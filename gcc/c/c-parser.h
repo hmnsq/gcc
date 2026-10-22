@@ -71,12 +71,12 @@ struct GTY (()) c_token {
 
   source_range get_range () const
   {
-    return get_range_from_loc (line_table, location);
+    вернуть get_range_from_loc (line_table, location);
   }
 
   location_t get_finish () const
   {
-    return get_range ().m_finish;
+    вернуть get_range ().m_finish;
   }
 };
 
@@ -145,7 +145,7 @@ enum c_lookahead_kind {
 
 extern c_token * c_parser_peek_token (c_parser *parser);
 extern c_token * c_parser_peek_2nd_token (c_parser *parser);
-extern c_token * c_parser_peek_nth_token (c_parser *parser, unsigned int n);
+extern c_token * c_parser_peek_nth_token (c_parser *parser, unsigned целое n);
 extern bool c_parser_require (c_parser *parser, enum cpp_ttype type,
 			      const char *msgid,
 			      location_t matching_location = UNKNOWN_LOCATION,
@@ -157,7 +157,7 @@ extern void c_parser_skip_until_found (c_parser *parser, enum cpp_ttype type,
 				       location_t = UNKNOWN_LOCATION);
 extern bool c_parser_next_token_starts_declspecs (c_parser *parser);
 bool c_parser_next_tokens_start_declaration (c_parser *parser,
-					     unsigned int n = 1);
+					     unsigned целое n = 1);
 bool c_token_starts_typename (c_token *token);
 
 /* Abstraction to avoid defining c_parser here which messes up gengtype
@@ -176,7 +176,7 @@ extern bool old_style_parameter_scope (void);
 inline bool
 c_parser_next_token_is (c_parser *parser, enum cpp_ttype type)
 {
-  return c_parser_peek_token (parser)->type == type;
+  вернуть c_parser_peek_token (parser)->type == type;
 }
 
 /* Return true if the next token from PARSER does not have the
@@ -185,7 +185,7 @@ c_parser_next_token_is (c_parser *parser, enum cpp_ttype type)
 inline bool
 c_parser_next_token_is_not (c_parser *parser, enum cpp_ttype type)
 {
-  return !c_parser_next_token_is (parser, type);
+  вернуть !c_parser_next_token_is (parser, type);
 }
 
 /* Return true if the next token from PARSER is the indicated
@@ -194,7 +194,7 @@ c_parser_next_token_is_not (c_parser *parser, enum cpp_ttype type)
 inline bool
 c_parser_next_token_is_keyword (c_parser *parser, enum rid keyword)
 {
-  return c_parser_peek_token (parser)->keyword == keyword;
+  вернуть c_parser_peek_token (parser)->keyword == keyword;
 }
 
 struct c_expr c_parser_string_literal (c_parser *, bool, bool);
