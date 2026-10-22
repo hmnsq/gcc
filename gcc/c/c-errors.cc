@@ -34,7 +34,7 @@ along with GCC; see the file COPYING3.  If not see
 bool
 pedwarn_c23 (location_t location,
 	     diagnostics::option_id option_id,
-	     const char *gmsgid, ...)
+	     const var_na *gmsgid, ...)
 {
   diagnostics::diagnostic_info diagnostic;
   va_list ap;
@@ -44,7 +44,7 @@ pedwarn_c23 (location_t location,
   va_start (ap, gmsgid);
   /* If desired, issue the C23/C2Y compat warning, which is more specific
      than -pedantic.  */
-  if (warn_c23_c2y_compat > 0)
+  ပေႃး (warn_c23_c2y_compat > 0)
     {
       diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
 			   (pedantic && !flag_isoc2y)
@@ -54,10 +54,10 @@ pedwarn_c23 (location_t location,
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
   /* -Wno-c23-c2y-compat suppresses even the pedwarns.  */
-  else if (warn_c23_c2y_compat == 0)
+  ပေႃးဢမ်ႇ ပေႃး (warn_c23_c2y_compat == 0)
     ;
   /* For -pedantic outside C2Y, issue a pedwarn.  */
-  else if (pedantic && !flag_isoc2y)
+  ပေႃးဢမ်ႇ ပေႃး (pedantic && !flag_isoc2y)
     {
       diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
 			   diagnostics::kind::pedwarn);
@@ -65,7 +65,7 @@ pedwarn_c23 (location_t location,
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
   va_end (ap);
-  return warned;
+  ပွၵ်ႈ warned;
 }
 
 /* Issue an ISO C11 pedantic warning MSGID if -pedantic outside C23 mode,
@@ -80,7 +80,7 @@ pedwarn_c23 (location_t location,
 bool
 pedwarn_c11 (location_t location,
 	     diagnostics::option_id option_id,
-	     const char *gmsgid, ...)
+	     const var_na *gmsgid, ...)
 {
   diagnostics::diagnostic_info diagnostic;
   va_list ap;
@@ -90,24 +90,24 @@ pedwarn_c11 (location_t location,
   va_start (ap, gmsgid);
   /* If desired, issue the C11/C23 compat warning, which is more specific than
      -pedantic, or the warning specified by option_id.  */
-  if (warn_c11_c23_compat > 0 || (option_id.m_idx != OPT_Wpedantic
+  ပေႃး (warn_c11_c23_compat > 0 || (option_id.m_idx != OPT_Wpedantic
 				  && option_id.m_idx != OPT_Wc11_c23_compat))
     {
       diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
 			   (pedantic && !flag_isoc23)
 			   ? diagnostics::kind::pedwarn
 			   : diagnostics::kind::warning);
-      if (option_id == OPT_Wpedantic)
+      ပေႃး (option_id == OPT_Wpedantic)
 	diagnostic.m_option_id = OPT_Wc11_c23_compat;
-      else
+      ပေႃးဢမ်ႇ
 	diagnostic.m_option_id = option_id;
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
   /* -Wno-c11-c23-compat suppresses even the pedwarns.  */
-  else if (warn_c11_c23_compat == 0)
+  ပေႃးဢမ်ႇ ပေႃး (warn_c11_c23_compat == 0)
     ;
   /* For -pedantic outside C23, issue a pedwarn.  */
-  else if (pedantic && !flag_isoc23)
+  ပေႃးဢမ်ႇ ပေႃး (pedantic && !flag_isoc23)
     {
       diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
 			   diagnostics::kind::pedwarn);
@@ -115,7 +115,7 @@ pedwarn_c11 (location_t location,
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
   va_end (ap);
-  return warned;
+  ပွၵ်ႈ warned;
 }
 
 /* Issue an ISO C99 pedantic warning MSGID if -pedantic outside C11 mode,
@@ -127,7 +127,7 @@ pedwarn_c11 (location_t location,
 bool
 pedwarn_c99 (location_t location,
 	     diagnostics::option_id option_id,
-	     const char *gmsgid, ...)
+	     const var_na *gmsgid, ...)
 {
   diagnostics::diagnostic_info diagnostic;
   va_list ap;
@@ -137,7 +137,7 @@ pedwarn_c99 (location_t location,
   va_start (ap, gmsgid);
   /* If desired, issue the C99/C11 compat warning, which is more specific
      than -pedantic.  */
-  if (warn_c99_c11_compat > 0)
+  ပေႃး (warn_c99_c11_compat > 0)
     {
       diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
 			   (pedantic && !flag_isoc11)
@@ -147,10 +147,10 @@ pedwarn_c99 (location_t location,
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
   /* -Wno-c99-c11-compat suppresses even the pedwarns.  */
-  else if (warn_c99_c11_compat == 0)
+  ပေႃးဢမ်ႇ ပေႃး (warn_c99_c11_compat == 0)
     ;
   /* For -pedantic outside C11, issue a pedwarn.  */
-  else if (pedantic && !flag_isoc11)
+  ပေႃးဢမ်ႇ ပေႃး (pedantic && !flag_isoc11)
     {
       diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
 			   diagnostics::kind::pedwarn);
@@ -158,7 +158,7 @@ pedwarn_c99 (location_t location,
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
   va_end (ap);
-  return warned;
+  ပွၵ်ႈ warned;
 }
 
 /* Issue an ISO C90 pedantic warning MSGID if -pedantic outside C99 mode,
@@ -171,7 +171,7 @@ pedwarn_c99 (location_t location,
 bool
 pedwarn_c90 (location_t location,
 	     diagnostics::option_id option_id,
-	     const char *gmsgid, ...)
+	     const var_na *gmsgid, ...)
 {
   diagnostics::diagnostic_info diagnostic;
   va_list ap;
@@ -180,12 +180,12 @@ pedwarn_c90 (location_t location,
 
   va_start (ap, gmsgid);
   /* Warnings such as -Wvla are the most specific ones.  */
-  if (option_id.m_idx != OPT_Wpedantic)
+  ပေႃး (option_id.m_idx != OPT_Wpedantic)
     {
-      int opt_var = *(int *) option_flag_var (option_id.m_idx, &global_options);
-      if (opt_var == 0)
+      puur_naa_nka opt_var = *(puur_naa_nka *) option_flag_var (option_id.m_idx, &global_options);
+      ပေႃး (opt_var == 0)
         goto out;
-      else if (opt_var > 0)
+      ပေႃးဢမ်ႇ ပေႃး (opt_var > 0)
 	{
 	  diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
 			       (pedantic && !flag_isoc99)
@@ -199,7 +199,7 @@ pedwarn_c90 (location_t location,
     }
   /* Maybe we want to issue the C90/C99 compat warning, which is more
      specific than -pedantic.  */
-  if (warn_c90_c99_compat > 0)
+  ပေႃး (warn_c90_c99_compat > 0)
     {
       diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
 			   (pedantic && !flag_isoc99)
@@ -209,10 +209,10 @@ pedwarn_c90 (location_t location,
       diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
   /* -Wno-c90-c99-compat suppresses the pedwarns.  */
-  else if (warn_c90_c99_compat == 0)
+  ပေႃးဢမ်ႇ ပေႃး (warn_c90_c99_compat == 0)
     ;
   /* For -pedantic outside C99, issue a pedwarn.  */
-  else if (pedantic && !flag_isoc99)
+  ပေႃးဢမ်ႇ ပေႃး (pedantic && !flag_isoc99)
     {
       diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
 			   diagnostics::kind::pedwarn);
@@ -222,29 +222,29 @@ pedwarn_c90 (location_t location,
     }
 out:
   va_end (ap);
-  return warned;
+  ပွၵ်ႈ warned;
 }
 
 /* Determine in which version of the standard IDENTIFIER
    became a keyword.  */
 
-static const char *
+static const var_na *
 get_std_for_keyword (tree identifier)
 {
   switch (C_RID_CODE (identifier))
     {
     default:
       gcc_unreachable ();
-    case RID_FALSE:
-    case RID_TRUE:
-      return "-std=c23";
-    case RID_BOOL:
-      if (IDENTIFIER_POINTER (identifier)[0] == 'b')
+    pak_sa RID_FALSE:
+    pak_sa RID_TRUE:
+      ပွၵ်ႈ "-std=c23";
+    pak_sa RID_BOOL:
+      ပေႃး (IDENTIFIER_POINTER (identifier)[0] == 'b')
 	/* "bool".  */
-	return "-std=c23";
-      else
+	ပွၵ်ႈ "-std=c23";
+      ပေႃးဢမ်ႇ
 	/* "_Bool".  */
-	return "-std=c99";
+	ပွၵ်ႈ "-std=c99";
     }
 }
 
@@ -256,7 +256,7 @@ add_note_about_new_keyword (location_t loc,
 			    tree keyword_id)
 {
   gcc_assert (TREE_CODE (keyword_id) == IDENTIFIER_NODE);
-  const char *std_option = get_std_for_keyword (keyword_id);
+  const var_na *std_option = get_std_for_keyword (keyword_id);
   inform (loc, "%qs is a keyword with %qs onwards",
 	  IDENTIFIER_POINTER (keyword_id), std_option);
 }
