@@ -23,42 +23,42 @@ along with GCC; see the file COPYING3.  If not see
    including computing the types of the result, C-specific error checks,
    and some optimization.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "memmodel.h"
-#include "target.h"
-#include "function.h"
-#include "bitmap.h"
-#include "c-tree.h"
-#include "gimple-expr.h"
-#include "predict.h"
-#include "stor-layout.h"
-#include "trans-mem.h"
-#include "varasm.h"
-#include "stmt.h"
-#include "langhooks.h"
-#include "c-lang.h"
-#include "intl.h"
-#include "tree-iterator.h"
-#include "gimplify.h"
-#include "tree-inline.h"
-#include "omp-general.h"
-#include "c-family/c-objc.h"
-#include "c-family/c-ubsan.h"
-#include "gomp-constants.h"
-#include "spellcheck-tree.h"
-#include "c-family/c-type-mismatch.h"
-#include "stringpool.h"
-#include "attribs.h"
-#include "asan.h"
-#include "realmpfr.h"
-#include "tree-pretty-print-markup.h"
-#include "gcc-urlifier.h"
+#अन्तर्भाव "config.h"
+#अन्तर्भाव "system.h"
+#अन्तर्भाव "coretypes.h"
+#अन्तर्भाव "memmodel.h"
+#अन्तर्भाव "target.h"
+#अन्तर्भाव "function.h"
+#अन्तर्भाव "bitmap.h"
+#अन्तर्भाव "c-tree.h"
+#अन्तर्भाव "gimple-expr.h"
+#अन्तर्भाव "predict.h"
+#अन्तर्भाव "stor-layout.h"
+#अन्तर्भाव "trans-mem.h"
+#अन्तर्भाव "varasm.h"
+#अन्तर्भाव "stmt.h"
+#अन्तर्भाव "langhooks.h"
+#अन्तर्भाव "c-lang.h"
+#अन्तर्भाव "intl.h"
+#अन्तर्भाव "tree-iterator.h"
+#अन्तर्भाव "gimplify.h"
+#अन्तर्भाव "tree-inline.h"
+#अन्तर्भाव "omp-general.h"
+#अन्तर्भाव "c-family/c-objc.h"
+#अन्तर्भाव "c-family/c-ubsan.h"
+#अन्तर्भाव "gomp-constants.h"
+#अन्तर्भाव "spellcheck-tree.h"
+#अन्तर्भाव "c-family/c-type-mismatch.h"
+#अन्तर्भाव "stringpool.h"
+#अन्तर्भाव "attribs.h"
+#अन्तर्भाव "asan.h"
+#अन्तर्भाव "realmpfr.h"
+#अन्तर्भाव "tree-pretty-print-markup.h"
+#अन्तर्भाव "gcc-urlifier.h"
 
 /* Possible cases of implicit conversions.  Used to select diagnostic messages
    and control folding initializers in convert_for_assignment.  */
-enum impl_conv {
+गणना impl_conv {
   ic_argpass,
   ic_assign,
   ic_init,
@@ -67,105 +67,105 @@ enum impl_conv {
 };
 
 /* The level of nesting inside "__alignof__".  */
-int in_alignof;
+पूर्णाङ्क in_alignof;
 
 /* The level of nesting inside "sizeof".  */
-int in_sizeof;
+पूर्णाङ्क in_sizeof;
 
 /* The level of nesting inside "countof".  */
-int in_countof;
+पूर्णाङ्क in_countof;
 
 /* The level of nesting inside "typeof".  */
-int in_typeof;
+पूर्णाङ्क in_typeof;
 
 /* The level of nesting inside "_Generic".  */
-int in_generic;
+पूर्णाङ्क in_generic;
 
 /* True when parsing OpenMP loop expressions.  */
-bool c_in_omp_for;
+तार्किक c_in_omp_for;
 
 /* True when parsing OpenMP map clause.  */
-bool c_omp_array_section_p;
+तार्किक c_omp_array_section_p;
 
 /* The argument of last parsed sizeof expression, only to be tested
    if expr.original_code == SIZEOF_EXPR.  */
-tree c_last_sizeof_arg;
+वृक्षः c_last_sizeof_arg;
 location_t c_last_sizeof_loc;
 
 /* Nonzero if we might need to print a "missing braces around
    initializer" message within this initializer.  */
-static int found_missing_braces;
+स्थिर पूर्णाङ्क found_missing_braces;
 
-static bool require_constant_value;
-static bool require_constant_elements;
-static bool require_constexpr_value;
+स्थिर तार्किक require_constant_मानम्;
+स्थिर तार्किक require_constant_elements;
+स्थिर तार्किक require_constexpr_मानम्;
 
-static tree qualify_type (tree, tree);
-struct comptypes_data;
-static bool tagged_types_tu_compatible_p (const_tree, const_tree,
-					  struct comptypes_data *);
-static bool comp_target_types (location_t, tree, tree);
-static bool function_types_compatible_p (const_tree, const_tree,
-					 struct comptypes_data *);
-static bool type_lists_compatible_p (const_tree, const_tree,
-				     struct comptypes_data *);
-static int convert_arguments (location_t, vec<location_t>, tree,
-			      vec<tree, va_gc> *, vec<tree, va_gc> *, tree,
-			      tree);
-static tree pointer_diff (location_t, tree, tree, tree *);
-static tree convert_for_assignment (location_t, location_t, tree, tree, tree,
-				    enum impl_conv, bool, tree, tree, int,
-				    int = 0);
-static tree valid_compound_expr_initializer (tree, tree);
-static void push_string (const char *);
-static void push_member_name (tree);
-static int spelling_length (void);
-static char *print_spelling (char *);
-static void warning_init (location_t, int, const char *);
-static tree digest_init (location_t, tree, tree, tree, tree, bool, bool, bool,
-			 bool, bool, bool);
-static void output_init_element (location_t, tree, tree, bool, tree, tree, bool,
-				 bool, struct obstack *);
-static void output_pending_init_elements (int, struct obstack *);
-static bool set_designator (location_t, bool, struct obstack *);
-static void push_range_stack (tree, struct obstack *);
-static void add_pending_init (location_t, tree, tree, tree, bool,
-			      struct obstack *);
-static void set_nonincremental_init (struct obstack *);
-static void set_nonincremental_init_from_string (tree, struct obstack *);
-static tree find_init_member (tree, struct obstack *);
-static void readonly_warning (tree, enum lvalue_use);
-static int lvalue_or_else (location_t, const_tree, enum lvalue_use);
-static void record_maybe_used_decl (tree, bool address);
-static bool comptypes_internal (const_tree, const_tree,
-				struct comptypes_data *data);
-static bool comptypes_check_for_composite (tree t1, tree t2);
-static bool handle_counted_by_p (tree);
-static bool top_array_vla_p (const_tree type);
+स्थिर वृक्षः qualify_type (वृक्षः, वृक्षः);
+संरचना comptypes_data;
+स्थिर तार्किक tagged_types_tu_compatible_p (const_वृक्षः, const_वृक्षः,
+					  संरचना comptypes_data *);
+स्थिर तार्किक comp_target_types (location_t, वृक्षः, वृक्षः);
+स्थिर तार्किक function_types_compatible_p (const_वृक्षः, const_वृक्षः,
+					 संरचना comptypes_data *);
+स्थिर तार्किक type_lists_compatible_p (const_वृक्षः, const_वृक्षः,
+				     संरचना comptypes_data *);
+स्थिर पूर्णाङ्क convert_arguments (location_t, vec<location_t>, वृक्षः,
+			      vec<वृक्षः, va_gc> *, vec<वृक्षः, va_gc> *, वृक्षः,
+			      वृक्षः);
+स्थिर वृक्षः pointer_diff (location_t, वृक्षः, वृक्षः, वृक्षः *);
+स्थिर वृक्षः convert_for_assignment (location_t, location_t, वृक्षः, वृक्षः, वृक्षः,
+				    गणना impl_conv, तार्किक, वृक्षः, वृक्षः, पूर्णाङ्क,
+				    पूर्णाङ्क = 0);
+स्थिर वृक्षः valid_compound_व्यञ्जकम्_initializer (वृक्षः, वृक्षः);
+स्थिर शून्य प्रक्षिप_string (ध्रुव वर्ण *);
+स्थिर शून्य प्रक्षिप_member_name (वृक्षः);
+स्थिर पूर्णाङ्क spelling_length (शून्य);
+स्थिर वर्ण *print_spelling (वर्ण *);
+स्थिर शून्य warning_init (location_t, पूर्णाङ्क, ध्रुव वर्ण *);
+स्थिर वृक्षः digest_init (location_t, वृक्षः, वृक्षः, वृक्षः, वृक्षः, तार्किक, तार्किक, तार्किक,
+			 तार्किक, तार्किक, तार्किक);
+स्थिर शून्य output_init_element (location_t, वृक्षः, वृक्षः, तार्किक, वृक्षः, वृक्षः, तार्किक,
+				 तार्किक, संरचना obstack *);
+स्थिर शून्य output_pending_init_elements (पूर्णाङ्क, संरचना obstack *);
+स्थिर तार्किक set_designator (location_t, तार्किक, संरचना obstack *);
+स्थिर शून्य प्रक्षिप_range_राशिः (वृक्षः, संरचना obstack *);
+स्थिर शून्य add_pending_init (location_t, वृक्षः, वृक्षः, वृक्षः, तार्किक,
+			      संरचना obstack *);
+स्थिर शून्य set_nonincremental_init (संरचना obstack *);
+स्थिर शून्य set_nonincremental_init_from_string (वृक्षः, संरचना obstack *);
+स्थिर वृक्षः find_init_member (वृक्षः, संरचना obstack *);
+स्थिर शून्य readonly_warning (वृक्षः, गणना lvalue_use);
+स्थिर पूर्णाङ्क lvalue_or_else (location_t, const_वृक्षः, गणना lvalue_use);
+स्थिर शून्य record_maybe_used_decl (वृक्षः, तार्किक address);
+स्थिर तार्किक comptypes_internal (const_वृक्षः, const_वृक्षः,
+				संरचना comptypes_data *data);
+स्थिर तार्किक comptypes_check_for_composite (वृक्षः t1, वृक्षः t2);
+स्थिर तार्किक handle_counted_by_p (वृक्षः);
+स्थिर तार्किक शिखरम्_array_vla_p (const_वृक्षः type);
 
 
 /* Return true if EXP is a null pointer constant, false otherwise.  */
 
-bool
-null_pointer_constant_p (const_tree expr)
+तार्किक
+null_pointer_constant_p (const_वृक्षः व्यञ्जकम्)
 {
   /* This should really operate on c_expr structures, but they aren't
      yet available everywhere required.  */
-  tree type = TREE_TYPE (expr);
+  वृक्षः type = वृक्षः_TYPE (व्यञ्जकम्);
 
   /* An integer constant expression with the value 0, such an expression
      cast to type void*, or the predefined constant nullptr, are a null
      pointer constant.  */
-  if (expr == nullptr_node)
-    return true;
+  सचे (व्यञ्जकम् == nullptr_ग्रन्थिः)
+    पटिनिवत्त सच्च;
 
-  return (TREE_CODE (expr) == INTEGER_CST
-	  && !TREE_OVERFLOW (expr)
-	  && integer_zerop (expr)
+  पटिनिवत्त (वृक्षः_CODE (व्यञ्जकम्) == INTEGER_CST
+	  && !वृक्षः_OVERFLOW (व्यञ्जकम्)
+	  && integer_zerop (व्यञ्जकम्)
 	  && (INTEGRAL_TYPE_P (type)
-	      || (TREE_CODE (type) == POINTER_TYPE
-		  && VOID_TYPE_P (TREE_TYPE (type))
-		  && TYPE_QUALS (TREE_TYPE (type)) == TYPE_UNQUALIFIED)));
+	      || (वृक्षः_CODE (type) == POINTER_TYPE
+		  && VOID_TYPE_P (वृक्षः_TYPE (type))
+		  && TYPE_QUALS (वृक्षः_TYPE (type)) == TYPE_UNQUALIFIED)));
 }
 
 /* EXPR may appear in an unevaluated part of an integer constant
@@ -173,21 +173,21 @@ null_pointer_constant_p (const_tree expr)
    C_MAYBE_CONST_EXPR, or mark it with TREE_OVERFLOW if it is just an
    INTEGER_CST and we cannot create a C_MAYBE_CONST_EXPR.  */
 
-static tree
-note_integer_operands (tree expr)
+स्थिर वृक्षः
+note_integer_operands (वृक्षः व्यञ्जकम्)
 {
-  tree ret;
-  if (TREE_CODE (expr) == INTEGER_CST && in_late_binary_op)
+  वृक्षः ret;
+  सचे (वृक्षः_CODE (व्यञ्जकम्) == INTEGER_CST && in_late_द्विमान_op)
     {
-      ret = copy_node (expr);
-      TREE_OVERFLOW (ret) = 1;
+      ret = copy_ग्रन्थिः (व्यञ्जकम्);
+      वृक्षः_OVERFLOW (ret) = 1;
     }
-  else
+  अञ्ञथा
     {
-      ret = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (expr), NULL_TREE, expr);
-      C_MAYBE_CONST_EXPR_INT_OPERANDS (ret) = 1;
+      ret = build2 (C_MAYBE_CONST_व्यञ्जकम्, वृक्षः_TYPE (व्यञ्जकम्), NULL_वृक्षः, व्यञ्जकम्);
+      C_MAYBE_CONST_व्यञ्जकम्_INT_OPERANDS (ret) = 1;
     }
-  return ret;
+  पटिनिवत्त ret;
 }
 
 /* Having checked whether EXPR may appear in an unevaluated part of an
@@ -195,41 +195,41 @@ note_integer_operands (tree expr)
    C_MAYBE_CONST_EXPR noting this fact and return the resulting
    expression.  */
 
-static inline tree
-remove_c_maybe_const_expr (tree expr)
+स्थिर अन्तःस्थ वृक्षः
+remove_c_maybe_const_व्यञ्जकम् (वृक्षः व्यञ्जकम्)
 {
-  if (TREE_CODE (expr) == C_MAYBE_CONST_EXPR)
-    return C_MAYBE_CONST_EXPR_EXPR (expr);
-  else
-    return expr;
+  सचे (वृक्षः_CODE (व्यञ्जकम्) == C_MAYBE_CONST_व्यञ्जकम्)
+    पटिनिवत्त C_MAYBE_CONST_व्यञ्जकम्_व्यञ्जकम् (व्यञ्जकम्);
+  अञ्ञथा
+    पटिनिवत्त व्यञ्जकम्;
 }
 
 /* This is a cache to hold if two types are seen.  */
 
-struct tagged_tu_seen_cache {
-  const struct tagged_tu_seen_cache * next;
-  const_tree t1;
-  const_tree t2;
+संरचना tagged_tu_seen_cache {
+  ध्रुव संरचना tagged_tu_seen_cache * next;
+  const_वृक्षः t1;
+  const_वृक्षः t2;
 };
 
 /* Do `exp = require_complete_type (loc, exp);' to make sure exp
    does not have an incomplete type.  (That includes void types.)
    LOC is the location of the use.  */
 
-tree
-require_complete_type (location_t loc, tree value)
+वृक्षः
+require_complete_type (location_t loc, वृक्षः मानम्)
 {
-  tree type = TREE_TYPE (value);
+  वृक्षः type = वृक्षः_TYPE (मानम्);
 
-  if (error_operand_p (value))
-    return error_mark_node;
+  सचे (error_operand_p (मानम्))
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
   /* First, detect a valid value with a complete type.  */
-  if (COMPLETE_TYPE_P (type))
-    return value;
+  सचे (COMPLETE_TYPE_P (type))
+    पटिनिवत्त मानम्;
 
-  c_incomplete_type_error (loc, value, type);
-  return error_mark_node;
+  c_incomplete_type_error (loc, मानम्, type);
+  पटिनिवत्त error_mark_ग्रन्थिः;
 }
 
 /* Print an error message for invalid use of an incomplete type.
@@ -237,52 +237,52 @@ require_complete_type (location_t loc, tree value)
    and TYPE is the type that was invalid.  LOC is the location for
    the error.  */
 
-void
-c_incomplete_type_error (location_t loc, const_tree value, const_tree type)
+शून्य
+c_incomplete_type_error (location_t loc, const_वृक्षः मानम्, const_वृक्षः type)
 {
   /* Avoid duplicate error message.  */
-  if (TREE_CODE (type) == ERROR_MARK)
-    return;
+  सचे (वृक्षः_CODE (type) == ERROR_MARK)
+    पटिनिवत्त;
 
-  if (value != NULL_TREE && (VAR_P (value) || TREE_CODE (value) == PARM_DECL))
-    error_at (loc, "%qD has an incomplete type %qT", value, type);
-  else
+  सचे (मानम् != NULL_वृक्षः && (VAR_P (मानम्) || वृक्षः_CODE (मानम्) == PARM_DECL))
+    error_at (loc, "%qD has an incomplete type %qT", मानम्, type);
+  अञ्ञथा
     {
     retry:
       /* We must print an error message.  Be clever about what it says.  */
 
-      switch (TREE_CODE (type))
+      विकल्प (वृक्षः_CODE (type))
 	{
-	case RECORD_TYPE:
-	case UNION_TYPE:
-	case ENUMERAL_TYPE:
-	  break;
+	पक्ष RECORD_TYPE:
+	पक्ष UNION_TYPE:
+	पक्ष ENUMERAL_TYPE:
+	  भङ्ग;
 
-	case VOID_TYPE:
+	पक्ष VOID_TYPE:
 	  error_at (loc, "invalid use of void expression");
-	  return;
+	  पटिनिवत्त;
 
-	case ARRAY_TYPE:
-	  if (TYPE_DOMAIN (type))
+	पक्ष ARRAY_TYPE:
+	  सचे (TYPE_DOMAIN (type))
 	    {
-	      if (flexible_array_member_type_p (type))
+	      सचे (flexible_array_member_type_p (type))
 		{
 		  error_at (loc, "invalid use of flexible array member");
-		  return;
+		  पटिनिवत्त;
 		}
-	      type = TREE_TYPE (type);
-	      goto retry;
+	      type = वृक्षः_TYPE (type);
+	      गच्छ retry;
 	    }
 	  error_at (loc, "invalid use of array with unspecified bounds");
-	  return;
+	  पटिनिवत्त;
 
-	default:
+	स्वभाव:
 	  gcc_unreachable ();
 	}
 
-      if (TREE_CODE (TYPE_NAME (type)) == IDENTIFIER_NODE)
+      सचे (वृक्षः_CODE (TYPE_NAME (type)) == IDENTIFIER_ग्रन्थिः)
 	error_at (loc, "invalid use of undefined type %qT", type);
-      else
+      अञ्ञथा
 	/* If this type has a typedef-name, the TYPE_NAME is a TYPE_DECL.  */
 	error_at (loc, "invalid use of incomplete typedef %qT", type);
     }
@@ -291,62 +291,62 @@ c_incomplete_type_error (location_t loc, const_tree value, const_tree type)
 /* Given a type, apply default promotions wrt unnamed function
    arguments and return the new type.  */
 
-tree
-c_type_promotes_to (tree type)
+वृक्षः
+c_type_promotes_to (वृक्षः type)
 {
-  tree ret = NULL_TREE;
+  वृक्षः ret = NULL_वृक्षः;
 
-  if (TYPE_MAIN_VARIANT (type) == float_type_node)
-    ret = double_type_node;
-  else if (c_promoting_integer_type_p (type))
+  सचे (TYPE_MAIN_VARIANT (type) == float_type_ग्रन्थिः)
+    ret = double_type_ग्रन्थिः;
+  अञ्ञथा सचे (c_promoting_integer_type_p (type))
     {
       /* Preserve unsignedness if not really getting any wider.  */
-      if (TYPE_UNSIGNED (type)
-	  && (TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_node)))
-	ret = unsigned_type_node;
-      else
-	ret = integer_type_node;
+      सचे (TYPE_UNSIGNED (type)
+	  && (TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_ग्रन्थिः)))
+	ret = unsigned_type_ग्रन्थिः;
+      अञ्ञथा
+	ret = integer_type_ग्रन्थिः;
     }
 
-  if (ret != NULL_TREE)
-    return (TYPE_ATOMIC (type)
+  सचे (ret != NULL_वृक्षः)
+    पटिनिवत्त (TYPE_ATOMIC (type)
 	    ? c_build_qualified_type (ret, TYPE_QUAL_ATOMIC)
 	    : ret);
 
-  return type;
+  पटिनिवत्त type;
 }
 
 /* Return true if between two named address spaces, whether there is a superset
    named address space that encompasses both address spaces.  If there is a
    superset, return which address space is the superset.  */
 
-static bool
+स्थिर तार्किक
 addr_space_superset (addr_space_t as1, addr_space_t as2, addr_space_t *common)
 {
-  if (as1 == as2)
+  सचे (as1 == as2)
     {
       *common = as1;
-      return true;
+      पटिनिवत्त सच्च;
     }
-  else if (targetm.addr_space.subset_p (as1, as2))
+  अञ्ञथा सचे (targetm.addr_space.subset_p (as1, as2))
     {
       *common = as2;
-      return true;
+      पटिनिवत्त सच्च;
     }
-  else if (targetm.addr_space.subset_p (as2, as1))
+  अञ्ञथा सचे (targetm.addr_space.subset_p (as2, as1))
     {
       *common = as1;
-      return true;
+      पटिनिवत्त सच्च;
     }
-  else
-    return false;
+  अञ्ञथा
+    पटिनिवत्त मिच्छा;
 }
 
 /* Return a variant of TYPE which has all the type qualifiers of LIKE
    as well as those of TYPE.  */
 
-static tree
-qualify_type (tree type, tree like)
+स्थिर वृक्षः
+qualify_type (वृक्षः type, वृक्षः like)
 {
   addr_space_t as_type = TYPE_ADDR_SPACE (type);
   addr_space_t as_like = TYPE_ADDR_SPACE (like);
@@ -354,14 +354,14 @@ qualify_type (tree type, tree like)
 
   /* If the two named address spaces are different, determine the common
      superset address space.  If there isn't one, raise an error.  */
-  if (!addr_space_superset (as_type, as_like, &as_common))
+  सचे (!addr_space_superset (as_type, as_like, &as_common))
     {
       as_common = as_type;
       error ("%qT and %qT are in disjoint named address spaces",
 	     type, like);
     }
 
-  return c_build_qualified_type (type,
+  पटिनिवत्त c_build_qualified_type (type,
 				 TYPE_QUALS_NO_ADDR_SPACE (type)
 				 | TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (like)
 				 | ENCODE_QUAL_ADDR_SPACE (as_common));
@@ -374,218 +374,218 @@ qualify_type (tree type, tree like)
    non-constant length are marked with C_TYPE_VARIABLE_SIZE. If any
    inconsistency is detected false is returned and true otherwise.  */
 
-static bool
-c_verify_type (tree type)
+स्थिर तार्किक
+c_verify_type (वृक्षः type)
 {
-  switch (TREE_CODE (type))
+  विकल्प (वृक्षः_CODE (type))
     {
-    case POINTER_TYPE:
-    case FUNCTION_TYPE:
-    case ARRAY_TYPE:
+    पक्ष POINTER_TYPE:
+    पक्ष FUNCTION_TYPE:
+    पक्ष ARRAY_TYPE:
       /* Pointer, array, functions are variably modified if and only if the
 	 target, element, return type is variably modified.  */
-      if (!TYPE_STRUCTURAL_EQUALITY_P (type)
+      सचे (!TYPE_STRUCTURAL_EQUALITY_P (type)
 	  && (C_TYPE_VARIABLY_MODIFIED (type)
-	      != C_TYPE_VARIABLY_MODIFIED (TREE_TYPE (type))))
-	return false;
+	      != C_TYPE_VARIABLY_MODIFIED (वृक्षः_TYPE (type))))
+	पटिनिवत्त मिच्छा;
       /* If the target type is structural equality, the type should also. */
-      if (!TYPE_STRUCTURAL_EQUALITY_P (type)
-	  && TYPE_STRUCTURAL_EQUALITY_P (TREE_TYPE (type)))
-	return false;
-    default:
-       break;
+      सचे (!TYPE_STRUCTURAL_EQUALITY_P (type)
+	  && TYPE_STRUCTURAL_EQUALITY_P (वृक्षः_TYPE (type)))
+	पटिनिवत्त मिच्छा;
+    स्वभाव:
+       भङ्ग;
     }
 
-  switch (TREE_CODE (type))
+  विकल्प (वृक्षः_CODE (type))
     {
-    case POINTER_TYPE:
-    case FUNCTION_TYPE:
+    पक्ष POINTER_TYPE:
+    पक्ष FUNCTION_TYPE:
       /* Pointer and functions can not have variable size.  */
-      if (C_TYPE_VARIABLE_SIZE (type))
-	return false;
-      break;
-    case ARRAY_TYPE:
+      सचे (C_TYPE_VARIABLE_SIZE (type))
+	पटिनिवत्त मिच्छा;
+      भङ्ग;
+    पक्ष ARRAY_TYPE:
       /* An array has variable size if and only if it has a non-constant
 	 dimensions or its element type has variable size.  */
-      if ((C_TYPE_VARIABLE_SIZE (TREE_TYPE (type))
-	   || top_array_vla_p (type))
+      सचे ((C_TYPE_VARIABLE_SIZE (वृक्षः_TYPE (type))
+	   || शिखरम्_array_vla_p (type))
 	  != C_TYPE_VARIABLE_SIZE (type))
-	return false;
+	पटिनिवत्त मिच्छा;
       /* If the element type or the array has variable size, then the
 	 array has variable size and is variably modified.  */
-      if (C_TYPE_VARIABLE_SIZE (TREE_TYPE (type))
+      सचे (C_TYPE_VARIABLE_SIZE (वृक्षः_TYPE (type))
 	  || C_TYPE_VARIABLE_SIZE (type))
 	{
-	  if (!C_TYPE_VARIABLE_SIZE (type))
-	    return false;
-	  if (!C_TYPE_VARIABLY_MODIFIED (type))
-	    return false;
+	  सचे (!C_TYPE_VARIABLE_SIZE (type))
+	    पटिनिवत्त मिच्छा;
+	  सचे (!C_TYPE_VARIABLY_MODIFIED (type))
+	    पटिनिवत्त मिच्छा;
 	}
 
       /* va_list violates this, accept such types here.  */
-      if (!COMPLETE_TYPE_P (TREE_TYPE (type)))
-	return true;
+      सचे (!COMPLETE_TYPE_P (वृक्षः_TYPE (type)))
+	पटिनिवत्त सच्च;
 
-      if (COMPLETE_TYPE_P (type))
+      सचे (COMPLETE_TYPE_P (type))
 	{
 	  /* If the size is unknown, it can not be complete.  */
-	  if (NULL_TREE == TYPE_DOMAIN (type))
-	    return false;
+	  सचे (NULL_वृक्षः == TYPE_DOMAIN (type))
+	    पटिनिवत्त मिच्छा;
 
 	  /* Zero-length arrays must have size zero.  */
-	  if (zero_length_array_type_p (type)
+	  सचे (zero_length_array_type_p (type)
 	      && !integer_zerop (TYPE_SIZE (type)))
-	    return false;
+	    पटिनिवत्त मिच्छा;
 	}
-      else
+      अञ्ञथा
 	{
 	  /* If not complete but has a domain, it must be a FAM.  */
-	  if (NULL_TREE != TYPE_DOMAIN (type)
+	  सचे (NULL_वृक्षः != TYPE_DOMAIN (type)
 	      && !flexible_array_member_type_p (type))
-	    return false;
+	    पटिनिवत्त मिच्छा;
 	}
-    default:
-      break;
+    स्वभाव:
+      भङ्ग;
     }
-  return true;
+  पटिनिवत्त सच्च;
 }
 
 /* Propagate C_TYPE_VARIABLY_MODIFIED and C_TYPE_VARIABLE_SIZE
    from a base type to a newly built derived or qualified type.  */
 
-static tree
-c_set_type_bits (tree new_type, tree old_type)
+स्थिर वृक्षः
+c_set_type_bits (वृक्षः new_type, वृक्षः old_type)
 {
   gcc_checking_assert (c_verify_type (old_type));
 
-  if (c_type_variably_modified_p (old_type))
-    C_TYPE_VARIABLY_MODIFIED (new_type) = true;
+  सचे (c_type_variably_modified_p (old_type))
+    C_TYPE_VARIABLY_MODIFIED (new_type) = सच्च;
 
-  if (TREE_CODE (new_type) == ARRAY_TYPE && C_TYPE_VARIABLE_SIZE (old_type))
+  सचे (वृक्षः_CODE (new_type) == ARRAY_TYPE && C_TYPE_VARIABLE_SIZE (old_type))
     {
-      C_TYPE_VARIABLY_MODIFIED (new_type) = true;
-      C_TYPE_VARIABLE_SIZE (new_type) = true;
+      C_TYPE_VARIABLY_MODIFIED (new_type) = सच्च;
+      C_TYPE_VARIABLE_SIZE (new_type) = सच्च;
     }
-  return new_type;
+  पटिनिवत्त new_type;
 }
 
 /* Build a pointer type using the default pointer mode.  */
 
-tree
-c_build_pointer_type (tree to_type)
+वृक्षः
+c_build_pointer_type (वृक्षः to_type)
 {
-  addr_space_t as = to_type == error_mark_node ? ADDR_SPACE_GENERIC
+  addr_space_t as = to_type == error_mark_ग्रन्थिः ? ADDR_SPACE_GENERIC
 					       : TYPE_ADDR_SPACE (to_type);
   machine_mode pointer_mode;
 
-  if (as != ADDR_SPACE_GENERIC || c_default_pointer_mode == VOIDmode)
+  सचे (as != ADDR_SPACE_GENERIC || c_default_pointer_mode == VOIDmode)
     pointer_mode = targetm.addr_space.pointer_mode (as);
-  else
+  अञ्ञथा
     pointer_mode = c_default_pointer_mode;
 
-  return c_build_pointer_type_for_mode (to_type, pointer_mode, false);
+  पटिनिवत्त c_build_pointer_type_for_mode (to_type, pointer_mode, मिच्छा);
 }
 
 /* Build a pointer type using the given mode.  */
 
-tree
-c_build_pointer_type_for_mode (tree type, machine_mode mode, bool m)
+वृक्षः
+c_build_pointer_type_for_mode (वृक्षः type, machine_mode mode, तार्किक m)
 {
-  tree ret = build_pointer_type_for_mode (type, mode, m);
-  return c_set_type_bits (ret, type);
+  वृक्षः ret = build_pointer_type_for_mode (type, mode, m);
+  पटिनिवत्त c_set_type_bits (ret, type);
 }
 
 /* Build a function type.  */
 
-tree
-c_build_function_type (tree type, tree args, bool no)
+वृक्षः
+c_build_function_type (वृक्षः type, वृक्षः args, तार्किक no)
 {
-  tree ret = build_function_type (type, args, no);
-  return c_set_type_bits (ret, type);
+  वृक्षः ret = build_function_type (type, args, no);
+  पटिनिवत्त c_set_type_bits (ret, type);
 }
 
 /* Build an array type.  This sets typeless storage as required
    by C2Y and C_TYPE_VARIABLY_MODIFIED and C_TYPE_VARIABLE_SIZE
    based on the element type and domain.  */
 
-tree
-c_build_array_type (tree type, tree domain)
+वृक्षः
+c_build_array_type (वृक्षः type, वृक्षः domain)
 {
-  int type_quals = TYPE_QUALS (type);
+  पूर्णाङ्क type_quals = TYPE_QUALS (type);
 
   /* Identify typeless storage as introduced in C2Y
      and supported also in earlier language modes.  */
-  bool typeless = (char_type_p (type) && !(type_quals & TYPE_QUAL_ATOMIC))
+  तार्किक typeless = (char_type_p (type) && !(type_quals & TYPE_QUAL_ATOMIC))
 		  || (AGGREGATE_TYPE_P (type) && TYPE_TYPELESS_STORAGE (type));
 
-  tree ret = build_array_type (type, domain, typeless);
+  वृक्षः ret = build_array_type (type, domain, typeless);
 
-  if (top_array_vla_p (ret))
+  सचे (शिखरम्_array_vla_p (ret))
     {
       C_TYPE_VARIABLE_SIZE (ret) = 1;
       C_TYPE_VARIABLY_MODIFIED (ret) = 1;
     }
 
-  return c_set_type_bits (ret, type);
+  पटिनिवत्त c_set_type_bits (ret, type);
 }
 
 /* Build an array type of unspecified size.  */
-tree
-c_build_array_type_unspecified (tree type)
+वृक्षः
+c_build_array_type_unspecified (वृक्षः type)
 {
-  tree upper = build2 (COMPOUND_EXPR, TREE_TYPE (size_zero_node),
-		       integer_zero_node, size_zero_node);
-  return c_build_array_type (type, build_index_type (upper));
+  वृक्षः upper = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (size_zero_ग्रन्थिः),
+		       integer_zero_ग्रन्थिः, size_zero_ग्रन्थिः);
+  पटिनिवत्त c_build_array_type (type, build_index_type (upper));
 }
 
 /* Build an array type of zero size.  */
-tree
-c_build_array_type_zero_size (tree type)
+वृक्षः
+c_build_array_type_zero_size (वृक्षः type)
 {
   /* The GCC extension for zero-length arrays differs from
      ISO flexible array members in that sizeof yields
      zero.  */
-  type = c_build_array_type (type, build_index_type (NULL_TREE));
+  type = c_build_array_type (type, build_index_type (NULL_वृक्षः));
   type = build_distinct_type_copy (TYPE_MAIN_VARIANT (type));
-  TYPE_SIZE (type) = bitsize_zero_node;
-  TYPE_SIZE_UNIT (type) = size_zero_node;
+  TYPE_SIZE (type) = bitsize_zero_ग्रन्थिः;
+  TYPE_SIZE_UNIT (type) = size_zero_ग्रन्थिः;
   SET_TYPE_STRUCTURAL_EQUALITY (type);
-  return type;
+  पटिनिवत्त type;
 }
 
-tree
-c_build_type_attribute_qual_variant (tree type, tree attrs, int quals)
+वृक्षः
+c_build_type_attribute_qual_variant (वृक्षः type, वृक्षः attrs, पूर्णाङ्क quals)
 {
-  tree ret = build_type_attribute_qual_variant (type, attrs, quals);
-  return c_set_type_bits (ret, type);
+  वृक्षः ret = build_type_attribute_qual_variant (type, attrs, quals);
+  पटिनिवत्त c_set_type_bits (ret, type);
 }
 
-tree
-c_build_type_attribute_variant (tree type, tree attrs)
+वृक्षः
+c_build_type_attribute_variant (वृक्षः type, वृक्षः attrs)
 {
-  return c_build_type_attribute_qual_variant (type, attrs, TYPE_QUALS (type));
+  पटिनिवत्त c_build_type_attribute_qual_variant (type, attrs, TYPE_QUALS (type));
 }
 
 /* Reconstruct a complex derived type.  This is used to re-construct types
    with the vector attribute.  It is called via a langhook.  */
 
-tree
-c_reconstruct_complex_type (tree type, tree bottom)
+वृक्षः
+c_reconstruct_complex_type (वृक्षः type, वृक्षः bottom)
 {
-  tree inner, outer;
+  वृक्षः inner, outer;
 
-  if (TREE_CODE (type) == POINTER_TYPE)
+  सचे (वृक्षः_CODE (type) == POINTER_TYPE)
     {
-      inner = c_reconstruct_complex_type (TREE_TYPE (type), bottom);
+      inner = c_reconstruct_complex_type (वृक्षः_TYPE (type), bottom);
       outer = c_build_pointer_type_for_mode (inner, TYPE_MODE (type),
 					     TYPE_REF_CAN_ALIAS_ALL (type));
     }
-  else if (TREE_CODE (type) == ARRAY_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (type) == ARRAY_TYPE)
     {
-      bool rso = TYPE_REVERSE_STORAGE_ORDER (type);
-      inner = c_reconstruct_complex_type (TREE_TYPE (type), bottom);
+      तार्किक rso = TYPE_REVERSE_STORAGE_ORDER (type);
+      inner = c_reconstruct_complex_type (वृक्षः_TYPE (type), bottom);
       outer = c_build_array_type (inner, TYPE_DOMAIN (type));
-      if (rso)
+      सचे (rso)
 	{
 	  outer = build_distinct_type_copy (outer);
 	  TYPE_REVERSE_STORAGE_ORDER (outer) = 1;
@@ -594,19 +594,19 @@ c_reconstruct_complex_type (tree type, tree bottom)
       gcc_checking_assert (C_TYPE_VARIABLE_SIZE (type)
 			   == C_TYPE_VARIABLE_SIZE (outer));
     }
-  else if (TREE_CODE (type) == FUNCTION_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (type) == FUNCTION_TYPE)
     {
-      inner = c_reconstruct_complex_type (TREE_TYPE (type), bottom);
+      inner = c_reconstruct_complex_type (वृक्षः_TYPE (type), bottom);
       outer = c_build_function_type (inner, TYPE_ARG_TYPES (type),
 				     TYPE_NO_NAMED_ARGS_STDARG_P (type));
     }
-  else if (TREE_CODE (type) == REFERENCE_TYPE
-	   || TREE_CODE (type) == OFFSET_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (type) == REFERENCE_TYPE
+	   || वृक्षः_CODE (type) == OFFSET_TYPE)
     gcc_unreachable ();
-  else
-    return bottom;
+  अञ्ञथा
+    पटिनिवत्त bottom;
 
-  return c_build_type_attribute_qual_variant (outer, TYPE_ATTRIBUTES (type),
+  पटिनिवत्त c_build_type_attribute_qual_variant (outer, TYPE_ATTRIBUTES (type),
 					      TYPE_QUALS (type));
 }
 
@@ -615,27 +615,27 @@ c_reconstruct_complex_type (tree type, tree bottom)
    contains a pointer to a structure or union with tag,
    possibly nested in other type derivations, and return the
    type of this nested structure or union.  */
-static tree
-ptr_to_tagged_member (tree field)
+स्थिर वृक्षः
+ptr_to_tagged_member (वृक्षः field)
 {
-  gcc_assert (FIELD_DECL == TREE_CODE (field));
-  tree type = TREE_TYPE (field);
-  bool ptr_seen = false;
-  while (TREE_CODE (type) == ARRAY_TYPE
-	 || TREE_CODE (type) == FUNCTION_TYPE
-	 || TREE_CODE (type) == POINTER_TYPE)
+  gcc_assert (FIELD_DECL == वृक्षः_CODE (field));
+  वृक्षः type = वृक्षः_TYPE (field);
+  तार्किक ptr_seen = मिच्छा;
+  याव (वृक्षः_CODE (type) == ARRAY_TYPE
+	 || वृक्षः_CODE (type) == FUNCTION_TYPE
+	 || वृक्षः_CODE (type) == POINTER_TYPE)
     {
-      if (TREE_CODE (type) == POINTER_TYPE)
-	ptr_seen = true;
-      type = TREE_TYPE (type);
+      सचे (वृक्षः_CODE (type) == POINTER_TYPE)
+	ptr_seen = सच्च;
+      type = वृक्षः_TYPE (type);
     }
 
-  if (ptr_seen
+  सचे (ptr_seen
       && RECORD_OR_UNION_TYPE_P (type)
-      && NULL_TREE != c_type_tag (type))
-    return type;
+      && NULL_वृक्षः != c_type_tag (type))
+    पटिनिवत्त type;
 
-  return NULL_TREE;
+  पटिनिवत्त NULL_वृक्षः;
 }
 
 /* For a record or union type, make necessary adaptations so that the
@@ -648,42 +648,42 @@ ptr_to_tagged_member (tree field)
    have formed equivalency classes that include types for which these
    member pointers end up pointing to other structure or unions types
    which have the same tag but are not compatible.  */
-tree
-c_type_canonical (tree type)
+वृक्षः
+c_type_canonical (वृक्षः type)
 {
   gcc_assert (RECORD_OR_UNION_TYPE_P (type));
 
-  bool needs_mod = false;
-  for (tree x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
+  तार्किक needs_mod = मिच्छा;
+  अत्थाय (वृक्षः x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
     {
-      if (!ptr_to_tagged_member (x))
-	continue;
-      needs_mod = true;
-      break;
+      सचे (!ptr_to_tagged_member (x))
+	अनुवर्त;
+      needs_mod = सच्च;
+      भङ्ग;
     }
-  if (!needs_mod)
-    return type;
+  सचे (!needs_mod)
+    पटिनिवत्त type;
 
   /* Construct new version with such members replaced.  */
-  tree n = build_distinct_type_copy (type);
-  tree *fields = &TYPE_FIELDS (n);
-  for (tree x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
+  वृक्षः n = build_distinct_type_copy (type);
+  वृक्षः *fields = &TYPE_FIELDS (n);
+  अत्थाय (वृक्षः x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
     {
-      tree f = copy_node (x);
-      if (tree m = ptr_to_tagged_member (x))
+      वृक्षः f = copy_ग्रन्थिः (x);
+      सचे (वृक्षः m = ptr_to_tagged_member (x))
 	{
-	  tree new_node = make_node (TREE_CODE (m));
-	  TYPE_NAME (new_node) = TYPE_NAME (m);
-	  SET_TYPE_STRUCTURAL_EQUALITY (new_node);
-	  new_node = qualify_type (new_node, m);
-	  TREE_TYPE (f) = c_reconstruct_complex_type (TREE_TYPE (x),
-						      new_node);
+	  वृक्षः new_ग्रन्थिः = make_ग्रन्थिः (वृक्षः_CODE (m));
+	  TYPE_NAME (new_ग्रन्थिः) = TYPE_NAME (m);
+	  SET_TYPE_STRUCTURAL_EQUALITY (new_ग्रन्थिः);
+	  new_ग्रन्थिः = qualify_type (new_ग्रन्थिः, m);
+	  वृक्षः_TYPE (f) = c_reconstruct_complex_type (वृक्षः_TYPE (x),
+						      new_ग्रन्थिः);
 	}
       *fields = f;
       fields = &DECL_CHAIN (f);
     }
   TYPE_CANONICAL (n) = n;
-  return n;
+  पटिनिवत्त n;
 }
 
 
@@ -693,64 +693,64 @@ c_type_canonical (tree type)
    Returns the result of build_type_attribute_variant of NTYPE and
    the (possibly) modified ATTRS.  */
 
-static tree
-c_build_functype_attribute_variant (tree ntype, tree otype, tree attrs)
+स्थिर वृक्षः
+c_build_functype_attribute_variant (वृक्षः ntype, वृक्षः otype, वृक्षः attrs)
 {
-  if (!prototype_p (otype)
+  सचे (!prototype_p (otype)
       && prototype_p (ntype)
       && lookup_attribute ("format", attrs))
     {
-      warning_at (input_location, OPT_Wattributes,
+      warning_at (निवेशः_location, OPT_Wattributes,
 		  "%qs attribute can only be applied to variadic functions",
 		  "format");
       attrs = remove_attribute ("format", attrs);
     }
-  return c_build_type_attribute_variant (ntype, attrs);
+  पटिनिवत्त c_build_type_attribute_variant (ntype, attrs);
 
 }
 
 /* Given a type which could be a typedef name, make sure to return the
    original type.  See set_underlying_type. */
-static const_tree
-c_type_original (const_tree t)
+स्थिर const_वृक्षः
+c_type_original (const_वृक्षः t)
 {
   /* It may even be a typedef of a typedef...
      In the case of compiler-created builtin structs the TYPE_DECL
      may be a dummy, with no DECL_ORIGINAL_TYPE.  Don't fault.  */
-  while (TYPE_NAME (t)
-	 && TREE_CODE (TYPE_NAME (t)) == TYPE_DECL
+  याव (TYPE_NAME (t)
+	 && वृक्षः_CODE (TYPE_NAME (t)) == TYPE_DECL
 	 && DECL_ORIGINAL_TYPE (TYPE_NAME (t)))
     t = DECL_ORIGINAL_TYPE (TYPE_NAME (t));
-  return t;
+  पटिनिवत्त t;
 }
 
 /* Return the tag for a tagged type.  */
-tree
-c_type_tag (const_tree t)
+वृक्षः
+c_type_tag (const_वृक्षः t)
 {
-  gcc_assert (RECORD_OR_UNION_TYPE_P (t) || TREE_CODE (t) == ENUMERAL_TYPE);
-  const_tree orig = c_type_original (t);
-  tree name = TYPE_NAME (orig);
-  if (!name)
-    return NULL_TREE;
-  if (TREE_CODE (name) == TYPE_DECL)
+  gcc_assert (RECORD_OR_UNION_TYPE_P (t) || वृक्षः_CODE (t) == ENUMERAL_TYPE);
+  const_वृक्षः orig = c_type_original (t);
+  वृक्षः name = TYPE_NAME (orig);
+  सचे (!name)
+    पटिनिवत्त NULL_वृक्षः;
+  सचे (वृक्षः_CODE (name) == TYPE_DECL)
     {
-      if (!DECL_NAME (name))
-	return NULL_TREE;
+      सचे (!DECL_NAME (name))
+	पटिनिवत्त NULL_वृक्षः;
       name = DECL_NAME (name);
     }
-  gcc_checking_assert (TREE_CODE (name) == IDENTIFIER_NODE);
-  return name;
+  gcc_checking_assert (वृक्षः_CODE (name) == IDENTIFIER_ग्रन्थिः);
+  पटिनिवत्त name;
 }
 
 /* Remove qualifiers but not atomic.  For arrays remove qualifiers
    on the element type but also do not remove atomic.  */
-static tree
-remove_qualifiers (tree t)
+स्थिर वृक्षः
+remove_qualifiers (वृक्षः t)
 {
-  if (!t || t == error_mark_node)
-    return t;
-  return TYPE_ATOMIC (strip_array_types (t))
+  सचे (!t || t == error_mark_ग्रन्थिः)
+    पटिनिवत्त t;
+  पटिनिवत्त TYPE_ATOMIC (strip_array_types (t))
 	 ? c_build_qualified_type (TYPE_MAIN_VARIANT (t), TYPE_QUAL_ATOMIC)
 	 : TYPE_MAIN_VARIANT (t);
 }
@@ -759,27 +759,27 @@ remove_qualifiers (tree t)
 /* Helper function for composite_type_internal.  Find a compatible type
    in a (transparent) union U compatible to T.  If found, return the
    type of the corresponding member.  Otherwise, return the union type U.  */
-static tree
-transparent_union_replacement (tree u, tree t)
+स्थिर वृक्षः
+transparent_union_replacement (वृक्षः u, वृक्षः t)
 {
-  if (u == error_mark_node || t == error_mark_node
-      || TREE_CODE (u) != UNION_TYPE
-      || !(TYPE_TRANSPARENT_AGGR (u) || TYPE_NAME (u) == NULL_TREE)
+  सचे (u == error_mark_ग्रन्थिः || t == error_mark_ग्रन्थिः
+      || वृक्षः_CODE (u) != UNION_TYPE
+      || !(TYPE_TRANSPARENT_AGGR (u) || TYPE_NAME (u) == NULL_वृक्षः)
       || comptypes (u, t))
-    return u;
+    पटिनिवत्त u;
 
-  for (tree memb = TYPE_FIELDS (u); memb; memb = DECL_CHAIN (memb))
+  अत्थाय (वृक्षः memb = TYPE_FIELDS (u); memb; memb = DECL_CHAIN (memb))
     {
-      tree m = remove_qualifiers (TREE_TYPE (memb));
-      if (comptypes (m, t))
+      वृक्षः m = remove_qualifiers (वृक्षः_TYPE (memb));
+      सचे (comptypes (m, t))
 	{
-	  pedwarn (input_location, OPT_Wpedantic,
+	  pedwarn (निवेशः_location, OPT_Wpedantic,
 		    "function types not truly compatible in ISO C");
-	  return m;
+	  पटिनिवत्त m;
 	}
     }
 
-  return u;
+  पटिनिवत्त u;
 }
 
 
@@ -790,33 +790,33 @@ transparent_union_replacement (tree u, tree t)
    nonzero; if that isn't so, this may crash.  In particular, we
    assume that qualifiers match.  */
 
-struct composite_cache {
-  tree t1;
-  tree t2;
-  tree composite;
-  struct composite_cache* next;
+संरचना composite_cache {
+  वृक्षः t1;
+  वृक्षः t2;
+  वृक्षः composite;
+  संरचना composite_cache* next;
 };
 
-tree
-composite_type_internal (tree t1, tree t2, tree cond,
-			 struct composite_cache* cache)
+वृक्षः
+composite_type_internal (वृक्षः t1, वृक्षः t2, वृक्षः cond,
+			 संरचना composite_cache* cache)
 {
-  enum tree_code code1;
-  enum tree_code code2;
-  tree attributes;
+  गणना वृक्षः_code code1;
+  गणना वृक्षः_code code2;
+  वृक्षः attributes;
 
   /* Save time if the two types are the same.  */
 
-  if (t1 == t2) return t1;
+  सचे (t1 == t2) पटिनिवत्त t1;
 
   /* If one type is nonsense, use the other.  */
-  if (t1 == error_mark_node)
-    return t2;
-  if (t2 == error_mark_node)
-    return t1;
+  सचे (t1 == error_mark_ग्रन्थिः)
+    पटिनिवत्त t2;
+  सचे (t2 == error_mark_ग्रन्थिः)
+    पटिनिवत्त t1;
 
-  code1 = TREE_CODE (t1);
-  code2 = TREE_CODE (t2);
+  code1 = वृक्षः_CODE (t1);
+  code2 = वृक्षः_CODE (t2);
 
   /* Merge the attributes.  */
   attributes = targetm.merge_type_attributes (t1, t2);
@@ -826,91 +826,91 @@ composite_type_internal (tree t1, tree t2, tree cond,
      (DR#013 question 3).  For consistency, use the enumerated type as
      the composite type.  */
 
-  if (code1 == ENUMERAL_TYPE
+  सचे (code1 == ENUMERAL_TYPE
       && (code2 == INTEGER_TYPE
 	  || code2 == BOOLEAN_TYPE))
-    return t1;
-  if (code2 == ENUMERAL_TYPE
+    पटिनिवत्त t1;
+  सचे (code2 == ENUMERAL_TYPE
       && (code1 == INTEGER_TYPE
 	  || code1 == BOOLEAN_TYPE))
-    return t2;
+    पटिनिवत्त t2;
 
   gcc_assert (code1 == code2);
 
-  switch (code1)
+  विकल्प (code1)
     {
-    case POINTER_TYPE:
+    पक्ष POINTER_TYPE:
       /* For two pointers, do this recursively on the target type.  */
       {
 	gcc_checking_assert (TYPE_QUALS (t1) == TYPE_QUALS (t2));
-	tree target = composite_type_internal (TREE_TYPE (t1), TREE_TYPE (t2),
+	वृक्षः target = composite_type_internal (वृक्षः_TYPE (t1), वृक्षः_TYPE (t2),
 					       cond, cache);
-	tree n = c_build_pointer_type_for_mode (target, TYPE_MODE (t1), false);
-	return c_build_type_attribute_qual_variant (n, attributes,
+	वृक्षः n = c_build_pointer_type_for_mode (target, TYPE_MODE (t1), मिच्छा);
+	पटिनिवत्त c_build_type_attribute_qual_variant (n, attributes,
 						    TYPE_QUALS (t2));
       }
 
-    case ARRAY_TYPE:
+    पक्ष ARRAY_TYPE:
       {
-	tree d1 = TYPE_DOMAIN (t1);
-	tree d2 = TYPE_DOMAIN (t2);
+	वृक्षः d1 = TYPE_DOMAIN (t1);
+	वृक्षः d2 = TYPE_DOMAIN (t2);
 
 	/* We should not have any type quals on arrays at all.  */
 	gcc_assert (!TYPE_QUALS_NO_ADDR_SPACE (t1)
 		    && !TYPE_QUALS_NO_ADDR_SPACE (t2));
 
-	bool d1_zero = zero_length_array_type_p (t1)
+	तार्किक d1_zero = zero_length_array_type_p (t1)
 		       || flexible_array_member_type_p (t1);
-	bool d2_zero = zero_length_array_type_p (t2)
+	तार्किक d2_zero = zero_length_array_type_p (t2)
 		       || flexible_array_member_type_p (t2);
 
-	bool d1_variable = top_array_vla_p (t1);
-	bool d2_variable = top_array_vla_p (t2);
+	तार्किक d1_variable = शिखरम्_array_vla_p (t1);
+	तार्किक d2_variable = शिखरम्_array_vla_p (t2);
 
-	bool use1 = d1 && (d2_variable || !d2 || d2_zero || !d1_variable);
-	bool use2 = d2 && (d1_variable || !d1 || d1_zero || !d2_variable);
+	तार्किक use1 = d1 && (d2_variable || !d2 || d2_zero || !d1_variable);
+	तार्किक use2 = d2 && (d1_variable || !d1 || d1_zero || !d2_variable);
 
 	/* If the first is an unspecified size pick the other one.  */
-	if (d2_variable && c_type_unspecified_p (t1))
+	सचे (d2_variable && c_type_unspecified_p (t1))
 	  {
 	    gcc_assert (use1 && use2);
-	    use1 = false;
+	    use1 = मिच्छा;
 	  }
 
 	/* If both are VLAs but not unspecified and we are in the
 	   conditional operator, we create a conditional to select
 	   the size of the active branch.  */
-	bool use0 = cond && d1_variable && !c_type_unspecified_p (t1)
+	तार्किक use0 = cond && d1_variable && !c_type_unspecified_p (t1)
 			 && d2_variable && !c_type_unspecified_p (t2);
 
-	tree td;
-	tree elt = composite_type_internal (TREE_TYPE (t1), TREE_TYPE (t2),
+	वृक्षः td;
+	वृक्षः elt = composite_type_internal (वृक्षः_TYPE (t1), वृक्षः_TYPE (t2),
 					    cond, cache);
 
-	if (!use0)
+	सचे (!use0)
 	  {
 	    /* Save space: see if the result is identical to one of the args.  */
-	    if (elt == TREE_TYPE (t1) && use1)
-	      return c_build_type_attribute_variant (t1, attributes);
-	    if (elt == TREE_TYPE (t2) && use2)
-	      return c_build_type_attribute_variant (t2, attributes);
+	    सचे (elt == वृक्षः_TYPE (t1) && use1)
+	      पटिनिवत्त c_build_type_attribute_variant (t1, attributes);
+	    सचे (elt == वृक्षः_TYPE (t2) && use2)
+	      पटिनिवत्त c_build_type_attribute_variant (t2, attributes);
 
-	    if (elt == TREE_TYPE (t1) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
-	      return c_build_type_attribute_variant (t1, attributes);
-	    if (elt == TREE_TYPE (t2) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
-	      return c_build_type_attribute_variant (t2, attributes);
+	    सचे (elt == वृक्षः_TYPE (t1) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
+	      पटिनिवत्त c_build_type_attribute_variant (t1, attributes);
+	    सचे (elt == वृक्षः_TYPE (t2) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
+	      पटिनिवत्त c_build_type_attribute_variant (t2, attributes);
 
 	    td = TYPE_DOMAIN (use1 ? t1 : t2);
 	  }
-	else
+	अञ्ञथा
 	  {
 	    /* Not used in C.  */
-	    gcc_assert (size_zero_node == TYPE_MIN_VALUE (d1));
-	    gcc_assert (size_zero_node == TYPE_MIN_VALUE (d2));
+	    gcc_assert (size_zero_ग्रन्थिः == TYPE_MIN_मानम् (d1));
+	    gcc_assert (size_zero_ग्रन्थिः == TYPE_MIN_मानम् (d2));
 
-	    tree d = fold_build3_loc (UNKNOWN_LOCATION, COND_EXPR, sizetype,
-				      cond, TYPE_MAX_VALUE (d1),
-				      TYPE_MAX_VALUE (d2));
+	    वृक्षः d = fold_build3_loc (UNKNOWN_LOCATION, COND_व्यञ्जकम्, sizetype,
+				      cond, TYPE_MAX_मानम् (d1),
+				      TYPE_MAX_मानम् (d2));
 
 	    td = build_index_type (d);
 	  }
@@ -920,31 +920,31 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	   up TYPE_MAIN_VARIANT correctly, we need to form the
 	   composite of the unqualified types and add the qualifiers
 	   back at the end.  */
-	int quals = TYPE_QUALS (strip_array_types (elt));
-	tree unqual_elt = c_build_qualified_type (elt, TYPE_UNQUALIFIED);
+	पूर्णाङ्क quals = TYPE_QUALS (strip_array_types (elt));
+	वृक्षः unqual_elt = c_build_qualified_type (elt, TYPE_UNQUALIFIED);
 
-	if ((!d1 || d1_zero) && (!d2 || d2_zero) && (d1 || d2))
+	सचे ((!d1 || d1_zero) && (!d2 || d2_zero) && (d1 || d2))
 	  t1 = c_build_array_type_zero_size (unqual_elt);
-	else
+	अञ्ञथा
 	  t1 = c_build_array_type (unqual_elt, td);
 
 	/* Check that a type which has a varying outermost dimension
 	   got marked as having a variable size.  */
-	bool varsize = (d1_variable && d2_variable)
+	तार्किक varsize = (d1_variable && d2_variable)
 		       || (d1_variable && !d2)
 		       || (d2_variable && !d1);
 	gcc_checking_assert (!varsize || C_TYPE_VARIABLE_SIZE (t1));
 
 	t1 = c_build_qualified_type (t1, quals);
-	return c_build_type_attribute_variant (t1, attributes);
+	पटिनिवत्त c_build_type_attribute_variant (t1, attributes);
       }
 
-    case RECORD_TYPE:
-    case UNION_TYPE:
-      if (flag_isoc23 && !comptypes_same_p (t1, t2))
+    पक्ष RECORD_TYPE:
+    पक्ष UNION_TYPE:
+      सचे (flag_isoc23 && !comptypes_same_p (t1, t2))
 	{
 	  /* Go to the original type to get the right tag.  */
-	  tree tag = c_type_tag (t1);
+	  वृक्षः tag = c_type_tag (t1);
 
 	  gcc_checking_assert (COMPLETE_TYPE_P (t1) && COMPLETE_TYPE_P (t2));
 	  gcc_checking_assert (!tag || comptypes (t1, t2));
@@ -952,30 +952,30 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	  /* If a composite type for these two types is already under
 	     construction, return it.  */
 
-	  for (struct composite_cache *c = cache; c != NULL; c = c->next)
-	    if ((c->t1 == t1 && c->t2 == t2) || (c->t1 == t2 && c->t2 == t1))
-	       return c->composite;
+	  अत्थाय (संरचना composite_cache *c = cache; c != रिक्त; c = c->next)
+	    सचे ((c->t1 == t1 && c->t2 == t2) || (c->t1 == t2 && c->t2 == t1))
+	       पटिनिवत्त c->composite;
 
 	  /* Otherwise, create a new type node and link it into the cache.  */
 
-	  tree n = make_node (code1);
+	  वृक्षः n = make_ग्रन्थिः (code1);
 	  SET_TYPE_STRUCTURAL_EQUALITY (n);
 	  TYPE_NAME (n) = tag;
 
-	  struct composite_cache cache2 = { t1, t2, n, cache };
+	  संरचना composite_cache cache2 = { t1, t2, n, cache };
 	  cache = &cache2;
 
-	  tree f1 = TYPE_FIELDS (t1);
-	  tree f2 = TYPE_FIELDS (t2);
-	  tree fields = NULL_TREE;
+	  वृक्षः f1 = TYPE_FIELDS (t1);
+	  वृक्षः f2 = TYPE_FIELDS (t2);
+	  वृक्षः fields = NULL_वृक्षः;
 
-	  for (tree a = f1, b = f2; a && b;
+	  अत्थाय (वृक्षः a = f1, b = f2; a && b;
 	       a = DECL_CHAIN (a), b = DECL_CHAIN (b))
 	    {
-	      tree ta = TREE_TYPE (a);
-	      tree tb = TREE_TYPE (b);
+	      वृक्षः ta = वृक्षः_TYPE (a);
+	      वृक्षः tb = वृक्षः_TYPE (b);
 
-	      if (DECL_C_BIT_FIELD (a))
+	      सचे (DECL_C_BIT_FIELD (a))
 		{
 		  ta = DECL_BIT_FIELD_TYPE (a);
 		  tb = DECL_BIT_FIELD_TYPE (b);
@@ -984,8 +984,8 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	      gcc_assert (DECL_NAME (a) == DECL_NAME (b));
 	      gcc_checking_assert (!DECL_NAME (a) || comptypes (ta, tb));
 
-	      tree t = composite_type_internal (ta, tb, cond, cache);
-	      tree f = build_decl (input_location, FIELD_DECL, DECL_NAME (a), t);
+	      वृक्षः t = composite_type_internal (ta, tb, cond, cache);
+	      वृक्षः f = build_decl (निवेशः_location, FIELD_DECL, DECL_NAME (a), t);
 
 	      DECL_PACKED (f) = DECL_PACKED (a);
 	      SET_DECL_ALIGN (f, DECL_ALIGN (a));
@@ -994,15 +994,15 @@ composite_type_internal (tree t1, tree t2, tree cond,
 
 	      decl_attributes (&f, DECL_ATTRIBUTES (f), 0);
 
-	      finish_decl (f, input_location, NULL, NULL, NULL);
+	      finish_decl (f, निवेशः_location, रिक्त, रिक्त, रिक्त);
 
-	      if (DECL_C_BIT_FIELD (a))
+	      सचे (DECL_C_BIT_FIELD (a))
 		{
 		  /* This will be processed by finish_struct.  */
 		  SET_DECL_C_BIT_FIELD (f);
-		  DECL_INITIAL (f) = build_int_cst (integer_type_node,
-						    tree_to_uhwi (DECL_SIZE (a)));
-		  DECL_NONADDRESSABLE_P (f) = true;
+		  DECL_INITIAL (f) = build_int_cst (integer_type_ग्रन्थिः,
+						    वृक्षः_to_uhwi (DECL_SIZE (a)));
+		  DECL_NONADDRESSABLE_P (f) = सच्च;
 		  DECL_PADDING_P (f) = !DECL_NAME (a);
 		}
 
@@ -1014,74 +1014,74 @@ composite_type_internal (tree t1, tree t2, tree cond,
 
 	  /* Setup the struct/union type.  Because we inherit all variably
 	     modified components, we can ignore the size expression.  */
-	  tree expr = NULL_TREE;
+	  वृक्षः व्यञ्जकम् = NULL_वृक्षः;
 
 	  /* Set TYPE_STUB_DECL for debugging symbols.  */
-	  TYPE_STUB_DECL (n) = pushdecl (build_decl (input_location, TYPE_DECL,
-						     NULL_TREE, n));
+	  TYPE_STUB_DECL (n) = pushdecl (build_decl (निवेशः_location, TYPE_DECL,
+						     NULL_वृक्षः, n));
 
-	  n = finish_struct (input_location, n, fields, attributes, NULL,
-			     &expr);
+	  n = finish_struct (निवेशः_location, n, fields, attributes, रिक्त,
+			     &व्यञ्जकम्);
 
-	  return qualify_type (n, t1);
+	  पटिनिवत्त qualify_type (n, t1);
 	}
       /* FALLTHRU */
-    case ENUMERAL_TYPE:
-      if (attributes != NULL)
+    पक्ष ENUMERAL_TYPE:
+      सचे (attributes != रिक्त)
 	{
 	  /* Try harder not to create a new aggregate type.  */
-	  if (attribute_list_equal (TYPE_ATTRIBUTES (t1), attributes))
-	    return t1;
-	  if (attribute_list_equal (TYPE_ATTRIBUTES (t2), attributes))
-	    return t2;
+	  सचे (attribute_list_equal (TYPE_ATTRIBUTES (t1), attributes))
+	    पटिनिवत्त t1;
+	  सचे (attribute_list_equal (TYPE_ATTRIBUTES (t2), attributes))
+	    पटिनिवत्त t2;
 	}
-      return c_build_type_attribute_variant (t1, attributes);
+      पटिनिवत्त c_build_type_attribute_variant (t1, attributes);
 
-    case FUNCTION_TYPE:
+    पक्ष FUNCTION_TYPE:
       /* Function types: prefer the one that specified arg types.
 	 If both do, merge the arg types.  Also merge the return types.  */
       {
-	tree valtype = composite_type_internal (TREE_TYPE (t1), TREE_TYPE (t2),
+	वृक्षः valtype = composite_type_internal (वृक्षः_TYPE (t1), वृक्षः_TYPE (t2),
 						cond, cache);
-	tree p1 = TYPE_ARG_TYPES (t1);
-	tree p2 = TYPE_ARG_TYPES (t2);
+	वृक्षः p1 = TYPE_ARG_TYPES (t1);
+	वृक्षः p2 = TYPE_ARG_TYPES (t2);
 
 	/* Save space: see if the result is identical to one of the args.  */
-	if (valtype == TREE_TYPE (t1) && !TYPE_ARG_TYPES (t2))
-	  return c_build_functype_attribute_variant (t1, t2, attributes);
-	if (valtype == TREE_TYPE (t2) && !TYPE_ARG_TYPES (t1))
-	  return c_build_functype_attribute_variant (t2, t1, attributes);
+	सचे (valtype == वृक्षः_TYPE (t1) && !TYPE_ARG_TYPES (t2))
+	  पटिनिवत्त c_build_functype_attribute_variant (t1, t2, attributes);
+	सचे (valtype == वृक्षः_TYPE (t2) && !TYPE_ARG_TYPES (t1))
+	  पटिनिवत्त c_build_functype_attribute_variant (t2, t1, attributes);
 
 	/* Simple way if one arg fails to specify argument types.  */
-	if (TYPE_ARG_TYPES (t1) == NULL_TREE)
+	सचे (TYPE_ARG_TYPES (t1) == NULL_वृक्षः)
 	  {
 	    t1 = c_build_function_type (valtype, TYPE_ARG_TYPES (t2),
 					TYPE_NO_NAMED_ARGS_STDARG_P (t2));
 	    t1 = c_build_type_attribute_variant (t1, attributes);
-	    return qualify_type (t1, t2);
+	    पटिनिवत्त qualify_type (t1, t2);
 	 }
-	if (TYPE_ARG_TYPES (t2) == NULL_TREE)
+	सचे (TYPE_ARG_TYPES (t2) == NULL_वृक्षः)
 	  {
 	    t1 = c_build_function_type (valtype, TYPE_ARG_TYPES (t1),
 					TYPE_NO_NAMED_ARGS_STDARG_P (t1));
 	    t1 = c_build_type_attribute_variant (t1, attributes);
-	    return qualify_type (t1, t2);
+	    पटिनिवत्त qualify_type (t1, t2);
 	  }
 
 	/* If both args specify argument types, we must merge the two
 	   lists, argument by argument.  */
-	tree newargs = NULL_TREE;
-	tree *endp = &newargs;
+	वृक्षः newargs = NULL_वृक्षः;
+	वृक्षः *endp = &newargs;
 
-	for (; p1; p1 = TREE_CHAIN (p1), p2 = TREE_CHAIN (p2))
+	अत्थाय (; p1; p1 = वृक्षः_CHAIN (p1), p2 = वृक्षः_CHAIN (p2))
 	  {
-	    if (p1 == void_list_node)
+	    सचे (p1 == void_list_ग्रन्थिः)
 	      {
-		*endp = void_list_node;
-		break;
+		*endp = void_list_ग्रन्थिः;
+		भङ्ग;
 	      }
-	    tree mv1 = remove_qualifiers (TREE_VALUE (p1));
-	    tree mv2 = remove_qualifiers (TREE_VALUE (p2));
+	    वृक्षः mv1 = remove_qualifiers (वृक्षः_मानम् (p1));
+	    वृक्षः mv2 = remove_qualifiers (वृक्षः_मानम् (p2));
 
 	    gcc_assert (mv1);
 	    gcc_assert (mv2);
@@ -1089,11 +1089,11 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	    mv1 = transparent_union_replacement (mv1, mv2);
 	    mv2 = transparent_union_replacement (mv2, mv1);
 
-	    *endp = tree_cons (NULL_TREE,
+	    *endp = वृक्षः_cons (NULL_वृक्षः,
 			       composite_type_internal (mv1, mv2, cond, cache),
-			       NULL_TREE);
+			       NULL_वृक्षः);
 
-	    endp = &TREE_CHAIN (*endp);
+	    endp = &वृक्षः_CHAIN (*endp);
 	  }
 
 	t1 = c_build_function_type (valtype, newargs);
@@ -1101,29 +1101,29 @@ composite_type_internal (tree t1, tree t2, tree cond,
       }
       /* FALLTHRU */
 
-    default:
-      return c_build_type_attribute_variant (t1, attributes);
+    स्वभाव:
+      पटिनिवत्त c_build_type_attribute_variant (t1, attributes);
     }
 }
 
-tree
-composite_type_cond (tree t1, tree t2, tree cond)
+वृक्षः
+composite_type_cond (वृक्षः t1, वृक्षः t2, वृक्षः cond)
 {
   gcc_checking_assert (comptypes_check_for_composite (t1, t2));
 
-  struct composite_cache cache = { };
-  tree n = composite_type_internal (t1, t2, cond, &cache);
+  संरचना composite_cache cache = { };
+  वृक्षः n = composite_type_internal (t1, t2, cond, &cache);
 
   gcc_checking_assert (comptypes_check_for_composite (n, t1));
   gcc_checking_assert (comptypes_check_for_composite (n, t2));
-  return n;
+  पटिनिवत्त n;
 }
 
 
-tree
-composite_type (tree t1, tree t2)
+वृक्षः
+composite_type (वृक्षः t1, वृक्षः t2)
 {
-  return composite_type_cond (t1, t2, NULL_TREE);
+  पटिनिवत्त composite_type_cond (t1, t2, NULL_वृक्षः);
 }
 
 /* Return the type of a conditional expression between pointers to
@@ -1132,35 +1132,35 @@ composite_type (tree t1, tree t2)
    We assume that comp_target_types has already been done and returned
    true; if that isn't so, this may crash.  */
 
-static tree
-common_pointer_type (tree t1, tree t2, tree cond)
+स्थिर वृक्षः
+common_pointer_type (वृक्षः t1, वृक्षः t2, वृक्षः cond)
 {
-  tree attributes;
+  वृक्षः attributes;
   unsigned target_quals;
   addr_space_t as1, as2, as_common;
-  int quals1, quals2;
+  पूर्णाङ्क quals1, quals2;
 
   /* Save time if the two types are the same.  */
 
-  if (t1 == t2) return t1;
+  सचे (t1 == t2) पटिनिवत्त t1;
 
   /* If one type is nonsense, use the other.  */
-  if (t1 == error_mark_node)
-    return t2;
-  if (t2 == error_mark_node)
-    return t1;
+  सचे (t1 == error_mark_ग्रन्थिः)
+    पटिनिवत्त t2;
+  सचे (t2 == error_mark_ग्रन्थिः)
+    पटिनिवत्त t1;
 
-  gcc_assert (TREE_CODE (t1) == POINTER_TYPE
-	      && TREE_CODE (t2) == POINTER_TYPE);
+  gcc_assert (वृक्षः_CODE (t1) == POINTER_TYPE
+	      && वृक्षः_CODE (t2) == POINTER_TYPE);
 
   /* Merge the attributes.  */
   attributes = targetm.merge_type_attributes (t1, t2);
 
   /* Find the composite type of the target types, and combine the
      qualifiers of the two types' targets.  */
-  tree pointed_to_1 = TREE_TYPE (t1);
-  tree pointed_to_2 = TREE_TYPE (t2);
-  tree target = composite_type_cond (TYPE_MAIN_VARIANT (pointed_to_1),
+  वृक्षः pointed_to_1 = वृक्षः_TYPE (t1);
+  वृक्षः pointed_to_2 = वृक्षः_TYPE (t2);
+  वृक्षः target = composite_type_cond (TYPE_MAIN_VARIANT (pointed_to_1),
 				     TYPE_MAIN_VARIANT (pointed_to_2), cond);
 
   /* Strip array types to get correct qualifier for pointers to arrays */
@@ -1170,9 +1170,9 @@ common_pointer_type (tree t1, tree t2, tree cond)
   /* For function types do not merge const qualifiers, but drop them
      if used inconsistently.  The middle-end uses these to mark const
      and noreturn functions.  */
-  if (TREE_CODE (pointed_to_1) == FUNCTION_TYPE)
+  सचे (वृक्षः_CODE (pointed_to_1) == FUNCTION_TYPE)
     target_quals = (quals1 & quals2);
-  else
+  अञ्ञथा
     target_quals = (quals1 | quals2);
 
   /* If the two named address spaces are different, determine the common
@@ -1180,13 +1180,13 @@ common_pointer_type (tree t1, tree t2, tree cond)
      assumption that comp_target_type returned true.  */
   as1 = TYPE_ADDR_SPACE (pointed_to_1);
   as2 = TYPE_ADDR_SPACE (pointed_to_2);
-  if (!addr_space_superset (as1, as2, &as_common))
+  सचे (!addr_space_superset (as1, as2, &as_common))
     gcc_unreachable ();
 
   target_quals |= ENCODE_QUAL_ADDR_SPACE (as_common);
 
   t1 = c_build_pointer_type (c_build_qualified_type (target, target_quals));
-  return c_build_type_attribute_variant (t1, attributes);
+  पटिनिवत्त c_build_type_attribute_variant (t1, attributes);
 }
 
 /* Return the common type for two arithmetic types under the usual
@@ -1197,42 +1197,42 @@ common_pointer_type (tree t1, tree t2, tree cond)
    This is the type for the result of most arithmetic operations
    if the operands have the given two types.  */
 
-static tree
-c_common_type (tree t1, tree t2)
+स्थिर वृक्षः
+c_common_type (वृक्षः t1, वृक्षः t2)
 {
-  enum tree_code code1;
-  enum tree_code code2;
+  गणना वृक्षः_code code1;
+  गणना वृक्षः_code code2;
 
   /* If one type is nonsense, use the other.  */
-  if (t1 == error_mark_node)
-    return t2;
-  if (t2 == error_mark_node)
-    return t1;
+  सचे (t1 == error_mark_ग्रन्थिः)
+    पटिनिवत्त t2;
+  सचे (t2 == error_mark_ग्रन्थिः)
+    पटिनिवत्त t1;
 
-  if (TYPE_QUALS (t1) != TYPE_UNQUALIFIED)
+  सचे (TYPE_QUALS (t1) != TYPE_UNQUALIFIED)
     t1 = TYPE_MAIN_VARIANT (t1);
 
-  if (TYPE_QUALS (t2) != TYPE_UNQUALIFIED)
+  सचे (TYPE_QUALS (t2) != TYPE_UNQUALIFIED)
     t2 = TYPE_MAIN_VARIANT (t2);
 
-  if (TYPE_ATTRIBUTES (t1) != NULL_TREE)
+  सचे (TYPE_ATTRIBUTES (t1) != NULL_वृक्षः)
     {
-      tree attrs = affects_type_identity_attributes (TYPE_ATTRIBUTES (t1));
+      वृक्षः attrs = affects_type_identity_attributes (TYPE_ATTRIBUTES (t1));
       t1 = c_build_type_attribute_variant (t1, attrs);
     }
 
-  if (TYPE_ATTRIBUTES (t2) != NULL_TREE)
+  सचे (TYPE_ATTRIBUTES (t2) != NULL_वृक्षः)
     {
-      tree attrs = affects_type_identity_attributes (TYPE_ATTRIBUTES (t2));
+      वृक्षः attrs = affects_type_identity_attributes (TYPE_ATTRIBUTES (t2));
       t2 = c_build_type_attribute_variant (t2, attrs);
     }
 
   /* Save time if the two types are the same.  */
 
-  if (t1 == t2) return t1;
+  सचे (t1 == t2) पटिनिवत्त t1;
 
-  code1 = TREE_CODE (t1);
-  code2 = TREE_CODE (t2);
+  code1 = वृक्षः_CODE (t1);
+  code2 = वृक्षः_CODE (t2);
 
   gcc_assert (code1 == VECTOR_TYPE || code1 == COMPLEX_TYPE
 	      || code1 == FIXED_POINT_TYPE || code1 == REAL_TYPE
@@ -1244,107 +1244,107 @@ c_common_type (tree t1, tree t2)
   /* When one operand is a decimal float type, the other operand cannot be
      a generic float type or a complex type.  We also disallow vector types
      here.  */
-  if ((DECIMAL_FLOAT_TYPE_P (t1) || DECIMAL_FLOAT_TYPE_P (t2))
+  सचे ((DECIMAL_FLOAT_TYPE_P (t1) || DECIMAL_FLOAT_TYPE_P (t2))
       && !(DECIMAL_FLOAT_TYPE_P (t1) && DECIMAL_FLOAT_TYPE_P (t2)))
     {
-      if (code1 == VECTOR_TYPE || code2 == VECTOR_TYPE)
+      सचे (code1 == VECTOR_TYPE || code2 == VECTOR_TYPE)
 	{
 	  error ("cannot mix operands of decimal floating and vector types");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      if (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
+      सचे (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
 	{
 	  error ("cannot mix operands of decimal floating and complex types");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      if (code1 == REAL_TYPE && code2 == REAL_TYPE)
+      सचे (code1 == REAL_TYPE && code2 == REAL_TYPE)
 	{
 	  error ("cannot mix operands of decimal floating "
 		 "and other floating types");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
     }
 
   /* If one type is a vector type, return that type.  (How the usual
      arithmetic conversions apply to the vector types extension is not
      precisely specified.)  */
-  if (code1 == VECTOR_TYPE)
-    return t1;
+  सचे (code1 == VECTOR_TYPE)
+    पटिनिवत्त t1;
 
-  if (code2 == VECTOR_TYPE)
-    return t2;
+  सचे (code2 == VECTOR_TYPE)
+    पटिनिवत्त t2;
 
   /* If one type is complex, form the common type of the non-complex
      components, then make that complex.  Use T1 or T2 if it is the
      required type.  */
-  if (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
+  सचे (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
     {
-      tree subtype1 = code1 == COMPLEX_TYPE ? TREE_TYPE (t1) : t1;
-      tree subtype2 = code2 == COMPLEX_TYPE ? TREE_TYPE (t2) : t2;
-      tree subtype = c_common_type (subtype1, subtype2);
+      वृक्षः subtype1 = code1 == COMPLEX_TYPE ? वृक्षः_TYPE (t1) : t1;
+      वृक्षः subtype2 = code2 == COMPLEX_TYPE ? वृक्षः_TYPE (t2) : t2;
+      वृक्षः subtype = c_common_type (subtype1, subtype2);
 
-      if (code1 == COMPLEX_TYPE && TREE_TYPE (t1) == subtype)
-	return t1;
-      else if (code2 == COMPLEX_TYPE && TREE_TYPE (t2) == subtype)
-	return t2;
-      else if (TREE_CODE (subtype) == BITINT_TYPE)
+      सचे (code1 == COMPLEX_TYPE && वृक्षः_TYPE (t1) == subtype)
+	पटिनिवत्त t1;
+      अञ्ञथा सचे (code2 == COMPLEX_TYPE && वृक्षः_TYPE (t2) == subtype)
+	पटिनिवत्त t2;
+      अञ्ञथा सचे (वृक्षः_CODE (subtype) == BITINT_TYPE)
 	{
 	  sorry ("%<_Complex _BitInt(%d)%> unsupported",
 		 TYPE_PRECISION (subtype));
-	  return code1 == COMPLEX_TYPE ? t1 : t2;
+	  पटिनिवत्त code1 == COMPLEX_TYPE ? t1 : t2;
 	}
-      else
-	return build_complex_type (subtype);
+      अञ्ञथा
+	पटिनिवत्त build_complex_type (subtype);
     }
 
   /* If only one is real, use it as the result.  */
 
-  if (code1 == REAL_TYPE && code2 != REAL_TYPE)
-    return t1;
+  सचे (code1 == REAL_TYPE && code2 != REAL_TYPE)
+    पटिनिवत्त t1;
 
-  if (code2 == REAL_TYPE && code1 != REAL_TYPE)
-    return t2;
+  सचे (code2 == REAL_TYPE && code1 != REAL_TYPE)
+    पटिनिवत्त t2;
 
   /* If both are real and either are decimal floating point types, use
      the decimal floating point type with the greater precision. */
 
-  if (code1 == REAL_TYPE && code2 == REAL_TYPE)
+  सचे (code1 == REAL_TYPE && code2 == REAL_TYPE)
     {
-      if (TYPE_MAIN_VARIANT (t1) == dfloat128_type_node
-	  || TYPE_MAIN_VARIANT (t2) == dfloat128_type_node)
-	return dfloat128_type_node;
+      सचे (TYPE_MAIN_VARIANT (t1) == dfloat128_type_ग्रन्थिः
+	  || TYPE_MAIN_VARIANT (t2) == dfloat128_type_ग्रन्थिः)
+	पटिनिवत्त dfloat128_type_ग्रन्थिः;
       /* And prefer _Decimal128 over _Decimal64x which has in GCC's
 	 implementation the same mode.  */
-      else if (TYPE_MAIN_VARIANT (t1) == dfloat64x_type_node
-	       || TYPE_MAIN_VARIANT (t2) == dfloat64x_type_node)
-	return dfloat64x_type_node;
-      else if (TYPE_MAIN_VARIANT (t1) == dfloat64_type_node
-	       || TYPE_MAIN_VARIANT (t2) == dfloat64_type_node)
-	return dfloat64_type_node;
-      else if (TYPE_MAIN_VARIANT (t1) == dfloat32_type_node
-	       || TYPE_MAIN_VARIANT (t2) == dfloat32_type_node)
-	return dfloat32_type_node;
+      अञ्ञथा सचे (TYPE_MAIN_VARIANT (t1) == dfloat64x_type_ग्रन्थिः
+	       || TYPE_MAIN_VARIANT (t2) == dfloat64x_type_ग्रन्थिः)
+	पटिनिवत्त dfloat64x_type_ग्रन्थिः;
+      अञ्ञथा सचे (TYPE_MAIN_VARIANT (t1) == dfloat64_type_ग्रन्थिः
+	       || TYPE_MAIN_VARIANT (t2) == dfloat64_type_ग्रन्थिः)
+	पटिनिवत्त dfloat64_type_ग्रन्थिः;
+      अञ्ञथा सचे (TYPE_MAIN_VARIANT (t1) == dfloat32_type_ग्रन्थिः
+	       || TYPE_MAIN_VARIANT (t2) == dfloat32_type_ग्रन्थिः)
+	पटिनिवत्त dfloat32_type_ग्रन्थिः;
     }
 
   /* Deal with fixed-point types.  */
-  if (code1 == FIXED_POINT_TYPE || code2 == FIXED_POINT_TYPE)
+  सचे (code1 == FIXED_POINT_TYPE || code2 == FIXED_POINT_TYPE)
     {
-      unsigned int unsignedp = 0, satp = 0;
+      unsigned पूर्णाङ्क unsignedp = 0, satp = 0;
       scalar_mode m1, m2;
-      unsigned int fbit1, ibit1, fbit2, ibit2, max_fbit, max_ibit;
+      unsigned पूर्णाङ्क fbit1, ibit1, fbit2, ibit2, max_fbit, max_ibit;
 
       m1 = SCALAR_TYPE_MODE (t1);
       m2 = SCALAR_TYPE_MODE (t2);
 
       /* If one input type is saturating, the result type is saturating.  */
-      if (TYPE_SATURATING (t1) || TYPE_SATURATING (t2))
+      सचे (TYPE_SATURATING (t1) || TYPE_SATURATING (t2))
 	satp = 1;
 
       /* If both fixed-point types are unsigned, the result type is unsigned.
 	 When mixing fixed-point and integer types, follow the sign of the
 	 fixed-point type.
 	 Otherwise, the result type is signed.  */
-      if ((TYPE_UNSIGNED (t1) && TYPE_UNSIGNED (t2)
+      सचे ((TYPE_UNSIGNED (t1) && TYPE_UNSIGNED (t2)
 	   && code1 == FIXED_POINT_TYPE && code2 == FIXED_POINT_TYPE)
 	  || (code1 == FIXED_POINT_TYPE && code2 != FIXED_POINT_TYPE
 	      && TYPE_UNSIGNED (t1))
@@ -1353,54 +1353,54 @@ c_common_type (tree t1, tree t2)
 	unsignedp = 1;
 
       /* The result type is signed.  */
-      if (unsignedp == 0)
+      सचे (unsignedp == 0)
 	{
 	  /* If the input type is unsigned, we need to convert to the
 	     signed type.  */
-	  if (code1 == FIXED_POINT_TYPE && TYPE_UNSIGNED (t1))
+	  सचे (code1 == FIXED_POINT_TYPE && TYPE_UNSIGNED (t1))
 	    {
-	      enum mode_class mclass = (enum mode_class) 0;
-	      if (GET_MODE_CLASS (m1) == MODE_UFRACT)
+	      गणना mode_class mclass = (गणना mode_class) 0;
+	      सचे (GET_MODE_CLASS (m1) == MODE_UFRACT)
 		mclass = MODE_FRACT;
-	      else if (GET_MODE_CLASS (m1) == MODE_UACCUM)
+	      अञ्ञथा सचे (GET_MODE_CLASS (m1) == MODE_UACCUM)
 		mclass = MODE_ACCUM;
-	      else
+	      अञ्ञथा
 		gcc_unreachable ();
 	      m1 = as_a <scalar_mode>
 		(mode_for_size (GET_MODE_PRECISION (m1), mclass, 0));
 	    }
-	  if (code2 == FIXED_POINT_TYPE && TYPE_UNSIGNED (t2))
+	  सचे (code2 == FIXED_POINT_TYPE && TYPE_UNSIGNED (t2))
 	    {
-	      enum mode_class mclass = (enum mode_class) 0;
-	      if (GET_MODE_CLASS (m2) == MODE_UFRACT)
+	      गणना mode_class mclass = (गणना mode_class) 0;
+	      सचे (GET_MODE_CLASS (m2) == MODE_UFRACT)
 		mclass = MODE_FRACT;
-	      else if (GET_MODE_CLASS (m2) == MODE_UACCUM)
+	      अञ्ञथा सचे (GET_MODE_CLASS (m2) == MODE_UACCUM)
 		mclass = MODE_ACCUM;
-	      else
+	      अञ्ञथा
 		gcc_unreachable ();
 	      m2 = as_a <scalar_mode>
 		(mode_for_size (GET_MODE_PRECISION (m2), mclass, 0));
 	    }
 	}
 
-      if (code1 == FIXED_POINT_TYPE)
+      सचे (code1 == FIXED_POINT_TYPE)
 	{
 	  fbit1 = GET_MODE_FBIT (m1);
 	  ibit1 = GET_MODE_IBIT (m1);
 	}
-      else
+      अञ्ञथा
 	{
 	  fbit1 = 0;
 	  /* Signed integers need to subtract one sign bit.  */
 	  ibit1 = TYPE_PRECISION (t1) - (!TYPE_UNSIGNED (t1));
 	}
 
-      if (code2 == FIXED_POINT_TYPE)
+      सचे (code2 == FIXED_POINT_TYPE)
 	{
 	  fbit2 = GET_MODE_FBIT (m2);
 	  ibit2 = GET_MODE_IBIT (m2);
 	}
-      else
+      अञ्ञथा
 	{
 	  fbit2 = 0;
 	  /* Signed integers need to subtract one sign bit.  */
@@ -1409,47 +1409,47 @@ c_common_type (tree t1, tree t2)
 
       max_ibit = ibit1 >= ibit2 ?  ibit1 : ibit2;
       max_fbit = fbit1 >= fbit2 ?  fbit1 : fbit2;
-      return c_common_fixed_point_type_for_size (max_ibit, max_fbit, unsignedp,
+      पटिनिवत्त c_common_fixed_point_type_for_size (max_ibit, max_fbit, unsignedp,
 						 satp);
     }
 
   /* Both real or both integers; use the one with greater precision.  */
 
-  if (TYPE_PRECISION (t1) > TYPE_PRECISION (t2))
-    return t1;
-  else if (TYPE_PRECISION (t2) > TYPE_PRECISION (t1))
-    return t2;
+  सचे (TYPE_PRECISION (t1) > TYPE_PRECISION (t2))
+    पटिनिवत्त t1;
+  अञ्ञथा सचे (TYPE_PRECISION (t2) > TYPE_PRECISION (t1))
+    पटिनिवत्त t2;
 
   /* Same precision.  Prefer long longs to longs to ints when the
      same precision, following the C99 rules on integer type rank
      (which are equivalent to the C90 rules for C90 types).  */
 
-  if (TYPE_MAIN_VARIANT (t1) == long_long_unsigned_type_node
-      || TYPE_MAIN_VARIANT (t2) == long_long_unsigned_type_node)
-    return long_long_unsigned_type_node;
+  सचे (TYPE_MAIN_VARIANT (t1) == long_long_unsigned_type_ग्रन्थिः
+      || TYPE_MAIN_VARIANT (t2) == long_long_unsigned_type_ग्रन्थिः)
+    पटिनिवत्त long_long_unsigned_type_ग्रन्थिः;
 
-  if (TYPE_MAIN_VARIANT (t1) == long_long_integer_type_node
-      || TYPE_MAIN_VARIANT (t2) == long_long_integer_type_node)
+  सचे (TYPE_MAIN_VARIANT (t1) == long_long_integer_type_ग्रन्थिः
+      || TYPE_MAIN_VARIANT (t2) == long_long_integer_type_ग्रन्थिः)
     {
-      if (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
-	return long_long_unsigned_type_node;
-      else
-	return long_long_integer_type_node;
+      सचे (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
+	पटिनिवत्त long_long_unsigned_type_ग्रन्थिः;
+      अञ्ञथा
+	पटिनिवत्त long_long_integer_type_ग्रन्थिः;
     }
 
-  if (TYPE_MAIN_VARIANT (t1) == long_unsigned_type_node
-      || TYPE_MAIN_VARIANT (t2) == long_unsigned_type_node)
-    return long_unsigned_type_node;
+  सचे (TYPE_MAIN_VARIANT (t1) == long_unsigned_type_ग्रन्थिः
+      || TYPE_MAIN_VARIANT (t2) == long_unsigned_type_ग्रन्थिः)
+    पटिनिवत्त long_unsigned_type_ग्रन्थिः;
 
-  if (TYPE_MAIN_VARIANT (t1) == long_integer_type_node
-      || TYPE_MAIN_VARIANT (t2) == long_integer_type_node)
+  सचे (TYPE_MAIN_VARIANT (t1) == long_integer_type_ग्रन्थिः
+      || TYPE_MAIN_VARIANT (t2) == long_integer_type_ग्रन्थिः)
     {
       /* But preserve unsignedness from the other type,
 	 since long cannot hold all the values of an unsigned int.  */
-      if (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
-	return long_unsigned_type_node;
-      else
-	return long_integer_type_node;
+      सचे (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
+	पटिनिवत्त long_unsigned_type_ग्रन्थिः;
+      अञ्ञथा
+	पटिनिवत्त long_integer_type_ग्रन्थिः;
     }
 
   /* For floating types of the same TYPE_PRECISION (which we here
@@ -1463,50 +1463,50 @@ c_common_type (tree t1, tree t2)
      types, also check in that order for consistency although it's not
      possible for more than one of them to have the same
      precision.  */
-  tree mv1 = TYPE_MAIN_VARIANT (t1);
-  tree mv2 = TYPE_MAIN_VARIANT (t2);
+  वृक्षः mv1 = TYPE_MAIN_VARIANT (t1);
+  वृक्षः mv2 = TYPE_MAIN_VARIANT (t2);
 
-  for (int i = NUM_FLOATN_TYPES - 1; i >= 0; i--)
-    if (mv1 == FLOATN_TYPE_NODE (i) || mv2 == FLOATN_TYPE_NODE (i))
-      return FLOATN_TYPE_NODE (i);
+  अत्थाय (पूर्णाङ्क i = अङ्कः_FLOATN_TYPES - 1; i >= 0; i--)
+    सचे (mv1 == FLOATN_TYPE_ग्रन्थिः (i) || mv2 == FLOATN_TYPE_ग्रन्थिः (i))
+      पटिनिवत्त FLOATN_TYPE_ग्रन्थिः (i);
 
   /* Likewise, prefer long double to double even if same size.  */
-  if (mv1 == long_double_type_node || mv2 == long_double_type_node)
-    return long_double_type_node;
+  सचे (mv1 == long_double_type_ग्रन्थिः || mv2 == long_double_type_ग्रन्थिः)
+    पटिनिवत्त long_double_type_ग्रन्थिः;
 
   /* Likewise, prefer double to float even if same size.
      We got a couple of embedded targets with 32 bit doubles, and the
      pdp11 might have 64 bit floats.  */
-  if (mv1 == double_type_node || mv2 == double_type_node)
-    return double_type_node;
+  सचे (mv1 == double_type_ग्रन्थिः || mv2 == double_type_ग्रन्थिः)
+    पटिनिवत्त double_type_ग्रन्थिः;
 
-  if (mv1 == float_type_node || mv2 == float_type_node)
-    return float_type_node;
+  सचे (mv1 == float_type_ग्रन्थिः || mv2 == float_type_ग्रन्थिः)
+    पटिनिवत्त float_type_ग्रन्थिः;
 
-  for (int i = NUM_FLOATNX_TYPES - 1; i >= 0; i--)
-    if (mv1 == FLOATNX_TYPE_NODE (i) || mv2 == FLOATNX_TYPE_NODE (i))
-      return FLOATNX_TYPE_NODE (i);
+  अत्थाय (पूर्णाङ्क i = अङ्कः_FLOATNX_TYPES - 1; i >= 0; i--)
+    सचे (mv1 == FLOATNX_TYPE_ग्रन्थिः (i) || mv2 == FLOATNX_TYPE_ग्रन्थिः (i))
+      पटिनिवत्त FLOATNX_TYPE_ग्रन्थिः (i);
 
-  if ((code1 == BITINT_TYPE || code2 == BITINT_TYPE) && code1 != code2)
+  सचे ((code1 == BITINT_TYPE || code2 == BITINT_TYPE) && code1 != code2)
     {
       /* Prefer any other integral types over bit-precise integer types.  */
-      if (TYPE_UNSIGNED (t1) == TYPE_UNSIGNED (t2))
-	return code1 == BITINT_TYPE ? t2 : t1;
+      सचे (TYPE_UNSIGNED (t1) == TYPE_UNSIGNED (t2))
+	पटिनिवत्त code1 == BITINT_TYPE ? t2 : t1;
       /* If BITINT_TYPE is unsigned and the other type is signed
 	 non-BITINT_TYPE with the same precision, the latter has higher rank.
 	 In that case:
 	 Otherwise, both operands are converted to the unsigned integer type
 	 corresponding to the type of the operand with signed integer type.  */
-      if (TYPE_UNSIGNED (code1 == BITINT_TYPE ? t1 : t2))
-	return c_common_unsigned_type (code1 == BITINT_TYPE ? t2 : t1);
+      सचे (TYPE_UNSIGNED (code1 == BITINT_TYPE ? t1 : t2))
+	पटिनिवत्त c_common_unsigned_type (code1 == BITINT_TYPE ? t2 : t1);
     }
 
   /* Otherwise prefer the unsigned one.  */
 
-  if (TYPE_UNSIGNED (t1))
-    return t1;
-  else
-    return t2;
+  सचे (TYPE_UNSIGNED (t1))
+    पटिनिवत्त t1;
+  अञ्ञथा
+    पटिनिवत्त t2;
 }
 
 /* Wrapper around c_common_type that is used by c-common.cc and other
@@ -1514,26 +1514,26 @@ c_common_type (tree t1, tree t2)
    are allowed here and are converted to their compatible integer types.
    BOOLEAN_TYPEs are allowed here and return either boolean_type_node or
    preferably a non-Boolean type as the common type.  */
-tree
-common_type (tree t1, tree t2)
+वृक्षः
+common_type (वृक्षः t1, वृक्षः t2)
 {
-  if (TREE_CODE (t1) == ENUMERAL_TYPE)
+  सचे (वृक्षः_CODE (t1) == ENUMERAL_TYPE)
     t1 = ENUM_UNDERLYING_TYPE (t1);
-  if (TREE_CODE (t2) == ENUMERAL_TYPE)
+  सचे (वृक्षः_CODE (t2) == ENUMERAL_TYPE)
     t2 = ENUM_UNDERLYING_TYPE (t2);
 
   /* If both types are BOOLEAN_TYPE, then return boolean_type_node.  */
-  if (TREE_CODE (t1) == BOOLEAN_TYPE
-      && TREE_CODE (t2) == BOOLEAN_TYPE)
-    return boolean_type_node;
+  सचे (वृक्षः_CODE (t1) == BOOLEAN_TYPE
+      && वृक्षः_CODE (t2) == BOOLEAN_TYPE)
+    पटिनिवत्त boolean_type_ग्रन्थिः;
 
   /* If either type is BOOLEAN_TYPE, then return the other.  */
-  if (TREE_CODE (t1) == BOOLEAN_TYPE)
-    return t2;
-  if (TREE_CODE (t2) == BOOLEAN_TYPE)
-    return t1;
+  सचे (वृक्षः_CODE (t1) == BOOLEAN_TYPE)
+    पटिनिवत्त t2;
+  सचे (वृक्षः_CODE (t2) == BOOLEAN_TYPE)
+    पटिनिवत्त t1;
 
-  return c_common_type (t1, t2);
+  पटिनिवत्त c_common_type (t1, t2);
 }
 
 
@@ -1542,45 +1542,45 @@ common_type (tree t1, tree t2)
    if they pass consistency checks.  In particular we test that
    TYPE_CANONICAL is set correctly, i.e. the two types can alias.  */
 
-static bool
-comptypes_verify (tree type1, tree type2)
+स्थिर तार्किक
+comptypes_verify (वृक्षः type1, वृक्षः type2)
 {
-  if (type1 == type2 || !type1 || !type2
-      || TREE_CODE (type1) == ERROR_MARK || TREE_CODE (type2) == ERROR_MARK)
-    return true;
+  सचे (type1 == type2 || !type1 || !type2
+      || वृक्षः_CODE (type1) == ERROR_MARK || वृक्षः_CODE (type2) == ERROR_MARK)
+    पटिनिवत्त सच्च;
 
   gcc_checking_assert (c_verify_type (type1));
   gcc_checking_assert (c_verify_type (type2));
 
-  if (TYPE_CANONICAL (type1) != TYPE_CANONICAL (type2)
+  सचे (TYPE_CANONICAL (type1) != TYPE_CANONICAL (type2)
       && !TYPE_STRUCTURAL_EQUALITY_P (type1)
       && !TYPE_STRUCTURAL_EQUALITY_P (type2))
     {
       /* FIXME: check other types. */
-      if (RECORD_OR_UNION_TYPE_P (type1)
-	  || TREE_CODE (type1) == ENUMERAL_TYPE
-	  || TREE_CODE (type2) == ENUMERAL_TYPE)
-	return false;
+      सचे (RECORD_OR_UNION_TYPE_P (type1)
+	  || वृक्षः_CODE (type1) == ENUMERAL_TYPE
+	  || वृक्षः_CODE (type2) == ENUMERAL_TYPE)
+	पटिनिवत्त मिच्छा;
     }
-  return true;
+  पटिनिवत्त सच्च;
 }
 
-struct comptypes_data {
+संरचना comptypes_data {
 
   /* output */
-  bool enum_and_int_p;
-  bool different_types_p;
-  bool warning_needed;
+  तार्किक enum_and_int_p;
+  तार्किक different_types_p;
+  तार्किक warning_needed;
 
   /* context */
-  bool anon_field;
-  bool pointedto;
+  तार्किक anon_field;
+  तार्किक pointedto;
 
   /* configuration */
-  bool equiv;
-  bool ignore_promoting_args;
+  तार्किक equiv;
+  तार्किक ignore_promoting_args;
 
-  const struct tagged_tu_seen_cache* cache;
+  ध्रुव संरचना tagged_tu_seen_cache* cache;
 };
 
 
@@ -1590,69 +1590,69 @@ struct comptypes_data {
    self-promoting.  This is ignored only for function types but not
    ignored in a nested context.  */
 
-static bool
-comptypes_check_for_composite (tree t1, tree t2)
+स्थिर तार्किक
+comptypes_check_for_composite (वृक्षः t1, वृक्षः t2)
 {
-  struct comptypes_data data = { };
-  data.ignore_promoting_args = FUNCTION_TYPE == TREE_CODE (t1);
-  return comptypes_internal (t1, t2, &data);
+  संरचना comptypes_data data = { };
+  data.ignore_promoting_args = FUNCTION_TYPE == वृक्षः_CODE (t1);
+  पटिनिवत्त comptypes_internal (t1, t2, &data);
 }
 
 
 /* C implementation of compatible_types_for_indirection_note_p.  */
 
-bool
-compatible_types_for_indirection_note_p (tree type1, tree type2)
+तार्किक
+compatible_types_for_indirection_note_p (वृक्षः type1, वृक्षः type2)
 {
-  return comptypes (type1, type2);
+  पटिनिवत्त comptypes (type1, type2);
 }
 
 /* Return true if TYPE1 and TYPE2 are compatible types for assignment
    or various other operations.  */
 
-bool
-comptypes (tree type1, tree type2)
+तार्किक
+comptypes (वृक्षः type1, वृक्षः type2)
 {
-  struct comptypes_data data = { };
-  bool ret = comptypes_internal (type1, type2, &data);
+  संरचना comptypes_data data = { };
+  तार्किक ret = comptypes_internal (type1, type2, &data);
 
   gcc_checking_assert (!ret || comptypes_verify (type1, type2));
 
-  return ret;
+  पटिनिवत्त ret;
 }
 
 
 /* Like comptypes, but it returns non-zero only for identical
    types.  */
 
-bool
-comptypes_same_p (tree type1, tree type2)
+तार्किक
+comptypes_same_p (वृक्षः type1, वृक्षः type2)
 {
-  struct comptypes_data data = { };
-  bool ret = comptypes_internal (type1, type2, &data);
+  संरचना comptypes_data data = { };
+  तार्किक ret = comptypes_internal (type1, type2, &data);
 
   gcc_checking_assert (!ret || comptypes_verify (type1, type2));
 
-  if (data.different_types_p)
-    return false;
+  सचे (data.different_types_p)
+    पटिनिवत्त मिच्छा;
 
-  return ret;
+  पटिनिवत्त ret;
 }
 
 
 /* Like comptypes, but if it returns true because enum and int are
    compatible, it sets *ENUM_AND_INT_P to true.  */
 
-bool
-comptypes_check_enum_int (tree type1, tree type2, bool *enum_and_int_p)
+तार्किक
+comptypes_check_enum_int (वृक्षः type1, वृक्षः type2, तार्किक *enum_and_int_p)
 {
-  struct comptypes_data data = { };
-  bool ret = comptypes_internal (type1, type2, &data);
+  संरचना comptypes_data data = { };
+  तार्किक ret = comptypes_internal (type1, type2, &data);
   *enum_and_int_p = data.enum_and_int_p;
 
   gcc_checking_assert (!ret || comptypes_verify (type1, type2));
 
-  return ret;
+  पटिनिवत्त ret;
 }
 
 
@@ -1688,18 +1688,18 @@ comptypes_check_enum_int (tree type1, tree type2, bool *enum_and_int_p)
    struct foo { struct bar { int a; } *x };
    struct foo { struct bar { char b; } *x };  */
 
-bool
-comptypes_equiv_p (tree type1, tree type2)
+तार्किक
+comptypes_equiv_p (वृक्षः type1, वृक्षः type2)
 {
-  struct comptypes_data data = { };
-  data.equiv = true;
-  bool ret = comptypes_internal (type1, type2, &data);
+  संरचना comptypes_data data = { };
+  data.equiv = सच्च;
+  तार्किक ret = comptypes_internal (type1, type2, &data);
 
   /* check that different equivance classes are assigned only
      to types that are not compatible.  */
   gcc_checking_assert (ret || !comptypes (type1, type2));
 
-  return ret;
+  पटिनिवत्त ret;
 }
 
 
@@ -1717,82 +1717,82 @@ comptypes_equiv_p (tree type1, tree type2)
    then this can be ignored by setting 'ignore_promoting_args_p'.
    For 'equiv' we can compute equivalency classes (see above).  */
 
-static bool
-comptypes_internal (const_tree type1, const_tree type2,
-		    struct comptypes_data *data)
+स्थिर तार्किक
+comptypes_internal (const_वृक्षः type1, const_वृक्षः type2,
+		    संरचना comptypes_data *data)
 {
-  const_tree t1 = type1;
-  const_tree t2 = type2;
+  const_वृक्षः t1 = type1;
+  const_वृक्षः t2 = type2;
 
   /* Suppress errors caused by previously reported errors.  */
 
-  if (t1 == t2 || !t1 || !t2
-      || TREE_CODE (t1) == ERROR_MARK || TREE_CODE (t2) == ERROR_MARK)
-    return true;
+  सचे (t1 == t2 || !t1 || !t2
+      || वृक्षः_CODE (t1) == ERROR_MARK || वृक्षः_CODE (t2) == ERROR_MARK)
+    पटिनिवत्त सच्च;
 
   /* Qualifiers must match. C99 6.7.3p9 */
 
-  if (TYPE_QUALS (t1) != TYPE_QUALS (t2))
-    return false;
+  सचे (TYPE_QUALS (t1) != TYPE_QUALS (t2))
+    पटिनिवत्त मिच्छा;
 
   /* Enumerated types are compatible with integer types, but this is
      not transitive: two enumerated types in the same translation unit
      are compatible with each other only if they are the same type.  */
 
-  if (TREE_CODE (t1) == ENUMERAL_TYPE
+  सचे (वृक्षः_CODE (t1) == ENUMERAL_TYPE
       && COMPLETE_TYPE_P (t1)
-      && TREE_CODE (t2) != ENUMERAL_TYPE)
+      && वृक्षः_CODE (t2) != ENUMERAL_TYPE)
     {
       t1 = ENUM_UNDERLYING_TYPE (t1);
-      if (TREE_CODE (t2) != VOID_TYPE)
+      सचे (वृक्षः_CODE (t2) != VOID_TYPE)
 	{
-	  data->enum_and_int_p = true;
-	  data->different_types_p = true;
+	  data->enum_and_int_p = सच्च;
+	  data->different_types_p = सच्च;
 	}
     }
-  else if (TREE_CODE (t2) == ENUMERAL_TYPE
+  अञ्ञथा सचे (वृक्षः_CODE (t2) == ENUMERAL_TYPE
 	   && COMPLETE_TYPE_P (t2)
-	   && TREE_CODE (t1) != ENUMERAL_TYPE)
+	   && वृक्षः_CODE (t1) != ENUMERAL_TYPE)
     {
       t2 = ENUM_UNDERLYING_TYPE (t2);
-      if (TREE_CODE (t1) != VOID_TYPE)
+      सचे (वृक्षः_CODE (t1) != VOID_TYPE)
 	{
-	  data->enum_and_int_p = true;
-	  data->different_types_p = true;
+	  data->enum_and_int_p = सच्च;
+	  data->different_types_p = सच्च;
 	}
     }
 
-  if (t1 == t2)
-    return true;
+  सचे (t1 == t2)
+    पटिनिवत्त सच्च;
 
   /* Different classes of types can't be compatible.  */
 
-  if (TREE_CODE (t1) != TREE_CODE (t2))
-    return false;
+  सचे (वृक्षः_CODE (t1) != वृक्षः_CODE (t2))
+    पटिनिवत्त मिच्छा;
 
   /* Allow for two different type nodes which have essentially the same
      definition.  Note that we already checked for equality of the type
      qualifiers (just above).  */
 
-  if (TREE_CODE (t1) != ARRAY_TYPE
+  सचे (वृक्षः_CODE (t1) != ARRAY_TYPE
       && TYPE_MAIN_VARIANT (t1) == TYPE_MAIN_VARIANT (t2))
-    return true;
+    पटिनिवत्त सच्च;
 
-  int attrval;
+  पूर्णाङ्क attrval;
 
   /* 1 if no need for warning yet, 2 if warning cause has been seen.  */
-  if (!(attrval = comp_type_attributes (t1, t2)))
-    return false;
+  सचे (!(attrval = comp_type_attributes (t1, t2)))
+    पटिनिवत्त मिच्छा;
 
-  if (2 == attrval)
-    data->warning_needed = true;
+  सचे (2 == attrval)
+    data->warning_needed = सच्च;
 
-  switch (TREE_CODE (t1))
+  विकल्प (वृक्षः_CODE (t1))
     {
-    case INTEGER_TYPE:
-    case FIXED_POINT_TYPE:
-    case REAL_TYPE:
-    case BITINT_TYPE:
+    पक्ष INTEGER_TYPE:
+    पक्ष FIXED_POINT_TYPE:
+    पक्ष REAL_TYPE:
+    पक्ष BITINT_TYPE:
       /* With these nodes, we can't determine type equivalence by
 	 looking at what is stored in the nodes themselves, because
 	 two nodes might have different TYPE_MAIN_VARIANTs but still
@@ -1807,77 +1807,77 @@ comptypes_internal (const_tree type1, const_tree type2,
 	 have identical properties, different TYPE_MAIN_VARIANTs, but
 	 represent the same type.  The canonical type system keeps
 	 track of equivalence in this case, so we fall back on it.  */
-      return TYPE_CANONICAL (t1) == TYPE_CANONICAL (t2);
+      पटिनिवत्त TYPE_CANONICAL (t1) == TYPE_CANONICAL (t2);
 
-    case POINTER_TYPE:
+    पक्ष POINTER_TYPE:
       /* Do not remove mode information.  */
-      if (TYPE_MODE (t1) != TYPE_MODE (t2))
-	return false;
-      data->pointedto = true;
-      return comptypes_internal (TREE_TYPE (t1), TREE_TYPE (t2), data);
+      सचे (TYPE_MODE (t1) != TYPE_MODE (t2))
+	पटिनिवत्त मिच्छा;
+      data->pointedto = सच्च;
+      पटिनिवत्त comptypes_internal (वृक्षः_TYPE (t1), वृक्षः_TYPE (t2), data);
 
-    case FUNCTION_TYPE:
-      return function_types_compatible_p (t1, t2, data);
+    पक्ष FUNCTION_TYPE:
+      पटिनिवत्त function_types_compatible_p (t1, t2, data);
 
-    case ARRAY_TYPE:
+    पक्ष ARRAY_TYPE:
       {
-	tree d1 = TYPE_DOMAIN (t1);
-	tree d2 = TYPE_DOMAIN (t2);
+	वृक्षः d1 = TYPE_DOMAIN (t1);
+	वृक्षः d2 = TYPE_DOMAIN (t2);
 
 	/* Target types must match incl. qualifiers.  */
-	if (!comptypes_internal (TREE_TYPE (t1), TREE_TYPE (t2), data))
-	  return false;
+	सचे (!comptypes_internal (वृक्षः_TYPE (t1), वृक्षः_TYPE (t2), data))
+	  पटिनिवत्त मिच्छा;
 
-	if ((d1 == NULL_TREE) != (d2 == NULL_TREE))
-	  data->different_types_p = true;
+	सचे ((d1 == NULL_वृक्षः) != (d2 == NULL_वृक्षः))
+	  data->different_types_p = सच्च;
 	/* Ignore size mismatches when forming equivalence classes.  */
-	if (data->equiv)
-	  return true;
+	सचे (data->equiv)
+	  पटिनिवत्त सच्च;
 	/* Sizes must match unless one is missing or variable.  */
-	if (d1 == NULL_TREE || d2 == NULL_TREE || d1 == d2)
-	  return true;
+	सचे (d1 == NULL_वृक्षः || d2 == NULL_वृक्षः || d1 == d2)
+	  पटिनिवत्त सच्च;
 
-	bool d1_variable = top_array_vla_p (t1);
-	bool d2_variable = top_array_vla_p (t2);
+	तार्किक d1_variable = शिखरम्_array_vla_p (t1);
+	तार्किक d2_variable = शिखरम्_array_vla_p (t2);
 
-	if (d1_variable != d2_variable)
-	  data->different_types_p = true;
-	if (d1_variable || d2_variable)
-	  return true;
+	सचे (d1_variable != d2_variable)
+	  data->different_types_p = सच्च;
+	सचे (d1_variable || d2_variable)
+	  पटिनिवत्त सच्च;
 
-	bool d1_zero = zero_length_array_type_p (t1)
+	तार्किक d1_zero = zero_length_array_type_p (t1)
 		       || flexible_array_member_type_p (t1);
 
-	bool d2_zero = zero_length_array_type_p (t2)
+	तार्किक d2_zero = zero_length_array_type_p (t2)
 		       || flexible_array_member_type_p (t2);
 
-	if (d1_zero && d2_zero)
-	  return true;
-	if (d1_zero || d2_zero)
-	  return false;
+	सचे (d1_zero && d2_zero)
+	  पटिनिवत्त सच्च;
+	सचे (d1_zero || d2_zero)
+	  पटिनिवत्त मिच्छा;
 
-	if (!tree_int_cst_equal (TYPE_MIN_VALUE (d1), TYPE_MIN_VALUE (d2))
-	    || !tree_int_cst_equal (TYPE_MAX_VALUE (d1), TYPE_MAX_VALUE (d2)))
-	  return false;
+	सचे (!वृक्षः_int_cst_equal (TYPE_MIN_मानम् (d1), TYPE_MIN_मानम् (d2))
+	    || !वृक्षः_int_cst_equal (TYPE_MAX_मानम् (d1), TYPE_MAX_मानम् (d2)))
+	  पटिनिवत्त मिच्छा;
 
-	return true;
+	पटिनिवत्त सच्च;
       }
 
-    case ENUMERAL_TYPE:
-    case RECORD_TYPE:
-    case UNION_TYPE:
+    पक्ष ENUMERAL_TYPE:
+    पक्ष RECORD_TYPE:
+    पक्ष UNION_TYPE:
 
-      if (!flag_isoc23)
-	return false;
+      सचे (!flag_isoc23)
+	पटिनिवत्त मिच्छा;
 
-      return tagged_types_tu_compatible_p (t1, t2, data);
+      पटिनिवत्त tagged_types_tu_compatible_p (t1, t2, data);
 
-    case VECTOR_TYPE:
-      return known_eq (TYPE_VECTOR_SUBPARTS (t1), TYPE_VECTOR_SUBPARTS (t2))
-	     && comptypes_internal (TREE_TYPE (t1), TREE_TYPE (t2), data);
+    पक्ष VECTOR_TYPE:
+      पटिनिवत्त known_eq (TYPE_VECTOR_SUBPARTS (t1), TYPE_VECTOR_SUBPARTS (t2))
+	     && comptypes_internal (वृक्षः_TYPE (t1), वृक्षः_TYPE (t2), data);
 
-    default:
-      return false;
+    स्वभाव:
+      पटिनिवत्त मिच्छा;
     }
   gcc_unreachable ();
 }
@@ -1887,43 +1887,43 @@ comptypes_internal (const_tree type1, const_tree type2,
    different named addresses, then we must determine if one address space is a
    subset of the other.  */
 
-static bool
-comp_target_types (location_t location, tree ttl, tree ttr)
+स्थिर तार्किक
+comp_target_types (location_t location, वृक्षः ttl, वृक्षः ttr)
 {
-  tree mvl = TREE_TYPE (ttl);
-  tree mvr = TREE_TYPE (ttr);
+  वृक्षः mvl = वृक्षः_TYPE (ttl);
+  वृक्षः mvr = वृक्षः_TYPE (ttr);
   addr_space_t asl = TYPE_ADDR_SPACE (mvl);
   addr_space_t asr = TYPE_ADDR_SPACE (mvr);
   addr_space_t as_common;
 
   /* Fail if pointers point to incompatible address spaces.  */
-  if (!addr_space_superset (asl, asr, &as_common))
-    return 0;
+  सचे (!addr_space_superset (asl, asr, &as_common))
+    पटिनिवत्त 0;
 
   /* Qualifiers on element types of array types that are
      pointer targets are also removed.  */
-  struct comptypes_data data = { };
-  if (!comptypes_internal (remove_qualifiers (mvl),
+  संरचना comptypes_data data = { };
+  सचे (!comptypes_internal (remove_qualifiers (mvl),
 			   remove_qualifiers (mvr), &data))
-    return false;
+    पटिनिवत्त मिच्छा;
 
   /* For pedantic use comptypes on arrays before removing
      qualifiers on the element type. */
-  if (TREE_CODE (mvl) == ARRAY_TYPE
-      && TREE_CODE (mvr) == ARRAY_TYPE
+  सचे (वृक्षः_CODE (mvl) == ARRAY_TYPE
+      && वृक्षः_CODE (mvr) == ARRAY_TYPE
       && !comptypes (mvl, mvr))
     pedwarn_c11 (location, OPT_Wpedantic, "invalid use of pointers to arrays "
 					  "with different qualifiers in ISO C "
 					  "before C23");
 
-  if (data.warning_needed)
+  सचे (data.warning_needed)
     pedwarn (location, OPT_Wpedantic, "types are not quite compatible");
 
-  if (data.enum_and_int_p && warn_cxx_compat)
+  सचे (data.enum_and_int_p && warn_cxx_compat)
     warning_at (location, OPT_Wc___compat,
 		"pointer target types incompatible in C++");
 
-  return true;
+  पटिनिवत्त सच्च;
 }
 
 /* Subroutines of `comptypes'.  */
@@ -1932,192 +1932,192 @@ comp_target_types (location_t location, tree ttl, tree ttr)
    compatible.  The two types are not the same (which has been
    checked earlier in comptypes_internal).  */
 
-static bool
-tagged_types_tu_compatible_p (const_tree t1, const_tree t2,
-			      struct comptypes_data *data)
+स्थिर तार्किक
+tagged_types_tu_compatible_p (const_वृक्षः t1, const_वृक्षः t2,
+			      संरचना comptypes_data *data)
 {
-  tree s1, s2;
+  वृक्षः s1, s2;
 
-  if (c_type_tag (t1) != c_type_tag (t2))
-    return false;
+  सचे (c_type_tag (t1) != c_type_tag (t2))
+    पटिनिवत्त मिच्छा;
 
   /* When forming equivalence classes for TYPE_CANONICAL in C23, we treat
      structs with the same tag as equivalent, but only when they are targets
      of pointers inside other structs.  */
-  if (data->equiv && data->pointedto && NULL_TREE != c_type_tag (t1))
-    return true;
+  सचे (data->equiv && data->pointedto && NULL_वृक्षः != c_type_tag (t1))
+    पटिनिवत्त सच्च;
 
   /* Different types without tag are incompatible except as an anonymous
      field or when forming equivalence classes for TYPE_CANONICAL.  */
-  if (!data->anon_field && !data->equiv && NULL_TREE == c_type_tag (t1))
-    return false;
+  सचे (!data->anon_field && !data->equiv && NULL_वृक्षः == c_type_tag (t1))
+    पटिनिवत्त मिच्छा;
 
-  if (!data->anon_field && TYPE_STUB_DECL (t1) != TYPE_STUB_DECL (t2))
-    data->different_types_p = true;
+  सचे (!data->anon_field && TYPE_STUB_DECL (t1) != TYPE_STUB_DECL (t2))
+    data->different_types_p = सच्च;
 
   /* Incomplete types are incompatible inside a TU.  */
-  if (TYPE_SIZE (t1) == NULL || TYPE_SIZE (t2) == NULL)
-    return false;
+  सचे (TYPE_SIZE (t1) == रिक्त || TYPE_SIZE (t2) == रिक्त)
+    पटिनिवत्त मिच्छा;
 
-  if (ENUMERAL_TYPE != TREE_CODE (t1)
+  सचे (ENUMERAL_TYPE != वृक्षः_CODE (t1)
       && (TYPE_REVERSE_STORAGE_ORDER (t1)
 	  != TYPE_REVERSE_STORAGE_ORDER (t2)))
-    return false;
+    पटिनिवत्त मिच्छा;
 
-  if (TYPE_USER_ALIGN (t1) != TYPE_USER_ALIGN (t2))
-    data->different_types_p = true;
+  सचे (TYPE_USER_ALIGN (t1) != TYPE_USER_ALIGN (t2))
+    data->different_types_p = सच्च;
 
   /* For types already being looked at in some active
      invocation of this function, assume compatibility.
      The cache is built as a linked list on the stack
      with the head of the list passed downwards.  */
-  for (const struct tagged_tu_seen_cache *t = data->cache;
-       t != NULL; t = t->next)
-    if (t->t1 == t1 && t->t2 == t2)
-      return true;
+  अत्थाय (ध्रुव संरचना tagged_tu_seen_cache *t = data->cache;
+       t != रिक्त; t = t->next)
+    सचे (t->t1 == t1 && t->t2 == t2)
+      पटिनिवत्त सच्च;
 
-  const struct tagged_tu_seen_cache entry = { data->cache, t1, t2 };
+  ध्रुव संरचना tagged_tu_seen_cache entry = { data->cache, t1, t2 };
 
-  switch (TREE_CODE (t1))
+  विकल्प (वृक्षः_CODE (t1))
     {
-    case ENUMERAL_TYPE:
+    पक्ष ENUMERAL_TYPE:
       {
-	if (!comptypes (ENUM_UNDERLYING_TYPE (t1), ENUM_UNDERLYING_TYPE (t2)))
-	  return false;
+	सचे (!comptypes (ENUM_UNDERLYING_TYPE (t1), ENUM_UNDERLYING_TYPE (t2)))
+	  पटिनिवत्त मिच्छा;
 
 	/* Speed up the case where the type values are in the same order.  */
-	tree tv1 = TYPE_VALUES (t1);
-	tree tv2 = TYPE_VALUES (t2);
+	वृक्षः tv1 = TYPE_मानानि (t1);
+	वृक्षः tv2 = TYPE_मानानि (t2);
 
-	if (tv1 == tv2)
-	  return true;
+	सचे (tv1 == tv2)
+	  पटिनिवत्त सच्च;
 
-	for (;tv1 && tv2; tv1 = TREE_CHAIN (tv1), tv2 = TREE_CHAIN (tv2))
+	अत्थाय (;tv1 && tv2; tv1 = वृक्षः_CHAIN (tv1), tv2 = वृक्षः_CHAIN (tv2))
 	  {
-	    if (TREE_PURPOSE (tv1) != TREE_PURPOSE (tv2))
-	      break;
+	    सचे (वृक्षः_PURPOSE (tv1) != वृक्षः_PURPOSE (tv2))
+	      भङ्ग;
 
-	    if (simple_cst_equal (DECL_INITIAL (TREE_VALUE (tv1)),
-				  DECL_INITIAL (TREE_VALUE (tv2))) != 1)
-	      break;
+	    सचे (simple_cst_equal (DECL_INITIAL (वृक्षः_मानम् (tv1)),
+				  DECL_INITIAL (वृक्षः_मानम् (tv2))) != 1)
+	      भङ्ग;
 	  }
 
-	if (tv1 == NULL_TREE && tv2 == NULL_TREE)
-	  return true;
+	सचे (tv1 == NULL_वृक्षः && tv2 == NULL_वृक्षः)
+	  पटिनिवत्त सच्च;
 
-	if (tv1 == NULL_TREE || tv2 == NULL_TREE)
-	  return false;
+	सचे (tv1 == NULL_वृक्षः || tv2 == NULL_वृक्षः)
+	  पटिनिवत्त मिच्छा;
 
-	if (list_length (TYPE_VALUES (t1)) != list_length (TYPE_VALUES (t2)))
-	  return false;
+	सचे (list_length (TYPE_मानानि (t1)) != list_length (TYPE_मानानि (t2)))
+	  पटिनिवत्त मिच्छा;
 
-	for (s1 = TYPE_VALUES (t1); s1; s1 = TREE_CHAIN (s1))
+	अत्थाय (s1 = TYPE_मानानि (t1); s1; s1 = वृक्षः_CHAIN (s1))
 	  {
-	    s2 = purpose_member (TREE_PURPOSE (s1), TYPE_VALUES (t2));
+	    s2 = purpose_member (वृक्षः_PURPOSE (s1), TYPE_मानानि (t2));
 
-	    if (s2 == NULL
-		|| simple_cst_equal (DECL_INITIAL (TREE_VALUE (s1)),
-				     DECL_INITIAL (TREE_VALUE (s2))) != 1)
-	      return false;
+	    सचे (s2 == रिक्त
+		|| simple_cst_equal (DECL_INITIAL (वृक्षः_मानम् (s1)),
+				     DECL_INITIAL (वृक्षः_मानम् (s2))) != 1)
+	      पटिनिवत्त मिच्छा;
 	  }
 
-	return true;
+	पटिनिवत्त सच्च;
       }
 
-    case UNION_TYPE:
-    case RECORD_TYPE:
+    पक्ष UNION_TYPE:
+    पक्ष RECORD_TYPE:
 
-	if (list_length (TYPE_FIELDS (t1)) != list_length (TYPE_FIELDS (t2)))
-	  return false;
+	सचे (list_length (TYPE_FIELDS (t1)) != list_length (TYPE_FIELDS (t2)))
+	  पटिनिवत्त मिच्छा;
 
-	for (s1 = TYPE_FIELDS (t1), s2 = TYPE_FIELDS (t2);
+	अत्थाय (s1 = TYPE_FIELDS (t1), s2 = TYPE_FIELDS (t2);
 	     s1 && s2;
 	     s1 = DECL_CHAIN (s1), s2 = DECL_CHAIN (s2))
 	  {
-	    gcc_assert (TREE_CODE (s1) == FIELD_DECL);
-	    gcc_assert (TREE_CODE (s2) == FIELD_DECL);
+	    gcc_assert (वृक्षः_CODE (s1) == FIELD_DECL);
+	    gcc_assert (वृक्षः_CODE (s2) == FIELD_DECL);
 
-	    tree ft1 = TREE_TYPE (s1);
-	    tree ft2 = TREE_TYPE (s2);
+	    वृक्षः ft1 = वृक्षः_TYPE (s1);
+	    वृक्षः ft2 = वृक्षः_TYPE (s2);
 
-	    if (DECL_NAME (s1) != DECL_NAME (s2))
-	      return false;
+	    सचे (DECL_NAME (s1) != DECL_NAME (s2))
+	      पटिनिवत्त मिच्छा;
 
-	    if (DECL_ALIGN (s1) != DECL_ALIGN (s2))
-	      return false;
+	    सचे (DECL_ALIGN (s1) != DECL_ALIGN (s2))
+	      पटिनिवत्त मिच्छा;
 
-	    if (DECL_C_BIT_FIELD (s1) != DECL_C_BIT_FIELD (s2))
-	       return false;
+	    सचे (DECL_C_BIT_FIELD (s1) != DECL_C_BIT_FIELD (s2))
+	       पटिनिवत्त मिच्छा;
 
-	    if (DECL_C_BIT_FIELD (s1))
+	    सचे (DECL_C_BIT_FIELD (s1))
 	      {
-		if (!tree_int_cst_equal (DECL_SIZE (s1), DECL_SIZE (s2)))
-		  return false;
+		सचे (!वृक्षः_int_cst_equal (DECL_SIZE (s1), DECL_SIZE (s2)))
+		  पटिनिवत्त मिच्छा;
 
 		ft1 = DECL_BIT_FIELD_TYPE (s1);
 		ft2 = DECL_BIT_FIELD_TYPE (s2);
 	      }
 
-	    if (!ft1 || !ft2)
-	      return false;
+	    सचे (!ft1 || !ft2)
+	      पटिनिवत्त मिच्छा;
 
-	    if (TREE_CODE (ft1) == ERROR_MARK || TREE_CODE (ft2) == ERROR_MARK)
-	      return false;
+	    सचे (वृक्षः_CODE (ft1) == ERROR_MARK || वृक्षः_CODE (ft2) == ERROR_MARK)
+	      पटिनिवत्त मिच्छा;
 
 	    data->anon_field = !DECL_NAME (s1);
-	    data->pointedto = false;
+	    data->pointedto = मिच्छा;
 
-	    const struct tagged_tu_seen_cache *cache = data->cache;
+	    ध्रुव संरचना tagged_tu_seen_cache *cache = data->cache;
 	    data->cache = &entry;
-	    bool ret = comptypes_internal (ft1, ft2, data);
+	    तार्किक ret = comptypes_internal (ft1, ft2, data);
 	    data->cache = cache;
-	    if (!ret)
-	      return false;
+	    सचे (!ret)
+	      पटिनिवत्त मिच्छा;
 
-	    tree st1 = TYPE_SIZE (TREE_TYPE (s1));
-	    tree st2 = TYPE_SIZE (TREE_TYPE (s2));
+	    वृक्षः st1 = TYPE_SIZE (वृक्षः_TYPE (s1));
+	    वृक्षः st2 = TYPE_SIZE (वृक्षः_TYPE (s2));
 
-	    if (data->equiv
-		&& st1 && TREE_CODE (st1) == INTEGER_CST
-		&& st2 && TREE_CODE (st2) == INTEGER_CST
-		&& !tree_int_cst_equal (st1, st2))
-	     return false;
+	    सचे (data->equiv
+		&& st1 && वृक्षः_CODE (st1) == INTEGER_CST
+		&& st2 && वृक्षः_CODE (st2) == INTEGER_CST
+		&& !वृक्षः_int_cst_equal (st1, st2))
+	     पटिनिवत्त मिच्छा;
 
-	    tree counted_by1 = lookup_attribute ("counted_by",
+	    वृक्षः counted_by1 = lookup_attribute ("counted_by",
 						 DECL_ATTRIBUTES (s1));
-	    tree counted_by2 = lookup_attribute ("counted_by",
+	    वृक्षः counted_by2 = lookup_attribute ("counted_by",
 						 DECL_ATTRIBUTES (s2));
 	    /* If there is no counted_by attribute for both fields.  */
-	    if (!counted_by1 && !counted_by2)
-	      continue;
+	    सचे (!counted_by1 && !counted_by2)
+	      अनुवर्त;
 
 	    /* If only one field has counted_by attribute.  */
-	    if ((counted_by1 && !counted_by2)
+	    सचे ((counted_by1 && !counted_by2)
 		|| (!counted_by1 && counted_by2))
-	      return false;
+	      पटिनिवत्त मिच्छा;
 
 	    /* Now both s1 and s2 have counted_by attributes, check
 	       whether they are the same.  */
 
-	    tree counted_by_field1
-	      = lookup_field (t1, TREE_VALUE (TREE_VALUE (counted_by1)));
-	    tree counted_by_field2
-	      = lookup_field (t2, TREE_VALUE (TREE_VALUE (counted_by2)));
+	    वृक्षः counted_by_field1
+	      = lookup_field (t1, वृक्षः_मानम् (वृक्षः_मानम् (counted_by1)));
+	    वृक्षः counted_by_field2
+	      = lookup_field (t2, वृक्षः_मानम् (वृक्षः_मानम् (counted_by2)));
 
 	    gcc_assert (counted_by_field1 && counted_by_field2);
 
-	    while (TREE_CHAIN (counted_by_field1))
-	      counted_by_field1 = TREE_CHAIN (counted_by_field1);
-	    while (TREE_CHAIN (counted_by_field2))
-	      counted_by_field2 = TREE_CHAIN (counted_by_field2);
+	    याव (वृक्षः_CHAIN (counted_by_field1))
+	      counted_by_field1 = वृक्षः_CHAIN (counted_by_field1);
+	    याव (वृक्षः_CHAIN (counted_by_field2))
+	      counted_by_field2 = वृक्षः_CHAIN (counted_by_field2);
 
-	    if (DECL_NAME (TREE_VALUE (counted_by_field1))
-		!= DECL_NAME (TREE_VALUE (counted_by_field2)))
-	      return false;
+	    सचे (DECL_NAME (वृक्षः_मानम् (counted_by_field1))
+		!= DECL_NAME (वृक्षः_मानम् (counted_by_field2)))
+	      पटिनिवत्त मिच्छा;
 	  }
-	return true;
+	पटिनिवत्त सच्च;
 
-    default:
+    स्वभाव:
       gcc_unreachable ();
     }
 }
@@ -2129,147 +2129,147 @@ tagged_types_tu_compatible_p (const_tree t1, const_tree t2,
    the other must specify that number of self-promoting arg types.
    Otherwise, the argument types must match.  */
 
-static bool
-function_types_compatible_p (const_tree f1, const_tree f2,
-			     struct comptypes_data *data)
+स्थिर तार्किक
+function_types_compatible_p (const_वृक्षः f1, const_वृक्षः f2,
+			     संरचना comptypes_data *data)
 {
-  tree ret1 = TREE_TYPE (f1);
-  tree ret2 = TREE_TYPE (f2);
+  वृक्षः ret1 = वृक्षः_TYPE (f1);
+  वृक्षः ret2 = वृक्षः_TYPE (f2);
 
   /* 'volatile' qualifiers on a function's return type used to mean
      the function is noreturn.  */
-  if (TYPE_VOLATILE (ret1) != TYPE_VOLATILE (ret2))
-    pedwarn (input_location, 0, "function return types not compatible due to %<volatile%>");
-  if (TYPE_VOLATILE (ret1))
+  सचे (TYPE_VOLATILE (ret1) != TYPE_VOLATILE (ret2))
+    pedwarn (निवेशः_location, 0, "function return types not compatible due to %<volatile%>");
+  सचे (TYPE_VOLATILE (ret1))
     ret1 = build_qualified_type (TYPE_MAIN_VARIANT (ret1),
 				 TYPE_QUALS (ret1) & ~TYPE_QUAL_VOLATILE);
-  if (TYPE_VOLATILE (ret2))
+  सचे (TYPE_VOLATILE (ret2))
     ret2 = build_qualified_type (TYPE_MAIN_VARIANT (ret2),
 				 TYPE_QUALS (ret2) & ~TYPE_QUAL_VOLATILE);
 
-  bool ignore_pargs = data->ignore_promoting_args;
-  data->ignore_promoting_args = false;
+  तार्किक ignore_pargs = data->ignore_promoting_args;
+  data->ignore_promoting_args = मिच्छा;
 
-  if (!comptypes_internal (ret1, ret2, data))
-    return false;
+  सचे (!comptypes_internal (ret1, ret2, data))
+    पटिनिवत्त मिच्छा;
 
   data->ignore_promoting_args = ignore_pargs;
 
-  tree args1 = TYPE_ARG_TYPES (f1);
-  tree args2 = TYPE_ARG_TYPES (f2);
+  वृक्षः args1 = TYPE_ARG_TYPES (f1);
+  वृक्षः args2 = TYPE_ARG_TYPES (f2);
 
-  if ((args1 == NULL_TREE) != (args2 == NULL_TREE))
-    data->different_types_p = true;
+  सचे ((args1 == NULL_वृक्षः) != (args2 == NULL_वृक्षः))
+    data->different_types_p = सच्च;
 
   /* An unspecified parmlist matches any specified parmlist
      whose argument types don't need default promotions.  */
 
-  if (args1 == NULL_TREE)
+  सचे (args1 == NULL_वृक्षः)
     {
-      if (TYPE_NO_NAMED_ARGS_STDARG_P (f1) != TYPE_NO_NAMED_ARGS_STDARG_P (f2))
-	return false;
-      if (!(data->ignore_promoting_args || self_promoting_args_p (args2)))
-	return false;
-      data->ignore_promoting_args = false;
+      सचे (TYPE_NO_NAMED_ARGS_STDARG_P (f1) != TYPE_NO_NAMED_ARGS_STDARG_P (f2))
+	पटिनिवत्त मिच्छा;
+      सचे (!(data->ignore_promoting_args || self_promoting_args_p (args2)))
+	पटिनिवत्त मिच्छा;
+      data->ignore_promoting_args = मिच्छा;
       /* If one of these types comes from a non-prototype fn definition,
 	 compare that with the other type's arglist.
 	 If they don't match, ask for a warning (but no error).  */
-      if (TYPE_ACTUAL_ARG_TYPES (f1)
+      सचे (TYPE_ACTUAL_ARG_TYPES (f1)
 	  && !type_lists_compatible_p (args2, TYPE_ACTUAL_ARG_TYPES (f1), data))
-	 data->warning_needed = true;
-      return true;
+	 data->warning_needed = सच्च;
+      पटिनिवत्त सच्च;
     }
-  if (args2 == NULL_TREE)
+  सचे (args2 == NULL_वृक्षः)
     {
-      if (TYPE_NO_NAMED_ARGS_STDARG_P (f1) != TYPE_NO_NAMED_ARGS_STDARG_P (f2))
-	return false;
-      if (!(data->ignore_promoting_args || self_promoting_args_p (args1)))
-	return false;
-      data->ignore_promoting_args = false;
-      if (TYPE_ACTUAL_ARG_TYPES (f2)
+      सचे (TYPE_NO_NAMED_ARGS_STDARG_P (f1) != TYPE_NO_NAMED_ARGS_STDARG_P (f2))
+	पटिनिवत्त मिच्छा;
+      सचे (!(data->ignore_promoting_args || self_promoting_args_p (args1)))
+	पटिनिवत्त मिच्छा;
+      data->ignore_promoting_args = मिच्छा;
+      सचे (TYPE_ACTUAL_ARG_TYPES (f2)
 	  && !type_lists_compatible_p (args1, TYPE_ACTUAL_ARG_TYPES (f2), data))
-	data->warning_needed = true;
-      return true;
+	data->warning_needed = सच्च;
+      पटिनिवत्त सच्च;
     }
 
   /* Both types have argument lists: compare them and propagate results.  */
-  return type_lists_compatible_p (args1, args2, data);
+  पटिनिवत्त type_lists_compatible_p (args1, args2, data);
 }
 
 /* Check two lists of types for compatibility, returning false for
    incompatible, true for compatible.  */
 
-static bool
-type_lists_compatible_p (const_tree args1, const_tree args2,
-			 struct comptypes_data *data)
+स्थिर तार्किक
+type_lists_compatible_p (const_वृक्षः args1, const_वृक्षः args2,
+			 संरचना comptypes_data *data)
 {
-  while (1)
+  याव (1)
     {
-      if (args1 == NULL_TREE && args2 == NULL_TREE)
-	return true;
+      सचे (args1 == NULL_वृक्षः && args2 == NULL_वृक्षः)
+	पटिनिवत्त सच्च;
       /* If one list is shorter than the other,
 	 they fail to match.  */
-      if (args1 == NULL_TREE || args2 == NULL_TREE)
-	return false;
-      tree a1 = TREE_VALUE (args1);
-      tree a2 = TREE_VALUE (args2);
-      tree mv1 = remove_qualifiers (a1);
-      tree mv2 = remove_qualifiers (a2);
+      सचे (args1 == NULL_वृक्षः || args2 == NULL_वृक्षः)
+	पटिनिवत्त मिच्छा;
+      वृक्षः a1 = वृक्षः_मानम् (args1);
+      वृक्षः a2 = वृक्षः_मानम् (args2);
+      वृक्षः mv1 = remove_qualifiers (a1);
+      वृक्षः mv2 = remove_qualifiers (a2);
 
       gcc_assert (mv2);
       gcc_assert (mv2);
 
       /* If one of the lists has an error marker, ignore this arg.  */
-      if (TREE_CODE (a1) == ERROR_MARK
-	       || TREE_CODE (a2) == ERROR_MARK)
+      सचे (वृक्षः_CODE (a1) == ERROR_MARK
+	       || वृक्षः_CODE (a2) == ERROR_MARK)
 	;
-      else if (!comptypes_internal (mv1, mv2, data))
+      अञ्ञथा सचे (!comptypes_internal (mv1, mv2, data))
 	{
-	  data->different_types_p = true;
+	  data->different_types_p = सच्च;
 	  /* Allow  wait (union {union wait *u; int *i} *)
 	     and  wait (union wait *)  to be compatible.  */
-	  if (TREE_CODE (a1) == UNION_TYPE
-	      && (TYPE_NAME (a1) == NULL_TREE
+	  सचे (वृक्षः_CODE (a1) == UNION_TYPE
+	      && (TYPE_NAME (a1) == NULL_वृक्षः
 		  || TYPE_TRANSPARENT_AGGR (a1))
-	      && TREE_CODE (TYPE_SIZE (a1)) == INTEGER_CST
-	      && tree_int_cst_equal (TYPE_SIZE (a1),
+	      && वृक्षः_CODE (TYPE_SIZE (a1)) == INTEGER_CST
+	      && वृक्षः_int_cst_equal (TYPE_SIZE (a1),
 				     TYPE_SIZE (a2)))
 	    {
-	      tree memb;
-	      for (memb = TYPE_FIELDS (a1);
+	      वृक्षः memb;
+	      अत्थाय (memb = TYPE_FIELDS (a1);
 		   memb; memb = DECL_CHAIN (memb))
 		{
-		  tree mv3 = remove_qualifiers (TREE_TYPE (memb));
-		  if (comptypes_internal (mv3, mv2, data))
-		    break;
+		  वृक्षः mv3 = remove_qualifiers (वृक्षः_TYPE (memb));
+		  सचे (comptypes_internal (mv3, mv2, data))
+		    भङ्ग;
 		}
-	      if (memb == NULL_TREE)
-		return false;
+	      सचे (memb == NULL_वृक्षः)
+		पटिनिवत्त मिच्छा;
 	    }
-	  else if (TREE_CODE (a2) == UNION_TYPE
-		   && (TYPE_NAME (a2) == NULL_TREE
+	  अञ्ञथा सचे (वृक्षः_CODE (a2) == UNION_TYPE
+		   && (TYPE_NAME (a2) == NULL_वृक्षः
 		       || TYPE_TRANSPARENT_AGGR (a2))
-		   && TREE_CODE (TYPE_SIZE (a2)) == INTEGER_CST
-		   && tree_int_cst_equal (TYPE_SIZE (a2),
+		   && वृक्षः_CODE (TYPE_SIZE (a2)) == INTEGER_CST
+		   && वृक्षः_int_cst_equal (TYPE_SIZE (a2),
 					  TYPE_SIZE (a1)))
 	    {
-	      tree memb;
-	      for (memb = TYPE_FIELDS (a2);
+	      वृक्षः memb;
+	      अत्थाय (memb = TYPE_FIELDS (a2);
 		   memb; memb = DECL_CHAIN (memb))
 		{
-		  tree mv3 = remove_qualifiers (TREE_TYPE (memb));
-		  if (comptypes_internal (mv3, mv1, data))
-		    break;
+		  वृक्षः mv3 = remove_qualifiers (वृक्षः_TYPE (memb));
+		  सचे (comptypes_internal (mv3, mv1, data))
+		    भङ्ग;
 		}
-	      if (memb == NULL_TREE)
-		return false;
+	      सचे (memb == NULL_वृक्षः)
+		पटिनिवत्त मिच्छा;
 	    }
-	  else
-	    return false;
+	  अञ्ञथा
+	    पटिनिवत्त मिच्छा;
 	}
 
-      args1 = TREE_CHAIN (args1);
-      args2 = TREE_CHAIN (args2);
+      args1 = वृक्षः_CHAIN (args1);
+      args2 = वृक्षः_CHAIN (args2);
     }
 }
 
@@ -2278,64 +2278,64 @@ type_lists_compatible_p (const_tree args1, const_tree args2,
    This function does not emit any diagnostics; the caller is responsible
    for that.  */
 
-static tree
-c_size_in_bytes (const_tree type)
+स्थिर वृक्षः
+c_size_in_bytes (const_वृक्षः type)
 {
-  enum tree_code code = TREE_CODE (type);
+  गणना वृक्षः_code code = वृक्षः_CODE (type);
 
-  if (code == FUNCTION_TYPE || code == VOID_TYPE || code == ERROR_MARK
+  सचे (code == FUNCTION_TYPE || code == VOID_TYPE || code == ERROR_MARK
       || !COMPLETE_TYPE_P (type))
-    return size_one_node;
+    पटिनिवत्त size_one_ग्रन्थिः;
 
   /* Convert in case a char is more than one unit.  */
-  return size_binop_loc (input_location, CEIL_DIV_EXPR, TYPE_SIZE_UNIT (type),
-			 size_int (TYPE_PRECISION (char_type_node)
+  पटिनिवत्त size_binop_loc (निवेशः_location, CEIL_DIV_व्यञ्जकम्, TYPE_SIZE_UNIT (type),
+			 size_int (TYPE_PRECISION (char_type_ग्रन्थिः)
 				   / BITS_PER_UNIT));
 }
 
 /* Return either DECL or its known constant value (if it has one).  */
 
-tree
-decl_constant_value_1 (tree decl, bool in_init)
+वृक्षः
+decl_constant_मानम्_1 (वृक्षः decl, तार्किक in_init)
 {
-  if (/* Note that DECL_INITIAL isn't valid for a PARM_DECL.  */
-      TREE_CODE (decl) != PARM_DECL
-      && !TREE_THIS_VOLATILE (decl)
-      && TREE_READONLY (decl)
-      && DECL_INITIAL (decl) != NULL_TREE
+  सचे (/* Note that DECL_INITIAL isn't valid for a PARM_DECL.  */
+      वृक्षः_CODE (decl) != PARM_DECL
+      && !वृक्षः_THIS_VOLATILE (decl)
+      && वृक्षः_READONLY (decl)
+      && DECL_INITIAL (decl) != NULL_वृक्षः
       && !error_operand_p (DECL_INITIAL (decl))
       /* This is invalid if initial value is not constant.
 	 If it has either a function call, a memory reference,
 	 or a variable, then re-evaluating it could give different results.  */
-      && TREE_CONSTANT (DECL_INITIAL (decl))
+      && वृक्षः_CONSTANT (DECL_INITIAL (decl))
       /* Check for cases where this is sub-optimal, even though valid.  */
-      && (in_init || TREE_CODE (DECL_INITIAL (decl)) != CONSTRUCTOR))
-    return DECL_INITIAL (decl);
-  return decl;
+      && (in_init || वृक्षः_CODE (DECL_INITIAL (decl)) != CONSTRUCTOR))
+    पटिनिवत्त DECL_INITIAL (decl);
+  पटिनिवत्त decl;
 }
 
 /* Return either DECL or its known constant value (if it has one).
    Like the above, but always return decl outside of functions.  */
 
-tree
-decl_constant_value (tree decl)
+वृक्षः
+decl_constant_मानम् (वृक्षः decl)
 {
   /* Don't change a variable array bound or initial value to a constant
      in a place where a variable is invalid.  */
-  return current_function_decl ? decl_constant_value_1 (decl, false) : decl;
+  पटिनिवत्त current_function_decl ? decl_constant_मानम्_1 (decl, मिच्छा) : decl;
 }
 
 /* Convert the array expression EXP to a pointer.  */
-static tree
-array_to_pointer_conversion (location_t loc, tree exp)
+स्थिर वृक्षः
+array_to_pointer_conversion (location_t loc, वृक्षः exp)
 {
-  tree orig_exp = exp;
-  tree type = TREE_TYPE (exp);
-  tree adr;
-  tree restype = TREE_TYPE (type);
-  tree ptrtype;
+  वृक्षः orig_exp = exp;
+  वृक्षः type = वृक्षः_TYPE (exp);
+  वृक्षः adr;
+  वृक्षः restype = वृक्षः_TYPE (type);
+  वृक्षः ptrtype;
 
-  gcc_assert (TREE_CODE (type) == ARRAY_TYPE);
+  gcc_assert (वृक्षः_CODE (type) == ARRAY_TYPE);
 
   STRIP_TYPE_NOPS (exp);
 
@@ -2343,143 +2343,143 @@ array_to_pointer_conversion (location_t loc, tree exp)
 
   ptrtype = c_build_pointer_type (restype);
 
-  if (INDIRECT_REF_P (exp))
-    return convert (ptrtype, TREE_OPERAND (exp, 0));
+  सचे (INDIRECT_REF_P (exp))
+    पटिनिवत्त convert (ptrtype, वृक्षः_OPERAND (exp, 0));
 
   /* In C++ array compound literals are temporary objects unless they are
      const or appear in namespace scope, so they are destroyed too soon
      to use them for much of anything  (c++/53220).  */
-  if (warn_cxx_compat && TREE_CODE (exp) == COMPOUND_LITERAL_EXPR)
+  सचे (warn_cxx_compat && वृक्षः_CODE (exp) == COMPOUND_LITERAL_व्यञ्जकम्)
     {
-      tree decl = TREE_OPERAND (TREE_OPERAND (exp, 0), 0);
-      if (!TREE_READONLY (decl) && !TREE_STATIC (decl))
+      वृक्षः decl = वृक्षः_OPERAND (वृक्षः_OPERAND (exp, 0), 0);
+      सचे (!वृक्षः_READONLY (decl) && !वृक्षः_STATIC (decl))
 	warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wc___compat,
 		    "converting an array compound literal to a pointer "
 		    "leads to a dangling pointer in C++");
     }
 
-  adr = build_unary_op (loc, ADDR_EXPR, exp, true);
-  return convert (ptrtype, adr);
+  adr = build_unary_op (loc, ADDR_व्यञ्जकम्, exp, सच्च);
+  पटिनिवत्त convert (ptrtype, adr);
 }
 
 /* Convert the function expression EXP to a pointer.  */
-static tree
-function_to_pointer_conversion (location_t loc, tree exp)
+स्थिर वृक्षः
+function_to_pointer_conversion (location_t loc, वृक्षः exp)
 {
-  tree orig_exp = exp;
+  वृक्षः orig_exp = exp;
 
-  gcc_assert (TREE_CODE (TREE_TYPE (exp)) == FUNCTION_TYPE);
+  gcc_assert (वृक्षः_CODE (वृक्षः_TYPE (exp)) == FUNCTION_TYPE);
 
   STRIP_TYPE_NOPS (exp);
 
   copy_warning (exp, orig_exp);
 
-  tree exp2 = build_unary_op (loc, ADDR_EXPR, exp, false);
+  वृक्षः exp2 = build_unary_op (loc, ADDR_व्यञ्जकम्, exp, मिच्छा);
 
   /* If the function is defined and known to not require a non-local
      context, make sure no trampoline is generated.  */
-  if (TREE_CODE (exp) == FUNCTION_DECL
+  सचे (वृक्षः_CODE (exp) == FUNCTION_DECL
       && DECL_INITIAL (exp) && !C_FUNC_NONLOCAL_CONTEXT (exp))
-   TREE_NO_TRAMPOLINE (exp2) = 1;
+   वृक्षः_NO_TRAMPOLINE (exp2) = 1;
 
-  return exp2;
+  पटिनिवत्त exp2;
 }
 
 /* Mark EXP as read, not just set, for set but not used -Wunused
    warning purposes.  */
 
-void
-mark_exp_read (tree exp)
+शून्य
+mark_exp_read (वृक्षः exp)
 {
-  switch (TREE_CODE (exp))
+  विकल्प (वृक्षः_CODE (exp))
     {
-    case VAR_DECL:
-    case PARM_DECL:
+    पक्ष VAR_DECL:
+    पक्ष PARM_DECL:
       DECL_READ_P (exp) = 1;
-      break;
+      भङ्ग;
     CASE_CONVERT:
-      if (VOID_TYPE_P (TREE_TYPE (exp)))
-	switch (TREE_CODE (TREE_OPERAND (exp, 0)))
+      सचे (VOID_TYPE_P (वृक्षः_TYPE (exp)))
+	विकल्प (वृक्षः_CODE (वृक्षः_OPERAND (exp, 0)))
 	  {
-	  case PREINCREMENT_EXPR:
-	  case PREDECREMENT_EXPR:
-	  case POSTINCREMENT_EXPR:
-	  case POSTDECREMENT_EXPR:
-	    return;
-	  default:
-	    break;
+	  पक्ष PREINCREMENT_व्यञ्जकम्:
+	  पक्ष PREDECREMENT_व्यञ्जकम्:
+	  पक्ष POSTINCREMENT_व्यञ्जकम्:
+	  पक्ष POSTDECREMENT_व्यञ्जकम्:
+	    पटिनिवत्त;
+	  स्वभाव:
+	    भङ्ग;
 	  }
       /* FALLTHRU */
-    case ARRAY_REF:
-    case COMPONENT_REF:
-    case MODIFY_EXPR:
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-    case ADDR_EXPR:
-    case VIEW_CONVERT_EXPR:
-    case PREINCREMENT_EXPR:
-    case PREDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-      mark_exp_read (TREE_OPERAND (exp, 0));
-      break;
-    case COMPOUND_EXPR:
+    पक्ष ARRAY_REF:
+    पक्ष COMPONENT_REF:
+    पक्ष MODIFY_व्यञ्जकम्:
+    पक्ष REALPART_व्यञ्जकम्:
+    पक्ष IMAGPART_व्यञ्जकम्:
+    पक्ष ADDR_व्यञ्जकम्:
+    पक्ष VIEW_CONVERT_व्यञ्जकम्:
+    पक्ष PREINCREMENT_व्यञ्जकम्:
+    पक्ष PREDECREMENT_व्यञ्जकम्:
+    पक्ष POSTINCREMENT_व्यञ्जकम्:
+    पक्ष POSTDECREMENT_व्यञ्जकम्:
+      mark_exp_read (वृक्षः_OPERAND (exp, 0));
+      भङ्ग;
+    पक्ष COMPOUND_व्यञ्जकम्:
       /* Pattern match what build_atomic_assign produces with modifycode
 	 NOP_EXPR.  */
-      if (VAR_P (TREE_OPERAND (exp, 1))
-	  && DECL_ARTIFICIAL (TREE_OPERAND (exp, 1))
-	  && TREE_CODE (TREE_OPERAND (exp, 0)) == COMPOUND_EXPR)
+      सचे (VAR_P (वृक्षः_OPERAND (exp, 1))
+	  && DECL_ARTIFICIAL (वृक्षः_OPERAND (exp, 1))
+	  && वृक्षः_CODE (वृक्षः_OPERAND (exp, 0)) == COMPOUND_व्यञ्जकम्)
 	{
-	  tree t1 = TREE_OPERAND (TREE_OPERAND (exp, 0), 0);
-	  tree t2 = TREE_OPERAND (TREE_OPERAND (exp, 0), 1);
-	  if (TREE_CODE (t1) == TARGET_EXPR
-	      && TARGET_EXPR_SLOT (t1) == TREE_OPERAND (exp, 1)
-	      && TREE_CODE (t2) == CALL_EXPR)
+	  वृक्षः t1 = वृक्षः_OPERAND (वृक्षः_OPERAND (exp, 0), 0);
+	  वृक्षः t2 = वृक्षः_OPERAND (वृक्षः_OPERAND (exp, 0), 1);
+	  सचे (वृक्षः_CODE (t1) == TARGET_व्यञ्जकम्
+	      && TARGET_व्यञ्जकम्_SLOT (t1) == वृक्षः_OPERAND (exp, 1)
+	      && वृक्षः_CODE (t2) == CALL_व्यञ्जकम्)
 	    {
-	      tree fndecl = get_callee_fndecl (t2);
-	      tree arg = NULL_TREE;
-	      if (fndecl
-		  && TREE_CODE (fndecl) == FUNCTION_DECL
+	      वृक्षः fndecl = get_callee_fndecl (t2);
+	      वृक्षः arg = NULL_वृक्षः;
+	      सचे (fndecl
+		  && वृक्षः_CODE (fndecl) == FUNCTION_DECL
 		  && fndecl_built_in_p (fndecl, BUILT_IN_NORMAL)
-		  && call_expr_nargs (t2) >= 2)
-		switch (DECL_FUNCTION_CODE (fndecl))
+		  && call_व्यञ्जकम्_nargs (t2) >= 2)
+		विकल्प (DECL_FUNCTION_CODE (fndecl))
 		  {
-		  case BUILT_IN_ATOMIC_STORE:
-		    arg = CALL_EXPR_ARG (t2, 1);
-		    break;
-		  case BUILT_IN_ATOMIC_STORE_1:
-		  case BUILT_IN_ATOMIC_STORE_2:
-		  case BUILT_IN_ATOMIC_STORE_4:
-		  case BUILT_IN_ATOMIC_STORE_8:
-		  case BUILT_IN_ATOMIC_STORE_16:
-		    arg = CALL_EXPR_ARG (t2, 0);
-		    break;
-		  default:
-		    break;
+		  पक्ष BUILT_IN_ATOMIC_STORE:
+		    arg = CALL_व्यञ्जकम्_ARG (t2, 1);
+		    भङ्ग;
+		  पक्ष BUILT_IN_ATOMIC_STORE_1:
+		  पक्ष BUILT_IN_ATOMIC_STORE_2:
+		  पक्ष BUILT_IN_ATOMIC_STORE_4:
+		  पक्ष BUILT_IN_ATOMIC_STORE_8:
+		  पक्ष BUILT_IN_ATOMIC_STORE_16:
+		    arg = CALL_व्यञ्जकम्_ARG (t2, 0);
+		    भङ्ग;
+		  स्वभाव:
+		    भङ्ग;
 		  }
-	      if (arg)
+	      सचे (arg)
 		{
 		  STRIP_NOPS (arg);
-		  if (TREE_CODE (arg) == ADDR_EXPR
-		      && DECL_P (TREE_OPERAND (arg, 0))
-		      && TYPE_ATOMIC (TREE_TYPE (TREE_OPERAND (arg, 0))))
-		    mark_exp_read (TREE_OPERAND (arg, 0));
+		  सचे (वृक्षः_CODE (arg) == ADDR_व्यञ्जकम्
+		      && DECL_P (वृक्षः_OPERAND (arg, 0))
+		      && TYPE_ATOMIC (वृक्षः_TYPE (वृक्षः_OPERAND (arg, 0))))
+		    mark_exp_read (वृक्षः_OPERAND (arg, 0));
 		}
 	    }
 	}
       /* FALLTHRU */
-    case C_MAYBE_CONST_EXPR:
-      mark_exp_read (TREE_OPERAND (exp, 1));
-      break;
-    case OMP_ARRAY_SECTION:
-      mark_exp_read (TREE_OPERAND (exp, 0));
-      if (TREE_OPERAND (exp, 1))
-	mark_exp_read (TREE_OPERAND (exp, 1));
-      if (TREE_OPERAND (exp, 2))
-	mark_exp_read (TREE_OPERAND (exp, 2));
-      break;
-    default:
-      break;
+    पक्ष C_MAYBE_CONST_व्यञ्जकम्:
+      mark_exp_read (वृक्षः_OPERAND (exp, 1));
+      भङ्ग;
+    पक्ष OMP_ARRAY_SECTION:
+      mark_exp_read (वृक्षः_OPERAND (exp, 0));
+      सचे (वृक्षः_OPERAND (exp, 1))
+	mark_exp_read (वृक्षः_OPERAND (exp, 1));
+      सचे (वृक्षः_OPERAND (exp, 2))
+	mark_exp_read (वृक्षः_OPERAND (exp, 2));
+      भङ्ग;
+    स्वभाव:
+      भङ्ग;
     }
 }
 
@@ -2489,79 +2489,79 @@ mark_exp_read (tree exp)
 
    LOC is the location of the expression.  */
 
-struct c_expr
-default_function_array_conversion (location_t loc, struct c_expr exp)
+संरचना c_व्यञ्जकम्
+default_function_array_conversion (location_t loc, संरचना c_व्यञ्जकम् exp)
 {
-  tree orig_exp = exp.value;
-  tree type = TREE_TYPE (exp.value);
-  enum tree_code code = TREE_CODE (type);
+  वृक्षः orig_exp = exp.मानम्;
+  वृक्षः type = वृक्षः_TYPE (exp.मानम्);
+  गणना वृक्षः_code code = वृक्षः_CODE (type);
 
-  switch (code)
+  विकल्प (code)
     {
-    case ARRAY_TYPE:
+    पक्ष ARRAY_TYPE:
       {
-	bool not_lvalue = false;
-	bool lvalue_array_p;
+	तार्किक not_lvalue = मिच्छा;
+	तार्किक lvalue_array_p;
 
-	while ((TREE_CODE (exp.value) == NON_LVALUE_EXPR
-		|| CONVERT_EXPR_P (exp.value))
-	       && TREE_TYPE (TREE_OPERAND (exp.value, 0)) == type)
+	याव ((वृक्षः_CODE (exp.मानम्) == NON_LVALUE_व्यञ्जकम्
+		|| CONVERT_व्यञ्जकम्_P (exp.मानम्))
+	       && वृक्षः_TYPE (वृक्षः_OPERAND (exp.मानम्, 0)) == type)
 	  {
-	    if (TREE_CODE (exp.value) == NON_LVALUE_EXPR)
-	      not_lvalue = true;
-	    exp.value = TREE_OPERAND (exp.value, 0);
+	    सचे (वृक्षः_CODE (exp.मानम्) == NON_LVALUE_व्यञ्जकम्)
+	      not_lvalue = सच्च;
+	    exp.मानम् = वृक्षः_OPERAND (exp.मानम्, 0);
 	  }
 
-	copy_warning (exp.value, orig_exp);
+	copy_warning (exp.मानम्, orig_exp);
 
-	lvalue_array_p = !not_lvalue && lvalue_p (exp.value);
-	if (!flag_isoc99 && !lvalue_array_p)
+	lvalue_array_p = !not_lvalue && lvalue_p (exp.मानम्);
+	सचे (!flag_isoc99 && !lvalue_array_p)
 	  {
 	    /* Before C99, non-lvalue arrays do not decay to pointers.
 	       Normally, using such an array would be invalid; but it can
 	       be used correctly inside sizeof or as a statement expression.
 	       Thus, do not give an error here; an error will result later.  */
-	    return exp;
+	    पटिनिवत्त exp;
 	  }
 
-	exp.value = array_to_pointer_conversion (loc, exp.value);
+	exp.मानम् = array_to_pointer_conversion (loc, exp.मानम्);
       }
-      break;
-    case FUNCTION_TYPE:
-      exp.value = function_to_pointer_conversion (loc, exp.value);
-      break;
-    default:
-      break;
+      भङ्ग;
+    पक्ष FUNCTION_TYPE:
+      exp.मानम् = function_to_pointer_conversion (loc, exp.मानम्);
+      भङ्ग;
+    स्वभाव:
+      भङ्ग;
     }
 
-  return exp;
+  पटिनिवत्त exp;
 }
 
-struct c_expr
-default_function_array_read_conversion (location_t loc, struct c_expr exp)
+संरचना c_व्यञ्जकम्
+default_function_array_read_conversion (location_t loc, संरचना c_व्यञ्जकम् exp)
 {
-  mark_exp_read (exp.value);
+  mark_exp_read (exp.मानम्);
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (TREE_CODE (exp.value) == COMPONENT_REF
-      && handle_counted_by_p (exp.value))
-    exp.value = handle_counted_by_for_component_ref (loc, exp.value);
-  return default_function_array_conversion (loc, exp);
+  सचे (वृक्षः_CODE (exp.मानम्) == COMPONENT_REF
+      && handle_counted_by_p (exp.मानम्))
+    exp.मानम् = handle_counted_by_for_component_ref (loc, exp.मानम्);
+  पटिनिवत्त default_function_array_conversion (loc, exp);
 }
 
 /* Return whether EXPR should be treated as an atomic lvalue for the
    purposes of load and store handling.  */
 
-static bool
-really_atomic_lvalue (tree expr)
+स्थिर तार्किक
+really_atomic_lvalue (वृक्षः व्यञ्जकम्)
 {
-  if (error_operand_p (expr))
-    return false;
-  if (!TYPE_ATOMIC (TREE_TYPE (expr)))
-    return false;
-  if (!COMPLETE_TYPE_P (TREE_TYPE (expr)))
-    return false;
-  if (!lvalue_p (expr))
-    return false;
+  सचे (error_operand_p (व्यञ्जकम्))
+    पटिनिवत्त मिच्छा;
+  सचे (!TYPE_ATOMIC (वृक्षः_TYPE (व्यञ्जकम्)))
+    पटिनिवत्त मिच्छा;
+  सचे (!COMPLETE_TYPE_P (वृक्षः_TYPE (व्यञ्जकम्)))
+    पटिनिवत्त मिच्छा;
+  सचे (!lvalue_p (व्यञ्जकम्))
+    पटिनिवत्त मिच्छा;
 
   /* Ignore _Atomic on register variables, since their addresses can't
      be taken so (a) atomicity is irrelevant and (b) the normal atomic
@@ -2570,18 +2570,18 @@ really_atomic_lvalue (tree expr)
      unions is undefined behavior (C11 6.5.2.3#5), but it's unclear if
      it's undefined at translation time or execution time, and the
      normal atomic sequences again wouldn't work.  */
-  while (handled_component_p (expr))
+  याव (handled_component_p (व्यञ्जकम्))
     {
-      if (TREE_CODE (expr) == COMPONENT_REF
-	  && DECL_C_BIT_FIELD (TREE_OPERAND (expr, 1)))
-	return false;
-      expr = TREE_OPERAND (expr, 0);
+      सचे (वृक्षः_CODE (व्यञ्जकम्) == COMPONENT_REF
+	  && DECL_C_BIT_FIELD (वृक्षः_OPERAND (व्यञ्जकम्, 1)))
+	पटिनिवत्त मिच्छा;
+      व्यञ्जकम् = वृक्षः_OPERAND (व्यञ्जकम्, 0);
     }
-  if (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
-    expr = COMPOUND_LITERAL_EXPR_DECL (expr);
-  if (DECL_P (expr) && C_DECL_REGISTER (expr))
-    return false;
-  return true;
+  सचे (वृक्षः_CODE (व्यञ्जकम्) == COMPOUND_LITERAL_व्यञ्जकम्)
+    व्यञ्जकम् = COMPOUND_LITERAL_व्यञ्जकम्_DECL (व्यञ्जकम्);
+  सचे (DECL_P (व्यञ्जकम्) && C_DECL_REGISTER (व्यञ्जकम्))
+    पटिनिवत्त मिच्छा;
+  पटिनिवत्त सच्च;
 }
 
 /* If EXPR is a named constant (C23) derived from a constexpr variable
@@ -2591,61 +2591,61 @@ really_atomic_lvalue (tree expr)
    initialized) - then return the corresponding initializer;
    otherwise, return NULL_TREE.  */
 
-static tree
-maybe_get_constexpr_init (tree expr)
+स्थिर वृक्षः
+maybe_get_constexpr_init (वृक्षः व्यञ्जकम्)
 {
-  tree decl = NULL_TREE;
-  if (TREE_CODE (expr) == VAR_DECL)
-    decl = expr;
-  else if (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
-    decl = COMPOUND_LITERAL_EXPR_DECL (expr);
-  if (decl
+  वृक्षः decl = NULL_वृक्षः;
+  सचे (वृक्षः_CODE (व्यञ्जकम्) == VAR_DECL)
+    decl = व्यञ्जकम्;
+  अञ्ञथा सचे (वृक्षः_CODE (व्यञ्जकम्) == COMPOUND_LITERAL_व्यञ्जकम्)
+    decl = COMPOUND_LITERAL_व्यञ्जकम्_DECL (व्यञ्जकम्);
+  सचे (decl
       && C_DECL_DECLARED_CONSTEXPR (decl)
-      && DECL_INITIAL (decl) != NULL_TREE
+      && DECL_INITIAL (decl) != NULL_वृक्षः
       && !error_operand_p (DECL_INITIAL (decl)))
-    return DECL_INITIAL (decl);
-  if (TREE_CODE (expr) != COMPONENT_REF)
-    return NULL_TREE;
-  tree inner = maybe_get_constexpr_init (TREE_OPERAND (expr, 0));
-  if (inner == NULL_TREE)
-    return NULL_TREE;
-  while ((CONVERT_EXPR_P (inner) || TREE_CODE (inner) == NON_LVALUE_EXPR)
+    पटिनिवत्त DECL_INITIAL (decl);
+  सचे (वृक्षः_CODE (व्यञ्जकम्) != COMPONENT_REF)
+    पटिनिवत्त NULL_वृक्षः;
+  वृक्षः inner = maybe_get_constexpr_init (वृक्षः_OPERAND (व्यञ्जकम्, 0));
+  सचे (inner == NULL_वृक्षः)
+    पटिनिवत्त NULL_वृक्षः;
+  याव ((CONVERT_व्यञ्जकम्_P (inner) || वृक्षः_CODE (inner) == NON_LVALUE_व्यञ्जकम्)
 	 && !error_operand_p (inner)
-	 && (TYPE_MAIN_VARIANT (TREE_TYPE (inner))
-	     == TYPE_MAIN_VARIANT (TREE_TYPE (TREE_OPERAND (inner, 0)))))
-    inner = TREE_OPERAND (inner, 0);
-  if (TREE_CODE (inner) != CONSTRUCTOR)
-    return NULL_TREE;
-  tree field = TREE_OPERAND (expr, 1);
+	 && (TYPE_MAIN_VARIANT (वृक्षः_TYPE (inner))
+	     == TYPE_MAIN_VARIANT (वृक्षः_TYPE (वृक्षः_OPERAND (inner, 0)))))
+    inner = वृक्षः_OPERAND (inner, 0);
+  सचे (वृक्षः_CODE (inner) != CONSTRUCTOR)
+    पटिनिवत्त NULL_वृक्षः;
+  वृक्षः field = वृक्षः_OPERAND (व्यञ्जकम्, 1);
   unsigned HOST_WIDE_INT cidx;
-  tree cfield, cvalue;
-  bool have_other_init = false;
+  वृक्षः cfield, cvalue;
+  तार्किक have_other_init = मिच्छा;
   FOR_EACH_CONSTRUCTOR_ELT (CONSTRUCTOR_ELTS (inner), cidx, cfield, cvalue)
     {
-      if (cfield == field)
-	return cvalue;
-      have_other_init = true;
+      सचे (cfield == field)
+	पटिनिवत्त cvalue;
+      have_other_init = सच्च;
     }
-  if (TREE_CODE (TREE_TYPE (inner)) == UNION_TYPE
-      && (have_other_init || field != TYPE_FIELDS (TREE_TYPE (inner))))
-    return NULL_TREE;
+  सचे (वृक्षः_CODE (वृक्षः_TYPE (inner)) == UNION_TYPE
+      && (have_other_init || field != TYPE_FIELDS (वृक्षः_TYPE (inner))))
+    पटिनिवत्त NULL_वृक्षः;
   /* Return a default initializer.  */
-  if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (expr)))
-    return build_constructor (TREE_TYPE (expr), NULL);
-  return build_zero_cst (TREE_TYPE (expr));
+  सचे (RECORD_OR_UNION_TYPE_P (वृक्षः_TYPE (व्यञ्जकम्)))
+    पटिनिवत्त build_constructor (वृक्षः_TYPE (व्यञ्जकम्), रिक्त);
+  पटिनिवत्त build_zero_cst (वृक्षः_TYPE (व्यञ्जकम्));
 }
 
 /* Helper function for convert_lvalue_to_rvalue called via
    walk_tree_without_duplicates.  Find DATA inside of the expression.  */
 
-static tree
-c_find_var_r (tree *tp, int *walk_subtrees, void *data)
+स्थिर वृक्षः
+c_find_var_r (वृक्षः *tp, पूर्णाङ्क *walk_subtrees, शून्य *data)
 {
-  if (TYPE_P (*tp))
+  सचे (TYPE_P (*tp))
     *walk_subtrees = 0;
-  else if (*tp == (tree) data)
-    return *tp;
-  return NULL_TREE;
+  अञ्ञथा सचे (*tp == (वृक्षः) data)
+    पटिनिवत्त *tp;
+  पटिनिवत्त NULL_वृक्षः;
 }
 
 /* Convert expression EXP (location LOC) from lvalue to rvalue,
@@ -2656,48 +2656,48 @@ c_find_var_r (tree *tp, int *walk_subtrees, void *data)
    constexpr scalars (including elements of structures and unions) are
    replaced by their initializers.  */
 
-struct c_expr
-convert_lvalue_to_rvalue (location_t loc, struct c_expr exp,
-			  bool convert_p, bool read_p, bool for_init)
+संरचना c_व्यञ्जकम्
+convert_lvalue_to_rvalue (location_t loc, संरचना c_व्यञ्जकम् exp,
+			  तार्किक convert_p, तार्किक read_p, तार्किक for_init)
 {
-  bool force_non_npc = false;
-  if (read_p)
-    mark_exp_read (exp.value);
+  तार्किक force_non_npc = मिच्छा;
+  सचे (read_p)
+    mark_exp_read (exp.मानम्);
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (read_p && TREE_CODE (exp.value) == COMPONENT_REF
-      && handle_counted_by_p (exp.value))
-    exp.value = handle_counted_by_for_component_ref (loc, exp.value);
+  सचे (read_p && वृक्षः_CODE (exp.मानम्) == COMPONENT_REF
+      && handle_counted_by_p (exp.मानम्))
+    exp.मानम् = handle_counted_by_for_component_ref (loc, exp.मानम्);
 
-  if (convert_p)
+  सचे (convert_p)
     exp = default_function_array_conversion (loc, exp);
-  if (!VOID_TYPE_P (TREE_TYPE (exp.value))
+  सचे (!VOID_TYPE_P (वृक्षः_TYPE (exp.मानम्))
       || (flag_isoc2y
-	  && TYPE_QUALS (TREE_TYPE (exp.value)) != TYPE_UNQUALIFIED))
-    exp.value = require_complete_type (loc, exp.value);
-  if (for_init || !RECORD_OR_UNION_TYPE_P (TREE_TYPE (exp.value)))
+	  && TYPE_QUALS (वृक्षः_TYPE (exp.मानम्)) != TYPE_UNQUALIFIED))
+    exp.मानम् = require_complete_type (loc, exp.मानम्);
+  सचे (for_init || !RECORD_OR_UNION_TYPE_P (वृक्षः_TYPE (exp.मानम्)))
     {
-      tree init = maybe_get_constexpr_init (exp.value);
-      if (init != NULL_TREE)
+      वृक्षः init = maybe_get_constexpr_init (exp.मानम्);
+      सचे (init != NULL_वृक्षः)
 	{
 	  /* A named constant of pointer type or type nullptr_t is not
 	     a null pointer constant even if the initializer is
 	     one.  */
-	  if (TREE_CODE (init) == INTEGER_CST
-	      && !INTEGRAL_TYPE_P (TREE_TYPE (init))
+	  सचे (वृक्षः_CODE (init) == INTEGER_CST
+	      && !INTEGRAL_TYPE_P (वृक्षः_TYPE (init))
 	      && integer_zerop (init))
-	    force_non_npc = true;
-	  exp.value = init;
+	    force_non_npc = सच्च;
+	  exp.मानम् = init;
 	}
     }
-  if (really_atomic_lvalue (exp.value))
+  सचे (really_atomic_lvalue (exp.मानम्))
     {
-      vec<tree, va_gc> *params;
-      tree nonatomic_type, tmp, tmp_addr, fndecl, func_call;
-      tree expr_type = TREE_TYPE (exp.value);
-      tree expr_addr = build_unary_op (loc, ADDR_EXPR, exp.value, false);
-      tree seq_cst = build_int_cst (integer_type_node, MEMMODEL_SEQ_CST);
+      vec<वृक्षः, va_gc> *params;
+      वृक्षः nonatomic_type, tmp, tmp_addr, fndecl, func_call;
+      वृक्षः व्यञ्जकम्_type = वृक्षः_TYPE (exp.मानम्);
+      वृक्षः व्यञ्जकम्_addr = build_unary_op (loc, ADDR_व्यञ्जकम्, exp.मानम्, मिच्छा);
+      वृक्षः seq_cst = build_int_cst (integer_type_ग्रन्थिः, MEMMODEL_SEQ_CST);
 
-      gcc_assert (TYPE_ATOMIC (expr_type));
+      gcc_assert (TYPE_ATOMIC (व्यञ्जकम्_type));
 
       /* Expansion of a generic atomic load may require an addition
 	 element, so allocate enough to prevent a resize.  */
@@ -2705,156 +2705,156 @@ convert_lvalue_to_rvalue (location_t loc, struct c_expr exp,
 
       /* Remove the qualifiers for the rest of the expressions and
 	 create the VAL temp variable to hold the RHS.  */
-      nonatomic_type = build_qualified_type (expr_type, TYPE_UNQUALIFIED);
+      nonatomic_type = build_qualified_type (व्यञ्जकम्_type, TYPE_UNQUALIFIED);
       tmp = create_tmp_var_raw (nonatomic_type);
-      tmp_addr = build_unary_op (loc, ADDR_EXPR, tmp, false);
-      TREE_ADDRESSABLE (tmp) = 1;
+      tmp_addr = build_unary_op (loc, ADDR_व्यञ्जकम्, tmp, मिच्छा);
+      वृक्षः_ADDRESSABLE (tmp) = 1;
       /* Do not disable warnings for TMP even though it's artificial.
 	 -Winvalid-memory-model depends on it.  */
 
       /* Issue __atomic_load (&expr, &tmp, SEQ_CST);  */
       fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_LOAD);
-      params->quick_push (expr_addr);
-      params->quick_push (tmp_addr);
-      params->quick_push (seq_cst);
-      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
+      params->quick_प्रक्षिप (व्यञ्जकम्_addr);
+      params->quick_प्रक्षिप (tmp_addr);
+      params->quick_प्रक्षिप (seq_cst);
+      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, रिक्त);
 
       /* EXPR is always read.  */
-      mark_exp_read (exp.value);
+      mark_exp_read (exp.मानम्);
 
       /* Optimize the common case where c_build_function_call_vec
 	 immediately folds __atomic_load (&expr, &tmp, SEQ_CST); into
 	 tmp = __atomic_load_<N> (&expr, SEQ_CST);
 	 In that case tmp is not addressable and can be initialized
 	 fully by the rhs of the MODIFY_EXPR.  */
-      tree tem = func_call;
-      if (CONVERT_EXPR_P (tem) && VOID_TYPE_P (TREE_TYPE (tem)))
+      वृक्षः tem = func_call;
+      सचे (CONVERT_व्यञ्जकम्_P (tem) && VOID_TYPE_P (वृक्षः_TYPE (tem)))
 	{
-	  tem = TREE_OPERAND (tem, 0);
-	  if (TREE_CODE (tem) == MODIFY_EXPR
-	      && TREE_OPERAND (tem, 0) == tmp
-	      && !walk_tree_without_duplicates (&TREE_OPERAND (tem, 1),
+	  tem = वृक्षः_OPERAND (tem, 0);
+	  सचे (वृक्षः_CODE (tem) == MODIFY_व्यञ्जकम्
+	      && वृक्षः_OPERAND (tem, 0) == tmp
+	      && !walk_वृक्षः_without_duplicates (&वृक्षः_OPERAND (tem, 1),
 						c_find_var_r, tmp))
 	    {
-	      TREE_ADDRESSABLE (tmp) = 0;
-	      func_call = TREE_OPERAND (tem, 1);
+	      वृक्षः_ADDRESSABLE (tmp) = 0;
+	      func_call = वृक्षः_OPERAND (tem, 1);
 	    }
 	}
 
       /* Return tmp which contains the value loaded.  */
-      exp.value = build4 (TARGET_EXPR, nonatomic_type, tmp, func_call,
-			  NULL_TREE, NULL_TREE);
+      exp.मानम् = build4 (TARGET_व्यञ्जकम्, nonatomic_type, tmp, func_call,
+			  NULL_वृक्षः, NULL_वृक्षः);
     }
-  if (convert_p && !error_operand_p (exp.value)
-      && (TREE_CODE (TREE_TYPE (exp.value)) != ARRAY_TYPE))
-    exp.value = convert (build_qualified_type (TREE_TYPE (exp.value), TYPE_UNQUALIFIED), exp.value);
-  if (force_non_npc)
-    exp.value = build1 (NOP_EXPR, TREE_TYPE (exp.value), exp.value);
+  सचे (convert_p && !error_operand_p (exp.मानम्)
+      && (वृक्षः_CODE (वृक्षः_TYPE (exp.मानम्)) != ARRAY_TYPE))
+    exp.मानम् = convert (build_qualified_type (वृक्षः_TYPE (exp.मानम्), TYPE_UNQUALIFIED), exp.मानम्);
+  सचे (force_non_npc)
+    exp.मानम् = build1 (NOP_व्यञ्जकम्, वृक्षः_TYPE (exp.मानम्), exp.मानम्);
 
   {
-    tree false_value, true_value;
-    if (convert_p && !error_operand_p (exp.value)
-	&& c_hardbool_type_attr (TREE_TYPE (exp.value),
-				 &false_value, &true_value))
+    वृक्षः false_मानम्, true_मानम्;
+    सचे (convert_p && !error_operand_p (exp.मानम्)
+	&& c_hardbool_type_attr (वृक्षः_TYPE (exp.मानम्),
+				 &false_मानम्, &true_मानम्))
       {
-	tree t = save_expr (exp.value);
+	वृक्षः t = save_व्यञ्जकम् (exp.मानम्);
 
-	mark_exp_read (exp.value);
+	mark_exp_read (exp.मानम्);
 
-	tree trapfn = builtin_decl_explicit (BUILT_IN_TRAP);
-	tree expr = build_call_expr_loc (loc, trapfn, 0);
-	expr = build_compound_expr (loc, expr, boolean_true_node);
-	expr = fold_build3_loc (loc, COND_EXPR, boolean_type_node,
-				fold_build2_loc (loc, NE_EXPR,
-						 boolean_type_node,
-						 t, true_value),
-				expr, boolean_true_node);
-	expr = fold_build3_loc (loc, COND_EXPR, boolean_type_node,
-				fold_build2_loc (loc, NE_EXPR,
-						 boolean_type_node,
-						 t, false_value),
-				expr, boolean_false_node);
+	वृक्षः trapfn = builtin_decl_explicit (BUILT_IN_TRAP);
+	वृक्षः व्यञ्जकम् = build_call_व्यञ्जकम्_loc (loc, trapfn, 0);
+	व्यञ्जकम् = build_compound_व्यञ्जकम् (loc, व्यञ्जकम्, boolean_true_ग्रन्थिः);
+	व्यञ्जकम् = fold_build3_loc (loc, COND_व्यञ्जकम्, boolean_type_ग्रन्थिः,
+				fold_build2_loc (loc, NE_व्यञ्जकम्,
+						 boolean_type_ग्रन्थिः,
+						 t, true_मानम्),
+				व्यञ्जकम्, boolean_true_ग्रन्थिः);
+	व्यञ्जकम् = fold_build3_loc (loc, COND_व्यञ्जकम्, boolean_type_ग्रन्थिः,
+				fold_build2_loc (loc, NE_व्यञ्जकम्,
+						 boolean_type_ग्रन्थिः,
+						 t, false_मानम्),
+				व्यञ्जकम्, boolean_false_ग्रन्थिः);
 
-	exp.value = expr;
+	exp.मानम् = व्यञ्जकम्;
       }
   }
 
-  return exp;
+  पटिनिवत्त exp;
 }
 
 /* Wrapper for the overload above, same arguments but for tree rather than
    c_expr.  This is important for hardbools to decay to bools.  */
 
-static inline tree
-convert_lvalue_to_rvalue (location_t loc, tree val,
-			  bool convert_p, bool read_p, bool for_init = false)
+स्थिर अन्तःस्थ वृक्षः
+convert_lvalue_to_rvalue (location_t loc, वृक्षः val,
+			  तार्किक convert_p, तार्किक read_p, तार्किक for_init = मिच्छा)
 {
-  struct c_expr expr;
-  memset (&expr, 0, sizeof (expr));
-  expr.value = val;
-  expr = convert_lvalue_to_rvalue (loc, expr, convert_p, read_p, for_init);
-  return expr.value;
+  संरचना c_व्यञ्जकम् व्यञ्जकम्;
+  memset (&व्यञ्जकम्, 0, परिमाण (व्यञ्जकम्));
+  व्यञ्जकम्.मानम् = val;
+  व्यञ्जकम् = convert_lvalue_to_rvalue (loc, व्यञ्जकम्, convert_p, read_p, for_init);
+  पटिनिवत्त व्यञ्जकम्.मानम्;
 }
 
 /* EXP is an expression of integer type.  Apply the integer promotions
    to it and return the promoted value.  */
 
-tree
-perform_integral_promotions (tree exp)
+वृक्षः
+perform_integral_promotions (वृक्षः exp)
 {
-  tree type = TREE_TYPE (exp);
-  enum tree_code code = TREE_CODE (type);
+  वृक्षः type = वृक्षः_TYPE (exp);
+  गणना वृक्षः_code code = वृक्षः_CODE (type);
 
   gcc_assert (INTEGRAL_TYPE_P (type));
 
   /* Convert enums to the result of applying the integer promotions to
      their underlying type.  */
-  if (code == ENUMERAL_TYPE)
+  सचे (code == ENUMERAL_TYPE)
     {
       type = ENUM_UNDERLYING_TYPE (type);
-      if (c_promoting_integer_type_p (type))
+      सचे (c_promoting_integer_type_p (type))
 	{
-	  if (TYPE_UNSIGNED (type)
-	      && TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_node))
-	    type = unsigned_type_node;
-	  else
-	    type = integer_type_node;
+	  सचे (TYPE_UNSIGNED (type)
+	      && TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_ग्रन्थिः))
+	    type = unsigned_type_ग्रन्थिः;
+	  अञ्ञथा
+	    type = integer_type_ग्रन्थिः;
 	}
 
-      return convert (type, exp);
+      पटिनिवत्त convert (type, exp);
     }
 
   /* ??? This should no longer be needed now bit-fields have their
      proper types.  */
-  if (TREE_CODE (exp) == COMPONENT_REF
-      && DECL_C_BIT_FIELD (TREE_OPERAND (exp, 1)))
+  सचे (वृक्षः_CODE (exp) == COMPONENT_REF
+      && DECL_C_BIT_FIELD (वृक्षः_OPERAND (exp, 1)))
     {
-      if (BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (TREE_OPERAND (exp, 1))))
+      सचे (BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (वृक्षः_OPERAND (exp, 1))))
 	{
-	  tree btype = DECL_BIT_FIELD_TYPE (TREE_OPERAND (exp, 1));
-	  if (TREE_CODE (btype) == BITINT_TYPE)
-	    return convert (btype, exp);
-	  else
-	    return convert (ENUM_UNDERLYING_TYPE (btype), exp);
+	  वृक्षः btype = DECL_BIT_FIELD_TYPE (वृक्षः_OPERAND (exp, 1));
+	  सचे (वृक्षः_CODE (btype) == BITINT_TYPE)
+	    पटिनिवत्त convert (btype, exp);
+	  अञ्ञथा
+	    पटिनिवत्त convert (ENUM_UNDERLYING_TYPE (btype), exp);
 	}
       /* If it's thinner than an int, promote it like a
 	 c_promoting_integer_type_p, otherwise leave it alone.  */
-      if (compare_tree_int (DECL_SIZE (TREE_OPERAND (exp, 1)),
-			    TYPE_PRECISION (integer_type_node)) < 0)
-	return convert (integer_type_node, exp);
+      सचे (compare_वृक्षः_int (DECL_SIZE (वृक्षः_OPERAND (exp, 1)),
+			    TYPE_PRECISION (integer_type_ग्रन्थिः)) < 0)
+	पटिनिवत्त convert (integer_type_ग्रन्थिः, exp);
     }
 
-  if (c_promoting_integer_type_p (type))
+  सचे (c_promoting_integer_type_p (type))
     {
       /* Preserve unsignedness if not really getting any wider.  */
-      if (TYPE_UNSIGNED (type)
-	  && TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_node))
-	return convert (unsigned_type_node, exp);
+      सचे (TYPE_UNSIGNED (type)
+	  && TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_ग्रन्थिः))
+	पटिनिवत्त convert (unsigned_type_ग्रन्थिः, exp);
 
-      return convert (integer_type_node, exp);
+      पटिनिवत्त convert (integer_type_ग्रन्थिः, exp);
     }
 
-  return exp;
+  पटिनिवत्त exp;
 }
 
 
@@ -2862,27 +2862,27 @@ perform_integral_promotions (tree exp)
    Enumeral types or short or char are converted to int.
    In addition, manifest constants symbols are replaced by their values.  */
 
-tree
-default_conversion (tree exp)
+वृक्षः
+default_conversion (वृक्षः exp)
 {
-  tree orig_exp;
-  tree type = TREE_TYPE (exp);
-  enum tree_code code = TREE_CODE (type);
-  tree promoted_type;
+  वृक्षः orig_exp;
+  वृक्षः type = वृक्षः_TYPE (exp);
+  गणना वृक्षः_code code = वृक्षः_CODE (type);
+  वृक्षः promoted_type;
 
   mark_exp_read (exp);
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (TREE_CODE (exp) == COMPONENT_REF
+  सचे (वृक्षः_CODE (exp) == COMPONENT_REF
       && handle_counted_by_p (exp))
-    exp = handle_counted_by_for_component_ref (EXPR_LOCATION (exp), exp);
+    exp = handle_counted_by_for_component_ref (व्यञ्जकम्_LOCATION (exp), exp);
 
   /* Functions and arrays have been converted during parsing.  */
   gcc_assert (code != FUNCTION_TYPE);
-  if (code == ARRAY_TYPE)
-    return exp;
+  सचे (code == ARRAY_TYPE)
+    पटिनिवत्त exp;
 
   /* Constants can be used directly unless they're not loadable.  */
-  if (TREE_CODE (exp) == CONST_DECL)
+  सचे (वृक्षः_CODE (exp) == CONST_DECL)
     exp = DECL_INITIAL (exp);
 
   /* Strip no-op conversions.  */
@@ -2891,35 +2891,35 @@ default_conversion (tree exp)
 
   copy_warning (exp, orig_exp);
 
-  if (code == VOID_TYPE)
+  सचे (code == VOID_TYPE)
     {
-      error_at (EXPR_LOC_OR_LOC (exp, input_location),
+      error_at (व्यञ्जकम्_LOC_OR_LOC (exp, निवेशः_location),
 		"void value not ignored as it ought to be");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  exp = require_complete_type (EXPR_LOC_OR_LOC (exp, input_location), exp);
-  if (exp == error_mark_node)
-    return error_mark_node;
+  exp = require_complete_type (व्यञ्जकम्_LOC_OR_LOC (exp, निवेशः_location), exp);
+  सचे (exp == error_mark_ग्रन्थिः)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
   promoted_type = targetm.promoted_type (type);
-  if (promoted_type)
-    return convert (promoted_type, exp);
+  सचे (promoted_type)
+    पटिनिवत्त convert (promoted_type, exp);
 
-  if (INTEGRAL_TYPE_P (type))
+  सचे (INTEGRAL_TYPE_P (type))
     {
       /* Avoid performing integral promotion of bit-precise integer
 	 type bit-field to its corresponding bit-precise integer if
 	 orig_exp is a cast to it to its underlying type.  */
-      if (orig_exp != exp
-	  && TREE_CODE (exp) == COMPONENT_REF
-	  && DECL_C_BIT_FIELD (TREE_OPERAND (exp, 1))
-	  && BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (TREE_OPERAND (exp, 1))))
-	return perform_integral_promotions (orig_exp);
-      return perform_integral_promotions (exp);
+      सचे (orig_exp != exp
+	  && वृक्षः_CODE (exp) == COMPONENT_REF
+	  && DECL_C_BIT_FIELD (वृक्षः_OPERAND (exp, 1))
+	  && BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (वृक्षः_OPERAND (exp, 1))))
+	पटिनिवत्त perform_integral_promotions (orig_exp);
+      पटिनिवत्त perform_integral_promotions (exp);
     }
 
-  return exp;
+  पटिनिवत्त exp;
 }
 
 /* Look up COMPONENT in a structure or union TYPE.
@@ -2931,10 +2931,10 @@ default_conversion (tree exp)
    the component is embedded within (nested) anonymous structures or
    unions, the list steps down the chain to the component.  */
 
-tree
-lookup_field (const_tree type, tree component)
+वृक्षः
+lookup_field (const_वृक्षः type, वृक्षः component)
 {
-  tree field;
+  वृक्षः field;
 
   /* If TYPE_LANG_SPECIFIC is set, then it is a sorted array of pointers
      to the field elements.  Use a binary search on this array to quickly
@@ -2945,135 +2945,135 @@ lookup_field (const_tree type, tree component)
      TYPE_LANG_SPECIFIC arrays are potentially no longer sorted.  In that
      case just iterate using DECL_CHAIN.  */
 
-  if (TYPE_LANG_SPECIFIC (type) && TYPE_LANG_SPECIFIC (type)->s
+  सचे (TYPE_LANG_SPECIFIC (type) && TYPE_LANG_SPECIFIC (type)->s
       && !seen_error ())
     {
-      int bot, top, half;
-      tree *field_array = &TYPE_LANG_SPECIFIC (type)->s->elts[0];
+      पूर्णाङ्क bot, शिखरम्, half;
+      वृक्षः *field_array = &TYPE_LANG_SPECIFIC (type)->s->elts[0];
 
       field = TYPE_FIELDS (type);
       bot = 0;
-      top = TYPE_LANG_SPECIFIC (type)->s->len;
-      while (top - bot > 1)
+      शिखरम् = TYPE_LANG_SPECIFIC (type)->s->len;
+      याव (शिखरम् - bot > 1)
 	{
-	  half = (top - bot + 1) >> 1;
+	  half = (शिखरम् - bot + 1) >> 1;
 	  field = field_array[bot+half];
 
-	  if (DECL_NAME (field) == NULL_TREE)
+	  सचे (DECL_NAME (field) == NULL_वृक्षः)
 	    {
 	      /* Step through all anon unions in linear fashion.  */
-	      while (DECL_NAME (field_array[bot]) == NULL_TREE)
+	      याव (DECL_NAME (field_array[bot]) == NULL_वृक्षः)
 		{
 		  field = field_array[bot++];
-		  if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
+		  सचे (RECORD_OR_UNION_TYPE_P (वृक्षः_TYPE (field)))
 		    {
-		      tree anon = lookup_field (TREE_TYPE (field), component);
+		      वृक्षः anon = lookup_field (वृक्षः_TYPE (field), component);
 
-		      if (anon)
-			return tree_cons (NULL_TREE, field, anon);
+		      सचे (anon)
+			पटिनिवत्त वृक्षः_cons (NULL_वृक्षः, field, anon);
 
 		      /* The Plan 9 compiler permits referring
 			 directly to an anonymous struct/union field
 			 using a typedef name.  */
-		      if (flag_plan9_extensions
-			  && TYPE_NAME (TREE_TYPE (field)) != NULL_TREE
-			  && (TREE_CODE (TYPE_NAME (TREE_TYPE (field)))
+		      सचे (flag_plan9_extensions
+			  && TYPE_NAME (वृक्षः_TYPE (field)) != NULL_वृक्षः
+			  && (वृक्षः_CODE (TYPE_NAME (वृक्षः_TYPE (field)))
 			      == TYPE_DECL)
-			  && (DECL_NAME (TYPE_NAME (TREE_TYPE (field)))
+			  && (DECL_NAME (TYPE_NAME (वृक्षः_TYPE (field)))
 			      == component))
-			break;
+			भङ्ग;
 		    }
 		}
 
 	      /* Entire record is only anon unions.  */
-	      if (bot > top)
-		return NULL_TREE;
+	      सचे (bot > शिखरम्)
+		पटिनिवत्त NULL_वृक्षः;
 
 	      /* Restart the binary search, with new lower bound.  */
-	      continue;
+	      अनुवर्त;
 	    }
 
-	  if (DECL_NAME (field) == component)
-	    break;
-	  if (DECL_NAME (field) < component)
+	  सचे (DECL_NAME (field) == component)
+	    भङ्ग;
+	  सचे (DECL_NAME (field) < component)
 	    bot += half;
-	  else
-	    top = bot + half;
+	  अञ्ञथा
+	    शिखरम् = bot + half;
 	}
 
-      if (DECL_NAME (field_array[bot]) == component)
+      सचे (DECL_NAME (field_array[bot]) == component)
 	field = field_array[bot];
-      else if (DECL_NAME (field) != component)
-	return NULL_TREE;
+      अञ्ञथा सचे (DECL_NAME (field) != component)
+	पटिनिवत्त NULL_वृक्षः;
     }
-  else
+  अञ्ञथा
     {
-      for (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
+      अत्थाय (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
 	{
-	  if (DECL_NAME (field) == NULL_TREE
-	      && RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
+	  सचे (DECL_NAME (field) == NULL_वृक्षः
+	      && RECORD_OR_UNION_TYPE_P (वृक्षः_TYPE (field)))
 	    {
-	      tree anon = lookup_field (TREE_TYPE (field), component);
+	      वृक्षः anon = lookup_field (वृक्षः_TYPE (field), component);
 
-	      if (anon)
-		return tree_cons (NULL_TREE, field, anon);
+	      सचे (anon)
+		पटिनिवत्त वृक्षः_cons (NULL_वृक्षः, field, anon);
 
 	      /* The Plan 9 compiler permits referring directly to an
 		 anonymous struct/union field using a typedef
 		 name.  */
-	      if (flag_plan9_extensions
-		  && TYPE_NAME (TREE_TYPE (field)) != NULL_TREE
-		  && TREE_CODE (TYPE_NAME (TREE_TYPE (field))) == TYPE_DECL
-		  && (DECL_NAME (TYPE_NAME (TREE_TYPE (field)))
+	      सचे (flag_plan9_extensions
+		  && TYPE_NAME (वृक्षः_TYPE (field)) != NULL_वृक्षः
+		  && वृक्षः_CODE (TYPE_NAME (वृक्षः_TYPE (field))) == TYPE_DECL
+		  && (DECL_NAME (TYPE_NAME (वृक्षः_TYPE (field)))
 		      == component))
-		break;
+		भङ्ग;
 	    }
 
-	  if (DECL_NAME (field) == component)
-	    break;
+	  सचे (DECL_NAME (field) == component)
+	    भङ्ग;
 	}
 
-      if (field == NULL_TREE)
-	return NULL_TREE;
+      सचे (field == NULL_वृक्षः)
+	पटिनिवत्त NULL_वृक्षः;
     }
 
-  return tree_cons (NULL_TREE, field, NULL_TREE);
+  पटिनिवत्त वृक्षः_cons (NULL_वृक्षः, field, NULL_वृक्षः);
 }
 
 /* Recursively append candidate IDENTIFIER_NODEs to CANDIDATES.  */
 
-static void
-lookup_field_fuzzy_find_candidates (tree type, tree component,
-				    vec<tree> *candidates)
+स्थिर शून्य
+lookup_field_fuzzy_find_candidates (वृक्षः type, वृक्षः component,
+				    vec<वृक्षः> *candidates)
 {
-  tree field;
-  for (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
+  वृक्षः field;
+  अत्थाय (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
     {
-      if (DECL_NAME (field) == NULL_TREE
-	  && RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
-	lookup_field_fuzzy_find_candidates (TREE_TYPE (field), component,
+      सचे (DECL_NAME (field) == NULL_वृक्षः
+	  && RECORD_OR_UNION_TYPE_P (वृक्षः_TYPE (field)))
+	lookup_field_fuzzy_find_candidates (वृक्षः_TYPE (field), component,
 					    candidates);
 
-      if (DECL_NAME (field))
-	candidates->safe_push (DECL_NAME (field));
+      सचे (DECL_NAME (field))
+	candidates->safe_प्रक्षिप (DECL_NAME (field));
     }
 }
 
 /* Like "lookup_field", but find the closest matching IDENTIFIER_NODE,
    rather than returning a TREE_LIST for an exact match.  */
 
-static tree
-lookup_field_fuzzy (tree type, tree component)
+स्थिर वृक्षः
+lookup_field_fuzzy (वृक्षः type, वृक्षः component)
 {
-  gcc_assert (TREE_CODE (component) == IDENTIFIER_NODE);
+  gcc_assert (वृक्षः_CODE (component) == IDENTIFIER_ग्रन्थिः);
 
   /* First, gather a list of candidates.  */
-  auto_vec <tree> candidates;
+  auto_vec <वृक्षः> candidates;
 
   lookup_field_fuzzy_find_candidates (type, component,
 				      &candidates);
 
-  return find_closest_identifier (component, &candidates);
+  पटिनिवत्त find_closest_identifier (component, &candidates);
 }
 
 /* Support function for build_component_ref's error-handling.
@@ -3081,77 +3081,77 @@ lookup_field_fuzzy (tree type, tree component)
    Given DATUM_TYPE, and "DATUM.COMPONENT", where DATUM is *not* a
    struct or union, should we suggest "DATUM->COMPONENT" as a hint?  */
 
-static bool
-should_suggest_deref_p (tree datum_type)
+स्थिर तार्किक
+should_suggest_deref_p (वृक्षः datum_type)
 {
   /* We don't do it for Objective-C, since Objective-C 2.0 dot-syntax
      allows "." for ptrs; we could be handling a failed attempt
      to access a property.  */
-  if (c_dialect_objc ())
-    return false;
+  सचे (c_dialect_objc ())
+    पटिनिवत्त मिच्छा;
 
   /* Only suggest it for pointers...  */
-  if (TREE_CODE (datum_type) != POINTER_TYPE)
-    return false;
+  सचे (वृक्षः_CODE (datum_type) != POINTER_TYPE)
+    पटिनिवत्त मिच्छा;
 
   /* ...to structs/unions.  */
-  tree underlying_type = TREE_TYPE (datum_type);
-  enum tree_code code = TREE_CODE (underlying_type);
-  if (code == RECORD_TYPE || code == UNION_TYPE)
-    return true;
-  else
-    return false;
+  वृक्षः underlying_type = वृक्षः_TYPE (datum_type);
+  गणना वृक्षः_code code = वृक्षः_CODE (underlying_type);
+  सचे (code == RECORD_TYPE || code == UNION_TYPE)
+    पटिनिवत्त सच्च;
+  अञ्ञथा
+    पटिनिवत्त मिच्छा;
 }
 
 /* Give a component ref REF, decide whether we should handle its counted_by
    attribute based on its context:
    Do not handle counted_by when in offsetof, typeof and alignof operator.  */
 
-static bool
-handle_counted_by_p (tree ref)
+स्थिर तार्किक
+handle_counted_by_p (वृक्षः ref)
 {
-  gcc_assert (TREE_CODE (ref) == COMPONENT_REF);
-  tree datum = TREE_OPERAND (ref, 0);
+  gcc_assert (वृक्षः_CODE (ref) == COMPONENT_REF);
+  वृक्षः datum = वृक्षः_OPERAND (ref, 0);
   /* If the component_ref is build for a offsetof, i.e., the datum
      of the component_ref is a indirect_ref of null_pointer_node,
      we should not generate call to .ACCESS_WITH_SIZE.  */
-  if (TREE_CODE (datum) == INDIRECT_REF
-      && TREE_OPERAND (datum, 0) == null_pointer_node)
-    return false;
-  if (in_typeof || in_alignof)
-    return false;
-  return true;
+  सचे (वृक्षः_CODE (datum) == INDIRECT_REF
+      && वृक्षः_OPERAND (datum, 0) == null_pointer_ग्रन्थिः)
+    पटिनिवत्त मिच्छा;
+  सचे (in_typeof || in_alignof)
+    पटिनिवत्त मिच्छा;
+  पटिनिवत्त सच्च;
 }
 
 /* Given a component ref REF, if there is a counted_by attribute attached,
    issue error when the element_type is a structure or union including a
    flexible array member.  */
 
-static void
-check_counted_by_attribute (location_t loc, tree ref)
+स्थिर शून्य
+check_counted_by_attribute (location_t loc, वृक्षः ref)
 {
-  tree subdatum = TREE_OPERAND (ref, 1);
-  tree sub_type = TREE_TYPE (subdatum);
+  वृक्षः subdatum = वृक्षः_OPERAND (ref, 1);
+  वृक्षः sub_type = वृक्षः_TYPE (subdatum);
 
-  if (!flexible_array_member_type_p (sub_type)
-      && TREE_CODE (sub_type) != POINTER_TYPE)
-    return;
+  सचे (!flexible_array_member_type_p (sub_type)
+      && वृक्षः_CODE (sub_type) != POINTER_TYPE)
+    पटिनिवत्त;
 
-  tree element_type = TREE_TYPE (sub_type);
+  वृक्षः element_type = वृक्षः_TYPE (sub_type);
 
-  tree attr_counted_by = lookup_attribute ("counted_by",
+  वृक्षः attr_counted_by = lookup_attribute ("counted_by",
 					   DECL_ATTRIBUTES (subdatum));
-  if (attr_counted_by)
+  सचे (attr_counted_by)
     {
       /* Issue error when the element_type is a structure or
 	union including a flexible array member.  */
-      if (RECORD_OR_UNION_TYPE_P (element_type)
+      सचे (RECORD_OR_UNION_TYPE_P (element_type)
 	  && TYPE_INCLUDES_FLEXARRAY (element_type))
 	{
 	  error_at (loc,
 		    "%<counted_by%> attribute is not allowed for a pointer to"
 		    " structure or union with flexible array member");
-	  return;
+	  पटिनिवत्त;
 	}
     }
 }
@@ -3176,58 +3176,58 @@ check_counted_by_attribute (location_t loc, tree ref)
     &(p->k)
 */
 
-static tree
-build_counted_by_ref (tree datum, tree subdatum,
-		      tree *counted_by_type)
+स्थिर वृक्षः
+build_counted_by_ref (वृक्षः datum, वृक्षः subdatum,
+		      वृक्षः *counted_by_type)
 {
-  tree sub_type = TREE_TYPE (subdatum);
-  if (!flexible_array_member_type_p (sub_type)
-      && TREE_CODE (sub_type) != POINTER_TYPE)
-    return NULL_TREE;
+  वृक्षः sub_type = वृक्षः_TYPE (subdatum);
+  सचे (!flexible_array_member_type_p (sub_type)
+      && वृक्षः_CODE (sub_type) != POINTER_TYPE)
+    पटिनिवत्त NULL_वृक्षः;
 
-  tree attr_counted_by = lookup_attribute ("counted_by",
+  वृक्षः attr_counted_by = lookup_attribute ("counted_by",
 					   DECL_ATTRIBUTES (subdatum));
-  if (!attr_counted_by)
-    return NULL_TREE;
+  सचे (!attr_counted_by)
+    पटिनिवत्त NULL_वृक्षः;
 
-  tree counted_by_ref = NULL_TREE;
-  *counted_by_type = NULL_TREE;
+  वृक्षः counted_by_ref = NULL_वृक्षः;
+  *counted_by_type = NULL_वृक्षः;
 
-  tree type = TREE_TYPE (datum);
+  वृक्षः type = वृक्षः_TYPE (datum);
 
   /* If the type of the containing structure is an anonymous struct/union,
      and this anonymous struct/union is not a root type, get the first
      outer named structure/union type.  */
-  while (TREE_CODE (datum) == COMPONENT_REF
-	 && c_type_tag (type) == NULL_TREE
-	 && DECL_NAME (TREE_OPERAND (datum, 1)) == NULL_TREE)
+  याव (वृक्षः_CODE (datum) == COMPONENT_REF
+	 && c_type_tag (type) == NULL_वृक्षः
+	 && DECL_NAME (वृक्षः_OPERAND (datum, 1)) == NULL_वृक्षः)
     {
-      datum = TREE_OPERAND (datum, 0);
-      type = TREE_TYPE (datum);
+      datum = वृक्षः_OPERAND (datum, 0);
+      type = वृक्षः_TYPE (datum);
     }
 
-  tree field_id = TREE_VALUE (TREE_VALUE (attr_counted_by));
-  tree counted_by_field = lookup_field (type, field_id);
+  वृक्षः field_id = वृक्षः_मानम् (वृक्षः_मानम् (attr_counted_by));
+  वृक्षः counted_by_field = lookup_field (type, field_id);
   gcc_assert (counted_by_field);
 
-  tree counted_by_subdatum;
-  do
+  वृक्षः counted_by_subdatum;
+  करोहि
     {
-      counted_by_subdatum = TREE_VALUE (counted_by_field);
+      counted_by_subdatum = वृक्षः_मानम् (counted_by_field);
       /* Get the TYPE of the counted_by field.  */
-      *counted_by_type = TREE_TYPE (counted_by_subdatum);
+      *counted_by_type = वृक्षः_TYPE (counted_by_subdatum);
 
       counted_by_ref
-	= build3 (COMPONENT_REF, TREE_TYPE (counted_by_subdatum),
-		  datum, counted_by_subdatum, NULL_TREE);
+	= build3 (COMPONENT_REF, वृक्षः_TYPE (counted_by_subdatum),
+		  datum, counted_by_subdatum, NULL_वृक्षः);
 
       datum = counted_by_ref;
-      counted_by_field = TREE_CHAIN (counted_by_field);
+      counted_by_field = वृक्षः_CHAIN (counted_by_field);
     }
-  while (counted_by_field);
+  याव (counted_by_field);
 
-  counted_by_ref = build_fold_addr_expr (counted_by_ref);
-  return counted_by_ref;
+  counted_by_ref = build_fold_addr_व्यञ्जकम् (counted_by_ref);
+  पटिनिवत्त counted_by_ref;
 }
 
 /* Given a COMPONENT_REF REF with the location LOC, the corresponding
@@ -3271,38 +3271,38 @@ build_counted_by_ref (tree datum, tree subdatum,
    of the array.
 
   */
-static tree
-build_access_with_size_for_counted_by (location_t loc, tree ref,
-				       tree counted_by_ref,
-				       tree counted_by_type)
+स्थिर वृक्षः
+build_access_with_size_for_counted_by (location_t loc, वृक्षः ref,
+				       वृक्षः counted_by_ref,
+				       वृक्षः counted_by_type)
 {
-  gcc_assert (flexible_array_member_type_p (TREE_TYPE (ref))
-	      || TREE_CODE (TREE_TYPE (ref)) == POINTER_TYPE);
+  gcc_assert (flexible_array_member_type_p (वृक्षः_TYPE (ref))
+	      || वृक्षः_CODE (वृक्षः_TYPE (ref)) == POINTER_TYPE);
 
-  bool is_fam = flexible_array_member_type_p (TREE_TYPE (ref));
+  तार्किक is_fam = flexible_array_member_type_p (वृक्षः_TYPE (ref));
 
   /* The result type of the call is a pointer to the flexible array type;
      or is the original pointer type to the pointer field with counted_by.  */
-  tree result_type = is_fam ? c_build_pointer_type (TREE_TYPE (ref))
-		     : TREE_TYPE (ref);
+  वृक्षः result_type = is_fam ? c_build_pointer_type (वृक्षः_TYPE (ref))
+		     : वृक्षः_TYPE (ref);
 
-  tree element_type = TREE_TYPE (TREE_TYPE (ref));
-  tree element_size = VOID_TYPE_P (element_type)
-		      ? size_one_node
+  वृक्षः element_type = वृक्षः_TYPE (वृक्षः_TYPE (ref));
+  वृक्षः element_size = VOID_TYPE_P (element_type)
+		      ? size_one_ग्रन्थिः
 		      : TYPE_SIZE_UNIT (element_type);
-  if (element_size == NULL_TREE)
-    return ref;
+  सचे (element_size == NULL_वृक्षः)
+    पटिनिवत्त ref;
 
-  tree first_param = is_fam
+  वृक्षः first_param = is_fam
 		     ? c_fully_fold (array_to_pointer_conversion (loc, ref),
-				     false, NULL)
-		     : c_fully_fold (ref, false, NULL);
-  tree second_param
-    = c_fully_fold (counted_by_ref, false, NULL);
-  tree third_param = build_int_cst (c_build_pointer_type (counted_by_type), 0);
+				     मिच्छा, रिक्त)
+		     : c_fully_fold (ref, मिच्छा, रिक्त);
+  वृक्षः second_param
+    = c_fully_fold (counted_by_ref, मिच्छा, रिक्त);
+  वृक्षः third_param = build_int_cst (c_build_pointer_type (counted_by_type), 0);
 
-  tree call
-    = build_call_expr_internal_loc (loc, IFN_ACCESS_WITH_SIZE,
+  वृक्षः call
+    = build_call_व्यञ्जकम्_internal_loc (loc, IFN_ACCESS_WITH_SIZE,
 				    result_type, 4,
 				    first_param,
 				    second_param,
@@ -3310,10 +3310,10 @@ build_access_with_size_for_counted_by (location_t loc, tree ref,
 				    element_size);
 
   /* Wrap the call with an INDIRECT_REF with the flexible array type.  */
-  if (is_fam)
-    call = build1 (INDIRECT_REF, TREE_TYPE (ref), call);
-  SET_EXPR_LOCATION (call, loc);
-  return call;
+  सचे (is_fam)
+    call = build1 (INDIRECT_REF, वृक्षः_TYPE (ref), call);
+  SET_व्यञ्जकम्_LOCATION (call, loc);
+  पटिनिवत्त call;
 }
 
 /* For the COMPONENT_REF ref, check whether it has a counted_by attribute,
@@ -3321,25 +3321,25 @@ build_access_with_size_for_counted_by (location_t loc, tree ref,
    function .ACCESS_WITH_SIZE.
    Otherwise, return the ref itself.  */
 
-tree
-handle_counted_by_for_component_ref (location_t loc, tree ref)
+वृक्षः
+handle_counted_by_for_component_ref (location_t loc, वृक्षः ref)
 {
-  gcc_assert (TREE_CODE (ref) == COMPONENT_REF);
-  tree datum = TREE_OPERAND (ref, 0);
-  tree subdatum = TREE_OPERAND (ref, 1);
-  tree counted_by_type = NULL_TREE;
+  gcc_assert (वृक्षः_CODE (ref) == COMPONENT_REF);
+  वृक्षः datum = वृक्षः_OPERAND (ref, 0);
+  वृक्षः subdatum = वृक्षः_OPERAND (ref, 1);
+  वृक्षः counted_by_type = NULL_वृक्षः;
 
-  if (!(flexible_array_member_type_p (TREE_TYPE (ref))
-	|| TREE_CODE (TREE_TYPE (ref)) == POINTER_TYPE))
-    return ref;
+  सचे (!(flexible_array_member_type_p (वृक्षः_TYPE (ref))
+	|| वृक्षः_CODE (वृक्षः_TYPE (ref)) == POINTER_TYPE))
+    पटिनिवत्त ref;
 
-  tree counted_by_ref = build_counted_by_ref (datum, subdatum,
+  वृक्षः counted_by_ref = build_counted_by_ref (datum, subdatum,
 					      &counted_by_type);
-  if (counted_by_ref)
+  सचे (counted_by_ref)
     ref = build_access_with_size_for_counted_by (loc, ref,
 						 counted_by_ref,
 						 counted_by_type);
-  return ref;
+  पटिनिवत्त ref;
 }
 
 /* Make an expression to refer to the COMPONENT field of structure or
@@ -3350,65 +3350,65 @@ handle_counted_by_for_component_ref (location_t loc, tree ref)
    If HANDLE_COUNTED_BY is true, check the counted_by attribute and generate
    a call to .ACCESS_WITH_SIZE.  Otherwise, ignore the attribute.  */
 
-tree
-build_component_ref (location_t loc, tree datum, tree component,
+वृक्षः
+build_component_ref (location_t loc, वृक्षः datum, वृक्षः component,
 		     location_t component_loc, location_t arrow_loc)
 {
-  tree type = TREE_TYPE (datum);
-  enum tree_code code = TREE_CODE (type);
-  tree field = NULL;
-  tree ref;
-  bool datum_lvalue = lvalue_p (datum);
+  वृक्षः type = वृक्षः_TYPE (datum);
+  गणना वृक्षः_code code = वृक्षः_CODE (type);
+  वृक्षः field = रिक्त;
+  वृक्षः ref;
+  तार्किक datum_lvalue = lvalue_p (datum);
 
-  if (!objc_is_public (datum, component))
-    return error_mark_node;
+  सचे (!objc_is_public (datum, component))
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
   /* Detect Objective-C property syntax object.property.  */
-  if (c_dialect_objc ()
+  सचे (c_dialect_objc ()
       && (ref = objc_maybe_build_component_ref (datum, component)))
-    return ref;
+    पटिनिवत्त ref;
 
   /* See if there is a field or component with name COMPONENT.  */
 
-  if (code == RECORD_TYPE || code == UNION_TYPE)
+  सचे (code == RECORD_TYPE || code == UNION_TYPE)
     {
-      if (!COMPLETE_TYPE_P (type))
+      सचे (!COMPLETE_TYPE_P (type))
 	{
-	  c_incomplete_type_error (loc, NULL_TREE, type);
-	  return error_mark_node;
+	  c_incomplete_type_error (loc, NULL_वृक्षः, type);
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
 
       field = lookup_field (type, component);
 
-      if (!field)
+      सचे (!field)
 	{
-	  tree guessed_id = lookup_field_fuzzy (type, component);
-	  if (guessed_id)
+	  वृक्षः guessed_id = lookup_field_fuzzy (type, component);
+	  सचे (guessed_id)
 	    {
 	      /* Attempt to provide a fixit replacement hint, if
 		 we have a valid range for the component.  */
 	      location_t reported_loc
 		= (component_loc != UNKNOWN_LOCATION) ? component_loc : loc;
 	      gcc_rich_location rich_loc (reported_loc);
-	      if (component_loc != UNKNOWN_LOCATION)
+	      सचे (component_loc != UNKNOWN_LOCATION)
 		rich_loc.add_fixit_misspelled_id (component_loc, guessed_id);
 	      error_at (&rich_loc,
 			"%qT has no member named %qE; did you mean %qE?",
 			type, component, guessed_id);
 	    }
-	  else
+	  अञ्ञथा
 	    error_at (loc, "%qT has no member named %qE", type, component);
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
 
       /* Accessing elements of atomic structures or unions is undefined
 	 behavior (C11 6.5.2.3#5).  */
-      if (TYPE_ATOMIC (type) && c_inhibit_evaluation_warnings == 0)
+      सचे (TYPE_ATOMIC (type) && c_inhibit_evaluation_warnings == 0)
 	{
-	  if (code == RECORD_TYPE)
+	  सचे (code == RECORD_TYPE)
 	    warning_at (loc, 0, "accessing a member %qE of an atomic "
 			"structure %qE", component, datum);
-	  else
+	  अञ्ञथा
 	    warning_at (loc, 0, "accessing a member %qE of an atomic "
 			"union %qE", component, datum);
 	}
@@ -3418,69 +3418,69 @@ build_component_ref (location_t loc, tree datum, tree component,
 	 end does it - by giving the anonymous entities each a
 	 separate name and type, and then have build_component_ref
 	 recursively call itself.  We can't do that here.  */
-      do
+      करोहि
 	{
-	  tree subdatum = TREE_VALUE (field);
-	  int quals;
-	  tree subtype;
-	  bool use_datum_quals;
+	  वृक्षः subdatum = वृक्षः_मानम् (field);
+	  पूर्णाङ्क quals;
+	  वृक्षः subtype;
+	  तार्किक use_datum_quals;
 
-	  if (TREE_TYPE (subdatum) == error_mark_node)
-	    return error_mark_node;
+	  सचे (वृक्षः_TYPE (subdatum) == error_mark_ग्रन्थिः)
+	    पटिनिवत्त error_mark_ग्रन्थिः;
 
 	  /* If this is an rvalue, it does not have qualifiers in C
 	     standard terms and we must avoid propagating such
 	     qualifiers down to a non-lvalue array that is then
 	     converted to a pointer.  */
 	  use_datum_quals = (datum_lvalue
-			     || TREE_CODE (TREE_TYPE (subdatum)) != ARRAY_TYPE);
+			     || वृक्षः_CODE (वृक्षः_TYPE (subdatum)) != ARRAY_TYPE);
 
-	  quals = TYPE_QUALS (strip_array_types (TREE_TYPE (subdatum)));
-	  if (use_datum_quals)
-	    quals |= TYPE_QUALS (TREE_TYPE (datum));
-	  subtype = c_build_qualified_type (TREE_TYPE (subdatum), quals);
+	  quals = TYPE_QUALS (strip_array_types (वृक्षः_TYPE (subdatum)));
+	  सचे (use_datum_quals)
+	    quals |= TYPE_QUALS (वृक्षः_TYPE (datum));
+	  subtype = c_build_qualified_type (वृक्षः_TYPE (subdatum), quals);
 
 	  ref = build3 (COMPONENT_REF, subtype, datum, subdatum,
-			NULL_TREE);
-	  SET_EXPR_LOCATION (ref, loc);
+			NULL_वृक्षः);
+	  SET_व्यञ्जकम्_LOCATION (ref, loc);
 
 	  check_counted_by_attribute (loc, ref);
 
-	  if (TREE_READONLY (subdatum)
-	      || (use_datum_quals && TREE_READONLY (datum)))
-	    TREE_READONLY (ref) = 1;
-	  if (TREE_THIS_VOLATILE (subdatum)
-	      || (use_datum_quals && TREE_THIS_VOLATILE (datum)))
-	    TREE_THIS_VOLATILE (ref) = 1;
+	  सचे (वृक्षः_READONLY (subdatum)
+	      || (use_datum_quals && वृक्षः_READONLY (datum)))
+	    वृक्षः_READONLY (ref) = 1;
+	  सचे (वृक्षः_THIS_VOLATILE (subdatum)
+	      || (use_datum_quals && वृक्षः_THIS_VOLATILE (datum)))
+	    वृक्षः_THIS_VOLATILE (ref) = 1;
 
-	  if (TREE_UNAVAILABLE (subdatum))
-	    error_unavailable_use (subdatum, NULL_TREE);
-	  else if (TREE_DEPRECATED (subdatum))
-	    warn_deprecated_use (subdatum, NULL_TREE);
+	  सचे (वृक्षः_UNAVAILABLE (subdatum))
+	    error_unavailable_use (subdatum, NULL_वृक्षः);
+	  अञ्ञथा सचे (वृक्षः_DEPRECATED (subdatum))
+	    warn_deprecated_use (subdatum, NULL_वृक्षः);
 
 	  datum = ref;
 
-	  field = TREE_CHAIN (field);
+	  field = वृक्षः_CHAIN (field);
 	}
-      while (field);
+      याव (field);
 
-      return ref;
+      पटिनिवत्त ref;
     }
-  else if (should_suggest_deref_p (type))
+  अञ्ञथा सचे (should_suggest_deref_p (type))
     {
       /* Special-case the error message for "ptr.field" for the case
 	 where the user has confused "." vs "->".  */
-      rich_location richloc (line_table, loc);
-      if (INDIRECT_REF_P (datum) && arrow_loc != UNKNOWN_LOCATION)
+      rich_location richloc (पङ्क्तिः_table, loc);
+      सचे (INDIRECT_REF_P (datum) && arrow_loc != UNKNOWN_LOCATION)
 	{
-	  richloc.add_fixit_insert_before (arrow_loc, "(*");
-	  richloc.add_fixit_insert_after (arrow_loc, ")");
+	  richloc.add_fixit_निवेशय_before (arrow_loc, "(*");
+	  richloc.add_fixit_निवेशय_after (arrow_loc, ")");
 	  error_at (&richloc,
 		    "%qE is a pointer to pointer; did you mean to dereference "
 		    "it before applying %<->%> to it?",
-		    TREE_OPERAND (datum, 0));
+		    वृक्षः_OPERAND (datum, 0));
 	}
-      else
+      अञ्ञथा
 	{
 	  /* "loc" should be the "." token.  */
 	  richloc.add_fixit_replace ("->");
@@ -3488,14 +3488,14 @@ build_component_ref (location_t loc, tree datum, tree component,
 		    "%qE is a pointer; did you mean to use %<->%>?",
 		    datum);
 	}
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
-  else if (code != ERROR_MARK)
+  अञ्ञथा सचे (code != ERROR_MARK)
     error_at (loc,
 	      "request for member %qE in something not a structure or union",
 	      component);
 
-  return error_mark_node;
+  पटिनिवत्त error_mark_ग्रन्थिः;
 }
 
 /* Given an expression PTR for a pointer, return an expression
@@ -3504,42 +3504,42 @@ build_component_ref (location_t loc, tree datum, tree component,
 
    LOC is the location to use for the generated tree.  */
 
-tree
-build_indirect_ref (location_t loc, tree ptr, ref_operator errstring)
+वृक्षः
+build_indirect_ref (location_t loc, वृक्षः ptr, ref_operator errstring)
 {
-  tree pointer = default_conversion (ptr);
-  tree type = TREE_TYPE (pointer);
-  tree ref;
+  वृक्षः pointer = default_conversion (ptr);
+  वृक्षः type = वृक्षः_TYPE (pointer);
+  वृक्षः ref;
 
-  if (TREE_CODE (type) == POINTER_TYPE)
+  सचे (वृक्षः_CODE (type) == POINTER_TYPE)
     {
-      if (CONVERT_EXPR_P (pointer)
-          || TREE_CODE (pointer) == VIEW_CONVERT_EXPR)
+      सचे (CONVERT_व्यञ्जकम्_P (pointer)
+          || वृक्षः_CODE (pointer) == VIEW_CONVERT_व्यञ्जकम्)
 	{
 	  /* If a warning is issued, mark it to avoid duplicates from
 	     the backend.  This only needs to be done at
 	     warn_strict_aliasing > 2.  */
-	  if (warn_strict_aliasing > 2)
-	    if (strict_aliasing_warning (EXPR_LOCATION (pointer),
-					 type, TREE_OPERAND (pointer, 0)))
+	  सचे (warn_strict_aliasing > 2)
+	    सचे (strict_aliasing_warning (व्यञ्जकम्_LOCATION (pointer),
+					 type, वृक्षः_OPERAND (pointer, 0)))
 	      suppress_warning (pointer, OPT_Wstrict_aliasing_);
 	}
 
-      if (TREE_CODE (pointer) == ADDR_EXPR
-	  && (TREE_TYPE (TREE_OPERAND (pointer, 0))
-	      == TREE_TYPE (type)))
+      सचे (वृक्षः_CODE (pointer) == ADDR_व्यञ्जकम्
+	  && (वृक्षः_TYPE (वृक्षः_OPERAND (pointer, 0))
+	      == वृक्षः_TYPE (type)))
 	{
-	  ref = TREE_OPERAND (pointer, 0);
-	  protected_set_expr_location (ref, loc);
-	  return ref;
+	  ref = वृक्षः_OPERAND (pointer, 0);
+	  protected_set_व्यञ्जकम्_location (ref, loc);
+	  पटिनिवत्त ref;
 	}
-      else
+      अञ्ञथा
 	{
-	  tree t = TREE_TYPE (type);
+	  वृक्षः t = वृक्षः_TYPE (type);
 
 	  ref = build1 (INDIRECT_REF, t, pointer);
 
-	  if (VOID_TYPE_P (t) && c_inhibit_evaluation_warnings == 0)
+	  सचे (VOID_TYPE_P (t) && c_inhibit_evaluation_warnings == 0)
 	    warning_at (loc, 0, "dereferencing %<void *%> pointer");
 
 	  /* We *must* set TREE_READONLY when dereferencing a pointer to const,
@@ -3549,18 +3549,18 @@ build_indirect_ref (location_t loc, tree ptr, ref_operator errstring)
 	     should be the const type.  */
 	  /* A de-reference of a pointer to const is not a const.  It is valid
 	     to change it via some other pointer.  */
-	  TREE_READONLY (ref) = TYPE_READONLY (t);
-	  TREE_SIDE_EFFECTS (ref)
-	    = TYPE_VOLATILE (t) || TREE_SIDE_EFFECTS (pointer);
-	  TREE_THIS_VOLATILE (ref) = TYPE_VOLATILE (t);
-	  protected_set_expr_location (ref, loc);
-	  return ref;
+	  वृक्षः_READONLY (ref) = TYPE_READONLY (t);
+	  वृक्षः_SIDE_EFFECTS (ref)
+	    = TYPE_VOLATILE (t) || वृक्षः_SIDE_EFFECTS (pointer);
+	  वृक्षः_THIS_VOLATILE (ref) = TYPE_VOLATILE (t);
+	  protected_set_व्यञ्जकम्_location (ref, loc);
+	  पटिनिवत्त ref;
 	}
     }
-  else if (TREE_CODE (pointer) != ERROR_MARK)
+  अञ्ञथा सचे (वृक्षः_CODE (pointer) != ERROR_MARK)
     invalid_indirection_error (loc, type, errstring);
 
-  return error_mark_node;
+  पटिनिवत्त error_mark_ग्रन्थिः;
 }
 
 /* This handles expressions of the form "a[i]", which denotes
@@ -3577,159 +3577,159 @@ build_indirect_ref (location_t loc, tree ptr, ref_operator errstring)
 
    LOC is the location to use for the returned expression.  */
 
-tree
-build_array_ref (location_t loc, tree array, tree index)
+वृक्षः
+build_array_ref (location_t loc, वृक्षः array, वृक्षः index)
 {
-  tree ret;
-  bool swapped = false;
-  if (TREE_TYPE (array) == error_mark_node
-      || TREE_TYPE (index) == error_mark_node)
-    return error_mark_node;
+  वृक्षः ret;
+  तार्किक swapped = मिच्छा;
+  सचे (वृक्षः_TYPE (array) == error_mark_ग्रन्थिः
+      || वृक्षः_TYPE (index) == error_mark_ग्रन्थिः)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if (TREE_CODE (TREE_TYPE (array)) != ARRAY_TYPE
-      && TREE_CODE (TREE_TYPE (array)) != POINTER_TYPE
+  सचे (वृक्षः_CODE (वृक्षः_TYPE (array)) != ARRAY_TYPE
+      && वृक्षः_CODE (वृक्षः_TYPE (array)) != POINTER_TYPE
       /* Allow vector[index] but not index[vector].  */
-      && !gnu_vector_type_p (TREE_TYPE (array)))
+      && !gnu_vector_type_p (वृक्षः_TYPE (array)))
     {
-      if (TREE_CODE (TREE_TYPE (index)) != ARRAY_TYPE
-	  && TREE_CODE (TREE_TYPE (index)) != POINTER_TYPE)
+      सचे (वृक्षः_CODE (वृक्षः_TYPE (index)) != ARRAY_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (index)) != POINTER_TYPE)
 	{
           error_at (loc,
             "subscripted value is neither array nor pointer nor vector");
 
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
       std::swap (array, index);
-      swapped = true;
+      swapped = सच्च;
     }
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (index)))
+  सचे (!INTEGRAL_TYPE_P (वृक्षः_TYPE (index)))
     {
       error_at (loc, "array subscript is not an integer");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  if (TREE_CODE (TREE_TYPE (TREE_TYPE (array))) == FUNCTION_TYPE)
+  सचे (वृक्षः_CODE (वृक्षः_TYPE (वृक्षः_TYPE (array))) == FUNCTION_TYPE)
     {
       error_at (loc, "subscripted value is pointer to function");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
   /* ??? Existing practice has been to warn only when the char
      index is syntactically the index, not for char[array].  */
-  if (!swapped)
+  सचे (!swapped)
      warn_array_subscript_with_type_char (loc, index);
 
   /* Apply default promotions *after* noticing character types.  */
   index = default_conversion (index);
-  if (index == error_mark_node)
-    return error_mark_node;
+  सचे (index == error_mark_ग्रन्थिः)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  gcc_assert (TREE_CODE (TREE_TYPE (index)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (index)) == BITINT_TYPE);
+  gcc_assert (वृक्षः_CODE (वृक्षः_TYPE (index)) == INTEGER_TYPE
+	      || वृक्षः_CODE (वृक्षः_TYPE (index)) == BITINT_TYPE);
 
-  bool was_vector = VECTOR_TYPE_P (TREE_TYPE (array));
-  bool non_lvalue = convert_vector_to_array_for_subscript (loc, &array, index);
+  तार्किक was_vector = VECTOR_TYPE_P (वृक्षः_TYPE (array));
+  तार्किक non_lvalue = convert_vector_to_array_for_subscript (loc, &array, index);
 
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (TREE_CODE (array) == COMPONENT_REF
+  सचे (वृक्षः_CODE (array) == COMPONENT_REF
       && handle_counted_by_p (array))
     array = handle_counted_by_for_component_ref (loc, array);
 
-  if (TREE_CODE (TREE_TYPE (array)) == ARRAY_TYPE)
+  सचे (वृक्षः_CODE (वृक्षः_TYPE (array)) == ARRAY_TYPE)
     {
-      tree rval, type;
+      वृक्षः rval, type;
 
       /* An array that is indexed by a non-constant
 	 cannot be stored in a register; we must be able to do
 	 address arithmetic on its address.
 	 Likewise an array of elements of variable size.  */
-      if (TREE_CODE (index) != INTEGER_CST
-	  || (COMPLETE_TYPE_P (TREE_TYPE (TREE_TYPE (array)))
-	      && TREE_CODE (TYPE_SIZE (TREE_TYPE (TREE_TYPE (array)))) != INTEGER_CST))
+      सचे (वृक्षः_CODE (index) != INTEGER_CST
+	  || (COMPLETE_TYPE_P (वृक्षः_TYPE (वृक्षः_TYPE (array)))
+	      && वृक्षः_CODE (TYPE_SIZE (वृक्षः_TYPE (वृक्षः_TYPE (array)))) != INTEGER_CST))
 	{
-	  if (!c_mark_addressable (array, true, true))
-	    return error_mark_node;
+	  सचे (!c_mark_addressable (array, सच्च, सच्च))
+	    पटिनिवत्त error_mark_ग्रन्थिः;
 	}
       /* An array that is indexed by a constant value which is not within
 	 the array bounds cannot be stored in a register either; because we
 	 would get a crash in store_bit_field/extract_bit_field when trying
 	 to access a non-existent part of the register.  */
-      if (TREE_CODE (index) == INTEGER_CST
-	  && TYPE_DOMAIN (TREE_TYPE (array))
-	  && !int_fits_type_p (index, TYPE_DOMAIN (TREE_TYPE (array))))
+      सचे (वृक्षः_CODE (index) == INTEGER_CST
+	  && TYPE_DOMAIN (वृक्षः_TYPE (array))
+	  && !int_fits_type_p (index, TYPE_DOMAIN (वृक्षः_TYPE (array))))
 	{
-	  if (!c_mark_addressable (array, false, true))
-	    return error_mark_node;
+	  सचे (!c_mark_addressable (array, मिच्छा, सच्च))
+	    पटिनिवत्त error_mark_ग्रन्थिः;
 	  /* ISO C2Y disallows a negative integer constant expression index
 	     when array subscripting has an operand of array type.  */
-	  if (flag_isoc2y
-	      && !TREE_OVERFLOW (index)
-	      && tree_int_cst_sgn (index) < 0)
+	  सचे (flag_isoc2y
+	      && !वृक्षः_OVERFLOW (index)
+	      && वृक्षः_int_cst_sgn (index) < 0)
 	    error_at (loc, "array subscript is negative");
 	}
 
-      if ((pedantic || warn_c90_c99_compat || warn_c23_c2y_compat)
+      सचे ((pedantic || warn_c90_c99_compat || warn_c23_c2y_compat)
 	  && ! was_vector)
 	{
-	  tree foo = array;
-	  while (TREE_CODE (foo) == COMPONENT_REF)
-	    foo = TREE_OPERAND (foo, 0);
-	  if ((VAR_P (foo) && C_DECL_REGISTER (foo))
-	      || (TREE_CODE (foo) == COMPOUND_LITERAL_EXPR
-		  && C_DECL_REGISTER (COMPOUND_LITERAL_EXPR_DECL (foo))))
+	  वृक्षः foo = array;
+	  याव (वृक्षः_CODE (foo) == COMPONENT_REF)
+	    foo = वृक्षः_OPERAND (foo, 0);
+	  सचे ((VAR_P (foo) && C_DECL_REGISTER (foo))
+	      || (वृक्षः_CODE (foo) == COMPOUND_LITERAL_व्यञ्जकम्
+		  && C_DECL_REGISTER (COMPOUND_LITERAL_व्यञ्जकम्_DECL (foo))))
 	    pedwarn_c23 (loc, OPT_Wpedantic,
 			 "ISO C forbids subscripting %<register%> array "
 			 "before C2Y");
-	  else if (!lvalue_p (foo))
+	  अञ्ञथा सचे (!lvalue_p (foo))
 	    pedwarn_c90 (loc, OPT_Wpedantic,
 			 "ISO C90 forbids subscripting non-lvalue "
 			 "array");
 	}
 
-      if (TREE_CODE (TREE_TYPE (index)) == BITINT_TYPE
-	  && TYPE_PRECISION (TREE_TYPE (index)) > TYPE_PRECISION (sizetype))
+      सचे (वृक्षः_CODE (वृक्षः_TYPE (index)) == BITINT_TYPE
+	  && TYPE_PRECISION (वृक्षः_TYPE (index)) > TYPE_PRECISION (sizetype))
 	index = fold_convert (sizetype, index);
 
-      type = TREE_TYPE (TREE_TYPE (array));
-      rval = build4 (ARRAY_REF, type, array, index, NULL_TREE, NULL_TREE);
+      type = वृक्षः_TYPE (वृक्षः_TYPE (array));
+      rval = build4 (ARRAY_REF, type, array, index, NULL_वृक्षः, NULL_वृक्षः);
       /* Array ref is const/volatile if the array elements are
 	 or if the array is.  */
-      TREE_READONLY (rval)
-	|= (TYPE_READONLY (TREE_TYPE (TREE_TYPE (array)))
-	    | TREE_READONLY (array));
-      TREE_SIDE_EFFECTS (rval)
-	|= (TYPE_VOLATILE (TREE_TYPE (TREE_TYPE (array)))
-	    | TREE_SIDE_EFFECTS (array));
-      TREE_THIS_VOLATILE (rval)
-	|= (TYPE_VOLATILE (TREE_TYPE (TREE_TYPE (array)))
+      वृक्षः_READONLY (rval)
+	|= (TYPE_READONLY (वृक्षः_TYPE (वृक्षः_TYPE (array)))
+	    | वृक्षः_READONLY (array));
+      वृक्षः_SIDE_EFFECTS (rval)
+	|= (TYPE_VOLATILE (वृक्षः_TYPE (वृक्षः_TYPE (array)))
+	    | वृक्षः_SIDE_EFFECTS (array));
+      वृक्षः_THIS_VOLATILE (rval)
+	|= (TYPE_VOLATILE (वृक्षः_TYPE (वृक्षः_TYPE (array)))
 	    /* This was added by rms on 16 Nov 91.
 	       It fixes  vol struct foo *a;  a->elts[1]
 	       in an inline function.
 	       Hope it doesn't break something else.  */
-	    | TREE_THIS_VOLATILE (array));
+	    | वृक्षः_THIS_VOLATILE (array));
       ret = require_complete_type (loc, rval);
-      protected_set_expr_location (ret, loc);
-      if (non_lvalue)
+      protected_set_व्यञ्जकम्_location (ret, loc);
+      सचे (non_lvalue)
 	ret = non_lvalue_loc (loc, ret);
-      return ret;
+      पटिनिवत्त ret;
     }
-  else
+  अञ्ञथा
     {
-      tree ar = default_conversion (array);
+      वृक्षः ar = default_conversion (array);
 
-      if (ar == error_mark_node)
-	return ar;
+      सचे (ar == error_mark_ग्रन्थिः)
+	पटिनिवत्त ar;
 
-      gcc_assert (TREE_CODE (TREE_TYPE (ar)) == POINTER_TYPE);
-      gcc_assert (TREE_CODE (TREE_TYPE (TREE_TYPE (ar))) != FUNCTION_TYPE);
+      gcc_assert (वृक्षः_CODE (वृक्षः_TYPE (ar)) == POINTER_TYPE);
+      gcc_assert (वृक्षः_CODE (वृक्षः_TYPE (वृक्षः_TYPE (ar))) != FUNCTION_TYPE);
 
-      ret = build_indirect_ref (loc, build_binary_op (loc, PLUS_EXPR, ar,
-						      index, false),
+      ret = build_indirect_ref (loc, build_द्विमान_op (loc, PLUS_व्यञ्जकम्, ar,
+						      index, मिच्छा),
 				RO_ARRAY_INDEXING);
-      if (non_lvalue)
+      सचे (non_lvalue)
 	ret = non_lvalue_loc (loc, ret);
-      return ret;
+      पटिनिवत्त ret;
     }
 }
 
@@ -3738,37 +3738,37 @@ build_array_ref (location_t loc, tree array, tree index)
    we have variable bounds, create an incomplete array type for the result
    instead.  */
 
-tree
-build_omp_array_section (location_t loc, tree array, tree index, tree length)
+वृक्षः
+build_omp_array_section (location_t loc, वृक्षः array, वृक्षः index, वृक्षः length)
 {
-  tree type = TREE_TYPE (array);
+  वृक्षः type = वृक्षः_TYPE (array);
   gcc_assert (type);
 
-  tree sectype, eltype = TREE_TYPE (type);
+  वृक्षः sectype, eltype = वृक्षः_TYPE (type);
 
   /* It's not an array or pointer type.  Just reuse the type of the original
      expression as the type of the array section (an error will be raised
      anyway, later).  */
-  if (eltype == NULL_TREE || error_operand_p (eltype))
-    sectype = TREE_TYPE (array);
-  else
+  सचे (eltype == NULL_वृक्षः || error_operand_p (eltype))
+    sectype = वृक्षः_TYPE (array);
+  अञ्ञथा
     {
-      tree idxtype = NULL_TREE;
+      वृक्षः idxtype = NULL_वृक्षः;
 
-      if (index != NULL_TREE
-	  && length != NULL_TREE
-	  && INTEGRAL_TYPE_P (TREE_TYPE (index))
-	  && INTEGRAL_TYPE_P (TREE_TYPE (length)))
+      सचे (index != NULL_वृक्षः
+	  && length != NULL_वृक्षः
+	  && INTEGRAL_TYPE_P (वृक्षः_TYPE (index))
+	  && INTEGRAL_TYPE_P (वृक्षः_TYPE (length)))
 	{
-	  tree low = fold_convert (sizetype, index);
-	  tree high = fold_convert (sizetype, length);
-	  high = size_binop (PLUS_EXPR, low, high);
-	  high = size_binop (MINUS_EXPR, high, size_one_node);
-	  idxtype = build_range_type (sizetype, low, high);
+	  वृक्षः नीचः = fold_convert (sizetype, index);
+	  वृक्षः उच्चः = fold_convert (sizetype, length);
+	  उच्चः = size_binop (PLUS_व्यञ्जकम्, नीचः, उच्चः);
+	  उच्चः = size_binop (MINUS_व्यञ्जकम्, उच्चः, size_one_ग्रन्थिः);
+	  idxtype = build_range_type (sizetype, नीचः, उच्चः);
 	}
-      else if ((index == NULL_TREE || integer_zerop (index))
-	       && length != NULL_TREE
-	       && INTEGRAL_TYPE_P (TREE_TYPE (length)))
+      अञ्ञथा सचे ((index == NULL_वृक्षः || integer_zerop (index))
+	       && length != NULL_वृक्षः
+	       && INTEGRAL_TYPE_P (वृक्षः_TYPE (length)))
 	idxtype = build_index_type (length);
 
       gcc_assert (!error_operand_p (idxtype));
@@ -3776,7 +3776,7 @@ build_omp_array_section (location_t loc, tree array, tree index, tree length)
       sectype = c_build_array_type (eltype, idxtype);
     }
 
-  return build3_loc (loc, OMP_ARRAY_SECTION, sectype, array, index, length);
+  पटिनिवत्त build3_loc (loc, OMP_ARRAY_SECTION, sectype, array, index, length);
 }
 
 
@@ -3784,83 +3784,83 @@ build_omp_array_section (location_t loc, tree array, tree index, tree length)
    function and declarations referenced from a non-local context.
    ADDRESS indicates whether the address is taken.  */
 
-void
-mark_decl_used (tree ref, bool address)
+शून्य
+mark_decl_used (वृक्षः ref, तार्किक address)
 {
-  if (!ref || !DECL_P (ref) || in_alignof)
-    return;
+  सचे (!ref || !DECL_P (ref) || in_alignof)
+    पटिनिवत्त;
 
   /* Non-file-scope and non-local reference in nested function.  */
-  bool nonloc_p = current_function_decl && DECL_CONTEXT (ref)
+  तार्किक nonloc_p = current_function_decl && DECL_CONTEXT (ref)
 		  && DECL_CONTEXT (current_function_decl)
 		  && DECL_CONTEXT (ref) != current_function_decl;
 
   /* An undeclared static function.  */
-  bool static_p = TREE_CODE (ref) == FUNCTION_DECL
-		  && DECL_INITIAL (ref) == NULL_TREE
+  तार्किक static_p = वृक्षः_CODE (ref) == FUNCTION_DECL
+		  && DECL_INITIAL (ref) == NULL_वृक्षः
 		  && DECL_EXTERNAL (ref)
-		  && !TREE_PUBLIC (ref);
+		  && !वृक्षः_PUBLIC (ref);
 
-  if (!static_p && !nonloc_p)
-    return;
+  सचे (!static_p && !nonloc_p)
+    पटिनिवत्त;
 
   /* If we may be in an unevaluated context, delay the decision.  */
-  if (in_sizeof || in_typeof || in_countof || in_generic)
-    return record_maybe_used_decl (ref, address);
+  सचे (in_sizeof || in_typeof || in_countof || in_generic)
+    पटिनिवत्त record_maybe_used_decl (ref, address);
 
-  if (static_p)
+  सचे (static_p)
     C_DECL_USED (ref) = 1;
 
-  if (nonloc_p && (VAR_OR_FUNCTION_DECL_P (ref)
-		   || TREE_CODE (ref) == PARM_DECL))
+  सचे (nonloc_p && (VAR_OR_FUNCTION_DECL_P (ref)
+		   || वृक्षः_CODE (ref) == PARM_DECL))
     DECL_NONLOCAL (ref) = 1;
 
   /* Nothing to do anymore.  */
-  if (!nonloc_p || C_FUNC_NONLOCAL_CONTEXT (current_function_decl))
-    return;
+  सचे (!nonloc_p || C_FUNC_NONLOCAL_CONTEXT (current_function_decl))
+    पटिनिवत्त;
 
   /* Filter out the cases where referencing a non-local variable does not
      require a non-local context passed via the static chain.  */
-  if (!c_type_variably_modified_p (TREE_TYPE (ref)))
-    switch (TREE_CODE (ref))
+  सचे (!c_type_variably_modified_p (वृक्षः_TYPE (ref)))
+    विकल्प (वृक्षः_CODE (ref))
       {
-      case FUNCTION_DECL:
+      पक्ष FUNCTION_DECL:
 	/* Use of another local function that requires no context is ok.  */
-	if (!C_FUNC_NONLOCAL_CONTEXT (ref) && DECL_INITIAL (ref))
-	  return;
-	break;
-      case VAR_DECL:
+	सचे (!C_FUNC_NONLOCAL_CONTEXT (ref) && DECL_INITIAL (ref))
+	  पटिनिवत्त;
+	भङ्ग;
+      पक्ष VAR_DECL:
 	/* Static variables and constexpr are ok, but for the later only
 	   when the address is not taken.  */
-	if (TREE_STATIC (ref) || (C_DECL_DECLARED_CONSTEXPR (ref) && !address))
-	  return;
-	break;
-      case TYPE_DECL:
+	सचे (वृक्षः_STATIC (ref) || (C_DECL_DECLARED_CONSTEXPR (ref) && !address))
+	  पटिनिवत्त;
+	भङ्ग;
+      पक्ष TYPE_DECL:
 	/* A typedef is ok when not for a variably-modified type. */
-	return;
-      case CONST_DECL:
+	पटिनिवत्त;
+      पक्ष CONST_DECL:
 	/* An enumeration constant is ok. */
-	return;
-      case PARM_DECL:
-	break;
-      case LABEL_DECL:
-	break;
-      default:
+	पटिनिवत्त;
+      पक्ष PARM_DECL:
+	भङ्ग;
+      पक्ष LABEL_DECL:
+	भङ्ग;
+      स्वभाव:
 	gcc_unreachable ();
     }
 
   /* Mark all parent functions up to the nesting level of the variable as
      as needing the non-local context.  */
-  for (tree cont = current_function_decl; cont; cont = DECL_CONTEXT (cont))
+  अत्थाय (वृक्षः cont = current_function_decl; cont; cont = DECL_CONTEXT (cont))
     {
-      if (cont == DECL_CONTEXT (ref))
-	break;
+      सचे (cont == DECL_CONTEXT (ref))
+	भङ्ग;
 
       /* There should not be any other type of context used for function
 	 except TRANSLATION_UNIT_DECL which we should be able to reach.  */
-      gcc_checking_assert (TREE_CODE (cont) == FUNCTION_DECL);
+      gcc_checking_assert (वृक्षः_CODE (cont) == FUNCTION_DECL);
 
-      if (TREE_CODE (cont) == FUNCTION_DECL)
+      सचे (वृक्षः_CODE (cont) == FUNCTION_DECL)
 	C_FUNC_NONLOCAL_CONTEXT (cont) = 1;
     }
 }
@@ -3872,65 +3872,65 @@ mark_decl_used (tree ref, bool address)
    identifier, which is not the same as the type of the returned value
    for CONST_DECLs defined as enum constants.  If the type of the
    identifier is not available, *TYPE is set to NULL.  */
-tree
-build_external_ref (location_t loc, tree id, bool fun, tree *type)
+वृक्षः
+build_external_ref (location_t loc, वृक्षः id, तार्किक fun, वृक्षः *type)
 {
-  tree ref;
-  tree decl = lookup_name (id);
+  वृक्षः ref;
+  वृक्षः decl = lookup_name (id);
 
   /* In Objective-C, an instance variable (ivar) may be preferred to
      whatever lookup_name() found.  */
   decl = objc_lookup_ivar (decl, id);
 
-  *type = NULL;
-  if (decl && decl != error_mark_node)
+  *type = रिक्त;
+  सचे (decl && decl != error_mark_ग्रन्थिः)
     {
       ref = decl;
-      *type = TREE_TYPE (ref);
-      if (DECL_P (decl) && C_DECL_UNDERSPECIFIED (decl))
+      *type = वृक्षः_TYPE (ref);
+      सचे (DECL_P (decl) && C_DECL_UNDERSPECIFIED (decl))
 	error_at (loc, "underspecified %qD referenced in its initializer",
 		  decl);
     }
-  else if (fun)
+  अञ्ञथा सचे (fun)
     /* Implicit function declaration.  */
     ref = implicitly_declare (loc, id);
-  else if (decl == error_mark_node)
+  अञ्ञथा सचे (decl == error_mark_ग्रन्थिः)
     /* Don't complain about something that's already been
        complained about.  */
-    return error_mark_node;
-  else
+    पटिनिवत्त error_mark_ग्रन्थिः;
+  अञ्ञथा
     {
       undeclared_variable (loc, id);
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
   /* For an OpenMP map clause, we can get better diagnostics for decls with
      unmappable types if we return the decl with an error_mark_node type,
      rather than returning error_mark_node for the decl itself.  */
-  if (TREE_TYPE (ref) == error_mark_node
+  सचे (वृक्षः_TYPE (ref) == error_mark_ग्रन्थिः
       && !c_omp_array_section_p)
-    return error_mark_node;
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if (TREE_UNAVAILABLE (ref))
-    error_unavailable_use (ref, NULL_TREE);
-  else if (TREE_DEPRECATED (ref))
-    warn_deprecated_use (ref, NULL_TREE);
+  सचे (वृक्षः_UNAVAILABLE (ref))
+    error_unavailable_use (ref, NULL_वृक्षः);
+  अञ्ञथा सचे (वृक्षः_DEPRECATED (ref))
+    warn_deprecated_use (ref, NULL_वृक्षः);
 
   /* Recursive call does not count as usage.  */
-  if (ref != current_function_decl)
+  सचे (ref != current_function_decl)
     {
-      TREE_USED (ref) = 1;
+      वृक्षः_USED (ref) = 1;
     }
 
-  mark_decl_used (ref, false);
+  mark_decl_used (ref, मिच्छा);
 
-  if (TREE_CODE (ref) == CONST_DECL)
+  सचे (वृक्षः_CODE (ref) == CONST_DECL)
     {
-      used_types_insert (TREE_TYPE (ref));
+      used_types_निवेशय (वृक्षः_TYPE (ref));
 
-      if (warn_cxx_compat
-	  && TREE_CODE (TREE_TYPE (ref)) == ENUMERAL_TYPE
-	  && C_TYPE_DEFINED_IN_STRUCT (TREE_TYPE (ref)))
+      सचे (warn_cxx_compat
+	  && वृक्षः_CODE (वृक्षः_TYPE (ref)) == ENUMERAL_TYPE
+	  && C_TYPE_DEFINED_IN_STRUCT (वृक्षः_TYPE (ref)))
 	{
 	  warning_at (loc, OPT_Wc___compat,
 		      "enum constant defined in struct or union "
@@ -3939,25 +3939,25 @@ build_external_ref (location_t loc, tree id, bool fun, tree *type)
 	}
 
       ref = DECL_INITIAL (ref);
-      TREE_CONSTANT (ref) = 1;
+      वृक्षः_CONSTANT (ref) = 1;
     }
   /* C99 6.7.4p3: An inline definition of a function with external
      linkage ... shall not contain a reference to an identifier with
      internal linkage.  */
-  else if (current_function_decl != NULL_TREE
+  अञ्ञथा सचे (current_function_decl != NULL_वृक्षः
 	   && DECL_DECLARED_INLINE_P (current_function_decl)
 	   && DECL_EXTERNAL (current_function_decl)
 	   && VAR_OR_FUNCTION_DECL_P (ref)
-	   && (!VAR_P (ref) || TREE_STATIC (ref))
-	   && ! TREE_PUBLIC (ref)
+	   && (!VAR_P (ref) || वृक्षः_STATIC (ref))
+	   && ! वृक्षः_PUBLIC (ref)
 	   && DECL_CONTEXT (ref) != current_function_decl)
     record_inline_static (loc, current_function_decl, ref,
 			  csi_internal);
 
-  return ref;
+  पटिनिवत्त ref;
 }
 
-static struct maybe_used_decl *maybe_used_decls;
+स्थिर संरचना maybe_used_decl *maybe_used_decls;
 
 /* Record that DECL, a reference seen inside sizeof or typeof or _Countof or
    _Generic, might be used if the operand of sizeof is a VLA type or the
@@ -3965,10 +3965,10 @@ static struct maybe_used_decl *maybe_used_decls;
    a variable number of elements or the operand of _Generic is the one selected
    as the result.  */
 
-static void
-record_maybe_used_decl (tree decl, bool address)
+स्थिर शून्य
+record_maybe_used_decl (वृक्षः decl, तार्किक address)
 {
-  struct maybe_used_decl *t = XOBNEW (&parser_obstack, struct maybe_used_decl);
+  संरचना maybe_used_decl *t = XOBNEW (&parser_obstack, संरचना maybe_used_decl);
   t->decl = decl;
   t->level = in_sizeof + in_typeof + in_countof + in_generic;
   t->address = address;
@@ -3982,23 +3982,23 @@ record_maybe_used_decl (tree decl, bool address)
    them to the next level up (if still inside sizeof or typeof or _Countof or
    _Generic).  */
 
-void
-pop_maybe_used (bool used)
+शून्य
+निष्कासय_maybe_used (तार्किक used)
 {
-  struct maybe_used_decl *p = maybe_used_decls;
-  int cur_level = in_sizeof + in_typeof + in_countof + in_generic;
-  while (p && p->level > cur_level)
+  संरचना maybe_used_decl *p = maybe_used_decls;
+  पूर्णाङ्क cur_level = in_sizeof + in_typeof + in_countof + in_generic;
+  याव (p && p->level > cur_level)
     {
-      if (used)
+      सचे (used)
 	{
-	  if (cur_level == 0)
+	  सचे (cur_level == 0)
 	    mark_decl_used (p->decl, p->address);
-	  else
+	  अञ्ञथा
 	    p->level = cur_level;
 	}
       p = p->next;
     }
-  if (!used || cur_level == 0)
+  सचे (!used || cur_level == 0)
     maybe_used_decls = p;
 }
 
@@ -4010,101 +4010,101 @@ pop_maybe_used (bool used)
    should be called on the return value followed by pop_maybe_used (true);
    otherwise, the return value can be discarded.  */
 
-struct maybe_used_decl *
+संरचना maybe_used_decl *
 save_maybe_used ()
 {
-  struct maybe_used_decl *p = maybe_used_decls, *orig = p;
-  int cur_level = in_sizeof + in_typeof + in_countof + in_generic;
-  while (p && p->level > cur_level)
+  संरचना maybe_used_decl *p = maybe_used_decls, *orig = p;
+  पूर्णाङ्क cur_level = in_sizeof + in_typeof + in_countof + in_generic;
+  याव (p && p->level > cur_level)
     p = p->next;
   maybe_used_decls = p;
-  return orig;
+  पटिनिवत्त orig;
 }
 
 /* Restore the stack of decls possibly used inside sizeof or typeof or _Countof
    or _Generic returned by save_maybe_used.  It is required that the stack is
    at exactly the point where it was left by save_maybe_used.  */
 
-void
-restore_maybe_used (struct maybe_used_decl *stack)
+शून्य
+restore_maybe_used (संरचना maybe_used_decl *राशिः)
 {
-  maybe_used_decls = stack;
+  maybe_used_decls = राशिः;
 }
 
 /* Return the result of sizeof applied to EXPR.  */
 
-struct c_expr
-c_expr_sizeof_expr (location_t loc, struct c_expr expr)
+संरचना c_व्यञ्जकम्
+c_व्यञ्जकम्_sizeof_व्यञ्जकम् (location_t loc, संरचना c_व्यञ्जकम् व्यञ्जकम्)
 {
-  struct c_expr ret;
-  if (expr.value == error_mark_node)
+  संरचना c_व्यञ्जकम् ret;
+  सचे (व्यञ्जकम्.मानम् == error_mark_ग्रन्थिः)
     {
-      ret.value = error_mark_node;
+      ret.मानम् = error_mark_ग्रन्थिः;
       ret.original_code = ERROR_MARK;
-      ret.original_type = NULL;
+      ret.original_type = रिक्त;
       ret.m_decimal = 0;
-      pop_maybe_used (false);
+      निष्कासय_maybe_used (मिच्छा);
     }
-  else
+  अञ्ञथा
     {
-      bool expr_const_operands = true;
+      तार्किक व्यञ्जकम्_const_operands = सच्च;
 
-      if (TREE_CODE (expr.value) == PARM_DECL
-	  && C_ARRAY_PARAMETER (expr.value))
+      सचे (वृक्षः_CODE (व्यञ्जकम्.मानम्) == PARM_DECL
+	  && C_ARRAY_PARAMETER (व्यञ्जकम्.मानम्))
 	{
 	  auto_diagnostic_group d;
-	  if (warning_at (loc, OPT_Wsizeof_array_argument,
+	  सचे (warning_at (loc, OPT_Wsizeof_array_argument,
 			  "%<sizeof%> on array function parameter %qE will "
-			  "return size of %qT", expr.value,
-			  TREE_TYPE (expr.value)))
-	    inform (DECL_SOURCE_LOCATION (expr.value), "declared here");
+			  "return size of %qT", व्यञ्जकम्.मानम्,
+			  वृक्षः_TYPE (व्यञ्जकम्.मानम्)))
+	    inform (DECL_SOURCE_LOCATION (व्यञ्जकम्.मानम्), "declared here");
 	}
-      tree folded_expr = c_fully_fold (expr.value, require_constant_value,
-				       &expr_const_operands);
-      ret.value = c_sizeof (loc, TREE_TYPE (folded_expr));
-      c_last_sizeof_arg = expr.value;
+      वृक्षः folded_व्यञ्जकम् = c_fully_fold (व्यञ्जकम्.मानम्, require_constant_मानम्,
+				       &व्यञ्जकम्_const_operands);
+      ret.मानम् = c_sizeof (loc, वृक्षः_TYPE (folded_व्यञ्जकम्));
+      c_last_sizeof_arg = व्यञ्जकम्.मानम्;
       c_last_sizeof_loc = loc;
-      ret.original_code = SIZEOF_EXPR;
-      ret.original_type = NULL;
+      ret.original_code = SIZEOF_व्यञ्जकम्;
+      ret.original_type = रिक्त;
       ret.m_decimal = 0;
-      if (C_TYPE_VARIABLE_SIZE (TREE_TYPE (folded_expr)))
+      सचे (C_TYPE_VARIABLE_SIZE (वृक्षः_TYPE (folded_व्यञ्जकम्)))
 	{
 	  /* sizeof is evaluated when given a vla (C99 6.5.3.4p2).  */
-	  ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
-			      folded_expr, ret.value);
-	  C_MAYBE_CONST_EXPR_NON_CONST (ret.value) = !expr_const_operands;
-	  SET_EXPR_LOCATION (ret.value, loc);
+	  ret.मानम् = build2 (C_MAYBE_CONST_व्यञ्जकम्, वृक्षः_TYPE (ret.मानम्),
+			      folded_व्यञ्जकम्, ret.मानम्);
+	  C_MAYBE_CONST_व्यञ्जकम्_NON_CONST (ret.मानम्) = !व्यञ्जकम्_const_operands;
+	  SET_व्यञ्जकम्_LOCATION (ret.मानम्, loc);
 	}
-      pop_maybe_used (C_TYPE_VARIABLE_SIZE (TREE_TYPE (folded_expr)));
+      निष्कासय_maybe_used (C_TYPE_VARIABLE_SIZE (वृक्षः_TYPE (folded_व्यञ्जकम्)));
     }
-  return ret;
+  पटिनिवत्त ret;
 }
 
 /* Return the result of sizeof applied to T, a structure for the type
    name passed to sizeof (rather than the type itself).  LOC is the
    location of the original expression.  */
 
-struct c_expr
-c_expr_sizeof_type (location_t loc, struct c_type_name *t)
+संरचना c_व्यञ्जकम्
+c_व्यञ्जकम्_sizeof_type (location_t loc, संरचना c_type_name *t)
 {
-  tree type;
-  struct c_expr ret;
-  tree type_expr = NULL_TREE;
-  bool type_expr_const = true;
-  type = groktypename (t, &type_expr, &type_expr_const);
-  ret.value = c_sizeof (loc, type);
+  वृक्षः type;
+  संरचना c_व्यञ्जकम् ret;
+  वृक्षः type_व्यञ्जकम् = NULL_वृक्षः;
+  तार्किक type_व्यञ्जकम्_const = सच्च;
+  type = groktypename (t, &type_व्यञ्जकम्, &type_व्यञ्जकम्_const);
+  ret.मानम् = c_sizeof (loc, type);
   c_last_sizeof_arg = type;
   c_last_sizeof_loc = loc;
-  ret.original_code = SIZEOF_EXPR;
-  ret.original_type = NULL;
+  ret.original_code = SIZEOF_व्यञ्जकम्;
+  ret.original_type = रिक्त;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  सचे (type == error_mark_ग्रन्थिः)
     {
-      ret.value = error_mark_node;
+      ret.मानम् = error_mark_ग्रन्थिः;
       ret.original_code = ERROR_MARK;
     }
-  else
-  if ((type_expr || TREE_CODE (ret.value) == INTEGER_CST)
+  अञ्ञथा
+  सचे ((type_व्यञ्जकम् || वृक्षः_CODE (ret.मानम्) == INTEGER_CST)
       && C_TYPE_VARIABLE_SIZE (type))
     {
       /* If the type is a [*] array, it is a VLA but is represented as
@@ -4114,99 +4114,99 @@ c_expr_sizeof_type (location_t loc, struct c_type_name *t)
 	 not constant and so constraints on zero or negative size
 	 arrays must not be applied when this sizeof call is inside
 	 another array declarator.  */
-      if (!type_expr)
-	type_expr = integer_zero_node;
-      ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
-			  type_expr, ret.value);
-      C_MAYBE_CONST_EXPR_NON_CONST (ret.value) = !type_expr_const;
+      सचे (!type_व्यञ्जकम्)
+	type_व्यञ्जकम् = integer_zero_ग्रन्थिः;
+      ret.मानम् = build2 (C_MAYBE_CONST_व्यञ्जकम्, वृक्षः_TYPE (ret.मानम्),
+			  type_व्यञ्जकम्, ret.मानम्);
+      C_MAYBE_CONST_व्यञ्जकम्_NON_CONST (ret.मानम्) = !type_व्यञ्जकम्_const;
     }
-  pop_maybe_used (type != error_mark_node
-		  ? C_TYPE_VARIABLE_SIZE (type) : false);
-  return ret;
+  निष्कासय_maybe_used (type != error_mark_ग्रन्थिः
+		  ? C_TYPE_VARIABLE_SIZE (type) : मिच्छा);
+  पटिनिवत्त ret;
 }
 
-static bool
-top_array_vla_p (const_tree type)
+स्थिर तार्किक
+शिखरम्_array_vla_p (const_वृक्षः type)
 {
-  if (TREE_CODE (type) != ARRAY_TYPE)
-    return false;
+  सचे (वृक्षः_CODE (type) != ARRAY_TYPE)
+    पटिनिवत्त मिच्छा;
 
-  tree d = TYPE_DOMAIN (type);
+  वृक्षः d = TYPE_DOMAIN (type);
 
-  if (!d)
-    return false;
-  if (!TYPE_MAX_VALUE (d))
-    return false;
+  सचे (!d)
+    पटिनिवत्त मिच्छा;
+  सचे (!TYPE_MAX_मानम् (d))
+    पटिनिवत्त मिच्छा;
 
-  return TREE_CODE (TYPE_MAX_VALUE (d)) != INTEGER_CST
-	 || TREE_CODE (TYPE_MIN_VALUE (d)) != INTEGER_CST;
+  पटिनिवत्त वृक्षः_CODE (TYPE_MAX_मानम् (d)) != INTEGER_CST
+	 || वृक्षः_CODE (TYPE_MIN_मानम् (d)) != INTEGER_CST;
 }
 
 /* Return the result of countof applied to EXPR.  */
 
-struct c_expr
-c_expr_countof_expr (location_t loc, struct c_expr expr)
+संरचना c_व्यञ्जकम्
+c_व्यञ्जकम्_countof_व्यञ्जकम् (location_t loc, संरचना c_व्यञ्जकम् व्यञ्जकम्)
 {
-  struct c_expr ret;
-  if (expr.value == error_mark_node)
+  संरचना c_व्यञ्जकम् ret;
+  सचे (व्यञ्जकम्.मानम् == error_mark_ग्रन्थिः)
     {
-      ret.value = error_mark_node;
+      ret.मानम् = error_mark_ग्रन्थिः;
       ret.original_code = ERROR_MARK;
-      ret.original_type = NULL;
+      ret.original_type = रिक्त;
       ret.m_decimal = 0;
-      pop_maybe_used (false);
+      निष्कासय_maybe_used (मिच्छा);
     }
-  else
+  अञ्ञथा
     {
-      bool expr_const_operands = true;
+      तार्किक व्यञ्जकम्_const_operands = सच्च;
 
-      tree folded_expr = c_fully_fold (expr.value, require_constant_value,
-				       &expr_const_operands);
-      ret.value = c_countof_type (loc, TREE_TYPE (folded_expr));
-      c_last_sizeof_arg = expr.value;
+      वृक्षः folded_व्यञ्जकम् = c_fully_fold (व्यञ्जकम्.मानम्, require_constant_मानम्,
+				       &व्यञ्जकम्_const_operands);
+      ret.मानम् = c_countof_type (loc, वृक्षः_TYPE (folded_व्यञ्जकम्));
+      c_last_sizeof_arg = व्यञ्जकम्.मानम्;
       c_last_sizeof_loc = loc;
-      ret.original_code = COUNTOF_EXPR;
-      ret.original_type = NULL;
+      ret.original_code = COUNTOF_व्यञ्जकम्;
+      ret.original_type = रिक्त;
       ret.m_decimal = 0;
-      if (top_array_vla_p (TREE_TYPE (folded_expr)))
+      सचे (शिखरम्_array_vla_p (वृक्षः_TYPE (folded_व्यञ्जकम्)))
 	{
 	  /* countof is evaluated when given a vla.  */
-	  ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
-			      folded_expr, ret.value);
-	  C_MAYBE_CONST_EXPR_NON_CONST (ret.value) = !expr_const_operands;
-	  SET_EXPR_LOCATION (ret.value, loc);
+	  ret.मानम् = build2 (C_MAYBE_CONST_व्यञ्जकम्, वृक्षः_TYPE (ret.मानम्),
+			      folded_व्यञ्जकम्, ret.मानम्);
+	  C_MAYBE_CONST_व्यञ्जकम्_NON_CONST (ret.मानम्) = !व्यञ्जकम्_const_operands;
+	  SET_व्यञ्जकम्_LOCATION (ret.मानम्, loc);
 	}
-      pop_maybe_used (top_array_vla_p (TREE_TYPE (folded_expr)));
+      निष्कासय_maybe_used (शिखरम्_array_vla_p (वृक्षः_TYPE (folded_व्यञ्जकम्)));
     }
-  return ret;
+  पटिनिवत्त ret;
 }
 
 /* Return the result of countof applied to T, a structure for the type
    name passed to countof (rather than the type itself).  LOC is the
    location of the original expression.  */
 
-struct c_expr
-c_expr_countof_type (location_t loc, struct c_type_name *t)
+संरचना c_व्यञ्जकम्
+c_व्यञ्जकम्_countof_type (location_t loc, संरचना c_type_name *t)
 {
-  tree type;
-  struct c_expr ret;
-  tree type_expr = NULL_TREE;
-  bool type_expr_const = true;
-  type = groktypename (t, &type_expr, &type_expr_const);
-  ret.value = c_countof_type (loc, type);
+  वृक्षः type;
+  संरचना c_व्यञ्जकम् ret;
+  वृक्षः type_व्यञ्जकम् = NULL_वृक्षः;
+  तार्किक type_व्यञ्जकम्_const = सच्च;
+  type = groktypename (t, &type_व्यञ्जकम्, &type_व्यञ्जकम्_const);
+  ret.मानम् = c_countof_type (loc, type);
   c_last_sizeof_arg = type;
   c_last_sizeof_loc = loc;
-  ret.original_code = COUNTOF_EXPR;
-  ret.original_type = NULL;
+  ret.original_code = COUNTOF_व्यञ्जकम्;
+  ret.original_type = रिक्त;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  सचे (type == error_mark_ग्रन्थिः)
     {
-      ret.value = error_mark_node;
+      ret.मानम् = error_mark_ग्रन्थिः;
       ret.original_code = ERROR_MARK;
     }
-  else
-  if ((type_expr || TREE_CODE (ret.value) == INTEGER_CST)
-      && top_array_vla_p (type))
+  अञ्ञथा
+  सचे ((type_व्यञ्जकम् || वृक्षः_CODE (ret.मानम्) == INTEGER_CST)
+      && शिखरम्_array_vla_p (type))
     {
       /* If the type is a [*] array, it is a VLA but is represented as
 	 having a size of zero.  In such a case we must ensure that
@@ -4215,68 +4215,68 @@ c_expr_countof_type (location_t loc, struct c_type_name *t)
 	 the result is not constant and so
 	 constraints on zero or negative size arrays must not be applied
 	 when this countof call is inside another array declarator.  */
-      if (!type_expr)
-	type_expr = integer_zero_node;
-      ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
-			  type_expr, ret.value);
-      C_MAYBE_CONST_EXPR_NON_CONST (ret.value) = !type_expr_const;
+      सचे (!type_व्यञ्जकम्)
+	type_व्यञ्जकम् = integer_zero_ग्रन्थिः;
+      ret.मानम् = build2 (C_MAYBE_CONST_व्यञ्जकम्, वृक्षः_TYPE (ret.मानम्),
+			  type_व्यञ्जकम्, ret.मानम्);
+      C_MAYBE_CONST_व्यञ्जकम्_NON_CONST (ret.मानम्) = !type_व्यञ्जकम्_const;
     }
-  pop_maybe_used (type != error_mark_node ? top_array_vla_p (type) : false);
-  return ret;
+  निष्कासय_maybe_used (type != error_mark_ग्रन्थिः ? शिखरम्_array_vla_p (type) : मिच्छा);
+  पटिनिवत्त ret;
 }
 
 /* Return the result of maxof applied to T, a structure for the type
    name passed to maxof (rather than the type itself).  LOC is the
    location of the original expression.  */
 
-struct c_expr
-c_expr_maxof_type (location_t loc, struct c_type_name *t)
+संरचना c_व्यञ्जकम्
+c_व्यञ्जकम्_maxof_type (location_t loc, संरचना c_type_name *t)
 {
-  tree type;
-  struct c_expr ret;
-  tree type_expr = NULL_TREE;
-  bool type_expr_const = true;
-  type = groktypename (t, &type_expr, &type_expr_const);
-  ret.value = c_maxof_type (loc, type);
+  वृक्षः type;
+  संरचना c_व्यञ्जकम् ret;
+  वृक्षः type_व्यञ्जकम् = NULL_वृक्षः;
+  तार्किक type_व्यञ्जकम्_const = सच्च;
+  type = groktypename (t, &type_व्यञ्जकम्, &type_व्यञ्जकम्_const);
+  ret.मानम् = c_maxof_type (loc, type);
   c_last_sizeof_arg = type;
   c_last_sizeof_loc = loc;
-  ret.original_code = MAXOF_EXPR;
-  ret.original_type = NULL;
+  ret.original_code = MAXOF_व्यञ्जकम्;
+  ret.original_type = रिक्त;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  सचे (type == error_mark_ग्रन्थिः)
     {
-      ret.value = error_mark_node;
+      ret.मानम् = error_mark_ग्रन्थिः;
       ret.original_code = ERROR_MARK;
     }
-  pop_maybe_used (type != error_mark_node);
-  return ret;
+  निष्कासय_maybe_used (type != error_mark_ग्रन्थिः);
+  पटिनिवत्त ret;
 }
 
 /* Return the result of minof applied to T, a structure for the type
    name passed to minof (rather than the type itself).  LOC is the
    location of the original expression.  */
 
-struct c_expr
-c_expr_minof_type (location_t loc, struct c_type_name *t)
+संरचना c_व्यञ्जकम्
+c_व्यञ्जकम्_minof_type (location_t loc, संरचना c_type_name *t)
 {
-  tree type;
-  struct c_expr ret;
-  tree type_expr = NULL_TREE;
-  bool type_expr_const = true;
-  type = groktypename (t, &type_expr, &type_expr_const);
-  ret.value = c_minof_type (loc, type);
+  वृक्षः type;
+  संरचना c_व्यञ्जकम् ret;
+  वृक्षः type_व्यञ्जकम् = NULL_वृक्षः;
+  तार्किक type_व्यञ्जकम्_const = सच्च;
+  type = groktypename (t, &type_व्यञ्जकम्, &type_व्यञ्जकम्_const);
+  ret.मानम् = c_minof_type (loc, type);
   c_last_sizeof_arg = type;
   c_last_sizeof_loc = loc;
-  ret.original_code = MINOF_EXPR;
-  ret.original_type = NULL;
+  ret.original_code = MINOF_व्यञ्जकम्;
+  ret.original_type = रिक्त;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  सचे (type == error_mark_ग्रन्थिः)
     {
-      ret.value = error_mark_node;
+      ret.मानम् = error_mark_ग्रन्थिः;
       ret.original_code = ERROR_MARK;
     }
-  pop_maybe_used (type != error_mark_node);
-  return ret;
+  निष्कासय_maybe_used (type != error_mark_ग्रन्थिः);
+  पटिनिवत्त ret;
 }
 
 /* Build a function call to function FUNCTION with parameters PARAMS.
@@ -4285,43 +4285,43 @@ c_expr_minof_type (location_t loc, struct c_type_name *t)
    TREE_VALUE of each node is a parameter-expression.
    FUNCTION's data type may be a function type or a pointer-to-function.  */
 
-tree
-build_function_call (location_t loc, tree function, tree params)
+वृक्षः
+build_function_call (location_t loc, वृक्षः function, वृक्षः params)
 {
-  vec<tree, va_gc> *v;
-  tree ret;
+  vec<वृक्षः, va_gc> *v;
+  वृक्षः ret;
 
   vec_alloc (v, list_length (params));
-  for (; params; params = TREE_CHAIN (params))
-    v->quick_push (TREE_VALUE (params));
-  ret = c_build_function_call_vec (loc, vNULL, function, v, NULL);
+  अत्थाय (; params; params = वृक्षः_CHAIN (params))
+    v->quick_प्रक्षिप (वृक्षः_मानम् (params));
+  ret = c_build_function_call_vec (loc, vNULL, function, v, रिक्त);
   vec_free (v);
-  return ret;
+  पटिनिवत्त ret;
 }
 
 /* Give a note about the location of the declaration of DECL,
    or, failing that, a pertinent declaration for FUNCTION_EXPR.  */
 
-static void
-inform_declaration (tree decl, tree function_expr)
+स्थिर शून्य
+inform_declaration (वृक्षः decl, वृक्षः function_व्यञ्जकम्)
 {
-  if (decl && (TREE_CODE (decl) != FUNCTION_DECL
+  सचे (decl && (वृक्षः_CODE (decl) != FUNCTION_DECL
 	       || !DECL_IS_UNDECLARED_BUILTIN (decl)))
     inform (DECL_SOURCE_LOCATION (decl), "declared here");
-  else if (function_expr)
-    switch (TREE_CODE (function_expr))
+  अञ्ञथा सचे (function_व्यञ्जकम्)
+    विकल्प (वृक्षः_CODE (function_व्यञ्जकम्))
       {
-      default:
-	break;
-      case COMPONENT_REF:
+      स्वभाव:
+	भङ्ग;
+      पक्ष COMPONENT_REF:
 	/* Show the decl of the pertinent field (e.g. for callback
 	   fields in a struct.  */
 	{
-	  tree field_decl = TREE_OPERAND (function_expr, 1);
-	  if (location_t loc = DECL_SOURCE_LOCATION (field_decl))
+	  वृक्षः field_decl = वृक्षः_OPERAND (function_व्यञ्जकम्, 1);
+	  सचे (location_t loc = DECL_SOURCE_LOCATION (field_decl))
 	    inform (loc, "declared here");
 	}
-	break;
+	भङ्ग;
       }
 }
 
@@ -4336,100 +4336,100 @@ inform_declaration (tree decl, tree function_expr)
    or pointer-to-function.  This function changes the elements of
    PARAMS.  */
 
-tree
+वृक्षः
 build_function_call_vec (location_t loc, vec<location_t> arg_loc,
-			 tree function, vec<tree, va_gc> *params,
-			 vec<tree, va_gc> *origtypes, tree orig_fundecl)
+			 वृक्षः function, vec<वृक्षः, va_gc> *params,
+			 vec<वृक्षः, va_gc> *origtypes, वृक्षः orig_fundecl)
 {
-  tree fntype, fundecl = NULL_TREE;
-  tree name = NULL_TREE, result;
-  tree tem;
-  int nargs;
-  tree *argarray;
+  वृक्षः fntype, fundecl = NULL_वृक्षः;
+  वृक्षः name = NULL_वृक्षः, result;
+  वृक्षः tem;
+  पूर्णाङ्क nargs;
+  वृक्षः *argarray;
 
 
   /* Strip NON_LVALUE_EXPRs, etc., since we aren't using as an lvalue.  */
   STRIP_TYPE_NOPS (function);
 
   /* Convert anything with function type to a pointer-to-function.  */
-  if (TREE_CODE (function) == FUNCTION_DECL)
+  सचे (वृक्षः_CODE (function) == FUNCTION_DECL)
     {
       name = DECL_NAME (function);
 
-      if (flag_tm)
+      सचे (flag_tm)
 	tm_malloc_replacement (function);
       fundecl = function;
-      if (!orig_fundecl)
+      सचे (!orig_fundecl)
 	orig_fundecl = fundecl;
       /* Atomic functions have type checking/casting already done.  They are
 	 often rewritten and don't match the original parameter list.  */
-      if (name && startswith (IDENTIFIER_POINTER (name), "__atomic_"))
-        origtypes = NULL;
+      सचे (name && startswith (IDENTIFIER_POINTER (name), "__atomic_"))
+        origtypes = रिक्त;
     }
-  if (TREE_CODE (TREE_TYPE (function)) == FUNCTION_TYPE)
+  सचे (वृक्षः_CODE (वृक्षः_TYPE (function)) == FUNCTION_TYPE)
     function = function_to_pointer_conversion (loc, function);
 
   /* For Objective-C, convert any calls via a cast to OBJC_TYPE_REF
      expressions, like those used for ObjC messenger dispatches.  */
-  if (params && !params->is_empty ())
+  सचे (params && !params->is_empty ())
     function = objc_rewrite_function_call (function, (*params)[0]);
 
-  function = c_fully_fold (function, false, NULL);
+  function = c_fully_fold (function, मिच्छा, रिक्त);
 
-  fntype = TREE_TYPE (function);
+  fntype = वृक्षः_TYPE (function);
 
-  if (TREE_CODE (fntype) == ERROR_MARK)
-    return error_mark_node;
+  सचे (वृक्षः_CODE (fntype) == ERROR_MARK)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if (!(TREE_CODE (fntype) == POINTER_TYPE
-	&& TREE_CODE (TREE_TYPE (fntype)) == FUNCTION_TYPE))
+  सचे (!(वृक्षः_CODE (fntype) == POINTER_TYPE
+	&& वृक्षः_CODE (वृक्षः_TYPE (fntype)) == FUNCTION_TYPE))
     {
-      if (!flag_diagnostics_show_caret && !STATEMENT_CLASS_P (function))
+      सचे (!flag_diagnostics_show_caret && !STATEMENT_CLASS_P (function))
 	error_at (loc,
 		  "called object %qE is not a function or function pointer",
 		  function);
-      else if (DECL_P (function))
+      अञ्ञथा सचे (DECL_P (function))
 	{
 	  auto_diagnostic_group d;
 	  error_at (loc,
 		    "called object %qD is not a function or function pointer",
 		    function);
-	  inform_declaration (function, NULL_TREE);
+	  inform_declaration (function, NULL_वृक्षः);
 	}
-      else
+      अञ्ञथा
 	error_at (loc,
 		  "called object is not a function or function pointer");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  if (fundecl && TREE_THIS_VOLATILE (fundecl))
+  सचे (fundecl && वृक्षः_THIS_VOLATILE (fundecl))
     current_function_returns_abnormally = 1;
 
   /* fntype now gets the type of function pointed to.  */
-  fntype = TREE_TYPE (fntype);
-  tree return_type = TREE_TYPE (fntype);
+  fntype = वृक्षः_TYPE (fntype);
+  वृक्षः return_type = वृक्षः_TYPE (fntype);
 
   /* Convert the parameters to the types declared in the
      function prototype, or apply default promotions.  */
 
   nargs = convert_arguments (loc, arg_loc, fntype, params,
 			     origtypes, function, fundecl);
-  if (nargs < 0)
-    return error_mark_node;
+  सचे (nargs < 0)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
   /* Check that the function is called through a compatible prototype.
      If it is not, warn.  */
-  if (CONVERT_EXPR_P (function)
-      && TREE_CODE (tem = TREE_OPERAND (function, 0)) == ADDR_EXPR
-      && TREE_CODE (tem = TREE_OPERAND (tem, 0)) == FUNCTION_DECL
-      && !comptypes (fntype, TREE_TYPE (tem)))
+  सचे (CONVERT_व्यञ्जकम्_P (function)
+      && वृक्षः_CODE (tem = वृक्षः_OPERAND (function, 0)) == ADDR_व्यञ्जकम्
+      && वृक्षः_CODE (tem = वृक्षः_OPERAND (tem, 0)) == FUNCTION_DECL
+      && !comptypes (fntype, वृक्षः_TYPE (tem)))
     {
       /* This situation leads to run-time undefined behavior.  We can't,
 	 therefore, simply error unless we can prove that all possible
 	 executions of the program must execute the code.  */
       warning_at (loc, 0, "function called through a non-compatible type");
 
-      if (VOID_TYPE_P (return_type)
+      सचे (VOID_TYPE_P (return_type)
 	  && TYPE_QUALS (return_type) != TYPE_UNQUALIFIED)
 	pedwarn (loc, 0,
 		 "function with qualified void return type called");
@@ -4438,84 +4438,84 @@ build_function_call_vec (location_t loc, vec<location_t> arg_loc,
   argarray = vec_safe_address (params);
 
   /* Check that arguments to builtin functions match the expectations.  */
-  if (fundecl
+  सचे (fundecl
       && fndecl_built_in_p (fundecl)
       && !check_builtin_function_arguments (loc, arg_loc, fundecl,
 					    orig_fundecl, nargs, argarray))
-    return error_mark_node;
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
   /* Check that the arguments to the function are valid.  */
-  bool warned_p = check_function_arguments (loc, fundecl, fntype,
+  तार्किक warned_p = check_function_arguments (loc, fundecl, fntype,
 					    nargs, argarray, &arg_loc,
 					    comptypes);
 
-  if (TYPE_QUALS (return_type) != TYPE_UNQUALIFIED
+  सचे (TYPE_QUALS (return_type) != TYPE_UNQUALIFIED
       && !VOID_TYPE_P (return_type))
     return_type = c_build_qualified_type (return_type, TYPE_UNQUALIFIED);
-  if (name != NULL_TREE
+  सचे (name != NULL_वृक्षः
       && startswith (IDENTIFIER_POINTER (name), "__builtin_"))
     {
-      if (require_constant_value)
+      सचे (require_constant_मानम्)
 	result
 	  = fold_build_call_array_initializer_loc (loc, return_type,
 						   function, nargs, argarray);
-      else
+      अञ्ञथा
 	result = fold_build_call_array_loc (loc, return_type,
 					    function, nargs, argarray);
-      if (TREE_CODE (result) == NOP_EXPR
-	  && TREE_CODE (TREE_OPERAND (result, 0)) == INTEGER_CST)
+      सचे (वृक्षः_CODE (result) == NOP_व्यञ्जकम्
+	  && वृक्षः_CODE (वृक्षः_OPERAND (result, 0)) == INTEGER_CST)
 	STRIP_TYPE_NOPS (result);
     }
-  else
+  अञ्ञथा
     result = build_call_array_loc (loc, return_type,
 				   function, nargs, argarray);
   /* If -Wnonnull warning has been diagnosed, avoid diagnosing it again
      later.  */
-  if (warned_p && TREE_CODE (result) == CALL_EXPR)
+  सचे (warned_p && वृक्षः_CODE (result) == CALL_व्यञ्जकम्)
     suppress_warning (result, OPT_Wnonnull);
 
   /* In this improbable scenario, a nested function returns a VM type.
      Create a TARGET_EXPR so that the call always has a LHS, much as
      what the C++ FE does for functions returning non-PODs.  */
-  if (c_type_variably_modified_p (TREE_TYPE (fntype)))
+  सचे (c_type_variably_modified_p (वृक्षः_TYPE (fntype)))
     {
-      tree tmp = create_tmp_var_raw (TREE_TYPE (fntype));
-      result = build4 (TARGET_EXPR, TREE_TYPE (fntype), tmp, result,
-		       NULL_TREE, NULL_TREE);
+      वृक्षः tmp = create_tmp_var_raw (वृक्षः_TYPE (fntype));
+      result = build4 (TARGET_व्यञ्जकम्, वृक्षः_TYPE (fntype), tmp, result,
+		       NULL_वृक्षः, NULL_वृक्षः);
     }
 
-  if (VOID_TYPE_P (TREE_TYPE (result)))
+  सचे (VOID_TYPE_P (वृक्षः_TYPE (result)))
     {
-      if (TYPE_QUALS (TREE_TYPE (result)) != TYPE_UNQUALIFIED)
+      सचे (TYPE_QUALS (वृक्षः_TYPE (result)) != TYPE_UNQUALIFIED)
 	pedwarn (loc, 0,
 		 "function with qualified void return type called");
-      return result;
+      पटिनिवत्त result;
     }
-  return require_complete_type (loc, result);
+  पटिनिवत्त require_complete_type (loc, result);
 }
 
 /* Like build_function_call_vec, but call also resolve_overloaded_builtin.  */
 
-tree
-c_build_function_call_vec (location_t loc, const vec<location_t> &arg_loc,
-			   tree function, vec<tree, va_gc> *params,
-			   vec<tree, va_gc> *origtypes)
+वृक्षः
+c_build_function_call_vec (location_t loc, ध्रुव vec<location_t> &arg_loc,
+			   वृक्षः function, vec<वृक्षः, va_gc> *params,
+			   vec<वृक्षः, va_gc> *origtypes)
 {
   /* Strip NON_LVALUE_EXPRs, etc., since we aren't using as an lvalue.  */
   STRIP_TYPE_NOPS (function);
 
   /* Convert anything with function type to a pointer-to-function.  */
-  if (TREE_CODE (function) == FUNCTION_DECL)
+  सचे (वृक्षः_CODE (function) == FUNCTION_DECL)
     {
       /* Implement type-directed function overloading for builtins.
 	 resolve_overloaded_builtin and targetm.resolve_overloaded_builtin
 	 handle all the type checking.  The result is a complete expression
 	 that implements this function call.  */
-      tree tem = resolve_overloaded_builtin (loc, function, params);
-      if (tem)
-	return tem;
+      वृक्षः tem = resolve_overloaded_builtin (loc, function, params);
+      सचे (tem)
+	पटिनिवत्त tem;
     }
-  return build_function_call_vec (loc, arg_loc, function, params, origtypes);
+  पटिनिवत्त build_function_call_vec (loc, arg_loc, function, params, origtypes);
 }
 
 /* Helper for convert_arguments called to convert the VALue of argument
@@ -4533,57 +4533,57 @@ c_build_function_call_vec (location_t loc, const vec<location_t> &arg_loc,
    as EXCESS_PRECISION_EXPR.
    WARNOPT is the same as in convert_for_assignment.  */
 
-static tree
-convert_argument (location_t ploc, tree function, tree fundecl,
-		  tree type, tree origtype, tree val, tree valtype,
-		  bool npc, tree rname, int parmnum, int argnum,
-		  bool excess_precision, int warnopt)
+स्थिर वृक्षः
+convert_argument (location_t ploc, वृक्षः function, वृक्षः fundecl,
+		  वृक्षः type, वृक्षः origtype, वृक्षः val, वृक्षः valtype,
+		  तार्किक npc, वृक्षः rname, पूर्णाङ्क parmnum, पूर्णाङ्क argnum,
+		  तार्किक excess_precision, पूर्णाङ्क warnopt)
 {
   /* Formal parm type is specified by a function prototype.  */
 
-  if (type == error_mark_node || !COMPLETE_TYPE_P (type))
+  सचे (type == error_mark_ग्रन्थिः || !COMPLETE_TYPE_P (type))
     {
       error_at (ploc, "type of formal parameter %d is incomplete",
 		parmnum + 1);
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
   /* Optionally warn about conversions that differ from the default
      conversions.  */
-  if (warn_traditional_conversion || warn_traditional)
+  सचे (warn_traditional_conversion || warn_traditional)
     {
-      if (INTEGRAL_TYPE_P (type)
+      सचे (INTEGRAL_TYPE_P (type)
 	  && SCALAR_FLOAT_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as integer rather "
 		    "than floating due to prototype",
 		    argnum, rname);
-      if (INTEGRAL_TYPE_P (type)
-	  && TREE_CODE (valtype) == COMPLEX_TYPE)
+      सचे (INTEGRAL_TYPE_P (type)
+	  && वृक्षः_CODE (valtype) == COMPLEX_TYPE)
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as integer rather "
 		    "than complex due to prototype",
 		    argnum, rname);
-      else if (TREE_CODE (type) == COMPLEX_TYPE
+      अञ्ञथा सचे (वृक्षः_CODE (type) == COMPLEX_TYPE
 	       && SCALAR_FLOAT_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as complex rather "
 		    "than floating due to prototype",
 		    argnum, rname);
-      else if (SCALAR_FLOAT_TYPE_P (type)
+      अञ्ञथा सचे (SCALAR_FLOAT_TYPE_P (type)
 	       && INTEGRAL_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as floating rather "
 		    "than integer due to prototype",
 		    argnum, rname);
-      else if (TREE_CODE (type) == COMPLEX_TYPE
+      अञ्ञथा सचे (वृक्षः_CODE (type) == COMPLEX_TYPE
 	       && INTEGRAL_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as complex rather "
 		    "than integer due to prototype",
 		    argnum, rname);
-      else if (SCALAR_FLOAT_TYPE_P (type)
-	       && TREE_CODE (valtype) == COMPLEX_TYPE)
+      अञ्ञथा सचे (SCALAR_FLOAT_TYPE_P (type)
+	       && वृक्षः_CODE (valtype) == COMPLEX_TYPE)
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as floating rather "
 		    "than complex due to prototype",
@@ -4591,15 +4591,15 @@ convert_argument (location_t ploc, tree function, tree fundecl,
       /* ??? At some point, messages should be written about
 	 conversions between complex types, but that's too messy
 	 to do now.  */
-      else if (SCALAR_FLOAT_TYPE_P (type)
+      अञ्ञथा सचे (SCALAR_FLOAT_TYPE_P (type)
 	       && SCALAR_FLOAT_TYPE_P (valtype))
 	{
-	  unsigned int formal_prec = TYPE_PRECISION (type);
+	  unsigned पूर्णाङ्क formal_prec = TYPE_PRECISION (type);
 
 	  /* Warn if any argument is passed as `float',
 	     since without a prototype it would be `double'.  */
-	  if (formal_prec == TYPE_PRECISION (float_type_node)
-	      && type != dfloat32_type_node)
+	  सचे (formal_prec == TYPE_PRECISION (float_type_ग्रन्थिः)
+	      && type != dfloat32_type_ग्रन्थिः)
 	    warning_at (ploc, 0,
 			"passing argument %d of %qE as %<float%> "
 			"rather than %<double%> due to prototype",
@@ -4609,23 +4609,23 @@ convert_argument (location_t ploc, tree function, tree fundecl,
 	     for decimal float types.  Warn of conversions with
 	     binary float types and of precision narrowing due to
 	     prototype.  */
-	  else if (type != valtype
-		   && (type == dfloat32_type_node
-		       || type == dfloat64_type_node
-		       || type == dfloat128_type_node
-		       || valtype == dfloat32_type_node
-		       || valtype == dfloat64_type_node
-		       || valtype == dfloat128_type_node)
+	  अञ्ञथा सचे (type != valtype
+		   && (type == dfloat32_type_ग्रन्थिः
+		       || type == dfloat64_type_ग्रन्थिः
+		       || type == dfloat128_type_ग्रन्थिः
+		       || valtype == dfloat32_type_ग्रन्थिः
+		       || valtype == dfloat64_type_ग्रन्थिः
+		       || valtype == dfloat128_type_ग्रन्थिः)
 		   && (formal_prec
 		       <= TYPE_PRECISION (valtype)
-		       || (type == dfloat128_type_node
+		       || (type == dfloat128_type_ग्रन्थिः
 			   && (valtype
-			       != dfloat64_type_node
+			       != dfloat64_type_ग्रन्थिः
 			       && (valtype
-				   != dfloat32_type_node)))
-		       || (type == dfloat64_type_node
+				   != dfloat32_type_ग्रन्थिः)))
+		       || (type == dfloat64_type_ग्रन्थिः
 			   && (valtype
-			       != dfloat32_type_node))))
+			       != dfloat32_type_ग्रन्थिः))))
 	    warning_at (ploc, 0,
 			"passing argument %d of %qE as %qT "
 			"rather than %qT due to prototype",
@@ -4635,35 +4635,35 @@ convert_argument (location_t ploc, tree function, tree fundecl,
       /* Detect integer changing in width or signedness.
 	 These warnings are only activated with
 	 -Wtraditional-conversion, not with -Wtraditional.  */
-      else if (warn_traditional_conversion
+      अञ्ञथा सचे (warn_traditional_conversion
 	       && INTEGRAL_TYPE_P (type)
 	       && INTEGRAL_TYPE_P (valtype))
 	{
-	  unsigned int formal_prec = TYPE_PRECISION (type);
-	  tree would_have_been = default_conversion (val);
-	  tree type1 = TREE_TYPE (would_have_been);
+	  unsigned पूर्णाङ्क formal_prec = TYPE_PRECISION (type);
+	  वृक्षः would_have_been = default_conversion (val);
+	  वृक्षः type1 = वृक्षः_TYPE (would_have_been);
 
-	  if (val == error_mark_node)
+	  सचे (val == error_mark_ग्रन्थिः)
 	    /* VAL could have been of incomplete type.  */;
-	  else if (TREE_CODE (type) == ENUMERAL_TYPE
+	  अञ्ञथा सचे (वृक्षः_CODE (type) == ENUMERAL_TYPE
 		   && (TYPE_MAIN_VARIANT (type)
 		       == TYPE_MAIN_VARIANT (valtype)))
 	    /* No warning if function asks for enum
 	       and the actual arg is that enum type.  */
 	    ;
-	  else if (formal_prec != TYPE_PRECISION (type1))
+	  अञ्ञथा सचे (formal_prec != TYPE_PRECISION (type1))
 	    warning_at (ploc, OPT_Wtraditional_conversion,
 			"passing argument %d of %qE "
 			"with different width due to prototype",
 			argnum, rname);
-	  else if (TYPE_UNSIGNED (type) == TYPE_UNSIGNED (type1))
+	  अञ्ञथा सचे (TYPE_UNSIGNED (type) == TYPE_UNSIGNED (type1))
 	    ;
 	  /* Don't complain if the formal parameter type
 	     is an enum, because we can't tell now whether
 	     the value was an enum--even the same enum.  */
-	  else if (TREE_CODE (type) == ENUMERAL_TYPE)
+	  अञ्ञथा सचे (वृक्षः_CODE (type) == ENUMERAL_TYPE)
 	    ;
-	  else if (TREE_CODE (val) == INTEGER_CST
+	  अञ्ञथा सचे (वृक्षः_CODE (val) == INTEGER_CST
 		   && int_fits_type_p (val, type))
 	    /* Change in signedness doesn't matter
 	       if a constant value is unaffected.  */
@@ -4672,15 +4672,15 @@ convert_argument (location_t ploc, tree function, tree fundecl,
 	     unsigned type, it doesn't matter whether we
 	     pass it as signed or unsigned; the value
 	     certainly is the same either way.  */
-	  else if (TYPE_PRECISION (valtype) < TYPE_PRECISION (type)
+	  अञ्ञथा सचे (TYPE_PRECISION (valtype) < TYPE_PRECISION (type)
 		   && TYPE_UNSIGNED (valtype))
 	    ;
-	  else if (TYPE_UNSIGNED (type))
+	  अञ्ञथा सचे (TYPE_UNSIGNED (type))
 	    warning_at (ploc, OPT_Wtraditional_conversion,
 			"passing argument %d of %qE "
 			"as unsigned due to prototype",
 			argnum, rname);
-	  else
+	  अञ्ञथा
 	    warning_at (ploc, OPT_Wtraditional_conversion,
 			"passing argument %d of %qE "
 			"as signed due to prototype",
@@ -4690,14 +4690,14 @@ convert_argument (location_t ploc, tree function, tree fundecl,
 
   /* Possibly restore an EXCESS_PRECISION_EXPR for the
      sake of better warnings from convert_and_check.  */
-  if (excess_precision)
-    val = build1 (EXCESS_PRECISION_EXPR, valtype, val);
+  सचे (excess_precision)
+    val = build1 (EXCESS_PRECISION_व्यञ्जकम्, valtype, val);
 
-  tree parmval = convert_for_assignment (ploc, ploc, type,
+  वृक्षः parmval = convert_for_assignment (ploc, ploc, type,
 					 val, origtype, ic_argpass,
 					 npc, fundecl, function,
 					 parmnum + 1, warnopt);
-  return parmval;
+  पटिनिवत्त parmval;
 }
 
 /* Convert the argument expressions in the vector VALUES
@@ -4721,182 +4721,182 @@ convert_argument (location_t ploc, tree function, tree fundecl,
    than the length of VALUES in some error situations), or -1 on
    failure.  */
 
-static int
-convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
-		   vec<tree, va_gc> *values, vec<tree, va_gc> *origtypes,
-		   tree function, tree fundecl)
+स्थिर पूर्णाङ्क
+convert_arguments (location_t loc, vec<location_t> arg_loc, वृक्षः fntype,
+		   vec<वृक्षः, va_gc> *मानानि, vec<वृक्षः, va_gc> *origtypes,
+		   वृक्षः function, वृक्षः fundecl)
 {
-  tree typelist = TYPE_ARG_TYPES (fntype);
-  unsigned int parmnum;
-  bool error_args = false;
-  const bool type_generic = fundecl
-    && lookup_attribute ("type generic", TYPE_ATTRIBUTES (TREE_TYPE (fundecl)));
-  bool type_generic_remove_excess_precision = false;
-  bool type_generic_overflow_p = false;
-  bool type_generic_bit_query = false;
-  tree selector;
+  वृक्षः typelist = TYPE_ARG_TYPES (fntype);
+  unsigned पूर्णाङ्क parmnum;
+  तार्किक error_args = मिच्छा;
+  ध्रुव तार्किक type_generic = fundecl
+    && lookup_attribute ("type generic", TYPE_ATTRIBUTES (वृक्षः_TYPE (fundecl)));
+  तार्किक type_generic_remove_excess_precision = मिच्छा;
+  तार्किक type_generic_overflow_p = मिच्छा;
+  तार्किक type_generic_bit_query = मिच्छा;
+  वृक्षः selector;
 
   /* Change pointer to function to the function itself for
      diagnostics.  */
-  if (TREE_CODE (function) == ADDR_EXPR
-      && TREE_CODE (TREE_OPERAND (function, 0)) == FUNCTION_DECL)
-    function = TREE_OPERAND (function, 0);
+  सचे (वृक्षः_CODE (function) == ADDR_व्यञ्जकम्
+      && वृक्षः_CODE (वृक्षः_OPERAND (function, 0)) == FUNCTION_DECL)
+    function = वृक्षः_OPERAND (function, 0);
 
   /* Handle an ObjC selector specially for diagnostics.  */
   selector = objc_message_selector ();
 
   /* For a call to a built-in function declared without a prototype,
      set to the built-in function's argument list.  */
-  tree builtin_typelist = NULL_TREE;
+  वृक्षः builtin_typelist = NULL_वृक्षः;
 
   /* For type-generic built-in functions, determine whether excess
      precision should be removed (classification) or not
      (comparison).  */
-  if (fundecl
+  सचे (fundecl
       && fndecl_built_in_p (fundecl, BUILT_IN_NORMAL))
     {
       built_in_function code = DECL_FUNCTION_CODE (fundecl);
-      if (C_DECL_BUILTIN_PROTOTYPE (fundecl))
+      सचे (C_DECL_BUILTIN_PROTOTYPE (fundecl))
 	{
 	  /* For a call to a built-in function declared without a prototype
 	     use the types of the parameters of the internal built-in to
 	     match those of the arguments to.  */
-	  if (tree bdecl = builtin_decl_explicit (code))
-	    builtin_typelist = TYPE_ARG_TYPES (TREE_TYPE (bdecl));
+	  सचे (वृक्षः bdecl = builtin_decl_explicit (code))
+	    builtin_typelist = TYPE_ARG_TYPES (वृक्षः_TYPE (bdecl));
 	}
 
       /* For type-generic built-in functions, determine whether excess
 	 precision should be removed (classification) or not
 	 (comparison).  */
-      if (type_generic)
-	switch (code)
+      सचे (type_generic)
+	विकल्प (code)
 	  {
-	  case BUILT_IN_ISFINITE:
-	  case BUILT_IN_ISINF:
-	  case BUILT_IN_ISINF_SIGN:
-	  case BUILT_IN_ISNAN:
-	  case BUILT_IN_ISNORMAL:
-	  case BUILT_IN_ISSIGNALING:
-	  case BUILT_IN_FPCLASSIFY:
-	    type_generic_remove_excess_precision = true;
-	    break;
+	  पक्ष BUILT_IN_ISFINITE:
+	  पक्ष BUILT_IN_ISINF:
+	  पक्ष BUILT_IN_ISINF_SIGN:
+	  पक्ष BUILT_IN_ISNAN:
+	  पक्ष BUILT_IN_ISNORMAL:
+	  पक्ष BUILT_IN_ISSIGNALING:
+	  पक्ष BUILT_IN_FPCLASSIFY:
+	    type_generic_remove_excess_precision = सच्च;
+	    भङ्ग;
 
-	  case BUILT_IN_ADD_OVERFLOW_P:
-	  case BUILT_IN_SUB_OVERFLOW_P:
-	  case BUILT_IN_MUL_OVERFLOW_P:
+	  पक्ष BUILT_IN_ADD_OVERFLOW_P:
+	  पक्ष BUILT_IN_SUB_OVERFLOW_P:
+	  पक्ष BUILT_IN_MUL_OVERFLOW_P:
 	    /* The last argument of these type-generic builtins
 	       should not be promoted.  */
-	    type_generic_overflow_p = true;
-	    break;
+	    type_generic_overflow_p = सच्च;
+	    भङ्ग;
 
-	  case BUILT_IN_CLZG:
-	  case BUILT_IN_CTZG:
-	  case BUILT_IN_CLRSBG:
-	  case BUILT_IN_FFSG:
-	  case BUILT_IN_PARITYG:
-	  case BUILT_IN_POPCOUNTG:
+	  पक्ष BUILT_IN_CLZG:
+	  पक्ष BUILT_IN_CTZG:
+	  पक्ष BUILT_IN_CLRSBG:
+	  पक्ष BUILT_IN_FFSG:
+	  पक्ष BUILT_IN_PARITYG:
+	  पक्ष BUILT_IN_POPCOUNTG:
 	    /* The first argument of these type-generic builtins
 	       should not be promoted.  */
-	    type_generic_bit_query = true;
-	    break;
+	    type_generic_bit_query = सच्च;
+	    भङ्ग;
 
-	  default:
-	    break;
+	  स्वभाव:
+	    भङ्ग;
 	  }
     }
 
   /* Scan the given expressions (VALUES) and types (TYPELIST), producing
      individual converted arguments.  */
 
-  tree typetail, builtin_typetail, val;
-  for (typetail = typelist,
+  वृक्षः typetail, builtin_typetail, val;
+  अत्थाय (typetail = typelist,
 	 builtin_typetail = builtin_typelist,
 	 parmnum = 0;
-       values && values->iterate (parmnum, &val);
+       मानानि && मानानि->iterate (parmnum, &val);
        ++parmnum)
     {
       /* The type of the function parameter (if it was declared with one).  */
-      tree type = typetail ? TREE_VALUE (typetail) : NULL_TREE;
+      वृक्षः type = typetail ? वृक्षः_मानम् (typetail) : NULL_वृक्षः;
       /* The type of the built-in function parameter (if the function
 	 is a built-in).  Used to detect type incompatibilities in
 	 calls to built-ins declared without a prototype.  */
-      tree builtin_type = (builtin_typetail
-			   ? TREE_VALUE (builtin_typetail) : NULL_TREE);
+      वृक्षः builtin_type = (builtin_typetail
+			   ? वृक्षः_मानम् (builtin_typetail) : NULL_वृक्षः);
       /* The original type of the argument being passed to the function.  */
-      tree valtype = TREE_TYPE (val);
+      वृक्षः valtype = वृक्षः_TYPE (val);
       /* The called function (or function selector in Objective C).  */
-      tree rname = function;
-      int argnum = parmnum + 1;
-      const char *invalid_func_diag;
+      वृक्षः rname = function;
+      पूर्णाङ्क argnum = parmnum + 1;
+      ध्रुव वर्ण *invalid_func_diag;
       /* Set for EXCESS_PRECISION_EXPR arguments.  */
-      bool excess_precision = false;
+      तार्किक excess_precision = मिच्छा;
       /* The value of the argument after conversion to the type
 	 of the function parameter it is passed to.  */
-      tree parmval;
+      वृक्षः parmval;
       /* Some __atomic_* builtins have additional hidden argument at
 	 position 0.  */
       location_t ploc
-	= !arg_loc.is_empty () && values->length () == arg_loc.length ()
+	= !arg_loc.is_empty () && मानानि->length () == arg_loc.length ()
 	  ? expansion_point_location_if_in_system_header (arg_loc[parmnum])
-	  : input_location;
+	  : निवेशः_location;
 
-      if (type == void_type_node)
+      सचे (type == void_type_ग्रन्थिः)
 	{
 	  auto_diagnostic_group d;
-	  int num_expected = parmnum;
-	  int num_actual = values->length ();
+	  पूर्णाङ्क अङ्कः_expected = parmnum;
+	  पूर्णाङ्क अङ्कः_actual = मानानि->length ();
 	  gcc_rich_location rich_loc (loc);
-	  if (ploc != input_location)
+	  सचे (ploc != निवेशः_location)
 	    rich_loc.add_range (ploc);
-	  if (selector)
+	  सचे (selector)
 	    error_at (&rich_loc,
 		      "too many arguments to method %qE; expected %i, have %i",
-		      selector, num_expected, num_actual);
-	  else
+		      selector, अङ्कः_expected, अङ्कः_actual);
+	  अञ्ञथा
 	    error_at (&rich_loc,
 		      "too many arguments to function %qE; expected %i, have %i",
-		      function, num_expected, num_actual);
+		      function, अङ्कः_expected, अङ्कः_actual);
 	  inform_declaration (fundecl, function);
-	  return error_args ? -1 : (int) parmnum;
+	  पटिनिवत्त error_args ? -1 : (पूर्णाङ्क) parmnum;
 	}
 
-      if (builtin_type == void_type_node)
+      सचे (builtin_type == void_type_ग्रन्थिः)
 	{
 	  auto_diagnostic_group d;
-	  if (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
+	  सचे (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
 			  "too many arguments to built-in function %qE "
 			  "expecting %d", function, parmnum))
 	    inform_declaration (fundecl, function);
-	  builtin_typetail = NULL_TREE;
+	  builtin_typetail = NULL_वृक्षः;
 	}
 
-      if (!typetail && parmnum == 0 && !TYPE_NO_NAMED_ARGS_STDARG_P (fntype)
+      सचे (!typetail && parmnum == 0 && !TYPE_NO_NAMED_ARGS_STDARG_P (fntype)
 	  && !(fundecl && fndecl_built_in_p (fundecl)))
 	{
 	  auto_diagnostic_group d;
-	  bool warned;
-	  if (selector)
+	  तार्किक warned;
+	  सचे (selector)
 	    warned = warning_at (loc, OPT_Wdeprecated_non_prototype,
 				 "ISO C23 does not allow arguments"
 				 " for method %qE declared without parameters",
 				 function);
-	  else
+	  अञ्ञथा
 	    warned = warning_at (loc, OPT_Wdeprecated_non_prototype,
 				 "ISO C23 does not allow arguments"
 				 " for function %qE declared without parameters",
 				 function);
-	  if (warned)
+	  सचे (warned)
 	    inform_declaration (fundecl, function);
 	}
 
-      if (selector && argnum > 2)
+      सचे (selector && argnum > 2)
 	{
 	  rname = selector;
 	  argnum -= 2;
 	}
 
       /* Determine if VAL is a null pointer constant before folding it.  */
-      bool npc = null_pointer_constant_p (val);
+      तार्किक npc = null_pointer_constant_p (val);
 
       /* If there is excess precision and a prototype, convert once to
 	 the required type rather than converting via the semantic
@@ -4904,13 +4904,13 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 	 as long double should be converted once to double.  But for
 	 type-generic classification functions excess precision must
 	 be removed here.  */
-      if (TREE_CODE (val) == EXCESS_PRECISION_EXPR
+      सचे (वृक्षः_CODE (val) == EXCESS_PRECISION_व्यञ्जकम्
 	  && (type || !type_generic || !type_generic_remove_excess_precision))
 	{
-	  val = TREE_OPERAND (val, 0);
-	  excess_precision = true;
+	  val = वृक्षः_OPERAND (val, 0);
+	  excess_precision = सच्च;
 	}
-      val = c_fully_fold (val, false, NULL);
+      val = c_fully_fold (val, मिच्छा, रिक्त);
       STRIP_TYPE_NOPS (val);
 
       val = require_complete_type (ploc, val);
@@ -4919,55 +4919,55 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 	 no type is specified by a prototype.  This applies to
 	 arguments of type float, and to architecture-specific types
 	 (ARM __fp16), but not to _FloatN or _FloatNx types.  */
-      bool promote_float_arg = false;
-      if (type == NULL_TREE
-	  && TREE_CODE (valtype) == REAL_TYPE
+      तार्किक promote_float_arg = मिच्छा;
+      सचे (type == NULL_वृक्षः
+	  && वृक्षः_CODE (valtype) == REAL_TYPE
 	  && (TYPE_PRECISION (valtype)
-	      <= TYPE_PRECISION (double_type_node))
-	  && TYPE_MAIN_VARIANT (valtype) != double_type_node
-	  && TYPE_MAIN_VARIANT (valtype) != long_double_type_node
+	      <= TYPE_PRECISION (double_type_ग्रन्थिः))
+	  && TYPE_MAIN_VARIANT (valtype) != double_type_ग्रन्थिः
+	  && TYPE_MAIN_VARIANT (valtype) != long_double_type_ग्रन्थिः
 	  && !DECIMAL_FLOAT_MODE_P (TYPE_MODE (valtype)))
 	{
 	  /* Promote this argument, unless it has a _FloatN or
 	     _FloatNx type.  */
-	  promote_float_arg = true;
-	  for (int i = 0; i < NUM_FLOATN_NX_TYPES; i++)
-	    if (TYPE_MAIN_VARIANT (valtype) == FLOATN_NX_TYPE_NODE (i))
+	  promote_float_arg = सच्च;
+	  अत्थाय (पूर्णाङ्क i = 0; i < अङ्कः_FLOATN_NX_TYPES; i++)
+	    सचे (TYPE_MAIN_VARIANT (valtype) == FLOATN_NX_TYPE_ग्रन्थिः (i))
 	      {
-		promote_float_arg = false;
-		break;
+		promote_float_arg = मिच्छा;
+		भङ्ग;
 	      }
 	  /* Don't promote __bf16 either.  */
-	  if (TYPE_MAIN_VARIANT (valtype) == bfloat16_type_node)
-	    promote_float_arg = false;
+	  सचे (TYPE_MAIN_VARIANT (valtype) == bfloat16_type_ग्रन्थिः)
+	    promote_float_arg = मिच्छा;
 	}
 
-      if (type != NULL_TREE)
+      सचे (type != NULL_वृक्षः)
 	{
-	  tree origtype = (!origtypes) ? NULL_TREE : (*origtypes)[parmnum];
+	  वृक्षः origtype = (!origtypes) ? NULL_वृक्षः : (*origtypes)[parmnum];
 	  parmval = convert_argument (ploc, function, fundecl, type, origtype,
 				      val, valtype, npc, rname, parmnum, argnum,
 				      excess_precision, 0);
 	}
       /* A NULLPTR type is just a nullptr always.  */
-      else if (TREE_CODE (TREE_TYPE (val)) == NULLPTR_TYPE)
-	parmval = omit_one_operand_loc (ploc, TREE_TYPE (val), nullptr_node, val);
-      else if (promote_float_arg)
+      अञ्ञथा सचे (वृक्षः_CODE (वृक्षः_TYPE (val)) == NULLPTR_TYPE)
+	parmval = omit_one_operand_loc (ploc, वृक्षः_TYPE (val), nullptr_ग्रन्थिः, val);
+      अञ्ञथा सचे (promote_float_arg)
         {
-	  if (type_generic)
+	  सचे (type_generic)
 	    parmval = val;
-	  else
+	  अञ्ञथा
 	    {
 	      /* Convert `float' to `double'.  */
-	      if (warn_double_promotion && !c_inhibit_evaluation_warnings)
+	      सचे (warn_double_promotion && !c_inhibit_evaluation_warnings)
 		warning_at (ploc, OPT_Wdouble_promotion,
 			    "implicit conversion from %qT to %qT when passing "
 			    "argument to function",
-			    valtype, double_type_node);
-	      parmval = convert (double_type_node, val);
+			    valtype, double_type_ग्रन्थिः);
+	      parmval = convert (double_type_ग्रन्थिः, val);
 	    }
 	}
-      else if ((excess_precision && !type_generic)
+      अञ्ञथा सचे ((excess_precision && !type_generic)
 	       || (type_generic_overflow_p && parmnum == 2)
 	       || (type_generic_bit_query && parmnum == 0))
 	/* A "double" argument with excess precision being passed
@@ -4976,93 +4976,93 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 	   promoted, similarly the first argument of
 	   __builtin_{clz,ctz,clrsb,ffs,parity,popcount}g.  */
 	parmval = convert (valtype, val);
-      else if ((invalid_func_diag =
+      अञ्ञथा सचे ((invalid_func_diag =
 		targetm.calls.invalid_arg_for_unprototyped_fn (typelist, fundecl, val)))
 	{
 	  error (invalid_func_diag);
-	  return -1;
+	  पटिनिवत्त -1;
 	}
-      else if (TREE_CODE (val) == ADDR_EXPR && reject_gcc_builtin (val))
+      अञ्ञथा सचे (वृक्षः_CODE (val) == ADDR_व्यञ्जकम् && reject_gcc_builtin (val))
 	{
-	  return -1;
+	  पटिनिवत्त -1;
 	}
-      else
+      अञ्ञथा
 	/* Convert `short' and `char' to full-size `int'.  */
 	parmval = default_conversion (val);
 
-      (*values)[parmnum] = parmval;
-      if (parmval == error_mark_node)
-	error_args = true;
+      (*मानानि)[parmnum] = parmval;
+      सचे (parmval == error_mark_ग्रन्थिः)
+	error_args = सच्च;
 
-      if (!type && builtin_type && TREE_CODE (builtin_type) != VOID_TYPE)
+      सचे (!type && builtin_type && वृक्षः_CODE (builtin_type) != VOID_TYPE)
 	{
 	  /* For a call to a built-in function declared without a prototype,
 	     perform the conversions from the argument to the expected type
 	     but issue warnings rather than errors for any mismatches.
 	     Ignore the converted argument and use the PARMVAL obtained
 	     above by applying default conversions instead.  */
-	  tree origtype = (!origtypes) ? NULL_TREE : (*origtypes)[parmnum];
+	  वृक्षः origtype = (!origtypes) ? NULL_वृक्षः : (*origtypes)[parmnum];
 	  convert_argument (ploc, function, fundecl, builtin_type, origtype,
 			    val, valtype, npc, rname, parmnum, argnum,
 			    excess_precision,
 			    OPT_Wbuiltin_declaration_mismatch);
 	}
 
-      if (typetail)
-	typetail = TREE_CHAIN (typetail);
+      सचे (typetail)
+	typetail = वृक्षः_CHAIN (typetail);
 
-      if (builtin_typetail)
-	builtin_typetail = TREE_CHAIN (builtin_typetail);
+      सचे (builtin_typetail)
+	builtin_typetail = वृक्षः_CHAIN (builtin_typetail);
     }
 
-  gcc_assert (parmnum == vec_safe_length (values));
+  gcc_assert (parmnum == vec_safe_length (मानानि));
 
-  if (typetail != NULL_TREE && TREE_VALUE (typetail) != void_type_node)
+  सचे (typetail != NULL_वृक्षः && वृक्षः_मानम् (typetail) != void_type_ग्रन्थिः)
     {
       /* Not enough args.
 	 Determine minimum number of arguments required.  */
-      int min_expected_num = 0;
-      bool at_least_p = false;
-      tree iter = typelist;
-      while (true)
+      पूर्णाङ्क min_expected_अङ्कः = 0;
+      तार्किक at_least_p = मिच्छा;
+      वृक्षः iter = typelist;
+      याव (सच्च)
 	{
-	  if (!iter)
+	  सचे (!iter)
 	    {
 	      /* Variadic arguments; stop iterating.  */
-	      at_least_p = true;
-	      break;
+	      at_least_p = सच्च;
+	      भङ्ग;
 	    }
-	  if (iter == void_list_node)
+	  सचे (iter == void_list_ग्रन्थिः)
 	    /* End of arguments; stop iterating.  */
-	    break;
-	  ++min_expected_num;
-	  iter = TREE_CHAIN (iter);
+	    भङ्ग;
+	  ++min_expected_अङ्कः;
+	  iter = वृक्षः_CHAIN (iter);
 	}
       auto_diagnostic_group d;
-      int actual_num = vec_safe_length (values);
+      पूर्णाङ्क actual_अङ्कः = vec_safe_length (मानानि);
       error_at (loc,
 		at_least_p
 		? G_("too few arguments to function %qE; expected at least %i, have %i")
 		: G_("too few arguments to function %qE; expected %i, have %i"),
-		function, min_expected_num, actual_num);
+		function, min_expected_अङ्कः, actual_अङ्कः);
       inform_declaration (fundecl, function);
-      return -1;
+      पटिनिवत्त -1;
     }
 
-  if (builtin_typetail && TREE_VALUE (builtin_typetail) != void_type_node)
+  सचे (builtin_typetail && वृक्षः_मानम् (builtin_typetail) != void_type_ग्रन्थिः)
     {
       unsigned nargs = parmnum;
-      for (tree t = builtin_typetail; t; t = TREE_CHAIN (t))
+      अत्थाय (वृक्षः t = builtin_typetail; t; t = वृक्षः_CHAIN (t))
 	++nargs;
 
       auto_diagnostic_group d;
-      if (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
+      सचे (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
 		      "too few arguments to built-in function %qE "
 		      "expecting %u", function, nargs - 1))
 	inform_declaration (fundecl, function);
     }
 
-  return error_args ? -1 : (int) parmnum;
+  पटिनिवत्त error_args ? -1 : (पूर्णाङ्क) parmnum;
 }
 
 /* This is the entry point used by the parser to build unary operators
@@ -5073,46 +5073,46 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
    LOC is the location to use for the tree generated.
 */
 
-struct c_expr
-parser_build_unary_op (location_t loc, enum tree_code code, struct c_expr arg)
+संरचना c_व्यञ्जकम्
+parser_build_unary_op (location_t loc, गणना वृक्षः_code code, संरचना c_व्यञ्जकम् arg)
 {
-  struct c_expr result;
+  संरचना c_व्यञ्जकम् result;
 
   result.original_code = code;
-  result.original_type = NULL;
+  result.original_type = रिक्त;
   result.m_decimal = 0;
 
-  if (reject_gcc_builtin (arg.value))
+  सचे (reject_gcc_builtin (arg.मानम्))
     {
-      result.value = error_mark_node;
+      result.मानम् = error_mark_ग्रन्थिः;
     }
-  else
+  अञ्ञथा
     {
-      result.value = build_unary_op (loc, code, arg.value, false);
+      result.मानम् = build_unary_op (loc, code, arg.मानम्, मिच्छा);
 
-      if (TREE_OVERFLOW_P (result.value) && !TREE_OVERFLOW_P (arg.value))
-	overflow_warning (loc, result.value, arg.value);
+      सचे (वृक्षः_OVERFLOW_P (result.मानम्) && !वृक्षः_OVERFLOW_P (arg.मानम्))
+	overflow_warning (loc, result.मानम्, arg.मानम्);
     }
 
   /* We are typically called when parsing a prefix token at LOC acting on
      ARG.  Reflect this by updating the source range of the result to
      start at LOC and end at the end of ARG.  */
-  set_c_expr_source_range (&result,
+  set_c_व्यञ्जकम्_source_range (&result,
 			   loc, arg.get_finish ());
 
-  return result;
+  पटिनिवत्त result;
 }
 
 /* Returns true if TYPE is a character type, *not* including wchar_t.  */
 
-bool
-char_type_p (tree type)
+तार्किक
+char_type_p (वृक्षः type)
 {
-  return (type == char_type_node
-	  || type == unsigned_char_type_node
-	  || type == signed_char_type_node
-	  || type == char16_type_node
-	  || type == char32_type_node);
+  पटिनिवत्त (type == char_type_ग्रन्थिः
+	  || type == unsigned_char_type_ग्रन्थिः
+	  || type == signed_char_type_ग्रन्थिः
+	  || type == char16_type_ग्रन्थिः
+	  || type == char32_type_ग्रन्थिः);
 }
 
 /* This is the entry point used by the parser to build binary operators
@@ -5125,268 +5125,268 @@ char_type_p (tree type)
 
    LOCATION is the location of the binary operator.  */
 
-struct c_expr
-parser_build_binary_op (location_t location, enum tree_code code,
-			struct c_expr arg1, struct c_expr arg2, tree orig_arg1)
+संरचना c_व्यञ्जकम्
+parser_build_द्विमान_op (location_t location, गणना वृक्षः_code code,
+			संरचना c_व्यञ्जकम् arg1, संरचना c_व्यञ्जकम् arg2, वृक्षः orig_arg1)
 {
-  struct c_expr result;
+  संरचना c_व्यञ्जकम् result;
   result.m_decimal = 0;
 
-  enum tree_code code1 = arg1.original_code;
-  enum tree_code code2 = arg2.original_code;
-  tree type1 = (arg1.original_type
+  गणना वृक्षः_code code1 = arg1.original_code;
+  गणना वृक्षः_code code2 = arg2.original_code;
+  वृक्षः type1 = (arg1.original_type
                 ? arg1.original_type
-                : TREE_TYPE (arg1.value));
-  tree type2 = (arg2.original_type
+                : वृक्षः_TYPE (arg1.मानम्));
+  वृक्षः type2 = (arg2.original_type
                 ? arg2.original_type
-                : TREE_TYPE (arg2.value));
+                : वृक्षः_TYPE (arg2.मानम्));
 
-  result.value = build_binary_op (location, code,
-				  arg1.value, arg2.value, true);
+  result.मानम् = build_द्विमान_op (location, code,
+				  arg1.मानम्, arg2.मानम्, सच्च);
   result.original_code = code;
-  result.original_type = NULL;
+  result.original_type = रिक्त;
   result.m_decimal = 0;
 
-  if (TREE_CODE (result.value) == ERROR_MARK)
+  सचे (वृक्षः_CODE (result.मानम्) == ERROR_MARK)
     {
-      set_c_expr_source_range (&result,
+      set_c_व्यञ्जकम्_source_range (&result,
 			       arg1.get_start (),
 			       arg2.get_finish ());
-      return result;
+      पटिनिवत्त result;
     }
 
-  if (location != UNKNOWN_LOCATION)
-    protected_set_expr_location (result.value, location);
+  सचे (location != UNKNOWN_LOCATION)
+    protected_set_व्यञ्जकम्_location (result.मानम्, location);
 
-  set_c_expr_source_range (&result,
+  set_c_व्यञ्जकम्_source_range (&result,
 			   arg1.get_start (),
 			   arg2.get_finish ());
 
   /* Check for cases such as x+y<<z which users are likely
      to misinterpret.  */
-  if (warn_parentheses)
-    warn_about_parentheses (location, code, code1, arg1.value, code2,
-			    arg2.value);
+  सचे (warn_parentheses)
+    warn_about_parentheses (location, code, code1, arg1.मानम्, code2,
+			    arg2.मानम्);
 
-  if (warn_logical_op)
-    warn_logical_operator (location, code, TREE_TYPE (result.value),
-			   code1, arg1.value, code2, arg2.value);
+  सचे (warn_logical_op)
+    warn_logical_operator (location, code, वृक्षः_TYPE (result.मानम्),
+			   code1, arg1.मानम्, code2, arg2.मानम्);
 
-  if (warn_constant_logical_operand
-      && (code == TRUTH_ANDIF_EXPR || code == TRUTH_ORIF_EXPR)
+  सचे (warn_constant_logical_operand
+      && (code == TRUTH_ANDIF_व्यञ्जकम् || code == TRUTH_ORIF_व्यञ्जकम्)
       && INTEGRAL_NB_TYPE_P (type1)
       && INTEGRAL_NB_TYPE_P (type2))
     {
-      const char *name = code == TRUTH_ANDIF_EXPR ? "&&" : "||";
-      if (orig_arg1 == NULL_TREE)
-	orig_arg1 = arg1.value;
-      auto enum_other_than_0_1 = [] (tree type) {
-	if (TREE_CODE (type) != ENUMERAL_TYPE)
-	  return false;
-	for (tree l = TYPE_VALUES (type); l; l = TREE_CHAIN (l))
+      ध्रुव वर्ण *name = code == TRUTH_ANDIF_व्यञ्जकम् ? "&&" : "||";
+      सचे (orig_arg1 == NULL_वृक्षः)
+	orig_arg1 = arg1.मानम्;
+      auto enum_other_than_0_1 = [] (वृक्षः type) {
+	सचे (वृक्षः_CODE (type) != ENUMERAL_TYPE)
+	  पटिनिवत्त मिच्छा;
+	अत्थाय (वृक्षः l = TYPE_मानानि (type); l; l = वृक्षः_CHAIN (l))
 	  {
-	    tree v = DECL_INITIAL (TREE_VALUE (l));
-	    if (!integer_zerop (v) && !integer_onep (v))
-	      return true;
+	    वृक्षः v = DECL_INITIAL (वृक्षः_मानम् (l));
+	    सचे (!integer_zerop (v) && !integer_onep (v))
+	      पटिनिवत्त सच्च;
 	  }
-	return false;
+	पटिनिवत्त मिच्छा;
       };
-      auto diagnose_constant_logical_operand = [=] (tree val, tree type) {
-	if (TREE_CODE (val) != INTEGER_CST || integer_zerop (val))
-	  return false;
-	if (integer_onep (val) && !enum_other_than_0_1 (type))
-	  return false;
+      auto diagnose_constant_logical_operand = [=] (वृक्षः val, वृक्षः type) {
+	सचे (वृक्षः_CODE (val) != INTEGER_CST || integer_zerop (val))
+	  पटिनिवत्त मिच्छा;
+	सचे (integer_onep (val) && !enum_other_than_0_1 (type))
+	  पटिनिवत्त मिच्छा;
 	gcc_rich_location richloc (location);
 	richloc.add_fixit_replace (name + 1);
 	auto_diagnostic_group d;
-	if (warning_at (location, OPT_Wconstant_logical_operand,
+	सचे (warning_at (location, OPT_Wconstant_logical_operand,
 			"use of logical %qs with constant operand %qE",
 			name, val))
 	  inform (&richloc, "use %qs for bitwise operation", name + 1);
-	return true;
+	पटिनिवत्त सच्च;
       };
-      if (!diagnose_constant_logical_operand (arg2.value, type2))
+      सचे (!diagnose_constant_logical_operand (arg2.मानम्, type2))
 	diagnose_constant_logical_operand (orig_arg1, type1);
     }
 
-  if (warn_tautological_compare)
+  सचे (warn_tautological_compare)
     {
-      tree lhs = arg1.value;
-      tree rhs = arg2.value;
-      if (TREE_CODE (lhs) == C_MAYBE_CONST_EXPR)
+      वृक्षः lhs = arg1.मानम्;
+      वृक्षः rhs = arg2.मानम्;
+      सचे (वृक्षः_CODE (lhs) == C_MAYBE_CONST_व्यञ्जकम्)
 	{
-	  if (C_MAYBE_CONST_EXPR_PRE (lhs) != NULL_TREE
-	      && TREE_SIDE_EFFECTS (C_MAYBE_CONST_EXPR_PRE (lhs)))
-	    lhs = NULL_TREE;
-	  else
-	    lhs = C_MAYBE_CONST_EXPR_EXPR (lhs);
+	  सचे (C_MAYBE_CONST_व्यञ्जकम्_PRE (lhs) != NULL_वृक्षः
+	      && वृक्षः_SIDE_EFFECTS (C_MAYBE_CONST_व्यञ्जकम्_PRE (lhs)))
+	    lhs = NULL_वृक्षः;
+	  अञ्ञथा
+	    lhs = C_MAYBE_CONST_व्यञ्जकम्_व्यञ्जकम् (lhs);
 	}
-      if (TREE_CODE (rhs) == C_MAYBE_CONST_EXPR)
+      सचे (वृक्षः_CODE (rhs) == C_MAYBE_CONST_व्यञ्जकम्)
 	{
-	  if (C_MAYBE_CONST_EXPR_PRE (rhs) != NULL_TREE
-	      && TREE_SIDE_EFFECTS (C_MAYBE_CONST_EXPR_PRE (rhs)))
-	    rhs = NULL_TREE;
-	  else
-	    rhs = C_MAYBE_CONST_EXPR_EXPR (rhs);
+	  सचे (C_MAYBE_CONST_व्यञ्जकम्_PRE (rhs) != NULL_वृक्षः
+	      && वृक्षः_SIDE_EFFECTS (C_MAYBE_CONST_व्यञ्जकम्_PRE (rhs)))
+	    rhs = NULL_वृक्षः;
+	  अञ्ञथा
+	    rhs = C_MAYBE_CONST_व्यञ्जकम्_व्यञ्जकम् (rhs);
 	}
-      if (lhs != NULL_TREE && rhs != NULL_TREE)
+      सचे (lhs != NULL_वृक्षः && rhs != NULL_वृक्षः)
 	warn_tautological_cmp (location, code, lhs, rhs);
     }
 
-  if (warn_logical_not_paren
-      && TREE_CODE_CLASS (code) == tcc_comparison
-      && code1 == TRUTH_NOT_EXPR
-      && code2 != TRUTH_NOT_EXPR
+  सचे (warn_logical_not_paren
+      && वृक्षः_CODE_CLASS (code) == tcc_comparison
+      && code1 == TRUTH_NOT_व्यञ्जकम्
+      && code2 != TRUTH_NOT_व्यञ्जकम्
       /* Avoid warning for !!x == y.  */
-      && (TREE_CODE (arg1.value) != NE_EXPR
-	  || !integer_zerop (TREE_OPERAND (arg1.value, 1))))
+      && (वृक्षः_CODE (arg1.मानम्) != NE_व्यञ्जकम्
+	  || !integer_zerop (वृक्षः_OPERAND (arg1.मानम्, 1))))
     {
       /* Avoid warning for !b == y where b has _Bool type.  */
-      tree t = integer_zero_node;
-      if (TREE_CODE (arg1.value) == EQ_EXPR
-	  && integer_zerop (TREE_OPERAND (arg1.value, 1))
-	  && TREE_TYPE (TREE_OPERAND (arg1.value, 0)) == integer_type_node)
+      वृक्षः t = integer_zero_ग्रन्थिः;
+      सचे (वृक्षः_CODE (arg1.मानम्) == EQ_व्यञ्जकम्
+	  && integer_zerop (वृक्षः_OPERAND (arg1.मानम्, 1))
+	  && वृक्षः_TYPE (वृक्षः_OPERAND (arg1.मानम्, 0)) == integer_type_ग्रन्थिः)
 	{
-	  t = TREE_OPERAND (arg1.value, 0);
-	  do
+	  t = वृक्षः_OPERAND (arg1.मानम्, 0);
+	  करोहि
 	    {
-	      if (TREE_TYPE (t) != integer_type_node)
-		break;
-	      if (TREE_CODE (t) == C_MAYBE_CONST_EXPR)
-		t = C_MAYBE_CONST_EXPR_EXPR (t);
-	      else if (CONVERT_EXPR_P (t))
-		t = TREE_OPERAND (t, 0);
-	      else
-		break;
+	      सचे (वृक्षः_TYPE (t) != integer_type_ग्रन्थिः)
+		भङ्ग;
+	      सचे (वृक्षः_CODE (t) == C_MAYBE_CONST_व्यञ्जकम्)
+		t = C_MAYBE_CONST_व्यञ्जकम्_व्यञ्जकम् (t);
+	      अञ्ञथा सचे (CONVERT_व्यञ्जकम्_P (t))
+		t = वृक्षः_OPERAND (t, 0);
+	      अञ्ञथा
+		भङ्ग;
 	    }
-	  while (1);
+	  याव (1);
 	}
-      if (!C_BOOLEAN_TYPE_P (TREE_TYPE (t)))
-	warn_logical_not_parentheses (location, code, arg1.value, arg2.value);
+      सचे (!C_BOOLEAN_TYPE_P (वृक्षः_TYPE (t)))
+	warn_logical_not_parentheses (location, code, arg1.मानम्, arg2.मानम्);
     }
 
   /* Warn about comparisons against string literals, with the exception
      of testing for equality or inequality of a string literal with NULL.  */
-  if (code == EQ_EXPR || code == NE_EXPR)
+  सचे (code == EQ_व्यञ्जकम् || code == NE_व्यञ्जकम्)
     {
-      if ((code1 == STRING_CST
-	   && !integer_zerop (tree_strip_nop_conversions (arg2.value)))
+      सचे ((code1 == STRING_CST
+	   && !integer_zerop (वृक्षः_strip_nop_conversions (arg2.मानम्)))
 	  || (code2 == STRING_CST
-	      && !integer_zerop (tree_strip_nop_conversions (arg1.value))))
+	      && !integer_zerop (वृक्षः_strip_nop_conversions (arg1.मानम्))))
 	warning_at (location, OPT_Waddress,
 		    "comparison with string literal results in unspecified behavior");
       /* Warn for ptr == '\0', it's likely that it should've been ptr[0].  */
-      if (POINTER_TYPE_P (type1)
-	  && null_pointer_constant_p (arg2.value)
+      सचे (POINTER_TYPE_P (type1)
+	  && null_pointer_constant_p (arg2.मानम्)
 	  && char_type_p (type2))
 	{
 	  auto_diagnostic_group d;
-	  if (warning_at (location, OPT_Wpointer_compare,
+	  सचे (warning_at (location, OPT_Wpointer_compare,
 			    "comparison between pointer and zero character "
 			    "constant"))
 	    inform (arg1.get_start (),
 		      "did you mean to dereference the pointer?");
 	}
-      else if (POINTER_TYPE_P (type2)
-	       && null_pointer_constant_p (arg1.value)
+      अञ्ञथा सचे (POINTER_TYPE_P (type2)
+	       && null_pointer_constant_p (arg1.मानम्)
 	       && char_type_p (type1))
 	{
 	  auto_diagnostic_group d;
-	  if (warning_at (location, OPT_Wpointer_compare,
+	  सचे (warning_at (location, OPT_Wpointer_compare,
 			    "comparison between pointer and zero character "
 			    "constant"))
 	    inform (arg2.get_start (),
 		      "did you mean to dereference the pointer?");
 	}
     }
-  else if (TREE_CODE_CLASS (code) == tcc_comparison
+  अञ्ञथा सचे (वृक्षः_CODE_CLASS (code) == tcc_comparison
 	   && (code1 == STRING_CST || code2 == STRING_CST))
     warning_at (location, OPT_Waddress,
 		"comparison with string literal results in unspecified "
 		"behavior");
 
-  if (warn_zero_as_null_pointer_constant
+  सचे (warn_zero_as_null_pointer_constant
       && c_inhibit_evaluation_warnings == 0
-      && TREE_CODE_CLASS (code) == tcc_comparison)
+      && वृक्षः_CODE_CLASS (code) == tcc_comparison)
     {
-      if ((TREE_CODE (type1) == POINTER_TYPE
-	   || TREE_CODE (type1) == NULLPTR_TYPE)
+      सचे ((वृक्षः_CODE (type1) == POINTER_TYPE
+	   || वृक्षः_CODE (type1) == NULLPTR_TYPE)
 	  && INTEGRAL_TYPE_P (type2)
-	  && null_pointer_constant_p (arg2.value))
+	  && null_pointer_constant_p (arg2.मानम्))
 	warning_at (arg2.get_location(), OPT_Wzero_as_null_pointer_constant,
 		    "zero as null pointer constant");
 
-      if ((TREE_CODE (type2) == POINTER_TYPE
-	   || TREE_CODE (type2) == NULLPTR_TYPE)
+      सचे ((वृक्षः_CODE (type2) == POINTER_TYPE
+	   || वृक्षः_CODE (type2) == NULLPTR_TYPE)
 	  && INTEGRAL_TYPE_P (type1)
-	  && null_pointer_constant_p (arg1.value))
+	  && null_pointer_constant_p (arg1.मानम्))
 	warning_at (arg1.get_location(), OPT_Wzero_as_null_pointer_constant,
 		    "zero as null pointer constant");
     }
 
-  if (warn_array_compare
-      && TREE_CODE_CLASS (code) == tcc_comparison
-      && TREE_CODE (type1) == ARRAY_TYPE
-      && TREE_CODE (type2) == ARRAY_TYPE)
-    do_warn_array_compare (location, code, arg1.value, arg2.value);
+  सचे (warn_array_compare
+      && वृक्षः_CODE_CLASS (code) == tcc_comparison
+      && वृक्षः_CODE (type1) == ARRAY_TYPE
+      && वृक्षः_CODE (type2) == ARRAY_TYPE)
+    do_warn_array_compare (location, code, arg1.मानम्, arg2.मानम्);
 
-  if (TREE_OVERFLOW_P (result.value)
-      && !TREE_OVERFLOW_P (arg1.value)
-      && !TREE_OVERFLOW_P (arg2.value))
-    overflow_warning (location, result.value);
+  सचे (वृक्षः_OVERFLOW_P (result.मानम्)
+      && !वृक्षः_OVERFLOW_P (arg1.मानम्)
+      && !वृक्षः_OVERFLOW_P (arg2.मानम्))
+    overflow_warning (location, result.मानम्);
 
   /* Warn about comparisons of different enum types.  */
-  if (warn_enum_compare
-      && TREE_CODE_CLASS (code) == tcc_comparison
-      && TREE_CODE (type1) == ENUMERAL_TYPE
-      && TREE_CODE (type2) == ENUMERAL_TYPE
+  सचे (warn_enum_compare
+      && वृक्षः_CODE_CLASS (code) == tcc_comparison
+      && वृक्षः_CODE (type1) == ENUMERAL_TYPE
+      && वृक्षः_CODE (type2) == ENUMERAL_TYPE
       && TYPE_MAIN_VARIANT (type1) != TYPE_MAIN_VARIANT (type2))
     warning_at (location, OPT_Wenum_compare,
 		"comparison between %qT and %qT",
 		type1, type2);
 
-  if (warn_xor_used_as_pow
-      && code == BIT_XOR_EXPR
+  सचे (warn_xor_used_as_pow
+      && code == BIT_XOR_व्यञ्जकम्
       && arg1.m_decimal
       && arg2.m_decimal)
-    check_for_xor_used_as_pow (arg1.get_location (), arg1.value,
+    check_for_xor_used_as_pow (arg1.get_location (), arg1.मानम्,
 			       location,
-			       arg2.get_location (), arg2.value);
+			       arg2.get_location (), arg2.मानम्);
 
-  return result;
+  पटिनिवत्त result;
 }
 
 /* Return a tree for the difference of pointers OP0 and OP1.
    The resulting tree has type ptrdiff_t.  If POINTER_SUBTRACT sanitization is
    enabled, assign to INSTRUMENT_EXPR call to libsanitizer.  */
 
-static tree
-pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
+स्थिर वृक्षः
+pointer_diff (location_t loc, वृक्षः op0, वृक्षः op1, वृक्षः *instrument_व्यञ्जकम्)
 {
-  tree restype = ptrdiff_type_node;
-  tree result, inttype;
+  वृक्षः restype = ptrdiff_type_ग्रन्थिः;
+  वृक्षः result, inttype;
 
-  addr_space_t as0 = TYPE_ADDR_SPACE (TREE_TYPE (TREE_TYPE (op0)));
-  addr_space_t as1 = TYPE_ADDR_SPACE (TREE_TYPE (TREE_TYPE (op1)));
-  tree target_type = TREE_TYPE (TREE_TYPE (op0));
-  tree orig_op0 = op0;
-  tree orig_op1 = op1;
+  addr_space_t as0 = TYPE_ADDR_SPACE (वृक्षः_TYPE (वृक्षः_TYPE (op0)));
+  addr_space_t as1 = TYPE_ADDR_SPACE (वृक्षः_TYPE (वृक्षः_TYPE (op1)));
+  वृक्षः target_type = वृक्षः_TYPE (वृक्षः_TYPE (op0));
+  वृक्षः orig_op0 = op0;
+  वृक्षः orig_op1 = op1;
 
   /* If the operands point into different address spaces, we need to
      explicitly convert them to pointers into the common address space
      before we can subtract the numerical address values.  */
-  if (as0 != as1)
+  सचे (as0 != as1)
     {
       addr_space_t as_common;
-      tree common_type;
+      वृक्षः common_type;
 
       /* Determine the common superset address space.  This is guaranteed
 	 to exist because the caller verified that comp_target_types
 	 returned non-zero.  */
-      if (!addr_space_superset (as0, as1, &as_common))
+      सचे (!addr_space_superset (as0, as1, &as_common))
 	gcc_unreachable ();
 
-      common_type = common_pointer_type (TREE_TYPE (op0), TREE_TYPE (op1), NULL_TREE);
+      common_type = common_pointer_type (वृक्षः_TYPE (op0), वृक्षः_TYPE (op1), NULL_वृक्षः);
       op0 = convert (common_type, op0);
       op1 = convert (common_type, op1);
     }
@@ -5394,26 +5394,26 @@ pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
   /* Determine integer type result of the subtraction.  This will usually
      be the same as the result type (ptrdiff_t), but may need to be a wider
      type if pointers for the address space are wider than ptrdiff_t.  */
-  if (TYPE_PRECISION (restype) < TYPE_PRECISION (TREE_TYPE (op0)))
-    inttype = c_common_type_for_size (TYPE_PRECISION (TREE_TYPE (op0)), 0);
-  else
+  सचे (TYPE_PRECISION (restype) < TYPE_PRECISION (वृक्षः_TYPE (op0)))
+    inttype = c_common_type_for_size (TYPE_PRECISION (वृक्षः_TYPE (op0)), 0);
+  अञ्ञथा
     inttype = restype;
 
-  if (VOID_TYPE_P (target_type))
+  सचे (VOID_TYPE_P (target_type))
     pedwarn (loc, OPT_Wpointer_arith,
 	     "pointer of type %<void *%> used in subtraction");
-  if (TREE_CODE (target_type) == FUNCTION_TYPE)
+  सचे (वृक्षः_CODE (target_type) == FUNCTION_TYPE)
     pedwarn (loc, OPT_Wpointer_arith,
 	     "pointer to a function used in subtraction");
 
-  if (current_function_decl != NULL_TREE
+  सचे (current_function_decl != NULL_वृक्षः
       && sanitize_flags_p (SANITIZE_POINTER_SUBTRACT))
     {
-      op0 = save_expr (c_fully_fold (op0, false, NULL));
-      op1 = save_expr (c_fully_fold (op1, false, NULL));
+      op0 = save_व्यञ्जकम् (c_fully_fold (op0, मिच्छा, रिक्त));
+      op1 = save_व्यञ्जकम् (c_fully_fold (op1, मिच्छा, रिक्त));
 
-      tree tt = builtin_decl_explicit (BUILT_IN_ASAN_POINTER_SUBTRACT);
-      *instrument_expr = build_call_expr_loc (loc, tt, 2, op0, op1);
+      वृक्षः tt = builtin_decl_explicit (BUILT_IN_ASAN_POINTER_SUBTRACT);
+      *instrument_व्यञ्जकम् = build_call_व्यञ्जकम्_loc (loc, tt, 2, op0, op1);
     }
 
   /* First do the subtraction, then build the divide operator
@@ -5425,36 +5425,36 @@ pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
      ptrdiff_type to support differences larger than half the address
      space, cast the pointers to some larger integer type and do the
      computations in that type.  */
-  if (TYPE_PRECISION (inttype) > TYPE_PRECISION (TREE_TYPE (op0)))
-    op0 = build_binary_op (loc, MINUS_EXPR, convert (inttype, op0),
-			   convert (inttype, op1), false);
-  else
+  सचे (TYPE_PRECISION (inttype) > TYPE_PRECISION (वृक्षः_TYPE (op0)))
+    op0 = build_द्विमान_op (loc, MINUS_व्यञ्जकम्, convert (inttype, op0),
+			   convert (inttype, op1), मिच्छा);
+  अञ्ञथा
     {
       /* Cast away qualifiers.  */
-      op0 = convert (c_common_type (TREE_TYPE (op0), TREE_TYPE (op0)), op0);
-      op1 = convert (c_common_type (TREE_TYPE (op1), TREE_TYPE (op1)), op1);
-      op0 = build2_loc (loc, POINTER_DIFF_EXPR, inttype, op0, op1);
+      op0 = convert (c_common_type (वृक्षः_TYPE (op0), वृक्षः_TYPE (op0)), op0);
+      op1 = convert (c_common_type (वृक्षः_TYPE (op1), वृक्षः_TYPE (op1)), op1);
+      op0 = build2_loc (loc, POINTER_DIFF_व्यञ्जकम्, inttype, op0, op1);
     }
 
   /* This generates an error if op1 is pointer to incomplete type.  */
-  if (!COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (TREE_TYPE (orig_op1))))
+  सचे (!COMPLETE_OR_VOID_TYPE_P (वृक्षः_TYPE (वृक्षः_TYPE (orig_op1))))
     error_at (loc, "arithmetic on pointer to an incomplete type");
-  else if (verify_type_context (loc, TCTX_POINTER_ARITH,
-				TREE_TYPE (TREE_TYPE (orig_op0))))
+  अञ्ञथा सचे (verify_type_context (loc, TCTX_POINTER_ARITH,
+				वृक्षः_TYPE (वृक्षः_TYPE (orig_op0))))
     verify_type_context (loc, TCTX_POINTER_ARITH,
-			 TREE_TYPE (TREE_TYPE (orig_op1)));
+			 वृक्षः_TYPE (वृक्षः_TYPE (orig_op1)));
 
   op1 = c_size_in_bytes (target_type);
 
-  if (pointer_to_zero_sized_aggr_p (TREE_TYPE (orig_op1)))
+  सचे (pointer_to_zero_sized_aggr_p (वृक्षः_TYPE (orig_op1)))
     error_at (loc, "arithmetic on pointer to an empty aggregate");
 
   /* Divide by the size, in easiest possible way.  */
-  result = fold_build2_loc (loc, EXACT_DIV_EXPR, inttype,
+  result = fold_build2_loc (loc, EXACT_DIV_व्यञ्जकम्, inttype,
 			    op0, convert (inttype, op1));
 
   /* Convert to final result type if necessary.  */
-  return convert (restype, result);
+  पटिनिवत्त convert (restype, result);
 }
 
 /* Expand atomic compound assignments into an appropriate sequence as
@@ -5510,38 +5510,38 @@ done:
    return the old value of LHS (this is only for postincrement and
    postdecrement).  */
 
-static tree
-build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
-		     tree rhs, bool return_old_p)
+स्थिर वृक्षः
+build_atomic_assign (location_t loc, वृक्षः lhs, गणना वृक्षः_code modifycode,
+		     वृक्षः rhs, तार्किक return_old_p)
 {
-  tree fndecl, func_call;
-  vec<tree, va_gc> *params;
-  tree val, nonatomic_lhs_type, nonatomic_rhs_type, newval, newval_addr;
-  tree old, old_addr;
-  tree compound_stmt = NULL_TREE;
-  tree stmt, goto_stmt;
-  tree loop_label, loop_decl, done_label, done_decl;
+  वृक्षः fndecl, func_call;
+  vec<वृक्षः, va_gc> *params;
+  वृक्षः val, nonatomic_lhs_type, nonatomic_rhs_type, newval, newval_addr;
+  वृक्षः old, old_addr;
+  वृक्षः compound_stmt = NULL_वृक्षः;
+  वृक्षः stmt, goto_stmt;
+  वृक्षः loop_label, loop_decl, done_label, done_decl;
 
-  tree lhs_type = TREE_TYPE (lhs);
-  tree lhs_addr = build_unary_op (loc, ADDR_EXPR, lhs, false);
-  tree seq_cst = build_int_cst (integer_type_node, MEMMODEL_SEQ_CST);
-  tree rhs_semantic_type = TREE_TYPE (rhs);
-  tree nonatomic_rhs_semantic_type;
-  tree rhs_type;
+  वृक्षः lhs_type = वृक्षः_TYPE (lhs);
+  वृक्षः lhs_addr = build_unary_op (loc, ADDR_व्यञ्जकम्, lhs, मिच्छा);
+  वृक्षः seq_cst = build_int_cst (integer_type_ग्रन्थिः, MEMMODEL_SEQ_CST);
+  वृक्षः rhs_semantic_type = वृक्षः_TYPE (rhs);
+  वृक्षः nonatomic_rhs_semantic_type;
+  वृक्षः rhs_type;
 
   gcc_assert (TYPE_ATOMIC (lhs_type));
 
-  if (return_old_p)
-    gcc_assert (modifycode == PLUS_EXPR || modifycode == MINUS_EXPR);
+  सचे (return_old_p)
+    gcc_assert (modifycode == PLUS_व्यञ्जकम् || modifycode == MINUS_व्यञ्जकम्);
 
   /* Allocate enough vector items for a compare_exchange.  */
   vec_alloc (params, 6);
 
   /* Create a compound statement to hold the sequence of statements
      with a loop.  */
-  if (modifycode != NOP_EXPR)
+  सचे (modifycode != NOP_व्यञ्जकम्)
     {
-      compound_stmt = c_begin_compound_stmt (false);
+      compound_stmt = c_begin_compound_stmt (मिच्छा);
 
       /* For consistency with build_modify_expr on non-_Atomic,
 	 mark the lhs as read.  Also, it would be very hard to match
@@ -5551,16 +5551,16 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
 
   /* Remove any excess precision (which is only present here in the
      case of compound assignments).  */
-  if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
+  सचे (वृक्षः_CODE (rhs) == EXCESS_PRECISION_व्यञ्जकम्)
     {
-      gcc_assert (modifycode != NOP_EXPR);
-      rhs = TREE_OPERAND (rhs, 0);
+      gcc_assert (modifycode != NOP_व्यञ्जकम्);
+      rhs = वृक्षः_OPERAND (rhs, 0);
     }
-  rhs_type = TREE_TYPE (rhs);
+  rhs_type = वृक्षः_TYPE (rhs);
 
   /* Fold the RHS if it hasn't already been folded.  */
-  if (modifycode != NOP_EXPR)
-    rhs = c_fully_fold (rhs, false, NULL);
+  सचे (modifycode != NOP_व्यञ्जकम्)
+    rhs = c_fully_fold (rhs, मिच्छा, रिक्त);
 
   /* Remove the qualifiers for the rest of the expressions and create
      the VAL temp variable to hold the RHS.  */
@@ -5569,231 +5569,231 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
   nonatomic_rhs_semantic_type = build_qualified_type (rhs_semantic_type,
 						      TYPE_UNQUALIFIED);
   val = create_tmp_var_raw (nonatomic_rhs_type);
-  TREE_ADDRESSABLE (val) = 1;
+  वृक्षः_ADDRESSABLE (val) = 1;
   suppress_warning (val);
-  rhs = build4 (TARGET_EXPR, nonatomic_rhs_type, val, rhs, NULL_TREE,
-		NULL_TREE);
-  TREE_SIDE_EFFECTS (rhs) = 1;
-  SET_EXPR_LOCATION (rhs, loc);
-  if (modifycode != NOP_EXPR)
+  rhs = build4 (TARGET_व्यञ्जकम्, nonatomic_rhs_type, val, rhs, NULL_वृक्षः,
+		NULL_वृक्षः);
+  वृक्षः_SIDE_EFFECTS (rhs) = 1;
+  SET_व्यञ्जकम्_LOCATION (rhs, loc);
+  सचे (modifycode != NOP_व्यञ्जकम्)
     add_stmt (rhs);
 
   /* NOP_EXPR indicates it's a straight store of the RHS. Simply issue
      an atomic_store.  */
-  if (modifycode == NOP_EXPR)
+  सचे (modifycode == NOP_व्यञ्जकम्)
     {
       compound_stmt = rhs;
       /* Build __atomic_store (&lhs, &val, SEQ_CST)  */
-      rhs = build_unary_op (loc, ADDR_EXPR, val, false);
+      rhs = build_unary_op (loc, ADDR_व्यञ्जकम्, val, मिच्छा);
       fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_STORE);
-      params->quick_push (lhs_addr);
-      params->quick_push (rhs);
-      params->quick_push (seq_cst);
-      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
+      params->quick_प्रक्षिप (lhs_addr);
+      params->quick_प्रक्षिप (rhs);
+      params->quick_प्रक्षिप (seq_cst);
+      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, रिक्त);
 
-      compound_stmt = build2 (COMPOUND_EXPR, void_type_node,
+      compound_stmt = build2 (COMPOUND_व्यञ्जकम्, void_type_ग्रन्थिः,
 			      compound_stmt, func_call);
 
       /* VAL is the value which was stored, return a COMPOUND_STMT of
 	 the statement and that value.  */
-      return build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt, val);
+      पटिनिवत्त build2 (COMPOUND_व्यञ्जकम्, nonatomic_lhs_type, compound_stmt, val);
     }
 
   /* Attempt to implement the atomic operation as an __atomic_fetch_* or
      __atomic_*_fetch built-in rather than a CAS loop.  atomic_bool type
      isn't applicable for such builtins.  ??? Do we want to handle enums?  */
-  if ((TREE_CODE (lhs_type) == INTEGER_TYPE || POINTER_TYPE_P (lhs_type))
-      && TREE_CODE (rhs_type) == INTEGER_TYPE)
+  सचे ((वृक्षः_CODE (lhs_type) == INTEGER_TYPE || POINTER_TYPE_P (lhs_type))
+      && वृक्षः_CODE (rhs_type) == INTEGER_TYPE)
     {
       built_in_function fncode;
-      switch (modifycode)
+      विकल्प (modifycode)
 	{
-	case PLUS_EXPR:
-	case POINTER_PLUS_EXPR:
+	पक्ष PLUS_व्यञ्जकम्:
+	पक्ष POINTER_PLUS_व्यञ्जकम्:
 	  fncode = (return_old_p
 		    ? BUILT_IN_ATOMIC_FETCH_ADD_N
 		    : BUILT_IN_ATOMIC_ADD_FETCH_N);
-	  break;
-	case MINUS_EXPR:
+	  भङ्ग;
+	पक्ष MINUS_व्यञ्जकम्:
 	  fncode = (return_old_p
 		    ? BUILT_IN_ATOMIC_FETCH_SUB_N
 		    : BUILT_IN_ATOMIC_SUB_FETCH_N);
-	  break;
-	case BIT_AND_EXPR:
+	  भङ्ग;
+	पक्ष BIT_AND_व्यञ्जकम्:
 	  fncode = (return_old_p
 		    ? BUILT_IN_ATOMIC_FETCH_AND_N
 		    : BUILT_IN_ATOMIC_AND_FETCH_N);
-	  break;
-	case BIT_IOR_EXPR:
+	  भङ्ग;
+	पक्ष BIT_IOR_व्यञ्जकम्:
 	  fncode = (return_old_p
 		    ? BUILT_IN_ATOMIC_FETCH_OR_N
 		    : BUILT_IN_ATOMIC_OR_FETCH_N);
-	  break;
-	case BIT_XOR_EXPR:
+	  भङ्ग;
+	पक्ष BIT_XOR_व्यञ्जकम्:
 	  fncode = (return_old_p
 		    ? BUILT_IN_ATOMIC_FETCH_XOR_N
 		    : BUILT_IN_ATOMIC_XOR_FETCH_N);
-	  break;
-	default:
-	  goto cas_loop;
+	  भङ्ग;
+	स्वभाव:
+	  गच्छ cas_loop;
 	}
 
       /* We can only use "_1" through "_16" variants of the atomic fetch
 	 built-ins.  */
-      unsigned HOST_WIDE_INT size = tree_to_uhwi (TYPE_SIZE_UNIT (lhs_type));
-      if (size != 1 && size != 2 && size != 4 && size != 8 && size != 16)
-	goto cas_loop;
+      unsigned HOST_WIDE_INT size = वृक्षः_to_uhwi (TYPE_SIZE_UNIT (lhs_type));
+      सचे (size != 1 && size != 2 && size != 4 && size != 8 && size != 16)
+	गच्छ cas_loop;
 
       /* If this is a pointer type, we need to multiply by the size of
 	 the pointer target type.  */
-      if (POINTER_TYPE_P (lhs_type))
+      सचे (POINTER_TYPE_P (lhs_type))
 	{
-	  if (!COMPLETE_TYPE_P (TREE_TYPE (lhs_type))
+	  सचे (!COMPLETE_TYPE_P (वृक्षः_TYPE (lhs_type))
 	      /* ??? This would introduce -Wdiscarded-qualifiers
 		 warning: __atomic_fetch_* expect volatile void *
 		 type as the first argument.  (Assignments between
 		 atomic and non-atomic objects are OK.) */
 	      || TYPE_RESTRICT (lhs_type))
-	    goto cas_loop;
-	  tree sz = TYPE_SIZE_UNIT (TREE_TYPE (lhs_type));
-	  rhs = fold_build2_loc (loc, MULT_EXPR, ptrdiff_type_node,
-				 convert (ptrdiff_type_node, rhs),
-				 convert (ptrdiff_type_node, sz));
+	    गच्छ cas_loop;
+	  वृक्षः sz = TYPE_SIZE_UNIT (वृक्षः_TYPE (lhs_type));
+	  rhs = fold_build2_loc (loc, MULT_व्यञ्जकम्, ptrdiff_type_ग्रन्थिः,
+				 convert (ptrdiff_type_ग्रन्थिः, rhs),
+				 convert (ptrdiff_type_ग्रन्थिः, sz));
 	}
 
       /* Build __atomic_fetch_* (&lhs, &val, SEQ_CST), or
 	 __atomic_*_fetch (&lhs, &val, SEQ_CST).  */
       fndecl = builtin_decl_explicit (fncode);
-      params->quick_push (lhs_addr);
-      params->quick_push (rhs);
-      params->quick_push (seq_cst);
-      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
+      params->quick_प्रक्षिप (lhs_addr);
+      params->quick_प्रक्षिप (rhs);
+      params->quick_प्रक्षिप (seq_cst);
+      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, रिक्त);
 
       newval = create_tmp_var_raw (nonatomic_lhs_type);
-      TREE_ADDRESSABLE (newval) = 1;
+      वृक्षः_ADDRESSABLE (newval) = 1;
       suppress_warning (newval);
-      rhs = build4 (TARGET_EXPR, nonatomic_lhs_type, newval, func_call,
-		    NULL_TREE, NULL_TREE);
-      SET_EXPR_LOCATION (rhs, loc);
+      rhs = build4 (TARGET_व्यञ्जकम्, nonatomic_lhs_type, newval, func_call,
+		    NULL_वृक्षः, NULL_वृक्षः);
+      SET_व्यञ्जकम्_LOCATION (rhs, loc);
       add_stmt (rhs);
 
       /* Finish the compound statement.  */
-      compound_stmt = c_end_compound_stmt (loc, compound_stmt, false);
+      compound_stmt = c_end_compound_stmt (loc, compound_stmt, मिच्छा);
 
       /* NEWVAL is the value which was stored, return a COMPOUND_STMT of
 	 the statement and that value.  */
-      return build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt, newval);
+      पटिनिवत्त build2 (COMPOUND_व्यञ्जकम्, nonatomic_lhs_type, compound_stmt, newval);
     }
 
 cas_loop:
   /* Create the variables and labels required for the op= form.  */
   old = create_tmp_var_raw (nonatomic_lhs_type);
-  old_addr = build_unary_op (loc, ADDR_EXPR, old, false);
-  TREE_ADDRESSABLE (old) = 1;
+  old_addr = build_unary_op (loc, ADDR_व्यञ्जकम्, old, मिच्छा);
+  वृक्षः_ADDRESSABLE (old) = 1;
   suppress_warning (old);
 
   newval = create_tmp_var_raw (nonatomic_lhs_type);
-  newval_addr = build_unary_op (loc, ADDR_EXPR, newval, false);
-  TREE_ADDRESSABLE (newval) = 1;
+  newval_addr = build_unary_op (loc, ADDR_व्यञ्जकम्, newval, मिच्छा);
+  वृक्षः_ADDRESSABLE (newval) = 1;
   suppress_warning (newval);
 
   loop_decl = create_artificial_label (loc);
-  loop_label = build1 (LABEL_EXPR, void_type_node, loop_decl);
+  loop_label = build1 (LABEL_व्यञ्जकम्, void_type_ग्रन्थिः, loop_decl);
 
   done_decl = create_artificial_label (loc);
-  done_label = build1 (LABEL_EXPR, void_type_node, done_decl);
+  done_label = build1 (LABEL_व्यञ्जकम्, void_type_ग्रन्थिः, done_decl);
 
   /* __atomic_load (addr, &old, SEQ_CST).  */
   fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_LOAD);
-  params->quick_push (lhs_addr);
-  params->quick_push (old_addr);
-  params->quick_push (seq_cst);
-  func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
-  old = build4 (TARGET_EXPR, nonatomic_lhs_type, old, func_call, NULL_TREE,
-		NULL_TREE);
+  params->quick_प्रक्षिप (lhs_addr);
+  params->quick_प्रक्षिप (old_addr);
+  params->quick_प्रक्षिप (seq_cst);
+  func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, रिक्त);
+  old = build4 (TARGET_व्यञ्जकम्, nonatomic_lhs_type, old, func_call, NULL_वृक्षः,
+		NULL_वृक्षः);
   add_stmt (old);
   params->truncate (0);
 
   /* Create the expressions for floating-point environment
      manipulation, if required.  */
-  bool need_fenv = (flag_trapping_math
+  तार्किक need_fenv = (flag_trapping_math
 		    && (FLOAT_TYPE_P (lhs_type) || FLOAT_TYPE_P (rhs_type)));
-  tree hold_call = NULL_TREE, clear_call = NULL_TREE, update_call = NULL_TREE;
-  if (need_fenv)
+  वृक्षः hold_call = NULL_वृक्षः, clear_call = NULL_वृक्षः, update_call = NULL_वृक्षः;
+  सचे (need_fenv)
     targetm.atomic_assign_expand_fenv (&hold_call, &clear_call, &update_call);
 
-  if (hold_call)
+  सचे (hold_call)
     add_stmt (hold_call);
 
   /* loop:  */
   add_stmt (loop_label);
 
   /* newval = old + val;  */
-  if (rhs_type != rhs_semantic_type)
-    val = build1 (EXCESS_PRECISION_EXPR, nonatomic_rhs_semantic_type, val);
-  rhs = build_binary_op (loc, modifycode,
-			 convert_lvalue_to_rvalue (loc, old, true, true),
-			 val, true);
-  if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
+  सचे (rhs_type != rhs_semantic_type)
+    val = build1 (EXCESS_PRECISION_व्यञ्जकम्, nonatomic_rhs_semantic_type, val);
+  rhs = build_द्विमान_op (loc, modifycode,
+			 convert_lvalue_to_rvalue (loc, old, सच्च, सच्च),
+			 val, सच्च);
+  सचे (वृक्षः_CODE (rhs) == EXCESS_PRECISION_व्यञ्जकम्)
     {
-      tree eptype = TREE_TYPE (rhs);
-      rhs = c_fully_fold (TREE_OPERAND (rhs, 0), false, NULL);
-      rhs = build1 (EXCESS_PRECISION_EXPR, eptype, rhs);
+      वृक्षः eptype = वृक्षः_TYPE (rhs);
+      rhs = c_fully_fold (वृक्षः_OPERAND (rhs, 0), मिच्छा, रिक्त);
+      rhs = build1 (EXCESS_PRECISION_व्यञ्जकम्, eptype, rhs);
     }
-  else
-    rhs = c_fully_fold (rhs, false, NULL);
+  अञ्ञथा
+    rhs = c_fully_fold (rhs, मिच्छा, रिक्त);
   rhs = convert_for_assignment (loc, UNKNOWN_LOCATION, nonatomic_lhs_type,
-				rhs, NULL_TREE, ic_assign, false, NULL_TREE,
-				NULL_TREE, 0);
+				rhs, NULL_वृक्षः, ic_assign, मिच्छा, NULL_वृक्षः,
+				NULL_वृक्षः, 0);
   /* The temporary variable for NEWVAL is only gimplified correctly (in
      particular, given a DECL_CONTEXT) if used in a TARGET_EXPR.  To avoid
      subsequent ICEs in nested function processing after an error, ensure such
      a TARGET_EXPR is built even after an error.  */
-  if (rhs == error_mark_node)
+  सचे (rhs == error_mark_ग्रन्थिः)
     rhs = old;
-  rhs = build4 (TARGET_EXPR, nonatomic_lhs_type, newval, rhs, NULL_TREE,
-		NULL_TREE);
-  SET_EXPR_LOCATION (rhs, loc);
+  rhs = build4 (TARGET_व्यञ्जकम्, nonatomic_lhs_type, newval, rhs, NULL_वृक्षः,
+		NULL_वृक्षः);
+  SET_व्यञ्जकम्_LOCATION (rhs, loc);
   add_stmt (rhs);
 
   /* if (__atomic_compare_exchange (addr, &old, &new, false, SEQ_CST, SEQ_CST))
        goto done;  */
   fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_COMPARE_EXCHANGE);
-  params->quick_push (lhs_addr);
-  params->quick_push (old_addr);
-  params->quick_push (newval_addr);
-  params->quick_push (integer_zero_node);
-  params->quick_push (seq_cst);
-  params->quick_push (seq_cst);
-  func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
+  params->quick_प्रक्षिप (lhs_addr);
+  params->quick_प्रक्षिप (old_addr);
+  params->quick_प्रक्षिप (newval_addr);
+  params->quick_प्रक्षिप (integer_zero_ग्रन्थिः);
+  params->quick_प्रक्षिप (seq_cst);
+  params->quick_प्रक्षिप (seq_cst);
+  func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, रिक्त);
 
-  goto_stmt = build1 (GOTO_EXPR, void_type_node, done_decl);
-  SET_EXPR_LOCATION (goto_stmt, loc);
+  goto_stmt = build1 (GOTO_व्यञ्जकम्, void_type_ग्रन्थिः, done_decl);
+  SET_व्यञ्जकम्_LOCATION (goto_stmt, loc);
 
-  stmt = build3 (COND_EXPR, void_type_node, func_call, goto_stmt, NULL_TREE);
-  SET_EXPR_LOCATION (stmt, loc);
+  stmt = build3 (COND_व्यञ्जकम्, void_type_ग्रन्थिः, func_call, goto_stmt, NULL_वृक्षः);
+  SET_व्यञ्जकम्_LOCATION (stmt, loc);
   add_stmt (stmt);
 
-  if (clear_call)
+  सचे (clear_call)
     add_stmt (clear_call);
 
   /* goto loop;  */
-  goto_stmt  = build1 (GOTO_EXPR, void_type_node, loop_decl);
-  SET_EXPR_LOCATION (goto_stmt, loc);
+  goto_stmt  = build1 (GOTO_व्यञ्जकम्, void_type_ग्रन्थिः, loop_decl);
+  SET_व्यञ्जकम्_LOCATION (goto_stmt, loc);
   add_stmt (goto_stmt);
 
   /* done:  */
   add_stmt (done_label);
 
-  if (update_call)
+  सचे (update_call)
     add_stmt (update_call);
 
   /* Finish the compound statement.  */
-  compound_stmt = c_end_compound_stmt (loc, compound_stmt, false);
+  compound_stmt = c_end_compound_stmt (loc, compound_stmt, मिच्छा);
 
   /* NEWVAL is the value that was successfully stored, return a
      COMPOUND_EXPR of the statement and the appropriate value.  */
-  return build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt,
+  पटिनिवत्त build2 (COMPOUND_व्यञ्जकम्, nonatomic_lhs_type, compound_stmt,
 		 return_old_p ? old : newval);
 }
 
@@ -5808,18 +5808,18 @@ cas_loop:
 
    LOCATION is the location of the operator.  */
 
-tree
-build_unary_op (location_t location, enum tree_code code, tree xarg,
-		bool noconvert)
+वृक्षः
+build_unary_op (location_t location, गणना वृक्षः_code code, वृक्षः xarg,
+		तार्किक noconvert)
 {
   /* No default_conversion here.  It causes trouble for ADDR_EXPR.  */
-  tree arg = xarg;
-  tree argtype = NULL_TREE;
-  enum tree_code typecode;
-  tree val;
-  tree ret = error_mark_node;
-  tree eptype = NULL_TREE;
-  const char *invalid_op_diag;
+  वृक्षः arg = xarg;
+  वृक्षः argtype = NULL_वृक्षः;
+  गणना वृक्षः_code typecode;
+  वृक्षः val;
+  वृक्षः ret = error_mark_ग्रन्थिः;
+  वृक्षः eptype = NULL_वृक्षः;
+  ध्रुव वर्ण *invalid_op_diag;
 
   /* If ARG is wrapped in a call to .ACCESS_WITH_SIZE — created when the
      C parser rvalue-converts a counted_by-annotated member access (see
@@ -5830,651 +5830,651 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
      handle the wrapped form.  PR123569 fixed the ++/-- side of this by
      suppressing wrapper creation in the parser; the rvalue-consuming
      ops still receive the wrapper and need to strip it here.  */
-  if (is_access_with_size_p (arg))
+  सचे (is_access_with_size_p (arg))
     xarg = arg = get_ref_from_access_with_size (arg);
 
   gcc_checking_assert (!is_access_with_size_p (arg));
 
-  bool int_operands = EXPR_INT_CONST_OPERANDS (xarg);
-  if (int_operands)
-    arg = remove_c_maybe_const_expr (arg);
+  तार्किक int_operands = व्यञ्जकम्_INT_CONST_OPERANDS (xarg);
+  सचे (int_operands)
+    arg = remove_c_maybe_const_व्यञ्जकम् (arg);
 
-  if (code != ADDR_EXPR)
+  सचे (code != ADDR_व्यञ्जकम्)
     arg = require_complete_type (location, arg);
 
-  typecode = TREE_CODE (TREE_TYPE (arg));
-  if (typecode == ERROR_MARK)
-    return error_mark_node;
-  if (typecode == ENUMERAL_TYPE || typecode == BOOLEAN_TYPE)
+  typecode = वृक्षः_CODE (वृक्षः_TYPE (arg));
+  सचे (typecode == ERROR_MARK)
+    पटिनिवत्त error_mark_ग्रन्थिः;
+  सचे (typecode == ENUMERAL_TYPE || typecode == BOOLEAN_TYPE)
     typecode = INTEGER_TYPE;
 
-  if ((invalid_op_diag
-       = targetm.invalid_unary_op (code, TREE_TYPE (xarg))))
+  सचे ((invalid_op_diag
+       = targetm.invalid_unary_op (code, वृक्षः_TYPE (xarg))))
     {
       error_at (location, invalid_op_diag);
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  if (TREE_CODE (arg) == EXCESS_PRECISION_EXPR)
+  सचे (वृक्षः_CODE (arg) == EXCESS_PRECISION_व्यञ्जकम्)
     {
-      eptype = TREE_TYPE (arg);
-      arg = TREE_OPERAND (arg, 0);
+      eptype = वृक्षः_TYPE (arg);
+      arg = वृक्षः_OPERAND (arg, 0);
     }
 
-  switch (code)
+  विकल्प (code)
     {
-    case CONVERT_EXPR:
+    पक्ष CONVERT_व्यञ्जकम्:
       /* This is used for unary plus, because a CONVERT_EXPR
 	 is enough to prevent anybody from looking inside for
 	 associativity, but won't generate any code.  */
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
+      सचे (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
 	    || typecode == FIXED_POINT_TYPE || typecode == COMPLEX_TYPE
 	    || typecode == BITINT_TYPE
-	    || gnu_vector_type_p (TREE_TYPE (arg))))
+	    || gnu_vector_type_p (वृक्षः_TYPE (arg))))
 	{
 	  error_at (location, "wrong type argument to unary plus");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      else if (!noconvert)
+      अञ्ञथा सचे (!noconvert)
 	arg = default_conversion (arg);
       arg = non_lvalue_loc (location, arg);
-      break;
+      भङ्ग;
 
-    case NEGATE_EXPR:
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
+    पक्ष NEGATE_व्यञ्जकम्:
+      सचे (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
 	    || typecode == FIXED_POINT_TYPE || typecode == COMPLEX_TYPE
 	    || typecode == BITINT_TYPE
-	    || gnu_vector_type_p (TREE_TYPE (arg))))
+	    || gnu_vector_type_p (वृक्षः_TYPE (arg))))
 	{
 	  error_at (location, "wrong type argument to unary minus");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      else if (!noconvert)
+      अञ्ञथा सचे (!noconvert)
 	arg = default_conversion (arg);
-      break;
+      भङ्ग;
 
-    case BIT_NOT_EXPR:
+    पक्ष BIT_NOT_व्यञ्जकम्:
       /* ~ works on integer types and non float vectors. */
-      if (typecode == INTEGER_TYPE
+      सचे (typecode == INTEGER_TYPE
 	  || typecode == BITINT_TYPE
-	  || (gnu_vector_type_p (TREE_TYPE (arg))
-	      && !VECTOR_FLOAT_TYPE_P (TREE_TYPE (arg))))
+	  || (gnu_vector_type_p (वृक्षः_TYPE (arg))
+	      && !VECTOR_FLOAT_TYPE_P (वृक्षः_TYPE (arg))))
 	{
-	  tree e = arg;
+	  वृक्षः e = arg;
 
 	  /* Warn if the expression has boolean value.  */
-	  while (TREE_CODE (e) == COMPOUND_EXPR)
-	    e = TREE_OPERAND (e, 1);
+	  याव (वृक्षः_CODE (e) == COMPOUND_व्यञ्जकम्)
+	    e = वृक्षः_OPERAND (e, 1);
 
-	  if ((C_BOOLEAN_TYPE_P (TREE_TYPE (arg))
-	       || truth_value_p (TREE_CODE (e))))
+	  सचे ((C_BOOLEAN_TYPE_P (वृक्षः_TYPE (arg))
+	       || truth_मानम्_p (वृक्षः_CODE (e))))
 	    {
 	      auto_diagnostic_group d;
-	      if (warning_at (location, OPT_Wbool_operation,
+	      सचे (warning_at (location, OPT_Wbool_operation,
 				"%<~%> on a boolean expression"))
 		{
 		  gcc_rich_location richloc (location);
-		  richloc.add_fixit_insert_before (location, "!");
+		  richloc.add_fixit_निवेशय_before (location, "!");
 		  inform (&richloc, "did you mean to use logical not?");
 		}
 	    }
-	  if (!noconvert)
+	  सचे (!noconvert)
 	    arg = default_conversion (arg);
 	}
-      else if (typecode == COMPLEX_TYPE)
+      अञ्ञथा सचे (typecode == COMPLEX_TYPE)
 	{
-	  code = CONJ_EXPR;
+	  code = CONJ_व्यञ्जकम्;
 	  pedwarn (location, OPT_Wpedantic,
 		   "ISO C does not support %<~%> for complex conjugation");
-	  if (!noconvert)
+	  सचे (!noconvert)
 	    arg = default_conversion (arg);
 	}
-      else
+      अञ्ञथा
 	{
 	  error_at (location, "wrong type argument to bit-complement");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      break;
+      भङ्ग;
 
-    case ABS_EXPR:
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE))
+    पक्ष ABS_व्यञ्जकम्:
+      सचे (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE))
 	{
 	  error_at (location, "wrong type argument to abs");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      else if (!noconvert)
+      अञ्ञथा सचे (!noconvert)
 	arg = default_conversion (arg);
-      break;
+      भङ्ग;
 
-    case ABSU_EXPR:
-      if (!(typecode == INTEGER_TYPE))
+    पक्ष ABSU_व्यञ्जकम्:
+      सचे (!(typecode == INTEGER_TYPE))
 	{
 	  error_at (location, "wrong type argument to absu");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      else if (!noconvert)
+      अञ्ञथा सचे (!noconvert)
 	arg = default_conversion (arg);
-      break;
+      भङ्ग;
 
-    case CONJ_EXPR:
+    पक्ष CONJ_व्यञ्जकम्:
       /* Conjugating a real value is a no-op, but allow it anyway.  */
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
+      सचे (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
 	    || typecode == COMPLEX_TYPE))
 	{
 	  error_at (location, "wrong type argument to conjugation");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      else if (!noconvert)
+      अञ्ञथा सचे (!noconvert)
 	arg = default_conversion (arg);
-      break;
+      भङ्ग;
 
-    case TRUTH_NOT_EXPR:
-      if (typecode != INTEGER_TYPE && typecode != FIXED_POINT_TYPE
+    पक्ष TRUTH_NOT_व्यञ्जकम्:
+      सचे (typecode != INTEGER_TYPE && typecode != FIXED_POINT_TYPE
 	  && typecode != REAL_TYPE && typecode != POINTER_TYPE
 	  && typecode != COMPLEX_TYPE && typecode != NULLPTR_TYPE
 	  && typecode != BITINT_TYPE)
 	{
 	  error_at (location,
 		    "wrong type argument to unary exclamation mark");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      if (int_operands)
+      सचे (int_operands)
 	{
 	  arg = c_objc_common_truthvalue_conversion (location, xarg);
-	  arg = remove_c_maybe_const_expr (arg);
+	  arg = remove_c_maybe_const_व्यञ्जकम् (arg);
 	}
-      else
+      अञ्ञथा
 	arg = c_objc_common_truthvalue_conversion (location, arg);
       ret = invert_truthvalue_loc (location, arg);
-      eptype = NULL_TREE;
+      eptype = NULL_वृक्षः;
       /* If the TRUTH_NOT_EXPR has been folded, reset the location.  */
-      if (EXPR_P (ret) && EXPR_HAS_LOCATION (ret))
-	location = EXPR_LOCATION (ret);
-      goto return_build_unary_op;
+      सचे (व्यञ्जकम्_P (ret) && व्यञ्जकम्_HAS_LOCATION (ret))
+	location = व्यञ्जकम्_LOCATION (ret);
+      गच्छ return_build_unary_op;
 
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-      ret = build_real_imag_expr (location, code, arg);
-      if (ret == error_mark_node)
-	return error_mark_node;
-      if (eptype && TREE_CODE (eptype) == COMPLEX_TYPE)
-	eptype = TREE_TYPE (eptype);
-      goto return_build_unary_op;
+    पक्ष REALPART_व्यञ्जकम्:
+    पक्ष IMAGPART_व्यञ्जकम्:
+      ret = build_real_imag_व्यञ्जकम् (location, code, arg);
+      सचे (ret == error_mark_ग्रन्थिः)
+	पटिनिवत्त error_mark_ग्रन्थिः;
+      सचे (eptype && वृक्षः_CODE (eptype) == COMPLEX_TYPE)
+	eptype = वृक्षः_TYPE (eptype);
+      गच्छ return_build_unary_op;
 
-    case PREINCREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-    case PREDECREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
+    पक्ष PREINCREMENT_व्यञ्जकम्:
+    पक्ष POSTINCREMENT_व्यञ्जकम्:
+    पक्ष PREDECREMENT_व्यञ्जकम्:
+    पक्ष POSTDECREMENT_व्यञ्जकम्:
 
-      if (TREE_CODE (arg) == C_MAYBE_CONST_EXPR)
+      सचे (वृक्षः_CODE (arg) == C_MAYBE_CONST_व्यञ्जकम्)
 	{
-	  tree inner = build_unary_op (location, code,
-				       C_MAYBE_CONST_EXPR_EXPR (arg),
+	  वृक्षः inner = build_unary_op (location, code,
+				       C_MAYBE_CONST_व्यञ्जकम्_व्यञ्जकम् (arg),
 				       noconvert);
-	  if (inner == error_mark_node)
-	    return error_mark_node;
-	  ret = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (inner),
-			C_MAYBE_CONST_EXPR_PRE (arg), inner);
-	  gcc_assert (!C_MAYBE_CONST_EXPR_INT_OPERANDS (arg));
-	  C_MAYBE_CONST_EXPR_NON_CONST (ret) = 1;
-	  goto return_build_unary_op;
+	  सचे (inner == error_mark_ग्रन्थिः)
+	    पटिनिवत्त error_mark_ग्रन्थिः;
+	  ret = build2 (C_MAYBE_CONST_व्यञ्जकम्, वृक्षः_TYPE (inner),
+			C_MAYBE_CONST_व्यञ्जकम्_PRE (arg), inner);
+	  gcc_assert (!C_MAYBE_CONST_व्यञ्जकम्_INT_OPERANDS (arg));
+	  C_MAYBE_CONST_व्यञ्जकम्_NON_CONST (ret) = 1;
+	  गच्छ return_build_unary_op;
 	}
 
       /* Complain about anything that is not a true lvalue.  In
 	 Objective-C, skip this check for property_refs.  */
-      if (!objc_is_property_ref (arg)
+      सचे (!objc_is_property_ref (arg)
 	  && !lvalue_or_else (location,
-			      arg, ((code == PREINCREMENT_EXPR
-				     || code == POSTINCREMENT_EXPR)
+			      arg, ((code == PREINCREMENT_व्यञ्जकम्
+				     || code == POSTINCREMENT_व्यञ्जकम्)
 				    ? lv_increment
 				    : lv_decrement)))
-	return error_mark_node;
+	पटिनिवत्त error_mark_ग्रन्थिः;
 
-      if (warn_cxx_compat && TREE_CODE (TREE_TYPE (arg)) == ENUMERAL_TYPE)
+      सचे (warn_cxx_compat && वृक्षः_CODE (वृक्षः_TYPE (arg)) == ENUMERAL_TYPE)
 	{
-	  if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+	  सचे (code == PREINCREMENT_व्यञ्जकम् || code == POSTINCREMENT_व्यञ्जकम्)
 	    warning_at (location, OPT_Wc___compat,
 			"increment of enumeration value is invalid in C++");
-	  else
+	  अञ्ञथा
 	    warning_at (location, OPT_Wc___compat,
 			"decrement of enumeration value is invalid in C++");
 	}
 
-      if (C_BOOLEAN_TYPE_P (TREE_TYPE (arg)))
+      सचे (C_BOOLEAN_TYPE_P (वृक्षः_TYPE (arg)))
 	{
-	  if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+	  सचे (code == PREINCREMENT_व्यञ्जकम् || code == POSTINCREMENT_व्यञ्जकम्)
 	    warning_at (location, OPT_Wbool_operation,
 			"increment of a boolean expression");
-	  else
+	  अञ्ञथा
 	    warning_at (location, OPT_Wbool_operation,
 			"decrement of a boolean expression");
 	}
 
       /* Ensure the argument is fully folded inside any SAVE_EXPR.  */
-      arg = c_fully_fold (arg, false, NULL, true);
+      arg = c_fully_fold (arg, मिच्छा, रिक्त, सच्च);
 
-      bool atomic_op;
+      तार्किक atomic_op;
       atomic_op = really_atomic_lvalue (arg);
 
       /* Increment or decrement the real part of the value,
 	 and don't change the imaginary part.  */
-      if (typecode == COMPLEX_TYPE)
+      सचे (typecode == COMPLEX_TYPE)
 	{
-	  tree real, imag;
+	  वृक्षः real, imag;
 
 	  pedwarn_c23 (location, OPT_Wpedantic,
 		       "ISO C does not support %<++%> and %<--%> on complex "
 		       "types before C2Y");
 
-	  if (!atomic_op)
+	  सचे (!atomic_op)
 	    {
 	      arg = stabilize_reference (arg);
-	      real = build_unary_op (EXPR_LOCATION (arg), REALPART_EXPR, arg,
-				     true);
-	      imag = build_unary_op (EXPR_LOCATION (arg), IMAGPART_EXPR, arg,
-				     true);
-	      real = build_unary_op (EXPR_LOCATION (arg), code, real, true);
-	      if (real == error_mark_node || imag == error_mark_node)
-		return error_mark_node;
-	      ret = build2 (COMPLEX_EXPR, TREE_TYPE (arg),
+	      real = build_unary_op (व्यञ्जकम्_LOCATION (arg), REALPART_व्यञ्जकम्, arg,
+				     सच्च);
+	      imag = build_unary_op (व्यञ्जकम्_LOCATION (arg), IMAGPART_व्यञ्जकम्, arg,
+				     सच्च);
+	      real = build_unary_op (व्यञ्जकम्_LOCATION (arg), code, real, सच्च);
+	      सचे (real == error_mark_ग्रन्थिः || imag == error_mark_ग्रन्थिः)
+		पटिनिवत्त error_mark_ग्रन्थिः;
+	      ret = build2 (COMPLEX_व्यञ्जकम्, वृक्षः_TYPE (arg),
 			    real, imag);
-	      goto return_build_unary_op;
+	      गच्छ return_build_unary_op;
 	    }
 	}
 
       /* Report invalid types.  */
 
-      if (typecode != POINTER_TYPE && typecode != FIXED_POINT_TYPE
+      सचे (typecode != POINTER_TYPE && typecode != FIXED_POINT_TYPE
 	  && typecode != INTEGER_TYPE && typecode != REAL_TYPE
 	  && typecode != COMPLEX_TYPE && typecode != BITINT_TYPE
-	  && !gnu_vector_type_p (TREE_TYPE (arg)))
+	  && !gnu_vector_type_p (वृक्षः_TYPE (arg)))
 	{
-	  if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+	  सचे (code == PREINCREMENT_व्यञ्जकम् || code == POSTINCREMENT_व्यञ्जकम्)
 	    error_at (location, "wrong type argument to increment");
-	  else
+	  अञ्ञथा
 	    error_at (location, "wrong type argument to decrement");
 
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
 
       {
-	tree inc;
+	वृक्षः inc;
 
-	argtype = TREE_TYPE (arg);
+	argtype = वृक्षः_TYPE (arg);
 
 	/* Compute the increment.  */
 
-	if (typecode == POINTER_TYPE)
+	सचे (typecode == POINTER_TYPE)
 	  {
 	    /* If pointer target is an incomplete type,
 	       we just cannot know how to do the arithmetic.  */
-	    if (!COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (argtype)))
+	    सचे (!COMPLETE_OR_VOID_TYPE_P (वृक्षः_TYPE (argtype)))
 	      {
-		if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+		सचे (code == PREINCREMENT_व्यञ्जकम् || code == POSTINCREMENT_व्यञ्जकम्)
 		  error_at (location,
 			    "increment of pointer to an incomplete type %qT",
-			    TREE_TYPE (argtype));
-		else
+			    वृक्षः_TYPE (argtype));
+		अञ्ञथा
 		  error_at (location,
 			    "decrement of pointer to an incomplete type %qT",
-			    TREE_TYPE (argtype));
+			    वृक्षः_TYPE (argtype));
 	      }
-	    else if (TREE_CODE (TREE_TYPE (argtype)) == FUNCTION_TYPE
-		     || VOID_TYPE_P (TREE_TYPE (argtype)))
+	    अञ्ञथा सचे (वृक्षः_CODE (वृक्षः_TYPE (argtype)) == FUNCTION_TYPE
+		     || VOID_TYPE_P (वृक्षः_TYPE (argtype)))
 	      {
-		if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+		सचे (code == PREINCREMENT_व्यञ्जकम् || code == POSTINCREMENT_व्यञ्जकम्)
 		  pedwarn (location, OPT_Wpointer_arith,
 			   "wrong type argument to increment");
-		else
+		अञ्ञथा
 		  pedwarn (location, OPT_Wpointer_arith,
 			   "wrong type argument to decrement");
 	      }
-	    else
+	    अञ्ञथा
 	      verify_type_context (location, TCTX_POINTER_ARITH,
-				   TREE_TYPE (argtype));
+				   वृक्षः_TYPE (argtype));
 
-	    inc = c_size_in_bytes (TREE_TYPE (argtype));
+	    inc = c_size_in_bytes (वृक्षः_TYPE (argtype));
 	    inc = convert_to_ptrofftype_loc (location, inc);
 	  }
-	else if (FRACT_MODE_P (TYPE_MODE (argtype)))
+	अञ्ञथा सचे (FRACT_MODE_P (TYPE_MODE (argtype)))
 	  {
 	    /* For signed fract types, we invert ++ to -- or
 	       -- to ++, and change inc from 1 to -1, because
 	       it is not possible to represent 1 in signed fract constants.
 	       For unsigned fract types, the result always overflows and
 	       we get an undefined (original) or the maximum value.  */
-	    if (code == PREINCREMENT_EXPR)
-	      code = PREDECREMENT_EXPR;
-	    else if (code == PREDECREMENT_EXPR)
-	      code = PREINCREMENT_EXPR;
-	    else if (code == POSTINCREMENT_EXPR)
-	      code = POSTDECREMENT_EXPR;
-	    else /* code == POSTDECREMENT_EXPR  */
-	      code = POSTINCREMENT_EXPR;
+	    सचे (code == PREINCREMENT_व्यञ्जकम्)
+	      code = PREDECREMENT_व्यञ्जकम्;
+	    अञ्ञथा सचे (code == PREDECREMENT_व्यञ्जकम्)
+	      code = PREINCREMENT_व्यञ्जकम्;
+	    अञ्ञथा सचे (code == POSTINCREMENT_व्यञ्जकम्)
+	      code = POSTDECREMENT_व्यञ्जकम्;
+	    अञ्ञथा /* code == POSTDECREMENT_EXPR  */
+	      code = POSTINCREMENT_व्यञ्जकम्;
 
-	    inc = integer_minus_one_node;
+	    inc = integer_minus_one_ग्रन्थिः;
 	    inc = convert (argtype, inc);
 	  }
-	else
+	अञ्ञथा
 	  {
 	    inc = VECTOR_TYPE_P (argtype)
 	      ? build_one_cst (argtype)
-	      : integer_one_node;
+	      : integer_one_ग्रन्थिः;
 	    inc = convert (argtype, inc);
 	  }
 
 	/* If 'arg' is an Objective-C PROPERTY_REF expression, then we
 	   need to ask Objective-C to build the increment or decrement
 	   expression for it.  */
-	if (objc_is_property_ref (arg))
-	  return objc_build_incr_expr_for_property_ref (location, code,
+	सचे (objc_is_property_ref (arg))
+	  पटिनिवत्त objc_build_incr_व्यञ्जकम्_for_property_ref (location, code,
 							arg, inc);
 
 	/* Report a read-only lvalue.  */
-	if (TYPE_READONLY (argtype))
+	सचे (TYPE_READONLY (argtype))
 	  {
 	    readonly_error (location, arg,
-			    ((code == PREINCREMENT_EXPR
-			      || code == POSTINCREMENT_EXPR)
+			    ((code == PREINCREMENT_व्यञ्जकम्
+			      || code == POSTINCREMENT_व्यञ्जकम्)
 			     ? lv_increment : lv_decrement));
-	    return error_mark_node;
+	    पटिनिवत्त error_mark_ग्रन्थिः;
 	  }
-	else if (TREE_READONLY (arg))
+	अञ्ञथा सचे (वृक्षः_READONLY (arg))
 	  readonly_warning (arg,
-			    ((code == PREINCREMENT_EXPR
-			      || code == POSTINCREMENT_EXPR)
+			    ((code == PREINCREMENT_व्यञ्जकम्
+			      || code == POSTINCREMENT_व्यञ्जकम्)
 			     ? lv_increment : lv_decrement));
 
 	/* If the argument is atomic, use the special code sequences for
 	   atomic compound assignment.  */
-	if (atomic_op)
+	सचे (atomic_op)
 	  {
 	    arg = stabilize_reference (arg);
 	    ret = build_atomic_assign (location, arg,
-				       ((code == PREINCREMENT_EXPR
-					 || code == POSTINCREMENT_EXPR)
-					? PLUS_EXPR
-					: MINUS_EXPR),
+				       ((code == PREINCREMENT_व्यञ्जकम्
+					 || code == POSTINCREMENT_व्यञ्जकम्)
+					? PLUS_व्यञ्जकम्
+					: MINUS_व्यञ्जकम्),
 				       (FRACT_MODE_P (TYPE_MODE (argtype))
 					? inc
-					: integer_one_node),
-				       (code == POSTINCREMENT_EXPR
-					|| code == POSTDECREMENT_EXPR));
-	    goto return_build_unary_op;
+					: integer_one_ग्रन्थिः),
+				       (code == POSTINCREMENT_व्यञ्जकम्
+					|| code == POSTDECREMENT_व्यञ्जकम्));
+	    गच्छ return_build_unary_op;
 	  }
 
-	tree true_res;
-	if (c_hardbool_type_attr (TREE_TYPE (arg), NULL, &true_res))
+	वृक्षः true_res;
+	सचे (c_hardbool_type_attr (वृक्षः_TYPE (arg), रिक्त, &true_res))
 	  {
-	    tree larg = stabilize_reference (arg);
-	    tree sarg = save_expr (larg);
-	    switch (code)
+	    वृक्षः larg = stabilize_reference (arg);
+	    वृक्षः sarg = save_व्यञ्जकम् (larg);
+	    विकल्प (code)
 	      {
-	      case PREINCREMENT_EXPR:
-		val = build2 (MODIFY_EXPR, TREE_TYPE (larg), larg, true_res);
-		val = build2 (COMPOUND_EXPR, TREE_TYPE (larg), sarg, val);
-		break;
-	      case POSTINCREMENT_EXPR:
-		val = build2 (MODIFY_EXPR, TREE_TYPE (larg), larg, true_res);
-		val = build2 (COMPOUND_EXPR, TREE_TYPE (larg), val, sarg);
-		val = build2 (COMPOUND_EXPR, TREE_TYPE (larg), sarg, val);
-		break;
-	      case PREDECREMENT_EXPR:
+	      पक्ष PREINCREMENT_व्यञ्जकम्:
+		val = build2 (MODIFY_व्यञ्जकम्, वृक्षः_TYPE (larg), larg, true_res);
+		val = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (larg), sarg, val);
+		भङ्ग;
+	      पक्ष POSTINCREMENT_व्यञ्जकम्:
+		val = build2 (MODIFY_व्यञ्जकम्, वृक्षः_TYPE (larg), larg, true_res);
+		val = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (larg), val, sarg);
+		val = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (larg), sarg, val);
+		भङ्ग;
+	      पक्ष PREDECREMENT_व्यञ्जकम्:
 		{
-		  tree rarg = convert_lvalue_to_rvalue (location, sarg,
-							true, true);
+		  वृक्षः rarg = convert_lvalue_to_rvalue (location, sarg,
+							सच्च, सच्च);
 		  rarg = invert_truthvalue_loc (location, rarg);
-		  rarg = convert (TREE_TYPE (sarg), rarg);
-		  val = build2 (MODIFY_EXPR, TREE_TYPE (larg), larg, rarg);
+		  rarg = convert (वृक्षः_TYPE (sarg), rarg);
+		  val = build2 (MODIFY_व्यञ्जकम्, वृक्षः_TYPE (larg), larg, rarg);
 		}
-		break;
-	      case POSTDECREMENT_EXPR:
+		भङ्ग;
+	      पक्ष POSTDECREMENT_व्यञ्जकम्:
 		{
-		  tree rarg = convert_lvalue_to_rvalue (location, sarg,
-							true, true);
+		  वृक्षः rarg = convert_lvalue_to_rvalue (location, sarg,
+							सच्च, सच्च);
 		  rarg = invert_truthvalue_loc (location, rarg);
-		  tree iarg = convert (TREE_TYPE (larg), rarg);
-		  val = build2 (MODIFY_EXPR, TREE_TYPE (larg), larg, iarg);
-		  val = build2 (COMPOUND_EXPR, TREE_TYPE (larg), val, sarg);
-		  val = build2 (COMPOUND_EXPR, TREE_TYPE (larg), sarg, val);
+		  वृक्षः iarg = convert (वृक्षः_TYPE (larg), rarg);
+		  val = build2 (MODIFY_व्यञ्जकम्, वृक्षः_TYPE (larg), larg, iarg);
+		  val = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (larg), val, sarg);
+		  val = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (larg), sarg, val);
 		}
-		break;
-	      default:
+		भङ्ग;
+	      स्वभाव:
 		gcc_unreachable ();
 	      }
-	    TREE_SIDE_EFFECTS (val) = 1;
+	    वृक्षः_SIDE_EFFECTS (val) = 1;
 	  }
-	else if (C_BOOLEAN_TYPE_P (TREE_TYPE (arg)))
+	अञ्ञथा सचे (C_BOOLEAN_TYPE_P (वृक्षः_TYPE (arg)))
 	  val = boolean_increment (code, arg);
-	else
-	  val = build2 (code, TREE_TYPE (arg), arg, inc);
-	TREE_SIDE_EFFECTS (val) = 1;
-	if (TYPE_QUALS (TREE_TYPE (val)) != TYPE_UNQUALIFIED)
-	  TREE_TYPE (val) = c_build_qualified_type (TREE_TYPE (val),
+	अञ्ञथा
+	  val = build2 (code, वृक्षः_TYPE (arg), arg, inc);
+	वृक्षः_SIDE_EFFECTS (val) = 1;
+	सचे (TYPE_QUALS (वृक्षः_TYPE (val)) != TYPE_UNQUALIFIED)
+	  वृक्षः_TYPE (val) = c_build_qualified_type (वृक्षः_TYPE (val),
 						    TYPE_UNQUALIFIED);
 	ret = val;
-	goto return_build_unary_op;
+	गच्छ return_build_unary_op;
       }
 
-    case ADDR_EXPR:
+    पक्ष ADDR_व्यञ्जकम्:
       /* Note that this operation never does default_conversion.  */
 
       /* The operand of unary '&' must be an lvalue (which excludes
 	 expressions of type void), or, in C99, the result of a [] or
 	 unary '*' operator.  */
-      if (VOID_TYPE_P (TREE_TYPE (arg))
-	  && TYPE_QUALS (TREE_TYPE (arg)) == TYPE_UNQUALIFIED
+      सचे (VOID_TYPE_P (वृक्षः_TYPE (arg))
+	  && TYPE_QUALS (वृक्षः_TYPE (arg)) == TYPE_UNQUALIFIED
 	  && (!INDIRECT_REF_P (arg) || !flag_isoc99))
 	pedwarn (location, 0, "taking address of expression of type %<void%>");
 
       /* Let &* cancel out to simplify resulting code.  */
-      if (INDIRECT_REF_P (arg))
+      सचे (INDIRECT_REF_P (arg))
 	{
 	  /* Don't let this be an lvalue.  */
-	  if (lvalue_p (TREE_OPERAND (arg, 0)))
-	    return non_lvalue_loc (location, TREE_OPERAND (arg, 0));
-	  ret = TREE_OPERAND (arg, 0);
-	  goto return_build_unary_op;
+	  सचे (lvalue_p (वृक्षः_OPERAND (arg, 0)))
+	    पटिनिवत्त non_lvalue_loc (location, वृक्षः_OPERAND (arg, 0));
+	  ret = वृक्षः_OPERAND (arg, 0);
+	  गच्छ return_build_unary_op;
 	}
 
       /* Anything not already handled and not a true memory reference
 	 or a non-lvalue array is an error.  */
-      if (typecode != FUNCTION_TYPE && !noconvert
+      सचे (typecode != FUNCTION_TYPE && !noconvert
 	  && !lvalue_or_else (location, arg, lv_addressof))
-	return error_mark_node;
+	पटिनिवत्त error_mark_ग्रन्थिः;
 
       /* Move address operations inside C_MAYBE_CONST_EXPR to simplify
 	 folding later.  */
-      if (TREE_CODE (arg) == C_MAYBE_CONST_EXPR)
+      सचे (वृक्षः_CODE (arg) == C_MAYBE_CONST_व्यञ्जकम्)
 	{
-	  tree inner = build_unary_op (location, code,
-				       C_MAYBE_CONST_EXPR_EXPR (arg),
+	  वृक्षः inner = build_unary_op (location, code,
+				       C_MAYBE_CONST_व्यञ्जकम्_व्यञ्जकम् (arg),
 				       noconvert);
-	  ret = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (inner),
-			C_MAYBE_CONST_EXPR_PRE (arg), inner);
-	  gcc_assert (!C_MAYBE_CONST_EXPR_INT_OPERANDS (arg));
-	  C_MAYBE_CONST_EXPR_NON_CONST (ret)
-	    = C_MAYBE_CONST_EXPR_NON_CONST (arg);
-	  goto return_build_unary_op;
+	  ret = build2 (C_MAYBE_CONST_व्यञ्जकम्, वृक्षः_TYPE (inner),
+			C_MAYBE_CONST_व्यञ्जकम्_PRE (arg), inner);
+	  gcc_assert (!C_MAYBE_CONST_व्यञ्जकम्_INT_OPERANDS (arg));
+	  C_MAYBE_CONST_व्यञ्जकम्_NON_CONST (ret)
+	    = C_MAYBE_CONST_व्यञ्जकम्_NON_CONST (arg);
+	  गच्छ return_build_unary_op;
 	}
 
       /* Ordinary case; arg is a COMPONENT_REF or a decl.  */
 
-      argtype = TREE_TYPE (arg);
+      argtype = वृक्षः_TYPE (arg);
 
       /* If the lvalue is const or volatile, merge that into the type
 	 to which the address will point.  This is only needed
 	 for function types.  */
-      if ((DECL_P (arg) || REFERENCE_CLASS_P (arg))
-	  && (TREE_READONLY (arg) || TREE_THIS_VOLATILE (arg))
-	  && TREE_CODE (argtype) == FUNCTION_TYPE)
+      सचे ((DECL_P (arg) || REFERENCE_CLASS_P (arg))
+	  && (वृक्षः_READONLY (arg) || वृक्षः_THIS_VOLATILE (arg))
+	  && वृक्षः_CODE (argtype) == FUNCTION_TYPE)
 	{
-	  int orig_quals = TYPE_QUALS (strip_array_types (argtype));
-	  int quals = orig_quals;
+	  पूर्णाङ्क orig_quals = TYPE_QUALS (strip_array_types (argtype));
+	  पूर्णाङ्क quals = orig_quals;
 
-	  if (TREE_READONLY (arg))
+	  सचे (वृक्षः_READONLY (arg))
 	    quals |= TYPE_QUAL_CONST;
-	  if (TREE_THIS_VOLATILE (arg))
+	  सचे (वृक्षः_THIS_VOLATILE (arg))
 	    quals |= TYPE_QUAL_VOLATILE;
 
 	  argtype = c_build_qualified_type (argtype, quals);
 	}
 
-      switch (TREE_CODE (arg))
+      विकल्प (वृक्षः_CODE (arg))
 	{
-	case COMPONENT_REF:
-	  if (DECL_C_BIT_FIELD (TREE_OPERAND (arg, 1)))
+	पक्ष COMPONENT_REF:
+	  सचे (DECL_C_BIT_FIELD (वृक्षः_OPERAND (arg, 1)))
 	    {
 	      error_at (location, "cannot take address of bit-field %qD",
-			TREE_OPERAND (arg, 1));
-	      return error_mark_node;
+			वृक्षः_OPERAND (arg, 1));
+	      पटिनिवत्त error_mark_ग्रन्थिः;
 	    }
 
 	  /* fall through */
 
-	case ARRAY_REF:
-	  if (TYPE_REVERSE_STORAGE_ORDER (TREE_TYPE (TREE_OPERAND (arg, 0))))
+	पक्ष ARRAY_REF:
+	  सचे (TYPE_REVERSE_STORAGE_ORDER (वृक्षः_TYPE (वृक्षः_OPERAND (arg, 0))))
 	    {
-	      if (!AGGREGATE_TYPE_P (TREE_TYPE (arg))
-		  && !POINTER_TYPE_P (TREE_TYPE (arg))
-		  && !VECTOR_TYPE_P (TREE_TYPE (arg)))
+	      सचे (!AGGREGATE_TYPE_P (वृक्षः_TYPE (arg))
+		  && !POINTER_TYPE_P (वृक्षः_TYPE (arg))
+		  && !VECTOR_TYPE_P (वृक्षः_TYPE (arg)))
 		{
 		  error_at (location, "cannot take address of scalar with "
 			    "reverse storage order");
-		  return error_mark_node;
+		  पटिनिवत्त error_mark_ग्रन्थिः;
 		}
 
-	      if (TREE_CODE (TREE_TYPE (arg)) == ARRAY_TYPE
-		  && TYPE_REVERSE_STORAGE_ORDER (TREE_TYPE (arg)))
+	      सचे (वृक्षः_CODE (वृक्षः_TYPE (arg)) == ARRAY_TYPE
+		  && TYPE_REVERSE_STORAGE_ORDER (वृक्षः_TYPE (arg)))
 		warning_at (location, OPT_Wscalar_storage_order,
 			    "address of array with reverse scalar storage "
 			    "order requested");
 	    }
 
-	default:
-	  break;
+	स्वभाव:
+	  भङ्ग;
 	}
 
-      if (!c_mark_addressable (arg))
-	return error_mark_node;
+      सचे (!c_mark_addressable (arg))
+	पटिनिवत्त error_mark_ग्रन्थिः;
 
-      gcc_assert (TREE_CODE (arg) != COMPONENT_REF
-		  || !DECL_C_BIT_FIELD (TREE_OPERAND (arg, 1)));
+      gcc_assert (वृक्षः_CODE (arg) != COMPONENT_REF
+		  || !DECL_C_BIT_FIELD (वृक्षः_OPERAND (arg, 1)));
 
       argtype = c_build_pointer_type (argtype);
 
       /* ??? Cope with user tricks that amount to offsetof.  Delete this
 	 when we have proper support for integer constant expressions.  */
       val = get_base_address (arg);
-      if (val && INDIRECT_REF_P (val)
-          && TREE_CONSTANT (TREE_OPERAND (val, 0)))
+      सचे (val && INDIRECT_REF_P (val)
+          && वृक्षः_CONSTANT (वृक्षः_OPERAND (val, 0)))
 	{
 	  ret = fold_offsetof (arg, argtype);
-	  goto return_build_unary_op;
+	  गच्छ return_build_unary_op;
 	}
 
-      val = build1 (ADDR_EXPR, argtype, arg);
+      val = build1 (ADDR_व्यञ्जकम्, argtype, arg);
 
       ret = val;
-      goto return_build_unary_op;
+      गच्छ return_build_unary_op;
 
-    case PAREN_EXPR:
-      ret = build1 (code, TREE_TYPE (arg), arg);
-      goto return_build_unary_op;
+    पक्ष PAREN_व्यञ्जकम्:
+      ret = build1 (code, वृक्षः_TYPE (arg), arg);
+      गच्छ return_build_unary_op;
 
-    default:
+    स्वभाव:
       gcc_unreachable ();
     }
 
-  if (argtype == NULL_TREE)
-    argtype = TREE_TYPE (arg);
-  if (TREE_CODE (arg) == INTEGER_CST)
-    ret = (require_constant_value
+  सचे (argtype == NULL_वृक्षः)
+    argtype = वृक्षः_TYPE (arg);
+  सचे (वृक्षः_CODE (arg) == INTEGER_CST)
+    ret = (require_constant_मानम्
 	   ? fold_build1_initializer_loc (location, code, argtype, arg)
 	   : fold_build1_loc (location, code, argtype, arg));
-  else
+  अञ्ञथा
     ret = build1 (code, argtype, arg);
  return_build_unary_op:
-  gcc_assert (ret != error_mark_node);
-  if (TREE_CODE (ret) == INTEGER_CST && !TREE_OVERFLOW (ret)
-      && !(TREE_CODE (xarg) == INTEGER_CST && !TREE_OVERFLOW (xarg)))
-    ret = build1 (NOP_EXPR, TREE_TYPE (ret), ret);
-  else if (TREE_CODE (ret) != INTEGER_CST && int_operands)
+  gcc_assert (ret != error_mark_ग्रन्थिः);
+  सचे (वृक्षः_CODE (ret) == INTEGER_CST && !वृक्षः_OVERFLOW (ret)
+      && !(वृक्षः_CODE (xarg) == INTEGER_CST && !वृक्षः_OVERFLOW (xarg)))
+    ret = build1 (NOP_व्यञ्जकम्, वृक्षः_TYPE (ret), ret);
+  अञ्ञथा सचे (वृक्षः_CODE (ret) != INTEGER_CST && int_operands)
     ret = note_integer_operands (ret);
-  if (eptype)
-    ret = build1 (EXCESS_PRECISION_EXPR, eptype, ret);
-  protected_set_expr_location (ret, location);
-  return ret;
+  सचे (eptype)
+    ret = build1 (EXCESS_PRECISION_व्यञ्जकम्, eptype, ret);
+  protected_set_व्यञ्जकम्_location (ret, location);
+  पटिनिवत्त ret;
 }
 
 /* Return nonzero if REF is an lvalue valid for this language.
    Lvalues can be assigned, unless their type has TYPE_READONLY.
    Lvalues can have their address taken, unless they have C_DECL_REGISTER.  */
 
-bool
-lvalue_p (const_tree ref)
+तार्किक
+lvalue_p (const_वृक्षः ref)
 {
-  const enum tree_code code = TREE_CODE (ref);
+  ध्रुव गणना वृक्षः_code code = वृक्षः_CODE (ref);
 
-  switch (code)
+  विकल्प (code)
     {
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-    case COMPONENT_REF:
-      return lvalue_p (TREE_OPERAND (ref, 0));
+    पक्ष REALPART_व्यञ्जकम्:
+    पक्ष IMAGPART_व्यञ्जकम्:
+    पक्ष COMPONENT_REF:
+      पटिनिवत्त lvalue_p (वृक्षः_OPERAND (ref, 0));
 
-    case C_MAYBE_CONST_EXPR:
-      return lvalue_p (TREE_OPERAND (ref, 1));
+    पक्ष C_MAYBE_CONST_व्यञ्जकम्:
+      पटिनिवत्त lvalue_p (वृक्षः_OPERAND (ref, 1));
 
-    case COMPOUND_LITERAL_EXPR:
-    case STRING_CST:
-      return true;
+    पक्ष COMPOUND_LITERAL_व्यञ्जकम्:
+    पक्ष STRING_CST:
+      पटिनिवत्त सच्च;
 
-    case MEM_REF:
-    case TARGET_MEM_REF:
+    पक्ष MEM_REF:
+    पक्ष TARGET_MEM_REF:
       /* MEM_REFs can appear from -fgimple parsing or folding, so allow them
 	 here as well.  */
-    case INDIRECT_REF:
-    case ARRAY_REF:
-    case VAR_DECL:
-    case PARM_DECL:
-    case RESULT_DECL:
-    case ERROR_MARK:
-      return (TREE_CODE (TREE_TYPE (ref)) != FUNCTION_TYPE
-	      && TREE_CODE (TREE_TYPE (ref)) != METHOD_TYPE);
+    पक्ष INDIRECT_REF:
+    पक्ष ARRAY_REF:
+    पक्ष VAR_DECL:
+    पक्ष PARM_DECL:
+    पक्ष RESULT_DECL:
+    पक्ष ERROR_MARK:
+      पटिनिवत्त (वृक्षः_CODE (वृक्षः_TYPE (ref)) != FUNCTION_TYPE
+	      && वृक्षः_CODE (वृक्षः_TYPE (ref)) != METHOD_TYPE);
 
-    case BIND_EXPR:
-      return TREE_CODE (TREE_TYPE (ref)) == ARRAY_TYPE;
+    पक्ष BIND_व्यञ्जकम्:
+      पटिनिवत्त वृक्षः_CODE (वृक्षः_TYPE (ref)) == ARRAY_TYPE;
 
-    case CALL_EXPR:
-      return is_access_with_size_p (ref);
+    पक्ष CALL_व्यञ्जकम्:
+      पटिनिवत्त is_access_with_size_p (ref);
 
-    default:
-      return false;
+    स्वभाव:
+      पटिनिवत्त मिच्छा;
     }
 }
 
 /* Give a warning for storing in something that is read-only in GCC
    terms but not const in ISO C terms.  */
 
-static void
-readonly_warning (tree arg, enum lvalue_use use)
+स्थिर शून्य
+readonly_warning (वृक्षः arg, गणना lvalue_use use)
 {
-  switch (use)
+  विकल्प (use)
     {
-    case lv_assign:
+    पक्ष lv_assign:
       warning (0, "assignment of read-only location %qE", arg);
-      break;
-    case lv_increment:
+      भङ्ग;
+    पक्ष lv_increment:
       warning (0, "increment of read-only location %qE", arg);
-      break;
-    case lv_decrement:
+      भङ्ग;
+    पक्ष lv_decrement:
       warning (0, "decrement of read-only location %qE", arg);
-      break;
-    default:
+      भङ्ग;
+    स्वभाव:
       gcc_unreachable ();
     }
-  return;
+  पटिनिवत्त;
 }
 
 
@@ -6483,15 +6483,15 @@ readonly_warning (tree arg, enum lvalue_use use)
    how the lvalue is being used and so selects the error message.
    LOCATION is the location at which any error should be reported.  */
 
-static int
-lvalue_or_else (location_t loc, const_tree ref, enum lvalue_use use)
+स्थिर पूर्णाङ्क
+lvalue_or_else (location_t loc, const_वृक्षः ref, गणना lvalue_use use)
 {
-  int win = lvalue_p (ref);
+  पूर्णाङ्क win = lvalue_p (ref);
 
-  if (!win)
+  सचे (!win)
     lvalue_error (loc, use);
 
-  return win;
+  पटिनिवत्त win;
 }
 
 /* Mark EXP saying that we need to be able to take the
@@ -6503,94 +6503,94 @@ lvalue_or_else (location_t loc, const_tree ref, enum lvalue_use use)
    register variables.  If OVERRIDE_REGISTER, clear DECL_REGISTER rather
    than producing an error for taking the address of a register.  */
 
-bool
-c_mark_addressable (tree exp, bool array_ref_p, bool override_register)
+तार्किक
+c_mark_addressable (वृक्षः exp, तार्किक array_ref_p, तार्किक override_register)
 {
-  tree x = exp;
+  वृक्षः x = exp;
 
-  while (1)
-    switch (TREE_CODE (x))
+  याव (1)
+    विकल्प (वृक्षः_CODE (x))
       {
-      case VIEW_CONVERT_EXPR:
-	if (array_ref_p
-	    && TREE_CODE (TREE_TYPE (x)) == ARRAY_TYPE
-	    && VECTOR_TYPE_P (TREE_TYPE (TREE_OPERAND (x, 0))))
-	  return true;
-	x = TREE_OPERAND (x, 0);
-	break;
+      पक्ष VIEW_CONVERT_व्यञ्जकम्:
+	सचे (array_ref_p
+	    && वृक्षः_CODE (वृक्षः_TYPE (x)) == ARRAY_TYPE
+	    && VECTOR_TYPE_P (वृक्षः_TYPE (वृक्षः_OPERAND (x, 0))))
+	  पटिनिवत्त सच्च;
+	x = वृक्षः_OPERAND (x, 0);
+	भङ्ग;
 
-      case COMPONENT_REF:
-	if (DECL_C_BIT_FIELD (TREE_OPERAND (x, 1)))
+      पक्ष COMPONENT_REF:
+	सचे (DECL_C_BIT_FIELD (वृक्षः_OPERAND (x, 1)))
 	  {
 	    error ("cannot take address of bit-field %qD",
-		   TREE_OPERAND (x, 1));
-	    return false;
+		   वृक्षः_OPERAND (x, 1));
+	    पटिनिवत्त मिच्छा;
 	  }
 	/* FALLTHRU */
-      case ADDR_EXPR:
-      case ARRAY_REF:
-      case REALPART_EXPR:
-      case IMAGPART_EXPR:
-	x = TREE_OPERAND (x, 0);
-	break;
+      पक्ष ADDR_व्यञ्जकम्:
+      पक्ष ARRAY_REF:
+      पक्ष REALPART_व्यञ्जकम्:
+      पक्ष IMAGPART_व्यञ्जकम्:
+	x = वृक्षः_OPERAND (x, 0);
+	भङ्ग;
 
-      case COMPOUND_LITERAL_EXPR:
-	if (C_DECL_REGISTER (COMPOUND_LITERAL_EXPR_DECL (x)))
+      पक्ष COMPOUND_LITERAL_व्यञ्जकम्:
+	सचे (C_DECL_REGISTER (COMPOUND_LITERAL_व्यञ्जकम्_DECL (x)))
 	  {
-	    if (override_register)
-	      DECL_REGISTER (COMPOUND_LITERAL_EXPR_DECL (x)) = 0;
-	    else
+	    सचे (override_register)
+	      DECL_REGISTER (COMPOUND_LITERAL_व्यञ्जकम्_DECL (x)) = 0;
+	    अञ्ञथा
 	      {
 		error ("address of register compound literal requested");
-		return false;
+		पटिनिवत्त मिच्छा;
 	      }
 	  }
-	TREE_ADDRESSABLE (x) = 1;
-	TREE_ADDRESSABLE (COMPOUND_LITERAL_EXPR_DECL (x)) = 1;
-	return true;
+	वृक्षः_ADDRESSABLE (x) = 1;
+	वृक्षः_ADDRESSABLE (COMPOUND_LITERAL_व्यञ्जकम्_DECL (x)) = 1;
+	पटिनिवत्त सच्च;
 
-      case CONSTRUCTOR:
-	TREE_ADDRESSABLE (x) = 1;
-	return true;
+      पक्ष CONSTRUCTOR:
+	वृक्षः_ADDRESSABLE (x) = 1;
+	पटिनिवत्त सच्च;
 
-      case VAR_DECL:
-      case CONST_DECL:
-      case PARM_DECL:
-      case RESULT_DECL:
-	if (C_DECL_REGISTER (x)
+      पक्ष VAR_DECL:
+      पक्ष CONST_DECL:
+      पक्ष PARM_DECL:
+      पक्ष RESULT_DECL:
+	सचे (C_DECL_REGISTER (x)
 	    && DECL_NONLOCAL (x))
 	  {
-	    if (TREE_PUBLIC (x) || is_global_var (x))
+	    सचे (वृक्षः_PUBLIC (x) || is_global_var (x))
 	      {
 		error
 		  ("global register variable %qD used in nested function", x);
-		return false;
+		पटिनिवत्त मिच्छा;
 	      }
-	    pedwarn (input_location, 0, "register variable %qD used in nested function", x);
+	    pedwarn (निवेशः_location, 0, "register variable %qD used in nested function", x);
 	  }
-	else if (C_DECL_REGISTER (x))
+	अञ्ञथा सचे (C_DECL_REGISTER (x))
 	  {
-	    if (TREE_PUBLIC (x) || is_global_var (x))
+	    सचे (वृक्षः_PUBLIC (x) || is_global_var (x))
 	      error ("address of global register variable %qD requested", x);
-	    else if (override_register && !DECL_HARD_REGISTER (x))
+	    अञ्ञथा सचे (override_register && !DECL_HARD_REGISTER (x))
 	      {
 		DECL_REGISTER (x) = 0;
-		TREE_ADDRESSABLE (x) = 1;
-		mark_decl_used (x, true);
-		return true;
+		वृक्षः_ADDRESSABLE (x) = 1;
+		mark_decl_used (x, सच्च);
+		पटिनिवत्त सच्च;
 	      }
-	    else
+	    अञ्ञथा
 	      error ("address of register variable %qD requested", x);
-	    return false;
+	    पटिनिवत्त मिच्छा;
 	  }
 
 	/* FALLTHRU */
-      case FUNCTION_DECL:
-	TREE_ADDRESSABLE (x) = 1;
-	mark_decl_used (x, true);
+      पक्ष FUNCTION_DECL:
+	वृक्षः_ADDRESSABLE (x) = 1;
+	mark_decl_used (x, सच्च);
 	/* FALLTHRU */
-      default:
-	return true;
+      स्वभाव:
+	पटिनिवत्त सच्च;
     }
 }
 
@@ -6601,28 +6601,28 @@ c_mark_addressable (tree exp, bool array_ref_p, bool override_register)
    handles conversions that may be different than
    the usual ones because of excess precision.  */
 
-static tree
-ep_convert_and_check (location_t loc, tree type, tree expr,
-		      tree semantic_type)
+स्थिर वृक्षः
+ep_convert_and_check (location_t loc, वृक्षः type, वृक्षः व्यञ्जकम्,
+		      वृक्षः semantic_type)
 {
-  if (TREE_TYPE (expr) == type)
-    return expr;
+  सचे (वृक्षः_TYPE (व्यञ्जकम्) == type)
+    पटिनिवत्त व्यञ्जकम्;
 
   /* For C11, integer conversions may have results with excess
      precision.  */
-  if (flag_isoc11 || !semantic_type)
-    return convert_and_check (loc, type, expr);
+  सचे (flag_isoc11 || !semantic_type)
+    पटिनिवत्त convert_and_check (loc, type, व्यञ्जकम्);
 
-  if (TREE_CODE (TREE_TYPE (expr)) == INTEGER_TYPE
-      && TREE_TYPE (expr) != semantic_type)
+  सचे (वृक्षः_CODE (वृक्षः_TYPE (व्यञ्जकम्)) == INTEGER_TYPE
+      && वृक्षः_TYPE (व्यञ्जकम्) != semantic_type)
     {
       /* For integers, we need to check the real conversion, not
 	 the conversion to the excess precision type.  */
-      expr = convert_and_check (loc, semantic_type, expr);
+      व्यञ्जकम् = convert_and_check (loc, semantic_type, व्यञ्जकम्);
     }
   /* Result type is the excess precision type, which should be
      large enough, so do not check.  */
-  return convert (type, expr);
+  पटिनिवत्त convert (type, व्यञ्जकम्);
 }
 
 /* If EXPR refers to a built-in declared without a prototype returns
@@ -6630,33 +6630,33 @@ ep_convert_and_check (location_t loc, tree type, tree expr,
    a pointer to the built-in.  Otherwise return the type of EXPR
    and clear *BLTIN if non-null.  */
 
-static tree
-type_or_builtin_type (tree expr, tree *bltin = NULL)
+स्थिर वृक्षः
+type_or_builtin_type (वृक्षः व्यञ्जकम्, वृक्षः *bltin = रिक्त)
 {
-  tree dummy;
-  if (!bltin)
+  वृक्षः dummy;
+  सचे (!bltin)
     bltin = &dummy;
 
-  *bltin = NULL_TREE;
+  *bltin = NULL_वृक्षः;
 
-  tree type = TREE_TYPE (expr);
-  if (TREE_CODE (expr) != ADDR_EXPR)
-    return type;
+  वृक्षः type = वृक्षः_TYPE (व्यञ्जकम्);
+  सचे (वृक्षः_CODE (व्यञ्जकम्) != ADDR_व्यञ्जकम्)
+    पटिनिवत्त type;
 
-  tree oper = TREE_OPERAND (expr, 0);
-  if (!DECL_P (oper)
-      || TREE_CODE (oper) != FUNCTION_DECL
+  वृक्षः oper = वृक्षः_OPERAND (व्यञ्जकम्, 0);
+  सचे (!DECL_P (oper)
+      || वृक्षः_CODE (oper) != FUNCTION_DECL
       || !fndecl_built_in_p (oper, BUILT_IN_NORMAL))
-    return type;
+    पटिनिवत्त type;
 
   built_in_function code = DECL_FUNCTION_CODE (oper);
-  if (!C_DECL_BUILTIN_PROTOTYPE (oper))
-    return type;
+  सचे (!C_DECL_BUILTIN_PROTOTYPE (oper))
+    पटिनिवत्त type;
 
-  if ((*bltin = builtin_decl_implicit (code)))
-    type = c_build_pointer_type (TREE_TYPE (*bltin));
+  सचे ((*bltin = builtin_decl_implicit (code)))
+    type = c_build_pointer_type (वृक्षः_TYPE (*bltin));
 
-  return type;
+  पटिनिवत्त type;
 }
 
 /* Build and return a conditional expression IFEXP ? OP1 : OP2.  If
@@ -6665,107 +6665,107 @@ type_or_builtin_type (tree expr, tree *bltin = NULL)
    contain arbitrary operations not normally permitted in constant
    expressions.  Set the location of the expression to LOC.  */
 
-tree
-build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
-			tree op1, tree op1_original_type, location_t op1_loc,
-			tree op2, tree op2_original_type, location_t op2_loc)
+वृक्षः
+build_conditional_व्यञ्जकम् (location_t colon_loc, वृक्षः ifexp, तार्किक ifexp_bcp,
+			वृक्षः op1, वृक्षः op1_original_type, location_t op1_loc,
+			वृक्षः op2, वृक्षः op2_original_type, location_t op2_loc)
 {
-  tree type1;
-  tree type2;
-  tree result_type = NULL;
-  tree semantic_result_type = NULL;
-  tree orig_op1 = op1, orig_op2 = op2;
-  bool int_const, op1_int_operands, op2_int_operands, int_operands;
-  bool ifexp_int_operands;
-  tree ret;
+  वृक्षः type1;
+  वृक्षः type2;
+  वृक्षः result_type = रिक्त;
+  वृक्षः semantic_result_type = रिक्त;
+  वृक्षः orig_op1 = op1, orig_op2 = op2;
+  तार्किक int_const, op1_int_operands, op2_int_operands, int_operands;
+  तार्किक ifexp_int_operands;
+  वृक्षः ret;
 
-  op1_int_operands = EXPR_INT_CONST_OPERANDS (orig_op1);
-  if (op1_int_operands)
-    op1 = remove_c_maybe_const_expr (op1);
-  op2_int_operands = EXPR_INT_CONST_OPERANDS (orig_op2);
-  if (op2_int_operands)
-    op2 = remove_c_maybe_const_expr (op2);
-  ifexp_int_operands = EXPR_INT_CONST_OPERANDS (ifexp);
-  if (ifexp_int_operands)
-    ifexp = remove_c_maybe_const_expr (ifexp);
+  op1_int_operands = व्यञ्जकम्_INT_CONST_OPERANDS (orig_op1);
+  सचे (op1_int_operands)
+    op1 = remove_c_maybe_const_व्यञ्जकम् (op1);
+  op2_int_operands = व्यञ्जकम्_INT_CONST_OPERANDS (orig_op2);
+  सचे (op2_int_operands)
+    op2 = remove_c_maybe_const_व्यञ्जकम् (op2);
+  ifexp_int_operands = व्यञ्जकम्_INT_CONST_OPERANDS (ifexp);
+  सचे (ifexp_int_operands)
+    ifexp = remove_c_maybe_const_व्यञ्जकम् (ifexp);
 
   /* Promote both alternatives.  */
 
-  if (TREE_CODE (TREE_TYPE (op1)) != VOID_TYPE)
+  सचे (वृक्षः_CODE (वृक्षः_TYPE (op1)) != VOID_TYPE)
     op1 = default_conversion (op1);
-  if (TREE_CODE (TREE_TYPE (op2)) != VOID_TYPE)
+  सचे (वृक्षः_CODE (वृक्षः_TYPE (op2)) != VOID_TYPE)
     op2 = default_conversion (op2);
 
-  if (TREE_CODE (ifexp) == ERROR_MARK
-      || TREE_CODE (TREE_TYPE (op1)) == ERROR_MARK
-      || TREE_CODE (TREE_TYPE (op2)) == ERROR_MARK)
-    return error_mark_node;
+  सचे (वृक्षः_CODE (ifexp) == ERROR_MARK
+      || वृक्षः_CODE (वृक्षः_TYPE (op1)) == ERROR_MARK
+      || वृक्षः_CODE (वृक्षः_TYPE (op2)) == ERROR_MARK)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  tree bltin1 = NULL_TREE;
-  tree bltin2 = NULL_TREE;
+  वृक्षः bltin1 = NULL_वृक्षः;
+  वृक्षः bltin2 = NULL_वृक्षः;
   type1 = type_or_builtin_type (op1, &bltin1);
-  const enum tree_code code1 = TREE_CODE (type1);
+  ध्रुव गणना वृक्षः_code code1 = वृक्षः_CODE (type1);
   type2 = type_or_builtin_type (op2, &bltin2);
-  const enum tree_code code2 = TREE_CODE (type2);
+  ध्रुव गणना वृक्षः_code code2 = वृक्षः_CODE (type2);
 
-  if (code1 == POINTER_TYPE && reject_gcc_builtin (op1))
-    return error_mark_node;
+  सचे (code1 == POINTER_TYPE && reject_gcc_builtin (op1))
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if (code2 == POINTER_TYPE && reject_gcc_builtin (op2))
-    return error_mark_node;
+  सचे (code2 == POINTER_TYPE && reject_gcc_builtin (op2))
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
   /* C90 does not permit non-lvalue arrays in conditional expressions.
      In C99 they will be pointers by now.  */
-  if (code1 == ARRAY_TYPE || code2 == ARRAY_TYPE)
+  सचे (code1 == ARRAY_TYPE || code2 == ARRAY_TYPE)
     {
       error_at (colon_loc, "non-lvalue array in conditional expression");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  if ((TREE_CODE (op1) == EXCESS_PRECISION_EXPR
-       || TREE_CODE (op2) == EXCESS_PRECISION_EXPR)
+  सचे ((वृक्षः_CODE (op1) == EXCESS_PRECISION_व्यञ्जकम्
+       || वृक्षः_CODE (op2) == EXCESS_PRECISION_व्यञ्जकम्)
       && (code1 == INTEGER_TYPE || code1 == REAL_TYPE
 	  || code1 == COMPLEX_TYPE || code1 == BITINT_TYPE)
       && (code2 == INTEGER_TYPE || code2 == REAL_TYPE
 	  || code2 == COMPLEX_TYPE || code2 == BITINT_TYPE))
     {
       semantic_result_type = c_common_type (type1, type2);
-      if (TREE_CODE (op1) == EXCESS_PRECISION_EXPR)
+      सचे (वृक्षः_CODE (op1) == EXCESS_PRECISION_व्यञ्जकम्)
 	{
-	  op1 = TREE_OPERAND (op1, 0);
-	  type1 = TREE_TYPE (op1);
-	  gcc_assert (TREE_CODE (type1) == code1);
+	  op1 = वृक्षः_OPERAND (op1, 0);
+	  type1 = वृक्षः_TYPE (op1);
+	  gcc_assert (वृक्षः_CODE (type1) == code1);
 	}
-      if (TREE_CODE (op2) == EXCESS_PRECISION_EXPR)
+      सचे (वृक्षः_CODE (op2) == EXCESS_PRECISION_व्यञ्जकम्)
 	{
-	  op2 = TREE_OPERAND (op2, 0);
-	  type2 = TREE_TYPE (op2);
-	  gcc_assert (TREE_CODE (type2) == code2);
+	  op2 = वृक्षः_OPERAND (op2, 0);
+	  type2 = वृक्षः_TYPE (op2);
+	  gcc_assert (वृक्षः_CODE (type2) == code2);
 	}
     }
 
-  if (warn_cxx_compat)
+  सचे (warn_cxx_compat)
     {
-      tree t1 = op1_original_type ? op1_original_type : TREE_TYPE (orig_op1);
-      tree t2 = op2_original_type ? op2_original_type : TREE_TYPE (orig_op2);
+      वृक्षः t1 = op1_original_type ? op1_original_type : वृक्षः_TYPE (orig_op1);
+      वृक्षः t2 = op2_original_type ? op2_original_type : वृक्षः_TYPE (orig_op2);
 
-      if (TREE_CODE (t1) == ENUMERAL_TYPE
-	  && TREE_CODE (t2) == ENUMERAL_TYPE
+      सचे (वृक्षः_CODE (t1) == ENUMERAL_TYPE
+	  && वृक्षः_CODE (t2) == ENUMERAL_TYPE
 	  && TYPE_MAIN_VARIANT (t1) != TYPE_MAIN_VARIANT (t2))
 	warning_at (colon_loc, OPT_Wc___compat,
 		    "different enum types in conditional is "
 		    "invalid in C++: %qT vs %qT", t1, t2);
     }
 
-  if (warn_zero_as_null_pointer_constant
+  सचे (warn_zero_as_null_pointer_constant
       && c_inhibit_evaluation_warnings == 0)
     {
-      if ((code1 == POINTER_TYPE || code1 == NULLPTR_TYPE)
+      सचे ((code1 == POINTER_TYPE || code1 == NULLPTR_TYPE)
 	  && INTEGRAL_TYPE_P (type2) && null_pointer_constant_p (orig_op2))
 	warning_at (op2_loc, OPT_Wzero_as_null_pointer_constant,
 		    "zero as null pointer constant");
 
-      if ((code2 == POINTER_TYPE || code2 == NULLPTR_TYPE)
+      सचे ((code2 == POINTER_TYPE || code2 == NULLPTR_TYPE)
 	  && INTEGRAL_TYPE_P (type1) && null_pointer_constant_p (orig_op1))
 	warning_at (op1_loc, OPT_Wzero_as_null_pointer_constant,
 		    "zero as null pointer constant");
@@ -6773,14 +6773,14 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 
   /* Quickly detect the usual case where op1 and op2 have the same type
      after promotion.  */
-  if (TYPE_MAIN_VARIANT (type1) == TYPE_MAIN_VARIANT (type2))
+  सचे (TYPE_MAIN_VARIANT (type1) == TYPE_MAIN_VARIANT (type2))
     {
-      if (type1 == type2)
+      सचे (type1 == type2)
 	result_type = type1;
-      else
+      अञ्ञथा
 	result_type = TYPE_MAIN_VARIANT (type1);
     }
-  else if ((code1 == INTEGER_TYPE || code1 == REAL_TYPE
+  अञ्ञथा सचे ((code1 == INTEGER_TYPE || code1 == REAL_TYPE
 	    || code1 == COMPLEX_TYPE || code1 == BITINT_TYPE)
 	   && (code2 == INTEGER_TYPE || code2 == REAL_TYPE
 	       || code2 == COMPLEX_TYPE || code2 == BITINT_TYPE))
@@ -6789,29 +6789,29 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	 type and an integer type should convert the integer type to
 	 the evaluation format of the floating-point type, with
 	 possible excess precision.  */
-      tree eptype1 = type1;
-      tree eptype2 = type2;
-      if (flag_isoc11)
+      वृक्षः eptype1 = type1;
+      वृक्षः eptype2 = type2;
+      सचे (flag_isoc11)
 	{
-	  tree eptype;
-	  if (ANY_INTEGRAL_TYPE_P (type1)
-	      && (eptype = excess_precision_type (type2)) != NULL_TREE)
+	  वृक्षः eptype;
+	  सचे (ANY_INTEGRAL_TYPE_P (type1)
+	      && (eptype = excess_precision_type (type2)) != NULL_वृक्षः)
 	    {
 	      eptype2 = eptype;
-	      if (!semantic_result_type)
+	      सचे (!semantic_result_type)
 		semantic_result_type = c_common_type (type1, type2);
 	    }
-	  else if (ANY_INTEGRAL_TYPE_P (type2)
-		   && (eptype = excess_precision_type (type1)) != NULL_TREE)
+	  अञ्ञथा सचे (ANY_INTEGRAL_TYPE_P (type2)
+		   && (eptype = excess_precision_type (type1)) != NULL_वृक्षः)
 	    {
 	      eptype1 = eptype;
-	      if (!semantic_result_type)
+	      सचे (!semantic_result_type)
 		semantic_result_type = c_common_type (type1, type2);
 	    }
 	}
       result_type = c_common_type (eptype1, eptype2);
-      if (result_type == error_mark_node)
-	return error_mark_node;
+      सचे (result_type == error_mark_ग्रन्थिः)
+	पटिनिवत्त error_mark_ग्रन्थिः;
       do_warn_double_promotion (result_type, type1, type2,
 				"implicit conversion from %qT to %qT to "
 				"match other result of conditional",
@@ -6822,22 +6822,22 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	 and later code won't know it used to be different.
 	 Do this check on the original types, so that explicit casts
 	 will be considered, but default promotions won't.  */
-      if (c_inhibit_evaluation_warnings == 0)
+      सचे (c_inhibit_evaluation_warnings == 0)
 	{
-	  int unsigned_op1 = TYPE_UNSIGNED (TREE_TYPE (orig_op1));
-	  int unsigned_op2 = TYPE_UNSIGNED (TREE_TYPE (orig_op2));
+	  पूर्णाङ्क unsigned_op1 = TYPE_UNSIGNED (वृक्षः_TYPE (orig_op1));
+	  पूर्णाङ्क unsigned_op2 = TYPE_UNSIGNED (वृक्षः_TYPE (orig_op2));
 
-	  if (unsigned_op1 ^ unsigned_op2)
+	  सचे (unsigned_op1 ^ unsigned_op2)
 	    {
 	      /* Do not warn if the result type is signed, since the
 		 signed type will only be chosen if it can represent
 		 all the values of the unsigned type.  */
-	      if (!TYPE_UNSIGNED (result_type))
+	      सचे (!TYPE_UNSIGNED (result_type))
 		/* OK */;
-	      else
+	      अञ्ञथा
 		{
-		  bool op1_maybe_const = true;
-		  bool op2_maybe_const = true;
+		  तार्किक op1_maybe_const = सच्च;
+		  तार्किक op2_maybe_const = सच्च;
 
 		  /* Do not warn if the signed quantity is an
 		     unsuffixed integer literal (or some static
@@ -6848,119 +6848,119 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 		     warn_sign_compare to avoid warning options
 		     possibly affecting code generation.  */
 		  c_inhibit_evaluation_warnings
-		    += (ifexp == truthvalue_false_node);
-		  op1 = c_fully_fold (op1, require_constant_value,
+		    += (ifexp == truthvalue_false_ग्रन्थिः);
+		  op1 = c_fully_fold (op1, require_constant_मानम्,
 				      &op1_maybe_const);
 		  c_inhibit_evaluation_warnings
-		    -= (ifexp == truthvalue_false_node);
+		    -= (ifexp == truthvalue_false_ग्रन्थिः);
 
 		  c_inhibit_evaluation_warnings
-		    += (ifexp == truthvalue_true_node);
-		  op2 = c_fully_fold (op2, require_constant_value,
+		    += (ifexp == truthvalue_true_ग्रन्थिः);
+		  op2 = c_fully_fold (op2, require_constant_मानम्,
 				      &op2_maybe_const);
 		  c_inhibit_evaluation_warnings
-		    -= (ifexp == truthvalue_true_node);
+		    -= (ifexp == truthvalue_true_ग्रन्थिः);
 
-		  if (warn_sign_compare)
+		  सचे (warn_sign_compare)
 		    {
-		      if ((unsigned_op2
-			   && tree_expr_nonnegative_p (op1))
+		      सचे ((unsigned_op2
+			   && वृक्षः_व्यञ्जकम्_nonnegative_p (op1))
 			  || (unsigned_op1
-			      && tree_expr_nonnegative_p (op2)))
+			      && वृक्षः_व्यञ्जकम्_nonnegative_p (op2)))
 			/* OK */;
-		      else if (unsigned_op2)
+		      अञ्ञथा सचे (unsigned_op2)
 			warning_at (op1_loc, OPT_Wsign_compare,
 				    "operand of %<?:%> changes signedness from "
 				    "%qT to %qT due to unsignedness of other "
-				    "operand", TREE_TYPE (orig_op1),
-				    TREE_TYPE (orig_op2));
-		      else
+				    "operand", वृक्षः_TYPE (orig_op1),
+				    वृक्षः_TYPE (orig_op2));
+		      अञ्ञथा
 			warning_at (op2_loc, OPT_Wsign_compare,
 				    "operand of %<?:%> changes signedness from "
 				    "%qT to %qT due to unsignedness of other "
-				    "operand", TREE_TYPE (orig_op2),
-				    TREE_TYPE (orig_op1));
+				    "operand", वृक्षः_TYPE (orig_op2),
+				    वृक्षः_TYPE (orig_op1));
 		    }
-		  if (!op1_maybe_const || TREE_CODE (op1) != INTEGER_CST)
+		  सचे (!op1_maybe_const || वृक्षः_CODE (op1) != INTEGER_CST)
 		    op1 = c_wrap_maybe_const (op1, !op1_maybe_const);
-		  if (!op2_maybe_const || TREE_CODE (op2) != INTEGER_CST)
+		  सचे (!op2_maybe_const || वृक्षः_CODE (op2) != INTEGER_CST)
 		    op2 = c_wrap_maybe_const (op2, !op2_maybe_const);
 		}
 	    }
 	}
     }
-  else if (code1 == VOID_TYPE || code2 == VOID_TYPE)
+  अञ्ञथा सचे (code1 == VOID_TYPE || code2 == VOID_TYPE)
     {
-      if (code1 != VOID_TYPE || code2 != VOID_TYPE)
+      सचे (code1 != VOID_TYPE || code2 != VOID_TYPE)
 	pedwarn (colon_loc, OPT_Wpedantic,
 		 "ISO C forbids conditional expr with only one void side");
-      result_type = void_type_node;
+      result_type = void_type_ग्रन्थिः;
     }
-  else if (code1 == POINTER_TYPE && code2 == POINTER_TYPE)
+  अञ्ञथा सचे (code1 == POINTER_TYPE && code2 == POINTER_TYPE)
     {
-      addr_space_t as1 = TYPE_ADDR_SPACE (TREE_TYPE (type1));
-      addr_space_t as2 = TYPE_ADDR_SPACE (TREE_TYPE (type2));
+      addr_space_t as1 = TYPE_ADDR_SPACE (वृक्षः_TYPE (type1));
+      addr_space_t as2 = TYPE_ADDR_SPACE (वृक्षः_TYPE (type2));
       addr_space_t as_common;
 
-      if (comp_target_types (colon_loc, type1, type2))
+      सचे (comp_target_types (colon_loc, type1, type2))
 	{
-	  ifexp = save_expr (ifexp);
+	  ifexp = save_व्यञ्जकम् (ifexp);
 	  result_type = common_pointer_type (type1, type2, ifexp);
 	}
-      else if (null_pointer_constant_p (orig_op1))
+      अञ्ञथा सचे (null_pointer_constant_p (orig_op1))
 	result_type = type2;
-      else if (null_pointer_constant_p (orig_op2))
+      अञ्ञथा सचे (null_pointer_constant_p (orig_op2))
 	result_type = type1;
-      else if (!addr_space_superset (as1, as2, &as_common))
+      अञ्ञथा सचे (!addr_space_superset (as1, as2, &as_common))
 	{
 	  error_at (colon_loc, "pointers to disjoint address spaces "
 		    "used in conditional expression");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      else if ((VOID_TYPE_P (TREE_TYPE (type1))
-		&& !TYPE_ATOMIC (TREE_TYPE (type1)))
-	       || (VOID_TYPE_P (TREE_TYPE (type2))
-		   && !TYPE_ATOMIC (TREE_TYPE (type2))))
+      अञ्ञथा सचे ((VOID_TYPE_P (वृक्षः_TYPE (type1))
+		&& !TYPE_ATOMIC (वृक्षः_TYPE (type1)))
+	       || (VOID_TYPE_P (वृक्षः_TYPE (type2))
+		   && !TYPE_ATOMIC (वृक्षः_TYPE (type2))))
 	{
-	  tree t1 = TREE_TYPE (type1);
-	  tree t2 = TREE_TYPE (type2);
-	  if (!(VOID_TYPE_P (t1)
+	  वृक्षः t1 = वृक्षः_TYPE (type1);
+	  वृक्षः t2 = वृक्षः_TYPE (type2);
+	  सचे (!(VOID_TYPE_P (t1)
 		&& !TYPE_ATOMIC (t1)))
 	   {
 	     /* roles are swapped */
 	     t1 = t2;
-	     t2 = TREE_TYPE (type1);
+	     t2 = वृक्षः_TYPE (type1);
 	   }
-	  tree t2_stripped = strip_array_types (t2);
-	  if ((TREE_CODE (t2) == ARRAY_TYPE)
+	  वृक्षः t2_stripped = strip_array_types (t2);
+	  सचे ((वृक्षः_CODE (t2) == ARRAY_TYPE)
 	      && (TYPE_QUALS (t2_stripped) & ~TYPE_QUALS (t1)))
 	    {
-	      if (!flag_isoc23)
+	      सचे (!flag_isoc23)
 		warning_at (colon_loc, OPT_Wdiscarded_array_qualifiers,
 			    "pointer to array loses qualifier "
 			    "in conditional expression");
-	      else if (warn_c11_c23_compat > 0)
+	      अञ्ञथा सचे (warn_c11_c23_compat > 0)
 		warning_at (colon_loc, OPT_Wc11_c23_compat,
 			    "pointer to array loses qualifier "
 			    "in conditional expression in ISO C before C23");
 	    }
-	  if (TREE_CODE (t2) == FUNCTION_TYPE)
+	  सचे (वृक्षः_CODE (t2) == FUNCTION_TYPE)
 	    pedwarn (colon_loc, OPT_Wpedantic,
 		     "ISO C forbids conditional expr between "
 		     "%<void *%> and function pointer");
 	  /* for array, use qualifiers of element type */
-	  if (flag_isoc23)
+	  सचे (flag_isoc23)
 	    t2 = t2_stripped;
 	  result_type = c_build_pointer_type (qualify_type (t1, t2));
 	}
       /* Objective-C pointer comparisons are a bit more lenient.  */
-      else if (objc_have_common_type (type1, type2, -3, NULL_TREE))
+      अञ्ञथा सचे (objc_have_common_type (type1, type2, -3, NULL_वृक्षः))
 	result_type = objc_common_type (type1, type2);
-      else
+      अञ्ञथा
 	{
-	  int qual = ENCODE_QUAL_ADDR_SPACE (as_common);
-	  enum diagnostics::kind kind = diagnostics::kind::permerror;
-	  if (!flag_isoc99)
+	  पूर्णाङ्क qual = ENCODE_QUAL_ADDR_SPACE (as_common);
+	  गणना diagnostics::kind kind = diagnostics::kind::permerror;
+	  सचे (!flag_isoc99)
 	    /* This downgrade to a warning ensures that -std=gnu89
 	       -pedantic-errors does not flag these mismatches between
 	       builtins as errors (as diagnostics::kind::permerror would)
@@ -6969,7 +6969,7 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	    kind = (bltin1 && bltin2
 		    ? diagnostics::kind::warning
 		    : diagnostics::kind::pedwarn);
-	  if (emit_diagnostic (kind, colon_loc, OPT_Wincompatible_pointer_types,
+	  सचे (emit_diagnostic (kind, colon_loc, OPT_Wincompatible_pointer_types,
 			       "pointer type mismatch "
 			       "in conditional expression"))
 	    {
@@ -6977,56 +6977,56 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	      inform (op2_loc, "second expression has type %qT", type2);
 	    }
 	  result_type = c_build_pointer_type
-			  (c_build_qualified_type (void_type_node, qual));
+			  (c_build_qualified_type (void_type_ग्रन्थिः, qual));
 	}
     }
-  else if (code1 == POINTER_TYPE
+  अञ्ञथा सचे (code1 == POINTER_TYPE
 	   && (code2 == INTEGER_TYPE || code2 == BITINT_TYPE))
     {
-      if (!null_pointer_constant_p (orig_op2))
+      सचे (!null_pointer_constant_p (orig_op2))
 	permerror_opt (colon_loc, OPT_Wint_conversion,
 		       "pointer/integer type mismatch "
 		       "in conditional expression");
-      else
+      अञ्ञथा
 	{
-	  op2 = null_pointer_node;
+	  op2 = null_pointer_ग्रन्थिः;
 	}
       result_type = type1;
     }
-  else if (code2 == POINTER_TYPE
+  अञ्ञथा सचे (code2 == POINTER_TYPE
 	   && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
     {
-      if (!null_pointer_constant_p (orig_op1))
+      सचे (!null_pointer_constant_p (orig_op1))
 	permerror_opt (colon_loc, OPT_Wint_conversion,
 		       "pointer/integer type mismatch "
 		       "in conditional expression");
-      else
+      अञ्ञथा
 	{
-	  op1 = null_pointer_node;
+	  op1 = null_pointer_ग्रन्थिः;
 	}
       result_type = type2;
     }
   /* 6.5.15: "if one is a null pointer constant (other than a pointer) or has
      type nullptr_t and the other is a pointer, the result type is the pointer
      type."  */
-  else if (code1 == NULLPTR_TYPE && code2 == POINTER_TYPE)
+  अञ्ञथा सचे (code1 == NULLPTR_TYPE && code2 == POINTER_TYPE)
     result_type = type2;
-  else if (code1 == POINTER_TYPE && code2 == NULLPTR_TYPE)
+  अञ्ञथा सचे (code1 == POINTER_TYPE && code2 == NULLPTR_TYPE)
     result_type = type1;
-  else if (RECORD_OR_UNION_TYPE_P (type1) && RECORD_OR_UNION_TYPE_P (type2)
+  अञ्ञथा सचे (RECORD_OR_UNION_TYPE_P (type1) && RECORD_OR_UNION_TYPE_P (type2)
 	   && comptypes (TYPE_MAIN_VARIANT (type1),
 			 TYPE_MAIN_VARIANT (type2)))
     result_type = composite_type (TYPE_MAIN_VARIANT (type1),
 				  TYPE_MAIN_VARIANT (type2));
 
-  if (!result_type)
+  सचे (!result_type)
     {
-      if (flag_cond_mismatch)
-	result_type = void_type_node;
-      else
+      सचे (flag_cond_mismatch)
+	result_type = void_type_ग्रन्थिः;
+      अञ्ञथा
 	{
 	  error_at (colon_loc, "type mismatch in conditional expression");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
     }
 
@@ -7041,142 +7041,142 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
   op2 = ep_convert_and_check (colon_loc, result_type, op2,
 			      semantic_result_type);
 
-  if (ifexp_bcp && ifexp == truthvalue_true_node)
+  सचे (ifexp_bcp && ifexp == truthvalue_true_ग्रन्थिः)
     {
-      op2_int_operands = true;
-      op1 = c_fully_fold (op1, require_constant_value, NULL);
+      op2_int_operands = सच्च;
+      op1 = c_fully_fold (op1, require_constant_मानम्, रिक्त);
     }
-  if (ifexp_bcp && ifexp == truthvalue_false_node)
+  सचे (ifexp_bcp && ifexp == truthvalue_false_ग्रन्थिः)
     {
-      op1_int_operands = true;
-      op2 = c_fully_fold (op2, require_constant_value, NULL);
+      op1_int_operands = सच्च;
+      op2 = c_fully_fold (op2, require_constant_मानम्, रिक्त);
     }
   int_const = int_operands = (ifexp_int_operands
 			      && op1_int_operands
 			      && op2_int_operands);
-  if (int_operands)
+  सचे (int_operands)
     {
-      int_const = ((ifexp == truthvalue_true_node
-		    && TREE_CODE (orig_op1) == INTEGER_CST
-		    && !TREE_OVERFLOW (orig_op1))
-		   || (ifexp == truthvalue_false_node
-		       && TREE_CODE (orig_op2) == INTEGER_CST
-		       && !TREE_OVERFLOW (orig_op2)));
+      int_const = ((ifexp == truthvalue_true_ग्रन्थिः
+		    && वृक्षः_CODE (orig_op1) == INTEGER_CST
+		    && !वृक्षः_OVERFLOW (orig_op1))
+		   || (ifexp == truthvalue_false_ग्रन्थिः
+		       && वृक्षः_CODE (orig_op2) == INTEGER_CST
+		       && !वृक्षः_OVERFLOW (orig_op2)));
     }
 
   /* Need to convert condition operand into a vector mask.  */
-  if (VECTOR_TYPE_P (TREE_TYPE (ifexp)))
+  सचे (VECTOR_TYPE_P (वृक्षः_TYPE (ifexp)))
     {
-      tree vectype = TREE_TYPE (ifexp);
-      tree elem_type = TREE_TYPE (vectype);
-      tree zero = build_int_cst (elem_type, 0);
-      tree zero_vec = build_vector_from_val (vectype, zero);
-      tree cmp_type = truth_type_for (vectype);
-      ifexp = build2 (NE_EXPR, cmp_type, ifexp, zero_vec);
+      वृक्षः vectype = वृक्षः_TYPE (ifexp);
+      वृक्षः elem_type = वृक्षः_TYPE (vectype);
+      वृक्षः zero = build_int_cst (elem_type, 0);
+      वृक्षः zero_vec = build_vector_from_val (vectype, zero);
+      वृक्षः cmp_type = truth_type_for (vectype);
+      ifexp = build2 (NE_व्यञ्जकम्, cmp_type, ifexp, zero_vec);
     }
 
-  if (int_const || (ifexp_bcp && TREE_CODE (ifexp) == INTEGER_CST))
-    ret = fold_build3_loc (colon_loc, COND_EXPR, result_type, ifexp, op1, op2);
-  else
+  सचे (int_const || (ifexp_bcp && वृक्षः_CODE (ifexp) == INTEGER_CST))
+    ret = fold_build3_loc (colon_loc, COND_व्यञ्जकम्, result_type, ifexp, op1, op2);
+  अञ्ञथा
     {
-      if (int_operands)
+      सचे (int_operands)
 	{
 	  /* Use c_fully_fold here, since C_MAYBE_CONST_EXPR might be
 	     nested inside of the expression.  */
-	  op1 = c_fully_fold (op1, false, NULL);
-	  op2 = c_fully_fold (op2, false, NULL);
+	  op1 = c_fully_fold (op1, मिच्छा, रिक्त);
+	  op2 = c_fully_fold (op2, मिच्छा, रिक्त);
 	}
-      ret = build3 (COND_EXPR, result_type, ifexp, op1, op2);
-      if (int_operands)
+      ret = build3 (COND_व्यञ्जकम्, result_type, ifexp, op1, op2);
+      सचे (int_operands)
 	ret = note_integer_operands (ret);
     }
-  if (semantic_result_type)
-    ret = build1 (EXCESS_PRECISION_EXPR, semantic_result_type, ret);
+  सचे (semantic_result_type)
+    ret = build1 (EXCESS_PRECISION_व्यञ्जकम्, semantic_result_type, ret);
 
-  protected_set_expr_location (ret, colon_loc);
+  protected_set_व्यञ्जकम्_location (ret, colon_loc);
 
   /* If the OP1 and OP2 are the same and don't have side-effects,
      warn here, because the COND_EXPR will be turned into OP1.  */
-  if (warn_duplicated_branches
-      && TREE_CODE (ret) == COND_EXPR
+  सचे (warn_duplicated_branches
+      && वृक्षः_CODE (ret) == COND_व्यञ्जकम्
       && (op1 == op2 || operand_equal_p (op1, op2, OEP_ADDRESS_OF_SAME_FIELD)))
-    warning_at (EXPR_LOCATION (ret), OPT_Wduplicated_branches,
+    warning_at (व्यञ्जकम्_LOCATION (ret), OPT_Wduplicated_branches,
 		"this condition has identical branches");
 
-  return ret;
+  पटिनिवत्त ret;
 }
 
 /* EXPR is an expression, location LOC, whose result is discarded.
    Warn if it is a call to a nodiscard function (or a COMPOUND_EXPR
    whose right-hand operand is such a call, possibly recursively).  */
 
-static void
-maybe_warn_nodiscard (location_t loc, tree expr)
+स्थिर शून्य
+maybe_warn_nodiscard (location_t loc, वृक्षः व्यञ्जकम्)
 {
-  if (VOID_TYPE_P (TREE_TYPE (expr)))
-    return;
-  while (TREE_CODE (expr) == COMPOUND_EXPR)
+  सचे (VOID_TYPE_P (वृक्षः_TYPE (व्यञ्जकम्)))
+    पटिनिवत्त;
+  याव (वृक्षः_CODE (व्यञ्जकम्) == COMPOUND_व्यञ्जकम्)
     {
-      expr = TREE_OPERAND (expr, 1);
-      if (EXPR_HAS_LOCATION (expr))
-	loc = EXPR_LOCATION (expr);
+      व्यञ्जकम् = वृक्षः_OPERAND (व्यञ्जकम्, 1);
+      सचे (व्यञ्जकम्_HAS_LOCATION (व्यञ्जकम्))
+	loc = व्यञ्जकम्_LOCATION (व्यञ्जकम्);
     }
-  if (TREE_CODE (expr) != CALL_EXPR)
-    return;
-  tree fn = CALL_EXPR_FN (expr);
-  if (!fn)
-    return;
-  tree attr;
-  if (TREE_CODE (fn) == ADDR_EXPR
-      && TREE_CODE (TREE_OPERAND (fn, 0)) == FUNCTION_DECL
+  सचे (वृक्षः_CODE (व्यञ्जकम्) != CALL_व्यञ्जकम्)
+    पटिनिवत्त;
+  वृक्षः fn = CALL_व्यञ्जकम्_FN (व्यञ्जकम्);
+  सचे (!fn)
+    पटिनिवत्त;
+  वृक्षः attr;
+  सचे (वृक्षः_CODE (fn) == ADDR_व्यञ्जकम्
+      && वृक्षः_CODE (वृक्षः_OPERAND (fn, 0)) == FUNCTION_DECL
       && (attr = lookup_attribute ("nodiscard",
-				   DECL_ATTRIBUTES (TREE_OPERAND (fn, 0)))))
+				   DECL_ATTRIBUTES (वृक्षः_OPERAND (fn, 0)))))
     {
-      fn = TREE_OPERAND (fn, 0);
-      tree args = TREE_VALUE (attr);
-      if (args)
-	args = TREE_VALUE (args);
+      fn = वृक्षः_OPERAND (fn, 0);
+      वृक्षः args = वृक्षः_मानम् (attr);
+      सचे (args)
+	args = वृक्षः_मानम् (args);
       auto_diagnostic_group d;
       auto_urlify_attributes sentinel;
-      int warned;
-      if (args)
+      पूर्णाङ्क warned;
+      सचे (args)
 	warned = warning_at (loc, OPT_Wunused_result,
 			     "ignoring return value of %qD, declared with "
 			     "attribute %<nodiscard%>: %E", fn, args);
-      else
+      अञ्ञथा
 	warned = warning_at (loc, OPT_Wunused_result,
 			     "ignoring return value of %qD, declared with "
 			     "attribute %<nodiscard%>", fn);
-      if (warned)
+      सचे (warned)
 	inform (DECL_SOURCE_LOCATION (fn), "declared here");
     }
-  else
+  अञ्ञथा
     {
-      tree rettype = TREE_TYPE (TREE_TYPE (TREE_TYPE (fn)));
+      वृक्षः rettype = वृक्षः_TYPE (वृक्षः_TYPE (वृक्षः_TYPE (fn)));
       attr = lookup_attribute ("nodiscard", TYPE_ATTRIBUTES (rettype));
-      if (!attr)
-	return;
-      tree args = TREE_VALUE (attr);
-      if (args)
-	args = TREE_VALUE (args);
+      सचे (!attr)
+	पटिनिवत्त;
+      वृक्षः args = वृक्षः_मानम् (attr);
+      सचे (args)
+	args = वृक्षः_मानम् (args);
       auto_diagnostic_group d;
       auto_urlify_attributes sentinel;
-      int warned;
-      if (args)
+      पूर्णाङ्क warned;
+      सचे (args)
 	warned = warning_at (loc, OPT_Wunused_result,
 			     "ignoring return value of type %qT, declared "
 			     "with attribute %<nodiscard%>: %E",
 			     rettype, args);
-      else
+      अञ्ञथा
 	warned = warning_at (loc, OPT_Wunused_result,
 			     "ignoring return value of type %qT, declared "
 			     "with attribute %<nodiscard%>", rettype);
-      if (warned)
+      सचे (warned)
 	{
-	  if (TREE_CODE (fn) == ADDR_EXPR)
+	  सचे (वृक्षः_CODE (fn) == ADDR_व्यञ्जकम्)
 	    {
-	      fn = TREE_OPERAND (fn, 0);
-	      if (TREE_CODE (fn) == FUNCTION_DECL)
+	      fn = वृक्षः_OPERAND (fn, 0);
+	      सचे (वृक्षः_CODE (fn) == FUNCTION_DECL)
 		inform (DECL_SOURCE_LOCATION (fn),
 			"in call to %qD, declared here", fn);
 	    }
@@ -7189,62 +7189,62 @@ maybe_warn_nodiscard (location_t loc, tree expr)
 
    LOC is the location of the COMPOUND_EXPR.  */
 
-tree
-build_compound_expr (location_t loc, tree expr1, tree expr2)
+वृक्षः
+build_compound_व्यञ्जकम् (location_t loc, वृक्षः expr1, वृक्षः expr2)
 {
-  bool expr1_int_operands, expr2_int_operands;
-  tree eptype = NULL_TREE;
-  tree ret;
+  तार्किक expr1_int_operands, expr2_int_operands;
+  वृक्षः eptype = NULL_वृक्षः;
+  वृक्षः ret;
 
-  expr1_int_operands = EXPR_INT_CONST_OPERANDS (expr1);
-  if (expr1_int_operands)
-    expr1 = remove_c_maybe_const_expr (expr1);
-  expr2_int_operands = EXPR_INT_CONST_OPERANDS (expr2);
-  if (expr2_int_operands)
-    expr2 = remove_c_maybe_const_expr (expr2);
+  expr1_int_operands = व्यञ्जकम्_INT_CONST_OPERANDS (expr1);
+  सचे (expr1_int_operands)
+    expr1 = remove_c_maybe_const_व्यञ्जकम् (expr1);
+  expr2_int_operands = व्यञ्जकम्_INT_CONST_OPERANDS (expr2);
+  सचे (expr2_int_operands)
+    expr2 = remove_c_maybe_const_व्यञ्जकम् (expr2);
 
-  if (TREE_CODE (expr1) == EXCESS_PRECISION_EXPR)
-    expr1 = TREE_OPERAND (expr1, 0);
-  if (TREE_CODE (expr2) == EXCESS_PRECISION_EXPR)
+  सचे (वृक्षः_CODE (expr1) == EXCESS_PRECISION_व्यञ्जकम्)
+    expr1 = वृक्षः_OPERAND (expr1, 0);
+  सचे (वृक्षः_CODE (expr2) == EXCESS_PRECISION_व्यञ्जकम्)
     {
-      eptype = TREE_TYPE (expr2);
-      expr2 = TREE_OPERAND (expr2, 0);
+      eptype = वृक्षः_TYPE (expr2);
+      expr2 = वृक्षः_OPERAND (expr2, 0);
     }
 
-  if (!TREE_SIDE_EFFECTS (expr1))
+  सचे (!वृक्षः_SIDE_EFFECTS (expr1))
     {
       /* The left-hand operand of a comma expression is like an expression
 	 statement: with -Wunused, we should warn if it doesn't have
 	 any side-effects, unless it was explicitly cast to (void).  */
-      if (warn_unused_value)
+      सचे (warn_unused_मानम्)
 	{
-	  if (VOID_TYPE_P (TREE_TYPE (expr1))
-	      && CONVERT_EXPR_P (expr1))
+	  सचे (VOID_TYPE_P (वृक्षः_TYPE (expr1))
+	      && CONVERT_व्यञ्जकम्_P (expr1))
 	    ; /* (void) a, b */
-	  else if (VOID_TYPE_P (TREE_TYPE (expr1))
-		   && TREE_CODE (expr1) == COMPOUND_EXPR
-		   && CONVERT_EXPR_P (TREE_OPERAND (expr1, 1)))
+	  अञ्ञथा सचे (VOID_TYPE_P (वृक्षः_TYPE (expr1))
+		   && वृक्षः_CODE (expr1) == COMPOUND_व्यञ्जकम्
+		   && CONVERT_व्यञ्जकम्_P (वृक्षः_OPERAND (expr1, 1)))
 	    ; /* (void) a, (void) b, c */
-	  else
-	    warning_at (loc, OPT_Wunused_value,
+	  अञ्ञथा
+	    warning_at (loc, OPT_Wunused_मानम्,
 			"left-hand operand of comma expression has no effect");
 	}
     }
-  else if (TREE_CODE (expr1) == COMPOUND_EXPR
-	   && warn_unused_value)
+  अञ्ञथा सचे (वृक्षः_CODE (expr1) == COMPOUND_व्यञ्जकम्
+	   && warn_unused_मानम्)
     {
-      tree r = expr1;
+      वृक्षः r = expr1;
       location_t cloc = loc;
-      while (TREE_CODE (r) == COMPOUND_EXPR)
+      याव (वृक्षः_CODE (r) == COMPOUND_व्यञ्जकम्)
         {
-	  if (EXPR_HAS_LOCATION (r))
-	    cloc = EXPR_LOCATION (r);
-	  r = TREE_OPERAND (r, 1);
+	  सचे (व्यञ्जकम्_HAS_LOCATION (r))
+	    cloc = व्यञ्जकम्_LOCATION (r);
+	  r = वृक्षः_OPERAND (r, 1);
 	}
-      if (!TREE_SIDE_EFFECTS (r)
-	  && !VOID_TYPE_P (TREE_TYPE (r))
-	  && !CONVERT_EXPR_P (r))
-	warning_at (cloc, OPT_Wunused_value,
+      सचे (!वृक्षः_SIDE_EFFECTS (r)
+	  && !VOID_TYPE_P (वृक्षः_TYPE (r))
+	  && !CONVERT_व्यञ्जकम्_P (r))
+	warning_at (cloc, OPT_Wunused_मानम्,
 	            "right-hand operand of comma expression has no effect");
     }
 
@@ -7252,26 +7252,26 @@ build_compound_expr (location_t loc, tree expr1, tree expr2)
      side-effects, but computes a value which is not used.  For example, in
      `foo() + bar(), baz()' the result of the `+' operator is not used,
      so we should issue a warning.  */
-  else if (warn_unused_value)
-    warn_if_unused_value (expr1, loc);
+  अञ्ञथा सचे (warn_unused_मानम्)
+    warn_if_unused_मानम् (expr1, loc);
 
   maybe_warn_nodiscard (loc, expr1);
 
-  if (expr2 == error_mark_node)
-    return error_mark_node;
+  सचे (expr2 == error_mark_ग्रन्थिः)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  ret = build2 (COMPOUND_EXPR, TREE_TYPE (expr2), expr1, expr2);
+  ret = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (expr2), expr1, expr2);
 
-  if (flag_isoc99
+  सचे (flag_isoc99
       && expr1_int_operands
       && expr2_int_operands)
     ret = note_integer_operands (ret);
 
-  if (eptype)
-    ret = build1 (EXCESS_PRECISION_EXPR, eptype, ret);
+  सचे (eptype)
+    ret = build1 (EXCESS_PRECISION_व्यञ्जकम्, eptype, ret);
 
-  protected_set_expr_location (ret, loc);
-  return ret;
+  protected_set_व्यञ्जकम्_location (ret, loc);
+  पटिनिवत्त ret;
 }
 
 /* Issue -Wcast-qual warnings when appropriate.  TYPE is the type to
@@ -7281,52 +7281,52 @@ build_compound_expr (location_t loc, tree expr1, tree expr2)
    address space qualifiers are not handled here, because they result
    in different warnings.  */
 
-static void
-handle_warn_cast_qual (location_t loc, tree type, tree otype)
+स्थिर शून्य
+handle_warn_cast_qual (location_t loc, वृक्षः type, वृक्षः otype)
 {
-  tree in_type = type;
-  tree in_otype = otype;
-  int added = 0;
-  int discarded = 0;
-  bool is_const;
+  वृक्षः in_type = type;
+  वृक्षः in_otype = otype;
+  पूर्णाङ्क added = 0;
+  पूर्णाङ्क discarded = 0;
+  तार्किक is_const;
 
   /* Check that the qualifiers on IN_TYPE are a superset of the
      qualifiers of IN_OTYPE.  The outermost level of POINTER_TYPE
      nodes is uninteresting and we stop as soon as we hit a
      non-POINTER_TYPE node on either type.  */
-  do
+  करोहि
     {
-      in_otype = TREE_TYPE (in_otype);
-      in_type = TREE_TYPE (in_type);
+      in_otype = वृक्षः_TYPE (in_otype);
+      in_type = वृक्षः_TYPE (in_type);
 
       /* GNU C allows cv-qualified function types.  'const' means the
 	 function is very pure, 'volatile' means it can't return.  We
 	 need to warn when such qualifiers are added, not when they're
 	 taken away.  */
-      if (TREE_CODE (in_otype) == FUNCTION_TYPE
-	  && TREE_CODE (in_type) == FUNCTION_TYPE)
+      सचे (वृक्षः_CODE (in_otype) == FUNCTION_TYPE
+	  && वृक्षः_CODE (in_type) == FUNCTION_TYPE)
 	added |= (TYPE_QUALS_NO_ADDR_SPACE (in_type)
 		  & ~TYPE_QUALS_NO_ADDR_SPACE (in_otype));
-      else
+      अञ्ञथा
 	discarded |= (TYPE_QUALS_NO_ADDR_SPACE (in_otype)
 		      & ~TYPE_QUALS_NO_ADDR_SPACE (in_type));
     }
-  while (TREE_CODE (in_type) == POINTER_TYPE
-	 && TREE_CODE (in_otype) == POINTER_TYPE);
+  याव (वृक्षः_CODE (in_type) == POINTER_TYPE
+	 && वृक्षः_CODE (in_otype) == POINTER_TYPE);
 
-  if (added)
+  सचे (added)
     warning_at (loc, OPT_Wcast_qual,
 		"cast adds %q#v qualifier to function type", added);
 
-  if (discarded)
+  सचे (discarded)
     /* There are qualifiers present in IN_OTYPE that are not present
        in IN_TYPE.  */
     warning_at (loc, OPT_Wcast_qual,
 		"cast discards %qv qualifier from pointer target type",
 		discarded);
 
-  if (added || discarded)
-    return;
+  सचे (added || discarded)
+    पटिनिवत्त;
 
   /* A cast from **T to const **T is unsafe, because it can cause a
      const value to be changed with no additional warning.  We only
@@ -7341,214 +7341,214 @@ handle_warn_cast_qual (location_t loc, tree type, tree otype)
      case function types, as they won't have the same
      TYPE_MAIN_VARIANT.  */
 
-  if (TYPE_MAIN_VARIANT (in_type) != TYPE_MAIN_VARIANT (in_otype))
-    return;
-  if (TREE_CODE (TREE_TYPE (type)) != POINTER_TYPE)
-    return;
+  सचे (TYPE_MAIN_VARIANT (in_type) != TYPE_MAIN_VARIANT (in_otype))
+    पटिनिवत्त;
+  सचे (वृक्षः_CODE (वृक्षः_TYPE (type)) != POINTER_TYPE)
+    पटिनिवत्त;
 
   in_type = type;
   in_otype = otype;
-  is_const = TYPE_READONLY (TREE_TYPE (in_type));
-  do
+  is_const = TYPE_READONLY (वृक्षः_TYPE (in_type));
+  करोहि
     {
-      in_type = TREE_TYPE (in_type);
-      in_otype = TREE_TYPE (in_otype);
-      if ((TYPE_QUALS (in_type) &~ TYPE_QUALS (in_otype)) != 0
+      in_type = वृक्षः_TYPE (in_type);
+      in_otype = वृक्षः_TYPE (in_otype);
+      सचे ((TYPE_QUALS (in_type) &~ TYPE_QUALS (in_otype)) != 0
 	  && !is_const)
 	{
 	  warning_at (loc, OPT_Wcast_qual,
 		      "to be safe all intermediate pointers in cast from "
                       "%qT to %qT must be %<const%> qualified",
 		      otype, type);
-	  break;
+	  भङ्ग;
 	}
-      if (is_const)
+      सचे (is_const)
 	is_const = TYPE_READONLY (in_type);
     }
-  while (TREE_CODE (in_type) == POINTER_TYPE);
+  याव (वृक्षः_CODE (in_type) == POINTER_TYPE);
 }
 
 /* Heuristic check if two parameter types can be considered ABI-equivalent.  */
 
-static bool
-c_safe_arg_type_equiv_p (tree t1, tree t2)
+स्थिर तार्किक
+c_safe_arg_type_equiv_p (वृक्षः t1, वृक्षः t2)
 {
-  if (error_operand_p (t1) || error_operand_p (t2))
-    return true;
+  सचे (error_operand_p (t1) || error_operand_p (t2))
+    पटिनिवत्त सच्च;
 
   t1 = TYPE_MAIN_VARIANT (t1);
   t2 = TYPE_MAIN_VARIANT (t2);
 
-  if (TREE_CODE (t1) == POINTER_TYPE
-      && TREE_CODE (t2) == POINTER_TYPE)
-    return true;
+  सचे (वृक्षः_CODE (t1) == POINTER_TYPE
+      && वृक्षः_CODE (t2) == POINTER_TYPE)
+    पटिनिवत्त सच्च;
 
   /* Only the precision of the parameter matters.  This check should
      make sure that the callee does not see undefined values in argument
      registers.  */
-  if (INTEGRAL_TYPE_P (t1)
+  सचे (INTEGRAL_TYPE_P (t1)
       && INTEGRAL_TYPE_P (t2)
       && TYPE_PRECISION (t1) == TYPE_PRECISION (t2))
-    return true;
+    पटिनिवत्त सच्च;
 
-  return comptypes (t1, t2);
+  पटिनिवत्त comptypes (t1, t2);
 }
 
 /* Check if a type cast between two function types can be considered safe.  */
 
-static bool
-c_safe_function_type_cast_p (tree t1, tree t2)
+स्थिर तार्किक
+c_safe_function_type_cast_p (वृक्षः t1, वृक्षः t2)
 {
-  if (TREE_TYPE (t1) == void_type_node &&
-      TYPE_ARG_TYPES (t1) == void_list_node)
-    return true;
+  सचे (वृक्षः_TYPE (t1) == void_type_ग्रन्थिः &&
+      TYPE_ARG_TYPES (t1) == void_list_ग्रन्थिः)
+    पटिनिवत्त सच्च;
 
-  if (TREE_TYPE (t2) == void_type_node &&
-      TYPE_ARG_TYPES (t2) == void_list_node)
-    return true;
+  सचे (वृक्षः_TYPE (t2) == void_type_ग्रन्थिः &&
+      TYPE_ARG_TYPES (t2) == void_list_ग्रन्थिः)
+    पटिनिवत्त सच्च;
 
-  if (!c_safe_arg_type_equiv_p (TREE_TYPE (t1), TREE_TYPE (t2)))
-    return false;
+  सचे (!c_safe_arg_type_equiv_p (वृक्षः_TYPE (t1), वृक्षः_TYPE (t2)))
+    पटिनिवत्त मिच्छा;
 
-  for (t1 = TYPE_ARG_TYPES (t1), t2 = TYPE_ARG_TYPES (t2);
+  अत्थाय (t1 = TYPE_ARG_TYPES (t1), t2 = TYPE_ARG_TYPES (t2);
        t1 && t2;
-       t1 = TREE_CHAIN (t1), t2 = TREE_CHAIN (t2))
-    if (!c_safe_arg_type_equiv_p (TREE_VALUE (t1), TREE_VALUE (t2)))
-      return false;
+       t1 = वृक्षः_CHAIN (t1), t2 = वृक्षः_CHAIN (t2))
+    सचे (!c_safe_arg_type_equiv_p (वृक्षः_मानम् (t1), वृक्षः_मानम् (t2)))
+      पटिनिवत्त मिच्छा;
 
-  return true;
+  पटिनिवत्त सच्च;
 }
 
 /* Build an expression representing a cast to type TYPE of expression EXPR.
    LOC is the location of the cast-- typically the open paren of the cast.  */
 
-tree
-build_c_cast (location_t loc, tree type, tree expr)
+वृक्षः
+build_c_cast (location_t loc, वृक्षः type, वृक्षः व्यञ्जकम्)
 {
-  tree value;
+  वृक्षः मानम्;
 
-  bool int_operands = EXPR_INT_CONST_OPERANDS (expr);
+  तार्किक int_operands = व्यञ्जकम्_INT_CONST_OPERANDS (व्यञ्जकम्);
 
-  if (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
-    expr = TREE_OPERAND (expr, 0);
+  सचे (वृक्षः_CODE (व्यञ्जकम्) == EXCESS_PRECISION_व्यञ्जकम्)
+    व्यञ्जकम् = वृक्षः_OPERAND (व्यञ्जकम्, 0);
 
-  value = expr;
-  if (int_operands)
-    value = remove_c_maybe_const_expr (value);
+  मानम् = व्यञ्जकम्;
+  सचे (int_operands)
+    मानम् = remove_c_maybe_const_व्यञ्जकम् (मानम्);
 
-  if (type == error_mark_node || expr == error_mark_node)
-    return error_mark_node;
+  सचे (type == error_mark_ग्रन्थिः || व्यञ्जकम् == error_mark_ग्रन्थिः)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
   /* The ObjC front-end uses TYPE_MAIN_VARIANT to tie together types differing
      only in <protocol> qualifications.  But when constructing cast expressions,
      the protocols do matter and must be kept around.  */
-  if (objc_is_object_ptr (type) && objc_is_object_ptr (TREE_TYPE (expr)))
-    return build1 (NOP_EXPR, type, expr);
+  सचे (objc_is_object_ptr (type) && objc_is_object_ptr (वृक्षः_TYPE (व्यञ्जकम्)))
+    पटिनिवत्त build1 (NOP_व्यञ्जकम्, type, व्यञ्जकम्);
 
   type = TYPE_MAIN_VARIANT (type);
 
-  if (TREE_CODE (type) == ARRAY_TYPE)
+  सचे (वृक्षः_CODE (type) == ARRAY_TYPE)
     {
       error_at (loc, "cast specifies array type");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  if (TREE_CODE (type) == FUNCTION_TYPE)
+  सचे (वृक्षः_CODE (type) == FUNCTION_TYPE)
     {
       error_at (loc, "cast specifies function type");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  if (!VOID_TYPE_P (type))
+  सचे (!VOID_TYPE_P (type))
     {
-      value = require_complete_type (loc, value);
-      if (value == error_mark_node)
-	return error_mark_node;
+      मानम् = require_complete_type (loc, मानम्);
+      सचे (मानम् == error_mark_ग्रन्थिः)
+	पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  if (type == TYPE_MAIN_VARIANT (TREE_TYPE (value)))
+  सचे (type == TYPE_MAIN_VARIANT (वृक्षः_TYPE (मानम्)))
     {
-      if (RECORD_OR_UNION_TYPE_P (type)
+      सचे (RECORD_OR_UNION_TYPE_P (type)
 	  && pedwarn (loc, OPT_Wpedantic,
 		      "ISO C forbids casting nonscalar to the same type"))
 	      ;
-      else if (warn_useless_cast && c_inhibit_evaluation_warnings == 0)
+      अञ्ञथा सचे (warn_useless_cast && c_inhibit_evaluation_warnings == 0)
 	warning_at (loc, OPT_Wuseless_cast,
 		    "useless cast to type %qT", type);
 
       /* Convert to remove any qualifiers from VALUE's type.  */
-      value = convert (type, value);
+      मानम् = convert (type, मानम्);
     }
-  else if (TREE_CODE (type) == UNION_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (type) == UNION_TYPE)
     {
-      tree field;
+      वृक्षः field;
 
-      for (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
-	if (TREE_TYPE (field) != error_mark_node
-	    && comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (field)),
-			  TYPE_MAIN_VARIANT (TREE_TYPE (value))))
-	  break;
+      अत्थाय (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
+	सचे (वृक्षः_TYPE (field) != error_mark_ग्रन्थिः
+	    && comptypes (TYPE_MAIN_VARIANT (वृक्षः_TYPE (field)),
+			  TYPE_MAIN_VARIANT (वृक्षः_TYPE (मानम्))))
+	  भङ्ग;
 
-      if (field)
+      सचे (field)
 	{
-	  tree t;
-	  bool maybe_const = true;
+	  वृक्षः t;
+	  तार्किक maybe_const = सच्च;
 
 	  pedwarn (loc, OPT_Wpedantic, "ISO C forbids casts to union type");
-	  t = c_fully_fold (value, false, &maybe_const);
+	  t = c_fully_fold (मानम्, मिच्छा, &maybe_const);
 	  t = build_constructor_single (type, field, t);
-	  if (!maybe_const)
-	    t = c_wrap_maybe_const (t, true);
+	  सचे (!maybe_const)
+	    t = c_wrap_maybe_const (t, सच्च);
 	  t = digest_init (loc, field, type, t,
-			   NULL_TREE, false, false, false, true, false, false);
-	  TREE_CONSTANT (t) = TREE_CONSTANT (value);
-	  return t;
+			   NULL_वृक्षः, मिच्छा, मिच्छा, मिच्छा, सच्च, मिच्छा, मिच्छा);
+	  वृक्षः_CONSTANT (t) = वृक्षः_CONSTANT (मानम्);
+	  पटिनिवत्त t;
 	}
       error_at (loc, "cast to union type from type not present in union");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
-  else
+  अञ्ञथा
     {
-      tree otype, ovalue;
+      वृक्षः otype, ovalue;
 
-      if (type == void_type_node)
+      सचे (type == void_type_ग्रन्थिः)
 	{
-	  tree t = build1 (CONVERT_EXPR, type, value);
-	  SET_EXPR_LOCATION (t, loc);
-	  return t;
+	  वृक्षः t = build1 (CONVERT_व्यञ्जकम्, type, मानम्);
+	  SET_व्यञ्जकम्_LOCATION (t, loc);
+	  पटिनिवत्त t;
 	}
 
-      otype = TREE_TYPE (value);
+      otype = वृक्षः_TYPE (मानम्);
 
       /* Optionally warn about potentially worrisome casts.  */
-      if (warn_cast_qual
-	  && TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE)
+      सचे (warn_cast_qual
+	  && वृक्षः_CODE (type) == POINTER_TYPE
+	  && वृक्षः_CODE (otype) == POINTER_TYPE)
 	handle_warn_cast_qual (loc, type, otype);
 
       /* Warn about conversions between pointers to disjoint
 	 address spaces.  */
-      if (TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE
-	  && !null_pointer_constant_p (value))
+      सचे (वृक्षः_CODE (type) == POINTER_TYPE
+	  && वृक्षः_CODE (otype) == POINTER_TYPE
+	  && !null_pointer_constant_p (मानम्))
 	{
-	  addr_space_t as_to = TYPE_ADDR_SPACE (TREE_TYPE (type));
-	  addr_space_t as_from = TYPE_ADDR_SPACE (TREE_TYPE (otype));
+	  addr_space_t as_to = TYPE_ADDR_SPACE (वृक्षः_TYPE (type));
+	  addr_space_t as_from = TYPE_ADDR_SPACE (वृक्षः_TYPE (otype));
 	  addr_space_t as_common;
 
-	  if (!addr_space_superset (as_to, as_from, &as_common))
+	  सचे (!addr_space_superset (as_to, as_from, &as_common))
 	    {
-	      if (ADDR_SPACE_GENERIC_P (as_from))
+	      सचे (ADDR_SPACE_GENERIC_P (as_from))
 		warning_at (loc, 0, "cast to %qs address space pointer "
 			    "from disjoint generic address space pointer",
 			    c_addr_space_name (as_to));
 
-	      else if (ADDR_SPACE_GENERIC_P (as_to))
+	      अञ्ञथा सचे (ADDR_SPACE_GENERIC_P (as_to))
 		warning_at (loc, 0, "cast to generic address space pointer "
 			    "from disjoint %qs address space pointer",
 			    c_addr_space_name (as_from));
 
-	      else
+	      अञ्ञथा
 		warning_at (loc, 0, "cast to %qs address space pointer "
 			    "from disjoint %qs address space pointer",
 			    c_addr_space_name (as_to),
@@ -7557,36 +7557,36 @@ build_c_cast (location_t loc, tree type, tree expr)
 
 	  /* Warn of new allocations that are not big enough for the target
 	     type.  */
-	  if (warn_alloc_size && TREE_CODE (value) == CALL_EXPR)
-	    if (tree fndecl = get_callee_fndecl (value))
-	      if (DECL_IS_MALLOC (fndecl))
+	  सचे (warn_alloc_size && वृक्षः_CODE (मानम्) == CALL_व्यञ्जकम्)
+	    सचे (वृक्षः fndecl = get_callee_fndecl (मानम्))
+	      सचे (DECL_IS_MALLOC (fndecl))
 		{
-		  tree attrs = TYPE_ATTRIBUTES (TREE_TYPE (fndecl));
-		  tree alloc_size = lookup_attribute ("alloc_size", attrs);
-		  if (alloc_size)
-		    warn_for_alloc_size (loc, TREE_TYPE (type), value,
+		  वृक्षः attrs = TYPE_ATTRIBUTES (वृक्षः_TYPE (fndecl));
+		  वृक्षः alloc_size = lookup_attribute ("alloc_size", attrs);
+		  सचे (alloc_size)
+		    warn_for_alloc_size (loc, वृक्षः_TYPE (type), मानम्,
 					 alloc_size);
 		}
 	}
 
       /* Warn about possible alignment problems.  */
-      if ((STRICT_ALIGNMENT || warn_cast_align == 2)
-	  && TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE
-	  && TREE_CODE (TREE_TYPE (otype)) != VOID_TYPE
-	  && TREE_CODE (TREE_TYPE (otype)) != FUNCTION_TYPE
+      सचे ((STRICT_ALIGNMENT || warn_cast_align == 2)
+	  && वृक्षः_CODE (type) == POINTER_TYPE
+	  && वृक्षः_CODE (otype) == POINTER_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (otype)) != VOID_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (otype)) != FUNCTION_TYPE
 	  /* Don't warn about opaque types, where the actual alignment
 	     restriction is unknown.  */
-	  && !(RECORD_OR_UNION_TYPE_P (TREE_TYPE (otype))
-	       && TYPE_MODE (TREE_TYPE (otype)) == VOIDmode)
-	  && min_align_of_type (TREE_TYPE (type))
-	     > min_align_of_type (TREE_TYPE (otype)))
+	  && !(RECORD_OR_UNION_TYPE_P (वृक्षः_TYPE (otype))
+	       && TYPE_MODE (वृक्षः_TYPE (otype)) == VOIDmode)
+	  && min_align_of_type (वृक्षः_TYPE (type))
+	     > min_align_of_type (वृक्षः_TYPE (otype)))
 	warning_at (loc, OPT_Wcast_align,
 		    "cast increases required alignment of target type");
 
-      if ((TREE_CODE (type) == INTEGER_TYPE
-	   || TREE_CODE (type) == BITINT_TYPE)
-	  && TREE_CODE (otype) == POINTER_TYPE
+      सचे ((वृक्षः_CODE (type) == INTEGER_TYPE
+	   || वृक्षः_CODE (type) == BITINT_TYPE)
+	  && वृक्षः_CODE (otype) == POINTER_TYPE
 	  && TYPE_PRECISION (type) != TYPE_PRECISION (otype))
       /* Unlike conversion of integers to pointers, where the
          warning is disabled for converting constants because
@@ -7596,57 +7596,57 @@ build_c_cast (location_t loc, tree type, tree expr)
 	warning_at (loc, OPT_Wpointer_to_int_cast,
 		    "cast from pointer to integer of different size");
 
-      if ((TREE_CODE (value) == CALL_EXPR
-	   && !is_access_with_size_p (value))
-	  && TREE_CODE (type) != TREE_CODE (otype))
+      सचे ((वृक्षः_CODE (मानम्) == CALL_व्यञ्जकम्
+	   && !is_access_with_size_p (मानम्))
+	  && वृक्षः_CODE (type) != वृक्षः_CODE (otype))
 	warning_at (loc, OPT_Wbad_function_cast,
 		    "cast from function call of type %qT "
 		    "to non-matching type %qT", otype, type);
 
-      if (TREE_CODE (type) == POINTER_TYPE
-	  && (TREE_CODE (otype) == INTEGER_TYPE
-	      || TREE_CODE (otype) == BITINT_TYPE)
+      सचे (वृक्षः_CODE (type) == POINTER_TYPE
+	  && (वृक्षः_CODE (otype) == INTEGER_TYPE
+	      || वृक्षः_CODE (otype) == BITINT_TYPE)
 	  && TYPE_PRECISION (type) != TYPE_PRECISION (otype)
 	  /* Don't warn about converting any constant.  */
-	  && !TREE_CONSTANT (value))
+	  && !वृक्षः_CONSTANT (मानम्))
 	warning_at (loc,
 		    OPT_Wint_to_pointer_cast, "cast to pointer from integer "
 		    "of different size");
 
-      if (warn_strict_aliasing <= 2)
-        strict_aliasing_warning (EXPR_LOCATION (value), type, expr);
+      सचे (warn_strict_aliasing <= 2)
+        strict_aliasing_warning (व्यञ्जकम्_LOCATION (मानम्), type, व्यञ्जकम्);
 
       /* If pedantic, warn for conversions between function and object
 	 pointer types, except for converting a null pointer constant
 	 to function pointer type.  */
-      if (pedantic
-	  && TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE
-	  && TREE_CODE (TREE_TYPE (otype)) == FUNCTION_TYPE
-	  && TREE_CODE (TREE_TYPE (type)) != FUNCTION_TYPE)
+      सचे (pedantic
+	  && वृक्षः_CODE (type) == POINTER_TYPE
+	  && वृक्षः_CODE (otype) == POINTER_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (otype)) == FUNCTION_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (type)) != FUNCTION_TYPE)
 	pedwarn (loc, OPT_Wpedantic, "ISO C forbids "
 		 "conversion of function pointer to object pointer type");
 
-      if (pedantic
-	  && TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE
-	  && TREE_CODE (TREE_TYPE (type)) == FUNCTION_TYPE
-	  && TREE_CODE (TREE_TYPE (otype)) != FUNCTION_TYPE
-	  && !null_pointer_constant_p (value))
+      सचे (pedantic
+	  && वृक्षः_CODE (type) == POINTER_TYPE
+	  && वृक्षः_CODE (otype) == POINTER_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (type)) == FUNCTION_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (otype)) != FUNCTION_TYPE
+	  && !null_pointer_constant_p (मानम्))
 	pedwarn (loc, OPT_Wpedantic, "ISO C forbids "
 		 "conversion of object pointer to function pointer type");
 
-      if (TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE
-	  && TREE_CODE (TREE_TYPE (type)) == FUNCTION_TYPE
-	  && TREE_CODE (TREE_TYPE (otype)) == FUNCTION_TYPE
-	  && !c_safe_function_type_cast_p (TREE_TYPE (type),
-					   TREE_TYPE (otype)))
+      सचे (वृक्षः_CODE (type) == POINTER_TYPE
+	  && वृक्षः_CODE (otype) == POINTER_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (type)) == FUNCTION_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (otype)) == FUNCTION_TYPE
+	  && !c_safe_function_type_cast_p (वृक्षः_TYPE (type),
+					   वृक्षः_TYPE (otype)))
 	warning_at (loc, OPT_Wcast_function_type,
 		    "cast between incompatible function types"
 		    " from %qT to %qT", otype, type);
 
-      ovalue = value;
+      ovalue = मानम्;
       /* If converting to boolean a value with integer operands that
 	 is not itself represented as an INTEGER_CST, the call below
 	 to note_integer_operands may insert a C_MAYBE_CONST_EXPR, but
@@ -7656,116 +7656,116 @@ build_c_cast (location_t loc, tree type, tree expr)
 	 C_MAYBE_CONST_EXPR, ensure that
 	 c_objc_common_truthvalue_conversion receives an argument
 	 properly marked as having integer operands in that case.  */
-      if (int_operands
-	  && TREE_CODE (value) != INTEGER_CST
-	  && (TREE_CODE (type) == BOOLEAN_TYPE
-	      || (TREE_CODE (type) == ENUMERAL_TYPE
-		  && ENUM_UNDERLYING_TYPE (type) != NULL_TREE
-		  && TREE_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)))
-	value = note_integer_operands (value);
-      value = convert (type, value);
+      सचे (int_operands
+	  && वृक्षः_CODE (मानम्) != INTEGER_CST
+	  && (वृक्षः_CODE (type) == BOOLEAN_TYPE
+	      || (वृक्षः_CODE (type) == ENUMERAL_TYPE
+		  && ENUM_UNDERLYING_TYPE (type) != NULL_वृक्षः
+		  && वृक्षः_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)))
+	मानम् = note_integer_operands (मानम्);
+      मानम् = convert (type, मानम्);
 
       /* Ignore any integer overflow caused by the cast.  */
-      if (TREE_CODE (value) == INTEGER_CST && !FLOAT_TYPE_P (otype))
+      सचे (वृक्षः_CODE (मानम्) == INTEGER_CST && !FLOAT_TYPE_P (otype))
 	{
-	  if (TREE_OVERFLOW_P (ovalue))
+	  सचे (वृक्षः_OVERFLOW_P (ovalue))
 	    {
-	      if (!TREE_OVERFLOW (value))
+	      सचे (!वृक्षः_OVERFLOW (मानम्))
 		{
 		  /* Avoid clobbering a shared constant.  */
-		  value = copy_node (value);
-		  TREE_OVERFLOW (value) = TREE_OVERFLOW (ovalue);
+		  मानम् = copy_ग्रन्थिः (मानम्);
+		  वृक्षः_OVERFLOW (मानम्) = वृक्षः_OVERFLOW (ovalue);
 		}
 	    }
-	  else if (TREE_OVERFLOW (value))
+	  अञ्ञथा सचे (वृक्षः_OVERFLOW (मानम्))
 	    /* Reset VALUE's overflow flags, ensuring constant sharing.  */
-	    value = wide_int_to_tree (TREE_TYPE (value), wi::to_wide (value));
+	    मानम् = wide_int_to_वृक्षः (वृक्षः_TYPE (मानम्), wi::to_wide (मानम्));
 	}
     }
 
   /* Don't let a cast be an lvalue.  */
-  if (lvalue_p (value)
+  सचे (lvalue_p (मानम्)
       /* Also, don't let a cast be a bit-field of a bit-precise integer type,
 	 otherwise it could be incorrectly subject of integer promotions.  */
-      || (TREE_CODE (value) == COMPONENT_REF
-	  && DECL_C_BIT_FIELD (TREE_OPERAND (value, 1))
-	  && BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (TREE_OPERAND (value, 1)))))
-    value = non_lvalue_loc (loc, value);
+      || (वृक्षः_CODE (मानम्) == COMPONENT_REF
+	  && DECL_C_BIT_FIELD (वृक्षः_OPERAND (मानम्, 1))
+	  && BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (वृक्षः_OPERAND (मानम्, 1)))))
+    मानम् = non_lvalue_loc (loc, मानम्);
 
   /* Don't allow the results of casting to floating-point or complex
      types be confused with actual constants, or casts involving
      integer and pointer types other than direct integer-to-integer
      and integer-to-pointer be confused with integer constant
      expressions and null pointer constants.  */
-  if (TREE_CODE (value) == REAL_CST
-      || TREE_CODE (value) == COMPLEX_CST
-      || (TREE_CODE (value) == INTEGER_CST
-	  && !((TREE_CODE (expr) == INTEGER_CST
-		&& INTEGRAL_TYPE_P (TREE_TYPE (expr)))
-	       || TREE_CODE (expr) == REAL_CST
-	       || TREE_CODE (expr) == COMPLEX_CST)))
-      value = build1 (NOP_EXPR, type, value);
+  सचे (वृक्षः_CODE (मानम्) == REAL_CST
+      || वृक्षः_CODE (मानम्) == COMPLEX_CST
+      || (वृक्षः_CODE (मानम्) == INTEGER_CST
+	  && !((वृक्षः_CODE (व्यञ्जकम्) == INTEGER_CST
+		&& INTEGRAL_TYPE_P (वृक्षः_TYPE (व्यञ्जकम्)))
+	       || वृक्षः_CODE (व्यञ्जकम्) == REAL_CST
+	       || वृक्षः_CODE (व्यञ्जकम्) == COMPLEX_CST)))
+      मानम् = build1 (NOP_व्यञ्जकम्, type, मानम्);
 
   /* If the expression has integer operands and so can occur in an
      unevaluated part of an integer constant expression, ensure the
      return value reflects this.  */
-  if (int_operands
+  सचे (int_operands
       && INTEGRAL_TYPE_P (type)
-      && value != error_mark_node
-      && !EXPR_INT_CONST_OPERANDS (value))
-    value = note_integer_operands (value);
+      && मानम् != error_mark_ग्रन्थिः
+      && !व्यञ्जकम्_INT_CONST_OPERANDS (मानम्))
+    मानम् = note_integer_operands (मानम्);
 
-  protected_set_expr_location (value, loc);
-  return value;
+  protected_set_व्यञ्जकम्_location (मानम्, loc);
+  पटिनिवत्त मानम्;
 }
 
 /* Interpret a cast of expression EXPR to type TYPE.  LOC is the
    location of the open paren of the cast, or the position of the cast
    expr.  */
-tree
-c_cast_expr (location_t loc, struct c_type_name *type_name, tree expr)
+वृक्षः
+c_cast_व्यञ्जकम् (location_t loc, संरचना c_type_name *type_name, वृक्षः व्यञ्जकम्)
 {
-  tree type;
-  tree type_expr = NULL_TREE;
-  bool type_expr_const = true;
-  tree ret;
-  int saved_wsp = warn_strict_prototypes;
+  वृक्षः type;
+  वृक्षः type_व्यञ्जकम् = NULL_वृक्षः;
+  तार्किक type_व्यञ्जकम्_const = सच्च;
+  वृक्षः ret;
+  पूर्णाङ्क saved_wsp = warn_strict_prototypes;
 
   /* This avoids warnings about unprototyped casts on
      integers.  E.g. "#define SIG_DFL (void(*)())0".  */
-  if (TREE_CODE (expr) == INTEGER_CST)
+  सचे (वृक्षः_CODE (व्यञ्जकम्) == INTEGER_CST)
     warn_strict_prototypes = 0;
-  type = groktypename (type_name, &type_expr, &type_expr_const);
+  type = groktypename (type_name, &type_व्यञ्जकम्, &type_व्यञ्जकम्_const);
   warn_strict_prototypes = saved_wsp;
 
-  if (TREE_CODE (expr) == ADDR_EXPR && !VOID_TYPE_P (type)
-      && reject_gcc_builtin (expr))
-    return error_mark_node;
+  सचे (वृक्षः_CODE (व्यञ्जकम्) == ADDR_व्यञ्जकम् && !VOID_TYPE_P (type)
+      && reject_gcc_builtin (व्यञ्जकम्))
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  ret = build_c_cast (loc, type, expr);
-  if (ret == error_mark_node)
-    return error_mark_node;
+  ret = build_c_cast (loc, type, व्यञ्जकम्);
+  सचे (ret == error_mark_ग्रन्थिः)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if (type_expr)
+  सचे (type_व्यञ्जकम्)
     {
-      bool inner_expr_const = true;
-      ret = c_fully_fold (ret, require_constant_value, &inner_expr_const);
-      ret = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret), type_expr, ret);
-      C_MAYBE_CONST_EXPR_NON_CONST (ret) = !(type_expr_const
-					     && inner_expr_const);
-      SET_EXPR_LOCATION (ret, loc);
+      तार्किक inner_व्यञ्जकम्_const = सच्च;
+      ret = c_fully_fold (ret, require_constant_मानम्, &inner_व्यञ्जकम्_const);
+      ret = build2 (C_MAYBE_CONST_व्यञ्जकम्, वृक्षः_TYPE (ret), type_व्यञ्जकम्, ret);
+      C_MAYBE_CONST_व्यञ्जकम्_NON_CONST (ret) = !(type_व्यञ्जकम्_const
+					     && inner_व्यञ्जकम्_const);
+      SET_व्यञ्जकम्_LOCATION (ret, loc);
     }
 
-  if (!EXPR_HAS_LOCATION (ret))
-    protected_set_expr_location (ret, loc);
+  सचे (!व्यञ्जकम्_HAS_LOCATION (ret))
+    protected_set_व्यञ्जकम्_location (ret, loc);
 
   /* C++ does not permits types to be defined in a cast, but it
      allows references to incomplete types.  */
-  if (warn_cxx_compat && type_name->specs->typespec_kind == ctsk_tagdef)
+  सचे (warn_cxx_compat && type_name->specs->typespec_kind == ctsk_tagdef)
     warning_at (loc, OPT_Wc___compat,
 		"defining a type in a cast is invalid in C++");
 
-  return ret;
+  पटिनिवत्त ret;
 }
 
 /* Build an assignment expression of lvalue LHS from value RHS.
@@ -7780,134 +7780,134 @@ c_cast_expr (location_t loc, struct c_type_name *type_name, tree expr)
    LOCATION is the location of the MODIFYCODE operator.
    RHS_LOC is the location of the RHS.  */
 
-tree
-build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
-		   enum tree_code modifycode,
-		   location_t rhs_loc, tree rhs, tree rhs_origtype)
+वृक्षः
+build_modify_व्यञ्जकम् (location_t location, वृक्षः lhs, वृक्षः lhs_origtype,
+		   गणना वृक्षः_code modifycode,
+		   location_t rhs_loc, वृक्षः rhs, वृक्षः rhs_origtype)
 {
-  tree result;
-  tree newrhs;
-  tree rhseval = NULL_TREE;
-  tree lhstype = TREE_TYPE (lhs);
-  tree olhstype = lhstype;
-  bool npc;
-  bool is_atomic_op;
+  वृक्षः result;
+  वृक्षः newrhs;
+  वृक्षः rhseval = NULL_वृक्षः;
+  वृक्षः lhstype = वृक्षः_TYPE (lhs);
+  वृक्षः olhstype = lhstype;
+  तार्किक npc;
+  तार्किक is_atomic_op;
 
   /* Types that aren't fully specified cannot be used in assignments.  */
   lhs = require_complete_type (location, lhs);
   rhs = require_complete_type (location, rhs);
 
   /* Avoid duplicate error messages from operands that had errors.  */
-  if (TREE_CODE (lhs) == ERROR_MARK || TREE_CODE (rhs) == ERROR_MARK)
-    return error_mark_node;
+  सचे (वृक्षः_CODE (lhs) == ERROR_MARK || वृक्षः_CODE (rhs) == ERROR_MARK)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
   /* Ensure an error for assigning a non-lvalue array to an array in
      C90.  */
-  if (TREE_CODE (lhstype) == ARRAY_TYPE)
+  सचे (वृक्षः_CODE (lhstype) == ARRAY_TYPE)
     {
       error_at (location, "assignment to expression with array type");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
   /* For ObjC properties, defer this check.  */
-  if (!objc_is_property_ref (lhs) && !lvalue_or_else (location, lhs, lv_assign))
-    return error_mark_node;
+  सचे (!objc_is_property_ref (lhs) && !lvalue_or_else (location, lhs, lv_assign))
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
   is_atomic_op = really_atomic_lvalue (lhs);
 
   newrhs = rhs;
 
-  if (TREE_CODE (lhs) == C_MAYBE_CONST_EXPR)
+  सचे (वृक्षः_CODE (lhs) == C_MAYBE_CONST_व्यञ्जकम्)
     {
-      tree inner = build_modify_expr (location, C_MAYBE_CONST_EXPR_EXPR (lhs),
+      वृक्षः inner = build_modify_व्यञ्जकम् (location, C_MAYBE_CONST_व्यञ्जकम्_व्यञ्जकम् (lhs),
 				      lhs_origtype, modifycode, rhs_loc, rhs,
 				      rhs_origtype);
-      if (inner == error_mark_node)
-	return error_mark_node;
-      result = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (inner),
-		       C_MAYBE_CONST_EXPR_PRE (lhs), inner);
-      gcc_assert (!C_MAYBE_CONST_EXPR_INT_OPERANDS (lhs));
-      C_MAYBE_CONST_EXPR_NON_CONST (result) = 1;
-      protected_set_expr_location (result, location);
-      return result;
+      सचे (inner == error_mark_ग्रन्थिः)
+	पटिनिवत्त error_mark_ग्रन्थिः;
+      result = build2 (C_MAYBE_CONST_व्यञ्जकम्, वृक्षः_TYPE (inner),
+		       C_MAYBE_CONST_व्यञ्जकम्_PRE (lhs), inner);
+      gcc_assert (!C_MAYBE_CONST_व्यञ्जकम्_INT_OPERANDS (lhs));
+      C_MAYBE_CONST_व्यञ्जकम्_NON_CONST (result) = 1;
+      protected_set_व्यञ्जकम्_location (result, location);
+      पटिनिवत्त result;
     }
 
   /* If a binary op has been requested, combine the old LHS value with the RHS
      producing the value we should actually store into the LHS.  */
 
-  if (modifycode != NOP_EXPR)
+  सचे (modifycode != NOP_व्यञ्जकम्)
     {
-      lhs = c_fully_fold (lhs, false, NULL, true);
+      lhs = c_fully_fold (lhs, मिच्छा, रिक्त, सच्च);
       lhs = stabilize_reference (lhs);
 
       /* Construct the RHS for any non-atomic compound assignment. */
-      if (!is_atomic_op)
+      सचे (!is_atomic_op)
         {
 	  /* If in LHS op= RHS the RHS has side-effects, ensure they
 	     are preevaluated before the rest of the assignment expression's
 	     side-effects, because RHS could contain e.g. function calls
 	     that modify LHS.  */
-	  if (TREE_SIDE_EFFECTS (rhs))
+	  सचे (वृक्षः_SIDE_EFFECTS (rhs))
 	    {
-	      if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
-		newrhs = save_expr (TREE_OPERAND (rhs, 0));
-	      else
-		newrhs = save_expr (rhs);
+	      सचे (वृक्षः_CODE (rhs) == EXCESS_PRECISION_व्यञ्जकम्)
+		newrhs = save_व्यञ्जकम् (वृक्षः_OPERAND (rhs, 0));
+	      अञ्ञथा
+		newrhs = save_व्यञ्जकम् (rhs);
 	      rhseval = newrhs;
-	      if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
-		newrhs = build1 (EXCESS_PRECISION_EXPR, TREE_TYPE (rhs),
+	      सचे (वृक्षः_CODE (rhs) == EXCESS_PRECISION_व्यञ्जकम्)
+		newrhs = build1 (EXCESS_PRECISION_व्यञ्जकम्, वृक्षः_TYPE (rhs),
 				 newrhs);
 	    }
-	  bool clear_decl_read = false;
-	  if ((VAR_P (lhs) || TREE_CODE (lhs) == PARM_DECL)
+	  तार्किक clear_decl_read = मिच्छा;
+	  सचे ((VAR_P (lhs) || वृक्षः_CODE (lhs) == PARM_DECL)
 	      && !DECL_READ_P (lhs)
 	      && (VAR_P (lhs) ? warn_unused_but_set_variable
 			      : warn_unused_but_set_parameter) > 2)
 	    {
 	      mark_exp_read (newrhs);
-	      if (!DECL_READ_P (lhs))
-		clear_decl_read = true;
+	      सचे (!DECL_READ_P (lhs))
+		clear_decl_read = सच्च;
 	    }
 
-	  newrhs = build_binary_op (location, modifycode,
+	  newrhs = build_द्विमान_op (location, modifycode,
 				    convert_lvalue_to_rvalue (location, lhs,
-							      true, true),
-				    newrhs, true);
-	  if (clear_decl_read)
+							      सच्च, सच्च),
+				    newrhs, सच्च);
+	  सचे (clear_decl_read)
 	    DECL_READ_P (lhs) = 0;
 
 	  /* The original type of the right hand side is no longer
 	     meaningful.  */
-	  rhs_origtype = NULL_TREE;
+	  rhs_origtype = NULL_वृक्षः;
 	}
     }
 
-  if (c_dialect_objc ())
+  सचे (c_dialect_objc ())
     {
       /* Check if we are modifying an Objective-C property reference;
 	 if so, we need to generate setter calls.  */
-      if (TREE_CODE (newrhs) == EXCESS_PRECISION_EXPR)
-	result = objc_maybe_build_modify_expr (lhs, TREE_OPERAND (newrhs, 0));
-      else
-	result = objc_maybe_build_modify_expr (lhs, newrhs);
-      if (result)
-	goto return_result;
+      सचे (वृक्षः_CODE (newrhs) == EXCESS_PRECISION_व्यञ्जकम्)
+	result = objc_maybe_build_modify_व्यञ्जकम् (lhs, वृक्षः_OPERAND (newrhs, 0));
+      अञ्ञथा
+	result = objc_maybe_build_modify_व्यञ्जकम् (lhs, newrhs);
+      सचे (result)
+	गच्छ return_result;
 
       /* Else, do the check that we postponed for Objective-C.  */
-      if (!lvalue_or_else (location, lhs, lv_assign))
-	return error_mark_node;
+      सचे (!lvalue_or_else (location, lhs, lv_assign))
+	पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
   /* Give an error for storing in something that is 'const'.  */
 
-  if (TYPE_READONLY (lhstype)
+  सचे (TYPE_READONLY (lhstype)
       || (RECORD_OR_UNION_TYPE_P (lhstype)
 	  && C_TYPE_FIELDS_READONLY (lhstype)))
     {
       readonly_error (location, lhs, lv_assign);
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
-  else if (TREE_READONLY (lhs))
+  अञ्ञथा सचे (वृक्षः_READONLY (lhs))
     readonly_warning (lhs, lv_assign);
 
   /* If storing into a structure or union member,
@@ -7915,36 +7915,36 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
      Compute the type that would go with
      the actual amount of storage the member occupies.  */
 
-  if (TREE_CODE (lhs) == COMPONENT_REF
-      && (TREE_CODE (lhstype) == INTEGER_TYPE
-	  || TREE_CODE (lhstype) == BOOLEAN_TYPE
+  सचे (वृक्षः_CODE (lhs) == COMPONENT_REF
+      && (वृक्षः_CODE (lhstype) == INTEGER_TYPE
+	  || वृक्षः_CODE (lhstype) == BOOLEAN_TYPE
 	  || SCALAR_FLOAT_TYPE_P (lhstype)
-	  || TREE_CODE (lhstype) == ENUMERAL_TYPE))
-    lhstype = TREE_TYPE (get_unwidened (lhs, 0));
+	  || वृक्षः_CODE (lhstype) == ENUMERAL_TYPE))
+    lhstype = वृक्षः_TYPE (get_unwidened (lhs, 0));
 
   /* If storing in a field that is in actuality a short or narrower than one,
      we must store in the field in its actual type.  */
 
-  if (lhstype != TREE_TYPE (lhs))
+  सचे (lhstype != वृक्षः_TYPE (lhs))
     {
-      lhs = copy_node (lhs);
-      TREE_TYPE (lhs) = lhstype;
+      lhs = copy_ग्रन्थिः (lhs);
+      वृक्षः_TYPE (lhs) = lhstype;
     }
 
   /* Issue -Wc++-compat warnings about an assignment to an enum type
      when LHS does not have its original type.  This happens for,
      e.g., an enum bitfield in a struct.  */
-  if (warn_cxx_compat
-      && lhs_origtype != NULL_TREE
+  सचे (warn_cxx_compat
+      && lhs_origtype != NULL_वृक्षः
       && lhs_origtype != lhstype
-      && TREE_CODE (lhs_origtype) == ENUMERAL_TYPE)
+      && वृक्षः_CODE (lhs_origtype) == ENUMERAL_TYPE)
     {
-      tree checktype = (rhs_origtype != NULL_TREE
+      वृक्षः checktype = (rhs_origtype != NULL_वृक्षः
 			? rhs_origtype
-			: TREE_TYPE (rhs));
-      if (checktype != error_mark_node
+			: वृक्षः_TYPE (rhs));
+      सचे (checktype != error_mark_ग्रन्थिः
 	  && (TYPE_MAIN_VARIANT (checktype) != TYPE_MAIN_VARIANT (lhs_origtype)
-	      || (is_atomic_op && modifycode != NOP_EXPR)))
+	      || (is_atomic_op && modifycode != NOP_व्यञ्जकम्)))
 	warning_at (location, OPT_Wc___compat,
 		    "enum conversion in assignment is invalid in C++");
     }
@@ -7957,50 +7957,50 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
      restore any excess precision information, for the sake of
      conversion warnings.  */
 
-  if (!(is_atomic_op && modifycode != NOP_EXPR))
+  सचे (!(is_atomic_op && modifycode != NOP_व्यञ्जकम्))
     {
-      tree rhs_semantic_type = NULL_TREE;
-      if (!c_in_omp_for)
+      वृक्षः rhs_semantic_type = NULL_वृक्षः;
+      सचे (!c_in_omp_for)
 	{
-	  if (TREE_CODE (newrhs) == EXCESS_PRECISION_EXPR)
+	  सचे (वृक्षः_CODE (newrhs) == EXCESS_PRECISION_व्यञ्जकम्)
 	    {
-	      rhs_semantic_type = TREE_TYPE (newrhs);
-	      newrhs = TREE_OPERAND (newrhs, 0);
+	      rhs_semantic_type = वृक्षः_TYPE (newrhs);
+	      newrhs = वृक्षः_OPERAND (newrhs, 0);
 	    }
 	  npc = null_pointer_constant_p (newrhs);
-	  newrhs = c_fully_fold (newrhs, false, NULL);
-	  if (rhs_semantic_type)
-	    newrhs = build1 (EXCESS_PRECISION_EXPR, rhs_semantic_type, newrhs);
+	  newrhs = c_fully_fold (newrhs, मिच्छा, रिक्त);
+	  सचे (rhs_semantic_type)
+	    newrhs = build1 (EXCESS_PRECISION_व्यञ्जकम्, rhs_semantic_type, newrhs);
 	}
-      else
+      अञ्ञथा
 	npc = null_pointer_constant_p (newrhs);
       newrhs = convert_for_assignment (location, rhs_loc, lhstype, newrhs,
 				       rhs_origtype, ic_assign, npc,
-				       NULL_TREE, NULL_TREE, 0);
-      if (TREE_CODE (newrhs) == ERROR_MARK)
-	return error_mark_node;
+				       NULL_वृक्षः, NULL_वृक्षः, 0);
+      सचे (वृक्षः_CODE (newrhs) == ERROR_MARK)
+	पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
   /* Emit ObjC write barrier, if necessary.  */
-  if (c_dialect_objc () && flag_objc_gc)
+  सचे (c_dialect_objc () && flag_objc_gc)
     {
       result = objc_generate_write_barrier (lhs, modifycode, newrhs);
-      if (result)
+      सचे (result)
 	{
-	  protected_set_expr_location (result, location);
-	  goto return_result;
+	  protected_set_व्यञ्जकम्_location (result, location);
+	  गच्छ return_result;
 	}
     }
 
   /* Scan operands.  */
 
-  if (is_atomic_op)
-    result = build_atomic_assign (location, lhs, modifycode, newrhs, false);
-  else
+  सचे (is_atomic_op)
+    result = build_atomic_assign (location, lhs, modifycode, newrhs, मिच्छा);
+  अञ्ञथा
     {
-      result = build2 (MODIFY_EXPR, lhstype, lhs, newrhs);
-      TREE_SIDE_EFFECTS (result) = 1;
-      protected_set_expr_location (result, location);
+      result = build2 (MODIFY_व्यञ्जकम्, lhstype, lhs, newrhs);
+      वृक्षः_SIDE_EFFECTS (result) = 1;
+      protected_set_व्यञ्जकम्_location (result, location);
     }
 
   /* If we got the LHS in a different type for storing in,
@@ -8008,53 +8008,53 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
      so that the value we return always has the same type
      as the LHS argument.  */
 
-  if (olhstype == TREE_TYPE (result))
-    goto return_result;
+  सचे (olhstype == वृक्षः_TYPE (result))
+    गच्छ return_result;
 
   result = convert_for_assignment (location, rhs_loc, olhstype, result,
-				   rhs_origtype, ic_assign, false, NULL_TREE,
-				   NULL_TREE, 0);
-  protected_set_expr_location (result, location);
+				   rhs_origtype, ic_assign, मिच्छा, NULL_वृक्षः,
+				   NULL_वृक्षः, 0);
+  protected_set_व्यञ्जकम्_location (result, location);
 
 return_result:
-  if (rhseval)
-    result = build2 (COMPOUND_EXPR, TREE_TYPE (result), rhseval, result);
-  return result;
+  सचे (rhseval)
+    result = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (result), rhseval, result);
+  पटिनिवत्त result;
 }
 
 /* Return whether STRUCT_TYPE has an anonymous field with type TYPE.
    This is used to implement -fplan9-extensions.  */
 
-static bool
-find_anonymous_field_with_type (tree struct_type, tree type)
+स्थिर तार्किक
+find_anonymous_field_with_type (वृक्षः struct_type, वृक्षः type)
 {
-  tree field;
-  bool found;
+  वृक्षः field;
+  तार्किक found;
 
   gcc_assert (RECORD_OR_UNION_TYPE_P (struct_type));
-  found = false;
-  for (field = TYPE_FIELDS (struct_type);
-       field != NULL_TREE;
-       field = TREE_CHAIN (field))
+  found = मिच्छा;
+  अत्थाय (field = TYPE_FIELDS (struct_type);
+       field != NULL_वृक्षः;
+       field = वृक्षः_CHAIN (field))
     {
-      tree fieldtype = remove_qualifiers (TREE_TYPE (field));
-      if (DECL_NAME (field) == NULL
+      वृक्षः fieldtype = remove_qualifiers (वृक्षः_TYPE (field));
+      सचे (DECL_NAME (field) == रिक्त
 	  && comptypes (type, fieldtype))
 	{
-	  if (found)
-	    return false;
-	  found = true;
+	  सचे (found)
+	    पटिनिवत्त मिच्छा;
+	  found = सच्च;
 	}
-      else if (DECL_NAME (field) == NULL
-	       && RECORD_OR_UNION_TYPE_P (TREE_TYPE (field))
-	       && find_anonymous_field_with_type (TREE_TYPE (field), type))
+      अञ्ञथा सचे (DECL_NAME (field) == रिक्त
+	       && RECORD_OR_UNION_TYPE_P (वृक्षः_TYPE (field))
+	       && find_anonymous_field_with_type (वृक्षः_TYPE (field), type))
 	{
-	  if (found)
-	    return false;
-	  found = true;
+	  सचे (found)
+	    पटिनिवत्त मिच्छा;
+	  found = सच्च;
 	}
     }
-  return found;
+  पटिनिवत्त found;
 }
 
 /* RHS is an expression whose type is pointer to struct.  If there is
@@ -8062,106 +8062,106 @@ find_anonymous_field_with_type (tree struct_type, tree type)
    that field in RHS.  This is used with -fplan9-extensions.  This
    returns NULL if no conversion could be found.  */
 
-static tree
-convert_to_anonymous_field (location_t location, tree type, tree rhs)
+स्थिर वृक्षः
+convert_to_anonymous_field (location_t location, वृक्षः type, वृक्षः rhs)
 {
-  tree rhs_struct_type, lhs_main_type;
-  tree field, found_field;
-  bool found_sub_field;
-  tree ret;
+  वृक्षः rhs_struct_type, lhs_main_type;
+  वृक्षः field, found_field;
+  तार्किक found_sub_field;
+  वृक्षः ret;
 
-  gcc_assert (POINTER_TYPE_P (TREE_TYPE (rhs)));
-  rhs_struct_type = TREE_TYPE (TREE_TYPE (rhs));
+  gcc_assert (POINTER_TYPE_P (वृक्षः_TYPE (rhs)));
+  rhs_struct_type = वृक्षः_TYPE (वृक्षः_TYPE (rhs));
   gcc_assert (RECORD_OR_UNION_TYPE_P (rhs_struct_type));
 
   gcc_assert (POINTER_TYPE_P (type));
-  lhs_main_type = remove_qualifiers (TREE_TYPE (type));
+  lhs_main_type = remove_qualifiers (वृक्षः_TYPE (type));
 
-  found_field = NULL_TREE;
-  found_sub_field = false;
-  for (field = TYPE_FIELDS (rhs_struct_type);
-       field != NULL_TREE;
-       field = TREE_CHAIN (field))
+  found_field = NULL_वृक्षः;
+  found_sub_field = मिच्छा;
+  अत्थाय (field = TYPE_FIELDS (rhs_struct_type);
+       field != NULL_वृक्षः;
+       field = वृक्षः_CHAIN (field))
     {
-      if (DECL_NAME (field) != NULL_TREE
-	  || !RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
-	continue;
-      tree fieldtype = remove_qualifiers (TREE_TYPE (field));
-      if (comptypes (lhs_main_type, fieldtype))
+      सचे (DECL_NAME (field) != NULL_वृक्षः
+	  || !RECORD_OR_UNION_TYPE_P (वृक्षः_TYPE (field)))
+	अनुवर्त;
+      वृक्षः fieldtype = remove_qualifiers (वृक्षः_TYPE (field));
+      सचे (comptypes (lhs_main_type, fieldtype))
 	{
-	  if (found_field != NULL_TREE)
-	    return NULL_TREE;
+	  सचे (found_field != NULL_वृक्षः)
+	    पटिनिवत्त NULL_वृक्षः;
 	  found_field = field;
 	}
-      else if (find_anonymous_field_with_type (TREE_TYPE (field),
+      अञ्ञथा सचे (find_anonymous_field_with_type (वृक्षः_TYPE (field),
 					       lhs_main_type))
 	{
-	  if (found_field != NULL_TREE)
-	    return NULL_TREE;
+	  सचे (found_field != NULL_वृक्षः)
+	    पटिनिवत्त NULL_वृक्षः;
 	  found_field = field;
-	  found_sub_field = true;
+	  found_sub_field = सच्च;
 	}
     }
 
-  if (found_field == NULL_TREE)
-    return NULL_TREE;
+  सचे (found_field == NULL_वृक्षः)
+    पटिनिवत्त NULL_वृक्षः;
 
-  ret = fold_build3_loc (location, COMPONENT_REF, TREE_TYPE (found_field),
+  ret = fold_build3_loc (location, COMPONENT_REF, वृक्षः_TYPE (found_field),
 			 build_fold_indirect_ref (rhs), found_field,
-			 NULL_TREE);
-  ret = build_fold_addr_expr_loc (location, ret);
+			 NULL_वृक्षः);
+  ret = build_fold_addr_व्यञ्जकम्_loc (location, ret);
 
-  if (found_sub_field)
+  सचे (found_sub_field)
     {
       ret = convert_to_anonymous_field (location, type, ret);
-      gcc_assert (ret != NULL_TREE);
+      gcc_assert (ret != NULL_वृक्षः);
     }
 
-  return ret;
+  पटिनिवत्त ret;
 }
 
 /* Issue an error message for a bad initializer component.
    GMSGID identifies the message.
    The component name is taken from the spelling stack.  */
 
-static void ATTRIBUTE_GCC_DIAG (2,0)
-error_init (location_t loc, const char *gmsgid, ...)
+स्थिर शून्य ATTRIBUTE_GCC_DIAG (2,0)
+error_init (location_t loc, ध्रुव वर्ण *gmsgid, ...)
 {
-  char *ofwhat;
+  वर्ण *ofwhat;
 
   auto_diagnostic_group d;
 
   /* The gmsgid may be a format string with %< and %>. */
   va_list ap;
   va_start (ap, gmsgid);
-  bool warned = emit_diagnostic_valist (diagnostics::kind::error,
+  तार्किक warned = emit_diagnostic_valist (diagnostics::kind::error,
 					loc, -1, gmsgid, &ap);
   va_end (ap);
 
-  ofwhat = print_spelling ((char *) alloca (spelling_length () + 1));
-  if (*ofwhat && warned)
+  ofwhat = print_spelling ((वर्ण *) alloca (spelling_length () + 1));
+  सचे (*ofwhat && warned)
     inform (loc, "(near initialization for %qs)", ofwhat);
 }
 
 /* Used to implement pedwarn_init and permerror_init.  */
 
-static bool ATTRIBUTE_GCC_DIAG (3,0)
-pedwarn_permerror_init (location_t loc, int opt, const char *gmsgid,
-			va_list *ap, enum diagnostics::kind kind)
+स्थिर तार्किक ATTRIBUTE_GCC_DIAG (3,0)
+pedwarn_permerror_init (location_t loc, पूर्णाङ्क opt, ध्रुव वर्ण *gmsgid,
+			va_list *ap, गणना diagnostics::kind kind)
 {
   /* Use the location where a macro was expanded rather than where
      it was defined to make sure macros defined in system headers
      but used incorrectly elsewhere are diagnosed.  */
   location_t exploc = expansion_point_location_if_in_system_header (loc);
   auto_diagnostic_group d;
-  bool warned = emit_diagnostic_valist (kind, exploc, opt, gmsgid, ap);
-  if (warned)
+  तार्किक warned = emit_diagnostic_valist (kind, exploc, opt, gmsgid, ap);
+  सचे (warned)
     {
-      char *ofwhat = print_spelling ((char *) alloca (spelling_length () + 1));
-      if (*ofwhat)
+      वर्ण *ofwhat = print_spelling ((वर्ण *) alloca (spelling_length () + 1));
+      सचे (*ofwhat)
 	inform (exploc, "(near initialization for %qs)", ofwhat);
     }
-  return warned;
+  पटिनिवत्त warned;
 }
 
 /* Issue a pedantic warning for a bad initializer component.  OPT is
@@ -8169,28 +8169,28 @@ pedwarn_permerror_init (location_t loc, int opt, const char *gmsgid,
    it is unconditionally given.  GMSGID identifies the message.  The
    component name is taken from the spelling stack.  */
 
-static bool ATTRIBUTE_GCC_DIAG (3,0)
-pedwarn_init (location_t loc, int opt, const char *gmsgid, ...)
+स्थिर तार्किक ATTRIBUTE_GCC_DIAG (3,0)
+pedwarn_init (location_t loc, पूर्णाङ्क opt, ध्रुव वर्ण *gmsgid, ...)
 {
   va_list ap;
   va_start (ap, gmsgid);
-  bool warned = pedwarn_permerror_init (loc, opt, gmsgid, &ap,
+  तार्किक warned = pedwarn_permerror_init (loc, opt, gmsgid, &ap,
 					diagnostics::kind::pedwarn);
   va_end (ap);
-  return warned;
+  पटिनिवत्त warned;
 }
 
 /* Like pedwarn_init, but issue a permerror.  */
 
-static bool ATTRIBUTE_GCC_DIAG (3,0)
-permerror_init (location_t loc, int opt, const char *gmsgid, ...)
+स्थिर तार्किक ATTRIBUTE_GCC_DIAG (3,0)
+permerror_init (location_t loc, पूर्णाङ्क opt, ध्रुव वर्ण *gmsgid, ...)
 {
   va_list ap;
   va_start (ap, gmsgid);
-  bool warned = pedwarn_permerror_init (loc, opt, gmsgid, &ap,
+  तार्किक warned = pedwarn_permerror_init (loc, opt, gmsgid, &ap,
 					diagnostics::kind::permerror);
   va_end (ap);
-  return warned;
+  पटिनिवत्त warned;
 }
 
 /* Issue a warning for a bad initializer component.
@@ -8199,11 +8199,11 @@ permerror_init (location_t loc, int opt, const char *gmsgid, ...)
    controls this warning.  GMSGID identifies the message.  The
    component name is taken from the spelling stack.  */
 
-static void
-warning_init (location_t loc, int opt, const char *gmsgid)
+स्थिर शून्य
+warning_init (location_t loc, पूर्णाङ्क opt, ध्रुव वर्ण *gmsgid)
 {
-  char *ofwhat;
-  bool warned;
+  वर्ण *ofwhat;
+  तार्किक warned;
 
   auto_diagnostic_group d;
 
@@ -8214,10 +8214,10 @@ warning_init (location_t loc, int opt, const char *gmsgid)
 
   /* The gmsgid may be a format string with %< and %>. */
   warned = warning_at (exploc, opt, gmsgid);
-  if (warned)
+  सचे (warned)
     {
-      ofwhat = print_spelling ((char *) alloca (spelling_length () + 1));
-      if (*ofwhat)
+      ofwhat = print_spelling ((वर्ण *) alloca (spelling_length () + 1));
+      सचे (*ofwhat)
 	inform (exploc, "(near initialization for %qs)", ofwhat);
     }
 }
@@ -8226,13 +8226,13 @@ warning_init (location_t loc, int opt, const char *gmsgid)
    constant, warn if pedantic that EXPR is being used to initialize an
    object of type TYPE.  */
 
-void
-maybe_warn_string_init (location_t loc, tree type, struct c_expr expr)
+शून्य
+maybe_warn_string_init (location_t loc, वृक्षः type, संरचना c_व्यञ्जकम् व्यञ्जकम्)
 {
-  if (pedantic
-      && TREE_CODE (type) == ARRAY_TYPE
-      && TREE_CODE (expr.value) == STRING_CST
-      && expr.original_code != STRING_CST)
+  सचे (pedantic
+      && वृक्षः_CODE (type) == ARRAY_TYPE
+      && वृक्षः_CODE (व्यञ्जकम्.मानम्) == STRING_CST
+      && व्यञ्जकम्.original_code != STRING_CST)
     pedwarn_init (loc, OPT_Wpedantic,
 		  "array initialized from parenthesized string constant");
 }
@@ -8240,24 +8240,24 @@ maybe_warn_string_init (location_t loc, tree type, struct c_expr expr)
 /* Attempt to locate the parameter with the given index within FNDECL,
    returning DECL_SOURCE_LOCATION (FNDECL) if it can't be found.  */
 
-static location_t
-get_fndecl_argument_location (tree fndecl, int argnum)
+स्थिर location_t
+get_fndecl_argument_location (वृक्षः fndecl, पूर्णाङ्क argnum)
 {
-  int i;
-  tree param;
+  पूर्णाङ्क i;
+  वृक्षः param;
 
   /* Locate param by index within DECL_ARGUMENTS (fndecl).  */
-  for (i = 0, param = DECL_ARGUMENTS (fndecl);
+  अत्थाय (i = 0, param = DECL_ARGUMENTS (fndecl);
        i < argnum && param;
-       i++, param = TREE_CHAIN (param))
+       i++, param = वृक्षः_CHAIN (param))
     ;
 
   /* If something went wrong (e.g. if we have a builtin and thus no arguments),
      return DECL_SOURCE_LOCATION (FNDECL).  */
-  if (param == NULL)
-    return DECL_SOURCE_LOCATION (fndecl);
+  सचे (param == रिक्त)
+    पटिनिवत्त DECL_SOURCE_LOCATION (fndecl);
 
-  return DECL_SOURCE_LOCATION (param);
+  पटिनिवत्त DECL_SOURCE_LOCATION (param);
 }
 
 /* Issue a note about a mismatching argument for parameter PARMNUM
@@ -8269,14 +8269,14 @@ get_fndecl_argument_location (tree fndecl, int argnum)
    and highlight_colors::expected for EXPECTED_TYPE and the
    parameter of FUNDECL*/
 
-static void
-inform_for_arg (tree fundecl, location_t ploc, int parmnum,
-		tree expected_type, tree actual_type)
+स्थिर शून्य
+inform_for_arg (वृक्षः fundecl, location_t ploc, पूर्णाङ्क parmnum,
+		वृक्षः expected_type, वृक्षः actual_type)
 {
   location_t loc;
-  if (fundecl && !DECL_IS_UNDECLARED_BUILTIN (fundecl))
+  सचे (fundecl && !DECL_IS_UNDECLARED_BUILTIN (fundecl))
     loc = get_fndecl_argument_location (fundecl, parmnum - 1);
-  else
+  अञ्ञथा
     loc = ploc;
 
   gcc_rich_location richloc (loc, nullptr, highlight_colors::expected);
@@ -8292,31 +8292,31 @@ inform_for_arg (tree fundecl, location_t ploc, int parmnum,
    function FUNDECL declared without prototype to parameter PARMNUM of
    PARMTYPE when ARGTYPE does not promote to PARMTYPE.  */
 
-static void
-maybe_warn_builtin_no_proto_arg (location_t loc, tree fundecl, int parmnum,
-				 tree parmtype, tree argtype)
+स्थिर शून्य
+maybe_warn_builtin_no_proto_arg (location_t loc, वृक्षः fundecl, पूर्णाङ्क parmnum,
+				 वृक्षः parmtype, वृक्षः argtype)
 {
-  tree_code parmcode = TREE_CODE (parmtype);
-  tree_code argcode = TREE_CODE (argtype);
-  tree promoted = c_type_promotes_to (argtype);
+  वृक्षः_code parmcode = वृक्षः_CODE (parmtype);
+  वृक्षः_code argcode = वृक्षः_CODE (argtype);
+  वृक्षः promoted = c_type_promotes_to (argtype);
 
   /* Avoid warning for enum arguments that promote to an integer type
      of the same size/mode.  */
-  if (parmcode == INTEGER_TYPE
+  सचे (parmcode == INTEGER_TYPE
       && argcode == ENUMERAL_TYPE
       && TYPE_MODE (parmtype) == TYPE_MODE (argtype))
-    return;
+    पटिनिवत्त;
 
-  if ((parmcode == argcode
+  सचे ((parmcode == argcode
        || (parmcode == INTEGER_TYPE
 	   && argcode == ENUMERAL_TYPE))
       && TYPE_MAIN_VARIANT (parmtype) == TYPE_MAIN_VARIANT (promoted))
-    return;
+    पटिनिवत्त;
 
   /* This diagnoses even signed/unsigned mismatches.  Those might be
      safe in many cases but GCC may emit suboptimal code for them so
      warning on those cases drives efficiency improvements.  */
-  if (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
+  सचे (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
 		  TYPE_MAIN_VARIANT (promoted) == argtype
 		  ? G_("%qD argument %d type is %qT where %qT is expected "
 		       "in a call to built-in function declared without "
@@ -8333,16 +8333,16 @@ maybe_warn_builtin_no_proto_arg (location_t loc, tree fundecl, int parmnum,
 /* Print a declaration in quotes, with the given highlight_color.
    Analogous to handler for %qD, but with a specific highlight color.  */
 
-class pp_element_quoted_decl : public pp_element
+वग्ग pp_element_quoted_decl : सार्वजनिक pp_element
 {
-public:
-  pp_element_quoted_decl (tree decl, const char *highlight_color)
+सार्वजनिक:
+  pp_element_quoted_decl (वृक्षः decl, ध्रुव वर्ण *highlight_color)
   : m_decl (decl),
     m_highlight_color (highlight_color)
   {
   }
 
-  void add_to_phase_2 (pp_markup::context &ctxt) override
+  शून्य add_to_phase_2 (pp_markup::context &ctxt) override
   {
     ctxt.begin_quote ();
     ctxt.begin_highlight_color (m_highlight_color);
@@ -8353,33 +8353,33 @@ public:
     ctxt.end_quote ();
   }
 
-  void print_decl (pp_markup::context &ctxt)
+  शून्य print_decl (pp_markup::context &ctxt)
   {
-    pretty_printer *const pp = &ctxt.m_pp;
+    pretty_printer *ध्रुव pp = &ctxt.m_pp;
     pp->set_padding (pp_none);
-    if (DECL_NAME (m_decl))
+    सचे (DECL_NAME (m_decl))
       pp_identifier (pp, lang_hooks.decl_printable_name (m_decl, 2));
-    else
+    अञ्ञथा
       pp_string (pp, _("({anonymous})"));
   }
 
-private:
-  tree m_decl;
-  const char *m_highlight_color;
+गुप्त:
+  वृक्षः m_decl;
+  ध्रुव वर्ण *m_highlight_color;
 };
 
 /* If TYPE is from a typedef, issue a note showing the location
    to the user.
    Use HIGHLIGHT_COLOR as the highlight color.  */
 
-static void
-maybe_inform_typedef_location (tree type, const char *highlight_color)
+स्थिर शून्य
+maybe_inform_typedef_location (वृक्षः type, ध्रुव वर्ण *highlight_color)
 {
-  if (!typedef_variant_p (type))
-    return;
+  सचे (!typedef_variant_p (type))
+    पटिनिवत्त;
 
-  tree typedef_decl = TYPE_NAME (type);
-  gcc_assert (TREE_CODE (typedef_decl) == TYPE_DECL);
+  वृक्षः typedef_decl = TYPE_NAME (type);
+  gcc_assert (वृक्षः_CODE (typedef_decl) == TYPE_DECL);
   gcc_rich_location richloc (DECL_SOURCE_LOCATION (typedef_decl),
 			     nullptr, highlight_color);
   pp_element_quoted_decl e_typedef_decl (typedef_decl, highlight_color);
@@ -8415,36 +8415,36 @@ maybe_inform_typedef_location (tree type, const char *highlight_color)
    rather than an error for invalid conversions.  Used for calls to built-in
    functions declared without a prototype.  */
 
-static tree
-convert_for_assignment (location_t location, location_t expr_loc, tree type,
-			tree rhs, tree origtype, enum impl_conv errtype,
-			bool null_pointer_constant, tree fundecl,
-			tree function, int parmnum, int warnopt /* = 0 */)
+स्थिर वृक्षः
+convert_for_assignment (location_t location, location_t व्यञ्जकम्_loc, वृक्षः type,
+			वृक्षः rhs, वृक्षः origtype, गणना impl_conv errtype,
+			तार्किक null_pointer_constant, वृक्षः fundecl,
+			वृक्षः function, पूर्णाङ्क parmnum, पूर्णाङ्क warnopt /* = 0 */)
 {
-  enum tree_code codel = TREE_CODE (type);
-  tree orig_rhs = rhs;
-  tree rhstype;
-  enum tree_code coder;
-  tree rname = NULL_TREE;
-  bool objc_ok = false;
+  गणना वृक्षः_code codel = वृक्षः_CODE (type);
+  वृक्षः orig_rhs = rhs;
+  वृक्षः rhstype;
+  गणना वृक्षः_code coder;
+  वृक्षः rname = NULL_वृक्षः;
+  तार्किक objc_ok = मिच्छा;
 
   /* Use the expansion point location to handle cases such as user's
      function returning a wrong-type macro defined in a system header.  */
   location = expansion_point_location_if_in_system_header (location);
 
-  if (errtype == ic_argpass)
+  सचे (errtype == ic_argpass)
     {
-      tree selector;
+      वृक्षः selector;
       /* Change pointer to function to the function itself for
 	 diagnostics.  */
-      if (TREE_CODE (function) == ADDR_EXPR
-	  && TREE_CODE (TREE_OPERAND (function, 0)) == FUNCTION_DECL)
-	function = TREE_OPERAND (function, 0);
+      सचे (वृक्षः_CODE (function) == ADDR_व्यञ्जकम्
+	  && वृक्षः_CODE (वृक्षः_OPERAND (function, 0)) == FUNCTION_DECL)
+	function = वृक्षः_OPERAND (function, 0);
 
       /* Handle an ObjC selector specially for diagnostics.  */
       selector = objc_message_selector ();
       rname = function;
-      if (selector && parmnum > 2)
+      सचे (selector && parmnum > 2)
 	{
 	  rname = selector;
 	  parmnum -= 2;
@@ -8455,160 +8455,160 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
      strings are complete sentences, visible to gettext and checked at
      compile time.  */
 #define PEDWARN_FOR_ASSIGNMENT(LOCATION, PLOC, OPT, AR, AS, IN, RE)	 \
-  do {                                                                   \
-    switch (errtype)                                                     \
+  करोहि {                                                                   \
+    विकल्प (errtype)                                                     \
       {                                                                  \
-      case ic_argpass:                                                   \
+      पक्ष ic_argpass:                                                   \
 	{								\
 	  auto_diagnostic_group d;						\
-	  if (pedwarn (PLOC, OPT, AR, parmnum, rname))		\
+	  सचे (pedwarn (PLOC, OPT, AR, parmnum, rname))		\
 	    inform_for_arg (fundecl, (PLOC), parmnum, type, rhstype); \
 	}								\
-        break;                                                           \
-      case ic_assign:                                                    \
+        भङ्ग;                                                           \
+      पक्ष ic_assign:                                                    \
         pedwarn (LOCATION, OPT, AS);                                     \
-        break;                                                           \
-      case ic_init:                                                      \
-      case ic_init_const:                                                \
+        भङ्ग;                                                           \
+      पक्ष ic_init:                                                      \
+      पक्ष ic_init_const:                                                \
         pedwarn_init (LOCATION, OPT, IN);                                \
-        break;                                                           \
-      case ic_return:                                                    \
+        भङ्ग;                                                           \
+      पक्ष ic_return:                                                    \
         pedwarn (LOCATION, OPT, RE);					 \
-        break;                                                           \
-      default:                                                           \
+        भङ्ग;                                                           \
+      स्वभाव:                                                           \
         gcc_unreachable ();                                              \
       }                                                                  \
-  } while (0)
+  } याव (0)
 
   /* This macro is used to emit diagnostics to ensure that all format
      strings are complete sentences, visible to gettext and checked at
      compile time.  It can be called with 'pedwarn' or 'warning_at'.  */
 #define WARNING_FOR_QUALIFIERS(PEDWARN, LOCATION, PLOC, OPT, AR, AS, IN, RE, QUALS) \
-  do {                                                                   \
-    switch (errtype)                                                     \
+  करोहि {                                                                   \
+    विकल्प (errtype)                                                     \
       {                                                                  \
-      case ic_argpass:                                                   \
+      पक्ष ic_argpass:                                                   \
 	{								 \
 	  auto_diagnostic_group d;					 \
-	  if (PEDWARN) {						 \
-	    if (pedwarn (PLOC, OPT, AR, parmnum, rname, QUALS))          \
+	  सचे (PEDWARN) {						 \
+	    सचे (pedwarn (PLOC, OPT, AR, parmnum, rname, QUALS))          \
 	      inform_for_arg (fundecl, (PLOC), parmnum, type, rhstype);  \
-	  } else {							 \
-	    if (warning_at (PLOC, OPT, AR, parmnum, rname, QUALS))	 \
+	  } अञ्ञथा {							 \
+	    सचे (warning_at (PLOC, OPT, AR, parmnum, rname, QUALS))	 \
 	      inform_for_arg (fundecl, (PLOC), parmnum, type, rhstype);  \
 	  }								 \
 	}								 \
-        break;                                                           \
-      case ic_assign:                                                    \
-	if (PEDWARN)							 \
+        भङ्ग;                                                           \
+      पक्ष ic_assign:                                                    \
+	सचे (PEDWARN)							 \
 	  pedwarn (LOCATION, OPT, AS, QUALS);                            \
-	else								 \
+	अञ्ञथा								 \
 	  warning_at (LOCATION, OPT, AS, QUALS);                         \
-        break;                                                           \
-      case ic_init:                                                      \
-      case ic_init_const:                                                \
-	if (PEDWARN)							 \
+        भङ्ग;                                                           \
+      पक्ष ic_init:                                                      \
+      पक्ष ic_init_const:                                                \
+	सचे (PEDWARN)							 \
 	  pedwarn (LOCATION, OPT, IN, QUALS);                            \
-	else								 \
+	अञ्ञथा								 \
 	  warning_at (LOCATION, OPT, IN, QUALS);                         \
-        break;                                                           \
-      case ic_return:                                                    \
-	if (PEDWARN)							 \
+        भङ्ग;                                                           \
+      पक्ष ic_return:                                                    \
+	सचे (PEDWARN)							 \
 	  pedwarn (LOCATION, OPT, RE, QUALS);                            \
-	else								 \
+	अञ्ञथा								 \
 	  warning_at (LOCATION, OPT, RE, QUALS);                         \
-        break;                                                           \
-      default:                                                           \
+        भङ्ग;                                                           \
+      स्वभाव:                                                           \
         gcc_unreachable ();                                              \
       }                                                                  \
-  } while (0)
+  } याव (0)
 
   /* This macro is used to emit diagnostics to ensure that all format
      strings are complete sentences, visible to gettext and checked at
      compile time.  It is the same as PEDWARN_FOR_ASSIGNMENT but with an
      extra parameter to enumerate qualifiers.  */
 #define PEDWARN_FOR_QUALIFIERS(LOCATION, PLOC, OPT, AR, AS, IN, RE, QUALS) \
-   WARNING_FOR_QUALIFIERS (true, LOCATION, PLOC, OPT, AR, AS, IN, RE, QUALS)
+   WARNING_FOR_QUALIFIERS (सच्च, LOCATION, PLOC, OPT, AR, AS, IN, RE, QUALS)
 
 
-  if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
-    rhs = TREE_OPERAND (rhs, 0);
+  सचे (वृक्षः_CODE (rhs) == EXCESS_PRECISION_व्यञ्जकम्)
+    rhs = वृक्षः_OPERAND (rhs, 0);
 
-  rhstype = TREE_TYPE (rhs);
-  coder = TREE_CODE (rhstype);
+  rhstype = वृक्षः_TYPE (rhs);
+  coder = वृक्षः_CODE (rhstype);
 
-  if (coder == ERROR_MARK)
-    return error_mark_node;
+  सचे (coder == ERROR_MARK)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if (c_dialect_objc ())
+  सचे (c_dialect_objc ())
     {
-      int parmno;
+      पूर्णाङ्क parmno;
 
-      switch (errtype)
+      विकल्प (errtype)
 	{
-	case ic_return:
+	पक्ष ic_return:
 	  parmno = 0;
-	  break;
+	  भङ्ग;
 
-	case ic_assign:
+	पक्ष ic_assign:
 	  parmno = -1;
-	  break;
+	  भङ्ग;
 
-	case ic_init:
-	case ic_init_const:
+	पक्ष ic_init:
+	पक्ष ic_init_const:
 	  parmno = -2;
-	  break;
+	  भङ्ग;
 
-	default:
+	स्वभाव:
 	  parmno = parmnum;
-	  break;
+	  भङ्ग;
 	}
 
       objc_ok = objc_compare_types (type, rhstype, parmno, rname);
     }
 
-  if (warn_cxx_compat)
+  सचे (warn_cxx_compat)
     {
-      tree checktype = origtype != NULL_TREE ? origtype : rhstype;
-      if (checktype != error_mark_node
-	  && TREE_CODE (type) == ENUMERAL_TYPE
+      वृक्षः checktype = origtype != NULL_वृक्षः ? origtype : rhstype;
+      सचे (checktype != error_mark_ग्रन्थिः
+	  && वृक्षः_CODE (type) == ENUMERAL_TYPE
 	  && TYPE_MAIN_VARIANT (checktype) != TYPE_MAIN_VARIANT (type))
-	switch (errtype)
+	विकल्प (errtype)
 	  {
-	  case ic_argpass:
-	    if (pedwarn (expr_loc, OPT_Wc___compat, "enum conversion when "
+	  पक्ष ic_argpass:
+	    सचे (pedwarn (व्यञ्जकम्_loc, OPT_Wc___compat, "enum conversion when "
 			 "passing argument %d of %qE is invalid in C++",
 			 parmnum, rname))
 	      inform ((fundecl && !DECL_IS_UNDECLARED_BUILTIN (fundecl))
-		      ? DECL_SOURCE_LOCATION (fundecl) : expr_loc,
+		      ? DECL_SOURCE_LOCATION (fundecl) : व्यञ्जकम्_loc,
 		      "expected %qT but argument is of type %qT",
 		      type, rhstype);
-	    break;
-	  case ic_assign:
+	    भङ्ग;
+	  पक्ष ic_assign:
 	    pedwarn (location, OPT_Wc___compat, "enum conversion from %qT to "
 		     "%qT in assignment is invalid in C++", rhstype, type);
-	    break;
-	  case ic_init:
-	  case ic_init_const:
+	    भङ्ग;
+	  पक्ष ic_init:
+	  पक्ष ic_init_const:
 	    pedwarn_init (location, OPT_Wc___compat, "enum conversion from "
 			  "%qT to %qT in initialization is invalid in C++",
 			  rhstype, type);
-	    break;
-	  case ic_return:
+	    भङ्ग;
+	  पक्ष ic_return:
 	    pedwarn (location, OPT_Wc___compat, "enum conversion from %qT to "
 		     "%qT in return is invalid in C++", rhstype, type);
-	    break;
-	  default:
+	    भङ्ग;
+	  स्वभाव:
 	    gcc_unreachable ();
 	  }
     }
 
-  if (warn_enum_conversion)
+  सचे (warn_enum_conversion)
     {
-      tree checktype = origtype != NULL_TREE ? origtype : rhstype;
-      if (checktype != error_mark_node
-	  && TREE_CODE (checktype) == ENUMERAL_TYPE
-	  && TREE_CODE (type) == ENUMERAL_TYPE
+      वृक्षः checktype = origtype != NULL_वृक्षः ? origtype : rhstype;
+      सचे (checktype != error_mark_ग्रन्थिः
+	  && वृक्षः_CODE (checktype) == ENUMERAL_TYPE
+	  && वृक्षः_CODE (type) == ENUMERAL_TYPE
 	  && !comptypes (TYPE_MAIN_VARIANT (checktype), TYPE_MAIN_VARIANT (type)))
        {
 	  gcc_rich_location loc (location);
@@ -8618,72 +8618,72 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
        }
     }
 
-  if (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (rhstype))
+  सचे (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (rhstype))
     {
       warn_for_address_of_packed_member (type, orig_rhs);
-      if (type != rhstype)
+      सचे (type != rhstype)
 	/* Convert RHS to TYPE in order to not lose TYPE in diagnostics.  */
 	rhs = convert (type, rhs);
-      return rhs;
+      पटिनिवत्त rhs;
     }
 
-  if (coder == VOID_TYPE)
+  सचे (coder == VOID_TYPE)
     {
       /* Except for passing an argument to an unprototyped function,
 	 this is a constraint violation.  When passing an argument to
 	 an unprototyped function, it is compile-time undefined;
 	 making it a constraint in that case was rejected in
 	 DR#252.  */
-      const char msg[] = "void value not ignored as it ought to be";
-      if (warnopt)
-	warning_at (location, warnopt, msg);
-      else
-	error_at (location, msg);
-      return error_mark_node;
+      ध्रुव वर्ण सन्देशः[] = "void value not ignored as it ought to be";
+      सचे (warnopt)
+	warning_at (location, warnopt, सन्देशः);
+      अञ्ञथा
+	error_at (location, सन्देशः);
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
   rhs = require_complete_type (location, rhs);
-  if (rhs == error_mark_node)
-    return error_mark_node;
+  सचे (rhs == error_mark_ग्रन्थिः)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if (coder == POINTER_TYPE && reject_gcc_builtin (rhs))
-    return error_mark_node;
+  सचे (coder == POINTER_TYPE && reject_gcc_builtin (rhs))
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
   /* A non-reference type can convert to a reference.  This handles
      va_start, va_copy and possibly port built-ins.  */
-  if (codel == REFERENCE_TYPE && coder != REFERENCE_TYPE)
+  सचे (codel == REFERENCE_TYPE && coder != REFERENCE_TYPE)
     {
-      if (!lvalue_p (rhs))
+      सचे (!lvalue_p (rhs))
 	{
-	  const char msg[] = "cannot pass rvalue to reference parameter";
-	  if (warnopt)
-	    warning_at (location, warnopt, msg);
-	  else
-	    error_at (location, msg);
-	  return error_mark_node;
+	  ध्रुव वर्ण सन्देशः[] = "cannot pass rvalue to reference parameter";
+	  सचे (warnopt)
+	    warning_at (location, warnopt, सन्देशः);
+	  अञ्ञथा
+	    error_at (location, सन्देशः);
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      if (!c_mark_addressable (rhs))
-	return error_mark_node;
-      rhs = build1 (ADDR_EXPR, c_build_pointer_type (TREE_TYPE (rhs)), rhs);
-      SET_EXPR_LOCATION (rhs, location);
+      सचे (!c_mark_addressable (rhs))
+	पटिनिवत्त error_mark_ग्रन्थिः;
+      rhs = build1 (ADDR_व्यञ्जकम्, c_build_pointer_type (वृक्षः_TYPE (rhs)), rhs);
+      SET_व्यञ्जकम्_LOCATION (rhs, location);
 
-      rhs = convert_for_assignment (location, expr_loc,
-				    c_build_pointer_type (TREE_TYPE (type)),
+      rhs = convert_for_assignment (location, व्यञ्जकम्_loc,
+				    c_build_pointer_type (वृक्षः_TYPE (type)),
 				    rhs, origtype, errtype,
 				    null_pointer_constant, fundecl, function,
 				    parmnum, warnopt);
-      if (rhs == error_mark_node)
-	return error_mark_node;
+      सचे (rhs == error_mark_ग्रन्थिः)
+	पटिनिवत्त error_mark_ग्रन्थिः;
 
-      rhs = build1 (NOP_EXPR, type, rhs);
-      SET_EXPR_LOCATION (rhs, location);
-      return rhs;
+      rhs = build1 (NOP_व्यञ्जकम्, type, rhs);
+      SET_व्यञ्जकम्_LOCATION (rhs, location);
+      पटिनिवत्त rhs;
     }
   /* Some types can interconvert without explicit casts.  */
-  else if (codel == VECTOR_TYPE && coder == VECTOR_TYPE
-	   && vector_types_convertible_p (type, TREE_TYPE (rhs), true))
-    return convert (type, rhs);
+  अञ्ञथा सचे (codel == VECTOR_TYPE && coder == VECTOR_TYPE
+	   && vector_types_convertible_p (type, वृक्षः_TYPE (rhs), सच्च))
+    पटिनिवत्त convert (type, rhs);
   /* Arithmetic types all interconvert, and enum is treated like int.  */
-  else if ((codel == INTEGER_TYPE || codel == REAL_TYPE
+  अञ्ञथा सचे ((codel == INTEGER_TYPE || codel == REAL_TYPE
 	    || codel == FIXED_POINT_TYPE
 	    || codel == ENUMERAL_TYPE || codel == COMPLEX_TYPE
 	    || codel == BOOLEAN_TYPE || codel == BITINT_TYPE)
@@ -8692,108 +8692,108 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	       || coder == ENUMERAL_TYPE || coder == COMPLEX_TYPE
 	       || coder == BOOLEAN_TYPE || coder == BITINT_TYPE))
     {
-      if (warnopt && errtype == ic_argpass)
-	maybe_warn_builtin_no_proto_arg (expr_loc, fundecl, parmnum, type,
+      सचे (warnopt && errtype == ic_argpass)
+	maybe_warn_builtin_no_proto_arg (व्यञ्जकम्_loc, fundecl, parmnum, type,
 					 rhstype);
 
-      bool save = in_late_binary_op;
-      if (C_BOOLEAN_TYPE_P (type) || codel == COMPLEX_TYPE
+      तार्किक save = in_late_द्विमान_op;
+      सचे (C_BOOLEAN_TYPE_P (type) || codel == COMPLEX_TYPE
 	  || (coder == REAL_TYPE
 	      && (codel == INTEGER_TYPE || codel == ENUMERAL_TYPE)
 	      && sanitize_flags_p (SANITIZE_FLOAT_CAST)))
-	in_late_binary_op = true;
-      tree ret = convert_and_check (expr_loc != UNKNOWN_LOCATION
-				    ? expr_loc : location, type, orig_rhs,
+	in_late_द्विमान_op = सच्च;
+      वृक्षः ret = convert_and_check (व्यञ्जकम्_loc != UNKNOWN_LOCATION
+				    ? व्यञ्जकम्_loc : location, type, orig_rhs,
 				    errtype == ic_init_const);
-      in_late_binary_op = save;
-      return ret;
+      in_late_द्विमान_op = save;
+      पटिनिवत्त ret;
     }
 
   /* Aggregates in different TUs might need conversion.  */
-  if ((codel == RECORD_TYPE || codel == UNION_TYPE)
+  सचे ((codel == RECORD_TYPE || codel == UNION_TYPE)
       && codel == coder
       && comptypes (TYPE_MAIN_VARIANT (type), TYPE_MAIN_VARIANT (rhstype)))
-    return convert_and_check (expr_loc != UNKNOWN_LOCATION
-			      ? expr_loc : location, type, rhs);
+    पटिनिवत्त convert_and_check (व्यञ्जकम्_loc != UNKNOWN_LOCATION
+			      ? व्यञ्जकम्_loc : location, type, rhs);
 
   /* Conversion to a transparent union or record from its member types.
      This applies only to function arguments.  */
-  if (((codel == UNION_TYPE || codel == RECORD_TYPE)
+  सचे (((codel == UNION_TYPE || codel == RECORD_TYPE)
       && TYPE_TRANSPARENT_AGGR (type))
       && errtype == ic_argpass)
     {
-      tree memb, marginal_memb = NULL_TREE;
+      वृक्षः memb, marginal_memb = NULL_वृक्षः;
 
-      for (memb = TYPE_FIELDS (type); memb ; memb = DECL_CHAIN (memb))
+      अत्थाय (memb = TYPE_FIELDS (type); memb ; memb = DECL_CHAIN (memb))
 	{
-	  tree memb_type = TREE_TYPE (memb);
+	  वृक्षः memb_type = वृक्षः_TYPE (memb);
 
-	  if (comptypes (TYPE_MAIN_VARIANT (memb_type),
+	  सचे (comptypes (TYPE_MAIN_VARIANT (memb_type),
 			 TYPE_MAIN_VARIANT (rhstype)))
-	    break;
+	    भङ्ग;
 
-	  if (TREE_CODE (memb_type) != POINTER_TYPE)
-	    continue;
+	  सचे (वृक्षः_CODE (memb_type) != POINTER_TYPE)
+	    अनुवर्त;
 
-	  if (coder == POINTER_TYPE)
+	  सचे (coder == POINTER_TYPE)
 	    {
-	      tree ttl = TREE_TYPE (memb_type);
-	      tree ttr = TREE_TYPE (rhstype);
+	      वृक्षः ttl = वृक्षः_TYPE (memb_type);
+	      वृक्षः ttr = वृक्षः_TYPE (rhstype);
 
 	      /* Any non-function converts to a [const][volatile] void *
 		 and vice versa; otherwise, targets must be the same.
 		 Meanwhile, the lhs target must have all the qualifiers of
 		 the rhs.  */
-	      if ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
+	      सचे ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
 		  || (VOID_TYPE_P (ttr) && !TYPE_ATOMIC (ttr))
 		  || comp_target_types (location, memb_type, rhstype))
 		{
-		  int lquals = TYPE_QUALS (ttl) & ~TYPE_QUAL_ATOMIC;
-		  int rquals = TYPE_QUALS (ttr) & ~TYPE_QUAL_ATOMIC;
+		  पूर्णाङ्क lquals = TYPE_QUALS (ttl) & ~TYPE_QUAL_ATOMIC;
+		  पूर्णाङ्क rquals = TYPE_QUALS (ttr) & ~TYPE_QUAL_ATOMIC;
 		  /* If this type won't generate any warnings, use it.  */
-		  if (lquals == rquals
-		      || ((TREE_CODE (ttr) == FUNCTION_TYPE
-			   && TREE_CODE (ttl) == FUNCTION_TYPE)
+		  सचे (lquals == rquals
+		      || ((वृक्षः_CODE (ttr) == FUNCTION_TYPE
+			   && वृक्षः_CODE (ttl) == FUNCTION_TYPE)
 			  ? ((lquals | rquals) == rquals)
 			  : ((lquals | rquals) == lquals)))
-		    break;
+		    भङ्ग;
 
 		  /* Keep looking for a better type, but remember this one.  */
-		  if (!marginal_memb)
+		  सचे (!marginal_memb)
 		    marginal_memb = memb;
 		}
 	    }
 
 	  /* Can convert integer zero to any pointer type.  */
-	  if (null_pointer_constant)
+	  सचे (null_pointer_constant)
 	    {
-	      rhs = null_pointer_node;
-	      break;
+	      rhs = null_pointer_ग्रन्थिः;
+	      भङ्ग;
 	    }
 	}
 
-      if (memb || marginal_memb)
+      सचे (memb || marginal_memb)
 	{
-	  if (!memb)
+	  सचे (!memb)
 	    {
 	      /* We have only a marginally acceptable member type;
 		 it needs a warning.  */
-	      tree ttl = TREE_TYPE (TREE_TYPE (marginal_memb));
-	      tree ttr = TREE_TYPE (rhstype);
+	      वृक्षः ttl = वृक्षः_TYPE (वृक्षः_TYPE (marginal_memb));
+	      वृक्षः ttr = वृक्षः_TYPE (rhstype);
 
 	      /* Const and volatile mean something different for function
 		 types, so the usual warnings are not appropriate.  */
-	      if (TREE_CODE (ttr) == FUNCTION_TYPE
-		  && TREE_CODE (ttl) == FUNCTION_TYPE)
+	      सचे (वृक्षः_CODE (ttr) == FUNCTION_TYPE
+		  && वृक्षः_CODE (ttl) == FUNCTION_TYPE)
 		{
 		  /* Because const and volatile on functions are
 		     restrictions that say the function will not do
 		     certain things, it is okay to use a const or volatile
 		     function where an ordinary one is wanted, but not
 		     vice-versa.  */
-		  if (TYPE_QUALS_NO_ADDR_SPACE (ttl)
+		  सचे (TYPE_QUALS_NO_ADDR_SPACE (ttl)
 		      & ~TYPE_QUALS_NO_ADDR_SPACE (ttr))
-		    PEDWARN_FOR_QUALIFIERS (location, expr_loc,
+		    PEDWARN_FOR_QUALIFIERS (location, व्यञ्जकम्_loc,
 					    OPT_Wdiscarded_qualifiers,
 					    G_("passing argument %d of %qE "
 					       "makes %q#v qualified function "
@@ -8808,9 +8808,9 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 					       "pointer from unqualified"),
 					    TYPE_QUALS (ttl) & ~TYPE_QUALS (ttr));
 		}
-	      else if (TYPE_QUALS_NO_ADDR_SPACE (ttr)
+	      अञ्ञथा सचे (TYPE_QUALS_NO_ADDR_SPACE (ttr)
 		       & ~TYPE_QUALS_NO_ADDR_SPACE (ttl))
-		PEDWARN_FOR_QUALIFIERS (location, expr_loc,
+		PEDWARN_FOR_QUALIFIERS (location, व्यञ्जकम्_loc,
 				        OPT_Wdiscarded_qualifiers,
 				        G_("passing argument %d of %qE discards "
 					   "%qv qualifier from pointer target type"),
@@ -8825,34 +8825,34 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	      memb = marginal_memb;
 	    }
 
-	  if (!fundecl || !DECL_IN_SYSTEM_HEADER (fundecl))
+	  सचे (!fundecl || !DECL_IN_SYSTEM_HEADER (fundecl))
 	    pedwarn (location, OPT_Wpedantic,
 		     "ISO C prohibits argument conversion to union type");
 
-	  rhs = fold_convert_loc (location, TREE_TYPE (memb), rhs);
-	  return build_constructor_single (type, memb, rhs);
+	  rhs = fold_convert_loc (location, वृक्षः_TYPE (memb), rhs);
+	  पटिनिवत्त build_constructor_single (type, memb, rhs);
 	}
     }
 
   /* Conversions among pointers */
-  else if ((codel == POINTER_TYPE || codel == REFERENCE_TYPE)
+  अञ्ञथा सचे ((codel == POINTER_TYPE || codel == REFERENCE_TYPE)
 	   && (coder == codel))
     {
       /* If RHS refers to a built-in declared without a prototype
 	 BLTIN is the declaration of the built-in with a prototype
 	 and RHSTYPE is set to the actual type of the built-in.  */
-      tree bltin;
+      वृक्षः bltin;
       rhstype = type_or_builtin_type (rhs, &bltin);
 
-      tree ttl = TREE_TYPE (type);
-      tree ttr = TREE_TYPE (rhstype);
-      bool is_opaque_pointer;
-      bool target_cmp = false;   /* Cache comp_target_types () result.  */
+      वृक्षः ttl = वृक्षः_TYPE (type);
+      वृक्षः ttr = वृक्षः_TYPE (rhstype);
+      तार्किक is_opaque_pointer;
+      तार्किक target_cmp = मिच्छा;   /* Cache comp_target_types () result.  */
       addr_space_t asl;
       addr_space_t asr;
 
-      tree mvl = remove_qualifiers (ttl);
-      tree mvr = remove_qualifiers (ttr);
+      वृक्षः mvl = remove_qualifiers (ttl);
+      वृक्षः mvr = remove_qualifiers (ttr);
 
       /* Opaque pointers are treated like void pointers.  */
       is_opaque_pointer = vector_targets_convertible_p (ttl, ttr);
@@ -8860,18 +8860,18 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       /* The Plan 9 compiler permits a pointer to a struct to be
 	 automatically converted into a pointer to an anonymous field
 	 within the struct.  */
-      if (flag_plan9_extensions
+      सचे (flag_plan9_extensions
 	  && RECORD_OR_UNION_TYPE_P (mvl)
 	  && RECORD_OR_UNION_TYPE_P (mvr)
 	  && mvl != mvr)
 	{
-	  tree new_rhs = convert_to_anonymous_field (location, type, rhs);
-	  if (new_rhs != NULL_TREE)
+	  वृक्षः new_rhs = convert_to_anonymous_field (location, type, rhs);
+	  सचे (new_rhs != NULL_वृक्षः)
 	    {
 	      rhs = new_rhs;
-	      rhstype = TREE_TYPE (rhs);
-	      coder = TREE_CODE (rhstype);
-	      ttr = TREE_TYPE (rhstype);
+	      rhstype = वृक्षः_TYPE (rhs);
+	      coder = वृक्षः_CODE (rhstype);
+	      ttr = वृक्षः_TYPE (rhstype);
 	      mvr = TYPE_MAIN_VARIANT (ttr);
 	    }
 	}
@@ -8883,169 +8883,169 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 		int *p = NULL;
 
 	 where NULL is typically defined in C to be '(void *) 0'.  */
-      if (VOID_TYPE_P (ttr) && rhs != null_pointer_node && !VOID_TYPE_P (ttl))
-	warning_at (errtype == ic_argpass ? expr_loc : location,
+      सचे (VOID_TYPE_P (ttr) && rhs != null_pointer_ग्रन्थिः && !VOID_TYPE_P (ttl))
+	warning_at (errtype == ic_argpass ? व्यञ्जकम्_loc : location,
 		    OPT_Wc___compat,
 		    "request for implicit conversion "
 		    "from %qT to %qT not permitted in C++", rhstype, type);
 
       /* Warn of new allocations that are not big enough for the target
 	 type.  */
-      if (warn_alloc_size && TREE_CODE (rhs) == CALL_EXPR)
-	if (tree fndecl = get_callee_fndecl (rhs))
-	  if (DECL_IS_MALLOC (fndecl))
+      सचे (warn_alloc_size && वृक्षः_CODE (rhs) == CALL_व्यञ्जकम्)
+	सचे (वृक्षः fndecl = get_callee_fndecl (rhs))
+	  सचे (DECL_IS_MALLOC (fndecl))
 	    {
-	      tree attrs = TYPE_ATTRIBUTES (TREE_TYPE (fndecl));
-	      tree alloc_size = lookup_attribute ("alloc_size", attrs);
-	      if (alloc_size)
+	      वृक्षः attrs = TYPE_ATTRIBUTES (वृक्षः_TYPE (fndecl));
+	      वृक्षः alloc_size = lookup_attribute ("alloc_size", attrs);
+	      सचे (alloc_size)
 		warn_for_alloc_size (location, ttl, rhs, alloc_size);
 	    }
 
       /* See if the pointers point to incompatible address spaces.  */
       asl = TYPE_ADDR_SPACE (ttl);
       asr = TYPE_ADDR_SPACE (ttr);
-      if (!null_pointer_constant_p (rhs)
+      सचे (!null_pointer_constant_p (rhs)
 	  && asr != asl && !targetm.addr_space.subset_p (asr, asl))
 	{
 	  auto_diagnostic_group d;
-	  bool diagnosed = true;
-	  switch (errtype)
+	  तार्किक diagnosed = सच्च;
+	  विकल्प (errtype)
 	    {
-	    case ic_argpass:
+	    पक्ष ic_argpass:
 	      {
-		const char msg[] = G_("passing argument %d of %qE from "
+		ध्रुव वर्ण सन्देशः[] = G_("passing argument %d of %qE from "
 				      "pointer to non-enclosed address space");
-		if (warnopt)
+		सचे (warnopt)
 		  diagnosed
-		    = warning_at (expr_loc, warnopt, msg, parmnum, rname);
-		else
-		  error_at (expr_loc, msg, parmnum, rname);
-	      break;
+		    = warning_at (व्यञ्जकम्_loc, warnopt, सन्देशः, parmnum, rname);
+		अञ्ञथा
+		  error_at (व्यञ्जकम्_loc, सन्देशः, parmnum, rname);
+	      भङ्ग;
 	      }
-	    case ic_assign:
+	    पक्ष ic_assign:
 	      {
-		const char msg[] = G_("assignment from pointer to "
+		ध्रुव वर्ण सन्देशः[] = G_("assignment from pointer to "
 				      "non-enclosed address space");
-		if (warnopt)
-		  diagnosed = warning_at (location, warnopt, msg);
-		else
-		  error_at (location, msg);
-		break;
+		सचे (warnopt)
+		  diagnosed = warning_at (location, warnopt, सन्देशः);
+		अञ्ञथा
+		  error_at (location, सन्देशः);
+		भङ्ग;
 	      }
-	    case ic_init:
-	    case ic_init_const:
+	    पक्ष ic_init:
+	    पक्ष ic_init_const:
 	      {
-		const char msg[] = G_("initialization from pointer to "
+		ध्रुव वर्ण सन्देशः[] = G_("initialization from pointer to "
 				      "non-enclosed address space");
-		if (warnopt)
-		  diagnosed = warning_at (location, warnopt, msg);
-		else
-		  error_at (location, msg);
-		break;
+		सचे (warnopt)
+		  diagnosed = warning_at (location, warnopt, सन्देशः);
+		अञ्ञथा
+		  error_at (location, सन्देशः);
+		भङ्ग;
 	      }
-	    case ic_return:
+	    पक्ष ic_return:
 	      {
-		const char msg[] = G_("return from pointer to "
+		ध्रुव वर्ण सन्देशः[] = G_("return from pointer to "
 				      "non-enclosed address space");
-		if (warnopt)
-		  diagnosed = warning_at (location, warnopt, msg);
-		else
-		  error_at (location, msg);
-		break;
+		सचे (warnopt)
+		  diagnosed = warning_at (location, warnopt, सन्देशः);
+		अञ्ञथा
+		  error_at (location, सन्देशः);
+		भङ्ग;
 	      }
-	    default:
+	    स्वभाव:
 	      gcc_unreachable ();
 	    }
-	  if (diagnosed)
+	  सचे (diagnosed)
 	    {
-	      if (errtype == ic_argpass)
-		inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
-	      else
+	      सचे (errtype == ic_argpass)
+		inform_for_arg (fundecl, व्यञ्जकम्_loc, parmnum, type, rhstype);
+	      अञ्ञथा
 		inform (location, "expected %qT but pointer is of type %qT",
 			type, rhstype);
 	    }
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
 
       /* Check if the right-hand side has a format attribute but the
 	 left-hand side doesn't.  */
-      if (warn_suggest_attribute_format
+      सचे (warn_suggest_attribute_format
 	  && check_missing_format_attribute (type, rhstype))
 	{
-	  switch (errtype)
+	  विकल्प (errtype)
 	  {
-	  case ic_argpass:
-	    warning_at (expr_loc, OPT_Wsuggest_attribute_format,
+	  पक्ष ic_argpass:
+	    warning_at (व्यञ्जकम्_loc, OPT_Wsuggest_attribute_format,
 			"argument %d of %qE might be "
 			"a candidate for a format attribute",
 			parmnum, rname);
-	    break;
-	  case ic_assign:
+	    भङ्ग;
+	  पक्ष ic_assign:
 	    warning_at (location, OPT_Wsuggest_attribute_format,
 			"assignment left-hand side might be "
 			"a candidate for a format attribute");
-	    break;
-	  case ic_init:
-	  case ic_init_const:
+	    भङ्ग;
+	  पक्ष ic_init:
+	  पक्ष ic_init_const:
 	    warning_at (location, OPT_Wsuggest_attribute_format,
 			"initialization left-hand side might be "
 			"a candidate for a format attribute");
-	    break;
-	  case ic_return:
+	    भङ्ग;
+	  पक्ष ic_return:
 	    warning_at (location, OPT_Wsuggest_attribute_format,
 			"return type might be "
 			"a candidate for a format attribute");
-	    break;
-	  default:
+	    भङ्ग;
+	  स्वभाव:
 	    gcc_unreachable ();
 	  }
 	}
 
       /* See if the pointers point to incompatible scalar storage orders.  */
-      if (warn_scalar_storage_order
+      सचे (warn_scalar_storage_order
 	  && !null_pointer_constant_p (rhs)
 	  && (AGGREGATE_TYPE_P (ttl) && TYPE_REVERSE_STORAGE_ORDER (ttl))
 	     != (AGGREGATE_TYPE_P (ttr) && TYPE_REVERSE_STORAGE_ORDER (ttr)))
 	{
-	  tree t;
+	  वृक्षः t;
 
-	  switch (errtype)
+	  विकल्प (errtype)
 	  {
-	  case ic_argpass:
+	  पक्ष ic_argpass:
 	    /* Do not warn for built-in functions, for example memcpy, since we
 	       control how they behave and they can be useful in this area.  */
-	    if (TREE_CODE (rname) != FUNCTION_DECL
+	    सचे (वृक्षः_CODE (rname) != FUNCTION_DECL
 		|| !fndecl_built_in_p (rname))
 	      warning_at (location, OPT_Wscalar_storage_order,
 			  "passing argument %d of %qE from incompatible "
 			  "scalar storage order", parmnum, rname);
-	    break;
-	  case ic_assign:
+	    भङ्ग;
+	  पक्ष ic_assign:
 	    /* Do not warn if the RHS is a call to a function that returns a
 	       pointer that is not an alias.  */
-	    if (TREE_CODE (rhs) != CALL_EXPR
-		|| (t = get_callee_fndecl (rhs)) == NULL_TREE
+	    सचे (वृक्षः_CODE (rhs) != CALL_व्यञ्जकम्
+		|| (t = get_callee_fndecl (rhs)) == NULL_वृक्षः
 		|| !DECL_IS_MALLOC (t))
 	      warning_at (location, OPT_Wscalar_storage_order,
 			  "assignment to %qT from pointer type %qT with "
 			  "incompatible scalar storage order", type, rhstype);
-	    break;
-	  case ic_init:
-	  case ic_init_const:
+	    भङ्ग;
+	  पक्ष ic_init:
+	  पक्ष ic_init_const:
 	    /* Likewise.  */
-	    if (TREE_CODE (rhs) != CALL_EXPR
-		|| (t = get_callee_fndecl (rhs)) == NULL_TREE
+	    सचे (वृक्षः_CODE (rhs) != CALL_व्यञ्जकम्
+		|| (t = get_callee_fndecl (rhs)) == NULL_वृक्षः
 		|| !DECL_IS_MALLOC (t))
 	      warning_at (location, OPT_Wscalar_storage_order,
 			  "initialization of %qT from pointer type %qT with "
 			  "incompatible scalar storage order", type, rhstype);
-	    break;
-	  case ic_return:
+	    भङ्ग;
+	  पक्ष ic_return:
 	    warning_at (location, OPT_Wscalar_storage_order,
 			"returning %qT from pointer type with incompatible "
 			"scalar storage order %qT", rhstype, type);
-	    break;
-	  default:
+	    भङ्ग;
+	  स्वभाव:
 	    gcc_unreachable ();
 	  }
 	}
@@ -9053,7 +9053,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       /* Any non-function converts to a [const][volatile] void *
 	 and vice versa; otherwise, targets must be the same.
 	 Meanwhile, the lhs target must have all the qualifiers of the rhs.  */
-      if ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
+      सचे ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
 	  || (VOID_TYPE_P (ttr) && !TYPE_ATOMIC (ttr))
 	  || (target_cmp = comp_target_types (location, type, rhstype))
 	  || is_opaque_pointer
@@ -9065,15 +9065,15 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	{
 	  /* Warn about loss of qualifers from pointers to arrays with
 	     qualifiers on the element type. */
-	  if (TREE_CODE (ttr) == ARRAY_TYPE)
+	  सचे (वृक्षः_CODE (ttr) == ARRAY_TYPE)
 	    {
 	      ttr = strip_array_types (ttr);
 	      ttl = strip_array_types (ttl);
 
-	      if (TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
+	      सचे (TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
 		  & ~TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttl))
 		WARNING_FOR_QUALIFIERS (flag_isoc23,
-					location, expr_loc,
+					location, व्यञ्जकम्_loc,
 					OPT_Wdiscarded_array_qualifiers,
 					G_("passing argument %d of %qE discards "
 					   "%qv qualifier from pointer target type"),
@@ -9085,13 +9085,13 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 					   "pointer target type"),
 					TYPE_QUALS (ttr) & ~TYPE_QUALS (ttl));
             }
-          else if (pedantic
-	      && ((VOID_TYPE_P (ttl) && TREE_CODE (ttr) == FUNCTION_TYPE)
+          अञ्ञथा सचे (pedantic
+	      && ((VOID_TYPE_P (ttl) && वृक्षः_CODE (ttr) == FUNCTION_TYPE)
 		  ||
 		  (VOID_TYPE_P (ttr)
 		   && !null_pointer_constant
-		   && TREE_CODE (ttl) == FUNCTION_TYPE)))
-	    PEDWARN_FOR_ASSIGNMENT (location, expr_loc, OPT_Wpedantic,
+		   && वृक्षः_CODE (ttl) == FUNCTION_TYPE)))
+	    PEDWARN_FOR_ASSIGNMENT (location, व्यञ्जकम्_loc, OPT_Wpedantic,
 				    G_("ISO C forbids passing argument %d of "
 				       "%qE between function pointer "
 				       "and %<void *%>"),
@@ -9103,20 +9103,20 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 				       "pointer and %<void *%>"));
 	  /* Const and volatile mean something different for function types,
 	     so the usual warnings are not appropriate.  */
-	  else if (TREE_CODE (ttr) != FUNCTION_TYPE
-		   && TREE_CODE (ttl) != FUNCTION_TYPE)
+	  अञ्ञथा सचे (वृक्षः_CODE (ttr) != FUNCTION_TYPE
+		   && वृक्षः_CODE (ttl) != FUNCTION_TYPE)
 	    {
 	       /* Assignments between atomic and non-atomic objects are OK.  */
-	       bool warn_quals_ped = TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
+	       तार्किक warn_quals_ped = TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
 				     & ~TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttl);
-	       bool warn_quals = TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
+	       तार्किक warn_quals = TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
 				 & ~TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (strip_array_types (ttl));
 
 	      /* Don't warn about loss of qualifier for conversions from
 		 qualified void* to pointers to arrays with corresponding
 		 qualifier on the element type (except for pedantic before C23). */
-	      if (warn_quals || (warn_quals_ped && pedantic && !flag_isoc23))
-		PEDWARN_FOR_QUALIFIERS (location, expr_loc,
+	      सचे (warn_quals || (warn_quals_ped && pedantic && !flag_isoc23))
+		PEDWARN_FOR_QUALIFIERS (location, व्यञ्जकम्_loc,
 					OPT_Wdiscarded_qualifiers,
 					G_("passing argument %d of %qE discards "
 					   "%qv qualifier from pointer target type"),
@@ -9127,63 +9127,63 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 					G_("return discards %qv qualifier from "
 					   "pointer target type"),
 					TYPE_QUALS (ttr) & ~TYPE_QUALS (ttl));
-	      else if (warn_quals_ped)
+	      अञ्ञथा सचे (warn_quals_ped)
 		pedwarn_c11 (location, OPT_Wc11_c23_compat,
 			     "array with qualifier on the element is not qualified before C23");
 
 	      /* If this is not a case of ignoring a mismatch in signedness,
 		 no warning.  */
-	      else if (VOID_TYPE_P (ttl) || VOID_TYPE_P (ttr)
+	      अञ्ञथा सचे (VOID_TYPE_P (ttl) || VOID_TYPE_P (ttr)
 		       || target_cmp)
 		;
 	      /* If there is a mismatch, do warn.  */
-	      else if (warn_pointer_sign)
-		switch (errtype)
+	      अञ्ञथा सचे (warn_pointer_sign)
+		विकल्प (errtype)
 		  {
-		  case ic_argpass:
+		  पक्ष ic_argpass:
 		    {
 		      auto_diagnostic_group d;
 		      range_label_for_type_mismatch rhs_label (rhstype, type);
-		      gcc_rich_location richloc (expr_loc, &rhs_label,
+		      gcc_rich_location richloc (व्यञ्जकम्_loc, &rhs_label,
 						 highlight_colors::actual);
-		      if (pedwarn (&richloc, OPT_Wpointer_sign,
+		      सचे (pedwarn (&richloc, OPT_Wpointer_sign,
 				   "pointer targets in passing argument %d of "
 				   "%qE differ in signedness", parmnum, rname))
-			inform_for_arg (fundecl, expr_loc, parmnum, type,
+			inform_for_arg (fundecl, व्यञ्जकम्_loc, parmnum, type,
 					rhstype);
 		    }
-		    break;
-		  case ic_assign:
+		    भङ्ग;
+		  पक्ष ic_assign:
 		    pedwarn (location, OPT_Wpointer_sign,
 			     "pointer targets in assignment from %qT to %qT "
 			     "differ in signedness", rhstype, type);
-		    break;
-		  case ic_init:
-		  case ic_init_const:
+		    भङ्ग;
+		  पक्ष ic_init:
+		  पक्ष ic_init_const:
 		    pedwarn_init (location, OPT_Wpointer_sign,
 				  "pointer targets in initialization of %qT "
 				  "from %qT differ in signedness", type,
 				  rhstype);
-		    break;
-		  case ic_return:
+		    भङ्ग;
+		  पक्ष ic_return:
 		    pedwarn (location, OPT_Wpointer_sign, "pointer targets in "
 			     "returning %qT from a function with return type "
 			     "%qT differ in signedness", rhstype, type);
-		    break;
-		  default:
+		    भङ्ग;
+		  स्वभाव:
 		    gcc_unreachable ();
 		  }
 	    }
-	  else if (TREE_CODE (ttl) == FUNCTION_TYPE
-		   && TREE_CODE (ttr) == FUNCTION_TYPE)
+	  अञ्ञथा सचे (वृक्षः_CODE (ttl) == FUNCTION_TYPE
+		   && वृक्षः_CODE (ttr) == FUNCTION_TYPE)
 	    {
 	      /* Because const and volatile on functions are restrictions
 		 that say the function will not do certain things,
 		 it is okay to use a const or volatile function
 		 where an ordinary one is wanted, but not vice-versa.  */
-	      if (TYPE_QUALS_NO_ADDR_SPACE (ttl)
+	      सचे (TYPE_QUALS_NO_ADDR_SPACE (ttl)
 		  & ~TYPE_QUALS_NO_ADDR_SPACE (ttr))
-		PEDWARN_FOR_QUALIFIERS (location, expr_loc,
+		PEDWARN_FOR_QUALIFIERS (location, व्यञ्जकम्_loc,
 				        OPT_Wdiscarded_qualifiers,
 				        G_("passing argument %d of %qE makes "
 					   "%q#v qualified function pointer "
@@ -9198,83 +9198,83 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	    }
 	}
       /* Avoid warning about the volatile ObjC EH puts on decls.  */
-      else if (!objc_ok)
+      अञ्ञथा सचे (!objc_ok)
 	{
 	  auto_diagnostic_group d;
-	  bool warned = false;
+	  तार्किक warned = मिच्छा;
 	  pp_markup::element_expected_type e_type (type);
 	  pp_markup::element_actual_type e_rhstype (rhstype);
-	  switch (errtype)
+	  विकल्प (errtype)
 	    {
-	    case ic_argpass:
+	    पक्ष ic_argpass:
 	      {
 		range_label_for_type_mismatch rhs_label (rhstype, type);
-		gcc_rich_location richloc (expr_loc, &rhs_label,
+		gcc_rich_location richloc (व्यञ्जकम्_loc, &rhs_label,
 					   highlight_colors::actual);
 		warned
 		  = permerror_opt (&richloc, OPT_Wincompatible_pointer_types,
 				   "passing argument %d of %qE from "
 				   "incompatible pointer type",
 				   parmnum, rname);
-		if (warned)
-		  inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
+		सचे (warned)
+		  inform_for_arg (fundecl, व्यञ्जकम्_loc, parmnum, type, rhstype);
 	      }
-	      break;
-	    case ic_assign:
-	      if (bltin)
+	      भङ्ग;
+	    पक्ष ic_assign:
+	      सचे (bltin)
 		warned
 		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
 				   "assignment to %e from pointer to "
 				   "%qD with incompatible type %e",
 				   &e_type, bltin, &e_rhstype);
-	      else
+	      अञ्ञथा
 		warned
 		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
 				   "assignment to %e from incompatible "
 				   "pointer type %e",
 				   &e_type, &e_rhstype);
-	      break;
-	    case ic_init:
-	    case ic_init_const:
-	      if (bltin)
+	      भङ्ग;
+	    पक्ष ic_init:
+	    पक्ष ic_init_const:
+	      सचे (bltin)
 		warned
 		  = permerror_init (location, OPT_Wincompatible_pointer_types,
 				    "initialization of %e from pointer to "
 				    "%qD with incompatible type %e",
 				    &e_type, bltin, &e_rhstype);
-	      else
+	      अञ्ञथा
 		warned
 		  = permerror_init (location, OPT_Wincompatible_pointer_types,
 				    "initialization of %e from incompatible "
 				    "pointer type %e",
 				    &e_type, &e_rhstype);
-	      break;
-	    case ic_return:
-	      if (bltin)
+	      भङ्ग;
+	    पक्ष ic_return:
+	      सचे (bltin)
 		warned
 		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
 				   "returning pointer to %qD of type %e from "
 				   "a function with incompatible type %e",
 				   bltin, &e_rhstype, &e_type);
-	      else
+	      अञ्ञथा
 		warned
 		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
 				   "returning %e from a function with "
 				   "incompatible return type %e",
 				   &e_rhstype, &e_type);
-	      break;
-	    default:
+	      भङ्ग;
+	    स्वभाव:
 	      gcc_unreachable ();
 	    }
-	  if (warned)
+	  सचे (warned)
 	    {
 	      /* If the mismatching function type is a pointer to a function,
 		 try to show the decl of the function.  */
-	      if (TREE_CODE (rhs) == ADDR_EXPR
-		  && TREE_CODE (TREE_OPERAND (rhs, 0)) == FUNCTION_DECL)
+	      सचे (वृक्षः_CODE (rhs) == ADDR_व्यञ्जकम्
+		  && वृक्षः_CODE (वृक्षः_OPERAND (rhs, 0)) == FUNCTION_DECL)
 		{
-		  tree rhs_fndecl = TREE_OPERAND (rhs, 0);
-		  if (!DECL_IS_UNDECLARED_BUILTIN (rhs_fndecl))
+		  वृक्षः rhs_fndecl = वृक्षः_OPERAND (rhs, 0);
+		  सचे (!DECL_IS_UNDECLARED_BUILTIN (rhs_fndecl))
 		    {
 		      gcc_rich_location richloc
 			(DECL_SOURCE_LOCATION (rhs_fndecl), nullptr,
@@ -9297,186 +9297,186 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	 struct or union.  */
       warn_for_address_of_packed_member (type, orig_rhs);
 
-      return convert (type, rhs);
+      पटिनिवत्त convert (type, rhs);
     }
-  else if (codel == POINTER_TYPE && coder == ARRAY_TYPE)
+  अञ्ञथा सचे (codel == POINTER_TYPE && coder == ARRAY_TYPE)
     {
       /* ??? This should not be an error when inlining calls to
 	 unprototyped functions.  */
-      const char msg[] = "invalid use of non-lvalue array";
-      if (warnopt)
-	warning_at (location, warnopt, msg);
-      else
-	error_at (location, msg);
-      return error_mark_node;
+      ध्रुव वर्ण सन्देशः[] = "invalid use of non-lvalue array";
+      सचे (warnopt)
+	warning_at (location, warnopt, सन्देशः);
+      अञ्ञथा
+	error_at (location, सन्देशः);
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
-  else if (codel == POINTER_TYPE
+  अञ्ञथा सचे (codel == POINTER_TYPE
 	   && (coder == INTEGER_TYPE
 	       || coder == ENUMERAL_TYPE
 	       || coder == BOOLEAN_TYPE
 	       || coder == NULLPTR_TYPE
 	       || coder == BITINT_TYPE))
     {
-      if (null_pointer_constant && c_inhibit_evaluation_warnings == 0
+      सचे (null_pointer_constant && c_inhibit_evaluation_warnings == 0
 	  && coder != NULLPTR_TYPE)
 	warning_at (location, OPT_Wzero_as_null_pointer_constant,
 		    "zero as null pointer constant");
       /* A NULLPTR type is just a nullptr always.  */
-      if (coder == NULLPTR_TYPE)
-	return omit_one_operand_loc (expr_loc, type, nullptr_node, rhs);
+      सचे (coder == NULLPTR_TYPE)
+	पटिनिवत्त omit_one_operand_loc (व्यञ्जकम्_loc, type, nullptr_ग्रन्थिः, rhs);
       /* An explicit constant 0 or type nullptr_t can convert to a pointer,
 	 or one that results from arithmetic, even including a cast to
 	 integer type.  */
-      else if (!null_pointer_constant)
-	switch (errtype)
+      अञ्ञथा सचे (!null_pointer_constant)
+	विकल्प (errtype)
 	  {
-	  case ic_argpass:
+	  पक्ष ic_argpass:
 	    {
 	      auto_diagnostic_group d;
 	      range_label_for_type_mismatch rhs_label (rhstype, type);
-	      gcc_rich_location richloc (expr_loc, &rhs_label,
+	      gcc_rich_location richloc (व्यञ्जकम्_loc, &rhs_label,
 					 highlight_colors::actual);
-	      if (permerror_opt (&richloc, OPT_Wint_conversion,
+	      सचे (permerror_opt (&richloc, OPT_Wint_conversion,
 				 "passing argument %d of %qE makes pointer "
 				 "from integer without a cast", parmnum, rname))
 		{
-		  maybe_emit_indirection_note (expr_loc, rhs, type);
-		  inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
+		  maybe_emit_indirection_note (व्यञ्जकम्_loc, rhs, type);
+		  inform_for_arg (fundecl, व्यञ्जकम्_loc, parmnum, type, rhstype);
 		}
 	    }
-	    break;
-	  case ic_assign:
+	    भङ्ग;
+	  पक्ष ic_assign:
 	    permerror_opt (location, OPT_Wint_conversion,
 			   "assignment to %qT from %qT makes pointer from "
 			   "integer without a cast", type, rhstype);
-	    break;
-	  case ic_init:
-	  case ic_init_const:
+	    भङ्ग;
+	  पक्ष ic_init:
+	  पक्ष ic_init_const:
 	    permerror_init (location, OPT_Wint_conversion,
 			    "initialization of %qT from %qT makes pointer "
 			    "from integer without a cast", type, rhstype);
-	    break;
-	  case ic_return:
+	    भङ्ग;
+	  पक्ष ic_return:
 	    permerror_init (location, OPT_Wint_conversion,
 			    "returning %qT from a function with return type "
 			    "%qT makes pointer from integer without a cast",
 			    rhstype, type);
-	    break;
-	  default:
+	    भङ्ग;
+	  स्वभाव:
 	    gcc_unreachable ();
 	  }
 
-      return convert (type, rhs);
+      पटिनिवत्त convert (type, rhs);
     }
-  else if ((codel == INTEGER_TYPE || codel == BITINT_TYPE)
+  अञ्ञथा सचे ((codel == INTEGER_TYPE || codel == BITINT_TYPE)
 	   && coder == POINTER_TYPE)
     {
-      switch (errtype)
+      विकल्प (errtype)
 	{
-	case ic_argpass:
+	पक्ष ic_argpass:
 	  {
 	    auto_diagnostic_group d;
 	    range_label_for_type_mismatch rhs_label (rhstype, type);
-	    gcc_rich_location richloc (expr_loc, &rhs_label,
+	    gcc_rich_location richloc (व्यञ्जकम्_loc, &rhs_label,
 				       highlight_colors::actual);
-	    if (permerror_opt (&richloc, OPT_Wint_conversion,
+	    सचे (permerror_opt (&richloc, OPT_Wint_conversion,
 			       "passing argument %d of %qE makes integer from "
 			       "pointer without a cast", parmnum, rname))
 	      {
-		maybe_emit_indirection_note (expr_loc, rhs, type);
-		inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
+		maybe_emit_indirection_note (व्यञ्जकम्_loc, rhs, type);
+		inform_for_arg (fundecl, व्यञ्जकम्_loc, parmnum, type, rhstype);
 	      }
 	  }
-	  break;
-	case ic_assign:
+	  भङ्ग;
+	पक्ष ic_assign:
 	  permerror_opt (location, OPT_Wint_conversion,
 			 "assignment to %qT from %qT makes integer from "
 			 "pointer without a cast", type, rhstype);
-	  break;
-	case ic_init:
-	case ic_init_const:
+	  भङ्ग;
+	पक्ष ic_init:
+	पक्ष ic_init_const:
 	  permerror_init (location, OPT_Wint_conversion,
 			  "initialization of %qT from %qT makes integer "
 			  "from pointer without a cast", type, rhstype);
-	  break;
-	case ic_return:
+	  भङ्ग;
+	पक्ष ic_return:
 	  permerror_opt (location, OPT_Wint_conversion, "returning %qT from a "
 			 "function with return type %qT makes integer from "
 			 "pointer without a cast", rhstype, type);
-	  break;
-	default:
+	  भङ्ग;
+	स्वभाव:
 	  gcc_unreachable ();
 	}
 
-      return convert (type, rhs);
+      पटिनिवत्त convert (type, rhs);
     }
-  else if (C_BOOLEAN_TYPE_P (type)
+  अञ्ञथा सचे (C_BOOLEAN_TYPE_P (type)
 	   /* The type nullptr_t may be converted to bool.  The
 	      result is false.  */
 	   && (coder == POINTER_TYPE || coder == NULLPTR_TYPE))
     {
-      tree ret;
-      bool save = in_late_binary_op;
-      in_late_binary_op = true;
+      वृक्षः ret;
+      तार्किक save = in_late_द्विमान_op;
+      in_late_द्विमान_op = सच्च;
       ret = convert (type, rhs);
-      in_late_binary_op = save;
-      return ret;
+      in_late_द्विमान_op = save;
+      पटिनिवत्त ret;
     }
-  else if (codel == NULLPTR_TYPE && null_pointer_constant)
-    return convert (type, rhs);
+  अञ्ञथा सचे (codel == NULLPTR_TYPE && null_pointer_constant)
+    पटिनिवत्त convert (type, rhs);
 
-  switch (errtype)
+  विकल्प (errtype)
     {
-    case ic_argpass:
+    पक्ष ic_argpass:
       {
 	auto_diagnostic_group d;
 	range_label_for_type_mismatch rhs_label (rhstype, type);
-	gcc_rich_location richloc (expr_loc, &rhs_label,
+	gcc_rich_location richloc (व्यञ्जकम्_loc, &rhs_label,
 				   highlight_colors::actual);
-	const char msg[] = G_("incompatible type for argument %d of %qE");
-	if (warnopt)
-	  warning_at (expr_loc, warnopt, msg, parmnum, rname);
-	else
-	  error_at (&richloc, msg, parmnum, rname);
-	inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
+	ध्रुव वर्ण सन्देशः[] = G_("incompatible type for argument %d of %qE");
+	सचे (warnopt)
+	  warning_at (व्यञ्जकम्_loc, warnopt, सन्देशः, parmnum, rname);
+	अञ्ञथा
+	  error_at (&richloc, सन्देशः, parmnum, rname);
+	inform_for_arg (fundecl, व्यञ्जकम्_loc, parmnum, type, rhstype);
       }
-      break;
-    case ic_assign:
+      भङ्ग;
+    पक्ष ic_assign:
       {
-	const char msg[]
+	ध्रुव वर्ण सन्देशः[]
 	  = G_("incompatible types when assigning to type %qT from type %qT");
-	if (warnopt)
-	  warning_at (expr_loc, 0, msg, type, rhstype);
-	else
-	  error_at (expr_loc, msg, type, rhstype);
-	break;
+	सचे (warnopt)
+	  warning_at (व्यञ्जकम्_loc, 0, सन्देशः, type, rhstype);
+	अञ्ञथा
+	  error_at (व्यञ्जकम्_loc, सन्देशः, type, rhstype);
+	भङ्ग;
       }
-    case ic_init:
-    case ic_init_const:
+    पक्ष ic_init:
+    पक्ष ic_init_const:
       {
-	const char msg[]
+	ध्रुव वर्ण सन्देशः[]
 	  = G_("incompatible types when initializing type %qT using type %qT");
-	if (warnopt)
-	  warning_at (location, 0, msg, type, rhstype);
-	else
-	  error_at (location, msg, type, rhstype);
-	break;
+	सचे (warnopt)
+	  warning_at (location, 0, सन्देशः, type, rhstype);
+	अञ्ञथा
+	  error_at (location, सन्देशः, type, rhstype);
+	भङ्ग;
       }
-    case ic_return:
+    पक्ष ic_return:
       {
-	const char msg[]
+	ध्रुव वर्ण सन्देशः[]
 	  = G_("incompatible types when returning type %qT but %qT was expected");
-	if (warnopt)
-	  warning_at (location, 0, msg, rhstype, type);
-	else
-	  error_at (location, msg, rhstype, type);
-	break;
+	सचे (warnopt)
+	  warning_at (location, 0, सन्देशः, rhstype, type);
+	अञ्ञथा
+	  error_at (location, सन्देशः, rhstype, type);
+	भङ्ग;
       }
-    default:
+    स्वभाव:
       gcc_unreachable ();
     }
 
-  return error_mark_node;
+  पटिनिवत्त error_mark_ग्रन्थिः;
 }
 
 /* If VALUE is a compound expr all of whose expressions are constant, then
@@ -9485,21 +9485,21 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
    This is for handling COMPOUND_EXPRs as initializer elements
    which is allowed with a warning when -pedantic is specified.  */
 
-static tree
-valid_compound_expr_initializer (tree value, tree endtype)
+स्थिर वृक्षः
+valid_compound_व्यञ्जकम्_initializer (वृक्षः मानम्, वृक्षः endtype)
 {
-  if (TREE_CODE (value) == COMPOUND_EXPR)
+  सचे (वृक्षः_CODE (मानम्) == COMPOUND_व्यञ्जकम्)
     {
-      if (valid_compound_expr_initializer (TREE_OPERAND (value, 0), endtype)
-	  == error_mark_node)
-	return error_mark_node;
-      return valid_compound_expr_initializer (TREE_OPERAND (value, 1),
+      सचे (valid_compound_व्यञ्जकम्_initializer (वृक्षः_OPERAND (मानम्, 0), endtype)
+	  == error_mark_ग्रन्थिः)
+	पटिनिवत्त error_mark_ग्रन्थिः;
+      पटिनिवत्त valid_compound_व्यञ्जकम्_initializer (वृक्षः_OPERAND (मानम्, 1),
 					      endtype);
     }
-  else if (!initializer_constant_valid_p (value, endtype))
-    return error_mark_node;
-  else
-    return value;
+  अञ्ञथा सचे (!initializer_constant_valid_p (मानम्, endtype))
+    पटिनिवत्त error_mark_ग्रन्थिः;
+  अञ्ञथा
+    पटिनिवत्त मानम्;
 }
 
 /* Perform appropriate conversions on the initial value of a variable,
@@ -9510,77 +9510,77 @@ valid_compound_expr_initializer (tree value, tree endtype)
 
    INIT_LOC is the location of the initial value.  */
 
-void
-store_init_value (location_t init_loc, tree decl, tree init, tree origtype)
+शून्य
+store_init_मानम् (location_t init_loc, वृक्षः decl, वृक्षः init, वृक्षः origtype)
 {
-  tree value, type;
-  bool npc = false;
-  bool int_const_expr = false;
-  bool arith_const_expr = false;
+  वृक्षः मानम्, type;
+  तार्किक npc = मिच्छा;
+  तार्किक int_const_व्यञ्जकम् = मिच्छा;
+  तार्किक arith_const_व्यञ्जकम् = मिच्छा;
 
   /* If variable's type was invalidly declared, just ignore it.  */
 
-  type = TREE_TYPE (decl);
-  if (TREE_CODE (type) == ERROR_MARK)
-    return;
+  type = वृक्षः_TYPE (decl);
+  सचे (वृक्षः_CODE (type) == ERROR_MARK)
+    पटिनिवत्त;
 
   /* Digest the specified initializer into an expression.  */
 
-  if (init)
+  सचे (init)
     {
       npc = null_pointer_constant_p (init);
-      int_const_expr = (TREE_CODE (init) == INTEGER_CST
-			&& !TREE_OVERFLOW (init)
-			&& INTEGRAL_TYPE_P (TREE_TYPE (init)));
+      int_const_व्यञ्जकम् = (वृक्षः_CODE (init) == INTEGER_CST
+			&& !वृक्षः_OVERFLOW (init)
+			&& INTEGRAL_TYPE_P (वृक्षः_TYPE (init)));
       /* Not fully determined before folding.  */
-      arith_const_expr = true;
+      arith_const_व्यञ्जकम् = सच्च;
     }
-  bool constexpr_p = (VAR_P (decl)
+  तार्किक constexpr_p = (VAR_P (decl)
 		      && C_DECL_DECLARED_CONSTEXPR (decl));
-  value = digest_init (init_loc, decl, type, init, origtype, npc,
-		       int_const_expr, arith_const_expr, true,
-		       TREE_STATIC (decl) || constexpr_p, constexpr_p);
+  मानम् = digest_init (init_loc, decl, type, init, origtype, npc,
+		       int_const_व्यञ्जकम्, arith_const_व्यञ्जकम्, सच्च,
+		       वृक्षः_STATIC (decl) || constexpr_p, constexpr_p);
 
   /* Store the expression if valid; else report error.  */
 
-  if (!in_system_header_at (input_location)
-      && AGGREGATE_TYPE_P (TREE_TYPE (decl)) && !TREE_STATIC (decl))
+  सचे (!in_system_header_at (निवेशः_location)
+      && AGGREGATE_TYPE_P (वृक्षः_TYPE (decl)) && !वृक्षः_STATIC (decl))
     warning (OPT_Wtraditional, "traditional C rejects automatic "
 	     "aggregate initialization");
 
-  if (value != error_mark_node || TREE_CODE (decl) != FUNCTION_DECL)
-    DECL_INITIAL (decl) = value;
+  सचे (मानम् != error_mark_ग्रन्थिः || वृक्षः_CODE (decl) != FUNCTION_DECL)
+    DECL_INITIAL (decl) = मानम्;
 
   /* ANSI wants warnings about out-of-range constant initializers.  */
-  STRIP_TYPE_NOPS (value);
-  if (TREE_STATIC (decl))
-    constant_expression_warning (value);
+  STRIP_TYPE_NOPS (मानम्);
+  सचे (वृक्षः_STATIC (decl))
+    constant_expression_warning (मानम्);
 
   /* Check if we need to set array size from compound literal size.  */
-  if (TREE_CODE (type) == ARRAY_TYPE
-      && TYPE_DOMAIN (type) == NULL_TREE
-      && value != error_mark_node)
+  सचे (वृक्षः_CODE (type) == ARRAY_TYPE
+      && TYPE_DOMAIN (type) == NULL_वृक्षः
+      && मानम् != error_mark_ग्रन्थिः)
     {
-      tree inside_init = init;
+      वृक्षः inside_init = init;
 
       STRIP_TYPE_NOPS (inside_init);
       inside_init = fold (inside_init);
 
-      if (TREE_CODE (inside_init) == COMPOUND_LITERAL_EXPR)
+      सचे (वृक्षः_CODE (inside_init) == COMPOUND_LITERAL_व्यञ्जकम्)
 	{
-	  tree cldecl = COMPOUND_LITERAL_EXPR_DECL (inside_init);
+	  वृक्षः cldecl = COMPOUND_LITERAL_व्यञ्जकम्_DECL (inside_init);
 
-	  if (TYPE_DOMAIN (TREE_TYPE (cldecl)))
+	  सचे (TYPE_DOMAIN (वृक्षः_TYPE (cldecl)))
 	    {
 	      /* For int foo[] = (int [3]){1}; we need to set array size
 		 now since later on array initializer will be just the
 		 brace enclosed list of the compound literal.  */
-	      tree etype = strip_array_types (TREE_TYPE (decl));
+	      वृक्षः etype = strip_array_types (वृक्षः_TYPE (decl));
 	      type = build_distinct_type_copy (TYPE_MAIN_VARIANT (type));
-	      TYPE_DOMAIN (type) = TYPE_DOMAIN (TREE_TYPE (cldecl));
+	      TYPE_DOMAIN (type) = TYPE_DOMAIN (वृक्षः_TYPE (cldecl));
 	      layout_type (type);
 	      layout_decl (cldecl, 0);
-	      TREE_TYPE (decl)
+	      वृक्षः_TYPE (decl)
 		= c_build_qualified_type (type, TYPE_QUALS (etype));
 	    }
 	}
@@ -9592,13 +9592,13 @@ store_init_value (location_t init_loc, tree decl, tree init, tree origtype)
 /* Implement a spelling stack that allows components of a name to be pushed
    and popped.  Each element on the stack is this structure.  */
 
-struct spelling
+संरचना spelling
 {
-  int kind;
-  union
+  पूर्णाङ्क kind;
+  सङ्घ
     {
       unsigned HOST_WIDE_INT i;
-      const char *s;
+      ध्रुव वर्ण *s;
     } u;
 };
 
@@ -9606,9 +9606,9 @@ struct spelling
 #define SPELLING_MEMBER 2
 #define SPELLING_BOUNDS 3
 
-static struct spelling *spelling;	/* Next stack element (unused).  */
-static struct spelling *spelling_base;	/* Spelling stack base.  */
-static int spelling_size;		/* Size of the spelling stack.  */
+स्थिर संरचना spelling *spelling;	/* Next stack element (unused).  */
+स्थिर संरचना spelling *spelling_base;	/* Spelling stack base.  */
+स्थिर पूर्णाङ्क spelling_size;		/* Size of the spelling stack.  */
 
 /* Macros to save and restore the spelling stack around push_... functions.
    Alternative to SAVE_SPELLING_STACK.  */
@@ -9619,157 +9619,157 @@ static int spelling_size;		/* Size of the spelling stack.  */
 /* Push an element on the spelling stack with type KIND and assign VALUE
    to MEMBER.  */
 
-#define PUSH_SPELLING(KIND, VALUE, MEMBER)				\
+#define प्रक्षिप_SPELLING(KIND, मानम्_2, MEMBER)				\
 {									\
-  int depth = SPELLING_DEPTH ();					\
+  पूर्णाङ्क depth = SPELLING_DEPTH ();					\
 									\
-  if (depth >= spelling_size)						\
+  सचे (depth >= spelling_size)						\
     {									\
       spelling_size += 10;						\
-      spelling_base = XRESIZEVEC (struct spelling, spelling_base,	\
+      spelling_base = XRESIZEVEC (संरचना spelling, spelling_base,	\
 				  spelling_size);			\
       RESTORE_SPELLING_DEPTH (depth);					\
     }									\
 									\
   spelling->kind = (KIND);						\
-  spelling->MEMBER = (VALUE);						\
+  spelling->MEMBER = (मानम्_2);						\
   spelling++;								\
 }
 
 /* Push STRING on the stack.  Printed literally.  */
 
-static void
-push_string (const char *string)
+स्थिर शून्य
+प्रक्षिप_string (ध्रुव वर्ण *string)
 {
-  PUSH_SPELLING (SPELLING_STRING, string, u.s);
+  प्रक्षिप_SPELLING (SPELLING_STRING, string, u.s);
 }
 
 /* Push a member name on the stack.  Printed as '.' STRING.  */
 
-static void
-push_member_name (tree decl)
+स्थिर शून्य
+प्रक्षिप_member_name (वृक्षः decl)
 {
-  const char *const string
+  ध्रुव वर्ण *ध्रुव string
     = (DECL_NAME (decl)
        ? identifier_to_locale (IDENTIFIER_POINTER (DECL_NAME (decl)))
        : _("<anonymous>"));
-  PUSH_SPELLING (SPELLING_MEMBER, string, u.s);
+  प्रक्षिप_SPELLING (SPELLING_MEMBER, string, u.s);
 }
 
 /* Push an array bounds on the stack.  Printed as [BOUNDS].  */
 
-static void
-push_array_bounds (unsigned HOST_WIDE_INT bounds)
+स्थिर शून्य
+प्रक्षिप_array_bounds (unsigned HOST_WIDE_INT bounds)
 {
-  PUSH_SPELLING (SPELLING_BOUNDS, bounds, u.i);
+  प्रक्षिप_SPELLING (SPELLING_BOUNDS, bounds, u.i);
 }
 
 /* Compute the maximum size in bytes of the printed spelling.  */
 
-static int
-spelling_length (void)
+स्थिर पूर्णाङ्क
+spelling_length (शून्य)
 {
-  int size = 0;
-  struct spelling *p;
+  पूर्णाङ्क size = 0;
+  संरचना spelling *p;
 
-  for (p = spelling_base; p < spelling; p++)
+  अत्थाय (p = spelling_base; p < spelling; p++)
     {
-      if (p->kind == SPELLING_BOUNDS)
+      सचे (p->kind == SPELLING_BOUNDS)
 	size += 25;
-      else
+      अञ्ञथा
 	size += strlen (p->u.s) + 1;
     }
 
-  return size;
+  पटिनिवत्त size;
 }
 
 /* Print the spelling to BUFFER and return it.  */
 
-static char *
-print_spelling (char *buffer)
+स्थिर वर्ण *
+print_spelling (वर्ण *buffer)
 {
-  char *d = buffer;
-  struct spelling *p;
+  वर्ण *d = buffer;
+  संरचना spelling *p;
 
-  for (p = spelling_base; p < spelling; p++)
-    if (p->kind == SPELLING_BOUNDS)
+  अत्थाय (p = spelling_base; p < spelling; p++)
+    सचे (p->kind == SPELLING_BOUNDS)
       {
 	sprintf (d, "[" HOST_WIDE_INT_PRINT_UNSIGNED "]", p->u.i);
 	d += strlen (d);
       }
-    else
+    अञ्ञथा
       {
-	const char *s;
-	if (p->kind == SPELLING_MEMBER)
+	ध्रुव वर्ण *s;
+	सचे (p->kind == SPELLING_MEMBER)
 	  *d++ = '.';
-	for (s = p->u.s; (*d = *s++); d++)
+	अत्थाय (s = p->u.s; (*d = *s++); d++)
 	  ;
       }
   *d++ = '\0';
-  return buffer;
+  पटिनिवत्त buffer;
 }
 
 /* Check whether INIT, a floating or integer constant, is
    representable in TYPE, a real floating type with the same radix or
    a decimal floating type initialized with a binary floating
    constant.  Return true if OK, false if not.  */
-static bool
-constexpr_init_fits_real_type (tree type, tree init)
+स्थिर तार्किक
+constexpr_init_fits_real_type (वृक्षः type, वृक्षः init)
 {
   gcc_assert (SCALAR_FLOAT_TYPE_P (type));
-  gcc_assert (TREE_CODE (init) == INTEGER_CST || TREE_CODE (init) == REAL_CST);
-  if (TREE_CODE (init) == REAL_CST
-      && TYPE_MODE (TREE_TYPE (init)) == TYPE_MODE (type))
+  gcc_assert (वृक्षः_CODE (init) == INTEGER_CST || वृक्षः_CODE (init) == REAL_CST);
+  सचे (वृक्षः_CODE (init) == REAL_CST
+      && TYPE_MODE (वृक्षः_TYPE (init)) == TYPE_MODE (type))
     {
       /* Same mode, no conversion required except for the case of
 	 signaling NaNs if the types are incompatible (e.g. double and
 	 long double with the same mode).  */
-      if (REAL_VALUE_ISSIGNALING_NAN (TREE_REAL_CST (init))
+      सचे (REAL_मानम्_ISSIGNALING_NAN (वृक्षः_REAL_CST (init))
 	  && !comptypes (TYPE_MAIN_VARIANT (type),
-			 TYPE_MAIN_VARIANT (TREE_TYPE (init))))
-	return false;
-      return true;
+			 TYPE_MAIN_VARIANT (वृक्षः_TYPE (init))))
+	पटिनिवत्त मिच्छा;
+      पटिनिवत्त सच्च;
     }
-  if (TREE_CODE (init) == INTEGER_CST)
+  सचे (वृक्षः_CODE (init) == INTEGER_CST)
     {
-      tree converted = build_real_from_int_cst (type, init);
-      bool fail = false;
-      wide_int w = real_to_integer (&TREE_REAL_CST (converted), &fail,
-				    TYPE_PRECISION (TREE_TYPE (init)));
-      return !fail && wi::eq_p (w, wi::to_wide (init));
+      वृक्षः converted = build_real_from_int_cst (type, init);
+      तार्किक fail = मिच्छा;
+      wide_int w = real_to_integer (&वृक्षः_REAL_CST (converted), &fail,
+				    TYPE_PRECISION (वृक्षः_TYPE (init)));
+      पटिनिवत्त !fail && wi::eq_p (w, wi::to_wide (init));
     }
-  if (REAL_VALUE_ISSIGNALING_NAN (TREE_REAL_CST (init)))
-    return false;
-  if ((REAL_VALUE_ISINF (TREE_REAL_CST (init))
+  सचे (REAL_मानम्_ISSIGNALING_NAN (वृक्षः_REAL_CST (init)))
+    पटिनिवत्त मिच्छा;
+  सचे ((REAL_मानम्_ISINF (वृक्षः_REAL_CST (init))
        && MODE_HAS_INFINITIES (TYPE_MODE (type)))
-      || (REAL_VALUE_ISNAN (TREE_REAL_CST (init))
+      || (REAL_मानम्_ISNAN (वृक्षः_REAL_CST (init))
 	  && MODE_HAS_NANS (TYPE_MODE (type))))
-    return true;
-  if (DECIMAL_FLOAT_TYPE_P (type)
-      && !DECIMAL_FLOAT_TYPE_P (TREE_TYPE (init)))
+    पटिनिवत्त सच्च;
+  सचे (DECIMAL_FLOAT_TYPE_P (type)
+      && !DECIMAL_FLOAT_TYPE_P (वृक्षः_TYPE (init)))
     {
       /* This is valid if the real number represented by the
 	 initializer can be exactly represented in the decimal
 	 type.  Compare the values using MPFR.  */
-      REAL_VALUE_TYPE t;
-      real_convert (&t, TYPE_MODE (type), &TREE_REAL_CST (init));
+      REAL_मानम्_TYPE t;
+      real_convert (&t, TYPE_MODE (type), &वृक्षः_REAL_CST (init));
       mpfr_t bin_val, dec_val;
-      mpfr_init2 (bin_val, REAL_MODE_FORMAT (TYPE_MODE (TREE_TYPE (init)))->p);
-      mpfr_init2 (dec_val, REAL_MODE_FORMAT (TYPE_MODE (TREE_TYPE (init)))->p);
-      mpfr_from_real (bin_val, &TREE_REAL_CST (init), MPFR_RNDN);
-      char string[256];
-      real_to_decimal (string, &t, sizeof string, 0, 1);
-      bool res = (mpfr_strtofr (dec_val, string, NULL, 10, MPFR_RNDN) == 0
+      mpfr_init2 (bin_val, REAL_MODE_FORMAT (TYPE_MODE (वृक्षः_TYPE (init)))->p);
+      mpfr_init2 (dec_val, REAL_MODE_FORMAT (TYPE_MODE (वृक्षः_TYPE (init)))->p);
+      mpfr_from_real (bin_val, &वृक्षः_REAL_CST (init), MPFR_RNDN);
+      वर्ण string[256];
+      real_to_decimal (string, &t, परिमाण string, 0, 1);
+      तार्किक res = (mpfr_strtofr (dec_val, string, रिक्त, 10, MPFR_RNDN) == 0
 		  && mpfr_equal_p (bin_val, dec_val));
       mpfr_clear (bin_val);
       mpfr_clear (dec_val);
-      return res;
+      पटिनिवत्त res;
     }
   /* exact_real_truncate is not quite right here, since it doesn't
      allow even an exact conversion to subnormal values.  */
-  REAL_VALUE_TYPE t;
-  real_convert (&t, TYPE_MODE (type), &TREE_REAL_CST (init));
-  return real_identical (&t, &TREE_REAL_CST (init));
+  REAL_मानम्_TYPE t;
+  real_convert (&t, TYPE_MODE (type), &वृक्षः_REAL_CST (init));
+  पटिनिवत्त real_identical (&t, &वृक्षः_REAL_CST (init));
 }
 
 /* Check whether INIT (location LOC) is valid as a 'constexpr'
@@ -9779,103 +9779,103 @@ constexpr_init_fits_real_type (tree type, tree init)
    expression or arithmetic constant expression, respectively.  If
    TYPE is not a scalar type, this function does nothing.  */
 
-static void
-check_constexpr_init (location_t loc, tree type, tree init,
-		      bool int_const_expr, bool arith_const_expr)
+स्थिर शून्य
+check_constexpr_init (location_t loc, वृक्षः type, वृक्षः init,
+		      तार्किक int_const_व्यञ्जकम्, तार्किक arith_const_व्यञ्जकम्)
 {
-  if (POINTER_TYPE_P (type))
+  सचे (POINTER_TYPE_P (type))
     {
       /* The initializer must be null.  */
-      if (TREE_CODE (init) != INTEGER_CST || !integer_zerop (init))
+      सचे (वृक्षः_CODE (init) != INTEGER_CST || !integer_zerop (init))
 	error_at (loc, "%<constexpr%> pointer initializer is not null");
-      return;
+      पटिनिवत्त;
     }
-  if (INTEGRAL_TYPE_P (type))
+  सचे (INTEGRAL_TYPE_P (type))
     {
       /* The initializer must be an integer constant expression,
 	 representable in the target type.  */
-      if (!int_const_expr)
+      सचे (!int_const_व्यञ्जकम्)
 	{
-	  if (TREE_CODE (init) == RAW_DATA_CST
+	  सचे (वृक्षः_CODE (init) == RAW_DATA_CST
 	      && TYPE_PRECISION (type) == CHAR_BIT)
 	    {
-	      if (!TYPE_UNSIGNED (type))
-		for (unsigned int i = 0;
+	      सचे (!TYPE_UNSIGNED (type))
+		अत्थाय (unsigned पूर्णाङ्क i = 0;
 		     i < (unsigned) RAW_DATA_LENGTH (init); ++i)
-		  if (RAW_DATA_SCHAR_ELT (init, i) < 0)
+		  सचे (RAW_DATA_SCHAR_ELT (init, i) < 0)
 		    {
 		      error_at (loc, "%<constexpr%> initializer not "
 				"representable in type of object");
-		      break;
+		      भङ्ग;
 		    }
 	    }
-	  else
+	  अञ्ञथा
 	    error_at (loc, "%<constexpr%> integer initializer is not an "
 		      "integer constant expression");
 	}
-      else if (!int_fits_type_p (init, type))
+      अञ्ञथा सचे (!int_fits_type_p (init, type))
 	error_at (loc, "%<constexpr%> initializer not representable in "
 		  "type of object");
-      return;
+      पटिनिवत्त;
     }
   /* We don't apply any extra checks to extension types such as vector
      or fixed-point types.  */
-  if (TREE_CODE (type) != REAL_TYPE && TREE_CODE (type) != COMPLEX_TYPE)
-    return;
-  if (!arith_const_expr)
+  सचे (वृक्षः_CODE (type) != REAL_TYPE && वृक्षः_CODE (type) != COMPLEX_TYPE)
+    पटिनिवत्त;
+  सचे (!arith_const_व्यञ्जकम्)
     {
       error_at (loc, "%<constexpr%> initializer is not an arithmetic "
 		"constant expression");
-      return;
+      पटिनिवत्त;
     }
   /* We don't apply any extra checks to complex integers.  */
-  if (TREE_CODE (type) == COMPLEX_TYPE
-      && TREE_CODE (TREE_TYPE (type)) != REAL_TYPE)
-    return;
+  सचे (वृक्षः_CODE (type) == COMPLEX_TYPE
+      && वृक्षः_CODE (वृक्षः_TYPE (type)) != REAL_TYPE)
+    पटिनिवत्त;
   /* Following N3082, a real type cannot be initialized from a complex
      type and a binary type cannot be initialized from a decimal type
      (but initializing a decimal type from a binary type is OK).
      Signaling NaN initializers are OK only if the types are
      compatible (not just the same mode); all quiet NaN and infinity
      initializations are considered to preserve the value.  */
-  if (TREE_CODE (TREE_TYPE (init)) == COMPLEX_TYPE
+  सचे (वृक्षः_CODE (वृक्षः_TYPE (init)) == COMPLEX_TYPE
       && SCALAR_FLOAT_TYPE_P (type))
     {
       error_at (loc, "%<constexpr%> initializer for a real type is of "
 		"complex type");
-      return;
+      पटिनिवत्त;
     }
-  if (SCALAR_FLOAT_TYPE_P (type)
-      && SCALAR_FLOAT_TYPE_P (TREE_TYPE (init))
-      && DECIMAL_FLOAT_TYPE_P (TREE_TYPE (init))
+  सचे (SCALAR_FLOAT_TYPE_P (type)
+      && SCALAR_FLOAT_TYPE_P (वृक्षः_TYPE (init))
+      && DECIMAL_FLOAT_TYPE_P (वृक्षः_TYPE (init))
       && !DECIMAL_FLOAT_TYPE_P (type))
     {
       error_at (loc, "%<constexpr%> initializer for a binary "
 		"floating-point type is of decimal type");
-      return;
+      पटिनिवत्त;
     }
-  bool fits;
-  if (TREE_CODE (type) == COMPLEX_TYPE)
+  तार्किक fits;
+  सचे (वृक्षः_CODE (type) == COMPLEX_TYPE)
     {
-      switch (TREE_CODE (init))
+      विकल्प (वृक्षः_CODE (init))
 	{
-	case INTEGER_CST:
-	case REAL_CST:
-	  fits = constexpr_init_fits_real_type (TREE_TYPE (type), init);
-	  break;
-	case COMPLEX_CST:
-	  fits = (constexpr_init_fits_real_type (TREE_TYPE (type),
-						 TREE_REALPART (init))
-		  && constexpr_init_fits_real_type (TREE_TYPE (type),
-						    TREE_IMAGPART (init)));
-	  break;
-	default:
+	पक्ष INTEGER_CST:
+	पक्ष REAL_CST:
+	  fits = constexpr_init_fits_real_type (वृक्षः_TYPE (type), init);
+	  भङ्ग;
+	पक्ष COMPLEX_CST:
+	  fits = (constexpr_init_fits_real_type (वृक्षः_TYPE (type),
+						 वृक्षः_REALPART (init))
+		  && constexpr_init_fits_real_type (वृक्षः_TYPE (type),
+						    वृक्षः_IMAGPART (init)));
+	  भङ्ग;
+	स्वभाव:
 	  gcc_unreachable ();
 	}
     }
-  else
+  अञ्ञथा
     fits = constexpr_init_fits_real_type (type, init);
-  if (!fits)
+  सचे (!fits)
     error_at (loc, "%<constexpr%> initializer not representable in "
 	      "type of object");
 }
@@ -9903,21 +9903,21 @@ check_constexpr_init (location_t loc, tree type, tree init,
    elements are seen.  REQUIRE_CONSTEXPR means the stricter requirements
    on initializers for 'constexpr' objects apply.  */
 
-static tree
-digest_init (location_t init_loc, tree decl, tree type, tree init,
-	     tree origtype, bool null_pointer_constant, bool int_const_expr,
-	     bool arith_const_expr, bool strict_string,
-	     bool require_constant, bool require_constexpr)
+स्थिर वृक्षः
+digest_init (location_t init_loc, वृक्षः decl, वृक्षः type, वृक्षः init,
+	     वृक्षः origtype, तार्किक null_pointer_constant, तार्किक int_const_व्यञ्जकम्,
+	     तार्किक arith_const_व्यञ्जकम्, तार्किक strict_string,
+	     तार्किक require_constant, तार्किक require_constexpr)
 {
-  enum tree_code code = TREE_CODE (type);
-  tree inside_init = init;
-  tree semantic_type = NULL_TREE;
-  bool maybe_const = true;
+  गणना वृक्षः_code code = वृक्षः_CODE (type);
+  वृक्षः inside_init = init;
+  वृक्षः semantic_type = NULL_वृक्षः;
+  तार्किक maybe_const = सच्च;
 
-  if (type == error_mark_node
+  सचे (type == error_mark_ग्रन्थिः
       || !init
       || error_operand_p (init))
-    return error_mark_node;
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
   STRIP_TYPE_NOPS (inside_init);
 
@@ -9928,125 +9928,125 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
      will be converted to
      y = &static_annotated.c.  */
 
-  if (require_constant
-      && TREE_CODE (inside_init) == NOP_EXPR
-      && TREE_CODE (TREE_OPERAND (inside_init, 0)) == CALL_EXPR
-      && is_access_with_size_p (TREE_OPERAND (inside_init, 0)))
+  सचे (require_constant
+      && वृक्षः_CODE (inside_init) == NOP_व्यञ्जकम्
+      && वृक्षः_CODE (वृक्षः_OPERAND (inside_init, 0)) == CALL_व्यञ्जकम्
+      && is_access_with_size_p (वृक्षः_OPERAND (inside_init, 0)))
     inside_init
-      = get_ref_from_access_with_size (TREE_OPERAND (inside_init, 0));
+      = get_ref_from_access_with_size (वृक्षः_OPERAND (inside_init, 0));
 
-  if (!c_in_omp_for)
+  सचे (!c_in_omp_for)
     {
-      if (TREE_CODE (inside_init) == EXCESS_PRECISION_EXPR)
+      सचे (वृक्षः_CODE (inside_init) == EXCESS_PRECISION_व्यञ्जकम्)
 	{
-	  semantic_type = TREE_TYPE (inside_init);
-	  inside_init = TREE_OPERAND (inside_init, 0);
+	  semantic_type = वृक्षः_TYPE (inside_init);
+	  inside_init = वृक्षः_OPERAND (inside_init, 0);
 	}
       inside_init = c_fully_fold (inside_init, require_constant, &maybe_const);
     }
   /* TODO: this may not detect all cases of expressions folding to
      constants that are not arithmetic constant expressions.  */
-  if (!maybe_const)
-    arith_const_expr = false;
-  else if (!INTEGRAL_TYPE_P (TREE_TYPE (inside_init))
-	   && TREE_CODE (TREE_TYPE (inside_init)) != REAL_TYPE
-	   && TREE_CODE (TREE_TYPE (inside_init)) != COMPLEX_TYPE)
-    arith_const_expr = false;
-  else if (TREE_CODE (inside_init) != INTEGER_CST
-	   && TREE_CODE (inside_init) != REAL_CST
-	   && TREE_CODE (inside_init) != COMPLEX_CST
-	   && TREE_CODE (inside_init) != RAW_DATA_CST)
-    arith_const_expr = false;
-  else if (TREE_OVERFLOW (inside_init))
-    arith_const_expr = false;
+  सचे (!maybe_const)
+    arith_const_व्यञ्जकम् = मिच्छा;
+  अञ्ञथा सचे (!INTEGRAL_TYPE_P (वृक्षः_TYPE (inside_init))
+	   && वृक्षः_CODE (वृक्षः_TYPE (inside_init)) != REAL_TYPE
+	   && वृक्षः_CODE (वृक्षः_TYPE (inside_init)) != COMPLEX_TYPE)
+    arith_const_व्यञ्जकम् = मिच्छा;
+  अञ्ञथा सचे (वृक्षः_CODE (inside_init) != INTEGER_CST
+	   && वृक्षः_CODE (inside_init) != REAL_CST
+	   && वृक्षः_CODE (inside_init) != COMPLEX_CST
+	   && वृक्षः_CODE (inside_init) != RAW_DATA_CST)
+    arith_const_व्यञ्जकम् = मिच्छा;
+  अञ्ञथा सचे (वृक्षः_OVERFLOW (inside_init))
+    arith_const_व्यञ्जकम् = मिच्छा;
 
   /* Initialization of an array of chars from a string constant
      optionally enclosed in braces.  */
 
-  if (code == ARRAY_TYPE && inside_init
-      && TREE_CODE (inside_init) == STRING_CST)
+  सचे (code == ARRAY_TYPE && inside_init
+      && वृक्षः_CODE (inside_init) == STRING_CST)
     {
-      tree typ1
-	= (TYPE_ATOMIC (TREE_TYPE (type))
-	   ? c_build_qualified_type (TYPE_MAIN_VARIANT (TREE_TYPE (type)),
+      वृक्षः typ1
+	= (TYPE_ATOMIC (वृक्षः_TYPE (type))
+	   ? c_build_qualified_type (TYPE_MAIN_VARIANT (वृक्षः_TYPE (type)),
 				     TYPE_QUAL_ATOMIC)
-	   : TYPE_MAIN_VARIANT (TREE_TYPE (type)));
+	   : TYPE_MAIN_VARIANT (वृक्षः_TYPE (type)));
       /* Note that an array could be both an array of character type
 	 and an array of wchar_t if wchar_t is signed char or unsigned
 	 char.  */
-      bool char_array = (typ1 == char_type_node
-			 || typ1 == signed_char_type_node
-			 || typ1 == unsigned_char_type_node);
-      bool wchar_array = comptypes (typ1, wchar_type_node);
-      bool char16_array = comptypes (typ1, char16_type_node);
-      bool char32_array = comptypes (typ1, char32_type_node);
+      तार्किक char_array = (typ1 == char_type_ग्रन्थिः
+			 || typ1 == signed_char_type_ग्रन्थिः
+			 || typ1 == unsigned_char_type_ग्रन्थिः);
+      तार्किक wchar_array = comptypes (typ1, wchar_type_ग्रन्थिः);
+      तार्किक char16_array = comptypes (typ1, char16_type_ग्रन्थिः);
+      तार्किक char32_array = comptypes (typ1, char32_type_ग्रन्थिः);
 
-      if (char_array || wchar_array || char16_array || char32_array)
+      सचे (char_array || wchar_array || char16_array || char32_array)
 	{
-	  struct c_expr expr;
-	  tree typ2 = TYPE_MAIN_VARIANT (TREE_TYPE (TREE_TYPE (inside_init)));
-	  bool incompat_string_cst = false;
-	  expr.value = inside_init;
-	  expr.original_code = (strict_string ? STRING_CST : ERROR_MARK);
-	  expr.original_type = NULL;
-	  expr.m_decimal = 0;
-	  maybe_warn_string_init (init_loc, type, expr);
+	  संरचना c_व्यञ्जकम् व्यञ्जकम्;
+	  वृक्षः typ2 = TYPE_MAIN_VARIANT (वृक्षः_TYPE (वृक्षः_TYPE (inside_init)));
+	  तार्किक incompat_string_cst = मिच्छा;
+	  व्यञ्जकम्.मानम् = inside_init;
+	  व्यञ्जकम्.original_code = (strict_string ? STRING_CST : ERROR_MARK);
+	  व्यञ्जकम्.original_type = रिक्त;
+	  व्यञ्जकम्.m_decimal = 0;
+	  maybe_warn_string_init (init_loc, type, व्यञ्जकम्);
 
-	  if (flexible_array_member_type_p (type))
+	  सचे (flexible_array_member_type_p (type))
 	    pedwarn_init (init_loc, OPT_Wpedantic,
 			  "initialization of a flexible array member");
 
-	  if (comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (inside_init)),
+	  सचे (comptypes (TYPE_MAIN_VARIANT (वृक्षः_TYPE (inside_init)),
 			 TYPE_MAIN_VARIANT (type)))
-	    return inside_init;
+	    पटिनिवत्त inside_init;
 
-	  if (char_array)
+	  सचे (char_array)
 	    {
-	      if (typ2 != char_type_node && typ2 != char8_type_node)
-		incompat_string_cst = true;
+	      सचे (typ2 != char_type_ग्रन्थिः && typ2 != char8_type_ग्रन्थिः)
+		incompat_string_cst = सच्च;
 	    }
-	  else if (!comptypes (typ1, typ2))
-	    incompat_string_cst = true;
+	  अञ्ञथा सचे (!comptypes (typ1, typ2))
+	    incompat_string_cst = सच्च;
 
-          if (incompat_string_cst)
+          सचे (incompat_string_cst)
             {
 	      error_init (init_loc, "cannot initialize array of %qT from "
 			  "a string literal with type array of %qT",
 			  typ1, typ2);
-	      return error_mark_node;
+	      पटिनिवत्त error_mark_ग्रन्थिः;
             }
 
-	  if (require_constexpr
+	  सचे (require_constexpr
 	      && TYPE_UNSIGNED (typ1) != TYPE_UNSIGNED (typ2))
 	    {
 	      /* Check if all characters of the string can be
 		 represented in the type of the constexpr object being
 		 initialized.  */
-	      unsigned HOST_WIDE_INT len = TREE_STRING_LENGTH (inside_init);
-	      const unsigned char *p =
-		(const unsigned char *) TREE_STRING_POINTER (inside_init);
+	      unsigned HOST_WIDE_INT len = वृक्षः_STRING_LENGTH (inside_init);
+	      ध्रुव unsigned वर्ण *p =
+		(ध्रुव unsigned वर्ण *) वृक्षः_STRING_POINTER (inside_init);
 	      gcc_assert (CHAR_TYPE_SIZE == 8 && CHAR_BIT == 8);
-	      for (unsigned i = 0; i < len; i++)
-		if (p[i] > 127)
+	      अत्थाय (unsigned i = 0; i < len; i++)
+		सचे (p[i] > 127)
 		  {
 		    error_init (init_loc, "%<constexpr%> initializer not "
 				"representable in type of object");
-		    break;
+		    भङ्ग;
 		  }
 	    }
 
-	  if (TYPE_DOMAIN (type) != NULL_TREE
-	      && TYPE_SIZE (type) != NULL_TREE
-	      && TREE_CODE (TYPE_SIZE (type)) == INTEGER_CST)
+	  सचे (TYPE_DOMAIN (type) != NULL_वृक्षः
+	      && TYPE_SIZE (type) != NULL_वृक्षः
+	      && वृक्षः_CODE (TYPE_SIZE (type)) == INTEGER_CST)
 	    {
-	      unsigned HOST_WIDE_INT len = TREE_STRING_LENGTH (inside_init);
+	      unsigned HOST_WIDE_INT len = वृक्षः_STRING_LENGTH (inside_init);
 
-	      if (compare_tree_int (TYPE_SIZE_UNIT (type), len) < 0)
+	      सचे (compare_वृक्षः_int (TYPE_SIZE_UNIT (type), len) < 0)
 		{
 		  unsigned HOST_WIDE_INT avail
-		    = tree_to_uhwi (TYPE_SIZE_UNIT (type));
+		    = वृक्षः_to_uhwi (TYPE_SIZE_UNIT (type));
 		  unsigned unit = TYPE_PRECISION (typ1) / BITS_PER_UNIT;
-		  const char *p = TREE_STRING_POINTER (inside_init);
+		  ध्रुव वर्ण *p = वृक्षः_STRING_POINTER (inside_init);
 
 		  /* Construct truncated string.  */
 		  inside_init = build_string (avail, p);
@@ -10054,18 +10054,18 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 		  /* Subtract the size of a single (possibly wide) character
 		     because it may be ok to ignore the terminating NUL char
 		     that is counted in the length of the constant.  */
-		  if (len - unit > avail)
+		  सचे (len - unit > avail)
 		    pedwarn_init (init_loc, 0,
 				  "initializer-string for array of %qT "
 				  "is too long (%wu chars into %wu "
 				  "available)", typ1, len, avail);
-		  else if (warn_cxx_compat)
+		  अञ्ञथा सचे (warn_cxx_compat)
 		    warning_at (init_loc, OPT_Wc___compat,
 				"initializer-string for array of %qT "
 				"is too long for C++ (%wu chars into %wu "
 				"available)", typ1, len, avail);
-		  else if (warn_unterminated_string_initialization
-			   && get_attr_nonstring_decl (decl) == NULL_TREE)
+		  अञ्ञथा सचे (warn_unterminated_string_initialization
+			   && get_attr_nonstring_decl (decl) == NULL_वृक्षः)
 		    warning_at (init_loc,
 				OPT_Wunterminated_string_initialization,
 				"initializer-string for array of %qT "
@@ -10075,308 +10075,308 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 		}
 	    }
 
-	  TREE_TYPE (inside_init) = type;
-	  return inside_init;
+	  वृक्षः_TYPE (inside_init) = type;
+	  पटिनिवत्त inside_init;
 	}
-      else if (INTEGRAL_TYPE_P (typ1))
+      अञ्ञथा सचे (INTEGRAL_TYPE_P (typ1))
 	{
 	  error_init (init_loc, "array of inappropriate type initialized "
 		      "from string constant");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
     }
 
   /* Build a VECTOR_CST from a *constant* vector constructor.  If the
      vector constructor is not constant (e.g. {1,2,3,foo()}) then punt
      below and handle as a constructor.  */
-  if (code == VECTOR_TYPE
-      && VECTOR_TYPE_P (TREE_TYPE (inside_init))
-      && vector_types_convertible_p (TREE_TYPE (inside_init), type, true)
-      && TREE_CONSTANT (inside_init))
+  सचे (code == VECTOR_TYPE
+      && VECTOR_TYPE_P (वृक्षः_TYPE (inside_init))
+      && vector_types_convertible_p (वृक्षः_TYPE (inside_init), type, सच्च)
+      && वृक्षः_CONSTANT (inside_init))
     {
-      if (TREE_CODE (inside_init) == VECTOR_CST
-	  && comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (inside_init)),
+      सचे (वृक्षः_CODE (inside_init) == VECTOR_CST
+	  && comptypes (TYPE_MAIN_VARIANT (वृक्षः_TYPE (inside_init)),
 			TYPE_MAIN_VARIANT (type)))
-	return inside_init;
+	पटिनिवत्त inside_init;
 
-      if (TREE_CODE (inside_init) == CONSTRUCTOR)
+      सचे (वृक्षः_CODE (inside_init) == CONSTRUCTOR)
 	{
 	  unsigned HOST_WIDE_INT ix;
-	  tree value;
-	  bool constant_p = true;
+	  वृक्षः मानम्;
+	  तार्किक constant_p = सच्च;
 
 	  /* Iterate through elements and check if all constructor
 	     elements are *_CSTs.  */
-	  FOR_EACH_CONSTRUCTOR_VALUE (CONSTRUCTOR_ELTS (inside_init), ix, value)
-	    if (!CONSTANT_CLASS_P (value))
+	  FOR_EACH_CONSTRUCTOR_मानम् (CONSTRUCTOR_ELTS (inside_init), ix, मानम्)
+	    सचे (!CONSTANT_CLASS_P (मानम्))
 	      {
-		constant_p = false;
-		break;
+		constant_p = मिच्छा;
+		भङ्ग;
 	      }
 
-	  if (constant_p)
-	    return build_vector_from_ctor (type,
+	  सचे (constant_p)
+	    पटिनिवत्त build_vector_from_ctor (type,
 					   CONSTRUCTOR_ELTS (inside_init));
 	}
     }
 
-  if (warn_sequence_point)
+  सचे (warn_sequence_point)
     verify_sequence_points (inside_init);
 
   /* Any type can be initialized
      from an expression of the same type, optionally with braces.  */
 
-  if (inside_init && TREE_TYPE (inside_init) != NULL_TREE
-      && (comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (inside_init)),
+  सचे (inside_init && वृक्षः_TYPE (inside_init) != NULL_वृक्षः
+      && (comptypes (TYPE_MAIN_VARIANT (वृक्षः_TYPE (inside_init)),
 		     TYPE_MAIN_VARIANT (type))
 	  || (code == ARRAY_TYPE
-	      && comptypes (TREE_TYPE (inside_init), type))
+	      && comptypes (वृक्षः_TYPE (inside_init), type))
 	  || (gnu_vector_type_p (type)
-	      && comptypes (TREE_TYPE (inside_init), type))
+	      && comptypes (वृक्षः_TYPE (inside_init), type))
 	  || (code == POINTER_TYPE
-	      && TREE_CODE (TREE_TYPE (inside_init)) == ARRAY_TYPE
-	      && comptypes (TREE_TYPE (TREE_TYPE (inside_init)),
-			    TREE_TYPE (type)))))
+	      && वृक्षः_CODE (वृक्षः_TYPE (inside_init)) == ARRAY_TYPE
+	      && comptypes (वृक्षः_TYPE (वृक्षः_TYPE (inside_init)),
+			    वृक्षः_TYPE (type)))))
     {
-      if (code == POINTER_TYPE)
+      सचे (code == POINTER_TYPE)
 	{
-	  if (TREE_CODE (TREE_TYPE (inside_init)) == ARRAY_TYPE)
+	  सचे (वृक्षः_CODE (वृक्षः_TYPE (inside_init)) == ARRAY_TYPE)
 	    {
-	      if (TREE_CODE (inside_init) == STRING_CST
-		  || TREE_CODE (inside_init) == COMPOUND_LITERAL_EXPR)
+	      सचे (वृक्षः_CODE (inside_init) == STRING_CST
+		  || वृक्षः_CODE (inside_init) == COMPOUND_LITERAL_व्यञ्जकम्)
 		inside_init = array_to_pointer_conversion
 		  (init_loc, inside_init);
-	      else
+	      अञ्ञथा
 		{
 		  error_init (init_loc, "invalid use of non-lvalue array");
-		  return error_mark_node;
+		  पटिनिवत्त error_mark_ग्रन्थिः;
 		}
 	    }
 	}
 
-      if (code == VECTOR_TYPE || c_hardbool_type_attr (type))
+      सचे (code == VECTOR_TYPE || c_hardbool_type_attr (type))
 	/* Although the types are compatible, we may require a
 	   conversion.  */
 	inside_init = convert (type, inside_init);
 
-      if ((code == RECORD_TYPE || code == UNION_TYPE)
-	  && !comptypes (TYPE_MAIN_VARIANT (type), TYPE_MAIN_VARIANT (TREE_TYPE (inside_init))))
+      सचे ((code == RECORD_TYPE || code == UNION_TYPE)
+	  && !comptypes (TYPE_MAIN_VARIANT (type), TYPE_MAIN_VARIANT (वृक्षः_TYPE (inside_init))))
 	{
 	  error_init (init_loc, "invalid initializer");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
 
-      if (require_constant
-	  && TREE_CODE (inside_init) == COMPOUND_LITERAL_EXPR)
+      सचे (require_constant
+	  && वृक्षः_CODE (inside_init) == COMPOUND_LITERAL_व्यञ्जकम्)
 	{
 	  /* As an extension, allow initializing objects with static storage
 	     duration with compound literals (which are then treated just as
 	     the brace enclosed list they contain).  Also allow this for
 	     vectors, as we can only assign them with compound literals.  */
-	  if (flag_isoc99 && code != VECTOR_TYPE)
+	  सचे (flag_isoc99 && code != VECTOR_TYPE)
 	    pedwarn_init (init_loc, OPT_Wpedantic, "initializer element "
 			  "is not constant");
-	  tree decl = COMPOUND_LITERAL_EXPR_DECL (inside_init);
+	  वृक्षः decl = COMPOUND_LITERAL_व्यञ्जकम्_DECL (inside_init);
 	  inside_init = DECL_INITIAL (decl);
 	}
 
-      if (code == ARRAY_TYPE && TREE_CODE (inside_init) != STRING_CST
-	  && TREE_CODE (inside_init) != CONSTRUCTOR)
+      सचे (code == ARRAY_TYPE && वृक्षः_CODE (inside_init) != STRING_CST
+	  && वृक्षः_CODE (inside_init) != CONSTRUCTOR)
 	{
 	  error_init (init_loc, "array initialized from non-constant array "
 		      "expression");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
 
       /* Compound expressions can only occur here if -Wpedantic or
 	 -pedantic-errors is specified.  In the later case, we always want
 	 an error.  In the former case, we simply want a warning.  */
-      if (require_constant && pedantic
-	  && TREE_CODE (inside_init) == COMPOUND_EXPR)
+      सचे (require_constant && pedantic
+	  && वृक्षः_CODE (inside_init) == COMPOUND_व्यञ्जकम्)
 	{
 	  inside_init
-	    = valid_compound_expr_initializer (inside_init,
-					       TREE_TYPE (inside_init));
-	  if (inside_init == error_mark_node)
+	    = valid_compound_व्यञ्जकम्_initializer (inside_init,
+					       वृक्षः_TYPE (inside_init));
+	  सचे (inside_init == error_mark_ग्रन्थिः)
 	    error_init (init_loc, "initializer element is not constant");
-	  else
+	  अञ्ञथा
 	    pedwarn_init (init_loc, OPT_Wpedantic,
 			  "initializer element is not constant");
-	  if (flag_pedantic_errors)
-	    inside_init = error_mark_node;
+	  सचे (flag_pedantic_errors)
+	    inside_init = error_mark_ग्रन्थिः;
 	}
-      else if (require_constant
+      अञ्ञथा सचे (require_constant
 	       && !initializer_constant_valid_p (inside_init,
-						 TREE_TYPE (inside_init)))
+						 वृक्षः_TYPE (inside_init)))
 	{
 	  error_init (init_loc, "initializer element is not constant");
-	  inside_init = error_mark_node;
+	  inside_init = error_mark_ग्रन्थिः;
 	}
-      else if (require_constant && !maybe_const)
+      अञ्ञथा सचे (require_constant && !maybe_const)
 	pedwarn_init (init_loc, OPT_Wpedantic,
 		      "initializer element is not a constant expression");
-      else if (require_constexpr)
+      अञ्ञथा सचे (require_constexpr)
 	check_constexpr_init (init_loc, type, inside_init,
-			      int_const_expr, arith_const_expr);
+			      int_const_व्यञ्जकम्, arith_const_व्यञ्जकम्);
 
       /* Added to enable additional -Wsuggest-attribute=format warnings.  */
-      if (TREE_CODE (TREE_TYPE (inside_init)) == POINTER_TYPE)
+      सचे (वृक्षः_CODE (वृक्षः_TYPE (inside_init)) == POINTER_TYPE)
 	inside_init = convert_for_assignment (init_loc, UNKNOWN_LOCATION,
 					      type, inside_init, origtype,
 					      (require_constant
 					       ? ic_init_const
 					       : ic_init), null_pointer_constant,
-					      NULL_TREE, NULL_TREE, 0);
-      if (TREE_CODE (inside_init) == RAW_DATA_CST
+					      NULL_वृक्षः, NULL_वृक्षः, 0);
+      सचे (वृक्षः_CODE (inside_init) == RAW_DATA_CST
 	  && c_inhibit_evaluation_warnings == 0
 	  && warn_conversion
 	  && !TYPE_UNSIGNED (type)
 	  && TYPE_PRECISION (type) == CHAR_BIT)
-	for (unsigned int i = 0;
+	अत्थाय (unsigned पूर्णाङ्क i = 0;
 	     i < (unsigned) RAW_DATA_LENGTH (inside_init); ++i)
-	  if (RAW_DATA_SCHAR_ELT (inside_init, i) < 0)
+	  सचे (RAW_DATA_SCHAR_ELT (inside_init, i) < 0)
 	    warning_at (init_loc, OPT_Wconversion,
 			"conversion from %qT to %qT changes value from "
 			"%qd to %qd",
-			integer_type_node, type,
+			integer_type_ग्रन्थिः, type,
 			RAW_DATA_UCHAR_ELT (inside_init, i),
 			RAW_DATA_SCHAR_ELT (inside_init, i));
-      return inside_init;
+      पटिनिवत्त inside_init;
     }
 
   /* Handle scalar types, including conversions.  */
 
-  if (code == INTEGER_TYPE || code == REAL_TYPE || code == FIXED_POINT_TYPE
+  सचे (code == INTEGER_TYPE || code == REAL_TYPE || code == FIXED_POINT_TYPE
       || code == POINTER_TYPE || code == ENUMERAL_TYPE || code == BOOLEAN_TYPE
       || code == COMPLEX_TYPE || code == VECTOR_TYPE || code == NULLPTR_TYPE
       || code == BITINT_TYPE)
     {
-      tree unconverted_init = inside_init;
-      if (TREE_CODE (TREE_TYPE (init)) == ARRAY_TYPE
-	  && (TREE_CODE (init) == STRING_CST
-	      || TREE_CODE (init) == COMPOUND_LITERAL_EXPR))
+      वृक्षः unconverted_init = inside_init;
+      सचे (वृक्षः_CODE (वृक्षः_TYPE (init)) == ARRAY_TYPE
+	  && (वृक्षः_CODE (init) == STRING_CST
+	      || वृक्षः_CODE (init) == COMPOUND_LITERAL_व्यञ्जकम्))
 	inside_init = init = array_to_pointer_conversion (init_loc, init);
-      if (semantic_type)
-	inside_init = build1 (EXCESS_PRECISION_EXPR, semantic_type,
+      सचे (semantic_type)
+	inside_init = build1 (EXCESS_PRECISION_व्यञ्जकम्, semantic_type,
 			      inside_init);
       inside_init
 	= convert_for_assignment (init_loc, UNKNOWN_LOCATION, type,
 				  inside_init, origtype,
 				  require_constant ? ic_init_const : ic_init,
-				  null_pointer_constant, NULL_TREE, NULL_TREE,
+				  null_pointer_constant, NULL_वृक्षः, NULL_वृक्षः,
 				  0);
 
       /* Check to see if we have already given an error message.  */
-      if (inside_init == error_mark_node)
+      सचे (inside_init == error_mark_ग्रन्थिः)
 	;
-      else if (require_constant && !TREE_CONSTANT (inside_init))
+      अञ्ञथा सचे (require_constant && !वृक्षः_CONSTANT (inside_init))
 	{
 	  error_init (init_loc, "initializer element is not constant");
-	  inside_init = error_mark_node;
+	  inside_init = error_mark_ग्रन्थिः;
 	}
-      else if (require_constant
+      अञ्ञथा सचे (require_constant
 	       && !initializer_constant_valid_p (inside_init,
-						 TREE_TYPE (inside_init)))
+						 वृक्षः_TYPE (inside_init)))
 	{
 	  error_init (init_loc, "initializer element is not computable at "
 		      "load time");
-	  inside_init = error_mark_node;
+	  inside_init = error_mark_ग्रन्थिः;
 	}
-      else if (require_constant && !maybe_const)
+      अञ्ञथा सचे (require_constant && !maybe_const)
 	pedwarn_init (init_loc, OPT_Wpedantic,
 		      "initializer element is not a constant expression");
-      else if (require_constexpr)
+      अञ्ञथा सचे (require_constexpr)
 	check_constexpr_init (init_loc, type, unconverted_init,
-			      int_const_expr, arith_const_expr);
+			      int_const_व्यञ्जकम्, arith_const_व्यञ्जकम्);
 
-      return inside_init;
+      पटिनिवत्त inside_init;
     }
 
   /* Come here only for records and arrays.  */
 
-  if (COMPLETE_TYPE_P (type) && TREE_CODE (TYPE_SIZE (type)) != INTEGER_CST)
+  सचे (COMPLETE_TYPE_P (type) && वृक्षः_CODE (TYPE_SIZE (type)) != INTEGER_CST)
     {
       error_init (init_loc,
 		  "variable-sized object may not be initialized except "
 		  "with an empty initializer");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
   error_init (init_loc, "invalid initializer");
-  return error_mark_node;
+  पटिनिवत्त error_mark_ग्रन्थिः;
 }
 
 /* Handle initializers that use braces.  */
 
 /* Type of object we are accumulating a constructor for.
    This type is always a RECORD_TYPE, UNION_TYPE or ARRAY_TYPE.  */
-static tree constructor_type;
+स्थिर वृक्षः constructor_type;
 
 /* For a RECORD_TYPE or UNION_TYPE, this is the chain of fields
    left to fill.  */
-static tree constructor_fields;
+स्थिर वृक्षः constructor_fields;
 
 /* For an ARRAY_TYPE, this is the specified index
    at which to store the next element we get.  */
-static tree constructor_index;
+स्थिर वृक्षः constructor_index;
 
 /* For an ARRAY_TYPE, this is the maximum index.  */
-static tree constructor_max_index;
+स्थिर वृक्षः constructor_max_index;
 
 /* For a RECORD_TYPE, this is the first field not yet written out.  */
-static tree constructor_unfilled_fields;
+स्थिर वृक्षः constructor_unfilled_fields;
 
 /* For an ARRAY_TYPE, this is the index of the first element
    not yet written out.  */
-static tree constructor_unfilled_index;
+स्थिर वृक्षः constructor_unfilled_index;
 
 /* In a RECORD_TYPE, the byte index of the next consecutive field.
    This is so we can generate gaps between fields, when appropriate.  */
-static tree constructor_bit_index;
+स्थिर वृक्षः constructor_bit_index;
 
 /* If we are saving up the elements rather than allocating them,
    this is the list of elements so far (in reverse order,
    most recent first).  */
-static vec<constructor_elt, va_gc> *constructor_elements;
+स्थिर vec<constructor_elt, va_gc> *constructor_elements;
 
 /* 1 if constructor should be incrementally stored into a constructor chain,
    0 if all the elements should be kept in AVL tree.  */
-static int constructor_incremental;
+स्थिर पूर्णाङ्क constructor_incremental;
 
 /* 1 if so far this constructor's elements are all compile-time constants.  */
-static int constructor_constant;
+स्थिर पूर्णाङ्क constructor_constant;
 
 /* 1 if so far this constructor's elements are all valid address constants.  */
-static int constructor_simple;
+स्थिर पूर्णाङ्क constructor_simple;
 
 /* 1 if this constructor has an element that cannot be part of a
    constant expression.  */
-static int constructor_nonconst;
+स्थिर पूर्णाङ्क constructor_nonconst;
 
 /* 1 if this constructor is erroneous so far.  */
-static int constructor_erroneous;
+स्थिर पूर्णाङ्क constructor_erroneous;
 
 /* 1 if this constructor is the universal zero initializer { 0 }.  */
-static int constructor_zeroinit;
+स्थिर पूर्णाङ्क constructor_zeroinit;
 
 /* 1 if this constructor should have padding bits zeroed (C23 {}.  */
-static bool constructor_zero_padding_bits;
+स्थिर तार्किक constructor_zero_padding_bits;
 
 /* 1 if this constructor is a braced scalar initializer (further nested levels
    of braces are an error).  */
-static bool constructor_braced_scalar;
+स्थिर तार्किक constructor_braced_scalar;
 
 /* Structure for managing pending initializer elements, organized as an
    AVL tree.  */
 
-struct init_node
+संरचना init_ग्रन्थिः
 {
-  struct init_node *left, *right;
-  struct init_node *parent;
-  int balance;
-  tree purpose;
-  tree value;
-  tree origtype;
+  संरचना init_ग्रन्थिः *वामः, *दक्षिणः;
+  संरचना init_ग्रन्थिः *parent;
+  पूर्णाङ्क balance;
+  वृक्षः purpose;
+  वृक्षः मानम्;
+  वृक्षः origtype;
 };
 
 /* Tree of pending elements at this constructor level.
@@ -10384,150 +10384,150 @@ struct init_node
    which belong at places we haven't reached yet in actually
    writing the output.
    Will never hold tree nodes across GC runs.  */
-static struct init_node *constructor_pending_elts;
+स्थिर संरचना init_ग्रन्थिः *constructor_pending_elts;
 
 /* The SPELLING_DEPTH of this constructor.  */
-static int constructor_depth;
+स्थिर पूर्णाङ्क constructor_depth;
 
 /* DECL node for which an initializer is being read.
    0 means we are reading a constructor expression
    such as (struct foo) {...}.  */
-static tree constructor_decl;
+स्थिर वृक्षः constructor_decl;
 
 /* Nonzero if there were any member designators in this initializer.  */
-static int constructor_designated;
+स्थिर पूर्णाङ्क constructor_designated;
 
 /* Nesting depth of designator list.  */
-static int designator_depth;
+स्थिर पूर्णाङ्क designator_depth;
 
 /* Nonzero if there were diagnosed errors in this designator list.  */
-static int designator_erroneous;
+स्थिर पूर्णाङ्क designator_erroneous;
 
 
 /* This stack has a level for each implicit or explicit level of
    structuring in the initializer, including the outermost one.  It
    saves the values of most of the variables above.  */
 
-struct constructor_range_stack;
+संरचना constructor_range_राशिः;
 
-struct constructor_stack
+संरचना constructor_राशिः
 {
-  struct constructor_stack *next;
-  tree type;
-  tree fields;
-  tree index;
-  tree max_index;
-  tree unfilled_index;
-  tree unfilled_fields;
-  tree bit_index;
+  संरचना constructor_राशिः *next;
+  वृक्षः type;
+  वृक्षः fields;
+  वृक्षः index;
+  वृक्षः max_index;
+  वृक्षः unfilled_index;
+  वृक्षः unfilled_fields;
+  वृक्षः bit_index;
   vec<constructor_elt, va_gc> *elements;
-  struct init_node *pending_elts;
-  int offset;
-  int depth;
+  संरचना init_ग्रन्थिः *pending_elts;
+  पूर्णाङ्क offset;
+  पूर्णाङ्क depth;
   /* If value nonzero, this value should replace the entire
      constructor at this level.  */
-  struct c_expr replacement_value;
-  struct constructor_range_stack *range_stack;
-  char constant;
-  char simple;
-  char nonconst;
-  char implicit;
-  char erroneous;
-  char outer;
-  char incremental;
-  char designated;
-  bool zero_padding_bits;
-  bool braced_scalar;
-  int designator_depth;
+  संरचना c_व्यञ्जकम् replacement_मानम्;
+  संरचना constructor_range_राशिः *range_राशिः;
+  वर्ण constant;
+  वर्ण simple;
+  वर्ण nonconst;
+  वर्ण implicit;
+  वर्ण erroneous;
+  वर्ण outer;
+  वर्ण incremental;
+  वर्ण designated;
+  तार्किक zero_padding_bits;
+  तार्किक braced_scalar;
+  पूर्णाङ्क designator_depth;
 };
 
-static struct constructor_stack *constructor_stack;
+स्थिर संरचना constructor_राशिः *constructor_राशिः;
 
 /* This stack represents designators from some range designator up to
    the last designator in the list.  */
 
-struct constructor_range_stack
+संरचना constructor_range_राशिः
 {
-  struct constructor_range_stack *next, *prev;
-  struct constructor_stack *stack;
-  tree range_start;
-  tree index;
-  tree range_end;
-  tree fields;
+  संरचना constructor_range_राशिः *next, *prev;
+  संरचना constructor_राशिः *राशिः;
+  वृक्षः range_start;
+  वृक्षः index;
+  वृक्षः range_end;
+  वृक्षः fields;
 };
 
-static struct constructor_range_stack *constructor_range_stack;
+स्थिर संरचना constructor_range_राशिः *constructor_range_राशिः;
 
 /* This stack records separate initializers that are nested.
    Nested initializers can't happen in ANSI C, but GNU C allows them
    in cases like { ... (struct foo) { ... } ... }.  */
 
-struct initializer_stack
+संरचना initializer_राशिः
 {
-  struct initializer_stack *next;
-  tree decl;
-  struct constructor_stack *constructor_stack;
-  struct constructor_range_stack *constructor_range_stack;
+  संरचना initializer_राशिः *next;
+  वृक्षः decl;
+  संरचना constructor_राशिः *constructor_राशिः;
+  संरचना constructor_range_राशिः *constructor_range_राशिः;
   vec<constructor_elt, va_gc> *elements;
-  struct spelling *spelling;
-  struct spelling *spelling_base;
-  int spelling_size;
-  char require_constant_value;
-  char require_constant_elements;
-  char require_constexpr_value;
-  char designated;
+  संरचना spelling *spelling;
+  संरचना spelling *spelling_base;
+  पूर्णाङ्क spelling_size;
+  वर्ण require_constant_मानम्;
+  वर्ण require_constant_elements;
+  वर्ण require_constexpr_मानम्;
+  वर्ण designated;
   rich_location *missing_brace_richloc;
 };
 
-static struct initializer_stack *initializer_stack;
+स्थिर संरचना initializer_राशिः *initializer_राशिः;
 
 /* Prepare to parse and output the initializer for variable DECL.  */
 
-void
-start_init (tree decl, tree asmspec_tree ATTRIBUTE_UNUSED,
-	    bool init_require_constant, bool init_require_constexpr,
+शून्य
+start_init (वृक्षः decl, वृक्षः asmspec_वृक्षः ATTRIBUTE_UNUSED,
+	    तार्किक init_require_constant, तार्किक init_require_constexpr,
 	    rich_location *richloc)
 {
-  const char *locus;
-  struct initializer_stack *p = XNEW (struct initializer_stack);
+  ध्रुव वर्ण *locus;
+  संरचना initializer_राशिः *p = XNEW (संरचना initializer_राशिः);
 
   p->decl = constructor_decl;
-  p->require_constant_value = require_constant_value;
+  p->require_constant_मानम् = require_constant_मानम्;
   p->require_constant_elements = require_constant_elements;
-  p->require_constexpr_value = require_constexpr_value;
-  p->constructor_stack = constructor_stack;
-  p->constructor_range_stack = constructor_range_stack;
+  p->require_constexpr_मानम् = require_constexpr_मानम्;
+  p->constructor_राशिः = constructor_राशिः;
+  p->constructor_range_राशिः = constructor_range_राशिः;
   p->elements = constructor_elements;
   p->spelling = spelling;
   p->spelling_base = spelling_base;
   p->spelling_size = spelling_size;
-  p->next = initializer_stack;
+  p->next = initializer_राशिः;
   p->missing_brace_richloc = richloc;
   p->designated = constructor_designated;
-  initializer_stack = p;
+  initializer_राशिः = p;
 
   constructor_decl = decl;
   constructor_designated = 0;
 
-  require_constant_value = init_require_constant;
-  require_constexpr_value = init_require_constexpr;
-  if (decl != NULL_TREE && decl != error_mark_node)
+  require_constant_मानम् = init_require_constant;
+  require_constexpr_मानम् = init_require_constexpr;
+  सचे (decl != NULL_वृक्षः && decl != error_mark_ग्रन्थिः)
     {
       require_constant_elements
 	= ((init_require_constant || (pedantic && !flag_isoc99))
 	   /* For a scalar, you can always use any value to initialize,
 	      even within braces.  */
-	   && AGGREGATE_TYPE_P (TREE_TYPE (decl)));
+	   && AGGREGATE_TYPE_P (वृक्षः_TYPE (decl)));
       locus = identifier_to_locale (IDENTIFIER_POINTER (DECL_NAME (decl)));
     }
-  else
+  अञ्ञथा
     {
-      require_constant_elements = false;
+      require_constant_elements = मिच्छा;
       locus = _("(anonymous)");
     }
 
-  constructor_stack = 0;
-  constructor_range_stack = 0;
+  constructor_राशिः = 0;
+  constructor_range_राशिः = 0;
 
   found_missing_braces = 0;
 
@@ -10535,40 +10535,40 @@ start_init (tree decl, tree asmspec_tree ATTRIBUTE_UNUSED,
   spelling_size = 0;
   RESTORE_SPELLING_DEPTH (0);
 
-  if (locus)
-    push_string (locus);
+  सचे (locus)
+    प्रक्षिप_string (locus);
 }
 
-void
-finish_init (void)
+शून्य
+finish_init (शून्य)
 {
-  struct initializer_stack *p = initializer_stack;
+  संरचना initializer_राशिः *p = initializer_राशिः;
 
   /* Free the whole constructor stack of this initializer.  */
-  while (constructor_stack)
+  याव (constructor_राशिः)
     {
-      struct constructor_stack *q = constructor_stack;
-      constructor_stack = q->next;
+      संरचना constructor_राशिः *q = constructor_राशिः;
+      constructor_राशिः = q->next;
       XDELETE (q);
     }
 
-  gcc_assert (!constructor_range_stack);
+  gcc_assert (!constructor_range_राशिः);
 
   /* Pop back to the data of the outer initializer (if any).  */
   XDELETE (spelling_base);
 
   constructor_decl = p->decl;
-  require_constant_value = p->require_constant_value;
+  require_constant_मानम् = p->require_constant_मानम्;
   require_constant_elements = p->require_constant_elements;
-  require_constexpr_value = p->require_constexpr_value;
-  constructor_stack = p->constructor_stack;
+  require_constexpr_मानम् = p->require_constexpr_मानम्;
+  constructor_राशिः = p->constructor_राशिः;
   constructor_designated = p->designated;
-  constructor_range_stack = p->constructor_range_stack;
+  constructor_range_राशिः = p->constructor_range_राशिः;
   constructor_elements = p->elements;
   spelling = p->spelling;
   spelling_base = p->spelling_base;
   spelling_size = p->spelling_size;
-  initializer_stack = p->next;
+  initializer_राशिः = p->next;
   XDELETE (p);
 }
 
@@ -10579,15 +10579,15 @@ finish_init (void)
    TYPE is the type to initialize, for a constructor expression.
    For an initializer for a decl, TYPE is zero.  */
 
-void
-really_start_incremental_init (tree type)
+शून्य
+really_start_incremental_init (वृक्षः type)
 {
-  struct constructor_stack *p = XNEW (struct constructor_stack);
+  संरचना constructor_राशिः *p = XNEW (संरचना constructor_राशिः);
 
-  if (type == NULL_TREE)
-    type = TREE_TYPE (constructor_decl);
+  सचे (type == NULL_वृक्षः)
+    type = वृक्षः_TYPE (constructor_decl);
 
-  if (VECTOR_TYPE_P (type)
+  सचे (VECTOR_TYPE_P (type)
       && TYPE_VECTOR_OPAQUE (type))
     error ("opaque vector types cannot be initialized");
 
@@ -10605,11 +10605,11 @@ really_start_incremental_init (tree type)
   p->erroneous = constructor_erroneous;
   p->pending_elts = constructor_pending_elts;
   p->depth = constructor_depth;
-  p->replacement_value.value = 0;
-  p->replacement_value.original_code = ERROR_MARK;
-  p->replacement_value.original_type = NULL;
+  p->replacement_मानम्.मानम् = 0;
+  p->replacement_मानम्.original_code = ERROR_MARK;
+  p->replacement_मानम्.original_type = रिक्त;
   p->implicit = 0;
-  p->range_stack = 0;
+  p->range_राशिः = 0;
   p->outer = 0;
   p->incremental = constructor_incremental;
   p->designated = constructor_designated;
@@ -10617,108 +10617,108 @@ really_start_incremental_init (tree type)
   p->braced_scalar = constructor_braced_scalar;
   p->designator_depth = designator_depth;
   p->next = 0;
-  constructor_stack = p;
+  constructor_राशिः = p;
 
   constructor_constant = 1;
   constructor_simple = 1;
   constructor_nonconst = 0;
   constructor_depth = SPELLING_DEPTH ();
-  constructor_elements = NULL;
+  constructor_elements = रिक्त;
   constructor_pending_elts = 0;
   constructor_type = type;
   constructor_incremental = 1;
   constructor_designated = 0;
-  constructor_zero_padding_bits = false;
+  constructor_zero_padding_bits = मिच्छा;
   constructor_zeroinit = 1;
-  constructor_braced_scalar = false;
+  constructor_braced_scalar = मिच्छा;
   designator_depth = 0;
   designator_erroneous = 0;
 
-  if (RECORD_OR_UNION_TYPE_P (constructor_type))
+  सचे (RECORD_OR_UNION_TYPE_P (constructor_type))
     {
       constructor_fields = TYPE_FIELDS (constructor_type);
       /* Skip any nameless bit fields at the beginning.  */
-      while (constructor_fields != NULL_TREE
+      याव (constructor_fields != NULL_वृक्षः
 	     && DECL_UNNAMED_BIT_FIELD (constructor_fields))
 	constructor_fields = DECL_CHAIN (constructor_fields);
 
       constructor_unfilled_fields = constructor_fields;
-      constructor_bit_index = bitsize_zero_node;
+      constructor_bit_index = bitsize_zero_ग्रन्थिः;
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE)
     {
-      if (TYPE_DOMAIN (constructor_type))
+      सचे (TYPE_DOMAIN (constructor_type))
 	{
 	  constructor_max_index
-	    = TYPE_MAX_VALUE (TYPE_DOMAIN (constructor_type));
+	    = TYPE_MAX_मानम् (TYPE_DOMAIN (constructor_type));
 
 	  /* Detect non-empty initializations of zero-length arrays.  */
-	  if (constructor_max_index == NULL_TREE
+	  सचे (constructor_max_index == NULL_वृक्षः
 	      && TYPE_SIZE (constructor_type))
-	    constructor_max_index = integer_minus_one_node;
+	    constructor_max_index = integer_minus_one_ग्रन्थिः;
 
 	  /* constructor_max_index needs to be an INTEGER_CST.  Attempts
 	     to initialize VLAs with a nonempty initializer will cause a
 	     proper error; avoid tree checking errors as well by setting a
 	     safe value.  */
-	  if (constructor_max_index
-	      && TREE_CODE (constructor_max_index) != INTEGER_CST)
-	    constructor_max_index = integer_minus_one_node;
+	  सचे (constructor_max_index
+	      && वृक्षः_CODE (constructor_max_index) != INTEGER_CST)
+	    constructor_max_index = integer_minus_one_ग्रन्थिः;
 
 	  constructor_index
 	    = convert (bitsizetype,
-		       TYPE_MIN_VALUE (TYPE_DOMAIN (constructor_type)));
+		       TYPE_MIN_मानम् (TYPE_DOMAIN (constructor_type)));
 	}
-      else
+      अञ्ञथा
 	{
-	  constructor_index = bitsize_zero_node;
-	  constructor_max_index = NULL_TREE;
+	  constructor_index = bitsize_zero_ग्रन्थिः;
+	  constructor_max_index = NULL_वृक्षः;
 	}
 
       constructor_unfilled_index = constructor_index;
     }
-  else if (gnu_vector_type_p (constructor_type))
+  अञ्ञथा सचे (gnu_vector_type_p (constructor_type))
     {
       /* Vectors are like simple fixed-size arrays.  */
       constructor_max_index =
 	bitsize_int (TYPE_VECTOR_SUBPARTS (constructor_type) - 1);
-      constructor_index = bitsize_zero_node;
+      constructor_index = bitsize_zero_ग्रन्थिः;
       constructor_unfilled_index = constructor_index;
     }
-  else
+  अञ्ञथा
     {
       /* Handle the case of int x = {5}; */
       constructor_fields = constructor_type;
       constructor_unfilled_fields = constructor_type;
-      constructor_braced_scalar = true;
+      constructor_braced_scalar = सच्च;
     }
 }
 
-extern location_t last_init_list_comma;
+बाह्य location_t last_init_list_comma;
 
 /* Called when we see an open brace for a nested initializer.  Finish
    off any pending levels with implicit braces.  */
-void
-finish_implicit_inits (location_t loc, struct obstack *braced_init_obstack)
+शून्य
+finish_implicit_inits (location_t loc, संरचना obstack *braced_init_obstack)
 {
-  while (constructor_stack->implicit)
+  याव (constructor_राशिः->implicit)
     {
-      if (RECORD_OR_UNION_TYPE_P (constructor_type)
-	  && constructor_fields == NULL_TREE)
-	process_init_element (input_location,
-			      pop_init_level (loc, 1, braced_init_obstack,
+      सचे (RECORD_OR_UNION_TYPE_P (constructor_type)
+	  && constructor_fields == NULL_वृक्षः)
+	process_init_element (निवेशः_location,
+			      निष्कासय_init_level (loc, 1, braced_init_obstack,
 					      last_init_list_comma),
-			      true, braced_init_obstack);
-      else if (TREE_CODE (constructor_type) == ARRAY_TYPE
+			      सच्च, braced_init_obstack);
+      अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE
 	       && constructor_max_index
-	       && tree_int_cst_lt (constructor_max_index,
+	       && वृक्षः_int_cst_lt (constructor_max_index,
 				   constructor_index))
-	process_init_element (input_location,
-			      pop_init_level (loc, 1, braced_init_obstack,
+	process_init_element (निवेशः_location,
+			      निष्कासय_init_level (loc, 1, braced_init_obstack,
 					      last_init_list_comma),
-			      true, braced_init_obstack);
-      else
-	break;
+			      सच्च, braced_init_obstack);
+      अञ्ञथा
+	भङ्ग;
     }
 }
 
@@ -10727,24 +10727,24 @@ finish_implicit_inits (location_t loc, struct obstack *braced_init_obstack)
    If it is because the next element belongs at a lower level,
    IMPLICIT is 1 (or 2 if the push is because of designator list).  */
 
-void
-push_init_level (location_t loc, int implicit,
-		 struct obstack *braced_init_obstack)
+शून्य
+प्रक्षिप_init_level (location_t loc, पूर्णाङ्क implicit,
+		 संरचना obstack *braced_init_obstack)
 {
-  struct constructor_stack *p;
-  tree value = NULL_TREE;
+  संरचना constructor_राशिः *p;
+  वृक्षः मानम् = NULL_वृक्षः;
 
   /* Unless this is an explicit brace, we need to preserve previous
      content if any.  */
-  if (implicit)
+  सचे (implicit)
     {
-      if (RECORD_OR_UNION_TYPE_P (constructor_type) && constructor_fields)
-	value = find_init_member (constructor_fields, braced_init_obstack);
-      else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
-	value = find_init_member (constructor_index, braced_init_obstack);
+      सचे (RECORD_OR_UNION_TYPE_P (constructor_type) && constructor_fields)
+	मानम् = find_init_member (constructor_fields, braced_init_obstack);
+      अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE)
+	मानम् = find_init_member (constructor_index, braced_init_obstack);
     }
 
-  p = XNEW (struct constructor_stack);
+  p = XNEW (संरचना constructor_राशिः);
   p->type = constructor_type;
   p->fields = constructor_fields;
   p->index = constructor_index;
@@ -10759,9 +10759,9 @@ push_init_level (location_t loc, int implicit,
   p->erroneous = constructor_erroneous;
   p->pending_elts = constructor_pending_elts;
   p->depth = constructor_depth;
-  p->replacement_value.value = NULL_TREE;
-  p->replacement_value.original_code = ERROR_MARK;
-  p->replacement_value.original_type = NULL;
+  p->replacement_मानम्.मानम् = NULL_वृक्षः;
+  p->replacement_मानम्.original_code = ERROR_MARK;
+  p->replacement_मानम्.original_type = रिक्त;
   p->implicit = implicit;
   p->outer = 0;
   p->incremental = constructor_incremental;
@@ -10769,15 +10769,15 @@ push_init_level (location_t loc, int implicit,
   p->zero_padding_bits = constructor_zero_padding_bits;
   p->braced_scalar = constructor_braced_scalar;
   p->designator_depth = designator_depth;
-  p->next = constructor_stack;
-  p->range_stack = 0;
-  constructor_stack = p;
+  p->next = constructor_राशिः;
+  p->range_राशिः = 0;
+  constructor_राशिः = p;
 
   constructor_constant = 1;
   constructor_simple = 1;
   constructor_nonconst = 0;
   constructor_depth = SPELLING_DEPTH ();
-  constructor_elements = NULL;
+  constructor_elements = रिक्त;
   constructor_incremental = 1;
   /* If the upper initializer is designated, then mark this as
      designated too to prevent bogus warnings.  */
@@ -10785,80 +10785,80 @@ push_init_level (location_t loc, int implicit,
   /* If the upper initializer has padding bits zeroed, that includes
      all nested initializers as well.  */
   constructor_zero_padding_bits = p->zero_padding_bits;
-  constructor_braced_scalar = false;
+  constructor_braced_scalar = मिच्छा;
   constructor_pending_elts = 0;
-  if (!implicit)
+  सचे (!implicit)
     {
-      p->range_stack = constructor_range_stack;
-      constructor_range_stack = 0;
+      p->range_राशिः = constructor_range_राशिः;
+      constructor_range_राशिः = 0;
       designator_depth = 0;
       designator_erroneous = 0;
     }
 
   /* Don't die if an entire brace-pair level is superfluous
      in the containing level.  */
-  if (constructor_type == NULL_TREE)
+  सचे (constructor_type == NULL_वृक्षः)
     ;
-  else if (RECORD_OR_UNION_TYPE_P (constructor_type))
+  अञ्ञथा सचे (RECORD_OR_UNION_TYPE_P (constructor_type))
     {
       /* Don't die if there are extra init elts at the end.  */
-      if (constructor_fields == NULL_TREE)
-	constructor_type = NULL_TREE;
-      else
+      सचे (constructor_fields == NULL_वृक्षः)
+	constructor_type = NULL_वृक्षः;
+      अञ्ञथा
 	{
-	  constructor_type = TREE_TYPE (constructor_fields);
-	  push_member_name (constructor_fields);
+	  constructor_type = वृक्षः_TYPE (constructor_fields);
+	  प्रक्षिप_member_name (constructor_fields);
 	  constructor_depth++;
 	}
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE)
     {
-      constructor_type = TREE_TYPE (constructor_type);
-      push_array_bounds (tree_to_uhwi (constructor_index));
+      constructor_type = वृक्षः_TYPE (constructor_type);
+      प्रक्षिप_array_bounds (वृक्षः_to_uhwi (constructor_index));
       constructor_depth++;
     }
 
-  if (constructor_type == NULL_TREE)
+  सचे (constructor_type == NULL_वृक्षः)
     {
       error_init (loc, "extra brace group at end of initializer");
-      constructor_fields = NULL_TREE;
-      constructor_unfilled_fields = NULL_TREE;
-      return;
+      constructor_fields = NULL_वृक्षः;
+      constructor_unfilled_fields = NULL_वृक्षः;
+      पटिनिवत्त;
     }
 
-  if (value && TREE_CODE (value) == CONSTRUCTOR)
+  सचे (मानम् && वृक्षः_CODE (मानम्) == CONSTRUCTOR)
     {
-      constructor_constant = TREE_CONSTANT (value);
-      constructor_simple = TREE_STATIC (value);
-      constructor_nonconst = CONSTRUCTOR_NON_CONST (value);
-      constructor_elements = CONSTRUCTOR_ELTS (value);
-      constructor_zero_padding_bits |= CONSTRUCTOR_ZERO_PADDING_BITS (value);
-      if (!vec_safe_is_empty (constructor_elements)
-	  && (TREE_CODE (constructor_type) == RECORD_TYPE
-	      || TREE_CODE (constructor_type) == ARRAY_TYPE))
+      constructor_constant = वृक्षः_CONSTANT (मानम्);
+      constructor_simple = वृक्षः_STATIC (मानम्);
+      constructor_nonconst = CONSTRUCTOR_NON_CONST (मानम्);
+      constructor_elements = CONSTRUCTOR_ELTS (मानम्);
+      constructor_zero_padding_bits |= CONSTRUCTOR_ZERO_PADDING_BITS (मानम्);
+      सचे (!vec_safe_is_empty (constructor_elements)
+	  && (वृक्षः_CODE (constructor_type) == RECORD_TYPE
+	      || वृक्षः_CODE (constructor_type) == ARRAY_TYPE))
 	set_nonincremental_init (braced_init_obstack);
     }
 
-  if (implicit == 1)
+  सचे (implicit == 1)
     {
       found_missing_braces = 1;
-      if (initializer_stack->missing_brace_richloc)
-	initializer_stack->missing_brace_richloc->add_fixit_insert_before
+      सचे (initializer_राशिः->missing_brace_richloc)
+	initializer_राशिः->missing_brace_richloc->add_fixit_निवेशय_before
 	  (loc, "{");
     }
 
-  if (RECORD_OR_UNION_TYPE_P (constructor_type))
+  सचे (RECORD_OR_UNION_TYPE_P (constructor_type))
     {
       constructor_fields = TYPE_FIELDS (constructor_type);
       /* Skip any nameless bit fields at the beginning.  */
-      while (constructor_fields != NULL_TREE
+      याव (constructor_fields != NULL_वृक्षः
 	     && DECL_UNNAMED_BIT_FIELD (constructor_fields))
 	constructor_fields = DECL_CHAIN (constructor_fields);
 
       constructor_unfilled_fields = constructor_fields;
-      constructor_bit_index = bitsize_zero_node;
+      constructor_bit_index = bitsize_zero_ग्रन्थिः;
     }
-  else if (gnu_vector_type_p (constructor_type))
+  अञ्ञथा सचे (gnu_vector_type_p (constructor_type))
     {
       /* Vectors are like simple fixed-size arrays.  */
       constructor_max_index =
@@ -10866,52 +10866,52 @@ push_init_level (location_t loc, int implicit,
       constructor_index = bitsize_int (0);
       constructor_unfilled_index = constructor_index;
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE)
     {
-      if (TYPE_DOMAIN (constructor_type))
+      सचे (TYPE_DOMAIN (constructor_type))
 	{
 	  constructor_max_index
-	    = TYPE_MAX_VALUE (TYPE_DOMAIN (constructor_type));
+	    = TYPE_MAX_मानम् (TYPE_DOMAIN (constructor_type));
 
 	  /* Detect non-empty initializations of zero-length arrays.  */
-	  if (constructor_max_index == NULL_TREE
+	  सचे (constructor_max_index == NULL_वृक्षः
 	      && TYPE_SIZE (constructor_type))
-	    constructor_max_index = integer_minus_one_node;
+	    constructor_max_index = integer_minus_one_ग्रन्थिः;
 
 	  /* constructor_max_index needs to be an INTEGER_CST.  Attempts
 	     to initialize VLAs will cause a proper error; avoid tree
 	     checking errors as well by setting a safe value.  */
-	  if (constructor_max_index
-	      && TREE_CODE (constructor_max_index) != INTEGER_CST)
-	    constructor_max_index = integer_minus_one_node;
+	  सचे (constructor_max_index
+	      && वृक्षः_CODE (constructor_max_index) != INTEGER_CST)
+	    constructor_max_index = integer_minus_one_ग्रन्थिः;
 
 	  constructor_index
 	    = convert (bitsizetype,
-		       TYPE_MIN_VALUE (TYPE_DOMAIN (constructor_type)));
+		       TYPE_MIN_मानम् (TYPE_DOMAIN (constructor_type)));
 	}
-      else
-	constructor_index = bitsize_zero_node;
+      अञ्ञथा
+	constructor_index = bitsize_zero_ग्रन्थिः;
 
       constructor_unfilled_index = constructor_index;
-      if (value && TREE_CODE (value) == STRING_CST)
+      सचे (मानम् && वृक्षः_CODE (मानम्) == STRING_CST)
 	{
 	  /* We need to split the char/wchar array into individual
 	     characters, so that we don't have to special case it
 	     everywhere.  */
-	  set_nonincremental_init_from_string (value, braced_init_obstack);
+	  set_nonincremental_init_from_string (मानम्, braced_init_obstack);
 	}
     }
-  else
+  अञ्ञथा
     {
-      if (constructor_type != error_mark_node)
+      सचे (constructor_type != error_mark_ग्रन्थिः)
 	{
-	  if (p->braced_scalar)
-	    permerror_init (input_location, 0,
+	  सचे (p->braced_scalar)
+	    permerror_init (निवेशः_location, 0,
 			    "braces around scalar initializer");
-	  else
-	    warning_init (input_location, 0,
+	  अञ्ञथा
+	    warning_init (निवेशः_location, 0,
 			  "braces around scalar initializer");
-	  constructor_braced_scalar = true;
+	  constructor_braced_scalar = सच्च;
 	}
       constructor_fields = constructor_type;
       constructor_unfilled_fields = constructor_type;
@@ -10929,59 +10929,59 @@ push_init_level (location_t loc, int implicit,
    (that's what we want to put in DECL_INITIAL).
    Otherwise, return a CONSTRUCTOR expression as the value.  */
 
-struct c_expr
-pop_init_level (location_t loc, int implicit,
-		struct obstack *braced_init_obstack,
-		location_t insert_before)
+संरचना c_व्यञ्जकम्
+निष्कासय_init_level (location_t loc, पूर्णाङ्क implicit,
+		संरचना obstack *braced_init_obstack,
+		location_t निवेशय_before)
 {
-  struct constructor_stack *p;
-  struct c_expr ret;
-  ret.value = NULL_TREE;
+  संरचना constructor_राशिः *p;
+  संरचना c_व्यञ्जकम् ret;
+  ret.मानम् = NULL_वृक्षः;
   ret.original_code = ERROR_MARK;
-  ret.original_type = NULL;
+  ret.original_type = रिक्त;
   ret.m_decimal = 0;
 
-  if (implicit == 0)
+  सचे (implicit == 0)
     {
       /* When we come to an explicit close brace,
 	 pop any inner levels that didn't have explicit braces.  */
-      while (constructor_stack->implicit)
-	process_init_element (input_location,
-			      pop_init_level (loc, 1, braced_init_obstack,
-					      insert_before),
-			      true, braced_init_obstack);
-      gcc_assert (!constructor_range_stack);
+      याव (constructor_राशिः->implicit)
+	process_init_element (निवेशः_location,
+			      निष्कासय_init_level (loc, 1, braced_init_obstack,
+					      निवेशय_before),
+			      सच्च, braced_init_obstack);
+      gcc_assert (!constructor_range_राशिः);
     }
-  else
-    if (initializer_stack->missing_brace_richloc)
-      initializer_stack->missing_brace_richloc->add_fixit_insert_before
-	(insert_before, "}");
+  अञ्ञथा
+    सचे (initializer_राशिः->missing_brace_richloc)
+      initializer_राशिः->missing_brace_richloc->add_fixit_निवेशय_before
+	(निवेशय_before, "}");
 
   /* Now output all pending elements.  */
   constructor_incremental = 1;
   output_pending_init_elements (1, braced_init_obstack);
 
-  p = constructor_stack;
+  p = constructor_राशिः;
 
   /* Error for initializing a flexible array member.  */
-  if (constructor_type && constructor_fields
+  सचे (constructor_type && constructor_fields
       && flexible_array_member_type_p (constructor_type))
     {
       /* Silently discard empty initializations.  The parser will
 	 already have pedwarned for empty brackets for C17 and earlier.  */
-      if (integer_zerop (constructor_unfilled_index))
-	constructor_type = NULL_TREE;
-      if (constructor_type || flag_isoc23)
+      सचे (integer_zerop (constructor_unfilled_index))
+	constructor_type = NULL_वृक्षः;
+      सचे (constructor_type || flag_isoc23)
 	{
 	  gcc_assert (!constructor_type || !TYPE_SIZE (constructor_type));
 
-	  if (constructor_depth <= 2)
+	  सचे (constructor_depth <= 2)
 	    pedwarn_init (loc, OPT_Wpedantic,
 			  "initialization of a flexible array member");
-	  else if (constructor_type)
+	  अञ्ञथा सचे (constructor_type)
 	    error_init (loc, "initialization of flexible array member "
 			     "in a nested context");
-	  else
+	  अञ्ञथा
 	    pedwarn_init (loc, OPT_Wpedantic,
 			  "initialization of flexible array member "
 			  "in a nested context");
@@ -10989,60 +10989,60 @@ pop_init_level (location_t loc, int implicit,
 	  /* We have already issued an error message for the existence
 	     of a flexible array member not at the end of the structure.
 	     Discard the initializer so that we do not die later.  */
-	  if (constructor_type
-	      && DECL_CHAIN (constructor_fields) != NULL_TREE
-	      && (!p->type || TREE_CODE (p->type) != UNION_TYPE))
-	    constructor_type = NULL_TREE;
+	  सचे (constructor_type
+	      && DECL_CHAIN (constructor_fields) != NULL_वृक्षः
+	      && (!p->type || वृक्षः_CODE (p->type) != UNION_TYPE))
+	    constructor_type = NULL_वृक्षः;
 	}
     }
 
-  switch (vec_safe_length (constructor_elements))
+  विकल्प (vec_safe_length (constructor_elements))
     {
-    case 0:
+    पक्ष 0:
       /* Initialization with { } counts as zeroinit.  */
       constructor_zeroinit = 1;
-      break;
-    case 1:
+      भङ्ग;
+    पक्ष 1:
       /* This might be zeroinit as well.  */
-      if (integer_zerop ((*constructor_elements)[0].value))
+      सचे (integer_zerop ((*constructor_elements)[0].मानम्))
 	constructor_zeroinit = 1;
-      break;
-    default:
+      भङ्ग;
+    स्वभाव:
       /* If the constructor has more than one element, it can't be { 0 }.  */
       constructor_zeroinit = 0;
-      break;
+      भङ्ग;
     }
 
   /* Warn when some structs are initialized with direct aggregation.  */
-  if (!implicit && found_missing_braces && warn_missing_braces
+  सचे (!implicit && found_missing_braces && warn_missing_braces
       && !constructor_zeroinit)
     {
-      gcc_assert (initializer_stack->missing_brace_richloc);
-      warning_at (initializer_stack->missing_brace_richloc,
+      gcc_assert (initializer_राशिः->missing_brace_richloc);
+      warning_at (initializer_राशिः->missing_brace_richloc,
 		  OPT_Wmissing_braces,
 		  "missing braces around initializer");
     }
 
   /* Warn when some struct elements are implicitly initialized to zero.  */
-  if (warn_missing_field_initializers
+  सचे (warn_missing_field_initializers
       && constructor_type
-      && TREE_CODE (constructor_type) == RECORD_TYPE
+      && वृक्षः_CODE (constructor_type) == RECORD_TYPE
       && constructor_unfilled_fields)
     {
 	/* Do not warn for flexible array members or zero-length arrays.  */
-	while (constructor_unfilled_fields
+	याव (constructor_unfilled_fields
 	       && (!DECL_SIZE (constructor_unfilled_fields)
 		   || integer_zerop (DECL_SIZE (constructor_unfilled_fields))))
 	  constructor_unfilled_fields = DECL_CHAIN (constructor_unfilled_fields);
 
-	if (constructor_unfilled_fields
+	सचे (constructor_unfilled_fields
 	    /* Do not warn if this level of the initializer uses member
 	       designators; it is likely to be deliberate.  */
 	    && !constructor_designated
 	    /* Do not warn about initializing with { 0 } or with { }.  */
 	    && !constructor_zeroinit)
 	  {
-	    if (warning_at (input_location, OPT_Wmissing_field_initializers,
+	    सचे (warning_at (निवेशः_location, OPT_Wmissing_field_initializers,
 			    "missing initializer for field %qD of %qT",
 			    constructor_unfilled_fields,
 			    constructor_type))
@@ -11052,67 +11052,67 @@ pop_init_level (location_t loc, int implicit,
     }
 
   /* Pad out the end of the structure.  */
-  if (p->replacement_value.value)
+  सचे (p->replacement_मानम्.मानम्)
     /* If this closes a superfluous brace pair,
        just pass out the element between them.  */
-    ret = p->replacement_value;
-  else if (constructor_type == NULL_TREE)
+    ret = p->replacement_मानम्;
+  अञ्ञथा सचे (constructor_type == NULL_वृक्षः)
     ;
-  else if (!RECORD_OR_UNION_TYPE_P (constructor_type)
-	   && TREE_CODE (constructor_type) != ARRAY_TYPE
+  अञ्ञथा सचे (!RECORD_OR_UNION_TYPE_P (constructor_type)
+	   && वृक्षः_CODE (constructor_type) != ARRAY_TYPE
 	   && !gnu_vector_type_p (constructor_type))
     {
       /* A nonincremental scalar initializer--just return
 	 the element, after verifying there is just one.
          Empty scalar initializers are supported in C23.  */
-      if (vec_safe_is_empty (constructor_elements))
+      सचे (vec_safe_is_empty (constructor_elements))
 	{
-	  if (constructor_erroneous || constructor_type == error_mark_node)
-	    ret.value = error_mark_node;
-	  else if (TREE_CODE (constructor_type) == FUNCTION_TYPE)
+	  सचे (constructor_erroneous || constructor_type == error_mark_ग्रन्थिः)
+	    ret.मानम् = error_mark_ग्रन्थिः;
+	  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == FUNCTION_TYPE)
 	    {
 	      error_init (loc, "invalid initializer");
-	      ret.value = error_mark_node;
+	      ret.मानम् = error_mark_ग्रन्थिः;
 	    }
-	  else if (TREE_CODE (constructor_type) == POINTER_TYPE)
+	  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == POINTER_TYPE)
 	    /* Ensure this is a null pointer constant in the case of a
 	       'constexpr' object initialized with {}.  */
-	    ret.value = build_zero_cst (ptr_type_node);
-	  else
-	    ret.value = build_zero_cst (constructor_type);
+	    ret.मानम् = build_zero_cst (ptr_type_ग्रन्थिः);
+	  अञ्ञथा
+	    ret.मानम् = build_zero_cst (constructor_type);
 	}
-      else if (vec_safe_length (constructor_elements) != 1)
+      अञ्ञथा सचे (vec_safe_length (constructor_elements) != 1)
 	{
 	  error_init (loc, "extra elements in scalar initializer");
-	  ret.value = (*constructor_elements)[0].value;
+	  ret.मानम् = (*constructor_elements)[0].मानम्;
 	}
-      else
-	ret.value = (*constructor_elements)[0].value;
+      अञ्ञथा
+	ret.मानम् = (*constructor_elements)[0].मानम्;
     }
-  else
+  अञ्ञथा
     {
-      if (constructor_erroneous)
-	ret.value = error_mark_node;
-      else
+      सचे (constructor_erroneous)
+	ret.मानम् = error_mark_ग्रन्थिः;
+      अञ्ञथा
 	{
-	  ret.value = build_constructor (constructor_type,
+	  ret.मानम् = build_constructor (constructor_type,
 					 constructor_elements);
-	  if (constructor_constant)
-	    TREE_CONSTANT (ret.value) = 1;
-	  if (constructor_constant && constructor_simple)
-	    TREE_STATIC (ret.value) = 1;
-	  if (constructor_nonconst)
-	    CONSTRUCTOR_NON_CONST (ret.value) = 1;
-	  if (constructor_zero_padding_bits)
-	    CONSTRUCTOR_ZERO_PADDING_BITS (ret.value) = 1;
+	  सचे (constructor_constant)
+	    वृक्षः_CONSTANT (ret.मानम्) = 1;
+	  सचे (constructor_constant && constructor_simple)
+	    वृक्षः_STATIC (ret.मानम्) = 1;
+	  सचे (constructor_nonconst)
+	    CONSTRUCTOR_NON_CONST (ret.मानम्) = 1;
+	  सचे (constructor_zero_padding_bits)
+	    CONSTRUCTOR_ZERO_PADDING_BITS (ret.मानम्) = 1;
 	}
     }
 
-  if (ret.value && TREE_CODE (ret.value) != CONSTRUCTOR)
+  सचे (ret.मानम् && वृक्षः_CODE (ret.मानम्) != CONSTRUCTOR)
     {
-      if (constructor_nonconst)
-	ret.original_code = C_MAYBE_CONST_EXPR;
-      else if (ret.original_code == C_MAYBE_CONST_EXPR)
+      सचे (constructor_nonconst)
+	ret.original_code = C_MAYBE_CONST_व्यञ्जकम्;
+      अञ्ञथा सचे (ret.original_code == C_MAYBE_CONST_व्यञ्जकम्)
 	ret.original_code = ERROR_MARK;
     }
 
@@ -11135,231 +11135,231 @@ pop_init_level (location_t loc, int implicit,
   designator_depth = p->designator_depth;
   constructor_pending_elts = p->pending_elts;
   constructor_depth = p->depth;
-  if (!p->implicit)
-    constructor_range_stack = p->range_stack;
+  सचे (!p->implicit)
+    constructor_range_राशिः = p->range_राशिः;
   RESTORE_SPELLING_DEPTH (constructor_depth);
 
-  constructor_stack = p->next;
+  constructor_राशिः = p->next;
   XDELETE (p);
 
-  if (ret.value == NULL_TREE && constructor_stack == 0)
-    ret.value = error_mark_node;
-  return ret;
+  सचे (ret.मानम् == NULL_वृक्षः && constructor_राशिः == 0)
+    ret.मानम् = error_mark_ग्रन्थिः;
+  पटिनिवत्त ret;
 }
 
 /* Common handling for both array range and field name designators.
    ARRAY argument is nonzero for array ranges.  Returns false for success.  */
 
-static bool
-set_designator (location_t loc, bool array,
-		struct obstack *braced_init_obstack)
+स्थिर तार्किक
+set_designator (location_t loc, तार्किक array,
+		संरचना obstack *braced_init_obstack)
 {
-  tree subtype;
-  enum tree_code subcode;
+  वृक्षः subtype;
+  गणना वृक्षः_code subcode;
 
   /* Don't die if an entire brace-pair level is superfluous
      in the containing level, or for an erroneous type.  */
-  if (constructor_type == NULL_TREE || constructor_type == error_mark_node)
-    return true;
+  सचे (constructor_type == NULL_वृक्षः || constructor_type == error_mark_ग्रन्थिः)
+    पटिनिवत्त सच्च;
 
   /* If there were errors in this designator list already, bail out
      silently.  */
-  if (designator_erroneous)
-    return true;
+  सचे (designator_erroneous)
+    पटिनिवत्त सच्च;
 
   /* Likewise for an initializer for a variable-size type.  Those are
      diagnosed in the parser, except for empty initializer braces.  */
-  if (COMPLETE_TYPE_P (constructor_type)
-      && TREE_CODE (TYPE_SIZE (constructor_type)) != INTEGER_CST)
-    return true;
+  सचे (COMPLETE_TYPE_P (constructor_type)
+      && वृक्षः_CODE (TYPE_SIZE (constructor_type)) != INTEGER_CST)
+    पटिनिवत्त सच्च;
 
-  if (!designator_depth)
+  सचे (!designator_depth)
     {
-      gcc_assert (!constructor_range_stack);
+      gcc_assert (!constructor_range_राशिः);
 
       /* Designator list starts at the level of closest explicit
 	 braces.  */
-      while (constructor_stack->implicit)
-	process_init_element (input_location,
-			      pop_init_level (loc, 1, braced_init_obstack,
+      याव (constructor_राशिः->implicit)
+	process_init_element (निवेशः_location,
+			      निष्कासय_init_level (loc, 1, braced_init_obstack,
 					      last_init_list_comma),
-			      true, braced_init_obstack);
+			      सच्च, braced_init_obstack);
       constructor_designated = 1;
-      return false;
+      पटिनिवत्त मिच्छा;
     }
 
-  switch (TREE_CODE (constructor_type))
+  विकल्प (वृक्षः_CODE (constructor_type))
     {
-    case  RECORD_TYPE:
-    case  UNION_TYPE:
-      subtype = TREE_TYPE (constructor_fields);
-      if (subtype != error_mark_node)
+    पक्ष  RECORD_TYPE:
+    पक्ष  UNION_TYPE:
+      subtype = वृक्षः_TYPE (constructor_fields);
+      सचे (subtype != error_mark_ग्रन्थिः)
 	subtype = TYPE_MAIN_VARIANT (subtype);
-      break;
-    case ARRAY_TYPE:
-      subtype = TYPE_MAIN_VARIANT (TREE_TYPE (constructor_type));
-      break;
-    default:
+      भङ्ग;
+    पक्ष ARRAY_TYPE:
+      subtype = TYPE_MAIN_VARIANT (वृक्षः_TYPE (constructor_type));
+      भङ्ग;
+    स्वभाव:
       gcc_unreachable ();
     }
 
-  subcode = TREE_CODE (subtype);
-  if (array && subcode != ARRAY_TYPE)
+  subcode = वृक्षः_CODE (subtype);
+  सचे (array && subcode != ARRAY_TYPE)
     {
       error_init (loc, "array index in non-array initializer");
-      return true;
+      पटिनिवत्त सच्च;
     }
-  else if (!array && subcode != RECORD_TYPE && subcode != UNION_TYPE)
+  अञ्ञथा सचे (!array && subcode != RECORD_TYPE && subcode != UNION_TYPE)
     {
       error_init (loc, "field name not in record or union initializer");
-      return true;
+      पटिनिवत्त सच्च;
     }
 
   constructor_designated = 1;
   finish_implicit_inits (loc, braced_init_obstack);
-  push_init_level (loc, 2, braced_init_obstack);
-  return false;
+  प्रक्षिप_init_level (loc, 2, braced_init_obstack);
+  पटिनिवत्त मिच्छा;
 }
 
 /* If there are range designators in designator list, push a new designator
    to constructor_range_stack.  RANGE_END is end of such stack range or
    NULL_TREE if there is no range designator at this level.  */
 
-static void
-push_range_stack (tree range_end, struct obstack * braced_init_obstack)
+स्थिर शून्य
+प्रक्षिप_range_राशिः (वृक्षः range_end, संरचना obstack * braced_init_obstack)
 {
-  struct constructor_range_stack *p;
+  संरचना constructor_range_राशिः *p;
 
-  p = (struct constructor_range_stack *)
+  p = (संरचना constructor_range_राशिः *)
     obstack_alloc (braced_init_obstack,
-		   sizeof (struct constructor_range_stack));
-  p->prev = constructor_range_stack;
+		   परिमाण (संरचना constructor_range_राशिः));
+  p->prev = constructor_range_राशिः;
   p->next = 0;
   p->fields = constructor_fields;
   p->range_start = constructor_index;
   p->index = constructor_index;
-  p->stack = constructor_stack;
+  p->राशिः = constructor_राशिः;
   p->range_end = range_end;
-  if (constructor_range_stack)
-    constructor_range_stack->next = p;
-  constructor_range_stack = p;
+  सचे (constructor_range_राशिः)
+    constructor_range_राशिः->next = p;
+  constructor_range_राशिः = p;
 }
 
 /* Within an array initializer, specify the next index to be initialized.
    FIRST is that index.  If LAST is nonzero, then initialize a range
    of indices, running from FIRST through LAST.  */
 
-void
-set_init_index (location_t loc, tree first, tree last,
-		struct obstack *braced_init_obstack)
+शून्य
+set_init_index (location_t loc, वृक्षः first, वृक्षः last,
+		संरचना obstack *braced_init_obstack)
 {
-  if (set_designator (loc, true, braced_init_obstack))
-    return;
+  सचे (set_designator (loc, सच्च, braced_init_obstack))
+    पटिनिवत्त;
 
   designator_erroneous = 1;
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (first))
-      || (last && !INTEGRAL_TYPE_P (TREE_TYPE (last))))
+  सचे (!INTEGRAL_TYPE_P (वृक्षः_TYPE (first))
+      || (last && !INTEGRAL_TYPE_P (वृक्षः_TYPE (last))))
     {
       error_init (loc, "array index in initializer not of integer type");
-      return;
+      पटिनिवत्त;
     }
 
-  if (TREE_CODE (first) != INTEGER_CST)
+  सचे (वृक्षः_CODE (first) != INTEGER_CST)
     {
-      first = c_fully_fold (first, false, NULL);
-      if (TREE_CODE (first) == INTEGER_CST)
+      first = c_fully_fold (first, मिच्छा, रिक्त);
+      सचे (वृक्षः_CODE (first) == INTEGER_CST)
 	pedwarn_init (loc, OPT_Wpedantic,
 		      "array index in initializer is not "
 		      "an integer constant expression");
     }
 
-  if (last && TREE_CODE (last) != INTEGER_CST)
+  सचे (last && वृक्षः_CODE (last) != INTEGER_CST)
     {
-      last = c_fully_fold (last, false, NULL);
-      if (TREE_CODE (last) == INTEGER_CST)
+      last = c_fully_fold (last, मिच्छा, रिक्त);
+      सचे (वृक्षः_CODE (last) == INTEGER_CST)
 	pedwarn_init (loc, OPT_Wpedantic,
 		      "array index in initializer is not "
 		      "an integer constant expression");
     }
 
-  if (TREE_CODE (first) != INTEGER_CST)
+  सचे (वृक्षः_CODE (first) != INTEGER_CST)
     error_init (loc, "nonconstant array index in initializer");
-  else if (last != NULL_TREE && TREE_CODE (last) != INTEGER_CST)
+  अञ्ञथा सचे (last != NULL_वृक्षः && वृक्षः_CODE (last) != INTEGER_CST)
     error_init (loc, "nonconstant array index in initializer");
-  else if (TREE_CODE (constructor_type) != ARRAY_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) != ARRAY_TYPE)
     error_init (loc, "array index in non-array initializer");
-  else if (tree_int_cst_sgn (first) == -1)
+  अञ्ञथा सचे (वृक्षः_int_cst_sgn (first) == -1)
     error_init (loc, "array index in initializer exceeds array bounds");
-  else if (constructor_max_index
-	   && tree_int_cst_lt (constructor_max_index, first))
+  अञ्ञथा सचे (constructor_max_index
+	   && वृक्षः_int_cst_lt (constructor_max_index, first))
     error_init (loc, "array index in initializer exceeds array bounds");
-  else
+  अञ्ञथा
     {
       constant_expression_warning (first);
-      if (last)
+      सचे (last)
 	constant_expression_warning (last);
       constructor_index = convert (bitsizetype, first);
-      if (tree_int_cst_lt (constructor_index, first))
+      सचे (वृक्षः_int_cst_lt (constructor_index, first))
 	{
-	  constructor_index = copy_node (constructor_index);
-	  TREE_OVERFLOW (constructor_index) = 1;
+	  constructor_index = copy_ग्रन्थिः (constructor_index);
+	  वृक्षः_OVERFLOW (constructor_index) = 1;
 	}
 
-      if (last)
+      सचे (last)
 	{
-	  if (tree_int_cst_equal (first, last))
-	    last = NULL_TREE;
-	  else if (tree_int_cst_lt (last, first))
+	  सचे (वृक्षः_int_cst_equal (first, last))
+	    last = NULL_वृक्षः;
+	  अञ्ञथा सचे (वृक्षः_int_cst_lt (last, first))
 	    {
 	      error_init (loc, "empty index range in initializer");
-	      last = NULL_TREE;
+	      last = NULL_वृक्षः;
 	    }
-	  else
+	  अञ्ञथा
 	    {
 	      last = convert (bitsizetype, last);
-	      if (constructor_max_index != NULL_TREE
-		  && tree_int_cst_lt (constructor_max_index, last))
+	      सचे (constructor_max_index != NULL_वृक्षः
+		  && वृक्षः_int_cst_lt (constructor_max_index, last))
 		{
 		  error_init (loc, "array index range in initializer exceeds "
 			      "array bounds");
-		  last = NULL_TREE;
+		  last = NULL_वृक्षः;
 		}
 	    }
 	}
 
       designator_depth++;
       designator_erroneous = 0;
-      if (constructor_range_stack || last)
-	push_range_stack (last, braced_init_obstack);
+      सचे (constructor_range_राशिः || last)
+	प्रक्षिप_range_राशिः (last, braced_init_obstack);
     }
 }
 
 /* Within a struct initializer, specify the next field to be initialized.  */
 
-void
-set_init_label (location_t loc, tree fieldname, location_t fieldname_loc,
-		struct obstack *braced_init_obstack)
+शून्य
+set_init_label (location_t loc, वृक्षः fieldname, location_t fieldname_loc,
+		संरचना obstack *braced_init_obstack)
 {
-  tree field;
+  वृक्षः field;
 
-  if (set_designator (loc, false, braced_init_obstack))
-    return;
+  सचे (set_designator (loc, मिच्छा, braced_init_obstack))
+    पटिनिवत्त;
 
   designator_erroneous = 1;
 
-  if (!RECORD_OR_UNION_TYPE_P (constructor_type))
+  सचे (!RECORD_OR_UNION_TYPE_P (constructor_type))
     {
       error_init (loc, "field name not in record or union initializer");
-      return;
+      पटिनिवत्त;
     }
 
   field = lookup_field (constructor_type, fieldname);
 
-  if (field == NULL_TREE)
+  सचे (field == NULL_वृक्षः)
     {
-      tree guessed_id = lookup_field_fuzzy (constructor_type, fieldname);
-      if (guessed_id)
+      वृक्षः guessed_id = lookup_field_fuzzy (constructor_type, fieldname);
+      सचे (guessed_id)
 	{
 	  gcc_rich_location rich_loc (fieldname_loc);
 	  rich_loc.add_fixit_misspelled_id (fieldname_loc, guessed_id);
@@ -11367,48 +11367,48 @@ set_init_label (location_t loc, tree fieldname, location_t fieldname_loc,
 		    "%qT has no member named %qE; did you mean %qE?",
 		    constructor_type, fieldname, guessed_id);
 	}
-      else
+      अञ्ञथा
 	error_at (fieldname_loc, "%qT has no member named %qE",
 		  constructor_type, fieldname);
     }
-  else
-    do
+  अञ्ञथा
+    करोहि
       {
-	constructor_fields = TREE_VALUE (field);
+	constructor_fields = वृक्षः_मानम् (field);
 	designator_depth++;
 	designator_erroneous = 0;
-	if (constructor_range_stack)
-	  push_range_stack (NULL_TREE, braced_init_obstack);
-	field = TREE_CHAIN (field);
-	if (field)
+	सचे (constructor_range_राशिः)
+	  प्रक्षिप_range_राशिः (NULL_वृक्षः, braced_init_obstack);
+	field = वृक्षः_CHAIN (field);
+	सचे (field)
 	  {
-	    if (set_designator (loc, false, braced_init_obstack))
-	      return;
+	    सचे (set_designator (loc, मिच्छा, braced_init_obstack))
+	      पटिनिवत्त;
 	  }
       }
-    while (field != NULL_TREE);
+    याव (field != NULL_वृक्षः);
 }
 
 /* Helper function for add_pending_init.  Find inorder successor of P
    in AVL tree.  */
-static struct init_node *
-init_node_successor (struct init_node *p)
+स्थिर संरचना init_ग्रन्थिः *
+init_ग्रन्थिः_successor (संरचना init_ग्रन्थिः *p)
 {
-  struct init_node *r;
-  if (p->right)
+  संरचना init_ग्रन्थिः *r;
+  सचे (p->दक्षिणः)
     {
-      r = p->right;
-      while (r->left)
-	r = r->left;
-      return r;
+      r = p->दक्षिणः;
+      याव (r->वामः)
+	r = r->वामः;
+      पटिनिवत्त r;
     }
   r = p->parent;
-  while (r && p == r->right)
+  याव (r && p == r->दक्षिणः)
     {
       p = r;
       r = r->parent;
     }
-  return r;
+  पटिनिवत्त r;
 }
 
 /* Add a new initializer to the tree of pending initializers.  PURPOSE
@@ -11421,162 +11421,162 @@ init_node_successor (struct init_node *p)
    and thus no warnings should be emitted about overriding an
    existing initializer.  */
 
-static void
-add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
-		  bool implicit, struct obstack *braced_init_obstack)
+स्थिर शून्य
+add_pending_init (location_t loc, वृक्षः purpose, वृक्षः मानम्, वृक्षः origtype,
+		  तार्किक implicit, संरचना obstack *braced_init_obstack)
 {
-  struct init_node *p, **q, *r;
+  संरचना init_ग्रन्थिः *p, **q, *r;
 
   q = &constructor_pending_elts;
   p = 0;
 
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE)
     {
-      while (*q != 0)
+      याव (*q != 0)
 	{
 	  p = *q;
-	  if (tree_int_cst_lt (purpose, p->purpose))
-	    q = &p->left;
-	  else if (tree_int_cst_lt (p->purpose, purpose))
+	  सचे (वृक्षः_int_cst_lt (purpose, p->purpose))
+	    q = &p->वामः;
+	  अञ्ञथा सचे (वृक्षः_int_cst_lt (p->purpose, purpose))
 	    {
-	      if (TREE_CODE (p->value) != RAW_DATA_CST
-		  || (p->right
-		      && tree_int_cst_le (p->right->purpose, purpose)))
-		q = &p->right;
-	      else
+	      सचे (वृक्षः_CODE (p->मानम्) != RAW_DATA_CST
+		  || (p->दक्षिणः
+		      && वृक्षः_int_cst_le (p->दक्षिणः->purpose, purpose)))
+		q = &p->दक्षिणः;
+	      अञ्ञथा
 		{
 		  widest_int pp = wi::to_widest (p->purpose);
 		  widest_int pw = wi::to_widest (purpose);
-		  if (pp + RAW_DATA_LENGTH (p->value) <= pw)
-		    q = &p->right;
-		  else
+		  सचे (pp + RAW_DATA_LENGTH (p->मानम्) <= pw)
+		    q = &p->दक्षिणः;
+		  अञ्ञथा
 		    {
 		      /* Override which should split the old RAW_DATA_CST
 			 into 2 or 3 pieces.  */
-		      if (!implicit && warn_override_init)
+		      सचे (!implicit && warn_override_init)
 			warning_init (loc, OPT_Woverride_init,
 				      "initialized field overwritten");
 		      unsigned HOST_WIDE_INT start = (pw - pp).to_uhwi ();
 		      unsigned HOST_WIDE_INT len = 1;
-		      if (TREE_CODE (value) == RAW_DATA_CST)
-			len = RAW_DATA_LENGTH (value);
+		      सचे (वृक्षः_CODE (मानम्) == RAW_DATA_CST)
+			len = RAW_DATA_LENGTH (मानम्);
 		      unsigned HOST_WIDE_INT end = 0;
-		      unsigned plen = RAW_DATA_LENGTH (p->value);
+		      unsigned plen = RAW_DATA_LENGTH (p->मानम्);
 		      gcc_checking_assert (start < plen && start);
-		      if (plen - start > len)
+		      सचे (plen - start > len)
 			end = plen - start - len;
-		      tree v = p->value;
-		      tree origtype = p->origtype;
-		      if (start == 1)
-			p->value = build_int_cst (TREE_TYPE (v),
+		      वृक्षः v = p->मानम्;
+		      वृक्षः origtype = p->origtype;
+		      सचे (start == 1)
+			p->मानम् = build_int_cst (वृक्षः_TYPE (v),
 						  RAW_DATA_UCHAR_ELT (v, 0));
-		      else
+		      अञ्ञथा
 			{
-			  p->value = v;
-			  if (end > 1)
-			    v = copy_node (v);
-			  RAW_DATA_LENGTH (p->value) = start;
+			  p->मानम् = v;
+			  सचे (end > 1)
+			    v = copy_ग्रन्थिः (v);
+			  RAW_DATA_LENGTH (p->मानम्) = start;
 			}
-		      if (end)
+		      सचे (end)
 			{
-			  tree epurpose
-			    = size_binop (PLUS_EXPR, purpose,
+			  वृक्षः epurpose
+			    = size_binop (PLUS_व्यञ्जकम्, purpose,
 					  bitsize_int (len));
-			  if (end > 1)
+			  सचे (end > 1)
 			    {
 			      RAW_DATA_LENGTH (v) -= plen - end;
 			      RAW_DATA_POINTER (v) += plen - end;
 			    }
-			  else
-			    v = build_int_cst (TREE_TYPE (v),
+			  अञ्ञथा
+			    v = build_int_cst (वृक्षः_TYPE (v),
 					       RAW_DATA_UCHAR_ELT (v, plen
 								      - end));
 			  add_pending_init (loc, epurpose, v, origtype,
 					    implicit, braced_init_obstack);
 			}
 		      q = &constructor_pending_elts;
-		      continue;
+		      अनुवर्त;
 		    }
 		}
 	    }
-	  else
+	  अञ्ञथा
 	    {
-	      if (TREE_CODE (p->value) == RAW_DATA_CST
-		  && (RAW_DATA_LENGTH (p->value)
-		      > (TREE_CODE (value) == RAW_DATA_CST
-			 ? RAW_DATA_LENGTH (value) : 1)))
+	      सचे (वृक्षः_CODE (p->मानम्) == RAW_DATA_CST
+		  && (RAW_DATA_LENGTH (p->मानम्)
+		      > (वृक्षः_CODE (मानम्) == RAW_DATA_CST
+			 ? RAW_DATA_LENGTH (मानम्) : 1)))
 		{
 		  /* Override which should split the old RAW_DATA_CST
 		     into 2 pieces.  */
-		  if (!implicit && warn_override_init)
+		  सचे (!implicit && warn_override_init)
 		    warning_init (loc, OPT_Woverride_init,
 				  "initialized field overwritten");
 		  unsigned HOST_WIDE_INT len = 1;
-		  if (TREE_CODE (value) == RAW_DATA_CST)
-		    len = RAW_DATA_LENGTH (value);
-		  if ((unsigned) RAW_DATA_LENGTH (p->value) > len + 1)
+		  सचे (वृक्षः_CODE (मानम्) == RAW_DATA_CST)
+		    len = RAW_DATA_LENGTH (मानम्);
+		  सचे ((unsigned) RAW_DATA_LENGTH (p->मानम्) > len + 1)
 		    {
-		      RAW_DATA_LENGTH (p->value) -= len;
-		      RAW_DATA_POINTER (p->value) += len;
+		      RAW_DATA_LENGTH (p->मानम्) -= len;
+		      RAW_DATA_POINTER (p->मानम्) += len;
 		    }
-		  else
+		  अञ्ञथा
 		    {
-		      unsigned int l = RAW_DATA_LENGTH (p->value) - 1;
-		      p->value
-			= build_int_cst (TREE_TYPE (p->value),
-					 RAW_DATA_UCHAR_ELT (p->value, l));
+		      unsigned पूर्णाङ्क l = RAW_DATA_LENGTH (p->मानम्) - 1;
+		      p->मानम्
+			= build_int_cst (वृक्षः_TYPE (p->मानम्),
+					 RAW_DATA_UCHAR_ELT (p->मानम्, l));
 		    }
-		  p->purpose = size_binop (PLUS_EXPR, p->purpose,
+		  p->purpose = size_binop (PLUS_व्यञ्जकम्, p->purpose,
 					   bitsize_int (len));
-		  continue;
+		  अनुवर्त;
 		}
-	      if (TREE_CODE (value) == RAW_DATA_CST)
+	      सचे (वृक्षः_CODE (मानम्) == RAW_DATA_CST)
 		{
 		handle_raw_data:
 		  /* RAW_DATA_CST value might overlap various further
 		     prior initval entries.  Find out how many.  */
 		  unsigned cnt = 0;
 		  widest_int w
-		    = wi::to_widest (purpose) + RAW_DATA_LENGTH (value);
-		  struct init_node *r = p, *last = NULL;
-		  bool override_init = warn_override_init;
-		  while ((r = init_node_successor (r))
+		    = wi::to_widest (purpose) + RAW_DATA_LENGTH (मानम्);
+		  संरचना init_ग्रन्थिः *r = p, *last = रिक्त;
+		  तार्किक override_init = warn_override_init;
+		  याव ((r = init_ग्रन्थिः_successor (r))
 			 && wi::to_widest (r->purpose) < w)
 		    {
 		      ++cnt;
-		      if (TREE_SIDE_EFFECTS (r->value))
+		      सचे (वृक्षः_SIDE_EFFECTS (r->मानम्))
 			warning_init (loc, OPT_Woverride_init_side_effects,
 				      "initialized field with side-effects "
 				      "overwritten");
-		      else if (override_init)
+		      अञ्ञथा सचे (override_init)
 			{
 			  warning_init (loc, OPT_Woverride_init,
 					"initialized field overwritten");
-			  override_init = false;
+			  override_init = मिच्छा;
 			}
 		      last = r;
 		    }
-		  if (cnt)
+		  सचे (cnt)
 		    {
-		      if (TREE_CODE (last->value) == RAW_DATA_CST
+		      सचे (वृक्षः_CODE (last->मानम्) == RAW_DATA_CST
 			  && (wi::to_widest (last->purpose)
-			      + RAW_DATA_LENGTH (last->value) > w))
+			      + RAW_DATA_LENGTH (last->मानम्) > w))
 			{
 			  /* The last overlapping prior initval overlaps
 			     only partially.  Shrink it and decrease cnt.  */
-			  unsigned int l = (wi::to_widest (last->purpose)
-					    + RAW_DATA_LENGTH (last->value)
+			  unsigned पूर्णाङ्क l = (wi::to_widest (last->purpose)
+					    + RAW_DATA_LENGTH (last->मानम्)
 					    - w).to_uhwi ();
 			  --cnt;
-			  RAW_DATA_LENGTH (last->value) -= l;
-			  RAW_DATA_POINTER (last->value) += l;
-			  if (RAW_DATA_LENGTH (last->value) == 1)
-			    last->value
-			      = build_int_cst (TREE_TYPE (last->value),
-					       RAW_DATA_UCHAR_ELT (last->value,
+			  RAW_DATA_LENGTH (last->मानम्) -= l;
+			  RAW_DATA_POINTER (last->मानम्) += l;
+			  सचे (RAW_DATA_LENGTH (last->मानम्) == 1)
+			    last->मानम्
+			      = build_int_cst (वृक्षः_TYPE (last->मानम्),
+					       RAW_DATA_UCHAR_ELT (last->मानम्,
 								   0));
 			  last->purpose
-			    = size_binop (PLUS_EXPR, last->purpose,
+			    = size_binop (PLUS_व्यञ्जकम्, last->purpose,
 					  bitsize_int (l));
 			}
 		      /* Instead of deleting cnt nodes from the AVL tree
@@ -11584,118 +11584,118 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 			 RAW_DATA_CST.  Overriding thousands of previously
 			 initialized array elements with #embed needs to work,
 			 but doesn't need to be super efficient.  */
-		      gcc_checking_assert ((unsigned) RAW_DATA_LENGTH (value)
+		      gcc_checking_assert ((unsigned) RAW_DATA_LENGTH (मानम्)
 					   > cnt);
-		      RAW_DATA_LENGTH (value) -= cnt;
-		      const unsigned char *s
-			= &RAW_DATA_UCHAR_ELT (value, RAW_DATA_LENGTH (value));
-		      unsigned int o = RAW_DATA_LENGTH (value);
-		      for (r = p; cnt--; ++o, ++s)
+		      RAW_DATA_LENGTH (मानम्) -= cnt;
+		      ध्रुव unsigned वर्ण *s
+			= &RAW_DATA_UCHAR_ELT (मानम्, RAW_DATA_LENGTH (मानम्));
+		      unsigned पूर्णाङ्क o = RAW_DATA_LENGTH (मानम्);
+		      अत्थाय (r = p; cnt--; ++o, ++s)
 			{
-			  r = init_node_successor (r);
-			  r->purpose = size_binop (PLUS_EXPR, purpose,
+			  r = init_ग्रन्थिः_successor (r);
+			  r->purpose = size_binop (PLUS_व्यञ्जकम्, purpose,
 						   bitsize_int (o));
-			  r->value = build_int_cst (TREE_TYPE (value), *s);
+			  r->मानम् = build_int_cst (वृक्षः_TYPE (मानम्), *s);
 			  r->origtype = origtype;
 			}
-		      if (RAW_DATA_LENGTH (value) == 1)
-			value = build_int_cst (TREE_TYPE (value),
-					       RAW_DATA_UCHAR_ELT (value, 0));
+		      सचे (RAW_DATA_LENGTH (मानम्) == 1)
+			मानम् = build_int_cst (वृक्षः_TYPE (मानम्),
+					       RAW_DATA_UCHAR_ELT (मानम्, 0));
 		    }
 		}
-	      if (!implicit)
+	      सचे (!implicit)
 		{
-		  if (TREE_SIDE_EFFECTS (p->value))
+		  सचे (वृक्षः_SIDE_EFFECTS (p->मानम्))
 		    warning_init (loc, OPT_Woverride_init_side_effects,
 				  "initialized field with side-effects "
 				  "overwritten");
-		  else if (warn_override_init)
+		  अञ्ञथा सचे (warn_override_init)
 		    warning_init (loc, OPT_Woverride_init,
 				  "initialized field overwritten");
 		}
-	      p->value = value;
+	      p->मानम् = मानम्;
 	      p->origtype = origtype;
-	      return;
+	      पटिनिवत्त;
 	    }
 	}
-      if (TREE_CODE (value) == RAW_DATA_CST && p)
+      सचे (वृक्षः_CODE (मानम्) == RAW_DATA_CST && p)
 	{
-	  struct init_node *r;
-	  if (q == &p->left)
+	  संरचना init_ग्रन्थिः *r;
+	  सचे (q == &p->वामः)
 	    r = p;
-	  else
-	    r = init_node_successor (p);
-	  if (r && wi::to_widest (r->purpose) < (wi::to_widest (purpose)
-						 + RAW_DATA_LENGTH (value)))
+	  अञ्ञथा
+	    r = init_ग्रन्थिः_successor (p);
+	  सचे (r && wi::to_widest (r->purpose) < (wi::to_widest (purpose)
+						 + RAW_DATA_LENGTH (मानम्)))
 	    {
 	      /* Overlap with at least one prior initval in the range but
 		 not at the start.  */
 	      p = r;
 	      p->purpose = purpose;
-	      goto handle_raw_data;
+	      गच्छ handle_raw_data;
 	    }
 	}
     }
-  else
+  अञ्ञथा
     {
-      tree bitpos;
+      वृक्षः bitpos;
 
       bitpos = bit_position (purpose);
-      while (*q != NULL)
+      याव (*q != रिक्त)
 	{
 	  p = *q;
-	  if (tree_int_cst_lt (bitpos, bit_position (p->purpose)))
-	    q = &p->left;
-	  else if (p->purpose != purpose)
-	    q = &p->right;
-	  else
+	  सचे (वृक्षः_int_cst_lt (bitpos, bit_position (p->purpose)))
+	    q = &p->वामः;
+	  अञ्ञथा सचे (p->purpose != purpose)
+	    q = &p->दक्षिणः;
+	  अञ्ञथा
 	    {
-	      if (!implicit)
+	      सचे (!implicit)
 		{
-		  if (TREE_SIDE_EFFECTS (p->value))
+		  सचे (वृक्षः_SIDE_EFFECTS (p->मानम्))
 		    warning_init (loc, OPT_Woverride_init_side_effects,
 				  "initialized field with side-effects "
 				  "overwritten");
-		  else if (warn_override_init)
+		  अञ्ञथा सचे (warn_override_init)
 		    warning_init (loc, OPT_Woverride_init,
 				  "initialized field overwritten");
 		}
-	      p->value = value;
+	      p->मानम् = मानम्;
 	      p->origtype = origtype;
-	      return;
+	      पटिनिवत्त;
 	    }
 	}
     }
 
-  r = (struct init_node *) obstack_alloc (braced_init_obstack,
-					  sizeof (struct init_node));
+  r = (संरचना init_ग्रन्थिः *) obstack_alloc (braced_init_obstack,
+					  परिमाण (संरचना init_ग्रन्थिः));
   r->purpose = purpose;
-  r->value = value;
+  r->मानम् = मानम्;
   r->origtype = origtype;
 
   *q = r;
   r->parent = p;
-  r->left = 0;
-  r->right = 0;
+  r->वामः = 0;
+  r->दक्षिणः = 0;
   r->balance = 0;
 
-  while (p)
+  याव (p)
     {
-      struct init_node *s;
+      संरचना init_ग्रन्थिः *s;
 
-      if (r == p->left)
+      सचे (r == p->वामः)
 	{
-	  if (p->balance == 0)
+	  सचे (p->balance == 0)
 	    p->balance = -1;
-	  else if (p->balance < 0)
+	  अञ्ञथा सचे (p->balance < 0)
 	    {
-	      if (r->balance < 0)
+	      सचे (r->balance < 0)
 		{
 		  /* L rotation.  */
-		  p->left = r->right;
-		  if (p->left)
-		    p->left->parent = p;
-		  r->right = p;
+		  p->वामः = r->दक्षिणः;
+		  सचे (p->वामः)
+		    p->वामः->parent = p;
+		  r->दक्षिणः = p;
 
 		  p->balance = 0;
 		  r->balance = 0;
@@ -11703,30 +11703,30 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 		  s = p->parent;
 		  p->parent = r;
 		  r->parent = s;
-		  if (s)
+		  सचे (s)
 		    {
-		      if (s->left == p)
-			s->left = r;
-		      else
-			s->right = r;
+		      सचे (s->वामः == p)
+			s->वामः = r;
+		      अञ्ञथा
+			s->दक्षिणः = r;
 		    }
-		  else
+		  अञ्ञथा
 		    constructor_pending_elts = r;
 		}
-	      else
+	      अञ्ञथा
 		{
 		  /* LR rotation.  */
-		  struct init_node *t = r->right;
+		  संरचना init_ग्रन्थिः *t = r->दक्षिणः;
 
-		  r->right = t->left;
-		  if (r->right)
-		    r->right->parent = r;
-		  t->left = r;
+		  r->दक्षिणः = t->वामः;
+		  सचे (r->दक्षिणः)
+		    r->दक्षिणः->parent = r;
+		  t->वामः = r;
 
-		  p->left = t->right;
-		  if (p->left)
-		    p->left->parent = p;
-		  t->right = p;
+		  p->वामः = t->दक्षिणः;
+		  सचे (p->वामः)
+		    p->वामः->parent = p;
+		  t->दक्षिणः = p;
 
 		  p->balance = t->balance < 0;
 		  r->balance = -(t->balance > 0);
@@ -11736,39 +11736,39 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 		  p->parent = t;
 		  r->parent = t;
 		  t->parent = s;
-		  if (s)
+		  सचे (s)
 		    {
-		      if (s->left == p)
-			s->left = t;
-		      else
-			s->right = t;
+		      सचे (s->वामः == p)
+			s->वामः = t;
+		      अञ्ञथा
+			s->दक्षिणः = t;
 		    }
-		  else
+		  अञ्ञथा
 		    constructor_pending_elts = t;
 		}
-	      break;
+	      भङ्ग;
 	    }
-	  else
+	  अञ्ञथा
 	    {
 	      /* p->balance == +1; growth of left side balances the node.  */
 	      p->balance = 0;
-	      break;
+	      भङ्ग;
 	    }
 	}
-      else /* r == p->right */
+      अञ्ञथा /* r == p->right */
 	{
-	  if (p->balance == 0)
+	  सचे (p->balance == 0)
 	    /* Growth propagation from right side.  */
 	    p->balance++;
-	  else if (p->balance > 0)
+	  अञ्ञथा सचे (p->balance > 0)
 	    {
-	      if (r->balance > 0)
+	      सचे (r->balance > 0)
 		{
 		  /* R rotation.  */
-		  p->right = r->left;
-		  if (p->right)
-		    p->right->parent = p;
-		  r->left = p;
+		  p->दक्षिणः = r->वामः;
+		  सचे (p->दक्षिणः)
+		    p->दक्षिणः->parent = p;
+		  r->वामः = p;
 
 		  p->balance = 0;
 		  r->balance = 0;
@@ -11776,30 +11776,30 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 		  s = p->parent;
 		  p->parent = r;
 		  r->parent = s;
-		  if (s)
+		  सचे (s)
 		    {
-		      if (s->left == p)
-			s->left = r;
-		      else
-			s->right = r;
+		      सचे (s->वामः == p)
+			s->वामः = r;
+		      अञ्ञथा
+			s->दक्षिणः = r;
 		    }
-		  else
+		  अञ्ञथा
 		    constructor_pending_elts = r;
 		}
-	      else /* r->balance == -1 */
+	      अञ्ञथा /* r->balance == -1 */
 		{
 		  /* RL rotation */
-		  struct init_node *t = r->left;
+		  संरचना init_ग्रन्थिः *t = r->वामः;
 
-		  r->left = t->right;
-		  if (r->left)
-		    r->left->parent = r;
-		  t->right = r;
+		  r->वामः = t->दक्षिणः;
+		  सचे (r->वामः)
+		    r->वामः->parent = r;
+		  t->दक्षिणः = r;
 
-		  p->right = t->left;
-		  if (p->right)
-		    p->right->parent = p;
-		  t->left = p;
+		  p->दक्षिणः = t->वामः;
+		  सचे (p->दक्षिणः)
+		    p->दक्षिणः->parent = p;
+		  t->वामः = p;
 
 		  r->balance = (t->balance < 0);
 		  p->balance = -(t->balance > 0);
@@ -11809,23 +11809,23 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 		  p->parent = t;
 		  r->parent = t;
 		  t->parent = s;
-		  if (s)
+		  सचे (s)
 		    {
-		      if (s->left == p)
-			s->left = t;
-		      else
-			s->right = t;
+		      सचे (s->वामः == p)
+			s->वामः = t;
+		      अञ्ञथा
+			s->दक्षिणः = t;
 		    }
-		  else
+		  अञ्ञथा
 		    constructor_pending_elts = t;
 		}
-	      break;
+	      भङ्ग;
 	    }
-	  else
+	  अञ्ञथा
 	    {
 	      /* p->balance == -1; growth of right side balances the node.  */
 	      p->balance = 0;
-	      break;
+	      भङ्ग;
 	    }
 	}
 
@@ -11836,114 +11836,114 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 
 /* Build AVL tree from a sorted chain.  */
 
-static void
-set_nonincremental_init (struct obstack * braced_init_obstack)
+स्थिर शून्य
+set_nonincremental_init (संरचना obstack * braced_init_obstack)
 {
   unsigned HOST_WIDE_INT ix;
-  tree index, value;
+  वृक्षः index, मानम्;
 
-  if (TREE_CODE (constructor_type) != RECORD_TYPE
-      && TREE_CODE (constructor_type) != ARRAY_TYPE)
-    return;
+  सचे (वृक्षः_CODE (constructor_type) != RECORD_TYPE
+      && वृक्षः_CODE (constructor_type) != ARRAY_TYPE)
+    पटिनिवत्त;
 
-  FOR_EACH_CONSTRUCTOR_ELT (constructor_elements, ix, index, value)
-    add_pending_init (input_location, index, value, NULL_TREE, true,
+  FOR_EACH_CONSTRUCTOR_ELT (constructor_elements, ix, index, मानम्)
+    add_pending_init (निवेशः_location, index, मानम्, NULL_वृक्षः, सच्च,
 		      braced_init_obstack);
-  constructor_elements = NULL;
-  if (TREE_CODE (constructor_type) == RECORD_TYPE)
+  constructor_elements = रिक्त;
+  सचे (वृक्षः_CODE (constructor_type) == RECORD_TYPE)
     {
       constructor_unfilled_fields = TYPE_FIELDS (constructor_type);
       /* Skip any nameless bit fields at the beginning.  */
-      while (constructor_unfilled_fields != NULL_TREE
+      याव (constructor_unfilled_fields != NULL_वृक्षः
 	     && DECL_UNNAMED_BIT_FIELD (constructor_unfilled_fields))
-	constructor_unfilled_fields = TREE_CHAIN (constructor_unfilled_fields);
+	constructor_unfilled_fields = वृक्षः_CHAIN (constructor_unfilled_fields);
 
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE)
     {
-      if (TYPE_DOMAIN (constructor_type))
+      सचे (TYPE_DOMAIN (constructor_type))
 	constructor_unfilled_index
 	  = convert (bitsizetype,
-		     TYPE_MIN_VALUE (TYPE_DOMAIN (constructor_type)));
-      else
-	constructor_unfilled_index = bitsize_zero_node;
+		     TYPE_MIN_मानम् (TYPE_DOMAIN (constructor_type)));
+      अञ्ञथा
+	constructor_unfilled_index = bitsize_zero_ग्रन्थिः;
     }
   constructor_incremental = 0;
 }
 
 /* Build AVL tree from a string constant.  */
 
-static void
-set_nonincremental_init_from_string (tree str,
-				     struct obstack * braced_init_obstack)
+स्थिर शून्य
+set_nonincremental_init_from_string (वृक्षः str,
+				     संरचना obstack * braced_init_obstack)
 {
-  tree value, purpose, type;
+  वृक्षः मानम्, purpose, type;
   HOST_WIDE_INT val[2];
-  const char *p, *end;
-  int byte, wchar_bytes, charwidth, bitpos;
+  ध्रुव वर्ण *p, *end;
+  पूर्णाङ्क byte, wchar_bytes, charwidth, bitpos;
 
-  gcc_assert (TREE_CODE (constructor_type) == ARRAY_TYPE);
+  gcc_assert (वृक्षः_CODE (constructor_type) == ARRAY_TYPE);
 
-  wchar_bytes = TYPE_PRECISION (TREE_TYPE (TREE_TYPE (str))) / BITS_PER_UNIT;
-  charwidth = TYPE_PRECISION (char_type_node);
+  wchar_bytes = TYPE_PRECISION (वृक्षः_TYPE (वृक्षः_TYPE (str))) / BITS_PER_UNIT;
+  charwidth = TYPE_PRECISION (char_type_ग्रन्थिः);
   gcc_assert ((size_t) wchar_bytes * charwidth
 	      <= ARRAY_SIZE (val) * HOST_BITS_PER_WIDE_INT);
-  type = TREE_TYPE (constructor_type);
-  p = TREE_STRING_POINTER (str);
-  end = p + TREE_STRING_LENGTH (str);
+  type = वृक्षः_TYPE (constructor_type);
+  p = वृक्षः_STRING_POINTER (str);
+  end = p + वृक्षः_STRING_LENGTH (str);
 
-  for (purpose = bitsize_zero_node;
+  अत्थाय (purpose = bitsize_zero_ग्रन्थिः;
        p < end
        && !(constructor_max_index
-	    && tree_int_cst_lt (constructor_max_index, purpose));
-       purpose = size_binop (PLUS_EXPR, purpose, bitsize_one_node))
+	    && वृक्षः_int_cst_lt (constructor_max_index, purpose));
+       purpose = size_binop (PLUS_व्यञ्जकम्, purpose, bitsize_one_ग्रन्थिः))
     {
-      if (wchar_bytes == 1)
+      सचे (wchar_bytes == 1)
 	{
-	  val[0] = (unsigned char) *p++;
+	  val[0] = (unsigned वर्ण) *p++;
 	  val[1] = 0;
 	}
-      else
+      अञ्ञथा
 	{
 	  val[1] = 0;
 	  val[0] = 0;
-	  for (byte = 0; byte < wchar_bytes; byte++)
+	  अत्थाय (byte = 0; byte < wchar_bytes; byte++)
 	    {
-	      if (BYTES_BIG_ENDIAN)
+	      सचे (BYTES_BIG_ENDIAN)
 		bitpos = (wchar_bytes - byte - 1) * charwidth;
-	      else
+	      अञ्ञथा
 		bitpos = byte * charwidth;
 	      val[bitpos / HOST_BITS_PER_WIDE_INT]
-		|= ((unsigned HOST_WIDE_INT) ((unsigned char) *p++))
+		|= ((unsigned HOST_WIDE_INT) ((unsigned वर्ण) *p++))
 		   << (bitpos % HOST_BITS_PER_WIDE_INT);
 	    }
 	}
 
-      if (!TYPE_UNSIGNED (type))
+      सचे (!TYPE_UNSIGNED (type))
 	{
 	  bitpos = ((wchar_bytes - 1) * charwidth) + HOST_BITS_PER_CHAR;
-	  if (bitpos < HOST_BITS_PER_WIDE_INT)
+	  सचे (bitpos < HOST_BITS_PER_WIDE_INT)
 	    {
-	      if (val[0] & (HOST_WIDE_INT_1 << (bitpos - 1)))
+	      सचे (val[0] & (HOST_WIDE_INT_1 << (bitpos - 1)))
 		{
 		  val[0] |= HOST_WIDE_INT_M1U << bitpos;
 		  val[1] = -1;
 		}
 	    }
-	  else if (bitpos == HOST_BITS_PER_WIDE_INT)
+	  अञ्ञथा सचे (bitpos == HOST_BITS_PER_WIDE_INT)
 	    {
-	      if (val[0] < 0)
+	      सचे (val[0] < 0)
 		val[1] = -1;
 	    }
-	  else if (val[1] & (HOST_WIDE_INT_1
+	  अञ्ञथा सचे (val[1] & (HOST_WIDE_INT_1
 			     << (bitpos - 1 - HOST_BITS_PER_WIDE_INT)))
 	    val[1] |= HOST_WIDE_INT_M1U << (bitpos - HOST_BITS_PER_WIDE_INT);
 	}
 
-      value = wide_int_to_tree (type,
+      मानम् = wide_int_to_वृक्षः (type,
 				wide_int::from_array (val, 2,
 						      HOST_BITS_PER_WIDE_INT * 2));
-      add_pending_init (input_location, purpose, value, NULL_TREE, true,
+      add_pending_init (निवेशः_location, purpose, मानम्, NULL_वृक्षः, सच्च,
                         braced_init_obstack);
     }
 
@@ -11953,56 +11953,56 @@ set_nonincremental_init_from_string (tree str,
 /* Return value of FIELD in pending initializer or NULL_TREE if the field was
    not initialized yet.  */
 
-static tree
-find_init_member (tree field, struct obstack * braced_init_obstack)
+स्थिर वृक्षः
+find_init_member (वृक्षः field, संरचना obstack * braced_init_obstack)
 {
-  struct init_node *p;
+  संरचना init_ग्रन्थिः *p;
 
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE)
     {
-      if (constructor_incremental
-	  && tree_int_cst_lt (field, constructor_unfilled_index))
+      सचे (constructor_incremental
+	  && वृक्षः_int_cst_lt (field, constructor_unfilled_index))
 	set_nonincremental_init (braced_init_obstack);
 
       p = constructor_pending_elts;
-      while (p)
+      याव (p)
 	{
-	  if (tree_int_cst_lt (field, p->purpose))
-	    p = p->left;
-	  else if (tree_int_cst_lt (p->purpose, field))
-	    p = p->right;
-	  else
-	    return p->value;
+	  सचे (वृक्षः_int_cst_lt (field, p->purpose))
+	    p = p->वामः;
+	  अञ्ञथा सचे (वृक्षः_int_cst_lt (p->purpose, field))
+	    p = p->दक्षिणः;
+	  अञ्ञथा
+	    पटिनिवत्त p->मानम्;
 	}
     }
-  else if (TREE_CODE (constructor_type) == RECORD_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == RECORD_TYPE)
     {
-      tree bitpos = bit_position (field);
+      वृक्षः bitpos = bit_position (field);
 
-      if (constructor_incremental
+      सचे (constructor_incremental
 	  && (!constructor_unfilled_fields
-	      || tree_int_cst_lt (bitpos,
+	      || वृक्षः_int_cst_lt (bitpos,
 				  bit_position (constructor_unfilled_fields))))
 	set_nonincremental_init (braced_init_obstack);
 
       p = constructor_pending_elts;
-      while (p)
+      याव (p)
 	{
-	  if (field == p->purpose)
-	    return p->value;
-	  else if (tree_int_cst_lt (bitpos, bit_position (p->purpose)))
-	    p = p->left;
-	  else
-	    p = p->right;
+	  सचे (field == p->purpose)
+	    पटिनिवत्त p->मानम्;
+	  अञ्ञथा सचे (वृक्षः_int_cst_lt (bitpos, bit_position (p->purpose)))
+	    p = p->वामः;
+	  अञ्ञथा
+	    p = p->दक्षिणः;
 	}
     }
-  else if (TREE_CODE (constructor_type) == UNION_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == UNION_TYPE)
     {
-      if (!vec_safe_is_empty (constructor_elements)
+      सचे (!vec_safe_is_empty (constructor_elements)
 	  && (constructor_elements->last ().index == field))
-	return constructor_elements->last ().value;
+	पटिनिवत्त constructor_elements->last ().मानम्;
     }
-  return NULL_TREE;
+  पटिनिवत्त NULL_वृक्षः;
 }
 
 /* "Output" the next constructor element.
@@ -12024,130 +12024,130 @@ find_init_member (tree field, struct obstack * braced_init_obstack)
    and thus no warnings should be emitted about overriding an
    existing initializer.  */
 
-static void
-output_init_element (location_t loc, tree value, tree origtype,
-		     bool strict_string, tree type, tree field, bool pending,
-		     bool implicit, struct obstack * braced_init_obstack)
+स्थिर शून्य
+output_init_element (location_t loc, वृक्षः मानम्, वृक्षः origtype,
+		     तार्किक strict_string, वृक्षः type, वृक्षः field, तार्किक pending,
+		     तार्किक implicit, संरचना obstack * braced_init_obstack)
 {
-  tree semantic_type = NULL_TREE;
-  bool maybe_const = true;
-  bool npc, int_const_expr, arith_const_expr;
+  वृक्षः semantic_type = NULL_वृक्षः;
+  तार्किक maybe_const = सच्च;
+  तार्किक npc, int_const_व्यञ्जकम्, arith_const_व्यञ्जकम्;
 
-  if (type == error_mark_node || value == error_mark_node)
+  सचे (type == error_mark_ग्रन्थिः || मानम् == error_mark_ग्रन्थिः)
     {
       constructor_erroneous = 1;
-      return;
+      पटिनिवत्त;
     }
-  if (TREE_CODE (TREE_TYPE (value)) == ARRAY_TYPE
-      && (TREE_CODE (value) == STRING_CST
-	  || TREE_CODE (value) == COMPOUND_LITERAL_EXPR)
-      && !(TREE_CODE (value) == STRING_CST
-	   && TREE_CODE (type) == ARRAY_TYPE
-	   && INTEGRAL_TYPE_P (TREE_TYPE (type)))
-      && !comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (value)),
+  सचे (वृक्षः_CODE (वृक्षः_TYPE (मानम्)) == ARRAY_TYPE
+      && (वृक्षः_CODE (मानम्) == STRING_CST
+	  || वृक्षः_CODE (मानम्) == COMPOUND_LITERAL_व्यञ्जकम्)
+      && !(वृक्षः_CODE (मानम्) == STRING_CST
+	   && वृक्षः_CODE (type) == ARRAY_TYPE
+	   && INTEGRAL_TYPE_P (वृक्षः_TYPE (type)))
+      && !comptypes (TYPE_MAIN_VARIANT (वृक्षः_TYPE (मानम्)),
 		     TYPE_MAIN_VARIANT (type)))
-    value = array_to_pointer_conversion (input_location, value);
+    मानम् = array_to_pointer_conversion (निवेशः_location, मानम्);
 
-  if (TREE_CODE (value) == COMPOUND_LITERAL_EXPR
-      && require_constant_value && pending)
+  सचे (वृक्षः_CODE (मानम्) == COMPOUND_LITERAL_व्यञ्जकम्
+      && require_constant_मानम् && pending)
     {
       /* As an extension, allow initializing objects with static storage
 	 duration with compound literals (which are then treated just as
 	 the brace enclosed list they contain).  */
-      if (flag_isoc99)
+      सचे (flag_isoc99)
 	pedwarn_init (loc, OPT_Wpedantic, "initializer element is not "
 		      "constant");
-      tree decl = COMPOUND_LITERAL_EXPR_DECL (value);
-      value = DECL_INITIAL (decl);
+      वृक्षः decl = COMPOUND_LITERAL_व्यञ्जकम्_DECL (मानम्);
+      मानम् = DECL_INITIAL (decl);
     }
 
-  npc = null_pointer_constant_p (value);
-  int_const_expr = (TREE_CODE (value) == INTEGER_CST
-		    && !TREE_OVERFLOW (value)
-		    && INTEGRAL_TYPE_P (TREE_TYPE (value)));
+  npc = null_pointer_constant_p (मानम्);
+  int_const_व्यञ्जकम् = (वृक्षः_CODE (मानम्) == INTEGER_CST
+		    && !वृक्षः_OVERFLOW (मानम्)
+		    && INTEGRAL_TYPE_P (वृक्षः_TYPE (मानम्)));
   /* Not fully determined before folding.  */
-  arith_const_expr = true;
-  if (TREE_CODE (value) == EXCESS_PRECISION_EXPR)
+  arith_const_व्यञ्जकम् = सच्च;
+  सचे (वृक्षः_CODE (मानम्) == EXCESS_PRECISION_व्यञ्जकम्)
     {
-      semantic_type = TREE_TYPE (value);
-      value = TREE_OPERAND (value, 0);
+      semantic_type = वृक्षः_TYPE (मानम्);
+      मानम् = वृक्षः_OPERAND (मानम्, 0);
     }
-  value = c_fully_fold (value, require_constant_value, &maybe_const);
+  मानम् = c_fully_fold (मानम्, require_constant_मानम्, &maybe_const);
   /* TODO: this may not detect all cases of expressions folding to
      constants that are not arithmetic constant expressions.  */
-  if (!maybe_const)
-    arith_const_expr = false;
-  else if (!INTEGRAL_TYPE_P (TREE_TYPE (value))
-	   && TREE_CODE (TREE_TYPE (value)) != REAL_TYPE
-	   && TREE_CODE (TREE_TYPE (value)) != COMPLEX_TYPE)
-    arith_const_expr = false;
-  else if (TREE_CODE (value) != INTEGER_CST
-	   && TREE_CODE (value) != REAL_CST
-	   && TREE_CODE (value) != COMPLEX_CST
-	   && TREE_CODE (value) != RAW_DATA_CST)
-    arith_const_expr = false;
-  else if (TREE_OVERFLOW (value))
-    arith_const_expr = false;
+  सचे (!maybe_const)
+    arith_const_व्यञ्जकम् = मिच्छा;
+  अञ्ञथा सचे (!INTEGRAL_TYPE_P (वृक्षः_TYPE (मानम्))
+	   && वृक्षः_CODE (वृक्षः_TYPE (मानम्)) != REAL_TYPE
+	   && वृक्षः_CODE (वृक्षः_TYPE (मानम्)) != COMPLEX_TYPE)
+    arith_const_व्यञ्जकम् = मिच्छा;
+  अञ्ञथा सचे (वृक्षः_CODE (मानम्) != INTEGER_CST
+	   && वृक्षः_CODE (मानम्) != REAL_CST
+	   && वृक्षः_CODE (मानम्) != COMPLEX_CST
+	   && वृक्षः_CODE (मानम्) != RAW_DATA_CST)
+    arith_const_व्यञ्जकम् = मिच्छा;
+  अञ्ञथा सचे (वृक्षः_OVERFLOW (मानम्))
+    arith_const_व्यञ्जकम् = मिच्छा;
 
-  if (value == error_mark_node)
+  सचे (मानम् == error_mark_ग्रन्थिः)
     constructor_erroneous = 1;
-  else if (!TREE_CONSTANT (value))
+  अञ्ञथा सचे (!वृक्षः_CONSTANT (मानम्))
     constructor_constant = 0;
-  else if (!initializer_constant_valid_p (value,
-					  TREE_TYPE (value),
+  अञ्ञथा सचे (!initializer_constant_valid_p (मानम्,
+					  वृक्षः_TYPE (मानम्),
 					  AGGREGATE_TYPE_P (constructor_type)
 					  && TYPE_REVERSE_STORAGE_ORDER
 					     (constructor_type))
 	   || (RECORD_OR_UNION_TYPE_P (constructor_type)
 	       && DECL_C_BIT_FIELD (field)
-	       && TREE_CODE (value) != INTEGER_CST))
+	       && वृक्षः_CODE (मानम्) != INTEGER_CST))
     constructor_simple = 0;
-  if (!maybe_const)
+  सचे (!maybe_const)
     constructor_nonconst = 1;
 
   /* Digest the initializer and issue any errors about incompatible
      types before issuing errors about non-constant initializers.  */
-  tree new_value = value;
-  if (semantic_type)
-    new_value = build1 (EXCESS_PRECISION_EXPR, semantic_type, value);
+  वृक्षः new_मानम् = मानम्;
+  सचे (semantic_type)
+    new_मानम् = build1 (EXCESS_PRECISION_व्यञ्जकम्, semantic_type, मानम्);
   /* In the case of braces around a scalar initializer, the result of
      this initializer processing goes through digest_init again at the
      outer level.  In the case of a constexpr initializer for a
      pointer, avoid converting a null pointer constant to something
      that is not a null pointer constant to avoid a spurious error
      from that second processing.  */
-  if (!require_constexpr_value
+  सचे (!require_constexpr_मानम्
       || !npc
-      || TREE_CODE (constructor_type) != POINTER_TYPE)
-    new_value = digest_init (loc,
+      || वृक्षः_CODE (constructor_type) != POINTER_TYPE)
+    new_मानम् = digest_init (loc,
 			     RECORD_OR_UNION_TYPE_P (constructor_type)
 			     ? field : constructor_fields
 			     ? constructor_fields : constructor_decl,
-			     type, new_value, origtype, npc,
-			     int_const_expr, arith_const_expr, strict_string,
-			     require_constant_value, require_constexpr_value);
-  if (new_value == error_mark_node)
+			     type, new_मानम्, origtype, npc,
+			     int_const_व्यञ्जकम्, arith_const_व्यञ्जकम्, strict_string,
+			     require_constant_मानम्, require_constexpr_मानम्);
+  सचे (new_मानम् == error_mark_ग्रन्थिः)
     {
       constructor_erroneous = 1;
-      return;
+      पटिनिवत्त;
     }
-  if (require_constant_value || require_constant_elements)
-    constant_expression_warning (new_value);
+  सचे (require_constant_मानम् || require_constant_elements)
+    constant_expression_warning (new_मानम्);
 
   /* Proceed to check the constness of the original initializer.  */
-  if (!initializer_constant_valid_p (value, TREE_TYPE (value)))
+  सचे (!initializer_constant_valid_p (मानम्, वृक्षः_TYPE (मानम्)))
     {
-      if (require_constant_value)
+      सचे (require_constant_मानम्)
 	{
 	  error_init (loc, "initializer element is not constant");
-	  value = error_mark_node;
+	  मानम् = error_mark_ग्रन्थिः;
 	}
-      else if (require_constant_elements)
+      अञ्ञथा सचे (require_constant_elements)
 	pedwarn (loc, OPT_Wpedantic,
 		 "initializer element is not computable at load time");
     }
-  else if (!maybe_const
-	   && (require_constant_value || require_constant_elements))
+  अञ्ञथा सचे (!maybe_const
+	   && (require_constant_मानम् || require_constant_elements))
     pedwarn_init (loc, OPT_Wpedantic,
 		  "initializer element is not a constant expression");
   /* digest_init has already carried out the additional checks
@@ -12158,16 +12158,16 @@ output_init_element (location_t loc, tree value, tree origtype,
 
   /* Issue -Wc++-compat warnings about initializing a bitfield with
      enum type.  */
-  if (warn_cxx_compat
-      && field != NULL_TREE
-      && TREE_CODE (field) == FIELD_DECL
-      && DECL_BIT_FIELD_TYPE (field) != NULL_TREE
+  सचे (warn_cxx_compat
+      && field != NULL_वृक्षः
+      && वृक्षः_CODE (field) == FIELD_DECL
+      && DECL_BIT_FIELD_TYPE (field) != NULL_वृक्षः
       && (TYPE_MAIN_VARIANT (DECL_BIT_FIELD_TYPE (field))
 	  != TYPE_MAIN_VARIANT (type))
-      && TREE_CODE (DECL_BIT_FIELD_TYPE (field)) == ENUMERAL_TYPE)
+      && वृक्षः_CODE (DECL_BIT_FIELD_TYPE (field)) == ENUMERAL_TYPE)
     {
-      tree checktype = origtype != NULL_TREE ? origtype : TREE_TYPE (value);
-      if (checktype != error_mark_node
+      वृक्षः checktype = origtype != NULL_वृक्षः ? origtype : वृक्षः_TYPE (मानम्);
+      सचे (checktype != error_mark_ग्रन्थिः
 	  && (TYPE_MAIN_VARIANT (checktype)
 	      != TYPE_MAIN_VARIANT (DECL_BIT_FIELD_TYPE (field))))
 	warning_init (loc, OPT_Wc___compat,
@@ -12177,114 +12177,114 @@ output_init_element (location_t loc, tree value, tree origtype,
   /* If this field is empty and does not have side effects (and is not at
      the end of structure), don't do anything other than checking the
      initializer.  */
-  if (field
-      && (TREE_TYPE (field) == error_mark_node
-	  || (COMPLETE_TYPE_P (TREE_TYPE (field))
-	      && integer_zerop (TYPE_SIZE (TREE_TYPE (field)))
-	      && !TREE_SIDE_EFFECTS (new_value)
-	      && (TREE_CODE (constructor_type) == ARRAY_TYPE
+  सचे (field
+      && (वृक्षः_TYPE (field) == error_mark_ग्रन्थिः
+	  || (COMPLETE_TYPE_P (वृक्षः_TYPE (field))
+	      && integer_zerop (TYPE_SIZE (वृक्षः_TYPE (field)))
+	      && !वृक्षः_SIDE_EFFECTS (new_मानम्)
+	      && (वृक्षः_CODE (constructor_type) == ARRAY_TYPE
 		  || DECL_CHAIN (field)))))
-    return;
+    पटिनिवत्त;
 
   /* Finally, set VALUE to the initializer value digested above.  */
-  value = new_value;
+  मानम् = new_मानम्;
 
   /* If this element doesn't come next in sequence,
      put it on constructor_pending_elts.  */
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE
+  सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE
       && (!constructor_incremental
-	  || !tree_int_cst_equal (field, constructor_unfilled_index)
-	  || (TREE_CODE (value) == RAW_DATA_CST
+	  || !वृक्षः_int_cst_equal (field, constructor_unfilled_index)
+	  || (वृक्षः_CODE (मानम्) == RAW_DATA_CST
 	      && constructor_pending_elts
 	      && pending)))
     {
-      if (constructor_incremental
-	  && (tree_int_cst_lt (field, constructor_unfilled_index)
-	      || (TREE_CODE (value) == RAW_DATA_CST
+      सचे (constructor_incremental
+	  && (वृक्षः_int_cst_lt (field, constructor_unfilled_index)
+	      || (वृक्षः_CODE (मानम्) == RAW_DATA_CST
 		  && constructor_pending_elts
 		  && pending)))
 	set_nonincremental_init (braced_init_obstack);
 
-      add_pending_init (loc, field, value, origtype, implicit,
+      add_pending_init (loc, field, मानम्, origtype, implicit,
 			braced_init_obstack);
-      return;
+      पटिनिवत्त;
     }
-  else if (TREE_CODE (constructor_type) == RECORD_TYPE
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == RECORD_TYPE
 	   && (!constructor_incremental
 	       || field != constructor_unfilled_fields))
     {
       /* We do this for records but not for unions.  In a union,
 	 no matter which field is specified, it can be initialized
 	 right away since it starts at the beginning of the union.  */
-      if (constructor_incremental)
+      सचे (constructor_incremental)
 	{
-	  if (!constructor_unfilled_fields)
+	  सचे (!constructor_unfilled_fields)
 	    set_nonincremental_init (braced_init_obstack);
-	  else
+	  अञ्ञथा
 	    {
-	      tree bitpos, unfillpos;
+	      वृक्षः bitpos, unfillpos;
 
 	      bitpos = bit_position (field);
 	      unfillpos = bit_position (constructor_unfilled_fields);
 
-	      if (tree_int_cst_lt (bitpos, unfillpos))
+	      सचे (वृक्षः_int_cst_lt (bitpos, unfillpos))
 		set_nonincremental_init (braced_init_obstack);
 	    }
 	}
 
-      add_pending_init (loc, field, value, origtype, implicit,
+      add_pending_init (loc, field, मानम्, origtype, implicit,
 			braced_init_obstack);
-      return;
+      पटिनिवत्त;
     }
-  else if (TREE_CODE (constructor_type) == UNION_TYPE
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == UNION_TYPE
 	   && !vec_safe_is_empty (constructor_elements))
     {
-      if (!implicit)
+      सचे (!implicit)
 	{
-	  if (TREE_SIDE_EFFECTS (constructor_elements->last ().value))
+	  सचे (वृक्षः_SIDE_EFFECTS (constructor_elements->last ().मानम्))
 	    warning_init (loc, OPT_Woverride_init_side_effects,
 			  "initialized field with side-effects overwritten");
-	  else if (warn_override_init)
+	  अञ्ञथा सचे (warn_override_init)
 	    warning_init (loc, OPT_Woverride_init,
 			  "initialized field overwritten");
 	}
 
       /* We can have just one union field set.  */
-      constructor_elements = NULL;
+      constructor_elements = रिक्त;
     }
 
   /* Otherwise, output this element either to
      constructor_elements or to the assembler file.  */
 
-  constructor_elt celt = {field, value};
-  vec_safe_push (constructor_elements, celt);
+  constructor_elt celt = {field, मानम्};
+  vec_safe_प्रक्षिप (constructor_elements, celt);
 
   /* Advance the variable that indicates sequential elements output.  */
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE)
     {
-      tree inc = bitsize_one_node;
-      if (value && TREE_CODE (value) == RAW_DATA_CST)
-	inc = bitsize_int (RAW_DATA_LENGTH (value));
+      वृक्षः inc = bitsize_one_ग्रन्थिः;
+      सचे (मानम् && वृक्षः_CODE (मानम्) == RAW_DATA_CST)
+	inc = bitsize_int (RAW_DATA_LENGTH (मानम्));
       constructor_unfilled_index
-	= size_binop_loc (input_location, PLUS_EXPR,
+	= size_binop_loc (निवेशः_location, PLUS_व्यञ्जकम्,
 			  constructor_unfilled_index, inc);
     }
-  else if (TREE_CODE (constructor_type) == RECORD_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == RECORD_TYPE)
     {
       constructor_unfilled_fields
 	= DECL_CHAIN (constructor_unfilled_fields);
 
       /* Skip any nameless bit fields.  */
-      while (constructor_unfilled_fields != NULL_TREE
+      याव (constructor_unfilled_fields != NULL_वृक्षः
 	     && DECL_UNNAMED_BIT_FIELD (constructor_unfilled_fields))
 	constructor_unfilled_fields
 	  = DECL_CHAIN (constructor_unfilled_fields);
     }
-  else if (TREE_CODE (constructor_type) == UNION_TYPE)
-    constructor_unfilled_fields = NULL_TREE;
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == UNION_TYPE)
+    constructor_unfilled_fields = NULL_वृक्षः;
 
   /* Now output any pending elements which have become next.  */
-  if (pending)
+  सचे (pending)
     output_pending_init_elements (0, braced_init_obstack);
 }
 
@@ -12292,59 +12292,59 @@ output_init_element (location_t loc, tree value, tree origtype,
    comes before field2, 1 if field1 comes after field2 and
    0 if field1 == field2.  */
 
-static int
-init_field_decl_cmp (tree field1, tree field2)
+स्थिर पूर्णाङ्क
+init_field_decl_cmp (वृक्षः field1, वृक्षः field2)
 {
-  if (field1 == field2)
-    return 0;
+  सचे (field1 == field2)
+    पटिनिवत्त 0;
 
-  tree bitpos1 = bit_position (field1);
-  tree bitpos2 = bit_position (field2);
-  if (tree_int_cst_equal (bitpos1, bitpos2))
+  वृक्षः bitpos1 = bit_position (field1);
+  वृक्षः bitpos2 = bit_position (field2);
+  सचे (वृक्षः_int_cst_equal (bitpos1, bitpos2))
     {
       /* If one of the fields has non-zero bitsize, then that
 	 field must be the last one in a sequence of zero
 	 sized fields, fields after it will have bigger
 	 bit_position.  */
-      if (TREE_TYPE (field1) != error_mark_node
-	  && COMPLETE_TYPE_P (TREE_TYPE (field1))
-	  && integer_nonzerop (TREE_TYPE (field1)))
-	return 1;
-      if (TREE_TYPE (field2) != error_mark_node
-	  && COMPLETE_TYPE_P (TREE_TYPE (field2))
-	  && integer_nonzerop (TREE_TYPE (field2)))
-	return -1;
+      सचे (वृक्षः_TYPE (field1) != error_mark_ग्रन्थिः
+	  && COMPLETE_TYPE_P (वृक्षः_TYPE (field1))
+	  && integer_nonzerop (वृक्षः_TYPE (field1)))
+	पटिनिवत्त 1;
+      सचे (वृक्षः_TYPE (field2) != error_mark_ग्रन्थिः
+	  && COMPLETE_TYPE_P (वृक्षः_TYPE (field2))
+	  && integer_nonzerop (वृक्षः_TYPE (field2)))
+	पटिनिवत्त -1;
       /* Otherwise, fallback to DECL_CHAIN walk to find out
 	 which field comes earlier.  Walk chains of both
 	 fields, so that if field1 and field2 are close to each
 	 other in either order, it is found soon even for large
 	 sequences of zero sized fields.  */
-      tree f1 = field1, f2 = field2;
-      while (1)
+      वृक्षः f1 = field1, f2 = field2;
+      याव (1)
 	{
 	  f1 = DECL_CHAIN (f1);
 	  f2 = DECL_CHAIN (f2);
-	  if (f1 == NULL_TREE)
+	  सचे (f1 == NULL_वृक्षः)
 	    {
 	      gcc_assert (f2);
-	      return 1;
+	      पटिनिवत्त 1;
 	    }
-	  if (f2 == NULL_TREE)
-	    return -1;
-	  if (f1 == field2)
-	    return -1;
-	  if (f2 == field1)
-	    return 1;
-	  if (!tree_int_cst_equal (bit_position (f1), bitpos1))
-	    return 1;
-	  if (!tree_int_cst_equal (bit_position (f2), bitpos1))
-	    return -1;
+	  सचे (f2 == NULL_वृक्षः)
+	    पटिनिवत्त -1;
+	  सचे (f1 == field2)
+	    पटिनिवत्त -1;
+	  सचे (f2 == field1)
+	    पटिनिवत्त 1;
+	  सचे (!वृक्षः_int_cst_equal (bit_position (f1), bitpos1))
+	    पटिनिवत्त 1;
+	  सचे (!वृक्षः_int_cst_equal (bit_position (f2), bitpos1))
+	    पटिनिवत्त -1;
 	}
     }
-  else if (tree_int_cst_lt (bitpos1, bitpos2))
-    return -1;
-  else
-    return 1;
+  अञ्ञथा सचे (वृक्षः_int_cst_lt (bitpos1, bitpos2))
+    पटिनिवत्त -1;
+  अञ्ञथा
+    पटिनिवत्त 1;
 }
 
 /* Output any pending elements which have become next.
@@ -12357,11 +12357,11 @@ init_field_decl_cmp (tree field1, tree field2)
 
    If ALL is 1, we output space as necessary so that
    we can output all the pending elements.  */
-static void
-output_pending_init_elements (int all, struct obstack * braced_init_obstack)
+स्थिर शून्य
+output_pending_init_elements (पूर्णाङ्क all, संरचना obstack * braced_init_obstack)
 {
-  struct init_node *elt = constructor_pending_elts;
-  tree next;
+  संरचना init_ग्रन्थिः *elt = constructor_pending_elts;
+  वृक्षः next;
 
  retry:
 
@@ -12370,96 +12370,96 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
      output it.  Otherwise, set NEXT to the element
      that comes first among those still pending.  */
 
-  next = NULL_TREE;
-  while (elt)
+  next = NULL_वृक्षः;
+  याव (elt)
     {
-      if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+      सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE)
 	{
-	  if (tree_int_cst_equal (elt->purpose,
+	  सचे (वृक्षः_int_cst_equal (elt->purpose,
 				  constructor_unfilled_index))
-	    output_init_element (input_location, elt->value, elt->origtype,
-				 true, TREE_TYPE (constructor_type),
-				 constructor_unfilled_index, false, false,
+	    output_init_element (निवेशः_location, elt->मानम्, elt->origtype,
+				 सच्च, वृक्षः_TYPE (constructor_type),
+				 constructor_unfilled_index, मिच्छा, मिच्छा,
 				 braced_init_obstack);
-	  else if (tree_int_cst_lt (constructor_unfilled_index,
+	  अञ्ञथा सचे (वृक्षः_int_cst_lt (constructor_unfilled_index,
 				    elt->purpose))
 	    {
 	      /* Advance to the next smaller node.  */
-	      if (elt->left)
-		elt = elt->left;
-	      else
+	      सचे (elt->वामः)
+		elt = elt->वामः;
+	      अञ्ञथा
 		{
 		  /* We have reached the smallest node bigger than the
 		     current unfilled index.  Fill the space first.  */
 		  next = elt->purpose;
-		  break;
+		  भङ्ग;
 		}
 	    }
-	  else
+	  अञ्ञथा
 	    {
 	      /* Advance to the next bigger node.  */
-	      if (elt->right)
-		elt = elt->right;
-	      else
+	      सचे (elt->दक्षिणः)
+		elt = elt->दक्षिणः;
+	      अञ्ञथा
 		{
 		  /* We have reached the biggest node in a subtree.  Find
 		     the parent of it, which is the next bigger node.  */
-		  while (elt->parent && elt->parent->right == elt)
+		  याव (elt->parent && elt->parent->दक्षिणः == elt)
 		    elt = elt->parent;
 		  elt = elt->parent;
-		  if (elt && tree_int_cst_lt (constructor_unfilled_index,
+		  सचे (elt && वृक्षः_int_cst_lt (constructor_unfilled_index,
 					      elt->purpose))
 		    {
 		      next = elt->purpose;
-		      break;
+		      भङ्ग;
 		    }
 		}
 	    }
 	}
-      else if (RECORD_OR_UNION_TYPE_P (constructor_type))
+      अञ्ञथा सचे (RECORD_OR_UNION_TYPE_P (constructor_type))
 	{
 	  /* If the current record is complete we are done.  */
-	  if (constructor_unfilled_fields == NULL_TREE)
-	    break;
+	  सचे (constructor_unfilled_fields == NULL_वृक्षः)
+	    भङ्ग;
 
-	  int cmp = init_field_decl_cmp (constructor_unfilled_fields,
+	  पूर्णाङ्क cmp = init_field_decl_cmp (constructor_unfilled_fields,
 					 elt->purpose);
-	  if (cmp == 0)
-	    output_init_element (input_location, elt->value, elt->origtype,
-				 true, TREE_TYPE (elt->purpose),
-				 elt->purpose, false, false,
+	  सचे (cmp == 0)
+	    output_init_element (निवेशः_location, elt->मानम्, elt->origtype,
+				 सच्च, वृक्षः_TYPE (elt->purpose),
+				 elt->purpose, मिच्छा, मिच्छा,
 				 braced_init_obstack);
-	  else if (cmp < 0)
+	  अञ्ञथा सचे (cmp < 0)
 	    {
 	      /* Advance to the next smaller node.  */
-	      if (elt->left)
-		elt = elt->left;
-	      else
+	      सचे (elt->वामः)
+		elt = elt->वामः;
+	      अञ्ञथा
 		{
 		  /* We have reached the smallest node bigger than the
 		     current unfilled field.  Fill the space first.  */
 		  next = elt->purpose;
-		  break;
+		  भङ्ग;
 		}
 	    }
-	  else
+	  अञ्ञथा
 	    {
 	      /* Advance to the next bigger node.  */
-	      if (elt->right)
-		elt = elt->right;
-	      else
+	      सचे (elt->दक्षिणः)
+		elt = elt->दक्षिणः;
+	      अञ्ञथा
 		{
 		  /* We have reached the biggest node in a subtree.  Find
 		     the parent of it, which is the next bigger node.  */
-		  while (elt->parent && elt->parent->right == elt)
+		  याव (elt->parent && elt->parent->दक्षिणः == elt)
 		    elt = elt->parent;
 		  elt = elt->parent;
-		  if (elt
+		  सचे (elt
 		      && init_field_decl_cmp (constructor_unfilled_fields,
 					      elt->purpose) < 0)
 		    {
 		      next = elt->purpose;
-		      break;
+		      भङ्ग;
 		    }
 		}
 	    }
@@ -12468,19 +12468,19 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
 
   /* Ordinarily return, but not if we want to output all
      and there are elements left.  */
-  if (!(all && next != NULL_TREE))
-    return;
+  सचे (!(all && next != NULL_वृक्षः))
+    पटिनिवत्त;
 
   /* If it's not incremental, just skip over the gap, so that after
      jumping to retry we will output the next successive element.  */
-  if (RECORD_OR_UNION_TYPE_P (constructor_type))
+  सचे (RECORD_OR_UNION_TYPE_P (constructor_type))
     constructor_unfilled_fields = next;
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE)
     constructor_unfilled_index = next;
 
   /* ELT now points to the node in the pending tree with the next
      initializer to output.  */
-  goto retry;
+  गच्छ retry;
 }
 
 /* Expression VALUE coincides with the start of type TYPE in a braced
@@ -12491,17 +12491,17 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
    If the initializer is clearly invalid, the question becomes:
    which choice gives the best error message?  */
 
-static bool
-initialize_elementwise_p (tree type, tree value)
+स्थिर तार्किक
+initialize_elementwise_p (वृक्षः type, वृक्षः मानम्)
 {
-  if (type == error_mark_node || value == error_mark_node)
-    return false;
+  सचे (type == error_mark_ग्रन्थिः || मानम् == error_mark_ग्रन्थिः)
+    पटिनिवत्त मिच्छा;
 
   gcc_checking_assert (TYPE_MAIN_VARIANT (type) == type);
 
-  tree value_type = TREE_TYPE (value);
-  if (value_type == error_mark_node)
-    return false;
+  वृक्षः मानम्_type = वृक्षः_TYPE (मानम्);
+  सचे (मानम्_type == error_mark_ग्रन्थिः)
+    पटिनिवत्त मिच्छा;
 
   /* GNU vectors can be initialized elementwise.  However, treat any
      kind of vector value as initializing the vector type as a whole,
@@ -12515,29 +12515,29 @@ initialize_elementwise_p (tree type, tree value)
      worst wrong.  For example, when -flax-vector-conversions is in effect,
      it's possible to initialize a V8HI from a V4SI, even though the vectors
      have different element types and different numbers of elements.  */
-  if (gnu_vector_type_p (type))
-    return !VECTOR_TYPE_P (value_type);
+  सचे (gnu_vector_type_p (type))
+    पटिनिवत्त !VECTOR_TYPE_P (मानम्_type);
 
-  if (AGGREGATE_TYPE_P (type))
-    return !comptypes (type, TYPE_MAIN_VARIANT (value_type));
+  सचे (AGGREGATE_TYPE_P (type))
+    पटिनिवत्त !comptypes (type, TYPE_MAIN_VARIANT (मानम्_type));
 
-  return false;
+  पटिनिवत्त मिच्छा;
 }
 
 /* Helper function for process_init_element.  Split first element of
    RAW_DATA_CST and save the rest to *RAW_DATA.  */
 
-static inline tree
-maybe_split_raw_data (tree value, tree *raw_data)
+स्थिर अन्तःस्थ वृक्षः
+maybe_split_raw_data (वृक्षः मानम्, वृक्षः *raw_data)
 {
-  if (value == NULL_TREE || TREE_CODE (value) != RAW_DATA_CST)
-    return value;
-  *raw_data = value;
-  value = build_int_cst (integer_type_node,
+  सचे (मानम् == NULL_वृक्षः || वृक्षः_CODE (मानम्) != RAW_DATA_CST)
+    पटिनिवत्त मानम्;
+  *raw_data = मानम्;
+  मानम् = build_int_cst (integer_type_ग्रन्थिः,
 			 RAW_DATA_UCHAR_ELT (*raw_data, 0));
   ++RAW_DATA_POINTER (*raw_data);
   --RAW_DATA_LENGTH (*raw_data);
-  return value;
+  पटिनिवत्त मानम्;
 }
 
 /* Return non-zero if c_parser_initval should attempt to optimize
@@ -12545,35 +12545,35 @@ maybe_split_raw_data (tree value, tree *raw_data)
    many elements to optimize at most.  */
 
 unsigned
-c_maybe_optimize_large_byte_initializer (void)
+c_maybe_optimize_large_byte_initializer (शून्य)
 {
-  if (!constructor_type
-      || TREE_CODE (constructor_type) != ARRAY_TYPE
-      || constructor_stack->implicit)
-    return 0;
-  tree elttype = TYPE_MAIN_VARIANT (TREE_TYPE (constructor_type));
-  if (TREE_CODE (elttype) != INTEGER_TYPE
-      && TREE_CODE (elttype) != BITINT_TYPE)
-    return 0;
-  if (TYPE_PRECISION (elttype) != CHAR_BIT
-      || constructor_stack->replacement_value.value
+  सचे (!constructor_type
+      || वृक्षः_CODE (constructor_type) != ARRAY_TYPE
+      || constructor_राशिः->implicit)
+    पटिनिवत्त 0;
+  वृक्षः elttype = TYPE_MAIN_VARIANT (वृक्षः_TYPE (constructor_type));
+  सचे (वृक्षः_CODE (elttype) != INTEGER_TYPE
+      && वृक्षः_CODE (elttype) != BITINT_TYPE)
+    पटिनिवत्त 0;
+  सचे (TYPE_PRECISION (elttype) != CHAR_BIT
+      || constructor_राशिः->replacement_मानम्.मानम्
       || (COMPLETE_TYPE_P (constructor_type)
-	  && !poly_int_tree_p (TYPE_SIZE (constructor_type)))
-      || constructor_range_stack)
-    return 0;
-  if (constructor_max_index == NULL_TREE)
-    return INT_MAX;
-  if (tree_int_cst_le (constructor_max_index, constructor_index)
+	  && !poly_int_वृक्षः_p (TYPE_SIZE (constructor_type)))
+      || constructor_range_राशिः)
+    पटिनिवत्त 0;
+  सचे (constructor_max_index == NULL_वृक्षः)
+    पटिनिवत्त INT_MAX;
+  सचे (वृक्षः_int_cst_le (constructor_max_index, constructor_index)
       || integer_all_onesp (constructor_max_index))
-    return 0;
+    पटिनिवत्त 0;
   widest_int w = wi::to_widest (constructor_max_index);
   w -= wi::to_widest (constructor_index);
   w += 1;
-  if (w < 64)
-    return 0;
-  if (w > INT_MAX)
-    return INT_MAX;
-  return w.to_uhwi ();
+  सचे (w < 64)
+    पटिनिवत्त 0;
+  सचे (w > INT_MAX)
+    पटिनिवत्त INT_MAX;
+  पटिनिवत्त w.to_uhwi ();
 }
 
 /* Add one non-braced element to the current constructor level.
@@ -12589,63 +12589,63 @@ c_maybe_optimize_large_byte_initializer (void)
    and thus no warnings should be emitted about overriding an
    existing initializer.  */
 
-void
-process_init_element (location_t loc, struct c_expr value, bool implicit,
-		      struct obstack * braced_init_obstack)
+शून्य
+process_init_element (location_t loc, संरचना c_व्यञ्जकम् मानम्, तार्किक implicit,
+		      संरचना obstack * braced_init_obstack)
 {
-  tree orig_value = value.value;
-  int string_flag
-    = (orig_value != NULL_TREE && TREE_CODE (orig_value) == STRING_CST);
-  bool strict_string = value.original_code == STRING_CST;
-  bool was_designated = designator_depth != 0;
-  tree raw_data = NULL_TREE;
+  वृक्षः orig_मानम् = मानम्.मानम्;
+  पूर्णाङ्क string_flag
+    = (orig_मानम् != NULL_वृक्षः && वृक्षः_CODE (orig_मानम्) == STRING_CST);
+  तार्किक strict_string = मानम्.original_code == STRING_CST;
+  तार्किक was_designated = designator_depth != 0;
+  वृक्षः raw_data = NULL_वृक्षः;
 
 retry:
   designator_depth = 0;
   designator_erroneous = 0;
 
-  if (!implicit && value.value && !integer_zerop (value.value))
+  सचे (!implicit && मानम्.मानम् && !integer_zerop (मानम्.मानम्))
     constructor_zeroinit = 0;
 
   /* Handle superfluous braces around string cst as in
      char x[] = {"foo"}; */
-  if (constructor_type
+  सचे (constructor_type
       && !was_designated
-      && TREE_CODE (constructor_type) == ARRAY_TYPE
-      && INTEGRAL_TYPE_P (TREE_TYPE (constructor_type))
+      && वृक्षः_CODE (constructor_type) == ARRAY_TYPE
+      && INTEGRAL_TYPE_P (वृक्षः_TYPE (constructor_type))
       && integer_zerop (constructor_unfilled_index))
     {
-      if (constructor_stack->replacement_value.value)
+      सचे (constructor_राशिः->replacement_मानम्.मानम्)
 	{
 	  error_init (loc, "excess elements in %qT initializer", constructor_type);
-	  return;
+	  पटिनिवत्त;
 	}
-      else if (string_flag)
+      अञ्ञथा सचे (string_flag)
 	{
-	  constructor_stack->replacement_value = value;
-	  return;
+	  constructor_राशिः->replacement_मानम् = मानम्;
+	  पटिनिवत्त;
 	}
     }
 
-  if (constructor_stack->replacement_value.value != NULL_TREE)
+  सचे (constructor_राशिः->replacement_मानम्.मानम् != NULL_वृक्षः)
     {
       error_init (loc, "excess elements in struct initializer");
-      return;
+      पटिनिवत्त;
     }
 
   /* Ignore elements of a brace group if it is entirely superfluous
      and has already been diagnosed, or if the type is erroneous.  */
-  if (constructor_type == NULL_TREE || constructor_type == error_mark_node)
-    return;
+  सचे (constructor_type == NULL_वृक्षः || constructor_type == error_mark_ग्रन्थिः)
+    पटिनिवत्त;
 
   /* Ignore elements of an initializer for a variable-size type.
      Those are diagnosed in the parser (empty initializer braces are OK).  */
-  if (COMPLETE_TYPE_P (constructor_type)
-      && !poly_int_tree_p (TYPE_SIZE (constructor_type)))
-    return;
+  सचे (COMPLETE_TYPE_P (constructor_type)
+      && !poly_int_वृक्षः_p (TYPE_SIZE (constructor_type)))
+    पटिनिवत्त;
 
-  if (!implicit && warn_designated_init && !was_designated
-      && TREE_CODE (constructor_type) == RECORD_TYPE
+  सचे (!implicit && warn_designated_init && !was_designated
+      && वृक्षः_CODE (constructor_type) == RECORD_TYPE
       && lookup_attribute ("designated_init",
 			   TYPE_ATTRIBUTES (constructor_type)))
     warning_init (loc,
@@ -12655,75 +12655,75 @@ retry:
 
   /* If we've exhausted any levels that didn't have braces,
      pop them now.  */
-  while (constructor_stack->implicit)
+  याव (constructor_राशिः->implicit)
     {
-      if (RECORD_OR_UNION_TYPE_P (constructor_type)
-	  && constructor_fields == NULL_TREE)
+      सचे (RECORD_OR_UNION_TYPE_P (constructor_type)
+	  && constructor_fields == NULL_वृक्षः)
 	process_init_element (loc,
-			      pop_init_level (loc, 1, braced_init_obstack,
+			      निष्कासय_init_level (loc, 1, braced_init_obstack,
 					      last_init_list_comma),
-			      true, braced_init_obstack);
-      else if ((TREE_CODE (constructor_type) == ARRAY_TYPE
+			      सच्च, braced_init_obstack);
+      अञ्ञथा सचे ((वृक्षः_CODE (constructor_type) == ARRAY_TYPE
 		|| gnu_vector_type_p (constructor_type))
 	       && constructor_max_index
-	       && tree_int_cst_lt (constructor_max_index,
+	       && वृक्षः_int_cst_lt (constructor_max_index,
 				   constructor_index))
 	process_init_element (loc,
-			      pop_init_level (loc, 1, braced_init_obstack,
+			      निष्कासय_init_level (loc, 1, braced_init_obstack,
 					      last_init_list_comma),
-			      true, braced_init_obstack);
-      else
-	break;
+			      सच्च, braced_init_obstack);
+      अञ्ञथा
+	भङ्ग;
     }
 
   /* In the case of [LO ... HI] = VALUE, only evaluate VALUE once.  */
-  if (constructor_range_stack)
+  सचे (constructor_range_राशिः)
     {
       /* If value is a compound literal and we'll be just using its
 	 content, don't put it into a SAVE_EXPR.  */
-      if (TREE_CODE (value.value) != COMPOUND_LITERAL_EXPR
-	  || !require_constant_value)
+      सचे (वृक्षः_CODE (मानम्.मानम्) != COMPOUND_LITERAL_व्यञ्जकम्
+	  || !require_constant_मानम्)
 	{
-	  tree semantic_type = NULL_TREE;
-	  if (TREE_CODE (value.value) == EXCESS_PRECISION_EXPR)
+	  वृक्षः semantic_type = NULL_वृक्षः;
+	  सचे (वृक्षः_CODE (मानम्.मानम्) == EXCESS_PRECISION_व्यञ्जकम्)
 	    {
-	      semantic_type = TREE_TYPE (value.value);
-	      value.value = TREE_OPERAND (value.value, 0);
+	      semantic_type = वृक्षः_TYPE (मानम्.मानम्);
+	      मानम्.मानम् = वृक्षः_OPERAND (मानम्.मानम्, 0);
 	    }
-	  value.value = save_expr (value.value);
-	  if (semantic_type)
-	    value.value = build1 (EXCESS_PRECISION_EXPR, semantic_type,
-				  value.value);
+	  मानम्.मानम् = save_व्यञ्जकम् (मानम्.मानम्);
+	  सचे (semantic_type)
+	    मानम्.मानम् = build1 (EXCESS_PRECISION_व्यञ्जकम्, semantic_type,
+				  मानम्.मानम्);
 	}
     }
 
-  while (1)
+  याव (1)
     {
-      if (TREE_CODE (constructor_type) == RECORD_TYPE)
+      सचे (वृक्षः_CODE (constructor_type) == RECORD_TYPE)
 	{
-	  tree fieldtype;
-	  enum tree_code fieldcode;
+	  वृक्षः fieldtype;
+	  गणना वृक्षः_code fieldcode;
 
-	  if (constructor_fields == NULL_TREE)
+	  सचे (constructor_fields == NULL_वृक्षः)
 	    {
 	      pedwarn_init (loc, 0, "excess elements in struct initializer");
-	      break;
+	      भङ्ग;
 	    }
 
-	  fieldtype = TREE_TYPE (constructor_fields);
-	  if (fieldtype != error_mark_node)
+	  fieldtype = वृक्षः_TYPE (constructor_fields);
+	  सचे (fieldtype != error_mark_ग्रन्थिः)
 	    fieldtype = TYPE_MAIN_VARIANT (fieldtype);
-	  fieldcode = TREE_CODE (fieldtype);
+	  fieldcode = वृक्षः_CODE (fieldtype);
 
 	  /* Error for non-static initialization of a flexible array member.  */
-	  if (fieldcode == ARRAY_TYPE
-	      && !require_constant_value
-	      && TYPE_SIZE (fieldtype) == NULL_TREE
-	      && DECL_CHAIN (constructor_fields) == NULL_TREE)
+	  सचे (fieldcode == ARRAY_TYPE
+	      && !require_constant_मानम्
+	      && TYPE_SIZE (fieldtype) == NULL_वृक्षः
+	      && DECL_CHAIN (constructor_fields) == NULL_वृक्षः)
 	    {
 	      error_init (loc, "non-static initialization of a flexible "
 			  "array member");
-	      break;
+	      भङ्ग;
 	    }
 
 	  /* Error for initialization of a flexible array member with
@@ -12731,71 +12731,71 @@ retry:
 	     struct S { int x; char y[]; };
 	     struct S s[] = { { 1, "foo" } };
 	     is invalid.  */
-	  if (string_flag
+	  सचे (string_flag
 	      && fieldcode == ARRAY_TYPE
 	      && constructor_depth > 1
-	      && TYPE_SIZE (fieldtype) == NULL_TREE
-	      && DECL_CHAIN (constructor_fields) == NULL_TREE)
+	      && TYPE_SIZE (fieldtype) == NULL_वृक्षः
+	      && DECL_CHAIN (constructor_fields) == NULL_वृक्षः)
 	    {
-	      bool in_array_p = false;
-	      for (struct constructor_stack *p = constructor_stack;
+	      तार्किक in_array_p = मिच्छा;
+	      अत्थाय (संरचना constructor_राशिः *p = constructor_राशिः;
 		   p && p->type; p = p->next)
-		if (TREE_CODE (p->type) == ARRAY_TYPE)
+		सचे (वृक्षः_CODE (p->type) == ARRAY_TYPE)
 		  {
-		    in_array_p = true;
-		    break;
+		    in_array_p = सच्च;
+		    भङ्ग;
 		  }
-	      if (in_array_p)
+	      सचे (in_array_p)
 		{
 		  error_init (loc, "initialization of flexible array "
 			      "member in a nested context");
-		  break;
+		  भङ्ग;
 		}
 	    }
 
 	  /* Accept a string constant to initialize a subarray.  */
-	  if (value.value != NULL_TREE
+	  सचे (मानम्.मानम् != NULL_वृक्षः
 	      && fieldcode == ARRAY_TYPE
-	      && INTEGRAL_TYPE_P (TREE_TYPE (fieldtype))
+	      && INTEGRAL_TYPE_P (वृक्षः_TYPE (fieldtype))
 	      && string_flag)
-	    value.value = orig_value;
+	    मानम्.मानम् = orig_मानम्;
 	  /* Otherwise, if we have come to a subaggregate,
 	     and we don't have an element of its type, push into it.  */
-	  else if (value.value != NULL_TREE
-		   && initialize_elementwise_p (fieldtype, value.value))
+	  अञ्ञथा सचे (मानम्.मानम् != NULL_वृक्षः
+		   && initialize_elementwise_p (fieldtype, मानम्.मानम्))
 	    {
-	      push_init_level (loc, 1, braced_init_obstack);
-	      continue;
+	      प्रक्षिप_init_level (loc, 1, braced_init_obstack);
+	      अनुवर्त;
 	    }
 
-	  value.value = maybe_split_raw_data (value.value, &raw_data);
-	  if (value.value)
+	  मानम्.मानम् = maybe_split_raw_data (मानम्.मानम्, &raw_data);
+	  सचे (मानम्.मानम्)
 	    {
-	      push_member_name (constructor_fields);
-	      output_init_element (loc, value.value, value.original_type,
+	      प्रक्षिप_member_name (constructor_fields);
+	      output_init_element (loc, मानम्.मानम्, मानम्.original_type,
 				   strict_string, fieldtype,
-				   constructor_fields, true, implicit,
+				   constructor_fields, सच्च, implicit,
 				   braced_init_obstack);
 	      RESTORE_SPELLING_DEPTH (constructor_depth);
 	    }
-	  else
+	  अञ्ञथा
 	    /* Do the bookkeeping for an element that was
 	       directly output as a constructor.  */
 	    {
 	      /* For a record, keep track of end position of last field.  */
-	      if (DECL_SIZE (constructor_fields))
+	      सचे (DECL_SIZE (constructor_fields))
 		constructor_bit_index
-		  = size_binop_loc (input_location, PLUS_EXPR,
+		  = size_binop_loc (निवेशः_location, PLUS_व्यञ्जकम्,
 				    bit_position (constructor_fields),
 				    DECL_SIZE (constructor_fields));
 
 	      /* If the current field was the first one not yet written out,
 		 it isn't now, so update.  */
-	      if (constructor_unfilled_fields == constructor_fields)
+	      सचे (constructor_unfilled_fields == constructor_fields)
 		{
 		  constructor_unfilled_fields = DECL_CHAIN (constructor_fields);
 		  /* Skip any nameless bit fields.  */
-		  while (constructor_unfilled_fields != 0
+		  याव (constructor_unfilled_fields != 0
 			 && (DECL_UNNAMED_BIT_FIELD
 			     (constructor_unfilled_fields)))
 		    constructor_unfilled_fields =
@@ -12805,26 +12805,26 @@ retry:
 
 	  constructor_fields = DECL_CHAIN (constructor_fields);
 	  /* Skip any nameless bit fields at the beginning.  */
-	  while (constructor_fields != NULL_TREE
+	  याव (constructor_fields != NULL_वृक्षः
 		 && DECL_UNNAMED_BIT_FIELD (constructor_fields))
 	    constructor_fields = DECL_CHAIN (constructor_fields);
 	}
-      else if (TREE_CODE (constructor_type) == UNION_TYPE)
+      अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == UNION_TYPE)
 	{
-	  tree fieldtype;
-	  enum tree_code fieldcode;
+	  वृक्षः fieldtype;
+	  गणना वृक्षः_code fieldcode;
 
-	  if (constructor_fields == NULL_TREE)
+	  सचे (constructor_fields == NULL_वृक्षः)
 	    {
 	      pedwarn_init (loc, 0,
 			    "excess elements in union initializer");
-	      break;
+	      भङ्ग;
 	    }
 
-	  fieldtype = TREE_TYPE (constructor_fields);
-	  if (fieldtype != error_mark_node)
+	  fieldtype = वृक्षः_TYPE (constructor_fields);
+	  सचे (fieldtype != error_mark_ग्रन्थिः)
 	    fieldtype = TYPE_MAIN_VARIANT (fieldtype);
-	  fieldcode = TREE_CODE (fieldtype);
+	  fieldcode = वृक्षः_CODE (fieldtype);
 
 	  /* Warn that traditional C rejects initialization of unions.
 	     We skip the warning if the value is zero.  This is done
@@ -12836,20 +12836,20 @@ retry:
 	     again on the assumption that this must be conditional on
 	     __STDC__ anyway (and we've already complained about the
 	     member-designator already).  */
-	  if (!in_system_header_at (input_location) && !constructor_designated
-	      && !(value.value && (integer_zerop (value.value)
-				   || real_zerop (value.value))))
+	  सचे (!in_system_header_at (निवेशः_location) && !constructor_designated
+	      && !(मानम्.मानम् && (integer_zerop (मानम्.मानम्)
+				   || real_zerop (मानम्.मानम्))))
 	    warning (OPT_Wtraditional, "traditional C rejects initialization "
 		     "of unions");
 
 	  /* Error for non-static initialization of a flexible array member.  */
-	  if (fieldcode == ARRAY_TYPE
-	      && !require_constant_value
-	      && TYPE_SIZE (fieldtype) == NULL_TREE)
+	  सचे (fieldcode == ARRAY_TYPE
+	      && !require_constant_मानम्
+	      && TYPE_SIZE (fieldtype) == NULL_वृक्षः)
 	    {
 	      error_init (loc, "non-static initialization of a flexible "
 			  "array member");
-	      break;
+	      भङ्ग;
 	    }
 
 	  /* Error for initialization of a flexible array member with
@@ -12857,53 +12857,53 @@ retry:
 	     union U { int x; char y[]; };
 	     union U s[] = { { 1, "foo" } };
 	     is invalid.  */
-	  if (string_flag
+	  सचे (string_flag
 	      && fieldcode == ARRAY_TYPE
 	      && constructor_depth > 1
-	      && TYPE_SIZE (fieldtype) == NULL_TREE)
+	      && TYPE_SIZE (fieldtype) == NULL_वृक्षः)
 	    {
-	      bool in_array_p = false;
-	      for (struct constructor_stack *p = constructor_stack;
+	      तार्किक in_array_p = मिच्छा;
+	      अत्थाय (संरचना constructor_राशिः *p = constructor_राशिः;
 		   p && p->type; p = p->next)
-		if (TREE_CODE (p->type) == ARRAY_TYPE)
+		सचे (वृक्षः_CODE (p->type) == ARRAY_TYPE)
 		  {
-		    in_array_p = true;
-		    break;
+		    in_array_p = सच्च;
+		    भङ्ग;
 		  }
-	      if (in_array_p)
+	      सचे (in_array_p)
 		{
 		  error_init (loc, "initialization of flexible array "
 			      "member in a nested context");
-		  break;
+		  भङ्ग;
 		}
 	    }
 
 	  /* Accept a string constant to initialize a subarray.  */
-	  if (value.value != NULL_TREE
+	  सचे (मानम्.मानम् != NULL_वृक्षः
 	      && fieldcode == ARRAY_TYPE
-	      && INTEGRAL_TYPE_P (TREE_TYPE (fieldtype))
+	      && INTEGRAL_TYPE_P (वृक्षः_TYPE (fieldtype))
 	      && string_flag)
-	    value.value = orig_value;
+	    मानम्.मानम् = orig_मानम्;
 	  /* Otherwise, if we have come to a subaggregate,
 	     and we don't have an element of its type, push into it.  */
-	  else if (value.value != NULL_TREE
-		   && initialize_elementwise_p (fieldtype, value.value))
+	  अञ्ञथा सचे (मानम्.मानम् != NULL_वृक्षः
+		   && initialize_elementwise_p (fieldtype, मानम्.मानम्))
 	    {
-	      push_init_level (loc, 1, braced_init_obstack);
-	      continue;
+	      प्रक्षिप_init_level (loc, 1, braced_init_obstack);
+	      अनुवर्त;
 	    }
 
-	  value.value = maybe_split_raw_data (value.value, &raw_data);
-	  if (value.value)
+	  मानम्.मानम् = maybe_split_raw_data (मानम्.मानम्, &raw_data);
+	  सचे (मानम्.मानम्)
 	    {
-	      push_member_name (constructor_fields);
-	      output_init_element (loc, value.value, value.original_type,
+	      प्रक्षिप_member_name (constructor_fields);
+	      output_init_element (loc, मानम्.मानम्, मानम्.original_type,
 				   strict_string, fieldtype,
-				   constructor_fields, true, implicit,
+				   constructor_fields, सच्च, implicit,
 				   braced_init_obstack);
 	      RESTORE_SPELLING_DEPTH (constructor_depth);
 	    }
-	  else
+	  अञ्ञथा
 	    /* Do the bookkeeping for an element that was
 	       directly output as a constructor.  */
 	    {
@@ -12911,136 +12911,136 @@ retry:
 	      constructor_unfilled_fields = DECL_CHAIN (constructor_fields);
 	    }
 
-	  constructor_fields = NULL_TREE;
+	  constructor_fields = NULL_वृक्षः;
 	}
-      else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+      अञ्ञथा सचे (वृक्षः_CODE (constructor_type) == ARRAY_TYPE)
 	{
-	  tree elttype = TYPE_MAIN_VARIANT (TREE_TYPE (constructor_type));
-	  enum tree_code eltcode = TREE_CODE (elttype);
+	  वृक्षः elttype = TYPE_MAIN_VARIANT (वृक्षः_TYPE (constructor_type));
+	  गणना वृक्षः_code eltcode = वृक्षः_CODE (elttype);
 
 	  /* Accept a string constant to initialize a subarray.  */
-	  if (value.value != NULL_TREE
+	  सचे (मानम्.मानम् != NULL_वृक्षः
 	      && eltcode == ARRAY_TYPE
-	      && INTEGRAL_TYPE_P (TREE_TYPE (elttype))
+	      && INTEGRAL_TYPE_P (वृक्षः_TYPE (elttype))
 	      && string_flag)
-	    value.value = orig_value;
+	    मानम्.मानम् = orig_मानम्;
 	  /* Otherwise, if we have come to a subaggregate,
 	     and we don't have an element of its type, push into it.  */
-	  else if (value.value != NULL_TREE
-		   && initialize_elementwise_p (elttype, value.value))
+	  अञ्ञथा सचे (मानम्.मानम् != NULL_वृक्षः
+		   && initialize_elementwise_p (elttype, मानम्.मानम्))
 	    {
-	      push_init_level (loc, 1, braced_init_obstack);
-	      continue;
+	      प्रक्षिप_init_level (loc, 1, braced_init_obstack);
+	      अनुवर्त;
 	    }
 
-	  if (constructor_max_index != NULL_TREE
-	      && (tree_int_cst_lt (constructor_max_index, constructor_index)
+	  सचे (constructor_max_index != NULL_वृक्षः
+	      && (वृक्षः_int_cst_lt (constructor_max_index, constructor_index)
 		  || integer_all_onesp (constructor_max_index))
 	      /* For VLA we got an error already.  */
 	      && !C_TYPE_VARIABLE_SIZE (constructor_type))
 	    {
 	      pedwarn_init (loc, 0,
 			    "excess elements in array initializer");
-	      break;
+	      भङ्ग;
 	    }
 
-	  if (value.value
-	      && TREE_CODE (value.value) == RAW_DATA_CST
-	      && RAW_DATA_LENGTH (value.value) > 1
-	      && (TREE_CODE (elttype) == INTEGER_TYPE
-		  || TREE_CODE (elttype) == BITINT_TYPE)
+	  सचे (मानम्.मानम्
+	      && वृक्षः_CODE (मानम्.मानम्) == RAW_DATA_CST
+	      && RAW_DATA_LENGTH (मानम्.मानम्) > 1
+	      && (वृक्षः_CODE (elttype) == INTEGER_TYPE
+		  || वृक्षः_CODE (elttype) == BITINT_TYPE)
 	      && TYPE_PRECISION (elttype) == CHAR_BIT
-	      && (constructor_max_index == NULL_TREE
-		  || tree_int_cst_lt (constructor_index,
+	      && (constructor_max_index == NULL_वृक्षः
+		  || वृक्षः_int_cst_lt (constructor_index,
 				      constructor_max_index)))
 	    {
-	      unsigned int len = RAW_DATA_LENGTH (value.value);
-	      if (constructor_max_index)
+	      unsigned पूर्णाङ्क len = RAW_DATA_LENGTH (मानम्.मानम्);
+	      सचे (constructor_max_index)
 		{
 		  widest_int w = wi::to_widest (constructor_max_index);
 		  w -= wi::to_widest (constructor_index);
 		  w += 1;
-		  if (w < len)
+		  सचे (w < len)
 		    len = w.to_uhwi ();
 		}
-	      if (len < (unsigned) RAW_DATA_LENGTH (value.value))
+	      सचे (len < (unsigned) RAW_DATA_LENGTH (मानम्.मानम्))
 		{
-		  raw_data = copy_node (value.value);
+		  raw_data = copy_ग्रन्थिः (मानम्.मानम्);
 		  RAW_DATA_LENGTH (raw_data) -= len;
 		  RAW_DATA_POINTER (raw_data) += len;
-		  RAW_DATA_LENGTH (value.value) = len;
+		  RAW_DATA_LENGTH (मानम्.मानम्) = len;
 		}
-	      TREE_TYPE (value.value) = elttype;
-	      push_array_bounds (tree_to_uhwi (constructor_index));
-	      output_init_element (loc, value.value, value.original_type,
-				   false, elttype, constructor_index, true,
+	      वृक्षः_TYPE (मानम्.मानम्) = elttype;
+	      प्रक्षिप_array_bounds (वृक्षः_to_uhwi (constructor_index));
+	      output_init_element (loc, मानम्.मानम्, मानम्.original_type,
+				   मिच्छा, elttype, constructor_index, सच्च,
 				   implicit, braced_init_obstack);
 	      RESTORE_SPELLING_DEPTH (constructor_depth);
 	      constructor_index
-		= size_binop_loc (input_location, PLUS_EXPR,
+		= size_binop_loc (निवेशः_location, PLUS_व्यञ्जकम्,
 				  constructor_index, bitsize_int (len));
 	    }
-	  else
+	  अञ्ञथा
 	    {
-	      value.value = maybe_split_raw_data (value.value, &raw_data);
+	      मानम्.मानम् = maybe_split_raw_data (मानम्.मानम्, &raw_data);
 	      /* Now output the actual element.  */
-	      if (value.value)
+	      सचे (मानम्.मानम्)
 		{
-		  push_array_bounds (tree_to_uhwi (constructor_index));
-		  output_init_element (loc, value.value, value.original_type,
+		  प्रक्षिप_array_bounds (वृक्षः_to_uhwi (constructor_index));
+		  output_init_element (loc, मानम्.मानम्, मानम्.original_type,
 				       strict_string, elttype,
-				       constructor_index, true, implicit,
+				       constructor_index, सच्च, implicit,
 				       braced_init_obstack);
 		  RESTORE_SPELLING_DEPTH (constructor_depth);
 		}
 
 	      constructor_index
-		= size_binop_loc (input_location, PLUS_EXPR,
-				  constructor_index, bitsize_one_node);
+		= size_binop_loc (निवेशः_location, PLUS_व्यञ्जकम्,
+				  constructor_index, bitsize_one_ग्रन्थिः);
 
-	      if (!value.value)
+	      सचे (!मानम्.मानम्)
 		/* If we are doing the bookkeeping for an element that was
 		   directly output as a constructor, we must update
 		   constructor_unfilled_index.  */
 		constructor_unfilled_index = constructor_index;
 	    }
 	}
-      else if (gnu_vector_type_p (constructor_type))
+      अञ्ञथा सचे (gnu_vector_type_p (constructor_type))
 	{
-	  tree elttype = TYPE_MAIN_VARIANT (TREE_TYPE (constructor_type));
+	  वृक्षः elttype = TYPE_MAIN_VARIANT (वृक्षः_TYPE (constructor_type));
 
 	  /* Do a basic check of initializer size.  Note that vectors
 	     may not always have a fixed size derived from their type.  */
-	  if (maybe_lt (tree_to_poly_uint64 (constructor_max_index),
-			tree_to_poly_uint64 (constructor_index)))
+	  सचे (maybe_lt (वृक्षः_to_poly_uint64 (constructor_max_index),
+			वृक्षः_to_poly_uint64 (constructor_index)))
 	    {
 	      /* Diagose VLA out-of-bounds as errors.  */
-	      if (tree_to_poly_uint64 (constructor_max_index).is_constant())
+	      सचे (वृक्षः_to_poly_uint64 (constructor_max_index).is_constant())
 		pedwarn_init (loc, 0,
 			      "excess elements in vector initializer");
-	      else
+	      अञ्ञथा
 		error_init (loc, "excess elements in vector initializer");
 
-	      break;
+	      भङ्ग;
 	    }
 
-	  value.value = maybe_split_raw_data (value.value, &raw_data);
+	  मानम्.मानम् = maybe_split_raw_data (मानम्.मानम्, &raw_data);
 	  /* Now output the actual element.  */
-	  if (value.value)
+	  सचे (मानम्.मानम्)
 	    {
-	      if (TREE_CODE (value.value) == VECTOR_CST)
+	      सचे (वृक्षः_CODE (मानम्.मानम्) == VECTOR_CST)
 		elttype = TYPE_MAIN_VARIANT (constructor_type);
-	      output_init_element (loc, value.value, value.original_type,
+	      output_init_element (loc, मानम्.मानम्, मानम्.original_type,
 				   strict_string, elttype,
-				   constructor_index, true, implicit,
+				   constructor_index, सच्च, implicit,
 				   braced_init_obstack);
 	    }
 
 	  constructor_index
-	    = size_binop_loc (input_location,
-			      PLUS_EXPR, constructor_index, bitsize_one_node);
+	    = size_binop_loc (निवेशः_location,
+			      PLUS_व्यञ्जकम्, constructor_index, bitsize_one_ग्रन्थिः);
 
-	  if (!value.value)
+	  सचे (!मानम्.मानम्)
 	    /* If we are doing the bookkeeping for an element that was
 	       directly output as a constructor, we must update
 	       constructor_unfilled_index.  */
@@ -13049,106 +13049,106 @@ retry:
 
       /* Handle the sole element allowed in a braced initializer
 	 for a scalar variable.  */
-      else if (constructor_type != error_mark_node
-	       && constructor_fields == NULL_TREE)
+      अञ्ञथा सचे (constructor_type != error_mark_ग्रन्थिः
+	       && constructor_fields == NULL_वृक्षः)
 	{
 	  pedwarn_init (loc, 0,
 			"excess elements in scalar initializer");
-	  break;
+	  भङ्ग;
 	}
-      else
+      अञ्ञथा
 	{
-	  value.value = maybe_split_raw_data (value.value, &raw_data);
-	  if (value.value)
-	    output_init_element (loc, value.value, value.original_type,
+	  मानम्.मानम् = maybe_split_raw_data (मानम्.मानम्, &raw_data);
+	  सचे (मानम्.मानम्)
+	    output_init_element (loc, मानम्.मानम्, मानम्.original_type,
 				 strict_string, constructor_type,
-				 NULL_TREE, true, implicit,
+				 NULL_वृक्षः, सच्च, implicit,
 				 braced_init_obstack);
-	  constructor_fields = NULL_TREE;
+	  constructor_fields = NULL_वृक्षः;
 	}
 
       /* Handle range initializers either at this level or anywhere higher
 	 in the designator stack.  */
-      if (constructor_range_stack)
+      सचे (constructor_range_राशिः)
 	{
-	  struct constructor_range_stack *p, *range_stack;
-	  int finish = 0;
+	  संरचना constructor_range_राशिः *p, *range_राशिः;
+	  पूर्णाङ्क finish = 0;
 
-	  range_stack = constructor_range_stack;
-	  constructor_range_stack = 0;
-	  while (constructor_stack != range_stack->stack)
+	  range_राशिः = constructor_range_राशिः;
+	  constructor_range_राशिः = 0;
+	  याव (constructor_राशिः != range_राशिः->राशिः)
 	    {
-	      gcc_assert (constructor_stack->implicit);
+	      gcc_assert (constructor_राशिः->implicit);
 	      process_init_element (loc,
-				    pop_init_level (loc, 1,
+				    निष्कासय_init_level (loc, 1,
 						    braced_init_obstack,
 						    last_init_list_comma),
-				    true, braced_init_obstack);
+				    सच्च, braced_init_obstack);
 	    }
-	  for (p = range_stack;
-	       !p->range_end || tree_int_cst_equal (p->index, p->range_end);
+	  अत्थाय (p = range_राशिः;
+	       !p->range_end || वृक्षः_int_cst_equal (p->index, p->range_end);
 	       p = p->prev)
 	    {
-	      gcc_assert (constructor_stack->implicit);
+	      gcc_assert (constructor_राशिः->implicit);
 	      process_init_element (loc,
-				    pop_init_level (loc, 1,
+				    निष्कासय_init_level (loc, 1,
 						    braced_init_obstack,
 						    last_init_list_comma),
-				    true, braced_init_obstack);
+				    सच्च, braced_init_obstack);
 	    }
 
-	  p->index = size_binop_loc (input_location,
-				     PLUS_EXPR, p->index, bitsize_one_node);
-	  if (tree_int_cst_equal (p->index, p->range_end) && !p->prev)
+	  p->index = size_binop_loc (निवेशः_location,
+				     PLUS_व्यञ्जकम्, p->index, bitsize_one_ग्रन्थिः);
+	  सचे (वृक्षः_int_cst_equal (p->index, p->range_end) && !p->prev)
 	    finish = 1;
 
-	  while (1)
+	  याव (1)
 	    {
 	      constructor_index = p->index;
 	      constructor_fields = p->fields;
-	      if (finish && p->range_end && p->index == p->range_start)
+	      सचे (finish && p->range_end && p->index == p->range_start)
 		{
 		  finish = 0;
 		  p->prev = 0;
 		}
 	      p = p->next;
-	      if (!p)
-		break;
+	      सचे (!p)
+		भङ्ग;
 	      finish_implicit_inits (loc, braced_init_obstack);
-	      push_init_level (loc, 2, braced_init_obstack);
-	      p->stack = constructor_stack;
-	      if (p->range_end && tree_int_cst_equal (p->index, p->range_end))
+	      प्रक्षिप_init_level (loc, 2, braced_init_obstack);
+	      p->राशिः = constructor_राशिः;
+	      सचे (p->range_end && वृक्षः_int_cst_equal (p->index, p->range_end))
 		p->index = p->range_start;
 	    }
 
-	  if (!finish)
-	    constructor_range_stack = range_stack;
-	  continue;
+	  सचे (!finish)
+	    constructor_range_राशिः = range_राशिः;
+	  अनुवर्त;
 	}
 
-      break;
+      भङ्ग;
     }
 
-  constructor_range_stack = 0;
+  constructor_range_राशिः = 0;
 
-  if (raw_data && RAW_DATA_LENGTH (raw_data))
+  सचे (raw_data && RAW_DATA_LENGTH (raw_data))
     {
       gcc_assert (!string_flag && !was_designated);
-      value.value = raw_data;
-      raw_data = NULL_TREE;
-      goto retry;
+      मानम्.मानम् = raw_data;
+      raw_data = NULL_वृक्षः;
+      गच्छ retry;
     }
 }
 
 /* Build a complete asm-statement, whose components are a CV_QUALIFIER
    (guaranteed to be 'volatile' or null) and ARGS (represented using
    an ASM_EXPR node).  */
-tree
-build_asm_stmt (bool is_volatile, tree args)
+वृक्षः
+build_asm_stmt (तार्किक is_volatile, वृक्षः args)
 {
-  if (is_volatile)
+  सचे (is_volatile)
     ASM_VOLATILE_P (args) = 1;
-  return add_stmt (args);
+  पटिनिवत्त add_stmt (args);
 }
 
 /* Build an asm-expr, whose components are a STRING, some OUTPUTS,
@@ -13158,30 +13158,30 @@ build_asm_stmt (bool is_volatile, tree args)
    are subtly different.  We use a ASM_EXPR node to represent this.
    LOC is the location of the asm, and IS_INLINE says whether this
    is asm inline.  */
-tree
-build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
-		tree clobbers, tree labels, bool simple, bool is_inline)
+वृक्षः
+build_asm_व्यञ्जकम् (location_t loc, वृक्षः string, वृक्षः outputs, वृक्षः inputs,
+		वृक्षः clobbers, वृक्षः labels, तार्किक simple, तार्किक is_inline)
 {
-  tree tail;
-  tree args;
-  int i;
-  const char *constraint;
-  const char **oconstraints;
-  bool allows_mem, allows_reg, is_inout;
-  int ninputs, noutputs;
+  वृक्षः tail;
+  वृक्षः args;
+  पूर्णाङ्क i;
+  ध्रुव वर्ण *constraint;
+  ध्रुव वर्ण **oconstraints;
+  तार्किक allows_mem, allows_reg, is_inout;
+  पूर्णाङ्क ninputs, noutputs;
 
   ninputs = list_length (inputs);
   noutputs = list_length (outputs);
-  oconstraints = (const char **) alloca (noutputs * sizeof (const char *));
+  oconstraints = (ध्रुव वर्ण **) alloca (noutputs * परिमाण (ध्रुव वर्ण *));
 
   string = resolve_asm_operand_names (string, outputs, inputs, labels);
 
   /* Remove output conversions that change the type but not the mode.  */
-  for (i = 0, tail = outputs; tail; ++i, tail = TREE_CHAIN (tail))
+  अत्थाय (i = 0, tail = outputs; tail; ++i, tail = वृक्षः_CHAIN (tail))
     {
-      tree output = TREE_VALUE (tail);
+      वृक्षः output = वृक्षः_मानम् (tail);
 
-      output = c_fully_fold (output, false, NULL, true);
+      output = c_fully_fold (output, मिच्छा, रिक्त, सच्च);
 
       /* ??? Really, this should not be here.  Users should be using a
 	 proper lvalue, dammit.  But there's a long history of using casts
@@ -13191,166 +13191,166 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
 	 get an error.  Gross, but ...  */
       STRIP_NOPS (output);
 
-      if (!lvalue_or_else (loc, output, lv_asm))
-	output = error_mark_node;
+      सचे (!lvalue_or_else (loc, output, lv_asm))
+	output = error_mark_ग्रन्थिः;
 
-      if (output != error_mark_node
-	  && (TREE_READONLY (output)
-	      || TYPE_READONLY (TREE_TYPE (output))
-	      || (RECORD_OR_UNION_TYPE_P (TREE_TYPE (output))
-		  && C_TYPE_FIELDS_READONLY (TREE_TYPE (output)))))
+      सचे (output != error_mark_ग्रन्थिः
+	  && (वृक्षः_READONLY (output)
+	      || TYPE_READONLY (वृक्षः_TYPE (output))
+	      || (RECORD_OR_UNION_TYPE_P (वृक्षः_TYPE (output))
+		  && C_TYPE_FIELDS_READONLY (वृक्षः_TYPE (output)))))
 	readonly_error (loc, output, lv_asm);
 
-      constraint = TREE_STRING_POINTER (TREE_VALUE (TREE_PURPOSE (tail)));
+      constraint = वृक्षः_STRING_POINTER (वृक्षः_मानम् (वृक्षः_PURPOSE (tail)));
       oconstraints[i] = constraint;
 
-      if (parse_output_constraint (&constraint, i, ninputs, noutputs,
+      सचे (parse_output_constraint (&constraint, i, ninputs, noutputs,
 				   &allows_mem, &allows_reg, &is_inout,
 				   nullptr))
 	{
 	  /* If the operand is going to end up in memory,
 	     mark it addressable.  */
-	  if (!allows_reg && !c_mark_addressable (output))
-	    output = error_mark_node;
-	  if (!(!allows_reg && allows_mem)
-	      && output != error_mark_node
-	      && VOID_TYPE_P (TREE_TYPE (output)))
+	  सचे (!allows_reg && !c_mark_addressable (output))
+	    output = error_mark_ग्रन्थिः;
+	  सचे (!(!allows_reg && allows_mem)
+	      && output != error_mark_ग्रन्थिः
+	      && VOID_TYPE_P (वृक्षः_TYPE (output)))
 	    {
 	      error_at (loc, "invalid use of void expression");
-	      output = error_mark_node;
+	      output = error_mark_ग्रन्थिः;
 	    }
-	  if (allows_reg && current_function_decl == NULL_TREE)
+	  सचे (allows_reg && current_function_decl == NULL_वृक्षः)
 	    {
 	      error_at (loc, "constraint allows registers outside of "
 			     "a function");
-	      output = error_mark_node;
+	      output = error_mark_ग्रन्थिः;
 	    }
 	}
-      else
-	output = error_mark_node;
+      अञ्ञथा
+	output = error_mark_ग्रन्थिः;
 
-      if (current_function_decl == NULL_TREE && output != error_mark_node)
+      सचे (current_function_decl == NULL_वृक्षः && output != error_mark_ग्रन्थिः)
 	{
-	  if (TREE_SIDE_EFFECTS (output))
+	  सचे (वृक्षः_SIDE_EFFECTS (output))
 	    {
 	      error_at (loc, "side-effects in output operand outside "
 			     "of a function");
-	      output = error_mark_node;
+	      output = error_mark_ग्रन्थिः;
 	    }
-	  else
+	  अञ्ञथा
 	    {
-	      tree addr = build_unary_op (loc, ADDR_EXPR, output, false);
-	      if (addr == error_mark_node)
-		output = error_mark_node;
-	      else if (!initializer_constant_valid_p (addr, TREE_TYPE (addr)))
+	      वृक्षः addr = build_unary_op (loc, ADDR_व्यञ्जकम्, output, मिच्छा);
+	      सचे (addr == error_mark_ग्रन्थिः)
+		output = error_mark_ग्रन्थिः;
+	      अञ्ञथा सचे (!initializer_constant_valid_p (addr, वृक्षः_TYPE (addr)))
 		{
 		  error_at (loc, "output operand outside of a function is not "
 				 "constant");
-		  output = error_mark_node;
+		  output = error_mark_ग्रन्थिः;
 		}
 	    }
 	}
-      else if (output != error_mark_node && strstr (constraint, "-"))
+      अञ्ञथा सचे (output != error_mark_ग्रन्थिः && strstr (constraint, "-"))
 	{
 	  error_at (loc, "%<-%> modifier used inside of a function");
-	  output = error_mark_node;
+	  output = error_mark_ग्रन्थिः;
 	}
 
-      TREE_VALUE (tail) = output;
+      वृक्षः_मानम् (tail) = output;
     }
 
-  for (i = 0, tail = inputs; tail; ++i, tail = TREE_CHAIN (tail))
+  अत्थाय (i = 0, tail = inputs; tail; ++i, tail = वृक्षः_CHAIN (tail))
     {
-      tree input;
+      वृक्षः निवेशः;
 
-      constraint = TREE_STRING_POINTER (TREE_VALUE (TREE_PURPOSE (tail)));
-      input = TREE_VALUE (tail);
+      constraint = वृक्षः_STRING_POINTER (वृक्षः_मानम् (वृक्षः_PURPOSE (tail)));
+      निवेशः = वृक्षः_मानम् (tail);
 
-      if (parse_input_constraint (&constraint, i, ninputs, noutputs, 0,
+      सचे (parse_निवेशः_constraint (&constraint, i, ninputs, noutputs, 0,
 				  oconstraints, &allows_mem, &allows_reg,
 				  nullptr))
 	{
 	  /* If the operand is going to end up in memory,
 	     mark it addressable.  */
-	  if (!allows_reg && allows_mem)
+	  सचे (!allows_reg && allows_mem)
 	    {
-	      input = c_fully_fold (input, false, NULL, true);
+	      निवेशः = c_fully_fold (निवेशः, मिच्छा, रिक्त, सच्च);
 
 	      /* Strip the nops as we allow this case.  FIXME, this really
 		 should be rejected or made deprecated.  */
-	      STRIP_NOPS (input);
-	      if (!c_mark_addressable (input))
-		input = error_mark_node;
+	      STRIP_NOPS (निवेशः);
+	      सचे (!c_mark_addressable (निवेशः))
+		निवेशः = error_mark_ग्रन्थिः;
 	    }
-	  else
+	  अञ्ञथा
 	    {
-	      input = c_fully_fold (convert_lvalue_to_rvalue (loc, input,
-							      true, false),
-				    false, NULL);
+	      निवेशः = c_fully_fold (convert_lvalue_to_rvalue (loc, निवेशः,
+							      सच्च, मिच्छा),
+				    मिच्छा, रिक्त);
 
-	      if (input != error_mark_node && VOID_TYPE_P (TREE_TYPE (input)))
+	      सचे (निवेशः != error_mark_ग्रन्थिः && VOID_TYPE_P (वृक्षः_TYPE (निवेशः)))
 		{
 		  error_at (loc, "invalid use of void expression");
-		  input = error_mark_node;
+		  निवेशः = error_mark_ग्रन्थिः;
 		}
 	    }
-	  if (allows_reg && current_function_decl == NULL_TREE)
+	  सचे (allows_reg && current_function_decl == NULL_वृक्षः)
 	    {
 	      error_at (loc, "constraint allows registers outside of "
 			     "a function");
-	      input = error_mark_node;
+	      निवेशः = error_mark_ग्रन्थिः;
 	    }
-	  if (constraint[0] == ':' && input != error_mark_node)
+	  सचे (constraint[0] == ':' && निवेशः != error_mark_ग्रन्थिः)
 	    {
-	      tree t = input;
+	      वृक्षः t = निवेशः;
 	      STRIP_NOPS (t);
-	      if (TREE_CODE (t) != ADDR_EXPR
-		  || !(TREE_CODE (TREE_OPERAND (t, 0)) == FUNCTION_DECL
-		       || (VAR_P (TREE_OPERAND (t, 0))
-			   && is_global_var (TREE_OPERAND (t, 0)))))
+	      सचे (वृक्षः_CODE (t) != ADDR_व्यञ्जकम्
+		  || !(वृक्षः_CODE (वृक्षः_OPERAND (t, 0)) == FUNCTION_DECL
+		       || (VAR_P (वृक्षः_OPERAND (t, 0))
+			   && is_global_var (वृक्षः_OPERAND (t, 0)))))
 		{
 		  error_at (loc, "%<:%> constraint operand is not address "
 				 "of a function or non-automatic variable");
-		  input = error_mark_node;
+		  निवेशः = error_mark_ग्रन्थिः;
 		}
-	      else if (TREE_CODE (TREE_OPERAND (t, 0)) == FUNCTION_DECL)
-		suppress_warning (TREE_OPERAND (t, 0), OPT_Wunused);
+	      अञ्ञथा सचे (वृक्षः_CODE (वृक्षः_OPERAND (t, 0)) == FUNCTION_DECL)
+		suppress_warning (वृक्षः_OPERAND (t, 0), OPT_Wunused);
 	    }
 	}
-      else
-	input = error_mark_node;
+      अञ्ञथा
+	निवेशः = error_mark_ग्रन्थिः;
 
-      if (current_function_decl == NULL_TREE && input != error_mark_node)
+      सचे (current_function_decl == NULL_वृक्षः && निवेशः != error_mark_ग्रन्थिः)
 	{
-	  if (TREE_SIDE_EFFECTS (input))
+	  सचे (वृक्षः_SIDE_EFFECTS (निवेशः))
 	    {
 	      error_at (loc, "side-effects in input operand outside "
 			     "of a function");
-	      input = error_mark_node;
+	      निवेशः = error_mark_ग्रन्थिः;
 	    }
-	  else
+	  अञ्ञथा
 	    {
-	      tree tem = input;
-	      if (allows_mem && lvalue_p (input))
-		tem = build_unary_op (loc, ADDR_EXPR, input, false);
-	      if (!initializer_constant_valid_p (tem, TREE_TYPE (tem)))
+	      वृक्षः tem = निवेशः;
+	      सचे (allows_mem && lvalue_p (निवेशः))
+		tem = build_unary_op (loc, ADDR_व्यञ्जकम्, निवेशः, मिच्छा);
+	      सचे (!initializer_constant_valid_p (tem, वृक्षः_TYPE (tem)))
 		{
 		  error_at (loc, "input operand outside of a function is not "
 				 "constant");
-		  input = error_mark_node;
+		  निवेशः = error_mark_ग्रन्थिः;
 		}
 	    }
 	}
-      else if (input != error_mark_node && strstr (constraint, "-"))
+      अञ्ञथा सचे (निवेशः != error_mark_ग्रन्थिः && strstr (constraint, "-"))
 	{
 	  error_at (loc, "%<-%> modifier used inside of a function");
-	  input = error_mark_node;
+	  निवेशः = error_mark_ग्रन्थिः;
 	}
 
-      TREE_VALUE (tail) = input;
+      वृक्षः_मानम् (tail) = निवेशः;
     }
 
-  args = build_stmt (loc, ASM_EXPR, string, outputs, inputs, clobbers, labels);
+  args = build_stmt (loc, ASM_व्यञ्जकम्, string, outputs, inputs, clobbers, labels);
 
   /* asm statements without outputs, including simple ones, are treated
      as volatile.  */
@@ -13358,50 +13358,50 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
   ASM_VOLATILE_P (args) = (noutputs == 0);
   ASM_INLINE_P (args) = is_inline;
 
-  return args;
+  पटिनिवत्त args;
 }
 
 /* Generate a goto statement to LABEL.  LOC is the location of the
    GOTO.  */
 
-tree
-c_finish_goto_label (location_t loc, tree label)
+वृक्षः
+c_finish_goto_label (location_t loc, वृक्षः label)
 {
-  tree decl = lookup_label_for_goto (loc, label);
-  if (!decl)
-    return NULL_TREE;
-  TREE_USED (decl) = 1;
-  mark_decl_used (decl, false);
+  वृक्षः decl = lookup_label_for_goto (loc, label);
+  सचे (!decl)
+    पटिनिवत्त NULL_वृक्षः;
+  वृक्षः_USED (decl) = 1;
+  mark_decl_used (decl, मिच्छा);
   {
-    add_stmt (build_predict_expr (PRED_GOTO, NOT_TAKEN));
-    tree t = build1 (GOTO_EXPR, void_type_node, decl);
-    SET_EXPR_LOCATION (t, loc);
-    return add_stmt (t);
+    add_stmt (build_predict_व्यञ्जकम् (PRED_GOTO, NOT_TAKEN));
+    वृक्षः t = build1 (GOTO_व्यञ्जकम्, void_type_ग्रन्थिः, decl);
+    SET_व्यञ्जकम्_LOCATION (t, loc);
+    पटिनिवत्त add_stmt (t);
   }
 }
 
 /* Generate a computed goto statement to EXPR.  LOC is the location of
    the GOTO.  */
 
-tree
-c_finish_goto_ptr (location_t loc, c_expr val)
+वृक्षः
+c_finish_goto_ptr (location_t loc, c_व्यञ्जकम् val)
 {
-  tree expr = val.value;
-  tree t;
+  वृक्षः व्यञ्जकम् = val.मानम्;
+  वृक्षः t;
   pedwarn (loc, OPT_Wpedantic, "ISO C forbids %<goto *expr;%>");
-  if (expr != error_mark_node
-      && !POINTER_TYPE_P (TREE_TYPE (expr))
-      && !null_pointer_constant_p (expr))
+  सचे (व्यञ्जकम् != error_mark_ग्रन्थिः
+      && !POINTER_TYPE_P (वृक्षः_TYPE (व्यञ्जकम्))
+      && !null_pointer_constant_p (व्यञ्जकम्))
     {
       error_at (val.get_location (),
 		"computed goto must be pointer type");
-      expr = build_zero_cst (ptr_type_node);
+      व्यञ्जकम् = build_zero_cst (ptr_type_ग्रन्थिः);
     }
-  expr = c_fully_fold (expr, false, NULL);
-  expr = convert (ptr_type_node, expr);
-  t = build1 (GOTO_EXPR, void_type_node, expr);
-  SET_EXPR_LOCATION (t, loc);
-  return add_stmt (t);
+  व्यञ्जकम् = c_fully_fold (व्यञ्जकम्, मिच्छा, रिक्त);
+  व्यञ्जकम् = convert (ptr_type_ग्रन्थिः, व्यञ्जकम्);
+  t = build1 (GOTO_व्यञ्जकम्, void_type_ग्रन्थिः, व्यञ्जकम्);
+  SET_व्यञ्जकम्_LOCATION (t, loc);
+  पटिनिवत्त add_stmt (t);
 }
 
 /* Generate a C `return' statement.  RETVAL is the expression for what
@@ -13411,47 +13411,47 @@ c_finish_goto_ptr (location_t loc, c_expr val)
    is the original type of RETVAL.  MUSTTAIL_P indicates a musttail
    attribute.  */
 
-tree
-c_finish_return (location_t loc, tree retval, tree origtype, bool musttail_p)
+वृक्षः
+c_finish_return (location_t loc, वृक्षः retval, वृक्षः origtype, तार्किक musttail_p)
 {
-  tree valtype = TREE_TYPE (TREE_TYPE (current_function_decl)), ret_stmt;
-  bool no_warning = false;
-  bool npc = false;
+  वृक्षः valtype = वृक्षः_TYPE (वृक्षः_TYPE (current_function_decl)), ret_stmt;
+  तार्किक no_warning = मिच्छा;
+  तार्किक npc = मिच्छा;
 
   /* Use the expansion point to handle cases such as returning NULL
      in a function returning void.  */
   location_t xloc = expansion_point_location_if_in_system_header (loc);
 
-  if (TREE_THIS_VOLATILE (current_function_decl))
+  सचे (वृक्षः_THIS_VOLATILE (current_function_decl))
     warning_at (xloc, 0,
 		"function declared %<noreturn%> has a %<return%> statement");
 
   set_musttail_on_return (retval, xloc, musttail_p);
 
-  if (retval)
+  सचे (retval)
     {
-      tree semantic_type = NULL_TREE;
+      वृक्षः semantic_type = NULL_वृक्षः;
       npc = null_pointer_constant_p (retval);
-      if (TREE_CODE (retval) == EXCESS_PRECISION_EXPR)
+      सचे (वृक्षः_CODE (retval) == EXCESS_PRECISION_व्यञ्जकम्)
 	{
-	  semantic_type = TREE_TYPE (retval);
-	  retval = TREE_OPERAND (retval, 0);
+	  semantic_type = वृक्षः_TYPE (retval);
+	  retval = वृक्षः_OPERAND (retval, 0);
 	}
-      retval = c_fully_fold (retval, false, NULL);
-      if (semantic_type
-	  && valtype != NULL_TREE
-	  && TREE_CODE (valtype) != VOID_TYPE)
-	retval = build1 (EXCESS_PRECISION_EXPR, semantic_type, retval);
+      retval = c_fully_fold (retval, मिच्छा, रिक्त);
+      सचे (semantic_type
+	  && valtype != NULL_वृक्षः
+	  && वृक्षः_CODE (valtype) != VOID_TYPE)
+	retval = build1 (EXCESS_PRECISION_व्यञ्जकम्, semantic_type, retval);
     }
 
-  if (!retval)
+  सचे (!retval)
     {
       current_function_returns_null = 1;
-      if ((warn_return_type >= 0 || flag_isoc99)
-	  && valtype != NULL_TREE && TREE_CODE (valtype) != VOID_TYPE)
+      सचे ((warn_return_type >= 0 || flag_isoc99)
+	  && valtype != NULL_वृक्षः && वृक्षः_CODE (valtype) != VOID_TYPE)
 	{
-	  no_warning = true;
-	  if (emit_diagnostic (flag_isoc99
+	  no_warning = सच्च;
+	  सचे (emit_diagnostic (flag_isoc99
 			       ? diagnostics::kind::permerror
 			       : diagnostics::kind::warning,
 			       loc, OPT_Wreturn_mismatch,
@@ -13461,163 +13461,163 @@ c_finish_return (location_t loc, tree retval, tree origtype, bool musttail_p)
 		    "declared here");
 	}
     }
-  else if (valtype == NULL_TREE || VOID_TYPE_P (valtype))
+  अञ्ञथा सचे (valtype == NULL_वृक्षः || VOID_TYPE_P (valtype))
     {
       current_function_returns_null = 1;
-      bool warned_here;
-      if (TREE_CODE (TREE_TYPE (retval)) != VOID_TYPE)
+      तार्किक warned_here;
+      सचे (वृक्षः_CODE (वृक्षः_TYPE (retval)) != VOID_TYPE)
 	warned_here = permerror_opt
 	  (xloc, OPT_Wreturn_mismatch,
 	   "%<return%> with a value, in function returning void");
-      else
+      अञ्ञथा
 	warned_here = pedwarn
 	  (xloc, OPT_Wpedantic, "ISO C forbids "
 	   "%<return%> with expression, in function returning void");
-      if (warned_here)
+      सचे (warned_here)
 	inform (DECL_SOURCE_LOCATION (current_function_decl),
 		"declared here");
     }
-  else
+  अञ्ञथा
     {
-      tree t = convert_for_assignment (loc, UNKNOWN_LOCATION, valtype,
+      वृक्षः t = convert_for_assignment (loc, UNKNOWN_LOCATION, valtype,
 				       retval, origtype, ic_return,
-				       npc, NULL_TREE, NULL_TREE, 0);
-      tree res = DECL_RESULT (current_function_decl);
-      tree inner;
-      bool save;
+				       npc, NULL_वृक्षः, NULL_वृक्षः, 0);
+      वृक्षः res = DECL_RESULT (current_function_decl);
+      वृक्षः inner;
+      तार्किक save;
 
-      current_function_returns_value = 1;
-      if (t == error_mark_node)
+      current_function_returns_मानम् = 1;
+      सचे (t == error_mark_ग्रन्थिः)
 	{
 	  /* Suppress -Wreturn-type for this function.  */
-	  if (warn_return_type)
+	  सचे (warn_return_type)
 	    suppress_warning (current_function_decl, OPT_Wreturn_type);
-	  return NULL_TREE;
+	  पटिनिवत्त NULL_वृक्षः;
 	}
 
-      save = in_late_binary_op;
-      if (C_BOOLEAN_TYPE_P (TREE_TYPE (res))
-	  || TREE_CODE (TREE_TYPE (res)) == COMPLEX_TYPE
-	  || (SCALAR_FLOAT_TYPE_P (TREE_TYPE (t))
-	      && (TREE_CODE (TREE_TYPE (res)) == INTEGER_TYPE
-		  || TREE_CODE (TREE_TYPE (res)) == ENUMERAL_TYPE)
+      save = in_late_द्विमान_op;
+      सचे (C_BOOLEAN_TYPE_P (वृक्षः_TYPE (res))
+	  || वृक्षः_CODE (वृक्षः_TYPE (res)) == COMPLEX_TYPE
+	  || (SCALAR_FLOAT_TYPE_P (वृक्षः_TYPE (t))
+	      && (वृक्षः_CODE (वृक्षः_TYPE (res)) == INTEGER_TYPE
+		  || वृक्षः_CODE (वृक्षः_TYPE (res)) == ENUMERAL_TYPE)
 	      && sanitize_flags_p (SANITIZE_FLOAT_CAST)))
-        in_late_binary_op = true;
-      inner = t = convert (TREE_TYPE (res), t);
-      in_late_binary_op = save;
+        in_late_द्विमान_op = सच्च;
+      inner = t = convert (वृक्षः_TYPE (res), t);
+      in_late_द्विमान_op = save;
 
       /* Strip any conversions, additions, and subtractions, and see if
 	 we are returning the address of a local variable.  Warn if so.  */
-      while (1)
+      याव (1)
 	{
-	  switch (TREE_CODE (inner))
+	  विकल्प (वृक्षः_CODE (inner))
 	    {
 	    CASE_CONVERT:
-	    case NON_LVALUE_EXPR:
-	    case PLUS_EXPR:
-	    case POINTER_PLUS_EXPR:
-	      inner = TREE_OPERAND (inner, 0);
-	      continue;
+	    पक्ष NON_LVALUE_व्यञ्जकम्:
+	    पक्ष PLUS_व्यञ्जकम्:
+	    पक्ष POINTER_PLUS_व्यञ्जकम्:
+	      inner = वृक्षः_OPERAND (inner, 0);
+	      अनुवर्त;
 
-	    case MINUS_EXPR:
+	    पक्ष MINUS_व्यञ्जकम्:
 	      /* If the second operand of the MINUS_EXPR has a pointer
 		 type (or is converted from it), this may be valid, so
 		 don't give a warning.  */
 	      {
-		tree op1 = TREE_OPERAND (inner, 1);
+		वृक्षः op1 = वृक्षः_OPERAND (inner, 1);
 
-		while (!POINTER_TYPE_P (TREE_TYPE (op1))
-		       && (CONVERT_EXPR_P (op1)
-			   || TREE_CODE (op1) == NON_LVALUE_EXPR))
-		  op1 = TREE_OPERAND (op1, 0);
+		याव (!POINTER_TYPE_P (वृक्षः_TYPE (op1))
+		       && (CONVERT_व्यञ्जकम्_P (op1)
+			   || वृक्षः_CODE (op1) == NON_LVALUE_व्यञ्जकम्))
+		  op1 = वृक्षः_OPERAND (op1, 0);
 
-		if (POINTER_TYPE_P (TREE_TYPE (op1)))
-		  break;
+		सचे (POINTER_TYPE_P (वृक्षः_TYPE (op1)))
+		  भङ्ग;
 
-		inner = TREE_OPERAND (inner, 0);
-		continue;
+		inner = वृक्षः_OPERAND (inner, 0);
+		अनुवर्त;
 	      }
 
-	    case ADDR_EXPR:
-	      inner = TREE_OPERAND (inner, 0);
+	    पक्ष ADDR_व्यञ्जकम्:
+	      inner = वृक्षः_OPERAND (inner, 0);
 
-	      while (REFERENCE_CLASS_P (inner)
+	      याव (REFERENCE_CLASS_P (inner)
 		     && !INDIRECT_REF_P (inner))
-		inner = TREE_OPERAND (inner, 0);
+		inner = वृक्षः_OPERAND (inner, 0);
 
-	      if (DECL_P (inner)
+	      सचे (DECL_P (inner)
 		  && !DECL_EXTERNAL (inner)
 		  && DECL_CONTEXT (inner) == current_function_decl
-		  && POINTER_TYPE_P (TREE_TYPE (TREE_TYPE (current_function_decl))))
+		  && POINTER_TYPE_P (वृक्षः_TYPE (वृक्षः_TYPE (current_function_decl))))
 		{
-		  if (TREE_CODE (inner) == LABEL_DECL)
+		  सचे (वृक्षः_CODE (inner) == LABEL_DECL)
 		    warning_at (loc, OPT_Wreturn_local_addr,
 				"function returns address of label");
-		  else if (TREE_CODE (inner) == FUNCTION_DECL
+		  अञ्ञथा सचे (वृक्षः_CODE (inner) == FUNCTION_DECL
 			   && (C_FUNC_NONLOCAL_CONTEXT (inner)
 			       || !DECL_INITIAL (inner)))
 		    warning_at (loc, OPT_Wreturn_local_addr,
 				"function returns address of nested function "
 				"referencing local context");
-		  else if (TREE_CODE (inner) != FUNCTION_DECL
-			   && !TREE_STATIC (inner))
+		  अञ्ञथा सचे (वृक्षः_CODE (inner) != FUNCTION_DECL
+			   && !वृक्षः_STATIC (inner))
 		    {
 		      warning_at (loc, OPT_Wreturn_local_addr,
 				  "function returns address of local variable");
-		      tree zero = build_zero_cst (TREE_TYPE (res));
-		      t = build2 (COMPOUND_EXPR, TREE_TYPE (res), t, zero);
+		      वृक्षः zero = build_zero_cst (वृक्षः_TYPE (res));
+		      t = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (res), t, zero);
 		    }
 		}
-	      break;
+	      भङ्ग;
 
-	    default:
-	      break;
+	    स्वभाव:
+	      भङ्ग;
 	    }
 
-	  break;
+	  भङ्ग;
 	}
 
-      retval = build2 (MODIFY_EXPR, TREE_TYPE (res), res, t);
-      SET_EXPR_LOCATION (retval, loc);
+      retval = build2 (MODIFY_व्यञ्जकम्, वृक्षः_TYPE (res), res, t);
+      SET_व्यञ्जकम्_LOCATION (retval, loc);
 
-      if (warn_sequence_point)
+      सचे (warn_sequence_point)
 	verify_sequence_points (retval);
     }
 
-  ret_stmt = build_stmt (loc, RETURN_EXPR, retval);
-  if (no_warning)
+  ret_stmt = build_stmt (loc, RETURN_व्यञ्जकम्, retval);
+  सचे (no_warning)
     suppress_warning (ret_stmt, OPT_Wreturn_type);
-  return add_stmt (ret_stmt);
+  पटिनिवत्त add_stmt (ret_stmt);
 }
 
-struct c_switch {
+संरचना c_switch {
   /* The SWITCH_STMT being built.  */
-  tree switch_stmt;
+  वृक्षः switch_stmt;
 
   /* The original type of the testing expression, i.e. before the
      default conversion is applied.  */
-  tree orig_type;
+  वृक्षः orig_type;
 
   /* A splay-tree mapping the low element of a case range to the high
      element, or NULL_TREE if there is no high element.  Used to
      determine whether or not a new case label duplicates an old case
      label.  We need a tree, rather than simply a hash table, because
      of the GNU case range extension.  */
-  splay_tree cases;
+  splay_वृक्षः cases;
 
   /* The bindings at the point of the switch.  This is used for
      warnings crossing decls when branching to a case label.  */
-  struct c_spot_bindings *bindings;
+  संरचना c_spot_bindings *bindings;
 
   /* Whether the switch includes any break statements.  */
-  bool break_stmt_seen_p;
+  तार्किक break_stmt_seen_p;
 
   /* The next node on the stack.  */
-  struct c_switch *next;
+  संरचना c_switch *next;
 
   /* Remember whether the controlling expression had boolean type
      before integer promotions for the sake of -Wswitch-bool.  */
-  bool bool_cond_p;
+  तार्किक bool_cond_p;
 };
 
 /* A stack of the currently active switch statements.  The innermost
@@ -13626,150 +13626,150 @@ struct c_switch {
    during the processing of the body of a function, and we never
    collect at that point.  */
 
-struct c_switch *c_switch_stack;
+संरचना c_switch *c_switch_राशिः;
 
 /* Start a C switch statement, testing expression EXP.  Return the new
    SWITCH_STMT.  SWITCH_LOC is the location of the `switch'.
    SWITCH_COND_LOC is the location of the switch's condition.
    EXPLICIT_CAST_P is true if the expression EXP has an explicit cast.  */
 
-tree
+वृक्षः
 c_start_switch (location_t switch_loc,
 		location_t switch_cond_loc,
-		tree exp, bool explicit_cast_p, tree switch_name)
+		वृक्षः exp, तार्किक explicit_cast_p, वृक्षः switch_name)
 {
-  tree orig_type = error_mark_node;
-  bool bool_cond_p = false;
-  struct c_switch *cs;
+  वृक्षः orig_type = error_mark_ग्रन्थिः;
+  तार्किक bool_cond_p = मिच्छा;
+  संरचना c_switch *cs;
 
-  if (exp != error_mark_node)
+  सचे (exp != error_mark_ग्रन्थिः)
     {
-      orig_type = TREE_TYPE (exp);
+      orig_type = वृक्षः_TYPE (exp);
 
-      if (!INTEGRAL_TYPE_P (orig_type))
+      सचे (!INTEGRAL_TYPE_P (orig_type))
 	{
-	  if (orig_type != error_mark_node)
+	  सचे (orig_type != error_mark_ग्रन्थिः)
 	    {
 	      error_at (switch_cond_loc, "switch quantity not an integer");
-	      orig_type = error_mark_node;
+	      orig_type = error_mark_ग्रन्थिः;
 	    }
-	  exp = integer_zero_node;
+	  exp = integer_zero_ग्रन्थिः;
 	}
-      else
+      अञ्ञथा
 	{
-	  tree type = TYPE_MAIN_VARIANT (orig_type);
-	  tree e = exp;
+	  वृक्षः type = TYPE_MAIN_VARIANT (orig_type);
+	  वृक्षः e = exp;
 
 	  /* Warn if the condition has boolean value.  */
-	  while (TREE_CODE (e) == COMPOUND_EXPR)
-	    e = TREE_OPERAND (e, 1);
+	  याव (वृक्षः_CODE (e) == COMPOUND_व्यञ्जकम्)
+	    e = वृक्षः_OPERAND (e, 1);
 
-	  if ((C_BOOLEAN_TYPE_P (type)
-	       || truth_value_p (TREE_CODE (e)))
+	  सचे ((C_BOOLEAN_TYPE_P (type)
+	       || truth_मानम्_p (वृक्षः_CODE (e)))
 	      /* Explicit cast to int suppresses this warning.  */
-	      && !(TREE_CODE (type) == INTEGER_TYPE
+	      && !(वृक्षः_CODE (type) == INTEGER_TYPE
 		   && explicit_cast_p))
-	    bool_cond_p = true;
+	    bool_cond_p = सच्च;
 
-	  if (!in_system_header_at (input_location)
-	      && (type == long_integer_type_node
-		  || type == long_unsigned_type_node))
+	  सचे (!in_system_header_at (निवेशः_location)
+	      && (type == long_integer_type_ग्रन्थिः
+		  || type == long_unsigned_type_ग्रन्थिः))
 	    warning_at (switch_cond_loc,
 			OPT_Wtraditional, "%<long%> switch expression not "
 			"converted to %<int%> in ISO C");
 
-	  exp = c_fully_fold (exp, false, NULL);
+	  exp = c_fully_fold (exp, मिच्छा, रिक्त);
 	  exp = default_conversion (exp);
 
-	  if (warn_sequence_point)
+	  सचे (warn_sequence_point)
 	    verify_sequence_points (exp);
 	}
     }
 
   /* Add this new SWITCH_STMT to the stack.  */
-  cs = XNEW (struct c_switch);
+  cs = XNEW (संरचना c_switch);
   cs->switch_stmt = build_stmt (switch_loc, SWITCH_STMT, exp,
-				NULL_TREE, orig_type, NULL_TREE, switch_name);
+				NULL_वृक्षः, orig_type, NULL_वृक्षः, switch_name);
   cs->orig_type = orig_type;
-  cs->cases = splay_tree_new (case_compare, NULL, NULL);
+  cs->cases = splay_वृक्षः_new (case_compare, रिक्त, रिक्त);
   cs->bindings = c_get_switch_bindings ();
-  cs->break_stmt_seen_p = false;
+  cs->break_stmt_seen_p = मिच्छा;
   cs->bool_cond_p = bool_cond_p;
-  cs->next = c_switch_stack;
-  c_switch_stack = cs;
+  cs->next = c_switch_राशिः;
+  c_switch_राशिः = cs;
 
-  return add_stmt (cs->switch_stmt);
+  पटिनिवत्त add_stmt (cs->switch_stmt);
 }
 
 /* Process a case label at location LOC, with attributes ATTRS.  */
 
-tree
-do_case (location_t loc, tree low_value, tree high_value, tree attrs)
+वृक्षः
+do_case (location_t loc, वृक्षः नीचः_मानम्, वृक्षः उच्चः_मानम्, वृक्षः attrs)
 {
-  tree label = NULL_TREE;
+  वृक्षः label = NULL_वृक्षः;
 
-  if (low_value && TREE_CODE (low_value) != INTEGER_CST)
+  सचे (नीचः_मानम् && वृक्षः_CODE (नीचः_मानम्) != INTEGER_CST)
     {
-      low_value = c_fully_fold (low_value, false, NULL);
-      if (TREE_CODE (low_value) == INTEGER_CST)
+      नीचः_मानम् = c_fully_fold (नीचः_मानम्, मिच्छा, रिक्त);
+      सचे (वृक्षः_CODE (नीचः_मानम्) == INTEGER_CST)
 	pedwarn (loc, OPT_Wpedantic,
 		 "case label is not an integer constant expression");
     }
 
-  if (high_value && TREE_CODE (high_value) != INTEGER_CST)
+  सचे (उच्चः_मानम् && वृक्षः_CODE (उच्चः_मानम्) != INTEGER_CST)
     {
-      high_value = c_fully_fold (high_value, false, NULL);
-      if (TREE_CODE (high_value) == INTEGER_CST)
-	pedwarn (input_location, OPT_Wpedantic,
+      उच्चः_मानम् = c_fully_fold (उच्चः_मानम्, मिच्छा, रिक्त);
+      सचे (वृक्षः_CODE (उच्चः_मानम्) == INTEGER_CST)
+	pedwarn (निवेशः_location, OPT_Wpedantic,
 		 "case label is not an integer constant expression");
     }
 
-  if (c_switch_stack == NULL)
+  सचे (c_switch_राशिः == रिक्त)
     {
-      if (low_value)
+      सचे (नीचः_मानम्)
 	error_at (loc, "case label not within a switch statement");
-      else
+      अञ्ञथा
 	error_at (loc, "%<default%> label not within a switch statement");
-      return NULL_TREE;
+      पटिनिवत्त NULL_वृक्षः;
     }
 
-  if (c_check_switch_jump_warnings (c_switch_stack->bindings,
-				    EXPR_LOCATION (c_switch_stack->switch_stmt),
+  सचे (c_check_switch_jump_warnings (c_switch_राशिः->bindings,
+				    व्यञ्जकम्_LOCATION (c_switch_राशिः->switch_stmt),
 				    loc))
-    return NULL_TREE;
+    पटिनिवत्त NULL_वृक्षः;
 
-  label = c_add_case_label (loc, c_switch_stack->cases,
-			    SWITCH_STMT_COND (c_switch_stack->switch_stmt),
-			    low_value, high_value, attrs);
-  if (label == error_mark_node)
-    label = NULL_TREE;
-  return label;
+  label = c_add_case_label (loc, c_switch_राशिः->cases,
+			    SWITCH_STMT_COND (c_switch_राशिः->switch_stmt),
+			    नीचः_मानम्, उच्चः_मानम्, attrs);
+  सचे (label == error_mark_ग्रन्थिः)
+    label = NULL_वृक्षः;
+  पटिनिवत्त label;
 }
 
 /* Finish the switch statement.  TYPE is the original type of the
    controlling expression of the switch, or NULL_TREE.  */
 
-void
-c_finish_switch (tree body, tree type)
+शून्य
+c_finish_switch (वृक्षः body, वृक्षः type)
 {
-  struct c_switch *cs = c_switch_stack;
+  संरचना c_switch *cs = c_switch_राशिः;
   location_t switch_location;
 
   SWITCH_STMT_BODY (cs->switch_stmt) = body;
 
   /* Emit warnings as needed.  */
-  switch_location = EXPR_LOCATION (cs->switch_stmt);
+  switch_location = व्यञ्जकम्_LOCATION (cs->switch_stmt);
   c_do_switch_warnings (cs->cases, switch_location,
 			type ? type : SWITCH_STMT_TYPE (cs->switch_stmt),
 			SWITCH_STMT_COND (cs->switch_stmt), cs->bool_cond_p);
-  if (c_switch_covers_all_cases_p (cs->cases,
+  सचे (c_switch_covers_all_cases_p (cs->cases,
 				   SWITCH_STMT_TYPE (cs->switch_stmt)))
     SWITCH_STMT_ALL_CASES_P (cs->switch_stmt) = 1;
   SWITCH_STMT_NO_BREAK_P (cs->switch_stmt) = !cs->break_stmt_seen_p;
 
   /* Pop the stack.  */
-  c_switch_stack = cs->next;
-  splay_tree_delete (cs->cases);
+  c_switch_राशिः = cs->next;
+  splay_वृक्षः_delete (cs->cases);
   c_release_switch_bindings (cs->bindings);
   XDELETE (cs);
 }
@@ -13778,19 +13778,19 @@ c_finish_switch (tree body, tree type)
    THEN_BLOCK and ELSE_BLOCK are expressions to be used; ELSE_BLOCK
    may be null.  */
 
-void
-c_finish_if_stmt (location_t if_locus, tree cond, tree then_block,
-		  tree else_block)
+शून्य
+c_finish_if_stmt (location_t if_locus, वृक्षः cond, वृक्षः then_block,
+		  वृक्षः else_block)
 {
-  tree stmt;
+  वृक्षः stmt;
 
-  stmt = build3 (COND_EXPR, void_type_node, cond, then_block, else_block);
-  SET_EXPR_LOCATION (stmt, if_locus);
+  stmt = build3 (COND_व्यञ्जकम्, void_type_ग्रन्थिः, cond, then_block, else_block);
+  SET_व्यञ्जकम्_LOCATION (stmt, if_locus);
   add_stmt (stmt);
 }
 
-tree
-c_finish_bc_stmt (location_t loc, tree label, bool is_break, tree name)
+वृक्षः
+c_finish_bc_stmt (location_t loc, वृक्षः label, तार्किक is_break, वृक्षः name)
 {
   /* In switch statements break is sometimes stylistically used after
      a return statement.  This can lead to spurious warnings about
@@ -13799,235 +13799,235 @@ c_finish_bc_stmt (location_t loc, tree label, bool is_break, tree name)
      language specific tree nodes; this works because
      block_may_fallthru returns true when given something it does not
      understand.  */
-  bool skip = !block_may_fallthru (cur_stmt_list);
+  तार्किक skip = !block_may_fallthru (cur_stmt_list);
 
-  if (is_break)
-    switch (in_statement & ~IN_NAMED_STMT)
+  सचे (is_break)
+    विकल्प (in_statement & ~IN_NAMED_STMT)
       {
-      case 0:
+      पक्ष 0:
 	error_at (loc, "break statement not within loop or switch");
-	return NULL_TREE;
-      case IN_OMP_BLOCK:
+	पटिनिवत्त NULL_वृक्षः;
+      पक्ष IN_OMP_BLOCK:
 	error_at (loc, "invalid exit from OpenMP structured block");
-	return NULL_TREE;
-      case IN_OMP_FOR:
+	पटिनिवत्त NULL_वृक्षः;
+      पक्ष IN_OMP_FOR:
 	error_at (loc, "break statement used with OpenMP for loop");
-	return NULL_TREE;
-      case IN_ITERATION_STMT:
-      case IN_OBJC_FOREACH:
-	break;
-      default:
+	पटिनिवत्त NULL_वृक्षः;
+      पक्ष IN_ITERATION_STMT:
+      पक्ष IN_OBJC_FOREACH:
+	भङ्ग;
+      स्वभाव:
 	gcc_assert (in_statement & IN_SWITCH_STMT);
-	c_switch_stack->break_stmt_seen_p = true;
-	break;
+	c_switch_राशिः->break_stmt_seen_p = सच्च;
+	भङ्ग;
       }
-  else
-    switch (in_statement & ~(IN_SWITCH_STMT | IN_NAMED_STMT))
+  अञ्ञथा
+    विकल्प (in_statement & ~(IN_SWITCH_STMT | IN_NAMED_STMT))
       {
-      case 0:
+      पक्ष 0:
 	error_at (loc, "continue statement not within a loop");
-	return NULL_TREE;
-      case IN_OMP_BLOCK:
+	पटिनिवत्त NULL_वृक्षः;
+      पक्ष IN_OMP_BLOCK:
 	error_at (loc, "invalid exit from OpenMP structured block");
-	return NULL_TREE;
-      case IN_ITERATION_STMT:
-      case IN_OMP_FOR:
-      case IN_OBJC_FOREACH:
-	break;
-      default:
+	पटिनिवत्त NULL_वृक्षः;
+      पक्ष IN_ITERATION_STMT:
+      पक्ष IN_OMP_FOR:
+      पक्ष IN_OBJC_FOREACH:
+	भङ्ग;
+      स्वभाव:
 	gcc_unreachable ();
       }
 
-  if (skip)
-    return NULL_TREE;
-  else if ((in_statement & IN_OBJC_FOREACH)
+  सचे (skip)
+    पटिनिवत्त NULL_वृक्षः;
+  अञ्ञथा सचे ((in_statement & IN_OBJC_FOREACH)
 	   && !(is_break && (in_statement & IN_SWITCH_STMT))
-	   && name == NULL_TREE)
+	   && name == NULL_वृक्षः)
     {
       /* The foreach expander produces low-level code using gotos instead
 	 of a structured loop construct.  */
       gcc_assert (label);
-      return add_stmt (build_stmt (loc, GOTO_EXPR, label));
+      पटिनिवत्त add_stmt (build_stmt (loc, GOTO_व्यञ्जकम्, label));
     }
-  else if (name && C_DECL_LOOP_NAME (name) && C_DECL_SWITCH_NAME (name))
+  अञ्ञथा सचे (name && C_DECL_LOOP_NAME (name) && C_DECL_SWITCH_NAME (name))
     {
       label = DECL_CHAIN (name);
-      if (!is_break)
+      सचे (!is_break)
 	label = DECL_CHAIN (label);
       /* Foreach expander from some outer level.  */
-      return add_stmt (build_stmt (loc, GOTO_EXPR, label));
+      पटिनिवत्त add_stmt (build_stmt (loc, GOTO_व्यञ्जकम्, label));
     }
-  return add_stmt (build_stmt (loc, is_break ? BREAK_STMT : CONTINUE_STMT,
+  पटिनिवत्त add_stmt (build_stmt (loc, is_break ? BREAK_STMT : CONTINUE_STMT,
 			       name));
 }
 
 /* A helper routine for c_process_expr_stmt and c_finish_stmt_expr.  */
 
-static void
-emit_side_effect_warnings (location_t loc, tree expr)
+स्थिर शून्य
+emit_side_effect_warnings (location_t loc, वृक्षः व्यञ्जकम्)
 {
-  maybe_warn_nodiscard (loc, expr);
-  if (!warn_unused_value)
-    return;
-  if (expr == error_mark_node)
+  maybe_warn_nodiscard (loc, व्यञ्जकम्);
+  सचे (!warn_unused_मानम्)
+    पटिनिवत्त;
+  सचे (व्यञ्जकम् == error_mark_ग्रन्थिः)
     ;
-  else if (!TREE_SIDE_EFFECTS (expr))
+  अञ्ञथा सचे (!वृक्षः_SIDE_EFFECTS (व्यञ्जकम्))
     {
-      if (!VOID_TYPE_P (TREE_TYPE (expr))
-	  && !warning_suppressed_p (expr, OPT_Wunused_value))
-	warning_at (loc, OPT_Wunused_value, "statement with no effect");
+      सचे (!VOID_TYPE_P (वृक्षः_TYPE (व्यञ्जकम्))
+	  && !warning_suppressed_p (व्यञ्जकम्, OPT_Wunused_मानम्))
+	warning_at (loc, OPT_Wunused_मानम्, "statement with no effect");
     }
-  else if (TREE_CODE (expr) == COMPOUND_EXPR)
+  अञ्ञथा सचे (वृक्षः_CODE (व्यञ्जकम्) == COMPOUND_व्यञ्जकम्)
     {
-      tree r = expr;
+      वृक्षः r = व्यञ्जकम्;
       location_t cloc = loc;
-      while (TREE_CODE (r) == COMPOUND_EXPR)
+      याव (वृक्षः_CODE (r) == COMPOUND_व्यञ्जकम्)
 	{
-	  if (EXPR_HAS_LOCATION (r))
-	    cloc = EXPR_LOCATION (r);
-	  r = TREE_OPERAND (r, 1);
+	  सचे (व्यञ्जकम्_HAS_LOCATION (r))
+	    cloc = व्यञ्जकम्_LOCATION (r);
+	  r = वृक्षः_OPERAND (r, 1);
 	}
-      if (!TREE_SIDE_EFFECTS (r)
-	  && !VOID_TYPE_P (TREE_TYPE (r))
-	  && !CONVERT_EXPR_P (r)
-	  && !warning_suppressed_p (r, OPT_Wunused_value)
-	  && !warning_suppressed_p (expr, OPT_Wunused_value))
-	warning_at (cloc, OPT_Wunused_value,
+      सचे (!वृक्षः_SIDE_EFFECTS (r)
+	  && !VOID_TYPE_P (वृक्षः_TYPE (r))
+	  && !CONVERT_व्यञ्जकम्_P (r)
+	  && !warning_suppressed_p (r, OPT_Wunused_मानम्)
+	  && !warning_suppressed_p (व्यञ्जकम्, OPT_Wunused_मानम्))
+	warning_at (cloc, OPT_Wunused_मानम्,
 		    "right-hand operand of comma expression has no effect");
     }
-  else
-    warn_if_unused_value (expr, loc);
+  अञ्ञथा
+    warn_if_unused_मानम् (व्यञ्जकम्, loc);
 }
 
 /* Process an expression as if it were a complete statement.  Emit
    diagnostics, but do not call ADD_STMT.  LOC is the location of the
    statement.  */
 
-tree
-c_process_expr_stmt (location_t loc, tree expr)
+वृक्षः
+c_process_व्यञ्जकम्_stmt (location_t loc, वृक्षः व्यञ्जकम्)
 {
-  tree exprv;
+  वृक्षः exprv;
 
-  if (!expr)
-    return NULL_TREE;
+  सचे (!व्यञ्जकम्)
+    पटिनिवत्त NULL_वृक्षः;
 
-  expr = c_fully_fold (expr, false, NULL);
+  व्यञ्जकम् = c_fully_fold (व्यञ्जकम्, मिच्छा, रिक्त);
 
-  if (warn_sequence_point)
-    verify_sequence_points (expr);
+  सचे (warn_sequence_point)
+    verify_sequence_points (व्यञ्जकम्);
 
-  if (TREE_TYPE (expr) != error_mark_node
-      && !COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (expr))
-      && TREE_CODE (TREE_TYPE (expr)) != ARRAY_TYPE)
+  सचे (वृक्षः_TYPE (व्यञ्जकम्) != error_mark_ग्रन्थिः
+      && !COMPLETE_OR_VOID_TYPE_P (वृक्षः_TYPE (व्यञ्जकम्))
+      && वृक्षः_CODE (वृक्षः_TYPE (व्यञ्जकम्)) != ARRAY_TYPE)
     error_at (loc, "expression statement has incomplete type");
 
   /* If we're not processing a statement expression, warn about unused values.
      Warnings for statement expressions will be emitted later, once we figure
      out which is the result.  */
-  if (!STATEMENT_LIST_STMT_EXPR (cur_stmt_list)
-      && (warn_unused_value || warn_unused_result))
-    emit_side_effect_warnings (EXPR_LOC_OR_LOC (expr, loc), expr);
+  सचे (!STATEMENT_LIST_STMT_व्यञ्जकम् (cur_stmt_list)
+      && (warn_unused_मानम् || warn_unused_result))
+    emit_side_effect_warnings (व्यञ्जकम्_LOC_OR_LOC (व्यञ्जकम्, loc), व्यञ्जकम्);
 
-  exprv = expr;
-  while (TREE_CODE (exprv) == COMPOUND_EXPR)
-    exprv = TREE_OPERAND (exprv, 1);
-  while (CONVERT_EXPR_P (exprv))
-    exprv = TREE_OPERAND (exprv, 0);
-  if (DECL_P (exprv)
+  exprv = व्यञ्जकम्;
+  याव (वृक्षः_CODE (exprv) == COMPOUND_व्यञ्जकम्)
+    exprv = वृक्षः_OPERAND (exprv, 1);
+  याव (CONVERT_व्यञ्जकम्_P (exprv))
+    exprv = वृक्षः_OPERAND (exprv, 0);
+  सचे (DECL_P (exprv)
       || handled_component_p (exprv)
-      || TREE_CODE (exprv) == ADDR_EXPR)
+      || वृक्षः_CODE (exprv) == ADDR_व्यञ्जकम्)
     mark_exp_read (exprv);
 
   /* If the expression is not of a type to which we cannot assign a line
      number, wrap the thing in a no-op NOP_EXPR.  */
-  if (DECL_P (expr) || CONSTANT_CLASS_P (expr))
+  सचे (DECL_P (व्यञ्जकम्) || CONSTANT_CLASS_P (व्यञ्जकम्))
     {
-      expr = build1 (NOP_EXPR, TREE_TYPE (expr), expr);
-      SET_EXPR_LOCATION (expr, loc);
+      व्यञ्जकम् = build1 (NOP_व्यञ्जकम्, वृक्षः_TYPE (व्यञ्जकम्), व्यञ्जकम्);
+      SET_व्यञ्जकम्_LOCATION (व्यञ्जकम्, loc);
     }
 
-  return expr;
+  पटिनिवत्त व्यञ्जकम्;
 }
 
 /* Emit an expression as a statement.  LOC is the location of the
    expression.  */
 
-tree
-c_finish_expr_stmt (location_t loc, tree expr)
+वृक्षः
+c_finish_व्यञ्जकम्_stmt (location_t loc, वृक्षः व्यञ्जकम्)
 {
-  if (expr)
-    return add_stmt (c_process_expr_stmt (loc, expr));
-  else
-    return NULL;
+  सचे (व्यञ्जकम्)
+    पटिनिवत्त add_stmt (c_process_व्यञ्जकम्_stmt (loc, व्यञ्जकम्));
+  अञ्ञथा
+    पटिनिवत्त रिक्त;
 }
 
 /* Do the opposite and emit a statement as an expression.  To begin,
    create a new binding level and return it.  */
 
-tree
-c_begin_stmt_expr (void)
+वृक्षः
+c_begin_stmt_व्यञ्जकम् (शून्य)
 {
-  tree ret;
+  वृक्षः ret;
 
   /* We must force a BLOCK for this level so that, if it is not expanded
      later, there is a way to turn off the entire subtree of blocks that
      are contained in it.  */
   keep_next_level ();
-  ret = c_begin_compound_stmt (true);
+  ret = c_begin_compound_stmt (सच्च);
 
-  c_bindings_start_stmt_expr (c_switch_stack == NULL
-			      ? NULL
-			      : c_switch_stack->bindings);
+  c_bindings_start_stmt_व्यञ्जकम् (c_switch_राशिः == रिक्त
+			      ? रिक्त
+			      : c_switch_राशिः->bindings);
 
   /* Mark the current statement list as belonging to a statement list.  */
-  STATEMENT_LIST_STMT_EXPR (ret) = 1;
+  STATEMENT_LIST_STMT_व्यञ्जकम् (ret) = 1;
 
-  return ret;
+  पटिनिवत्त ret;
 }
 
 /* LOC is the location of the compound statement to which this body
    belongs.  */
 
-tree
-c_finish_stmt_expr (location_t loc, tree body)
+वृक्षः
+c_finish_stmt_व्यञ्जकम् (location_t loc, वृक्षः body)
 {
-  tree last, type, tmp, val;
-  tree *last_p;
+  वृक्षः last, type, tmp, val;
+  वृक्षः *last_p;
 
-  body = c_end_compound_stmt (loc, body, true);
+  body = c_end_compound_stmt (loc, body, सच्च);
 
-  c_bindings_end_stmt_expr (c_switch_stack == NULL
-			    ? NULL
-			    : c_switch_stack->bindings);
+  c_bindings_end_stmt_व्यञ्जकम् (c_switch_राशिः == रिक्त
+			    ? रिक्त
+			    : c_switch_राशिः->bindings);
 
   /* Locate the last statement in BODY.  See c_end_compound_stmt
      about always returning a BIND_EXPR.  */
-  last_p = &BIND_EXPR_BODY (body);
-  last = BIND_EXPR_BODY (body);
+  last_p = &BIND_व्यञ्जकम्_BODY (body);
+  last = BIND_व्यञ्जकम्_BODY (body);
 
  continue_searching:
-  if (TREE_CODE (last) == STATEMENT_LIST)
+  सचे (वृक्षः_CODE (last) == STATEMENT_LIST)
     {
-      tree_stmt_iterator l = tsi_last (last);
+      वृक्षः_stmt_iterator l = tsi_last (last);
 
-      while (!tsi_end_p (l) && TREE_CODE (tsi_stmt (l)) == DEBUG_BEGIN_STMT)
+      याव (!tsi_end_p (l) && वृक्षः_CODE (tsi_stmt (l)) == DEBUG_BEGIN_STMT)
 	tsi_prev (&l);
 
       /* This can happen with degenerate cases like ({ }).  No value.  */
-      if (tsi_end_p (l))
-	return body;
+      सचे (tsi_end_p (l))
+	पटिनिवत्त body;
 
       /* If we're supposed to generate side effects warnings, process
 	 all of the statements except the last.  */
-      if (warn_unused_value || warn_unused_result)
+      सचे (warn_unused_मानम् || warn_unused_result)
 	{
-	  for (tree_stmt_iterator i = tsi_start (last);
+	  अत्थाय (वृक्षः_stmt_iterator i = tsi_start (last);
 	       tsi_stmt (i) != tsi_stmt (l); tsi_next (&i))
 	    {
 	      location_t tloc;
-	      tree t = tsi_stmt (i);
+	      वृक्षः t = tsi_stmt (i);
 
-	      tloc = EXPR_HAS_LOCATION (t) ? EXPR_LOCATION (t) : loc;
+	      tloc = व्यञ्जकम्_HAS_LOCATION (t) ? व्यञ्जकम्_LOCATION (t) : loc;
 	      emit_side_effect_warnings (tloc, t);
 	    }
 	}
@@ -14037,40 +14037,40 @@ c_finish_stmt_expr (location_t loc, tree body)
 
   /* If the end of the list is exception related, then the list was split
      by a call to push_cleanup.  Continue searching.  */
-  if (TREE_CODE (last) == TRY_FINALLY_EXPR
-      || TREE_CODE (last) == TRY_CATCH_EXPR)
+  सचे (वृक्षः_CODE (last) == TRY_FINALLY_व्यञ्जकम्
+      || वृक्षः_CODE (last) == TRY_CATCH_व्यञ्जकम्)
     {
-      last_p = &TREE_OPERAND (last, 0);
+      last_p = &वृक्षः_OPERAND (last, 0);
       last = *last_p;
-      goto continue_searching;
+      गच्छ continue_searching;
     }
 
-  if (last == error_mark_node)
-    return last;
+  सचे (last == error_mark_ग्रन्थिः)
+    पटिनिवत्त last;
 
   /* In the case that the BIND_EXPR is not necessary, return the
      expression out from inside it.  */
-  if ((last == BIND_EXPR_BODY (body)
+  सचे ((last == BIND_व्यञ्जकम्_BODY (body)
        /* Skip nested debug stmts.  */
-       || last == expr_first (BIND_EXPR_BODY (body)))
-      && BIND_EXPR_VARS (body) == NULL)
+       || last == व्यञ्जकम्_first (BIND_व्यञ्जकम्_BODY (body)))
+      && BIND_व्यञ्जकम्_VARS (body) == रिक्त)
     {
       /* Even if this looks constant, do not allow it in a constant
 	 expression.  */
-      last = c_wrap_maybe_const (last, true);
+      last = c_wrap_maybe_const (last, सच्च);
       /* Do not warn if the return value of a statement expression is
 	 unused.  */
       suppress_warning (last, OPT_Wunused);
-      return last;
+      पटिनिवत्त last;
     }
 
   /* Extract the type of said expression.  */
-  type = TREE_TYPE (last);
+  type = वृक्षः_TYPE (last);
 
   /* If we're not returning a value at all, then the BIND_EXPR that
      we already have is a fine expression to return.  */
-  if (!type || VOID_TYPE_P (type))
-    return body;
+  सचे (!type || VOID_TYPE_P (type))
+    पटिनिवत्त body;
 
   /* Now that we've located the expression containing the value, it seems
      silly to make voidify_wrapper_expr repeat the process.  Create a
@@ -14080,207 +14080,207 @@ c_finish_stmt_expr (location_t loc, tree body)
   /* Unwrap a no-op NOP_EXPR as added by c_finish_expr_stmt.  This avoids
      tree_expr_nonnegative_p giving up immediately.  */
   val = last;
-  if (TREE_CODE (val) == NOP_EXPR
-      && TREE_TYPE (val) == TREE_TYPE (TREE_OPERAND (val, 0)))
-    val = TREE_OPERAND (val, 0);
+  सचे (वृक्षः_CODE (val) == NOP_व्यञ्जकम्
+      && वृक्षः_TYPE (val) == वृक्षः_TYPE (वृक्षः_OPERAND (val, 0)))
+    val = वृक्षः_OPERAND (val, 0);
 
-  *last_p = build2 (MODIFY_EXPR, void_type_node, tmp, val);
-  SET_EXPR_LOCATION (*last_p, EXPR_LOCATION (last));
+  *last_p = build2 (MODIFY_व्यञ्जकम्, void_type_ग्रन्थिः, tmp, val);
+  SET_व्यञ्जकम्_LOCATION (*last_p, व्यञ्जकम्_LOCATION (last));
 
   {
-    tree t = build4 (TARGET_EXPR, type, tmp, body, NULL_TREE, NULL_TREE);
-    SET_EXPR_LOCATION (t, loc);
-    return t;
+    वृक्षः t = build4 (TARGET_व्यञ्जकम्, type, tmp, body, NULL_वृक्षः, NULL_वृक्षः);
+    SET_व्यञ्जकम्_LOCATION (t, loc);
+    पटिनिवत्त t;
   }
 }
 
 /* Begin and end compound statements.  This is as simple as pushing
    and popping new statement lists from the tree.  */
 
-tree
-c_begin_compound_stmt (bool do_scope)
+वृक्षः
+c_begin_compound_stmt (तार्किक do_scope)
 {
-  tree stmt = push_stmt_list ();
-  if (do_scope)
-    push_scope ();
-  return stmt;
+  वृक्षः stmt = प्रक्षिप_stmt_list ();
+  सचे (do_scope)
+    प्रक्षिप_scope ();
+  पटिनिवत्त stmt;
 }
 
 /* End a compound statement.  STMT is the statement.  LOC is the
    location of the compound statement-- this is usually the location
    of the opening brace.  */
 
-tree
-c_end_compound_stmt (location_t loc, tree stmt, bool do_scope)
+वृक्षः
+c_end_compound_stmt (location_t loc, वृक्षः stmt, तार्किक do_scope)
 {
-  tree block = NULL;
+  वृक्षः block = रिक्त;
 
-  if (do_scope)
+  सचे (do_scope)
     {
-      if (c_dialect_objc ())
+      सचे (c_dialect_objc ())
 	objc_clear_super_receiver ();
-      block = pop_scope ();
+      block = निष्कासय_scope ();
     }
 
-  stmt = pop_stmt_list (stmt);
-  stmt = c_build_bind_expr (loc, block, stmt);
+  stmt = निष्कासय_stmt_list (stmt);
+  stmt = c_build_bind_व्यञ्जकम् (loc, block, stmt);
 
   /* If this compound statement is nested immediately inside a statement
      expression, then force a BIND_EXPR to be created.  Otherwise we'll
      do the wrong thing for ({ { 1; } }) or ({ 1; { } }).  In particular,
      STATEMENT_LISTs merge, and thus we can lose track of what statement
      was really last.  */
-  if (building_stmt_list_p ()
-      && STATEMENT_LIST_STMT_EXPR (cur_stmt_list)
-      && TREE_CODE (stmt) != BIND_EXPR)
+  सचे (building_stmt_list_p ()
+      && STATEMENT_LIST_STMT_व्यञ्जकम् (cur_stmt_list)
+      && वृक्षः_CODE (stmt) != BIND_व्यञ्जकम्)
     {
-      stmt = build3 (BIND_EXPR, void_type_node, NULL, stmt, NULL);
-      TREE_SIDE_EFFECTS (stmt) = 1;
-      SET_EXPR_LOCATION (stmt, loc);
+      stmt = build3 (BIND_व्यञ्जकम्, void_type_ग्रन्थिः, रिक्त, stmt, रिक्त);
+      वृक्षः_SIDE_EFFECTS (stmt) = 1;
+      SET_व्यञ्जकम्_LOCATION (stmt, loc);
     }
 
-  return stmt;
+  पटिनिवत्त stmt;
 }
 
 /* Queue a cleanup.  CLEANUP is an expression/statement to be executed
    when the current scope is exited.  EH_ONLY is true when this is not
    meant to apply to normal control flow transfer.  */
 
-void
-push_cleanup (tree decl, tree cleanup, bool eh_only)
+शून्य
+प्रक्षिप_cleanup (वृक्षः decl, वृक्षः cleanup, तार्किक eh_only)
 {
-  enum tree_code code;
-  tree stmt, list;
-  bool stmt_expr;
+  गणना वृक्षः_code code;
+  वृक्षः stmt, list;
+  तार्किक stmt_व्यञ्जकम्;
 
-  code = eh_only ? TRY_CATCH_EXPR : TRY_FINALLY_EXPR;
-  stmt = build_stmt (DECL_SOURCE_LOCATION (decl), code, NULL, cleanup);
+  code = eh_only ? TRY_CATCH_व्यञ्जकम् : TRY_FINALLY_व्यञ्जकम्;
+  stmt = build_stmt (DECL_SOURCE_LOCATION (decl), code, रिक्त, cleanup);
   add_stmt (stmt);
-  stmt_expr = STATEMENT_LIST_STMT_EXPR (cur_stmt_list);
-  list = push_stmt_list ();
-  TREE_OPERAND (stmt, 0) = list;
-  STATEMENT_LIST_STMT_EXPR (list) = stmt_expr;
+  stmt_व्यञ्जकम् = STATEMENT_LIST_STMT_व्यञ्जकम् (cur_stmt_list);
+  list = प्रक्षिप_stmt_list ();
+  वृक्षः_OPERAND (stmt, 0) = list;
+  STATEMENT_LIST_STMT_व्यञ्जकम् (list) = stmt_व्यञ्जकम्;
 }
 
 /* Build a vector comparison of ARG0 and ARG1 using CODE opcode
    into a value of TYPE type.  Comparison is done via VEC_COND_EXPR.  */
 
-static tree
-build_vec_cmp (tree_code code, tree type,
-	       tree arg0, tree arg1)
+स्थिर वृक्षः
+build_vec_cmp (वृक्षः_code code, वृक्षः type,
+	       वृक्षः arg0, वृक्षः arg1)
 {
-  tree zero_vec = build_zero_cst (type);
-  tree minus_one_vec = build_minus_one_cst (type);
-  tree cmp_type = truth_type_for (TREE_TYPE (arg0));
-  tree cmp = build2 (code, cmp_type, arg0, arg1);
-  return build3 (VEC_COND_EXPR, type, cmp, minus_one_vec, zero_vec);
+  वृक्षः zero_vec = build_zero_cst (type);
+  वृक्षः minus_one_vec = build_minus_one_cst (type);
+  वृक्षः cmp_type = truth_type_for (वृक्षः_TYPE (arg0));
+  वृक्षः cmp = build2 (code, cmp_type, arg0, arg1);
+  पटिनिवत्त build3 (VEC_COND_व्यञ्जकम्, type, cmp, minus_one_vec, zero_vec);
 }
 
 /* Possibly warn about an address of OP never being NULL in a comparison
    operation CODE involving null.  */
 
-static void
-maybe_warn_for_null_address (location_t loc, tree op, tree_code code)
+स्थिर शून्य
+maybe_warn_for_null_address (location_t loc, वृक्षः op, वृक्षः_code code)
 {
   /* Prevent warnings issued for macro expansion.  */
-  if (!warn_address
+  सचे (!warn_address
       || warning_suppressed_p (op, OPT_Waddress)
       || from_macro_expansion_at (loc))
-    return;
+    पटिनिवत्त;
 
-  if (TREE_CODE (op) == NOP_EXPR)
+  सचे (वृक्षः_CODE (op) == NOP_व्यञ्जकम्)
     {
       /* Allow casts to intptr_t to suppress the warning.  */
-      tree type = TREE_TYPE (op);
-      if (TREE_CODE (type) == INTEGER_TYPE)
-	return;
-      op = TREE_OPERAND (op, 0);
+      वृक्षः type = वृक्षः_TYPE (op);
+      सचे (वृक्षः_CODE (type) == INTEGER_TYPE)
+	पटिनिवत्त;
+      op = वृक्षः_OPERAND (op, 0);
     }
 
-  if (TREE_CODE (op) == POINTER_PLUS_EXPR)
+  सचे (वृक्षः_CODE (op) == POINTER_PLUS_व्यञ्जकम्)
     {
       /* Allow a cast to void* to suppress the warning.  */
-      tree type = TREE_TYPE (TREE_TYPE (op));
-      if (VOID_TYPE_P (type))
-	return;
+      वृक्षः type = वृक्षः_TYPE (वृक्षः_TYPE (op));
+      सचे (VOID_TYPE_P (type))
+	पटिनिवत्त;
 
       /* Adding any value to a null pointer, including zero, is undefined
 	 in C.  This includes the expression &p[0] where p is the null
 	 pointer, although &p[0] will have been folded to p by this point
 	 and so not diagnosed.  */
-      if (code == EQ_EXPR)
+      सचे (code == EQ_व्यञ्जकम्)
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<false%> "
 		    "for the pointer operand in %qE must not be NULL",
 		    op);
-      else
+      अञ्ञथा
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<true%> "
 		    "for the pointer operand in %qE must not be NULL",
 		    op);
 
-      return;
+      पटिनिवत्त;
     }
 
-  if (TREE_CODE (op) != ADDR_EXPR)
-    return;
+  सचे (वृक्षः_CODE (op) != ADDR_व्यञ्जकम्)
+    पटिनिवत्त;
 
-  op = TREE_OPERAND (op, 0);
+  op = वृक्षः_OPERAND (op, 0);
 
-  if (TREE_CODE (op) == IMAGPART_EXPR
-      || TREE_CODE (op) == REALPART_EXPR)
+  सचे (वृक्षः_CODE (op) == IMAGPART_व्यञ्जकम्
+      || वृक्षः_CODE (op) == REALPART_व्यञ्जकम्)
     {
       /* The address of either complex part may not be null.  */
-      if (code == EQ_EXPR)
+      सचे (code == EQ_व्यञ्जकम्)
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<false%> "
 		    "for the address of %qE will never be NULL",
 		    op);
-      else
+      अञ्ञथा
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<true%> "
 		    "for the address of %qE will never be NULL",
 		    op);
-      return;
+      पटिनिवत्त;
     }
 
   /* Set to true in the loop below if OP dereferences is operand.
      In such a case the ultimate target need not be a decl for
      the null [in]equality test to be constant.  */
-  bool deref = false;
+  तार्किक deref = मिच्छा;
 
   /* Get the outermost array or object, or member.  */
-  while (handled_component_p (op))
+  याव (handled_component_p (op))
     {
-      if (TREE_CODE (op) == COMPONENT_REF)
+      सचे (वृक्षः_CODE (op) == COMPONENT_REF)
 	{
 	  /* Get the member (its address is never null).  */
-	  op = TREE_OPERAND (op, 1);
-	  break;
+	  op = वृक्षः_OPERAND (op, 1);
+	  भङ्ग;
 	}
 
       /* Get the outer array/object to refer to in the warning.  */
-      op = TREE_OPERAND (op, 0);
-      deref = true;
+      op = वृक्षः_OPERAND (op, 0);
+      deref = सच्च;
     }
 
-  if ((!deref && !decl_with_nonnull_addr_p (op))
+  सचे ((!deref && !decl_with_nonnull_addr_p (op))
       || from_macro_expansion_at (loc))
-    return;
+    पटिनिवत्त;
 
-  bool w;
-  if (code == EQ_EXPR)
+  तार्किक w;
+  सचे (code == EQ_व्यञ्जकम्)
     w = warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<false%> "
 		    "for the address of %qE will never be NULL",
 		    op);
-  else
+  अञ्ञथा
     w = warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<true%> "
 		    "for the address of %qE will never be NULL",
 		    op);
 
-  if (w && DECL_P (op))
+  सचे (w && DECL_P (op))
     inform (DECL_SOURCE_LOCATION (op), "%qD declared here", op);
 }
 
@@ -14300,44 +14300,44 @@ maybe_warn_for_null_address (location_t loc, tree op, tree_code code)
    performed or they have both just been converted to some other type in which
    the arithmetic is to be done.  */
 
-tree
-build_binary_op (location_t location, enum tree_code code,
-		 tree orig_op0, tree orig_op1, bool convert_p)
+वृक्षः
+build_द्विमान_op (location_t location, गणना वृक्षः_code code,
+		 वृक्षः orig_op0, वृक्षः orig_op1, तार्किक convert_p)
 {
-  tree type0, type1, orig_type0, orig_type1;
-  tree eptype;
-  enum tree_code code0, code1;
-  tree op0, op1;
-  tree ret = error_mark_node;
-  const char *invalid_op_diag;
-  bool op0_int_operands, op1_int_operands;
-  bool int_const, int_const_or_overflow, int_operands;
+  वृक्षः type0, type1, orig_type0, orig_type1;
+  वृक्षः eptype;
+  गणना वृक्षः_code code0, code1;
+  वृक्षः op0, op1;
+  वृक्षः ret = error_mark_ग्रन्थिः;
+  ध्रुव वर्ण *invalid_op_diag;
+  तार्किक op0_int_operands, op1_int_operands;
+  तार्किक int_const, int_const_or_overflow, int_operands;
 
   /* Expression code to give to the expression when it is built.
      Normally this is CODE, which is what the caller asked for,
      but in some special cases we change it.  */
-  enum tree_code resultcode = code;
+  गणना वृक्षः_code resultcode = code;
 
   /* Data type in which the computation is to be performed.
      In the simplest cases this is the common type of the arguments.  */
-  tree result_type = NULL;
+  वृक्षः result_type = रिक्त;
 
   /* When the computation is in excess precision, the type of the
      final EXCESS_PRECISION_EXPR.  */
-  tree semantic_result_type = NULL;
+  वृक्षः semantic_result_type = रिक्त;
 
   /* Nonzero means operands have already been type-converted
      in whatever way is necessary.
      Zero means they need to be converted to RESULT_TYPE.  */
-  int converted = 0;
+  पूर्णाङ्क converted = 0;
 
   /* Nonzero means create the expression with this type, rather than
      RESULT_TYPE.  */
-  tree build_type = NULL_TREE;
+  वृक्षः build_type = NULL_वृक्षः;
 
   /* Nonzero means after finally constructing the expression
      convert it to this type.  */
-  tree final_type = NULL_TREE;
+  वृक्षः final_type = NULL_वृक्षः;
 
   /* Nonzero if this is an operation like MIN or MAX which can
      safely be computed in short if both args are promoted shorts.
@@ -14345,80 +14345,80 @@ build_binary_op (location_t location, enum tree_code code,
      -1 indicates a bitwise operation; this makes a difference
      in the exact conditions for when it is safe to do the operation
      in a narrower mode.  */
-  int shorten = 0;
+  पूर्णाङ्क shorten = 0;
 
   /* Nonzero if this is a comparison operation;
      if both args are promoted shorts, compare the original shorts.
      Also implies COMMON.  */
-  int short_compare = 0;
+  पूर्णाङ्क short_compare = 0;
 
   /* Nonzero if this is a right-shift operation, which can be computed on the
      original short and then promoted if the operand is a promoted short.  */
-  int short_shift = 0;
+  पूर्णाङ्क short_shift = 0;
 
   /* Nonzero means set RESULT_TYPE to the common type of the args.  */
-  int common = 0;
+  पूर्णाङ्क common = 0;
 
   /* True means types are compatible as far as ObjC is concerned.  */
-  bool objc_ok;
+  तार्किक objc_ok;
 
   /* True means this is an arithmetic operation that may need excess
      precision.  */
-  bool may_need_excess_precision;
+  तार्किक may_need_excess_precision;
 
   /* True means this is a boolean operation that converts both its
      operands to truth-values.  */
-  bool boolean_op = false;
+  तार्किक boolean_op = मिच्छा;
 
   /* Remember whether we're doing / or %.  */
-  bool doing_div_or_mod = false;
+  तार्किक doing_div_or_mod = मिच्छा;
 
   /* Remember whether we're doing << or >>.  */
-  bool doing_shift = false;
+  तार्किक doing_shift = मिच्छा;
 
   /* Tree holding instrumentation expression.  */
-  tree instrument_expr = NULL;
+  वृक्षः instrument_व्यञ्जकम् = रिक्त;
 
-  if (location == UNKNOWN_LOCATION)
-    location = input_location;
+  सचे (location == UNKNOWN_LOCATION)
+    location = निवेशः_location;
 
   op0 = orig_op0;
   op1 = orig_op1;
 
-  op0_int_operands = EXPR_INT_CONST_OPERANDS (orig_op0);
-  if (op0_int_operands)
-    op0 = remove_c_maybe_const_expr (op0);
-  op1_int_operands = EXPR_INT_CONST_OPERANDS (orig_op1);
-  if (op1_int_operands)
-    op1 = remove_c_maybe_const_expr (op1);
+  op0_int_operands = व्यञ्जकम्_INT_CONST_OPERANDS (orig_op0);
+  सचे (op0_int_operands)
+    op0 = remove_c_maybe_const_व्यञ्जकम् (op0);
+  op1_int_operands = व्यञ्जकम्_INT_CONST_OPERANDS (orig_op1);
+  सचे (op1_int_operands)
+    op1 = remove_c_maybe_const_व्यञ्जकम् (op1);
   int_operands = (op0_int_operands && op1_int_operands);
-  if (int_operands)
+  सचे (int_operands)
     {
-      int_const_or_overflow = (TREE_CODE (orig_op0) == INTEGER_CST
-			       && TREE_CODE (orig_op1) == INTEGER_CST);
+      int_const_or_overflow = (वृक्षः_CODE (orig_op0) == INTEGER_CST
+			       && वृक्षः_CODE (orig_op1) == INTEGER_CST);
       int_const = (int_const_or_overflow
-		   && !TREE_OVERFLOW (orig_op0)
-		   && !TREE_OVERFLOW (orig_op1));
+		   && !वृक्षः_OVERFLOW (orig_op0)
+		   && !वृक्षः_OVERFLOW (orig_op1));
     }
-  else
-    int_const = int_const_or_overflow = false;
+  अञ्ञथा
+    int_const = int_const_or_overflow = मिच्छा;
 
   /* Do not apply default conversion in mixed vector/scalar expression.  */
-  if (convert_p
-      && VECTOR_TYPE_P (TREE_TYPE (op0)) == VECTOR_TYPE_P (TREE_TYPE (op1)))
+  सचे (convert_p
+      && VECTOR_TYPE_P (वृक्षः_TYPE (op0)) == VECTOR_TYPE_P (वृक्षः_TYPE (op1)))
     {
       op0 = default_conversion (op0);
       op1 = default_conversion (op1);
     }
 
-  orig_type0 = type0 = TREE_TYPE (op0);
+  orig_type0 = type0 = वृक्षः_TYPE (op0);
 
-  orig_type1 = type1 = TREE_TYPE (op1);
+  orig_type1 = type1 = वृक्षः_TYPE (op1);
 
   /* The expression codes of the data types of the arguments tell us
      whether the arguments are integers, floating, pointers, etc.  */
-  code0 = TREE_CODE (type0);
-  code1 = TREE_CODE (type1);
+  code0 = वृक्षः_CODE (type0);
+  code1 = वृक्षः_CODE (type1);
 
   /* Strip NON_LVALUE_EXPRs, etc., since we aren't using as an lvalue.  */
   STRIP_TYPE_NOPS (op0);
@@ -14427,179 +14427,179 @@ build_binary_op (location_t location, enum tree_code code,
   /* If an error was already reported for one of the arguments,
      avoid reporting another error.  */
 
-  if (code0 == ERROR_MARK || code1 == ERROR_MARK)
-    return error_mark_node;
+  सचे (code0 == ERROR_MARK || code1 == ERROR_MARK)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if (code0 == POINTER_TYPE
-      && reject_gcc_builtin (op0, EXPR_LOCATION (orig_op0)))
-    return error_mark_node;
+  सचे (code0 == POINTER_TYPE
+      && reject_gcc_builtin (op0, व्यञ्जकम्_LOCATION (orig_op0)))
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if (code1 == POINTER_TYPE
-      && reject_gcc_builtin (op1, EXPR_LOCATION (orig_op1)))
-    return error_mark_node;
+  सचे (code1 == POINTER_TYPE
+      && reject_gcc_builtin (op1, व्यञ्जकम्_LOCATION (orig_op1)))
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if ((invalid_op_diag
-       = targetm.invalid_binary_op (code, type0, type1)))
+  सचे ((invalid_op_diag
+       = targetm.invalid_द्विमान_op (code, type0, type1)))
     {
       error_at (location, invalid_op_diag);
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  switch (code)
+  विकल्प (code)
     {
-    case PLUS_EXPR:
-    case MINUS_EXPR:
-    case MULT_EXPR:
-    case TRUNC_DIV_EXPR:
-    case CEIL_DIV_EXPR:
-    case FLOOR_DIV_EXPR:
-    case ROUND_DIV_EXPR:
-    case EXACT_DIV_EXPR:
-      may_need_excess_precision = true;
-      break;
+    पक्ष PLUS_व्यञ्जकम्:
+    पक्ष MINUS_व्यञ्जकम्:
+    पक्ष MULT_व्यञ्जकम्:
+    पक्ष TRUNC_DIV_व्यञ्जकम्:
+    पक्ष CEIL_DIV_व्यञ्जकम्:
+    पक्ष FLOOR_DIV_व्यञ्जकम्:
+    पक्ष ROUND_DIV_व्यञ्जकम्:
+    पक्ष EXACT_DIV_व्यञ्जकम्:
+      may_need_excess_precision = सच्च;
+      भङ्ग;
 
-    case EQ_EXPR:
-    case NE_EXPR:
-    case LE_EXPR:
-    case GE_EXPR:
-    case LT_EXPR:
-    case GT_EXPR:
+    पक्ष EQ_व्यञ्जकम्:
+    पक्ष NE_व्यञ्जकम्:
+    पक्ष LE_व्यञ्जकम्:
+    पक्ष GE_व्यञ्जकम्:
+    पक्ष LT_व्यञ्जकम्:
+    पक्ष GT_व्यञ्जकम्:
       /* Excess precision for implicit conversions of integers to
 	 floating point in C11 and later.  */
       may_need_excess_precision = (flag_isoc11
 				   && (ANY_INTEGRAL_TYPE_P (type0)
 				       || ANY_INTEGRAL_TYPE_P (type1)));
-      break;
+      भङ्ग;
 
-    default:
-      may_need_excess_precision = false;
-      break;
+    स्वभाव:
+      may_need_excess_precision = मिच्छा;
+      भङ्ग;
     }
-  if (TREE_CODE (op0) == EXCESS_PRECISION_EXPR)
+  सचे (वृक्षः_CODE (op0) == EXCESS_PRECISION_व्यञ्जकम्)
     {
-      op0 = TREE_OPERAND (op0, 0);
-      type0 = TREE_TYPE (op0);
+      op0 = वृक्षः_OPERAND (op0, 0);
+      type0 = वृक्षः_TYPE (op0);
     }
-  else if (may_need_excess_precision
-	   && (eptype = excess_precision_type (type0)) != NULL_TREE)
+  अञ्ञथा सचे (may_need_excess_precision
+	   && (eptype = excess_precision_type (type0)) != NULL_वृक्षः)
     {
       type0 = eptype;
       op0 = convert (eptype, op0);
     }
-  if (TREE_CODE (op1) == EXCESS_PRECISION_EXPR)
+  सचे (वृक्षः_CODE (op1) == EXCESS_PRECISION_व्यञ्जकम्)
     {
-      op1 = TREE_OPERAND (op1, 0);
-      type1 = TREE_TYPE (op1);
+      op1 = वृक्षः_OPERAND (op1, 0);
+      type1 = वृक्षः_TYPE (op1);
     }
-  else if (may_need_excess_precision
-	   && (eptype = excess_precision_type (type1)) != NULL_TREE)
+  अञ्ञथा सचे (may_need_excess_precision
+	   && (eptype = excess_precision_type (type1)) != NULL_वृक्षः)
     {
       type1 = eptype;
       op1 = convert (eptype, op1);
     }
 
-  objc_ok = objc_compare_types (type0, type1, -3, NULL_TREE);
+  objc_ok = objc_compare_types (type0, type1, -3, NULL_वृक्षः);
 
   /* In case when one of the operands of the binary operation is
      a vector and another is a scalar -- convert scalar to vector.  */
-  if ((gnu_vector_type_p (type0) && code1 != VECTOR_TYPE)
+  सचे ((gnu_vector_type_p (type0) && code1 != VECTOR_TYPE)
       || (gnu_vector_type_p (type1) && code0 != VECTOR_TYPE))
     {
-      enum stv_conv convert_flag = scalar_to_vector (location, code, orig_op0,
-						     orig_op1, true);
+      गणना stv_conv convert_flag = scalar_to_vector (location, code, orig_op0,
+						     orig_op1, सच्च);
 
-      switch (convert_flag)
+      विकल्प (convert_flag)
 	{
-	  case stv_error:
-	    return error_mark_node;
-	  case stv_firstarg:
+	  पक्ष stv_error:
+	    पटिनिवत्त error_mark_ग्रन्थिः;
+	  पक्ष stv_firstarg:
 	    {
-              bool maybe_const = true;
-              tree sc;
-              sc = c_fully_fold (op0, false, &maybe_const);
-              sc = save_expr (sc);
-              sc = convert (TREE_TYPE (type1), sc);
+              तार्किक maybe_const = सच्च;
+              वृक्षः sc;
+              sc = c_fully_fold (op0, मिच्छा, &maybe_const);
+              sc = save_व्यञ्जकम् (sc);
+              sc = convert (वृक्षः_TYPE (type1), sc);
               op0 = build_vector_from_val (type1, sc);
-              if (!maybe_const)
-                op0 = c_wrap_maybe_const (op0, true);
-              orig_type0 = type0 = TREE_TYPE (op0);
-              code0 = TREE_CODE (type0);
+              सचे (!maybe_const)
+                op0 = c_wrap_maybe_const (op0, सच्च);
+              orig_type0 = type0 = वृक्षः_TYPE (op0);
+              code0 = वृक्षः_CODE (type0);
               converted = 1;
-              break;
+              भङ्ग;
 	    }
-	  case stv_secondarg:
+	  पक्ष stv_secondarg:
 	    {
-	      bool maybe_const = true;
-	      tree sc;
-	      sc = c_fully_fold (op1, false, &maybe_const);
-	      sc = save_expr (sc);
-	      sc = convert (TREE_TYPE (type0), sc);
+	      तार्किक maybe_const = सच्च;
+	      वृक्षः sc;
+	      sc = c_fully_fold (op1, मिच्छा, &maybe_const);
+	      sc = save_व्यञ्जकम् (sc);
+	      sc = convert (वृक्षः_TYPE (type0), sc);
 	      op1 = build_vector_from_val (type0, sc);
-	      if (!maybe_const)
-		op1 = c_wrap_maybe_const (op1, true);
-	      orig_type1 = type1 = TREE_TYPE (op1);
-	      code1 = TREE_CODE (type1);
+	      सचे (!maybe_const)
+		op1 = c_wrap_maybe_const (op1, सच्च);
+	      orig_type1 = type1 = वृक्षः_TYPE (op1);
+	      code1 = वृक्षः_CODE (type1);
 	      converted = 1;
-	      break;
+	      भङ्ग;
 	    }
-	  default:
-	    break;
+	  स्वभाव:
+	    भङ्ग;
 	}
     }
 
-  switch (code)
+  विकल्प (code)
     {
-    case PLUS_EXPR:
+    पक्ष PLUS_व्यञ्जकम्:
       /* Handle the pointer + int case.  */
-      if (code0 == POINTER_TYPE
+      सचे (code0 == POINTER_TYPE
 	  && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
-	  ret = pointer_int_sum (location, PLUS_EXPR, op0, op1);
-	  goto return_build_binary_op;
+	  ret = pointer_int_sum (location, PLUS_व्यञ्जकम्, op0, op1);
+	  गच्छ return_build_द्विमान_op;
 	}
-      else if (code1 == POINTER_TYPE
+      अञ्ञथा सचे (code1 == POINTER_TYPE
 	       && (code0 == INTEGER_TYPE || code0 == BITINT_TYPE))
 	{
-	  ret = pointer_int_sum (location, PLUS_EXPR, op1, op0);
-	  goto return_build_binary_op;
+	  ret = pointer_int_sum (location, PLUS_व्यञ्जकम्, op1, op0);
+	  गच्छ return_build_द्विमान_op;
 	}
-      else
+      अञ्ञथा
 	common = 1;
-      break;
+      भङ्ग;
 
-    case MINUS_EXPR:
+    पक्ष MINUS_व्यञ्जकम्:
       /* Subtraction of two similar pointers.
 	 We must subtract them as integers, then divide by object size.  */
-      if (code0 == POINTER_TYPE && code1 == POINTER_TYPE
+      सचे (code0 == POINTER_TYPE && code1 == POINTER_TYPE
 	  && comp_target_types (location, type0, type1))
 	{
-	  ret = pointer_diff (location, op0, op1, &instrument_expr);
-	  goto return_build_binary_op;
+	  ret = pointer_diff (location, op0, op1, &instrument_व्यञ्जकम्);
+	  गच्छ return_build_द्विमान_op;
 	}
       /* Handle pointer minus int.  Just like pointer plus int.  */
-      else if (code0 == POINTER_TYPE
+      अञ्ञथा सचे (code0 == POINTER_TYPE
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
-	  ret = pointer_int_sum (location, MINUS_EXPR, op0, op1);
-	  goto return_build_binary_op;
+	  ret = pointer_int_sum (location, MINUS_व्यञ्जकम्, op0, op1);
+	  गच्छ return_build_द्विमान_op;
 	}
-      else
+      अञ्ञथा
 	common = 1;
-      break;
+      भङ्ग;
 
-    case MULT_EXPR:
+    पक्ष MULT_व्यञ्जकम्:
       common = 1;
-      break;
+      भङ्ग;
 
-    case TRUNC_DIV_EXPR:
-    case CEIL_DIV_EXPR:
-    case FLOOR_DIV_EXPR:
-    case ROUND_DIV_EXPR:
-    case EXACT_DIV_EXPR:
-      doing_div_or_mod = true;
+    पक्ष TRUNC_DIV_व्यञ्जकम्:
+    पक्ष CEIL_DIV_व्यञ्जकम्:
+    पक्ष FLOOR_DIV_व्यञ्जकम्:
+    पक्ष ROUND_DIV_व्यञ्जकम्:
+    पक्ष EXACT_DIV_व्यञ्जकम्:
+      doing_div_or_mod = सच्च;
       warn_for_div_by_zero (location, op1);
 
-      if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
+      सचे ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
 	   || code0 == FIXED_POINT_TYPE || code0 == BITINT_TYPE
 	   || code0 == COMPLEX_TYPE
 	   || gnu_vector_type_p (type0))
@@ -14608,20 +14608,20 @@ build_binary_op (location_t location, enum tree_code code,
 	      || code1 == COMPLEX_TYPE
 	      || gnu_vector_type_p (type1)))
 	{
-	  enum tree_code tcode0 = code0, tcode1 = code1;
+	  गणना वृक्षः_code tcode0 = code0, tcode1 = code1;
 
-	  if (code0 == COMPLEX_TYPE || code0 == VECTOR_TYPE)
-	    tcode0 = TREE_CODE (TREE_TYPE (TREE_TYPE (op0)));
-	  if (code1 == COMPLEX_TYPE || code1 == VECTOR_TYPE)
-	    tcode1 = TREE_CODE (TREE_TYPE (TREE_TYPE (op1)));
+	  सचे (code0 == COMPLEX_TYPE || code0 == VECTOR_TYPE)
+	    tcode0 = वृक्षः_CODE (वृक्षः_TYPE (वृक्षः_TYPE (op0)));
+	  सचे (code1 == COMPLEX_TYPE || code1 == VECTOR_TYPE)
+	    tcode1 = वृक्षः_CODE (वृक्षः_TYPE (वृक्षः_TYPE (op1)));
 
-	  if (!(((tcode0 == INTEGER_TYPE || tcode0 == BITINT_TYPE
+	  सचे (!(((tcode0 == INTEGER_TYPE || tcode0 == BITINT_TYPE
 		  || (tcode0 == ENUMERAL_TYPE && code0 == VECTOR_TYPE))
 		 && (tcode1 == INTEGER_TYPE || tcode1 == BITINT_TYPE
 		     || (tcode1 == ENUMERAL_TYPE && code1 == VECTOR_TYPE)))
 		|| (tcode0 == FIXED_POINT_TYPE && tcode1 == FIXED_POINT_TYPE)))
-	    resultcode = RDIV_EXPR;
-	  else
+	    resultcode = RDIV_व्यञ्जकम्;
+	  अञ्ञथा
 	    /* Although it would be tempting to shorten always here, that
 	       loses on some targets, since the modulo instruction is
 	       undefined if the quotient can't be represented in the
@@ -14630,33 +14630,33 @@ build_binary_op (location_t location, enum tree_code code,
 	    shorten = may_shorten_divmod (op0, op1);
 	  common = 1;
 	}
-      break;
+      भङ्ग;
 
-    case BIT_AND_EXPR:
-    case BIT_IOR_EXPR:
-    case BIT_XOR_EXPR:
-      if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+    पक्ष BIT_AND_व्यञ्जकम्:
+    पक्ष BIT_IOR_व्यञ्जकम्:
+    पक्ष BIT_XOR_व्यञ्जकम्:
+      सचे ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
 	  && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	shorten = -1;
       /* Allow vector types which are not floating point types.   */
-      else if (gnu_vector_type_p (type0)
+      अञ्ञथा सचे (gnu_vector_type_p (type0)
 	       && gnu_vector_type_p (type1)
 	       && !VECTOR_FLOAT_TYPE_P (type0)
 	       && !VECTOR_FLOAT_TYPE_P (type1))
 	common = 1;
-      break;
+      भङ्ग;
 
-    case TRUNC_MOD_EXPR:
-    case FLOOR_MOD_EXPR:
-      doing_div_or_mod = true;
+    पक्ष TRUNC_MOD_व्यञ्जकम्:
+    पक्ष FLOOR_MOD_व्यञ्जकम्:
+      doing_div_or_mod = सच्च;
       warn_for_div_by_zero (location, op1);
 
-      if (gnu_vector_type_p (type0)
+      सचे (gnu_vector_type_p (type0)
 	  && gnu_vector_type_p (type1)
-	  && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE
-	  && TREE_CODE (TREE_TYPE (type1)) == INTEGER_TYPE)
+	  && वृक्षः_CODE (वृक्षः_TYPE (type0)) == INTEGER_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (type1)) == INTEGER_TYPE)
 	common = 1;
-      else if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+      अञ्ञथा सचे ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
 	  /* Although it would be tempting to shorten always here, that loses
@@ -14666,14 +14666,14 @@ build_binary_op (location_t location, enum tree_code code,
 	  shorten = may_shorten_divmod (op0, op1);
 	  common = 1;
 	}
-      break;
+      भङ्ग;
 
-    case TRUTH_ANDIF_EXPR:
-    case TRUTH_ORIF_EXPR:
-    case TRUTH_AND_EXPR:
-    case TRUTH_OR_EXPR:
-    case TRUTH_XOR_EXPR:
-      if ((code0 == INTEGER_TYPE || code0 == POINTER_TYPE
+    पक्ष TRUTH_ANDIF_व्यञ्जकम्:
+    पक्ष TRUTH_ORIF_व्यञ्जकम्:
+    पक्ष TRUTH_AND_व्यञ्जकम्:
+    पक्ष TRUTH_OR_व्यञ्जकम्:
+    पक्ष TRUTH_XOR_व्यञ्जकम्:
+      सचे ((code0 == INTEGER_TYPE || code0 == POINTER_TYPE
 	   || code0 == REAL_TYPE || code0 == COMPLEX_TYPE
 	   || code0 == FIXED_POINT_TYPE || code0 == NULLPTR_TYPE
 	   || code0 == BITINT_TYPE)
@@ -14685,101 +14685,101 @@ build_binary_op (location_t location, enum tree_code code,
 	  /* Result of these operations is always an int,
 	     but that does not mean the operands should be
 	     converted to ints!  */
-	  result_type = integer_type_node;
-	  if (op0_int_operands)
+	  result_type = integer_type_ग्रन्थिः;
+	  सचे (op0_int_operands)
 	    {
 	      op0 = c_objc_common_truthvalue_conversion (location, orig_op0);
-	      op0 = remove_c_maybe_const_expr (op0);
+	      op0 = remove_c_maybe_const_व्यञ्जकम् (op0);
 	    }
-	  else
+	  अञ्ञथा
 	    op0 = c_objc_common_truthvalue_conversion (location, op0);
-	  if (op1_int_operands)
+	  सचे (op1_int_operands)
 	    {
 	      op1 = c_objc_common_truthvalue_conversion (location, orig_op1);
-	      op1 = remove_c_maybe_const_expr (op1);
+	      op1 = remove_c_maybe_const_व्यञ्जकम् (op1);
 	    }
-	  else
+	  अञ्ञथा
 	    op1 = c_objc_common_truthvalue_conversion (location, op1);
 	  converted = 1;
-	  boolean_op = true;
+	  boolean_op = सच्च;
 	}
-      if (code == TRUTH_ANDIF_EXPR)
+      सचे (code == TRUTH_ANDIF_व्यञ्जकम्)
 	{
 	  int_const_or_overflow = (int_operands
-				   && TREE_CODE (orig_op0) == INTEGER_CST
-				   && (op0 == truthvalue_false_node
-				       || TREE_CODE (orig_op1) == INTEGER_CST));
+				   && वृक्षः_CODE (orig_op0) == INTEGER_CST
+				   && (op0 == truthvalue_false_ग्रन्थिः
+				       || वृक्षः_CODE (orig_op1) == INTEGER_CST));
 	  int_const = (int_const_or_overflow
-		       && !TREE_OVERFLOW (orig_op0)
-		       && (op0 == truthvalue_false_node
-			   || !TREE_OVERFLOW (orig_op1)));
+		       && !वृक्षः_OVERFLOW (orig_op0)
+		       && (op0 == truthvalue_false_ग्रन्थिः
+			   || !वृक्षः_OVERFLOW (orig_op1)));
 	}
-      else if (code == TRUTH_ORIF_EXPR)
+      अञ्ञथा सचे (code == TRUTH_ORIF_व्यञ्जकम्)
 	{
 	  int_const_or_overflow = (int_operands
-				   && TREE_CODE (orig_op0) == INTEGER_CST
-				   && (op0 == truthvalue_true_node
-				       || TREE_CODE (orig_op1) == INTEGER_CST));
+				   && वृक्षः_CODE (orig_op0) == INTEGER_CST
+				   && (op0 == truthvalue_true_ग्रन्थिः
+				       || वृक्षः_CODE (orig_op1) == INTEGER_CST));
 	  int_const = (int_const_or_overflow
-		       && !TREE_OVERFLOW (orig_op0)
-		       && (op0 == truthvalue_true_node
-			   || !TREE_OVERFLOW (orig_op1)));
+		       && !वृक्षः_OVERFLOW (orig_op0)
+		       && (op0 == truthvalue_true_ग्रन्थिः
+			   || !वृक्षः_OVERFLOW (orig_op1)));
 	}
-      break;
+      भङ्ग;
 
       /* Shift operations: result has same type as first operand;
 	 always convert second operand to int.
 	 Also set SHORT_SHIFT if shifting rightward.  */
 
-    case RSHIFT_EXPR:
-      if (gnu_vector_type_p (type0)
+    पक्ष RSHIFT_व्यञ्जकम्:
+      सचे (gnu_vector_type_p (type0)
 	  && gnu_vector_type_p (type1)
-	  && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE
-	  && TREE_CODE (TREE_TYPE (type1)) == INTEGER_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (type0)) == INTEGER_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (type1)) == INTEGER_TYPE
 	  && known_eq (TYPE_VECTOR_SUBPARTS (type0),
 		       TYPE_VECTOR_SUBPARTS (type1)))
 	{
 	  result_type = type0;
 	  converted = 1;
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == FIXED_POINT_TYPE
+      अञ्ञथा सचे ((code0 == INTEGER_TYPE || code0 == FIXED_POINT_TYPE
 		|| code0 == BITINT_TYPE
 		|| (gnu_vector_type_p (type0)
-		    && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE))
+		    && वृक्षः_CODE (वृक्षः_TYPE (type0)) == INTEGER_TYPE))
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
-	  doing_shift = true;
-	  if (TREE_CODE (op1) == INTEGER_CST)
+	  doing_shift = सच्च;
+	  सचे (वृक्षः_CODE (op1) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_sgn (op1) < 0)
+	      सचे (वृक्षः_int_cst_sgn (op1) < 0)
 		{
-		  int_const = false;
-		  if (c_inhibit_evaluation_warnings == 0)
-		    warning_at (location, OPT_Wshift_count_negative,
+		  int_const = मिच्छा;
+		  सचे (c_inhibit_evaluation_warnings == 0)
+		    warning_at (location, OPT_Wshift_गणनम्_negative,
 				"right shift count is negative");
 		}
-	      else if (code0 == VECTOR_TYPE)
+	      अञ्ञथा सचे (code0 == VECTOR_TYPE)
 		{
-		  if (compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (type0)))
+		  सचे (compare_वृक्षः_int (op1,
+					TYPE_PRECISION (वृक्षः_TYPE (type0)))
 		      >= 0)
 		    {
-		      int_const = false;
-		      if (c_inhibit_evaluation_warnings == 0)
-			warning_at (location, OPT_Wshift_count_overflow,
+		      int_const = मिच्छा;
+		      सचे (c_inhibit_evaluation_warnings == 0)
+			warning_at (location, OPT_Wshift_गणनम्_overflow,
 				    "right shift count >= width of vector element");
 		    }
 		}
-	      else
+	      अञ्ञथा
 		{
-		  if (!integer_zerop (op1))
+		  सचे (!integer_zerop (op1))
 		    short_shift = 1;
 
-		  if (compare_tree_int (op1, TYPE_PRECISION (type0)) >= 0)
+		  सचे (compare_वृक्षः_int (op1, TYPE_PRECISION (type0)) >= 0)
 		    {
-		      int_const = false;
-		      if (c_inhibit_evaluation_warnings == 0)
-			warning_at (location, OPT_Wshift_count_overflow,
+		      int_const = मिच्छा;
+		      सचे (c_inhibit_evaluation_warnings == 0)
+			warning_at (location, OPT_Wshift_गणनम्_overflow,
 				    "right shift count >= width of type");
 		    }
 		}
@@ -14790,70 +14790,70 @@ build_binary_op (location_t location, enum tree_code code,
 	  /* Avoid converting op1 to result_type later.  */
 	  converted = 1;
 	}
-      break;
+      भङ्ग;
 
-    case LSHIFT_EXPR:
-      if (gnu_vector_type_p (type0)
+    पक्ष LSHIFT_व्यञ्जकम्:
+      सचे (gnu_vector_type_p (type0)
 	  && gnu_vector_type_p (type1)
-	  && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE
-	  && TREE_CODE (TREE_TYPE (type1)) == INTEGER_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (type0)) == INTEGER_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (type1)) == INTEGER_TYPE
 	  && known_eq (TYPE_VECTOR_SUBPARTS (type0),
 		       TYPE_VECTOR_SUBPARTS (type1)))
 	{
 	  result_type = type0;
 	  converted = 1;
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == FIXED_POINT_TYPE
+      अञ्ञथा सचे ((code0 == INTEGER_TYPE || code0 == FIXED_POINT_TYPE
 		|| code0 == BITINT_TYPE
 		|| (gnu_vector_type_p (type0)
-		    && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE))
+		    && वृक्षः_CODE (वृक्षः_TYPE (type0)) == INTEGER_TYPE))
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
-	  doing_shift = true;
-	  if (TREE_CODE (op0) == INTEGER_CST
-	      && tree_int_cst_sgn (op0) < 0
+	  doing_shift = सच्च;
+	  सचे (वृक्षः_CODE (op0) == INTEGER_CST
+	      && वृक्षः_int_cst_sgn (op0) < 0
 	      && !TYPE_OVERFLOW_WRAPS (type0))
 	    {
 	      /* Don't reject a left shift of a negative value in a context
 		 where a constant expression is needed in C90.  */
-	      if (flag_isoc99)
-		int_const = false;
-	      if (c_inhibit_evaluation_warnings == 0)
-		warning_at (location, OPT_Wshift_negative_value,
+	      सचे (flag_isoc99)
+		int_const = मिच्छा;
+	      सचे (c_inhibit_evaluation_warnings == 0)
+		warning_at (location, OPT_Wshift_negative_मानम्,
 			    "left shift of negative value");
 	    }
-	  if (TREE_CODE (op1) == INTEGER_CST)
+	  सचे (वृक्षः_CODE (op1) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_sgn (op1) < 0)
+	      सचे (वृक्षः_int_cst_sgn (op1) < 0)
 		{
-		  int_const = false;
-		  if (c_inhibit_evaluation_warnings == 0)
-		    warning_at (location, OPT_Wshift_count_negative,
+		  int_const = मिच्छा;
+		  सचे (c_inhibit_evaluation_warnings == 0)
+		    warning_at (location, OPT_Wshift_गणनम्_negative,
 				"left shift count is negative");
 		}
-	      else if (code0 == VECTOR_TYPE)
+	      अञ्ञथा सचे (code0 == VECTOR_TYPE)
 		{
-		  if (compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (type0)))
+		  सचे (compare_वृक्षः_int (op1,
+					TYPE_PRECISION (वृक्षः_TYPE (type0)))
 		      >= 0)
 		    {
-		      int_const = false;
-		      if (c_inhibit_evaluation_warnings == 0)
-			warning_at (location, OPT_Wshift_count_overflow,
+		      int_const = मिच्छा;
+		      सचे (c_inhibit_evaluation_warnings == 0)
+			warning_at (location, OPT_Wshift_गणनम्_overflow,
 				    "left shift count >= width of vector element");
 		    }
 		}
-	      else if (compare_tree_int (op1, TYPE_PRECISION (type0)) >= 0)
+	      अञ्ञथा सचे (compare_वृक्षः_int (op1, TYPE_PRECISION (type0)) >= 0)
 		{
-		  int_const = false;
-		  if (c_inhibit_evaluation_warnings == 0)
-		    warning_at (location, OPT_Wshift_count_overflow,
+		  int_const = मिच्छा;
+		  सचे (c_inhibit_evaluation_warnings == 0)
+		    warning_at (location, OPT_Wshift_गणनम्_overflow,
 				"left shift count >= width of type");
 		}
-	      else if (TREE_CODE (op0) == INTEGER_CST
+	      अञ्ञथा सचे (वृक्षः_CODE (op0) == INTEGER_CST
 		       && maybe_warn_shift_overflow (location, op0, op1)
 		       && flag_isoc99)
-		int_const = false;
+		int_const = मिच्छा;
 	    }
 
 	  /* Use the type of the value to be shifted.  */
@@ -14861,96 +14861,96 @@ build_binary_op (location_t location, enum tree_code code,
 	  /* Avoid converting op1 to result_type later.  */
 	  converted = 1;
 	}
-      break;
+      भङ्ग;
 
-    case EQ_EXPR:
-    case NE_EXPR:
-      if (gnu_vector_type_p (type0) && gnu_vector_type_p (type1))
+    पक्ष EQ_व्यञ्जकम्:
+    पक्ष NE_व्यञ्जकम्:
+      सचे (gnu_vector_type_p (type0) && gnu_vector_type_p (type1))
         {
-          tree intt;
-	  if (!vector_types_compatible_elements_p (type0, type1))
+          वृक्षः intt;
+	  सचे (!vector_types_compatible_elements_p (type0, type1))
             {
               error_at (location, "comparing vectors with different "
                                   "element types");
-              return error_mark_node;
+              पटिनिवत्त error_mark_ग्रन्थिः;
             }
 
-	  if (maybe_ne (TYPE_VECTOR_SUBPARTS (type0),
+	  सचे (maybe_ne (TYPE_VECTOR_SUBPARTS (type0),
 			TYPE_VECTOR_SUBPARTS (type1)))
             {
               error_at (location, "comparing vectors with different "
                                   "number of elements");
-              return error_mark_node;
+              पटिनिवत्त error_mark_ग्रन्थिः;
             }
 
 	  /* It's not precisely specified how the usual arithmetic
 	     conversions apply to the vector types.  Here, we use
 	     the unsigned type if one of the operands is signed and
 	     the other one is unsigned.  */
-	  if (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
+	  सचे (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
 	    {
-	      if (!TYPE_UNSIGNED (type0))
-		op0 = build1 (VIEW_CONVERT_EXPR, type1, op0);
-	      else
-		op1 = build1 (VIEW_CONVERT_EXPR, type0, op1);
+	      सचे (!TYPE_UNSIGNED (type0))
+		op0 = build1 (VIEW_CONVERT_व्यञ्जकम्, type1, op0);
+	      अञ्ञथा
+		op1 = build1 (VIEW_CONVERT_व्यञ्जकम्, type0, op1);
 	      warning_at (location, OPT_Wsign_compare, "comparison between "
 			  "types %qT and %qT", type0, type1);
 	    }
 
           /* Always construct signed integer vector type.  */
-	  if (VECTOR_BOOLEAN_TYPE_P (type0) && VECTOR_BOOLEAN_TYPE_P (type1))
+	  सचे (VECTOR_BOOLEAN_TYPE_P (type0) && VECTOR_BOOLEAN_TYPE_P (type1))
 	    result_type = type0;
-	  else
+	  अञ्ञथा
 	    {
 	      auto nelts = TYPE_VECTOR_SUBPARTS (type0);
 
 	      intt = c_common_type_for_size (GET_MODE_BITSIZE
 					     (SCALAR_TYPE_MODE
-						(TREE_TYPE (type0))), 0);
-	      if (!intt)
+						(वृक्षः_TYPE (type0))), 0);
+	      सचे (!intt)
 		{
 		  error_at (location, "could not find an integer type "
 				      "of the same size as %qT",
-			    TREE_TYPE (type0));
-		  return error_mark_node;
+			    वृक्षः_TYPE (type0));
+		  पटिनिवत्त error_mark_ग्रन्थिः;
 		}
 	      result_type = build_opaque_vector_type (intt, nelts);
 	    }
           converted = 1;
 	  ret = build_vec_cmp (resultcode, result_type, op0, op1);
-	  goto return_build_binary_op;
+	  गच्छ return_build_द्विमान_op;
         }
-      if (FLOAT_TYPE_P (type0) || FLOAT_TYPE_P (type1))
+      सचे (FLOAT_TYPE_P (type0) || FLOAT_TYPE_P (type1))
 	warning_at (location,
 		    OPT_Wfloat_equal,
 		    "comparing floating-point with %<==%> or %<!=%> is unsafe");
       /* Result of comparison is always int,
 	 but don't convert the args to int!  */
-      build_type = integer_type_node;
-      if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == BITINT_TYPE
+      build_type = integer_type_ग्रन्थिः;
+      सचे ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == BITINT_TYPE
 	   || code0 == FIXED_POINT_TYPE || code0 == COMPLEX_TYPE)
 	  && (code1 == INTEGER_TYPE || code1 == REAL_TYPE
 	      || code1 == BITINT_TYPE
 	      || code1 == FIXED_POINT_TYPE || code1 == COMPLEX_TYPE))
 	short_compare = 1;
-      else if (code0 == POINTER_TYPE
+      अञ्ञथा सचे (code0 == POINTER_TYPE
 	       && (code1 == NULLPTR_TYPE
 		   || null_pointer_constant_p (orig_op1)))
 	{
 	  maybe_warn_for_null_address (location, op0, code);
 	  result_type = type0;
 	}
-      else if (code1 == POINTER_TYPE
+      अञ्ञथा सचे (code1 == POINTER_TYPE
 	       && (code0 == NULLPTR_TYPE
 		   || null_pointer_constant_p (orig_op0)))
 	{
 	  maybe_warn_for_null_address (location, op1, code);
 	  result_type = type1;
 	}
-      else if (code0 == POINTER_TYPE && code1 == POINTER_TYPE)
+      अञ्ञथा सचे (code0 == POINTER_TYPE && code1 == POINTER_TYPE)
 	{
-	  tree tt0 = TREE_TYPE (type0);
-	  tree tt1 = TREE_TYPE (type1);
+	  वृक्षः tt0 = वृक्षः_TYPE (type0);
+	  वृक्षः tt1 = वृक्षः_TYPE (type1);
 	  addr_space_t as0 = TYPE_ADDR_SPACE (tt0);
 	  addr_space_t as1 = TYPE_ADDR_SPACE (tt1);
 	  addr_space_t as_common = ADDR_SPACE_GENERIC;
@@ -14958,46 +14958,46 @@ build_binary_op (location_t location, enum tree_code code,
 	  /* Anything compares with void *.  void * compares with anything.
 	     Otherwise, the targets must be compatible
 	     and both must be object or both incomplete.  */
-	  if (comp_target_types (location, type0, type1))
-	    result_type = common_pointer_type (type0, type1, NULL_TREE);
-	  else if (!addr_space_superset (as0, as1, &as_common))
+	  सचे (comp_target_types (location, type0, type1))
+	    result_type = common_pointer_type (type0, type1, NULL_वृक्षः);
+	  अञ्ञथा सचे (!addr_space_superset (as0, as1, &as_common))
 	    {
 	      error_at (location, "comparison of pointers to "
 			"disjoint address spaces");
-	      return error_mark_node;
+	      पटिनिवत्त error_mark_ग्रन्थिः;
 	    }
-	  else if (VOID_TYPE_P (tt0) && !TYPE_ATOMIC (tt0))
+	  अञ्ञथा सचे (VOID_TYPE_P (tt0) && !TYPE_ATOMIC (tt0))
 	    {
-	      if (pedantic && TREE_CODE (tt1) == FUNCTION_TYPE)
+	      सचे (pedantic && वृक्षः_CODE (tt1) == FUNCTION_TYPE)
 		pedwarn (location, OPT_Wpedantic, "ISO C forbids "
 			 "comparison of %<void *%> with function pointer");
 	    }
-	  else if (VOID_TYPE_P (tt1) && !TYPE_ATOMIC (tt1))
+	  अञ्ञथा सचे (VOID_TYPE_P (tt1) && !TYPE_ATOMIC (tt1))
 	    {
-	      if (pedantic && TREE_CODE (tt0) == FUNCTION_TYPE)
+	      सचे (pedantic && वृक्षः_CODE (tt0) == FUNCTION_TYPE)
 		pedwarn (location, OPT_Wpedantic, "ISO C forbids "
 			 "comparison of %<void *%> with function pointer");
 	    }
-	  else
+	  अञ्ञथा
 	    /* Avoid warning about the volatile ObjC EH puts on decls.  */
-	    if (!objc_ok)
+	    सचे (!objc_ok)
 	      pedwarn (location, OPT_Wcompare_distinct_pointer_types,
 		       "comparison of distinct pointer types lacks a cast");
 
-	  if (result_type == NULL_TREE)
+	  सचे (result_type == NULL_वृक्षः)
 	    {
-	      int qual = ENCODE_QUAL_ADDR_SPACE (as_common);
+	      पूर्णाङ्क qual = ENCODE_QUAL_ADDR_SPACE (as_common);
 	      result_type = c_build_pointer_type
-			      (c_build_qualified_type (void_type_node, qual));
+			      (c_build_qualified_type (void_type_ग्रन्थिः, qual));
 	    }
 	}
-      else if (code0 == POINTER_TYPE
+      अञ्ञथा सचे (code0 == POINTER_TYPE
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
 	  result_type = type0;
 	  pedwarn (location, 0, "comparison between pointer and integer");
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+      अञ्ञथा सचे ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
 	       && code1 == POINTER_TYPE)
 	{
 	  result_type = type1;
@@ -15005,9 +15005,9 @@ build_binary_op (location_t location, enum tree_code code,
 	}
       /* 6.5.9: One of the following shall hold:
 	 -- both operands have type nullptr_t;  */
-      else if (code0 == NULLPTR_TYPE && code1 == NULLPTR_TYPE)
+      अञ्ञथा सचे (code0 == NULLPTR_TYPE && code1 == NULLPTR_TYPE)
 	{
-	  result_type = nullptr_type_node;
+	  result_type = nullptr_type_ग्रन्थिः;
 	  /* No need to convert the operands to result_type later.  */
 	  converted = 1;
 	}
@@ -15018,51 +15018,51 @@ build_binary_op (location_t location, enum tree_code code,
        type, since only nullptr_t can be converted to nullptr_t.  Also,
        even a constant 0 is a null pointer constant, so we may have to
        create a pointer type from its type.  */
-      else if (code0 == NULLPTR_TYPE && null_pointer_constant_p (orig_op1))
+      अञ्ञथा सचे (code0 == NULLPTR_TYPE && null_pointer_constant_p (orig_op1))
 	result_type = (INTEGRAL_TYPE_P (type1)
 		       ? c_build_pointer_type (type1) : type1);
-      else if (code1 == NULLPTR_TYPE && null_pointer_constant_p (orig_op0))
+      अञ्ञथा सचे (code1 == NULLPTR_TYPE && null_pointer_constant_p (orig_op0))
 	result_type = (INTEGRAL_TYPE_P (type0)
 		       ? c_build_pointer_type (type0) : type0);
-      if ((C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op0))
-	   || truth_value_p (TREE_CODE (orig_op0)))
-	  ^ (C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op1))
-	     || truth_value_p (TREE_CODE (orig_op1))))
+      सचे ((C_BOOLEAN_TYPE_P (वृक्षः_TYPE (orig_op0))
+	   || truth_मानम्_p (वृक्षः_CODE (orig_op0)))
+	  ^ (C_BOOLEAN_TYPE_P (वृक्षः_TYPE (orig_op1))
+	     || truth_मानम्_p (वृक्षः_CODE (orig_op1))))
 	maybe_warn_bool_compare (location, code, orig_op0, orig_op1);
-      break;
+      भङ्ग;
 
-    case LE_EXPR:
-    case GE_EXPR:
-    case LT_EXPR:
-    case GT_EXPR:
-      if (gnu_vector_type_p (type0) && gnu_vector_type_p (type1))
+    पक्ष LE_व्यञ्जकम्:
+    पक्ष GE_व्यञ्जकम्:
+    पक्ष LT_व्यञ्जकम्:
+    पक्ष GT_व्यञ्जकम्:
+      सचे (gnu_vector_type_p (type0) && gnu_vector_type_p (type1))
         {
-          tree intt;
-	  if (!vector_types_compatible_elements_p (type0, type1))
+          वृक्षः intt;
+	  सचे (!vector_types_compatible_elements_p (type0, type1))
             {
               error_at (location, "comparing vectors with different "
                                   "element types");
-              return error_mark_node;
+              पटिनिवत्त error_mark_ग्रन्थिः;
             }
 
-	  if (maybe_ne (TYPE_VECTOR_SUBPARTS (type0),
+	  सचे (maybe_ne (TYPE_VECTOR_SUBPARTS (type0),
 			TYPE_VECTOR_SUBPARTS (type1)))
             {
               error_at (location, "comparing vectors with different "
                                   "number of elements");
-              return error_mark_node;
+              पटिनिवत्त error_mark_ग्रन्थिः;
             }
 
 	  /* It's not precisely specified how the usual arithmetic
 	     conversions apply to the vector types.  Here, we use
 	     the unsigned type if one of the operands is signed and
 	     the other one is unsigned.  */
-	  if (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
+	  सचे (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
 	    {
-	      if (!TYPE_UNSIGNED (type0))
-		op0 = build1 (VIEW_CONVERT_EXPR, type1, op0);
-	      else
-		op1 = build1 (VIEW_CONVERT_EXPR, type0, op1);
+	      सचे (!TYPE_UNSIGNED (type0))
+		op0 = build1 (VIEW_CONVERT_व्यञ्जकम्, type1, op0);
+	      अञ्ञथा
+		op1 = build1 (VIEW_CONVERT_व्यञ्जकम्, type0, op1);
 	      warning_at (location, OPT_Wsign_compare, "comparison between "
 			  "types %qT and %qT", type0, type1);
 	    }
@@ -15070,155 +15070,155 @@ build_binary_op (location_t location, enum tree_code code,
           /* Always construct signed integer vector type.  */
           intt = c_common_type_for_size (GET_MODE_BITSIZE
 					 (SCALAR_TYPE_MODE
-					  (TREE_TYPE (type0))), 0);
-	  if (!intt)
+					  (वृक्षः_TYPE (type0))), 0);
+	  सचे (!intt)
 	    {
 	      error_at (location, "could not find an integer type "
 				  "of the same size as %qT",
-			TREE_TYPE (type0));
-	      return error_mark_node;
+			वृक्षः_TYPE (type0));
+	      पटिनिवत्त error_mark_ग्रन्थिः;
 	    }
           result_type = build_opaque_vector_type (intt,
 						  TYPE_VECTOR_SUBPARTS (type0));
           converted = 1;
 	  ret = build_vec_cmp (resultcode, result_type, op0, op1);
-	  goto return_build_binary_op;
+	  गच्छ return_build_द्विमान_op;
         }
-      build_type = integer_type_node;
-      if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
+      build_type = integer_type_ग्रन्थिः;
+      सचे ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
 	   || code0 == BITINT_TYPE || code0 == FIXED_POINT_TYPE)
 	  && (code1 == INTEGER_TYPE || code1 == REAL_TYPE
 	      || code1 == BITINT_TYPE || code1 == FIXED_POINT_TYPE))
 	short_compare = 1;
-      else if (code0 == POINTER_TYPE && code1 == POINTER_TYPE)
+      अञ्ञथा सचे (code0 == POINTER_TYPE && code1 == POINTER_TYPE)
 	{
-	  addr_space_t as0 = TYPE_ADDR_SPACE (TREE_TYPE (type0));
-	  addr_space_t as1 = TYPE_ADDR_SPACE (TREE_TYPE (type1));
+	  addr_space_t as0 = TYPE_ADDR_SPACE (वृक्षः_TYPE (type0));
+	  addr_space_t as1 = TYPE_ADDR_SPACE (वृक्षः_TYPE (type1));
 	  addr_space_t as_common;
 
-	  if (comp_target_types (location, type0, type1))
+	  सचे (comp_target_types (location, type0, type1))
 	    {
-	      result_type = common_pointer_type (type0, type1, NULL_TREE);
-	      if (!COMPLETE_TYPE_P (TREE_TYPE (type0))
-		  != !COMPLETE_TYPE_P (TREE_TYPE (type1)))
+	      result_type = common_pointer_type (type0, type1, NULL_वृक्षः);
+	      सचे (!COMPLETE_TYPE_P (वृक्षः_TYPE (type0))
+		  != !COMPLETE_TYPE_P (वृक्षः_TYPE (type1)))
 		pedwarn_c99 (location, OPT_Wpedantic,
 			     "comparison of complete and incomplete pointers");
-	      else if (TREE_CODE (TREE_TYPE (type0)) == FUNCTION_TYPE)
+	      अञ्ञथा सचे (वृक्षः_CODE (वृक्षः_TYPE (type0)) == FUNCTION_TYPE)
 		pedwarn (location, OPT_Wpedantic, "ISO C forbids "
 			 "ordered comparisons of pointers to functions");
-	      else if (null_pointer_constant_p (orig_op0)
+	      अञ्ञथा सचे (null_pointer_constant_p (orig_op0)
 		       || null_pointer_constant_p (orig_op1))
 		warning_at (location, OPT_Wextra,
 			    "ordered comparison of pointer with null pointer");
 
 	    }
-	  else if (!addr_space_superset (as0, as1, &as_common))
+	  अञ्ञथा सचे (!addr_space_superset (as0, as1, &as_common))
 	    {
 	      error_at (location, "comparison of pointers to "
 			"disjoint address spaces");
-	      return error_mark_node;
+	      पटिनिवत्त error_mark_ग्रन्थिः;
 	    }
-	  else
+	  अञ्ञथा
 	    {
-	      int qual = ENCODE_QUAL_ADDR_SPACE (as_common);
+	      पूर्णाङ्क qual = ENCODE_QUAL_ADDR_SPACE (as_common);
 	      result_type = c_build_pointer_type
-			      (c_build_qualified_type (void_type_node, qual));
+			      (c_build_qualified_type (void_type_ग्रन्थिः, qual));
               pedwarn (location, OPT_Wcompare_distinct_pointer_types,
                        "comparison of distinct pointer types lacks a cast");
 	    }
 	}
-      else if (code0 == POINTER_TYPE && null_pointer_constant_p (orig_op1))
+      अञ्ञथा सचे (code0 == POINTER_TYPE && null_pointer_constant_p (orig_op1))
 	{
 	  result_type = type0;
-	  if (pedantic)
+	  सचे (pedantic)
 	    pedwarn (location, OPT_Wpedantic,
 		     "ordered comparison of pointer with integer zero");
-	  else if (extra_warnings)
+	  अञ्ञथा सचे (extra_warnings)
 	    warning_at (location, OPT_Wextra,
 			"ordered comparison of pointer with integer zero");
 	}
-      else if (code1 == POINTER_TYPE && null_pointer_constant_p (orig_op0))
+      अञ्ञथा सचे (code1 == POINTER_TYPE && null_pointer_constant_p (orig_op0))
 	{
 	  result_type = type1;
-	  if (pedantic)
+	  सचे (pedantic)
 	    pedwarn (location, OPT_Wpedantic,
 		     "ordered comparison of pointer with integer zero");
-	  else if (extra_warnings)
+	  अञ्ञथा सचे (extra_warnings)
 	    warning_at (location, OPT_Wextra,
 			"ordered comparison of pointer with integer zero");
 	}
-      else if (code0 == POINTER_TYPE
+      अञ्ञथा सचे (code0 == POINTER_TYPE
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
 	  result_type = type0;
 	  pedwarn (location, 0, "comparison between pointer and integer");
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+      अञ्ञथा सचे ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
 	       && code1 == POINTER_TYPE)
 	{
 	  result_type = type1;
 	  pedwarn (location, 0, "comparison between pointer and integer");
 	}
 
-      if ((code0 == POINTER_TYPE || code1 == POINTER_TYPE)
-	  && current_function_decl != NULL_TREE
+      सचे ((code0 == POINTER_TYPE || code1 == POINTER_TYPE)
+	  && current_function_decl != NULL_वृक्षः
 	  && sanitize_flags_p (SANITIZE_POINTER_COMPARE))
 	{
-	  op0 = save_expr (c_fully_fold (op0, false, NULL));
-	  op1 = save_expr (c_fully_fold (op1, false, NULL));
+	  op0 = save_व्यञ्जकम् (c_fully_fold (op0, मिच्छा, रिक्त));
+	  op1 = save_व्यञ्जकम् (c_fully_fold (op1, मिच्छा, रिक्त));
 
-	  tree tt = builtin_decl_explicit (BUILT_IN_ASAN_POINTER_COMPARE);
-	  instrument_expr = build_call_expr_loc (location, tt, 2, op0, op1);
+	  वृक्षः tt = builtin_decl_explicit (BUILT_IN_ASAN_POINTER_COMPARE);
+	  instrument_व्यञ्जकम् = build_call_व्यञ्जकम्_loc (location, tt, 2, op0, op1);
 	}
 
-      if ((C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op0))
-	   || truth_value_p (TREE_CODE (orig_op0)))
-	  ^ (C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op1))
-	     || truth_value_p (TREE_CODE (orig_op1))))
+      सचे ((C_BOOLEAN_TYPE_P (वृक्षः_TYPE (orig_op0))
+	   || truth_मानम्_p (वृक्षः_CODE (orig_op0)))
+	  ^ (C_BOOLEAN_TYPE_P (वृक्षः_TYPE (orig_op1))
+	     || truth_मानम्_p (वृक्षः_CODE (orig_op1))))
 	maybe_warn_bool_compare (location, code, orig_op0, orig_op1);
-      break;
+      भङ्ग;
 
-    case MIN_EXPR:
-    case MAX_EXPR:
+    पक्ष MIN_व्यञ्जकम्:
+    पक्ष MAX_व्यञ्जकम्:
       /* Used for OpenMP atomics.  */
       gcc_assert (flag_openmp);
       common = 1;
-      break;
+      भङ्ग;
 
-    default:
+    स्वभाव:
       gcc_unreachable ();
     }
 
-  if (code0 == ERROR_MARK || code1 == ERROR_MARK)
-    return error_mark_node;
+  सचे (code0 == ERROR_MARK || code1 == ERROR_MARK)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if (gnu_vector_type_p (type0)
+  सचे (gnu_vector_type_p (type0)
       && gnu_vector_type_p (type1)
-      && (!tree_int_cst_equal (TYPE_SIZE (type0), TYPE_SIZE (type1))
+      && (!वृक्षः_int_cst_equal (TYPE_SIZE (type0), TYPE_SIZE (type1))
 	  || !vector_types_compatible_elements_p (type0, type1)))
     {
       gcc_rich_location richloc (location);
-      maybe_range_label_for_tree_type_mismatch
+      maybe_range_label_for_वृक्षः_type_mismatch
 	label_for_op0 (orig_op0, orig_op1),
 	label_for_op1 (orig_op1, orig_op0);
-      richloc.maybe_add_expr (orig_op0, &label_for_op0, highlight_colors::lhs);
-      richloc.maybe_add_expr (orig_op1, &label_for_op1, highlight_colors::rhs);
-      binary_op_error (&richloc, code, type0, type1);
-      return error_mark_node;
+      richloc.maybe_add_व्यञ्जकम् (orig_op0, &label_for_op0, highlight_colors::lhs);
+      richloc.maybe_add_व्यञ्जकम् (orig_op1, &label_for_op1, highlight_colors::rhs);
+      द्विमान_op_error (&richloc, code, type0, type1);
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == COMPLEX_TYPE
+  सचे ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == COMPLEX_TYPE
        || code0 == FIXED_POINT_TYPE || code0 == BITINT_TYPE
        || gnu_vector_type_p (type0))
       && (code1 == INTEGER_TYPE || code1 == REAL_TYPE || code1 == COMPLEX_TYPE
 	  || code1 == FIXED_POINT_TYPE || code1 == BITINT_TYPE
 	  || gnu_vector_type_p (type1)))
     {
-      bool first_complex = (code0 == COMPLEX_TYPE);
-      bool second_complex = (code1 == COMPLEX_TYPE);
-      int none_complex = (!first_complex && !second_complex);
+      तार्किक first_complex = (code0 == COMPLEX_TYPE);
+      तार्किक second_complex = (code1 == COMPLEX_TYPE);
+      पूर्णाङ्क none_complex = (!first_complex && !second_complex);
 
-      if (shorten || common || short_compare)
+      सचे (shorten || common || short_compare)
 	{
 	  result_type = c_common_type (type0, type1);
 	  do_warn_double_promotion (result_type, type0, type1,
@@ -15226,93 +15226,93 @@ build_binary_op (location_t location, enum tree_code code,
 				    "to match other operand of binary "
 				    "expression",
 				    location);
-	  if (result_type == error_mark_node)
-	    return error_mark_node;
+	  सचे (result_type == error_mark_ग्रन्थिः)
+	    पटिनिवत्त error_mark_ग्रन्थिः;
 	}
 
-      if (first_complex != second_complex
-	  && (code == PLUS_EXPR
-	      || code == MINUS_EXPR
-	      || code == MULT_EXPR
-	      || (code == TRUNC_DIV_EXPR && first_complex))
-	  && TREE_CODE (TREE_TYPE (result_type)) == REAL_TYPE
+      सचे (first_complex != second_complex
+	  && (code == PLUS_व्यञ्जकम्
+	      || code == MINUS_व्यञ्जकम्
+	      || code == MULT_व्यञ्जकम्
+	      || (code == TRUNC_DIV_व्यञ्जकम् && first_complex))
+	  && वृक्षः_CODE (वृक्षः_TYPE (result_type)) == REAL_TYPE
 	  && flag_signed_zeros)
 	{
 	  /* An operation on mixed real/complex operands must be
 	     handled specially, but the language-independent code can
 	     more easily optimize the plain complex arithmetic if
 	     -fno-signed-zeros.  */
-	  tree real_type = TREE_TYPE (result_type);
-	  tree real, imag;
-	  if (type0 != orig_type0 || type1 != orig_type1)
+	  वृक्षः real_type = वृक्षः_TYPE (result_type);
+	  वृक्षः real, imag;
+	  सचे (type0 != orig_type0 || type1 != orig_type1)
 	    {
 	      gcc_assert (may_need_excess_precision && common);
 	      semantic_result_type = c_common_type (orig_type0, orig_type1);
 	    }
-	  if (first_complex)
+	  सचे (first_complex)
 	    {
-	      if (TREE_TYPE (op0) != result_type)
+	      सचे (वृक्षः_TYPE (op0) != result_type)
 		op0 = convert_and_check (location, result_type, op0);
-	      if (TREE_TYPE (op1) != real_type)
+	      सचे (वृक्षः_TYPE (op1) != real_type)
 		op1 = convert_and_check (location, real_type, op1);
 	    }
-	  else
+	  अञ्ञथा
 	    {
-	      if (TREE_TYPE (op0) != real_type)
+	      सचे (वृक्षः_TYPE (op0) != real_type)
 		op0 = convert_and_check (location, real_type, op0);
-	      if (TREE_TYPE (op1) != result_type)
+	      सचे (वृक्षः_TYPE (op1) != result_type)
 		op1 = convert_and_check (location, result_type, op1);
 	    }
-	  if (TREE_CODE (op0) == ERROR_MARK || TREE_CODE (op1) == ERROR_MARK)
-	    return error_mark_node;
-	  if (first_complex)
+	  सचे (वृक्षः_CODE (op0) == ERROR_MARK || वृक्षः_CODE (op1) == ERROR_MARK)
+	    पटिनिवत्त error_mark_ग्रन्थिः;
+	  सचे (first_complex)
 	    {
-	      op0 = save_expr (op0);
-	      real = build_unary_op (EXPR_LOCATION (orig_op0), REALPART_EXPR,
-				     op0, true);
-	      imag = build_unary_op (EXPR_LOCATION (orig_op0), IMAGPART_EXPR,
-				     op0, true);
-	      switch (code)
+	      op0 = save_व्यञ्जकम् (op0);
+	      real = build_unary_op (व्यञ्जकम्_LOCATION (orig_op0), REALPART_व्यञ्जकम्,
+				     op0, सच्च);
+	      imag = build_unary_op (व्यञ्जकम्_LOCATION (orig_op0), IMAGPART_व्यञ्जकम्,
+				     op0, सच्च);
+	      विकल्प (code)
 		{
-		case MULT_EXPR:
-		case TRUNC_DIV_EXPR:
-		  op1 = save_expr (op1);
+		पक्ष MULT_व्यञ्जकम्:
+		पक्ष TRUNC_DIV_व्यञ्जकम्:
+		  op1 = save_व्यञ्जकम् (op1);
 		  imag = build2 (resultcode, real_type, imag, op1);
 		  /* Fall through.  */
-		case PLUS_EXPR:
-		case MINUS_EXPR:
+		पक्ष PLUS_व्यञ्जकम्:
+		पक्ष MINUS_व्यञ्जकम्:
 		  real = build2 (resultcode, real_type, real, op1);
-		  break;
-		default:
+		  भङ्ग;
+		स्वभाव:
 		  gcc_unreachable();
 		}
 	    }
-	  else
+	  अञ्ञथा
 	    {
-	      op1 = save_expr (op1);
-	      real = build_unary_op (EXPR_LOCATION (orig_op1), REALPART_EXPR,
-				     op1, true);
-	      imag = build_unary_op (EXPR_LOCATION (orig_op1), IMAGPART_EXPR,
-				     op1, true);
-	      switch (code)
+	      op1 = save_व्यञ्जकम् (op1);
+	      real = build_unary_op (व्यञ्जकम्_LOCATION (orig_op1), REALPART_व्यञ्जकम्,
+				     op1, सच्च);
+	      imag = build_unary_op (व्यञ्जकम्_LOCATION (orig_op1), IMAGPART_व्यञ्जकम्,
+				     op1, सच्च);
+	      विकल्प (code)
 		{
-		case MULT_EXPR:
-		  op0 = save_expr (op0);
+		पक्ष MULT_व्यञ्जकम्:
+		  op0 = save_व्यञ्जकम् (op0);
 		  imag = build2 (resultcode, real_type, op0, imag);
 		  /* Fall through.  */
-		case PLUS_EXPR:
+		पक्ष PLUS_व्यञ्जकम्:
 		  real = build2 (resultcode, real_type, op0, real);
-		  break;
-		case MINUS_EXPR:
+		  भङ्ग;
+		पक्ष MINUS_व्यञ्जकम्:
 		  real = build2 (resultcode, real_type, op0, real);
-		  imag = build1 (NEGATE_EXPR, real_type, imag);
-		  break;
-		default:
+		  imag = build1 (NEGATE_व्यञ्जकम्, real_type, imag);
+		  भङ्ग;
+		स्वभाव:
 		  gcc_unreachable();
 		}
 	    }
-	  ret = build2 (COMPLEX_EXPR, result_type, real, imag);
-	  goto return_build_binary_op;
+	  ret = build2 (COMPLEX_व्यञ्जकम्, result_type, real, imag);
+	  गच्छ return_build_द्विमान_op;
 	}
 
       /* For certain operations (which identify themselves by shorten != 0)
@@ -15326,39 +15326,39 @@ build_binary_op (location_t location, enum tree_code code,
 	 Eg, (short)-1 | (unsigned short)-1 is (int)-1
 	 but calculated in (unsigned short) it would be (unsigned short)-1.  */
 
-      if (shorten && none_complex)
+      सचे (shorten && none_complex)
 	{
 	  final_type = result_type;
-	  result_type = shorten_binary_op (result_type, op0, op1,
+	  result_type = shorten_द्विमान_op (result_type, op0, op1,
 					   shorten == -1);
 	}
 
       /* Shifts can be shortened if shifting right.  */
 
-      if (short_shift)
+      सचे (short_shift)
 	{
-	  int unsigned_arg;
-	  tree arg0 = get_narrower (op0, &unsigned_arg);
+	  पूर्णाङ्क unsigned_arg;
+	  वृक्षः arg0 = get_narrower (op0, &unsigned_arg);
 
 	  final_type = result_type;
 
-	  if (arg0 == op0 && final_type == TREE_TYPE (op0))
-	    unsigned_arg = TYPE_UNSIGNED (TREE_TYPE (op0));
+	  सचे (arg0 == op0 && final_type == वृक्षः_TYPE (op0))
+	    unsigned_arg = TYPE_UNSIGNED (वृक्षः_TYPE (op0));
 
-	  if (TYPE_PRECISION (TREE_TYPE (arg0)) < TYPE_PRECISION (result_type)
-	      && tree_int_cst_sgn (op1) > 0
+	  सचे (TYPE_PRECISION (वृक्षः_TYPE (arg0)) < TYPE_PRECISION (result_type)
+	      && वृक्षः_int_cst_sgn (op1) > 0
 	      /* We can shorten only if the shift count is less than the
 		 number of bits in the smaller type size.  */
-	      && compare_tree_int (op1, TYPE_PRECISION (TREE_TYPE (arg0))) < 0
+	      && compare_वृक्षः_int (op1, TYPE_PRECISION (वृक्षः_TYPE (arg0))) < 0
 	      /* We cannot drop an unsigned shift after sign-extension.  */
 	      && (!TYPE_UNSIGNED (final_type) || unsigned_arg))
 	    {
 	      /* Do an unsigned shift if the operand was zero-extended.  */
 	      result_type
 		= c_common_signed_or_unsigned_type (unsigned_arg,
-						    TREE_TYPE (arg0));
+						    वृक्षः_TYPE (arg0));
 	      /* Convert value-to-be-shifted to that type.  */
-	      if (TREE_TYPE (op0) != result_type)
+	      सचे (वृक्षः_TYPE (op0) != result_type)
 		op0 = convert (result_type, op0);
 	      converted = 1;
 	    }
@@ -15367,68 +15367,68 @@ build_binary_op (location_t location, enum tree_code code,
       /* Comparison operations are shortened too but differently.
 	 They identify themselves by setting short_compare = 1.  */
 
-      if (short_compare)
+      सचे (short_compare)
 	{
 	  /* Don't write &op0, etc., because that would prevent op0
 	     from being kept in a register.
 	     Instead, make copies of the our local variables and
 	     pass the copies by reference, then copy them back afterward.  */
-	  tree xop0 = op0, xop1 = op1, xresult_type = result_type;
-	  enum tree_code xresultcode = resultcode;
-	  tree val
+	  वृक्षः xop0 = op0, xop1 = op1, xresult_type = result_type;
+	  गणना वृक्षः_code xresultcode = resultcode;
+	  वृक्षः val
 	    = shorten_compare (location, &xop0, &xop1, &xresult_type,
 			       &xresultcode);
 
-	  if (val != NULL_TREE)
+	  सचे (val != NULL_वृक्षः)
 	    {
 	      ret = val;
-	      goto return_build_binary_op;
+	      गच्छ return_build_द्विमान_op;
 	    }
 
 	  op0 = xop0, op1 = xop1;
 	  converted = 1;
 	  resultcode = xresultcode;
 
-	  if (c_inhibit_evaluation_warnings == 0 && !c_in_omp_for)
+	  सचे (c_inhibit_evaluation_warnings == 0 && !c_in_omp_for)
 	    {
-	      bool op0_maybe_const = true;
-	      bool op1_maybe_const = true;
-	      tree orig_op0_folded, orig_op1_folded;
+	      तार्किक op0_maybe_const = सच्च;
+	      तार्किक op1_maybe_const = सच्च;
+	      वृक्षः orig_op0_folded, orig_op1_folded;
 
-	      if (in_late_binary_op)
+	      सचे (in_late_द्विमान_op)
 		{
 		  orig_op0_folded = orig_op0;
 		  orig_op1_folded = orig_op1;
 		}
-	      else
+	      अञ्ञथा
 		{
 		  /* Fold for the sake of possible warnings, as in
 		     build_conditional_expr.  This requires the
 		     "original" values to be folded, not just op0 and
 		     op1.  */
 		  c_inhibit_evaluation_warnings++;
-		  op0 = c_fully_fold (op0, require_constant_value,
+		  op0 = c_fully_fold (op0, require_constant_मानम्,
 				      &op0_maybe_const);
-		  op1 = c_fully_fold (op1, require_constant_value,
+		  op1 = c_fully_fold (op1, require_constant_मानम्,
 				      &op1_maybe_const);
 		  c_inhibit_evaluation_warnings--;
 		  orig_op0_folded = c_fully_fold (orig_op0,
-						  require_constant_value,
-						  NULL);
+						  require_constant_मानम्,
+						  रिक्त);
 		  orig_op1_folded = c_fully_fold (orig_op1,
-						  require_constant_value,
-						  NULL);
+						  require_constant_मानम्,
+						  रिक्त);
 		}
 
-	      if (warn_sign_compare)
+	      सचे (warn_sign_compare)
 		warn_for_sign_compare (location, orig_op0_folded,
 				       orig_op1_folded, op0, op1,
 				       result_type, resultcode);
-	      if (!in_late_binary_op && !int_operands)
+	      सचे (!in_late_द्विमान_op && !int_operands)
 		{
-		  if (!op0_maybe_const || TREE_CODE (op0) != INTEGER_CST)
+		  सचे (!op0_maybe_const || वृक्षः_CODE (op0) != INTEGER_CST)
 		    op0 = c_wrap_maybe_const (op0, !op0_maybe_const);
-		  if (!op1_maybe_const || TREE_CODE (op1) != INTEGER_CST)
+		  सचे (!op1_maybe_const || वृक्षः_CODE (op1) != INTEGER_CST)
 		    op1 = c_wrap_maybe_const (op1, !op1_maybe_const);
 		}
 	    }
@@ -15441,19 +15441,19 @@ build_binary_op (location_t location, enum tree_code code,
      It will be given type FINAL_TYPE if that is nonzero;
      otherwise, it will be given type RESULT_TYPE.  */
 
-  if (!result_type)
+  सचे (!result_type)
     {
       /* Favor showing any expression locations that are available. */
       op_location_t oploc (location, UNKNOWN_LOCATION);
-      binary_op_rich_location richloc (oploc, orig_op0, orig_op1, true);
-      binary_op_error (&richloc, code, TREE_TYPE (op0), TREE_TYPE (op1));
-      return error_mark_node;
+      द्विमान_op_rich_location richloc (oploc, orig_op0, orig_op1, सच्च);
+      द्विमान_op_error (&richloc, code, वृक्षः_TYPE (op0), वृक्षः_TYPE (op1));
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  if (build_type == NULL_TREE)
+  सचे (build_type == NULL_वृक्षः)
     {
       build_type = result_type;
-      if ((type0 != orig_type0 || type1 != orig_type1)
+      सचे ((type0 != orig_type0 || type1 != orig_type1)
 	  && !boolean_op)
 	{
 	  gcc_assert (may_need_excess_precision && common);
@@ -15461,7 +15461,7 @@ build_binary_op (location_t location, enum tree_code code,
 	}
     }
 
-  if (!converted)
+  सचे (!converted)
     {
       op0 = ep_convert_and_check (location, result_type, op0,
 				  semantic_result_type);
@@ -15470,319 +15470,319 @@ build_binary_op (location_t location, enum tree_code code,
 
       /* This can happen if one operand has a vector type, and the other
 	 has a different type.  */
-      if (TREE_CODE (op0) == ERROR_MARK || TREE_CODE (op1) == ERROR_MARK)
-	return error_mark_node;
+      सचे (वृक्षः_CODE (op0) == ERROR_MARK || वृक्षः_CODE (op1) == ERROR_MARK)
+	पटिनिवत्त error_mark_ग्रन्थिः;
     }
 
-  if (sanitize_flags_p ((SANITIZE_SHIFT
+  सचे (sanitize_flags_p ((SANITIZE_SHIFT
 			 | SANITIZE_DIVIDE
 			 | SANITIZE_FLOAT_DIVIDE
 			 | SANITIZE_SI_OVERFLOW))
-      && current_function_decl != NULL_TREE
+      && current_function_decl != NULL_वृक्षः
       && (doing_div_or_mod || doing_shift)
-      && !require_constant_value)
+      && !require_constant_मानम्)
     {
       /* OP0 and/or OP1 might have side-effects.  */
-      op0 = save_expr (op0);
-      op1 = save_expr (op1);
-      op0 = c_fully_fold (op0, false, NULL);
-      op1 = c_fully_fold (op1, false, NULL);
-      if (doing_div_or_mod && (sanitize_flags_p ((SANITIZE_DIVIDE
+      op0 = save_व्यञ्जकम् (op0);
+      op1 = save_व्यञ्जकम् (op1);
+      op0 = c_fully_fold (op0, मिच्छा, रिक्त);
+      op1 = c_fully_fold (op1, मिच्छा, रिक्त);
+      सचे (doing_div_or_mod && (sanitize_flags_p ((SANITIZE_DIVIDE
 						  | SANITIZE_FLOAT_DIVIDE
 						  | SANITIZE_SI_OVERFLOW))))
-	instrument_expr = ubsan_instrument_division (location, op0, op1);
-      else if (doing_shift && sanitize_flags_p (SANITIZE_SHIFT))
-	instrument_expr = ubsan_instrument_shift (location, code, op0, op1);
+	instrument_व्यञ्जकम् = ubsan_instrument_division (location, op0, op1);
+      अञ्ञथा सचे (doing_shift && sanitize_flags_p (SANITIZE_SHIFT))
+	instrument_व्यञ्जकम् = ubsan_instrument_shift (location, code, op0, op1);
     }
 
   /* Treat expressions in initializers specially as they can't trap.  */
-  if (int_const_or_overflow)
-    ret = (require_constant_value
+  सचे (int_const_or_overflow)
+    ret = (require_constant_मानम्
 	   ? fold_build2_initializer_loc (location, resultcode, build_type,
 					  op0, op1)
 	   : fold_build2_loc (location, resultcode, build_type, op0, op1));
-  else
+  अञ्ञथा
     ret = build2 (resultcode, build_type, op0, op1);
-  if (final_type != NULL_TREE)
+  सचे (final_type != NULL_वृक्षः)
     ret = convert (final_type, ret);
 
- return_build_binary_op:
-  gcc_assert (ret != error_mark_node);
-  if (TREE_CODE (ret) == INTEGER_CST && !TREE_OVERFLOW (ret) && !int_const)
+ return_build_द्विमान_op:
+  gcc_assert (ret != error_mark_ग्रन्थिः);
+  सचे (वृक्षः_CODE (ret) == INTEGER_CST && !वृक्षः_OVERFLOW (ret) && !int_const)
     ret = (int_operands
 	   ? note_integer_operands (ret)
-	   : build1 (NOP_EXPR, TREE_TYPE (ret), ret));
-  else if (TREE_CODE (ret) != INTEGER_CST && int_operands
-	   && !in_late_binary_op)
+	   : build1 (NOP_व्यञ्जकम्, वृक्षः_TYPE (ret), ret));
+  अञ्ञथा सचे (वृक्षः_CODE (ret) != INTEGER_CST && int_operands
+	   && !in_late_द्विमान_op)
     ret = note_integer_operands (ret);
-  protected_set_expr_location (ret, location);
+  protected_set_व्यञ्जकम्_location (ret, location);
 
-  if (instrument_expr != NULL)
-    ret = fold_build2 (COMPOUND_EXPR, TREE_TYPE (ret),
-		       instrument_expr, ret);
+  सचे (instrument_व्यञ्जकम् != रिक्त)
+    ret = fold_build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (ret),
+		       instrument_व्यञ्जकम्, ret);
 
-  if (semantic_result_type)
-    ret = build1_loc (location, EXCESS_PRECISION_EXPR,
+  सचे (semantic_result_type)
+    ret = build1_loc (location, EXCESS_PRECISION_व्यञ्जकम्,
 		      semantic_result_type, ret);
 
-  return ret;
+  पटिनिवत्त ret;
 }
 
 
 /* Convert EXPR to be a truth-value (type TYPE), validating its type for this
    purpose.  LOCATION is the source location for the expression.  */
 
-tree
-c_objc_common_truthvalue_conversion (location_t location, tree expr, tree type)
+वृक्षः
+c_objc_common_truthvalue_conversion (location_t location, वृक्षः व्यञ्जकम्, वृक्षः type)
 {
-  bool int_const, int_operands;
+  तार्किक int_const, int_operands;
 
-  switch (TREE_CODE (TREE_TYPE (expr)))
+  विकल्प (वृक्षः_CODE (वृक्षः_TYPE (व्यञ्जकम्)))
     {
-    case ARRAY_TYPE:
+    पक्ष ARRAY_TYPE:
       error_at (location, "used array that cannot be converted to pointer where scalar is required");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
 
-    case RECORD_TYPE:
+    पक्ष RECORD_TYPE:
       error_at (location, "used struct type value where scalar is required");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
 
-    case UNION_TYPE:
+    पक्ष UNION_TYPE:
       error_at (location, "used union type value where scalar is required");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
 
-    case VOID_TYPE:
+    पक्ष VOID_TYPE:
       error_at (location, "void value not ignored as it ought to be");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
 
-    case POINTER_TYPE:
-      if (reject_gcc_builtin (expr))
-	return error_mark_node;
-      break;
+    पक्ष POINTER_TYPE:
+      सचे (reject_gcc_builtin (व्यञ्जकम्))
+	पटिनिवत्त error_mark_ग्रन्थिः;
+      भङ्ग;
 
-    case FUNCTION_TYPE:
+    पक्ष FUNCTION_TYPE:
       gcc_unreachable ();
 
-    case VECTOR_TYPE:
+    पक्ष VECTOR_TYPE:
       error_at (location, "used vector type where scalar is required");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
 
-    default:
-      break;
+    स्वभाव:
+      भङ्ग;
     }
 
   /* Conversion of a floating constant to boolean goes through here
      and yields an integer constant expression.  Otherwise, the result
      is only an integer constant expression if the argument is.  */
-  int_const = ((TREE_CODE (expr) == INTEGER_CST && !TREE_OVERFLOW (expr))
-	       || ((TREE_CODE (expr) == REAL_CST
-		    || TREE_CODE (expr) == COMPLEX_CST)
-		   && (TREE_CODE (type) == BOOLEAN_TYPE
-		       || (TREE_CODE (type) == ENUMERAL_TYPE
-			   && ENUM_UNDERLYING_TYPE (type) != NULL_TREE
-			   && (TREE_CODE (ENUM_UNDERLYING_TYPE (type))
+  int_const = ((वृक्षः_CODE (व्यञ्जकम्) == INTEGER_CST && !वृक्षः_OVERFLOW (व्यञ्जकम्))
+	       || ((वृक्षः_CODE (व्यञ्जकम्) == REAL_CST
+		    || वृक्षः_CODE (व्यञ्जकम्) == COMPLEX_CST)
+		   && (वृक्षः_CODE (type) == BOOLEAN_TYPE
+		       || (वृक्षः_CODE (type) == ENUMERAL_TYPE
+			   && ENUM_UNDERLYING_TYPE (type) != NULL_वृक्षः
+			   && (वृक्षः_CODE (ENUM_UNDERLYING_TYPE (type))
 			       == BOOLEAN_TYPE)))));
-  int_operands = EXPR_INT_CONST_OPERANDS (expr);
-  if (int_operands && TREE_CODE (expr) != INTEGER_CST)
+  int_operands = व्यञ्जकम्_INT_CONST_OPERANDS (व्यञ्जकम्);
+  सचे (int_operands && वृक्षः_CODE (व्यञ्जकम्) != INTEGER_CST)
     {
-      expr = remove_c_maybe_const_expr (expr);
-      expr = build2 (NE_EXPR, type, expr,
-		     convert (TREE_TYPE (expr), integer_zero_node));
-      expr = note_integer_operands (expr);
+      व्यञ्जकम् = remove_c_maybe_const_व्यञ्जकम् (व्यञ्जकम्);
+      व्यञ्जकम् = build2 (NE_व्यञ्जकम्, type, व्यञ्जकम्,
+		     convert (वृक्षः_TYPE (व्यञ्जकम्), integer_zero_ग्रन्थिः));
+      व्यञ्जकम् = note_integer_operands (व्यञ्जकम्);
     }
-  else
+  अञ्ञथा
     {
       /* ??? Should we also give an error for vectors rather than leaving
 	 those to give errors later?  */
-      expr = c_common_truthvalue_conversion (location, expr);
-      expr = fold_convert_loc (location, type, expr);
+      व्यञ्जकम् = c_common_truthvalue_conversion (location, व्यञ्जकम्);
+      व्यञ्जकम् = fold_convert_loc (location, type, व्यञ्जकम्);
     }
 
-  if (TREE_CODE (expr) == INTEGER_CST && int_operands && !int_const)
+  सचे (वृक्षः_CODE (व्यञ्जकम्) == INTEGER_CST && int_operands && !int_const)
     {
-      if (TREE_OVERFLOW (expr))
-	return expr;
-      else
-	return note_integer_operands (expr);
+      सचे (वृक्षः_OVERFLOW (व्यञ्जकम्))
+	पटिनिवत्त व्यञ्जकम्;
+      अञ्ञथा
+	पटिनिवत्त note_integer_operands (व्यञ्जकम्);
     }
-  if (TREE_CODE (expr) == INTEGER_CST && !int_const)
-    return build1 (NOP_EXPR, TREE_TYPE (expr), expr);
-  return expr;
+  सचे (वृक्षः_CODE (व्यञ्जकम्) == INTEGER_CST && !int_const)
+    पटिनिवत्त build1 (NOP_व्यञ्जकम्, वृक्षः_TYPE (व्यञ्जकम्), व्यञ्जकम्);
+  पटिनिवत्त व्यञ्जकम्;
 }
 
 
 /* Convert EXPR to a contained DECL, updating *TC, *TI and *SE as
    required.  */
 
-tree
-c_expr_to_decl (tree expr, bool *tc ATTRIBUTE_UNUSED, bool *se)
+वृक्षः
+c_व्यञ्जकम्_to_decl (वृक्षः व्यञ्जकम्, तार्किक *tc ATTRIBUTE_UNUSED, तार्किक *se)
 {
-  if (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
+  सचे (वृक्षः_CODE (व्यञ्जकम्) == COMPOUND_LITERAL_व्यञ्जकम्)
     {
-      tree decl = COMPOUND_LITERAL_EXPR_DECL (expr);
+      वृक्षः decl = COMPOUND_LITERAL_व्यञ्जकम्_DECL (व्यञ्जकम्);
       /* Executing a compound literal inside a function reinitializes
 	 it.  */
-      if (!TREE_STATIC (decl))
-	*se = true;
-      return decl;
+      सचे (!वृक्षः_STATIC (decl))
+	*se = सच्च;
+      पटिनिवत्त decl;
     }
-  else
-    return expr;
+  अञ्ञथा
+    पटिनिवत्त व्यञ्जकम्;
 }
 
 /* Generate OMP construct CODE, with BODY and CLAUSES as its compound
    statement.  LOC is the location of the construct.  */
 
-tree
-c_finish_omp_construct (location_t loc, enum tree_code code, tree body,
-			tree clauses)
+वृक्षः
+c_finish_omp_construct (location_t loc, गणना वृक्षः_code code, वृक्षः body,
+			वृक्षः clauses)
 {
-  body = c_end_compound_stmt (loc, body, true);
+  body = c_end_compound_stmt (loc, body, सच्च);
 
-  tree stmt = make_node (code);
-  TREE_TYPE (stmt) = void_type_node;
+  वृक्षः stmt = make_ग्रन्थिः (code);
+  वृक्षः_TYPE (stmt) = void_type_ग्रन्थिः;
   OMP_BODY (stmt) = body;
   OMP_CLAUSES (stmt) = clauses;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_व्यञ्जकम्_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  पटिनिवत्त add_stmt (stmt);
 }
 
 /* Generate OACC_DATA, with CLAUSES and BLOCK as its compound
    statement.  LOC is the location of the OACC_DATA.  */
 
-tree
-c_finish_oacc_data (location_t loc, tree clauses, tree block)
+वृक्षः
+c_finish_oacc_data (location_t loc, वृक्षः clauses, वृक्षः block)
 {
-  tree stmt;
+  वृक्षः stmt;
 
-  block = c_end_compound_stmt (loc, block, true);
+  block = c_end_compound_stmt (loc, block, सच्च);
 
-  stmt = make_node (OACC_DATA);
-  TREE_TYPE (stmt) = void_type_node;
+  stmt = make_ग्रन्थिः (OACC_DATA);
+  वृक्षः_TYPE (stmt) = void_type_ग्रन्थिः;
   OACC_DATA_CLAUSES (stmt) = clauses;
   OACC_DATA_BODY (stmt) = block;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_व्यञ्जकम्_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  पटिनिवत्त add_stmt (stmt);
 }
 
 /* Generate OACC_HOST_DATA, with CLAUSES and BLOCK as its compound
    statement.  LOC is the location of the OACC_HOST_DATA.  */
 
-tree
-c_finish_oacc_host_data (location_t loc, tree clauses, tree block)
+वृक्षः
+c_finish_oacc_host_data (location_t loc, वृक्षः clauses, वृक्षः block)
 {
-  tree stmt;
+  वृक्षः stmt;
 
-  block = c_end_compound_stmt (loc, block, true);
+  block = c_end_compound_stmt (loc, block, सच्च);
 
-  stmt = make_node (OACC_HOST_DATA);
-  TREE_TYPE (stmt) = void_type_node;
+  stmt = make_ग्रन्थिः (OACC_HOST_DATA);
+  वृक्षः_TYPE (stmt) = void_type_ग्रन्थिः;
   OACC_HOST_DATA_CLAUSES (stmt) = clauses;
   OACC_HOST_DATA_BODY (stmt) = block;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_व्यञ्जकम्_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  पटिनिवत्त add_stmt (stmt);
 }
 
 /* Like c_begin_compound_stmt, except force the retention of the BLOCK.  */
 
-tree
-c_begin_omp_parallel (void)
+वृक्षः
+c_begin_omp_parallel (शून्य)
 {
-  tree block;
+  वृक्षः block;
 
   keep_next_level ();
-  block = c_begin_compound_stmt (true);
+  block = c_begin_compound_stmt (सच्च);
 
-  return block;
+  पटिनिवत्त block;
 }
 
 /* Generate OMP_PARALLEL, with CLAUSES and BLOCK as its compound
    statement.  LOC is the location of the OMP_PARALLEL.  */
 
-tree
-c_finish_omp_parallel (location_t loc, tree clauses, tree block)
+वृक्षः
+c_finish_omp_parallel (location_t loc, वृक्षः clauses, वृक्षः block)
 {
-  tree stmt;
+  वृक्षः stmt;
 
-  block = c_end_compound_stmt (loc, block, true);
+  block = c_end_compound_stmt (loc, block, सच्च);
 
-  stmt = make_node (OMP_PARALLEL);
-  TREE_TYPE (stmt) = void_type_node;
+  stmt = make_ग्रन्थिः (OMP_PARALLEL);
+  वृक्षः_TYPE (stmt) = void_type_ग्रन्थिः;
   OMP_PARALLEL_CLAUSES (stmt) = clauses;
   OMP_PARALLEL_BODY (stmt) = block;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_व्यञ्जकम्_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  पटिनिवत्त add_stmt (stmt);
 }
 
 /* Like c_begin_compound_stmt, except force the retention of the BLOCK.  */
 
-tree
-c_begin_omp_task (void)
+वृक्षः
+c_begin_omp_task (शून्य)
 {
-  tree block;
+  वृक्षः block;
 
   keep_next_level ();
-  block = c_begin_compound_stmt (true);
+  block = c_begin_compound_stmt (सच्च);
 
-  return block;
+  पटिनिवत्त block;
 }
 
 /* Generate OMP_TASK, with CLAUSES and BLOCK as its compound
    statement.  LOC is the location of the #pragma.  */
 
-tree
-c_finish_omp_task (location_t loc, tree clauses, tree block)
+वृक्षः
+c_finish_omp_task (location_t loc, वृक्षः clauses, वृक्षः block)
 {
-  tree stmt;
+  वृक्षः stmt;
 
-  block = c_end_compound_stmt (loc, block, true);
+  block = c_end_compound_stmt (loc, block, सच्च);
 
-  stmt = make_node (OMP_TASK);
-  TREE_TYPE (stmt) = void_type_node;
+  stmt = make_ग्रन्थिः (OMP_TASK);
+  वृक्षः_TYPE (stmt) = void_type_ग्रन्थिः;
   OMP_TASK_CLAUSES (stmt) = clauses;
   OMP_TASK_BODY (stmt) = block;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_व्यञ्जकम्_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  पटिनिवत्त add_stmt (stmt);
 }
 
 /* Generate GOMP_cancel call for #pragma omp cancel.  */
 
-void
-c_finish_omp_cancel (location_t loc, tree clauses)
+शून्य
+c_finish_omp_cancel (location_t loc, वृक्षः clauses)
 {
-  tree fn = builtin_decl_explicit (BUILT_IN_GOMP_CANCEL);
-  int mask = 0;
-  if (omp_find_clause (clauses, OMP_CLAUSE_PARALLEL))
+  वृक्षः fn = builtin_decl_explicit (BUILT_IN_GOMP_CANCEL);
+  पूर्णाङ्क mask = 0;
+  सचे (omp_find_clause (clauses, OMP_CLAUSE_PARALLEL))
     mask = 1;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_FOR))
+  अञ्ञथा सचे (omp_find_clause (clauses, OMP_CLAUSE_FOR))
     mask = 2;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_SECTIONS))
+  अञ्ञथा सचे (omp_find_clause (clauses, OMP_CLAUSE_SECTIONS))
     mask = 4;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_TASKGROUP))
+  अञ्ञथा सचे (omp_find_clause (clauses, OMP_CLAUSE_TASKGROUP))
     mask = 8;
-  else
+  अञ्ञथा
     {
       error_at (loc, "%<#pragma omp cancel%> must specify one of "
 		     "%<parallel%>, %<for%>, %<sections%> or %<taskgroup%> "
 		     "clauses");
-      return;
+      पटिनिवत्त;
     }
-  tree ifc = omp_find_clause (clauses, OMP_CLAUSE_IF);
-  if (ifc != NULL_TREE)
+  वृक्षः ifc = omp_find_clause (clauses, OMP_CLAUSE_IF);
+  सचे (ifc != NULL_वृक्षः)
     {
-      if (OMP_CLAUSE_IF_MODIFIER (ifc) != ERROR_MARK
+      सचे (OMP_CLAUSE_IF_MODIFIER (ifc) != ERROR_MARK
 	  && OMP_CLAUSE_IF_MODIFIER (ifc) != VOID_CST)
 	error_at (OMP_CLAUSE_LOCATION (ifc),
 		  "expected %<cancel%> %<if%> clause modifier");
-      else
+      अञ्ञथा
 	{
-	  tree ifc2 = omp_find_clause (OMP_CLAUSE_CHAIN (ifc), OMP_CLAUSE_IF);
-	  if (ifc2 != NULL_TREE)
+	  वृक्षः ifc2 = omp_find_clause (OMP_CLAUSE_CHAIN (ifc), OMP_CLAUSE_IF);
+	  सचे (ifc2 != NULL_वृक्षः)
 	    {
 	      gcc_assert (OMP_CLAUSE_IF_MODIFIER (ifc) == VOID_CST
 			  && OMP_CLAUSE_IF_MODIFIER (ifc2) != ERROR_MARK
@@ -15792,15 +15792,15 @@ c_finish_omp_cancel (location_t loc, tree clauses)
 	    }
 	}
 
-      tree type = TREE_TYPE (OMP_CLAUSE_IF_EXPR (ifc));
-      ifc = fold_build2_loc (OMP_CLAUSE_LOCATION (ifc), NE_EXPR,
-			     boolean_type_node, OMP_CLAUSE_IF_EXPR (ifc),
+      वृक्षः type = वृक्षः_TYPE (OMP_CLAUSE_IF_व्यञ्जकम् (ifc));
+      ifc = fold_build2_loc (OMP_CLAUSE_LOCATION (ifc), NE_व्यञ्जकम्,
+			     boolean_type_ग्रन्थिः, OMP_CLAUSE_IF_व्यञ्जकम् (ifc),
 			     build_zero_cst (type));
     }
-  else
-    ifc = boolean_true_node;
-  tree stmt = build_call_expr_loc (loc, fn, 2,
-				   build_int_cst (integer_type_node, mask),
+  अञ्ञथा
+    ifc = boolean_true_ग्रन्थिः;
+  वृक्षः stmt = build_call_व्यञ्जकम्_loc (loc, fn, 2,
+				   build_int_cst (integer_type_ग्रन्थिः, mask),
 				   ifc);
   add_stmt (stmt);
 }
@@ -15808,28 +15808,28 @@ c_finish_omp_cancel (location_t loc, tree clauses)
 /* Generate GOMP_cancellation_point call for
    #pragma omp cancellation point.  */
 
-void
-c_finish_omp_cancellation_point (location_t loc, tree clauses)
+शून्य
+c_finish_omp_cancellation_point (location_t loc, वृक्षः clauses)
 {
-  tree fn = builtin_decl_explicit (BUILT_IN_GOMP_CANCELLATION_POINT);
-  int mask = 0;
-  if (omp_find_clause (clauses, OMP_CLAUSE_PARALLEL))
+  वृक्षः fn = builtin_decl_explicit (BUILT_IN_GOMP_CANCELLATION_POINT);
+  पूर्णाङ्क mask = 0;
+  सचे (omp_find_clause (clauses, OMP_CLAUSE_PARALLEL))
     mask = 1;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_FOR))
+  अञ्ञथा सचे (omp_find_clause (clauses, OMP_CLAUSE_FOR))
     mask = 2;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_SECTIONS))
+  अञ्ञथा सचे (omp_find_clause (clauses, OMP_CLAUSE_SECTIONS))
     mask = 4;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_TASKGROUP))
+  अञ्ञथा सचे (omp_find_clause (clauses, OMP_CLAUSE_TASKGROUP))
     mask = 8;
-  else
+  अञ्ञथा
     {
       error_at (loc, "%<#pragma omp cancellation point%> must specify one of "
 		     "%<parallel%>, %<for%>, %<sections%> or %<taskgroup%> "
 		     "clauses");
-      return;
+      पटिनिवत्त;
     }
-  tree stmt = build_call_expr_loc (loc, fn, 1,
-				   build_int_cst (integer_type_node, mask));
+  वृक्षः stmt = build_call_व्यञ्जकम्_loc (loc, fn, 1,
+				   build_int_cst (integer_type_ग्रन्थिः, mask));
   add_stmt (stmt);
 }
 
@@ -15853,61 +15853,61 @@ c_finish_omp_cancellation_point (location_t loc, tree clauses)
    can if MAYBE_ZERO_LEN is false.  MAYBE_ZERO_LEN will be true in the above
    case though, as some lengths could be zero.  */
 
-static tree
-handle_omp_array_sections_1 (tree c, tree t, vec<tree> &types,
-			     bool &maybe_zero_len, unsigned int &first_non_one,
-			     enum c_omp_region_type ort)
+स्थिर वृक्षः
+handle_omp_array_sections_1 (वृक्षः c, वृक्षः t, vec<वृक्षः> &types,
+			     तार्किक &maybe_zero_len, unsigned पूर्णाङ्क &first_non_one,
+			     गणना c_omp_region_type ort)
 {
-  tree ret, low_bound, length, type;
-  bool openacc = (ort & C_ORT_ACC) != 0;
-  if (TREE_CODE (t) != OMP_ARRAY_SECTION)
+  वृक्षः ret, नीचः_bound, length, type;
+  तार्किक openacc = (ort & C_ORT_ACC) != 0;
+  सचे (वृक्षः_CODE (t) != OMP_ARRAY_SECTION)
     {
-      if (error_operand_p (t))
-	return error_mark_node;
+      सचे (error_operand_p (t))
+	पटिनिवत्त error_mark_ग्रन्थिः;
       c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
       ret = t;
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
+      सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
 	  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
-	  && TYPE_ATOMIC (strip_array_types (TREE_TYPE (t))))
+	  && TYPE_ATOMIC (strip_array_types (वृक्षः_TYPE (t))))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c), "%<_Atomic%> %qE in %qs clause",
 		    t, omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      if (!ai.check_clause (c))
-	return error_mark_node;
-      else if (ai.component_access_p ()
+      सचे (!ai.check_clause (c))
+	पटिनिवत्त error_mark_ग्रन्थिः;
+      अञ्ञथा सचे (ai.component_access_p ()
 	       && (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TO
 		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_FROM))
-	t = ai.get_root_term (true);
-      else
+	t = ai.get_मूलम्_term (सच्च);
+      अञ्ञथा
 	t = ai.unconverted_ref_origin ();
-      if (t == error_mark_node)
-	return error_mark_node;
-      if (!VAR_P (t)
-	  && (ort == C_ORT_ACC || !EXPR_P (t))
-	  && TREE_CODE (t) != PARM_DECL)
+      सचे (t == error_mark_ग्रन्थिः)
+	पटिनिवत्त error_mark_ग्रन्थिः;
+      सचे (!VAR_P (t)
+	  && (ort == C_ORT_ACC || !व्यञ्जकम्_P (t))
+	  && वृक्षः_CODE (t) != PARM_DECL)
 	{
-	  if (DECL_P (t))
+	  सचे (DECL_P (t))
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qD is not a variable in %qs clause", t,
 		      omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  else
+	  अञ्ञथा
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qE is not a variable in %qs clause", t,
 		      omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      else if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
+      अञ्ञथा सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
 	       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
-	       && TYPE_ATOMIC (TREE_TYPE (t)))
+	       && TYPE_ATOMIC (वृक्षः_TYPE (t)))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c), "%<_Atomic%> %qD in %qs clause",
 		    t, omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      else if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
+      अञ्ञथा सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
 	       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
 	       && VAR_P (t)
 	       && DECL_THREAD_LOCAL_P (t))
@@ -15915,146 +15915,146 @@ handle_omp_array_sections_1 (tree c, tree t, vec<tree> &types,
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "%qD is threadprivate variable in %qs clause", t,
 		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
+      सचे ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
 	   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND)
-	  && TYPE_ATOMIC (TREE_TYPE (t))
-	  && POINTER_TYPE_P (TREE_TYPE (t)))
+	  && TYPE_ATOMIC (वृक्षः_TYPE (t))
+	  && POINTER_TYPE_P (वृक्षः_TYPE (t)))
 	{
 	  /* If the array section is pointer based and the pointer
 	     itself is _Atomic qualified, we need to atomically load
 	     the pointer.  */
 	  ret = convert_lvalue_to_rvalue (OMP_CLAUSE_LOCATION (c),
-					  ret, false, false);
+					  ret, मिच्छा, मिच्छा);
 	}
-      return ret;
+      पटिनिवत्त ret;
     }
 
-  ret = handle_omp_array_sections_1 (c, TREE_OPERAND (t, 0), types,
+  ret = handle_omp_array_sections_1 (c, वृक्षः_OPERAND (t, 0), types,
 				     maybe_zero_len, first_non_one, ort);
-  if (ret == error_mark_node || ret == NULL_TREE)
-    return ret;
+  सचे (ret == error_mark_ग्रन्थिः || ret == NULL_वृक्षः)
+    पटिनिवत्त ret;
 
-  type = TREE_TYPE (ret);
-  low_bound = TREE_OPERAND (t, 1);
-  length = TREE_OPERAND (t, 2);
+  type = वृक्षः_TYPE (ret);
+  नीचः_bound = वृक्षः_OPERAND (t, 1);
+  length = वृक्षः_OPERAND (t, 2);
 
-  if (low_bound == error_mark_node || length == error_mark_node)
-    return error_mark_node;
+  सचे (नीचः_bound == error_mark_ग्रन्थिः || length == error_mark_ग्रन्थिः)
+    पटिनिवत्त error_mark_ग्रन्थिः;
 
-  if (low_bound && !INTEGRAL_TYPE_P (TREE_TYPE (low_bound)))
+  सचे (नीचः_bound && !INTEGRAL_TYPE_P (वृक्षः_TYPE (नीचः_bound)))
     {
       error_at (OMP_CLAUSE_LOCATION (c),
 		"low bound %qE of array section does not have integral type",
-		low_bound);
-      return error_mark_node;
+		नीचः_bound);
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
-  if (length && !INTEGRAL_TYPE_P (TREE_TYPE (length)))
+  सचे (length && !INTEGRAL_TYPE_P (वृक्षः_TYPE (length)))
     {
       error_at (OMP_CLAUSE_LOCATION (c),
 		"length %qE of array section does not have integral type",
 		length);
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
-  if (low_bound
-      && TREE_CODE (low_bound) == INTEGER_CST
-      && TYPE_PRECISION (TREE_TYPE (low_bound))
+  सचे (नीचः_bound
+      && वृक्षः_CODE (नीचः_bound) == INTEGER_CST
+      && TYPE_PRECISION (वृक्षः_TYPE (नीचः_bound))
 	 > TYPE_PRECISION (sizetype))
-    low_bound = fold_convert (sizetype, low_bound);
-  if (length
-      && TREE_CODE (length) == INTEGER_CST
-      && TYPE_PRECISION (TREE_TYPE (length))
+    नीचः_bound = fold_convert (sizetype, नीचः_bound);
+  सचे (length
+      && वृक्षः_CODE (length) == INTEGER_CST
+      && TYPE_PRECISION (वृक्षः_TYPE (length))
 	 > TYPE_PRECISION (sizetype))
     length = fold_convert (sizetype, length);
-  if (low_bound == NULL_TREE)
-    low_bound = integer_zero_node;
-  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+  सचे (नीचः_bound == NULL_वृक्षः)
+    नीचः_bound = integer_zero_ग्रन्थिः;
+  सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
       && (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
 	  || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH))
     {
-      if (length != integer_one_node)
+      सचे (length != integer_one_ग्रन्थिः)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "expected single pointer in %qs clause",
 		    user_omp_clause_code_name (c, openacc));
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
     }
-  if (length != NULL_TREE)
+  सचे (length != NULL_वृक्षः)
     {
-      if (!integer_nonzerop (length))
+      सचे (!integer_nonzerop (length))
 	{
-	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
+	  सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
 	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
 	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION)
 	    {
-	      if (integer_zerop (length))
+	      सचे (integer_zerop (length))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "zero length array section in %qs clause",
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+		  पटिनिवत्त error_mark_ग्रन्थिः;
 		}
 	    }
-	  else
-	    maybe_zero_len = true;
+	  अञ्ञथा
+	    maybe_zero_len = सच्च;
 	}
-      if (first_non_one == types.length ()
-	  && (TREE_CODE (length) != INTEGER_CST || integer_onep (length)))
+      सचे (first_non_one == types.length ()
+	  && (वृक्षः_CODE (length) != INTEGER_CST || integer_onep (length)))
 	first_non_one++;
     }
-  if (TREE_CODE (type) == ARRAY_TYPE)
+  सचे (वृक्षः_CODE (type) == ARRAY_TYPE)
     {
-      if (length == NULL_TREE
-	  && (TYPE_DOMAIN (type) == NULL_TREE
-	      || TYPE_MAX_VALUE (TYPE_DOMAIN (type)) == NULL_TREE))
+      सचे (length == NULL_वृक्षः
+	  && (TYPE_DOMAIN (type) == NULL_वृक्षः
+	      || TYPE_MAX_मानम् (TYPE_DOMAIN (type)) == NULL_वृक्षः))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "for unknown bound array type length expression must "
 		    "be specified");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      if (TREE_CODE (low_bound) == INTEGER_CST
-	  && tree_int_cst_sgn (low_bound) == -1)
+      सचे (वृक्षः_CODE (नीचः_bound) == INTEGER_CST
+	  && वृक्षः_int_cst_sgn (नीचः_bound) == -1)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "negative low bound in array section in %qs clause",
 		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      if (length != NULL_TREE
-	  && TREE_CODE (length) == INTEGER_CST
-	  && tree_int_cst_sgn (length) == -1)
+      सचे (length != NULL_वृक्षः
+	  && वृक्षः_CODE (length) == INTEGER_CST
+	  && वृक्षः_int_cst_sgn (length) == -1)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "negative length in array section in %qs clause",
 		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      if (TYPE_DOMAIN (type)
-	  && TYPE_MAX_VALUE (TYPE_DOMAIN (type))
-	  && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (type)))
+      सचे (TYPE_DOMAIN (type)
+	  && TYPE_MAX_मानम् (TYPE_DOMAIN (type))
+	  && वृक्षः_CODE (TYPE_MAX_मानम् (TYPE_DOMAIN (type)))
 			== INTEGER_CST)
 	{
-	  tree size
-	    = fold_convert (sizetype, TYPE_MAX_VALUE (TYPE_DOMAIN (type)));
-	  size = size_binop (PLUS_EXPR, size, size_one_node);
-	  if (TREE_CODE (low_bound) == INTEGER_CST)
+	  वृक्षः size
+	    = fold_convert (sizetype, TYPE_MAX_मानम् (TYPE_DOMAIN (type)));
+	  size = size_binop (PLUS_व्यञ्जकम्, size, size_one_ग्रन्थिः);
+	  सचे (वृक्षः_CODE (नीचः_bound) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_lt (size, low_bound))
+	      सचे (वृक्षः_int_cst_lt (size, नीचः_bound))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "low bound %qE above array section size "
-			    "in %qs clause", low_bound,
+			    "in %qs clause", नीचः_bound,
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+		  पटिनिवत्त error_mark_ग्रन्थिः;
 		}
-	      if (tree_int_cst_equal (size, low_bound))
+	      सचे (वृक्षः_int_cst_equal (size, नीचः_bound))
 		{
-		  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
+		  सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
@@ -16063,396 +16063,396 @@ handle_omp_array_sections_1 (tree c, tree t, vec<tree> &types,
 		      error_at (OMP_CLAUSE_LOCATION (c),
 				"zero length array section in %qs clause",
 				omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		      return error_mark_node;
+		      पटिनिवत्त error_mark_ग्रन्थिः;
 		    }
-		  maybe_zero_len = true;
+		  maybe_zero_len = सच्च;
 		}
-	      else if (length == NULL_TREE
+	      अञ्ञथा सचे (length == NULL_वृक्षः
 		       && first_non_one == types.length ()
-		       && tree_int_cst_equal
-			    (TYPE_MAX_VALUE (TYPE_DOMAIN (type)),
-			     low_bound))
+		       && वृक्षः_int_cst_equal
+			    (TYPE_MAX_मानम् (TYPE_DOMAIN (type)),
+			     नीचः_bound))
 		first_non_one++;
 	    }
-	  else if (length == NULL_TREE)
+	  अञ्ञथा सचे (length == NULL_वृक्षः)
 	    {
-	      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
+	      सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
 		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
 		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_REDUCTION
 		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_IN_REDUCTION
 		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_TASK_REDUCTION)
-		maybe_zero_len = true;
-	      if (first_non_one == types.length ())
+		maybe_zero_len = सच्च;
+	      सचे (first_non_one == types.length ())
 		first_non_one++;
 	    }
-	  if (length && TREE_CODE (length) == INTEGER_CST)
+	  सचे (length && वृक्षः_CODE (length) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_lt (size, length))
+	      सचे (वृक्षः_int_cst_lt (size, length))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "length %qE above array section size "
 			    "in %qs clause", length,
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+		  पटिनिवत्त error_mark_ग्रन्थिः;
 		}
-	      if (TREE_CODE (low_bound) == INTEGER_CST)
+	      सचे (वृक्षः_CODE (नीचः_bound) == INTEGER_CST)
 		{
-		  tree lbpluslen
-		    = size_binop (PLUS_EXPR,
-				  fold_convert (sizetype, low_bound),
+		  वृक्षः lbpluslen
+		    = size_binop (PLUS_व्यञ्जकम्,
+				  fold_convert (sizetype, नीचः_bound),
 				  fold_convert (sizetype, length));
-		  if (TREE_CODE (lbpluslen) == INTEGER_CST
-		      && tree_int_cst_lt (size, lbpluslen))
+		  सचे (वृक्षः_CODE (lbpluslen) == INTEGER_CST
+		      && वृक्षः_int_cst_lt (size, lbpluslen))
 		    {
 		      error_at (OMP_CLAUSE_LOCATION (c),
 				"high bound %qE above array section size "
 				"in %qs clause", lbpluslen,
 				omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		      return error_mark_node;
+		      पटिनिवत्त error_mark_ग्रन्थिः;
 		    }
 		}
 	    }
 	}
-      else if (length == NULL_TREE)
+      अञ्ञथा सचे (length == NULL_वृक्षः)
 	{
-	  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
+	  सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
 	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
 	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_REDUCTION
 	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_IN_REDUCTION
 	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_TASK_REDUCTION)
-	    maybe_zero_len = true;
-	  if (first_non_one == types.length ())
+	    maybe_zero_len = सच्च;
+	  सचे (first_non_one == types.length ())
 	    first_non_one++;
 	}
 
       /* For [lb:] we will need to evaluate lb more than once.  */
-      if (length == NULL_TREE && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND)
+      सचे (length == NULL_वृक्षः && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND)
 	{
-	  tree lb = save_expr (low_bound);
-	  if (lb != low_bound)
+	  वृक्षः lb = save_व्यञ्जकम् (नीचः_bound);
+	  सचे (lb != नीचः_bound)
 	    {
-	      TREE_OPERAND (t, 1) = lb;
-	      low_bound = lb;
+	      वृक्षः_OPERAND (t, 1) = lb;
+	      नीचः_bound = lb;
 	    }
 	}
     }
-  else if (TREE_CODE (type) == POINTER_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (type) == POINTER_TYPE)
     {
-      if (length == NULL_TREE)
+      सचे (length == NULL_वृक्षः)
 	{
-	  if (TREE_CODE (ret) == PARM_DECL && C_ARRAY_PARAMETER (ret))
+	  सचे (वृक्षः_CODE (ret) == PARM_DECL && C_ARRAY_PARAMETER (ret))
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "for array function parameter length expression "
 		      "must be specified");
-	  else
+	  अञ्ञथा
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "for pointer type length expression must be specified");
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
-      if (length != NULL_TREE
-	  && TREE_CODE (length) == INTEGER_CST
-	  && tree_int_cst_sgn (length) == -1)
+      सचे (length != NULL_वृक्षः
+	  && वृक्षः_CODE (length) == INTEGER_CST
+	  && वृक्षः_int_cst_sgn (length) == -1)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "negative length in array section in %qs clause",
 		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  पटिनिवत्त error_mark_ग्रन्थिः;
 	}
       /* If there is a pointer type anywhere but in the very first
 	 array-section-subscript, the array section could be non-contiguous.  */
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
+      सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
 	  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
-	  && TREE_CODE (TREE_OPERAND (t, 0)) == OMP_ARRAY_SECTION)
+	  && वृक्षः_CODE (वृक्षः_OPERAND (t, 0)) == OMP_ARRAY_SECTION)
 	{
 	  /* If any prior dimension has a non-one length, then deem this
 	     array section as non-contiguous.  */
-	  for (tree d = TREE_OPERAND (t, 0);
-	       TREE_CODE (d) == OMP_ARRAY_SECTION;
-	       d = TREE_OPERAND (d, 0))
+	  अत्थाय (वृक्षः d = वृक्षः_OPERAND (t, 0);
+	       वृक्षः_CODE (d) == OMP_ARRAY_SECTION;
+	       d = वृक्षः_OPERAND (d, 0))
 	    {
-	      tree d_length = TREE_OPERAND (d, 2);
-	      if (d_length == NULL_TREE || !integer_onep (d_length))
+	      वृक्षः d_length = वृक्षः_OPERAND (d, 2);
+	      सचे (d_length == NULL_वृक्षः || !integer_onep (d_length))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "array section is not contiguous in %qs clause",
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+		  पटिनिवत्त error_mark_ग्रन्थिः;
 		}
 	    }
 	}
     }
-  else
+  अञ्ञथा
     {
       error_at (OMP_CLAUSE_LOCATION (c),
 		"%qE does not have pointer or array type", ret);
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
-  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND)
-    types.safe_push (TREE_TYPE (ret));
+  सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND)
+    types.safe_प्रक्षिप (वृक्षः_TYPE (ret));
   /* We will need to evaluate lb more than once.  */
-  tree lb = save_expr (low_bound);
-  if (lb != low_bound)
+  वृक्षः lb = save_व्यञ्जकम् (नीचः_bound);
+  सचे (lb != नीचः_bound)
     {
-      TREE_OPERAND (t, 1) = lb;
-      low_bound = lb;
+      वृक्षः_OPERAND (t, 1) = lb;
+      नीचः_bound = lb;
     }
-  ret = build_array_ref (OMP_CLAUSE_LOCATION (c), ret, low_bound);
-  return ret;
+  ret = build_array_ref (OMP_CLAUSE_LOCATION (c), ret, नीचः_bound);
+  पटिनिवत्त ret;
 }
 
 /* Handle array sections for clause C.  */
 
-static bool
-handle_omp_array_sections (tree &c, enum c_omp_region_type ort)
+स्थिर तार्किक
+handle_omp_array_sections (वृक्षः &c, गणना c_omp_region_type ort)
 {
-  bool maybe_zero_len = false;
-  unsigned int first_non_one = 0;
-  auto_vec<tree, 10> types;
-  tree *tp = &OMP_CLAUSE_DECL (c);
-  if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+  तार्किक maybe_zero_len = मिच्छा;
+  unsigned पूर्णाङ्क first_non_one = 0;
+  auto_vec<वृक्षः, 10> types;
+  वृक्षः *tp = &OMP_CLAUSE_DECL (c);
+  सचे ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
        || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY)
       && OMP_ITERATOR_DECL_P (*tp))
-    tp = &TREE_VALUE (*tp);
-  tree first = handle_omp_array_sections_1 (c, *tp, types,
+    tp = &वृक्षः_मानम् (*tp);
+  वृक्षः first = handle_omp_array_sections_1 (c, *tp, types,
 					    maybe_zero_len, first_non_one,
 					    ort);
-  if (first == error_mark_node)
-    return true;
-  if (first == NULL_TREE)
-    return false;
-  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+  सचे (first == error_mark_ग्रन्थिः)
+    पटिनिवत्त सच्च;
+  सचे (first == NULL_वृक्षः)
+    पटिनिवत्त मिच्छा;
+  सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
       || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY)
     {
-      tree t = *tp;
-      tree tem = NULL_TREE;
+      वृक्षः t = *tp;
+      वृक्षः tem = NULL_वृक्षः;
       /* Need to evaluate side effects in the length expressions
 	 if any.  */
-      while (TREE_CODE (t) == TREE_LIST)
+      याव (वृक्षः_CODE (t) == वृक्षः_LIST)
 	{
-	  if (TREE_VALUE (t) && TREE_SIDE_EFFECTS (TREE_VALUE (t)))
+	  सचे (वृक्षः_मानम् (t) && वृक्षः_SIDE_EFFECTS (वृक्षः_मानम् (t)))
 	    {
-	      if (tem == NULL_TREE)
-		tem = TREE_VALUE (t);
-	      else
-		tem = build2 (COMPOUND_EXPR, TREE_TYPE (tem),
-			      TREE_VALUE (t), tem);
+	      सचे (tem == NULL_वृक्षः)
+		tem = वृक्षः_मानम् (t);
+	      अञ्ञथा
+		tem = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (tem),
+			      वृक्षः_मानम् (t), tem);
 	    }
-	  t = TREE_CHAIN (t);
+	  t = वृक्षः_CHAIN (t);
 	}
-      if (tem)
-	first = build2 (COMPOUND_EXPR, TREE_TYPE (first), tem, first);
-      first = c_fully_fold (first, false, NULL, true);
+      सचे (tem)
+	first = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (first), tem, first);
+      first = c_fully_fold (first, मिच्छा, रिक्त, सच्च);
       *tp = first;
     }
-  else
+  अञ्ञथा
     {
-      unsigned int num = types.length (), i;
-      tree t, side_effects = NULL_TREE, size = NULL_TREE;
-      tree condition = NULL_TREE;
+      unsigned पूर्णाङ्क अङ्कः = types.length (), i;
+      वृक्षः t, side_effects = NULL_वृक्षः, size = NULL_वृक्षः;
+      वृक्षः condition = NULL_वृक्षः;
 
-      if (int_size_in_bytes (TREE_TYPE (first)) <= 0)
-	maybe_zero_len = true;
+      सचे (int_size_in_bytes (वृक्षः_TYPE (first)) <= 0)
+	maybe_zero_len = सच्च;
 
-      for (i = num, t = OMP_CLAUSE_DECL (c); i > 0;
-	   t = TREE_OPERAND (t, 0))
+      अत्थाय (i = अङ्कः, t = OMP_CLAUSE_DECL (c); i > 0;
+	   t = वृक्षः_OPERAND (t, 0))
 	{
-	  tree low_bound = TREE_OPERAND (t, 1);
-	  tree length = TREE_OPERAND (t, 2);
+	  वृक्षः नीचः_bound = वृक्षः_OPERAND (t, 1);
+	  वृक्षः length = वृक्षः_OPERAND (t, 2);
 
 	  i--;
-	  if (low_bound
-	      && TREE_CODE (low_bound) == INTEGER_CST
-	      && TYPE_PRECISION (TREE_TYPE (low_bound))
+	  सचे (नीचः_bound
+	      && वृक्षः_CODE (नीचः_bound) == INTEGER_CST
+	      && TYPE_PRECISION (वृक्षः_TYPE (नीचः_bound))
 		 > TYPE_PRECISION (sizetype))
-	    low_bound = fold_convert (sizetype, low_bound);
-	  if (length
-	      && TREE_CODE (length) == INTEGER_CST
-	      && TYPE_PRECISION (TREE_TYPE (length))
+	    नीचः_bound = fold_convert (sizetype, नीचः_bound);
+	  सचे (length
+	      && वृक्षः_CODE (length) == INTEGER_CST
+	      && TYPE_PRECISION (वृक्षः_TYPE (length))
 		 > TYPE_PRECISION (sizetype))
 	    length = fold_convert (sizetype, length);
-	  if (low_bound == NULL_TREE)
-	    low_bound = integer_zero_node;
-	  if (!maybe_zero_len && i > first_non_one)
+	  सचे (नीचः_bound == NULL_वृक्षः)
+	    नीचः_bound = integer_zero_ग्रन्थिः;
+	  सचे (!maybe_zero_len && i > first_non_one)
 	    {
-	      if (integer_nonzerop (low_bound))
-		goto do_warn_noncontiguous;
-	      if (length != NULL_TREE
-		  && TREE_CODE (length) == INTEGER_CST
+	      सचे (integer_nonzerop (नीचः_bound))
+		गच्छ do_warn_noncontiguous;
+	      सचे (length != NULL_वृक्षः
+		  && वृक्षः_CODE (length) == INTEGER_CST
 		  && TYPE_DOMAIN (types[i])
-		  && TYPE_MAX_VALUE (TYPE_DOMAIN (types[i]))
-		  && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (types[i])))
+		  && TYPE_MAX_मानम् (TYPE_DOMAIN (types[i]))
+		  && वृक्षः_CODE (TYPE_MAX_मानम् (TYPE_DOMAIN (types[i])))
 		     == INTEGER_CST)
 		{
-		  tree size;
-		  size = size_binop (PLUS_EXPR,
-				     TYPE_MAX_VALUE (TYPE_DOMAIN (types[i])),
-				     size_one_node);
-		  if (!tree_int_cst_equal (length, size))
+		  वृक्षः size;
+		  size = size_binop (PLUS_व्यञ्जकम्,
+				     TYPE_MAX_मानम् (TYPE_DOMAIN (types[i])),
+				     size_one_ग्रन्थिः);
+		  सचे (!वृक्षः_int_cst_equal (length, size))
 		    {
 		     do_warn_noncontiguous:
 		      error_at (OMP_CLAUSE_LOCATION (c),
 				"array section is not contiguous in %qs "
 				"clause",
 				omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		      return true;
+		      पटिनिवत्त सच्च;
 		    }
 		}
-	      if (length != NULL_TREE
-		  && TREE_SIDE_EFFECTS (length))
+	      सचे (length != NULL_वृक्षः
+		  && वृक्षः_SIDE_EFFECTS (length))
 		{
-		  if (side_effects == NULL_TREE)
+		  सचे (side_effects == NULL_वृक्षः)
 		    side_effects = length;
-		  else
-		    side_effects = build2 (COMPOUND_EXPR,
-					   TREE_TYPE (side_effects),
+		  अञ्ञथा
+		    side_effects = build2 (COMPOUND_व्यञ्जकम्,
+					   वृक्षः_TYPE (side_effects),
 					   length, side_effects);
 		}
 	    }
-	  else
+	  अञ्ञथा
 	    {
-	      tree l;
+	      वृक्षः l;
 
-	      if (i > first_non_one
+	      सचे (i > first_non_one
 		  && ((length && integer_nonzerop (length))
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION))
-		continue;
-	      if (length)
+		अनुवर्त;
+	      सचे (length)
 		l = fold_convert (sizetype, length);
-	      else
+	      अञ्ञथा
 		{
-		  l = size_binop (PLUS_EXPR,
-				  TYPE_MAX_VALUE (TYPE_DOMAIN (types[i])),
-				  size_one_node);
-		  l = size_binop (MINUS_EXPR, l,
-				  fold_convert (sizetype, low_bound));
+		  l = size_binop (PLUS_व्यञ्जकम्,
+				  TYPE_MAX_मानम् (TYPE_DOMAIN (types[i])),
+				  size_one_ग्रन्थिः);
+		  l = size_binop (MINUS_व्यञ्जकम्, l,
+				  fold_convert (sizetype, नीचः_bound));
 		}
-	      if (i > first_non_one)
+	      सचे (i > first_non_one)
 		{
-		  l = fold_build2 (NE_EXPR, boolean_type_node, l,
-				   size_zero_node);
-		  if (condition == NULL_TREE)
+		  l = fold_build2 (NE_व्यञ्जकम्, boolean_type_ग्रन्थिः, l,
+				   size_zero_ग्रन्थिः);
+		  सचे (condition == NULL_वृक्षः)
 		    condition = l;
-		  else
-		    condition = fold_build2 (BIT_AND_EXPR, boolean_type_node,
+		  अञ्ञथा
+		    condition = fold_build2 (BIT_AND_व्यञ्जकम्, boolean_type_ग्रन्थिः,
 					     l, condition);
 		}
-	      else if (size == NULL_TREE)
+	      अञ्ञथा सचे (size == NULL_वृक्षः)
 		{
-		  size = size_in_bytes (TREE_TYPE (types[i]));
-		  tree eltype = TREE_TYPE (types[num - 1]);
-		  while (TREE_CODE (eltype) == ARRAY_TYPE)
-		    eltype = TREE_TYPE (eltype);
-		  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
+		  size = size_in_bytes (वृक्षः_TYPE (types[i]));
+		  वृक्षः eltype = वृक्षः_TYPE (types[अङ्कः - 1]);
+		  याव (वृक्षः_CODE (eltype) == ARRAY_TYPE)
+		    eltype = वृक्षः_TYPE (eltype);
+		  सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION)
 		    {
-		      if (integer_zerop (size)
+		      सचे (integer_zerop (size)
 			  || integer_zerop (size_in_bytes (eltype)))
 			{
 			  error_at (OMP_CLAUSE_LOCATION (c),
 				    "zero length array section in %qs clause",
 				    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-			  return error_mark_node;
+			  पटिनिवत्त error_mark_ग्रन्थिः;
 			}
-		      size = size_binop (EXACT_DIV_EXPR, size,
+		      size = size_binop (EXACT_DIV_व्यञ्जकम्, size,
 					 size_in_bytes (eltype));
 		    }
-		  size = size_binop (MULT_EXPR, size, l);
-		  if (condition)
-		    size = fold_build3 (COND_EXPR, sizetype, condition,
-					size, size_zero_node);
+		  size = size_binop (MULT_व्यञ्जकम्, size, l);
+		  सचे (condition)
+		    size = fold_build3 (COND_व्यञ्जकम्, sizetype, condition,
+					size, size_zero_ग्रन्थिः);
 		}
-	      else
-		size = size_binop (MULT_EXPR, size, l);
+	      अञ्ञथा
+		size = size_binop (MULT_व्यञ्जकम्, size, l);
 	    }
 	}
-      if (side_effects)
-	size = build2 (COMPOUND_EXPR, sizetype, side_effects, size);
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
+      सचे (side_effects)
+	size = build2 (COMPOUND_व्यञ्जकम्, sizetype, side_effects, size);
+      सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 	  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
 	  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION)
 	{
-	  size = size_binop (MINUS_EXPR, size, size_one_node);
-	  size = c_fully_fold (size, false, NULL);
-	  size = save_expr (size);
-	  tree index_type = build_index_type (size);
-	  tree eltype = TREE_TYPE (first);
-	  while (TREE_CODE (eltype) == ARRAY_TYPE)
-	    eltype = TREE_TYPE (eltype);
-	  tree type = c_build_array_type (eltype, index_type);
-	  tree ptype = c_build_pointer_type (eltype);
-	  if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE)
-	    t = build_fold_addr_expr (t);
-	  tree t2 = build_fold_addr_expr (first);
+	  size = size_binop (MINUS_व्यञ्जकम्, size, size_one_ग्रन्थिः);
+	  size = c_fully_fold (size, मिच्छा, रिक्त);
+	  size = save_व्यञ्जकम् (size);
+	  वृक्षः index_type = build_index_type (size);
+	  वृक्षः eltype = वृक्षः_TYPE (first);
+	  याव (वृक्षः_CODE (eltype) == ARRAY_TYPE)
+	    eltype = वृक्षः_TYPE (eltype);
+	  वृक्षः type = c_build_array_type (eltype, index_type);
+	  वृक्षः ptype = c_build_pointer_type (eltype);
+	  सचे (वृक्षः_CODE (वृक्षः_TYPE (t)) == ARRAY_TYPE)
+	    t = build_fold_addr_व्यञ्जकम् (t);
+	  वृक्षः t2 = build_fold_addr_व्यञ्जकम् (first);
 	  t2 = fold_convert_loc (OMP_CLAUSE_LOCATION (c),
-				 ptrdiff_type_node, t2);
-	  t2 = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_EXPR,
-				ptrdiff_type_node, t2,
+				 ptrdiff_type_ग्रन्थिः, t2);
+	  t2 = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_व्यञ्जकम्,
+				ptrdiff_type_ग्रन्थिः, t2,
 				fold_convert_loc (OMP_CLAUSE_LOCATION (c),
-						  ptrdiff_type_node, t));
-	  t2 = c_fully_fold (t2, false, NULL);
-	  if (tree_fits_shwi_p (t2))
+						  ptrdiff_type_ग्रन्थिः, t));
+	  t2 = c_fully_fold (t2, मिच्छा, रिक्त);
+	  सचे (वृक्षः_fits_shwi_p (t2))
 	    t = build2 (MEM_REF, type, t,
-			build_int_cst (ptype, tree_to_shwi (t2)));
-	  else
+			build_int_cst (ptype, वृक्षः_to_shwi (t2)));
+	  अञ्ञथा
 	    {
 	      t2 = fold_convert_loc (OMP_CLAUSE_LOCATION (c), sizetype, t2);
-	      t = build2_loc (OMP_CLAUSE_LOCATION (c), POINTER_PLUS_EXPR,
-			      TREE_TYPE (t), t, t2);
+	      t = build2_loc (OMP_CLAUSE_LOCATION (c), POINTER_PLUS_व्यञ्जकम्,
+			      वृक्षः_TYPE (t), t, t2);
 	      t = build2 (MEM_REF, type, t, build_int_cst (ptype, 0));
 	    }
 	  OMP_CLAUSE_DECL (c) = t;
-	  return false;
+	  पटिनिवत्त मिच्छा;
 	}
-      first = c_fully_fold (first, false, NULL);
+      first = c_fully_fold (first, मिच्छा, रिक्त);
       OMP_CLAUSE_DECL (c) = first;
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_HAS_DEVICE_ADDR)
-	return false;
+      सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_HAS_DEVICE_ADDR)
+	पटिनिवत्त मिच्छा;
       /* Don't set OMP_CLAUSE_SIZE for bare attach/detach clauses.  */
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
+      सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
 	  || (OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_ATTACH
 	      && OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_DETACH
 	      && OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_FORCE_DETACH))
 	{
-	  if (size)
-	    size = c_fully_fold (size, false, NULL);
+	  सचे (size)
+	    size = c_fully_fold (size, मिच्छा, रिक्त);
 	  OMP_CLAUSE_SIZE (c) = size;
 	}
 
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
-	return false;
+      सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
+	पटिनिवत्त मिच्छा;
 
       auto_vec<omp_addr_token *, 10> addr_tokens;
 
-      if (!omp_parse_expr (addr_tokens, first))
-	return true;
+      सचे (!omp_parse_व्यञ्जकम् (addr_tokens, first))
+	पटिनिवत्त सच्च;
 
       c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
 
-      tree nc = ai.expand_map_clause (c, first, addr_tokens, ort);
-      if (nc != error_mark_node)
+      वृक्षः nc = ai.expand_map_clause (c, first, addr_tokens, ort);
+      सचे (nc != error_mark_ग्रन्थिः)
 	{
-	  using namespace omp_addr_tokenizer;
+	  using नामाकाश omp_addr_tokenizer;
 
-	  if (ai.maybe_zero_length_array_section (c))
+	  सचे (ai.maybe_zero_length_array_section (c))
 	    OMP_CLAUSE_MAP_MAYBE_ZERO_LENGTH_ARRAY_SECTION (c) = 1;
 
 	  /* !!! If we're accessing a base decl via chained access
 	     methods (e.g. multiple indirections), duplicate clause
 	     detection won't work properly.  Skip it in that case.  */
-	  if ((addr_tokens[0]->type == STRUCTURE_BASE
+	  सचे ((addr_tokens[0]->type == STRUCTURE_BASE
 	       || addr_tokens[0]->type == ARRAY_BASE)
 	      && addr_tokens[0]->u.structure_base_kind == BASE_DECL
 	      && addr_tokens[1]->type == ACCESS_METHOD
 	      && omp_access_chain_p (addr_tokens, 1))
 	    c = nc;
 
-	  return false;
+	  पटिनिवत्त मिच्छा;
 	}
     }
-  return false;
+  पटिनिवत्त मिच्छा;
 }
 
 /* Helper function of finish_omp_clauses.  Clone STMT as if we were making
@@ -16460,16 +16460,16 @@ handle_omp_array_sections (tree &c, enum c_omp_region_type ort)
    the OMP_DECL1 VAR_DECL (omp_out resp. omp_orig) to PLACEHOLDER
    and OMP_DECL2 VAR_DECL (omp_in resp. omp_priv) to DECL.  */
 
-static tree
-c_clone_omp_udr (tree stmt, tree omp_decl1, tree omp_decl2,
-		 tree decl, tree placeholder)
+स्थिर वृक्षः
+c_clone_omp_udr (वृक्षः stmt, वृक्षः omp_decl1, वृक्षः omp_decl2,
+		 वृक्षः decl, वृक्षः placeholder)
 {
   copy_body_data id;
-  hash_map<tree, tree> decl_map;
+  hash_map<वृक्षः, वृक्षः> decl_map;
 
   decl_map.put (omp_decl1, placeholder);
   decl_map.put (omp_decl2, decl);
-  memset (&id, 0, sizeof (id));
+  memset (&id, 0, परिमाण (id));
   id.src_fn = DECL_CONTEXT (omp_decl1);
   id.dst_fn = current_function_decl;
   id.src_cfun = DECL_STRUCT_FUNCTION (id.src_fn);
@@ -16477,269 +16477,269 @@ c_clone_omp_udr (tree stmt, tree omp_decl1, tree omp_decl2,
 
   id.copy_decl = copy_decl_no_change;
   id.transform_call_graph_edges = CB_CGE_DUPLICATE;
-  id.transform_new_cfg = true;
-  id.transform_return_to_modify = false;
+  id.transform_new_cfg = सच्च;
+  id.transform_return_to_modify = मिच्छा;
   id.eh_lp_nr = 0;
-  walk_tree (&stmt, copy_tree_body_r, &id, NULL);
-  return stmt;
+  walk_वृक्षः (&stmt, copy_वृक्षः_body_r, &id, रिक्त);
+  पटिनिवत्त stmt;
 }
 
 /* Helper function of c_finish_omp_clauses, called via walk_tree.
    Find OMP_CLAUSE_PLACEHOLDER (passed in DATA) in *TP.  */
 
-static tree
-c_find_omp_placeholder_r (tree *tp, int *, void *data)
+स्थिर वृक्षः
+c_find_omp_placeholder_r (वृक्षः *tp, पूर्णाङ्क *, शून्य *data)
 {
-  if (*tp == (tree) data)
-    return *tp;
-  return NULL_TREE;
+  सचे (*tp == (वृक्षः) data)
+    पटिनिवत्त *tp;
+  पटिनिवत्त NULL_वृक्षः;
 }
 
 /* Similarly, but also walk aggregate fields.  */
 
-struct c_find_omp_var_s { tree var; hash_set<tree> *pset; };
+संरचना c_find_omp_var_s { वृक्षः var; hash_set<वृक्षः> *pset; };
 
-static tree
-c_find_omp_var_r (tree *tp, int *, void *data)
+स्थिर वृक्षः
+c_find_omp_var_r (वृक्षः *tp, पूर्णाङ्क *, शून्य *data)
 {
-  if (*tp == ((struct c_find_omp_var_s *) data)->var)
-    return *tp;
-  if (RECORD_OR_UNION_TYPE_P (*tp))
+  सचे (*tp == ((संरचना c_find_omp_var_s *) data)->var)
+    पटिनिवत्त *tp;
+  सचे (RECORD_OR_UNION_TYPE_P (*tp))
     {
-      tree field;
-      hash_set<tree> *pset = ((struct c_find_omp_var_s *) data)->pset;
+      वृक्षः field;
+      hash_set<वृक्षः> *pset = ((संरचना c_find_omp_var_s *) data)->pset;
 
-      for (field = TYPE_FIELDS (*tp); field;
+      अत्थाय (field = TYPE_FIELDS (*tp); field;
 	   field = DECL_CHAIN (field))
-	if (TREE_CODE (field) == FIELD_DECL)
+	सचे (वृक्षः_CODE (field) == FIELD_DECL)
 	  {
-	    tree ret = walk_tree (&DECL_FIELD_OFFSET (field),
+	    वृक्षः ret = walk_वृक्षः (&DECL_FIELD_OFFSET (field),
 				  c_find_omp_var_r, data, pset);
-	    if (ret)
-	      return ret;
-	    ret = walk_tree (&DECL_SIZE (field), c_find_omp_var_r, data, pset);
-	    if (ret)
-	      return ret;
-	    ret = walk_tree (&DECL_SIZE_UNIT (field), c_find_omp_var_r, data,
+	    सचे (ret)
+	      पटिनिवत्त ret;
+	    ret = walk_वृक्षः (&DECL_SIZE (field), c_find_omp_var_r, data, pset);
+	    सचे (ret)
+	      पटिनिवत्त ret;
+	    ret = walk_वृक्षः (&DECL_SIZE_UNIT (field), c_find_omp_var_r, data,
 			     pset);
-	    if (ret)
-	      return ret;
-	    ret = walk_tree (&TREE_TYPE (field), c_find_omp_var_r, data, pset);
-	    if (ret)
-	      return ret;
+	    सचे (ret)
+	      पटिनिवत्त ret;
+	    ret = walk_वृक्षः (&वृक्षः_TYPE (field), c_find_omp_var_r, data, pset);
+	    सचे (ret)
+	      पटिनिवत्त ret;
 	  }
     }
-  else if (INTEGRAL_TYPE_P (*tp))
-    return walk_tree (&TYPE_MAX_VALUE (*tp), c_find_omp_var_r, data,
-		      ((struct c_find_omp_var_s *) data)->pset);
-  return NULL_TREE;
+  अञ्ञथा सचे (INTEGRAL_TYPE_P (*tp))
+    पटिनिवत्त walk_वृक्षः (&TYPE_MAX_मानम् (*tp), c_find_omp_var_r, data,
+		      ((संरचना c_find_omp_var_s *) data)->pset);
+  पटिनिवत्त NULL_वृक्षः;
 }
 
 /* Finish OpenMP iterators ITER.  Return true if they are erroneous
    and clauses containing them should be removed.  */
 
-static bool
-c_omp_finish_iterators (tree iter)
+स्थिर तार्किक
+c_omp_finish_iterators (वृक्षः iter)
 {
-  bool ret = false;
-  for (tree it = iter; it; it = TREE_CHAIN (it))
+  तार्किक ret = मिच्छा;
+  अत्थाय (वृक्षः it = iter; it; it = वृक्षः_CHAIN (it))
     {
-      tree var = OMP_ITERATOR_VAR (it);
-      tree begin = OMP_ITERATOR_BEGIN (it);
-      tree end = OMP_ITERATOR_END (it);
-      tree step = OMP_ITERATOR_STEP (it);
-      tree orig_step;
-      tree type = TREE_TYPE (var);
+      वृक्षः var = OMP_ITERATOR_VAR (it);
+      वृक्षः begin = OMP_ITERATOR_BEGIN (it);
+      वृक्षः end = OMP_ITERATOR_END (it);
+      वृक्षः step = OMP_ITERATOR_STEP (it);
+      वृक्षः orig_step;
+      वृक्षः type = वृक्षः_TYPE (var);
       location_t loc = DECL_SOURCE_LOCATION (var);
-      if (type == error_mark_node)
+      सचे (type == error_mark_ग्रन्थिः)
 	{
-	  ret = true;
-	  continue;
+	  ret = सच्च;
+	  अनुवर्त;
 	}
-      if (!INTEGRAL_TYPE_P (type) && !POINTER_TYPE_P (type))
+      सचे (!INTEGRAL_TYPE_P (type) && !POINTER_TYPE_P (type))
 	{
 	  error_at (loc, "iterator %qD has neither integral nor pointer type",
 		    var);
-	  ret = true;
-	  continue;
+	  ret = सच्च;
+	  अनुवर्त;
 	}
-      else if (TYPE_ATOMIC (type))
+      अञ्ञथा सचे (TYPE_ATOMIC (type))
 	{
 	  error_at (loc, "iterator %qD has %<_Atomic%> qualified type", var);
-	  ret = true;
-	  continue;
+	  ret = सच्च;
+	  अनुवर्त;
 	}
-      else if (TYPE_READONLY (type))
+      अञ्ञथा सचे (TYPE_READONLY (type))
 	{
 	  error_at (loc, "iterator %qD has const qualified type", var);
-	  ret = true;
-	  continue;
+	  ret = सच्च;
+	  अनुवर्त;
 	}
-      else if (step == error_mark_node
-	       || TREE_TYPE (step) == error_mark_node)
+      अञ्ञथा सचे (step == error_mark_ग्रन्थिः
+	       || वृक्षः_TYPE (step) == error_mark_ग्रन्थिः)
 	{
-	  ret = true;
-	  continue;
+	  ret = सच्च;
+	  अनुवर्त;
 	}
-      else if (!INTEGRAL_TYPE_P (TREE_TYPE (step)))
+      अञ्ञथा सचे (!INTEGRAL_TYPE_P (वृक्षः_TYPE (step)))
 	{
-	  error_at (EXPR_LOC_OR_LOC (step, loc),
+	  error_at (व्यञ्जकम्_LOC_OR_LOC (step, loc),
 		    "iterator step with non-integral type");
-	  ret = true;
-	  continue;
+	  ret = सच्च;
+	  अनुवर्त;
 	}
-      begin = c_fully_fold (build_c_cast (loc, type, begin), false, NULL);
-      end = c_fully_fold (build_c_cast (loc, type, end), false, NULL);
-      orig_step = save_expr (c_fully_fold (step, false, NULL));
-      tree stype = POINTER_TYPE_P (type) ? sizetype : type;
-      step = c_fully_fold (build_c_cast (loc, stype, orig_step), false, NULL);
-      if (POINTER_TYPE_P (type))
+      begin = c_fully_fold (build_c_cast (loc, type, begin), मिच्छा, रिक्त);
+      end = c_fully_fold (build_c_cast (loc, type, end), मिच्छा, रिक्त);
+      orig_step = save_व्यञ्जकम् (c_fully_fold (step, मिच्छा, रिक्त));
+      वृक्षः stype = POINTER_TYPE_P (type) ? sizetype : type;
+      step = c_fully_fold (build_c_cast (loc, stype, orig_step), मिच्छा, रिक्त);
+      सचे (POINTER_TYPE_P (type))
 	{
-	  begin = save_expr (begin);
-	  step = pointer_int_sum (loc, PLUS_EXPR, begin, step);
-	  step = fold_build2_loc (loc, MINUS_EXPR, sizetype,
+	  begin = save_व्यञ्जकम् (begin);
+	  step = pointer_int_sum (loc, PLUS_व्यञ्जकम्, begin, step);
+	  step = fold_build2_loc (loc, MINUS_व्यञ्जकम्, sizetype,
 				  fold_convert (sizetype, step),
 				  fold_convert (sizetype, begin));
 	  step = fold_convert (ssizetype, step);
 	}
-      if (integer_zerop (step))
+      सचे (integer_zerop (step))
 	{
 	  error_at (loc, "iterator %qD has zero step", var);
-	  ret = true;
-	  continue;
+	  ret = सच्च;
+	  अनुवर्त;
 	}
 
-      if (begin == error_mark_node
-	  || end == error_mark_node
-	  || step == error_mark_node
-	  || orig_step == error_mark_node)
+      सचे (begin == error_mark_ग्रन्थिः
+	  || end == error_mark_ग्रन्थिः
+	  || step == error_mark_ग्रन्थिः
+	  || orig_step == error_mark_ग्रन्थिः)
 	{
-	  ret = true;
-	  continue;
+	  ret = सच्च;
+	  अनुवर्त;
 	}
-      hash_set<tree> pset;
-      tree it2;
-      for (it2 = TREE_CHAIN (it); it2; it2 = TREE_CHAIN (it2))
+      hash_set<वृक्षः> pset;
+      वृक्षः it2;
+      अत्थाय (it2 = वृक्षः_CHAIN (it); it2; it2 = वृक्षः_CHAIN (it2))
 	{
-	  tree var2 = OMP_ITERATOR_VAR (it2);
-	  tree begin2 = OMP_ITERATOR_BEGIN (it2);
-	  tree end2 = OMP_ITERATOR_END (it2);
-	  tree step2 = OMP_ITERATOR_STEP (it2);
-	  tree type2 = TREE_TYPE (var2);
+	  वृक्षः var2 = OMP_ITERATOR_VAR (it2);
+	  वृक्षः begin2 = OMP_ITERATOR_BEGIN (it2);
+	  वृक्षः end2 = OMP_ITERATOR_END (it2);
+	  वृक्षः step2 = OMP_ITERATOR_STEP (it2);
+	  वृक्षः type2 = वृक्षः_TYPE (var2);
 	  location_t loc2 = DECL_SOURCE_LOCATION (var2);
-	  struct c_find_omp_var_s data = { var, &pset };
-	  if (walk_tree (&type2, c_find_omp_var_r, &data, &pset))
+	  संरचना c_find_omp_var_s data = { var, &pset };
+	  सचे (walk_वृक्षः (&type2, c_find_omp_var_r, &data, &pset))
 	    {
 	      error_at (loc2,
 			"type of iterator %qD refers to outer iterator %qD",
 			var2, var);
-	      break;
+	      भङ्ग;
 	    }
-	  else if (walk_tree (&begin2, c_find_omp_var_r, &data, &pset))
+	  अञ्ञथा सचे (walk_वृक्षः (&begin2, c_find_omp_var_r, &data, &pset))
 	    {
-	      error_at (EXPR_LOC_OR_LOC (begin2, loc2),
+	      error_at (व्यञ्जकम्_LOC_OR_LOC (begin2, loc2),
 			"begin expression refers to outer iterator %qD", var);
-	      break;
+	      भङ्ग;
 	    }
-	  else if (walk_tree (&end2, c_find_omp_var_r, &data, &pset))
+	  अञ्ञथा सचे (walk_वृक्षः (&end2, c_find_omp_var_r, &data, &pset))
 	    {
-	      error_at (EXPR_LOC_OR_LOC (end2, loc2),
+	      error_at (व्यञ्जकम्_LOC_OR_LOC (end2, loc2),
 			"end expression refers to outer iterator %qD", var);
-	      break;
+	      भङ्ग;
 	    }
-	  else if (walk_tree (&step2, c_find_omp_var_r, &data, &pset))
+	  अञ्ञथा सचे (walk_वृक्षः (&step2, c_find_omp_var_r, &data, &pset))
 	    {
-	      error_at (EXPR_LOC_OR_LOC (step2, loc2),
+	      error_at (व्यञ्जकम्_LOC_OR_LOC (step2, loc2),
 			"step expression refers to outer iterator %qD", var);
-	      break;
+	      भङ्ग;
 	    }
 	}
-      if (it2)
+      सचे (it2)
 	{
-	  ret = true;
-	  continue;
+	  ret = सच्च;
+	  अनुवर्त;
 	}
       OMP_ITERATOR_BEGIN (it) = begin;
       OMP_ITERATOR_END (it) = end;
       OMP_ITERATOR_STEP (it) = step;
       OMP_ITERATOR_ORIG_STEP (it) = orig_step;
     }
-  return ret;
+  पटिनिवत्त ret;
 }
 
 /* Ensure that pointers are used in OpenACC attach and detach clauses.
    Return true if an error has been detected.  */
 
-static bool
-c_oacc_check_attachments (tree c)
+स्थिर तार्किक
+c_oacc_check_attachments (वृक्षः c)
 {
-  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
-    return false;
+  सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
+    पटिनिवत्त मिच्छा;
 
   /* OpenACC attach / detach clauses must be pointers.  */
-  if (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
+  सचे (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
       || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH)
     {
-      tree t = OMP_CLAUSE_DECL (c);
+      वृक्षः t = OMP_CLAUSE_DECL (c);
 
-      while (TREE_CODE (t) == OMP_ARRAY_SECTION)
-	t = TREE_OPERAND (t, 0);
+      याव (वृक्षः_CODE (t) == OMP_ARRAY_SECTION)
+	t = वृक्षः_OPERAND (t, 0);
 
-      if (TREE_CODE (TREE_TYPE (t)) != POINTER_TYPE)
+      सचे (वृक्षः_CODE (वृक्षः_TYPE (t)) != POINTER_TYPE)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c), "expected pointer in %qs clause",
-		    user_omp_clause_code_name (c, true));
-	  return true;
+		    user_omp_clause_code_name (c, सच्च));
+	  पटिनिवत्त सच्च;
 	}
     }
 
-  return false;
+  पटिनिवत्त मिच्छा;
 }
 
 /* For all elements of CLAUSES, validate them against their constraints.
    Remove any elements from the list that are invalid.  */
 
-tree
-c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
+वृक्षः
+c_finish_omp_clauses (वृक्षः clauses, गणना c_omp_region_type ort)
 {
   bitmap_head generic_head, firstprivate_head, lastprivate_head;
   bitmap_head aligned_head, map_head, map_field_head, map_firstprivate_head;
   bitmap_head oacc_reduction_head, is_on_device_head;
-  tree c, t, type, *pc;
-  tree simdlen = NULL_TREE, safelen = NULL_TREE;
-  bool branch_seen = false;
-  bool copyprivate_seen = false;
-  bool mergeable_seen = false;
-  tree *detach_seen = NULL;
-  bool linear_variable_step_check = false;
-  tree *nowait_clause = NULL;
-  tree *grainsize_seen = NULL;
-  bool num_tasks_seen = false;
-  tree ordered_clause = NULL_TREE;
-  tree schedule_clause = NULL_TREE;
-  bool oacc_async = false;
-  tree last_iterators = NULL_TREE;
-  bool last_iterators_remove = false;
-  tree *nogroup_seen = NULL;
-  tree *order_clause = NULL;
+  वृक्षः c, t, type, *pc;
+  वृक्षः simdlen = NULL_वृक्षः, safelen = NULL_वृक्षः;
+  तार्किक branch_seen = मिच्छा;
+  तार्किक copyprivate_seen = मिच्छा;
+  तार्किक mergeable_seen = मिच्छा;
+  वृक्षः *detach_seen = रिक्त;
+  तार्किक linear_variable_step_check = मिच्छा;
+  वृक्षः *nowait_clause = रिक्त;
+  वृक्षः *grainsize_seen = रिक्त;
+  तार्किक अङ्कः_tasks_seen = मिच्छा;
+  वृक्षः ordered_clause = NULL_वृक्षः;
+  वृक्षः schedule_clause = NULL_वृक्षः;
+  तार्किक oacc_async = मिच्छा;
+  वृक्षः last_iterators = NULL_वृक्षः;
+  तार्किक last_iterators_remove = मिच्छा;
+  वृक्षः *nogroup_seen = रिक्त;
+  वृक्षः *order_clause = रिक्त;
   /* 1 if normal/task reduction has been seen, -1 if inscan reduction
      has been seen, -2 if mixed inscan/normal reduction diagnosed.  */
-  int reduction_seen = 0;
-  bool allocate_seen = false;
-  bool implicit_moved = false;
-  bool target_in_reduction_seen = false;
-  tree *full_seen = NULL;
-  bool partial_seen = false;
-  bool openacc = (ort & C_ORT_ACC) != 0;
-  bool init_seen = false;
-  bool init_use_destroy_seen = false;
-  tree init_no_targetsync_clause = NULL_TREE;
-  tree depend_clause = NULL_TREE;
+  पूर्णाङ्क reduction_seen = 0;
+  तार्किक allocate_seen = मिच्छा;
+  तार्किक implicit_moved = मिच्छा;
+  तार्किक target_in_reduction_seen = मिच्छा;
+  वृक्षः *full_seen = रिक्त;
+  तार्किक partial_seen = मिच्छा;
+  तार्किक openacc = (ort & C_ORT_ACC) != 0;
+  तार्किक init_seen = मिच्छा;
+  तार्किक init_use_destroy_seen = मिच्छा;
+  वृक्षः init_no_targetsync_clause = NULL_वृक्षः;
+  वृक्षः depend_clause = NULL_वृक्षः;
 
-  if (!openacc)
-    clauses = omp_remove_duplicate_maps (clauses, true);
+  सचे (!openacc)
+    clauses = omp_remove_duplicate_maps (clauses, सच्च);
 
-  bitmap_obstack_initialize (NULL);
+  bitmap_obstack_initialize (रिक्त);
   bitmap_initialize (&generic_head, &bitmap_default_obstack);
   bitmap_initialize (&firstprivate_head, &bitmap_default_obstack);
   bitmap_initialize (&lastprivate_head, &bitmap_default_obstack);
@@ -16753,49 +16753,49 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
   bitmap_initialize (&oacc_reduction_head, &bitmap_default_obstack);
   bitmap_initialize (&is_on_device_head, &bitmap_default_obstack);
 
-  if (openacc)
-    for (c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ASYNC)
+  सचे (openacc)
+    अत्थाय (c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+      सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ASYNC)
 	{
-	  oacc_async = true;
-	  break;
+	  oacc_async = सच्च;
+	  भङ्ग;
 	}
 
-  tree *grp_start_p = NULL, grp_sentinel = NULL_TREE;
+  वृक्षः *grp_start_p = रिक्त, grp_sentinel = NULL_वृक्षः;
 
-  for (pc = &clauses, c = clauses; c ; c = *pc)
+  अत्थाय (pc = &clauses, c = clauses; c ; c = *pc)
     {
-      bool remove = false;
-      bool need_complete = false;
-      bool need_implicitly_determined = false;
+      तार्किक remove = मिच्छा;
+      तार्किक need_complete = मिच्छा;
+      तार्किक need_implicitly_determined = मिच्छा;
 
       /* We've reached the end of a list of expanded nodes.  Reset the group
 	 start pointer.  */
-      if (c == grp_sentinel)
+      सचे (c == grp_sentinel)
 	{
-	  if (grp_start_p
+	  सचे (grp_start_p
 	      && OMP_CLAUSE_HAS_ITERATORS (*grp_start_p))
-	    for (tree gc = *grp_start_p; gc != grp_sentinel;
+	    अत्थाय (वृक्षः gc = *grp_start_p; gc != grp_sentinel;
 		 gc = OMP_CLAUSE_CHAIN (gc))
 	      OMP_CLAUSE_ITERATORS (gc) = OMP_CLAUSE_ITERATORS (*grp_start_p);
-	  grp_start_p = NULL;
+	  grp_start_p = रिक्त;
 	}
 
-      switch (OMP_CLAUSE_CODE (c))
+      विकल्प (OMP_CLAUSE_CODE (c))
 	{
-	case OMP_CLAUSE_SHARED:
-	  need_implicitly_determined = true;
-	  goto check_dup_generic;
+	पक्ष OMP_CLAUSE_SHARED:
+	  need_implicitly_determined = सच्च;
+	  गच्छ check_dup_generic;
 
-	case OMP_CLAUSE_PRIVATE:
-	  need_complete = true;
-	  need_implicitly_determined = true;
-	  goto check_dup_generic;
+	पक्ष OMP_CLAUSE_PRIVATE:
+	  need_complete = सच्च;
+	  need_implicitly_determined = सच्च;
+	  गच्छ check_dup_generic;
 
-	case OMP_CLAUSE_REDUCTION:
-	  if (reduction_seen == 0)
+	पक्ष OMP_CLAUSE_REDUCTION:
+	  सचे (reduction_seen == 0)
 	    reduction_seen = OMP_CLAUSE_REDUCTION_INSCAN (c) ? -1 : 1;
-	  else if (reduction_seen != -2
+	  अञ्ञथा सचे (reduction_seen != -2
 		   && reduction_seen != (OMP_CLAUSE_REDUCTION_INSCAN (c)
 					 ? -1 : 1))
 	    {
@@ -16805,281 +16805,281 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	      reduction_seen = -2;
 	    }
 	  /* FALLTHRU */
-	case OMP_CLAUSE_IN_REDUCTION:
-	case OMP_CLAUSE_TASK_REDUCTION:
-	  need_implicitly_determined = true;
+	पक्ष OMP_CLAUSE_IN_REDUCTION:
+	पक्ष OMP_CLAUSE_TASK_REDUCTION:
+	  need_implicitly_determined = सच्च;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	  सचे (वृक्षः_CODE (t) == OMP_ARRAY_SECTION)
 	    {
-	      if (handle_omp_array_sections (c, ort))
+	      सचे (handle_omp_array_sections (c, ort))
 		{
-		  remove = true;
-		  break;
+		  remove = सच्च;
+		  भङ्ग;
 		}
 
 	      t = OMP_CLAUSE_DECL (c);
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
+	      सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 		  && OMP_CLAUSE_REDUCTION_INSCAN (c))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%<inscan%> %<reduction%> clause with array "
 			    "section");
-		  remove = true;
-		  break;
+		  remove = सच्च;
+		  भङ्ग;
 		}
 	    }
 	  t = require_complete_type (OMP_CLAUSE_LOCATION (c), t);
-	  if (t == error_mark_node)
+	  सचे (t == error_mark_ग्रन्थिः)
 	    {
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  if (oacc_async)
+	  सचे (oacc_async)
 	    c_mark_addressable (t);
-	  type = TREE_TYPE (t);
-	  if (TREE_CODE (t) == MEM_REF)
-	    type = TREE_TYPE (type);
-	  if (TREE_CODE (type) == ARRAY_TYPE)
+	  type = वृक्षः_TYPE (t);
+	  सचे (वृक्षः_CODE (t) == MEM_REF)
+	    type = वृक्षः_TYPE (type);
+	  सचे (वृक्षः_CODE (type) == ARRAY_TYPE)
 	    {
-	      tree oatype = type;
-	      gcc_assert (TREE_CODE (t) != MEM_REF);
-	      while (TREE_CODE (type) == ARRAY_TYPE)
-		type = TREE_TYPE (type);
-	      if (integer_zerop (TYPE_SIZE_UNIT (type)))
+	      वृक्षः oatype = type;
+	      gcc_assert (वृक्षः_CODE (t) != MEM_REF);
+	      याव (वृक्षः_CODE (type) == ARRAY_TYPE)
+		type = वृक्षः_TYPE (type);
+	      सचे (integer_zerop (TYPE_SIZE_UNIT (type)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD in %<reduction%> clause is a zero size array",
 			    t);
-		  remove = true;
-		  break;
+		  remove = सच्च;
+		  भङ्ग;
 		}
-	      tree size = size_binop (EXACT_DIV_EXPR, TYPE_SIZE_UNIT (oatype),
+	      वृक्षः size = size_binop (EXACT_DIV_व्यञ्जकम्, TYPE_SIZE_UNIT (oatype),
 				      TYPE_SIZE_UNIT (type));
-	      if (integer_zerop (size))
+	      सचे (integer_zerop (size))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD in %<reduction%> clause is a zero size array",
 			    t);
-		  remove = true;
-		  break;
+		  remove = सच्च;
+		  भङ्ग;
 		}
-	      size = size_binop (MINUS_EXPR, size, size_one_node);
-	      size = save_expr (size);
-	      tree index_type = build_index_type (size);
-	      tree atype = c_build_array_type (TYPE_MAIN_VARIANT (type),
+	      size = size_binop (MINUS_व्यञ्जकम्, size, size_one_ग्रन्थिः);
+	      size = save_व्यञ्जकम् (size);
+	      वृक्षः index_type = build_index_type (size);
+	      वृक्षः atype = c_build_array_type (TYPE_MAIN_VARIANT (type),
 					       index_type);
 	      atype = c_build_qualified_type (atype, TYPE_QUALS (type));
-	      tree ptype = c_build_pointer_type (type);
-	      if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE)
-		t = build_fold_addr_expr (t);
+	      वृक्षः ptype = c_build_pointer_type (type);
+	      सचे (वृक्षः_CODE (वृक्षः_TYPE (t)) == ARRAY_TYPE)
+		t = build_fold_addr_व्यञ्जकम् (t);
 	      t = build2 (MEM_REF, atype, t, build_int_cst (ptype, 0));
 	      OMP_CLAUSE_DECL (c) = t;
 	    }
-	  if (TYPE_ATOMIC (type))
+	  सचे (TYPE_ATOMIC (type))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<_Atomic%> %qE in %<reduction%> clause", t);
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_REDUCTION
+	  सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_REDUCTION
 	      || OMP_CLAUSE_REDUCTION_TASK (c))
 	    {
 	      /* Disallow zero sized or potentially zero sized task
 		 reductions.  */
-	      if (integer_zerop (TYPE_SIZE_UNIT (type)))
+	      सचे (integer_zerop (TYPE_SIZE_UNIT (type)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "zero sized type %qT in %qs clause", type,
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  remove = true;
-		  break;
+		  remove = सच्च;
+		  भङ्ग;
 		}
-	      else if (TREE_CODE (TYPE_SIZE_UNIT (type)) != INTEGER_CST)
+	      अञ्ञथा सचे (वृक्षः_CODE (TYPE_SIZE_UNIT (type)) != INTEGER_CST)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "variable sized type %qT in %qs clause", type,
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  remove = true;
-		  break;
+		  remove = सच्च;
+		  भङ्ग;
 		}
 	    }
-	  if (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == NULL_TREE
+	  सचे (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == NULL_वृक्षः
 	      && (FLOAT_TYPE_P (type)
-		  || TREE_CODE (type) == COMPLEX_TYPE))
+		  || वृक्षः_CODE (type) == COMPLEX_TYPE))
 	    {
-	      enum tree_code r_code = OMP_CLAUSE_REDUCTION_CODE (c);
-	      const char *r_name = NULL;
+	      गणना वृक्षः_code r_code = OMP_CLAUSE_REDUCTION_CODE (c);
+	      ध्रुव वर्ण *r_name = रिक्त;
 
-	      switch (r_code)
+	      विकल्प (r_code)
 		{
-		case PLUS_EXPR:
-		case MULT_EXPR:
-		case MINUS_EXPR:
-		case TRUTH_ANDIF_EXPR:
-		case TRUTH_ORIF_EXPR:
-		  break;
-		case MIN_EXPR:
-		  if (TREE_CODE (type) == COMPLEX_TYPE)
+		पक्ष PLUS_व्यञ्जकम्:
+		पक्ष MULT_व्यञ्जकम्:
+		पक्ष MINUS_व्यञ्जकम्:
+		पक्ष TRUTH_ANDIF_व्यञ्जकम्:
+		पक्ष TRUTH_ORIF_व्यञ्जकम्:
+		  भङ्ग;
+		पक्ष MIN_व्यञ्जकम्:
+		  सचे (वृक्षः_CODE (type) == COMPLEX_TYPE)
 		    r_name = "min";
-		  break;
-		case MAX_EXPR:
-		  if (TREE_CODE (type) == COMPLEX_TYPE)
+		  भङ्ग;
+		पक्ष MAX_व्यञ्जकम्:
+		  सचे (वृक्षः_CODE (type) == COMPLEX_TYPE)
 		    r_name = "max";
-		  break;
-		case BIT_AND_EXPR:
+		  भङ्ग;
+		पक्ष BIT_AND_व्यञ्जकम्:
 		  r_name = "&";
-		  break;
-		case BIT_XOR_EXPR:
+		  भङ्ग;
+		पक्ष BIT_XOR_व्यञ्जकम्:
 		  r_name = "^";
-		  break;
-		case BIT_IOR_EXPR:
+		  भङ्ग;
+		पक्ष BIT_IOR_व्यञ्जकम्:
 		  r_name = "|";
-		  break;
-		default:
+		  भङ्ग;
+		स्वभाव:
 		  gcc_unreachable ();
 		}
-	      if (r_name)
+	      सचे (r_name)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qE has invalid type for %<reduction(%s)%>",
 			    t, r_name);
-		  remove = true;
-		  break;
+		  remove = सच्च;
+		  भङ्ग;
 		}
 	    }
-	  else if (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == error_mark_node)
+	  अञ्ञथा सचे (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == error_mark_ग्रन्थिः)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"user defined reduction not found for %qE", t);
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  else if (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c))
+	  अञ्ञथा सचे (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c))
 	    {
-	      tree list = OMP_CLAUSE_REDUCTION_PLACEHOLDER (c);
+	      वृक्षः list = OMP_CLAUSE_REDUCTION_PLACEHOLDER (c);
 	      type = TYPE_MAIN_VARIANT (type);
-	      tree placeholder = build_decl (OMP_CLAUSE_LOCATION (c),
-					     VAR_DECL, NULL_TREE, type);
-	      tree decl_placeholder = NULL_TREE;
+	      वृक्षः placeholder = build_decl (OMP_CLAUSE_LOCATION (c),
+					     VAR_DECL, NULL_वृक्षः, type);
+	      वृक्षः decl_placeholder = NULL_वृक्षः;
 	      OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) = placeholder;
 	      DECL_ARTIFICIAL (placeholder) = 1;
 	      DECL_IGNORED_P (placeholder) = 1;
-	      if (TREE_CODE (t) == MEM_REF)
+	      सचे (वृक्षः_CODE (t) == MEM_REF)
 		{
 		  decl_placeholder = build_decl (OMP_CLAUSE_LOCATION (c),
-						 VAR_DECL, NULL_TREE, type);
+						 VAR_DECL, NULL_वृक्षः, type);
 		  OMP_CLAUSE_REDUCTION_DECL_PLACEHOLDER (c) = decl_placeholder;
 		  DECL_ARTIFICIAL (decl_placeholder) = 1;
 		  DECL_IGNORED_P (decl_placeholder) = 1;
 		}
-	      if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 0)))
+	      सचे (वृक्षः_ADDRESSABLE (वृक्षः_VEC_ELT (list, 0)))
 		c_mark_addressable (placeholder);
-	      if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 1)))
+	      सचे (वृक्षः_ADDRESSABLE (वृक्षः_VEC_ELT (list, 1)))
 		c_mark_addressable (decl_placeholder ? decl_placeholder
 				    : OMP_CLAUSE_DECL (c));
 	      OMP_CLAUSE_REDUCTION_MERGE (c)
-		= c_clone_omp_udr (TREE_VEC_ELT (list, 2),
-				   TREE_VEC_ELT (list, 0),
-				   TREE_VEC_ELT (list, 1),
+		= c_clone_omp_udr (वृक्षः_VEC_ELT (list, 2),
+				   वृक्षः_VEC_ELT (list, 0),
+				   वृक्षः_VEC_ELT (list, 1),
 				   decl_placeholder ? decl_placeholder
 				   : OMP_CLAUSE_DECL (c), placeholder);
 	      OMP_CLAUSE_REDUCTION_MERGE (c)
-		= build3_loc (OMP_CLAUSE_LOCATION (c), BIND_EXPR,
-			      void_type_node, NULL_TREE,
-			      OMP_CLAUSE_REDUCTION_MERGE (c), NULL_TREE);
-	      TREE_SIDE_EFFECTS (OMP_CLAUSE_REDUCTION_MERGE (c)) = 1;
-	      if (TREE_VEC_LENGTH (list) == 6)
+		= build3_loc (OMP_CLAUSE_LOCATION (c), BIND_व्यञ्जकम्,
+			      void_type_ग्रन्थिः, NULL_वृक्षः,
+			      OMP_CLAUSE_REDUCTION_MERGE (c), NULL_वृक्षः);
+	      वृक्षः_SIDE_EFFECTS (OMP_CLAUSE_REDUCTION_MERGE (c)) = 1;
+	      सचे (वृक्षः_VEC_LENGTH (list) == 6)
 		{
-		  if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 3)))
+		  सचे (वृक्षः_ADDRESSABLE (वृक्षः_VEC_ELT (list, 3)))
 		    c_mark_addressable (decl_placeholder ? decl_placeholder
 					: OMP_CLAUSE_DECL (c));
-		  if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 4)))
+		  सचे (वृक्षः_ADDRESSABLE (वृक्षः_VEC_ELT (list, 4)))
 		    c_mark_addressable (placeholder);
-		  tree init = TREE_VEC_ELT (list, 5);
-		  if (init == error_mark_node)
-		    init = DECL_INITIAL (TREE_VEC_ELT (list, 3));
+		  वृक्षः init = वृक्षः_VEC_ELT (list, 5);
+		  सचे (init == error_mark_ग्रन्थिः)
+		    init = DECL_INITIAL (वृक्षः_VEC_ELT (list, 3));
 		  OMP_CLAUSE_REDUCTION_INIT (c)
-		    = c_clone_omp_udr (init, TREE_VEC_ELT (list, 4),
-				       TREE_VEC_ELT (list, 3),
+		    = c_clone_omp_udr (init, वृक्षः_VEC_ELT (list, 4),
+				       वृक्षः_VEC_ELT (list, 3),
 				       decl_placeholder ? decl_placeholder
 				       : OMP_CLAUSE_DECL (c), placeholder);
-		  if (TREE_VEC_ELT (list, 5) == error_mark_node)
+		  सचे (वृक्षः_VEC_ELT (list, 5) == error_mark_ग्रन्थिः)
 		    {
-		      tree v = decl_placeholder ? decl_placeholder : t;
+		      वृक्षः v = decl_placeholder ? decl_placeholder : t;
 		      OMP_CLAUSE_REDUCTION_INIT (c)
-			= build2 (INIT_EXPR, TREE_TYPE (v), v,
+			= build2 (INIT_व्यञ्जकम्, वृक्षः_TYPE (v), v,
 				  OMP_CLAUSE_REDUCTION_INIT (c));
 		    }
-		  if (walk_tree (&OMP_CLAUSE_REDUCTION_INIT (c),
+		  सचे (walk_वृक्षः (&OMP_CLAUSE_REDUCTION_INIT (c),
 				 c_find_omp_placeholder_r,
-				 placeholder, NULL))
+				 placeholder, रिक्त))
 		    OMP_CLAUSE_REDUCTION_OMP_ORIG_REF (c) = 1;
 		}
-	      else
+	      अञ्ञथा
 		{
-		  tree init;
-		  tree v = decl_placeholder ? decl_placeholder : t;
-		  if (AGGREGATE_TYPE_P (TREE_TYPE (v)))
-		    init = build_constructor (TREE_TYPE (v), NULL);
-		  else
-		    init = fold_convert (TREE_TYPE (v), integer_zero_node);
+		  वृक्षः init;
+		  वृक्षः v = decl_placeholder ? decl_placeholder : t;
+		  सचे (AGGREGATE_TYPE_P (वृक्षः_TYPE (v)))
+		    init = build_constructor (वृक्षः_TYPE (v), रिक्त);
+		  अञ्ञथा
+		    init = fold_convert (वृक्षः_TYPE (v), integer_zero_ग्रन्थिः);
 		  OMP_CLAUSE_REDUCTION_INIT (c)
-		    = build2 (INIT_EXPR, TREE_TYPE (v), v, init);
+		    = build2 (INIT_व्यञ्जकम्, वृक्षः_TYPE (v), v, init);
 		}
 	      OMP_CLAUSE_REDUCTION_INIT (c)
-		= build3_loc (OMP_CLAUSE_LOCATION (c), BIND_EXPR,
-			      void_type_node, NULL_TREE,
-			       OMP_CLAUSE_REDUCTION_INIT (c), NULL_TREE);
-	      TREE_SIDE_EFFECTS (OMP_CLAUSE_REDUCTION_INIT (c)) = 1;
+		= build3_loc (OMP_CLAUSE_LOCATION (c), BIND_व्यञ्जकम्,
+			      void_type_ग्रन्थिः, NULL_वृक्षः,
+			       OMP_CLAUSE_REDUCTION_INIT (c), NULL_वृक्षः);
+	      वृक्षः_SIDE_EFFECTS (OMP_CLAUSE_REDUCTION_INIT (c)) = 1;
 	    }
-	  if (TREE_CODE (t) == MEM_REF)
+	  सचे (वृक्षः_CODE (t) == MEM_REF)
 	    {
-	      if (TYPE_SIZE_UNIT (TREE_TYPE (TREE_TYPE (t))) == NULL_TREE
-		  || TREE_CODE (TYPE_SIZE_UNIT (TREE_TYPE (TREE_TYPE (t))))
+	      सचे (TYPE_SIZE_UNIT (वृक्षः_TYPE (वृक्षः_TYPE (t))) == NULL_वृक्षः
+		  || वृक्षः_CODE (TYPE_SIZE_UNIT (वृक्षः_TYPE (वृक्षः_TYPE (t))))
 		     != INTEGER_CST)
 		{
 		  sorry ("variable length element type in array "
 			 "%<reduction%> clause");
-		  remove = true;
-		  break;
+		  remove = सच्च;
+		  भङ्ग;
 		}
-	      t = TREE_OPERAND (t, 0);
-	      if (TREE_CODE (t) == POINTER_PLUS_EXPR)
-		t = TREE_OPERAND (t, 0);
-	      if (TREE_CODE (t) == ADDR_EXPR)
-		t = TREE_OPERAND (t, 0);
+	      t = वृक्षः_OPERAND (t, 0);
+	      सचे (वृक्षः_CODE (t) == POINTER_PLUS_व्यञ्जकम्)
+		t = वृक्षः_OPERAND (t, 0);
+	      सचे (वृक्षः_CODE (t) == ADDR_व्यञ्जकम्)
+		t = वृक्षः_OPERAND (t, 0);
 	    }
-	  goto check_dup_generic_t;
+	  गच्छ check_dup_generic_t;
 
-	case OMP_CLAUSE_COPYPRIVATE:
-	  copyprivate_seen = true;
-	  if (nowait_clause)
+	पक्ष OMP_CLAUSE_COPYPRIVATE:
+	  copyprivate_seen = सच्च;
+	  सचे (nowait_clause)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (*nowait_clause),
 			"%<nowait%> clause must not be used together "
 			"with %<copyprivate%> clause");
 	      *nowait_clause = OMP_CLAUSE_CHAIN (*nowait_clause);
-	      nowait_clause = NULL;
+	      nowait_clause = रिक्त;
 	    }
-	  goto check_dup_generic;
+	  गच्छ check_dup_generic;
 
-	case OMP_CLAUSE_COPYIN:
+	पक्ष OMP_CLAUSE_COPYIN:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) || !DECL_THREAD_LOCAL_P (t))
+	  सचे (!VAR_P (t) || !DECL_THREAD_LOCAL_P (t))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE must be %<threadprivate%> for %<copyin%>", t);
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  goto check_dup_generic;
+	  गच्छ check_dup_generic;
 
-	case OMP_CLAUSE_LINEAR:
-	  if (ort != C_ORT_OMP_DECLARE_SIMD)
-	    need_implicitly_determined = true;
+	पक्ष OMP_CLAUSE_LINEAR:
+	  सचे (ort != C_ORT_OMP_DECLARE_SIMD)
+	    need_implicitly_determined = सच्च;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (ort != C_ORT_OMP_DECLARE_SIMD
+	  सचे (ort != C_ORT_OMP_DECLARE_SIMD
 	      && OMP_CLAUSE_LINEAR_KIND (c) != OMP_CLAUSE_LINEAR_DEFAULT
 	      && OMP_CLAUSE_LINEAR_OLD_LINEAR_MODIFIER (c))
 	    {
@@ -17089,72 +17089,72 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			"using OpenMP 5.2 modifiers");
 	      OMP_CLAUSE_LINEAR_KIND (c) = OMP_CLAUSE_LINEAR_DEFAULT;
 	    }
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (t))
-	      && TREE_CODE (TREE_TYPE (t)) != POINTER_TYPE)
+	  सचे (!INTEGRAL_TYPE_P (वृक्षः_TYPE (t))
+	      && वृक्षः_CODE (वृक्षः_TYPE (t)) != POINTER_TYPE)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"linear clause applied to non-integral non-pointer "
-			"variable with type %qT", TREE_TYPE (t));
-	      remove = true;
-	      break;
+			"variable with type %qT", वृक्षः_TYPE (t));
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  if (TYPE_ATOMIC (TREE_TYPE (t)))
+	  सचे (TYPE_ATOMIC (वृक्षः_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<_Atomic%> %qD in %<linear%> clause", t);
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  if (ort == C_ORT_OMP_DECLARE_SIMD)
+	  सचे (ort == C_ORT_OMP_DECLARE_SIMD)
 	    {
-	      tree s = OMP_CLAUSE_LINEAR_STEP (c);
-	      if (TREE_CODE (s) == PARM_DECL)
+	      वृक्षः s = OMP_CLAUSE_LINEAR_STEP (c);
+	      सचे (वृक्षः_CODE (s) == PARM_DECL)
 		{
 		  OMP_CLAUSE_LINEAR_VARIABLE_STRIDE (c) = 1;
 		  /* map_head bitmap is used as uniform_head if
 		     declare_simd.  */
-		  if (!bitmap_bit_p (&map_head, DECL_UID (s)))
-		    linear_variable_step_check = true;
-		  goto check_dup_generic;
+		  सचे (!bitmap_bit_p (&map_head, DECL_UID (s)))
+		    linear_variable_step_check = सच्च;
+		  गच्छ check_dup_generic;
 		}
-	      if (TREE_CODE (s) != INTEGER_CST)
+	      सचे (वृक्षः_CODE (s) != INTEGER_CST)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%<linear%> clause step %qE is neither constant "
 			    "nor a parameter", s);
-		  remove = true;
-		  break;
+		  remove = सच्च;
+		  भङ्ग;
 		}
 	    }
-	  if (TREE_CODE (TREE_TYPE (OMP_CLAUSE_DECL (c))) == POINTER_TYPE)
+	  सचे (वृक्षः_CODE (वृक्षः_TYPE (OMP_CLAUSE_DECL (c))) == POINTER_TYPE)
 	    {
-	      tree s = OMP_CLAUSE_LINEAR_STEP (c);
-	      s = pointer_int_sum (OMP_CLAUSE_LOCATION (c), PLUS_EXPR,
+	      वृक्षः s = OMP_CLAUSE_LINEAR_STEP (c);
+	      s = pointer_int_sum (OMP_CLAUSE_LOCATION (c), PLUS_व्यञ्जकम्,
 				   OMP_CLAUSE_DECL (c), s);
-	      s = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_EXPR,
+	      s = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_व्यञ्जकम्,
 				   sizetype, fold_convert (sizetype, s),
 				   fold_convert
 				     (sizetype, OMP_CLAUSE_DECL (c)));
-	      if (s == error_mark_node)
-		s = size_one_node;
+	      सचे (s == error_mark_ग्रन्थिः)
+		s = size_one_ग्रन्थिः;
 	      OMP_CLAUSE_LINEAR_STEP (c) = s;
 	    }
-	  else
+	  अञ्ञथा
 	    OMP_CLAUSE_LINEAR_STEP (c)
-	      = fold_convert (TREE_TYPE (t), OMP_CLAUSE_LINEAR_STEP (c));
-	  goto check_dup_generic;
+	      = fold_convert (वृक्षः_TYPE (t), OMP_CLAUSE_LINEAR_STEP (c));
+	  गच्छ check_dup_generic;
 
 	check_dup_generic:
 	  t = OMP_CLAUSE_DECL (c);
 	check_dup_generic_t:
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  सचे (!VAR_P (t) && वृक्षः_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %qs", t,
 			omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if ((openacc && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION)
+	  अञ्ञथा सचे ((openacc && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION)
 		   || (ort == C_ORT_OMP
 		       && (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_USE_DEVICE_PTR
 			   || (OMP_CLAUSE_CODE (c)
@@ -17162,266 +17162,266 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		   || (ort == C_ORT_OMP_TARGET
 		       && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION))
 	    {
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
+	      सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
 		  && (bitmap_bit_p (&generic_head, DECL_UID (t))
 		      || bitmap_bit_p (&firstprivate_head, DECL_UID (t))))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in data-sharing "
 			    "clauses", t);
-		  remove = true;
-		  break;
+		  remove = सच्च;
+		  भङ्ग;
 		}
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION)
-		target_in_reduction_seen = true;
-	      if (bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
+	      सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION)
+		target_in_reduction_seen = सच्च;
+	      सचे (bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    openacc
 			    ? "%qD appears more than once in reduction clauses"
 			    : "%qD appears more than once in data clauses",
 			    t);
-		  remove = true;
+		  remove = सच्च;
 		}
-	      else
+	      अञ्ञथा
 		bitmap_set_bit (&oacc_reduction_head, DECL_UID (t));
 	    }
-	  else if (bitmap_bit_p (&generic_head, DECL_UID (t))
+	  अञ्ञथा सचे (bitmap_bit_p (&generic_head, DECL_UID (t))
 		   || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
 		   || bitmap_bit_p (&lastprivate_head, DECL_UID (t))
 		   || bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in data clauses", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_PRIVATE
+	  अञ्ञथा सचे ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_PRIVATE
 		    || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_HAS_DEVICE_ADDR
 		    || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IS_DEVICE_PTR)
 		   && bitmap_bit_p (&map_head, DECL_UID (t)))
 	    {
-	      if (openacc)
+	      सचे (openacc)
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears more than once in data clauses", t);
-	      else
+	      अञ्ञथा
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears both in data and map clauses", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else
+	  अञ्ञथा
 	    bitmap_set_bit (&generic_head, DECL_UID (t));
-	  break;
+	  भङ्ग;
 
-	case OMP_CLAUSE_FIRSTPRIVATE:
-	  if (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c) && !implicit_moved)
+	पक्ष OMP_CLAUSE_FIRSTPRIVATE:
+	  सचे (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c) && !implicit_moved)
 	    {
 	    move_implicit:
-	      implicit_moved = true;
+	      implicit_moved = सच्च;
 	      /* Move firstprivate and map clauses with
 		 OMP_CLAUSE_{FIRSTPRIVATE,MAP}_IMPLICIT set to the end of
 		 clauses chain.  */
-	      tree cl1 = NULL_TREE, cl2 = NULL_TREE;
-	      tree *pc1 = pc, *pc2 = &cl1, *pc3 = &cl2;
-	      while (*pc1)
-		if (OMP_CLAUSE_CODE (*pc1) == OMP_CLAUSE_FIRSTPRIVATE
+	      वृक्षः cl1 = NULL_वृक्षः, cl2 = NULL_वृक्षः;
+	      वृक्षः *pc1 = pc, *pc2 = &cl1, *pc3 = &cl2;
+	      याव (*pc1)
+		सचे (OMP_CLAUSE_CODE (*pc1) == OMP_CLAUSE_FIRSTPRIVATE
 		    && OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (*pc1))
 		  {
 		    *pc3 = *pc1;
 		    pc3 = &OMP_CLAUSE_CHAIN (*pc3);
 		    *pc1 = OMP_CLAUSE_CHAIN (*pc1);
 		  }
-		else if (OMP_CLAUSE_CODE (*pc1) == OMP_CLAUSE_MAP
+		अञ्ञथा सचे (OMP_CLAUSE_CODE (*pc1) == OMP_CLAUSE_MAP
 			 && OMP_CLAUSE_MAP_IMPLICIT (*pc1))
 		  {
 		    *pc2 = *pc1;
 		    pc2 = &OMP_CLAUSE_CHAIN (*pc2);
 		    *pc1 = OMP_CLAUSE_CHAIN (*pc1);
 		  }
-		else
+		अञ्ञथा
 		  pc1 = &OMP_CLAUSE_CHAIN (*pc1);
-	      *pc3 = NULL;
+	      *pc3 = रिक्त;
 	      *pc2 = cl2;
 	      *pc1 = cl1;
-	      continue;
+	      अनुवर्त;
 	    }
 	  t = OMP_CLAUSE_DECL (c);
-	  need_complete = true;
-	  need_implicitly_determined = true;
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  need_complete = सच्च;
+	  need_implicitly_determined = सच्च;
+	  सचे (!VAR_P (t) && वृक्षः_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %<firstprivate%>", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
+	  अञ्ञथा सचे (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
 		   && !OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT_TARGET (c)
 		   && bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
-	    remove = true;
-	  else if (bitmap_bit_p (&generic_head, DECL_UID (t))
+	    remove = सच्च;
+	  अञ्ञथा सचे (bitmap_bit_p (&generic_head, DECL_UID (t))
 		   || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
 		   || bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in data clauses", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if (bitmap_bit_p (&map_head, DECL_UID (t))
+	  अञ्ञथा सचे (bitmap_bit_p (&map_head, DECL_UID (t))
 		   || bitmap_bit_p (&map_field_head, DECL_UID (t)))
 	    {
-	      if (openacc)
+	      सचे (openacc)
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears more than once in data clauses", t);
-	      else if (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
+	      अञ्ञथा सचे (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
 		       && !OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT_TARGET (c))
 		/* Silently drop the clause.  */;
-	      else
+	      अञ्ञथा
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears both in data and map clauses", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else
+	  अञ्ञथा
 	    bitmap_set_bit (&firstprivate_head, DECL_UID (t));
-	  break;
+	  भङ्ग;
 
-	case OMP_CLAUSE_LASTPRIVATE:
+	पक्ष OMP_CLAUSE_LASTPRIVATE:
 	  t = OMP_CLAUSE_DECL (c);
-	  need_complete = true;
-	  need_implicitly_determined = true;
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  need_complete = सच्च;
+	  need_implicitly_determined = सच्च;
+	  सचे (!VAR_P (t) && वृक्षः_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %<lastprivate%>", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if (bitmap_bit_p (&generic_head, DECL_UID (t))
+	  अञ्ञथा सचे (bitmap_bit_p (&generic_head, DECL_UID (t))
 		   || bitmap_bit_p (&lastprivate_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 		     "%qE appears more than once in data clauses", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else
+	  अञ्ञथा
 	    bitmap_set_bit (&lastprivate_head, DECL_UID (t));
-	  break;
+	  भङ्ग;
 
-	case OMP_CLAUSE_ALIGNED:
+	पक्ष OMP_CLAUSE_ALIGNED:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  सचे (!VAR_P (t) && वृक्षः_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in %<aligned%> clause", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if (!POINTER_TYPE_P (TREE_TYPE (t))
-		   && TREE_CODE (TREE_TYPE (t)) != ARRAY_TYPE)
+	  अञ्ञथा सचे (!POINTER_TYPE_P (वृक्षः_TYPE (t))
+		   && वृक्षः_CODE (वृक्षः_TYPE (t)) != ARRAY_TYPE)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE in %<aligned%> clause is neither a pointer nor "
 			"an array", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if (TYPE_ATOMIC (TREE_TYPE (t)))
+	  अञ्ञथा सचे (TYPE_ATOMIC (वृक्षः_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<_Atomic%> %qD in %<aligned%> clause", t);
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  else if (bitmap_bit_p (&aligned_head, DECL_UID (t)))
+	  अञ्ञथा सचे (bitmap_bit_p (&aligned_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in %<aligned%> clauses",
 			t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else
+	  अञ्ञथा
 	    bitmap_set_bit (&aligned_head, DECL_UID (t));
-	  break;
+	  भङ्ग;
 
-	case OMP_CLAUSE_NONTEMPORAL:
+	पक्ष OMP_CLAUSE_NONTEMPORAL:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  सचे (!VAR_P (t) && वृक्षः_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in %<nontemporal%> clause", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if (bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
+	  अञ्ञथा सचे (bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in %<nontemporal%> "
 			"clauses", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else
+	  अञ्ञथा
 	    bitmap_set_bit (&oacc_reduction_head, DECL_UID (t));
-	  break;
+	  भङ्ग;
 
-	case OMP_CLAUSE_ALLOCATE:
+	पक्ष OMP_CLAUSE_ALLOCATE:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  सचे (!VAR_P (t) && वृक्षः_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in %<allocate%> clause", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if (bitmap_bit_p (&aligned_head, DECL_UID (t)))
+	  अञ्ञथा सचे (bitmap_bit_p (&aligned_head, DECL_UID (t)))
 	    {
 	      warning_at (OMP_CLAUSE_LOCATION (c), OPT_Wopenmp,
 			  "%qE appears more than once in %<allocate%> clauses",
 			  t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else
+	  अञ्ञथा
 	    {
 	      bitmap_set_bit (&aligned_head, DECL_UID (t));
-	      if (!OMP_CLAUSE_ALLOCATE_COMBINED (c))
-		allocate_seen = true;
+	      सचे (!OMP_CLAUSE_ALLOCATE_COMBINED (c))
+		allocate_seen = सच्च;
 	    }
-	  break;
+	  भङ्ग;
 
-	case OMP_CLAUSE_DOACROSS:
+	पक्ष OMP_CLAUSE_DOACROSS:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (t == NULL_TREE)
-	    break;
-	  if (OMP_CLAUSE_DOACROSS_KIND (c) == OMP_CLAUSE_DOACROSS_SINK)
+	  सचे (t == NULL_वृक्षः)
+	    भङ्ग;
+	  सचे (OMP_CLAUSE_DOACROSS_KIND (c) == OMP_CLAUSE_DOACROSS_SINK)
 	    {
-	      gcc_assert (TREE_CODE (t) == TREE_LIST);
-	      for (; t; t = TREE_CHAIN (t))
+	      gcc_assert (वृक्षः_CODE (t) == वृक्षः_LIST);
+	      अत्थाय (; t; t = वृक्षः_CHAIN (t))
 		{
-		  tree decl = TREE_VALUE (t);
-		  if (TREE_CODE (TREE_TYPE (decl)) == POINTER_TYPE)
+		  वृक्षः decl = वृक्षः_मानम् (t);
+		  सचे (वृक्षः_CODE (वृक्षः_TYPE (decl)) == POINTER_TYPE)
 		    {
-		      tree offset = TREE_PURPOSE (t);
-		      bool neg = wi::neg_p (wi::to_wide (offset));
-		      offset = fold_unary (ABS_EXPR, TREE_TYPE (offset), offset);
-		      tree t2 = pointer_int_sum (OMP_CLAUSE_LOCATION (c),
-						 neg ? MINUS_EXPR : PLUS_EXPR,
+		      वृक्षः offset = वृक्षः_PURPOSE (t);
+		      तार्किक neg = wi::neg_p (wi::to_wide (offset));
+		      offset = fold_unary (ABS_व्यञ्जकम्, वृक्षः_TYPE (offset), offset);
+		      वृक्षः t2 = pointer_int_sum (OMP_CLAUSE_LOCATION (c),
+						 neg ? MINUS_व्यञ्जकम् : PLUS_व्यञ्जकम्,
 						 decl, offset);
-		      t2 = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_EXPR,
+		      t2 = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_व्यञ्जकम्,
 					    sizetype,
 					    fold_convert (sizetype, t2),
 					    fold_convert (sizetype, decl));
-		      if (t2 == error_mark_node)
+		      सचे (t2 == error_mark_ग्रन्थिः)
 			{
-			  remove = true;
-			  break;
+			  remove = सच्च;
+			  भङ्ग;
 			}
-		      TREE_PURPOSE (t) = t2;
+		      वृक्षः_PURPOSE (t) = t2;
 		    }
 		}
-	      break;
+	      भङ्ग;
 	    }
 	  gcc_unreachable ();
 
-	case OMP_CLAUSE_USES_ALLOCATORS:
+	पक्ष OMP_CLAUSE_USES_ALLOCATORS:
 	  t = OMP_CLAUSE_USES_ALLOCATORS_ALLOCATOR (c);
-	  if (t == error_mark_node)
+	  सचे (t == error_mark_ग्रन्थिः)
 	    {
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  if ((VAR_P (t) || TREE_CODE (t) == PARM_DECL)
+	  सचे ((VAR_P (t) || वृक्षः_CODE (t) == PARM_DECL)
 	      && (bitmap_bit_p (&generic_head, DECL_UID (t))
 		  || bitmap_bit_p (&map_head, DECL_UID (t))
 		  || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
@@ -17429,310 +17429,310 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in data clauses", t);
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  else
+	  अञ्ञथा
 	    bitmap_set_bit (&generic_head, DECL_UID (t));
-	  if (TREE_CODE (TREE_TYPE (t)) != ENUMERAL_TYPE
-	      || strcmp (IDENTIFIER_POINTER (TYPE_IDENTIFIER (TREE_TYPE (t))),
+	  सचे (वृक्षः_CODE (वृक्षः_TYPE (t)) != ENUMERAL_TYPE
+	      || strcmp (IDENTIFIER_POINTER (TYPE_IDENTIFIER (वृक्षः_TYPE (t))),
 			 "omp_allocator_handle_t") != 0)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"allocator %qE must be of %<omp_allocator_handle_t%> "
 			"type", t);
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  tree init;
-	  if (!DECL_P (t)
-	      || (TREE_CODE (t) == CONST_DECL
+	  वृक्षः init;
+	  सचे (!DECL_P (t)
+	      || (वृक्षः_CODE (t) == CONST_DECL
 		  && ((init = DECL_INITIAL(t)) == nullptr
-		      || TREE_CODE (init) != INTEGER_CST
+		      || वृक्षः_CODE (init) != INTEGER_CST
 		      || ((wi::to_widest (init) < 0
 			   || wi::to_widest (init) > GOMP_OMP_PREDEF_ALLOC_MAX)
 			  && (wi::to_widest (init) < GOMP_OMPX_PREDEF_ALLOC_MIN
 			      || (wi::to_widest (init)
 				  > GOMP_OMPX_PREDEF_ALLOC_MAX))))))
 	    {
-	      remove = true;
+	      remove = सच्च;
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"allocator %qE must be either a variable or a "
 			"predefined allocator", t);
-	      break;
+	      भङ्ग;
 	    }
-	  else if (TREE_CODE (t) == CONST_DECL)
+	  अञ्ञथा सचे (वृक्षः_CODE (t) == CONST_DECL)
 	    {
 	      /* omp_null_allocator is ignored and for predefined allocators,
 		 no special handling is required; thus, mark them removed. */
-	      remove = true;
+	      remove = सच्च;
 
-	      if (OMP_CLAUSE_USES_ALLOCATORS_MEMSPACE (c)
+	      सचे (OMP_CLAUSE_USES_ALLOCATORS_MEMSPACE (c)
 		  || OMP_CLAUSE_USES_ALLOCATORS_TRAITS (c))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "modifiers cannot be used with predefined "
 			    "allocator %qE", t);
-		  break;
+		  भङ्ग;
 		}
 	    }
 	  t = OMP_CLAUSE_USES_ALLOCATORS_MEMSPACE (c);
-	  if (t == error_mark_node)
+	  सचे (t == error_mark_ग्रन्थिः)
 	    {
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  if (t != NULL_TREE
-	      && ((TREE_CODE (t) != CONST_DECL && TREE_CODE (t) != INTEGER_CST)
-		  || TREE_CODE (TREE_TYPE (t)) != ENUMERAL_TYPE
-		  || strcmp (IDENTIFIER_POINTER (TYPE_IDENTIFIER (TREE_TYPE (t))),
+	  सचे (t != NULL_वृक्षः
+	      && ((वृक्षः_CODE (t) != CONST_DECL && वृक्षः_CODE (t) != INTEGER_CST)
+		  || वृक्षः_CODE (वृक्षः_TYPE (t)) != ENUMERAL_TYPE
+		  || strcmp (IDENTIFIER_POINTER (TYPE_IDENTIFIER (वृक्षः_TYPE (t))),
 			     "omp_memspace_handle_t") != 0))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c), "memspace modifier %qE must be"
 			" constant enum of %<omp_memspace_handle_t%> type", t);
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
 	  t = OMP_CLAUSE_USES_ALLOCATORS_TRAITS (c);
-	  if (t == error_mark_node)
+	  सचे (t == error_mark_ग्रन्थिः)
 	    {
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  if (t != NULL_TREE
-	      && t != error_mark_node
+	  सचे (t != NULL_वृक्षः
+	      && t != error_mark_ग्रन्थिः
 	      && (DECL_EXTERNAL (t)
-		  || TREE_CODE (t) == PARM_DECL))
+		  || वृक्षः_CODE (t) == PARM_DECL))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c), "traits array %qE must be "
 			"defined in same scope as the construct on which the "
 			"clause appears", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  if (t != NULL_TREE)
+	  सचे (t != NULL_वृक्षः)
 	    {
-	      bool type_err = false;
+	      तार्किक type_err = मिच्छा;
 
-	      if (TREE_CODE (TREE_TYPE (t)) != ARRAY_TYPE
-		  || DECL_SIZE (t) == NULL_TREE
-		  || !COMPLETE_TYPE_P (TREE_TYPE (t)))
-		type_err = true;
-	      else
+	      सचे (वृक्षः_CODE (वृक्षः_TYPE (t)) != ARRAY_TYPE
+		  || DECL_SIZE (t) == NULL_वृक्षः
+		  || !COMPLETE_TYPE_P (वृक्षः_TYPE (t)))
+		type_err = सच्च;
+	      अञ्ञथा
 		{
-		  tree elem_t = TREE_TYPE (TREE_TYPE (t));
-		  if (TREE_CODE (elem_t) != RECORD_TYPE
+		  वृक्षः elem_t = वृक्षः_TYPE (वृक्षः_TYPE (t));
+		  सचे (वृक्षः_CODE (elem_t) != RECORD_TYPE
 		      || strcmp (IDENTIFIER_POINTER (TYPE_IDENTIFIER (elem_t)),
 				 "omp_alloctrait_t") != 0
 		      || !TYPE_READONLY (elem_t))
-		    type_err = true;
+		    type_err = सच्च;
 		}
-	      if (type_err)
+	      सचे (type_err)
 		{
-		  if (t != error_mark_node)
+		  सचे (t != error_mark_ग्रन्थिः)
 		    error_at (OMP_CLAUSE_LOCATION (c), "traits array %qE must "
 			      "be of %<const omp_alloctrait_t []%> type", t);
-		  else
+		  अञ्ञथा
 		    error_at (OMP_CLAUSE_LOCATION (c), "traits array must "
 			      "be of %<const omp_alloctrait_t []%> type");
-		  remove = true;
+		  remove = सच्च;
 		}
-	      else
+	      अञ्ञथा
 		{
-		  tree cst_val = decl_constant_value_1 (t, true);
-		  if (cst_val == t)
+		  वृक्षः cst_val = decl_constant_मानम्_1 (t, सच्च);
+		  सचे (cst_val == t)
 		    {
 		      error_at (OMP_CLAUSE_LOCATION (c), "traits array must be "
 				"initialized with constants");
 
-		      remove = true;
+		      remove = सच्च;
 		    }
 		}
 	    }
-	  if (remove)
-	    break;
+	  सचे (remove)
+	    भङ्ग;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
-	case OMP_CLAUSE_DEPEND:
+	  अनुवर्त;
+	पक्ष OMP_CLAUSE_DEPEND:
 	  depend_clause = c;
 	  /* FALLTHRU */
-	case OMP_CLAUSE_AFFINITY:
+	पक्ष OMP_CLAUSE_AFFINITY:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (OMP_ITERATOR_DECL_P (t))
+	  सचे (OMP_ITERATOR_DECL_P (t))
 	    {
-	      if (TREE_PURPOSE (t) != last_iterators)
+	      सचे (वृक्षः_PURPOSE (t) != last_iterators)
 		last_iterators_remove
-		  = c_omp_finish_iterators (TREE_PURPOSE (t));
-	      last_iterators = TREE_PURPOSE (t);
-	      t = TREE_VALUE (t);
-	      if (last_iterators_remove)
-		t = error_mark_node;
+		  = c_omp_finish_iterators (वृक्षः_PURPOSE (t));
+	      last_iterators = वृक्षः_PURPOSE (t);
+	      t = वृक्षः_मानम् (t);
+	      सचे (last_iterators_remove)
+		t = error_mark_ग्रन्थिः;
 	    }
-	  else
-	    last_iterators = NULL_TREE;
-	  if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	  अञ्ञथा
+	    last_iterators = NULL_वृक्षः;
+	  सचे (वृक्षः_CODE (t) == OMP_ARRAY_SECTION)
 	    {
-	      if (handle_omp_array_sections (c, ort))
-		remove = true;
-	      else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+	      सचे (handle_omp_array_sections (c, ort))
+		remove = सच्च;
+	      अञ्ञथा सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 		       && OMP_CLAUSE_DEPEND_KIND (c) == OMP_CLAUSE_DEPEND_DEPOBJ)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%<depend%> clause with %<depobj%> dependence "
 			    "type on array section");
-		  remove = true;
+		  remove = सच्च;
 		}
-	      break;
+	      भङ्ग;
 	    }
-	  if (t == error_mark_node)
-	    remove = true;
-	  else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+	  सचे (t == error_mark_ग्रन्थिः)
+	    remove = सच्च;
+	  अञ्ञथा सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 		   && t == ridpointers[RID_OMP_ALL_MEMORY])
 	    {
-	      if (OMP_CLAUSE_DEPEND_KIND (c) != OMP_CLAUSE_DEPEND_OUT
+	      सचे (OMP_CLAUSE_DEPEND_KIND (c) != OMP_CLAUSE_DEPEND_OUT
 		  && OMP_CLAUSE_DEPEND_KIND (c) != OMP_CLAUSE_DEPEND_INOUT)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%<omp_all_memory%> used with %<depend%> kind "
 			    "other than %<out%> or %<inout%>");
-		  remove = true;
+		  remove = सच्च;
 		}
 	    }
-	  else if (!lvalue_p (t))
+	  अञ्ञथा सचे (!lvalue_p (t))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not lvalue expression nor array section in "
 			"%qs clause", t,
 			omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if (TREE_CODE (t) == COMPONENT_REF
-		   && DECL_C_BIT_FIELD (TREE_OPERAND (t, 1)))
+	  अञ्ञथा सचे (वृक्षः_CODE (t) == COMPONENT_REF
+		   && DECL_C_BIT_FIELD (वृक्षः_OPERAND (t, 1)))
 	    {
 	      gcc_assert (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 			  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY);
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"bit-field %qE in %qs clause", t,
 			omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+	  अञ्ञथा सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 		   && OMP_CLAUSE_DEPEND_KIND (c) == OMP_CLAUSE_DEPEND_DEPOBJ)
 	    {
-	      if (!c_omp_depend_t_p (TREE_TYPE (t)))
+	      सचे (!c_omp_depend_t_p (वृक्षः_TYPE (t)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qE does not have %<omp_depend_t%> type in "
 			    "%<depend%> clause with %<depobj%> dependence "
 			    "type", t);
-		  remove = true;
+		  remove = सच्च;
 		}
 	    }
-	  else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
-		   && c_omp_depend_t_p (TREE_TYPE (t)))
+	  अञ्ञथा सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+		   && c_omp_depend_t_p (वृक्षः_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE should not have %<omp_depend_t%> type in "
 			"%<depend%> clause with dependence type other than "
 			"%<depobj%>", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  if (!remove)
+	  सचे (!remove)
 	    {
-	      if (t == ridpointers[RID_OMP_ALL_MEMORY])
-		t = null_pointer_node;
-	      else
+	      सचे (t == ridpointers[RID_OMP_ALL_MEMORY])
+		t = null_pointer_ग्रन्थिः;
+	      अञ्ञथा
 		{
-		  tree addr = build_unary_op (OMP_CLAUSE_LOCATION (c),
-					      ADDR_EXPR, t, false);
-		  if (addr == error_mark_node)
+		  वृक्षः addr = build_unary_op (OMP_CLAUSE_LOCATION (c),
+					      ADDR_व्यञ्जकम्, t, मिच्छा);
+		  सचे (addr == error_mark_ग्रन्थिः)
 		    {
-		      remove = true;
-		      break;
+		      remove = सच्च;
+		      भङ्ग;
 		    }
 		  t = build_indirect_ref (OMP_CLAUSE_LOCATION (c), addr,
 					  RO_UNARY_STAR);
-		  if (t == error_mark_node)
+		  सचे (t == error_mark_ग्रन्थिः)
 		    {
-		      remove = true;
-		      break;
+		      remove = सच्च;
+		      भङ्ग;
 		    }
 		}
-	      if (OMP_ITERATOR_DECL_P (OMP_CLAUSE_DECL (c)))
-		TREE_VALUE (OMP_CLAUSE_DECL (c)) = t;
-	      else
+	      सचे (OMP_ITERATOR_DECL_P (OMP_CLAUSE_DECL (c)))
+		वृक्षः_मानम् (OMP_CLAUSE_DECL (c)) = t;
+	      अञ्ञथा
 		OMP_CLAUSE_DECL (c) = t;
 	    }
-	  break;
+	  भङ्ग;
 
-	case OMP_CLAUSE_MAP:
-	  if (OMP_CLAUSE_MAP_IMPLICIT (c) && !implicit_moved)
-	    goto move_implicit;
-	  if (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_PUSH_MAPPER_NAME
-	      || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_POP_MAPPER_NAME)
+	पक्ष OMP_CLAUSE_MAP:
+	  सचे (OMP_CLAUSE_MAP_IMPLICIT (c) && !implicit_moved)
+	    गच्छ move_implicit;
+	  सचे (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_प्रक्षिप_MAPPER_NAME
+	      || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_निष्कासय_MAPPER_NAME)
 	    {
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
 	  /* FALLTHRU */
-	case OMP_CLAUSE_TO:
-	case OMP_CLAUSE_FROM:
-	  if (OMP_CLAUSE_ITERATORS (c)
+	पक्ष OMP_CLAUSE_TO:
+	पक्ष OMP_CLAUSE_FROM:
+	  सचे (OMP_CLAUSE_ITERATORS (c)
 	      && c_omp_finish_iterators (OMP_CLAUSE_ITERATORS (c)))
 	    {
-	      t = error_mark_node;
-	      break;
+	      t = error_mark_ग्रन्थिः;
+	      भङ्ग;
 	    }
 	  /* FALLTHRU */
-	case OMP_CLAUSE__CACHE_:
+	पक्ष OMP_CLAUSE__CACHE_:
 	  {
-	    using namespace omp_addr_tokenizer;
+	    using नामाकाश omp_addr_tokenizer;
 	    auto_vec<omp_addr_token *, 10> addr_tokens;
 
 	    t = OMP_CLAUSE_DECL (c);
-	    if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	    सचे (वृक्षः_CODE (t) == OMP_ARRAY_SECTION)
 	      {
 		grp_start_p = pc;
 		grp_sentinel = OMP_CLAUSE_CHAIN (c);
 
-		if (handle_omp_array_sections (c, ort))
-		  remove = true;
-		else
+		सचे (handle_omp_array_sections (c, ort))
+		  remove = सच्च;
+		अञ्ञथा
 		  {
 		    t = OMP_CLAUSE_DECL (c);
-		    if (!omp_mappable_type (TREE_TYPE (t)))
+		    सचे (!omp_mappable_type (वृक्षः_TYPE (t)))
 		      {
 			error_at (OMP_CLAUSE_LOCATION (c),
 				  "array section does not have mappable type "
 				  "in %qs clause",
 				  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-			remove = true;
+			remove = सच्च;
 		      }
-		    else if (TYPE_ATOMIC (TREE_TYPE (t)))
+		    अञ्ञथा सचे (TYPE_ATOMIC (वृक्षः_TYPE (t)))
 		      {
 			error_at (OMP_CLAUSE_LOCATION (c),
 				  "%<_Atomic%> %qE in %qs clause", t,
 				  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-			remove = true;
+			remove = सच्च;
 		      }
-		    while (TREE_CODE (t) == ARRAY_REF)
-		      t = TREE_OPERAND (t, 0);
+		    याव (वृक्षः_CODE (t) == ARRAY_REF)
+		      t = वृक्षः_OPERAND (t, 0);
 
 		    c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
 
-		    if (!omp_parse_expr (addr_tokens, t))
+		    सचे (!omp_parse_व्यञ्जकम् (addr_tokens, t))
 		      {
 			sorry_at (OMP_CLAUSE_LOCATION (c),
 				  "unsupported map expression %qE",
 				  OMP_CLAUSE_DECL (c));
-			remove = true;
-			break;
+			remove = सच्च;
+			भङ्ग;
 		      }
 
 		    /* This check is to determine if this will be the only map
 		       node created for this clause.  Otherwise, we'll check
 		       the following FIRSTPRIVATE_POINTER or ATTACH_DETACH
 		       node on the next iteration(s) of the loop.   */
-		    if (addr_tokens.length () >= 4
+		    सचे (addr_tokens.length () >= 4
 			&& addr_tokens[0]->type == STRUCTURE_BASE
 			&& addr_tokens[0]->u.structure_base_kind == BASE_DECL
 			&& addr_tokens[1]->type == ACCESS_METHOD
@@ -17742,48 +17742,48 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			    || (addr_tokens[3]->u.access_kind
 				== ACCESS_INDEXED_ARRAY)))
 		      {
-			tree rt = addr_tokens[1]->expr;
+			वृक्षः rt = addr_tokens[1]->व्यञ्जकम्;
 
 			gcc_assert (DECL_P (rt));
 
-			if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+			सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 			    && OMP_CLAUSE_MAP_IMPLICIT (c)
 			    && (bitmap_bit_p (&map_head, DECL_UID (rt))
 				|| bitmap_bit_p (&map_field_head, DECL_UID (rt))
 				|| bitmap_bit_p (&map_firstprivate_head,
 						 DECL_UID (rt))))
 			  {
-			    remove = true;
-			    break;
+			    remove = सच्च;
+			    भङ्ग;
 			  }
-			if (bitmap_bit_p (&map_field_head, DECL_UID (rt)))
-			  break;
-			if (bitmap_bit_p (&map_head, DECL_UID (rt)))
+			सचे (bitmap_bit_p (&map_field_head, DECL_UID (rt)))
+			  भङ्ग;
+			सचे (bitmap_bit_p (&map_head, DECL_UID (rt)))
 			  {
-			    if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
+			    सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
 			      error_at (OMP_CLAUSE_LOCATION (c),
 					"%qD appears more than once in motion "
 					"clauses", rt);
-			    else if (openacc)
+			    अञ्ञथा सचे (openacc)
 			      error_at (OMP_CLAUSE_LOCATION (c),
 					"%qD appears more than once in data "
 					"clauses", rt);
-			    else
+			    अञ्ञथा
 			      error_at (OMP_CLAUSE_LOCATION (c),
 					"%qD appears more than once in map "
 					"clauses", rt);
-			    remove = true;
+			    remove = सच्च;
 			  }
-			else
+			अञ्ञथा
 			  {
 			    bitmap_set_bit (&map_head, DECL_UID (rt));
 			    bitmap_set_bit (&map_field_head, DECL_UID (rt));
 			  }
 		      }
 		  }
-		if (c_oacc_check_attachments (c))
-		  remove = true;
-		if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+		सचे (c_oacc_check_attachments (c))
+		  remove = सच्च;
+		सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		    && (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
 			|| OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH)
 		    && !OMP_CLAUSE_SIZE (c))
@@ -17792,201 +17792,201 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		     handle_omp_array_sections above.  For attach/detach
 		     clauses, reset the OMP_CLAUSE_SIZE (representing a bias)
 		     to zero here.  */
-		  OMP_CLAUSE_SIZE (c) = size_zero_node;
-		break;
+		  OMP_CLAUSE_SIZE (c) = size_zero_ग्रन्थिः;
+		भङ्ग;
 	      }
-	    else if (!omp_parse_expr (addr_tokens, t))
+	    अञ्ञथा सचे (!omp_parse_व्यञ्जकम् (addr_tokens, t))
 	      {
 		sorry_at (OMP_CLAUSE_LOCATION (c),
 			  "unsupported map expression %qE",
 			  OMP_CLAUSE_DECL (c));
-		remove = true;
-		break;
+		remove = सच्च;
+		भङ्ग;
 	      }
-	    if (t == error_mark_node)
+	    सचे (t == error_mark_ग्रन्थिः)
 	      {
-		remove = true;
-		break;
+		remove = सच्च;
+		भङ्ग;
 	      }
 
-	    tree attr;
-	    if (DECL_P (t)
+	    वृक्षः attr;
+	    सचे (DECL_P (t)
 		&& OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		&& (attr = lookup_attribute ("omp declare target",
 					     DECL_ATTRIBUTES (t)))
-		&& value_member (get_identifier ("local"),
-				 TREE_VALUE (attr)))
+		&& मानम्_member (get_identifier ("local"),
+				 वृक्षः_मानम् (attr)))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "device-local variable %qD cannot appear "
 			  "in map clause", t);
-		remove = true;
-		break;
+		remove = सच्च;
+		भङ्ग;
 	      }
 
 	    /* OpenACC attach / detach clauses must be pointers.  */
-	    if (c_oacc_check_attachments (c))
+	    सचे (c_oacc_check_attachments (c))
 	      {
-		remove = true;
-		break;
+		remove = सच्च;
+		भङ्ग;
 	      }
-	    if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+	    सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		&& (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
 		    || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH)
 		&& !OMP_CLAUSE_SIZE (c))
 	      /* For attach/detach clauses, set OMP_CLAUSE_SIZE (representing a
 		 bias) to zero here, so it is not set erroneously to the pointer
 		 size later on in gimplify.cc.  */
-	      OMP_CLAUSE_SIZE (c) = size_zero_node;
+	      OMP_CLAUSE_SIZE (c) = size_zero_ग्रन्थिः;
 
 	    c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
 
-	    if (!ai.check_clause (c))
+	    सचे (!ai.check_clause (c))
 	      {
-		remove = true;
-		break;
+		remove = सच्च;
+		भङ्ग;
 	      }
 
-	    if (!ai.map_supported_p ())
+	    सचे (!ai.map_supported_p ())
 	      {
 		sorry_at (OMP_CLAUSE_LOCATION (c),
 			  "unsupported map expression %qE",
 			  OMP_CLAUSE_DECL (c));
-		remove = true;
-		break;
+		remove = सच्च;
+		भङ्ग;
 	      }
 
 	    gcc_assert ((addr_tokens[0]->type == ARRAY_BASE
 			 || addr_tokens[0]->type == STRUCTURE_BASE)
 			&& addr_tokens[1]->type == ACCESS_METHOD);
 
-	    t = addr_tokens[1]->expr;
+	    t = addr_tokens[1]->व्यञ्जकम्;
 
-	    if (addr_tokens[0]->u.structure_base_kind != BASE_DECL)
-	      goto skip_decl_checks;
+	    सचे (addr_tokens[0]->u.structure_base_kind != BASE_DECL)
+	      गच्छ skip_decl_checks;
 
 	    /* For OpenMP, we can access a struct "t" and "t.d" on the same
 	       mapping.  OpenACC allows multiple fields of the same structure
 	       to be written.  */
-	    if (addr_tokens[0]->type == STRUCTURE_BASE
+	    सचे (addr_tokens[0]->type == STRUCTURE_BASE
 		&& (bitmap_bit_p (&map_field_head, DECL_UID (t))
 		    || (!openacc && bitmap_bit_p (&map_head, DECL_UID (t)))))
-	      goto skip_decl_checks;
+	      गच्छ skip_decl_checks;
 
-	    if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	    सचे (!VAR_P (t) && वृक्षः_CODE (t) != PARM_DECL)
 	      {
-		if (ort != C_ORT_ACC && EXPR_P (t))
-		  break;
+		सचे (ort != C_ORT_ACC && व्यञ्जकम्_P (t))
+		  भङ्ग;
 
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qE is not a variable in %qs clause", t,
 			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		remove = true;
+		remove = सच्च;
 	      }
-	    else if (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
+	    अञ्ञथा सचे (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD is threadprivate variable in %qs clause", t,
 			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		remove = true;
+		remove = सच्च;
 	      }
-	    else if ((OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
+	    अञ्ञथा सचे ((OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
 		      || (OMP_CLAUSE_MAP_KIND (c)
 			  != GOMP_MAP_FIRSTPRIVATE_POINTER))
 		     && !c_mark_addressable (t))
-	      remove = true;
-	    else if (!(OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+	      remove = सच्च;
+	    अञ्ञथा सचे (!(OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		       && (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_POINTER
 			   || (OMP_CLAUSE_MAP_KIND (c)
 			       == GOMP_MAP_FIRSTPRIVATE_POINTER)
 			   || (OMP_CLAUSE_MAP_KIND (c)
 			       == GOMP_MAP_FORCE_DEVICEPTR)))
 		     && t == OMP_CLAUSE_DECL (c)
-		     && !omp_mappable_type (TREE_TYPE (t)))
+		     && !omp_mappable_type (वृक्षः_TYPE (t)))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD does not have a mappable type in %qs clause", t,
 			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		remove = true;
+		remove = सच्च;
 	      }
-	    else if (TREE_TYPE (t) == error_mark_node)
-	      remove = true;
-	    else if (TYPE_ATOMIC (strip_array_types (TREE_TYPE (t))))
+	    अञ्ञथा सचे (वृक्षः_TYPE (t) == error_mark_ग्रन्थिः)
+	      remove = सच्च;
+	    अञ्ञथा सचे (TYPE_ATOMIC (strip_array_types (वृक्षः_TYPE (t))))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%<_Atomic%> %qE in %qs clause", t,
 			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		remove = true;
+		remove = सच्च;
 	      }
-	    else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+	    अञ्ञथा सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		     && OMP_CLAUSE_MAP_IMPLICIT (c)
 		     && (bitmap_bit_p (&map_head, DECL_UID (t))
 			 || bitmap_bit_p (&map_field_head, DECL_UID (t))
 			 || bitmap_bit_p (&map_firstprivate_head,
 					  DECL_UID (t))))
-	      remove = true;
-	    else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+	      remove = सच्च;
+	    अञ्ञथा सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		     && (OMP_CLAUSE_MAP_KIND (c)
 			 == GOMP_MAP_FIRSTPRIVATE_POINTER))
 	      {
-		if (bitmap_bit_p (&generic_head, DECL_UID (t))
+		सचे (bitmap_bit_p (&generic_head, DECL_UID (t))
 		    || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
 		    || bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
 		  {
 		    error_at (OMP_CLAUSE_LOCATION (c),
 			      "%qD appears more than once in data clauses", t);
-		    remove = true;
+		    remove = सच्च;
 		  }
-		else if (bitmap_bit_p (&map_head, DECL_UID (t))
+		अञ्ञथा सचे (bitmap_bit_p (&map_head, DECL_UID (t))
 			 && !bitmap_bit_p (&map_field_head, DECL_UID (t))
 			 && openacc)
 		  {
 		    error_at (OMP_CLAUSE_LOCATION (c),
 			      "%qD appears more than once in data clauses", t);
-		    remove = true;
+		    remove = सच्च;
 		  }
-		else
+		अञ्ञथा
 		  bitmap_set_bit (&map_firstprivate_head, DECL_UID (t));
 	      }
-	    else if (bitmap_bit_p (&map_head, DECL_UID (t))
+	    अञ्ञथा सचे (bitmap_bit_p (&map_head, DECL_UID (t))
 		     && !bitmap_bit_p (&map_field_head, DECL_UID (t))
 		     && ort != C_ORT_OMP
 		     && ort != C_ORT_OMP_TARGET
 		     && ort != C_ORT_OMP_EXIT_DATA)
 	      {
-		if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
+		सचे (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in motion clauses", t);
-		else if (openacc)
+		अञ्ञथा सचे (openacc)
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in data clauses", t);
-		else
+		अञ्ञथा
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in map clauses", t);
-		remove = true;
+		remove = सच्च;
 	      }
-	    else if (openacc && bitmap_bit_p (&generic_head, DECL_UID (t)))
+	    अञ्ञथा सचे (openacc && bitmap_bit_p (&generic_head, DECL_UID (t)))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears more than once in data clauses", t);
-		remove = true;
+		remove = सच्च;
 	      }
-	    else if (bitmap_bit_p (&firstprivate_head, DECL_UID (t))
+	    अञ्ञथा सचे (bitmap_bit_p (&firstprivate_head, DECL_UID (t))
 		     || bitmap_bit_p (&is_on_device_head, DECL_UID (t)))
 	      {
-		if (openacc)
+		सचे (openacc)
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in data clauses", t);
-		else
+		अञ्ञथा
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears both in data and map clauses", t);
-		remove = true;
+		remove = सच्च;
 	      }
-	    else if (!omp_access_chain_p (addr_tokens, 1))
+	    अञ्ञथा सचे (!omp_access_chain_p (addr_tokens, 1))
 	      {
 		bitmap_set_bit (&map_head, DECL_UID (t));
-		if (t != OMP_CLAUSE_DECL (c)
-		    && TREE_CODE (OMP_CLAUSE_DECL (c)) == COMPONENT_REF)
+		सचे (t != OMP_CLAUSE_DECL (c)
+		    && वृक्षः_CODE (OMP_CLAUSE_DECL (c)) == COMPONENT_REF)
 		  bitmap_set_bit (&map_field_head, DECL_UID (t));
 	      }
 
@@ -17995,7 +17995,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	       the containing loop (here) iterates through the new nodes
 	       created by that expansion.  Avoid expanding those again (just
 	       by checking the node type).  */
-	    if (!remove
+	    सचे (!remove
 		&& ort != C_ORT_DECLARE_SIMD
 		&& (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
 		    || (OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_FIRSTPRIVATE_POINTER
@@ -18008,437 +18008,437 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	      {
 		grp_start_p = pc;
 		grp_sentinel = OMP_CLAUSE_CHAIN (c);
-		tree nc = ai.expand_map_clause (c, OMP_CLAUSE_DECL (c),
+		वृक्षः nc = ai.expand_map_clause (c, OMP_CLAUSE_DECL (c),
 						addr_tokens, ort);
-		if (nc != error_mark_node)
+		सचे (nc != error_mark_ग्रन्थिः)
 		  c = nc;
 	      }
 	  }
-	  break;
+	  भङ्ग;
 
-	case OMP_CLAUSE_ENTER:
-	case OMP_CLAUSE_LINK:
-	case OMP_CLAUSE_LOCAL:
+	पक्ष OMP_CLAUSE_ENTER:
+	पक्ष OMP_CLAUSE_LINK:
+	पक्ष OMP_CLAUSE_LOCAL:
 	  t = OMP_CLAUSE_DECL (c);
-	  const char *cname;
+	  ध्रुव वर्ण *cname;
 	  cname = omp_clause_code_name[OMP_CLAUSE_CODE (c)];
-	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER
+	  सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER
 	      && OMP_CLAUSE_ENTER_TO (c))
 	    cname = "to";
-	  if (TREE_CODE (t) == FUNCTION_DECL
+	  सचे (वृक्षः_CODE (t) == FUNCTION_DECL
 	      && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
 	    ;
-	  else if (!VAR_P (t))
+	  अञ्ञथा सचे (!VAR_P (t))
 	    {
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
+	      सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qE is neither a variable nor a function name in "
 			  "clause %qs", t, cname);
-	      else
+	      अञ्ञथा
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qE is not a variable in clause %qs", t, cname);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if (DECL_THREAD_LOCAL_P (t))
+	  अञ्ञथा सचे (DECL_THREAD_LOCAL_P (t))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD is threadprivate variable in %qs clause", t,
 			cname);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if (!omp_mappable_type (TREE_TYPE (t)))
+	  अञ्ञथा सचे (!omp_mappable_type (वृक्षः_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD does not have a mappable type in %qs clause", t,
 			cname);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  if (remove)
-	    break;
-	  if (bitmap_bit_p (&generic_head, DECL_UID (t)))
+	  सचे (remove)
+	    भङ्ग;
+	  सचे (bitmap_bit_p (&generic_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once on the same "
 			"%<declare target%> directive", t);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else
+	  अञ्ञथा
 	    bitmap_set_bit (&generic_head, DECL_UID (t));
-	  break;
+	  भङ्ग;
 
-	case OMP_CLAUSE_UNIFORM:
+	पक्ष OMP_CLAUSE_UNIFORM:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (TREE_CODE (t) != PARM_DECL)
+	  सचे (वृक्षः_CODE (t) != PARM_DECL)
 	    {
-	      if (DECL_P (t))
+	      सचे (DECL_P (t))
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD is not an argument in %<uniform%> clause", t);
-	      else
+	      अञ्ञथा
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qE is not an argument in %<uniform%> clause", t);
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
 	  /* map_head bitmap is used as uniform_head if declare_simd.  */
 	  bitmap_set_bit (&map_head, DECL_UID (t));
-	  goto check_dup_generic;
+	  गच्छ check_dup_generic;
 
-	case OMP_CLAUSE_IS_DEVICE_PTR:
-	case OMP_CLAUSE_USE_DEVICE_PTR:
+	पक्ष OMP_CLAUSE_IS_DEVICE_PTR:
+	पक्ष OMP_CLAUSE_USE_DEVICE_PTR:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IS_DEVICE_PTR)
+	  सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IS_DEVICE_PTR)
 	    bitmap_set_bit (&is_on_device_head, DECL_UID (t));
-	  if (TREE_CODE (TREE_TYPE (t)) != POINTER_TYPE)
+	  सचे (वृक्षः_CODE (वृक्षः_TYPE (t)) != POINTER_TYPE)
 	    {
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_USE_DEVICE_PTR
+	      सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_USE_DEVICE_PTR
 		  && !openacc)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qs variable is not a pointer",
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  remove = true;
+		  remove = सच्च;
 		}
-	      else if (TREE_CODE (TREE_TYPE (t)) != ARRAY_TYPE)
+	      अञ्ञथा सचे (वृक्षः_CODE (वृक्षः_TYPE (t)) != ARRAY_TYPE)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qs variable is neither a pointer nor an array",
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  remove = true;
+		  remove = सच्च;
 		}
 	    }
-	  goto check_dup_generic;
+	  गच्छ check_dup_generic;
 
-	case OMP_CLAUSE_HAS_DEVICE_ADDR:
+	पक्ष OMP_CLAUSE_HAS_DEVICE_ADDR:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	  सचे (वृक्षः_CODE (t) == OMP_ARRAY_SECTION)
 	    {
-	      if (handle_omp_array_sections (c, ort))
-		remove = true;
-	      else
+	      सचे (handle_omp_array_sections (c, ort))
+		remove = सच्च;
+	      अञ्ञथा
 		{
 		  t = OMP_CLAUSE_DECL (c);
-		  while (TREE_CODE (t) == ARRAY_REF)
-		    t = TREE_OPERAND (t, 0);
+		  याव (वृक्षः_CODE (t) == ARRAY_REF)
+		    t = वृक्षः_OPERAND (t, 0);
 		}
 	    }
 	  bitmap_set_bit (&is_on_device_head, DECL_UID (t));
-	  if (VAR_P (t) || TREE_CODE (t) == PARM_DECL)
+	  सचे (VAR_P (t) || वृक्षः_CODE (t) == PARM_DECL)
 	    c_mark_addressable (t);
-	  goto check_dup_generic_t;
+	  गच्छ check_dup_generic_t;
 
-	case OMP_CLAUSE_USE_DEVICE_ADDR:
+	पक्ष OMP_CLAUSE_USE_DEVICE_ADDR:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (VAR_P (t) || TREE_CODE (t) == PARM_DECL)
+	  सचे (VAR_P (t) || वृक्षः_CODE (t) == PARM_DECL)
 	    c_mark_addressable (t);
-	  goto check_dup_generic;
+	  गच्छ check_dup_generic;
 
-	case OMP_CLAUSE_NOWAIT:
-	  if (copyprivate_seen)
+	पक्ष OMP_CLAUSE_NOWAIT:
+	  सचे (copyprivate_seen)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<nowait%> clause must not be used together "
 			"with %<copyprivate%> clause");
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
 	  nowait_clause = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_ORDER:
-	  if (ordered_clause)
+	पक्ष OMP_CLAUSE_ORDER:
+	  सचे (ordered_clause)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<order%> clause must not be used together "
 			"with %<ordered%> clause");
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  else if (order_clause)
+	  अञ्ञथा सचे (order_clause)
 	    {
 	      /* Silently remove duplicates.  */
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
 	  order_clause = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_DETACH:
+	पक्ष OMP_CLAUSE_DETACH:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (detach_seen)
+	  सचे (detach_seen)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"too many %qs clauses on a task construct",
 			"detach");
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
 	  detach_seen = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
 	  c_mark_addressable (t);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_IF:
-	case OMP_CLAUSE_SELF:
-	case OMP_CLAUSE_NUM_THREADS:
-	case OMP_CLAUSE_NUM_TEAMS:
-	case OMP_CLAUSE_THREAD_LIMIT:
-	case OMP_CLAUSE_DEFAULT:
-	case OMP_CLAUSE_UNTIED:
-	case OMP_CLAUSE_COLLAPSE:
-	case OMP_CLAUSE_FINAL:
-	case OMP_CLAUSE_DEVICE:
-	case OMP_CLAUSE_DIST_SCHEDULE:
-	case OMP_CLAUSE_DYN_GROUPPRIVATE:
-	case OMP_CLAUSE_PARALLEL:
-	case OMP_CLAUSE_FOR:
-	case OMP_CLAUSE_SECTIONS:
-	case OMP_CLAUSE_TASKGROUP:
-	case OMP_CLAUSE_PROC_BIND:
-	case OMP_CLAUSE_DEVICE_TYPE:
-	case OMP_CLAUSE_PRIORITY:
-	case OMP_CLAUSE_THREADS:
-	case OMP_CLAUSE_SIMD:
-	case OMP_CLAUSE_HINT:
-	case OMP_CLAUSE_FILTER:
-	case OMP_CLAUSE_DEFAULTMAP:
-	case OMP_CLAUSE_BIND:
-	case OMP_CLAUSE_NUM_GANGS:
-	case OMP_CLAUSE_NUM_WORKERS:
-	case OMP_CLAUSE_VECTOR_LENGTH:
-	case OMP_CLAUSE_ASYNC:
-	case OMP_CLAUSE_WAIT:
-	case OMP_CLAUSE_AUTO:
-	case OMP_CLAUSE_INDEPENDENT:
-	case OMP_CLAUSE_SEQ:
-	case OMP_CLAUSE_GANG:
-	case OMP_CLAUSE_WORKER:
-	case OMP_CLAUSE_VECTOR:
-	case OMP_CLAUSE_TILE:
-	case OMP_CLAUSE_IF_PRESENT:
-	case OMP_CLAUSE_FINALIZE:
-	case OMP_CLAUSE_NOHOST:
-	case OMP_CLAUSE_INDIRECT:
-	case OMP_CLAUSE_NOVARIANTS:
-	case OMP_CLAUSE_NOCONTEXT:
+	पक्ष OMP_CLAUSE_IF:
+	पक्ष OMP_CLAUSE_SELF:
+	पक्ष OMP_CLAUSE_अङ्कः_THREADS:
+	पक्ष OMP_CLAUSE_अङ्कः_TEAMS:
+	पक्ष OMP_CLAUSE_THREAD_LIMIT:
+	पक्ष OMP_CLAUSE_DEFAULT:
+	पक्ष OMP_CLAUSE_UNTIED:
+	पक्ष OMP_CLAUSE_COLLAPSE:
+	पक्ष OMP_CLAUSE_FINAL:
+	पक्ष OMP_CLAUSE_DEVICE:
+	पक्ष OMP_CLAUSE_DIST_SCHEDULE:
+	पक्ष OMP_CLAUSE_DYN_GROUPPRIVATE:
+	पक्ष OMP_CLAUSE_PARALLEL:
+	पक्ष OMP_CLAUSE_FOR:
+	पक्ष OMP_CLAUSE_SECTIONS:
+	पक्ष OMP_CLAUSE_TASKGROUP:
+	पक्ष OMP_CLAUSE_PROC_BIND:
+	पक्ष OMP_CLAUSE_DEVICE_TYPE:
+	पक्ष OMP_CLAUSE_PRIORITY:
+	पक्ष OMP_CLAUSE_THREADS:
+	पक्ष OMP_CLAUSE_SIMD:
+	पक्ष OMP_CLAUSE_HINT:
+	पक्ष OMP_CLAUSE_FILTER:
+	पक्ष OMP_CLAUSE_DEFAULTMAP:
+	पक्ष OMP_CLAUSE_BIND:
+	पक्ष OMP_CLAUSE_अङ्कः_GANGS:
+	पक्ष OMP_CLAUSE_अङ्कः_WORKERS:
+	पक्ष OMP_CLAUSE_VECTOR_LENGTH:
+	पक्ष OMP_CLAUSE_ASYNC:
+	पक्ष OMP_CLAUSE_WAIT:
+	पक्ष OMP_CLAUSE_AUTO:
+	पक्ष OMP_CLAUSE_INDEPENDENT:
+	पक्ष OMP_CLAUSE_SEQ:
+	पक्ष OMP_CLAUSE_GANG:
+	पक्ष OMP_CLAUSE_WORKER:
+	पक्ष OMP_CLAUSE_VECTOR:
+	पक्ष OMP_CLAUSE_TILE:
+	पक्ष OMP_CLAUSE_IF_PRESENT:
+	पक्ष OMP_CLAUSE_FINALIZE:
+	पक्ष OMP_CLAUSE_NOHOST:
+	पक्ष OMP_CLAUSE_INDIRECT:
+	पक्ष OMP_CLAUSE_NOVARIANTS:
+	पक्ष OMP_CLAUSE_NOCONTEXT:
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_GRAINSIZE:
+	पक्ष OMP_CLAUSE_GRAINSIZE:
 	  grainsize_seen = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_NUM_TASKS:
-	  num_tasks_seen = true;
+	पक्ष OMP_CLAUSE_अङ्कः_TASKS:
+	  अङ्कः_tasks_seen = सच्च;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_MERGEABLE:
-	  mergeable_seen = true;
+	पक्ष OMP_CLAUSE_MERGEABLE:
+	  mergeable_seen = सच्च;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_NOGROUP:
+	पक्ष OMP_CLAUSE_NOGROUP:
 	  nogroup_seen = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_SCHEDULE:
+	पक्ष OMP_CLAUSE_SCHEDULE:
 	  schedule_clause = c;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_ORDERED:
+	पक्ष OMP_CLAUSE_ORDERED:
 	  ordered_clause = c;
-	  if (order_clause)
+	  सचे (order_clause)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (*order_clause),
 			"%<order%> clause must not be used together "
 			"with %<ordered%> clause");
 	      *order_clause = OMP_CLAUSE_CHAIN (*order_clause);
-	      order_clause = NULL;
+	      order_clause = रिक्त;
 	    }
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_SAFELEN:
+	पक्ष OMP_CLAUSE_SAFELEN:
 	  safelen = c;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
-	case OMP_CLAUSE_SIMDLEN:
+	  अनुवर्त;
+	पक्ष OMP_CLAUSE_SIMDLEN:
 	  simdlen = c;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_FULL:
+	पक्ष OMP_CLAUSE_FULL:
 	  full_seen = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_PARTIAL:
-	  partial_seen = true;
+	पक्ष OMP_CLAUSE_PARTIAL:
+	  partial_seen = सच्च;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_SIZES:
+	पक्ष OMP_CLAUSE_SIZES:
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_INBRANCH:
-	case OMP_CLAUSE_NOTINBRANCH:
-	  if (branch_seen)
+	पक्ष OMP_CLAUSE_INBRANCH:
+	पक्ष OMP_CLAUSE_NOTINBRANCH:
+	  सचे (branch_seen)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<inbranch%> clause is incompatible with "
 			"%<notinbranch%>");
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
-	  branch_seen = true;
+	  branch_seen = सच्च;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  अनुवर्त;
 
-	case OMP_CLAUSE_INCLUSIVE:
-	case OMP_CLAUSE_EXCLUSIVE:
-	  need_complete = true;
-	  need_implicitly_determined = true;
+	पक्ष OMP_CLAUSE_INCLUSIVE:
+	पक्ष OMP_CLAUSE_EXCLUSIVE:
+	  need_complete = सच्च;
+	  need_implicitly_determined = सच्च;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  सचे (!VAR_P (t) && वृक्षः_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %qs", t,
 			omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  break;
+	  भङ्ग;
 
-	case OMP_CLAUSE_INIT:
-	  init_seen = true;
-	  if (!OMP_CLAUSE_INIT_TARGETSYNC (c))
+	पक्ष OMP_CLAUSE_INIT:
+	  init_seen = सच्च;
+	  सचे (!OMP_CLAUSE_INIT_TARGETSYNC (c))
 	    init_no_targetsync_clause = c;
 	  /* FALLTHRU */
-	case OMP_CLAUSE_DESTROY:
-	case OMP_CLAUSE_USE:
-	  init_use_destroy_seen = true;
+	पक्ष OMP_CLAUSE_DESTROY:
+	पक्ष OMP_CLAUSE_USE:
+	  init_use_destroy_seen = सच्च;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (bitmap_bit_p (&generic_head, DECL_UID (t)))
+	  सचे (bitmap_bit_p (&generic_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD appears more than once in action clauses", t);
-	      remove = true;
-	      break;
+	      remove = सच्च;
+	      भङ्ग;
 	    }
 	  bitmap_set_bit (&generic_head, DECL_UID (t));
 	  /* FALLTHRU */
-	case OMP_CLAUSE_INTEROP:
-	  if (/* ort == C_ORT_OMP_INTEROP [uncomment for depobj init]  */
-		   !c_omp_interop_t_p (TREE_TYPE (OMP_CLAUSE_DECL (c))))
+	पक्ष OMP_CLAUSE_INTEROP:
+	  सचे (/* ort == C_ORT_OMP_INTEROP [uncomment for depobj init]  */
+		   !c_omp_interop_t_p (वृक्षः_TYPE (OMP_CLAUSE_DECL (c))))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD must be of %<omp_interop_t%>",
 			OMP_CLAUSE_DECL (c));
-	      remove = true;
+	      remove = सच्च;
 	    }
-	  else if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INIT
+	  अञ्ञथा सचे ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INIT
 		    || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DESTROY)
-		   && TREE_READONLY (OMP_CLAUSE_DECL (c)))
+		   && वृक्षः_READONLY (OMP_CLAUSE_DECL (c)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qD shall not be const", OMP_CLAUSE_DECL (c));
-	      remove = true;
+	      remove = सच्च;
 	    }
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  break;
-	default:
+	  भङ्ग;
+	स्वभाव:
 	  gcc_unreachable ();
 	}
 
-      if (!remove)
+      सचे (!remove)
 	{
 	  t = OMP_CLAUSE_DECL (c);
 
-	  if (need_complete)
+	  सचे (need_complete)
 	    {
 	      t = require_complete_type (OMP_CLAUSE_LOCATION (c), t);
-	      if (t == error_mark_node)
-		remove = true;
+	      सचे (t == error_mark_ग्रन्थिः)
+		remove = सच्च;
 	    }
 
-	  if (need_implicitly_determined)
+	  सचे (need_implicitly_determined)
 	    {
-	      const char *share_name = NULL;
+	      ध्रुव वर्ण *share_name = रिक्त;
 
-	      if (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
+	      सचे (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
 		share_name = "threadprivate";
-	      else switch (c_omp_predetermined_sharing (t))
+	      अञ्ञथा विकल्प (c_omp_predetermined_sharing (t))
 		{
-		case OMP_CLAUSE_DEFAULT_UNSPECIFIED:
-		  break;
-		case OMP_CLAUSE_DEFAULT_SHARED:
-		  if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SHARED
+		पक्ष OMP_CLAUSE_DEFAULT_UNSPECIFIED:
+		  भङ्ग;
+		पक्ष OMP_CLAUSE_DEFAULT_SHARED:
+		  सचे ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SHARED
 		       || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_FIRSTPRIVATE)
 		      && c_omp_predefined_variable (t))
 		    /* The __func__ variable and similar function-local
 		       predefined variables may be listed in a shared or
 		       firstprivate clause.  */
-		    break;
+		    भङ्ग;
 		  share_name = "shared";
-		  break;
-		case OMP_CLAUSE_DEFAULT_PRIVATE:
+		  भङ्ग;
+		पक्ष OMP_CLAUSE_DEFAULT_PRIVATE:
 		  share_name = "private";
-		  break;
-		default:
+		  भङ्ग;
+		स्वभाव:
 		  gcc_unreachable ();
 		}
-	      if (share_name)
+	      सचे (share_name)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qE is predetermined %qs for %qs",
 			    t, share_name,
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  remove = true;
+		  remove = सच्च;
 		}
-	      else if (TREE_READONLY (t)
+	      अञ्ञथा सचे (वृक्षः_READONLY (t)
 		       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_SHARED
 		       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_FIRSTPRIVATE)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%<const%> qualified %qE may appear only in "
 			    "%<shared%> or %<firstprivate%> clauses", t);
-		  remove = true;
+		  remove = सच्च;
 		}
 	    }
 	}
 
-      if (remove)
+      सचे (remove)
 	{
-	  if (grp_start_p)
+	  सचे (grp_start_p)
 	    {
 	      /* If we found a clause to remove, we want to remove the whole
 		 expanded group, otherwise gimplify
 		 (omp_resolve_clause_dependencies) can get confused.  */
 	      *grp_start_p = grp_sentinel;
 	      pc = grp_start_p;
-	      grp_start_p = NULL;
+	      grp_start_p = रिक्त;
 	    }
-	  else
+	  अञ्ञथा
 	    *pc = OMP_CLAUSE_CHAIN (c);
 	}
-      else
+      अञ्ञथा
 	pc = &OMP_CLAUSE_CHAIN (c);
     }
 
-  if (grp_start_p
+  सचे (grp_start_p
       && OMP_CLAUSE_HAS_ITERATORS (*grp_start_p))
-    for (tree gc = *grp_start_p; gc; gc = OMP_CLAUSE_CHAIN (gc))
+    अत्थाय (वृक्षः gc = *grp_start_p; gc; gc = OMP_CLAUSE_CHAIN (gc))
       OMP_CLAUSE_ITERATORS (gc) = OMP_CLAUSE_ITERATORS (*grp_start_p);
 
-  if (simdlen
+  सचे (simdlen
       && safelen
-      && tree_int_cst_lt (OMP_CLAUSE_SAFELEN_EXPR (safelen),
-			  OMP_CLAUSE_SIMDLEN_EXPR (simdlen)))
+      && वृक्षः_int_cst_lt (OMP_CLAUSE_SAFELEN_व्यञ्जकम् (safelen),
+			  OMP_CLAUSE_SIMDLEN_व्यञ्जकम् (simdlen)))
     {
       /* Note: How a scaling factor affects this, is underspecified in OpenMP;
 	 cf. OpenMP spec issue #5160.  Presumably, it means:
@@ -18451,11 +18451,11 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       error_at (OMP_CLAUSE_LOCATION (simdlen),
 		"%<simdlen%> clause value is bigger than "
 		"%<safelen%> clause value");
-      OMP_CLAUSE_SIMDLEN_EXPR (simdlen)
-	= OMP_CLAUSE_SAFELEN_EXPR (safelen);
+      OMP_CLAUSE_SIMDLEN_व्यञ्जकम् (simdlen)
+	= OMP_CLAUSE_SAFELEN_व्यञ्जकम् (safelen);
     }
 
-  if (ordered_clause
+  सचे (ordered_clause
       && schedule_clause
       && (OMP_CLAUSE_SCHEDULE_KIND (schedule_clause)
 	  & OMP_CLAUSE_SCHEDULE_NONMONOTONIC))
@@ -18464,12 +18464,12 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		"%<nonmonotonic%> schedule modifier specified together "
 		"with %<ordered%> clause");
       OMP_CLAUSE_SCHEDULE_KIND (schedule_clause)
-	= (enum omp_clause_schedule_kind)
+	= (गणना omp_clause_schedule_kind)
 	  (OMP_CLAUSE_SCHEDULE_KIND (schedule_clause)
 	   & ~OMP_CLAUSE_SCHEDULE_NONMONOTONIC);
     }
 
-  if (reduction_seen < 0 && ordered_clause)
+  सचे (reduction_seen < 0 && ordered_clause)
     {
       error_at (OMP_CLAUSE_LOCATION (ordered_clause),
 		"%qs clause specified together with %<inscan%> "
@@ -18477,7 +18477,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       reduction_seen = -2;
     }
 
-  if (reduction_seen < 0 && schedule_clause)
+  सचे (reduction_seen < 0 && schedule_clause)
     {
       error_at (OMP_CLAUSE_LOCATION (schedule_clause),
 		"%qs clause specified together with %<inscan%> "
@@ -18485,44 +18485,44 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       reduction_seen = -2;
     }
 
-  if (linear_variable_step_check
+  सचे (linear_variable_step_check
       || reduction_seen == -2
       || allocate_seen
       || target_in_reduction_seen)
-    for (pc = &clauses, c = clauses; c ; c = *pc)
+    अत्थाय (pc = &clauses, c = clauses; c ; c = *pc)
       {
-	bool remove = false;
-	if (allocate_seen)
-	  switch (OMP_CLAUSE_CODE (c))
+	तार्किक remove = मिच्छा;
+	सचे (allocate_seen)
+	  विकल्प (OMP_CLAUSE_CODE (c))
 	    {
-	    case OMP_CLAUSE_REDUCTION:
-	    case OMP_CLAUSE_IN_REDUCTION:
-	    case OMP_CLAUSE_TASK_REDUCTION:
-	      if (TREE_CODE (OMP_CLAUSE_DECL (c)) == MEM_REF)
+	    पक्ष OMP_CLAUSE_REDUCTION:
+	    पक्ष OMP_CLAUSE_IN_REDUCTION:
+	    पक्ष OMP_CLAUSE_TASK_REDUCTION:
+	      सचे (वृक्षः_CODE (OMP_CLAUSE_DECL (c)) == MEM_REF)
 		{
-		  t = TREE_OPERAND (OMP_CLAUSE_DECL (c), 0);
-		  if (TREE_CODE (t) == POINTER_PLUS_EXPR)
-		    t = TREE_OPERAND (t, 0);
-		  if (TREE_CODE (t) == ADDR_EXPR
+		  t = वृक्षः_OPERAND (OMP_CLAUSE_DECL (c), 0);
+		  सचे (वृक्षः_CODE (t) == POINTER_PLUS_व्यञ्जकम्)
+		    t = वृक्षः_OPERAND (t, 0);
+		  सचे (वृक्षः_CODE (t) == ADDR_व्यञ्जकम्
 		      || INDIRECT_REF_P (t))
-		    t = TREE_OPERAND (t, 0);
-		  if (DECL_P (t))
+		    t = वृक्षः_OPERAND (t, 0);
+		  सचे (DECL_P (t))
 		    bitmap_clear_bit (&aligned_head, DECL_UID (t));
-		  break;
+		  भङ्ग;
 		}
 	      /* FALLTHRU */
-	    case OMP_CLAUSE_PRIVATE:
-	    case OMP_CLAUSE_FIRSTPRIVATE:
-	    case OMP_CLAUSE_LASTPRIVATE:
-	    case OMP_CLAUSE_LINEAR:
-	      if (DECL_P (OMP_CLAUSE_DECL (c)))
+	    पक्ष OMP_CLAUSE_PRIVATE:
+	    पक्ष OMP_CLAUSE_FIRSTPRIVATE:
+	    पक्ष OMP_CLAUSE_LASTPRIVATE:
+	    पक्ष OMP_CLAUSE_LINEAR:
+	      सचे (DECL_P (OMP_CLAUSE_DECL (c)))
 		bitmap_clear_bit (&aligned_head,
 				  DECL_UID (OMP_CLAUSE_DECL (c)));
-	      break;
-	    default:
-	      break;
+	      भङ्ग;
+	    स्वभाव:
+	      भङ्ग;
 	    }
-	if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LINEAR
+	सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LINEAR
 	    && OMP_CLAUSE_LINEAR_VARIABLE_STRIDE (c)
 	    && !bitmap_bit_p (&map_head,
 			      DECL_UID (OMP_CLAUSE_LINEAR_STEP (c))))
@@ -18531,52 +18531,52 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		      "%<linear%> clause step is a parameter %qD not "
 		      "specified in %<uniform%> clause",
 		      OMP_CLAUSE_LINEAR_STEP (c));
-	    remove = true;
+	    remove = सच्च;
 	  }
-	else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
+	अञ्ञथा सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 		 && reduction_seen == -2)
 	  OMP_CLAUSE_REDUCTION_INSCAN (c) = 0;
-	if (target_in_reduction_seen
+	सचे (target_in_reduction_seen
 	    && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP)
 	  {
-	    tree t = OMP_CLAUSE_DECL (c);
-	    while (handled_component_p (t)
+	    वृक्षः t = OMP_CLAUSE_DECL (c);
+	    याव (handled_component_p (t)
 		   || INDIRECT_REF_P (t)
-		   || TREE_CODE (t) == ADDR_EXPR
-		   || TREE_CODE (t) == MEM_REF
-		   || TREE_CODE (t) == NON_LVALUE_EXPR)
-	      t = TREE_OPERAND (t, 0);
-	    if (DECL_P (t)
+		   || वृक्षः_CODE (t) == ADDR_व्यञ्जकम्
+		   || वृक्षः_CODE (t) == MEM_REF
+		   || वृक्षः_CODE (t) == NON_LVALUE_व्यञ्जकम्)
+	      t = वृक्षः_OPERAND (t, 0);
+	    सचे (DECL_P (t)
 		&& bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
 	      OMP_CLAUSE_MAP_IN_REDUCTION (c) = 1;
 	  }
 
-	if (remove)
+	सचे (remove)
 	  *pc = OMP_CLAUSE_CHAIN (c);
-	else
+	अञ्ञथा
 	  pc = &OMP_CLAUSE_CHAIN (c);
       }
 
-  if (allocate_seen)
-    for (pc = &clauses, c = clauses; c ; c = *pc)
+  सचे (allocate_seen)
+    अत्थाय (pc = &clauses, c = clauses; c ; c = *pc)
       {
-	bool remove = false;
-	if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ALLOCATE
+	तार्किक remove = मिच्छा;
+	सचे (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ALLOCATE
 	    && !OMP_CLAUSE_ALLOCATE_COMBINED (c)
 	    && bitmap_bit_p (&aligned_head, DECL_UID (OMP_CLAUSE_DECL (c))))
 	  {
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qD specified in %<allocate%> clause but not in "
 		      "an explicit privatization clause", OMP_CLAUSE_DECL (c));
-	    remove = true;
+	    remove = सच्च;
 	  }
-	if (remove)
+	सचे (remove)
 	  *pc = OMP_CLAUSE_CHAIN (c);
-	else
+	अञ्ञथा
 	  pc = &OMP_CLAUSE_CHAIN (c);
       }
 
-  if (nogroup_seen && reduction_seen)
+  सचे (nogroup_seen && reduction_seen)
     {
       error_at (OMP_CLAUSE_LOCATION (*nogroup_seen),
 		"%<nogroup%> clause must not be used together with "
@@ -18584,7 +18584,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       *nogroup_seen = OMP_CLAUSE_CHAIN (*nogroup_seen);
     }
 
-  if (grainsize_seen && num_tasks_seen)
+  सचे (grainsize_seen && अङ्कः_tasks_seen)
     {
       error_at (OMP_CLAUSE_LOCATION (*grainsize_seen),
 		"%<grainsize%> clause must not be used together with "
@@ -18592,7 +18592,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       *grainsize_seen = OMP_CLAUSE_CHAIN (*grainsize_seen);
     }
 
-  if (full_seen && partial_seen)
+  सचे (full_seen && partial_seen)
     {
       error_at (OMP_CLAUSE_LOCATION (*full_seen),
 		"%<full%> clause must not be used together with "
@@ -18600,23 +18600,23 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       *full_seen = OMP_CLAUSE_CHAIN (*full_seen);
     }
 
-  if (detach_seen)
+  सचे (detach_seen)
     {
-      if (mergeable_seen)
+      सचे (mergeable_seen)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (*detach_seen),
 		    "%<detach%> clause must not be used together with "
 		    "%<mergeable%> clause");
 	  *detach_seen = OMP_CLAUSE_CHAIN (*detach_seen);
 	}
-      else
+      अञ्ञथा
 	{
-	  tree detach_decl = OMP_CLAUSE_DECL (*detach_seen);
+	  वृक्षः detach_decl = OMP_CLAUSE_DECL (*detach_seen);
 
-	  for (pc = &clauses, c = clauses; c ; c = *pc)
+	  अत्थाय (pc = &clauses, c = clauses; c ; c = *pc)
 	    {
-	      bool remove = false;
-	      if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SHARED
+	      तार्किक remove = मिच्छा;
+	      सचे ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SHARED
 		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_PRIVATE
 		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_FIRSTPRIVATE
 		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LASTPRIVATE)
@@ -18625,17 +18625,17 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "the event handle of a %<detach%> clause "
 			    "should not be in a data-sharing clause");
-		  remove = true;
+		  remove = सच्च;
 		}
-	      if (remove)
+	      सचे (remove)
 		*pc = OMP_CLAUSE_CHAIN (c);
-	      else
+	      अञ्ञथा
 		pc = &OMP_CLAUSE_CHAIN (c);
 	    }
 	}
     }
 
-  if (ort == C_ORT_OMP_INTEROP
+  सचे (ort == C_ORT_OMP_INTEROP
       && depend_clause
       && (!init_use_destroy_seen
 	  || (init_seen && init_no_targetsync_clause)))
@@ -18643,22 +18643,22 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       error_at (OMP_CLAUSE_LOCATION (depend_clause),
 		"%<depend%> clause requires action clauses with "
 		"%<targetsync%> interop-type");
-      if (init_no_targetsync_clause)
+      सचे (init_no_targetsync_clause)
 	inform (OMP_CLAUSE_LOCATION (init_no_targetsync_clause),
 		"%<init%> clause lacks the %<targetsync%> modifier");
     }
 
-  bitmap_obstack_release (NULL);
-  return clauses;
+  bitmap_obstack_release (रिक्त);
+  पटिनिवत्त clauses;
 }
 
 /* Do processing necessary to make CLAUSES well-formed, where CLAUSES result
    from implicit instantiation of user-defined mappers (in gimplify.cc).  */
 
-tree
-c_omp_finish_mapper_clauses (tree clauses)
+वृक्षः
+c_omp_finish_mapper_clauses (वृक्षः clauses)
 {
-  return c_finish_omp_clauses (clauses, C_ORT_OMP);
+  पटिनिवत्त c_finish_omp_clauses (clauses, C_ORT_OMP);
 }
 
 /* Return code to initialize DST with a copy constructor from SRC.
@@ -18666,56 +18666,56 @@ c_omp_finish_mapper_clauses (tree clauses)
    _Atomic vars we need to perform __atomic_load from src into a temporary
    followed by __atomic_store of the temporary to dst.  */
 
-tree
-c_omp_clause_copy_ctor (tree clause, tree dst, tree src)
+वृक्षः
+c_omp_clause_copy_ctor (वृक्षः clause, वृक्षः dst, वृक्षः src)
 {
-  if (!really_atomic_lvalue (dst) && !really_atomic_lvalue (src))
-    return build2 (MODIFY_EXPR, TREE_TYPE (dst), dst, src);
+  सचे (!really_atomic_lvalue (dst) && !really_atomic_lvalue (src))
+    पटिनिवत्त build2 (MODIFY_व्यञ्जकम्, वृक्षः_TYPE (dst), dst, src);
 
   location_t loc = OMP_CLAUSE_LOCATION (clause);
-  tree type = TREE_TYPE (dst);
-  tree nonatomic_type = build_qualified_type (type, TYPE_UNQUALIFIED);
-  tree tmp = create_tmp_var (nonatomic_type);
-  tree tmp_addr = build_fold_addr_expr (tmp);
-  TREE_ADDRESSABLE (tmp) = 1;
+  वृक्षः type = वृक्षः_TYPE (dst);
+  वृक्षः nonatomic_type = build_qualified_type (type, TYPE_UNQUALIFIED);
+  वृक्षः tmp = create_tmp_var (nonatomic_type);
+  वृक्षः tmp_addr = build_fold_addr_व्यञ्जकम् (tmp);
+  वृक्षः_ADDRESSABLE (tmp) = 1;
   suppress_warning (tmp);
-  tree src_addr = build_fold_addr_expr (src);
-  tree dst_addr = build_fold_addr_expr (dst);
-  tree seq_cst = build_int_cst (integer_type_node, MEMMODEL_SEQ_CST);
-  vec<tree, va_gc> *params;
+  वृक्षः src_addr = build_fold_addr_व्यञ्जकम् (src);
+  वृक्षः dst_addr = build_fold_addr_व्यञ्जकम् (dst);
+  वृक्षः seq_cst = build_int_cst (integer_type_ग्रन्थिः, MEMMODEL_SEQ_CST);
+  vec<वृक्षः, va_gc> *params;
   /* Expansion of a generic atomic load may require an addition
      element, so allocate enough to prevent a resize.  */
   vec_alloc (params, 4);
 
   /* Build __atomic_load (&src, &tmp, SEQ_CST);  */
-  tree fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_LOAD);
-  params->quick_push (src_addr);
-  params->quick_push (tmp_addr);
-  params->quick_push (seq_cst);
-  tree load = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
+  वृक्षः fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_LOAD);
+  params->quick_प्रक्षिप (src_addr);
+  params->quick_प्रक्षिप (tmp_addr);
+  params->quick_प्रक्षिप (seq_cst);
+  वृक्षः load = c_build_function_call_vec (loc, vNULL, fndecl, params, रिक्त);
 
   vec_alloc (params, 4);
 
   /* Build __atomic_store (&dst, &tmp, SEQ_CST);  */
   fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_STORE);
-  params->quick_push (dst_addr);
-  params->quick_push (tmp_addr);
-  params->quick_push (seq_cst);
-  tree store = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
-  return build2 (COMPOUND_EXPR, void_type_node, load, store);
+  params->quick_प्रक्षिप (dst_addr);
+  params->quick_प्रक्षिप (tmp_addr);
+  params->quick_प्रक्षिप (seq_cst);
+  वृक्षः store = c_build_function_call_vec (loc, vNULL, fndecl, params, रिक्त);
+  पटिनिवत्त build2 (COMPOUND_व्यञ्जकम्, void_type_ग्रन्थिः, load, store);
 }
 
 /* Create a transaction node.  */
 
-tree
-c_finish_transaction (location_t loc, tree block, int flags)
+वृक्षः
+c_finish_transaction (location_t loc, वृक्षः block, पूर्णाङ्क flags)
 {
-  tree stmt = build_stmt (loc, TRANSACTION_EXPR, block);
-  if (flags & TM_STMT_ATTR_OUTER)
-    TRANSACTION_EXPR_OUTER (stmt) = 1;
-  if (flags & TM_STMT_ATTR_RELAXED)
-    TRANSACTION_EXPR_RELAXED (stmt) = 1;
-  return add_stmt (stmt);
+  वृक्षः stmt = build_stmt (loc, TRANSACTION_व्यञ्जकम्, block);
+  सचे (flags & TM_STMT_ATTR_OUTER)
+    TRANSACTION_व्यञ्जकम्_OUTER (stmt) = 1;
+  सचे (flags & TM_STMT_ATTR_RELAXED)
+    TRANSACTION_व्यञ्जकम्_RELAXED (stmt) = 1;
+  पटिनिवत्त add_stmt (stmt);
 }
 
 /* Make a variant type in the proper way for C/C++, propagating qualifiers
@@ -18725,52 +18725,52 @@ c_finish_transaction (location_t loc, tree block, int flags)
    preserve information about the typedef name from which an array
    type was derived).  */
 
-tree
-c_build_qualified_type (tree type, int type_quals, tree orig_qual_type,
+वृक्षः
+c_build_qualified_type (वृक्षः type, पूर्णाङ्क type_quals, वृक्षः orig_qual_type,
 			size_t orig_qual_indirect)
 {
-  if (type == error_mark_node)
-    return type;
+  सचे (type == error_mark_ग्रन्थिः)
+    पटिनिवत्त type;
 
-  if (TREE_CODE (type) == ARRAY_TYPE)
+  सचे (वृक्षः_CODE (type) == ARRAY_TYPE)
     {
-      tree t;
-      tree element_type = c_build_qualified_type (TREE_TYPE (type),
+      वृक्षः t;
+      वृक्षः element_type = c_build_qualified_type (वृक्षः_TYPE (type),
 						  type_quals, orig_qual_type,
 						  orig_qual_indirect - 1);
 
       /* See if we already have an identically qualified type.  */
-      if (orig_qual_type && orig_qual_indirect == 0)
+      सचे (orig_qual_type && orig_qual_indirect == 0)
 	t = orig_qual_type;
-      else
-	for (t = TYPE_MAIN_VARIANT (type); t; t = TYPE_NEXT_VARIANT (t))
+      अञ्ञथा
+	अत्थाय (t = TYPE_MAIN_VARIANT (type); t; t = TYPE_NEXT_VARIANT (t))
 	  {
-	    if (TYPE_QUALS (strip_array_types (t)) == type_quals
+	    सचे (TYPE_QUALS (strip_array_types (t)) == type_quals
 		&& TYPE_NAME (t) == TYPE_NAME (type)
 		&& TYPE_CONTEXT (t) == TYPE_CONTEXT (type)
 		&& attribute_list_equal (TYPE_ATTRIBUTES (t),
 					 TYPE_ATTRIBUTES (type)))
-	      break;
+	      भङ्ग;
 	  }
-      if (!t)
+      सचे (!t)
 	{
-          tree domain = TYPE_DOMAIN (type);
+          वृक्षः domain = TYPE_DOMAIN (type);
 
 	  t = build_variant_type_copy (type);
-	  TREE_TYPE (t) = element_type;
+	  वृक्षः_TYPE (t) = element_type;
 	  TYPE_ADDR_SPACE (t) = TYPE_ADDR_SPACE (element_type);
 
-          if (TYPE_STRUCTURAL_EQUALITY_P (element_type)
+          सचे (TYPE_STRUCTURAL_EQUALITY_P (element_type)
               || (domain && TYPE_STRUCTURAL_EQUALITY_P (domain)))
             SET_TYPE_STRUCTURAL_EQUALITY (t);
-          else if (TYPE_CANONICAL (element_type) != element_type
+          अञ्ञथा सचे (TYPE_CANONICAL (element_type) != element_type
                    || (domain && TYPE_CANONICAL (domain) != domain))
             {
-              tree unqualified_canon
+              वृक्षः unqualified_canon
 		= c_build_array_type (TYPE_CANONICAL (element_type),
 				      domain ? TYPE_CANONICAL (domain)
-					     : NULL_TREE);
-              if (TYPE_REVERSE_STORAGE_ORDER (type))
+					     : NULL_वृक्षः);
+              सचे (TYPE_REVERSE_STORAGE_ORDER (type))
                 {
                   unqualified_canon
 		    = build_distinct_type_copy (unqualified_canon);
@@ -18779,24 +18779,24 @@ c_build_qualified_type (tree type, int type_quals, tree orig_qual_type,
               TYPE_CANONICAL (t)
 		= c_build_qualified_type (unqualified_canon, type_quals);
             }
-          else
+          अञ्ञथा
             TYPE_CANONICAL (t) = t;
 	}
-      return t;
+      पटिनिवत्त t;
     }
 
   /* A restrict-qualified pointer type must be a pointer to object or
      incomplete type.  Note that the use of POINTER_TYPE_P also allows
      REFERENCE_TYPEs, which is appropriate for C++.  */
-  if ((type_quals & TYPE_QUAL_RESTRICT)
+  सचे ((type_quals & TYPE_QUAL_RESTRICT)
       && (!POINTER_TYPE_P (type)
-	  || !C_TYPE_OBJECT_OR_INCOMPLETE_P (TREE_TYPE (type))))
+	  || !C_TYPE_OBJECT_OR_INCOMPLETE_P (वृक्षः_TYPE (type))))
     {
       error ("invalid use of %<restrict%>");
       type_quals &= ~TYPE_QUAL_RESTRICT;
     }
 
-  tree var_type = (orig_qual_type && orig_qual_indirect == 0
+  वृक्षः var_type = (orig_qual_type && orig_qual_indirect == 0
 		   ? orig_qual_type
 		   : build_qualified_type (type, type_quals));
 
@@ -18807,272 +18807,272 @@ c_build_qualified_type (tree type, int type_quals, tree orig_qual_type,
 
   /* A variant type does not inherit the list of incomplete vars from the
      type main variant.  */
-  if ((RECORD_OR_UNION_TYPE_P (var_type)
-       || TREE_CODE (var_type) == ENUMERAL_TYPE)
+  सचे ((RECORD_OR_UNION_TYPE_P (var_type)
+       || वृक्षः_CODE (var_type) == ENUMERAL_TYPE)
       && TYPE_MAIN_VARIANT (var_type) != var_type)
     C_TYPE_INCOMPLETE_VARS (var_type) = 0;
-  return var_type;
+  पटिनिवत्त var_type;
 }
 
 /* Build a VA_ARG_EXPR for the C parser.  */
 
-tree
-c_build_va_arg (location_t loc1, tree expr, location_t loc2, tree type,
-		tree type_expr)
+वृक्षः
+c_build_va_arg (location_t loc1, वृक्षः व्यञ्जकम्, location_t loc2, वृक्षः type,
+		वृक्षः type_व्यञ्जकम्)
 {
-  if (error_operand_p (type))
-    return error_mark_node;
+  सचे (error_operand_p (type))
+    पटिनिवत्त error_mark_ग्रन्थिः;
   /* VA_ARG_EXPR cannot be used for a scalar va_list with reverse storage
      order because it takes the address of the expression.  */
-  else if (handled_component_p (expr)
-	   && reverse_storage_order_for_component_p (expr))
+  अञ्ञथा सचे (handled_component_p (व्यञ्जकम्)
+	   && reverse_storage_order_for_component_p (व्यञ्जकम्))
     {
       error_at (loc1, "cannot use %<va_arg%> with reverse storage order");
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
-  else if (!COMPLETE_TYPE_P (type))
+  अञ्ञथा सचे (!COMPLETE_TYPE_P (type))
     {
       error_at (loc2, "second argument to %<va_arg%> is of incomplete "
 		"type %qT", type);
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
-  else if (TREE_CODE (type) == FUNCTION_TYPE)
+  अञ्ञथा सचे (वृक्षः_CODE (type) == FUNCTION_TYPE)
     {
       error_at (loc2, "second argument to %<va_arg%> is a function type %qT",
 		type);
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
-  else if (TREE_CODE (type) == ARRAY_TYPE && C_TYPE_VARIABLE_SIZE (type)
+  अञ्ञथा सचे (वृक्षः_CODE (type) == ARRAY_TYPE && C_TYPE_VARIABLE_SIZE (type)
 	   && !flag_isoc99)
     {
       error_at (loc2, "second argument to %<va_arg%> is an array type %qT",
 		type);
-      return error_mark_node;
+      पटिनिवत्त error_mark_ग्रन्थिः;
     }
-  else if (warn_cxx_compat && TREE_CODE (type) == ENUMERAL_TYPE)
+  अञ्ञथा सचे (warn_cxx_compat && वृक्षः_CODE (type) == ENUMERAL_TYPE)
     warning_at (loc2, OPT_Wc___compat,
 		"C++ requires promoted type, not enum type, in %<va_arg%>");
 
-  if (flag_isoc99 && TREE_CODE (type) == ARRAY_TYPE)
+  सचे (flag_isoc99 && वृक्षः_CODE (type) == ARRAY_TYPE)
     {
       warning_at (loc2, 0, "second argument to %<va_arg%> is an array type %qT",
 		  type);
       /* We create a trap but evaluate side effects first.  */
-      tree trapfn = builtin_decl_explicit (BUILT_IN_TRAP);
-      trapfn = build_call_expr_loc (loc2, trapfn, 0);
-      tree e2 = build2 (COMPOUND_EXPR, void_type_node, expr, trapfn);
+      वृक्षः trapfn = builtin_decl_explicit (BUILT_IN_TRAP);
+      trapfn = build_call_व्यञ्जकम्_loc (loc2, trapfn, 0);
+      वृक्षः e2 = build2 (COMPOUND_व्यञ्जकम्, void_type_ग्रन्थिः, व्यञ्जकम्, trapfn);
       /* Return a compound literal of the right type.  */
-      tree e1 = build_compound_literal (loc2, type, NULL, true, 0, NULL);
-      expr = build2 (COMPOUND_EXPR, type, e2, e1);
+      वृक्षः e1 = build_compound_literal (loc2, type, रिक्त, सच्च, 0, रिक्त);
+      व्यञ्जकम् = build2 (COMPOUND_व्यञ्जकम्, type, e2, e1);
     }
-  else
-    expr = build_va_arg (loc2, expr, type);
+  अञ्ञथा
+    व्यञ्जकम् = build_va_arg (loc2, व्यञ्जकम्, type);
 
-  if (type_expr)
-    expr = build2 (COMPOUND_EXPR, TREE_TYPE (expr), type_expr, expr);
+  सचे (type_व्यञ्जकम्)
+    व्यञ्जकम् = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (व्यञ्जकम्), type_व्यञ्जकम्, व्यञ्जकम्);
 
-  return expr;
+  पटिनिवत्त व्यञ्जकम्;
 }
 
 /* Return truthvalue of whether T1 is the same tree structure as T2.
    Return 1 if they are the same. Return false if they are different.  */
 
-bool
-c_tree_equal (tree t1, tree t2)
+तार्किक
+c_वृक्षः_equal (वृक्षः t1, वृक्षः t2)
 {
-  enum tree_code code1, code2;
+  गणना वृक्षः_code code1, code2;
 
-  if (t1 == t2)
-    return true;
-  if (!t1 || !t2)
-    return false;
+  सचे (t1 == t2)
+    पटिनिवत्त सच्च;
+  सचे (!t1 || !t2)
+    पटिनिवत्त मिच्छा;
 
-  for (code1 = TREE_CODE (t1); code1 == NON_LVALUE_EXPR;
-       code1 = TREE_CODE (t1))
-    t1 = TREE_OPERAND (t1, 0);
-  for (code2 = TREE_CODE (t2); code2 == NON_LVALUE_EXPR;
-       code2 = TREE_CODE (t2))
-    t2 = TREE_OPERAND (t2, 0);
+  अत्थाय (code1 = वृक्षः_CODE (t1); code1 == NON_LVALUE_व्यञ्जकम्;
+       code1 = वृक्षः_CODE (t1))
+    t1 = वृक्षः_OPERAND (t1, 0);
+  अत्थाय (code2 = वृक्षः_CODE (t2); code2 == NON_LVALUE_व्यञ्जकम्;
+       code2 = वृक्षः_CODE (t2))
+    t2 = वृक्षः_OPERAND (t2, 0);
 
   /* They might have become equal now.  */
-  if (t1 == t2)
-    return true;
+  सचे (t1 == t2)
+    पटिनिवत्त सच्च;
 
-  if (code1 != code2)
-    return false;
+  सचे (code1 != code2)
+    पटिनिवत्त मिच्छा;
 
-  if (CONSTANT_CLASS_P (t1) && !comptypes (TREE_TYPE (t1), TREE_TYPE (t2)))
-    return false;
+  सचे (CONSTANT_CLASS_P (t1) && !comptypes (वृक्षः_TYPE (t1), वृक्षः_TYPE (t2)))
+    पटिनिवत्त मिच्छा;
 
-  switch (code1)
+  विकल्प (code1)
     {
-    case INTEGER_CST:
-      return wi::to_wide (t1) == wi::to_wide (t2);
+    पक्ष INTEGER_CST:
+      पटिनिवत्त wi::to_wide (t1) == wi::to_wide (t2);
 
-    case REAL_CST:
-      return real_equal (&TREE_REAL_CST (t1), &TREE_REAL_CST (t2));
+    पक्ष REAL_CST:
+      पटिनिवत्त real_equal (&वृक्षः_REAL_CST (t1), &वृक्षः_REAL_CST (t2));
 
-    case STRING_CST:
-      return TREE_STRING_LENGTH (t1) == TREE_STRING_LENGTH (t2)
-	&& !memcmp (TREE_STRING_POINTER (t1), TREE_STRING_POINTER (t2),
-		    TREE_STRING_LENGTH (t1));
+    पक्ष STRING_CST:
+      पटिनिवत्त वृक्षः_STRING_LENGTH (t1) == वृक्षः_STRING_LENGTH (t2)
+	&& !memcmp (वृक्षः_STRING_POINTER (t1), वृक्षः_STRING_POINTER (t2),
+		    वृक्षः_STRING_LENGTH (t1));
 
-    case FIXED_CST:
-      return FIXED_VALUES_IDENTICAL (TREE_FIXED_CST (t1),
-				     TREE_FIXED_CST (t2));
+    पक्ष FIXED_CST:
+      पटिनिवत्त FIXED_मानानि_IDENTICAL (वृक्षः_FIXED_CST (t1),
+				     वृक्षः_FIXED_CST (t2));
 
-    case COMPLEX_CST:
-      return c_tree_equal (TREE_REALPART (t1), TREE_REALPART (t2))
-	     && c_tree_equal (TREE_IMAGPART (t1), TREE_IMAGPART (t2));
+    पक्ष COMPLEX_CST:
+      पटिनिवत्त c_वृक्षः_equal (वृक्षः_REALPART (t1), वृक्षः_REALPART (t2))
+	     && c_वृक्षः_equal (वृक्षः_IMAGPART (t1), वृक्षः_IMAGPART (t2));
 
-    case VECTOR_CST:
-      return operand_equal_p (t1, t2, OEP_ONLY_CONST);
+    पक्ष VECTOR_CST:
+      पटिनिवत्त operand_equal_p (t1, t2, OEP_ONLY_CONST);
 
-    case CONSTRUCTOR:
+    पक्ष CONSTRUCTOR:
       /* We need to do this when determining whether or not two
 	 non-type pointer to member function template arguments
 	 are the same.  */
-      if (!comptypes (TREE_TYPE (t1), TREE_TYPE (t2))
+      सचे (!comptypes (वृक्षः_TYPE (t1), वृक्षः_TYPE (t2))
 	  || CONSTRUCTOR_NELTS (t1) != CONSTRUCTOR_NELTS (t2))
-	return false;
+	पटिनिवत्त मिच्छा;
       {
-	tree field, value;
-	unsigned int i;
-	FOR_EACH_CONSTRUCTOR_ELT (CONSTRUCTOR_ELTS (t1), i, field, value)
+	वृक्षः field, मानम्;
+	unsigned पूर्णाङ्क i;
+	FOR_EACH_CONSTRUCTOR_ELT (CONSTRUCTOR_ELTS (t1), i, field, मानम्)
 	  {
 	    constructor_elt *elt2 = CONSTRUCTOR_ELT (t2, i);
-	    if (!c_tree_equal (field, elt2->index)
-		|| !c_tree_equal (value, elt2->value))
-	      return false;
+	    सचे (!c_वृक्षः_equal (field, elt2->index)
+		|| !c_वृक्षः_equal (मानम्, elt2->मानम्))
+	      पटिनिवत्त मिच्छा;
 	  }
       }
-      return true;
+      पटिनिवत्त सच्च;
 
-    case TREE_LIST:
-      if (!c_tree_equal (TREE_PURPOSE (t1), TREE_PURPOSE (t2)))
-	return false;
-      if (!c_tree_equal (TREE_VALUE (t1), TREE_VALUE (t2)))
-	return false;
-      return c_tree_equal (TREE_CHAIN (t1), TREE_CHAIN (t2));
+    पक्ष वृक्षः_LIST:
+      सचे (!c_वृक्षः_equal (वृक्षः_PURPOSE (t1), वृक्षः_PURPOSE (t2)))
+	पटिनिवत्त मिच्छा;
+      सचे (!c_वृक्षः_equal (वृक्षः_मानम् (t1), वृक्षः_मानम् (t2)))
+	पटिनिवत्त मिच्छा;
+      पटिनिवत्त c_वृक्षः_equal (वृक्षः_CHAIN (t1), वृक्षः_CHAIN (t2));
 
-    case SAVE_EXPR:
-      return c_tree_equal (TREE_OPERAND (t1, 0), TREE_OPERAND (t2, 0));
+    पक्ष SAVE_व्यञ्जकम्:
+      पटिनिवत्त c_वृक्षः_equal (वृक्षः_OPERAND (t1, 0), वृक्षः_OPERAND (t2, 0));
 
-    case CALL_EXPR:
+    पक्ष CALL_व्यञ्जकम्:
       {
-	tree arg1, arg2;
-	call_expr_arg_iterator iter1, iter2;
-	if (!c_tree_equal (CALL_EXPR_FN (t1), CALL_EXPR_FN (t2)))
-	  return false;
-	for (arg1 = first_call_expr_arg (t1, &iter1),
-	       arg2 = first_call_expr_arg (t2, &iter2);
+	वृक्षः arg1, arg2;
+	call_व्यञ्जकम्_arg_iterator iter1, iter2;
+	सचे (!c_वृक्षः_equal (CALL_व्यञ्जकम्_FN (t1), CALL_व्यञ्जकम्_FN (t2)))
+	  पटिनिवत्त मिच्छा;
+	अत्थाय (arg1 = first_call_व्यञ्जकम्_arg (t1, &iter1),
+	       arg2 = first_call_व्यञ्जकम्_arg (t2, &iter2);
 	     arg1 && arg2;
-	     arg1 = next_call_expr_arg (&iter1),
-	       arg2 = next_call_expr_arg (&iter2))
-	  if (!c_tree_equal (arg1, arg2))
-	    return false;
-	if (arg1 || arg2)
-	  return false;
-	return true;
+	     arg1 = next_call_व्यञ्जकम्_arg (&iter1),
+	       arg2 = next_call_व्यञ्जकम्_arg (&iter2))
+	  सचे (!c_वृक्षः_equal (arg1, arg2))
+	    पटिनिवत्त मिच्छा;
+	सचे (arg1 || arg2)
+	  पटिनिवत्त मिच्छा;
+	पटिनिवत्त सच्च;
       }
 
-    case TARGET_EXPR:
+    पक्ष TARGET_व्यञ्जकम्:
       {
-	tree o1 = TREE_OPERAND (t1, 0);
-	tree o2 = TREE_OPERAND (t2, 0);
+	वृक्षः o1 = वृक्षः_OPERAND (t1, 0);
+	वृक्षः o2 = वृक्षः_OPERAND (t2, 0);
 
 	/* Special case: if either target is an unallocated VAR_DECL,
 	   it means that it's going to be unified with whatever the
 	   TARGET_EXPR is really supposed to initialize, so treat it
 	   as being equivalent to anything.  */
-	if (VAR_P (o1) && DECL_NAME (o1) == NULL_TREE
+	सचे (VAR_P (o1) && DECL_NAME (o1) == NULL_वृक्षः
 	    && !DECL_RTL_SET_P (o1))
 	  /*Nop*/;
-	else if (VAR_P (o2) && DECL_NAME (o2) == NULL_TREE
+	अञ्ञथा सचे (VAR_P (o2) && DECL_NAME (o2) == NULL_वृक्षः
 		 && !DECL_RTL_SET_P (o2))
 	  /*Nop*/;
-	else if (!c_tree_equal (o1, o2))
-	  return false;
+	अञ्ञथा सचे (!c_वृक्षः_equal (o1, o2))
+	  पटिनिवत्त मिच्छा;
 
-	return c_tree_equal (TREE_OPERAND (t1, 1), TREE_OPERAND (t2, 1));
+	पटिनिवत्त c_वृक्षः_equal (वृक्षः_OPERAND (t1, 1), वृक्षः_OPERAND (t2, 1));
       }
 
-    case COMPONENT_REF:
-      if (TREE_OPERAND (t1, 1) != TREE_OPERAND (t2, 1))
-	return false;
-      return c_tree_equal (TREE_OPERAND (t1, 0), TREE_OPERAND (t2, 0));
+    पक्ष COMPONENT_REF:
+      सचे (वृक्षः_OPERAND (t1, 1) != वृक्षः_OPERAND (t2, 1))
+	पटिनिवत्त मिच्छा;
+      पटिनिवत्त c_वृक्षः_equal (वृक्षः_OPERAND (t1, 0), वृक्षः_OPERAND (t2, 0));
 
-    case PARM_DECL:
-    case VAR_DECL:
-    case CONST_DECL:
-    case FIELD_DECL:
-    case FUNCTION_DECL:
-    case IDENTIFIER_NODE:
-    case SSA_NAME:
-      return false;
+    पक्ष PARM_DECL:
+    पक्ष VAR_DECL:
+    पक्ष CONST_DECL:
+    पक्ष FIELD_DECL:
+    पक्ष FUNCTION_DECL:
+    पक्ष IDENTIFIER_ग्रन्थिः:
+    पक्ष SSA_NAME:
+      पटिनिवत्त मिच्छा;
 
-    case TREE_VEC:
+    पक्ष वृक्षः_VEC:
       {
 	unsigned ix;
-	if (TREE_VEC_LENGTH (t1) != TREE_VEC_LENGTH (t2))
-	  return false;
-	for (ix = TREE_VEC_LENGTH (t1); ix--;)
-	  if (!c_tree_equal (TREE_VEC_ELT (t1, ix),
-			     TREE_VEC_ELT (t2, ix)))
-	    return false;
-	return true;
+	सचे (वृक्षः_VEC_LENGTH (t1) != वृक्षः_VEC_LENGTH (t2))
+	  पटिनिवत्त मिच्छा;
+	अत्थाय (ix = वृक्षः_VEC_LENGTH (t1); ix--;)
+	  सचे (!c_वृक्षः_equal (वृक्षः_VEC_ELT (t1, ix),
+			     वृक्षः_VEC_ELT (t2, ix)))
+	    पटिनिवत्त मिच्छा;
+	पटिनिवत्त सच्च;
       }
 
     CASE_CONVERT:
-      if (!comptypes (TREE_TYPE (t1), TREE_TYPE (t2)))
-	return false;
-      break;
+      सचे (!comptypes (वृक्षः_TYPE (t1), वृक्षः_TYPE (t2)))
+	पटिनिवत्त मिच्छा;
+      भङ्ग;
 
-    default:
-      break;
+    स्वभाव:
+      भङ्ग;
     }
 
-  switch (TREE_CODE_CLASS (code1))
+  विकल्प (वृक्षः_CODE_CLASS (code1))
     {
-    case tcc_unary:
-    case tcc_binary:
-    case tcc_comparison:
-    case tcc_expression:
-    case tcc_vl_exp:
-    case tcc_reference:
-    case tcc_statement:
+    पक्ष tcc_unary:
+    पक्ष tcc_द्विमान:
+    पक्ष tcc_comparison:
+    पक्ष tcc_expression:
+    पक्ष tcc_vl_exp:
+    पक्ष tcc_reference:
+    पक्ष tcc_statement:
       {
-	int i, n = TREE_OPERAND_LENGTH (t1);
+	पूर्णाङ्क i, n = वृक्षः_OPERAND_LENGTH (t1);
 
-	switch (code1)
+	विकल्प (code1)
 	  {
-	  case PREINCREMENT_EXPR:
-	  case PREDECREMENT_EXPR:
-	  case POSTINCREMENT_EXPR:
-	  case POSTDECREMENT_EXPR:
+	  पक्ष PREINCREMENT_व्यञ्जकम्:
+	  पक्ष PREDECREMENT_व्यञ्जकम्:
+	  पक्ष POSTINCREMENT_व्यञ्जकम्:
+	  पक्ष POSTDECREMENT_व्यञ्जकम्:
 	    n = 1;
-	    break;
-	  case ARRAY_REF:
+	    भङ्ग;
+	  पक्ष ARRAY_REF:
 	    n = 2;
-	    break;
-	  default:
-	    break;
+	    भङ्ग;
+	  स्वभाव:
+	    भङ्ग;
 	  }
 
-	if (TREE_CODE_CLASS (code1) == tcc_vl_exp
-	    && n != TREE_OPERAND_LENGTH (t2))
-	  return false;
+	सचे (वृक्षः_CODE_CLASS (code1) == tcc_vl_exp
+	    && n != वृक्षः_OPERAND_LENGTH (t2))
+	  पटिनिवत्त मिच्छा;
 
-	for (i = 0; i < n; ++i)
-	  if (!c_tree_equal (TREE_OPERAND (t1, i), TREE_OPERAND (t2, i)))
-	    return false;
+	अत्थाय (i = 0; i < n; ++i)
+	  सचे (!c_वृक्षः_equal (वृक्षः_OPERAND (t1, i), वृक्षः_OPERAND (t2, i)))
+	    पटिनिवत्त मिच्छा;
 
-	return true;
+	पटिनिवत्त सच्च;
       }
 
-    case tcc_type:
-      return comptypes (t1, t2);
-    default:
+    पक्ष tcc_type:
+      पटिनिवत्त comptypes (t1, t2);
+    स्वभाव:
       gcc_unreachable ();
     }
 }
@@ -19081,8 +19081,8 @@ c_tree_equal (tree t1, tree t2)
    introduced as a result of a call to an otherwise undeclared
    function, and false otherwise.  */
 
-bool
-c_decl_implicit (const_tree fndecl)
+तार्किक
+c_decl_implicit (const_वृक्षः fndecl)
 {
-  return C_DECL_IMPLICIT (fndecl);
+  पटिनिवत्त C_DECL_IMPLICIT (fndecl);
 }
