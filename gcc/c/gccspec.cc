@@ -17,91 +17,91 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "tm.h"
-#include "opts.h"
+#అన్తర్భావ "config.h"
+#అన్తర్భావ "system.h"
+#అన్తర్భావ "coretypes.h"
+#అన్తర్భావ "tm.h"
+#అన్తర్భావ "opts.h"
 
 /* Filter command line before processing by the gcc driver proper.  */
-void
-lang_specific_driver (struct cl_decoded_option **in_decoded_options ATTRIBUTE_UNUSED,
-		      unsigned int *in_decoded_options_count ATTRIBUTE_UNUSED,
-		      int *in_added_libraries ATTRIBUTE_UNUSED)
+శూన్య
+lang_specific_driver (నిర్మాణం cl_decoded_option **లోపల_decoded_options ATTRIBUTE_వాడని,
+		      గుర్తులేని పూర్ణాంకం *లోపల_decoded_options_లెక్క ATTRIBUTE_వాడని,
+		      పూర్ణాంకం *లోపల_added_libraries ATTRIBUTE_వాడని)
 {
   /* Systems which use the NeXT runtime by default should arrange
      for the shared libgcc to be used when -fgnu-runtime is passed
      through specs.  */
-#if defined(ENABLE_SHARED_LIBGCC) && ! NEXT_OBJC_RUNTIME
-  unsigned int i;
+#ఒకవేళ defined(ENABLE_SHARED_LIBGCC) && ! తదుపరి_OBJC_RUNTIME
+  గుర్తులేని పూర్ణాంకం i;
 
   /* The new argument list will be contained in this.  */
-  struct cl_decoded_option *new_decoded_options;
+  నిర్మాణం cl_decoded_option *new_decoded_options;
 
   /* True if we should add -shared-libgcc to the command-line.  */
-  int shared_libgcc = 0;
+  పూర్ణాంకం shared_libgcc = 0;
 
   /* The total number of arguments with the new stuff.  */
-  unsigned int argc;
+  గుర్తులేని పూర్ణాంకం argc;
 
   /* The argument list.  */
-  struct cl_decoded_option *decoded_options;
+  నిర్మాణం cl_decoded_option *decoded_options;
 
-  argc = *in_decoded_options_count;
-  decoded_options = *in_decoded_options;
+  argc = *లోపల_decoded_options_లెక్క;
+  decoded_options = *లోపల_decoded_options;
 
-  for (i = 1; i < argc; i++)
+  కొరకు (i = 1; i < argc; i++)
     {
-      switch (decoded_options[i].opt_index)
+      ఎంపిక (decoded_options[i].opt_సూచీ)
 	{
-	case OPT_static_libgcc:
-	case OPT_static:
-	  return;
+	స్థితి OPT_static_libgcc:
+	స్థితి OPT_static:
+	  తిరిగి;
 
-	case OPT_SPECIAL_input_file:
+	స్థితి OPT_SPECIAL_ఆదానం_file:
 	  {
-	    const char *file = decoded_options[i].arg;
-	    int len;
+	    స్థిరరాశి అక్షరం *file = decoded_options[i].arg;
+	    పూర్ణాంకం len;
 
 	    /* If the filename ends in .m or .mi, we are compiling
 	       ObjC and want to pass -shared-libgcc.  */
-	    len = strlen (file);
-	    if ((len > 2 && file[len - 2] == '.' && file[len - 1] == 'm')
+	    len = అక్షరశ్రేణి_పొడవు (file);
+	    ఒకవేళ ((len > 2 && file[len - 2] == '.' && file[len - 1] == 'm')
 		||  (len > 3 && file[len - 3] == '.' && file[len - 2] == 'm'
 		     && file[len - 1] == 'i'))
 	      shared_libgcc = 1;
 	  }
-	  break;
+	  ఆపు;
 	}
     }
 
-  if  (shared_libgcc)
+  ఒకవేళ  (shared_libgcc)
     {
-      new_decoded_options = XNEWVEC (struct cl_decoded_option, argc + 1);
+      new_decoded_options = XNEWVEC (నిర్మాణం cl_decoded_option, argc + 1);
 
       i = 0;
-      do
+      చేయి
 	{
 	  new_decoded_options[i] = decoded_options[i];
 	  i++;
 	}
-      while (i < argc);
+      అయితే (i < argc);
 
-      generate_option (OPT_shared_libgcc, NULL, 1, CL_DRIVER,
+      generate_option (OPT_shared_libgcc, ఖాళీ, 1, CL_DRIVER,
 		       &new_decoded_options[i++]);
 
-      *in_decoded_options_count = i;
-      *in_decoded_options = new_decoded_options;
+      *లోపల_decoded_options_లెక్క = i;
+      *లోపల_decoded_options = new_decoded_options;
     }
-#endif
+#అయితే_ముగింపు
 }
 
 /* Called before linking.  Returns 0 on success and -1 on failure.  */
-int
-lang_specific_pre_link (void)
+పూర్ణాంకం
+lang_specific_pre_link (శూన్య)
 {
-  return 0;  /* Not used for C.  */
+  తిరిగి 0;  /* Not used for C.  */
 }
 
 /* Number of extra output files that lang_specific_pre_link may generate.  */
-int lang_specific_extra_outfiles = 0;  /* Not used for C.  */
+పూర్ణాంకం lang_specific_extra_outfiles = 0;  /* Not used for C.  */

@@ -17,80 +17,80 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_C_LANG_H
-#define GCC_C_LANG_H
+#నిర్వచితం_కాకపోతే GCC_C_LANG_H
+#నిర్వచించు GCC_C_LANG_H
 
-#include "c-family/c-common.h"
+#అన్తర్భావ "c-family/c-common.h"
 
 /* In a RECORD_TYPE, a sorted array of the fields of the type, not a
    tree for size reasons.  */
-struct GTY(()) sorted_fields_type {
-  int len;
-  tree GTY((length ("%h.len"))) elts[1];
+నిర్మాణం GTY(()) sorted_fields_type {
+  పూర్ణాంకం len;
+  వృక్షం GTY((నిడివి ("%h.len"))) elts[1];
 };
 
-struct GTY(()) lang_type {
+నిర్మాణం GTY(()) lang_type {
   /* In a RECORD_TYPE, a sorted array of the fields of the type.  */
-  struct sorted_fields_type * GTY ((reorder ("resort_sorted_fields"))) s;
+  నిర్మాణం sorted_fields_type * GTY ((reorder ("resort_sorted_fields"))) s;
   /* In an ENUMERAL_TYPE, the min and max values.  */
-  tree enum_min;
-  tree enum_max;
-  union maybe_objc_info {
+  వృక్షం enum_min;
+  వృక్షం enum_max;
+  సంఘం maybe_objc_info {
     /* If not c_dialect_objc, this part is not even allocated.  */
-    char GTY((tag ("0"))) non_objc;
+    అక్షరం GTY((ట్యాగ్ ("0"))) non_objc;
     /* In a RECORD_TYPE, information specific to Objective-C, such
        as a list of adopted protocols or a pointer to a corresponding
        @interface.  See objc/objc-act.h for details.  */
-    tree GTY((tag ("1"))) objc_info;
+    వృక్షం GTY((ట్యాగ్ ("1"))) objc_info;
   } GTY ((desc ("c_dialect_objc ()"))) info;
 };
 
-struct GTY(()) lang_decl {
-  char dummy;
+నిర్మాణం GTY(()) lang_decl {
+  అక్షరం dummy;
 };
 
 /* Save and restore the variables in this file and elsewhere
    that keep track of the progress of compilation of the current function.
    Used for nested functions.  */
 
-struct GTY(()) language_function {
-  struct c_language_function base;
-  unsigned char x_in_statement;
-  struct c_switch * GTY((skip)) x_switch_stack;
-  struct c_arg_info * GTY((skip)) arg_info;
-  vec<tree> GTY((skip)) loop_names;
-  decl_tree_map * GTY((skip)) loop_names_hash;
-  int returns_value;
-  int returns_null;
-  int returns_abnormally;
-  int warn_about_return_type;
+నిర్మాణం GTY(()) language_function {
+  నిర్మాణం c_language_function పునాది;
+  గుర్తులేని అక్షరం x_లోపల_statement;
+  నిర్మాణం c_switch * GTY((skip)) x_switch_దొంతర;
+  నిర్మాణం c_arg_info * GTY((skip)) arg_info;
+  vec<వృక్షం> GTY((skip)) loop_పేర్లు;
+  decl_వృక్షం_map * GTY((skip)) loop_పేర్లు_hash;
+  పూర్ణాంకం returns_విలువ;
+  పూర్ణాంకం returns_null;
+  పూర్ణాంకం returns_abnormally;
+  పూర్ణాంకం warn_about_return_type;
 };
 
-struct GTY(()) c_omp_declare_target_attr {
+నిర్మాణం GTY(()) c_omp_declare_లక్ష్యం_attr {
   bool attr_syntax;
-  int device_type;
-  int indirect;
+  పూర్ణాంకం device_type;
+  పూర్ణాంకం పరోక్ష;
 };
 
-struct GTY(()) c_omp_begin_assumes_data {
+నిర్మాణం GTY(()) c_omp_begin_assumes_దత్తాంశం {
   bool attr_syntax;
 };
 
-struct GTY(()) c_omp_declare_variant_attr {
+నిర్మాణం GTY(()) c_omp_declare_variant_attr {
   bool attr_syntax;
-  tree selector;
+  వృక్షం selector;
 };
 
 /* If non-empty, implicit "omp declare target" attribute is added into the
    attribute lists.  */
-extern GTY(()) vec<c_omp_declare_target_attr, va_gc>
-  *current_omp_declare_target_attribute;
+బాహ్య GTY(()) vec<c_omp_declare_లక్ష్యం_attr, va_gc>
+  *current_omp_declare_లక్ష్యం_attribute;
 /* Similarly whether we are in between #pragma omp begin assumes and
    #pragma omp end assumes (and how many times when nested).  */
-extern GTY(()) vec<c_omp_begin_assumes_data, va_gc>
+బాహ్య GTY(()) vec<c_omp_begin_assumes_దత్తాంశం, va_gc>
   *current_omp_begin_assumes;
 /* And similarly for #pragma omp begin/end declare variant.  */
-extern GTY(()) vec<c_omp_declare_variant_attr, va_gc>
+బాహ్య GTY(()) vec<c_omp_declare_variant_attr, va_gc>
   *current_omp_declare_variant_attribute;
 
-#endif /* ! GCC_C_LANG_H */
+#అయితే_ముగింపు /* ! GCC_C_LANG_H */

@@ -17,13 +17,13 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_GIMPLE_PARSER_H
-#define GCC_GIMPLE_PARSER_H
+#నిర్వచితం_కాకపోతే GCC_GIMPLE_PARSER_H
+#నిర్వచించు GCC_GIMPLE_PARSER_H
 
 /* Gimple parsing functions.  */
-extern void c_parser_parse_gimple_body (c_parser *, char *,
-					enum c_declspec_il,
-					profile_count);
-extern void c_parser_gimple_or_rtl_pass_list (c_parser *, c_declspecs *);
+బాహ్య శూన్య c_parser_parse_gimple_body (c_parser *, అక్షరం *,
+					గణన c_declspec_il,
+					profile_లెక్క);
+బాహ్య శూన్య c_parser_gimple_or_rtl_pass_list (c_parser *, c_declspecs *);
 
-#endif
+#అయితే_ముగింపు

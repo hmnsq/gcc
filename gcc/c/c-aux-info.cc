@@ -20,26 +20,26 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "tm.h"
-#include "c-tree.h"
+#అన్తర్భావ "config.h"
+#అన్తర్భావ "system.h"
+#అన్తర్భావ "coretypes.h"
+#అన్తర్భావ "tm.h"
+#అన్తర్భావ "c-tree.h"
 
-enum formals_style {
+గణన formals_style {
   ansi,
-  k_and_r_names,
+  k_and_r_పేర్లు,
   k_and_r_decls
 };
 
 
-static const char *data_type;
+స్థిర స్థిరరాశి అక్షరం *దత్తాంశం_type;
 
-static char *affix_data_type (const char *) ATTRIBUTE_MALLOC;
-static const char *gen_formal_list_for_type (tree, formals_style);
-static const char *gen_formal_list_for_func_def (tree, formals_style);
-static const char *gen_type (const char *, tree, formals_style);
-static const char *gen_decl (tree, int, formals_style);
+స్థిర అక్షరం *affix_దత్తాంశం_type (స్థిరరాశి అక్షరం *) ATTRIBUTE_MALLOC;
+స్థిర స్థిరరాశి అక్షరం *gen_formal_list_for_type (వృక్షం, formals_style);
+స్థిర స్థిరరాశి అక్షరం *gen_formal_list_for_func_def (వృక్షం, formals_style);
+స్థిర స్థిరరాశి అక్షరం *gen_type (స్థిరరాశి అక్షరం *, వృక్షం, formals_style);
+స్థిర స్థిరరాశి అక్షరం *gen_decl (వృక్షం, పూర్ణాంకం, formals_style);
 
 /* Given a string representing an entire type or an entire declaration
    which only lacks the actual "data-type" specifier (at its left end),
@@ -55,43 +55,43 @@ static const char *gen_decl (tree, int, formals_style);
    `const char *foo;' and *not* `char const *foo;' so we try to create types
    that look as expected.  */
 
-static char *
-affix_data_type (const char *param)
+స్థిర అక్షరం *
+affix_దత్తాంశం_type (స్థిరరాశి అక్షరం *param)
 {
-  char *const type_or_decl = ASTRDUP (param);
-  char *p = type_or_decl;
-  char *qualifiers_then_data_type;
-  char saved;
+  అక్షరం *స్థిరరాశి type_or_decl = ASTRDUP (param);
+  అక్షరం *p = type_or_decl;
+  అక్షరం *qualifiers_then_దత్తాంశం_type;
+  అక్షరం saved;
 
   /* Skip as many leading const's or volatile's as there are.  */
 
-  for (;;)
+  కొరకు (;;)
     {
-      if (startswith (p, "volatile "))
+      ఒకవేళ (startswith (p, "volatile "))
 	{
 	  p += 9;
-	  continue;
+	  కొనసాగు;
 	}
-      if (startswith (p, "const "))
+      ఒకవేళ (startswith (p, "const "))
 	{
 	  p += 6;
-	  continue;
+	  కొనసాగు;
 	}
-      break;
+      ఆపు;
     }
 
   /* p now points to the place where we can insert the data type.  We have to
      add a blank after the data-type of course.  */
 
-  if (p == type_or_decl)
-    return concat (data_type, " ", type_or_decl, NULL);
+  ఒకవేళ (p == type_or_decl)
+    తిరిగి concat (దత్తాంశం_type, " ", type_or_decl, ఖాళీ);
 
   saved = *p;
   *p = '\0';
-  qualifiers_then_data_type = concat (type_or_decl, data_type, NULL);
+  qualifiers_then_దత్తాంశం_type = concat (type_or_decl, దత్తాంశం_type, ఖాళీ);
   *p = saved;
-  return reconcat (qualifiers_then_data_type,
-		   qualifiers_then_data_type, " ", p, NULL);
+  తిరిగి reconcat (qualifiers_then_దత్తాంశం_type,
+		   qualifiers_then_దత్తాంశం_type, " ", p, ఖాళీ);
 }
 
 /* Given a tree node which represents some "function type", generate the
@@ -101,30 +101,30 @@ affix_data_type (const char *param)
    we are currently aiming for is non-ansi, then we just return a pair
    of empty parens here.  */
 
-static const char *
-gen_formal_list_for_type (tree fntype, formals_style style)
+స్థిర స్థిరరాశి అక్షరం *
+gen_formal_list_for_type (వృక్షం fntype, formals_style style)
 {
-  const char *formal_list = "";
-  tree formal_type;
+  స్థిరరాశి అక్షరం *formal_list = "";
+  వృక్షం formal_type;
 
-  if (style != ansi)
-    return "()";
+  ఒకవేళ (style != ansi)
+    తిరిగి "()";
 
   formal_type = TYPE_ARG_TYPES (fntype);
-  while (formal_type && TREE_VALUE (formal_type) != void_type_node)
+  అయితే (formal_type && వృక్షం_విలువ (formal_type) != void_type_కణుపు)
     {
-      const char *this_type;
+      స్థిరరాశి అక్షరం *this_type;
 
-      if (*formal_list)
-	formal_list = concat (formal_list, ", ", NULL);
+      ఒకవేళ (*formal_list)
+	formal_list = concat (formal_list, ", ", ఖాళీ);
 
-      this_type = gen_type ("", TREE_VALUE (formal_type), ansi);
+      this_type = gen_type ("", వృక్షం_విలువ (formal_type), ansi);
       formal_list
-	= ((strlen (this_type))
-	   ? concat (formal_list, affix_data_type (this_type), NULL)
-	   : concat (formal_list, data_type, NULL));
+	= ((అక్షరశ్రేణి_పొడవు (this_type))
+	   ? concat (formal_list, affix_దత్తాంశం_type (this_type), ఖాళీ)
+	   : concat (formal_list, దత్తాంశం_type, ఖాళీ));
 
-      formal_type = TREE_CHAIN (formal_type);
+      formal_type = వృక్షం_CHAIN (formal_type);
     }
 
   /* If we got to here, then we are trying to generate an ANSI style formal
@@ -157,24 +157,24 @@ gen_formal_list_for_type (tree fntype, formals_style style)
 
      The string chosen here is a comment with question marks in it.  */
 
-  if (!*formal_list)
+  ఒకవేళ (!*formal_list)
     {
-      if (prototype_p (fntype))
+      ఒకవేళ (prototype_p (fntype))
 	/* assert (TREE_VALUE (TYPE_ARG_TYPES (fntype)) == void_type_node);  */
 	formal_list = "void";
-      else
+      లేకపోతే
 	formal_list = "/* ??? */";
     }
-  else
+  లేకపోతే
     {
       /* If there were at least some parameters, and if the formals-types-list
 	 petered out to a NULL (i.e. without being terminated by a
 	 void_type_node) then we need to tack on an ellipsis.  */
-      if (!formal_type)
-	formal_list = concat (formal_list, ", ...", NULL);
+      ఒకవేళ (!formal_type)
+	formal_list = concat (formal_list, ", ...", ఖాళీ);
     }
 
-  return concat (" (", formal_list, ")", NULL);
+  తిరిగి concat (" (", formal_list, ")", ఖాళీ);
 }
 
 /* Generate a parameter list for a function definition (in some given style).
@@ -196,36 +196,36 @@ gen_formal_list_for_type (tree fntype, formals_style style)
    This routine returns a string which is the source form for the entire
    function formal parameter list.  */
 
-static const char *
-gen_formal_list_for_func_def (tree fndecl, formals_style style)
+స్థిర స్థిరరాశి అక్షరం *
+gen_formal_list_for_func_def (వృక్షం fndecl, formals_style style)
 {
-  const char *formal_list = "";
-  tree formal_decl;
+  స్థిరరాశి అక్షరం *formal_list = "";
+  వృక్షం formal_decl;
 
   formal_decl = DECL_ARGUMENTS (fndecl);
-  while (formal_decl)
+  అయితే (formal_decl)
     {
-      const char *this_formal;
+      స్థిరరాశి అక్షరం *this_formal;
 
-      if (*formal_list && ((style == ansi) || (style == k_and_r_names)))
-	formal_list = concat (formal_list, ", ", NULL);
+      ఒకవేళ (*formal_list && ((style == ansi) || (style == k_and_r_పేర్లు)))
+	formal_list = concat (formal_list, ", ", ఖాళీ);
       this_formal = gen_decl (formal_decl, 0, style);
-      if (style == k_and_r_decls)
-	formal_list = concat (formal_list, this_formal, "; ", NULL);
-      else
-	formal_list = concat (formal_list, this_formal, NULL);
-      formal_decl = TREE_CHAIN (formal_decl);
+      ఒకవేళ (style == k_and_r_decls)
+	formal_list = concat (formal_list, this_formal, "; ", ఖాళీ);
+      లేకపోతే
+	formal_list = concat (formal_list, this_formal, ఖాళీ);
+      formal_decl = వృక్షం_CHAIN (formal_decl);
     }
-  if (style == ansi)
+  ఒకవేళ (style == ansi)
     {
-      if (!DECL_ARGUMENTS (fndecl))
-	formal_list = concat (formal_list, "void", NULL);
-      if (stdarg_p (TREE_TYPE (fndecl)))
-	formal_list = concat (formal_list, ", ...", NULL);
+      ఒకవేళ (!DECL_ARGUMENTS (fndecl))
+	formal_list = concat (formal_list, "void", ఖాళీ);
+      ఒకవేళ (stdarg_p (వృక్షం_TYPE (fndecl)))
+	formal_list = concat (formal_list, ", ...", ఖాళీ);
     }
-  if ((style == ansi) || (style == k_and_r_names))
-    formal_list = concat (" (", formal_list, ")", NULL);
-  return formal_list;
+  ఒకవేళ ((style == ansi) || (style == k_and_r_పేర్లు))
+    formal_list = concat (" (", formal_list, ")", ఖాళీ);
+  తిరిగి formal_list;
 }
 
 /* Generate a string which is the source code form for a given type (t).  This
@@ -269,63 +269,63 @@ gen_formal_list_for_func_def (tree fndecl, formals_style style)
    to do at this point is for the initial caller to prepend the "data_type"
    string onto the returned "seed".  */
 
-static const char *
-gen_type (const char *ret_val, tree t, formals_style style)
+స్థిర స్థిరరాశి అక్షరం *
+gen_type (స్థిరరాశి అక్షరం *ret_val, వృక్షం t, formals_style style)
 {
-  tree chain_p;
+  వృక్షం chain_p;
 
   /* If there is a typedef name for this type, use it.  */
-  if (TYPE_NAME (t) && TREE_CODE (TYPE_NAME (t)) == TYPE_DECL)
-    data_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
-  else
+  ఒకవేళ (TYPE_NAME (t) && వృక్షం_సంకేతం (TYPE_NAME (t)) == TYPE_DECL)
+    దత్తాంశం_type = IDENTIFIER_సూచిక (DECL_NAME (TYPE_NAME (t)));
+  లేకపోతే
     {
-      switch (TREE_CODE (t))
+      ఎంపిక (వృక్షం_సంకేతం (t))
 	{
-	case POINTER_TYPE:
-	  if (TYPE_ATOMIC (t))
-	    ret_val = concat ("_Atomic ", ret_val, NULL);
-	  if (TYPE_READONLY (t))
-	    ret_val = concat ("const ", ret_val, NULL);
-	  if (TYPE_VOLATILE (t))
-	    ret_val = concat ("volatile ", ret_val, NULL);
+	స్థితి సూచిక_TYPE:
+	  ఒకవేళ (TYPE_ATOMIC (t))
+	    ret_val = concat ("_Atomic ", ret_val, ఖాళీ);
+	  ఒకవేళ (TYPE_READONLY (t))
+	    ret_val = concat ("const ", ret_val, ఖాళీ);
+	  ఒకవేళ (TYPE_VOLATILE (t))
+	    ret_val = concat ("volatile ", ret_val, ఖాళీ);
 
-	  ret_val = concat ("*", ret_val, NULL);
+	  ret_val = concat ("*", ret_val, ఖాళీ);
 
-	  if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE || TREE_CODE (TREE_TYPE (t)) == FUNCTION_TYPE)
-	    ret_val = concat ("(", ret_val, ")", NULL);
+	  ఒకవేళ (వృక్షం_సంకేతం (వృక్షం_TYPE (t)) == ARRAY_TYPE || వృక్షం_సంకేతం (వృక్షం_TYPE (t)) == FUNCTION_TYPE)
+	    ret_val = concat ("(", ret_val, ")", ఖాళీ);
 
-	  ret_val = gen_type (ret_val, TREE_TYPE (t), style);
+	  ret_val = gen_type (ret_val, వృక్షం_TYPE (t), style);
 
-	  return ret_val;
+	  తిరిగి ret_val;
 
-	case ARRAY_TYPE:
-	  if (!COMPLETE_TYPE_P (t) || TREE_CODE (TYPE_SIZE (t)) != INTEGER_CST)
-	    ret_val = gen_type (concat (ret_val, "[]", NULL),
-				TREE_TYPE (t), style);
-	  else if (int_size_in_bytes (t) == 0)
-	    ret_val = gen_type (concat (ret_val, "[0]", NULL),
-				TREE_TYPE (t), style);
-	  else
+	స్థితి ARRAY_TYPE:
+	  ఒకవేళ (!COMPLETE_TYPE_P (t) || వృక్షం_సంకేతం (TYPE_కొలత (t)) != INTEGER_CST)
+	    ret_val = gen_type (concat (ret_val, "[]", ఖాళీ),
+				వృక్షం_TYPE (t), style);
+	  లేకపోతే ఒకవేళ (int_కొలత_లోపల_బైట్లు (t) == 0)
+	    ret_val = gen_type (concat (ret_val, "[0]", ఖాళీ),
+				వృక్షం_TYPE (t), style);
+	  లేకపోతే
 	    {
-	      char buff[23];
+	      అక్షరం buff[23];
 	      sprintf (buff, "[" HOST_WIDE_INT_PRINT_DEC"]",
-		       int_size_in_bytes (t)
-		       / int_size_in_bytes (TREE_TYPE (t)));
-	      ret_val = gen_type (concat (ret_val, buff, NULL),
-				  TREE_TYPE (t), style);
+		       int_కొలత_లోపల_బైట్లు (t)
+		       / int_కొలత_లోపల_బైట్లు (వృక్షం_TYPE (t)));
+	      ret_val = gen_type (concat (ret_val, buff, ఖాళీ),
+				  వృక్షం_TYPE (t), style);
 	    }
-	  break;
+	  ఆపు;
 
-	case FUNCTION_TYPE:
+	స్థితి FUNCTION_TYPE:
 	  ret_val = gen_type (concat (ret_val,
 				      gen_formal_list_for_type (t, style),
-				      NULL),
-			      TREE_TYPE (t), style);
-	  break;
+				      ఖాళీ),
+			      వృక్షం_TYPE (t), style);
+	  ఆపు;
 
-	case IDENTIFIER_NODE:
-	  data_type = IDENTIFIER_POINTER (t);
-	  break;
+	స్థితి IDENTIFIER_కణుపు:
+	  దత్తాంశం_type = IDENTIFIER_సూచిక (t);
+	  ఆపు;
 
 	/* The following three cases are complicated by the fact that a
 	   user may do something really stupid, like creating a brand new
@@ -338,114 +338,114 @@ gen_type (const char *ret_val, tree t, formals_style style)
 	   to represent the (anonymous) type.  Thus, we have to generate the
 	   whole darn type specification.  Yuck!  */
 
-	case RECORD_TYPE:
-	  if (TYPE_NAME (t))
-	    data_type = IDENTIFIER_POINTER (TYPE_NAME (t));
-	  else
+	స్థితి రికార్డు_TYPE:
+	  ఒకవేళ (TYPE_NAME (t))
+	    దత్తాంశం_type = IDENTIFIER_సూచిక (TYPE_NAME (t));
+	  లేకపోతే
 	    {
-	      data_type = "";
+	      దత్తాంశం_type = "";
 	      chain_p = TYPE_FIELDS (t);
-	      while (chain_p)
+	      అయితే (chain_p)
 		{
-		  data_type = concat (data_type, gen_decl (chain_p, 0, ansi),
-				      NULL);
-		  chain_p = TREE_CHAIN (chain_p);
-		  data_type = concat (data_type, "; ", NULL);
+		  దత్తాంశం_type = concat (దత్తాంశం_type, gen_decl (chain_p, 0, ansi),
+				      ఖాళీ);
+		  chain_p = వృక్షం_CHAIN (chain_p);
+		  దత్తాంశం_type = concat (దత్తాంశం_type, "; ", ఖాళీ);
 		}
-	      data_type = concat ("{ ", data_type, "}", NULL);
+	      దత్తాంశం_type = concat ("{ ", దత్తాంశం_type, "}", ఖాళీ);
 	    }
-	  data_type = concat ("struct ", data_type, NULL);
-	  break;
+	  దత్తాంశం_type = concat ("struct ", దత్తాంశం_type, ఖాళీ);
+	  ఆపు;
 
-	case UNION_TYPE:
-	  if (TYPE_NAME (t))
-	    data_type = IDENTIFIER_POINTER (TYPE_NAME (t));
-	  else
+	స్థితి UNION_TYPE:
+	  ఒకవేళ (TYPE_NAME (t))
+	    దత్తాంశం_type = IDENTIFIER_సూచిక (TYPE_NAME (t));
+	  లేకపోతే
 	    {
-	      data_type = "";
+	      దత్తాంశం_type = "";
 	      chain_p = TYPE_FIELDS (t);
-	      while (chain_p)
+	      అయితే (chain_p)
 		{
-		  data_type = concat (data_type, gen_decl (chain_p, 0, ansi),
-				      NULL);
-		  chain_p = TREE_CHAIN (chain_p);
-		  data_type = concat (data_type, "; ", NULL);
+		  దత్తాంశం_type = concat (దత్తాంశం_type, gen_decl (chain_p, 0, ansi),
+				      ఖాళీ);
+		  chain_p = వృక్షం_CHAIN (chain_p);
+		  దత్తాంశం_type = concat (దత్తాంశం_type, "; ", ఖాళీ);
 		}
-	      data_type = concat ("{ ", data_type, "}", NULL);
+	      దత్తాంశం_type = concat ("{ ", దత్తాంశం_type, "}", ఖాళీ);
 	    }
-	  data_type = concat ("union ", data_type, NULL);
-	  break;
+	  దత్తాంశం_type = concat ("union ", దత్తాంశం_type, ఖాళీ);
+	  ఆపు;
 
-	case ENUMERAL_TYPE:
-	  if (TYPE_NAME (t))
-	    data_type = IDENTIFIER_POINTER (TYPE_NAME (t));
-	  else
+	స్థితి ENUMERAL_TYPE:
+	  ఒకవేళ (TYPE_NAME (t))
+	    దత్తాంశం_type = IDENTIFIER_సూచిక (TYPE_NAME (t));
+	  లేకపోతే
 	    {
-	      data_type = "";
-	      chain_p = TYPE_VALUES (t);
-	      while (chain_p)
+	      దత్తాంశం_type = "";
+	      chain_p = TYPE_విలువలు (t);
+	      అయితే (chain_p)
 		{
-		  data_type = concat (data_type,
-			IDENTIFIER_POINTER (TREE_PURPOSE (chain_p)), NULL);
-		  chain_p = TREE_CHAIN (chain_p);
-		  if (chain_p)
-		    data_type = concat (data_type, ", ", NULL);
+		  దత్తాంశం_type = concat (దత్తాంశం_type,
+			IDENTIFIER_సూచిక (వృక్షం_PURPOSE (chain_p)), ఖాళీ);
+		  chain_p = వృక్షం_CHAIN (chain_p);
+		  ఒకవేళ (chain_p)
+		    దత్తాంశం_type = concat (దత్తాంశం_type, ", ", ఖాళీ);
 		}
-	      data_type = concat ("{ ", data_type, " }", NULL);
+	      దత్తాంశం_type = concat ("{ ", దత్తాంశం_type, " }", ఖాళీ);
 	    }
-	  data_type = concat ("enum ", data_type, NULL);
-	  break;
+	  దత్తాంశం_type = concat ("enum ", దత్తాంశం_type, ఖాళీ);
+	  ఆపు;
 
-	case TYPE_DECL:
-	  data_type = IDENTIFIER_POINTER (DECL_NAME (t));
-	  break;
+	స్థితి TYPE_DECL:
+	  దత్తాంశం_type = IDENTIFIER_సూచిక (DECL_NAME (t));
+	  ఆపు;
 
-	case INTEGER_TYPE:
-	case FIXED_POINT_TYPE:
-	  data_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
+	స్థితి INTEGER_TYPE:
+	స్థితి FIXED_బిందువు_TYPE:
+	  దత్తాంశం_type = IDENTIFIER_సూచిక (DECL_NAME (TYPE_NAME (t)));
 	  /* Normally, `unsigned' is part of the deal.  Not so if it comes
 	     with a type qualifier.  */
-	  if (TYPE_UNSIGNED (t) && TYPE_QUALS (t))
-	    data_type = concat ("unsigned ", data_type, NULL);
-	  break;
+	  ఒకవేళ (TYPE_UNSIGNED (t) && TYPE_QUALS (t))
+	    దత్తాంశం_type = concat ("unsigned ", దత్తాంశం_type, ఖాళీ);
+	  ఆపు;
 
-	case BITINT_TYPE:
+	స్థితి BITINT_TYPE:
 	  {
-	    char buf[sizeof ("2147483647")];
+	    అక్షరం buf[పరిమాణం ("2147483647")];
 	    sprintf (buf, "%d", TYPE_PRECISION (t));
-	    if (TYPE_UNSIGNED (t))
-	      data_type = concat ("unsigned _BitInt(", buf, ")", NULL);
-	    else
-	      data_type = concat ("_BitInt(", buf, ")", NULL);
-	    break;
+	    ఒకవేళ (TYPE_UNSIGNED (t))
+	      దత్తాంశం_type = concat ("unsigned _BitInt(", buf, ")", ఖాళీ);
+	    లేకపోతే
+	      దత్తాంశం_type = concat ("_BitInt(", buf, ")", ఖాళీ);
+	    ఆపు;
 	  }
 
-	case OPAQUE_TYPE:
-	case REAL_TYPE:
-	  data_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
-	  break;
+	స్థితి OPAQUE_TYPE:
+	స్థితి REAL_TYPE:
+	  దత్తాంశం_type = IDENTIFIER_సూచిక (DECL_NAME (TYPE_NAME (t)));
+	  ఆపు;
 
-	case VOID_TYPE:
-	  data_type = "void";
-	  break;
+	స్థితి VOID_TYPE:
+	  దత్తాంశం_type = "void";
+	  ఆపు;
 
-	case ERROR_MARK:
-	  data_type = "[ERROR]";
-	  break;
+	స్థితి ERROR_MARK:
+	  దత్తాంశం_type = "[ERROR]";
+	  ఆపు;
 
-	default:
+	అప్రమేయ:
 	  gcc_unreachable ();
 	}
     }
-  if (TYPE_ATOMIC (t))
-    ret_val = concat ("_Atomic ", ret_val, NULL);
-  if (TYPE_READONLY (t))
-    ret_val = concat ("const ", ret_val, NULL);
-  if (TYPE_VOLATILE (t))
-    ret_val = concat ("volatile ", ret_val, NULL);
-  if (TYPE_RESTRICT (t))
-    ret_val = concat ("restrict ", ret_val, NULL);
-  return ret_val;
+  ఒకవేళ (TYPE_ATOMIC (t))
+    ret_val = concat ("_Atomic ", ret_val, ఖాళీ);
+  ఒకవేళ (TYPE_READONLY (t))
+    ret_val = concat ("const ", ret_val, ఖాళీ);
+  ఒకవేళ (TYPE_VOLATILE (t))
+    ret_val = concat ("volatile ", ret_val, ఖాళీ);
+  ఒకవేళ (TYPE_RESTRICT (t))
+    ret_val = concat ("restrict ", ret_val, ఖాళీ);
+  తిరిగి ret_val;
 }
 
 /* Generate a string (source) representation of an entire entity declaration
@@ -458,22 +458,22 @@ gen_type (const char *ret_val, tree t, formals_style style)
    associated with a function definition.  In this case, we can assume that
    an attached list of DECL nodes for function formal arguments is present.  */
 
-static const char *
-gen_decl (tree decl, int is_func_definition, formals_style style)
+స్థిర స్థిరరాశి అక్షరం *
+gen_decl (వృక్షం decl, పూర్ణాంకం is_func_definition, formals_style style)
 {
-  const char *ret_val;
+  స్థిరరాశి అక్షరం *ret_val;
 
-  if (DECL_NAME (decl))
-    ret_val = IDENTIFIER_POINTER (DECL_NAME (decl));
-  else
+  ఒకవేళ (DECL_NAME (decl))
+    ret_val = IDENTIFIER_సూచిక (DECL_NAME (decl));
+  లేకపోతే
     ret_val = "";
 
   /* If we are just generating a list of names of formal parameters, we can
      simply return the formal parameter name (with no typing information
      attached to it) now.  */
 
-  if (style == k_and_r_names)
-    return ret_val;
+  ఒకవేళ (style == k_and_r_పేర్లు)
+    తిరిగి ret_val;
 
   /* Note that for the declaration of some entity (either a function or a
      data object, like for instance a parameter) if the entity itself was
@@ -482,12 +482,12 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
      the `type' of the entity.  Thus, for such declared entities, we have to
      generate the qualifiers here.  */
 
-  if (TREE_THIS_VOLATILE (decl))
-    ret_val = concat ("volatile ", ret_val, NULL);
-  if (TREE_READONLY (decl))
-    ret_val = concat ("const ", ret_val, NULL);
+  ఒకవేళ (వృక్షం_THIS_VOLATILE (decl))
+    ret_val = concat ("volatile ", ret_val, ఖాళీ);
+  ఒకవేళ (వృక్షం_READONLY (decl))
+    ret_val = concat ("const ", ret_val, ఖాళీ);
 
-  data_type = "";
+  దత్తాంశం_type = "";
 
   /* For FUNCTION_DECL nodes, there are two possible cases here.  First, if
      this FUNCTION_DECL node was generated from a function "definition", then
@@ -501,10 +501,10 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
      parameter list is considered to be a (suffix) part of the "type" of the
      function.  */
 
-  if (TREE_CODE (decl) == FUNCTION_DECL && is_func_definition)
+  ఒకవేళ (వృక్షం_సంకేతం (decl) == FUNCTION_DECL && is_func_definition)
     {
       ret_val = concat (ret_val, gen_formal_list_for_func_def (decl, ansi),
-			NULL);
+			ఖాళీ);
 
       /* Since we have already added in the formals list stuff, here we don't
 	 add the whole "type" of the function we are considering (which
@@ -513,42 +513,42 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
 	 the return-type of the function (and does not include the parameter
 	 list info).  */
 
-      ret_val = gen_type (ret_val, TREE_TYPE (TREE_TYPE (decl)), style);
+      ret_val = gen_type (ret_val, వృక్షం_TYPE (వృక్షం_TYPE (decl)), style);
     }
-  else
-    ret_val = gen_type (ret_val, TREE_TYPE (decl), style);
+  లేకపోతే
+    ret_val = gen_type (ret_val, వృక్షం_TYPE (decl), style);
 
-  ret_val = affix_data_type (ret_val);
+  ret_val = affix_దత్తాంశం_type (ret_val);
 
-  if (TREE_CODE (decl) != FUNCTION_DECL && C_DECL_REGISTER (decl))
-    ret_val = concat ("register ", ret_val, NULL);
-  if (TREE_PUBLIC (decl))
-    ret_val = concat ("extern ", ret_val, NULL);
-  if (TREE_CODE (decl) == FUNCTION_DECL && !TREE_PUBLIC (decl))
-    ret_val = concat ("static ", ret_val, NULL);
+  ఒకవేళ (వృక్షం_సంకేతం (decl) != FUNCTION_DECL && C_DECL_రిజిస్టరు (decl))
+    ret_val = concat ("register ", ret_val, ఖాళీ);
+  ఒకవేళ (వృక్షం_ప్రజా (decl))
+    ret_val = concat ("extern ", ret_val, ఖాళీ);
+  ఒకవేళ (వృక్షం_సంకేతం (decl) == FUNCTION_DECL && !వృక్షం_ప్రజా (decl))
+    ret_val = concat ("static ", ret_val, ఖాళీ);
 
-  return ret_val;
+  తిరిగి ret_val;
 }
 
-extern FILE *aux_info_file;
+బాహ్య FILE *aux_info_file;
 
 /* Generate and write a new line of info to the aux-info (.X) file.  This
    routine is called once for each function declaration, and once for each
    function definition (even the implicit ones).  */
 
-void
-gen_aux_info_record (tree fndecl, int is_definition, int is_implicit,
-		     int is_prototyped)
+శూన్య
+gen_aux_info_రికార్డు (వృక్షం fndecl, పూర్ణాంకం is_definition, పూర్ణాంకం is_implicit,
+		     పూర్ణాంకం is_prototyped)
 {
-  if (flag_gen_aux_info)
+  ఒకవేళ (flag_gen_aux_info)
     {
-      static int compiled_from_record = 0;
-      expanded_location xloc = expand_location (DECL_SOURCE_LOCATION (fndecl));
+      స్థిర పూర్ణాంకం compiled_from_రికార్డు = 0;
+      expanded_location xloc = expand_location (DECL_ఆధారం_LOCATION (fndecl));
 
       /* Each output .X file must have a header line.  Write one now if we
 	 have not yet done so.  */
 
-      if (!compiled_from_record++)
+      ఒకవేళ (!compiled_from_రికార్డు++)
 	{
 	  /* The first line tells which directory file names are relative to.
 	     Currently, -aux-info works only for files in the working
@@ -559,7 +559,7 @@ gen_aux_info_record (tree fndecl, int is_definition, int is_implicit,
       /* Write the actual line of auxiliary info.  */
 
       fprintf (aux_info_file, "/* %s:%d:%c%c */ %s;",
-	       xloc.file, xloc.line,
+	       xloc.file, xloc.పంక్తి,
 	       (is_implicit) ? 'I' : (is_prototyped) ? 'N' : 'O',
 	       (is_definition) ? 'F' : 'C',
 	       gen_decl (fndecl, is_definition, ansi));
@@ -568,10 +568,10 @@ gen_aux_info_record (tree fndecl, int is_definition, int is_implicit,
 	 out an old-style (i.e. K&R) function header, just in case the user
 	 wants to run unprotoize.  */
 
-      if (is_definition)
+      ఒకవేళ (is_definition)
 	{
 	  fprintf (aux_info_file, " /*%s %s*/",
-		   gen_formal_list_for_func_def (fndecl, k_and_r_names),
+		   gen_formal_list_for_func_def (fndecl, k_and_r_పేర్లు),
 		   gen_formal_list_for_func_def (fndecl, k_and_r_decls));
 	}
 

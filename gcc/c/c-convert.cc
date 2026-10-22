@@ -23,17 +23,17 @@ along with GCC; see the file COPYING3.  If not see
    Every language front end must have a `convert' function
    but what kind of conversions it does will depend on the language.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "c-tree.h"
-#include "convert.h"
-#include "langhooks.h"
-#include "ubsan.h"
-#include "stringpool.h"
-#include "attribs.h"
-#include "asan.h"
+#అన్తర్భావ "config.h"
+#అన్తర్భావ "system.h"
+#అన్తర్భావ "coretypes.h"
+#అన్తర్భావ "target.h"
+#అన్తర్భావ "c-tree.h"
+#అన్తర్భావ "convert.h"
+#అన్తర్భావ "langhooks.h"
+#అన్తర్భావ "ubsan.h"
+#అన్తర్భావ "stringpool.h"
+#అన్తర్భావ "attribs.h"
+#అన్తర్భావ "asan.h"
 
 /* Change of width--truncation and extension of integers or reals--
    is represented with NOP_EXPR.  Proper functioning of many things
@@ -65,181 +65,181 @@ along with GCC; see the file COPYING3.  If not see
    initializer and folding must apply accordingly (discarding floating-point
    exceptions and assuming the default rounding mode is in effect).  */
 
-static tree
-c_convert (tree type, tree expr, bool init_const)
+స్థిర వృక్షం
+c_convert (వృక్షం type, వృక్షం సమాసం, తార్కిక init_const)
 {
-  tree e = expr;
-  enum tree_code code = TREE_CODE (type);
-  const char *invalid_conv_diag;
-  tree ret;
-  location_t loc = EXPR_LOCATION (expr);
+  వృక్షం e = సమాసం;
+  గణన వృక్షం_సంకేతం_2 సంకేతం_2 = వృక్షం_సంకేతం (type);
+  స్థిరరాశి అక్షరం *invalid_conv_diag;
+  వృక్షం ret;
+  location_t loc = సమాసం_LOCATION (సమాసం);
 
-  if (type == error_mark_node
-      || error_operand_p (expr))
-    return error_mark_node;
+  ఒకవేళ (type == error_mark_కణుపు
+      || error_నిర్వాహ్యం_p (సమాసం))
+    తిరిగి error_mark_కణుపు;
 
-  if ((invalid_conv_diag
-       = targetm.invalid_conversion (TREE_TYPE (expr), type)))
+  ఒకవేళ ((invalid_conv_diag
+       = targetm.invalid_conversion (వృక్షం_TYPE (సమాసం), type)))
     {
       error (invalid_conv_diag);
-      return error_mark_node;
+      తిరిగి error_mark_కణుపు;
     }
 
-  if (type == TREE_TYPE (expr))
-    return expr;
-  ret = targetm.convert_to_type (type, expr);
-  if (ret)
-      return ret;
+  ఒకవేళ (type == వృక్షం_TYPE (సమాసం))
+    తిరిగి సమాసం;
+  ret = targetm.convert_గమ్యం_type (type, సమాసం);
+  ఒకవేళ (ret)
+      తిరిగి ret;
 
   STRIP_TYPE_NOPS (e);
 
-  if (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (TREE_TYPE (expr))
-      && (TREE_CODE (TREE_TYPE (expr)) != COMPLEX_TYPE
-	  || TREE_CODE (e) == COMPLEX_EXPR))
-    return fold_convert_loc (loc, type, expr);
-  if (TREE_CODE (TREE_TYPE (expr)) == ERROR_MARK)
-    return error_mark_node;
-  if (VOID_TYPE_P (TREE_TYPE (expr)))
+  ఒకవేళ (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (వృక్షం_TYPE (సమాసం))
+      && (వృక్షం_సంకేతం (వృక్షం_TYPE (సమాసం)) != COMPLEX_TYPE
+	  || వృక్షం_సంకేతం (e) == COMPLEX_సమాసం))
+    తిరిగి fold_convert_loc (loc, type, సమాసం);
+  ఒకవేళ (వృక్షం_సంకేతం (వృక్షం_TYPE (సమాసం)) == ERROR_MARK)
+    తిరిగి error_mark_కణుపు;
+  ఒకవేళ (VOID_TYPE_P (వృక్షం_TYPE (సమాసం)))
     {
       error ("void value not ignored as it ought to be");
-      return error_mark_node;
+      తిరిగి error_mark_కణుపు;
     }
 
   {
-    tree false_value, true_value;
-    if (c_hardbool_type_attr (type, &false_value, &true_value))
+    వృక్షం false_విలువ, true_విలువ;
+    ఒకవేళ (c_hardbool_type_attr (type, &false_విలువ, &true_విలువ))
       {
-	bool save = in_late_binary_op;
-	in_late_binary_op = true;
-	expr = c_objc_common_truthvalue_conversion (input_location, expr);
-	in_late_binary_op = save;
+	తార్కిక save = లోపల_late_ద్విమాన_op;
+	లోపల_late_ద్విమాన_op = నిజం;
+	సమాసం = c_objc_common_truthvalue_conversion (ఆదానం_location, సమాసం);
+	లోపల_late_ద్విమాన_op = save;
 
-	return fold_build3_loc (loc, COND_EXPR, type,
-				expr, true_value, false_value);
+	తిరిగి fold_build3_loc (loc, COND_సమాసం, type,
+				సమాసం, true_విలువ, false_విలువ);
       }
   }
 
-  switch (code)
+  ఎంపిక (సంకేతం_2)
     {
-    case VOID_TYPE:
-      return fold_convert_loc (loc, type, e);
+    స్థితి VOID_TYPE:
+      తిరిగి fold_convert_loc (loc, type, e);
 
-    case ENUMERAL_TYPE:
-      if (ENUM_UNDERLYING_TYPE (type) != NULL_TREE
-	  && TREE_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
-	goto convert_to_boolean;
+    స్థితి ENUMERAL_TYPE:
+      ఒకవేళ (ENUM_UNDERLYING_TYPE (type) != NULL_వృక్షం
+	  && వృక్షం_సంకేతం (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
+	వెళ్ళు convert_గమ్యం_boolean;
       gcc_fallthrough ();
 
-    case INTEGER_TYPE:
-    case BITINT_TYPE:
-      if (sanitize_flags_p (SANITIZE_FLOAT_CAST)
-	  && current_function_decl != NULL_TREE
-	  && SCALAR_FLOAT_TYPE_P (TREE_TYPE (expr))
+    స్థితి INTEGER_TYPE:
+    స్థితి BITINT_TYPE:
+      ఒకవేళ (sanitize_flags_p (SANITIZE_FLOAT_CAST)
+	  && current_function_decl != NULL_వృక్షం
+	  && SCALAR_FLOAT_TYPE_P (వృక్షం_TYPE (సమాసం))
 	  && COMPLETE_TYPE_P (type))
 	{
-	  expr = save_expr (expr);
-	  expr = c_fully_fold (expr, init_const, NULL);
-	  tree check = ubsan_instrument_float_cast (loc, type, expr);
-	  expr = fold_build1 (FIX_TRUNC_EXPR, type, expr);
-	  if (check == NULL_TREE)
-	    return expr;
-	  return fold_build2 (COMPOUND_EXPR, TREE_TYPE (expr), check, expr);
+	  సమాసం = save_సమాసం (సమాసం);
+	  సమాసం = c_fully_fold (సమాసం, init_const, ఖాళీ);
+	  వృక్షం check = ubsan_instrument_float_cast (loc, type, సమాసం);
+	  సమాసం = fold_build1 (FIX_TRUNC_సమాసం, type, సమాసం);
+	  ఒకవేళ (check == NULL_వృక్షం)
+	    తిరిగి సమాసం;
+	  తిరిగి fold_build2 (COMPOUND_సమాసం, వృక్షం_TYPE (సమాసం), check, సమాసం);
 	}
-      ret = convert_to_integer (type, e);
-      goto maybe_fold;
+      ret = convert_గమ్యం_integer (type, e);
+      వెళ్ళు maybe_fold;
 
-    case BOOLEAN_TYPE:
-    convert_to_boolean:
-      return c_objc_common_truthvalue_conversion (input_location, expr, type);
+    స్థితి BOOLEAN_TYPE:
+    convert_గమ్యం_boolean:
+      తిరిగి c_objc_common_truthvalue_conversion (ఆదానం_location, సమాసం, type);
 
-    case POINTER_TYPE:
+    స్థితి సూచిక_TYPE:
       /* The type nullptr_t may be converted to a pointer type.  The result is
 	 a null pointer value.  */
-      if (NULLPTR_TYPE_P (TREE_TYPE (e)))
+      ఒకవేళ (NULLPTR_TYPE_P (వృక్షం_TYPE (e)))
 	{
 	  /* To make sure that (void *)nullptr is not a null pointer constant,
 	     build_c_cast will create an additional NOP_EXPR around the result
 	     of this conversion.  */
-	  if (TREE_SIDE_EFFECTS (e))
-	    ret = build2 (COMPOUND_EXPR, type, e, build_int_cst (type, 0));
-	  else
+	  ఒకవేళ (వృక్షం_SIDE_EFFECTS (e))
+	    ret = build2 (COMPOUND_సమాసం, type, e, build_int_cst (type, 0));
+	  లేకపోతే
 	    ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  వెళ్ళు maybe_fold;
 	}
       gcc_fallthrough ();
-    case REFERENCE_TYPE:
-      ret = convert_to_pointer (type, e);
-      goto maybe_fold;
+    స్థితి REFERENCE_TYPE:
+      ret = convert_గమ్యం_సూచిక (type, e);
+      వెళ్ళు maybe_fold;
 
-    case NULLPTR_TYPE:
+    స్థితి NULLPTR_TYPE:
       /* A null pointer constant or value of type nullptr_t may be
 	 converted to nullptr_t.  The latter case has already been
 	 handled.  build_c_cast will create an additional NOP_EXPR to
 	 ensure the result of the conversion is not itself a null
 	 pointer constant.  */
-      if (null_pointer_constant_p (expr))
+      ఒకవేళ (null_సూచిక_constant_p (సమాసం))
 	{
 	  ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  వెళ్ళు maybe_fold;
 	}
-      break;
+      ఆపు;
 
-    case REAL_TYPE:
-      ret = convert_to_real (type, e);
-      goto maybe_fold;
+    స్థితి REAL_TYPE:
+      ret = convert_గమ్యం_real (type, e);
+      వెళ్ళు maybe_fold;
 
-    case FIXED_POINT_TYPE:
-      ret = convert_to_fixed (type, e);
-      goto maybe_fold;
+    స్థితి FIXED_బిందువు_TYPE:
+      ret = convert_గమ్యం_fixed (type, e);
+      వెళ్ళు maybe_fold;
 
-    case COMPLEX_TYPE:
-      ret = convert_to_complex (type, e);
-      goto maybe_fold;
+    స్థితి COMPLEX_TYPE:
+      ret = convert_గమ్యం_complex (type, e);
+      వెళ్ళు maybe_fold;
 
-    case VECTOR_TYPE:
-      if (gnu_vector_type_p (type)
-	  || gnu_vector_type_p (TREE_TYPE (e))
+    స్థితి సదిశ_TYPE:
+      ఒకవేళ (gnu_సదిశ_type_p (type)
+	  || gnu_సదిశ_type_p (వృక్షం_TYPE (e))
 	  /* Allow conversions between compatible non-GNU vector types
 	     when -flax-vector-conversions is passed.  The whole purpose
 	     of the option is to bend the normal type rules and accept
 	     nonconforming code.  */
-	  || (flag_lax_vector_conversions
-	      && VECTOR_TYPE_P (TREE_TYPE (e))
-	      && vector_types_convertible_p (type, TREE_TYPE (e), false)))
+	  || (flag_lax_సదిశ_conversions
+	      && సదిశ_TYPE_P (వృక్షం_TYPE (e))
+	      && సదిశ_types_convertible_p (type, వృక్షం_TYPE (e), అబద్ధం)))
 	{
-	  ret = convert_to_vector (type, e);
-	  goto maybe_fold;
+	  ret = convert_గమ్యం_సదిశ (type, e);
+	  వెళ్ళు maybe_fold;
 	}
-      break;
+      ఆపు;
 
-    case RECORD_TYPE:
-    case UNION_TYPE:
-      if (lang_hooks.types_compatible_p (type, TREE_TYPE (expr)))
-	return e;
-      break;
+    స్థితి రికార్డు_TYPE:
+    స్థితి UNION_TYPE:
+      ఒకవేళ (lang_hooks.types_compatible_p (type, వృక్షం_TYPE (సమాసం)))
+	తిరిగి e;
+      ఆపు;
 
-    default:
-      break;
+    అప్రమేయ:
+      ఆపు;
 
     maybe_fold:
-      if (TREE_CODE (ret) != C_MAYBE_CONST_EXPR)
+      ఒకవేళ (వృక్షం_సంకేతం (ret) != C_MAYBE_CONST_సమాసం)
 	ret = init_const ? fold_init (ret) : fold (ret);
-      return ret;
+      తిరిగి ret;
     }
 
   /* If we are converting to nullptr_t, don't say "non-scalar type" because
      the nullptr_t type is a scalar type.  Only nullptr_t or a null pointer
      constant shall be converted to nullptr_t.  */
-  if (code == NULLPTR_TYPE)
+  ఒకవేళ (సంకేతం_2 == NULLPTR_TYPE)
     {
-      error ("conversion from %qT to %qT", TREE_TYPE (e), type);
-      inform (input_location,
+      error ("conversion from %qT to %qT", వృక్షం_TYPE (e), type);
+      inform (ఆదానం_location,
 	      "only %qT or a null pointer constant can be converted to %qT",
 	      type, type);
     }
-  else
+  లేకపోతే
     error ("conversion to non-scalar type requested");
-  return error_mark_node;
+  తిరిగి error_mark_కణుపు;
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE.
@@ -247,10 +247,10 @@ c_convert (tree type, tree expr, bool init_const)
    reasonable conversions; callers should filter out those that are not
    permitted by the language being compiled.  */
 
-tree
-convert (tree type, tree expr)
+వృక్షం
+convert (వృక్షం type, వృక్షం సమాసం)
 {
-  return c_convert (type, expr, false);
+  తిరిగి c_convert (type, సమాసం, అబద్ధం);
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE, in
@@ -258,8 +258,8 @@ convert (tree type, tree expr)
    function implements all reasonable conversions; callers should filter out
    those that are not permitted by the language being compiled.  */
 
-tree
-convert_init (tree type, tree expr)
+వృక్షం
+convert_init (వృక్షం type, వృక్షం సమాసం)
 {
-  return c_convert (type, expr, true);
+  తిరిగి c_convert (type, సమాసం, నిజం);
 }

@@ -17,225 +17,225 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_C_TREE_H
-#define GCC_C_TREE_H
+#నిర్వచితం_కాకపోతే GCC_C_వృక్షం_H
+#నిర్వచించు GCC_C_వృక్షం_H
 
-#include "c-family/c-common.h"
-#include "diagnostic.h"
+#అన్తర్భావ "c-family/c-common.h"
+#అన్తర్భావ "diagnostic.h"
 
 /* struct lang_identifier is private to c-decl.cc, but langhooks.cc needs to
    know how big it is.  This is sanity-checked in c-decl.cc.  */
-#define C_SIZEOF_STRUCT_LANG_IDENTIFIER \
-  (sizeof (struct c_common_identifier) + 3 * sizeof (void *))
+#నిర్వచించు C_SIZEOF_STRUCT_LANG_IDENTIFIER \
+  (పరిమాణం (నిర్మాణం c_common_identifier) + 3 * పరిమాణం (శూన్య *))
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is read-only.  */
-#define C_TYPE_FIELDS_READONLY(TYPE) TREE_LANG_FLAG_1 (TYPE)
+#నిర్వచించు C_TYPE_FIELDS_READONLY(TYPE) వృక్షం_LANG_FLAG_1 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is volatile.  */
-#define C_TYPE_FIELDS_VOLATILE(TYPE) TREE_LANG_FLAG_2 (TYPE)
+#నిర్వచించు C_TYPE_FIELDS_VOLATILE(TYPE) వృక్షం_LANG_FLAG_2 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is
    volatile, restrict-qualified or atomic; that is, has a type not
    permitted for a constexpr object.  */
-#define C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) TREE_LANG_FLAG_4 (TYPE)
+#నిర్వచించు C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) వృక్షం_LANG_FLAG_4 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component has a
    counted_by attribute.  */
-#define C_TYPE_FIELDS_HAS_COUNTED_BY(TYPE) TYPE_LANG_FLAG_3 (TYPE)
+#నిర్వచించు C_TYPE_FIELDS_HAS_COUNTED_BY(TYPE) TYPE_LANG_FLAG_3 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE or ENUMERAL_TYPE
    nonzero if the definition of the type has already started.  */
-#define C_TYPE_BEING_DEFINED(TYPE) TYPE_LANG_FLAG_0 (TYPE)
+#నిర్వచించు C_TYPE_BEING_DEFINED(TYPE) TYPE_LANG_FLAG_0 (TYPE)
 
 /* In an incomplete RECORD_TYPE, UNION_TYPE or ENUMERAL_TYPE, a list of
    variable declarations whose type would be completed by completing
    that type.  */
-#define C_TYPE_INCOMPLETE_VARS(TYPE) \
-  TYPE_LANG_SLOT_1 (TREE_CHECK4 (TYPE, RECORD_TYPE, UNION_TYPE, \
+#నిర్వచించు C_TYPE_INCOMPLETE_VARS(TYPE) \
+  TYPE_LANG_స్థానం_1 (వృక్షం_CHECK4 (TYPE, రికార్డు_TYPE, UNION_TYPE, \
 				 QUAL_UNION_TYPE, ENUMERAL_TYPE))
 
 /* In an IDENTIFIER_NODE, nonzero if this identifier is actually a
    keyword.  C_RID_CODE (node) is then the RID_* value of the keyword.  */
-#define C_IS_RESERVED_WORD(ID) TREE_LANG_FLAG_0 (ID)
+#నిర్వచించు C_IS_RESERVED_మాట(ID) వృక్షం_LANG_FLAG_0 (ID)
 
 /* Record whether a type or decl was written with nonconstant size.
    Note that TYPE_SIZE may have simplified to a constant.  */
-#define C_TYPE_VARIABLE_SIZE(TYPE) TYPE_LANG_FLAG_1 (TYPE)
-#define C_DECL_VARIABLE_SIZE(TYPE) DECL_LANG_FLAG_0 (TYPE)
+#నిర్వచించు C_TYPE_VARIABLE_కొలత(TYPE) TYPE_LANG_FLAG_1 (TYPE)
+#నిర్వచించు C_DECL_VARIABLE_కొలత(TYPE) DECL_LANG_FLAG_0 (TYPE)
 
 /* Record whether a type is variably modified. */
-#define C_TYPE_VARIABLY_MODIFIED(TYPE) TYPE_LANG_FLAG_6 (TYPE)
+#నిర్వచించు C_TYPE_VARIABLY_MODIFIED(TYPE) TYPE_LANG_FLAG_6 (TYPE)
 
 
 /* Record whether a type is defined inside a struct or union type.
    This is used for -Wc++-compat. */
-#define C_TYPE_DEFINED_IN_STRUCT(TYPE) TYPE_LANG_FLAG_2 (TYPE)
+#నిర్వచించు C_TYPE_DEFINED_లోపల_STRUCT(TYPE) TYPE_LANG_FLAG_2 (TYPE)
 
 /* Record whether a typedef for type `int' was actually `signed int'.  */
-#define C_TYPEDEF_EXPLICITLY_SIGNED(EXP) DECL_LANG_FLAG_1 (EXP)
+#నిర్వచించు C_TYPEDEF_EXPLICITLY_SIGNED(EXP) DECL_LANG_FLAG_1 (EXP)
 
 /* For a FUNCTION_DECL, nonzero if it was defined without an explicit
    return type.  */
-#define C_FUNCTION_IMPLICIT_INT(EXP) DECL_LANG_FLAG_1 (EXP)
+#నిర్వచించు C_FUNCTION_IMPLICIT_INT(EXP) DECL_LANG_FLAG_1 (EXP)
 
 /* For a FUNCTION_DECL, nonzero if it was an implicit declaration.  */
-#define C_DECL_IMPLICIT(EXP) DECL_LANG_FLAG_2 (EXP)
+#నిర్వచించు C_DECL_IMPLICIT(EXP) DECL_LANG_FLAG_2 (EXP)
 
 /* For a PARM_DECL, nonzero if it was declared as an array.  */
-#define C_ARRAY_PARAMETER(NODE) DECL_LANG_FLAG_0 (NODE)
+#నిర్వచించు C_ARRAY_PARAMETER(కణుపు_2) DECL_LANG_FLAG_0 (కణుపు_2)
 
 /* For FUNCTION_DECLs, evaluates true if the decl is a nested
    function that requires a non-local context.  */
-#define C_FUNC_NONLOCAL_CONTEXT(EXP)		\
+#నిర్వచించు C_FUNC_NONLOCAL_CONTEXT(EXP)		\
   DECL_LANG_FLAG_4 (FUNCTION_DECL_CHECK (EXP))
 
 /* For FUNCTION_DECLs, evaluates true if the decl is built-in but has
    been declared.  */
-#define C_DECL_DECLARED_BUILTIN(EXP)		\
+#నిర్వచించు C_DECL_DECLARED_BUILTIN(EXP)		\
   DECL_LANG_FLAG_3 (FUNCTION_DECL_CHECK (EXP))
 
 /* For FUNCTION_DECLs, evaluates true if the decl is built-in, has a
    built-in prototype and does not have a non-built-in prototype.  */
-#define C_DECL_BUILTIN_PROTOTYPE(EXP)		\
+#నిర్వచించు C_DECL_BUILTIN_PROTOTYPE(EXP)		\
   DECL_LANG_FLAG_6 (FUNCTION_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical name of a loop.  */
-#define C_DECL_LOOP_NAME(EXP) DECL_LANG_FLAG_3 (LABEL_DECL_CHECK (EXP))
+#నిర్వచించు C_DECL_LOOP_NAME(EXP) DECL_LANG_FLAG_3 (LABEL_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical name of a switch.  During parsing of
    ObjC foreach named loop both C_DECL_LOOP_NAME and C_DECL_SWITCH_NAME
    are temporarily set.  */
-#define C_DECL_SWITCH_NAME(EXP) DECL_LANG_FLAG_5 (LABEL_DECL_CHECK (EXP))
+#నిర్వచించు C_DECL_SWITCH_NAME(EXP) DECL_LANG_FLAG_5 (LABEL_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical name of a loop or switch being
    valid for use in break identifier or continue identifier statements.  */
-#define C_DECL_LOOP_SWITCH_NAME_VALID(EXP) \
+#నిర్వచించు C_DECL_LOOP_SWITCH_NAME_VALID(EXP) \
   DECL_LANG_FLAG_6 (LABEL_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical loop or switch names which were actually
    used in one or more break identifier or continue identifier statements.  */
-#define C_DECL_LOOP_SWITCH_NAME_USED(EXP) \
+#నిర్వచించు C_DECL_LOOP_SWITCH_NAME_వాడిన(EXP) \
   DECL_LANG_FLAG_8 (LABEL_DECL_CHECK (EXP))
 
 /* Record whether a decl was declared register.  This is strictly a
    front-end flag, whereas DECL_REGISTER is used for code generation;
    they may differ for structures with volatile fields.  */
-#define C_DECL_REGISTER(EXP) \
-  DECL_LANG_FLAG_4 (TREE_NOT_CHECK (EXP, FUNCTION_DECL))
+#నిర్వచించు C_DECL_రిజిస్టరు(EXP) \
+  DECL_LANG_FLAG_4 (వృక్షం_NOT_CHECK (EXP, FUNCTION_DECL))
 
 /* Record whether a decl was used in an expression anywhere except an
    unevaluated operand of sizeof / typeof / alignof.  This is only
    used for functions declared static but not defined, though outside
    sizeof and typeof it is set for other function decls as well.  */
-#define C_DECL_USED(EXP) DECL_LANG_FLAG_5 (FUNCTION_DECL_CHECK (EXP))
+#నిర్వచించు C_DECL_వాడిన(EXP) DECL_LANG_FLAG_5 (FUNCTION_DECL_CHECK (EXP))
 
 /* Record whether a variable has been declared threadprivate by
    #pragma omp threadprivate.  */
-#define C_DECL_THREADPRIVATE_P(DECL) DECL_LANG_FLAG_3 (VAR_DECL_CHECK (DECL))
+#నిర్వచించు C_DECL_THREADPRIVATE_P(DECL) DECL_LANG_FLAG_3 (VAR_DECL_CHECK (DECL))
 
 /* Set on VAR_DECLs for compound literals.  */
-#define C_DECL_COMPOUND_LITERAL_P(DECL) \
+#నిర్వచించు C_DECL_COMPOUND_LITERAL_P(DECL) \
   DECL_LANG_FLAG_5 (VAR_DECL_CHECK (DECL))
 
 /* Set on decls used as placeholders for a C23 underspecified object
    definition.  */
-#define C_DECL_UNDERSPECIFIED(DECL) DECL_LANG_FLAG_7 (DECL)
+#నిర్వచించు C_DECL_UNDERSPECIFIED(DECL) DECL_LANG_FLAG_7 (DECL)
 
 /* Set on VAR_DECLs declared as 'constexpr'.  */
-#define C_DECL_DECLARED_CONSTEXPR(DECL) \
+#నిర్వచించు C_DECL_DECLARED_CONSTEXPR(DECL) \
   DECL_LANG_FLAG_8 (VAR_DECL_CHECK (DECL))
 
 /* Nonzero for a decl which either doesn't exist or isn't a prototype.
    N.B. Could be simplified if all built-in decls had complete prototypes
    (but this is presently difficult because some of them need FILE*).  */
-#define C_DECL_ISNT_PROTOTYPE(EXP)			\
+#నిర్వచించు C_DECL_ISNT_PROTOTYPE(EXP)			\
        (EXP == 0					\
-	|| (!prototype_p (TREE_TYPE (EXP))	\
-	    && !fndecl_built_in_p (EXP)))
+	|| (!prototype_p (వృక్షం_TYPE (EXP))	\
+	    && !fndecl_built_లోపల_p (EXP)))
 
 /* For FUNCTION_TYPE, a hidden list of types of arguments.  The same as
    TYPE_ARG_TYPES for functions with prototypes, but created for functions
    without prototypes.  */
-#define TYPE_ACTUAL_ARG_TYPES(NODE) \
-  TYPE_LANG_SLOT_1 (FUNCTION_TYPE_CHECK (NODE))
+#నిర్వచించు TYPE_ACTUAL_ARG_TYPES(కణుపు_2) \
+  TYPE_LANG_స్థానం_1 (FUNCTION_TYPE_CHECK (కణుపు_2))
 
 /* For a CONSTRUCTOR, whether some initializer contains a
    subexpression meaning it is not a constant expression.  */
-#define CONSTRUCTOR_NON_CONST(EXPR) TREE_LANG_FLAG_1 (CONSTRUCTOR_CHECK (EXPR))
+#నిర్వచించు CONSTRUCTOR_NON_CONST(సమాసం_2) వృక్షం_LANG_FLAG_1 (CONSTRUCTOR_CHECK (సమాసం_2))
 
 /* For a SAVE_EXPR, nonzero if the operand of the SAVE_EXPR has already
    been folded.  */
-#define SAVE_EXPR_FOLDED_P(EXP)	TREE_LANG_FLAG_1 (SAVE_EXPR_CHECK (EXP))
+#నిర్వచించు SAVE_సమాసం_FOLDED_P(EXP)	వృక్షం_LANG_FLAG_1 (SAVE_సమాసం_CHECK (EXP))
 
 /* Whether a type has boolean semantics: either a boolean type or an
    enumeration type with a boolean type as its underlying type.  */
-#define C_BOOLEAN_TYPE_P(TYPE)						\
-  (TREE_CODE (TYPE) == BOOLEAN_TYPE					\
-   || (TREE_CODE (TYPE) == ENUMERAL_TYPE				\
-       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_TREE			\
-       && (TREE_CODE (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
+#నిర్వచించు C_BOOLEAN_TYPE_P(TYPE)						\
+  (వృక్షం_సంకేతం (TYPE) == BOOLEAN_TYPE					\
+   || (వృక్షం_సంకేతం (TYPE) == ENUMERAL_TYPE				\
+       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_వృక్షం			\
+       && (వృక్షం_సంకేతం (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
 	   || c_hardbool_type_attr (TYPE))))
 
 /* Record parser information about an expression that is irrelevant
    for code generation alongside a tree representing its value.  */
-struct c_expr
+నిర్మాణం c_సమాసం
 {
   /* The value of the expression.  */
-  tree value;
+  వృక్షం విలువ;
   /* Record the original unary/binary operator of an expression, which may
      have been changed by fold, STRING_CST for unparenthesized string
      constants, C_MAYBE_CONST_EXPR for __builtin_constant_p calls
      (even if parenthesized), for subexpressions, and for non-constant
      initializers, or ERROR_MARK for other expressions (including
      parenthesized expressions).  */
-  enum tree_code original_code;
+  గణన వృక్షం_సంకేతం_2 original_సంకేతం;
   /* If not NULL, the original type of an expression.  This will
      differ from the type of the value field for an enum constant.
      The type of an enum constant is a plain integer type, but this
      field will be the enum type.  */
-  tree original_type;
+  వృక్షం original_type;
 
   /* The source range of this expression.  This is redundant
      for node values that have locations, but not all node kinds
      have locations (e.g. constants, and references to params, locals,
      etc), so we stash a copy here.  */
-  source_range src_range;
+  ఆధారం_range src_range;
 
   /* True if this was directly from a decimal constant token.  */
   bool m_decimal : 1;
 
   /* Access to the first and last locations within the source spelling
      of this expression.  */
-  location_t get_start () const { return src_range.m_start; }
-  location_t get_finish () const { return src_range.m_finish; }
+  location_t get_ప్రారంభం () స్థిరరాశి { తిరిగి src_range.m_ప్రారంభం; }
+  location_t get_ముగింపు () స్థిరరాశి { తిరిగి src_range.m_ముగింపు; }
 
-  location_t get_location () const
+  location_t get_location () స్థిరరాశి
   {
-    if (EXPR_HAS_LOCATION (value))
-      return EXPR_LOCATION (value);
-    else
-      return make_location (get_start (), get_start (), get_finish ());
+    ఒకవేళ (సమాసం_HAS_LOCATION (విలువ))
+      తిరిగి సమాసం_LOCATION (విలువ);
+    లేకపోతే
+      తిరిగి make_location (get_ప్రారంభం (), get_ప్రారంభం (), get_ముగింపు ());
   }
 
   /* Set the value to error_mark_node whilst ensuring that src_range
      and m_decimal are initialized.  */
-  void set_error ()
+  శూన్య సమితి_error ()
   {
-    value = error_mark_node;
-    src_range.m_start = UNKNOWN_LOCATION;
-    src_range.m_finish = UNKNOWN_LOCATION;
+    విలువ = error_mark_కణుపు;
+    src_range.m_ప్రారంభం = UNKNOWN_LOCATION;
+    src_range.m_ముగింపు = UNKNOWN_LOCATION;
     m_decimal = 0;
   }
 };
 
 /* Type alias for struct c_expr. This allows to use the structure
    inside the VEC types.  */
-typedef struct c_expr c_expr_t;
+రకనిర్వచనం నిర్మాణం c_సమాసం c_సమాసం_t;
 
 /* A kind of type specifier.  Note that this information is currently
    only used to distinguish tag definitions, tag references and typeof
    uses.  */
-enum c_typespec_kind {
+గణన c_typespec_రకం {
   /* No typespec.  This appears only in struct c_declspec.  */
   ctsk_none,
   /* A reserved keyword type specifier.  */
@@ -264,18 +264,18 @@ enum c_typespec_kind {
 
 /* A type specifier: this structure is created in the parser and
    passed to declspecs_add_type only.  */
-struct c_typespec {
+నిర్మాణం c_typespec {
   /* What kind of type specifier this is.  */
-  enum c_typespec_kind kind;
+  గణన c_typespec_రకం రకం;
   /* Whether the expression has operands suitable for use in constant
      expressions.  */
-  bool expr_const_operands;
+  bool సమాసం_const_operands;
   /* Whether the type specifier includes an enum type specifier (that
      is, ": specifier-qualifier-list" in a declaration using
      "enum").  */
   bool has_enum_type_specifier;
   /* The specifier itself.  */
-  tree spec;
+  వృక్షం spec;
   /* An expression to be evaluated before the type specifier, in the
      case of typeof specifiers, or NULL otherwise or if no such
      expression is required for a particular typeof specifier.  In
@@ -284,15 +284,15 @@ struct c_typespec {
      determine array sizes that form part of the type, but the
      expression itself (as opposed to the array sizes) forms no part
      of the type and so needs to be recorded separately.  */
-  tree expr;
+  వృక్షం సమాసం;
 };
 
 /* A storage class specifier.  */
-enum c_storage_class {
+గణన c_storage_class {
   csc_none,
   csc_auto,
   csc_extern,
-  csc_register,
+  csc_రిజిస్టరు,
   csc_static,
   csc_typedef
 };
@@ -300,7 +300,7 @@ enum c_storage_class {
 /* A type specifier keyword "void", "_Bool", "char", "int", "float",
    "double", "_Decimal32", "_Decimal64", "_Decimal128", "_Decimal64x",
    "_Fract", "_Accum", "_BitInt", or none of these.  */
-enum c_typespec_keyword {
+గణన c_typespec_keyword {
   cts_none,
   cts_void,
   cts_bool,
@@ -327,10 +327,10 @@ enum c_typespec_keyword {
 
    It is used to index the array of declspec locations in struct
    c_declspecs.  */
-enum c_declspec_word {
+గణన c_declspec_మాట {
   cdw_typespec /* A catch-all for a typespec.  */,
   cdw_storage_class  /* A catch-all for a storage class */,
-  cdw_attributes,
+  cdw_లక్షణాలు,
   cdw_typedef,
   cdw_explicit_signed,
   cdw_deprecated,
@@ -350,14 +350,14 @@ enum c_declspec_word {
   cdw_atomic,
   cdw_saturating,
   cdw_alignas,
-  cdw_address_space,
+  cdw_చిరునామా_space,
   cdw_gimple,
   cdw_rtl,
-  cdw_number_of_elements /* This one must always be the last
+  cdw_సంఖ్య_యొక్క_elements /* This one must always be the last
 			    enumerator.  */
 };
 
-enum c_declspec_il {
+గణన c_declspec_il {
   cdil_none,
   cdil_gimple,		/* __GIMPLE  */
   cdil_gimple_cfg,	/* __GIMPLE(cfg)  */
@@ -368,70 +368,70 @@ enum c_declspec_il {
 /* A sequence of declaration specifiers in C.  When a new declaration
    specifier is added, please update the enum c_declspec_word above
    accordingly.  */
-struct c_declspecs {
-  location_t locations[cdw_number_of_elements];
+నిర్మాణం c_declspecs {
+  location_t locations[cdw_సంఖ్య_యొక్క_elements];
   /* The type specified, if a single type specifier such as a struct,
      union or enum specifier, typedef name or typeof specifies the
      whole type, or NULL_TREE if none or a keyword such as "void" or
      "char" is used.  Does not include qualifiers.  */
-  tree type;
+  వృక్షం type;
   /* Any expression to be evaluated before the type, from a typeof
      specifier.  */
-  tree expr;
+  వృక్షం సమాసం;
   /* The attributes from a typedef decl.  */
-  tree decl_attr;
+  వృక్షం decl_attr;
   /* When parsing, the GNU attributes and prefix standard attributes.
      Outside the parser, this will be NULL; attributes (possibly from
      multiple lists) will be passed separately.  */
-  tree attrs;
+  వృక్షం attrs;
   /* When parsing, postfix standard attributes (which appertain to the
      type specified by the preceding declaration specifiers, unlike
      prefix standard attributes which appertain to the declaration or
      declarations as a whole).  */
-  tree postfix_attrs;
+  వృక్షం postfix_attrs;
   /* The pass to start compiling a __GIMPLE or __RTL function with.  */
-  char *gimple_or_rtl_pass;
+  అక్షరం *gimple_or_rtl_pass;
   /* ENTRY BB count.  */
-  profile_count entry_bb_count;
+  profile_లెక్క నమోదు_bb_లెక్క;
   /* The base-2 log of the greatest alignment required by an _Alignas
      specifier, in bytes, or -1 if no such specifiers with nonzero
      alignment.  */
-  int align_log;
-  union {
+  పూర్ణాంకం align_log;
+  సంఘం {
     /* For the __intN declspec, this stores the index into the int_n_*
        arrays.  */
-    int int_n_idx;
+    పూర్ణాంకం int_n_idx;
     /* For the _FloatN and _FloatNx declspec, this stores the index into
        the floatn_nx_types array.  */
-    int floatn_nx_idx;
+    పూర్ణాంకం floatn_nx_idx;
     /* For _BitInt(N) this stores the N.  */
-    int bitint_prec;
+    పూర్ణాంకం bitint_prec;
   } u;
   /* The storage class specifier, or csc_none if none.  */
-  enum c_storage_class storage_class;
+  గణన c_storage_class storage_class;
   /* Any type specifier keyword used such as "int", not reflecting
      modifiers such as "short", or cts_none if none.  */
-  enum c_typespec_keyword typespec_word : 8;
+  గణన c_typespec_keyword typespec_మాట : 8;
   /* The kind of type specifier if one has been seen, ctsk_none
      otherwise.  */
-  enum c_typespec_kind typespec_kind : 4;
-  enum c_declspec_il declspec_il : 3;
+  గణన c_typespec_రకం typespec_రకం : 4;
+  గణన c_declspec_il declspec_il : 3;
   /* Whether any expressions in typeof specifiers may appear in
      constant expressions.  */
-  bool expr_const_operands : 1;
+  bool సమాసం_const_operands : 1;
   /* Whether any declaration specifiers have been seen at all.  */
-  bool declspecs_seen_p : 1;
+  bool declspecs_చూసిన_p : 1;
   /* Whether any declaration specifiers other than standard attributes
      have been seen at all.  If only standard attributes have been
      seen, this is an attribute-declaration.  */
-  bool non_std_attrs_seen_p : 1;
+  bool non_std_attrs_చూసిన_p : 1;
   /* Whether something other than a storage class specifier or
      attribute has been seen.  This is used to warn for the
      obsolescent usage of storage class specifiers other than at the
      start of the list.  (Doing this properly would require function
      specifiers to be handled separately from storage class
      specifiers.)  */
-  bool non_sc_seen_p : 1;
+  bool non_sc_చూసిన_p : 1;
   /* Whether the type is specified by a typedef or typeof name.  */
   bool typedef_p : 1;
   /* Whether the type is explicitly "signed" or specified by a typedef
@@ -491,11 +491,11 @@ struct c_declspecs {
   /* Whether "constexpr" was specified.  */
   bool constexpr_p : 1;
   /* The address space that the declaration belongs to.  */
-  addr_space_t address_space;
+  addr_space_t చిరునామా_space;
 };
 
 /* The various kinds of declarators in C.  */
-enum c_declarator_kind {
+గణన c_declarator_రకం {
   /* An identifier.  */
   cdk_id,
   /* A function.  */
@@ -503,125 +503,125 @@ enum c_declarator_kind {
   /* An array.  */
   cdk_array,
   /* A pointer.  */
-  cdk_pointer,
+  cdk_సూచిక,
   /* Parenthesized declarator with nested attributes.  */
   cdk_attrs
 };
 
-struct c_arg_tag {
+నిర్మాణం c_arg_ట్యాగ్ {
   /* The argument name.  */
-  tree id;
+  వృక్షం id;
   /* The type of the argument.  */
-  tree type;
+  వృక్షం type;
 };
 
 
 /* Information about the parameters in a function declarator.  */
-struct c_arg_info {
+నిర్మాణం c_arg_info {
   /* A list of parameter decls.  */
-  tree parms;
+  వృక్షం parms;
   /* A list of structure, union and enum tags defined.  */
-  vec<c_arg_tag, va_gc> *tags;
+  vec<c_arg_ట్యాగ్, va_gc> *ట్యాగులు;
   /* A list of argument types to go in the FUNCTION_TYPE.  */
-  tree types;
+  వృక్షం types;
   /* A list of non-parameter decls (notably enumeration constants)
      defined with the parameters.  */
-  tree others;
+  వృక్షం others;
   /* A compound expression of VLA sizes from the parameters, or NULL.
      In a function definition, these are used to ensure that
      side-effects in sizes of arrays converted to pointers (such as a
      parameter int i[n++]) take place; otherwise, they are
      ignored.  */
-  tree pending_sizes;
+  వృక్షం pending_sizes;
   /* True when these arguments had [*].  */
   bool had_vla_unspec : 1;
   /* True when the arguments are a (...) prototype.  */
-  bool no_named_args_stdarg_p : 1;
+  bool no_named_వాదనలు_stdarg_p : 1;
   /* True when empty parentheses have been interpreted as (void) in C23 or
      later.  This is only for use by -Wtraditional and is no longer needed if
      -Wtraditional is removed.  */
-  bool c23_empty_parens : 1;
+  bool c23_ఖాళీలు_parens : 1;
 };
 
 /* A declarator.  */
-struct c_declarator {
+నిర్మాణం c_declarator {
   /* The kind of declarator.  */
-  enum c_declarator_kind kind;
+  గణన c_declarator_రకం రకం;
   location_t id_loc; /* Currently only set for cdk_id, cdk_array. */
   /* Except for cdk_id, the contained declarator.  For cdk_id, NULL.  */
-  struct c_declarator *declarator;
-  union {
+  నిర్మాణం c_declarator *declarator;
+  సంఘం {
     /* For identifiers.  */
-    struct {
+    నిర్మాణం {
       /* An IDENTIFIER_NODE, or NULL_TREE if an abstract
 	 declarator.  */
-      tree id;
+      వృక్షం id;
       /* Any attributes (which apply to the declaration rather than to
 	 the type described by the outer declarators).  */
-      tree attrs;
+      వృక్షం attrs;
     } id;
     /* For functions.  */
-    struct c_arg_info *arg_info;
+    నిర్మాణం c_arg_info *arg_info;
     /* For arrays.  */
-    struct {
+    నిర్మాణం {
       /* The array dimension, or NULL for [] and [*].  */
-      tree dimen;
+      వృక్షం dimen;
       /* The qualifiers inside [].  */
-      int quals;
+      పూర్ణాంకం quals;
       /* The attributes (currently ignored) inside [].  */
-      tree attrs;
+      వృక్షం attrs;
       /* Whether [static] was used.  */
       bool static_p : 1;
       /* Whether [*] was used.  */
       bool vla_unspec_p : 1;
     } array;
     /* For pointers, the qualifiers on the pointer type.  */
-    int pointer_quals;
+    పూర్ణాంకం సూచిక_quals;
     /* For attributes.  */
-    tree attrs;
+    వృక్షం attrs;
   } u;
 };
 
 /* A type name.  */
-struct c_type_name {
+నిర్మాణం c_type_name {
   /* The declaration specifiers.  */
-  struct c_declspecs *specs;
+  నిర్మాణం c_declspecs *specs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  నిర్మాణం c_declarator *declarator;
 };
 
 /* A parameter.  */
-struct c_parm {
+నిర్మాణం c_parm {
   /* The declaration specifiers, minus any prefix attributes.  */
-  struct c_declspecs *specs;
+  నిర్మాణం c_declspecs *specs;
   /* The attributes.  */
-  tree attrs;
+  వృక్షం attrs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  నిర్మాణం c_declarator *declarator;
   /* The location of the parameter.  */
   location_t loc;
 };
 
 /* Used when parsing an enum.  Initialized by start_enum.  */
-struct c_enum_contents
+నిర్మాణం c_enum_contents
 {
   /* While defining an enum type, this is 1 plus the last enumerator
      constant value.  */
-  tree enum_next_value;
+  వృక్షం enum_తదుపరి_విలువ;
 
   /* The enumeration type itself.  */
-  tree enum_type;
+  వృక్షం enum_type;
 
   /* Nonzero means that there was overflow computing enum_next_value.  */
-  int enum_overflow;
+  పూర్ణాంకం enum_అధికప్రవాహం;
 };
 
 /* A type of reference to a static identifier in an inline
    function.  */
-enum c_inline_static_type {
+గణన c_inline_static_type {
   /* Identifier with internal linkage used in function that may be an
      inline definition (i.e., file-scope static).  */
-  csi_internal,
+  csi_అంతర్గత,
   /* Modifiable object with static storage duration defined in
      function that may be an inline definition (i.e., local
      static).  */
@@ -629,31 +629,31 @@ enum c_inline_static_type {
 };
 
 /* Record details of decls possibly used inside sizeof or typeof.  */
-struct maybe_used_decl
+నిర్మాణం maybe_వాడిన_decl
 {
   /* The decl.  */
-  tree decl;
+  వృక్షం decl;
   /* The level seen at (in_sizeof + in_typeof + in_countof + in_generic).  */
-  int level;
+  పూర్ణాంకం level;
   /* Seen in address-of.  */
-  bool address;
+  bool చిరునామా;
   /* The next one at this level or above, or NULL.  */
-  struct maybe_used_decl *next;
+  నిర్మాణం maybe_వాడిన_decl *తదుపరి;
 };
 
 
 /* in c-parser.cc */
-struct c_tree_token_vec;
-extern void c_parse_init (void);
-extern bool c_keyword_starts_typename (enum rid keyword);
+నిర్మాణం c_వృక్షం_token_vec;
+బాహ్య శూన్య c_parse_init (శూన్య);
+బాహ్య bool c_keyword_starts_typename (గణన rid keyword);
 
 /* in c-aux-info.cc */
-extern void gen_aux_info_record (tree, int, int, int);
+బాహ్య శూన్య gen_aux_info_రికార్డు (వృక్షం, పూర్ణాంకం, పూర్ణాంకం, పూర్ణాంకం);
 
 /* in c-decl.cc */
-struct c_spot_bindings;
+నిర్మాణం c_spot_bindings;
 class c_struct_parse_info;
-extern struct obstack parser_obstack;
+బాహ్య నిర్మాణం obstack parser_obstack;
 /* Set to IN_ITERATION_STMT if parsing an iteration-statement,
    to IN_OMP_BLOCK if parsing OpenMP structured block and
    IN_OMP_FOR if parsing OpenMP loop.  If parsing a switch statement,
@@ -661,333 +661,333 @@ extern struct obstack parser_obstack;
    iteration-statement, OpenMP block or loop within that switch.
    If the innermost iteration/switch statement is named, IN_NAMED_STMT
    is additionally bitwise ORed into it.  */
-#define IN_SWITCH_STMT		1
-#define IN_ITERATION_STMT	2
-#define IN_OMP_BLOCK		4
-#define IN_OMP_FOR		8
-#define IN_OBJC_FOREACH		16
-#define IN_NAMED_STMT		32
-extern unsigned char in_statement;
+#నిర్వచించు లోపల_SWITCH_STMT		1
+#నిర్వచించు లోపల_ITERATION_STMT	2
+#నిర్వచించు లోపల_OMP_ఖండం		4
+#నిర్వచించు లోపల_OMP_FOR		8
+#నిర్వచించు లోపల_OBJC_FOREACH		16
+#నిర్వచించు లోపల_NAMED_STMT		32
+బాహ్య గుర్తులేని అక్షరం లోపల_statement;
 
-extern bool switch_statement_break_seen_p;
+బాహ్య bool switch_statement_break_చూసిన_p;
 
-extern bool global_bindings_p (void);
-extern tree pushdecl (tree);
-extern unsigned int start_underspecified_init (location_t, tree);
-extern void finish_underspecified_init (tree, unsigned int);
-extern void push_scope (void);
-extern tree pop_scope (void);
-extern void c_mark_decl_jump_unsafe_in_current_scope ();
-extern void c_bindings_start_stmt_expr (struct c_spot_bindings *);
-extern void c_bindings_end_stmt_expr (struct c_spot_bindings *);
+బాహ్య bool global_bindings_p (శూన్య);
+బాహ్య వృక్షం pushdecl (వృక్షం);
+బాహ్య గుర్తులేని పూర్ణాంకం ప్రారంభం_underspecified_init (location_t, వృక్షం);
+బాహ్య శూన్య ముగింపు_underspecified_init (వృక్షం, గుర్తులేని పూర్ణాంకం);
+బాహ్య శూన్య నెట్టు_scope (శూన్య);
+బాహ్య వృక్షం తీయి_scope (శూన్య);
+బాహ్య శూన్య c_mark_decl_jump_unsafe_లోపల_current_scope ();
+బాహ్య శూన్య c_bindings_ప్రారంభం_stmt_సమాసం (నిర్మాణం c_spot_bindings *);
+బాహ్య శూన్య c_bindings_చివర_stmt_సమాసం (నిర్మాణం c_spot_bindings *);
 
-extern void record_inline_static (location_t, tree, tree,
-				  enum c_inline_static_type);
-extern void c_init_decl_processing (void);
-extern void c_print_identifier (FILE *, tree, int);
-extern int quals_from_declspecs (const struct c_declspecs *);
-extern struct c_declarator *build_array_declarator (location_t, tree,
-    						    struct c_declspecs *,
+బాహ్య శూన్య రికార్డు_inline_static (location_t, వృక్షం, వృక్షం,
+				  గణన c_inline_static_type);
+బాహ్య శూన్య c_init_decl_processing (శూన్య);
+బాహ్య శూన్య c_print_identifier (FILE *, వృక్షం, పూర్ణాంకం);
+బాహ్య పూర్ణాంకం quals_from_declspecs (స్థిరరాశి నిర్మాణం c_declspecs *);
+బాహ్య నిర్మాణం c_declarator *build_array_declarator (location_t, వృక్షం,
+    						    నిర్మాణం c_declspecs *,
 						    bool, bool);
-extern tree build_enumerator (location_t, location_t, struct c_enum_contents *,
-			      tree, tree);
-extern tree check_for_loop_decls (location_t, bool);
-extern void mark_forward_parm_decls (void);
-extern void declare_parm_level (void);
-extern void undeclared_variable (location_t, tree);
-extern tree lookup_label_for_goto (location_t, tree);
-extern tree declare_label (tree);
-extern tree define_label (location_t, tree);
-extern struct c_spot_bindings *c_get_switch_bindings (void);
-extern void c_release_switch_bindings (struct c_spot_bindings *);
-extern bool c_check_switch_jump_warnings (struct c_spot_bindings *,
+బాహ్య వృక్షం build_enumerator (location_t, location_t, నిర్మాణం c_enum_contents *,
+			      వృక్షం, వృక్షం);
+బాహ్య వృక్షం check_for_loop_decls (location_t, bool);
+బాహ్య శూన్య mark_forward_parm_decls (శూన్య);
+బాహ్య శూన్య declare_parm_level (శూన్య);
+బాహ్య శూన్య undeclared_variable (location_t, వృక్షం);
+బాహ్య వృక్షం lookup_label_for_goto (location_t, వృక్షం);
+బాహ్య వృక్షం declare_label (వృక్షం);
+బాహ్య వృక్షం define_label (location_t, వృక్షం);
+బాహ్య నిర్మాణం c_spot_bindings *c_get_switch_bindings (శూన్య);
+బాహ్య శూన్య c_release_switch_bindings (నిర్మాణం c_spot_bindings *);
+బాహ్య bool c_check_switch_jump_warnings (నిర్మాణం c_spot_bindings *,
 					  location_t, location_t);
-extern void finish_decl (tree, location_t, tree, tree, tree);
-extern tree finish_enum (tree, tree, tree);
-extern void finish_function (location_t = input_location);
-extern tree finish_struct (location_t, tree, tree, tree,
+బాహ్య శూన్య ముగింపు_decl (వృక్షం, location_t, వృక్షం, వృక్షం, వృక్షం);
+బాహ్య వృక్షం ముగింపు_enum (వృక్షం, వృక్షం, వృక్షం);
+బాహ్య శూన్య ముగింపు_function (location_t = ఆదానం_location);
+బాహ్య వృక్షం ముగింపు_struct (location_t, వృక్షం, వృక్షం, వృక్షం,
 			   class c_struct_parse_info *,
-			   tree *expr = NULL);
-extern tree c_simulate_enum_decl (location_t, const char *,
+			   వృక్షం *సమాసం = ఖాళీ);
+బాహ్య వృక్షం c_simulate_enum_decl (location_t, స్థిరరాశి అక్షరం *,
 				  vec<string_int_pair> *);
-extern tree c_simulate_record_decl (location_t, const char *,
-				    array_slice<const tree>);
-extern struct c_arg_info *build_arg_info (void);
-extern struct c_arg_info *get_parm_info (bool, tree);
-extern tree grokfield (location_t, struct c_declarator *,
-		       struct c_declspecs *, tree, tree *, tree *);
-extern tree groktypename (struct c_type_name *, tree *, bool *);
-extern tree grokgenassoc (struct c_type_name *);
-extern tree grokparm (const struct c_parm *, tree *);
-extern tree implicitly_declare (location_t, tree);
-extern void keep_next_level (void);
-extern void pending_xref_error (void);
-extern void c_push_function_context (void);
-extern void c_pop_function_context (void);
-extern void push_parm_decl (const struct c_parm *, tree *);
-extern struct c_declarator *set_array_declarator_inner (struct c_declarator *,
-							struct c_declarator *);
-extern tree c_builtin_function (tree);
-extern tree c_builtin_function_ext_scope (tree);
-extern tree c_simulate_builtin_function_decl (tree);
-extern void c_warn_unused_attributes (tree);
-extern tree c_warn_type_attributes (tree, tree);
-extern void shadow_tag (const struct c_declspecs *);
-extern void shadow_tag_warned (const struct c_declspecs *, int);
-extern tree start_enum (location_t, struct c_enum_contents *, tree, tree,
+బాహ్య వృక్షం c_simulate_రికార్డు_decl (location_t, స్థిరరాశి అక్షరం *,
+				    array_ముక్క<స్థిరరాశి వృక్షం>);
+బాహ్య నిర్మాణం c_arg_info *build_arg_info (శూన్య);
+బాహ్య నిర్మాణం c_arg_info *get_parm_info (bool, వృక్షం);
+బాహ్య వృక్షం grokfield (location_t, నిర్మాణం c_declarator *,
+		       నిర్మాణం c_declspecs *, వృక్షం, వృక్షం *, వృక్షం *);
+బాహ్య వృక్షం groktypename (నిర్మాణం c_type_name *, వృక్షం *, bool *);
+బాహ్య వృక్షం grokgenassoc (నిర్మాణం c_type_name *);
+బాహ్య వృక్షం grokparm (స్థిరరాశి నిర్మాణం c_parm *, వృక్షం *);
+బాహ్య వృక్షం implicitly_declare (location_t, వృక్షం);
+బాహ్య శూన్య keep_తదుపరి_level (శూన్య);
+బాహ్య శూన్య pending_xref_error (శూన్య);
+బాహ్య శూన్య c_నెట్టు_function_context (శూన్య);
+బాహ్య శూన్య c_తీయి_function_context (శూన్య);
+బాహ్య శూన్య నెట్టు_parm_decl (స్థిరరాశి నిర్మాణం c_parm *, వృక్షం *);
+బాహ్య నిర్మాణం c_declarator *సమితి_array_declarator_inner (నిర్మాణం c_declarator *,
+							నిర్మాణం c_declarator *);
+బాహ్య వృక్షం c_builtin_function (వృక్షం);
+బాహ్య వృక్షం c_builtin_function_ext_scope (వృక్షం);
+బాహ్య వృక్షం c_simulate_builtin_function_decl (వృక్షం);
+బాహ్య శూన్య c_warn_వాడని_లక్షణాలు (వృక్షం);
+బాహ్య వృక్షం c_warn_type_లక్షణాలు (వృక్షం, వృక్షం);
+బాహ్య శూన్య shadow_ట్యాగ్ (స్థిరరాశి నిర్మాణం c_declspecs *);
+బాహ్య శూన్య shadow_ట్యాగ్_warned (స్థిరరాశి నిర్మాణం c_declspecs *, పూర్ణాంకం);
+బాహ్య వృక్షం ప్రారంభం_enum (location_t, నిర్మాణం c_enum_contents *, వృక్షం, వృక్షం,
 			bool potential_nesting_p);
-extern bool start_function (struct c_declspecs *, struct c_declarator *, tree);
-extern tree start_decl (struct c_declarator *, struct c_declspecs *, bool,
-			tree, bool = true, location_t * = NULL);
-extern tree start_struct (location_t, enum tree_code, tree,
+బాహ్య bool ప్రారంభం_function (నిర్మాణం c_declspecs *, నిర్మాణం c_declarator *, వృక్షం);
+బాహ్య వృక్షం ప్రారంభం_decl (నిర్మాణం c_declarator *, నిర్మాణం c_declspecs *, bool,
+			వృక్షం, bool = true, location_t * = ఖాళీ);
+బాహ్య వృక్షం ప్రారంభం_struct (location_t, గణన వృక్షం_సంకేతం_2, వృక్షం,
 			  class c_struct_parse_info **);
-extern void store_parm_decls (void);
-extern void store_parm_decls_from (struct c_arg_info *);
-extern void temp_store_parm_decls (tree, tree);
-extern void temp_pop_parm_decls (void);
-extern tree xref_tag (enum tree_code, tree);
-extern struct c_typespec parser_xref_tag (location_t, enum tree_code, tree,
-					  bool, tree, bool);
-extern struct c_parm *build_c_parm (struct c_declspecs *, tree,
-				    struct c_declarator *, location_t);
-extern struct c_declarator *build_attrs_declarator (tree,
-						    struct c_declarator *);
-extern struct c_declarator *build_function_declarator (struct c_arg_info *,
-						       struct c_declarator *);
-extern struct c_declarator *build_id_declarator (tree);
-extern struct c_declarator *make_pointer_declarator (struct c_declspecs *,
-						     struct c_declarator *);
-extern struct c_declspecs *build_null_declspecs (void);
-extern struct c_declspecs *declspecs_add_qual (location_t,
-					       struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_type (location_t,
-					       struct c_declspecs *,
-					       struct c_typespec);
-extern struct c_declspecs *declspecs_add_scspec (location_t,
-						 struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_attrs (location_t,
-						struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_addrspace (location_t,
-						    struct c_declspecs *,
+బాహ్య శూన్య store_parm_decls (శూన్య);
+బాహ్య శూన్య store_parm_decls_from (నిర్మాణం c_arg_info *);
+బాహ్య శూన్య తాత్కాలిక_store_parm_decls (వృక్షం, వృక్షం);
+బాహ్య శూన్య తాత్కాలిక_తీయి_parm_decls (శూన్య);
+బాహ్య వృక్షం xref_ట్యాగ్ (గణన వృక్షం_సంకేతం_2, వృక్షం);
+బాహ్య నిర్మాణం c_typespec parser_xref_ట్యాగ్ (location_t, గణన వృక్షం_సంకేతం_2, వృక్షం,
+					  bool, వృక్షం, bool);
+బాహ్య నిర్మాణం c_parm *build_c_parm (నిర్మాణం c_declspecs *, వృక్షం,
+				    నిర్మాణం c_declarator *, location_t);
+బాహ్య నిర్మాణం c_declarator *build_attrs_declarator (వృక్షం,
+						    నిర్మాణం c_declarator *);
+బాహ్య నిర్మాణం c_declarator *build_function_declarator (నిర్మాణం c_arg_info *,
+						       నిర్మాణం c_declarator *);
+బాహ్య నిర్మాణం c_declarator *build_id_declarator (వృక్షం);
+బాహ్య నిర్మాణం c_declarator *make_సూచిక_declarator (నిర్మాణం c_declspecs *,
+						     నిర్మాణం c_declarator *);
+బాహ్య నిర్మాణం c_declspecs *build_null_declspecs (శూన్య);
+బాహ్య నిర్మాణం c_declspecs *declspecs_కూడు_qual (location_t,
+					       నిర్మాణం c_declspecs *, వృక్షం);
+బాహ్య నిర్మాణం c_declspecs *declspecs_కూడు_type (location_t,
+					       నిర్మాణం c_declspecs *,
+					       నిర్మాణం c_typespec);
+బాహ్య నిర్మాణం c_declspecs *declspecs_కూడు_scspec (location_t,
+						 నిర్మాణం c_declspecs *, వృక్షం);
+బాహ్య నిర్మాణం c_declspecs *declspecs_కూడు_attrs (location_t,
+						నిర్మాణం c_declspecs *, వృక్షం);
+బాహ్య నిర్మాణం c_declspecs *declspecs_కూడు_addrspace (location_t,
+						    నిర్మాణం c_declspecs *,
 						    addr_space_t);
-extern struct c_declspecs *declspecs_add_alignas (location_t,
-						  struct c_declspecs *, tree);
-extern struct c_declspecs *finish_declspecs (struct c_declspecs *);
-extern size_t c_tree_size (enum tree_code);
-extern int c_get_loop_names (tree, bool, tree *);
-extern void c_release_loop_names (int);
-extern tree c_finish_bc_name (location_t, tree, bool);
+బాహ్య నిర్మాణం c_declspecs *declspecs_కూడు_alignas (location_t,
+						  నిర్మాణం c_declspecs *, వృక్షం);
+బాహ్య నిర్మాణం c_declspecs *ముగింపు_declspecs (నిర్మాణం c_declspecs *);
+బాహ్య కొలత_t c_వృక్షం_కొలత (గణన వృక్షం_సంకేతం_2);
+బాహ్య పూర్ణాంకం c_get_loop_పేర్లు (వృక్షం, bool, వృక్షం *);
+బాహ్య శూన్య c_release_loop_పేర్లు (పూర్ణాంకం);
+బాహ్య వృక్షం c_ముగింపు_bc_name (location_t, వృక్షం, bool);
 
 /* in c-objc-common.cc */
-extern bool c_objc_common_init (void);
-extern bool c_missing_noreturn_ok_p (tree);
-extern bool c_warn_unused_global_decl (const_tree);
-extern void c_initialize_diagnostics (diagnostics::context *);
-extern bool c_var_mod_p (tree x, tree fn);
-extern alias_set_type c_get_alias_set (tree);
-extern int c_type_dwarf_attribute (const_tree, int);
-extern tree c_enum_underlying_base_type (const_tree);
+బాహ్య bool c_objc_common_init (శూన్య);
+బాహ్య bool c_missing_noreturn_ok_p (వృక్షం);
+బాహ్య bool c_warn_వాడని_global_decl (const_వృక్షం);
+బాహ్య శూన్య c_initialize_diagnostics (diagnostics::context *);
+బాహ్య bool c_var_mod_p (వృక్షం x, వృక్షం fn);
+బాహ్య alias_సమితి_type c_get_alias_సమితి (వృక్షం);
+బాహ్య పూర్ణాంకం c_type_dwarf_attribute (const_వృక్షం, పూర్ణాంకం);
+బాహ్య వృక్షం c_enum_underlying_పునాది_type (const_వృక్షం);
 
 /* in c-typeck.cc */
-extern int in_alignof;
-extern int in_sizeof;
-extern int in_countof;
-extern int in_typeof;
-extern int in_generic;
-extern bool c_in_omp_for;
-extern bool c_omp_array_section_p;
+బాహ్య పూర్ణాంకం లోపల_alignof;
+బాహ్య పూర్ణాంకం లోపల_sizeof;
+బాహ్య పూర్ణాంకం లోపల_countof;
+బాహ్య పూర్ణాంకం లోపల_typeof;
+బాహ్య పూర్ణాంకం లోపల_generic;
+బాహ్య bool c_లోపల_omp_for;
+బాహ్య bool c_omp_array_section_p;
 
-extern tree c_last_sizeof_arg;
-extern location_t c_last_sizeof_loc;
+బాహ్య వృక్షం c_చివరి_sizeof_arg;
+బాహ్య location_t c_చివరి_sizeof_loc;
 
-extern struct c_switch *c_switch_stack;
+బాహ్య నిర్మాణం c_switch *c_switch_దొంతర;
 
-extern bool null_pointer_constant_p (const_tree);
+బాహ్య bool null_సూచిక_constant_p (const_వృక్షం);
 
 
-inline bool
-c_type_variably_modified_p (tree t)
+అంతఃవరుస bool
+c_type_variably_modified_p (వృక్షం t)
 {
-  if (error_mark_node == t)
-    return false;
-  if (C_TYPE_VARIABLY_MODIFIED (t))
-    return true;
-  if (TYPE_STRUCTURAL_EQUALITY_P (t))
+  ఒకవేళ (error_mark_కణుపు == t)
+    తిరిగి false;
+  ఒకవేళ (C_TYPE_VARIABLY_MODIFIED (t))
+    తిరిగి true;
+  ఒకవేళ (TYPE_STRUCTURAL_EQUALITY_P (t))
     {
       /* The flag may not have been set yet because of incomplete
 	 structure or union types completed later.  */
-      switch (TREE_CODE (t))
+      ఎంపిక (వృక్షం_సంకేతం (t))
 	{
-	case ARRAY_TYPE:
-	case FUNCTION_TYPE:
-	case POINTER_TYPE:
+	స్థితి ARRAY_TYPE:
+	స్థితి FUNCTION_TYPE:
+	స్థితి సూచిక_TYPE:
 	  /* Recurse.  */
-	  if (c_type_variably_modified_p (TREE_TYPE (t)))
+	  ఒకవేళ (c_type_variably_modified_p (వృక్షం_TYPE (t)))
 	    {
 	      C_TYPE_VARIABLY_MODIFIED (t) = 1;
-	      return true;
+	      తిరిగి true;
 	    }
-	  break;
-	default:
-	  break;
+	  ఆపు;
+	అప్రమేయ:
+	  ఆపు;
 	}
     }
-  return false;
+  తిరిగి false;
 }
 
-inline bool
-c_type_unspecified_p (tree t)
+అంతఃవరుస bool
+c_type_unspecified_p (వృక్షం t)
 {
-  return error_mark_node != t
-	 && C_TYPE_VARIABLE_SIZE (t) && TREE_CODE (t) == ARRAY_TYPE
-	 && TYPE_DOMAIN (t) && TYPE_MAX_VALUE (TYPE_DOMAIN (t))
-	 && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (t))) == COMPOUND_EXPR
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 0))
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 1));
+  తిరిగి error_mark_కణుపు != t
+	 && C_TYPE_VARIABLE_కొలత (t) && వృక్షం_సంకేతం (t) == ARRAY_TYPE
+	 && TYPE_DOMAIN (t) && TYPE_MAX_విలువ (TYPE_DOMAIN (t))
+	 && వృక్షం_సంకేతం (TYPE_MAX_విలువ (TYPE_DOMAIN (t))) == COMPOUND_సమాసం
+	 && integer_zerop (వృక్షం_నిర్వాహ్యం (TYPE_MAX_విలువ (TYPE_DOMAIN (t)), 0))
+	 && integer_zerop (వృక్షం_నిర్వాహ్యం (TYPE_MAX_విలువ (TYPE_DOMAIN (t)), 1));
 }
 
-extern bool zero_length_array_type_p (const_tree type);
-extern bool char_type_p (tree);
-extern tree c_type_tag (const_tree t);
-extern tree c_objc_common_truthvalue_conversion (location_t, tree,
-						 tree = integer_type_node);
-extern tree require_complete_type (location_t, tree);
-extern bool same_translation_unit_p (const_tree, const_tree);
-extern bool comptypes (tree, tree);
-extern bool comptypes_same_p (tree, tree);
-extern bool comptypes_equiv_p (tree, tree);
-extern bool comptypes_check_enum_int (tree, tree, bool *);
-extern bool c_mark_addressable (tree, bool = false, bool = false);
-extern void c_incomplete_type_error (location_t, const_tree, const_tree);
-extern tree c_type_promotes_to (tree);
-extern struct c_expr default_function_array_conversion (location_t,
-							struct c_expr);
-extern struct c_expr default_function_array_read_conversion (location_t,
-							     struct c_expr);
-extern struct c_expr convert_lvalue_to_rvalue (location_t, struct c_expr,
+బాహ్య bool zero_నిడివి_array_type_p (const_వృక్షం type);
+బాహ్య bool char_type_p (వృక్షం);
+బాహ్య వృక్షం c_type_ట్యాగ్ (const_వృక్షం t);
+బాహ్య వృక్షం c_objc_common_truthvalue_conversion (location_t, వృక్షం,
+						 వృక్షం = integer_type_కణుపు);
+బాహ్య వృక్షం require_complete_type (location_t, వృక్షం);
+బాహ్య bool same_translation_unit_p (const_వృక్షం, const_వృక్షం);
+బాహ్య bool comptypes (వృక్షం, వృక్షం);
+బాహ్య bool comptypes_same_p (వృక్షం, వృక్షం);
+బాహ్య bool comptypes_equiv_p (వృక్షం, వృక్షం);
+బాహ్య bool comptypes_check_enum_int (వృక్షం, వృక్షం, bool *);
+బాహ్య bool c_mark_addressable (వృక్షం, bool = false, bool = false);
+బాహ్య శూన్య c_incomplete_type_error (location_t, const_వృక్షం, const_వృక్షం);
+బాహ్య వృక్షం c_type_promotes_గమ్యం (వృక్షం);
+బాహ్య నిర్మాణం c_సమాసం default_function_array_conversion (location_t,
+							నిర్మాణం c_సమాసం);
+బాహ్య నిర్మాణం c_సమాసం default_function_array_read_conversion (location_t,
+							     నిర్మాణం c_సమాసం);
+బాహ్య నిర్మాణం c_సమాసం convert_lvalue_గమ్యం_rvalue (location_t, నిర్మాణం c_సమాసం,
 					       bool, bool, bool = false);
-extern tree decl_constant_value_1 (tree, bool);
-extern void mark_exp_read (tree);
-extern tree composite_type (tree, tree);
-extern tree lookup_field (const_tree, tree);
-extern tree build_component_ref (location_t, tree, tree, location_t,
+బాహ్య వృక్షం decl_constant_విలువ_1 (వృక్షం, bool);
+బాహ్య శూన్య mark_exp_read (వృక్షం);
+బాహ్య వృక్షం సంయుక్త_type (వృక్షం, వృక్షం);
+బాహ్య వృక్షం lookup_క్షేత్రం (const_వృక్షం, వృక్షం);
+బాహ్య వృక్షం build_component_ref (location_t, వృక్షం, వృక్షం, location_t,
 				 location_t);
-extern tree handle_counted_by_for_component_ref (location_t, tree);
-extern tree build_array_ref (location_t, tree, tree);
-extern tree build_omp_array_section (location_t, tree, tree, tree);
-extern tree build_external_ref (location_t, tree, bool, tree *);
-extern void pop_maybe_used (bool);
-extern struct maybe_used_decl *save_maybe_used ();
-extern void restore_maybe_used (struct maybe_used_decl *);
-extern void mark_decl_used (tree, bool);
-extern struct c_expr c_expr_sizeof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_sizeof_type (location_t, struct c_type_name *);
-extern struct c_expr c_expr_countof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_countof_type (location_t loc,
-					  struct c_type_name *);
-extern struct c_expr c_expr_maxof_type (location_t loc, struct c_type_name *);
-extern struct c_expr c_expr_minof_type (location_t loc, struct c_type_name *);
-extern struct c_expr parser_build_unary_op (location_t, enum tree_code,
-    					    struct c_expr);
-extern struct c_expr parser_build_binary_op (location_t,
-    					     enum tree_code, struct c_expr,
-					     struct c_expr, tree);
-extern tree build_conditional_expr (location_t, tree, bool, tree, tree,
-				    location_t, tree, tree, location_t);
-extern tree build_compound_expr (location_t, tree, tree);
-extern tree c_cast_expr (location_t, struct c_type_name *, tree);
-extern tree build_c_cast (location_t, tree, tree);
-extern void store_init_value (location_t, tree, tree, tree);
-extern void maybe_warn_string_init (location_t, tree, struct c_expr);
-extern void start_init (tree, tree, bool, bool, rich_location *);
-extern void finish_init (void);
-extern void really_start_incremental_init (tree);
-extern void finish_implicit_inits (location_t, struct obstack *);
-extern void push_init_level (location_t, int, struct obstack *);
-extern struct c_expr pop_init_level (location_t, int, struct obstack *,
+బాహ్య వృక్షం handle_counted_by_for_component_ref (location_t, వృక్షం);
+బాహ్య వృక్షం build_array_ref (location_t, వృక్షం, వృక్షం);
+బాహ్య వృక్షం build_omp_array_section (location_t, వృక్షం, వృక్షం, వృక్షం);
+బాహ్య వృక్షం build_external_ref (location_t, వృక్షం, bool, వృక్షం *);
+బాహ్య శూన్య తీయి_maybe_వాడిన (bool);
+బాహ్య నిర్మాణం maybe_వాడిన_decl *save_maybe_వాడిన ();
+బాహ్య శూన్య restore_maybe_వాడిన (నిర్మాణం maybe_వాడిన_decl *);
+బాహ్య శూన్య mark_decl_వాడిన (వృక్షం, bool);
+బాహ్య నిర్మాణం c_సమాసం c_సమాసం_sizeof_సమాసం (location_t, నిర్మాణం c_సమాసం);
+బాహ్య నిర్మాణం c_సమాసం c_సమాసం_sizeof_type (location_t, నిర్మాణం c_type_name *);
+బాహ్య నిర్మాణం c_సమాసం c_సమాసం_countof_సమాసం (location_t, నిర్మాణం c_సమాసం);
+బాహ్య నిర్మాణం c_సమాసం c_సమాసం_countof_type (location_t loc,
+					  నిర్మాణం c_type_name *);
+బాహ్య నిర్మాణం c_సమాసం c_సమాసం_maxof_type (location_t loc, నిర్మాణం c_type_name *);
+బాహ్య నిర్మాణం c_సమాసం c_సమాసం_minof_type (location_t loc, నిర్మాణం c_type_name *);
+బాహ్య నిర్మాణం c_సమాసం parser_build_unary_op (location_t, గణన వృక్షం_సంకేతం_2,
+    					    నిర్మాణం c_సమాసం);
+బాహ్య నిర్మాణం c_సమాసం parser_build_ద్విమాన_op (location_t,
+    					     గణన వృక్షం_సంకేతం_2, నిర్మాణం c_సమాసం,
+					     నిర్మాణం c_సమాసం, వృక్షం);
+బాహ్య వృక్షం build_conditional_సమాసం (location_t, వృక్షం, bool, వృక్షం, వృక్షం,
+				    location_t, వృక్షం, వృక్షం, location_t);
+బాహ్య వృక్షం build_compound_సమాసం (location_t, వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_cast_సమాసం (location_t, నిర్మాణం c_type_name *, వృక్షం);
+బాహ్య వృక్షం build_c_cast (location_t, వృక్షం, వృక్షం);
+బాహ్య శూన్య store_init_విలువ (location_t, వృక్షం, వృక్షం, వృక్షం);
+బాహ్య శూన్య maybe_warn_string_init (location_t, వృక్షం, నిర్మాణం c_సమాసం);
+బాహ్య శూన్య ప్రారంభం_init (వృక్షం, వృక్షం, bool, bool, rich_location *);
+బాహ్య శూన్య ముగింపు_init (శూన్య);
+బాహ్య శూన్య really_ప్రారంభం_incremental_init (వృక్షం);
+బాహ్య శూన్య ముగింపు_implicit_inits (location_t, నిర్మాణం obstack *);
+బాహ్య శూన్య నెట్టు_init_level (location_t, పూర్ణాంకం, నిర్మాణం obstack *);
+బాహ్య నిర్మాణం c_సమాసం తీయి_init_level (location_t, పూర్ణాంకం, నిర్మాణం obstack *,
 				     location_t);
-extern void set_init_index (location_t, tree, tree, struct obstack *);
-extern void set_init_label (location_t, tree, location_t, struct obstack *);
-unsigned c_maybe_optimize_large_byte_initializer (void);
-extern void process_init_element (location_t, struct c_expr, bool,
-				  struct obstack *);
-extern tree build_compound_literal (location_t, tree, tree, bool,
-				    unsigned int, struct c_declspecs *);
-extern void check_compound_literal_type (location_t, struct c_type_name *);
-extern tree c_start_switch (location_t, location_t, tree, bool, tree);
-extern void c_finish_switch (tree, tree);
-extern tree build_asm_expr (location_t, tree, tree, tree, tree, tree, bool,
+బాహ్య శూన్య సమితి_init_సూచీ (location_t, వృక్షం, వృక్షం, నిర్మాణం obstack *);
+బాహ్య శూన్య సమితి_init_label (location_t, వృక్షం, location_t, నిర్మాణం obstack *);
+గుర్తులేని c_maybe_optimize_large_byte_initializer (శూన్య);
+బాహ్య శూన్య process_init_element (location_t, నిర్మాణం c_సమాసం, bool,
+				  నిర్మాణం obstack *);
+బాహ్య వృక్షం build_compound_literal (location_t, వృక్షం, వృక్షం, bool,
+				    గుర్తులేని పూర్ణాంకం, నిర్మాణం c_declspecs *);
+బాహ్య శూన్య check_compound_literal_type (location_t, నిర్మాణం c_type_name *);
+బాహ్య వృక్షం c_ప్రారంభం_switch (location_t, location_t, వృక్షం, bool, వృక్షం);
+బాహ్య శూన్య c_ముగింపు_switch (వృక్షం, వృక్షం);
+బాహ్య వృక్షం build_asm_సమాసం (location_t, వృక్షం, వృక్షం, వృక్షం, వృక్షం, వృక్షం, bool,
 			    bool);
-extern tree build_asm_stmt (bool, tree);
-extern int c_types_compatible_p (tree, tree);
-extern tree c_begin_compound_stmt (bool);
-extern tree c_end_compound_stmt (location_t, tree, bool);
-extern void c_finish_if_stmt (location_t, tree, tree, tree);
-extern void c_finish_loop (location_t, location_t, tree, location_t, tree,
-			   tree, tree, tree, bool);
-extern tree c_begin_stmt_expr (void);
-extern tree c_finish_stmt_expr (location_t, tree);
-extern tree c_process_expr_stmt (location_t, tree);
-extern tree c_finish_expr_stmt (location_t, tree);
-extern tree c_finish_return (location_t, tree, tree, bool = false);
-extern tree c_finish_bc_stmt (location_t, tree, bool, tree);
-extern tree c_finish_goto_label (location_t, tree);
-extern tree c_finish_goto_ptr (location_t, c_expr val);
-extern tree c_expr_to_decl (tree, bool *, bool *);
-extern tree c_finish_omp_construct (location_t, enum tree_code, tree, tree);
-extern tree c_finish_oacc_data (location_t, tree, tree);
-extern tree c_finish_oacc_host_data (location_t, tree, tree);
-extern tree c_begin_omp_parallel (void);
-extern tree c_finish_omp_parallel (location_t, tree, tree);
-extern tree c_begin_omp_task (void);
-extern tree c_finish_omp_task (location_t, tree, tree);
-extern void c_finish_omp_cancel (location_t, tree);
-extern void c_finish_omp_cancellation_point (location_t, tree);
-extern tree c_finish_omp_clauses (tree, enum c_omp_region_type);
-extern tree c_omp_finish_mapper_clauses (tree);
-extern tree c_omp_mapper_lookup (tree, tree);
-extern tree c_omp_extract_mapper_directive (tree);
-extern tree c_omp_map_array_section (location_t, tree);
-extern tree c_build_va_arg (location_t, tree, location_t, tree, tree);
-extern tree c_finish_transaction (location_t, tree, int);
-extern bool c_tree_equal (tree, tree);
-extern tree c_build_function_call_vec (location_t, const vec<location_t>&,
-				       tree, vec<tree, va_gc> *,
-				       vec<tree, va_gc> *);
-extern tree c_omp_clause_copy_ctor (tree, tree, tree);
-extern tree c_reconstruct_complex_type (tree, tree);
-extern tree c_type_canonical (tree);
-extern tree c_build_type_attribute_variant (tree ntype, tree attrs);
-extern tree c_build_pointer_type (tree type);
-extern tree c_build_array_type (tree type, tree domain);
-extern tree c_build_array_type_unspecified (tree type);
-extern tree c_build_array_type_zero_size (tree type);
-extern tree c_build_function_type (tree type, tree args, bool no = false);
-extern tree c_build_pointer_type_for_mode (tree type, machine_mode mode, bool m);
+బాహ్య వృక్షం build_asm_stmt (bool, వృక్షం);
+బాహ్య పూర్ణాంకం c_types_compatible_p (వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_begin_compound_stmt (bool);
+బాహ్య వృక్షం c_చివర_compound_stmt (location_t, వృక్షం, bool);
+బాహ్య శూన్య c_ముగింపు_if_stmt (location_t, వృక్షం, వృక్షం, వృక్షం);
+బాహ్య శూన్య c_ముగింపు_loop (location_t, location_t, వృక్షం, location_t, వృక్షం,
+			   వృక్షం, వృక్షం, వృక్షం, bool);
+బాహ్య వృక్షం c_begin_stmt_సమాసం (శూన్య);
+బాహ్య వృక్షం c_ముగింపు_stmt_సమాసం (location_t, వృక్షం);
+బాహ్య వృక్షం c_process_సమాసం_stmt (location_t, వృక్షం);
+బాహ్య వృక్షం c_ముగింపు_సమాసం_stmt (location_t, వృక్షం);
+బాహ్య వృక్షం c_ముగింపు_return (location_t, వృక్షం, వృక్షం, bool = false);
+బాహ్య వృక్షం c_ముగింపు_bc_stmt (location_t, వృక్షం, bool, వృక్షం);
+బాహ్య వృక్షం c_ముగింపు_goto_label (location_t, వృక్షం);
+బాహ్య వృక్షం c_ముగింపు_goto_ptr (location_t, c_సమాసం val);
+బాహ్య వృక్షం c_సమాసం_గమ్యం_decl (వృక్షం, bool *, bool *);
+బాహ్య వృక్షం c_ముగింపు_omp_construct (location_t, గణన వృక్షం_సంకేతం_2, వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_ముగింపు_oacc_దత్తాంశం (location_t, వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_ముగింపు_oacc_host_దత్తాంశం (location_t, వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_begin_omp_parallel (శూన్య);
+బాహ్య వృక్షం c_ముగింపు_omp_parallel (location_t, వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_begin_omp_task (శూన్య);
+బాహ్య వృక్షం c_ముగింపు_omp_task (location_t, వృక్షం, వృక్షం);
+బాహ్య శూన్య c_ముగింపు_omp_cancel (location_t, వృక్షం);
+బాహ్య శూన్య c_ముగింపు_omp_cancellation_బిందువు (location_t, వృక్షం);
+బాహ్య వృక్షం c_ముగింపు_omp_clauses (వృక్షం, గణన c_omp_region_type);
+బాహ్య వృక్షం c_omp_ముగింపు_mapper_clauses (వృక్షం);
+బాహ్య వృక్షం c_omp_mapper_lookup (వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_omp_వెలికితీయి_mapper_directive (వృక్షం);
+బాహ్య వృక్షం c_omp_map_array_section (location_t, వృక్షం);
+బాహ్య వృక్షం c_build_va_arg (location_t, వృక్షం, location_t, వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_ముగింపు_transaction (location_t, వృక్షం, పూర్ణాంకం);
+బాహ్య bool c_వృక్షం_equal (వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_build_function_call_vec (location_t, స్థిరరాశి vec<location_t>&,
+				       వృక్షం, vec<వృక్షం, va_gc> *,
+				       vec<వృక్షం, va_gc> *);
+బాహ్య వృక్షం c_omp_clause_copy_ctor (వృక్షం, వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_reconstruct_complex_type (వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_type_canonical (వృక్షం);
+బాహ్య వృక్షం c_build_type_attribute_variant (వృక్షం ntype, వృక్షం attrs);
+బాహ్య వృక్షం c_build_సూచిక_type (వృక్షం type);
+బాహ్య వృక్షం c_build_array_type (వృక్షం type, వృక్షం domain);
+బాహ్య వృక్షం c_build_array_type_unspecified (వృక్షం type);
+బాహ్య వృక్షం c_build_array_type_zero_కొలత (వృక్షం type);
+బాహ్య వృక్షం c_build_function_type (వృక్షం type, వృక్షం వాదనలు, bool no = false);
+బాహ్య వృక్షం c_build_సూచిక_type_for_బహుళకం (వృక్షం type, machine_బహుళకం బహుళకం, bool m);
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement that specifies a return value is seen.  */
 
-extern int current_function_returns_value;
+బాహ్య పూర్ణాంకం current_function_returns_విలువ;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement with no argument is seen.  */
 
-extern int current_function_returns_null;
+బాహ్య పూర్ణాంకం current_function_returns_null;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a call to a noreturn function is seen.  */
 
-extern int current_function_returns_abnormally;
+బాహ్య పూర్ణాంకం current_function_returns_abnormally;
 
 /* In c-decl.cc */
 
 /* Tell the binding oracle what kind of binding we are looking for.  */
 
-enum c_oracle_request
+గణన c_oracle_request
 {
-  C_ORACLE_SYMBOL,
-  C_ORACLE_TAG,
+  C_ORACLE_చిహ్నం,
+  C_ORACLE_ట్యాగ్,
   C_ORACLE_LABEL
 };
 
@@ -999,57 +999,57 @@ enum c_oracle_request
    oracle has been called and will not call it again if it fails to
    create a given binding.  */
 
-typedef void c_binding_oracle_function (enum c_oracle_request, tree identifier);
+రకనిర్వచనం శూన్య c_binding_oracle_function (గణన c_oracle_request, వృక్షం identifier);
 
-extern c_binding_oracle_function *c_binding_oracle;
+బాహ్య c_binding_oracle_function *c_binding_oracle;
 
-extern void c_finish_incomplete_decl (tree);
-extern tree c_omp_reduction_id (enum tree_code, tree);
-extern tree c_omp_reduction_decl (tree);
-extern tree c_omp_reduction_lookup (tree, tree);
-extern tree c_check_omp_declare_reduction_r (tree *, int *, void *);
-extern tree c_omp_mapper_id (tree);
-extern tree c_omp_mapper_decl (tree);
-extern void c_omp_scan_mapper_bindings (location_t, tree *, tree);
-extern bool c_check_in_current_scope (tree);
-extern void c_pushtag (location_t, tree, tree);
-extern void c_bind (location_t, tree, bool);
-extern bool tag_exists_p (enum tree_code, tree);
+బాహ్య శూన్య c_ముగింపు_incomplete_decl (వృక్షం);
+బాహ్య వృక్షం c_omp_reduction_id (గణన వృక్షం_సంకేతం_2, వృక్షం);
+బాహ్య వృక్షం c_omp_reduction_decl (వృక్షం);
+బాహ్య వృక్షం c_omp_reduction_lookup (వృక్షం, వృక్షం);
+బాహ్య వృక్షం c_check_omp_declare_reduction_r (వృక్షం *, పూర్ణాంకం *, శూన్య *);
+బాహ్య వృక్షం c_omp_mapper_id (వృక్షం);
+బాహ్య వృక్షం c_omp_mapper_decl (వృక్షం);
+బాహ్య శూన్య c_omp_పరిశీలన_mapper_bindings (location_t, వృక్షం *, వృక్షం);
+బాహ్య bool c_check_లోపల_current_scope (వృక్షం);
+బాహ్య శూన్య c_pushtag (location_t, వృక్షం, వృక్షం);
+బాహ్య శూన్య c_bind (location_t, వృక్షం, bool);
+బాహ్య bool ట్యాగ్_exists_p (గణన వృక్షం_సంకేతం_2, వృక్షం);
 
-extern void verify_counted_by_for_top_anonymous_type (tree);
+బాహ్య శూన్య verify_counted_by_for_శిఖరం_anonymous_type (వృక్షం);
 
 /* In c-errors.cc */
-extern bool pedwarn_c90 (location_t, diagnostics::option_id, const char *, ...)
+బాహ్య bool pedwarn_c90 (location_t, diagnostics::option_id, స్థిరరాశి అక్షరం *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c99 (location_t, diagnostics::option_id, const char *, ...)
+బాహ్య bool pedwarn_c99 (location_t, diagnostics::option_id, స్థిరరాశి అక్షరం *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c11 (location_t, diagnostics::option_id, const char *, ...)
+బాహ్య bool pedwarn_c11 (location_t, diagnostics::option_id, స్థిరరాశి అక్షరం *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c23 (location_t, diagnostics::option_id, const char *, ...)
+బాహ్య bool pedwarn_c23 (location_t, diagnostics::option_id, స్థిరరాశి అక్షరం *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern void add_note_about_new_keyword (location_t loc,
-					tree keyword_id);
+బాహ్య శూన్య కూడు_note_about_new_keyword (location_t loc,
+					వృక్షం keyword_id);
 
-extern void
-set_c_expr_source_range (c_expr *expr,
-			 location_t start, location_t finish);
+బాహ్య శూన్య
+సమితి_c_సమాసం_ఆధారం_range (c_సమాసం *సమాసం,
+			 location_t ప్రారంభం, location_t ముగింపు);
 
-extern void
-set_c_expr_source_range (c_expr *expr,
-			 source_range src_range);
+బాహ్య శూన్య
+సమితి_c_సమాసం_ఆధారం_range (c_సమాసం *సమాసం,
+			 ఆధారం_range src_range);
 
 /* In c-fold.cc */
-extern vec<tree> incomplete_record_decls;
+బాహ్య vec<వృక్షం> incomplete_రికార్డు_decls;
 
-extern const char *c_get_sarif_source_language (const char *filename);
+బాహ్య స్థిరరాశి అక్షరం *c_get_sarif_ఆధారం_language (స్థిరరాశి అక్షరం *filename);
 
-extern const struct scoped_attribute_specs std_attribute_table;
+బాహ్య స్థిరరాశి నిర్మాణం scoped_attribute_specs std_attribute_పట్టిక;
 
-#if CHECKING_P
+#ఒకవేళ CHECKING_P
 namespace selftest {
-  extern void run_c_tests (void);
+  బాహ్య శూన్య నిరంతరం_c_tests (శూన్య);
 } // namespace selftest
-#endif /* #if CHECKING_P */
+#అయితే_ముగింపు /* #if CHECKING_P */
 
 
-#endif /* ! GCC_C_TREE_H */
+#అయితే_ముగింపు /* ! GCC_C_TREE_H */
