@@ -17,27 +17,27 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "function.h"
-#include "bitmap.h"
-#include "c-tree.h"
-#include "intl.h"
-#include "gimplify.h"
+#ضمن "config.h"
+#ضمن "system.h"
+#ضمن "coretypes.h"
+#ضمن "target.h"
+#ضمن "function.h"
+#ضمن "bitmap.h"
+#ضمن "c-tree.h"
+#ضمن "intl.h"
+#ضمن "gimplify.h"
 
-static tree c_fully_fold_internal (tree expr, bool, bool *, bool *, bool,
-				   bool);
+ساكن ڤوکوق c_fully_fold_internal (ڤوکوق اوڠکاڤن, منطقي, منطقي *, منطقي *, منطقي,
+				   منطقي);
 
 /* If DISABLE is true, stop issuing warnings.  This is used when
    parsing code that we know will not be executed.  This function may
    be called multiple times, and works as a stack.  */
 
-static void
-c_disable_warnings (bool disable)
+ساكن فراغ
+c_disable_warnings (منطقي disable)
 {
-  if (disable)
+  إذا (disable)
     {
       ++c_inhibit_evaluation_warnings;
     }
@@ -45,10 +45,10 @@ c_disable_warnings (bool disable)
 
 /* If ENABLE is true, re-enable issuing warnings.  */
 
-static void
-c_enable_warnings (bool enable)
+ساكن فراغ
+c_enable_warnings (منطقي enable)
 {
-  if (enable)
+  إذا (enable)
     {
       --c_inhibit_evaluation_warnings;
     }
@@ -57,36 +57,36 @@ c_enable_warnings (bool enable)
 /* Try to fold ARRAY_REF ary[index] if possible and not handled by
    normal fold, return NULL_TREE otherwise.  */
 
-static tree
-c_fold_array_ref (tree type, tree ary, tree index)
+ساكن ڤوکوق
+c_fold_array_ref (ڤوکوق type, ڤوکوق ary, ڤوکوق index)
 {
-  if (TREE_CODE (ary) != STRING_CST
-      || TREE_CODE (index) != INTEGER_CST
-      || TREE_OVERFLOW (index)
-      || TREE_CODE (TREE_TYPE (ary)) != ARRAY_TYPE
-      || !tree_fits_uhwi_p (index))
-    return NULL_TREE;
+  إذا (ڤوکوق_CODE (ary) != STRING_CST
+      || ڤوکوق_CODE (index) != INTEGER_CST
+      || ڤوکوق_OVERFLOW (index)
+      || ڤوکوق_CODE (ڤوکوق_TYPE (ary)) != ARRAY_TYPE
+      || !ڤوکوق_fits_uhwi_p (index))
+    أرجع NULL_ڤوکوق;
 
-  tree elem_type = TREE_TYPE (TREE_TYPE (ary));
+  ڤوکوق elem_type = ڤوکوق_TYPE (ڤوکوق_TYPE (ary));
   unsigned elem_nchars = (TYPE_PRECISION (elem_type)
-			  / TYPE_PRECISION (char_type_node));
-  unsigned len = (unsigned) TREE_STRING_LENGTH (ary) / elem_nchars;
-  tree nelts_minus_one = array_type_nelts_minus_one (TREE_TYPE (ary));
-  bool dummy1 = true, dummy2 = true;
+			  / TYPE_PRECISION (char_type_نود));
+  unsigned len = (unsigned) ڤوکوق_STRING_LENGTH (ary) / elem_nchars;
+  ڤوکوق nelts_minus_one = array_type_nelts_minus_one (ڤوکوق_TYPE (ary));
+  منطقي dummy1 = true, dummy2 = true;
   nelts_minus_one = c_fully_fold_internal (nelts_minus_one, true, &dummy1,
-					   &dummy2, false, false);
-  unsigned HOST_WIDE_INT i = tree_to_uhwi (index);
-  if (!tree_int_cst_le (index, nelts_minus_one)
+					   &dummy2, خطأ, خطأ);
+  unsigned HOST_WIDE_INT i = ڤوکوق_to_uhwi (index);
+  إذا (!ڤوکوق_int_cst_le (index, nelts_minus_one)
       || i >= len
       || i + elem_nchars > len)
-    return NULL_TREE;
+    أرجع NULL_ڤوکوق;
 
-  if (elem_nchars == 1)
-    return build_int_cst (type, TREE_STRING_POINTER (ary)[i]);
+  إذا (elem_nchars == 1)
+    أرجع build_int_cst (type, ڤوکوق_STRING_POINTER (ary)[i]);
 
-  const unsigned char *ptr
-    = ((const unsigned char *)TREE_STRING_POINTER (ary) + i * elem_nchars);
-  return native_interpret_expr (type, ptr, elem_nchars);
+  ثابت unsigned حرف *ptr
+    = ((ثابت unsigned حرف *)ڤوکوق_STRING_POINTER (ary) + i * elem_nchars);
+  أرجع native_interpret_اوڠکاڤن (type, ptr, elem_nchars);
 }
 
 /* Fully fold EXPR, an expression that was not folded (beyond integer
@@ -105,28 +105,28 @@ c_fold_array_ref (tree type, tree ary, tree index)
    C_MAYBE_CONST_EXPR.  LVAL is true if it should be treated as an
    lvalue.  */
 
-tree
-c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
+ڤوکوق
+c_fully_fold (ڤوکوق اوڠکاڤن, منطقي in_init, منطقي *maybe_const, منطقي lval)
 {
-  tree ret;
-  tree eptype = NULL_TREE;
-  bool dummy = true;
-  bool maybe_const_itself = true;
-  location_t loc = EXPR_LOCATION (expr);
+  ڤوکوق ret;
+  ڤوکوق eptype = NULL_ڤوکوق;
+  منطقي dummy = true;
+  منطقي maybe_const_itself = true;
+  location_t loc = اوڠکاڤن_LOCATION (اوڠکاڤن);
 
-  if (!maybe_const)
+  إذا (!maybe_const)
     maybe_const = &dummy;
-  if (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
+  إذا (ڤوکوق_CODE (اوڠکاڤن) == EXCESS_PRECISION_اوڠکاڤن)
     {
-      eptype = TREE_TYPE (expr);
-      expr = TREE_OPERAND (expr, 0);
+      eptype = ڤوکوق_TYPE (اوڠکاڤن);
+      اوڠکاڤن = ڤوکوق_OPERAND (اوڠکاڤن, 0);
     }
-  ret = c_fully_fold_internal (expr, in_init, maybe_const,
-			       &maybe_const_itself, false, lval);
-  if (eptype)
+  ret = c_fully_fold_internal (اوڠکاڤن, in_init, maybe_const,
+			       &maybe_const_itself, خطأ, lval);
+  إذا (eptype)
     ret = fold_convert_loc (loc, eptype, ret);
   *maybe_const &= maybe_const_itself;
-  return ret;
+  أرجع ret;
 }
 
 /* Internal helper for c_fully_fold.  EXPR and IN_INIT are as for
@@ -141,81 +141,81 @@ c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
    LVAL indicates folding of lvalue, where we can't replace it with
    an rvalue.  */
 
-static tree
-c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
-		       bool *maybe_const_itself, bool for_int_const, bool lval)
+ساكن ڤوکوق
+c_fully_fold_internal (ڤوکوق اوڠکاڤن, منطقي in_init, منطقي *maybe_const_operands,
+		       منطقي *maybe_const_itself, منطقي for_int_const, منطقي lval)
 {
-  tree ret = expr;
-  enum tree_code code = TREE_CODE (expr);
-  enum tree_code_class kind = TREE_CODE_CLASS (code);
-  location_t loc = EXPR_LOCATION (expr);
-  tree op0, op1, op2, op3;
-  tree orig_op0, orig_op1, orig_op2;
-  bool op0_const = true, op1_const = true, op2_const = true;
-  bool op0_const_self = true, op1_const_self = true, op2_const_self = true;
-  bool nowarning = warning_suppressed_p (expr, OPT_Woverflow);
-  bool unused_p;
-  bool op0_lval = false;
+  ڤوکوق ret = اوڠکاڤن;
+  تعداد ڤوکوق_code code = ڤوکوق_CODE (اوڠکاڤن);
+  تعداد ڤوکوق_code_class kind = ڤوکوق_CODE_CLASS (code);
+  location_t loc = اوڠکاڤن_LOCATION (اوڠکاڤن);
+  ڤوکوق op0, op1, op2, op3;
+  ڤوکوق orig_op0, orig_op1, orig_op2;
+  منطقي op0_const = true, op1_const = true, op2_const = true;
+  منطقي op0_const_self = true, op1_const_self = true, op2_const_self = true;
+  منطقي nowarning = warning_suppressed_p (اوڠکاڤن, OPT_Woverflow);
+  منطقي unused_p;
+  منطقي op0_lval = خطأ;
   source_range old_range;
 
   /* Constants, declarations, statements, errors, and anything else not
      counted as an expression cannot usefully be folded further at this
      point.  */
-  if (!IS_EXPR_CODE_CLASS (kind) || kind == tcc_statement)
+  إذا (!IS_اوڠکاڤن_CODE_CLASS (kind) || kind == tcc_statement)
     {
       /* Except for variables which we can optimize to its initializer.  */
-      if (VAR_P (expr) && !lval && (optimize || in_init))
+      إذا (VAR_P (اوڠکاڤن) && !lval && (optimize || in_init))
 	{
-	  if (in_init)
-	    ret = decl_constant_value_1 (expr, true);
-	  else
+	  إذا (in_init)
+	    ret = decl_constant_نيلاي_1 (اوڠکاڤن, true);
+	  وإلا
 	    {
-	      ret = decl_constant_value (expr);
-	      if (ret != expr
-		  && (TYPE_MODE (TREE_TYPE (ret)) == BLKmode
-		      || TREE_CODE (TREE_TYPE (ret)) == ARRAY_TYPE))
-		return expr;
+	      ret = decl_constant_نيلاي (اوڠکاڤن);
+	      إذا (ret != اوڠکاڤن
+		  && (TYPE_MODE (ڤوکوق_TYPE (ret)) == BLKmode
+		      || ڤوکوق_CODE (ڤوکوق_TYPE (ret)) == ARRAY_TYPE))
+		أرجع اوڠکاڤن;
 	    }
 	  /* Avoid unwanted tree sharing between the initializer and current
 	     function's body where the tree can be modified e.g. by the
 	     gimplifier.  */
-	  if (ret != expr && TREE_STATIC (expr))
-	    ret = unshare_expr (ret);
-	  return ret;
+	  إذا (ret != اوڠکاڤن && ڤوکوق_STATIC (اوڠکاڤن))
+	    ret = unshare_اوڠکاڤن (ret);
+	  أرجع ret;
 	}
-      return expr;
+      أرجع اوڠکاڤن;
     }
 
-  if (IS_EXPR_CODE_CLASS (kind))
-    old_range = EXPR_LOCATION_RANGE (expr);
+  إذا (IS_اوڠکاڤن_CODE_CLASS (kind))
+    old_range = اوڠکاڤن_LOCATION_RANGE (اوڠکاڤن);
 
   /* Operands of variable-length expressions (function calls) have
      already been folded, as have __builtin_* function calls, and such
      expressions cannot occur in constant expressions.  */
-  if (kind == tcc_vl_exp)
+  إذا (kind == tcc_vl_exp)
     {
-      *maybe_const_operands = false;
-      ret = fold (expr);
-      goto out;
+      *maybe_const_operands = خطأ;
+      ret = fold (اوڠکاڤن);
+      اذهب out;
     }
 
-  if (code == C_MAYBE_CONST_EXPR)
+  إذا (code == C_MAYBE_CONST_اوڠکاڤن)
     {
-      tree pre = C_MAYBE_CONST_EXPR_PRE (expr);
-      tree inner = C_MAYBE_CONST_EXPR_EXPR (expr);
-      if (C_MAYBE_CONST_EXPR_NON_CONST (expr))
-	*maybe_const_operands = false;
-      if (C_MAYBE_CONST_EXPR_INT_OPERANDS (expr))
+      ڤوکوق pre = C_MAYBE_CONST_اوڠکاڤن_PRE (اوڠکاڤن);
+      ڤوکوق inner = C_MAYBE_CONST_اوڠکاڤن_اوڠکاڤن (اوڠکاڤن);
+      إذا (C_MAYBE_CONST_اوڠکاڤن_NON_CONST (اوڠکاڤن))
+	*maybe_const_operands = خطأ;
+      إذا (C_MAYBE_CONST_اوڠکاڤن_INT_OPERANDS (اوڠکاڤن))
 	{
-	  *maybe_const_itself = false;
+	  *maybe_const_itself = خطأ;
 	  inner = c_fully_fold_internal (inner, in_init, maybe_const_operands,
 					 maybe_const_itself, true, lval);
 	}
-      if (pre && !in_init)
-	ret = build2 (COMPOUND_EXPR, TREE_TYPE (expr), pre, inner);
-      else
+      إذا (pre && !in_init)
+	ret = build2 (COMPOUND_اوڠکاڤن, ڤوکوق_TYPE (اوڠکاڤن), pre, inner);
+      وإلا
 	ret = inner;
-      goto out;
+      اذهب out;
     }
 
   /* Assignment, increment, decrement, function call and comma
@@ -224,450 +224,450 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      were handled above, though VA_ARG_EXPR is treated like a function
      call here, and statement expressions are handled through
      C_MAYBE_CONST_EXPR to avoid folding inside them.)  */
-  switch (code)
+  بدل (code)
     {
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-    case COMPOUND_EXPR:
-      *maybe_const_operands = false;
-      break;
+    حالة MODIFY_اوڠکاڤن:
+    حالة PREDECREMENT_اوڠکاڤن:
+    حالة PREINCREMENT_اوڠکاڤن:
+    حالة POSTDECREMENT_اوڠکاڤن:
+    حالة POSTINCREMENT_اوڠکاڤن:
+    حالة COMPOUND_اوڠکاڤن:
+      *maybe_const_operands = خطأ;
+      اكسر;
 
-    case VA_ARG_EXPR:
-    case TARGET_EXPR:
-    case BIND_EXPR:
-    case OBJ_TYPE_REF:
-      *maybe_const_operands = false;
-      ret = fold (expr);
-      goto out;
+    حالة VA_ARG_اوڠکاڤن:
+    حالة TARGET_اوڠکاڤن:
+    حالة BIND_اوڠکاڤن:
+    حالة OBJ_TYPE_REF:
+      *maybe_const_operands = خطأ;
+      ret = fold (اوڠکاڤن);
+      اذهب out;
 
-    default:
-      break;
+    افتراضي:
+      اكسر;
     }
 
   /* Fold individual tree codes as appropriate.  */
-  switch (code)
+  بدل (code)
     {
-    case COMPOUND_LITERAL_EXPR:
+    حالة COMPOUND_LITERAL_اوڠکاڤن:
       /* Any non-constancy will have been marked in a containing
 	 C_MAYBE_CONST_EXPR; there is no more folding to do here.  */
-      goto out;
+      اذهب out;
 
-    case COMPONENT_REF:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      op1 = TREE_OPERAND (expr, 1);
-      op2 = TREE_OPERAND (expr, 2);
+    حالة COMPONENT_REF:
+      orig_op0 = op0 = ڤوکوق_OPERAND (اوڠکاڤن, 0);
+      op1 = ڤوکوق_OPERAND (اوڠکاڤن, 1);
+      op2 = ڤوکوق_OPERAND (اوڠکاڤن, 2);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
-      if (op0 != orig_op0)
-	ret = build3 (COMPONENT_REF, TREE_TYPE (expr), op0, op1, op2);
-      if (ret != expr)
+      إذا (op0 != orig_op0)
+	ret = build3 (COMPONENT_REF, ڤوکوق_TYPE (اوڠکاڤن), op0, op1, op2);
+      إذا (ret != اوڠکاڤن)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  ڤوکوق_READONLY (ret) = ڤوکوق_READONLY (اوڠکاڤن);
+	  ڤوکوق_THIS_VOLATILE (ret) = ڤوکوق_THIS_VOLATILE (اوڠکاڤن);
 	}
-      if (!lval)
+      إذا (!lval)
 	ret = fold (ret);
-      goto out;
+      اذهب out;
 
-    case ARRAY_REF:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      op2 = TREE_OPERAND (expr, 2);
-      op3 = TREE_OPERAND (expr, 3);
+    حالة ARRAY_REF:
+      orig_op0 = op0 = ڤوکوق_OPERAND (اوڠکاڤن, 0);
+      orig_op1 = op1 = ڤوکوق_OPERAND (اوڠکاڤن, 1);
+      op2 = ڤوکوق_OPERAND (اوڠکاڤن, 2);
+      op3 = ڤوکوق_OPERAND (اوڠکاڤن, 3);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
       op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, خطأ);
       STRIP_TYPE_NOPS (op1);
       /* Fold "foo"[2] in initializers.  */
-      if (!lval && in_init)
+      إذا (!lval && in_init)
 	{
-	  ret = c_fold_array_ref (TREE_TYPE (expr), op0, op1);
-	  if (ret)
-	    goto out;
-	  ret = expr;
+	  ret = c_fold_array_ref (ڤوکوق_TYPE (اوڠکاڤن), op0, op1);
+	  إذا (ret)
+	    اذهب out;
+	  ret = اوڠکاڤن;
 	}
-      if (op0 != orig_op0 || op1 != orig_op1)
-	ret = build4 (ARRAY_REF, TREE_TYPE (expr), op0, op1, op2, op3);
-      if (ret != expr)
+      إذا (op0 != orig_op0 || op1 != orig_op1)
+	ret = build4 (ARRAY_REF, ڤوکوق_TYPE (اوڠکاڤن), op0, op1, op2, op3);
+      إذا (ret != اوڠکاڤن)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  ڤوکوق_READONLY (ret) = ڤوکوق_READONLY (اوڠکاڤن);
+	  ڤوکوق_SIDE_EFFECTS (ret) = ڤوکوق_SIDE_EFFECTS (اوڠکاڤن);
+	  ڤوکوق_THIS_VOLATILE (ret) = ڤوکوق_THIS_VOLATILE (اوڠکاڤن);
 	}
-      if (!lval)
+      إذا (!lval)
 	ret = fold (ret);
-      goto out;
+      اذهب out;
 
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
+    حالة MODIFY_اوڠکاڤن:
+    حالة PREDECREMENT_اوڠکاڤن:
+    حالة PREINCREMENT_اوڠکاڤن:
+    حالة POSTDECREMENT_اوڠکاڤن:
+    حالة POSTINCREMENT_اوڠکاڤن:
       op0_lval = true;
       /* FALLTHRU */
-    case COMPOUND_EXPR:
-    case PLUS_EXPR:
-    case MINUS_EXPR:
-    case MULT_EXPR:
-    case POINTER_PLUS_EXPR:
-    case POINTER_DIFF_EXPR:
-    case TRUNC_DIV_EXPR:
-    case CEIL_DIV_EXPR:
-    case FLOOR_DIV_EXPR:
-    case TRUNC_MOD_EXPR:
-    case RDIV_EXPR:
-    case EXACT_DIV_EXPR:
-    case LSHIFT_EXPR:
-    case RSHIFT_EXPR:
-    case LROTATE_EXPR:
-    case RROTATE_EXPR:
-    case BIT_IOR_EXPR:
-    case BIT_XOR_EXPR:
-    case BIT_AND_EXPR:
-    case LT_EXPR:
-    case LE_EXPR:
-    case GT_EXPR:
-    case GE_EXPR:
-    case EQ_EXPR:
-    case NE_EXPR:
-    case COMPLEX_EXPR:
-    case TRUTH_AND_EXPR:
-    case TRUTH_OR_EXPR:
-    case TRUTH_XOR_EXPR:
-    case UNORDERED_EXPR:
-    case ORDERED_EXPR:
-    case UNLT_EXPR:
-    case UNLE_EXPR:
-    case UNGT_EXPR:
-    case UNGE_EXPR:
-    case UNEQ_EXPR:
-    case MEM_REF:
+    حالة COMPOUND_اوڠکاڤن:
+    حالة PLUS_اوڠکاڤن:
+    حالة MINUS_اوڠکاڤن:
+    حالة MULT_اوڠکاڤن:
+    حالة POINTER_PLUS_اوڠکاڤن:
+    حالة POINTER_DIFF_اوڠکاڤن:
+    حالة TRUNC_DIV_اوڠکاڤن:
+    حالة CEIL_DIV_اوڠکاڤن:
+    حالة FLOOR_DIV_اوڠکاڤن:
+    حالة TRUNC_MOD_اوڠکاڤن:
+    حالة RDIV_اوڠکاڤن:
+    حالة EXACT_DIV_اوڠکاڤن:
+    حالة LSHIFT_اوڠکاڤن:
+    حالة RSHIFT_اوڠکاڤن:
+    حالة LROTATE_اوڠکاڤن:
+    حالة RROTATE_اوڠکاڤن:
+    حالة BIT_IOR_اوڠکاڤن:
+    حالة BIT_XOR_اوڠکاڤن:
+    حالة BIT_AND_اوڠکاڤن:
+    حالة LT_اوڠکاڤن:
+    حالة LE_اوڠکاڤن:
+    حالة GT_اوڠکاڤن:
+    حالة GE_اوڠکاڤن:
+    حالة EQ_اوڠکاڤن:
+    حالة NE_اوڠکاڤن:
+    حالة COMPLEX_اوڠکاڤن:
+    حالة TRUTH_AND_اوڠکاڤن:
+    حالة TRUTH_OR_اوڠکاڤن:
+    حالة TRUTH_XOR_اوڠکاڤن:
+    حالة UNORDERED_اوڠکاڤن:
+    حالة ORDERED_اوڠکاڤن:
+    حالة UNLT_اوڠکاڤن:
+    حالة UNLE_اوڠکاڤن:
+    حالة UNGT_اوڠکاڤن:
+    حالة UNGE_اوڠکاڤن:
+    حالة UNEQ_اوڠکاڤن:
+    حالة MEM_REF:
       /* Binary operations evaluating both arguments (increment and
 	 decrement are binary internally in GCC).  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
+      orig_op0 = op0 = ڤوکوق_OPERAND (اوڠکاڤن, 0);
+      orig_op1 = op1 = ڤوکوق_OPERAND (اوڠکاڤن, 1);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
       /* The RHS of a MODIFY_EXPR was fully folded when building that
 	 expression for the sake of conversion warnings.  */
-      if (code != MODIFY_EXPR)
+      إذا (code != MODIFY_اوڠکاڤن)
 	op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				     maybe_const_itself, for_int_const, false);
+				     maybe_const_itself, for_int_const, خطأ);
       STRIP_TYPE_NOPS (op1);
 
-      if (for_int_const && (TREE_CODE (op0) != INTEGER_CST
-			    || TREE_CODE (op1) != INTEGER_CST))
-	goto out;
+      إذا (for_int_const && (ڤوکوق_CODE (op0) != INTEGER_CST
+			    || ڤوکوق_CODE (op1) != INTEGER_CST))
+	اذهب out;
 
-      if (TREE_CODE_CLASS (code) == tcc_comparison
-	  && TREE_CODE (TREE_TYPE (op0)) == NULLPTR_TYPE
-	  && TREE_CODE (TREE_TYPE (op1)) == NULLPTR_TYPE)
+      إذا (ڤوکوق_CODE_CLASS (code) == tcc_comparison
+	  && ڤوکوق_CODE (ڤوکوق_TYPE (op0)) == NULLPTR_TYPE
+	  && ڤوکوق_CODE (ڤوکوق_TYPE (op1)) == NULLPTR_TYPE)
 	{
-	  switch (code)
+	  بدل (code)
 	    {
-	    case EQ_EXPR:
-	      ret = constant_boolean_node (true, TREE_TYPE (expr));
-	      break;
-	    case NE_EXPR:
-	      ret = constant_boolean_node (false, TREE_TYPE (expr));
-	      break;
-	    default:
+	    حالة EQ_اوڠکاڤن:
+	      ret = constant_boolean_نود (true, ڤوکوق_TYPE (اوڠکاڤن));
+	      اكسر;
+	    حالة NE_اوڠکاڤن:
+	      ret = constant_boolean_نود (خطأ, ڤوکوق_TYPE (اوڠکاڤن));
+	      اكسر;
+	    افتراضي:
 	      gcc_unreachable ();
 	    }
-	  ret = omit_two_operands_loc (loc, TREE_TYPE (expr), ret,
+	  ret = omit_two_operands_loc (loc, ڤوکوق_TYPE (اوڠکاڤن), ret,
 				       op0, op1);
 	}
-      else if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      وإلا إذا (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
-	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
-	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
-	ret = fold (expr);
-      if (TREE_OVERFLOW_P (ret)
-	  && !TREE_OVERFLOW_P (op0)
-	  && !(BINARY_CLASS_P (op0) && TREE_OVERFLOW_P (TREE_OPERAND (op0, 1)))
-	  && !TREE_OVERFLOW_P (op1))
-	overflow_warning (EXPR_LOC_OR_LOC (expr, input_location), ret, expr);
-      if (code == LSHIFT_EXPR
-	  && TREE_CODE (orig_op0) != INTEGER_CST
-	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
-	  && TREE_CODE (op0) == INTEGER_CST
+	  ? fold_build2_initializer_loc (loc, code, ڤوکوق_TYPE (اوڠکاڤن), op0, op1)
+	  : fold_build2_loc (loc, code, ڤوکوق_TYPE (اوڠکاڤن), op0, op1);
+      وإلا
+	ret = fold (اوڠکاڤن);
+      إذا (ڤوکوق_OVERFLOW_P (ret)
+	  && !ڤوکوق_OVERFLOW_P (op0)
+	  && !(بيناري_CLASS_P (op0) && ڤوکوق_OVERFLOW_P (ڤوکوق_OPERAND (op0, 1)))
+	  && !ڤوکوق_OVERFLOW_P (op1))
+	overflow_warning (اوڠکاڤن_LOC_OR_LOC (اوڠکاڤن, ماسوقن_location), ret, اوڠکاڤن);
+      إذا (code == LSHIFT_اوڠکاڤن
+	  && ڤوکوق_CODE (orig_op0) != INTEGER_CST
+	  && (ڤوکوق_CODE (ڤوکوق_TYPE (orig_op0)) == INTEGER_TYPE
+	      || ڤوکوق_CODE (ڤوکوق_TYPE (orig_op0)) == BITINT_TYPE)
+	  && ڤوکوق_CODE (op0) == INTEGER_CST
 	  && c_inhibit_evaluation_warnings == 0
-	  && !TYPE_OVERFLOW_WRAPS (TREE_TYPE (orig_op0))
-	  && tree_int_cst_sgn (op0) < 0)
-	warning_at (loc, OPT_Wshift_negative_value,
+	  && !TYPE_OVERFLOW_WRAPS (ڤوکوق_TYPE (orig_op0))
+	  && ڤوکوق_int_cst_sgn (op0) < 0)
+	warning_at (loc, OPT_Wshift_negative_نيلاي,
 		    "left shift of negative value");
-      if ((code == LSHIFT_EXPR
-	   || code == RSHIFT_EXPR
-	   || code == LROTATE_EXPR
-	   || code == RROTATE_EXPR)
-	  && TREE_CODE (orig_op1) != INTEGER_CST
-	  && TREE_CODE (op1) == INTEGER_CST
-	  && TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
+      إذا ((code == LSHIFT_اوڠکاڤن
+	   || code == RSHIFT_اوڠکاڤن
+	   || code == LROTATE_اوڠکاڤن
+	   || code == RROTATE_اوڠکاڤن)
+	  && ڤوکوق_CODE (orig_op1) != INTEGER_CST
+	  && ڤوکوق_CODE (op1) == INTEGER_CST
+	  && ڤوکوق_CODE (ڤوکوق_TYPE (orig_op1)) == INTEGER_TYPE
 	  && c_inhibit_evaluation_warnings == 0)
 	{
-	  if (tree_int_cst_sgn (op1) < 0)
-	    warning_at (loc, OPT_Wshift_count_negative,
-			(code == LSHIFT_EXPR
+	  إذا (ڤوکوق_int_cst_sgn (op1) < 0)
+	    warning_at (loc, OPT_Wshift_کيراءن_negative,
+			(code == LSHIFT_اوڠکاڤن
 			 ? G_("left shift count is negative")
 			 : G_("right shift count is negative")));
-	  else if ((TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-		    || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
-		    || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
-		   && compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (orig_op0)))
+	  وإلا إذا ((ڤوکوق_CODE (ڤوکوق_TYPE (orig_op0)) == INTEGER_TYPE
+		    || ڤوکوق_CODE (ڤوکوق_TYPE (orig_op0)) == BITINT_TYPE
+		    || ڤوکوق_CODE (ڤوکوق_TYPE (orig_op0)) == FIXED_POINT_TYPE)
+		   && compare_ڤوکوق_int (op1,
+					TYPE_PRECISION (ڤوکوق_TYPE (orig_op0)))
 		      >= 0
-		   && !warning_suppressed_p (expr, OPT_Wshift_count_overflow))
-	    warning_at (loc, OPT_Wshift_count_overflow,
-			(code == LSHIFT_EXPR
+		   && !warning_suppressed_p (اوڠکاڤن, OPT_Wshift_کيراءن_overflow))
+	    warning_at (loc, OPT_Wshift_کيراءن_overflow,
+			(code == LSHIFT_اوڠکاڤن
 			 ? G_("left shift count >= width of type")
 			 : G_("right shift count >= width of type")));
-	  else if (TREE_CODE (TREE_TYPE (orig_op0)) == VECTOR_TYPE
-		   && compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (TREE_TYPE (orig_op0))))
+	  وإلا إذا (ڤوکوق_CODE (ڤوکوق_TYPE (orig_op0)) == VECTOR_TYPE
+		   && compare_ڤوکوق_int (op1,
+					TYPE_PRECISION (ڤوکوق_TYPE (ڤوکوق_TYPE (orig_op0))))
 		      >= 0)
-	    warning_at (loc, OPT_Wshift_count_overflow,
-			code == LSHIFT_EXPR
+	    warning_at (loc, OPT_Wshift_کيراءن_overflow,
+			code == LSHIFT_اوڠکاڤن
 			? G_("left shift count >= width of vector element")
 			: G_("right shift count >= width of vector element"));
 	}
-      if (code == LSHIFT_EXPR
+      إذا (code == LSHIFT_اوڠکاڤن
 	  /* If either OP0 has been folded to INTEGER_CST...  */
-	  && ((TREE_CODE (orig_op0) != INTEGER_CST
-	       && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-		   || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
-	       && TREE_CODE (op0) == INTEGER_CST)
+	  && ((ڤوکوق_CODE (orig_op0) != INTEGER_CST
+	       && (ڤوکوق_CODE (ڤوکوق_TYPE (orig_op0)) == INTEGER_TYPE
+		   || ڤوکوق_CODE (ڤوکوق_TYPE (orig_op0)) == BITINT_TYPE)
+	       && ڤوکوق_CODE (op0) == INTEGER_CST)
 	      /* ...or if OP1 has been folded to INTEGER_CST...  */
-	      || (TREE_CODE (orig_op1) != INTEGER_CST
-		  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
-		      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE)
-		  && TREE_CODE (op1) == INTEGER_CST))
+	      || (ڤوکوق_CODE (orig_op1) != INTEGER_CST
+		  && (ڤوکوق_CODE (ڤوکوق_TYPE (orig_op1)) == INTEGER_TYPE
+		      || ڤوکوق_CODE (ڤوکوق_TYPE (orig_op1)) == BITINT_TYPE)
+		  && ڤوکوق_CODE (op1) == INTEGER_CST))
 	  && c_inhibit_evaluation_warnings == 0)
 	/* ...then maybe we can detect an overflow.  */
 	maybe_warn_shift_overflow (loc, op0, op1);
-      if ((code == TRUNC_DIV_EXPR
-	   || code == CEIL_DIV_EXPR
-	   || code == FLOOR_DIV_EXPR
-	   || code == EXACT_DIV_EXPR
-	   || code == TRUNC_MOD_EXPR)
-	  && TREE_CODE (orig_op1) != INTEGER_CST
-	  && TREE_CODE (op1) == INTEGER_CST
-	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
-	  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE))
+      إذا ((code == TRUNC_DIV_اوڠکاڤن
+	   || code == CEIL_DIV_اوڠکاڤن
+	   || code == FLOOR_DIV_اوڠکاڤن
+	   || code == EXACT_DIV_اوڠکاڤن
+	   || code == TRUNC_MOD_اوڠکاڤن)
+	  && ڤوکوق_CODE (orig_op1) != INTEGER_CST
+	  && ڤوکوق_CODE (op1) == INTEGER_CST
+	  && (ڤوکوق_CODE (ڤوکوق_TYPE (orig_op0)) == INTEGER_TYPE
+	      || ڤوکوق_CODE (ڤوکوق_TYPE (orig_op0)) == BITINT_TYPE
+	      || ڤوکوق_CODE (ڤوکوق_TYPE (orig_op0)) == FIXED_POINT_TYPE)
+	  && (ڤوکوق_CODE (ڤوکوق_TYPE (orig_op1)) == INTEGER_TYPE
+	      || ڤوکوق_CODE (ڤوکوق_TYPE (orig_op1)) == BITINT_TYPE))
 	warn_for_div_by_zero (loc, op1);
-      if (code == MEM_REF
-	  && ret != expr
-	  && TREE_CODE (ret) == MEM_REF)
+      إذا (code == MEM_REF
+	  && ret != اوڠکاڤن
+	  && ڤوکوق_CODE (ret) == MEM_REF)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  ڤوکوق_READONLY (ret) = ڤوکوق_READONLY (اوڠکاڤن);
+	  ڤوکوق_SIDE_EFFECTS (ret) = ڤوکوق_SIDE_EFFECTS (اوڠکاڤن);
+	  ڤوکوق_THIS_VOLATILE (ret) = ڤوکوق_THIS_VOLATILE (اوڠکاڤن);
 	}
-      goto out;
+      اذهب out;
 
-    case ADDR_EXPR:
+    حالة ADDR_اوڠکاڤن:
       op0_lval = true;
-      goto unary;
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-    case VIEW_CONVERT_EXPR:
+      اذهب unary;
+    حالة REALPART_اوڠکاڤن:
+    حالة IMAGPART_اوڠکاڤن:
+    حالة VIEW_CONVERT_اوڠکاڤن:
       op0_lval = lval;
       /* FALLTHRU */
-    case INDIRECT_REF:
-    case FIX_TRUNC_EXPR:
-    case FLOAT_EXPR:
+    حالة INDIRECT_REF:
+    حالة FIX_TRUNC_اوڠکاڤن:
+    حالة FLOAT_اوڠکاڤن:
     CASE_CONVERT:
-    case ADDR_SPACE_CONVERT_EXPR:
-    case NON_LVALUE_EXPR:
-    case NEGATE_EXPR:
-    case BIT_NOT_EXPR:
-    case TRUTH_NOT_EXPR:
-    case CONJ_EXPR:
-    case PAREN_EXPR:
+    حالة ADDR_SPACE_CONVERT_اوڠکاڤن:
+    حالة NON_LVALUE_اوڠکاڤن:
+    حالة NEGATE_اوڠکاڤن:
+    حالة BIT_NOT_اوڠکاڤن:
+    حالة TRUTH_NOT_اوڠکاڤن:
+    حالة CONJ_اوڠکاڤن:
+    حالة PAREN_اوڠکاڤن:
     unary:
       /* Unary operations.  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
+      orig_op0 = op0 = ڤوکوق_OPERAND (اوڠکاڤن, 0);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
 
-      if (for_int_const && TREE_CODE (op0) != INTEGER_CST)
-	goto out;
+      إذا (for_int_const && ڤوکوق_CODE (op0) != INTEGER_CST)
+	اذهب out;
 
       /* ??? Cope with user tricks that amount to offsetof.  The middle-end is
 	 not prepared to deal with them if they occur in initializers.  */
-      if (op0 != orig_op0
-	  && code == ADDR_EXPR
-	  && (op1 = get_base_address (op0)) != NULL_TREE
+      إذا (op0 != orig_op0
+	  && code == ADDR_اوڠکاڤن
+	  && (op1 = get_base_address (op0)) != NULL_ڤوکوق
 	  && INDIRECT_REF_P (op1)
-	  && TREE_CONSTANT (TREE_OPERAND (op1, 0)))
-	ret = fold_offsetof (op0, TREE_TYPE (expr));
-      else if (op0 != orig_op0 || in_init)
+	  && ڤوکوق_CONSTANT (ڤوکوق_OPERAND (op1, 0)))
+	ret = fold_offsetof (op0, ڤوکوق_TYPE (اوڠکاڤن));
+      وإلا إذا (op0 != orig_op0 || in_init)
 	ret = in_init
-	  ? fold_build1_initializer_loc (loc, code, TREE_TYPE (expr), op0)
-	  : fold_build1_loc (loc, code, TREE_TYPE (expr), op0);
-      else
-	ret = fold (expr);
-      if (code == INDIRECT_REF
-	  && ret != expr
+	  ? fold_build1_initializer_loc (loc, code, ڤوکوق_TYPE (اوڠکاڤن), op0)
+	  : fold_build1_loc (loc, code, ڤوکوق_TYPE (اوڠکاڤن), op0);
+      وإلا
+	ret = fold (اوڠکاڤن);
+      إذا (code == INDIRECT_REF
+	  && ret != اوڠکاڤن
 	  && INDIRECT_REF_P (ret))
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  ڤوکوق_READONLY (ret) = ڤوکوق_READONLY (اوڠکاڤن);
+	  ڤوکوق_SIDE_EFFECTS (ret) = ڤوکوق_SIDE_EFFECTS (اوڠکاڤن);
+	  ڤوکوق_THIS_VOLATILE (ret) = ڤوکوق_THIS_VOLATILE (اوڠکاڤن);
 	}
-      switch (code)
+      بدل (code)
 	{
-	case FIX_TRUNC_EXPR:
-	case FLOAT_EXPR:
+	حالة FIX_TRUNC_اوڠکاڤن:
+	حالة FLOAT_اوڠکاڤن:
 	CASE_CONVERT:
 	  /* Don't warn about explicit conversions.  We will already
 	     have warned about suspect implicit conversions.  */
-	  break;
+	  اكسر;
 
-	default:
-	  if (TREE_OVERFLOW_P (ret) && !TREE_OVERFLOW_P (op0))
-	    overflow_warning (EXPR_LOCATION (expr), ret, op0);
-	  break;
+	افتراضي:
+	  إذا (ڤوکوق_OVERFLOW_P (ret) && !ڤوکوق_OVERFLOW_P (op0))
+	    overflow_warning (اوڠکاڤن_LOCATION (اوڠکاڤن), ret, op0);
+	  اكسر;
 	}
-      goto out;
+      اذهب out;
 
-    case TRUTH_ANDIF_EXPR:
-    case TRUTH_ORIF_EXPR:
+    حالة TRUTH_ANDIF_اوڠکاڤن:
+    حالة TRUTH_ORIF_اوڠکاڤن:
       /* Binary operations not necessarily evaluating both
 	 arguments.  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
+      orig_op0 = op0 = ڤوکوق_OPERAND (اوڠکاڤن, 0);
+      orig_op1 = op1 = ڤوکوق_OPERAND (اوڠکاڤن, 1);
       op0 = c_fully_fold_internal (op0, in_init, &op0_const, &op0_const_self,
-				   for_int_const, false);
+				   for_int_const, خطأ);
       STRIP_TYPE_NOPS (op0);
 
-      unused_p = (op0 == (code == TRUTH_ANDIF_EXPR
-			  ? truthvalue_false_node
-			  : truthvalue_true_node));
+      unused_p = (op0 == (code == TRUTH_ANDIF_اوڠکاڤن
+			  ? truthvalue_false_نود
+			  : truthvalue_true_نود));
       c_disable_warnings (unused_p);
       op1 = c_fully_fold_internal (op1, in_init, &op1_const, &op1_const_self,
-				   for_int_const, false);
+				   for_int_const, خطأ);
       STRIP_TYPE_NOPS (op1);
       c_enable_warnings (unused_p);
 
-      if (for_int_const
-	  && (TREE_CODE (op0) != INTEGER_CST
+      إذا (for_int_const
+	  && (ڤوکوق_CODE (op0) != INTEGER_CST
 	      /* Require OP1 be an INTEGER_CST only if it's evaluated.  */
-	      || (!unused_p && TREE_CODE (op1) != INTEGER_CST)))
-	goto out;
+	      || (!unused_p && ڤوکوق_CODE (op1) != INTEGER_CST)))
+	اذهب out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      إذا (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
-	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
-	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
-	ret = fold (expr);
+	  ? fold_build2_initializer_loc (loc, code, ڤوکوق_TYPE (اوڠکاڤن), op0, op1)
+	  : fold_build2_loc (loc, code, ڤوکوق_TYPE (اوڠکاڤن), op0, op1);
+      وإلا
+	ret = fold (اوڠکاڤن);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      إذا (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && (code == TRUTH_ANDIF_EXPR
-		? op0 == truthvalue_false_node
-		: op0 == truthvalue_true_node)))
+	    && (code == TRUTH_ANDIF_اوڠکاڤن
+		? op0 == truthvalue_false_نود
+		: op0 == truthvalue_true_نود)))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      إذا (!(op0_const
 	    && op0_const_self
-	    && (code == TRUTH_ANDIF_EXPR
-		? op0 == truthvalue_false_node
-		: op0 == truthvalue_true_node)))
+	    && (code == TRUTH_ANDIF_اوڠکاڤن
+		? op0 == truthvalue_false_نود
+		: op0 == truthvalue_true_نود)))
 	*maybe_const_itself &= op1_const_self;
-      goto out;
+      اذهب out;
 
-    case COND_EXPR:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      orig_op2 = op2 = TREE_OPERAND (expr, 2);
+    حالة COND_اوڠکاڤن:
+      orig_op0 = op0 = ڤوکوق_OPERAND (اوڠکاڤن, 0);
+      orig_op1 = op1 = ڤوکوق_OPERAND (اوڠکاڤن, 1);
+      orig_op2 = op2 = ڤوکوق_OPERAND (اوڠکاڤن, 2);
       op0 = c_fully_fold_internal (op0, in_init, &op0_const, &op0_const_self,
-				   for_int_const, false);
+				   for_int_const, خطأ);
 
       STRIP_TYPE_NOPS (op0);
-      c_disable_warnings (op0 == truthvalue_false_node);
+      c_disable_warnings (op0 == truthvalue_false_نود);
       op1 = c_fully_fold_internal (op1, in_init, &op1_const, &op1_const_self,
-				   for_int_const, false);
+				   for_int_const, خطأ);
       STRIP_TYPE_NOPS (op1);
-      c_enable_warnings (op0 == truthvalue_false_node);
+      c_enable_warnings (op0 == truthvalue_false_نود);
 
-      c_disable_warnings (op0 == truthvalue_true_node);
+      c_disable_warnings (op0 == truthvalue_true_نود);
       op2 = c_fully_fold_internal (op2, in_init, &op2_const, &op2_const_self,
-				   for_int_const, false);
+				   for_int_const, خطأ);
       STRIP_TYPE_NOPS (op2);
-      c_enable_warnings (op0 == truthvalue_true_node);
+      c_enable_warnings (op0 == truthvalue_true_نود);
 
-      if (for_int_const
-	  && (TREE_CODE (op0) != INTEGER_CST
+      إذا (for_int_const
+	  && (ڤوکوق_CODE (op0) != INTEGER_CST
 	      /* Only the evaluated operand must be an INTEGER_CST.  */
-	      || (op0 == truthvalue_true_node
-		  ? TREE_CODE (op1) != INTEGER_CST
-		  : TREE_CODE (op2) != INTEGER_CST)))
-	goto out;
+	      || (op0 == truthvalue_true_نود
+		  ? ڤوکوق_CODE (op1) != INTEGER_CST
+		  : ڤوکوق_CODE (op2) != INTEGER_CST)))
+	اذهب out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
-	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
-	ret = fold (expr);
+      إذا (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+	ret = fold_build3_loc (loc, code, ڤوکوق_TYPE (اوڠکاڤن), op0, op1, op2);
+      وإلا
+	ret = fold (اوڠکاڤن);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      إذا (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_false_node))
+	    && op0 == truthvalue_false_نود))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      إذا (!(op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_false_node))
+	    && op0 == truthvalue_false_نود))
 	*maybe_const_itself &= op1_const_self;
-      if (!(flag_isoc99
+      إذا (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_true_node))
+	    && op0 == truthvalue_true_نود))
 	*maybe_const_operands &= op2_const;
-      if (!(op0_const
+      إذا (!(op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_true_node))
+	    && op0 == truthvalue_true_نود))
 	*maybe_const_itself &= op2_const_self;
-      goto out;
+      اذهب out;
 
-    case VEC_COND_EXPR:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      orig_op2 = op2 = TREE_OPERAND (expr, 2);
+    حالة VEC_COND_اوڠکاڤن:
+      orig_op0 = op0 = ڤوکوق_OPERAND (اوڠکاڤن, 0);
+      orig_op1 = op1 = ڤوکوق_OPERAND (اوڠکاڤن, 1);
+      orig_op2 = op2 = ڤوکوق_OPERAND (اوڠکاڤن, 2);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, خطأ);
       STRIP_TYPE_NOPS (op0);
       op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, خطأ);
       STRIP_TYPE_NOPS (op1);
       op2 = c_fully_fold_internal (op2, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, خطأ);
       STRIP_TYPE_NOPS (op2);
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
-	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
-	ret = fold (expr);
-      goto out;
+      إذا (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+	ret = fold_build3_loc (loc, code, ڤوکوق_TYPE (اوڠکاڤن), op0, op1, op2);
+      وإلا
+	ret = fold (اوڠکاڤن);
+      اذهب out;
 
-    case EXCESS_PRECISION_EXPR:
+    حالة EXCESS_PRECISION_اوڠکاڤن:
       /* Each case where an operand with excess precision may be
 	 encountered must remove the EXCESS_PRECISION_EXPR around
 	 inner operands and possibly put one around the whole
@@ -676,26 +676,26 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	 appropriate in any particular case.  */
       gcc_unreachable ();
 
-    case SAVE_EXPR:
+    حالة SAVE_اوڠکاڤن:
       /* Make sure to fold the contents of a SAVE_EXPR exactly once.  */
-      op0 = TREE_OPERAND (expr, 0);
-      if (!SAVE_EXPR_FOLDED_P (expr))
+      op0 = ڤوکوق_OPERAND (اوڠکاڤن, 0);
+      إذا (!SAVE_اوڠکاڤن_FOLDED_P (اوڠکاڤن))
 	{
 	  op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				       maybe_const_itself, for_int_const,
-				       false);
-	  TREE_OPERAND (expr, 0) = op0;
-	  SAVE_EXPR_FOLDED_P (expr) = true;
+				       خطأ);
+	  ڤوکوق_OPERAND (اوڠکاڤن, 0) = op0;
+	  SAVE_اوڠکاڤن_FOLDED_P (اوڠکاڤن) = true;
 	}
       /* Return the SAVE_EXPR operand if it is invariant.  */
-      if (tree_invariant_p (op0))
+      إذا (ڤوکوق_invariant_p (op0))
 	ret = op0;
-      goto out;
+      اذهب out;
 
-    default:
+    افتراضي:
       /* Various codes may appear through folding built-in functions
 	 and their arguments.  */
-      goto out;
+      اذهب out;
     }
 
  out:
@@ -703,27 +703,27 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      have been done by this point, so remove them again.  */
   nowarning |= warning_suppressed_p (ret, OPT_Woverflow);
   STRIP_TYPE_NOPS (ret);
-  if (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
+  إذا (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
     {
-      if (!CAN_HAVE_LOCATION_P (ret))
-	ret = build1 (NOP_EXPR, TREE_TYPE (ret), ret);
+      إذا (!CAN_HAVE_LOCATION_P (ret))
+	ret = build1 (NOP_اوڠکاڤن, ڤوکوق_TYPE (ret), ret);
       suppress_warning (ret, OPT_Woverflow);
     }
-  if (ret != expr)
+  إذا (ret != اوڠکاڤن)
     {
-      protected_set_expr_location (ret, loc);
-      if (IS_EXPR_CODE_CLASS (kind))
+      protected_set_اوڠکاڤن_location (ret, loc);
+      إذا (IS_اوڠکاڤن_CODE_CLASS (kind))
 	set_source_range (ret, old_range.m_start, old_range.m_finish);
     }
-  return ret;
+  أرجع ret;
 }
 
 /* Fold X for consideration by one of the warning functions when checking
    whether an expression has a constant value.  */
 
-tree
-fold_for_warn (tree x)
+ڤوکوق
+fold_for_warn (ڤوکوق x)
 {
   /* The C front-end has already folded X appropriately.  */
-  return x;
+  أرجع x;
 }
