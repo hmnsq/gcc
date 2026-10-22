@@ -18,70 +18,70 @@ along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "c-tree.h"
-#include "langhooks.h"
-#include "langhooks-def.h"
-#include "c-objc-common.h"
-#include "c-family/c-pragma.h"
-#include "c-parser.h"
+#شامل "config.h"
+#شامل "system.h"
+#شامل "coretypes.h"
+#شامل "c-tree.h"
+#شامل "langhooks.h"
+#شامل "langhooks-def.h"
+#شامل "c-objc-common.h"
+#شامل "c-family/c-pragma.h"
+#شامل "c-parser.h"
 
-enum c_language_kind c_language = clk_c;
+شمار c_language_قسم c_language = clk_c;
 
 /* Lang hooks common to C and ObjC are declared in c-objc-common.h;
    consequently, there should be very few hooks below.  */
 
-#undef LANG_HOOKS_NAME
-#define LANG_HOOKS_NAME "GNU C"
-#undef LANG_HOOKS_INIT
-#define LANG_HOOKS_INIT c_objc_common_init
-#undef LANG_HOOKS_INIT_TS
-#define LANG_HOOKS_INIT_TS c_common_init_ts
-#undef LANG_HOOKS_ENUM_UNDERLYING_BASE_TYPE
-#define LANG_HOOKS_ENUM_UNDERLYING_BASE_TYPE c_enum_underlying_base_type
+#تعریف_منسوخ LANG_HOOKS_NAME
+#تعریف_کرو LANG_HOOKS_NAME "GNU C"
+#تعریف_منسوخ LANG_HOOKS_INIT
+#تعریف_کرو LANG_HOOKS_INIT c_objc_common_init
+#تعریف_منسوخ LANG_HOOKS_INIT_TS
+#تعریف_کرو LANG_HOOKS_INIT_TS c_common_init_ts
+#تعریف_منسوخ LANG_HOOKS_ENUM_UNDERLYING_بنیاد_TYPE
+#تعریف_کرو LANG_HOOKS_ENUM_UNDERLYING_بنیاد_TYPE c_enum_underlying_بنیاد_type
 
-#if CHECKING_P
-#undef LANG_HOOKS_RUN_LANG_SELFTESTS
-#define LANG_HOOKS_RUN_LANG_SELFTESTS selftest::run_c_tests
-#endif /* #if CHECKING_P */
+#اگر CHECKING_P
+#تعریف_منسوخ LANG_HOOKS_تسلسل_LANG_SELFTESTS
+#تعریف_کرو LANG_HOOKS_تسلسل_LANG_SELFTESTS selftest::تسلسل_c_tests
+#اگر_ختم /* #if CHECKING_P */
 
-#undef LANG_HOOKS_GET_SUBSTRING_LOCATION
-#define LANG_HOOKS_GET_SUBSTRING_LOCATION c_get_substring_location
+#تعریف_منسوخ LANG_HOOKS_GET_SUBSTRING_LOCATION
+#تعریف_کرو LANG_HOOKS_GET_SUBSTRING_LOCATION c_get_substring_location
 
-#undef LANG_HOOKS_GET_SARIF_SOURCE_LANGUAGE
-#define LANG_HOOKS_GET_SARIF_SOURCE_LANGUAGE c_get_sarif_source_language
+#تعریف_منسوخ LANG_HOOKS_GET_SARIF_ماخذ_LANGUAGE
+#تعریف_کرو LANG_HOOKS_GET_SARIF_ماخذ_LANGUAGE c_get_sarif_ماخذ_language
 
 /* Each front end provides its own lang hook initializer.  */
-struct lang_hooks lang_hooks = LANG_HOOKS_INITIALIZER;
+ساخت lang_hooks lang_hooks = LANG_HOOKS_INITIALIZER;
 
 /* Get a value for the SARIF v2.1.0 "artifact.sourceLanguage" property,
    based on the list in SARIF v2.1.0 Appendix J.  */
 
-const char *
-c_get_sarif_source_language (const char *)
+ثابت حرف *
+c_get_sarif_ماخذ_language (ثابت حرف *)
 {
-  return "c";
+  واپس "c";
 }
 
 /* Implement c-family hook to register language-specific features for
    __has_{feature,extension}.  */
 
-void
-c_family_register_lang_features ()
+خالی
+c_family_رجسٹر_lang_features ()
 {
-  c_register_features ();
+  c_رجسٹر_features ();
 }
 
-#if CHECKING_P
+#اگر CHECKING_P
 
-namespace selftest {
+نامخلا selftest {
 
 /* Implementation of LANG_HOOKS_RUN_LANG_SELFTESTS for the C frontend.  */
 
-void
-run_c_tests (void)
+خالی
+تسلسل_c_tests (خالی)
 {
   /* Run selftests shared within the C family.  */
   c_family_tests ();
@@ -91,7 +91,7 @@ run_c_tests (void)
 
 } // namespace selftest
 
-#endif /* #if CHECKING_P */
+#اگر_ختم /* #if CHECKING_P */
 
 
-#include "gtype-c.h"
+#شامل "gtype-c.h"

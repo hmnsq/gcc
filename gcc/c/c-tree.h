@@ -17,225 +17,225 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_C_TREE_H
-#define GCC_C_TREE_H
+#اگر_غیر_تعریف_شدہ GCC_C_درخت_H
+#تعریف_کرو GCC_C_درخت_H
 
-#include "c-family/c-common.h"
-#include "diagnostic.h"
+#شامل "c-family/c-common.h"
+#شامل "diagnostic.h"
 
 /* struct lang_identifier is private to c-decl.cc, but langhooks.cc needs to
    know how big it is.  This is sanity-checked in c-decl.cc.  */
-#define C_SIZEOF_STRUCT_LANG_IDENTIFIER \
-  (sizeof (struct c_common_identifier) + 3 * sizeof (void *))
+#تعریف_کرو C_SIZEOF_STRUCT_LANG_IDENTIFIER \
+  (حجم (ساخت c_common_identifier) + 3 * حجم (خالی *))
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is read-only.  */
-#define C_TYPE_FIELDS_READONLY(TYPE) TREE_LANG_FLAG_1 (TYPE)
+#تعریف_کرو C_TYPE_FIELDS_READONLY(TYPE) درخت_LANG_FLAG_1 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is volatile.  */
-#define C_TYPE_FIELDS_VOLATILE(TYPE) TREE_LANG_FLAG_2 (TYPE)
+#تعریف_کرو C_TYPE_FIELDS_VOLATILE(TYPE) درخت_LANG_FLAG_2 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is
    volatile, restrict-qualified or atomic; that is, has a type not
    permitted for a constexpr object.  */
-#define C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) TREE_LANG_FLAG_4 (TYPE)
+#تعریف_کرو C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) درخت_LANG_FLAG_4 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component has a
    counted_by attribute.  */
-#define C_TYPE_FIELDS_HAS_COUNTED_BY(TYPE) TYPE_LANG_FLAG_3 (TYPE)
+#تعریف_کرو C_TYPE_FIELDS_HAS_COUNTED_BY(TYPE) TYPE_LANG_FLAG_3 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE or ENUMERAL_TYPE
    nonzero if the definition of the type has already started.  */
-#define C_TYPE_BEING_DEFINED(TYPE) TYPE_LANG_FLAG_0 (TYPE)
+#تعریف_کرو C_TYPE_BEING_DEFINED(TYPE) TYPE_LANG_FLAG_0 (TYPE)
 
 /* In an incomplete RECORD_TYPE, UNION_TYPE or ENUMERAL_TYPE, a list of
    variable declarations whose type would be completed by completing
    that type.  */
-#define C_TYPE_INCOMPLETE_VARS(TYPE) \
-  TYPE_LANG_SLOT_1 (TREE_CHECK4 (TYPE, RECORD_TYPE, UNION_TYPE, \
+#تعریف_کرو C_TYPE_INCOMPLETE_VARS(TYPE) \
+  TYPE_LANG_خانہ_1 (درخت_CHECK4 (TYPE, ریکارڈ_TYPE, UNION_TYPE, \
 				 QUAL_UNION_TYPE, ENUMERAL_TYPE))
 
 /* In an IDENTIFIER_NODE, nonzero if this identifier is actually a
    keyword.  C_RID_CODE (node) is then the RID_* value of the keyword.  */
-#define C_IS_RESERVED_WORD(ID) TREE_LANG_FLAG_0 (ID)
+#تعریف_کرو C_IS_RESERVED_لفظ(ID) درخت_LANG_FLAG_0 (ID)
 
 /* Record whether a type or decl was written with nonconstant size.
    Note that TYPE_SIZE may have simplified to a constant.  */
-#define C_TYPE_VARIABLE_SIZE(TYPE) TYPE_LANG_FLAG_1 (TYPE)
-#define C_DECL_VARIABLE_SIZE(TYPE) DECL_LANG_FLAG_0 (TYPE)
+#تعریف_کرو C_TYPE_VARIABLE_سائز(TYPE) TYPE_LANG_FLAG_1 (TYPE)
+#تعریف_کرو C_DECL_VARIABLE_سائز(TYPE) DECL_LANG_FLAG_0 (TYPE)
 
 /* Record whether a type is variably modified. */
-#define C_TYPE_VARIABLY_MODIFIED(TYPE) TYPE_LANG_FLAG_6 (TYPE)
+#تعریف_کرو C_TYPE_VARIABLY_MODIFIED(TYPE) TYPE_LANG_FLAG_6 (TYPE)
 
 
 /* Record whether a type is defined inside a struct or union type.
    This is used for -Wc++-compat. */
-#define C_TYPE_DEFINED_IN_STRUCT(TYPE) TYPE_LANG_FLAG_2 (TYPE)
+#تعریف_کرو C_TYPE_DEFINED_اندر_STRUCT(TYPE) TYPE_LANG_FLAG_2 (TYPE)
 
 /* Record whether a typedef for type `int' was actually `signed int'.  */
-#define C_TYPEDEF_EXPLICITLY_SIGNED(EXP) DECL_LANG_FLAG_1 (EXP)
+#تعریف_کرو C_TYPEDEF_EXPLICITLY_SIGNED(EXP) DECL_LANG_FLAG_1 (EXP)
 
 /* For a FUNCTION_DECL, nonzero if it was defined without an explicit
    return type.  */
-#define C_FUNCTION_IMPLICIT_INT(EXP) DECL_LANG_FLAG_1 (EXP)
+#تعریف_کرو C_FUNCTION_IMPLICIT_INT(EXP) DECL_LANG_FLAG_1 (EXP)
 
 /* For a FUNCTION_DECL, nonzero if it was an implicit declaration.  */
-#define C_DECL_IMPLICIT(EXP) DECL_LANG_FLAG_2 (EXP)
+#تعریف_کرو C_DECL_IMPLICIT(EXP) DECL_LANG_FLAG_2 (EXP)
 
 /* For a PARM_DECL, nonzero if it was declared as an array.  */
-#define C_ARRAY_PARAMETER(NODE) DECL_LANG_FLAG_0 (NODE)
+#تعریف_کرو C_ARRAY_PARAMETER(گرہ_2) DECL_LANG_FLAG_0 (گرہ_2)
 
 /* For FUNCTION_DECLs, evaluates true if the decl is a nested
    function that requires a non-local context.  */
-#define C_FUNC_NONLOCAL_CONTEXT(EXP)		\
+#تعریف_کرو C_FUNC_NONLOCAL_CONTEXT(EXP)		\
   DECL_LANG_FLAG_4 (FUNCTION_DECL_CHECK (EXP))
 
 /* For FUNCTION_DECLs, evaluates true if the decl is built-in but has
    been declared.  */
-#define C_DECL_DECLARED_BUILTIN(EXP)		\
+#تعریف_کرو C_DECL_DECLARED_BUILTIN(EXP)		\
   DECL_LANG_FLAG_3 (FUNCTION_DECL_CHECK (EXP))
 
 /* For FUNCTION_DECLs, evaluates true if the decl is built-in, has a
    built-in prototype and does not have a non-built-in prototype.  */
-#define C_DECL_BUILTIN_PROTOTYPE(EXP)		\
+#تعریف_کرو C_DECL_BUILTIN_PROTOTYPE(EXP)		\
   DECL_LANG_FLAG_6 (FUNCTION_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical name of a loop.  */
-#define C_DECL_LOOP_NAME(EXP) DECL_LANG_FLAG_3 (LABEL_DECL_CHECK (EXP))
+#تعریف_کرو C_DECL_LOOP_NAME(EXP) DECL_LANG_FLAG_3 (LABEL_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical name of a switch.  During parsing of
    ObjC foreach named loop both C_DECL_LOOP_NAME and C_DECL_SWITCH_NAME
    are temporarily set.  */
-#define C_DECL_SWITCH_NAME(EXP) DECL_LANG_FLAG_5 (LABEL_DECL_CHECK (EXP))
+#تعریف_کرو C_DECL_SWITCH_NAME(EXP) DECL_LANG_FLAG_5 (LABEL_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical name of a loop or switch being
    valid for use in break identifier or continue identifier statements.  */
-#define C_DECL_LOOP_SWITCH_NAME_VALID(EXP) \
+#تعریف_کرو C_DECL_LOOP_SWITCH_NAME_VALID(EXP) \
   DECL_LANG_FLAG_6 (LABEL_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical loop or switch names which were actually
    used in one or more break identifier or continue identifier statements.  */
-#define C_DECL_LOOP_SWITCH_NAME_USED(EXP) \
+#تعریف_کرو C_DECL_LOOP_SWITCH_NAME_مستعمل(EXP) \
   DECL_LANG_FLAG_8 (LABEL_DECL_CHECK (EXP))
 
 /* Record whether a decl was declared register.  This is strictly a
    front-end flag, whereas DECL_REGISTER is used for code generation;
    they may differ for structures with volatile fields.  */
-#define C_DECL_REGISTER(EXP) \
-  DECL_LANG_FLAG_4 (TREE_NOT_CHECK (EXP, FUNCTION_DECL))
+#تعریف_کرو C_DECL_رجسٹر(EXP) \
+  DECL_LANG_FLAG_4 (درخت_NOT_CHECK (EXP, FUNCTION_DECL))
 
 /* Record whether a decl was used in an expression anywhere except an
    unevaluated operand of sizeof / typeof / alignof.  This is only
    used for functions declared static but not defined, though outside
    sizeof and typeof it is set for other function decls as well.  */
-#define C_DECL_USED(EXP) DECL_LANG_FLAG_5 (FUNCTION_DECL_CHECK (EXP))
+#تعریف_کرو C_DECL_مستعمل(EXP) DECL_LANG_FLAG_5 (FUNCTION_DECL_CHECK (EXP))
 
 /* Record whether a variable has been declared threadprivate by
    #pragma omp threadprivate.  */
-#define C_DECL_THREADPRIVATE_P(DECL) DECL_LANG_FLAG_3 (VAR_DECL_CHECK (DECL))
+#تعریف_کرو C_DECL_THREADPRIVATE_P(DECL) DECL_LANG_FLAG_3 (VAR_DECL_CHECK (DECL))
 
 /* Set on VAR_DECLs for compound literals.  */
-#define C_DECL_COMPOUND_LITERAL_P(DECL) \
+#تعریف_کرو C_DECL_COMPOUND_LITERAL_P(DECL) \
   DECL_LANG_FLAG_5 (VAR_DECL_CHECK (DECL))
 
 /* Set on decls used as placeholders for a C23 underspecified object
    definition.  */
-#define C_DECL_UNDERSPECIFIED(DECL) DECL_LANG_FLAG_7 (DECL)
+#تعریف_کرو C_DECL_UNDERSPECIFIED(DECL) DECL_LANG_FLAG_7 (DECL)
 
 /* Set on VAR_DECLs declared as 'constexpr'.  */
-#define C_DECL_DECLARED_CONSTEXPR(DECL) \
+#تعریف_کرو C_DECL_DECLARED_CONSTEXPR(DECL) \
   DECL_LANG_FLAG_8 (VAR_DECL_CHECK (DECL))
 
 /* Nonzero for a decl which either doesn't exist or isn't a prototype.
    N.B. Could be simplified if all built-in decls had complete prototypes
    (but this is presently difficult because some of them need FILE*).  */
-#define C_DECL_ISNT_PROTOTYPE(EXP)			\
+#تعریف_کرو C_DECL_ISNT_PROTOTYPE(EXP)			\
        (EXP == 0					\
-	|| (!prototype_p (TREE_TYPE (EXP))	\
-	    && !fndecl_built_in_p (EXP)))
+	|| (!prototype_p (درخت_TYPE (EXP))	\
+	    && !fndecl_built_اندر_p (EXP)))
 
 /* For FUNCTION_TYPE, a hidden list of types of arguments.  The same as
    TYPE_ARG_TYPES for functions with prototypes, but created for functions
    without prototypes.  */
-#define TYPE_ACTUAL_ARG_TYPES(NODE) \
-  TYPE_LANG_SLOT_1 (FUNCTION_TYPE_CHECK (NODE))
+#تعریف_کرو TYPE_ACTUAL_ARG_TYPES(گرہ_2) \
+  TYPE_LANG_خانہ_1 (FUNCTION_TYPE_CHECK (گرہ_2))
 
 /* For a CONSTRUCTOR, whether some initializer contains a
    subexpression meaning it is not a constant expression.  */
-#define CONSTRUCTOR_NON_CONST(EXPR) TREE_LANG_FLAG_1 (CONSTRUCTOR_CHECK (EXPR))
+#تعریف_کرو CONSTRUCTOR_NON_CONST(اظہاریہ_2) درخت_LANG_FLAG_1 (CONSTRUCTOR_CHECK (اظہاریہ_2))
 
 /* For a SAVE_EXPR, nonzero if the operand of the SAVE_EXPR has already
    been folded.  */
-#define SAVE_EXPR_FOLDED_P(EXP)	TREE_LANG_FLAG_1 (SAVE_EXPR_CHECK (EXP))
+#تعریف_کرو SAVE_اظہاریہ_FOLDED_P(EXP)	درخت_LANG_FLAG_1 (SAVE_اظہاریہ_CHECK (EXP))
 
 /* Whether a type has boolean semantics: either a boolean type or an
    enumeration type with a boolean type as its underlying type.  */
-#define C_BOOLEAN_TYPE_P(TYPE)						\
-  (TREE_CODE (TYPE) == BOOLEAN_TYPE					\
-   || (TREE_CODE (TYPE) == ENUMERAL_TYPE				\
-       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_TREE			\
-       && (TREE_CODE (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
+#تعریف_کرو C_BOOLEAN_TYPE_P(TYPE)						\
+  (درخت_رمز (TYPE) == BOOLEAN_TYPE					\
+   || (درخت_رمز (TYPE) == ENUMERAL_TYPE				\
+       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_درخت			\
+       && (درخت_رمز (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
 	   || c_hardbool_type_attr (TYPE))))
 
 /* Record parser information about an expression that is irrelevant
    for code generation alongside a tree representing its value.  */
-struct c_expr
+ساخت c_اظہاریہ
 {
   /* The value of the expression.  */
-  tree value;
+  درخت قدر;
   /* Record the original unary/binary operator of an expression, which may
      have been changed by fold, STRING_CST for unparenthesized string
      constants, C_MAYBE_CONST_EXPR for __builtin_constant_p calls
      (even if parenthesized), for subexpressions, and for non-constant
      initializers, or ERROR_MARK for other expressions (including
      parenthesized expressions).  */
-  enum tree_code original_code;
+  شمار درخت_رمز_2 original_رمز;
   /* If not NULL, the original type of an expression.  This will
      differ from the type of the value field for an enum constant.
      The type of an enum constant is a plain integer type, but this
      field will be the enum type.  */
-  tree original_type;
+  درخت original_type;
 
   /* The source range of this expression.  This is redundant
      for node values that have locations, but not all node kinds
      have locations (e.g. constants, and references to params, locals,
      etc), so we stash a copy here.  */
-  source_range src_range;
+  ماخذ_range src_range;
 
   /* True if this was directly from a decimal constant token.  */
   bool m_decimal : 1;
 
   /* Access to the first and last locations within the source spelling
      of this expression.  */
-  location_t get_start () const { return src_range.m_start; }
-  location_t get_finish () const { return src_range.m_finish; }
+  location_t get_آغاز () ثابت { واپس src_range.m_آغاز; }
+  location_t get_اختتام () ثابت { واپس src_range.m_اختتام; }
 
-  location_t get_location () const
+  location_t get_location () ثابت
   {
-    if (EXPR_HAS_LOCATION (value))
-      return EXPR_LOCATION (value);
-    else
-      return make_location (get_start (), get_start (), get_finish ());
+    اگر (اظہاریہ_HAS_LOCATION (قدر))
+      واپس اظہاریہ_LOCATION (قدر);
+    ورنہ
+      واپس make_location (get_آغاز (), get_آغاز (), get_اختتام ());
   }
 
   /* Set the value to error_mark_node whilst ensuring that src_range
      and m_decimal are initialized.  */
-  void set_error ()
+  خالی سیٹ_error ()
   {
-    value = error_mark_node;
-    src_range.m_start = UNKNOWN_LOCATION;
-    src_range.m_finish = UNKNOWN_LOCATION;
+    قدر = error_mark_گرہ;
+    src_range.m_آغاز = UNKNOWN_LOCATION;
+    src_range.m_اختتام = UNKNOWN_LOCATION;
     m_decimal = 0;
   }
 };
 
 /* Type alias for struct c_expr. This allows to use the structure
    inside the VEC types.  */
-typedef struct c_expr c_expr_t;
+قسمتعریف ساخت c_اظہاریہ c_اظہاریہ_t;
 
 /* A kind of type specifier.  Note that this information is currently
    only used to distinguish tag definitions, tag references and typeof
    uses.  */
-enum c_typespec_kind {
+شمار c_typespec_قسم {
   /* No typespec.  This appears only in struct c_declspec.  */
   ctsk_none,
   /* A reserved keyword type specifier.  */
@@ -264,18 +264,18 @@ enum c_typespec_kind {
 
 /* A type specifier: this structure is created in the parser and
    passed to declspecs_add_type only.  */
-struct c_typespec {
+ساخت c_typespec {
   /* What kind of type specifier this is.  */
-  enum c_typespec_kind kind;
+  شمار c_typespec_قسم قسم;
   /* Whether the expression has operands suitable for use in constant
      expressions.  */
-  bool expr_const_operands;
+  bool اظہاریہ_const_operands;
   /* Whether the type specifier includes an enum type specifier (that
      is, ": specifier-qualifier-list" in a declaration using
      "enum").  */
   bool has_enum_type_specifier;
   /* The specifier itself.  */
-  tree spec;
+  درخت spec;
   /* An expression to be evaluated before the type specifier, in the
      case of typeof specifiers, or NULL otherwise or if no such
      expression is required for a particular typeof specifier.  In
@@ -284,15 +284,15 @@ struct c_typespec {
      determine array sizes that form part of the type, but the
      expression itself (as opposed to the array sizes) forms no part
      of the type and so needs to be recorded separately.  */
-  tree expr;
+  درخت اظہاریہ;
 };
 
 /* A storage class specifier.  */
-enum c_storage_class {
+شمار c_storage_class {
   csc_none,
   csc_auto,
   csc_extern,
-  csc_register,
+  csc_رجسٹر,
   csc_static,
   csc_typedef
 };
@@ -300,7 +300,7 @@ enum c_storage_class {
 /* A type specifier keyword "void", "_Bool", "char", "int", "float",
    "double", "_Decimal32", "_Decimal64", "_Decimal128", "_Decimal64x",
    "_Fract", "_Accum", "_BitInt", or none of these.  */
-enum c_typespec_keyword {
+شمار c_typespec_keyword {
   cts_none,
   cts_void,
   cts_bool,
@@ -327,10 +327,10 @@ enum c_typespec_keyword {
 
    It is used to index the array of declspec locations in struct
    c_declspecs.  */
-enum c_declspec_word {
+شمار c_declspec_لفظ {
   cdw_typespec /* A catch-all for a typespec.  */,
   cdw_storage_class  /* A catch-all for a storage class */,
-  cdw_attributes,
+  cdw_اوصاف,
   cdw_typedef,
   cdw_explicit_signed,
   cdw_deprecated,
@@ -350,14 +350,14 @@ enum c_declspec_word {
   cdw_atomic,
   cdw_saturating,
   cdw_alignas,
-  cdw_address_space,
+  cdw_پتہ_space,
   cdw_gimple,
   cdw_rtl,
-  cdw_number_of_elements /* This one must always be the last
+  cdw_نمبر_کا_elements /* This one must always be the last
 			    enumerator.  */
 };
 
-enum c_declspec_il {
+شمار c_declspec_il {
   cdil_none,
   cdil_gimple,		/* __GIMPLE  */
   cdil_gimple_cfg,	/* __GIMPLE(cfg)  */
@@ -368,70 +368,70 @@ enum c_declspec_il {
 /* A sequence of declaration specifiers in C.  When a new declaration
    specifier is added, please update the enum c_declspec_word above
    accordingly.  */
-struct c_declspecs {
-  location_t locations[cdw_number_of_elements];
+ساخت c_declspecs {
+  location_t locations[cdw_نمبر_کا_elements];
   /* The type specified, if a single type specifier such as a struct,
      union or enum specifier, typedef name or typeof specifies the
      whole type, or NULL_TREE if none or a keyword such as "void" or
      "char" is used.  Does not include qualifiers.  */
-  tree type;
+  درخت type;
   /* Any expression to be evaluated before the type, from a typeof
      specifier.  */
-  tree expr;
+  درخت اظہاریہ;
   /* The attributes from a typedef decl.  */
-  tree decl_attr;
+  درخت decl_attr;
   /* When parsing, the GNU attributes and prefix standard attributes.
      Outside the parser, this will be NULL; attributes (possibly from
      multiple lists) will be passed separately.  */
-  tree attrs;
+  درخت attrs;
   /* When parsing, postfix standard attributes (which appertain to the
      type specified by the preceding declaration specifiers, unlike
      prefix standard attributes which appertain to the declaration or
      declarations as a whole).  */
-  tree postfix_attrs;
+  درخت postfix_attrs;
   /* The pass to start compiling a __GIMPLE or __RTL function with.  */
-  char *gimple_or_rtl_pass;
+  حرف *gimple_or_rtl_pass;
   /* ENTRY BB count.  */
-  profile_count entry_bb_count;
+  profile_گنتی اندراج_bb_گنتی;
   /* The base-2 log of the greatest alignment required by an _Alignas
      specifier, in bytes, or -1 if no such specifiers with nonzero
      alignment.  */
-  int align_log;
-  union {
+  صحیح align_log;
+  اتحاد {
     /* For the __intN declspec, this stores the index into the int_n_*
        arrays.  */
-    int int_n_idx;
+    صحیح int_n_idx;
     /* For the _FloatN and _FloatNx declspec, this stores the index into
        the floatn_nx_types array.  */
-    int floatn_nx_idx;
+    صحیح floatn_nx_idx;
     /* For _BitInt(N) this stores the N.  */
-    int bitint_prec;
+    صحیح bitint_prec;
   } u;
   /* The storage class specifier, or csc_none if none.  */
-  enum c_storage_class storage_class;
+  شمار c_storage_class storage_class;
   /* Any type specifier keyword used such as "int", not reflecting
      modifiers such as "short", or cts_none if none.  */
-  enum c_typespec_keyword typespec_word : 8;
+  شمار c_typespec_keyword typespec_لفظ : 8;
   /* The kind of type specifier if one has been seen, ctsk_none
      otherwise.  */
-  enum c_typespec_kind typespec_kind : 4;
-  enum c_declspec_il declspec_il : 3;
+  شمار c_typespec_قسم typespec_قسم : 4;
+  شمار c_declspec_il declspec_il : 3;
   /* Whether any expressions in typeof specifiers may appear in
      constant expressions.  */
-  bool expr_const_operands : 1;
+  bool اظہاریہ_const_operands : 1;
   /* Whether any declaration specifiers have been seen at all.  */
-  bool declspecs_seen_p : 1;
+  bool declspecs_نظر_آیا_p : 1;
   /* Whether any declaration specifiers other than standard attributes
      have been seen at all.  If only standard attributes have been
      seen, this is an attribute-declaration.  */
-  bool non_std_attrs_seen_p : 1;
+  bool non_std_attrs_نظر_آیا_p : 1;
   /* Whether something other than a storage class specifier or
      attribute has been seen.  This is used to warn for the
      obsolescent usage of storage class specifiers other than at the
      start of the list.  (Doing this properly would require function
      specifiers to be handled separately from storage class
      specifiers.)  */
-  bool non_sc_seen_p : 1;
+  bool non_sc_نظر_آیا_p : 1;
   /* Whether the type is specified by a typedef or typeof name.  */
   bool typedef_p : 1;
   /* Whether the type is explicitly "signed" or specified by a typedef
@@ -491,11 +491,11 @@ struct c_declspecs {
   /* Whether "constexpr" was specified.  */
   bool constexpr_p : 1;
   /* The address space that the declaration belongs to.  */
-  addr_space_t address_space;
+  addr_space_t پتہ_space;
 };
 
 /* The various kinds of declarators in C.  */
-enum c_declarator_kind {
+شمار c_declarator_قسم {
   /* An identifier.  */
   cdk_id,
   /* A function.  */
@@ -503,125 +503,125 @@ enum c_declarator_kind {
   /* An array.  */
   cdk_array,
   /* A pointer.  */
-  cdk_pointer,
+  cdk_اشارہ_گر,
   /* Parenthesized declarator with nested attributes.  */
   cdk_attrs
 };
 
-struct c_arg_tag {
+ساخت c_arg_لیبل {
   /* The argument name.  */
-  tree id;
+  درخت id;
   /* The type of the argument.  */
-  tree type;
+  درخت type;
 };
 
 
 /* Information about the parameters in a function declarator.  */
-struct c_arg_info {
+ساخت c_arg_info {
   /* A list of parameter decls.  */
-  tree parms;
+  درخت parms;
   /* A list of structure, union and enum tags defined.  */
-  vec<c_arg_tag, va_gc> *tags;
+  vec<c_arg_لیبل, va_gc> *لیبل_فہرست;
   /* A list of argument types to go in the FUNCTION_TYPE.  */
-  tree types;
+  درخت types;
   /* A list of non-parameter decls (notably enumeration constants)
      defined with the parameters.  */
-  tree others;
+  درخت others;
   /* A compound expression of VLA sizes from the parameters, or NULL.
      In a function definition, these are used to ensure that
      side-effects in sizes of arrays converted to pointers (such as a
      parameter int i[n++]) take place; otherwise, they are
      ignored.  */
-  tree pending_sizes;
+  درخت pending_sizes;
   /* True when these arguments had [*].  */
   bool had_vla_unspec : 1;
   /* True when the arguments are a (...) prototype.  */
-  bool no_named_args_stdarg_p : 1;
+  bool no_named_دلائل_stdarg_p : 1;
   /* True when empty parentheses have been interpreted as (void) in C23 or
      later.  This is only for use by -Wtraditional and is no longer needed if
      -Wtraditional is removed.  */
-  bool c23_empty_parens : 1;
+  bool c23_خالی_خانے_parens : 1;
 };
 
 /* A declarator.  */
-struct c_declarator {
+ساخت c_declarator {
   /* The kind of declarator.  */
-  enum c_declarator_kind kind;
+  شمار c_declarator_قسم قسم;
   location_t id_loc; /* Currently only set for cdk_id, cdk_array. */
   /* Except for cdk_id, the contained declarator.  For cdk_id, NULL.  */
-  struct c_declarator *declarator;
-  union {
+  ساخت c_declarator *declarator;
+  اتحاد {
     /* For identifiers.  */
-    struct {
+    ساخت {
       /* An IDENTIFIER_NODE, or NULL_TREE if an abstract
 	 declarator.  */
-      tree id;
+      درخت id;
       /* Any attributes (which apply to the declaration rather than to
 	 the type described by the outer declarators).  */
-      tree attrs;
+      درخت attrs;
     } id;
     /* For functions.  */
-    struct c_arg_info *arg_info;
+    ساخت c_arg_info *arg_info;
     /* For arrays.  */
-    struct {
+    ساخت {
       /* The array dimension, or NULL for [] and [*].  */
-      tree dimen;
+      درخت dimen;
       /* The qualifiers inside [].  */
-      int quals;
+      صحیح quals;
       /* The attributes (currently ignored) inside [].  */
-      tree attrs;
+      درخت attrs;
       /* Whether [static] was used.  */
       bool static_p : 1;
       /* Whether [*] was used.  */
       bool vla_unspec_p : 1;
     } array;
     /* For pointers, the qualifiers on the pointer type.  */
-    int pointer_quals;
+    صحیح اشارہ_گر_quals;
     /* For attributes.  */
-    tree attrs;
+    درخت attrs;
   } u;
 };
 
 /* A type name.  */
-struct c_type_name {
+ساخت c_type_name {
   /* The declaration specifiers.  */
-  struct c_declspecs *specs;
+  ساخت c_declspecs *specs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  ساخت c_declarator *declarator;
 };
 
 /* A parameter.  */
-struct c_parm {
+ساخت c_parm {
   /* The declaration specifiers, minus any prefix attributes.  */
-  struct c_declspecs *specs;
+  ساخت c_declspecs *specs;
   /* The attributes.  */
-  tree attrs;
+  درخت attrs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  ساخت c_declarator *declarator;
   /* The location of the parameter.  */
   location_t loc;
 };
 
 /* Used when parsing an enum.  Initialized by start_enum.  */
-struct c_enum_contents
+ساخت c_enum_contents
 {
   /* While defining an enum type, this is 1 plus the last enumerator
      constant value.  */
-  tree enum_next_value;
+  درخت enum_اگلا_قدر;
 
   /* The enumeration type itself.  */
-  tree enum_type;
+  درخت enum_type;
 
   /* Nonzero means that there was overflow computing enum_next_value.  */
-  int enum_overflow;
+  صحیح enum_حد_سے_تجاوز;
 };
 
 /* A type of reference to a static identifier in an inline
    function.  */
-enum c_inline_static_type {
+شمار c_inline_static_type {
   /* Identifier with internal linkage used in function that may be an
      inline definition (i.e., file-scope static).  */
-  csi_internal,
+  csi_اندرونی,
   /* Modifiable object with static storage duration defined in
      function that may be an inline definition (i.e., local
      static).  */
@@ -629,31 +629,31 @@ enum c_inline_static_type {
 };
 
 /* Record details of decls possibly used inside sizeof or typeof.  */
-struct maybe_used_decl
+ساخت maybe_مستعمل_decl
 {
   /* The decl.  */
-  tree decl;
+  درخت decl;
   /* The level seen at (in_sizeof + in_typeof + in_countof + in_generic).  */
-  int level;
+  صحیح level;
   /* Seen in address-of.  */
-  bool address;
+  bool پتہ;
   /* The next one at this level or above, or NULL.  */
-  struct maybe_used_decl *next;
+  ساخت maybe_مستعمل_decl *اگلا;
 };
 
 
 /* in c-parser.cc */
-struct c_tree_token_vec;
-extern void c_parse_init (void);
-extern bool c_keyword_starts_typename (enum rid keyword);
+ساخت c_درخت_token_vec;
+خارجی خالی c_parse_init (خالی);
+خارجی bool c_keyword_starts_typename (شمار rid keyword);
 
 /* in c-aux-info.cc */
-extern void gen_aux_info_record (tree, int, int, int);
+خارجی خالی gen_aux_info_ریکارڈ (درخت, صحیح, صحیح, صحیح);
 
 /* in c-decl.cc */
-struct c_spot_bindings;
+ساخت c_spot_bindings;
 class c_struct_parse_info;
-extern struct obstack parser_obstack;
+خارجی ساخت obstack parser_obstack;
 /* Set to IN_ITERATION_STMT if parsing an iteration-statement,
    to IN_OMP_BLOCK if parsing OpenMP structured block and
    IN_OMP_FOR if parsing OpenMP loop.  If parsing a switch statement,
@@ -661,333 +661,333 @@ extern struct obstack parser_obstack;
    iteration-statement, OpenMP block or loop within that switch.
    If the innermost iteration/switch statement is named, IN_NAMED_STMT
    is additionally bitwise ORed into it.  */
-#define IN_SWITCH_STMT		1
-#define IN_ITERATION_STMT	2
-#define IN_OMP_BLOCK		4
-#define IN_OMP_FOR		8
-#define IN_OBJC_FOREACH		16
-#define IN_NAMED_STMT		32
-extern unsigned char in_statement;
+#تعریف_کرو اندر_SWITCH_STMT		1
+#تعریف_کرو اندر_ITERATION_STMT	2
+#تعریف_کرو اندر_OMP_بلاک		4
+#تعریف_کرو اندر_OMP_FOR		8
+#تعریف_کرو اندر_OBJC_FOREACH		16
+#تعریف_کرو اندر_NAMED_STMT		32
+خارجی غیرعلامتی حرف اندر_statement;
 
-extern bool switch_statement_break_seen_p;
+خارجی bool switch_statement_break_نظر_آیا_p;
 
-extern bool global_bindings_p (void);
-extern tree pushdecl (tree);
-extern unsigned int start_underspecified_init (location_t, tree);
-extern void finish_underspecified_init (tree, unsigned int);
-extern void push_scope (void);
-extern tree pop_scope (void);
-extern void c_mark_decl_jump_unsafe_in_current_scope ();
-extern void c_bindings_start_stmt_expr (struct c_spot_bindings *);
-extern void c_bindings_end_stmt_expr (struct c_spot_bindings *);
+خارجی bool global_bindings_p (خالی);
+خارجی درخت pushdecl (درخت);
+خارجی غیرعلامتی صحیح آغاز_underspecified_init (location_t, درخت);
+خارجی خالی اختتام_underspecified_init (درخت, غیرعلامتی صحیح);
+خارجی خالی ڈالو_scope (خالی);
+خارجی درخت نکالو_scope (خالی);
+خارجی خالی c_mark_decl_jump_unsafe_اندر_current_scope ();
+خارجی خالی c_bindings_آغاز_stmt_اظہاریہ (ساخت c_spot_bindings *);
+خارجی خالی c_bindings_انتہا_stmt_اظہاریہ (ساخت c_spot_bindings *);
 
-extern void record_inline_static (location_t, tree, tree,
-				  enum c_inline_static_type);
-extern void c_init_decl_processing (void);
-extern void c_print_identifier (FILE *, tree, int);
-extern int quals_from_declspecs (const struct c_declspecs *);
-extern struct c_declarator *build_array_declarator (location_t, tree,
-    						    struct c_declspecs *,
+خارجی خالی ریکارڈ_inline_static (location_t, درخت, درخت,
+				  شمار c_inline_static_type);
+خارجی خالی c_init_decl_processing (خالی);
+خارجی خالی c_print_identifier (FILE *, درخت, صحیح);
+خارجی صحیح quals_from_declspecs (ثابت ساخت c_declspecs *);
+خارجی ساخت c_declarator *build_array_declarator (location_t, درخت,
+    						    ساخت c_declspecs *,
 						    bool, bool);
-extern tree build_enumerator (location_t, location_t, struct c_enum_contents *,
-			      tree, tree);
-extern tree check_for_loop_decls (location_t, bool);
-extern void mark_forward_parm_decls (void);
-extern void declare_parm_level (void);
-extern void undeclared_variable (location_t, tree);
-extern tree lookup_label_for_goto (location_t, tree);
-extern tree declare_label (tree);
-extern tree define_label (location_t, tree);
-extern struct c_spot_bindings *c_get_switch_bindings (void);
-extern void c_release_switch_bindings (struct c_spot_bindings *);
-extern bool c_check_switch_jump_warnings (struct c_spot_bindings *,
+خارجی درخت build_enumerator (location_t, location_t, ساخت c_enum_contents *,
+			      درخت, درخت);
+خارجی درخت check_for_loop_decls (location_t, bool);
+خارجی خالی mark_forward_parm_decls (خالی);
+خارجی خالی declare_parm_level (خالی);
+خارجی خالی undeclared_variable (location_t, درخت);
+خارجی درخت lookup_label_for_goto (location_t, درخت);
+خارجی درخت declare_label (درخت);
+خارجی درخت define_label (location_t, درخت);
+خارجی ساخت c_spot_bindings *c_get_switch_bindings (خالی);
+خارجی خالی c_release_switch_bindings (ساخت c_spot_bindings *);
+خارجی bool c_check_switch_jump_warnings (ساخت c_spot_bindings *,
 					  location_t, location_t);
-extern void finish_decl (tree, location_t, tree, tree, tree);
-extern tree finish_enum (tree, tree, tree);
-extern void finish_function (location_t = input_location);
-extern tree finish_struct (location_t, tree, tree, tree,
+خارجی خالی اختتام_decl (درخت, location_t, درخت, درخت, درخت);
+خارجی درخت اختتام_enum (درخت, درخت, درخت);
+خارجی خالی اختتام_function (location_t = داخلہ_location);
+خارجی درخت اختتام_struct (location_t, درخت, درخت, درخت,
 			   class c_struct_parse_info *,
-			   tree *expr = NULL);
-extern tree c_simulate_enum_decl (location_t, const char *,
+			   درخت *اظہاریہ = تہی);
+خارجی درخت c_simulate_enum_decl (location_t, ثابت حرف *,
 				  vec<string_int_pair> *);
-extern tree c_simulate_record_decl (location_t, const char *,
-				    array_slice<const tree>);
-extern struct c_arg_info *build_arg_info (void);
-extern struct c_arg_info *get_parm_info (bool, tree);
-extern tree grokfield (location_t, struct c_declarator *,
-		       struct c_declspecs *, tree, tree *, tree *);
-extern tree groktypename (struct c_type_name *, tree *, bool *);
-extern tree grokgenassoc (struct c_type_name *);
-extern tree grokparm (const struct c_parm *, tree *);
-extern tree implicitly_declare (location_t, tree);
-extern void keep_next_level (void);
-extern void pending_xref_error (void);
-extern void c_push_function_context (void);
-extern void c_pop_function_context (void);
-extern void push_parm_decl (const struct c_parm *, tree *);
-extern struct c_declarator *set_array_declarator_inner (struct c_declarator *,
-							struct c_declarator *);
-extern tree c_builtin_function (tree);
-extern tree c_builtin_function_ext_scope (tree);
-extern tree c_simulate_builtin_function_decl (tree);
-extern void c_warn_unused_attributes (tree);
-extern tree c_warn_type_attributes (tree, tree);
-extern void shadow_tag (const struct c_declspecs *);
-extern void shadow_tag_warned (const struct c_declspecs *, int);
-extern tree start_enum (location_t, struct c_enum_contents *, tree, tree,
+خارجی درخت c_simulate_ریکارڈ_decl (location_t, ثابت حرف *,
+				    array_قاش<ثابت درخت>);
+خارجی ساخت c_arg_info *build_arg_info (خالی);
+خارجی ساخت c_arg_info *get_parm_info (bool, درخت);
+خارجی درخت grokfield (location_t, ساخت c_declarator *,
+		       ساخت c_declspecs *, درخت, درخت *, درخت *);
+خارجی درخت groktypename (ساخت c_type_name *, درخت *, bool *);
+خارجی درخت grokgenassoc (ساخت c_type_name *);
+خارجی درخت grokparm (ثابت ساخت c_parm *, درخت *);
+خارجی درخت implicitly_declare (location_t, درخت);
+خارجی خالی keep_اگلا_level (خالی);
+خارجی خالی pending_xref_error (خالی);
+خارجی خالی c_ڈالو_function_context (خالی);
+خارجی خالی c_نکالو_function_context (خالی);
+خارجی خالی ڈالو_parm_decl (ثابت ساخت c_parm *, درخت *);
+خارجی ساخت c_declarator *سیٹ_array_declarator_inner (ساخت c_declarator *,
+							ساخت c_declarator *);
+خارجی درخت c_builtin_function (درخت);
+خارجی درخت c_builtin_function_ext_scope (درخت);
+خارجی درخت c_simulate_builtin_function_decl (درخت);
+خارجی خالی c_warn_غیر_مستعمل_اوصاف (درخت);
+خارجی درخت c_warn_type_اوصاف (درخت, درخت);
+خارجی خالی shadow_لیبل (ثابت ساخت c_declspecs *);
+خارجی خالی shadow_لیبل_warned (ثابت ساخت c_declspecs *, صحیح);
+خارجی درخت آغاز_enum (location_t, ساخت c_enum_contents *, درخت, درخت,
 			bool potential_nesting_p);
-extern bool start_function (struct c_declspecs *, struct c_declarator *, tree);
-extern tree start_decl (struct c_declarator *, struct c_declspecs *, bool,
-			tree, bool = true, location_t * = NULL);
-extern tree start_struct (location_t, enum tree_code, tree,
+خارجی bool آغاز_function (ساخت c_declspecs *, ساخت c_declarator *, درخت);
+خارجی درخت آغاز_decl (ساخت c_declarator *, ساخت c_declspecs *, bool,
+			درخت, bool = true, location_t * = تہی);
+خارجی درخت آغاز_struct (location_t, شمار درخت_رمز_2, درخت,
 			  class c_struct_parse_info **);
-extern void store_parm_decls (void);
-extern void store_parm_decls_from (struct c_arg_info *);
-extern void temp_store_parm_decls (tree, tree);
-extern void temp_pop_parm_decls (void);
-extern tree xref_tag (enum tree_code, tree);
-extern struct c_typespec parser_xref_tag (location_t, enum tree_code, tree,
-					  bool, tree, bool);
-extern struct c_parm *build_c_parm (struct c_declspecs *, tree,
-				    struct c_declarator *, location_t);
-extern struct c_declarator *build_attrs_declarator (tree,
-						    struct c_declarator *);
-extern struct c_declarator *build_function_declarator (struct c_arg_info *,
-						       struct c_declarator *);
-extern struct c_declarator *build_id_declarator (tree);
-extern struct c_declarator *make_pointer_declarator (struct c_declspecs *,
-						     struct c_declarator *);
-extern struct c_declspecs *build_null_declspecs (void);
-extern struct c_declspecs *declspecs_add_qual (location_t,
-					       struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_type (location_t,
-					       struct c_declspecs *,
-					       struct c_typespec);
-extern struct c_declspecs *declspecs_add_scspec (location_t,
-						 struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_attrs (location_t,
-						struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_addrspace (location_t,
-						    struct c_declspecs *,
+خارجی خالی store_parm_decls (خالی);
+خارجی خالی store_parm_decls_from (ساخت c_arg_info *);
+خارجی خالی عارضی_store_parm_decls (درخت, درخت);
+خارجی خالی عارضی_نکالو_parm_decls (خالی);
+خارجی درخت xref_لیبل (شمار درخت_رمز_2, درخت);
+خارجی ساخت c_typespec parser_xref_لیبل (location_t, شمار درخت_رمز_2, درخت,
+					  bool, درخت, bool);
+خارجی ساخت c_parm *build_c_parm (ساخت c_declspecs *, درخت,
+				    ساخت c_declarator *, location_t);
+خارجی ساخت c_declarator *build_attrs_declarator (درخت,
+						    ساخت c_declarator *);
+خارجی ساخت c_declarator *build_function_declarator (ساخت c_arg_info *,
+						       ساخت c_declarator *);
+خارجی ساخت c_declarator *build_id_declarator (درخت);
+خارجی ساخت c_declarator *make_اشارہ_گر_declarator (ساخت c_declspecs *,
+						     ساخت c_declarator *);
+خارجی ساخت c_declspecs *build_null_declspecs (خالی);
+خارجی ساخت c_declspecs *declspecs_جوڑو_qual (location_t,
+					       ساخت c_declspecs *, درخت);
+خارجی ساخت c_declspecs *declspecs_جوڑو_type (location_t,
+					       ساخت c_declspecs *,
+					       ساخت c_typespec);
+خارجی ساخت c_declspecs *declspecs_جوڑو_scspec (location_t,
+						 ساخت c_declspecs *, درخت);
+خارجی ساخت c_declspecs *declspecs_جوڑو_attrs (location_t,
+						ساخت c_declspecs *, درخت);
+خارجی ساخت c_declspecs *declspecs_جوڑو_addrspace (location_t,
+						    ساخت c_declspecs *,
 						    addr_space_t);
-extern struct c_declspecs *declspecs_add_alignas (location_t,
-						  struct c_declspecs *, tree);
-extern struct c_declspecs *finish_declspecs (struct c_declspecs *);
-extern size_t c_tree_size (enum tree_code);
-extern int c_get_loop_names (tree, bool, tree *);
-extern void c_release_loop_names (int);
-extern tree c_finish_bc_name (location_t, tree, bool);
+خارجی ساخت c_declspecs *declspecs_جوڑو_alignas (location_t,
+						  ساخت c_declspecs *, درخت);
+خارجی ساخت c_declspecs *اختتام_declspecs (ساخت c_declspecs *);
+خارجی سائز_t c_درخت_سائز (شمار درخت_رمز_2);
+خارجی صحیح c_get_loop_نام (درخت, bool, درخت *);
+خارجی خالی c_release_loop_نام (صحیح);
+خارجی درخت c_اختتام_bc_name (location_t, درخت, bool);
 
 /* in c-objc-common.cc */
-extern bool c_objc_common_init (void);
-extern bool c_missing_noreturn_ok_p (tree);
-extern bool c_warn_unused_global_decl (const_tree);
-extern void c_initialize_diagnostics (diagnostics::context *);
-extern bool c_var_mod_p (tree x, tree fn);
-extern alias_set_type c_get_alias_set (tree);
-extern int c_type_dwarf_attribute (const_tree, int);
-extern tree c_enum_underlying_base_type (const_tree);
+خارجی bool c_objc_common_init (خالی);
+خارجی bool c_missing_noreturn_ok_p (درخت);
+خارجی bool c_warn_غیر_مستعمل_global_decl (const_درخت);
+خارجی خالی c_initialize_diagnostics (diagnostics::context *);
+خارجی bool c_var_mod_p (درخت x, درخت fn);
+خارجی alias_سیٹ_type c_get_alias_سیٹ (درخت);
+خارجی صحیح c_type_dwarf_attribute (const_درخت, صحیح);
+خارجی درخت c_enum_underlying_بنیاد_type (const_درخت);
 
 /* in c-typeck.cc */
-extern int in_alignof;
-extern int in_sizeof;
-extern int in_countof;
-extern int in_typeof;
-extern int in_generic;
-extern bool c_in_omp_for;
-extern bool c_omp_array_section_p;
+خارجی صحیح اندر_alignof;
+خارجی صحیح اندر_sizeof;
+خارجی صحیح اندر_countof;
+خارجی صحیح اندر_typeof;
+خارجی صحیح اندر_generic;
+خارجی bool c_اندر_omp_for;
+خارجی bool c_omp_array_section_p;
 
-extern tree c_last_sizeof_arg;
-extern location_t c_last_sizeof_loc;
+خارجی درخت c_آخری_sizeof_arg;
+خارجی location_t c_آخری_sizeof_loc;
 
-extern struct c_switch *c_switch_stack;
+خارجی ساخت c_switch *c_switch_ڈھیر;
 
-extern bool null_pointer_constant_p (const_tree);
+خارجی bool null_اشارہ_گر_constant_p (const_درخت);
 
 
-inline bool
-c_type_variably_modified_p (tree t)
+اندرونی bool
+c_type_variably_modified_p (درخت t)
 {
-  if (error_mark_node == t)
-    return false;
-  if (C_TYPE_VARIABLY_MODIFIED (t))
-    return true;
-  if (TYPE_STRUCTURAL_EQUALITY_P (t))
+  اگر (error_mark_گرہ == t)
+    واپس false;
+  اگر (C_TYPE_VARIABLY_MODIFIED (t))
+    واپس true;
+  اگر (TYPE_STRUCTURAL_EQUALITY_P (t))
     {
       /* The flag may not have been set yet because of incomplete
 	 structure or union types completed later.  */
-      switch (TREE_CODE (t))
+      انتخاب (درخت_رمز (t))
 	{
-	case ARRAY_TYPE:
-	case FUNCTION_TYPE:
-	case POINTER_TYPE:
+	حالت ARRAY_TYPE:
+	حالت FUNCTION_TYPE:
+	حالت اشارہ_گر_TYPE:
 	  /* Recurse.  */
-	  if (c_type_variably_modified_p (TREE_TYPE (t)))
+	  اگر (c_type_variably_modified_p (درخت_TYPE (t)))
 	    {
 	      C_TYPE_VARIABLY_MODIFIED (t) = 1;
-	      return true;
+	      واپس true;
 	    }
-	  break;
-	default:
-	  break;
+	  توڑو;
+	طےشدہ:
+	  توڑو;
 	}
     }
-  return false;
+  واپس false;
 }
 
-inline bool
-c_type_unspecified_p (tree t)
+اندرونی bool
+c_type_unspecified_p (درخت t)
 {
-  return error_mark_node != t
-	 && C_TYPE_VARIABLE_SIZE (t) && TREE_CODE (t) == ARRAY_TYPE
-	 && TYPE_DOMAIN (t) && TYPE_MAX_VALUE (TYPE_DOMAIN (t))
-	 && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (t))) == COMPOUND_EXPR
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 0))
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 1));
+  واپس error_mark_گرہ != t
+	 && C_TYPE_VARIABLE_سائز (t) && درخت_رمز (t) == ARRAY_TYPE
+	 && TYPE_DOMAIN (t) && TYPE_MAX_قدر (TYPE_DOMAIN (t))
+	 && درخت_رمز (TYPE_MAX_قدر (TYPE_DOMAIN (t))) == COMPOUND_اظہاریہ
+	 && integer_zerop (درخت_عملیہ (TYPE_MAX_قدر (TYPE_DOMAIN (t)), 0))
+	 && integer_zerop (درخت_عملیہ (TYPE_MAX_قدر (TYPE_DOMAIN (t)), 1));
 }
 
-extern bool zero_length_array_type_p (const_tree type);
-extern bool char_type_p (tree);
-extern tree c_type_tag (const_tree t);
-extern tree c_objc_common_truthvalue_conversion (location_t, tree,
-						 tree = integer_type_node);
-extern tree require_complete_type (location_t, tree);
-extern bool same_translation_unit_p (const_tree, const_tree);
-extern bool comptypes (tree, tree);
-extern bool comptypes_same_p (tree, tree);
-extern bool comptypes_equiv_p (tree, tree);
-extern bool comptypes_check_enum_int (tree, tree, bool *);
-extern bool c_mark_addressable (tree, bool = false, bool = false);
-extern void c_incomplete_type_error (location_t, const_tree, const_tree);
-extern tree c_type_promotes_to (tree);
-extern struct c_expr default_function_array_conversion (location_t,
-							struct c_expr);
-extern struct c_expr default_function_array_read_conversion (location_t,
-							     struct c_expr);
-extern struct c_expr convert_lvalue_to_rvalue (location_t, struct c_expr,
+خارجی bool zero_لمبائی_array_type_p (const_درخت type);
+خارجی bool char_type_p (درخت);
+خارجی درخت c_type_لیبل (const_درخت t);
+خارجی درخت c_objc_common_truthvalue_conversion (location_t, درخت,
+						 درخت = integer_type_گرہ);
+خارجی درخت require_complete_type (location_t, درخت);
+خارجی bool same_translation_unit_p (const_درخت, const_درخت);
+خارجی bool comptypes (درخت, درخت);
+خارجی bool comptypes_same_p (درخت, درخت);
+خارجی bool comptypes_equiv_p (درخت, درخت);
+خارجی bool comptypes_check_enum_int (درخت, درخت, bool *);
+خارجی bool c_mark_addressable (درخت, bool = false, bool = false);
+خارجی خالی c_incomplete_type_error (location_t, const_درخت, const_درخت);
+خارجی درخت c_type_promotes_مقصد (درخت);
+خارجی ساخت c_اظہاریہ default_function_array_conversion (location_t,
+							ساخت c_اظہاریہ);
+خارجی ساخت c_اظہاریہ default_function_array_read_conversion (location_t,
+							     ساخت c_اظہاریہ);
+خارجی ساخت c_اظہاریہ convert_lvalue_مقصد_rvalue (location_t, ساخت c_اظہاریہ,
 					       bool, bool, bool = false);
-extern tree decl_constant_value_1 (tree, bool);
-extern void mark_exp_read (tree);
-extern tree composite_type (tree, tree);
-extern tree lookup_field (const_tree, tree);
-extern tree build_component_ref (location_t, tree, tree, location_t,
+خارجی درخت decl_constant_قدر_1 (درخت, bool);
+خارجی خالی mark_exp_read (درخت);
+خارجی درخت مرکب_type (درخت, درخت);
+خارجی درخت lookup_میدان (const_درخت, درخت);
+خارجی درخت build_component_ref (location_t, درخت, درخت, location_t,
 				 location_t);
-extern tree handle_counted_by_for_component_ref (location_t, tree);
-extern tree build_array_ref (location_t, tree, tree);
-extern tree build_omp_array_section (location_t, tree, tree, tree);
-extern tree build_external_ref (location_t, tree, bool, tree *);
-extern void pop_maybe_used (bool);
-extern struct maybe_used_decl *save_maybe_used ();
-extern void restore_maybe_used (struct maybe_used_decl *);
-extern void mark_decl_used (tree, bool);
-extern struct c_expr c_expr_sizeof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_sizeof_type (location_t, struct c_type_name *);
-extern struct c_expr c_expr_countof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_countof_type (location_t loc,
-					  struct c_type_name *);
-extern struct c_expr c_expr_maxof_type (location_t loc, struct c_type_name *);
-extern struct c_expr c_expr_minof_type (location_t loc, struct c_type_name *);
-extern struct c_expr parser_build_unary_op (location_t, enum tree_code,
-    					    struct c_expr);
-extern struct c_expr parser_build_binary_op (location_t,
-    					     enum tree_code, struct c_expr,
-					     struct c_expr, tree);
-extern tree build_conditional_expr (location_t, tree, bool, tree, tree,
-				    location_t, tree, tree, location_t);
-extern tree build_compound_expr (location_t, tree, tree);
-extern tree c_cast_expr (location_t, struct c_type_name *, tree);
-extern tree build_c_cast (location_t, tree, tree);
-extern void store_init_value (location_t, tree, tree, tree);
-extern void maybe_warn_string_init (location_t, tree, struct c_expr);
-extern void start_init (tree, tree, bool, bool, rich_location *);
-extern void finish_init (void);
-extern void really_start_incremental_init (tree);
-extern void finish_implicit_inits (location_t, struct obstack *);
-extern void push_init_level (location_t, int, struct obstack *);
-extern struct c_expr pop_init_level (location_t, int, struct obstack *,
+خارجی درخت handle_counted_by_for_component_ref (location_t, درخت);
+خارجی درخت build_array_ref (location_t, درخت, درخت);
+خارجی درخت build_omp_array_section (location_t, درخت, درخت, درخت);
+خارجی درخت build_external_ref (location_t, درخت, bool, درخت *);
+خارجی خالی نکالو_maybe_مستعمل (bool);
+خارجی ساخت maybe_مستعمل_decl *save_maybe_مستعمل ();
+خارجی خالی restore_maybe_مستعمل (ساخت maybe_مستعمل_decl *);
+خارجی خالی mark_decl_مستعمل (درخت, bool);
+خارجی ساخت c_اظہاریہ c_اظہاریہ_sizeof_اظہاریہ (location_t, ساخت c_اظہاریہ);
+خارجی ساخت c_اظہاریہ c_اظہاریہ_sizeof_type (location_t, ساخت c_type_name *);
+خارجی ساخت c_اظہاریہ c_اظہاریہ_countof_اظہاریہ (location_t, ساخت c_اظہاریہ);
+خارجی ساخت c_اظہاریہ c_اظہاریہ_countof_type (location_t loc,
+					  ساخت c_type_name *);
+خارجی ساخت c_اظہاریہ c_اظہاریہ_maxof_type (location_t loc, ساخت c_type_name *);
+خارجی ساخت c_اظہاریہ c_اظہاریہ_minof_type (location_t loc, ساخت c_type_name *);
+خارجی ساخت c_اظہاریہ parser_build_unary_op (location_t, شمار درخت_رمز_2,
+    					    ساخت c_اظہاریہ);
+خارجی ساخت c_اظہاریہ parser_build_ثنائی_op (location_t,
+    					     شمار درخت_رمز_2, ساخت c_اظہاریہ,
+					     ساخت c_اظہاریہ, درخت);
+خارجی درخت build_conditional_اظہاریہ (location_t, درخت, bool, درخت, درخت,
+				    location_t, درخت, درخت, location_t);
+خارجی درخت build_compound_اظہاریہ (location_t, درخت, درخت);
+خارجی درخت c_cast_اظہاریہ (location_t, ساخت c_type_name *, درخت);
+خارجی درخت build_c_cast (location_t, درخت, درخت);
+خارجی خالی store_init_قدر (location_t, درخت, درخت, درخت);
+خارجی خالی maybe_warn_string_init (location_t, درخت, ساخت c_اظہاریہ);
+خارجی خالی آغاز_init (درخت, درخت, bool, bool, rich_location *);
+خارجی خالی اختتام_init (خالی);
+خارجی خالی really_آغاز_incremental_init (درخت);
+خارجی خالی اختتام_implicit_inits (location_t, ساخت obstack *);
+خارجی خالی ڈالو_init_level (location_t, صحیح, ساخت obstack *);
+خارجی ساخت c_اظہاریہ نکالو_init_level (location_t, صحیح, ساخت obstack *,
 				     location_t);
-extern void set_init_index (location_t, tree, tree, struct obstack *);
-extern void set_init_label (location_t, tree, location_t, struct obstack *);
-unsigned c_maybe_optimize_large_byte_initializer (void);
-extern void process_init_element (location_t, struct c_expr, bool,
-				  struct obstack *);
-extern tree build_compound_literal (location_t, tree, tree, bool,
-				    unsigned int, struct c_declspecs *);
-extern void check_compound_literal_type (location_t, struct c_type_name *);
-extern tree c_start_switch (location_t, location_t, tree, bool, tree);
-extern void c_finish_switch (tree, tree);
-extern tree build_asm_expr (location_t, tree, tree, tree, tree, tree, bool,
+خارجی خالی سیٹ_init_اشاریہ (location_t, درخت, درخت, ساخت obstack *);
+خارجی خالی سیٹ_init_label (location_t, درخت, location_t, ساخت obstack *);
+غیرعلامتی c_maybe_optimize_large_byte_initializer (خالی);
+خارجی خالی process_init_element (location_t, ساخت c_اظہاریہ, bool,
+				  ساخت obstack *);
+خارجی درخت build_compound_literal (location_t, درخت, درخت, bool,
+				    غیرعلامتی صحیح, ساخت c_declspecs *);
+خارجی خالی check_compound_literal_type (location_t, ساخت c_type_name *);
+خارجی درخت c_آغاز_switch (location_t, location_t, درخت, bool, درخت);
+خارجی خالی c_اختتام_switch (درخت, درخت);
+خارجی درخت build_asm_اظہاریہ (location_t, درخت, درخت, درخت, درخت, درخت, bool,
 			    bool);
-extern tree build_asm_stmt (bool, tree);
-extern int c_types_compatible_p (tree, tree);
-extern tree c_begin_compound_stmt (bool);
-extern tree c_end_compound_stmt (location_t, tree, bool);
-extern void c_finish_if_stmt (location_t, tree, tree, tree);
-extern void c_finish_loop (location_t, location_t, tree, location_t, tree,
-			   tree, tree, tree, bool);
-extern tree c_begin_stmt_expr (void);
-extern tree c_finish_stmt_expr (location_t, tree);
-extern tree c_process_expr_stmt (location_t, tree);
-extern tree c_finish_expr_stmt (location_t, tree);
-extern tree c_finish_return (location_t, tree, tree, bool = false);
-extern tree c_finish_bc_stmt (location_t, tree, bool, tree);
-extern tree c_finish_goto_label (location_t, tree);
-extern tree c_finish_goto_ptr (location_t, c_expr val);
-extern tree c_expr_to_decl (tree, bool *, bool *);
-extern tree c_finish_omp_construct (location_t, enum tree_code, tree, tree);
-extern tree c_finish_oacc_data (location_t, tree, tree);
-extern tree c_finish_oacc_host_data (location_t, tree, tree);
-extern tree c_begin_omp_parallel (void);
-extern tree c_finish_omp_parallel (location_t, tree, tree);
-extern tree c_begin_omp_task (void);
-extern tree c_finish_omp_task (location_t, tree, tree);
-extern void c_finish_omp_cancel (location_t, tree);
-extern void c_finish_omp_cancellation_point (location_t, tree);
-extern tree c_finish_omp_clauses (tree, enum c_omp_region_type);
-extern tree c_omp_finish_mapper_clauses (tree);
-extern tree c_omp_mapper_lookup (tree, tree);
-extern tree c_omp_extract_mapper_directive (tree);
-extern tree c_omp_map_array_section (location_t, tree);
-extern tree c_build_va_arg (location_t, tree, location_t, tree, tree);
-extern tree c_finish_transaction (location_t, tree, int);
-extern bool c_tree_equal (tree, tree);
-extern tree c_build_function_call_vec (location_t, const vec<location_t>&,
-				       tree, vec<tree, va_gc> *,
-				       vec<tree, va_gc> *);
-extern tree c_omp_clause_copy_ctor (tree, tree, tree);
-extern tree c_reconstruct_complex_type (tree, tree);
-extern tree c_type_canonical (tree);
-extern tree c_build_type_attribute_variant (tree ntype, tree attrs);
-extern tree c_build_pointer_type (tree type);
-extern tree c_build_array_type (tree type, tree domain);
-extern tree c_build_array_type_unspecified (tree type);
-extern tree c_build_array_type_zero_size (tree type);
-extern tree c_build_function_type (tree type, tree args, bool no = false);
-extern tree c_build_pointer_type_for_mode (tree type, machine_mode mode, bool m);
+خارجی درخت build_asm_stmt (bool, درخت);
+خارجی صحیح c_types_compatible_p (درخت, درخت);
+خارجی درخت c_begin_compound_stmt (bool);
+خارجی درخت c_انتہا_compound_stmt (location_t, درخت, bool);
+خارجی خالی c_اختتام_if_stmt (location_t, درخت, درخت, درخت);
+خارجی خالی c_اختتام_loop (location_t, location_t, درخت, location_t, درخت,
+			   درخت, درخت, درخت, bool);
+خارجی درخت c_begin_stmt_اظہاریہ (خالی);
+خارجی درخت c_اختتام_stmt_اظہاریہ (location_t, درخت);
+خارجی درخت c_process_اظہاریہ_stmt (location_t, درخت);
+خارجی درخت c_اختتام_اظہاریہ_stmt (location_t, درخت);
+خارجی درخت c_اختتام_return (location_t, درخت, درخت, bool = false);
+خارجی درخت c_اختتام_bc_stmt (location_t, درخت, bool, درخت);
+خارجی درخت c_اختتام_goto_label (location_t, درخت);
+خارجی درخت c_اختتام_goto_ptr (location_t, c_اظہاریہ val);
+خارجی درخت c_اظہاریہ_مقصد_decl (درخت, bool *, bool *);
+خارجی درخت c_اختتام_omp_construct (location_t, شمار درخت_رمز_2, درخت, درخت);
+خارجی درخت c_اختتام_oacc_ڈیٹا (location_t, درخت, درخت);
+خارجی درخت c_اختتام_oacc_host_ڈیٹا (location_t, درخت, درخت);
+خارجی درخت c_begin_omp_parallel (خالی);
+خارجی درخت c_اختتام_omp_parallel (location_t, درخت, درخت);
+خارجی درخت c_begin_omp_task (خالی);
+خارجی درخت c_اختتام_omp_task (location_t, درخت, درخت);
+خارجی خالی c_اختتام_omp_cancel (location_t, درخت);
+خارجی خالی c_اختتام_omp_cancellation_نقطہ (location_t, درخت);
+خارجی درخت c_اختتام_omp_clauses (درخت, شمار c_omp_region_type);
+خارجی درخت c_omp_اختتام_mapper_clauses (درخت);
+خارجی درخت c_omp_mapper_lookup (درخت, درخت);
+خارجی درخت c_omp_نکالو_mapper_directive (درخت);
+خارجی درخت c_omp_map_array_section (location_t, درخت);
+خارجی درخت c_build_va_arg (location_t, درخت, location_t, درخت, درخت);
+خارجی درخت c_اختتام_transaction (location_t, درخت, صحیح);
+خارجی bool c_درخت_equal (درخت, درخت);
+خارجی درخت c_build_function_call_vec (location_t, ثابت vec<location_t>&,
+				       درخت, vec<درخت, va_gc> *,
+				       vec<درخت, va_gc> *);
+خارجی درخت c_omp_clause_copy_ctor (درخت, درخت, درخت);
+خارجی درخت c_reconstruct_complex_type (درخت, درخت);
+خارجی درخت c_type_canonical (درخت);
+خارجی درخت c_build_type_attribute_variant (درخت ntype, درخت attrs);
+خارجی درخت c_build_اشارہ_گر_type (درخت type);
+خارجی درخت c_build_array_type (درخت type, درخت domain);
+خارجی درخت c_build_array_type_unspecified (درخت type);
+خارجی درخت c_build_array_type_zero_سائز (درخت type);
+خارجی درخت c_build_function_type (درخت type, درخت دلائل, bool no = false);
+خارجی درخت c_build_اشارہ_گر_type_for_منوال (درخت type, machine_منوال منوال, bool m);
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement that specifies a return value is seen.  */
 
-extern int current_function_returns_value;
+خارجی صحیح current_function_returns_قدر;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement with no argument is seen.  */
 
-extern int current_function_returns_null;
+خارجی صحیح current_function_returns_null;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a call to a noreturn function is seen.  */
 
-extern int current_function_returns_abnormally;
+خارجی صحیح current_function_returns_abnormally;
 
 /* In c-decl.cc */
 
 /* Tell the binding oracle what kind of binding we are looking for.  */
 
-enum c_oracle_request
+شمار c_oracle_request
 {
-  C_ORACLE_SYMBOL,
-  C_ORACLE_TAG,
+  C_ORACLE_علامت,
+  C_ORACLE_لیبل,
   C_ORACLE_LABEL
 };
 
@@ -999,57 +999,57 @@ enum c_oracle_request
    oracle has been called and will not call it again if it fails to
    create a given binding.  */
 
-typedef void c_binding_oracle_function (enum c_oracle_request, tree identifier);
+قسمتعریف خالی c_binding_oracle_function (شمار c_oracle_request, درخت identifier);
 
-extern c_binding_oracle_function *c_binding_oracle;
+خارجی c_binding_oracle_function *c_binding_oracle;
 
-extern void c_finish_incomplete_decl (tree);
-extern tree c_omp_reduction_id (enum tree_code, tree);
-extern tree c_omp_reduction_decl (tree);
-extern tree c_omp_reduction_lookup (tree, tree);
-extern tree c_check_omp_declare_reduction_r (tree *, int *, void *);
-extern tree c_omp_mapper_id (tree);
-extern tree c_omp_mapper_decl (tree);
-extern void c_omp_scan_mapper_bindings (location_t, tree *, tree);
-extern bool c_check_in_current_scope (tree);
-extern void c_pushtag (location_t, tree, tree);
-extern void c_bind (location_t, tree, bool);
-extern bool tag_exists_p (enum tree_code, tree);
+خارجی خالی c_اختتام_incomplete_decl (درخت);
+خارجی درخت c_omp_reduction_id (شمار درخت_رمز_2, درخت);
+خارجی درخت c_omp_reduction_decl (درخت);
+خارجی درخت c_omp_reduction_lookup (درخت, درخت);
+خارجی درخت c_check_omp_declare_reduction_r (درخت *, صحیح *, خالی *);
+خارجی درخت c_omp_mapper_id (درخت);
+خارجی درخت c_omp_mapper_decl (درخت);
+خارجی خالی c_omp_جائزہ_mapper_bindings (location_t, درخت *, درخت);
+خارجی bool c_check_اندر_current_scope (درخت);
+خارجی خالی c_pushtag (location_t, درخت, درخت);
+خارجی خالی c_bind (location_t, درخت, bool);
+خارجی bool لیبل_exists_p (شمار درخت_رمز_2, درخت);
 
-extern void verify_counted_by_for_top_anonymous_type (tree);
+خارجی خالی verify_counted_by_for_چوٹی_anonymous_type (درخت);
 
 /* In c-errors.cc */
-extern bool pedwarn_c90 (location_t, diagnostics::option_id, const char *, ...)
+خارجی bool pedwarn_c90 (location_t, diagnostics::option_id, ثابت حرف *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c99 (location_t, diagnostics::option_id, const char *, ...)
+خارجی bool pedwarn_c99 (location_t, diagnostics::option_id, ثابت حرف *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c11 (location_t, diagnostics::option_id, const char *, ...)
+خارجی bool pedwarn_c11 (location_t, diagnostics::option_id, ثابت حرف *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c23 (location_t, diagnostics::option_id, const char *, ...)
+خارجی bool pedwarn_c23 (location_t, diagnostics::option_id, ثابت حرف *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern void add_note_about_new_keyword (location_t loc,
-					tree keyword_id);
+خارجی خالی جوڑو_note_about_new_keyword (location_t loc,
+					درخت keyword_id);
 
-extern void
-set_c_expr_source_range (c_expr *expr,
-			 location_t start, location_t finish);
+خارجی خالی
+سیٹ_c_اظہاریہ_ماخذ_range (c_اظہاریہ *اظہاریہ,
+			 location_t آغاز, location_t اختتام);
 
-extern void
-set_c_expr_source_range (c_expr *expr,
-			 source_range src_range);
+خارجی خالی
+سیٹ_c_اظہاریہ_ماخذ_range (c_اظہاریہ *اظہاریہ,
+			 ماخذ_range src_range);
 
 /* In c-fold.cc */
-extern vec<tree> incomplete_record_decls;
+خارجی vec<درخت> incomplete_ریکارڈ_decls;
 
-extern const char *c_get_sarif_source_language (const char *filename);
+خارجی ثابت حرف *c_get_sarif_ماخذ_language (ثابت حرف *filename);
 
-extern const struct scoped_attribute_specs std_attribute_table;
+خارجی ثابت ساخت scoped_attribute_specs std_attribute_جدول;
 
-#if CHECKING_P
+#اگر CHECKING_P
 namespace selftest {
-  extern void run_c_tests (void);
+  خارجی خالی تسلسل_c_tests (خالی);
 } // namespace selftest
-#endif /* #if CHECKING_P */
+#اگر_ختم /* #if CHECKING_P */
 
 
-#endif /* ! GCC_C_TREE_H */
+#اگر_ختم /* ! GCC_C_TREE_H */
