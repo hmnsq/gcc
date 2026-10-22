@@ -17,82 +17,82 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "function.h"
-#include "c-tree.h"
-#include "timevar.h"
-#include "stringpool.h"
-#include "cgraph.h"
-#include "attribs.h"
-#include "stor-layout.h"
-#include "varasm.h"
-#include "trans-mem.h"
-#include "c-family/c-pragma.h"
-#include "c-lang.h"
-#include "c-family/c-objc.h"
-#include "plugin.h"
-#include "builtins.h"
-#include "gomp-constants.h"
-#include "c-family/c-indentation.h"
-#include "gimple-expr.h"
-#include "context.h"
-#include "gcc-rich-location.h"
-#include "c-parser.h"
-#include "tree-vrp.h"
-#include "tree-pass.h"
-#include "tree-pretty-print.h"
-#include "tree.h"
-#include "basic-block.h"
-#include "gimple.h"
-#include "gimple-pretty-print.h"
-#include "tree-ssa.h"
-#include "pass_manager.h"
-#include "tree-ssanames.h"
-#include "gimple-ssa.h"
-#include "tree-dfa.h"
-#include "internal-fn.h"
-#include "cfg.h"
-#include "cfghooks.h"
-#include "bitmap.h"
-#include "cfganal.h"
-#include "tree-cfg.h"
-#include "gimple-iterator.h"
-#include "cfgloop.h"
-#include "tree-phinodes.h"
-#include "tree-into-ssa.h"
+#ضمن "config.h"
+#ضمن "system.h"
+#ضمن "coretypes.h"
+#ضمن "target.h"
+#ضمن "function.h"
+#ضمن "c-tree.h"
+#ضمن "timevar.h"
+#ضمن "stringpool.h"
+#ضمن "cgraph.h"
+#ضمن "attribs.h"
+#ضمن "stor-layout.h"
+#ضمن "varasm.h"
+#ضمن "trans-mem.h"
+#ضمن "c-family/c-pragma.h"
+#ضمن "c-lang.h"
+#ضمن "c-family/c-objc.h"
+#ضمن "plugin.h"
+#ضمن "builtins.h"
+#ضمن "gomp-constants.h"
+#ضمن "c-family/c-indentation.h"
+#ضمن "gimple-expr.h"
+#ضمن "context.h"
+#ضمن "gcc-rich-location.h"
+#ضمن "c-parser.h"
+#ضمن "tree-vrp.h"
+#ضمن "tree-pass.h"
+#ضمن "tree-pretty-print.h"
+#ضمن "tree.h"
+#ضمن "basic-block.h"
+#ضمن "gimple.h"
+#ضمن "gimple-pretty-print.h"
+#ضمن "tree-ssa.h"
+#ضمن "pass_manager.h"
+#ضمن "tree-ssanames.h"
+#ضمن "gimple-ssa.h"
+#ضمن "tree-dfa.h"
+#ضمن "internal-fn.h"
+#ضمن "cfg.h"
+#ضمن "cfghooks.h"
+#ضمن "bitmap.h"
+#ضمن "cfganal.h"
+#ضمن "tree-cfg.h"
+#ضمن "gimple-iterator.h"
+#ضمن "cfgloop.h"
+#ضمن "tree-phinodes.h"
+#ضمن "tree-into-ssa.h"
 
 
 /* GIMPLE parser state.  */
 
-class gimple_parser
+صنف gimple_parser
 {
-public:
-  gimple_parser (c_parser *p) : parser (p), edges(), current_bb(NULL) {}
+عام:
+  gimple_parser (c_parser *p) : parser (p), edges(), current_bb(عدم) {}
   /* c_parser is not visible here, use composition and fake inheritance
      via a conversion operator.  */
-  operator c_parser *() { return parser; }
+  operator c_parser *() { أرجع parser; }
   c_parser *parser;
 
   /* CFG build state.  */
-  class gimple_parser_edge
+  صنف gimple_parser_edge
   {
-  public:
-    int src;
-    int dest;
-    int flags;
+  عام:
+    صحيح src;
+    صحيح dest;
+    صحيح flags;
     profile_probability probability;
   };
   auto_vec<gimple_parser_edge> edges;
   basic_block current_bb;
 
-  void push_edge (int, int, int, profile_probability);
+  فراغ ادفع_edge (صحيح, صحيح, صحيح, profile_probability);
 };
 
-void
-gimple_parser::push_edge (int src, int dest, int flags,
+فراغ
+gimple_parser::ادفع_edge (صحيح src, صحيح dest, صحيح flags,
 			  profile_probability prob)
 {
   gimple_parser_edge e;
@@ -100,88 +100,88 @@ gimple_parser::push_edge (int src, int dest, int flags,
   e.dest = dest;
   e.flags = flags;
   e.probability = prob;
-  edges.safe_push (e);
+  edges.safe_ادفع (e);
 }
 
 
 /* Gimple parsing functions.  */
-static bool c_parser_gimple_compound_statement (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_label (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_statement (gimple_parser &, gimple_seq *);
-static struct c_expr c_parser_gimple_binary_expression (gimple_parser &, tree);
-static struct c_expr c_parser_gimple_unary_expression (gimple_parser &);
-static struct c_expr c_parser_gimple_postfix_expression
-			(gimple_parser &, tree = error_mark_node);
-static struct c_expr c_parser_gimple_postfix_expression_after_primary
-			(gimple_parser &, location_t, struct c_expr);
-static void c_parser_gimple_declaration (gimple_parser &);
-static void c_parser_gimple_goto_stmt (gimple_parser &, location_t,
-				       tree, gimple_seq *);
-static void c_parser_gimple_try_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_if_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_switch_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_return_stmt (gimple_parser &, gimple_seq *);
-static void c_finish_gimple_return (location_t, tree);
-static tree c_parser_gimple_paren_condition (gimple_parser &);
-static void c_parser_gimple_expr_list (gimple_parser &, vec<tree> *);
+ساكن منطقي c_parser_gimple_compound_statement (gimple_parser &, gimple_seq *);
+ساكن فراغ c_parser_gimple_label (gimple_parser &, gimple_seq *);
+ساكن فراغ c_parser_gimple_statement (gimple_parser &, gimple_seq *);
+ساكن بنية c_تعبير c_parser_gimple_ثنائي_expression (gimple_parser &, شجرة);
+ساكن بنية c_تعبير c_parser_gimple_unary_expression (gimple_parser &);
+ساكن بنية c_تعبير c_parser_gimple_postfix_expression
+			(gimple_parser &, شجرة = error_mark_عقدة);
+ساكن بنية c_تعبير c_parser_gimple_postfix_expression_after_primary
+			(gimple_parser &, location_t, بنية c_تعبير);
+ساكن فراغ c_parser_gimple_declaration (gimple_parser &);
+ساكن فراغ c_parser_gimple_goto_stmt (gimple_parser &, location_t,
+				       شجرة, gimple_seq *);
+ساكن فراغ c_parser_gimple_try_stmt (gimple_parser &, gimple_seq *);
+ساكن فراغ c_parser_gimple_if_stmt (gimple_parser &, gimple_seq *);
+ساكن فراغ c_parser_gimple_switch_stmt (gimple_parser &, gimple_seq *);
+ساكن فراغ c_parser_gimple_return_stmt (gimple_parser &, gimple_seq *);
+ساكن فراغ c_finish_gimple_return (location_t, شجرة);
+ساكن شجرة c_parser_gimple_paren_condition (gimple_parser &);
+ساكن فراغ c_parser_gimple_تعبير_list (gimple_parser &, vec<شجرة> *);
 
 
 /* Much like parser_build_unary_op, but avoid applying default conversions.  */
 
-static c_expr
+ساكن c_تعبير
 gimple_parser_build_unary_op (location_t loc,
-			      enum tree_code code, struct c_expr arg)
+			      تعداد شجرة_code code, بنية c_تعبير arg)
 {
-  struct c_expr result;
+  بنية c_تعبير result;
 
   result.original_code = code;
-  result.original_type = NULL;
+  result.original_type = عدم;
   result.m_decimal = 0;
 
-  if (reject_gcc_builtin (arg.value))
+  إذا (reject_gcc_builtin (arg.قيمة))
     {
-      result.value = error_mark_node;
+      result.قيمة = error_mark_عقدة;
     }
-  else
+  وإلا
     {
-      result.value = build_unary_op (loc, code, arg.value, true);
+      result.قيمة = build_unary_op (loc, code, arg.قيمة, true);
 
-      if (TREE_OVERFLOW_P (result.value) && !TREE_OVERFLOW_P (arg.value))
-	overflow_warning (loc, result.value, arg.value);
+      إذا (شجرة_OVERFLOW_P (result.قيمة) && !شجرة_OVERFLOW_P (arg.قيمة))
+	overflow_warning (loc, result.قيمة, arg.قيمة);
     }
 
   /* We are typically called when parsing a prefix token at LOC acting on
      ARG.  Reflect this by updating the source range of the result to
      start at LOC and end at the end of ARG.  */
-  set_c_expr_source_range (&result,
+  set_c_تعبير_source_range (&result,
 			   loc, arg.get_finish ());
 
-  return result;
+  أرجع result;
 }
 
 /* See if VAL is an identifier matching __BB<num> and return <num>
    in *INDEX.  */
 
-static bool
-c_parser_gimple_parse_bb_spec (tree val, int *index)
+ساكن منطقي
+c_parser_gimple_parse_bb_spec (شجرة val, صحيح *index)
 {
-  if (!startswith (IDENTIFIER_POINTER (val), "__BB"))
-    return false;
+  إذا (!startswith (IDENTIFIER_POINTER (val), "__BB"))
+    أرجع خطأ;
 
-  const char *bb = IDENTIFIER_POINTER (val) + 4;
-  if (! ISDIGIT (*bb))
-    return false;
+  ثابت حرف *bb = IDENTIFIER_POINTER (val) + 4;
+  إذا (! ISDIGIT (*bb))
+    أرجع خطأ;
 
-  char *pend;
+  حرف *pend;
   errno = 0;
-  const unsigned long number = strtoul (bb, &pend, 10);
-  if (errno == ERANGE
+  ثابت unsigned long رقم_2 = strtoul (bb, &pend, 10);
+  إذا (errno == ERANGE
       || *pend != '\0'
-      || number > INT_MAX)
-    return false;
+      || رقم_2 > INT_MAX)
+    أرجع خطأ;
 
-  *index = number;
-  return true;
+  *index = رقم_2;
+  أرجع true;
 }
 
 /* See if VAL is an identifier matching __BB<num> and return <num>
@@ -189,150 +189,150 @@ c_parser_gimple_parse_bb_spec (tree val, int *index)
    the edge.  */
 
 
-static bool
-c_parser_gimple_parse_bb_spec_edge_probability (tree val,
+ساكن منطقي
+c_parser_gimple_parse_bb_spec_edge_probability (شجرة val,
 						gimple_parser &parser,
-						int *index,
+						صحيح *index,
 						profile_probability
 						*probability)
 {
-  bool return_p = c_parser_gimple_parse_bb_spec (val, index);
-  if (return_p)
+  منطقي return_p = c_parser_gimple_parse_bb_spec (val, index);
+  إذا (return_p)
     {
       *probability = profile_probability::uninitialized ();
       /* Parse frequency if provided.  */
-      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+      إذا (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	{
-	  tree f;
+	  شجرة f;
 	  c_parser_consume_token (parser);
-	  if (!c_parser_next_token_is (parser, CPP_NAME))
+	  إذا (!c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      c_parser_error (parser, "expected frequency quality");
-	      return false;
+	      أرجع خطأ;
 	    }
 
 	  profile_quality quality;
-	  const char *v
-	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	  if (!parse_profile_quality (v, &quality))
+	  ثابت حرف *v
+	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->قيمة);
+	  إذا (!parse_profile_quality (v, &quality))
 	    {
 	      c_parser_error (parser, "unknown profile quality");
-	      return false;
+	      أرجع خطأ;
 	    }
 
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return false;
+	  إذا (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    أرجع خطأ;
 
-	  if (!c_parser_next_token_is (parser, CPP_NUMBER)
-	      || (TREE_CODE (f = c_parser_peek_token (parser)->value)
+	  إذا (!c_parser_next_token_is (parser, CPP_رقم)
+	      || (شجرة_CODE (f = c_parser_peek_token (parser)->قيمة)
 		  != INTEGER_CST))
 	    {
 	      c_parser_error (parser, "expected frequency value");
-	      return false;
+	      أرجع خطأ;
 	    }
 
-	  unsigned int value = TREE_INT_CST_LOW (f);
-	  *probability = profile_probability (value, quality);
+	  unsigned صحيح قيمة = شجرة_INT_CST_أدنى (f);
+	  *probability = profile_probability (قيمة, quality);
 
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return false;
+	  إذا (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    أرجع خطأ;
 
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return false;
+	  إذا (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    أرجع خطأ;
 	}
 
-      return true;
+      أرجع true;
     }
 
-  return false;
+  أرجع خطأ;
 
 }
 
 /* Parse the body of a function declaration marked with "__GIMPLE".  */
 
-void
-c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
-			    enum c_declspec_il cdil,
-			    profile_count entry_bb_count)
+فراغ
+c_parser_parse_gimple_body (c_parser *cparser, حرف *gimple_pass,
+			    تعداد c_declspec_il cdil,
+			    profile_عدد entry_bb_عدد)
 {
   gimple_parser parser (cparser);
-  gimple_seq seq = NULL;
-  gimple_seq body = NULL;
-  tree stmt = push_stmt_list ();
-  push_scope ();
+  gimple_seq seq = عدم;
+  gimple_seq body = عدم;
+  شجرة stmt = ادفع_stmt_list ();
+  ادفع_scope ();
   location_t loc1 = c_parser_peek_token (parser)->location;
 
   cfun->pass_startwith = gimple_pass;
-  init_tree_ssa (cfun);
+  init_شجرة_ssa (cfun);
 
-  if (cdil == cdil_gimple)
+  إذا (cdil == cdil_gimple)
     /* While we have SSA names in the IL we do not have a CFG built yet
        and PHIs are represented using a PHI internal function.  We do
        have lowered control flow and exception handling (well, we do not
        have parser support for EH yet).  But as we still have BINDs
        we have to go through lowering again.  */
     cfun->curr_properties = PROP_gimple_any;
-  else
+  وإلا
     {
       /* We have at least cdil_gimple_cfg.  */
       gimple_register_cfg_hooks ();
-      init_empty_tree_cfg ();
+      init_empty_شجرة_cfg ();
       parser.current_bb = ENTRY_BLOCK_PTR_FOR_FN (cfun);
       /* Initialize the bare loop structure - we are going to only
          mark headers and leave the rest to fixup.  */
-      set_loops_for_fn (cfun, ggc_cleared_alloc<struct loops> ());
+      set_loops_for_fn (cfun, ggc_cleared_alloc<بنية loops> ());
       init_loops_structure (cfun, loops_for_fn (cfun), 1);
       loops_state_set (cfun, LOOPS_NEED_FIXUP|LOOPS_MAY_HAVE_MULTIPLE_LATCHES);
       cfun->curr_properties
 	|= PROP_gimple_lcf | PROP_gimple_leh | PROP_cfg | PROP_loops;
-      if (cdil == cdil_gimple_ssa)
+      إذا (cdil == cdil_gimple_ssa)
 	{
 	  init_ssa_operands (cfun);
 	  cfun->curr_properties |= PROP_ssa;
 	}
     }
 
-  if (! c_parser_gimple_compound_statement (parser, &seq)
+  إذا (! c_parser_gimple_compound_statement (parser, &seq)
       && cdil == cdil_gimple)
     {
-      gimple *ret = gimple_build_return (NULL);
+      gimple *ret = gimple_build_return (عدم);
       gimple_seq_add_stmt_without_update (&seq, ret);
     }
 
-  tree block = pop_scope ();
-  stmt = pop_stmt_list (stmt);
-  stmt = c_build_bind_expr (loc1, block, stmt);
+  شجرة block = اسحب_scope ();
+  stmt = اسحب_stmt_list (stmt);
+  stmt = c_build_bind_تعبير (loc1, block, stmt);
 
   block = DECL_INITIAL (current_function_decl);
-  BLOCK_SUBBLOCKS (block) = NULL_TREE;
-  BLOCK_CHAIN (block) = NULL_TREE;
-  TREE_ASM_WRITTEN (block) = 1;
+  BLOCK_SUBBLOCKS (block) = NULL_شجرة;
+  BLOCK_CHAIN (block) = NULL_شجرة;
+  شجرة_ASM_WRITTEN (block) = 1;
 
-  if (cdil == cdil_gimple)
+  إذا (cdil == cdil_gimple)
     {
-      gbind *bind_stmt = gimple_build_bind (BIND_EXPR_VARS (stmt), NULL,
-					    BIND_EXPR_BLOCK (stmt));
+      gbind *bind_stmt = gimple_build_bind (BIND_تعبير_VARS (stmt), عدم,
+					    BIND_تعبير_BLOCK (stmt));
       gimple_bind_set_body (bind_stmt, seq);
       gimple_seq_add_stmt_without_update (&body, bind_stmt);
       gimple_set_body (current_function_decl, body);
     }
-  else
+  وإلا
     {
       /* Control-flow and binds are lowered, record local decls.  */
-      for (tree var = BIND_EXPR_VARS (stmt); var; var = DECL_CHAIN (var))
-	if (VAR_P (var)
+      لكل (شجرة var = BIND_تعبير_VARS (stmt); var; var = DECL_CHAIN (var))
+	إذا (VAR_P (var)
 	    && !DECL_EXTERNAL (var))
 	  {
 	    add_local_decl (cfun, var);
 	    /* When the middle-end re-gimplifies any expression we might
 	       run into the assertion that we've seen the decl in a BIND.  */
-	    if (!TREE_STATIC (var))
-	      DECL_SEEN_IN_BIND_EXPR_P (var) = 1;
+	    إذا (!شجرة_STATIC (var))
+	      DECL_SEEN_IN_BIND_تعبير_P (var) = 1;
 	  }
       /* We have a CFG.  Build the edges.  */
-      for (unsigned i = 0; i < parser.edges.length (); ++i)
+      لكل (unsigned i = 0; i < parser.edges.length (); ++i)
 	{
 	  edge e = make_edge (BASIC_BLOCK_FOR_FN (cfun, parser.edges[i].src),
 			      BASIC_BLOCK_FOR_FN (cfun, parser.edges[i].dest),
@@ -342,10 +342,10 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
       /* Add edges for case labels.  */
       basic_block bb;
       FOR_EACH_BB_FN (bb, cfun)
-	if (EDGE_COUNT (bb->succs) == 0)
+	إذا (EDGE_عدد (bb->succs) == 0)
 	  {
-	    if (gswitch *sw = safe_dyn_cast <gswitch *> (*gsi_last_bb (bb)))
-	      for (unsigned i = 0; i < gimple_switch_num_labels (sw); ++i)
+	    إذا (gswitch *sw = safe_dyn_cast <gswitch *> (*gsi_last_bb (bb)))
+	      لكل (unsigned i = 0; i < gimple_switch_رقم_labels (sw); ++i)
 		{
 		  basic_block label_bb = gimple_switch_label_bb (cfun, sw, i);
 		  make_edge (bb, label_bb, 0);
@@ -355,50 +355,50 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
       calculate_dominance_info (CDI_DOMINATORS);
       /* With SSA lower PHIs parsed as internal function calls and
 	 update stmts.  */
-      if (cdil == cdil_gimple_ssa)
+      إذا (cdil == cdil_gimple_ssa)
 	{
 	  /* Create PHI nodes, they are parsed into __PHI internal calls
 	     and update SSA operands.  */
 	  FOR_EACH_BB_FN (bb, cfun)
 	    {
 	      gimple_stmt_iterator gsi;
-	      for (gsi = gsi_start_bb (bb); !gsi_end_p (gsi);)
+	      لكل (gsi = gsi_start_bb (bb); !gsi_end_p (gsi);)
 		{
 		  gimple *stmt = gsi_stmt (gsi);
-		  if (!gimple_call_internal_p (stmt, IFN_PHI))
-		    break;
+		  إذا (!gimple_call_internal_p (stmt, IFN_PHI))
+		    اكسر;
 
-		  gphi *phi = create_phi_node (gimple_call_lhs (stmt), bb);
-		  for (unsigned i = 0; i < gimple_call_num_args (stmt); i += 2)
+		  gphi *phi = create_phi_عقدة (gimple_call_lhs (stmt), bb);
+		  لكل (unsigned i = 0; i < gimple_call_رقم_وسائط (stmt); i += 2)
 		    {
-		      int srcidx = TREE_INT_CST_LOW (gimple_call_arg (stmt, i));
+		      صحيح srcidx = شجرة_INT_CST_أدنى (gimple_call_arg (stmt, i));
 		      edge e = find_edge (BASIC_BLOCK_FOR_FN (cfun, srcidx), bb);
-		      if (!e)
+		      إذا (!e)
 			c_parser_error (parser, "edge not found");
-		      else
+		      وإلا
 			add_phi_arg (phi, gimple_call_arg (stmt, i + 1), e,
 				     UNKNOWN_LOCATION);
 		    }
 		  gsi_remove (&gsi, true);
 		}
-	      for (; !gsi_end_p (gsi); gsi_next (&gsi))
+	      لكل (; !gsi_end_p (gsi); gsi_next (&gsi))
 		update_stmt (gsi_stmt (gsi));
 	    }
 	  /* Fill SSA name gaps, putting them on the freelist and diagnose
 	     SSA names without definition.  */
-	  for (unsigned i = 1; i < num_ssa_names; ++i)
-	    if (!ssa_name (i))
+	  لكل (unsigned i = 1; i < رقم_ssa_names; ++i)
+	    إذا (!ssa_name (i))
 	      {
-		tree name = make_ssa_name_fn (cfun, integer_type_node, NULL, i);
+		شجرة name = make_ssa_name_fn (cfun, integer_type_عقدة, عدم, i);
 		release_ssa_name_fn (cfun, name);
 	      }
-	    else if (!SSA_NAME_DEF_STMT (ssa_name (i)))
+	    وإلا إذا (!SSA_NAME_DEF_STMT (ssa_name (i)))
 	      error ("SSA name %qE with version %d has no definition",
 		     ssa_name (i), i);
 	  /* No explicit virtual operands (yet).  */
-	  bitmap_obstack_initialize (NULL);
+	  bitmap_obstack_initialize (عدم);
 	  update_ssa (TODO_update_ssa_only_virtuals);
-	  bitmap_obstack_release (NULL);
+	  bitmap_obstack_release (عدم);
 	  /* ???  By flushing the freelist after virtual operand SSA rewrite
 	     we keep the gaps available for re-use like needed for the
 	     PR89595 testcase but then usually virtual operands would have
@@ -406,27 +406,27 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
 	     operands explicit in the SSA IL.  */
 	  flush_ssaname_freelist ();
 	}
-      fix_loop_structure (NULL);
+      fix_loop_structure (عدم);
     }
 
-  if (cfun->curr_properties & PROP_cfg)
+  إذا (cfun->curr_properties & PROP_cfg)
     {
-      ENTRY_BLOCK_PTR_FOR_FN (cfun)->count = entry_bb_count;
+      ENTRY_BLOCK_PTR_FOR_FN (cfun)->عدد = entry_bb_عدد;
       gcov_type t = param_gimple_fe_computed_hot_bb_threshold;
       set_hot_bb_threshold (t);
-      update_max_bb_count ();
-      cgraph_node::get_create (cfun->decl);
+      update_max_bb_عدد ();
+      cgraph_عقدة::get_create (cfun->decl);
       cgraph_edge::rebuild_edges ();
     }
 
   /* Perform IL validation and if any error is found abort compilation
      of this function by zapping its body.  */
-  if ((cfun->curr_properties & PROP_cfg)
-      && verify_gimple_in_cfg (cfun, false, false))
-    init_empty_tree_cfg ();
-  else if (!(cfun->curr_properties & PROP_cfg)
-	   && verify_gimple_in_seq (gimple_body (current_function_decl), false))
-    gimple_set_body (current_function_decl, NULL);
+  إذا ((cfun->curr_properties & PROP_cfg)
+      && verify_gimple_in_cfg (cfun, خطأ, خطأ))
+    init_empty_شجرة_cfg ();
+  وإلا إذا (!(cfun->curr_properties & PROP_cfg)
+	   && verify_gimple_in_seq (gimple_body (current_function_decl), خطأ))
+    gimple_set_body (current_function_decl, عدم);
 
   dump_function (TDI_gimple, current_function_decl);
 }
@@ -445,210 +445,210 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
      gimple-return-statement
 */
 
-static bool
+ساكن منطقي
 c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 {
-  bool return_p = false;
+  منطقي return_p = خطأ;
 
-  if (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
-    return false;
+  إذا (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+    أرجع خطأ;
 
   /* A compound statement starts with optional declarations.  */
-  while (c_parser_next_tokens_start_declaration (parser))
+  طالما (c_parser_next_tokens_start_declaration (parser))
     {
       c_parser_gimple_declaration (parser);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return false;
+      إذا (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	أرجع خطأ;
     }
 
-  while (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
+  طالما (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
     {
-      if (c_parser_error (parser))
+      إذا (c_parser_error (parser))
 	{
-	  c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, NULL);
-	  return return_p;
+	  c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, عدم);
+	  أرجع return_p;
 	}
-      else if (c_parser_next_token_is (parser, CPP_EOF))
+      وإلا إذا (c_parser_next_token_is (parser, CPP_EOF))
 	{
 	  c_parser_error (parser, "expected declaration or statement");
-	  return return_p;
+	  أرجع return_p;
 	}
 
-      switch (c_parser_peek_token (parser)->type)
+      بدل (c_parser_peek_token (parser)->type)
 	{
-	case CPP_KEYWORD:
-	  switch (c_parser_peek_token (parser)->keyword)
+	حالة CPP_KEYWORD:
+	  بدل (c_parser_peek_token (parser)->keyword)
 	    {
-	    case RID_AT_TRY:
+	    حالة RID_AT_TRY:
 	      c_parser_gimple_try_stmt (parser, seq);
-	      break;
-	    case RID_IF:
+	      اكسر;
+	    حالة RID_IF:
 	      c_parser_gimple_if_stmt (parser, seq);
-	      break;
-	    case RID_SWITCH:
+	      اكسر;
+	    حالة RID_SWITCH:
 	      c_parser_gimple_switch_stmt (parser, seq);
-	      break;
-	    case RID_GOTO:
+	      اكسر;
+	    حالة RID_GOTO:
 	      {
 		location_t loc = c_parser_peek_token (parser)->location;
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		إذا (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    tree label = c_parser_peek_token (parser)->value;
+		    شجرة label = c_parser_peek_token (parser)->قيمة;
 		    c_parser_consume_token (parser);
 		    c_parser_gimple_goto_stmt (parser, loc, label, seq);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    إذا (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return return_p;
+		      أرجع return_p;
 		  }
 		}
-	      break;
-	    case RID_RETURN:
+	      اكسر;
+	    حالة RID_RETURN:
 	      return_p = true;
 	      c_parser_gimple_return_stmt (parser, seq);
-	      if (! c_parser_require (parser, CPP_SEMICOLON,
+	      إذا (! c_parser_require (parser, CPP_SEMICOLON,
 				      "expected %<;%>"))
-		return return_p;
-	      if (cfun->curr_properties & PROP_cfg)
-		parser.push_edge (parser.current_bb->index, EXIT_BLOCK, 0,
+		أرجع return_p;
+	      إذا (cfun->curr_properties & PROP_cfg)
+		parser.ادفع_edge (parser.current_bb->index, EXIT_BLOCK, 0,
 				  profile_probability::uninitialized ());
-	      break;
-	    default:
-	      goto expr_stmt;
+	      اكسر;
+	    افتراضي:
+	      اذهب تعبير_stmt;
 	    }
-	  break;
-	case CPP_NAME:
-	  if (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
+	  اكسر;
+	حالة CPP_NAME:
+	  إذا (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
 	      c_parser_gimple_label (parser, seq);
-	      break;
+	      اكسر;
 	    }
-	  if (c_parser_next_token_is (parser, CPP_NAME)
+	  إذا (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_token (parser)->id_kind == C_ID_ID
-	      && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	      && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->قيمة),
 			 "try") == 0)
 	    {
 	      c_parser_gimple_try_stmt (parser, seq);
-	      break;
+	      اكسر;
 	    }
 	  /* Basic block specification.
 	     __BB (index, ...)  */
-	  if ((cfun->curr_properties & PROP_cfg)
+	  إذا ((cfun->curr_properties & PROP_cfg)
 	      && !strcmp (IDENTIFIER_POINTER
-			    (c_parser_peek_token (parser)->value), "__BB"))
+			    (c_parser_peek_token (parser)->قيمة), "__BB"))
 	    {
 	      c_parser_consume_token (parser);
-	      if (! c_parser_require (parser, CPP_OPEN_PAREN,
+	      إذا (! c_parser_require (parser, CPP_OPEN_PAREN,
 				      "expected %<(%>"))
-		return return_p;
-	      if (c_parser_next_token_is_not (parser, CPP_NUMBER))
+		أرجع return_p;
+	      إذا (c_parser_next_token_is_not (parser, CPP_رقم))
 		{
 		  c_parser_error (parser, "expected block index");
-		  return return_p;
+		  أرجع return_p;
 		}
-	      tree tnum = c_parser_peek_token (parser)->value;
-	      if (TREE_CODE (tnum) != INTEGER_CST)
+	      شجرة tnum = c_parser_peek_token (parser)->قيمة;
+	      إذا (شجرة_CODE (tnum) != INTEGER_CST)
 		{
 		  c_parser_error (parser, "expected block index");
-		  return return_p;
+		  أرجع return_p;
 		}
-	      int index = TREE_INT_CST_LOW (tnum);
-	      if (index < NUM_FIXED_BLOCKS
+	      صحيح index = شجرة_INT_CST_أدنى (tnum);
+	      إذا (index < رقم_FIXED_BLOCKS
 		  || (index < last_basic_block_for_fn (cfun)
-		      && BASIC_BLOCK_FOR_FN (cfun, index) != NULL))
+		      && BASIC_BLOCK_FOR_FN (cfun, index) != عدم))
 		{
 		  c_parser_error (parser, "invalid block index");
-		  return return_p;
+		  أرجع return_p;
 		}
-	      int is_loop_header_of = -1;
-	      profile_count bb_count = profile_count::uninitialized ();
+	      صحيح is_loop_header_of = -1;
+	      profile_عدد bb_عدد = profile_عدد::uninitialized ();
 	      c_parser_consume_token (parser);
-	      while (c_parser_next_token_is (parser, CPP_COMMA))
+	      طالما (c_parser_next_token_is (parser, CPP_COMMA))
 		{
 		  c_parser_consume_token (parser);
-		  if (! c_parser_next_token_is (parser, CPP_NAME))
+		  إذا (! c_parser_next_token_is (parser, CPP_NAME))
 		    {
 		      c_parser_error (parser, "expected block specifier");
-		      return return_p;
+		      أرجع return_p;
 		    }
 		  /* loop_header (NUM)  */
-		  if (!strcmp (IDENTIFIER_POINTER
-			         (c_parser_peek_token (parser)->value),
+		  إذا (!strcmp (IDENTIFIER_POINTER
+			         (c_parser_peek_token (parser)->قيمة),
 			       "loop_header"))
 		    {
 		      c_parser_consume_token (parser);
-		      if (! c_parser_require (parser, CPP_OPEN_PAREN,
+		      إذا (! c_parser_require (parser, CPP_OPEN_PAREN,
 					      "expected %<(%>"))
-			return return_p;
-		      tree loop_num;
-		      if (! c_parser_next_token_is (parser, CPP_NUMBER)
-			  || TREE_CODE (loop_num
-					  = c_parser_peek_token (parser)->value)
+			أرجع return_p;
+		      شجرة loop_رقم;
+		      إذا (! c_parser_next_token_is (parser, CPP_رقم)
+			  || شجرة_CODE (loop_رقم
+					  = c_parser_peek_token (parser)->قيمة)
 			       != INTEGER_CST)
 			{
 			  c_parser_error (parser, "expected loop number");
-			  return return_p;
+			  أرجع return_p;
 			}
 		      c_parser_consume_token (parser);
-		      is_loop_header_of = TREE_INT_CST_LOW (loop_num);
-		      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+		      is_loop_header_of = شجرة_INT_CST_أدنى (loop_رقم);
+		      إذا (! c_parser_require (parser, CPP_CLOSE_PAREN,
 					      "expected %<)%>"))
-			return return_p;
+			أرجع return_p;
 		    }
 		  /* Parse profile: quality(value) */
-		  else
+		  وإلا
 		    {
-		      tree q;
+		      شجرة q;
 		      profile_quality quality;
-		      tree v = c_parser_peek_token (parser)->value;
-		      if (!parse_profile_quality (IDENTIFIER_POINTER (v),
+		      شجرة v = c_parser_peek_token (parser)->قيمة;
+		      إذا (!parse_profile_quality (IDENTIFIER_POINTER (v),
 						  &quality))
 			{
 			  c_parser_error (parser, "unknown block specifier");
-			  return false;
+			  أرجع خطأ;
 			}
 
 		      c_parser_consume_token (parser);
-		      if (!c_parser_require (parser, CPP_OPEN_PAREN,
+		      إذا (!c_parser_require (parser, CPP_OPEN_PAREN,
 					     "expected %<(%>"))
-			return false;
+			أرجع خطأ;
 
-		      if (!c_parser_next_token_is (parser, CPP_NUMBER)
-			  || (TREE_CODE (q = c_parser_peek_token (parser)->value)
+		      إذا (!c_parser_next_token_is (parser, CPP_رقم)
+			  || (شجرة_CODE (q = c_parser_peek_token (parser)->قيمة)
 			      != INTEGER_CST))
 			{
 			  c_parser_error (parser, "expected count value");
-			  return false;
+			  أرجع خطأ;
 			}
 
-		      bb_count
-			= profile_count::from_gcov_type (TREE_INT_CST_LOW (q),
+		      bb_عدد
+			= profile_عدد::from_gcov_type (شجرة_INT_CST_أدنى (q),
 							 quality);
 		      c_parser_consume_token (parser);
-		      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+		      إذا (! c_parser_require (parser, CPP_CLOSE_PAREN,
 					      "expected %<)%>"))
-			return return_p;
+			أرجع return_p;
 		    }
 		}
-	      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+	      إذا (! c_parser_require (parser, CPP_CLOSE_PAREN,
 				      "expected %<)%>")
 		  || ! c_parser_require (parser, CPP_COLON,
 					 "expected %<:%>"))
-		return return_p;
+		أرجع return_p;
 
 	      /* Put stmts parsed in the current block.  */
-	      if (!gimple_seq_empty_p (*seq))
+	      إذا (!gimple_seq_empty_p (*seq))
 		{
-		  if (!parser.current_bb)
+		  إذا (!parser.current_bb)
 		    c_parser_error (parser, "stmts without block");
-		  else
+		  وإلا
 		    {
 		      gimple_stmt_iterator gsi
 			= gsi_start_bb (parser.current_bb);
-		      gsi_insert_seq_after_without_update (&gsi, *seq,
+		      gsi_أدرج_seq_after_without_update (&gsi, *seq,
 							   GSI_CONTINUE_LINKING);
 		    }
-		  *seq = NULL;
+		  *seq = عدم;
 		}
 
 	      /* Build an empty block with specified index, linking them
@@ -657,53 +657,53 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 	      bb->index = index;
 	      link_block (bb, (parser.current_bb ? parser.current_bb
 			       : ENTRY_BLOCK_PTR_FOR_FN (cfun)));
-	      if (basic_block_info_for_fn (cfun)->length () <= (size_t)index)
+	      إذا (basic_block_info_for_fn (cfun)->length () <= (size_t)index)
 		vec_safe_grow_cleared (basic_block_info_for_fn (cfun),
 				       index + 1, true);
 	      SET_BASIC_BLOCK_FOR_FN (cfun, index, bb);
-	      if (last_basic_block_for_fn (cfun) <= index)
+	      إذا (last_basic_block_for_fn (cfun) <= index)
 		last_basic_block_for_fn (cfun) = index + 1;
 	      n_basic_blocks_for_fn (cfun)++;
-	      if (parser.current_bb->index == ENTRY_BLOCK)
-		parser.push_edge (ENTRY_BLOCK, bb->index, EDGE_FALLTHRU,
+	      إذا (parser.current_bb->index == ENTRY_BLOCK)
+		parser.ادفع_edge (ENTRY_BLOCK, bb->index, EDGE_FALLTHRU,
 				  profile_probability::always ());
 
 	      /* We leave the proper setting to fixup.  */
-	      class loop *loop_father = loops_for_fn (cfun)->tree_root;
+	      صنف loop *loop_father = loops_for_fn (cfun)->شجرة_جذر;
 	      /* If the new block is a loop header, allocate a loop
 		 struct.  Fixup will take care of proper placement within
 		 the loop tree.  */
-	      if (is_loop_header_of != -1)
+	      إذا (is_loop_header_of != -1)
 		{
-		  if (number_of_loops (cfun) > (unsigned)is_loop_header_of
-		      && get_loop (cfun, is_loop_header_of) != NULL)
+		  إذا (رقم_of_loops (cfun) > (unsigned)is_loop_header_of
+		      && get_loop (cfun, is_loop_header_of) != عدم)
 		    {
 		      c_parser_error (parser, "duplicate loop header");
 		    }
-		  else
+		  وإلا
 		    {
-		      class loop *loop = alloc_loop ();
-		      loop->num = is_loop_header_of;
+		      صنف loop *loop = alloc_loop ();
+		      loop->رقم = is_loop_header_of;
 		      loop->header = bb;
-		      if (number_of_loops (cfun) <= (unsigned)is_loop_header_of)
+		      إذا (رقم_of_loops (cfun) <= (unsigned)is_loop_header_of)
 			vec_safe_grow_cleared (loops_for_fn (cfun)->larray,
 					       is_loop_header_of + 1, true);
 		      (*loops_for_fn (cfun)->larray)[is_loop_header_of] = loop;
-		      flow_loop_tree_node_add (loops_for_fn (cfun)->tree_root,
+		      flow_loop_شجرة_عقدة_add (loops_for_fn (cfun)->شجرة_جذر,
 					       loop);
 		    }
 		  loop_father = get_loop (cfun, is_loop_header_of);
 		}
 	      bb->loop_father = loop_father;
-	      bb->count = bb_count;
+	      bb->عدد = bb_عدد;
 
 	      /* Stmts now go to the new block.  */
 	      parser.current_bb = bb;
-	      break;
+	      اكسر;
 	    }
-	  goto expr_stmt;
+	  اذهب تعبير_stmt;
 
-	case CPP_SEMICOLON:
+	حالة CPP_SEMICOLON:
 	  {
 	    /* Empty stmt.  */
 	    location_t loc = c_parser_peek_token (parser)->location;
@@ -711,44 +711,44 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 	    gimple *nop = gimple_build_nop ();
 	    gimple_set_location (nop, loc);
 	    gimple_seq_add_stmt_without_update (seq, nop);
-	    break;
+	    اكسر;
 	  }
 
-	case CPP_CLOSE_PAREN:
-	case CPP_CLOSE_SQUARE:
+	حالة CPP_CLOSE_PAREN:
+	حالة CPP_CLOSE_SQUARE:
 	  /* Avoid infinite loop in error recovery:
 	     c_parser_skip_until_found stops at a closing nesting
 	     delimiter without consuming it, but here we need to consume
 	     it to proceed further.  */
 	  c_parser_error (parser, "expected statement");
 	  c_parser_consume_token (parser);
-	break;
+	اكسر;
 
-	default:
-expr_stmt:
+	افتراضي:
+تعبير_stmt:
 	  c_parser_gimple_statement (parser, seq);
-	  if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	    c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
+	  إذا (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	    c_parser_skip_until_found (parser, CPP_SEMICOLON, عدم);
 	}
     }
   c_parser_consume_token (parser);
 
   /* Put stmts parsed in the current block.  */
-  if ((cfun->curr_properties & PROP_cfg)
+  إذا ((cfun->curr_properties & PROP_cfg)
       && !gimple_seq_empty_p (*seq))
     {
-      if (!parser.current_bb)
+      إذا (!parser.current_bb)
 	c_parser_error (parser, "stmts without block");
-      else
+      وإلا
 	{
 	  gimple_stmt_iterator gsi = gsi_start_bb (parser.current_bb);
-	  gsi_insert_seq_after_without_update (&gsi, *seq,
+	  gsi_أدرج_seq_after_without_update (&gsi, *seq,
 					       GSI_CONTINUE_LINKING);
 	}
-      *seq = NULL;
+      *seq = عدم;
     }
 
-  return return_p;
+  أرجع return_p;
 }
 
 /* Parse a gimple statement.
@@ -778,42 +778,42 @@ expr_stmt:
 
 */
 
-static void
+ساكن فراغ
 c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
 {
-  struct c_expr lhs, rhs;
-  gimple *assign = NULL;
+  بنية c_تعبير lhs, rhs;
+  gimple *assign = عدم;
   location_t loc;
-  tree arg = NULL_TREE;
-  auto_vec<tree> vargs;
+  شجرة arg = NULL_شجرة;
+  auto_vec<شجرة> vargs;
 
   lhs = c_parser_gimple_unary_expression (parser);
-  loc = EXPR_LOCATION (lhs.value);
+  loc = تعبير_LOCATION (lhs.قيمة);
   rhs.set_error ();
 
   /* GIMPLE call statement without LHS.  */
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON)
-      && TREE_CODE (lhs.value) == CALL_EXPR)
+  إذا (c_parser_next_token_is (parser, CPP_SEMICOLON)
+      && شجرة_CODE (lhs.قيمة) == CALL_تعبير)
     {
       gimple *call;
-      call = gimple_build_call_from_tree (lhs.value, NULL);
+      call = gimple_build_call_from_شجرة (lhs.قيمة, عدم);
       gimple_seq_add_stmt_without_update (seq, call);
       gimple_set_location (call, loc);
-      return;
+      أرجع;
     }
 
   /* All following cases are statements with LHS.  */
-  if (! c_parser_require (parser, CPP_EQ, "expected %<=%>"))
-    return;
+  إذا (! c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+    أرجع;
 
   /* Eat and ignore {v} right after the =, the has_volatile_ops is
      redundant and re-computed by the operand scanner.  */
-  if (c_parser_next_token_is (parser, CPP_OPEN_BRACE)
+  إذا (c_parser_next_token_is (parser, CPP_OPEN_BRACE)
       && !(c_parser_peek_token (parser)->flags & PREV_WHITE)
       && c_parser_peek_2nd_token (parser)->type == CPP_NAME
       && !(c_parser_peek_2nd_token (parser)->flags & PREV_WHITE)
       && strcmp ("v", IDENTIFIER_POINTER
-			(c_parser_peek_2nd_token (parser)->value)) == 0
+			(c_parser_peek_2nd_token (parser)->قيمة)) == 0
       && c_parser_peek_nth_token (parser, 3)->type == CPP_CLOSE_BRACE
       && !(c_parser_peek_nth_token (parser, 3)->flags & PREV_WHITE))
     {
@@ -823,104 +823,104 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
     }
 
   /* Cast expression.  */
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+  إذا (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
       && c_token_starts_typename (c_parser_peek_2nd_token (parser)))
     {
       c_parser_consume_token (parser);
-      struct c_type_name *type_name = c_parser_type_name (parser);
+      بنية c_type_name *type_name = c_parser_type_name (parser);
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, "expected %<)%>");
-      if (type_name == NULL)
-	return;
+      إذا (type_name == عدم)
+	أرجع;
       /* ???  The actual type used in the cast expression is ignored as
          in GIMPLE it is encoded by the type of the LHS.  */
       rhs = c_parser_gimple_postfix_expression (parser);
-      if (lhs.value != error_mark_node
-	  && rhs.value != error_mark_node)
+      إذا (lhs.قيمة != error_mark_عقدة
+	  && rhs.قيمة != error_mark_عقدة)
 	{
-	  enum tree_code code = NOP_EXPR;
-	  if (FLOAT_TYPE_P (TREE_TYPE (lhs.value))
-	      && ! FLOAT_TYPE_P (TREE_TYPE (rhs.value)))
-	    code = FLOAT_EXPR;
-	  else if (! FLOAT_TYPE_P (TREE_TYPE (lhs.value))
-		   && FLOAT_TYPE_P (TREE_TYPE (rhs.value)))
-	    code = FIX_TRUNC_EXPR;
-	  assign = gimple_build_assign (lhs.value, code, rhs.value);
+	  تعداد شجرة_code code = NOP_تعبير;
+	  إذا (FLOAT_TYPE_P (شجرة_TYPE (lhs.قيمة))
+	      && ! FLOAT_TYPE_P (شجرة_TYPE (rhs.قيمة)))
+	    code = FLOAT_تعبير;
+	  وإلا إذا (! FLOAT_TYPE_P (شجرة_TYPE (lhs.قيمة))
+		   && FLOAT_TYPE_P (شجرة_TYPE (rhs.قيمة)))
+	    code = FIX_TRUNC_تعبير;
+	  assign = gimple_build_assign (lhs.قيمة, code, rhs.قيمة);
 	  gimple_seq_add_stmt_without_update (seq, assign);
 	  gimple_set_location (assign, loc);
-	  return;
+	  أرجع;
 	}
     }
 
   /* Unary expression.  */
-  switch (c_parser_peek_token (parser)->type)
+  بدل (c_parser_peek_token (parser)->type)
     {
-    case CPP_NAME:
+    حالة CPP_NAME:
       {
-	tree id = c_parser_peek_token (parser)->value;
-	if (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0
+	شجرة id = c_parser_peek_token (parser)->قيمة;
+	إذا (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
-	  goto build_unary_expr;
-	break;
+	  اذهب build_unary_تعبير;
+	اكسر;
       }
-    case CPP_KEYWORD:
-      if (c_parser_peek_token (parser)->keyword != RID_REALPART
+    حالة CPP_KEYWORD:
+      إذا (c_parser_peek_token (parser)->keyword != RID_REALPART
 	  && c_parser_peek_token (parser)->keyword != RID_IMAGPART)
-	break;
+	اكسر;
       /* Fallthru.  */
-    case CPP_AND:
-    case CPP_PLUS:
-    case CPP_MINUS:
-    case CPP_COMPL:
-    case CPP_NOT:
-    case CPP_MULT: /* pointer deref */
-    build_unary_expr:
+    حالة CPP_AND:
+    حالة CPP_PLUS:
+    حالة CPP_MINUS:
+    حالة CPP_COMPL:
+    حالة CPP_NOT:
+    حالة CPP_MULT: /* pointer deref */
+    build_unary_تعبير:
       rhs = c_parser_gimple_unary_expression (parser);
-      if (rhs.value != error_mark_node)
+      إذا (rhs.قيمة != error_mark_عقدة)
 	{
-	  assign = gimple_build_assign (lhs.value, rhs.value);
+	  assign = gimple_build_assign (lhs.قيمة, rhs.قيمة);
 	  gimple_set_location (assign, loc);
 	  gimple_seq_add_stmt_without_update (seq, assign);
 	}
-      return;
+      أرجع;
 
-    default:;
+    افتراضي:;
     }
 
   /* GIMPLE PHI statement.  */
-  if (c_parser_next_token_is_keyword (parser, RID_PHI))
+  إذا (c_parser_next_token_is_keyword (parser, RID_PHI))
     {
       c_parser_consume_token (parser);
 
-      if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	return;
+      إذا (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	أرجع;
 
-      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+      إذا (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	c_parser_consume_token (parser);
 
-      while (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN))
+      طالما (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN))
 	{
-	  if (c_parser_next_token_is (parser, CPP_NAME)
+	  إذا (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
-	      arg = c_parser_peek_token (parser)->value;
+	      arg = c_parser_peek_token (parser)->قيمة;
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is (parser, CPP_COLON))
+	      إذا (c_parser_next_token_is (parser, CPP_COLON))
 		c_parser_consume_token (parser);
-	      int src_index = -1;
-	      if (!c_parser_gimple_parse_bb_spec (arg, &src_index))
+	      صحيح src_index = -1;
+	      إذا (!c_parser_gimple_parse_bb_spec (arg, &src_index))
 		c_parser_error (parser, "invalid source block specification");
-	      vargs.safe_push (size_int (src_index));
+	      vargs.safe_ادفع (size_int (src_index));
 	    }
-	  else if (c_parser_next_token_is (parser, CPP_COMMA))
+	  وإلا إذا (c_parser_next_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
-	  else
+	  وإلا
 	    {
-	      arg = c_parser_gimple_unary_expression (parser).value;
-	      vargs.safe_push (arg);
+	      arg = c_parser_gimple_unary_expression (parser).قيمة;
+	      vargs.safe_ادفع (arg);
 	    }
 	}
 
@@ -929,85 +929,85 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
 
       /* Build internal function for PHI.  */
       gcall *call_stmt = gimple_build_call_internal_vec (IFN_PHI, vargs);
-      gimple_call_set_lhs (call_stmt, lhs.value);
+      gimple_call_set_lhs (call_stmt, lhs.قيمة);
       gimple_set_location (call_stmt, UNKNOWN_LOCATION);
       gimple_seq_add_stmt_without_update (seq, call_stmt);
-      return;
+      أرجع;
     }
 
   /* GIMPLE call with lhs.  */
-  if (c_parser_next_token_is (parser, CPP_DOT)
+  إذا (c_parser_next_token_is (parser, CPP_DOT)
       || (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN
-	  && lookup_name (c_parser_peek_token (parser)->value)))
+	  && lookup_name (c_parser_peek_token (parser)->قيمة)))
     {
       rhs = c_parser_gimple_unary_expression (parser);
-      if (rhs.value != error_mark_node)
+      إذا (rhs.قيمة != error_mark_عقدة)
 	{
-	  gimple *call = gimple_build_call_from_tree (rhs.value, NULL);
-	  gimple_call_set_lhs (call, lhs.value);
+	  gimple *call = gimple_build_call_from_شجرة (rhs.قيمة, عدم);
+	  gimple_call_set_lhs (call, lhs.قيمة);
 	  gimple_seq_add_stmt_without_update (seq, call);
 	  gimple_set_location (call, loc);
 	}
-      return;
+      أرجع;
     }
 
-  rhs = c_parser_gimple_binary_expression (parser, TREE_TYPE (lhs.value));
-  if (lhs.value != error_mark_node
-      && rhs.value != error_mark_node)
+  rhs = c_parser_gimple_ثنائي_expression (parser, شجرة_TYPE (lhs.قيمة));
+  إذا (lhs.قيمة != error_mark_عقدة
+      && rhs.قيمة != error_mark_عقدة)
     {
       /* If we parsed an identifier and the next token  is a '?' then parse
 	 a conditional expression.  */
-      if (SSA_VAR_P (rhs.value) && c_parser_next_token_is (parser, CPP_QUERY))
+      إذا (SSA_VAR_P (rhs.قيمة) && c_parser_next_token_is (parser, CPP_QUERY))
 	{
-	  struct c_expr trueval, falseval;
+	  بنية c_تعبير trueval, falseval;
 	  c_parser_consume_token (parser);
 	  trueval = c_parser_gimple_postfix_expression (parser);
 	  falseval.set_error ();
-	  if (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	  إذا (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    falseval = c_parser_gimple_postfix_expression (parser);
-	  if (trueval.value == error_mark_node
-	      || falseval.value == error_mark_node)
-	    return;
-	  rhs.value = build3_loc (loc,
-				  VECTOR_TYPE_P (TREE_TYPE (rhs.value))
-				  ? VEC_COND_EXPR : COND_EXPR,
-				  TREE_TYPE (trueval.value),
-				  rhs.value, trueval.value, falseval.value);
+	  إذا (trueval.قيمة == error_mark_عقدة
+	      || falseval.قيمة == error_mark_عقدة)
+	    أرجع;
+	  rhs.قيمة = build3_loc (loc,
+				  VECTOR_TYPE_P (شجرة_TYPE (rhs.قيمة))
+				  ? VEC_COND_تعبير : COND_تعبير,
+				  شجرة_TYPE (trueval.قيمة),
+				  rhs.قيمة, trueval.قيمة, falseval.قيمة);
 	}
-      if (get_gimple_rhs_class (TREE_CODE (rhs.value)) == GIMPLE_INVALID_RHS)
+      إذا (get_gimple_rhs_class (شجرة_CODE (rhs.قيمة)) == GIMPLE_INVALID_RHS)
 	{
 	  c_parser_error (parser, "unexpected RHS for assignment");
-	  return;
+	  أرجع;
 	}
-      assign = gimple_build_assign (lhs.value, rhs.value);
+      assign = gimple_build_assign (lhs.قيمة, rhs.قيمة);
       gimple_seq_add_stmt_without_update (seq, assign);
       gimple_set_location (assign, loc);
     }
-  return;
+  أرجع;
 }
 
 /* A mapping between an identifier to a tree code for binary operations. */
-static const std::pair<const char *, tree_code> gimple_binary_identifier_code[] =
+ساكن ثابت std::pair<ثابت حرف *, شجرة_code> gimple_ثنائي_identifier_code[] =
   {
-    {"__MULT_HIGHPART", MULT_HIGHPART_EXPR},
-    {"__UNLT", UNLT_EXPR},
-    {"__UNLE", UNLE_EXPR},
-    {"__UNGT", UNGT_EXPR},
-    {"__UNGE", UNGE_EXPR},
-    {"__UNEQ", UNEQ_EXPR},
-    {"__UNORDERED", UNORDERED_EXPR},
-    {"__ORDERED", ORDERED_EXPR},
-    {"__LTGT", LTGT_EXPR},
-    {"__FLOOR_DIV", FLOOR_DIV_EXPR},
-    {"__ROUND_DIV", ROUND_DIV_EXPR},
-    {"__EXACT_DIV", EXACT_DIV_EXPR},
-    {"__CEIL_DIV", CEIL_DIV_EXPR},
-    {"__FLOOR_MOD", FLOOR_MOD_EXPR},
-    {"__ROUND_MOD", ROUND_MOD_EXPR},
-    {"__CEIL_MOD", CEIL_MOD_EXPR},
-    {"__ROTATE_LEFT", LROTATE_EXPR},
-    {"__ROTATE_RIGHT", RROTATE_EXPR},
+    {"__MULT_HIGHPART", MULT_HIGHPART_تعبير},
+    {"__UNLT", UNLT_تعبير},
+    {"__UNLE", UNLE_تعبير},
+    {"__UNGT", UNGT_تعبير},
+    {"__UNGE", UNGE_تعبير},
+    {"__UNEQ", UNEQ_تعبير},
+    {"__UNORDERED", UNORDERED_تعبير},
+    {"__ORDERED", ORDERED_تعبير},
+    {"__LTGT", LTGT_تعبير},
+    {"__FLOOR_DIV", FLOOR_DIV_تعبير},
+    {"__ROUND_DIV", ROUND_DIV_تعبير},
+    {"__EXACT_DIV", EXACT_DIV_تعبير},
+    {"__CEIL_DIV", CEIL_DIV_تعبير},
+    {"__FLOOR_MOD", FLOOR_MOD_تعبير},
+    {"__ROUND_MOD", ROUND_MOD_تعبير},
+    {"__CEIL_MOD", CEIL_MOD_تعبير},
+    {"__ROTATE_LEFT", LROTATE_تعبير},
+    {"__ROTATE_RIGHT", RROTATE_تعبير},
   };
 
 /* Parse gimple binary expr.
@@ -1033,161 +1033,161 @@ static const std::pair<const char *, tree_code> gimple_binary_identifier_code[] 
 
 */
 
-static c_expr
-c_parser_gimple_binary_expression (gimple_parser &parser, tree ret_type)
+ساكن c_تعبير
+c_parser_gimple_ثنائي_expression (gimple_parser &parser, شجرة ret_type)
 {
   /* Location of the binary operator.  */
-  struct c_expr ret, lhs, rhs;
-  enum tree_code code = ERROR_MARK;
+  بنية c_تعبير ret, lhs, rhs;
+  تعداد شجرة_code code = ERROR_MARK;
   ret.set_error ();
   lhs = c_parser_gimple_postfix_expression (parser, ret_type);
-  if (c_parser_error (parser))
-    return ret;
-  switch (c_parser_peek_token (parser)->type)
+  إذا (c_parser_error (parser))
+    أرجع ret;
+  بدل (c_parser_peek_token (parser)->type)
     {
-    case CPP_MULT:
-      code = MULT_EXPR;
-      break;
-    case CPP_DIV:
-      code = TRUNC_DIV_EXPR;
-      break;
-    case CPP_MOD:
-      code = TRUNC_MOD_EXPR;
-      break;
-    case CPP_PLUS:
-      if (POINTER_TYPE_P (TREE_TYPE (lhs.value)))
-	code = POINTER_PLUS_EXPR;
-      else
-	code = PLUS_EXPR;
-      break;
-    case CPP_MINUS:
-      if (POINTER_TYPE_P (TREE_TYPE (lhs.value)))
-	code = POINTER_DIFF_EXPR;
-      else
-	code = MINUS_EXPR;
-      break;
-    case CPP_LSHIFT:
-      code = LSHIFT_EXPR;
-      break;
-    case CPP_RSHIFT:
-      code = RSHIFT_EXPR;
-      break;
-    case CPP_LESS:
-      code = LT_EXPR;
-      break;
-    case CPP_GREATER:
-      code = GT_EXPR;
-      break;
-    case CPP_LESS_EQ:
-      code = LE_EXPR;
-      break;
-    case CPP_GREATER_EQ:
-      code = GE_EXPR;
-      break;
-    case CPP_EQ_EQ:
-      code = EQ_EXPR;
-      break;
-    case CPP_NOT_EQ:
-      code = NE_EXPR;
-      break;
-    case CPP_AND:
-      code = BIT_AND_EXPR;
-      break;
-    case CPP_XOR:
-      code = BIT_XOR_EXPR;
-      break;
-    case CPP_OR:
-      code = BIT_IOR_EXPR;
-      break;
-    case CPP_AND_AND:
+    حالة CPP_MULT:
+      code = MULT_تعبير;
+      اكسر;
+    حالة CPP_DIV:
+      code = TRUNC_DIV_تعبير;
+      اكسر;
+    حالة CPP_MOD:
+      code = TRUNC_MOD_تعبير;
+      اكسر;
+    حالة CPP_PLUS:
+      إذا (POINTER_TYPE_P (شجرة_TYPE (lhs.قيمة)))
+	code = POINTER_PLUS_تعبير;
+      وإلا
+	code = PLUS_تعبير;
+      اكسر;
+    حالة CPP_MINUS:
+      إذا (POINTER_TYPE_P (شجرة_TYPE (lhs.قيمة)))
+	code = POINTER_DIFF_تعبير;
+      وإلا
+	code = MINUS_تعبير;
+      اكسر;
+    حالة CPP_LSHIFT:
+      code = LSHIFT_تعبير;
+      اكسر;
+    حالة CPP_RSHIFT:
+      code = RSHIFT_تعبير;
+      اكسر;
+    حالة CPP_LESS:
+      code = LT_تعبير;
+      اكسر;
+    حالة CPP_GREATER:
+      code = GT_تعبير;
+      اكسر;
+    حالة CPP_LESS_EQ:
+      code = LE_تعبير;
+      اكسر;
+    حالة CPP_GREATER_EQ:
+      code = GE_تعبير;
+      اكسر;
+    حالة CPP_EQ_EQ:
+      code = EQ_تعبير;
+      اكسر;
+    حالة CPP_NOT_EQ:
+      code = NE_تعبير;
+      اكسر;
+    حالة CPP_AND:
+      code = BIT_AND_تعبير;
+      اكسر;
+    حالة CPP_XOR:
+      code = BIT_XOR_تعبير;
+      اكسر;
+    حالة CPP_OR:
+      code = BIT_IOR_تعبير;
+      اكسر;
+    حالة CPP_AND_AND:
       c_parser_error (parser, "%<&&%> not valid in GIMPLE");
-      return ret;
-    case CPP_OR_OR:
+      أرجع ret;
+    حالة CPP_OR_OR:
       c_parser_error (parser, "%<||%> not valid in GIMPLE");
-      return ret;
-    case CPP_NAME:
+      أرجع ret;
+    حالة CPP_NAME:
       {
-	tree id = c_parser_peek_token (parser)->value;
-	for (auto &p : gimple_binary_identifier_code)
+	شجرة id = c_parser_peek_token (parser)->قيمة;
+	لكل (auto &p : gimple_ثنائي_identifier_code)
 	  {
-	    if (strcmp (IDENTIFIER_POINTER (id), p.first) == 0)
+	    إذا (strcmp (IDENTIFIER_POINTER (id), p.first) == 0)
 	      {
 		code = p.second;
-		break;
+		اكسر;
 	      }
 	  }
-	if (code != ERROR_MARK)
-	  break;
+	إذا (code != ERROR_MARK)
+	  اكسر;
       }
       /* Fallthru.  */
-    default:
+    افتراضي:
       /* Not a binary expression.  */
-      return lhs;
+      أرجع lhs;
     }
   location_t ret_loc = c_parser_peek_token (parser)->location;
   c_parser_consume_token (parser);
   rhs = c_parser_gimple_postfix_expression (parser);
-  if (lhs.value != error_mark_node && rhs.value != error_mark_node)
-    ret.value = build2_loc (ret_loc, code, ret_type, lhs.value, rhs.value);
-  return ret;
+  إذا (lhs.قيمة != error_mark_عقدة && rhs.قيمة != error_mark_عقدة)
+    ret.قيمة = build2_loc (ret_loc, code, ret_type, lhs.قيمة, rhs.قيمة);
+  أرجع ret;
 }
 
 /* Parse a gimple parentized binary expression.  */
 
-static c_expr
-c_parser_gimple_parentized_binary_expression (gimple_parser &parser,
+ساكن c_تعبير
+c_parser_gimple_parentized_ثنائي_expression (gimple_parser &parser,
 					      location_t op_loc,
-					      tree_code code)
+					      شجرة_code code)
 {
-  struct c_expr ret;
+  بنية c_تعبير ret;
   ret.set_error ();
 
   c_parser_consume_token (parser);
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return ret;
-  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
-    return ret;
-  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return ret;
+  إذا (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    أرجع ret;
+  c_تعبير op1 = c_parser_gimple_postfix_expression (parser);
+  إذا (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+    أرجع ret;
+  c_تعبير op2 = c_parser_gimple_postfix_expression (parser);
+  إذا (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    أرجع ret;
 
-  if (op1.value != error_mark_node && op2.value != error_mark_node)
-    ret.value = build2_loc (op_loc,
-			    code, TREE_TYPE (op1.value), op1.value, op2.value);
-  return ret;
+  إذا (op1.قيمة != error_mark_عقدة && op2.قيمة != error_mark_عقدة)
+    ret.قيمة = build2_loc (op_loc,
+			    code, شجرة_TYPE (op1.قيمة), op1.قيمة, op2.قيمة);
+  أرجع ret;
 }
 
 /* Parse a gimple parentized binary expression.  */
 
-static c_expr
+ساكن c_تعبير
 c_parser_gimple_parentized_ternary_expression (gimple_parser &parser,
 					       location_t op_loc,
-					       tree_code code)
+					       شجرة_code code)
 {
-  struct c_expr ret;
+  بنية c_تعبير ret;
   ret.set_error ();
 
   c_parser_consume_token (parser);
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return ret;
-  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
-    return ret;
-  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<)%>"))
-    return ret;
-  c_expr op3 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return ret;
+  إذا (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    أرجع ret;
+  c_تعبير op1 = c_parser_gimple_postfix_expression (parser);
+  إذا (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+    أرجع ret;
+  c_تعبير op2 = c_parser_gimple_postfix_expression (parser);
+  إذا (!c_parser_require (parser, CPP_COMMA, "expected %<)%>"))
+    أرجع ret;
+  c_تعبير op3 = c_parser_gimple_postfix_expression (parser);
+  إذا (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    أرجع ret;
 
-  if (op1.value != error_mark_node
-      && op2.value != error_mark_node
-      && op3.value != error_mark_node)
-    ret.value = build3_loc (op_loc,
-			    code, TREE_TYPE (op1.value),
-			    op1.value, op2.value, op3.value);
-  return ret;
+  إذا (op1.قيمة != error_mark_عقدة
+      && op2.قيمة != error_mark_عقدة
+      && op3.قيمة != error_mark_عقدة)
+    ret.قيمة = build3_loc (op_loc,
+			    code, شجرة_TYPE (op1.قيمة),
+			    op1.قيمة, op2.قيمة, op3.قيمة);
+  أرجع ret;
 }
 
 /* Parse gimple unary expression.
@@ -1200,212 +1200,212 @@ c_parser_gimple_parentized_ternary_expression (gimple_parser &parser,
      & * + - ~ abs_expr
 */
 
-static c_expr
+ساكن c_تعبير
 c_parser_gimple_unary_expression (gimple_parser &parser)
 {
-  struct c_expr ret, op;
+  بنية c_تعبير ret, op;
   location_t op_loc = c_parser_peek_token (parser)->location;
   location_t finish;
   ret.set_error ();
-  switch (c_parser_peek_token (parser)->type)
+  بدل (c_parser_peek_token (parser)->type)
     {
-    case CPP_AND:
+    حالة CPP_AND:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      mark_exp_read (op.value);
-      return gimple_parser_build_unary_op (op_loc, ADDR_EXPR, op);
-    case CPP_MULT:
+      mark_exp_read (op.قيمة);
+      أرجع gimple_parser_build_unary_op (op_loc, ADDR_تعبير, op);
+    حالة CPP_MULT:
       {
 	c_parser_consume_token (parser);
 	op = c_parser_gimple_postfix_expression (parser);
-	if (op.value == error_mark_node)
-	  return ret;
-	if (! POINTER_TYPE_P (TREE_TYPE (op.value)))
+	إذا (op.قيمة == error_mark_عقدة)
+	  أرجع ret;
+	إذا (! POINTER_TYPE_P (شجرة_TYPE (op.قيمة)))
 	  {
 	    error_at (op_loc, "expected pointer as argument of unary %<*%>");
-	    return ret;
+	    أرجع ret;
 	  }
 	finish = op.get_finish ();
 	location_t combined_loc = make_location (op_loc, op_loc, finish);
-	ret.value = build_simple_mem_ref_loc (combined_loc, op.value);
-	TREE_SIDE_EFFECTS (ret.value)
-	  = TREE_THIS_VOLATILE (ret.value)
-	  = TYPE_VOLATILE (TREE_TYPE (TREE_TYPE (op.value)));
+	ret.قيمة = build_simple_mem_ref_loc (combined_loc, op.قيمة);
+	شجرة_SIDE_EFFECTS (ret.قيمة)
+	  = شجرة_THIS_VOLATILE (ret.قيمة)
+	  = TYPE_VOLATILE (شجرة_TYPE (شجرة_TYPE (op.قيمة)));
 	ret.src_range.m_start = op_loc;
 	ret.src_range.m_finish = finish;
-	return ret;
+	أرجع ret;
       }
-    case CPP_PLUS:
+    حالة CPP_PLUS:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, CONVERT_EXPR, op);
-    case CPP_MINUS:
+      أرجع gimple_parser_build_unary_op (op_loc, CONVERT_تعبير, op);
+    حالة CPP_MINUS:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, NEGATE_EXPR, op);
-    case CPP_COMPL:
+      أرجع gimple_parser_build_unary_op (op_loc, NEGATE_تعبير, op);
+    حالة CPP_COMPL:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, BIT_NOT_EXPR, op);
-    case CPP_NOT:
+      أرجع gimple_parser_build_unary_op (op_loc, BIT_NOT_تعبير, op);
+    حالة CPP_NOT:
       c_parser_error (parser, "%<!%> not valid in GIMPLE");
-      return ret;
-    case CPP_KEYWORD:
-      switch (c_parser_peek_token (parser)->keyword)
+      أرجع ret;
+    حالة CPP_KEYWORD:
+      بدل (c_parser_peek_token (parser)->keyword)
 	{
-	case RID_REALPART:
+	حالة RID_REALPART:
 	  c_parser_consume_token (parser);
 	  op = c_parser_gimple_postfix_expression (parser);
-	  return gimple_parser_build_unary_op (op_loc, REALPART_EXPR, op);
-	case RID_IMAGPART:
+	  أرجع gimple_parser_build_unary_op (op_loc, REALPART_تعبير, op);
+	حالة RID_IMAGPART:
 	  c_parser_consume_token (parser);
 	  op = c_parser_gimple_postfix_expression (parser);
-	  return gimple_parser_build_unary_op (op_loc, IMAGPART_EXPR, op);
-	default:
-	  return c_parser_gimple_postfix_expression (parser);
+	  أرجع gimple_parser_build_unary_op (op_loc, IMAGPART_تعبير, op);
+	افتراضي:
+	  أرجع c_parser_gimple_postfix_expression (parser);
 	}
-    case CPP_NAME:
+    حالة CPP_NAME:
 	{
-	  tree id = c_parser_peek_token (parser)->value;
-	  if (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0)
+	  شجرة id = c_parser_peek_token (parser)->قيمة;
+	  إذا (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0)
 	    {
 	      c_parser_consume_token (parser);
 	      op = c_parser_gimple_postfix_expression (parser);
-	      return gimple_parser_build_unary_op (op_loc, ABS_EXPR, op);
+	      أرجع gimple_parser_build_unary_op (op_loc, ABS_تعبير, op);
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0)
+	  وإلا إذا (strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0)
 	    {
 	      c_parser_consume_token (parser);
 	      op = c_parser_gimple_postfix_expression (parser);
-	      return gimple_parser_build_unary_op (op_loc, ABSU_EXPR, op);
+	      أرجع gimple_parser_build_unary_op (op_loc, ABSU_تعبير, op);
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0)
-	    return c_parser_gimple_parentized_binary_expression (parser,
+	  وإلا إذا (strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0)
+	    أرجع c_parser_gimple_parentized_ثنائي_expression (parser,
 								 op_loc,
-								 MIN_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0)
-	    return c_parser_gimple_parentized_binary_expression (parser,
+								 MIN_تعبير);
+	  وإلا إذا (strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0)
+	    أرجع c_parser_gimple_parentized_ثنائي_expression (parser,
 								 op_loc,
-								 MAX_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
-	    return c_parser_gimple_parentized_ternary_expression
-			(parser, op_loc, VEC_PERM_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0)
+								 MAX_تعبير);
+	  وإلا إذا (strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
+	    أرجع c_parser_gimple_parentized_ternary_expression
+			(parser, op_loc, VEC_PERM_تعبير);
+	  وإلا إذا (strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0)
 	    {
 	      /* __BIT_INSERT '(' postfix-expression, postfix-expression,
 			          integer ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      إذا (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op0 = c_parser_gimple_postfix_expression (parser);
+		  c_تعبير op0 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op1 = c_parser_gimple_postfix_expression (parser);
+		  c_تعبير op1 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op2.value) != INTEGER_CST
-		      || !int_fits_type_p (op2.value, bitsizetype))
+		  c_تعبير op2 = c_parser_gimple_postfix_expression (parser);
+		  إذا (شجرة_CODE (op2.قيمة) != INTEGER_CST
+		      || !int_fits_type_p (op2.قيمة, bitsizetype))
 		    c_parser_error (parser, "expected constant offset");
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (op0.value != error_mark_node
-		      && op1.value != error_mark_node
-		      && TREE_CODE (op2.value) == INTEGER_CST)
-		    ret.value = build3_loc (loc, BIT_INSERT_EXPR,
-					    TREE_TYPE (op0.value),
-					    op0.value, op1.value,
+		  إذا (op0.قيمة != error_mark_عقدة
+		      && op1.قيمة != error_mark_عقدة
+		      && شجرة_CODE (op2.قيمة) == INTEGER_CST)
+		    ret.قيمة = build3_loc (loc, BIT_أدرج_تعبير,
+					    شجرة_TYPE (op0.قيمة),
+					    op0.قيمة, op1.قيمة,
 					    fold_convert (bitsizetype,
-							  op2.value));
+							  op2.قيمة));
 		}
-	      return ret;
+	      أرجع ret;
 	    }
-	  else
-	    return c_parser_gimple_postfix_expression (parser);
+	  وإلا
+	    أرجع c_parser_gimple_postfix_expression (parser);
 	}
-    default:
-      return c_parser_gimple_postfix_expression (parser);
+    افتراضي:
+      أرجع c_parser_gimple_postfix_expression (parser);
     }
 }
 
 /* Decompose ID into base name (ID until ver_offset) and VERSION.  Return
    true if ID matches a SSA name.  */
 
-static bool
-c_parser_parse_ssa_name_id (tree id, unsigned *version, unsigned *ver_offset)
+ساكن منطقي
+c_parser_parse_ssa_name_id (شجرة id, unsigned *version, unsigned *ver_offset)
 {
-  const char *token = IDENTIFIER_POINTER (id);
-  const char *var_version = strrchr (token, '_');
-  if (! var_version)
-    return false;
+  ثابت حرف *token = IDENTIFIER_POINTER (id);
+  ثابت حرف *var_version = strrchr (token, '_');
+  إذا (! var_version)
+    أرجع خطأ;
 
   *ver_offset = var_version - token;
-  for (const char *p = var_version + 1; *p; ++p)
-    if (! ISDIGIT (*p))
-      return false;
+  لكل (ثابت حرف *p = var_version + 1; *p; ++p)
+    إذا (! ISDIGIT (*p))
+      أرجع خطأ;
   *version = atoi (var_version + 1);
-  return *version > 0;
+  أرجع *version > 0;
 }
 
 /* Get at the actual SSA name ID with VERSION starting at VER_OFFSET.
    TYPE is the type if the SSA name is being declared.  */
 
-static tree
+ساكن شجرة
 c_parser_parse_ssa_name (gimple_parser &parser,
-			 tree id, tree type, unsigned version,
+			 شجرة id, شجرة type, unsigned version,
 			 unsigned ver_offset)
 {
-  tree name = NULL_TREE;
-  const char *token = IDENTIFIER_POINTER (id);
+  شجرة name = NULL_شجرة;
+  ثابت حرف *token = IDENTIFIER_POINTER (id);
 
-  if (ver_offset == 0)
+  إذا (ver_offset == 0)
     {
       /* Anonymous unnamed SSA name.  */
-      if (version < num_ssa_names)
+      إذا (version < رقم_ssa_names)
 	name = ssa_name (version);
-      if (! name)
+      إذا (! name)
 	{
-	  if (! type)
+	  إذا (! type)
 	    {
 	      c_parser_error (parser, "SSA name undeclared");
-	      return error_mark_node;
+	      أرجع error_mark_عقدة;
 	    }
-	  name = make_ssa_name_fn (cfun, type, NULL, version);
+	  name = make_ssa_name_fn (cfun, type, عدم, version);
 	}
     }
-  else
+  وإلا
     {
-      if (version < num_ssa_names)
+      إذا (version < رقم_ssa_names)
 	name = ssa_name (version);
-      if (! name)
+      إذا (! name)
 	{
 	  /* Separate var name from version.  */
-	  char *var_name = XNEWVEC (char, ver_offset + 1);
+	  حرف *var_name = XNEWVEC (حرف, ver_offset + 1);
 	  memcpy (var_name, token, ver_offset);
 	  var_name[ver_offset] = '\0';
 	  /* lookup for parent decl.  */
 	  id = get_identifier (var_name);
-	  tree parent = lookup_name (id);
+	  شجرة parent = lookup_name (id);
 	  XDELETEVEC (var_name);
-	  if (! parent || parent == error_mark_node)
+	  إذا (! parent || parent == error_mark_عقدة)
 	    {
 	      c_parser_error (parser, "base variable or SSA name undeclared");
-	      return error_mark_node;
+	      أرجع error_mark_عقدة;
 	    }
-	  if (!(VAR_P (parent)
-		|| TREE_CODE (parent) == PARM_DECL
-		|| TREE_CODE (parent) == RESULT_DECL))
+	  إذا (!(VAR_P (parent)
+		|| شجرة_CODE (parent) == PARM_DECL
+		|| شجرة_CODE (parent) == RESULT_DECL))
 	    {
 	      error ("invalid base %qE for SSA name", parent);
-	      return error_mark_node;
+	      أرجع error_mark_عقدة;
 	    }
 	  name = make_ssa_name_fn (cfun, parent,
 				   gimple_build_nop (), version);
 	}
     }
 
-  return name;
+  أرجع name;
 }
 
 /* Parse a gimple call to an internal function.
@@ -1413,73 +1413,73 @@ c_parser_parse_ssa_name (gimple_parser &parser,
    gimple-call-internal:
      . identifier ( gimple-argument-expression-list[opt] )  */
 
-static struct c_expr
+ساكن بنية c_تعبير
 c_parser_gimple_call_internal (gimple_parser &parser)
 {
-  struct c_expr expr;
-  expr.set_error ();
+  بنية c_تعبير تعبير;
+  تعبير.set_error ();
 
   gcc_assert (c_parser_next_token_is (parser, CPP_DOT));
   c_parser_consume_token (parser);
   location_t loc = c_parser_peek_token (parser)->location;
-  if (!c_parser_next_token_is (parser, CPP_NAME)
+  إذا (!c_parser_next_token_is (parser, CPP_NAME)
       || c_parser_peek_token (parser)->id_kind != C_ID_ID)
     {
       c_parser_error (parser, "expecting internal function name");
-      return expr;
+      أرجع تعبير;
     }
-  tree id = c_parser_peek_token (parser)->value;
+  شجرة id = c_parser_peek_token (parser)->قيمة;
   internal_fn ifn = lookup_internal_fn (IDENTIFIER_POINTER (id));
   c_parser_consume_token (parser);
-  if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+  إذا (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
     {
-      auto_vec<tree> exprlist;
-      if (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
-	c_parser_gimple_expr_list (parser, &exprlist);
+      auto_vec<شجرة> exprlist;
+      إذا (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	c_parser_gimple_تعبير_list (parser, &exprlist);
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, "expected %<)%>");
-      if (ifn == IFN_LAST)
+      إذا (ifn == IFN_LAST)
 	error_at (loc, "unknown internal function %qE", id);
-      else
+      وإلا
 	{
-	  expr.value = build_call_expr_internal_loc_array
-	    (loc, ifn, void_type_node, exprlist.length (),
+	  تعبير.قيمة = build_call_تعبير_internal_loc_array
+	    (loc, ifn, void_type_عقدة, exprlist.length (),
 	     exprlist.address ());
-	  expr.original_code = ERROR_MARK;
-	  expr.original_type = NULL;
-	  expr.m_decimal = 0;
+	  تعبير.original_code = ERROR_MARK;
+	  تعبير.original_type = عدم;
+	  تعبير.m_decimal = 0;
 	}
     }
-  return expr;
+  أرجع تعبير;
 }
 
 /* Parse '<' type [',' alignment] '>' and return a type on success
    and NULL_TREE on error.  */
 
-static tree
+ساكن شجرة
 c_parser_gimple_typespec (gimple_parser &parser)
 {
-  struct c_type_name *type_name = NULL;
-  tree alignment = NULL_TREE;
-  if (c_parser_require (parser, CPP_LESS, "expected %<<%>"))
+  بنية c_type_name *type_name = عدم;
+  شجرة alignment = NULL_شجرة;
+  إذا (c_parser_require (parser, CPP_LESS, "expected %<<%>"))
     {
       type_name = c_parser_type_name (parser);
       /* Optional alignment.  */
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      إذا (c_parser_next_token_is (parser, CPP_COMMA))
 	{
 	  c_parser_consume_token (parser);
 	  alignment
-	      = c_parser_gimple_postfix_expression (parser).value;
+	      = c_parser_gimple_postfix_expression (parser).قيمة;
 	}
       c_parser_skip_until_found (parser,
 				 CPP_GREATER, "expected %<>%>");
     }
-  if (!type_name)
-    return NULL_TREE;
-  tree tem;
-  tree type = groktypename (type_name, &tem, NULL);
-  if (alignment)
-    type = build_aligned_type (type, tree_to_uhwi (alignment));
-  return type;
+  إذا (!type_name)
+    أرجع NULL_شجرة;
+  شجرة tem;
+  شجرة type = groktypename (type_name, &tem, عدم);
+  إذا (alignment)
+    type = build_aligned_type (type, شجرة_to_uhwi (alignment));
+  أرجع type;
 }
 
 /* Parse gimple postfix expression.
@@ -1504,45 +1504,45 @@ c_parser_gimple_typespec (gimple_parser &parser)
 
 */
 
-static struct c_expr
-c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
+ساكن بنية c_تعبير
+c_parser_gimple_postfix_expression (gimple_parser &parser, شجرة ret_type)
 {
   location_t loc = c_parser_peek_token (parser)->location;
   source_range tok_range = c_parser_peek_token (parser)->get_range ();
-  struct c_expr expr;
-  expr.set_error ();
-  switch (c_parser_peek_token (parser)->type)
+  بنية c_تعبير تعبير;
+  تعبير.set_error ();
+  بدل (c_parser_peek_token (parser)->type)
     {
-    case CPP_NUMBER:
-      expr.value = c_parser_peek_token (parser)->value;
-      set_c_expr_source_range (&expr, tok_range);
+    حالة CPP_رقم:
+      تعبير.قيمة = c_parser_peek_token (parser)->قيمة;
+      set_c_تعبير_source_range (&تعبير, tok_range);
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      break;
-    case CPP_CHAR:
-    case CPP_CHAR16:
-    case CPP_CHAR32:
-    case CPP_UTF8CHAR:
-    case CPP_WCHAR:
-      expr.value = c_parser_peek_token (parser)->value;
-      set_c_expr_source_range (&expr, tok_range);
+      اكسر;
+    حالة CPP_CHAR:
+    حالة CPP_CHAR16:
+    حالة CPP_CHAR32:
+    حالة CPP_UTF8CHAR:
+    حالة CPP_WCHAR:
+      تعبير.قيمة = c_parser_peek_token (parser)->قيمة;
+      set_c_تعبير_source_range (&تعبير, tok_range);
       c_parser_consume_token (parser);
-      break;
-    case CPP_STRING:
-    case CPP_STRING16:
-    case CPP_STRING32:
-    case CPP_WSTRING:
-    case CPP_UTF8STRING:
-      expr = c_parser_string_literal (parser, false, true);
-      break;
-    case CPP_DOT:
-      expr = c_parser_gimple_call_internal (parser);
-      break;
-    case CPP_NAME:
-      if (c_parser_peek_token (parser)->id_kind == C_ID_ID)
+      اكسر;
+    حالة CPP_STRING:
+    حالة CPP_STRING16:
+    حالة CPP_STRING32:
+    حالة CPP_WSTRING:
+    حالة CPP_UTF8STRING:
+      تعبير = c_parser_string_literal (parser, خطأ, true);
+      اكسر;
+    حالة CPP_DOT:
+      تعبير = c_parser_gimple_call_internal (parser);
+      اكسر;
+    حالة CPP_NAME:
+      إذا (c_parser_peek_token (parser)->id_kind == C_ID_ID)
 	{
-	  tree id = c_parser_peek_token (parser)->value;
-	  if (strcmp (IDENTIFIER_POINTER (id), "__MEM") == 0)
+	  شجرة id = c_parser_peek_token (parser)->قيمة;
+	  إذا (strcmp (IDENTIFIER_POINTER (id), "__MEM") == 0)
 	    {
 	      /* __MEM '<' type-name [ ',' number ] '>'
 	               '(' [ '(' type-name ')' ] unary-expression
@@ -1551,134 +1551,134 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 			   [ ',' number ':' number ] ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      struct c_expr ptr, alias_off, step, index, index2;
-	      ptr.value = error_mark_node;
-	      alias_off.value = NULL_TREE;
-	      step.value = NULL_TREE;
-	      index.value = NULL_TREE;
-	      index2.value = NULL_TREE;
+	      شجرة type = c_parser_gimple_typespec (parser);
+	      بنية c_تعبير ptr, alias_off, step, index, index2;
+	      ptr.قيمة = error_mark_عقدة;
+	      alias_off.قيمة = NULL_شجرة;
+	      step.قيمة = NULL_شجرة;
+	      index.قيمة = NULL_شجرة;
+	      index2.قيمة = NULL_شجرة;
 	      unsigned short clique = 0;
 	      unsigned short base = 0;
-	      bool reverse_order = false;
-	      struct c_expr ro;
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      منطقي reverse_order = خطأ;
+	      بنية c_تعبير ro;
+	      إذا (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  tree alias_type = NULL_TREE;
+		  شجرة alias_type = NULL_شجرة;
 		  /* Optional alias-type cast.  */
-		  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+		  إذا (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 		    {
 		      c_parser_consume_token (parser);
-		      struct c_type_name *alias_type_name
+		      بنية c_type_name *alias_type_name
 			= c_parser_type_name (parser);
 		      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 						 "expected %<)%>");
-		      if (alias_type_name)
+		      إذا (alias_type_name)
 			{
-			  tree tem;
+			  شجرة tem;
 			  alias_type = groktypename (alias_type_name,
-						     &tem, NULL);
+						     &tem, عدم);
 			}
 		    }
 		  ptr = c_parser_gimple_unary_expression (parser);
-		  if (ptr.value == error_mark_node
-		      || ! POINTER_TYPE_P (TREE_TYPE (ptr.value)))
+		  إذا (ptr.قيمة == error_mark_عقدة
+		      || ! POINTER_TYPE_P (شجرة_TYPE (ptr.قيمة)))
 		    {
-		      if (ptr.value != error_mark_node)
+		      إذا (ptr.قيمة != error_mark_عقدة)
 			error_at (ptr.get_start (),
 				  "invalid type of %<__MEM%> operand");
 		      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 						 "expected %<)%>");
-		      return expr;
+		      أرجع تعبير;
 		    }
-		  if (! alias_type)
-		    alias_type = TREE_TYPE (ptr.value);
+		  إذا (! alias_type)
+		    alias_type = شجرة_TYPE (ptr.قيمة);
 		  /* Optional constant offset.  */
-		  if (c_parser_next_token_is (parser, CPP_PLUS))
+		  إذا (c_parser_next_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
 		      alias_off = c_parser_gimple_postfix_expression (parser);
 		    }
-		  if (c_parser_next_token_is (parser, CPP_MULT))
+		  إذا (c_parser_next_token_is (parser, CPP_MULT))
 		    {
 		      std::swap (index, alias_off);
 		      c_parser_consume_token (parser);
 		      step = c_parser_gimple_postfix_expression (parser);
 		    }
-		  else if (c_parser_next_token_is (parser, CPP_PLUS))
+		  وإلا إذا (c_parser_next_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
 		      index = c_parser_gimple_postfix_expression (parser);
-		      if (c_parser_next_token_is (parser, CPP_MULT))
+		      إذا (c_parser_next_token_is (parser, CPP_MULT))
 			{
 			  c_parser_consume_token (parser);
 			  step = c_parser_gimple_postfix_expression (parser);
 			}
-		      else
+		      وإلا
 			std::swap (index, index2);
 		    }
-		  else if (alias_off.value
-			   && TREE_CODE (alias_off.value) != INTEGER_CST)
+		  وإلا إذا (alias_off.قيمة
+			   && شجرة_CODE (alias_off.قيمة) != INTEGER_CST)
 		    std::swap (alias_off, index2);
-		  if (c_parser_next_token_is (parser, CPP_PLUS))
+		  إذا (c_parser_next_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
 		      index2 = c_parser_gimple_postfix_expression (parser);
 		    }
-		  if (alias_off.value)
+		  إذا (alias_off.قيمة)
 		    {
-		      if (TREE_CODE (alias_off.value) != INTEGER_CST)
+		      إذا (شجرة_CODE (alias_off.قيمة) != INTEGER_CST)
 			error_at (alias_off.get_start (),
 				  "expected constant offset for %<__MEM%> "
 				  "operand");
-		      alias_off.value = fold_convert (alias_type,
-						      alias_off.value);
+		      alias_off.قيمة = fold_convert (alias_type,
+						      alias_off.قيمة);
 		    }
-		  else
-		    alias_off.value = build_int_cst (alias_type, 0);
-		  if (step.value)
+		  وإلا
+		    alias_off.قيمة = build_int_cst (alias_type, 0);
+		  إذا (step.قيمة)
 		    {
-		      if (TREE_CODE (step.value) != INTEGER_CST)
+		      إذا (شجرة_CODE (step.قيمة) != INTEGER_CST)
 			error_at (step.get_start (),
 				  "expected constant step for %<__MEM%> "
 				  "operand");
 		    }
-		  if (c_parser_next_token_is (parser, CPP_COMMA))
+		  إذا (c_parser_next_token_is (parser, CPP_COMMA))
 		    {
-		      struct c_expr cl, ba;
-		      bool has_clb = true;
+		      بنية c_تعبير cl, ba;
+		      منطقي has_clb = true;
 		      c_parser_consume_token (parser);
 		      cl = c_parser_gimple_postfix_expression (parser);
-		      if (!c_parser_next_token_is (parser, CPP_COLON))
+		      إذا (!c_parser_next_token_is (parser, CPP_COLON))
 			{
 			  ro = cl;
 			  unsigned HOST_WIDE_INT tmp = 0;
-			  if (!tree_fits_uhwi_p (ro.value)
-			      || (tmp = tree_to_uhwi (ro.value)) > 1)
+			  إذا (!شجرة_fits_uhwi_p (ro.قيمة)
+			      || (tmp = شجرة_to_uhwi (ro.قيمة)) > 1)
 			    error_at (ro.get_start (),
 				      "invalid reverse order value");
 			  reverse_order = tmp;
-			  has_clb = false;
-			  if (c_parser_next_token_is (parser, CPP_COMMA))
+			  has_clb = خطأ;
+			  إذا (c_parser_next_token_is (parser, CPP_COMMA))
 			    {
 			      c_parser_consume_token (parser);
 			      cl = c_parser_gimple_postfix_expression (parser);
 		              has_clb = true;
 			    }
 			}
-		      if (has_clb
+		      إذا (has_clb
 			  && c_parser_require (parser,
 					       CPP_COLON, "expected %<:%>"))
 			{
 			  ba = c_parser_gimple_postfix_expression (parser);
-			  if (!tree_fits_uhwi_p (cl.value)
-			      || !tree_fits_uhwi_p (ba.value)
-			      || compare_tree_int (cl.value,
-						   (clique = tree_to_uhwi
-								(cl.value)))
-			      || compare_tree_int (ba.value,
-						   (base = tree_to_uhwi
-								 (ba.value))))
+			  إذا (!شجرة_fits_uhwi_p (cl.قيمة)
+			      || !شجرة_fits_uhwi_p (ba.قيمة)
+			      || compare_شجرة_int (cl.قيمة,
+						   (clique = شجرة_to_uhwi
+								(cl.قيمة)))
+			      || compare_شجرة_int (ba.قيمة,
+						   (base = شجرة_to_uhwi
+								 (ba.قيمة))))
 			    error_at (cl.get_start (),
 				      "invalid clique/base pair");
 			}
@@ -1686,111 +1686,111 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
 		}
-	      if (! type || c_parser_error (parser))
+	      إذا (! type || c_parser_error (parser))
 		{
-		  c_parser_set_error (parser, false);
-		  return expr;
+		  c_parser_set_error (parser, خطأ);
+		  أرجع تعبير;
 		}
-	      if (index.value || step.value || index2.value)
-		expr.value = build5_loc (loc, TARGET_MEM_REF,
-					 type, ptr.value, alias_off.value,
-					 index.value, step.value, index2.value);
-	      else
-		expr.value = build2_loc (loc, MEM_REF,
-					 type, ptr.value, alias_off.value);
-	      if (clique != 0)
+	      إذا (index.قيمة || step.قيمة || index2.قيمة)
+		تعبير.قيمة = build5_loc (loc, TARGET_MEM_REF,
+					 type, ptr.قيمة, alias_off.قيمة,
+					 index.قيمة, step.قيمة, index2.قيمة);
+	      وإلا
+		تعبير.قيمة = build2_loc (loc, MEM_REF,
+					 type, ptr.قيمة, alias_off.قيمة);
+	      إذا (clique != 0)
 		{
 		  cfun->last_clique = MAX (cfun->last_clique, clique);
-		  MR_DEPENDENCE_CLIQUE (expr.value) = clique;
-		  MR_DEPENDENCE_BASE (expr.value) = base;
+		  MR_DEPENDENCE_CLIQUE (تعبير.قيمة) = clique;
+		  MR_DEPENDENCE_BASE (تعبير.قيمة) = base;
 		}
-	      if (reverse_order)
+	      إذا (reverse_order)
 		{
-		  if (TREE_CODE (expr.value) == MEM_REF)
-		    REF_REVERSE_STORAGE_ORDER (expr.value) = reverse_order;
-		  else
+		  إذا (شجرة_CODE (تعبير.قيمة) == MEM_REF)
+		    REF_REVERSE_STORAGE_ORDER (تعبير.قيمة) = reverse_order;
+		  وإلا
 		    error_at (ro.get_start (),
 			      "target mem ref cannot have reverse order");
 		}
-	      break;
+	      اكسر;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__VIEW_CONVERT") == 0)
+	  وإلا إذا (strcmp (IDENTIFIER_POINTER (id), "__VIEW_CONVERT") == 0)
 	    {
 	      /* __VIEW_CONVERT '<' type-name [ ',' number ] '>'
 	                        '(' postfix-expression ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      شجرة type = c_parser_gimple_typespec (parser);
+	      إذا (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op = c_parser_gimple_postfix_expression (parser);
+		  c_تعبير op = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (type && op.value != error_mark_node)
-		    expr.value = build1_loc (loc, VIEW_CONVERT_EXPR,
-					     type, op.value);
+		  إذا (type && op.قيمة != error_mark_عقدة)
+		    تعبير.قيمة = build1_loc (loc, VIEW_CONVERT_تعبير,
+					     type, op.قيمة);
 		}
-	      break;
+	      اكسر;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__BIT_FIELD_REF") == 0)
+	  وإلا إذا (strcmp (IDENTIFIER_POINTER (id), "__BIT_FIELD_REF") == 0)
 	    {
 	      /* __BIT_FIELD_REF '<' type-name [ ',' number ] '>'
 	                        '(' postfix-expression, integer, integer ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      شجرة type = c_parser_gimple_typespec (parser);
+	      إذا (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op0 = c_parser_gimple_postfix_expression (parser);
+		  c_تعبير op0 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op1.value) != INTEGER_CST
-		      || !int_fits_type_p (op1.value, bitsizetype))
+		  c_تعبير op1 = c_parser_gimple_postfix_expression (parser);
+		  إذا (شجرة_CODE (op1.قيمة) != INTEGER_CST
+		      || !int_fits_type_p (op1.قيمة, bitsizetype))
 		    c_parser_error (parser, "expected constant size");
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op2.value) != INTEGER_CST
-		      || !int_fits_type_p (op2.value, bitsizetype))
+		  c_تعبير op2 = c_parser_gimple_postfix_expression (parser);
+		  إذا (شجرة_CODE (op2.قيمة) != INTEGER_CST
+		      || !int_fits_type_p (op2.قيمة, bitsizetype))
 		    c_parser_error (parser, "expected constant offset");
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (type
-		      && op0.value != error_mark_node
-		      && TREE_CODE (op1.value) == INTEGER_CST
-		      && TREE_CODE (op2.value) == INTEGER_CST)
-		    expr.value = build3_loc (loc, BIT_FIELD_REF, type,
-					     op0.value,
+		  إذا (type
+		      && op0.قيمة != error_mark_عقدة
+		      && شجرة_CODE (op1.قيمة) == INTEGER_CST
+		      && شجرة_CODE (op2.قيمة) == INTEGER_CST)
+		    تعبير.قيمة = build3_loc (loc, BIT_FIELD_REF, type,
+					     op0.قيمة,
 					     fold_convert (bitsizetype,
-							   op1.value),
+							   op1.قيمة),
 					     fold_convert (bitsizetype,
-							   op2.value));
+							   op2.قيمة));
 		}
-	      break;
+	      اكسر;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__CLOBBER") == 0)
+	  وإلا إذا (strcmp (IDENTIFIER_POINTER (id), "__CLOBBER") == 0)
 	    {
 	      /* __CLOBBER [ '(' bob | eob | bos | eos ')' ]  */
 	      clobber_kind kind = CLOBBER_UNDEF;
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+	      إذا (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 		{
 		  c_parser_consume_token (parser);
 		  auto tok = c_parser_peek_token (parser);
-		  if (c_parser_require (parser, CPP_NAME,
+		  إذا (c_parser_require (parser, CPP_NAME,
 					"expected clobber kind"))
 		    {
-		      const char *kind_str = IDENTIFIER_POINTER (tok->value);
-		      if (strcmp (kind_str, "bos") == 0)
+		      ثابت حرف *kind_str = IDENTIFIER_POINTER (tok->قيمة);
+		      إذا (strcmp (kind_str, "bos") == 0)
 			kind = CLOBBER_STORAGE_BEGIN;
-		      else if (strcmp (kind_str, "bob") == 0)
+		      وإلا إذا (strcmp (kind_str, "bob") == 0)
 			kind = CLOBBER_OBJECT_BEGIN;
-		      else if (strcmp (kind_str, "eob") == 0)
+		      وإلا إذا (strcmp (kind_str, "eob") == 0)
 			kind = CLOBBER_OBJECT_END;
-		      else if (strcmp (kind_str, "eos") == 0)
+		      وإلا إذا (strcmp (kind_str, "eos") == 0)
 			kind = CLOBBER_STORAGE_END;
-		      else
+		      وإلا
 			c_parser_error (parser, "expected one of %<bos%>, "
 					"%<eos%>, %<bob>, %<eob%>");
 		    }
@@ -1798,334 +1798,334 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 					     "expected %<)%>");
 		}
 	      /* We infer the (redundant) type from the LHS.  */
-	      expr.value = build_clobber (ret_type, kind);
-	      break;
+	      تعبير.قيمة = build_clobber (ret_type, kind);
+	      اكسر;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "_Literal") == 0)
+	  وإلا إذا (strcmp (IDENTIFIER_POINTER (id), "_Literal") == 0)
 	    {
 	      /* _Literal '(' type-name ')' ( [ '-' ] constant | constructor ) */
 	      c_parser_consume_token (parser);
-	      tree type = NULL_TREE;
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      شجرة type = NULL_شجرة;
+	      إذا (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  struct c_type_name *type_name = c_parser_type_name (parser);
-		  tree tem;
-		  if (type_name)
-		    type = groktypename (type_name, &tem, NULL);
+		  بنية c_type_name *type_name = c_parser_type_name (parser);
+		  شجرة tem;
+		  إذا (type_name)
+		    type = groktypename (type_name, &tem, عدم);
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
 		}
-	      if (! type)
+	      إذا (! type)
 		{
 		  c_parser_error (parser, "invalid _Literal");
-		  return expr;
+		  أرجع تعبير;
 		}
-	      if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+	      إذا (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 		{
 		  c_parser_consume_token (parser);
-		  if (!AGGREGATE_TYPE_P (type)
+		  إذا (!AGGREGATE_TYPE_P (type)
 		      && !VECTOR_TYPE_P (type))
 		    {
 		      c_parser_error (parser, "invalid type for _Literal with "
 				      "constructor");
 		      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
 						 "expected %<}%>");
-		      return expr;
+		      أرجع تعبير;
 		    }
-		  vec<constructor_elt, va_gc> *v = NULL;
-		  bool constant_p = true;
-		  if (VECTOR_TYPE_P (type)
+		  vec<constructor_elt, va_gc> *v = عدم;
+		  منطقي constant_p = true;
+		  إذا (VECTOR_TYPE_P (type)
 		      && !c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 		    {
 		      vec_alloc (v, TYPE_VECTOR_SUBPARTS (type).to_constant ());
-		      do
+		      افعل
 			{
-			  tree val
-			    = c_parser_gimple_postfix_expression (parser).value;
-			  if (! val
-			      || val == error_mark_node
+			  شجرة val
+			    = c_parser_gimple_postfix_expression (parser).قيمة;
+			  إذا (! val
+			      || val == error_mark_عقدة
 			      || (! CONSTANT_CLASS_P (val)
 				  && ! SSA_VAR_P (val)))
 			    {
 			      c_parser_error (parser, "invalid _Literal");
-			      return expr;
+			      أرجع تعبير;
 			    }
-			  CONSTRUCTOR_APPEND_ELT (v, NULL_TREE, val);
-			  if (! CONSTANT_CLASS_P (val))
-			    constant_p = false;
-			  if (c_parser_next_token_is (parser, CPP_COMMA))
+			  CONSTRUCTOR_APPEND_ELT (v, NULL_شجرة, val);
+			  إذا (! CONSTANT_CLASS_P (val))
+			    constant_p = خطأ;
+			  إذا (c_parser_next_token_is (parser, CPP_COMMA))
 			    c_parser_consume_token (parser);
-			  else
-			    break;
+			  وإلا
+			    اكسر;
 			}
-		      while (1);
+		      طالما (1);
 		    }
-		  if (c_parser_require (parser, CPP_CLOSE_BRACE,
+		  إذا (c_parser_require (parser, CPP_CLOSE_BRACE,
 					"expected %<}%>"))
 		    {
-		      if (v && constant_p)
-			expr.value = build_vector_from_ctor (type, v);
-		      else
-			expr.value = build_constructor (type, v);
+		      إذا (v && constant_p)
+			تعبير.قيمة = build_vector_from_ctor (type, v);
+		      وإلا
+			تعبير.قيمة = build_constructor (type, v);
 		    }
-		  else
+		  وإلا
 		    {
 		      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
 						 "expected %<}%>");
-		      return expr;
+		      أرجع تعبير;
 		    }
 		}
-	      else
+	      وإلا
 		{
-		  bool neg_p, addr_p;
-		  if ((neg_p = c_parser_next_token_is (parser, CPP_MINUS)))
+		  منطقي neg_p, addr_p;
+		  إذا ((neg_p = c_parser_next_token_is (parser, CPP_MINUS)))
 		    c_parser_consume_token (parser);
-		  if ((addr_p = c_parser_next_token_is (parser, CPP_AND)))
+		  إذا ((addr_p = c_parser_next_token_is (parser, CPP_AND)))
 		    c_parser_consume_token (parser);
-		  tree val = c_parser_gimple_postfix_expression (parser).value;
-		  if (! val
-		      || val == error_mark_node
+		  شجرة val = c_parser_gimple_postfix_expression (parser).قيمة;
+		  إذا (! val
+		      || val == error_mark_عقدة
 		      || (!CONSTANT_CLASS_P (val) && !addr_p))
 		    {
 		      c_parser_error (parser, "invalid _Literal");
-		      return expr;
+		      أرجع تعبير;
 		    }
-		  if (addr_p)
+		  إذا (addr_p)
 		    {
-		      val = build1 (ADDR_EXPR, type, val);
-		      if (!is_gimple_invariant_address (val))
+		      val = build1 (ADDR_تعبير, type, val);
+		      إذا (!is_gimple_invariant_address (val))
 			{
 			  c_parser_error (parser, "invalid _Literal");
-			  return expr;
+			  أرجع تعبير;
 			}
 		    }
-		  if (neg_p)
+		  إذا (neg_p)
 		    {
-		      val = const_unop (NEGATE_EXPR, TREE_TYPE (val), val);
-		      if (! val)
+		      val = const_unop (NEGATE_تعبير, شجرة_TYPE (val), val);
+		      إذا (! val)
 			{
 			  c_parser_error (parser, "invalid _Literal");
-			  return expr;
+			  أرجع تعبير;
 			}
 		    }
-		  expr.value = fold_convert (type, val);
+		  تعبير.قيمة = fold_convert (type, val);
 		}
-	      return expr;
+	      أرجع تعبير;
 	    }
 
 	  /* SSA name.  */
 	  unsigned version, ver_offset;
-	  if (! lookup_name (id)
+	  إذا (! lookup_name (id)
 	      && c_parser_parse_ssa_name_id (id, &version, &ver_offset))
 	    {
 	      c_parser_consume_token (parser);
-	      expr.value = c_parser_parse_ssa_name (parser, id, NULL_TREE,
+	      تعبير.قيمة = c_parser_parse_ssa_name (parser, id, NULL_شجرة,
 						    version, ver_offset);
-	      if (expr.value == error_mark_node)
-		return expr;
-	      set_c_expr_source_range (&expr, tok_range);
+	      إذا (تعبير.قيمة == error_mark_عقدة)
+		أرجع تعبير;
+	      set_c_تعبير_source_range (&تعبير, tok_range);
 	      /* For default definition SSA names.  */
-	      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+	      إذا (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
 		  && c_parser_peek_2nd_token (parser)->type == CPP_NAME
 		  && strcmp ("D",
 			     IDENTIFIER_POINTER
-			       (c_parser_peek_2nd_token (parser)->value)) == 0
+			       (c_parser_peek_2nd_token (parser)->قيمة)) == 0
 		  && c_parser_peek_nth_token (parser, 3)->type == CPP_CLOSE_PAREN)
 		{
 		  c_parser_consume_token (parser);
 		  c_parser_consume_token (parser);
 		  c_parser_consume_token (parser);
-		  if (! SSA_NAME_IS_DEFAULT_DEF (expr.value))
+		  إذا (! SSA_NAME_IS_DEFAULT_DEF (تعبير.قيمة))
 		    {
-		      if (!SSA_NAME_VAR (expr.value))
+		      إذا (!SSA_NAME_VAR (تعبير.قيمة))
 			{
 			  error_at (loc, "anonymous SSA name cannot have"
 				    " default definition");
-			  expr.value = error_mark_node;
-			  return expr;
+			  تعبير.قيمة = error_mark_عقدة;
+			  أرجع تعبير;
 			}
-		      set_ssa_default_def (cfun, SSA_NAME_VAR (expr.value),
-					   expr.value);
-		      SSA_NAME_DEF_STMT (expr.value) = gimple_build_nop ();
+		      set_ssa_default_def (cfun, SSA_NAME_VAR (تعبير.قيمة),
+					   تعبير.قيمة);
+		      SSA_NAME_DEF_STMT (تعبير.قيمة) = gimple_build_nop ();
 		    }
 		}
 	    }
-	  else
+	  وإلا
 	    {
 	      c_parser_consume_token (parser);
-	      expr.value
+	      تعبير.قيمة
 		= build_external_ref (loc, id,
 				      (c_parser_peek_token (parser)->type
-				       == CPP_OPEN_PAREN), &expr.original_type);
-	      set_c_expr_source_range (&expr, tok_range);
+				       == CPP_OPEN_PAREN), &تعبير.original_type);
+	      set_c_تعبير_source_range (&تعبير, tok_range);
 	    }
-	  break;
+	  اكسر;
 	}
       /* Fallthru.  */
-    default:
+    افتراضي:
       c_parser_error (parser, "expected expression");
-      expr.set_error ();
-      break;
+      تعبير.set_error ();
+      اكسر;
     }
-  if (expr.value == error_mark_node)
-    return expr;
-  return c_parser_gimple_postfix_expression_after_primary
-    (parser, EXPR_LOC_OR_LOC (expr.value, loc), expr);
+  إذا (تعبير.قيمة == error_mark_عقدة)
+    أرجع تعبير;
+  أرجع c_parser_gimple_postfix_expression_after_primary
+    (parser, تعبير_LOC_OR_LOC (تعبير.قيمة, loc), تعبير);
 }
 
 /* Parse a gimple postfix expression after the initial primary or compound
    literal.  */
 
-static struct c_expr
+ساكن بنية c_تعبير
 c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
-						  location_t expr_loc,
-						  struct c_expr expr)
+						  location_t تعبير_loc,
+						  بنية c_تعبير تعبير)
 {
   location_t start;
   location_t finish;
-  tree ident;
+  شجرة ident;
   location_t comp_loc;
 
-  while (true)
+  طالما (true)
     {
       location_t op_loc = c_parser_peek_token (parser)->location;
-      switch (c_parser_peek_token (parser)->type)
+      بدل (c_parser_peek_token (parser)->type)
 	{
-	case CPP_OPEN_SQUARE:
+	حالة CPP_OPEN_SQUARE:
 	  {
 	    c_parser_consume_token (parser);
-	    tree idx = c_parser_gimple_unary_expression (parser).value;
+	    شجرة idx = c_parser_gimple_unary_expression (parser).قيمة;
 
-	    if (! c_parser_require (parser, CPP_CLOSE_SQUARE, "expected %<]%>"))
+	    إذا (! c_parser_require (parser, CPP_CLOSE_SQUARE, "expected %<]%>"))
 	      {
-		c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, NULL);
-		break;
+		c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, عدم);
+		اكسر;
 	      }
 
-	    start = expr.get_start ();
+	    start = تعبير.get_start ();
 	    finish = c_parser_tokens_buf (parser, 0)->location;
-	    expr.value = build_array_ref (op_loc, expr.value, idx);
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
+	    تعبير.قيمة = build_array_ref (op_loc, تعبير.قيمة, idx);
+	    set_c_تعبير_source_range (&تعبير, start, finish);
+	    تعبير.m_decimal = 0;
 
-	    expr.original_code = ERROR_MARK;
-	    expr.original_type = NULL;
-	    break;
+	    تعبير.original_code = ERROR_MARK;
+	    تعبير.original_type = عدم;
+	    اكسر;
 	  }
-	case CPP_OPEN_PAREN:
+	حالة CPP_OPEN_PAREN:
 	  {
 	    /* Function call.  */
 	    c_parser_consume_token (parser);
-	    auto_vec<tree> exprlist;
-	    if (! c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
-	      c_parser_gimple_expr_list (parser, &exprlist);
+	    auto_vec<شجرة> exprlist;
+	    إذا (! c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	      c_parser_gimple_تعبير_list (parser, &exprlist);
 	    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				       "expected %<)%>");
-	    if (!FUNC_OR_METHOD_TYPE_P (TREE_TYPE (expr.value)))
+	    إذا (!FUNC_OR_METHOD_TYPE_P (شجرة_TYPE (تعبير.قيمة)))
 	      {
 		c_parser_error (parser, "invalid call to non-function");
-		expr.set_error ();
-		break;
+		تعبير.set_error ();
+		اكسر;
 	      }
-	    expr.value = build_call_array_loc
-		(expr_loc, TREE_TYPE (TREE_TYPE (expr.value)),
-		 expr.value, exprlist.length (), exprlist.address ());
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    expr.original_type = NULL;
-	    break;
+	    تعبير.قيمة = build_call_array_loc
+		(تعبير_loc, شجرة_TYPE (شجرة_TYPE (تعبير.قيمة)),
+		 تعبير.قيمة, exprlist.length (), exprlist.address ());
+	    تعبير.m_decimal = 0;
+	    تعبير.original_code = ERROR_MARK;
+	    تعبير.original_type = عدم;
+	    اكسر;
 	  }
-	case CPP_DOT:
+	حالة CPP_DOT:
 	  {
 	    /* Structure element reference.  */
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_NAME))
+	    إذا (c_parser_next_token_is (parser, CPP_NAME))
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
-		ident = comp_tok->value;
+		ident = comp_tok->قيمة;
 		comp_loc = comp_tok->location;
 	      }
-	    else
+	    وإلا
 	      {
 		c_parser_error (parser, "expected identifier");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		تعبير.set_error ();
+		تعبير.original_code = ERROR_MARK;
+		تعبير.original_type = عدم;
+		أرجع تعبير;
 	      }
-	    start = expr.get_start ();
+	    start = تعبير.get_start ();
 	    finish = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_consume_token (parser);
-	    expr.value = build_component_ref (op_loc, expr.value, ident,
+	    تعبير.قيمة = build_component_ref (op_loc, تعبير.قيمة, ident,
 					      comp_loc, UNKNOWN_LOCATION);
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    if (TREE_CODE (expr.value) != COMPONENT_REF)
-	      expr.original_type = NULL;
-	    else
+	    set_c_تعبير_source_range (&تعبير, start, finish);
+	    تعبير.m_decimal = 0;
+	    تعبير.original_code = ERROR_MARK;
+	    إذا (شجرة_CODE (تعبير.قيمة) != COMPONENT_REF)
+	      تعبير.original_type = عدم;
+	    وإلا
 	      {
 		/* Remember the original type of a bitfield.  */
-		tree field = TREE_OPERAND (expr.value, 1);
-		if (TREE_CODE (field) != FIELD_DECL)
-		  expr.original_type = NULL;
-		else
-		  expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		شجرة field = شجرة_OPERAND (تعبير.قيمة, 1);
+		إذا (شجرة_CODE (field) != FIELD_DECL)
+		  تعبير.original_type = عدم;
+		وإلا
+		  تعبير.original_type = DECL_BIT_FIELD_TYPE (field);
 	      }
-	    break;
+	    اكسر;
 	  }
-	case CPP_DEREF:
+	حالة CPP_DEREF:
 	  {
 	    /* Structure element reference.  */
-	    if (!POINTER_TYPE_P (TREE_TYPE (expr.value)))
+	    إذا (!POINTER_TYPE_P (شجرة_TYPE (تعبير.قيمة)))
 	      {
 		c_parser_error (parser, "dereference of non-pointer");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		تعبير.set_error ();
+		تعبير.original_code = ERROR_MARK;
+		تعبير.original_type = عدم;
+		أرجع تعبير;
 	      }
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_NAME))
+	    إذا (c_parser_next_token_is (parser, CPP_NAME))
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
-		ident = comp_tok->value;
+		ident = comp_tok->قيمة;
 		comp_loc = comp_tok->location;
 	      }
-	    else
+	    وإلا
 	      {
 		c_parser_error (parser, "expected identifier");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		تعبير.set_error ();
+		تعبير.original_code = ERROR_MARK;
+		تعبير.original_type = عدم;
+		أرجع تعبير;
 	      }
-	    start = expr.get_start ();
+	    start = تعبير.get_start ();
 	    finish = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_consume_token (parser);
-	    expr.value = build_component_ref (op_loc,
+	    تعبير.قيمة = build_component_ref (op_loc,
 					      build_simple_mem_ref_loc
-					        (op_loc, expr.value),
+					        (op_loc, تعبير.قيمة),
 					      ident, comp_loc,
-					      expr.get_location ());
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    if (TREE_CODE (expr.value) != COMPONENT_REF)
-	      expr.original_type = NULL;
-	    else
+					      تعبير.get_location ());
+	    set_c_تعبير_source_range (&تعبير, start, finish);
+	    تعبير.m_decimal = 0;
+	    تعبير.original_code = ERROR_MARK;
+	    إذا (شجرة_CODE (تعبير.قيمة) != COMPONENT_REF)
+	      تعبير.original_type = عدم;
+	    وإلا
 	      {
 		/* Remember the original type of a bitfield.  */
-		tree field = TREE_OPERAND (expr.value, 1);
-		if (TREE_CODE (field) != FIELD_DECL)
-		  expr.original_type = NULL;
-		else
-		  expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		شجرة field = شجرة_OPERAND (تعبير.قيمة, 1);
+		إذا (شجرة_CODE (field) != FIELD_DECL)
+		  تعبير.original_type = عدم;
+		وإلا
+		  تعبير.original_type = DECL_BIT_FIELD_TYPE (field);
 	      }
-	    break;
+	    اكسر;
 	  }
-	default:
-	  return expr;
+	افتراضي:
+	  أرجع تعبير;
 	}
     }
 }
@@ -2138,18 +2138,18 @@ c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
 
  */
 
-static void
-c_parser_gimple_expr_list (gimple_parser &parser, vec<tree> *ret)
+ساكن فراغ
+c_parser_gimple_تعبير_list (gimple_parser &parser, vec<شجرة> *ret)
 {
-  struct c_expr expr;
+  بنية c_تعبير تعبير;
 
-  expr = c_parser_gimple_unary_expression (parser);
-  ret->safe_push (expr.value);
-  while (c_parser_next_token_is (parser, CPP_COMMA))
+  تعبير = c_parser_gimple_unary_expression (parser);
+  ret->safe_ادفع (تعبير.قيمة);
+  طالما (c_parser_next_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
-      expr = c_parser_gimple_unary_expression (parser);
-      ret->safe_push (expr.value);
+      تعبير = c_parser_gimple_unary_expression (parser);
+      ret->safe_ادفع (تعبير.قيمة);
     }
 }
 
@@ -2162,19 +2162,19 @@ c_parser_gimple_expr_list (gimple_parser &parser, vec<tree> *ret)
 
 */
 
-static void
+ساكن فراغ
 c_parser_gimple_label (gimple_parser &parser, gimple_seq *seq)
 {
-  tree name = c_parser_peek_token (parser)->value;
+  شجرة name = c_parser_peek_token (parser)->قيمة;
   location_t loc1 = c_parser_peek_token (parser)->location;
   gcc_assert (c_parser_next_token_is (parser, CPP_NAME));
   c_parser_consume_token (parser);
   gcc_assert (c_parser_next_token_is (parser, CPP_COLON));
   c_parser_consume_token (parser);
-  tree label = define_label (loc1, name);
-  if (label)
+  شجرة label = define_label (loc1, name);
+  إذا (label)
     gimple_seq_add_stmt_without_update (seq, gimple_build_label (label));
-  return;
+  أرجع;
 }
 
 /* Parse gimple/RTL pass list.
@@ -2183,77 +2183,77 @@ c_parser_gimple_label (gimple_parser &parser, gimple_seq *seq)
      startwith("pass-name")[,{cfg,ssa}]
  */
 
-void
+فراغ
 c_parser_gimple_or_rtl_pass_list (c_parser *parser, c_declspecs *specs)
 {
-  char *pass = NULL;
+  حرف *pass = عدم;
 
   /* Accept __GIMPLE/__RTL.  */
-  if (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
-    return;
+  إذا (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
+    أرجع;
   c_parser_consume_token (parser);
 
-  specs->entry_bb_count = profile_count::uninitialized ();
-  while (c_parser_next_token_is (parser, CPP_NAME))
+  specs->entry_bb_عدد = profile_عدد::uninitialized ();
+  طالما (c_parser_next_token_is (parser, CPP_NAME))
     {
       profile_quality quality;
-      const char *op = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      ثابت حرف *op = IDENTIFIER_POINTER (c_parser_peek_token (parser)->قيمة);
       c_parser_consume_token (parser);
-      if (! strcmp (op, "startwith"))
+      إذا (! strcmp (op, "startwith"))
 	{
-	  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return;
-	  if (c_parser_next_token_is_not (parser, CPP_STRING))
+	  إذا (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    أرجع;
+	  إذا (c_parser_next_token_is_not (parser, CPP_STRING))
 	    {
 	      error_at (c_parser_peek_token (parser)->location,
 			"expected pass name");
-	      return;
+	      أرجع;
 	    }
-	  pass = xstrdup (TREE_STRING_POINTER
-			  (c_parser_string_literal (parser, false,
-						    false).value));
-	  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<(%>"))
-	    return;
+	  pass = xstrdup (شجرة_STRING_POINTER
+			  (c_parser_string_literal (parser, خطأ,
+						    خطأ).قيمة));
+	  إذا (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<(%>"))
+	    أرجع;
 	}
-      else if (parse_profile_quality (op, &quality))
+      وإلا إذا (parse_profile_quality (op, &quality))
 	{
-	  tree q;
-	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return;
+	  شجرة q;
+	  إذا (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    أرجع;
 
-	  if (!c_parser_next_token_is (parser, CPP_NUMBER)
-	      || (TREE_CODE (q = c_parser_peek_token (parser)->value)
+	  إذا (!c_parser_next_token_is (parser, CPP_رقم)
+	      || (شجرة_CODE (q = c_parser_peek_token (parser)->قيمة)
 		  != INTEGER_CST))
 	    {
 	      c_parser_error (parser, "expected count value");
-	      return;
+	      أرجع;
 	    }
 
-	  specs->entry_bb_count
-	    = profile_count::from_gcov_type (TREE_INT_CST_LOW (q), quality);
+	  specs->entry_bb_عدد
+	    = profile_عدد::from_gcov_type (شجرة_INT_CST_أدنى (q), quality);
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return;
+	  إذا (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    أرجع;
 	}
-      else if (specs->declspec_il != cdil_gimple)
+      وإلا إذا (specs->declspec_il != cdil_gimple)
 	/* Allow only one IL specifier and none on RTL.  */
 	;
-      else if (! strcmp (op, "cfg"))
+      وإلا إذا (! strcmp (op, "cfg"))
 	specs->declspec_il = cdil_gimple_cfg;
-      else if (! strcmp (op, "ssa"))
+      وإلا إذا (! strcmp (op, "ssa"))
 	specs->declspec_il = cdil_gimple_ssa;
-      else
+      وإلا
 	{
 	  error_at (c_parser_peek_token (parser)->location,
 		    "invalid operation");
-	  return;
+	  أرجع;
 	}
-     if (c_parser_next_token_is (parser, CPP_COMMA))
+     إذا (c_parser_next_token_is (parser, CPP_COMMA))
        c_parser_consume_token (parser);
     }
 
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return;
+  إذا (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    أرجع;
 
   specs->gimple_or_rtl_pass = pass;
 }
@@ -2296,36 +2296,36 @@ c_parser_gimple_or_rtl_pass_list (c_parser *parser, c_declspecs *specs)
 
  */
 
-static void
+ساكن فراغ
 c_parser_gimple_declaration (gimple_parser &parser)
 {
-  struct c_declarator *declarator;
-  struct c_declspecs *specs = build_null_declspecs ();
+  بنية c_declarator *declarator;
+  بنية c_declspecs *specs = build_null_declspecs ();
   c_parser_declspecs (parser, specs, true, true, true,
 		      true, true, true, true, cla_nonabstract_decl);
   finish_declspecs (specs);
 
   /* Provide better error recovery.  Note that a type name here is usually
      better diagnosed as a redeclaration.  */
-  if (c_parser_next_token_starts_declspecs (parser)
+  إذا (c_parser_next_token_starts_declspecs (parser)
       && ! c_parser_next_token_is (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected %<;%>");
-      c_parser_set_error (parser, false);
-      return;
+      c_parser_set_error (parser, خطأ);
+      أرجع;
     }
 
-  bool dummy = false;
+  منطقي dummy = خطأ;
   declarator = c_parser_declarator (parser,
 				    specs->typespec_kind != ctsk_none,
 				    C_DTR_NORMAL, &dummy);
 
-  if (!c_parser_next_token_is (parser, CPP_SEMICOLON))
+  إذا (!c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
       c_parser_error (parser, "expected %<;%>");
-      return;
+      أرجع;
     }
-  if (declarator)
+  إذا (declarator)
     {
       /* Handle SSA name decls specially, they do not go into the identifier
          table but we simply build the SSA name for later lookup.  */
@@ -2335,10 +2335,10 @@ c_parser_gimple_declaration (gimple_parser &parser)
 	 just build the type of the decl - start_decl already pushes
 	 the identifier to the bindings for lookup, something we do not
 	 want.  */
-      struct c_declarator *id_declarator = declarator;
-      while (id_declarator->kind == cdk_pointer)
+      بنية c_declarator *id_declarator = declarator;
+      طالما (id_declarator->kind == cdk_pointer)
 	id_declarator = id_declarator->declarator;
-      if (id_declarator->kind == cdk_id
+      إذا (id_declarator->kind == cdk_id
 	  && (declarator->kind == cdk_pointer
 	      || is_gimple_reg_type (specs->type))
 	  && c_parser_parse_ssa_name_id (id_declarator->u.id.id,
@@ -2348,9 +2348,9 @@ c_parser_gimple_declaration (gimple_parser &parser)
 	     decide to not dump their name for -gimple).  */
 	  && ver_offset == 0)
 	{
-	  struct c_declarator *p = declarator;
-	  tree type = specs->type;
-	  while (p->kind == cdk_pointer)
+	  بنية c_declarator *p = declarator;
+	  شجرة type = specs->type;
+	  طالما (p->kind == cdk_pointer)
 	    {
 	      type = build_pointer_type (type);
 	      p = p->declarator;
@@ -2358,39 +2358,39 @@ c_parser_gimple_declaration (gimple_parser &parser)
 	  c_parser_parse_ssa_name (parser, id_declarator->u.id.id, type,
 				   version, ver_offset);
 	}
-      else
+      وإلا
 	{
-	  tree postfix_attrs = NULL_TREE;
-	  tree all_prefix_attrs = specs->attrs;
-	  specs->attrs = NULL;
-	  tree decl = start_decl (declarator, specs, false,
+	  شجرة postfix_attrs = NULL_شجرة;
+	  شجرة all_prefix_attrs = specs->attrs;
+	  specs->attrs = عدم;
+	  شجرة decl = start_decl (declarator, specs, خطأ,
 				  chainon (postfix_attrs, all_prefix_attrs));
-	  if (decl)
-	    finish_decl (decl, UNKNOWN_LOCATION, NULL_TREE, NULL_TREE,
-			 NULL_TREE);
+	  إذا (decl)
+	    finish_decl (decl, UNKNOWN_LOCATION, NULL_شجرة, NULL_شجرة,
+			 NULL_شجرة);
 	}
     }
 }
 
 /* Parse gimple goto statement.  */
 
-static void
+ساكن فراغ
 c_parser_gimple_goto_stmt (gimple_parser &parser,
-			   location_t loc, tree label, gimple_seq *seq)
+			   location_t loc, شجرة label, gimple_seq *seq)
 {
-  if (cfun->curr_properties & PROP_cfg)
+  إذا (cfun->curr_properties & PROP_cfg)
     {
-      int dest_index;
+      صحيح dest_index;
       profile_probability prob;
-      if (c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
+      إذا (c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							  &dest_index, &prob))
 	{
-	  parser.push_edge (parser.current_bb->index, dest_index,
+	  parser.ادفع_edge (parser.current_bb->index, dest_index,
 			    EDGE_FALLTHRU, prob);
-	  return;
+	  أرجع;
 	}
     }
-  tree decl = lookup_label_for_goto (loc, label);
+  شجرة decl = lookup_label_for_goto (loc, label);
   gimple_seq_add_stmt_without_update (seq, gimple_build_goto (decl));
 }
 
@@ -2398,24 +2398,24 @@ c_parser_gimple_goto_stmt (gimple_parser &parser,
    gimple-condition:
      ( gimple-binary-expression )    */
 
-static tree
+ساكن شجرة
 c_parser_gimple_paren_condition (gimple_parser &parser)
 {
-  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return error_mark_node;
-  tree cond
-    = c_parser_gimple_binary_expression (parser, boolean_type_node).value;
-  if (cond != error_mark_node
+  إذا (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    أرجع error_mark_عقدة;
+  شجرة cond
+    = c_parser_gimple_ثنائي_expression (parser, boolean_type_عقدة).قيمة;
+  إذا (cond != error_mark_عقدة
       && ! COMPARISON_CLASS_P (cond)
       && ! CONSTANT_CLASS_P (cond)
       && ! SSA_VAR_P (cond))
     {
       c_parser_error (parser, "comparison required");
-      cond = error_mark_node;
+      cond = error_mark_عقدة;
     }
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return error_mark_node;
-  return cond;
+  إذا (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    أرجع error_mark_عقدة;
+  أرجع cond;
 }
 
 /* Parse gimple try statement.
@@ -2427,43 +2427,43 @@ c_parser_gimple_paren_condition (gimple_parser &parser)
    This could support try/catch as well, but it's not implemented yet.
  */
 
-static void
+ساكن فراغ
 c_parser_gimple_try_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  gimple_seq tryseq = NULL;
+  gimple_seq tryseq = عدم;
   c_parser_consume_token (parser);
   c_parser_gimple_compound_statement (parser, &tryseq);
 
-  if ((c_parser_next_token_is (parser, CPP_KEYWORD)
+  إذا ((c_parser_next_token_is (parser, CPP_KEYWORD)
        && c_parser_peek_token (parser)->keyword == RID_AT_FINALLY)
       || (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_token (parser)->id_kind == C_ID_ID
-	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->قيمة),
 		     "finally") == 0))
     {
-      gimple_seq finseq = NULL;
+      gimple_seq finseq = عدم;
       c_parser_consume_token (parser);
       c_parser_gimple_compound_statement (parser, &finseq);
 
-      if (c_parser_next_token_is (parser, CPP_KEYWORD)
+      إذا (c_parser_next_token_is (parser, CPP_KEYWORD)
 	  && c_parser_peek_token (parser)->keyword == RID_ELSE)
 	{
-	  gimple_seq elsseq = NULL;
+	  gimple_seq elsseq = عدم;
 	  c_parser_consume_token (parser);
 	  c_parser_gimple_compound_statement (parser, &elsseq);
 
 	  geh_else *stmt = gimple_build_eh_else (finseq, elsseq);
-	  finseq = NULL;
+	  finseq = عدم;
 	  gimple_seq_add_stmt_without_update (&finseq, stmt);
 	}
 
       gtry *stmt = gimple_build_try (tryseq, finseq, GIMPLE_TRY_FINALLY);
       gimple_seq_add_stmt_without_update (seq, stmt);
     }
-  else if (c_parser_next_token_is (parser, CPP_KEYWORD)
+  وإلا إذا (c_parser_next_token_is (parser, CPP_KEYWORD)
       && c_parser_peek_token (parser)->keyword == RID_AT_CATCH)
     c_parser_error (parser, "%<catch%> is not supported");
-  else
+  وإلا
     c_parser_error (parser, "expected %<finally%> or %<catch%>");
 }
 
@@ -2475,82 +2475,82 @@ c_parser_gimple_try_stmt (gimple_parser &parser, gimple_seq *seq)
 					else gimple-goto-statement
  */
 
-static void
+ساكن فراغ
 c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  tree t_label = NULL_TREE, f_label = NULL_TREE, label;
+  شجرة t_label = NULL_شجرة, f_label = NULL_شجرة, label;
   location_t loc;
   c_parser_consume_token (parser);
-  tree cond = c_parser_gimple_paren_condition (parser);
+  شجرة cond = c_parser_gimple_paren_condition (parser);
 
-  if (c_parser_next_token_is_keyword (parser, RID_GOTO))
+  إذا (c_parser_next_token_is_keyword (parser, RID_GOTO))
     {
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      if (! c_parser_next_token_is (parser, CPP_NAME))
+      إذا (! c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected label");
-	  return;
+	  أرجع;
 	}
-      label = c_parser_peek_token (parser)->value;
+      label = c_parser_peek_token (parser)->قيمة;
       c_parser_consume_token (parser);
-      int dest_index;
+      صحيح dest_index;
       profile_probability prob;
-      if ((cfun->curr_properties & PROP_cfg)
+      إذا ((cfun->curr_properties & PROP_cfg)
 	  && c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							     &dest_index, &prob))
-	parser.push_edge (parser.current_bb->index, dest_index,
-			  EDGE_TRUE_VALUE, prob);
-      else
+	parser.ادفع_edge (parser.current_bb->index, dest_index,
+			  EDGE_TRUE_قيمة, prob);
+      وإلا
 	t_label = lookup_label_for_goto (loc, label);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return;
+      إذا (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	أرجع;
     }
-  else
+  وإلا
     {
       c_parser_error (parser, "expected goto expression");
-      return;
+      أرجع;
     }
 
-  if (c_parser_next_token_is_keyword (parser, RID_ELSE))
+  إذا (c_parser_next_token_is_keyword (parser, RID_ELSE))
     c_parser_consume_token (parser);
-  else
+  وإلا
     {
       c_parser_error (parser, "expected else statement");
-      return;
+      أرجع;
     }
 
-  if (c_parser_next_token_is_keyword (parser, RID_GOTO))
+  إذا (c_parser_next_token_is_keyword (parser, RID_GOTO))
     {
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      if (! c_parser_next_token_is (parser, CPP_NAME))
+      إذا (! c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected label");
-	  return;
+	  أرجع;
 	}
-      label = c_parser_peek_token (parser)->value;
+      label = c_parser_peek_token (parser)->قيمة;
       c_parser_consume_token (parser);
-      int dest_index;
+      صحيح dest_index;
       profile_probability prob;
-      if ((cfun->curr_properties & PROP_cfg)
+      إذا ((cfun->curr_properties & PROP_cfg)
 	  && c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							     &dest_index, &prob))
-	parser.push_edge (parser.current_bb->index, dest_index,
-			  EDGE_FALSE_VALUE, prob);
-      else
+	parser.ادفع_edge (parser.current_bb->index, dest_index,
+			  EDGE_FALSE_قيمة, prob);
+      وإلا
 	f_label = lookup_label_for_goto (loc, label);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return;
+      إذا (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	أرجع;
     }
-  else
+  وإلا
     {
       c_parser_error (parser, "expected goto expression");
-      return;
+      أرجع;
     }
 
-  if (cond != error_mark_node)
-    gimple_seq_add_stmt_without_update (seq, gimple_build_cond_from_tree (cond, t_label,
+  إذا (cond != error_mark_عقدة)
+    gimple_seq_add_stmt_without_update (seq, gimple_build_cond_from_شجرة (cond, t_label,
 							   f_label));
 }
 
@@ -2564,138 +2564,138 @@ c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
      gimple-label-statement : gimple-goto-statement
 */
 
-static void
+ساكن فراغ
 c_parser_gimple_switch_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  c_expr cond_expr;
-  tree case_label, label;
-  auto_vec<tree> labels;
-  tree default_label = NULL_TREE;
+  c_تعبير cond_تعبير;
+  شجرة case_label, label;
+  auto_vec<شجرة> labels;
+  شجرة default_label = NULL_شجرة;
   c_parser_consume_token (parser);
 
-  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return;
-  cond_expr = c_parser_gimple_postfix_expression (parser);
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return;
+  إذا (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    أرجع;
+  cond_تعبير = c_parser_gimple_postfix_expression (parser);
+  إذا (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    أرجع;
 
-  if (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
-    return;
+  إذا (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+    أرجع;
 
-  while (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
+  طالما (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
     {
-      if (c_parser_next_token_is (parser, CPP_EOF))
+      إذا (c_parser_next_token_is (parser, CPP_EOF))
 	{
 	  c_parser_error (parser, "expected statement");
-	  return;
+	  أرجع;
 	}
 
-      switch (c_parser_peek_token (parser)->keyword)
+      بدل (c_parser_peek_token (parser)->keyword)
 	{
-	case RID_CASE:
+	حالة RID_CASE:
 	  {
-	    c_expr exp1;
+	    c_تعبير exp1;
 	    location_t loc = c_parser_peek_token (parser)->location;
 	    c_parser_consume_token (parser);
 
-	    if (c_parser_next_token_is (parser, CPP_NAME)
-		|| c_parser_peek_token (parser)->type == CPP_NUMBER)
+	    إذا (c_parser_next_token_is (parser, CPP_NAME)
+		|| c_parser_peek_token (parser)->type == CPP_رقم)
 	      exp1 = c_parser_gimple_postfix_expression (parser);
-	    else
+	    وإلا
 	      {
 		c_parser_error (parser, "expected expression");
-		return;
+		أرجع;
 	      }
 
-	    if (c_parser_next_token_is (parser, CPP_COLON))
+	    إذا (c_parser_next_token_is (parser, CPP_COLON))
 	      {
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		إذا (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    label = c_parser_peek_token (parser)->value;
+		    label = c_parser_peek_token (parser)->قيمة;
 		    c_parser_consume_token (parser);
-		    tree decl = lookup_label_for_goto (loc, label);
-		    case_label = build_case_label (exp1.value, NULL_TREE,
+		    شجرة decl = lookup_label_for_goto (loc, label);
+		    case_label = build_case_label (exp1.قيمة, NULL_شجرة,
 						   decl);
-		    labels.safe_push (case_label);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    labels.safe_ادفع (case_label);
+		    إذا (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return;
+		      أرجع;
 		  }
-		else if (! c_parser_require (parser, CPP_NAME,
+		وإلا إذا (! c_parser_require (parser, CPP_NAME,
 					     "expected label"))
-		  return;
+		  أرجع;
 	      }
-	    else if (! c_parser_require (parser, CPP_SEMICOLON,
+	    وإلا إذا (! c_parser_require (parser, CPP_SEMICOLON,
 					 "expected %<:%>"))
-	      return;
-	    break;
+	      أرجع;
+	    اكسر;
 	  }
-	case RID_DEFAULT:
+	حالة RID_DEFAULT:
 	  {
 	    location_t loc = c_parser_peek_token (parser)->location;
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_COLON))
+	    إذا (c_parser_next_token_is (parser, CPP_COLON))
 	      {
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		إذا (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    label = c_parser_peek_token (parser)->value;
+		    label = c_parser_peek_token (parser)->قيمة;
 		    c_parser_consume_token (parser);
-		    tree decl = lookup_label_for_goto (loc, label);
-		    default_label = build_case_label (NULL_TREE, NULL_TREE,
+		    شجرة decl = lookup_label_for_goto (loc, label);
+		    default_label = build_case_label (NULL_شجرة, NULL_شجرة,
 						      decl);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    إذا (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return;
+		      أرجع;
 		  }
-		else if (! c_parser_require (parser, CPP_NAME,
+		وإلا إذا (! c_parser_require (parser, CPP_NAME,
 					     "expected label"))
-		  return;
+		  أرجع;
 	      }
-	    else if (! c_parser_require (parser, CPP_SEMICOLON,
+	    وإلا إذا (! c_parser_require (parser, CPP_SEMICOLON,
 					 "expected %<:%>"))
-	      return;
-	    break;
+	      أرجع;
+	    اكسر;
 	  }
-	default:
+	افتراضي:
 	  c_parser_error (parser, "expected case label");
-	  return;
+	  أرجع;
 	}
 
     }
-  if (! c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
-    return;
+  إذا (! c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
+    أرجع;
 
-  if (cond_expr.value != error_mark_node)
+  إذا (cond_تعبير.قيمة != error_mark_عقدة)
     {
-      gswitch *s = gimple_build_switch (cond_expr.value, default_label, labels);
+      gswitch *s = gimple_build_switch (cond_تعبير.قيمة, default_label, labels);
       gimple_seq_add_stmt_without_update (seq, s);
     }
 }
 
 /* Parse gimple return statement.  */
 
-static void
+ساكن فراغ
 c_parser_gimple_return_stmt (gimple_parser &parser, gimple_seq *seq)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  gimple *ret = NULL;
+  gimple *ret = عدم;
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+  إذا (c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
-      c_finish_gimple_return (loc, NULL_TREE);
-      ret = gimple_build_return (NULL);
+      c_finish_gimple_return (loc, NULL_شجرة);
+      ret = gimple_build_return (عدم);
       gimple_seq_add_stmt_without_update (seq, ret);
     }
-  else
+  وإلا
     {
       location_t xloc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_gimple_unary_expression (parser);
-      if (expr.value != error_mark_node)
+      c_تعبير تعبير = c_parser_gimple_unary_expression (parser);
+      إذا (تعبير.قيمة != error_mark_عقدة)
 	{
-	  c_finish_gimple_return (xloc, expr.value);
-	  ret = gimple_build_return (expr.value);
+	  c_finish_gimple_return (xloc, تعبير.قيمة);
+	  ret = gimple_build_return (تعبير.قيمة);
 	  gimple_seq_add_stmt_without_update (seq, ret);
 	}
     }
@@ -2703,25 +2703,25 @@ c_parser_gimple_return_stmt (gimple_parser &parser, gimple_seq *seq)
 
 /* Support function for c_parser_gimple_return_stmt.  */
 
-static void
-c_finish_gimple_return (location_t loc, tree retval)
+ساكن فراغ
+c_finish_gimple_return (location_t loc, شجرة retval)
 {
-  tree valtype = TREE_TYPE (TREE_TYPE (current_function_decl));
+  شجرة valtype = شجرة_TYPE (شجرة_TYPE (current_function_decl));
 
   /* Use the expansion point to handle cases such as returning NULL
      in a function returning void.  */
   location_t xloc = expansion_point_location_if_in_system_header (loc);
 
-  if (TREE_THIS_VOLATILE (current_function_decl))
+  إذا (شجرة_THIS_VOLATILE (current_function_decl))
     warning_at (xloc, 0,
 		"function declared %<noreturn%> has a %<return%> statement");
 
-  if (! retval)
+  إذا (! retval)
     current_function_returns_null = 1;
-  else if (valtype == 0 || VOID_TYPE_P (valtype))
+  وإلا إذا (valtype == 0 || VOID_TYPE_P (valtype))
     {
       current_function_returns_null = 1;
-      if (TREE_CODE (TREE_TYPE (retval)) != VOID_TYPE)
+      إذا (شجرة_CODE (شجرة_TYPE (retval)) != VOID_TYPE)
 	{
 	  error_at
 	    (xloc, "%<return%> with a value, in function returning void");
@@ -2729,12 +2729,12 @@ c_finish_gimple_return (location_t loc, tree retval)
 		  "declared here");
 	}
     }
-  else if (TREE_CODE (valtype) != TREE_CODE (TREE_TYPE (retval)))
+  وإلا إذا (شجرة_CODE (valtype) != شجرة_CODE (شجرة_TYPE (retval)))
     {
       error_at
 	(xloc, "invalid conversion in return statement");
       inform (DECL_SOURCE_LOCATION (current_function_decl),
 	      "declared here");
     }
-  return;
+  أرجع;
 }
