@@ -17,27 +17,27 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "function.h"
-#include "bitmap.h"
-#include "c-tree.h"
-#include "intl.h"
-#include "gimplify.h"
+#अन्तर्भाव "config.h"
+#अन्तर्भाव "system.h"
+#अन्तर्भाव "coretypes.h"
+#अन्तर्भाव "target.h"
+#अन्तर्भाव "function.h"
+#अन्तर्भाव "bitmap.h"
+#अन्तर्भाव "c-tree.h"
+#अन्तर्भाव "intl.h"
+#अन्तर्भाव "gimplify.h"
 
-static tree c_fully_fold_internal (tree expr, bool, bool *, bool *, bool,
-				   bool);
+स्थिर वृक्षः c_fully_fold_internal (वृक्षः व्यञ्जकम्, तार्किक, तार्किक *, तार्किक *, तार्किक,
+				   तार्किक);
 
 /* If DISABLE is true, stop issuing warnings.  This is used when
    parsing code that we know will not be executed.  This function may
    be called multiple times, and works as a stack.  */
 
-static void
-c_disable_warnings (bool disable)
+स्थिर शून्य
+c_disable_warnings (तार्किक disable)
 {
-  if (disable)
+  जइ (disable)
     {
       ++c_inhibit_evaluation_warnings;
     }
@@ -45,10 +45,10 @@ c_disable_warnings (bool disable)
 
 /* If ENABLE is true, re-enable issuing warnings.  */
 
-static void
-c_enable_warnings (bool enable)
+स्थिर शून्य
+c_enable_warnings (तार्किक enable)
 {
-  if (enable)
+  जइ (enable)
     {
       --c_inhibit_evaluation_warnings;
     }
@@ -57,36 +57,36 @@ c_enable_warnings (bool enable)
 /* Try to fold ARRAY_REF ary[index] if possible and not handled by
    normal fold, return NULL_TREE otherwise.  */
 
-static tree
-c_fold_array_ref (tree type, tree ary, tree index)
+स्थिर वृक्षः
+c_fold_array_ref (वृक्षः type, वृक्षः ary, वृक्षः index)
 {
-  if (TREE_CODE (ary) != STRING_CST
-      || TREE_CODE (index) != INTEGER_CST
-      || TREE_OVERFLOW (index)
-      || TREE_CODE (TREE_TYPE (ary)) != ARRAY_TYPE
-      || !tree_fits_uhwi_p (index))
-    return NULL_TREE;
+  जइ (वृक्षः_CODE (ary) != STRING_CST
+      || वृक्षः_CODE (index) != INTEGER_CST
+      || वृक्षः_OVERFLOW (index)
+      || वृक्षः_CODE (वृक्षः_TYPE (ary)) != ARRAY_TYPE
+      || !वृक्षः_fits_uhwi_p (index))
+    प्रत्यागम NULL_वृक्षः;
 
-  tree elem_type = TREE_TYPE (TREE_TYPE (ary));
+  वृक्षः elem_type = वृक्षः_TYPE (वृक्षः_TYPE (ary));
   unsigned elem_nchars = (TYPE_PRECISION (elem_type)
-			  / TYPE_PRECISION (char_type_node));
-  unsigned len = (unsigned) TREE_STRING_LENGTH (ary) / elem_nchars;
-  tree nelts_minus_one = array_type_nelts_minus_one (TREE_TYPE (ary));
-  bool dummy1 = true, dummy2 = true;
-  nelts_minus_one = c_fully_fold_internal (nelts_minus_one, true, &dummy1,
-					   &dummy2, false, false);
-  unsigned HOST_WIDE_INT i = tree_to_uhwi (index);
-  if (!tree_int_cst_le (index, nelts_minus_one)
+			  / TYPE_PRECISION (char_type_ग्रन्थिः));
+  unsigned len = (unsigned) वृक्षः_STRING_LENGTH (ary) / elem_nchars;
+  वृक्षः nelts_minus_one = array_type_nelts_minus_one (वृक्षः_TYPE (ary));
+  तार्किक dummy1 = सच्च, dummy2 = सच्च;
+  nelts_minus_one = c_fully_fold_internal (nelts_minus_one, सच्च, &dummy1,
+					   &dummy2, मिच्छ, मिच्छ);
+  unsigned HOST_WIDE_INT i = वृक्षः_to_uhwi (index);
+  जइ (!वृक्षः_int_cst_le (index, nelts_minus_one)
       || i >= len
       || i + elem_nchars > len)
-    return NULL_TREE;
+    प्रत्यागम NULL_वृक्षः;
 
-  if (elem_nchars == 1)
-    return build_int_cst (type, TREE_STRING_POINTER (ary)[i]);
+  जइ (elem_nchars == 1)
+    प्रत्यागम build_int_cst (type, वृक्षः_STRING_POINTER (ary)[i]);
 
-  const unsigned char *ptr
-    = ((const unsigned char *)TREE_STRING_POINTER (ary) + i * elem_nchars);
-  return native_interpret_expr (type, ptr, elem_nchars);
+  ध्रुव unsigned वर्ण *ptr
+    = ((ध्रुव unsigned वर्ण *)वृक्षः_STRING_POINTER (ary) + i * elem_nchars);
+  प्रत्यागम native_interpret_व्यञ्जकम् (type, ptr, elem_nchars);
 }
 
 /* Fully fold EXPR, an expression that was not folded (beyond integer
@@ -105,28 +105,28 @@ c_fold_array_ref (tree type, tree ary, tree index)
    C_MAYBE_CONST_EXPR.  LVAL is true if it should be treated as an
    lvalue.  */
 
-tree
-c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
+वृक्षः
+c_fully_fold (वृक्षः व्यञ्जकम्, तार्किक in_init, तार्किक *maybe_const, तार्किक lval)
 {
-  tree ret;
-  tree eptype = NULL_TREE;
-  bool dummy = true;
-  bool maybe_const_itself = true;
-  location_t loc = EXPR_LOCATION (expr);
+  वृक्षः ret;
+  वृक्षः eptype = NULL_वृक्षः;
+  तार्किक dummy = सच्च;
+  तार्किक maybe_const_itself = सच्च;
+  location_t loc = व्यञ्जकम्_LOCATION (व्यञ्जकम्);
 
-  if (!maybe_const)
+  जइ (!maybe_const)
     maybe_const = &dummy;
-  if (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
+  जइ (वृक्षः_CODE (व्यञ्जकम्) == EXCESS_PRECISION_व्यञ्जकम्)
     {
-      eptype = TREE_TYPE (expr);
-      expr = TREE_OPERAND (expr, 0);
+      eptype = वृक्षः_TYPE (व्यञ्जकम्);
+      व्यञ्जकम् = वृक्षः_OPERAND (व्यञ्जकम्, 0);
     }
-  ret = c_fully_fold_internal (expr, in_init, maybe_const,
-			       &maybe_const_itself, false, lval);
-  if (eptype)
+  ret = c_fully_fold_internal (व्यञ्जकम्, in_init, maybe_const,
+			       &maybe_const_itself, मिच्छ, lval);
+  जइ (eptype)
     ret = fold_convert_loc (loc, eptype, ret);
   *maybe_const &= maybe_const_itself;
-  return ret;
+  प्रत्यागम ret;
 }
 
 /* Internal helper for c_fully_fold.  EXPR and IN_INIT are as for
@@ -141,81 +141,81 @@ c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
    LVAL indicates folding of lvalue, where we can't replace it with
    an rvalue.  */
 
-static tree
-c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
-		       bool *maybe_const_itself, bool for_int_const, bool lval)
+स्थिर वृक्षः
+c_fully_fold_internal (वृक्षः व्यञ्जकम्, तार्किक in_init, तार्किक *maybe_const_operands,
+		       तार्किक *maybe_const_itself, तार्किक for_int_const, तार्किक lval)
 {
-  tree ret = expr;
-  enum tree_code code = TREE_CODE (expr);
-  enum tree_code_class kind = TREE_CODE_CLASS (code);
-  location_t loc = EXPR_LOCATION (expr);
-  tree op0, op1, op2, op3;
-  tree orig_op0, orig_op1, orig_op2;
-  bool op0_const = true, op1_const = true, op2_const = true;
-  bool op0_const_self = true, op1_const_self = true, op2_const_self = true;
-  bool nowarning = warning_suppressed_p (expr, OPT_Woverflow);
-  bool unused_p;
-  bool op0_lval = false;
+  वृक्षः ret = व्यञ्जकम्;
+  गणना वृक्षः_code code = वृक्षः_CODE (व्यञ्जकम्);
+  गणना वृक्षः_code_class kind = वृक्षः_CODE_CLASS (code);
+  location_t loc = व्यञ्जकम्_LOCATION (व्यञ्जकम्);
+  वृक्षः op0, op1, op2, op3;
+  वृक्षः orig_op0, orig_op1, orig_op2;
+  तार्किक op0_const = सच्च, op1_const = सच्च, op2_const = सच्च;
+  तार्किक op0_const_self = सच्च, op1_const_self = सच्च, op2_const_self = सच्च;
+  तार्किक nowarning = warning_suppressed_p (व्यञ्जकम्, OPT_Woverflow);
+  तार्किक unused_p;
+  तार्किक op0_lval = मिच्छ;
   source_range old_range;
 
   /* Constants, declarations, statements, errors, and anything else not
      counted as an expression cannot usefully be folded further at this
      point.  */
-  if (!IS_EXPR_CODE_CLASS (kind) || kind == tcc_statement)
+  जइ (!IS_व्यञ्जकम्_CODE_CLASS (kind) || kind == tcc_statement)
     {
       /* Except for variables which we can optimize to its initializer.  */
-      if (VAR_P (expr) && !lval && (optimize || in_init))
+      जइ (VAR_P (व्यञ्जकम्) && !lval && (optimize || in_init))
 	{
-	  if (in_init)
-	    ret = decl_constant_value_1 (expr, true);
-	  else
+	  जइ (in_init)
+	    ret = decl_constant_मानम्_1 (व्यञ्जकम्, सच्च);
+	  अण्णहा
 	    {
-	      ret = decl_constant_value (expr);
-	      if (ret != expr
-		  && (TYPE_MODE (TREE_TYPE (ret)) == BLKmode
-		      || TREE_CODE (TREE_TYPE (ret)) == ARRAY_TYPE))
-		return expr;
+	      ret = decl_constant_मानम् (व्यञ्जकम्);
+	      जइ (ret != व्यञ्जकम्
+		  && (TYPE_MODE (वृक्षः_TYPE (ret)) == BLKmode
+		      || वृक्षः_CODE (वृक्षः_TYPE (ret)) == ARRAY_TYPE))
+		प्रत्यागम व्यञ्जकम्;
 	    }
 	  /* Avoid unwanted tree sharing between the initializer and current
 	     function's body where the tree can be modified e.g. by the
 	     gimplifier.  */
-	  if (ret != expr && TREE_STATIC (expr))
-	    ret = unshare_expr (ret);
-	  return ret;
+	  जइ (ret != व्यञ्जकम् && वृक्षः_STATIC (व्यञ्जकम्))
+	    ret = unshare_व्यञ्जकम् (ret);
+	  प्रत्यागम ret;
 	}
-      return expr;
+      प्रत्यागम व्यञ्जकम्;
     }
 
-  if (IS_EXPR_CODE_CLASS (kind))
-    old_range = EXPR_LOCATION_RANGE (expr);
+  जइ (IS_व्यञ्जकम्_CODE_CLASS (kind))
+    old_range = व्यञ्जकम्_LOCATION_RANGE (व्यञ्जकम्);
 
   /* Operands of variable-length expressions (function calls) have
      already been folded, as have __builtin_* function calls, and such
      expressions cannot occur in constant expressions.  */
-  if (kind == tcc_vl_exp)
+  जइ (kind == tcc_vl_exp)
     {
-      *maybe_const_operands = false;
-      ret = fold (expr);
-      goto out;
+      *maybe_const_operands = मिच्छ;
+      ret = fold (व्यञ्जकम्);
+      गच्छ out;
     }
 
-  if (code == C_MAYBE_CONST_EXPR)
+  जइ (code == C_MAYBE_CONST_व्यञ्जकम्)
     {
-      tree pre = C_MAYBE_CONST_EXPR_PRE (expr);
-      tree inner = C_MAYBE_CONST_EXPR_EXPR (expr);
-      if (C_MAYBE_CONST_EXPR_NON_CONST (expr))
-	*maybe_const_operands = false;
-      if (C_MAYBE_CONST_EXPR_INT_OPERANDS (expr))
+      वृक्षः pre = C_MAYBE_CONST_व्यञ्जकम्_PRE (व्यञ्जकम्);
+      वृक्षः inner = C_MAYBE_CONST_व्यञ्जकम्_व्यञ्जकम् (व्यञ्जकम्);
+      जइ (C_MAYBE_CONST_व्यञ्जकम्_NON_CONST (व्यञ्जकम्))
+	*maybe_const_operands = मिच्छ;
+      जइ (C_MAYBE_CONST_व्यञ्जकम्_INT_OPERANDS (व्यञ्जकम्))
 	{
-	  *maybe_const_itself = false;
+	  *maybe_const_itself = मिच्छ;
 	  inner = c_fully_fold_internal (inner, in_init, maybe_const_operands,
-					 maybe_const_itself, true, lval);
+					 maybe_const_itself, सच्च, lval);
 	}
-      if (pre && !in_init)
-	ret = build2 (COMPOUND_EXPR, TREE_TYPE (expr), pre, inner);
-      else
+      जइ (pre && !in_init)
+	ret = build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (व्यञ्जकम्), pre, inner);
+      अण्णहा
 	ret = inner;
-      goto out;
+      गच्छ out;
     }
 
   /* Assignment, increment, decrement, function call and comma
@@ -224,450 +224,450 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      were handled above, though VA_ARG_EXPR is treated like a function
      call here, and statement expressions are handled through
      C_MAYBE_CONST_EXPR to avoid folding inside them.)  */
-  switch (code)
+  विकल्प (code)
     {
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-    case COMPOUND_EXPR:
-      *maybe_const_operands = false;
-      break;
+    पक्ष MODIFY_व्यञ्जकम्:
+    पक्ष PREDECREMENT_व्यञ्जकम्:
+    पक्ष PREINCREMENT_व्यञ्जकम्:
+    पक्ष POSTDECREMENT_व्यञ्जकम्:
+    पक्ष POSTINCREMENT_व्यञ्जकम्:
+    पक्ष COMPOUND_व्यञ्जकम्:
+      *maybe_const_operands = मिच्छ;
+      भङ्ग;
 
-    case VA_ARG_EXPR:
-    case TARGET_EXPR:
-    case BIND_EXPR:
-    case OBJ_TYPE_REF:
-      *maybe_const_operands = false;
-      ret = fold (expr);
-      goto out;
+    पक्ष VA_ARG_व्यञ्जकम्:
+    पक्ष TARGET_व्यञ्जकम्:
+    पक्ष BIND_व्यञ्जकम्:
+    पक्ष OBJ_TYPE_REF:
+      *maybe_const_operands = मिच्छ;
+      ret = fold (व्यञ्जकम्);
+      गच्छ out;
 
-    default:
-      break;
+    स्वभाव:
+      भङ्ग;
     }
 
   /* Fold individual tree codes as appropriate.  */
-  switch (code)
+  विकल्प (code)
     {
-    case COMPOUND_LITERAL_EXPR:
+    पक्ष COMPOUND_LITERAL_व्यञ्जकम्:
       /* Any non-constancy will have been marked in a containing
 	 C_MAYBE_CONST_EXPR; there is no more folding to do here.  */
-      goto out;
+      गच्छ out;
 
-    case COMPONENT_REF:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      op1 = TREE_OPERAND (expr, 1);
-      op2 = TREE_OPERAND (expr, 2);
+    पक्ष COMPONENT_REF:
+      orig_op0 = op0 = वृक्षः_OPERAND (व्यञ्जकम्, 0);
+      op1 = वृक्षः_OPERAND (व्यञ्जकम्, 1);
+      op2 = वृक्षः_OPERAND (व्यञ्जकम्, 2);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
-      if (op0 != orig_op0)
-	ret = build3 (COMPONENT_REF, TREE_TYPE (expr), op0, op1, op2);
-      if (ret != expr)
+      जइ (op0 != orig_op0)
+	ret = build3 (COMPONENT_REF, वृक्षः_TYPE (व्यञ्जकम्), op0, op1, op2);
+      जइ (ret != व्यञ्जकम्)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  वृक्षः_READONLY (ret) = वृक्षः_READONLY (व्यञ्जकम्);
+	  वृक्षः_THIS_VOLATILE (ret) = वृक्षः_THIS_VOLATILE (व्यञ्जकम्);
 	}
-      if (!lval)
+      जइ (!lval)
 	ret = fold (ret);
-      goto out;
+      गच्छ out;
 
-    case ARRAY_REF:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      op2 = TREE_OPERAND (expr, 2);
-      op3 = TREE_OPERAND (expr, 3);
+    पक्ष ARRAY_REF:
+      orig_op0 = op0 = वृक्षः_OPERAND (व्यञ्जकम्, 0);
+      orig_op1 = op1 = वृक्षः_OPERAND (व्यञ्जकम्, 1);
+      op2 = वृक्षः_OPERAND (व्यञ्जकम्, 2);
+      op3 = वृक्षः_OPERAND (व्यञ्जकम्, 3);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
       op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, मिच्छ);
       STRIP_TYPE_NOPS (op1);
       /* Fold "foo"[2] in initializers.  */
-      if (!lval && in_init)
+      जइ (!lval && in_init)
 	{
-	  ret = c_fold_array_ref (TREE_TYPE (expr), op0, op1);
-	  if (ret)
-	    goto out;
-	  ret = expr;
+	  ret = c_fold_array_ref (वृक्षः_TYPE (व्यञ्जकम्), op0, op1);
+	  जइ (ret)
+	    गच्छ out;
+	  ret = व्यञ्जकम्;
 	}
-      if (op0 != orig_op0 || op1 != orig_op1)
-	ret = build4 (ARRAY_REF, TREE_TYPE (expr), op0, op1, op2, op3);
-      if (ret != expr)
+      जइ (op0 != orig_op0 || op1 != orig_op1)
+	ret = build4 (ARRAY_REF, वृक्षः_TYPE (व्यञ्जकम्), op0, op1, op2, op3);
+      जइ (ret != व्यञ्जकम्)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  वृक्षः_READONLY (ret) = वृक्षः_READONLY (व्यञ्जकम्);
+	  वृक्षः_SIDE_EFFECTS (ret) = वृक्षः_SIDE_EFFECTS (व्यञ्जकम्);
+	  वृक्षः_THIS_VOLATILE (ret) = वृक्षः_THIS_VOLATILE (व्यञ्जकम्);
 	}
-      if (!lval)
+      जइ (!lval)
 	ret = fold (ret);
-      goto out;
+      गच्छ out;
 
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-      op0_lval = true;
+    पक्ष MODIFY_व्यञ्जकम्:
+    पक्ष PREDECREMENT_व्यञ्जकम्:
+    पक्ष PREINCREMENT_व्यञ्जकम्:
+    पक्ष POSTDECREMENT_व्यञ्जकम्:
+    पक्ष POSTINCREMENT_व्यञ्जकम्:
+      op0_lval = सच्च;
       /* FALLTHRU */
-    case COMPOUND_EXPR:
-    case PLUS_EXPR:
-    case MINUS_EXPR:
-    case MULT_EXPR:
-    case POINTER_PLUS_EXPR:
-    case POINTER_DIFF_EXPR:
-    case TRUNC_DIV_EXPR:
-    case CEIL_DIV_EXPR:
-    case FLOOR_DIV_EXPR:
-    case TRUNC_MOD_EXPR:
-    case RDIV_EXPR:
-    case EXACT_DIV_EXPR:
-    case LSHIFT_EXPR:
-    case RSHIFT_EXPR:
-    case LROTATE_EXPR:
-    case RROTATE_EXPR:
-    case BIT_IOR_EXPR:
-    case BIT_XOR_EXPR:
-    case BIT_AND_EXPR:
-    case LT_EXPR:
-    case LE_EXPR:
-    case GT_EXPR:
-    case GE_EXPR:
-    case EQ_EXPR:
-    case NE_EXPR:
-    case COMPLEX_EXPR:
-    case TRUTH_AND_EXPR:
-    case TRUTH_OR_EXPR:
-    case TRUTH_XOR_EXPR:
-    case UNORDERED_EXPR:
-    case ORDERED_EXPR:
-    case UNLT_EXPR:
-    case UNLE_EXPR:
-    case UNGT_EXPR:
-    case UNGE_EXPR:
-    case UNEQ_EXPR:
-    case MEM_REF:
+    पक्ष COMPOUND_व्यञ्जकम्:
+    पक्ष PLUS_व्यञ्जकम्:
+    पक्ष MINUS_व्यञ्जकम्:
+    पक्ष MULT_व्यञ्जकम्:
+    पक्ष POINTER_PLUS_व्यञ्जकम्:
+    पक्ष POINTER_DIFF_व्यञ्जकम्:
+    पक्ष TRUNC_DIV_व्यञ्जकम्:
+    पक्ष CEIL_DIV_व्यञ्जकम्:
+    पक्ष FLOOR_DIV_व्यञ्जकम्:
+    पक्ष TRUNC_MOD_व्यञ्जकम्:
+    पक्ष RDIV_व्यञ्जकम्:
+    पक्ष EXACT_DIV_व्यञ्जकम्:
+    पक्ष LSHIFT_व्यञ्जकम्:
+    पक्ष RSHIFT_व्यञ्जकम्:
+    पक्ष LROTATE_व्यञ्जकम्:
+    पक्ष RROTATE_व्यञ्जकम्:
+    पक्ष BIT_IOR_व्यञ्जकम्:
+    पक्ष BIT_XOR_व्यञ्जकम्:
+    पक्ष BIT_AND_व्यञ्जकम्:
+    पक्ष LT_व्यञ्जकम्:
+    पक्ष LE_व्यञ्जकम्:
+    पक्ष GT_व्यञ्जकम्:
+    पक्ष GE_व्यञ्जकम्:
+    पक्ष EQ_व्यञ्जकम्:
+    पक्ष NE_व्यञ्जकम्:
+    पक्ष COMPLEX_व्यञ्जकम्:
+    पक्ष TRUTH_AND_व्यञ्जकम्:
+    पक्ष TRUTH_OR_व्यञ्जकम्:
+    पक्ष TRUTH_XOR_व्यञ्जकम्:
+    पक्ष UNORDERED_व्यञ्जकम्:
+    पक्ष ORDERED_व्यञ्जकम्:
+    पक्ष UNLT_व्यञ्जकम्:
+    पक्ष UNLE_व्यञ्जकम्:
+    पक्ष UNGT_व्यञ्जकम्:
+    पक्ष UNGE_व्यञ्जकम्:
+    पक्ष UNEQ_व्यञ्जकम्:
+    पक्ष MEM_REF:
       /* Binary operations evaluating both arguments (increment and
 	 decrement are binary internally in GCC).  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
+      orig_op0 = op0 = वृक्षः_OPERAND (व्यञ्जकम्, 0);
+      orig_op1 = op1 = वृक्षः_OPERAND (व्यञ्जकम्, 1);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
       /* The RHS of a MODIFY_EXPR was fully folded when building that
 	 expression for the sake of conversion warnings.  */
-      if (code != MODIFY_EXPR)
+      जइ (code != MODIFY_व्यञ्जकम्)
 	op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				     maybe_const_itself, for_int_const, false);
+				     maybe_const_itself, for_int_const, मिच्छ);
       STRIP_TYPE_NOPS (op1);
 
-      if (for_int_const && (TREE_CODE (op0) != INTEGER_CST
-			    || TREE_CODE (op1) != INTEGER_CST))
-	goto out;
+      जइ (for_int_const && (वृक्षः_CODE (op0) != INTEGER_CST
+			    || वृक्षः_CODE (op1) != INTEGER_CST))
+	गच्छ out;
 
-      if (TREE_CODE_CLASS (code) == tcc_comparison
-	  && TREE_CODE (TREE_TYPE (op0)) == NULLPTR_TYPE
-	  && TREE_CODE (TREE_TYPE (op1)) == NULLPTR_TYPE)
+      जइ (वृक्षः_CODE_CLASS (code) == tcc_comparison
+	  && वृक्षः_CODE (वृक्षः_TYPE (op0)) == NULLPTR_TYPE
+	  && वृक्षः_CODE (वृक्षः_TYPE (op1)) == NULLPTR_TYPE)
 	{
-	  switch (code)
+	  विकल्प (code)
 	    {
-	    case EQ_EXPR:
-	      ret = constant_boolean_node (true, TREE_TYPE (expr));
-	      break;
-	    case NE_EXPR:
-	      ret = constant_boolean_node (false, TREE_TYPE (expr));
-	      break;
-	    default:
+	    पक्ष EQ_व्यञ्जकम्:
+	      ret = constant_boolean_ग्रन्थिः (सच्च, वृक्षः_TYPE (व्यञ्जकम्));
+	      भङ्ग;
+	    पक्ष NE_व्यञ्जकम्:
+	      ret = constant_boolean_ग्रन्थिः (मिच्छ, वृक्षः_TYPE (व्यञ्जकम्));
+	      भङ्ग;
+	    स्वभाव:
 	      gcc_unreachable ();
 	    }
-	  ret = omit_two_operands_loc (loc, TREE_TYPE (expr), ret,
+	  ret = omit_two_operands_loc (loc, वृक्षः_TYPE (व्यञ्जकम्), ret,
 				       op0, op1);
 	}
-      else if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      अण्णहा जइ (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
-	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
-	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
-	ret = fold (expr);
-      if (TREE_OVERFLOW_P (ret)
-	  && !TREE_OVERFLOW_P (op0)
-	  && !(BINARY_CLASS_P (op0) && TREE_OVERFLOW_P (TREE_OPERAND (op0, 1)))
-	  && !TREE_OVERFLOW_P (op1))
-	overflow_warning (EXPR_LOC_OR_LOC (expr, input_location), ret, expr);
-      if (code == LSHIFT_EXPR
-	  && TREE_CODE (orig_op0) != INTEGER_CST
-	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
-	  && TREE_CODE (op0) == INTEGER_CST
+	  ? fold_build2_initializer_loc (loc, code, वृक्षः_TYPE (व्यञ्जकम्), op0, op1)
+	  : fold_build2_loc (loc, code, वृक्षः_TYPE (व्यञ्जकम्), op0, op1);
+      अण्णहा
+	ret = fold (व्यञ्जकम्);
+      जइ (वृक्षः_OVERFLOW_P (ret)
+	  && !वृक्षः_OVERFLOW_P (op0)
+	  && !(द्विमान_CLASS_P (op0) && वृक्षः_OVERFLOW_P (वृक्षः_OPERAND (op0, 1)))
+	  && !वृक्षः_OVERFLOW_P (op1))
+	overflow_warning (व्यञ्जकम्_LOC_OR_LOC (व्यञ्जकम्, निवेशः_location), ret, व्यञ्जकम्);
+      जइ (code == LSHIFT_व्यञ्जकम्
+	  && वृक्षः_CODE (orig_op0) != INTEGER_CST
+	  && (वृक्षः_CODE (वृक्षः_TYPE (orig_op0)) == INTEGER_TYPE
+	      || वृक्षः_CODE (वृक्षः_TYPE (orig_op0)) == BITINT_TYPE)
+	  && वृक्षः_CODE (op0) == INTEGER_CST
 	  && c_inhibit_evaluation_warnings == 0
-	  && !TYPE_OVERFLOW_WRAPS (TREE_TYPE (orig_op0))
-	  && tree_int_cst_sgn (op0) < 0)
-	warning_at (loc, OPT_Wshift_negative_value,
+	  && !TYPE_OVERFLOW_WRAPS (वृक्षः_TYPE (orig_op0))
+	  && वृक्षः_int_cst_sgn (op0) < 0)
+	warning_at (loc, OPT_Wshift_negative_मानम्,
 		    "left shift of negative value");
-      if ((code == LSHIFT_EXPR
-	   || code == RSHIFT_EXPR
-	   || code == LROTATE_EXPR
-	   || code == RROTATE_EXPR)
-	  && TREE_CODE (orig_op1) != INTEGER_CST
-	  && TREE_CODE (op1) == INTEGER_CST
-	  && TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
+      जइ ((code == LSHIFT_व्यञ्जकम्
+	   || code == RSHIFT_व्यञ्जकम्
+	   || code == LROTATE_व्यञ्जकम्
+	   || code == RROTATE_व्यञ्जकम्)
+	  && वृक्षः_CODE (orig_op1) != INTEGER_CST
+	  && वृक्षः_CODE (op1) == INTEGER_CST
+	  && वृक्षः_CODE (वृक्षः_TYPE (orig_op1)) == INTEGER_TYPE
 	  && c_inhibit_evaluation_warnings == 0)
 	{
-	  if (tree_int_cst_sgn (op1) < 0)
-	    warning_at (loc, OPT_Wshift_count_negative,
-			(code == LSHIFT_EXPR
+	  जइ (वृक्षः_int_cst_sgn (op1) < 0)
+	    warning_at (loc, OPT_Wshift_गणनम्_negative,
+			(code == LSHIFT_व्यञ्जकम्
 			 ? G_("left shift count is negative")
 			 : G_("right shift count is negative")));
-	  else if ((TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-		    || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
-		    || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
-		   && compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (orig_op0)))
+	  अण्णहा जइ ((वृक्षः_CODE (वृक्षः_TYPE (orig_op0)) == INTEGER_TYPE
+		    || वृक्षः_CODE (वृक्षः_TYPE (orig_op0)) == BITINT_TYPE
+		    || वृक्षः_CODE (वृक्षः_TYPE (orig_op0)) == FIXED_POINT_TYPE)
+		   && compare_वृक्षः_int (op1,
+					TYPE_PRECISION (वृक्षः_TYPE (orig_op0)))
 		      >= 0
-		   && !warning_suppressed_p (expr, OPT_Wshift_count_overflow))
-	    warning_at (loc, OPT_Wshift_count_overflow,
-			(code == LSHIFT_EXPR
+		   && !warning_suppressed_p (व्यञ्जकम्, OPT_Wshift_गणनम्_overflow))
+	    warning_at (loc, OPT_Wshift_गणनम्_overflow,
+			(code == LSHIFT_व्यञ्जकम्
 			 ? G_("left shift count >= width of type")
 			 : G_("right shift count >= width of type")));
-	  else if (TREE_CODE (TREE_TYPE (orig_op0)) == VECTOR_TYPE
-		   && compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (TREE_TYPE (orig_op0))))
+	  अण्णहा जइ (वृक्षः_CODE (वृक्षः_TYPE (orig_op0)) == VECTOR_TYPE
+		   && compare_वृक्षः_int (op1,
+					TYPE_PRECISION (वृक्षः_TYPE (वृक्षः_TYPE (orig_op0))))
 		      >= 0)
-	    warning_at (loc, OPT_Wshift_count_overflow,
-			code == LSHIFT_EXPR
+	    warning_at (loc, OPT_Wshift_गणनम्_overflow,
+			code == LSHIFT_व्यञ्जकम्
 			? G_("left shift count >= width of vector element")
 			: G_("right shift count >= width of vector element"));
 	}
-      if (code == LSHIFT_EXPR
+      जइ (code == LSHIFT_व्यञ्जकम्
 	  /* If either OP0 has been folded to INTEGER_CST...  */
-	  && ((TREE_CODE (orig_op0) != INTEGER_CST
-	       && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-		   || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
-	       && TREE_CODE (op0) == INTEGER_CST)
+	  && ((वृक्षः_CODE (orig_op0) != INTEGER_CST
+	       && (वृक्षः_CODE (वृक्षः_TYPE (orig_op0)) == INTEGER_TYPE
+		   || वृक्षः_CODE (वृक्षः_TYPE (orig_op0)) == BITINT_TYPE)
+	       && वृक्षः_CODE (op0) == INTEGER_CST)
 	      /* ...or if OP1 has been folded to INTEGER_CST...  */
-	      || (TREE_CODE (orig_op1) != INTEGER_CST
-		  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
-		      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE)
-		  && TREE_CODE (op1) == INTEGER_CST))
+	      || (वृक्षः_CODE (orig_op1) != INTEGER_CST
+		  && (वृक्षः_CODE (वृक्षः_TYPE (orig_op1)) == INTEGER_TYPE
+		      || वृक्षः_CODE (वृक्षः_TYPE (orig_op1)) == BITINT_TYPE)
+		  && वृक्षः_CODE (op1) == INTEGER_CST))
 	  && c_inhibit_evaluation_warnings == 0)
 	/* ...then maybe we can detect an overflow.  */
 	maybe_warn_shift_overflow (loc, op0, op1);
-      if ((code == TRUNC_DIV_EXPR
-	   || code == CEIL_DIV_EXPR
-	   || code == FLOOR_DIV_EXPR
-	   || code == EXACT_DIV_EXPR
-	   || code == TRUNC_MOD_EXPR)
-	  && TREE_CODE (orig_op1) != INTEGER_CST
-	  && TREE_CODE (op1) == INTEGER_CST
-	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
-	  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE))
+      जइ ((code == TRUNC_DIV_व्यञ्जकम्
+	   || code == CEIL_DIV_व्यञ्जकम्
+	   || code == FLOOR_DIV_व्यञ्जकम्
+	   || code == EXACT_DIV_व्यञ्जकम्
+	   || code == TRUNC_MOD_व्यञ्जकम्)
+	  && वृक्षः_CODE (orig_op1) != INTEGER_CST
+	  && वृक्षः_CODE (op1) == INTEGER_CST
+	  && (वृक्षः_CODE (वृक्षः_TYPE (orig_op0)) == INTEGER_TYPE
+	      || वृक्षः_CODE (वृक्षः_TYPE (orig_op0)) == BITINT_TYPE
+	      || वृक्षः_CODE (वृक्षः_TYPE (orig_op0)) == FIXED_POINT_TYPE)
+	  && (वृक्षः_CODE (वृक्षः_TYPE (orig_op1)) == INTEGER_TYPE
+	      || वृक्षः_CODE (वृक्षः_TYPE (orig_op1)) == BITINT_TYPE))
 	warn_for_div_by_zero (loc, op1);
-      if (code == MEM_REF
-	  && ret != expr
-	  && TREE_CODE (ret) == MEM_REF)
+      जइ (code == MEM_REF
+	  && ret != व्यञ्जकम्
+	  && वृक्षः_CODE (ret) == MEM_REF)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  वृक्षः_READONLY (ret) = वृक्षः_READONLY (व्यञ्जकम्);
+	  वृक्षः_SIDE_EFFECTS (ret) = वृक्षः_SIDE_EFFECTS (व्यञ्जकम्);
+	  वृक्षः_THIS_VOLATILE (ret) = वृक्षः_THIS_VOLATILE (व्यञ्जकम्);
 	}
-      goto out;
+      गच्छ out;
 
-    case ADDR_EXPR:
-      op0_lval = true;
-      goto unary;
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-    case VIEW_CONVERT_EXPR:
+    पक्ष ADDR_व्यञ्जकम्:
+      op0_lval = सच्च;
+      गच्छ unary;
+    पक्ष REALPART_व्यञ्जकम्:
+    पक्ष IMAGPART_व्यञ्जकम्:
+    पक्ष VIEW_CONVERT_व्यञ्जकम्:
       op0_lval = lval;
       /* FALLTHRU */
-    case INDIRECT_REF:
-    case FIX_TRUNC_EXPR:
-    case FLOAT_EXPR:
+    पक्ष INDIRECT_REF:
+    पक्ष FIX_TRUNC_व्यञ्जकम्:
+    पक्ष FLOAT_व्यञ्जकम्:
     CASE_CONVERT:
-    case ADDR_SPACE_CONVERT_EXPR:
-    case NON_LVALUE_EXPR:
-    case NEGATE_EXPR:
-    case BIT_NOT_EXPR:
-    case TRUTH_NOT_EXPR:
-    case CONJ_EXPR:
-    case PAREN_EXPR:
+    पक्ष ADDR_SPACE_CONVERT_व्यञ्जकम्:
+    पक्ष NON_LVALUE_व्यञ्जकम्:
+    पक्ष NEGATE_व्यञ्जकम्:
+    पक्ष BIT_NOT_व्यञ्जकम्:
+    पक्ष TRUTH_NOT_व्यञ्जकम्:
+    पक्ष CONJ_व्यञ्जकम्:
+    पक्ष PAREN_व्यञ्जकम्:
     unary:
       /* Unary operations.  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
+      orig_op0 = op0 = वृक्षः_OPERAND (व्यञ्जकम्, 0);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
 
-      if (for_int_const && TREE_CODE (op0) != INTEGER_CST)
-	goto out;
+      जइ (for_int_const && वृक्षः_CODE (op0) != INTEGER_CST)
+	गच्छ out;
 
       /* ??? Cope with user tricks that amount to offsetof.  The middle-end is
 	 not prepared to deal with them if they occur in initializers.  */
-      if (op0 != orig_op0
-	  && code == ADDR_EXPR
-	  && (op1 = get_base_address (op0)) != NULL_TREE
+      जइ (op0 != orig_op0
+	  && code == ADDR_व्यञ्जकम्
+	  && (op1 = get_base_address (op0)) != NULL_वृक्षः
 	  && INDIRECT_REF_P (op1)
-	  && TREE_CONSTANT (TREE_OPERAND (op1, 0)))
-	ret = fold_offsetof (op0, TREE_TYPE (expr));
-      else if (op0 != orig_op0 || in_init)
+	  && वृक्षः_CONSTANT (वृक्षः_OPERAND (op1, 0)))
+	ret = fold_offsetof (op0, वृक्षः_TYPE (व्यञ्जकम्));
+      अण्णहा जइ (op0 != orig_op0 || in_init)
 	ret = in_init
-	  ? fold_build1_initializer_loc (loc, code, TREE_TYPE (expr), op0)
-	  : fold_build1_loc (loc, code, TREE_TYPE (expr), op0);
-      else
-	ret = fold (expr);
-      if (code == INDIRECT_REF
-	  && ret != expr
+	  ? fold_build1_initializer_loc (loc, code, वृक्षः_TYPE (व्यञ्जकम्), op0)
+	  : fold_build1_loc (loc, code, वृक्षः_TYPE (व्यञ्जकम्), op0);
+      अण्णहा
+	ret = fold (व्यञ्जकम्);
+      जइ (code == INDIRECT_REF
+	  && ret != व्यञ्जकम्
 	  && INDIRECT_REF_P (ret))
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  वृक्षः_READONLY (ret) = वृक्षः_READONLY (व्यञ्जकम्);
+	  वृक्षः_SIDE_EFFECTS (ret) = वृक्षः_SIDE_EFFECTS (व्यञ्जकम्);
+	  वृक्षः_THIS_VOLATILE (ret) = वृक्षः_THIS_VOLATILE (व्यञ्जकम्);
 	}
-      switch (code)
+      विकल्प (code)
 	{
-	case FIX_TRUNC_EXPR:
-	case FLOAT_EXPR:
+	पक्ष FIX_TRUNC_व्यञ्जकम्:
+	पक्ष FLOAT_व्यञ्जकम्:
 	CASE_CONVERT:
 	  /* Don't warn about explicit conversions.  We will already
 	     have warned about suspect implicit conversions.  */
-	  break;
+	  भङ्ग;
 
-	default:
-	  if (TREE_OVERFLOW_P (ret) && !TREE_OVERFLOW_P (op0))
-	    overflow_warning (EXPR_LOCATION (expr), ret, op0);
-	  break;
+	स्वभाव:
+	  जइ (वृक्षः_OVERFLOW_P (ret) && !वृक्षः_OVERFLOW_P (op0))
+	    overflow_warning (व्यञ्जकम्_LOCATION (व्यञ्जकम्), ret, op0);
+	  भङ्ग;
 	}
-      goto out;
+      गच्छ out;
 
-    case TRUTH_ANDIF_EXPR:
-    case TRUTH_ORIF_EXPR:
+    पक्ष TRUTH_ANDIF_व्यञ्जकम्:
+    पक्ष TRUTH_ORIF_व्यञ्जकम्:
       /* Binary operations not necessarily evaluating both
 	 arguments.  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
+      orig_op0 = op0 = वृक्षः_OPERAND (व्यञ्जकम्, 0);
+      orig_op1 = op1 = वृक्षः_OPERAND (व्यञ्जकम्, 1);
       op0 = c_fully_fold_internal (op0, in_init, &op0_const, &op0_const_self,
-				   for_int_const, false);
+				   for_int_const, मिच्छ);
       STRIP_TYPE_NOPS (op0);
 
-      unused_p = (op0 == (code == TRUTH_ANDIF_EXPR
-			  ? truthvalue_false_node
-			  : truthvalue_true_node));
+      unused_p = (op0 == (code == TRUTH_ANDIF_व्यञ्जकम्
+			  ? truthvalue_false_ग्रन्थिः
+			  : truthvalue_true_ग्रन्थिः));
       c_disable_warnings (unused_p);
       op1 = c_fully_fold_internal (op1, in_init, &op1_const, &op1_const_self,
-				   for_int_const, false);
+				   for_int_const, मिच्छ);
       STRIP_TYPE_NOPS (op1);
       c_enable_warnings (unused_p);
 
-      if (for_int_const
-	  && (TREE_CODE (op0) != INTEGER_CST
+      जइ (for_int_const
+	  && (वृक्षः_CODE (op0) != INTEGER_CST
 	      /* Require OP1 be an INTEGER_CST only if it's evaluated.  */
-	      || (!unused_p && TREE_CODE (op1) != INTEGER_CST)))
-	goto out;
+	      || (!unused_p && वृक्षः_CODE (op1) != INTEGER_CST)))
+	गच्छ out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      जइ (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
-	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
-	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
-	ret = fold (expr);
+	  ? fold_build2_initializer_loc (loc, code, वृक्षः_TYPE (व्यञ्जकम्), op0, op1)
+	  : fold_build2_loc (loc, code, वृक्षः_TYPE (व्यञ्जकम्), op0, op1);
+      अण्णहा
+	ret = fold (व्यञ्जकम्);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      जइ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && (code == TRUTH_ANDIF_EXPR
-		? op0 == truthvalue_false_node
-		: op0 == truthvalue_true_node)))
+	    && (code == TRUTH_ANDIF_व्यञ्जकम्
+		? op0 == truthvalue_false_ग्रन्थिः
+		: op0 == truthvalue_true_ग्रन्थिः)))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      जइ (!(op0_const
 	    && op0_const_self
-	    && (code == TRUTH_ANDIF_EXPR
-		? op0 == truthvalue_false_node
-		: op0 == truthvalue_true_node)))
+	    && (code == TRUTH_ANDIF_व्यञ्जकम्
+		? op0 == truthvalue_false_ग्रन्थिः
+		: op0 == truthvalue_true_ग्रन्थिः)))
 	*maybe_const_itself &= op1_const_self;
-      goto out;
+      गच्छ out;
 
-    case COND_EXPR:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      orig_op2 = op2 = TREE_OPERAND (expr, 2);
+    पक्ष COND_व्यञ्जकम्:
+      orig_op0 = op0 = वृक्षः_OPERAND (व्यञ्जकम्, 0);
+      orig_op1 = op1 = वृक्षः_OPERAND (व्यञ्जकम्, 1);
+      orig_op2 = op2 = वृक्षः_OPERAND (व्यञ्जकम्, 2);
       op0 = c_fully_fold_internal (op0, in_init, &op0_const, &op0_const_self,
-				   for_int_const, false);
+				   for_int_const, मिच्छ);
 
       STRIP_TYPE_NOPS (op0);
-      c_disable_warnings (op0 == truthvalue_false_node);
+      c_disable_warnings (op0 == truthvalue_false_ग्रन्थिः);
       op1 = c_fully_fold_internal (op1, in_init, &op1_const, &op1_const_self,
-				   for_int_const, false);
+				   for_int_const, मिच्छ);
       STRIP_TYPE_NOPS (op1);
-      c_enable_warnings (op0 == truthvalue_false_node);
+      c_enable_warnings (op0 == truthvalue_false_ग्रन्थिः);
 
-      c_disable_warnings (op0 == truthvalue_true_node);
+      c_disable_warnings (op0 == truthvalue_true_ग्रन्थिः);
       op2 = c_fully_fold_internal (op2, in_init, &op2_const, &op2_const_self,
-				   for_int_const, false);
+				   for_int_const, मिच्छ);
       STRIP_TYPE_NOPS (op2);
-      c_enable_warnings (op0 == truthvalue_true_node);
+      c_enable_warnings (op0 == truthvalue_true_ग्रन्थिः);
 
-      if (for_int_const
-	  && (TREE_CODE (op0) != INTEGER_CST
+      जइ (for_int_const
+	  && (वृक्षः_CODE (op0) != INTEGER_CST
 	      /* Only the evaluated operand must be an INTEGER_CST.  */
-	      || (op0 == truthvalue_true_node
-		  ? TREE_CODE (op1) != INTEGER_CST
-		  : TREE_CODE (op2) != INTEGER_CST)))
-	goto out;
+	      || (op0 == truthvalue_true_ग्रन्थिः
+		  ? वृक्षः_CODE (op1) != INTEGER_CST
+		  : वृक्षः_CODE (op2) != INTEGER_CST)))
+	गच्छ out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
-	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
-	ret = fold (expr);
+      जइ (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+	ret = fold_build3_loc (loc, code, वृक्षः_TYPE (व्यञ्जकम्), op0, op1, op2);
+      अण्णहा
+	ret = fold (व्यञ्जकम्);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      जइ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_false_node))
+	    && op0 == truthvalue_false_ग्रन्थिः))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      जइ (!(op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_false_node))
+	    && op0 == truthvalue_false_ग्रन्थिः))
 	*maybe_const_itself &= op1_const_self;
-      if (!(flag_isoc99
+      जइ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_true_node))
+	    && op0 == truthvalue_true_ग्रन्थिः))
 	*maybe_const_operands &= op2_const;
-      if (!(op0_const
+      जइ (!(op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_true_node))
+	    && op0 == truthvalue_true_ग्रन्थिः))
 	*maybe_const_itself &= op2_const_self;
-      goto out;
+      गच्छ out;
 
-    case VEC_COND_EXPR:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      orig_op2 = op2 = TREE_OPERAND (expr, 2);
+    पक्ष VEC_COND_व्यञ्जकम्:
+      orig_op0 = op0 = वृक्षः_OPERAND (व्यञ्जकम्, 0);
+      orig_op1 = op1 = वृक्षः_OPERAND (व्यञ्जकम्, 1);
+      orig_op2 = op2 = वृक्षः_OPERAND (व्यञ्जकम्, 2);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, मिच्छ);
       STRIP_TYPE_NOPS (op0);
       op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, मिच्छ);
       STRIP_TYPE_NOPS (op1);
       op2 = c_fully_fold_internal (op2, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, मिच्छ);
       STRIP_TYPE_NOPS (op2);
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
-	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
-	ret = fold (expr);
-      goto out;
+      जइ (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+	ret = fold_build3_loc (loc, code, वृक्षः_TYPE (व्यञ्जकम्), op0, op1, op2);
+      अण्णहा
+	ret = fold (व्यञ्जकम्);
+      गच्छ out;
 
-    case EXCESS_PRECISION_EXPR:
+    पक्ष EXCESS_PRECISION_व्यञ्जकम्:
       /* Each case where an operand with excess precision may be
 	 encountered must remove the EXCESS_PRECISION_EXPR around
 	 inner operands and possibly put one around the whole
@@ -676,26 +676,26 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	 appropriate in any particular case.  */
       gcc_unreachable ();
 
-    case SAVE_EXPR:
+    पक्ष SAVE_व्यञ्जकम्:
       /* Make sure to fold the contents of a SAVE_EXPR exactly once.  */
-      op0 = TREE_OPERAND (expr, 0);
-      if (!SAVE_EXPR_FOLDED_P (expr))
+      op0 = वृक्षः_OPERAND (व्यञ्जकम्, 0);
+      जइ (!SAVE_व्यञ्जकम्_FOLDED_P (व्यञ्जकम्))
 	{
 	  op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				       maybe_const_itself, for_int_const,
-				       false);
-	  TREE_OPERAND (expr, 0) = op0;
-	  SAVE_EXPR_FOLDED_P (expr) = true;
+				       मिच्छ);
+	  वृक्षः_OPERAND (व्यञ्जकम्, 0) = op0;
+	  SAVE_व्यञ्जकम्_FOLDED_P (व्यञ्जकम्) = सच्च;
 	}
       /* Return the SAVE_EXPR operand if it is invariant.  */
-      if (tree_invariant_p (op0))
+      जइ (वृक्षः_invariant_p (op0))
 	ret = op0;
-      goto out;
+      गच्छ out;
 
-    default:
+    स्वभाव:
       /* Various codes may appear through folding built-in functions
 	 and their arguments.  */
-      goto out;
+      गच्छ out;
     }
 
  out:
@@ -703,27 +703,27 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      have been done by this point, so remove them again.  */
   nowarning |= warning_suppressed_p (ret, OPT_Woverflow);
   STRIP_TYPE_NOPS (ret);
-  if (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
+  जइ (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
     {
-      if (!CAN_HAVE_LOCATION_P (ret))
-	ret = build1 (NOP_EXPR, TREE_TYPE (ret), ret);
+      जइ (!CAN_HAVE_LOCATION_P (ret))
+	ret = build1 (NOP_व्यञ्जकम्, वृक्षः_TYPE (ret), ret);
       suppress_warning (ret, OPT_Woverflow);
     }
-  if (ret != expr)
+  जइ (ret != व्यञ्जकम्)
     {
-      protected_set_expr_location (ret, loc);
-      if (IS_EXPR_CODE_CLASS (kind))
+      protected_set_व्यञ्जकम्_location (ret, loc);
+      जइ (IS_व्यञ्जकम्_CODE_CLASS (kind))
 	set_source_range (ret, old_range.m_start, old_range.m_finish);
     }
-  return ret;
+  प्रत्यागम ret;
 }
 
 /* Fold X for consideration by one of the warning functions when checking
    whether an expression has a constant value.  */
 
-tree
-fold_for_warn (tree x)
+वृक्षः
+fold_for_warn (वृक्षः x)
 {
   /* The C front-end has already folded X appropriately.  */
-  return x;
+  प्रत्यागम x;
 }
