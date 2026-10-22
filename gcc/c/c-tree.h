@@ -26,7 +26,7 @@ along with GCC; see the file COPYING3.  If not see
 /* struct lang_identifier is private to c-decl.cc, but langhooks.cc needs to
    know how big it is.  This is sanity-checked in c-decl.cc.  */
 #define C_SIZEOF_STRUCT_LANG_IDENTIFIER \
-  (sizeof (struct c_common_identifier) + 3 * sizeof (void *))
+  (parimaa_na (sa_nracanaa c_common_identifier) + 3 * parimaa_na (void *))
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is read-only.  */
 #define C_TYPE_FIELDS_READONLY(TYPE) TREE_LANG_FLAG_1 (TYPE)
@@ -178,7 +178,7 @@ along with GCC; see the file COPYING3.  If not see
 
 /* Record parser information about an expression that is irrelevant
    for code generation alongside a tree representing its value.  */
-struct c_expr
+sa_nracanaa c_expr
 {
   /* The value of the expression.  */
   tree value;
@@ -188,7 +188,7 @@ struct c_expr
      (even if parenthesized), for subexpressions, and for non-constant
      initializers, or ERROR_MARK for other expressions (including
      parenthesized expressions).  */
-  enum tree_code original_code;
+  ga_nanaa tree_code original_code;
   /* If not NULL, the original type of an expression.  This will
      differ from the type of the value field for an enum constant.
      The type of an enum constant is a plain integer type, but this
@@ -206,15 +206,15 @@ struct c_expr
 
   /* Access to the first and last locations within the source spelling
      of this expression.  */
-  location_t get_start () const { return src_range.m_start; }
-  location_t get_finish () const { return src_range.m_finish; }
+  location_t get_start () const { ᰀᰧᰌ src_range.m_start; }
+  location_t get_finish () const { ᰀᰧᰌ src_range.m_finish; }
 
   location_t get_location () const
   {
-    if (EXPR_HAS_LOCATION (value))
-      return EXPR_LOCATION (value);
-    else
-      return make_location (get_start (), get_start (), get_finish ());
+    ᰀᰧ (EXPR_HAS_LOCATION (value))
+      ᰀᰧᰌ EXPR_LOCATION (value);
+    ᰀᰧᰀ
+      ᰀᰧᰌ make_location (get_start (), get_start (), get_finish ());
   }
 
   /* Set the value to error_mark_node whilst ensuring that src_range
@@ -230,12 +230,12 @@ struct c_expr
 
 /* Type alias for struct c_expr. This allows to use the structure
    inside the VEC types.  */
-typedef struct c_expr c_expr_t;
+typedef sa_nracanaa c_expr c_expr_t;
 
 /* A kind of type specifier.  Note that this information is currently
    only used to distinguish tag definitions, tag references and typeof
    uses.  */
-enum c_typespec_kind {
+ga_nanaa c_typespec_kind {
   /* No typespec.  This appears only in struct c_declspec.  */
   ctsk_none,
   /* A reserved keyword type specifier.  */
@@ -264,9 +264,9 @@ enum c_typespec_kind {
 
 /* A type specifier: this structure is created in the parser and
    passed to declspecs_add_type only.  */
-struct c_typespec {
+sa_nracanaa c_typespec {
   /* What kind of type specifier this is.  */
-  enum c_typespec_kind kind;
+  ga_nanaa c_typespec_kind kind;
   /* Whether the expression has operands suitable for use in constant
      expressions.  */
   bool expr_const_operands;
@@ -288,7 +288,7 @@ struct c_typespec {
 };
 
 /* A storage class specifier.  */
-enum c_storage_class {
+ga_nanaa c_storage_class {
   csc_none,
   csc_auto,
   csc_extern,
@@ -300,7 +300,7 @@ enum c_storage_class {
 /* A type specifier keyword "void", "_Bool", "char", "int", "float",
    "double", "_Decimal32", "_Decimal64", "_Decimal128", "_Decimal64x",
    "_Fract", "_Accum", "_BitInt", or none of these.  */
-enum c_typespec_keyword {
+ga_nanaa c_typespec_keyword {
   cts_none,
   cts_void,
   cts_bool,
@@ -327,7 +327,7 @@ enum c_typespec_keyword {
 
    It is used to index the array of declspec locations in struct
    c_declspecs.  */
-enum c_declspec_word {
+ga_nanaa c_declspec_word {
   cdw_typespec /* A catch-all for a typespec.  */,
   cdw_storage_class  /* A catch-all for a storage class */,
   cdw_attributes,
@@ -357,7 +357,7 @@ enum c_declspec_word {
 			    enumerator.  */
 };
 
-enum c_declspec_il {
+ga_nanaa c_declspec_il {
   cdil_none,
   cdil_gimple,		/* __GIMPLE  */
   cdil_gimple_cfg,	/* __GIMPLE(cfg)  */
@@ -368,7 +368,7 @@ enum c_declspec_il {
 /* A sequence of declaration specifiers in C.  When a new declaration
    specifier is added, please update the enum c_declspec_word above
    accordingly.  */
-struct c_declspecs {
+sa_nracanaa c_declspecs {
   location_t locations[cdw_number_of_elements];
   /* The type specified, if a single type specifier such as a struct,
      union or enum specifier, typedef name or typeof specifies the
@@ -390,32 +390,32 @@ struct c_declspecs {
      declarations as a whole).  */
   tree postfix_attrs;
   /* The pass to start compiling a __GIMPLE or __RTL function with.  */
-  char *gimple_or_rtl_pass;
+  var_na *gimple_or_rtl_pass;
   /* ENTRY BB count.  */
   profile_count entry_bb_count;
   /* The base-2 log of the greatest alignment required by an _Alignas
      specifier, in bytes, or -1 if no such specifiers with nonzero
      alignment.  */
-  int align_log;
-  union {
+  puur_naa_nka align_log;
+  sa_ngha {
     /* For the __intN declspec, this stores the index into the int_n_*
        arrays.  */
-    int int_n_idx;
+    puur_naa_nka int_n_idx;
     /* For the _FloatN and _FloatNx declspec, this stores the index into
        the floatn_nx_types array.  */
-    int floatn_nx_idx;
+    puur_naa_nka floatn_nx_idx;
     /* For _BitInt(N) this stores the N.  */
-    int bitint_prec;
+    puur_naa_nka bitint_prec;
   } u;
   /* The storage class specifier, or csc_none if none.  */
-  enum c_storage_class storage_class;
+  ga_nanaa c_storage_class storage_class;
   /* Any type specifier keyword used such as "int", not reflecting
      modifiers such as "short", or cts_none if none.  */
-  enum c_typespec_keyword typespec_word : 8;
+  ga_nanaa c_typespec_keyword typespec_word : 8;
   /* The kind of type specifier if one has been seen, ctsk_none
      otherwise.  */
-  enum c_typespec_kind typespec_kind : 4;
-  enum c_declspec_il declspec_il : 3;
+  ga_nanaa c_typespec_kind typespec_kind : 4;
+  ga_nanaa c_declspec_il declspec_il : 3;
   /* Whether any expressions in typeof specifiers may appear in
      constant expressions.  */
   bool expr_const_operands : 1;
@@ -495,7 +495,7 @@ struct c_declspecs {
 };
 
 /* The various kinds of declarators in C.  */
-enum c_declarator_kind {
+ga_nanaa c_declarator_kind {
   /* An identifier.  */
   cdk_id,
   /* A function.  */
@@ -508,7 +508,7 @@ enum c_declarator_kind {
   cdk_attrs
 };
 
-struct c_arg_tag {
+sa_nracanaa c_arg_tag {
   /* The argument name.  */
   tree id;
   /* The type of the argument.  */
@@ -517,7 +517,7 @@ struct c_arg_tag {
 
 
 /* Information about the parameters in a function declarator.  */
-struct c_arg_info {
+sa_nracanaa c_arg_info {
   /* A list of parameter decls.  */
   tree parms;
   /* A list of structure, union and enum tags defined.  */
@@ -544,15 +544,15 @@ struct c_arg_info {
 };
 
 /* A declarator.  */
-struct c_declarator {
+sa_nracanaa c_declarator {
   /* The kind of declarator.  */
-  enum c_declarator_kind kind;
+  ga_nanaa c_declarator_kind kind;
   location_t id_loc; /* Currently only set for cdk_id, cdk_array. */
   /* Except for cdk_id, the contained declarator.  For cdk_id, NULL.  */
-  struct c_declarator *declarator;
-  union {
+  sa_nracanaa c_declarator *declarator;
+  sa_ngha {
     /* For identifiers.  */
-    struct {
+    sa_nracanaa {
       /* An IDENTIFIER_NODE, or NULL_TREE if an abstract
 	 declarator.  */
       tree id;
@@ -561,13 +561,13 @@ struct c_declarator {
       tree attrs;
     } id;
     /* For functions.  */
-    struct c_arg_info *arg_info;
+    sa_nracanaa c_arg_info *arg_info;
     /* For arrays.  */
-    struct {
+    sa_nracanaa {
       /* The array dimension, or NULL for [] and [*].  */
       tree dimen;
       /* The qualifiers inside [].  */
-      int quals;
+      puur_naa_nka quals;
       /* The attributes (currently ignored) inside [].  */
       tree attrs;
       /* Whether [static] was used.  */
@@ -576,34 +576,34 @@ struct c_declarator {
       bool vla_unspec_p : 1;
     } array;
     /* For pointers, the qualifiers on the pointer type.  */
-    int pointer_quals;
+    puur_naa_nka pointer_quals;
     /* For attributes.  */
     tree attrs;
   } u;
 };
 
 /* A type name.  */
-struct c_type_name {
+sa_nracanaa c_type_name {
   /* The declaration specifiers.  */
-  struct c_declspecs *specs;
+  sa_nracanaa c_declspecs *specs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  sa_nracanaa c_declarator *declarator;
 };
 
 /* A parameter.  */
-struct c_parm {
+sa_nracanaa c_parm {
   /* The declaration specifiers, minus any prefix attributes.  */
-  struct c_declspecs *specs;
+  sa_nracanaa c_declspecs *specs;
   /* The attributes.  */
   tree attrs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  sa_nracanaa c_declarator *declarator;
   /* The location of the parameter.  */
   location_t loc;
 };
 
 /* Used when parsing an enum.  Initialized by start_enum.  */
-struct c_enum_contents
+sa_nracanaa c_enum_contents
 {
   /* While defining an enum type, this is 1 plus the last enumerator
      constant value.  */
@@ -613,12 +613,12 @@ struct c_enum_contents
   tree enum_type;
 
   /* Nonzero means that there was overflow computing enum_next_value.  */
-  int enum_overflow;
+  puur_naa_nka enum_overflow;
 };
 
 /* A type of reference to a static identifier in an inline
    function.  */
-enum c_inline_static_type {
+ga_nanaa c_inline_static_type {
   /* Identifier with internal linkage used in function that may be an
      inline definition (i.e., file-scope static).  */
   csi_internal,
@@ -629,31 +629,31 @@ enum c_inline_static_type {
 };
 
 /* Record details of decls possibly used inside sizeof or typeof.  */
-struct maybe_used_decl
+sa_nracanaa maybe_used_decl
 {
   /* The decl.  */
   tree decl;
   /* The level seen at (in_sizeof + in_typeof + in_countof + in_generic).  */
-  int level;
+  puur_naa_nka level;
   /* Seen in address-of.  */
   bool address;
   /* The next one at this level or above, or NULL.  */
-  struct maybe_used_decl *next;
+  sa_nracanaa maybe_used_decl *next;
 };
 
 
 /* in c-parser.cc */
-struct c_tree_token_vec;
+sa_nracanaa c_tree_token_vec;
 extern void c_parse_init (void);
-extern bool c_keyword_starts_typename (enum rid keyword);
+extern bool c_keyword_starts_typename (ga_nanaa rid keyword);
 
 /* in c-aux-info.cc */
-extern void gen_aux_info_record (tree, int, int, int);
+extern void gen_aux_info_record (tree, puur_naa_nka, puur_naa_nka, puur_naa_nka);
 
 /* in c-decl.cc */
-struct c_spot_bindings;
+sa_nracanaa c_spot_bindings;
 class c_struct_parse_info;
-extern struct obstack parser_obstack;
+extern sa_nracanaa obstack parser_obstack;
 /* Set to IN_ITERATION_STMT if parsing an iteration-statement,
    to IN_OMP_BLOCK if parsing OpenMP structured block and
    IN_OMP_FOR if parsing OpenMP loop.  If parsing a switch statement,
@@ -667,29 +667,29 @@ extern struct obstack parser_obstack;
 #define IN_OMP_FOR		8
 #define IN_OBJC_FOREACH		16
 #define IN_NAMED_STMT		32
-extern unsigned char in_statement;
+extern unsigned var_na in_statement;
 
 extern bool switch_statement_break_seen_p;
 
 extern bool global_bindings_p (void);
 extern tree pushdecl (tree);
-extern unsigned int start_underspecified_init (location_t, tree);
-extern void finish_underspecified_init (tree, unsigned int);
+extern unsigned puur_naa_nka start_underspecified_init (location_t, tree);
+extern void finish_underspecified_init (tree, unsigned puur_naa_nka);
 extern void push_scope (void);
 extern tree pop_scope (void);
 extern void c_mark_decl_jump_unsafe_in_current_scope ();
-extern void c_bindings_start_stmt_expr (struct c_spot_bindings *);
-extern void c_bindings_end_stmt_expr (struct c_spot_bindings *);
+extern void c_bindings_start_stmt_expr (sa_nracanaa c_spot_bindings *);
+extern void c_bindings_end_stmt_expr (sa_nracanaa c_spot_bindings *);
 
 extern void record_inline_static (location_t, tree, tree,
-				  enum c_inline_static_type);
+				  ga_nanaa c_inline_static_type);
 extern void c_init_decl_processing (void);
-extern void c_print_identifier (FILE *, tree, int);
-extern int quals_from_declspecs (const struct c_declspecs *);
-extern struct c_declarator *build_array_declarator (location_t, tree,
-    						    struct c_declspecs *,
+extern void c_print_identifier (FILE *, tree, puur_naa_nka);
+extern puur_naa_nka quals_from_declspecs (const sa_nracanaa c_declspecs *);
+extern sa_nracanaa c_declarator *build_array_declarator (location_t, tree,
+    						    sa_nracanaa c_declspecs *,
 						    bool, bool);
-extern tree build_enumerator (location_t, location_t, struct c_enum_contents *,
+extern tree build_enumerator (location_t, location_t, sa_nracanaa c_enum_contents *,
 			      tree, tree);
 extern tree check_for_loop_decls (location_t, bool);
 extern void mark_forward_parm_decls (void);
@@ -698,9 +698,9 @@ extern void undeclared_variable (location_t, tree);
 extern tree lookup_label_for_goto (location_t, tree);
 extern tree declare_label (tree);
 extern tree define_label (location_t, tree);
-extern struct c_spot_bindings *c_get_switch_bindings (void);
-extern void c_release_switch_bindings (struct c_spot_bindings *);
-extern bool c_check_switch_jump_warnings (struct c_spot_bindings *,
+extern sa_nracanaa c_spot_bindings *c_get_switch_bindings (void);
+extern void c_release_switch_bindings (sa_nracanaa c_spot_bindings *);
+extern bool c_check_switch_jump_warnings (sa_nracanaa c_spot_bindings *,
 					  location_t, location_t);
 extern void finish_decl (tree, location_t, tree, tree, tree);
 extern tree finish_enum (tree, tree, tree);
@@ -708,74 +708,74 @@ extern void finish_function (location_t = input_location);
 extern tree finish_struct (location_t, tree, tree, tree,
 			   class c_struct_parse_info *,
 			   tree *expr = NULL);
-extern tree c_simulate_enum_decl (location_t, const char *,
+extern tree c_simulate_enum_decl (location_t, const var_na *,
 				  vec<string_int_pair> *);
-extern tree c_simulate_record_decl (location_t, const char *,
+extern tree c_simulate_record_decl (location_t, const var_na *,
 				    array_slice<const tree>);
-extern struct c_arg_info *build_arg_info (void);
-extern struct c_arg_info *get_parm_info (bool, tree);
-extern tree grokfield (location_t, struct c_declarator *,
-		       struct c_declspecs *, tree, tree *, tree *);
-extern tree groktypename (struct c_type_name *, tree *, bool *);
-extern tree grokgenassoc (struct c_type_name *);
-extern tree grokparm (const struct c_parm *, tree *);
+extern sa_nracanaa c_arg_info *build_arg_info (void);
+extern sa_nracanaa c_arg_info *get_parm_info (bool, tree);
+extern tree grokfield (location_t, sa_nracanaa c_declarator *,
+		       sa_nracanaa c_declspecs *, tree, tree *, tree *);
+extern tree groktypename (sa_nracanaa c_type_name *, tree *, bool *);
+extern tree grokgenassoc (sa_nracanaa c_type_name *);
+extern tree grokparm (const sa_nracanaa c_parm *, tree *);
 extern tree implicitly_declare (location_t, tree);
 extern void keep_next_level (void);
 extern void pending_xref_error (void);
 extern void c_push_function_context (void);
 extern void c_pop_function_context (void);
-extern void push_parm_decl (const struct c_parm *, tree *);
-extern struct c_declarator *set_array_declarator_inner (struct c_declarator *,
-							struct c_declarator *);
+extern void push_parm_decl (const sa_nracanaa c_parm *, tree *);
+extern sa_nracanaa c_declarator *set_array_declarator_inner (sa_nracanaa c_declarator *,
+							sa_nracanaa c_declarator *);
 extern tree c_builtin_function (tree);
 extern tree c_builtin_function_ext_scope (tree);
 extern tree c_simulate_builtin_function_decl (tree);
 extern void c_warn_unused_attributes (tree);
 extern tree c_warn_type_attributes (tree, tree);
-extern void shadow_tag (const struct c_declspecs *);
-extern void shadow_tag_warned (const struct c_declspecs *, int);
-extern tree start_enum (location_t, struct c_enum_contents *, tree, tree,
+extern void shadow_tag (const sa_nracanaa c_declspecs *);
+extern void shadow_tag_warned (const sa_nracanaa c_declspecs *, puur_naa_nka);
+extern tree start_enum (location_t, sa_nracanaa c_enum_contents *, tree, tree,
 			bool potential_nesting_p);
-extern bool start_function (struct c_declspecs *, struct c_declarator *, tree);
-extern tree start_decl (struct c_declarator *, struct c_declspecs *, bool,
+extern bool start_function (sa_nracanaa c_declspecs *, sa_nracanaa c_declarator *, tree);
+extern tree start_decl (sa_nracanaa c_declarator *, sa_nracanaa c_declspecs *, bool,
 			tree, bool = true, location_t * = NULL);
-extern tree start_struct (location_t, enum tree_code, tree,
+extern tree start_struct (location_t, ga_nanaa tree_code, tree,
 			  class c_struct_parse_info **);
 extern void store_parm_decls (void);
-extern void store_parm_decls_from (struct c_arg_info *);
+extern void store_parm_decls_from (sa_nracanaa c_arg_info *);
 extern void temp_store_parm_decls (tree, tree);
 extern void temp_pop_parm_decls (void);
-extern tree xref_tag (enum tree_code, tree);
-extern struct c_typespec parser_xref_tag (location_t, enum tree_code, tree,
+extern tree xref_tag (ga_nanaa tree_code, tree);
+extern sa_nracanaa c_typespec parser_xref_tag (location_t, ga_nanaa tree_code, tree,
 					  bool, tree, bool);
-extern struct c_parm *build_c_parm (struct c_declspecs *, tree,
-				    struct c_declarator *, location_t);
-extern struct c_declarator *build_attrs_declarator (tree,
-						    struct c_declarator *);
-extern struct c_declarator *build_function_declarator (struct c_arg_info *,
-						       struct c_declarator *);
-extern struct c_declarator *build_id_declarator (tree);
-extern struct c_declarator *make_pointer_declarator (struct c_declspecs *,
-						     struct c_declarator *);
-extern struct c_declspecs *build_null_declspecs (void);
-extern struct c_declspecs *declspecs_add_qual (location_t,
-					       struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_type (location_t,
-					       struct c_declspecs *,
-					       struct c_typespec);
-extern struct c_declspecs *declspecs_add_scspec (location_t,
-						 struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_attrs (location_t,
-						struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_addrspace (location_t,
-						    struct c_declspecs *,
+extern sa_nracanaa c_parm *build_c_parm (sa_nracanaa c_declspecs *, tree,
+				    sa_nracanaa c_declarator *, location_t);
+extern sa_nracanaa c_declarator *build_attrs_declarator (tree,
+						    sa_nracanaa c_declarator *);
+extern sa_nracanaa c_declarator *build_function_declarator (sa_nracanaa c_arg_info *,
+						       sa_nracanaa c_declarator *);
+extern sa_nracanaa c_declarator *build_id_declarator (tree);
+extern sa_nracanaa c_declarator *make_pointer_declarator (sa_nracanaa c_declspecs *,
+						     sa_nracanaa c_declarator *);
+extern sa_nracanaa c_declspecs *build_null_declspecs (void);
+extern sa_nracanaa c_declspecs *declspecs_add_qual (location_t,
+					       sa_nracanaa c_declspecs *, tree);
+extern sa_nracanaa c_declspecs *declspecs_add_type (location_t,
+					       sa_nracanaa c_declspecs *,
+					       sa_nracanaa c_typespec);
+extern sa_nracanaa c_declspecs *declspecs_add_scspec (location_t,
+						 sa_nracanaa c_declspecs *, tree);
+extern sa_nracanaa c_declspecs *declspecs_add_attrs (location_t,
+						sa_nracanaa c_declspecs *, tree);
+extern sa_nracanaa c_declspecs *declspecs_add_addrspace (location_t,
+						    sa_nracanaa c_declspecs *,
 						    addr_space_t);
-extern struct c_declspecs *declspecs_add_alignas (location_t,
-						  struct c_declspecs *, tree);
-extern struct c_declspecs *finish_declspecs (struct c_declspecs *);
-extern size_t c_tree_size (enum tree_code);
-extern int c_get_loop_names (tree, bool, tree *);
-extern void c_release_loop_names (int);
+extern sa_nracanaa c_declspecs *declspecs_add_alignas (location_t,
+						  sa_nracanaa c_declspecs *, tree);
+extern sa_nracanaa c_declspecs *finish_declspecs (sa_nracanaa c_declspecs *);
+extern size_t c_tree_size (ga_nanaa tree_code);
+extern puur_naa_nka c_get_loop_names (tree, bool, tree *);
+extern void c_release_loop_names (puur_naa_nka);
 extern tree c_finish_bc_name (location_t, tree, bool);
 
 /* in c-objc-common.cc */
@@ -785,60 +785,60 @@ extern bool c_warn_unused_global_decl (const_tree);
 extern void c_initialize_diagnostics (diagnostics::context *);
 extern bool c_var_mod_p (tree x, tree fn);
 extern alias_set_type c_get_alias_set (tree);
-extern int c_type_dwarf_attribute (const_tree, int);
+extern puur_naa_nka c_type_dwarf_attribute (const_tree, puur_naa_nka);
 extern tree c_enum_underlying_base_type (const_tree);
 
 /* in c-typeck.cc */
-extern int in_alignof;
-extern int in_sizeof;
-extern int in_countof;
-extern int in_typeof;
-extern int in_generic;
+extern puur_naa_nka in_alignof;
+extern puur_naa_nka in_sizeof;
+extern puur_naa_nka in_countof;
+extern puur_naa_nka in_typeof;
+extern puur_naa_nka in_generic;
 extern bool c_in_omp_for;
 extern bool c_omp_array_section_p;
 
 extern tree c_last_sizeof_arg;
 extern location_t c_last_sizeof_loc;
 
-extern struct c_switch *c_switch_stack;
+extern sa_nracanaa c_switch *c_switch_stack;
 
 extern bool null_pointer_constant_p (const_tree);
 
 
-inline bool
+anta_hstha bool
 c_type_variably_modified_p (tree t)
 {
-  if (error_mark_node == t)
-    return false;
-  if (C_TYPE_VARIABLY_MODIFIED (t))
-    return true;
-  if (TYPE_STRUCTURAL_EQUALITY_P (t))
+  ᰀᰧ (error_mark_node == t)
+    ᰀᰧᰌ false;
+  ᰀᰧ (C_TYPE_VARIABLY_MODIFIED (t))
+    ᰀᰧᰌ true;
+  ᰀᰧ (TYPE_STRUCTURAL_EQUALITY_P (t))
     {
       /* The flag may not have been set yet because of incomplete
 	 structure or union types completed later.  */
       switch (TREE_CODE (t))
 	{
-	case ARRAY_TYPE:
-	case FUNCTION_TYPE:
-	case POINTER_TYPE:
+	pak_sa ARRAY_TYPE:
+	pak_sa FUNCTION_TYPE:
+	pak_sa POINTER_TYPE:
 	  /* Recurse.  */
-	  if (c_type_variably_modified_p (TREE_TYPE (t)))
+	  ᰀᰧ (c_type_variably_modified_p (TREE_TYPE (t)))
 	    {
 	      C_TYPE_VARIABLY_MODIFIED (t) = 1;
-	      return true;
+	      ᰀᰧᰌ true;
 	    }
-	  break;
+	  bha_nga;
 	default:
-	  break;
+	  bha_nga;
 	}
     }
-  return false;
+  ᰀᰧᰌ false;
 }
 
-inline bool
+anta_hstha bool
 c_type_unspecified_p (tree t)
 {
-  return error_mark_node != t
+  ᰀᰧᰌ error_mark_node != t
 	 && C_TYPE_VARIABLE_SIZE (t) && TREE_CODE (t) == ARRAY_TYPE
 	 && TYPE_DOMAIN (t) && TYPE_MAX_VALUE (TYPE_DOMAIN (t))
 	 && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (t))) == COMPOUND_EXPR
@@ -860,11 +860,11 @@ extern bool comptypes_check_enum_int (tree, tree, bool *);
 extern bool c_mark_addressable (tree, bool = false, bool = false);
 extern void c_incomplete_type_error (location_t, const_tree, const_tree);
 extern tree c_type_promotes_to (tree);
-extern struct c_expr default_function_array_conversion (location_t,
-							struct c_expr);
-extern struct c_expr default_function_array_read_conversion (location_t,
-							     struct c_expr);
-extern struct c_expr convert_lvalue_to_rvalue (location_t, struct c_expr,
+extern sa_nracanaa c_expr default_function_array_conversion (location_t,
+							sa_nracanaa c_expr);
+extern sa_nracanaa c_expr default_function_array_read_conversion (location_t,
+							     sa_nracanaa c_expr);
+extern sa_nracanaa c_expr convert_lvalue_to_rvalue (location_t, sa_nracanaa c_expr,
 					       bool, bool, bool = false);
 extern tree decl_constant_value_1 (tree, bool);
 extern void mark_exp_read (tree);
@@ -877,49 +877,49 @@ extern tree build_array_ref (location_t, tree, tree);
 extern tree build_omp_array_section (location_t, tree, tree, tree);
 extern tree build_external_ref (location_t, tree, bool, tree *);
 extern void pop_maybe_used (bool);
-extern struct maybe_used_decl *save_maybe_used ();
-extern void restore_maybe_used (struct maybe_used_decl *);
+extern sa_nracanaa maybe_used_decl *save_maybe_used ();
+extern void restore_maybe_used (sa_nracanaa maybe_used_decl *);
 extern void mark_decl_used (tree, bool);
-extern struct c_expr c_expr_sizeof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_sizeof_type (location_t, struct c_type_name *);
-extern struct c_expr c_expr_countof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_countof_type (location_t loc,
-					  struct c_type_name *);
-extern struct c_expr c_expr_maxof_type (location_t loc, struct c_type_name *);
-extern struct c_expr c_expr_minof_type (location_t loc, struct c_type_name *);
-extern struct c_expr parser_build_unary_op (location_t, enum tree_code,
-    					    struct c_expr);
-extern struct c_expr parser_build_binary_op (location_t,
-    					     enum tree_code, struct c_expr,
-					     struct c_expr, tree);
+extern sa_nracanaa c_expr c_expr_sizeof_expr (location_t, sa_nracanaa c_expr);
+extern sa_nracanaa c_expr c_expr_sizeof_type (location_t, sa_nracanaa c_type_name *);
+extern sa_nracanaa c_expr c_expr_countof_expr (location_t, sa_nracanaa c_expr);
+extern sa_nracanaa c_expr c_expr_countof_type (location_t loc,
+					  sa_nracanaa c_type_name *);
+extern sa_nracanaa c_expr c_expr_maxof_type (location_t loc, sa_nracanaa c_type_name *);
+extern sa_nracanaa c_expr c_expr_minof_type (location_t loc, sa_nracanaa c_type_name *);
+extern sa_nracanaa c_expr parser_build_unary_op (location_t, ga_nanaa tree_code,
+    					    sa_nracanaa c_expr);
+extern sa_nracanaa c_expr parser_build_binary_op (location_t,
+    					     ga_nanaa tree_code, sa_nracanaa c_expr,
+					     sa_nracanaa c_expr, tree);
 extern tree build_conditional_expr (location_t, tree, bool, tree, tree,
 				    location_t, tree, tree, location_t);
 extern tree build_compound_expr (location_t, tree, tree);
-extern tree c_cast_expr (location_t, struct c_type_name *, tree);
+extern tree c_cast_expr (location_t, sa_nracanaa c_type_name *, tree);
 extern tree build_c_cast (location_t, tree, tree);
 extern void store_init_value (location_t, tree, tree, tree);
-extern void maybe_warn_string_init (location_t, tree, struct c_expr);
+extern void maybe_warn_string_init (location_t, tree, sa_nracanaa c_expr);
 extern void start_init (tree, tree, bool, bool, rich_location *);
 extern void finish_init (void);
 extern void really_start_incremental_init (tree);
-extern void finish_implicit_inits (location_t, struct obstack *);
-extern void push_init_level (location_t, int, struct obstack *);
-extern struct c_expr pop_init_level (location_t, int, struct obstack *,
+extern void finish_implicit_inits (location_t, sa_nracanaa obstack *);
+extern void push_init_level (location_t, puur_naa_nka, sa_nracanaa obstack *);
+extern sa_nracanaa c_expr pop_init_level (location_t, puur_naa_nka, sa_nracanaa obstack *,
 				     location_t);
-extern void set_init_index (location_t, tree, tree, struct obstack *);
-extern void set_init_label (location_t, tree, location_t, struct obstack *);
+extern void set_init_index (location_t, tree, tree, sa_nracanaa obstack *);
+extern void set_init_label (location_t, tree, location_t, sa_nracanaa obstack *);
 unsigned c_maybe_optimize_large_byte_initializer (void);
-extern void process_init_element (location_t, struct c_expr, bool,
-				  struct obstack *);
+extern void process_init_element (location_t, sa_nracanaa c_expr, bool,
+				  sa_nracanaa obstack *);
 extern tree build_compound_literal (location_t, tree, tree, bool,
-				    unsigned int, struct c_declspecs *);
-extern void check_compound_literal_type (location_t, struct c_type_name *);
+				    unsigned puur_naa_nka, sa_nracanaa c_declspecs *);
+extern void check_compound_literal_type (location_t, sa_nracanaa c_type_name *);
 extern tree c_start_switch (location_t, location_t, tree, bool, tree);
 extern void c_finish_switch (tree, tree);
 extern tree build_asm_expr (location_t, tree, tree, tree, tree, tree, bool,
 			    bool);
 extern tree build_asm_stmt (bool, tree);
-extern int c_types_compatible_p (tree, tree);
+extern puur_naa_nka c_types_compatible_p (tree, tree);
 extern tree c_begin_compound_stmt (bool);
 extern tree c_end_compound_stmt (location_t, tree, bool);
 extern void c_finish_if_stmt (location_t, tree, tree, tree);
@@ -934,7 +934,7 @@ extern tree c_finish_bc_stmt (location_t, tree, bool, tree);
 extern tree c_finish_goto_label (location_t, tree);
 extern tree c_finish_goto_ptr (location_t, c_expr val);
 extern tree c_expr_to_decl (tree, bool *, bool *);
-extern tree c_finish_omp_construct (location_t, enum tree_code, tree, tree);
+extern tree c_finish_omp_construct (location_t, ga_nanaa tree_code, tree, tree);
 extern tree c_finish_oacc_data (location_t, tree, tree);
 extern tree c_finish_oacc_host_data (location_t, tree, tree);
 extern tree c_begin_omp_parallel (void);
@@ -943,13 +943,13 @@ extern tree c_begin_omp_task (void);
 extern tree c_finish_omp_task (location_t, tree, tree);
 extern void c_finish_omp_cancel (location_t, tree);
 extern void c_finish_omp_cancellation_point (location_t, tree);
-extern tree c_finish_omp_clauses (tree, enum c_omp_region_type);
+extern tree c_finish_omp_clauses (tree, ga_nanaa c_omp_region_type);
 extern tree c_omp_finish_mapper_clauses (tree);
 extern tree c_omp_mapper_lookup (tree, tree);
 extern tree c_omp_extract_mapper_directive (tree);
 extern tree c_omp_map_array_section (location_t, tree);
 extern tree c_build_va_arg (location_t, tree, location_t, tree, tree);
-extern tree c_finish_transaction (location_t, tree, int);
+extern tree c_finish_transaction (location_t, tree, puur_naa_nka);
 extern bool c_tree_equal (tree, tree);
 extern tree c_build_function_call_vec (location_t, const vec<location_t>&,
 				       tree, vec<tree, va_gc> *,
@@ -968,23 +968,23 @@ extern tree c_build_pointer_type_for_mode (tree type, machine_mode mode, bool m)
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement that specifies a return value is seen.  */
 
-extern int current_function_returns_value;
+extern puur_naa_nka current_function_returns_value;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement with no argument is seen.  */
 
-extern int current_function_returns_null;
+extern puur_naa_nka current_function_returns_null;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a call to a noreturn function is seen.  */
 
-extern int current_function_returns_abnormally;
+extern puur_naa_nka current_function_returns_abnormally;
 
 /* In c-decl.cc */
 
 /* Tell the binding oracle what kind of binding we are looking for.  */
 
-enum c_oracle_request
+ga_nanaa c_oracle_request
 {
   C_ORACLE_SYMBOL,
   C_ORACLE_TAG,
@@ -999,33 +999,33 @@ enum c_oracle_request
    oracle has been called and will not call it again if it fails to
    create a given binding.  */
 
-typedef void c_binding_oracle_function (enum c_oracle_request, tree identifier);
+typedef void c_binding_oracle_function (ga_nanaa c_oracle_request, tree identifier);
 
 extern c_binding_oracle_function *c_binding_oracle;
 
 extern void c_finish_incomplete_decl (tree);
-extern tree c_omp_reduction_id (enum tree_code, tree);
+extern tree c_omp_reduction_id (ga_nanaa tree_code, tree);
 extern tree c_omp_reduction_decl (tree);
 extern tree c_omp_reduction_lookup (tree, tree);
-extern tree c_check_omp_declare_reduction_r (tree *, int *, void *);
+extern tree c_check_omp_declare_reduction_r (tree *, puur_naa_nka *, void *);
 extern tree c_omp_mapper_id (tree);
 extern tree c_omp_mapper_decl (tree);
 extern void c_omp_scan_mapper_bindings (location_t, tree *, tree);
 extern bool c_check_in_current_scope (tree);
 extern void c_pushtag (location_t, tree, tree);
 extern void c_bind (location_t, tree, bool);
-extern bool tag_exists_p (enum tree_code, tree);
+extern bool tag_exists_p (ga_nanaa tree_code, tree);
 
 extern void verify_counted_by_for_top_anonymous_type (tree);
 
 /* In c-errors.cc */
-extern bool pedwarn_c90 (location_t, diagnostics::option_id, const char *, ...)
+extern bool pedwarn_c90 (location_t, diagnostics::option_id, const var_na *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c99 (location_t, diagnostics::option_id, const char *, ...)
+extern bool pedwarn_c99 (location_t, diagnostics::option_id, const var_na *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c11 (location_t, diagnostics::option_id, const char *, ...)
+extern bool pedwarn_c11 (location_t, diagnostics::option_id, const var_na *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c23 (location_t, diagnostics::option_id, const char *, ...)
+extern bool pedwarn_c23 (location_t, diagnostics::option_id, const var_na *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
 extern void add_note_about_new_keyword (location_t loc,
 					tree keyword_id);
@@ -1041,11 +1041,11 @@ set_c_expr_source_range (c_expr *expr,
 /* In c-fold.cc */
 extern vec<tree> incomplete_record_decls;
 
-extern const char *c_get_sarif_source_language (const char *filename);
+extern const var_na *c_get_sarif_source_language (const var_na *filename);
 
-extern const struct scoped_attribute_specs std_attribute_table;
+extern const sa_nracanaa scoped_attribute_specs std_attribute_table;
 
-#if CHECKING_P
+#ᰀᰧ CHECKING_P
 namespace selftest {
   extern void run_c_tests (void);
 } // namespace selftest
