@@ -35,7 +35,7 @@ along with GCC; see the file COPYING3.  If not see
    lexer code, if desired.  */
 
 /* More information about the type of a CPP_NAME token.  */
-enum c_id_kind {
+تعداد c_id_kind {
   /* An ordinary identifier.  */
   C_ID_ID,
   /* An identifier declared as a typedef name.  */
@@ -50,52 +50,52 @@ enum c_id_kind {
 
 /* A single C token after string literal concatenation and conversion
    of preprocessing tokens to tokens.  */
-struct GTY (()) c_token {
+بنية GTY (()) c_token {
   /* The kind of token.  */
-  enum cpp_ttype type : 8;
+  تعداد cpp_ttype type : 8;
   /* If this token is a CPP_NAME, this value indicates whether also
      declared as some kind of type.  Otherwise, it is C_ID_NONE.  */
-  enum c_id_kind id_kind : 8;
+  تعداد c_id_kind id_kind : 8;
   /* If this token is a keyword, this value indicates which keyword.
      Otherwise, this value is RID_MAX.  */
-  enum rid keyword : 8;
+  تعداد rid keyword : 8;
   /* If this token is a CPP_PRAGMA, this indicates the pragma that
      was seen.  Otherwise it is PRAGMA_NONE.  */
-  enum pragma_kind pragma_kind : 8;
+  تعداد pragma_kind pragma_kind : 8;
   /* The location at which this token was found.  */
   location_t location;
   /* The value associated with this token, if any.  */
   tree value;
   /* Token flags.  */
-  unsigned char flags;
+  unsigned حرف flags;
 
-  source_range get_range () const
+  source_range get_range () ثابت
   {
-    return get_range_from_loc (line_table, location);
+    أرجع get_range_from_loc (line_table, location);
   }
 
-  location_t get_finish () const
+  location_t get_finish () ثابت
   {
-    return get_range ().m_finish;
+    أرجع get_range ().m_finish;
   }
 };
 
 /* This should have the same layout as c_tree_token_vec
    in c-decl.cc, but for GTY reasons with ObjC can't be
    GTY itself.  */
-struct c_tree_token_vec_struct {
-  struct tree_base base;
+بنية c_tree_token_vec_struct {
+  بنية tree_base base;
   vec<c_token, va_gc> *tokens;
 };
 
 #define C_TOKEN_VEC_TOKENS(NODE) \
-  (((struct c_tree_token_vec_struct *) TREE_CHECK (NODE, C_TOKEN_VEC))->tokens)
+  (((بنية c_tree_token_vec_struct *) TREE_CHECK (NODE, C_TOKEN_VEC))->tokens)
 
 /* The parser.  */
-struct c_parser;
+بنية c_parser;
 
 /* Possibly kinds of declarator to parse.  */
-enum c_dtr_syn {
+تعداد c_dtr_syn {
   /* A normal declarator with an identifier.  */
   C_DTR_NORMAL,
   /* An abstract declarator (maybe empty).  */
@@ -115,7 +115,7 @@ enum c_dtr_syn {
 
 /* The binary operation precedence levels, where 0 is a dummy lowest level
    used for the bottom of the stack.  */
-enum c_parser_prec {
+تعداد c_parser_prec {
   PREC_NONE,
   PREC_LOGOR,
   PREC_LOGAND,
@@ -130,7 +130,7 @@ enum c_parser_prec {
   NUM_PRECS
 };
 
-enum c_lookahead_kind {
+تعداد c_lookahead_kind {
   /* Always treat unknown identifiers as typenames.  */
   cla_prefer_type,
 
@@ -143,68 +143,68 @@ enum c_lookahead_kind {
 };
 
 
-extern c_token * c_parser_peek_token (c_parser *parser);
-extern c_token * c_parser_peek_2nd_token (c_parser *parser);
-extern c_token * c_parser_peek_nth_token (c_parser *parser, unsigned int n);
-extern bool c_parser_require (c_parser *parser, enum cpp_ttype type,
-			      const char *msgid,
+خارجي c_token * c_parser_peek_token (c_parser *parser);
+خارجي c_token * c_parser_peek_2nd_token (c_parser *parser);
+خارجي c_token * c_parser_peek_nth_token (c_parser *parser, unsigned صحيح n);
+خارجي bool c_parser_require (c_parser *parser, تعداد cpp_ttype type,
+			      ثابت حرف *msgid,
 			      location_t matching_location = UNKNOWN_LOCATION,
 			      bool type_is_unique=true);
-extern bool c_parser_error (c_parser *parser, const char *gmsgid);
-extern void c_parser_consume_token (c_parser *parser);
-extern void c_parser_skip_until_found (c_parser *parser, enum cpp_ttype type,
-				       const char *msgid,
+خارجي bool c_parser_error (c_parser *parser, ثابت حرف *gmsgid);
+خارجي فراغ c_parser_consume_token (c_parser *parser);
+خارجي فراغ c_parser_skip_until_found (c_parser *parser, تعداد cpp_ttype type,
+				       ثابت حرف *msgid,
 				       location_t = UNKNOWN_LOCATION);
-extern bool c_parser_next_token_starts_declspecs (c_parser *parser);
+خارجي bool c_parser_next_token_starts_declspecs (c_parser *parser);
 bool c_parser_next_tokens_start_declaration (c_parser *parser,
-					     unsigned int n = 1);
+					     unsigned صحيح n = 1);
 bool c_token_starts_typename (c_token *token);
 
 /* Abstraction to avoid defining c_parser here which messes up gengtype
    output wrt ObjC due to vec<c_token> routines being put in gtype-c.h
    but not gtype-objc.h.  */
-extern c_token * c_parser_tokens_buf (c_parser *parser, unsigned n);
-extern bool c_parser_error (c_parser *parser);
-extern void c_parser_set_error (c_parser *parser, bool);
+خارجي c_token * c_parser_tokens_buf (c_parser *parser, unsigned n);
+خارجي bool c_parser_error (c_parser *parser);
+خارجي فراغ c_parser_set_error (c_parser *parser, bool);
 
 /* A bit of a hack to have this here.  It would be better in a c-decl.h.  */
-extern bool old_style_parameter_scope (void);
+خارجي bool old_style_parameter_scope (فراغ);
 
 /* Return true if the next token from PARSER has the indicated
    TYPE.  */
 
-inline bool
-c_parser_next_token_is (c_parser *parser, enum cpp_ttype type)
+مضمن bool
+c_parser_next_token_is (c_parser *parser, تعداد cpp_ttype type)
 {
-  return c_parser_peek_token (parser)->type == type;
+  أرجع c_parser_peek_token (parser)->type == type;
 }
 
 /* Return true if the next token from PARSER does not have the
    indicated TYPE.  */
 
-inline bool
-c_parser_next_token_is_not (c_parser *parser, enum cpp_ttype type)
+مضمن bool
+c_parser_next_token_is_not (c_parser *parser, تعداد cpp_ttype type)
 {
-  return !c_parser_next_token_is (parser, type);
+  أرجع !c_parser_next_token_is (parser, type);
 }
 
 /* Return true if the next token from PARSER is the indicated
    KEYWORD.  */
 
-inline bool
-c_parser_next_token_is_keyword (c_parser *parser, enum rid keyword)
+مضمن bool
+c_parser_next_token_is_keyword (c_parser *parser, تعداد rid keyword)
 {
-  return c_parser_peek_token (parser)->keyword == keyword;
+  أرجع c_parser_peek_token (parser)->keyword == keyword;
 }
 
-struct c_expr c_parser_string_literal (c_parser *, bool, bool);
-extern struct c_declarator *
+بنية c_expr c_parser_string_literal (c_parser *, bool, bool);
+خارجي بنية c_declarator *
 c_parser_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
 		     bool *seen_id);
-extern void c_parser_declspecs (c_parser *, struct c_declspecs *, bool, bool,
+خارجي فراغ c_parser_declspecs (c_parser *, بنية c_declspecs *, bool, bool,
 				bool, bool, bool, bool, bool,
-				enum c_lookahead_kind);
-extern struct c_type_name *c_parser_type_name (c_parser *, bool = false);
-extern bool c_maybe_parse_omp_decl (tree, tree);
+				تعداد c_lookahead_kind);
+خارجي بنية c_type_name *c_parser_type_name (c_parser *, bool = false);
+خارجي bool c_maybe_parse_omp_decl (tree, tree);
 
 #endif
