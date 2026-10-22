@@ -17,27 +17,27 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_C_TREE_H
-#define GCC_C_TREE_H
+#ifndef GCC_C_വൃക്ഷം_H
+#define GCC_C_വൃക്ഷം_H
 
-#include "c-family/c-common.h"
-#include "diagnostic.h"
+#അന്തര്ഭാവ "c-family/c-common.h"
+#അന്തര്ഭാവ "diagnostic.h"
 
 /* struct lang_identifier is private to c-decl.cc, but langhooks.cc needs to
    know how big it is.  This is sanity-checked in c-decl.cc.  */
 #define C_SIZEOF_STRUCT_LANG_IDENTIFIER \
-  (sizeof (struct c_common_identifier) + 3 * sizeof (void *))
+  (വലുപ്പം (ഘടന c_common_identifier) + 3 * വലുപ്പം (ശൂന്യം *))
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is read-only.  */
-#define C_TYPE_FIELDS_READONLY(TYPE) TREE_LANG_FLAG_1 (TYPE)
+#define C_TYPE_FIELDS_READONLY(TYPE) വൃക്ഷം_LANG_FLAG_1 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is volatile.  */
-#define C_TYPE_FIELDS_VOLATILE(TYPE) TREE_LANG_FLAG_2 (TYPE)
+#define C_TYPE_FIELDS_VOLATILE(TYPE) വൃക്ഷം_LANG_FLAG_2 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is
    volatile, restrict-qualified or atomic; that is, has a type not
    permitted for a constexpr object.  */
-#define C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) TREE_LANG_FLAG_4 (TYPE)
+#define C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) വൃക്ഷം_LANG_FLAG_4 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component has a
    counted_by attribute.  */
@@ -51,12 +51,12 @@ along with GCC; see the file COPYING3.  If not see
    variable declarations whose type would be completed by completing
    that type.  */
 #define C_TYPE_INCOMPLETE_VARS(TYPE) \
-  TYPE_LANG_SLOT_1 (TREE_CHECK4 (TYPE, RECORD_TYPE, UNION_TYPE, \
+  TYPE_LANG_SLOT_1 (വൃക്ഷം_CHECK4 (TYPE, RECORD_TYPE, UNION_TYPE, \
 				 QUAL_UNION_TYPE, ENUMERAL_TYPE))
 
 /* In an IDENTIFIER_NODE, nonzero if this identifier is actually a
    keyword.  C_RID_CODE (node) is then the RID_* value of the keyword.  */
-#define C_IS_RESERVED_WORD(ID) TREE_LANG_FLAG_0 (ID)
+#define C_IS_RESERVED_WORD(ID) വൃക്ഷം_LANG_FLAG_0 (ID)
 
 /* Record whether a type or decl was written with nonconstant size.
    Note that TYPE_SIZE may have simplified to a constant.  */
@@ -82,7 +82,7 @@ along with GCC; see the file COPYING3.  If not see
 #define C_DECL_IMPLICIT(EXP) DECL_LANG_FLAG_2 (EXP)
 
 /* For a PARM_DECL, nonzero if it was declared as an array.  */
-#define C_ARRAY_PARAMETER(NODE) DECL_LANG_FLAG_0 (NODE)
+#define C_ARRAY_PARAMETER(കണ്ണി_2) DECL_LANG_FLAG_0 (കണ്ണി_2)
 
 /* For FUNCTION_DECLs, evaluates true if the decl is a nested
    function that requires a non-local context.  */
@@ -121,7 +121,7 @@ along with GCC; see the file COPYING3.  If not see
    front-end flag, whereas DECL_REGISTER is used for code generation;
    they may differ for structures with volatile fields.  */
 #define C_DECL_REGISTER(EXP) \
-  DECL_LANG_FLAG_4 (TREE_NOT_CHECK (EXP, FUNCTION_DECL))
+  DECL_LANG_FLAG_4 (വൃക്ഷം_NOT_CHECK (EXP, FUNCTION_DECL))
 
 /* Record whether a decl was used in an expression anywhere except an
    unevaluated operand of sizeof / typeof / alignof.  This is only
@@ -150,50 +150,50 @@ along with GCC; see the file COPYING3.  If not see
    (but this is presently difficult because some of them need FILE*).  */
 #define C_DECL_ISNT_PROTOTYPE(EXP)			\
        (EXP == 0					\
-	|| (!prototype_p (TREE_TYPE (EXP))	\
+	|| (!prototype_p (വൃക്ഷം_TYPE (EXP))	\
 	    && !fndecl_built_in_p (EXP)))
 
 /* For FUNCTION_TYPE, a hidden list of types of arguments.  The same as
    TYPE_ARG_TYPES for functions with prototypes, but created for functions
    without prototypes.  */
-#define TYPE_ACTUAL_ARG_TYPES(NODE) \
-  TYPE_LANG_SLOT_1 (FUNCTION_TYPE_CHECK (NODE))
+#define TYPE_ACTUAL_ARG_TYPES(കണ്ണി_2) \
+  TYPE_LANG_SLOT_1 (FUNCTION_TYPE_CHECK (കണ്ണി_2))
 
 /* For a CONSTRUCTOR, whether some initializer contains a
    subexpression meaning it is not a constant expression.  */
-#define CONSTRUCTOR_NON_CONST(EXPR) TREE_LANG_FLAG_1 (CONSTRUCTOR_CHECK (EXPR))
+#define CONSTRUCTOR_NON_CONST(വ്യഞ്ജകം_2) വൃക്ഷം_LANG_FLAG_1 (CONSTRUCTOR_CHECK (വ്യഞ്ജകം_2))
 
 /* For a SAVE_EXPR, nonzero if the operand of the SAVE_EXPR has already
    been folded.  */
-#define SAVE_EXPR_FOLDED_P(EXP)	TREE_LANG_FLAG_1 (SAVE_EXPR_CHECK (EXP))
+#define SAVE_വ്യഞ്ജകം_FOLDED_P(EXP)	വൃക്ഷം_LANG_FLAG_1 (SAVE_വ്യഞ്ജകം_CHECK (EXP))
 
 /* Whether a type has boolean semantics: either a boolean type or an
    enumeration type with a boolean type as its underlying type.  */
 #define C_BOOLEAN_TYPE_P(TYPE)						\
-  (TREE_CODE (TYPE) == BOOLEAN_TYPE					\
-   || (TREE_CODE (TYPE) == ENUMERAL_TYPE				\
-       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_TREE			\
-       && (TREE_CODE (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
+  (വൃക്ഷം_CODE (TYPE) == BOOLEAN_TYPE					\
+   || (വൃക്ഷം_CODE (TYPE) == ENUMERAL_TYPE				\
+       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_വൃക്ഷം			\
+       && (വൃക്ഷം_CODE (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
 	   || c_hardbool_type_attr (TYPE))))
 
 /* Record parser information about an expression that is irrelevant
    for code generation alongside a tree representing its value.  */
-struct c_expr
+ഘടന c_വ്യഞ്ജകം
 {
   /* The value of the expression.  */
-  tree value;
+  വൃക്ഷം മൂല്യം;
   /* Record the original unary/binary operator of an expression, which may
      have been changed by fold, STRING_CST for unparenthesized string
      constants, C_MAYBE_CONST_EXPR for __builtin_constant_p calls
      (even if parenthesized), for subexpressions, and for non-constant
      initializers, or ERROR_MARK for other expressions (including
      parenthesized expressions).  */
-  enum tree_code original_code;
+  എണ്ണൽ വൃക്ഷം_code original_code;
   /* If not NULL, the original type of an expression.  This will
      differ from the type of the value field for an enum constant.
      The type of an enum constant is a plain integer type, but this
      field will be the enum type.  */
-  tree original_type;
+  വൃക്ഷം original_type;
 
   /* The source range of this expression.  This is redundant
      for node values that have locations, but not all node kinds
@@ -206,22 +206,22 @@ struct c_expr
 
   /* Access to the first and last locations within the source spelling
      of this expression.  */
-  location_t get_start () const { return src_range.m_start; }
-  location_t get_finish () const { return src_range.m_finish; }
+  location_t get_start () സ്ഥിരം { തിരികെ src_range.m_start; }
+  location_t get_finish () സ്ഥിരം { തിരികെ src_range.m_finish; }
 
-  location_t get_location () const
+  location_t get_location () സ്ഥിരം
   {
-    if (EXPR_HAS_LOCATION (value))
-      return EXPR_LOCATION (value);
-    else
-      return make_location (get_start (), get_start (), get_finish ());
+    എങ്കിൽ (വ്യഞ്ജകം_HAS_LOCATION (മൂല്യം))
+      തിരികെ വ്യഞ്ജകം_LOCATION (മൂല്യം);
+    അല്ലെങ്കിൽ
+      തിരികെ make_location (get_start (), get_start (), get_finish ());
   }
 
   /* Set the value to error_mark_node whilst ensuring that src_range
      and m_decimal are initialized.  */
-  void set_error ()
+  ശൂന്യം set_error ()
   {
-    value = error_mark_node;
+    മൂല്യം = error_mark_കണ്ണി;
     src_range.m_start = UNKNOWN_LOCATION;
     src_range.m_finish = UNKNOWN_LOCATION;
     m_decimal = 0;
@@ -230,12 +230,12 @@ struct c_expr
 
 /* Type alias for struct c_expr. This allows to use the structure
    inside the VEC types.  */
-typedef struct c_expr c_expr_t;
+തരനിർവചനം ഘടന c_വ്യഞ്ജകം c_വ്യഞ്ജകം_t;
 
 /* A kind of type specifier.  Note that this information is currently
    only used to distinguish tag definitions, tag references and typeof
    uses.  */
-enum c_typespec_kind {
+എണ്ണൽ c_typespec_kind {
   /* No typespec.  This appears only in struct c_declspec.  */
   ctsk_none,
   /* A reserved keyword type specifier.  */
@@ -264,18 +264,18 @@ enum c_typespec_kind {
 
 /* A type specifier: this structure is created in the parser and
    passed to declspecs_add_type only.  */
-struct c_typespec {
+ഘടന c_typespec {
   /* What kind of type specifier this is.  */
-  enum c_typespec_kind kind;
+  എണ്ണൽ c_typespec_kind kind;
   /* Whether the expression has operands suitable for use in constant
      expressions.  */
-  bool expr_const_operands;
+  bool വ്യഞ്ജകം_const_operands;
   /* Whether the type specifier includes an enum type specifier (that
      is, ": specifier-qualifier-list" in a declaration using
      "enum").  */
   bool has_enum_type_specifier;
   /* The specifier itself.  */
-  tree spec;
+  വൃക്ഷം spec;
   /* An expression to be evaluated before the type specifier, in the
      case of typeof specifiers, or NULL otherwise or if no such
      expression is required for a particular typeof specifier.  In
@@ -284,11 +284,11 @@ struct c_typespec {
      determine array sizes that form part of the type, but the
      expression itself (as opposed to the array sizes) forms no part
      of the type and so needs to be recorded separately.  */
-  tree expr;
+  വൃക്ഷം വ്യഞ്ജകം;
 };
 
 /* A storage class specifier.  */
-enum c_storage_class {
+എണ്ണൽ c_storage_class {
   csc_none,
   csc_auto,
   csc_extern,
@@ -300,7 +300,7 @@ enum c_storage_class {
 /* A type specifier keyword "void", "_Bool", "char", "int", "float",
    "double", "_Decimal32", "_Decimal64", "_Decimal128", "_Decimal64x",
    "_Fract", "_Accum", "_BitInt", or none of these.  */
-enum c_typespec_keyword {
+എണ്ണൽ c_typespec_keyword {
   cts_none,
   cts_void,
   cts_bool,
@@ -327,7 +327,7 @@ enum c_typespec_keyword {
 
    It is used to index the array of declspec locations in struct
    c_declspecs.  */
-enum c_declspec_word {
+എണ്ണൽ c_declspec_word {
   cdw_typespec /* A catch-all for a typespec.  */,
   cdw_storage_class  /* A catch-all for a storage class */,
   cdw_attributes,
@@ -353,11 +353,11 @@ enum c_declspec_word {
   cdw_address_space,
   cdw_gimple,
   cdw_rtl,
-  cdw_number_of_elements /* This one must always be the last
+  cdw_സംഖ്യ_of_elements /* This one must always be the last
 			    enumerator.  */
 };
 
-enum c_declspec_il {
+എണ്ണൽ c_declspec_il {
   cdil_none,
   cdil_gimple,		/* __GIMPLE  */
   cdil_gimple_cfg,	/* __GIMPLE(cfg)  */
@@ -368,57 +368,57 @@ enum c_declspec_il {
 /* A sequence of declaration specifiers in C.  When a new declaration
    specifier is added, please update the enum c_declspec_word above
    accordingly.  */
-struct c_declspecs {
-  location_t locations[cdw_number_of_elements];
+ഘടന c_declspecs {
+  location_t locations[cdw_സംഖ്യ_of_elements];
   /* The type specified, if a single type specifier such as a struct,
      union or enum specifier, typedef name or typeof specifies the
      whole type, or NULL_TREE if none or a keyword such as "void" or
      "char" is used.  Does not include qualifiers.  */
-  tree type;
+  വൃക്ഷം type;
   /* Any expression to be evaluated before the type, from a typeof
      specifier.  */
-  tree expr;
+  വൃക്ഷം വ്യഞ്ജകം;
   /* The attributes from a typedef decl.  */
-  tree decl_attr;
+  വൃക്ഷം decl_attr;
   /* When parsing, the GNU attributes and prefix standard attributes.
      Outside the parser, this will be NULL; attributes (possibly from
      multiple lists) will be passed separately.  */
-  tree attrs;
+  വൃക്ഷം attrs;
   /* When parsing, postfix standard attributes (which appertain to the
      type specified by the preceding declaration specifiers, unlike
      prefix standard attributes which appertain to the declaration or
      declarations as a whole).  */
-  tree postfix_attrs;
+  വൃക്ഷം postfix_attrs;
   /* The pass to start compiling a __GIMPLE or __RTL function with.  */
-  char *gimple_or_rtl_pass;
+  അക്ഷരം *gimple_or_rtl_pass;
   /* ENTRY BB count.  */
-  profile_count entry_bb_count;
+  profile_എണ്ണം entry_bb_എണ്ണം;
   /* The base-2 log of the greatest alignment required by an _Alignas
      specifier, in bytes, or -1 if no such specifiers with nonzero
      alignment.  */
-  int align_log;
-  union {
+  പൂർണ്ണസംഖ്യ align_log;
+  സംഘം {
     /* For the __intN declspec, this stores the index into the int_n_*
        arrays.  */
-    int int_n_idx;
+    പൂർണ്ണസംഖ്യ int_n_idx;
     /* For the _FloatN and _FloatNx declspec, this stores the index into
        the floatn_nx_types array.  */
-    int floatn_nx_idx;
+    പൂർണ്ണസംഖ്യ floatn_nx_idx;
     /* For _BitInt(N) this stores the N.  */
-    int bitint_prec;
+    പൂർണ്ണസംഖ്യ bitint_prec;
   } u;
   /* The storage class specifier, or csc_none if none.  */
-  enum c_storage_class storage_class;
+  എണ്ണൽ c_storage_class storage_class;
   /* Any type specifier keyword used such as "int", not reflecting
      modifiers such as "short", or cts_none if none.  */
-  enum c_typespec_keyword typespec_word : 8;
+  എണ്ണൽ c_typespec_keyword typespec_word : 8;
   /* The kind of type specifier if one has been seen, ctsk_none
      otherwise.  */
-  enum c_typespec_kind typespec_kind : 4;
-  enum c_declspec_il declspec_il : 3;
+  എണ്ണൽ c_typespec_kind typespec_kind : 4;
+  എണ്ണൽ c_declspec_il declspec_il : 3;
   /* Whether any expressions in typeof specifiers may appear in
      constant expressions.  */
-  bool expr_const_operands : 1;
+  bool വ്യഞ്ജകം_const_operands : 1;
   /* Whether any declaration specifiers have been seen at all.  */
   bool declspecs_seen_p : 1;
   /* Whether any declaration specifiers other than standard attributes
@@ -495,7 +495,7 @@ struct c_declspecs {
 };
 
 /* The various kinds of declarators in C.  */
-enum c_declarator_kind {
+എണ്ണൽ c_declarator_kind {
   /* An identifier.  */
   cdk_id,
   /* A function.  */
@@ -508,31 +508,31 @@ enum c_declarator_kind {
   cdk_attrs
 };
 
-struct c_arg_tag {
+ഘടന c_arg_tag {
   /* The argument name.  */
-  tree id;
+  വൃക്ഷം id;
   /* The type of the argument.  */
-  tree type;
+  വൃക്ഷം type;
 };
 
 
 /* Information about the parameters in a function declarator.  */
-struct c_arg_info {
+ഘടന c_arg_info {
   /* A list of parameter decls.  */
-  tree parms;
+  വൃക്ഷം parms;
   /* A list of structure, union and enum tags defined.  */
   vec<c_arg_tag, va_gc> *tags;
   /* A list of argument types to go in the FUNCTION_TYPE.  */
-  tree types;
+  വൃക്ഷം types;
   /* A list of non-parameter decls (notably enumeration constants)
      defined with the parameters.  */
-  tree others;
+  വൃക്ഷം others;
   /* A compound expression of VLA sizes from the parameters, or NULL.
      In a function definition, these are used to ensure that
      side-effects in sizes of arrays converted to pointers (such as a
      parameter int i[n++]) take place; otherwise, they are
      ignored.  */
-  tree pending_sizes;
+  വൃക്ഷം pending_sizes;
   /* True when these arguments had [*].  */
   bool had_vla_unspec : 1;
   /* True when the arguments are a (...) prototype.  */
@@ -544,81 +544,81 @@ struct c_arg_info {
 };
 
 /* A declarator.  */
-struct c_declarator {
+ഘടന c_declarator {
   /* The kind of declarator.  */
-  enum c_declarator_kind kind;
+  എണ്ണൽ c_declarator_kind kind;
   location_t id_loc; /* Currently only set for cdk_id, cdk_array. */
   /* Except for cdk_id, the contained declarator.  For cdk_id, NULL.  */
-  struct c_declarator *declarator;
-  union {
+  ഘടന c_declarator *declarator;
+  സംഘം {
     /* For identifiers.  */
-    struct {
+    ഘടന {
       /* An IDENTIFIER_NODE, or NULL_TREE if an abstract
 	 declarator.  */
-      tree id;
+      വൃക്ഷം id;
       /* Any attributes (which apply to the declaration rather than to
 	 the type described by the outer declarators).  */
-      tree attrs;
+      വൃക്ഷം attrs;
     } id;
     /* For functions.  */
-    struct c_arg_info *arg_info;
+    ഘടന c_arg_info *arg_info;
     /* For arrays.  */
-    struct {
+    ഘടന {
       /* The array dimension, or NULL for [] and [*].  */
-      tree dimen;
+      വൃക്ഷം dimen;
       /* The qualifiers inside [].  */
-      int quals;
+      പൂർണ്ണസംഖ്യ quals;
       /* The attributes (currently ignored) inside [].  */
-      tree attrs;
+      വൃക്ഷം attrs;
       /* Whether [static] was used.  */
       bool static_p : 1;
       /* Whether [*] was used.  */
       bool vla_unspec_p : 1;
     } array;
     /* For pointers, the qualifiers on the pointer type.  */
-    int pointer_quals;
+    പൂർണ്ണസംഖ്യ pointer_quals;
     /* For attributes.  */
-    tree attrs;
+    വൃക്ഷം attrs;
   } u;
 };
 
 /* A type name.  */
-struct c_type_name {
+ഘടന c_type_name {
   /* The declaration specifiers.  */
-  struct c_declspecs *specs;
+  ഘടന c_declspecs *specs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  ഘടന c_declarator *declarator;
 };
 
 /* A parameter.  */
-struct c_parm {
+ഘടന c_parm {
   /* The declaration specifiers, minus any prefix attributes.  */
-  struct c_declspecs *specs;
+  ഘടന c_declspecs *specs;
   /* The attributes.  */
-  tree attrs;
+  വൃക്ഷം attrs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  ഘടന c_declarator *declarator;
   /* The location of the parameter.  */
   location_t loc;
 };
 
 /* Used when parsing an enum.  Initialized by start_enum.  */
-struct c_enum_contents
+ഘടന c_enum_contents
 {
   /* While defining an enum type, this is 1 plus the last enumerator
      constant value.  */
-  tree enum_next_value;
+  വൃക്ഷം enum_next_മൂല്യം;
 
   /* The enumeration type itself.  */
-  tree enum_type;
+  വൃക്ഷം enum_type;
 
   /* Nonzero means that there was overflow computing enum_next_value.  */
-  int enum_overflow;
+  പൂർണ്ണസംഖ്യ enum_overflow;
 };
 
 /* A type of reference to a static identifier in an inline
    function.  */
-enum c_inline_static_type {
+എണ്ണൽ c_inline_static_type {
   /* Identifier with internal linkage used in function that may be an
      inline definition (i.e., file-scope static).  */
   csi_internal,
@@ -629,31 +629,31 @@ enum c_inline_static_type {
 };
 
 /* Record details of decls possibly used inside sizeof or typeof.  */
-struct maybe_used_decl
+ഘടന maybe_used_decl
 {
   /* The decl.  */
-  tree decl;
+  വൃക്ഷം decl;
   /* The level seen at (in_sizeof + in_typeof + in_countof + in_generic).  */
-  int level;
+  പൂർണ്ണസംഖ്യ level;
   /* Seen in address-of.  */
   bool address;
   /* The next one at this level or above, or NULL.  */
-  struct maybe_used_decl *next;
+  ഘടന maybe_used_decl *next;
 };
 
 
 /* in c-parser.cc */
-struct c_tree_token_vec;
-extern void c_parse_init (void);
-extern bool c_keyword_starts_typename (enum rid keyword);
+ഘടന c_വൃക്ഷം_token_vec;
+ബാഹ്യ ശൂന്യം c_parse_init (ശൂന്യം);
+ബാഹ്യ bool c_keyword_starts_typename (എണ്ണൽ rid keyword);
 
 /* in c-aux-info.cc */
-extern void gen_aux_info_record (tree, int, int, int);
+ബാഹ്യ ശൂന്യം gen_aux_info_record (വൃക്ഷം, പൂർണ്ണസംഖ്യ, പൂർണ്ണസംഖ്യ, പൂർണ്ണസംഖ്യ);
 
 /* in c-decl.cc */
-struct c_spot_bindings;
+ഘടന c_spot_bindings;
 class c_struct_parse_info;
-extern struct obstack parser_obstack;
+ബാഹ്യ ഘടന obstack parser_obstack;
 /* Set to IN_ITERATION_STMT if parsing an iteration-statement,
    to IN_OMP_BLOCK if parsing OpenMP structured block and
    IN_OMP_FOR if parsing OpenMP loop.  If parsing a switch statement,
@@ -667,326 +667,326 @@ extern struct obstack parser_obstack;
 #define IN_OMP_FOR		8
 #define IN_OBJC_FOREACH		16
 #define IN_NAMED_STMT		32
-extern unsigned char in_statement;
+ബാഹ്യ unsigned അക്ഷരം in_statement;
 
-extern bool switch_statement_break_seen_p;
+ബാഹ്യ bool switch_statement_break_seen_p;
 
-extern bool global_bindings_p (void);
-extern tree pushdecl (tree);
-extern unsigned int start_underspecified_init (location_t, tree);
-extern void finish_underspecified_init (tree, unsigned int);
-extern void push_scope (void);
-extern tree pop_scope (void);
-extern void c_mark_decl_jump_unsafe_in_current_scope ();
-extern void c_bindings_start_stmt_expr (struct c_spot_bindings *);
-extern void c_bindings_end_stmt_expr (struct c_spot_bindings *);
+ബാഹ്യ bool global_bindings_p (ശൂന്യം);
+ബാഹ്യ വൃക്ഷം pushdecl (വൃക്ഷം);
+ബാഹ്യ unsigned പൂർണ്ണസംഖ്യ start_underspecified_init (location_t, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം finish_underspecified_init (വൃക്ഷം, unsigned പൂർണ്ണസംഖ്യ);
+ബാഹ്യ ശൂന്യം തള്ളുക_scope (ശൂന്യം);
+ബാഹ്യ വൃക്ഷം എടുക്കുക_scope (ശൂന്യം);
+ബാഹ്യ ശൂന്യം c_mark_decl_jump_unsafe_in_current_scope ();
+ബാഹ്യ ശൂന്യം c_bindings_start_stmt_വ്യഞ്ജകം (ഘടന c_spot_bindings *);
+ബാഹ്യ ശൂന്യം c_bindings_end_stmt_വ്യഞ്ജകം (ഘടന c_spot_bindings *);
 
-extern void record_inline_static (location_t, tree, tree,
-				  enum c_inline_static_type);
-extern void c_init_decl_processing (void);
-extern void c_print_identifier (FILE *, tree, int);
-extern int quals_from_declspecs (const struct c_declspecs *);
-extern struct c_declarator *build_array_declarator (location_t, tree,
-    						    struct c_declspecs *,
+ബാഹ്യ ശൂന്യം record_inline_static (location_t, വൃക്ഷം, വൃക്ഷം,
+				  എണ്ണൽ c_inline_static_type);
+ബാഹ്യ ശൂന്യം c_init_decl_processing (ശൂന്യം);
+ബാഹ്യ ശൂന്യം c_print_identifier (FILE *, വൃക്ഷം, പൂർണ്ണസംഖ്യ);
+ബാഹ്യ പൂർണ്ണസംഖ്യ quals_from_declspecs (സ്ഥിരം ഘടന c_declspecs *);
+ബാഹ്യ ഘടന c_declarator *build_array_declarator (location_t, വൃക്ഷം,
+    						    ഘടന c_declspecs *,
 						    bool, bool);
-extern tree build_enumerator (location_t, location_t, struct c_enum_contents *,
-			      tree, tree);
-extern tree check_for_loop_decls (location_t, bool);
-extern void mark_forward_parm_decls (void);
-extern void declare_parm_level (void);
-extern void undeclared_variable (location_t, tree);
-extern tree lookup_label_for_goto (location_t, tree);
-extern tree declare_label (tree);
-extern tree define_label (location_t, tree);
-extern struct c_spot_bindings *c_get_switch_bindings (void);
-extern void c_release_switch_bindings (struct c_spot_bindings *);
-extern bool c_check_switch_jump_warnings (struct c_spot_bindings *,
+ബാഹ്യ വൃക്ഷം build_enumerator (location_t, location_t, ഘടന c_enum_contents *,
+			      വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം check_for_loop_decls (location_t, bool);
+ബാഹ്യ ശൂന്യം mark_forward_parm_decls (ശൂന്യം);
+ബാഹ്യ ശൂന്യം declare_parm_level (ശൂന്യം);
+ബാഹ്യ ശൂന്യം undeclared_variable (location_t, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം lookup_label_for_goto (location_t, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം declare_label (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം define_label (location_t, വൃക്ഷം);
+ബാഹ്യ ഘടന c_spot_bindings *c_get_switch_bindings (ശൂന്യം);
+ബാഹ്യ ശൂന്യം c_release_switch_bindings (ഘടന c_spot_bindings *);
+ബാഹ്യ bool c_check_switch_jump_warnings (ഘടന c_spot_bindings *,
 					  location_t, location_t);
-extern void finish_decl (tree, location_t, tree, tree, tree);
-extern tree finish_enum (tree, tree, tree);
-extern void finish_function (location_t = input_location);
-extern tree finish_struct (location_t, tree, tree, tree,
+ബാഹ്യ ശൂന്യം finish_decl (വൃക്ഷം, location_t, വൃക്ഷം, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം finish_enum (വൃക്ഷം, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം finish_function (location_t = നിവേശം_location);
+ബാഹ്യ വൃക്ഷം finish_struct (location_t, വൃക്ഷം, വൃക്ഷം, വൃക്ഷം,
 			   class c_struct_parse_info *,
-			   tree *expr = NULL);
-extern tree c_simulate_enum_decl (location_t, const char *,
+			   വൃക്ഷം *വ്യഞ്ജകം = ശൂന്യ);
+ബാഹ്യ വൃക്ഷം c_simulate_enum_decl (location_t, സ്ഥിരം അക്ഷരം *,
 				  vec<string_int_pair> *);
-extern tree c_simulate_record_decl (location_t, const char *,
-				    array_slice<const tree>);
-extern struct c_arg_info *build_arg_info (void);
-extern struct c_arg_info *get_parm_info (bool, tree);
-extern tree grokfield (location_t, struct c_declarator *,
-		       struct c_declspecs *, tree, tree *, tree *);
-extern tree groktypename (struct c_type_name *, tree *, bool *);
-extern tree grokgenassoc (struct c_type_name *);
-extern tree grokparm (const struct c_parm *, tree *);
-extern tree implicitly_declare (location_t, tree);
-extern void keep_next_level (void);
-extern void pending_xref_error (void);
-extern void c_push_function_context (void);
-extern void c_pop_function_context (void);
-extern void push_parm_decl (const struct c_parm *, tree *);
-extern struct c_declarator *set_array_declarator_inner (struct c_declarator *,
-							struct c_declarator *);
-extern tree c_builtin_function (tree);
-extern tree c_builtin_function_ext_scope (tree);
-extern tree c_simulate_builtin_function_decl (tree);
-extern void c_warn_unused_attributes (tree);
-extern tree c_warn_type_attributes (tree, tree);
-extern void shadow_tag (const struct c_declspecs *);
-extern void shadow_tag_warned (const struct c_declspecs *, int);
-extern tree start_enum (location_t, struct c_enum_contents *, tree, tree,
+ബാഹ്യ വൃക്ഷം c_simulate_record_decl (location_t, സ്ഥിരം അക്ഷരം *,
+				    array_slice<സ്ഥിരം വൃക്ഷം>);
+ബാഹ്യ ഘടന c_arg_info *build_arg_info (ശൂന്യം);
+ബാഹ്യ ഘടന c_arg_info *get_parm_info (bool, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം grokfield (location_t, ഘടന c_declarator *,
+		       ഘടന c_declspecs *, വൃക്ഷം, വൃക്ഷം *, വൃക്ഷം *);
+ബാഹ്യ വൃക്ഷം groktypename (ഘടന c_type_name *, വൃക്ഷം *, bool *);
+ബാഹ്യ വൃക്ഷം grokgenassoc (ഘടന c_type_name *);
+ബാഹ്യ വൃക്ഷം grokparm (സ്ഥിരം ഘടന c_parm *, വൃക്ഷം *);
+ബാഹ്യ വൃക്ഷം implicitly_declare (location_t, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം keep_next_level (ശൂന്യം);
+ബാഹ്യ ശൂന്യം pending_xref_error (ശൂന്യം);
+ബാഹ്യ ശൂന്യം c_തള്ളുക_function_context (ശൂന്യം);
+ബാഹ്യ ശൂന്യം c_എടുക്കുക_function_context (ശൂന്യം);
+ബാഹ്യ ശൂന്യം തള്ളുക_parm_decl (സ്ഥിരം ഘടന c_parm *, വൃക്ഷം *);
+ബാഹ്യ ഘടന c_declarator *set_array_declarator_inner (ഘടന c_declarator *,
+							ഘടന c_declarator *);
+ബാഹ്യ വൃക്ഷം c_builtin_function (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_builtin_function_ext_scope (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_simulate_builtin_function_decl (വൃക്ഷം);
+ബാഹ്യ ശൂന്യം c_warn_unused_attributes (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_warn_type_attributes (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം shadow_tag (സ്ഥിരം ഘടന c_declspecs *);
+ബാഹ്യ ശൂന്യം shadow_tag_warned (സ്ഥിരം ഘടന c_declspecs *, പൂർണ്ണസംഖ്യ);
+ബാഹ്യ വൃക്ഷം start_enum (location_t, ഘടന c_enum_contents *, വൃക്ഷം, വൃക്ഷം,
 			bool potential_nesting_p);
-extern bool start_function (struct c_declspecs *, struct c_declarator *, tree);
-extern tree start_decl (struct c_declarator *, struct c_declspecs *, bool,
-			tree, bool = true, location_t * = NULL);
-extern tree start_struct (location_t, enum tree_code, tree,
+ബാഹ്യ bool start_function (ഘടന c_declspecs *, ഘടന c_declarator *, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം start_decl (ഘടന c_declarator *, ഘടന c_declspecs *, bool,
+			വൃക്ഷം, bool = true, location_t * = ശൂന്യ);
+ബാഹ്യ വൃക്ഷം start_struct (location_t, എണ്ണൽ വൃക്ഷം_code, വൃക്ഷം,
 			  class c_struct_parse_info **);
-extern void store_parm_decls (void);
-extern void store_parm_decls_from (struct c_arg_info *);
-extern void temp_store_parm_decls (tree, tree);
-extern void temp_pop_parm_decls (void);
-extern tree xref_tag (enum tree_code, tree);
-extern struct c_typespec parser_xref_tag (location_t, enum tree_code, tree,
-					  bool, tree, bool);
-extern struct c_parm *build_c_parm (struct c_declspecs *, tree,
-				    struct c_declarator *, location_t);
-extern struct c_declarator *build_attrs_declarator (tree,
-						    struct c_declarator *);
-extern struct c_declarator *build_function_declarator (struct c_arg_info *,
-						       struct c_declarator *);
-extern struct c_declarator *build_id_declarator (tree);
-extern struct c_declarator *make_pointer_declarator (struct c_declspecs *,
-						     struct c_declarator *);
-extern struct c_declspecs *build_null_declspecs (void);
-extern struct c_declspecs *declspecs_add_qual (location_t,
-					       struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_type (location_t,
-					       struct c_declspecs *,
-					       struct c_typespec);
-extern struct c_declspecs *declspecs_add_scspec (location_t,
-						 struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_attrs (location_t,
-						struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_addrspace (location_t,
-						    struct c_declspecs *,
+ബാഹ്യ ശൂന്യം store_parm_decls (ശൂന്യം);
+ബാഹ്യ ശൂന്യം store_parm_decls_from (ഘടന c_arg_info *);
+ബാഹ്യ ശൂന്യം temp_store_parm_decls (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം temp_എടുക്കുക_parm_decls (ശൂന്യം);
+ബാഹ്യ വൃക്ഷം xref_tag (എണ്ണൽ വൃക്ഷം_code, വൃക്ഷം);
+ബാഹ്യ ഘടന c_typespec parser_xref_tag (location_t, എണ്ണൽ വൃക്ഷം_code, വൃക്ഷം,
+					  bool, വൃക്ഷം, bool);
+ബാഹ്യ ഘടന c_parm *build_c_parm (ഘടന c_declspecs *, വൃക്ഷം,
+				    ഘടന c_declarator *, location_t);
+ബാഹ്യ ഘടന c_declarator *build_attrs_declarator (വൃക്ഷം,
+						    ഘടന c_declarator *);
+ബാഹ്യ ഘടന c_declarator *build_function_declarator (ഘടന c_arg_info *,
+						       ഘടന c_declarator *);
+ബാഹ്യ ഘടന c_declarator *build_id_declarator (വൃക്ഷം);
+ബാഹ്യ ഘടന c_declarator *make_pointer_declarator (ഘടന c_declspecs *,
+						     ഘടന c_declarator *);
+ബാഹ്യ ഘടന c_declspecs *build_null_declspecs (ശൂന്യം);
+ബാഹ്യ ഘടന c_declspecs *declspecs_add_qual (location_t,
+					       ഘടന c_declspecs *, വൃക്ഷം);
+ബാഹ്യ ഘടന c_declspecs *declspecs_add_type (location_t,
+					       ഘടന c_declspecs *,
+					       ഘടന c_typespec);
+ബാഹ്യ ഘടന c_declspecs *declspecs_add_scspec (location_t,
+						 ഘടന c_declspecs *, വൃക്ഷം);
+ബാഹ്യ ഘടന c_declspecs *declspecs_add_attrs (location_t,
+						ഘടന c_declspecs *, വൃക്ഷം);
+ബാഹ്യ ഘടന c_declspecs *declspecs_add_addrspace (location_t,
+						    ഘടന c_declspecs *,
 						    addr_space_t);
-extern struct c_declspecs *declspecs_add_alignas (location_t,
-						  struct c_declspecs *, tree);
-extern struct c_declspecs *finish_declspecs (struct c_declspecs *);
-extern size_t c_tree_size (enum tree_code);
-extern int c_get_loop_names (tree, bool, tree *);
-extern void c_release_loop_names (int);
-extern tree c_finish_bc_name (location_t, tree, bool);
+ബാഹ്യ ഘടന c_declspecs *declspecs_add_alignas (location_t,
+						  ഘടന c_declspecs *, വൃക്ഷം);
+ബാഹ്യ ഘടന c_declspecs *finish_declspecs (ഘടന c_declspecs *);
+ബാഹ്യ size_t c_വൃക്ഷം_size (എണ്ണൽ വൃക്ഷം_code);
+ബാഹ്യ പൂർണ്ണസംഖ്യ c_get_loop_names (വൃക്ഷം, bool, വൃക്ഷം *);
+ബാഹ്യ ശൂന്യം c_release_loop_names (പൂർണ്ണസംഖ്യ);
+ബാഹ്യ വൃക്ഷം c_finish_bc_name (location_t, വൃക്ഷം, bool);
 
 /* in c-objc-common.cc */
-extern bool c_objc_common_init (void);
-extern bool c_missing_noreturn_ok_p (tree);
-extern bool c_warn_unused_global_decl (const_tree);
-extern void c_initialize_diagnostics (diagnostics::context *);
-extern bool c_var_mod_p (tree x, tree fn);
-extern alias_set_type c_get_alias_set (tree);
-extern int c_type_dwarf_attribute (const_tree, int);
-extern tree c_enum_underlying_base_type (const_tree);
+ബാഹ്യ bool c_objc_common_init (ശൂന്യം);
+ബാഹ്യ bool c_missing_noreturn_ok_p (വൃക്ഷം);
+ബാഹ്യ bool c_warn_unused_global_decl (const_വൃക്ഷം);
+ബാഹ്യ ശൂന്യം c_initialize_diagnostics (diagnostics::context *);
+ബാഹ്യ bool c_var_mod_p (വൃക്ഷം x, വൃക്ഷം fn);
+ബാഹ്യ alias_set_type c_get_alias_set (വൃക്ഷം);
+ബാഹ്യ പൂർണ്ണസംഖ്യ c_type_dwarf_attribute (const_വൃക്ഷം, പൂർണ്ണസംഖ്യ);
+ബാഹ്യ വൃക്ഷം c_enum_underlying_base_type (const_വൃക്ഷം);
 
 /* in c-typeck.cc */
-extern int in_alignof;
-extern int in_sizeof;
-extern int in_countof;
-extern int in_typeof;
-extern int in_generic;
-extern bool c_in_omp_for;
-extern bool c_omp_array_section_p;
+ബാഹ്യ പൂർണ്ണസംഖ്യ in_alignof;
+ബാഹ്യ പൂർണ്ണസംഖ്യ in_sizeof;
+ബാഹ്യ പൂർണ്ണസംഖ്യ in_countof;
+ബാഹ്യ പൂർണ്ണസംഖ്യ in_typeof;
+ബാഹ്യ പൂർണ്ണസംഖ്യ in_generic;
+ബാഹ്യ bool c_in_omp_for;
+ബാഹ്യ bool c_omp_array_section_p;
 
-extern tree c_last_sizeof_arg;
-extern location_t c_last_sizeof_loc;
+ബാഹ്യ വൃക്ഷം c_last_sizeof_arg;
+ബാഹ്യ location_t c_last_sizeof_loc;
 
-extern struct c_switch *c_switch_stack;
+ബാഹ്യ ഘടന c_switch *c_switch_അട്ടി;
 
-extern bool null_pointer_constant_p (const_tree);
+ബാഹ്യ bool null_pointer_constant_p (const_വൃക്ഷം);
 
 
-inline bool
-c_type_variably_modified_p (tree t)
+വരിയിൽ bool
+c_type_variably_modified_p (വൃക്ഷം t)
 {
-  if (error_mark_node == t)
-    return false;
-  if (C_TYPE_VARIABLY_MODIFIED (t))
-    return true;
-  if (TYPE_STRUCTURAL_EQUALITY_P (t))
+  എങ്കിൽ (error_mark_കണ്ണി == t)
+    തിരികെ false;
+  എങ്കിൽ (C_TYPE_VARIABLY_MODIFIED (t))
+    തിരികെ true;
+  എങ്കിൽ (TYPE_STRUCTURAL_EQUALITY_P (t))
     {
       /* The flag may not have been set yet because of incomplete
 	 structure or union types completed later.  */
-      switch (TREE_CODE (t))
+      തിരഞ്ഞെടുപ്പ് (വൃക്ഷം_CODE (t))
 	{
-	case ARRAY_TYPE:
-	case FUNCTION_TYPE:
-	case POINTER_TYPE:
+	അവസ്ഥ ARRAY_TYPE:
+	അവസ്ഥ FUNCTION_TYPE:
+	അവസ്ഥ POINTER_TYPE:
 	  /* Recurse.  */
-	  if (c_type_variably_modified_p (TREE_TYPE (t)))
+	  എങ്കിൽ (c_type_variably_modified_p (വൃക്ഷം_TYPE (t)))
 	    {
 	      C_TYPE_VARIABLY_MODIFIED (t) = 1;
-	      return true;
+	      തിരികെ true;
 	    }
-	  break;
-	default:
-	  break;
+	  നിർത്തുക;
+	സ്ഥിരസ്ഥിതി:
+	  നിർത്തുക;
 	}
     }
-  return false;
+  തിരികെ false;
 }
 
-inline bool
-c_type_unspecified_p (tree t)
+വരിയിൽ bool
+c_type_unspecified_p (വൃക്ഷം t)
 {
-  return error_mark_node != t
-	 && C_TYPE_VARIABLE_SIZE (t) && TREE_CODE (t) == ARRAY_TYPE
-	 && TYPE_DOMAIN (t) && TYPE_MAX_VALUE (TYPE_DOMAIN (t))
-	 && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (t))) == COMPOUND_EXPR
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 0))
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 1));
+  തിരികെ error_mark_കണ്ണി != t
+	 && C_TYPE_VARIABLE_SIZE (t) && വൃക്ഷം_CODE (t) == ARRAY_TYPE
+	 && TYPE_DOMAIN (t) && TYPE_MAX_മൂല്യം (TYPE_DOMAIN (t))
+	 && വൃക്ഷം_CODE (TYPE_MAX_മൂല്യം (TYPE_DOMAIN (t))) == COMPOUND_വ്യഞ്ജകം
+	 && integer_zerop (വൃക്ഷം_OPERAND (TYPE_MAX_മൂല്യം (TYPE_DOMAIN (t)), 0))
+	 && integer_zerop (വൃക്ഷം_OPERAND (TYPE_MAX_മൂല്യം (TYPE_DOMAIN (t)), 1));
 }
 
-extern bool zero_length_array_type_p (const_tree type);
-extern bool char_type_p (tree);
-extern tree c_type_tag (const_tree t);
-extern tree c_objc_common_truthvalue_conversion (location_t, tree,
-						 tree = integer_type_node);
-extern tree require_complete_type (location_t, tree);
-extern bool same_translation_unit_p (const_tree, const_tree);
-extern bool comptypes (tree, tree);
-extern bool comptypes_same_p (tree, tree);
-extern bool comptypes_equiv_p (tree, tree);
-extern bool comptypes_check_enum_int (tree, tree, bool *);
-extern bool c_mark_addressable (tree, bool = false, bool = false);
-extern void c_incomplete_type_error (location_t, const_tree, const_tree);
-extern tree c_type_promotes_to (tree);
-extern struct c_expr default_function_array_conversion (location_t,
-							struct c_expr);
-extern struct c_expr default_function_array_read_conversion (location_t,
-							     struct c_expr);
-extern struct c_expr convert_lvalue_to_rvalue (location_t, struct c_expr,
+ബാഹ്യ bool zero_length_array_type_p (const_വൃക്ഷം type);
+ബാഹ്യ bool char_type_p (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_type_tag (const_വൃക്ഷം t);
+ബാഹ്യ വൃക്ഷം c_objc_common_truthvalue_conversion (location_t, വൃക്ഷം,
+						 വൃക്ഷം = integer_type_കണ്ണി);
+ബാഹ്യ വൃക്ഷം require_complete_type (location_t, വൃക്ഷം);
+ബാഹ്യ bool same_translation_unit_p (const_വൃക്ഷം, const_വൃക്ഷം);
+ബാഹ്യ bool comptypes (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ bool comptypes_same_p (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ bool comptypes_equiv_p (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ bool comptypes_check_enum_int (വൃക്ഷം, വൃക്ഷം, bool *);
+ബാഹ്യ bool c_mark_addressable (വൃക്ഷം, bool = false, bool = false);
+ബാഹ്യ ശൂന്യം c_incomplete_type_error (location_t, const_വൃക്ഷം, const_വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_type_promotes_to (വൃക്ഷം);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം default_function_array_conversion (location_t,
+							ഘടന c_വ്യഞ്ജകം);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം default_function_array_read_conversion (location_t,
+							     ഘടന c_വ്യഞ്ജകം);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം convert_lvalue_to_rvalue (location_t, ഘടന c_വ്യഞ്ജകം,
 					       bool, bool, bool = false);
-extern tree decl_constant_value_1 (tree, bool);
-extern void mark_exp_read (tree);
-extern tree composite_type (tree, tree);
-extern tree lookup_field (const_tree, tree);
-extern tree build_component_ref (location_t, tree, tree, location_t,
+ബാഹ്യ വൃക്ഷം decl_constant_മൂല്യം_1 (വൃക്ഷം, bool);
+ബാഹ്യ ശൂന്യം mark_exp_read (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം composite_type (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം lookup_field (const_വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം build_component_ref (location_t, വൃക്ഷം, വൃക്ഷം, location_t,
 				 location_t);
-extern tree handle_counted_by_for_component_ref (location_t, tree);
-extern tree build_array_ref (location_t, tree, tree);
-extern tree build_omp_array_section (location_t, tree, tree, tree);
-extern tree build_external_ref (location_t, tree, bool, tree *);
-extern void pop_maybe_used (bool);
-extern struct maybe_used_decl *save_maybe_used ();
-extern void restore_maybe_used (struct maybe_used_decl *);
-extern void mark_decl_used (tree, bool);
-extern struct c_expr c_expr_sizeof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_sizeof_type (location_t, struct c_type_name *);
-extern struct c_expr c_expr_countof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_countof_type (location_t loc,
-					  struct c_type_name *);
-extern struct c_expr c_expr_maxof_type (location_t loc, struct c_type_name *);
-extern struct c_expr c_expr_minof_type (location_t loc, struct c_type_name *);
-extern struct c_expr parser_build_unary_op (location_t, enum tree_code,
-    					    struct c_expr);
-extern struct c_expr parser_build_binary_op (location_t,
-    					     enum tree_code, struct c_expr,
-					     struct c_expr, tree);
-extern tree build_conditional_expr (location_t, tree, bool, tree, tree,
-				    location_t, tree, tree, location_t);
-extern tree build_compound_expr (location_t, tree, tree);
-extern tree c_cast_expr (location_t, struct c_type_name *, tree);
-extern tree build_c_cast (location_t, tree, tree);
-extern void store_init_value (location_t, tree, tree, tree);
-extern void maybe_warn_string_init (location_t, tree, struct c_expr);
-extern void start_init (tree, tree, bool, bool, rich_location *);
-extern void finish_init (void);
-extern void really_start_incremental_init (tree);
-extern void finish_implicit_inits (location_t, struct obstack *);
-extern void push_init_level (location_t, int, struct obstack *);
-extern struct c_expr pop_init_level (location_t, int, struct obstack *,
+ബാഹ്യ വൃക്ഷം handle_counted_by_for_component_ref (location_t, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം build_array_ref (location_t, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം build_omp_array_section (location_t, വൃക്ഷം, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം build_external_ref (location_t, വൃക്ഷം, bool, വൃക്ഷം *);
+ബാഹ്യ ശൂന്യം എടുക്കുക_maybe_used (bool);
+ബാഹ്യ ഘടന maybe_used_decl *save_maybe_used ();
+ബാഹ്യ ശൂന്യം restore_maybe_used (ഘടന maybe_used_decl *);
+ബാഹ്യ ശൂന്യം mark_decl_used (വൃക്ഷം, bool);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം c_വ്യഞ്ജകം_sizeof_വ്യഞ്ജകം (location_t, ഘടന c_വ്യഞ്ജകം);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം c_വ്യഞ്ജകം_sizeof_type (location_t, ഘടന c_type_name *);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം c_വ്യഞ്ജകം_countof_വ്യഞ്ജകം (location_t, ഘടന c_വ്യഞ്ജകം);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം c_വ്യഞ്ജകം_countof_type (location_t loc,
+					  ഘടന c_type_name *);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം c_വ്യഞ്ജകം_maxof_type (location_t loc, ഘടന c_type_name *);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം c_വ്യഞ്ജകം_minof_type (location_t loc, ഘടന c_type_name *);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം parser_build_unary_op (location_t, എണ്ണൽ വൃക്ഷം_code,
+    					    ഘടന c_വ്യഞ്ജകം);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം parser_build_ദ്വിമാന_op (location_t,
+    					     എണ്ണൽ വൃക്ഷം_code, ഘടന c_വ്യഞ്ജകം,
+					     ഘടന c_വ്യഞ്ജകം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം build_conditional_വ്യഞ്ജകം (location_t, വൃക്ഷം, bool, വൃക്ഷം, വൃക്ഷം,
+				    location_t, വൃക്ഷം, വൃക്ഷം, location_t);
+ബാഹ്യ വൃക്ഷം build_compound_വ്യഞ്ജകം (location_t, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_cast_വ്യഞ്ജകം (location_t, ഘടന c_type_name *, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം build_c_cast (location_t, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം store_init_മൂല്യം (location_t, വൃക്ഷം, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം maybe_warn_string_init (location_t, വൃക്ഷം, ഘടന c_വ്യഞ്ജകം);
+ബാഹ്യ ശൂന്യം start_init (വൃക്ഷം, വൃക്ഷം, bool, bool, rich_location *);
+ബാഹ്യ ശൂന്യം finish_init (ശൂന്യം);
+ബാഹ്യ ശൂന്യം really_start_incremental_init (വൃക്ഷം);
+ബാഹ്യ ശൂന്യം finish_implicit_inits (location_t, ഘടന obstack *);
+ബാഹ്യ ശൂന്യം തള്ളുക_init_level (location_t, പൂർണ്ണസംഖ്യ, ഘടന obstack *);
+ബാഹ്യ ഘടന c_വ്യഞ്ജകം എടുക്കുക_init_level (location_t, പൂർണ്ണസംഖ്യ, ഘടന obstack *,
 				     location_t);
-extern void set_init_index (location_t, tree, tree, struct obstack *);
-extern void set_init_label (location_t, tree, location_t, struct obstack *);
-unsigned c_maybe_optimize_large_byte_initializer (void);
-extern void process_init_element (location_t, struct c_expr, bool,
-				  struct obstack *);
-extern tree build_compound_literal (location_t, tree, tree, bool,
-				    unsigned int, struct c_declspecs *);
-extern void check_compound_literal_type (location_t, struct c_type_name *);
-extern tree c_start_switch (location_t, location_t, tree, bool, tree);
-extern void c_finish_switch (tree, tree);
-extern tree build_asm_expr (location_t, tree, tree, tree, tree, tree, bool,
+ബാഹ്യ ശൂന്യം set_init_index (location_t, വൃക്ഷം, വൃക്ഷം, ഘടന obstack *);
+ബാഹ്യ ശൂന്യം set_init_label (location_t, വൃക്ഷം, location_t, ഘടന obstack *);
+unsigned c_maybe_optimize_large_byte_initializer (ശൂന്യം);
+ബാഹ്യ ശൂന്യം process_init_element (location_t, ഘടന c_വ്യഞ്ജകം, bool,
+				  ഘടന obstack *);
+ബാഹ്യ വൃക്ഷം build_compound_literal (location_t, വൃക്ഷം, വൃക്ഷം, bool,
+				    unsigned പൂർണ്ണസംഖ്യ, ഘടന c_declspecs *);
+ബാഹ്യ ശൂന്യം check_compound_literal_type (location_t, ഘടന c_type_name *);
+ബാഹ്യ വൃക്ഷം c_start_switch (location_t, location_t, വൃക്ഷം, bool, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം c_finish_switch (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം build_asm_വ്യഞ്ജകം (location_t, വൃക്ഷം, വൃക്ഷം, വൃക്ഷം, വൃക്ഷം, വൃക്ഷം, bool,
 			    bool);
-extern tree build_asm_stmt (bool, tree);
-extern int c_types_compatible_p (tree, tree);
-extern tree c_begin_compound_stmt (bool);
-extern tree c_end_compound_stmt (location_t, tree, bool);
-extern void c_finish_if_stmt (location_t, tree, tree, tree);
-extern void c_finish_loop (location_t, location_t, tree, location_t, tree,
-			   tree, tree, tree, bool);
-extern tree c_begin_stmt_expr (void);
-extern tree c_finish_stmt_expr (location_t, tree);
-extern tree c_process_expr_stmt (location_t, tree);
-extern tree c_finish_expr_stmt (location_t, tree);
-extern tree c_finish_return (location_t, tree, tree, bool = false);
-extern tree c_finish_bc_stmt (location_t, tree, bool, tree);
-extern tree c_finish_goto_label (location_t, tree);
-extern tree c_finish_goto_ptr (location_t, c_expr val);
-extern tree c_expr_to_decl (tree, bool *, bool *);
-extern tree c_finish_omp_construct (location_t, enum tree_code, tree, tree);
-extern tree c_finish_oacc_data (location_t, tree, tree);
-extern tree c_finish_oacc_host_data (location_t, tree, tree);
-extern tree c_begin_omp_parallel (void);
-extern tree c_finish_omp_parallel (location_t, tree, tree);
-extern tree c_begin_omp_task (void);
-extern tree c_finish_omp_task (location_t, tree, tree);
-extern void c_finish_omp_cancel (location_t, tree);
-extern void c_finish_omp_cancellation_point (location_t, tree);
-extern tree c_finish_omp_clauses (tree, enum c_omp_region_type);
-extern tree c_omp_finish_mapper_clauses (tree);
-extern tree c_omp_mapper_lookup (tree, tree);
-extern tree c_omp_extract_mapper_directive (tree);
-extern tree c_omp_map_array_section (location_t, tree);
-extern tree c_build_va_arg (location_t, tree, location_t, tree, tree);
-extern tree c_finish_transaction (location_t, tree, int);
-extern bool c_tree_equal (tree, tree);
-extern tree c_build_function_call_vec (location_t, const vec<location_t>&,
-				       tree, vec<tree, va_gc> *,
-				       vec<tree, va_gc> *);
-extern tree c_omp_clause_copy_ctor (tree, tree, tree);
-extern tree c_reconstruct_complex_type (tree, tree);
-extern tree c_type_canonical (tree);
-extern tree c_build_type_attribute_variant (tree ntype, tree attrs);
-extern tree c_build_pointer_type (tree type);
-extern tree c_build_array_type (tree type, tree domain);
-extern tree c_build_array_type_unspecified (tree type);
-extern tree c_build_array_type_zero_size (tree type);
-extern tree c_build_function_type (tree type, tree args, bool no = false);
-extern tree c_build_pointer_type_for_mode (tree type, machine_mode mode, bool m);
+ബാഹ്യ വൃക്ഷം build_asm_stmt (bool, വൃക്ഷം);
+ബാഹ്യ പൂർണ്ണസംഖ്യ c_types_compatible_p (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_begin_compound_stmt (bool);
+ബാഹ്യ വൃക്ഷം c_end_compound_stmt (location_t, വൃക്ഷം, bool);
+ബാഹ്യ ശൂന്യം c_finish_if_stmt (location_t, വൃക്ഷം, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം c_finish_loop (location_t, location_t, വൃക്ഷം, location_t, വൃക്ഷം,
+			   വൃക്ഷം, വൃക്ഷം, വൃക്ഷം, bool);
+ബാഹ്യ വൃക്ഷം c_begin_stmt_വ്യഞ്ജകം (ശൂന്യം);
+ബാഹ്യ വൃക്ഷം c_finish_stmt_വ്യഞ്ജകം (location_t, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_process_വ്യഞ്ജകം_stmt (location_t, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_finish_വ്യഞ്ജകം_stmt (location_t, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_finish_return (location_t, വൃക്ഷം, വൃക്ഷം, bool = false);
+ബാഹ്യ വൃക്ഷം c_finish_bc_stmt (location_t, വൃക്ഷം, bool, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_finish_goto_label (location_t, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_finish_goto_ptr (location_t, c_വ്യഞ്ജകം val);
+ബാഹ്യ വൃക്ഷം c_വ്യഞ്ജകം_to_decl (വൃക്ഷം, bool *, bool *);
+ബാഹ്യ വൃക്ഷം c_finish_omp_construct (location_t, എണ്ണൽ വൃക്ഷം_code, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_finish_oacc_data (location_t, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_finish_oacc_host_data (location_t, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_begin_omp_parallel (ശൂന്യം);
+ബാഹ്യ വൃക്ഷം c_finish_omp_parallel (location_t, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_begin_omp_task (ശൂന്യം);
+ബാഹ്യ വൃക്ഷം c_finish_omp_task (location_t, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം c_finish_omp_cancel (location_t, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം c_finish_omp_cancellation_point (location_t, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_finish_omp_clauses (വൃക്ഷം, എണ്ണൽ c_omp_region_type);
+ബാഹ്യ വൃക്ഷം c_omp_finish_mapper_clauses (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_omp_mapper_lookup (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_omp_extract_mapper_directive (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_omp_map_array_section (location_t, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_build_va_arg (location_t, വൃക്ഷം, location_t, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_finish_transaction (location_t, വൃക്ഷം, പൂർണ്ണസംഖ്യ);
+ബാഹ്യ bool c_വൃക്ഷം_equal (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_build_function_call_vec (location_t, സ്ഥിരം vec<location_t>&,
+				       വൃക്ഷം, vec<വൃക്ഷം, va_gc> *,
+				       vec<വൃക്ഷം, va_gc> *);
+ബാഹ്യ വൃക്ഷം c_omp_clause_copy_ctor (വൃക്ഷം, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_reconstruct_complex_type (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_type_canonical (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_build_type_attribute_variant (വൃക്ഷം ntype, വൃക്ഷം attrs);
+ബാഹ്യ വൃക്ഷം c_build_pointer_type (വൃക്ഷം type);
+ബാഹ്യ വൃക്ഷം c_build_array_type (വൃക്ഷം type, വൃക്ഷം domain);
+ബാഹ്യ വൃക്ഷം c_build_array_type_unspecified (വൃക്ഷം type);
+ബാഹ്യ വൃക്ഷം c_build_array_type_zero_size (വൃക്ഷം type);
+ബാഹ്യ വൃക്ഷം c_build_function_type (വൃക്ഷം type, വൃക്ഷം args, bool no = false);
+ബാഹ്യ വൃക്ഷം c_build_pointer_type_for_mode (വൃക്ഷം type, machine_mode mode, bool m);
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement that specifies a return value is seen.  */
 
-extern int current_function_returns_value;
+ബാഹ്യ പൂർണ്ണസംഖ്യ current_function_returns_മൂല്യം;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement with no argument is seen.  */
 
-extern int current_function_returns_null;
+ബാഹ്യ പൂർണ്ണസംഖ്യ current_function_returns_null;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a call to a noreturn function is seen.  */
 
-extern int current_function_returns_abnormally;
+ബാഹ്യ പൂർണ്ണസംഖ്യ current_function_returns_abnormally;
 
 /* In c-decl.cc */
 
 /* Tell the binding oracle what kind of binding we are looking for.  */
 
-enum c_oracle_request
+എണ്ണൽ c_oracle_request
 {
-  C_ORACLE_SYMBOL,
+  C_ORACLE_ചിഹ്നം,
   C_ORACLE_TAG,
   C_ORACLE_LABEL
 };
@@ -999,55 +999,55 @@ enum c_oracle_request
    oracle has been called and will not call it again if it fails to
    create a given binding.  */
 
-typedef void c_binding_oracle_function (enum c_oracle_request, tree identifier);
+തരനിർവചനം ശൂന്യം c_binding_oracle_function (എണ്ണൽ c_oracle_request, വൃക്ഷം identifier);
 
-extern c_binding_oracle_function *c_binding_oracle;
+ബാഹ്യ c_binding_oracle_function *c_binding_oracle;
 
-extern void c_finish_incomplete_decl (tree);
-extern tree c_omp_reduction_id (enum tree_code, tree);
-extern tree c_omp_reduction_decl (tree);
-extern tree c_omp_reduction_lookup (tree, tree);
-extern tree c_check_omp_declare_reduction_r (tree *, int *, void *);
-extern tree c_omp_mapper_id (tree);
-extern tree c_omp_mapper_decl (tree);
-extern void c_omp_scan_mapper_bindings (location_t, tree *, tree);
-extern bool c_check_in_current_scope (tree);
-extern void c_pushtag (location_t, tree, tree);
-extern void c_bind (location_t, tree, bool);
-extern bool tag_exists_p (enum tree_code, tree);
+ബാഹ്യ ശൂന്യം c_finish_incomplete_decl (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_omp_reduction_id (എണ്ണൽ വൃക്ഷം_code, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_omp_reduction_decl (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_omp_reduction_lookup (വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_check_omp_declare_reduction_r (വൃക്ഷം *, പൂർണ്ണസംഖ്യ *, ശൂന്യം *);
+ബാഹ്യ വൃക്ഷം c_omp_mapper_id (വൃക്ഷം);
+ബാഹ്യ വൃക്ഷം c_omp_mapper_decl (വൃക്ഷം);
+ബാഹ്യ ശൂന്യം c_omp_scan_mapper_bindings (location_t, വൃക്ഷം *, വൃക്ഷം);
+ബാഹ്യ bool c_check_in_current_scope (വൃക്ഷം);
+ബാഹ്യ ശൂന്യം c_pushtag (location_t, വൃക്ഷം, വൃക്ഷം);
+ബാഹ്യ ശൂന്യം c_bind (location_t, വൃക്ഷം, bool);
+ബാഹ്യ bool tag_exists_p (എണ്ണൽ വൃക്ഷം_code, വൃക്ഷം);
 
-extern void verify_counted_by_for_top_anonymous_type (tree);
+ബാഹ്യ ശൂന്യം verify_counted_by_for_മുകൾ_anonymous_type (വൃക്ഷം);
 
 /* In c-errors.cc */
-extern bool pedwarn_c90 (location_t, diagnostics::option_id, const char *, ...)
+ബാഹ്യ bool pedwarn_c90 (location_t, diagnostics::option_id, സ്ഥിരം അക്ഷരം *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c99 (location_t, diagnostics::option_id, const char *, ...)
+ബാഹ്യ bool pedwarn_c99 (location_t, diagnostics::option_id, സ്ഥിരം അക്ഷരം *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c11 (location_t, diagnostics::option_id, const char *, ...)
+ബാഹ്യ bool pedwarn_c11 (location_t, diagnostics::option_id, സ്ഥിരം അക്ഷരം *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c23 (location_t, diagnostics::option_id, const char *, ...)
+ബാഹ്യ bool pedwarn_c23 (location_t, diagnostics::option_id, സ്ഥിരം അക്ഷരം *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern void add_note_about_new_keyword (location_t loc,
-					tree keyword_id);
+ബാഹ്യ ശൂന്യം add_note_about_new_keyword (location_t loc,
+					വൃക്ഷം keyword_id);
 
-extern void
-set_c_expr_source_range (c_expr *expr,
+ബാഹ്യ ശൂന്യം
+set_c_വ്യഞ്ജകം_source_range (c_വ്യഞ്ജകം *വ്യഞ്ജകം,
 			 location_t start, location_t finish);
 
-extern void
-set_c_expr_source_range (c_expr *expr,
+ബാഹ്യ ശൂന്യം
+set_c_വ്യഞ്ജകം_source_range (c_വ്യഞ്ജകം *വ്യഞ്ജകം,
 			 source_range src_range);
 
 /* In c-fold.cc */
-extern vec<tree> incomplete_record_decls;
+ബാഹ്യ vec<വൃക്ഷം> incomplete_record_decls;
 
-extern const char *c_get_sarif_source_language (const char *filename);
+ബാഹ്യ സ്ഥിരം അക്ഷരം *c_get_sarif_source_language (സ്ഥിരം അക്ഷരം *filename);
 
-extern const struct scoped_attribute_specs std_attribute_table;
+ബാഹ്യ സ്ഥിരം ഘടന scoped_attribute_specs std_attribute_table;
 
-#if CHECKING_P
+#എങ്കിൽ CHECKING_P
 namespace selftest {
-  extern void run_c_tests (void);
+  ബാഹ്യ ശൂന്യം run_c_tests (ശൂന്യം);
 } // namespace selftest
 #endif /* #if CHECKING_P */
 

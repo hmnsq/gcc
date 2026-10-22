@@ -17,27 +17,27 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "function.h"
-#include "bitmap.h"
-#include "c-tree.h"
-#include "intl.h"
-#include "gimplify.h"
+#അന്തര്ഭാവ "config.h"
+#അന്തര്ഭാവ "system.h"
+#അന്തര്ഭാവ "coretypes.h"
+#അന്തര്ഭാവ "target.h"
+#അന്തര്ഭാവ "function.h"
+#അന്തര്ഭാവ "bitmap.h"
+#അന്തര്ഭാവ "c-tree.h"
+#അന്തര്ഭാവ "intl.h"
+#അന്തര്ഭാവ "gimplify.h"
 
-static tree c_fully_fold_internal (tree expr, bool, bool *, bool *, bool,
-				   bool);
+സ്ഥിതം വൃക്ഷം c_fully_fold_internal (വൃക്ഷം വ്യഞ്ജകം, തർക്കം, തർക്കം *, തർക്കം *, തർക്കം,
+				   തർക്കം);
 
 /* If DISABLE is true, stop issuing warnings.  This is used when
    parsing code that we know will not be executed.  This function may
    be called multiple times, and works as a stack.  */
 
-static void
-c_disable_warnings (bool disable)
+സ്ഥിതം ശൂന്യം
+c_disable_warnings (തർക്കം disable)
 {
-  if (disable)
+  എങ്കിൽ (disable)
     {
       ++c_inhibit_evaluation_warnings;
     }
@@ -45,10 +45,10 @@ c_disable_warnings (bool disable)
 
 /* If ENABLE is true, re-enable issuing warnings.  */
 
-static void
-c_enable_warnings (bool enable)
+സ്ഥിതം ശൂന്യം
+c_enable_warnings (തർക്കം enable)
 {
-  if (enable)
+  എങ്കിൽ (enable)
     {
       --c_inhibit_evaluation_warnings;
     }
@@ -57,36 +57,36 @@ c_enable_warnings (bool enable)
 /* Try to fold ARRAY_REF ary[index] if possible and not handled by
    normal fold, return NULL_TREE otherwise.  */
 
-static tree
-c_fold_array_ref (tree type, tree ary, tree index)
+സ്ഥിതം വൃക്ഷം
+c_fold_array_ref (വൃക്ഷം type, വൃക്ഷം ary, വൃക്ഷം index)
 {
-  if (TREE_CODE (ary) != STRING_CST
-      || TREE_CODE (index) != INTEGER_CST
-      || TREE_OVERFLOW (index)
-      || TREE_CODE (TREE_TYPE (ary)) != ARRAY_TYPE
-      || !tree_fits_uhwi_p (index))
-    return NULL_TREE;
+  എങ്കിൽ (വൃക്ഷം_CODE (ary) != STRING_CST
+      || വൃക്ഷം_CODE (index) != INTEGER_CST
+      || വൃക്ഷം_OVERFLOW (index)
+      || വൃക്ഷം_CODE (വൃക്ഷം_TYPE (ary)) != ARRAY_TYPE
+      || !വൃക്ഷം_fits_uhwi_p (index))
+    തിരികെ NULL_വൃക്ഷം;
 
-  tree elem_type = TREE_TYPE (TREE_TYPE (ary));
+  വൃക്ഷം elem_type = വൃക്ഷം_TYPE (വൃക്ഷം_TYPE (ary));
   unsigned elem_nchars = (TYPE_PRECISION (elem_type)
-			  / TYPE_PRECISION (char_type_node));
-  unsigned len = (unsigned) TREE_STRING_LENGTH (ary) / elem_nchars;
-  tree nelts_minus_one = array_type_nelts_minus_one (TREE_TYPE (ary));
-  bool dummy1 = true, dummy2 = true;
-  nelts_minus_one = c_fully_fold_internal (nelts_minus_one, true, &dummy1,
-					   &dummy2, false, false);
-  unsigned HOST_WIDE_INT i = tree_to_uhwi (index);
-  if (!tree_int_cst_le (index, nelts_minus_one)
+			  / TYPE_PRECISION (char_type_കണ്ണി));
+  unsigned len = (unsigned) വൃക്ഷം_STRING_LENGTH (ary) / elem_nchars;
+  വൃക്ഷം nelts_minus_one = array_type_nelts_minus_one (വൃക്ഷം_TYPE (ary));
+  തർക്കം dummy1 = സത്യം, dummy2 = സത്യം;
+  nelts_minus_one = c_fully_fold_internal (nelts_minus_one, സത്യം, &dummy1,
+					   &dummy2, അസത്യം, അസത്യം);
+  unsigned HOST_WIDE_INT i = വൃക്ഷം_to_uhwi (index);
+  എങ്കിൽ (!വൃക്ഷം_int_cst_le (index, nelts_minus_one)
       || i >= len
       || i + elem_nchars > len)
-    return NULL_TREE;
+    തിരികെ NULL_വൃക്ഷം;
 
-  if (elem_nchars == 1)
-    return build_int_cst (type, TREE_STRING_POINTER (ary)[i]);
+  എങ്കിൽ (elem_nchars == 1)
+    തിരികെ build_int_cst (type, വൃക്ഷം_STRING_POINTER (ary)[i]);
 
-  const unsigned char *ptr
-    = ((const unsigned char *)TREE_STRING_POINTER (ary) + i * elem_nchars);
-  return native_interpret_expr (type, ptr, elem_nchars);
+  സ്ഥിരം unsigned അക്ഷരം *ptr
+    = ((സ്ഥിരം unsigned അക്ഷരം *)വൃക്ഷം_STRING_POINTER (ary) + i * elem_nchars);
+  തിരികെ native_interpret_വ്യഞ്ജകം (type, ptr, elem_nchars);
 }
 
 /* Fully fold EXPR, an expression that was not folded (beyond integer
@@ -105,28 +105,28 @@ c_fold_array_ref (tree type, tree ary, tree index)
    C_MAYBE_CONST_EXPR.  LVAL is true if it should be treated as an
    lvalue.  */
 
-tree
-c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
+വൃക്ഷം
+c_fully_fold (വൃക്ഷം വ്യഞ്ജകം, തർക്കം in_init, തർക്കം *maybe_const, തർക്കം lval)
 {
-  tree ret;
-  tree eptype = NULL_TREE;
-  bool dummy = true;
-  bool maybe_const_itself = true;
-  location_t loc = EXPR_LOCATION (expr);
+  വൃക്ഷം ret;
+  വൃക്ഷം eptype = NULL_വൃക്ഷം;
+  തർക്കം dummy = സത്യം;
+  തർക്കം maybe_const_itself = സത്യം;
+  location_t loc = വ്യഞ്ജകം_LOCATION (വ്യഞ്ജകം);
 
-  if (!maybe_const)
+  എങ്കിൽ (!maybe_const)
     maybe_const = &dummy;
-  if (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
+  എങ്കിൽ (വൃക്ഷം_CODE (വ്യഞ്ജകം) == EXCESS_PRECISION_വ്യഞ്ജകം)
     {
-      eptype = TREE_TYPE (expr);
-      expr = TREE_OPERAND (expr, 0);
+      eptype = വൃക്ഷം_TYPE (വ്യഞ്ജകം);
+      വ്യഞ്ജകം = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 0);
     }
-  ret = c_fully_fold_internal (expr, in_init, maybe_const,
-			       &maybe_const_itself, false, lval);
-  if (eptype)
+  ret = c_fully_fold_internal (വ്യഞ്ജകം, in_init, maybe_const,
+			       &maybe_const_itself, അസത്യം, lval);
+  എങ്കിൽ (eptype)
     ret = fold_convert_loc (loc, eptype, ret);
   *maybe_const &= maybe_const_itself;
-  return ret;
+  തിരികെ ret;
 }
 
 /* Internal helper for c_fully_fold.  EXPR and IN_INIT are as for
@@ -141,81 +141,81 @@ c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
    LVAL indicates folding of lvalue, where we can't replace it with
    an rvalue.  */
 
-static tree
-c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
-		       bool *maybe_const_itself, bool for_int_const, bool lval)
+സ്ഥിതം വൃക്ഷം
+c_fully_fold_internal (വൃക്ഷം വ്യഞ്ജകം, തർക്കം in_init, തർക്കം *maybe_const_operands,
+		       തർക്കം *maybe_const_itself, തർക്കം for_int_const, തർക്കം lval)
 {
-  tree ret = expr;
-  enum tree_code code = TREE_CODE (expr);
-  enum tree_code_class kind = TREE_CODE_CLASS (code);
-  location_t loc = EXPR_LOCATION (expr);
-  tree op0, op1, op2, op3;
-  tree orig_op0, orig_op1, orig_op2;
-  bool op0_const = true, op1_const = true, op2_const = true;
-  bool op0_const_self = true, op1_const_self = true, op2_const_self = true;
-  bool nowarning = warning_suppressed_p (expr, OPT_Woverflow);
-  bool unused_p;
-  bool op0_lval = false;
+  വൃക്ഷം ret = വ്യഞ്ജകം;
+  എണ്ണൽ വൃക്ഷം_code code = വൃക്ഷം_CODE (വ്യഞ്ജകം);
+  എണ്ണൽ വൃക്ഷം_code_class kind = വൃക്ഷം_CODE_CLASS (code);
+  location_t loc = വ്യഞ്ജകം_LOCATION (വ്യഞ്ജകം);
+  വൃക്ഷം op0, op1, op2, op3;
+  വൃക്ഷം orig_op0, orig_op1, orig_op2;
+  തർക്കം op0_const = സത്യം, op1_const = സത്യം, op2_const = സത്യം;
+  തർക്കം op0_const_self = സത്യം, op1_const_self = സത്യം, op2_const_self = സത്യം;
+  തർക്കം nowarning = warning_suppressed_p (വ്യഞ്ജകം, OPT_Woverflow);
+  തർക്കം unused_p;
+  തർക്കം op0_lval = അസത്യം;
   source_range old_range;
 
   /* Constants, declarations, statements, errors, and anything else not
      counted as an expression cannot usefully be folded further at this
      point.  */
-  if (!IS_EXPR_CODE_CLASS (kind) || kind == tcc_statement)
+  എങ്കിൽ (!IS_വ്യഞ്ജകം_CODE_CLASS (kind) || kind == tcc_statement)
     {
       /* Except for variables which we can optimize to its initializer.  */
-      if (VAR_P (expr) && !lval && (optimize || in_init))
+      എങ്കിൽ (VAR_P (വ്യഞ്ജകം) && !lval && (optimize || in_init))
 	{
-	  if (in_init)
-	    ret = decl_constant_value_1 (expr, true);
-	  else
+	  എങ്കിൽ (in_init)
+	    ret = decl_constant_മൂല്യം_1 (വ്യഞ്ജകം, സത്യം);
+	  അല്ലെങ്കിൽ
 	    {
-	      ret = decl_constant_value (expr);
-	      if (ret != expr
-		  && (TYPE_MODE (TREE_TYPE (ret)) == BLKmode
-		      || TREE_CODE (TREE_TYPE (ret)) == ARRAY_TYPE))
-		return expr;
+	      ret = decl_constant_മൂല്യം (വ്യഞ്ജകം);
+	      എങ്കിൽ (ret != വ്യഞ്ജകം
+		  && (TYPE_MODE (വൃക്ഷം_TYPE (ret)) == BLKmode
+		      || വൃക്ഷം_CODE (വൃക്ഷം_TYPE (ret)) == ARRAY_TYPE))
+		തിരികെ വ്യഞ്ജകം;
 	    }
 	  /* Avoid unwanted tree sharing between the initializer and current
 	     function's body where the tree can be modified e.g. by the
 	     gimplifier.  */
-	  if (ret != expr && TREE_STATIC (expr))
-	    ret = unshare_expr (ret);
-	  return ret;
+	  എങ്കിൽ (ret != വ്യഞ്ജകം && വൃക്ഷം_STATIC (വ്യഞ്ജകം))
+	    ret = unshare_വ്യഞ്ജകം (ret);
+	  തിരികെ ret;
 	}
-      return expr;
+      തിരികെ വ്യഞ്ജകം;
     }
 
-  if (IS_EXPR_CODE_CLASS (kind))
-    old_range = EXPR_LOCATION_RANGE (expr);
+  എങ്കിൽ (IS_വ്യഞ്ജകം_CODE_CLASS (kind))
+    old_range = വ്യഞ്ജകം_LOCATION_RANGE (വ്യഞ്ജകം);
 
   /* Operands of variable-length expressions (function calls) have
      already been folded, as have __builtin_* function calls, and such
      expressions cannot occur in constant expressions.  */
-  if (kind == tcc_vl_exp)
+  എങ്കിൽ (kind == tcc_vl_exp)
     {
-      *maybe_const_operands = false;
-      ret = fold (expr);
-      goto out;
+      *maybe_const_operands = അസത്യം;
+      ret = fold (വ്യഞ്ജകം);
+      പോകുക out;
     }
 
-  if (code == C_MAYBE_CONST_EXPR)
+  എങ്കിൽ (code == C_MAYBE_CONST_വ്യഞ്ജകം)
     {
-      tree pre = C_MAYBE_CONST_EXPR_PRE (expr);
-      tree inner = C_MAYBE_CONST_EXPR_EXPR (expr);
-      if (C_MAYBE_CONST_EXPR_NON_CONST (expr))
-	*maybe_const_operands = false;
-      if (C_MAYBE_CONST_EXPR_INT_OPERANDS (expr))
+      വൃക്ഷം pre = C_MAYBE_CONST_വ്യഞ്ജകം_PRE (വ്യഞ്ജകം);
+      വൃക്ഷം inner = C_MAYBE_CONST_വ്യഞ്ജകം_വ്യഞ്ജകം (വ്യഞ്ജകം);
+      എങ്കിൽ (C_MAYBE_CONST_വ്യഞ്ജകം_NON_CONST (വ്യഞ്ജകം))
+	*maybe_const_operands = അസത്യം;
+      എങ്കിൽ (C_MAYBE_CONST_വ്യഞ്ജകം_INT_OPERANDS (വ്യഞ്ജകം))
 	{
-	  *maybe_const_itself = false;
+	  *maybe_const_itself = അസത്യം;
 	  inner = c_fully_fold_internal (inner, in_init, maybe_const_operands,
-					 maybe_const_itself, true, lval);
+					 maybe_const_itself, സത്യം, lval);
 	}
-      if (pre && !in_init)
-	ret = build2 (COMPOUND_EXPR, TREE_TYPE (expr), pre, inner);
-      else
+      എങ്കിൽ (pre && !in_init)
+	ret = build2 (COMPOUND_വ്യഞ്ജകം, വൃക്ഷം_TYPE (വ്യഞ്ജകം), pre, inner);
+      അല്ലെങ്കിൽ
 	ret = inner;
-      goto out;
+      പോകുക out;
     }
 
   /* Assignment, increment, decrement, function call and comma
@@ -224,450 +224,450 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      were handled above, though VA_ARG_EXPR is treated like a function
      call here, and statement expressions are handled through
      C_MAYBE_CONST_EXPR to avoid folding inside them.)  */
-  switch (code)
+  തിരഞ്ഞെടുപ്പ് (code)
     {
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-    case COMPOUND_EXPR:
-      *maybe_const_operands = false;
-      break;
+    അവസ്ഥ MODIFY_വ്യഞ്ജകം:
+    അവസ്ഥ PREDECREMENT_വ്യഞ്ജകം:
+    അവസ്ഥ PREINCREMENT_വ്യഞ്ജകം:
+    അവസ്ഥ POSTDECREMENT_വ്യഞ്ജകം:
+    അവസ്ഥ POSTINCREMENT_വ്യഞ്ജകം:
+    അവസ്ഥ COMPOUND_വ്യഞ്ജകം:
+      *maybe_const_operands = അസത്യം;
+      നിർത്തുക;
 
-    case VA_ARG_EXPR:
-    case TARGET_EXPR:
-    case BIND_EXPR:
-    case OBJ_TYPE_REF:
-      *maybe_const_operands = false;
-      ret = fold (expr);
-      goto out;
+    അവസ്ഥ VA_ARG_വ്യഞ്ജകം:
+    അവസ്ഥ TARGET_വ്യഞ്ജകം:
+    അവസ്ഥ BIND_വ്യഞ്ജകം:
+    അവസ്ഥ OBJ_TYPE_REF:
+      *maybe_const_operands = അസത്യം;
+      ret = fold (വ്യഞ്ജകം);
+      പോകുക out;
 
-    default:
-      break;
+    സ്ഥിരസ്ഥിതി:
+      നിർത്തുക;
     }
 
   /* Fold individual tree codes as appropriate.  */
-  switch (code)
+  തിരഞ്ഞെടുപ്പ് (code)
     {
-    case COMPOUND_LITERAL_EXPR:
+    അവസ്ഥ COMPOUND_LITERAL_വ്യഞ്ജകം:
       /* Any non-constancy will have been marked in a containing
 	 C_MAYBE_CONST_EXPR; there is no more folding to do here.  */
-      goto out;
+      പോകുക out;
 
-    case COMPONENT_REF:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      op1 = TREE_OPERAND (expr, 1);
-      op2 = TREE_OPERAND (expr, 2);
+    അവസ്ഥ COMPONENT_REF:
+      orig_op0 = op0 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 0);
+      op1 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 1);
+      op2 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 2);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
-      if (op0 != orig_op0)
-	ret = build3 (COMPONENT_REF, TREE_TYPE (expr), op0, op1, op2);
-      if (ret != expr)
+      എങ്കിൽ (op0 != orig_op0)
+	ret = build3 (COMPONENT_REF, വൃക്ഷം_TYPE (വ്യഞ്ജകം), op0, op1, op2);
+      എങ്കിൽ (ret != വ്യഞ്ജകം)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  വൃക്ഷം_READONLY (ret) = വൃക്ഷം_READONLY (വ്യഞ്ജകം);
+	  വൃക്ഷം_THIS_VOLATILE (ret) = വൃക്ഷം_THIS_VOLATILE (വ്യഞ്ജകം);
 	}
-      if (!lval)
+      എങ്കിൽ (!lval)
 	ret = fold (ret);
-      goto out;
+      പോകുക out;
 
-    case ARRAY_REF:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      op2 = TREE_OPERAND (expr, 2);
-      op3 = TREE_OPERAND (expr, 3);
+    അവസ്ഥ ARRAY_REF:
+      orig_op0 = op0 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 0);
+      orig_op1 = op1 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 1);
+      op2 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 2);
+      op3 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 3);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
       op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, അസത്യം);
       STRIP_TYPE_NOPS (op1);
       /* Fold "foo"[2] in initializers.  */
-      if (!lval && in_init)
+      എങ്കിൽ (!lval && in_init)
 	{
-	  ret = c_fold_array_ref (TREE_TYPE (expr), op0, op1);
-	  if (ret)
-	    goto out;
-	  ret = expr;
+	  ret = c_fold_array_ref (വൃക്ഷം_TYPE (വ്യഞ്ജകം), op0, op1);
+	  എങ്കിൽ (ret)
+	    പോകുക out;
+	  ret = വ്യഞ്ജകം;
 	}
-      if (op0 != orig_op0 || op1 != orig_op1)
-	ret = build4 (ARRAY_REF, TREE_TYPE (expr), op0, op1, op2, op3);
-      if (ret != expr)
+      എങ്കിൽ (op0 != orig_op0 || op1 != orig_op1)
+	ret = build4 (ARRAY_REF, വൃക്ഷം_TYPE (വ്യഞ്ജകം), op0, op1, op2, op3);
+      എങ്കിൽ (ret != വ്യഞ്ജകം)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  വൃക്ഷം_READONLY (ret) = വൃക്ഷം_READONLY (വ്യഞ്ജകം);
+	  വൃക്ഷം_SIDE_EFFECTS (ret) = വൃക്ഷം_SIDE_EFFECTS (വ്യഞ്ജകം);
+	  വൃക്ഷം_THIS_VOLATILE (ret) = വൃക്ഷം_THIS_VOLATILE (വ്യഞ്ജകം);
 	}
-      if (!lval)
+      എങ്കിൽ (!lval)
 	ret = fold (ret);
-      goto out;
+      പോകുക out;
 
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-      op0_lval = true;
+    അവസ്ഥ MODIFY_വ്യഞ്ജകം:
+    അവസ്ഥ PREDECREMENT_വ്യഞ്ജകം:
+    അവസ്ഥ PREINCREMENT_വ്യഞ്ജകം:
+    അവസ്ഥ POSTDECREMENT_വ്യഞ്ജകം:
+    അവസ്ഥ POSTINCREMENT_വ്യഞ്ജകം:
+      op0_lval = സത്യം;
       /* FALLTHRU */
-    case COMPOUND_EXPR:
-    case PLUS_EXPR:
-    case MINUS_EXPR:
-    case MULT_EXPR:
-    case POINTER_PLUS_EXPR:
-    case POINTER_DIFF_EXPR:
-    case TRUNC_DIV_EXPR:
-    case CEIL_DIV_EXPR:
-    case FLOOR_DIV_EXPR:
-    case TRUNC_MOD_EXPR:
-    case RDIV_EXPR:
-    case EXACT_DIV_EXPR:
-    case LSHIFT_EXPR:
-    case RSHIFT_EXPR:
-    case LROTATE_EXPR:
-    case RROTATE_EXPR:
-    case BIT_IOR_EXPR:
-    case BIT_XOR_EXPR:
-    case BIT_AND_EXPR:
-    case LT_EXPR:
-    case LE_EXPR:
-    case GT_EXPR:
-    case GE_EXPR:
-    case EQ_EXPR:
-    case NE_EXPR:
-    case COMPLEX_EXPR:
-    case TRUTH_AND_EXPR:
-    case TRUTH_OR_EXPR:
-    case TRUTH_XOR_EXPR:
-    case UNORDERED_EXPR:
-    case ORDERED_EXPR:
-    case UNLT_EXPR:
-    case UNLE_EXPR:
-    case UNGT_EXPR:
-    case UNGE_EXPR:
-    case UNEQ_EXPR:
-    case MEM_REF:
+    അവസ്ഥ COMPOUND_വ്യഞ്ജകം:
+    അവസ്ഥ PLUS_വ്യഞ്ജകം:
+    അവസ്ഥ MINUS_വ്യഞ്ജകം:
+    അവസ്ഥ MULT_വ്യഞ്ജകം:
+    അവസ്ഥ POINTER_PLUS_വ്യഞ്ജകം:
+    അവസ്ഥ POINTER_DIFF_വ്യഞ്ജകം:
+    അവസ്ഥ TRUNC_DIV_വ്യഞ്ജകം:
+    അവസ്ഥ CEIL_DIV_വ്യഞ്ജകം:
+    അവസ്ഥ FLOOR_DIV_വ്യഞ്ജകം:
+    അവസ്ഥ TRUNC_MOD_വ്യഞ്ജകം:
+    അവസ്ഥ RDIV_വ്യഞ്ജകം:
+    അവസ്ഥ EXACT_DIV_വ്യഞ്ജകം:
+    അവസ്ഥ LSHIFT_വ്യഞ്ജകം:
+    അവസ്ഥ RSHIFT_വ്യഞ്ജകം:
+    അവസ്ഥ LROTATE_വ്യഞ്ജകം:
+    അവസ്ഥ RROTATE_വ്യഞ്ജകം:
+    അവസ്ഥ BIT_IOR_വ്യഞ്ജകം:
+    അവസ്ഥ BIT_XOR_വ്യഞ്ജകം:
+    അവസ്ഥ BIT_AND_വ്യഞ്ജകം:
+    അവസ്ഥ LT_വ്യഞ്ജകം:
+    അവസ്ഥ LE_വ്യഞ്ജകം:
+    അവസ്ഥ GT_വ്യഞ്ജകം:
+    അവസ്ഥ GE_വ്യഞ്ജകം:
+    അവസ്ഥ EQ_വ്യഞ്ജകം:
+    അവസ്ഥ NE_വ്യഞ്ജകം:
+    അവസ്ഥ COMPLEX_വ്യഞ്ജകം:
+    അവസ്ഥ TRUTH_AND_വ്യഞ്ജകം:
+    അവസ്ഥ TRUTH_OR_വ്യഞ്ജകം:
+    അവസ്ഥ TRUTH_XOR_വ്യഞ്ജകം:
+    അവസ്ഥ UNORDERED_വ്യഞ്ജകം:
+    അവസ്ഥ ORDERED_വ്യഞ്ജകം:
+    അവസ്ഥ UNLT_വ്യഞ്ജകം:
+    അവസ്ഥ UNLE_വ്യഞ്ജകം:
+    അവസ്ഥ UNGT_വ്യഞ്ജകം:
+    അവസ്ഥ UNGE_വ്യഞ്ജകം:
+    അവസ്ഥ UNEQ_വ്യഞ്ജകം:
+    അവസ്ഥ MEM_REF:
       /* Binary operations evaluating both arguments (increment and
 	 decrement are binary internally in GCC).  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
+      orig_op0 = op0 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 0);
+      orig_op1 = op1 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 1);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
       /* The RHS of a MODIFY_EXPR was fully folded when building that
 	 expression for the sake of conversion warnings.  */
-      if (code != MODIFY_EXPR)
+      എങ്കിൽ (code != MODIFY_വ്യഞ്ജകം)
 	op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				     maybe_const_itself, for_int_const, false);
+				     maybe_const_itself, for_int_const, അസത്യം);
       STRIP_TYPE_NOPS (op1);
 
-      if (for_int_const && (TREE_CODE (op0) != INTEGER_CST
-			    || TREE_CODE (op1) != INTEGER_CST))
-	goto out;
+      എങ്കിൽ (for_int_const && (വൃക്ഷം_CODE (op0) != INTEGER_CST
+			    || വൃക്ഷം_CODE (op1) != INTEGER_CST))
+	പോകുക out;
 
-      if (TREE_CODE_CLASS (code) == tcc_comparison
-	  && TREE_CODE (TREE_TYPE (op0)) == NULLPTR_TYPE
-	  && TREE_CODE (TREE_TYPE (op1)) == NULLPTR_TYPE)
+      എങ്കിൽ (വൃക്ഷം_CODE_CLASS (code) == tcc_comparison
+	  && വൃക്ഷം_CODE (വൃക്ഷം_TYPE (op0)) == NULLPTR_TYPE
+	  && വൃക്ഷം_CODE (വൃക്ഷം_TYPE (op1)) == NULLPTR_TYPE)
 	{
-	  switch (code)
+	  തിരഞ്ഞെടുപ്പ് (code)
 	    {
-	    case EQ_EXPR:
-	      ret = constant_boolean_node (true, TREE_TYPE (expr));
-	      break;
-	    case NE_EXPR:
-	      ret = constant_boolean_node (false, TREE_TYPE (expr));
-	      break;
-	    default:
+	    അവസ്ഥ EQ_വ്യഞ്ജകം:
+	      ret = constant_boolean_കണ്ണി (സത്യം, വൃക്ഷം_TYPE (വ്യഞ്ജകം));
+	      നിർത്തുക;
+	    അവസ്ഥ NE_വ്യഞ്ജകം:
+	      ret = constant_boolean_കണ്ണി (അസത്യം, വൃക്ഷം_TYPE (വ്യഞ്ജകം));
+	      നിർത്തുക;
+	    സ്ഥിരസ്ഥിതി:
 	      gcc_unreachable ();
 	    }
-	  ret = omit_two_operands_loc (loc, TREE_TYPE (expr), ret,
+	  ret = omit_two_operands_loc (loc, വൃക്ഷം_TYPE (വ്യഞ്ജകം), ret,
 				       op0, op1);
 	}
-      else if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      അല്ലെങ്കിൽ എങ്കിൽ (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
-	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
-	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
-	ret = fold (expr);
-      if (TREE_OVERFLOW_P (ret)
-	  && !TREE_OVERFLOW_P (op0)
-	  && !(BINARY_CLASS_P (op0) && TREE_OVERFLOW_P (TREE_OPERAND (op0, 1)))
-	  && !TREE_OVERFLOW_P (op1))
-	overflow_warning (EXPR_LOC_OR_LOC (expr, input_location), ret, expr);
-      if (code == LSHIFT_EXPR
-	  && TREE_CODE (orig_op0) != INTEGER_CST
-	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
-	  && TREE_CODE (op0) == INTEGER_CST
+	  ? fold_build2_initializer_loc (loc, code, വൃക്ഷം_TYPE (വ്യഞ്ജകം), op0, op1)
+	  : fold_build2_loc (loc, code, വൃക്ഷം_TYPE (വ്യഞ്ജകം), op0, op1);
+      അല്ലെങ്കിൽ
+	ret = fold (വ്യഞ്ജകം);
+      എങ്കിൽ (വൃക്ഷം_OVERFLOW_P (ret)
+	  && !വൃക്ഷം_OVERFLOW_P (op0)
+	  && !(ദ്വിമാന_CLASS_P (op0) && വൃക്ഷം_OVERFLOW_P (വൃക്ഷം_OPERAND (op0, 1)))
+	  && !വൃക്ഷം_OVERFLOW_P (op1))
+	overflow_warning (വ്യഞ്ജകം_LOC_OR_LOC (വ്യഞ്ജകം, നിവേശം_location), ret, വ്യഞ്ജകം);
+      എങ്കിൽ (code == LSHIFT_വ്യഞ്ജകം
+	  && വൃക്ഷം_CODE (orig_op0) != INTEGER_CST
+	  && (വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op0)) == INTEGER_TYPE
+	      || വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op0)) == BITINT_TYPE)
+	  && വൃക്ഷം_CODE (op0) == INTEGER_CST
 	  && c_inhibit_evaluation_warnings == 0
-	  && !TYPE_OVERFLOW_WRAPS (TREE_TYPE (orig_op0))
-	  && tree_int_cst_sgn (op0) < 0)
-	warning_at (loc, OPT_Wshift_negative_value,
+	  && !TYPE_OVERFLOW_WRAPS (വൃക്ഷം_TYPE (orig_op0))
+	  && വൃക്ഷം_int_cst_sgn (op0) < 0)
+	warning_at (loc, OPT_Wshift_negative_മൂല്യം,
 		    "left shift of negative value");
-      if ((code == LSHIFT_EXPR
-	   || code == RSHIFT_EXPR
-	   || code == LROTATE_EXPR
-	   || code == RROTATE_EXPR)
-	  && TREE_CODE (orig_op1) != INTEGER_CST
-	  && TREE_CODE (op1) == INTEGER_CST
-	  && TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
+      എങ്കിൽ ((code == LSHIFT_വ്യഞ്ജകം
+	   || code == RSHIFT_വ്യഞ്ജകം
+	   || code == LROTATE_വ്യഞ്ജകം
+	   || code == RROTATE_വ്യഞ്ജകം)
+	  && വൃക്ഷം_CODE (orig_op1) != INTEGER_CST
+	  && വൃക്ഷം_CODE (op1) == INTEGER_CST
+	  && വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op1)) == INTEGER_TYPE
 	  && c_inhibit_evaluation_warnings == 0)
 	{
-	  if (tree_int_cst_sgn (op1) < 0)
-	    warning_at (loc, OPT_Wshift_count_negative,
-			(code == LSHIFT_EXPR
+	  എങ്കിൽ (വൃക്ഷം_int_cst_sgn (op1) < 0)
+	    warning_at (loc, OPT_Wshift_എണ്ണം_negative,
+			(code == LSHIFT_വ്യഞ്ജകം
 			 ? G_("left shift count is negative")
 			 : G_("right shift count is negative")));
-	  else if ((TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-		    || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
-		    || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
-		   && compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (orig_op0)))
+	  അല്ലെങ്കിൽ എങ്കിൽ ((വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op0)) == INTEGER_TYPE
+		    || വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op0)) == BITINT_TYPE
+		    || വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op0)) == FIXED_POINT_TYPE)
+		   && compare_വൃക്ഷം_int (op1,
+					TYPE_PRECISION (വൃക്ഷം_TYPE (orig_op0)))
 		      >= 0
-		   && !warning_suppressed_p (expr, OPT_Wshift_count_overflow))
-	    warning_at (loc, OPT_Wshift_count_overflow,
-			(code == LSHIFT_EXPR
+		   && !warning_suppressed_p (വ്യഞ്ജകം, OPT_Wshift_എണ്ണം_overflow))
+	    warning_at (loc, OPT_Wshift_എണ്ണം_overflow,
+			(code == LSHIFT_വ്യഞ്ജകം
 			 ? G_("left shift count >= width of type")
 			 : G_("right shift count >= width of type")));
-	  else if (TREE_CODE (TREE_TYPE (orig_op0)) == VECTOR_TYPE
-		   && compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (TREE_TYPE (orig_op0))))
+	  അല്ലെങ്കിൽ എങ്കിൽ (വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op0)) == VECTOR_TYPE
+		   && compare_വൃക്ഷം_int (op1,
+					TYPE_PRECISION (വൃക്ഷം_TYPE (വൃക്ഷം_TYPE (orig_op0))))
 		      >= 0)
-	    warning_at (loc, OPT_Wshift_count_overflow,
-			code == LSHIFT_EXPR
+	    warning_at (loc, OPT_Wshift_എണ്ണം_overflow,
+			code == LSHIFT_വ്യഞ്ജകം
 			? G_("left shift count >= width of vector element")
 			: G_("right shift count >= width of vector element"));
 	}
-      if (code == LSHIFT_EXPR
+      എങ്കിൽ (code == LSHIFT_വ്യഞ്ജകം
 	  /* If either OP0 has been folded to INTEGER_CST...  */
-	  && ((TREE_CODE (orig_op0) != INTEGER_CST
-	       && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-		   || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
-	       && TREE_CODE (op0) == INTEGER_CST)
+	  && ((വൃക്ഷം_CODE (orig_op0) != INTEGER_CST
+	       && (വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op0)) == INTEGER_TYPE
+		   || വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op0)) == BITINT_TYPE)
+	       && വൃക്ഷം_CODE (op0) == INTEGER_CST)
 	      /* ...or if OP1 has been folded to INTEGER_CST...  */
-	      || (TREE_CODE (orig_op1) != INTEGER_CST
-		  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
-		      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE)
-		  && TREE_CODE (op1) == INTEGER_CST))
+	      || (വൃക്ഷം_CODE (orig_op1) != INTEGER_CST
+		  && (വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op1)) == INTEGER_TYPE
+		      || വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op1)) == BITINT_TYPE)
+		  && വൃക്ഷം_CODE (op1) == INTEGER_CST))
 	  && c_inhibit_evaluation_warnings == 0)
 	/* ...then maybe we can detect an overflow.  */
 	maybe_warn_shift_overflow (loc, op0, op1);
-      if ((code == TRUNC_DIV_EXPR
-	   || code == CEIL_DIV_EXPR
-	   || code == FLOOR_DIV_EXPR
-	   || code == EXACT_DIV_EXPR
-	   || code == TRUNC_MOD_EXPR)
-	  && TREE_CODE (orig_op1) != INTEGER_CST
-	  && TREE_CODE (op1) == INTEGER_CST
-	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
-	  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE))
+      എങ്കിൽ ((code == TRUNC_DIV_വ്യഞ്ജകം
+	   || code == CEIL_DIV_വ്യഞ്ജകം
+	   || code == FLOOR_DIV_വ്യഞ്ജകം
+	   || code == EXACT_DIV_വ്യഞ്ജകം
+	   || code == TRUNC_MOD_വ്യഞ്ജകം)
+	  && വൃക്ഷം_CODE (orig_op1) != INTEGER_CST
+	  && വൃക്ഷം_CODE (op1) == INTEGER_CST
+	  && (വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op0)) == INTEGER_TYPE
+	      || വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op0)) == BITINT_TYPE
+	      || വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op0)) == FIXED_POINT_TYPE)
+	  && (വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op1)) == INTEGER_TYPE
+	      || വൃക്ഷം_CODE (വൃക്ഷം_TYPE (orig_op1)) == BITINT_TYPE))
 	warn_for_div_by_zero (loc, op1);
-      if (code == MEM_REF
-	  && ret != expr
-	  && TREE_CODE (ret) == MEM_REF)
+      എങ്കിൽ (code == MEM_REF
+	  && ret != വ്യഞ്ജകം
+	  && വൃക്ഷം_CODE (ret) == MEM_REF)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  വൃക്ഷം_READONLY (ret) = വൃക്ഷം_READONLY (വ്യഞ്ജകം);
+	  വൃക്ഷം_SIDE_EFFECTS (ret) = വൃക്ഷം_SIDE_EFFECTS (വ്യഞ്ജകം);
+	  വൃക്ഷം_THIS_VOLATILE (ret) = വൃക്ഷം_THIS_VOLATILE (വ്യഞ്ജകം);
 	}
-      goto out;
+      പോകുക out;
 
-    case ADDR_EXPR:
-      op0_lval = true;
-      goto unary;
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-    case VIEW_CONVERT_EXPR:
+    അവസ്ഥ ADDR_വ്യഞ്ജകം:
+      op0_lval = സത്യം;
+      പോകുക unary;
+    അവസ്ഥ REALPART_വ്യഞ്ജകം:
+    അവസ്ഥ IMAGPART_വ്യഞ്ജകം:
+    അവസ്ഥ VIEW_CONVERT_വ്യഞ്ജകം:
       op0_lval = lval;
       /* FALLTHRU */
-    case INDIRECT_REF:
-    case FIX_TRUNC_EXPR:
-    case FLOAT_EXPR:
+    അവസ്ഥ INDIRECT_REF:
+    അവസ്ഥ FIX_TRUNC_വ്യഞ്ജകം:
+    അവസ്ഥ FLOAT_വ്യഞ്ജകം:
     CASE_CONVERT:
-    case ADDR_SPACE_CONVERT_EXPR:
-    case NON_LVALUE_EXPR:
-    case NEGATE_EXPR:
-    case BIT_NOT_EXPR:
-    case TRUTH_NOT_EXPR:
-    case CONJ_EXPR:
-    case PAREN_EXPR:
+    അവസ്ഥ ADDR_SPACE_CONVERT_വ്യഞ്ജകം:
+    അവസ്ഥ NON_LVALUE_വ്യഞ്ജകം:
+    അവസ്ഥ NEGATE_വ്യഞ്ജകം:
+    അവസ്ഥ BIT_NOT_വ്യഞ്ജകം:
+    അവസ്ഥ TRUTH_NOT_വ്യഞ്ജകം:
+    അവസ്ഥ CONJ_വ്യഞ്ജകം:
+    അവസ്ഥ PAREN_വ്യഞ്ജകം:
     unary:
       /* Unary operations.  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
+      orig_op0 = op0 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 0);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
 
-      if (for_int_const && TREE_CODE (op0) != INTEGER_CST)
-	goto out;
+      എങ്കിൽ (for_int_const && വൃക്ഷം_CODE (op0) != INTEGER_CST)
+	പോകുക out;
 
       /* ??? Cope with user tricks that amount to offsetof.  The middle-end is
 	 not prepared to deal with them if they occur in initializers.  */
-      if (op0 != orig_op0
-	  && code == ADDR_EXPR
-	  && (op1 = get_base_address (op0)) != NULL_TREE
+      എങ്കിൽ (op0 != orig_op0
+	  && code == ADDR_വ്യഞ്ജകം
+	  && (op1 = get_base_address (op0)) != NULL_വൃക്ഷം
 	  && INDIRECT_REF_P (op1)
-	  && TREE_CONSTANT (TREE_OPERAND (op1, 0)))
-	ret = fold_offsetof (op0, TREE_TYPE (expr));
-      else if (op0 != orig_op0 || in_init)
+	  && വൃക്ഷം_CONSTANT (വൃക്ഷം_OPERAND (op1, 0)))
+	ret = fold_offsetof (op0, വൃക്ഷം_TYPE (വ്യഞ്ജകം));
+      അല്ലെങ്കിൽ എങ്കിൽ (op0 != orig_op0 || in_init)
 	ret = in_init
-	  ? fold_build1_initializer_loc (loc, code, TREE_TYPE (expr), op0)
-	  : fold_build1_loc (loc, code, TREE_TYPE (expr), op0);
-      else
-	ret = fold (expr);
-      if (code == INDIRECT_REF
-	  && ret != expr
+	  ? fold_build1_initializer_loc (loc, code, വൃക്ഷം_TYPE (വ്യഞ്ജകം), op0)
+	  : fold_build1_loc (loc, code, വൃക്ഷം_TYPE (വ്യഞ്ജകം), op0);
+      അല്ലെങ്കിൽ
+	ret = fold (വ്യഞ്ജകം);
+      എങ്കിൽ (code == INDIRECT_REF
+	  && ret != വ്യഞ്ജകം
 	  && INDIRECT_REF_P (ret))
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  വൃക്ഷം_READONLY (ret) = വൃക്ഷം_READONLY (വ്യഞ്ജകം);
+	  വൃക്ഷം_SIDE_EFFECTS (ret) = വൃക്ഷം_SIDE_EFFECTS (വ്യഞ്ജകം);
+	  വൃക്ഷം_THIS_VOLATILE (ret) = വൃക്ഷം_THIS_VOLATILE (വ്യഞ്ജകം);
 	}
-      switch (code)
+      തിരഞ്ഞെടുപ്പ് (code)
 	{
-	case FIX_TRUNC_EXPR:
-	case FLOAT_EXPR:
+	അവസ്ഥ FIX_TRUNC_വ്യഞ്ജകം:
+	അവസ്ഥ FLOAT_വ്യഞ്ജകം:
 	CASE_CONVERT:
 	  /* Don't warn about explicit conversions.  We will already
 	     have warned about suspect implicit conversions.  */
-	  break;
+	  നിർത്തുക;
 
-	default:
-	  if (TREE_OVERFLOW_P (ret) && !TREE_OVERFLOW_P (op0))
-	    overflow_warning (EXPR_LOCATION (expr), ret, op0);
-	  break;
+	സ്ഥിരസ്ഥിതി:
+	  എങ്കിൽ (വൃക്ഷം_OVERFLOW_P (ret) && !വൃക്ഷം_OVERFLOW_P (op0))
+	    overflow_warning (വ്യഞ്ജകം_LOCATION (വ്യഞ്ജകം), ret, op0);
+	  നിർത്തുക;
 	}
-      goto out;
+      പോകുക out;
 
-    case TRUTH_ANDIF_EXPR:
-    case TRUTH_ORIF_EXPR:
+    അവസ്ഥ TRUTH_ANDIF_വ്യഞ്ജകം:
+    അവസ്ഥ TRUTH_ORIF_വ്യഞ്ജകം:
       /* Binary operations not necessarily evaluating both
 	 arguments.  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
+      orig_op0 = op0 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 0);
+      orig_op1 = op1 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 1);
       op0 = c_fully_fold_internal (op0, in_init, &op0_const, &op0_const_self,
-				   for_int_const, false);
+				   for_int_const, അസത്യം);
       STRIP_TYPE_NOPS (op0);
 
-      unused_p = (op0 == (code == TRUTH_ANDIF_EXPR
-			  ? truthvalue_false_node
-			  : truthvalue_true_node));
+      unused_p = (op0 == (code == TRUTH_ANDIF_വ്യഞ്ജകം
+			  ? truthvalue_false_കണ്ണി
+			  : truthvalue_true_കണ്ണി));
       c_disable_warnings (unused_p);
       op1 = c_fully_fold_internal (op1, in_init, &op1_const, &op1_const_self,
-				   for_int_const, false);
+				   for_int_const, അസത്യം);
       STRIP_TYPE_NOPS (op1);
       c_enable_warnings (unused_p);
 
-      if (for_int_const
-	  && (TREE_CODE (op0) != INTEGER_CST
+      എങ്കിൽ (for_int_const
+	  && (വൃക്ഷം_CODE (op0) != INTEGER_CST
 	      /* Require OP1 be an INTEGER_CST only if it's evaluated.  */
-	      || (!unused_p && TREE_CODE (op1) != INTEGER_CST)))
-	goto out;
+	      || (!unused_p && വൃക്ഷം_CODE (op1) != INTEGER_CST)))
+	പോകുക out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      എങ്കിൽ (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
-	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
-	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
-	ret = fold (expr);
+	  ? fold_build2_initializer_loc (loc, code, വൃക്ഷം_TYPE (വ്യഞ്ജകം), op0, op1)
+	  : fold_build2_loc (loc, code, വൃക്ഷം_TYPE (വ്യഞ്ജകം), op0, op1);
+      അല്ലെങ്കിൽ
+	ret = fold (വ്യഞ്ജകം);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      എങ്കിൽ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && (code == TRUTH_ANDIF_EXPR
-		? op0 == truthvalue_false_node
-		: op0 == truthvalue_true_node)))
+	    && (code == TRUTH_ANDIF_വ്യഞ്ജകം
+		? op0 == truthvalue_false_കണ്ണി
+		: op0 == truthvalue_true_കണ്ണി)))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      എങ്കിൽ (!(op0_const
 	    && op0_const_self
-	    && (code == TRUTH_ANDIF_EXPR
-		? op0 == truthvalue_false_node
-		: op0 == truthvalue_true_node)))
+	    && (code == TRUTH_ANDIF_വ്യഞ്ജകം
+		? op0 == truthvalue_false_കണ്ണി
+		: op0 == truthvalue_true_കണ്ണി)))
 	*maybe_const_itself &= op1_const_self;
-      goto out;
+      പോകുക out;
 
-    case COND_EXPR:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      orig_op2 = op2 = TREE_OPERAND (expr, 2);
+    അവസ്ഥ COND_വ്യഞ്ജകം:
+      orig_op0 = op0 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 0);
+      orig_op1 = op1 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 1);
+      orig_op2 = op2 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 2);
       op0 = c_fully_fold_internal (op0, in_init, &op0_const, &op0_const_self,
-				   for_int_const, false);
+				   for_int_const, അസത്യം);
 
       STRIP_TYPE_NOPS (op0);
-      c_disable_warnings (op0 == truthvalue_false_node);
+      c_disable_warnings (op0 == truthvalue_false_കണ്ണി);
       op1 = c_fully_fold_internal (op1, in_init, &op1_const, &op1_const_self,
-				   for_int_const, false);
+				   for_int_const, അസത്യം);
       STRIP_TYPE_NOPS (op1);
-      c_enable_warnings (op0 == truthvalue_false_node);
+      c_enable_warnings (op0 == truthvalue_false_കണ്ണി);
 
-      c_disable_warnings (op0 == truthvalue_true_node);
+      c_disable_warnings (op0 == truthvalue_true_കണ്ണി);
       op2 = c_fully_fold_internal (op2, in_init, &op2_const, &op2_const_self,
-				   for_int_const, false);
+				   for_int_const, അസത്യം);
       STRIP_TYPE_NOPS (op2);
-      c_enable_warnings (op0 == truthvalue_true_node);
+      c_enable_warnings (op0 == truthvalue_true_കണ്ണി);
 
-      if (for_int_const
-	  && (TREE_CODE (op0) != INTEGER_CST
+      എങ്കിൽ (for_int_const
+	  && (വൃക്ഷം_CODE (op0) != INTEGER_CST
 	      /* Only the evaluated operand must be an INTEGER_CST.  */
-	      || (op0 == truthvalue_true_node
-		  ? TREE_CODE (op1) != INTEGER_CST
-		  : TREE_CODE (op2) != INTEGER_CST)))
-	goto out;
+	      || (op0 == truthvalue_true_കണ്ണി
+		  ? വൃക്ഷം_CODE (op1) != INTEGER_CST
+		  : വൃക്ഷം_CODE (op2) != INTEGER_CST)))
+	പോകുക out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
-	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
-	ret = fold (expr);
+      എങ്കിൽ (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+	ret = fold_build3_loc (loc, code, വൃക്ഷം_TYPE (വ്യഞ്ജകം), op0, op1, op2);
+      അല്ലെങ്കിൽ
+	ret = fold (വ്യഞ്ജകം);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      എങ്കിൽ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_false_node))
+	    && op0 == truthvalue_false_കണ്ണി))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      എങ്കിൽ (!(op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_false_node))
+	    && op0 == truthvalue_false_കണ്ണി))
 	*maybe_const_itself &= op1_const_self;
-      if (!(flag_isoc99
+      എങ്കിൽ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_true_node))
+	    && op0 == truthvalue_true_കണ്ണി))
 	*maybe_const_operands &= op2_const;
-      if (!(op0_const
+      എങ്കിൽ (!(op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_true_node))
+	    && op0 == truthvalue_true_കണ്ണി))
 	*maybe_const_itself &= op2_const_self;
-      goto out;
+      പോകുക out;
 
-    case VEC_COND_EXPR:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      orig_op2 = op2 = TREE_OPERAND (expr, 2);
+    അവസ്ഥ VEC_COND_വ്യഞ്ജകം:
+      orig_op0 = op0 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 0);
+      orig_op1 = op1 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 1);
+      orig_op2 = op2 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 2);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, അസത്യം);
       STRIP_TYPE_NOPS (op0);
       op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, അസത്യം);
       STRIP_TYPE_NOPS (op1);
       op2 = c_fully_fold_internal (op2, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, അസത്യം);
       STRIP_TYPE_NOPS (op2);
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
-	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
-	ret = fold (expr);
-      goto out;
+      എങ്കിൽ (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+	ret = fold_build3_loc (loc, code, വൃക്ഷം_TYPE (വ്യഞ്ജകം), op0, op1, op2);
+      അല്ലെങ്കിൽ
+	ret = fold (വ്യഞ്ജകം);
+      പോകുക out;
 
-    case EXCESS_PRECISION_EXPR:
+    അവസ്ഥ EXCESS_PRECISION_വ്യഞ്ജകം:
       /* Each case where an operand with excess precision may be
 	 encountered must remove the EXCESS_PRECISION_EXPR around
 	 inner operands and possibly put one around the whole
@@ -676,26 +676,26 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	 appropriate in any particular case.  */
       gcc_unreachable ();
 
-    case SAVE_EXPR:
+    അവസ്ഥ SAVE_വ്യഞ്ജകം:
       /* Make sure to fold the contents of a SAVE_EXPR exactly once.  */
-      op0 = TREE_OPERAND (expr, 0);
-      if (!SAVE_EXPR_FOLDED_P (expr))
+      op0 = വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 0);
+      എങ്കിൽ (!SAVE_വ്യഞ്ജകം_FOLDED_P (വ്യഞ്ജകം))
 	{
 	  op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				       maybe_const_itself, for_int_const,
-				       false);
-	  TREE_OPERAND (expr, 0) = op0;
-	  SAVE_EXPR_FOLDED_P (expr) = true;
+				       അസത്യം);
+	  വൃക്ഷം_OPERAND (വ്യഞ്ജകം, 0) = op0;
+	  SAVE_വ്യഞ്ജകം_FOLDED_P (വ്യഞ്ജകം) = സത്യം;
 	}
       /* Return the SAVE_EXPR operand if it is invariant.  */
-      if (tree_invariant_p (op0))
+      എങ്കിൽ (വൃക്ഷം_invariant_p (op0))
 	ret = op0;
-      goto out;
+      പോകുക out;
 
-    default:
+    സ്ഥിരസ്ഥിതി:
       /* Various codes may appear through folding built-in functions
 	 and their arguments.  */
-      goto out;
+      പോകുക out;
     }
 
  out:
@@ -703,27 +703,27 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      have been done by this point, so remove them again.  */
   nowarning |= warning_suppressed_p (ret, OPT_Woverflow);
   STRIP_TYPE_NOPS (ret);
-  if (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
+  എങ്കിൽ (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
     {
-      if (!CAN_HAVE_LOCATION_P (ret))
-	ret = build1 (NOP_EXPR, TREE_TYPE (ret), ret);
+      എങ്കിൽ (!CAN_HAVE_LOCATION_P (ret))
+	ret = build1 (NOP_വ്യഞ്ജകം, വൃക്ഷം_TYPE (ret), ret);
       suppress_warning (ret, OPT_Woverflow);
     }
-  if (ret != expr)
+  എങ്കിൽ (ret != വ്യഞ്ജകം)
     {
-      protected_set_expr_location (ret, loc);
-      if (IS_EXPR_CODE_CLASS (kind))
+      protected_set_വ്യഞ്ജകം_location (ret, loc);
+      എങ്കിൽ (IS_വ്യഞ്ജകം_CODE_CLASS (kind))
 	set_source_range (ret, old_range.m_start, old_range.m_finish);
     }
-  return ret;
+  തിരികെ ret;
 }
 
 /* Fold X for consideration by one of the warning functions when checking
    whether an expression has a constant value.  */
 
-tree
-fold_for_warn (tree x)
+വൃക്ഷം
+fold_for_warn (വൃക്ഷം x)
 {
   /* The C front-end has already folded X appropriately.  */
-  return x;
+  തിരികെ x;
 }

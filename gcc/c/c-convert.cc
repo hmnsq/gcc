@@ -23,17 +23,17 @@ along with GCC; see the file COPYING3.  If not see
    Every language front end must have a `convert' function
    but what kind of conversions it does will depend on the language.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "c-tree.h"
-#include "convert.h"
-#include "langhooks.h"
-#include "ubsan.h"
-#include "stringpool.h"
-#include "attribs.h"
-#include "asan.h"
+#അന്തര്ഭാവ "config.h"
+#അന്തര്ഭാവ "system.h"
+#അന്തര്ഭാവ "coretypes.h"
+#അന്തര്ഭാവ "target.h"
+#അന്തര്ഭാവ "c-tree.h"
+#അന്തര്ഭാവ "convert.h"
+#അന്തര്ഭാവ "langhooks.h"
+#അന്തര്ഭാവ "ubsan.h"
+#അന്തര്ഭാവ "stringpool.h"
+#അന്തര്ഭാവ "attribs.h"
+#അന്തര്ഭാവ "asan.h"
 
 /* Change of width--truncation and extension of integers or reals--
    is represented with NOP_EXPR.  Proper functioning of many things
@@ -65,181 +65,181 @@ along with GCC; see the file COPYING3.  If not see
    initializer and folding must apply accordingly (discarding floating-point
    exceptions and assuming the default rounding mode is in effect).  */
 
-static tree
-c_convert (tree type, tree expr, bool init_const)
+സ്ഥിതം വൃക്ഷം
+c_convert (വൃക്ഷം type, വൃക്ഷം വ്യഞ്ജകം, തർക്കം init_const)
 {
-  tree e = expr;
-  enum tree_code code = TREE_CODE (type);
-  const char *invalid_conv_diag;
-  tree ret;
-  location_t loc = EXPR_LOCATION (expr);
+  വൃക്ഷം e = വ്യഞ്ജകം;
+  എണ്ണൽ വൃക്ഷം_code code = വൃക്ഷം_CODE (type);
+  സ്ഥിരം അക്ഷരം *invalid_conv_diag;
+  വൃക്ഷം ret;
+  location_t loc = വ്യഞ്ജകം_LOCATION (വ്യഞ്ജകം);
 
-  if (type == error_mark_node
-      || error_operand_p (expr))
-    return error_mark_node;
+  എങ്കിൽ (type == error_mark_കണ്ണി
+      || error_operand_p (വ്യഞ്ജകം))
+    തിരികെ error_mark_കണ്ണി;
 
-  if ((invalid_conv_diag
-       = targetm.invalid_conversion (TREE_TYPE (expr), type)))
+  എങ്കിൽ ((invalid_conv_diag
+       = targetm.invalid_conversion (വൃക്ഷം_TYPE (വ്യഞ്ജകം), type)))
     {
       error (invalid_conv_diag);
-      return error_mark_node;
+      തിരികെ error_mark_കണ്ണി;
     }
 
-  if (type == TREE_TYPE (expr))
-    return expr;
-  ret = targetm.convert_to_type (type, expr);
-  if (ret)
-      return ret;
+  എങ്കിൽ (type == വൃക്ഷം_TYPE (വ്യഞ്ജകം))
+    തിരികെ വ്യഞ്ജകം;
+  ret = targetm.convert_to_type (type, വ്യഞ്ജകം);
+  എങ്കിൽ (ret)
+      തിരികെ ret;
 
   STRIP_TYPE_NOPS (e);
 
-  if (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (TREE_TYPE (expr))
-      && (TREE_CODE (TREE_TYPE (expr)) != COMPLEX_TYPE
-	  || TREE_CODE (e) == COMPLEX_EXPR))
-    return fold_convert_loc (loc, type, expr);
-  if (TREE_CODE (TREE_TYPE (expr)) == ERROR_MARK)
-    return error_mark_node;
-  if (VOID_TYPE_P (TREE_TYPE (expr)))
+  എങ്കിൽ (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (വൃക്ഷം_TYPE (വ്യഞ്ജകം))
+      && (വൃക്ഷം_CODE (വൃക്ഷം_TYPE (വ്യഞ്ജകം)) != COMPLEX_TYPE
+	  || വൃക്ഷം_CODE (e) == COMPLEX_വ്യഞ്ജകം))
+    തിരികെ fold_convert_loc (loc, type, വ്യഞ്ജകം);
+  എങ്കിൽ (വൃക്ഷം_CODE (വൃക്ഷം_TYPE (വ്യഞ്ജകം)) == ERROR_MARK)
+    തിരികെ error_mark_കണ്ണി;
+  എങ്കിൽ (VOID_TYPE_P (വൃക്ഷം_TYPE (വ്യഞ്ജകം)))
     {
       error ("void value not ignored as it ought to be");
-      return error_mark_node;
+      തിരികെ error_mark_കണ്ണി;
     }
 
   {
-    tree false_value, true_value;
-    if (c_hardbool_type_attr (type, &false_value, &true_value))
+    വൃക്ഷം false_മൂല്യം, true_മൂല്യം;
+    എങ്കിൽ (c_hardbool_type_attr (type, &false_മൂല്യം, &true_മൂല്യം))
       {
-	bool save = in_late_binary_op;
-	in_late_binary_op = true;
-	expr = c_objc_common_truthvalue_conversion (input_location, expr);
-	in_late_binary_op = save;
+	തർക്കം save = in_late_ദ്വിമാന_op;
+	in_late_ദ്വിമാന_op = സത്യം;
+	വ്യഞ്ജകം = c_objc_common_truthvalue_conversion (നിവേശം_location, വ്യഞ്ജകം);
+	in_late_ദ്വിമാന_op = save;
 
-	return fold_build3_loc (loc, COND_EXPR, type,
-				expr, true_value, false_value);
+	തിരികെ fold_build3_loc (loc, COND_വ്യഞ്ജകം, type,
+				വ്യഞ്ജകം, true_മൂല്യം, false_മൂല്യം);
       }
   }
 
-  switch (code)
+  തിരഞ്ഞെടുപ്പ് (code)
     {
-    case VOID_TYPE:
-      return fold_convert_loc (loc, type, e);
+    അവസ്ഥ VOID_TYPE:
+      തിരികെ fold_convert_loc (loc, type, e);
 
-    case ENUMERAL_TYPE:
-      if (ENUM_UNDERLYING_TYPE (type) != NULL_TREE
-	  && TREE_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
-	goto convert_to_boolean;
+    അവസ്ഥ ENUMERAL_TYPE:
+      എങ്കിൽ (ENUM_UNDERLYING_TYPE (type) != NULL_വൃക്ഷം
+	  && വൃക്ഷം_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
+	പോകുക convert_to_boolean;
       gcc_fallthrough ();
 
-    case INTEGER_TYPE:
-    case BITINT_TYPE:
-      if (sanitize_flags_p (SANITIZE_FLOAT_CAST)
-	  && current_function_decl != NULL_TREE
-	  && SCALAR_FLOAT_TYPE_P (TREE_TYPE (expr))
+    അവസ്ഥ INTEGER_TYPE:
+    അവസ്ഥ BITINT_TYPE:
+      എങ്കിൽ (sanitize_flags_p (SANITIZE_FLOAT_CAST)
+	  && current_function_decl != NULL_വൃക്ഷം
+	  && SCALAR_FLOAT_TYPE_P (വൃക്ഷം_TYPE (വ്യഞ്ജകം))
 	  && COMPLETE_TYPE_P (type))
 	{
-	  expr = save_expr (expr);
-	  expr = c_fully_fold (expr, init_const, NULL);
-	  tree check = ubsan_instrument_float_cast (loc, type, expr);
-	  expr = fold_build1 (FIX_TRUNC_EXPR, type, expr);
-	  if (check == NULL_TREE)
-	    return expr;
-	  return fold_build2 (COMPOUND_EXPR, TREE_TYPE (expr), check, expr);
+	  വ്യഞ്ജകം = save_വ്യഞ്ജകം (വ്യഞ്ജകം);
+	  വ്യഞ്ജകം = c_fully_fold (വ്യഞ്ജകം, init_const, ശൂന്യ);
+	  വൃക്ഷം check = ubsan_instrument_float_cast (loc, type, വ്യഞ്ജകം);
+	  വ്യഞ്ജകം = fold_build1 (FIX_TRUNC_വ്യഞ്ജകം, type, വ്യഞ്ജകം);
+	  എങ്കിൽ (check == NULL_വൃക്ഷം)
+	    തിരികെ വ്യഞ്ജകം;
+	  തിരികെ fold_build2 (COMPOUND_വ്യഞ്ജകം, വൃക്ഷം_TYPE (വ്യഞ്ജകം), check, വ്യഞ്ജകം);
 	}
       ret = convert_to_integer (type, e);
-      goto maybe_fold;
+      പോകുക maybe_fold;
 
-    case BOOLEAN_TYPE:
+    അവസ്ഥ BOOLEAN_TYPE:
     convert_to_boolean:
-      return c_objc_common_truthvalue_conversion (input_location, expr, type);
+      തിരികെ c_objc_common_truthvalue_conversion (നിവേശം_location, വ്യഞ്ജകം, type);
 
-    case POINTER_TYPE:
+    അവസ്ഥ POINTER_TYPE:
       /* The type nullptr_t may be converted to a pointer type.  The result is
 	 a null pointer value.  */
-      if (NULLPTR_TYPE_P (TREE_TYPE (e)))
+      എങ്കിൽ (NULLPTR_TYPE_P (വൃക്ഷം_TYPE (e)))
 	{
 	  /* To make sure that (void *)nullptr is not a null pointer constant,
 	     build_c_cast will create an additional NOP_EXPR around the result
 	     of this conversion.  */
-	  if (TREE_SIDE_EFFECTS (e))
-	    ret = build2 (COMPOUND_EXPR, type, e, build_int_cst (type, 0));
-	  else
+	  എങ്കിൽ (വൃക്ഷം_SIDE_EFFECTS (e))
+	    ret = build2 (COMPOUND_വ്യഞ്ജകം, type, e, build_int_cst (type, 0));
+	  അല്ലെങ്കിൽ
 	    ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  പോകുക maybe_fold;
 	}
       gcc_fallthrough ();
-    case REFERENCE_TYPE:
+    അവസ്ഥ REFERENCE_TYPE:
       ret = convert_to_pointer (type, e);
-      goto maybe_fold;
+      പോകുക maybe_fold;
 
-    case NULLPTR_TYPE:
+    അവസ്ഥ NULLPTR_TYPE:
       /* A null pointer constant or value of type nullptr_t may be
 	 converted to nullptr_t.  The latter case has already been
 	 handled.  build_c_cast will create an additional NOP_EXPR to
 	 ensure the result of the conversion is not itself a null
 	 pointer constant.  */
-      if (null_pointer_constant_p (expr))
+      എങ്കിൽ (null_pointer_constant_p (വ്യഞ്ജകം))
 	{
 	  ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  പോകുക maybe_fold;
 	}
-      break;
+      നിർത്തുക;
 
-    case REAL_TYPE:
+    അവസ്ഥ REAL_TYPE:
       ret = convert_to_real (type, e);
-      goto maybe_fold;
+      പോകുക maybe_fold;
 
-    case FIXED_POINT_TYPE:
+    അവസ്ഥ FIXED_POINT_TYPE:
       ret = convert_to_fixed (type, e);
-      goto maybe_fold;
+      പോകുക maybe_fold;
 
-    case COMPLEX_TYPE:
+    അവസ്ഥ COMPLEX_TYPE:
       ret = convert_to_complex (type, e);
-      goto maybe_fold;
+      പോകുക maybe_fold;
 
-    case VECTOR_TYPE:
-      if (gnu_vector_type_p (type)
-	  || gnu_vector_type_p (TREE_TYPE (e))
+    അവസ്ഥ VECTOR_TYPE:
+      എങ്കിൽ (gnu_vector_type_p (type)
+	  || gnu_vector_type_p (വൃക്ഷം_TYPE (e))
 	  /* Allow conversions between compatible non-GNU vector types
 	     when -flax-vector-conversions is passed.  The whole purpose
 	     of the option is to bend the normal type rules and accept
 	     nonconforming code.  */
 	  || (flag_lax_vector_conversions
-	      && VECTOR_TYPE_P (TREE_TYPE (e))
-	      && vector_types_convertible_p (type, TREE_TYPE (e), false)))
+	      && VECTOR_TYPE_P (വൃക്ഷം_TYPE (e))
+	      && vector_types_convertible_p (type, വൃക്ഷം_TYPE (e), അസത്യം)))
 	{
 	  ret = convert_to_vector (type, e);
-	  goto maybe_fold;
+	  പോകുക maybe_fold;
 	}
-      break;
+      നിർത്തുക;
 
-    case RECORD_TYPE:
-    case UNION_TYPE:
-      if (lang_hooks.types_compatible_p (type, TREE_TYPE (expr)))
-	return e;
-      break;
+    അവസ്ഥ RECORD_TYPE:
+    അവസ്ഥ UNION_TYPE:
+      എങ്കിൽ (lang_hooks.types_compatible_p (type, വൃക്ഷം_TYPE (വ്യഞ്ജകം)))
+	തിരികെ e;
+      നിർത്തുക;
 
-    default:
-      break;
+    സ്ഥിരസ്ഥിതി:
+      നിർത്തുക;
 
     maybe_fold:
-      if (TREE_CODE (ret) != C_MAYBE_CONST_EXPR)
+      എങ്കിൽ (വൃക്ഷം_CODE (ret) != C_MAYBE_CONST_വ്യഞ്ജകം)
 	ret = init_const ? fold_init (ret) : fold (ret);
-      return ret;
+      തിരികെ ret;
     }
 
   /* If we are converting to nullptr_t, don't say "non-scalar type" because
      the nullptr_t type is a scalar type.  Only nullptr_t or a null pointer
      constant shall be converted to nullptr_t.  */
-  if (code == NULLPTR_TYPE)
+  എങ്കിൽ (code == NULLPTR_TYPE)
     {
-      error ("conversion from %qT to %qT", TREE_TYPE (e), type);
-      inform (input_location,
+      error ("conversion from %qT to %qT", വൃക്ഷം_TYPE (e), type);
+      inform (നിവേശം_location,
 	      "only %qT or a null pointer constant can be converted to %qT",
 	      type, type);
     }
-  else
+  അല്ലെങ്കിൽ
     error ("conversion to non-scalar type requested");
-  return error_mark_node;
+  തിരികെ error_mark_കണ്ണി;
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE.
@@ -247,10 +247,10 @@ c_convert (tree type, tree expr, bool init_const)
    reasonable conversions; callers should filter out those that are not
    permitted by the language being compiled.  */
 
-tree
-convert (tree type, tree expr)
+വൃക്ഷം
+convert (വൃക്ഷം type, വൃക്ഷം വ്യഞ്ജകം)
 {
-  return c_convert (type, expr, false);
+  തിരികെ c_convert (type, വ്യഞ്ജകം, അസത്യം);
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE, in
@@ -258,8 +258,8 @@ convert (tree type, tree expr)
    function implements all reasonable conversions; callers should filter out
    those that are not permitted by the language being compiled.  */
 
-tree
-convert_init (tree type, tree expr)
+വൃക്ഷം
+convert_init (വൃക്ഷം type, വൃക്ഷം വ്യഞ്ജകം)
 {
-  return c_convert (type, expr, true);
+  തിരികെ c_convert (type, വ്യഞ്ജകം, സത്യം);
 }

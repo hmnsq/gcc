@@ -35,7 +35,7 @@ along with GCC; see the file COPYING3.  If not see
    lexer code, if desired.  */
 
 /* More information about the type of a CPP_NAME token.  */
-enum c_id_kind {
+എണ്ണൽ c_id_kind {
   /* An ordinary identifier.  */
   C_ID_ID,
   /* An identifier declared as a typedef name.  */
@@ -50,52 +50,52 @@ enum c_id_kind {
 
 /* A single C token after string literal concatenation and conversion
    of preprocessing tokens to tokens.  */
-struct GTY (()) c_token {
+ഘടന GTY (()) c_token {
   /* The kind of token.  */
-  enum cpp_ttype type : 8;
+  എണ്ണൽ cpp_ttype type : 8;
   /* If this token is a CPP_NAME, this value indicates whether also
      declared as some kind of type.  Otherwise, it is C_ID_NONE.  */
-  enum c_id_kind id_kind : 8;
+  എണ്ണൽ c_id_kind id_kind : 8;
   /* If this token is a keyword, this value indicates which keyword.
      Otherwise, this value is RID_MAX.  */
-  enum rid keyword : 8;
+  എണ്ണൽ rid keyword : 8;
   /* If this token is a CPP_PRAGMA, this indicates the pragma that
      was seen.  Otherwise it is PRAGMA_NONE.  */
-  enum pragma_kind pragma_kind : 8;
+  എണ്ണൽ pragma_kind pragma_kind : 8;
   /* The location at which this token was found.  */
   location_t location;
   /* The value associated with this token, if any.  */
-  tree value;
+  വൃക്ഷം മൂല്യം;
   /* Token flags.  */
-  unsigned char flags;
+  unsigned അക്ഷരം flags;
 
-  source_range get_range () const
+  source_range get_range () സ്ഥിരം
   {
-    return get_range_from_loc (line_table, location);
+    തിരികെ get_range_from_loc (വരി_table, location);
   }
 
-  location_t get_finish () const
+  location_t get_finish () സ്ഥിരം
   {
-    return get_range ().m_finish;
+    തിരികെ get_range ().m_finish;
   }
 };
 
 /* This should have the same layout as c_tree_token_vec
    in c-decl.cc, but for GTY reasons with ObjC can't be
    GTY itself.  */
-struct c_tree_token_vec_struct {
-  struct tree_base base;
+ഘടന c_വൃക്ഷം_token_vec_struct {
+  ഘടന വൃക്ഷം_base base;
   vec<c_token, va_gc> *tokens;
 };
 
-#define C_TOKEN_VEC_TOKENS(NODE) \
-  (((struct c_tree_token_vec_struct *) TREE_CHECK (NODE, C_TOKEN_VEC))->tokens)
+#define C_TOKEN_VEC_TOKENS(കണ്ണി_2) \
+  (((ഘടന c_വൃക്ഷം_token_vec_struct *) വൃക്ഷം_CHECK (കണ്ണി_2, C_TOKEN_VEC))->tokens)
 
 /* The parser.  */
-struct c_parser;
+ഘടന c_parser;
 
 /* Possibly kinds of declarator to parse.  */
-enum c_dtr_syn {
+എണ്ണൽ c_dtr_syn {
   /* A normal declarator with an identifier.  */
   C_DTR_NORMAL,
   /* An abstract declarator (maybe empty).  */
@@ -115,7 +115,7 @@ enum c_dtr_syn {
 
 /* The binary operation precedence levels, where 0 is a dummy lowest level
    used for the bottom of the stack.  */
-enum c_parser_prec {
+എണ്ണൽ c_parser_prec {
   PREC_NONE,
   PREC_LOGOR,
   PREC_LOGAND,
@@ -127,10 +127,10 @@ enum c_parser_prec {
   PREC_SHIFT,
   PREC_ADD,
   PREC_MULT,
-  NUM_PRECS
+  അക്കം_PRECS
 };
 
-enum c_lookahead_kind {
+എണ്ണൽ c_lookahead_kind {
   /* Always treat unknown identifiers as typenames.  */
   cla_prefer_type,
 
@@ -143,68 +143,68 @@ enum c_lookahead_kind {
 };
 
 
-extern c_token * c_parser_peek_token (c_parser *parser);
-extern c_token * c_parser_peek_2nd_token (c_parser *parser);
-extern c_token * c_parser_peek_nth_token (c_parser *parser, unsigned int n);
-extern bool c_parser_require (c_parser *parser, enum cpp_ttype type,
-			      const char *msgid,
+ബാഹ്യ c_token * c_parser_peek_token (c_parser *parser);
+ബാഹ്യ c_token * c_parser_peek_2nd_token (c_parser *parser);
+ബാഹ്യ c_token * c_parser_peek_nth_token (c_parser *parser, unsigned പൂർണ്ണസംഖ്യ n);
+ബാഹ്യ bool c_parser_require (c_parser *parser, എണ്ണൽ cpp_ttype type,
+			      സ്ഥിരം അക്ഷരം *msgid,
 			      location_t matching_location = UNKNOWN_LOCATION,
 			      bool type_is_unique=true);
-extern bool c_parser_error (c_parser *parser, const char *gmsgid);
-extern void c_parser_consume_token (c_parser *parser);
-extern void c_parser_skip_until_found (c_parser *parser, enum cpp_ttype type,
-				       const char *msgid,
+ബാഹ്യ bool c_parser_error (c_parser *parser, സ്ഥിരം അക്ഷരം *gmsgid);
+ബാഹ്യ ശൂന്യം c_parser_consume_token (c_parser *parser);
+ബാഹ്യ ശൂന്യം c_parser_skip_until_found (c_parser *parser, എണ്ണൽ cpp_ttype type,
+				       സ്ഥിരം അക്ഷരം *msgid,
 				       location_t = UNKNOWN_LOCATION);
-extern bool c_parser_next_token_starts_declspecs (c_parser *parser);
+ബാഹ്യ bool c_parser_next_token_starts_declspecs (c_parser *parser);
 bool c_parser_next_tokens_start_declaration (c_parser *parser,
-					     unsigned int n = 1);
+					     unsigned പൂർണ്ണസംഖ്യ n = 1);
 bool c_token_starts_typename (c_token *token);
 
 /* Abstraction to avoid defining c_parser here which messes up gengtype
    output wrt ObjC due to vec<c_token> routines being put in gtype-c.h
    but not gtype-objc.h.  */
-extern c_token * c_parser_tokens_buf (c_parser *parser, unsigned n);
-extern bool c_parser_error (c_parser *parser);
-extern void c_parser_set_error (c_parser *parser, bool);
+ബാഹ്യ c_token * c_parser_tokens_buf (c_parser *parser, unsigned n);
+ബാഹ്യ bool c_parser_error (c_parser *parser);
+ബാഹ്യ ശൂന്യം c_parser_set_error (c_parser *parser, bool);
 
 /* A bit of a hack to have this here.  It would be better in a c-decl.h.  */
-extern bool old_style_parameter_scope (void);
+ബാഹ്യ bool old_style_parameter_scope (ശൂന്യം);
 
 /* Return true if the next token from PARSER has the indicated
    TYPE.  */
 
-inline bool
-c_parser_next_token_is (c_parser *parser, enum cpp_ttype type)
+വരിയിൽ bool
+c_parser_next_token_is (c_parser *parser, എണ്ണൽ cpp_ttype type)
 {
-  return c_parser_peek_token (parser)->type == type;
+  തിരികെ c_parser_peek_token (parser)->type == type;
 }
 
 /* Return true if the next token from PARSER does not have the
    indicated TYPE.  */
 
-inline bool
-c_parser_next_token_is_not (c_parser *parser, enum cpp_ttype type)
+വരിയിൽ bool
+c_parser_next_token_is_not (c_parser *parser, എണ്ണൽ cpp_ttype type)
 {
-  return !c_parser_next_token_is (parser, type);
+  തിരികെ !c_parser_next_token_is (parser, type);
 }
 
 /* Return true if the next token from PARSER is the indicated
    KEYWORD.  */
 
-inline bool
-c_parser_next_token_is_keyword (c_parser *parser, enum rid keyword)
+വരിയിൽ bool
+c_parser_next_token_is_keyword (c_parser *parser, എണ്ണൽ rid keyword)
 {
-  return c_parser_peek_token (parser)->keyword == keyword;
+  തിരികെ c_parser_peek_token (parser)->keyword == keyword;
 }
 
-struct c_expr c_parser_string_literal (c_parser *, bool, bool);
-extern struct c_declarator *
+ഘടന c_വ്യഞ്ജകം c_parser_string_literal (c_parser *, bool, bool);
+ബാഹ്യ ഘടന c_declarator *
 c_parser_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
 		     bool *seen_id);
-extern void c_parser_declspecs (c_parser *, struct c_declspecs *, bool, bool,
+ബാഹ്യ ശൂന്യം c_parser_declspecs (c_parser *, ഘടന c_declspecs *, bool, bool,
 				bool, bool, bool, bool, bool,
-				enum c_lookahead_kind);
-extern struct c_type_name *c_parser_type_name (c_parser *, bool = false);
-extern bool c_maybe_parse_omp_decl (tree, tree);
+				എണ്ണൽ c_lookahead_kind);
+ബാഹ്യ ഘടന c_type_name *c_parser_type_name (c_parser *, bool = false);
+ബാഹ്യ bool c_maybe_parse_omp_decl (വൃക്ഷം, വൃക്ഷം);
 
 #endif

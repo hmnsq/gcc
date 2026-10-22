@@ -20,77 +20,77 @@ along with GCC; see the file COPYING3.  If not see
 #ifndef GCC_C_LANG_H
 #define GCC_C_LANG_H
 
-#include "c-family/c-common.h"
+#അന്തര്ഭാവ "c-family/c-common.h"
 
 /* In a RECORD_TYPE, a sorted array of the fields of the type, not a
    tree for size reasons.  */
-struct GTY(()) sorted_fields_type {
-  int len;
-  tree GTY((length ("%h.len"))) elts[1];
+ഘടന GTY(()) sorted_fields_type {
+  പൂർണ്ണസംഖ്യ len;
+  വൃക്ഷം GTY((length ("%h.len"))) elts[1];
 };
 
-struct GTY(()) lang_type {
+ഘടന GTY(()) lang_type {
   /* In a RECORD_TYPE, a sorted array of the fields of the type.  */
-  struct sorted_fields_type * GTY ((reorder ("resort_sorted_fields"))) s;
+  ഘടന sorted_fields_type * GTY ((reorder ("resort_sorted_fields"))) s;
   /* In an ENUMERAL_TYPE, the min and max values.  */
-  tree enum_min;
-  tree enum_max;
-  union maybe_objc_info {
+  വൃക്ഷം enum_min;
+  വൃക്ഷം enum_max;
+  സംഘം maybe_objc_info {
     /* If not c_dialect_objc, this part is not even allocated.  */
-    char GTY((tag ("0"))) non_objc;
+    അക്ഷരം GTY((tag ("0"))) non_objc;
     /* In a RECORD_TYPE, information specific to Objective-C, such
        as a list of adopted protocols or a pointer to a corresponding
        @interface.  See objc/objc-act.h for details.  */
-    tree GTY((tag ("1"))) objc_info;
+    വൃക്ഷം GTY((tag ("1"))) objc_info;
   } GTY ((desc ("c_dialect_objc ()"))) info;
 };
 
-struct GTY(()) lang_decl {
-  char dummy;
+ഘടന GTY(()) lang_decl {
+  അക്ഷരം dummy;
 };
 
 /* Save and restore the variables in this file and elsewhere
    that keep track of the progress of compilation of the current function.
    Used for nested functions.  */
 
-struct GTY(()) language_function {
-  struct c_language_function base;
-  unsigned char x_in_statement;
-  struct c_switch * GTY((skip)) x_switch_stack;
-  struct c_arg_info * GTY((skip)) arg_info;
-  vec<tree> GTY((skip)) loop_names;
-  decl_tree_map * GTY((skip)) loop_names_hash;
-  int returns_value;
-  int returns_null;
-  int returns_abnormally;
-  int warn_about_return_type;
+ഘടന GTY(()) language_function {
+  ഘടന c_language_function base;
+  unsigned അക്ഷരം x_in_statement;
+  ഘടന c_switch * GTY((skip)) x_switch_അട്ടി;
+  ഘടന c_arg_info * GTY((skip)) arg_info;
+  vec<വൃക്ഷം> GTY((skip)) loop_names;
+  decl_വൃക്ഷം_map * GTY((skip)) loop_names_hash;
+  പൂർണ്ണസംഖ്യ returns_മൂല്യം;
+  പൂർണ്ണസംഖ്യ returns_null;
+  പൂർണ്ണസംഖ്യ returns_abnormally;
+  പൂർണ്ണസംഖ്യ warn_about_return_type;
 };
 
-struct GTY(()) c_omp_declare_target_attr {
+ഘടന GTY(()) c_omp_declare_target_attr {
   bool attr_syntax;
-  int device_type;
-  int indirect;
+  പൂർണ്ണസംഖ്യ device_type;
+  പൂർണ്ണസംഖ്യ indirect;
 };
 
-struct GTY(()) c_omp_begin_assumes_data {
+ഘടന GTY(()) c_omp_begin_assumes_data {
   bool attr_syntax;
 };
 
-struct GTY(()) c_omp_declare_variant_attr {
+ഘടന GTY(()) c_omp_declare_variant_attr {
   bool attr_syntax;
-  tree selector;
+  വൃക്ഷം selector;
 };
 
 /* If non-empty, implicit "omp declare target" attribute is added into the
    attribute lists.  */
-extern GTY(()) vec<c_omp_declare_target_attr, va_gc>
+ബാഹ്യ GTY(()) vec<c_omp_declare_target_attr, va_gc>
   *current_omp_declare_target_attribute;
 /* Similarly whether we are in between #pragma omp begin assumes and
    #pragma omp end assumes (and how many times when nested).  */
-extern GTY(()) vec<c_omp_begin_assumes_data, va_gc>
+ബാഹ്യ GTY(()) vec<c_omp_begin_assumes_data, va_gc>
   *current_omp_begin_assumes;
 /* And similarly for #pragma omp begin/end declare variant.  */
-extern GTY(()) vec<c_omp_declare_variant_attr, va_gc>
+ബാഹ്യ GTY(()) vec<c_omp_declare_variant_attr, va_gc>
   *current_omp_declare_variant_attribute;
 
 #endif /* ! GCC_C_LANG_H */

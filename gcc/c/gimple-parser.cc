@@ -17,82 +17,82 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "function.h"
-#include "c-tree.h"
-#include "timevar.h"
-#include "stringpool.h"
-#include "cgraph.h"
-#include "attribs.h"
-#include "stor-layout.h"
-#include "varasm.h"
-#include "trans-mem.h"
-#include "c-family/c-pragma.h"
-#include "c-lang.h"
-#include "c-family/c-objc.h"
-#include "plugin.h"
-#include "builtins.h"
-#include "gomp-constants.h"
-#include "c-family/c-indentation.h"
-#include "gimple-expr.h"
-#include "context.h"
-#include "gcc-rich-location.h"
-#include "c-parser.h"
-#include "tree-vrp.h"
-#include "tree-pass.h"
-#include "tree-pretty-print.h"
-#include "tree.h"
-#include "basic-block.h"
-#include "gimple.h"
-#include "gimple-pretty-print.h"
-#include "tree-ssa.h"
-#include "pass_manager.h"
-#include "tree-ssanames.h"
-#include "gimple-ssa.h"
-#include "tree-dfa.h"
-#include "internal-fn.h"
-#include "cfg.h"
-#include "cfghooks.h"
-#include "bitmap.h"
-#include "cfganal.h"
-#include "tree-cfg.h"
-#include "gimple-iterator.h"
-#include "cfgloop.h"
-#include "tree-phinodes.h"
-#include "tree-into-ssa.h"
+#അന്തര്ഭാവ "config.h"
+#അന്തര്ഭാവ "system.h"
+#അന്തര്ഭാവ "coretypes.h"
+#അന്തര്ഭാവ "target.h"
+#അന്തര്ഭാവ "function.h"
+#അന്തര്ഭാവ "c-tree.h"
+#അന്തര്ഭാവ "timevar.h"
+#അന്തര്ഭാവ "stringpool.h"
+#അന്തര്ഭാവ "cgraph.h"
+#അന്തര്ഭാവ "attribs.h"
+#അന്തര്ഭാവ "stor-layout.h"
+#അന്തര്ഭാവ "varasm.h"
+#അന്തര്ഭാവ "trans-mem.h"
+#അന്തര്ഭാവ "c-family/c-pragma.h"
+#അന്തര്ഭാവ "c-lang.h"
+#അന്തര്ഭാവ "c-family/c-objc.h"
+#അന്തര്ഭാവ "plugin.h"
+#അന്തര്ഭാവ "builtins.h"
+#അന്തര്ഭാവ "gomp-constants.h"
+#അന്തര്ഭാവ "c-family/c-indentation.h"
+#അന്തര്ഭാവ "gimple-expr.h"
+#അന്തര്ഭാവ "context.h"
+#അന്തര്ഭാവ "gcc-rich-location.h"
+#അന്തര്ഭാവ "c-parser.h"
+#അന്തര്ഭാവ "tree-vrp.h"
+#അന്തര്ഭാവ "tree-pass.h"
+#അന്തര്ഭാവ "tree-pretty-print.h"
+#അന്തര്ഭാവ "tree.h"
+#അന്തര്ഭാവ "basic-block.h"
+#അന്തര്ഭാവ "gimple.h"
+#അന്തര്ഭാവ "gimple-pretty-print.h"
+#അന്തര്ഭാവ "tree-ssa.h"
+#അന്തര്ഭാവ "pass_manager.h"
+#അന്തര്ഭാവ "tree-ssanames.h"
+#അന്തര്ഭാവ "gimple-ssa.h"
+#അന്തര്ഭാവ "tree-dfa.h"
+#അന്തര്ഭാവ "internal-fn.h"
+#അന്തര്ഭാവ "cfg.h"
+#അന്തര്ഭാവ "cfghooks.h"
+#അന്തര്ഭാവ "bitmap.h"
+#അന്തര്ഭാവ "cfganal.h"
+#അന്തര്ഭാവ "tree-cfg.h"
+#അന്തര്ഭാവ "gimple-iterator.h"
+#അന്തര്ഭാവ "cfgloop.h"
+#അന്തര്ഭാവ "tree-phinodes.h"
+#അന്തര്ഭാവ "tree-into-ssa.h"
 
 
 /* GIMPLE parser state.  */
 
-class gimple_parser
+വർഗ്ഗം gimple_parser
 {
-public:
-  gimple_parser (c_parser *p) : parser (p), edges(), current_bb(NULL) {}
+പൊതു:
+  gimple_parser (c_parser *p) : parser (p), edges(), current_bb(ശൂന്യ) {}
   /* c_parser is not visible here, use composition and fake inheritance
      via a conversion operator.  */
-  operator c_parser *() { return parser; }
+  operator c_parser *() { തിരികെ parser; }
   c_parser *parser;
 
   /* CFG build state.  */
-  class gimple_parser_edge
+  വർഗ്ഗം gimple_parser_edge
   {
-  public:
-    int src;
-    int dest;
-    int flags;
+  പൊതു:
+    പൂർണ്ണസംഖ്യ src;
+    പൂർണ്ണസംഖ്യ dest;
+    പൂർണ്ണസംഖ്യ flags;
     profile_probability probability;
   };
   auto_vec<gimple_parser_edge> edges;
   basic_block current_bb;
 
-  void push_edge (int, int, int, profile_probability);
+  ശൂന്യം തള്ളുക_edge (പൂർണ്ണസംഖ്യ, പൂർണ്ണസംഖ്യ, പൂർണ്ണസംഖ്യ, profile_probability);
 };
 
-void
-gimple_parser::push_edge (int src, int dest, int flags,
+ശൂന്യം
+gimple_parser::തള്ളുക_edge (പൂർണ്ണസംഖ്യ src, പൂർണ്ണസംഖ്യ dest, പൂർണ്ണസംഖ്യ flags,
 			  profile_probability prob)
 {
   gimple_parser_edge e;
@@ -100,88 +100,88 @@ gimple_parser::push_edge (int src, int dest, int flags,
   e.dest = dest;
   e.flags = flags;
   e.probability = prob;
-  edges.safe_push (e);
+  edges.safe_തള്ളുക (e);
 }
 
 
 /* Gimple parsing functions.  */
-static bool c_parser_gimple_compound_statement (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_label (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_statement (gimple_parser &, gimple_seq *);
-static struct c_expr c_parser_gimple_binary_expression (gimple_parser &, tree);
-static struct c_expr c_parser_gimple_unary_expression (gimple_parser &);
-static struct c_expr c_parser_gimple_postfix_expression
-			(gimple_parser &, tree = error_mark_node);
-static struct c_expr c_parser_gimple_postfix_expression_after_primary
-			(gimple_parser &, location_t, struct c_expr);
-static void c_parser_gimple_declaration (gimple_parser &);
-static void c_parser_gimple_goto_stmt (gimple_parser &, location_t,
-				       tree, gimple_seq *);
-static void c_parser_gimple_try_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_if_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_switch_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_return_stmt (gimple_parser &, gimple_seq *);
-static void c_finish_gimple_return (location_t, tree);
-static tree c_parser_gimple_paren_condition (gimple_parser &);
-static void c_parser_gimple_expr_list (gimple_parser &, vec<tree> *);
+സ്ഥിതം തർക്കം c_parser_gimple_compound_statement (gimple_parser &, gimple_seq *);
+സ്ഥിതം ശൂന്യം c_parser_gimple_label (gimple_parser &, gimple_seq *);
+സ്ഥിതം ശൂന്യം c_parser_gimple_statement (gimple_parser &, gimple_seq *);
+സ്ഥിതം ഘടന c_വ്യഞ്ജകം c_parser_gimple_ദ്വിമാന_expression (gimple_parser &, വൃക്ഷം);
+സ്ഥിതം ഘടന c_വ്യഞ്ജകം c_parser_gimple_unary_expression (gimple_parser &);
+സ്ഥിതം ഘടന c_വ്യഞ്ജകം c_parser_gimple_postfix_expression
+			(gimple_parser &, വൃക്ഷം = error_mark_കണ്ണി);
+സ്ഥിതം ഘടന c_വ്യഞ്ജകം c_parser_gimple_postfix_expression_after_primary
+			(gimple_parser &, location_t, ഘടന c_വ്യഞ്ജകം);
+സ്ഥിതം ശൂന്യം c_parser_gimple_declaration (gimple_parser &);
+സ്ഥിതം ശൂന്യം c_parser_gimple_goto_stmt (gimple_parser &, location_t,
+				       വൃക്ഷം, gimple_seq *);
+സ്ഥിതം ശൂന്യം c_parser_gimple_try_stmt (gimple_parser &, gimple_seq *);
+സ്ഥിതം ശൂന്യം c_parser_gimple_if_stmt (gimple_parser &, gimple_seq *);
+സ്ഥിതം ശൂന്യം c_parser_gimple_switch_stmt (gimple_parser &, gimple_seq *);
+സ്ഥിതം ശൂന്യം c_parser_gimple_return_stmt (gimple_parser &, gimple_seq *);
+സ്ഥിതം ശൂന്യം c_finish_gimple_return (location_t, വൃക്ഷം);
+സ്ഥിതം വൃക്ഷം c_parser_gimple_paren_condition (gimple_parser &);
+സ്ഥിതം ശൂന്യം c_parser_gimple_വ്യഞ്ജകം_list (gimple_parser &, vec<വൃക്ഷം> *);
 
 
 /* Much like parser_build_unary_op, but avoid applying default conversions.  */
 
-static c_expr
+സ്ഥിതം c_വ്യഞ്ജകം
 gimple_parser_build_unary_op (location_t loc,
-			      enum tree_code code, struct c_expr arg)
+			      എണ്ണൽ വൃക്ഷം_code code, ഘടന c_വ്യഞ്ജകം arg)
 {
-  struct c_expr result;
+  ഘടന c_വ്യഞ്ജകം result;
 
   result.original_code = code;
-  result.original_type = NULL;
+  result.original_type = ശൂന്യ;
   result.m_decimal = 0;
 
-  if (reject_gcc_builtin (arg.value))
+  എങ്കിൽ (reject_gcc_builtin (arg.മൂല്യം))
     {
-      result.value = error_mark_node;
+      result.മൂല്യം = error_mark_കണ്ണി;
     }
-  else
+  അല്ലെങ്കിൽ
     {
-      result.value = build_unary_op (loc, code, arg.value, true);
+      result.മൂല്യം = build_unary_op (loc, code, arg.മൂല്യം, സത്യം);
 
-      if (TREE_OVERFLOW_P (result.value) && !TREE_OVERFLOW_P (arg.value))
-	overflow_warning (loc, result.value, arg.value);
+      എങ്കിൽ (വൃക്ഷം_OVERFLOW_P (result.മൂല്യം) && !വൃക്ഷം_OVERFLOW_P (arg.മൂല്യം))
+	overflow_warning (loc, result.മൂല്യം, arg.മൂല്യം);
     }
 
   /* We are typically called when parsing a prefix token at LOC acting on
      ARG.  Reflect this by updating the source range of the result to
      start at LOC and end at the end of ARG.  */
-  set_c_expr_source_range (&result,
+  set_c_വ്യഞ്ജകം_source_range (&result,
 			   loc, arg.get_finish ());
 
-  return result;
+  തിരികെ result;
 }
 
 /* See if VAL is an identifier matching __BB<num> and return <num>
    in *INDEX.  */
 
-static bool
-c_parser_gimple_parse_bb_spec (tree val, int *index)
+സ്ഥിതം തർക്കം
+c_parser_gimple_parse_bb_spec (വൃക്ഷം val, പൂർണ്ണസംഖ്യ *index)
 {
-  if (!startswith (IDENTIFIER_POINTER (val), "__BB"))
-    return false;
+  എങ്കിൽ (!startswith (IDENTIFIER_POINTER (val), "__BB"))
+    തിരികെ അസത്യം;
 
-  const char *bb = IDENTIFIER_POINTER (val) + 4;
-  if (! ISDIGIT (*bb))
-    return false;
+  സ്ഥിരം അക്ഷരം *bb = IDENTIFIER_POINTER (val) + 4;
+  എങ്കിൽ (! ISDIGIT (*bb))
+    തിരികെ അസത്യം;
 
-  char *pend;
+  അക്ഷരം *pend;
   errno = 0;
-  const unsigned long number = strtoul (bb, &pend, 10);
-  if (errno == ERANGE
+  സ്ഥിരം unsigned long സംഖ്യ = strtoul (bb, &pend, 10);
+  എങ്കിൽ (errno == ERANGE
       || *pend != '\0'
-      || number > INT_MAX)
-    return false;
+      || സംഖ്യ > INT_MAX)
+    തിരികെ അസത്യം;
 
-  *index = number;
-  return true;
+  *index = സംഖ്യ;
+  തിരികെ സത്യം;
 }
 
 /* See if VAL is an identifier matching __BB<num> and return <num>
@@ -189,150 +189,150 @@ c_parser_gimple_parse_bb_spec (tree val, int *index)
    the edge.  */
 
 
-static bool
-c_parser_gimple_parse_bb_spec_edge_probability (tree val,
+സ്ഥിതം തർക്കം
+c_parser_gimple_parse_bb_spec_edge_probability (വൃക്ഷം val,
 						gimple_parser &parser,
-						int *index,
+						പൂർണ്ണസംഖ്യ *index,
 						profile_probability
 						*probability)
 {
-  bool return_p = c_parser_gimple_parse_bb_spec (val, index);
-  if (return_p)
+  തർക്കം return_p = c_parser_gimple_parse_bb_spec (val, index);
+  എങ്കിൽ (return_p)
     {
       *probability = profile_probability::uninitialized ();
       /* Parse frequency if provided.  */
-      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+      എങ്കിൽ (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	{
-	  tree f;
+	  വൃക്ഷം f;
 	  c_parser_consume_token (parser);
-	  if (!c_parser_next_token_is (parser, CPP_NAME))
+	  എങ്കിൽ (!c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      c_parser_error (parser, "expected frequency quality");
-	      return false;
+	      തിരികെ അസത്യം;
 	    }
 
 	  profile_quality quality;
-	  const char *v
-	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	  if (!parse_profile_quality (v, &quality))
+	  സ്ഥിരം അക്ഷരം *v
+	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->മൂല്യം);
+	  എങ്കിൽ (!parse_profile_quality (v, &quality))
 	    {
 	      c_parser_error (parser, "unknown profile quality");
-	      return false;
+	      തിരികെ അസത്യം;
 	    }
 
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return false;
+	  എങ്കിൽ (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    തിരികെ അസത്യം;
 
-	  if (!c_parser_next_token_is (parser, CPP_NUMBER)
-	      || (TREE_CODE (f = c_parser_peek_token (parser)->value)
+	  എങ്കിൽ (!c_parser_next_token_is (parser, CPP_സംഖ്യ)
+	      || (വൃക്ഷം_CODE (f = c_parser_peek_token (parser)->മൂല്യം)
 		  != INTEGER_CST))
 	    {
 	      c_parser_error (parser, "expected frequency value");
-	      return false;
+	      തിരികെ അസത്യം;
 	    }
 
-	  unsigned int value = TREE_INT_CST_LOW (f);
-	  *probability = profile_probability (value, quality);
+	  unsigned പൂർണ്ണസംഖ്യ മൂല്യം = വൃക്ഷം_INT_CST_താഴെയുള്ള (f);
+	  *probability = profile_probability (മൂല്യം, quality);
 
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return false;
+	  എങ്കിൽ (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    തിരികെ അസത്യം;
 
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return false;
+	  എങ്കിൽ (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    തിരികെ അസത്യം;
 	}
 
-      return true;
+      തിരികെ സത്യം;
     }
 
-  return false;
+  തിരികെ അസത്യം;
 
 }
 
 /* Parse the body of a function declaration marked with "__GIMPLE".  */
 
-void
-c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
-			    enum c_declspec_il cdil,
-			    profile_count entry_bb_count)
+ശൂന്യം
+c_parser_parse_gimple_body (c_parser *cparser, അക്ഷരം *gimple_pass,
+			    എണ്ണൽ c_declspec_il cdil,
+			    profile_എണ്ണം entry_bb_എണ്ണം)
 {
   gimple_parser parser (cparser);
-  gimple_seq seq = NULL;
-  gimple_seq body = NULL;
-  tree stmt = push_stmt_list ();
-  push_scope ();
+  gimple_seq seq = ശൂന്യ;
+  gimple_seq body = ശൂന്യ;
+  വൃക്ഷം stmt = തള്ളുക_stmt_list ();
+  തള്ളുക_scope ();
   location_t loc1 = c_parser_peek_token (parser)->location;
 
   cfun->pass_startwith = gimple_pass;
-  init_tree_ssa (cfun);
+  init_വൃക്ഷം_ssa (cfun);
 
-  if (cdil == cdil_gimple)
+  എങ്കിൽ (cdil == cdil_gimple)
     /* While we have SSA names in the IL we do not have a CFG built yet
        and PHIs are represented using a PHI internal function.  We do
        have lowered control flow and exception handling (well, we do not
        have parser support for EH yet).  But as we still have BINDs
        we have to go through lowering again.  */
     cfun->curr_properties = PROP_gimple_any;
-  else
+  അല്ലെങ്കിൽ
     {
       /* We have at least cdil_gimple_cfg.  */
       gimple_register_cfg_hooks ();
-      init_empty_tree_cfg ();
+      init_empty_വൃക്ഷം_cfg ();
       parser.current_bb = ENTRY_BLOCK_PTR_FOR_FN (cfun);
       /* Initialize the bare loop structure - we are going to only
          mark headers and leave the rest to fixup.  */
-      set_loops_for_fn (cfun, ggc_cleared_alloc<struct loops> ());
+      set_loops_for_fn (cfun, ggc_cleared_alloc<ഘടന loops> ());
       init_loops_structure (cfun, loops_for_fn (cfun), 1);
       loops_state_set (cfun, LOOPS_NEED_FIXUP|LOOPS_MAY_HAVE_MULTIPLE_LATCHES);
       cfun->curr_properties
 	|= PROP_gimple_lcf | PROP_gimple_leh | PROP_cfg | PROP_loops;
-      if (cdil == cdil_gimple_ssa)
+      എങ്കിൽ (cdil == cdil_gimple_ssa)
 	{
 	  init_ssa_operands (cfun);
 	  cfun->curr_properties |= PROP_ssa;
 	}
     }
 
-  if (! c_parser_gimple_compound_statement (parser, &seq)
+  എങ്കിൽ (! c_parser_gimple_compound_statement (parser, &seq)
       && cdil == cdil_gimple)
     {
-      gimple *ret = gimple_build_return (NULL);
+      gimple *ret = gimple_build_return (ശൂന്യ);
       gimple_seq_add_stmt_without_update (&seq, ret);
     }
 
-  tree block = pop_scope ();
-  stmt = pop_stmt_list (stmt);
-  stmt = c_build_bind_expr (loc1, block, stmt);
+  വൃക്ഷം block = എടുക്കുക_scope ();
+  stmt = എടുക്കുക_stmt_list (stmt);
+  stmt = c_build_bind_വ്യഞ്ജകം (loc1, block, stmt);
 
   block = DECL_INITIAL (current_function_decl);
-  BLOCK_SUBBLOCKS (block) = NULL_TREE;
-  BLOCK_CHAIN (block) = NULL_TREE;
-  TREE_ASM_WRITTEN (block) = 1;
+  BLOCK_SUBBLOCKS (block) = NULL_വൃക്ഷം;
+  BLOCK_CHAIN (block) = NULL_വൃക്ഷം;
+  വൃക്ഷം_ASM_WRITTEN (block) = 1;
 
-  if (cdil == cdil_gimple)
+  എങ്കിൽ (cdil == cdil_gimple)
     {
-      gbind *bind_stmt = gimple_build_bind (BIND_EXPR_VARS (stmt), NULL,
-					    BIND_EXPR_BLOCK (stmt));
+      gbind *bind_stmt = gimple_build_bind (BIND_വ്യഞ്ജകം_VARS (stmt), ശൂന്യ,
+					    BIND_വ്യഞ്ജകം_BLOCK (stmt));
       gimple_bind_set_body (bind_stmt, seq);
       gimple_seq_add_stmt_without_update (&body, bind_stmt);
       gimple_set_body (current_function_decl, body);
     }
-  else
+  അല്ലെങ്കിൽ
     {
       /* Control-flow and binds are lowered, record local decls.  */
-      for (tree var = BIND_EXPR_VARS (stmt); var; var = DECL_CHAIN (var))
-	if (VAR_P (var)
+      വേണ്ടി (വൃക്ഷം var = BIND_വ്യഞ്ജകം_VARS (stmt); var; var = DECL_CHAIN (var))
+	എങ്കിൽ (VAR_P (var)
 	    && !DECL_EXTERNAL (var))
 	  {
 	    add_local_decl (cfun, var);
 	    /* When the middle-end re-gimplifies any expression we might
 	       run into the assertion that we've seen the decl in a BIND.  */
-	    if (!TREE_STATIC (var))
-	      DECL_SEEN_IN_BIND_EXPR_P (var) = 1;
+	    എങ്കിൽ (!വൃക്ഷം_STATIC (var))
+	      DECL_SEEN_IN_BIND_വ്യഞ്ജകം_P (var) = 1;
 	  }
       /* We have a CFG.  Build the edges.  */
-      for (unsigned i = 0; i < parser.edges.length (); ++i)
+      വേണ്ടി (unsigned i = 0; i < parser.edges.length (); ++i)
 	{
 	  edge e = make_edge (BASIC_BLOCK_FOR_FN (cfun, parser.edges[i].src),
 			      BASIC_BLOCK_FOR_FN (cfun, parser.edges[i].dest),
@@ -342,10 +342,10 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
       /* Add edges for case labels.  */
       basic_block bb;
       FOR_EACH_BB_FN (bb, cfun)
-	if (EDGE_COUNT (bb->succs) == 0)
+	എങ്കിൽ (EDGE_എണ്ണം (bb->succs) == 0)
 	  {
-	    if (gswitch *sw = safe_dyn_cast <gswitch *> (*gsi_last_bb (bb)))
-	      for (unsigned i = 0; i < gimple_switch_num_labels (sw); ++i)
+	    എങ്കിൽ (gswitch *sw = safe_dyn_cast <gswitch *> (*gsi_last_bb (bb)))
+	      വേണ്ടി (unsigned i = 0; i < gimple_switch_അക്കം_labels (sw); ++i)
 		{
 		  basic_block label_bb = gimple_switch_label_bb (cfun, sw, i);
 		  make_edge (bb, label_bb, 0);
@@ -355,50 +355,50 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
       calculate_dominance_info (CDI_DOMINATORS);
       /* With SSA lower PHIs parsed as internal function calls and
 	 update stmts.  */
-      if (cdil == cdil_gimple_ssa)
+      എങ്കിൽ (cdil == cdil_gimple_ssa)
 	{
 	  /* Create PHI nodes, they are parsed into __PHI internal calls
 	     and update SSA operands.  */
 	  FOR_EACH_BB_FN (bb, cfun)
 	    {
 	      gimple_stmt_iterator gsi;
-	      for (gsi = gsi_start_bb (bb); !gsi_end_p (gsi);)
+	      വേണ്ടി (gsi = gsi_start_bb (bb); !gsi_end_p (gsi);)
 		{
 		  gimple *stmt = gsi_stmt (gsi);
-		  if (!gimple_call_internal_p (stmt, IFN_PHI))
-		    break;
+		  എങ്കിൽ (!gimple_call_internal_p (stmt, IFN_PHI))
+		    നിർത്തുക;
 
-		  gphi *phi = create_phi_node (gimple_call_lhs (stmt), bb);
-		  for (unsigned i = 0; i < gimple_call_num_args (stmt); i += 2)
+		  gphi *phi = create_phi_കണ്ണി (gimple_call_lhs (stmt), bb);
+		  വേണ്ടി (unsigned i = 0; i < gimple_call_അക്കം_args (stmt); i += 2)
 		    {
-		      int srcidx = TREE_INT_CST_LOW (gimple_call_arg (stmt, i));
+		      പൂർണ്ണസംഖ്യ srcidx = വൃക്ഷം_INT_CST_താഴെയുള്ള (gimple_call_arg (stmt, i));
 		      edge e = find_edge (BASIC_BLOCK_FOR_FN (cfun, srcidx), bb);
-		      if (!e)
+		      എങ്കിൽ (!e)
 			c_parser_error (parser, "edge not found");
-		      else
+		      അല്ലെങ്കിൽ
 			add_phi_arg (phi, gimple_call_arg (stmt, i + 1), e,
 				     UNKNOWN_LOCATION);
 		    }
-		  gsi_remove (&gsi, true);
+		  gsi_remove (&gsi, സത്യം);
 		}
-	      for (; !gsi_end_p (gsi); gsi_next (&gsi))
+	      വേണ്ടി (; !gsi_end_p (gsi); gsi_next (&gsi))
 		update_stmt (gsi_stmt (gsi));
 	    }
 	  /* Fill SSA name gaps, putting them on the freelist and diagnose
 	     SSA names without definition.  */
-	  for (unsigned i = 1; i < num_ssa_names; ++i)
-	    if (!ssa_name (i))
+	  വേണ്ടി (unsigned i = 1; i < അക്കം_ssa_names; ++i)
+	    എങ്കിൽ (!ssa_name (i))
 	      {
-		tree name = make_ssa_name_fn (cfun, integer_type_node, NULL, i);
+		വൃക്ഷം name = make_ssa_name_fn (cfun, integer_type_കണ്ണി, ശൂന്യ, i);
 		release_ssa_name_fn (cfun, name);
 	      }
-	    else if (!SSA_NAME_DEF_STMT (ssa_name (i)))
+	    അല്ലെങ്കിൽ എങ്കിൽ (!SSA_NAME_DEF_STMT (ssa_name (i)))
 	      error ("SSA name %qE with version %d has no definition",
 		     ssa_name (i), i);
 	  /* No explicit virtual operands (yet).  */
-	  bitmap_obstack_initialize (NULL);
+	  bitmap_obstack_initialize (ശൂന്യ);
 	  update_ssa (TODO_update_ssa_only_virtuals);
-	  bitmap_obstack_release (NULL);
+	  bitmap_obstack_release (ശൂന്യ);
 	  /* ???  By flushing the freelist after virtual operand SSA rewrite
 	     we keep the gaps available for re-use like needed for the
 	     PR89595 testcase but then usually virtual operands would have
@@ -406,27 +406,27 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
 	     operands explicit in the SSA IL.  */
 	  flush_ssaname_freelist ();
 	}
-      fix_loop_structure (NULL);
+      fix_loop_structure (ശൂന്യ);
     }
 
-  if (cfun->curr_properties & PROP_cfg)
+  എങ്കിൽ (cfun->curr_properties & PROP_cfg)
     {
-      ENTRY_BLOCK_PTR_FOR_FN (cfun)->count = entry_bb_count;
+      ENTRY_BLOCK_PTR_FOR_FN (cfun)->എണ്ണം = entry_bb_എണ്ണം;
       gcov_type t = param_gimple_fe_computed_hot_bb_threshold;
       set_hot_bb_threshold (t);
-      update_max_bb_count ();
-      cgraph_node::get_create (cfun->decl);
+      update_max_bb_എണ്ണം ();
+      cgraph_കണ്ണി::get_create (cfun->decl);
       cgraph_edge::rebuild_edges ();
     }
 
   /* Perform IL validation and if any error is found abort compilation
      of this function by zapping its body.  */
-  if ((cfun->curr_properties & PROP_cfg)
-      && verify_gimple_in_cfg (cfun, false, false))
-    init_empty_tree_cfg ();
-  else if (!(cfun->curr_properties & PROP_cfg)
-	   && verify_gimple_in_seq (gimple_body (current_function_decl), false))
-    gimple_set_body (current_function_decl, NULL);
+  എങ്കിൽ ((cfun->curr_properties & PROP_cfg)
+      && verify_gimple_in_cfg (cfun, അസത്യം, അസത്യം))
+    init_empty_വൃക്ഷം_cfg ();
+  അല്ലെങ്കിൽ എങ്കിൽ (!(cfun->curr_properties & PROP_cfg)
+	   && verify_gimple_in_seq (gimple_body (current_function_decl), അസത്യം))
+    gimple_set_body (current_function_decl, ശൂന്യ);
 
   dump_function (TDI_gimple, current_function_decl);
 }
@@ -445,210 +445,210 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
      gimple-return-statement
 */
 
-static bool
+സ്ഥിതം തർക്കം
 c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 {
-  bool return_p = false;
+  തർക്കം return_p = അസത്യം;
 
-  if (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
-    return false;
+  എങ്കിൽ (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+    തിരികെ അസത്യം;
 
   /* A compound statement starts with optional declarations.  */
-  while (c_parser_next_tokens_start_declaration (parser))
+  ആകുമ്പോൾ (c_parser_next_tokens_start_declaration (parser))
     {
       c_parser_gimple_declaration (parser);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return false;
+      എങ്കിൽ (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	തിരികെ അസത്യം;
     }
 
-  while (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
+  ആകുമ്പോൾ (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
     {
-      if (c_parser_error (parser))
+      എങ്കിൽ (c_parser_error (parser))
 	{
-	  c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, NULL);
-	  return return_p;
+	  c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, ശൂന്യ);
+	  തിരികെ return_p;
 	}
-      else if (c_parser_next_token_is (parser, CPP_EOF))
+      അല്ലെങ്കിൽ എങ്കിൽ (c_parser_next_token_is (parser, CPP_EOF))
 	{
 	  c_parser_error (parser, "expected declaration or statement");
-	  return return_p;
+	  തിരികെ return_p;
 	}
 
-      switch (c_parser_peek_token (parser)->type)
+      തിരഞ്ഞെടുപ്പ് (c_parser_peek_token (parser)->type)
 	{
-	case CPP_KEYWORD:
-	  switch (c_parser_peek_token (parser)->keyword)
+	അവസ്ഥ CPP_KEYWORD:
+	  തിരഞ്ഞെടുപ്പ് (c_parser_peek_token (parser)->keyword)
 	    {
-	    case RID_AT_TRY:
+	    അവസ്ഥ RID_AT_TRY:
 	      c_parser_gimple_try_stmt (parser, seq);
-	      break;
-	    case RID_IF:
+	      നിർത്തുക;
+	    അവസ്ഥ RID_IF:
 	      c_parser_gimple_if_stmt (parser, seq);
-	      break;
-	    case RID_SWITCH:
+	      നിർത്തുക;
+	    അവസ്ഥ RID_SWITCH:
 	      c_parser_gimple_switch_stmt (parser, seq);
-	      break;
-	    case RID_GOTO:
+	      നിർത്തുക;
+	    അവസ്ഥ RID_GOTO:
 	      {
 		location_t loc = c_parser_peek_token (parser)->location;
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		എങ്കിൽ (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    tree label = c_parser_peek_token (parser)->value;
+		    വൃക്ഷം label = c_parser_peek_token (parser)->മൂല്യം;
 		    c_parser_consume_token (parser);
 		    c_parser_gimple_goto_stmt (parser, loc, label, seq);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    എങ്കിൽ (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return return_p;
+		      തിരികെ return_p;
 		  }
 		}
-	      break;
-	    case RID_RETURN:
-	      return_p = true;
+	      നിർത്തുക;
+	    അവസ്ഥ RID_RETURN:
+	      return_p = സത്യം;
 	      c_parser_gimple_return_stmt (parser, seq);
-	      if (! c_parser_require (parser, CPP_SEMICOLON,
+	      എങ്കിൽ (! c_parser_require (parser, CPP_SEMICOLON,
 				      "expected %<;%>"))
-		return return_p;
-	      if (cfun->curr_properties & PROP_cfg)
-		parser.push_edge (parser.current_bb->index, EXIT_BLOCK, 0,
+		തിരികെ return_p;
+	      എങ്കിൽ (cfun->curr_properties & PROP_cfg)
+		parser.തള്ളുക_edge (parser.current_bb->index, EXIT_BLOCK, 0,
 				  profile_probability::uninitialized ());
-	      break;
-	    default:
-	      goto expr_stmt;
+	      നിർത്തുക;
+	    സ്ഥിരസ്ഥിതി:
+	      പോകുക വ്യഞ്ജകം_stmt;
 	    }
-	  break;
-	case CPP_NAME:
-	  if (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
+	  നിർത്തുക;
+	അവസ്ഥ CPP_NAME:
+	  എങ്കിൽ (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
 	      c_parser_gimple_label (parser, seq);
-	      break;
+	      നിർത്തുക;
 	    }
-	  if (c_parser_next_token_is (parser, CPP_NAME)
+	  എങ്കിൽ (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_token (parser)->id_kind == C_ID_ID
-	      && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	      && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->മൂല്യം),
 			 "try") == 0)
 	    {
 	      c_parser_gimple_try_stmt (parser, seq);
-	      break;
+	      നിർത്തുക;
 	    }
 	  /* Basic block specification.
 	     __BB (index, ...)  */
-	  if ((cfun->curr_properties & PROP_cfg)
+	  എങ്കിൽ ((cfun->curr_properties & PROP_cfg)
 	      && !strcmp (IDENTIFIER_POINTER
-			    (c_parser_peek_token (parser)->value), "__BB"))
+			    (c_parser_peek_token (parser)->മൂല്യം), "__BB"))
 	    {
 	      c_parser_consume_token (parser);
-	      if (! c_parser_require (parser, CPP_OPEN_PAREN,
+	      എങ്കിൽ (! c_parser_require (parser, CPP_OPEN_PAREN,
 				      "expected %<(%>"))
-		return return_p;
-	      if (c_parser_next_token_is_not (parser, CPP_NUMBER))
+		തിരികെ return_p;
+	      എങ്കിൽ (c_parser_next_token_is_not (parser, CPP_സംഖ്യ))
 		{
 		  c_parser_error (parser, "expected block index");
-		  return return_p;
+		  തിരികെ return_p;
 		}
-	      tree tnum = c_parser_peek_token (parser)->value;
-	      if (TREE_CODE (tnum) != INTEGER_CST)
+	      വൃക്ഷം tnum = c_parser_peek_token (parser)->മൂല്യം;
+	      എങ്കിൽ (വൃക്ഷം_CODE (tnum) != INTEGER_CST)
 		{
 		  c_parser_error (parser, "expected block index");
-		  return return_p;
+		  തിരികെ return_p;
 		}
-	      int index = TREE_INT_CST_LOW (tnum);
-	      if (index < NUM_FIXED_BLOCKS
+	      പൂർണ്ണസംഖ്യ index = വൃക്ഷം_INT_CST_താഴെയുള്ള (tnum);
+	      എങ്കിൽ (index < അക്കം_FIXED_BLOCKS
 		  || (index < last_basic_block_for_fn (cfun)
-		      && BASIC_BLOCK_FOR_FN (cfun, index) != NULL))
+		      && BASIC_BLOCK_FOR_FN (cfun, index) != ശൂന്യ))
 		{
 		  c_parser_error (parser, "invalid block index");
-		  return return_p;
+		  തിരികെ return_p;
 		}
-	      int is_loop_header_of = -1;
-	      profile_count bb_count = profile_count::uninitialized ();
+	      പൂർണ്ണസംഖ്യ is_loop_header_of = -1;
+	      profile_എണ്ണം bb_എണ്ണം = profile_എണ്ണം::uninitialized ();
 	      c_parser_consume_token (parser);
-	      while (c_parser_next_token_is (parser, CPP_COMMA))
+	      ആകുമ്പോൾ (c_parser_next_token_is (parser, CPP_COMMA))
 		{
 		  c_parser_consume_token (parser);
-		  if (! c_parser_next_token_is (parser, CPP_NAME))
+		  എങ്കിൽ (! c_parser_next_token_is (parser, CPP_NAME))
 		    {
 		      c_parser_error (parser, "expected block specifier");
-		      return return_p;
+		      തിരികെ return_p;
 		    }
 		  /* loop_header (NUM)  */
-		  if (!strcmp (IDENTIFIER_POINTER
-			         (c_parser_peek_token (parser)->value),
+		  എങ്കിൽ (!strcmp (IDENTIFIER_POINTER
+			         (c_parser_peek_token (parser)->മൂല്യം),
 			       "loop_header"))
 		    {
 		      c_parser_consume_token (parser);
-		      if (! c_parser_require (parser, CPP_OPEN_PAREN,
+		      എങ്കിൽ (! c_parser_require (parser, CPP_OPEN_PAREN,
 					      "expected %<(%>"))
-			return return_p;
-		      tree loop_num;
-		      if (! c_parser_next_token_is (parser, CPP_NUMBER)
-			  || TREE_CODE (loop_num
-					  = c_parser_peek_token (parser)->value)
+			തിരികെ return_p;
+		      വൃക്ഷം loop_അക്കം;
+		      എങ്കിൽ (! c_parser_next_token_is (parser, CPP_സംഖ്യ)
+			  || വൃക്ഷം_CODE (loop_അക്കം
+					  = c_parser_peek_token (parser)->മൂല്യം)
 			       != INTEGER_CST)
 			{
 			  c_parser_error (parser, "expected loop number");
-			  return return_p;
+			  തിരികെ return_p;
 			}
 		      c_parser_consume_token (parser);
-		      is_loop_header_of = TREE_INT_CST_LOW (loop_num);
-		      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+		      is_loop_header_of = വൃക്ഷം_INT_CST_താഴെയുള്ള (loop_അക്കം);
+		      എങ്കിൽ (! c_parser_require (parser, CPP_CLOSE_PAREN,
 					      "expected %<)%>"))
-			return return_p;
+			തിരികെ return_p;
 		    }
 		  /* Parse profile: quality(value) */
-		  else
+		  അല്ലെങ്കിൽ
 		    {
-		      tree q;
+		      വൃക്ഷം q;
 		      profile_quality quality;
-		      tree v = c_parser_peek_token (parser)->value;
-		      if (!parse_profile_quality (IDENTIFIER_POINTER (v),
+		      വൃക്ഷം v = c_parser_peek_token (parser)->മൂല്യം;
+		      എങ്കിൽ (!parse_profile_quality (IDENTIFIER_POINTER (v),
 						  &quality))
 			{
 			  c_parser_error (parser, "unknown block specifier");
-			  return false;
+			  തിരികെ അസത്യം;
 			}
 
 		      c_parser_consume_token (parser);
-		      if (!c_parser_require (parser, CPP_OPEN_PAREN,
+		      എങ്കിൽ (!c_parser_require (parser, CPP_OPEN_PAREN,
 					     "expected %<(%>"))
-			return false;
+			തിരികെ അസത്യം;
 
-		      if (!c_parser_next_token_is (parser, CPP_NUMBER)
-			  || (TREE_CODE (q = c_parser_peek_token (parser)->value)
+		      എങ്കിൽ (!c_parser_next_token_is (parser, CPP_സംഖ്യ)
+			  || (വൃക്ഷം_CODE (q = c_parser_peek_token (parser)->മൂല്യം)
 			      != INTEGER_CST))
 			{
 			  c_parser_error (parser, "expected count value");
-			  return false;
+			  തിരികെ അസത്യം;
 			}
 
-		      bb_count
-			= profile_count::from_gcov_type (TREE_INT_CST_LOW (q),
+		      bb_എണ്ണം
+			= profile_എണ്ണം::from_gcov_type (വൃക്ഷം_INT_CST_താഴെയുള്ള (q),
 							 quality);
 		      c_parser_consume_token (parser);
-		      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+		      എങ്കിൽ (! c_parser_require (parser, CPP_CLOSE_PAREN,
 					      "expected %<)%>"))
-			return return_p;
+			തിരികെ return_p;
 		    }
 		}
-	      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+	      എങ്കിൽ (! c_parser_require (parser, CPP_CLOSE_PAREN,
 				      "expected %<)%>")
 		  || ! c_parser_require (parser, CPP_COLON,
 					 "expected %<:%>"))
-		return return_p;
+		തിരികെ return_p;
 
 	      /* Put stmts parsed in the current block.  */
-	      if (!gimple_seq_empty_p (*seq))
+	      എങ്കിൽ (!gimple_seq_empty_p (*seq))
 		{
-		  if (!parser.current_bb)
+		  എങ്കിൽ (!parser.current_bb)
 		    c_parser_error (parser, "stmts without block");
-		  else
+		  അല്ലെങ്കിൽ
 		    {
 		      gimple_stmt_iterator gsi
 			= gsi_start_bb (parser.current_bb);
-		      gsi_insert_seq_after_without_update (&gsi, *seq,
+		      gsi_തിരുകുക_seq_after_without_update (&gsi, *seq,
 							   GSI_CONTINUE_LINKING);
 		    }
-		  *seq = NULL;
+		  *seq = ശൂന്യ;
 		}
 
 	      /* Build an empty block with specified index, linking them
@@ -657,53 +657,53 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 	      bb->index = index;
 	      link_block (bb, (parser.current_bb ? parser.current_bb
 			       : ENTRY_BLOCK_PTR_FOR_FN (cfun)));
-	      if (basic_block_info_for_fn (cfun)->length () <= (size_t)index)
+	      എങ്കിൽ (basic_block_info_for_fn (cfun)->length () <= (size_t)index)
 		vec_safe_grow_cleared (basic_block_info_for_fn (cfun),
-				       index + 1, true);
+				       index + 1, സത്യം);
 	      SET_BASIC_BLOCK_FOR_FN (cfun, index, bb);
-	      if (last_basic_block_for_fn (cfun) <= index)
+	      എങ്കിൽ (last_basic_block_for_fn (cfun) <= index)
 		last_basic_block_for_fn (cfun) = index + 1;
 	      n_basic_blocks_for_fn (cfun)++;
-	      if (parser.current_bb->index == ENTRY_BLOCK)
-		parser.push_edge (ENTRY_BLOCK, bb->index, EDGE_FALLTHRU,
+	      എങ്കിൽ (parser.current_bb->index == ENTRY_BLOCK)
+		parser.തള്ളുക_edge (ENTRY_BLOCK, bb->index, EDGE_FALLTHRU,
 				  profile_probability::always ());
 
 	      /* We leave the proper setting to fixup.  */
-	      class loop *loop_father = loops_for_fn (cfun)->tree_root;
+	      വർഗ്ഗം loop *loop_father = loops_for_fn (cfun)->വൃക്ഷം_വേര്;
 	      /* If the new block is a loop header, allocate a loop
 		 struct.  Fixup will take care of proper placement within
 		 the loop tree.  */
-	      if (is_loop_header_of != -1)
+	      എങ്കിൽ (is_loop_header_of != -1)
 		{
-		  if (number_of_loops (cfun) > (unsigned)is_loop_header_of
-		      && get_loop (cfun, is_loop_header_of) != NULL)
+		  എങ്കിൽ (സംഖ്യ_of_loops (cfun) > (unsigned)is_loop_header_of
+		      && get_loop (cfun, is_loop_header_of) != ശൂന്യ)
 		    {
 		      c_parser_error (parser, "duplicate loop header");
 		    }
-		  else
+		  അല്ലെങ്കിൽ
 		    {
-		      class loop *loop = alloc_loop ();
-		      loop->num = is_loop_header_of;
+		      വർഗ്ഗം loop *loop = alloc_loop ();
+		      loop->അക്കം = is_loop_header_of;
 		      loop->header = bb;
-		      if (number_of_loops (cfun) <= (unsigned)is_loop_header_of)
+		      എങ്കിൽ (സംഖ്യ_of_loops (cfun) <= (unsigned)is_loop_header_of)
 			vec_safe_grow_cleared (loops_for_fn (cfun)->larray,
-					       is_loop_header_of + 1, true);
+					       is_loop_header_of + 1, സത്യം);
 		      (*loops_for_fn (cfun)->larray)[is_loop_header_of] = loop;
-		      flow_loop_tree_node_add (loops_for_fn (cfun)->tree_root,
+		      flow_loop_വൃക്ഷം_കണ്ണി_add (loops_for_fn (cfun)->വൃക്ഷം_വേര്,
 					       loop);
 		    }
 		  loop_father = get_loop (cfun, is_loop_header_of);
 		}
 	      bb->loop_father = loop_father;
-	      bb->count = bb_count;
+	      bb->എണ്ണം = bb_എണ്ണം;
 
 	      /* Stmts now go to the new block.  */
 	      parser.current_bb = bb;
-	      break;
+	      നിർത്തുക;
 	    }
-	  goto expr_stmt;
+	  പോകുക വ്യഞ്ജകം_stmt;
 
-	case CPP_SEMICOLON:
+	അവസ്ഥ CPP_SEMICOLON:
 	  {
 	    /* Empty stmt.  */
 	    location_t loc = c_parser_peek_token (parser)->location;
@@ -711,44 +711,44 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 	    gimple *nop = gimple_build_nop ();
 	    gimple_set_location (nop, loc);
 	    gimple_seq_add_stmt_without_update (seq, nop);
-	    break;
+	    നിർത്തുക;
 	  }
 
-	case CPP_CLOSE_PAREN:
-	case CPP_CLOSE_SQUARE:
+	അവസ്ഥ CPP_CLOSE_PAREN:
+	അവസ്ഥ CPP_CLOSE_SQUARE:
 	  /* Avoid infinite loop in error recovery:
 	     c_parser_skip_until_found stops at a closing nesting
 	     delimiter without consuming it, but here we need to consume
 	     it to proceed further.  */
 	  c_parser_error (parser, "expected statement");
 	  c_parser_consume_token (parser);
-	break;
+	നിർത്തുക;
 
-	default:
-expr_stmt:
+	സ്ഥിരസ്ഥിതി:
+വ്യഞ്ജകം_stmt:
 	  c_parser_gimple_statement (parser, seq);
-	  if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	    c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
+	  എങ്കിൽ (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	    c_parser_skip_until_found (parser, CPP_SEMICOLON, ശൂന്യ);
 	}
     }
   c_parser_consume_token (parser);
 
   /* Put stmts parsed in the current block.  */
-  if ((cfun->curr_properties & PROP_cfg)
+  എങ്കിൽ ((cfun->curr_properties & PROP_cfg)
       && !gimple_seq_empty_p (*seq))
     {
-      if (!parser.current_bb)
+      എങ്കിൽ (!parser.current_bb)
 	c_parser_error (parser, "stmts without block");
-      else
+      അല്ലെങ്കിൽ
 	{
 	  gimple_stmt_iterator gsi = gsi_start_bb (parser.current_bb);
-	  gsi_insert_seq_after_without_update (&gsi, *seq,
+	  gsi_തിരുകുക_seq_after_without_update (&gsi, *seq,
 					       GSI_CONTINUE_LINKING);
 	}
-      *seq = NULL;
+      *seq = ശൂന്യ;
     }
 
-  return return_p;
+  തിരികെ return_p;
 }
 
 /* Parse a gimple statement.
@@ -778,42 +778,42 @@ expr_stmt:
 
 */
 
-static void
+സ്ഥിതം ശൂന്യം
 c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
 {
-  struct c_expr lhs, rhs;
-  gimple *assign = NULL;
+  ഘടന c_വ്യഞ്ജകം lhs, rhs;
+  gimple *assign = ശൂന്യ;
   location_t loc;
-  tree arg = NULL_TREE;
-  auto_vec<tree> vargs;
+  വൃക്ഷം arg = NULL_വൃക്ഷം;
+  auto_vec<വൃക്ഷം> vargs;
 
   lhs = c_parser_gimple_unary_expression (parser);
-  loc = EXPR_LOCATION (lhs.value);
+  loc = വ്യഞ്ജകം_LOCATION (lhs.മൂല്യം);
   rhs.set_error ();
 
   /* GIMPLE call statement without LHS.  */
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON)
-      && TREE_CODE (lhs.value) == CALL_EXPR)
+  എങ്കിൽ (c_parser_next_token_is (parser, CPP_SEMICOLON)
+      && വൃക്ഷം_CODE (lhs.മൂല്യം) == CALL_വ്യഞ്ജകം)
     {
       gimple *call;
-      call = gimple_build_call_from_tree (lhs.value, NULL);
+      call = gimple_build_call_from_വൃക്ഷം (lhs.മൂല്യം, ശൂന്യ);
       gimple_seq_add_stmt_without_update (seq, call);
       gimple_set_location (call, loc);
-      return;
+      തിരികെ;
     }
 
   /* All following cases are statements with LHS.  */
-  if (! c_parser_require (parser, CPP_EQ, "expected %<=%>"))
-    return;
+  എങ്കിൽ (! c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+    തിരികെ;
 
   /* Eat and ignore {v} right after the =, the has_volatile_ops is
      redundant and re-computed by the operand scanner.  */
-  if (c_parser_next_token_is (parser, CPP_OPEN_BRACE)
+  എങ്കിൽ (c_parser_next_token_is (parser, CPP_OPEN_BRACE)
       && !(c_parser_peek_token (parser)->flags & PREV_WHITE)
       && c_parser_peek_2nd_token (parser)->type == CPP_NAME
       && !(c_parser_peek_2nd_token (parser)->flags & PREV_WHITE)
       && strcmp ("v", IDENTIFIER_POINTER
-			(c_parser_peek_2nd_token (parser)->value)) == 0
+			(c_parser_peek_2nd_token (parser)->മൂല്യം)) == 0
       && c_parser_peek_nth_token (parser, 3)->type == CPP_CLOSE_BRACE
       && !(c_parser_peek_nth_token (parser, 3)->flags & PREV_WHITE))
     {
@@ -823,104 +823,104 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
     }
 
   /* Cast expression.  */
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+  എങ്കിൽ (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
       && c_token_starts_typename (c_parser_peek_2nd_token (parser)))
     {
       c_parser_consume_token (parser);
-      struct c_type_name *type_name = c_parser_type_name (parser);
+      ഘടന c_type_name *type_name = c_parser_type_name (parser);
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, "expected %<)%>");
-      if (type_name == NULL)
-	return;
+      എങ്കിൽ (type_name == ശൂന്യ)
+	തിരികെ;
       /* ???  The actual type used in the cast expression is ignored as
          in GIMPLE it is encoded by the type of the LHS.  */
       rhs = c_parser_gimple_postfix_expression (parser);
-      if (lhs.value != error_mark_node
-	  && rhs.value != error_mark_node)
+      എങ്കിൽ (lhs.മൂല്യം != error_mark_കണ്ണി
+	  && rhs.മൂല്യം != error_mark_കണ്ണി)
 	{
-	  enum tree_code code = NOP_EXPR;
-	  if (FLOAT_TYPE_P (TREE_TYPE (lhs.value))
-	      && ! FLOAT_TYPE_P (TREE_TYPE (rhs.value)))
-	    code = FLOAT_EXPR;
-	  else if (! FLOAT_TYPE_P (TREE_TYPE (lhs.value))
-		   && FLOAT_TYPE_P (TREE_TYPE (rhs.value)))
-	    code = FIX_TRUNC_EXPR;
-	  assign = gimple_build_assign (lhs.value, code, rhs.value);
+	  എണ്ണൽ വൃക്ഷം_code code = NOP_വ്യഞ്ജകം;
+	  എങ്കിൽ (FLOAT_TYPE_P (വൃക്ഷം_TYPE (lhs.മൂല്യം))
+	      && ! FLOAT_TYPE_P (വൃക്ഷം_TYPE (rhs.മൂല്യം)))
+	    code = FLOAT_വ്യഞ്ജകം;
+	  അല്ലെങ്കിൽ എങ്കിൽ (! FLOAT_TYPE_P (വൃക്ഷം_TYPE (lhs.മൂല്യം))
+		   && FLOAT_TYPE_P (വൃക്ഷം_TYPE (rhs.മൂല്യം)))
+	    code = FIX_TRUNC_വ്യഞ്ജകം;
+	  assign = gimple_build_assign (lhs.മൂല്യം, code, rhs.മൂല്യം);
 	  gimple_seq_add_stmt_without_update (seq, assign);
 	  gimple_set_location (assign, loc);
-	  return;
+	  തിരികെ;
 	}
     }
 
   /* Unary expression.  */
-  switch (c_parser_peek_token (parser)->type)
+  തിരഞ്ഞെടുപ്പ് (c_parser_peek_token (parser)->type)
     {
-    case CPP_NAME:
+    അവസ്ഥ CPP_NAME:
       {
-	tree id = c_parser_peek_token (parser)->value;
-	if (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0
+	വൃക്ഷം id = c_parser_peek_token (parser)->മൂല്യം;
+	എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
-	  goto build_unary_expr;
-	break;
+	  പോകുക build_unary_വ്യഞ്ജകം;
+	നിർത്തുക;
       }
-    case CPP_KEYWORD:
-      if (c_parser_peek_token (parser)->keyword != RID_REALPART
+    അവസ്ഥ CPP_KEYWORD:
+      എങ്കിൽ (c_parser_peek_token (parser)->keyword != RID_REALPART
 	  && c_parser_peek_token (parser)->keyword != RID_IMAGPART)
-	break;
+	നിർത്തുക;
       /* Fallthru.  */
-    case CPP_AND:
-    case CPP_PLUS:
-    case CPP_MINUS:
-    case CPP_COMPL:
-    case CPP_NOT:
-    case CPP_MULT: /* pointer deref */
-    build_unary_expr:
+    അവസ്ഥ CPP_AND:
+    അവസ്ഥ CPP_PLUS:
+    അവസ്ഥ CPP_MINUS:
+    അവസ്ഥ CPP_COMPL:
+    അവസ്ഥ CPP_NOT:
+    അവസ്ഥ CPP_MULT: /* pointer deref */
+    build_unary_വ്യഞ്ജകം:
       rhs = c_parser_gimple_unary_expression (parser);
-      if (rhs.value != error_mark_node)
+      എങ്കിൽ (rhs.മൂല്യം != error_mark_കണ്ണി)
 	{
-	  assign = gimple_build_assign (lhs.value, rhs.value);
+	  assign = gimple_build_assign (lhs.മൂല്യം, rhs.മൂല്യം);
 	  gimple_set_location (assign, loc);
 	  gimple_seq_add_stmt_without_update (seq, assign);
 	}
-      return;
+      തിരികെ;
 
-    default:;
+    സ്ഥിരസ്ഥിതി:;
     }
 
   /* GIMPLE PHI statement.  */
-  if (c_parser_next_token_is_keyword (parser, RID_PHI))
+  എങ്കിൽ (c_parser_next_token_is_keyword (parser, RID_PHI))
     {
       c_parser_consume_token (parser);
 
-      if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	return;
+      എങ്കിൽ (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	തിരികെ;
 
-      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+      എങ്കിൽ (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	c_parser_consume_token (parser);
 
-      while (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN))
+      ആകുമ്പോൾ (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN))
 	{
-	  if (c_parser_next_token_is (parser, CPP_NAME)
+	  എങ്കിൽ (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
-	      arg = c_parser_peek_token (parser)->value;
+	      arg = c_parser_peek_token (parser)->മൂല്യം;
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is (parser, CPP_COLON))
+	      എങ്കിൽ (c_parser_next_token_is (parser, CPP_COLON))
 		c_parser_consume_token (parser);
-	      int src_index = -1;
-	      if (!c_parser_gimple_parse_bb_spec (arg, &src_index))
+	      പൂർണ്ണസംഖ്യ src_index = -1;
+	      എങ്കിൽ (!c_parser_gimple_parse_bb_spec (arg, &src_index))
 		c_parser_error (parser, "invalid source block specification");
-	      vargs.safe_push (size_int (src_index));
+	      vargs.safe_തള്ളുക (size_int (src_index));
 	    }
-	  else if (c_parser_next_token_is (parser, CPP_COMMA))
+	  അല്ലെങ്കിൽ എങ്കിൽ (c_parser_next_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
-	  else
+	  അല്ലെങ്കിൽ
 	    {
-	      arg = c_parser_gimple_unary_expression (parser).value;
-	      vargs.safe_push (arg);
+	      arg = c_parser_gimple_unary_expression (parser).മൂല്യം;
+	      vargs.safe_തള്ളുക (arg);
 	    }
 	}
 
@@ -929,85 +929,85 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
 
       /* Build internal function for PHI.  */
       gcall *call_stmt = gimple_build_call_internal_vec (IFN_PHI, vargs);
-      gimple_call_set_lhs (call_stmt, lhs.value);
+      gimple_call_set_lhs (call_stmt, lhs.മൂല്യം);
       gimple_set_location (call_stmt, UNKNOWN_LOCATION);
       gimple_seq_add_stmt_without_update (seq, call_stmt);
-      return;
+      തിരികെ;
     }
 
   /* GIMPLE call with lhs.  */
-  if (c_parser_next_token_is (parser, CPP_DOT)
+  എങ്കിൽ (c_parser_next_token_is (parser, CPP_DOT)
       || (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN
-	  && lookup_name (c_parser_peek_token (parser)->value)))
+	  && lookup_name (c_parser_peek_token (parser)->മൂല്യം)))
     {
       rhs = c_parser_gimple_unary_expression (parser);
-      if (rhs.value != error_mark_node)
+      എങ്കിൽ (rhs.മൂല്യം != error_mark_കണ്ണി)
 	{
-	  gimple *call = gimple_build_call_from_tree (rhs.value, NULL);
-	  gimple_call_set_lhs (call, lhs.value);
+	  gimple *call = gimple_build_call_from_വൃക്ഷം (rhs.മൂല്യം, ശൂന്യ);
+	  gimple_call_set_lhs (call, lhs.മൂല്യം);
 	  gimple_seq_add_stmt_without_update (seq, call);
 	  gimple_set_location (call, loc);
 	}
-      return;
+      തിരികെ;
     }
 
-  rhs = c_parser_gimple_binary_expression (parser, TREE_TYPE (lhs.value));
-  if (lhs.value != error_mark_node
-      && rhs.value != error_mark_node)
+  rhs = c_parser_gimple_ദ്വിമാന_expression (parser, വൃക്ഷം_TYPE (lhs.മൂല്യം));
+  എങ്കിൽ (lhs.മൂല്യം != error_mark_കണ്ണി
+      && rhs.മൂല്യം != error_mark_കണ്ണി)
     {
       /* If we parsed an identifier and the next token  is a '?' then parse
 	 a conditional expression.  */
-      if (SSA_VAR_P (rhs.value) && c_parser_next_token_is (parser, CPP_QUERY))
+      എങ്കിൽ (SSA_VAR_P (rhs.മൂല്യം) && c_parser_next_token_is (parser, CPP_QUERY))
 	{
-	  struct c_expr trueval, falseval;
+	  ഘടന c_വ്യഞ്ജകം trueval, falseval;
 	  c_parser_consume_token (parser);
 	  trueval = c_parser_gimple_postfix_expression (parser);
 	  falseval.set_error ();
-	  if (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	  എങ്കിൽ (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    falseval = c_parser_gimple_postfix_expression (parser);
-	  if (trueval.value == error_mark_node
-	      || falseval.value == error_mark_node)
-	    return;
-	  rhs.value = build3_loc (loc,
-				  VECTOR_TYPE_P (TREE_TYPE (rhs.value))
-				  ? VEC_COND_EXPR : COND_EXPR,
-				  TREE_TYPE (trueval.value),
-				  rhs.value, trueval.value, falseval.value);
+	  എങ്കിൽ (trueval.മൂല്യം == error_mark_കണ്ണി
+	      || falseval.മൂല്യം == error_mark_കണ്ണി)
+	    തിരികെ;
+	  rhs.മൂല്യം = build3_loc (loc,
+				  VECTOR_TYPE_P (വൃക്ഷം_TYPE (rhs.മൂല്യം))
+				  ? VEC_COND_വ്യഞ്ജകം : COND_വ്യഞ്ജകം,
+				  വൃക്ഷം_TYPE (trueval.മൂല്യം),
+				  rhs.മൂല്യം, trueval.മൂല്യം, falseval.മൂല്യം);
 	}
-      if (get_gimple_rhs_class (TREE_CODE (rhs.value)) == GIMPLE_INVALID_RHS)
+      എങ്കിൽ (get_gimple_rhs_class (വൃക്ഷം_CODE (rhs.മൂല്യം)) == GIMPLE_INVALID_RHS)
 	{
 	  c_parser_error (parser, "unexpected RHS for assignment");
-	  return;
+	  തിരികെ;
 	}
-      assign = gimple_build_assign (lhs.value, rhs.value);
+      assign = gimple_build_assign (lhs.മൂല്യം, rhs.മൂല്യം);
       gimple_seq_add_stmt_without_update (seq, assign);
       gimple_set_location (assign, loc);
     }
-  return;
+  തിരികെ;
 }
 
 /* A mapping between an identifier to a tree code for binary operations. */
-static const std::pair<const char *, tree_code> gimple_binary_identifier_code[] =
+സ്ഥിതം സ്ഥിരം std::pair<സ്ഥിരം അക്ഷരം *, വൃക്ഷം_code> gimple_ദ്വിമാന_identifier_code[] =
   {
-    {"__MULT_HIGHPART", MULT_HIGHPART_EXPR},
-    {"__UNLT", UNLT_EXPR},
-    {"__UNLE", UNLE_EXPR},
-    {"__UNGT", UNGT_EXPR},
-    {"__UNGE", UNGE_EXPR},
-    {"__UNEQ", UNEQ_EXPR},
-    {"__UNORDERED", UNORDERED_EXPR},
-    {"__ORDERED", ORDERED_EXPR},
-    {"__LTGT", LTGT_EXPR},
-    {"__FLOOR_DIV", FLOOR_DIV_EXPR},
-    {"__ROUND_DIV", ROUND_DIV_EXPR},
-    {"__EXACT_DIV", EXACT_DIV_EXPR},
-    {"__CEIL_DIV", CEIL_DIV_EXPR},
-    {"__FLOOR_MOD", FLOOR_MOD_EXPR},
-    {"__ROUND_MOD", ROUND_MOD_EXPR},
-    {"__CEIL_MOD", CEIL_MOD_EXPR},
-    {"__ROTATE_LEFT", LROTATE_EXPR},
-    {"__ROTATE_RIGHT", RROTATE_EXPR},
+    {"__MULT_HIGHPART", MULT_HIGHPART_വ്യഞ്ജകം},
+    {"__UNLT", UNLT_വ്യഞ്ജകം},
+    {"__UNLE", UNLE_വ്യഞ്ജകം},
+    {"__UNGT", UNGT_വ്യഞ്ജകം},
+    {"__UNGE", UNGE_വ്യഞ്ജകം},
+    {"__UNEQ", UNEQ_വ്യഞ്ജകം},
+    {"__UNORDERED", UNORDERED_വ്യഞ്ജകം},
+    {"__ORDERED", ORDERED_വ്യഞ്ജകം},
+    {"__LTGT", LTGT_വ്യഞ്ജകം},
+    {"__FLOOR_DIV", FLOOR_DIV_വ്യഞ്ജകം},
+    {"__ROUND_DIV", ROUND_DIV_വ്യഞ്ജകം},
+    {"__EXACT_DIV", EXACT_DIV_വ്യഞ്ജകം},
+    {"__CEIL_DIV", CEIL_DIV_വ്യഞ്ജകം},
+    {"__FLOOR_MOD", FLOOR_MOD_വ്യഞ്ജകം},
+    {"__ROUND_MOD", ROUND_MOD_വ്യഞ്ജകം},
+    {"__CEIL_MOD", CEIL_MOD_വ്യഞ്ജകം},
+    {"__ROTATE_LEFT", LROTATE_വ്യഞ്ജകം},
+    {"__ROTATE_RIGHT", RROTATE_വ്യഞ്ജകം},
   };
 
 /* Parse gimple binary expr.
@@ -1033,161 +1033,161 @@ static const std::pair<const char *, tree_code> gimple_binary_identifier_code[] 
 
 */
 
-static c_expr
-c_parser_gimple_binary_expression (gimple_parser &parser, tree ret_type)
+സ്ഥിതം c_വ്യഞ്ജകം
+c_parser_gimple_ദ്വിമാന_expression (gimple_parser &parser, വൃക്ഷം ret_type)
 {
   /* Location of the binary operator.  */
-  struct c_expr ret, lhs, rhs;
-  enum tree_code code = ERROR_MARK;
+  ഘടന c_വ്യഞ്ജകം ret, lhs, rhs;
+  എണ്ണൽ വൃക്ഷം_code code = ERROR_MARK;
   ret.set_error ();
   lhs = c_parser_gimple_postfix_expression (parser, ret_type);
-  if (c_parser_error (parser))
-    return ret;
-  switch (c_parser_peek_token (parser)->type)
+  എങ്കിൽ (c_parser_error (parser))
+    തിരികെ ret;
+  തിരഞ്ഞെടുപ്പ് (c_parser_peek_token (parser)->type)
     {
-    case CPP_MULT:
-      code = MULT_EXPR;
-      break;
-    case CPP_DIV:
-      code = TRUNC_DIV_EXPR;
-      break;
-    case CPP_MOD:
-      code = TRUNC_MOD_EXPR;
-      break;
-    case CPP_PLUS:
-      if (POINTER_TYPE_P (TREE_TYPE (lhs.value)))
-	code = POINTER_PLUS_EXPR;
-      else
-	code = PLUS_EXPR;
-      break;
-    case CPP_MINUS:
-      if (POINTER_TYPE_P (TREE_TYPE (lhs.value)))
-	code = POINTER_DIFF_EXPR;
-      else
-	code = MINUS_EXPR;
-      break;
-    case CPP_LSHIFT:
-      code = LSHIFT_EXPR;
-      break;
-    case CPP_RSHIFT:
-      code = RSHIFT_EXPR;
-      break;
-    case CPP_LESS:
-      code = LT_EXPR;
-      break;
-    case CPP_GREATER:
-      code = GT_EXPR;
-      break;
-    case CPP_LESS_EQ:
-      code = LE_EXPR;
-      break;
-    case CPP_GREATER_EQ:
-      code = GE_EXPR;
-      break;
-    case CPP_EQ_EQ:
-      code = EQ_EXPR;
-      break;
-    case CPP_NOT_EQ:
-      code = NE_EXPR;
-      break;
-    case CPP_AND:
-      code = BIT_AND_EXPR;
-      break;
-    case CPP_XOR:
-      code = BIT_XOR_EXPR;
-      break;
-    case CPP_OR:
-      code = BIT_IOR_EXPR;
-      break;
-    case CPP_AND_AND:
+    അവസ്ഥ CPP_MULT:
+      code = MULT_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_DIV:
+      code = TRUNC_DIV_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_MOD:
+      code = TRUNC_MOD_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_PLUS:
+      എങ്കിൽ (POINTER_TYPE_P (വൃക്ഷം_TYPE (lhs.മൂല്യം)))
+	code = POINTER_PLUS_വ്യഞ്ജകം;
+      അല്ലെങ്കിൽ
+	code = PLUS_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_MINUS:
+      എങ്കിൽ (POINTER_TYPE_P (വൃക്ഷം_TYPE (lhs.മൂല്യം)))
+	code = POINTER_DIFF_വ്യഞ്ജകം;
+      അല്ലെങ്കിൽ
+	code = MINUS_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_LSHIFT:
+      code = LSHIFT_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_RSHIFT:
+      code = RSHIFT_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_LESS:
+      code = LT_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_GREATER:
+      code = GT_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_LESS_EQ:
+      code = LE_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_GREATER_EQ:
+      code = GE_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_EQ_EQ:
+      code = EQ_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_NOT_EQ:
+      code = NE_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_AND:
+      code = BIT_AND_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_XOR:
+      code = BIT_XOR_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_OR:
+      code = BIT_IOR_വ്യഞ്ജകം;
+      നിർത്തുക;
+    അവസ്ഥ CPP_AND_AND:
       c_parser_error (parser, "%<&&%> not valid in GIMPLE");
-      return ret;
-    case CPP_OR_OR:
+      തിരികെ ret;
+    അവസ്ഥ CPP_OR_OR:
       c_parser_error (parser, "%<||%> not valid in GIMPLE");
-      return ret;
-    case CPP_NAME:
+      തിരികെ ret;
+    അവസ്ഥ CPP_NAME:
       {
-	tree id = c_parser_peek_token (parser)->value;
-	for (auto &p : gimple_binary_identifier_code)
+	വൃക്ഷം id = c_parser_peek_token (parser)->മൂല്യം;
+	വേണ്ടി (auto &p : gimple_ദ്വിമാന_identifier_code)
 	  {
-	    if (strcmp (IDENTIFIER_POINTER (id), p.first) == 0)
+	    എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), p.first) == 0)
 	      {
 		code = p.second;
-		break;
+		നിർത്തുക;
 	      }
 	  }
-	if (code != ERROR_MARK)
-	  break;
+	എങ്കിൽ (code != ERROR_MARK)
+	  നിർത്തുക;
       }
       /* Fallthru.  */
-    default:
+    സ്ഥിരസ്ഥിതി:
       /* Not a binary expression.  */
-      return lhs;
+      തിരികെ lhs;
     }
   location_t ret_loc = c_parser_peek_token (parser)->location;
   c_parser_consume_token (parser);
   rhs = c_parser_gimple_postfix_expression (parser);
-  if (lhs.value != error_mark_node && rhs.value != error_mark_node)
-    ret.value = build2_loc (ret_loc, code, ret_type, lhs.value, rhs.value);
-  return ret;
+  എങ്കിൽ (lhs.മൂല്യം != error_mark_കണ്ണി && rhs.മൂല്യം != error_mark_കണ്ണി)
+    ret.മൂല്യം = build2_loc (ret_loc, code, ret_type, lhs.മൂല്യം, rhs.മൂല്യം);
+  തിരികെ ret;
 }
 
 /* Parse a gimple parentized binary expression.  */
 
-static c_expr
-c_parser_gimple_parentized_binary_expression (gimple_parser &parser,
+സ്ഥിതം c_വ്യഞ്ജകം
+c_parser_gimple_parentized_ദ്വിമാന_expression (gimple_parser &parser,
 					      location_t op_loc,
-					      tree_code code)
+					      വൃക്ഷം_code code)
 {
-  struct c_expr ret;
+  ഘടന c_വ്യഞ്ജകം ret;
   ret.set_error ();
 
   c_parser_consume_token (parser);
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return ret;
-  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
-    return ret;
-  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return ret;
+  എങ്കിൽ (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    തിരികെ ret;
+  c_വ്യഞ്ജകം op1 = c_parser_gimple_postfix_expression (parser);
+  എങ്കിൽ (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+    തിരികെ ret;
+  c_വ്യഞ്ജകം op2 = c_parser_gimple_postfix_expression (parser);
+  എങ്കിൽ (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    തിരികെ ret;
 
-  if (op1.value != error_mark_node && op2.value != error_mark_node)
-    ret.value = build2_loc (op_loc,
-			    code, TREE_TYPE (op1.value), op1.value, op2.value);
-  return ret;
+  എങ്കിൽ (op1.മൂല്യം != error_mark_കണ്ണി && op2.മൂല്യം != error_mark_കണ്ണി)
+    ret.മൂല്യം = build2_loc (op_loc,
+			    code, വൃക്ഷം_TYPE (op1.മൂല്യം), op1.മൂല്യം, op2.മൂല്യം);
+  തിരികെ ret;
 }
 
 /* Parse a gimple parentized binary expression.  */
 
-static c_expr
+സ്ഥിതം c_വ്യഞ്ജകം
 c_parser_gimple_parentized_ternary_expression (gimple_parser &parser,
 					       location_t op_loc,
-					       tree_code code)
+					       വൃക്ഷം_code code)
 {
-  struct c_expr ret;
+  ഘടന c_വ്യഞ്ജകം ret;
   ret.set_error ();
 
   c_parser_consume_token (parser);
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return ret;
-  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
-    return ret;
-  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<)%>"))
-    return ret;
-  c_expr op3 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return ret;
+  എങ്കിൽ (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    തിരികെ ret;
+  c_വ്യഞ്ജകം op1 = c_parser_gimple_postfix_expression (parser);
+  എങ്കിൽ (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+    തിരികെ ret;
+  c_വ്യഞ്ജകം op2 = c_parser_gimple_postfix_expression (parser);
+  എങ്കിൽ (!c_parser_require (parser, CPP_COMMA, "expected %<)%>"))
+    തിരികെ ret;
+  c_വ്യഞ്ജകം op3 = c_parser_gimple_postfix_expression (parser);
+  എങ്കിൽ (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    തിരികെ ret;
 
-  if (op1.value != error_mark_node
-      && op2.value != error_mark_node
-      && op3.value != error_mark_node)
-    ret.value = build3_loc (op_loc,
-			    code, TREE_TYPE (op1.value),
-			    op1.value, op2.value, op3.value);
-  return ret;
+  എങ്കിൽ (op1.മൂല്യം != error_mark_കണ്ണി
+      && op2.മൂല്യം != error_mark_കണ്ണി
+      && op3.മൂല്യം != error_mark_കണ്ണി)
+    ret.മൂല്യം = build3_loc (op_loc,
+			    code, വൃക്ഷം_TYPE (op1.മൂല്യം),
+			    op1.മൂല്യം, op2.മൂല്യം, op3.മൂല്യം);
+  തിരികെ ret;
 }
 
 /* Parse gimple unary expression.
@@ -1200,212 +1200,212 @@ c_parser_gimple_parentized_ternary_expression (gimple_parser &parser,
      & * + - ~ abs_expr
 */
 
-static c_expr
+സ്ഥിതം c_വ്യഞ്ജകം
 c_parser_gimple_unary_expression (gimple_parser &parser)
 {
-  struct c_expr ret, op;
+  ഘടന c_വ്യഞ്ജകം ret, op;
   location_t op_loc = c_parser_peek_token (parser)->location;
   location_t finish;
   ret.set_error ();
-  switch (c_parser_peek_token (parser)->type)
+  തിരഞ്ഞെടുപ്പ് (c_parser_peek_token (parser)->type)
     {
-    case CPP_AND:
+    അവസ്ഥ CPP_AND:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      mark_exp_read (op.value);
-      return gimple_parser_build_unary_op (op_loc, ADDR_EXPR, op);
-    case CPP_MULT:
+      mark_exp_read (op.മൂല്യം);
+      തിരികെ gimple_parser_build_unary_op (op_loc, ADDR_വ്യഞ്ജകം, op);
+    അവസ്ഥ CPP_MULT:
       {
 	c_parser_consume_token (parser);
 	op = c_parser_gimple_postfix_expression (parser);
-	if (op.value == error_mark_node)
-	  return ret;
-	if (! POINTER_TYPE_P (TREE_TYPE (op.value)))
+	എങ്കിൽ (op.മൂല്യം == error_mark_കണ്ണി)
+	  തിരികെ ret;
+	എങ്കിൽ (! POINTER_TYPE_P (വൃക്ഷം_TYPE (op.മൂല്യം)))
 	  {
 	    error_at (op_loc, "expected pointer as argument of unary %<*%>");
-	    return ret;
+	    തിരികെ ret;
 	  }
 	finish = op.get_finish ();
 	location_t combined_loc = make_location (op_loc, op_loc, finish);
-	ret.value = build_simple_mem_ref_loc (combined_loc, op.value);
-	TREE_SIDE_EFFECTS (ret.value)
-	  = TREE_THIS_VOLATILE (ret.value)
-	  = TYPE_VOLATILE (TREE_TYPE (TREE_TYPE (op.value)));
+	ret.മൂല്യം = build_simple_mem_ref_loc (combined_loc, op.മൂല്യം);
+	വൃക്ഷം_SIDE_EFFECTS (ret.മൂല്യം)
+	  = വൃക്ഷം_THIS_VOLATILE (ret.മൂല്യം)
+	  = TYPE_VOLATILE (വൃക്ഷം_TYPE (വൃക്ഷം_TYPE (op.മൂല്യം)));
 	ret.src_range.m_start = op_loc;
 	ret.src_range.m_finish = finish;
-	return ret;
+	തിരികെ ret;
       }
-    case CPP_PLUS:
+    അവസ്ഥ CPP_PLUS:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, CONVERT_EXPR, op);
-    case CPP_MINUS:
+      തിരികെ gimple_parser_build_unary_op (op_loc, CONVERT_വ്യഞ്ജകം, op);
+    അവസ്ഥ CPP_MINUS:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, NEGATE_EXPR, op);
-    case CPP_COMPL:
+      തിരികെ gimple_parser_build_unary_op (op_loc, NEGATE_വ്യഞ്ജകം, op);
+    അവസ്ഥ CPP_COMPL:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, BIT_NOT_EXPR, op);
-    case CPP_NOT:
+      തിരികെ gimple_parser_build_unary_op (op_loc, BIT_NOT_വ്യഞ്ജകം, op);
+    അവസ്ഥ CPP_NOT:
       c_parser_error (parser, "%<!%> not valid in GIMPLE");
-      return ret;
-    case CPP_KEYWORD:
-      switch (c_parser_peek_token (parser)->keyword)
+      തിരികെ ret;
+    അവസ്ഥ CPP_KEYWORD:
+      തിരഞ്ഞെടുപ്പ് (c_parser_peek_token (parser)->keyword)
 	{
-	case RID_REALPART:
+	അവസ്ഥ RID_REALPART:
 	  c_parser_consume_token (parser);
 	  op = c_parser_gimple_postfix_expression (parser);
-	  return gimple_parser_build_unary_op (op_loc, REALPART_EXPR, op);
-	case RID_IMAGPART:
+	  തിരികെ gimple_parser_build_unary_op (op_loc, REALPART_വ്യഞ്ജകം, op);
+	അവസ്ഥ RID_IMAGPART:
 	  c_parser_consume_token (parser);
 	  op = c_parser_gimple_postfix_expression (parser);
-	  return gimple_parser_build_unary_op (op_loc, IMAGPART_EXPR, op);
-	default:
-	  return c_parser_gimple_postfix_expression (parser);
+	  തിരികെ gimple_parser_build_unary_op (op_loc, IMAGPART_വ്യഞ്ജകം, op);
+	സ്ഥിരസ്ഥിതി:
+	  തിരികെ c_parser_gimple_postfix_expression (parser);
 	}
-    case CPP_NAME:
+    അവസ്ഥ CPP_NAME:
 	{
-	  tree id = c_parser_peek_token (parser)->value;
-	  if (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0)
+	  വൃക്ഷം id = c_parser_peek_token (parser)->മൂല്യം;
+	  എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0)
 	    {
 	      c_parser_consume_token (parser);
 	      op = c_parser_gimple_postfix_expression (parser);
-	      return gimple_parser_build_unary_op (op_loc, ABS_EXPR, op);
+	      തിരികെ gimple_parser_build_unary_op (op_loc, ABS_വ്യഞ്ജകം, op);
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0)
+	  അല്ലെങ്കിൽ എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0)
 	    {
 	      c_parser_consume_token (parser);
 	      op = c_parser_gimple_postfix_expression (parser);
-	      return gimple_parser_build_unary_op (op_loc, ABSU_EXPR, op);
+	      തിരികെ gimple_parser_build_unary_op (op_loc, ABSU_വ്യഞ്ജകം, op);
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0)
-	    return c_parser_gimple_parentized_binary_expression (parser,
+	  അല്ലെങ്കിൽ എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0)
+	    തിരികെ c_parser_gimple_parentized_ദ്വിമാന_expression (parser,
 								 op_loc,
-								 MIN_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0)
-	    return c_parser_gimple_parentized_binary_expression (parser,
+								 MIN_വ്യഞ്ജകം);
+	  അല്ലെങ്കിൽ എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0)
+	    തിരികെ c_parser_gimple_parentized_ദ്വിമാന_expression (parser,
 								 op_loc,
-								 MAX_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
-	    return c_parser_gimple_parentized_ternary_expression
-			(parser, op_loc, VEC_PERM_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0)
+								 MAX_വ്യഞ്ജകം);
+	  അല്ലെങ്കിൽ എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
+	    തിരികെ c_parser_gimple_parentized_ternary_expression
+			(parser, op_loc, VEC_PERM_വ്യഞ്ജകം);
+	  അല്ലെങ്കിൽ എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0)
 	    {
 	      /* __BIT_INSERT '(' postfix-expression, postfix-expression,
 			          integer ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      എങ്കിൽ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op0 = c_parser_gimple_postfix_expression (parser);
+		  c_വ്യഞ്ജകം op0 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op1 = c_parser_gimple_postfix_expression (parser);
+		  c_വ്യഞ്ജകം op1 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op2.value) != INTEGER_CST
-		      || !int_fits_type_p (op2.value, bitsizetype))
+		  c_വ്യഞ്ജകം op2 = c_parser_gimple_postfix_expression (parser);
+		  എങ്കിൽ (വൃക്ഷം_CODE (op2.മൂല്യം) != INTEGER_CST
+		      || !int_fits_type_p (op2.മൂല്യം, bitsizetype))
 		    c_parser_error (parser, "expected constant offset");
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (op0.value != error_mark_node
-		      && op1.value != error_mark_node
-		      && TREE_CODE (op2.value) == INTEGER_CST)
-		    ret.value = build3_loc (loc, BIT_INSERT_EXPR,
-					    TREE_TYPE (op0.value),
-					    op0.value, op1.value,
+		  എങ്കിൽ (op0.മൂല്യം != error_mark_കണ്ണി
+		      && op1.മൂല്യം != error_mark_കണ്ണി
+		      && വൃക്ഷം_CODE (op2.മൂല്യം) == INTEGER_CST)
+		    ret.മൂല്യം = build3_loc (loc, BIT_തിരുകുക_വ്യഞ്ജകം,
+					    വൃക്ഷം_TYPE (op0.മൂല്യം),
+					    op0.മൂല്യം, op1.മൂല്യം,
 					    fold_convert (bitsizetype,
-							  op2.value));
+							  op2.മൂല്യം));
 		}
-	      return ret;
+	      തിരികെ ret;
 	    }
-	  else
-	    return c_parser_gimple_postfix_expression (parser);
+	  അല്ലെങ്കിൽ
+	    തിരികെ c_parser_gimple_postfix_expression (parser);
 	}
-    default:
-      return c_parser_gimple_postfix_expression (parser);
+    സ്ഥിരസ്ഥിതി:
+      തിരികെ c_parser_gimple_postfix_expression (parser);
     }
 }
 
 /* Decompose ID into base name (ID until ver_offset) and VERSION.  Return
    true if ID matches a SSA name.  */
 
-static bool
-c_parser_parse_ssa_name_id (tree id, unsigned *version, unsigned *ver_offset)
+സ്ഥിതം തർക്കം
+c_parser_parse_ssa_name_id (വൃക്ഷം id, unsigned *version, unsigned *ver_offset)
 {
-  const char *token = IDENTIFIER_POINTER (id);
-  const char *var_version = strrchr (token, '_');
-  if (! var_version)
-    return false;
+  സ്ഥിരം അക്ഷരം *token = IDENTIFIER_POINTER (id);
+  സ്ഥിരം അക്ഷരം *var_version = strrchr (token, '_');
+  എങ്കിൽ (! var_version)
+    തിരികെ അസത്യം;
 
   *ver_offset = var_version - token;
-  for (const char *p = var_version + 1; *p; ++p)
-    if (! ISDIGIT (*p))
-      return false;
+  വേണ്ടി (സ്ഥിരം അക്ഷരം *p = var_version + 1; *p; ++p)
+    എങ്കിൽ (! ISDIGIT (*p))
+      തിരികെ അസത്യം;
   *version = atoi (var_version + 1);
-  return *version > 0;
+  തിരികെ *version > 0;
 }
 
 /* Get at the actual SSA name ID with VERSION starting at VER_OFFSET.
    TYPE is the type if the SSA name is being declared.  */
 
-static tree
+സ്ഥിതം വൃക്ഷം
 c_parser_parse_ssa_name (gimple_parser &parser,
-			 tree id, tree type, unsigned version,
+			 വൃക്ഷം id, വൃക്ഷം type, unsigned version,
 			 unsigned ver_offset)
 {
-  tree name = NULL_TREE;
-  const char *token = IDENTIFIER_POINTER (id);
+  വൃക്ഷം name = NULL_വൃക്ഷം;
+  സ്ഥിരം അക്ഷരം *token = IDENTIFIER_POINTER (id);
 
-  if (ver_offset == 0)
+  എങ്കിൽ (ver_offset == 0)
     {
       /* Anonymous unnamed SSA name.  */
-      if (version < num_ssa_names)
+      എങ്കിൽ (version < അക്കം_ssa_names)
 	name = ssa_name (version);
-      if (! name)
+      എങ്കിൽ (! name)
 	{
-	  if (! type)
+	  എങ്കിൽ (! type)
 	    {
 	      c_parser_error (parser, "SSA name undeclared");
-	      return error_mark_node;
+	      തിരികെ error_mark_കണ്ണി;
 	    }
-	  name = make_ssa_name_fn (cfun, type, NULL, version);
+	  name = make_ssa_name_fn (cfun, type, ശൂന്യ, version);
 	}
     }
-  else
+  അല്ലെങ്കിൽ
     {
-      if (version < num_ssa_names)
+      എങ്കിൽ (version < അക്കം_ssa_names)
 	name = ssa_name (version);
-      if (! name)
+      എങ്കിൽ (! name)
 	{
 	  /* Separate var name from version.  */
-	  char *var_name = XNEWVEC (char, ver_offset + 1);
+	  അക്ഷരം *var_name = XNEWVEC (അക്ഷരം, ver_offset + 1);
 	  memcpy (var_name, token, ver_offset);
 	  var_name[ver_offset] = '\0';
 	  /* lookup for parent decl.  */
 	  id = get_identifier (var_name);
-	  tree parent = lookup_name (id);
+	  വൃക്ഷം parent = lookup_name (id);
 	  XDELETEVEC (var_name);
-	  if (! parent || parent == error_mark_node)
+	  എങ്കിൽ (! parent || parent == error_mark_കണ്ണി)
 	    {
 	      c_parser_error (parser, "base variable or SSA name undeclared");
-	      return error_mark_node;
+	      തിരികെ error_mark_കണ്ണി;
 	    }
-	  if (!(VAR_P (parent)
-		|| TREE_CODE (parent) == PARM_DECL
-		|| TREE_CODE (parent) == RESULT_DECL))
+	  എങ്കിൽ (!(VAR_P (parent)
+		|| വൃക്ഷം_CODE (parent) == PARM_DECL
+		|| വൃക്ഷം_CODE (parent) == RESULT_DECL))
 	    {
 	      error ("invalid base %qE for SSA name", parent);
-	      return error_mark_node;
+	      തിരികെ error_mark_കണ്ണി;
 	    }
 	  name = make_ssa_name_fn (cfun, parent,
 				   gimple_build_nop (), version);
 	}
     }
 
-  return name;
+  തിരികെ name;
 }
 
 /* Parse a gimple call to an internal function.
@@ -1413,73 +1413,73 @@ c_parser_parse_ssa_name (gimple_parser &parser,
    gimple-call-internal:
      . identifier ( gimple-argument-expression-list[opt] )  */
 
-static struct c_expr
+സ്ഥിതം ഘടന c_വ്യഞ്ജകം
 c_parser_gimple_call_internal (gimple_parser &parser)
 {
-  struct c_expr expr;
-  expr.set_error ();
+  ഘടന c_വ്യഞ്ജകം വ്യഞ്ജകം;
+  വ്യഞ്ജകം.set_error ();
 
   gcc_assert (c_parser_next_token_is (parser, CPP_DOT));
   c_parser_consume_token (parser);
   location_t loc = c_parser_peek_token (parser)->location;
-  if (!c_parser_next_token_is (parser, CPP_NAME)
+  എങ്കിൽ (!c_parser_next_token_is (parser, CPP_NAME)
       || c_parser_peek_token (parser)->id_kind != C_ID_ID)
     {
       c_parser_error (parser, "expecting internal function name");
-      return expr;
+      തിരികെ വ്യഞ്ജകം;
     }
-  tree id = c_parser_peek_token (parser)->value;
+  വൃക്ഷം id = c_parser_peek_token (parser)->മൂല്യം;
   internal_fn ifn = lookup_internal_fn (IDENTIFIER_POINTER (id));
   c_parser_consume_token (parser);
-  if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+  എങ്കിൽ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
     {
-      auto_vec<tree> exprlist;
-      if (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
-	c_parser_gimple_expr_list (parser, &exprlist);
+      auto_vec<വൃക്ഷം> exprlist;
+      എങ്കിൽ (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	c_parser_gimple_വ്യഞ്ജകം_list (parser, &exprlist);
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, "expected %<)%>");
-      if (ifn == IFN_LAST)
+      എങ്കിൽ (ifn == IFN_LAST)
 	error_at (loc, "unknown internal function %qE", id);
-      else
+      അല്ലെങ്കിൽ
 	{
-	  expr.value = build_call_expr_internal_loc_array
-	    (loc, ifn, void_type_node, exprlist.length (),
+	  വ്യഞ്ജകം.മൂല്യം = build_call_വ്യഞ്ജകം_internal_loc_array
+	    (loc, ifn, void_type_കണ്ണി, exprlist.length (),
 	     exprlist.address ());
-	  expr.original_code = ERROR_MARK;
-	  expr.original_type = NULL;
-	  expr.m_decimal = 0;
+	  വ്യഞ്ജകം.original_code = ERROR_MARK;
+	  വ്യഞ്ജകം.original_type = ശൂന്യ;
+	  വ്യഞ്ജകം.m_decimal = 0;
 	}
     }
-  return expr;
+  തിരികെ വ്യഞ്ജകം;
 }
 
 /* Parse '<' type [',' alignment] '>' and return a type on success
    and NULL_TREE on error.  */
 
-static tree
+സ്ഥിതം വൃക്ഷം
 c_parser_gimple_typespec (gimple_parser &parser)
 {
-  struct c_type_name *type_name = NULL;
-  tree alignment = NULL_TREE;
-  if (c_parser_require (parser, CPP_LESS, "expected %<<%>"))
+  ഘടന c_type_name *type_name = ശൂന്യ;
+  വൃക്ഷം alignment = NULL_വൃക്ഷം;
+  എങ്കിൽ (c_parser_require (parser, CPP_LESS, "expected %<<%>"))
     {
       type_name = c_parser_type_name (parser);
       /* Optional alignment.  */
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      എങ്കിൽ (c_parser_next_token_is (parser, CPP_COMMA))
 	{
 	  c_parser_consume_token (parser);
 	  alignment
-	      = c_parser_gimple_postfix_expression (parser).value;
+	      = c_parser_gimple_postfix_expression (parser).മൂല്യം;
 	}
       c_parser_skip_until_found (parser,
 				 CPP_GREATER, "expected %<>%>");
     }
-  if (!type_name)
-    return NULL_TREE;
-  tree tem;
-  tree type = groktypename (type_name, &tem, NULL);
-  if (alignment)
-    type = build_aligned_type (type, tree_to_uhwi (alignment));
-  return type;
+  എങ്കിൽ (!type_name)
+    തിരികെ NULL_വൃക്ഷം;
+  വൃക്ഷം tem;
+  വൃക്ഷം type = groktypename (type_name, &tem, ശൂന്യ);
+  എങ്കിൽ (alignment)
+    type = build_aligned_type (type, വൃക്ഷം_to_uhwi (alignment));
+  തിരികെ type;
 }
 
 /* Parse gimple postfix expression.
@@ -1504,45 +1504,45 @@ c_parser_gimple_typespec (gimple_parser &parser)
 
 */
 
-static struct c_expr
-c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
+സ്ഥിതം ഘടന c_വ്യഞ്ജകം
+c_parser_gimple_postfix_expression (gimple_parser &parser, വൃക്ഷം ret_type)
 {
   location_t loc = c_parser_peek_token (parser)->location;
   source_range tok_range = c_parser_peek_token (parser)->get_range ();
-  struct c_expr expr;
-  expr.set_error ();
-  switch (c_parser_peek_token (parser)->type)
+  ഘടന c_വ്യഞ്ജകം വ്യഞ്ജകം;
+  വ്യഞ്ജകം.set_error ();
+  തിരഞ്ഞെടുപ്പ് (c_parser_peek_token (parser)->type)
     {
-    case CPP_NUMBER:
-      expr.value = c_parser_peek_token (parser)->value;
-      set_c_expr_source_range (&expr, tok_range);
+    അവസ്ഥ CPP_സംഖ്യ:
+      വ്യഞ്ജകം.മൂല്യം = c_parser_peek_token (parser)->മൂല്യം;
+      set_c_വ്യഞ്ജകം_source_range (&വ്യഞ്ജകം, tok_range);
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      break;
-    case CPP_CHAR:
-    case CPP_CHAR16:
-    case CPP_CHAR32:
-    case CPP_UTF8CHAR:
-    case CPP_WCHAR:
-      expr.value = c_parser_peek_token (parser)->value;
-      set_c_expr_source_range (&expr, tok_range);
+      നിർത്തുക;
+    അവസ്ഥ CPP_CHAR:
+    അവസ്ഥ CPP_CHAR16:
+    അവസ്ഥ CPP_CHAR32:
+    അവസ്ഥ CPP_UTF8CHAR:
+    അവസ്ഥ CPP_WCHAR:
+      വ്യഞ്ജകം.മൂല്യം = c_parser_peek_token (parser)->മൂല്യം;
+      set_c_വ്യഞ്ജകം_source_range (&വ്യഞ്ജകം, tok_range);
       c_parser_consume_token (parser);
-      break;
-    case CPP_STRING:
-    case CPP_STRING16:
-    case CPP_STRING32:
-    case CPP_WSTRING:
-    case CPP_UTF8STRING:
-      expr = c_parser_string_literal (parser, false, true);
-      break;
-    case CPP_DOT:
-      expr = c_parser_gimple_call_internal (parser);
-      break;
-    case CPP_NAME:
-      if (c_parser_peek_token (parser)->id_kind == C_ID_ID)
+      നിർത്തുക;
+    അവസ്ഥ CPP_STRING:
+    അവസ്ഥ CPP_STRING16:
+    അവസ്ഥ CPP_STRING32:
+    അവസ്ഥ CPP_WSTRING:
+    അവസ്ഥ CPP_UTF8STRING:
+      വ്യഞ്ജകം = c_parser_string_literal (parser, അസത്യം, സത്യം);
+      നിർത്തുക;
+    അവസ്ഥ CPP_DOT:
+      വ്യഞ്ജകം = c_parser_gimple_call_internal (parser);
+      നിർത്തുക;
+    അവസ്ഥ CPP_NAME:
+      എങ്കിൽ (c_parser_peek_token (parser)->id_kind == C_ID_ID)
 	{
-	  tree id = c_parser_peek_token (parser)->value;
-	  if (strcmp (IDENTIFIER_POINTER (id), "__MEM") == 0)
+	  വൃക്ഷം id = c_parser_peek_token (parser)->മൂല്യം;
+	  എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "__MEM") == 0)
 	    {
 	      /* __MEM '<' type-name [ ',' number ] '>'
 	               '(' [ '(' type-name ')' ] unary-expression
@@ -1551,134 +1551,134 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 			   [ ',' number ':' number ] ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      struct c_expr ptr, alias_off, step, index, index2;
-	      ptr.value = error_mark_node;
-	      alias_off.value = NULL_TREE;
-	      step.value = NULL_TREE;
-	      index.value = NULL_TREE;
-	      index2.value = NULL_TREE;
+	      വൃക്ഷം type = c_parser_gimple_typespec (parser);
+	      ഘടന c_വ്യഞ്ജകം ptr, alias_off, step, index, index2;
+	      ptr.മൂല്യം = error_mark_കണ്ണി;
+	      alias_off.മൂല്യം = NULL_വൃക്ഷം;
+	      step.മൂല്യം = NULL_വൃക്ഷം;
+	      index.മൂല്യം = NULL_വൃക്ഷം;
+	      index2.മൂല്യം = NULL_വൃക്ഷം;
 	      unsigned short clique = 0;
 	      unsigned short base = 0;
-	      bool reverse_order = false;
-	      struct c_expr ro;
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      തർക്കം reverse_order = അസത്യം;
+	      ഘടന c_വ്യഞ്ജകം ro;
+	      എങ്കിൽ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  tree alias_type = NULL_TREE;
+		  വൃക്ഷം alias_type = NULL_വൃക്ഷം;
 		  /* Optional alias-type cast.  */
-		  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+		  എങ്കിൽ (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 		    {
 		      c_parser_consume_token (parser);
-		      struct c_type_name *alias_type_name
+		      ഘടന c_type_name *alias_type_name
 			= c_parser_type_name (parser);
 		      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 						 "expected %<)%>");
-		      if (alias_type_name)
+		      എങ്കിൽ (alias_type_name)
 			{
-			  tree tem;
+			  വൃക്ഷം tem;
 			  alias_type = groktypename (alias_type_name,
-						     &tem, NULL);
+						     &tem, ശൂന്യ);
 			}
 		    }
 		  ptr = c_parser_gimple_unary_expression (parser);
-		  if (ptr.value == error_mark_node
-		      || ! POINTER_TYPE_P (TREE_TYPE (ptr.value)))
+		  എങ്കിൽ (ptr.മൂല്യം == error_mark_കണ്ണി
+		      || ! POINTER_TYPE_P (വൃക്ഷം_TYPE (ptr.മൂല്യം)))
 		    {
-		      if (ptr.value != error_mark_node)
+		      എങ്കിൽ (ptr.മൂല്യം != error_mark_കണ്ണി)
 			error_at (ptr.get_start (),
 				  "invalid type of %<__MEM%> operand");
 		      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 						 "expected %<)%>");
-		      return expr;
+		      തിരികെ വ്യഞ്ജകം;
 		    }
-		  if (! alias_type)
-		    alias_type = TREE_TYPE (ptr.value);
+		  എങ്കിൽ (! alias_type)
+		    alias_type = വൃക്ഷം_TYPE (ptr.മൂല്യം);
 		  /* Optional constant offset.  */
-		  if (c_parser_next_token_is (parser, CPP_PLUS))
+		  എങ്കിൽ (c_parser_next_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
 		      alias_off = c_parser_gimple_postfix_expression (parser);
 		    }
-		  if (c_parser_next_token_is (parser, CPP_MULT))
+		  എങ്കിൽ (c_parser_next_token_is (parser, CPP_MULT))
 		    {
 		      std::swap (index, alias_off);
 		      c_parser_consume_token (parser);
 		      step = c_parser_gimple_postfix_expression (parser);
 		    }
-		  else if (c_parser_next_token_is (parser, CPP_PLUS))
+		  അല്ലെങ്കിൽ എങ്കിൽ (c_parser_next_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
 		      index = c_parser_gimple_postfix_expression (parser);
-		      if (c_parser_next_token_is (parser, CPP_MULT))
+		      എങ്കിൽ (c_parser_next_token_is (parser, CPP_MULT))
 			{
 			  c_parser_consume_token (parser);
 			  step = c_parser_gimple_postfix_expression (parser);
 			}
-		      else
+		      അല്ലെങ്കിൽ
 			std::swap (index, index2);
 		    }
-		  else if (alias_off.value
-			   && TREE_CODE (alias_off.value) != INTEGER_CST)
+		  അല്ലെങ്കിൽ എങ്കിൽ (alias_off.മൂല്യം
+			   && വൃക്ഷം_CODE (alias_off.മൂല്യം) != INTEGER_CST)
 		    std::swap (alias_off, index2);
-		  if (c_parser_next_token_is (parser, CPP_PLUS))
+		  എങ്കിൽ (c_parser_next_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
 		      index2 = c_parser_gimple_postfix_expression (parser);
 		    }
-		  if (alias_off.value)
+		  എങ്കിൽ (alias_off.മൂല്യം)
 		    {
-		      if (TREE_CODE (alias_off.value) != INTEGER_CST)
+		      എങ്കിൽ (വൃക്ഷം_CODE (alias_off.മൂല്യം) != INTEGER_CST)
 			error_at (alias_off.get_start (),
 				  "expected constant offset for %<__MEM%> "
 				  "operand");
-		      alias_off.value = fold_convert (alias_type,
-						      alias_off.value);
+		      alias_off.മൂല്യം = fold_convert (alias_type,
+						      alias_off.മൂല്യം);
 		    }
-		  else
-		    alias_off.value = build_int_cst (alias_type, 0);
-		  if (step.value)
+		  അല്ലെങ്കിൽ
+		    alias_off.മൂല്യം = build_int_cst (alias_type, 0);
+		  എങ്കിൽ (step.മൂല്യം)
 		    {
-		      if (TREE_CODE (step.value) != INTEGER_CST)
+		      എങ്കിൽ (വൃക്ഷം_CODE (step.മൂല്യം) != INTEGER_CST)
 			error_at (step.get_start (),
 				  "expected constant step for %<__MEM%> "
 				  "operand");
 		    }
-		  if (c_parser_next_token_is (parser, CPP_COMMA))
+		  എങ്കിൽ (c_parser_next_token_is (parser, CPP_COMMA))
 		    {
-		      struct c_expr cl, ba;
-		      bool has_clb = true;
+		      ഘടന c_വ്യഞ്ജകം cl, ba;
+		      തർക്കം has_clb = സത്യം;
 		      c_parser_consume_token (parser);
 		      cl = c_parser_gimple_postfix_expression (parser);
-		      if (!c_parser_next_token_is (parser, CPP_COLON))
+		      എങ്കിൽ (!c_parser_next_token_is (parser, CPP_COLON))
 			{
 			  ro = cl;
 			  unsigned HOST_WIDE_INT tmp = 0;
-			  if (!tree_fits_uhwi_p (ro.value)
-			      || (tmp = tree_to_uhwi (ro.value)) > 1)
+			  എങ്കിൽ (!വൃക്ഷം_fits_uhwi_p (ro.മൂല്യം)
+			      || (tmp = വൃക്ഷം_to_uhwi (ro.മൂല്യം)) > 1)
 			    error_at (ro.get_start (),
 				      "invalid reverse order value");
 			  reverse_order = tmp;
-			  has_clb = false;
-			  if (c_parser_next_token_is (parser, CPP_COMMA))
+			  has_clb = അസത്യം;
+			  എങ്കിൽ (c_parser_next_token_is (parser, CPP_COMMA))
 			    {
 			      c_parser_consume_token (parser);
 			      cl = c_parser_gimple_postfix_expression (parser);
-		              has_clb = true;
+		              has_clb = സത്യം;
 			    }
 			}
-		      if (has_clb
+		      എങ്കിൽ (has_clb
 			  && c_parser_require (parser,
 					       CPP_COLON, "expected %<:%>"))
 			{
 			  ba = c_parser_gimple_postfix_expression (parser);
-			  if (!tree_fits_uhwi_p (cl.value)
-			      || !tree_fits_uhwi_p (ba.value)
-			      || compare_tree_int (cl.value,
-						   (clique = tree_to_uhwi
-								(cl.value)))
-			      || compare_tree_int (ba.value,
-						   (base = tree_to_uhwi
-								 (ba.value))))
+			  എങ്കിൽ (!വൃക്ഷം_fits_uhwi_p (cl.മൂല്യം)
+			      || !വൃക്ഷം_fits_uhwi_p (ba.മൂല്യം)
+			      || compare_വൃക്ഷം_int (cl.മൂല്യം,
+						   (clique = വൃക്ഷം_to_uhwi
+								(cl.മൂല്യം)))
+			      || compare_വൃക്ഷം_int (ba.മൂല്യം,
+						   (base = വൃക്ഷം_to_uhwi
+								 (ba.മൂല്യം))))
 			    error_at (cl.get_start (),
 				      "invalid clique/base pair");
 			}
@@ -1686,111 +1686,111 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
 		}
-	      if (! type || c_parser_error (parser))
+	      എങ്കിൽ (! type || c_parser_error (parser))
 		{
-		  c_parser_set_error (parser, false);
-		  return expr;
+		  c_parser_set_error (parser, അസത്യം);
+		  തിരികെ വ്യഞ്ജകം;
 		}
-	      if (index.value || step.value || index2.value)
-		expr.value = build5_loc (loc, TARGET_MEM_REF,
-					 type, ptr.value, alias_off.value,
-					 index.value, step.value, index2.value);
-	      else
-		expr.value = build2_loc (loc, MEM_REF,
-					 type, ptr.value, alias_off.value);
-	      if (clique != 0)
+	      എങ്കിൽ (index.മൂല്യം || step.മൂല്യം || index2.മൂല്യം)
+		വ്യഞ്ജകം.മൂല്യം = build5_loc (loc, TARGET_MEM_REF,
+					 type, ptr.മൂല്യം, alias_off.മൂല്യം,
+					 index.മൂല്യം, step.മൂല്യം, index2.മൂല്യം);
+	      അല്ലെങ്കിൽ
+		വ്യഞ്ജകം.മൂല്യം = build2_loc (loc, MEM_REF,
+					 type, ptr.മൂല്യം, alias_off.മൂല്യം);
+	      എങ്കിൽ (clique != 0)
 		{
 		  cfun->last_clique = MAX (cfun->last_clique, clique);
-		  MR_DEPENDENCE_CLIQUE (expr.value) = clique;
-		  MR_DEPENDENCE_BASE (expr.value) = base;
+		  MR_DEPENDENCE_CLIQUE (വ്യഞ്ജകം.മൂല്യം) = clique;
+		  MR_DEPENDENCE_BASE (വ്യഞ്ജകം.മൂല്യം) = base;
 		}
-	      if (reverse_order)
+	      എങ്കിൽ (reverse_order)
 		{
-		  if (TREE_CODE (expr.value) == MEM_REF)
-		    REF_REVERSE_STORAGE_ORDER (expr.value) = reverse_order;
-		  else
+		  എങ്കിൽ (വൃക്ഷം_CODE (വ്യഞ്ജകം.മൂല്യം) == MEM_REF)
+		    REF_REVERSE_STORAGE_ORDER (വ്യഞ്ജകം.മൂല്യം) = reverse_order;
+		  അല്ലെങ്കിൽ
 		    error_at (ro.get_start (),
 			      "target mem ref cannot have reverse order");
 		}
-	      break;
+	      നിർത്തുക;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__VIEW_CONVERT") == 0)
+	  അല്ലെങ്കിൽ എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "__VIEW_CONVERT") == 0)
 	    {
 	      /* __VIEW_CONVERT '<' type-name [ ',' number ] '>'
 	                        '(' postfix-expression ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      വൃക്ഷം type = c_parser_gimple_typespec (parser);
+	      എങ്കിൽ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op = c_parser_gimple_postfix_expression (parser);
+		  c_വ്യഞ്ജകം op = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (type && op.value != error_mark_node)
-		    expr.value = build1_loc (loc, VIEW_CONVERT_EXPR,
-					     type, op.value);
+		  എങ്കിൽ (type && op.മൂല്യം != error_mark_കണ്ണി)
+		    വ്യഞ്ജകം.മൂല്യം = build1_loc (loc, VIEW_CONVERT_വ്യഞ്ജകം,
+					     type, op.മൂല്യം);
 		}
-	      break;
+	      നിർത്തുക;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__BIT_FIELD_REF") == 0)
+	  അല്ലെങ്കിൽ എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "__BIT_FIELD_REF") == 0)
 	    {
 	      /* __BIT_FIELD_REF '<' type-name [ ',' number ] '>'
 	                        '(' postfix-expression, integer, integer ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      വൃക്ഷം type = c_parser_gimple_typespec (parser);
+	      എങ്കിൽ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op0 = c_parser_gimple_postfix_expression (parser);
+		  c_വ്യഞ്ജകം op0 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op1.value) != INTEGER_CST
-		      || !int_fits_type_p (op1.value, bitsizetype))
+		  c_വ്യഞ്ജകം op1 = c_parser_gimple_postfix_expression (parser);
+		  എങ്കിൽ (വൃക്ഷം_CODE (op1.മൂല്യം) != INTEGER_CST
+		      || !int_fits_type_p (op1.മൂല്യം, bitsizetype))
 		    c_parser_error (parser, "expected constant size");
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op2.value) != INTEGER_CST
-		      || !int_fits_type_p (op2.value, bitsizetype))
+		  c_വ്യഞ്ജകം op2 = c_parser_gimple_postfix_expression (parser);
+		  എങ്കിൽ (വൃക്ഷം_CODE (op2.മൂല്യം) != INTEGER_CST
+		      || !int_fits_type_p (op2.മൂല്യം, bitsizetype))
 		    c_parser_error (parser, "expected constant offset");
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (type
-		      && op0.value != error_mark_node
-		      && TREE_CODE (op1.value) == INTEGER_CST
-		      && TREE_CODE (op2.value) == INTEGER_CST)
-		    expr.value = build3_loc (loc, BIT_FIELD_REF, type,
-					     op0.value,
+		  എങ്കിൽ (type
+		      && op0.മൂല്യം != error_mark_കണ്ണി
+		      && വൃക്ഷം_CODE (op1.മൂല്യം) == INTEGER_CST
+		      && വൃക്ഷം_CODE (op2.മൂല്യം) == INTEGER_CST)
+		    വ്യഞ്ജകം.മൂല്യം = build3_loc (loc, BIT_FIELD_REF, type,
+					     op0.മൂല്യം,
 					     fold_convert (bitsizetype,
-							   op1.value),
+							   op1.മൂല്യം),
 					     fold_convert (bitsizetype,
-							   op2.value));
+							   op2.മൂല്യം));
 		}
-	      break;
+	      നിർത്തുക;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__CLOBBER") == 0)
+	  അല്ലെങ്കിൽ എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "__CLOBBER") == 0)
 	    {
 	      /* __CLOBBER [ '(' bob | eob | bos | eos ')' ]  */
 	      clobber_kind kind = CLOBBER_UNDEF;
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+	      എങ്കിൽ (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 		{
 		  c_parser_consume_token (parser);
 		  auto tok = c_parser_peek_token (parser);
-		  if (c_parser_require (parser, CPP_NAME,
+		  എങ്കിൽ (c_parser_require (parser, CPP_NAME,
 					"expected clobber kind"))
 		    {
-		      const char *kind_str = IDENTIFIER_POINTER (tok->value);
-		      if (strcmp (kind_str, "bos") == 0)
+		      സ്ഥിരം അക്ഷരം *kind_str = IDENTIFIER_POINTER (tok->മൂല്യം);
+		      എങ്കിൽ (strcmp (kind_str, "bos") == 0)
 			kind = CLOBBER_STORAGE_BEGIN;
-		      else if (strcmp (kind_str, "bob") == 0)
+		      അല്ലെങ്കിൽ എങ്കിൽ (strcmp (kind_str, "bob") == 0)
 			kind = CLOBBER_OBJECT_BEGIN;
-		      else if (strcmp (kind_str, "eob") == 0)
+		      അല്ലെങ്കിൽ എങ്കിൽ (strcmp (kind_str, "eob") == 0)
 			kind = CLOBBER_OBJECT_END;
-		      else if (strcmp (kind_str, "eos") == 0)
+		      അല്ലെങ്കിൽ എങ്കിൽ (strcmp (kind_str, "eos") == 0)
 			kind = CLOBBER_STORAGE_END;
-		      else
+		      അല്ലെങ്കിൽ
 			c_parser_error (parser, "expected one of %<bos%>, "
 					"%<eos%>, %<bob>, %<eob%>");
 		    }
@@ -1798,334 +1798,334 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 					     "expected %<)%>");
 		}
 	      /* We infer the (redundant) type from the LHS.  */
-	      expr.value = build_clobber (ret_type, kind);
-	      break;
+	      വ്യഞ്ജകം.മൂല്യം = build_clobber (ret_type, kind);
+	      നിർത്തുക;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "_Literal") == 0)
+	  അല്ലെങ്കിൽ എങ്കിൽ (strcmp (IDENTIFIER_POINTER (id), "_Literal") == 0)
 	    {
 	      /* _Literal '(' type-name ')' ( [ '-' ] constant | constructor ) */
 	      c_parser_consume_token (parser);
-	      tree type = NULL_TREE;
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      വൃക്ഷം type = NULL_വൃക്ഷം;
+	      എങ്കിൽ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  struct c_type_name *type_name = c_parser_type_name (parser);
-		  tree tem;
-		  if (type_name)
-		    type = groktypename (type_name, &tem, NULL);
+		  ഘടന c_type_name *type_name = c_parser_type_name (parser);
+		  വൃക്ഷം tem;
+		  എങ്കിൽ (type_name)
+		    type = groktypename (type_name, &tem, ശൂന്യ);
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
 		}
-	      if (! type)
+	      എങ്കിൽ (! type)
 		{
 		  c_parser_error (parser, "invalid _Literal");
-		  return expr;
+		  തിരികെ വ്യഞ്ജകം;
 		}
-	      if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+	      എങ്കിൽ (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 		{
 		  c_parser_consume_token (parser);
-		  if (!AGGREGATE_TYPE_P (type)
+		  എങ്കിൽ (!AGGREGATE_TYPE_P (type)
 		      && !VECTOR_TYPE_P (type))
 		    {
 		      c_parser_error (parser, "invalid type for _Literal with "
 				      "constructor");
 		      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
 						 "expected %<}%>");
-		      return expr;
+		      തിരികെ വ്യഞ്ജകം;
 		    }
-		  vec<constructor_elt, va_gc> *v = NULL;
-		  bool constant_p = true;
-		  if (VECTOR_TYPE_P (type)
+		  vec<constructor_elt, va_gc> *v = ശൂന്യ;
+		  തർക്കം constant_p = സത്യം;
+		  എങ്കിൽ (VECTOR_TYPE_P (type)
 		      && !c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 		    {
 		      vec_alloc (v, TYPE_VECTOR_SUBPARTS (type).to_constant ());
-		      do
+		      ചെയ്യുക
 			{
-			  tree val
-			    = c_parser_gimple_postfix_expression (parser).value;
-			  if (! val
-			      || val == error_mark_node
+			  വൃക്ഷം val
+			    = c_parser_gimple_postfix_expression (parser).മൂല്യം;
+			  എങ്കിൽ (! val
+			      || val == error_mark_കണ്ണി
 			      || (! CONSTANT_CLASS_P (val)
 				  && ! SSA_VAR_P (val)))
 			    {
 			      c_parser_error (parser, "invalid _Literal");
-			      return expr;
+			      തിരികെ വ്യഞ്ജകം;
 			    }
-			  CONSTRUCTOR_APPEND_ELT (v, NULL_TREE, val);
-			  if (! CONSTANT_CLASS_P (val))
-			    constant_p = false;
-			  if (c_parser_next_token_is (parser, CPP_COMMA))
+			  CONSTRUCTOR_APPEND_ELT (v, NULL_വൃക്ഷം, val);
+			  എങ്കിൽ (! CONSTANT_CLASS_P (val))
+			    constant_p = അസത്യം;
+			  എങ്കിൽ (c_parser_next_token_is (parser, CPP_COMMA))
 			    c_parser_consume_token (parser);
-			  else
-			    break;
+			  അല്ലെങ്കിൽ
+			    നിർത്തുക;
 			}
-		      while (1);
+		      ആകുമ്പോൾ (1);
 		    }
-		  if (c_parser_require (parser, CPP_CLOSE_BRACE,
+		  എങ്കിൽ (c_parser_require (parser, CPP_CLOSE_BRACE,
 					"expected %<}%>"))
 		    {
-		      if (v && constant_p)
-			expr.value = build_vector_from_ctor (type, v);
-		      else
-			expr.value = build_constructor (type, v);
+		      എങ്കിൽ (v && constant_p)
+			വ്യഞ്ജകം.മൂല്യം = build_vector_from_ctor (type, v);
+		      അല്ലെങ്കിൽ
+			വ്യഞ്ജകം.മൂല്യം = build_constructor (type, v);
 		    }
-		  else
+		  അല്ലെങ്കിൽ
 		    {
 		      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
 						 "expected %<}%>");
-		      return expr;
+		      തിരികെ വ്യഞ്ജകം;
 		    }
 		}
-	      else
+	      അല്ലെങ്കിൽ
 		{
-		  bool neg_p, addr_p;
-		  if ((neg_p = c_parser_next_token_is (parser, CPP_MINUS)))
+		  തർക്കം neg_p, addr_p;
+		  എങ്കിൽ ((neg_p = c_parser_next_token_is (parser, CPP_MINUS)))
 		    c_parser_consume_token (parser);
-		  if ((addr_p = c_parser_next_token_is (parser, CPP_AND)))
+		  എങ്കിൽ ((addr_p = c_parser_next_token_is (parser, CPP_AND)))
 		    c_parser_consume_token (parser);
-		  tree val = c_parser_gimple_postfix_expression (parser).value;
-		  if (! val
-		      || val == error_mark_node
+		  വൃക്ഷം val = c_parser_gimple_postfix_expression (parser).മൂല്യം;
+		  എങ്കിൽ (! val
+		      || val == error_mark_കണ്ണി
 		      || (!CONSTANT_CLASS_P (val) && !addr_p))
 		    {
 		      c_parser_error (parser, "invalid _Literal");
-		      return expr;
+		      തിരികെ വ്യഞ്ജകം;
 		    }
-		  if (addr_p)
+		  എങ്കിൽ (addr_p)
 		    {
-		      val = build1 (ADDR_EXPR, type, val);
-		      if (!is_gimple_invariant_address (val))
+		      val = build1 (ADDR_വ്യഞ്ജകം, type, val);
+		      എങ്കിൽ (!is_gimple_invariant_address (val))
 			{
 			  c_parser_error (parser, "invalid _Literal");
-			  return expr;
+			  തിരികെ വ്യഞ്ജകം;
 			}
 		    }
-		  if (neg_p)
+		  എങ്കിൽ (neg_p)
 		    {
-		      val = const_unop (NEGATE_EXPR, TREE_TYPE (val), val);
-		      if (! val)
+		      val = const_unop (NEGATE_വ്യഞ്ജകം, വൃക്ഷം_TYPE (val), val);
+		      എങ്കിൽ (! val)
 			{
 			  c_parser_error (parser, "invalid _Literal");
-			  return expr;
+			  തിരികെ വ്യഞ്ജകം;
 			}
 		    }
-		  expr.value = fold_convert (type, val);
+		  വ്യഞ്ജകം.മൂല്യം = fold_convert (type, val);
 		}
-	      return expr;
+	      തിരികെ വ്യഞ്ജകം;
 	    }
 
 	  /* SSA name.  */
 	  unsigned version, ver_offset;
-	  if (! lookup_name (id)
+	  എങ്കിൽ (! lookup_name (id)
 	      && c_parser_parse_ssa_name_id (id, &version, &ver_offset))
 	    {
 	      c_parser_consume_token (parser);
-	      expr.value = c_parser_parse_ssa_name (parser, id, NULL_TREE,
+	      വ്യഞ്ജകം.മൂല്യം = c_parser_parse_ssa_name (parser, id, NULL_വൃക്ഷം,
 						    version, ver_offset);
-	      if (expr.value == error_mark_node)
-		return expr;
-	      set_c_expr_source_range (&expr, tok_range);
+	      എങ്കിൽ (വ്യഞ്ജകം.മൂല്യം == error_mark_കണ്ണി)
+		തിരികെ വ്യഞ്ജകം;
+	      set_c_വ്യഞ്ജകം_source_range (&വ്യഞ്ജകം, tok_range);
 	      /* For default definition SSA names.  */
-	      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+	      എങ്കിൽ (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
 		  && c_parser_peek_2nd_token (parser)->type == CPP_NAME
 		  && strcmp ("D",
 			     IDENTIFIER_POINTER
-			       (c_parser_peek_2nd_token (parser)->value)) == 0
+			       (c_parser_peek_2nd_token (parser)->മൂല്യം)) == 0
 		  && c_parser_peek_nth_token (parser, 3)->type == CPP_CLOSE_PAREN)
 		{
 		  c_parser_consume_token (parser);
 		  c_parser_consume_token (parser);
 		  c_parser_consume_token (parser);
-		  if (! SSA_NAME_IS_DEFAULT_DEF (expr.value))
+		  എങ്കിൽ (! SSA_NAME_IS_DEFAULT_DEF (വ്യഞ്ജകം.മൂല്യം))
 		    {
-		      if (!SSA_NAME_VAR (expr.value))
+		      എങ്കിൽ (!SSA_NAME_VAR (വ്യഞ്ജകം.മൂല്യം))
 			{
 			  error_at (loc, "anonymous SSA name cannot have"
 				    " default definition");
-			  expr.value = error_mark_node;
-			  return expr;
+			  വ്യഞ്ജകം.മൂല്യം = error_mark_കണ്ണി;
+			  തിരികെ വ്യഞ്ജകം;
 			}
-		      set_ssa_default_def (cfun, SSA_NAME_VAR (expr.value),
-					   expr.value);
-		      SSA_NAME_DEF_STMT (expr.value) = gimple_build_nop ();
+		      set_ssa_default_def (cfun, SSA_NAME_VAR (വ്യഞ്ജകം.മൂല്യം),
+					   വ്യഞ്ജകം.മൂല്യം);
+		      SSA_NAME_DEF_STMT (വ്യഞ്ജകം.മൂല്യം) = gimple_build_nop ();
 		    }
 		}
 	    }
-	  else
+	  അല്ലെങ്കിൽ
 	    {
 	      c_parser_consume_token (parser);
-	      expr.value
+	      വ്യഞ്ജകം.മൂല്യം
 		= build_external_ref (loc, id,
 				      (c_parser_peek_token (parser)->type
-				       == CPP_OPEN_PAREN), &expr.original_type);
-	      set_c_expr_source_range (&expr, tok_range);
+				       == CPP_OPEN_PAREN), &വ്യഞ്ജകം.original_type);
+	      set_c_വ്യഞ്ജകം_source_range (&വ്യഞ്ജകം, tok_range);
 	    }
-	  break;
+	  നിർത്തുക;
 	}
       /* Fallthru.  */
-    default:
+    സ്ഥിരസ്ഥിതി:
       c_parser_error (parser, "expected expression");
-      expr.set_error ();
-      break;
+      വ്യഞ്ജകം.set_error ();
+      നിർത്തുക;
     }
-  if (expr.value == error_mark_node)
-    return expr;
-  return c_parser_gimple_postfix_expression_after_primary
-    (parser, EXPR_LOC_OR_LOC (expr.value, loc), expr);
+  എങ്കിൽ (വ്യഞ്ജകം.മൂല്യം == error_mark_കണ്ണി)
+    തിരികെ വ്യഞ്ജകം;
+  തിരികെ c_parser_gimple_postfix_expression_after_primary
+    (parser, വ്യഞ്ജകം_LOC_OR_LOC (വ്യഞ്ജകം.മൂല്യം, loc), വ്യഞ്ജകം);
 }
 
 /* Parse a gimple postfix expression after the initial primary or compound
    literal.  */
 
-static struct c_expr
+സ്ഥിതം ഘടന c_വ്യഞ്ജകം
 c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
-						  location_t expr_loc,
-						  struct c_expr expr)
+						  location_t വ്യഞ്ജകം_loc,
+						  ഘടന c_വ്യഞ്ജകം വ്യഞ്ജകം)
 {
   location_t start;
   location_t finish;
-  tree ident;
+  വൃക്ഷം ident;
   location_t comp_loc;
 
-  while (true)
+  ആകുമ്പോൾ (സത്യം)
     {
       location_t op_loc = c_parser_peek_token (parser)->location;
-      switch (c_parser_peek_token (parser)->type)
+      തിരഞ്ഞെടുപ്പ് (c_parser_peek_token (parser)->type)
 	{
-	case CPP_OPEN_SQUARE:
+	അവസ്ഥ CPP_OPEN_SQUARE:
 	  {
 	    c_parser_consume_token (parser);
-	    tree idx = c_parser_gimple_unary_expression (parser).value;
+	    വൃക്ഷം idx = c_parser_gimple_unary_expression (parser).മൂല്യം;
 
-	    if (! c_parser_require (parser, CPP_CLOSE_SQUARE, "expected %<]%>"))
+	    എങ്കിൽ (! c_parser_require (parser, CPP_CLOSE_SQUARE, "expected %<]%>"))
 	      {
-		c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, NULL);
-		break;
+		c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, ശൂന്യ);
+		നിർത്തുക;
 	      }
 
-	    start = expr.get_start ();
+	    start = വ്യഞ്ജകം.get_start ();
 	    finish = c_parser_tokens_buf (parser, 0)->location;
-	    expr.value = build_array_ref (op_loc, expr.value, idx);
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
+	    വ്യഞ്ജകം.മൂല്യം = build_array_ref (op_loc, വ്യഞ്ജകം.മൂല്യം, idx);
+	    set_c_വ്യഞ്ജകം_source_range (&വ്യഞ്ജകം, start, finish);
+	    വ്യഞ്ജകം.m_decimal = 0;
 
-	    expr.original_code = ERROR_MARK;
-	    expr.original_type = NULL;
-	    break;
+	    വ്യഞ്ജകം.original_code = ERROR_MARK;
+	    വ്യഞ്ജകം.original_type = ശൂന്യ;
+	    നിർത്തുക;
 	  }
-	case CPP_OPEN_PAREN:
+	അവസ്ഥ CPP_OPEN_PAREN:
 	  {
 	    /* Function call.  */
 	    c_parser_consume_token (parser);
-	    auto_vec<tree> exprlist;
-	    if (! c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
-	      c_parser_gimple_expr_list (parser, &exprlist);
+	    auto_vec<വൃക്ഷം> exprlist;
+	    എങ്കിൽ (! c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	      c_parser_gimple_വ്യഞ്ജകം_list (parser, &exprlist);
 	    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				       "expected %<)%>");
-	    if (!FUNC_OR_METHOD_TYPE_P (TREE_TYPE (expr.value)))
+	    എങ്കിൽ (!FUNC_OR_METHOD_TYPE_P (വൃക്ഷം_TYPE (വ്യഞ്ജകം.മൂല്യം)))
 	      {
 		c_parser_error (parser, "invalid call to non-function");
-		expr.set_error ();
-		break;
+		വ്യഞ്ജകം.set_error ();
+		നിർത്തുക;
 	      }
-	    expr.value = build_call_array_loc
-		(expr_loc, TREE_TYPE (TREE_TYPE (expr.value)),
-		 expr.value, exprlist.length (), exprlist.address ());
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    expr.original_type = NULL;
-	    break;
+	    വ്യഞ്ജകം.മൂല്യം = build_call_array_loc
+		(വ്യഞ്ജകം_loc, വൃക്ഷം_TYPE (വൃക്ഷം_TYPE (വ്യഞ്ജകം.മൂല്യം)),
+		 വ്യഞ്ജകം.മൂല്യം, exprlist.length (), exprlist.address ());
+	    വ്യഞ്ജകം.m_decimal = 0;
+	    വ്യഞ്ജകം.original_code = ERROR_MARK;
+	    വ്യഞ്ജകം.original_type = ശൂന്യ;
+	    നിർത്തുക;
 	  }
-	case CPP_DOT:
+	അവസ്ഥ CPP_DOT:
 	  {
 	    /* Structure element reference.  */
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_NAME))
+	    എങ്കിൽ (c_parser_next_token_is (parser, CPP_NAME))
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
-		ident = comp_tok->value;
+		ident = comp_tok->മൂല്യം;
 		comp_loc = comp_tok->location;
 	      }
-	    else
+	    അല്ലെങ്കിൽ
 	      {
 		c_parser_error (parser, "expected identifier");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		വ്യഞ്ജകം.set_error ();
+		വ്യഞ്ജകം.original_code = ERROR_MARK;
+		വ്യഞ്ജകം.original_type = ശൂന്യ;
+		തിരികെ വ്യഞ്ജകം;
 	      }
-	    start = expr.get_start ();
+	    start = വ്യഞ്ജകം.get_start ();
 	    finish = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_consume_token (parser);
-	    expr.value = build_component_ref (op_loc, expr.value, ident,
+	    വ്യഞ്ജകം.മൂല്യം = build_component_ref (op_loc, വ്യഞ്ജകം.മൂല്യം, ident,
 					      comp_loc, UNKNOWN_LOCATION);
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    if (TREE_CODE (expr.value) != COMPONENT_REF)
-	      expr.original_type = NULL;
-	    else
+	    set_c_വ്യഞ്ജകം_source_range (&വ്യഞ്ജകം, start, finish);
+	    വ്യഞ്ജകം.m_decimal = 0;
+	    വ്യഞ്ജകം.original_code = ERROR_MARK;
+	    എങ്കിൽ (വൃക്ഷം_CODE (വ്യഞ്ജകം.മൂല്യം) != COMPONENT_REF)
+	      വ്യഞ്ജകം.original_type = ശൂന്യ;
+	    അല്ലെങ്കിൽ
 	      {
 		/* Remember the original type of a bitfield.  */
-		tree field = TREE_OPERAND (expr.value, 1);
-		if (TREE_CODE (field) != FIELD_DECL)
-		  expr.original_type = NULL;
-		else
-		  expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		വൃക്ഷം field = വൃക്ഷം_OPERAND (വ്യഞ്ജകം.മൂല്യം, 1);
+		എങ്കിൽ (വൃക്ഷം_CODE (field) != FIELD_DECL)
+		  വ്യഞ്ജകം.original_type = ശൂന്യ;
+		അല്ലെങ്കിൽ
+		  വ്യഞ്ജകം.original_type = DECL_BIT_FIELD_TYPE (field);
 	      }
-	    break;
+	    നിർത്തുക;
 	  }
-	case CPP_DEREF:
+	അവസ്ഥ CPP_DEREF:
 	  {
 	    /* Structure element reference.  */
-	    if (!POINTER_TYPE_P (TREE_TYPE (expr.value)))
+	    എങ്കിൽ (!POINTER_TYPE_P (വൃക്ഷം_TYPE (വ്യഞ്ജകം.മൂല്യം)))
 	      {
 		c_parser_error (parser, "dereference of non-pointer");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		വ്യഞ്ജകം.set_error ();
+		വ്യഞ്ജകം.original_code = ERROR_MARK;
+		വ്യഞ്ജകം.original_type = ശൂന്യ;
+		തിരികെ വ്യഞ്ജകം;
 	      }
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_NAME))
+	    എങ്കിൽ (c_parser_next_token_is (parser, CPP_NAME))
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
-		ident = comp_tok->value;
+		ident = comp_tok->മൂല്യം;
 		comp_loc = comp_tok->location;
 	      }
-	    else
+	    അല്ലെങ്കിൽ
 	      {
 		c_parser_error (parser, "expected identifier");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		വ്യഞ്ജകം.set_error ();
+		വ്യഞ്ജകം.original_code = ERROR_MARK;
+		വ്യഞ്ജകം.original_type = ശൂന്യ;
+		തിരികെ വ്യഞ്ജകം;
 	      }
-	    start = expr.get_start ();
+	    start = വ്യഞ്ജകം.get_start ();
 	    finish = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_consume_token (parser);
-	    expr.value = build_component_ref (op_loc,
+	    വ്യഞ്ജകം.മൂല്യം = build_component_ref (op_loc,
 					      build_simple_mem_ref_loc
-					        (op_loc, expr.value),
+					        (op_loc, വ്യഞ്ജകം.മൂല്യം),
 					      ident, comp_loc,
-					      expr.get_location ());
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    if (TREE_CODE (expr.value) != COMPONENT_REF)
-	      expr.original_type = NULL;
-	    else
+					      വ്യഞ്ജകം.get_location ());
+	    set_c_വ്യഞ്ജകം_source_range (&വ്യഞ്ജകം, start, finish);
+	    വ്യഞ്ജകം.m_decimal = 0;
+	    വ്യഞ്ജകം.original_code = ERROR_MARK;
+	    എങ്കിൽ (വൃക്ഷം_CODE (വ്യഞ്ജകം.മൂല്യം) != COMPONENT_REF)
+	      വ്യഞ്ജകം.original_type = ശൂന്യ;
+	    അല്ലെങ്കിൽ
 	      {
 		/* Remember the original type of a bitfield.  */
-		tree field = TREE_OPERAND (expr.value, 1);
-		if (TREE_CODE (field) != FIELD_DECL)
-		  expr.original_type = NULL;
-		else
-		  expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		വൃക്ഷം field = വൃക്ഷം_OPERAND (വ്യഞ്ജകം.മൂല്യം, 1);
+		എങ്കിൽ (വൃക്ഷം_CODE (field) != FIELD_DECL)
+		  വ്യഞ്ജകം.original_type = ശൂന്യ;
+		അല്ലെങ്കിൽ
+		  വ്യഞ്ജകം.original_type = DECL_BIT_FIELD_TYPE (field);
 	      }
-	    break;
+	    നിർത്തുക;
 	  }
-	default:
-	  return expr;
+	സ്ഥിരസ്ഥിതി:
+	  തിരികെ വ്യഞ്ജകം;
 	}
     }
 }
@@ -2138,18 +2138,18 @@ c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
 
  */
 
-static void
-c_parser_gimple_expr_list (gimple_parser &parser, vec<tree> *ret)
+സ്ഥിതം ശൂന്യം
+c_parser_gimple_വ്യഞ്ജകം_list (gimple_parser &parser, vec<വൃക്ഷം> *ret)
 {
-  struct c_expr expr;
+  ഘടന c_വ്യഞ്ജകം വ്യഞ്ജകം;
 
-  expr = c_parser_gimple_unary_expression (parser);
-  ret->safe_push (expr.value);
-  while (c_parser_next_token_is (parser, CPP_COMMA))
+  വ്യഞ്ജകം = c_parser_gimple_unary_expression (parser);
+  ret->safe_തള്ളുക (വ്യഞ്ജകം.മൂല്യം);
+  ആകുമ്പോൾ (c_parser_next_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
-      expr = c_parser_gimple_unary_expression (parser);
-      ret->safe_push (expr.value);
+      വ്യഞ്ജകം = c_parser_gimple_unary_expression (parser);
+      ret->safe_തള്ളുക (വ്യഞ്ജകം.മൂല്യം);
     }
 }
 
@@ -2162,19 +2162,19 @@ c_parser_gimple_expr_list (gimple_parser &parser, vec<tree> *ret)
 
 */
 
-static void
+സ്ഥിതം ശൂന്യം
 c_parser_gimple_label (gimple_parser &parser, gimple_seq *seq)
 {
-  tree name = c_parser_peek_token (parser)->value;
+  വൃക്ഷം name = c_parser_peek_token (parser)->മൂല്യം;
   location_t loc1 = c_parser_peek_token (parser)->location;
   gcc_assert (c_parser_next_token_is (parser, CPP_NAME));
   c_parser_consume_token (parser);
   gcc_assert (c_parser_next_token_is (parser, CPP_COLON));
   c_parser_consume_token (parser);
-  tree label = define_label (loc1, name);
-  if (label)
+  വൃക്ഷം label = define_label (loc1, name);
+  എങ്കിൽ (label)
     gimple_seq_add_stmt_without_update (seq, gimple_build_label (label));
-  return;
+  തിരികെ;
 }
 
 /* Parse gimple/RTL pass list.
@@ -2183,77 +2183,77 @@ c_parser_gimple_label (gimple_parser &parser, gimple_seq *seq)
      startwith("pass-name")[,{cfg,ssa}]
  */
 
-void
+ശൂന്യം
 c_parser_gimple_or_rtl_pass_list (c_parser *parser, c_declspecs *specs)
 {
-  char *pass = NULL;
+  അക്ഷരം *pass = ശൂന്യ;
 
   /* Accept __GIMPLE/__RTL.  */
-  if (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
-    return;
+  എങ്കിൽ (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
+    തിരികെ;
   c_parser_consume_token (parser);
 
-  specs->entry_bb_count = profile_count::uninitialized ();
-  while (c_parser_next_token_is (parser, CPP_NAME))
+  specs->entry_bb_എണ്ണം = profile_എണ്ണം::uninitialized ();
+  ആകുമ്പോൾ (c_parser_next_token_is (parser, CPP_NAME))
     {
       profile_quality quality;
-      const char *op = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      സ്ഥിരം അക്ഷരം *op = IDENTIFIER_POINTER (c_parser_peek_token (parser)->മൂല്യം);
       c_parser_consume_token (parser);
-      if (! strcmp (op, "startwith"))
+      എങ്കിൽ (! strcmp (op, "startwith"))
 	{
-	  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return;
-	  if (c_parser_next_token_is_not (parser, CPP_STRING))
+	  എങ്കിൽ (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    തിരികെ;
+	  എങ്കിൽ (c_parser_next_token_is_not (parser, CPP_STRING))
 	    {
 	      error_at (c_parser_peek_token (parser)->location,
 			"expected pass name");
-	      return;
+	      തിരികെ;
 	    }
-	  pass = xstrdup (TREE_STRING_POINTER
-			  (c_parser_string_literal (parser, false,
-						    false).value));
-	  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<(%>"))
-	    return;
+	  pass = xstrdup (വൃക്ഷം_STRING_POINTER
+			  (c_parser_string_literal (parser, അസത്യം,
+						    അസത്യം).മൂല്യം));
+	  എങ്കിൽ (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<(%>"))
+	    തിരികെ;
 	}
-      else if (parse_profile_quality (op, &quality))
+      അല്ലെങ്കിൽ എങ്കിൽ (parse_profile_quality (op, &quality))
 	{
-	  tree q;
-	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return;
+	  വൃക്ഷം q;
+	  എങ്കിൽ (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    തിരികെ;
 
-	  if (!c_parser_next_token_is (parser, CPP_NUMBER)
-	      || (TREE_CODE (q = c_parser_peek_token (parser)->value)
+	  എങ്കിൽ (!c_parser_next_token_is (parser, CPP_സംഖ്യ)
+	      || (വൃക്ഷം_CODE (q = c_parser_peek_token (parser)->മൂല്യം)
 		  != INTEGER_CST))
 	    {
 	      c_parser_error (parser, "expected count value");
-	      return;
+	      തിരികെ;
 	    }
 
-	  specs->entry_bb_count
-	    = profile_count::from_gcov_type (TREE_INT_CST_LOW (q), quality);
+	  specs->entry_bb_എണ്ണം
+	    = profile_എണ്ണം::from_gcov_type (വൃക്ഷം_INT_CST_താഴെയുള്ള (q), quality);
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return;
+	  എങ്കിൽ (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    തിരികെ;
 	}
-      else if (specs->declspec_il != cdil_gimple)
+      അല്ലെങ്കിൽ എങ്കിൽ (specs->declspec_il != cdil_gimple)
 	/* Allow only one IL specifier and none on RTL.  */
 	;
-      else if (! strcmp (op, "cfg"))
+      അല്ലെങ്കിൽ എങ്കിൽ (! strcmp (op, "cfg"))
 	specs->declspec_il = cdil_gimple_cfg;
-      else if (! strcmp (op, "ssa"))
+      അല്ലെങ്കിൽ എങ്കിൽ (! strcmp (op, "ssa"))
 	specs->declspec_il = cdil_gimple_ssa;
-      else
+      അല്ലെങ്കിൽ
 	{
 	  error_at (c_parser_peek_token (parser)->location,
 		    "invalid operation");
-	  return;
+	  തിരികെ;
 	}
-     if (c_parser_next_token_is (parser, CPP_COMMA))
+     എങ്കിൽ (c_parser_next_token_is (parser, CPP_COMMA))
        c_parser_consume_token (parser);
     }
 
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return;
+  എങ്കിൽ (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    തിരികെ;
 
   specs->gimple_or_rtl_pass = pass;
 }
@@ -2296,36 +2296,36 @@ c_parser_gimple_or_rtl_pass_list (c_parser *parser, c_declspecs *specs)
 
  */
 
-static void
+സ്ഥിതം ശൂന്യം
 c_parser_gimple_declaration (gimple_parser &parser)
 {
-  struct c_declarator *declarator;
-  struct c_declspecs *specs = build_null_declspecs ();
-  c_parser_declspecs (parser, specs, true, true, true,
-		      true, true, true, true, cla_nonabstract_decl);
+  ഘടന c_declarator *declarator;
+  ഘടന c_declspecs *specs = build_null_declspecs ();
+  c_parser_declspecs (parser, specs, സത്യം, സത്യം, സത്യം,
+		      സത്യം, സത്യം, സത്യം, സത്യം, cla_nonabstract_decl);
   finish_declspecs (specs);
 
   /* Provide better error recovery.  Note that a type name here is usually
      better diagnosed as a redeclaration.  */
-  if (c_parser_next_token_starts_declspecs (parser)
+  എങ്കിൽ (c_parser_next_token_starts_declspecs (parser)
       && ! c_parser_next_token_is (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected %<;%>");
-      c_parser_set_error (parser, false);
-      return;
+      c_parser_set_error (parser, അസത്യം);
+      തിരികെ;
     }
 
-  bool dummy = false;
+  തർക്കം dummy = അസത്യം;
   declarator = c_parser_declarator (parser,
 				    specs->typespec_kind != ctsk_none,
 				    C_DTR_NORMAL, &dummy);
 
-  if (!c_parser_next_token_is (parser, CPP_SEMICOLON))
+  എങ്കിൽ (!c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
       c_parser_error (parser, "expected %<;%>");
-      return;
+      തിരികെ;
     }
-  if (declarator)
+  എങ്കിൽ (declarator)
     {
       /* Handle SSA name decls specially, they do not go into the identifier
          table but we simply build the SSA name for later lookup.  */
@@ -2335,10 +2335,10 @@ c_parser_gimple_declaration (gimple_parser &parser)
 	 just build the type of the decl - start_decl already pushes
 	 the identifier to the bindings for lookup, something we do not
 	 want.  */
-      struct c_declarator *id_declarator = declarator;
-      while (id_declarator->kind == cdk_pointer)
+      ഘടന c_declarator *id_declarator = declarator;
+      ആകുമ്പോൾ (id_declarator->kind == cdk_pointer)
 	id_declarator = id_declarator->declarator;
-      if (id_declarator->kind == cdk_id
+      എങ്കിൽ (id_declarator->kind == cdk_id
 	  && (declarator->kind == cdk_pointer
 	      || is_gimple_reg_type (specs->type))
 	  && c_parser_parse_ssa_name_id (id_declarator->u.id.id,
@@ -2348,9 +2348,9 @@ c_parser_gimple_declaration (gimple_parser &parser)
 	     decide to not dump their name for -gimple).  */
 	  && ver_offset == 0)
 	{
-	  struct c_declarator *p = declarator;
-	  tree type = specs->type;
-	  while (p->kind == cdk_pointer)
+	  ഘടന c_declarator *p = declarator;
+	  വൃക്ഷം type = specs->type;
+	  ആകുമ്പോൾ (p->kind == cdk_pointer)
 	    {
 	      type = build_pointer_type (type);
 	      p = p->declarator;
@@ -2358,39 +2358,39 @@ c_parser_gimple_declaration (gimple_parser &parser)
 	  c_parser_parse_ssa_name (parser, id_declarator->u.id.id, type,
 				   version, ver_offset);
 	}
-      else
+      അല്ലെങ്കിൽ
 	{
-	  tree postfix_attrs = NULL_TREE;
-	  tree all_prefix_attrs = specs->attrs;
-	  specs->attrs = NULL;
-	  tree decl = start_decl (declarator, specs, false,
+	  വൃക്ഷം postfix_attrs = NULL_വൃക്ഷം;
+	  വൃക്ഷം all_prefix_attrs = specs->attrs;
+	  specs->attrs = ശൂന്യ;
+	  വൃക്ഷം decl = start_decl (declarator, specs, അസത്യം,
 				  chainon (postfix_attrs, all_prefix_attrs));
-	  if (decl)
-	    finish_decl (decl, UNKNOWN_LOCATION, NULL_TREE, NULL_TREE,
-			 NULL_TREE);
+	  എങ്കിൽ (decl)
+	    finish_decl (decl, UNKNOWN_LOCATION, NULL_വൃക്ഷം, NULL_വൃക്ഷം,
+			 NULL_വൃക്ഷം);
 	}
     }
 }
 
 /* Parse gimple goto statement.  */
 
-static void
+സ്ഥിതം ശൂന്യം
 c_parser_gimple_goto_stmt (gimple_parser &parser,
-			   location_t loc, tree label, gimple_seq *seq)
+			   location_t loc, വൃക്ഷം label, gimple_seq *seq)
 {
-  if (cfun->curr_properties & PROP_cfg)
+  എങ്കിൽ (cfun->curr_properties & PROP_cfg)
     {
-      int dest_index;
+      പൂർണ്ണസംഖ്യ dest_index;
       profile_probability prob;
-      if (c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
+      എങ്കിൽ (c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							  &dest_index, &prob))
 	{
-	  parser.push_edge (parser.current_bb->index, dest_index,
+	  parser.തള്ളുക_edge (parser.current_bb->index, dest_index,
 			    EDGE_FALLTHRU, prob);
-	  return;
+	  തിരികെ;
 	}
     }
-  tree decl = lookup_label_for_goto (loc, label);
+  വൃക്ഷം decl = lookup_label_for_goto (loc, label);
   gimple_seq_add_stmt_without_update (seq, gimple_build_goto (decl));
 }
 
@@ -2398,24 +2398,24 @@ c_parser_gimple_goto_stmt (gimple_parser &parser,
    gimple-condition:
      ( gimple-binary-expression )    */
 
-static tree
+സ്ഥിതം വൃക്ഷം
 c_parser_gimple_paren_condition (gimple_parser &parser)
 {
-  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return error_mark_node;
-  tree cond
-    = c_parser_gimple_binary_expression (parser, boolean_type_node).value;
-  if (cond != error_mark_node
+  എങ്കിൽ (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    തിരികെ error_mark_കണ്ണി;
+  വൃക്ഷം cond
+    = c_parser_gimple_ദ്വിമാന_expression (parser, boolean_type_കണ്ണി).മൂല്യം;
+  എങ്കിൽ (cond != error_mark_കണ്ണി
       && ! COMPARISON_CLASS_P (cond)
       && ! CONSTANT_CLASS_P (cond)
       && ! SSA_VAR_P (cond))
     {
       c_parser_error (parser, "comparison required");
-      cond = error_mark_node;
+      cond = error_mark_കണ്ണി;
     }
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return error_mark_node;
-  return cond;
+  എങ്കിൽ (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    തിരികെ error_mark_കണ്ണി;
+  തിരികെ cond;
 }
 
 /* Parse gimple try statement.
@@ -2427,43 +2427,43 @@ c_parser_gimple_paren_condition (gimple_parser &parser)
    This could support try/catch as well, but it's not implemented yet.
  */
 
-static void
+സ്ഥിതം ശൂന്യം
 c_parser_gimple_try_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  gimple_seq tryseq = NULL;
+  gimple_seq tryseq = ശൂന്യ;
   c_parser_consume_token (parser);
   c_parser_gimple_compound_statement (parser, &tryseq);
 
-  if ((c_parser_next_token_is (parser, CPP_KEYWORD)
+  എങ്കിൽ ((c_parser_next_token_is (parser, CPP_KEYWORD)
        && c_parser_peek_token (parser)->keyword == RID_AT_FINALLY)
       || (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_token (parser)->id_kind == C_ID_ID
-	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->മൂല്യം),
 		     "finally") == 0))
     {
-      gimple_seq finseq = NULL;
+      gimple_seq finseq = ശൂന്യ;
       c_parser_consume_token (parser);
       c_parser_gimple_compound_statement (parser, &finseq);
 
-      if (c_parser_next_token_is (parser, CPP_KEYWORD)
+      എങ്കിൽ (c_parser_next_token_is (parser, CPP_KEYWORD)
 	  && c_parser_peek_token (parser)->keyword == RID_ELSE)
 	{
-	  gimple_seq elsseq = NULL;
+	  gimple_seq elsseq = ശൂന്യ;
 	  c_parser_consume_token (parser);
 	  c_parser_gimple_compound_statement (parser, &elsseq);
 
 	  geh_else *stmt = gimple_build_eh_else (finseq, elsseq);
-	  finseq = NULL;
+	  finseq = ശൂന്യ;
 	  gimple_seq_add_stmt_without_update (&finseq, stmt);
 	}
 
       gtry *stmt = gimple_build_try (tryseq, finseq, GIMPLE_TRY_FINALLY);
       gimple_seq_add_stmt_without_update (seq, stmt);
     }
-  else if (c_parser_next_token_is (parser, CPP_KEYWORD)
+  അല്ലെങ്കിൽ എങ്കിൽ (c_parser_next_token_is (parser, CPP_KEYWORD)
       && c_parser_peek_token (parser)->keyword == RID_AT_CATCH)
     c_parser_error (parser, "%<catch%> is not supported");
-  else
+  അല്ലെങ്കിൽ
     c_parser_error (parser, "expected %<finally%> or %<catch%>");
 }
 
@@ -2475,82 +2475,82 @@ c_parser_gimple_try_stmt (gimple_parser &parser, gimple_seq *seq)
 					else gimple-goto-statement
  */
 
-static void
+സ്ഥിതം ശൂന്യം
 c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  tree t_label = NULL_TREE, f_label = NULL_TREE, label;
+  വൃക്ഷം t_label = NULL_വൃക്ഷം, f_label = NULL_വൃക്ഷം, label;
   location_t loc;
   c_parser_consume_token (parser);
-  tree cond = c_parser_gimple_paren_condition (parser);
+  വൃക്ഷം cond = c_parser_gimple_paren_condition (parser);
 
-  if (c_parser_next_token_is_keyword (parser, RID_GOTO))
+  എങ്കിൽ (c_parser_next_token_is_keyword (parser, RID_GOTO))
     {
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      if (! c_parser_next_token_is (parser, CPP_NAME))
+      എങ്കിൽ (! c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected label");
-	  return;
+	  തിരികെ;
 	}
-      label = c_parser_peek_token (parser)->value;
+      label = c_parser_peek_token (parser)->മൂല്യം;
       c_parser_consume_token (parser);
-      int dest_index;
+      പൂർണ്ണസംഖ്യ dest_index;
       profile_probability prob;
-      if ((cfun->curr_properties & PROP_cfg)
+      എങ്കിൽ ((cfun->curr_properties & PROP_cfg)
 	  && c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							     &dest_index, &prob))
-	parser.push_edge (parser.current_bb->index, dest_index,
-			  EDGE_TRUE_VALUE, prob);
-      else
+	parser.തള്ളുക_edge (parser.current_bb->index, dest_index,
+			  EDGE_TRUE_മൂല്യം, prob);
+      അല്ലെങ്കിൽ
 	t_label = lookup_label_for_goto (loc, label);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return;
+      എങ്കിൽ (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	തിരികെ;
     }
-  else
+  അല്ലെങ്കിൽ
     {
       c_parser_error (parser, "expected goto expression");
-      return;
+      തിരികെ;
     }
 
-  if (c_parser_next_token_is_keyword (parser, RID_ELSE))
+  എങ്കിൽ (c_parser_next_token_is_keyword (parser, RID_ELSE))
     c_parser_consume_token (parser);
-  else
+  അല്ലെങ്കിൽ
     {
       c_parser_error (parser, "expected else statement");
-      return;
+      തിരികെ;
     }
 
-  if (c_parser_next_token_is_keyword (parser, RID_GOTO))
+  എങ്കിൽ (c_parser_next_token_is_keyword (parser, RID_GOTO))
     {
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      if (! c_parser_next_token_is (parser, CPP_NAME))
+      എങ്കിൽ (! c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected label");
-	  return;
+	  തിരികെ;
 	}
-      label = c_parser_peek_token (parser)->value;
+      label = c_parser_peek_token (parser)->മൂല്യം;
       c_parser_consume_token (parser);
-      int dest_index;
+      പൂർണ്ണസംഖ്യ dest_index;
       profile_probability prob;
-      if ((cfun->curr_properties & PROP_cfg)
+      എങ്കിൽ ((cfun->curr_properties & PROP_cfg)
 	  && c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							     &dest_index, &prob))
-	parser.push_edge (parser.current_bb->index, dest_index,
-			  EDGE_FALSE_VALUE, prob);
-      else
+	parser.തള്ളുക_edge (parser.current_bb->index, dest_index,
+			  EDGE_FALSE_മൂല്യം, prob);
+      അല്ലെങ്കിൽ
 	f_label = lookup_label_for_goto (loc, label);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return;
+      എങ്കിൽ (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	തിരികെ;
     }
-  else
+  അല്ലെങ്കിൽ
     {
       c_parser_error (parser, "expected goto expression");
-      return;
+      തിരികെ;
     }
 
-  if (cond != error_mark_node)
-    gimple_seq_add_stmt_without_update (seq, gimple_build_cond_from_tree (cond, t_label,
+  എങ്കിൽ (cond != error_mark_കണ്ണി)
+    gimple_seq_add_stmt_without_update (seq, gimple_build_cond_from_വൃക്ഷം (cond, t_label,
 							   f_label));
 }
 
@@ -2564,138 +2564,138 @@ c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
      gimple-label-statement : gimple-goto-statement
 */
 
-static void
+സ്ഥിതം ശൂന്യം
 c_parser_gimple_switch_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  c_expr cond_expr;
-  tree case_label, label;
-  auto_vec<tree> labels;
-  tree default_label = NULL_TREE;
+  c_വ്യഞ്ജകം cond_വ്യഞ്ജകം;
+  വൃക്ഷം case_label, label;
+  auto_vec<വൃക്ഷം> labels;
+  വൃക്ഷം default_label = NULL_വൃക്ഷം;
   c_parser_consume_token (parser);
 
-  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return;
-  cond_expr = c_parser_gimple_postfix_expression (parser);
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return;
+  എങ്കിൽ (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    തിരികെ;
+  cond_വ്യഞ്ജകം = c_parser_gimple_postfix_expression (parser);
+  എങ്കിൽ (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    തിരികെ;
 
-  if (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
-    return;
+  എങ്കിൽ (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+    തിരികെ;
 
-  while (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
+  ആകുമ്പോൾ (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
     {
-      if (c_parser_next_token_is (parser, CPP_EOF))
+      എങ്കിൽ (c_parser_next_token_is (parser, CPP_EOF))
 	{
 	  c_parser_error (parser, "expected statement");
-	  return;
+	  തിരികെ;
 	}
 
-      switch (c_parser_peek_token (parser)->keyword)
+      തിരഞ്ഞെടുപ്പ് (c_parser_peek_token (parser)->keyword)
 	{
-	case RID_CASE:
+	അവസ്ഥ RID_CASE:
 	  {
-	    c_expr exp1;
+	    c_വ്യഞ്ജകം exp1;
 	    location_t loc = c_parser_peek_token (parser)->location;
 	    c_parser_consume_token (parser);
 
-	    if (c_parser_next_token_is (parser, CPP_NAME)
-		|| c_parser_peek_token (parser)->type == CPP_NUMBER)
+	    എങ്കിൽ (c_parser_next_token_is (parser, CPP_NAME)
+		|| c_parser_peek_token (parser)->type == CPP_സംഖ്യ)
 	      exp1 = c_parser_gimple_postfix_expression (parser);
-	    else
+	    അല്ലെങ്കിൽ
 	      {
 		c_parser_error (parser, "expected expression");
-		return;
+		തിരികെ;
 	      }
 
-	    if (c_parser_next_token_is (parser, CPP_COLON))
+	    എങ്കിൽ (c_parser_next_token_is (parser, CPP_COLON))
 	      {
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		എങ്കിൽ (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    label = c_parser_peek_token (parser)->value;
+		    label = c_parser_peek_token (parser)->മൂല്യം;
 		    c_parser_consume_token (parser);
-		    tree decl = lookup_label_for_goto (loc, label);
-		    case_label = build_case_label (exp1.value, NULL_TREE,
+		    വൃക്ഷം decl = lookup_label_for_goto (loc, label);
+		    case_label = build_case_label (exp1.മൂല്യം, NULL_വൃക്ഷം,
 						   decl);
-		    labels.safe_push (case_label);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    labels.safe_തള്ളുക (case_label);
+		    എങ്കിൽ (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return;
+		      തിരികെ;
 		  }
-		else if (! c_parser_require (parser, CPP_NAME,
+		അല്ലെങ്കിൽ എങ്കിൽ (! c_parser_require (parser, CPP_NAME,
 					     "expected label"))
-		  return;
+		  തിരികെ;
 	      }
-	    else if (! c_parser_require (parser, CPP_SEMICOLON,
+	    അല്ലെങ്കിൽ എങ്കിൽ (! c_parser_require (parser, CPP_SEMICOLON,
 					 "expected %<:%>"))
-	      return;
-	    break;
+	      തിരികെ;
+	    നിർത്തുക;
 	  }
-	case RID_DEFAULT:
+	അവസ്ഥ RID_DEFAULT:
 	  {
 	    location_t loc = c_parser_peek_token (parser)->location;
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_COLON))
+	    എങ്കിൽ (c_parser_next_token_is (parser, CPP_COLON))
 	      {
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		എങ്കിൽ (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    label = c_parser_peek_token (parser)->value;
+		    label = c_parser_peek_token (parser)->മൂല്യം;
 		    c_parser_consume_token (parser);
-		    tree decl = lookup_label_for_goto (loc, label);
-		    default_label = build_case_label (NULL_TREE, NULL_TREE,
+		    വൃക്ഷം decl = lookup_label_for_goto (loc, label);
+		    default_label = build_case_label (NULL_വൃക്ഷം, NULL_വൃക്ഷം,
 						      decl);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    എങ്കിൽ (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return;
+		      തിരികെ;
 		  }
-		else if (! c_parser_require (parser, CPP_NAME,
+		അല്ലെങ്കിൽ എങ്കിൽ (! c_parser_require (parser, CPP_NAME,
 					     "expected label"))
-		  return;
+		  തിരികെ;
 	      }
-	    else if (! c_parser_require (parser, CPP_SEMICOLON,
+	    അല്ലെങ്കിൽ എങ്കിൽ (! c_parser_require (parser, CPP_SEMICOLON,
 					 "expected %<:%>"))
-	      return;
-	    break;
+	      തിരികെ;
+	    നിർത്തുക;
 	  }
-	default:
+	സ്ഥിരസ്ഥിതി:
 	  c_parser_error (parser, "expected case label");
-	  return;
+	  തിരികെ;
 	}
 
     }
-  if (! c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
-    return;
+  എങ്കിൽ (! c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
+    തിരികെ;
 
-  if (cond_expr.value != error_mark_node)
+  എങ്കിൽ (cond_വ്യഞ്ജകം.മൂല്യം != error_mark_കണ്ണി)
     {
-      gswitch *s = gimple_build_switch (cond_expr.value, default_label, labels);
+      gswitch *s = gimple_build_switch (cond_വ്യഞ്ജകം.മൂല്യം, default_label, labels);
       gimple_seq_add_stmt_without_update (seq, s);
     }
 }
 
 /* Parse gimple return statement.  */
 
-static void
+സ്ഥിതം ശൂന്യം
 c_parser_gimple_return_stmt (gimple_parser &parser, gimple_seq *seq)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  gimple *ret = NULL;
+  gimple *ret = ശൂന്യ;
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+  എങ്കിൽ (c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
-      c_finish_gimple_return (loc, NULL_TREE);
-      ret = gimple_build_return (NULL);
+      c_finish_gimple_return (loc, NULL_വൃക്ഷം);
+      ret = gimple_build_return (ശൂന്യ);
       gimple_seq_add_stmt_without_update (seq, ret);
     }
-  else
+  അല്ലെങ്കിൽ
     {
       location_t xloc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_gimple_unary_expression (parser);
-      if (expr.value != error_mark_node)
+      c_വ്യഞ്ജകം വ്യഞ്ജകം = c_parser_gimple_unary_expression (parser);
+      എങ്കിൽ (വ്യഞ്ജകം.മൂല്യം != error_mark_കണ്ണി)
 	{
-	  c_finish_gimple_return (xloc, expr.value);
-	  ret = gimple_build_return (expr.value);
+	  c_finish_gimple_return (xloc, വ്യഞ്ജകം.മൂല്യം);
+	  ret = gimple_build_return (വ്യഞ്ജകം.മൂല്യം);
 	  gimple_seq_add_stmt_without_update (seq, ret);
 	}
     }
@@ -2703,25 +2703,25 @@ c_parser_gimple_return_stmt (gimple_parser &parser, gimple_seq *seq)
 
 /* Support function for c_parser_gimple_return_stmt.  */
 
-static void
-c_finish_gimple_return (location_t loc, tree retval)
+സ്ഥിതം ശൂന്യം
+c_finish_gimple_return (location_t loc, വൃക്ഷം retval)
 {
-  tree valtype = TREE_TYPE (TREE_TYPE (current_function_decl));
+  വൃക്ഷം valtype = വൃക്ഷം_TYPE (വൃക്ഷം_TYPE (current_function_decl));
 
   /* Use the expansion point to handle cases such as returning NULL
      in a function returning void.  */
   location_t xloc = expansion_point_location_if_in_system_header (loc);
 
-  if (TREE_THIS_VOLATILE (current_function_decl))
+  എങ്കിൽ (വൃക്ഷം_THIS_VOLATILE (current_function_decl))
     warning_at (xloc, 0,
 		"function declared %<noreturn%> has a %<return%> statement");
 
-  if (! retval)
+  എങ്കിൽ (! retval)
     current_function_returns_null = 1;
-  else if (valtype == 0 || VOID_TYPE_P (valtype))
+  അല്ലെങ്കിൽ എങ്കിൽ (valtype == 0 || VOID_TYPE_P (valtype))
     {
       current_function_returns_null = 1;
-      if (TREE_CODE (TREE_TYPE (retval)) != VOID_TYPE)
+      എങ്കിൽ (വൃക്ഷം_CODE (വൃക്ഷം_TYPE (retval)) != VOID_TYPE)
 	{
 	  error_at
 	    (xloc, "%<return%> with a value, in function returning void");
@@ -2729,12 +2729,12 @@ c_finish_gimple_return (location_t loc, tree retval)
 		  "declared here");
 	}
     }
-  else if (TREE_CODE (valtype) != TREE_CODE (TREE_TYPE (retval)))
+  അല്ലെങ്കിൽ എങ്കിൽ (വൃക്ഷം_CODE (valtype) != വൃക്ഷം_CODE (വൃക്ഷം_TYPE (retval)))
     {
       error_at
 	(xloc, "invalid conversion in return statement");
       inform (DECL_SOURCE_LOCATION (current_function_decl),
 	      "declared here");
     }
-  return;
+  തിരികെ;
 }
