@@ -17,225 +17,225 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_C_TREE_H
-#define GCC_C_TREE_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ GCC_C_ವೃಕ್ಷ_H
+#ವ್ಯಾಖ್ಯಾನಿಸು GCC_C_ವೃಕ್ಷ_H
 
-#include "c-family/c-common.h"
-#include "diagnostic.h"
+#ಅನ್ತರ್ಭಾವ "c-family/c-common.h"
+#ಅನ್ತರ್ಭಾವ "diagnostic.h"
 
 /* struct lang_identifier is private to c-decl.cc, but langhooks.cc needs to
    know how big it is.  This is sanity-checked in c-decl.cc.  */
-#define C_SIZEOF_STRUCT_LANG_IDENTIFIER \
-  (sizeof (struct c_common_identifier) + 3 * sizeof (void *))
+#ವ್ಯಾಖ್ಯಾನಿಸು C_SIZEOF_STRUCT_LANG_IDENTIFIER \
+  (ಗಾತ್ರ (ರಚನೆ c_common_identifier) + 3 * ಗಾತ್ರ (ಶೂನ್ಯ *))
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is read-only.  */
-#define C_TYPE_FIELDS_READONLY(TYPE) TREE_LANG_FLAG_1 (TYPE)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_TYPE_FIELDS_READONLY(TYPE) ವೃಕ್ಷ_LANG_FLAG_1 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is volatile.  */
-#define C_TYPE_FIELDS_VOLATILE(TYPE) TREE_LANG_FLAG_2 (TYPE)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_TYPE_FIELDS_VOLATILE(TYPE) ವೃಕ್ಷ_LANG_FLAG_2 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is
    volatile, restrict-qualified or atomic; that is, has a type not
    permitted for a constexpr object.  */
-#define C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) TREE_LANG_FLAG_4 (TYPE)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) ವೃಕ್ಷ_LANG_FLAG_4 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component has a
    counted_by attribute.  */
-#define C_TYPE_FIELDS_HAS_COUNTED_BY(TYPE) TYPE_LANG_FLAG_3 (TYPE)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_TYPE_FIELDS_HAS_COUNTED_BY(TYPE) TYPE_LANG_FLAG_3 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE or ENUMERAL_TYPE
    nonzero if the definition of the type has already started.  */
-#define C_TYPE_BEING_DEFINED(TYPE) TYPE_LANG_FLAG_0 (TYPE)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_TYPE_BEING_DEFINED(TYPE) TYPE_LANG_FLAG_0 (TYPE)
 
 /* In an incomplete RECORD_TYPE, UNION_TYPE or ENUMERAL_TYPE, a list of
    variable declarations whose type would be completed by completing
    that type.  */
-#define C_TYPE_INCOMPLETE_VARS(TYPE) \
-  TYPE_LANG_SLOT_1 (TREE_CHECK4 (TYPE, RECORD_TYPE, UNION_TYPE, \
+#ವ್ಯಾಖ್ಯಾನಿಸು C_TYPE_INCOMPLETE_VARS(TYPE) \
+  TYPE_LANG_ಸ್ಥಾನ_1 (ವೃಕ್ಷ_CHECK4 (TYPE, ದಾಖಲೆ_TYPE, UNION_TYPE, \
 				 QUAL_UNION_TYPE, ENUMERAL_TYPE))
 
 /* In an IDENTIFIER_NODE, nonzero if this identifier is actually a
    keyword.  C_RID_CODE (node) is then the RID_* value of the keyword.  */
-#define C_IS_RESERVED_WORD(ID) TREE_LANG_FLAG_0 (ID)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_IS_RESERVED_ಶಬ್ದ(ID) ವೃಕ್ಷ_LANG_FLAG_0 (ID)
 
 /* Record whether a type or decl was written with nonconstant size.
    Note that TYPE_SIZE may have simplified to a constant.  */
-#define C_TYPE_VARIABLE_SIZE(TYPE) TYPE_LANG_FLAG_1 (TYPE)
-#define C_DECL_VARIABLE_SIZE(TYPE) DECL_LANG_FLAG_0 (TYPE)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_TYPE_VARIABLE_ಗಾತ್ರ(TYPE) TYPE_LANG_FLAG_1 (TYPE)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_VARIABLE_ಗಾತ್ರ(TYPE) DECL_LANG_FLAG_0 (TYPE)
 
 /* Record whether a type is variably modified. */
-#define C_TYPE_VARIABLY_MODIFIED(TYPE) TYPE_LANG_FLAG_6 (TYPE)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_TYPE_VARIABLY_MODIFIED(TYPE) TYPE_LANG_FLAG_6 (TYPE)
 
 
 /* Record whether a type is defined inside a struct or union type.
    This is used for -Wc++-compat. */
-#define C_TYPE_DEFINED_IN_STRUCT(TYPE) TYPE_LANG_FLAG_2 (TYPE)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_TYPE_DEFINED_ಒಳ_STRUCT(TYPE) TYPE_LANG_FLAG_2 (TYPE)
 
 /* Record whether a typedef for type `int' was actually `signed int'.  */
-#define C_TYPEDEF_EXPLICITLY_SIGNED(EXP) DECL_LANG_FLAG_1 (EXP)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_TYPEDEF_EXPLICITLY_SIGNED(EXP) DECL_LANG_FLAG_1 (EXP)
 
 /* For a FUNCTION_DECL, nonzero if it was defined without an explicit
    return type.  */
-#define C_FUNCTION_IMPLICIT_INT(EXP) DECL_LANG_FLAG_1 (EXP)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_FUNCTION_IMPLICIT_INT(EXP) DECL_LANG_FLAG_1 (EXP)
 
 /* For a FUNCTION_DECL, nonzero if it was an implicit declaration.  */
-#define C_DECL_IMPLICIT(EXP) DECL_LANG_FLAG_2 (EXP)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_IMPLICIT(EXP) DECL_LANG_FLAG_2 (EXP)
 
 /* For a PARM_DECL, nonzero if it was declared as an array.  */
-#define C_ARRAY_PARAMETER(NODE) DECL_LANG_FLAG_0 (NODE)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_ARRAY_PARAMETER(ಗಂಟು_2) DECL_LANG_FLAG_0 (ಗಂಟು_2)
 
 /* For FUNCTION_DECLs, evaluates true if the decl is a nested
    function that requires a non-local context.  */
-#define C_FUNC_NONLOCAL_CONTEXT(EXP)		\
+#ವ್ಯಾಖ್ಯಾನಿಸು C_FUNC_NONLOCAL_CONTEXT(EXP)		\
   DECL_LANG_FLAG_4 (FUNCTION_DECL_CHECK (EXP))
 
 /* For FUNCTION_DECLs, evaluates true if the decl is built-in but has
    been declared.  */
-#define C_DECL_DECLARED_BUILTIN(EXP)		\
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_DECLARED_BUILTIN(EXP)		\
   DECL_LANG_FLAG_3 (FUNCTION_DECL_CHECK (EXP))
 
 /* For FUNCTION_DECLs, evaluates true if the decl is built-in, has a
    built-in prototype and does not have a non-built-in prototype.  */
-#define C_DECL_BUILTIN_PROTOTYPE(EXP)		\
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_BUILTIN_PROTOTYPE(EXP)		\
   DECL_LANG_FLAG_6 (FUNCTION_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical name of a loop.  */
-#define C_DECL_LOOP_NAME(EXP) DECL_LANG_FLAG_3 (LABEL_DECL_CHECK (EXP))
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_LOOP_NAME(EXP) DECL_LANG_FLAG_3 (LABEL_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical name of a switch.  During parsing of
    ObjC foreach named loop both C_DECL_LOOP_NAME and C_DECL_SWITCH_NAME
    are temporarily set.  */
-#define C_DECL_SWITCH_NAME(EXP) DECL_LANG_FLAG_5 (LABEL_DECL_CHECK (EXP))
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_SWITCH_NAME(EXP) DECL_LANG_FLAG_5 (LABEL_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical name of a loop or switch being
    valid for use in break identifier or continue identifier statements.  */
-#define C_DECL_LOOP_SWITCH_NAME_VALID(EXP) \
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_LOOP_SWITCH_NAME_VALID(EXP) \
   DECL_LANG_FLAG_6 (LABEL_DECL_CHECK (EXP))
 
 /* For LABEL_DECLs marks canonical loop or switch names which were actually
    used in one or more break identifier or continue identifier statements.  */
-#define C_DECL_LOOP_SWITCH_NAME_USED(EXP) \
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_LOOP_SWITCH_NAME_ಬಳಸಿದ(EXP) \
   DECL_LANG_FLAG_8 (LABEL_DECL_CHECK (EXP))
 
 /* Record whether a decl was declared register.  This is strictly a
    front-end flag, whereas DECL_REGISTER is used for code generation;
    they may differ for structures with volatile fields.  */
-#define C_DECL_REGISTER(EXP) \
-  DECL_LANG_FLAG_4 (TREE_NOT_CHECK (EXP, FUNCTION_DECL))
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_ರಿಜಿಸ್ಟರ್(EXP) \
+  DECL_LANG_FLAG_4 (ವೃಕ್ಷ_NOT_CHECK (EXP, FUNCTION_DECL))
 
 /* Record whether a decl was used in an expression anywhere except an
    unevaluated operand of sizeof / typeof / alignof.  This is only
    used for functions declared static but not defined, though outside
    sizeof and typeof it is set for other function decls as well.  */
-#define C_DECL_USED(EXP) DECL_LANG_FLAG_5 (FUNCTION_DECL_CHECK (EXP))
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_ಬಳಸಿದ(EXP) DECL_LANG_FLAG_5 (FUNCTION_DECL_CHECK (EXP))
 
 /* Record whether a variable has been declared threadprivate by
    #pragma omp threadprivate.  */
-#define C_DECL_THREADPRIVATE_P(DECL) DECL_LANG_FLAG_3 (VAR_DECL_CHECK (DECL))
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_THREADPRIVATE_P(DECL) DECL_LANG_FLAG_3 (VAR_DECL_CHECK (DECL))
 
 /* Set on VAR_DECLs for compound literals.  */
-#define C_DECL_COMPOUND_LITERAL_P(DECL) \
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_COMPOUND_LITERAL_P(DECL) \
   DECL_LANG_FLAG_5 (VAR_DECL_CHECK (DECL))
 
 /* Set on decls used as placeholders for a C23 underspecified object
    definition.  */
-#define C_DECL_UNDERSPECIFIED(DECL) DECL_LANG_FLAG_7 (DECL)
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_UNDERSPECIFIED(DECL) DECL_LANG_FLAG_7 (DECL)
 
 /* Set on VAR_DECLs declared as 'constexpr'.  */
-#define C_DECL_DECLARED_CONSTEXPR(DECL) \
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_DECLARED_CONSTEXPR(DECL) \
   DECL_LANG_FLAG_8 (VAR_DECL_CHECK (DECL))
 
 /* Nonzero for a decl which either doesn't exist or isn't a prototype.
    N.B. Could be simplified if all built-in decls had complete prototypes
    (but this is presently difficult because some of them need FILE*).  */
-#define C_DECL_ISNT_PROTOTYPE(EXP)			\
+#ವ್ಯಾಖ್ಯಾನಿಸು C_DECL_ISNT_PROTOTYPE(EXP)			\
        (EXP == 0					\
-	|| (!prototype_p (TREE_TYPE (EXP))	\
-	    && !fndecl_built_in_p (EXP)))
+	|| (!prototype_p (ವೃಕ್ಷ_TYPE (EXP))	\
+	    && !fndecl_built_ಒಳ_p (EXP)))
 
 /* For FUNCTION_TYPE, a hidden list of types of arguments.  The same as
    TYPE_ARG_TYPES for functions with prototypes, but created for functions
    without prototypes.  */
-#define TYPE_ACTUAL_ARG_TYPES(NODE) \
-  TYPE_LANG_SLOT_1 (FUNCTION_TYPE_CHECK (NODE))
+#ವ್ಯಾಖ್ಯಾನಿಸು TYPE_ACTUAL_ARG_TYPES(ಗಂಟು_2) \
+  TYPE_LANG_ಸ್ಥಾನ_1 (FUNCTION_TYPE_CHECK (ಗಂಟು_2))
 
 /* For a CONSTRUCTOR, whether some initializer contains a
    subexpression meaning it is not a constant expression.  */
-#define CONSTRUCTOR_NON_CONST(EXPR) TREE_LANG_FLAG_1 (CONSTRUCTOR_CHECK (EXPR))
+#ವ್ಯಾಖ್ಯಾನಿಸು CONSTRUCTOR_NON_CONST(ಅಭಿವ್ಯಕ್ತಿ_3) ವೃಕ್ಷ_LANG_FLAG_1 (CONSTRUCTOR_CHECK (ಅಭಿವ್ಯಕ್ತಿ_3))
 
 /* For a SAVE_EXPR, nonzero if the operand of the SAVE_EXPR has already
    been folded.  */
-#define SAVE_EXPR_FOLDED_P(EXP)	TREE_LANG_FLAG_1 (SAVE_EXPR_CHECK (EXP))
+#ವ್ಯಾಖ್ಯಾನಿಸು SAVE_ಅಭಿವ್ಯಕ್ತಿ_FOLDED_P(EXP)	ವೃಕ್ಷ_LANG_FLAG_1 (SAVE_ಅಭಿವ್ಯಕ್ತಿ_CHECK (EXP))
 
 /* Whether a type has boolean semantics: either a boolean type or an
    enumeration type with a boolean type as its underlying type.  */
-#define C_BOOLEAN_TYPE_P(TYPE)						\
-  (TREE_CODE (TYPE) == BOOLEAN_TYPE					\
-   || (TREE_CODE (TYPE) == ENUMERAL_TYPE				\
-       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_TREE			\
-       && (TREE_CODE (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
+#ವ್ಯಾಖ್ಯಾನಿಸು C_BOOLEAN_TYPE_P(TYPE)						\
+  (ವೃಕ್ಷ_ಸಂಕೇತ (TYPE) == BOOLEAN_TYPE					\
+   || (ವೃಕ್ಷ_ಸಂಕೇತ (TYPE) == ENUMERAL_TYPE				\
+       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_ವೃಕ್ಷ			\
+       && (ವೃಕ್ಷ_ಸಂಕೇತ (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
 	   || c_hardbool_type_attr (TYPE))))
 
 /* Record parser information about an expression that is irrelevant
    for code generation alongside a tree representing its value.  */
-struct c_expr
+ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ
 {
   /* The value of the expression.  */
-  tree value;
+  ವೃಕ್ಷ ಮೌಲ್ಯ;
   /* Record the original unary/binary operator of an expression, which may
      have been changed by fold, STRING_CST for unparenthesized string
      constants, C_MAYBE_CONST_EXPR for __builtin_constant_p calls
      (even if parenthesized), for subexpressions, and for non-constant
      initializers, or ERROR_MARK for other expressions (including
      parenthesized expressions).  */
-  enum tree_code original_code;
+  ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2 original_ಸಂಕೇತ;
   /* If not NULL, the original type of an expression.  This will
      differ from the type of the value field for an enum constant.
      The type of an enum constant is a plain integer type, but this
      field will be the enum type.  */
-  tree original_type;
+  ವೃಕ್ಷ original_type;
 
   /* The source range of this expression.  This is redundant
      for node values that have locations, but not all node kinds
      have locations (e.g. constants, and references to params, locals,
      etc), so we stash a copy here.  */
-  source_range src_range;
+  ಮೂಲ_range src_range;
 
   /* True if this was directly from a decimal constant token.  */
   bool m_decimal : 1;
 
   /* Access to the first and last locations within the source spelling
      of this expression.  */
-  location_t get_start () const { return src_range.m_start; }
-  location_t get_finish () const { return src_range.m_finish; }
+  location_t get_ಆರಂಭ () ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ src_range.m_ಆರಂಭ; }
+  location_t get_ಮುಕ್ತಾಯ () ಸ್ಥಿರಾಂಕ { ಹಿಂತಿರುಗಿ src_range.m_ಮುಕ್ತಾಯ; }
 
-  location_t get_location () const
+  location_t get_location () ಸ್ಥಿರಾಂಕ
   {
-    if (EXPR_HAS_LOCATION (value))
-      return EXPR_LOCATION (value);
-    else
-      return make_location (get_start (), get_start (), get_finish ());
+    ಆದರೆ (ಅಭಿವ್ಯಕ್ತಿ_HAS_LOCATION (ಮೌಲ್ಯ))
+      ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ_LOCATION (ಮೌಲ್ಯ);
+    ಇಲ್ಲದಿದ್ದರೆ
+      ಹಿಂತಿರುಗಿ make_location (get_ಆರಂಭ (), get_ಆರಂಭ (), get_ಮುಕ್ತಾಯ ());
   }
 
   /* Set the value to error_mark_node whilst ensuring that src_range
      and m_decimal are initialized.  */
-  void set_error ()
+  ಶೂನ್ಯ ಗಣ_error ()
   {
-    value = error_mark_node;
-    src_range.m_start = UNKNOWN_LOCATION;
-    src_range.m_finish = UNKNOWN_LOCATION;
+    ಮೌಲ್ಯ = error_mark_ಗಂಟು;
+    src_range.m_ಆರಂಭ = UNKNOWN_LOCATION;
+    src_range.m_ಮುಕ್ತಾಯ = UNKNOWN_LOCATION;
     m_decimal = 0;
   }
 };
 
 /* Type alias for struct c_expr. This allows to use the structure
    inside the VEC types.  */
-typedef struct c_expr c_expr_t;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ c_ಅಭಿವ್ಯಕ್ತಿ_t;
 
 /* A kind of type specifier.  Note that this information is currently
    only used to distinguish tag definitions, tag references and typeof
    uses.  */
-enum c_typespec_kind {
+ಎಣಿಕೆ c_typespec_ಬಗೆ {
   /* No typespec.  This appears only in struct c_declspec.  */
   ctsk_none,
   /* A reserved keyword type specifier.  */
@@ -264,18 +264,18 @@ enum c_typespec_kind {
 
 /* A type specifier: this structure is created in the parser and
    passed to declspecs_add_type only.  */
-struct c_typespec {
+ರಚನೆ c_typespec {
   /* What kind of type specifier this is.  */
-  enum c_typespec_kind kind;
+  ಎಣಿಕೆ c_typespec_ಬಗೆ ಬಗೆ;
   /* Whether the expression has operands suitable for use in constant
      expressions.  */
-  bool expr_const_operands;
+  bool ಅಭಿವ್ಯಕ್ತಿ_const_operands;
   /* Whether the type specifier includes an enum type specifier (that
      is, ": specifier-qualifier-list" in a declaration using
      "enum").  */
   bool has_enum_type_specifier;
   /* The specifier itself.  */
-  tree spec;
+  ವೃಕ್ಷ spec;
   /* An expression to be evaluated before the type specifier, in the
      case of typeof specifiers, or NULL otherwise or if no such
      expression is required for a particular typeof specifier.  In
@@ -284,15 +284,15 @@ struct c_typespec {
      determine array sizes that form part of the type, but the
      expression itself (as opposed to the array sizes) forms no part
      of the type and so needs to be recorded separately.  */
-  tree expr;
+  ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ;
 };
 
 /* A storage class specifier.  */
-enum c_storage_class {
+ಎಣಿಕೆ c_storage_class {
   csc_none,
   csc_auto,
   csc_extern,
-  csc_register,
+  csc_ರಿಜಿಸ್ಟರ್,
   csc_static,
   csc_typedef
 };
@@ -300,7 +300,7 @@ enum c_storage_class {
 /* A type specifier keyword "void", "_Bool", "char", "int", "float",
    "double", "_Decimal32", "_Decimal64", "_Decimal128", "_Decimal64x",
    "_Fract", "_Accum", "_BitInt", or none of these.  */
-enum c_typespec_keyword {
+ಎಣಿಕೆ c_typespec_keyword {
   cts_none,
   cts_void,
   cts_bool,
@@ -327,10 +327,10 @@ enum c_typespec_keyword {
 
    It is used to index the array of declspec locations in struct
    c_declspecs.  */
-enum c_declspec_word {
+ಎಣಿಕೆ c_declspec_ಶಬ್ದ {
   cdw_typespec /* A catch-all for a typespec.  */,
   cdw_storage_class  /* A catch-all for a storage class */,
-  cdw_attributes,
+  cdw_ಗುಣಲಕ್ಷಣಗಳು,
   cdw_typedef,
   cdw_explicit_signed,
   cdw_deprecated,
@@ -350,14 +350,14 @@ enum c_declspec_word {
   cdw_atomic,
   cdw_saturating,
   cdw_alignas,
-  cdw_address_space,
+  cdw_ವಿಳಾಸ_space,
   cdw_gimple,
   cdw_rtl,
-  cdw_number_of_elements /* This one must always be the last
+  cdw_ಸಂಖ್ಯೆ_ದ_elements /* This one must always be the last
 			    enumerator.  */
 };
 
-enum c_declspec_il {
+ಎಣಿಕೆ c_declspec_il {
   cdil_none,
   cdil_gimple,		/* __GIMPLE  */
   cdil_gimple_cfg,	/* __GIMPLE(cfg)  */
@@ -368,70 +368,70 @@ enum c_declspec_il {
 /* A sequence of declaration specifiers in C.  When a new declaration
    specifier is added, please update the enum c_declspec_word above
    accordingly.  */
-struct c_declspecs {
-  location_t locations[cdw_number_of_elements];
+ರಚನೆ c_declspecs {
+  location_t locations[cdw_ಸಂಖ್ಯೆ_ದ_elements];
   /* The type specified, if a single type specifier such as a struct,
      union or enum specifier, typedef name or typeof specifies the
      whole type, or NULL_TREE if none or a keyword such as "void" or
      "char" is used.  Does not include qualifiers.  */
-  tree type;
+  ವೃಕ್ಷ type;
   /* Any expression to be evaluated before the type, from a typeof
      specifier.  */
-  tree expr;
+  ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ;
   /* The attributes from a typedef decl.  */
-  tree decl_attr;
+  ವೃಕ್ಷ decl_attr;
   /* When parsing, the GNU attributes and prefix standard attributes.
      Outside the parser, this will be NULL; attributes (possibly from
      multiple lists) will be passed separately.  */
-  tree attrs;
+  ವೃಕ್ಷ attrs;
   /* When parsing, postfix standard attributes (which appertain to the
      type specified by the preceding declaration specifiers, unlike
      prefix standard attributes which appertain to the declaration or
      declarations as a whole).  */
-  tree postfix_attrs;
+  ವೃಕ್ಷ postfix_attrs;
   /* The pass to start compiling a __GIMPLE or __RTL function with.  */
-  char *gimple_or_rtl_pass;
+  ಅಕ್ಷರ *gimple_or_rtl_pass;
   /* ENTRY BB count.  */
-  profile_count entry_bb_count;
+  profile_ಎಣಿಕೆ ನಮೂದು_bb_ಎಣಿಕೆ;
   /* The base-2 log of the greatest alignment required by an _Alignas
      specifier, in bytes, or -1 if no such specifiers with nonzero
      alignment.  */
-  int align_log;
-  union {
+  ಪೂರ್ಣಾಂಕ align_log;
+  ಒಕ್ಕೂಟ {
     /* For the __intN declspec, this stores the index into the int_n_*
        arrays.  */
-    int int_n_idx;
+    ಪೂರ್ಣಾಂಕ int_n_idx;
     /* For the _FloatN and _FloatNx declspec, this stores the index into
        the floatn_nx_types array.  */
-    int floatn_nx_idx;
+    ಪೂರ್ಣಾಂಕ floatn_nx_idx;
     /* For _BitInt(N) this stores the N.  */
-    int bitint_prec;
+    ಪೂರ್ಣಾಂಕ bitint_prec;
   } u;
   /* The storage class specifier, or csc_none if none.  */
-  enum c_storage_class storage_class;
+  ಎಣಿಕೆ c_storage_class storage_class;
   /* Any type specifier keyword used such as "int", not reflecting
      modifiers such as "short", or cts_none if none.  */
-  enum c_typespec_keyword typespec_word : 8;
+  ಎಣಿಕೆ c_typespec_keyword typespec_ಶಬ್ದ : 8;
   /* The kind of type specifier if one has been seen, ctsk_none
      otherwise.  */
-  enum c_typespec_kind typespec_kind : 4;
-  enum c_declspec_il declspec_il : 3;
+  ಎಣಿಕೆ c_typespec_ಬಗೆ typespec_ಬಗೆ : 4;
+  ಎಣಿಕೆ c_declspec_il declspec_il : 3;
   /* Whether any expressions in typeof specifiers may appear in
      constant expressions.  */
-  bool expr_const_operands : 1;
+  bool ಅಭಿವ್ಯಕ್ತಿ_const_operands : 1;
   /* Whether any declaration specifiers have been seen at all.  */
-  bool declspecs_seen_p : 1;
+  bool declspecs_ನೋಡಿದ_p : 1;
   /* Whether any declaration specifiers other than standard attributes
      have been seen at all.  If only standard attributes have been
      seen, this is an attribute-declaration.  */
-  bool non_std_attrs_seen_p : 1;
+  bool non_std_attrs_ನೋಡಿದ_p : 1;
   /* Whether something other than a storage class specifier or
      attribute has been seen.  This is used to warn for the
      obsolescent usage of storage class specifiers other than at the
      start of the list.  (Doing this properly would require function
      specifiers to be handled separately from storage class
      specifiers.)  */
-  bool non_sc_seen_p : 1;
+  bool non_sc_ನೋಡಿದ_p : 1;
   /* Whether the type is specified by a typedef or typeof name.  */
   bool typedef_p : 1;
   /* Whether the type is explicitly "signed" or specified by a typedef
@@ -491,11 +491,11 @@ struct c_declspecs {
   /* Whether "constexpr" was specified.  */
   bool constexpr_p : 1;
   /* The address space that the declaration belongs to.  */
-  addr_space_t address_space;
+  addr_space_t ವಿಳಾಸ_space;
 };
 
 /* The various kinds of declarators in C.  */
-enum c_declarator_kind {
+ಎಣಿಕೆ c_declarator_ಬಗೆ {
   /* An identifier.  */
   cdk_id,
   /* A function.  */
@@ -503,125 +503,125 @@ enum c_declarator_kind {
   /* An array.  */
   cdk_array,
   /* A pointer.  */
-  cdk_pointer,
+  cdk_ಸೂಚಕ,
   /* Parenthesized declarator with nested attributes.  */
   cdk_attrs
 };
 
-struct c_arg_tag {
+ರಚನೆ c_arg_ಟ್ಯಾಗ್ {
   /* The argument name.  */
-  tree id;
+  ವೃಕ್ಷ id;
   /* The type of the argument.  */
-  tree type;
+  ವೃಕ್ಷ type;
 };
 
 
 /* Information about the parameters in a function declarator.  */
-struct c_arg_info {
+ರಚನೆ c_arg_info {
   /* A list of parameter decls.  */
-  tree parms;
+  ವೃಕ್ಷ parms;
   /* A list of structure, union and enum tags defined.  */
-  vec<c_arg_tag, va_gc> *tags;
+  vec<c_arg_ಟ್ಯಾಗ್, va_gc> *ಟ್ಯಾಗುಗಳು;
   /* A list of argument types to go in the FUNCTION_TYPE.  */
-  tree types;
+  ವೃಕ್ಷ types;
   /* A list of non-parameter decls (notably enumeration constants)
      defined with the parameters.  */
-  tree others;
+  ವೃಕ್ಷ others;
   /* A compound expression of VLA sizes from the parameters, or NULL.
      In a function definition, these are used to ensure that
      side-effects in sizes of arrays converted to pointers (such as a
      parameter int i[n++]) take place; otherwise, they are
      ignored.  */
-  tree pending_sizes;
+  ವೃಕ್ಷ pending_sizes;
   /* True when these arguments had [*].  */
   bool had_vla_unspec : 1;
   /* True when the arguments are a (...) prototype.  */
-  bool no_named_args_stdarg_p : 1;
+  bool no_named_ವಾದಗಳು_stdarg_p : 1;
   /* True when empty parentheses have been interpreted as (void) in C23 or
      later.  This is only for use by -Wtraditional and is no longer needed if
      -Wtraditional is removed.  */
-  bool c23_empty_parens : 1;
+  bool c23_ಖಾಲಿಗಳು_parens : 1;
 };
 
 /* A declarator.  */
-struct c_declarator {
+ರಚನೆ c_declarator {
   /* The kind of declarator.  */
-  enum c_declarator_kind kind;
+  ಎಣಿಕೆ c_declarator_ಬಗೆ ಬಗೆ;
   location_t id_loc; /* Currently only set for cdk_id, cdk_array. */
   /* Except for cdk_id, the contained declarator.  For cdk_id, NULL.  */
-  struct c_declarator *declarator;
-  union {
+  ರಚನೆ c_declarator *declarator;
+  ಒಕ್ಕೂಟ {
     /* For identifiers.  */
-    struct {
+    ರಚನೆ {
       /* An IDENTIFIER_NODE, or NULL_TREE if an abstract
 	 declarator.  */
-      tree id;
+      ವೃಕ್ಷ id;
       /* Any attributes (which apply to the declaration rather than to
 	 the type described by the outer declarators).  */
-      tree attrs;
+      ವೃಕ್ಷ attrs;
     } id;
     /* For functions.  */
-    struct c_arg_info *arg_info;
+    ರಚನೆ c_arg_info *arg_info;
     /* For arrays.  */
-    struct {
+    ರಚನೆ {
       /* The array dimension, or NULL for [] and [*].  */
-      tree dimen;
+      ವೃಕ್ಷ dimen;
       /* The qualifiers inside [].  */
-      int quals;
+      ಪೂರ್ಣಾಂಕ quals;
       /* The attributes (currently ignored) inside [].  */
-      tree attrs;
+      ವೃಕ್ಷ attrs;
       /* Whether [static] was used.  */
       bool static_p : 1;
       /* Whether [*] was used.  */
       bool vla_unspec_p : 1;
     } array;
     /* For pointers, the qualifiers on the pointer type.  */
-    int pointer_quals;
+    ಪೂರ್ಣಾಂಕ ಸೂಚಕ_quals;
     /* For attributes.  */
-    tree attrs;
+    ವೃಕ್ಷ attrs;
   } u;
 };
 
 /* A type name.  */
-struct c_type_name {
+ರಚನೆ c_type_name {
   /* The declaration specifiers.  */
-  struct c_declspecs *specs;
+  ರಚನೆ c_declspecs *specs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  ರಚನೆ c_declarator *declarator;
 };
 
 /* A parameter.  */
-struct c_parm {
+ರಚನೆ c_parm {
   /* The declaration specifiers, minus any prefix attributes.  */
-  struct c_declspecs *specs;
+  ರಚನೆ c_declspecs *specs;
   /* The attributes.  */
-  tree attrs;
+  ವೃಕ್ಷ attrs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  ರಚನೆ c_declarator *declarator;
   /* The location of the parameter.  */
   location_t loc;
 };
 
 /* Used when parsing an enum.  Initialized by start_enum.  */
-struct c_enum_contents
+ರಚನೆ c_enum_contents
 {
   /* While defining an enum type, this is 1 plus the last enumerator
      constant value.  */
-  tree enum_next_value;
+  ವೃಕ್ಷ enum_ಮುಂದಿನ_ಮೌಲ್ಯ;
 
   /* The enumeration type itself.  */
-  tree enum_type;
+  ವೃಕ್ಷ enum_type;
 
   /* Nonzero means that there was overflow computing enum_next_value.  */
-  int enum_overflow;
+  ಪೂರ್ಣಾಂಕ enum_ಅತಿಪ್ರವಾಹ;
 };
 
 /* A type of reference to a static identifier in an inline
    function.  */
-enum c_inline_static_type {
+ಎಣಿಕೆ c_inline_static_type {
   /* Identifier with internal linkage used in function that may be an
      inline definition (i.e., file-scope static).  */
-  csi_internal,
+  csi_ಆಂತರಿಕ,
   /* Modifiable object with static storage duration defined in
      function that may be an inline definition (i.e., local
      static).  */
@@ -629,31 +629,31 @@ enum c_inline_static_type {
 };
 
 /* Record details of decls possibly used inside sizeof or typeof.  */
-struct maybe_used_decl
+ರಚನೆ maybe_ಬಳಸಿದ_decl
 {
   /* The decl.  */
-  tree decl;
+  ವೃಕ್ಷ decl;
   /* The level seen at (in_sizeof + in_typeof + in_countof + in_generic).  */
-  int level;
+  ಪೂರ್ಣಾಂಕ level;
   /* Seen in address-of.  */
-  bool address;
+  bool ವಿಳಾಸ;
   /* The next one at this level or above, or NULL.  */
-  struct maybe_used_decl *next;
+  ರಚನೆ maybe_ಬಳಸಿದ_decl *ಮುಂದಿನ;
 };
 
 
 /* in c-parser.cc */
-struct c_tree_token_vec;
-extern void c_parse_init (void);
-extern bool c_keyword_starts_typename (enum rid keyword);
+ರಚನೆ c_ವೃಕ್ಷ_token_vec;
+ಬಾಹ್ಯ ಶೂನ್ಯ c_parse_init (ಶೂನ್ಯ);
+ಬಾಹ್ಯ bool c_keyword_starts_typename (ಎಣಿಕೆ rid keyword);
 
 /* in c-aux-info.cc */
-extern void gen_aux_info_record (tree, int, int, int);
+ಬಾಹ್ಯ ಶೂನ್ಯ gen_aux_info_ದಾಖಲೆ (ವೃಕ್ಷ, ಪೂರ್ಣಾಂಕ, ಪೂರ್ಣಾಂಕ, ಪೂರ್ಣಾಂಕ);
 
 /* in c-decl.cc */
-struct c_spot_bindings;
+ರಚನೆ c_spot_bindings;
 class c_struct_parse_info;
-extern struct obstack parser_obstack;
+ಬಾಹ್ಯ ರಚನೆ obstack parser_obstack;
 /* Set to IN_ITERATION_STMT if parsing an iteration-statement,
    to IN_OMP_BLOCK if parsing OpenMP structured block and
    IN_OMP_FOR if parsing OpenMP loop.  If parsing a switch statement,
@@ -661,333 +661,333 @@ extern struct obstack parser_obstack;
    iteration-statement, OpenMP block or loop within that switch.
    If the innermost iteration/switch statement is named, IN_NAMED_STMT
    is additionally bitwise ORed into it.  */
-#define IN_SWITCH_STMT		1
-#define IN_ITERATION_STMT	2
-#define IN_OMP_BLOCK		4
-#define IN_OMP_FOR		8
-#define IN_OBJC_FOREACH		16
-#define IN_NAMED_STMT		32
-extern unsigned char in_statement;
+#ವ್ಯಾಖ್ಯಾನಿಸು ಒಳ_SWITCH_STMT		1
+#ವ್ಯಾಖ್ಯಾನಿಸು ಒಳ_ITERATION_STMT	2
+#ವ್ಯಾಖ್ಯಾನಿಸು ಒಳ_OMP_ಖಂಡ		4
+#ವ್ಯಾಖ್ಯಾನಿಸು ಒಳ_OMP_FOR		8
+#ವ್ಯಾಖ್ಯಾನಿಸು ಒಳ_OBJC_FOREACH		16
+#ವ್ಯಾಖ್ಯಾನಿಸು ಒಳ_NAMED_STMT		32
+ಬಾಹ್ಯ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ ಒಳ_statement;
 
-extern bool switch_statement_break_seen_p;
+ಬಾಹ್ಯ bool switch_statement_break_ನೋಡಿದ_p;
 
-extern bool global_bindings_p (void);
-extern tree pushdecl (tree);
-extern unsigned int start_underspecified_init (location_t, tree);
-extern void finish_underspecified_init (tree, unsigned int);
-extern void push_scope (void);
-extern tree pop_scope (void);
-extern void c_mark_decl_jump_unsafe_in_current_scope ();
-extern void c_bindings_start_stmt_expr (struct c_spot_bindings *);
-extern void c_bindings_end_stmt_expr (struct c_spot_bindings *);
+ಬಾಹ್ಯ bool global_bindings_p (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ವೃಕ್ಷ pushdecl (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ ಆರಂಭ_underspecified_init (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ ಮುಕ್ತಾಯ_underspecified_init (ವೃಕ್ಷ, ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ);
+ಬಾಹ್ಯ ಶೂನ್ಯ ತಳ್ಳು_scope (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ವೃಕ್ಷ ತೆಗೆ_scope (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_mark_decl_jump_unsafe_ಒಳ_current_scope ();
+ಬಾಹ್ಯ ಶೂನ್ಯ c_bindings_ಆರಂಭ_stmt_ಅಭಿವ್ಯಕ್ತಿ (ರಚನೆ c_spot_bindings *);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_bindings_ಕೊನೆ_stmt_ಅಭಿವ್ಯಕ್ತಿ (ರಚನೆ c_spot_bindings *);
 
-extern void record_inline_static (location_t, tree, tree,
-				  enum c_inline_static_type);
-extern void c_init_decl_processing (void);
-extern void c_print_identifier (FILE *, tree, int);
-extern int quals_from_declspecs (const struct c_declspecs *);
-extern struct c_declarator *build_array_declarator (location_t, tree,
-    						    struct c_declspecs *,
+ಬಾಹ್ಯ ಶೂನ್ಯ ದಾಖಲೆ_inline_static (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ,
+				  ಎಣಿಕೆ c_inline_static_type);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_init_decl_processing (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_print_identifier (FILE *, ವೃಕ್ಷ, ಪೂರ್ಣಾಂಕ);
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ quals_from_declspecs (ಸ್ಥಿರಾಂಕ ರಚನೆ c_declspecs *);
+ಬಾಹ್ಯ ರಚನೆ c_declarator *build_array_declarator (location_t, ವೃಕ್ಷ,
+    						    ರಚನೆ c_declspecs *,
 						    bool, bool);
-extern tree build_enumerator (location_t, location_t, struct c_enum_contents *,
-			      tree, tree);
-extern tree check_for_loop_decls (location_t, bool);
-extern void mark_forward_parm_decls (void);
-extern void declare_parm_level (void);
-extern void undeclared_variable (location_t, tree);
-extern tree lookup_label_for_goto (location_t, tree);
-extern tree declare_label (tree);
-extern tree define_label (location_t, tree);
-extern struct c_spot_bindings *c_get_switch_bindings (void);
-extern void c_release_switch_bindings (struct c_spot_bindings *);
-extern bool c_check_switch_jump_warnings (struct c_spot_bindings *,
+ಬಾಹ್ಯ ವೃಕ್ಷ build_enumerator (location_t, location_t, ರಚನೆ c_enum_contents *,
+			      ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ check_for_loop_decls (location_t, bool);
+ಬಾಹ್ಯ ಶೂನ್ಯ mark_forward_parm_decls (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ declare_parm_level (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ undeclared_variable (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ lookup_label_for_goto (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ declare_label (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ define_label (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ರಚನೆ c_spot_bindings *c_get_switch_bindings (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_release_switch_bindings (ರಚನೆ c_spot_bindings *);
+ಬಾಹ್ಯ bool c_check_switch_jump_warnings (ರಚನೆ c_spot_bindings *,
 					  location_t, location_t);
-extern void finish_decl (tree, location_t, tree, tree, tree);
-extern tree finish_enum (tree, tree, tree);
-extern void finish_function (location_t = input_location);
-extern tree finish_struct (location_t, tree, tree, tree,
+ಬಾಹ್ಯ ಶೂನ್ಯ ಮುಕ್ತಾಯ_decl (ವೃಕ್ಷ, location_t, ವೃಕ್ಷ, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ ಮುಕ್ತಾಯ_enum (ವೃಕ್ಷ, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ ಮುಕ್ತಾಯ_function (location_t = ಒಳಹರಿವು_location);
+ಬಾಹ್ಯ ವೃಕ್ಷ ಮುಕ್ತಾಯ_struct (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ, ವೃಕ್ಷ,
 			   class c_struct_parse_info *,
-			   tree *expr = NULL);
-extern tree c_simulate_enum_decl (location_t, const char *,
+			   ವೃಕ್ಷ *ಅಭಿವ್ಯಕ್ತಿ = ಖಾಲಿ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_simulate_enum_decl (location_t, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *,
 				  vec<string_int_pair> *);
-extern tree c_simulate_record_decl (location_t, const char *,
-				    array_slice<const tree>);
-extern struct c_arg_info *build_arg_info (void);
-extern struct c_arg_info *get_parm_info (bool, tree);
-extern tree grokfield (location_t, struct c_declarator *,
-		       struct c_declspecs *, tree, tree *, tree *);
-extern tree groktypename (struct c_type_name *, tree *, bool *);
-extern tree grokgenassoc (struct c_type_name *);
-extern tree grokparm (const struct c_parm *, tree *);
-extern tree implicitly_declare (location_t, tree);
-extern void keep_next_level (void);
-extern void pending_xref_error (void);
-extern void c_push_function_context (void);
-extern void c_pop_function_context (void);
-extern void push_parm_decl (const struct c_parm *, tree *);
-extern struct c_declarator *set_array_declarator_inner (struct c_declarator *,
-							struct c_declarator *);
-extern tree c_builtin_function (tree);
-extern tree c_builtin_function_ext_scope (tree);
-extern tree c_simulate_builtin_function_decl (tree);
-extern void c_warn_unused_attributes (tree);
-extern tree c_warn_type_attributes (tree, tree);
-extern void shadow_tag (const struct c_declspecs *);
-extern void shadow_tag_warned (const struct c_declspecs *, int);
-extern tree start_enum (location_t, struct c_enum_contents *, tree, tree,
+ಬಾಹ್ಯ ವೃಕ್ಷ c_simulate_ದಾಖಲೆ_decl (location_t, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *,
+				    array_ತುಂಡು<ಸ್ಥಿರಾಂಕ ವೃಕ್ಷ>);
+ಬಾಹ್ಯ ರಚನೆ c_arg_info *build_arg_info (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ರಚನೆ c_arg_info *get_parm_info (bool, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ grokfield (location_t, ರಚನೆ c_declarator *,
+		       ರಚನೆ c_declspecs *, ವೃಕ್ಷ, ವೃಕ್ಷ *, ವೃಕ್ಷ *);
+ಬಾಹ್ಯ ವೃಕ್ಷ groktypename (ರಚನೆ c_type_name *, ವೃಕ್ಷ *, bool *);
+ಬಾಹ್ಯ ವೃಕ್ಷ grokgenassoc (ರಚನೆ c_type_name *);
+ಬಾಹ್ಯ ವೃಕ್ಷ grokparm (ಸ್ಥಿರಾಂಕ ರಚನೆ c_parm *, ವೃಕ್ಷ *);
+ಬಾಹ್ಯ ವೃಕ್ಷ implicitly_declare (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ keep_ಮುಂದಿನ_level (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ pending_xref_error (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_ತಳ್ಳು_function_context (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_ತೆಗೆ_function_context (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ ತಳ್ಳು_parm_decl (ಸ್ಥಿರಾಂಕ ರಚನೆ c_parm *, ವೃಕ್ಷ *);
+ಬಾಹ್ಯ ರಚನೆ c_declarator *ಗಣ_array_declarator_inner (ರಚನೆ c_declarator *,
+							ರಚನೆ c_declarator *);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_builtin_function (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_builtin_function_ext_scope (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_simulate_builtin_function_decl (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_warn_ಬಳಸದ_ಗುಣಲಕ್ಷಣಗಳು (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_warn_type_ಗುಣಲಕ್ಷಣಗಳು (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ shadow_ಟ್ಯಾಗ್ (ಸ್ಥಿರಾಂಕ ರಚನೆ c_declspecs *);
+ಬಾಹ್ಯ ಶೂನ್ಯ shadow_ಟ್ಯಾಗ್_warned (ಸ್ಥಿರಾಂಕ ರಚನೆ c_declspecs *, ಪೂರ್ಣಾಂಕ);
+ಬಾಹ್ಯ ವೃಕ್ಷ ಆರಂಭ_enum (location_t, ರಚನೆ c_enum_contents *, ವೃಕ್ಷ, ವೃಕ್ಷ,
 			bool potential_nesting_p);
-extern bool start_function (struct c_declspecs *, struct c_declarator *, tree);
-extern tree start_decl (struct c_declarator *, struct c_declspecs *, bool,
-			tree, bool = true, location_t * = NULL);
-extern tree start_struct (location_t, enum tree_code, tree,
+ಬಾಹ್ಯ bool ಆರಂಭ_function (ರಚನೆ c_declspecs *, ರಚನೆ c_declarator *, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ ಆರಂಭ_decl (ರಚನೆ c_declarator *, ರಚನೆ c_declspecs *, bool,
+			ವೃಕ್ಷ, bool = true, location_t * = ಖಾಲಿ);
+ಬಾಹ್ಯ ವೃಕ್ಷ ಆರಂಭ_struct (location_t, ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2, ವೃಕ್ಷ,
 			  class c_struct_parse_info **);
-extern void store_parm_decls (void);
-extern void store_parm_decls_from (struct c_arg_info *);
-extern void temp_store_parm_decls (tree, tree);
-extern void temp_pop_parm_decls (void);
-extern tree xref_tag (enum tree_code, tree);
-extern struct c_typespec parser_xref_tag (location_t, enum tree_code, tree,
-					  bool, tree, bool);
-extern struct c_parm *build_c_parm (struct c_declspecs *, tree,
-				    struct c_declarator *, location_t);
-extern struct c_declarator *build_attrs_declarator (tree,
-						    struct c_declarator *);
-extern struct c_declarator *build_function_declarator (struct c_arg_info *,
-						       struct c_declarator *);
-extern struct c_declarator *build_id_declarator (tree);
-extern struct c_declarator *make_pointer_declarator (struct c_declspecs *,
-						     struct c_declarator *);
-extern struct c_declspecs *build_null_declspecs (void);
-extern struct c_declspecs *declspecs_add_qual (location_t,
-					       struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_type (location_t,
-					       struct c_declspecs *,
-					       struct c_typespec);
-extern struct c_declspecs *declspecs_add_scspec (location_t,
-						 struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_attrs (location_t,
-						struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_addrspace (location_t,
-						    struct c_declspecs *,
+ಬಾಹ್ಯ ಶೂನ್ಯ store_parm_decls (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ store_parm_decls_from (ರಚನೆ c_arg_info *);
+ಬಾಹ್ಯ ಶೂನ್ಯ ತಾತ್ಕಾಲಿಕ_store_parm_decls (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ ತಾತ್ಕಾಲಿಕ_ತೆಗೆ_parm_decls (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ವೃಕ್ಷ xref_ಟ್ಯಾಗ್ (ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ರಚನೆ c_typespec parser_xref_ಟ್ಯಾಗ್ (location_t, ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2, ವೃಕ್ಷ,
+					  bool, ವೃಕ್ಷ, bool);
+ಬಾಹ್ಯ ರಚನೆ c_parm *build_c_parm (ರಚನೆ c_declspecs *, ವೃಕ್ಷ,
+				    ರಚನೆ c_declarator *, location_t);
+ಬಾಹ್ಯ ರಚನೆ c_declarator *build_attrs_declarator (ವೃಕ್ಷ,
+						    ರಚನೆ c_declarator *);
+ಬಾಹ್ಯ ರಚನೆ c_declarator *build_function_declarator (ರಚನೆ c_arg_info *,
+						       ರಚನೆ c_declarator *);
+ಬಾಹ್ಯ ರಚನೆ c_declarator *build_id_declarator (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ರಚನೆ c_declarator *make_ಸೂಚಕ_declarator (ರಚನೆ c_declspecs *,
+						     ರಚನೆ c_declarator *);
+ಬಾಹ್ಯ ರಚನೆ c_declspecs *build_null_declspecs (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ರಚನೆ c_declspecs *declspecs_ಕೂಡಿಸು_qual (location_t,
+					       ರಚನೆ c_declspecs *, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ರಚನೆ c_declspecs *declspecs_ಕೂಡಿಸು_type (location_t,
+					       ರಚನೆ c_declspecs *,
+					       ರಚನೆ c_typespec);
+ಬಾಹ್ಯ ರಚನೆ c_declspecs *declspecs_ಕೂಡಿಸು_scspec (location_t,
+						 ರಚನೆ c_declspecs *, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ರಚನೆ c_declspecs *declspecs_ಕೂಡಿಸು_attrs (location_t,
+						ರಚನೆ c_declspecs *, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ರಚನೆ c_declspecs *declspecs_ಕೂಡಿಸು_addrspace (location_t,
+						    ರಚನೆ c_declspecs *,
 						    addr_space_t);
-extern struct c_declspecs *declspecs_add_alignas (location_t,
-						  struct c_declspecs *, tree);
-extern struct c_declspecs *finish_declspecs (struct c_declspecs *);
-extern size_t c_tree_size (enum tree_code);
-extern int c_get_loop_names (tree, bool, tree *);
-extern void c_release_loop_names (int);
-extern tree c_finish_bc_name (location_t, tree, bool);
+ಬಾಹ್ಯ ರಚನೆ c_declspecs *declspecs_ಕೂಡಿಸು_alignas (location_t,
+						  ರಚನೆ c_declspecs *, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ರಚನೆ c_declspecs *ಮುಕ್ತಾಯ_declspecs (ರಚನೆ c_declspecs *);
+ಬಾಹ್ಯ ಗಾತ್ರ_t c_ವೃಕ್ಷ_ಗಾತ್ರ (ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2);
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ c_get_loop_ಹೆಸರುಗಳು (ವೃಕ್ಷ, bool, ವೃಕ್ಷ *);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_release_loop_ಹೆಸರುಗಳು (ಪೂರ್ಣಾಂಕ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_bc_name (location_t, ವೃಕ್ಷ, bool);
 
 /* in c-objc-common.cc */
-extern bool c_objc_common_init (void);
-extern bool c_missing_noreturn_ok_p (tree);
-extern bool c_warn_unused_global_decl (const_tree);
-extern void c_initialize_diagnostics (diagnostics::context *);
-extern bool c_var_mod_p (tree x, tree fn);
-extern alias_set_type c_get_alias_set (tree);
-extern int c_type_dwarf_attribute (const_tree, int);
-extern tree c_enum_underlying_base_type (const_tree);
+ಬಾಹ್ಯ bool c_objc_common_init (ಶೂನ್ಯ);
+ಬಾಹ್ಯ bool c_missing_noreturn_ok_p (ವೃಕ್ಷ);
+ಬಾಹ್ಯ bool c_warn_ಬಳಸದ_global_decl (const_ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_initialize_diagnostics (diagnostics::context *);
+ಬಾಹ್ಯ bool c_var_mod_p (ವೃಕ್ಷ x, ವೃಕ್ಷ fn);
+ಬಾಹ್ಯ alias_ಗಣ_type c_get_alias_ಗಣ (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ c_type_dwarf_attribute (const_ವೃಕ್ಷ, ಪೂರ್ಣಾಂಕ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_enum_underlying_ತಳ_type (const_ವೃಕ್ಷ);
 
 /* in c-typeck.cc */
-extern int in_alignof;
-extern int in_sizeof;
-extern int in_countof;
-extern int in_typeof;
-extern int in_generic;
-extern bool c_in_omp_for;
-extern bool c_omp_array_section_p;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ ಒಳ_alignof;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ ಒಳ_sizeof;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ ಒಳ_countof;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ ಒಳ_typeof;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ ಒಳ_generic;
+ಬಾಹ್ಯ bool c_ಒಳ_omp_for;
+ಬಾಹ್ಯ bool c_omp_array_section_p;
 
-extern tree c_last_sizeof_arg;
-extern location_t c_last_sizeof_loc;
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಕೊನೆಯ_sizeof_arg;
+ಬಾಹ್ಯ location_t c_ಕೊನೆಯ_sizeof_loc;
 
-extern struct c_switch *c_switch_stack;
+ಬಾಹ್ಯ ರಚನೆ c_switch *c_switch_ರಾಶಿ;
 
-extern bool null_pointer_constant_p (const_tree);
+ಬಾಹ್ಯ bool null_ಸೂಚಕ_constant_p (const_ವೃಕ್ಷ);
 
 
-inline bool
-c_type_variably_modified_p (tree t)
+ಸಾಲೊಳಗೆ bool
+c_type_variably_modified_p (ವೃಕ್ಷ t)
 {
-  if (error_mark_node == t)
-    return false;
-  if (C_TYPE_VARIABLY_MODIFIED (t))
-    return true;
-  if (TYPE_STRUCTURAL_EQUALITY_P (t))
+  ಆದರೆ (error_mark_ಗಂಟು == t)
+    ಹಿಂತಿರುಗಿ false;
+  ಆದರೆ (C_TYPE_VARIABLY_MODIFIED (t))
+    ಹಿಂತಿರುಗಿ true;
+  ಆದರೆ (TYPE_STRUCTURAL_EQUALITY_P (t))
     {
       /* The flag may not have been set yet because of incomplete
 	 structure or union types completed later.  */
-      switch (TREE_CODE (t))
+      ಆಯ್ಕೆ (ವೃಕ್ಷ_ಸಂಕೇತ (t))
 	{
-	case ARRAY_TYPE:
-	case FUNCTION_TYPE:
-	case POINTER_TYPE:
+	ಸ್ಥಿತಿ ARRAY_TYPE:
+	ಸ್ಥಿತಿ FUNCTION_TYPE:
+	ಸ್ಥಿತಿ ಸೂಚಕ_TYPE:
 	  /* Recurse.  */
-	  if (c_type_variably_modified_p (TREE_TYPE (t)))
+	  ಆದರೆ (c_type_variably_modified_p (ವೃಕ್ಷ_TYPE (t)))
 	    {
 	      C_TYPE_VARIABLY_MODIFIED (t) = 1;
-	      return true;
+	      ಹಿಂತಿರುಗಿ true;
 	    }
-	  break;
-	default:
-	  break;
+	  ನಿಲ್ಲಿಸು;
+	ಪೂರ್ವನಿಯೋಜಿತ:
+	  ನಿಲ್ಲಿಸು;
 	}
     }
-  return false;
+  ಹಿಂತಿರುಗಿ false;
 }
 
-inline bool
-c_type_unspecified_p (tree t)
+ಸಾಲೊಳಗೆ bool
+c_type_unspecified_p (ವೃಕ್ಷ t)
 {
-  return error_mark_node != t
-	 && C_TYPE_VARIABLE_SIZE (t) && TREE_CODE (t) == ARRAY_TYPE
-	 && TYPE_DOMAIN (t) && TYPE_MAX_VALUE (TYPE_DOMAIN (t))
-	 && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (t))) == COMPOUND_EXPR
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 0))
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 1));
+  ಹಿಂತಿರುಗಿ error_mark_ಗಂಟು != t
+	 && C_TYPE_VARIABLE_ಗಾತ್ರ (t) && ವೃಕ್ಷ_ಸಂಕೇತ (t) == ARRAY_TYPE
+	 && TYPE_DOMAIN (t) && TYPE_MAX_ಮೌಲ್ಯ (TYPE_DOMAIN (t))
+	 && ವೃಕ್ಷ_ಸಂಕೇತ (TYPE_MAX_ಮೌಲ್ಯ (TYPE_DOMAIN (t))) == COMPOUND_ಅಭಿವ್ಯಕ್ತಿ
+	 && integer_zerop (ವೃಕ್ಷ_ಕಾರ್ಯಾಂಶ (TYPE_MAX_ಮೌಲ್ಯ (TYPE_DOMAIN (t)), 0))
+	 && integer_zerop (ವೃಕ್ಷ_ಕಾರ್ಯಾಂಶ (TYPE_MAX_ಮೌಲ್ಯ (TYPE_DOMAIN (t)), 1));
 }
 
-extern bool zero_length_array_type_p (const_tree type);
-extern bool char_type_p (tree);
-extern tree c_type_tag (const_tree t);
-extern tree c_objc_common_truthvalue_conversion (location_t, tree,
-						 tree = integer_type_node);
-extern tree require_complete_type (location_t, tree);
-extern bool same_translation_unit_p (const_tree, const_tree);
-extern bool comptypes (tree, tree);
-extern bool comptypes_same_p (tree, tree);
-extern bool comptypes_equiv_p (tree, tree);
-extern bool comptypes_check_enum_int (tree, tree, bool *);
-extern bool c_mark_addressable (tree, bool = false, bool = false);
-extern void c_incomplete_type_error (location_t, const_tree, const_tree);
-extern tree c_type_promotes_to (tree);
-extern struct c_expr default_function_array_conversion (location_t,
-							struct c_expr);
-extern struct c_expr default_function_array_read_conversion (location_t,
-							     struct c_expr);
-extern struct c_expr convert_lvalue_to_rvalue (location_t, struct c_expr,
+ಬಾಹ್ಯ bool zero_ಉದ್ದಳತೆ_array_type_p (const_ವೃಕ್ಷ type);
+ಬಾಹ್ಯ bool char_type_p (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_type_ಟ್ಯಾಗ್ (const_ವೃಕ್ಷ t);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_objc_common_truthvalue_conversion (location_t, ವೃಕ್ಷ,
+						 ವೃಕ್ಷ = integer_type_ಗಂಟು);
+ಬಾಹ್ಯ ವೃಕ್ಷ require_complete_type (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ bool same_translation_unit_p (const_ವೃಕ್ಷ, const_ವೃಕ್ಷ);
+ಬಾಹ್ಯ bool comptypes (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ bool comptypes_same_p (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ bool comptypes_equiv_p (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ bool comptypes_check_enum_int (ವೃಕ್ಷ, ವೃಕ್ಷ, bool *);
+ಬಾಹ್ಯ bool c_mark_addressable (ವೃಕ್ಷ, bool = false, bool = false);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_incomplete_type_error (location_t, const_ವೃಕ್ಷ, const_ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_type_promotes_ಗಮ್ಯ (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ default_function_array_conversion (location_t,
+							ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ default_function_array_read_conversion (location_t,
+							     ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ convert_lvalue_ಗಮ್ಯ_rvalue (location_t, ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ,
 					       bool, bool, bool = false);
-extern tree decl_constant_value_1 (tree, bool);
-extern void mark_exp_read (tree);
-extern tree composite_type (tree, tree);
-extern tree lookup_field (const_tree, tree);
-extern tree build_component_ref (location_t, tree, tree, location_t,
+ಬಾಹ್ಯ ವೃಕ್ಷ decl_constant_ಮೌಲ್ಯ_1 (ವೃಕ್ಷ, bool);
+ಬಾಹ್ಯ ಶೂನ್ಯ mark_exp_read (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ ಸಂಯುಕ್ತ_type (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ lookup_ಕ್ಷೇತ್ರ (const_ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ build_component_ref (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ, location_t,
 				 location_t);
-extern tree handle_counted_by_for_component_ref (location_t, tree);
-extern tree build_array_ref (location_t, tree, tree);
-extern tree build_omp_array_section (location_t, tree, tree, tree);
-extern tree build_external_ref (location_t, tree, bool, tree *);
-extern void pop_maybe_used (bool);
-extern struct maybe_used_decl *save_maybe_used ();
-extern void restore_maybe_used (struct maybe_used_decl *);
-extern void mark_decl_used (tree, bool);
-extern struct c_expr c_expr_sizeof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_sizeof_type (location_t, struct c_type_name *);
-extern struct c_expr c_expr_countof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_countof_type (location_t loc,
-					  struct c_type_name *);
-extern struct c_expr c_expr_maxof_type (location_t loc, struct c_type_name *);
-extern struct c_expr c_expr_minof_type (location_t loc, struct c_type_name *);
-extern struct c_expr parser_build_unary_op (location_t, enum tree_code,
-    					    struct c_expr);
-extern struct c_expr parser_build_binary_op (location_t,
-    					     enum tree_code, struct c_expr,
-					     struct c_expr, tree);
-extern tree build_conditional_expr (location_t, tree, bool, tree, tree,
-				    location_t, tree, tree, location_t);
-extern tree build_compound_expr (location_t, tree, tree);
-extern tree c_cast_expr (location_t, struct c_type_name *, tree);
-extern tree build_c_cast (location_t, tree, tree);
-extern void store_init_value (location_t, tree, tree, tree);
-extern void maybe_warn_string_init (location_t, tree, struct c_expr);
-extern void start_init (tree, tree, bool, bool, rich_location *);
-extern void finish_init (void);
-extern void really_start_incremental_init (tree);
-extern void finish_implicit_inits (location_t, struct obstack *);
-extern void push_init_level (location_t, int, struct obstack *);
-extern struct c_expr pop_init_level (location_t, int, struct obstack *,
+ಬಾಹ್ಯ ವೃಕ್ಷ handle_counted_by_for_component_ref (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ build_array_ref (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ build_omp_array_section (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ build_external_ref (location_t, ವೃಕ್ಷ, bool, ವೃಕ್ಷ *);
+ಬಾಹ್ಯ ಶೂನ್ಯ ತೆಗೆ_maybe_ಬಳಸಿದ (bool);
+ಬಾಹ್ಯ ರಚನೆ maybe_ಬಳಸಿದ_decl *save_maybe_ಬಳಸಿದ ();
+ಬಾಹ್ಯ ಶೂನ್ಯ restore_maybe_ಬಳಸಿದ (ರಚನೆ maybe_ಬಳಸಿದ_decl *);
+ಬಾಹ್ಯ ಶೂನ್ಯ mark_decl_ಬಳಸಿದ (ವೃಕ್ಷ, bool);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ c_ಅಭಿವ್ಯಕ್ತಿ_sizeof_ಅಭಿವ್ಯಕ್ತಿ (location_t, ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ c_ಅಭಿವ್ಯಕ್ತಿ_sizeof_type (location_t, ರಚನೆ c_type_name *);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ c_ಅಭಿವ್ಯಕ್ತಿ_countof_ಅಭಿವ್ಯಕ್ತಿ (location_t, ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ c_ಅಭಿವ್ಯಕ್ತಿ_countof_type (location_t loc,
+					  ರಚನೆ c_type_name *);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ c_ಅಭಿವ್ಯಕ್ತಿ_maxof_type (location_t loc, ರಚನೆ c_type_name *);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ c_ಅಭಿವ್ಯಕ್ತಿ_minof_type (location_t loc, ರಚನೆ c_type_name *);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ parser_build_unary_op (location_t, ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2,
+    					    ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ parser_build_ದ್ವಿಮಾನ_op (location_t,
+    					     ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2, ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ,
+					     ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ build_conditional_ಅಭಿವ್ಯಕ್ತಿ (location_t, ವೃಕ್ಷ, bool, ವೃಕ್ಷ, ವೃಕ್ಷ,
+				    location_t, ವೃಕ್ಷ, ವೃಕ್ಷ, location_t);
+ಬಾಹ್ಯ ವೃಕ್ಷ build_compound_ಅಭಿವ್ಯಕ್ತಿ (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_cast_ಅಭಿವ್ಯಕ್ತಿ (location_t, ರಚನೆ c_type_name *, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ build_c_cast (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ store_init_ಮೌಲ್ಯ (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ maybe_warn_string_init (location_t, ವೃಕ್ಷ, ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ);
+ಬಾಹ್ಯ ಶೂನ್ಯ ಆರಂಭ_init (ವೃಕ್ಷ, ವೃಕ್ಷ, bool, bool, rich_location *);
+ಬಾಹ್ಯ ಶೂನ್ಯ ಮುಕ್ತಾಯ_init (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ really_ಆರಂಭ_incremental_init (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ ಮುಕ್ತಾಯ_implicit_inits (location_t, ರಚನೆ obstack *);
+ಬಾಹ್ಯ ಶೂನ್ಯ ತಳ್ಳು_init_level (location_t, ಪೂರ್ಣಾಂಕ, ರಚನೆ obstack *);
+ಬಾಹ್ಯ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ತೆಗೆ_init_level (location_t, ಪೂರ್ಣಾಂಕ, ರಚನೆ obstack *,
 				     location_t);
-extern void set_init_index (location_t, tree, tree, struct obstack *);
-extern void set_init_label (location_t, tree, location_t, struct obstack *);
-unsigned c_maybe_optimize_large_byte_initializer (void);
-extern void process_init_element (location_t, struct c_expr, bool,
-				  struct obstack *);
-extern tree build_compound_literal (location_t, tree, tree, bool,
-				    unsigned int, struct c_declspecs *);
-extern void check_compound_literal_type (location_t, struct c_type_name *);
-extern tree c_start_switch (location_t, location_t, tree, bool, tree);
-extern void c_finish_switch (tree, tree);
-extern tree build_asm_expr (location_t, tree, tree, tree, tree, tree, bool,
+ಬಾಹ್ಯ ಶೂನ್ಯ ಗಣ_init_ಸೂಚ್ಯಂಕ (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ, ರಚನೆ obstack *);
+ಬಾಹ್ಯ ಶೂನ್ಯ ಗಣ_init_label (location_t, ವೃಕ್ಷ, location_t, ರಚನೆ obstack *);
+ಚಿಹ್ನೆರಹಿತ c_maybe_optimize_large_byte_initializer (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ಶೂನ್ಯ process_init_element (location_t, ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ, bool,
+				  ರಚನೆ obstack *);
+ಬಾಹ್ಯ ವೃಕ್ಷ build_compound_literal (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ, bool,
+				    ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ, ರಚನೆ c_declspecs *);
+ಬಾಹ್ಯ ಶೂನ್ಯ check_compound_literal_type (location_t, ರಚನೆ c_type_name *);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಆರಂಭ_switch (location_t, location_t, ವೃಕ್ಷ, bool, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_ಮುಕ್ತಾಯ_switch (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ build_asm_ಅಭಿವ್ಯಕ್ತಿ (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ, ವೃಕ್ಷ, ವೃಕ್ಷ, ವೃಕ್ಷ, bool,
 			    bool);
-extern tree build_asm_stmt (bool, tree);
-extern int c_types_compatible_p (tree, tree);
-extern tree c_begin_compound_stmt (bool);
-extern tree c_end_compound_stmt (location_t, tree, bool);
-extern void c_finish_if_stmt (location_t, tree, tree, tree);
-extern void c_finish_loop (location_t, location_t, tree, location_t, tree,
-			   tree, tree, tree, bool);
-extern tree c_begin_stmt_expr (void);
-extern tree c_finish_stmt_expr (location_t, tree);
-extern tree c_process_expr_stmt (location_t, tree);
-extern tree c_finish_expr_stmt (location_t, tree);
-extern tree c_finish_return (location_t, tree, tree, bool = false);
-extern tree c_finish_bc_stmt (location_t, tree, bool, tree);
-extern tree c_finish_goto_label (location_t, tree);
-extern tree c_finish_goto_ptr (location_t, c_expr val);
-extern tree c_expr_to_decl (tree, bool *, bool *);
-extern tree c_finish_omp_construct (location_t, enum tree_code, tree, tree);
-extern tree c_finish_oacc_data (location_t, tree, tree);
-extern tree c_finish_oacc_host_data (location_t, tree, tree);
-extern tree c_begin_omp_parallel (void);
-extern tree c_finish_omp_parallel (location_t, tree, tree);
-extern tree c_begin_omp_task (void);
-extern tree c_finish_omp_task (location_t, tree, tree);
-extern void c_finish_omp_cancel (location_t, tree);
-extern void c_finish_omp_cancellation_point (location_t, tree);
-extern tree c_finish_omp_clauses (tree, enum c_omp_region_type);
-extern tree c_omp_finish_mapper_clauses (tree);
-extern tree c_omp_mapper_lookup (tree, tree);
-extern tree c_omp_extract_mapper_directive (tree);
-extern tree c_omp_map_array_section (location_t, tree);
-extern tree c_build_va_arg (location_t, tree, location_t, tree, tree);
-extern tree c_finish_transaction (location_t, tree, int);
-extern bool c_tree_equal (tree, tree);
-extern tree c_build_function_call_vec (location_t, const vec<location_t>&,
-				       tree, vec<tree, va_gc> *,
-				       vec<tree, va_gc> *);
-extern tree c_omp_clause_copy_ctor (tree, tree, tree);
-extern tree c_reconstruct_complex_type (tree, tree);
-extern tree c_type_canonical (tree);
-extern tree c_build_type_attribute_variant (tree ntype, tree attrs);
-extern tree c_build_pointer_type (tree type);
-extern tree c_build_array_type (tree type, tree domain);
-extern tree c_build_array_type_unspecified (tree type);
-extern tree c_build_array_type_zero_size (tree type);
-extern tree c_build_function_type (tree type, tree args, bool no = false);
-extern tree c_build_pointer_type_for_mode (tree type, machine_mode mode, bool m);
+ಬಾಹ್ಯ ವೃಕ್ಷ build_asm_stmt (bool, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ c_types_compatible_p (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_begin_compound_stmt (bool);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಕೊನೆ_compound_stmt (location_t, ವೃಕ್ಷ, bool);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_ಮುಕ್ತಾಯ_if_stmt (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_ಮುಕ್ತಾಯ_loop (location_t, location_t, ವೃಕ್ಷ, location_t, ವೃಕ್ಷ,
+			   ವೃಕ್ಷ, ವೃಕ್ಷ, ವೃಕ್ಷ, bool);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_begin_stmt_ಅಭಿವ್ಯಕ್ತಿ (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_stmt_ಅಭಿವ್ಯಕ್ತಿ (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_process_ಅಭಿವ್ಯಕ್ತಿ_stmt (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_ಅಭಿವ್ಯಕ್ತಿ_stmt (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_return (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ, bool = false);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_bc_stmt (location_t, ವೃಕ್ಷ, bool, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_goto_label (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_goto_ptr (location_t, c_ಅಭಿವ್ಯಕ್ತಿ val);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಅಭಿವ್ಯಕ್ತಿ_ಗಮ್ಯ_decl (ವೃಕ್ಷ, bool *, bool *);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_omp_construct (location_t, ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_oacc_ದತ್ತಾಂಶ (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_oacc_host_ದತ್ತಾಂಶ (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_begin_omp_parallel (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_omp_parallel (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_begin_omp_task (ಶೂನ್ಯ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_omp_task (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_ಮುಕ್ತಾಯ_omp_cancel (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_ಮುಕ್ತಾಯ_omp_cancellation_ಬಿಂದು (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_omp_clauses (ವೃಕ್ಷ, ಎಣಿಕೆ c_omp_region_type);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_omp_ಮುಕ್ತಾಯ_mapper_clauses (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_omp_mapper_lookup (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_omp_ಹೊರತೆಗೆ_mapper_directive (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_omp_map_array_section (location_t, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_build_va_arg (location_t, ವೃಕ್ಷ, location_t, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_ಮುಕ್ತಾಯ_transaction (location_t, ವೃಕ್ಷ, ಪೂರ್ಣಾಂಕ);
+ಬಾಹ್ಯ bool c_ವೃಕ್ಷ_equal (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_build_function_call_vec (location_t, ಸ್ಥಿರಾಂಕ vec<location_t>&,
+				       ವೃಕ್ಷ, vec<ವೃಕ್ಷ, va_gc> *,
+				       vec<ವೃಕ್ಷ, va_gc> *);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_omp_clause_copy_ctor (ವೃಕ್ಷ, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_reconstruct_complex_type (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_type_canonical (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_build_type_attribute_variant (ವೃಕ್ಷ ntype, ವೃಕ್ಷ attrs);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_build_ಸೂಚಕ_type (ವೃಕ್ಷ type);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_build_array_type (ವೃಕ್ಷ type, ವೃಕ್ಷ domain);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_build_array_type_unspecified (ವೃಕ್ಷ type);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_build_array_type_zero_ಗಾತ್ರ (ವೃಕ್ಷ type);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_build_function_type (ವೃಕ್ಷ type, ವೃಕ್ಷ ವಾದಗಳು, bool no = false);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_build_ಸೂಚಕ_type_for_ಬಹುಲಕ (ವೃಕ್ಷ type, machine_ಬಹುಲಕ ಬಹುಲಕ, bool m);
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement that specifies a return value is seen.  */
 
-extern int current_function_returns_value;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ current_function_returns_ಮೌಲ್ಯ;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement with no argument is seen.  */
 
-extern int current_function_returns_null;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ current_function_returns_null;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a call to a noreturn function is seen.  */
 
-extern int current_function_returns_abnormally;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ current_function_returns_abnormally;
 
 /* In c-decl.cc */
 
 /* Tell the binding oracle what kind of binding we are looking for.  */
 
-enum c_oracle_request
+ಎಣಿಕೆ c_oracle_request
 {
-  C_ORACLE_SYMBOL,
-  C_ORACLE_TAG,
+  C_ORACLE_ಚಿಹ್ನೆ,
+  C_ORACLE_ಟ್ಯಾಗ್,
   C_ORACLE_LABEL
 };
 
@@ -999,57 +999,57 @@ enum c_oracle_request
    oracle has been called and will not call it again if it fails to
    create a given binding.  */
 
-typedef void c_binding_oracle_function (enum c_oracle_request, tree identifier);
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಶೂನ್ಯ c_binding_oracle_function (ಎಣಿಕೆ c_oracle_request, ವೃಕ್ಷ identifier);
 
-extern c_binding_oracle_function *c_binding_oracle;
+ಬಾಹ್ಯ c_binding_oracle_function *c_binding_oracle;
 
-extern void c_finish_incomplete_decl (tree);
-extern tree c_omp_reduction_id (enum tree_code, tree);
-extern tree c_omp_reduction_decl (tree);
-extern tree c_omp_reduction_lookup (tree, tree);
-extern tree c_check_omp_declare_reduction_r (tree *, int *, void *);
-extern tree c_omp_mapper_id (tree);
-extern tree c_omp_mapper_decl (tree);
-extern void c_omp_scan_mapper_bindings (location_t, tree *, tree);
-extern bool c_check_in_current_scope (tree);
-extern void c_pushtag (location_t, tree, tree);
-extern void c_bind (location_t, tree, bool);
-extern bool tag_exists_p (enum tree_code, tree);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_ಮುಕ್ತಾಯ_incomplete_decl (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_omp_reduction_id (ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_omp_reduction_decl (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_omp_reduction_lookup (ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_check_omp_declare_reduction_r (ವೃಕ್ಷ *, ಪೂರ್ಣಾಂಕ *, ಶೂನ್ಯ *);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_omp_mapper_id (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ವೃಕ್ಷ c_omp_mapper_decl (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_omp_ಪರಿಶೀಲನೆ_mapper_bindings (location_t, ವೃಕ್ಷ *, ವೃಕ್ಷ);
+ಬಾಹ್ಯ bool c_check_ಒಳ_current_scope (ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_pushtag (location_t, ವೃಕ್ಷ, ವೃಕ್ಷ);
+ಬಾಹ್ಯ ಶೂನ್ಯ c_bind (location_t, ವೃಕ್ಷ, bool);
+ಬಾಹ್ಯ bool ಟ್ಯಾಗ್_exists_p (ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2, ವೃಕ್ಷ);
 
-extern void verify_counted_by_for_top_anonymous_type (tree);
+ಬಾಹ್ಯ ಶೂನ್ಯ verify_counted_by_for_ತುದಿ_anonymous_type (ವೃಕ್ಷ);
 
 /* In c-errors.cc */
-extern bool pedwarn_c90 (location_t, diagnostics::option_id, const char *, ...)
+ಬಾಹ್ಯ bool pedwarn_c90 (location_t, diagnostics::option_id, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c99 (location_t, diagnostics::option_id, const char *, ...)
+ಬಾಹ್ಯ bool pedwarn_c99 (location_t, diagnostics::option_id, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c11 (location_t, diagnostics::option_id, const char *, ...)
+ಬಾಹ್ಯ bool pedwarn_c11 (location_t, diagnostics::option_id, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c23 (location_t, diagnostics::option_id, const char *, ...)
+ಬಾಹ್ಯ bool pedwarn_c23 (location_t, diagnostics::option_id, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern void add_note_about_new_keyword (location_t loc,
-					tree keyword_id);
+ಬಾಹ್ಯ ಶೂನ್ಯ ಕೂಡಿಸು_note_about_new_keyword (location_t loc,
+					ವೃಕ್ಷ keyword_id);
 
-extern void
-set_c_expr_source_range (c_expr *expr,
-			 location_t start, location_t finish);
+ಬಾಹ್ಯ ಶೂನ್ಯ
+ಗಣ_c_ಅಭಿವ್ಯಕ್ತಿ_ಮೂಲ_range (c_ಅಭಿವ್ಯಕ್ತಿ *ಅಭಿವ್ಯಕ್ತಿ,
+			 location_t ಆರಂಭ, location_t ಮುಕ್ತಾಯ);
 
-extern void
-set_c_expr_source_range (c_expr *expr,
-			 source_range src_range);
+ಬಾಹ್ಯ ಶೂನ್ಯ
+ಗಣ_c_ಅಭಿವ್ಯಕ್ತಿ_ಮೂಲ_range (c_ಅಭಿವ್ಯಕ್ತಿ *ಅಭಿವ್ಯಕ್ತಿ,
+			 ಮೂಲ_range src_range);
 
 /* In c-fold.cc */
-extern vec<tree> incomplete_record_decls;
+ಬಾಹ್ಯ vec<ವೃಕ್ಷ> incomplete_ದಾಖಲೆ_decls;
 
-extern const char *c_get_sarif_source_language (const char *filename);
+ಬಾಹ್ಯ ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *c_get_sarif_ಮೂಲ_language (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *filename);
 
-extern const struct scoped_attribute_specs std_attribute_table;
+ಬಾಹ್ಯ ಸ್ಥಿರಾಂಕ ರಚನೆ scoped_attribute_specs std_attribute_ಕೋಷ್ಟಕ;
 
-#if CHECKING_P
+#ಆದರೆ CHECKING_P
 namespace selftest {
-  extern void run_c_tests (void);
+  ಬಾಹ್ಯ ಶೂನ್ಯ ಸತತ_c_tests (ಶೂನ್ಯ);
 } // namespace selftest
-#endif /* #if CHECKING_P */
+#ಆದರೆ_ಅಂತ್ಯ /* #if CHECKING_P */
 
 
-#endif /* ! GCC_C_TREE_H */
+#ಆದರೆ_ಅಂತ್ಯ /* ! GCC_C_TREE_H */

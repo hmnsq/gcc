@@ -23,17 +23,17 @@ along with GCC; see the file COPYING3.  If not see
    Every language front end must have a `convert' function
    but what kind of conversions it does will depend on the language.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "c-tree.h"
-#include "convert.h"
-#include "langhooks.h"
-#include "ubsan.h"
-#include "stringpool.h"
-#include "attribs.h"
-#include "asan.h"
+#ಅನ್ತರ್ಭಾವ "config.h"
+#ಅನ್ತರ್ಭಾವ "system.h"
+#ಅನ್ತರ್ಭಾವ "coretypes.h"
+#ಅನ್ತರ್ಭಾವ "target.h"
+#ಅನ್ತರ್ಭಾವ "c-tree.h"
+#ಅನ್ತರ್ಭಾವ "convert.h"
+#ಅನ್ತರ್ಭಾವ "langhooks.h"
+#ಅನ್ತರ್ಭಾವ "ubsan.h"
+#ಅನ್ತರ್ಭಾವ "stringpool.h"
+#ಅನ್ತರ್ಭಾವ "attribs.h"
+#ಅನ್ತರ್ಭಾವ "asan.h"
 
 /* Change of width--truncation and extension of integers or reals--
    is represented with NOP_EXPR.  Proper functioning of many things
@@ -65,181 +65,181 @@ along with GCC; see the file COPYING3.  If not see
    initializer and folding must apply accordingly (discarding floating-point
    exceptions and assuming the default rounding mode is in effect).  */
 
-static tree
-c_convert (tree type, tree expr, bool init_const)
+ಸ್ಥಿರ ವೃಕ್ಷ
+c_convert (ವೃಕ್ಷ type, ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ, ತಾರ್ಕಿಕ init_const)
 {
-  tree e = expr;
-  enum tree_code code = TREE_CODE (type);
-  const char *invalid_conv_diag;
-  tree ret;
-  location_t loc = EXPR_LOCATION (expr);
+  ವೃಕ್ಷ e = ಅಭಿವ್ಯಕ್ತಿ;
+  ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2 ಸಂಕೇತ_2 = ವೃಕ್ಷ_ಸಂಕೇತ (type);
+  ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *invalid_conv_diag;
+  ವೃಕ್ಷ ret;
+  location_t loc = ಅಭಿವ್ಯಕ್ತಿ_LOCATION (ಅಭಿವ್ಯಕ್ತಿ);
 
-  if (type == error_mark_node
-      || error_operand_p (expr))
-    return error_mark_node;
+  ಆದರೆ (type == error_mark_ಗಂಟು
+      || error_ಕಾರ್ಯಾಂಶ_p (ಅಭಿವ್ಯಕ್ತಿ))
+    ಹಿಂತಿರುಗಿ error_mark_ಗಂಟು;
 
-  if ((invalid_conv_diag
-       = targetm.invalid_conversion (TREE_TYPE (expr), type)))
+  ಆದರೆ ((invalid_conv_diag
+       = targetm.invalid_conversion (ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), type)))
     {
       error (invalid_conv_diag);
-      return error_mark_node;
+      ಹಿಂತಿರುಗಿ error_mark_ಗಂಟು;
     }
 
-  if (type == TREE_TYPE (expr))
-    return expr;
-  ret = targetm.convert_to_type (type, expr);
-  if (ret)
-      return ret;
+  ಆದರೆ (type == ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ))
+    ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
+  ret = targetm.convert_ಗಮ್ಯ_type (type, ಅಭಿವ್ಯಕ್ತಿ);
+  ಆದರೆ (ret)
+      ಹಿಂತಿರುಗಿ ret;
 
   STRIP_TYPE_NOPS (e);
 
-  if (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (TREE_TYPE (expr))
-      && (TREE_CODE (TREE_TYPE (expr)) != COMPLEX_TYPE
-	  || TREE_CODE (e) == COMPLEX_EXPR))
-    return fold_convert_loc (loc, type, expr);
-  if (TREE_CODE (TREE_TYPE (expr)) == ERROR_MARK)
-    return error_mark_node;
-  if (VOID_TYPE_P (TREE_TYPE (expr)))
+  ಆದರೆ (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ))
+      && (ವೃಕ್ಷ_ಸಂಕೇತ (ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ)) != COMPLEX_TYPE
+	  || ವೃಕ್ಷ_ಸಂಕೇತ (e) == COMPLEX_ಅಭಿವ್ಯಕ್ತಿ))
+    ಹಿಂತಿರುಗಿ fold_convert_loc (loc, type, ಅಭಿವ್ಯಕ್ತಿ);
+  ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ)) == ERROR_MARK)
+    ಹಿಂತಿರುಗಿ error_mark_ಗಂಟು;
+  ಆದರೆ (VOID_TYPE_P (ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ)))
     {
       error ("void value not ignored as it ought to be");
-      return error_mark_node;
+      ಹಿಂತಿರುಗಿ error_mark_ಗಂಟು;
     }
 
   {
-    tree false_value, true_value;
-    if (c_hardbool_type_attr (type, &false_value, &true_value))
+    ವೃಕ್ಷ false_ಮೌಲ್ಯ, true_ಮೌಲ್ಯ;
+    ಆದರೆ (c_hardbool_type_attr (type, &false_ಮೌಲ್ಯ, &true_ಮೌಲ್ಯ))
       {
-	bool save = in_late_binary_op;
-	in_late_binary_op = true;
-	expr = c_objc_common_truthvalue_conversion (input_location, expr);
-	in_late_binary_op = save;
+	ತಾರ್ಕಿಕ save = ಒಳ_late_ದ್ವಿಮಾನ_op;
+	ಒಳ_late_ದ್ವಿಮಾನ_op = ನಿಜ;
+	ಅಭಿವ್ಯಕ್ತಿ = c_objc_common_truthvalue_conversion (ಒಳಹರಿವು_location, ಅಭಿವ್ಯಕ್ತಿ);
+	ಒಳ_late_ದ್ವಿಮಾನ_op = save;
 
-	return fold_build3_loc (loc, COND_EXPR, type,
-				expr, true_value, false_value);
+	ಹಿಂತಿರುಗಿ fold_build3_loc (loc, COND_ಅಭಿವ್ಯಕ್ತಿ, type,
+				ಅಭಿವ್ಯಕ್ತಿ, true_ಮೌಲ್ಯ, false_ಮೌಲ್ಯ);
       }
   }
 
-  switch (code)
+  ಆಯ್ಕೆ (ಸಂಕೇತ_2)
     {
-    case VOID_TYPE:
-      return fold_convert_loc (loc, type, e);
+    ಸ್ಥಿತಿ VOID_TYPE:
+      ಹಿಂತಿರುಗಿ fold_convert_loc (loc, type, e);
 
-    case ENUMERAL_TYPE:
-      if (ENUM_UNDERLYING_TYPE (type) != NULL_TREE
-	  && TREE_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
-	goto convert_to_boolean;
+    ಸ್ಥಿತಿ ENUMERAL_TYPE:
+      ಆದರೆ (ENUM_UNDERLYING_TYPE (type) != NULL_ವೃಕ್ಷ
+	  && ವೃಕ್ಷ_ಸಂಕೇತ (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
+	ಹೋಗು convert_ಗಮ್ಯ_boolean;
       gcc_fallthrough ();
 
-    case INTEGER_TYPE:
-    case BITINT_TYPE:
-      if (sanitize_flags_p (SANITIZE_FLOAT_CAST)
-	  && current_function_decl != NULL_TREE
-	  && SCALAR_FLOAT_TYPE_P (TREE_TYPE (expr))
+    ಸ್ಥಿತಿ INTEGER_TYPE:
+    ಸ್ಥಿತಿ BITINT_TYPE:
+      ಆದರೆ (sanitize_flags_p (SANITIZE_FLOAT_CAST)
+	  && current_function_decl != NULL_ವೃಕ್ಷ
+	  && SCALAR_FLOAT_TYPE_P (ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ))
 	  && COMPLETE_TYPE_P (type))
 	{
-	  expr = save_expr (expr);
-	  expr = c_fully_fold (expr, init_const, NULL);
-	  tree check = ubsan_instrument_float_cast (loc, type, expr);
-	  expr = fold_build1 (FIX_TRUNC_EXPR, type, expr);
-	  if (check == NULL_TREE)
-	    return expr;
-	  return fold_build2 (COMPOUND_EXPR, TREE_TYPE (expr), check, expr);
+	  ಅಭಿವ್ಯಕ್ತಿ = save_ಅಭಿವ್ಯಕ್ತಿ (ಅಭಿವ್ಯಕ್ತಿ);
+	  ಅಭಿವ್ಯಕ್ತಿ = c_fully_fold (ಅಭಿವ್ಯಕ್ತಿ, init_const, ಖಾಲಿ);
+	  ವೃಕ್ಷ check = ubsan_instrument_float_cast (loc, type, ಅಭಿವ್ಯಕ್ತಿ);
+	  ಅಭಿವ್ಯಕ್ತಿ = fold_build1 (FIX_TRUNC_ಅಭಿವ್ಯಕ್ತಿ, type, ಅಭಿವ್ಯಕ್ತಿ);
+	  ಆದರೆ (check == NULL_ವೃಕ್ಷ)
+	    ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
+	  ಹಿಂತಿರುಗಿ fold_build2 (COMPOUND_ಅಭಿವ್ಯಕ್ತಿ, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), check, ಅಭಿವ್ಯಕ್ತಿ);
 	}
-      ret = convert_to_integer (type, e);
-      goto maybe_fold;
+      ret = convert_ಗಮ್ಯ_integer (type, e);
+      ಹೋಗು maybe_fold;
 
-    case BOOLEAN_TYPE:
-    convert_to_boolean:
-      return c_objc_common_truthvalue_conversion (input_location, expr, type);
+    ಸ್ಥಿತಿ BOOLEAN_TYPE:
+    convert_ಗಮ್ಯ_boolean:
+      ಹಿಂತಿರುಗಿ c_objc_common_truthvalue_conversion (ಒಳಹರಿವು_location, ಅಭಿವ್ಯಕ್ತಿ, type);
 
-    case POINTER_TYPE:
+    ಸ್ಥಿತಿ ಸೂಚಕ_TYPE:
       /* The type nullptr_t may be converted to a pointer type.  The result is
 	 a null pointer value.  */
-      if (NULLPTR_TYPE_P (TREE_TYPE (e)))
+      ಆದರೆ (NULLPTR_TYPE_P (ವೃಕ್ಷ_TYPE (e)))
 	{
 	  /* To make sure that (void *)nullptr is not a null pointer constant,
 	     build_c_cast will create an additional NOP_EXPR around the result
 	     of this conversion.  */
-	  if (TREE_SIDE_EFFECTS (e))
-	    ret = build2 (COMPOUND_EXPR, type, e, build_int_cst (type, 0));
-	  else
+	  ಆದರೆ (ವೃಕ್ಷ_SIDE_EFFECTS (e))
+	    ret = build2 (COMPOUND_ಅಭಿವ್ಯಕ್ತಿ, type, e, build_int_cst (type, 0));
+	  ಇಲ್ಲದಿದ್ದರೆ
 	    ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  ಹೋಗು maybe_fold;
 	}
       gcc_fallthrough ();
-    case REFERENCE_TYPE:
-      ret = convert_to_pointer (type, e);
-      goto maybe_fold;
+    ಸ್ಥಿತಿ REFERENCE_TYPE:
+      ret = convert_ಗಮ್ಯ_ಸೂಚಕ (type, e);
+      ಹೋಗು maybe_fold;
 
-    case NULLPTR_TYPE:
+    ಸ್ಥಿತಿ NULLPTR_TYPE:
       /* A null pointer constant or value of type nullptr_t may be
 	 converted to nullptr_t.  The latter case has already been
 	 handled.  build_c_cast will create an additional NOP_EXPR to
 	 ensure the result of the conversion is not itself a null
 	 pointer constant.  */
-      if (null_pointer_constant_p (expr))
+      ಆದರೆ (null_ಸೂಚಕ_constant_p (ಅಭಿವ್ಯಕ್ತಿ))
 	{
 	  ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  ಹೋಗು maybe_fold;
 	}
-      break;
+      ನಿಲ್ಲಿಸು;
 
-    case REAL_TYPE:
-      ret = convert_to_real (type, e);
-      goto maybe_fold;
+    ಸ್ಥಿತಿ REAL_TYPE:
+      ret = convert_ಗಮ್ಯ_real (type, e);
+      ಹೋಗು maybe_fold;
 
-    case FIXED_POINT_TYPE:
-      ret = convert_to_fixed (type, e);
-      goto maybe_fold;
+    ಸ್ಥಿತಿ FIXED_ಬಿಂದು_TYPE:
+      ret = convert_ಗಮ್ಯ_fixed (type, e);
+      ಹೋಗು maybe_fold;
 
-    case COMPLEX_TYPE:
-      ret = convert_to_complex (type, e);
-      goto maybe_fold;
+    ಸ್ಥಿತಿ COMPLEX_TYPE:
+      ret = convert_ಗಮ್ಯ_complex (type, e);
+      ಹೋಗು maybe_fold;
 
-    case VECTOR_TYPE:
-      if (gnu_vector_type_p (type)
-	  || gnu_vector_type_p (TREE_TYPE (e))
+    ಸ್ಥಿತಿ ಸದಿಶ_TYPE:
+      ಆದರೆ (gnu_ಸದಿಶ_type_p (type)
+	  || gnu_ಸದಿಶ_type_p (ವೃಕ್ಷ_TYPE (e))
 	  /* Allow conversions between compatible non-GNU vector types
 	     when -flax-vector-conversions is passed.  The whole purpose
 	     of the option is to bend the normal type rules and accept
 	     nonconforming code.  */
-	  || (flag_lax_vector_conversions
-	      && VECTOR_TYPE_P (TREE_TYPE (e))
-	      && vector_types_convertible_p (type, TREE_TYPE (e), false)))
+	  || (flag_lax_ಸದಿಶ_conversions
+	      && ಸದಿಶ_TYPE_P (ವೃಕ್ಷ_TYPE (e))
+	      && ಸದಿಶ_types_convertible_p (type, ವೃಕ್ಷ_TYPE (e), ಸುಳ್ಳು)))
 	{
-	  ret = convert_to_vector (type, e);
-	  goto maybe_fold;
+	  ret = convert_ಗಮ್ಯ_ಸದಿಶ (type, e);
+	  ಹೋಗು maybe_fold;
 	}
-      break;
+      ನಿಲ್ಲಿಸು;
 
-    case RECORD_TYPE:
-    case UNION_TYPE:
-      if (lang_hooks.types_compatible_p (type, TREE_TYPE (expr)))
-	return e;
-      break;
+    ಸ್ಥಿತಿ ದಾಖಲೆ_TYPE:
+    ಸ್ಥಿತಿ UNION_TYPE:
+      ಆದರೆ (lang_hooks.types_compatible_p (type, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ)))
+	ಹಿಂತಿರುಗಿ e;
+      ನಿಲ್ಲಿಸು;
 
-    default:
-      break;
+    ಪೂರ್ವನಿಯೋಜಿತ:
+      ನಿಲ್ಲಿಸು;
 
     maybe_fold:
-      if (TREE_CODE (ret) != C_MAYBE_CONST_EXPR)
+      ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (ret) != C_MAYBE_CONST_ಅಭಿವ್ಯಕ್ತಿ)
 	ret = init_const ? fold_init (ret) : fold (ret);
-      return ret;
+      ಹಿಂತಿರುಗಿ ret;
     }
 
   /* If we are converting to nullptr_t, don't say "non-scalar type" because
      the nullptr_t type is a scalar type.  Only nullptr_t or a null pointer
      constant shall be converted to nullptr_t.  */
-  if (code == NULLPTR_TYPE)
+  ಆದರೆ (ಸಂಕೇತ_2 == NULLPTR_TYPE)
     {
-      error ("conversion from %qT to %qT", TREE_TYPE (e), type);
-      inform (input_location,
+      error ("conversion from %qT to %qT", ವೃಕ್ಷ_TYPE (e), type);
+      inform (ಒಳಹರಿವು_location,
 	      "only %qT or a null pointer constant can be converted to %qT",
 	      type, type);
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     error ("conversion to non-scalar type requested");
-  return error_mark_node;
+  ಹಿಂತಿರುಗಿ error_mark_ಗಂಟು;
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE.
@@ -247,10 +247,10 @@ c_convert (tree type, tree expr, bool init_const)
    reasonable conversions; callers should filter out those that are not
    permitted by the language being compiled.  */
 
-tree
-convert (tree type, tree expr)
+ವೃಕ್ಷ
+convert (ವೃಕ್ಷ type, ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ)
 {
-  return c_convert (type, expr, false);
+  ಹಿಂತಿರುಗಿ c_convert (type, ಅಭಿವ್ಯಕ್ತಿ, ಸುಳ್ಳು);
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE, in
@@ -258,8 +258,8 @@ convert (tree type, tree expr)
    function implements all reasonable conversions; callers should filter out
    those that are not permitted by the language being compiled.  */
 
-tree
-convert_init (tree type, tree expr)
+ವೃಕ್ಷ
+convert_init (ವೃಕ್ಷ type, ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ)
 {
-  return c_convert (type, expr, true);
+  ಹಿಂತಿರುಗಿ c_convert (type, ಅಭಿವ್ಯಕ್ತಿ, ನಿಜ);
 }

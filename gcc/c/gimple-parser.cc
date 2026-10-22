@@ -17,171 +17,171 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "function.h"
-#include "c-tree.h"
-#include "timevar.h"
-#include "stringpool.h"
-#include "cgraph.h"
-#include "attribs.h"
-#include "stor-layout.h"
-#include "varasm.h"
-#include "trans-mem.h"
-#include "c-family/c-pragma.h"
-#include "c-lang.h"
-#include "c-family/c-objc.h"
-#include "plugin.h"
-#include "builtins.h"
-#include "gomp-constants.h"
-#include "c-family/c-indentation.h"
-#include "gimple-expr.h"
-#include "context.h"
-#include "gcc-rich-location.h"
-#include "c-parser.h"
-#include "tree-vrp.h"
-#include "tree-pass.h"
-#include "tree-pretty-print.h"
-#include "tree.h"
-#include "basic-block.h"
-#include "gimple.h"
-#include "gimple-pretty-print.h"
-#include "tree-ssa.h"
-#include "pass_manager.h"
-#include "tree-ssanames.h"
-#include "gimple-ssa.h"
-#include "tree-dfa.h"
-#include "internal-fn.h"
-#include "cfg.h"
-#include "cfghooks.h"
-#include "bitmap.h"
-#include "cfganal.h"
-#include "tree-cfg.h"
-#include "gimple-iterator.h"
-#include "cfgloop.h"
-#include "tree-phinodes.h"
-#include "tree-into-ssa.h"
+#ಅನ್ತರ್ಭಾವ "config.h"
+#ಅನ್ತರ್ಭಾವ "system.h"
+#ಅನ್ತರ್ಭಾವ "coretypes.h"
+#ಅನ್ತರ್ಭಾವ "target.h"
+#ಅನ್ತರ್ಭಾವ "function.h"
+#ಅನ್ತರ್ಭಾವ "c-tree.h"
+#ಅನ್ತರ್ಭಾವ "timevar.h"
+#ಅನ್ತರ್ಭಾವ "stringpool.h"
+#ಅನ್ತರ್ಭಾವ "cgraph.h"
+#ಅನ್ತರ್ಭಾವ "attribs.h"
+#ಅನ್ತರ್ಭಾವ "stor-layout.h"
+#ಅನ್ತರ್ಭಾವ "varasm.h"
+#ಅನ್ತರ್ಭಾವ "trans-mem.h"
+#ಅನ್ತರ್ಭಾವ "c-family/c-pragma.h"
+#ಅನ್ತರ್ಭಾವ "c-lang.h"
+#ಅನ್ತರ್ಭಾವ "c-family/c-objc.h"
+#ಅನ್ತರ್ಭಾವ "plugin.h"
+#ಅನ್ತರ್ಭಾವ "builtins.h"
+#ಅನ್ತರ್ಭಾವ "gomp-constants.h"
+#ಅನ್ತರ್ಭಾವ "c-family/c-indentation.h"
+#ಅನ್ತರ್ಭಾವ "gimple-expr.h"
+#ಅನ್ತರ್ಭಾವ "context.h"
+#ಅನ್ತರ್ಭಾವ "gcc-rich-location.h"
+#ಅನ್ತರ್ಭಾವ "c-parser.h"
+#ಅನ್ತರ್ಭಾವ "tree-vrp.h"
+#ಅನ್ತರ್ಭಾವ "tree-pass.h"
+#ಅನ್ತರ್ಭಾವ "tree-pretty-print.h"
+#ಅನ್ತರ್ಭಾವ "tree.h"
+#ಅನ್ತರ್ಭಾವ "basic-block.h"
+#ಅನ್ತರ್ಭಾವ "gimple.h"
+#ಅನ್ತರ್ಭಾವ "gimple-pretty-print.h"
+#ಅನ್ತರ್ಭಾವ "tree-ssa.h"
+#ಅನ್ತರ್ಭಾವ "pass_manager.h"
+#ಅನ್ತರ್ಭಾವ "tree-ssanames.h"
+#ಅನ್ತರ್ಭಾವ "gimple-ssa.h"
+#ಅನ್ತರ್ಭಾವ "tree-dfa.h"
+#ಅನ್ತರ್ಭಾವ "internal-fn.h"
+#ಅನ್ತರ್ಭಾವ "cfg.h"
+#ಅನ್ತರ್ಭಾವ "cfghooks.h"
+#ಅನ್ತರ್ಭಾವ "bitmap.h"
+#ಅನ್ತರ್ಭಾವ "cfganal.h"
+#ಅನ್ತರ್ಭಾವ "tree-cfg.h"
+#ಅನ್ತರ್ಭಾವ "gimple-iterator.h"
+#ಅನ್ತರ್ಭಾವ "cfgloop.h"
+#ಅನ್ತರ್ಭಾವ "tree-phinodes.h"
+#ಅನ್ತರ್ಭಾವ "tree-into-ssa.h"
 
 
 /* GIMPLE parser state.  */
 
-class gimple_parser
+ವರ್ಗ gimple_parser
 {
-public:
-  gimple_parser (c_parser *p) : parser (p), edges(), current_bb(NULL) {}
+ಸಾರ್ವಜನಿಕ:
+  gimple_parser (c_parser *p) : parser (p), ಅಂಚುಗಳು(), current_bb(ಖಾಲಿ) {}
   /* c_parser is not visible here, use composition and fake inheritance
      via a conversion operator.  */
-  operator c_parser *() { return parser; }
+  ಕ್ರಿಯಾಕಾರಕ c_parser *() { ಹಿಂತಿರುಗಿ parser; }
   c_parser *parser;
 
   /* CFG build state.  */
-  class gimple_parser_edge
+  ವರ್ಗ gimple_parser_ಅಂಚು
   {
-  public:
-    int src;
-    int dest;
-    int flags;
+  ಸಾರ್ವಜನಿಕ:
+    ಪೂರ್ಣಾಂಕ src;
+    ಪೂರ್ಣಾಂಕ dest;
+    ಪೂರ್ಣಾಂಕ flags;
     profile_probability probability;
   };
-  auto_vec<gimple_parser_edge> edges;
-  basic_block current_bb;
+  auto_vec<gimple_parser_ಅಂಚು> ಅಂಚುಗಳು;
+  basic_ಖಂಡ current_bb;
 
-  void push_edge (int, int, int, profile_probability);
+  ಶೂನ್ಯ ತಳ್ಳು_ಅಂಚು (ಪೂರ್ಣಾಂಕ, ಪೂರ್ಣಾಂಕ, ಪೂರ್ಣಾಂಕ, profile_probability);
 };
 
-void
-gimple_parser::push_edge (int src, int dest, int flags,
+ಶೂನ್ಯ
+gimple_parser::ತಳ್ಳು_ಅಂಚು (ಪೂರ್ಣಾಂಕ src, ಪೂರ್ಣಾಂಕ dest, ಪೂರ್ಣಾಂಕ flags,
 			  profile_probability prob)
 {
-  gimple_parser_edge e;
+  gimple_parser_ಅಂಚು e;
   e.src = src;
   e.dest = dest;
   e.flags = flags;
   e.probability = prob;
-  edges.safe_push (e);
+  ಅಂಚುಗಳು.ಸುರಕ್ಷಿತ_ತಳ್ಳು (e);
 }
 
 
 /* Gimple parsing functions.  */
-static bool c_parser_gimple_compound_statement (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_label (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_statement (gimple_parser &, gimple_seq *);
-static struct c_expr c_parser_gimple_binary_expression (gimple_parser &, tree);
-static struct c_expr c_parser_gimple_unary_expression (gimple_parser &);
-static struct c_expr c_parser_gimple_postfix_expression
-			(gimple_parser &, tree = error_mark_node);
-static struct c_expr c_parser_gimple_postfix_expression_after_primary
-			(gimple_parser &, location_t, struct c_expr);
-static void c_parser_gimple_declaration (gimple_parser &);
-static void c_parser_gimple_goto_stmt (gimple_parser &, location_t,
-				       tree, gimple_seq *);
-static void c_parser_gimple_try_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_if_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_switch_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_return_stmt (gimple_parser &, gimple_seq *);
-static void c_finish_gimple_return (location_t, tree);
-static tree c_parser_gimple_paren_condition (gimple_parser &);
-static void c_parser_gimple_expr_list (gimple_parser &, vec<tree> *);
+ಸ್ಥಿರ ತಾರ್ಕಿಕ c_parser_gimple_compound_statement (gimple_parser &, gimple_seq *);
+ಸ್ಥಿರ ಶೂನ್ಯ c_parser_gimple_label (gimple_parser &, gimple_seq *);
+ಸ್ಥಿರ ಶೂನ್ಯ c_parser_gimple_statement (gimple_parser &, gimple_seq *);
+ಸ್ಥಿರ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ c_parser_gimple_ದ್ವಿಮಾನ_ಅಭಿವ್ಯಕ್ತಿ (gimple_parser &, ವೃಕ್ಷ);
+ಸ್ಥಿರ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ c_parser_gimple_unary_ಅಭಿವ್ಯಕ್ತಿ (gimple_parser &);
+ಸ್ಥಿರ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ
+			(gimple_parser &, ವೃಕ್ಷ = error_mark_ಗಂಟು);
+ಸ್ಥಿರ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ_after_primary
+			(gimple_parser &, location_t, ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ);
+ಸ್ಥಿರ ಶೂನ್ಯ c_parser_gimple_declaration (gimple_parser &);
+ಸ್ಥಿರ ಶೂನ್ಯ c_parser_gimple_goto_stmt (gimple_parser &, location_t,
+				       ವೃಕ್ಷ, gimple_seq *);
+ಸ್ಥಿರ ಶೂನ್ಯ c_parser_gimple_try_stmt (gimple_parser &, gimple_seq *);
+ಸ್ಥಿರ ಶೂನ್ಯ c_parser_gimple_if_stmt (gimple_parser &, gimple_seq *);
+ಸ್ಥಿರ ಶೂನ್ಯ c_parser_gimple_switch_stmt (gimple_parser &, gimple_seq *);
+ಸ್ಥಿರ ಶೂನ್ಯ c_parser_gimple_return_stmt (gimple_parser &, gimple_seq *);
+ಸ್ಥಿರ ಶೂನ್ಯ c_ಮುಕ್ತಾಯ_gimple_return (location_t, ವೃಕ್ಷ);
+ಸ್ಥಿರ ವೃಕ್ಷ c_parser_gimple_paren_condition (gimple_parser &);
+ಸ್ಥಿರ ಶೂನ್ಯ c_parser_gimple_ಅಭಿವ್ಯಕ್ತಿ_list (gimple_parser &, vec<ವೃಕ್ಷ> *);
 
 
 /* Much like parser_build_unary_op, but avoid applying default conversions.  */
 
-static c_expr
+ಸ್ಥಿರ c_ಅಭಿವ್ಯಕ್ತಿ
 gimple_parser_build_unary_op (location_t loc,
-			      enum tree_code code, struct c_expr arg)
+			      ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2 ಸಂಕೇತ_2, ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ arg)
 {
-  struct c_expr result;
+  ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ಫಲಿತಾಂಶ;
 
-  result.original_code = code;
-  result.original_type = NULL;
-  result.m_decimal = 0;
+  ಫಲಿತಾಂಶ.original_ಸಂಕೇತ = ಸಂಕೇತ_2;
+  ಫಲಿತಾಂಶ.original_type = ಖಾಲಿ;
+  ಫಲಿತಾಂಶ.m_decimal = 0;
 
-  if (reject_gcc_builtin (arg.value))
+  ಆದರೆ (reject_gcc_builtin (arg.ಮೌಲ್ಯ))
     {
-      result.value = error_mark_node;
+      ಫಲಿತಾಂಶ.ಮೌಲ್ಯ = error_mark_ಗಂಟು;
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
-      result.value = build_unary_op (loc, code, arg.value, true);
+      ಫಲಿತಾಂಶ.ಮೌಲ್ಯ = build_unary_op (loc, ಸಂಕೇತ_2, arg.ಮೌಲ್ಯ, ನಿಜ);
 
-      if (TREE_OVERFLOW_P (result.value) && !TREE_OVERFLOW_P (arg.value))
-	overflow_warning (loc, result.value, arg.value);
+      ಆದರೆ (ವೃಕ್ಷ_ಅತಿಪ್ರವಾಹ_P (ಫಲಿತಾಂಶ.ಮೌಲ್ಯ) && !ವೃಕ್ಷ_ಅತಿಪ್ರವಾಹ_P (arg.ಮೌಲ್ಯ))
+	ಅತಿಪ್ರವಾಹ_warning (loc, ಫಲಿತಾಂಶ.ಮೌಲ್ಯ, arg.ಮೌಲ್ಯ);
     }
 
   /* We are typically called when parsing a prefix token at LOC acting on
      ARG.  Reflect this by updating the source range of the result to
      start at LOC and end at the end of ARG.  */
-  set_c_expr_source_range (&result,
-			   loc, arg.get_finish ());
+  ಗಣ_c_ಅಭಿವ್ಯಕ್ತಿ_ಮೂಲ_range (&ಫಲಿತಾಂಶ,
+			   loc, arg.get_ಮುಕ್ತಾಯ ());
 
-  return result;
+  ಹಿಂತಿರುಗಿ ಫಲಿತಾಂಶ;
 }
 
 /* See if VAL is an identifier matching __BB<num> and return <num>
    in *INDEX.  */
 
-static bool
-c_parser_gimple_parse_bb_spec (tree val, int *index)
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+c_parser_gimple_parse_bb_spec (ವೃಕ್ಷ val, ಪೂರ್ಣಾಂಕ *ಸೂಚ್ಯಂಕ)
 {
-  if (!startswith (IDENTIFIER_POINTER (val), "__BB"))
-    return false;
+  ಆದರೆ (!startswith (IDENTIFIER_ಸೂಚಕ (val), "__BB"))
+    ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 
-  const char *bb = IDENTIFIER_POINTER (val) + 4;
-  if (! ISDIGIT (*bb))
-    return false;
+  ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *bb = IDENTIFIER_ಸೂಚಕ (val) + 4;
+  ಆದರೆ (! ISDIGIT (*bb))
+    ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 
-  char *pend;
+  ಅಕ್ಷರ *pend;
   errno = 0;
-  const unsigned long number = strtoul (bb, &pend, 10);
-  if (errno == ERANGE
+  ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ದೀರ್ಘ ಸಂಖ್ಯೆ = strtoul (bb, &pend, 10);
+  ಆದರೆ (errno == ERANGE
       || *pend != '\0'
-      || number > INT_MAX)
-    return false;
+      || ಸಂಖ್ಯೆ > ಗರಿಷ್ಠ_ಪೂರ್ಣಾಂಕ)
+    ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 
-  *index = number;
-  return true;
+  *ಸೂಚ್ಯಂಕ = ಸಂಖ್ಯೆ;
+  ಹಿಂತಿರುಗಿ ನಿಜ;
 }
 
 /* See if VAL is an identifier matching __BB<num> and return <num>
@@ -189,216 +189,216 @@ c_parser_gimple_parse_bb_spec (tree val, int *index)
    the edge.  */
 
 
-static bool
-c_parser_gimple_parse_bb_spec_edge_probability (tree val,
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+c_parser_gimple_parse_bb_spec_ಅಂಚು_probability (ವೃಕ್ಷ val,
 						gimple_parser &parser,
-						int *index,
+						ಪೂರ್ಣಾಂಕ *ಸೂಚ್ಯಂಕ,
 						profile_probability
 						*probability)
 {
-  bool return_p = c_parser_gimple_parse_bb_spec (val, index);
-  if (return_p)
+  ತಾರ್ಕಿಕ return_p = c_parser_gimple_parse_bb_spec (val, ಸೂಚ್ಯಂಕ);
+  ಆದರೆ (return_p)
     {
       *probability = profile_probability::uninitialized ();
       /* Parse frequency if provided.  */
-      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+      ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_OPEN_PAREN))
 	{
-	  tree f;
+	  ವೃಕ್ಷ f;
 	  c_parser_consume_token (parser);
-	  if (!c_parser_next_token_is (parser, CPP_NAME))
+	  ಆದರೆ (!c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME))
 	    {
 	      c_parser_error (parser, "expected frequency quality");
-	      return false;
+	      ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 	    }
 
 	  profile_quality quality;
-	  const char *v
-	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	  if (!parse_profile_quality (v, &quality))
+	  ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *v
+	    = IDENTIFIER_ಸೂಚಕ (c_parser_peek_token (parser)->ಮೌಲ್ಯ);
+	  ಆದರೆ (!parse_profile_quality (v, &quality))
 	    {
 	      c_parser_error (parser, "unknown profile quality");
-	      return false;
+	      ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 	    }
 
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return false;
+	  ಆದರೆ (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 
-	  if (!c_parser_next_token_is (parser, CPP_NUMBER)
-	      || (TREE_CODE (f = c_parser_peek_token (parser)->value)
+	  ಆದರೆ (!c_parser_ಮುಂದಿನ_token_is (parser, CPP_ಸಂಖ್ಯೆ)
+	      || (ವೃಕ್ಷ_ಸಂಕೇತ (f = c_parser_peek_token (parser)->ಮೌಲ್ಯ)
 		  != INTEGER_CST))
 	    {
 	      c_parser_error (parser, "expected frequency value");
-	      return false;
+	      ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 	    }
 
-	  unsigned int value = TREE_INT_CST_LOW (f);
-	  *probability = profile_probability (value, quality);
+	  ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ ಮೌಲ್ಯ = ವೃಕ್ಷ_INT_CST_ಕೆಳಗಿನ (f);
+	  *probability = profile_probability (ಮೌಲ್ಯ, quality);
 
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return false;
+	  ಆದರೆ (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return false;
+	  ಆದರೆ (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 	}
 
-      return true;
+      ಹಿಂತಿರುಗಿ ನಿಜ;
     }
 
-  return false;
+  ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 
 }
 
 /* Parse the body of a function declaration marked with "__GIMPLE".  */
 
-void
-c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
-			    enum c_declspec_il cdil,
-			    profile_count entry_bb_count)
+ಶೂನ್ಯ
+c_parser_parse_gimple_body (c_parser *cparser, ಅಕ್ಷರ *gimple_pass,
+			    ಎಣಿಕೆ c_declspec_il cdil,
+			    profile_ಎಣಿಕೆ ನಮೂದು_bb_ಎಣಿಕೆ)
 {
   gimple_parser parser (cparser);
-  gimple_seq seq = NULL;
-  gimple_seq body = NULL;
-  tree stmt = push_stmt_list ();
-  push_scope ();
+  gimple_seq seq = ಖಾಲಿ;
+  gimple_seq body = ಖಾಲಿ;
+  ವೃಕ್ಷ stmt = ತಳ್ಳು_stmt_list ();
+  ತಳ್ಳು_scope ();
   location_t loc1 = c_parser_peek_token (parser)->location;
 
   cfun->pass_startwith = gimple_pass;
-  init_tree_ssa (cfun);
+  init_ವೃಕ್ಷ_ssa (cfun);
 
-  if (cdil == cdil_gimple)
+  ಆದರೆ (cdil == cdil_gimple)
     /* While we have SSA names in the IL we do not have a CFG built yet
        and PHIs are represented using a PHI internal function.  We do
        have lowered control flow and exception handling (well, we do not
        have parser support for EH yet).  But as we still have BINDs
        we have to go through lowering again.  */
     cfun->curr_properties = PROP_gimple_any;
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
       /* We have at least cdil_gimple_cfg.  */
-      gimple_register_cfg_hooks ();
-      init_empty_tree_cfg ();
-      parser.current_bb = ENTRY_BLOCK_PTR_FOR_FN (cfun);
+      gimple_ರಿಜಿಸ್ಟರ್_cfg_hooks ();
+      init_ಖಾಲಿಗಳು_ವೃಕ್ಷ_cfg ();
+      parser.current_bb = ನಮೂದು_ಖಂಡ_PTR_FOR_FN (cfun);
       /* Initialize the bare loop structure - we are going to only
          mark headers and leave the rest to fixup.  */
-      set_loops_for_fn (cfun, ggc_cleared_alloc<struct loops> ());
+      ಗಣ_loops_for_fn (cfun, ggc_cleared_alloc<ರಚನೆ loops> ());
       init_loops_structure (cfun, loops_for_fn (cfun), 1);
-      loops_state_set (cfun, LOOPS_NEED_FIXUP|LOOPS_MAY_HAVE_MULTIPLE_LATCHES);
+      loops_state_ಗಣ (cfun, LOOPS_NEED_FIXUP|LOOPS_MAY_HAVE_ಅಪವರ್ತ್ಯ_LATCHES);
       cfun->curr_properties
 	|= PROP_gimple_lcf | PROP_gimple_leh | PROP_cfg | PROP_loops;
-      if (cdil == cdil_gimple_ssa)
+      ಆದರೆ (cdil == cdil_gimple_ssa)
 	{
 	  init_ssa_operands (cfun);
 	  cfun->curr_properties |= PROP_ssa;
 	}
     }
 
-  if (! c_parser_gimple_compound_statement (parser, &seq)
+  ಆದರೆ (! c_parser_gimple_compound_statement (parser, &seq)
       && cdil == cdil_gimple)
     {
-      gimple *ret = gimple_build_return (NULL);
-      gimple_seq_add_stmt_without_update (&seq, ret);
+      gimple *ret = gimple_build_return (ಖಾಲಿ);
+      gimple_seq_ಕೂಡಿಸು_stmt_without_update (&seq, ret);
     }
 
-  tree block = pop_scope ();
-  stmt = pop_stmt_list (stmt);
-  stmt = c_build_bind_expr (loc1, block, stmt);
+  ವೃಕ್ಷ ಖಂಡ = ತೆಗೆ_scope ();
+  stmt = ತೆಗೆ_stmt_list (stmt);
+  stmt = c_build_bind_ಅಭಿವ್ಯಕ್ತಿ (loc1, ಖಂಡ, stmt);
 
-  block = DECL_INITIAL (current_function_decl);
-  BLOCK_SUBBLOCKS (block) = NULL_TREE;
-  BLOCK_CHAIN (block) = NULL_TREE;
-  TREE_ASM_WRITTEN (block) = 1;
+  ಖಂಡ = DECL_INITIAL (current_function_decl);
+  ಖಂಡ_SUBBLOCKS (ಖಂಡ) = NULL_ವೃಕ್ಷ;
+  ಖಂಡ_CHAIN (ಖಂಡ) = NULL_ವೃಕ್ಷ;
+  ವೃಕ್ಷ_ASM_WRITTEN (ಖಂಡ) = 1;
 
-  if (cdil == cdil_gimple)
+  ಆದರೆ (cdil == cdil_gimple)
     {
-      gbind *bind_stmt = gimple_build_bind (BIND_EXPR_VARS (stmt), NULL,
-					    BIND_EXPR_BLOCK (stmt));
-      gimple_bind_set_body (bind_stmt, seq);
-      gimple_seq_add_stmt_without_update (&body, bind_stmt);
-      gimple_set_body (current_function_decl, body);
+      gbind *bind_stmt = gimple_build_bind (BIND_ಅಭಿವ್ಯಕ್ತಿ_VARS (stmt), ಖಾಲಿ,
+					    BIND_ಅಭಿವ್ಯಕ್ತಿ_ಖಂಡ (stmt));
+      gimple_bind_ಗಣ_body (bind_stmt, seq);
+      gimple_seq_ಕೂಡಿಸು_stmt_without_update (&body, bind_stmt);
+      gimple_ಗಣ_body (current_function_decl, body);
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
       /* Control-flow and binds are lowered, record local decls.  */
-      for (tree var = BIND_EXPR_VARS (stmt); var; var = DECL_CHAIN (var))
-	if (VAR_P (var)
+      ಗಾಗಿ (ವೃಕ್ಷ var = BIND_ಅಭಿವ್ಯಕ್ತಿ_VARS (stmt); var; var = DECL_CHAIN (var))
+	ಆದರೆ (VAR_P (var)
 	    && !DECL_EXTERNAL (var))
 	  {
-	    add_local_decl (cfun, var);
+	    ಕೂಡಿಸು_local_decl (cfun, var);
 	    /* When the middle-end re-gimplifies any expression we might
 	       run into the assertion that we've seen the decl in a BIND.  */
-	    if (!TREE_STATIC (var))
-	      DECL_SEEN_IN_BIND_EXPR_P (var) = 1;
+	    ಆದರೆ (!ವೃಕ್ಷ_STATIC (var))
+	      DECL_ನೋಡಿದ_ಒಳ_BIND_ಅಭಿವ್ಯಕ್ತಿ_P (var) = 1;
 	  }
       /* We have a CFG.  Build the edges.  */
-      for (unsigned i = 0; i < parser.edges.length (); ++i)
+      ಗಾಗಿ (ಚಿಹ್ನೆರಹಿತ i = 0; i < parser.ಅಂಚುಗಳು.ಉದ್ದಳತೆ (); ++i)
 	{
-	  edge e = make_edge (BASIC_BLOCK_FOR_FN (cfun, parser.edges[i].src),
-			      BASIC_BLOCK_FOR_FN (cfun, parser.edges[i].dest),
-			      parser.edges[i].flags);
-	  e->probability = parser.edges[i].probability;
+	  ಅಂಚು e = make_ಅಂಚು (BASIC_ಖಂಡ_FOR_FN (cfun, parser.ಅಂಚುಗಳು[i].src),
+			      BASIC_ಖಂಡ_FOR_FN (cfun, parser.ಅಂಚುಗಳು[i].dest),
+			      parser.ಅಂಚುಗಳು[i].flags);
+	  e->probability = parser.ಅಂಚುಗಳು[i].probability;
 	}
       /* Add edges for case labels.  */
-      basic_block bb;
+      basic_ಖಂಡ bb;
       FOR_EACH_BB_FN (bb, cfun)
-	if (EDGE_COUNT (bb->succs) == 0)
+	ಆದರೆ (ಅಂಚು_ಎಣಿಕೆ (bb->succs) == 0)
 	  {
-	    if (gswitch *sw = safe_dyn_cast <gswitch *> (*gsi_last_bb (bb)))
-	      for (unsigned i = 0; i < gimple_switch_num_labels (sw); ++i)
+	    ಆದರೆ (gswitch *sw = ಸುರಕ್ಷಿತ_dyn_cast <gswitch *> (*gsi_ಕೊನೆಯ_bb (bb)))
+	      ಗಾಗಿ (ಚಿಹ್ನೆರಹಿತ i = 0; i < gimple_switch_ಅಂಕೆ_labels (sw); ++i)
 		{
-		  basic_block label_bb = gimple_switch_label_bb (cfun, sw, i);
-		  make_edge (bb, label_bb, 0);
+		  basic_ಖಂಡ label_bb = gimple_switch_label_bb (cfun, sw, i);
+		  make_ಅಂಚು (bb, label_bb, 0);
 		}
 	  }
       /* Need those for loop fixup.  */
       calculate_dominance_info (CDI_DOMINATORS);
       /* With SSA lower PHIs parsed as internal function calls and
 	 update stmts.  */
-      if (cdil == cdil_gimple_ssa)
+      ಆದರೆ (cdil == cdil_gimple_ssa)
 	{
 	  /* Create PHI nodes, they are parsed into __PHI internal calls
 	     and update SSA operands.  */
 	  FOR_EACH_BB_FN (bb, cfun)
 	    {
 	      gimple_stmt_iterator gsi;
-	      for (gsi = gsi_start_bb (bb); !gsi_end_p (gsi);)
+	      ಗಾಗಿ (gsi = gsi_ಆರಂಭ_bb (bb); !gsi_ಕೊನೆ_p (gsi);)
 		{
 		  gimple *stmt = gsi_stmt (gsi);
-		  if (!gimple_call_internal_p (stmt, IFN_PHI))
-		    break;
+		  ಆದರೆ (!gimple_call_ಆಂತರಿಕ_p (stmt, IFN_PHI))
+		    ನಿಲ್ಲಿಸು;
 
-		  gphi *phi = create_phi_node (gimple_call_lhs (stmt), bb);
-		  for (unsigned i = 0; i < gimple_call_num_args (stmt); i += 2)
+		  gphi *phi = create_phi_ಗಂಟು (gimple_call_lhs (stmt), bb);
+		  ಗಾಗಿ (ಚಿಹ್ನೆರಹಿತ i = 0; i < gimple_call_ಅಂಕೆ_ವಾದಗಳು (stmt); i += 2)
 		    {
-		      int srcidx = TREE_INT_CST_LOW (gimple_call_arg (stmt, i));
-		      edge e = find_edge (BASIC_BLOCK_FOR_FN (cfun, srcidx), bb);
-		      if (!e)
+		      ಪೂರ್ಣಾಂಕ srcidx = ವೃಕ್ಷ_INT_CST_ಕೆಳಗಿನ (gimple_call_arg (stmt, i));
+		      ಅಂಚು e = ಕಂಡುಹಿಡಿ_ಅಂಚು (BASIC_ಖಂಡ_FOR_FN (cfun, srcidx), bb);
+		      ಆದರೆ (!e)
 			c_parser_error (parser, "edge not found");
-		      else
-			add_phi_arg (phi, gimple_call_arg (stmt, i + 1), e,
+		      ಇಲ್ಲದಿದ್ದರೆ
+			ಕೂಡಿಸು_phi_arg (phi, gimple_call_arg (stmt, i + 1), e,
 				     UNKNOWN_LOCATION);
 		    }
-		  gsi_remove (&gsi, true);
+		  gsi_remove (&gsi, ನಿಜ);
 		}
-	      for (; !gsi_end_p (gsi); gsi_next (&gsi))
+	      ಗಾಗಿ (; !gsi_ಕೊನೆ_p (gsi); gsi_ಮುಂದಿನ (&gsi))
 		update_stmt (gsi_stmt (gsi));
 	    }
 	  /* Fill SSA name gaps, putting them on the freelist and diagnose
 	     SSA names without definition.  */
-	  for (unsigned i = 1; i < num_ssa_names; ++i)
-	    if (!ssa_name (i))
+	  ಗಾಗಿ (ಚಿಹ್ನೆರಹಿತ i = 1; i < ಅಂಕೆ_ssa_ಹೆಸರುಗಳು; ++i)
+	    ಆದರೆ (!ssa_name (i))
 	      {
-		tree name = make_ssa_name_fn (cfun, integer_type_node, NULL, i);
+		ವೃಕ್ಷ name = make_ssa_name_fn (cfun, integer_type_ಗಂಟು, ಖಾಲಿ, i);
 		release_ssa_name_fn (cfun, name);
 	      }
-	    else if (!SSA_NAME_DEF_STMT (ssa_name (i)))
+	    ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (!SSA_NAME_DEF_STMT (ssa_name (i)))
 	      error ("SSA name %qE with version %d has no definition",
 		     ssa_name (i), i);
 	  /* No explicit virtual operands (yet).  */
-	  bitmap_obstack_initialize (NULL);
+	  bitmap_obstack_initialize (ಖಾಲಿ);
 	  update_ssa (TODO_update_ssa_only_virtuals);
-	  bitmap_obstack_release (NULL);
+	  bitmap_obstack_release (ಖಾಲಿ);
 	  /* ???  By flushing the freelist after virtual operand SSA rewrite
 	     we keep the gaps available for re-use like needed for the
 	     PR89595 testcase but then usually virtual operands would have
@@ -406,27 +406,27 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
 	     operands explicit in the SSA IL.  */
 	  flush_ssaname_freelist ();
 	}
-      fix_loop_structure (NULL);
+      fix_loop_structure (ಖಾಲಿ);
     }
 
-  if (cfun->curr_properties & PROP_cfg)
+  ಆದರೆ (cfun->curr_properties & PROP_cfg)
     {
-      ENTRY_BLOCK_PTR_FOR_FN (cfun)->count = entry_bb_count;
-      gcov_type t = param_gimple_fe_computed_hot_bb_threshold;
-      set_hot_bb_threshold (t);
-      update_max_bb_count ();
-      cgraph_node::get_create (cfun->decl);
-      cgraph_edge::rebuild_edges ();
+      ನಮೂದು_ಖಂಡ_PTR_FOR_FN (cfun)->ಎಣಿಕೆ_2 = ನಮೂದು_bb_ಎಣಿಕೆ;
+      gcov_type t = param_gimple_fe_computed_hot_bb_ಮಿತಿ;
+      ಗಣ_hot_bb_ಮಿತಿ (t);
+      update_max_bb_ಎಣಿಕೆ ();
+      cgraph_ಗಂಟು::get_create (cfun->decl);
+      cgraph_ಅಂಚು::rebuild_ಅಂಚುಗಳು ();
     }
 
   /* Perform IL validation and if any error is found abort compilation
      of this function by zapping its body.  */
-  if ((cfun->curr_properties & PROP_cfg)
-      && verify_gimple_in_cfg (cfun, false, false))
-    init_empty_tree_cfg ();
-  else if (!(cfun->curr_properties & PROP_cfg)
-	   && verify_gimple_in_seq (gimple_body (current_function_decl), false))
-    gimple_set_body (current_function_decl, NULL);
+  ಆದರೆ ((cfun->curr_properties & PROP_cfg)
+      && verify_gimple_ಒಳ_cfg (cfun, ಸುಳ್ಳು, ಸುಳ್ಳು))
+    init_ಖಾಲಿಗಳು_ವೃಕ್ಷ_cfg ();
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (!(cfun->curr_properties & PROP_cfg)
+	   && verify_gimple_ಒಳ_seq (gimple_body (current_function_decl), ಸುಳ್ಳು))
+    gimple_ಗಣ_body (current_function_decl, ಖಾಲಿ);
 
   dump_function (TDI_gimple, current_function_decl);
 }
@@ -445,310 +445,310 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
      gimple-return-statement
 */
 
-static bool
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
 c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 {
-  bool return_p = false;
+  ತಾರ್ಕಿಕ return_p = ಸುಳ್ಳು;
 
-  if (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
-    return false;
+  ಆದರೆ (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+    ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 
   /* A compound statement starts with optional declarations.  */
-  while (c_parser_next_tokens_start_declaration (parser))
+  ಆಗ (c_parser_ಮುಂದಿನ_ಟೋಕನುಗಳು_ಆರಂಭ_declaration (parser))
     {
       c_parser_gimple_declaration (parser);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return false;
+      ಆದರೆ (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
     }
 
-  while (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
+  ಆಗ (c_parser_ಮುಂದಿನ_token_is_not (parser, CPP_CLOSE_BRACE))
     {
-      if (c_parser_error (parser))
+      ಆದರೆ (c_parser_error (parser))
 	{
-	  c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, NULL);
-	  return return_p;
+	  c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_BRACE, ಖಾಲಿ);
+	  ಹಿಂತಿರುಗಿ return_p;
 	}
-      else if (c_parser_next_token_is (parser, CPP_EOF))
+      ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_EOF))
 	{
 	  c_parser_error (parser, "expected declaration or statement");
-	  return return_p;
+	  ಹಿಂತಿರುಗಿ return_p;
 	}
 
-      switch (c_parser_peek_token (parser)->type)
+      ಆಯ್ಕೆ (c_parser_peek_token (parser)->type)
 	{
-	case CPP_KEYWORD:
-	  switch (c_parser_peek_token (parser)->keyword)
+	ಸ್ಥಿತಿ CPP_KEYWORD:
+	  ಆಯ್ಕೆ (c_parser_peek_token (parser)->keyword)
 	    {
-	    case RID_AT_TRY:
+	    ಸ್ಥಿತಿ RID_AT_TRY:
 	      c_parser_gimple_try_stmt (parser, seq);
-	      break;
-	    case RID_IF:
+	      ನಿಲ್ಲಿಸು;
+	    ಸ್ಥಿತಿ RID_IF:
 	      c_parser_gimple_if_stmt (parser, seq);
-	      break;
-	    case RID_SWITCH:
+	      ನಿಲ್ಲಿಸು;
+	    ಸ್ಥಿತಿ RID_SWITCH:
 	      c_parser_gimple_switch_stmt (parser, seq);
-	      break;
-	    case RID_GOTO:
+	      ನಿಲ್ಲಿಸು;
+	    ಸ್ಥಿತಿ RID_GOTO:
 	      {
 		location_t loc = c_parser_peek_token (parser)->location;
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME))
 		  {
-		    tree label = c_parser_peek_token (parser)->value;
+		    ವೃಕ್ಷ label = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
 		    c_parser_consume_token (parser);
 		    c_parser_gimple_goto_stmt (parser, loc, label, seq);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    ಆದರೆ (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return return_p;
+		      ಹಿಂತಿರುಗಿ return_p;
 		  }
 		}
-	      break;
-	    case RID_RETURN:
-	      return_p = true;
+	      ನಿಲ್ಲಿಸು;
+	    ಸ್ಥಿತಿ RID_RETURN:
+	      return_p = ನಿಜ;
 	      c_parser_gimple_return_stmt (parser, seq);
-	      if (! c_parser_require (parser, CPP_SEMICOLON,
+	      ಆದರೆ (! c_parser_require (parser, CPP_SEMICOLON,
 				      "expected %<;%>"))
-		return return_p;
-	      if (cfun->curr_properties & PROP_cfg)
-		parser.push_edge (parser.current_bb->index, EXIT_BLOCK, 0,
+		ಹಿಂತಿರುಗಿ return_p;
+	      ಆದರೆ (cfun->curr_properties & PROP_cfg)
+		parser.ತಳ್ಳು_ಅಂಚು (parser.current_bb->ಸೂಚ್ಯಂಕ, EXIT_ಖಂಡ, 0,
 				  profile_probability::uninitialized ());
-	      break;
-	    default:
-	      goto expr_stmt;
+	      ನಿಲ್ಲಿಸು;
+	    ಪೂರ್ವನಿಯೋಜಿತ:
+	      ಹೋಗು ಅಭಿವ್ಯಕ್ತಿ_stmt;
 	    }
-	  break;
-	case CPP_NAME:
-	  if (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
+	  ನಿಲ್ಲಿಸು;
+	ಸ್ಥಿತಿ CPP_NAME:
+	  ಆದರೆ (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
 	      c_parser_gimple_label (parser, seq);
-	      break;
+	      ನಿಲ್ಲಿಸು;
 	    }
-	  if (c_parser_next_token_is (parser, CPP_NAME)
-	      && c_parser_peek_token (parser)->id_kind == C_ID_ID
-	      && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME)
+	      && c_parser_peek_token (parser)->id_ಬಗೆ == C_ID_ID
+	      && strcmp (IDENTIFIER_ಸೂಚಕ (c_parser_peek_token (parser)->ಮೌಲ್ಯ),
 			 "try") == 0)
 	    {
 	      c_parser_gimple_try_stmt (parser, seq);
-	      break;
+	      ನಿಲ್ಲಿಸು;
 	    }
 	  /* Basic block specification.
 	     __BB (index, ...)  */
-	  if ((cfun->curr_properties & PROP_cfg)
-	      && !strcmp (IDENTIFIER_POINTER
-			    (c_parser_peek_token (parser)->value), "__BB"))
+	  ಆದರೆ ((cfun->curr_properties & PROP_cfg)
+	      && !strcmp (IDENTIFIER_ಸೂಚಕ
+			    (c_parser_peek_token (parser)->ಮೌಲ್ಯ), "__BB"))
 	    {
 	      c_parser_consume_token (parser);
-	      if (! c_parser_require (parser, CPP_OPEN_PAREN,
+	      ಆದರೆ (! c_parser_require (parser, CPP_OPEN_PAREN,
 				      "expected %<(%>"))
-		return return_p;
-	      if (c_parser_next_token_is_not (parser, CPP_NUMBER))
+		ಹಿಂತಿರುಗಿ return_p;
+	      ಆದರೆ (c_parser_ಮುಂದಿನ_token_is_not (parser, CPP_ಸಂಖ್ಯೆ))
 		{
 		  c_parser_error (parser, "expected block index");
-		  return return_p;
+		  ಹಿಂತಿರುಗಿ return_p;
 		}
-	      tree tnum = c_parser_peek_token (parser)->value;
-	      if (TREE_CODE (tnum) != INTEGER_CST)
+	      ವೃಕ್ಷ tnum = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
+	      ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (tnum) != INTEGER_CST)
 		{
 		  c_parser_error (parser, "expected block index");
-		  return return_p;
+		  ಹಿಂತಿರುಗಿ return_p;
 		}
-	      int index = TREE_INT_CST_LOW (tnum);
-	      if (index < NUM_FIXED_BLOCKS
-		  || (index < last_basic_block_for_fn (cfun)
-		      && BASIC_BLOCK_FOR_FN (cfun, index) != NULL))
+	      ಪೂರ್ಣಾಂಕ ಸೂಚ್ಯಂಕ = ವೃಕ್ಷ_INT_CST_ಕೆಳಗಿನ (tnum);
+	      ಆದರೆ (ಸೂಚ್ಯಂಕ < ಅಂಕೆ_FIXED_ಖಂಡಗಳು
+		  || (ಸೂಚ್ಯಂಕ < ಕೊನೆಯ_basic_ಖಂಡ_for_fn (cfun)
+		      && BASIC_ಖಂಡ_FOR_FN (cfun, ಸೂಚ್ಯಂಕ) != ಖಾಲಿ))
 		{
 		  c_parser_error (parser, "invalid block index");
-		  return return_p;
+		  ಹಿಂತಿರುಗಿ return_p;
 		}
-	      int is_loop_header_of = -1;
-	      profile_count bb_count = profile_count::uninitialized ();
+	      ಪೂರ್ಣಾಂಕ is_loop_ಶೀರ್ಷಿಕೆ_ದ = -1;
+	      profile_ಎಣಿಕೆ bb_ಎಣಿಕೆ = profile_ಎಣಿಕೆ::uninitialized ();
 	      c_parser_consume_token (parser);
-	      while (c_parser_next_token_is (parser, CPP_COMMA))
+	      ಆಗ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COMMA))
 		{
 		  c_parser_consume_token (parser);
-		  if (! c_parser_next_token_is (parser, CPP_NAME))
+		  ಆದರೆ (! c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME))
 		    {
 		      c_parser_error (parser, "expected block specifier");
-		      return return_p;
+		      ಹಿಂತಿರುಗಿ return_p;
 		    }
 		  /* loop_header (NUM)  */
-		  if (!strcmp (IDENTIFIER_POINTER
-			         (c_parser_peek_token (parser)->value),
+		  ಆದರೆ (!strcmp (IDENTIFIER_ಸೂಚಕ
+			         (c_parser_peek_token (parser)->ಮೌಲ್ಯ),
 			       "loop_header"))
 		    {
 		      c_parser_consume_token (parser);
-		      if (! c_parser_require (parser, CPP_OPEN_PAREN,
+		      ಆದರೆ (! c_parser_require (parser, CPP_OPEN_PAREN,
 					      "expected %<(%>"))
-			return return_p;
-		      tree loop_num;
-		      if (! c_parser_next_token_is (parser, CPP_NUMBER)
-			  || TREE_CODE (loop_num
-					  = c_parser_peek_token (parser)->value)
+			ಹಿಂತಿರುಗಿ return_p;
+		      ವೃಕ್ಷ loop_ಅಂಕೆ;
+		      ಆದರೆ (! c_parser_ಮುಂದಿನ_token_is (parser, CPP_ಸಂಖ್ಯೆ)
+			  || ವೃಕ್ಷ_ಸಂಕೇತ (loop_ಅಂಕೆ
+					  = c_parser_peek_token (parser)->ಮೌಲ್ಯ)
 			       != INTEGER_CST)
 			{
 			  c_parser_error (parser, "expected loop number");
-			  return return_p;
+			  ಹಿಂತಿರುಗಿ return_p;
 			}
 		      c_parser_consume_token (parser);
-		      is_loop_header_of = TREE_INT_CST_LOW (loop_num);
-		      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+		      is_loop_ಶೀರ್ಷಿಕೆ_ದ = ವೃಕ್ಷ_INT_CST_ಕೆಳಗಿನ (loop_ಅಂಕೆ);
+		      ಆದರೆ (! c_parser_require (parser, CPP_CLOSE_PAREN,
 					      "expected %<)%>"))
-			return return_p;
+			ಹಿಂತಿರುಗಿ return_p;
 		    }
 		  /* Parse profile: quality(value) */
-		  else
+		  ಇಲ್ಲದಿದ್ದರೆ
 		    {
-		      tree q;
+		      ವೃಕ್ಷ q;
 		      profile_quality quality;
-		      tree v = c_parser_peek_token (parser)->value;
-		      if (!parse_profile_quality (IDENTIFIER_POINTER (v),
+		      ವೃಕ್ಷ v = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
+		      ಆದರೆ (!parse_profile_quality (IDENTIFIER_ಸೂಚಕ (v),
 						  &quality))
 			{
 			  c_parser_error (parser, "unknown block specifier");
-			  return false;
+			  ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 			}
 
 		      c_parser_consume_token (parser);
-		      if (!c_parser_require (parser, CPP_OPEN_PAREN,
+		      ಆದರೆ (!c_parser_require (parser, CPP_OPEN_PAREN,
 					     "expected %<(%>"))
-			return false;
+			ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 
-		      if (!c_parser_next_token_is (parser, CPP_NUMBER)
-			  || (TREE_CODE (q = c_parser_peek_token (parser)->value)
+		      ಆದರೆ (!c_parser_ಮುಂದಿನ_token_is (parser, CPP_ಸಂಖ್ಯೆ)
+			  || (ವೃಕ್ಷ_ಸಂಕೇತ (q = c_parser_peek_token (parser)->ಮೌಲ್ಯ)
 			      != INTEGER_CST))
 			{
 			  c_parser_error (parser, "expected count value");
-			  return false;
+			  ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 			}
 
-		      bb_count
-			= profile_count::from_gcov_type (TREE_INT_CST_LOW (q),
+		      bb_ಎಣಿಕೆ
+			= profile_ಎಣಿಕೆ::from_gcov_type (ವೃಕ್ಷ_INT_CST_ಕೆಳಗಿನ (q),
 							 quality);
 		      c_parser_consume_token (parser);
-		      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+		      ಆದರೆ (! c_parser_require (parser, CPP_CLOSE_PAREN,
 					      "expected %<)%>"))
-			return return_p;
+			ಹಿಂತಿರುಗಿ return_p;
 		    }
 		}
-	      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+	      ಆದರೆ (! c_parser_require (parser, CPP_CLOSE_PAREN,
 				      "expected %<)%>")
 		  || ! c_parser_require (parser, CPP_COLON,
 					 "expected %<:%>"))
-		return return_p;
+		ಹಿಂತಿರುಗಿ return_p;
 
 	      /* Put stmts parsed in the current block.  */
-	      if (!gimple_seq_empty_p (*seq))
+	      ಆದರೆ (!gimple_seq_ಖಾಲಿಗಳು_p (*seq))
 		{
-		  if (!parser.current_bb)
+		  ಆದರೆ (!parser.current_bb)
 		    c_parser_error (parser, "stmts without block");
-		  else
+		  ಇಲ್ಲದಿದ್ದರೆ
 		    {
 		      gimple_stmt_iterator gsi
-			= gsi_start_bb (parser.current_bb);
-		      gsi_insert_seq_after_without_update (&gsi, *seq,
+			= gsi_ಆರಂಭ_bb (parser.current_bb);
+		      gsi_ಸೇರಿಸು_seq_after_without_update (&gsi, *seq,
 							   GSI_CONTINUE_LINKING);
 		    }
-		  *seq = NULL;
+		  *seq = ಖಾಲಿ;
 		}
 
 	      /* Build an empty block with specified index, linking them
 		 in source order.  */
-	      basic_block bb = alloc_block ();
-	      bb->index = index;
-	      link_block (bb, (parser.current_bb ? parser.current_bb
-			       : ENTRY_BLOCK_PTR_FOR_FN (cfun)));
-	      if (basic_block_info_for_fn (cfun)->length () <= (size_t)index)
-		vec_safe_grow_cleared (basic_block_info_for_fn (cfun),
-				       index + 1, true);
-	      SET_BASIC_BLOCK_FOR_FN (cfun, index, bb);
-	      if (last_basic_block_for_fn (cfun) <= index)
-		last_basic_block_for_fn (cfun) = index + 1;
-	      n_basic_blocks_for_fn (cfun)++;
-	      if (parser.current_bb->index == ENTRY_BLOCK)
-		parser.push_edge (ENTRY_BLOCK, bb->index, EDGE_FALLTHRU,
+	      basic_ಖಂಡ bb = alloc_ಖಂಡ ();
+	      bb->ಸೂಚ್ಯಂಕ = ಸೂಚ್ಯಂಕ;
+	      link_ಖಂಡ (bb, (parser.current_bb ? parser.current_bb
+			       : ನಮೂದು_ಖಂಡ_PTR_FOR_FN (cfun)));
+	      ಆದರೆ (basic_ಖಂಡ_info_for_fn (cfun)->ಉದ್ದಳತೆ () <= (ಗಾತ್ರ_t)ಸೂಚ್ಯಂಕ)
+		vec_ಸುರಕ್ಷಿತ_grow_cleared (basic_ಖಂಡ_info_for_fn (cfun),
+				       ಸೂಚ್ಯಂಕ + 1, ನಿಜ);
+	      ಗಣ_BASIC_ಖಂಡ_FOR_FN (cfun, ಸೂಚ್ಯಂಕ, bb);
+	      ಆದರೆ (ಕೊನೆಯ_basic_ಖಂಡ_for_fn (cfun) <= ಸೂಚ್ಯಂಕ)
+		ಕೊನೆಯ_basic_ಖಂಡ_for_fn (cfun) = ಸೂಚ್ಯಂಕ + 1;
+	      n_basic_ಖಂಡಗಳು_for_fn (cfun)++;
+	      ಆದರೆ (parser.current_bb->ಸೂಚ್ಯಂಕ == ನಮೂದು_ಖಂಡ)
+		parser.ತಳ್ಳು_ಅಂಚು (ನಮೂದು_ಖಂಡ, bb->ಸೂಚ್ಯಂಕ, ಅಂಚು_FALLTHRU,
 				  profile_probability::always ());
 
 	      /* We leave the proper setting to fixup.  */
-	      class loop *loop_father = loops_for_fn (cfun)->tree_root;
+	      ವರ್ಗ loop *loop_father = loops_for_fn (cfun)->ವೃಕ್ಷ_ಬೇರು;
 	      /* If the new block is a loop header, allocate a loop
 		 struct.  Fixup will take care of proper placement within
 		 the loop tree.  */
-	      if (is_loop_header_of != -1)
+	      ಆದರೆ (is_loop_ಶೀರ್ಷಿಕೆ_ದ != -1)
 		{
-		  if (number_of_loops (cfun) > (unsigned)is_loop_header_of
-		      && get_loop (cfun, is_loop_header_of) != NULL)
+		  ಆದರೆ (ಸಂಖ್ಯೆ_ದ_loops (cfun) > (ಚಿಹ್ನೆರಹಿತ)is_loop_ಶೀರ್ಷಿಕೆ_ದ
+		      && get_loop (cfun, is_loop_ಶೀರ್ಷಿಕೆ_ದ) != ಖಾಲಿ)
 		    {
 		      c_parser_error (parser, "duplicate loop header");
 		    }
-		  else
+		  ಇಲ್ಲದಿದ್ದರೆ
 		    {
-		      class loop *loop = alloc_loop ();
-		      loop->num = is_loop_header_of;
-		      loop->header = bb;
-		      if (number_of_loops (cfun) <= (unsigned)is_loop_header_of)
-			vec_safe_grow_cleared (loops_for_fn (cfun)->larray,
-					       is_loop_header_of + 1, true);
-		      (*loops_for_fn (cfun)->larray)[is_loop_header_of] = loop;
-		      flow_loop_tree_node_add (loops_for_fn (cfun)->tree_root,
+		      ವರ್ಗ loop *loop = alloc_loop ();
+		      loop->ಅಂಕೆ = is_loop_ಶೀರ್ಷಿಕೆ_ದ;
+		      loop->ಶೀರ್ಷಿಕೆ = bb;
+		      ಆದರೆ (ಸಂಖ್ಯೆ_ದ_loops (cfun) <= (ಚಿಹ್ನೆರಹಿತ)is_loop_ಶೀರ್ಷಿಕೆ_ದ)
+			vec_ಸುರಕ್ಷಿತ_grow_cleared (loops_for_fn (cfun)->larray,
+					       is_loop_ಶೀರ್ಷಿಕೆ_ದ + 1, ನಿಜ);
+		      (*loops_for_fn (cfun)->larray)[is_loop_ಶೀರ್ಷಿಕೆ_ದ] = loop;
+		      flow_loop_ವೃಕ್ಷ_ಗಂಟು_ಕೂಡಿಸು (loops_for_fn (cfun)->ವೃಕ್ಷ_ಬೇರು,
 					       loop);
 		    }
-		  loop_father = get_loop (cfun, is_loop_header_of);
+		  loop_father = get_loop (cfun, is_loop_ಶೀರ್ಷಿಕೆ_ದ);
 		}
 	      bb->loop_father = loop_father;
-	      bb->count = bb_count;
+	      bb->ಎಣಿಕೆ_2 = bb_ಎಣಿಕೆ;
 
 	      /* Stmts now go to the new block.  */
 	      parser.current_bb = bb;
-	      break;
+	      ನಿಲ್ಲಿಸು;
 	    }
-	  goto expr_stmt;
+	  ಹೋಗು ಅಭಿವ್ಯಕ್ತಿ_stmt;
 
-	case CPP_SEMICOLON:
+	ಸ್ಥಿತಿ CPP_SEMICOLON:
 	  {
 	    /* Empty stmt.  */
 	    location_t loc = c_parser_peek_token (parser)->location;
 	    c_parser_consume_token (parser);
 	    gimple *nop = gimple_build_nop ();
-	    gimple_set_location (nop, loc);
-	    gimple_seq_add_stmt_without_update (seq, nop);
-	    break;
+	    gimple_ಗಣ_location (nop, loc);
+	    gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, nop);
+	    ನಿಲ್ಲಿಸು;
 	  }
 
-	case CPP_CLOSE_PAREN:
-	case CPP_CLOSE_SQUARE:
+	ಸ್ಥಿತಿ CPP_CLOSE_PAREN:
+	ಸ್ಥಿತಿ CPP_CLOSE_ವರ್ಗಫಲ:
 	  /* Avoid infinite loop in error recovery:
 	     c_parser_skip_until_found stops at a closing nesting
 	     delimiter without consuming it, but here we need to consume
 	     it to proceed further.  */
 	  c_parser_error (parser, "expected statement");
 	  c_parser_consume_token (parser);
-	break;
+	ನಿಲ್ಲಿಸು;
 
-	default:
-expr_stmt:
+	ಪೂರ್ವನಿಯೋಜಿತ:
+ಅಭಿವ್ಯಕ್ತಿ_stmt:
 	  c_parser_gimple_statement (parser, seq);
-	  if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	    c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
+	  ಆದರೆ (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	    c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_SEMICOLON, ಖಾಲಿ);
 	}
     }
   c_parser_consume_token (parser);
 
   /* Put stmts parsed in the current block.  */
-  if ((cfun->curr_properties & PROP_cfg)
-      && !gimple_seq_empty_p (*seq))
+  ಆದರೆ ((cfun->curr_properties & PROP_cfg)
+      && !gimple_seq_ಖಾಲಿಗಳು_p (*seq))
     {
-      if (!parser.current_bb)
+      ಆದರೆ (!parser.current_bb)
 	c_parser_error (parser, "stmts without block");
-      else
+      ಇಲ್ಲದಿದ್ದರೆ
 	{
-	  gimple_stmt_iterator gsi = gsi_start_bb (parser.current_bb);
-	  gsi_insert_seq_after_without_update (&gsi, *seq,
+	  gimple_stmt_iterator gsi = gsi_ಆರಂಭ_bb (parser.current_bb);
+	  gsi_ಸೇರಿಸು_seq_after_without_update (&gsi, *seq,
 					       GSI_CONTINUE_LINKING);
 	}
-      *seq = NULL;
+      *seq = ಖಾಲಿ;
     }
 
-  return return_p;
+  ಹಿಂತಿರುಗಿ return_p;
 }
 
 /* Parse a gimple statement.
@@ -778,42 +778,42 @@ expr_stmt:
 
 */
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
 {
-  struct c_expr lhs, rhs;
-  gimple *assign = NULL;
+  ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ lhs, rhs;
+  gimple *ನಿಯೋಜಿಸು = ಖಾಲಿ;
   location_t loc;
-  tree arg = NULL_TREE;
-  auto_vec<tree> vargs;
+  ವೃಕ್ಷ arg = NULL_ವೃಕ್ಷ;
+  auto_vec<ವೃಕ್ಷ> vargs;
 
-  lhs = c_parser_gimple_unary_expression (parser);
-  loc = EXPR_LOCATION (lhs.value);
-  rhs.set_error ();
+  lhs = c_parser_gimple_unary_ಅಭಿವ್ಯಕ್ತಿ (parser);
+  loc = ಅಭಿವ್ಯಕ್ತಿ_LOCATION (lhs.ಮೌಲ್ಯ);
+  rhs.ಗಣ_error ();
 
   /* GIMPLE call statement without LHS.  */
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON)
-      && TREE_CODE (lhs.value) == CALL_EXPR)
+  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_SEMICOLON)
+      && ವೃಕ್ಷ_ಸಂಕೇತ (lhs.ಮೌಲ್ಯ) == CALL_ಅಭಿವ್ಯಕ್ತಿ)
     {
       gimple *call;
-      call = gimple_build_call_from_tree (lhs.value, NULL);
-      gimple_seq_add_stmt_without_update (seq, call);
-      gimple_set_location (call, loc);
-      return;
+      call = gimple_build_call_from_ವೃಕ್ಷ (lhs.ಮೌಲ್ಯ, ಖಾಲಿ);
+      gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, call);
+      gimple_ಗಣ_location (call, loc);
+      ಹಿಂತಿರುಗಿ;
     }
 
   /* All following cases are statements with LHS.  */
-  if (! c_parser_require (parser, CPP_EQ, "expected %<=%>"))
-    return;
+  ಆದರೆ (! c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+    ಹಿಂತಿರುಗಿ;
 
   /* Eat and ignore {v} right after the =, the has_volatile_ops is
      redundant and re-computed by the operand scanner.  */
-  if (c_parser_next_token_is (parser, CPP_OPEN_BRACE)
+  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_OPEN_BRACE)
       && !(c_parser_peek_token (parser)->flags & PREV_WHITE)
       && c_parser_peek_2nd_token (parser)->type == CPP_NAME
       && !(c_parser_peek_2nd_token (parser)->flags & PREV_WHITE)
-      && strcmp ("v", IDENTIFIER_POINTER
-			(c_parser_peek_2nd_token (parser)->value)) == 0
+      && strcmp ("v", IDENTIFIER_ಸೂಚಕ
+			(c_parser_peek_2nd_token (parser)->ಮೌಲ್ಯ)) == 0
       && c_parser_peek_nth_token (parser, 3)->type == CPP_CLOSE_BRACE
       && !(c_parser_peek_nth_token (parser, 3)->flags & PREV_WHITE))
     {
@@ -823,191 +823,191 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
     }
 
   /* Cast expression.  */
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_OPEN_PAREN)
       && c_token_starts_typename (c_parser_peek_2nd_token (parser)))
     {
       c_parser_consume_token (parser);
-      struct c_type_name *type_name = c_parser_type_name (parser);
-      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, "expected %<)%>");
-      if (type_name == NULL)
-	return;
+      ರಚನೆ c_type_name *type_name = c_parser_type_name (parser);
+      c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN, "expected %<)%>");
+      ಆದರೆ (type_name == ಖಾಲಿ)
+	ಹಿಂತಿರುಗಿ;
       /* ???  The actual type used in the cast expression is ignored as
          in GIMPLE it is encoded by the type of the LHS.  */
-      rhs = c_parser_gimple_postfix_expression (parser);
-      if (lhs.value != error_mark_node
-	  && rhs.value != error_mark_node)
+      rhs = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+      ಆದರೆ (lhs.ಮೌಲ್ಯ != error_mark_ಗಂಟು
+	  && rhs.ಮೌಲ್ಯ != error_mark_ಗಂಟು)
 	{
-	  enum tree_code code = NOP_EXPR;
-	  if (FLOAT_TYPE_P (TREE_TYPE (lhs.value))
-	      && ! FLOAT_TYPE_P (TREE_TYPE (rhs.value)))
-	    code = FLOAT_EXPR;
-	  else if (! FLOAT_TYPE_P (TREE_TYPE (lhs.value))
-		   && FLOAT_TYPE_P (TREE_TYPE (rhs.value)))
-	    code = FIX_TRUNC_EXPR;
-	  assign = gimple_build_assign (lhs.value, code, rhs.value);
-	  gimple_seq_add_stmt_without_update (seq, assign);
-	  gimple_set_location (assign, loc);
-	  return;
+	  ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2 ಸಂಕೇತ_2 = NOP_ಅಭಿವ್ಯಕ್ತಿ;
+	  ಆದರೆ (FLOAT_TYPE_P (ವೃಕ್ಷ_TYPE (lhs.ಮೌಲ್ಯ))
+	      && ! FLOAT_TYPE_P (ವೃಕ್ಷ_TYPE (rhs.ಮೌಲ್ಯ)))
+	    ಸಂಕೇತ_2 = FLOAT_ಅಭಿವ್ಯಕ್ತಿ;
+	  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (! FLOAT_TYPE_P (ವೃಕ್ಷ_TYPE (lhs.ಮೌಲ್ಯ))
+		   && FLOAT_TYPE_P (ವೃಕ್ಷ_TYPE (rhs.ಮೌಲ್ಯ)))
+	    ಸಂಕೇತ_2 = FIX_TRUNC_ಅಭಿವ್ಯಕ್ತಿ;
+	  ನಿಯೋಜಿಸು = gimple_build_ನಿಯೋಜಿಸು (lhs.ಮೌಲ್ಯ, ಸಂಕೇತ_2, rhs.ಮೌಲ್ಯ);
+	  gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, ನಿಯೋಜಿಸು);
+	  gimple_ಗಣ_location (ನಿಯೋಜಿಸು, loc);
+	  ಹಿಂತಿರುಗಿ;
 	}
     }
 
   /* Unary expression.  */
-  switch (c_parser_peek_token (parser)->type)
+  ಆಯ್ಕೆ (c_parser_peek_token (parser)->type)
     {
-    case CPP_NAME:
+    ಸ್ಥಿತಿ CPP_NAME:
       {
-	tree id = c_parser_peek_token (parser)->value;
-	if (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0
-	    || strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0
-	    || strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0
-	    || strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0
-	    || strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0
-	    || strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
-	  goto build_unary_expr;
-	break;
+	ವೃಕ್ಷ id = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
+	ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "__ABS") == 0
+	    || strcmp (IDENTIFIER_ಸೂಚಕ (id), "__ABSU") == 0
+	    || strcmp (IDENTIFIER_ಸೂಚಕ (id), "__MIN") == 0
+	    || strcmp (IDENTIFIER_ಸೂಚಕ (id), "__MAX") == 0
+	    || strcmp (IDENTIFIER_ಸೂಚಕ (id), "__BIT_INSERT") == 0
+	    || strcmp (IDENTIFIER_ಸೂಚಕ (id), "__VEC_PERM") == 0)
+	  ಹೋಗು build_unary_ಅಭಿವ್ಯಕ್ತಿ;
+	ನಿಲ್ಲಿಸು;
       }
-    case CPP_KEYWORD:
-      if (c_parser_peek_token (parser)->keyword != RID_REALPART
+    ಸ್ಥಿತಿ CPP_KEYWORD:
+      ಆದರೆ (c_parser_peek_token (parser)->keyword != RID_REALPART
 	  && c_parser_peek_token (parser)->keyword != RID_IMAGPART)
-	break;
+	ನಿಲ್ಲಿಸು;
       /* Fallthru.  */
-    case CPP_AND:
-    case CPP_PLUS:
-    case CPP_MINUS:
-    case CPP_COMPL:
-    case CPP_NOT:
-    case CPP_MULT: /* pointer deref */
-    build_unary_expr:
-      rhs = c_parser_gimple_unary_expression (parser);
-      if (rhs.value != error_mark_node)
+    ಸ್ಥಿತಿ CPP_AND:
+    ಸ್ಥಿತಿ CPP_PLUS:
+    ಸ್ಥಿತಿ CPP_MINUS:
+    ಸ್ಥಿತಿ CPP_COMPL:
+    ಸ್ಥಿತಿ CPP_NOT:
+    ಸ್ಥಿತಿ CPP_MULT: /* pointer deref */
+    build_unary_ಅಭಿವ್ಯಕ್ತಿ:
+      rhs = c_parser_gimple_unary_ಅಭಿವ್ಯಕ್ತಿ (parser);
+      ಆದರೆ (rhs.ಮೌಲ್ಯ != error_mark_ಗಂಟು)
 	{
-	  assign = gimple_build_assign (lhs.value, rhs.value);
-	  gimple_set_location (assign, loc);
-	  gimple_seq_add_stmt_without_update (seq, assign);
+	  ನಿಯೋಜಿಸು = gimple_build_ನಿಯೋಜಿಸು (lhs.ಮೌಲ್ಯ, rhs.ಮೌಲ್ಯ);
+	  gimple_ಗಣ_location (ನಿಯೋಜಿಸು, loc);
+	  gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, ನಿಯೋಜಿಸು);
 	}
-      return;
+      ಹಿಂತಿರುಗಿ;
 
-    default:;
+    ಪೂರ್ವನಿಯೋಜಿತ:;
     }
 
   /* GIMPLE PHI statement.  */
-  if (c_parser_next_token_is_keyword (parser, RID_PHI))
+  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is_keyword (parser, RID_PHI))
     {
       c_parser_consume_token (parser);
 
-      if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	return;
+      ಆದರೆ (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	ಹಿಂತಿರುಗಿ;
 
-      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+      ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_OPEN_PAREN))
 	c_parser_consume_token (parser);
 
-      while (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN))
+      ಆಗ (c_parser_ಮುಂದಿನ_token_is_not (parser, CPP_CLOSE_PAREN))
 	{
-	  if (c_parser_next_token_is (parser, CPP_NAME)
+	  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME)
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
-	      arg = c_parser_peek_token (parser)->value;
+	      arg = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is (parser, CPP_COLON))
+	      ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COLON))
 		c_parser_consume_token (parser);
-	      int src_index = -1;
-	      if (!c_parser_gimple_parse_bb_spec (arg, &src_index))
+	      ಪೂರ್ಣಾಂಕ src_ಸೂಚ್ಯಂಕ = -1;
+	      ಆದರೆ (!c_parser_gimple_parse_bb_spec (arg, &src_ಸೂಚ್ಯಂಕ))
 		c_parser_error (parser, "invalid source block specification");
-	      vargs.safe_push (size_int (src_index));
+	      vargs.ಸುರಕ್ಷಿತ_ತಳ್ಳು (ಗಾತ್ರ_int (src_ಸೂಚ್ಯಂಕ));
 	    }
-	  else if (c_parser_next_token_is (parser, CPP_COMMA))
+	  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
-	  else
+	  ಇಲ್ಲದಿದ್ದರೆ
 	    {
-	      arg = c_parser_gimple_unary_expression (parser).value;
-	      vargs.safe_push (arg);
+	      arg = c_parser_gimple_unary_ಅಭಿವ್ಯಕ್ತಿ (parser).ಮೌಲ್ಯ;
+	      vargs.ಸುರಕ್ಷಿತ_ತಳ್ಳು (arg);
 	    }
 	}
 
-      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
+      c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN,
 				 "expected %<)%>");
 
       /* Build internal function for PHI.  */
-      gcall *call_stmt = gimple_build_call_internal_vec (IFN_PHI, vargs);
-      gimple_call_set_lhs (call_stmt, lhs.value);
-      gimple_set_location (call_stmt, UNKNOWN_LOCATION);
-      gimple_seq_add_stmt_without_update (seq, call_stmt);
-      return;
+      gcall *call_stmt = gimple_build_call_ಆಂತರಿಕ_vec (IFN_PHI, vargs);
+      gimple_call_ಗಣ_lhs (call_stmt, lhs.ಮೌಲ್ಯ);
+      gimple_ಗಣ_location (call_stmt, UNKNOWN_LOCATION);
+      gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, call_stmt);
+      ಹಿಂತಿರುಗಿ;
     }
 
   /* GIMPLE call with lhs.  */
-  if (c_parser_next_token_is (parser, CPP_DOT)
-      || (c_parser_next_token_is (parser, CPP_NAME)
+  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_DOT)
+      || (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN
-	  && lookup_name (c_parser_peek_token (parser)->value)))
+	  && lookup_name (c_parser_peek_token (parser)->ಮೌಲ್ಯ)))
     {
-      rhs = c_parser_gimple_unary_expression (parser);
-      if (rhs.value != error_mark_node)
+      rhs = c_parser_gimple_unary_ಅಭಿವ್ಯಕ್ತಿ (parser);
+      ಆದರೆ (rhs.ಮೌಲ್ಯ != error_mark_ಗಂಟು)
 	{
-	  gimple *call = gimple_build_call_from_tree (rhs.value, NULL);
-	  gimple_call_set_lhs (call, lhs.value);
-	  gimple_seq_add_stmt_without_update (seq, call);
-	  gimple_set_location (call, loc);
+	  gimple *call = gimple_build_call_from_ವೃಕ್ಷ (rhs.ಮೌಲ್ಯ, ಖಾಲಿ);
+	  gimple_call_ಗಣ_lhs (call, lhs.ಮೌಲ್ಯ);
+	  gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, call);
+	  gimple_ಗಣ_location (call, loc);
 	}
-      return;
+      ಹಿಂತಿರುಗಿ;
     }
 
-  rhs = c_parser_gimple_binary_expression (parser, TREE_TYPE (lhs.value));
-  if (lhs.value != error_mark_node
-      && rhs.value != error_mark_node)
+  rhs = c_parser_gimple_ದ್ವಿಮಾನ_ಅಭಿವ್ಯಕ್ತಿ (parser, ವೃಕ್ಷ_TYPE (lhs.ಮೌಲ್ಯ));
+  ಆದರೆ (lhs.ಮೌಲ್ಯ != error_mark_ಗಂಟು
+      && rhs.ಮೌಲ್ಯ != error_mark_ಗಂಟು)
     {
       /* If we parsed an identifier and the next token  is a '?' then parse
 	 a conditional expression.  */
-      if (SSA_VAR_P (rhs.value) && c_parser_next_token_is (parser, CPP_QUERY))
+      ಆದರೆ (SSA_VAR_P (rhs.ಮೌಲ್ಯ) && c_parser_ಮುಂದಿನ_token_is (parser, CPP_QUERY))
 	{
-	  struct c_expr trueval, falseval;
+	  ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ trueval, falseval;
 	  c_parser_consume_token (parser);
-	  trueval = c_parser_gimple_postfix_expression (parser);
-	  falseval.set_error ();
-	  if (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
-	    falseval = c_parser_gimple_postfix_expression (parser);
-	  if (trueval.value == error_mark_node
-	      || falseval.value == error_mark_node)
-	    return;
-	  rhs.value = build3_loc (loc,
-				  VECTOR_TYPE_P (TREE_TYPE (rhs.value))
-				  ? VEC_COND_EXPR : COND_EXPR,
-				  TREE_TYPE (trueval.value),
-				  rhs.value, trueval.value, falseval.value);
+	  trueval = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+	  falseval.ಗಣ_error ();
+	  ಆದರೆ (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	    falseval = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+	  ಆದರೆ (trueval.ಮೌಲ್ಯ == error_mark_ಗಂಟು
+	      || falseval.ಮೌಲ್ಯ == error_mark_ಗಂಟು)
+	    ಹಿಂತಿರುಗಿ;
+	  rhs.ಮೌಲ್ಯ = build3_loc (loc,
+				  ಸದಿಶ_TYPE_P (ವೃಕ್ಷ_TYPE (rhs.ಮೌಲ್ಯ))
+				  ? VEC_COND_ಅಭಿವ್ಯಕ್ತಿ : COND_ಅಭಿವ್ಯಕ್ತಿ,
+				  ವೃಕ್ಷ_TYPE (trueval.ಮೌಲ್ಯ),
+				  rhs.ಮೌಲ್ಯ, trueval.ಮೌಲ್ಯ, falseval.ಮೌಲ್ಯ);
 	}
-      if (get_gimple_rhs_class (TREE_CODE (rhs.value)) == GIMPLE_INVALID_RHS)
+      ಆದರೆ (get_gimple_rhs_class (ವೃಕ್ಷ_ಸಂಕೇತ (rhs.ಮೌಲ್ಯ)) == GIMPLE_INVALID_RHS)
 	{
 	  c_parser_error (parser, "unexpected RHS for assignment");
-	  return;
+	  ಹಿಂತಿರುಗಿ;
 	}
-      assign = gimple_build_assign (lhs.value, rhs.value);
-      gimple_seq_add_stmt_without_update (seq, assign);
-      gimple_set_location (assign, loc);
+      ನಿಯೋಜಿಸು = gimple_build_ನಿಯೋಜಿಸು (lhs.ಮೌಲ್ಯ, rhs.ಮೌಲ್ಯ);
+      gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, ನಿಯೋಜಿಸು);
+      gimple_ಗಣ_location (ನಿಯೋಜಿಸು, loc);
     }
-  return;
+  ಹಿಂತಿರುಗಿ;
 }
 
 /* A mapping between an identifier to a tree code for binary operations. */
-static const std::pair<const char *, tree_code> gimple_binary_identifier_code[] =
+ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ std::pair<ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *, ವೃಕ್ಷ_ಸಂಕೇತ_2> gimple_ದ್ವಿಮಾನ_identifier_ಸಂಕೇತ[] =
   {
-    {"__MULT_HIGHPART", MULT_HIGHPART_EXPR},
-    {"__UNLT", UNLT_EXPR},
-    {"__UNLE", UNLE_EXPR},
-    {"__UNGT", UNGT_EXPR},
-    {"__UNGE", UNGE_EXPR},
-    {"__UNEQ", UNEQ_EXPR},
-    {"__UNORDERED", UNORDERED_EXPR},
-    {"__ORDERED", ORDERED_EXPR},
-    {"__LTGT", LTGT_EXPR},
-    {"__FLOOR_DIV", FLOOR_DIV_EXPR},
-    {"__ROUND_DIV", ROUND_DIV_EXPR},
-    {"__EXACT_DIV", EXACT_DIV_EXPR},
-    {"__CEIL_DIV", CEIL_DIV_EXPR},
-    {"__FLOOR_MOD", FLOOR_MOD_EXPR},
-    {"__ROUND_MOD", ROUND_MOD_EXPR},
-    {"__CEIL_MOD", CEIL_MOD_EXPR},
-    {"__ROTATE_LEFT", LROTATE_EXPR},
-    {"__ROTATE_RIGHT", RROTATE_EXPR},
+    {"__MULT_HIGHPART", MULT_HIGHPART_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__UNLT", UNLT_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__UNLE", UNLE_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__UNGT", UNGT_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__UNGE", UNGE_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__UNEQ", UNEQ_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__UNORDERED", UNORDERED_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__ORDERED", ORDERED_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__LTGT", LTGT_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__FLOOR_DIV", FLOOR_DIV_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__ROUND_DIV", ಸುತ್ತು_DIV_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__EXACT_DIV", EXACT_DIV_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__CEIL_DIV", CEIL_DIV_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__FLOOR_MOD", FLOOR_MOD_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__ROUND_MOD", ಸುತ್ತು_MOD_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__CEIL_MOD", CEIL_MOD_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__ROTATE_LEFT", LROTATE_ಅಭಿವ್ಯಕ್ತಿ},
+    {"__ROTATE_RIGHT", RROTATE_ಅಭಿವ್ಯಕ್ತಿ},
   };
 
 /* Parse gimple binary expr.
@@ -1033,161 +1033,161 @@ static const std::pair<const char *, tree_code> gimple_binary_identifier_code[] 
 
 */
 
-static c_expr
-c_parser_gimple_binary_expression (gimple_parser &parser, tree ret_type)
+ಸ್ಥಿರ c_ಅಭಿವ್ಯಕ್ತಿ
+c_parser_gimple_ದ್ವಿಮಾನ_ಅಭಿವ್ಯಕ್ತಿ (gimple_parser &parser, ವೃಕ್ಷ ret_type)
 {
   /* Location of the binary operator.  */
-  struct c_expr ret, lhs, rhs;
-  enum tree_code code = ERROR_MARK;
-  ret.set_error ();
-  lhs = c_parser_gimple_postfix_expression (parser, ret_type);
-  if (c_parser_error (parser))
-    return ret;
-  switch (c_parser_peek_token (parser)->type)
+  ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ret, lhs, rhs;
+  ಎಣಿಕೆ ವೃಕ್ಷ_ಸಂಕೇತ_2 ಸಂಕೇತ_2 = ERROR_MARK;
+  ret.ಗಣ_error ();
+  lhs = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser, ret_type);
+  ಆದರೆ (c_parser_error (parser))
+    ಹಿಂತಿರುಗಿ ret;
+  ಆಯ್ಕೆ (c_parser_peek_token (parser)->type)
     {
-    case CPP_MULT:
-      code = MULT_EXPR;
-      break;
-    case CPP_DIV:
-      code = TRUNC_DIV_EXPR;
-      break;
-    case CPP_MOD:
-      code = TRUNC_MOD_EXPR;
-      break;
-    case CPP_PLUS:
-      if (POINTER_TYPE_P (TREE_TYPE (lhs.value)))
-	code = POINTER_PLUS_EXPR;
-      else
-	code = PLUS_EXPR;
-      break;
-    case CPP_MINUS:
-      if (POINTER_TYPE_P (TREE_TYPE (lhs.value)))
-	code = POINTER_DIFF_EXPR;
-      else
-	code = MINUS_EXPR;
-      break;
-    case CPP_LSHIFT:
-      code = LSHIFT_EXPR;
-      break;
-    case CPP_RSHIFT:
-      code = RSHIFT_EXPR;
-      break;
-    case CPP_LESS:
-      code = LT_EXPR;
-      break;
-    case CPP_GREATER:
-      code = GT_EXPR;
-      break;
-    case CPP_LESS_EQ:
-      code = LE_EXPR;
-      break;
-    case CPP_GREATER_EQ:
-      code = GE_EXPR;
-      break;
-    case CPP_EQ_EQ:
-      code = EQ_EXPR;
-      break;
-    case CPP_NOT_EQ:
-      code = NE_EXPR;
-      break;
-    case CPP_AND:
-      code = BIT_AND_EXPR;
-      break;
-    case CPP_XOR:
-      code = BIT_XOR_EXPR;
-      break;
-    case CPP_OR:
-      code = BIT_IOR_EXPR;
-      break;
-    case CPP_AND_AND:
+    ಸ್ಥಿತಿ CPP_MULT:
+      ಸಂಕೇತ_2 = MULT_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_DIV:
+      ಸಂಕೇತ_2 = TRUNC_DIV_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_MOD:
+      ಸಂಕೇತ_2 = TRUNC_MOD_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_PLUS:
+      ಆದರೆ (ಸೂಚಕ_TYPE_P (ವೃಕ್ಷ_TYPE (lhs.ಮೌಲ್ಯ)))
+	ಸಂಕೇತ_2 = ಸೂಚಕ_PLUS_ಅಭಿವ್ಯಕ್ತಿ;
+      ಇಲ್ಲದಿದ್ದರೆ
+	ಸಂಕೇತ_2 = PLUS_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_MINUS:
+      ಆದರೆ (ಸೂಚಕ_TYPE_P (ವೃಕ್ಷ_TYPE (lhs.ಮೌಲ್ಯ)))
+	ಸಂಕೇತ_2 = ಸೂಚಕ_DIFF_ಅಭಿವ್ಯಕ್ತಿ;
+      ಇಲ್ಲದಿದ್ದರೆ
+	ಸಂಕೇತ_2 = MINUS_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_LSHIFT:
+      ಸಂಕೇತ_2 = LSHIFT_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_RSHIFT:
+      ಸಂಕೇತ_2 = RSHIFT_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_LESS:
+      ಸಂಕೇತ_2 = LT_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_GREATER:
+      ಸಂಕೇತ_2 = GT_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_LESS_EQ:
+      ಸಂಕೇತ_2 = LE_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_GREATER_EQ:
+      ಸಂಕೇತ_2 = GE_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_EQ_EQ:
+      ಸಂಕೇತ_2 = EQ_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_NOT_EQ:
+      ಸಂಕೇತ_2 = NE_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_AND:
+      ಸಂಕೇತ_2 = ಬಿಟ್_AND_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_XOR:
+      ಸಂಕೇತ_2 = ಬಿಟ್_XOR_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_OR:
+      ಸಂಕೇತ_2 = ಬಿಟ್_IOR_ಅಭಿವ್ಯಕ್ತಿ;
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_AND_AND:
       c_parser_error (parser, "%<&&%> not valid in GIMPLE");
-      return ret;
-    case CPP_OR_OR:
+      ಹಿಂತಿರುಗಿ ret;
+    ಸ್ಥಿತಿ CPP_OR_OR:
       c_parser_error (parser, "%<||%> not valid in GIMPLE");
-      return ret;
-    case CPP_NAME:
+      ಹಿಂತಿರುಗಿ ret;
+    ಸ್ಥಿತಿ CPP_NAME:
       {
-	tree id = c_parser_peek_token (parser)->value;
-	for (auto &p : gimple_binary_identifier_code)
+	ವೃಕ್ಷ id = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
+	ಗಾಗಿ (ಸ್ವಯಂಚಾಲಿತ &p : gimple_ದ್ವಿಮಾನ_identifier_ಸಂಕೇತ)
 	  {
-	    if (strcmp (IDENTIFIER_POINTER (id), p.first) == 0)
+	    ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), p.ಮೊದಲ) == 0)
 	      {
-		code = p.second;
-		break;
+		ಸಂಕೇತ_2 = p.ಎರಡನೇ;
+		ನಿಲ್ಲಿಸು;
 	      }
 	  }
-	if (code != ERROR_MARK)
-	  break;
+	ಆದರೆ (ಸಂಕೇತ_2 != ERROR_MARK)
+	  ನಿಲ್ಲಿಸು;
       }
       /* Fallthru.  */
-    default:
+    ಪೂರ್ವನಿಯೋಜಿತ:
       /* Not a binary expression.  */
-      return lhs;
+      ಹಿಂತಿರುಗಿ lhs;
     }
   location_t ret_loc = c_parser_peek_token (parser)->location;
   c_parser_consume_token (parser);
-  rhs = c_parser_gimple_postfix_expression (parser);
-  if (lhs.value != error_mark_node && rhs.value != error_mark_node)
-    ret.value = build2_loc (ret_loc, code, ret_type, lhs.value, rhs.value);
-  return ret;
+  rhs = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+  ಆದರೆ (lhs.ಮೌಲ್ಯ != error_mark_ಗಂಟು && rhs.ಮೌಲ್ಯ != error_mark_ಗಂಟು)
+    ret.ಮೌಲ್ಯ = build2_loc (ret_loc, ಸಂಕೇತ_2, ret_type, lhs.ಮೌಲ್ಯ, rhs.ಮೌಲ್ಯ);
+  ಹಿಂತಿರುಗಿ ret;
 }
 
 /* Parse a gimple parentized binary expression.  */
 
-static c_expr
-c_parser_gimple_parentized_binary_expression (gimple_parser &parser,
+ಸ್ಥಿರ c_ಅಭಿವ್ಯಕ್ತಿ
+c_parser_gimple_parentized_ದ್ವಿಮಾನ_ಅಭಿವ್ಯಕ್ತಿ (gimple_parser &parser,
 					      location_t op_loc,
-					      tree_code code)
+					      ವೃಕ್ಷ_ಸಂಕೇತ_2 ಸಂಕೇತ_2)
 {
-  struct c_expr ret;
-  ret.set_error ();
+  ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ret;
+  ret.ಗಣ_error ();
 
   c_parser_consume_token (parser);
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return ret;
-  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
-    return ret;
-  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return ret;
+  ಆದರೆ (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    ಹಿಂತಿರುಗಿ ret;
+  c_ಅಭಿವ್ಯಕ್ತಿ op1 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+  ಆದರೆ (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+    ಹಿಂತಿರುಗಿ ret;
+  c_ಅಭಿವ್ಯಕ್ತಿ op2 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+  ಆದರೆ (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    ಹಿಂತಿರುಗಿ ret;
 
-  if (op1.value != error_mark_node && op2.value != error_mark_node)
-    ret.value = build2_loc (op_loc,
-			    code, TREE_TYPE (op1.value), op1.value, op2.value);
-  return ret;
+  ಆದರೆ (op1.ಮೌಲ್ಯ != error_mark_ಗಂಟು && op2.ಮೌಲ್ಯ != error_mark_ಗಂಟು)
+    ret.ಮೌಲ್ಯ = build2_loc (op_loc,
+			    ಸಂಕೇತ_2, ವೃಕ್ಷ_TYPE (op1.ಮೌಲ್ಯ), op1.ಮೌಲ್ಯ, op2.ಮೌಲ್ಯ);
+  ಹಿಂತಿರುಗಿ ret;
 }
 
 /* Parse a gimple parentized binary expression.  */
 
-static c_expr
-c_parser_gimple_parentized_ternary_expression (gimple_parser &parser,
+ಸ್ಥಿರ c_ಅಭಿವ್ಯಕ್ತಿ
+c_parser_gimple_parentized_ternary_ಅಭಿವ್ಯಕ್ತಿ (gimple_parser &parser,
 					       location_t op_loc,
-					       tree_code code)
+					       ವೃಕ್ಷ_ಸಂಕೇತ_2 ಸಂಕೇತ_2)
 {
-  struct c_expr ret;
-  ret.set_error ();
+  ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ret;
+  ret.ಗಣ_error ();
 
   c_parser_consume_token (parser);
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return ret;
-  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
-    return ret;
-  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<)%>"))
-    return ret;
-  c_expr op3 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return ret;
+  ಆದರೆ (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    ಹಿಂತಿರುಗಿ ret;
+  c_ಅಭಿವ್ಯಕ್ತಿ op1 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+  ಆದರೆ (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+    ಹಿಂತಿರುಗಿ ret;
+  c_ಅಭಿವ್ಯಕ್ತಿ op2 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+  ಆದರೆ (!c_parser_require (parser, CPP_COMMA, "expected %<)%>"))
+    ಹಿಂತಿರುಗಿ ret;
+  c_ಅಭಿವ್ಯಕ್ತಿ op3 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+  ಆದರೆ (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    ಹಿಂತಿರುಗಿ ret;
 
-  if (op1.value != error_mark_node
-      && op2.value != error_mark_node
-      && op3.value != error_mark_node)
-    ret.value = build3_loc (op_loc,
-			    code, TREE_TYPE (op1.value),
-			    op1.value, op2.value, op3.value);
-  return ret;
+  ಆದರೆ (op1.ಮೌಲ್ಯ != error_mark_ಗಂಟು
+      && op2.ಮೌಲ್ಯ != error_mark_ಗಂಟು
+      && op3.ಮೌಲ್ಯ != error_mark_ಗಂಟು)
+    ret.ಮೌಲ್ಯ = build3_loc (op_loc,
+			    ಸಂಕೇತ_2, ವೃಕ್ಷ_TYPE (op1.ಮೌಲ್ಯ),
+			    op1.ಮೌಲ್ಯ, op2.ಮೌಲ್ಯ, op3.ಮೌಲ್ಯ);
+  ಹಿಂತಿರುಗಿ ret;
 }
 
 /* Parse gimple unary expression.
@@ -1200,212 +1200,212 @@ c_parser_gimple_parentized_ternary_expression (gimple_parser &parser,
      & * + - ~ abs_expr
 */
 
-static c_expr
-c_parser_gimple_unary_expression (gimple_parser &parser)
+ಸ್ಥಿರ c_ಅಭಿವ್ಯಕ್ತಿ
+c_parser_gimple_unary_ಅಭಿವ್ಯಕ್ತಿ (gimple_parser &parser)
 {
-  struct c_expr ret, op;
+  ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ret, op;
   location_t op_loc = c_parser_peek_token (parser)->location;
-  location_t finish;
-  ret.set_error ();
-  switch (c_parser_peek_token (parser)->type)
+  location_t ಮುಕ್ತಾಯ;
+  ret.ಗಣ_error ();
+  ಆಯ್ಕೆ (c_parser_peek_token (parser)->type)
     {
-    case CPP_AND:
+    ಸ್ಥಿತಿ CPP_AND:
       c_parser_consume_token (parser);
-      op = c_parser_gimple_postfix_expression (parser);
-      mark_exp_read (op.value);
-      return gimple_parser_build_unary_op (op_loc, ADDR_EXPR, op);
-    case CPP_MULT:
+      op = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+      mark_exp_read (op.ಮೌಲ್ಯ);
+      ಹಿಂತಿರುಗಿ gimple_parser_build_unary_op (op_loc, ADDR_ಅಭಿವ್ಯಕ್ತಿ, op);
+    ಸ್ಥಿತಿ CPP_MULT:
       {
 	c_parser_consume_token (parser);
-	op = c_parser_gimple_postfix_expression (parser);
-	if (op.value == error_mark_node)
-	  return ret;
-	if (! POINTER_TYPE_P (TREE_TYPE (op.value)))
+	op = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+	ಆದರೆ (op.ಮೌಲ್ಯ == error_mark_ಗಂಟು)
+	  ಹಿಂತಿರುಗಿ ret;
+	ಆದರೆ (! ಸೂಚಕ_TYPE_P (ವೃಕ್ಷ_TYPE (op.ಮೌಲ್ಯ)))
 	  {
 	    error_at (op_loc, "expected pointer as argument of unary %<*%>");
-	    return ret;
+	    ಹಿಂತಿರುಗಿ ret;
 	  }
-	finish = op.get_finish ();
-	location_t combined_loc = make_location (op_loc, op_loc, finish);
-	ret.value = build_simple_mem_ref_loc (combined_loc, op.value);
-	TREE_SIDE_EFFECTS (ret.value)
-	  = TREE_THIS_VOLATILE (ret.value)
-	  = TYPE_VOLATILE (TREE_TYPE (TREE_TYPE (op.value)));
-	ret.src_range.m_start = op_loc;
-	ret.src_range.m_finish = finish;
-	return ret;
+	ಮುಕ್ತಾಯ = op.get_ಮುಕ್ತಾಯ ();
+	location_t combined_loc = make_location (op_loc, op_loc, ಮುಕ್ತಾಯ);
+	ret.ಮೌಲ್ಯ = build_simple_mem_ref_loc (combined_loc, op.ಮೌಲ್ಯ);
+	ವೃಕ್ಷ_SIDE_EFFECTS (ret.ಮೌಲ್ಯ)
+	  = ವೃಕ್ಷ_THIS_VOLATILE (ret.ಮೌಲ್ಯ)
+	  = TYPE_VOLATILE (ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (op.ಮೌಲ್ಯ)));
+	ret.src_range.m_ಆರಂಭ = op_loc;
+	ret.src_range.m_ಮುಕ್ತಾಯ = ಮುಕ್ತಾಯ;
+	ಹಿಂತಿರುಗಿ ret;
       }
-    case CPP_PLUS:
+    ಸ್ಥಿತಿ CPP_PLUS:
       c_parser_consume_token (parser);
-      op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, CONVERT_EXPR, op);
-    case CPP_MINUS:
+      op = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+      ಹಿಂತಿರುಗಿ gimple_parser_build_unary_op (op_loc, CONVERT_ಅಭಿವ್ಯಕ್ತಿ, op);
+    ಸ್ಥಿತಿ CPP_MINUS:
       c_parser_consume_token (parser);
-      op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, NEGATE_EXPR, op);
-    case CPP_COMPL:
+      op = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+      ಹಿಂತಿರುಗಿ gimple_parser_build_unary_op (op_loc, NEGATE_ಅಭಿವ್ಯಕ್ತಿ, op);
+    ಸ್ಥಿತಿ CPP_COMPL:
       c_parser_consume_token (parser);
-      op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, BIT_NOT_EXPR, op);
-    case CPP_NOT:
+      op = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+      ಹಿಂತಿರುಗಿ gimple_parser_build_unary_op (op_loc, ಬಿಟ್_NOT_ಅಭಿವ್ಯಕ್ತಿ, op);
+    ಸ್ಥಿತಿ CPP_NOT:
       c_parser_error (parser, "%<!%> not valid in GIMPLE");
-      return ret;
-    case CPP_KEYWORD:
-      switch (c_parser_peek_token (parser)->keyword)
+      ಹಿಂತಿರುಗಿ ret;
+    ಸ್ಥಿತಿ CPP_KEYWORD:
+      ಆಯ್ಕೆ (c_parser_peek_token (parser)->keyword)
 	{
-	case RID_REALPART:
+	ಸ್ಥಿತಿ RID_REALPART:
 	  c_parser_consume_token (parser);
-	  op = c_parser_gimple_postfix_expression (parser);
-	  return gimple_parser_build_unary_op (op_loc, REALPART_EXPR, op);
-	case RID_IMAGPART:
+	  op = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+	  ಹಿಂತಿರುಗಿ gimple_parser_build_unary_op (op_loc, REALPART_ಅಭಿವ್ಯಕ್ತಿ, op);
+	ಸ್ಥಿತಿ RID_IMAGPART:
 	  c_parser_consume_token (parser);
-	  op = c_parser_gimple_postfix_expression (parser);
-	  return gimple_parser_build_unary_op (op_loc, IMAGPART_EXPR, op);
-	default:
-	  return c_parser_gimple_postfix_expression (parser);
+	  op = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+	  ಹಿಂತಿರುಗಿ gimple_parser_build_unary_op (op_loc, IMAGPART_ಅಭಿವ್ಯಕ್ತಿ, op);
+	ಪೂರ್ವನಿಯೋಜಿತ:
+	  ಹಿಂತಿರುಗಿ c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
 	}
-    case CPP_NAME:
+    ಸ್ಥಿತಿ CPP_NAME:
 	{
-	  tree id = c_parser_peek_token (parser)->value;
-	  if (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0)
+	  ವೃಕ್ಷ id = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
+	  ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "__ABS") == 0)
 	    {
 	      c_parser_consume_token (parser);
-	      op = c_parser_gimple_postfix_expression (parser);
-	      return gimple_parser_build_unary_op (op_loc, ABS_EXPR, op);
+	      op = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+	      ಹಿಂತಿರುಗಿ gimple_parser_build_unary_op (op_loc, ABS_ಅಭಿವ್ಯಕ್ತಿ, op);
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0)
+	  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "__ABSU") == 0)
 	    {
 	      c_parser_consume_token (parser);
-	      op = c_parser_gimple_postfix_expression (parser);
-	      return gimple_parser_build_unary_op (op_loc, ABSU_EXPR, op);
+	      op = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+	      ಹಿಂತಿರುಗಿ gimple_parser_build_unary_op (op_loc, ABSU_ಅಭಿವ್ಯಕ್ತಿ, op);
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0)
-	    return c_parser_gimple_parentized_binary_expression (parser,
+	  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "__MIN") == 0)
+	    ಹಿಂತಿರುಗಿ c_parser_gimple_parentized_ದ್ವಿಮಾನ_ಅಭಿವ್ಯಕ್ತಿ (parser,
 								 op_loc,
-								 MIN_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0)
-	    return c_parser_gimple_parentized_binary_expression (parser,
+								 MIN_ಅಭಿವ್ಯಕ್ತಿ);
+	  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "__MAX") == 0)
+	    ಹಿಂತಿರುಗಿ c_parser_gimple_parentized_ದ್ವಿಮಾನ_ಅಭಿವ್ಯಕ್ತಿ (parser,
 								 op_loc,
-								 MAX_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
-	    return c_parser_gimple_parentized_ternary_expression
-			(parser, op_loc, VEC_PERM_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0)
+								 MAX_ಅಭಿವ್ಯಕ್ತಿ);
+	  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "__VEC_PERM") == 0)
+	    ಹಿಂತಿರುಗಿ c_parser_gimple_parentized_ternary_ಅಭಿವ್ಯಕ್ತಿ
+			(parser, op_loc, VEC_PERM_ಅಭಿವ್ಯಕ್ತಿ);
+	  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "__BIT_INSERT") == 0)
 	    {
 	      /* __BIT_INSERT '(' postfix-expression, postfix-expression,
 			          integer ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      ಆದರೆ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op0 = c_parser_gimple_postfix_expression (parser);
-		  c_parser_skip_until_found (parser, CPP_COMMA,
+		  c_ಅಭಿವ್ಯಕ್ತಿ op0 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+		  c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-		  c_parser_skip_until_found (parser, CPP_COMMA,
+		  c_ಅಭಿವ್ಯಕ್ತಿ op1 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+		  c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op2.value) != INTEGER_CST
-		      || !int_fits_type_p (op2.value, bitsizetype))
+		  c_ಅಭಿವ್ಯಕ್ತಿ op2 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+		  ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (op2.ಮೌಲ್ಯ) != INTEGER_CST
+		      || !int_ಹೊಂದುತ್ತದೆ_type_p (op2.ಮೌಲ್ಯ, bitsizetype))
 		    c_parser_error (parser, "expected constant offset");
-		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
+		  c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (op0.value != error_mark_node
-		      && op1.value != error_mark_node
-		      && TREE_CODE (op2.value) == INTEGER_CST)
-		    ret.value = build3_loc (loc, BIT_INSERT_EXPR,
-					    TREE_TYPE (op0.value),
-					    op0.value, op1.value,
+		  ಆದರೆ (op0.ಮೌಲ್ಯ != error_mark_ಗಂಟು
+		      && op1.ಮೌಲ್ಯ != error_mark_ಗಂಟು
+		      && ವೃಕ್ಷ_ಸಂಕೇತ (op2.ಮೌಲ್ಯ) == INTEGER_CST)
+		    ret.ಮೌಲ್ಯ = build3_loc (loc, ಬಿಟ್_ಸೇರಿಸು_ಅಭಿವ್ಯಕ್ತಿ,
+					    ವೃಕ್ಷ_TYPE (op0.ಮೌಲ್ಯ),
+					    op0.ಮೌಲ್ಯ, op1.ಮೌಲ್ಯ,
 					    fold_convert (bitsizetype,
-							  op2.value));
+							  op2.ಮೌಲ್ಯ));
 		}
-	      return ret;
+	      ಹಿಂತಿರುಗಿ ret;
 	    }
-	  else
-	    return c_parser_gimple_postfix_expression (parser);
+	  ಇಲ್ಲದಿದ್ದರೆ
+	    ಹಿಂತಿರುಗಿ c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
 	}
-    default:
-      return c_parser_gimple_postfix_expression (parser);
+    ಪೂರ್ವನಿಯೋಜಿತ:
+      ಹಿಂತಿರುಗಿ c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
     }
 }
 
 /* Decompose ID into base name (ID until ver_offset) and VERSION.  Return
    true if ID matches a SSA name.  */
 
-static bool
-c_parser_parse_ssa_name_id (tree id, unsigned *version, unsigned *ver_offset)
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+c_parser_parse_ssa_name_id (ವೃಕ್ಷ id, ಚಿಹ್ನೆರಹಿತ *ಆವೃತ್ತಿ, ಚಿಹ್ನೆರಹಿತ *ver_ಸ್ಥಾನಾಂತರ)
 {
-  const char *token = IDENTIFIER_POINTER (id);
-  const char *var_version = strrchr (token, '_');
-  if (! var_version)
-    return false;
+  ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *token = IDENTIFIER_ಸೂಚಕ (id);
+  ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *var_ಆವೃತ್ತಿ = strrchr (token, '_');
+  ಆದರೆ (! var_ಆವೃತ್ತಿ)
+    ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
 
-  *ver_offset = var_version - token;
-  for (const char *p = var_version + 1; *p; ++p)
-    if (! ISDIGIT (*p))
-      return false;
-  *version = atoi (var_version + 1);
-  return *version > 0;
+  *ver_ಸ್ಥಾನಾಂತರ = var_ಆವೃತ್ತಿ - token;
+  ಗಾಗಿ (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *p = var_ಆವೃತ್ತಿ + 1; *p; ++p)
+    ಆದರೆ (! ISDIGIT (*p))
+      ಹಿಂತಿರುಗಿ ಸುಳ್ಳು;
+  *ಆವೃತ್ತಿ = atoi (var_ಆವೃತ್ತಿ + 1);
+  ಹಿಂತಿರುಗಿ *ಆವೃತ್ತಿ > 0;
 }
 
 /* Get at the actual SSA name ID with VERSION starting at VER_OFFSET.
    TYPE is the type if the SSA name is being declared.  */
 
-static tree
+ಸ್ಥಿರ ವೃಕ್ಷ
 c_parser_parse_ssa_name (gimple_parser &parser,
-			 tree id, tree type, unsigned version,
-			 unsigned ver_offset)
+			 ವೃಕ್ಷ id, ವೃಕ್ಷ type, ಚಿಹ್ನೆರಹಿತ ಆವೃತ್ತಿ,
+			 ಚಿಹ್ನೆರಹಿತ ver_ಸ್ಥಾನಾಂತರ)
 {
-  tree name = NULL_TREE;
-  const char *token = IDENTIFIER_POINTER (id);
+  ವೃಕ್ಷ name = NULL_ವೃಕ್ಷ;
+  ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *token = IDENTIFIER_ಸೂಚಕ (id);
 
-  if (ver_offset == 0)
+  ಆದರೆ (ver_ಸ್ಥಾನಾಂತರ == 0)
     {
       /* Anonymous unnamed SSA name.  */
-      if (version < num_ssa_names)
-	name = ssa_name (version);
-      if (! name)
+      ಆದರೆ (ಆವೃತ್ತಿ < ಅಂಕೆ_ssa_ಹೆಸರುಗಳು)
+	name = ssa_name (ಆವೃತ್ತಿ);
+      ಆದರೆ (! name)
 	{
-	  if (! type)
+	  ಆದರೆ (! type)
 	    {
 	      c_parser_error (parser, "SSA name undeclared");
-	      return error_mark_node;
+	      ಹಿಂತಿರುಗಿ error_mark_ಗಂಟು;
 	    }
-	  name = make_ssa_name_fn (cfun, type, NULL, version);
+	  name = make_ssa_name_fn (cfun, type, ಖಾಲಿ, ಆವೃತ್ತಿ);
 	}
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
-      if (version < num_ssa_names)
-	name = ssa_name (version);
-      if (! name)
+      ಆದರೆ (ಆವೃತ್ತಿ < ಅಂಕೆ_ssa_ಹೆಸರುಗಳು)
+	name = ssa_name (ಆವೃತ್ತಿ);
+      ಆದರೆ (! name)
 	{
 	  /* Separate var name from version.  */
-	  char *var_name = XNEWVEC (char, ver_offset + 1);
-	  memcpy (var_name, token, ver_offset);
-	  var_name[ver_offset] = '\0';
+	  ಅಕ್ಷರ *var_name = XNEWVEC (ಅಕ್ಷರ, ver_ಸ್ಥಾನಾಂತರ + 1);
+	  ಸ್ಮರಣೆ_ನಕಲು (var_name, token, ver_ಸ್ಥಾನಾಂತರ);
+	  var_name[ver_ಸ್ಥಾನಾಂತರ] = '\0';
 	  /* lookup for parent decl.  */
 	  id = get_identifier (var_name);
-	  tree parent = lookup_name (id);
+	  ವೃಕ್ಷ ಪೋಷಕ = lookup_name (id);
 	  XDELETEVEC (var_name);
-	  if (! parent || parent == error_mark_node)
+	  ಆದರೆ (! ಪೋಷಕ || ಪೋಷಕ == error_mark_ಗಂಟು)
 	    {
 	      c_parser_error (parser, "base variable or SSA name undeclared");
-	      return error_mark_node;
+	      ಹಿಂತಿರುಗಿ error_mark_ಗಂಟು;
 	    }
-	  if (!(VAR_P (parent)
-		|| TREE_CODE (parent) == PARM_DECL
-		|| TREE_CODE (parent) == RESULT_DECL))
+	  ಆದರೆ (!(VAR_P (ಪೋಷಕ)
+		|| ವೃಕ್ಷ_ಸಂಕೇತ (ಪೋಷಕ) == PARM_DECL
+		|| ವೃಕ್ಷ_ಸಂಕೇತ (ಪೋಷಕ) == ಫಲಿತಾಂಶ_DECL))
 	    {
-	      error ("invalid base %qE for SSA name", parent);
-	      return error_mark_node;
+	      error ("invalid base %qE for SSA name", ಪೋಷಕ);
+	      ಹಿಂತಿರುಗಿ error_mark_ಗಂಟು;
 	    }
-	  name = make_ssa_name_fn (cfun, parent,
-				   gimple_build_nop (), version);
+	  name = make_ssa_name_fn (cfun, ಪೋಷಕ,
+				   gimple_build_nop (), ಆವೃತ್ತಿ);
 	}
     }
 
-  return name;
+  ಹಿಂತಿರುಗಿ name;
 }
 
 /* Parse a gimple call to an internal function.
@@ -1413,73 +1413,73 @@ c_parser_parse_ssa_name (gimple_parser &parser,
    gimple-call-internal:
      . identifier ( gimple-argument-expression-list[opt] )  */
 
-static struct c_expr
-c_parser_gimple_call_internal (gimple_parser &parser)
+ಸ್ಥಿರ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ
+c_parser_gimple_call_ಆಂತರಿಕ (gimple_parser &parser)
 {
-  struct c_expr expr;
-  expr.set_error ();
+  ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ಅಭಿವ್ಯಕ್ತಿ;
+  ಅಭಿವ್ಯಕ್ತಿ.ಗಣ_error ();
 
-  gcc_assert (c_parser_next_token_is (parser, CPP_DOT));
+  gcc_assert (c_parser_ಮುಂದಿನ_token_is (parser, CPP_DOT));
   c_parser_consume_token (parser);
   location_t loc = c_parser_peek_token (parser)->location;
-  if (!c_parser_next_token_is (parser, CPP_NAME)
-      || c_parser_peek_token (parser)->id_kind != C_ID_ID)
+  ಆದರೆ (!c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME)
+      || c_parser_peek_token (parser)->id_ಬಗೆ != C_ID_ID)
     {
       c_parser_error (parser, "expecting internal function name");
-      return expr;
+      ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
     }
-  tree id = c_parser_peek_token (parser)->value;
-  internal_fn ifn = lookup_internal_fn (IDENTIFIER_POINTER (id));
+  ವೃಕ್ಷ id = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
+  ಆಂತರಿಕ_fn ifn = lookup_ಆಂತರಿಕ_fn (IDENTIFIER_ಸೂಚಕ (id));
   c_parser_consume_token (parser);
-  if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+  ಆದರೆ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
     {
-      auto_vec<tree> exprlist;
-      if (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
-	c_parser_gimple_expr_list (parser, &exprlist);
-      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, "expected %<)%>");
-      if (ifn == IFN_LAST)
+      auto_vec<ವೃಕ್ಷ> exprlist;
+      ಆದರೆ (!c_parser_ಮುಂದಿನ_token_is (parser, CPP_CLOSE_PAREN))
+	c_parser_gimple_ಅಭಿವ್ಯಕ್ತಿ_list (parser, &exprlist);
+      c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN, "expected %<)%>");
+      ಆದರೆ (ifn == IFN_ಕೊನೆಯ)
 	error_at (loc, "unknown internal function %qE", id);
-      else
+      ಇಲ್ಲದಿದ್ದರೆ
 	{
-	  expr.value = build_call_expr_internal_loc_array
-	    (loc, ifn, void_type_node, exprlist.length (),
-	     exprlist.address ());
-	  expr.original_code = ERROR_MARK;
-	  expr.original_type = NULL;
-	  expr.m_decimal = 0;
+	  ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build_call_ಅಭಿವ್ಯಕ್ತಿ_ಆಂತರಿಕ_loc_array
+	    (loc, ifn, void_type_ಗಂಟು, exprlist.ಉದ್ದಳತೆ (),
+	     exprlist.ವಿಳಾಸ ());
+	  ಅಭಿವ್ಯಕ್ತಿ.original_ಸಂಕೇತ = ERROR_MARK;
+	  ಅಭಿವ್ಯಕ್ತಿ.original_type = ಖಾಲಿ;
+	  ಅಭಿವ್ಯಕ್ತಿ.m_decimal = 0;
 	}
     }
-  return expr;
+  ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 }
 
 /* Parse '<' type [',' alignment] '>' and return a type on success
    and NULL_TREE on error.  */
 
-static tree
+ಸ್ಥಿರ ವೃಕ್ಷ
 c_parser_gimple_typespec (gimple_parser &parser)
 {
-  struct c_type_name *type_name = NULL;
-  tree alignment = NULL_TREE;
-  if (c_parser_require (parser, CPP_LESS, "expected %<<%>"))
+  ರಚನೆ c_type_name *type_name = ಖಾಲಿ;
+  ವೃಕ್ಷ alignment = NULL_ವೃಕ್ಷ;
+  ಆದರೆ (c_parser_require (parser, CPP_LESS, "expected %<<%>"))
     {
       type_name = c_parser_type_name (parser);
       /* Optional alignment.  */
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COMMA))
 	{
 	  c_parser_consume_token (parser);
 	  alignment
-	      = c_parser_gimple_postfix_expression (parser).value;
+	      = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser).ಮೌಲ್ಯ;
 	}
-      c_parser_skip_until_found (parser,
+      c_parser_skip_until_ಸಿಕ್ಕಿತು (parser,
 				 CPP_GREATER, "expected %<>%>");
     }
-  if (!type_name)
-    return NULL_TREE;
-  tree tem;
-  tree type = groktypename (type_name, &tem, NULL);
-  if (alignment)
-    type = build_aligned_type (type, tree_to_uhwi (alignment));
-  return type;
+  ಆದರೆ (!type_name)
+    ಹಿಂತಿರುಗಿ NULL_ವೃಕ್ಷ;
+  ವೃಕ್ಷ tem;
+  ವೃಕ್ಷ type = groktypename (type_name, &tem, ಖಾಲಿ);
+  ಆದರೆ (alignment)
+    type = build_aligned_type (type, ವೃಕ್ಷ_ಗಮ್ಯ_uhwi (alignment));
+  ಹಿಂತಿರುಗಿ type;
 }
 
 /* Parse gimple postfix expression.
@@ -1504,45 +1504,45 @@ c_parser_gimple_typespec (gimple_parser &parser)
 
 */
 
-static struct c_expr
-c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
+ಸ್ಥಿರ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ
+c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (gimple_parser &parser, ವೃಕ್ಷ ret_type)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  source_range tok_range = c_parser_peek_token (parser)->get_range ();
-  struct c_expr expr;
-  expr.set_error ();
-  switch (c_parser_peek_token (parser)->type)
+  ಮೂಲ_range tok_range = c_parser_peek_token (parser)->get_range ();
+  ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ಅಭಿವ್ಯಕ್ತಿ;
+  ಅಭಿವ್ಯಕ್ತಿ.ಗಣ_error ();
+  ಆಯ್ಕೆ (c_parser_peek_token (parser)->type)
     {
-    case CPP_NUMBER:
-      expr.value = c_parser_peek_token (parser)->value;
-      set_c_expr_source_range (&expr, tok_range);
+    ಸ್ಥಿತಿ CPP_ಸಂಖ್ಯೆ:
+      ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
+      ಗಣ_c_ಅಭಿವ್ಯಕ್ತಿ_ಮೂಲ_range (&ಅಭಿವ್ಯಕ್ತಿ, tok_range);
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      break;
-    case CPP_CHAR:
-    case CPP_CHAR16:
-    case CPP_CHAR32:
-    case CPP_UTF8CHAR:
-    case CPP_WCHAR:
-      expr.value = c_parser_peek_token (parser)->value;
-      set_c_expr_source_range (&expr, tok_range);
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_CHAR:
+    ಸ್ಥಿತಿ CPP_CHAR16:
+    ಸ್ಥಿತಿ CPP_CHAR32:
+    ಸ್ಥಿತಿ CPP_UTF8CHAR:
+    ಸ್ಥಿತಿ CPP_WCHAR:
+      ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
+      ಗಣ_c_ಅಭಿವ್ಯಕ್ತಿ_ಮೂಲ_range (&ಅಭಿವ್ಯಕ್ತಿ, tok_range);
       c_parser_consume_token (parser);
-      break;
-    case CPP_STRING:
-    case CPP_STRING16:
-    case CPP_STRING32:
-    case CPP_WSTRING:
-    case CPP_UTF8STRING:
-      expr = c_parser_string_literal (parser, false, true);
-      break;
-    case CPP_DOT:
-      expr = c_parser_gimple_call_internal (parser);
-      break;
-    case CPP_NAME:
-      if (c_parser_peek_token (parser)->id_kind == C_ID_ID)
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_STRING:
+    ಸ್ಥಿತಿ CPP_STRING16:
+    ಸ್ಥಿತಿ CPP_STRING32:
+    ಸ್ಥಿತಿ CPP_WSTRING:
+    ಸ್ಥಿತಿ CPP_UTF8STRING:
+      ಅಭಿವ್ಯಕ್ತಿ = c_parser_string_literal (parser, ಸುಳ್ಳು, ನಿಜ);
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_DOT:
+      ಅಭಿವ್ಯಕ್ತಿ = c_parser_gimple_call_ಆಂತರಿಕ (parser);
+      ನಿಲ್ಲಿಸು;
+    ಸ್ಥಿತಿ CPP_NAME:
+      ಆದರೆ (c_parser_peek_token (parser)->id_ಬಗೆ == C_ID_ID)
 	{
-	  tree id = c_parser_peek_token (parser)->value;
-	  if (strcmp (IDENTIFIER_POINTER (id), "__MEM") == 0)
+	  ವೃಕ್ಷ id = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
+	  ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "__MEM") == 0)
 	    {
 	      /* __MEM '<' type-name [ ',' number ] '>'
 	               '(' [ '(' type-name ')' ] unary-expression
@@ -1551,581 +1551,581 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 			   [ ',' number ':' number ] ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      struct c_expr ptr, alias_off, step, index, index2;
-	      ptr.value = error_mark_node;
-	      alias_off.value = NULL_TREE;
-	      step.value = NULL_TREE;
-	      index.value = NULL_TREE;
-	      index2.value = NULL_TREE;
-	      unsigned short clique = 0;
-	      unsigned short base = 0;
-	      bool reverse_order = false;
-	      struct c_expr ro;
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      ವೃಕ್ಷ type = c_parser_gimple_typespec (parser);
+	      ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ptr, alias_off, ಹೆಜ್ಜೆ, ಸೂಚ್ಯಂಕ, index2;
+	      ptr.ಮೌಲ್ಯ = error_mark_ಗಂಟು;
+	      alias_off.ಮೌಲ್ಯ = NULL_ವೃಕ್ಷ;
+	      ಹೆಜ್ಜೆ.ಮೌಲ್ಯ = NULL_ವೃಕ್ಷ;
+	      ಸೂಚ್ಯಂಕ.ಮೌಲ್ಯ = NULL_ವೃಕ್ಷ;
+	      index2.ಮೌಲ್ಯ = NULL_ವೃಕ್ಷ;
+	      ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ clique = 0;
+	      ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ ತಳ = 0;
+	      ತಾರ್ಕಿಕ ಹಿಮ್ಮುಖ_ಕ್ರಮ = ಸುಳ್ಳು;
+	      ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ro;
+	      ಆದರೆ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  tree alias_type = NULL_TREE;
+		  ವೃಕ್ಷ alias_type = NULL_ವೃಕ್ಷ;
 		  /* Optional alias-type cast.  */
-		  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+		  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_OPEN_PAREN))
 		    {
 		      c_parser_consume_token (parser);
-		      struct c_type_name *alias_type_name
+		      ರಚನೆ c_type_name *alias_type_name
 			= c_parser_type_name (parser);
-		      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
+		      c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN,
 						 "expected %<)%>");
-		      if (alias_type_name)
+		      ಆದರೆ (alias_type_name)
 			{
-			  tree tem;
+			  ವೃಕ್ಷ tem;
 			  alias_type = groktypename (alias_type_name,
-						     &tem, NULL);
+						     &tem, ಖಾಲಿ);
 			}
 		    }
-		  ptr = c_parser_gimple_unary_expression (parser);
-		  if (ptr.value == error_mark_node
-		      || ! POINTER_TYPE_P (TREE_TYPE (ptr.value)))
+		  ptr = c_parser_gimple_unary_ಅಭಿವ್ಯಕ್ತಿ (parser);
+		  ಆದರೆ (ptr.ಮೌಲ್ಯ == error_mark_ಗಂಟು
+		      || ! ಸೂಚಕ_TYPE_P (ವೃಕ್ಷ_TYPE (ptr.ಮೌಲ್ಯ)))
 		    {
-		      if (ptr.value != error_mark_node)
-			error_at (ptr.get_start (),
+		      ಆದರೆ (ptr.ಮೌಲ್ಯ != error_mark_ಗಂಟು)
+			error_at (ptr.get_ಆರಂಭ (),
 				  "invalid type of %<__MEM%> operand");
-		      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
+		      c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN,
 						 "expected %<)%>");
-		      return expr;
+		      ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 		    }
-		  if (! alias_type)
-		    alias_type = TREE_TYPE (ptr.value);
+		  ಆದರೆ (! alias_type)
+		    alias_type = ವೃಕ್ಷ_TYPE (ptr.ಮೌಲ್ಯ);
 		  /* Optional constant offset.  */
-		  if (c_parser_next_token_is (parser, CPP_PLUS))
+		  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
-		      alias_off = c_parser_gimple_postfix_expression (parser);
+		      alias_off = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
 		    }
-		  if (c_parser_next_token_is (parser, CPP_MULT))
+		  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_MULT))
 		    {
-		      std::swap (index, alias_off);
+		      std::ಅದಲುಬದಲು (ಸೂಚ್ಯಂಕ, alias_off);
 		      c_parser_consume_token (parser);
-		      step = c_parser_gimple_postfix_expression (parser);
+		      ಹೆಜ್ಜೆ = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
 		    }
-		  else if (c_parser_next_token_is (parser, CPP_PLUS))
+		  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
-		      index = c_parser_gimple_postfix_expression (parser);
-		      if (c_parser_next_token_is (parser, CPP_MULT))
+		      ಸೂಚ್ಯಂಕ = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+		      ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_MULT))
 			{
 			  c_parser_consume_token (parser);
-			  step = c_parser_gimple_postfix_expression (parser);
+			  ಹೆಜ್ಜೆ = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
 			}
-		      else
-			std::swap (index, index2);
+		      ಇಲ್ಲದಿದ್ದರೆ
+			std::ಅದಲುಬದಲು (ಸೂಚ್ಯಂಕ, index2);
 		    }
-		  else if (alias_off.value
-			   && TREE_CODE (alias_off.value) != INTEGER_CST)
-		    std::swap (alias_off, index2);
-		  if (c_parser_next_token_is (parser, CPP_PLUS))
+		  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (alias_off.ಮೌಲ್ಯ
+			   && ವೃಕ್ಷ_ಸಂಕೇತ (alias_off.ಮೌಲ್ಯ) != INTEGER_CST)
+		    std::ಅದಲುಬದಲು (alias_off, index2);
+		  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
-		      index2 = c_parser_gimple_postfix_expression (parser);
+		      index2 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
 		    }
-		  if (alias_off.value)
+		  ಆದರೆ (alias_off.ಮೌಲ್ಯ)
 		    {
-		      if (TREE_CODE (alias_off.value) != INTEGER_CST)
-			error_at (alias_off.get_start (),
+		      ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (alias_off.ಮೌಲ್ಯ) != INTEGER_CST)
+			error_at (alias_off.get_ಆರಂಭ (),
 				  "expected constant offset for %<__MEM%> "
 				  "operand");
-		      alias_off.value = fold_convert (alias_type,
-						      alias_off.value);
+		      alias_off.ಮೌಲ್ಯ = fold_convert (alias_type,
+						      alias_off.ಮೌಲ್ಯ);
 		    }
-		  else
-		    alias_off.value = build_int_cst (alias_type, 0);
-		  if (step.value)
+		  ಇಲ್ಲದಿದ್ದರೆ
+		    alias_off.ಮೌಲ್ಯ = build_int_cst (alias_type, 0);
+		  ಆದರೆ (ಹೆಜ್ಜೆ.ಮೌಲ್ಯ)
 		    {
-		      if (TREE_CODE (step.value) != INTEGER_CST)
-			error_at (step.get_start (),
+		      ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (ಹೆಜ್ಜೆ.ಮೌಲ್ಯ) != INTEGER_CST)
+			error_at (ಹೆಜ್ಜೆ.get_ಆರಂಭ (),
 				  "expected constant step for %<__MEM%> "
 				  "operand");
 		    }
-		  if (c_parser_next_token_is (parser, CPP_COMMA))
+		  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COMMA))
 		    {
-		      struct c_expr cl, ba;
-		      bool has_clb = true;
+		      ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ cl, ba;
+		      ತಾರ್ಕಿಕ has_clb = ನಿಜ;
 		      c_parser_consume_token (parser);
-		      cl = c_parser_gimple_postfix_expression (parser);
-		      if (!c_parser_next_token_is (parser, CPP_COLON))
+		      cl = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+		      ಆದರೆ (!c_parser_ಮುಂದಿನ_token_is (parser, CPP_COLON))
 			{
 			  ro = cl;
-			  unsigned HOST_WIDE_INT tmp = 0;
-			  if (!tree_fits_uhwi_p (ro.value)
-			      || (tmp = tree_to_uhwi (ro.value)) > 1)
-			    error_at (ro.get_start (),
+			  ಚಿಹ್ನೆರಹಿತ HOST_WIDE_INT tmp = 0;
+			  ಆದರೆ (!ವೃಕ್ಷ_ಹೊಂದುತ್ತದೆ_uhwi_p (ro.ಮೌಲ್ಯ)
+			      || (tmp = ವೃಕ್ಷ_ಗಮ್ಯ_uhwi (ro.ಮೌಲ್ಯ)) > 1)
+			    error_at (ro.get_ಆರಂಭ (),
 				      "invalid reverse order value");
-			  reverse_order = tmp;
-			  has_clb = false;
-			  if (c_parser_next_token_is (parser, CPP_COMMA))
+			  ಹಿಮ್ಮುಖ_ಕ್ರಮ = tmp;
+			  has_clb = ಸುಳ್ಳು;
+			  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COMMA))
 			    {
 			      c_parser_consume_token (parser);
-			      cl = c_parser_gimple_postfix_expression (parser);
-		              has_clb = true;
+			      cl = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+		              has_clb = ನಿಜ;
 			    }
 			}
-		      if (has_clb
+		      ಆದರೆ (has_clb
 			  && c_parser_require (parser,
 					       CPP_COLON, "expected %<:%>"))
 			{
-			  ba = c_parser_gimple_postfix_expression (parser);
-			  if (!tree_fits_uhwi_p (cl.value)
-			      || !tree_fits_uhwi_p (ba.value)
-			      || compare_tree_int (cl.value,
-						   (clique = tree_to_uhwi
-								(cl.value)))
-			      || compare_tree_int (ba.value,
-						   (base = tree_to_uhwi
-								 (ba.value))))
-			    error_at (cl.get_start (),
+			  ba = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+			  ಆದರೆ (!ವೃಕ್ಷ_ಹೊಂದುತ್ತದೆ_uhwi_p (cl.ಮೌಲ್ಯ)
+			      || !ವೃಕ್ಷ_ಹೊಂದುತ್ತದೆ_uhwi_p (ba.ಮೌಲ್ಯ)
+			      || compare_ವೃಕ್ಷ_int (cl.ಮೌಲ್ಯ,
+						   (clique = ವೃಕ್ಷ_ಗಮ್ಯ_uhwi
+								(cl.ಮೌಲ್ಯ)))
+			      || compare_ವೃಕ್ಷ_int (ba.ಮೌಲ್ಯ,
+						   (ತಳ = ವೃಕ್ಷ_ಗಮ್ಯ_uhwi
+								 (ba.ಮೌಲ್ಯ))))
+			    error_at (cl.get_ಆರಂಭ (),
 				      "invalid clique/base pair");
 			}
 		    }
-		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
+		  c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
 		}
-	      if (! type || c_parser_error (parser))
+	      ಆದರೆ (! type || c_parser_error (parser))
 		{
-		  c_parser_set_error (parser, false);
-		  return expr;
+		  c_parser_ಗಣ_error (parser, ಸುಳ್ಳು);
+		  ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 		}
-	      if (index.value || step.value || index2.value)
-		expr.value = build5_loc (loc, TARGET_MEM_REF,
-					 type, ptr.value, alias_off.value,
-					 index.value, step.value, index2.value);
-	      else
-		expr.value = build2_loc (loc, MEM_REF,
-					 type, ptr.value, alias_off.value);
-	      if (clique != 0)
+	      ಆದರೆ (ಸೂಚ್ಯಂಕ.ಮೌಲ್ಯ || ಹೆಜ್ಜೆ.ಮೌಲ್ಯ || index2.ಮೌಲ್ಯ)
+		ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build5_loc (loc, ಗುರಿ_MEM_REF,
+					 type, ptr.ಮೌಲ್ಯ, alias_off.ಮೌಲ್ಯ,
+					 ಸೂಚ್ಯಂಕ.ಮೌಲ್ಯ, ಹೆಜ್ಜೆ.ಮೌಲ್ಯ, index2.ಮೌಲ್ಯ);
+	      ಇಲ್ಲದಿದ್ದರೆ
+		ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build2_loc (loc, MEM_REF,
+					 type, ptr.ಮೌಲ್ಯ, alias_off.ಮೌಲ್ಯ);
+	      ಆದರೆ (clique != 0)
 		{
-		  cfun->last_clique = MAX (cfun->last_clique, clique);
-		  MR_DEPENDENCE_CLIQUE (expr.value) = clique;
-		  MR_DEPENDENCE_BASE (expr.value) = base;
+		  cfun->ಕೊನೆಯ_clique = MAX (cfun->ಕೊನೆಯ_clique, clique);
+		  MR_DEPENDENCE_CLIQUE (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ) = clique;
+		  MR_DEPENDENCE_ತಳ (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ) = ತಳ;
 		}
-	      if (reverse_order)
+	      ಆದರೆ (ಹಿಮ್ಮುಖ_ಕ್ರಮ)
 		{
-		  if (TREE_CODE (expr.value) == MEM_REF)
-		    REF_REVERSE_STORAGE_ORDER (expr.value) = reverse_order;
-		  else
-		    error_at (ro.get_start (),
+		  ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ) == MEM_REF)
+		    REF_ಹಿಮ್ಮುಖ_STORAGE_ಕ್ರಮ (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ) = ಹಿಮ್ಮುಖ_ಕ್ರಮ;
+		  ಇಲ್ಲದಿದ್ದರೆ
+		    error_at (ro.get_ಆರಂಭ (),
 			      "target mem ref cannot have reverse order");
 		}
-	      break;
+	      ನಿಲ್ಲಿಸು;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__VIEW_CONVERT") == 0)
+	  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "__VIEW_CONVERT") == 0)
 	    {
 	      /* __VIEW_CONVERT '<' type-name [ ',' number ] '>'
 	                        '(' postfix-expression ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      ವೃಕ್ಷ type = c_parser_gimple_typespec (parser);
+	      ಆದರೆ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op = c_parser_gimple_postfix_expression (parser);
-		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
+		  c_ಅಭಿವ್ಯಕ್ತಿ op = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+		  c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (type && op.value != error_mark_node)
-		    expr.value = build1_loc (loc, VIEW_CONVERT_EXPR,
-					     type, op.value);
+		  ಆದರೆ (type && op.ಮೌಲ್ಯ != error_mark_ಗಂಟು)
+		    ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build1_loc (loc, VIEW_CONVERT_ಅಭಿವ್ಯಕ್ತಿ,
+					     type, op.ಮೌಲ್ಯ);
 		}
-	      break;
+	      ನಿಲ್ಲಿಸು;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__BIT_FIELD_REF") == 0)
+	  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "__BIT_FIELD_REF") == 0)
 	    {
 	      /* __BIT_FIELD_REF '<' type-name [ ',' number ] '>'
 	                        '(' postfix-expression, integer, integer ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      ವೃಕ್ಷ type = c_parser_gimple_typespec (parser);
+	      ಆದರೆ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op0 = c_parser_gimple_postfix_expression (parser);
-		  c_parser_skip_until_found (parser, CPP_COMMA,
+		  c_ಅಭಿವ್ಯಕ್ತಿ op0 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+		  c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op1.value) != INTEGER_CST
-		      || !int_fits_type_p (op1.value, bitsizetype))
+		  c_ಅಭಿವ್ಯಕ್ತಿ op1 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+		  ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (op1.ಮೌಲ್ಯ) != INTEGER_CST
+		      || !int_ಹೊಂದುತ್ತದೆ_type_p (op1.ಮೌಲ್ಯ, bitsizetype))
 		    c_parser_error (parser, "expected constant size");
-		  c_parser_skip_until_found (parser, CPP_COMMA,
+		  c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op2.value) != INTEGER_CST
-		      || !int_fits_type_p (op2.value, bitsizetype))
+		  c_ಅಭಿವ್ಯಕ್ತಿ op2 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+		  ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (op2.ಮೌಲ್ಯ) != INTEGER_CST
+		      || !int_ಹೊಂದುತ್ತದೆ_type_p (op2.ಮೌಲ್ಯ, bitsizetype))
 		    c_parser_error (parser, "expected constant offset");
-		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
+		  c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (type
-		      && op0.value != error_mark_node
-		      && TREE_CODE (op1.value) == INTEGER_CST
-		      && TREE_CODE (op2.value) == INTEGER_CST)
-		    expr.value = build3_loc (loc, BIT_FIELD_REF, type,
-					     op0.value,
+		  ಆದರೆ (type
+		      && op0.ಮೌಲ್ಯ != error_mark_ಗಂಟು
+		      && ವೃಕ್ಷ_ಸಂಕೇತ (op1.ಮೌಲ್ಯ) == INTEGER_CST
+		      && ವೃಕ್ಷ_ಸಂಕೇತ (op2.ಮೌಲ್ಯ) == INTEGER_CST)
+		    ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build3_loc (loc, ಬಿಟ್_ಕ್ಷೇತ್ರ_REF, type,
+					     op0.ಮೌಲ್ಯ,
 					     fold_convert (bitsizetype,
-							   op1.value),
+							   op1.ಮೌಲ್ಯ),
 					     fold_convert (bitsizetype,
-							   op2.value));
+							   op2.ಮೌಲ್ಯ));
 		}
-	      break;
+	      ನಿಲ್ಲಿಸು;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__CLOBBER") == 0)
+	  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "__CLOBBER") == 0)
 	    {
 	      /* __CLOBBER [ '(' bob | eob | bos | eos ')' ]  */
-	      clobber_kind kind = CLOBBER_UNDEF;
+	      clobber_ಬಗೆ ಬಗೆ = CLOBBER_UNDEF;
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+	      ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_OPEN_PAREN))
 		{
 		  c_parser_consume_token (parser);
-		  auto tok = c_parser_peek_token (parser);
-		  if (c_parser_require (parser, CPP_NAME,
+		  ಸ್ವಯಂಚಾಲಿತ tok = c_parser_peek_token (parser);
+		  ಆದರೆ (c_parser_require (parser, CPP_NAME,
 					"expected clobber kind"))
 		    {
-		      const char *kind_str = IDENTIFIER_POINTER (tok->value);
-		      if (strcmp (kind_str, "bos") == 0)
-			kind = CLOBBER_STORAGE_BEGIN;
-		      else if (strcmp (kind_str, "bob") == 0)
-			kind = CLOBBER_OBJECT_BEGIN;
-		      else if (strcmp (kind_str, "eob") == 0)
-			kind = CLOBBER_OBJECT_END;
-		      else if (strcmp (kind_str, "eos") == 0)
-			kind = CLOBBER_STORAGE_END;
-		      else
+		      ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಬಗೆ_str = IDENTIFIER_ಸೂಚಕ (tok->ಮೌಲ್ಯ);
+		      ಆದರೆ (strcmp (ಬಗೆ_str, "bos") == 0)
+			ಬಗೆ = CLOBBER_STORAGE_BEGIN;
+		      ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (ಬಗೆ_str, "bob") == 0)
+			ಬಗೆ = CLOBBER_OBJECT_BEGIN;
+		      ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (ಬಗೆ_str, "eob") == 0)
+			ಬಗೆ = CLOBBER_OBJECT_ಕೊನೆ;
+		      ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (ಬಗೆ_str, "eos") == 0)
+			ಬಗೆ = CLOBBER_STORAGE_ಕೊನೆ;
+		      ಇಲ್ಲದಿದ್ದರೆ
 			c_parser_error (parser, "expected one of %<bos%>, "
 					"%<eos%>, %<bob>, %<eob%>");
 		    }
-		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
+		  c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
 		}
 	      /* We infer the (redundant) type from the LHS.  */
-	      expr.value = build_clobber (ret_type, kind);
-	      break;
+	      ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build_clobber (ret_type, ಬಗೆ);
+	      ನಿಲ್ಲಿಸು;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "_Literal") == 0)
+	  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (strcmp (IDENTIFIER_ಸೂಚಕ (id), "_Literal") == 0)
 	    {
 	      /* _Literal '(' type-name ')' ( [ '-' ] constant | constructor ) */
 	      c_parser_consume_token (parser);
-	      tree type = NULL_TREE;
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      ವೃಕ್ಷ type = NULL_ವೃಕ್ಷ;
+	      ಆದರೆ (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  struct c_type_name *type_name = c_parser_type_name (parser);
-		  tree tem;
-		  if (type_name)
-		    type = groktypename (type_name, &tem, NULL);
-		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
+		  ರಚನೆ c_type_name *type_name = c_parser_type_name (parser);
+		  ವೃಕ್ಷ tem;
+		  ಆದರೆ (type_name)
+		    type = groktypename (type_name, &tem, ಖಾಲಿ);
+		  c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
 		}
-	      if (! type)
+	      ಆದರೆ (! type)
 		{
 		  c_parser_error (parser, "invalid _Literal");
-		  return expr;
+		  ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 		}
-	      if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+	      ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_OPEN_BRACE))
 		{
 		  c_parser_consume_token (parser);
-		  if (!AGGREGATE_TYPE_P (type)
-		      && !VECTOR_TYPE_P (type))
+		  ಆದರೆ (!AGGREGATE_TYPE_P (type)
+		      && !ಸದಿಶ_TYPE_P (type))
 		    {
 		      c_parser_error (parser, "invalid type for _Literal with "
 				      "constructor");
-		      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
+		      c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_BRACE,
 						 "expected %<}%>");
-		      return expr;
+		      ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 		    }
-		  vec<constructor_elt, va_gc> *v = NULL;
-		  bool constant_p = true;
-		  if (VECTOR_TYPE_P (type)
-		      && !c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+		  vec<constructor_elt, va_gc> *v = ಖಾಲಿ;
+		  ತಾರ್ಕಿಕ constant_p = ನಿಜ;
+		  ಆದರೆ (ಸದಿಶ_TYPE_P (type)
+		      && !c_parser_ಮುಂದಿನ_token_is (parser, CPP_CLOSE_BRACE))
 		    {
-		      vec_alloc (v, TYPE_VECTOR_SUBPARTS (type).to_constant ());
-		      do
+		      vec_alloc (v, TYPE_ಸದಿಶ_SUBPARTS (type).ಗಮ್ಯ_constant ());
+		      ಮಾಡು
 			{
-			  tree val
-			    = c_parser_gimple_postfix_expression (parser).value;
-			  if (! val
-			      || val == error_mark_node
+			  ವೃಕ್ಷ val
+			    = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser).ಮೌಲ್ಯ;
+			  ಆದರೆ (! val
+			      || val == error_mark_ಗಂಟು
 			      || (! CONSTANT_CLASS_P (val)
 				  && ! SSA_VAR_P (val)))
 			    {
 			      c_parser_error (parser, "invalid _Literal");
-			      return expr;
+			      ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 			    }
-			  CONSTRUCTOR_APPEND_ELT (v, NULL_TREE, val);
-			  if (! CONSTANT_CLASS_P (val))
-			    constant_p = false;
-			  if (c_parser_next_token_is (parser, CPP_COMMA))
+			  CONSTRUCTOR_APPEND_ELT (v, NULL_ವೃಕ್ಷ, val);
+			  ಆದರೆ (! CONSTANT_CLASS_P (val))
+			    constant_p = ಸುಳ್ಳು;
+			  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COMMA))
 			    c_parser_consume_token (parser);
-			  else
-			    break;
+			  ಇಲ್ಲದಿದ್ದರೆ
+			    ನಿಲ್ಲಿಸು;
 			}
-		      while (1);
+		      ಆಗ (1);
 		    }
-		  if (c_parser_require (parser, CPP_CLOSE_BRACE,
+		  ಆದರೆ (c_parser_require (parser, CPP_CLOSE_BRACE,
 					"expected %<}%>"))
 		    {
-		      if (v && constant_p)
-			expr.value = build_vector_from_ctor (type, v);
-		      else
-			expr.value = build_constructor (type, v);
+		      ಆದರೆ (v && constant_p)
+			ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build_ಸದಿಶ_from_ctor (type, v);
+		      ಇಲ್ಲದಿದ್ದರೆ
+			ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build_constructor (type, v);
 		    }
-		  else
+		  ಇಲ್ಲದಿದ್ದರೆ
 		    {
-		      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
+		      c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_BRACE,
 						 "expected %<}%>");
-		      return expr;
+		      ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 		    }
 		}
-	      else
+	      ಇಲ್ಲದಿದ್ದರೆ
 		{
-		  bool neg_p, addr_p;
-		  if ((neg_p = c_parser_next_token_is (parser, CPP_MINUS)))
+		  ತಾರ್ಕಿಕ neg_p, addr_p;
+		  ಆದರೆ ((neg_p = c_parser_ಮುಂದಿನ_token_is (parser, CPP_MINUS)))
 		    c_parser_consume_token (parser);
-		  if ((addr_p = c_parser_next_token_is (parser, CPP_AND)))
+		  ಆದರೆ ((addr_p = c_parser_ಮುಂದಿನ_token_is (parser, CPP_AND)))
 		    c_parser_consume_token (parser);
-		  tree val = c_parser_gimple_postfix_expression (parser).value;
-		  if (! val
-		      || val == error_mark_node
+		  ವೃಕ್ಷ val = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser).ಮೌಲ್ಯ;
+		  ಆದರೆ (! val
+		      || val == error_mark_ಗಂಟು
 		      || (!CONSTANT_CLASS_P (val) && !addr_p))
 		    {
 		      c_parser_error (parser, "invalid _Literal");
-		      return expr;
+		      ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 		    }
-		  if (addr_p)
+		  ಆದರೆ (addr_p)
 		    {
-		      val = build1 (ADDR_EXPR, type, val);
-		      if (!is_gimple_invariant_address (val))
+		      val = build1 (ADDR_ಅಭಿವ್ಯಕ್ತಿ, type, val);
+		      ಆದರೆ (!is_gimple_invariant_ವಿಳಾಸ (val))
 			{
 			  c_parser_error (parser, "invalid _Literal");
-			  return expr;
+			  ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 			}
 		    }
-		  if (neg_p)
+		  ಆದರೆ (neg_p)
 		    {
-		      val = const_unop (NEGATE_EXPR, TREE_TYPE (val), val);
-		      if (! val)
+		      val = const_unop (NEGATE_ಅಭಿವ್ಯಕ್ತಿ, ವೃಕ್ಷ_TYPE (val), val);
+		      ಆದರೆ (! val)
 			{
 			  c_parser_error (parser, "invalid _Literal");
-			  return expr;
+			  ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 			}
 		    }
-		  expr.value = fold_convert (type, val);
+		  ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = fold_convert (type, val);
 		}
-	      return expr;
+	      ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 	    }
 
 	  /* SSA name.  */
-	  unsigned version, ver_offset;
-	  if (! lookup_name (id)
-	      && c_parser_parse_ssa_name_id (id, &version, &ver_offset))
+	  ಚಿಹ್ನೆರಹಿತ ಆವೃತ್ತಿ, ver_ಸ್ಥಾನಾಂತರ;
+	  ಆದರೆ (! lookup_name (id)
+	      && c_parser_parse_ssa_name_id (id, &ಆವೃತ್ತಿ, &ver_ಸ್ಥಾನಾಂತರ))
 	    {
 	      c_parser_consume_token (parser);
-	      expr.value = c_parser_parse_ssa_name (parser, id, NULL_TREE,
-						    version, ver_offset);
-	      if (expr.value == error_mark_node)
-		return expr;
-	      set_c_expr_source_range (&expr, tok_range);
+	      ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = c_parser_parse_ssa_name (parser, id, NULL_ವೃಕ್ಷ,
+						    ಆವೃತ್ತಿ, ver_ಸ್ಥಾನಾಂತರ);
+	      ಆದರೆ (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ == error_mark_ಗಂಟು)
+		ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
+	      ಗಣ_c_ಅಭಿವ್ಯಕ್ತಿ_ಮೂಲ_range (&ಅಭಿವ್ಯಕ್ತಿ, tok_range);
 	      /* For default definition SSA names.  */
-	      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+	      ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_OPEN_PAREN)
 		  && c_parser_peek_2nd_token (parser)->type == CPP_NAME
 		  && strcmp ("D",
-			     IDENTIFIER_POINTER
-			       (c_parser_peek_2nd_token (parser)->value)) == 0
+			     IDENTIFIER_ಸೂಚಕ
+			       (c_parser_peek_2nd_token (parser)->ಮೌಲ್ಯ)) == 0
 		  && c_parser_peek_nth_token (parser, 3)->type == CPP_CLOSE_PAREN)
 		{
 		  c_parser_consume_token (parser);
 		  c_parser_consume_token (parser);
 		  c_parser_consume_token (parser);
-		  if (! SSA_NAME_IS_DEFAULT_DEF (expr.value))
+		  ಆದರೆ (! SSA_NAME_IS_DEFAULT_DEF (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ))
 		    {
-		      if (!SSA_NAME_VAR (expr.value))
+		      ಆದರೆ (!SSA_NAME_VAR (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ))
 			{
 			  error_at (loc, "anonymous SSA name cannot have"
 				    " default definition");
-			  expr.value = error_mark_node;
-			  return expr;
+			  ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = error_mark_ಗಂಟು;
+			  ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 			}
-		      set_ssa_default_def (cfun, SSA_NAME_VAR (expr.value),
-					   expr.value);
-		      SSA_NAME_DEF_STMT (expr.value) = gimple_build_nop ();
+		      ಗಣ_ssa_default_def (cfun, SSA_NAME_VAR (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ),
+					   ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ);
+		      SSA_NAME_DEF_STMT (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ) = gimple_build_nop ();
 		    }
 		}
 	    }
-	  else
+	  ಇಲ್ಲದಿದ್ದರೆ
 	    {
 	      c_parser_consume_token (parser);
-	      expr.value
+	      ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ
 		= build_external_ref (loc, id,
 				      (c_parser_peek_token (parser)->type
-				       == CPP_OPEN_PAREN), &expr.original_type);
-	      set_c_expr_source_range (&expr, tok_range);
+				       == CPP_OPEN_PAREN), &ಅಭಿವ್ಯಕ್ತಿ.original_type);
+	      ಗಣ_c_ಅಭಿವ್ಯಕ್ತಿ_ಮೂಲ_range (&ಅಭಿವ್ಯಕ್ತಿ, tok_range);
 	    }
-	  break;
+	  ನಿಲ್ಲಿಸು;
 	}
       /* Fallthru.  */
-    default:
+    ಪೂರ್ವನಿಯೋಜಿತ:
       c_parser_error (parser, "expected expression");
-      expr.set_error ();
-      break;
+      ಅಭಿವ್ಯಕ್ತಿ.ಗಣ_error ();
+      ನಿಲ್ಲಿಸು;
     }
-  if (expr.value == error_mark_node)
-    return expr;
-  return c_parser_gimple_postfix_expression_after_primary
-    (parser, EXPR_LOC_OR_LOC (expr.value, loc), expr);
+  ಆದರೆ (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ == error_mark_ಗಂಟು)
+    ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
+  ಹಿಂತಿರುಗಿ c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ_after_primary
+    (parser, ಅಭಿವ್ಯಕ್ತಿ_LOC_OR_LOC (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ, loc), ಅಭಿವ್ಯಕ್ತಿ);
 }
 
 /* Parse a gimple postfix expression after the initial primary or compound
    literal.  */
 
-static struct c_expr
-c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
-						  location_t expr_loc,
-						  struct c_expr expr)
+ಸ್ಥಿರ ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ
+c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ_after_primary (gimple_parser &parser,
+						  location_t ಅಭಿವ್ಯಕ್ತಿ_loc,
+						  ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ಅಭಿವ್ಯಕ್ತಿ)
 {
-  location_t start;
-  location_t finish;
-  tree ident;
+  location_t ಆರಂಭ;
+  location_t ಮುಕ್ತಾಯ;
+  ವೃಕ್ಷ ident;
   location_t comp_loc;
 
-  while (true)
+  ಆಗ (ನಿಜ)
     {
       location_t op_loc = c_parser_peek_token (parser)->location;
-      switch (c_parser_peek_token (parser)->type)
+      ಆಯ್ಕೆ (c_parser_peek_token (parser)->type)
 	{
-	case CPP_OPEN_SQUARE:
+	ಸ್ಥಿತಿ CPP_OPEN_ವರ್ಗಫಲ:
 	  {
 	    c_parser_consume_token (parser);
-	    tree idx = c_parser_gimple_unary_expression (parser).value;
+	    ವೃಕ್ಷ idx = c_parser_gimple_unary_ಅಭಿವ್ಯಕ್ತಿ (parser).ಮೌಲ್ಯ;
 
-	    if (! c_parser_require (parser, CPP_CLOSE_SQUARE, "expected %<]%>"))
+	    ಆದರೆ (! c_parser_require (parser, CPP_CLOSE_ವರ್ಗಫಲ, "expected %<]%>"))
 	      {
-		c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, NULL);
-		break;
+		c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_ವರ್ಗಫಲ, ಖಾಲಿ);
+		ನಿಲ್ಲಿಸು;
 	      }
 
-	    start = expr.get_start ();
-	    finish = c_parser_tokens_buf (parser, 0)->location;
-	    expr.value = build_array_ref (op_loc, expr.value, idx);
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
+	    ಆರಂಭ = ಅಭಿವ್ಯಕ್ತಿ.get_ಆರಂಭ ();
+	    ಮುಕ್ತಾಯ = c_parser_ಟೋಕನುಗಳು_buf (parser, 0)->location;
+	    ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build_array_ref (op_loc, ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ, idx);
+	    ಗಣ_c_ಅಭಿವ್ಯಕ್ತಿ_ಮೂಲ_range (&ಅಭಿವ್ಯಕ್ತಿ, ಆರಂಭ, ಮುಕ್ತಾಯ);
+	    ಅಭಿವ್ಯಕ್ತಿ.m_decimal = 0;
 
-	    expr.original_code = ERROR_MARK;
-	    expr.original_type = NULL;
-	    break;
+	    ಅಭಿವ್ಯಕ್ತಿ.original_ಸಂಕೇತ = ERROR_MARK;
+	    ಅಭಿವ್ಯಕ್ತಿ.original_type = ಖಾಲಿ;
+	    ನಿಲ್ಲಿಸು;
 	  }
-	case CPP_OPEN_PAREN:
+	ಸ್ಥಿತಿ CPP_OPEN_PAREN:
 	  {
 	    /* Function call.  */
 	    c_parser_consume_token (parser);
-	    auto_vec<tree> exprlist;
-	    if (! c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
-	      c_parser_gimple_expr_list (parser, &exprlist);
-	    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
+	    auto_vec<ವೃಕ್ಷ> exprlist;
+	    ಆದರೆ (! c_parser_ಮುಂದಿನ_token_is (parser, CPP_CLOSE_PAREN))
+	      c_parser_gimple_ಅಭಿವ್ಯಕ್ತಿ_list (parser, &exprlist);
+	    c_parser_skip_until_ಸಿಕ್ಕಿತು (parser, CPP_CLOSE_PAREN,
 				       "expected %<)%>");
-	    if (!FUNC_OR_METHOD_TYPE_P (TREE_TYPE (expr.value)))
+	    ಆದರೆ (!FUNC_OR_ವಿಧಾನ_TYPE_P (ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ)))
 	      {
 		c_parser_error (parser, "invalid call to non-function");
-		expr.set_error ();
-		break;
+		ಅಭಿವ್ಯಕ್ತಿ.ಗಣ_error ();
+		ನಿಲ್ಲಿಸು;
 	      }
-	    expr.value = build_call_array_loc
-		(expr_loc, TREE_TYPE (TREE_TYPE (expr.value)),
-		 expr.value, exprlist.length (), exprlist.address ());
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    expr.original_type = NULL;
-	    break;
+	    ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build_call_array_loc
+		(ಅಭಿವ್ಯಕ್ತಿ_loc, ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ)),
+		 ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ, exprlist.ಉದ್ದಳತೆ (), exprlist.ವಿಳಾಸ ());
+	    ಅಭಿವ್ಯಕ್ತಿ.m_decimal = 0;
+	    ಅಭಿವ್ಯಕ್ತಿ.original_ಸಂಕೇತ = ERROR_MARK;
+	    ಅಭಿವ್ಯಕ್ತಿ.original_type = ಖಾಲಿ;
+	    ನಿಲ್ಲಿಸು;
 	  }
-	case CPP_DOT:
+	ಸ್ಥಿತಿ CPP_DOT:
 	  {
 	    /* Structure element reference.  */
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_NAME))
+	    ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME))
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
-		ident = comp_tok->value;
+		ident = comp_tok->ಮೌಲ್ಯ;
 		comp_loc = comp_tok->location;
 	      }
-	    else
+	    ಇಲ್ಲದಿದ್ದರೆ
 	      {
 		c_parser_error (parser, "expected identifier");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		ಅಭಿವ್ಯಕ್ತಿ.ಗಣ_error ();
+		ಅಭಿವ್ಯಕ್ತಿ.original_ಸಂಕೇತ = ERROR_MARK;
+		ಅಭಿವ್ಯಕ್ತಿ.original_type = ಖಾಲಿ;
+		ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 	      }
-	    start = expr.get_start ();
-	    finish = c_parser_peek_token (parser)->get_finish ();
+	    ಆರಂಭ = ಅಭಿವ್ಯಕ್ತಿ.get_ಆರಂಭ ();
+	    ಮುಕ್ತಾಯ = c_parser_peek_token (parser)->get_ಮುಕ್ತಾಯ ();
 	    c_parser_consume_token (parser);
-	    expr.value = build_component_ref (op_loc, expr.value, ident,
+	    ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build_component_ref (op_loc, ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ, ident,
 					      comp_loc, UNKNOWN_LOCATION);
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    if (TREE_CODE (expr.value) != COMPONENT_REF)
-	      expr.original_type = NULL;
-	    else
+	    ಗಣ_c_ಅಭಿವ್ಯಕ್ತಿ_ಮೂಲ_range (&ಅಭಿವ್ಯಕ್ತಿ, ಆರಂಭ, ಮುಕ್ತಾಯ);
+	    ಅಭಿವ್ಯಕ್ತಿ.m_decimal = 0;
+	    ಅಭಿವ್ಯಕ್ತಿ.original_ಸಂಕೇತ = ERROR_MARK;
+	    ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ) != COMPONENT_REF)
+	      ಅಭಿವ್ಯಕ್ತಿ.original_type = ಖಾಲಿ;
+	    ಇಲ್ಲದಿದ್ದರೆ
 	      {
 		/* Remember the original type of a bitfield.  */
-		tree field = TREE_OPERAND (expr.value, 1);
-		if (TREE_CODE (field) != FIELD_DECL)
-		  expr.original_type = NULL;
-		else
-		  expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		ವೃಕ್ಷ ಕ್ಷೇತ್ರ_2 = ವೃಕ್ಷ_ಕಾರ್ಯಾಂಶ (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ, 1);
+		ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (ಕ್ಷೇತ್ರ_2) != ಕ್ಷೇತ್ರ_DECL)
+		  ಅಭಿವ್ಯಕ್ತಿ.original_type = ಖಾಲಿ;
+		ಇಲ್ಲದಿದ್ದರೆ
+		  ಅಭಿವ್ಯಕ್ತಿ.original_type = DECL_ಬಿಟ್_ಕ್ಷೇತ್ರ_TYPE (ಕ್ಷೇತ್ರ_2);
 	      }
-	    break;
+	    ನಿಲ್ಲಿಸು;
 	  }
-	case CPP_DEREF:
+	ಸ್ಥಿತಿ CPP_DEREF:
 	  {
 	    /* Structure element reference.  */
-	    if (!POINTER_TYPE_P (TREE_TYPE (expr.value)))
+	    ಆದರೆ (!ಸೂಚಕ_TYPE_P (ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ)))
 	      {
 		c_parser_error (parser, "dereference of non-pointer");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		ಅಭಿವ್ಯಕ್ತಿ.ಗಣ_error ();
+		ಅಭಿವ್ಯಕ್ತಿ.original_ಸಂಕೇತ = ERROR_MARK;
+		ಅಭಿವ್ಯಕ್ತಿ.original_type = ಖಾಲಿ;
+		ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 	      }
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_NAME))
+	    ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME))
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
-		ident = comp_tok->value;
+		ident = comp_tok->ಮೌಲ್ಯ;
 		comp_loc = comp_tok->location;
 	      }
-	    else
+	    ಇಲ್ಲದಿದ್ದರೆ
 	      {
 		c_parser_error (parser, "expected identifier");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		ಅಭಿವ್ಯಕ್ತಿ.ಗಣ_error ();
+		ಅಭಿವ್ಯಕ್ತಿ.original_ಸಂಕೇತ = ERROR_MARK;
+		ಅಭಿವ್ಯಕ್ತಿ.original_type = ಖಾಲಿ;
+		ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 	      }
-	    start = expr.get_start ();
-	    finish = c_parser_peek_token (parser)->get_finish ();
+	    ಆರಂಭ = ಅಭಿವ್ಯಕ್ತಿ.get_ಆರಂಭ ();
+	    ಮುಕ್ತಾಯ = c_parser_peek_token (parser)->get_ಮುಕ್ತಾಯ ();
 	    c_parser_consume_token (parser);
-	    expr.value = build_component_ref (op_loc,
+	    ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ = build_component_ref (op_loc,
 					      build_simple_mem_ref_loc
-					        (op_loc, expr.value),
+					        (op_loc, ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ),
 					      ident, comp_loc,
-					      expr.get_location ());
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    if (TREE_CODE (expr.value) != COMPONENT_REF)
-	      expr.original_type = NULL;
-	    else
+					      ಅಭಿವ್ಯಕ್ತಿ.get_location ());
+	    ಗಣ_c_ಅಭಿವ್ಯಕ್ತಿ_ಮೂಲ_range (&ಅಭಿವ್ಯಕ್ತಿ, ಆರಂಭ, ಮುಕ್ತಾಯ);
+	    ಅಭಿವ್ಯಕ್ತಿ.m_decimal = 0;
+	    ಅಭಿವ್ಯಕ್ತಿ.original_ಸಂಕೇತ = ERROR_MARK;
+	    ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ) != COMPONENT_REF)
+	      ಅಭಿವ್ಯಕ್ತಿ.original_type = ಖಾಲಿ;
+	    ಇಲ್ಲದಿದ್ದರೆ
 	      {
 		/* Remember the original type of a bitfield.  */
-		tree field = TREE_OPERAND (expr.value, 1);
-		if (TREE_CODE (field) != FIELD_DECL)
-		  expr.original_type = NULL;
-		else
-		  expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		ವೃಕ್ಷ ಕ್ಷೇತ್ರ_2 = ವೃಕ್ಷ_ಕಾರ್ಯಾಂಶ (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ, 1);
+		ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (ಕ್ಷೇತ್ರ_2) != ಕ್ಷೇತ್ರ_DECL)
+		  ಅಭಿವ್ಯಕ್ತಿ.original_type = ಖಾಲಿ;
+		ಇಲ್ಲದಿದ್ದರೆ
+		  ಅಭಿವ್ಯಕ್ತಿ.original_type = DECL_ಬಿಟ್_ಕ್ಷೇತ್ರ_TYPE (ಕ್ಷೇತ್ರ_2);
 	      }
-	    break;
+	    ನಿಲ್ಲಿಸು;
 	  }
-	default:
-	  return expr;
+	ಪೂರ್ವನಿಯೋಜಿತ:
+	  ಹಿಂತಿರುಗಿ ಅಭಿವ್ಯಕ್ತಿ;
 	}
     }
 }
@@ -2138,18 +2138,18 @@ c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
 
  */
 
-static void
-c_parser_gimple_expr_list (gimple_parser &parser, vec<tree> *ret)
+ಸ್ಥಿರ ಶೂನ್ಯ
+c_parser_gimple_ಅಭಿವ್ಯಕ್ತಿ_list (gimple_parser &parser, vec<ವೃಕ್ಷ> *ret)
 {
-  struct c_expr expr;
+  ರಚನೆ c_ಅಭಿವ್ಯಕ್ತಿ ಅಭಿವ್ಯಕ್ತಿ;
 
-  expr = c_parser_gimple_unary_expression (parser);
-  ret->safe_push (expr.value);
-  while (c_parser_next_token_is (parser, CPP_COMMA))
+  ಅಭಿವ್ಯಕ್ತಿ = c_parser_gimple_unary_ಅಭಿವ್ಯಕ್ತಿ (parser);
+  ret->ಸುರಕ್ಷಿತ_ತಳ್ಳು (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ);
+  ಆಗ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
-      expr = c_parser_gimple_unary_expression (parser);
-      ret->safe_push (expr.value);
+      ಅಭಿವ್ಯಕ್ತಿ = c_parser_gimple_unary_ಅಭಿವ್ಯಕ್ತಿ (parser);
+      ret->ಸುರಕ್ಷಿತ_ತಳ್ಳು (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ);
     }
 }
 
@@ -2162,19 +2162,19 @@ c_parser_gimple_expr_list (gimple_parser &parser, vec<tree> *ret)
 
 */
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 c_parser_gimple_label (gimple_parser &parser, gimple_seq *seq)
 {
-  tree name = c_parser_peek_token (parser)->value;
+  ವೃಕ್ಷ name = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
   location_t loc1 = c_parser_peek_token (parser)->location;
-  gcc_assert (c_parser_next_token_is (parser, CPP_NAME));
+  gcc_assert (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME));
   c_parser_consume_token (parser);
-  gcc_assert (c_parser_next_token_is (parser, CPP_COLON));
+  gcc_assert (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COLON));
   c_parser_consume_token (parser);
-  tree label = define_label (loc1, name);
-  if (label)
-    gimple_seq_add_stmt_without_update (seq, gimple_build_label (label));
-  return;
+  ವೃಕ್ಷ label = define_label (loc1, name);
+  ಆದರೆ (label)
+    gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, gimple_build_label (label));
+  ಹಿಂತಿರುಗಿ;
 }
 
 /* Parse gimple/RTL pass list.
@@ -2183,77 +2183,77 @@ c_parser_gimple_label (gimple_parser &parser, gimple_seq *seq)
      startwith("pass-name")[,{cfg,ssa}]
  */
 
-void
+ಶೂನ್ಯ
 c_parser_gimple_or_rtl_pass_list (c_parser *parser, c_declspecs *specs)
 {
-  char *pass = NULL;
+  ಅಕ್ಷರ *pass = ಖಾಲಿ;
 
   /* Accept __GIMPLE/__RTL.  */
-  if (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
-    return;
+  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is_not (parser, CPP_OPEN_PAREN))
+    ಹಿಂತಿರುಗಿ;
   c_parser_consume_token (parser);
 
-  specs->entry_bb_count = profile_count::uninitialized ();
-  while (c_parser_next_token_is (parser, CPP_NAME))
+  specs->ನಮೂದು_bb_ಎಣಿಕೆ = profile_ಎಣಿಕೆ::uninitialized ();
+  ಆಗ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME))
     {
       profile_quality quality;
-      const char *op = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *op = IDENTIFIER_ಸೂಚಕ (c_parser_peek_token (parser)->ಮೌಲ್ಯ);
       c_parser_consume_token (parser);
-      if (! strcmp (op, "startwith"))
+      ಆದರೆ (! strcmp (op, "startwith"))
 	{
-	  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return;
-	  if (c_parser_next_token_is_not (parser, CPP_STRING))
+	  ಆದರೆ (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    ಹಿಂತಿರುಗಿ;
+	  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is_not (parser, CPP_STRING))
 	    {
 	      error_at (c_parser_peek_token (parser)->location,
 			"expected pass name");
-	      return;
+	      ಹಿಂತಿರುಗಿ;
 	    }
-	  pass = xstrdup (TREE_STRING_POINTER
-			  (c_parser_string_literal (parser, false,
-						    false).value));
-	  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<(%>"))
-	    return;
+	  pass = xstrdup (ವೃಕ್ಷ_STRING_ಸೂಚಕ
+			  (c_parser_string_literal (parser, ಸುಳ್ಳು,
+						    ಸುಳ್ಳು).ಮೌಲ್ಯ));
+	  ಆದರೆ (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<(%>"))
+	    ಹಿಂತಿರುಗಿ;
 	}
-      else if (parse_profile_quality (op, &quality))
+      ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (parse_profile_quality (op, &quality))
 	{
-	  tree q;
-	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return;
+	  ವೃಕ್ಷ q;
+	  ಆದರೆ (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    ಹಿಂತಿರುಗಿ;
 
-	  if (!c_parser_next_token_is (parser, CPP_NUMBER)
-	      || (TREE_CODE (q = c_parser_peek_token (parser)->value)
+	  ಆದರೆ (!c_parser_ಮುಂದಿನ_token_is (parser, CPP_ಸಂಖ್ಯೆ)
+	      || (ವೃಕ್ಷ_ಸಂಕೇತ (q = c_parser_peek_token (parser)->ಮೌಲ್ಯ)
 		  != INTEGER_CST))
 	    {
 	      c_parser_error (parser, "expected count value");
-	      return;
+	      ಹಿಂತಿರುಗಿ;
 	    }
 
-	  specs->entry_bb_count
-	    = profile_count::from_gcov_type (TREE_INT_CST_LOW (q), quality);
+	  specs->ನಮೂದು_bb_ಎಣಿಕೆ
+	    = profile_ಎಣಿಕೆ::from_gcov_type (ವೃಕ್ಷ_INT_CST_ಕೆಳಗಿನ (q), quality);
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return;
+	  ಆದರೆ (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    ಹಿಂತಿರುಗಿ;
 	}
-      else if (specs->declspec_il != cdil_gimple)
+      ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (specs->declspec_il != cdil_gimple)
 	/* Allow only one IL specifier and none on RTL.  */
 	;
-      else if (! strcmp (op, "cfg"))
+      ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (! strcmp (op, "cfg"))
 	specs->declspec_il = cdil_gimple_cfg;
-      else if (! strcmp (op, "ssa"))
+      ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (! strcmp (op, "ssa"))
 	specs->declspec_il = cdil_gimple_ssa;
-      else
+      ಇಲ್ಲದಿದ್ದರೆ
 	{
 	  error_at (c_parser_peek_token (parser)->location,
 		    "invalid operation");
-	  return;
+	  ಹಿಂತಿರುಗಿ;
 	}
-     if (c_parser_next_token_is (parser, CPP_COMMA))
+     ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COMMA))
        c_parser_consume_token (parser);
     }
 
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return;
+  ಆದರೆ (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    ಹಿಂತಿರುಗಿ;
 
   specs->gimple_or_rtl_pass = pass;
 }
@@ -2272,7 +2272,7 @@ c_parser_gimple_or_rtl_pass_list (c_parser *parser, c_declspecs *specs)
      extern
      static
      auto
-     register
+ರಿಜಿಸ್ಟರ್
 
    type-specifier:
      void
@@ -2296,126 +2296,126 @@ c_parser_gimple_or_rtl_pass_list (c_parser *parser, c_declspecs *specs)
 
  */
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 c_parser_gimple_declaration (gimple_parser &parser)
 {
-  struct c_declarator *declarator;
-  struct c_declspecs *specs = build_null_declspecs ();
-  c_parser_declspecs (parser, specs, true, true, true,
-		      true, true, true, true, cla_nonabstract_decl);
-  finish_declspecs (specs);
+  ರಚನೆ c_declarator *declarator;
+  ರಚನೆ c_declspecs *specs = build_null_declspecs ();
+  c_parser_declspecs (parser, specs, ನಿಜ, ನಿಜ, ನಿಜ,
+		      ನಿಜ, ನಿಜ, ನಿಜ, ನಿಜ, cla_nonabstract_decl);
+  ಮುಕ್ತಾಯ_declspecs (specs);
 
   /* Provide better error recovery.  Note that a type name here is usually
      better diagnosed as a redeclaration.  */
-  if (c_parser_next_token_starts_declspecs (parser)
-      && ! c_parser_next_token_is (parser, CPP_NAME))
+  ಆದರೆ (c_parser_ಮುಂದಿನ_token_starts_declspecs (parser)
+      && ! c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected %<;%>");
-      c_parser_set_error (parser, false);
-      return;
+      c_parser_ಗಣ_error (parser, ಸುಳ್ಳು);
+      ಹಿಂತಿರುಗಿ;
     }
 
-  bool dummy = false;
+  ತಾರ್ಕಿಕ dummy = ಸುಳ್ಳು;
   declarator = c_parser_declarator (parser,
-				    specs->typespec_kind != ctsk_none,
-				    C_DTR_NORMAL, &dummy);
+				    specs->typespec_ಬಗೆ != ctsk_none,
+				    C_DTR_ಸಾಮಾನ್ಯ, &dummy);
 
-  if (!c_parser_next_token_is (parser, CPP_SEMICOLON))
+  ಆದರೆ (!c_parser_ಮುಂದಿನ_token_is (parser, CPP_SEMICOLON))
     {
       c_parser_error (parser, "expected %<;%>");
-      return;
+      ಹಿಂತಿರುಗಿ;
     }
-  if (declarator)
+  ಆದರೆ (declarator)
     {
       /* Handle SSA name decls specially, they do not go into the identifier
          table but we simply build the SSA name for later lookup.  */
-      unsigned version, ver_offset;
+      ಚಿಹ್ನೆರಹಿತ ಆವೃತ್ತಿ, ver_ಸ್ಥಾನಾಂತರ;
       /* Handle SSA pointer declarations in a very simplistic ways, we
 	 probably would like to call grokdeclarator in a special mode to
 	 just build the type of the decl - start_decl already pushes
 	 the identifier to the bindings for lookup, something we do not
 	 want.  */
-      struct c_declarator *id_declarator = declarator;
-      while (id_declarator->kind == cdk_pointer)
+      ರಚನೆ c_declarator *id_declarator = declarator;
+      ಆಗ (id_declarator->ಬಗೆ == cdk_ಸೂಚಕ)
 	id_declarator = id_declarator->declarator;
-      if (id_declarator->kind == cdk_id
-	  && (declarator->kind == cdk_pointer
+      ಆದರೆ (id_declarator->ಬಗೆ == cdk_id
+	  && (declarator->ಬಗೆ == cdk_ಸೂಚಕ
 	      || is_gimple_reg_type (specs->type))
 	  && c_parser_parse_ssa_name_id (id_declarator->u.id.id,
-					 &version, &ver_offset)
+					 &ಆವೃತ್ತಿ, &ver_ಸ್ಥಾನಾಂತರ)
 	  /* The following restricts it to unnamed anonymous SSA names
 	     which fails parsing of named ones in dumps (we could
 	     decide to not dump their name for -gimple).  */
-	  && ver_offset == 0)
+	  && ver_ಸ್ಥಾನಾಂತರ == 0)
 	{
-	  struct c_declarator *p = declarator;
-	  tree type = specs->type;
-	  while (p->kind == cdk_pointer)
+	  ರಚನೆ c_declarator *p = declarator;
+	  ವೃಕ್ಷ type = specs->type;
+	  ಆಗ (p->ಬಗೆ == cdk_ಸೂಚಕ)
 	    {
-	      type = build_pointer_type (type);
+	      type = build_ಸೂಚಕ_type (type);
 	      p = p->declarator;
 	    }
 	  c_parser_parse_ssa_name (parser, id_declarator->u.id.id, type,
-				   version, ver_offset);
+				   ಆವೃತ್ತಿ, ver_ಸ್ಥಾನಾಂತರ);
 	}
-      else
+      ಇಲ್ಲದಿದ್ದರೆ
 	{
-	  tree postfix_attrs = NULL_TREE;
-	  tree all_prefix_attrs = specs->attrs;
-	  specs->attrs = NULL;
-	  tree decl = start_decl (declarator, specs, false,
-				  chainon (postfix_attrs, all_prefix_attrs));
-	  if (decl)
-	    finish_decl (decl, UNKNOWN_LOCATION, NULL_TREE, NULL_TREE,
-			 NULL_TREE);
+	  ವೃಕ್ಷ postfix_attrs = NULL_ವೃಕ್ಷ;
+	  ವೃಕ್ಷ all_ಪೂರ್ವಪ್ರತ್ಯಯ_attrs = specs->attrs;
+	  specs->attrs = ಖಾಲಿ;
+	  ವೃಕ್ಷ decl = ಆರಂಭ_decl (declarator, specs, ಸುಳ್ಳು,
+				  chainon (postfix_attrs, all_ಪೂರ್ವಪ್ರತ್ಯಯ_attrs));
+	  ಆದರೆ (decl)
+	    ಮುಕ್ತಾಯ_decl (decl, UNKNOWN_LOCATION, NULL_ವೃಕ್ಷ, NULL_ವೃಕ್ಷ,
+			 NULL_ವೃಕ್ಷ);
 	}
     }
 }
 
 /* Parse gimple goto statement.  */
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 c_parser_gimple_goto_stmt (gimple_parser &parser,
-			   location_t loc, tree label, gimple_seq *seq)
+			   location_t loc, ವೃಕ್ಷ label, gimple_seq *seq)
 {
-  if (cfun->curr_properties & PROP_cfg)
+  ಆದರೆ (cfun->curr_properties & PROP_cfg)
     {
-      int dest_index;
+      ಪೂರ್ಣಾಂಕ dest_ಸೂಚ್ಯಂಕ;
       profile_probability prob;
-      if (c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
-							  &dest_index, &prob))
+      ಆದರೆ (c_parser_gimple_parse_bb_spec_ಅಂಚು_probability (label, parser,
+							  &dest_ಸೂಚ್ಯಂಕ, &prob))
 	{
-	  parser.push_edge (parser.current_bb->index, dest_index,
-			    EDGE_FALLTHRU, prob);
-	  return;
+	  parser.ತಳ್ಳು_ಅಂಚು (parser.current_bb->ಸೂಚ್ಯಂಕ, dest_ಸೂಚ್ಯಂಕ,
+			    ಅಂಚು_FALLTHRU, prob);
+	  ಹಿಂತಿರುಗಿ;
 	}
     }
-  tree decl = lookup_label_for_goto (loc, label);
-  gimple_seq_add_stmt_without_update (seq, gimple_build_goto (decl));
+  ವೃಕ್ಷ decl = lookup_label_for_goto (loc, label);
+  gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, gimple_build_goto (decl));
 }
 
 /* Parse a parenthesized condition.
    gimple-condition:
      ( gimple-binary-expression )    */
 
-static tree
+ಸ್ಥಿರ ವೃಕ್ಷ
 c_parser_gimple_paren_condition (gimple_parser &parser)
 {
-  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return error_mark_node;
-  tree cond
-    = c_parser_gimple_binary_expression (parser, boolean_type_node).value;
-  if (cond != error_mark_node
+  ಆದರೆ (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    ಹಿಂತಿರುಗಿ error_mark_ಗಂಟು;
+  ವೃಕ್ಷ cond
+    = c_parser_gimple_ದ್ವಿಮಾನ_ಅಭಿವ್ಯಕ್ತಿ (parser, boolean_type_ಗಂಟು).ಮೌಲ್ಯ;
+  ಆದರೆ (cond != error_mark_ಗಂಟು
       && ! COMPARISON_CLASS_P (cond)
       && ! CONSTANT_CLASS_P (cond)
       && ! SSA_VAR_P (cond))
     {
       c_parser_error (parser, "comparison required");
-      cond = error_mark_node;
+      cond = error_mark_ಗಂಟು;
     }
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return error_mark_node;
-  return cond;
+  ಆದರೆ (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    ಹಿಂತಿರುಗಿ error_mark_ಗಂಟು;
+  ಹಿಂತಿರುಗಿ cond;
 }
 
 /* Parse gimple try statement.
@@ -2427,43 +2427,43 @@ c_parser_gimple_paren_condition (gimple_parser &parser)
    This could support try/catch as well, but it's not implemented yet.
  */
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 c_parser_gimple_try_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  gimple_seq tryseq = NULL;
+  gimple_seq tryseq = ಖಾಲಿ;
   c_parser_consume_token (parser);
   c_parser_gimple_compound_statement (parser, &tryseq);
 
-  if ((c_parser_next_token_is (parser, CPP_KEYWORD)
+  ಆದರೆ ((c_parser_ಮುಂದಿನ_token_is (parser, CPP_KEYWORD)
        && c_parser_peek_token (parser)->keyword == RID_AT_FINALLY)
-      || (c_parser_next_token_is (parser, CPP_NAME)
-	  && c_parser_peek_token (parser)->id_kind == C_ID_ID
-	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+      || (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME)
+	  && c_parser_peek_token (parser)->id_ಬಗೆ == C_ID_ID
+	  && strcmp (IDENTIFIER_ಸೂಚಕ (c_parser_peek_token (parser)->ಮೌಲ್ಯ),
 		     "finally") == 0))
     {
-      gimple_seq finseq = NULL;
+      gimple_seq finseq = ಖಾಲಿ;
       c_parser_consume_token (parser);
       c_parser_gimple_compound_statement (parser, &finseq);
 
-      if (c_parser_next_token_is (parser, CPP_KEYWORD)
+      ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_KEYWORD)
 	  && c_parser_peek_token (parser)->keyword == RID_ELSE)
 	{
-	  gimple_seq elsseq = NULL;
+	  gimple_seq elsseq = ಖಾಲಿ;
 	  c_parser_consume_token (parser);
 	  c_parser_gimple_compound_statement (parser, &elsseq);
 
 	  geh_else *stmt = gimple_build_eh_else (finseq, elsseq);
-	  finseq = NULL;
-	  gimple_seq_add_stmt_without_update (&finseq, stmt);
+	  finseq = ಖಾಲಿ;
+	  gimple_seq_ಕೂಡಿಸು_stmt_without_update (&finseq, stmt);
 	}
 
       gtry *stmt = gimple_build_try (tryseq, finseq, GIMPLE_TRY_FINALLY);
-      gimple_seq_add_stmt_without_update (seq, stmt);
+      gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, stmt);
     }
-  else if (c_parser_next_token_is (parser, CPP_KEYWORD)
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_KEYWORD)
       && c_parser_peek_token (parser)->keyword == RID_AT_CATCH)
     c_parser_error (parser, "%<catch%> is not supported");
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     c_parser_error (parser, "expected %<finally%> or %<catch%>");
 }
 
@@ -2475,82 +2475,82 @@ c_parser_gimple_try_stmt (gimple_parser &parser, gimple_seq *seq)
 					else gimple-goto-statement
  */
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  tree t_label = NULL_TREE, f_label = NULL_TREE, label;
+  ವೃಕ್ಷ t_label = NULL_ವೃಕ್ಷ, f_label = NULL_ವೃಕ್ಷ, label;
   location_t loc;
   c_parser_consume_token (parser);
-  tree cond = c_parser_gimple_paren_condition (parser);
+  ವೃಕ್ಷ cond = c_parser_gimple_paren_condition (parser);
 
-  if (c_parser_next_token_is_keyword (parser, RID_GOTO))
+  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is_keyword (parser, RID_GOTO))
     {
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      if (! c_parser_next_token_is (parser, CPP_NAME))
+      ಆದರೆ (! c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected label");
-	  return;
+	  ಹಿಂತಿರುಗಿ;
 	}
-      label = c_parser_peek_token (parser)->value;
+      label = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
       c_parser_consume_token (parser);
-      int dest_index;
+      ಪೂರ್ಣಾಂಕ dest_ಸೂಚ್ಯಂಕ;
       profile_probability prob;
-      if ((cfun->curr_properties & PROP_cfg)
-	  && c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
-							     &dest_index, &prob))
-	parser.push_edge (parser.current_bb->index, dest_index,
-			  EDGE_TRUE_VALUE, prob);
-      else
+      ಆದರೆ ((cfun->curr_properties & PROP_cfg)
+	  && c_parser_gimple_parse_bb_spec_ಅಂಚು_probability (label, parser,
+							     &dest_ಸೂಚ್ಯಂಕ, &prob))
+	parser.ತಳ್ಳು_ಅಂಚು (parser.current_bb->ಸೂಚ್ಯಂಕ, dest_ಸೂಚ್ಯಂಕ,
+			  ಅಂಚು_TRUE_ಮೌಲ್ಯ, prob);
+      ಇಲ್ಲದಿದ್ದರೆ
 	t_label = lookup_label_for_goto (loc, label);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return;
+      ಆದರೆ (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	ಹಿಂತಿರುಗಿ;
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
       c_parser_error (parser, "expected goto expression");
-      return;
+      ಹಿಂತಿರುಗಿ;
     }
 
-  if (c_parser_next_token_is_keyword (parser, RID_ELSE))
+  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is_keyword (parser, RID_ELSE))
     c_parser_consume_token (parser);
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
       c_parser_error (parser, "expected else statement");
-      return;
+      ಹಿಂತಿರುಗಿ;
     }
 
-  if (c_parser_next_token_is_keyword (parser, RID_GOTO))
+  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is_keyword (parser, RID_GOTO))
     {
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      if (! c_parser_next_token_is (parser, CPP_NAME))
+      ಆದರೆ (! c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected label");
-	  return;
+	  ಹಿಂತಿರುಗಿ;
 	}
-      label = c_parser_peek_token (parser)->value;
+      label = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
       c_parser_consume_token (parser);
-      int dest_index;
+      ಪೂರ್ಣಾಂಕ dest_ಸೂಚ್ಯಂಕ;
       profile_probability prob;
-      if ((cfun->curr_properties & PROP_cfg)
-	  && c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
-							     &dest_index, &prob))
-	parser.push_edge (parser.current_bb->index, dest_index,
-			  EDGE_FALSE_VALUE, prob);
-      else
+      ಆದರೆ ((cfun->curr_properties & PROP_cfg)
+	  && c_parser_gimple_parse_bb_spec_ಅಂಚು_probability (label, parser,
+							     &dest_ಸೂಚ್ಯಂಕ, &prob))
+	parser.ತಳ್ಳು_ಅಂಚು (parser.current_bb->ಸೂಚ್ಯಂಕ, dest_ಸೂಚ್ಯಂಕ,
+			  ಅಂಚು_FALSE_ಮೌಲ್ಯ, prob);
+      ಇಲ್ಲದಿದ್ದರೆ
 	f_label = lookup_label_for_goto (loc, label);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return;
+      ಆದರೆ (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	ಹಿಂತಿರುಗಿ;
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
       c_parser_error (parser, "expected goto expression");
-      return;
+      ಹಿಂತಿರುಗಿ;
     }
 
-  if (cond != error_mark_node)
-    gimple_seq_add_stmt_without_update (seq, gimple_build_cond_from_tree (cond, t_label,
+  ಆದರೆ (cond != error_mark_ಗಂಟು)
+    gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, gimple_build_cond_from_ವೃಕ್ಷ (cond, t_label,
 							   f_label));
 }
 
@@ -2564,177 +2564,177 @@ c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
      gimple-label-statement : gimple-goto-statement
 */
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 c_parser_gimple_switch_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  c_expr cond_expr;
-  tree case_label, label;
-  auto_vec<tree> labels;
-  tree default_label = NULL_TREE;
+  c_ಅಭಿವ್ಯಕ್ತಿ cond_ಅಭಿವ್ಯಕ್ತಿ;
+  ವೃಕ್ಷ case_label, label;
+  auto_vec<ವೃಕ್ಷ> labels;
+  ವೃಕ್ಷ default_label = NULL_ವೃಕ್ಷ;
   c_parser_consume_token (parser);
 
-  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return;
-  cond_expr = c_parser_gimple_postfix_expression (parser);
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return;
+  ಆದರೆ (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    ಹಿಂತಿರುಗಿ;
+  cond_ಅಭಿವ್ಯಕ್ತಿ = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+  ಆದರೆ (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    ಹಿಂತಿರುಗಿ;
 
-  if (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
-    return;
+  ಆದರೆ (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+    ಹಿಂತಿರುಗಿ;
 
-  while (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
+  ಆಗ (c_parser_ಮುಂದಿನ_token_is_not (parser, CPP_CLOSE_BRACE))
     {
-      if (c_parser_next_token_is (parser, CPP_EOF))
+      ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_EOF))
 	{
 	  c_parser_error (parser, "expected statement");
-	  return;
+	  ಹಿಂತಿರುಗಿ;
 	}
 
-      switch (c_parser_peek_token (parser)->keyword)
+      ಆಯ್ಕೆ (c_parser_peek_token (parser)->keyword)
 	{
-	case RID_CASE:
+	ಸ್ಥಿತಿ RID_CASE:
 	  {
-	    c_expr exp1;
+	    c_ಅಭಿವ್ಯಕ್ತಿ exp1;
 	    location_t loc = c_parser_peek_token (parser)->location;
 	    c_parser_consume_token (parser);
 
-	    if (c_parser_next_token_is (parser, CPP_NAME)
-		|| c_parser_peek_token (parser)->type == CPP_NUMBER)
-	      exp1 = c_parser_gimple_postfix_expression (parser);
-	    else
+	    ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME)
+		|| c_parser_peek_token (parser)->type == CPP_ಸಂಖ್ಯೆ)
+	      exp1 = c_parser_gimple_postfix_ಅಭಿವ್ಯಕ್ತಿ (parser);
+	    ಇಲ್ಲದಿದ್ದರೆ
 	      {
 		c_parser_error (parser, "expected expression");
-		return;
+		ಹಿಂತಿರುಗಿ;
 	      }
 
-	    if (c_parser_next_token_is (parser, CPP_COLON))
+	    ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COLON))
 	      {
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME))
 		  {
-		    label = c_parser_peek_token (parser)->value;
+		    label = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
 		    c_parser_consume_token (parser);
-		    tree decl = lookup_label_for_goto (loc, label);
-		    case_label = build_case_label (exp1.value, NULL_TREE,
+		    ವೃಕ್ಷ decl = lookup_label_for_goto (loc, label);
+		    case_label = build_case_label (exp1.ಮೌಲ್ಯ, NULL_ವೃಕ್ಷ,
 						   decl);
-		    labels.safe_push (case_label);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    labels.ಸುರಕ್ಷಿತ_ತಳ್ಳು (case_label);
+		    ಆದರೆ (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return;
+		      ಹಿಂತಿರುಗಿ;
 		  }
-		else if (! c_parser_require (parser, CPP_NAME,
+		ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (! c_parser_require (parser, CPP_NAME,
 					     "expected label"))
-		  return;
+		  ಹಿಂತಿರುಗಿ;
 	      }
-	    else if (! c_parser_require (parser, CPP_SEMICOLON,
+	    ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (! c_parser_require (parser, CPP_SEMICOLON,
 					 "expected %<:%>"))
-	      return;
-	    break;
+	      ಹಿಂತಿರುಗಿ;
+	    ನಿಲ್ಲಿಸು;
 	  }
-	case RID_DEFAULT:
+	ಸ್ಥಿತಿ RID_DEFAULT:
 	  {
 	    location_t loc = c_parser_peek_token (parser)->location;
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_COLON))
+	    ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_COLON))
 	      {
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_NAME))
 		  {
-		    label = c_parser_peek_token (parser)->value;
+		    label = c_parser_peek_token (parser)->ಮೌಲ್ಯ;
 		    c_parser_consume_token (parser);
-		    tree decl = lookup_label_for_goto (loc, label);
-		    default_label = build_case_label (NULL_TREE, NULL_TREE,
+		    ವೃಕ್ಷ decl = lookup_label_for_goto (loc, label);
+		    default_label = build_case_label (NULL_ವೃಕ್ಷ, NULL_ವೃಕ್ಷ,
 						      decl);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    ಆದರೆ (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return;
+		      ಹಿಂತಿರುಗಿ;
 		  }
-		else if (! c_parser_require (parser, CPP_NAME,
+		ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (! c_parser_require (parser, CPP_NAME,
 					     "expected label"))
-		  return;
+		  ಹಿಂತಿರುಗಿ;
 	      }
-	    else if (! c_parser_require (parser, CPP_SEMICOLON,
+	    ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (! c_parser_require (parser, CPP_SEMICOLON,
 					 "expected %<:%>"))
-	      return;
-	    break;
+	      ಹಿಂತಿರುಗಿ;
+	    ನಿಲ್ಲಿಸು;
 	  }
-	default:
+	ಪೂರ್ವನಿಯೋಜಿತ:
 	  c_parser_error (parser, "expected case label");
-	  return;
+	  ಹಿಂತಿರುಗಿ;
 	}
 
     }
-  if (! c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
-    return;
+  ಆದರೆ (! c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
+    ಹಿಂತಿರುಗಿ;
 
-  if (cond_expr.value != error_mark_node)
+  ಆದರೆ (cond_ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ != error_mark_ಗಂಟು)
     {
-      gswitch *s = gimple_build_switch (cond_expr.value, default_label, labels);
-      gimple_seq_add_stmt_without_update (seq, s);
+      gswitch *s = gimple_build_switch (cond_ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ, default_label, labels);
+      gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, s);
     }
 }
 
 /* Parse gimple return statement.  */
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 c_parser_gimple_return_stmt (gimple_parser &parser, gimple_seq *seq)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  gimple *ret = NULL;
+  gimple *ret = ಖಾಲಿ;
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+  ಆದರೆ (c_parser_ಮುಂದಿನ_token_is (parser, CPP_SEMICOLON))
     {
-      c_finish_gimple_return (loc, NULL_TREE);
-      ret = gimple_build_return (NULL);
-      gimple_seq_add_stmt_without_update (seq, ret);
+      c_ಮುಕ್ತಾಯ_gimple_return (loc, NULL_ವೃಕ್ಷ);
+      ret = gimple_build_return (ಖಾಲಿ);
+      gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, ret);
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
       location_t xloc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_gimple_unary_expression (parser);
-      if (expr.value != error_mark_node)
+      c_ಅಭಿವ್ಯಕ್ತಿ ಅಭಿವ್ಯಕ್ತಿ = c_parser_gimple_unary_ಅಭಿವ್ಯಕ್ತಿ (parser);
+      ಆದರೆ (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ != error_mark_ಗಂಟು)
 	{
-	  c_finish_gimple_return (xloc, expr.value);
-	  ret = gimple_build_return (expr.value);
-	  gimple_seq_add_stmt_without_update (seq, ret);
+	  c_ಮುಕ್ತಾಯ_gimple_return (xloc, ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ);
+	  ret = gimple_build_return (ಅಭಿವ್ಯಕ್ತಿ.ಮೌಲ್ಯ);
+	  gimple_seq_ಕೂಡಿಸು_stmt_without_update (seq, ret);
 	}
     }
 }
 
 /* Support function for c_parser_gimple_return_stmt.  */
 
-static void
-c_finish_gimple_return (location_t loc, tree retval)
+ಸ್ಥಿರ ಶೂನ್ಯ
+c_ಮುಕ್ತಾಯ_gimple_return (location_t loc, ವೃಕ್ಷ retval)
 {
-  tree valtype = TREE_TYPE (TREE_TYPE (current_function_decl));
+  ವೃಕ್ಷ valtype = ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (current_function_decl));
 
   /* Use the expansion point to handle cases such as returning NULL
      in a function returning void.  */
-  location_t xloc = expansion_point_location_if_in_system_header (loc);
+  location_t xloc = expansion_ಬಿಂದು_location_if_ಒಳ_system_ಶೀರ್ಷಿಕೆ (loc);
 
-  if (TREE_THIS_VOLATILE (current_function_decl))
+  ಆದರೆ (ವೃಕ್ಷ_THIS_VOLATILE (current_function_decl))
     warning_at (xloc, 0,
 		"function declared %<noreturn%> has a %<return%> statement");
 
-  if (! retval)
+  ಆದರೆ (! retval)
     current_function_returns_null = 1;
-  else if (valtype == 0 || VOID_TYPE_P (valtype))
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (valtype == 0 || VOID_TYPE_P (valtype))
     {
       current_function_returns_null = 1;
-      if (TREE_CODE (TREE_TYPE (retval)) != VOID_TYPE)
+      ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (ವೃಕ್ಷ_TYPE (retval)) != VOID_TYPE)
 	{
 	  error_at
 	    (xloc, "%<return%> with a value, in function returning void");
-	  inform (DECL_SOURCE_LOCATION (current_function_decl),
+	  inform (DECL_ಮೂಲ_LOCATION (current_function_decl),
 		  "declared here");
 	}
     }
-  else if (TREE_CODE (valtype) != TREE_CODE (TREE_TYPE (retval)))
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (ವೃಕ್ಷ_ಸಂಕೇತ (valtype) != ವೃಕ್ಷ_ಸಂಕೇತ (ವೃಕ್ಷ_TYPE (retval)))
     {
       error_at
 	(xloc, "invalid conversion in return statement");
-      inform (DECL_SOURCE_LOCATION (current_function_decl),
+      inform (DECL_ಮೂಲ_LOCATION (current_function_decl),
 	      "declared here");
     }
-  return;
+  ಹಿಂತಿರುಗಿ;
 }
