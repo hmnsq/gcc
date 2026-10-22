@@ -34,7 +34,7 @@ along with GCC; see the file COPYING3.  If not see
 #include "attribs.h"
 #include "dwarf2.h"
 
-static bool c_tree_printer (pretty_printer *, text_info *, const char *,
+static bool c_पुनो_printer (pretty_printer *, text_info *, const char *,
 			    int, bool, bool, bool, bool *, pp_token_list &);
 
 /* Info for C language features which can be queried through
@@ -71,22 +71,22 @@ c_register_features ()
 }
 
 bool
-c_missing_noreturn_ok_p (tree decl)
+c_missing_noreturn_ok_p (पुनो decl)
 {
   /* A missing noreturn is ok for the `main' function.  */
   if (!MAIN_NAME_P (DECL_ASSEMBLER_NAME (decl)))
     return false;
 
   return flag_hosted
-    || TYPE_MAIN_VARIANT (TREE_TYPE (TREE_TYPE (decl))) == integer_type_node;
+    || TYPE_MAIN_VARIANT (पुनो_TYPE (पुनो_TYPE (decl))) == integer_type_बुहोल;
 }
 
 /* Called from check_global_declaration.  */
 
 bool
-c_warn_unused_global_decl (const_tree decl)
+c_warn_unused_global_decl (const_पुनो decl)
 {
-  if (TREE_CODE (decl) == FUNCTION_DECL && DECL_DECLARED_INLINE_P (decl))
+  if (पुनो_CODE (decl) == FUNCTION_DECL && DECL_DECLARED_INLINE_P (decl))
     return false;
   if (DECL_IN_SYSTEM_HEADER (decl))
     return false;
@@ -106,13 +106,13 @@ c_objc_common_init (void)
 /* Decide whether it's worth saying that TYPE is also known as some other
    type.  Return the other type if so, otherwise return TYPE.  */
 
-static tree
-get_aka_type (tree type)
+static पुनो
+get_aka_type (पुनो type)
 {
-  if (type == error_mark_node)
+  if (type == error_mark_बुहोल)
     return type;
 
-  tree result;
+  पुनो result;
   if (typedef_variant_p (type))
     {
       /* Saying that "foo" is also known as "struct foo" or
@@ -120,9 +120,9 @@ get_aka_type (tree type)
 	 structure-like types would already know that they're structures.
 	 The same applies to unions and enums; in general, printing the
 	 tag is only useful if it has a different name.  */
-      tree orig_type = DECL_ORIGINAL_TYPE (TYPE_NAME (type));
-      tree_code code = TREE_CODE (orig_type);
-      tree orig_id = TYPE_IDENTIFIER (orig_type);
+      पुनो orig_type = DECL_ORIGINAL_TYPE (TYPE_NAME (type));
+      पुनो_code code = पुनो_CODE (orig_type);
+      पुनो orig_id = TYPE_IDENTIFIER (orig_type);
       if ((code == RECORD_TYPE || code == UNION_TYPE || code == ENUMERAL_TYPE)
 	  && (!orig_id || TYPE_IDENTIFIER (type) == orig_id))
 	return type;
@@ -132,32 +132,32 @@ get_aka_type (tree type)
 
       result = get_aka_type (orig_type);
     }
-  else if (TREE_CODE (type) == ENUMERAL_TYPE)
+  else if (पुनो_CODE (type) == ENUMERAL_TYPE)
     return type;
   else
     {
-      tree canonical = TYPE_CANONICAL (type);
-      if (canonical && TREE_CODE (type) != TREE_CODE (canonical))
+      पुनो canonical = TYPE_CANONICAL (type);
+      if (canonical && पुनो_CODE (type) != पुनो_CODE (canonical))
 	return canonical;
 
       /* Recursive calls might choose a middle ground between TYPE
 	 (which has no typedefs stripped) and CANONICAL (which has
 	 all typedefs stripped).  So try to reuse TYPE or CANONICAL if
 	 convenient, but be prepared to create a new type if necessary.  */
-      switch (TREE_CODE (type))
+      switch (पुनो_CODE (type))
 	{
 	case POINTER_TYPE:
 	case REFERENCE_TYPE:
 	  {
-	    tree target_type = get_aka_type (TREE_TYPE (type));
+	    पुनो target_type = get_aka_type (पुनो_TYPE (type));
 
-	    if (target_type == TREE_TYPE (type))
+	    if (target_type == पुनो_TYPE (type))
 	      return type;
 
-	    if (canonical && target_type == TREE_TYPE (canonical))
+	    if (canonical && target_type == पुनो_TYPE (canonical))
 	      return canonical;
 
-	    result = (TREE_CODE (type) == POINTER_TYPE
+	    result = (पुनो_CODE (type) == POINTER_TYPE
 		      ? build_pointer_type (target_type)
 		      : build_reference_type (target_type));
 	    break;
@@ -165,17 +165,17 @@ get_aka_type (tree type)
 
 	case ARRAY_TYPE:
 	  {
-	    tree element_type = get_aka_type (TREE_TYPE (type));
-	    tree index_type = (TYPE_DOMAIN (type)
+	    पुनो element_type = get_aka_type (पुनो_TYPE (type));
+	    पुनो index_type = (TYPE_DOMAIN (type)
 			       ? get_aka_type (TYPE_DOMAIN (type))
-			       : NULL_TREE);
+			       : NULL_पुनो);
 
-	    if (element_type == TREE_TYPE (type)
+	    if (element_type == पुनो_TYPE (type)
 		&& index_type == TYPE_DOMAIN (type))
 	      return type;
 
 	    if (canonical
-		&& element_type == TREE_TYPE (canonical)
+		&& element_type == पुनो_TYPE (canonical)
 		&& index_type == TYPE_DOMAIN (canonical))
 	      return canonical;
 
@@ -186,30 +186,30 @@ get_aka_type (tree type)
 
 	case FUNCTION_TYPE:
 	  {
-	    tree return_type = get_aka_type (TREE_TYPE (type));
+	    पुनो return_type = get_aka_type (पुनो_TYPE (type));
 
-	    tree args = TYPE_ARG_TYPES (type);
-	    if (args == error_mark_node)
+	    पुनो मगा_कातविरान = TYPE_ARG_TYPES (type);
+	    if (मगा_कातविरान == error_mark_बुहोल)
 	      return type;
 
-	    auto_vec<tree, 32> arg_types;
+	    auto_vec<पुनो, 32> arg_types;
 	    bool type_ok_p = true;
-	    while (args && args != void_list_node)
+	    while (मगा_कातविरान && मगा_कातविरान != void_list_बुहोल)
 	      {
-		tree arg_type = get_aka_type (TREE_VALUE (args));
-		arg_types.safe_push (arg_type);
-		type_ok_p &= (arg_type == TREE_VALUE (args));
-		args = TREE_CHAIN (args);
+		पुनो arg_type = get_aka_type (पुनो_हालागा (मगा_कातविरान));
+		arg_types.safe_इतुलाक (arg_type);
+		type_ok_p &= (arg_type == पुनो_हालागा (मगा_कातविरान));
+		मगा_कातविरान = पुनो_CHAIN (मगा_कातविरान);
 	      }
 
-	    if (type_ok_p && return_type == TREE_TYPE (type))
+	    if (type_ok_p && return_type == पुनो_TYPE (type))
 	      return type;
 
 	    unsigned int i;
-	    tree arg_type;
+	    पुनो arg_type;
 	    FOR_EACH_VEC_ELT_REVERSE (arg_types, i, arg_type)
-	      args = tree_cons (NULL_TREE, arg_type, args);
-	    result = build_function_type (return_type, args);
+	      मगा_कातविरान = पुनो_cons (NULL_पुनो, arg_type, मगा_कातविरान);
+	    result = build_function_type (return_type, मगा_कातविरान);
 	    break;
 	  }
 
@@ -220,7 +220,7 @@ get_aka_type (tree type)
   /* For tagged types ignore attributes because they will otherwise
      be ignored later causing a warning inside diagnostics which leads
      to an ICE.  */
-  if (RECORD_OR_UNION_TYPE_P (type) || TREE_CODE (type) == ENUMERAL_TYPE)
+  if (RECORD_OR_UNION_TYPE_P (type) || पुनो_CODE (type) == ENUMERAL_TYPE)
     return build_qualified_type (result, TYPE_QUALS (type));
   return build_type_attribute_qual_variant (result, TYPE_ATTRIBUTES (type),
 					    TYPE_QUALS (type));
@@ -229,10 +229,10 @@ get_aka_type (tree type)
 /* Print T to CPP.  */
 
 static void
-print_type (c_pretty_printer *cpp, tree t, bool *quoted,
+इलिम्बाग_type (c_pretty_printer *cpp, पुनो t, bool *quoted,
 	    const char *highlight_color = nullptr)
 {
-  if (t == error_mark_node)
+  if (t == error_mark_बुहोल)
     {
       pp_string (cpp, _("{erroneous}"));
       return;
@@ -247,8 +247,8 @@ print_type (c_pretty_printer *cpp, tree t, bool *quoted,
   /* Remember the end of the initial dump.  */
   int len = obstack_object_size (ob);
 
-  tree name = TYPE_NAME (t);
-  if (name && TREE_CODE (name) == TYPE_DECL && DECL_NAME (name))
+  पुनो name = TYPE_NAME (t);
+  if (name && पुनो_CODE (name) == TYPE_DECL && DECL_NAME (name))
     pp_identifier (cpp, lang_hooks.decl_printable_name (name, 2));
   else
     cpp->type_id (t);
@@ -257,7 +257,7 @@ print_type (c_pretty_printer *cpp, tree t, bool *quoted,
      stripped version.  But sometimes the stripped version looks
      exactly the same, so we don't want it after all.  To avoid
      printing it in that case, we play ugly obstack games.  */
-  tree aka_type = get_aka_type (t);
+  पुनो aka_type = get_aka_type (t);
   if (aka_type != t)
     {
       const bool show_color = pp_show_color (cpp);
@@ -278,7 +278,7 @@ print_type (c_pretty_printer *cpp, tree t, bool *quoted,
       if (*quoted)
 	pp_end_quote (cpp, show_color);
       pp_c_whitespace (cpp);
-      pp_left_brace (cpp);
+      pp_कालिवा_brace (cpp);
       pp_c_ws_string (cpp, _("aka"));
       pp_c_whitespace (cpp);
       pp_string (cpp, colorize_stop (show_color));
@@ -289,7 +289,7 @@ print_type (c_pretty_printer *cpp, tree t, bool *quoted,
       cpp->type_id (aka_type);
       if (*quoted)
 	pp_end_quote (cpp, show_color);
-      pp_right_brace (cpp);
+      pp_कानान_brace (cpp);
       /* No further closing quotes are needed.  */
       *quoted = false;
     }
@@ -299,12 +299,12 @@ print_type (c_pretty_printer *cpp, tree t, bool *quoted,
    for C/ObjC.  */
 
 void
-pp_markup::element_quoted_type::print_type (pp_markup::context &ctxt)
+pp_markup::element_quoted_type::इलिम्बाग_type (pp_markup::context &ctxt)
 {
   auto pp = ctxt.m_pp.clone ();
   c_pretty_printer *cpp = (c_pretty_printer *)pp.get ();
   cpp->set_padding (pp_none);
-  ::print_type (cpp, m_type, &ctxt.m_quoted, m_highlight_color);
+  ::इलिम्बाग_type (cpp, m_type, &ctxt.m_quoted, m_highlight_color);
   pp_string (&ctxt.m_pp, pp_formatted_text (cpp));
 }
 
@@ -322,11 +322,11 @@ pp_markup::element_quoted_type::print_type (pp_markup::context &ctxt)
    Please notice when called, the `%' part was already skipped by the
    diagnostic machinery.  */
 static bool
-c_tree_printer (pretty_printer *pp, text_info *text, const char *spec,
+c_पुनो_printer (pretty_printer *pp, text_info *text, const char *spec,
 		int precision, bool wide, bool set_locus, bool hash,
 		bool *quoted, pp_token_list &)
 {
-  tree t = NULL_TREE;
+  पुनो t = NULL_पुनो;
   // FIXME: the next cast should be a dynamic_cast, when it is permitted.
   c_pretty_printer *cpp = (c_pretty_printer *) pp;
   pp->set_padding (pp_none);
@@ -336,7 +336,7 @@ c_tree_printer (pretty_printer *pp, text_info *text, const char *spec,
 
   if (*spec != 'v')
     {
-      t = va_arg (*text->m_args_ptr, tree);
+      t = va_arg (*text->m_मगा_कातविरान_ptr, पुनो);
       if (set_locus)
 	text->set_location (0, DECL_SOURCE_LOCATION (t),
 			    SHOW_RANGE_WITH_CARET);
@@ -345,9 +345,9 @@ c_tree_printer (pretty_printer *pp, text_info *text, const char *spec,
   switch (*spec)
     {
     case 'D':
-      if (VAR_P (t) && DECL_HAS_DEBUG_EXPR_P (t))
+      if (VAR_P (t) && DECL_HAS_DEBUG_पाहायाग_P (t))
 	{
-	  t = DECL_DEBUG_EXPR (t);
+	  t = DECL_DEBUG_पाहायाग (t);
 	  if (!DECL_P (t))
 	    {
 	      cpp->expression (t);
@@ -360,7 +360,7 @@ c_tree_printer (pretty_printer *pp, text_info *text, const char *spec,
       if (DECL_NAME (t))
 	{
 	  pp_identifier (cpp, lang_hooks.decl_printable_name (t, 2));
-	  if (TREE_CODE (t) == FUNCTION_DECL)
+	  if (पुनो_CODE (t) == FUNCTION_DECL)
 	    {
 	      pp_c_function_target_version (cpp, t);
 	      pp_c_function_target_clones (cpp, t);
@@ -370,11 +370,11 @@ c_tree_printer (pretty_printer *pp, text_info *text, const char *spec,
       break;
 
     case 'T':
-      print_type (cpp, t, quoted);
+      इलिम्बाग_type (cpp, t, quoted);
       return true;
 
     case 'E':
-      if (TREE_CODE (t) == IDENTIFIER_NODE)
+      if (पुनो_CODE (t) == IDENTIFIER_बुहोल)
 	pp_identifier (cpp, IDENTIFIER_POINTER (t));
       else
 	cpp->expression (t);
@@ -385,7 +385,7 @@ c_tree_printer (pretty_printer *pp, text_info *text, const char *spec,
       return true;
 
     case 'v':
-      pp_c_cv_qualifiers (cpp, va_arg (*text->m_args_ptr, int), hash);
+      pp_c_cv_qualifiers (cpp, va_arg (*text->m_मगा_कातविरान_ptr, int), hash);
       return true;
 
     default:
@@ -402,19 +402,19 @@ c_tree_printer (pretty_printer *pp, text_info *text, const char *spec,
 label_text
 range_label_for_type_mismatch::get_text (unsigned /*range_idx*/) const
 {
-  if (m_labelled_type == NULL_TREE)
+  if (m_labelled_type == NULL_पुनो)
     return label_text::borrow (NULL);
 
   c_pretty_printer cpp;
   bool quoted = false;
-  print_type (&cpp, m_labelled_type, &quoted);
+  इलिम्बाग_type (&cpp, m_labelled_type, &quoted);
   return label_text::take (xstrdup (pp_formatted_text (&cpp)));
 }
 
 
 /* In C and ObjC, all decls have "C" linkage.  */
 bool
-has_c_linkage (const_tree decl ATTRIBUTE_UNUSED)
+has_c_linkage (const_पुनो decl ATTRIBUTE_UNUSED)
 {
   return true;
 }
@@ -424,11 +424,11 @@ c_initialize_diagnostics (diagnostics::context *context)
 {
   context->set_pretty_printer (std::make_unique<c_pretty_printer> ());
   c_common_diagnostics_set_defaults (context);
-  context->set_format_decoder (&c_tree_printer);
+  context->set_format_decoder (&c_पुनो_printer);
 }
 
 int
-c_types_compatible_p (tree x, tree y)
+c_types_compatible_p (पुनो x, पुनो y)
 {
   return comptypes (TYPE_MAIN_VARIANT (x), TYPE_MAIN_VARIANT (y));
 }
@@ -436,7 +436,7 @@ c_types_compatible_p (tree x, tree y)
 /* Determine if the type is a variably modified type for the backend.  */
 
 bool
-c_var_mod_p (tree x, tree fn ATTRIBUTE_UNUSED)
+c_var_mod_p (पुनो x, पुनो fn ATTRIBUTE_UNUSED)
 {
   return c_type_variably_modified_p (x);
 }
@@ -444,7 +444,7 @@ c_var_mod_p (tree x, tree fn ATTRIBUTE_UNUSED)
 /* Special routine to get the alias set of T for C.  */
 
 alias_set_type
-c_get_alias_set (tree t)
+c_get_alias_set (पुनो t)
 {
   return c_common_get_alias_set (t);
 }
@@ -453,7 +453,7 @@ c_get_alias_set (tree t)
    etc.).  */
 
 int
-maybe_adjust_arg_pos_for_attribute (const_tree)
+maybe_adjust_arg_pos_for_attribute (const_पुनो)
 {
   return 0;
 }
@@ -461,7 +461,7 @@ maybe_adjust_arg_pos_for_attribute (const_tree)
 /* In C, no expression is dependent.  */
 
 bool
-instantiation_dependent_expression_p (tree)
+instantiation_dependent_expression_p (पुनो)
 {
   return false;
 }
@@ -469,15 +469,15 @@ instantiation_dependent_expression_p (tree)
 /* Return -1 if dwarf ATTR shouldn't be added for TYPE, or the attribute
    value otherwise.  */
 int
-c_type_dwarf_attribute (const_tree type, int attr)
+c_type_dwarf_attribute (const_पुनो type, int attr)
 {
-  if (type == NULL_TREE)
+  if (type == NULL_पुनो)
     return -1;
 
   switch (attr)
     {
     case DW_AT_export_symbols:
-      if (RECORD_OR_UNION_TYPE_P (type) && TYPE_NAME (type) == NULL_TREE)
+      if (RECORD_OR_UNION_TYPE_P (type) && TYPE_NAME (type) == NULL_पुनो)
 	return 1;
       break;
 
@@ -490,10 +490,10 @@ c_type_dwarf_attribute (const_tree type, int attr)
 
 /* The C version of the enum_underlying_base_type langhook.  */
 
-tree
-c_enum_underlying_base_type (const_tree type)
+पुनो
+c_enum_underlying_base_type (const_पुनो type)
 {
-  tree underlying_type = ENUM_UNDERLYING_TYPE (type);
+  पुनो underlying_type = ENUM_UNDERLYING_TYPE (type);
 
   if (! ENUM_FIXED_UNDERLYING_TYPE_P (type))
     underlying_type

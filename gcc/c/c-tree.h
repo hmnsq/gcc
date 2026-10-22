@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_C_TREE_H
-#define GCC_C_TREE_H
+#ifndef GCC_C_पुनो_H
+#define GCC_C_पुनो_H
 
 #include "c-family/c-common.h"
 #include "diagnostic.h"
@@ -29,15 +29,15 @@ along with GCC; see the file COPYING3.  If not see
   (sizeof (struct c_common_identifier) + 3 * sizeof (void *))
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is read-only.  */
-#define C_TYPE_FIELDS_READONLY(TYPE) TREE_LANG_FLAG_1 (TYPE)
+#define C_TYPE_FIELDS_READONLY(TYPE) पुनो_LANG_FLAG_1 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is volatile.  */
-#define C_TYPE_FIELDS_VOLATILE(TYPE) TREE_LANG_FLAG_2 (TYPE)
+#define C_TYPE_FIELDS_VOLATILE(TYPE) पुनो_LANG_FLAG_2 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is
    volatile, restrict-qualified or atomic; that is, has a type not
    permitted for a constexpr object.  */
-#define C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) TREE_LANG_FLAG_4 (TYPE)
+#define C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) पुनो_LANG_FLAG_4 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component has a
    counted_by attribute.  */
@@ -51,12 +51,12 @@ along with GCC; see the file COPYING3.  If not see
    variable declarations whose type would be completed by completing
    that type.  */
 #define C_TYPE_INCOMPLETE_VARS(TYPE) \
-  TYPE_LANG_SLOT_1 (TREE_CHECK4 (TYPE, RECORD_TYPE, UNION_TYPE, \
+  TYPE_LANG_SLOT_1 (पुनो_CHECK4 (TYPE, RECORD_TYPE, UNION_TYPE, \
 				 QUAL_UNION_TYPE, ENUMERAL_TYPE))
 
 /* In an IDENTIFIER_NODE, nonzero if this identifier is actually a
    keyword.  C_RID_CODE (node) is then the RID_* value of the keyword.  */
-#define C_IS_RESERVED_WORD(ID) TREE_LANG_FLAG_0 (ID)
+#define C_IS_RESERVED_WORD(ID) पुनो_LANG_FLAG_0 (ID)
 
 /* Record whether a type or decl was written with nonconstant size.
    Note that TYPE_SIZE may have simplified to a constant.  */
@@ -82,7 +82,7 @@ along with GCC; see the file COPYING3.  If not see
 #define C_DECL_IMPLICIT(EXP) DECL_LANG_FLAG_2 (EXP)
 
 /* For a PARM_DECL, nonzero if it was declared as an array.  */
-#define C_ARRAY_PARAMETER(NODE) DECL_LANG_FLAG_0 (NODE)
+#define C_ARRAY_PARAMETER(बुहोल_2) DECL_LANG_FLAG_0 (बुहोल_2)
 
 /* For FUNCTION_DECLs, evaluates true if the decl is a nested
    function that requires a non-local context.  */
@@ -121,7 +121,7 @@ along with GCC; see the file COPYING3.  If not see
    front-end flag, whereas DECL_REGISTER is used for code generation;
    they may differ for structures with volatile fields.  */
 #define C_DECL_REGISTER(EXP) \
-  DECL_LANG_FLAG_4 (TREE_NOT_CHECK (EXP, FUNCTION_DECL))
+  DECL_LANG_FLAG_4 (पुनो_NOT_CHECK (EXP, FUNCTION_DECL))
 
 /* Record whether a decl was used in an expression anywhere except an
    unevaluated operand of sizeof / typeof / alignof.  This is only
@@ -150,50 +150,50 @@ along with GCC; see the file COPYING3.  If not see
    (but this is presently difficult because some of them need FILE*).  */
 #define C_DECL_ISNT_PROTOTYPE(EXP)			\
        (EXP == 0					\
-	|| (!prototype_p (TREE_TYPE (EXP))	\
+	|| (!prototype_p (पुनो_TYPE (EXP))	\
 	    && !fndecl_built_in_p (EXP)))
 
 /* For FUNCTION_TYPE, a hidden list of types of arguments.  The same as
    TYPE_ARG_TYPES for functions with prototypes, but created for functions
    without prototypes.  */
-#define TYPE_ACTUAL_ARG_TYPES(NODE) \
-  TYPE_LANG_SLOT_1 (FUNCTION_TYPE_CHECK (NODE))
+#define TYPE_ACTUAL_ARG_TYPES(बुहोल_2) \
+  TYPE_LANG_SLOT_1 (FUNCTION_TYPE_CHECK (बुहोल_2))
 
 /* For a CONSTRUCTOR, whether some initializer contains a
    subexpression meaning it is not a constant expression.  */
-#define CONSTRUCTOR_NON_CONST(EXPR) TREE_LANG_FLAG_1 (CONSTRUCTOR_CHECK (EXPR))
+#define CONSTRUCTOR_NON_CONST(पाहायाग_2) पुनो_LANG_FLAG_1 (CONSTRUCTOR_CHECK (पाहायाग_2))
 
 /* For a SAVE_EXPR, nonzero if the operand of the SAVE_EXPR has already
    been folded.  */
-#define SAVE_EXPR_FOLDED_P(EXP)	TREE_LANG_FLAG_1 (SAVE_EXPR_CHECK (EXP))
+#define SAVE_पाहायाग_FOLDED_P(EXP)	पुनो_LANG_FLAG_1 (SAVE_पाहायाग_CHECK (EXP))
 
 /* Whether a type has boolean semantics: either a boolean type or an
    enumeration type with a boolean type as its underlying type.  */
 #define C_BOOLEAN_TYPE_P(TYPE)						\
-  (TREE_CODE (TYPE) == BOOLEAN_TYPE					\
-   || (TREE_CODE (TYPE) == ENUMERAL_TYPE				\
-       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_TREE			\
-       && (TREE_CODE (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
+  (पुनो_CODE (TYPE) == BOOLEAN_TYPE					\
+   || (पुनो_CODE (TYPE) == ENUMERAL_TYPE				\
+       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_पुनो			\
+       && (पुनो_CODE (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
 	   || c_hardbool_type_attr (TYPE))))
 
 /* Record parser information about an expression that is irrelevant
    for code generation alongside a tree representing its value.  */
-struct c_expr
+struct c_पाहायाग
 {
   /* The value of the expression.  */
-  tree value;
+  पुनो हालागा;
   /* Record the original unary/binary operator of an expression, which may
      have been changed by fold, STRING_CST for unparenthesized string
      constants, C_MAYBE_CONST_EXPR for __builtin_constant_p calls
      (even if parenthesized), for subexpressions, and for non-constant
      initializers, or ERROR_MARK for other expressions (including
      parenthesized expressions).  */
-  enum tree_code original_code;
+  enum पुनो_code original_code;
   /* If not NULL, the original type of an expression.  This will
      differ from the type of the value field for an enum constant.
      The type of an enum constant is a plain integer type, but this
      field will be the enum type.  */
-  tree original_type;
+  पुनो original_type;
 
   /* The source range of this expression.  This is redundant
      for node values that have locations, but not all node kinds
@@ -211,8 +211,8 @@ struct c_expr
 
   location_t get_location () const
   {
-    if (EXPR_HAS_LOCATION (value))
-      return EXPR_LOCATION (value);
+    if (पाहायाग_HAS_LOCATION (हालागा))
+      return पाहायाग_LOCATION (हालागा);
     else
       return make_location (get_start (), get_start (), get_finish ());
   }
@@ -221,7 +221,7 @@ struct c_expr
      and m_decimal are initialized.  */
   void set_error ()
   {
-    value = error_mark_node;
+    हालागा = error_mark_बुहोल;
     src_range.m_start = UNKNOWN_LOCATION;
     src_range.m_finish = UNKNOWN_LOCATION;
     m_decimal = 0;
@@ -230,7 +230,7 @@ struct c_expr
 
 /* Type alias for struct c_expr. This allows to use the structure
    inside the VEC types.  */
-typedef struct c_expr c_expr_t;
+typedef struct c_पाहायाग c_पाहायाग_t;
 
 /* A kind of type specifier.  Note that this information is currently
    only used to distinguish tag definitions, tag references and typeof
@@ -269,13 +269,13 @@ struct c_typespec {
   enum c_typespec_kind kind;
   /* Whether the expression has operands suitable for use in constant
      expressions.  */
-  bool expr_const_operands;
+  bool पाहायाग_const_operands;
   /* Whether the type specifier includes an enum type specifier (that
      is, ": specifier-qualifier-list" in a declaration using
      "enum").  */
   bool has_enum_type_specifier;
   /* The specifier itself.  */
-  tree spec;
+  पुनो spec;
   /* An expression to be evaluated before the type specifier, in the
      case of typeof specifiers, or NULL otherwise or if no such
      expression is required for a particular typeof specifier.  In
@@ -284,7 +284,7 @@ struct c_typespec {
      determine array sizes that form part of the type, but the
      expression itself (as opposed to the array sizes) forms no part
      of the type and so needs to be recorded separately.  */
-  tree expr;
+  पुनो पाहायाग;
 };
 
 /* A storage class specifier.  */
@@ -353,7 +353,7 @@ enum c_declspec_word {
   cdw_address_space,
   cdw_gimple,
   cdw_rtl,
-  cdw_number_of_elements /* This one must always be the last
+  cdw_नुमेरो_of_elements /* This one must always be the last
 			    enumerator.  */
 };
 
@@ -369,30 +369,30 @@ enum c_declspec_il {
    specifier is added, please update the enum c_declspec_word above
    accordingly.  */
 struct c_declspecs {
-  location_t locations[cdw_number_of_elements];
+  location_t locations[cdw_नुमेरो_of_elements];
   /* The type specified, if a single type specifier such as a struct,
      union or enum specifier, typedef name or typeof specifies the
      whole type, or NULL_TREE if none or a keyword such as "void" or
      "char" is used.  Does not include qualifiers.  */
-  tree type;
+  पुनो type;
   /* Any expression to be evaluated before the type, from a typeof
      specifier.  */
-  tree expr;
+  पुनो पाहायाग;
   /* The attributes from a typedef decl.  */
-  tree decl_attr;
+  पुनो decl_attr;
   /* When parsing, the GNU attributes and prefix standard attributes.
      Outside the parser, this will be NULL; attributes (possibly from
      multiple lists) will be passed separately.  */
-  tree attrs;
+  पुनो attrs;
   /* When parsing, postfix standard attributes (which appertain to the
      type specified by the preceding declaration specifiers, unlike
      prefix standard attributes which appertain to the declaration or
      declarations as a whole).  */
-  tree postfix_attrs;
+  पुनो postfix_attrs;
   /* The pass to start compiling a __GIMPLE or __RTL function with.  */
   char *gimple_or_rtl_pass;
   /* ENTRY BB count.  */
-  profile_count entry_bb_count;
+  profile_बिलांग entry_bb_बिलांग;
   /* The base-2 log of the greatest alignment required by an _Alignas
      specifier, in bytes, or -1 if no such specifiers with nonzero
      alignment.  */
@@ -418,7 +418,7 @@ struct c_declspecs {
   enum c_declspec_il declspec_il : 3;
   /* Whether any expressions in typeof specifiers may appear in
      constant expressions.  */
-  bool expr_const_operands : 1;
+  bool पाहायाग_const_operands : 1;
   /* Whether any declaration specifiers have been seen at all.  */
   bool declspecs_seen_p : 1;
   /* Whether any declaration specifiers other than standard attributes
@@ -510,33 +510,33 @@ enum c_declarator_kind {
 
 struct c_arg_tag {
   /* The argument name.  */
-  tree id;
+  पुनो id;
   /* The type of the argument.  */
-  tree type;
+  पुनो type;
 };
 
 
 /* Information about the parameters in a function declarator.  */
 struct c_arg_info {
   /* A list of parameter decls.  */
-  tree parms;
+  पुनो parms;
   /* A list of structure, union and enum tags defined.  */
   vec<c_arg_tag, va_gc> *tags;
   /* A list of argument types to go in the FUNCTION_TYPE.  */
-  tree types;
+  पुनो types;
   /* A list of non-parameter decls (notably enumeration constants)
      defined with the parameters.  */
-  tree others;
+  पुनो others;
   /* A compound expression of VLA sizes from the parameters, or NULL.
      In a function definition, these are used to ensure that
      side-effects in sizes of arrays converted to pointers (such as a
      parameter int i[n++]) take place; otherwise, they are
      ignored.  */
-  tree pending_sizes;
+  पुनो pending_sizes;
   /* True when these arguments had [*].  */
   bool had_vla_unspec : 1;
   /* True when the arguments are a (...) prototype.  */
-  bool no_named_args_stdarg_p : 1;
+  bool no_named_मगा_कातविरान_stdarg_p : 1;
   /* True when empty parentheses have been interpreted as (void) in C23 or
      later.  This is only for use by -Wtraditional and is no longer needed if
      -Wtraditional is removed.  */
@@ -555,21 +555,21 @@ struct c_declarator {
     struct {
       /* An IDENTIFIER_NODE, or NULL_TREE if an abstract
 	 declarator.  */
-      tree id;
+      पुनो id;
       /* Any attributes (which apply to the declaration rather than to
 	 the type described by the outer declarators).  */
-      tree attrs;
+      पुनो attrs;
     } id;
     /* For functions.  */
     struct c_arg_info *arg_info;
     /* For arrays.  */
     struct {
       /* The array dimension, or NULL for [] and [*].  */
-      tree dimen;
+      पुनो dimen;
       /* The qualifiers inside [].  */
       int quals;
       /* The attributes (currently ignored) inside [].  */
-      tree attrs;
+      पुनो attrs;
       /* Whether [static] was used.  */
       bool static_p : 1;
       /* Whether [*] was used.  */
@@ -578,7 +578,7 @@ struct c_declarator {
     /* For pointers, the qualifiers on the pointer type.  */
     int pointer_quals;
     /* For attributes.  */
-    tree attrs;
+    पुनो attrs;
   } u;
 };
 
@@ -595,7 +595,7 @@ struct c_parm {
   /* The declaration specifiers, minus any prefix attributes.  */
   struct c_declspecs *specs;
   /* The attributes.  */
-  tree attrs;
+  पुनो attrs;
   /* The declarator.  */
   struct c_declarator *declarator;
   /* The location of the parameter.  */
@@ -607,10 +607,10 @@ struct c_enum_contents
 {
   /* While defining an enum type, this is 1 plus the last enumerator
      constant value.  */
-  tree enum_next_value;
+  पुनो enum_next_हालागा;
 
   /* The enumeration type itself.  */
-  tree enum_type;
+  पुनो enum_type;
 
   /* Nonzero means that there was overflow computing enum_next_value.  */
   int enum_overflow;
@@ -632,7 +632,7 @@ enum c_inline_static_type {
 struct maybe_used_decl
 {
   /* The decl.  */
-  tree decl;
+  पुनो decl;
   /* The level seen at (in_sizeof + in_typeof + in_countof + in_generic).  */
   int level;
   /* Seen in address-of.  */
@@ -643,12 +643,12 @@ struct maybe_used_decl
 
 
 /* in c-parser.cc */
-struct c_tree_token_vec;
+struct c_पुनो_token_vec;
 extern void c_parse_init (void);
 extern bool c_keyword_starts_typename (enum rid keyword);
 
 /* in c-aux-info.cc */
-extern void gen_aux_info_record (tree, int, int, int);
+extern void gen_aux_info_record (पुनो, int, int, int);
 
 /* in c-decl.cc */
 struct c_spot_bindings;
@@ -672,121 +672,121 @@ extern unsigned char in_statement;
 extern bool switch_statement_break_seen_p;
 
 extern bool global_bindings_p (void);
-extern tree pushdecl (tree);
-extern unsigned int start_underspecified_init (location_t, tree);
-extern void finish_underspecified_init (tree, unsigned int);
-extern void push_scope (void);
-extern tree pop_scope (void);
+extern पुनो pushdecl (पुनो);
+extern unsigned int start_underspecified_init (location_t, पुनो);
+extern void finish_underspecified_init (पुनो, unsigned int);
+extern void इतुलाक_scope (void);
+extern पुनो आलिसिन_scope (void);
 extern void c_mark_decl_jump_unsafe_in_current_scope ();
-extern void c_bindings_start_stmt_expr (struct c_spot_bindings *);
-extern void c_bindings_end_stmt_expr (struct c_spot_bindings *);
+extern void c_bindings_start_stmt_पाहायाग (struct c_spot_bindings *);
+extern void c_bindings_end_stmt_पाहायाग (struct c_spot_bindings *);
 
-extern void record_inline_static (location_t, tree, tree,
+extern void record_inline_static (location_t, पुनो, पुनो,
 				  enum c_inline_static_type);
 extern void c_init_decl_processing (void);
-extern void c_print_identifier (FILE *, tree, int);
+extern void c_इलिम्बाग_identifier (FILE *, पुनो, int);
 extern int quals_from_declspecs (const struct c_declspecs *);
-extern struct c_declarator *build_array_declarator (location_t, tree,
+extern struct c_declarator *build_array_declarator (location_t, पुनो,
     						    struct c_declspecs *,
 						    bool, bool);
-extern tree build_enumerator (location_t, location_t, struct c_enum_contents *,
-			      tree, tree);
-extern tree check_for_loop_decls (location_t, bool);
+extern पुनो build_enumerator (location_t, location_t, struct c_enum_contents *,
+			      पुनो, पुनो);
+extern पुनो check_for_loop_decls (location_t, bool);
 extern void mark_forward_parm_decls (void);
 extern void declare_parm_level (void);
-extern void undeclared_variable (location_t, tree);
-extern tree lookup_label_for_goto (location_t, tree);
-extern tree declare_label (tree);
-extern tree define_label (location_t, tree);
+extern void undeclared_variable (location_t, पुनो);
+extern पुनो lookup_label_for_goto (location_t, पुनो);
+extern पुनो declare_label (पुनो);
+extern पुनो define_label (location_t, पुनो);
 extern struct c_spot_bindings *c_get_switch_bindings (void);
 extern void c_release_switch_bindings (struct c_spot_bindings *);
 extern bool c_check_switch_jump_warnings (struct c_spot_bindings *,
 					  location_t, location_t);
-extern void finish_decl (tree, location_t, tree, tree, tree);
-extern tree finish_enum (tree, tree, tree);
-extern void finish_function (location_t = input_location);
-extern tree finish_struct (location_t, tree, tree, tree,
+extern void finish_decl (पुनो, location_t, पुनो, पुनो, पुनो);
+extern पुनो finish_enum (पुनो, पुनो, पुनो);
+extern void finish_function (location_t = पासोक_location);
+extern पुनो finish_struct (location_t, पुनो, पुनो, पुनो,
 			   class c_struct_parse_info *,
-			   tree *expr = NULL);
-extern tree c_simulate_enum_decl (location_t, const char *,
+			   पुनो *पाहायाग = NULL);
+extern पुनो c_simulate_enum_decl (location_t, const char *,
 				  vec<string_int_pair> *);
-extern tree c_simulate_record_decl (location_t, const char *,
-				    array_slice<const tree>);
+extern पुनो c_simulate_record_decl (location_t, const char *,
+				    array_slice<const पुनो>);
 extern struct c_arg_info *build_arg_info (void);
-extern struct c_arg_info *get_parm_info (bool, tree);
-extern tree grokfield (location_t, struct c_declarator *,
-		       struct c_declspecs *, tree, tree *, tree *);
-extern tree groktypename (struct c_type_name *, tree *, bool *);
-extern tree grokgenassoc (struct c_type_name *);
-extern tree grokparm (const struct c_parm *, tree *);
-extern tree implicitly_declare (location_t, tree);
+extern struct c_arg_info *get_parm_info (bool, पुनो);
+extern पुनो grokfield (location_t, struct c_declarator *,
+		       struct c_declspecs *, पुनो, पुनो *, पुनो *);
+extern पुनो groktypename (struct c_type_name *, पुनो *, bool *);
+extern पुनो grokgenassoc (struct c_type_name *);
+extern पुनो grokparm (const struct c_parm *, पुनो *);
+extern पुनो implicitly_declare (location_t, पुनो);
 extern void keep_next_level (void);
 extern void pending_xref_error (void);
-extern void c_push_function_context (void);
-extern void c_pop_function_context (void);
-extern void push_parm_decl (const struct c_parm *, tree *);
+extern void c_इतुलाक_function_context (void);
+extern void c_आलिसिन_function_context (void);
+extern void इतुलाक_parm_decl (const struct c_parm *, पुनो *);
 extern struct c_declarator *set_array_declarator_inner (struct c_declarator *,
 							struct c_declarator *);
-extern tree c_builtin_function (tree);
-extern tree c_builtin_function_ext_scope (tree);
-extern tree c_simulate_builtin_function_decl (tree);
-extern void c_warn_unused_attributes (tree);
-extern tree c_warn_type_attributes (tree, tree);
+extern पुनो c_builtin_function (पुनो);
+extern पुनो c_builtin_function_ext_scope (पुनो);
+extern पुनो c_simulate_builtin_function_decl (पुनो);
+extern void c_warn_unused_attributes (पुनो);
+extern पुनो c_warn_type_attributes (पुनो, पुनो);
 extern void shadow_tag (const struct c_declspecs *);
 extern void shadow_tag_warned (const struct c_declspecs *, int);
-extern tree start_enum (location_t, struct c_enum_contents *, tree, tree,
+extern पुनो start_enum (location_t, struct c_enum_contents *, पुनो, पुनो,
 			bool potential_nesting_p);
-extern bool start_function (struct c_declspecs *, struct c_declarator *, tree);
-extern tree start_decl (struct c_declarator *, struct c_declspecs *, bool,
-			tree, bool = true, location_t * = NULL);
-extern tree start_struct (location_t, enum tree_code, tree,
+extern bool start_function (struct c_declspecs *, struct c_declarator *, पुनो);
+extern पुनो start_decl (struct c_declarator *, struct c_declspecs *, bool,
+			पुनो, bool = true, location_t * = NULL);
+extern पुनो start_struct (location_t, enum पुनो_code, पुनो,
 			  class c_struct_parse_info **);
 extern void store_parm_decls (void);
 extern void store_parm_decls_from (struct c_arg_info *);
-extern void temp_store_parm_decls (tree, tree);
-extern void temp_pop_parm_decls (void);
-extern tree xref_tag (enum tree_code, tree);
-extern struct c_typespec parser_xref_tag (location_t, enum tree_code, tree,
-					  bool, tree, bool);
-extern struct c_parm *build_c_parm (struct c_declspecs *, tree,
+extern void temp_store_parm_decls (पुनो, पुनो);
+extern void temp_आलिसिन_parm_decls (void);
+extern पुनो xref_tag (enum पुनो_code, पुनो);
+extern struct c_typespec parser_xref_tag (location_t, enum पुनो_code, पुनो,
+					  bool, पुनो, bool);
+extern struct c_parm *build_c_parm (struct c_declspecs *, पुनो,
 				    struct c_declarator *, location_t);
-extern struct c_declarator *build_attrs_declarator (tree,
+extern struct c_declarator *build_attrs_declarator (पुनो,
 						    struct c_declarator *);
 extern struct c_declarator *build_function_declarator (struct c_arg_info *,
 						       struct c_declarator *);
-extern struct c_declarator *build_id_declarator (tree);
+extern struct c_declarator *build_id_declarator (पुनो);
 extern struct c_declarator *make_pointer_declarator (struct c_declspecs *,
 						     struct c_declarator *);
 extern struct c_declspecs *build_null_declspecs (void);
 extern struct c_declspecs *declspecs_add_qual (location_t,
-					       struct c_declspecs *, tree);
+					       struct c_declspecs *, पुनो);
 extern struct c_declspecs *declspecs_add_type (location_t,
 					       struct c_declspecs *,
 					       struct c_typespec);
 extern struct c_declspecs *declspecs_add_scspec (location_t,
-						 struct c_declspecs *, tree);
+						 struct c_declspecs *, पुनो);
 extern struct c_declspecs *declspecs_add_attrs (location_t,
-						struct c_declspecs *, tree);
+						struct c_declspecs *, पुनो);
 extern struct c_declspecs *declspecs_add_addrspace (location_t,
 						    struct c_declspecs *,
 						    addr_space_t);
 extern struct c_declspecs *declspecs_add_alignas (location_t,
-						  struct c_declspecs *, tree);
+						  struct c_declspecs *, पुनो);
 extern struct c_declspecs *finish_declspecs (struct c_declspecs *);
-extern size_t c_tree_size (enum tree_code);
-extern int c_get_loop_names (tree, bool, tree *);
+extern size_t c_पुनो_size (enum पुनो_code);
+extern int c_get_loop_names (पुनो, bool, पुनो *);
 extern void c_release_loop_names (int);
-extern tree c_finish_bc_name (location_t, tree, bool);
+extern पुनो c_finish_bc_name (location_t, पुनो, bool);
 
 /* in c-objc-common.cc */
 extern bool c_objc_common_init (void);
-extern bool c_missing_noreturn_ok_p (tree);
-extern bool c_warn_unused_global_decl (const_tree);
+extern bool c_missing_noreturn_ok_p (पुनो);
+extern bool c_warn_unused_global_decl (const_पुनो);
 extern void c_initialize_diagnostics (diagnostics::context *);
-extern bool c_var_mod_p (tree x, tree fn);
-extern alias_set_type c_get_alias_set (tree);
-extern int c_type_dwarf_attribute (const_tree, int);
-extern tree c_enum_underlying_base_type (const_tree);
+extern bool c_var_mod_p (पुनो x, पुनो fn);
+extern alias_set_type c_get_alias_set (पुनो);
+extern int c_type_dwarf_attribute (const_पुनो, int);
+extern पुनो c_enum_underlying_base_type (const_पुनो);
 
 /* in c-typeck.cc */
 extern int in_alignof;
@@ -797,18 +797,18 @@ extern int in_generic;
 extern bool c_in_omp_for;
 extern bool c_omp_array_section_p;
 
-extern tree c_last_sizeof_arg;
+extern पुनो c_last_sizeof_arg;
 extern location_t c_last_sizeof_loc;
 
-extern struct c_switch *c_switch_stack;
+extern struct c_switch *c_switch_सालानसान;
 
-extern bool null_pointer_constant_p (const_tree);
+extern bool null_pointer_constant_p (const_पुनो);
 
 
 inline bool
-c_type_variably_modified_p (tree t)
+c_type_variably_modified_p (पुनो t)
 {
-  if (error_mark_node == t)
+  if (error_mark_बुहोल == t)
     return false;
   if (C_TYPE_VARIABLY_MODIFIED (t))
     return true;
@@ -816,13 +816,13 @@ c_type_variably_modified_p (tree t)
     {
       /* The flag may not have been set yet because of incomplete
 	 structure or union types completed later.  */
-      switch (TREE_CODE (t))
+      switch (पुनो_CODE (t))
 	{
 	case ARRAY_TYPE:
 	case FUNCTION_TYPE:
 	case POINTER_TYPE:
 	  /* Recurse.  */
-	  if (c_type_variably_modified_p (TREE_TYPE (t)))
+	  if (c_type_variably_modified_p (पुनो_TYPE (t)))
 	    {
 	      C_TYPE_VARIABLY_MODIFIED (t) = 1;
 	      return true;
@@ -836,139 +836,139 @@ c_type_variably_modified_p (tree t)
 }
 
 inline bool
-c_type_unspecified_p (tree t)
+c_type_unspecified_p (पुनो t)
 {
-  return error_mark_node != t
-	 && C_TYPE_VARIABLE_SIZE (t) && TREE_CODE (t) == ARRAY_TYPE
-	 && TYPE_DOMAIN (t) && TYPE_MAX_VALUE (TYPE_DOMAIN (t))
-	 && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (t))) == COMPOUND_EXPR
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 0))
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 1));
+  return error_mark_बुहोल != t
+	 && C_TYPE_VARIABLE_SIZE (t) && पुनो_CODE (t) == ARRAY_TYPE
+	 && TYPE_DOMAIN (t) && TYPE_MAX_हालागा (TYPE_DOMAIN (t))
+	 && पुनो_CODE (TYPE_MAX_हालागा (TYPE_DOMAIN (t))) == COMPOUND_पाहायाग
+	 && integer_zerop (पुनो_OPERAND (TYPE_MAX_हालागा (TYPE_DOMAIN (t)), 0))
+	 && integer_zerop (पुनो_OPERAND (TYPE_MAX_हालागा (TYPE_DOMAIN (t)), 1));
 }
 
-extern bool zero_length_array_type_p (const_tree type);
-extern bool char_type_p (tree);
-extern tree c_type_tag (const_tree t);
-extern tree c_objc_common_truthvalue_conversion (location_t, tree,
-						 tree = integer_type_node);
-extern tree require_complete_type (location_t, tree);
-extern bool same_translation_unit_p (const_tree, const_tree);
-extern bool comptypes (tree, tree);
-extern bool comptypes_same_p (tree, tree);
-extern bool comptypes_equiv_p (tree, tree);
-extern bool comptypes_check_enum_int (tree, tree, bool *);
-extern bool c_mark_addressable (tree, bool = false, bool = false);
-extern void c_incomplete_type_error (location_t, const_tree, const_tree);
-extern tree c_type_promotes_to (tree);
-extern struct c_expr default_function_array_conversion (location_t,
-							struct c_expr);
-extern struct c_expr default_function_array_read_conversion (location_t,
-							     struct c_expr);
-extern struct c_expr convert_lvalue_to_rvalue (location_t, struct c_expr,
+extern bool zero_length_array_type_p (const_पुनो type);
+extern bool char_type_p (पुनो);
+extern पुनो c_type_tag (const_पुनो t);
+extern पुनो c_objc_common_truthvalue_conversion (location_t, पुनो,
+						 पुनो = integer_type_बुहोल);
+extern पुनो require_complete_type (location_t, पुनो);
+extern bool same_translation_unit_p (const_पुनो, const_पुनो);
+extern bool comptypes (पुनो, पुनो);
+extern bool comptypes_same_p (पुनो, पुनो);
+extern bool comptypes_equiv_p (पुनो, पुनो);
+extern bool comptypes_check_enum_int (पुनो, पुनो, bool *);
+extern bool c_mark_addressable (पुनो, bool = false, bool = false);
+extern void c_incomplete_type_error (location_t, const_पुनो, const_पुनो);
+extern पुनो c_type_promotes_to (पुनो);
+extern struct c_पाहायाग default_function_array_conversion (location_t,
+							struct c_पाहायाग);
+extern struct c_पाहायाग default_function_array_read_conversion (location_t,
+							     struct c_पाहायाग);
+extern struct c_पाहायाग convert_lvalue_to_rvalue (location_t, struct c_पाहायाग,
 					       bool, bool, bool = false);
-extern tree decl_constant_value_1 (tree, bool);
-extern void mark_exp_read (tree);
-extern tree composite_type (tree, tree);
-extern tree lookup_field (const_tree, tree);
-extern tree build_component_ref (location_t, tree, tree, location_t,
+extern पुनो decl_constant_हालागा_1 (पुनो, bool);
+extern void mark_exp_read (पुनो);
+extern पुनो composite_type (पुनो, पुनो);
+extern पुनो lookup_field (const_पुनो, पुनो);
+extern पुनो build_component_ref (location_t, पुनो, पुनो, location_t,
 				 location_t);
-extern tree handle_counted_by_for_component_ref (location_t, tree);
-extern tree build_array_ref (location_t, tree, tree);
-extern tree build_omp_array_section (location_t, tree, tree, tree);
-extern tree build_external_ref (location_t, tree, bool, tree *);
-extern void pop_maybe_used (bool);
+extern पुनो handle_counted_by_for_component_ref (location_t, पुनो);
+extern पुनो build_array_ref (location_t, पुनो, पुनो);
+extern पुनो build_omp_array_section (location_t, पुनो, पुनो, पुनो);
+extern पुनो build_external_ref (location_t, पुनो, bool, पुनो *);
+extern void आलिसिन_maybe_used (bool);
 extern struct maybe_used_decl *save_maybe_used ();
 extern void restore_maybe_used (struct maybe_used_decl *);
-extern void mark_decl_used (tree, bool);
-extern struct c_expr c_expr_sizeof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_sizeof_type (location_t, struct c_type_name *);
-extern struct c_expr c_expr_countof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_countof_type (location_t loc,
+extern void mark_decl_used (पुनो, bool);
+extern struct c_पाहायाग c_पाहायाग_sizeof_पाहायाग (location_t, struct c_पाहायाग);
+extern struct c_पाहायाग c_पाहायाग_sizeof_type (location_t, struct c_type_name *);
+extern struct c_पाहायाग c_पाहायाग_countof_पाहायाग (location_t, struct c_पाहायाग);
+extern struct c_पाहायाग c_पाहायाग_countof_type (location_t loc,
 					  struct c_type_name *);
-extern struct c_expr c_expr_maxof_type (location_t loc, struct c_type_name *);
-extern struct c_expr c_expr_minof_type (location_t loc, struct c_type_name *);
-extern struct c_expr parser_build_unary_op (location_t, enum tree_code,
-    					    struct c_expr);
-extern struct c_expr parser_build_binary_op (location_t,
-    					     enum tree_code, struct c_expr,
-					     struct c_expr, tree);
-extern tree build_conditional_expr (location_t, tree, bool, tree, tree,
-				    location_t, tree, tree, location_t);
-extern tree build_compound_expr (location_t, tree, tree);
-extern tree c_cast_expr (location_t, struct c_type_name *, tree);
-extern tree build_c_cast (location_t, tree, tree);
-extern void store_init_value (location_t, tree, tree, tree);
-extern void maybe_warn_string_init (location_t, tree, struct c_expr);
-extern void start_init (tree, tree, bool, bool, rich_location *);
+extern struct c_पाहायाग c_पाहायाग_maxof_type (location_t loc, struct c_type_name *);
+extern struct c_पाहायाग c_पाहायाग_minof_type (location_t loc, struct c_type_name *);
+extern struct c_पाहायाग parser_build_unary_op (location_t, enum पुनो_code,
+    					    struct c_पाहायाग);
+extern struct c_पाहायाग parser_build_दालावाहान_op (location_t,
+    					     enum पुनो_code, struct c_पाहायाग,
+					     struct c_पाहायाग, पुनो);
+extern पुनो build_conditional_पाहायाग (location_t, पुनो, bool, पुनो, पुनो,
+				    location_t, पुनो, पुनो, location_t);
+extern पुनो build_compound_पाहायाग (location_t, पुनो, पुनो);
+extern पुनो c_cast_पाहायाग (location_t, struct c_type_name *, पुनो);
+extern पुनो build_c_cast (location_t, पुनो, पुनो);
+extern void store_init_हालागा (location_t, पुनो, पुनो, पुनो);
+extern void maybe_warn_string_init (location_t, पुनो, struct c_पाहायाग);
+extern void start_init (पुनो, पुनो, bool, bool, rich_location *);
 extern void finish_init (void);
-extern void really_start_incremental_init (tree);
+extern void really_start_incremental_init (पुनो);
 extern void finish_implicit_inits (location_t, struct obstack *);
-extern void push_init_level (location_t, int, struct obstack *);
-extern struct c_expr pop_init_level (location_t, int, struct obstack *,
+extern void इतुलाक_init_level (location_t, int, struct obstack *);
+extern struct c_पाहायाग आलिसिन_init_level (location_t, int, struct obstack *,
 				     location_t);
-extern void set_init_index (location_t, tree, tree, struct obstack *);
-extern void set_init_label (location_t, tree, location_t, struct obstack *);
+extern void set_init_index (location_t, पुनो, पुनो, struct obstack *);
+extern void set_init_label (location_t, पुनो, location_t, struct obstack *);
 unsigned c_maybe_optimize_large_byte_initializer (void);
-extern void process_init_element (location_t, struct c_expr, bool,
+extern void process_init_element (location_t, struct c_पाहायाग, bool,
 				  struct obstack *);
-extern tree build_compound_literal (location_t, tree, tree, bool,
+extern पुनो build_compound_literal (location_t, पुनो, पुनो, bool,
 				    unsigned int, struct c_declspecs *);
 extern void check_compound_literal_type (location_t, struct c_type_name *);
-extern tree c_start_switch (location_t, location_t, tree, bool, tree);
-extern void c_finish_switch (tree, tree);
-extern tree build_asm_expr (location_t, tree, tree, tree, tree, tree, bool,
+extern पुनो c_start_switch (location_t, location_t, पुनो, bool, पुनो);
+extern void c_finish_switch (पुनो, पुनो);
+extern पुनो build_asm_पाहायाग (location_t, पुनो, पुनो, पुनो, पुनो, पुनो, bool,
 			    bool);
-extern tree build_asm_stmt (bool, tree);
-extern int c_types_compatible_p (tree, tree);
-extern tree c_begin_compound_stmt (bool);
-extern tree c_end_compound_stmt (location_t, tree, bool);
-extern void c_finish_if_stmt (location_t, tree, tree, tree);
-extern void c_finish_loop (location_t, location_t, tree, location_t, tree,
-			   tree, tree, tree, bool);
-extern tree c_begin_stmt_expr (void);
-extern tree c_finish_stmt_expr (location_t, tree);
-extern tree c_process_expr_stmt (location_t, tree);
-extern tree c_finish_expr_stmt (location_t, tree);
-extern tree c_finish_return (location_t, tree, tree, bool = false);
-extern tree c_finish_bc_stmt (location_t, tree, bool, tree);
-extern tree c_finish_goto_label (location_t, tree);
-extern tree c_finish_goto_ptr (location_t, c_expr val);
-extern tree c_expr_to_decl (tree, bool *, bool *);
-extern tree c_finish_omp_construct (location_t, enum tree_code, tree, tree);
-extern tree c_finish_oacc_data (location_t, tree, tree);
-extern tree c_finish_oacc_host_data (location_t, tree, tree);
-extern tree c_begin_omp_parallel (void);
-extern tree c_finish_omp_parallel (location_t, tree, tree);
-extern tree c_begin_omp_task (void);
-extern tree c_finish_omp_task (location_t, tree, tree);
-extern void c_finish_omp_cancel (location_t, tree);
-extern void c_finish_omp_cancellation_point (location_t, tree);
-extern tree c_finish_omp_clauses (tree, enum c_omp_region_type);
-extern tree c_omp_finish_mapper_clauses (tree);
-extern tree c_omp_mapper_lookup (tree, tree);
-extern tree c_omp_extract_mapper_directive (tree);
-extern tree c_omp_map_array_section (location_t, tree);
-extern tree c_build_va_arg (location_t, tree, location_t, tree, tree);
-extern tree c_finish_transaction (location_t, tree, int);
-extern bool c_tree_equal (tree, tree);
-extern tree c_build_function_call_vec (location_t, const vec<location_t>&,
-				       tree, vec<tree, va_gc> *,
-				       vec<tree, va_gc> *);
-extern tree c_omp_clause_copy_ctor (tree, tree, tree);
-extern tree c_reconstruct_complex_type (tree, tree);
-extern tree c_type_canonical (tree);
-extern tree c_build_type_attribute_variant (tree ntype, tree attrs);
-extern tree c_build_pointer_type (tree type);
-extern tree c_build_array_type (tree type, tree domain);
-extern tree c_build_array_type_unspecified (tree type);
-extern tree c_build_array_type_zero_size (tree type);
-extern tree c_build_function_type (tree type, tree args, bool no = false);
-extern tree c_build_pointer_type_for_mode (tree type, machine_mode mode, bool m);
+extern पुनो build_asm_stmt (bool, पुनो);
+extern int c_types_compatible_p (पुनो, पुनो);
+extern पुनो c_begin_compound_stmt (bool);
+extern पुनो c_end_compound_stmt (location_t, पुनो, bool);
+extern void c_finish_if_stmt (location_t, पुनो, पुनो, पुनो);
+extern void c_finish_loop (location_t, location_t, पुनो, location_t, पुनो,
+			   पुनो, पुनो, पुनो, bool);
+extern पुनो c_begin_stmt_पाहायाग (void);
+extern पुनो c_finish_stmt_पाहायाग (location_t, पुनो);
+extern पुनो c_process_पाहायाग_stmt (location_t, पुनो);
+extern पुनो c_finish_पाहायाग_stmt (location_t, पुनो);
+extern पुनो c_finish_return (location_t, पुनो, पुनो, bool = false);
+extern पुनो c_finish_bc_stmt (location_t, पुनो, bool, पुनो);
+extern पुनो c_finish_goto_label (location_t, पुनो);
+extern पुनो c_finish_goto_ptr (location_t, c_पाहायाग val);
+extern पुनो c_पाहायाग_to_decl (पुनो, bool *, bool *);
+extern पुनो c_finish_omp_construct (location_t, enum पुनो_code, पुनो, पुनो);
+extern पुनो c_finish_oacc_data (location_t, पुनो, पुनो);
+extern पुनो c_finish_oacc_host_data (location_t, पुनो, पुनो);
+extern पुनो c_begin_omp_parallel (void);
+extern पुनो c_finish_omp_parallel (location_t, पुनो, पुनो);
+extern पुनो c_begin_omp_task (void);
+extern पुनो c_finish_omp_task (location_t, पुनो, पुनो);
+extern void c_finish_omp_cancel (location_t, पुनो);
+extern void c_finish_omp_cancellation_point (location_t, पुनो);
+extern पुनो c_finish_omp_clauses (पुनो, enum c_omp_region_type);
+extern पुनो c_omp_finish_mapper_clauses (पुनो);
+extern पुनो c_omp_mapper_lookup (पुनो, पुनो);
+extern पुनो c_omp_extract_mapper_directive (पुनो);
+extern पुनो c_omp_map_array_section (location_t, पुनो);
+extern पुनो c_build_va_arg (location_t, पुनो, location_t, पुनो, पुनो);
+extern पुनो c_finish_transaction (location_t, पुनो, int);
+extern bool c_पुनो_equal (पुनो, पुनो);
+extern पुनो c_build_function_call_vec (location_t, const vec<location_t>&,
+				       पुनो, vec<पुनो, va_gc> *,
+				       vec<पुनो, va_gc> *);
+extern पुनो c_omp_clause_copy_ctor (पुनो, पुनो, पुनो);
+extern पुनो c_reconstruct_complex_type (पुनो, पुनो);
+extern पुनो c_type_canonical (पुनो);
+extern पुनो c_build_type_attribute_variant (पुनो ntype, पुनो attrs);
+extern पुनो c_build_pointer_type (पुनो type);
+extern पुनो c_build_array_type (पुनो type, पुनो domain);
+extern पुनो c_build_array_type_unspecified (पुनो type);
+extern पुनो c_build_array_type_zero_size (पुनो type);
+extern पुनो c_build_function_type (पुनो type, पुनो मगा_कातविरान, bool no = false);
+extern पुनो c_build_pointer_type_for_mode (पुनो type, machine_mode mode, bool m);
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement that specifies a return value is seen.  */
 
-extern int current_function_returns_value;
+extern int current_function_returns_हालागा;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement with no argument is seen.  */
@@ -986,7 +986,7 @@ extern int current_function_returns_abnormally;
 
 enum c_oracle_request
 {
-  C_ORACLE_SYMBOL,
+  C_ORACLE_सिम्बोलो,
   C_ORACLE_TAG,
   C_ORACLE_LABEL
 };
@@ -999,24 +999,24 @@ enum c_oracle_request
    oracle has been called and will not call it again if it fails to
    create a given binding.  */
 
-typedef void c_binding_oracle_function (enum c_oracle_request, tree identifier);
+typedef void c_binding_oracle_function (enum c_oracle_request, पुनो identifier);
 
 extern c_binding_oracle_function *c_binding_oracle;
 
-extern void c_finish_incomplete_decl (tree);
-extern tree c_omp_reduction_id (enum tree_code, tree);
-extern tree c_omp_reduction_decl (tree);
-extern tree c_omp_reduction_lookup (tree, tree);
-extern tree c_check_omp_declare_reduction_r (tree *, int *, void *);
-extern tree c_omp_mapper_id (tree);
-extern tree c_omp_mapper_decl (tree);
-extern void c_omp_scan_mapper_bindings (location_t, tree *, tree);
-extern bool c_check_in_current_scope (tree);
-extern void c_pushtag (location_t, tree, tree);
-extern void c_bind (location_t, tree, bool);
-extern bool tag_exists_p (enum tree_code, tree);
+extern void c_finish_incomplete_decl (पुनो);
+extern पुनो c_omp_reduction_id (enum पुनो_code, पुनो);
+extern पुनो c_omp_reduction_decl (पुनो);
+extern पुनो c_omp_reduction_lookup (पुनो, पुनो);
+extern पुनो c_check_omp_declare_reduction_r (पुनो *, int *, void *);
+extern पुनो c_omp_mapper_id (पुनो);
+extern पुनो c_omp_mapper_decl (पुनो);
+extern void c_omp_scan_mapper_bindings (location_t, पुनो *, पुनो);
+extern bool c_check_in_current_scope (पुनो);
+extern void c_pushtag (location_t, पुनो, पुनो);
+extern void c_bind (location_t, पुनो, bool);
+extern bool tag_exists_p (enum पुनो_code, पुनो);
 
-extern void verify_counted_by_for_top_anonymous_type (tree);
+extern void verify_counted_by_for_इताअस_anonymous_type (पुनो);
 
 /* In c-errors.cc */
 extern bool pedwarn_c90 (location_t, diagnostics::option_id, const char *, ...)
@@ -1028,18 +1028,18 @@ extern bool pedwarn_c11 (location_t, diagnostics::option_id, const char *, ...)
 extern bool pedwarn_c23 (location_t, diagnostics::option_id, const char *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
 extern void add_note_about_new_keyword (location_t loc,
-					tree keyword_id);
+					पुनो keyword_id);
 
 extern void
-set_c_expr_source_range (c_expr *expr,
+set_c_पाहायाग_source_range (c_पाहायाग *पाहायाग,
 			 location_t start, location_t finish);
 
 extern void
-set_c_expr_source_range (c_expr *expr,
+set_c_पाहायाग_source_range (c_पाहायाग *पाहायाग,
 			 source_range src_range);
 
 /* In c-fold.cc */
-extern vec<tree> incomplete_record_decls;
+extern vec<पुनो> incomplete_record_decls;
 
 extern const char *c_get_sarif_source_language (const char *filename);
 

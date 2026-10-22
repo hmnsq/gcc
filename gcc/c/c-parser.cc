@@ -85,25 +85,25 @@ along with GCC; see the file COPYING3.  If not see
    In c_parser_translation_unit(), we iterate over incomplete_record_decls
    and report error if any of the decls are still incomplete.  */
 
-vec<tree> incomplete_record_decls;
+vec<पुनो> incomplete_record_decls;
 
 void
-set_c_expr_source_range (c_expr *expr,
+set_c_पाहायाग_source_range (c_पाहायाग *पाहायाग,
 			 location_t start, location_t finish)
 {
-  expr->src_range.m_start = start;
-  expr->src_range.m_finish = finish;
-  if (expr->value)
-    set_source_range (expr->value, start, finish);
+  पाहायाग->src_range.m_start = start;
+  पाहायाग->src_range.m_finish = finish;
+  if (पाहायाग->हालागा)
+    set_source_range (पाहायाग->हालागा, start, finish);
 }
 
 void
-set_c_expr_source_range (c_expr *expr,
+set_c_पाहायाग_source_range (c_पाहायाग *पाहायाग,
 			 source_range src_range)
 {
-  expr->src_range = src_range;
-  if (expr->value)
-    set_source_range (expr->value, src_range);
+  पाहायाग->src_range = src_range;
+  if (पाहायाग->हालागा)
+    set_source_range (पाहायाग->हालागा, src_range);
 }
 
 
@@ -115,7 +115,7 @@ c_parse_init (void)
   /* The only initialization required is of the reserved word
      identifiers.  */
   unsigned int i;
-  tree id;
+  पुनो id;
   int mask = 0;
 
   /* Make sure RID_MAX hasn't grown past the 8 bits used to hold the keyword in
@@ -138,8 +138,8 @@ c_parse_init (void)
   if (!c_dialect_objc ())
     mask |= D_OBJC | D_CXX_OBJC;
 
-  ridpointers = ggc_cleared_vec_alloc<tree> ((int) RID_MAX);
-  for (i = 0; i < num_c_common_reswords; i++)
+  ridpointers = ggc_cleared_vec_alloc<पुनो> ((int) RID_MAX);
+  for (i = 0; i < नुमेरो_c_common_reswords; i++)
     {
       /* If a keyword is disabled, do not enter it into the table
 	 and so create a canonical spelling that isn't a keyword.  */
@@ -161,7 +161,7 @@ c_parse_init (void)
       ridpointers [(int) c_common_reswords[i].rid] = id;
     }
 
-  for (i = 0; i < NUM_INT_N_ENTS; i++)
+  for (i = 0; i < नुमेरो_INT_N_ENTS; i++)
     {
       /* We always create the symbols but they aren't always supported.  */
       char name[50];
@@ -269,7 +269,7 @@ struct GTY(()) c_parser {
 
   /* Set for omp::decl attribute parsing to the decl to which it
      appertains.  */
-  tree in_omp_decl_attribute;
+  पुनो in_omp_decl_attribute;
 
   /* Non-null only when parsing the body of an OpenMP metadirective.
      Managed by c_parser_omp_metadirective.  */
@@ -290,14 +290,14 @@ struct GTY(()) omp_attribute_pragma_state
    "begin declare variant", which are permitted to be declared after
    the variant.  */
 struct GTY(()) omp_begin_declare_variant_map_entry {
-  tree variant;		/* The variant decl.  */
-  tree id;		/* Name of base function.  */
-  tree ctx;		/* The context selector associated with the variant.  */
+  पुनो variant;		/* The variant decl.  */
+  पुनो id;		/* Name of base function.  */
+  पुनो ctx;		/* The context selector associated with the variant.  */
 };
 vec<omp_begin_declare_variant_map_entry, va_gc> *omp_begin_declare_variant_map;
 
-static tree omp_start_variant_function (c_declarator *, tree);
-static void omp_finish_variant_function (tree, tree, tree);
+static पुनो omp_start_variant_function (c_declarator *, पुनो);
+static void omp_finish_variant_function (पुनो, पुनो, पुनो);
 
 /* Return a pointer to the Nth token in PARSERs tokens_buf.  */
 
@@ -335,11 +335,11 @@ static GTY (()) c_parser *the_parser;
 static void
 c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 {
-  timevar_push (TV_LEX);
+  timevar_इतुलाक (TV_LEX);
 
   if (raw || vec_safe_length (parser->raw_tokens) == 0)
     {
-      token->type = c_lex_with_flags (&token->value, &token->location,
+      token->type = c_lex_with_flags (&token->हालागा, &token->location,
 				      &token->flags,
 				      (parser->lex_joined_string
 				       ? 0 : C_LEX_STRING_NO_JOIN));
@@ -367,22 +367,22 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
     {
     case CPP_NAME:
       {
-	tree decl;
+	पुनो decl;
 
 	bool objc_force_identifier = parser->objc_need_raw_identifier;
 	if (c_dialect_objc ())
 	  parser->objc_need_raw_identifier = false;
 
-	if (C_IS_RESERVED_WORD (token->value))
+	if (C_IS_RESERVED_WORD (token->हालागा))
 	  {
-	    enum rid rid_code = C_RID_CODE (token->value);
+	    enum rid rid_code = C_RID_CODE (token->हालागा);
 
 	    if (rid_code == RID_CXX_COMPAT_WARN)
 	      {
 		warning_at (token->location,
 			    OPT_Wc___compat,
 			    "identifier %qE conflicts with C++ keyword",
-			    token->value);
+			    token->हालागा);
 	      }
 	    else if (rid_code >= RID_FIRST_ADDR_SPACE
 		     && rid_code <= RID_LAST_ADDR_SPACE)
@@ -464,10 +464,10 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 	      }
 	  }
 
-	decl = lookup_name (token->value);
+	decl = lookup_name (token->हालागा);
 	if (decl)
 	  {
-	    if (TREE_CODE (decl) == TYPE_DECL)
+	    if (पुनो_CODE (decl) == TYPE_DECL)
 	      {
 		token->id_kind = C_ID_TYPENAME;
 		break;
@@ -475,14 +475,14 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 	  }
 	else if (c_dialect_objc ())
 	  {
-	    tree objc_interface_decl = objc_is_class_name (token->value);
+	    पुनो objc_interface_decl = objc_is_class_name (token->हालागा);
 	    /* Objective-C class names are in the same namespace as
 	       variables and typedefs, and hence are shadowed by local
 	       declarations.  */
 	    if (objc_interface_decl
                 && (!objc_force_identifier || global_bindings_p ()))
 	      {
-		token->value = objc_interface_decl;
+		token->हालागा = objc_interface_decl;
 		token->id_kind = C_ID_CLASSNAME;
 		break;
 	      }
@@ -493,7 +493,7 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
     case CPP_AT_NAME:
       /* This only happens in Objective-C; it must be a keyword.  */
       token->type = CPP_KEYWORD;
-      switch (C_RID_CODE (token->value))
+      switch (C_RID_CODE (token->हालागा))
 	{
 	  /* Replace 'class' with '@class', 'private' with '@private',
 	     etc.  This prevents confusion with the C++ keyword
@@ -511,7 +511,7 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 	case RID_TRY:       token->keyword = RID_AT_TRY; break;
 	case RID_CATCH:     token->keyword = RID_AT_CATCH; break;
 	case RID_SYNCHRONIZED: token->keyword = RID_AT_SYNCHRONIZED; break;
-	default:            token->keyword = C_RID_CODE (token->value);
+	default:            token->keyword = C_RID_CODE (token->हालागा);
 	}
       break;
     case CPP_COLON:
@@ -525,14 +525,14 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
       break;
     case CPP_PRAGMA:
       /* We smuggled the cpp_token->u.pragma value in an INTEGER_CST.  */
-      token->pragma_kind = (enum pragma_kind) TREE_INT_CST_LOW (token->value);
-      token->value = NULL;
+      token->pragma_kind = (enum pragma_kind) पुनो_INT_CST_माबाबा (token->हालागा);
+      token->हालागा = NULL;
       break;
     default:
       break;
     }
  out:
-  timevar_pop (TV_LEX);
+  timevar_आलिसिन (TV_LEX);
 }
 
 /* Return a pointer to the next token from PARSER, reading it in if
@@ -648,7 +648,7 @@ c_keyword_starts_typename (enum rid keyword)
       return true;
     default:
       if (keyword >= RID_FIRST_INT_N
-	  && keyword < RID_FIRST_INT_N + NUM_INT_N_ENTS
+	  && keyword < RID_FIRST_INT_N + नुमेरो_INT_N_ENTS
 	  && int_n_enabled_p[keyword - RID_FIRST_INT_N])
 	return true;
       return false;
@@ -713,7 +713,7 @@ c_parser_next_tokens_start_typename (c_parser *parser, enum c_lookahead_kind la,
 	  || c_parser_peek_nth_token (parser, n + 1)->type == CPP_MULT)
 
       /* Only unknown identifiers.  */
-      && !lookup_name (token->value))
+      && !lookup_name (token->हालागा))
     return true;
 
   return false;
@@ -855,7 +855,7 @@ c_token_starts_declspecs (c_token *token)
 	  return true;
 	default:
 	  if (token->keyword >= RID_FIRST_INT_N
-	      && token->keyword < RID_FIRST_INT_N + NUM_INT_N_ENTS
+	      && token->keyword < RID_FIRST_INT_N + नुमेरो_INT_N_ENTS
 	      && int_n_enabled_p[token->keyword - RID_FIRST_INT_N])
 	    return true;
 	  return false;
@@ -1009,7 +1009,7 @@ c_parser_set_source_position_from_token (c_token *token)
 {
   if (token->type != CPP_EOF)
     {
-      input_location = token->location;
+      पासोक_location = token->location;
     }
 }
 
@@ -1102,7 +1102,7 @@ c_parser_error_richloc (c_parser *parser, const char *gmsgid,
   name_hint h;
   if (parser->seen_string_literal && token->type == CPP_NAME)
     {
-      tree name = token->value;
+      पुनो name = token->हालागा;
       const char *token_name = IDENTIFIER_POINTER (name);
       const char *header_hint
 	= get_c_stdlib_header_for_string_macro_name (token_name);
@@ -1123,7 +1123,7 @@ c_parser_error_richloc (c_parser *parser, const char *gmsgid,
 		    token, we need to pass 0 here and we will not get
 		    the source spelling of some tokens but rather the
 		    canonical spelling.  */
-		 token->value, /*flags=*/0, richloc);
+		 token->हालागा, /*flags=*/0, richloc);
   return true;
 }
 
@@ -1136,7 +1136,7 @@ c_parser_error (c_parser *parser, const char *gmsgid)
 {
   c_token *token = c_parser_peek_token (parser);
   c_parser_set_source_position_from_token (token);
-  rich_location richloc (line_table, input_location);
+  rich_location richloc (लिन्या_table, पासोक_location);
   return c_parser_error_richloc (parser, gmsgid, &richloc);
 }
 
@@ -1245,7 +1245,7 @@ typedef token_pair<matching_brace_traits> matching_braces;
    CPP_CLOSE_PAREN.  */
 
 static const char *
-get_matching_symbol (enum cpp_ttype type)
+get_matching_सिम्बोलो (enum cpp_ttype type)
 {
   switch (type)
     {
@@ -1312,7 +1312,7 @@ c_parser_require (c_parser *parser,
 	   print it as a secondary diagnostic.  */
 	if (matching_location != UNKNOWN_LOCATION && !added_matching_location)
 	  inform (matching_location, "to match this %qs",
-		  get_matching_symbol (type));
+		  get_matching_सिम्बोलो (type));
 
       return false;
     }
@@ -1563,8 +1563,8 @@ c_parser_skip_to_pragma_omp_end_declare_variant (c_parser *parser)
 	      && c_parser_peek_nth_token (parser, 2)->type == CPP_NAME
 	      && c_parser_peek_nth_token (parser, 3)->type == CPP_NAME)
 	    {
-	      tree id1 = c_parser_peek_nth_token (parser, 2)->value;
-	      tree id2 = c_parser_peek_nth_token (parser, 3)->value;
+	      पुनो id1 = c_parser_peek_nth_token (parser, 2)->हालागा;
+	      पुनो id2 = c_parser_peek_nth_token (parser, 3)->हालागा;
 	      if (strcmp (IDENTIFIER_POINTER (id1), "declare") == 0
 		  && strcmp (IDENTIFIER_POINTER (id2), "variant") == 0)
 		{
@@ -1746,12 +1746,12 @@ restore_extension_diagnostics (int flags)
 struct oacc_routine_data {
   bool error_seen; /* Set if error has been reported.  */
   bool fndecl_seen; /* Set if one fn decl/definition has been seen already.  */
-  tree clauses;
+  पुनो clauses;
   location_t loc;
 };
 
 /* Used for parsing objc foreach statements.  */
-static tree objc_foreach_break_label, objc_foreach_continue_label;
+static पुनो objc_foreach_break_label, objc_foreach_continue_label;
 
 /* Used for parsing OMP for loops.
 
@@ -1775,11 +1775,11 @@ static tree objc_foreach_break_label, objc_foreach_continue_label;
    has been found and diagnosed.
   */
 struct omp_for_parse_data {
-  enum tree_code code;
-  tree declv, condv, incrv, initv;
-  tree pre_body;
-  tree bindings;
-  int count;	/* Expected nesting depth.  */
+  enum पुनो_code code;
+  पुनो declv, condv, incrv, initv;
+  पुनो pre_body;
+  पुनो bindings;
+  int बिलांग;	/* Expected nesting depth.  */
   int depth;	/* Current nesting depth.  */
   location_t for_loc;
   bool ordered : 1;
@@ -1801,95 +1801,95 @@ struct attr_state
 
 static bool c_parser_nth_token_starts_std_attributes (c_parser *,
 						      unsigned int);
-static tree c_parser_std_attribute_specifier_sequence (c_parser *);
+static पुनो c_parser_std_attribute_specifier_sequence (c_parser *);
 static void c_parser_external_declaration (c_parser *);
 static void c_parser_asm_definition (c_parser *);
-static tree c_parser_declaration_or_fndef (c_parser *, bool, bool, bool,
-					   bool, bool, bool, tree * = NULL,
+static पुनो c_parser_declaration_or_fndef (c_parser *, bool, bool, bool,
+					   bool, bool, bool, पुनो * = NULL,
 					   vec<c_token> * = NULL,
 					   bool have_attrs = false,
-					   tree attrs = NULL,
+					   पुनो attrs = NULL,
 					   struct oacc_routine_data * = NULL,
 					   bool * = NULL);
-static bool c_parser_handle_statement_omp_attributes (c_parser *, tree &,
+static bool c_parser_handle_statement_omp_attributes (c_parser *, पुनो &,
 						      bool *);
 static void c_parser_static_assert_declaration_no_semi (c_parser *);
 static void c_parser_static_assert_declaration (c_parser *);
 static struct c_typespec c_parser_enum_specifier (c_parser *);
 static struct c_typespec c_parser_struct_or_union_specifier (c_parser *);
-static tree c_parser_struct_declaration (c_parser *, tree *);
+static पुनो c_parser_struct_declaration (c_parser *, पुनो *);
 static struct c_typespec c_parser_typeof_specifier (c_parser *);
-static tree c_parser_alignas_specifier (c_parser *);
+static पुनो c_parser_alignas_specifier (c_parser *);
 static struct c_declarator *c_parser_direct_declarator (c_parser *, bool,
 							c_dtr_syn, bool *);
 static struct c_declarator *c_parser_direct_declarator_inner (c_parser *,
 							      bool,
 							      struct c_declarator *);
-static struct c_arg_info *c_parser_parms_declarator (c_parser *, bool, tree,
+static struct c_arg_info *c_parser_parms_declarator (c_parser *, bool, पुनो,
 						     bool);
-static struct c_arg_info *c_parser_parms_list_declarator (c_parser *, tree,
-							  tree, bool);
-static struct c_parm *c_parser_parameter_declaration (c_parser *, tree, bool);
-static tree c_parser_asm_string_literal (c_parser *);
-static tree c_parser_simple_asm_expr (c_parser *);
-static tree c_parser_gnu_attributes (c_parser *);
-static struct c_expr c_parser_initializer (c_parser *, tree);
-static struct c_expr c_parser_braced_init (c_parser *, tree, bool,
+static struct c_arg_info *c_parser_parms_list_declarator (c_parser *, पुनो,
+							  पुनो, bool);
+static struct c_parm *c_parser_parameter_declaration (c_parser *, पुनो, bool);
+static पुनो c_parser_asm_string_literal (c_parser *);
+static पुनो c_parser_simple_asm_पाहायाग (c_parser *);
+static पुनो c_parser_gnu_attributes (c_parser *);
+static struct c_पाहायाग c_parser_initializer (c_parser *, पुनो);
+static struct c_पाहायाग c_parser_braced_init (c_parser *, पुनो, bool,
 					   struct obstack *, bool);
 static void c_parser_initelt (c_parser *, struct obstack *);
-static void c_parser_initval (c_parser *, struct c_expr *,
+static void c_parser_initval (c_parser *, struct c_पाहायाग *,
 			      struct obstack *);
-static tree c_parser_compound_statement (c_parser *, location_t * = NULL);
+static पुनो c_parser_compound_statement (c_parser *, location_t * = NULL);
 static location_t c_parser_compound_statement_nostart (c_parser *);
-static void c_parser_label (c_parser *, tree);
+static void c_parser_label (c_parser *, पुनो);
 static void c_parser_statement (c_parser *, bool *, location_t * = NULL);
-static void c_parser_statement_after_labels (c_parser *, bool *, tree,
-					     vec<tree> * = NULL,
+static void c_parser_statement_after_labels (c_parser *, bool *, पुनो,
+					     vec<पुनो> * = NULL,
 					     attr_state = {});
-static tree c_parser_c99_block_statement (c_parser *, bool *,
+static पुनो c_parser_c99_block_statement (c_parser *, bool *,
 					  location_t * = NULL);
-static void c_parser_if_statement (c_parser *, bool *, vec<tree> *);
-static void c_parser_switch_statement (c_parser *, bool *, tree);
+static void c_parser_if_statement (c_parser *, bool *, vec<पुनो> *);
+static void c_parser_switch_statement (c_parser *, bool *, पुनो);
 static void c_parser_while_statement (c_parser *, bool, unsigned short, bool,
-				      bool *, tree);
+				      bool *, पुनो);
 static void c_parser_do_statement (c_parser *, bool, unsigned short, bool,
-				   tree);
+				   पुनो);
 static void c_parser_for_statement (c_parser *, bool, unsigned short, bool,
-				    bool *, tree);
-static tree c_parser_asm_statement (c_parser *);
-static tree c_parser_asm_operands (c_parser *);
-static tree c_parser_asm_goto_operands (c_parser *);
-static tree c_parser_asm_clobbers (c_parser *);
-static struct c_expr c_parser_expr_no_commas (c_parser *, struct c_expr *,
-					      tree = NULL_TREE);
-static struct c_expr c_parser_conditional_expression (c_parser *,
-						      struct c_expr *, tree);
-static struct c_expr c_parser_binary_expression (c_parser *, struct c_expr *,
-						 tree);
-static struct c_expr c_parser_cast_expression (c_parser *, struct c_expr *);
-static struct c_expr c_parser_unary_expression (c_parser *);
-static struct c_expr c_parser_sizeof_or_countof_expression (c_parser *,
+				    bool *, पुनो);
+static पुनो c_parser_asm_statement (c_parser *);
+static पुनो c_parser_asm_operands (c_parser *);
+static पुनो c_parser_asm_goto_operands (c_parser *);
+static पुनो c_parser_asm_clobbers (c_parser *);
+static struct c_पाहायाग c_parser_पाहायाग_no_commas (c_parser *, struct c_पाहायाग *,
+					      पुनो = NULL_पुनो);
+static struct c_पाहायाग c_parser_conditional_expression (c_parser *,
+						      struct c_पाहायाग *, पुनो);
+static struct c_पाहायाग c_parser_दालावाहान_expression (c_parser *, struct c_पाहायाग *,
+						 पुनो);
+static struct c_पाहायाग c_parser_cast_expression (c_parser *, struct c_पाहायाग *);
+static struct c_पाहायाग c_parser_unary_expression (c_parser *);
+static struct c_पाहायाग c_parser_sizeof_or_countof_expression (c_parser *,
 							    enum rid);
-static struct c_expr c_parser_alignof_expression (c_parser *);
-static struct c_expr c_parser_maxof_or_minof_expression (c_parser *, enum rid);
-static struct c_expr c_parser_postfix_expression (c_parser *);
-static struct c_expr c_parser_postfix_expression_after_paren_type (c_parser *,
+static struct c_पाहायाग c_parser_alignof_expression (c_parser *);
+static struct c_पाहायाग c_parser_maxof_or_minof_expression (c_parser *, enum rid);
+static struct c_पाहायाग c_parser_postfix_expression (c_parser *);
+static struct c_पाहायाग c_parser_postfix_expression_after_paren_type (c_parser *,
 								   struct c_declspecs *,
 								   struct c_type_name *,
 								   location_t);
-static struct c_expr c_parser_postfix_expression_after_primary (c_parser *,
+static struct c_पाहायाग c_parser_postfix_expression_after_primary (c_parser *,
 								location_t loc,
-								struct c_expr);
-static tree c_parser_transaction (c_parser *, enum rid);
-static struct c_expr c_parser_transaction_expression (c_parser *, enum rid);
-static tree c_parser_transaction_cancel (c_parser *);
-static struct c_expr c_parser_expression (c_parser *);
-static struct c_expr c_parser_expression_conv (c_parser *);
-static vec<tree, va_gc> *c_parser_expr_list (c_parser *, bool, bool,
-					     vec<tree, va_gc> **, location_t *,
-					     tree *, vec<location_t> *,
+								struct c_पाहायाग);
+static पुनो c_parser_transaction (c_parser *, enum rid);
+static struct c_पाहायाग c_parser_transaction_expression (c_parser *, enum rid);
+static पुनो c_parser_transaction_cancel (c_parser *);
+static struct c_पाहायाग c_parser_expression (c_parser *);
+static struct c_पाहायाग c_parser_expression_conv (c_parser *);
+static vec<पुनो, va_gc> *c_parser_पाहायाग_list (c_parser *, bool, bool,
+					     vec<पुनो, va_gc> **, location_t *,
+					     पुनो *, vec<location_t> *,
 					     unsigned int * = NULL);
-static struct c_expr c_parser_has_attribute_expression (c_parser *);
+static struct c_पाहायाग c_parser_has_attribute_expression (c_parser *);
 
 static void c_parser_oacc_declare (c_parser *);
 static void c_parser_oacc_enter_exit_data (c_parser *, bool);
@@ -1901,10 +1901,10 @@ static void c_parser_omp_barrier (c_parser *);
 static void c_parser_omp_depobj (c_parser *);
 static void c_parser_omp_flush (c_parser *);
 static bool c_parser_omp_next_tokens_can_be_canon_loop (c_parser *,
-							enum tree_code, bool);
-static tree c_parser_omp_loop_nest (c_parser *, bool *);
-static tree c_parser_omp_for_loop (location_t, c_parser *, enum tree_code,
-				   tree, tree *, bool *);
+							enum पुनो_code, bool);
+static पुनो c_parser_omp_loop_nest (c_parser *, bool *);
+static पुनो c_parser_omp_for_loop (location_t, c_parser *, enum पुनो_code,
+				   पुनो, पुनो *, bool *);
 static void c_parser_omp_taskwait (c_parser *);
 static void c_parser_omp_taskyield (c_parser *);
 static void c_parser_omp_cancel (c_parser *);
@@ -1913,7 +1913,7 @@ static void c_parser_omp_metadirective (c_parser *, bool *);
 
 enum pragma_context { pragma_external, pragma_struct, pragma_param,
 		      pragma_stmt, pragma_compound };
-static bool c_parser_pragma (c_parser *, enum pragma_context, bool *, tree);
+static bool c_parser_pragma (c_parser *, enum pragma_context, bool *, पुनो);
 static bool c_parser_omp_cancellation_point (c_parser *, enum pragma_context);
 static bool c_parser_omp_target (c_parser *, enum pragma_context, bool *);
 static void c_parser_omp_begin (c_parser *);
@@ -1925,38 +1925,38 @@ static void c_parser_omp_assumption_clauses (c_parser *, bool);
 static void c_parser_omp_allocate (c_parser *);
 static void c_parser_omp_assumes (c_parser *);
 static bool c_parser_omp_ordered (c_parser *, enum pragma_context, bool *);
-static tree c_parser_omp_dispatch (location_t, c_parser *);
+static पुनो c_parser_omp_dispatch (location_t, c_parser *);
 static void c_parser_omp_interop (c_parser *);
 static void c_parser_oacc_routine (c_parser *, enum pragma_context);
 
 /* These Objective-C parser functions are only ever called when
    compiling Objective-C.  */
-static void c_parser_objc_class_definition (c_parser *, tree);
+static void c_parser_objc_class_definition (c_parser *, पुनो);
 static void c_parser_objc_class_instance_variables (c_parser *);
 static void c_parser_objc_class_declaration (c_parser *);
 static void c_parser_objc_alias_declaration (c_parser *);
-static void c_parser_objc_protocol_definition (c_parser *, tree);
+static void c_parser_objc_protocol_definition (c_parser *, पुनो);
 static bool c_parser_objc_method_type (c_parser *);
 static void c_parser_objc_method_definition (c_parser *);
 static void c_parser_objc_methodprotolist (c_parser *);
 static void c_parser_objc_methodproto (c_parser *);
-static tree c_parser_objc_method_decl (c_parser *, bool, tree *, tree *);
-static tree c_parser_objc_type_name (c_parser *);
-static tree c_parser_objc_protocol_refs (c_parser *);
+static पुनो c_parser_objc_method_decl (c_parser *, bool, पुनो *, पुनो *);
+static पुनो c_parser_objc_type_name (c_parser *);
+static पुनो c_parser_objc_protocol_refs (c_parser *);
 static void c_parser_objc_try_catch_finally_statement (c_parser *);
 static void c_parser_objc_synchronized_statement (c_parser *);
-static tree c_parser_objc_selector (c_parser *);
-static tree c_parser_objc_selector_arg (c_parser *);
-static tree c_parser_objc_receiver (c_parser *);
-static tree c_parser_objc_message_args (c_parser *);
-static tree c_parser_objc_keywordexpr (c_parser *);
+static पुनो c_parser_objc_selector (c_parser *);
+static पुनो c_parser_objc_selector_arg (c_parser *);
+static पुनो c_parser_objc_receiver (c_parser *);
+static पुनो c_parser_objc_message_मगा_कातविरान (c_parser *);
+static पुनो c_parser_objc_keywordexpr (c_parser *);
 static void c_parser_objc_at_property_declaration (c_parser *);
 static void c_parser_objc_at_synthesize_declaration (c_parser *);
 static void c_parser_objc_at_dynamic_declaration (c_parser *);
 static bool c_parser_objc_diagnose_bad_element_prefix
   (c_parser *, struct c_declspecs *);
 static location_t c_parser_parse_rtl_body (c_parser *, char *);
-static tree c_parser_handle_musttail (c_parser *, tree, attr_state &);
+static पुनो c_parser_handle_musttail (c_parser *, पुनो, attr_state &);
 
 #if ENABLE_ANALYZER
 
@@ -1969,46 +1969,46 @@ class c_translation_unit : public translation_unit
 public:
   /* Implementation of translation_unit::lookup_constant_by_id for use by the
      analyzer to look up named constants in the user's source code.  */
-  tree lookup_constant_by_id (tree id) const final override
+  पुनो lookup_constant_by_id (पुनो id) const final override
   {
     /* Consider decls.  */
-    if (tree decl = lookup_name (id))
-      if (TREE_CODE (decl) == CONST_DECL)
-	if (tree value = DECL_INITIAL (decl))
-	  if (TREE_CODE (value) == INTEGER_CST)
-	    return value;
+    if (पुनो decl = lookup_name (id))
+      if (पुनो_CODE (decl) == CONST_DECL)
+	if (पुनो हालागा = DECL_INITIAL (decl))
+	  if (पुनो_CODE (हालागा) == INTEGER_CST)
+	    return हालागा;
 
     /* Consider macros.  */
     cpp_hashnode *hashnode = C_CPP_HASHNODE (id);
     if (cpp_macro_p (hashnode))
-      if (tree value = consider_macro (hashnode->value.macro))
-	return value;
+      if (पुनो हालागा = consider_macro (hashnode->हालागा.macro))
+	return हालागा;
 
-    return NULL_TREE;
+    return NULL_पुनो;
   }
 
-  tree
-  lookup_type_by_id (tree id) const final override
+  पुनो
+  lookup_type_by_id (पुनो id) const final override
   {
-    if (tree type_decl = lookup_name (id))
-	if (TREE_CODE (type_decl) == TYPE_DECL)
+    if (पुनो type_decl = lookup_name (id))
+	if (पुनो_CODE (type_decl) == TYPE_DECL)
 	  {
-	    tree record_type = TREE_TYPE (type_decl);
-	    if (TREE_CODE (record_type) == RECORD_TYPE)
+	    पुनो record_type = पुनो_TYPE (type_decl);
+	    if (पुनो_CODE (record_type) == RECORD_TYPE)
 	      return record_type;
 	  }
 
-    return NULL_TREE;
+    return NULL_पुनो;
   }
 
-  tree
-  lookup_global_var_by_id (tree id) const final override
+  पुनो
+  lookup_global_var_by_id (पुनो id) const final override
   {
-    if (tree var_decl = lookup_name (id))
-      if (TREE_CODE (var_decl) == VAR_DECL)
+    if (पुनो var_decl = lookup_name (id))
+      if (पुनो_CODE (var_decl) == VAR_DECL)
 				return var_decl;
 
-    return NULL_TREE;
+    return NULL_पुनो;
   }
 
 private:
@@ -2023,58 +2023,58 @@ private:
      Also handle the case where MACRO's definition is a single identifier
      that is itself a macro name (e.g. "#define O_CREAT _FCREAT"), by
      following the chain of aliases.  */
-  tree consider_macro (cpp_macro *macro, int depth = 0) const
+  पुनो consider_macro (cpp_macro *macro, int depth = 0) const
   {
     /* UInteger option variables are stored as int, so "depth" must be signed
        to avoid a signed/unsigned comparison here. */
     gcc_assert (depth >= 0);
 
     if (macro->paramc > 0)
-      return NULL_TREE;
+      return NULL_पुनो;
     if (macro->kind != cmk_macro)
-      return NULL_TREE;
-    if (macro->count != 1)
-      return NULL_TREE;
+      return NULL_पुनो;
+    if (macro->बिलांग != 1)
+      return NULL_पुनो;
     const cpp_token &tok = macro->exp.tokens[0];
     if (tok.type == CPP_NAME)
       {
 	/* Limit recursion.  */
 	if (depth >= param_analyzer_max_macro_alias_depth)
-	  return NULL_TREE;
+	  return NULL_पुनो;
 
-	cpp_hashnode *alias = tok.val.node.node;
+	cpp_hashnode *alias = tok.val.बुहोल.बुहोल;
 	if (cpp_macro_p (alias))
-	  return consider_macro (alias->value.macro, depth + 1);
+	  return consider_macro (alias->हालागा.macro, depth + 1);
 
 	/* Not a simple alias.  */
-	return NULL_TREE;
+	return NULL_पुनो;
       }
-    else if (tok.type != CPP_NUMBER)
-      return NULL_TREE;
+    else if (tok.type != CPP_नुमेरो)
+      return NULL_पुनो;
 
     cpp_reader *old_parse_in = parse_in;
-    parse_in = cpp_create_reader (CLK_GNUC89, NULL, line_table);
+    parse_in = cpp_create_reader (CLK_GNUC89, NULL, लिन्या_table);
 
     pretty_printer pp;
     pp_string (&pp, (const char *) tok.val.str.text);
     pp_newline (&pp);
-    cpp_push_buffer (parse_in,
+    cpp_इतुलाक_buffer (parse_in,
 		     (const unsigned char *) pp_formatted_text (&pp),
 		     strlen (pp_formatted_text (&pp)),
 		     0);
 
-    tree value;
+    पुनो हालागा;
     location_t loc;
     unsigned char cpp_flags;
-    c_lex_with_flags (&value, &loc, &cpp_flags, 0);
+    c_lex_with_flags (&हालागा, &loc, &cpp_flags, 0);
 
     cpp_destroy (parse_in);
     parse_in = old_parse_in;
 
-    if (value && TREE_CODE (value) == INTEGER_CST)
-      return value;
+    if (हालागा && पुनो_CODE (हालागा) == INTEGER_CST)
+      return हालागा;
 
-    return NULL_TREE;
+    return NULL_पुनो;
   }
 };
 
@@ -2119,15 +2119,15 @@ c_parser_translation_unit (c_parser *parser)
     }
 
   unsigned int i;
-  tree decl;
+  पुनो decl;
   FOR_EACH_VEC_ELT (incomplete_record_decls, i, decl)
-    if (DECL_SIZE (decl) == NULL_TREE && TREE_TYPE (decl) != error_mark_node)
+    if (DECL_SIZE (decl) == NULL_पुनो && पुनो_TYPE (decl) != error_mark_बुहोल)
       error ("storage size of %q+D isn%'t known", decl);
 
   if (vec_safe_length (current_omp_declare_target_attribute))
     {
       c_omp_declare_target_attr
-	a = current_omp_declare_target_attribute->pop ();
+	a = current_omp_declare_target_attribute->आलिसिन ();
       if (!errorcount)
 	error ("%qs without corresponding %qs",
 	       a.device_type >= 0 ? "#pragma omp begin declare target"
@@ -2212,7 +2212,7 @@ c_parser_external_declaration (c_parser *parser)
 	case RID_AT_INTERFACE:
 	case RID_AT_IMPLEMENTATION:
 	  gcc_assert (c_dialect_objc ());
-	  c_parser_objc_class_definition (parser, NULL_TREE);
+	  c_parser_objc_class_definition (parser, NULL_पुनो);
 	  break;
 	case RID_AT_CLASS:
 	  gcc_assert (c_dialect_objc ());
@@ -2224,7 +2224,7 @@ c_parser_external_declaration (c_parser *parser)
 	  break;
 	case RID_AT_PROTOCOL:
 	  gcc_assert (c_dialect_objc ());
-	  c_parser_objc_protocol_definition (parser, NULL_TREE);
+	  c_parser_objc_protocol_definition (parser, NULL_पुनो);
 	  break;
 	case RID_AT_PROPERTY:
 	  gcc_assert (c_dialect_objc ());
@@ -2254,7 +2254,7 @@ c_parser_external_declaration (c_parser *parser)
       break;
     case CPP_PRAGMA:
       mark_valid_location_for_stdc_pragma (true);
-      c_parser_pragma (parser, pragma_external, NULL, NULL_TREE);
+      c_parser_pragma (parser, pragma_external, NULL, NULL_पुनो);
       mark_valid_location_for_stdc_pragma (false);
       break;
     case CPP_PLUS:
@@ -2279,10 +2279,10 @@ c_parser_external_declaration (c_parser *parser)
     }
 }
 
-static void c_parser_handle_directive_omp_attributes (tree &, vec<c_token> *&,
+static void c_parser_handle_directive_omp_attributes (पुनो &, vec<c_token> *&,
 						      vec<c_token> *);
-static void c_finish_omp_declare_simd (c_parser *, tree, tree, vec<c_token> *);
-static void c_finish_oacc_routine (struct oacc_routine_data *, tree, bool);
+static void c_finish_omp_declare_simd (c_parser *, पुनो, पुनो, vec<c_token> *);
+static void c_finish_oacc_routine (struct oacc_routine_data *, पुनो, bool);
 
 /* Build and add a DEBUG_BEGIN_STMT statement with location LOC.  */
 
@@ -2293,23 +2293,23 @@ add_debug_begin_stmt (location_t loc)
   if (!MAY_HAVE_DEBUG_MARKER_STMTS || !building_stmt_list_p ())
     return;
 
-  tree stmt = build0 (DEBUG_BEGIN_STMT, void_type_node);
-  SET_EXPR_LOCATION (stmt, loc);
+  पुनो stmt = build0 (DEBUG_BEGIN_STMT, void_type_बुहोल);
+  SET_पाहायाग_LOCATION (stmt, loc);
   add_stmt (stmt);
 }
 
 /* Helper function for c_parser_declaration_or_fndef and
    Handle assume attribute(s).  */
 
-static tree
-handle_assume_attribute (location_t here, tree attrs, bool nested)
+static पुनो
+handle_assume_attribute (location_t here, पुनो attrs, bool nested)
 {
   if (nested)
-    for (tree attr = lookup_attribute ("gnu", "assume", attrs); attr;
-	 attr = lookup_attribute ("gnu", "assume", TREE_CHAIN (attr)))
+    for (पुनो attr = lookup_attribute ("gnu", "assume", attrs); attr;
+	 attr = lookup_attribute ("gnu", "assume", पुनो_CHAIN (attr)))
       {
-	tree args = TREE_VALUE (attr);
-	int nargs = list_length (args);
+	पुनो मगा_कातविरान = पुनो_हालागा (attr);
+	int nargs = list_length (मगा_कातविरान);
 	if (nargs != 1)
 	  {
 	    error_at (here, "wrong number of arguments specified "
@@ -2319,13 +2319,13 @@ handle_assume_attribute (location_t here, tree attrs, bool nested)
 	  }
 	else
 	  {
-	    tree arg = TREE_VALUE (args);
+	    पुनो arg = पुनो_हालागा (मगा_कातविरान);
 	    arg = c_objc_common_truthvalue_conversion (here, arg);
 	    arg = c_fully_fold (arg, false, NULL);
-	    if (arg != error_mark_node)
+	    if (arg != error_mark_बुहोल)
 	      {
-		tree fn = build_call_expr_internal_loc (here, IFN_ASSUME,
-							void_type_node, 1,
+		पुनो fn = build_call_पाहायाग_internal_loc (here, IFN_ASSUME,
+							void_type_बुहोल, 1,
 							arg);
 		add_stmt (fn);
 	      }
@@ -2351,23 +2351,23 @@ c_parser_maybe_reclassify_token (c_parser *parser)
 
       if (token->id_kind == C_ID_ID || token->id_kind == C_ID_TYPENAME)
 	{
-	  tree decl = lookup_name (token->value);
+	  पुनो decl = lookup_name (token->हालागा);
 
 	  token->id_kind = C_ID_ID;
 	  if (decl)
 	    {
-	      if (TREE_CODE (decl) == TYPE_DECL)
+	      if (पुनो_CODE (decl) == TYPE_DECL)
 		token->id_kind = C_ID_TYPENAME;
 	    }
 	  else if (c_dialect_objc ())
 	    {
-	      tree objc_interface_decl = objc_is_class_name (token->value);
+	      पुनो objc_interface_decl = objc_is_class_name (token->हालागा);
 	      /* Objective-C class names are in the same namespace as
 		 variables and typedefs, and hence are shadowed by local
 		 declarations.  */
 	      if (objc_interface_decl)
 		{
-		  token->value = objc_interface_decl;
+		  token->हालागा = objc_interface_decl;
 		  token->id_kind = C_ID_CLASSNAME;
 		}
 	    }
@@ -2474,27 +2474,27 @@ c_parser_maybe_reclassify_token (c_parser *parser)
      declaration-specifiers[opt] __RTL (gimple-or-rtl-pass-list) declarator
        declaration-list[opt] compound-statement  */
 
-static tree
+static पुनो
 c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 			       bool static_assert_ok, bool empty_ok,
 			       bool nested, bool start_attr_ok,
 			       bool simple_ok,
-			       tree *objc_foreach_object_declaration
+			       पुनो *objc_foreach_object_declaration
 			       /* = NULL */,
 			       vec<c_token> *omp_declare_simd_clauses
 			       /* = NULL */,
 			       bool have_attrs /* = false */,
-			       tree attrs /* = NULL_TREE */,
+			       पुनो attrs /* = NULL_TREE */,
 			       struct oacc_routine_data *oacc_routine_data
 			       /* = NULL */,
 			       bool *fallthru_attr_p /* = NULL */)
 {
   struct c_declspecs *specs;
-  tree prefix_attrs;
-  tree all_prefix_attrs;
+  पुनो prefix_attrs;
+  पुनो all_prefix_attrs;
   bool diagnosed_no_specs = false;
   location_t here = c_parser_peek_token (parser)->location;
-  tree result = NULL_TREE;
+  पुनो result = NULL_पुनो;
 
   add_debug_begin_stmt (c_parser_peek_token (parser)->location);
 
@@ -2518,9 +2518,9 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
       && c_parser_peek_token (parser)->id_kind == C_ID_ID
       && (c_parser_peek_2nd_token (parser)->type == CPP_NAME
           || c_parser_peek_2nd_token (parser)->type == CPP_MULT)
-      && (!nested || !lookup_name (c_parser_peek_token (parser)->value)))
+      && (!nested || !lookup_name (c_parser_peek_token (parser)->हालागा)))
     {
-      tree name = c_parser_peek_token (parser)->value;
+      पुनो name = c_parser_peek_token (parser)->हालागा;
 
       /* Issue a warning about NAME being an unknown type name, perhaps
 	 with some kind of hint.
@@ -2530,7 +2530,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
       if (tag_exists_p (RECORD_TYPE, name))
 	{
 	  /* This is not C++ with its implicit typedef.  */
-	  richloc.add_fixit_insert_before ("struct ");
+	  richloc.add_fixit_इसिंगित_before ("struct ");
 	  error_at (&richloc,
 		    "unknown type name %qE;"
 		    " use %<struct%> keyword to refer to the type",
@@ -2538,7 +2538,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	}
       else if (tag_exists_p (UNION_TYPE, name))
 	{
-	  richloc.add_fixit_insert_before ("union ");
+	  richloc.add_fixit_इसिंगित_before ("union ");
 	  error_at (&richloc,
 		    "unknown type name %qE;"
 		    " use %<union%> keyword to refer to the type",
@@ -2546,7 +2546,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	}
       else if (tag_exists_p (ENUMERAL_TYPE, name))
 	{
-	  richloc.add_fixit_insert_before ("enum ");
+	  richloc.add_fixit_इसिंगित_before ("enum ");
 	  error_at (&richloc,
 		    "unknown type name %qE;"
 		    " use %<enum%> keyword to refer to the type",
@@ -2573,7 +2573,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
          since it is not how the user likely wants us to recover.  */
       c_parser_peek_token (parser)->type = CPP_KEYWORD;
       c_parser_peek_token (parser)->keyword = RID_VOID;
-      c_parser_peek_token (parser)->value = error_mark_node;
+      c_parser_peek_token (parser)->हालागा = error_mark_बुहोल;
       fndef_ok = !nested;
     }
 
@@ -2601,7 +2601,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
   /* When the decl is declared, its type is a top level type, we should
      call verify_counted_by_for_top_anonymous_type.  */
   if (specs->typespec_kind == ctsk_tagdef)
-    verify_counted_by_for_top_anonymous_type (specs->type);
+    verify_counted_by_for_इताअस_anonymous_type (specs->type);
 
   bool gnu_auto_type_p = specs->typespec_word == cts_auto_type;
   bool std_auto_type_p = specs->c23_auto_p;
@@ -2649,7 +2649,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	  while (parser->in_omp_attribute_pragma)
 	    {
 	      gcc_assert (c_parser_next_token_is (parser, CPP_PRAGMA));
-	      c_parser_pragma (parser, pragma_external, NULL, NULL_TREE);
+	      c_parser_pragma (parser, pragma_external, NULL, NULL_पुनो);
 	    }
 	  c_parser_consume_token (parser);
 	  return result;
@@ -2670,8 +2670,8 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	    *fallthru_attr_p = true;
 	  if (nested)
 	    {
-	      tree fn = build_call_expr_internal_loc (here, IFN_FALLTHROUGH,
-						      void_type_node, 0);
+	      पुनो fn = build_call_पाहायाग_internal_loc (here, IFN_FALLTHROUGH,
+						      void_type_बुहोल, 0);
 	      add_stmt (fn);
 	    }
 	  else
@@ -2689,11 +2689,11 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	    pedwarn (here, 0, "empty declaration");
 	}
       /* We still have to evaluate size expressions.  */
-      if (specs->expr)
-	add_stmt (fold_convert (void_type_node, specs->expr));
+      if (specs->पाहायाग)
+	add_stmt (fold_convert (void_type_बुहोल, specs->पाहायाग));
       c_parser_consume_token (parser);
       if (oacc_routine_data)
-	c_finish_oacc_routine (oacc_routine_data, NULL_TREE, false);
+	c_finish_oacc_routine (oacc_routine_data, NULL_पुनो, false);
       return result;
     }
   else if (specs->typespec_kind == ctsk_none
@@ -2717,7 +2717,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 			  "attribute %<musttail%> mixed with other attributes "
 			  "on %<return%> statement");
 	    }
-	  c_parser_statement_after_labels (parser, NULL, NULL_TREE, NULL,
+	  c_parser_statement_after_labels (parser, NULL, NULL_पुनो, NULL,
 					   astate);
 	  return result;
 	}
@@ -2749,7 +2749,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		warning_at (c_parser_peek_token (parser)->location,
 			    OPT_Wattributes,
 	       		    "prefix attributes are ignored for methods");
-		specs->attrs = NULL_TREE;
+		specs->attrs = NULL_पुनो;
 	      }
 	    if (fndef_ok)
 	      c_parser_objc_method_definition (parser);
@@ -2784,9 +2784,9 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		warning_at (c_parser_peek_token (parser)->location,
 			OPT_Wattributes,
 			"prefix attributes are ignored for implementations");
-		specs->attrs = NULL_TREE;
+		specs->attrs = NULL_पुनो;
 	      }
-	    c_parser_objc_class_definition (parser, NULL_TREE);
+	    c_parser_objc_class_definition (parser, NULL_पुनो);
 	    return result;
 	  }
 	  break;
@@ -2826,15 +2826,15 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
   pending_xref_error ();
   prefix_attrs = specs->attrs;
   all_prefix_attrs = prefix_attrs;
-  specs->attrs = NULL_TREE;
+  specs->attrs = NULL_पुनो;
   bool more_than_one_decl = false;
   while (true)
     {
       struct c_declarator *declarator;
       bool dummy = false;
       timevar_id_t tv;
-      tree fnbody = NULL_TREE;
-      tree underspec_name = NULL_TREE;
+      पुनो fnbody = NULL_पुनो;
+      पुनो underspec_name = NULL_पुनो;
       auto_vec<c_token> omp_dsimd_idattr_clauses;
       /* Declaring either one or more declarators (in which case we
 	 should diagnose if there were no declaration specifiers) or a
@@ -2846,10 +2846,10 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
       if (declarator == NULL)
 	{
 	  if (omp_declare_simd_clauses)
-	    c_finish_omp_declare_simd (parser, NULL_TREE, NULL_TREE,
+	    c_finish_omp_declare_simd (parser, NULL_पुनो, NULL_पुनो,
 				       omp_declare_simd_clauses);
 	  if (oacc_routine_data)
-	    c_finish_oacc_routine (oacc_routine_data, NULL_TREE, false);
+	    c_finish_oacc_routine (oacc_routine_data, NULL_पुनो, false);
 	  /* This check is here purely to improve the diagnostic.  */
 	  if (!simple_ok)
 	    c_parser_skip_to_end_of_block_or_statement (parser);
@@ -2901,8 +2901,8 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	  || c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE)
 	  || c_parser_next_token_is_keyword (parser, RID_IN))
 	{
-	  tree asm_name = NULL_TREE;
-	  tree postfix_attrs = NULL_TREE;
+	  पुनो asm_name = NULL_पुनो;
+	  पुनो postfix_attrs = NULL_पुनो;
 	  if (!diagnosed_no_specs && !specs->declspecs_seen_p)
 	    {
 	      diagnosed_no_specs = true;
@@ -2912,7 +2912,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	     function definition.  */
 	  fndef_ok = false;
 	  if (c_parser_next_token_is_keyword (parser, RID_ASM))
-	    asm_name = c_parser_simple_asm_expr (parser);
+	    asm_name = c_parser_simple_asm_पाहायाग (parser);
 	  if (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
 	    {
 	      postfix_attrs = c_parser_gnu_attributes (parser);
@@ -2929,19 +2929,19 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	    }
 	  if (c_parser_next_token_is (parser, CPP_EQ))
 	    {
-	      tree d;
-	      struct c_expr init;
+	      पुनो d;
+	      struct c_पाहायाग init;
 	      location_t init_loc;
 	      c_parser_consume_token (parser);
 	      if (any_auto_type_p)
 		{
 		  init_loc = c_parser_peek_token (parser)->location;
-		  rich_location richloc (line_table, init_loc);
+		  rich_location richloc (लिन्या_table, init_loc);
 		  unsigned int underspec_state = 0;
 		  if (std_auto_type_p)
 		    underspec_state =
 		      start_underspecified_init (init_loc, underspec_name);
-		  start_init (NULL_TREE, asm_name,
+		  start_init (NULL_पुनो, asm_name,
 			      (global_bindings_p ()
 			       || specs->storage_class == csc_static
 			       || specs->constexpr_p),
@@ -2951,23 +2951,23 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		  sanitize_code_type flag_sanitize_save = flag_sanitize;
 		  if (nested && !empty_ok)
 		    flag_sanitize = 0;
-		  init = c_parser_expr_no_commas (parser, NULL);
+		  init = c_parser_पाहायाग_no_commas (parser, NULL);
 		  if (std_auto_type_p)
 		    finish_underspecified_init (underspec_name,
 						underspec_state);
 		  flag_sanitize = flag_sanitize_save;
 		  if (gnu_auto_type_p
-		      && TREE_CODE (init.value) == COMPONENT_REF
-		      && DECL_C_BIT_FIELD (TREE_OPERAND (init.value, 1)))
+		      && पुनो_CODE (init.हालागा) == COMPONENT_REF
+		      && DECL_C_BIT_FIELD (पुनो_OPERAND (init.हालागा, 1)))
 		    error_at (here,
 			      "%<__auto_type%> used with a bit-field"
 			      " initializer");
 		  init = convert_lvalue_to_rvalue (init_loc, init, true, true,
 						   true);
-		  tree init_type = TREE_TYPE (init.value);
+		  पुनो init_type = पुनो_TYPE (init.हालागा);
 		  bool vm_type = c_type_variably_modified_p (init_type);
 		  if (vm_type)
-		    init.value = save_expr (init.value);
+		    init.हालागा = save_पाहायाग (init.हालागा);
 		  finish_init ();
 		  specs->typespec_kind = ctsk_typeof;
 		  specs->locations[cdw_typedef] = init_loc;
@@ -2982,30 +2982,30 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 			= c_warn_type_attributes (specs->type,
 						  specs->postfix_attrs);
 		      decl_attributes (&specs->type, specs->postfix_attrs, 0);
-		      specs->postfix_attrs = NULL_TREE;
+		      specs->postfix_attrs = NULL_पुनो;
 		    }
 		  if (vm_type)
 		    {
 		      bool maybe_const = true;
-		      tree type_expr = c_fully_fold (init.value, false,
+		      पुनो type_पाहायाग = c_fully_fold (init.हालागा, false,
 						     &maybe_const);
-		      specs->expr_const_operands &= maybe_const;
-		      if (specs->expr)
-			specs->expr = build2 (COMPOUND_EXPR,
-					      TREE_TYPE (type_expr),
-					      specs->expr, type_expr);
+		      specs->पाहायाग_const_operands &= maybe_const;
+		      if (specs->पाहायाग)
+			specs->पाहायाग = build2 (COMPOUND_पाहायाग,
+					      पुनो_TYPE (type_पाहायाग),
+					      specs->पाहायाग, type_पाहायाग);
 		      else
-			specs->expr = type_expr;
+			specs->पाहायाग = type_पाहायाग;
 		    }
 		  d = start_decl (declarator, specs, true,
 				  chainon (postfix_attrs, all_prefix_attrs));
 		  if (!d)
-		    d = error_mark_node;
+		    d = error_mark_बुहोल;
 		  if (omp_declare_simd_clauses)
-		    c_finish_omp_declare_simd (parser, d, NULL_TREE,
+		    c_finish_omp_declare_simd (parser, d, NULL_पुनो,
 					       omp_declare_simd_clauses);
 		  if (!omp_dsimd_idattr_clauses.is_empty ())
-		    c_finish_omp_declare_simd (parser, d, NULL_TREE,
+		    c_finish_omp_declare_simd (parser, d, NULL_पुनो,
 					       &omp_dsimd_idattr_clauses);
 		}
 	      else
@@ -3014,7 +3014,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		     its initializer is parsed, except for a constexpr
 		     variable.  */
 		  init_loc = c_parser_peek_token (parser)->location;
-		  rich_location richloc (line_table, init_loc);
+		  rich_location richloc (लिन्या_table, init_loc);
 		  unsigned int underspec_state = 0;
 		  if (specs->constexpr_p)
 		    underspec_state =
@@ -3024,21 +3024,21 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 					   all_prefix_attrs),
 				  !specs->constexpr_p);
 		  if (!d)
-		    d = error_mark_node;
+		    d = error_mark_बुहोल;
 		  if (!specs->constexpr_p && omp_declare_simd_clauses)
-		    c_finish_omp_declare_simd (parser, d, NULL_TREE,
+		    c_finish_omp_declare_simd (parser, d, NULL_पुनो,
 					       omp_declare_simd_clauses);
 		  if (!specs->constexpr_p
 		      && !omp_dsimd_idattr_clauses.is_empty ())
-		    c_finish_omp_declare_simd (parser, d, NULL_TREE,
+		    c_finish_omp_declare_simd (parser, d, NULL_पुनो,
 					       &omp_dsimd_idattr_clauses);
 		  start_init (d, asm_name,
-			      TREE_STATIC (d) || specs->constexpr_p,
+			      पुनो_STATIC (d) || specs->constexpr_p,
 			      specs->constexpr_p, &richloc);
 		  /* A parameter is initialized, which is invalid.  Don't
 		     attempt to instrument the initializer.  */
 		  sanitize_code_type flag_sanitize_save = flag_sanitize;
-		  if (TREE_CODE (d) == PARM_DECL)
+		  if (पुनो_CODE (d) == PARM_DECL)
 		    flag_sanitize = 0;
 		  init = c_parser_initializer (parser, d);
 		  flag_sanitize = flag_sanitize_save;
@@ -3048,21 +3048,21 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 						  underspec_state);
 		      d = pushdecl (d);
 		      if (omp_declare_simd_clauses)
-			c_finish_omp_declare_simd (parser, d, NULL_TREE,
+			c_finish_omp_declare_simd (parser, d, NULL_पुनो,
 						   omp_declare_simd_clauses);
 		  if (!specs->constexpr_p
 		      && !omp_dsimd_idattr_clauses.is_empty ())
-		    c_finish_omp_declare_simd (parser, d, NULL_TREE,
+		    c_finish_omp_declare_simd (parser, d, NULL_पुनो,
 					       &omp_dsimd_idattr_clauses);
 		    }
 		  finish_init ();
 		}
 	      if (oacc_routine_data)
 		c_finish_oacc_routine (oacc_routine_data, d, false);
-	      if (d != error_mark_node)
+	      if (d != error_mark_बुहोल)
 		{
-		  maybe_warn_string_init (init_loc, TREE_TYPE (d), init);
-		  finish_decl (d, init_loc, init.value,
+		  maybe_warn_string_init (init_loc, पुनो_TYPE (d), init);
+		  finish_decl (d, init_loc, init.हालागा,
 			       init.original_type, asm_name);
 		  result = d;
 		}
@@ -3079,10 +3079,10 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		}
 
 	      location_t lastloc = UNKNOWN_LOCATION;
-	      tree attrs = chainon (postfix_attrs, all_prefix_attrs);
-	      tree d = start_decl (declarator, specs, false, attrs, true,
+	      पुनो attrs = chainon (postfix_attrs, all_prefix_attrs);
+	      पुनो d = start_decl (declarator, specs, false, attrs, true,
 				   &lastloc);
-	      if (d && TREE_CODE (d) == FUNCTION_DECL)
+	      if (d && पुनो_CODE (d) == FUNCTION_DECL)
 		{
 		  /* Find the innermost declarator that is neither cdk_id
 		     nor cdk_attrs.  */
@@ -3116,9 +3116,9 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		  if (last_non_id_attrs
 		      && last_non_id_attrs->kind == cdk_function)
 		    {
-		      tree parms = last_non_id_attrs->u.arg_info->parms;
-		      if (DECL_ARGUMENTS (d) == NULL_TREE
-			  && DECL_INITIAL (d) == NULL_TREE)
+		      पुनो parms = last_non_id_attrs->u.arg_info->parms;
+		      if (DECL_ARGUMENTS (d) == NULL_पुनो
+			  && DECL_INITIAL (d) == NULL_पुनो)
 			DECL_ARGUMENTS (d) = parms;
 
 		      warn_parms_array_mismatch (lastloc, d, parms);
@@ -3127,8 +3127,8 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	      if (omp_declare_simd_clauses
 		  || !omp_dsimd_idattr_clauses.is_empty ())
 		{
-		  tree parms = NULL_TREE;
-		  if (d && TREE_CODE (d) == FUNCTION_DECL)
+		  पुनो parms = NULL_पुनो;
+		  if (d && पुनो_CODE (d) == FUNCTION_DECL)
 		    {
 		      struct c_declarator *ce = declarator;
 		      while (ce != NULL)
@@ -3150,20 +3150,20 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		    c_finish_omp_declare_simd (parser, d, parms,
 					       &omp_dsimd_idattr_clauses);
 		  if (parms)
-		    temp_pop_parm_decls ();
+		    temp_आलिसिन_parm_decls ();
 		}
 	      if (oacc_routine_data)
 		c_finish_oacc_routine (oacc_routine_data, d, false);
 	      if (d)
-		finish_decl (d, UNKNOWN_LOCATION, NULL_TREE,
-			     NULL_TREE, asm_name);
+		finish_decl (d, UNKNOWN_LOCATION, NULL_पुनो,
+			     NULL_पुनो, asm_name);
 
 	      if (c_parser_next_token_is_keyword (parser, RID_IN))
 		{
 		  if (d)
 		    *objc_foreach_object_declaration = d;
 		  else
-		    *objc_foreach_object_declaration = error_mark_node;
+		    *objc_foreach_object_declaration = error_mark_बुहोल;
 		}
 	    }
 	  if (c_parser_next_token_is (parser, CPP_COMMA))
@@ -3238,15 +3238,15 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
       if (nested)
 	{
 	  pedwarn (here, OPT_Wpedantic, "ISO C forbids nested functions");
-	  c_push_function_context ();
+	  c_इतुलाक_function_context ();
 	}
 
       /* If we're in an OpenMP "begin declare variant" block, the
 	 name in the declarator refers to the base function.  We need
 	 to save that and modify the declarator to have the mangled
 	 name for the variant function instead.  */
-      tree dv_base = NULL_TREE;
-      tree dv_ctx = NULL_TREE;
+      पुनो dv_base = NULL_पुनो;
+      पुनो dv_ctx = NULL_पुनो;
       if (!vec_safe_is_empty (current_omp_declare_variant_attribute))
 	{
 	  c_omp_declare_variant_attr a
@@ -3289,7 +3289,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 			      "or %<__attribute__%>");
 	    }
 	  if (nested)
-	    c_pop_function_context ();
+	    c_आलिसिन_function_context ();
 	  break;
 	}
 
@@ -3321,10 +3321,10 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
       debug_nonbind_markers_p = save_debug_nonbind_markers_p;
       store_parm_decls ();
       if (omp_declare_simd_clauses)
-	c_finish_omp_declare_simd (parser, current_function_decl, NULL_TREE,
+	c_finish_omp_declare_simd (parser, current_function_decl, NULL_पुनो,
 				   omp_declare_simd_clauses);
       if (!omp_dsimd_idattr_clauses.is_empty ())
-	c_finish_omp_declare_simd (parser, current_function_decl, NULL_TREE,
+	c_finish_omp_declare_simd (parser, current_function_decl, NULL_पुनो,
 				   &omp_dsimd_idattr_clauses);
       if (oacc_routine_data)
 	c_finish_oacc_routine (oacc_routine_data, current_function_decl, true);
@@ -3336,11 +3336,11 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	 remember it.  We will associate it with the base function at
 	 the end of processing the translation unit, since it is permitted
 	 for the variant definition to appear before the base declaration.  */
-      if (dv_base && current_function_decl != error_mark_node)
+      if (dv_base && current_function_decl != error_mark_बुहोल)
 	{
 	  omp_begin_declare_variant_map_entry e
 	    = { current_function_decl, dv_base, dv_ctx };
-	  vec_safe_push (omp_begin_declare_variant_map, e);
+	  vec_safe_इतुलाक (omp_begin_declare_variant_map, e);
 	}
 
       /* If the definition was marked with __RTL, use the RTL parser now,
@@ -3353,8 +3353,8 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	     anticipating a function body.  We need a push_scope/pop_scope
 	     pair to flush out this state, or subsequent function parsing
 	     will go wrong.  */
-	  push_scope ();
-	  pop_scope ();
+	  इतुलाक_scope ();
+	  आलिसिन_scope ();
 
 	  finish_function (endloc);
 	  return result;
@@ -3363,19 +3363,19 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
          function body as GIMPLE.  */
       else if (specs->declspec_il != cdil_none)
 	{
-	  bool saved = in_late_binary_op;
-	  in_late_binary_op = true;
+	  bool saved = in_late_दालावाहान_op;
+	  in_late_दालावाहान_op = true;
 	  c_parser_parse_gimple_body (parser, specs->gimple_or_rtl_pass,
 				      specs->declspec_il,
-				      specs->entry_bb_count);
-	  in_late_binary_op = saved;
+				      specs->entry_bb_बिलांग);
+	  in_late_दालावाहान_op = saved;
 	}
       else
 	fnbody = c_parser_compound_statement (parser, &endloc);
-      tree fndecl = current_function_decl;
+      पुनो fndecl = current_function_decl;
       if (nested && specs->declspec_il == cdil_none)
 	{
-	  tree decl = current_function_decl;
+	  पुनो decl = current_function_decl;
 	  /* Mark nested functions as needing static-chain initially.
 	     lower_nested_functions will recompute it but the
 	     DECL_STATIC_CHAIN flag is also used before that happens,
@@ -3383,8 +3383,8 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	  DECL_STATIC_CHAIN (decl) = 1;
 	  add_stmt (fnbody);
 	  finish_function (endloc);
-	  c_pop_function_context ();
-	  add_stmt (build_stmt (DECL_SOURCE_LOCATION (decl), DECL_EXPR, decl));
+	  c_आलिसिन_function_context ();
+	  add_stmt (build_stmt (DECL_SOURCE_LOCATION (decl), DECL_पाहायाग, decl));
 	}
       else if (nested)
 	{
@@ -3393,7 +3393,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	  else
 	    error ("%<__GIMPLE%> function cannot be a nested function");
 	  finish_function (endloc);
-	  c_pop_function_context ();
+	  c_आलिसिन_function_context ();
 	}
       else
 	{
@@ -3403,7 +3403,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	}
       /* Get rid of the empty stmt list for GIMPLE/RTL.  */
       if (specs->declspec_il != cdil_none)
-	DECL_SAVED_TREE (fndecl) = NULL_TREE;
+	DECL_SAVED_पुनो (fndecl) = NULL_पुनो;
 
       break;
     }
@@ -3432,8 +3432,8 @@ c_parser_asm_definition (c_parser *parser)
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_ASM));
   c_parser_consume_token (parser);
   matching_parens parens;
-  tree asm_str = NULL_TREE;
-  tree outputs = NULL_TREE, inputs = NULL_TREE;
+  पुनो asm_str = NULL_पुनो;
+  पुनो outputs = NULL_पुनो, inputs = NULL_पुनो;
   if (!parens.require_open (parser))
     goto done;
   asm_str = c_parser_asm_string_literal (parser);
@@ -3452,7 +3452,7 @@ c_parser_asm_definition (c_parser *parser)
 	      c_parser_error (parser, "expected %<)%>");
 	    error_close_paren:
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	      asm_str = NULL_TREE;
+	      asm_str = NULL_पुनो;
 	      goto done;
 	    }
 	  c_parser_consume_token (parser);
@@ -3477,12 +3477,12 @@ c_parser_asm_definition (c_parser *parser)
   if (!parens.require_close (parser))
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-      asm_str = NULL_TREE;
+      asm_str = NULL_पुनो;
     }
 
   if (asm_str)
-    asm_str = build_asm_expr (asm_loc, asm_str, outputs, inputs,
-			      NULL_TREE, NULL_TREE, false, false);
+    asm_str = build_asm_पाहायाग (asm_loc, asm_str, outputs, inputs,
+			      NULL_पुनो, NULL_पुनो, false, false);
 done:
   if (asm_str)
     symtab->finalize_toplevel_asm (asm_str);
@@ -3518,12 +3518,12 @@ c_parser_static_assert_declaration (c_parser *parser)
 static void
 c_parser_static_assert_declaration_no_semi (c_parser *parser)
 {
-  location_t assert_loc, value_loc;
-  tree value;
-  tree string = NULL_TREE;
+  location_t assert_loc, हालागा_loc;
+  पुनो हालागा;
+  पुनो string = NULL_पुनो;
 
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_STATIC_ASSERT));
-  tree spelling = c_parser_peek_token (parser)->value;
+  पुनो spelling = c_parser_peek_token (parser)->हालागा;
   assert_loc = c_parser_peek_token (parser)->location;
   if (flag_isoc99)
     pedwarn_c99 (assert_loc, OPT_Wpedantic,
@@ -3535,11 +3535,11 @@ c_parser_static_assert_declaration_no_semi (c_parser *parser)
   matching_parens parens;
   if (!parens.require_open (parser))
     return;
-  location_t value_tok_loc = c_parser_peek_token (parser)->location;
-  value = convert_lvalue_to_rvalue (value_tok_loc,
-				    c_parser_expr_no_commas (parser, NULL),
-				    true, true).value;
-  value_loc = EXPR_LOC_OR_LOC (value, value_tok_loc);
+  location_t हालागा_tok_loc = c_parser_peek_token (parser)->location;
+  हालागा = convert_lvalue_to_rvalue (हालागा_tok_loc,
+				    c_parser_पाहायाग_no_commas (parser, NULL),
+				    true, true).हालागा;
+  हालागा_loc = पाहायाग_LOC_OR_LOC (हालागा, हालागा_tok_loc);
   if (c_parser_next_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
@@ -3550,7 +3550,7 @@ c_parser_static_assert_declaration_no_semi (c_parser *parser)
 	case CPP_STRING32:
 	case CPP_WSTRING:
 	case CPP_UTF8STRING:
-	  string = c_parser_string_literal (parser, false, true).value;
+	  string = c_parser_string_literal (parser, false, true).हालागा;
 	  break;
 	default:
 	  c_parser_error (parser, "expected string literal");
@@ -3566,27 +3566,27 @@ c_parser_static_assert_declaration_no_semi (c_parser *parser)
 		 "%qE", spelling);
   parens.require_close (parser);
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (value)))
+  if (!INTEGRAL_TYPE_P (पुनो_TYPE (हालागा)))
     {
-      error_at (value_loc, "expression in static assertion is not an integer");
+      error_at (हालागा_loc, "expression in static assertion is not an integer");
       return;
     }
-  if (TREE_CODE (value) != INTEGER_CST)
+  if (पुनो_CODE (हालागा) != INTEGER_CST)
     {
-      value = c_fully_fold (value, false, NULL);
+      हालागा = c_fully_fold (हालागा, false, NULL);
       /* Strip no-op conversions.  */
-      STRIP_TYPE_NOPS (value);
-      if (TREE_CODE (value) == INTEGER_CST)
-	pedwarn (value_loc, OPT_Wpedantic, "expression in static assertion "
+      STRIP_TYPE_NOPS (हालागा);
+      if (पुनो_CODE (हालागा) == INTEGER_CST)
+	pedwarn (हालागा_loc, OPT_Wpedantic, "expression in static assertion "
 		 "is not an integer constant expression");
     }
-  if (TREE_CODE (value) != INTEGER_CST)
+  if (पुनो_CODE (हालागा) != INTEGER_CST)
     {
-      error_at (value_loc, "expression in static assertion is not constant");
+      error_at (हालागा_loc, "expression in static assertion is not constant");
       return;
     }
-  constant_expression_warning (value);
-  if (integer_zerop (value))
+  constant_expression_warning (हालागा);
+  if (integer_zerop (हालागा))
     {
       if (string)
 	error_at (assert_loc, "static assertion failed: %E", string);
@@ -3731,7 +3731,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
     {
       gcc_assert (!specs->non_std_attrs_seen_p);
       location_t loc = c_parser_peek_token (parser)->location;
-      tree attrs = c_parser_std_attribute_specifier_sequence (parser);
+      पुनो attrs = c_parser_std_attribute_specifier_sequence (parser);
       declspecs_add_attrs (loc, specs, attrs);
       specs->non_std_attrs_seen_p = false;
     }
@@ -3741,8 +3741,8 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	 || (c_dialect_objc () && c_parser_next_token_is (parser, CPP_LESS)))
     {
       struct c_typespec t;
-      tree attrs;
-      tree align;
+      पुनो attrs;
+      पुनो align;
       location_t loc = c_parser_peek_token (parser)->location;
 
       /* If we cannot accept a type, exit if the next token must start
@@ -3758,7 +3758,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
       if (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_token *name_token = c_parser_peek_token (parser);
-	  tree value = name_token->value;
+	  पुनो हालागा = name_token->हालागा;
 	  c_id_kind kind = name_token->id_kind;
 
 	  if (kind == C_ID_ADDRSPACE)
@@ -3788,7 +3788,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	  if (kind == C_ID_ID)
 	    {
 	      auto_diagnostic_group d;
-	      name_hint hint = lookup_name_fuzzy (value, FUZZY_LOOKUP_TYPENAME,
+	      name_hint hint = lookup_name_fuzzy (हालागा, FUZZY_LOOKUP_TYPENAME,
 						  loc);
 	      if (const char *suggestion = hint.suggestion ())
 		{
@@ -3796,12 +3796,12 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 		  richloc.add_fixit_replace (suggestion);
 		  error_at (&richloc,
 			    "unknown type name %qE; did you mean %qs?",
-			    value, suggestion);
+			    हालागा, suggestion);
 		}
 	      else
-		error_at (loc, "unknown type name %qE", value);
+		error_at (loc, "unknown type name %qE", हालागा);
 	      t.kind = ctsk_typedef;
-	      t.spec = error_mark_node;
+	      t.spec = error_mark_बुहोल;
 	    }
 	  else if (kind == C_ID_TYPENAME
 	           && (!c_dialect_objc ()
@@ -3810,19 +3810,19 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	      t.kind = ctsk_typedef;
 	      /* For a typedef name, record the meaning, not the name.
 		 In case of 'foo foo, bar;'.  */
-	      t.spec = lookup_name (value);
+	      t.spec = lookup_name (हालागा);
 	    }
 	  else
 	    {
-	      tree proto = NULL_TREE;
+	      पुनो proto = NULL_पुनो;
 	      gcc_assert (c_dialect_objc ());
 	      t.kind = ctsk_objc;
 	      if (c_parser_next_token_is (parser, CPP_LESS))
 		proto = c_parser_objc_protocol_refs (parser);
-	      t.spec = objc_get_protocol_qualified_type (value, proto);
+	      t.spec = objc_get_protocol_qualified_type (हालागा, proto);
 	    }
-	  t.expr = NULL_TREE;
-	  t.expr_const_operands = true;
+	  t.पाहायाग = NULL_पुनो;
+	  t.पाहायाग_const_operands = true;
 	  t.has_enum_type_specifier = false;
 	  declspecs_add_type (name_token->location, specs, t);
 	  continue;
@@ -3831,15 +3831,15 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	{
 	  /* Make "<SomeProtocol>" equivalent to "id <SomeProtocol>" -
 	     nisse@lysator.liu.se.  */
-	  tree proto;
+	  पुनो proto;
 	  gcc_assert (c_dialect_objc ());
 	  if (!typespec_ok || seen_type)
 	    break;
 	  proto = c_parser_objc_protocol_refs (parser);
 	  t.kind = ctsk_objc;
-	  t.spec = objc_get_protocol_qualified_type (NULL_TREE, proto);
-	  t.expr = NULL_TREE;
-	  t.expr_const_operands = true;
+	  t.spec = objc_get_protocol_qualified_type (NULL_पुनो, proto);
+	  t.पाहायाग = NULL_पुनो;
+	  t.पाहायाग_const_operands = true;
 	  t.has_enum_type_specifier = false;
 	  declspecs_add_type (loc, specs, t);
 	  continue;
@@ -3863,7 +3863,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	     and storage class specifiers, either here or in
 	     declspecs_add_scspec.  */
 	  declspecs_add_scspec (loc, specs,
-				c_parser_peek_token (parser)->value);
+				c_parser_peek_token (parser)->हालागा);
 	  c_parser_consume_token (parser);
 	  break;
 	case RID_AUTO_TYPE:
@@ -3900,9 +3900,9 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	  if (c_dialect_objc ())
 	    parser->objc_need_raw_identifier = true;
 	  t.kind = ctsk_resword;
-	  t.spec = c_parser_peek_token (parser)->value;
-	  t.expr = NULL_TREE;
-	  t.expr_const_operands = true;
+	  t.spec = c_parser_peek_token (parser)->हालागा;
+	  t.पाहायाग = NULL_पुनो;
+	  t.पाहायाग_const_operands = true;
 	  t.has_enum_type_specifier = false;
 	  declspecs_add_type (loc, specs, t);
 	  c_parser_consume_token (parser);
@@ -3946,17 +3946,17 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	      attrs_ok = true;
 	      seen_type = true;
 	      t.kind = ctsk_resword;
-	      t.spec = c_parser_peek_token (parser)->value;
-	      t.expr = error_mark_node;
-	      t.expr_const_operands = true;
+	      t.spec = c_parser_peek_token (parser)->हालागा;
+	      t.पाहायाग = error_mark_बुहोल;
+	      t.पाहायाग_const_operands = true;
 	      t.has_enum_type_specifier = false;
 	      c_parser_consume_token (parser);
 	      matching_parens parens;
 	      if (parens.require_open (parser))
 		{
-		  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-		  t.expr = convert_lvalue_to_rvalue (loc, expr, true,
-						     true).value;
+		  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+		  t.पाहायाग = convert_lvalue_to_rvalue (loc, पाहायाग, true,
+						     true).हालागा;
 		  parens.skip_until_found_close (parser);
 		}
 	      declspecs_add_type (loc, specs, t);
@@ -3979,8 +3979,8 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	    pedwarn_c99 (loc, OPT_Wpedantic,
 			 "ISO C90 does not support the %<_Atomic%> qualifier");
 	  attrs_ok = true;
-	  tree value;
-	  value = c_parser_peek_token (parser)->value;
+	  पुनो हालागा;
+	  हालागा = c_parser_peek_token (parser)->हालागा;
 	  c_parser_consume_token (parser);
 	  if (typespec_ok && c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	    {
@@ -3989,20 +3989,20 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	      c_parser_consume_token (parser);
 	      struct c_type_name *type = c_parser_type_name (parser);
 	      t.kind = ctsk_typeof;
-	      t.spec = error_mark_node;
-	      t.expr = NULL_TREE;
-	      t.expr_const_operands = true;
+	      t.spec = error_mark_बुहोल;
+	      t.पाहायाग = NULL_पुनो;
+	      t.पाहायाग_const_operands = true;
 	      t.has_enum_type_specifier = false;
 	      if (type != NULL)
-		t.spec = groktypename (type, &t.expr,
-				       &t.expr_const_operands);
+		t.spec = groktypename (type, &t.पाहायाग,
+				       &t.पाहायाग_const_operands);
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					 "expected %<)%>");
-	      if (t.spec != error_mark_node)
+	      if (t.spec != error_mark_बुहोल)
 		{
-		  if (TREE_CODE (t.spec) == ARRAY_TYPE)
+		  if (पुनो_CODE (t.spec) == ARRAY_TYPE)
 		    error_at (loc, "%<_Atomic%>-qualified array type");
-		  else if (TREE_CODE (t.spec) == FUNCTION_TYPE)
+		  else if (पुनो_CODE (t.spec) == FUNCTION_TYPE)
 		    error_at (loc, "%<_Atomic%>-qualified function type");
 		  else if (TYPE_QUALS (t.spec) != TYPE_UNQUALIFIED)
 		    error_at (loc, "%<_Atomic%> applied to a qualified type");
@@ -4012,13 +4012,13 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	      declspecs_add_type (loc, specs, t);
 	    }
 	  else
-	    declspecs_add_qual (loc, specs, value);
+	    declspecs_add_qual (loc, specs, हालागा);
 	  break;
 	case RID_CONST:
 	case RID_VOLATILE:
 	case RID_RESTRICT:
 	  attrs_ok = true;
-	  declspecs_add_qual (loc, specs, c_parser_peek_token (parser)->value);
+	  declspecs_add_qual (loc, specs, c_parser_peek_token (parser)->हालागा);
 	  c_parser_consume_token (parser);
 	  break;
 	case RID_ATTRIBUTE:
@@ -4084,9 +4084,9 @@ report_bad_enum_name (c_parser *parser)
 	      auto_diagnostic_group d;
 	      error_at (token->location,
 			"cannot use keyword %qs as enumeration constant",
-			IDENTIFIER_POINTER (token->value));
+			IDENTIFIER_POINTER (token->हालागा));
 	      add_note_about_new_keyword (token->location,
-					  token->value);
+					  token->हालागा);
 	      parser->error = true;
 	      return;
 	    }
@@ -4140,10 +4140,10 @@ c_parser_enum_specifier (c_parser *parser)
   struct c_typespec ret;
   bool have_std_attrs;
   bool potential_nesting_p = false;
-  tree std_attrs = NULL_TREE;
-  tree attrs;
-  tree ident = NULL_TREE;
-  tree fixed_underlying_type = NULL_TREE;
+  पुनो std_attrs = NULL_पुनो;
+  पुनो attrs;
+  पुनो ident = NULL_पुनो;
+  पुनो fixed_underlying_type = NULL_पुनो;
   location_t enum_loc;
   location_t ident_loc = UNKNOWN_LOCATION;  /* Quiet warning.  */
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_ENUM));
@@ -4157,7 +4157,7 @@ c_parser_enum_specifier (c_parser *parser)
   c_parser_set_source_position_from_token (c_parser_peek_token (parser));
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      ident = c_parser_peek_token (parser)->value;
+      ident = c_parser_peek_token (parser)->हालागा;
       ident_loc = c_parser_peek_token (parser)->location;
       enum_loc = ident_loc;
       c_parser_consume_token (parser);
@@ -4179,7 +4179,7 @@ c_parser_enum_specifier (c_parser *parser)
 	  if (!ENUM_FIXED_UNDERLYING_TYPE_P (ret.spec))
 	    error_at (enum_loc, "%<enum%> declared both with and without "
 		      "fixed underlying type");
-	  potential_nesting_p = NULL_TREE == TYPE_VALUES (ret.spec);
+	  potential_nesting_p = NULL_पुनो == TYPE_मगा_हालागा (ret.spec);
 	}
       else
 	{
@@ -4188,10 +4188,10 @@ c_parser_enum_specifier (c_parser *parser)
 	     will be replaced later (either with the results of that
 	     definition, or with the results of error handling for the
 	     case of no tag and no definition).  */
-	  ret.spec = NULL_TREE;
+	  ret.spec = NULL_पुनो;
 	  ret.kind = ctsk_tagdef;
-	  ret.expr = NULL_TREE;
-	  ret.expr_const_operands = true;
+	  ret.पाहायाग = NULL_पुनो;
+	  ret.पाहायाग_const_operands = true;
 	  ret.has_enum_type_specifier = true;
 	}
       c_parser_consume_token (parser);
@@ -4201,12 +4201,12 @@ c_parser_enum_specifier (c_parser *parser)
       finish_declspecs (specs);
       if (specs->default_int_p)
 	error_at (enum_loc, "no %<enum%> underlying type specified");
-      else if (TREE_CODE (specs->type) != INTEGER_TYPE
-	       && TREE_CODE (specs->type) != BOOLEAN_TYPE
-	       && (!flag_isoc2y || TREE_CODE (specs->type) != BITINT_TYPE))
+      else if (पुनो_CODE (specs->type) != INTEGER_TYPE
+	       && पुनो_CODE (specs->type) != BOOLEAN_TYPE
+	       && (!flag_isoc2y || पुनो_CODE (specs->type) != BITINT_TYPE))
 	{
 	  error_at (enum_loc, "invalid %<enum%> underlying type");
-	  specs->type = integer_type_node;
+	  specs->type = integer_type_बुहोल;
 	}
       else if (specs->restrict_p)
 	error_at (enum_loc, "invalid use of %<restrict%>");
@@ -4217,15 +4217,15 @@ c_parser_enum_specifier (c_parser *parser)
 	     specified underlying type.  If this is a newly declared
 	     type, it is now a complete type.  */
 	  if (ENUM_FIXED_UNDERLYING_TYPE_P (ret.spec)
-	      && ENUM_UNDERLYING_TYPE (ret.spec) == NULL_TREE)
+	      && ENUM_UNDERLYING_TYPE (ret.spec) == NULL_पुनो)
 	    {
-	      TYPE_MIN_VALUE (ret.spec) =
-		TYPE_MIN_VALUE (fixed_underlying_type);
-	      TYPE_MAX_VALUE (ret.spec) =
-		TYPE_MAX_VALUE (fixed_underlying_type);
+	      TYPE_MIN_हालागा (ret.spec) =
+		TYPE_MIN_हालागा (fixed_underlying_type);
+	      TYPE_MAX_हालागा (ret.spec) =
+		TYPE_MAX_हालागा (fixed_underlying_type);
 	      TYPE_UNSIGNED (ret.spec) = TYPE_UNSIGNED (fixed_underlying_type);
 	      SET_TYPE_ALIGN (ret.spec, TYPE_ALIGN (fixed_underlying_type));
-	      TYPE_SIZE (ret.spec) = NULL_TREE;
+	      TYPE_SIZE (ret.spec) = NULL_पुनो;
 	      TYPE_PRECISION (ret.spec) =
 		TYPE_PRECISION (fixed_underlying_type);
 	      ENUM_UNDERLYING_TYPE (ret.spec) = fixed_underlying_type;
@@ -4245,61 +4245,61 @@ c_parser_enum_specifier (c_parser *parser)
     {
       /* Parse an enum definition.  */
       struct c_enum_contents the_enum;
-      tree type;
-      tree postfix_attrs;
+      पुनो type;
+      पुनो postfix_attrs;
       /* We chain the enumerators in reverse order, then put them in
 	 forward order at the end.  */
-      tree values;
-      timevar_push (TV_PARSE_ENUM);
+      पुनो मगा_हालागा;
+      timevar_इतुलाक (TV_PARSE_ENUM);
       type = start_enum (enum_loc, &the_enum, ident, fixed_underlying_type,
 			 potential_nesting_p);
-      values = NULL_TREE;
+      मगा_हालागा = NULL_पुनो;
       c_parser_consume_token (parser);
       while (true)
 	{
-	  tree enum_id;
-	  tree enum_value;
-	  tree enum_decl;
+	  पुनो enum_id;
+	  पुनो enum_हालागा;
+	  पुनो enum_decl;
 	  bool seen_comma;
 	  c_token *token;
 	  location_t comma_loc = UNKNOWN_LOCATION;  /* Quiet warning.  */
-	  location_t decl_loc, value_loc;
+	  location_t decl_loc, हालागा_loc;
 	  if (c_parser_next_token_is_not (parser, CPP_NAME))
 	    {
 	      report_bad_enum_name (parser);
 	      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, NULL);
-	      values = error_mark_node;
+	      मगा_हालागा = error_mark_बुहोल;
 	      break;
 	    }
 	  token = c_parser_peek_token (parser);
-	  enum_id = token->value;
+	  enum_id = token->हालागा;
 	  /* Set the location in case we create a decl now.  */
 	  c_parser_set_source_position_from_token (token);
-	  decl_loc = value_loc = token->location;
+	  decl_loc = हालागा_loc = token->location;
 	  c_parser_consume_token (parser);
 	  /* Parse any specified attributes.  */
-	  tree std_attrs = NULL_TREE;
+	  पुनो std_attrs = NULL_पुनो;
 	  if (c_parser_nth_token_starts_std_attributes (parser, 1))
 	    std_attrs = c_parser_std_attribute_specifier_sequence (parser);
-	  tree enum_attrs = chainon (std_attrs,
+	  पुनो enum_attrs = chainon (std_attrs,
 				     c_parser_gnu_attributes (parser));
 	  if (c_parser_next_token_is (parser, CPP_EQ))
 	    {
 	      c_parser_consume_token (parser);
-	      value_loc = c_parser_peek_token (parser)->location;
-	      enum_value = convert_lvalue_to_rvalue (value_loc,
-						     (c_parser_expr_no_commas
+	      हालागा_loc = c_parser_peek_token (parser)->location;
+	      enum_हालागा = convert_lvalue_to_rvalue (हालागा_loc,
+						     (c_parser_पाहायाग_no_commas
 						      (parser, NULL)),
-						     true, true).value;
+						     true, true).हालागा;
 	    }
 	  else
-	    enum_value = NULL_TREE;
-	  enum_decl = build_enumerator (decl_loc, value_loc,
-					&the_enum, enum_id, enum_value);
+	    enum_हालागा = NULL_पुनो;
+	  enum_decl = build_enumerator (decl_loc, हालागा_loc,
+					&the_enum, enum_id, enum_हालागा);
 	  if (enum_attrs)
-	    decl_attributes (&TREE_PURPOSE (enum_decl), enum_attrs, 0);
-	  TREE_CHAIN (enum_decl) = values;
-	  values = enum_decl;
+	    decl_attributes (&पुनो_PURPOSE (enum_decl), enum_attrs, 0);
+	  पुनो_CHAIN (enum_decl) = मगा_हालागा;
+	  मगा_हालागा = enum_decl;
 	  seen_comma = false;
 	  if (c_parser_next_token_is (parser, CPP_COMMA))
 	    {
@@ -4319,28 +4319,28 @@ c_parser_enum_specifier (c_parser *parser)
 	    {
 	      c_parser_error (parser, "expected %<,%> or %<}%>");
 	      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, NULL);
-	      values = error_mark_node;
+	      मगा_हालागा = error_mark_बुहोल;
 	      break;
 	    }
 	}
       postfix_attrs = c_parser_gnu_attributes (parser);
-      ret.spec = finish_enum (type, nreverse (values),
+      ret.spec = finish_enum (type, nreverse (मगा_हालागा),
 			      chainon (std_attrs,
 				       chainon (attrs, postfix_attrs)));
       ret.kind = ctsk_tagdef;
-      ret.expr = NULL_TREE;
-      ret.expr_const_operands = true;
-      ret.has_enum_type_specifier = fixed_underlying_type != NULL_TREE;
-      timevar_pop (TV_PARSE_ENUM);
+      ret.पाहायाग = NULL_पुनो;
+      ret.पाहायाग_const_operands = true;
+      ret.has_enum_type_specifier = fixed_underlying_type != NULL_पुनो;
+      timevar_आलिसिन (TV_PARSE_ENUM);
       return ret;
     }
   else if (!ident)
     {
       c_parser_error (parser, "expected %<{%>");
-      ret.spec = error_mark_node;
+      ret.spec = error_mark_बुहोल;
       ret.kind = ctsk_tagref;
-      ret.expr = NULL_TREE;
-      ret.expr_const_operands = true;
+      ret.पाहायाग = NULL_पुनो;
+      ret.पाहायाग_const_operands = true;
       ret.has_enum_type_specifier = false;
       return ret;
     }
@@ -4350,7 +4350,7 @@ c_parser_enum_specifier (c_parser *parser)
      standard C).  */
   if (have_std_attrs && c_parser_next_token_is_not (parser, CPP_SEMICOLON))
     c_parser_error (parser, "expected %<;%>");
-  if (fixed_underlying_type == NULL_TREE)
+  if (fixed_underlying_type == NULL_पुनो)
     {
       ret = parser_xref_tag (ident_loc, ENUMERAL_TYPE, ident, have_std_attrs,
 			     std_attrs, false);
@@ -4411,12 +4411,12 @@ c_parser_struct_or_union_specifier (c_parser *parser)
 {
   struct c_typespec ret;
   bool have_std_attrs;
-  tree std_attrs = NULL_TREE;
-  tree attrs;
-  tree ident = NULL_TREE;
+  पुनो std_attrs = NULL_पुनो;
+  पुनो attrs;
+  पुनो ident = NULL_पुनो;
   location_t struct_loc;
   location_t ident_loc = UNKNOWN_LOCATION;
-  enum tree_code code;
+  enum पुनो_code code;
   switch (c_parser_peek_token (parser)->keyword)
     {
     case RID_STRUCT:
@@ -4440,7 +4440,7 @@ c_parser_struct_or_union_specifier (c_parser *parser)
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      ident = c_parser_peek_token (parser)->value;
+      ident = c_parser_peek_token (parser)->हालागा;
       ident_loc = c_parser_peek_token (parser)->location;
       struct_loc = ident_loc;
       c_parser_consume_token (parser);
@@ -4450,8 +4450,8 @@ c_parser_struct_or_union_specifier (c_parser *parser)
       /* Parse a struct or union definition.  Start the scope of the
 	 tag before parsing components.  */
       class c_struct_parse_info *struct_info;
-      tree type = start_struct (struct_loc, code, ident, &struct_info);
-      tree postfix_attrs;
+      पुनो type = start_struct (struct_loc, code, ident, &struct_info);
+      पुनो postfix_attrs;
       /* We chain the components in reverse order, then put them in
 	 forward order at the end.  Each struct-declaration may
 	 declare multiple components (comma-separated), so we must use
@@ -4462,16 +4462,16 @@ c_parser_struct_or_union_specifier (c_parser *parser)
 	 semicolon separated fields than comma separated fields, and
 	 so we'll be minimizing the number of node traversals required
 	 by chainon.  */
-      tree contents;
-      tree expr = NULL;
-      timevar_push (TV_PARSE_STRUCT);
-      contents = NULL_TREE;
+      पुनो contents;
+      पुनो पाहायाग = NULL;
+      timevar_इतुलाक (TV_PARSE_STRUCT);
+      contents = NULL_पुनो;
       c_parser_consume_token (parser);
       /* Handle the Objective-C @defs construct,
 	 e.g. foo(sizeof(struct{ @defs(ClassName) }));.  */
       if (c_parser_next_token_is_keyword (parser, RID_AT_DEFS))
 	{
-	  tree name;
+	  पुनो name;
 	  gcc_assert (c_dialect_objc ());
 	  c_parser_consume_token (parser);
 	  matching_parens parens;
@@ -4480,7 +4480,7 @@ c_parser_struct_or_union_specifier (c_parser *parser)
 	  if (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_token (parser)->id_kind == C_ID_CLASSNAME)
 	    {
-	      name = c_parser_peek_token (parser)->value;
+	      name = c_parser_peek_token (parser)->हालागा;
 	      c_parser_consume_token (parser);
 	    }
 	  else
@@ -4498,7 +4498,7 @@ c_parser_struct_or_union_specifier (c_parser *parser)
 	 elsewhere.  */
       while (true)
 	{
-	  tree decls;
+	  पुनो decls;
 	  /* Parse any stray semicolon.  */
 	  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	    {
@@ -4520,12 +4520,12 @@ c_parser_struct_or_union_specifier (c_parser *parser)
 	  /* Accept #pragmas at struct scope.  */
 	  if (c_parser_next_token_is (parser, CPP_PRAGMA))
 	    {
-	      c_parser_pragma (parser, pragma_struct, NULL, NULL_TREE);
+	      c_parser_pragma (parser, pragma_struct, NULL, NULL_पुनो);
 	      continue;
 	    }
 	  /* Parse some comma-separated declarations, but not the
 	     trailing semicolon if any.  */
-	  decls = c_parser_struct_declaration (parser, &expr);
+	  decls = c_parser_struct_declaration (parser, &पाहायाग);
 	  contents = chainon (decls, contents);
 	  /* If no semicolon follows, either we have a parse error or
 	     are at the end of the struct or union and should
@@ -4554,21 +4554,21 @@ c_parser_struct_or_union_specifier (c_parser *parser)
       ret.spec = finish_struct (struct_loc, type, nreverse (contents),
 				chainon (std_attrs,
 					 chainon (attrs, postfix_attrs)),
-				struct_info, &expr);
+				struct_info, &पाहायाग);
       ret.kind = ctsk_tagdef;
-      ret.expr = expr;
-      ret.expr_const_operands = true;
+      ret.पाहायाग = पाहायाग;
+      ret.पाहायाग_const_operands = true;
       ret.has_enum_type_specifier = false;
-      timevar_pop (TV_PARSE_STRUCT);
+      timevar_आलिसिन (TV_PARSE_STRUCT);
       return ret;
     }
   else if (!ident)
     {
       c_parser_error (parser, "expected %<{%>");
-      ret.spec = error_mark_node;
+      ret.spec = error_mark_बुहोल;
       ret.kind = ctsk_tagref;
-      ret.expr = NULL_TREE;
-      ret.expr_const_operands = true;
+      ret.पाहायाग = NULL_पुनो;
+      ret.पाहायाग_const_operands = true;
       ret.has_enum_type_specifier = false;
       return ret;
     }
@@ -4617,28 +4617,28 @@ c_parser_struct_or_union_specifier (c_parser *parser)
    expressions, not just conditional expressions); assignment
    expressions will be diagnosed as non-constant.  */
 
-static tree
-c_parser_struct_declaration (c_parser *parser, tree *expr)
+static पुनो
+c_parser_struct_declaration (c_parser *parser, पुनो *पाहायाग)
 {
   struct c_declspecs *specs;
-  tree prefix_attrs;
-  tree all_prefix_attrs;
-  tree decls;
+  पुनो prefix_attrs;
+  पुनो all_prefix_attrs;
+  पुनो decls;
   location_t decl_loc;
   if (c_parser_next_token_is_keyword (parser, RID_EXTENSION))
     {
       int ext;
-      tree decl;
+      पुनो decl;
       ext = disable_extension_diagnostics ();
       c_parser_consume_token (parser);
-      decl = c_parser_struct_declaration (parser, expr);
+      decl = c_parser_struct_declaration (parser, पाहायाग);
       restore_extension_diagnostics (ext);
       return decl;
     }
   if (c_parser_next_token_is_keyword (parser, RID_STATIC_ASSERT))
     {
       c_parser_static_assert_declaration_no_semi (parser);
-      return NULL_TREE;
+      return NULL_पुनो;
     }
   specs = build_null_declspecs ();
   decl_loc = c_parser_peek_token (parser)->location;
@@ -4650,34 +4650,34 @@ c_parser_struct_declaration (c_parser *parser, tree *expr)
   c_parser_declspecs (parser, specs, false, true, true,
 		      true, false, true, true, cla_nonabstract_decl);
   if (parser->error)
-    return NULL_TREE;
+    return NULL_पुनो;
   if (!specs->declspecs_seen_p)
     {
       c_parser_error (parser, "expected specifier-qualifier-list");
-      return NULL_TREE;
+      return NULL_पुनो;
     }
   finish_declspecs (specs);
   if (c_parser_next_token_is (parser, CPP_SEMICOLON)
       || c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
     {
-      tree ret;
+      पुनो ret;
       if (specs->typespec_kind == ctsk_none)
 	{
 	  pedwarn (decl_loc, OPT_Wpedantic,
 		   "ISO C forbids member declarations with no members");
 	  shadow_tag_warned (specs, pedantic);
-	  ret = NULL_TREE;
+	  ret = NULL_पुनो;
 	}
       else
 	{
 	  /* Support for unnamed structs or unions as members of
 	     structs or unions (which is [a] useful and [b] supports
 	     MS P-SDK).  */
-	  tree attrs = NULL;
+	  पुनो attrs = NULL;
 
 	  ret = grokfield (c_parser_peek_token (parser)->location,
-			   build_id_declarator (NULL_TREE), specs,
-			   NULL_TREE, &attrs, expr);
+			   build_id_declarator (NULL_पुनो), specs,
+			   NULL_पुनो, &attrs, पाहायाग);
 	  if (ret)
 	    decl_attributes (&ret, attrs, 0);
 	}
@@ -4687,27 +4687,27 @@ c_parser_struct_declaration (c_parser *parser, tree *expr)
   /* Provide better error recovery.  Note that a type name here is valid,
      and will be treated as a field name.  */
   if (specs->typespec_kind == ctsk_tagdef
-      && TREE_CODE (specs->type) != ENUMERAL_TYPE
+      && पुनो_CODE (specs->type) != ENUMERAL_TYPE
       && c_parser_next_token_starts_declspecs (parser)
       && !c_parser_next_token_is (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected %<;%>, identifier or %<(%>");
       parser->error = false;
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
   pending_xref_error ();
   prefix_attrs = specs->attrs;
   all_prefix_attrs = prefix_attrs;
-  specs->attrs = NULL_TREE;
-  decls = NULL_TREE;
+  specs->attrs = NULL_पुनो;
+  decls = NULL_पुनो;
   while (true)
     {
       /* Declaring one or more declarators or un-named bit-fields.  */
       struct c_declarator *declarator;
       bool dummy = false;
       if (c_parser_next_token_is (parser, CPP_COLON))
-	declarator = build_id_declarator (NULL_TREE);
+	declarator = build_id_declarator (NULL_पुनो);
       else
 	declarator = c_parser_declarator (parser,
 					  specs->typespec_kind != ctsk_none,
@@ -4723,22 +4723,22 @@ c_parser_struct_declaration (c_parser *parser, tree *expr)
 	  || c_parser_next_token_is (parser, CPP_CLOSE_BRACE)
 	  || c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
 	{
-	  tree postfix_attrs = NULL_TREE;
-	  tree width = NULL_TREE;
-	  tree d;
+	  पुनो postfix_attrs = NULL_पुनो;
+	  पुनो width = NULL_पुनो;
+	  पुनो d;
 	  if (c_parser_next_token_is (parser, CPP_COLON))
 	    {
 	      c_parser_consume_token (parser);
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      width = convert_lvalue_to_rvalue (loc,
-						(c_parser_expr_no_commas
+						(c_parser_पाहायाग_no_commas
 						 (parser, NULL)),
-						true, true).value;
+						true, true).हालागा;
 	    }
 	  if (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
 	    postfix_attrs = c_parser_gnu_attributes (parser);
 	  d = grokfield (c_parser_peek_token (parser)->location,
-			 declarator, specs, width, &all_prefix_attrs, expr);
+			 declarator, specs, width, &all_prefix_attrs, पाहायाग);
 	  decl_attributes (&d, chainon (postfix_attrs,
 					all_prefix_attrs), 0);
 	  DECL_CHAIN (d) = decls;
@@ -4789,14 +4789,14 @@ c_parser_typeof_specifier (c_parser *parser)
   bool is_std;
   struct c_typespec ret;
   ret.kind = ctsk_typeof;
-  ret.spec = error_mark_node;
-  ret.expr = NULL_TREE;
-  ret.expr_const_operands = true;
+  ret.spec = error_mark_बुहोल;
+  ret.पाहायाग = NULL_पुनो;
+  ret.पाहायाग_const_operands = true;
   ret.has_enum_type_specifier = false;
   if (c_parser_next_token_is_keyword (parser, RID_TYPEOF))
     {
       is_unqual = false;
-      tree spelling = c_parser_peek_token (parser)->value;
+      पुनो spelling = c_parser_peek_token (parser)->हालागा;
       is_std = (flag_isoc23
 		&& strcmp (IDENTIFIER_POINTER (spelling), "typeof") == 0);
     }
@@ -4804,7 +4804,7 @@ c_parser_typeof_specifier (c_parser *parser)
     {
       gcc_assert (c_parser_next_token_is_keyword (parser, RID_TYPEOF_UNQUAL));
       is_unqual = true;
-      tree spelling = c_parser_peek_token (parser)->value;
+      पुनो spelling = c_parser_peek_token (parser)->हालागा;
       is_std = strcmp (IDENTIFIER_POINTER (spelling), "typeof_unqual") == 0;
     }
   c_parser_consume_token (parser);
@@ -4824,35 +4824,35 @@ c_parser_typeof_specifier (c_parser *parser)
       in_typeof--;
       if (type != NULL)
 	{
-	  ret.spec = groktypename (type, &ret.expr, &ret.expr_const_operands);
-	  pop_maybe_used (c_type_variably_modified_p (ret.spec));
+	  ret.spec = groktypename (type, &ret.पाहायाग, &ret.पाहायाग_const_operands);
+	  आलिसिन_maybe_used (c_type_variably_modified_p (ret.spec));
 	}
     }
   else
     {
       bool was_vm;
       location_t here = c_parser_peek_token (parser)->location;
-      struct c_expr expr = c_parser_expression (parser);
+      struct c_पाहायाग पाहायाग = c_parser_expression (parser);
       c_inhibit_evaluation_warnings--;
       in_typeof--;
-      if (TREE_CODE (expr.value) == COMPONENT_REF
-	  && DECL_C_BIT_FIELD (TREE_OPERAND (expr.value, 1)))
+      if (पुनो_CODE (पाहायाग.हालागा) == COMPONENT_REF
+	  && DECL_C_BIT_FIELD (पुनो_OPERAND (पाहायाग.हालागा, 1)))
 	error_at (here, "%<typeof%> applied to a bit-field");
-      mark_exp_read (expr.value);
-      ret.spec = TREE_TYPE (expr.value);
+      mark_exp_read (पाहायाग.हालागा);
+      ret.spec = पुनो_TYPE (पाहायाग.हालागा);
       was_vm = c_type_variably_modified_p (ret.spec);
       /* This is returned with the type so that when the type is
 	 evaluated, this can be evaluated.  */
       if (was_vm)
-	ret.expr = c_fully_fold (expr.value, false, &ret.expr_const_operands);
-      pop_maybe_used (was_vm);
+	ret.पाहायाग = c_fully_fold (पाहायाग.हालागा, false, &ret.पाहायाग_const_operands);
+      आलिसिन_maybe_used (was_vm);
     }
   parens.skip_until_found_close (parser);
-  if (ret.spec != error_mark_node)
+  if (ret.spec != error_mark_बुहोल)
     {
       if (is_unqual)
 	{
-	  bool is_array = TREE_CODE (ret.spec) == ARRAY_TYPE;
+	  bool is_array = पुनो_CODE (ret.spec) == ARRAY_TYPE;
 	  int quals = TYPE_QUALS (strip_array_types (ret.spec));
 	  if ((is_array ? quals & ~TYPE_QUAL_ATOMIC : quals)
 	      != TYPE_UNQUALIFIED)
@@ -4868,13 +4868,13 @@ c_parser_typeof_specifier (c_parser *parser)
 	  /* In ISO C terms, _Noreturn is not part of the type of
 	     expressions such as &abort, but in GCC it is represented
 	     internally as a type qualifier.  */
-	  if (TREE_CODE (ret.spec) == FUNCTION_TYPE
+	  if (पुनो_CODE (ret.spec) == FUNCTION_TYPE
 	      && TYPE_QUALS (ret.spec) != TYPE_UNQUALIFIED)
 	    ret.spec = TYPE_MAIN_VARIANT (ret.spec);
 	  else if (FUNCTION_POINTER_TYPE_P (ret.spec)
-		   && TYPE_QUALS (TREE_TYPE (ret.spec)) != TYPE_UNQUALIFIED)
+		   && TYPE_QUALS (पुनो_TYPE (ret.spec)) != TYPE_UNQUALIFIED)
 	    ret.spec
-	      = c_build_pointer_type (TYPE_MAIN_VARIANT (TREE_TYPE (ret.spec)));
+	      = c_build_pointer_type (TYPE_MAIN_VARIANT (पुनो_TYPE (ret.spec)));
 	}
     }
   return ret;
@@ -4889,13 +4889,13 @@ c_parser_typeof_specifier (c_parser *parser)
      _Alignas ( constant-expression )
 */
 
-static tree
+static पुनो
 c_parser_alignas_specifier (c_parser * parser)
 {
-  tree ret = error_mark_node;
+  पुनो ret = error_mark_बुहोल;
   location_t loc = c_parser_peek_token (parser)->location;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_ALIGNAS));
-  tree spelling = c_parser_peek_token (parser)->value;
+  पुनो spelling = c_parser_peek_token (parser)->हालागा;
   c_parser_consume_token (parser);
   if (flag_isoc99)
     pedwarn_c99 (loc, OPT_Wpedantic,
@@ -4915,8 +4915,8 @@ c_parser_alignas_specifier (c_parser * parser)
     }
   else
     ret = convert_lvalue_to_rvalue (loc,
-				    c_parser_expr_no_commas (parser, NULL),
-				    true, true).value;
+				    c_parser_पाहायाग_no_commas (parser, NULL),
+				    true, true).हालागा;
   parens.skip_until_found_close (parser);
   return ret;
 }
@@ -5077,7 +5077,7 @@ c_parser_direct_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
 	  || c_parser_peek_token (parser)->id_kind == C_ID_ID))
     {
       struct c_declarator *inner
-	= build_id_declarator (c_parser_peek_token (parser)->value);
+	= build_id_declarator (c_parser_peek_token (parser)->हालागा);
       *seen_id = true;
       inner->id_loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
@@ -5090,7 +5090,7 @@ c_parser_direct_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
       && c_parser_next_token_is (parser, CPP_OPEN_SQUARE)
       && !c_parser_nth_token_starts_std_attributes (parser, 1))
     {
-      struct c_declarator *inner = build_id_declarator (NULL_TREE);
+      struct c_declarator *inner = build_id_declarator (NULL_पुनो);
       inner->id_loc = c_parser_peek_token (parser)->location;
       return c_parser_direct_declarator_inner (parser, *seen_id, inner);
     }
@@ -5100,7 +5100,7 @@ c_parser_direct_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
 
   if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
-      tree attrs;
+      पुनो attrs;
       struct c_declarator *inner;
       c_parser_consume_token (parser);
       bool have_gnu_attrs = c_parser_next_token_is_keyword (parser,
@@ -5113,25 +5113,25 @@ c_parser_direct_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
 		      || c_parser_next_token_is (parser, CPP_ELLIPSIS)))
 	      || c_parser_next_token_is (parser, CPP_CLOSE_PAREN)))
 	{
-	  struct c_arg_info *args
+	  struct c_arg_info *मगा_कातविरान
 	    = c_parser_parms_declarator (parser, kind == C_DTR_NORMAL,
 					 attrs, have_gnu_attrs);
-	  if (args == NULL)
+	  if (मगा_कातविरान == NULL)
 	    return NULL;
 	  else
 	    {
-	      inner = build_id_declarator (NULL_TREE);
-	      if (!(args->types
-		    && args->types != error_mark_node
-		    && TREE_CODE (TREE_VALUE (args->types)) == IDENTIFIER_NODE)
+	      inner = build_id_declarator (NULL_पुनो);
+	      if (!(मगा_कातविरान->types
+		    && मगा_कातविरान->types != error_mark_बुहोल
+		    && पुनो_CODE (पुनो_हालागा (मगा_कातविरान->types)) == IDENTIFIER_बुहोल)
 		  && c_parser_nth_token_starts_std_attributes (parser, 1))
 		{
-		  tree std_attrs
+		  पुनो std_attrs
 		    = c_parser_std_attribute_specifier_sequence (parser);
 		  if (std_attrs)
 		    inner = build_attrs_declarator (std_attrs, inner);
 		}
-	      inner = build_function_declarator (args, inner);
+	      inner = build_function_declarator (मगा_कातविरान, inner);
 	      return c_parser_direct_declarator_inner (parser, *seen_id,
 						       inner);
 	    }
@@ -5163,7 +5163,7 @@ c_parser_direct_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
 	  return NULL;
 	}
       else
-	return build_id_declarator (NULL_TREE);
+	return build_id_declarator (NULL_पुनो);
     }
 }
 
@@ -5183,10 +5183,10 @@ c_parser_direct_declarator_inner (c_parser *parser, bool id_present,
       location_t brace_loc = c_parser_peek_token (parser)->location;
       struct c_declarator *declarator;
       struct c_declspecs *quals_attrs = build_null_declspecs ();
-      struct c_expr dimen;
-      dimen.value = NULL_TREE;
+      struct c_पाहायाग dimen;
+      dimen.हालागा = NULL_पुनो;
       dimen.original_code = ERROR_MARK;
-      dimen.original_type = NULL_TREE;
+      dimen.original_type = NULL_पुनो;
       c_parser_consume_token (parser);
       c_parser_declspecs (parser, quals_attrs, false, false, true,
 			  false, false, false, false, cla_prefer_id);
@@ -5214,7 +5214,7 @@ c_parser_direct_declarator_inner (c_parser *parser, bool id_present,
 	  c_parser_consume_token (parser);
 	}
       else if (!c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
-	dimen = c_parser_expr_no_commas (parser, NULL);
+	dimen = c_parser_पाहायाग_no_commas (parser, NULL);
 
       if (static_seen)
 	{
@@ -5225,9 +5225,9 @@ c_parser_direct_declarator_inner (c_parser *parser, bool id_present,
 			"variable length array size");
 	      /* Prevent further errors.  */
 	      star_seen = false;
-	      dimen.value = error_mark_node;
+	      dimen.हालागा = error_mark_बुहोल;
 	    }
-	  else if (!dimen.value)
+	  else if (!dimen.हालागा)
 	    error_at (static_loc,
 		      "%<static%> may not be used without an array size");
 	}
@@ -5240,15 +5240,15 @@ c_parser_direct_declarator_inner (c_parser *parser, bool id_present,
 				     "expected %<]%>");
 	  return NULL;
 	}
-      if (dimen.value)
+      if (dimen.हालागा)
 	dimen = convert_lvalue_to_rvalue (brace_loc, dimen, true, true);
-      declarator = build_array_declarator (brace_loc, dimen.value, quals_attrs,
+      declarator = build_array_declarator (brace_loc, dimen.हालागा, quals_attrs,
 					   static_seen, star_seen);
       if (declarator == NULL)
 	return NULL;
       if (c_parser_nth_token_starts_std_attributes (parser, 1))
 	{
-	  tree std_attrs
+	  पुनो std_attrs
 	    = c_parser_std_attribute_specifier_sequence (parser);
 	  if (std_attrs)
 	    inner = build_attrs_declarator (std_attrs, inner);
@@ -5258,29 +5258,29 @@ c_parser_direct_declarator_inner (c_parser *parser, bool id_present,
     }
   else if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
-      tree attrs;
-      struct c_arg_info *args;
+      पुनो attrs;
+      struct c_arg_info *मगा_कातविरान;
       c_parser_consume_token (parser);
       bool have_gnu_attrs = c_parser_next_token_is_keyword (parser,
 							    RID_ATTRIBUTE);
       attrs = c_parser_gnu_attributes (parser);
-      args = c_parser_parms_declarator (parser, id_present, attrs,
+      मगा_कातविरान = c_parser_parms_declarator (parser, id_present, attrs,
 					have_gnu_attrs);
-      if (args == NULL)
+      if (मगा_कातविरान == NULL)
 	return NULL;
       else
 	{
-	  if (!(args->types
-		&& args->types != error_mark_node
-		&& TREE_CODE (TREE_VALUE (args->types)) == IDENTIFIER_NODE)
+	  if (!(मगा_कातविरान->types
+		&& मगा_कातविरान->types != error_mark_बुहोल
+		&& पुनो_CODE (पुनो_हालागा (मगा_कातविरान->types)) == IDENTIFIER_बुहोल)
 	      && c_parser_nth_token_starts_std_attributes (parser, 1))
 	    {
-	      tree std_attrs
+	      पुनो std_attrs
 		= c_parser_std_attribute_specifier_sequence (parser);
 	      if (std_attrs)
 		inner = build_attrs_declarator (std_attrs, inner);
 	    }
-	  inner = build_function_declarator (args, inner);
+	  inner = build_function_declarator (मगा_कातविरान, inner);
 	  return c_parser_direct_declarator_inner (parser, id_present, inner);
 	}
     }
@@ -5296,10 +5296,10 @@ c_parser_direct_declarator_inner (c_parser *parser, bool id_present,
    occur).  */
 
 static struct c_arg_info *
-c_parser_parms_declarator (c_parser *parser, bool id_list_ok, tree attrs,
+c_parser_parms_declarator (c_parser *parser, bool id_list_ok, पुनो attrs,
 			   bool have_gnu_attrs)
 {
-  push_scope ();
+  इतुलाक_scope ();
   declare_parm_level ();
   /* If the list starts with an identifier, it is an identifier list.
      Otherwise, it is either a prototype list or an empty list.  */
@@ -5315,13 +5315,13 @@ c_parser_parms_declarator (c_parser *parser, bool id_list_ok, tree attrs,
       && c_parser_peek_2nd_token (parser)->type != CPP_OPEN_SQUARE
       && c_parser_peek_2nd_token (parser)->type != CPP_KEYWORD)
     {
-      tree list = NULL_TREE, *nextp = &list;
+      पुनो list = NULL_पुनो, *nextp = &list;
       while (c_parser_next_token_is (parser, CPP_NAME)
 	     && c_parser_peek_token (parser)->id_kind == C_ID_ID)
 	{
-	  *nextp = build_tree_list (NULL_TREE,
-				    c_parser_peek_token (parser)->value);
-	  nextp = & TREE_CHAIN (*nextp);
+	  *nextp = build_पुनो_list (NULL_पुनो,
+				    c_parser_peek_token (parser)->हालागा);
+	  nextp = & पुनो_CHAIN (*nextp);
 	  c_parser_consume_token (parser);
 	  if (c_parser_next_token_is_not (parser, CPP_COMMA))
 	    break;
@@ -5337,14 +5337,14 @@ c_parser_parms_declarator (c_parser *parser, bool id_list_ok, tree attrs,
 	  struct c_arg_info *ret = build_arg_info ();
 	  ret->types = list;
 	  c_parser_consume_token (parser);
-	  pop_scope ();
+	  आलिसिन_scope ();
 	  return ret;
 	}
       else
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				     "expected %<)%>");
-	  pop_scope ();
+	  आलिसिन_scope ();
 	  return NULL;
 	}
     }
@@ -5352,7 +5352,7 @@ c_parser_parms_declarator (c_parser *parser, bool id_list_ok, tree attrs,
     {
       struct c_arg_info *ret
 	= c_parser_parms_list_declarator (parser, attrs, NULL, have_gnu_attrs);
-      pop_scope ();
+      आलिसिन_scope ();
       return ret;
     }
 }
@@ -5366,7 +5366,7 @@ c_parser_parms_declarator (c_parser *parser, bool id_list_ok, tree attrs,
    effects of array size expressions in the parameters.  */
 
 static struct c_arg_info *
-c_parser_parms_list_declarator (c_parser *parser, tree attrs, tree expr,
+c_parser_parms_list_declarator (c_parser *parser, पुनो attrs, पुनो पाहायाग,
 				bool have_gnu_attrs)
 {
   bool bad_parm = false;
@@ -5387,14 +5387,14 @@ c_parser_parms_list_declarator (c_parser *parser, tree attrs, tree expr,
     {
       struct c_arg_info *ret = build_arg_info ();
 
-      ret->types = NULL_TREE;
+      ret->types = NULL_पुनो;
       pedwarn_c11 (c_parser_peek_token (parser)->location, OPT_Wpedantic,
 		   "ISO C requires a named argument before %<...%> "
 		   "before C23");
       c_parser_consume_token (parser);
       if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	{
-	  ret->no_named_args_stdarg_p = true;
+	  ret->no_named_मगा_कातविरान_stdarg_p = true;
 	  c_parser_consume_token (parser);
 	  return ret;
 	}
@@ -5413,21 +5413,21 @@ c_parser_parms_list_declarator (c_parser *parser, tree attrs, tree expr,
       /* Parse a parameter.  */
       struct c_parm *parm = c_parser_parameter_declaration (parser, attrs,
 							    have_gnu_attrs);
-      attrs = NULL_TREE;
+      attrs = NULL_पुनो;
       have_gnu_attrs = false;
       if (parm == NULL)
 	bad_parm = true;
       else
-	push_parm_decl (parm, &expr);
+	इतुलाक_parm_decl (parm, &पाहायाग);
       if (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	{
-	  tree new_attrs;
+	  पुनो new_attrs;
 	  c_parser_consume_token (parser);
 	  mark_forward_parm_decls ();
 	  bool new_have_gnu_attrs
 	    = c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE);
 	  new_attrs = c_parser_gnu_attributes (parser);
-	  return c_parser_parms_list_declarator (parser, new_attrs, expr,
+	  return c_parser_parms_list_declarator (parser, new_attrs, पाहायाग,
 						 new_have_gnu_attrs);
 	}
       if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
@@ -5436,7 +5436,7 @@ c_parser_parms_list_declarator (c_parser *parser, tree attrs, tree expr,
 	  if (bad_parm)
 	    return NULL;
 	  else
-	    return get_parm_info (false, expr);
+	    return get_parm_info (false, पाहायाग);
 	}
       if (!c_parser_require (parser, CPP_COMMA,
 			     "expected %<;%>, %<,%> or %<)%>",
@@ -5454,7 +5454,7 @@ c_parser_parms_list_declarator (c_parser *parser, tree attrs, tree expr,
 	      if (bad_parm)
 		return NULL;
 	      else
-		return get_parm_info (true, expr);
+		return get_parm_info (true, पाहायाग);
 	    }
 	  else
 	    {
@@ -5472,18 +5472,18 @@ c_parser_parms_list_declarator (c_parser *parser, tree attrs, tree expr,
    empty) there.  */
 
 static struct c_parm *
-c_parser_parameter_declaration (c_parser *parser, tree attrs,
+c_parser_parameter_declaration (c_parser *parser, पुनो attrs,
 				bool have_gnu_attrs)
 {
   struct c_declspecs *specs;
   struct c_declarator *declarator;
-  tree prefix_attrs;
-  tree postfix_attrs = NULL_TREE;
+  पुनो prefix_attrs;
+  पुनो postfix_attrs = NULL_पुनो;
   bool dummy = false;
 
   /* Accept #pragmas between parameter declarations.  */
   while (c_parser_next_token_is (parser, CPP_PRAGMA))
-    c_parser_pragma (parser, pragma_param, NULL, NULL_TREE);
+    c_parser_pragma (parser, pragma_param, NULL, NULL_पुनो);
 
   if (!c_parser_next_token_starts_declspecs (parser)
       && !c_parser_nth_token_starts_std_attributes (parser, 1))
@@ -5495,7 +5495,7 @@ c_parser_parameter_declaration (c_parser *parser, tree attrs,
       if (c_parser_next_tokens_start_typename (parser, cla_prefer_type))
 	{
 	  auto_diagnostic_group d;
-	  name_hint hint = lookup_name_fuzzy (token->value,
+	  name_hint hint = lookup_name_fuzzy (token->हालागा,
 					      FUZZY_LOOKUP_TYPENAME,
 					      token->location);
 	  if (const char *suggestion = hint.suggestion ())
@@ -5504,10 +5504,10 @@ c_parser_parameter_declaration (c_parser *parser, tree attrs,
 	      richloc.add_fixit_replace (suggestion);
 	      error_at (&richloc,
 			"unknown type name %qE; did you mean %qs?",
-			token->value, suggestion);
+			token->हालागा, suggestion);
 	    }
 	  else
-	    error_at (token->location, "unknown type name %qE", token->value);
+	    error_at (token->location, "unknown type name %qE", token->हालागा);
 	  parser->error = true;
 	}
       /* ??? In some Objective-C cases '...' isn't applicable so there
@@ -5524,8 +5524,8 @@ c_parser_parameter_declaration (c_parser *parser, tree attrs,
   specs = build_null_declspecs ();
   if (attrs)
     {
-      declspecs_add_attrs (input_location, specs, attrs);
-      attrs = NULL_TREE;
+      declspecs_add_attrs (पासोक_location, specs, attrs);
+      attrs = NULL_पुनो;
     }
   c_parser_declspecs (parser, specs, true, true, true, true, false,
 		      !have_gnu_attrs, true, cla_nonabstract_decl);
@@ -5533,11 +5533,11 @@ c_parser_parameter_declaration (c_parser *parser, tree attrs,
   /* When the param is declared, its type is a top level type, we should
      call verify_counted_by_for_top_anonymous_type.  */
   if (specs->typespec_kind == ctsk_tagdef)
-    verify_counted_by_for_top_anonymous_type (specs->type);
+    verify_counted_by_for_इताअस_anonymous_type (specs->type);
 
   pending_xref_error ();
   prefix_attrs = specs->attrs;
-  specs->attrs = NULL_TREE;
+  specs->attrs = NULL_पुनो;
   declarator = c_parser_declarator (parser,
 				    specs->typespec_kind != ctsk_none,
 				    C_DTR_PARM, &dummy);
@@ -5585,13 +5585,13 @@ c_parser_parameter_declaration (c_parser *parser, tree attrs,
      string-literal
 */
 
-static tree
+static पुनो
 c_parser_asm_string_literal (c_parser *parser)
 {
-  tree str;
+  पुनो str;
   int save_flag = warn_overlength_strings;
   warn_overlength_strings = 0;
-  str = c_parser_string_literal (parser, false, false).value;
+  str = c_parser_string_literal (parser, false, false).हालागा;
   warn_overlength_strings = save_flag;
   return str;
 }
@@ -5604,28 +5604,28 @@ c_parser_asm_string_literal (c_parser *parser)
      asm ( asm-string-literal )
 */
 
-static tree
-c_parser_simple_asm_expr (c_parser *parser)
+static पुनो
+c_parser_simple_asm_पाहायाग (c_parser *parser)
 {
-  tree str;
+  पुनो str;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_ASM));
   c_parser_consume_token (parser);
   matching_parens parens;
   if (!parens.require_open (parser))
-    return NULL_TREE;
+    return NULL_पुनो;
   str = c_parser_asm_string_literal (parser);
   if (!parens.require_close (parser))
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-      return NULL_TREE;
+      return NULL_पुनो;
     }
   return str;
 }
 
-static tree
+static पुनो
 c_parser_gnu_attribute_any_word (c_parser *parser)
 {
-  tree attr_name = NULL_TREE;
+  पुनो attr_name = NULL_पुनो;
 
   if (c_parser_next_token_is (parser, CPP_KEYWORD))
     {
@@ -5680,13 +5680,13 @@ c_parser_gnu_attribute_any_word (c_parser *parser)
 	  break;
 	}
       if (!ok)
-	return NULL_TREE;
+	return NULL_पुनो;
 
       /* Accept __attribute__((__const)) as __attribute__((const)) etc.  */
       attr_name = ridpointers[(int) c_parser_peek_token (parser)->keyword];
     }
   else if (c_parser_next_token_is (parser, CPP_NAME))
-    attr_name = c_parser_peek_token (parser)->value;
+    attr_name = c_parser_peek_token (parser)->हालागा;
 
   return attr_name;
 }
@@ -5702,13 +5702,13 @@ c_parser_gnu_attribute_any_word (c_parser *parser)
    where the "identifier" must not be declared as a type.  ??? Why not
    allow identifiers declared as types to start the arguments?  */
 
-static tree
+static पुनो
 c_parser_attribute_arguments (c_parser *parser, bool takes_identifier,
 			      bool require_string, bool assume_attr,
-			      bool allow_empty_args)
+			      bool allow_empty_मगा_कातविरान)
 {
-  vec<tree, va_gc> *expr_list;
-  tree attr_args;
+  vec<पुनो, va_gc> *पाहायाग_list;
+  पुनो attr_मगा_कातविरान;
   /* Parse the attribute contents.  If they start with an
      identifier which is followed by a comma or close
      parenthesis, then the arguments start with that
@@ -5728,65 +5728,65 @@ c_parser_attribute_arguments (c_parser *parser, bool takes_identifier,
 	      && c_parser_peek_token (parser)->id_kind
 	      == C_ID_CLASSNAME)))
     {
-      tree arg1 = c_parser_peek_token (parser)->value;
+      पुनो arg1 = c_parser_peek_token (parser)->हालागा;
       c_parser_consume_token (parser);
       if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
-	attr_args = build_tree_list (NULL_TREE, arg1);
+	attr_मगा_कातविरान = build_पुनो_list (NULL_पुनो, arg1);
       else
 	{
-	  tree tree_list;
+	  पुनो पुनो_list;
 	  c_parser_consume_token (parser);
-	  expr_list = c_parser_expr_list (parser, false, true,
+	  पाहायाग_list = c_parser_पाहायाग_list (parser, false, true,
 					  NULL, NULL, NULL, NULL);
-	  tree_list = build_tree_list_vec (expr_list);
-	  attr_args = tree_cons (NULL_TREE, arg1, tree_list);
-	  release_tree_vector (expr_list);
+	  पुनो_list = build_पुनो_list_vec (पाहायाग_list);
+	  attr_मगा_कातविरान = पुनो_cons (NULL_पुनो, arg1, पुनो_list);
+	  release_पुनो_vector (पाहायाग_list);
 	}
     }
   else
     {
       if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	{
-	  if (!allow_empty_args)
+	  if (!allow_empty_मगा_कातविरान)
 	    error_at (c_parser_peek_token (parser)->location,
 		      "parentheses must be omitted if "
 		      "attribute argument list is empty");
-	  attr_args = NULL_TREE;
+	  attr_मगा_कातविरान = NULL_पुनो;
 	}
       else if (require_string)
 	{
 	  /* The only valid argument for this attribute is a string
 	     literal.  Handle this specially here to avoid accepting
 	     string literals with excess parentheses.  */
-	  tree string = c_parser_string_literal (parser, false, true).value;
-	  attr_args = build_tree_list (NULL_TREE, string);
+	  पुनो string = c_parser_string_literal (parser, false, true).हालागा;
+	  attr_मगा_कातविरान = build_पुनो_list (NULL_पुनो, string);
 	}
       else if (assume_attr)
 	{
-	  tree cond
-	    = c_parser_conditional_expression (parser, NULL, NULL_TREE).value;
+	  पुनो cond
+	    = c_parser_conditional_expression (parser, NULL, NULL_पुनो).हालागा;
 	  if (!c_parser_next_token_is (parser, CPP_COMMA))
-	    attr_args = build_tree_list (NULL_TREE, cond);
+	    attr_मगा_कातविरान = build_पुनो_list (NULL_पुनो, cond);
 	  else
 	    {
-	      tree tree_list;
+	      पुनो पुनो_list;
 	      c_parser_consume_token (parser);
-	      expr_list = c_parser_expr_list (parser, false, true,
+	      पाहायाग_list = c_parser_पाहायाग_list (parser, false, true,
 					      NULL, NULL, NULL, NULL);
-	      tree_list = build_tree_list_vec (expr_list);
-	      attr_args = tree_cons (NULL_TREE, cond, tree_list);
-	      release_tree_vector (expr_list);
+	      पुनो_list = build_पुनो_list_vec (पाहायाग_list);
+	      attr_मगा_कातविरान = पुनो_cons (NULL_पुनो, cond, पुनो_list);
+	      release_पुनो_vector (पाहायाग_list);
 	    }
 	}
       else
 	{
-	  expr_list = c_parser_expr_list (parser, false, true,
+	  पाहायाग_list = c_parser_पाहायाग_list (parser, false, true,
 					  NULL, NULL, NULL, NULL);
-	  attr_args = build_tree_list_vec (expr_list);
-	  release_tree_vector (expr_list);
+	  attr_मगा_कातविरान = build_पुनो_list_vec (पाहायाग_list);
+	  release_पुनो_vector (पाहायाग_list);
 	}
     }
-  return attr_args;
+  return attr_मगा_कातविरान;
 }
 
 /* Parse (possibly empty) gnu-attributes.  This is a GNU extension.
@@ -5816,15 +5816,15 @@ c_parser_attribute_arguments (c_parser *parser, bool takes_identifier,
    When EMPTY_OK is true, allow and consume any number of consecutive
    commas with no attributes in between.  */
 
-static tree
-c_parser_gnu_attribute (c_parser *parser, tree attrs,
+static पुनो
+c_parser_gnu_attribute (c_parser *parser, पुनो attrs,
 			bool expect_comma = false, bool empty_ok = true)
 {
   bool comma_first = c_parser_next_token_is (parser, CPP_COMMA);
   if (!comma_first
       && !c_parser_next_token_is (parser, CPP_NAME)
       && !c_parser_next_token_is (parser, CPP_KEYWORD))
-    return NULL_TREE;
+    return NULL_पुनो;
 
   while (c_parser_next_token_is (parser, CPP_COMMA))
     {
@@ -5833,14 +5833,14 @@ c_parser_gnu_attribute (c_parser *parser, tree attrs,
 	return attrs;
     }
 
-  tree attr_name = c_parser_gnu_attribute_any_word (parser);
-  if (attr_name == NULL_TREE)
-    return NULL_TREE;
+  पुनो attr_name = c_parser_gnu_attribute_any_word (parser);
+  if (attr_name == NULL_पुनो)
+    return NULL_पुनो;
 
   attr_name = canonicalize_attr_name (attr_name);
   c_parser_consume_token (parser);
 
-  tree attr;
+  पुनो attr;
   if (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
     {
       if (expect_comma && !comma_first)
@@ -5849,30 +5849,30 @@ c_parser_gnu_attribute (c_parser *parser, tree attrs,
 	     and this one.  */
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				     "expected %<)%>");
-	  return error_mark_node;
+	  return error_mark_बुहोल;
 	}
-      attr = build_tree_list (attr_name, NULL_TREE);
+      attr = build_पुनो_list (attr_name, NULL_पुनो);
       /* Add this attribute to the list.  */
       attrs = chainon (attrs, attr);
       return attrs;
     }
   c_parser_consume_token (parser);
 
-  tree attr_args
+  पुनो attr_मगा_कातविरान
     = c_parser_attribute_arguments (parser,
 				    attribute_takes_identifier_p (attr_name),
 				    false,
 				    is_attribute_p ("assume", attr_name),
 				    true);
 
-  attr = build_tree_list (attr_name, attr_args);
+  attr = build_पुनो_list (attr_name, attr_मगा_कातविरान);
   if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
     c_parser_consume_token (parser);
   else
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				 "expected %<)%>");
-      return error_mark_node;
+      return error_mark_बुहोल;
     }
 
   if (expect_comma && !comma_first)
@@ -5881,7 +5881,7 @@ c_parser_gnu_attribute (c_parser *parser, tree attrs,
 	 and this one.  */
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				 "expected %<)%>");
-      return error_mark_node;
+      return error_mark_बुहोल;
     }
 
   /* Add this attribute to the list.  */
@@ -5889,10 +5889,10 @@ c_parser_gnu_attribute (c_parser *parser, tree attrs,
   return attrs;
 }
 
-static tree
+static पुनो
 c_parser_gnu_attributes (c_parser *parser)
 {
-  tree attrs = NULL_TREE;
+  पुनो attrs = NULL_पुनो;
   while (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
     {
       bool save_translate_strings_p = parser->translate_strings_p;
@@ -5916,8 +5916,8 @@ c_parser_gnu_attributes (c_parser *parser)
       for (bool expect_comma = false; ; expect_comma = true)
 	{
 	  /* Parse a single attribute.  */
-	  tree attr = c_parser_gnu_attribute (parser, attrs, expect_comma);
-	  if (attr == error_mark_node)
+	  पुनो attr = c_parser_gnu_attribute (parser, attrs, expect_comma);
+	  if (attr == error_mark_बुहोल)
 	    return attrs;
 	  if (!attr)
 	    break;
@@ -6020,7 +6020,7 @@ c_parser_balanced_token_sequence (c_parser *parser)
    parsing.  */
 
 static void
-c_parser_omp_directive_args (c_parser *parser, tree attribute, bool decl_p)
+c_parser_omp_directive_मगा_कातविरान (c_parser *parser, पुनो attribute, bool decl_p)
 {
   unsigned int n = 1;
   c_token *first = c_parser_peek_token (parser);
@@ -6029,13 +6029,13 @@ c_parser_omp_directive_args (c_parser *parser, tree attribute, bool decl_p)
 	  != CPP_CLOSE_PAREN))
     {
       c_parser_balanced_token_sequence (parser);
-      TREE_VALUE (attribute) = NULL_TREE;
+      पुनो_हालागा (attribute) = NULL_पुनो;
       return;
     }
   if (n == 1)
     {
       error_at (first->location, "expected OpenMP directive name");
-      TREE_VALUE (attribute) = NULL_TREE;
+      पुनो_हालागा (attribute) = NULL_पुनो;
       return;
     }
   vec<c_token, va_gc> *v;
@@ -6043,14 +6043,14 @@ c_parser_omp_directive_args (c_parser *parser, tree attribute, bool decl_p)
   for (--n; n; --n)
     {
       c_token *tok = c_parser_peek_token (parser);
-      v->quick_push (*tok);
+      v->quick_इतुलाक (*tok);
       c_parser_consume_token (parser);
     }
-  tree arg = make_node (C_TOKEN_VEC);
+  पुनो arg = make_बुहोल (C_TOKEN_VEC);
   C_TOKEN_VEC_TOKENS (arg) = v;
   if (decl_p)
-    TREE_PUBLIC (arg) = 1;
-  TREE_VALUE (attribute) = tree_cons (NULL_TREE, arg, TREE_VALUE (attribute));
+    पुनो_PUBLIC (arg) = 1;
+  पुनो_हालागा (attribute) = पुनो_cons (NULL_पुनो, arg, पुनो_हालागा (attribute));
 }
 
 /* Parse arguments of omp::sequence attribute.
@@ -6058,13 +6058,13 @@ c_parser_omp_directive_args (c_parser *parser, tree attribute, bool decl_p)
    omp::[opt] directive-attr [ , omp::[opt] directive-attr ]...  */
 
 static void
-c_parser_omp_sequence_args (c_parser *parser, tree attribute)
+c_parser_omp_sequence_मगा_कातविरान (c_parser *parser, पुनो attribute)
 {
   do
     {
       c_token *token = c_parser_peek_token (parser);
       if (token->type == CPP_NAME
-	  && strcmp (IDENTIFIER_POINTER (token->value), "omp") == 0
+	  && strcmp (IDENTIFIER_POINTER (token->हालागा), "omp") == 0
 	  && c_parser_peek_2nd_token (parser)->type == CPP_SCOPE)
 	{
 	  c_parser_consume_token (parser);
@@ -6076,7 +6076,7 @@ c_parser_omp_sequence_args (c_parser *parser, tree attribute)
       if (token->type != CPP_NAME)
 	p = "";
       else
-	p = IDENTIFIER_POINTER (token->value);
+	p = IDENTIFIER_POINTER (token->हालागा);
       if (strcmp (p, "directive") == 0)
 	directive = true;
       else if (strcmp (p, "sequence") != 0)
@@ -6121,9 +6121,9 @@ c_parser_omp_sequence_args (c_parser *parser, tree attribute)
       if (parens.require_open (parser))
 	{
 	  if (directive)
-	    c_parser_omp_directive_args (parser, attribute, false);
+	    c_parser_omp_directive_मगा_कातविरान (parser, attribute, false);
 	  else
-	    c_parser_omp_sequence_args (parser, attribute);
+	    c_parser_omp_sequence_मगा_कातविरान (parser, attribute);
 	  parens.skip_until_found_close (parser);
 	  if (c_parser_next_token_is_not (parser, CPP_COMMA))
 	    break;
@@ -6179,19 +6179,19 @@ c_parser_omp_sequence_args (c_parser *parser, tree attribute)
    to check whether the colons are immediately adjacent.  LOOSE_SCOPE_P
    indicates whether this relaxation is in effect.  */
 
-static tree
+static पुनो
 c_parser_std_attribute (c_parser *parser, bool for_tm)
 {
   c_token *token = c_parser_peek_token (parser);
-  tree ns, name, attribute;
+  पुनो ns, name, attribute;
 
   /* Parse the attribute-token.  */
   if (token->type != CPP_NAME && token->type != CPP_KEYWORD)
     {
       c_parser_error (parser, "expected identifier");
-      return error_mark_node;
+      return error_mark_बुहोल;
     }
-  name = canonicalize_attr_name (token->value);
+  name = canonicalize_attr_name (token->हालागा);
   c_parser_consume_token (parser);
   if (c_parser_next_token_is (parser, CPP_SCOPE)
       || (c_parser_next_token_is (parser, CPP_COLON)
@@ -6206,17 +6206,17 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
       if (token->type != CPP_NAME && token->type != CPP_KEYWORD)
 	{
 	  c_parser_error (parser, "expected identifier");
-	  return error_mark_node;
+	  return error_mark_बुहोल;
 	}
-      name = canonicalize_attr_name (token->value);
+      name = canonicalize_attr_name (token->हालागा);
       c_parser_consume_token (parser);
     }
   else
-    ns = NULL_TREE;
-  attribute = build_tree_list (build_tree_list (ns, name), NULL_TREE);
+    ns = NULL_पुनो;
+  attribute = build_पुनो_list (build_पुनो_list (ns, name), NULL_पुनो);
 
   /* Parse the arguments, if any.  */
-  const attribute_spec *as = lookup_attribute_spec (TREE_PURPOSE (attribute));
+  const attribute_spec *as = lookup_attribute_spec (पुनो_PURPOSE (attribute));
   if (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
     {
       if ((flag_openmp || flag_openmp_simd)
@@ -6227,7 +6227,7 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
 	      || is_attribute_p ("decl", name)))
 	{
 	  error ("%<omp::%E%> attribute requires argument", name);
-	  return error_mark_node;
+	  return error_mark_बुहोल;
 	}
       goto out;
     }
@@ -6244,25 +6244,25 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
       {
 	error_at (open_loc, "%qE attribute does not take any arguments", name);
 	parens.skip_until_found_close (parser);
-	return error_mark_node;
+	return error_mark_बुहोल;
       }
     /* If this is a fake attribute created to handle -Wno-attributes,
        we must skip parsing the arguments.  */
     if (as && !attribute_ignored_p (as))
       {
 	bool takes_identifier
-	  = (ns != NULL_TREE
+	  = (ns != NULL_पुनो
 	     && strcmp (IDENTIFIER_POINTER (ns), "gnu") == 0
 	     && attribute_takes_identifier_p (name));
 	bool require_string
-	  = (ns == NULL_TREE
+	  = (ns == NULL_पुनो
 	     && (strcmp (IDENTIFIER_POINTER (name), "deprecated") == 0
 		 || strcmp (IDENTIFIER_POINTER (name), "nodiscard") == 0));
 	bool assume_attr
-	  = (ns != NULL_TREE
+	  = (ns != NULL_पुनो
 	     && strcmp (IDENTIFIER_POINTER (ns), "gnu") == 0
 	     && strcmp (IDENTIFIER_POINTER (name), "assume") == 0);
-	TREE_VALUE (attribute)
+	पुनो_हालागा (attribute)
 	  = c_parser_attribute_arguments (parser, takes_identifier,
 					  require_string, assume_attr, false);
       }
@@ -6274,25 +6274,25 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
 	  {
 	    if (is_attribute_p ("directive", name))
 	      {
-		c_parser_omp_directive_args (parser, attribute, false);
+		c_parser_omp_directive_मगा_कातविरान (parser, attribute, false);
 		parens.skip_until_found_close (parser);
 		return attribute;
 	      }
 	    else if (is_attribute_p ("decl", name))
 	      {
-		TREE_VALUE (TREE_PURPOSE (attribute))
+		पुनो_हालागा (पुनो_PURPOSE (attribute))
 		  = get_identifier ("directive");
-		c_parser_omp_directive_args (parser, attribute, true);
+		c_parser_omp_directive_मगा_कातविरान (parser, attribute, true);
 		parens.skip_until_found_close (parser);
 		return attribute;
 	      }
 	    else if (is_attribute_p ("sequence", name))
 	      {
-		TREE_VALUE (TREE_PURPOSE (attribute))
+		पुनो_हालागा (पुनो_PURPOSE (attribute))
 		  = get_identifier ("directive");
-		c_parser_omp_sequence_args (parser, attribute);
+		c_parser_omp_sequence_मगा_कातविरान (parser, attribute);
 		parens.skip_until_found_close (parser);
-		TREE_VALUE (attribute) = nreverse (TREE_VALUE (attribute));
+		पुनो_हालागा (attribute) = nreverse (पुनो_हालागा (attribute));
 		return attribute;
 	      }
 	  }
@@ -6301,23 +6301,23 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
     parens.require_close (parser);
   }
  out:
-  if (ns == NULL_TREE && !for_tm && !as)
+  if (ns == NULL_पुनो && !for_tm && !as)
     {
       /* An attribute with standard syntax and no namespace specified
 	 is a constraint violation if it is not one of the known
 	 standard attributes.  Diagnose it here with a pedwarn and
 	 then discard it to prevent a duplicate warning later.  */
-      pedwarn (input_location, OPT_Wattributes, "%qE attribute ignored",
+      pedwarn (पासोक_location, OPT_Wattributes, "%qE attribute ignored",
 	       name);
-      return error_mark_node;
+      return error_mark_बुहोल;
     }
   return attribute;
 }
 
-static tree
+static पुनो
 c_parser_std_attribute_list (c_parser *parser, bool for_tm)
 {
-  tree attributes = NULL_TREE;
+  पुनो attributes = NULL_पुनो;
   while (true)
     {
       c_token *token = c_parser_peek_token (parser);
@@ -6328,10 +6328,10 @@ c_parser_std_attribute_list (c_parser *parser, bool for_tm)
 	  c_parser_consume_token (parser);
 	  continue;
 	}
-      tree attribute = c_parser_std_attribute (parser, for_tm);
-      if (attribute != error_mark_node)
+      पुनो attribute = c_parser_std_attribute (parser, for_tm);
+      if (attribute != error_mark_बुहोल)
 	{
-	  TREE_CHAIN (attribute) = attributes;
+	  पुनो_CHAIN (attribute) = attributes;
 	  attributes = attribute;
 	}
       if (c_parser_next_token_is_not (parser, CPP_COMMA))
@@ -6340,18 +6340,18 @@ c_parser_std_attribute_list (c_parser *parser, bool for_tm)
   return attributes;
 }
 
-static tree
+static पुनो
 c_parser_std_attribute_specifier (c_parser *parser, bool for_tm)
 {
   location_t loc = c_parser_peek_token (parser)->location;
   if (!c_parser_require (parser, CPP_OPEN_SQUARE, "expected %<[%>"))
-    return NULL_TREE;
+    return NULL_पुनो;
   if (!c_parser_require (parser, CPP_OPEN_SQUARE, "expected %<[%>"))
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, "expected %<]%>");
-      return NULL_TREE;
+      return NULL_पुनो;
     }
-  tree attributes;
+  पुनो attributes;
   if (c_parser_next_token_is_keyword (parser, RID_EXTENSION))
     {
       auto ext = disable_extension_diagnostics ();
@@ -6498,13 +6498,13 @@ c_parser_skip_std_attribute_spec_seq (c_parser *parser, size_t n)
   return n;
 }
 
-static tree
+static पुनो
 c_parser_std_attribute_specifier_sequence (c_parser *parser)
 {
-  tree attributes = NULL_TREE;
+  पुनो attributes = NULL_पुनो;
   do
     {
-      tree attrs = c_parser_std_attribute_specifier (parser, false);
+      पुनो attrs = c_parser_std_attribute_specifier (parser, false);
       attributes = chainon (attributes, attrs);
     }
   while (c_parser_nth_token_starts_std_attributes (parser, 1));
@@ -6533,14 +6533,14 @@ c_parser_type_name (c_parser *parser, bool alignas_ok)
       c_parser_error (parser, "expected specifier-qualifier-list");
       return NULL;
     }
-  if (specs->type != error_mark_node)
+  if (specs->type != error_mark_बुहोल)
     {
       pending_xref_error ();
       finish_declspecs (specs);
       /* When the typename is declared, its type is a top level type, we should
 	 call verify_counted_by_for_top_anonymous_type.  */
       if (specs->typespec_kind == ctsk_tagdef)
-	verify_counted_by_for_top_anonymous_type (specs->type);
+	verify_counted_by_for_इताअस_anonymous_type (specs->type);
     }
   declarator = c_parser_declarator (parser,
 				    specs->typespec_kind != ctsk_none,
@@ -6598,19 +6598,19 @@ c_parser_type_name (c_parser *parser, bool alignas_ok)
    This function is only used for top-level initializers; for nested
    ones, see c_parser_initval.  */
 
-static struct c_expr
-c_parser_initializer (c_parser *parser, tree decl)
+static struct c_पाहायाग
+c_parser_initializer (c_parser *parser, पुनो decl)
 {
   if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
-    return c_parser_braced_init (parser, NULL_TREE, false, NULL,
-				 decl != error_mark_node
+    return c_parser_braced_init (parser, NULL_पुनो, false, NULL,
+				 decl != error_mark_बुहोल
 				 && C_DECL_VARIABLE_SIZE (decl));
   else
     {
-      struct c_expr ret;
+      struct c_पाहायाग ret;
       location_t loc = c_parser_peek_token (parser)->location;
-      ret = c_parser_expr_no_commas (parser, NULL);
-      if (decl != error_mark_node && C_DECL_VARIABLE_SIZE (decl))
+      ret = c_parser_पाहायाग_no_commas (parser, NULL);
+      if (decl != error_mark_बुहोल && C_DECL_VARIABLE_SIZE (decl))
 	{
 	  error_at (loc,
 		    "variable-sized object may not be initialized except "
@@ -6622,14 +6622,14 @@ c_parser_initializer (c_parser *parser, tree decl)
 	 this warning but only if warn_init_self is zero.  */
       if (VAR_P (decl)
 	  && !DECL_EXTERNAL (decl)
-	  && !TREE_STATIC (decl)
-	  && ret.value == decl
+	  && !पुनो_STATIC (decl)
+	  && ret.हालागा == decl
 	  && !warning_enabled_at (DECL_SOURCE_LOCATION (decl), OPT_Winit_self))
 	suppress_warning (decl, OPT_Winit_self);
-      if (TREE_CODE (ret.value) != STRING_CST
-	  && (TREE_CODE (ret.value) != COMPOUND_LITERAL_EXPR
-	      || C_DECL_DECLARED_CONSTEXPR (COMPOUND_LITERAL_EXPR_DECL
-					    (ret.value))))
+      if (पुनो_CODE (ret.हालागा) != STRING_CST
+	  && (पुनो_CODE (ret.हालागा) != COMPOUND_LITERAL_पाहायाग
+	      || C_DECL_DECLARED_CONSTEXPR (COMPOUND_LITERAL_पाहायाग_DECL
+					    (ret.हालागा))))
 	ret = convert_lvalue_to_rvalue (loc, ret, true, true, true);
       return ret;
     }
@@ -6647,11 +6647,11 @@ location_t last_init_list_comma;
    top-level initializer in a declaration.  VARSIZE_P indicates
    whether the object to be initialized has a variable size.  */
 
-static struct c_expr
-c_parser_braced_init (c_parser *parser, tree type, bool nested_p,
+static struct c_पाहायाग
+c_parser_braced_init (c_parser *parser, पुनो type, bool nested_p,
 		      struct obstack *outer_obstack, bool varsize_p)
 {
-  struct c_expr ret;
+  struct c_पाहायाग ret;
   struct obstack braced_init_obstack;
   location_t brace_loc = c_parser_peek_token (parser)->location;
   gcc_obstack_init (&braced_init_obstack);
@@ -6664,7 +6664,7 @@ c_parser_braced_init (c_parser *parser, tree type, bool nested_p,
   if (nested_p)
     {
       finish_implicit_inits (brace_loc, outer_obstack);
-      push_init_level (brace_loc, 0, &braced_init_obstack);
+      इतुलाक_init_level (brace_loc, 0, &braced_init_obstack);
     }
   else
     really_start_incremental_init (type);
@@ -6698,11 +6698,11 @@ c_parser_braced_init (c_parser *parser, tree type, bool nested_p,
 		{
 		  c_token *embed = c_parser_peek_token (parser);
 		  c_parser_consume_token (parser);
-		  c_expr embed_val;
-		  embed_val.value = embed->value;
+		  c_पाहायाग embed_val;
+		  embed_val.हालागा = embed->हालागा;
 		  embed_val.original_code = RAW_DATA_CST;
-		  embed_val.original_type = integer_type_node;
-		  set_c_expr_source_range (&embed_val, embed->get_range ());
+		  embed_val.original_type = integer_type_बुहोल;
+		  set_c_पाहायाग_source_range (&embed_val, embed->get_range ());
 		  embed_val.m_decimal = 0;
 		  process_init_element (embed->location, embed_val, false,
 					&braced_init_obstack);
@@ -6726,19 +6726,19 @@ c_parser_braced_init (c_parser *parser, tree type, bool nested_p,
       ret.original_code = ERROR_MARK;
       ret.original_type = NULL;
       braces.skip_until_found_close (parser);
-      pop_init_level (brace_loc, 0, &braced_init_obstack, last_init_list_comma);
+      आलिसिन_init_level (brace_loc, 0, &braced_init_obstack, last_init_list_comma);
       obstack_free (&braced_init_obstack, NULL);
       return ret;
     }
   location_t close_loc = next_tok->location;
   c_parser_consume_token (parser);
-  ret = pop_init_level (brace_loc, 0, &braced_init_obstack, close_loc);
+  ret = आलिसिन_init_level (brace_loc, 0, &braced_init_obstack, close_loc);
   if (zero_init_padding_bits
-      && ret.value
-      && TREE_CODE (ret.value) == CONSTRUCTOR)
-    CONSTRUCTOR_ZERO_PADDING_BITS (ret.value) = 1;
+      && ret.हालागा
+      && पुनो_CODE (ret.हालागा) == CONSTRUCTOR)
+    CONSTRUCTOR_ZERO_PADDING_BITS (ret.हालागा) = 1;
   obstack_free (&braced_init_obstack, NULL);
-  set_c_expr_source_range (&ret, brace_loc, close_loc);
+  set_c_पाहायाग_source_range (&ret, brace_loc, close_loc);
   return ret;
 }
 
@@ -6755,7 +6755,7 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
     {
       /* Old-style structure member designator.  */
       set_init_label (c_parser_peek_token (parser)->location,
-		      c_parser_peek_token (parser)->value,
+		      c_parser_peek_token (parser)->हालागा,
 		      c_parser_peek_token (parser)->location,
 		      braced_init_obstack);
       /* Use the colon as the error location.  */
@@ -6785,28 +6785,28 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 	      c_parser_consume_token (parser);
 	      if (c_parser_next_token_is (parser, CPP_NAME))
 		{
-		  set_init_label (des_loc, c_parser_peek_token (parser)->value,
+		  set_init_label (des_loc, c_parser_peek_token (parser)->हालागा,
 				  c_parser_peek_token (parser)->location,
 				  braced_init_obstack);
 		  c_parser_consume_token (parser);
 		}
 	      else
 		{
-		  struct c_expr init;
+		  struct c_पाहायाग init;
 		  init.set_error ();
 		  init.original_code = ERROR_MARK;
 		  init.original_type = NULL;
 		  c_parser_error (parser, "expected identifier");
 		  c_parser_skip_until_found (parser, CPP_COMMA, NULL);
-		  process_init_element (input_location, init, false,
+		  process_init_element (पासोक_location, init, false,
 					braced_init_obstack);
 		  return;
 		}
 	    }
 	  else
 	    {
-	      struct c_expr first_expr;
-	      tree first, second;
+	      struct c_पाहायाग first_पाहायाग;
+	      पुनो first, second;
 	      location_t ellipsis_loc = UNKNOWN_LOCATION;  /* Quiet warning.  */
 	      location_t array_index_loc = UNKNOWN_LOCATION;
 	      /* ??? Following the old parser, [ objc-receiver
@@ -6834,8 +6834,8 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 		     primary-expression.  ??? It might make sense to
 		     distinguish when des_prev == 1 as well; see
 		     previous comment.  */
-		  tree rec, args;
-		  struct c_expr mexpr;
+		  पुनो rec, मगा_कातविरान;
+		  struct c_पाहायाग mexpr;
 		  c_parser_consume_token (parser);
 		  if (c_parser_peek_token (parser)->type == CPP_NAME
 		      && ((c_parser_peek_token (parser)->id_kind
@@ -6844,41 +6844,41 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 			      == C_ID_CLASSNAME)))
 		    {
 		      /* Type name receiver.  */
-		      tree id = c_parser_peek_token (parser)->value;
+		      पुनो id = c_parser_peek_token (parser)->हालागा;
 		      c_parser_consume_token (parser);
 		      rec = objc_get_class_reference (id);
-		      goto parse_message_args;
+		      goto parse_message_मगा_कातविरान;
 		    }
 		  array_index_loc = c_parser_peek_token (parser)->location;
-		  first_expr = c_parser_expr_no_commas (parser, NULL);
-		  mark_exp_read (first_expr.value);
+		  first_पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+		  mark_exp_read (first_पाहायाग.हालागा);
 		  if (c_parser_next_token_is (parser, CPP_ELLIPSIS)
 		      || c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
 		    goto array_desig_after_first;
-		  first = first_expr.value;
+		  first = first_पाहायाग.हालागा;
 		  /* Expression receiver.  So far only one part
 		     without commas has been parsed; there might be
 		     more of the expression.  */
 		  rec = first;
 		  while (c_parser_next_token_is (parser, CPP_COMMA))
 		    {
-		      struct c_expr next;
+		      struct c_पाहायाग next;
 		      location_t comma_loc, exp_loc;
 		      comma_loc = c_parser_peek_token (parser)->location;
 		      c_parser_consume_token (parser);
 		      exp_loc = c_parser_peek_token (parser)->location;
-		      next = c_parser_expr_no_commas (parser, NULL);
+		      next = c_parser_पाहायाग_no_commas (parser, NULL);
 		      next = convert_lvalue_to_rvalue (exp_loc, next,
 						       true, true);
-		      rec = build_compound_expr (comma_loc, rec, next.value);
+		      rec = build_compound_पाहायाग (comma_loc, rec, next.हालागा);
 		    }
-		parse_message_args:
+		parse_message_मगा_कातविरान:
 		  /* Now parse the objc-message-args.  */
-		  args = c_parser_objc_message_args (parser);
+		  मगा_कातविरान = c_parser_objc_message_मगा_कातविरान (parser);
 		  c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE,
 					     "expected %<]%>");
-		  mexpr.value
-		    = objc_build_message_expr (rec, args);
+		  mexpr.हालागा
+		    = objc_build_message_पाहायाग (rec, मगा_कातविरान);
 		  mexpr.original_code = ERROR_MARK;
 		  mexpr.original_type = NULL;
 		  mexpr.m_decimal = 0;
@@ -6890,25 +6890,25 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 		}
 	      c_parser_consume_token (parser);
 	      array_index_loc = c_parser_peek_token (parser)->location;
-	      first_expr = c_parser_expr_no_commas (parser, NULL);
-	      mark_exp_read (first_expr.value);
+	      first_पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	      mark_exp_read (first_पाहायाग.हालागा);
 	    array_desig_after_first:
-	      first_expr = convert_lvalue_to_rvalue (array_index_loc,
-						     first_expr,
+	      first_पाहायाग = convert_lvalue_to_rvalue (array_index_loc,
+						     first_पाहायाग,
 						     true, true);
-	      first = first_expr.value;
+	      first = first_पाहायाग.हालागा;
 	      if (c_parser_next_token_is (parser, CPP_ELLIPSIS))
 		{
 		  ellipsis_loc = c_parser_peek_token (parser)->location;
 		  c_parser_consume_token (parser);
 		  second = convert_lvalue_to_rvalue (ellipsis_loc,
-						     (c_parser_expr_no_commas
+						     (c_parser_पाहायाग_no_commas
 						      (parser, NULL)),
-						     true, true).value;
+						     true, true).हालागा;
 		  mark_exp_read (second);
 		}
 	      else
-		second = NULL_TREE;
+		second = NULL_पुनो;
 	      if (c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
 		{
 		  c_parser_consume_token (parser);
@@ -6939,13 +6939,13 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 			 "obsolete use of designated initializer without %<=%>");
 	      else
 		{
-		  struct c_expr init;
+		  struct c_पाहायाग init;
 		  init.set_error ();
 		  init.original_code = ERROR_MARK;
 		  init.original_type = NULL;
 		  c_parser_error (parser, "expected %<=%>");
 		  c_parser_skip_until_found (parser, CPP_COMMA, NULL);
-		  process_init_element (input_location, init, false,
+		  process_init_element (पासोक_location, init, false,
 					braced_init_obstack);
 		  return;
 		}
@@ -6962,27 +6962,27 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
    initializer.  */
 
 static void
-c_parser_initval (c_parser *parser, struct c_expr *after,
+c_parser_initval (c_parser *parser, struct c_पाहायाग *after,
 		  struct obstack * braced_init_obstack)
 {
-  struct c_expr init;
+  struct c_पाहायाग init;
   gcc_assert (!after || c_dialect_objc ());
   location_t loc = c_parser_peek_token (parser)->location;
 
   if (c_parser_next_token_is (parser, CPP_OPEN_BRACE) && !after)
-    init = c_parser_braced_init (parser, NULL_TREE, true,
+    init = c_parser_braced_init (parser, NULL_पुनो, true,
 				 braced_init_obstack, false);
   else
     {
-      init = c_parser_expr_no_commas (parser, after);
-      if (init.value != NULL_TREE
-	  && TREE_CODE (init.value) != STRING_CST
-	  && (TREE_CODE (init.value) != COMPOUND_LITERAL_EXPR
-	      || C_DECL_DECLARED_CONSTEXPR (COMPOUND_LITERAL_EXPR_DECL
-					    (init.value))))
+      init = c_parser_पाहायाग_no_commas (parser, after);
+      if (init.हालागा != NULL_पुनो
+	  && पुनो_CODE (init.हालागा) != STRING_CST
+	  && (पुनो_CODE (init.हालागा) != COMPOUND_LITERAL_पाहायाग
+	      || C_DECL_DECLARED_CONSTEXPR (COMPOUND_LITERAL_पाहायाग_DECL
+					    (init.हालागा))))
 	init = convert_lvalue_to_rvalue (loc, init, true, true, true);
     }
-  tree val = init.value;
+  पुनो val = init.हालागा;
   process_init_element (loc, init, false, braced_init_obstack);
 
   /* Attempt to optimize large char array initializers into RAW_DATA_CST
@@ -6995,8 +6995,8 @@ c_parser_initval (c_parser *parser, struct c_expr *after,
        they are all parsed.  */
     --vals_to_ignore;
   else if (val
-	   && TREE_CODE (val) == INTEGER_CST
-	   && TREE_TYPE (val) == integer_type_node
+	   && पुनो_CODE (val) == INTEGER_CST
+	   && पुनो_TYPE (val) == integer_type_बुहोल
 	   && c_parser_next_token_is (parser, CPP_COMMA))
     if (unsigned int len = c_maybe_optimize_large_byte_initializer ())
       {
@@ -7010,13 +7010,13 @@ c_parser_initval (c_parser *parser, struct c_expr *after,
 	    if (tok->type != CPP_COMMA)
 	      break;
 	    tok = c_parser_peek_nth_token_raw (parser, 2 + 2 * i);
-	    if (tok->type != CPP_NUMBER
-		|| TREE_CODE (tok->value) != INTEGER_CST
-		|| TREE_TYPE (tok->value) != integer_type_node
-		|| wi::neg_p (wi::to_wide (tok->value))
-		|| wi::to_widest (tok->value) > UCHAR_MAX)
+	    if (tok->type != CPP_नुमेरो
+		|| पुनो_CODE (tok->हालागा) != INTEGER_CST
+		|| पुनो_TYPE (tok->हालागा) != integer_type_बुहोल
+		|| wi::neg_p (wi::to_wide (tok->हालागा))
+		|| wi::to_widest (tok->हालागा) > UCHAR_MAX)
 	      break;
-	    buf1[i] = (char) tree_to_uhwi (tok->value);
+	    buf1[i] = (char) पुनो_to_uhwi (tok->हालागा);
 	    if (i == 0)
 	      loc = tok->location;
 	    last_loc = tok->location;
@@ -7035,13 +7035,13 @@ c_parser_initval (c_parser *parser, struct c_expr *after,
 	  len = i;
 	else if (tok->type != CPP_COMMA
 		 || (c_parser_peek_nth_token_raw (parser, 2 + 2 * i)->type
-		     != CPP_NUMBER))
+		     != CPP_नुमेरो))
 	  {
 	    vals_to_ignore = i;
 	    return;
 	  }
 	/* Ensure the STRING_CST fits into 128K.  */
-	unsigned int max_len = 131072 - offsetof (struct tree_string, str) - 1;
+	unsigned int max_len = 131072 - offsetof (struct पुनो_string, str) - 1;
 	unsigned int orig_len = len;
 	unsigned int off = 0, last = 0;
 	if (!wi::neg_p (wi::to_wide (val)) && wi::to_widest (val) <= UCHAR_MAX)
@@ -7049,7 +7049,7 @@ c_parser_initval (c_parser *parser, struct c_expr *after,
 	len = MIN (len, max_len - off);
 	char *buf2 = XNEWVEC (char, len + off);
 	if (off)
-	  buf2[0] = (char) tree_to_uhwi (val);
+	  buf2[0] = (char) पुनो_to_uhwi (val);
 	memcpy (buf2 + off, buf1, i);
 	for (unsigned int j = 0; j < i; ++j)
 	  {
@@ -7063,16 +7063,16 @@ c_parser_initval (c_parser *parser, struct c_expr *after,
 	    if (!c_parser_next_token_is (parser, CPP_COMMA))
 	      break;
 	    tok = c_parser_peek_2nd_token (parser);
-	    if (tok->type != CPP_NUMBER
-		|| TREE_CODE (tok->value) != INTEGER_CST
-		|| TREE_TYPE (tok->value) != integer_type_node
-		|| wi::neg_p (wi::to_wide (tok->value))
-		|| wi::to_widest (tok->value) > UCHAR_MAX)
+	    if (tok->type != CPP_नुमेरो
+		|| पुनो_CODE (tok->हालागा) != INTEGER_CST
+		|| पुनो_TYPE (tok->हालागा) != integer_type_बुहोल
+		|| wi::neg_p (wi::to_wide (tok->हालागा))
+		|| wi::to_widest (tok->हालागा) > UCHAR_MAX)
 	      break;
 	    c_token *tok2 = c_parser_peek_nth_token (parser, 3);
 	    if (tok2->type != CPP_COMMA && tok2->type != CPP_CLOSE_BRACE)
 	      break;
-	    buf2[i + off] = (char) tree_to_uhwi (tok->value);
+	    buf2[i + off] = (char) पुनो_to_uhwi (tok->हालागा);
 	    /* If orig_len is INT_MAX, this can be flexible array member and
 	       in that case we need to ensure another element which
 	       for CPP_EMBED is normally guaranteed after it.  Include
@@ -7081,7 +7081,7 @@ c_parser_initval (c_parser *parser, struct c_expr *after,
 	    if (orig_len == INT_MAX
 		&& (tok2->type == CPP_CLOSE_BRACE
 		    || (c_parser_peek_nth_token (parser, 4)->type
-			!= CPP_NUMBER)))
+			!= CPP_नुमेरो)))
 	      {
 		last = 1;
 		break;
@@ -7090,19 +7090,19 @@ c_parser_initval (c_parser *parser, struct c_expr *after,
 	    c_parser_consume_token (parser);
 	    c_parser_consume_token (parser);
 	  }
-	val = make_node (RAW_DATA_CST);
-	TREE_TYPE (val) = integer_type_node;
+	val = make_बुहोल (RAW_DATA_CST);
+	पुनो_TYPE (val) = integer_type_बुहोल;
 	RAW_DATA_LENGTH (val) = i;
-	tree owner = build_string (i + off + last, buf2);
+	पुनो owner = build_string (i + off + last, buf2);
 	XDELETEVEC (buf2);
-	TREE_TYPE (owner) = build_array_type_nelts (unsigned_char_type_node,
+	पुनो_TYPE (owner) = build_array_type_nelts (unsigned_char_type_बुहोल,
 						    i + off + last);
 	RAW_DATA_OWNER (val) = owner;
-	RAW_DATA_POINTER (val) = TREE_STRING_POINTER (owner) + off;
-	init.value = val;
-	set_c_expr_source_range (&init, loc, last_loc);
+	RAW_DATA_POINTER (val) = पुनो_STRING_POINTER (owner) + off;
+	init.हालागा = val;
+	set_c_पाहायाग_source_range (&init, loc, last_loc);
 	init.original_code = RAW_DATA_CST;
-	init.original_type = integer_type_node;
+	init.original_type = integer_type_बुहोल;
 	init.m_decimal = 0;
 	process_init_element (loc, init, false, braced_init_obstack);
       }
@@ -7174,10 +7174,10 @@ c_parser_initval (c_parser *parser, struct c_expr *after,
      cancel-directive
      cancellation-point-directive  */
 
-static tree
+static पुनो
 c_parser_compound_statement (c_parser *parser, location_t *endlocp)
 {
-  tree stmt;
+  पुनो stmt;
   location_t brace_loc;
   brace_loc = c_parser_peek_token (parser)->location;
   if (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
@@ -7186,7 +7186,7 @@ c_parser_compound_statement (c_parser *parser, location_t *endlocp)
 	 if we have just prepared to enter a function body.  */
       stmt = c_begin_compound_stmt (true);
       c_end_compound_stmt (brace_loc, stmt, true);
-      return error_mark_node;
+      return error_mark_बुहोल;
     }
   stmt = c_begin_compound_stmt (true);
   location_t end_loc = c_parser_compound_statement_nostart (parser);
@@ -7257,11 +7257,11 @@ check_omp_intervening_code (c_parser *parser)
    and add the statement to the current list.  If SL is an empty statement
    list, do nothing.  */
 static void
-add_structured_block_stmt (tree sl)
+add_structured_block_stmt (पुनो sl)
 {
-  if (TREE_CODE (sl) != STATEMENT_LIST
+  if (पुनो_CODE (sl) != STATEMENT_LIST
       || !tsi_end_p (tsi_start (sl)))
-    add_stmt (build1 (OMP_STRUCTURED_BLOCK, void_type_node, sl));
+    add_stmt (build1 (OMP_STRUCTURED_BLOCK, void_type_बुहोल, sl));
 }
 
 struct c_omp_attribute_data
@@ -7275,7 +7275,7 @@ struct c_omp_attribute_data
    (if any) at the start of a statement or in attribute-declaration.  */
 
 static bool
-c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
+c_parser_handle_statement_omp_attributes (c_parser *parser, पुनो &attrs,
 					  bool *have_std_attrs)
 {
   if (!flag_openmp && !flag_openmp_simd)
@@ -7285,15 +7285,15 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
   int cnt = 0;
   int tokens = 0;
   bool bad = false;
-  for (tree *pa = &attrs; *pa; )
+  for (पुनो *pa = &attrs; *pa; )
     if (is_attribute_namespace_p ("omp", *pa)
 	&& is_attribute_p ("directive", get_attribute_name (*pa)))
       {
 	cnt++;
-	for (tree a = TREE_VALUE (*pa); a; a = TREE_CHAIN (a))
+	for (पुनो a = पुनो_हालागा (*pa); a; a = पुनो_CHAIN (a))
 	  {
-	    tree d = TREE_VALUE (a);
-	    gcc_assert (TREE_CODE (d) == C_TOKEN_VEC);
+	    पुनो d = पुनो_हालागा (a);
+	    gcc_assert (पुनो_CODE (d) == C_TOKEN_VEC);
 	    vec<c_token, va_gc> *toks = C_TOKEN_VEC_TOKENS (d);
 	    c_token *first = toks->address ();
 	    c_token *last = first + toks->length ();
@@ -7305,7 +7305,7 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 		parser->omp_attrs_forbidden_p = false;
 		bad = true;
 	      }
-	    else if (TREE_PUBLIC (d))
+	    else if (पुनो_PUBLIC (d))
 	      {
 		error_at (first->location,
 			  "OpenMP %<omp::decl%> attribute on a statement");
@@ -7314,11 +7314,11 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 	    const char *directive[3] = {};
 	    for (int i = 0; i < 3; i++)
 	      {
-		tree id = NULL_TREE;
+		पुनो id = NULL_पुनो;
 		if (first + i == last)
 		  break;
 		if (first[i].type == CPP_NAME)
-		  id = first[i].value;
+		  id = first[i].हालागा;
 		else if (first[i].type == CPP_KEYWORD)
 		  id = ridpointers[(int) first[i].keyword];
 		else
@@ -7334,7 +7334,7 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 		error_at (first->location,
 			  "unknown OpenMP directive name in %qs attribute "
 			  "argument",
-			  TREE_PUBLIC (d) ? "omp::decl" : "omp::directive");
+			  पुनो_PUBLIC (d) ? "omp::decl" : "omp::directive");
 		continue;
 	      }
 	    c_omp_directive_kind kind = dir->kind;
@@ -7349,9 +7349,9 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 		else if (first + 2 < last
 			 && first[1].type == CPP_COMMA
 			 && first[2].type == CPP_NAME
-			 && (strcmp (IDENTIFIER_POINTER (first[2].value),
+			 && (strcmp (IDENTIFIER_POINTER (first[2].हालागा),
 				     "depend") == 0
-			     || strcmp (IDENTIFIER_POINTER (first[2].value),
+			     || strcmp (IDENTIFIER_POINTER (first[2].हालागा),
 					"doacross") == 0))
 		  kind = C_OMP_DIR_STANDALONE;
 	      }
@@ -7369,10 +7369,10 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 			   && first[i].type == CPP_NAME
 			   && first[i + 1].type == CPP_OPEN_PAREN
 			   && first[i + 2].type == CPP_NAME
-			   && !strcmp (IDENTIFIER_POINTER (first[i].value),
+			   && !strcmp (IDENTIFIER_POINTER (first[i].हालागा),
 				       "at")
 			   && !strcmp (IDENTIFIER_POINTER (first[i
-								 + 2].value),
+								 + 2].हालागा),
 				       "execution"))
 		    {
 		      kind = C_OMP_DIR_STANDALONE;
@@ -7380,16 +7380,16 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 		    }
 	      }
 	    c_omp_attribute_data v = { toks, dir, kind };
-	    vd.safe_push (v);
+	    vd.safe_इतुलाक (v);
 	    if (flag_openmp || dir->simd)
 	      tokens += (last - first) + 1;
 	  }
 	c_omp_attribute_data v = {};
-	vd.safe_push (v);
-	*pa = TREE_CHAIN (*pa);
+	vd.safe_इतुलाक (v);
+	*pa = पुनो_CHAIN (*pa);
       }
     else
-      pa = &TREE_CHAIN (*pa);
+      pa = &पुनो_CHAIN (*pa);
 
   if (bad)
     {
@@ -7482,21 +7482,21 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
       tok.keyword = RID_MAX;
       tok.pragma_kind = pragma_kind (v->dir->id);
       tok.location = first->location;
-      toks->quick_push (tok);
+      toks->quick_इतुलाक (tok);
       while (++first < last)
-	toks->quick_push (*first);
+	toks->quick_इतुलाक (*first);
       tok = {};
       tok.type = CPP_PRAGMA_EOL;
       tok.keyword = RID_MAX;
       tok.location = last[-1].location;
-      toks->quick_push (tok);
+      toks->quick_इतुलाक (tok);
     }
 
   c_token tok = {};
   tok.type = CPP_EOF;
   tok.keyword = RID_MAX;
   tok.location = toks->last ().location;
-  toks->quick_push (tok);
+  toks->quick_इतुलाक (tok);
 
   gcc_assert (!parser->in_omp_attribute_pragma);
   parser->in_omp_attribute_pragma = ggc_alloc<omp_attribute_pragma_state> ();
@@ -7512,34 +7512,34 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
    (if any) at the start or after declaration-id of a declaration.  */
 
 static void
-c_parser_handle_directive_omp_attributes (tree &attrs,
+c_parser_handle_directive_omp_attributes (पुनो &attrs,
 					  vec<c_token> *&pragma_clauses,
 					  vec<c_token> *attr_clauses)
 {
   if (!flag_openmp && !flag_openmp_simd)
     return;
 
-  for (tree *pa = &attrs; *pa; )
+  for (पुनो *pa = &attrs; *pa; )
     if (is_attribute_namespace_p ("omp", *pa)
 	&& is_attribute_p ("directive", get_attribute_name (*pa)))
       {
 	int cnt = 0;
-	for (tree *pa2 = &TREE_VALUE (*pa); *pa2; )
+	for (पुनो *pa2 = &पुनो_हालागा (*pa); *pa2; )
 	  {
-	    tree a = *pa2;
-	    tree d = TREE_VALUE (a);
-	    gcc_assert (TREE_CODE (d) == C_TOKEN_VEC);
+	    पुनो a = *pa2;
+	    पुनो d = पुनो_हालागा (a);
+	    gcc_assert (पुनो_CODE (d) == C_TOKEN_VEC);
 	    vec<c_token, va_gc> *toks = C_TOKEN_VEC_TOKENS (d);
 	    c_token *first = toks->address ();
 	    c_token *last = first + toks->length ();
 	    const char *directive[3] = {};
 	    for (int i = 0; i < 3; i++)
 	      {
-		tree id = NULL_TREE;
+		पुनो id = NULL_पुनो;
 		if (first + i == last)
 		  break;
 		if (first[i].type == CPP_NAME)
-		  id = first[i].value;
+		  id = first[i].हालागा;
 		else if (first[i].type == CPP_KEYWORD)
 		  id = ridpointers[(int) first[i].keyword];
 		else
@@ -7555,8 +7555,8 @@ c_parser_handle_directive_omp_attributes (tree &attrs,
 		error_at (first->location,
 			  "unknown OpenMP directive name in "
 			  "%qs attribute argument",
-			  TREE_PUBLIC (d) ? "omp::decl" : "omp::directive");
-		*pa2 = TREE_CHAIN (a);
+			  पुनो_PUBLIC (d) ? "omp::decl" : "omp::directive");
+		*pa2 = पुनो_CHAIN (a);
 	      }
 	    else if (dir->id == PRAGMA_OMP_DECLARE
 		     && (strcmp (directive[1], "simd") == 0
@@ -7571,41 +7571,41 @@ c_parser_handle_directive_omp_attributes (tree &attrs,
 		      if (is_attribute_namespace_p ("omp", *pa)
 			  && is_attribute_p ("directive",
 					     get_attribute_name (*pa)))
-			*pa = TREE_CHAIN (*pa);
+			*pa = पुनो_CHAIN (*pa);
 		      else
-			pa = &TREE_CHAIN (*pa);
+			pa = &पुनो_CHAIN (*pa);
 		    return;
 		  }
 		++cnt;
 		attr_clauses->reserve (attr_clauses->length ()
 				       + toks->length () + 2);
 		for (++first; first < last; ++first)
-		  attr_clauses->quick_push (*first);
+		  attr_clauses->quick_इतुलाक (*first);
 		c_token tok = {};
 		tok.type = CPP_PRAGMA_EOL;
 		tok.keyword = RID_MAX;
 		tok.location = last[-1].location;
-		attr_clauses->quick_push (tok);
-		*pa2 = TREE_CHAIN (a);
+		attr_clauses->quick_इतुलाक (tok);
+		*pa2 = पुनो_CHAIN (a);
 	      }
 	    else
-	      pa2 = &TREE_CHAIN (a);
+	      pa2 = &पुनो_CHAIN (a);
 	  }
-	if (cnt && TREE_VALUE (*pa) == NULL_TREE)
-	  *pa = TREE_CHAIN (*pa);
+	if (cnt && पुनो_हालागा (*pa) == NULL_पुनो)
+	  *pa = पुनो_CHAIN (*pa);
 	else
-	  pa = &TREE_CHAIN (*pa);
+	  pa = &पुनो_CHAIN (*pa);
       }
     else
-      pa = &TREE_CHAIN (*pa);
+      pa = &पुनो_CHAIN (*pa);
   if (attr_clauses->length ())
     {
       c_token tok = {};
       tok.type = CPP_EOF;
       tok.keyword = RID_MAX;
       tok.location = attr_clauses->last ().location;
-      attr_clauses->quick_push (tok);
-      attr_clauses->quick_push (tok);
+      attr_clauses->quick_इतुलाक (tok);
+      attr_clauses->quick_इतुलाक (tok);
       pragma_clauses = attr_clauses;
     }
 }
@@ -7614,15 +7614,15 @@ c_parser_handle_directive_omp_attributes (tree &attrs,
    precedes a return.  PARSER is the parser and ATTR is the output
    attr_state.  */
 
-static tree
-c_parser_handle_musttail (c_parser *parser, tree std_attrs, attr_state &attr)
+static पुनो
+c_parser_handle_musttail (c_parser *parser, पुनो std_attrs, attr_state &attr)
 {
   if (c_parser_next_token_is_keyword (parser, RID_RETURN))
     {
-      if (tree a = lookup_attribute ("gnu", "musttail", std_attrs))
+      if (पुनो a = lookup_attribute ("gnu", "musttail", std_attrs))
 	{
-	  for (; a; a = lookup_attribute ("gnu", "musttail", TREE_CHAIN (a)))
-	    if (TREE_VALUE (a))
+	  for (; a; a = lookup_attribute ("gnu", "musttail", पुनो_CHAIN (a)))
+	    if (पुनो_हालागा (a))
 	      error ("%qs attribute does not take any arguments",
 		     "musttail");
 	  std_attrs = remove_attribute ("gnu", "musttail", std_attrs);
@@ -7644,14 +7644,14 @@ c_parser_handle_musttail (c_parser *parser, tree std_attrs, attr_state &attr)
    statement search backwards in cur_stmt_list until that stmt for loop
    names if any.  */
 
-static tree
+static पुनो
 get_before_labels ()
 {
   if (!building_stmt_list_p ())
-    return NULL_TREE;
-  tree_stmt_iterator tsi = tsi_last (cur_stmt_list);
+    return NULL_पुनो;
+  पुनो_stmt_iterator tsi = tsi_last (cur_stmt_list);
   if (tsi_end_p (tsi))
-    return NULL_TREE;
+    return NULL_पुनो;
   return tsi_stmt (tsi);
 }
 
@@ -7670,7 +7670,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
     = parser->omp_for_parse_state;
   bool in_omp_loop_block
     = omp_for_parse_state ? omp_for_parse_state->want_nested_loop : false;
-  tree sl = NULL_TREE;
+  पुनो sl = NULL_पुनो;
   attr_state astate = {};
 
   if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
@@ -7684,7 +7684,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
   /* If we're parsing a {} sequence in an OMP_FOR body, start a
      statement list for intervening code.  */
   if (in_omp_loop_block)
-    sl = push_stmt_list ();
+    sl = इतुलाक_stmt_list ();
 
   mark_valid_location_for_stdc_pragma (true);
   if (c_parser_next_token_is_keyword (parser, RID_LABEL))
@@ -7702,16 +7702,16 @@ c_parser_compound_statement_nostart (c_parser *parser)
 	     are OK here.  */
 	  while (true)
 	    {
-	      tree label;
+	      पुनो label;
 	      if (c_parser_next_token_is_not (parser, CPP_NAME))
 		{
 		  c_parser_error (parser, "expected identifier");
 		  break;
 		}
 	      label
-		= declare_label (c_parser_peek_token (parser)->value);
+		= declare_label (c_parser_peek_token (parser)->हालागा);
 	      C_DECLARED_LABEL_FLAG (label) = 1;
-	      add_stmt (build_stmt (label_loc, DECL_EXPR, label));
+	      add_stmt (build_stmt (label_loc, DECL_पाहायाग, label));
 	      c_parser_consume_token (parser);
 	      if (c_parser_next_token_is (parser, CPP_COMMA))
 		c_parser_consume_token (parser);
@@ -7731,7 +7731,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
       c_parser_consume_token (parser);
       return endloc;
     }
-  tree before_labels = get_before_labels ();
+  पुनो before_labels = get_before_labels ();
   while (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
     {
       location_t loc = c_parser_peek_token (parser)->location;
@@ -7746,7 +7746,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
 	 __extension__ before the nested statement.  */
       if (in_omp_loop_block && !last_label)
 	{
-	  tree_code code = omp_for_parse_state->code;
+	  पुनो_code code = omp_for_parse_state->code;
 	  if (want_nested_loop
 	      && c_parser_omp_next_tokens_can_be_canon_loop (parser, code,
 							     false))
@@ -7756,11 +7756,11 @@ c_parser_compound_statement_nostart (c_parser *parser)
 		 OMP_STRUCTURED_BLOCK node, and start a new structured
 		 block to hold statements that may come after the FOR.  */
 	      gcc_assert (sl);
-	      add_structured_block_stmt (pop_stmt_list (sl));
+	      add_structured_block_stmt (आलिसिन_stmt_list (sl));
 	      omp_for_parse_state->depth++;
 	      add_stmt (c_parser_omp_loop_nest (parser, NULL));
 	      omp_for_parse_state->depth--;
-	      sl = push_stmt_list ();
+	      sl = इतुलाक_stmt_list ();
 	      parser->error = false;
 	      before_labels = get_before_labels ();
 	      astate.reset ();
@@ -7774,17 +7774,17 @@ c_parser_compound_statement_nostart (c_parser *parser)
 		 statement into separate blocks of intervening code.  If
 		 there's no nested loop, it's all part of the same
 		 chunk of intervening code.  */
-	      tree pre_sl = pop_stmt_list (sl);
-	      tree nested_sl = push_stmt_list ();
+	      पुनो pre_sl = आलिसिन_stmt_list (sl);
+	      पुनो nested_sl = इतुलाक_stmt_list ();
 	      mark_valid_location_for_stdc_pragma (false);
-	      c_parser_statement_after_labels (parser, NULL, NULL_TREE);
-	      nested_sl = pop_stmt_list (nested_sl);
+	      c_parser_statement_after_labels (parser, NULL, NULL_पुनो);
+	      nested_sl = आलिसिन_stmt_list (nested_sl);
 	      if (omp_for_parse_state->want_nested_loop)
 		{
 		  /* This block didn't contain a loop-nest, so it's
 		     all part of the same chunk of intervening code.  */
 		  check_omp_intervening_code (parser);
-		  sl = push_stmt_list ();
+		  sl = इतुलाक_stmt_list ();
 		  add_stmt (pre_sl);
 		  add_stmt (nested_sl);
 		}
@@ -7793,7 +7793,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
 		  /* It contains the nested loop.  */
 		  add_structured_block_stmt (pre_sl);
 		  add_stmt (nested_sl);
-		  sl = push_stmt_list ();
+		  sl = इतुलाक_stmt_list ();
 		}
 	      parser->error = false;
 	      before_labels = get_before_labels ();
@@ -7817,7 +7817,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
       /* Standard attributes may start a label, statement or declaration.  */
       bool have_std_attrs
 	= c_parser_nth_token_starts_std_attributes (parser, 1);
-      tree std_attrs = NULL_TREE;
+      पुनो std_attrs = NULL_पुनो;
       if (have_std_attrs)
 	{
 	  std_attrs = c_parser_std_attribute_specifier_sequence (parser);
@@ -8009,7 +8009,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
      construct and didn't find one.  */
   if (sl)
     {
-      sl = pop_stmt_list (sl);
+      sl = आलिसिन_stmt_list (sl);
       if (omp_for_parse_state->want_nested_loop)
 	add_stmt (sl);
       else
@@ -8028,7 +8028,7 @@ c_parser_all_labels (c_parser *parser)
 {
   attr_state attr = {};
   bool have_std_attrs;
-  tree std_attrs = NULL;
+  पुनो std_attrs = NULL;
   if ((have_std_attrs = c_parser_nth_token_starts_std_attributes (parser, 1)))
     {
       std_attrs = c_parser_std_attribute_specifier_sequence (parser);
@@ -8067,21 +8067,21 @@ c_parser_all_labels (c_parser *parser)
 struct omp_metadirective_parse_data {
   /* These fields are used to unique-ify labels when reparsing the
      code in a metadirective alternative.  */
-  vec<tree> * GTY((skip)) body_labels;
-  unsigned int region_num;
+  vec<पुनो> * GTY((skip)) body_labels;
+  unsigned int region_नुमेरो;
 };
 
 /* Helper function for c_parser_label: mangle a metadirective region
    label NAME.  */
-static tree
-mangle_metadirective_region_label (c_parser *parser, tree name)
+static पुनो
+mangle_metadirective_region_label (c_parser *parser, पुनो name)
 {
   if (parser->omp_metadirective_state->body_labels->contains (name))
     {
       const char *old_name = IDENTIFIER_POINTER (name);
       char *new_name = (char *) XALLOCAVEC (char, strlen (old_name) + 32);
       sprintf (new_name, "%s_MDR%u", old_name,
-	       parser->omp_metadirective_state->region_num);
+	       parser->omp_metadirective_state->region_नुमेरो);
       return get_identifier (new_name);
     }
   return name;
@@ -8107,10 +8107,10 @@ mangle_metadirective_region_label (c_parser *parser, tree name)
    attribute-specifier-sequence after the label is parsed in this
    function.  */
 static void
-c_parser_label (c_parser *parser, tree std_attrs)
+c_parser_label (c_parser *parser, पुनो std_attrs)
 {
   location_t loc1 = c_parser_peek_token (parser)->location;
-  tree label = NULL_TREE;
+  पुनो label = NULL_पुनो;
 
   /* Remember whether this case or a user-defined label is allowed to fall
      through to.  */
@@ -8118,23 +8118,23 @@ c_parser_label (c_parser *parser, tree std_attrs)
 
   if (c_parser_next_token_is_keyword (parser, RID_CASE))
     {
-      tree exp1, exp2;
+      पुनो exp1, exp2;
       c_parser_consume_token (parser);
       exp1 = convert_lvalue_to_rvalue (loc1,
-				       c_parser_expr_no_commas (parser, NULL),
-				       true, true).value;
+				       c_parser_पाहायाग_no_commas (parser, NULL),
+				       true, true).हालागा;
       if (c_parser_next_token_is (parser, CPP_COLON))
 	{
 	  c_parser_consume_token (parser);
-	  label = do_case (loc1, exp1, NULL_TREE, std_attrs);
+	  label = do_case (loc1, exp1, NULL_पुनो, std_attrs);
 	}
       else if (c_parser_next_token_is (parser, CPP_ELLIPSIS))
 	{
 	  c_parser_consume_token (parser);
 	  exp2 = convert_lvalue_to_rvalue (loc1,
-					   c_parser_expr_no_commas (parser,
+					   c_parser_पाहायाग_no_commas (parser,
 								    NULL),
-					   true, true).value;
+					   true, true).हालागा;
 	  if (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    label = do_case (loc1, exp1, exp2, std_attrs);
 	}
@@ -8145,13 +8145,13 @@ c_parser_label (c_parser *parser, tree std_attrs)
     {
       c_parser_consume_token (parser);
       if (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
-	label = do_case (loc1, NULL_TREE, NULL_TREE, std_attrs);
+	label = do_case (loc1, NULL_पुनो, NULL_पुनो, std_attrs);
     }
   else
     {
-      tree name = c_parser_peek_token (parser)->value;
-      tree tlab;
-      tree attrs;
+      पुनो name = c_parser_peek_token (parser)->हालागा;
+      पुनो tlab;
+      पुनो attrs;
       location_t loc2 = c_parser_peek_token (parser)->location;
       gcc_assert (c_parser_next_token_is (parser, CPP_NAME));
       c_parser_consume_token (parser);
@@ -8165,7 +8165,7 @@ c_parser_label (c_parser *parser, tree std_attrs)
 	{
 	  decl_attributes (&tlab, attrs, 0);
 	  decl_attributes (&tlab, std_attrs, 0);
-	  label = add_stmt (build_stmt (loc1, LABEL_EXPR, tlab));
+	  label = add_stmt (build_stmt (loc1, LABEL_पाहायाग, tlab));
 	}
       if (attrs
 	  && c_parser_next_tokens_start_declaration (parser))
@@ -8174,8 +8174,8 @@ c_parser_label (c_parser *parser, tree std_attrs)
     }
   if (label)
     {
-      if (TREE_CODE (label) == LABEL_EXPR)
-	FALLTHROUGH_LABEL_P (LABEL_EXPR_LABEL (label)) = fallthrough_p;
+      if (पुनो_CODE (label) == LABEL_पाहायाग)
+	FALLTHROUGH_LABEL_P (LABEL_पाहायाग_LABEL (label)) = fallthrough_p;
       else
 	FALLTHROUGH_LABEL_P (CASE_LABEL (label)) = fallthrough_p;
     }
@@ -8330,7 +8330,7 @@ c_parser_label (c_parser *parser, tree std_attrs)
 static void
 c_parser_statement (c_parser *parser, bool *if_p, location_t *loc_after_labels)
 {
-  tree before_labels = get_before_labels ();
+  पुनो before_labels = get_before_labels ();
   attr_state a = c_parser_all_labels (parser);
   if (loc_after_labels)
     *loc_after_labels = c_parser_peek_token (parser)->location;
@@ -8340,14 +8340,14 @@ c_parser_statement (c_parser *parser, bool *if_p, location_t *loc_after_labels)
 
 /* Parse and handle optional identifier after break or continue keywords.  */
 
-static tree
+static पुनो
 c_parser_bc_name (c_parser *parser, bool is_break)
 {
   if (!c_parser_next_token_is (parser, CPP_NAME))
-    return NULL_TREE;
+    return NULL_पुनो;
 
   c_token *tok = c_parser_peek_token (parser);
-  tree label = c_finish_bc_name (tok->location, tok->value, is_break);
+  पुनो label = c_finish_bc_name (tok->location, tok->हालागा, is_break);
   c_parser_consume_token (parser);
   return label;
 }
@@ -8365,11 +8365,11 @@ c_parser_bc_name (c_parser *parser, bool is_break)
 
 static void
 c_parser_statement_after_labels (c_parser *parser, bool *if_p,
-				 tree before_labels,
-				 vec<tree> *chain, attr_state astate)
+				 पुनो before_labels,
+				 vec<पुनो> *chain, attr_state astate)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  tree stmt = NULL_TREE;
+  पुनो stmt = NULL_पुनो;
   bool in_if_block = parser->in_if_block;
   parser->in_if_block = false;
   if (if_p != NULL)
@@ -8406,7 +8406,7 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	  c_parser_consume_token (parser);
 	  if (c_parser_next_token_is (parser, CPP_NAME))
 	    {
-	      tree name = c_parser_peek_token (parser)->value;
+	      पुनो name = c_parser_peek_token (parser)->हालागा;
 	      if (parser->omp_metadirective_state)
 		name = mangle_metadirective_region_label (parser, name);
 	      stmt = c_finish_goto_label (loc, name);
@@ -8414,7 +8414,7 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	    }
 	  else if (c_parser_next_token_is (parser, CPP_MULT))
 	    {
-	      struct c_expr val;
+	      struct c_पाहायाग val;
 
 	      c_parser_consume_token (parser);
 	      val = c_parser_expression (parser);
@@ -8438,17 +8438,17 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	  c_parser_consume_token (parser);
 	  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	    {
-	      stmt = c_finish_return (loc, NULL_TREE, NULL_TREE,
+	      stmt = c_finish_return (loc, NULL_पुनो, NULL_पुनो,
 				      astate.musttail_p);
 	      c_parser_consume_token (parser);
 	    }
 	  else
 	    {
 	      location_t xloc = c_parser_peek_token (parser)->location;
-	      struct c_expr expr = c_parser_expression_conv (parser);
-	      mark_exp_read (expr.value);
-	      stmt = c_finish_return (EXPR_LOC_OR_LOC (expr.value, xloc),
-				      expr.value, expr.original_type,
+	      struct c_पाहायाग पाहायाग = c_parser_expression_conv (parser);
+	      mark_exp_read (पाहायाग.हालागा);
+	      stmt = c_finish_return (पाहायाग_LOC_OR_LOC (पाहायाग.हालागा, xloc),
+				      पाहायाग.हालागा, पाहायाग.original_type,
 				      astate.musttail_p);
 	      goto expect_semicolon;
 	    }
@@ -8469,15 +8469,15 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	  c_parser_consume_token (parser);
 	  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	    {
-	      stmt = objc_build_throw_stmt (loc, NULL_TREE);
+	      stmt = objc_build_throw_stmt (loc, NULL_पुनो);
 	      c_parser_consume_token (parser);
 	    }
 	  else
 	    {
-	      struct c_expr expr = c_parser_expression (parser);
-	      expr = convert_lvalue_to_rvalue (loc, expr, false, false);
-	      expr.value = c_fully_fold (expr.value, false, NULL);
-	      stmt = objc_build_throw_stmt (loc, expr.value);
+	      struct c_पाहायाग पाहायाग = c_parser_expression (parser);
+	      पाहायाग = convert_lvalue_to_rvalue (loc, पाहायाग, false, false);
+	      पाहायाग.हालागा = c_fully_fold (पाहायाग.हालागा, false, NULL);
+	      stmt = objc_build_throw_stmt (loc, पाहायाग.हालागा);
 	      goto expect_semicolon;
 	    }
 	  break;
@@ -8494,7 +8494,7 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	    /* Allow '__attribute__((fallthrough));' or
 	       '__attribute__((assume(cond)));' or
 	       '__attribute__((musttail))) return'.  */
-	    tree attrs = c_parser_gnu_attributes (parser);
+	    पुनो attrs = c_parser_gnu_attributes (parser);
 	    bool has_assume = lookup_attribute ("assume", attrs);
 	    if (has_assume)
 	      {
@@ -8526,9 +8526,9 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	      {
 		if (c_parser_next_token_is (parser, CPP_SEMICOLON))
 		  {
-		    tree fn = build_call_expr_internal_loc (loc,
+		    पुनो fn = build_call_पाहायाग_internal_loc (loc,
 							    IFN_FALLTHROUGH,
-							    void_type_node, 0);
+							    void_type_बुहोल, 0);
 		    add_stmt (fn);
 		    /* Eat the ';'.  */
 		    c_parser_consume_token (parser);
@@ -8544,7 +8544,7 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	    else if (has_assume)
 	      /* Eat the ';'.  */
 	      c_parser_consume_token (parser);
-	    else if (attrs != NULL_TREE)
+	    else if (attrs != NULL_पुनो)
 	      {
 		auto_urlify_attributes sentinel;
 		warning_at (loc, OPT_Wattributes,
@@ -8554,7 +8554,7 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	    break;
 	  }
 	default:
-	  goto expr_stmt;
+	  goto पाहायाग_stmt;
 	}
       break;
     case CPP_SEMICOLON:
@@ -8574,8 +8574,8 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
         goto restart;
       break;
     default:
-    expr_stmt:
-      stmt = c_finish_expr_stmt (loc, c_parser_expression_conv (parser).value);
+    पाहायाग_stmt:
+      stmt = c_finish_पाहायाग_stmt (loc, c_parser_expression_conv (parser).हालागा);
     expect_semicolon:
       c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
       break;
@@ -8590,20 +8590,20 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
      (recursively) all of the component statements should already have
      line numbers assigned.  ??? Can we discard no-op statements
      earlier?  */
-  if (EXPR_LOCATION (stmt) == UNKNOWN_LOCATION)
-    protected_set_expr_location (stmt, loc);
+  if (पाहायाग_LOCATION (stmt) == UNKNOWN_LOCATION)
+    protected_set_पाहायाग_location (stmt, loc);
 
   parser->in_if_block = in_if_block;
 }
 
 /* Parse the condition from an if, do, while or for statements.  */
 
-static tree
+static पुनो
 c_parser_condition (c_parser *parser)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  tree cond;
-  cond = c_parser_expression_conv (parser).value;
+  पुनो cond;
+  cond = c_parser_expression_conv (parser).हालागा;
   cond = c_objc_common_truthvalue_conversion (loc, cond);
   cond = c_fully_fold (cond, false, NULL);
   if (warn_sequence_point)
@@ -8617,13 +8617,13 @@ c_parser_condition (c_parser *parser)
      ( expression )
 */
 
-static tree
+static पुनो
 c_parser_paren_condition (c_parser *parser)
 {
-  tree cond;
+  पुनो cond;
   matching_parens parens;
   if (!parens.require_open (parser))
-    return error_mark_node;
+    return error_mark_बुहोल;
   cond = c_parser_condition (parser);
   parens.skip_until_found_close (parser);
   return cond;
@@ -8643,23 +8643,23 @@ c_parser_paren_condition (c_parser *parser)
   SWITCH_P is true if we are called from c_parser_switch_statement; in
   that case, don't perform the truthvalue conversion.  */
 
-static c_expr
+static c_पाहायाग
 c_parser_selection_header (c_parser *parser, bool switch_p)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  c_expr expr;
-  bool parse_expr = true;
-  tree std_attrs;
+  c_पाहायाग पाहायाग;
+  bool parse_पाहायाग = true;
+  पुनो std_attrs;
   bool have_std_attrs = c_parser_nth_token_starts_std_attributes (parser, 1);
   if (have_std_attrs)
     std_attrs = c_parser_std_attribute_specifier_sequence (parser);
   else
-    std_attrs = NULL_TREE;
+    std_attrs = NULL_पुनो;
   if (c_parser_next_tokens_start_declaration (parser))
     {
       pedwarn_c23 (loc, OPT_Wpedantic,
 		   "ISO C does not support if declarations before C2Y");
-      expr.value
+      पाहायाग.हालागा
 	= c_parser_declaration_or_fndef (parser,
 					 /*fndef_ok=*/false,
 					 /*static_assert_ok=*/false,
@@ -8678,41 +8678,41 @@ c_parser_selection_header (c_parser *parser, bool switch_p)
 	  /* A simple-declaration is a declaration that can appear in
 	     place of the controlling expression of a selection statement.
 	     In that case, there shall be an initializer.  */
-	  if (!expr.value)
+	  if (!पाहायाग.हालागा)
 	    {
 	      error_at (loc, "declaration in the controlling expression must "
 			"have an initializer");
-	      expr.original_type = error_mark_node;
-	      expr.set_error ();
-	      return expr;
+	      पाहायाग.original_type = error_mark_बुहोल;
+	      पाहायाग.set_error ();
+	      return पाहायाग;
 	    }
-	  parse_expr = false;
+	  parse_पाहायाग = false;
 	}
-      if (expr.value)
+      if (पाहायाग.हालागा)
 	{
-	  expr.original_type = TREE_TYPE (expr.value);
-	  expr = convert_lvalue_to_rvalue (loc, expr, /*convert_p=*/true,
+	  पाहायाग.original_type = पुनो_TYPE (पाहायाग.हालागा);
+	  पाहायाग = convert_lvalue_to_rvalue (loc, पाहायाग, /*convert_p=*/true,
 					   /*read_p=*/true);
 	}
     }
   else if (have_std_attrs)
     {
       c_parser_error (parser, "expected declaration");
-      expr.original_type = error_mark_node;
-      expr.set_error ();
-      return expr;
+      पाहायाग.original_type = error_mark_बुहोल;
+      पाहायाग.set_error ();
+      return पाहायाग;
     }
 
-  if (parse_expr)
-    expr = c_parser_expression_conv (parser);
+  if (parse_पाहायाग)
+    पाहायाग = c_parser_expression_conv (parser);
   if (!switch_p)
     {
-      expr.value = c_objc_common_truthvalue_conversion (loc, expr.value);
-      expr.value = c_fully_fold (expr.value, false, NULL);
+      पाहायाग.हालागा = c_objc_common_truthvalue_conversion (loc, पाहायाग.हालागा);
+      पाहायाग.हालागा = c_fully_fold (पाहायाग.हालागा, false, NULL);
       if (warn_sequence_point)
-	verify_sequence_points (expr.value);
+	verify_sequence_points (पाहायाग.हालागा);
     }
-  return expr;
+  return पाहायाग;
 }
 
 /* Parse a selection-header enclosed in parentheses:
@@ -8720,13 +8720,13 @@ c_parser_selection_header (c_parser *parser, bool switch_p)
    ( selection-header )
 */
 
-static tree
+static पुनो
 c_parser_paren_selection_header (c_parser *parser)
 {
   matching_parens parens;
   if (!parens.require_open (parser))
-    return error_mark_node;
-  tree cond = c_parser_selection_header (parser, /*switch_p=*/false).value;
+    return error_mark_बुहोल;
+  पुनो cond = c_parser_selection_header (parser, /*switch_p=*/false).हालागा;
   parens.skip_until_found_close (parser);
   return cond;
 }
@@ -8737,11 +8737,11 @@ c_parser_paren_selection_header (c_parser *parser)
    which is not enclosed in braces and has an else clause.  This is used to
    implement -Wparentheses.  */
 
-static tree
+static पुनो
 c_parser_c99_block_statement (c_parser *parser, bool *if_p,
 			      location_t *loc_after_labels)
 {
-  tree block = c_begin_compound_stmt (flag_isoc99);
+  पुनो block = c_begin_compound_stmt (flag_isoc99);
   location_t loc = c_parser_peek_token (parser)->location;
   c_parser_statement (parser, if_p, loc_after_labels);
   return c_end_compound_stmt (loc, block, flag_isoc99);
@@ -8759,16 +8759,16 @@ c_parser_c99_block_statement (c_parser *parser, bool *if_p,
    which is not enclosed in braces and has an else clause.  This is used to
    implement -Wparentheses.  */
 
-static tree
+static पुनो
 c_parser_if_body (c_parser *parser, bool *if_p,
 		  const token_indent_info &if_tinfo)
 {
-  tree block = c_begin_compound_stmt (flag_isoc99);
+  पुनो block = c_begin_compound_stmt (flag_isoc99);
   location_t body_loc = c_parser_peek_token (parser)->location;
   location_t body_loc_after_labels = UNKNOWN_LOCATION;
   token_indent_info body_tinfo
     = get_token_indent_info (c_parser_peek_token (parser));
-  tree before_labels = get_before_labels ();
+  पुनो before_labels = get_before_labels ();
   attr_state a = c_parser_all_labels (parser);
 
   if (c_parser_next_token_is (parser, CPP_SEMICOLON))
@@ -8804,16 +8804,16 @@ c_parser_if_body (c_parser *parser, bool *if_p,
    specially for the sake of -Wempty-body warnings.  CHAIN is a vector
    of if-else-if conditions.  */
 
-static tree
+static पुनो
 c_parser_else_body (c_parser *parser, const token_indent_info &else_tinfo,
-		    vec<tree> *chain)
+		    vec<पुनो> *chain)
 {
   location_t body_loc = c_parser_peek_token (parser)->location;
-  tree block = c_begin_compound_stmt (flag_isoc99);
+  पुनो block = c_begin_compound_stmt (flag_isoc99);
   token_indent_info body_tinfo
     = get_token_indent_info (c_parser_peek_token (parser));
   location_t body_loc_after_labels = UNKNOWN_LOCATION;
-  tree before_labels = get_before_labels ();
+  पुनो before_labels = get_before_labels ();
   attr_state a = c_parser_all_labels (parser);
 
   if (c_parser_next_token_is (parser, CPP_SEMICOLON))
@@ -8855,13 +8855,13 @@ c_parser_else_body (c_parser *parser, const token_indent_info &else_tinfo,
    implement -Wparentheses.  */
 
 static void
-c_parser_if_statement (c_parser *parser, bool *if_p, vec<tree> *chain)
+c_parser_if_statement (c_parser *parser, bool *if_p, vec<पुनो> *chain)
 {
-  tree block;
+  पुनो block;
   location_t loc;
-  tree cond;
+  पुनो cond;
   bool nested_if = false;
-  tree first_body, second_body;
+  पुनो first_body, second_body;
   bool in_if_block;
 
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_IF));
@@ -8877,7 +8877,7 @@ c_parser_if_statement (c_parser *parser, bool *if_p, vec<tree> *chain)
   parser->in_if_block = in_if_block;
 
   if (warn_duplicated_cond)
-    warn_duplicated_cond_add_or_warn (EXPR_LOCATION (cond), cond, &chain);
+    warn_duplicated_cond_add_or_warn (पाहायाग_LOCATION (cond), cond, &chain);
 
   if (c_parser_next_token_is_keyword (parser, RID_ELSE))
     {
@@ -8891,9 +8891,9 @@ c_parser_if_statement (c_parser *parser, bool *if_p, vec<tree> *chain)
 	    {
 	      /* We've got "if (COND) else if (COND2)".  Start the
 		 condition chain and add COND as the first element.  */
-	      chain = new vec<tree> ();
-	      if (!CONSTANT_CLASS_P (cond) && !TREE_SIDE_EFFECTS (cond))
-		chain->safe_push (cond);
+	      chain = new vec<पुनो> ();
+	      if (!CONSTANT_CLASS_P (cond) && !पुनो_SIDE_EFFECTS (cond))
+		chain->safe_इतुलाक (cond);
 	    }
 	  else if (!c_parser_next_token_is_keyword (parser, RID_IF))
 	    /* This is if-else without subsequent if.  Zap the condition
@@ -8909,7 +8909,7 @@ c_parser_if_statement (c_parser *parser, bool *if_p, vec<tree> *chain)
     }
   else
     {
-      second_body = NULL_TREE;
+      second_body = NULL_पुनो;
 
       /* Diagnose an ambiguous else if if-then-else is nested inside
 	 if-then.  */
@@ -8937,17 +8937,17 @@ c_parser_if_statement (c_parser *parser, bool *if_p, vec<tree> *chain)
    get_before_labels description for details.  */
 
 static void
-c_parser_switch_statement (c_parser *parser, bool *if_p, tree before_labels)
+c_parser_switch_statement (c_parser *parser, bool *if_p, पुनो before_labels)
 {
-  struct c_expr ce;
-  tree block, expr, body;
+  struct c_पाहायाग ce;
+  पुनो block, पाहायाग, body;
   unsigned char save_in_statement;
   location_t switch_loc = c_parser_peek_token (parser)->location;
   location_t switch_cond_loc;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_SWITCH));
   c_parser_consume_token (parser);
-  tree switch_name;
-  int num_names = c_get_loop_names (before_labels, true, &switch_name);
+  पुनो switch_name;
+  int नुमेरो_names = c_get_loop_names (before_labels, true, &switch_name);
   block = c_begin_compound_stmt (flag_isoc99);
   bool explicit_cast_p = false;
   matching_parens parens;
@@ -8962,18 +8962,18 @@ c_parser_switch_statement (c_parser *parser, bool *if_p, tree before_labels)
 	 if it parsed an expression, read_p was false.  Make sure we mark
 	 the expression as read.  */
       ce = convert_lvalue_to_rvalue (switch_cond_loc, ce, true, true);
-      expr = ce.value;
+      पाहायाग = ce.हालागा;
       /* ??? expr has no valid location?  */
       parens.skip_until_found_close (parser);
     }
   else
     {
       switch_cond_loc = UNKNOWN_LOCATION;
-      expr = error_mark_node;
-      ce.original_type = error_mark_node;
+      पाहायाग = error_mark_बुहोल;
+      ce.original_type = error_mark_बुहोल;
     }
-  tree stmt
-    = c_start_switch (switch_loc, switch_cond_loc, expr, explicit_cast_p,
+  पुनो stmt
+    = c_start_switch (switch_loc, switch_cond_loc, पाहायाग, explicit_cast_p,
 		      switch_name);
   save_in_statement = in_statement;
   in_statement |= IN_SWITCH_STMT;
@@ -8993,13 +8993,13 @@ c_parser_switch_statement (c_parser *parser, bool *if_p, tree before_labels)
 				    RID_SWITCH);
   c_finish_switch (body, ce.original_type);
   in_statement = save_in_statement;
-  if (num_names)
+  if (नुमेरो_names)
     {
       if (!C_DECL_LOOP_SWITCH_NAME_USED (switch_name))
-	SWITCH_STMT_NAME (stmt) = NULL_TREE;
+	SWITCH_STMT_NAME (stmt) = NULL_पुनो;
       else
 	SWITCH_STMT_NO_BREAK_P (stmt) = 0;
-      c_release_loop_names (num_names);
+      c_release_loop_names (नुमेरो_names);
     }
   add_stmt (c_end_compound_stmt (switch_loc, block, flag_isoc99));
   c_parser_maybe_reclassify_token (parser);
@@ -9019,16 +9019,16 @@ c_parser_switch_statement (c_parser *parser, bool *if_p, tree before_labels)
 
 static void
 c_parser_while_statement (c_parser *parser, bool ivdep, unsigned short unroll,
-			  bool novector, bool *if_p, tree before_labels)
+			  bool novector, bool *if_p, पुनो before_labels)
 {
-  tree block, cond, body;
+  पुनो block, cond, body;
   unsigned char save_in_statement;
   location_t loc;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_WHILE));
   token_indent_info while_tinfo
     = get_token_indent_info (c_parser_peek_token (parser));
-  tree loop_name;
-  int num_names = c_get_loop_names (before_labels, false, &loop_name);
+  पुनो loop_name;
+  int नुमेरो_names = c_get_loop_names (before_labels, false, &loop_name);
 
   if (parser->omp_for_parse_state)
     {
@@ -9041,21 +9041,21 @@ c_parser_while_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   block = c_begin_compound_stmt (flag_isoc99);
   loc = c_parser_peek_token (parser)->location;
   cond = c_parser_paren_condition (parser);
-  if (ivdep && cond != error_mark_node)
-    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
-		   build_int_cst (integer_type_node,
-				  annot_expr_ivdep_kind),
-		   integer_zero_node);
-  if (unroll && cond != error_mark_node)
-    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
-		   build_int_cst (integer_type_node,
-				  annot_expr_unroll_kind),
-		   build_int_cst (integer_type_node, unroll));
-  if (novector && cond != error_mark_node)
-    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
-		   build_int_cst (integer_type_node,
-				  annot_expr_no_vector_kind),
-		   integer_zero_node);
+  if (ivdep && cond != error_mark_बुहोल)
+    cond = build3 (ANNOTATE_पाहायाग, पुनो_TYPE (cond), cond,
+		   build_int_cst (integer_type_बुहोल,
+				  annot_पाहायाग_ivdep_kind),
+		   integer_zero_बुहोल);
+  if (unroll && cond != error_mark_बुहोल)
+    cond = build3 (ANNOTATE_पाहायाग, पुनो_TYPE (cond), cond,
+		   build_int_cst (integer_type_बुहोल,
+				  annot_पाहायाग_unroll_kind),
+		   build_int_cst (integer_type_बुहोल, unroll));
+  if (novector && cond != error_mark_बुहोल)
+    cond = build3 (ANNOTATE_पाहायाग, पुनो_TYPE (cond), cond,
+		   build_int_cst (integer_type_बुहोल,
+				  annot_पाहायाग_no_vector_kind),
+		   integer_zero_बुहोल);
   save_in_statement = in_statement;
   in_statement = IN_ITERATION_STMT;
   if (loop_name)
@@ -9071,13 +9071,13 @@ c_parser_while_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   bool open_brace = c_parser_next_token_is (parser, CPP_OPEN_BRACE);
   body = c_parser_c99_block_statement (parser, if_p, &loc_after_labels);
   if (loop_name && !C_DECL_LOOP_SWITCH_NAME_USED (loop_name))
-    loop_name = NULL_TREE;
-  add_stmt (build_stmt (loc, WHILE_STMT, cond, body, loop_name, NULL_TREE,
-			NULL_TREE));
+    loop_name = NULL_पुनो;
+  add_stmt (build_stmt (loc, WHILE_STMT, cond, body, loop_name, NULL_पुनो,
+			NULL_पुनो));
   add_stmt (c_end_compound_stmt (loc, block, flag_isoc99));
   c_parser_maybe_reclassify_token (parser);
-  if (num_names)
-    c_release_loop_names (num_names);
+  if (नुमेरो_names)
+    c_release_loop_names (नुमेरो_names);
 
   token_indent_info next_tinfo
     = get_token_indent_info (c_parser_peek_token (parser));
@@ -9100,14 +9100,14 @@ c_parser_while_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 
 static void
 c_parser_do_statement (c_parser *parser, bool ivdep, unsigned short unroll,
-		       bool novector, tree before_labels)
+		       bool novector, पुनो before_labels)
 {
-  tree block, cond, body;
+  पुनो block, cond, body;
   unsigned char save_in_statement;
   location_t loc;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_DO));
-  tree loop_name;
-  int num_names = c_get_loop_names (before_labels, false, &loop_name);
+  पुनो loop_name;
+  int नुमेरो_names = c_get_loop_names (before_labels, false, &loop_name);
 
   if (parser->omp_for_parse_state)
     {
@@ -9133,28 +9133,28 @@ c_parser_do_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   body = c_parser_c99_block_statement (parser, NULL);
   c_parser_require_keyword (parser, RID_WHILE, "expected %<while%>");
   in_statement = save_in_statement;
-  if (num_names)
+  if (नुमेरो_names)
     {
       if (!C_DECL_LOOP_SWITCH_NAME_USED (loop_name))
-	loop_name = NULL_TREE;
-      c_release_loop_names (num_names);
+	loop_name = NULL_पुनो;
+      c_release_loop_names (नुमेरो_names);
     }
   cond = c_parser_paren_condition (parser);
-  if (ivdep && cond != error_mark_node)
-    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
-		   build_int_cst (integer_type_node,
-				  annot_expr_ivdep_kind),
-		   integer_zero_node);
-  if (unroll && cond != error_mark_node)
-    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
-		   build_int_cst (integer_type_node,
-				  annot_expr_unroll_kind),
- 		   build_int_cst (integer_type_node, unroll));
-  if (novector && cond != error_mark_node)
-    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
-		   build_int_cst (integer_type_node,
-				  annot_expr_no_vector_kind),
-		   integer_zero_node);
+  if (ivdep && cond != error_mark_बुहोल)
+    cond = build3 (ANNOTATE_पाहायाग, पुनो_TYPE (cond), cond,
+		   build_int_cst (integer_type_बुहोल,
+				  annot_पाहायाग_ivdep_kind),
+		   integer_zero_बुहोल);
+  if (unroll && cond != error_mark_बुहोल)
+    cond = build3 (ANNOTATE_पाहायाग, पुनो_TYPE (cond), cond,
+		   build_int_cst (integer_type_बुहोल,
+				  annot_पाहायाग_unroll_kind),
+ 		   build_int_cst (integer_type_बुहोल, unroll));
+  if (novector && cond != error_mark_बुहोल)
+    cond = build3 (ANNOTATE_पाहायाग, पुनो_TYPE (cond), cond,
+		   build_int_cst (integer_type_बुहोल,
+				  annot_पाहायाग_no_vector_kind),
+		   integer_zero_बुहोल);
   if (!c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
     c_parser_skip_to_end_of_block_or_statement (parser);
 
@@ -9226,23 +9226,23 @@ c_parser_do_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 
 static void
 c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
-			bool novector, bool *if_p, tree before_labels)
+			bool novector, bool *if_p, पुनो before_labels)
 {
-  tree block, cond, incr, body;
+  पुनो block, cond, incr, body;
   unsigned char save_in_statement;
-  tree save_objc_foreach_break_label, save_objc_foreach_continue_label;
+  पुनो save_objc_foreach_break_label, save_objc_foreach_continue_label;
   /* The following are only used when parsing an ObjC foreach statement.  */
-  tree object_expression;
+  पुनो object_expression;
   /* Silence the bogus uninitialized warning.  */
-  tree collection_expression = NULL;
+  पुनो collection_expression = NULL;
   location_t loc = c_parser_peek_token (parser)->location;
   location_t for_loc = loc;
   bool is_foreach_statement = false;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_FOR));
   token_indent_info for_tinfo
     = get_token_indent_info (c_parser_peek_token (parser));
-  tree loop_name;
-  int num_names = c_get_loop_names (before_labels, false, &loop_name);
+  पुनो loop_name;
+  int नुमेरो_names = c_get_loop_names (before_labels, false, &loop_name);
 
   if (parser->omp_for_parse_state)
     {
@@ -9255,19 +9255,19 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   /* Open a compound statement in Objective-C as well, just in case this is
      as foreach expression.  */
   block = c_begin_compound_stmt (flag_isoc99 || c_dialect_objc ());
-  cond = error_mark_node;
-  incr = error_mark_node;
+  cond = error_mark_बुहोल;
+  incr = error_mark_बुहोल;
   matching_parens parens;
   if (parens.require_open (parser))
     {
       /* Parse the initialization declaration or expression.  */
-      object_expression = error_mark_node;
+      object_expression = error_mark_बुहोल;
       parser->objc_could_be_foreach_context = c_dialect_objc ();
       if (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	{
 	  parser->objc_could_be_foreach_context = false;
 	  c_parser_consume_token (parser);
-	  c_finish_expr_stmt (loc, NULL_TREE);
+	  c_finish_पाहायाग_stmt (loc, NULL_पुनो);
 	}
       else if (c_parser_next_tokens_start_declaration (parser)
 	       || c_parser_nth_token_starts_std_attributes (parser, 1))
@@ -9280,7 +9280,7 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 	    {
 	      c_parser_consume_token (parser);
 	      is_foreach_statement = true;
-	      if (check_for_loop_decls (for_loc, true) == NULL_TREE)
+	      if (check_for_loop_decls (for_loc, true) == NULL_पुनो)
 		c_parser_error (parser, "multiple iterating variables in "
 					"fast enumeration");
 	    }
@@ -9312,7 +9312,7 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 		{
 		  c_parser_consume_token (parser);
 		  is_foreach_statement = true;
-		  if (check_for_loop_decls (for_loc, true) == NULL_TREE)
+		  if (check_for_loop_decls (for_loc, true) == NULL_पुनो)
 		    c_parser_error (parser, "multiple iterating variables in "
 					    "fast enumeration");
 		}
@@ -9320,16 +9320,16 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 		check_for_loop_decls (for_loc, flag_isoc99);
 	    }
 	  else
-	    goto init_expr;
+	    goto init_पाहायाग;
 	}
       else
 	{
-	init_expr:
+	init_पाहायाग:
 	  {
-	    struct c_expr ce;
-	    tree init_expression;
+	    struct c_पाहायाग ce;
+	    पुनो init_expression;
 	    ce = c_parser_expression (parser);
-	    init_expression = ce.value;
+	    init_expression = ce.हालागा;
 	    parser->objc_could_be_foreach_context = false;
 	    if (c_parser_next_token_is_keyword (parser, RID_IN))
 	      {
@@ -9344,8 +9344,8 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 	    else
 	      {
 		ce = convert_lvalue_to_rvalue (loc, ce, true, false);
-		init_expression = ce.value;
-		c_finish_expr_stmt (loc, init_expression);
+		init_expression = ce.हालागा;
+		c_finish_पाहायाग_stmt (loc, init_expression);
 		c_parser_skip_until_found (parser, CPP_SEMICOLON,
 					   "expected %<;%>");
 	      }
@@ -9362,18 +9362,18 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 		{
 		  c_parser_error (parser, "missing loop condition in loop "
 					  "with %<GCC ivdep%> pragma");
-		  cond = error_mark_node;
+		  cond = error_mark_बुहोल;
 		}
 	      else if (unroll)
 		{
 		  c_parser_error (parser, "missing loop condition in loop "
 					  "with %<GCC unroll%> pragma");
-		  cond = error_mark_node;
+		  cond = error_mark_बुहोल;
 		}
 	      else
 		{
 		  c_parser_consume_token (parser);
-		  cond = NULL_TREE;
+		  cond = NULL_पुनो;
 		}
 	    }
 	  else
@@ -9382,21 +9382,21 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 	      c_parser_skip_until_found (parser, CPP_SEMICOLON,
 					 "expected %<;%>");
 	    }
-	  if (ivdep && cond != error_mark_node)
-	    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
-			   build_int_cst (integer_type_node,
-					  annot_expr_ivdep_kind),
-			   integer_zero_node);
-	  if (unroll && cond != error_mark_node)
-	    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
- 			   build_int_cst (integer_type_node,
-					  annot_expr_unroll_kind),
-			   build_int_cst (integer_type_node, unroll));
-	  if (novector && cond && cond != error_mark_node)
-	    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
-			   build_int_cst (integer_type_node,
-					  annot_expr_no_vector_kind),
-			   integer_zero_node);
+	  if (ivdep && cond != error_mark_बुहोल)
+	    cond = build3 (ANNOTATE_पाहायाग, पुनो_TYPE (cond), cond,
+			   build_int_cst (integer_type_बुहोल,
+					  annot_पाहायाग_ivdep_kind),
+			   integer_zero_बुहोल);
+	  if (unroll && cond != error_mark_बुहोल)
+	    cond = build3 (ANNOTATE_पाहायाग, पुनो_TYPE (cond), cond,
+ 			   build_int_cst (integer_type_बुहोल,
+					  annot_पाहायाग_unroll_kind),
+			   build_int_cst (integer_type_बुहोल, unroll));
+	  if (novector && cond && cond != error_mark_बुहोल)
+	    cond = build3 (ANNOTATE_पाहायाग, पुनो_TYPE (cond), cond,
+			   build_int_cst (integer_type_बुहोल,
+					  annot_पाहायाग_no_vector_kind),
+			   integer_zero_बुहोल);
 	}
       /* Parse the increment expression (the third expression in a
 	 for-statement).  In the case of a foreach-statement, this is
@@ -9408,21 +9408,21 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 	    {
 	      c_parser_error (parser,
 			      "missing collection in fast enumeration");
-	      collection_expression = error_mark_node;
+	      collection_expression = error_mark_बुहोल;
 	    }
 	  else
-	    incr = c_process_expr_stmt (loc, NULL_TREE);
+	    incr = c_process_पाहायाग_stmt (loc, NULL_पुनो);
 	}
       else
 	{
 	  if (is_foreach_statement)
 	    collection_expression
-	      = c_fully_fold (c_parser_expression (parser).value, false, NULL);
+	      = c_fully_fold (c_parser_expression (parser).हालागा, false, NULL);
 	  else
 	    {
-	      struct c_expr ce = c_parser_expression (parser);
+	      struct c_पाहायाग ce = c_parser_expression (parser);
 	      ce = convert_lvalue_to_rvalue (loc, ce, true, false);
-	      incr = c_process_expr_stmt (loc, ce.value);
+	      incr = c_process_पाहायाग_stmt (loc, ce.हालागा);
 	    }
 	}
       parens.skip_until_found_close (parser);
@@ -9465,8 +9465,8 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 			   && (DECL_CHAIN (objc_foreach_break_label)
 			       == objc_foreach_continue_label));
       C_DECL_SWITCH_NAME (loop_name) = 0;
-      DECL_CHAIN (loop_name) = NULL_TREE;
-      DECL_CHAIN (objc_foreach_break_label) = NULL_TREE;
+      DECL_CHAIN (loop_name) = NULL_पुनो;
+      DECL_CHAIN (objc_foreach_break_label) = NULL_पुनो;
     }
 
   if (is_foreach_statement)
@@ -9475,10 +9475,10 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 			      objc_foreach_break_label,
 			      objc_foreach_continue_label);
   else
-    add_stmt (build_stmt (for_loc, FOR_STMT, NULL_TREE, cond, incr,
-			  body, NULL_TREE,
+    add_stmt (build_stmt (for_loc, FOR_STMT, NULL_पुनो, cond, incr,
+			  body, NULL_पुनो,
 			  loop_name && C_DECL_LOOP_SWITCH_NAME_USED (loop_name)
-			  ? loop_name : NULL_TREE, NULL_TREE, NULL_TREE));
+			  ? loop_name : NULL_पुनो, NULL_पुनो, NULL_पुनो));
   add_stmt (c_end_compound_stmt (for_loc, block,
 				 flag_isoc99 || c_dialect_objc ()));
   c_parser_maybe_reclassify_token (parser);
@@ -9492,8 +9492,8 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 				    for_tinfo.location, RID_FOR);
 
   in_statement = save_in_statement;
-  if (num_names)
-    c_release_loop_names (num_names);
+  if (नुमेरो_names)
+    c_release_loop_names (नुमेरो_names);
   if (is_foreach_statement)
     {
       objc_foreach_break_label = save_objc_foreach_break_label;
@@ -9532,10 +9532,10 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 
    The :: token is considered equivalent to two consecutive : tokens.  */
 
-static tree
+static पुनो
 c_parser_asm_statement (c_parser *parser)
 {
-  tree str, outputs, inputs, clobbers, labels, ret;
+  पुनो str, outputs, inputs, clobbers, labels, ret;
   bool simple;
   location_t asm_loc = c_parser_peek_token (parser)->location;
   int section, nsections;
@@ -9556,7 +9556,7 @@ c_parser_asm_statement (c_parser *parser)
 	case RID_VOLATILE:
 	  if (volatile_loc)
 	    {
-	      error_at (loc, "duplicate %<asm%> qualifier %qE", token->value);
+	      error_at (loc, "duplicate %<asm%> qualifier %qE", token->हालागा);
 	      inform (volatile_loc, "first seen here");
 	    }
 	  else
@@ -9567,7 +9567,7 @@ c_parser_asm_statement (c_parser *parser)
 	case RID_INLINE:
 	  if (inline_loc)
 	    {
-	      error_at (loc, "duplicate %<asm%> qualifier %qE", token->value);
+	      error_at (loc, "duplicate %<asm%> qualifier %qE", token->हालागा);
 	      inform (inline_loc, "first seen here");
 	    }
 	  else
@@ -9578,7 +9578,7 @@ c_parser_asm_statement (c_parser *parser)
 	case RID_GOTO:
 	  if (goto_loc)
 	    {
-	      error_at (loc, "duplicate %<asm%> qualifier %qE", token->value);
+	      error_at (loc, "duplicate %<asm%> qualifier %qE", token->हालागा);
 	      inform (goto_loc, "first seen here");
 	    }
 	  else
@@ -9588,7 +9588,7 @@ c_parser_asm_statement (c_parser *parser)
 
 	case RID_CONST:
 	case RID_RESTRICT:
-	  error_at (loc, "%qE is not a valid %<asm%> qualifier", token->value);
+	  error_at (loc, "%qE is not a valid %<asm%> qualifier", token->हालागा);
 	  c_parser_consume_token (parser);
 	  continue;
 
@@ -9609,14 +9609,14 @@ c_parser_asm_statement (c_parser *parser)
     goto error;
 
   str = c_parser_asm_string_literal (parser);
-  if (str == NULL_TREE)
+  if (str == NULL_पुनो)
     goto error_close_paren;
 
   simple = true;
-  outputs = NULL_TREE;
-  inputs = NULL_TREE;
-  clobbers = NULL_TREE;
-  labels = NULL_TREE;
+  outputs = NULL_पुनो;
+  inputs = NULL_पुनो;
+  clobbers = NULL_पुनो;
+  labels = NULL_पुनो;
 
   if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN) && !is_goto)
     goto done_asm;
@@ -9682,7 +9682,7 @@ c_parser_asm_statement (c_parser *parser)
     c_parser_skip_to_end_of_block_or_statement (parser);
 
   ret = build_asm_stmt (is_volatile,
-			build_asm_expr (asm_loc, str, outputs, inputs,
+			build_asm_पाहायाग (asm_loc, str, outputs, inputs,
 					clobbers, labels, simple, is_inline));
 
  error:
@@ -9704,20 +9704,20 @@ c_parser_asm_statement (c_parser *parser)
      [ identifier ] asm-string-literal ( expression )
 */
 
-static tree
+static पुनो
 c_parser_asm_operands (c_parser *parser)
 {
-  tree list = NULL_TREE;
+  पुनो list = NULL_पुनो;
   while (true)
     {
-      tree name, str;
-      struct c_expr expr;
+      पुनो name, str;
+      struct c_पाहायाग पाहायाग;
       if (c_parser_next_token_is (parser, CPP_OPEN_SQUARE))
 	{
 	  c_parser_consume_token (parser);
 	  if (c_parser_next_token_is (parser, CPP_NAME))
 	    {
-	      tree id = c_parser_peek_token (parser)->value;
+	      पुनो id = c_parser_peek_token (parser)->हालागा;
 	      c_parser_consume_token (parser);
 	      name = build_string (IDENTIFIER_LENGTH (id),
 				   IDENTIFIER_POINTER (id));
@@ -9726,28 +9726,28 @@ c_parser_asm_operands (c_parser *parser)
 	    {
 	      c_parser_error (parser, "expected identifier");
 	      c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, NULL);
-	      return NULL_TREE;
+	      return NULL_पुनो;
 	    }
 	  c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE,
 				     "expected %<]%>");
 	}
       else
-	name = NULL_TREE;
+	name = NULL_पुनो;
       str = c_parser_asm_string_literal (parser);
-      if (str == NULL_TREE)
-	return NULL_TREE;
+      if (str == NULL_पुनो)
+	return NULL_पुनो;
       matching_parens parens;
       if (!parens.require_open (parser))
-	return NULL_TREE;
-      expr = c_parser_expression (parser);
-      mark_exp_read (expr.value);
+	return NULL_पुनो;
+      पाहायाग = c_parser_expression (parser);
+      mark_exp_read (पाहायाग.हालागा);
       if (!parens.require_close (parser))
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	  return NULL_TREE;
+	  return NULL_पुनो;
 	}
-      list = chainon (list, build_tree_list (build_tree_list (name, str),
-					     expr.value));
+      list = chainon (list, build_पुनो_list (build_पुनो_list (name, str),
+					     पाहायाग.हालागा));
       if (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
       else
@@ -9763,17 +9763,17 @@ c_parser_asm_operands (c_parser *parser)
      asm-clobbers , asm-string-literal
 */
 
-static tree
+static पुनो
 c_parser_asm_clobbers (c_parser *parser)
 {
-  tree list = NULL_TREE;
+  पुनो list = NULL_पुनो;
   while (true)
     {
-      tree str = c_parser_asm_string_literal (parser);
+      पुनो str = c_parser_asm_string_literal (parser);
       if (str)
-	list = tree_cons (NULL_TREE, str, list);
+	list = पुनो_cons (NULL_पुनो, str, list);
       else
-	return NULL_TREE;
+	return NULL_पुनो;
       if (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
       else
@@ -9789,31 +9789,31 @@ c_parser_asm_clobbers (c_parser *parser)
      asm-goto-operands , identifier
 */
 
-static tree
+static पुनो
 c_parser_asm_goto_operands (c_parser *parser)
 {
-  tree list = NULL_TREE;
+  पुनो list = NULL_पुनो;
   while (true)
     {
-      tree name, label;
+      पुनो name, label;
 
       if (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_token *tok = c_parser_peek_token (parser);
-	  name = tok->value;
+	  name = tok->हालागा;
 	  label = lookup_label_for_goto (tok->location, name);
 	  c_parser_consume_token (parser);
-	  TREE_USED (label) = 1;
+	  पुनो_USED (label) = 1;
 	}
       else
 	{
 	  c_parser_error (parser, "expected identifier");
-	  return NULL_TREE;
+	  return NULL_पुनो;
 	}
 
       name = build_string (IDENTIFIER_LENGTH (name),
 			   IDENTIFIER_POINTER (name));
-      list = tree_cons (name, label, list);
+      list = पुनो_cons (name, label, list);
       if (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
       else
@@ -9827,22 +9827,22 @@ c_parser_asm_goto_operands (c_parser *parser)
    permitted in this context.  This code is based on that in
    lex_string.  */
 
-struct c_expr
+struct c_पाहायाग
 c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
 {
-  struct c_expr ret;
-  size_t count;
+  struct c_पाहायाग ret;
+  size_t बिलांग;
   struct obstack str_ob;
   struct obstack loc_ob;
   cpp_string str, istr, *strs;
   c_token *tok;
   location_t loc, last_tok_loc;
   enum cpp_ttype type;
-  tree value, string_tree;
+  पुनो हालागा, string_पुनो;
 
   tok = c_parser_peek_token (parser);
   loc = tok->location;
-  last_tok_loc = linemap_resolve_location (line_table, loc,
+  last_tok_loc = linemap_resolve_location (लिन्या_table, loc,
 					   LRK_MACRO_DEFINITION_LOCATION,
 					   NULL);
   type = tok->type;
@@ -9853,15 +9853,15 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
     case CPP_STRING16:
     case CPP_STRING32:
     case CPP_UTF8STRING:
-      string_tree = tok->value;
+      string_पुनो = tok->हालागा;
       break;
 
     default:
       c_parser_error (parser, "expected string literal");
       ret.set_error ();
-      ret.value = NULL_TREE;
+      ret.हालागा = NULL_पुनो;
       ret.original_code = ERROR_MARK;
-      ret.original_type = NULL_TREE;
+      ret.original_type = NULL_पुनो;
       return ret;
     }
 
@@ -9871,9 +9871,9 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
     {
     default:
       c_parser_consume_token (parser);
-      str.text = (const unsigned char *) TREE_STRING_POINTER (string_tree);
-      str.len = TREE_STRING_LENGTH (string_tree);
-      count = 1;
+      str.text = (const unsigned char *) पुनो_STRING_POINTER (string_पुनो);
+      str.len = पुनो_STRING_LENGTH (string_पुनो);
+      बिलांग = 1;
       strs = &str;
       break;
 
@@ -9884,13 +9884,13 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
     case CPP_UTF8STRING:
       gcc_obstack_init (&str_ob);
       gcc_obstack_init (&loc_ob);
-      count = 0;
+      बिलांग = 0;
       do
 	{
 	  c_parser_consume_token (parser);
-	  count++;
-	  str.text = (const unsigned char *) TREE_STRING_POINTER (string_tree);
-	  str.len = TREE_STRING_LENGTH (string_tree);
+	  बिलांग++;
+	  str.text = (const unsigned char *) पुनो_STRING_POINTER (string_पुनो);
+	  str.len = पुनो_STRING_LENGTH (string_पुनो);
 	  if (type != tok->type)
 	    {
 	      if (type == CPP_STRING)
@@ -9902,9 +9902,9 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
 	  obstack_grow (&str_ob, &str, sizeof (cpp_string));
 	  obstack_grow (&loc_ob, &last_tok_loc, sizeof (location_t));
 	  tok = c_parser_peek_token (parser);
-	  string_tree = tok->value;
+	  string_पुनो = tok->हालागा;
 	  last_tok_loc
-	    = linemap_resolve_location (line_table, tok->location,
+	    = linemap_resolve_location (लिन्या_table, tok->location,
 					LRK_MACRO_DEFINITION_LOCATION, NULL);
 	}
       while (tok->type == CPP_STRING
@@ -9915,22 +9915,22 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
       strs = (cpp_string *) obstack_finish (&str_ob);
     }
 
-  if (count > 1 && !in_system_header_at (input_location))
+  if (बिलांग > 1 && !in_system_header_at (पासोक_location))
     warning (OPT_Wtraditional,
 	     "traditional C rejects string constant concatenation");
 
   if ((type == CPP_STRING || wide_ok)
       && ((translate
 	  ? cpp_interpret_string : cpp_interpret_string_notranslate)
-	  (parse_in, strs, count, &istr, type)))
+	  (parse_in, strs, बिलांग, &istr, type)))
     {
-      value = build_string (istr.len, (const char *) istr.text);
+      हालागा = build_string (istr.len, (const char *) istr.text);
       free (const_cast<unsigned char *> (istr.text));
-      if (count > 1)
+      if (बिलांग > 1)
 	{
 	  location_t *locs = (location_t *) obstack_finish (&loc_ob);
 	  gcc_assert (g_string_concat_db);
-	  g_string_concat_db->record_string_concatenation (count, locs);
+	  g_string_concat_db->record_string_concatenation (बिलांग, locs);
 	}
     }
   else
@@ -9950,26 +9950,26 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
 	case CPP_UTF8STRING:
 	  if (type == CPP_UTF8STRING && flag_char8_t)
 	    {
-	      value = build_string (TYPE_PRECISION (char8_type_node)
-				    / TYPE_PRECISION (char_type_node),
+	      हालागा = build_string (TYPE_PRECISION (char8_type_बुहोल)
+				    / TYPE_PRECISION (char_type_बुहोल),
 				    "");  /* char8_t is 8 bits */
 	    }
 	  else
-	    value = build_string (1, "");
+	    हालागा = build_string (1, "");
 	  break;
 	case CPP_STRING16:
-	  value = build_string (TYPE_PRECISION (char16_type_node)
-				/ TYPE_PRECISION (char_type_node),
+	  हालागा = build_string (TYPE_PRECISION (char16_type_बुहोल)
+				/ TYPE_PRECISION (char_type_बुहोल),
 				"\0");  /* char16_t is 16 bits */
 	  break;
 	case CPP_STRING32:
-	  value = build_string (TYPE_PRECISION (char32_type_node)
-				/ TYPE_PRECISION (char_type_node),
+	  हालागा = build_string (TYPE_PRECISION (char32_type_बुहोल)
+				/ TYPE_PRECISION (char_type_बुहोल),
 				"\0\0\0");  /* char32_t is 32 bits */
 	  break;
 	case CPP_WSTRING:
-	  value = build_string (TYPE_PRECISION (wchar_type_node)
-				/ TYPE_PRECISION (char_type_node),
+	  हालागा = build_string (TYPE_PRECISION (wchar_type_बुहोल)
+				/ TYPE_PRECISION (char_type_बुहोल),
 				"\0\0\0");  /* widest supported wchar_t
 					       is 32 bits */
 	  break;
@@ -9980,35 +9980,35 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
     {
     default:
     case CPP_STRING:
-      TREE_TYPE (value) = char_array_type_node;
+      पुनो_TYPE (हालागा) = char_array_type_बुहोल;
       break;
     case CPP_UTF8STRING:
       if (flag_char8_t)
-	TREE_TYPE (value) = char8_array_type_node;
+	पुनो_TYPE (हालागा) = char8_array_type_बुहोल;
       else
-	TREE_TYPE (value) = char_array_type_node;
+	पुनो_TYPE (हालागा) = char_array_type_बुहोल;
       break;
     case CPP_STRING16:
-      TREE_TYPE (value) = char16_array_type_node;
+      पुनो_TYPE (हालागा) = char16_array_type_बुहोल;
       break;
     case CPP_STRING32:
-      TREE_TYPE (value) = char32_array_type_node;
+      पुनो_TYPE (हालागा) = char32_array_type_बुहोल;
       break;
     case CPP_WSTRING:
-      TREE_TYPE (value) = wchar_array_type_node;
+      पुनो_TYPE (हालागा) = wchar_array_type_बुहोल;
     }
-  value = fix_string_type (value);
+  हालागा = fix_string_type (हालागा);
 
-  if (count > 1)
+  if (बिलांग > 1)
     {
       obstack_free (&str_ob, 0);
       obstack_free (&loc_ob, 0);
     }
 
-  ret.value = value;
+  ret.हालागा = हालागा;
   ret.original_code = STRING_CST;
-  ret.original_type = NULL_TREE;
-  set_c_expr_source_range (&ret, get_range_from_loc (line_table, loc));
+  ret.original_type = NULL_पुनो;
+  set_c_पाहायाग_source_range (&ret, get_range_from_loc (लिन्या_table, loc));
   ret.m_decimal = 0;
   parser->seen_string_literal = true;
   return ret;
@@ -10030,12 +10030,12 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
    diagnose the invalid lvalue rather than producing a syntax
    error.  */
 
-static struct c_expr
-c_parser_expr_no_commas (c_parser *parser, struct c_expr *after,
-			 tree omp_atomic_lhs)
+static struct c_पाहायाग
+c_parser_पाहायाग_no_commas (c_parser *parser, struct c_पाहायाग *after,
+			 पुनो omp_atomic_lhs)
 {
-  struct c_expr lhs, rhs, ret;
-  enum tree_code code;
+  struct c_पाहायाग lhs, rhs, ret;
+  enum पुनो_code code;
   location_t op_location, exp_location;
   bool save_in_omp_for = c_in_omp_for;
   c_in_omp_for = false;
@@ -10045,37 +10045,37 @@ c_parser_expr_no_commas (c_parser *parser, struct c_expr *after,
   switch (c_parser_peek_token (parser)->type)
     {
     case CPP_EQ:
-      code = NOP_EXPR;
+      code = NOP_पाहायाग;
       break;
     case CPP_MULT_EQ:
-      code = MULT_EXPR;
+      code = MULT_पाहायाग;
       break;
     case CPP_DIV_EQ:
-      code = TRUNC_DIV_EXPR;
+      code = TRUNC_DIV_पाहायाग;
       break;
     case CPP_MOD_EQ:
-      code = TRUNC_MOD_EXPR;
+      code = TRUNC_MOD_पाहायाग;
       break;
     case CPP_PLUS_EQ:
-      code = PLUS_EXPR;
+      code = PLUS_पाहायाग;
       break;
     case CPP_MINUS_EQ:
-      code = MINUS_EXPR;
+      code = MINUS_पाहायाग;
       break;
     case CPP_LSHIFT_EQ:
-      code = LSHIFT_EXPR;
+      code = LSHIFT_पाहायाग;
       break;
     case CPP_RSHIFT_EQ:
-      code = RSHIFT_EXPR;
+      code = RSHIFT_पाहायाग;
       break;
     case CPP_AND_EQ:
-      code = BIT_AND_EXPR;
+      code = BIT_AND_पाहायाग;
       break;
     case CPP_XOR_EQ:
-      code = BIT_XOR_EXPR;
+      code = BIT_XOR_पाहायाग;
       break;
     case CPP_OR_EQ:
-      code = BIT_IOR_EXPR;
+      code = BIT_IOR_पाहायाग;
       break;
     default:
       c_in_omp_for = save_in_omp_for;
@@ -10083,19 +10083,19 @@ c_parser_expr_no_commas (c_parser *parser, struct c_expr *after,
     }
   c_parser_consume_token (parser);
   exp_location = c_parser_peek_token (parser)->location;
-  rhs = c_parser_expr_no_commas (parser, NULL);
+  rhs = c_parser_पाहायाग_no_commas (parser, NULL);
   rhs = convert_lvalue_to_rvalue (exp_location, rhs, true, true);
 
-  ret.value = build_modify_expr (op_location, lhs.value, lhs.original_type,
-				 code, exp_location, rhs.value,
+  ret.हालागा = build_modify_पाहायाग (op_location, lhs.हालागा, lhs.original_type,
+				 code, exp_location, rhs.हालागा,
 				 rhs.original_type);
   ret.m_decimal = 0;
-  set_c_expr_source_range (&ret, lhs.get_start (), rhs.get_finish ());
-  if (code == NOP_EXPR)
-    ret.original_code = MODIFY_EXPR;
+  set_c_पाहायाग_source_range (&ret, lhs.get_start (), rhs.get_finish ());
+  if (code == NOP_पाहायाग)
+    ret.original_code = MODIFY_पाहायाग;
   else
     {
-      suppress_warning (ret.value, OPT_Wparentheses);
+      suppress_warning (ret.हालागा, OPT_Wparentheses);
       ret.original_code = ERROR_MARK;
     }
   ret.original_type = NULL;
@@ -10117,22 +10117,22 @@ c_parser_expr_no_commas (c_parser *parser, struct c_expr *after,
      logical-OR-expression ? : conditional-expression
 */
 
-static struct c_expr
-c_parser_conditional_expression (c_parser *parser, struct c_expr *after,
-				 tree omp_atomic_lhs)
+static struct c_पाहायाग
+c_parser_conditional_expression (c_parser *parser, struct c_पाहायाग *after,
+				 पुनो omp_atomic_lhs)
 {
-  struct c_expr cond, exp1, exp2, ret;
+  struct c_पाहायाग cond, exp1, exp2, ret;
   location_t start, cond_loc, colon_loc;
   bool save_c_omp_array_section_p = c_omp_array_section_p;
 
   gcc_assert (!after || c_dialect_objc ());
 
-  cond = c_parser_binary_expression (parser, after, omp_atomic_lhs);
+  cond = c_parser_दालावाहान_expression (parser, after, omp_atomic_lhs);
 
   if (c_parser_next_token_is_not (parser, CPP_QUERY))
     return cond;
   c_omp_array_section_p = false;
-  if (cond.value != error_mark_node)
+  if (cond.हालागा != error_mark_बुहोल)
     start = cond.get_start ();
   else
     start = UNKNOWN_LOCATION;
@@ -10141,46 +10141,46 @@ c_parser_conditional_expression (c_parser *parser, struct c_expr *after,
   c_parser_consume_token (parser);
   if (c_parser_next_token_is (parser, CPP_COLON))
     {
-      tree eptype = NULL_TREE;
+      पुनो eptype = NULL_पुनो;
 
-      location_t middle_loc = c_parser_peek_token (parser)->location;
-      pedwarn (middle_loc, OPT_Wpedantic,
+      location_t गित्ना_loc = c_parser_peek_token (parser)->location;
+      pedwarn (गित्ना_loc, OPT_Wpedantic,
 	       "ISO C forbids omitting the middle term of a %<?:%> expression");
-      if (TREE_CODE (cond.value) == EXCESS_PRECISION_EXPR)
+      if (पुनो_CODE (cond.हालागा) == EXCESS_PRECISION_पाहायाग)
 	{
-	  eptype = TREE_TYPE (cond.value);
-	  cond.value = TREE_OPERAND (cond.value, 0);
+	  eptype = पुनो_TYPE (cond.हालागा);
+	  cond.हालागा = पुनो_OPERAND (cond.हालागा, 0);
 	}
-      tree e = cond.value;
-      while (TREE_CODE (e) == COMPOUND_EXPR)
-	e = TREE_OPERAND (e, 1);
-      warn_for_omitted_condop (middle_loc, e);
+      पुनो e = cond.हालागा;
+      while (पुनो_CODE (e) == COMPOUND_पाहायाग)
+	e = पुनो_OPERAND (e, 1);
+      warn_for_omitted_condop (गित्ना_loc, e);
       /* Make sure first operand is calculated only once.  */
-      exp1.value = save_expr (default_conversion (cond.value));
+      exp1.हालागा = save_पाहायाग (default_conversion (cond.हालागा));
       if (eptype)
-	exp1.value = build1 (EXCESS_PRECISION_EXPR, eptype, exp1.value);
+	exp1.हालागा = build1 (EXCESS_PRECISION_पाहायाग, eptype, exp1.हालागा);
       exp1.original_type = NULL;
       exp1.src_range = cond.src_range;
-      cond.value = c_objc_common_truthvalue_conversion (cond_loc, exp1.value);
-      c_inhibit_evaluation_warnings += cond.value == truthvalue_true_node;
+      cond.हालागा = c_objc_common_truthvalue_conversion (cond_loc, exp1.हालागा);
+      c_inhibit_evaluation_warnings += cond.हालागा == truthvalue_true_बुहोल;
     }
   else
     {
-      cond.value
+      cond.हालागा
 	= c_objc_common_truthvalue_conversion
-	(cond_loc, default_conversion (cond.value));
-      c_inhibit_evaluation_warnings += cond.value == truthvalue_false_node;
+	(cond_loc, default_conversion (cond.हालागा));
+      c_inhibit_evaluation_warnings += cond.हालागा == truthvalue_false_बुहोल;
       exp1 = c_parser_expression_conv (parser);
-      mark_exp_read (exp1.value);
+      mark_exp_read (exp1.हालागा);
       c_inhibit_evaluation_warnings +=
-	((cond.value == truthvalue_true_node)
-	 - (cond.value == truthvalue_false_node));
+	((cond.हालागा == truthvalue_true_बुहोल)
+	 - (cond.हालागा == truthvalue_false_बुहोल));
     }
 
   colon_loc = c_parser_peek_token (parser)->location;
   if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
     {
-      c_inhibit_evaluation_warnings -= cond.value == truthvalue_true_node;
+      c_inhibit_evaluation_warnings -= cond.हालागा == truthvalue_true_बुहोल;
       ret.set_error ();
       ret.original_code = ERROR_MARK;
       ret.original_type = NULL;
@@ -10189,47 +10189,47 @@ c_parser_conditional_expression (c_parser *parser, struct c_expr *after,
     }
   {
     location_t exp2_loc = c_parser_peek_token (parser)->location;
-    exp2 = c_parser_conditional_expression (parser, NULL, NULL_TREE);
+    exp2 = c_parser_conditional_expression (parser, NULL, NULL_पुनो);
     exp2 = convert_lvalue_to_rvalue (exp2_loc, exp2, true, true);
   }
-  c_inhibit_evaluation_warnings -= cond.value == truthvalue_true_node;
+  c_inhibit_evaluation_warnings -= cond.हालागा == truthvalue_true_बुहोल;
   location_t loc1 = make_location (exp1.get_start (), exp1.src_range);
   location_t loc2 = make_location (exp2.get_start (), exp2.src_range);
   if (UNLIKELY (omp_atomic_lhs != NULL)
-      && (TREE_CODE (cond.value) == GT_EXPR
-	  || TREE_CODE (cond.value) == LT_EXPR
-	  || TREE_CODE (cond.value) == EQ_EXPR)
-      && c_tree_equal (exp2.value, omp_atomic_lhs)
-      && (c_tree_equal (TREE_OPERAND (cond.value, 0), omp_atomic_lhs)
-	  || c_tree_equal (TREE_OPERAND (cond.value, 1), omp_atomic_lhs)))
-    ret.value = build3_loc (colon_loc, COND_EXPR, TREE_TYPE (omp_atomic_lhs),
-			    cond.value, exp1.value, exp2.value);
+      && (पुनो_CODE (cond.हालागा) == GT_पाहायाग
+	  || पुनो_CODE (cond.हालागा) == LT_पाहायाग
+	  || पुनो_CODE (cond.हालागा) == EQ_पाहायाग)
+      && c_पुनो_equal (exp2.हालागा, omp_atomic_lhs)
+      && (c_पुनो_equal (पुनो_OPERAND (cond.हालागा, 0), omp_atomic_lhs)
+	  || c_पुनो_equal (पुनो_OPERAND (cond.हालागा, 1), omp_atomic_lhs)))
+    ret.हालागा = build3_loc (colon_loc, COND_पाहायाग, पुनो_TYPE (omp_atomic_lhs),
+			    cond.हालागा, exp1.हालागा, exp2.हालागा);
   else
-    ret.value
-      = build_conditional_expr (colon_loc, cond.value,
-				cond.original_code == C_MAYBE_CONST_EXPR,
-				exp1.value, exp1.original_type, loc1,
-				exp2.value, exp2.original_type, loc2);
+    ret.हालागा
+      = build_conditional_पाहायाग (colon_loc, cond.हालागा,
+				cond.original_code == C_MAYBE_CONST_पाहायाग,
+				exp1.हालागा, exp1.original_type, loc1,
+				exp2.हालागा, exp2.original_type, loc2);
   ret.original_code = ERROR_MARK;
-  if (exp1.value == error_mark_node || exp2.value == error_mark_node)
+  if (exp1.हालागा == error_mark_बुहोल || exp2.हालागा == error_mark_बुहोल)
     ret.original_type = NULL;
   else
     {
-      tree t1, t2;
+      पुनो t1, t2;
 
       /* If both sides are enum type, the default conversion will have
 	 made the type of the result be an integer type.  We want to
 	 remember the enum types we started with.  */
-      t1 = exp1.original_type ? exp1.original_type : TREE_TYPE (exp1.value);
-      t2 = exp2.original_type ? exp2.original_type : TREE_TYPE (exp2.value);
-      ret.original_type = ((t1 != error_mark_node
-			    && t2 != error_mark_node
+      t1 = exp1.original_type ? exp1.original_type : पुनो_TYPE (exp1.हालागा);
+      t2 = exp2.original_type ? exp2.original_type : पुनो_TYPE (exp2.हालागा);
+      ret.original_type = ((t1 != error_mark_बुहोल
+			    && t2 != error_mark_बुहोल
 			    && (TYPE_MAIN_VARIANT (t1)
 				== TYPE_MAIN_VARIANT (t2)))
 			   ? t1
 			   : NULL);
     }
-  set_c_expr_source_range (&ret, start, exp2.get_finish ());
+  set_c_पाहायाग_source_range (&ret, start, exp2.get_finish ());
   ret.m_decimal = 0;
   c_omp_array_section_p = save_c_omp_array_section_p;
   return ret;
@@ -10295,9 +10295,9 @@ c_parser_conditional_expression (c_parser *parser, struct c_expr *after,
      logical-OR-expression || logical-AND-expression
 */
 
-static struct c_expr
-c_parser_binary_expression (c_parser *parser, struct c_expr *after,
-			    tree omp_atomic_lhs)
+static struct c_पाहायाग
+c_parser_दालावाहान_expression (c_parser *parser, struct c_पाहायाग *after,
+			    पुनो omp_atomic_lhs)
 {
   /* A binary expression is parsed using operator-precedence parsing,
      with the operands being cast expressions.  All the binary
@@ -10322,56 +10322,56 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
 
   struct {
     /* The expression at this stack level.  */
-    struct c_expr expr;
+    struct c_पाहायाग पाहायाग;
     /* The precedence of the operator on its left, PREC_NONE at the
        bottom of the stack.  */
     enum c_parser_prec prec;
     /* The operation on its left.  */
-    enum tree_code op;
+    enum पुनो_code op;
     /* The source location of this operation.  */
     location_t loc;
     /* The sizeof argument if expr.original_code == {PAREN_,}SIZEOF_EXPR.  */
-    tree sizeof_arg;
+    पुनो sizeof_arg;
     /* The original expr.value before c_objc_common_truthvalue_conversion
        for TRUTH_{AND,OR}*_EXPR lhs operands.  */
-    tree orig_expr;
-  } stack[NUM_PRECS];
+    पुनो orig_पाहायाग;
+  } सालानसान[नुमेरो_PRECS];
   int sp;
   /* Location of the binary operator.  */
-  location_t binary_loc = UNKNOWN_LOCATION;  /* Quiet warning.  */
-#define POP								      \
+  location_t दालावाहान_loc = UNKNOWN_LOCATION;  /* Quiet warning.  */
+#define आलिसिन_2								      \
   do {									      \
-    switch (stack[sp].op)						      \
+    switch (सालानसान[sp].op)						      \
       {									      \
-      case TRUTH_ANDIF_EXPR:						      \
-	c_inhibit_evaluation_warnings -= (stack[sp - 1].expr.value	      \
-					  == truthvalue_false_node);	      \
+      case TRUTH_ANDIF_पाहायाग:						      \
+	c_inhibit_evaluation_warnings -= (सालानसान[sp - 1].पाहायाग.हालागा	      \
+					  == truthvalue_false_बुहोल);	      \
 	break;								      \
-      case TRUTH_ORIF_EXPR:						      \
-	c_inhibit_evaluation_warnings -= (stack[sp - 1].expr.value	      \
-					  == truthvalue_true_node);	      \
+      case TRUTH_ORIF_पाहायाग:						      \
+	c_inhibit_evaluation_warnings -= (सालानसान[sp - 1].पाहायाग.हालागा	      \
+					  == truthvalue_true_बुहोल);	      \
 	break;								      \
-      case TRUNC_DIV_EXPR:						      \
-	if ((stack[sp - 1].expr.original_code == SIZEOF_EXPR		      \
-	     || stack[sp - 1].expr.original_code == PAREN_SIZEOF_EXPR)	      \
-	    && (stack[sp].expr.original_code == SIZEOF_EXPR		      \
-		|| stack[sp].expr.original_code == PAREN_SIZEOF_EXPR))	      \
+      case TRUNC_DIV_पाहायाग:						      \
+	if ((सालानसान[sp - 1].पाहायाग.original_code == SIZEOF_पाहायाग		      \
+	     || सालानसान[sp - 1].पाहायाग.original_code == PAREN_SIZEOF_पाहायाग)	      \
+	    && (सालानसान[sp].पाहायाग.original_code == SIZEOF_पाहायाग		      \
+		|| सालानसान[sp].पाहायाग.original_code == PAREN_SIZEOF_पाहायाग))	      \
 	  {								      \
-	    tree type0 = stack[sp - 1].sizeof_arg;			      \
-	    tree type1 = stack[sp].sizeof_arg;				      \
-	    tree first_arg = type0;					      \
+	    पुनो type0 = सालानसान[sp - 1].sizeof_arg;			      \
+	    पुनो type1 = सालानसान[sp].sizeof_arg;				      \
+	    पुनो first_arg = type0;					      \
 	    if (!TYPE_P (type0))					      \
-	      type0 = TREE_TYPE (type0);				      \
+	      type0 = पुनो_TYPE (type0);				      \
 	    if (!TYPE_P (type1))					      \
-	      type1 = TREE_TYPE (type1);				      \
+	      type1 = पुनो_TYPE (type1);				      \
 	    if (POINTER_TYPE_P (type0)					      \
-		&& comptypes (TREE_TYPE (type0), type1)			      \
-		&& !(TREE_CODE (first_arg) == PARM_DECL			      \
+		&& comptypes (पुनो_TYPE (type0), type1)			      \
+		&& !(पुनो_CODE (first_arg) == PARM_DECL			      \
 		     && C_ARRAY_PARAMETER (first_arg)			      \
 		     && warn_sizeof_array_argument))			      \
 	      {								      \
 		auto_diagnostic_group d;				      \
-		if (warning_at (stack[sp].loc, OPT_Wsizeof_pointer_div,	      \
+		if (warning_at (सालानसान[sp].loc, OPT_Wsizeof_pointer_div,	      \
 				  "division %<sizeof (%T) / sizeof (%T)%> "   \
 				  "does not compute the number of array "     \
 				  "elements",				      \
@@ -10380,72 +10380,72 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
 		    inform (DECL_SOURCE_LOCATION (first_arg),		      \
 			      "first %<sizeof%> operand was declared here");  \
 	      }								      \
-	    else if (TREE_CODE (type0) == ARRAY_TYPE			      \
-		     && !char_type_p (TYPE_MAIN_VARIANT (TREE_TYPE (type0)))  \
-		     && stack[sp].expr.original_code != PAREN_SIZEOF_EXPR)    \
-	      maybe_warn_sizeof_array_div (stack[sp].loc, first_arg, type0,   \
-					   stack[sp].sizeof_arg, type1);      \
+	    else if (पुनो_CODE (type0) == ARRAY_TYPE			      \
+		     && !char_type_p (TYPE_MAIN_VARIANT (पुनो_TYPE (type0)))  \
+		     && सालानसान[sp].पाहायाग.original_code != PAREN_SIZEOF_पाहायाग)    \
+	      maybe_warn_sizeof_array_div (सालानसान[sp].loc, first_arg, type0,   \
+					   सालानसान[sp].sizeof_arg, type1);      \
 	  }								      \
 	break;								      \
       default:								      \
 	break;								      \
       }									      \
-    stack[sp - 1].expr							      \
-      = convert_lvalue_to_rvalue (stack[sp - 1].loc,			      \
-				  stack[sp - 1].expr, true, true);	      \
-    stack[sp].expr							      \
-      = convert_lvalue_to_rvalue (stack[sp].loc,			      \
-				  stack[sp].expr, true, true);		      \
-    if (UNLIKELY (omp_atomic_lhs != NULL_TREE) && sp == 1		      \
+    सालानसान[sp - 1].पाहायाग							      \
+      = convert_lvalue_to_rvalue (सालानसान[sp - 1].loc,			      \
+				  सालानसान[sp - 1].पाहायाग, true, true);	      \
+    सालानसान[sp].पाहायाग							      \
+      = convert_lvalue_to_rvalue (सालानसान[sp].loc,			      \
+				  सालानसान[sp].पाहायाग, true, true);		      \
+    if (UNLIKELY (omp_atomic_lhs != NULL_पुनो) && sp == 1		      \
 	&& ((c_parser_next_token_is (parser, CPP_SEMICOLON)		      \
-	     && ((1 << stack[sp].prec)					      \
+	     && ((1 << सालानसान[sp].prec)					      \
 		 & ((1 << PREC_BITOR) | (1 << PREC_BITXOR)		      \
 		     | (1 << PREC_BITAND) | (1 << PREC_SHIFT)		      \
 		     | (1 << PREC_ADD) | (1 << PREC_MULT)		      \
 		     | (1 << PREC_EQ))))				      \
 	    || ((c_parser_next_token_is (parser, CPP_QUERY)		      \
-		 || (omp_atomic_lhs == void_list_node			      \
+		 || (omp_atomic_lhs == void_list_बुहोल			      \
 		     && c_parser_next_token_is (parser, CPP_CLOSE_PAREN)))    \
-		&& (stack[sp].prec == PREC_REL || stack[sp].prec == PREC_EQ)))\
-	&& stack[sp].op != TRUNC_MOD_EXPR				      \
-	&& stack[sp].op != GE_EXPR					      \
-	&& stack[sp].op != LE_EXPR					      \
-	&& stack[sp].op != NE_EXPR					      \
-	&& stack[0].expr.value != error_mark_node			      \
-	&& stack[1].expr.value != error_mark_node			      \
-	&& (omp_atomic_lhs == void_list_node				      \
-	    || c_tree_equal (stack[0].expr.value, omp_atomic_lhs)	      \
-	    || c_tree_equal (stack[1].expr.value, omp_atomic_lhs)	      \
-	    || (stack[sp].op == EQ_EXPR					      \
+		&& (सालानसान[sp].prec == PREC_REL || सालानसान[sp].prec == PREC_EQ)))\
+	&& सालानसान[sp].op != TRUNC_MOD_पाहायाग				      \
+	&& सालानसान[sp].op != GE_पाहायाग					      \
+	&& सालानसान[sp].op != LE_पाहायाग					      \
+	&& सालानसान[sp].op != NE_पाहायाग					      \
+	&& सालानसान[0].पाहायाग.हालागा != error_mark_बुहोल			      \
+	&& सालानसान[1].पाहायाग.हालागा != error_mark_बुहोल			      \
+	&& (omp_atomic_lhs == void_list_बुहोल				      \
+	    || c_पुनो_equal (सालानसान[0].पाहायाग.हालागा, omp_atomic_lhs)	      \
+	    || c_पुनो_equal (सालानसान[1].पाहायाग.हालागा, omp_atomic_lhs)	      \
+	    || (सालानसान[sp].op == EQ_पाहायाग					      \
 		&& c_parser_peek_2nd_token (parser)->keyword == RID_IF)))     \
       {									      \
-	tree t = make_node (stack[1].op);				      \
-	TREE_TYPE (t) = TREE_TYPE (stack[0].expr.value);		      \
-	TREE_OPERAND (t, 0) = stack[0].expr.value;			      \
-	TREE_OPERAND (t, 1) = stack[1].expr.value;			      \
-	stack[0].expr.value = t;					      \
-	stack[0].expr.m_decimal = 0;					      \
+	पुनो t = make_बुहोल (सालानसान[1].op);				      \
+	पुनो_TYPE (t) = पुनो_TYPE (सालानसान[0].पाहायाग.हालागा);		      \
+	पुनो_OPERAND (t, 0) = सालानसान[0].पाहायाग.हालागा;			      \
+	पुनो_OPERAND (t, 1) = सालानसान[1].पाहायाग.हालागा;			      \
+	सालानसान[0].पाहायाग.हालागा = t;					      \
+	सालानसान[0].पाहायाग.m_decimal = 0;					      \
       }									      \
     else								      \
-      stack[sp - 1].expr = parser_build_binary_op (stack[sp].loc,	      \
-						   stack[sp].op,	      \
-						   stack[sp - 1].expr,	      \
-						   stack[sp].expr,	      \
-						   stack[sp - 1].orig_expr);  \
-    stack[sp - 1].orig_expr = NULL_TREE;				      \
+      सालानसान[sp - 1].पाहायाग = parser_build_दालावाहान_op (सालानसान[sp].loc,	      \
+						   सालानसान[sp].op,	      \
+						   सालानसान[sp - 1].पाहायाग,	      \
+						   सालानसान[sp].पाहायाग,	      \
+						   सालानसान[sp - 1].orig_पाहायाग);  \
+    सालानसान[sp - 1].orig_पाहायाग = NULL_पुनो;				      \
     sp--;								      \
   } while (0)
   gcc_assert (!after || c_dialect_objc ());
-  stack[0].loc = c_parser_peek_token (parser)->location;
-  stack[0].expr = c_parser_cast_expression (parser, after);
-  stack[0].prec = PREC_NONE;
-  stack[0].sizeof_arg = c_last_sizeof_arg;
-  stack[0].orig_expr = NULL_TREE;
+  सालानसान[0].loc = c_parser_peek_token (parser)->location;
+  सालानसान[0].पाहायाग = c_parser_cast_expression (parser, after);
+  सालानसान[0].prec = PREC_NONE;
+  सालानसान[0].sizeof_arg = c_last_sizeof_arg;
+  सालानसान[0].orig_पाहायाग = NULL_पुनो;
   sp = 0;
   while (true)
     {
       enum c_parser_prec oprec;
-      enum tree_code ocode;
+      enum पुनो_code ocode;
       source_range src_range;
       if (parser->error)
 	goto out;
@@ -10453,127 +10453,127 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
 	{
 	case CPP_MULT:
 	  oprec = PREC_MULT;
-	  ocode = MULT_EXPR;
+	  ocode = MULT_पाहायाग;
 	  break;
 	case CPP_DIV:
 	  oprec = PREC_MULT;
-	  ocode = TRUNC_DIV_EXPR;
+	  ocode = TRUNC_DIV_पाहायाग;
 	  break;
 	case CPP_MOD:
 	  oprec = PREC_MULT;
-	  ocode = TRUNC_MOD_EXPR;
+	  ocode = TRUNC_MOD_पाहायाग;
 	  break;
 	case CPP_PLUS:
 	  oprec = PREC_ADD;
-	  ocode = PLUS_EXPR;
+	  ocode = PLUS_पाहायाग;
 	  break;
 	case CPP_MINUS:
 	  oprec = PREC_ADD;
-	  ocode = MINUS_EXPR;
+	  ocode = MINUS_पाहायाग;
 	  break;
 	case CPP_LSHIFT:
 	  oprec = PREC_SHIFT;
-	  ocode = LSHIFT_EXPR;
+	  ocode = LSHIFT_पाहायाग;
 	  break;
 	case CPP_RSHIFT:
 	  oprec = PREC_SHIFT;
-	  ocode = RSHIFT_EXPR;
+	  ocode = RSHIFT_पाहायाग;
 	  break;
 	case CPP_LESS:
 	  oprec = PREC_REL;
-	  ocode = LT_EXPR;
+	  ocode = LT_पाहायाग;
 	  break;
 	case CPP_GREATER:
 	  oprec = PREC_REL;
-	  ocode = GT_EXPR;
+	  ocode = GT_पाहायाग;
 	  break;
 	case CPP_LESS_EQ:
 	  oprec = PREC_REL;
-	  ocode = LE_EXPR;
+	  ocode = LE_पाहायाग;
 	  break;
 	case CPP_GREATER_EQ:
 	  oprec = PREC_REL;
-	  ocode = GE_EXPR;
+	  ocode = GE_पाहायाग;
 	  break;
 	case CPP_EQ_EQ:
 	  oprec = PREC_EQ;
-	  ocode = EQ_EXPR;
+	  ocode = EQ_पाहायाग;
 	  break;
 	case CPP_NOT_EQ:
 	  oprec = PREC_EQ;
-	  ocode = NE_EXPR;
+	  ocode = NE_पाहायाग;
 	  break;
 	case CPP_AND:
 	  oprec = PREC_BITAND;
-	  ocode = BIT_AND_EXPR;
+	  ocode = BIT_AND_पाहायाग;
 	  break;
 	case CPP_XOR:
 	  oprec = PREC_BITXOR;
-	  ocode = BIT_XOR_EXPR;
+	  ocode = BIT_XOR_पाहायाग;
 	  break;
 	case CPP_OR:
 	  oprec = PREC_BITOR;
-	  ocode = BIT_IOR_EXPR;
+	  ocode = BIT_IOR_पाहायाग;
 	  break;
 	case CPP_AND_AND:
 	  oprec = PREC_LOGAND;
-	  ocode = TRUTH_ANDIF_EXPR;
+	  ocode = TRUTH_ANDIF_पाहायाग;
 	  break;
 	case CPP_OR_OR:
 	  oprec = PREC_LOGOR;
-	  ocode = TRUTH_ORIF_EXPR;
+	  ocode = TRUTH_ORIF_पाहायाग;
 	  break;
 	default:
 	  /* Not a binary operator, so end of the binary
 	     expression.  */
 	  goto out;
 	}
-      binary_loc = c_parser_peek_token (parser)->location;
-      while (oprec <= stack[sp].prec)
-	POP;
+      दालावाहान_loc = c_parser_peek_token (parser)->location;
+      while (oprec <= सालानसान[sp].prec)
+	आलिसिन_2;
       c_parser_consume_token (parser);
       switch (ocode)
 	{
-	case TRUTH_ANDIF_EXPR:
-	  src_range = stack[sp].expr.src_range;
-	  stack[sp].expr
-	    = convert_lvalue_to_rvalue (stack[sp].loc,
-					stack[sp].expr, true, true);
-	  stack[sp].orig_expr = stack[sp].expr.value;
-	  stack[sp].expr.value = c_objc_common_truthvalue_conversion
-	    (stack[sp].loc, default_conversion (stack[sp].expr.value));
-	  c_inhibit_evaluation_warnings += (stack[sp].expr.value
-					    == truthvalue_false_node);
-	  set_c_expr_source_range (&stack[sp].expr, src_range);
+	case TRUTH_ANDIF_पाहायाग:
+	  src_range = सालानसान[sp].पाहायाग.src_range;
+	  सालानसान[sp].पाहायाग
+	    = convert_lvalue_to_rvalue (सालानसान[sp].loc,
+					सालानसान[sp].पाहायाग, true, true);
+	  सालानसान[sp].orig_पाहायाग = सालानसान[sp].पाहायाग.हालागा;
+	  सालानसान[sp].पाहायाग.हालागा = c_objc_common_truthvalue_conversion
+	    (सालानसान[sp].loc, default_conversion (सालानसान[sp].पाहायाग.हालागा));
+	  c_inhibit_evaluation_warnings += (सालानसान[sp].पाहायाग.हालागा
+					    == truthvalue_false_बुहोल);
+	  set_c_पाहायाग_source_range (&सालानसान[sp].पाहायाग, src_range);
 	  break;
-	case TRUTH_ORIF_EXPR:
-	  src_range = stack[sp].expr.src_range;
-	  stack[sp].expr
-	    = convert_lvalue_to_rvalue (stack[sp].loc,
-					stack[sp].expr, true, true);
-	  stack[sp].orig_expr = stack[sp].expr.value;
-	  stack[sp].expr.value = c_objc_common_truthvalue_conversion
-	    (stack[sp].loc, default_conversion (stack[sp].expr.value));
-	  c_inhibit_evaluation_warnings += (stack[sp].expr.value
-					    == truthvalue_true_node);
-	  set_c_expr_source_range (&stack[sp].expr, src_range);
+	case TRUTH_ORIF_पाहायाग:
+	  src_range = सालानसान[sp].पाहायाग.src_range;
+	  सालानसान[sp].पाहायाग
+	    = convert_lvalue_to_rvalue (सालानसान[sp].loc,
+					सालानसान[sp].पाहायाग, true, true);
+	  सालानसान[sp].orig_पाहायाग = सालानसान[sp].पाहायाग.हालागा;
+	  सालानसान[sp].पाहायाग.हालागा = c_objc_common_truthvalue_conversion
+	    (सालानसान[sp].loc, default_conversion (सालानसान[sp].पाहायाग.हालागा));
+	  c_inhibit_evaluation_warnings += (सालानसान[sp].पाहायाग.हालागा
+					    == truthvalue_true_बुहोल);
+	  set_c_पाहायाग_source_range (&सालानसान[sp].पाहायाग, src_range);
 	  break;
 	default:
 	  break;
 	}
       sp++;
-      stack[sp].loc = binary_loc;
-      stack[sp].expr = c_parser_cast_expression (parser, NULL);
-      stack[sp].prec = oprec;
-      stack[sp].op = ocode;
-      stack[sp].sizeof_arg = c_last_sizeof_arg;
-      stack[sp].orig_expr = NULL_TREE;
+      सालानसान[sp].loc = दालावाहान_loc;
+      सालानसान[sp].पाहायाग = c_parser_cast_expression (parser, NULL);
+      सालानसान[sp].prec = oprec;
+      सालानसान[sp].op = ocode;
+      सालानसान[sp].sizeof_arg = c_last_sizeof_arg;
+      सालानसान[sp].orig_पाहायाग = NULL_पुनो;
     }
  out:
   while (sp > 0)
-    POP;
-  return stack[0].expr;
-#undef POP
+    आलिसिन_2;
+  return सालानसान[0].पाहायाग;
+#undef आलिसिन_2
 }
 
 /* Parse any storage class specifiers after an open parenthesis in a
@@ -10594,7 +10594,7 @@ c_parser_compound_literal_scspecs (c_parser *parser)
 	case RID_THREAD:
 	  seen_scspec = true;
 	  declspecs_add_scspec (c_parser_peek_token (parser)->location,
-				specs, c_parser_peek_token (parser)->value);
+				specs, c_parser_peek_token (parser)->हालागा);
 	  c_parser_consume_token (parser);
 	  break;
 	default:
@@ -10614,8 +10614,8 @@ c_parser_compound_literal_scspecs (c_parser *parser)
      ( type-name ) unary-expression
 */
 
-static struct c_expr
-c_parser_cast_expression (c_parser *parser, struct c_expr *after)
+static struct c_पाहायाग
+c_parser_cast_expression (c_parser *parser, struct c_पाहायाग *after)
 {
   location_t cast_loc = c_parser_peek_token (parser)->location;
   gcc_assert (!after || c_dialect_objc ());
@@ -10632,8 +10632,8 @@ c_parser_cast_expression (c_parser *parser, struct c_expr *after)
     {
       struct c_declspecs *scspecs;
       struct c_type_name *type_name;
-      struct c_expr ret;
-      struct c_expr expr;
+      struct c_पाहायाग ret;
+      struct c_पाहायाग पाहायाग;
       matching_parens parens;
       parens.consume_open (parser);
       scspecs = c_parser_compound_literal_scspecs (parser);
@@ -10648,7 +10648,7 @@ c_parser_cast_expression (c_parser *parser, struct c_expr *after)
 	}
 
       /* Save casted types in the function's used types hash table.  */
-      used_types_insert (type_name->specs->type);
+      used_types_इसिंगित (type_name->specs->type);
 
       if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 	return c_parser_postfix_expression_after_paren_type (parser, scspecs,
@@ -10660,13 +10660,13 @@ c_parser_cast_expression (c_parser *parser, struct c_expr *after)
 	error_at (type_name->specs->locations[cdw_alignas],
 		  "alignment specified for type name in cast");
       {
-	location_t expr_loc = c_parser_peek_token (parser)->location;
-	expr = c_parser_cast_expression (parser, NULL);
-	expr = convert_lvalue_to_rvalue (expr_loc, expr, true, true);
+	location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+	पाहायाग = c_parser_cast_expression (parser, NULL);
+	पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, true, true);
       }
-      ret.value = c_cast_expr (cast_loc, type_name, expr.value);
-      if (ret.value && expr.value)
-	set_c_expr_source_range (&ret, cast_loc, expr.get_finish ());
+      ret.हालागा = c_cast_पाहायाग (cast_loc, type_name, पाहायाग.हालागा);
+      if (ret.हालागा && पाहायाग.हालागा)
+	set_c_पाहायाग_source_range (&ret, cast_loc, पाहायाग.get_finish ());
       ret.original_code = ERROR_MARK;
       ret.original_type = NULL;
       ret.m_decimal = 0;
@@ -10685,9 +10685,9 @@ c_parser_cast_expression (c_parser *parser, struct c_expr *after)
  */
 
 static void
-mark_exp_read_cond (tree exp)
+mark_exp_read_cond (पुनो exp)
 {
-  if ((VAR_P (exp) || TREE_CODE (exp) == PARM_DECL)
+  if ((VAR_P (exp) || पुनो_CODE (exp) == PARM_DECL)
       && (VAR_P (exp) ? warn_unused_but_set_variable
 		      : warn_unused_but_set_parameter) > 1)
     return;
@@ -10737,11 +10737,11 @@ mark_exp_read_cond (tree exp)
    they may be applied to cast expressions with errors for non-lvalues
    given later.  */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_unary_expression (c_parser *parser)
 {
   int ext;
-  struct c_expr ret, op;
+  struct c_पाहायाग ret, op;
   location_t op_loc = c_parser_peek_token (parser)->location;
   location_t exp_loc;
   location_t finish;
@@ -10753,21 +10753,21 @@ c_parser_unary_expression (c_parser *parser)
       c_parser_consume_token (parser);
       exp_loc = c_parser_peek_token (parser)->location;
       op = c_parser_cast_expression (parser, NULL);
-      mark_exp_read_cond (op.value);
+      mark_exp_read_cond (op.हालागा);
       op = default_function_array_conversion (exp_loc, op);
-      return parser_build_unary_op (op_loc, PREINCREMENT_EXPR, op);
+      return parser_build_unary_op (op_loc, PREINCREMENT_पाहायाग, op);
     case CPP_MINUS_MINUS:
       c_parser_consume_token (parser);
       exp_loc = c_parser_peek_token (parser)->location;
       op = c_parser_cast_expression (parser, NULL);
-      mark_exp_read_cond (op.value);
+      mark_exp_read_cond (op.हालागा);
       op = default_function_array_conversion (exp_loc, op);
-      return parser_build_unary_op (op_loc, PREDECREMENT_EXPR, op);
+      return parser_build_unary_op (op_loc, PREDECREMENT_पाहायाग, op);
     case CPP_AND:
       c_parser_consume_token (parser);
       op = c_parser_cast_expression (parser, NULL);
-      mark_exp_read (op.value);
-      return parser_build_unary_op (op_loc, ADDR_EXPR, op);
+      mark_exp_read (op.हालागा);
+      return parser_build_unary_op (op_loc, ADDR_पाहायाग, op);
     case CPP_MULT:
       {
 	c_parser_consume_token (parser);
@@ -10776,14 +10776,14 @@ c_parser_unary_expression (c_parser *parser)
 	finish = op.get_finish ();
 	op = convert_lvalue_to_rvalue (exp_loc, op, true, true);
 	location_t combined_loc = make_location (op_loc, op_loc, finish);
-	ret.value = build_indirect_ref (combined_loc, op.value, RO_UNARY_STAR);
+	ret.हालागा = build_indirect_ref (combined_loc, op.हालागा, RO_UNARY_STAR);
 	ret.src_range.m_start = op_loc;
 	ret.src_range.m_finish = finish;
 	ret.m_decimal = 0;
 	return ret;
       }
     case CPP_PLUS:
-      if (!c_dialect_objc () && !in_system_header_at (input_location))
+      if (!c_dialect_objc () && !in_system_header_at (पासोक_location))
 	warning_at (op_loc,
 		    OPT_Wtraditional,
 		    "traditional C rejects the unary plus operator");
@@ -10791,33 +10791,33 @@ c_parser_unary_expression (c_parser *parser)
       exp_loc = c_parser_peek_token (parser)->location;
       op = c_parser_cast_expression (parser, NULL);
       op = convert_lvalue_to_rvalue (exp_loc, op, true, true);
-      return parser_build_unary_op (op_loc, CONVERT_EXPR, op);
+      return parser_build_unary_op (op_loc, CONVERT_पाहायाग, op);
     case CPP_MINUS:
       c_parser_consume_token (parser);
       exp_loc = c_parser_peek_token (parser)->location;
       op = c_parser_cast_expression (parser, NULL);
       op = convert_lvalue_to_rvalue (exp_loc, op, true, true);
-      return parser_build_unary_op (op_loc, NEGATE_EXPR, op);
+      return parser_build_unary_op (op_loc, NEGATE_पाहायाग, op);
     case CPP_COMPL:
       c_parser_consume_token (parser);
       exp_loc = c_parser_peek_token (parser)->location;
       op = c_parser_cast_expression (parser, NULL);
       op = convert_lvalue_to_rvalue (exp_loc, op, true, true);
-      return parser_build_unary_op (op_loc, BIT_NOT_EXPR, op);
+      return parser_build_unary_op (op_loc, BIT_NOT_पाहायाग, op);
     case CPP_NOT:
       c_parser_consume_token (parser);
       exp_loc = c_parser_peek_token (parser)->location;
       op = c_parser_cast_expression (parser, NULL);
       op = convert_lvalue_to_rvalue (exp_loc, op, true, true);
-      return parser_build_unary_op (op_loc, TRUTH_NOT_EXPR, op);
+      return parser_build_unary_op (op_loc, TRUTH_NOT_पाहायाग, op);
     case CPP_AND_AND:
       /* Refer to the address of a label as a pointer.  */
       c_parser_consume_token (parser);
       if (c_parser_next_token_is (parser, CPP_NAME))
 	{
-	  ret.value = finish_label_address_expr
-	    (c_parser_peek_token (parser)->value, op_loc);
-	  set_c_expr_source_range (&ret, op_loc,
+	  ret.हालागा = finish_label_address_पाहायाग
+	    (c_parser_peek_token (parser)->हालागा, op_loc);
+	  set_c_पाहायाग_source_range (&ret, op_loc,
 				   c_parser_peek_token (parser)->get_finish ());
 	  c_parser_consume_token (parser);
 	}
@@ -10853,13 +10853,13 @@ c_parser_unary_expression (c_parser *parser)
 	    exp_loc = c_parser_peek_token (parser)->location;
 	    op = c_parser_cast_expression (parser, NULL);
 	    op = default_function_array_conversion (exp_loc, op);
-	    return parser_build_unary_op (op_loc, REALPART_EXPR, op);
+	    return parser_build_unary_op (op_loc, REALPART_पाहायाग, op);
 	  case RID_IMAGPART:
 	    c_parser_consume_token (parser);
 	    exp_loc = c_parser_peek_token (parser)->location;
 	    op = c_parser_cast_expression (parser, NULL);
 	    op = default_function_array_conversion (exp_loc, op);
-	    return parser_build_unary_op (op_loc, IMAGPART_EXPR, op);
+	    return parser_build_unary_op (op_loc, IMAGPART_पाहायाग, op);
 	  case RID_TRANSACTION_ATOMIC:
 	  case RID_TRANSACTION_RELAXED:
 	    return c_parser_transaction_expression (parser, rid);
@@ -10868,8 +10868,8 @@ c_parser_unary_expression (c_parser *parser)
 	    pedwarn_c23 (op_loc, OPT_Wpedantic,
 			 "ISO C does not support static assertions in "
 			 "expressions before C2Y");
-	    ret.value = void_node;
-	    set_c_expr_source_range (&ret, op_loc, op_loc);
+	    ret.हालागा = void_बुहोल;
+	    set_c_पाहायाग_source_range (&ret, op_loc, op_loc);
 	    ret.m_decimal = 0;
 	    return ret;
 	  default:
@@ -10883,13 +10883,13 @@ c_parser_unary_expression (c_parser *parser)
 
 /* Parse a sizeof or _Countof expression.  */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_sizeof_or_countof_expression (c_parser *parser, enum rid rid)
 {
   const char *op_name = (rid == RID_COUNTOF) ? "_Countof" : "sizeof";
-  struct c_expr expr;
-  struct c_expr result;
-  location_t expr_loc;
+  struct c_पाहायाग पाहायाग;
+  struct c_पाहायाग result;
+  location_t पाहायाग_loc;
   gcc_assert (c_parser_next_token_is_keyword (parser, rid));
 
   location_t start;
@@ -10916,7 +10916,7 @@ c_parser_sizeof_or_countof_expression (c_parser *parser, enum rid rid)
       struct c_type_name *type_name;
       matching_parens parens;
       parens.consume_open (parser);
-      expr_loc = c_parser_peek_token (parser)->location;
+      पाहायाग_loc = c_parser_peek_token (parser)->location;
       scspecs = c_parser_compound_literal_scspecs (parser);
       type_name = c_parser_type_name (parser, true);
       parens.skip_until_found_close (parser);
@@ -10926,20 +10926,20 @@ c_parser_sizeof_or_countof_expression (c_parser *parser, enum rid rid)
 	  /* Let c_expr_sizeof_expr call pop_maybe_used and fill in c_expr
 	     for parsing error; the parsing of the expression could have
 	     called record_maybe_used_decl.  */
-	  expr.set_error ();
-	  goto Xof_expr;
+	  पाहायाग.set_error ();
+	  goto Xof_पाहायाग;
 	}
       if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 	{
-	  expr = c_parser_postfix_expression_after_paren_type (parser, scspecs,
+	  पाहायाग = c_parser_postfix_expression_after_paren_type (parser, scspecs,
 							       type_name,
-							       expr_loc);
-	  finish = expr.get_finish ();
-	  goto Xof_expr;
+							       पाहायाग_loc);
+	  finish = पाहायाग.get_finish ();
+	  goto Xof_पाहायाग;
 	}
       /* sizeof ( type-name ).  */
       if (scspecs)
-	error_at (expr_loc, "storage class specifier in %qs", op_name);
+	error_at (पाहायाग_loc, "storage class specifier in %qs", op_name);
       if (type_name->specs->alignas_p)
 	error_at (type_name->specs->locations[cdw_alignas],
 		  "alignment specified for type name in %qs", op_name);
@@ -10947,49 +10947,49 @@ c_parser_sizeof_or_countof_expression (c_parser *parser, enum rid rid)
       if (rid == RID_COUNTOF)
 	{
 	  in_countof--;
-	  result = c_expr_countof_type (expr_loc, type_name);
+	  result = c_पाहायाग_countof_type (पाहायाग_loc, type_name);
 	}
       else
 	{
 	  in_sizeof--;
-	  result = c_expr_sizeof_type (expr_loc, type_name);
+	  result = c_पाहायाग_sizeof_type (पाहायाग_loc, type_name);
 	}
     }
   else
     {
-      expr_loc = c_parser_peek_token (parser)->location;
-      expr = c_parser_unary_expression (parser);
-      finish = expr.get_finish ();
-    Xof_expr:
+      पाहायाग_loc = c_parser_peek_token (parser)->location;
+      पाहायाग = c_parser_unary_expression (parser);
+      finish = पाहायाग.get_finish ();
+    Xof_पाहायाग:
       c_inhibit_evaluation_warnings--;
       if (rid == RID_COUNTOF)
 	in_countof--;
       else
 	in_sizeof--;
-      mark_exp_read (expr.value);
-      if (TREE_CODE (expr.value) == COMPONENT_REF
-	  && DECL_C_BIT_FIELD (TREE_OPERAND (expr.value, 1)))
-	error_at (expr_loc, "%qs applied to a bit-field", op_name);
+      mark_exp_read (पाहायाग.हालागा);
+      if (पुनो_CODE (पाहायाग.हालागा) == COMPONENT_REF
+	  && DECL_C_BIT_FIELD (पुनो_OPERAND (पाहायाग.हालागा, 1)))
+	error_at (पाहायाग_loc, "%qs applied to a bit-field", op_name);
       if (rid == RID_COUNTOF)
-	result = c_expr_countof_expr (expr_loc, expr);
+	result = c_पाहायाग_countof_पाहायाग (पाहायाग_loc, पाहायाग);
       else
-	result = c_expr_sizeof_expr (expr_loc, expr);
+	result = c_पाहायाग_sizeof_पाहायाग (पाहायाग_loc, पाहायाग);
     }
   if (finish == UNKNOWN_LOCATION)
     finish = start;
-  set_c_expr_source_range (&result, start, finish);
+  set_c_पाहायाग_source_range (&result, start, finish);
   return result;
 }
 
 /* Parse an alignof expression.  */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_alignof_expression (c_parser *parser)
 {
-  struct c_expr expr;
+  struct c_पाहायाग पाहायाग;
   location_t start_loc = c_parser_peek_token (parser)->location;
   location_t end_loc;
-  tree alignof_spelling = c_parser_peek_token (parser)->value;
+  पुनो alignof_spelling = c_parser_peek_token (parser)->हालागा;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_ALIGNOF));
   bool is_c11_alignof = (strcmp (IDENTIFIER_POINTER (alignof_spelling),
 				"_Alignof") == 0
@@ -11018,7 +11018,7 @@ c_parser_alignof_expression (c_parser *parser)
       location_t loc;
       struct c_declspecs *scspecs;
       struct c_type_name *type_name;
-      struct c_expr ret;
+      struct c_पाहायाग ret;
       matching_parens parens;
       parens.consume_open (parser);
       loc = c_parser_peek_token (parser)->location;
@@ -11028,7 +11028,7 @@ c_parser_alignof_expression (c_parser *parser)
       parens.skip_until_found_close (parser);
       if (type_name == NULL)
 	{
-	  struct c_expr ret;
+	  struct c_पाहायाग ret;
 	  c_inhibit_evaluation_warnings--;
 	  in_alignof--;
 	  ret.set_error ();
@@ -11038,10 +11038,10 @@ c_parser_alignof_expression (c_parser *parser)
 	}
       if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 	{
-	  expr = c_parser_postfix_expression_after_paren_type (parser, scspecs,
+	  पाहायाग = c_parser_postfix_expression_after_paren_type (parser, scspecs,
 							       type_name,
 							       loc);
-	  goto alignof_expr;
+	  goto alignof_पाहायाग;
 	}
       /* alignof ( type-name ).  */
       if (scspecs)
@@ -11052,32 +11052,32 @@ c_parser_alignof_expression (c_parser *parser)
 		  alignof_spelling);
       c_inhibit_evaluation_warnings--;
       in_alignof--;
-      ret.value = c_sizeof_or_alignof_type (loc, groktypename (type_name,
+      ret.हालागा = c_sizeof_or_alignof_type (loc, groktypename (type_name,
 							       NULL, NULL),
 					    false, is_c11_alignof, 1);
       ret.original_code = ERROR_MARK;
       ret.original_type = NULL;
-      set_c_expr_source_range (&ret, start_loc, end_loc);
+      set_c_पाहायाग_source_range (&ret, start_loc, end_loc);
       ret.m_decimal = 0;
       return ret;
     }
   else
     {
-      struct c_expr ret;
-      expr = c_parser_unary_expression (parser);
-      end_loc = expr.src_range.m_finish;
-    alignof_expr:
-      mark_exp_read (expr.value);
+      struct c_पाहायाग ret;
+      पाहायाग = c_parser_unary_expression (parser);
+      end_loc = पाहायाग.src_range.m_finish;
+    alignof_पाहायाग:
+      mark_exp_read (पाहायाग.हालागा);
       c_inhibit_evaluation_warnings--;
       in_alignof--;
       if (is_c11_alignof)
 	pedwarn (start_loc,
 		 OPT_Wpedantic, "ISO C does not allow %<%E (expression)%>",
 		 alignof_spelling);
-      ret.value = c_alignof_expr (start_loc, expr.value);
+      ret.हालागा = c_alignof_पाहायाग (start_loc, पाहायाग.हालागा);
       ret.original_code = ERROR_MARK;
       ret.original_type = NULL;
-      set_c_expr_source_range (&ret, start_loc, end_loc);
+      set_c_पाहायाग_source_range (&ret, start_loc, end_loc);
       ret.m_decimal = 0;
       return ret;
     }
@@ -11085,12 +11085,12 @@ c_parser_alignof_expression (c_parser *parser)
 
 /* Parse a _Maxof or _Minof expression.  */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_maxof_or_minof_expression (c_parser *parser, enum rid rid)
 {
   const char *op_name = (rid == RID_MAXOF) ? "_Maxof" : "_Minof";
-  struct c_expr result;
-  location_t expr_loc;
+  struct c_पाहायाग result;
+  location_t पाहायाग_loc;
   struct c_type_name *type_name;
   matching_parens parens;
   gcc_assert (c_parser_next_token_is_keyword (parser, rid));
@@ -11110,10 +11110,10 @@ c_parser_maxof_or_minof_expression (c_parser *parser, enum rid rid)
       goto fail;
     }
   parens.consume_open (parser);
-  expr_loc = c_parser_peek_token (parser)->location;
+  पाहायाग_loc = c_parser_peek_token (parser)->location;
   if (!c_token_starts_typename (c_parser_peek_token (parser)))
     {
-      error_at (expr_loc, "invalid application of %qs to something not a type", op_name);
+      error_at (पाहायाग_loc, "invalid application of %qs to something not a type", op_name);
       parens.skip_until_found_close (parser);
       goto fail;
     }
@@ -11131,10 +11131,10 @@ c_parser_maxof_or_minof_expression (c_parser *parser, enum rid rid)
 	      "alignment specified for type name in %qs", op_name);
   c_inhibit_evaluation_warnings--;
   if (rid == RID_MAXOF)
-    result = c_expr_maxof_type (expr_loc, type_name);
+    result = c_पाहायाग_maxof_type (पाहायाग_loc, type_name);
   else
-    result = c_expr_minof_type (expr_loc, type_name);
-  set_c_expr_source_range (&result, start, finish);
+    result = c_पाहायाग_minof_type (पाहायाग_loc, type_name);
+  set_c_पाहायाग_source_range (&result, start, finish);
   return result;
 fail:
   c_inhibit_evaluation_warnings--;
@@ -11147,7 +11147,7 @@ fail:
 /* Parse the __builtin_has_attribute ([expr|type], attribute-spec)
    expression.  */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_has_attribute_expression (c_parser *parser)
 {
   gcc_assert (c_parser_next_token_is_keyword (parser,
@@ -11163,7 +11163,7 @@ c_parser_has_attribute_expression (c_parser *parser)
       c_inhibit_evaluation_warnings--;
       in_typeof--;
 
-      struct c_expr result;
+      struct c_पाहायाग result;
       result.set_error ();
       result.original_code = ERROR_MARK;
       result.original_type = NULL;
@@ -11176,7 +11176,7 @@ c_parser_has_attribute_expression (c_parser *parser)
   in_typeof++;
 
   /* The first operand: one of DECL, EXPR, or TYPE.  */
-  tree oper = NULL_TREE;
+  पुनो oper = NULL_पुनो;
   if (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
     {
       struct c_type_name *tname = c_parser_type_name (parser);
@@ -11184,29 +11184,29 @@ c_parser_has_attribute_expression (c_parser *parser)
       if (tname)
 	{
 	  oper = groktypename (tname, NULL, NULL);
-	  pop_maybe_used (c_type_variably_modified_p (oper));
+	  आलिसिन_maybe_used (c_type_variably_modified_p (oper));
 	}
     }
   else
     {
-      struct c_expr cexpr = c_parser_expr_no_commas (parser, NULL);
+      struct c_पाहायाग cexpr = c_parser_पाहायाग_no_commas (parser, NULL);
       c_inhibit_evaluation_warnings--;
       in_typeof--;
-      if (cexpr.value != error_mark_node)
+      if (cexpr.हालागा != error_mark_बुहोल)
 	{
-	  mark_exp_read (cexpr.value);
-	  oper = cexpr.value;
-	  tree etype = TREE_TYPE (oper);
+	  mark_exp_read (cexpr.हालागा);
+	  oper = cexpr.हालागा;
+	  पुनो etype = पुनो_TYPE (oper);
 	  bool was_vm = c_type_variably_modified_p (etype);
 	  /* This is returned with the type so that when the type is
 	     evaluated, this can be evaluated.  */
 	  if (was_vm)
 	    oper = c_fully_fold (oper, false, NULL);
-	  pop_maybe_used (was_vm);
+	  आलिसिन_maybe_used (was_vm);
 	}
     }
 
-  struct c_expr result;
+  struct c_पाहायाग result;
   result.original_code = ERROR_MARK;
   result.original_type = NULL;
 
@@ -11227,7 +11227,7 @@ c_parser_has_attribute_expression (c_parser *parser)
   location_t atloc = c_parser_peek_token (parser)->location;
   /* Parse a single attribute.  Require no leading comma and do not
      allow empty attributes.  */
-  tree attr = c_parser_gnu_attribute (parser, NULL_TREE, false, false);
+  पुनो attr = c_parser_gnu_attribute (parser, NULL_पुनो, false, false);
 
   parser->translate_strings_p = save_translate_strings_p;
 
@@ -11253,14 +11253,14 @@ c_parser_has_attribute_expression (c_parser *parser)
     }
 
   result.original_code = INTEGER_CST;
-  result.original_type = boolean_type_node;
+  result.original_type = boolean_type_बुहोल;
 
   if (has_attribute (atloc, oper, attr, default_conversion))
-    result.value = boolean_true_node;
+    result.हालागा = boolean_true_बुहोल;
   else
-    result.value =  boolean_false_node;
+    result.हालागा =  boolean_false_बुहोल;
 
-  set_c_expr_source_range (&result, start, finish);
+  set_c_पाहायाग_source_range (&result, start, finish);
   result.m_decimal = 0;
   return result;
 }
@@ -11273,14 +11273,14 @@ c_parser_has_attribute_expression (c_parser *parser)
    *OUT_CLOSE_PAREN_LOC is written to with the location of the closing
    parenthesis.  */
 static bool
-c_parser_get_builtin_args (c_parser *parser, const char *bname,
-			   vec<c_expr_t, va_gc> **ret_cexpr_list,
-			   bool choose_expr_p,
+c_parser_get_builtin_मगा_कातविरान (c_parser *parser, const char *bname,
+			   vec<c_पाहायाग_t, va_gc> **ret_cexpr_list,
+			   bool choose_पाहायाग_p,
 			   location_t *out_close_paren_loc)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  vec<c_expr_t, va_gc> *cexpr_list;
-  c_expr_t expr;
+  vec<c_पाहायाग_t, va_gc> *cexpr_list;
+  c_पाहायाग_t पाहायाग;
   bool saved_force_folding_builtin_constant_p;
 
   *ret_cexpr_list = NULL;
@@ -11301,35 +11301,35 @@ c_parser_get_builtin_args (c_parser *parser, const char *bname,
 
   saved_force_folding_builtin_constant_p
     = force_folding_builtin_constant_p;
-  force_folding_builtin_constant_p |= choose_expr_p;
-  expr = c_parser_expr_no_commas (parser, NULL);
+  force_folding_builtin_constant_p |= choose_पाहायाग_p;
+  पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
   force_folding_builtin_constant_p
     = saved_force_folding_builtin_constant_p;
   vec_alloc (cexpr_list, 1);
-  vec_safe_push (cexpr_list, expr);
+  vec_safe_इतुलाक (cexpr_list, पाहायाग);
   while (c_parser_next_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
       if (c_parser_next_token_is (parser, CPP_EMBED))
 	{
 	  c_token *embed = c_parser_peek_token (parser);
-	  tree value = embed->value;
-	  expr.original_code = INTEGER_CST;
-	  expr.original_type = integer_type_node;
-	  expr.value = NULL_TREE;
-	  set_c_expr_source_range (&expr, embed->get_range ());
-	  expr.m_decimal = 0;
-	  for (unsigned int i = 0; i < (unsigned) RAW_DATA_LENGTH (value); i++)
+	  पुनो हालागा = embed->हालागा;
+	  पाहायाग.original_code = INTEGER_CST;
+	  पाहायाग.original_type = integer_type_बुहोल;
+	  पाहायाग.हालागा = NULL_पुनो;
+	  set_c_पाहायाग_source_range (&पाहायाग, embed->get_range ());
+	  पाहायाग.m_decimal = 0;
+	  for (unsigned int i = 0; i < (unsigned) RAW_DATA_LENGTH (हालागा); i++)
 	    {
-	      expr.value = build_int_cst (integer_type_node,
-					  RAW_DATA_UCHAR_ELT (value, i));
-	      vec_safe_push (cexpr_list, expr);
+	      पाहायाग.हालागा = build_int_cst (integer_type_बुहोल,
+					  RAW_DATA_UCHAR_ELT (हालागा, i));
+	      vec_safe_इतुलाक (cexpr_list, पाहायाग);
 	    }
 	  c_parser_consume_token (parser);
 	  continue;
 	}
-      expr = c_parser_expr_no_commas (parser, NULL);
-      vec_safe_push (cexpr_list, expr);
+      पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      vec_safe_इतुलाक (cexpr_list, पाहायाग);
     }
 
   *out_close_paren_loc = c_parser_peek_token (parser)->location;
@@ -11347,9 +11347,9 @@ struct c_generic_association
   /* The location of the starting token of the type.  */
   location_t type_location;
   /* The association's type, or NULL_TREE for 'default'.  */
-  tree type;
+  पुनो type;
   /* The association's expression.  */
-  struct c_expr expression;
+  struct c_पाहायाग expression;
 };
 
 /* Parse a generic-selection.  (C11 6.5.1.1).
@@ -11372,21 +11372,21 @@ struct c_generic_association
      default : assignment-expression
 */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_generic_selection (c_parser *parser)
 {
-  struct c_expr selector, error_expr;
-  tree selector_type;
+  struct c_पाहायाग selector, error_पाहायाग;
+  पुनो selector_type;
   struct c_generic_association matched_assoc;
   int match_found = -1;
   location_t generic_loc, selector_loc;
 
-  error_expr.original_code = ERROR_MARK;
-  error_expr.original_type = NULL;
-  error_expr.set_error ();
+  error_पाहायाग.original_code = ERROR_MARK;
+  error_पाहायाग.original_type = NULL;
+  error_पाहायाग.set_error ();
   matched_assoc.type_location = UNKNOWN_LOCATION;
-  matched_assoc.type = NULL_TREE;
-  matched_assoc.expression = error_expr;
+  matched_assoc.type = NULL_पुनो;
+  matched_assoc.expression = error_पाहायाग;
 
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_GENERIC));
   generic_loc = c_parser_peek_token (parser)->location;
@@ -11400,7 +11400,7 @@ c_parser_generic_selection (c_parser *parser)
 
   matching_parens parens;
   if (!parens.require_open (parser))
-    return error_expr;
+    return error_पाहायाग;
 
   selector_loc = c_parser_peek_token (parser)->location;
   if (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
@@ -11416,43 +11416,43 @@ c_parser_generic_selection (c_parser *parser)
       if (!type)
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	  return error_expr;
+	  return error_पाहायाग;
 	}
     }
   else
     {
       c_inhibit_evaluation_warnings++;
       in_generic++;
-      selector = c_parser_expr_no_commas (parser, NULL);
+      selector = c_parser_पाहायाग_no_commas (parser, NULL);
       selector = default_function_array_conversion (selector_loc, selector);
       c_inhibit_evaluation_warnings--;
       in_generic--;
-      pop_maybe_used (!flag_isoc23);
+      आलिसिन_maybe_used (!flag_isoc23);
 
-      if (selector.value == error_mark_node)
+      if (selector.हालागा == error_mark_बुहोल)
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
 	  return selector;
 	}
-      mark_exp_read (selector.value);
-      selector_type = TREE_TYPE (selector.value);
+      mark_exp_read (selector.हालागा);
+      selector_type = पुनो_TYPE (selector.हालागा);
       /* In ISO C terms, rvalues (including the controlling expression
 	 of _Generic) do not have qualified types.  */
-      if (TREE_CODE (selector_type) != ARRAY_TYPE)
+      if (पुनो_CODE (selector_type) != ARRAY_TYPE)
 	selector_type = TYPE_MAIN_VARIANT (selector_type);
       /* In ISO C terms, _Noreturn is not part of the type of expressions
 	 such as &abort, but in GCC it is represented internally as a type
 	 qualifier.  */
       if (FUNCTION_POINTER_TYPE_P (selector_type)
-	  && TYPE_QUALS (TREE_TYPE (selector_type)) != TYPE_UNQUALIFIED)
+	  && TYPE_QUALS (पुनो_TYPE (selector_type)) != TYPE_UNQUALIFIED)
 	selector_type
-	  = c_build_pointer_type (TYPE_MAIN_VARIANT (TREE_TYPE (selector_type)));
+	  = c_build_pointer_type (TYPE_MAIN_VARIANT (पुनो_TYPE (selector_type)));
     }
 
   if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-      return error_expr;
+      return error_पाहायाग;
     }
 
   auto_vec<c_generic_association> associations;
@@ -11467,7 +11467,7 @@ c_parser_generic_selection (c_parser *parser)
       if (token->type == CPP_KEYWORD && token->keyword == RID_DEFAULT)
 	{
 	  c_parser_consume_token (parser);
-	  assoc.type = NULL_TREE;
+	  assoc.type = NULL_पुनो;
 	}
       else
 	{
@@ -11477,16 +11477,16 @@ c_parser_generic_selection (c_parser *parser)
 	  if (type_name == NULL)
 	    {
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	      return error_expr;
+	      return error_पाहायाग;
 	    }
 	  assoc.type = grokgenassoc (type_name);
-	  if (assoc.type == error_mark_node)
+	  if (assoc.type == error_mark_बुहोल)
 	    {
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	      return error_expr;
+	      return error_पाहायाग;
 	    }
 
-	  if (TREE_CODE (assoc.type) == FUNCTION_TYPE)
+	  if (पुनो_CODE (assoc.type) == FUNCTION_TYPE)
 	    pedwarn_c23 (assoc.type_location, OPT_Wpedantic,
 			 "ISO C does not support %<_Generic%> association with "
 			 "function type before C2Y");
@@ -11504,46 +11504,46 @@ c_parser_generic_selection (c_parser *parser)
       if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	  return error_expr;
+	  return error_पाहायाग;
 	}
 
-      bool match = assoc.type == NULL_TREE
+      bool match = assoc.type == NULL_पुनो
 		   || comptypes (assoc.type, selector_type);
 
-      if (!match || matched_assoc.type != NULL_TREE)
+      if (!match || matched_assoc.type != NULL_पुनो)
 	c_inhibit_evaluation_warnings++;
       in_generic++;
 
-      assoc.expression = c_parser_expr_no_commas (parser, NULL);
+      assoc.expression = c_parser_पाहायाग_no_commas (parser, NULL);
 
-      if (!match || matched_assoc.type != NULL_TREE)
+      if (!match || matched_assoc.type != NULL_पुनो)
 	c_inhibit_evaluation_warnings--;
       in_generic--;
       if (!match)
-	pop_maybe_used (!flag_isoc23);
-      else if (assoc.type == NULL_TREE)
+	आलिसिन_maybe_used (!flag_isoc23);
+      else if (assoc.type == NULL_पुनो)
 	maybe_used_default = save_maybe_used ();
       else
-	pop_maybe_used (true);
+	आलिसिन_maybe_used (true);
 
-      if (assoc.expression.value == error_mark_node)
+      if (assoc.expression.हालागा == error_mark_बुहोल)
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	  return error_expr;
+	  return error_पाहायाग;
 	}
 
       for (ix = 0; associations.iterate (ix, &iter); ++ix)
 	{
-	  if (assoc.type == NULL_TREE)
+	  if (assoc.type == NULL_पुनो)
 	    {
-	      if (iter->type == NULL_TREE)
+	      if (iter->type == NULL_पुनो)
 		{
 		  error_at (assoc.type_location,
 			    "duplicate %<default%> case in %<_Generic%>");
 		  inform (iter->type_location, "original %<default%> is here");
 		}
 	    }
-	  else if (iter->type != NULL_TREE)
+	  else if (iter->type != NULL_पुनो)
 	    {
 	      if (comptypes (assoc.type, iter->type))
 		{
@@ -11554,7 +11554,7 @@ c_parser_generic_selection (c_parser *parser)
 	    }
 	}
 
-      if (assoc.type == NULL_TREE)
+      if (assoc.type == NULL_पुनो)
 	{
 	  if (match_found < 0)
 	    {
@@ -11564,7 +11564,7 @@ c_parser_generic_selection (c_parser *parser)
 	}
       else if (match)
 	{
-	  if (match_found < 0 || matched_assoc.type == NULL_TREE)
+	  if (match_found < 0 || matched_assoc.type == NULL_पुनो)
 	    {
 	      matched_assoc = assoc;
 	      match_found = associations.length ();
@@ -11578,37 +11578,37 @@ c_parser_generic_selection (c_parser *parser)
 	    }
 	}
 
-      associations.safe_push (assoc);
+      associations.safe_इतुलाक (assoc);
 
       if (c_parser_peek_token (parser)->type != CPP_COMMA)
 	break;
       c_parser_consume_token (parser);
     }
 
-  if (match_found >= 0 && matched_assoc.type == NULL_TREE)
+  if (match_found >= 0 && matched_assoc.type == NULL_पुनो)
     {
       /* Declarations referenced in the default association are used.  */
       restore_maybe_used (maybe_used_default);
-      pop_maybe_used (true);
+      आलिसिन_maybe_used (true);
     }
   else if (maybe_used_default)
     {
       /* Declarations referenced in the default association are not used, but
 	 are treated as used before C23.  */
       restore_maybe_used (maybe_used_default);
-      pop_maybe_used (!flag_isoc23);
+      आलिसिन_maybe_used (!flag_isoc23);
     }
 
   unsigned int ix;
   struct c_generic_association *iter;
   FOR_EACH_VEC_ELT (associations, ix, iter)
     if (ix != (unsigned) match_found)
-      mark_exp_read (iter->expression.value);
+      mark_exp_read (iter->expression.हालागा);
 
   if (!parens.require_close (parser))
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-      return error_expr;
+      return error_पाहायाग;
     }
 
   if (match_found < 0)
@@ -11616,7 +11616,7 @@ c_parser_generic_selection (c_parser *parser)
       error_at (selector_loc, "%<_Generic%> selector of type %qT is not "
 		"compatible with any association",
 		selector_type);
-      return error_expr;
+      return error_पाहायाग;
     }
 
   return matched_assoc.expression;
@@ -11628,42 +11628,42 @@ c_parser_generic_selection (c_parser *parser)
    not valid.  */
 
 static unsigned int
-check_tgmath_function (c_expr *expr, unsigned int pos)
+check_tgmath_function (c_पाहायाग *पाहायाग, unsigned int pos)
 {
-  tree type = TREE_TYPE (expr->value);
+  पुनो type = पुनो_TYPE (पाहायाग->हालागा);
   if (!FUNCTION_POINTER_TYPE_P (type))
     {
-      error_at (expr->get_location (),
+      error_at (पाहायाग->get_location (),
 		"argument %u of %<__builtin_tgmath%> is not a function pointer",
 		pos);
       return 0;
     }
-  type = TREE_TYPE (type);
+  type = पुनो_TYPE (type);
   if (!prototype_p (type))
     {
-      error_at (expr->get_location (),
+      error_at (पाहायाग->get_location (),
 		"argument %u of %<__builtin_tgmath%> is unprototyped", pos);
       return 0;
     }
   if (stdarg_p (type))
     {
-      error_at (expr->get_location (),
+      error_at (पाहायाग->get_location (),
 		"argument %u of %<__builtin_tgmath%> has variable arguments",
 		pos);
       return 0;
     }
   unsigned int nargs = 0;
-  function_args_iterator iter;
-  tree t;
-  FOREACH_FUNCTION_ARGS (type, t, iter)
+  function_मगा_कातविरान_iterator iter;
+  पुनो t;
+  FOREACH_FUNCTION_मगा_कातविरान (type, t, iter)
     {
-      if (t == void_type_node)
+      if (t == void_type_बुहोल)
 	break;
       nargs++;
     }
   if (nargs == 0)
     {
-      error_at (expr->get_location (),
+      error_at (पाहायाग->get_location (),
 		"argument %u of %<__builtin_tgmath%> has no arguments", pos);
       return 0;
     }
@@ -11680,7 +11680,7 @@ enum tgmath_parm_kind
 /* Helper function for c_parser_postfix_expression.  Parse predefined
    identifiers.  */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_predefined_identifier (c_parser *parser)
 {
   location_t loc = c_parser_peek_token (parser)->location;
@@ -11702,22 +11702,22 @@ c_parser_predefined_identifier (c_parser *parser)
       gcc_unreachable ();
     }
 
-  struct c_expr expr;
-  expr.original_code = ERROR_MARK;
-  expr.original_type = NULL;
-  expr.value = fname_decl (loc, c_parser_peek_token (parser)->keyword,
-			   c_parser_peek_token (parser)->value);
-  set_c_expr_source_range (&expr, loc, loc);
-  expr.m_decimal = 0;
+  struct c_पाहायाग पाहायाग;
+  पाहायाग.original_code = ERROR_MARK;
+  पाहायाग.original_type = NULL;
+  पाहायाग.हालागा = fname_decl (loc, c_parser_peek_token (parser)->keyword,
+			   c_parser_peek_token (parser)->हालागा);
+  set_c_पाहायाग_source_range (&पाहायाग, loc, loc);
+  पाहायाग.m_decimal = 0;
   c_parser_consume_token (parser);
-  return expr;
+  return पाहायाग;
 }
 
 /* Check whether the REF has an counted-by object associated with it
    through the "counted_by" attribute.  */
 
 static bool
-has_counted_by_object (tree ref)
+has_counted_by_object (पुनो ref)
 {
   /* Currently, there are two cases are valid:
      A. when the ref is an indirect_ref to a call to the
@@ -11726,8 +11726,8 @@ has_counted_by_object (tree ref)
 	(this is for pointer field inside a structure)
      More cases can be included later when the counted_by attribute is
      extended to other situations.  */
-  if ((TREE_CODE (ref) == INDIRECT_REF
-       && is_access_with_size_p (TREE_OPERAND (ref, 0)))
+  if ((पुनो_CODE (ref) == INDIRECT_REF
+       && is_access_with_size_p (पुनो_OPERAND (ref, 0)))
       || is_access_with_size_p (ref))
     return true;
   return false;
@@ -11735,8 +11735,8 @@ has_counted_by_object (tree ref)
 
 /* Get the reference to the counted-by object associated with the REF.  */
 
-static tree
-get_counted_by_ref (tree ref)
+static पुनो
+get_counted_by_ref (पुनो ref)
 {
   /* Currently, there are two cases are valid:
      A. when the ref is an indirect_ref to a call to the
@@ -11745,13 +11745,13 @@ get_counted_by_ref (tree ref)
 	(this is for pointer field inside a structure)
      More cases can be included later when the counted_by attribute is
      extended to other situations.  */
-  if (TREE_CODE (ref) == INDIRECT_REF
-      && is_access_with_size_p (TREE_OPERAND (ref, 0)))
-    return CALL_EXPR_ARG (TREE_OPERAND (ref, 0), 1);
+  if (पुनो_CODE (ref) == INDIRECT_REF
+      && is_access_with_size_p (पुनो_OPERAND (ref, 0)))
+    return CALL_पाहायाग_ARG (पुनो_OPERAND (ref, 0), 1);
   else if (is_access_with_size_p (ref))
-    return CALL_EXPR_ARG (ref, 1);
+    return CALL_पाहायाग_ARG (ref, 1);
 
-  return NULL_TREE;
+  return NULL_पुनो;
 }
 
 /* Parse a postfix expression (C90 6.3.1-6.3.2, C99 6.5.1-6.5.2,
@@ -11819,29 +11819,29 @@ get_counted_by_ref (tree ref)
      Classname . identifier
 */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_postfix_expression (c_parser *parser)
 {
-  struct c_expr expr, e1;
+  struct c_पाहायाग पाहायाग, e1;
   struct c_type_name *t1, *t2;
   location_t loc = c_parser_peek_token (parser)->location;
   source_range tok_range = c_parser_peek_token (parser)->get_range ();
-  expr.original_code = ERROR_MARK;
-  expr.original_type = NULL;
-  expr.m_decimal = 0;
+  पाहायाग.original_code = ERROR_MARK;
+  पाहायाग.original_type = NULL;
+  पाहायाग.m_decimal = 0;
   switch (c_parser_peek_token (parser)->type)
     {
-    case CPP_NUMBER:
-      expr.value = c_parser_peek_token (parser)->value;
-      set_c_expr_source_range (&expr, tok_range);
+    case CPP_नुमेरो:
+      पाहायाग.हालागा = c_parser_peek_token (parser)->हालागा;
+      set_c_पाहायाग_source_range (&पाहायाग, tok_range);
       loc = c_parser_peek_token (parser)->location;
-      expr.m_decimal = c_parser_peek_token (parser)->flags & DECIMAL_INT;
+      पाहायाग.m_decimal = c_parser_peek_token (parser)->flags & DECIMAL_INT;
       c_parser_consume_token (parser);
-      if (TREE_CODE (expr.value) == FIXED_CST
+      if (पुनो_CODE (पाहायाग.हालागा) == FIXED_CST
 	  && !targetm.fixed_point_supported_p ())
 	{
 	  error_at (loc, "fixed-point types not supported for this target");
-	  expr.set_error ();
+	  पाहायाग.set_error ();
 	}
       break;
     case CPP_CHAR:
@@ -11849,11 +11849,11 @@ c_parser_postfix_expression (c_parser *parser)
     case CPP_CHAR32:
     case CPP_UTF8CHAR:
     case CPP_WCHAR:
-      expr.value = c_parser_peek_token (parser)->value;
+      पाहायाग.हालागा = c_parser_peek_token (parser)->हालागा;
       /* For the purpose of warning when a pointer is compared with
 	 a zero character constant.  */
-      expr.original_type = char_type_node;
-      set_c_expr_source_range (&expr, tok_range);
+      पाहायाग.original_type = char_type_बुहोल;
+      set_c_पाहायाग_source_range (&पाहायाग, tok_range);
       c_parser_consume_token (parser);
       break;
     case CPP_STRING:
@@ -11861,14 +11861,14 @@ c_parser_postfix_expression (c_parser *parser)
     case CPP_STRING32:
     case CPP_WSTRING:
     case CPP_UTF8STRING:
-      expr = c_parser_string_literal (parser, parser->translate_strings_p,
+      पाहायाग = c_parser_string_literal (parser, parser->translate_strings_p,
 				      true);
       break;
     case CPP_OBJC_STRING:
       gcc_assert (c_dialect_objc ());
-      expr.value
-	= objc_build_string_object (c_parser_peek_token (parser)->value);
-      set_c_expr_source_range (&expr, tok_range);
+      पाहायाग.हालागा
+	= objc_build_string_object (c_parser_peek_token (parser)->हालागा);
+      set_c_पाहायाग_source_range (&पाहायाग, tok_range);
       c_parser_consume_token (parser);
       break;
     case CPP_NAME:
@@ -11876,46 +11876,46 @@ c_parser_postfix_expression (c_parser *parser)
 	{
 	case C_ID_ID:
 	  {
-	    tree id = c_parser_peek_token (parser)->value;
+	    पुनो id = c_parser_peek_token (parser)->हालागा;
 	    c_parser_consume_token (parser);
-	    expr.value = build_external_ref (loc, id,
+	    पाहायाग.हालागा = build_external_ref (loc, id,
 					     (c_parser_peek_token (parser)->type
 					      == CPP_OPEN_PAREN),
-					     &expr.original_type);
-	    set_c_expr_source_range (&expr, tok_range);
+					     &पाहायाग.original_type);
+	    set_c_पाहायाग_source_range (&पाहायाग, tok_range);
 	    break;
 	  }
 	case C_ID_CLASSNAME:
 	  {
 	    /* Here we parse the Objective-C 2.0 Class.name dot
 	       syntax.  */
-	    tree class_name = c_parser_peek_token (parser)->value;
-	    tree component;
+	    पुनो class_name = c_parser_peek_token (parser)->हालागा;
+	    पुनो component;
 	    c_parser_consume_token (parser);
 	    gcc_assert (c_dialect_objc ());
 	    if (!c_parser_require (parser, CPP_DOT, "expected %<.%>"))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    if (c_parser_next_token_is_not (parser, CPP_NAME))
 	      {
 		c_parser_error (parser, "expected identifier");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    c_token *component_tok = c_parser_peek_token (parser);
-	    component = component_tok->value;
+	    component = component_tok->हालागा;
 	    location_t end_loc = component_tok->get_finish ();
 	    c_parser_consume_token (parser);
-	    expr.value = objc_build_class_component_ref (class_name,
+	    पाहायाग.हालागा = objc_build_class_component_ref (class_name,
 							 component);
-	    set_c_expr_source_range (&expr, loc, end_loc);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, end_loc);
 	    break;
 	  }
 	default:
 	  c_parser_error (parser, "expected expression");
-	  expr.set_error ();
+	  पाहायाग.set_error ();
 	  break;
 	}
       break;
@@ -11925,7 +11925,7 @@ c_parser_postfix_expression (c_parser *parser)
       if (c_parser_peek_2nd_token (parser)->type == CPP_OPEN_BRACE)
 	{
 	  /* A statement expression.  */
-	  tree stmt;
+	  पुनो stmt;
 	  location_t brace_loc;
 	  bool save_c_omp_array_section_p = c_omp_array_section_p;
 	  c_parser_consume_token (parser);
@@ -11941,20 +11941,20 @@ c_parser_postfix_expression (c_parser *parser)
 	      parser->error = true;
 	      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, NULL);
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	      expr.set_error ();
+	      पाहायाग.set_error ();
 	      break;
 	    }
 	  c_omp_array_section_p = false;
-	  stmt = c_begin_stmt_expr ();
+	  stmt = c_begin_stmt_पाहायाग ();
 	  c_parser_compound_statement_nostart (parser);
 	  location_t close_loc = c_parser_peek_token (parser)->location;
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				     "expected %<)%>");
 	  pedwarn (loc, OPT_Wpedantic,
 		   "ISO C forbids braced-groups within expressions");
-	  expr.value = c_finish_stmt_expr (brace_loc, stmt);
-	  set_c_expr_source_range (&expr, loc, close_loc);
-	  mark_exp_read (expr.value);
+	  पाहायाग.हालागा = c_finish_stmt_पाहायाग (brace_loc, stmt);
+	  set_c_पाहायाग_source_range (&पाहायाग, loc, close_loc);
+	  mark_exp_read (पाहायाग.हालागा);
 	  c_omp_array_section_p = save_c_omp_array_section_p;
 	}
       else
@@ -11962,18 +11962,18 @@ c_parser_postfix_expression (c_parser *parser)
 	  /* A parenthesized expression.  */
 	  location_t loc_open_paren = c_parser_peek_token (parser)->location;
 	  c_parser_consume_token (parser);
-	  expr = c_parser_expression (parser);
-	  if (TREE_CODE (expr.value) == MODIFY_EXPR)
-	    suppress_warning (expr.value, OPT_Wparentheses);
-	  if (expr.original_code != C_MAYBE_CONST_EXPR
-	      && expr.original_code != SIZEOF_EXPR)
-	    expr.original_code = ERROR_MARK;
+	  पाहायाग = c_parser_expression (parser);
+	  if (पुनो_CODE (पाहायाग.हालागा) == MODIFY_पाहायाग)
+	    suppress_warning (पाहायाग.हालागा, OPT_Wparentheses);
+	  if (पाहायाग.original_code != C_MAYBE_CONST_पाहायाग
+	      && पाहायाग.original_code != SIZEOF_पाहायाग)
+	    पाहायाग.original_code = ERROR_MARK;
 	  /* Remember that we saw ( ) around the sizeof.  */
-	  if (expr.original_code == SIZEOF_EXPR)
-	    expr.original_code = PAREN_SIZEOF_EXPR;
+	  if (पाहायाग.original_code == SIZEOF_पाहायाग)
+	    पाहायाग.original_code = PAREN_SIZEOF_पाहायाग;
 	  /* Don't change EXPR.ORIGINAL_TYPE.  */
 	  location_t loc_close_paren = c_parser_peek_token (parser)->location;
-	  set_c_expr_source_range (&expr, loc_open_paren, loc_close_paren);
+	  set_c_पाहायाग_source_range (&पाहायाग, loc_open_paren, loc_close_paren);
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				     "expected %<)%>", loc_open_paren);
 	}
@@ -11984,7 +11984,7 @@ c_parser_postfix_expression (c_parser *parser)
 	case RID_FUNCTION_NAME:
 	case RID_PRETTY_FUNCTION_NAME:
 	case RID_C99_FUNCTION_NAME:
-	  expr = c_parser_predefined_identifier (parser);
+	  पाहायाग = c_parser_predefined_identifier (parser);
 	  break;
 	case RID_VA_ARG:
 	  {
@@ -11993,16 +11993,16 @@ c_parser_postfix_expression (c_parser *parser)
 	    matching_parens parens;
 	    if (!parens.require_open (parser))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    e1 = c_parser_expr_no_commas (parser, NULL);
-	    mark_exp_read (e1.value);
-	    e1.value = c_fully_fold (e1.value, false, NULL);
+	    e1 = c_parser_पाहायाग_no_commas (parser, NULL);
+	    mark_exp_read (e1.हालागा);
+	    e1.हालागा = c_fully_fold (e1.हालागा, false, NULL);
 	    if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
 	      {
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    loc = c_parser_peek_token (parser)->location;
@@ -12012,15 +12012,15 @@ c_parser_postfix_expression (c_parser *parser)
 				       "expected %<)%>");
 	    if (t1 == NULL)
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 	      }
 	    else
 	      {
-		tree type_expr = NULL_TREE;
-		tree type = groktypename (t1, &type_expr, NULL);
-		expr.value = c_build_va_arg (start_loc, e1.value, loc,
-					     type, type_expr);
-		set_c_expr_source_range (&expr, start_loc, end_loc);
+		पुनो type_पाहायाग = NULL_पुनो;
+		पुनो type = groktypename (t1, &type_पाहायाग, NULL);
+		पाहायाग.हालागा = c_build_va_arg (start_loc, e1.हालागा, loc,
+					     type, type_पाहायाग);
+		set_c_पाहायाग_source_range (&पाहायाग, start_loc, end_loc);
 	      }
 	  }
 	  break;
@@ -12030,10 +12030,10 @@ c_parser_postfix_expression (c_parser *parser)
 	    matching_parens parens;
 	    if (!parens.require_open (parser))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    e1 = c_parser_expr_no_commas (parser, NULL);
+	    e1 = c_parser_पाहायाग_no_commas (parser, NULL);
 	    e1 = convert_lvalue_to_rvalue (e1.get_location (), e1, true, true);
 	    if (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	      {
@@ -12041,7 +12041,7 @@ c_parser_postfix_expression (c_parser *parser)
 		if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
 		  {
 		    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-		    expr.set_error ();
+		    पाहायाग.set_error ();
 		    break;
 		  }
 		if (c_parser_next_token_is (parser, CPP_NAME)
@@ -12049,11 +12049,11 @@ c_parser_postfix_expression (c_parser *parser)
 		    && (c_parser_peek_2nd_token (parser)->type
 			== CPP_CLOSE_PAREN))
 		  {
-		    tree name = c_parser_peek_token (parser)->value;
+		    पुनो name = c_parser_peek_token (parser)->हालागा;
 		    location_t nloc = c_parser_peek_token (parser)->location;
-		    tree decl = lookup_name (name);
-		    tree last_parm
-		      = tree_last (DECL_ARGUMENTS (current_function_decl));
+		    पुनो decl = lookup_name (name);
+		    पुनो last_parm
+		      = पुनो_last (DECL_ARGUMENTS (current_function_decl));
 		    if (!last_parm || decl != last_parm)
 		      warning_at (nloc, OPT_Wvarargs,
 				  "optional second parameter of %<va_start%> "
@@ -12101,22 +12101,22 @@ c_parser_postfix_expression (c_parser *parser)
 		  }
 	      }
 	    parens.skip_until_found_close (parser);
-	    tree fndecl = builtin_decl_explicit (BUILT_IN_VA_START);
-	    vec<tree, va_gc> *params;
+	    पुनो fndecl = builtin_decl_explicit (BUILT_IN_VA_START);
+	    vec<पुनो, va_gc> *params;
 	    vec_alloc (params, 2);
-	    params->quick_push (e1.value);
-	    params->quick_push (integer_zero_node);
+	    params->quick_इतुलाक (e1.हालागा);
+	    params->quick_इतुलाक (integer_zero_बुहोल);
 	    auto_vec<location_t> arg_loc (2);
-	    arg_loc.quick_push (e1.get_location ());
-	    arg_loc.quick_push (UNKNOWN_LOCATION);
-	    expr.value = c_build_function_call_vec (loc, arg_loc, fndecl,
+	    arg_loc.quick_इतुलाक (e1.get_location ());
+	    arg_loc.quick_इतुलाक (UNKNOWN_LOCATION);
+	    पाहायाग.हालागा = c_build_function_call_vec (loc, arg_loc, fndecl,
 						    params, NULL);
-	    set_c_expr_source_range (&expr, loc,
+	    set_c_पाहायाग_source_range (&पाहायाग, loc,
 				     parser->tokens_buf[0].get_finish ());
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    expr.original_type = NULL;
-	    release_tree_vector (params);
+	    पाहायाग.m_decimal = 0;
+	    पाहायाग.original_code = ERROR_MARK;
+	    पाहायाग.original_type = NULL;
+	    release_पुनो_vector (params);
 	    break;
 	  }
 	case RID_OFFSETOF:
@@ -12125,7 +12125,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    matching_parens parens;
 	    if (!parens.require_open (parser))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    t1 = c_parser_type_name (parser);
@@ -12136,17 +12136,17 @@ c_parser_postfix_expression (c_parser *parser)
 	    if (parser->error)
 	      {
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    tree type = groktypename (t1, NULL, NULL);
-	    tree offsetof_ref;
-	    if (type == error_mark_node)
-	      offsetof_ref = error_mark_node;
+	    पुनो type = groktypename (t1, NULL, NULL);
+	    पुनो offsetof_ref;
+	    if (type == error_mark_बुहोल)
+	      offsetof_ref = error_mark_बुहोल;
 	    else
 	      {
-		offsetof_ref = build1 (INDIRECT_REF, type, null_pointer_node);
-		SET_EXPR_LOCATION (offsetof_ref, loc);
+		offsetof_ref = build1 (INDIRECT_REF, type, null_pointer_बुहोल);
+		SET_पाहायाग_LOCATION (offsetof_ref, loc);
 	      }
 	    /* Parse the second argument to __builtin_offsetof.  We
 	       must have one identifier, and beyond that we want to
@@ -12155,7 +12155,7 @@ c_parser_postfix_expression (c_parser *parser)
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
 		offsetof_ref
-		  = build_component_ref (loc, offsetof_ref, comp_tok->value,
+		  = build_component_ref (loc, offsetof_ref, comp_tok->हालागा,
 					 comp_tok->location, UNKNOWN_LOCATION);
 		c_parser_consume_token (parser);
 		while (c_parser_next_token_is (parser, CPP_DOT)
@@ -12169,7 +12169,7 @@ c_parser_postfix_expression (c_parser *parser)
 			loc = c_parser_peek_token (parser)->location;
 			offsetof_ref = build_array_ref (loc,
 							offsetof_ref,
-							integer_zero_node);
+							integer_zero_बुहोल);
 			goto do_dot;
 		      }
 		    else if (c_parser_next_token_is (parser, CPP_DOT))
@@ -12185,20 +12185,20 @@ c_parser_postfix_expression (c_parser *parser)
 			c_token *comp_tok = c_parser_peek_token (parser);
 			offsetof_ref
 			  = build_component_ref (loc, offsetof_ref,
-						 comp_tok->value,
+						 comp_tok->हालागा,
 						 comp_tok->location,
 						 UNKNOWN_LOCATION);
 			c_parser_consume_token (parser);
 		      }
 		    else
 		      {
-			struct c_expr ce;
-			tree idx;
+			struct c_पाहायाग ce;
+			पुनो idx;
 			loc = c_parser_peek_token (parser)->location;
 			c_parser_consume_token (parser);
 			ce = c_parser_expression (parser);
 			ce = convert_lvalue_to_rvalue (loc, ce, false, false);
-			idx = ce.value;
+			idx = ce.हालागा;
 			idx = c_fully_fold (idx, false, NULL);
 			c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE,
 						   "expected %<]%>");
@@ -12211,24 +12211,24 @@ c_parser_postfix_expression (c_parser *parser)
 	    location_t end_loc = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				       "expected %<)%>");
-	    expr.value = fold_offsetof (offsetof_ref);
-	    set_c_expr_source_range (&expr, loc, end_loc);
+	    पाहायाग.हालागा = fold_offsetof (offsetof_ref);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, end_loc);
 	  }
 	  break;
-	case RID_CHOOSE_EXPR:
+	case RID_CHOOSE_पाहायाग:
 	  {
-	    vec<c_expr_t, va_gc> *cexpr_list;
-	    c_expr_t *e1_p, *e2_p, *e3_p;
-	    tree c;
+	    vec<c_पाहायाग_t, va_gc> *cexpr_list;
+	    c_पाहायाग_t *e1_p, *e2_p, *e3_p;
+	    पुनो c;
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    if (!c_parser_get_builtin_मगा_कातविरान (parser,
 					    "__builtin_choose_expr",
 					    &cexpr_list, true,
 					    &close_paren_loc))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
@@ -12236,7 +12236,7 @@ c_parser_postfix_expression (c_parser *parser)
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_choose_expr%>");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
@@ -12244,17 +12244,17 @@ c_parser_postfix_expression (c_parser *parser)
 	    e2_p = &(*cexpr_list)[1];
 	    e3_p = &(*cexpr_list)[2];
 
-	    c = e1_p->value;
-	    mark_exp_read (e2_p->value);
-	    mark_exp_read (e3_p->value);
-	    if (TREE_CODE (c) != INTEGER_CST
-		|| !INTEGRAL_TYPE_P (TREE_TYPE (c)))
+	    c = e1_p->हालागा;
+	    mark_exp_read (e2_p->हालागा);
+	    mark_exp_read (e3_p->हालागा);
+	    if (पुनो_CODE (c) != INTEGER_CST
+		|| !INTEGRAL_TYPE_P (पुनो_TYPE (c)))
 	      error_at (loc,
 			"first argument to %<__builtin_choose_expr%> not"
 			" a constant");
 	    constant_expression_warning (c);
-	    expr = integer_zerop (c) ? *e3_p : *e2_p;
-	    set_c_expr_source_range (&expr, loc, close_paren_loc);
+	    पाहायाग = integer_zerop (c) ? *e3_p : *e2_p;
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_paren_loc);
 	    break;
 	  }
 	case RID_TYPES_COMPATIBLE_P:
@@ -12263,89 +12263,89 @@ c_parser_postfix_expression (c_parser *parser)
 	    matching_parens parens;
 	    if (!parens.require_open (parser))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    t1 = c_parser_type_name (parser);
 	    if (t1 == NULL)
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
 	      {
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    t2 = c_parser_type_name (parser);
 	    if (t2 == NULL)
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    location_t close_paren_loc = c_parser_peek_token (parser)->location;
 	    parens.skip_until_found_close (parser);
-	    tree e1, e2;
+	    पुनो e1, e2;
 	    e1 = groktypename (t1, NULL, NULL);
 	    e2 = groktypename (t2, NULL, NULL);
-	    if (e1 == error_mark_node || e2 == error_mark_node)
+	    if (e1 == error_mark_बुहोल || e2 == error_mark_बुहोल)
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
 	    e1 = TYPE_MAIN_VARIANT (e1);
 	    e2 = TYPE_MAIN_VARIANT (e2);
 
-	    expr.value
-	      = comptypes (e1, e2) ? integer_one_node : integer_zero_node;
-	    set_c_expr_source_range (&expr, loc, close_paren_loc);
+	    पाहायाग.हालागा
+	      = comptypes (e1, e2) ? integer_one_बुहोल : integer_zero_बुहोल;
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_paren_loc);
 	  }
 	  break;
 	case RID_BUILTIN_TGMATH:
 	  {
-	    vec<c_expr_t, va_gc> *cexpr_list;
+	    vec<c_पाहायाग_t, va_gc> *cexpr_list;
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    if (!c_parser_get_builtin_मगा_कातविरान (parser,
 					    "__builtin_tgmath",
 					    &cexpr_list, false,
 					    &close_paren_loc))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
 	    if (vec_safe_length (cexpr_list) < 3)
 	      {
 		error_at (loc, "too few arguments to %<__builtin_tgmath%>");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
 	    unsigned int i;
-	    c_expr_t *p;
+	    c_पाहायाग_t *p;
 	    FOR_EACH_VEC_ELT (*cexpr_list, i, p)
 	      *p = convert_lvalue_to_rvalue (loc, *p, true, true);
 	    unsigned int nargs = check_tgmath_function (&(*cexpr_list)[0], 1);
 	    if (nargs == 0)
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    if (vec_safe_length (cexpr_list) < nargs)
 	      {
 		error_at (loc, "too few arguments to %<__builtin_tgmath%>");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    unsigned int num_functions = vec_safe_length (cexpr_list) - nargs;
-	    if (num_functions < 2)
+	    unsigned int नुमेरो_functions = vec_safe_length (cexpr_list) - nargs;
+	    if (नुमेरो_functions < 2)
 	      {
 		error_at (loc, "too few arguments to %<__builtin_tgmath%>");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
@@ -12353,13 +12353,13 @@ c_parser_postfix_expression (c_parser *parser)
 	       pointers.  The remaining NARGS expressions are the
 	       arguments that are to be passed to one of those
 	       functions, chosen following <tgmath.h> rules.  */
-	    for (unsigned int j = 1; j < num_functions; j++)
+	    for (unsigned int j = 1; j < नुमेरो_functions; j++)
 	      {
 		unsigned int this_nargs
 		  = check_tgmath_function (&(*cexpr_list)[j], j + 1);
 		if (this_nargs == 0)
 		  {
-		    expr.set_error ();
+		    पाहायाग.set_error ();
 		    goto out;
 		  }
 		if (this_nargs != nargs)
@@ -12367,7 +12367,7 @@ c_parser_postfix_expression (c_parser *parser)
 		    error_at ((*cexpr_list)[j].get_location (),
 			      "argument %u of %<__builtin_tgmath%> has "
 			      "wrong number of arguments", j + 1);
-		    expr.set_error ();
+		    पाहायाग.set_error ();
 		    goto out;
 		  }
 	      }
@@ -12379,29 +12379,29 @@ c_parser_postfix_expression (c_parser *parser)
 	       return type, subsequent entries for parameter
 	       types.  */
 	    auto_vec<enum tgmath_parm_kind> parm_kind (nargs + 1);
-	    auto_vec<tree> parm_first (nargs + 1);
+	    auto_vec<पुनो> parm_first (nargs + 1);
 	    auto_vec<bool> parm_complex (nargs + 1);
 	    auto_vec<bool> parm_varies (nargs + 1);
-	    tree first_type = TREE_TYPE (TREE_TYPE ((*cexpr_list)[0].value));
-	    tree first_ret = TYPE_MAIN_VARIANT (TREE_TYPE (first_type));
-	    parm_first.quick_push (first_ret);
-	    parm_complex.quick_push (TREE_CODE (first_ret) == COMPLEX_TYPE);
-	    parm_varies.quick_push (false);
-	    function_args_iterator iter;
-	    tree t;
+	    पुनो first_type = पुनो_TYPE (पुनो_TYPE ((*cexpr_list)[0].हालागा));
+	    पुनो first_ret = TYPE_MAIN_VARIANT (पुनो_TYPE (first_type));
+	    parm_first.quick_इतुलाक (first_ret);
+	    parm_complex.quick_इतुलाक (पुनो_CODE (first_ret) == COMPLEX_TYPE);
+	    parm_varies.quick_इतुलाक (false);
+	    function_मगा_कातविरान_iterator iter;
+	    पुनो t;
 	    unsigned int argpos;
-	    FOREACH_FUNCTION_ARGS (first_type, t, iter)
+	    FOREACH_FUNCTION_मगा_कातविरान (first_type, t, iter)
 	      {
-		if (t == void_type_node)
+		if (t == void_type_बुहोल)
 		  break;
-		parm_first.quick_push (TYPE_MAIN_VARIANT (t));
-		parm_complex.quick_push (TREE_CODE (t) == COMPLEX_TYPE);
-		parm_varies.quick_push (false);
+		parm_first.quick_इतुलाक (TYPE_MAIN_VARIANT (t));
+		parm_complex.quick_इतुलाक (पुनो_CODE (t) == COMPLEX_TYPE);
+		parm_varies.quick_इतुलाक (false);
 	      }
-	    for (unsigned int j = 1; j < num_functions; j++)
+	    for (unsigned int j = 1; j < नुमेरो_functions; j++)
 	      {
-		tree type = TREE_TYPE (TREE_TYPE ((*cexpr_list)[j].value));
-		tree ret = TYPE_MAIN_VARIANT (TREE_TYPE (type));
+		पुनो type = पुनो_TYPE (पुनो_TYPE ((*cexpr_list)[j].हालागा));
+		पुनो ret = TYPE_MAIN_VARIANT (पुनो_TYPE (type));
 		if (ret != parm_first[0])
 		  {
 		    parm_varies[0] = true;
@@ -12412,7 +12412,7 @@ c_parser_postfix_expression (c_parser *parser)
 				  "invalid type-generic return type for "
 				  "argument %u of %<__builtin_tgmath%>",
 				  1);
-			expr.set_error ();
+			पाहायाग.set_error ();
 			goto out;
 		      }
 		    if (!SCALAR_FLOAT_TYPE_P (ret)
@@ -12422,16 +12422,16 @@ c_parser_postfix_expression (c_parser *parser)
 				  "invalid type-generic return type for "
 				  "argument %u of %<__builtin_tgmath%>",
 				  j + 1);
-			expr.set_error ();
+			पाहायाग.set_error ();
 			goto out;
 		      }
 		  }
-		if (TREE_CODE (ret) == COMPLEX_TYPE)
+		if (पुनो_CODE (ret) == COMPLEX_TYPE)
 		  parm_complex[0] = true;
 		argpos = 1;
-		FOREACH_FUNCTION_ARGS (type, t, iter)
+		FOREACH_FUNCTION_मगा_कातविरान (type, t, iter)
 		  {
-		    if (t == void_type_node)
+		    if (t == void_type_बुहोल)
 		      break;
 		    t = TYPE_MAIN_VARIANT (t);
 		    if (t != parm_first[argpos])
@@ -12444,7 +12444,7 @@ c_parser_postfix_expression (c_parser *parser)
 				      "invalid type-generic type for "
 				      "argument %u of argument %u of "
 				      "%<__builtin_tgmath%>", argpos, 1);
-			    expr.set_error ();
+			    पाहायाग.set_error ();
 			    goto out;
 			  }
 			if (!SCALAR_FLOAT_TYPE_P (t)
@@ -12454,11 +12454,11 @@ c_parser_postfix_expression (c_parser *parser)
 				      "invalid type-generic type for "
 				      "argument %u of argument %u of "
 				      "%<__builtin_tgmath%>", argpos, j + 1);
-			    expr.set_error ();
+			    पाहायाग.set_error ();
 			    goto out;
 			  }
 		      }
-		    if (TREE_CODE (t) == COMPLEX_TYPE)
+		    if (पुनो_CODE (t) == COMPLEX_TYPE)
 		      parm_complex[argpos] = true;
 		    argpos++;
 		  }
@@ -12480,13 +12480,13 @@ c_parser_postfix_expression (c_parser *parser)
 		  }
 		else
 		  this_kind = tgmath_fixed;
-		parm_kind.quick_push (this_kind);
+		parm_kind.quick_इतुलाक (this_kind);
 	      }
 	    if (max_variation == tgmath_fixed)
 	      {
 		error_at (loc, "function arguments of %<__builtin_tgmath%> "
 			  "all have the same type");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
@@ -12505,22 +12505,22 @@ c_parser_postfix_expression (c_parser *parser)
 	      {
 		error_at (loc, "function arguments of %<__builtin_tgmath%> "
 			  "lack type-generic parameter");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
 	    /* Determine the type of the relevant parameter for each
 	       function.  */
-	    auto_vec<tree> tg_type (num_functions);
-	    for (unsigned int j = 0; j < num_functions; j++)
+	    auto_vec<पुनो> tg_type (नुमेरो_functions);
+	    for (unsigned int j = 0; j < नुमेरो_functions; j++)
 	      {
-		tree type = TREE_TYPE (TREE_TYPE ((*cexpr_list)[j].value));
+		पुनो type = पुनो_TYPE (पुनो_TYPE ((*cexpr_list)[j].हालागा));
 		argpos = 1;
-		FOREACH_FUNCTION_ARGS (type, t, iter)
+		FOREACH_FUNCTION_मगा_कातविरान (type, t, iter)
 		  {
 		    if (argpos == tgarg)
 		      {
-			tg_type.quick_push (TYPE_MAIN_VARIANT (t));
+			tg_type.quick_इतुलाक (TYPE_MAIN_VARIANT (t));
 			break;
 		      }
 		    argpos++;
@@ -12533,18 +12533,18 @@ c_parser_postfix_expression (c_parser *parser)
 	       standard or binary, and whether all the types are
 	       decimal.  */
 	    bool all_complex = true;
-	    bool all_binary = true;
+	    bool all_दालावाहान = true;
 	    bool all_decimal = true;
-	    hash_set<tree> tg_types;
+	    hash_set<पुनो> tg_types;
 	    FOR_EACH_VEC_ELT (tg_type, i, t)
 	      {
-		if (TREE_CODE (t) == COMPLEX_TYPE)
+		if (पुनो_CODE (t) == COMPLEX_TYPE)
 		  all_decimal = false;
 		else
 		  {
 		    all_complex = false;
 		    if (DECIMAL_FLOAT_TYPE_P (t))
-		      all_binary = false;
+		      all_दालावाहान = false;
 		    else
 		      all_decimal = false;
 		  }
@@ -12554,7 +12554,7 @@ c_parser_postfix_expression (c_parser *parser)
 			      "duplicate type-generic parameter type for "
 			      "function argument %u of %<__builtin_tgmath%>",
 			      i + 1);
-		    expr.set_error ();
+		    पाहायाग.set_error ();
 		    goto out;
 		  }
 	      }
@@ -12562,27 +12562,27 @@ c_parser_postfix_expression (c_parser *parser)
 	    /* Verify that other parameters and the return type whose
 	       types vary have their types varying in the correct
 	       way.  */
-	    for (unsigned int j = 0; j < num_functions; j++)
+	    for (unsigned int j = 0; j < नुमेरो_functions; j++)
 	      {
-		tree exp_type = tg_type[j];
-		tree exp_real_type = exp_type;
-		if (TREE_CODE (exp_type) == COMPLEX_TYPE)
-		  exp_real_type = TREE_TYPE (exp_type);
-		tree type = TREE_TYPE (TREE_TYPE ((*cexpr_list)[j].value));
-		tree ret = TYPE_MAIN_VARIANT (TREE_TYPE (type));
+		पुनो exp_type = tg_type[j];
+		पुनो exp_real_type = exp_type;
+		if (पुनो_CODE (exp_type) == COMPLEX_TYPE)
+		  exp_real_type = पुनो_TYPE (exp_type);
+		पुनो type = पुनो_TYPE (पुनो_TYPE ((*cexpr_list)[j].हालागा));
+		पुनो ret = TYPE_MAIN_VARIANT (पुनो_TYPE (type));
 		if ((parm_kind[0] == tgmath_complex && ret != exp_type)
 		    || (parm_kind[0] == tgmath_real && ret != exp_real_type))
 		  {
 		    error_at ((*cexpr_list)[j].get_location (),
 			      "bad return type for function argument %u "
 			      "of %<__builtin_tgmath%>", j + 1);
-		    expr.set_error ();
+		    पाहायाग.set_error ();
 		    goto out;
 		  }
 		argpos = 1;
-		FOREACH_FUNCTION_ARGS (type, t, iter)
+		FOREACH_FUNCTION_मगा_कातविरान (type, t, iter)
 		  {
-		    if (t == void_type_node)
+		    if (t == void_type_बुहोल)
 		      break;
 		    t = TYPE_MAIN_VARIANT (t);
 		    if ((parm_kind[argpos] == tgmath_complex
@@ -12594,7 +12594,7 @@ c_parser_postfix_expression (c_parser *parser)
 				  "bad type for argument %u of "
 				  "function argument %u of "
 				  "%<__builtin_tgmath%>", argpos, j + 1);
-			expr.set_error ();
+			पाहायाग.set_error ();
 			goto out;
 		      }
 		    argpos++;
@@ -12616,7 +12616,7 @@ c_parser_postfix_expression (c_parser *parser)
 	       arithmetic conversions.  If the function only accepts
 	       complex arguments, a complex type is produced.  */
 	    bool arg_complex = all_complex;
-	    bool arg_binary = all_binary;
+	    bool arg_दालावाहान = all_दालावाहान;
 	    bool arg_int_decimal = all_decimal;
 	    bool arg_int_floatnx = false;
 	    bool arg_int_decimalx = false;
@@ -12624,16 +12624,16 @@ c_parser_postfix_expression (c_parser *parser)
 	      {
 		if (parm_kind[j] == tgmath_fixed)
 		  continue;
-		c_expr_t *ce = &(*cexpr_list)[num_functions + j - 1];
-		tree type = TREE_TYPE (ce->value);
+		c_पाहायाग_t *ce = &(*cexpr_list)[नुमेरो_functions + j - 1];
+		पुनो type = पुनो_TYPE (ce->हालागा);
 		if (!INTEGRAL_TYPE_P (type)
 		    && !SCALAR_FLOAT_TYPE_P (type)
-		    && TREE_CODE (type) != COMPLEX_TYPE)
+		    && पुनो_CODE (type) != COMPLEX_TYPE)
 		  {
 		    error_at (ce->get_location (),
 			      "invalid type of argument %u of type-generic "
 			      "function", j);
-		    expr.set_error ();
+		    पाहायाग.set_error ();
 		    goto out;
 		  }
 		if (DECIMAL_FLOAT_TYPE_P (type))
@@ -12644,15 +12644,15 @@ c_parser_postfix_expression (c_parser *parser)
 			error_at (ce->get_location (),
 				  "decimal floating-point argument %u to "
 				  "complex-only type-generic function", j);
-			expr.set_error ();
+			पाहायाग.set_error ();
 			goto out;
 		      }
-		    else if (all_binary)
+		    else if (all_दालावाहान)
 		      {
 			error_at (ce->get_location (),
 				  "decimal floating-point argument %u to "
 				  "binary-only type-generic function", j);
-			expr.set_error ();
+			पाहायाग.set_error ();
 			goto out;
 		      }
 		    else if (arg_complex)
@@ -12660,29 +12660,29 @@ c_parser_postfix_expression (c_parser *parser)
 			error_at (ce->get_location (),
 				  "both complex and decimal floating-point "
 				  "arguments to type-generic function");
-			expr.set_error ();
+			पाहायाग.set_error ();
 			goto out;
 		      }
-		    else if (arg_binary)
+		    else if (arg_दालावाहान)
 		      {
 			error_at (ce->get_location (),
 				  "both binary and decimal floating-point "
 				  "arguments to type-generic function");
-			expr.set_error ();
+			पाहायाग.set_error ();
 			goto out;
 		      }
 		  }
-		else if (TREE_CODE (type) == COMPLEX_TYPE)
+		else if (पुनो_CODE (type) == COMPLEX_TYPE)
 		  {
 		    arg_complex = true;
 		    if (COMPLEX_FLOAT_TYPE_P (type))
-		      arg_binary = true;
+		      arg_दालावाहान = true;
 		    if (all_decimal)
 		      {
 			error_at (ce->get_location (),
 				  "complex argument %u to "
 				  "decimal-only type-generic function", j);
-			expr.set_error ();
+			पाहायाग.set_error ();
 			goto out;
 		      }
 		    else if (arg_int_decimal)
@@ -12690,19 +12690,19 @@ c_parser_postfix_expression (c_parser *parser)
 			error_at (ce->get_location (),
 				  "both complex and decimal floating-point "
 				  "arguments to type-generic function");
-			expr.set_error ();
+			पाहायाग.set_error ();
 			goto out;
 		      }
 		  }
 		else if (SCALAR_FLOAT_TYPE_P (type))
 		  {
-		    arg_binary = true;
+		    arg_दालावाहान = true;
 		    if (all_decimal)
 		      {
 			error_at (ce->get_location (),
 				  "binary argument %u to "
 				  "decimal-only type-generic function", j);
-			expr.set_error ();
+			पाहायाग.set_error ();
 			goto out;
 		      }
 		    else if (arg_int_decimal)
@@ -12710,58 +12710,58 @@ c_parser_postfix_expression (c_parser *parser)
 			error_at (ce->get_location (),
 				  "both binary and decimal floating-point "
 				  "arguments to type-generic function");
-			expr.set_error ();
+			पाहायाग.set_error ();
 			goto out;
 		      }
 		  }
-		tree rtype = TYPE_MAIN_VARIANT (type);
-		if (TREE_CODE (rtype) == COMPLEX_TYPE)
-		  rtype = TREE_TYPE (rtype);
+		पुनो rtype = TYPE_MAIN_VARIANT (type);
+		if (पुनो_CODE (rtype) == COMPLEX_TYPE)
+		  rtype = पुनो_TYPE (rtype);
 		if (SCALAR_FLOAT_TYPE_P (rtype))
-		  for (unsigned int j = 0; j < NUM_FLOATNX_TYPES; j++)
-		    if (rtype == FLOATNX_TYPE_NODE (j))
+		  for (unsigned int j = 0; j < नुमेरो_FLOATNX_TYPES; j++)
+		    if (rtype == FLOATNX_TYPE_बुहोल (j))
 		      {
 			arg_int_floatnx = true;
 			break;
 		      }
-		if (rtype == dfloat64x_type_node)
+		if (rtype == dfloat64x_type_बुहोल)
 		  arg_int_decimalx = true;
 	      }
-	    tree arg_real = NULL_TREE;
+	    पुनो arg_real = NULL_पुनो;
 	    for (unsigned int j = 1; j <= nargs; j++)
 	      {
 		if (parm_kind[j] == tgmath_fixed)
 		  continue;
-		c_expr_t *ce = &(*cexpr_list)[num_functions + j - 1];
-		tree type = TYPE_MAIN_VARIANT (TREE_TYPE (ce->value));
-		if (TREE_CODE (type) == COMPLEX_TYPE)
-		  type = TREE_TYPE (type);
+		c_पाहायाग_t *ce = &(*cexpr_list)[नुमेरो_functions + j - 1];
+		पुनो type = TYPE_MAIN_VARIANT (पुनो_TYPE (ce->हालागा));
+		if (पुनो_CODE (type) == COMPLEX_TYPE)
+		  type = पुनो_TYPE (type);
 		if (INTEGRAL_TYPE_P (type))
 		  type = (arg_int_decimalx
-			  ? dfloat64x_type_node
+			  ? dfloat64x_type_बुहोल
 			  : arg_int_floatnx
-			  ? float32x_type_node
+			  ? float32x_type_बुहोल
 			  : arg_int_decimal
-			  ? dfloat64_type_node
-			  : double_type_node);
-		if (arg_real == NULL_TREE)
+			  ? dfloat64_type_बुहोल
+			  : double_type_बुहोल);
+		if (arg_real == NULL_पुनो)
 		  arg_real = type;
 		else
 		  arg_real = common_type (arg_real, type);
-		if (arg_real == error_mark_node)
+		if (arg_real == error_mark_बुहोल)
 		  {
-		    expr.set_error ();
+		    पाहायाग.set_error ();
 		    goto out;
 		  }
 	      }
-	    tree arg_type = (arg_complex
+	    पुनो arg_type = (arg_complex
 			     ? build_complex_type (arg_real)
 			     : arg_real);
 
 	    /* Look for a function to call with type-generic parameter
 	       type ARG_TYPE.  */
-	    c_expr_t *fn = NULL;
-	    for (unsigned int j = 0; j < num_functions; j++)
+	    c_पाहायाग_t *fn = NULL;
+	    for (unsigned int j = 0; j < नुमेरो_functions; j++)
 	      {
 		if (tg_type[j] == arg_type)
 		  {
@@ -12777,13 +12777,13 @@ c_parser_postfix_expression (c_parser *parser)
 		   narrower type, and look for the first function with
 		   at least the range and precision of the argument
 		   type.  */
-		for (unsigned int j = 0; j < num_functions; j++)
+		for (unsigned int j = 0; j < नुमेरो_functions; j++)
 		  {
 		    if (arg_complex
-			!= (TREE_CODE (tg_type[j]) == COMPLEX_TYPE))
+			!= (पुनो_CODE (tg_type[j]) == COMPLEX_TYPE))
 		      continue;
-		    tree real_tg_type = (arg_complex
-					 ? TREE_TYPE (tg_type[j])
+		    पुनो real_tg_type = (arg_complex
+					 ? पुनो_TYPE (tg_type[j])
 					 : tg_type[j]);
 		    if (DECIMAL_FLOAT_TYPE_P (arg_real)
 			!= DECIMAL_FLOAT_TYPE_P (real_tg_type))
@@ -12808,84 +12808,84 @@ c_parser_postfix_expression (c_parser *parser)
 	    if (fn == NULL)
 	      {
 		error_at (loc, "no matching function for type-generic call");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
 	    /* Construct a call to FN.  */
-	    vec<tree, va_gc> *args;
-	    vec_alloc (args, nargs);
-	    vec<tree, va_gc> *origtypes;
+	    vec<पुनो, va_gc> *मगा_कातविरान;
+	    vec_alloc (मगा_कातविरान, nargs);
+	    vec<पुनो, va_gc> *origtypes;
 	    vec_alloc (origtypes, nargs);
 	    auto_vec<location_t> arg_loc (nargs);
 	    for (unsigned int j = 0; j < nargs; j++)
 	      {
-		c_expr_t *ce = &(*cexpr_list)[num_functions + j];
-		args->quick_push (ce->value);
-		arg_loc.quick_push (ce->get_location ());
-		origtypes->quick_push (ce->original_type);
+		c_पाहायाग_t *ce = &(*cexpr_list)[नुमेरो_functions + j];
+		मगा_कातविरान->quick_इतुलाक (ce->हालागा);
+		arg_loc.quick_इतुलाक (ce->get_location ());
+		origtypes->quick_इतुलाक (ce->original_type);
 	      }
-	    expr.value = c_build_function_call_vec (loc, arg_loc, fn->value,
-						    args, origtypes);
-	    set_c_expr_source_range (&expr, loc, close_paren_loc);
+	    पाहायाग.हालागा = c_build_function_call_vec (loc, arg_loc, fn->हालागा,
+						    मगा_कातविरान, origtypes);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_paren_loc);
 	    break;
 	  }
 	case RID_BUILTIN_CALL_WITH_STATIC_CHAIN:
 	  {
-	    vec<c_expr_t, va_gc> *cexpr_list;
-	    c_expr_t *e2_p;
-	    tree chain_value;
+	    vec<c_पाहायाग_t, va_gc> *cexpr_list;
+	    c_पाहायाग_t *e2_p;
+	    पुनो chain_हालागा;
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    if (!c_parser_get_builtin_मगा_कातविरान (parser,
 					    "__builtin_call_with_static_chain",
 					    &cexpr_list, false,
 					    &close_paren_loc))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    if (vec_safe_length (cexpr_list) != 2)
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_call_with_static_chain%>");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
-	    expr = (*cexpr_list)[0];
+	    पाहायाग = (*cexpr_list)[0];
 	    e2_p = &(*cexpr_list)[1];
 	    *e2_p = convert_lvalue_to_rvalue (loc, *e2_p, true, true);
-	    chain_value = e2_p->value;
-	    mark_exp_read (chain_value);
+	    chain_हालागा = e2_p->हालागा;
+	    mark_exp_read (chain_हालागा);
 
-	    if (TREE_CODE (expr.value) != CALL_EXPR)
+	    if (पुनो_CODE (पाहायाग.हालागा) != CALL_पाहायाग)
 	      error_at (loc, "first argument to "
 			"%<__builtin_call_with_static_chain%> "
 			"must be a call expression");
-	    else if (TREE_CODE (TREE_TYPE (chain_value)) != POINTER_TYPE)
+	    else if (पुनो_CODE (पुनो_TYPE (chain_हालागा)) != POINTER_TYPE)
 	      error_at (loc, "second argument to "
 			"%<__builtin_call_with_static_chain%> "
 			"must be a pointer type");
 	    else
-	      CALL_EXPR_STATIC_CHAIN (expr.value) = chain_value;
-	    set_c_expr_source_range (&expr, loc, close_paren_loc);
+	      CALL_पाहायाग_STATIC_CHAIN (पाहायाग.हालागा) = chain_हालागा;
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_paren_loc);
 	    break;
 	  }
 	case RID_BUILTIN_COMPLEX:
 	  {
-	    vec<c_expr_t, va_gc> *cexpr_list;
-	    c_expr_t *e1_p, *e2_p;
+	    vec<c_पाहायाग_t, va_gc> *cexpr_list;
+	    c_पाहायाग_t *e1_p, *e2_p;
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    if (!c_parser_get_builtin_मगा_कातविरान (parser,
 					    "__builtin_complex",
 					    &cexpr_list, false,
 					    &close_paren_loc))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
@@ -12893,7 +12893,7 @@ c_parser_postfix_expression (c_parser *parser)
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_complex%>");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
@@ -12901,112 +12901,112 @@ c_parser_postfix_expression (c_parser *parser)
 	    e2_p = &(*cexpr_list)[1];
 
 	    *e1_p = convert_lvalue_to_rvalue (loc, *e1_p, true, true);
-	    if (TREE_CODE (e1_p->value) == EXCESS_PRECISION_EXPR)
-	      e1_p->value = convert (TREE_TYPE (e1_p->value),
-				     TREE_OPERAND (e1_p->value, 0));
+	    if (पुनो_CODE (e1_p->हालागा) == EXCESS_PRECISION_पाहायाग)
+	      e1_p->हालागा = convert (पुनो_TYPE (e1_p->हालागा),
+				     पुनो_OPERAND (e1_p->हालागा, 0));
 	    *e2_p = convert_lvalue_to_rvalue (loc, *e2_p, true, true);
-	    if (TREE_CODE (e2_p->value) == EXCESS_PRECISION_EXPR)
-	      e2_p->value = convert (TREE_TYPE (e2_p->value),
-				     TREE_OPERAND (e2_p->value, 0));
-	    if (!SCALAR_FLOAT_TYPE_P (TREE_TYPE (e1_p->value))
-		|| DECIMAL_FLOAT_TYPE_P (TREE_TYPE (e1_p->value))
-		|| !SCALAR_FLOAT_TYPE_P (TREE_TYPE (e2_p->value))
-		|| DECIMAL_FLOAT_TYPE_P (TREE_TYPE (e2_p->value)))
+	    if (पुनो_CODE (e2_p->हालागा) == EXCESS_PRECISION_पाहायाग)
+	      e2_p->हालागा = convert (पुनो_TYPE (e2_p->हालागा),
+				     पुनो_OPERAND (e2_p->हालागा, 0));
+	    if (!SCALAR_FLOAT_TYPE_P (पुनो_TYPE (e1_p->हालागा))
+		|| DECIMAL_FLOAT_TYPE_P (पुनो_TYPE (e1_p->हालागा))
+		|| !SCALAR_FLOAT_TYPE_P (पुनो_TYPE (e2_p->हालागा))
+		|| DECIMAL_FLOAT_TYPE_P (पुनो_TYPE (e2_p->हालागा)))
 	      {
 		error_at (loc, "%<__builtin_complex%> operand "
 			  "not of real binary floating-point type");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    if (TYPE_MAIN_VARIANT (TREE_TYPE (e1_p->value))
-		!= TYPE_MAIN_VARIANT (TREE_TYPE (e2_p->value)))
+	    if (TYPE_MAIN_VARIANT (पुनो_TYPE (e1_p->हालागा))
+		!= TYPE_MAIN_VARIANT (पुनो_TYPE (e2_p->हालागा)))
 	      {
 		error_at (loc,
 			  "%<__builtin_complex%> operands of different types");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    pedwarn_c90 (loc, OPT_Wpedantic,
 			 "ISO C90 does not support complex types");
-	    expr.value = build2_loc (loc, COMPLEX_EXPR,
+	    पाहायाग.हालागा = build2_loc (loc, COMPLEX_पाहायाग,
 				     build_complex_type
 				     (TYPE_MAIN_VARIANT
-				      (TREE_TYPE (e1_p->value))),
-				     e1_p->value, e2_p->value);
-	    set_c_expr_source_range (&expr, loc, close_paren_loc);
+				      (पुनो_TYPE (e1_p->हालागा))),
+				     e1_p->हालागा, e2_p->हालागा);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_paren_loc);
 	    break;
 	  }
 	case RID_BUILTIN_COUNTED_BY_REF:
 	  {
-	    vec<c_expr_t, va_gc> *cexpr_list;
-	    c_expr_t *e_p;
+	    vec<c_पाहायाग_t, va_gc> *cexpr_list;
+	    c_पाहायाग_t *e_p;
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    if (!c_parser_get_builtin_मगा_कातविरान (parser,
 					    "__builtin_counted_by_ref",
 					    &cexpr_list, false,
 					    &close_paren_loc))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    if (vec_safe_length (cexpr_list) != 1)
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_counted_by_ref%>");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
 	    e_p = &(*cexpr_list)[0];
-	    tree ref = e_p->value;
+	    पुनो ref = e_p->हालागा;
 
-	    if (TREE_CODE (TREE_TYPE (ref)) != ARRAY_TYPE
-		 && TREE_CODE (TREE_TYPE (ref)) != POINTER_TYPE)
+	    if (पुनो_CODE (पुनो_TYPE (ref)) != ARRAY_TYPE
+		 && पुनो_CODE (पुनो_TYPE (ref)) != POINTER_TYPE)
 	      {
 		error_at (loc, "the argument to %<__builtin_counted_by_ref%>"
 				" must be an array or pointer");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
-	    if (TREE_CODE (ref) != COMPONENT_REF)
+	    if (पुनो_CODE (ref) != COMPONENT_REF)
 	      {
 		error_at (loc, "the argument to %<__builtin_counted_by_ref%>"
 				" must be a field of a structure");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
 	    /* If the ref is inside TYPEOF or ALIGNOF, the call to
 	       .ACCESS_WITH_SIZE was not generated by the routine
 	       build_component_ref by default, we should generate it here.  */
-	    if (TREE_CODE (ref) == COMPONENT_REF)
+	    if (पुनो_CODE (ref) == COMPONENT_REF)
 	      ref = handle_counted_by_for_component_ref (loc, ref);
 
 	    if (has_counted_by_object (ref))
-	      expr.value = get_counted_by_ref (ref);
+	      पाहायाग.हालागा = get_counted_by_ref (ref);
 	    else
-	      expr.value = null_pointer_node;
+	      पाहायाग.हालागा = null_pointer_बुहोल;
 
-	    set_c_expr_source_range (&expr, loc, close_paren_loc);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_paren_loc);
 	    break;
 	  }
 	case RID_BUILTIN_SHUFFLE:
 	  {
-	    vec<c_expr_t, va_gc> *cexpr_list;
+	    vec<c_पाहायाग_t, va_gc> *cexpr_list;
 	    unsigned int i;
-	    c_expr_t *p;
+	    c_पाहायाग_t *p;
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    if (!c_parser_get_builtin_मगा_कातविरान (parser,
 					    "__builtin_shuffle",
 					    &cexpr_list, false,
 					    &close_paren_loc))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
@@ -13014,37 +13014,37 @@ c_parser_postfix_expression (c_parser *parser)
 	      *p = convert_lvalue_to_rvalue (loc, *p, true, true);
 
 	    if (vec_safe_length (cexpr_list) == 2)
-	      expr.value = c_build_vec_perm_expr (loc, (*cexpr_list)[0].value,
-						  NULL_TREE,
-						  (*cexpr_list)[1].value);
+	      पाहायाग.हालागा = c_build_vec_perm_पाहायाग (loc, (*cexpr_list)[0].हालागा,
+						  NULL_पुनो,
+						  (*cexpr_list)[1].हालागा);
 
 	    else if (vec_safe_length (cexpr_list) == 3)
-	      expr.value = c_build_vec_perm_expr (loc, (*cexpr_list)[0].value,
-						  (*cexpr_list)[1].value,
-						  (*cexpr_list)[2].value);
+	      पाहायाग.हालागा = c_build_vec_perm_पाहायाग (loc, (*cexpr_list)[0].हालागा,
+						  (*cexpr_list)[1].हालागा,
+						  (*cexpr_list)[2].हालागा);
 	    else
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_shuffle%>");
-		expr.set_error ();
+		पाहायाग.set_error ();
 	      }
-	    set_c_expr_source_range (&expr, loc, close_paren_loc);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_paren_loc);
 	    break;
 	  }
 	case RID_BUILTIN_SHUFFLEVECTOR:
 	  {
-	    vec<c_expr_t, va_gc> *cexpr_list;
+	    vec<c_पाहायाग_t, va_gc> *cexpr_list;
 	    unsigned int i;
-	    c_expr_t *p;
+	    c_पाहायाग_t *p;
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    if (!c_parser_get_builtin_मगा_कातविरान (parser,
 					    "__builtin_shufflevector",
 					    &cexpr_list, false,
 					    &close_paren_loc))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
@@ -13055,18 +13055,18 @@ c_parser_postfix_expression (c_parser *parser)
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_shuffle%>");
-		expr.set_error ();
+		पाहायाग.set_error ();
 	      }
 	    else
 	      {
-		auto_vec<tree, 16> mask;
+		auto_vec<पुनो, 16> mask;
 		for (i = 2; i < cexpr_list->length (); ++i)
-		  mask.safe_push ((*cexpr_list)[i].value);
-		expr.value = c_build_shufflevector (loc, (*cexpr_list)[0].value,
-						    (*cexpr_list)[1].value,
+		  mask.safe_इतुलाक ((*cexpr_list)[i].हालागा);
+		पाहायाग.हालागा = c_build_shufflevector (loc, (*cexpr_list)[0].हालागा,
+						    (*cexpr_list)[1].हालागा,
 						    mask);
 	      }
-	    set_c_expr_source_range (&expr, loc, close_paren_loc);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_paren_loc);
 	    break;
 	  }
 	case RID_BUILTIN_CONVERTVECTOR:
@@ -13076,15 +13076,15 @@ c_parser_postfix_expression (c_parser *parser)
 	    matching_parens parens;
 	    if (!parens.require_open (parser))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    e1 = c_parser_expr_no_commas (parser, NULL);
-	    mark_exp_read (e1.value);
+	    e1 = c_parser_पाहायाग_no_commas (parser, NULL);
+	    mark_exp_read (e1.हालागा);
 	    if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
 	      {
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    loc = c_parser_peek_token (parser)->location;
@@ -13093,14 +13093,14 @@ c_parser_postfix_expression (c_parser *parser)
 	    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				       "expected %<)%>");
 	    if (t1 == NULL)
-	      expr.set_error ();
+	      पाहायाग.set_error ();
 	    else
 	      {
-		tree type_expr = NULL_TREE;
-		expr.value = c_build_vec_convert (start_loc, e1.value, loc,
-						  groktypename (t1, &type_expr,
+		पुनो type_पाहायाग = NULL_पुनो;
+		पाहायाग.हालागा = c_build_vec_convert (start_loc, e1.हालागा, loc,
+						  groktypename (t1, &type_पाहायाग,
 								NULL));
-		set_c_expr_source_range (&expr, start_loc, end_loc);
+		set_c_पाहायाग_source_range (&पाहायाग, start_loc, end_loc);
 	      }
 	  }
 	  break;
@@ -13111,28 +13111,28 @@ c_parser_postfix_expression (c_parser *parser)
 	    matching_parens parens;
 	    if (!parens.require_open (parser))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    e1 = c_parser_expr_no_commas (parser, NULL);
-	    mark_exp_read (e1.value);
+	    e1 = c_parser_पाहायाग_no_commas (parser, NULL);
+	    mark_exp_read (e1.हालागा);
 	    location_t end_loc = c_parser_peek_token (parser)->get_finish ();
 	    parens.skip_until_found_close (parser);
-	    expr = parser_build_unary_op (loc, PAREN_EXPR, e1);
-	    set_c_expr_source_range (&expr, start_loc, end_loc);
+	    पाहायाग = parser_build_unary_op (loc, PAREN_पाहायाग, e1);
+	    set_c_पाहायाग_source_range (&पाहायाग, start_loc, end_loc);
 	  }
 	  break;
 	case RID_BUILTIN_STDC:
 	  {
-	    vec<c_expr_t, va_gc> *cexpr_list;
-	    c_expr_t *arg_p;
+	    vec<c_पाहायाग_t, va_gc> *cexpr_list;
+	    c_पाहायाग_t *arg_p;
 	    location_t close_paren_loc;
 	    enum c_builtin_stdc {
 	      C_BUILTIN_STDC_BIT_CEIL,
 	      C_BUILTIN_STDC_BIT_FLOOR,
 	      C_BUILTIN_STDC_BIT_WIDTH,
-	      C_BUILTIN_STDC_COUNT_ONES,
-	      C_BUILTIN_STDC_COUNT_ZEROS,
+	      C_BUILTIN_STDC_बिलांग_ONES,
+	      C_BUILTIN_STDC_बिलांग_ZEROS,
 	      C_BUILTIN_STDC_FIRST_LEADING_ONE,
 	      C_BUILTIN_STDC_FIRST_LEADING_ZERO,
 	      C_BUILTIN_STDC_FIRST_TRAILING_ONE,
@@ -13140,15 +13140,15 @@ c_parser_postfix_expression (c_parser *parser)
 	      C_BUILTIN_STDC_HAS_SINGLE_BIT,
 	      C_BUILTIN_STDC_LEADING_ONES,
 	      C_BUILTIN_STDC_LEADING_ZEROS,
-	      C_BUILTIN_STDC_ROTATE_LEFT,
-	      C_BUILTIN_STDC_ROTATE_RIGHT,
+	      C_BUILTIN_STDC_ROTATE_कालिवा,
+	      C_BUILTIN_STDC_ROTATE_कानान,
 	      C_BUILTIN_STDC_TRAILING_ONES,
 	      C_BUILTIN_STDC_TRAILING_ZEROS,
 	      C_BUILTIN_STDC_MAX
 	    } stdc_rid = C_BUILTIN_STDC_MAX;
 	    const char *name
-	      = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	    unsigned num_args = 1;
+	      = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
+	    unsigned नुमेरो_मगा_कातविरान = 1;
 	    switch (name[sizeof ("__builtin_stdc_") - 1])
 	      {
 	      case 'b':
@@ -13167,9 +13167,9 @@ c_parser_postfix_expression (c_parser *parser)
 		break;
 	      case 'c':
 		if (name[sizeof ("__builtin_stdc_count_") - 1] == 'o')
-		  stdc_rid = C_BUILTIN_STDC_COUNT_ONES;
+		  stdc_rid = C_BUILTIN_STDC_बिलांग_ONES;
 		else
-		  stdc_rid = C_BUILTIN_STDC_COUNT_ZEROS;
+		  stdc_rid = C_BUILTIN_STDC_बिलांग_ZEROS;
 		break;
 	      case 'f':
 		switch (name[sizeof ("__builtin_stdc_first_trailing_") - 1])
@@ -13199,10 +13199,10 @@ c_parser_postfix_expression (c_parser *parser)
 		break;
 	      case 'r':
 		if (name[sizeof ("__builtin_stdc_rotate_") - 1] == 'l')
-		  stdc_rid = C_BUILTIN_STDC_ROTATE_LEFT;
+		  stdc_rid = C_BUILTIN_STDC_ROTATE_कालिवा;
 		else
-		  stdc_rid = C_BUILTIN_STDC_ROTATE_RIGHT;
-		num_args = 2;
+		  stdc_rid = C_BUILTIN_STDC_ROTATE_कानान;
+		नुमेरो_मगा_कातविरान = 2;
 		break;
 	      case 't':
 		if (name[sizeof ("__builtin_stdc_trailing_") - 1] == 'o')
@@ -13214,60 +13214,60 @@ c_parser_postfix_expression (c_parser *parser)
 	    gcc_checking_assert (stdc_rid != C_BUILTIN_STDC_MAX);
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser, name,
+	    if (!c_parser_get_builtin_मगा_कातविरान (parser, name,
 					    &cexpr_list, false,
 					    &close_paren_loc))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
-	    if (vec_safe_length (cexpr_list) != num_args)
+	    if (vec_safe_length (cexpr_list) != नुमेरो_मगा_कातविरान)
 	      {
 		error_at (loc, "wrong number of arguments to %qs", name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
 	    arg_p = &(*cexpr_list)[0];
 	    *arg_p = convert_lvalue_to_rvalue (loc, *arg_p, true, true);
-	    if (!INTEGRAL_TYPE_P (TREE_TYPE (arg_p->value)))
+	    if (!INTEGRAL_TYPE_P (पुनो_TYPE (arg_p->हालागा)))
 	      {
 		error_at (loc, "%qs operand not an integral type", name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    if (TREE_CODE (TREE_TYPE (arg_p->value)) == ENUMERAL_TYPE)
+	    if (पुनो_CODE (पुनो_TYPE (arg_p->हालागा)) == ENUMERAL_TYPE)
 	      {
 		error_at (loc, "argument %u in call to function "
 			  "%qs has enumerated type", 1, name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    if (TREE_CODE (TREE_TYPE (arg_p->value)) == BOOLEAN_TYPE)
+	    if (पुनो_CODE (पुनो_TYPE (arg_p->हालागा)) == BOOLEAN_TYPE)
 	      {
 		error_at (loc, "argument %u in call to function "
 			  "%qs has boolean type", 1, name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    if (!TYPE_UNSIGNED (TREE_TYPE (arg_p->value)))
+	    if (!TYPE_UNSIGNED (पुनो_TYPE (arg_p->हालागा)))
 	      {
 		error_at (loc, "argument 1 in call to function "
 			  "%qs has signed type", name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    if (TYPE_MAIN_VARIANT (TREE_TYPE (arg_p->value))
-		== char_type_node)
+	    if (TYPE_MAIN_VARIANT (पुनो_TYPE (arg_p->हालागा))
+		== char_type_बुहोल)
 	      {
 		error_at (loc, "argument 1 in call to function "
 			  "%qs has %<char%> type", name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    tree arg = arg_p->value;
-	    tree type = TYPE_MAIN_VARIANT (TREE_TYPE (arg));
+	    पुनो arg = arg_p->हालागा;
+	    पुनो type = TYPE_MAIN_VARIANT (पुनो_TYPE (arg));
 	    /* Expand:
 	       __builtin_stdc_leading_zeros (arg) as
 		 (unsigned int) __builtin_clzg (arg, prec)
@@ -13302,7 +13302,7 @@ c_parser_postfix_expression (c_parser *parser)
 	       without evaluating arg multiple times, type being
 	       __typeof (arg) and prec __builtin_popcountg ((type) ~0)).  */
 	    int prec = TYPE_PRECISION (type);
-	    if (num_args == 2)
+	    if (नुमेरो_मगा_कातविरान == 2)
 	      {
 		/* Expand:
 		   __builtin_stdc_rotate_left (arg1, arg2) as
@@ -13311,56 +13311,56 @@ c_parser_postfix_expression (c_parser *parser)
 		   arg1 r>> (arg2 % prec).  */
 		arg_p = &(*cexpr_list)[1];
 		*arg_p = convert_lvalue_to_rvalue (loc, *arg_p, true, true);
-		if (!INTEGRAL_TYPE_P (TREE_TYPE (arg_p->value)))
+		if (!INTEGRAL_TYPE_P (पुनो_TYPE (arg_p->हालागा)))
 		  {
 		    error_at (loc, "%qs operand not an integral type", name);
-		    expr.set_error ();
+		    पाहायाग.set_error ();
 		    break;
 		  }
-		if (TREE_CODE (TREE_TYPE (arg_p->value)) == ENUMERAL_TYPE)
+		if (पुनो_CODE (पुनो_TYPE (arg_p->हालागा)) == ENUMERAL_TYPE)
 		  {
 		    error_at (loc, "argument %u in call to function "
 				   "%qs has enumerated type", 2, name);
-		    expr.set_error ();
+		    पाहायाग.set_error ();
 		    break;
 		  }
-		tree arg1 = save_expr (arg);
-		tree arg2 = save_expr (arg_p->value);
-		tree_code code;
-		if (stdc_rid == C_BUILTIN_STDC_ROTATE_LEFT)
-		  code = LROTATE_EXPR;
+		पुनो arg1 = save_पाहायाग (arg);
+		पुनो arg2 = save_पाहायाग (arg_p->हालागा);
+		पुनो_code code;
+		if (stdc_rid == C_BUILTIN_STDC_ROTATE_कालिवा)
+		  code = LROTATE_पाहायाग;
 		else
-		  code = RROTATE_EXPR;
+		  code = RROTATE_पाहायाग;
 
-		if (TREE_CODE (arg2) == INTEGER_CST
-		    && tree_int_cst_sgn (arg2) < 0)
-		  warning_at (loc, OPT_Wshift_count_negative,
+		if (पुनो_CODE (arg2) == INTEGER_CST
+		    && पुनो_int_cst_sgn (arg2) < 0)
+		  warning_at (loc, OPT_Wshift_बिलांग_negative,
 			      "rotate count is negative");
 
-		tree instrument_expr = NULL_TREE;
+		पुनो instrument_पाहायाग = NULL_पुनो;
 		if (sanitize_flags_p (SANITIZE_SHIFT))
-		  instrument_expr = ubsan_instrument_shift (loc, code,
+		  instrument_पाहायाग = ubsan_instrument_shift (loc, code,
 							    arg1, arg2);
 
 		/* Promote arg2 to unsigned just so that we don't
 		   need to deal with arg2 type not being able to represent
 		   prec.  In the end gimplification uses unsigned int
 		   for all shifts/rotates anyway.  */
-		if (TYPE_PRECISION (TREE_TYPE (arg2))
-		    < TYPE_PRECISION (integer_type_node))
-		  arg2 = fold_convert (unsigned_type_node, arg2);
+		if (TYPE_PRECISION (पुनो_TYPE (arg2))
+		    < TYPE_PRECISION (integer_type_बुहोल))
+		  arg2 = fold_convert (unsigned_type_बुहोल, arg2);
 
-		if (TYPE_UNSIGNED (TREE_TYPE (arg2)))
-		  arg2 = build2_loc (loc, TRUNC_MOD_EXPR, TREE_TYPE (arg2),
-				     arg2, build_int_cst (TREE_TYPE (arg2),
+		if (TYPE_UNSIGNED (पुनो_TYPE (arg2)))
+		  arg2 = build2_loc (loc, TRUNC_MOD_पाहायाग, पुनो_TYPE (arg2),
+				     arg2, build_int_cst (पुनो_TYPE (arg2),
 							  prec));
 		else
 		  {
 		    /* When second argument is signed, just do the modulo in
 		       unsigned type, that results in better generated code
 		       (for power of 2 precisions bitwise AND).  */
-		    tree utype = c_common_unsigned_type (TREE_TYPE (arg2));
-		    arg2 = build2_loc (loc, TRUNC_MOD_EXPR, utype,
+		    पुनो utype = c_common_unsigned_type (पुनो_TYPE (arg2));
+		    arg2 = build2_loc (loc, TRUNC_MOD_पाहायाग, utype,
 				       fold_convert (utype, arg2),
 				       build_int_cst (utype, prec));
 		  }
@@ -13368,64 +13368,64 @@ c_parser_postfix_expression (c_parser *parser)
 		/* The middle-end isn't prepared to handle {L,R}ROTATE_EXPR
 		   on types without mode precision, except for large/huge
 		   _BitInt types.  */
-		if (type_has_mode_precision_p (TREE_TYPE (arg1))
-		    || (TREE_CODE (TREE_TYPE (arg1)) == BITINT_TYPE
+		if (type_has_mode_precision_p (पुनो_TYPE (arg1))
+		    || (पुनो_CODE (पुनो_TYPE (arg1)) == BITINT_TYPE
 			&& prec > MAX_FIXED_MODE_SIZE))
-		  expr.value = build2_loc (loc, code, TREE_TYPE (arg1), arg1,
+		  पाहायाग.हालागा = build2_loc (loc, code, पुनो_TYPE (arg1), arg1,
 					   arg2);
 		else
 		  {
-		    arg2 = save_expr (arg2);
-		    tree t1 = build2_loc (loc, (code == LROTATE_EXPR
-						? LSHIFT_EXPR : RSHIFT_EXPR),
-					  TREE_TYPE (arg1), arg1, arg2);
-		    tree t2 = build2_loc (loc, MINUS_EXPR,
-					  TREE_TYPE (arg2),
-					  build_int_cst (TREE_TYPE (arg2),
+		    arg2 = save_पाहायाग (arg2);
+		    पुनो t1 = build2_loc (loc, (code == LROTATE_पाहायाग
+						? LSHIFT_पाहायाग : RSHIFT_पाहायाग),
+					  पुनो_TYPE (arg1), arg1, arg2);
+		    पुनो t2 = build2_loc (loc, MINUS_पाहायाग,
+					  पुनो_TYPE (arg2),
+					  build_int_cst (पुनो_TYPE (arg2),
 							 prec), arg2);
-		    t2 = build2_loc (loc, (code == LROTATE_EXPR
-					   ? RSHIFT_EXPR : LSHIFT_EXPR),
-				     TREE_TYPE (arg1), arg1, t2);
-		    suppress_warning (t2, OPT_Wshift_count_overflow);
-		    tree t3 = build2_loc (loc, BIT_IOR_EXPR,
-					  TREE_TYPE (arg1), t1, t2);
-		    tree t4 = build2_loc (loc, NE_EXPR, boolean_type_node,
+		    t2 = build2_loc (loc, (code == LROTATE_पाहायाग
+					   ? RSHIFT_पाहायाग : LSHIFT_पाहायाग),
+				     पुनो_TYPE (arg1), arg1, t2);
+		    suppress_warning (t2, OPT_Wshift_बिलांग_overflow);
+		    पुनो t3 = build2_loc (loc, BIT_IOR_पाहायाग,
+					  पुनो_TYPE (arg1), t1, t2);
+		    पुनो t4 = build2_loc (loc, NE_पाहायाग, boolean_type_बुहोल,
 					  arg2,
-					  build_zero_cst (TREE_TYPE (arg2)));
-		    t4 = build2_loc (loc, COMPOUND_EXPR, boolean_type_node,
+					  build_zero_cst (पुनो_TYPE (arg2)));
+		    t4 = build2_loc (loc, COMPOUND_पाहायाग, boolean_type_बुहोल,
 				     arg1, t4);
-		    expr.value = build3_loc (loc, COND_EXPR,
-					     TREE_TYPE (arg1), t4, t3, arg1);
+		    पाहायाग.हालागा = build3_loc (loc, COND_पाहायाग,
+					     पुनो_TYPE (arg1), t4, t3, arg1);
 		  }
-		if (instrument_expr)
-		  expr.value = build2_loc (loc, COMPOUND_EXPR,
-					   TREE_TYPE (expr.value),
-					   instrument_expr, expr.value);
-		set_c_expr_source_range (&expr, loc, close_paren_loc);
+		if (instrument_पाहायाग)
+		  पाहायाग.हालागा = build2_loc (loc, COMPOUND_पाहायाग,
+					   पुनो_TYPE (पाहायाग.हालागा),
+					   instrument_पाहायाग, पाहायाग.हालागा);
+		set_c_पाहायाग_source_range (&पाहायाग, loc, close_paren_loc);
 		break;
 	      }
-	    tree barg1 = arg;
+	    पुनो barg1 = arg;
 	    switch (stdc_rid)
 	      {
 	      case C_BUILTIN_STDC_BIT_CEIL:
-		arg = save_expr (arg);
-		barg1 = build2_loc (loc, PLUS_EXPR, type, arg,
+		arg = save_पाहायाग (arg);
+		barg1 = build2_loc (loc, PLUS_पाहायाग, type, arg,
 				    build_int_cst (type, -1));
 		break;
 	      case C_BUILTIN_STDC_BIT_FLOOR:
-		barg1 = arg = save_expr (arg);
+		barg1 = arg = save_पाहायाग (arg);
 		break;
-	      case C_BUILTIN_STDC_COUNT_ZEROS:
+	      case C_BUILTIN_STDC_बिलांग_ZEROS:
 	      case C_BUILTIN_STDC_FIRST_LEADING_ZERO:
 	      case C_BUILTIN_STDC_FIRST_TRAILING_ZERO:
 	      case C_BUILTIN_STDC_LEADING_ONES:
 	      case C_BUILTIN_STDC_TRAILING_ONES:
-		barg1 = build1_loc (loc, BIT_NOT_EXPR, type, arg);
+		barg1 = build1_loc (loc, BIT_NOT_पाहायाग, type, arg);
 		break;
 	      default:
 		break;
 	      }
-	    tree barg2 = NULL_TREE;
+	    पुनो barg2 = NULL_पुनो;
 	    switch (stdc_rid)
 	      {
 	      case C_BUILTIN_STDC_BIT_WIDTH:
@@ -13433,18 +13433,18 @@ c_parser_postfix_expression (c_parser *parser)
 	      case C_BUILTIN_STDC_LEADING_ZEROS:
 	      case C_BUILTIN_STDC_TRAILING_ONES:
 	      case C_BUILTIN_STDC_TRAILING_ZEROS:
-		barg2 = build_int_cst (integer_type_node, prec);
+		barg2 = build_int_cst (integer_type_बुहोल, prec);
 		break;
 	      case C_BUILTIN_STDC_FIRST_LEADING_ONE:
 	      case C_BUILTIN_STDC_FIRST_LEADING_ZERO:
 	      case C_BUILTIN_STDC_FIRST_TRAILING_ONE:
 	      case C_BUILTIN_STDC_FIRST_TRAILING_ZERO:
-		barg2 = integer_minus_one_node;
+		barg2 = integer_minus_one_बुहोल;
 		break;
 	      default:
 		break;
 	      }
-	    tree fndecl = NULL_TREE;
+	    पुनो fndecl = NULL_पुनो;
 	    switch (stdc_rid)
 	      {
 	      case C_BUILTIN_STDC_BIT_CEIL:
@@ -13462,8 +13462,8 @@ c_parser_postfix_expression (c_parser *parser)
 	      case C_BUILTIN_STDC_TRAILING_ZEROS:
 		fndecl = builtin_decl_explicit (BUILT_IN_CTZG);
 		break;
-	      case C_BUILTIN_STDC_COUNT_ONES:
-	      case C_BUILTIN_STDC_COUNT_ZEROS:
+	      case C_BUILTIN_STDC_बिलांग_ONES:
+	      case C_BUILTIN_STDC_बिलांग_ZEROS:
 	      case C_BUILTIN_STDC_HAS_SINGLE_BIT:
 		fndecl = builtin_decl_explicit (BUILT_IN_POPCOUNTG);
 		break;
@@ -13471,25 +13471,25 @@ c_parser_postfix_expression (c_parser *parser)
 		gcc_unreachable ();
 	      }
 	    /* Construct a call to __builtin_{clz,ctz,popcount}g.  */
-	    int nargs = barg2 != NULL_TREE ? 2 : 1;
-	    vec<tree, va_gc> *args;
-	    vec_alloc (args, nargs);
-	    vec<tree, va_gc> *origtypes;
+	    int nargs = barg2 != NULL_पुनो ? 2 : 1;
+	    vec<पुनो, va_gc> *मगा_कातविरान;
+	    vec_alloc (मगा_कातविरान, nargs);
+	    vec<पुनो, va_gc> *origtypes;
 	    vec_alloc (origtypes, nargs);
 	    auto_vec<location_t> arg_loc (nargs);
-	    args->quick_push (barg1);
-	    arg_loc.quick_push (arg_p->get_location ());
-	    origtypes->quick_push (arg_p->original_type);
+	    मगा_कातविरान->quick_इतुलाक (barg1);
+	    arg_loc.quick_इतुलाक (arg_p->get_location ());
+	    origtypes->quick_इतुलाक (arg_p->original_type);
 	    if (nargs == 2)
 	      {
-		args->quick_push (barg2);
-		arg_loc.quick_push (loc);
-		origtypes->quick_push (integer_type_node);
+		मगा_कातविरान->quick_इतुलाक (barg2);
+		arg_loc.quick_इतुलाक (loc);
+		origtypes->quick_इतुलाक (integer_type_बुहोल);
 	      }
-	    expr.value = c_build_function_call_vec (loc, arg_loc, fndecl,
-						    args, origtypes);
-	    set_c_expr_source_range (&expr, loc, close_paren_loc);
-	    if (expr.value == error_mark_node)
+	    पाहायाग.हालागा = c_build_function_call_vec (loc, arg_loc, fndecl,
+						    मगा_कातविरान, origtypes);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_paren_loc);
+	    if (पाहायाग.हालागा == error_mark_बुहोल)
 	      break;
 	    switch (stdc_rid)
 	      {
@@ -13498,20 +13498,20 @@ c_parser_postfix_expression (c_parser *parser)
 		--prec;
 		/* FALLTHRU */
 	      case C_BUILTIN_STDC_BIT_WIDTH:
-		expr.value = build2_loc (loc, MINUS_EXPR, integer_type_node,
-					 build_int_cst (integer_type_node,
-							prec), expr.value);
+		पाहायाग.हालागा = build2_loc (loc, MINUS_पाहायाग, integer_type_बुहोल,
+					 build_int_cst (integer_type_बुहोल,
+							prec), पाहायाग.हालागा);
 		break;
 	      case C_BUILTIN_STDC_FIRST_LEADING_ONE:
 	      case C_BUILTIN_STDC_FIRST_LEADING_ZERO:
 	      case C_BUILTIN_STDC_FIRST_TRAILING_ONE:
 	      case C_BUILTIN_STDC_FIRST_TRAILING_ZERO:
-		expr.value = build2_loc (loc, PLUS_EXPR, integer_type_node,
-					 expr.value, integer_one_node);
+		पाहायाग.हालागा = build2_loc (loc, PLUS_पाहायाग, integer_type_बुहोल,
+					 पाहायाग.हालागा, integer_one_बुहोल);
 		break;
 	      case C_BUILTIN_STDC_HAS_SINGLE_BIT:
-		expr.value = build2_loc (loc, EQ_EXPR, boolean_type_node,
-					 expr.value, integer_one_node);
+		पाहायाग.हालागा = build2_loc (loc, EQ_पाहायाग, boolean_type_बुहोल,
+					 पाहायाग.हालागा, integer_one_बुहोल);
 		break;
 	      default:
 		break;
@@ -13521,8 +13521,8 @@ c_parser_postfix_expression (c_parser *parser)
 		&& stdc_rid != C_BUILTIN_STDC_BIT_FLOOR)
 	      {
 		if (stdc_rid != C_BUILTIN_STDC_HAS_SINGLE_BIT)
-		  expr.value = fold_convert_loc (loc, unsigned_type_node,
-						 expr.value);
+		  पाहायाग.हालागा = fold_convert_loc (loc, unsigned_type_बुहोल,
+						 पाहायाग.हालागा);
 		break;
 	      }
 	    /* For __builtin_stdc_bit_ceil (0U) or __builtin_stdc_bit_ceil (1U)
@@ -13530,34 +13530,34 @@ c_parser_postfix_expression (c_parser *parser)
 	       warnings.  The LSHIFT_EXPR is in dead code in that case.  */
 	    if (integer_zerop (arg)
 		|| (stdc_rid == C_BUILTIN_STDC_BIT_CEIL && integer_onep (arg)))
-	      expr.value = build_int_cst (type, 0);
+	      पाहायाग.हालागा = build_int_cst (type, 0);
 	    else
-	      expr.value
-		= build2_loc (loc, LSHIFT_EXPR, type,
+	      पाहायाग.हालागा
+		= build2_loc (loc, LSHIFT_पाहायाग, type,
 			      build_int_cst (type,
 					     (stdc_rid
 					      == C_BUILTIN_STDC_BIT_CEIL
-					      ? 2 : 1)), expr.value);
+					      ? 2 : 1)), पाहायाग.हालागा);
 	    if (stdc_rid == C_BUILTIN_STDC_BIT_CEIL)
-	      expr.value = build3_loc (loc, COND_EXPR, type,
-				       build2_loc (loc, LE_EXPR,
-						   boolean_type_node, arg,
+	      पाहायाग.हालागा = build3_loc (loc, COND_पाहायाग, type,
+				       build2_loc (loc, LE_पाहायाग,
+						   boolean_type_बुहोल, arg,
 						   build_int_cst (type, 1)),
 				       build_int_cst (type, 1),
-				       expr.value);
+				       पाहायाग.हालागा);
 	    else
-	      expr.value = build3_loc (loc, COND_EXPR, type,
-				       build2_loc (loc, EQ_EXPR,
-						   boolean_type_node, arg,
+	      पाहायाग.हालागा = build3_loc (loc, COND_पाहायाग, type,
+				       build2_loc (loc, EQ_पाहायाग,
+						   boolean_type_बुहोल, arg,
 						   build_int_cst (type, 0)),
 				       build_int_cst (type, 0),
-				       expr.value);
+				       पाहायाग.हालागा);
 	    break;
 	  }
 	case RID_BUILTIN_BSWAPG:
 	case RID_BUILTIN_BITREVERSEG:
 	  {
-	    vec<c_expr_t, va_gc> *cexpr_list;
+	    vec<c_पाहायाग_t, va_gc> *cexpr_list;
 	    location_t close_paren_loc;
 	    internal_fn ifn
 	      = (c_parser_peek_token (parser)->keyword == RID_BUILTIN_BSWAPG
@@ -13567,54 +13567,54 @@ c_parser_postfix_expression (c_parser *parser)
 		 : "__builtin_bitreverseg");
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser, name, &cexpr_list, false,
+	    if (!c_parser_get_builtin_मगा_कातविरान (parser, name, &cexpr_list, false,
 					    &close_paren_loc))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
 	    if (vec_safe_length (cexpr_list) != 1)
 	      {
 		error_at (loc, "wrong number of arguments to %qs", name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 
-	    c_expr_t *arg_p = &(*cexpr_list)[0];
+	    c_पाहायाग_t *arg_p = &(*cexpr_list)[0];
 	    *arg_p = convert_lvalue_to_rvalue (loc, *arg_p, true, true);
-	    tree arg = arg_p->value;
+	    पुनो arg = arg_p->हालागा;
 	    if (error_operand_p (arg))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    tree type = TYPE_MAIN_VARIANT (TREE_TYPE (arg));
+	    पुनो type = TYPE_MAIN_VARIANT (पुनो_TYPE (arg));
 	    if (!INTEGRAL_TYPE_P (type))
 	      {
 		error_at (loc, "%qs operand not an integral type", name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    if (TREE_CODE (type) == ENUMERAL_TYPE)
+	    if (पुनो_CODE (type) == ENUMERAL_TYPE)
 	      {
 		error_at (loc, "argument %u in call to function "
 			  "%qs has enumerated type", 1, name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    if (TREE_CODE (type) == BOOLEAN_TYPE)
+	    if (पुनो_CODE (type) == BOOLEAN_TYPE)
 	      {
 		error_at (loc, "argument %u in call to function "
 			  "%qs has boolean type", 1, name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    if (!TYPE_UNSIGNED (type))
 	      {
 		error_at (loc, "argument 1 in call to function "
 			  "%qs has signed type", name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    if (ifn == IFN_BSWAP && (TYPE_PRECISION (type) % 8) != 0)
@@ -13622,12 +13622,12 @@ c_parser_postfix_expression (c_parser *parser)
 		error_at (loc, "precision %d of argument 1 to function "
 			  "%qs is not a multiple of 8",
 			  TYPE_PRECISION (type), name);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    arg = c_fully_fold (arg, false, NULL);
-	    expr.value = fold_build_builtin_bswapg_bitreverseg (loc, ifn, arg);
-	    set_c_expr_source_range (&expr, loc, close_paren_loc);
+	    पाहायाग.हालागा = fold_build_builtin_bswapg_bitreverseg (loc, ifn, arg);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_paren_loc);
 	    break;
 	  }
 	case RID_AT_SELECTOR:
@@ -13637,14 +13637,14 @@ c_parser_postfix_expression (c_parser *parser)
 	    matching_parens parens;
 	    if (!parens.require_open (parser))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    tree sel = c_parser_objc_selector_arg (parser);
+	    पुनो sel = c_parser_objc_selector_arg (parser);
 	    location_t close_loc = c_parser_peek_token (parser)->location;
 	    parens.skip_until_found_close (parser);
-	    expr.value = objc_build_selector_expr (loc, sel);
-	    set_c_expr_source_range (&expr, loc, close_loc);
+	    पाहायाग.हालागा = objc_build_selector_पाहायाग (loc, sel);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_loc);
 	  }
 	  break;
 	case RID_AT_PROTOCOL:
@@ -13654,22 +13654,22 @@ c_parser_postfix_expression (c_parser *parser)
 	    matching_parens parens;
 	    if (!parens.require_open (parser))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    if (c_parser_next_token_is_not (parser, CPP_NAME))
 	      {
 		c_parser_error (parser, "expected identifier");
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    tree id = c_parser_peek_token (parser)->value;
+	    पुनो id = c_parser_peek_token (parser)->हालागा;
 	    c_parser_consume_token (parser);
 	    location_t close_loc = c_parser_peek_token (parser)->location;
 	    parens.skip_until_found_close (parser);
-	    expr.value = objc_build_protocol_expr (id);
-	    set_c_expr_source_range (&expr, loc, close_loc);
+	    पाहायाग.हालागा = objc_build_protocol_पाहायाग (id);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_loc);
 	  }
 	  break;
 	case RID_AT_ENCODE:
@@ -13680,81 +13680,81 @@ c_parser_postfix_expression (c_parser *parser)
 	    matching_parens parens;
 	    if (!parens.require_open (parser))
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
 	    t1 = c_parser_type_name (parser);
 	    if (t1 == NULL)
 	      {
-		expr.set_error ();
+		पाहायाग.set_error ();
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
 		break;
 	      }
 	    location_t close_loc = c_parser_peek_token (parser)->location;
 	    parens.skip_until_found_close (parser);
-	    tree type = groktypename (t1, NULL, NULL);
-	    expr.value = objc_build_encode_expr (type);
-	    set_c_expr_source_range (&expr, loc, close_loc);
+	    पुनो type = groktypename (t1, NULL, NULL);
+	    पाहायाग.हालागा = objc_build_encode_पाहायाग (type);
+	    set_c_पाहायाग_source_range (&पाहायाग, loc, close_loc);
 	  }
 	  break;
 	case RID_GENERIC:
-	  expr = c_parser_generic_selection (parser);
+	  पाहायाग = c_parser_generic_selection (parser);
 	  break;
 	case RID_OMP_ALL_MEMORY:
 	  gcc_assert (flag_openmp);
 	  c_parser_consume_token (parser);
 	  error_at (loc, "%<omp_all_memory%> may only be used in OpenMP "
 			 "%<depend%> clause");
-	  expr.set_error ();
+	  पाहायाग.set_error ();
 	  break;
 	/* C23 'nullptr' literal.  */
 	case RID_NULLPTR:
 	  c_parser_consume_token (parser);
-	  expr.value = nullptr_node;
-	  set_c_expr_source_range (&expr, tok_range);
+	  पाहायाग.हालागा = nullptr_बुहोल;
+	  set_c_पाहायाग_source_range (&पाहायाग, tok_range);
 	  pedwarn_c11 (loc, OPT_Wpedantic,
 		       "ISO C does not support %qs before C23", "nullptr");
 	  break;
 	case RID_TRUE:
 	  c_parser_consume_token (parser);
-	  expr.value = boolean_true_node;
-	  set_c_expr_source_range (&expr, tok_range);
+	  पाहायाग.हालागा = boolean_true_बुहोल;
+	  set_c_पाहायाग_source_range (&पाहायाग, tok_range);
 	  break;
 	case RID_FALSE:
 	  c_parser_consume_token (parser);
-	  expr.value = boolean_false_node;
-	  set_c_expr_source_range (&expr, tok_range);
+	  पाहायाग.हालागा = boolean_false_बुहोल;
+	  set_c_पाहायाग_source_range (&पाहायाग, tok_range);
 	  break;
 	default:
 	  c_parser_error (parser, "expected expression");
-	  expr.set_error ();
+	  पाहायाग.set_error ();
 	  break;
 	}
       break;
     case CPP_OPEN_SQUARE:
       if (c_dialect_objc ())
 	{
-	  tree receiver, args;
+	  पुनो receiver, मगा_कातविरान;
 	  c_parser_consume_token (parser);
 	  receiver = c_parser_objc_receiver (parser);
-	  args = c_parser_objc_message_args (parser);
+	  मगा_कातविरान = c_parser_objc_message_मगा_कातविरान (parser);
 	  location_t close_loc = c_parser_peek_token (parser)->location;
 	  c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE,
 				     "expected %<]%>");
-	  expr.value = objc_build_message_expr (receiver, args);
-	  set_c_expr_source_range (&expr, loc, close_loc);
+	  पाहायाग.हालागा = objc_build_message_पाहायाग (receiver, मगा_कातविरान);
+	  set_c_पाहायाग_source_range (&पाहायाग, loc, close_loc);
 	  break;
 	}
       /* Else fall through to report error.  */
       /* FALLTHRU */
     default:
       c_parser_error (parser, "expected expression");
-      expr.set_error ();
+      पाहायाग.set_error ();
       break;
     }
  out:
   return c_parser_postfix_expression_after_primary
-    (parser, EXPR_LOC_OR_LOC (expr.value, loc), expr);
+    (parser, पाहायाग_LOC_OR_LOC (पाहायाग.हालागा, loc), पाहायाग);
 }
 
 /* Parse a postfix expression after a parenthesized type name: the
@@ -13767,27 +13767,27 @@ c_parser_postfix_expression (c_parser *parser)
    location of the first token after the parentheses around the type
    name.  */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_postfix_expression_after_paren_type (c_parser *parser,
 					      struct c_declspecs *scspecs,
 					      struct c_type_name *type_name,
 					      location_t type_loc)
 {
-  tree type;
-  struct c_expr init;
+  पुनो type;
+  struct c_पाहायाग init;
   bool non_const;
-  struct c_expr expr;
+  struct c_पाहायाग पाहायाग;
   location_t start_loc;
-  tree type_expr = NULL_TREE;
-  bool type_expr_const = true;
+  पुनो type_पाहायाग = NULL_पुनो;
+  bool type_पाहायाग_const = true;
   bool constexpr_p = scspecs ? scspecs->constexpr_p : false;
   unsigned int underspec_state = 0;
   check_compound_literal_type (type_loc, type_name);
-  rich_location richloc (line_table, type_loc);
+  rich_location richloc (लिन्या_table, type_loc);
   start_loc = c_parser_peek_token (parser)->location;
   if (constexpr_p)
     {
-      underspec_state = start_underspecified_init (start_loc, NULL_TREE);
+      underspec_state = start_underspecified_init (start_loc, NULL_पुनो);
       /* A constexpr compound literal is subject to the constraints on
 	 underspecified declarations, which may not declare tags or
 	 members or structures or unions; it is undefined behavior to
@@ -13814,25 +13814,25 @@ c_parser_postfix_expression_after_paren_type (c_parser *parser,
 	  break;
 	}
     }
-  start_init (NULL_TREE, NULL,
+  start_init (NULL_पुनो, NULL,
 	      (global_bindings_p ()
 	       || (scspecs && scspecs->storage_class == csc_static)
 	       || constexpr_p), constexpr_p, &richloc);
-  type = groktypename (type_name, &type_expr, &type_expr_const);
+  type = groktypename (type_name, &type_पाहायाग, &type_पाहायाग_const);
   bool varsize_p = false;
-  if (type != error_mark_node && C_TYPE_VARIABLE_SIZE (type))
+  if (type != error_mark_बुहोल && C_TYPE_VARIABLE_SIZE (type))
     {
       pedwarn (type_loc, OPT_Wpedantic, "compound literal has variable size");
       varsize_p = true;
     }
-  else if (TREE_CODE (type) == FUNCTION_TYPE)
+  else if (पुनो_CODE (type) == FUNCTION_TYPE)
     {
       error_at (type_loc, "compound literal has function type");
-      type = error_mark_node;
+      type = error_mark_बुहोल;
     }
-  if (constexpr_p && type != error_mark_node)
+  if (constexpr_p && type != error_mark_बुहोल)
     {
-      tree type_no_array = strip_array_types (type);
+      पुनो type_no_array = strip_array_types (type);
       /* The type of a constexpr object must not be variably modified
 	 (which applies to all compound literals), volatile, atomic or
 	 restrict qualified or have a member with such a qualifier.
@@ -13850,16 +13850,16 @@ c_parser_postfix_expression_after_paren_type (c_parser *parser,
     }
   init = c_parser_braced_init (parser, type, false, NULL, varsize_p);
   if (constexpr_p)
-    finish_underspecified_init (NULL_TREE, underspec_state);
+    finish_underspecified_init (NULL_पुनो, underspec_state);
   finish_init ();
   maybe_warn_string_init (type_loc, type, init);
 
-  if (type != error_mark_node
+  if (type != error_mark_बुहोल
       && !ADDR_SPACE_GENERIC_P (TYPE_ADDR_SPACE (type))
       && current_function_decl)
     {
       error ("compound literal qualified by address-space qualifier");
-      type = error_mark_node;
+      type = error_mark_बुहोल;
     }
 
   if (!pedwarn_c90 (start_loc, OPT_Wpedantic,
@@ -13867,12 +13867,12 @@ c_parser_postfix_expression_after_paren_type (c_parser *parser,
     pedwarn_c11 (start_loc, OPT_Wpedantic,
 		 "ISO C forbids storage class specifiers in compound literals "
 		 "before C23");
-  non_const = ((init.value && TREE_CODE (init.value) == CONSTRUCTOR)
-	       ? CONSTRUCTOR_NON_CONST (init.value)
-	       : init.original_code == C_MAYBE_CONST_EXPR);
-  non_const |= !type_expr_const;
+  non_const = ((init.हालागा && पुनो_CODE (init.हालागा) == CONSTRUCTOR)
+	       ? CONSTRUCTOR_NON_CONST (init.हालागा)
+	       : init.original_code == C_MAYBE_CONST_पाहायाग);
+  non_const |= !type_पाहायाग_const;
   unsigned int alignas_align = 0;
-  if (type != error_mark_node
+  if (type != error_mark_बुहोल
       && type_name->specs->align_log != -1)
     {
       alignas_align = 1U << type_name->specs->align_log;
@@ -13884,36 +13884,36 @@ c_parser_postfix_expression_after_paren_type (c_parser *parser,
 	  alignas_align = 0;
 	}
     }
-  expr.value = build_compound_literal (start_loc, type, init.value, non_const,
+  पाहायाग.हालागा = build_compound_literal (start_loc, type, init.हालागा, non_const,
 				       alignas_align, scspecs);
-  set_c_expr_source_range (&expr, init.src_range);
-  expr.m_decimal = 0;
-  expr.original_code = ERROR_MARK;
-  expr.original_type = NULL;
-  if (type != error_mark_node
-      && expr.value != error_mark_node
-      && type_expr)
+  set_c_पाहायाग_source_range (&पाहायाग, init.src_range);
+  पाहायाग.m_decimal = 0;
+  पाहायाग.original_code = ERROR_MARK;
+  पाहायाग.original_type = NULL;
+  if (type != error_mark_बुहोल
+      && पाहायाग.हालागा != error_mark_बुहोल
+      && type_पाहायाग)
     {
-      if (TREE_CODE (expr.value) == C_MAYBE_CONST_EXPR)
+      if (पुनो_CODE (पाहायाग.हालागा) == C_MAYBE_CONST_पाहायाग)
 	{
-	  gcc_assert (C_MAYBE_CONST_EXPR_PRE (expr.value) == NULL_TREE);
-	  C_MAYBE_CONST_EXPR_PRE (expr.value) = type_expr;
+	  gcc_assert (C_MAYBE_CONST_पाहायाग_PRE (पाहायाग.हालागा) == NULL_पुनो);
+	  C_MAYBE_CONST_पाहायाग_PRE (पाहायाग.हालागा) = type_पाहायाग;
 	}
       else
 	{
 	  gcc_assert (!non_const);
-	  expr.value = build2 (C_MAYBE_CONST_EXPR, type,
-			       type_expr, expr.value);
+	  पाहायाग.हालागा = build2 (C_MAYBE_CONST_पाहायाग, type,
+			       type_पाहायाग, पाहायाग.हालागा);
 	}
     }
-  return c_parser_postfix_expression_after_primary (parser, start_loc, expr);
+  return c_parser_postfix_expression_after_primary (parser, start_loc, पाहायाग);
 }
 
 /* Callback function for sizeof_pointer_memaccess_warning to compare
    types.  */
 
 static bool
-sizeof_ptr_memacc_comptypes (tree type1, tree type2)
+sizeof_ptr_memacc_comptypes (पुनो type1, पुनो type2)
 {
   return comptypes (type1, type2) == 1;
 }
@@ -13925,13 +13925,13 @@ sizeof_ptr_memacc_comptypes (tree type1, tree type2)
    call.  */
 
 static void
-warn_for_abs (location_t loc, tree fndecl, tree arg)
+warn_for_abs (location_t loc, पुनो fndecl, पुनो arg)
 {
   /* Avoid warning in unreachable subexpressions.  */
   if (c_inhibit_evaluation_warnings)
     return;
 
-  tree atype = TREE_TYPE (arg);
+  पुनो atype = पुनो_TYPE (arg);
 
   /* Casts from pointers (and thus arrays and fndecls) will generate
      -Wint-conversion warnings.  Most other wrong types hopefully lead to type
@@ -13939,7 +13939,7 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
      types and possibly other exotic types.  */
   if (!INTEGRAL_TYPE_P (atype)
       && !SCALAR_FLOAT_TYPE_P (atype)
-      && TREE_CODE (atype) != COMPLEX_TYPE)
+      && पुनो_CODE (atype) != COMPLEX_TYPE)
     return;
 
   enum built_in_function fcode = DECL_FUNCTION_CODE (fndecl);
@@ -13953,12 +13953,12 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
       if (!INTEGRAL_TYPE_P (atype))
 	{
 	  if (SCALAR_FLOAT_TYPE_P (atype))
-	    warning_at (loc, OPT_Wabsolute_value,
+	    warning_at (loc, OPT_Wabsolute_हालागा,
 			"using integer absolute value function %qD when "
 			"argument is of floating-point type %qT",
 			fndecl, atype);
-	  else if (TREE_CODE (atype) == COMPLEX_TYPE)
-	    warning_at (loc, OPT_Wabsolute_value,
+	  else if (पुनो_CODE (atype) == COMPLEX_TYPE)
+	    warning_at (loc, OPT_Wabsolute_हालागा,
 			"using integer absolute value function %qD when "
 			"argument is of complex type %qT", fndecl, atype);
 	  else
@@ -13966,7 +13966,7 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
 	  return;
 	}
       if (TYPE_UNSIGNED (atype))
-	warning_at (loc, OPT_Wabsolute_value,
+	warning_at (loc, OPT_Wabsolute_हालागा,
 		    "taking the absolute value of unsigned type %qT "
 		    "has no effect", atype);
       break;
@@ -13977,16 +13977,16 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
 	  || DECIMAL_FLOAT_MODE_P (TYPE_MODE (atype)))
 	{
 	  if (INTEGRAL_TYPE_P (atype))
-	    warning_at (loc, OPT_Wabsolute_value,
+	    warning_at (loc, OPT_Wabsolute_हालागा,
 			"using floating-point absolute value function %qD "
 			"when argument is of integer type %qT", fndecl, atype);
 	  else if (DECIMAL_FLOAT_TYPE_P (atype))
-	    warning_at (loc, OPT_Wabsolute_value,
+	    warning_at (loc, OPT_Wabsolute_हालागा,
 			"using floating-point absolute value function %qD "
 			"when argument is of decimal floating-point type %qT",
 			fndecl, atype);
-	  else if (TREE_CODE (atype) == COMPLEX_TYPE)
-	    warning_at (loc, OPT_Wabsolute_value,
+	  else if (पुनो_CODE (atype) == COMPLEX_TYPE)
+	    warning_at (loc, OPT_Wabsolute_हालागा,
 			"using floating-point absolute value function %qD when "
 			"argument is of complex type %qT", fndecl, atype);
 	  else
@@ -13996,14 +13996,14 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
       break;
 
     CASE_FLT_FN (BUILT_IN_CABS):
-      if (TREE_CODE (atype) != COMPLEX_TYPE)
+      if (पुनो_CODE (atype) != COMPLEX_TYPE)
 	{
 	  if (INTEGRAL_TYPE_P (atype))
-	    warning_at (loc, OPT_Wabsolute_value,
+	    warning_at (loc, OPT_Wabsolute_हालागा,
 			"using complex absolute value function %qD when "
 			"argument is of integer type %qT", fndecl, atype);
 	  else if (SCALAR_FLOAT_TYPE_P (atype))
-	    warning_at (loc, OPT_Wabsolute_value,
+	    warning_at (loc, OPT_Wabsolute_हालागा,
 			"using complex absolute value function %qD when "
 			"argument is of floating-point type %qT",
 			fndecl, atype);
@@ -14021,17 +14021,17 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
       if (!DECIMAL_FLOAT_TYPE_P (atype))
 	{
 	  if (INTEGRAL_TYPE_P (atype))
-	    warning_at (loc, OPT_Wabsolute_value,
+	    warning_at (loc, OPT_Wabsolute_हालागा,
 			"using decimal floating-point absolute value "
 			"function %qD when argument is of integer type %qT",
 			fndecl, atype);
 	  else if (SCALAR_FLOAT_TYPE_P (atype))
-	    warning_at (loc, OPT_Wabsolute_value,
+	    warning_at (loc, OPT_Wabsolute_हालागा,
 			"using decimal floating-point absolute value "
 			"function %qD when argument is of floating-point "
 			"type %qT", fndecl, atype);
-	  else if (TREE_CODE (atype) == COMPLEX_TYPE)
-	    warning_at (loc, OPT_Wabsolute_value,
+	  else if (पुनो_CODE (atype) == COMPLEX_TYPE)
+	    warning_at (loc, OPT_Wabsolute_हालागा,
 			"using decimal floating-point absolute value "
 			"function %qD when argument is of complex type %qT",
 			fndecl, atype);
@@ -14045,19 +14045,19 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
       return;
     }
 
-  if (!TYPE_ARG_TYPES (TREE_TYPE (fndecl)))
+  if (!TYPE_ARG_TYPES (पुनो_TYPE (fndecl)))
     return;
 
-  tree ftype = TREE_VALUE (TYPE_ARG_TYPES (TREE_TYPE (fndecl)));
-  if (TREE_CODE (atype) == COMPLEX_TYPE)
+  पुनो ftype = पुनो_हालागा (TYPE_ARG_TYPES (पुनो_TYPE (fndecl)));
+  if (पुनो_CODE (atype) == COMPLEX_TYPE)
     {
-      gcc_assert (TREE_CODE (ftype) == COMPLEX_TYPE);
-      atype = TREE_TYPE (atype);
-      ftype = TREE_TYPE (ftype);
+      gcc_assert (पुनो_CODE (ftype) == COMPLEX_TYPE);
+      atype = पुनो_TYPE (atype);
+      ftype = पुनो_TYPE (ftype);
     }
 
   if (TYPE_PRECISION (ftype) < TYPE_PRECISION (atype))
-    warning_at (loc, OPT_Wabsolute_value,
+    warning_at (loc, OPT_Wabsolute_हालागा,
 		"absolute value function %qD given an argument of type %qT "
 		"but has parameter of type %qT which may cause truncation "
 		"of value", fndecl, atype, ftype);
@@ -14069,19 +14069,19 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
 
    EXPR_LOC is the location of the primary expression.  */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_postfix_expression_after_primary (c_parser *parser,
-					   location_t expr_loc,
-					   struct c_expr expr)
+					   location_t पाहायाग_loc,
+					   struct c_पाहायाग पाहायाग)
 {
-  struct c_expr orig_expr;
-  tree ident, idx, len;
+  struct c_पाहायाग orig_पाहायाग;
+  पुनो ident, idx, len;
   location_t sizeof_arg_loc[6], comp_loc;
-  tree sizeof_arg[6];
+  पुनो sizeof_arg[6];
   unsigned int literal_zero_mask;
   unsigned int i;
-  vec<tree, va_gc> *exprlist;
-  vec<tree, va_gc> *origtypes = NULL;
+  vec<पुनो, va_gc> *exprlist;
+  vec<पुनो, va_gc> *origtypes = NULL;
   vec<location_t> arg_loc = vNULL;
   location_t start;
   location_t finish;
@@ -14094,33 +14094,33 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 	case CPP_OPEN_SQUARE:
 	  /* Array reference.  */
 	  c_parser_consume_token (parser);
-	  idx = len = NULL_TREE;
+	  idx = len = NULL_पुनो;
 	  if (!c_omp_array_section_p
 	      || c_parser_next_token_is_not (parser, CPP_COLON))
-	    idx = c_parser_expression (parser).value;
+	    idx = c_parser_expression (parser).हालागा;
 
 	  if (c_omp_array_section_p
 	      && c_parser_next_token_is (parser, CPP_COLON))
 	    {
 	      c_parser_consume_token (parser);
 	      if (c_parser_next_token_is_not (parser, CPP_CLOSE_SQUARE))
-		len = c_parser_expression (parser).value;
+		len = c_parser_expression (parser).हालागा;
 
-	      expr.value = build_omp_array_section (op_loc, expr.value, idx,
+	      पाहायाग.हालागा = build_omp_array_section (op_loc, पाहायाग.हालागा, idx,
 						    len);
 	    }
 	  else
-	    expr.value = build_array_ref (op_loc, expr.value, idx);
+	    पाहायाग.हालागा = build_array_ref (op_loc, पाहायाग.हालागा, idx);
 
 	  c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE,
 				     "expected %<]%>");
 
-	  start = expr.get_start ();
+	  start = पाहायाग.get_start ();
 	  finish = parser->tokens_buf[0].location;
-	  set_c_expr_source_range (&expr, start, finish);
-	  expr.original_code = ERROR_MARK;
-	  expr.original_type = NULL;
-	  expr.m_decimal = 0;
+	  set_c_पाहायाग_source_range (&पाहायाग, start, finish);
+	  पाहायाग.original_code = ERROR_MARK;
+	  पाहायाग.original_type = NULL;
+	  पाहायाग.m_decimal = 0;
 	  break;
 	case CPP_OPEN_PAREN:
 	  /* Function call.  */
@@ -14129,14 +14129,14 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 	    parens.consume_open (parser);
 	    for (i = 0; i < 6; i++)
 	      {
-		sizeof_arg[i] = NULL_TREE;
+		sizeof_arg[i] = NULL_पुनो;
 		sizeof_arg_loc[i] = UNKNOWN_LOCATION;
 	      }
 	    literal_zero_mask = 0;
 	    if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	      exprlist = NULL;
-	    else if (TREE_CODE (expr.value) == FUNCTION_DECL
-		     && fndecl_built_in_p (expr.value, BUILT_IN_CLASSIFY_TYPE)
+	    else if (पुनो_CODE (पाहायाग.हालागा) == FUNCTION_DECL
+		     && fndecl_built_in_p (पाहायाग.हालागा, BUILT_IN_CLASSIFY_TYPE)
 		     && c_parser_next_tokens_start_typename (parser,
 							     cla_prefer_id))
 	      {
@@ -14147,189 +14147,189 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 		c_inhibit_evaluation_warnings--;
 		in_alignof--;
 		struct c_typespec ret;
-		ret.expr = NULL_TREE;
-		ret.spec = error_mark_node;
-		ret.expr_const_operands = false;
+		ret.पाहायाग = NULL_पुनो;
+		ret.spec = error_mark_बुहोल;
+		ret.पाहायाग_const_operands = false;
 		if (type != NULL)
-		  ret.spec = groktypename (type, &ret.expr,
-					   &ret.expr_const_operands);
+		  ret.spec = groktypename (type, &ret.पाहायाग,
+					   &ret.पाहायाग_const_operands);
 		parens.skip_until_found_close (parser);
-		expr.value = build_int_cst (integer_type_node,
+		पाहायाग.हालागा = build_int_cst (integer_type_बुहोल,
 					    type_to_class (ret.spec));
 		break;
 	      }
 	    else
-	      exprlist = c_parser_expr_list (parser, true, false, &origtypes,
+	      exprlist = c_parser_पाहायाग_list (parser, true, false, &origtypes,
 					     sizeof_arg_loc, sizeof_arg,
 					     &arg_loc, &literal_zero_mask);
 	    parens.skip_until_found_close (parser);
 	  }
-	  orig_expr = expr;
-	  mark_exp_read (expr.value);
+	  orig_पाहायाग = पाहायाग;
+	  mark_exp_read (पाहायाग.हालागा);
 	  if (warn_sizeof_pointer_memaccess)
 	    sizeof_pointer_memaccess_warning (sizeof_arg_loc,
-					      expr.value, exprlist,
+					      पाहायाग.हालागा, exprlist,
 					      sizeof_arg,
 					      sizeof_ptr_memacc_comptypes);
-	  if (TREE_CODE (expr.value) == FUNCTION_DECL)
+	  if (पुनो_CODE (पाहायाग.हालागा) == FUNCTION_DECL)
 	    {
-	      if (fndecl_built_in_p (expr.value, BUILT_IN_MEMSET)
+	      if (fndecl_built_in_p (पाहायाग.हालागा, BUILT_IN_MEMSET)
 		  && vec_safe_length (exprlist) == 3)
 		{
-		  tree arg0 = (*exprlist)[0];
-		  tree arg2 = (*exprlist)[2];
-		  warn_for_memset (expr_loc, arg0, arg2, literal_zero_mask);
+		  पुनो arg0 = (*exprlist)[0];
+		  पुनो arg2 = (*exprlist)[2];
+		  warn_for_memset (पाहायाग_loc, arg0, arg2, literal_zero_mask);
 		}
-	      if (warn_absolute_value
-		  && fndecl_built_in_p (expr.value, BUILT_IN_NORMAL)
+	      if (warn_absolute_हालागा
+		  && fndecl_built_in_p (पाहायाग.हालागा, BUILT_IN_NORMAL)
 		  && vec_safe_length (exprlist) == 1)
-		warn_for_abs (expr_loc, expr.value, (*exprlist)[0]);
+		warn_for_abs (पाहायाग_loc, पाहायाग.हालागा, (*exprlist)[0]);
 	      if (parser->omp_for_parse_state
 		  && parser->omp_for_parse_state->in_intervening_code
-		  && omp_runtime_api_call (expr.value))
+		  && omp_runtime_api_call (पाहायाग.हालागा))
 		{
-		  error_at (expr_loc, "calls to the OpenMP runtime API are "
+		  error_at (पाहायाग_loc, "calls to the OpenMP runtime API are "
 				      "not permitted in intervening code");
 		  parser->omp_for_parse_state->fail = true;
 		}
-	      if (warn_calloc_transposed_args)
-		if (tree attr = lookup_attribute ("alloc_size",
+	      if (warn_calloc_transposed_मगा_कातविरान)
+		if (पुनो attr = lookup_attribute ("alloc_size",
 						  TYPE_ATTRIBUTES
-						    (TREE_TYPE (expr.value))))
-		  if (TREE_VALUE (attr) && TREE_CHAIN (TREE_VALUE (attr)))
-		    warn_for_calloc (sizeof_arg_loc, expr.value, exprlist,
+						    (पुनो_TYPE (पाहायाग.हालागा))))
+		  if (पुनो_हालागा (attr) && पुनो_CHAIN (पुनो_हालागा (attr)))
+		    warn_for_calloc (sizeof_arg_loc, पाहायाग.हालागा, exprlist,
 				     sizeof_arg, attr);
 	    }
 
-	  start = expr.get_start ();
+	  start = पाहायाग.get_start ();
 	  finish = parser->tokens_buf[0].get_finish ();
-	  expr.value
-	    = c_build_function_call_vec (expr_loc, arg_loc, expr.value,
+	  पाहायाग.हालागा
+	    = c_build_function_call_vec (पाहायाग_loc, arg_loc, पाहायाग.हालागा,
 					 exprlist, origtypes);
-	  set_c_expr_source_range (&expr, start, finish);
-	  expr.m_decimal = 0;
+	  set_c_पाहायाग_source_range (&पाहायाग, start, finish);
+	  पाहायाग.m_decimal = 0;
 
-	  expr.original_code = ERROR_MARK;
-	  if (TREE_CODE (expr.value) == INTEGER_CST
-	      && TREE_CODE (orig_expr.value) == FUNCTION_DECL
-	      && fndecl_built_in_p (orig_expr.value, BUILT_IN_CONSTANT_P))
-	    expr.original_code = C_MAYBE_CONST_EXPR;
-	  expr.original_type = NULL;
+	  पाहायाग.original_code = ERROR_MARK;
+	  if (पुनो_CODE (पाहायाग.हालागा) == INTEGER_CST
+	      && पुनो_CODE (orig_पाहायाग.हालागा) == FUNCTION_DECL
+	      && fndecl_built_in_p (orig_पाहायाग.हालागा, BUILT_IN_CONSTANT_P))
+	    पाहायाग.original_code = C_MAYBE_CONST_पाहायाग;
+	  पाहायाग.original_type = NULL;
 	  if (exprlist)
 	    {
-	      release_tree_vector (exprlist);
-	      release_tree_vector (origtypes);
+	      release_पुनो_vector (exprlist);
+	      release_पुनो_vector (origtypes);
 	    }
 	  arg_loc.release ();
 	  break;
 	case CPP_DOT:
 	  /* Structure element reference.  */
 	  c_parser_consume_token (parser);
-	  expr = default_function_array_conversion (expr_loc, expr);
+	  पाहायाग = default_function_array_conversion (पाहायाग_loc, पाहायाग);
 	  if (c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      c_token *comp_tok = c_parser_peek_token (parser);
-	      ident = comp_tok->value;
+	      ident = comp_tok->हालागा;
 	      comp_loc = comp_tok->location;
 	    }
 	  else
 	    {
 	      c_parser_error (parser, "expected identifier");
-	      expr.set_error ();
-	      expr.original_code = ERROR_MARK;
-              expr.original_type = NULL;
-	      return expr;
+	      पाहायाग.set_error ();
+	      पाहायाग.original_code = ERROR_MARK;
+              पाहायाग.original_type = NULL;
+	      return पाहायाग;
 	    }
-	  start = expr.get_start ();
+	  start = पाहायाग.get_start ();
 	  finish = c_parser_peek_token (parser)->get_finish ();
 	  c_parser_consume_token (parser);
-	  expr.value = build_component_ref (op_loc, expr.value, ident,
+	  पाहायाग.हालागा = build_component_ref (op_loc, पाहायाग.हालागा, ident,
 					    comp_loc, UNKNOWN_LOCATION);
-	  set_c_expr_source_range (&expr, start, finish);
-	  expr.original_code = ERROR_MARK;
-	  if (TREE_CODE (expr.value) != COMPONENT_REF)
-	    expr.original_type = NULL;
+	  set_c_पाहायाग_source_range (&पाहायाग, start, finish);
+	  पाहायाग.original_code = ERROR_MARK;
+	  if (पुनो_CODE (पाहायाग.हालागा) != COMPONENT_REF)
+	    पाहायाग.original_type = NULL;
 	  else
 	    {
 	      /* Remember the original type of a bitfield.  */
-	      tree field = TREE_OPERAND (expr.value, 1);
-	      if (TREE_CODE (field) != FIELD_DECL)
-		expr.original_type = NULL;
+	      पुनो field = पुनो_OPERAND (पाहायाग.हालागा, 1);
+	      if (पुनो_CODE (field) != FIELD_DECL)
+		पाहायाग.original_type = NULL;
 	      else
-		expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		पाहायाग.original_type = DECL_BIT_FIELD_TYPE (field);
 	    }
-	  expr.m_decimal = 0;
+	  पाहायाग.m_decimal = 0;
 	  break;
 	case CPP_DEREF:
 	  /* Structure element reference.  */
 	  c_parser_consume_token (parser);
-	  expr = convert_lvalue_to_rvalue (expr_loc, expr, true, false);
+	  पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, true, false);
 	  if (c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      c_token *comp_tok = c_parser_peek_token (parser);
-	      ident = comp_tok->value;
+	      ident = comp_tok->हालागा;
 	      comp_loc = comp_tok->location;
 	    }
 	  else
 	    {
 	      c_parser_error (parser, "expected identifier");
-	      expr.set_error ();
-	      expr.original_code = ERROR_MARK;
-	      expr.original_type = NULL;
-	      return expr;
+	      पाहायाग.set_error ();
+	      पाहायाग.original_code = ERROR_MARK;
+	      पाहायाग.original_type = NULL;
+	      return पाहायाग;
 	    }
-	  start = expr.get_start ();
+	  start = पाहायाग.get_start ();
 	  finish = c_parser_peek_token (parser)->get_finish ();
 	  c_parser_consume_token (parser);
-	  expr.value = build_component_ref (op_loc,
+	  पाहायाग.हालागा = build_component_ref (op_loc,
 					    build_indirect_ref (op_loc,
-								expr.value,
+								पाहायाग.हालागा,
 								RO_ARROW),
 					    ident, comp_loc,
-					    expr.get_location ());
-	  set_c_expr_source_range (&expr, start, finish);
-	  expr.original_code = ERROR_MARK;
-	  if (TREE_CODE (expr.value) != COMPONENT_REF)
-	    expr.original_type = NULL;
+					    पाहायाग.get_location ());
+	  set_c_पाहायाग_source_range (&पाहायाग, start, finish);
+	  पाहायाग.original_code = ERROR_MARK;
+	  if (पुनो_CODE (पाहायाग.हालागा) != COMPONENT_REF)
+	    पाहायाग.original_type = NULL;
 	  else
 	    {
 	      /* Remember the original type of a bitfield.  */
-	      tree field = TREE_OPERAND (expr.value, 1);
-	      if (TREE_CODE (field) != FIELD_DECL)
-		expr.original_type = NULL;
+	      पुनो field = पुनो_OPERAND (पाहायाग.हालागा, 1);
+	      if (पुनो_CODE (field) != FIELD_DECL)
+		पाहायाग.original_type = NULL;
 	      else
-		expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		पाहायाग.original_type = DECL_BIT_FIELD_TYPE (field);
 	    }
-	  expr.m_decimal = 0;
+	  पाहायाग.m_decimal = 0;
 	  break;
 	case CPP_PLUS_PLUS:
 	  /* Postincrement.  */
-	  start = expr.get_start ();
+	  start = पाहायाग.get_start ();
 	  finish = c_parser_peek_token (parser)->get_finish ();
 	  c_parser_consume_token (parser);
-	  mark_exp_read_cond (expr.value);
-	  expr = default_function_array_conversion (expr_loc, expr);
-	  expr.value = build_unary_op (op_loc, POSTINCREMENT_EXPR,
-				       expr.value, false);
-	  set_c_expr_source_range (&expr, start, finish);
-	  expr.original_code = ERROR_MARK;
-	  expr.original_type = NULL;
+	  mark_exp_read_cond (पाहायाग.हालागा);
+	  पाहायाग = default_function_array_conversion (पाहायाग_loc, पाहायाग);
+	  पाहायाग.हालागा = build_unary_op (op_loc, POSTINCREMENT_पाहायाग,
+				       पाहायाग.हालागा, false);
+	  set_c_पाहायाग_source_range (&पाहायाग, start, finish);
+	  पाहायाग.original_code = ERROR_MARK;
+	  पाहायाग.original_type = NULL;
 	  break;
 	case CPP_MINUS_MINUS:
 	  /* Postdecrement.  */
-	  start = expr.get_start ();
+	  start = पाहायाग.get_start ();
 	  finish = c_parser_peek_token (parser)->get_finish ();
 	  c_parser_consume_token (parser);
-	  mark_exp_read_cond (expr.value);
-	  expr = default_function_array_conversion (expr_loc, expr);
-	  expr.value = build_unary_op (op_loc, POSTDECREMENT_EXPR,
-				       expr.value, false);
-	  set_c_expr_source_range (&expr, start, finish);
-	  expr.original_code = ERROR_MARK;
-	  expr.original_type = NULL;
+	  mark_exp_read_cond (पाहायाग.हालागा);
+	  पाहायाग = default_function_array_conversion (पाहायाग_loc, पाहायाग);
+	  पाहायाग.हालागा = build_unary_op (op_loc, POSTDECREMENT_पाहायाग,
+				       पाहायाग.हालागा, false);
+	  set_c_पाहायाग_source_range (&पाहायाग, start, finish);
+	  पाहायाग.original_code = ERROR_MARK;
+	  पाहायाग.original_type = NULL;
 	  break;
 	default:
-	  return expr;
+	  return पाहायाग;
 	}
     }
 }
@@ -14341,30 +14341,30 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
      expression , assignment-expression
 */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_expression (c_parser *parser)
 {
   location_t tloc = c_parser_peek_token (parser)->location;
-  struct c_expr expr;
-  expr = c_parser_expr_no_commas (parser, NULL);
+  struct c_पाहायाग पाहायाग;
+  पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
   if (c_parser_next_token_is (parser, CPP_COMMA))
-    expr = convert_lvalue_to_rvalue (tloc, expr, true, false);
+    पाहायाग = convert_lvalue_to_rvalue (tloc, पाहायाग, true, false);
   while (c_parser_next_token_is (parser, CPP_COMMA))
     {
-      struct c_expr next;
-      tree lhsval;
+      struct c_पाहायाग next;
+      पुनो lhsval;
       location_t loc = c_parser_peek_token (parser)->location;
-      location_t expr_loc;
+      location_t पाहायाग_loc;
       c_parser_consume_token (parser);
-      expr_loc = c_parser_peek_token (parser)->location;
-      lhsval = expr.value;
-      while (TREE_CODE (lhsval) == COMPOUND_EXPR
-	     || TREE_CODE (lhsval) == NOP_EXPR)
+      पाहायाग_loc = c_parser_peek_token (parser)->location;
+      lhsval = पाहायाग.हालागा;
+      while (पुनो_CODE (lhsval) == COMPOUND_पाहायाग
+	     || पुनो_CODE (lhsval) == NOP_पाहायाग)
 	{
-	  if (TREE_CODE (lhsval) == COMPOUND_EXPR)
-	    lhsval = TREE_OPERAND (lhsval, 1);
+	  if (पुनो_CODE (lhsval) == COMPOUND_पाहायाग)
+	    lhsval = पुनो_OPERAND (lhsval, 1);
 	  else
-	    lhsval = TREE_OPERAND (lhsval, 0);
+	    lhsval = पुनो_OPERAND (lhsval, 0);
 	}
       if (DECL_P (lhsval) || handled_component_p (lhsval))
 	mark_exp_read (lhsval);
@@ -14377,37 +14377,37 @@ c_parser_expression (c_parser *parser)
 	     the preprocessor.  Thus, parse the whole CPP_EMBED just
 	     as a single INTEGER_CST, the last byte in it.  */
 	  c_token *embed = c_parser_peek_token (parser);
-	  tree val = embed->value;
+	  पुनो val = embed->हालागा;
 	  unsigned last = RAW_DATA_LENGTH (val) - 1;
-	  next.value = build_int_cst (TREE_TYPE (val),
+	  next.हालागा = build_int_cst (पुनो_TYPE (val),
 				      RAW_DATA_UCHAR_ELT (val, last));
-	  next.original_type = integer_type_node;
+	  next.original_type = integer_type_बुहोल;
 	  c_parser_consume_token (parser);
 	}
       else
 	{
-	  next = c_parser_expr_no_commas (parser, NULL);
-	  next = convert_lvalue_to_rvalue (expr_loc, next, true, false);
+	  next = c_parser_पाहायाग_no_commas (parser, NULL);
+	  next = convert_lvalue_to_rvalue (पाहायाग_loc, next, true, false);
 	}
-      expr.value = build_compound_expr (loc, expr.value, next.value);
-      expr.original_code = COMPOUND_EXPR;
-      expr.original_type = next.original_type;
-      expr.m_decimal = 0;
+      पाहायाग.हालागा = build_compound_पाहायाग (loc, पाहायाग.हालागा, next.हालागा);
+      पाहायाग.original_code = COMPOUND_पाहायाग;
+      पाहायाग.original_type = next.original_type;
+      पाहायाग.m_decimal = 0;
     }
-  return expr;
+  return पाहायाग;
 }
 
 /* Parse an expression and convert functions or arrays to pointers and
    lvalues to rvalues.  */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_expression_conv (c_parser *parser)
 {
-  struct c_expr expr;
+  struct c_पाहायाग पाहायाग;
   location_t loc = c_parser_peek_token (parser)->location;
-  expr = c_parser_expression (parser);
-  expr = convert_lvalue_to_rvalue (loc, expr, true, false);
-  return expr;
+  पाहायाग = c_parser_expression (parser);
+  पाहायाग = convert_lvalue_to_rvalue (loc, पाहायाग, true, false);
+  return पाहायाग;
 }
 
 /* Helper function of c_parser_expr_list.  Check if IDXth (0 based)
@@ -14423,7 +14423,7 @@ c_parser_check_literal_zero (c_parser *parser, unsigned *literal_zero_mask,
   c_token *tok = c_parser_peek_token (parser);
   switch (tok->type)
     {
-    case CPP_NUMBER:
+    case CPP_नुमेरो:
     case CPP_CHAR:
     case CPP_WCHAR:
     case CPP_CHAR16:
@@ -14431,8 +14431,8 @@ c_parser_check_literal_zero (c_parser *parser, unsigned *literal_zero_mask,
     case CPP_UTF8CHAR:
       /* If a parameter is literal zero alone, remember it
 	 for -Wmemset-transposed-args warning.  */
-      if (integer_zerop (tok->value)
-	  && !TREE_OVERFLOW (tok->value)
+      if (integer_zerop (tok->हालागा)
+	  && !पुनो_OVERFLOW (tok->हालागा)
 	  && (c_parser_peek_2nd_token (parser)->type == CPP_COMMA
 	      || c_parser_peek_2nd_token (parser)->type == CPP_CLOSE_PAREN))
 	*literal_zero_mask |= 1U << idx;
@@ -14451,41 +14451,41 @@ c_parser_check_literal_zero (c_parser *parser, unsigned *literal_zero_mask,
      nonempty-expr-list , assignment-expression
 */
 
-static vec<tree, va_gc> *
-c_parser_expr_list (c_parser *parser, bool convert_p, bool fold_p,
-		    vec<tree, va_gc> **p_orig_types,
-		    location_t *sizeof_arg_loc, tree *sizeof_arg,
+static vec<पुनो, va_gc> *
+c_parser_पाहायाग_list (c_parser *parser, bool convert_p, bool fold_p,
+		    vec<पुनो, va_gc> **p_orig_types,
+		    location_t *sizeof_arg_loc, पुनो *sizeof_arg,
 		    vec<location_t> *locations,
 		    unsigned int *literal_zero_mask)
 {
-  vec<tree, va_gc> *ret;
-  vec<tree, va_gc> *orig_types;
-  struct c_expr expr;
+  vec<पुनो, va_gc> *ret;
+  vec<पुनो, va_gc> *orig_types;
+  struct c_पाहायाग पाहायाग;
   unsigned int idx = 0;
   bool save_c_omp_array_section_p = c_omp_array_section_p;
   c_omp_array_section_p = false;
 
-  ret = make_tree_vector ();
+  ret = make_पुनो_vector ();
   if (p_orig_types == NULL)
     orig_types = NULL;
   else
-    orig_types = make_tree_vector ();
+    orig_types = make_पुनो_vector ();
 
   if (literal_zero_mask)
     c_parser_check_literal_zero (parser, literal_zero_mask, 0);
-  expr = c_parser_expr_no_commas (parser, NULL);
+  पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
   if (convert_p)
-    expr = convert_lvalue_to_rvalue (expr.get_location (), expr, true, true);
+    पाहायाग = convert_lvalue_to_rvalue (पाहायाग.get_location (), पाहायाग, true, true);
   if (fold_p)
-    expr.value = c_fully_fold (expr.value, false, NULL);
-  ret->quick_push (expr.value);
+    पाहायाग.हालागा = c_fully_fold (पाहायाग.हालागा, false, NULL);
+  ret->quick_इतुलाक (पाहायाग.हालागा);
   if (orig_types)
-    orig_types->quick_push (expr.original_type);
+    orig_types->quick_इतुलाक (पाहायाग.original_type);
   if (locations)
-    locations->safe_push (expr.get_location ());
+    locations->safe_इतुलाक (पाहायाग.get_location ());
   if (sizeof_arg != NULL
-      && (expr.original_code == SIZEOF_EXPR
-	  || expr.original_code == PAREN_SIZEOF_EXPR))
+      && (पाहायाग.original_code == SIZEOF_पाहायाग
+	  || पाहायाग.original_code == PAREN_SIZEOF_पाहायाग))
     {
       sizeof_arg[0] = c_last_sizeof_arg;
       sizeof_arg_loc[0] = c_last_sizeof_loc;
@@ -14496,25 +14496,25 @@ c_parser_expr_list (c_parser *parser, bool convert_p, bool fold_p,
       if (c_parser_next_token_is (parser, CPP_EMBED))
 	{
 	  c_token *embed = c_parser_peek_token (parser);
-	  tree value = embed->value;
-	  expr.original_code = INTEGER_CST;
-	  expr.original_type = integer_type_node;
-	  expr.value = NULL_TREE;
-	  set_c_expr_source_range (&expr, embed->get_range ());
-	  expr.m_decimal = 0;
-	  for (unsigned int i = 0; i < (unsigned) RAW_DATA_LENGTH (value); i++)
+	  पुनो हालागा = embed->हालागा;
+	  पाहायाग.original_code = INTEGER_CST;
+	  पाहायाग.original_type = integer_type_बुहोल;
+	  पाहायाग.हालागा = NULL_पुनो;
+	  set_c_पाहायाग_source_range (&पाहायाग, embed->get_range ());
+	  पाहायाग.m_decimal = 0;
+	  for (unsigned int i = 0; i < (unsigned) RAW_DATA_LENGTH (हालागा); i++)
 	    {
 	      if (literal_zero_mask
 		  && idx + 1 < HOST_BITS_PER_INT
-		  && RAW_DATA_POINTER (value)[i] == 0)
+		  && RAW_DATA_POINTER (हालागा)[i] == 0)
 		*literal_zero_mask |= 1U << (idx + 1);
-	      expr.value = build_int_cst (integer_type_node,
-					  RAW_DATA_UCHAR_ELT (value, i));
-	      vec_safe_push (ret, expr.value);
+	      पाहायाग.हालागा = build_int_cst (integer_type_बुहोल,
+					  RAW_DATA_UCHAR_ELT (हालागा, i));
+	      vec_safe_इतुलाक (ret, पाहायाग.हालागा);
 	      if (orig_types)
-		vec_safe_push (orig_types, expr.original_type);
+		vec_safe_इतुलाक (orig_types, पाहायाग.original_type);
 	      if (locations)
-		locations->safe_push (expr.get_location ());
+		locations->safe_इतुलाक (पाहायाग.get_location ());
 	      ++idx;
 	    }
 	  c_parser_consume_token (parser);
@@ -14522,21 +14522,21 @@ c_parser_expr_list (c_parser *parser, bool convert_p, bool fold_p,
 	}
       if (literal_zero_mask)
 	c_parser_check_literal_zero (parser, literal_zero_mask, idx + 1);
-      expr = c_parser_expr_no_commas (parser, NULL);
+      पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
       if (convert_p)
-	expr = convert_lvalue_to_rvalue (expr.get_location (), expr, true,
+	पाहायाग = convert_lvalue_to_rvalue (पाहायाग.get_location (), पाहायाग, true,
 					 true);
       if (fold_p)
-	expr.value = c_fully_fold (expr.value, false, NULL);
-      vec_safe_push (ret, expr.value);
+	पाहायाग.हालागा = c_fully_fold (पाहायाग.हालागा, false, NULL);
+      vec_safe_इतुलाक (ret, पाहायाग.हालागा);
       if (orig_types)
-	vec_safe_push (orig_types, expr.original_type);
+	vec_safe_इतुलाक (orig_types, पाहायाग.original_type);
       if (locations)
-	locations->safe_push (expr.get_location ());
+	locations->safe_इतुलाक (पाहायाग.get_location ());
       if (++idx < 6
 	  && sizeof_arg != NULL
-	  && (expr.original_code == SIZEOF_EXPR
-	      || expr.original_code == PAREN_SIZEOF_EXPR))
+	  && (पाहायाग.original_code == SIZEOF_पाहायाग
+	      || पाहायाग.original_code == PAREN_SIZEOF_पाहायाग))
 	{
 	  sizeof_arg[idx] = c_last_sizeof_arg;
 	  sizeof_arg_loc[idx] = c_last_sizeof_loc;
@@ -14573,11 +14573,11 @@ c_parser_expr_list (c_parser *parser, bool convert_p, bool fold_p,
    objc-protocol-refs and objc-class-instance-variables are omitted.  */
 
 static void
-c_parser_objc_class_definition (c_parser *parser, tree attributes)
+c_parser_objc_class_definition (c_parser *parser, पुनो attributes)
 {
   bool iface_p;
-  tree id1;
-  tree superclass;
+  पुनो id1;
+  पुनो superclass;
   if (c_parser_next_token_is_keyword (parser, RID_AT_INTERFACE))
     iface_p = true;
   else if (c_parser_next_token_is_keyword (parser, RID_AT_IMPLEMENTATION))
@@ -14591,14 +14591,14 @@ c_parser_objc_class_definition (c_parser *parser, tree attributes)
       c_parser_error (parser, "expected identifier");
       return;
     }
-  id1 = c_parser_peek_token (parser)->value;
+  id1 = c_parser_peek_token (parser)->हालागा;
   location_t loc1 = c_parser_peek_token (parser)->location;
   c_parser_consume_token (parser);
   if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       /* We have a category or class extension.  */
-      tree id2;
-      tree proto = NULL_TREE;
+      पुनो id2;
+      पुनो proto = NULL_पुनो;
       matching_parens parens;
       parens.consume_open (parser);
       if (c_parser_next_token_is_not (parser, CPP_NAME))
@@ -14606,7 +14606,7 @@ c_parser_objc_class_definition (c_parser *parser, tree attributes)
 	  if (iface_p && c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	    {
 	      /* We have a class extension.  */
-	      id2 = NULL_TREE;
+	      id2 = NULL_पुनो;
 	    }
 	  else
 	    {
@@ -14617,7 +14617,7 @@ c_parser_objc_class_definition (c_parser *parser, tree attributes)
 	}
       else
 	{
-	  id2 = c_parser_peek_token (parser)->value;
+	  id2 = c_parser_peek_token (parser)->हालागा;
 	  c_parser_consume_token (parser);
 	}
       parens.skip_until_found_close (parser);
@@ -14642,14 +14642,14 @@ c_parser_objc_class_definition (c_parser *parser, tree attributes)
 	  c_parser_error (parser, "expected identifier");
 	  return;
 	}
-      superclass = c_parser_peek_token (parser)->value;
+      superclass = c_parser_peek_token (parser)->हालागा;
       c_parser_consume_token (parser);
     }
   else
-    superclass = NULL_TREE;
+    superclass = NULL_पुनो;
   if (iface_p)
     {
-      tree proto = NULL_TREE;
+      पुनो proto = NULL_पुनो;
       if (c_parser_next_token_is (parser, CPP_LESS))
 	proto = c_parser_objc_protocol_refs (parser);
       objc_start_class_interface (id1, loc1, superclass, proto, attributes);
@@ -14701,7 +14701,7 @@ c_parser_objc_class_instance_variables (c_parser *parser)
   c_parser_consume_token (parser);
   while (c_parser_next_token_is_not (parser, CPP_EOF))
     {
-      tree decls;
+      पुनो decls;
       /* Parse any stray semicolon.  */
       if (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	{
@@ -14743,7 +14743,7 @@ c_parser_objc_class_instance_variables (c_parser *parser)
 	}
       else if (c_parser_next_token_is (parser, CPP_PRAGMA))
 	{
-	  c_parser_pragma (parser, pragma_external, NULL, NULL_TREE);
+	  c_parser_pragma (parser, pragma_external, NULL, NULL_पुनो);
 	  continue;
 	}
 
@@ -14773,9 +14773,9 @@ c_parser_objc_class_instance_variables (c_parser *parser)
 	{
 	  /* Comma-separated instance variables are chained together
 	     in reverse order; add them one by one.  */
-	  tree ivar = nreverse (decls);
+	  पुनो ivar = nreverse (decls);
 	  for (; ivar; ivar = DECL_CHAIN (ivar))
-	    objc_add_instance_variable (copy_node (ivar));
+	    objc_add_instance_variable (copy_बुहोल (ivar));
 	}
       c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
     }
@@ -14796,7 +14796,7 @@ c_parser_objc_class_declaration (c_parser *parser)
      here.  */
   while (true)
     {
-      tree id;
+      पुनो id;
       if (c_parser_next_token_is_not (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected identifier");
@@ -14804,7 +14804,7 @@ c_parser_objc_class_declaration (c_parser *parser)
 	  parser->error = false;
 	  return;
 	}
-      id = c_parser_peek_token (parser)->value;
+      id = c_parser_peek_token (parser)->हालागा;
       objc_declare_class (id);
       c_parser_consume_token (parser);
       if (c_parser_next_token_is (parser, CPP_COMMA))
@@ -14824,7 +14824,7 @@ c_parser_objc_class_declaration (c_parser *parser)
 static void
 c_parser_objc_alias_declaration (c_parser *parser)
 {
-  tree id1, id2;
+  पुनो id1, id2;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_AT_ALIAS));
   c_parser_consume_token (parser);
   if (c_parser_next_token_is_not (parser, CPP_NAME))
@@ -14833,7 +14833,7 @@ c_parser_objc_alias_declaration (c_parser *parser)
       c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
       return;
     }
-  id1 = c_parser_peek_token (parser)->value;
+  id1 = c_parser_peek_token (parser)->हालागा;
   c_parser_consume_token (parser);
   if (c_parser_next_token_is_not (parser, CPP_NAME))
     {
@@ -14841,7 +14841,7 @@ c_parser_objc_alias_declaration (c_parser *parser)
       c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
       return;
     }
-  id2 = c_parser_peek_token (parser)->value;
+  id2 = c_parser_peek_token (parser)->हालागा;
   c_parser_consume_token (parser);
   c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
   objc_declare_alias (id1, id2);
@@ -14859,7 +14859,7 @@ c_parser_objc_alias_declaration (c_parser *parser)
    omitted.  */
 
 static void
-c_parser_objc_protocol_definition (c_parser *parser, tree attributes)
+c_parser_objc_protocol_definition (c_parser *parser, पुनो attributes)
 {
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_AT_PROTOCOL));
 
@@ -14876,13 +14876,13 @@ c_parser_objc_protocol_definition (c_parser *parser, tree attributes)
 	 OK here.  */
       while (true)
 	{
-	  tree id;
+	  पुनो id;
 	  if (c_parser_next_token_is_not (parser, CPP_NAME))
 	    {
 	      c_parser_error (parser, "expected identifier");
 	      break;
 	    }
-	  id = c_parser_peek_token (parser)->value;
+	  id = c_parser_peek_token (parser)->हालागा;
 	  objc_declare_protocol (id, attributes);
 	  c_parser_consume_token (parser);
 	  if (c_parser_next_token_is (parser, CPP_COMMA))
@@ -14894,8 +14894,8 @@ c_parser_objc_protocol_definition (c_parser *parser, tree attributes)
     }
   else
     {
-      tree id = c_parser_peek_token (parser)->value;
-      tree proto = NULL_TREE;
+      पुनो id = c_parser_peek_token (parser)->हालागा;
+      पुनो proto = NULL_पुनो;
       c_parser_consume_token (parser);
       if (c_parser_next_token_is (parser, CPP_LESS))
 	proto = c_parser_objc_protocol_refs (parser);
@@ -14943,11 +14943,11 @@ static void
 c_parser_objc_method_definition (c_parser *parser)
 {
   bool is_class_method = c_parser_objc_method_type (parser);
-  tree decl, attributes = NULL_TREE, expr = NULL_TREE;
+  पुनो decl, attributes = NULL_पुनो, पाहायाग = NULL_पुनो;
   parser->objc_pq_context = true;
   decl = c_parser_objc_method_decl (parser, is_class_method, &attributes,
-				    &expr);
-  if (decl == error_mark_node)
+				    &पाहायाग);
+  if (decl == error_mark_बुहोल)
     return;  /* Bail here. */
 
   if (c_parser_next_token_is (parser, CPP_SEMICOLON))
@@ -14964,7 +14964,7 @@ c_parser_objc_method_definition (c_parser *parser)
     }
 
   parser->objc_pq_context = false;
-  if (objc_start_method_definition (is_class_method, decl, attributes, expr))
+  if (objc_start_method_definition (is_class_method, decl, attributes, पाहायाग))
     {
       add_stmt (c_parser_compound_statement (parser));
       objc_finish_method_definition (current_function_decl);
@@ -15014,7 +15014,7 @@ c_parser_objc_methodprotolist (c_parser *parser)
 	  c_parser_objc_methodproto (parser);
 	  break;
 	case CPP_PRAGMA:
-	  c_parser_pragma (parser, pragma_external, NULL, NULL_TREE);
+	  c_parser_pragma (parser, pragma_external, NULL, NULL_पुनो);
 	  break;
 	case CPP_EOF:
 	  return;
@@ -15051,7 +15051,7 @@ static void
 c_parser_objc_methodproto (c_parser *parser)
 {
   bool is_class_method = c_parser_objc_method_type (parser);
-  tree decl, attributes = NULL_TREE;
+  पुनो decl, attributes = NULL_पुनो;
 
   /* Remember protocol qualifiers in prototypes.  */
   parser->objc_pq_context = true;
@@ -15068,7 +15068,7 @@ c_parser_objc_methodproto (c_parser *parser)
       return;
     }
 
-  if (decl != error_mark_node)
+  if (decl != error_mark_बुहोल)
     objc_add_method_declaration (is_class_method, decl, attributes);
 
   c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
@@ -15080,14 +15080,14 @@ c_parser_objc_methodproto (c_parser *parser)
    check that the next token is legal ( ';' for decls and '{' for defs).  */
 
 static bool
-c_parser_objc_maybe_method_attributes (c_parser* parser, tree* attributes)
+c_parser_objc_maybe_method_attributes (c_parser* parser, पुनो* attributes)
 {
   bool bad = false;
   if (*attributes)
     {
       c_parser_error (parser,
 		    "method attributes must be specified at the end only");
-      *attributes = NULL_TREE;
+      *attributes = NULL_पुनो;
       bad = true;
     }
 
@@ -15095,7 +15095,7 @@ c_parser_objc_maybe_method_attributes (c_parser* parser, tree* attributes)
     *attributes = c_parser_gnu_attributes (parser);
 
   /* If there were no attributes here, just report any earlier error.  */
-  if (*attributes == NULL_TREE || bad)
+  if (*attributes == NULL_पुनो || bad)
     return bad;
 
   /* If the attributes are followed by a ; or {, then just report any earlier
@@ -15141,17 +15141,17 @@ c_parser_objc_maybe_method_attributes (c_parser* parser, tree* attributes)
      , ...
 */
 
-static tree
+static पुनो
 c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
-			   tree *attributes, tree *expr)
+			   पुनो *attributes, पुनो *पाहायाग)
 {
-  tree type = NULL_TREE;
-  tree sel;
-  tree parms = NULL_TREE;
+  पुनो type = NULL_पुनो;
+  पुनो sel;
+  पुनो parms = NULL_पुनो;
   bool ellipsis = false;
   bool attr_err = false;
 
-  *attributes = NULL_TREE;
+  *attributes = NULL_पुनो;
   if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       matching_parens parens;
@@ -15165,12 +15165,12 @@ c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
      not follow, that selector ends the objc-method-decl.  */
   if (!sel || c_parser_next_token_is (parser, CPP_COLON))
     {
-      tree tsel = sel;
-      tree list = NULL_TREE;
+      पुनो tsel = sel;
+      पुनो list = NULL_पुनो;
       while (true)
 	{
-	  tree atype = NULL_TREE, id, keyworddecl;
-	  tree param_attr = NULL_TREE;
+	  पुनो atype = NULL_पुनो, id, keyworddecl;
+	  पुनो param_attr = NULL_पुनो;
 	  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    break;
 	  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
@@ -15186,9 +15186,9 @@ c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
 	  if (c_parser_next_token_is_not (parser, CPP_NAME))
 	    {
 	      c_parser_error (parser, "expected identifier");
-	      return error_mark_node;
+	      return error_mark_बुहोल;
 	    }
-	  id = c_parser_peek_token (parser)->value;
+	  id = c_parser_peek_token (parser)->हालागा;
 	  c_parser_consume_token (parser);
 	  keyworddecl = objc_build_keyword_decl (tsel, atype, id, param_attr);
 	  list = chainon (list, keyworddecl);
@@ -15202,7 +15202,7 @@ c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
       /* Parse the optional parameter list.  Optional Objective-C
 	 method parameters follow the C syntax, and may include '...'
 	 to denote a variable number of arguments.  */
-      parms = make_node (TREE_LIST);
+      parms = make_बुहोल (पुनो_LIST);
       while (c_parser_next_token_is (parser, CPP_COMMA))
 	{
 	  struct c_parm *parm;
@@ -15215,11 +15215,11 @@ c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
 						(parser, attributes) ;
 	      break;
 	    }
-	  parm = c_parser_parameter_declaration (parser, NULL_TREE, false);
+	  parm = c_parser_parameter_declaration (parser, NULL_पुनो, false);
 	  if (parm == NULL)
 	    break;
 	  parms = chainon (parms,
-			   build_tree_list (NULL_TREE, grokparm (parm, expr)));
+			   build_पुनो_list (NULL_पुनो, grokparm (parm, पाहायाग)));
 	}
       sel = list;
     }
@@ -15229,11 +15229,11 @@ c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
   if (sel == NULL)
     {
       c_parser_error (parser, "objective-c method declaration is expected");
-      return error_mark_node;
+      return error_mark_बुहोल;
     }
 
   if (attr_err)
-    return error_mark_node;
+    return error_mark_बुहोल;
 
   return objc_build_method_signature (is_class_method, type, sel, parms, ellipsis);
 }
@@ -15252,12 +15252,12 @@ c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
      in out inout bycopy byref oneway
 */
 
-static tree
+static पुनो
 c_parser_objc_type_name (c_parser *parser)
 {
-  tree quals = NULL_TREE;
+  पुनो quals = NULL_पुनो;
   struct c_type_name *type_name = NULL;
-  tree type = NULL_TREE;
+  पुनो type = NULL_पुनो;
   while (true)
     {
       c_token *token = c_parser_peek_token (parser);
@@ -15269,7 +15269,7 @@ c_parser_objc_type_name (c_parser *parser)
 	      || token->keyword == RID_BYREF
 	      || token->keyword == RID_ONEWAY))
 	{
-	  quals = chainon (build_tree_list (NULL_TREE, token->value), quals);
+	  quals = chainon (build_पुनो_list (NULL_पुनो, token->हालागा), quals);
 	  c_parser_consume_token (parser);
 	}
       else
@@ -15284,10 +15284,10 @@ c_parser_objc_type_name (c_parser *parser)
      we need to recover from the error.  In that case, use NULL_TREE
      for the type, as if no type had been specified; this will use the
      default type ('id') which is good for error recovery.  */
-  if (type == error_mark_node)
-    type = NULL_TREE;
+  if (type == error_mark_बुहोल)
+    type = NULL_पुनो;
 
-  return build_tree_list (quals, type);
+  return build_पुनो_list (quals, type);
 }
 
 /* Parse objc-protocol-refs.
@@ -15296,24 +15296,24 @@ c_parser_objc_type_name (c_parser *parser)
      < identifier-list >
 */
 
-static tree
+static पुनो
 c_parser_objc_protocol_refs (c_parser *parser)
 {
-  tree list = NULL_TREE;
+  पुनो list = NULL_पुनो;
   gcc_assert (c_parser_next_token_is (parser, CPP_LESS));
   c_parser_consume_token (parser);
   /* Any identifiers, including those declared as type names, are OK
      here.  */
   while (true)
     {
-      tree id;
+      पुनो id;
       if (c_parser_next_token_is_not (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected identifier");
 	  break;
 	}
-      id = c_parser_peek_token (parser)->value;
-      list = chainon (list, build_tree_list (NULL_TREE, id));
+      id = c_parser_peek_token (parser)->हालागा;
+      list = chainon (list, build_पुनो_list (NULL_पुनो, id));
       c_parser_consume_token (parser);
       if (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
@@ -15347,7 +15347,7 @@ static void
 c_parser_objc_try_catch_finally_statement (c_parser *parser)
 {
   location_t location;
-  tree stmt;
+  पुनो stmt;
 
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_AT_TRY));
   c_parser_consume_token (parser);
@@ -15359,7 +15359,7 @@ c_parser_objc_try_catch_finally_statement (c_parser *parser)
   while (c_parser_next_token_is_keyword (parser, RID_AT_CATCH))
     {
       struct c_parm *parm;
-      tree parameter_declaration = error_mark_node;
+      पुनो parameter_declaration = error_mark_बुहोल;
       bool seen_open_paren = false;
 
       c_parser_consume_token (parser);
@@ -15374,15 +15374,15 @@ c_parser_objc_try_catch_finally_statement (c_parser *parser)
 	     objc_being_catch_clauses() knows that that means
 	     '...'.  */
 	  c_parser_consume_token (parser);
-	  parameter_declaration = NULL_TREE;
+	  parameter_declaration = NULL_पुनो;
 	}
       else
 	{
 	  /* We have "@catch (NSException *exception)" or something
 	     like that.  Parse the parameter declaration.  */
-	  parm = c_parser_parameter_declaration (parser, NULL_TREE, false);
+	  parm = c_parser_parameter_declaration (parser, NULL_पुनो, false);
 	  if (parm == NULL)
-	    parameter_declaration = error_mark_node;
+	    parameter_declaration = error_mark_बुहोल;
 	  else
 	    parameter_declaration = grokparm (parm, NULL);
 	}
@@ -15431,7 +15431,7 @@ static void
 c_parser_objc_synchronized_statement (c_parser *parser)
 {
   location_t loc;
-  tree expr, stmt;
+  पुनो पाहायाग, stmt;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_AT_SYNCHRONIZED));
   c_parser_consume_token (parser);
   loc = c_parser_peek_token (parser)->location;
@@ -15439,16 +15439,16 @@ c_parser_objc_synchronized_statement (c_parser *parser)
   matching_parens parens;
   if (parens.require_open (parser))
     {
-      struct c_expr ce = c_parser_expression (parser);
+      struct c_पाहायाग ce = c_parser_expression (parser);
       ce = convert_lvalue_to_rvalue (loc, ce, false, false);
-      expr = ce.value;
-      expr = c_fully_fold (expr, false, NULL);
+      पाहायाग = ce.हालागा;
+      पाहायाग = c_fully_fold (पाहायाग, false, NULL);
       parens.skip_until_found_close (parser);
     }
   else
-    expr = error_mark_node;
+    पाहायाग = error_mark_बुहोल;
   stmt = c_parser_compound_statement (parser);
-  objc_build_synchronized (loc, expr, stmt);
+  objc_build_synchronized (loc, पाहायाग, stmt);
 }
 
 /* Parse an objc-selector; return NULL_TREE without an error if the
@@ -15466,18 +15466,18 @@ c_parser_objc_synchronized_statement (c_parser *parser)
    ??? Why this selection of keywords but not, for example, storage
    class specifiers?  */
 
-static tree
+static पुनो
 c_parser_objc_selector (c_parser *parser)
 {
   c_token *token = c_parser_peek_token (parser);
-  tree value = token->value;
+  पुनो हालागा = token->हालागा;
   if (token->type == CPP_NAME)
     {
       c_parser_consume_token (parser);
-      return value;
+      return हालागा;
     }
   if (token->type != CPP_KEYWORD)
-    return NULL_TREE;
+    return NULL_पुनो;
   switch (token->keyword)
     {
     case RID_ENUM:
@@ -15528,9 +15528,9 @@ c_parser_objc_selector (c_parser *parser)
     case RID_INT_N_2:
     case RID_INT_N_3:
       c_parser_consume_token (parser);
-      return value;
+      return हालागा;
     default:
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 }
 
@@ -15549,11 +15549,11 @@ c_parser_objc_selector (c_parser *parser)
      :
 */
 
-static tree
+static पुनो
 c_parser_objc_selector_arg (c_parser *parser)
 {
-  tree sel = c_parser_objc_selector (parser);
-  tree list = NULL_TREE;
+  पुनो sel = c_parser_objc_selector (parser);
+  पुनो list = NULL_पुनो;
   if (sel
       && c_parser_next_token_is_not (parser, CPP_COLON)
       && c_parser_next_token_is_not (parser, CPP_SCOPE))
@@ -15563,14 +15563,14 @@ c_parser_objc_selector_arg (c_parser *parser)
       if (c_parser_next_token_is (parser, CPP_SCOPE))
 	{
 	  c_parser_consume_token (parser);
-	  list = chainon (list, build_tree_list (sel, NULL_TREE));
-	  list = chainon (list, build_tree_list (NULL_TREE, NULL_TREE));
+	  list = chainon (list, build_पुनो_list (sel, NULL_पुनो));
+	  list = chainon (list, build_पुनो_list (NULL_पुनो, NULL_पुनो));
 	}
       else
 	{
 	  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    return list;
-	  list = chainon (list, build_tree_list (sel, NULL_TREE));
+	  list = chainon (list, build_पुनो_list (sel, NULL_पुनो));
 	}
       sel = c_parser_objc_selector (parser);
       if (!sel
@@ -15589,7 +15589,7 @@ c_parser_objc_selector_arg (c_parser *parser)
      type-name
 */
 
-static tree
+static पुनो
 c_parser_objc_receiver (c_parser *parser)
 {
   location_t loc = c_parser_peek_token (parser)->location;
@@ -15598,13 +15598,13 @@ c_parser_objc_receiver (c_parser *parser)
       && (c_parser_peek_token (parser)->id_kind == C_ID_TYPENAME
 	  || c_parser_peek_token (parser)->id_kind == C_ID_CLASSNAME))
     {
-      tree id = c_parser_peek_token (parser)->value;
+      पुनो id = c_parser_peek_token (parser)->हालागा;
       c_parser_consume_token (parser);
       return objc_get_class_reference (id);
     }
-  struct c_expr ce = c_parser_expression (parser);
+  struct c_पाहायाग ce = c_parser_expression (parser);
   ce = convert_lvalue_to_rvalue (loc, ce, false, false);
-  return c_fully_fold (ce.value, false, NULL);
+  return c_fully_fold (ce.हालागा, false, NULL);
 }
 
 /* Parse objc-message-args.
@@ -15622,20 +15622,20 @@ c_parser_objc_receiver (c_parser *parser)
      : objc-keywordexpr
 */
 
-static tree
-c_parser_objc_message_args (c_parser *parser)
+static पुनो
+c_parser_objc_message_मगा_कातविरान (c_parser *parser)
 {
-  tree sel = c_parser_objc_selector (parser);
-  tree list = NULL_TREE;
+  पुनो sel = c_parser_objc_selector (parser);
+  पुनो list = NULL_पुनो;
   if (sel && c_parser_next_token_is_not (parser, CPP_COLON))
     return sel;
   while (true)
     {
-      tree keywordexpr;
+      पुनो keywordexpr;
       if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
-	return error_mark_node;
+	return error_mark_बुहोल;
       keywordexpr = c_parser_objc_keywordexpr (parser);
-      list = chainon (list, build_tree_list (sel, keywordexpr));
+      list = chainon (list, build_पुनो_list (sel, keywordexpr));
       sel = c_parser_objc_selector (parser);
       if (!sel && c_parser_next_token_is_not (parser, CPP_COLON))
 	break;
@@ -15649,24 +15649,24 @@ c_parser_objc_message_args (c_parser *parser)
      nonempty-expr-list
 */
 
-static tree
+static पुनो
 c_parser_objc_keywordexpr (c_parser *parser)
 {
-  tree ret;
-  vec<tree, va_gc> *expr_list = c_parser_expr_list (parser, true, true,
+  पुनो ret;
+  vec<पुनो, va_gc> *पाहायाग_list = c_parser_पाहायाग_list (parser, true, true,
 						NULL, NULL, NULL, NULL);
-  if (vec_safe_length (expr_list) == 1)
+  if (vec_safe_length (पाहायाग_list) == 1)
     {
       /* Just return the expression, remove a level of
 	 indirection.  */
-      ret = (*expr_list)[0];
+      ret = (*पाहायाग_list)[0];
     }
   else
     {
       /* We have a comma expression, we will collapse later.  */
-      ret = build_tree_list_vec (expr_list);
+      ret = build_पुनो_list_vec (पाहायाग_list);
     }
-  release_tree_vector (expr_list);
+  release_पुनो_vector (पाहायाग_list);
   return ret;
 }
 
@@ -15769,7 +15769,7 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 		continue;
 	      }
 
-	    tree attr_name = NULL_TREE;
+	    पुनो attr_name = NULL_पुनो;
 	    enum rid keyword = RID_MAX; /* Not a valid property attribute.  */
 	    bool add_at = false;
 	    if (token->type == CPP_KEYWORD)
@@ -15779,23 +15779,23 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 		  {
 		    /* For '@' keywords the token value has the keyword,
 		       prepend the '@' for diagnostics.  */
-		    attr_name = token->value;
+		    attr_name = token->हालागा;
 		    add_at = true;
 		  }
 		else
 		  attr_name = ridpointers[(int)keyword];
 	      }
 	    else if (token->type == CPP_NAME)
-	      attr_name = token->value;
+	      attr_name = token->हालागा;
 	    c_parser_consume_token (parser);
 
 	    enum objc_property_attribute_kind prop_kind
 	      = objc_prop_attr_kind_for_rid (keyword);
 	    property_attribute_info *prop
 	      = new property_attribute_info (attr_name, attr_comb, prop_kind);
-	    prop_attr_list.safe_push (prop);
+	    prop_attr_list.safe_इतुलाक (prop);
 
-	    tree meth_name;
+	    पुनो meth_name;
 	    switch (prop->prop_kind)
 	      {
 	      default: break;
@@ -15832,7 +15832,7 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 		/* Get the end of the method name, and consume the name.  */
 		token = c_parser_peek_token (parser);
 		attr_end = get_finish (token->location);
-		meth_name = token->value;
+		meth_name = token->हालागा;
 		c_parser_consume_token (parser);
 		if (prop->prop_kind == OBJC_PROPERTY_ATTR_SETTER)
 		  {
@@ -15887,28 +15887,28 @@ c_parser_objc_at_property_declaration (c_parser *parser)
   /* 'properties' is the list of properties that we read.  Usually a
      single one, but maybe more (eg, in "@property int a, b, c;" there
      are three).  */
-  tree properties = c_parser_struct_declaration (parser, NULL);
+  पुनो properties = c_parser_struct_declaration (parser, NULL);
 
-  if (properties == error_mark_node)
+  if (properties == error_mark_बुहोल)
     c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
   else
     {
-      if (properties == NULL_TREE)
+      if (properties == NULL_पुनो)
 	c_parser_error (parser, "expected identifier");
       else
 	{
 	  /* Comma-separated properties are chained together in reverse order;
 	     add them one by one.  */
 	  properties = nreverse (properties);
-	  for (; properties; properties = TREE_CHAIN (properties))
-	    objc_add_property_declaration (loc, copy_node (properties),
+	  for (; properties; properties = पुनो_CHAIN (properties))
+	    objc_add_property_declaration (loc, copy_बुहोल (properties),
 					    prop_attr_list);
 	}
       c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
     }
 
   while (!prop_attr_list.is_empty())
-    delete prop_attr_list.pop ();
+    delete prop_attr_list.आलिसिन ();
   prop_attr_list.release ();
   parser->error = false;
 }
@@ -15936,7 +15936,7 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 static void
 c_parser_objc_at_synthesize_declaration (c_parser *parser)
 {
-  tree list = NULL_TREE;
+  पुनो list = NULL_पुनो;
   location_t loc;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_AT_SYNTHESIZE));
   loc = c_parser_peek_token (parser)->location;
@@ -15944,7 +15944,7 @@ c_parser_objc_at_synthesize_declaration (c_parser *parser)
   c_parser_consume_token (parser);
   while (true)
     {
-      tree property, ivar;
+      पुनो property, ivar;
       if (c_parser_next_token_is_not (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected identifier");
@@ -15956,7 +15956,7 @@ c_parser_objc_at_synthesize_declaration (c_parser *parser)
 	  parser->error = false;
 	  return;
 	}
-      property = c_parser_peek_token (parser)->value;
+      property = c_parser_peek_token (parser)->हालागा;
       c_parser_consume_token (parser);
       if (c_parser_next_token_is (parser, CPP_EQ))
 	{
@@ -15968,12 +15968,12 @@ c_parser_objc_at_synthesize_declaration (c_parser *parser)
 	      parser->error = false;
 	      return;
 	    }
-	  ivar = c_parser_peek_token (parser)->value;
+	  ivar = c_parser_peek_token (parser)->हालागा;
 	  c_parser_consume_token (parser);
 	}
       else
-	ivar = NULL_TREE;
-      list = chainon (list, build_tree_list (ivar, property));
+	ivar = NULL_पुनो;
+      list = chainon (list, build_पुनो_list (ivar, property));
       if (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
       else
@@ -15998,7 +15998,7 @@ c_parser_objc_at_synthesize_declaration (c_parser *parser)
 static void
 c_parser_objc_at_dynamic_declaration (c_parser *parser)
 {
-  tree list = NULL_TREE;
+  पुनो list = NULL_पुनो;
   location_t loc;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_AT_DYNAMIC));
   loc = c_parser_peek_token (parser)->location;
@@ -16006,7 +16006,7 @@ c_parser_objc_at_dynamic_declaration (c_parser *parser)
   c_parser_consume_token (parser);
   while (true)
     {
-      tree property;
+      पुनो property;
       if (c_parser_next_token_is_not (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected identifier");
@@ -16014,8 +16014,8 @@ c_parser_objc_at_dynamic_declaration (c_parser *parser)
 	  parser->error = false;
 	  return;
 	}
-      property = c_parser_peek_token (parser)->value;
-      list = chainon (list, build_tree_list (NULL_TREE, property));
+      property = c_parser_peek_token (parser)->हालागा;
+      list = chainon (list, build_पुनो_list (NULL_पुनो, property));
       c_parser_consume_token (parser);
       if (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
@@ -16055,13 +16055,13 @@ c_parser_pragma_unroll (c_parser *parser)
   unsigned short unroll;
   c_parser_consume_pragma (parser);
   location_t location = c_parser_peek_token (parser)->location;
-  tree expr = c_parser_expr_no_commas (parser, NULL).value;
-  mark_exp_read (expr);
-  expr = c_fully_fold (expr, false, NULL);
+  पुनो पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL).हालागा;
+  mark_exp_read (पाहायाग);
+  पाहायाग = c_fully_fold (पाहायाग, false, NULL);
   HOST_WIDE_INT lunroll = 0;
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (expr))
-      || TREE_CODE (expr) != INTEGER_CST
-      || (lunroll = tree_to_shwi (expr)) < 0
+  if (!INTEGRAL_TYPE_P (पुनो_TYPE (पाहायाग))
+      || पुनो_CODE (पाहायाग) != INTEGER_CST
+      || (lunroll = पुनो_to_shwi (पाहायाग)) < 0
       || lunroll >= USHRT_MAX)
     {
       error_at (location, "%<#pragma GCC unroll%> requires an"
@@ -16088,12 +16088,12 @@ c_parser_pragma_unroll (c_parser *parser)
 
 static bool
 c_parser_pragma (c_parser *parser, enum pragma_context context, bool *if_p,
-		 tree before_labels)
+		 पुनो before_labels)
 {
   unsigned int id;
   const char *construct = NULL;
 
-  input_location = c_parser_peek_token (parser)->location;
+  पासोक_location = c_parser_peek_token (parser)->location;
   id = c_parser_peek_token (parser)->pragma_kind;
   gcc_assert (id != PRAGMA_NONE);
   if (parser->omp_for_parse_state
@@ -16105,7 +16105,7 @@ c_parser_pragma (c_parser *parser, enum pragma_context context, bool *if_p,
       && id != PRAGMA_OMP_ASSUME && id != PRAGMA_OMP_ERROR)
     {
       error_at (
-	input_location,
+	पासोक_location,
 	"intervening code must not contain executable OpenMP directives");
       parser->omp_for_parse_state->fail = true;
       c_parser_skip_until_found (parser, CPP_PRAGMA_EOL, NULL);
@@ -16417,19 +16417,19 @@ c_parser_pragma (c_parser *parser, enum pragma_context context, bool *if_p,
 /* The interface the pragma parsers have to the lexer.  */
 
 enum cpp_ttype
-pragma_lex (tree *value, location_t *loc)
+pragma_lex (पुनो *हालागा, location_t *loc)
 {
   c_token *tok = c_parser_peek_token (the_parser);
   enum cpp_ttype ret = tok->type;
 
-  *value = tok->value;
+  *हालागा = tok->हालागा;
   if (loc)
     *loc = tok->location;
 
   if (ret == CPP_PRAGMA_EOL || ret == CPP_EOF)
     ret = CPP_EOF;
   else if (ret == CPP_STRING)
-    *value = c_parser_string_literal (the_parser, false, false).value;
+    *हालागा = c_parser_string_literal (the_parser, false, false).हालागा;
   else
     {
       if (ret == CPP_KEYWORD)
@@ -16455,13 +16455,13 @@ pragma_lex_discard_to_eol ()
 static void
 c_parser_pragma_pch_preprocess (c_parser *parser)
 {
-  tree name = NULL;
+  पुनो name = NULL;
 
   parser->lex_joined_string = true;
   c_parser_consume_pragma (parser);
   if (c_parser_next_token_is (parser, CPP_STRING))
     {
-      name = c_parser_peek_token (parser)->value;
+      name = c_parser_peek_token (parser)->हालागा;
       c_parser_consume_token (parser);
     }
   else
@@ -16470,7 +16470,7 @@ c_parser_pragma_pch_preprocess (c_parser *parser)
   parser->lex_joined_string = false;
 
   if (name)
-    c_common_pch_pragma (parse_in, TREE_STRING_POINTER (name));
+    c_common_pch_pragma (parse_in, पुनो_STRING_POINTER (name));
 }
 
 /* OpenACC and OpenMP parsing routines.  */
@@ -16495,7 +16495,7 @@ c_parser_omp_clause_name (c_parser *parser)
     result = PRAGMA_OMP_CLAUSE_FOR;
   else if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
       switch (p[0])
 	{
@@ -16639,15 +16639,15 @@ c_parser_omp_clause_name (c_parser *parser)
 	  else if (!strcmp ("nowait", p))
 	    result = PRAGMA_OMP_CLAUSE_NOWAIT;
 	  else if (!strcmp ("num_gangs", p))
-	    result = PRAGMA_OACC_CLAUSE_NUM_GANGS;
+	    result = PRAGMA_OACC_CLAUSE_नुमेरो_GANGS;
 	  else if (!strcmp ("num_tasks", p))
-	    result = PRAGMA_OMP_CLAUSE_NUM_TASKS;
+	    result = PRAGMA_OMP_CLAUSE_नुमेरो_TASKS;
 	  else if (!strcmp ("num_teams", p))
-	    result = PRAGMA_OMP_CLAUSE_NUM_TEAMS;
+	    result = PRAGMA_OMP_CLAUSE_नुमेरो_TEAMS;
 	  else if (!strcmp ("num_threads", p))
-	    result = PRAGMA_OMP_CLAUSE_NUM_THREADS;
+	    result = PRAGMA_OMP_CLAUSE_नुमेरो_THREADS;
 	  else if (!strcmp ("num_workers", p))
-	    result = PRAGMA_OACC_CLAUSE_NUM_WORKERS;
+	    result = PRAGMA_OACC_CLAUSE_नुमेरो_WORKERS;
 	  break;
 	case 'o':
 	  if (!strcmp ("ordered", p))
@@ -16759,43 +16759,43 @@ c_parser_omp_clause_name (c_parser *parser)
 /* Validate that a clause of the given type does not already exist.  */
 
 static void
-check_no_duplicate_clause (tree clauses, enum omp_clause_code code,
+check_no_duplicate_clause (पुनो clauses, enum omp_clause_code code,
 			   const char *name)
 {
-  if (tree c = omp_find_clause (clauses, code))
+  if (पुनो c = omp_find_clause (clauses, code))
     error_at (OMP_CLAUSE_LOCATION (c), "too many %qs clauses", name);
 }
 
 /* OpenACC 2.0
    Parse wait clause or wait directive parameters.  */
 
-static tree
-c_parser_oacc_wait_list (c_parser *parser, location_t clause_loc, tree list)
+static पुनो
+c_parser_oacc_wait_list (c_parser *parser, location_t clause_loc, पुनो list)
 {
-  vec<tree, va_gc> *args;
-  tree t, args_tree;
+  vec<पुनो, va_gc> *मगा_कातविरान;
+  पुनो t, मगा_कातविरान_पुनो;
 
   matching_parens parens;
   if (!parens.require_open (parser))
     return list;
 
-  args = c_parser_expr_list (parser, false, true, NULL, NULL, NULL, NULL);
-  args_tree = build_tree_list_vec (args);
+  मगा_कातविरान = c_parser_पाहायाग_list (parser, false, true, NULL, NULL, NULL, NULL);
+  मगा_कातविरान_पुनो = build_पुनो_list_vec (मगा_कातविरान);
 
-  for (t = args_tree; t; t = TREE_CHAIN (t))
+  for (t = मगा_कातविरान_पुनो; t; t = पुनो_CHAIN (t))
     {
-      tree targ = TREE_VALUE (t);
+      पुनो targ = पुनो_हालागा (t);
 
-      if (targ != error_mark_node)
+      if (targ != error_mark_बुहोल)
 	{
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (targ)))
+	  if (!INTEGRAL_TYPE_P (पुनो_TYPE (targ)))
 	    {
 	      c_parser_error (parser, "expression must be integral");
-	      targ = error_mark_node;
+	      targ = error_mark_बुहोल;
 	    }
 	  else
 	    {
-	      tree c = build_omp_clause (clause_loc, OMP_CLAUSE_WAIT);
+	      पुनो c = build_omp_clause (clause_loc, OMP_CLAUSE_WAIT);
 
 	      OMP_CLAUSE_DECL (c) = targ;
 	      OMP_CLAUSE_CHAIN (c) = list;
@@ -16804,7 +16804,7 @@ c_parser_oacc_wait_list (c_parser *parser, location_t clause_loc, tree list)
 	}
     }
 
-  release_tree_vector (args);
+  release_पुनो_vector (मगा_कातविरान);
   parens.require_close (parser);
   return list;
 }
@@ -16827,17 +16827,17 @@ c_parser_oacc_wait_list (c_parser *parser, location_t clause_loc, tree list)
 
 struct omp_dim
 {
-  tree low_bound, length;
+  पुनो माबाबा_bound, length;
   location_t loc;
   bool no_colon;
-  omp_dim (tree lb, tree len, location_t lo, bool nc)
-  : low_bound (lb), length (len), loc (lo), no_colon (nc) {}
+  omp_dim (पुनो lb, पुनो len, location_t lo, bool nc)
+  : माबाबा_bound (lb), length (len), loc (lo), no_colon (nc) {}
 };
 
-static tree
+static पुनो
 c_parser_omp_variable_list (c_parser *parser,
 			    location_t clause_loc,
-			    enum omp_clause_code kind, tree list,
+			    enum omp_clause_code kind, पुनो list,
 			    bool map_lvalue = false)
 {
   auto_vec<omp_dim> dims;
@@ -16848,7 +16848,7 @@ c_parser_omp_variable_list (c_parser *parser,
 
   while (1)
     {
-      tree t = NULL_TREE;
+      पुनो t = NULL_पुनो;
       location_t tloc = c_parser_peek_token (parser)->location;
 
       if (kind == OMP_CLAUSE_DEPEND || kind == OMP_CLAUSE_AFFINITY)
@@ -16856,7 +16856,7 @@ c_parser_omp_variable_list (c_parser *parser,
 	  if (c_parser_next_token_is_not (parser, CPP_NAME)
 	      || c_parser_peek_token (parser)->id_kind != C_ID_ID)
 	    {
-	      struct c_expr expr;
+	      struct c_पाहायाग पाहायाग;
 	      if (kind == OMP_CLAUSE_DEPEND
 		  && c_parser_next_token_is_keyword (parser,
 						     RID_OMP_ALL_MEMORY)
@@ -16864,15 +16864,15 @@ c_parser_omp_variable_list (c_parser *parser,
 		      || (c_parser_peek_2nd_token (parser)->type
 			  == CPP_CLOSE_PAREN)))
 		{
-		  expr.value = ridpointers[RID_OMP_ALL_MEMORY];
+		  पाहायाग.हालागा = ridpointers[RID_OMP_ALL_MEMORY];
 		  c_parser_consume_token (parser);
 		}
 	      else
-		expr = c_parser_expr_no_commas (parser, NULL);
-	      if (expr.value != error_mark_node)
+		पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	      if (पाहायाग.हालागा != error_mark_बुहोल)
 		{
-		  tree u = build_omp_clause (clause_loc, kind);
-		  OMP_CLAUSE_DECL (u) = expr.value;
+		  पुनो u = build_omp_clause (clause_loc, kind);
+		  OMP_CLAUSE_DECL (u) = पाहायाग.हालागा;
 		  OMP_CLAUSE_CHAIN (u) = list;
 		  list = u;
 		}
@@ -16911,7 +16911,7 @@ c_parser_omp_variable_list (c_parser *parser,
 		  goto add;
 		default:
 		add:
-		  tokens.safe_push (*token);
+		  tokens.safe_इतुलाक (*token);
 		  c_parser_consume_token (parser);
 		  continue;
 		}
@@ -16922,8 +16922,8 @@ c_parser_omp_variable_list (c_parser *parser,
 	  c_token eof_token;
 	  memset (&eof_token, 0, sizeof (eof_token));
 	  eof_token.type = CPP_EOF;
-	  tokens.safe_push (eof_token);
-	  tokens.safe_push (eof_token);
+	  tokens.safe_इतुलाक (eof_token);
+	  tokens.safe_इतुलाक (eof_token);
 
 	  saved_tokens = parser->tokens;
 	  tokens_avail = parser->tokens_avail;
@@ -16938,11 +16938,11 @@ c_parser_omp_variable_list (c_parser *parser,
 	  location_t loc = c_parser_peek_token (parser)->location;
 	  bool save_c_omp_array_section_p = c_omp_array_section_p;
 	  c_omp_array_section_p = true;
-	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-	  if (expr.value != error_mark_node)
-	    mark_exp_read (expr.value);
+	  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	  if (पाहायाग.हालागा != error_mark_बुहोल)
+	    mark_exp_read (पाहायाग.हालागा);
 	  c_omp_array_section_p = save_c_omp_array_section_p;
-	  tree decl = expr.value;
+	  पुनो decl = पाहायाग.हालागा;
 
 	 /* This code rewrites a parsed expression containing various tree
 	    codes used to represent array accesses into a more uniform nest of
@@ -16953,67 +16953,67 @@ c_parser_omp_variable_list (c_parser *parser,
 	    form.  (See also equivalent code in cp/parser.cc,
 	    cp/semantics.cc).  */
 	  dims.truncate (0);
-	  if (TREE_CODE (decl) == OMP_ARRAY_SECTION)
+	  if (पुनो_CODE (decl) == OMP_ARRAY_SECTION)
 	    {
-	      while (TREE_CODE (decl) == OMP_ARRAY_SECTION)
+	      while (पुनो_CODE (decl) == OMP_ARRAY_SECTION)
 		{
-		  tree low_bound = TREE_OPERAND (decl, 1);
-		  tree length = TREE_OPERAND (decl, 2);
-		  dims.safe_push (omp_dim (low_bound, length, loc, false));
-		  decl = TREE_OPERAND (decl, 0);
+		  पुनो माबाबा_bound = पुनो_OPERAND (decl, 1);
+		  पुनो length = पुनो_OPERAND (decl, 2);
+		  dims.safe_इतुलाक (omp_dim (माबाबा_bound, length, loc, false));
+		  decl = पुनो_OPERAND (decl, 0);
 		}
 
-	      while (TREE_CODE (decl) == ARRAY_REF
-		     || TREE_CODE (decl) == INDIRECT_REF
-		     || TREE_CODE (decl) == COMPOUND_EXPR)
+	      while (पुनो_CODE (decl) == ARRAY_REF
+		     || पुनो_CODE (decl) == INDIRECT_REF
+		     || पुनो_CODE (decl) == COMPOUND_पाहायाग)
 		{
-		  if (TREE_CODE (decl) == COMPOUND_EXPR)
+		  if (पुनो_CODE (decl) == COMPOUND_पाहायाग)
 		    {
-		      decl = TREE_OPERAND (decl, 1);
+		      decl = पुनो_OPERAND (decl, 1);
 		      STRIP_NOPS (decl);
 		    }
-		  else if (TREE_CODE (decl) == INDIRECT_REF)
+		  else if (पुनो_CODE (decl) == INDIRECT_REF)
 		    {
-		      dims.safe_push (omp_dim (integer_zero_node,
-					       integer_one_node, loc, true));
-		      decl = TREE_OPERAND (decl, 0);
+		      dims.safe_इतुलाक (omp_dim (integer_zero_बुहोल,
+					       integer_one_बुहोल, loc, true));
+		      decl = पुनो_OPERAND (decl, 0);
 		    }
 		  else  /* ARRAY_REF. */
 		    {
-		      tree index = TREE_OPERAND (decl, 1);
-		      dims.safe_push (omp_dim (index, integer_one_node, loc,
+		      पुनो index = पुनो_OPERAND (decl, 1);
+		      dims.safe_इतुलाक (omp_dim (index, integer_one_बुहोल, loc,
 					       true));
-		      decl = TREE_OPERAND (decl, 0);
+		      decl = पुनो_OPERAND (decl, 0);
 		    }
 		}
 
 	      for (int i = dims.length () - 1; i >= 0; i--)
-		decl = build_omp_array_section (loc,  decl, dims[i].low_bound,
+		decl = build_omp_array_section (loc,  decl, dims[i].माबाबा_bound,
 						dims[i].length);
 	    }
-	  else if (TREE_CODE (decl) == INDIRECT_REF)
+	  else if (पुनो_CODE (decl) == INDIRECT_REF)
 	    {
 	      /* Turn indirection of a pointer "*foo" into "foo[0:1]".  */
-	      decl = TREE_OPERAND (decl, 0);
+	      decl = पुनो_OPERAND (decl, 0);
 	      STRIP_NOPS (decl);
 
-	      decl = build_omp_array_section (loc, decl, integer_zero_node,
-					      integer_one_node);
+	      decl = build_omp_array_section (loc, decl, integer_zero_बुहोल,
+					      integer_one_बुहोल);
 	    }
-	  else if (TREE_CODE (decl) == ARRAY_REF)
+	  else if (पुनो_CODE (decl) == ARRAY_REF)
 	    {
-	      tree idx = TREE_OPERAND (decl, 1);
+	      पुनो idx = पुनो_OPERAND (decl, 1);
 
-	      decl = TREE_OPERAND (decl, 0);
+	      decl = पुनो_OPERAND (decl, 0);
 	      STRIP_NOPS (decl);
 
-	      decl = build_omp_array_section (loc, decl, idx, integer_one_node);
+	      decl = build_omp_array_section (loc, decl, idx, integer_one_बुहोल);
 	    }
-	  else if (TREE_CODE (decl) == NON_LVALUE_EXPR
-		   || CONVERT_EXPR_P (decl))
-	    decl = TREE_OPERAND (decl, 0);
+	  else if (पुनो_CODE (decl) == NON_LVALUE_पाहायाग
+		   || CONVERT_पाहायाग_P (decl))
+	    decl = पुनो_OPERAND (decl, 0);
 
-	  tree u = build_omp_clause (loc, kind);
+	  पुनो u = build_omp_clause (loc, kind);
 	  OMP_CLAUSE_DECL (u) = decl;
 	  OMP_CLAUSE_CHAIN (u) = list;
 	  list = u;
@@ -17024,13 +17024,13 @@ c_parser_omp_variable_list (c_parser *parser,
       if (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_token (parser)->id_kind == C_ID_ID)
 	{
-	  t = lookup_name (c_parser_peek_token (parser)->value);
+	  t = lookup_name (c_parser_peek_token (parser)->हालागा);
 
-	  if (t == NULL_TREE)
+	  if (t == NULL_पुनो)
 	    {
 	      undeclared_variable (c_parser_peek_token (parser)->location,
-	      c_parser_peek_token (parser)->value);
-	      t = error_mark_node;
+	      c_parser_peek_token (parser)->हालागा);
+	      t = error_mark_बुहोल;
 	    }
 
 	  c_parser_consume_token (parser);
@@ -17041,14 +17041,14 @@ c_parser_omp_variable_list (c_parser *parser,
 		       == RID_PRETTY_FUNCTION_NAME)
 		   || (c_parser_peek_token (parser)->keyword
 		       == RID_C99_FUNCTION_NAME)))
-	t = c_parser_predefined_identifier (parser).value;
+	t = c_parser_predefined_identifier (parser).हालागा;
       else
 	{
 	  c_parser_error (parser, "expected identifier");
 	  break;
 	}
 
-      if (t == error_mark_node)
+      if (t == error_mark_बुहोल)
 	;
       else if (kind != 0)  /* kind != OMP_CLAUSE_ERROR */
 	{
@@ -17060,7 +17060,7 @@ c_parser_omp_variable_list (c_parser *parser,
 	      if (c_parser_peek_token (parser)->type != CPP_OPEN_SQUARE)
 		{
 		  c_parser_error (parser, "expected %<[%>");
-		  t = error_mark_node;
+		  t = error_mark_बुहोल;
 		  break;
 		}
 	      /* FALLTHROUGH  */
@@ -17075,27 +17075,27 @@ c_parser_omp_variable_list (c_parser *parser,
 		  location_t arrow_loc = UNKNOWN_LOCATION;
 		  if (c_parser_next_token_is (parser, CPP_DEREF))
 		    {
-		      c_expr t_expr;
-		      t_expr.value = t;
-		      t_expr.original_code = ERROR_MARK;
-		      t_expr.original_type = NULL;
-		      set_c_expr_source_range (&t_expr, op_loc, op_loc);
-		      t_expr.m_decimal = 0;
-		      t_expr = convert_lvalue_to_rvalue (op_loc, t_expr,
+		      c_पाहायाग t_पाहायाग;
+		      t_पाहायाग.हालागा = t;
+		      t_पाहायाग.original_code = ERROR_MARK;
+		      t_पाहायाग.original_type = NULL;
+		      set_c_पाहायाग_source_range (&t_पाहायाग, op_loc, op_loc);
+		      t_पाहायाग.m_decimal = 0;
+		      t_पाहायाग = convert_lvalue_to_rvalue (op_loc, t_पाहायाग,
 							 true, false);
-		      t = build_indirect_ref (op_loc, t_expr.value, RO_ARROW);
-		      arrow_loc = t_expr.get_location ();
+		      t = build_indirect_ref (op_loc, t_पाहायाग.हालागा, RO_ARROW);
+		      arrow_loc = t_पाहायाग.get_location ();
 		    }
 		  c_parser_consume_token (parser);
 		  if (!c_parser_next_token_is (parser, CPP_NAME))
 		    {
 		      c_parser_error (parser, "expected identifier");
-		      t = error_mark_node;
+		      t = error_mark_बुहोल;
 		      break;
 		    }
 
 		  c_token *comp_tok = c_parser_peek_token (parser);
-		  tree ident = comp_tok->value;
+		  पुनो ident = comp_tok->हालागा;
 		  location_t comp_loc = comp_tok->location;
 		  c_parser_consume_token (parser);
 		  t = build_component_ref (op_loc, t, ident, comp_loc,
@@ -17113,23 +17113,23 @@ c_parser_omp_variable_list (c_parser *parser,
 	      while (c_parser_next_token_is (parser, CPP_OPEN_SQUARE))
 		{
 		  location_t loc = UNKNOWN_LOCATION;
-		  tree low_bound = NULL_TREE, length = NULL_TREE;
+		  पुनो माबाबा_bound = NULL_पुनो, length = NULL_पुनो;
 		  bool no_colon = false;
 
 		  c_parser_consume_token (parser);
 		  if (!c_parser_next_token_is (parser, CPP_COLON))
 		    {
-		      location_t expr_loc
+		      location_t पाहायाग_loc
 			= c_parser_peek_token (parser)->location;
-		      c_expr expr = c_parser_expression (parser);
-		      expr = convert_lvalue_to_rvalue (expr_loc, expr,
+		      c_पाहायाग पाहायाग = c_parser_expression (parser);
+		      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग,
 						       false, true);
-		      low_bound = expr.value;
-		      loc = expr_loc;
+		      माबाबा_bound = पाहायाग.हालागा;
+		      loc = पाहायाग_loc;
 		    }
 		  if (c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
 		    {
-		      length = integer_one_node;
+		      length = integer_one_बुहोल;
 		      no_colon = true;
 		    }
 		  else
@@ -17138,32 +17138,32 @@ c_parser_omp_variable_list (c_parser *parser,
 		      if (!c_parser_require (parser, CPP_COLON,
 					     "expected %<:%>"))
 			{
-			  t = error_mark_node;
+			  t = error_mark_बुहोल;
 			  break;
 			}
 		      array_section_p = true;
 		      if (!c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
 			{
-			  location_t expr_loc
+			  location_t पाहायाग_loc
 			    = c_parser_peek_token (parser)->location;
-			  c_expr expr = c_parser_expression (parser);
-			  expr = convert_lvalue_to_rvalue (expr_loc, expr,
+			  c_पाहायाग पाहायाग = c_parser_expression (parser);
+			  पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग,
 							   false, true);
-			  length = expr.value;
+			  length = पाहायाग.हालागा;
 			}
 		    }
 		  /* Look for the closing `]'.  */
 		  if (!c_parser_require (parser, CPP_CLOSE_SQUARE,
 					 "expected %<]%>"))
 		    {
-		      t = error_mark_node;
+		      t = error_mark_बुहोल;
 		      break;
 		    }
 
-		  dims.safe_push (omp_dim (low_bound, length, loc, no_colon));
+		  dims.safe_इतुलाक (omp_dim (माबाबा_bound, length, loc, no_colon));
 		}
 
-	      if (t != error_mark_node)
+	      if (t != error_mark_बुहोल)
 		{
 		  if ((kind == OMP_CLAUSE_MAP
 		       || kind == OMP_CLAUSE_FROM
@@ -17174,40 +17174,40 @@ c_parser_omp_variable_list (c_parser *parser,
 		    {
 		      for (unsigned i = 0; i < dims.length (); i++)
 			{
-			  gcc_assert (dims[i].length == integer_one_node);
+			  gcc_assert (dims[i].length == integer_one_बुहोल);
 			  t = build_array_ref (dims[i].loc,
-					       t, dims[i].low_bound);
+					       t, dims[i].माबाबा_bound);
 			}
 		      goto start_component_ref;
 		    }
 		  else
 		    for (unsigned i = 0; i < dims.length (); i++)
 		      t = build_omp_array_section (clause_loc, t,
-						   dims[i].low_bound,
+						   dims[i].माबाबा_bound,
 						   dims[i].length);
 		}
 
 	      if ((kind == OMP_CLAUSE_DEPEND || kind == OMP_CLAUSE_AFFINITY)
-		  && t != error_mark_node
+		  && t != error_mark_बुहोल
 		  && parser->tokens_avail != 2)
 		{
 		  if (array_section_p)
 		    {
 		      error_at (c_parser_peek_token (parser)->location,
 				"expected %<)%> or %<,%>");
-		      t = error_mark_node;
+		      t = error_mark_बुहोल;
 		    }
 		  else
 		    {
 		      parser->tokens = tokens.address ();
 		      parser->tokens_avail = tokens.length ();
 
-		      t = c_parser_expr_no_commas (parser, NULL).value;
-		      if (t != error_mark_node && parser->tokens_avail != 2)
+		      t = c_parser_पाहायाग_no_commas (parser, NULL).हालागा;
+		      if (t != error_mark_बुहोल && parser->tokens_avail != 2)
 			{
 			  error_at (c_parser_peek_token (parser)->location,
 				    "expected %<)%> or %<,%>");
-			  t = error_mark_node;
+			  t = error_mark_बुहोल;
 			}
 		    }
 		}
@@ -17216,16 +17216,16 @@ c_parser_omp_variable_list (c_parser *parser,
 	      break;
 	    }
 
-	  if (t != error_mark_node)
+	  if (t != error_mark_बुहोल)
 	    {
-	      tree u = build_omp_clause (clause_loc, kind);
+	      पुनो u = build_omp_clause (clause_loc, kind);
 	      OMP_CLAUSE_DECL (u) = t;
 	      OMP_CLAUSE_CHAIN (u) = list;
 	      list = u;
 	    }
 	}
       else  /* kind == OMP_CLAUSE_ERROR */
-	list = tree_cons (t, build_empty_stmt (tloc), list);
+	list = पुनो_cons (t, build_empty_stmt (tloc), list);
 
       if (kind == OMP_CLAUSE_DEPEND || kind == OMP_CLAUSE_AFFINITY)
 	{
@@ -17247,9 +17247,9 @@ c_parser_omp_variable_list (c_parser *parser,
    common case for OpenACC and OpenMP clauses.  The optional ALLOW_DEREF
    argument is true if list items can use the deref (->) operator.  */
 
-static tree
+static पुनो
 c_parser_omp_var_list_parens (c_parser *parser, enum omp_clause_code kind,
-			      tree list, bool map_lvalue = false)
+			      पुनो list, bool map_lvalue = false)
 {
   /* The clauses location.  */
   location_t loc = c_parser_peek_token (parser)->location;
@@ -17258,13 +17258,13 @@ c_parser_omp_var_list_parens (c_parser *parser, enum omp_clause_code kind,
     {
       if (kind)
 	{
-	  tree u = build_omp_clause (loc, kind);
+	  पुनो u = build_omp_clause (loc, kind);
 	  OMP_CLAUSE_DECL (u) = parser->in_omp_decl_attribute;
 	  OMP_CLAUSE_CHAIN (u) = list;
 	  return u;
 	}
       else
-	return tree_cons (parser->in_omp_decl_attribute, NULL_TREE, list);
+	return पुनो_cons (parser->in_omp_decl_attribute, NULL_पुनो, list);
     }
 
   matching_parens parens;
@@ -17293,9 +17293,9 @@ c_parser_omp_var_list_parens (c_parser *parser, enum omp_clause_code kind,
    copyin (readonly : variable-list )
  */
 
-static tree
+static पुनो
 c_parser_oacc_data_clause (c_parser *parser, pragma_omp_clause c_kind,
-			   tree list)
+			   पुनो list)
 {
   enum gomp_map_kind kind;
   switch (c_kind)
@@ -17345,7 +17345,7 @@ c_parser_oacc_data_clause (c_parser *parser, pragma_omp_clause c_kind,
       gcc_unreachable ();
     }
 
-  tree nl = list;
+  पुनो nl = list;
   bool readonly = false;
   location_t open_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
@@ -17356,7 +17356,7 @@ c_parser_oacc_data_clause (c_parser *parser, pragma_omp_clause c_kind,
 	{
 	  c_token *token = c_parser_peek_token (parser);
 	  if (token->type == CPP_NAME
-	      && !strcmp (IDENTIFIER_POINTER (token->value), "readonly")
+	      && !strcmp (IDENTIFIER_POINTER (token->हालागा), "readonly")
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
 	      c_parser_consume_token (parser);
@@ -17369,7 +17369,7 @@ c_parser_oacc_data_clause (c_parser *parser, pragma_omp_clause c_kind,
       parens.skip_until_found_close (parser);
     }
 
-  for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  for (पुनो c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
     {
       OMP_CLAUSE_SET_MAP_KIND (c, kind);
       if (readonly)
@@ -17382,28 +17382,28 @@ c_parser_oacc_data_clause (c_parser *parser, pragma_omp_clause c_kind,
 /* OpenACC 2.0:
    deviceptr ( variable-list ) */
 
-static tree
-c_parser_oacc_data_clause_deviceptr (c_parser *parser, tree list)
+static पुनो
+c_parser_oacc_data_clause_deviceptr (c_parser *parser, पुनो list)
 {
-  tree vars, t;
+  पुनो vars, t;
 
   /* Can't use OMP_CLAUSE_MAP here (that is, can't use the generic
      c_parser_oacc_data_clause), as for PRAGMA_OACC_CLAUSE_DEVICEPTR,
      variable-list must only allow for pointer variables.  */
   vars = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ERROR, NULL);
-  for (t = vars; t && t; t = TREE_CHAIN (t))
+  for (t = vars; t && t; t = पुनो_CHAIN (t))
     {
-      tree v = TREE_PURPOSE (t);
-      location_t loc = EXPR_LOCATION (TREE_VALUE (t));
+      पुनो v = पुनो_PURPOSE (t);
+      location_t loc = पाहायाग_LOCATION (पुनो_हालागा (t));
 
-      if (!VAR_P (v) && TREE_CODE (v) != PARM_DECL)
+      if (!VAR_P (v) && पुनो_CODE (v) != PARM_DECL)
 	error_at (loc, "%qD is not a variable", v);
-      else if (TREE_TYPE (v) == error_mark_node)
+      else if (पुनो_TYPE (v) == error_mark_बुहोल)
 	;
-      else if (!POINTER_TYPE_P (TREE_TYPE (v)))
+      else if (!POINTER_TYPE_P (पुनो_TYPE (v)))
 	error_at (loc, "%qD is not a pointer variable", v);
 
-      tree u = build_omp_clause (loc, OMP_CLAUSE_MAP);
+      पुनो u = build_omp_clause (loc, OMP_CLAUSE_MAP);
       OMP_CLAUSE_SET_MAP_KIND (u, GOMP_MAP_FORCE_DEVICEPTR);
       OMP_CLAUSE_DECL (u) = v;
       OMP_CLAUSE_CHAIN (u) = list;
@@ -17416,10 +17416,10 @@ c_parser_oacc_data_clause_deviceptr (c_parser *parser, tree list)
 /* OpenACC 2.0, OpenMP 3.0:
    collapse ( constant-expression ) */
 
-static tree
-c_parser_omp_clause_collapse (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_collapse (c_parser *parser, पुनो list)
 {
-  tree c, num = error_mark_node;
+  पुनो c, नुमेरो = error_mark_बुहोल;
   HOST_WIDE_INT n;
   location_t loc;
 
@@ -17430,16 +17430,16 @@ c_parser_omp_clause_collapse (c_parser *parser, tree list)
   matching_parens parens;
   if (parens.require_open (parser))
     {
-      num = c_parser_expr_no_commas (parser, NULL).value;
+      नुमेरो = c_parser_पाहायाग_no_commas (parser, NULL).हालागा;
       parens.skip_until_found_close (parser);
     }
-  if (num == error_mark_node)
+  if (नुमेरो == error_mark_बुहोल)
     return list;
-  mark_exp_read (num);
-  num = c_fully_fold (num, false, NULL);
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (num))
-      || !tree_fits_shwi_p (num)
-      || (n = tree_to_shwi (num)) <= 0
+  mark_exp_read (नुमेरो);
+  नुमेरो = c_fully_fold (नुमेरो, false, NULL);
+  if (!INTEGRAL_TYPE_P (पुनो_TYPE (नुमेरो))
+      || !पुनो_fits_shwi_p (नुमेरो)
+      || (n = पुनो_to_shwi (नुमेरो)) <= 0
       || (int) n != n)
     {
       error_at (loc,
@@ -17447,7 +17447,7 @@ c_parser_omp_clause_collapse (c_parser *parser, tree list)
       return list;
     }
   c = build_omp_clause (loc, OMP_CLAUSE_COLLAPSE);
-  OMP_CLAUSE_COLLAPSE_EXPR (c) = num;
+  OMP_CLAUSE_COLLAPSE_पाहायाग (c) = नुमेरो;
   OMP_CLAUSE_CHAIN (c) = list;
   return c;
 }
@@ -17455,8 +17455,8 @@ c_parser_omp_clause_collapse (c_parser *parser, tree list)
 /* OpenMP 2.5:
    copyin ( variable-list ) */
 
-static tree
-c_parser_omp_clause_copyin (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_copyin (c_parser *parser, पुनो list)
 {
   return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_COPYIN, list);
 }
@@ -17464,8 +17464,8 @@ c_parser_omp_clause_copyin (c_parser *parser, tree list)
 /* OpenMP 2.5:
    copyprivate ( variable-list ) */
 
-static tree
-c_parser_omp_clause_copyprivate (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_copyprivate (c_parser *parser, पुनो list)
 {
   return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_COPYPRIVATE, list);
 }
@@ -17479,19 +17479,19 @@ c_parser_omp_clause_copyprivate (c_parser *parser, tree list)
    OpenACC:
    default ( none | present ) */
 
-static tree
-c_parser_omp_clause_default (c_parser *parser, tree list, bool is_oacc)
+static पुनो
+c_parser_omp_clause_default (c_parser *parser, पुनो list, bool is_oacc)
 {
   enum omp_clause_default_kind kind = OMP_CLAUSE_DEFAULT_UNSPECIFIED;
   location_t loc = c_parser_peek_token (parser)->location;
-  tree c;
+  पुनो c;
 
   matching_parens parens;
   if (!parens.require_open (parser))
     return list;
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
       switch (p[0])
 	{
@@ -17559,8 +17559,8 @@ c_parser_omp_clause_default (c_parser *parser, tree list, bool is_oacc)
 /* OpenMP 2.5:
    firstprivate ( variable-list ) */
 
-static tree
-c_parser_omp_clause_firstprivate (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_firstprivate (c_parser *parser, पुनो list)
 {
   return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_FIRSTPRIVATE, list);
 }
@@ -17568,21 +17568,21 @@ c_parser_omp_clause_firstprivate (c_parser *parser, tree list)
 /* OpenMP 3.1:
    final ( expression ) */
 
-static tree
-c_parser_omp_clause_final (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_final (c_parser *parser, पुनो list)
 {
   location_t loc = c_parser_peek_token (parser)->location;
   if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       matching_parens parens;
-      tree t, c;
+      पुनो t, c;
       if (!parens.require_open (parser))
-	t = error_mark_node;
+	t = error_mark_बुहोल;
       else
 	{
 	  location_t eloc = c_parser_peek_token (parser)->location;
-	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-	  t = convert_lvalue_to_rvalue (eloc, expr, true, true).value;
+	  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	  t = convert_lvalue_to_rvalue (eloc, पाहायाग, true, true).हालागा;
 	  t = c_objc_common_truthvalue_conversion (eloc, t);
 	  t = c_fully_fold (t, false, NULL);
 	  parens.skip_until_found_close (parser);
@@ -17591,7 +17591,7 @@ c_parser_omp_clause_final (c_parser *parser, tree list)
       check_no_duplicate_clause (list, OMP_CLAUSE_FINAL, "final");
 
       c = build_omp_clause (loc, OMP_CLAUSE_FINAL);
-      OMP_CLAUSE_FINAL_EXPR (c) = t;
+      OMP_CLAUSE_FINAL_पाहायाग (c) = t;
       OMP_CLAUSE_CHAIN (c) = list;
       list = c;
     }
@@ -17605,11 +17605,11 @@ c_parser_omp_clause_final (c_parser *parser, tree list)
    indirect [( expression )]
 */
 
-static tree
-c_parser_omp_clause_indirect (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_indirect (c_parser *parser, पुनो list)
 {
   location_t location = c_parser_peek_token (parser)->location;
-  tree t;
+  पुनो t;
 
   if (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
     {
@@ -17618,12 +17618,12 @@ c_parser_omp_clause_indirect (c_parser *parser, tree list)
 	return list;
 
       location_t loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (loc, expr, true, true);
-      t = c_objc_common_truthvalue_conversion (loc, expr.value);
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (loc, पाहायाग, true, true);
+      t = c_objc_common_truthvalue_conversion (loc, पाहायाग.हालागा);
       t = c_fully_fold (t, false, NULL);
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t))
-	  || TREE_CODE (t) != INTEGER_CST)
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (t))
+	  || पुनो_CODE (t) != INTEGER_CST)
 	{
 	  c_parser_error (parser, "expected constant logical expression");
 	  return list;
@@ -17631,12 +17631,12 @@ c_parser_omp_clause_indirect (c_parser *parser, tree list)
       parens.skip_until_found_close (parser);
     }
   else
-    t = integer_one_node;
+    t = integer_one_बुहोल;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_INDIRECT, "indirect");
 
-  tree c = build_omp_clause (location, OMP_CLAUSE_INDIRECT);
-  OMP_CLAUSE_INDIRECT_EXPR (c) = t;
+  पुनो c = build_omp_clause (location, OMP_CLAUSE_INDIRECT);
+  OMP_CLAUSE_INDIRECT_पाहायाग (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
 
   return c;
@@ -17656,11 +17656,11 @@ c_parser_omp_clause_indirect (c_parser *parser, tree list)
    directive-name-modifier:
      ... | simd | cancel  */
 
-static tree
-c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
+static पुनो
+c_parser_omp_clause_if (c_parser *parser, पुनो list, bool is_omp)
 {
   location_t location = c_parser_peek_token (parser)->location;
-  enum tree_code if_modifier = ERROR_MARK;
+  enum पुनो_code if_modifier = ERROR_MARK;
 
   matching_parens parens;
   if (!parens.require_open (parser))
@@ -17668,7 +17668,7 @@ c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
 
   if (is_omp && c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       int n = 2;
       if (strcmp (p, "cancel") == 0)
 	if_modifier = VOID_CST;
@@ -17685,7 +17685,7 @@ c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
 	  if_modifier = OMP_TARGET;
 	  if (c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 	    {
-	      p = IDENTIFIER_POINTER (c_parser_peek_2nd_token (parser)->value);
+	      p = IDENTIFIER_POINTER (c_parser_peek_2nd_token (parser)->हालागा);
 	      if (strcmp ("data", p) == 0)
 		if_modifier = OMP_TARGET_DATA;
 	      else if (strcmp ("update", p) == 0)
@@ -17712,7 +17712,7 @@ c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
 		  if (c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 		    {
 		      p = IDENTIFIER_POINTER
-				(c_parser_peek_2nd_token (parser)->value);
+				(c_parser_peek_2nd_token (parser)->हालागा);
 		      if (strcmp ("data", p) == 0)
 			n = 4;
 		    }
@@ -17748,9 +17748,9 @@ c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
     }
 
   location_t loc = c_parser_peek_token (parser)->location;
-  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-  expr = convert_lvalue_to_rvalue (loc, expr, true, true);
-  tree t = c_objc_common_truthvalue_conversion (loc, expr.value), c;
+  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+  पाहायाग = convert_lvalue_to_rvalue (loc, पाहायाग, true, true);
+  पुनो t = c_objc_common_truthvalue_conversion (loc, पाहायाग.हालागा), c;
   t = c_fully_fold (t, false, NULL);
   parens.skip_until_found_close (parser);
 
@@ -17798,7 +17798,7 @@ c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
 
   c = build_omp_clause (location, OMP_CLAUSE_IF);
   OMP_CLAUSE_IF_MODIFIER (c) = if_modifier;
-  OMP_CLAUSE_IF_EXPR (c) = t;
+  OMP_CLAUSE_IF_पाहायाग (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
   return c;
 }
@@ -17809,8 +17809,8 @@ c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
    OpenMP 5.0:
    lastprivate ( [ lastprivate-modifier : ] variable-list ) */
 
-static tree
-c_parser_omp_clause_lastprivate (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_lastprivate (c_parser *parser, पुनो list)
 {
   /* The clauses location.  */
   location_t loc = c_parser_peek_token (parser)->location;
@@ -17822,7 +17822,7 @@ c_parser_omp_clause_lastprivate (c_parser *parser, tree list)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	{
 	  const char *p
-	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 	  if (strcmp (p, "conditional") == 0)
 	    {
 	      conditional = true;
@@ -17830,11 +17830,11 @@ c_parser_omp_clause_lastprivate (c_parser *parser, tree list)
 	      c_parser_consume_token (parser);
 	    }
 	}
-      tree nlist = c_parser_omp_variable_list (parser, loc,
+      पुनो nlist = c_parser_omp_variable_list (parser, loc,
 					       OMP_CLAUSE_LASTPRIVATE, list);
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, "expected %<)%>");
       if (conditional)
-	for (tree c = nlist; c != list; c = OMP_CLAUSE_CHAIN (c))
+	for (पुनो c = nlist; c != list; c = OMP_CLAUSE_CHAIN (c))
 	  OMP_CLAUSE_LASTPRIVATE_CONDITIONAL (c) = 1;
       return nlist;
     }
@@ -17844,10 +17844,10 @@ c_parser_omp_clause_lastprivate (c_parser *parser, tree list)
 /* OpenMP 3.1:
    mergeable */
 
-static tree
-c_parser_omp_clause_mergeable (c_parser *parser ATTRIBUTE_UNUSED, tree list)
+static पुनो
+c_parser_omp_clause_mergeable (c_parser *parser ATTRIBUTE_UNUSED, पुनो list)
 {
-  tree c;
+  पुनो c;
 
   /* FIXME: Should we allow duplicates?  */
   check_no_duplicate_clause (list, OMP_CLAUSE_MERGEABLE, "mergeable");
@@ -17862,10 +17862,10 @@ c_parser_omp_clause_mergeable (c_parser *parser ATTRIBUTE_UNUSED, tree list)
 /* OpenMP 2.5:
    nowait */
 
-static tree
-c_parser_omp_clause_nowait (c_parser *parser ATTRIBUTE_UNUSED, tree list)
+static पुनो
+c_parser_omp_clause_nowait (c_parser *parser ATTRIBUTE_UNUSED, पुनो list)
 {
-  tree c;
+  पुनो c;
   location_t loc = c_parser_peek_token (parser)->location;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_NOWAIT, "nowait");
@@ -17878,42 +17878,42 @@ c_parser_omp_clause_nowait (c_parser *parser ATTRIBUTE_UNUSED, tree list)
 /* OpenMP 2.5:
    num_threads ( expression ) */
 
-static tree
-c_parser_omp_clause_num_threads (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_नुमेरो_threads (c_parser *parser, पुनो list)
 {
-  location_t num_threads_loc = c_parser_peek_token (parser)->location;
+  location_t नुमेरो_threads_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
   if (parens.require_open (parser))
     {
-      location_t expr_loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-      tree c, t = expr.value;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+      पुनो c, t = पाहायाग.हालागा;
       t = c_fully_fold (t, false, NULL);
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
 	  return list;
 	}
 
       /* Attempt to statically determine when the number isn't positive.  */
-      c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, t,
-		       build_int_cst (TREE_TYPE (t), 0));
-      protected_set_expr_location (c, expr_loc);
-      if (c == boolean_true_node)
+      c = fold_build2_loc (पाहायाग_loc, LE_पाहायाग, boolean_type_बुहोल, t,
+		       build_int_cst (पुनो_TYPE (t), 0));
+      protected_set_पाहायाग_location (c, पाहायाग_loc);
+      if (c == boolean_true_बुहोल)
 	{
-	  warning_at (expr_loc, OPT_Wopenmp,
+	  warning_at (पाहायाग_loc, OPT_Wopenmp,
 		      "%<num_threads%> value must be positive");
-	  t = integer_one_node;
+	  t = integer_one_बुहोल;
 	}
 
-      check_no_duplicate_clause (list, OMP_CLAUSE_NUM_THREADS, "num_threads");
+      check_no_duplicate_clause (list, OMP_CLAUSE_नुमेरो_THREADS, "num_threads");
 
-      c = build_omp_clause (num_threads_loc, OMP_CLAUSE_NUM_THREADS);
-      OMP_CLAUSE_NUM_THREADS_EXPR (c) = t;
+      c = build_omp_clause (नुमेरो_threads_loc, OMP_CLAUSE_नुमेरो_THREADS);
+      OMP_CLAUSE_नुमेरो_THREADS_पाहायाग (c) = t;
       OMP_CLAUSE_CHAIN (c) = list;
       list = c;
     }
@@ -17927,17 +17927,17 @@ c_parser_omp_clause_num_threads (c_parser *parser, tree list)
    OpenMP 5.1:
    num_tasks ( strict : expression ) */
 
-static tree
-c_parser_omp_clause_num_tasks (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_नुमेरो_tasks (c_parser *parser, पुनो list)
 {
-  location_t num_tasks_loc = c_parser_peek_token (parser)->location;
+  location_t नुमेरो_tasks_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
   if (parens.require_open (parser))
     {
       bool strict = false;
       if (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_COLON
-	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा),
 		     "strict") == 0)
 	{
 	  strict = true;
@@ -17945,37 +17945,37 @@ c_parser_omp_clause_num_tasks (c_parser *parser, tree list)
 	  c_parser_consume_token (parser);
 	}
 
-      location_t expr_loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-      tree c, t = expr.value;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+      पुनो c, t = पाहायाग.हालागा;
       t = c_fully_fold (t, false, NULL);
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
 	  return list;
 	}
 
       /* Attempt to statically determine when the number isn't positive.  */
-      c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, t,
-			   build_int_cst (TREE_TYPE (t), 0));
+      c = fold_build2_loc (पाहायाग_loc, LE_पाहायाग, boolean_type_बुहोल, t,
+			   build_int_cst (पुनो_TYPE (t), 0));
       if (CAN_HAVE_LOCATION_P (c))
-	SET_EXPR_LOCATION (c, expr_loc);
-      if (c == boolean_true_node)
+	SET_पाहायाग_LOCATION (c, पाहायाग_loc);
+      if (c == boolean_true_बुहोल)
 	{
-	  warning_at (expr_loc, OPT_Wopenmp,
+	  warning_at (पाहायाग_loc, OPT_Wopenmp,
 		      "%<num_tasks%> value must be positive");
-	  t = integer_one_node;
+	  t = integer_one_बुहोल;
 	}
 
-      check_no_duplicate_clause (list, OMP_CLAUSE_NUM_TASKS, "num_tasks");
+      check_no_duplicate_clause (list, OMP_CLAUSE_नुमेरो_TASKS, "num_tasks");
 
-      c = build_omp_clause (num_tasks_loc, OMP_CLAUSE_NUM_TASKS);
-      OMP_CLAUSE_NUM_TASKS_EXPR (c) = t;
-      OMP_CLAUSE_NUM_TASKS_STRICT (c) = strict;
+      c = build_omp_clause (नुमेरो_tasks_loc, OMP_CLAUSE_नुमेरो_TASKS);
+      OMP_CLAUSE_नुमेरो_TASKS_पाहायाग (c) = t;
+      OMP_CLAUSE_नुमेरो_TASKS_STRICT (c) = strict;
       OMP_CLAUSE_CHAIN (c) = list;
       list = c;
     }
@@ -17989,8 +17989,8 @@ c_parser_omp_clause_num_tasks (c_parser *parser, tree list)
    OpenMP 5.1:
    grainsize ( strict : expression ) */
 
-static tree
-c_parser_omp_clause_grainsize (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_grainsize (c_parser *parser, पुनो list)
 {
   location_t grainsize_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
@@ -17999,7 +17999,7 @@ c_parser_omp_clause_grainsize (c_parser *parser, tree list)
       bool strict = false;
       if (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_COLON
-	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा),
 		     "strict") == 0)
 	{
 	  strict = true;
@@ -18007,36 +18007,36 @@ c_parser_omp_clause_grainsize (c_parser *parser, tree list)
 	  c_parser_consume_token (parser);
 	}
 
-      location_t expr_loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-      tree c, t = expr.value;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+      पुनो c, t = पाहायाग.हालागा;
       t = c_fully_fold (t, false, NULL);
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
 	  return list;
 	}
 
       /* Attempt to statically determine when the number isn't positive.  */
-      c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, t,
-			   build_int_cst (TREE_TYPE (t), 0));
+      c = fold_build2_loc (पाहायाग_loc, LE_पाहायाग, boolean_type_बुहोल, t,
+			   build_int_cst (पुनो_TYPE (t), 0));
       if (CAN_HAVE_LOCATION_P (c))
-	SET_EXPR_LOCATION (c, expr_loc);
-      if (c == boolean_true_node)
+	SET_पाहायाग_LOCATION (c, पाहायाग_loc);
+      if (c == boolean_true_बुहोल)
 	{
-	  warning_at (expr_loc, OPT_Wopenmp,
+	  warning_at (पाहायाग_loc, OPT_Wopenmp,
 		      "%<grainsize%> value must be positive");
-	  t = integer_one_node;
+	  t = integer_one_बुहोल;
 	}
 
       check_no_duplicate_clause (list, OMP_CLAUSE_GRAINSIZE, "grainsize");
 
       c = build_omp_clause (grainsize_loc, OMP_CLAUSE_GRAINSIZE);
-      OMP_CLAUSE_GRAINSIZE_EXPR (c) = t;
+      OMP_CLAUSE_GRAINSIZE_पाहायाग (c) = t;
       OMP_CLAUSE_GRAINSIZE_STRICT (c) = strict;
       OMP_CLAUSE_CHAIN (c) = list;
       list = c;
@@ -18048,22 +18048,22 @@ c_parser_omp_clause_grainsize (c_parser *parser, tree list)
 /* OpenMP 4.5:
    priority ( expression ) */
 
-static tree
-c_parser_omp_clause_priority (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_priority (c_parser *parser, पुनो list)
 {
   location_t priority_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
   if (parens.require_open (parser))
     {
-      location_t expr_loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-      tree c, t = expr.value;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+      पुनो c, t = पाहायाग.हालागा;
       t = c_fully_fold (t, false, NULL);
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
 	  return list;
@@ -18071,21 +18071,21 @@ c_parser_omp_clause_priority (c_parser *parser, tree list)
 
       /* Attempt to statically determine when the number isn't
 	 non-negative.  */
-      c = fold_build2_loc (expr_loc, LT_EXPR, boolean_type_node, t,
-			   build_int_cst (TREE_TYPE (t), 0));
+      c = fold_build2_loc (पाहायाग_loc, LT_पाहायाग, boolean_type_बुहोल, t,
+			   build_int_cst (पुनो_TYPE (t), 0));
       if (CAN_HAVE_LOCATION_P (c))
-	SET_EXPR_LOCATION (c, expr_loc);
-      if (c == boolean_true_node)
+	SET_पाहायाग_LOCATION (c, पाहायाग_loc);
+      if (c == boolean_true_बुहोल)
 	{
-	  warning_at (expr_loc, OPT_Wopenmp,
+	  warning_at (पाहायाग_loc, OPT_Wopenmp,
 		      "%<priority%> value must be non-negative");
-	  t = integer_one_node;
+	  t = integer_one_बुहोल;
 	}
 
       check_no_duplicate_clause (list, OMP_CLAUSE_PRIORITY, "priority");
 
       c = build_omp_clause (priority_loc, OMP_CLAUSE_PRIORITY);
-      OMP_CLAUSE_PRIORITY_EXPR (c) = t;
+      OMP_CLAUSE_PRIORITY_पाहायाग (c) = t;
       OMP_CLAUSE_CHAIN (c) = list;
       list = c;
     }
@@ -18096,21 +18096,21 @@ c_parser_omp_clause_priority (c_parser *parser, tree list)
 /* OpenMP 4.5:
    hint ( expression ) */
 
-static tree
-c_parser_omp_clause_hint (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_hint (c_parser *parser, पुनो list)
 {
   location_t hint_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
   if (parens.require_open (parser))
     {
-      location_t expr_loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-      tree c, t = expr.value;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+      पुनो c, t = पाहायाग.हालागा;
       t = c_fully_fold (t, false, NULL);
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t))
-	  || TREE_CODE (t) != INTEGER_CST
-	  || tree_int_cst_sgn (t) == -1)
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (t))
+	  || पुनो_CODE (t) != INTEGER_CST
+	  || पुनो_int_cst_sgn (t) == -1)
 	{
 	  c_parser_error (parser, "expected constant integer expression "
 				  "with valid sync-hint value");
@@ -18120,7 +18120,7 @@ c_parser_omp_clause_hint (c_parser *parser, tree list)
       check_no_duplicate_clause (list, OMP_CLAUSE_HINT, "hint");
 
       c = build_omp_clause (hint_loc, OMP_CLAUSE_HINT);
-      OMP_CLAUSE_HINT_EXPR (c) = t;
+      OMP_CLAUSE_HINT_पाहायाग (c) = t;
       OMP_CLAUSE_CHAIN (c) = list;
       list = c;
     }
@@ -18131,19 +18131,19 @@ c_parser_omp_clause_hint (c_parser *parser, tree list)
 /* OpenMP 5.1:
    filter ( integer-expression ) */
 
-static tree
-c_parser_omp_clause_filter (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_filter (c_parser *parser, पुनो list)
 {
   location_t hint_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
   if (parens.require_open (parser))
     {
-      location_t expr_loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-      tree c, t = expr.value;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+      पुनो c, t = पाहायाग.हालागा;
       t = c_fully_fold (t, false, NULL);
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
 	  return list;
@@ -18152,7 +18152,7 @@ c_parser_omp_clause_filter (c_parser *parser, tree list)
       check_no_duplicate_clause (list, OMP_CLAUSE_FILTER, "filter");
 
       c = build_omp_clause (hint_loc, OMP_CLAUSE_FILTER);
-      OMP_CLAUSE_FILTER_EXPR (c) = t;
+      OMP_CLAUSE_FILTER_पाहायाग (c) = t;
       OMP_CLAUSE_CHAIN (c) = list;
       list = c;
     }
@@ -18166,11 +18166,11 @@ c_parser_omp_clause_filter (c_parser *parser, tree list)
    OpenMP 5.0:
    defaultmap ( implicit-behavior [ : variable-category ] ) */
 
-static tree
-c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_defaultmap (c_parser *parser, पुनो list)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  tree c;
+  पुनो c;
   const char *p;
   enum omp_clause_defaultmap_kind behavior = OMP_CLAUSE_DEFAULTMAP_DEFAULT;
   enum omp_clause_defaultmap_kind category
@@ -18190,7 +18190,7 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
       goto out_err;
     }
   else
-    p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+    p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
   switch (p[0])
     {
@@ -18256,7 +18256,7 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
 				  "%<pointer%> or %<all%>");
 	  goto out_err;
 	}
-      p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       switch (p[0])
 	{
 	case 'a':
@@ -18353,8 +18353,8 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
    OpenMP 4.5:
    use_device_ptr ( variable-list ) */
 
-static tree
-c_parser_omp_clause_use_device_ptr (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_use_device_ptr (c_parser *parser, पुनो list)
 {
   return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_USE_DEVICE_PTR,
 				       list);
@@ -18363,8 +18363,8 @@ c_parser_omp_clause_use_device_ptr (c_parser *parser, tree list)
 /* OpenMP 5.0:
    use_device_addr ( variable-list ) */
 
-static tree
-c_parser_omp_clause_use_device_addr (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_use_device_addr (c_parser *parser, पुनो list)
 {
   return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_USE_DEVICE_ADDR,
 				       list);
@@ -18373,8 +18373,8 @@ c_parser_omp_clause_use_device_addr (c_parser *parser, tree list)
 /* OpenMP 5.1:
    has_device_addr ( variable-list ) */
 
-static tree
-c_parser_omp_clause_has_device_addr (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_has_device_addr (c_parser *parser, पुनो list)
 {
   return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_HAS_DEVICE_ADDR,
 				       list);
@@ -18383,8 +18383,8 @@ c_parser_omp_clause_has_device_addr (c_parser *parser, tree list)
 /* OpenMP 4.5:
    is_device_ptr ( variable-list ) */
 
-static tree
-c_parser_omp_clause_is_device_ptr (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_is_device_ptr (c_parser *parser, पुनो list)
 {
   return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_IS_DEVICE_PTR, list);
 }
@@ -18394,9 +18394,9 @@ c_parser_omp_clause_is_device_ptr (c_parser *parser, tree list)
    num_workers ( expression )
    vector_length ( expression )  */
 
-static tree
+static पुनो
 c_parser_oacc_single_int_clause (c_parser *parser, omp_clause_code code,
-				 tree list)
+				 पुनो list)
 {
   location_t loc = c_parser_peek_token (parser)->location;
 
@@ -18404,33 +18404,33 @@ c_parser_oacc_single_int_clause (c_parser *parser, omp_clause_code code,
   if (!parens.require_open (parser))
     return list;
 
-  location_t expr_loc = c_parser_peek_token (parser)->location;
-  c_expr expr = c_parser_expression (parser);
-  expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-  tree c, t = expr.value;
+  location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+  c_पाहायाग पाहायाग = c_parser_expression (parser);
+  पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+  पुनो c, t = पाहायाग.हालागा;
   t = c_fully_fold (t, false, NULL);
 
   parens.skip_until_found_close (parser);
 
-  if (t == error_mark_node)
+  if (t == error_mark_बुहोल)
     return list;
-  else if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+  else if (!INTEGRAL_TYPE_P (पुनो_TYPE (t)))
     {
-      error_at (expr_loc, "%qs expression must be integral",
+      error_at (पाहायाग_loc, "%qs expression must be integral",
 		omp_clause_code_name[code]);
       return list;
     }
 
   /* Attempt to statically determine when the number isn't positive.  */
-  c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, t,
-		       build_int_cst (TREE_TYPE (t), 0));
-  protected_set_expr_location (c, expr_loc);
-  if (c == boolean_true_node)
+  c = fold_build2_loc (पाहायाग_loc, LE_पाहायाग, boolean_type_बुहोल, t,
+		       build_int_cst (पुनो_TYPE (t), 0));
+  protected_set_पाहायाग_location (c, पाहायाग_loc);
+  if (c == boolean_true_बुहोल)
     {
-      warning_at (expr_loc, 0,
+      warning_at (पाहायाग_loc, 0,
 		  "%qs value must be positive",
 		  omp_clause_code_name[code]);
-      t = integer_one_node;
+      t = integer_one_बुहोल;
     }
 
   check_no_duplicate_clause (list, code, omp_clause_code_name[code]);
@@ -18458,13 +18458,13 @@ c_parser_oacc_single_int_clause (c_parser *parser, omp_clause_code code,
     int-expr
 */
 
-static tree
+static पुनो
 c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 			    omp_clause_code kind,
-			    const char *str, tree list)
+			    const char *str, पुनो list)
 {
   const char *id = "num";
-  tree ops[2] = { NULL_TREE, NULL_TREE }, c;
+  पुनो ops[2] = { NULL_पुनो, NULL_पुनो }, c;
 
   if (kind == OMP_CLAUSE_VECTOR)
     id = "length";
@@ -18488,7 +18488,7 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 		goto cleanup_error;
 
 	      idx = 1;
-	      if (ops[idx] != NULL_TREE)
+	      if (ops[idx] != NULL_पुनो)
 		{
 		  c_parser_error (parser, "too many %<static%> arguments");
 		  goto cleanup_error;
@@ -18501,7 +18501,7 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 		         == CPP_CLOSE_PAREN))
 		{
 		  c_parser_consume_token (parser);
-		  ops[idx] = integer_minus_one_node;
+		  ops[idx] = integer_minus_one_बुहोल;
 
 		  if (c_parser_next_token_is (parser, CPP_COMMA))
 		    {
@@ -18514,7 +18514,7 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 	    }
 	  /* Worker num: argument and vector length: arguments.  */
 	  else if (c_parser_next_token_is (parser, CPP_NAME)
-		   && strcmp (id, IDENTIFIER_POINTER (next->value)) == 0
+		   && strcmp (id, IDENTIFIER_POINTER (next->हालागा)) == 0
 		   && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
 	      c_parser_consume_token (parser);  /* id  */
@@ -18522,40 +18522,40 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 	    }
 
 	  /* Now collect the actual argument.  */
-	  if (ops[idx] != NULL_TREE)
+	  if (ops[idx] != NULL_पुनो)
 	    {
 	      c_parser_error (parser, "unexpected argument");
 	      goto cleanup_error;
 	    }
 
-	  location_t expr_loc = c_parser_peek_token (parser)->location;
-	  c_expr cexpr = c_parser_expr_no_commas (parser, NULL);
-	  cexpr = convert_lvalue_to_rvalue (expr_loc, cexpr, false, true);
-	  tree expr = cexpr.value;
-	  if (expr == error_mark_node)
+	  location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+	  c_पाहायाग cexpr = c_parser_पाहायाग_no_commas (parser, NULL);
+	  cexpr = convert_lvalue_to_rvalue (पाहायाग_loc, cexpr, false, true);
+	  पुनो पाहायाग = cexpr.हालागा;
+	  if (पाहायाग == error_mark_बुहोल)
 	    goto cleanup_error;
 
-	  expr = c_fully_fold (expr, false, NULL);
+	  पाहायाग = c_fully_fold (पाहायाग, false, NULL);
 
 	  /* Attempt to statically determine when the number isn't a
 	     positive integer.  */
 
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (expr)))
+	  if (!INTEGRAL_TYPE_P (पुनो_TYPE (पाहायाग)))
 	    {
 	      c_parser_error (parser, "expected integer expression");
 	      return list;
 	    }
 
-	  tree c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, expr,
-				    build_int_cst (TREE_TYPE (expr), 0));
-	  if (c == boolean_true_node)
+	  पुनो c = fold_build2_loc (पाहायाग_loc, LE_पाहायाग, boolean_type_बुहोल, पाहायाग,
+				    build_int_cst (पुनो_TYPE (पाहायाग), 0));
+	  if (c == boolean_true_बुहोल)
 	    {
 	      warning_at (loc, 0,
 			  "%qs value must be positive", str);
-	      expr = integer_one_node;
+	      पाहायाग = integer_one_बुहोल;
 	    }
 
-	  ops[idx] = expr;
+	  ops[idx] = पाहायाग;
 
 	  if (kind == OMP_CLAUSE_GANG
 	      && c_parser_next_token_is (parser, CPP_COMMA))
@@ -18595,13 +18595,13 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
    nohost
    seq */
 
-static tree
+static पुनो
 c_parser_oacc_simple_clause (location_t loc, enum omp_clause_code code,
-			     tree list)
+			     पुनो list)
 {
   check_no_duplicate_clause (list, code, omp_clause_code_name[code]);
 
-  tree c = build_omp_clause (loc, code);
+  पुनो c = build_omp_clause (loc, code);
   OMP_CLAUSE_CHAIN (c) = list;
 
   return c;
@@ -18610,22 +18610,22 @@ c_parser_oacc_simple_clause (location_t loc, enum omp_clause_code code,
 /* OpenACC:
    async [( int-expr )] */
 
-static tree
-c_parser_oacc_clause_async (c_parser *parser, tree list)
+static पुनो
+c_parser_oacc_clause_async (c_parser *parser, पुनो list)
 {
-  tree c, t;
+  पुनो c, t;
   location_t loc = c_parser_peek_token (parser)->location;
 
-  t = build_int_cst (integer_type_node, GOMP_ASYNC_NOVAL);
+  t = build_int_cst (integer_type_बुहोल, GOMP_ASYNC_NOVAL);
 
   if (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
     {
       c_parser_consume_token (parser);
 
-      t = c_parser_expr_no_commas (parser, NULL).value;
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      t = c_parser_पाहायाग_no_commas (parser, NULL).हालागा;
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (t)))
 	c_parser_error (parser, "expected integer expression");
-      else if (t == error_mark_node
+      else if (t == error_mark_बुहोल
 	  || !c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
 	return list;
     }
@@ -18635,7 +18635,7 @@ c_parser_oacc_clause_async (c_parser *parser, tree list)
   check_no_duplicate_clause (list, OMP_CLAUSE_ASYNC, "async");
 
   c = build_omp_clause (loc, OMP_CLAUSE_ASYNC);
-  OMP_CLAUSE_ASYNC_EXPR (c) = t;
+  OMP_CLAUSE_ASYNC_पाहायाग (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
   list = c;
 
@@ -18645,12 +18645,12 @@ c_parser_oacc_clause_async (c_parser *parser, tree list)
 /* OpenACC 2.0:
    tile ( size-expr-list ) */
 
-static tree
-c_parser_oacc_clause_tile (c_parser *parser, tree list)
+static पुनो
+c_parser_oacc_clause_tile (c_parser *parser, पुनो list)
 {
-  tree c, expr = error_mark_node;
+  पुनो c, पाहायाग = error_mark_बुहोल;
   location_t loc;
-  tree tile = NULL_TREE;
+  पुनो tile = NULL_पुनो;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_TILE, "tile");
   check_no_duplicate_clause (list, OMP_CLAUSE_COLLAPSE, "collapse");
@@ -18669,35 +18669,35 @@ c_parser_oacc_clause_tile (c_parser *parser, tree list)
 	      || c_parser_peek_2nd_token (parser)->type == CPP_CLOSE_PAREN))
 	{
 	  c_parser_consume_token (parser);
-	  expr = integer_zero_node;
+	  पाहायाग = integer_zero_बुहोल;
 	}
       else
 	{
-	  location_t expr_loc = c_parser_peek_token (parser)->location;
-	  c_expr cexpr = c_parser_expr_no_commas (parser, NULL);
-	  cexpr = convert_lvalue_to_rvalue (expr_loc, cexpr, false, true);
-	  expr = cexpr.value;
+	  location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+	  c_पाहायाग cexpr = c_parser_पाहायाग_no_commas (parser, NULL);
+	  cexpr = convert_lvalue_to_rvalue (पाहायाग_loc, cexpr, false, true);
+	  पाहायाग = cexpr.हालागा;
 
-	  if (expr == error_mark_node)
+	  if (पाहायाग == error_mark_बुहोल)
 	    {
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					 "expected %<)%>");
 	      return list;
 	    }
 
-	  expr = c_fully_fold (expr, false, NULL);
+	  पाहायाग = c_fully_fold (पाहायाग, false, NULL);
 
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (expr))
-	      || !tree_fits_shwi_p (expr)
-	      || tree_to_shwi (expr) <= 0)
+	  if (!INTEGRAL_TYPE_P (पुनो_TYPE (पाहायाग))
+	      || !पुनो_fits_shwi_p (पाहायाग)
+	      || पुनो_to_shwi (पाहायाग) <= 0)
 	    {
-	      error_at (expr_loc, "%<tile%> argument needs positive"
+	      error_at (पाहायाग_loc, "%<tile%> argument needs positive"
 			" integral constant");
-	      expr = integer_zero_node;
+	      पाहायाग = integer_zero_बुहोल;
 	    }
 	}
 
-      tile = tree_cons (NULL_TREE, expr, tile);
+      tile = पुनो_cons (NULL_पुनो, पाहायाग, tile);
     }
   while (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN));
 
@@ -18714,8 +18714,8 @@ c_parser_oacc_clause_tile (c_parser *parser, tree list)
 /* OpenACC:
    wait [( int-expr-list )] */
 
-static tree
-c_parser_oacc_clause_wait (c_parser *parser, tree list)
+static पुनो
+c_parser_oacc_clause_wait (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
 
@@ -18723,9 +18723,9 @@ c_parser_oacc_clause_wait (c_parser *parser, tree list)
     list = c_parser_oacc_wait_list (parser, clause_loc, list);
   else
     {
-      tree c = build_omp_clause (clause_loc, OMP_CLAUSE_WAIT);
+      पुनो c = build_omp_clause (clause_loc, OMP_CLAUSE_WAIT);
 
-      OMP_CLAUSE_DECL (c) = build_int_cst (integer_type_node, GOMP_ASYNC_NOVAL);
+      OMP_CLAUSE_DECL (c) = build_int_cst (integer_type_बुहोल, GOMP_ASYNC_NOVAL);
       OMP_CLAUSE_CHAIN (c) = list;
       list = c;
     }
@@ -18736,10 +18736,10 @@ c_parser_oacc_clause_wait (c_parser *parser, tree list)
 /* OpenACC 2.7:
    self [( expression )] */
 
-static tree
-c_parser_oacc_compute_clause_self (c_parser *parser, tree list)
+static पुनो
+c_parser_oacc_compute_clause_self (c_parser *parser, पुनो list)
 {
-  tree t;
+  पुनो t;
   location_t location = c_parser_peek_token (parser)->location;
   if (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
     {
@@ -18747,24 +18747,24 @@ c_parser_oacc_compute_clause_self (c_parser *parser, tree list)
       parens.consume_open (parser);
 
       location_t loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (loc, expr, true, true);
-      t = c_objc_common_truthvalue_conversion (loc, expr.value);
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (loc, पाहायाग, true, true);
+      t = c_objc_common_truthvalue_conversion (loc, पाहायाग.हालागा);
       t = c_fully_fold (t, false, NULL);
       parens.skip_until_found_close (parser);
     }
   else
-    t = truthvalue_true_node;
+    t = truthvalue_true_बुहोल;
 
-  for (tree c = list; c; c = OMP_CLAUSE_CHAIN (c))
+  for (पुनो c = list; c; c = OMP_CLAUSE_CHAIN (c))
     if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SELF)
       {
 	error_at (location, "too many %<self%> clauses");
 	return list;
       }
 
-  tree c = build_omp_clause (location, OMP_CLAUSE_SELF);
-  OMP_CLAUSE_SELF_EXPR (c) = t;
+  पुनो c = build_omp_clause (location, OMP_CLAUSE_SELF);
+  OMP_CLAUSE_SELF_पाहायाग (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
   return c;
 }
@@ -18779,11 +18779,11 @@ c_parser_oacc_compute_clause_self (c_parser *parser, tree list)
      reproducible
      unconstrained  */
 
-static tree
-c_parser_omp_clause_order (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_order (c_parser *parser, पुनो list)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  tree c;
+  पुनो c;
   const char *p;
   bool unconstrained = false;
   bool reproducible = false;
@@ -18794,7 +18794,7 @@ c_parser_omp_clause_order (c_parser *parser, tree list)
   if (c_parser_next_token_is (parser, CPP_NAME)
       && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
     {
-      p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "unconstrained") == 0)
 	unconstrained = true;
       else if (strcmp (p, "reproducible") == 0)
@@ -18813,7 +18813,7 @@ c_parser_omp_clause_order (c_parser *parser, tree list)
       c_parser_error (parser, "expected %<concurrent%>");
       goto out_err;
     }
-  p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+  p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
   if (strcmp (p, "concurrent") != 0)
     {
       c_parser_error (parser, "expected %<concurrent%>");
@@ -18837,11 +18837,11 @@ c_parser_omp_clause_order (c_parser *parser, tree list)
 /* OpenMP 5.0:
    bind ( teams | parallel | thread ) */
 
-static tree
-c_parser_omp_clause_bind (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_bind (c_parser *parser, पुनो list)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  tree c;
+  पुनो c;
   const char *p;
   enum omp_clause_bind_kind kind = OMP_CLAUSE_BIND_THREAD;
 
@@ -18856,7 +18856,7 @@ c_parser_omp_clause_bind (c_parser *parser, tree list)
       parens.skip_until_found_close (parser);
       return list;
     }
-  p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+  p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
   if (strcmp (p, "teams") == 0)
     kind = OMP_CLAUSE_BIND_TEAMS;
   else if (strcmp (p, "parallel") == 0)
@@ -18879,30 +18879,30 @@ c_parser_omp_clause_bind (c_parser *parser, tree list)
    OpenMP 4.5:
    ordered ( constant-expression ) */
 
-static tree
-c_parser_omp_clause_ordered (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_ordered (c_parser *parser, पुनो list)
 {
   check_no_duplicate_clause (list, OMP_CLAUSE_ORDERED, "ordered");
 
-  tree c, num = NULL_TREE;
+  पुनो c, नुमेरो = NULL_पुनो;
   HOST_WIDE_INT n;
   location_t loc = c_parser_peek_token (parser)->location;
   if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       matching_parens parens;
       parens.consume_open (parser);
-      num = c_parser_expr_no_commas (parser, NULL).value;
+      नुमेरो = c_parser_पाहायाग_no_commas (parser, NULL).हालागा;
       parens.skip_until_found_close (parser);
     }
-  if (num == error_mark_node)
+  if (नुमेरो == error_mark_बुहोल)
     return list;
-  if (num)
+  if (नुमेरो)
     {
-      mark_exp_read (num);
-      num = c_fully_fold (num, false, NULL);
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (num))
-	  || !tree_fits_shwi_p (num)
-	  || (n = tree_to_shwi (num)) <= 0
+      mark_exp_read (नुमेरो);
+      नुमेरो = c_fully_fold (नुमेरो, false, NULL);
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (नुमेरो))
+	  || !पुनो_fits_shwi_p (नुमेरो)
+	  || (n = पुनो_to_shwi (नुमेरो)) <= 0
 	  || (int) n != n)
 	{
 	  error_at (loc, "ordered argument needs positive "
@@ -18911,7 +18911,7 @@ c_parser_omp_clause_ordered (c_parser *parser, tree list)
 	}
     }
   c = build_omp_clause (loc, OMP_CLAUSE_ORDERED);
-  OMP_CLAUSE_ORDERED_EXPR (c) = num;
+  OMP_CLAUSE_ORDERED_पाहायाग (c) = नुमेरो;
   OMP_CLAUSE_CHAIN (c) = list;
   return c;
 }
@@ -18919,8 +18919,8 @@ c_parser_omp_clause_ordered (c_parser *parser, tree list)
 /* OpenMP 2.5:
    private ( variable-list ) */
 
-static tree
-c_parser_omp_clause_private (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_private (c_parser *parser, पुनो list)
 {
   return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_PRIVATE, list);
 }
@@ -18947,9 +18947,9 @@ c_parser_omp_clause_private (c_parser *parser, tree list)
    in_reduction ( reduction-operator : variable-list )
    task_reduction ( reduction-operator : variable-list )  */
 
-static tree
+static पुनो
 c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
-			       bool is_omp, tree list)
+			       bool is_omp, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
@@ -18957,8 +18957,8 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
     {
       bool task = false;
       bool inscan = false;
-      enum tree_code code = ERROR_MARK;
-      tree reduc_id = NULL_TREE;
+      enum पुनो_code code = ERROR_MARK;
+      पुनो reduc_id = NULL_पुनो;
 
       if (kind == OMP_CLAUSE_REDUCTION && is_omp)
 	{
@@ -18972,7 +18972,7 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
 		   && c_parser_peek_2nd_token (parser)->type == CPP_COMMA)
 	    {
 	      const char *p
-		= IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+		= IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 	      if (strcmp (p, "task") == 0)
 		task = true;
 	      else if (strcmp (p, "inscan") == 0)
@@ -18988,10 +18988,10 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
       switch (c_parser_peek_token (parser)->type)
 	{
 	case CPP_PLUS:
-	  code = PLUS_EXPR;
+	  code = PLUS_पाहायाग;
 	  break;
 	case CPP_MULT:
-	  code = MULT_EXPR;
+	  code = MULT_पाहायाग;
 	  break;
 	case CPP_MINUS:
 	  if (is_omp)
@@ -19003,38 +19003,38 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
 			  "%<-%> operator for reductions deprecated in "
 			  "OpenMP 5.2");
 	    }
-	  code = MINUS_EXPR;
+	  code = MINUS_पाहायाग;
 	  break;
 	case CPP_AND:
-	  code = BIT_AND_EXPR;
+	  code = BIT_AND_पाहायाग;
 	  break;
 	case CPP_XOR:
-	  code = BIT_XOR_EXPR;
+	  code = BIT_XOR_पाहायाग;
 	  break;
 	case CPP_OR:
-	  code = BIT_IOR_EXPR;
+	  code = BIT_IOR_पाहायाग;
 	  break;
 	case CPP_AND_AND:
-	  code = TRUTH_ANDIF_EXPR;
+	  code = TRUTH_ANDIF_पाहायाग;
 	  break;
 	case CPP_OR_OR:
-	  code = TRUTH_ORIF_EXPR;
+	  code = TRUTH_ORIF_पाहायाग;
 	  break;
         case CPP_NAME:
 	  {
 	    const char *p
-	      = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	      = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 	    if (strcmp (p, "min") == 0)
 	      {
-		code = MIN_EXPR;
+		code = MIN_पाहायाग;
 		break;
 	      }
 	    if (strcmp (p, "max") == 0)
 	      {
-		code = MAX_EXPR;
+		code = MAX_पाहायाग;
 		break;
 	      }
-	    reduc_id = c_parser_peek_token (parser)->value;
+	    reduc_id = c_parser_peek_token (parser)->हालागा;
 	    break;
 	  }
 	default:
@@ -19048,34 +19048,34 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
       reduc_id = c_omp_reduction_id (code, reduc_id);
       if (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	{
-	  tree nl, c;
+	  पुनो nl, c;
 
 	  nl = c_parser_omp_variable_list (parser, clause_loc, kind, list);
 	  for (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
 	    {
-	      tree d = OMP_CLAUSE_DECL (c), type;
-	      if (TREE_CODE (d) != OMP_ARRAY_SECTION)
-		type = TREE_TYPE (d);
+	      पुनो d = OMP_CLAUSE_DECL (c), type;
+	      if (पुनो_CODE (d) != OMP_ARRAY_SECTION)
+		type = पुनो_TYPE (d);
 	      else
 		{
 		  int cnt = 0;
-		  tree t;
+		  पुनो t;
 		  for (t = d;
-		      TREE_CODE (t) == OMP_ARRAY_SECTION;
-		      t = TREE_OPERAND (t, 0))
+		      पुनो_CODE (t) == OMP_ARRAY_SECTION;
+		      t = पुनो_OPERAND (t, 0))
 		    cnt++;
-		  type = TREE_TYPE (t);
+		  type = पुनो_TYPE (t);
 		  while (cnt > 0)
 		    {
-		      if (TREE_CODE (type) != POINTER_TYPE
-			  && TREE_CODE (type) != ARRAY_TYPE)
+		      if (पुनो_CODE (type) != POINTER_TYPE
+			  && पुनो_CODE (type) != ARRAY_TYPE)
 			break;
-		      type = TREE_TYPE (type);
+		      type = पुनो_TYPE (type);
 		      cnt--;
 		    }
 		}
-	      while (TREE_CODE (type) == ARRAY_TYPE)
-		type = TREE_TYPE (type);
+	      while (पुनो_CODE (type) == ARRAY_TYPE)
+		type = पुनो_TYPE (type);
 	      OMP_CLAUSE_REDUCTION_CODE (c) = code;
 	      if (task)
 		OMP_CLAUSE_REDUCTION_TASK (c) = 1;
@@ -19084,7 +19084,7 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
 	      if (code == ERROR_MARK
 		  || !(INTEGRAL_TYPE_P (type)
 		       || SCALAR_FLOAT_TYPE_P (type)
-		       || TREE_CODE (type) == COMPLEX_TYPE))
+		       || पुनो_CODE (type) == COMPLEX_TYPE))
 		OMP_CLAUSE_REDUCTION_PLACEHOLDER (c)
 		  = c_omp_reduction_lookup (reduc_id,
 					    TYPE_MAIN_VARIANT (type));
@@ -19113,10 +19113,10 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
      monotonic
      nonmonotonic  */
 
-static tree
-c_parser_omp_clause_schedule (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_schedule (c_parser *parser, पुनो list)
 {
-  tree c, t;
+  पुनो c, t;
   location_t loc = c_parser_peek_token (parser)->location;
   int modifiers = 0, nmodifiers = 0;
 
@@ -19129,7 +19129,7 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
   location_t comma = UNKNOWN_LOCATION;
   while (c_parser_next_token_is (parser, CPP_NAME))
     {
-      tree kind = c_parser_peek_token (parser)->value;
+      पुनो kind = c_parser_peek_token (parser)->हालागा;
       const char *p = IDENTIFIER_POINTER (kind);
       if (strcmp ("simd", p) == 0)
 	OMP_CLAUSE_SCHEDULE_SIMD (c) = 1;
@@ -19168,7 +19168,7 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      tree kind = c_parser_peek_token (parser)->value;
+      पुनो kind = c_parser_peek_token (parser)->हालागा;
       const char *p = IDENTIFIER_POINTER (kind);
 
       switch (p[0])
@@ -19209,9 +19209,9 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
       c_parser_consume_token (parser);
 
       here = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (here, expr, false, true);
-      t = expr.value;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (here, पाहायाग, false, true);
+      t = पाहायाग.हालागा;
       t = c_fully_fold (t, false, NULL);
 
       if (OMP_CLAUSE_SCHEDULE_KIND (c) == OMP_CLAUSE_SCHEDULE_RUNTIME)
@@ -19221,21 +19221,21 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
 	error_at (here,
 		  "schedule %<auto%> does not take "
 		  "a %<chunk_size%> parameter");
-      else if (TREE_CODE (TREE_TYPE (t)) == INTEGER_TYPE
-	       || TREE_CODE (TREE_TYPE (t)) == BITINT_TYPE)
+      else if (पुनो_CODE (पुनो_TYPE (t)) == INTEGER_TYPE
+	       || पुनो_CODE (पुनो_TYPE (t)) == BITINT_TYPE)
 	{
 	  /* Attempt to statically determine when the number isn't
 	     positive.  */
-	  tree s = fold_build2_loc (loc, LE_EXPR, boolean_type_node, t,
-				    build_int_cst (TREE_TYPE (t), 0));
-	  protected_set_expr_location (s, loc);
-	  if (s == boolean_true_node)
+	  पुनो s = fold_build2_loc (loc, LE_पाहायाग, boolean_type_बुहोल, t,
+				    build_int_cst (पुनो_TYPE (t), 0));
+	  protected_set_पाहायाग_location (s, loc);
+	  if (s == boolean_true_बुहोल)
 	    {
 	      warning_at (loc, OPT_Wopenmp,
 			  "chunk size value must be positive");
-	      t = integer_one_node;
+	      t = integer_one_बुहोल;
 	    }
-	  OMP_CLAUSE_SCHEDULE_CHUNK_EXPR (c) = t;
+	  OMP_CLAUSE_SCHEDULE_CHUNK_पाहायाग (c) = t;
 	}
       else
 	c_parser_error (parser, "expected integer expression");
@@ -19263,8 +19263,8 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
 /* OpenMP 2.5:
    shared ( variable-list ) */
 
-static tree
-c_parser_omp_clause_shared (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_shared (c_parser *parser, पुनो list)
 {
   return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_SHARED, list);
 }
@@ -19272,10 +19272,10 @@ c_parser_omp_clause_shared (c_parser *parser, tree list)
 /* OpenMP 3.0:
    untied */
 
-static tree
-c_parser_omp_clause_untied (c_parser *parser ATTRIBUTE_UNUSED, tree list)
+static पुनो
+c_parser_omp_clause_untied (c_parser *parser ATTRIBUTE_UNUSED, पुनो list)
 {
-  tree c;
+  पुनो c;
 
   /* FIXME: Should we allow duplicates?  */
   check_no_duplicate_clause (list, OMP_CLAUSE_UNTIED, "untied");
@@ -19291,13 +19291,13 @@ c_parser_omp_clause_untied (c_parser *parser ATTRIBUTE_UNUSED, tree list)
    inbranch
    notinbranch */
 
-static tree
+static पुनो
 c_parser_omp_clause_branch (c_parser *parser ATTRIBUTE_UNUSED,
-			    enum omp_clause_code code, tree list)
+			    enum omp_clause_code code, पुनो list)
 {
   check_no_duplicate_clause (list, code, omp_clause_code_name[code]);
 
-  tree c = build_omp_clause (c_parser_peek_token (parser)->location, code);
+  पुनो c = build_omp_clause (c_parser_peek_token (parser)->location, code);
   OMP_CLAUSE_CHAIN (c) = list;
 
   return c;
@@ -19309,11 +19309,11 @@ c_parser_omp_clause_branch (c_parser *parser ATTRIBUTE_UNUSED,
    sections
    taskgroup */
 
-static tree
+static पुनो
 c_parser_omp_clause_cancelkind (c_parser *parser ATTRIBUTE_UNUSED,
-				enum omp_clause_code code, tree list)
+				enum omp_clause_code code, पुनो list)
 {
-  tree c = build_omp_clause (c_parser_peek_token (parser)->location, code);
+  पुनो c = build_omp_clause (c_parser_peek_token (parser)->location, code);
   OMP_CLAUSE_CHAIN (c) = list;
 
   return c;
@@ -19322,11 +19322,11 @@ c_parser_omp_clause_cancelkind (c_parser *parser ATTRIBUTE_UNUSED,
 /* OpenMP 4.5:
    nogroup */
 
-static tree
-c_parser_omp_clause_nogroup (c_parser *parser ATTRIBUTE_UNUSED, tree list)
+static पुनो
+c_parser_omp_clause_nogroup (c_parser *parser ATTRIBUTE_UNUSED, पुनो list)
 {
   check_no_duplicate_clause (list, OMP_CLAUSE_NOGROUP, "nogroup");
-  tree c = build_omp_clause (c_parser_peek_token (parser)->location,
+  पुनो c = build_omp_clause (c_parser_peek_token (parser)->location,
 			     OMP_CLAUSE_NOGROUP);
   OMP_CLAUSE_CHAIN (c) = list;
   return c;
@@ -19336,12 +19336,12 @@ c_parser_omp_clause_nogroup (c_parser *parser ATTRIBUTE_UNUSED, tree list)
    simd
    threads */
 
-static tree
+static पुनो
 c_parser_omp_clause_orderedkind (c_parser *parser ATTRIBUTE_UNUSED,
-				 enum omp_clause_code code, tree list)
+				 enum omp_clause_code code, पुनो list)
 {
   check_no_duplicate_clause (list, code, omp_clause_code_name[code]);
-  tree c = build_omp_clause (c_parser_peek_token (parser)->location, code);
+  पुनो c = build_omp_clause (c_parser_peek_token (parser)->location, code);
   OMP_CLAUSE_CHAIN (c) = list;
   return c;
 }
@@ -19352,18 +19352,18 @@ c_parser_omp_clause_orderedkind (c_parser *parser ATTRIBUTE_UNUSED,
    OpenMP 5.1:
    num_teams ( expression : expression ) */
 
-static tree
-c_parser_omp_clause_num_teams (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_नुमेरो_teams (c_parser *parser, पुनो list)
 {
-  location_t num_teams_loc = c_parser_peek_token (parser)->location;
+  location_t नुमेरो_teams_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
   if (parens.require_open (parser))
     {
       location_t upper_loc = c_parser_peek_token (parser)->location;
       location_t lower_loc = UNKNOWN_LOCATION;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (upper_loc, expr, false, true);
-      tree c, upper = expr.value, lower = NULL_TREE;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (upper_loc, पाहायाग, false, true);
+      पुनो c, upper = पाहायाग.हालागा, lower = NULL_पुनो;
       upper = c_fully_fold (upper, false, NULL);
 
       if (c_parser_next_token_is (parser, CPP_COLON))
@@ -19372,58 +19372,58 @@ c_parser_omp_clause_num_teams (c_parser *parser, tree list)
 	  lower_loc = upper_loc;
 	  lower = upper;
 	  upper_loc = c_parser_peek_token (parser)->location;
-	  expr = c_parser_expr_no_commas (parser, NULL);
-	  expr = convert_lvalue_to_rvalue (upper_loc, expr, false, true);
-	  upper = expr.value;
+	  पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	  पाहायाग = convert_lvalue_to_rvalue (upper_loc, पाहायाग, false, true);
+	  upper = पाहायाग.हालागा;
 	  upper = c_fully_fold (upper, false, NULL);
 	}
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (upper))
-	  || (lower && !INTEGRAL_TYPE_P (TREE_TYPE (lower))))
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (upper))
+	  || (lower && !INTEGRAL_TYPE_P (पुनो_TYPE (lower))))
 	{
 	  c_parser_error (parser, "expected integer expression");
 	  return list;
 	}
 
       /* Attempt to statically determine when the number isn't positive.  */
-      c = fold_build2_loc (upper_loc, LE_EXPR, boolean_type_node, upper,
-			   build_int_cst (TREE_TYPE (upper), 0));
-      protected_set_expr_location (c, upper_loc);
-      if (c == boolean_true_node)
+      c = fold_build2_loc (upper_loc, LE_पाहायाग, boolean_type_बुहोल, upper,
+			   build_int_cst (पुनो_TYPE (upper), 0));
+      protected_set_पाहायाग_location (c, upper_loc);
+      if (c == boolean_true_बुहोल)
 	{
 	  warning_at (upper_loc, OPT_Wopenmp,
 		      "%<num_teams%> value must be positive");
-	  upper = integer_one_node;
+	  upper = integer_one_बुहोल;
 	}
       if (lower)
 	{
-	  c = fold_build2_loc (lower_loc, LE_EXPR, boolean_type_node, lower,
-			       build_int_cst (TREE_TYPE (lower), 0));
-	  protected_set_expr_location (c, lower_loc);
-	  if (c == boolean_true_node)
+	  c = fold_build2_loc (lower_loc, LE_पाहायाग, boolean_type_बुहोल, lower,
+			       build_int_cst (पुनो_TYPE (lower), 0));
+	  protected_set_पाहायाग_location (c, lower_loc);
+	  if (c == boolean_true_बुहोल)
 	    {
 	      warning_at (lower_loc, OPT_Wopenmp,
 			  "%<num_teams%> value must be positive");
-	      lower = NULL_TREE;
+	      lower = NULL_पुनो;
 	    }
-	  else if (TREE_CODE (lower) == INTEGER_CST
-		   && TREE_CODE (upper) == INTEGER_CST
-		   && tree_int_cst_lt (upper, lower))
+	  else if (पुनो_CODE (lower) == INTEGER_CST
+		   && पुनो_CODE (upper) == INTEGER_CST
+		   && पुनो_int_cst_lt (upper, lower))
 	    {
 	      warning_at (lower_loc, OPT_Wopenmp,
 			  "%<num_teams%> lower bound %qE bigger than upper "
 			  "bound %qE", lower, upper);
-	      lower = NULL_TREE;
+	      lower = NULL_पुनो;
 	    }
 	}
 
-      check_no_duplicate_clause (list, OMP_CLAUSE_NUM_TEAMS, "num_teams");
+      check_no_duplicate_clause (list, OMP_CLAUSE_नुमेरो_TEAMS, "num_teams");
 
-      c = build_omp_clause (num_teams_loc, OMP_CLAUSE_NUM_TEAMS);
-      OMP_CLAUSE_NUM_TEAMS_UPPER_EXPR (c) = upper;
-      OMP_CLAUSE_NUM_TEAMS_LOWER_EXPR (c) = lower;
+      c = build_omp_clause (नुमेरो_teams_loc, OMP_CLAUSE_नुमेरो_TEAMS);
+      OMP_CLAUSE_नुमेरो_TEAMS_UPPER_पाहायाग (c) = upper;
+      OMP_CLAUSE_नुमेरो_TEAMS_LOWER_पाहायाग (c) = lower;
       OMP_CLAUSE_CHAIN (c) = list;
       list = c;
     }
@@ -19434,43 +19434,43 @@ c_parser_omp_clause_num_teams (c_parser *parser, tree list)
 /* OpenMP 4.0:
    thread_limit ( expression ) */
 
-static tree
-c_parser_omp_clause_thread_limit (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_thread_limit (c_parser *parser, पुनो list)
 {
-  location_t num_thread_limit_loc = c_parser_peek_token (parser)->location;
+  location_t नुमेरो_thread_limit_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
   if (parens.require_open (parser))
     {
-      location_t expr_loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-      tree c, t = expr.value;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+      पुनो c, t = पाहायाग.हालागा;
       t = c_fully_fold (t, false, NULL);
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
 	  return list;
 	}
 
       /* Attempt to statically determine when the number isn't positive.  */
-      c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, t,
-			   build_int_cst (TREE_TYPE (t), 0));
-      protected_set_expr_location (c, expr_loc);
-      if (c == boolean_true_node)
+      c = fold_build2_loc (पाहायाग_loc, LE_पाहायाग, boolean_type_बुहोल, t,
+			   build_int_cst (पुनो_TYPE (t), 0));
+      protected_set_पाहायाग_location (c, पाहायाग_loc);
+      if (c == boolean_true_बुहोल)
 	{
-	  warning_at (expr_loc, OPT_Wopenmp,
+	  warning_at (पाहायाग_loc, OPT_Wopenmp,
 		      "%<thread_limit%> value must be positive");
-	  t = integer_one_node;
+	  t = integer_one_बुहोल;
 	}
 
       check_no_duplicate_clause (list, OMP_CLAUSE_THREAD_LIMIT,
 				 "thread_limit");
 
-      c = build_omp_clause (num_thread_limit_loc, OMP_CLAUSE_THREAD_LIMIT);
-      OMP_CLAUSE_THREAD_LIMIT_EXPR (c) = t;
+      c = build_omp_clause (नुमेरो_thread_limit_loc, OMP_CLAUSE_THREAD_LIMIT);
+      OMP_CLAUSE_THREAD_LIMIT_पाहायाग (c) = t;
       OMP_CLAUSE_CHAIN (c) = list;
       list = c;
     }
@@ -19482,11 +19482,11 @@ c_parser_omp_clause_thread_limit (c_parser *parser, tree list)
    aligned ( variable-list )
    aligned ( variable-list : constant-expression ) */
 
-static tree
-c_parser_omp_clause_aligned (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_aligned (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
-  tree nl, c;
+  पुनो nl, c;
 
   matching_parens parens;
   if (!parens.require_open (parser))
@@ -19498,18 +19498,18 @@ c_parser_omp_clause_aligned (c_parser *parser, tree list)
   if (c_parser_next_token_is (parser, CPP_COLON))
     {
       c_parser_consume_token (parser);
-      location_t expr_loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-      tree alignment = expr.value;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+      पुनो alignment = पाहायाग.हालागा;
       alignment = c_fully_fold (alignment, false, NULL);
-      if (TREE_CODE (alignment) != INTEGER_CST
-	  || !INTEGRAL_TYPE_P (TREE_TYPE (alignment))
-	  || tree_int_cst_sgn (alignment) != 1)
+      if (पुनो_CODE (alignment) != INTEGER_CST
+	  || !INTEGRAL_TYPE_P (पुनो_TYPE (alignment))
+	  || पुनो_int_cst_sgn (alignment) != 1)
 	{
 	  error_at (clause_loc, "%<aligned%> clause alignment expression must "
 				"be positive constant integer expression");
-	  alignment = NULL_TREE;
+	  alignment = NULL_पुनो;
 	}
 
       for (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
@@ -19532,13 +19532,13 @@ c_parser_omp_clause_aligned (c_parser *parser, tree list)
    allocator ( expression )
    align ( expression )  */
 
-static tree
-c_parser_omp_clause_allocate (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_allocate (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
-  tree nl, c;
-  tree allocator = NULL_TREE;
-  tree align = NULL_TREE;
+  पुनो nl, c;
+  पुनो allocator = NULL_पुनो;
+  पुनो align = NULL_पुनो;
 
   matching_parens parens;
   if (!parens.require_open (parser))
@@ -19550,13 +19550,13 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 	  && c_parser_peek_2nd_token (parser)->type != CPP_CLOSE_PAREN))
     {
       bool has_modifiers = false;
-      tree orig_type = NULL_TREE;
+      पुनो orig_type = NULL_पुनो;
       if (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN)
 	{
 	  unsigned int n = 3;
 	  const char *p
-	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 	  if ((strcmp (p, "allocator") == 0 || strcmp (p, "align") == 0)
 	      && c_parser_check_balanced_raw_token_sequence (parser, &n)
 	      && (c_parser_peek_nth_token_raw (parser, n)->type
@@ -19573,7 +19573,7 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 			   == CPP_OPEN_PAREN))
 		{
 		  c_token *tok = c_parser_peek_nth_token_raw (parser, n + 2);
-		  const char *q = IDENTIFIER_POINTER (tok->value);
+		  const char *q = IDENTIFIER_POINTER (tok->हालागा);
 		  n += 4;
 		  if ((strcmp (q, "allocator") == 0
 		       || strcmp (q, "align") == 0)
@@ -19591,22 +19591,22 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 	      c_parser_consume_token (parser);
 	      matching_parens parens2;
 	      parens2.require_open (parser);
-	      location_t expr_loc = c_parser_peek_token (parser)->location;
-	      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-	      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-	      if (expr.value == error_mark_node)
+	      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+	      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+	      if (पाहायाग.हालागा == error_mark_बुहोल)
 		;
 	      else if (strcmp (p, "allocator") == 0)
 		{
-		  allocator = expr.value;
+		  allocator = पाहायाग.हालागा;
 		  allocator = c_fully_fold (allocator, false, NULL);
-		  orig_type = expr.original_type
-			      ? expr.original_type : TREE_TYPE (allocator);
+		  orig_type = पाहायाग.original_type
+			      ? पाहायाग.original_type : पुनो_TYPE (allocator);
 		  orig_type = TYPE_MAIN_VARIANT (orig_type);
 		}
 	      else
 		{
-		  align = expr.value;
+		  align = पाहायाग.हालागा;
 		  align = c_fully_fold (align, false, NULL);
 		}
 	      parens2.skip_until_found_close (parser);
@@ -19616,7 +19616,7 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 		  c_token *tok = c_parser_peek_token (parser);
 		  const char *q = "";
 		  if (c_parser_next_token_is (parser, CPP_NAME))
-		    q = IDENTIFIER_POINTER (tok->value);
+		    q = IDENTIFIER_POINTER (tok->हालागा);
 		  if (strcmp (q, "allocator") != 0 && strcmp (q, "align") != 0)
 		    {
 		      c_parser_error (parser, "expected %<allocator%> or "
@@ -19636,21 +19636,21 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 		      parens.skip_until_found_close (parser);
 		      return list;
 		    }
-		  expr_loc = c_parser_peek_token (parser)->location;
-		  expr = c_parser_expr_no_commas (parser, NULL);
-		  expr = convert_lvalue_to_rvalue (expr_loc, expr, false,
+		  पाहायाग_loc = c_parser_peek_token (parser)->location;
+		  पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+		  पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false,
 						   true);
 		  if (strcmp (q, "allocator") == 0)
 		    {
-		      allocator = expr.value;
+		      allocator = पाहायाग.हालागा;
 		      allocator = c_fully_fold (allocator, false, NULL);
-		      orig_type = expr.original_type
-				  ? expr.original_type : TREE_TYPE (allocator);
+		      orig_type = पाहायाग.original_type
+				  ? पाहायाग.original_type : पुनो_TYPE (allocator);
 		      orig_type = TYPE_MAIN_VARIANT (orig_type);
 		    }
 		  else
 		    {
-		      align = expr.value;
+		      align = पाहायाग.हालागा;
 		      align = c_fully_fold (align, false, NULL);
 		    }
 		  parens2.skip_until_found_close (parser);
@@ -19659,39 +19659,39 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 	}
       if (!has_modifiers)
 	{
-	  location_t expr_loc = c_parser_peek_token (parser)->location;
-	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-	  expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-	  if (expr.value != error_mark_node)
+	  location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+	  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	  पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+	  if (पाहायाग.हालागा != error_mark_बुहोल)
 	    {
-	      allocator = expr.value;
+	      allocator = पाहायाग.हालागा;
 	      allocator = c_fully_fold (allocator, false, NULL);
-	      orig_type = expr.original_type
-			  ? expr.original_type : TREE_TYPE (allocator);
+	      orig_type = पाहायाग.original_type
+			  ? पाहायाग.original_type : पुनो_TYPE (allocator);
 	      orig_type = TYPE_MAIN_VARIANT (orig_type);
 	    }
 	}
       if (allocator
-	  && (!INTEGRAL_TYPE_P (TREE_TYPE (allocator))
-	      || TREE_CODE (orig_type) != ENUMERAL_TYPE
+	  && (!INTEGRAL_TYPE_P (पुनो_TYPE (allocator))
+	      || पुनो_CODE (orig_type) != ENUMERAL_TYPE
 	      || (TYPE_NAME (orig_type)
 		  != get_identifier ("omp_allocator_handle_t"))))
         {
           error_at (clause_loc, "%<allocate%> clause allocator expression "
 				"has type %qT rather than "
 				"%<omp_allocator_handle_t%>",
-				TREE_TYPE (allocator));
-          allocator = NULL_TREE;
+				पुनो_TYPE (allocator));
+          allocator = NULL_पुनो;
         }
       if (align
-	  && (!INTEGRAL_TYPE_P (TREE_TYPE (align))
-	      || !tree_fits_uhwi_p (align)
+	  && (!INTEGRAL_TYPE_P (पुनो_TYPE (align))
+	      || !पुनो_fits_uhwi_p (align)
 	      || !integer_pow2p (align)))
 	{
 	  error_at (clause_loc, "%<allocate%> clause %<align%> modifier "
 				"argument needs to be positive constant "
 				"power of two integer expression");
-	  align = NULL_TREE;
+	  align = NULL_पुनो;
 	}
       if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	{
@@ -19737,11 +19737,11 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
    traits ( traits-array )
    memspace ( mem-space-handle )  */
 
-static tree
-c_parser_omp_clause_uses_allocators (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_uses_allocators (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
-  tree nl = list;
+  पुनो nl = list;
   matching_parens parens;
   if (!parens.require_open (parser))
     return list;
@@ -19750,15 +19750,15 @@ parse_next:
 
   bool has_modifiers = false;
   bool seen_allocators = false;
-  tree memspace_expr = NULL_TREE;
-  tree traits_var = NULL_TREE;
+  पुनो memspace_पाहायाग = NULL_पुनो;
+  पुनो traits_var = NULL_पुनो;
 
   if (c_parser_next_token_is (parser, CPP_NAME)
       && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN)
     {
       unsigned int n = 3;
       const char *p
-	= IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	= IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if ((strcmp (p, "traits") == 0 || strcmp (p, "memspace") == 0)
 	  && c_parser_check_balanced_raw_token_sequence (parser, &n)
 	  && (c_parser_peek_nth_token_raw (parser, n)->type
@@ -19775,7 +19775,7 @@ parse_next:
 		       == CPP_OPEN_PAREN))
 	    {
 	      c_token *tok = c_parser_peek_nth_token_raw (parser, n + 2);
-	      const char *q = IDENTIFIER_POINTER (tok->value);
+	      const char *q = IDENTIFIER_POINTER (tok->हालागा);
 	      n += 4;
 	      if ((strcmp (q, "traits") == 0
 		   || strcmp (q, "memspace") == 0)
@@ -19793,7 +19793,7 @@ parse_next:
 		    {
 		      c_token *tok
 			= c_parser_peek_nth_token_raw (parser, n + 2);
-		      const char *m = IDENTIFIER_POINTER (tok->value);
+		      const char *m = IDENTIFIER_POINTER (tok->हालागा);
 		      if (strcmp (p, m) == 0 || strcmp (q, m) == 0)
 			{
 			  error_at (tok->location, "duplicate %qs modifier", m);
@@ -19808,19 +19808,19 @@ parse_next:
 	  c_parser_consume_token (parser);
 	  matching_parens parens2;
 	  parens2.require_open (parser);
-	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-	  if (expr.value == error_mark_node)
+	  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	  if (पाहायाग.हालागा == error_mark_बुहोल)
 	    ;
 	  else if (strcmp (p, "traits") == 0)
 	    {
-	      traits_var = expr.value;
+	      traits_var = पाहायाग.हालागा;
 	      traits_var = c_fully_fold (traits_var, false, NULL);
 	      mark_exp_read (traits_var);
 	    }
 	  else
 	    {
-	      memspace_expr = expr.value;
-	      memspace_expr = c_fully_fold (memspace_expr, false, NULL);
+	      memspace_पाहायाग = पाहायाग.हालागा;
+	      memspace_पाहायाग = c_fully_fold (memspace_पाहायाग, false, NULL);
 	    }
 	  parens2.skip_until_found_close (parser);
 	  if (c_parser_next_token_is (parser, CPP_COMMA))
@@ -19829,7 +19829,7 @@ parse_next:
 	      c_token *tok = c_parser_peek_token (parser);
 	      const char *q = "";
 	      if (c_parser_next_token_is (parser, CPP_NAME))
-		q = IDENTIFIER_POINTER (tok->value);
+		q = IDENTIFIER_POINTER (tok->हालागा);
 	      if (strcmp (q, "traits") != 0 && strcmp (q, "memspace") != 0)
 		{
 		  c_parser_error (parser, "expected %<traits%> or "
@@ -19849,17 +19849,17 @@ parse_next:
 		  parens.skip_until_found_close (parser);
 		  return list;
 		}
-	      expr = c_parser_expr_no_commas (parser, NULL);
+	      पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
 	      if (strcmp (q, "traits") == 0)
 		{
-		  traits_var = expr.value;
+		  traits_var = पाहायाग.हालागा;
 		  traits_var = c_fully_fold (traits_var, false, NULL);
 		  mark_exp_read (traits_var);
 		}
 	      else
 		{
-		  memspace_expr = expr.value;
-		  memspace_expr = c_fully_fold (memspace_expr, false, NULL);
+		  memspace_पाहायाग = पाहायाग.हालागा;
+		  memspace_पाहायाग = c_fully_fold (memspace_पाहायाग, false, NULL);
 		}
 	      parens2.skip_until_found_close (parser);
 	    }
@@ -19872,17 +19872,17 @@ parse_next:
     {
       location_t alloc_loc = c_parser_peek_token (parser)->location;
       c_token *tok = c_parser_peek_token (parser);
-      const char *tok_s = IDENTIFIER_POINTER (tok->value);
-      tree t = lookup_name (tok->value);
-      if (t == NULL_TREE)
+      const char *tok_s = IDENTIFIER_POINTER (tok->हालागा);
+      पुनो t = lookup_name (tok->हालागा);
+      if (t == NULL_पुनो)
 	{
-	  undeclared_variable (tok->location, tok->value);
-	  t = error_mark_node;
+	  undeclared_variable (tok->location, tok->हालागा);
+	  t = error_mark_बुहोल;
 	}
       c_parser_consume_token (parser);
 
       /* Legacy traits syntax.  */
-      tree legacy_traits = NULL_TREE;
+      पुनो legacy_traits = NULL_पुनो;
       if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_NAME
 	  && c_parser_peek_nth_token_raw (parser, 3)->type == CPP_CLOSE_PAREN)
@@ -19890,8 +19890,8 @@ parse_next:
 	  matching_parens parens2;
 	  parens2.require_open (parser);
 	  const char *tok_a
-	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
+	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
+	  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
 	  location_t close_loc = c_parser_peek_token (parser)->location;
 	  parens2.skip_until_found_close (parser);
 
@@ -19903,8 +19903,8 @@ parse_next:
 			tok_s, tok_a);
 	      goto end;
 	    }
-	  legacy_traits = c_fully_fold (expr.value, false, NULL);
-	  if (legacy_traits == error_mark_node)
+	  legacy_traits = c_fully_fold (पाहायाग.हालागा, false, NULL);
+	  if (legacy_traits == error_mark_बुहोल)
 	    goto end;
 	  mark_exp_read (legacy_traits);
 
@@ -19913,8 +19913,8 @@ parse_next:
 	    {
 	      /* Fixit only works well if it is the only first item.  */
 	      richloc.add_fixit_replace (alloc_loc, "traits");
-	      richloc.add_fixit_insert_after (close_loc, ": ");
-	      richloc.add_fixit_insert_after (close_loc, tok_s);
+	      richloc.add_fixit_इसिंगित_after (close_loc, ": ");
+	      richloc.add_fixit_इसिंगित_after (close_loc, tok_s);
 	    }
 	  warning_at (&richloc, OPT_Wdeprecated_openmp,
 		      "the specification of arguments to %<uses_allocators%> "
@@ -19931,10 +19931,10 @@ parse_next:
 	}
       seen_allocators = true;
 
-      tree c = build_omp_clause (clause_loc,
+      पुनो c = build_omp_clause (clause_loc,
 				 OMP_CLAUSE_USES_ALLOCATORS);
       OMP_CLAUSE_USES_ALLOCATORS_ALLOCATOR (c) = t;
-      OMP_CLAUSE_USES_ALLOCATORS_MEMSPACE (c) = memspace_expr;
+      OMP_CLAUSE_USES_ALLOCATORS_MEMSPACE (c) = memspace_पाहायाग;
       OMP_CLAUSE_USES_ALLOCATORS_TRAITS (c) = (legacy_traits
 					       ? legacy_traits : traits_var);
       OMP_CLAUSE_CHAIN (c) = nl;
@@ -19975,13 +19975,13 @@ parse_next:
      val
      step ( expression )  */
 
-static tree
-c_parser_omp_clause_linear (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_linear (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
   location_t rm1_loc = UNKNOWN_LOCATION, rm2_loc = UNKNOWN_LOCATION;
   location_t after_colon_loc = UNKNOWN_LOCATION;
-  tree nl, c, step;
+  पुनो nl, c, step;
   enum omp_clause_linear_kind kind = OMP_CLAUSE_LINEAR_DEFAULT;
   bool old_linear_modifier = false;
 
@@ -19992,7 +19992,7 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
       c_token *tok = c_parser_peek_token (parser);
-      const char *p = IDENTIFIER_POINTER (tok->value);
+      const char *p = IDENTIFIER_POINTER (tok->हालागा);
       if (strcmp ("val", p) == 0)
 	kind = OMP_CLAUSE_LINEAR_VAL;
       if (c_parser_peek_2nd_token (parser)->type != CPP_OPEN_PAREN)
@@ -20020,14 +20020,14 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
   if (c_parser_next_token_is (parser, CPP_COLON))
     {
       c_parser_consume_token (parser);
-      location_t expr_loc = c_parser_peek_token (parser)->location;
-      after_colon_loc = expr_loc;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+      after_colon_loc = पाहायाग_loc;
       bool has_modifiers = false;
       if (kind == OMP_CLAUSE_LINEAR_DEFAULT
 	  && c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_token *tok = c_parser_peek_token (parser);
-	  const char *p = IDENTIFIER_POINTER (tok->value);
+	  const char *p = IDENTIFIER_POINTER (tok->हालागा);
 	  unsigned int pos = 0;
 	  if (strcmp ("val", p) == 0)
 	    pos = 2;
@@ -20051,11 +20051,11 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
 	}
       if (has_modifiers)
 	{
-	  step = NULL_TREE;
+	  step = NULL_पुनो;
 	  while (c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      c_token *tok = c_parser_peek_token (parser);
-	      const char *p = IDENTIFIER_POINTER (tok->value);
+	      const char *p = IDENTIFIER_POINTER (tok->हालागा);
 	      if (strcmp ("val", p) == 0)
 		{
 		  if (kind != OMP_CLAUSE_LINEAR_DEFAULT)
@@ -20072,16 +20072,16 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
 		      if (step)
 			error_at (tok->location,
 				  "multiple %<step%> modifiers");
-		      expr_loc = c_parser_peek_token (parser)->location;
-		      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-		      expr = convert_lvalue_to_rvalue (expr_loc, expr, false,
+		      पाहायाग_loc = c_parser_peek_token (parser)->location;
+		      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+		      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false,
 						       true);
-		      step = c_fully_fold (expr.value, false, NULL);
-		      if (!INTEGRAL_TYPE_P (TREE_TYPE (step)))
+		      step = c_fully_fold (पाहायाग.हालागा, false, NULL);
+		      if (!INTEGRAL_TYPE_P (पुनो_TYPE (step)))
 			{
 			  error_at (clause_loc, "%<linear%> clause step "
 						"expression must be integral");
-			  step = integer_one_node;
+			  step = integer_one_बुहोल;
 			}
 		      parens2.skip_until_found_close (parser);
 		    }
@@ -20098,24 +20098,24 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
 	      break;
 	    }
 	  if (!step)
-	    step = integer_one_node;
+	    step = integer_one_बुहोल;
 	}
       else
 	{
-	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-	  expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-	  step = c_fully_fold (expr.value, false, NULL);
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (step)))
+	  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	  पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+	  step = c_fully_fold (पाहायाग.हालागा, false, NULL);
+	  if (!INTEGRAL_TYPE_P (पुनो_TYPE (step)))
 	    {
 	      error_at (clause_loc, "%<linear%> clause step expression must "
 				    "be integral");
-	      step = integer_one_node;
+	      step = integer_one_बुहोल;
 	    }
 	}
 
     }
   else
-    step = integer_one_node;
+    step = integer_one_बुहोल;
 
   for (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
     {
@@ -20133,9 +20133,9 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
 	  if (after_colon_loc != UNKNOWN_LOCATION)
 	    {
 	      richloc.add_fixit_remove (rm2_loc);
-	      richloc.add_fixit_insert_before (after_colon_loc, "val, step (");
+	      richloc.add_fixit_इसिंगित_before (after_colon_loc, "val, step (");
 	      location_t close_loc = c_parser_peek_token (parser)->location;
-	      richloc.add_fixit_insert_before (close_loc, ")");
+	      richloc.add_fixit_इसिंगित_before (close_loc, ")");
 	    }
 	  else
 	    richloc.add_fixit_replace (rm2_loc, " : val");
@@ -20152,8 +20152,8 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
 /* OpenMP 5.0:
    nontemporal ( variable-list ) */
 
-static tree
-c_parser_omp_clause_nontemporal (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_nontemporal (c_parser *parser, पुनो list)
 {
   return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_NONTEMPORAL, list);
 }
@@ -20161,38 +20161,38 @@ c_parser_omp_clause_nontemporal (c_parser *parser, tree list)
 /* OpenMP 4.0:
    safelen ( constant-expression ) */
 
-static tree
-c_parser_omp_clause_safelen (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_safelen (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
-  tree c, t;
+  पुनो c, t;
 
   matching_parens parens;
   if (!parens.require_open (parser))
     return list;
 
-  location_t expr_loc = c_parser_peek_token (parser)->location;
-  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-  expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-  t = expr.value;
+  location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+  पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+  t = पाहायाग.हालागा;
   t = c_fully_fold (t, false, NULL);
-  if (TREE_CODE (t) != INTEGER_CST
-      || !INTEGRAL_TYPE_P (TREE_TYPE (t))
-      || tree_int_cst_sgn (t) != 1)
+  if (पुनो_CODE (t) != INTEGER_CST
+      || !INTEGRAL_TYPE_P (पुनो_TYPE (t))
+      || पुनो_int_cst_sgn (t) != 1)
     {
       error_at (clause_loc, "%<safelen%> clause expression must "
 			    "be positive constant integer expression");
-      t = NULL_TREE;
+      t = NULL_पुनो;
     }
 
   parens.skip_until_found_close (parser);
-  if (t == NULL_TREE || t == error_mark_node)
+  if (t == NULL_पुनो || t == error_mark_बुहोल)
     return list;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_SAFELEN, "safelen");
 
   c = build_omp_clause (clause_loc, OMP_CLAUSE_SAFELEN);
-  OMP_CLAUSE_SAFELEN_EXPR (c) = t;
+  OMP_CLAUSE_SAFELEN_पाहायाग (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
   return c;
 }
@@ -20203,11 +20203,11 @@ c_parser_omp_clause_safelen (c_parser *parser, tree list)
    OpenMP 6.1:
    simdlen ([scaled(type[, constant-expression]):] constant-expression )  */
 
-static tree
-c_parser_omp_clause_simdlen (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_simdlen (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
-  tree c, t = NULL_TREE, type = NULL_TREE, divisor = NULL_TREE;
+  पुनो c, t = NULL_पुनो, type = NULL_पुनो, पांगहाति = NULL_पुनो;
 
   matching_parens parens;
   if (!parens.require_open (parser))
@@ -20216,7 +20216,7 @@ c_parser_omp_clause_simdlen (c_parser *parser, tree list)
   unsigned pos = 3;
   if (c_parser_next_token_is (parser, CPP_NAME)
       && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN
-      && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+      && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा),
 		 "scaled") == 0
       && c_parser_check_balanced_raw_token_sequence (parser, &pos)
       && c_parser_peek_nth_token_raw (parser, ++pos)->type == CPP_COLON)
@@ -20231,60 +20231,60 @@ c_parser_omp_clause_simdlen (c_parser *parser, tree list)
 	  || (type = groktypename (ctype, NULL, NULL)) == NULL
 	  || (!INTEGRAL_TYPE_P (type)
 	      && !SCALAR_FLOAT_TYPE_P (type)
-	      && TREE_CODE (type) != COMPLEX_TYPE))
+	      && पुनो_CODE (type) != COMPLEX_TYPE))
 	{
 	  error_at (loc, "expected arithmetic type name as argument to the "
 			 "%<scaled%> modifier");
-	  type = error_mark_node;
+	  type = error_mark_बुहोल;
 	}
       else if (c_parser_next_token_is (parser, CPP_COMMA))
 	{
 	  c_parser_consume_token (parser);
 	  loc = c_parser_peek_token (parser)->location;
-	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-	  expr = convert_lvalue_to_rvalue (loc, expr, false, true);
-	  divisor = expr.value;
-	  divisor = c_fully_fold (divisor, false, NULL);
-	  if (TREE_CODE (divisor) != INTEGER_CST
-	      || !INTEGRAL_TYPE_P (TREE_TYPE (divisor))
-	      || tree_int_cst_sgn (divisor) != 1)
+	  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	  पाहायाग = convert_lvalue_to_rvalue (loc, पाहायाग, false, true);
+	  पांगहाति = पाहायाग.हालागा;
+	  पांगहाति = c_fully_fold (पांगहाति, false, NULL);
+	  if (पुनो_CODE (पांगहाति) != INTEGER_CST
+	      || !INTEGRAL_TYPE_P (पुनो_TYPE (पांगहाति))
+	      || पुनो_int_cst_sgn (पांगहाति) != 1)
 	    {
 	      error_at (loc, "divisor expression of the %<scaled%> modifier "
 			     "must a be positive constant integer expression");
-	      type = error_mark_node;
+	      type = error_mark_बुहोल;
 	    }
 	}
       parens2.skip_until_found_close (parser);
       c_parser_require (parser, CPP_COLON, "expected %<:%>");
     }
 
-  if (type != error_mark_node)
+  if (type != error_mark_बुहोल)
     {
-      location_t expr_loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-      t = expr.value;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+      t = पाहायाग.हालागा;
       t = c_fully_fold (t, false, NULL);
-      if (TREE_CODE (t) != INTEGER_CST
-	  || !INTEGRAL_TYPE_P (TREE_TYPE (t))
-	  || tree_int_cst_sgn (t) != 1)
+      if (पुनो_CODE (t) != INTEGER_CST
+	  || !INTEGRAL_TYPE_P (पुनो_TYPE (t))
+	  || पुनो_int_cst_sgn (t) != 1)
 	{
 	  error_at (clause_loc, "%<simdlen%> clause expression must "
 				"be positive constant integer expression");
-	  t = NULL_TREE;
+	  t = NULL_पुनो;
 	}
     }
 
   parens.skip_until_found_close (parser);
-  if (type == error_mark_node || t == NULL_TREE || t == error_mark_node)
+  if (type == error_mark_बुहोल || t == NULL_पुनो || t == error_mark_बुहोल)
     return list;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_SIMDLEN, "simdlen");
 
   c = build_omp_clause (clause_loc, OMP_CLAUSE_SIMDLEN);
-  OMP_CLAUSE_SIMDLEN_EXPR (c) = t;
+  OMP_CLAUSE_SIMDLEN_पाहायाग (c) = t;
   OMP_CLAUSE_SIMDLEN_TYPE (c) = type;
-  OMP_CLAUSE_SIMDLEN_DIVISOR (c) = divisor;
+  OMP_CLAUSE_SIMDLEN_पांगहाति (c) = पांगहाति;
   OMP_CLAUSE_CHAIN (c) = list;
   return c;
 }
@@ -20295,11 +20295,11 @@ c_parser_omp_clause_simdlen (c_parser *parser, tree list)
      vec , identifier [+/- integer]
 */
 
-static tree
+static पुनो
 c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
-				   tree list, bool depend_p)
+				   पुनो list, bool depend_p)
 {
-  tree vec = NULL;
+  पुनो vec = NULL;
   if (c_parser_next_token_is_not (parser, CPP_NAME)
       || c_parser_peek_token (parser)->id_kind != C_ID_ID)
     {
@@ -20309,19 +20309,19 @@ c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
 
   if (!depend_p)
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "omp_cur_iteration") == 0
 	  && c_parser_peek_2nd_token (parser)->type == CPP_MINUS
-	  && c_parser_peek_nth_token (parser, 3)->type == CPP_NUMBER
+	  && c_parser_peek_nth_token (parser, 3)->type == CPP_नुमेरो
 	  && c_parser_peek_nth_token (parser, 4)->type == CPP_CLOSE_PAREN)
 	{
-	  tree val = c_parser_peek_nth_token (parser, 3)->value;
+	  पुनो val = c_parser_peek_nth_token (parser, 3)->हालागा;
 	  if (integer_onep (val))
 	    {
 	      c_parser_consume_token (parser);
 	      c_parser_consume_token (parser);
 	      c_parser_consume_token (parser);
-	      tree u = build_omp_clause (clause_loc, OMP_CLAUSE_DOACROSS);
+	      पुनो u = build_omp_clause (clause_loc, OMP_CLAUSE_DOACROSS);
 	      OMP_CLAUSE_DOACROSS_KIND (u) = OMP_CLAUSE_DOACROSS_SINK;
 	      OMP_CLAUSE_CHAIN (u) = list;
 	      return u;
@@ -20334,14 +20334,14 @@ c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
   while (c_parser_next_token_is (parser, CPP_NAME)
 	 && c_parser_peek_token (parser)->id_kind == C_ID_ID)
     {
-      tree t = lookup_name (c_parser_peek_token (parser)->value);
-      tree addend = NULL;
+      पुनो t = lookup_name (c_parser_peek_token (parser)->हालागा);
+      पुनो addend = NULL;
 
-      if (t == NULL_TREE)
+      if (t == NULL_पुनो)
 	{
 	  undeclared_variable (c_parser_peek_token (parser)->location,
-			       c_parser_peek_token (parser)->value);
-	  t = error_mark_node;
+			       c_parser_peek_token (parser)->हालागा);
+	  t = error_mark_बुहोल;
 	}
 
       c_parser_consume_token (parser);
@@ -20351,20 +20351,20 @@ c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
 	neg = true;
       else if (!c_parser_next_token_is (parser, CPP_PLUS))
 	{
-	  addend = integer_zero_node;
+	  addend = integer_zero_बुहोल;
 	  neg = false;
 	  goto add_to_vector;
 	}
       c_parser_consume_token (parser);
 
-      if (c_parser_next_token_is_not (parser, CPP_NUMBER))
+      if (c_parser_next_token_is_not (parser, CPP_नुमेरो))
 	{
 	  c_parser_error (parser, "expected integer");
 	  return list;
 	}
 
-      addend = c_parser_peek_token (parser)->value;
-      if (TREE_CODE (addend) != INTEGER_CST)
+      addend = c_parser_peek_token (parser)->हालागा;
+      if (पुनो_CODE (addend) != INTEGER_CST)
 	{
 	  c_parser_error (parser, "expected integer");
 	  return list;
@@ -20372,9 +20372,9 @@ c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
       c_parser_consume_token (parser);
 
     add_to_vector:
-      if (t != error_mark_node)
+      if (t != error_mark_बुहोल)
 	{
-	  vec = tree_cons (addend, t, vec);
+	  vec = पुनो_cons (addend, t, vec);
 	  if (neg)
 	    OMP_CLAUSE_DOACROSS_SINK_NEGATIVE (vec) = 1;
 	}
@@ -20387,10 +20387,10 @@ c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
       c_parser_consume_token (parser);
     }
 
-  if (vec == NULL_TREE)
+  if (vec == NULL_पुनो)
     return list;
 
-  tree u = build_omp_clause (clause_loc, OMP_CLAUSE_DOACROSS);
+  पुनो u = build_omp_clause (clause_loc, OMP_CLAUSE_DOACROSS);
   OMP_CLAUSE_DOACROSS_KIND (u) = OMP_CLAUSE_DOACROSS_SINK;
   OMP_CLAUSE_DOACROSS_DEPEND (u) = depend_p;
   OMP_CLAUSE_DECL (u) = nreverse (vec);
@@ -20413,29 +20413,29 @@ c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
      begin : end
      begin : end : step  */
 
-static tree
+static पुनो
 c_parser_omp_iterators (c_parser *parser)
 {
-  tree ret = NULL_TREE, *last = &ret;
+  पुनो ret = NULL_पुनो, *last = &ret;
   c_parser_consume_token (parser);
 
-  push_scope ();
+  इतुलाक_scope ();
 
   matching_parens parens;
   if (!parens.require_open (parser))
-    return error_mark_node;
+    return error_mark_बुहोल;
 
   do
     {
-      tree iter_type = NULL_TREE, type_expr = NULL_TREE;
+      पुनो iter_type = NULL_पुनो, type_पाहायाग = NULL_पुनो;
       if (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
 	{
 	  struct c_type_name *type = c_parser_type_name (parser);
 	  if (type != NULL)
-	    iter_type = groktypename (type, &type_expr, NULL);
+	    iter_type = groktypename (type, &type_पाहायाग, NULL);
 	}
-      if (iter_type == NULL_TREE)
-	iter_type = integer_type_node;
+      if (iter_type == NULL_पुनो)
+	iter_type = integer_type_बुहोल;
 
       location_t loc = c_parser_peek_token (parser)->location;
       if (!c_parser_next_token_is (parser, CPP_NAME))
@@ -20444,36 +20444,36 @@ c_parser_omp_iterators (c_parser *parser)
 	  break;
 	}
 
-      tree id = c_parser_peek_token (parser)->value;
+      पुनो id = c_parser_peek_token (parser)->हालागा;
       c_parser_consume_token (parser);
 
       if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
 	break;
 
       location_t eloc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (eloc, expr, true, false);
-      tree begin = expr.value;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (eloc, पाहायाग, true, false);
+      पुनो begin = पाहायाग.हालागा;
 
       if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	break;
 
       eloc = c_parser_peek_token (parser)->location;
-      expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (eloc, expr, true, false);
-      tree end = expr.value;
+      पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (eloc, पाहायाग, true, false);
+      पुनो end = पाहायाग.हालागा;
 
-      tree step = integer_one_node;
+      पुनो step = integer_one_बुहोल;
       if (c_parser_next_token_is (parser, CPP_COLON))
 	{
 	  c_parser_consume_token (parser);
 	  eloc = c_parser_peek_token (parser)->location;
-	  expr = c_parser_expr_no_commas (parser, NULL);
-	  expr = convert_lvalue_to_rvalue (eloc, expr, true, false);
-	  step = expr.value;
+	  पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	  पाहायाग = convert_lvalue_to_rvalue (eloc, पाहायाग, true, false);
+	  step = पाहायाग.हालागा;
 	}
 
-      tree iter_var = build_decl (loc, VAR_DECL, id, iter_type);
+      पुनो iter_var = build_decl (loc, VAR_DECL, id, iter_type);
       DECL_ARTIFICIAL (iter_var) = 1;
       DECL_CONTEXT (iter_var) = current_function_decl;
       pushdecl (iter_var);
@@ -20483,7 +20483,7 @@ c_parser_omp_iterators (c_parser *parser)
       OMP_ITERATOR_BEGIN (*last) = begin;
       OMP_ITERATOR_END (*last) = end;
       OMP_ITERATOR_STEP (*last) = step;
-      last = &TREE_CHAIN (*last);
+      last = &पुनो_CHAIN (*last);
 
       if (c_parser_next_token_is (parser, CPP_COMMA))
 	{
@@ -20495,7 +20495,7 @@ c_parser_omp_iterators (c_parser *parser)
   while (1);
 
   parens.skip_until_found_close (parser);
-  return ret ? ret : error_mark_node;
+  return ret ? ret : error_mark_बुहोल;
 }
 
 /* OpenMP 5.0:
@@ -20503,11 +20503,11 @@ c_parser_omp_iterators (c_parser *parser)
    aff-modifier:
      iterator ( iterators-definition )  */
 
-static tree
-c_parser_omp_clause_affinity (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_affinity (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
-  tree nl, iterators = NULL_TREE;
+  पुनो nl, iterators = NULL_पुनो;
 
   matching_parens parens;
   if (!parens.require_open (parser))
@@ -20515,7 +20515,7 @@ c_parser_omp_clause_affinity (c_parser *parser, tree list)
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       bool parse_iter = ((strcmp ("iterator", p) == 0)
 			 && (c_parser_peek_2nd_token (parser)->type
 			     == CPP_OPEN_PAREN));
@@ -20534,7 +20534,7 @@ c_parser_omp_clause_affinity (c_parser *parser, tree list)
 	  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    {
 	      if (iterators)
-		pop_scope ();
+		आलिसिन_scope ();
 	      parens.skip_until_found_close (parser);
 	      return list;
 	    }
@@ -20544,12 +20544,12 @@ c_parser_omp_clause_affinity (c_parser *parser, tree list)
 				   list);
   if (iterators)
     {
-      tree block = pop_scope ();
-      if (iterators != error_mark_node)
+      पुनो block = आलिसिन_scope ();
+      if (iterators != error_mark_बुहोल)
 	{
 	  OMP_ITERATOR_BLOCK (iterators) = block;
-	  for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
-	    OMP_CLAUSE_DECL (c) = build_tree_list (iterators,
+	  for (पुनो c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+	    OMP_CLAUSE_DECL (c) = build_पुनो_list (iterators,
 						   OMP_CLAUSE_DECL (c));
 	}
     }
@@ -20579,13 +20579,13 @@ c_parser_omp_clause_affinity (c_parser *parser, tree list)
    depend-modifier:
      iterator ( iterators-definition )  */
 
-static tree
-c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
+static पुनो
+c_parser_omp_clause_depend (c_parser *parser, पुनो list, location_t here)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
   enum omp_clause_depend_kind kind = OMP_CLAUSE_DEPEND_LAST;
   enum omp_clause_doacross_kind dkind = OMP_CLAUSE_DOACROSS_LAST;
-  tree nl, c, iterators = NULL_TREE;
+  पुनो nl, c, iterators = NULL_पुनो;
 
   matching_parens parens;
   if (!parens.require_open (parser))
@@ -20596,8 +20596,8 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
       if (c_parser_next_token_is_not (parser, CPP_NAME))
 	goto invalid_kind;
 
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp ("iterator", p) == 0 && iterators == NULL_TREE)
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
+      if (strcmp ("iterator", p) == 0 && iterators == NULL_पुनो)
 	{
 	  iterators = c_parser_omp_iterators (parser);
 	  c_parser_require (parser, CPP_COMMA, "expected %<,%>");
@@ -20645,10 +20645,10 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
       && (dkind == OMP_CLAUSE_DOACROSS_SOURCE
 	  || dkind == OMP_CLAUSE_DOACROSS_SINK))
     {
-      pop_scope ();
+      आलिसिन_scope ();
       error_at (clause_loc, "%<iterator%> modifier incompatible with %qs",
 		dkind == OMP_CLAUSE_DOACROSS_SOURCE ? "source" : "sink");
-      iterators = NULL_TREE;
+      iterators = NULL_पुनो;
     }
 
   if (dkind == OMP_CLAUSE_DOACROSS_SOURCE)
@@ -20656,7 +20656,7 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
       c = build_omp_clause (clause_loc, OMP_CLAUSE_DOACROSS);
       OMP_CLAUSE_DOACROSS_KIND (c) = dkind;
       OMP_CLAUSE_DOACROSS_DEPEND (c) = 1;
-      OMP_CLAUSE_DECL (c) = NULL_TREE;
+      OMP_CLAUSE_DECL (c) = NULL_पुनो;
       OMP_CLAUSE_CHAIN (c) = list;
       parens.skip_until_found_close (parser);
       return c;
@@ -20674,9 +20674,9 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
 
       if (iterators)
 	{
-	  tree block = pop_scope ();
-	  if (iterators == error_mark_node)
-	    iterators = NULL_TREE;
+	  पुनो block = आलिसिन_scope ();
+	  if (iterators == error_mark_बुहोल)
+	    iterators = NULL_पुनो;
 	  else
 	    OMP_ITERATOR_BLOCK (iterators) = block;
 	}
@@ -20686,7 +20686,7 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
 	  OMP_CLAUSE_DEPEND_KIND (c) = kind;
 	  if (iterators)
 	    OMP_CLAUSE_DECL (c)
-	      = build_tree_list (iterators, OMP_CLAUSE_DECL (c));
+	      = build_पुनो_list (iterators, OMP_CLAUSE_DECL (c));
 	}
     }
 
@@ -20698,7 +20698,7 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
  resync_fail:
   parens.skip_until_found_close (parser);
   if (iterators)
-    pop_scope ();
+    आलिसिन_scope ();
   return list;
 }
 
@@ -20709,12 +20709,12 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
    doacross ( sink : vec )
    doacross ( sink : omp_cur_iteration - logical_iteration )  */
 
-static tree
-c_parser_omp_clause_doacross (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_doacross (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
   enum omp_clause_doacross_kind kind = OMP_CLAUSE_DOACROSS_LAST;
-  tree nl;
+  पुनो nl;
   const char *p;
 
   matching_parens parens;
@@ -20724,7 +20724,7 @@ c_parser_omp_clause_doacross (c_parser *parser, tree list)
   if (c_parser_next_token_is_not (parser, CPP_NAME))
     goto invalid_kind;
 
-  p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+  p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
   if (strcmp ("sink", p) == 0)
     kind = OMP_CLAUSE_DOACROSS_SINK;
   else if (strcmp ("source", p) == 0)
@@ -20740,12 +20740,12 @@ c_parser_omp_clause_doacross (c_parser *parser, tree list)
   if (kind == OMP_CLAUSE_DOACROSS_SOURCE)
     {
       if (c_parser_next_token_is (parser, CPP_NAME)
-	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा),
 		     "omp_cur_iteration") == 0)
 	c_parser_consume_token (parser);
       nl = build_omp_clause (clause_loc, OMP_CLAUSE_DOACROSS);
       OMP_CLAUSE_DOACROSS_KIND (nl) = OMP_CLAUSE_DOACROSS_SOURCE;
-      OMP_CLAUSE_DECL (nl) = NULL_TREE;
+      OMP_CLAUSE_DECL (nl) = NULL_पुनो;
       OMP_CLAUSE_CHAIN (nl) = list;
     }
   else
@@ -20767,8 +20767,8 @@ c_parser_omp_clause_doacross (c_parser *parser, tree list)
    fallback-modifier
       fallback( abort | default_mem | null )  */
 
-static tree
-c_parser_omp_clause_dyn_groupprivate (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_dyn_groupprivate (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
@@ -20787,7 +20787,7 @@ c_parser_omp_clause_dyn_groupprivate (c_parser *parser, tree list)
 	      && (c_parser_peek_nth_token_raw (parser, n + 1)->type
 		  == CPP_COLON))))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "fallback") != 0)
 	{
 	  c_parser_error (parser, "expected %<fallback%> modifier");
@@ -20798,7 +20798,7 @@ c_parser_omp_clause_dyn_groupprivate (c_parser *parser, tree list)
 	return list;
       p = "";
       if (c_parser_next_token_is (parser, CPP_NAME))
-	p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "abort") == 0)
 	kind = OMP_CLAUSE_FALLBACK_ABORT;
       else if (strcmp (p, "default_mem") == 0)
@@ -20817,34 +20817,34 @@ c_parser_omp_clause_dyn_groupprivate (c_parser *parser, tree list)
       if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	return list;
     }
-  location_t expr_loc = c_parser_peek_token (parser)->location;
-  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-  expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-  tree size = c_fully_fold (expr.value, false, NULL);
+  location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+  पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+  पुनो size = c_fully_fold (पाहायाग.हालागा, false, NULL);
   parens.skip_until_found_close (parser);
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (size)))
+  if (!INTEGRAL_TYPE_P (पुनो_TYPE (size)))
     {
-      error_at (expr_loc, "expected integer expression");
+      error_at (पाहायाग_loc, "expected integer expression");
       return list;
     }
 
   /* Attempt to statically determine when the number is negative.  */
-  tree c = fold_build2_loc (expr_loc, LT_EXPR, boolean_type_node, size,
-			    build_int_cst (TREE_TYPE (size), 0));
-  protected_set_expr_location (c, expr_loc);
-  if (c == boolean_true_node)
+  पुनो c = fold_build2_loc (पाहायाग_loc, LT_पाहायाग, boolean_type_बुहोल, size,
+			    build_int_cst (पुनो_TYPE (size), 0));
+  protected_set_पाहायाग_location (c, पाहायाग_loc);
+  if (c == boolean_true_बुहोल)
     {
-      warning_at (expr_loc, OPT_Wopenmp,
+      warning_at (पाहायाग_loc, OPT_Wopenmp,
 		  "%<dyn_groupprivate%> value must be non-negative");
-      size = integer_zero_node;
+      size = integer_zero_बुहोल;
     }
   check_no_duplicate_clause (list, OMP_CLAUSE_DYN_GROUPPRIVATE,
 			     "dyn_groupprivate");
 
   c = build_omp_clause (clause_loc, OMP_CLAUSE_DYN_GROUPPRIVATE);
   OMP_CLAUSE_DYN_GROUPPRIVATE_KIND (c) = kind;
-  OMP_CLAUSE_DYN_GROUPPRIVATE_EXPR (c) = size;
+  OMP_CLAUSE_DYN_GROUPPRIVATE_पाहायाग (c) = size;
   OMP_CLAUSE_CHAIN (c) = list;
   list = c;
 
@@ -20870,11 +20870,11 @@ c_parser_omp_clause_dyn_groupprivate (c_parser *parser, tree list)
    map-type-modifier:
      always | close | present | iterator (iterators-definition)  */
 
-static tree
-c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
+static पुनो
+c_parser_omp_clause_map (c_parser *parser, पुनो list, bool declare_mapper_p)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
-  tree nl, c;
+  पुनो nl, c;
   enum gomp_map_kind kind = declare_mapper_p ? GOMP_MAP_UNSET : GOMP_MAP_TOFROM;
 
   matching_parens parens;
@@ -20890,7 +20890,7 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
       if (tok->type != CPP_NAME)
 	break;
 
-      const char *p = IDENTIFIER_POINTER (tok->value);
+      const char *p = IDENTIFIER_POINTER (tok->हालागा);
       c_token *next_tok = c_parser_peek_nth_token_raw (parser, pos + 1);
       if (strcmp (p, "iterator") == 0 && next_tok->type == CPP_OPEN_PAREN)
 	{
@@ -20932,24 +20932,24 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
   int close_modifier = 0;
   int present_modifier = 0;
   int mapper_modifier = 0;
-  int num_commas = 0;
-  int num_identifiers = 0;
-  tree mapper_name = NULL_TREE;
-  tree iterators = NULL_TREE;
+  int नुमेरो_commas = 0;
+  int नुमेरो_identifiers = 0;
+  पुनो mapper_name = NULL_पुनो;
+  पुनो iterators = NULL_पुनो;
   for (int pos = 1; pos < map_kind_pos; ++pos)
     {
       c_token *tok = c_parser_peek_token (parser);
 
       if (tok->type == CPP_COMMA)
 	{
-	  ++num_commas;
-	  if (num_commas > num_identifiers)
+	  ++नुमेरो_commas;
+	  if (नुमेरो_commas > नुमेरो_identifiers)
 	    c_parser_error (parser, "illegal comma");
 	  c_parser_consume_token (parser);
 	  continue;
 	}
 
-      const char *p = IDENTIFIER_POINTER (tok->value);
+      const char *p = IDENTIFIER_POINTER (tok->हालागा);
       if (strcmp ("always", p) == 0)
 	{
 	  if (always_modifier)
@@ -21007,7 +21007,7 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
 		{
 		case CPP_NAME:
 		  {
-		    mapper_name = tok->value;
+		    mapper_name = tok->हालागा;
 		    c_parser_consume_token (parser);
 		    if (declare_mapper_p)
 		      {
@@ -21061,22 +21061,22 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
 	  parens.skip_until_found_close (parser);
 	  return list;
 	}
-      ++num_identifiers;
-      if (num_identifiers - 1 > num_commas)
+      ++नुमेरो_identifiers;
+      if (नुमेरो_identifiers - 1 > नुमेरो_commas)
 	{
 	  gcc_rich_location richloc (clause_loc);
-	  richloc.add_fixit_insert_before (tok->location, ",");
+	  richloc.add_fixit_इसिंगित_before (tok->location, ",");
 	  warning_at (&richloc, OPT_Wdeprecated_openmp,
 		      "%<map%> clause modifiers without comma separation is "
 		      "deprecated since OpenMP 5.2");
 	}
-      num_commas = num_identifiers - 1;
+      नुमेरो_commas = नुमेरो_identifiers - 1;
     }
 
   if (c_parser_next_token_is (parser, CPP_NAME)
       && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       int always_present_modifier = always_modifier && present_modifier;
 
       if (strcmp ("alloc", p) == 0)
@@ -21114,13 +21114,13 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
   nl = c_parser_omp_variable_list (parser, clause_loc, OMP_CLAUSE_MAP, list,
 				   true);
 
-  tree last_new = NULL_TREE;
+  पुनो last_new = NULL_पुनो;
 
   if (iterators)
     {
-      tree block = pop_scope ();
-      if (iterators == error_mark_node)
-	iterators = NULL_TREE;
+      पुनो block = आलिसिन_scope ();
+      if (iterators == error_mark_बुहोल)
+	iterators = NULL_पुनो;
       else
 	OMP_ITERATOR_BLOCK (iterators) = block;
     }
@@ -21134,17 +21134,17 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
 
   if (mapper_name)
     {
-      tree name = build_omp_clause (input_location, OMP_CLAUSE_MAP);
-      OMP_CLAUSE_SET_MAP_KIND (name, GOMP_MAP_PUSH_MAPPER_NAME);
+      पुनो name = build_omp_clause (पासोक_location, OMP_CLAUSE_MAP);
+      OMP_CLAUSE_SET_MAP_KIND (name, GOMP_MAP_इतुलाक_MAPPER_NAME);
       OMP_CLAUSE_DECL (name) = mapper_name;
       OMP_CLAUSE_CHAIN (name) = nl;
       nl = name;
 
       gcc_assert (last_new);
 
-      name = build_omp_clause (input_location, OMP_CLAUSE_MAP);
-      OMP_CLAUSE_SET_MAP_KIND (name, GOMP_MAP_POP_MAPPER_NAME);
-      OMP_CLAUSE_DECL (name) = null_pointer_node;
+      name = build_omp_clause (पासोक_location, OMP_CLAUSE_MAP);
+      OMP_CLAUSE_SET_MAP_KIND (name, GOMP_MAP_आलिसिन_MAPPER_NAME);
+      OMP_CLAUSE_DECL (name) = null_pointer_बुहोल;
       OMP_CLAUSE_CHAIN (name) = OMP_CLAUSE_CHAIN (last_new);
       OMP_CLAUSE_CHAIN (last_new) = name;
     }
@@ -21162,13 +21162,13 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
    device-modifier:
      ancestor | device_num */
 
-static tree
-c_parser_omp_clause_device (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_device (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
-  location_t expr_loc;
-  c_expr expr;
-  tree c, t;
+  location_t पाहायाग_loc;
+  c_पाहायाग पाहायाग;
+  पुनो c, t;
   bool ancestor = false;
 
   matching_parens parens;
@@ -21179,7 +21179,7 @@ c_parser_omp_clause_device (c_parser *parser, tree list)
       && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
     {
       c_token *tok = c_parser_peek_token (parser);
-      const char *p = IDENTIFIER_POINTER (tok->value);
+      const char *p = IDENTIFIER_POINTER (tok->हालागा);
       if (strcmp ("ancestor", p) == 0)
 	{
 	  /* A requires directive with the reverse_offload clause must be
@@ -21206,22 +21206,22 @@ c_parser_omp_clause_device (c_parser *parser, tree list)
       c_parser_consume_token (parser);
     }
 
-  expr_loc = c_parser_peek_token (parser)->location;
-  expr = c_parser_expr_no_commas (parser, NULL);
-  expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-  t = expr.value;
+  पाहायाग_loc = c_parser_peek_token (parser)->location;
+  पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+  पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+  t = पाहायाग.हालागा;
   t = c_fully_fold (t, false, NULL);
 
   parens.skip_until_found_close (parser);
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+  if (!INTEGRAL_TYPE_P (पुनो_TYPE (t)))
     {
       c_parser_error (parser, "expected integer expression");
       return list;
     }
-  if (ancestor && TREE_CODE (t) == INTEGER_CST && !integer_onep (t))
+  if (ancestor && पुनो_CODE (t) == INTEGER_CST && !integer_onep (t))
     {
-      error_at (expr_loc, "the %<device%> clause expression must evaluate to "
+      error_at (पाहायाग_loc, "the %<device%> clause expression must evaluate to "
 			  "%<1%>");
       return list;
     }
@@ -21242,10 +21242,10 @@ c_parser_omp_clause_device (c_parser *parser, tree list)
    dist_schedule ( static )
    dist_schedule ( static , expression ) */
 
-static tree
-c_parser_omp_clause_dist_schedule (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_dist_schedule (c_parser *parser, पुनो list)
 {
-  tree c, t = NULL_TREE;
+  पुनो c, t = NULL_पुनो;
   location_t loc = c_parser_peek_token (parser)->location;
 
   matching_parens parens;
@@ -21265,10 +21265,10 @@ c_parser_omp_clause_dist_schedule (c_parser *parser, tree list)
     {
       c_parser_consume_token (parser);
 
-      location_t expr_loc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-      t = expr.value;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+      t = पाहायाग.हालागा;
       t = c_fully_fold (t, false, NULL);
       parens.skip_until_found_close (parser);
     }
@@ -21280,11 +21280,11 @@ c_parser_omp_clause_dist_schedule (c_parser *parser, tree list)
 				"dist_schedule"); */
   if (omp_find_clause (list, OMP_CLAUSE_DIST_SCHEDULE))
     warning_at (loc, OPT_Wopenmp, "too many %qs clauses", "dist_schedule");
-  if (t == error_mark_node)
+  if (t == error_mark_बुहोल)
     return list;
 
   c = build_omp_clause (loc, OMP_CLAUSE_DIST_SCHEDULE);
-  OMP_CLAUSE_DIST_SCHEDULE_CHUNK_EXPR (c) = t;
+  OMP_CLAUSE_DIST_SCHEDULE_CHUNK_पाहायाग (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
   return c;
 }
@@ -21296,12 +21296,12 @@ c_parser_omp_clause_dist_schedule (c_parser *parser, tree list)
      primary | master | close | spread
    where OpenMP 5.1 added 'primary' and deprecated the alias 'master'.  */
 
-static tree
-c_parser_omp_clause_proc_bind (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_proc_bind (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
   enum omp_clause_proc_bind_kind kind;
-  tree c;
+  पुनो c;
 
   matching_parens parens;
   if (!parens.require_open (parser))
@@ -21309,7 +21309,7 @@ c_parser_omp_clause_proc_bind (c_parser *parser, tree list)
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp ("primary", p) == 0)
 	kind = OMP_CLAUSE_PROC_BIND_PRIMARY;
       else if (strcmp ("master", p) == 0)
@@ -21349,12 +21349,12 @@ c_parser_omp_clause_proc_bind (c_parser *parser, tree list)
 /* OpenMP 5.0:
    device_type ( host | nohost | any )  */
 
-static tree
-c_parser_omp_clause_device_type (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_device_type (c_parser *parser, पुनो list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
   enum omp_clause_device_type_kind kind;
-  tree c;
+  पुनो c;
 
   matching_parens parens;
   if (!parens.require_open (parser))
@@ -21362,7 +21362,7 @@ c_parser_omp_clause_device_type (c_parser *parser, tree list)
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp ("host", p) == 0)
 	kind = OMP_CLAUSE_DEVICE_TYPE_HOST;
       else if (strcmp ("nohost", p) == 0)
@@ -21401,9 +21401,9 @@ c_parser_omp_clause_device_type (c_parser *parser, tree list)
    motion-modifier:
      present | iterator (iterators-definition) | mapper (id)  */
 
-static tree
+static पुनो
 c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
-			     tree list)
+			     पुनो list)
 {
   location_t loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
@@ -21416,7 +21416,7 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
   while (c_parser_peek_nth_token_raw (parser, pos)->type == CPP_NAME)
     {
       const char *identifier =
-	IDENTIFIER_POINTER (c_parser_peek_nth_token_raw (parser, pos)->value);
+	IDENTIFIER_POINTER (c_parser_peek_nth_token_raw (parser, pos)->हालागा);
       if (c_parser_peek_nth_token_raw (parser, pos + 1)->type
 	  == CPP_OPEN_PAREN)
 	{
@@ -21442,8 +21442,8 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
     }
 
   bool present = false, mapper_modifier = false;
-  tree iterators = NULL_TREE;
-  tree mapper_name = NULL_TREE;
+  पुनो iterators = NULL_पुनो;
+  पुनो mapper_name = NULL_पुनो;
 
   for (int pos = 1; pos < colon_pos; ++pos)
     {
@@ -21453,7 +21453,7 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
 	  c_parser_consume_token (parser);
 	  continue;
 	}
-      const char *p = IDENTIFIER_POINTER (token->value);
+      const char *p = IDENTIFIER_POINTER (token->हालागा);
       if (strcmp ("present", p) == 0)
 	{
 	  if (present)
@@ -21499,7 +21499,7 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
 		{
 		case CPP_NAME:
 		  {
-		    mapper_name = token->value;
+		    mapper_name = token->हालागा;
 		    c_parser_consume_token (parser);
 		  }
 		  break;
@@ -21538,43 +21538,43 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
   if (colon_pos)
     c_parser_require (parser, CPP_COLON, "expected %<:%>");
 
-  tree nl = c_parser_omp_variable_list (parser, loc, kind, list);
+  पुनो nl = c_parser_omp_variable_list (parser, loc, kind, list);
   parens.skip_until_found_close (parser);
 
   if (present)
-    for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+    for (पुनो c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
       OMP_CLAUSE_MOTION_PRESENT (c) = 1;
 
   if (iterators)
     {
-      tree block = pop_scope ();
-      if (iterators == error_mark_node)
-	iterators = NULL_TREE;
+      पुनो block = आलिसिन_scope ();
+      if (iterators == error_mark_बुहोल)
+	iterators = NULL_पुनो;
       else
 	OMP_ITERATOR_BLOCK (iterators) = block;
     }
 
   if (iterators)
-    for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+    for (पुनो c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
       OMP_CLAUSE_ITERATORS (c) = iterators;
 
   if (mapper_name)
     {
-      tree last_new = NULL_TREE;
-      for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+      पुनो last_new = NULL_पुनो;
+      for (पुनो c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
 	last_new = c;
 
-      tree name = build_omp_clause (input_location, OMP_CLAUSE_MAP);
-      OMP_CLAUSE_SET_MAP_KIND (name, GOMP_MAP_PUSH_MAPPER_NAME);
+      पुनो name = build_omp_clause (पासोक_location, OMP_CLAUSE_MAP);
+      OMP_CLAUSE_SET_MAP_KIND (name, GOMP_MAP_इतुलाक_MAPPER_NAME);
       OMP_CLAUSE_DECL (name) = mapper_name;
       OMP_CLAUSE_CHAIN (name) = nl;
       nl = name;
 
       gcc_assert (last_new);
 
-      name = build_omp_clause (input_location, OMP_CLAUSE_MAP);
-      OMP_CLAUSE_SET_MAP_KIND (name, GOMP_MAP_POP_MAPPER_NAME);
-      OMP_CLAUSE_DECL (name) = null_pointer_node;
+      name = build_omp_clause (पासोक_location, OMP_CLAUSE_MAP);
+      OMP_CLAUSE_SET_MAP_KIND (name, GOMP_MAP_आलिसिन_MAPPER_NAME);
+      OMP_CLAUSE_DECL (name) = null_pointer_बुहोल;
       OMP_CLAUSE_CHAIN (name) = OMP_CLAUSE_CHAIN (last_new);
       OMP_CLAUSE_CHAIN (last_new) = name;
     }
@@ -21585,8 +21585,8 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
 /* OpenMP 4.0:
    uniform ( variable-list ) */
 
-static tree
-c_parser_omp_clause_uniform (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_uniform (c_parser *parser, पुनो list)
 {
   /* The clauses location.  */
   location_t loc = c_parser_peek_token (parser)->location;
@@ -21604,13 +21604,13 @@ c_parser_omp_clause_uniform (c_parser *parser, tree list)
 /* OpenMP 5.1
    full */
 
-static tree
-c_parser_omp_clause_full (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_full (c_parser *parser, पुनो list)
 {
   check_no_duplicate_clause (list, OMP_CLAUSE_FULL, "full");
 
   location_t loc = c_parser_peek_token (parser)->location;
-  tree c = build_omp_clause (loc, OMP_CLAUSE_FULL);
+  पुनो c = build_omp_clause (loc, OMP_CLAUSE_FULL);
   OMP_CLAUSE_CHAIN (c) = list;
   return c;
 }
@@ -21618,10 +21618,10 @@ c_parser_omp_clause_full (c_parser *parser, tree list)
 /* OpenMP 5.1
    partial ( constant-expression ) */
 
-static tree
-c_parser_omp_clause_partial (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_partial (c_parser *parser, पुनो list)
 {
-  tree num = NULL_TREE;
+  पुनो नुमेरो = NULL_पुनो;
   location_t loc = c_parser_peek_token (parser)->location;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_PARTIAL, "partial");
@@ -21630,18 +21630,18 @@ c_parser_omp_clause_partial (c_parser *parser, tree list)
     {
       matching_parens parens;
       parens.consume_open (parser);
-      num = c_parser_expr_no_commas (parser, NULL).value;
+      नुमेरो = c_parser_पाहायाग_no_commas (parser, NULL).हालागा;
       parens.skip_until_found_close (parser);
 
-      if (num == error_mark_node)
+      if (नुमेरो == error_mark_बुहोल)
 	return list;
 
-      mark_exp_read (num);
-      num = c_fully_fold (num, false, NULL);
+      mark_exp_read (नुमेरो);
+      नुमेरो = c_fully_fold (नुमेरो, false, NULL);
       HOST_WIDE_INT n;
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (num))
-	  || !tree_fits_shwi_p (num)
-	  || (n = tree_to_shwi (num)) <= 0
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (नुमेरो))
+	  || !पुनो_fits_shwi_p (नुमेरो)
+	  || (n = पुनो_to_shwi (नुमेरो)) <= 0
 	  || (int) n != n)
 	{
 	  error_at (loc, "%<partial%> argument needs positive constant "
@@ -21650,8 +21650,8 @@ c_parser_omp_clause_partial (c_parser *parser, tree list)
 	}
     }
 
-  tree c = build_omp_clause (loc, OMP_CLAUSE_PARTIAL);
-  OMP_CLAUSE_PARTIAL_EXPR (c) = num;
+  पुनो c = build_omp_clause (loc, OMP_CLAUSE_PARTIAL);
+  OMP_CLAUSE_PARTIAL_पाहायाग (c) = नुमेरो;
   OMP_CLAUSE_CHAIN (c) = list;
   return c;
 }
@@ -21659,24 +21659,24 @@ c_parser_omp_clause_partial (c_parser *parser, tree list)
 /* OpenMP 5.1
    novariants ( scalar-expression ) */
 
-static tree
-c_parser_omp_clause_novariants (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_novariants (c_parser *parser, पुनो list)
 {
   matching_parens parens;
   if (!parens.require_open (parser))
     return list;
 
   location_t loc = c_parser_peek_token (parser)->location;
-  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-  tree t = convert_lvalue_to_rvalue (loc, expr, true, true).value;
+  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+  पुनो t = convert_lvalue_to_rvalue (loc, पाहायाग, true, true).हालागा;
   t = c_objc_common_truthvalue_conversion (loc, t);
   t = c_fully_fold (t, false, NULL);
   parens.skip_until_found_close (parser);
 
   check_no_duplicate_clause (list, OMP_CLAUSE_NOVARIANTS, "novariants");
 
-  tree c = build_omp_clause (loc, OMP_CLAUSE_NOVARIANTS);
-  OMP_CLAUSE_NOVARIANTS_EXPR (c) = t;
+  पुनो c = build_omp_clause (loc, OMP_CLAUSE_NOVARIANTS);
+  OMP_CLAUSE_NOVARIANTS_पाहायाग (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
   list = c;
 
@@ -21686,24 +21686,24 @@ c_parser_omp_clause_novariants (c_parser *parser, tree list)
 /* OpenMP 5.1
    nocontext ( scalar-expression ) */
 
-static tree
-c_parser_omp_clause_nocontext (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_nocontext (c_parser *parser, पुनो list)
 {
   matching_parens parens;
   if (!parens.require_open (parser))
     return list;
 
   location_t loc = c_parser_peek_token (parser)->location;
-  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-  tree t = convert_lvalue_to_rvalue (loc, expr, true, true).value;
+  c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+  पुनो t = convert_lvalue_to_rvalue (loc, पाहायाग, true, true).हालागा;
   t = c_objc_common_truthvalue_conversion (loc, t);
   t = c_fully_fold (t, false, NULL);
   parens.skip_until_found_close (parser);
 
   check_no_duplicate_clause (list, OMP_CLAUSE_NOCONTEXT, "nocontext");
 
-  tree c = build_omp_clause (loc, OMP_CLAUSE_NOCONTEXT);
-  OMP_CLAUSE_NOCONTEXT_EXPR (c) = t;
+  पुनो c = build_omp_clause (loc, OMP_CLAUSE_NOCONTEXT);
+  OMP_CLAUSE_NOCONTEXT_पाहायाग (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
   list = c;
 
@@ -21713,8 +21713,8 @@ c_parser_omp_clause_nocontext (c_parser *parser, tree list)
 /* OpenMP 5.0:
    detach ( event-handle ) */
 
-static tree
-c_parser_omp_clause_detach (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_detach (c_parser *parser, पुनो list)
 {
   matching_parens parens;
   location_t clause_loc = c_parser_peek_token (parser)->location;
@@ -21730,19 +21730,19 @@ c_parser_omp_clause_detach (c_parser *parser, tree list)
       return list;
     }
 
-  tree t = lookup_name (c_parser_peek_token (parser)->value);
-  if (t == NULL_TREE)
+  पुनो t = lookup_name (c_parser_peek_token (parser)->हालागा);
+  if (t == NULL_पुनो)
     {
       undeclared_variable (c_parser_peek_token (parser)->location,
-			   c_parser_peek_token (parser)->value);
+			   c_parser_peek_token (parser)->हालागा);
       parens.skip_until_found_close (parser);
       return list;
     }
   c_parser_consume_token (parser);
 
-  tree type = TYPE_MAIN_VARIANT (TREE_TYPE (t));
+  पुनो type = TYPE_MAIN_VARIANT (पुनो_TYPE (t));
   if (!INTEGRAL_TYPE_P (type)
-      || TREE_CODE (type) != ENUMERAL_TYPE
+      || पुनो_CODE (type) != ENUMERAL_TYPE
       || TYPE_NAME (type) != get_identifier ("omp_event_handle_t"))
     {
       error_at (clause_loc, "%<detach%> clause event handle "
@@ -21753,7 +21753,7 @@ c_parser_omp_clause_detach (c_parser *parser, tree list)
       return list;
     }
 
-  tree u = build_omp_clause (clause_loc, OMP_CLAUSE_DETACH);
+  पुनो u = build_omp_clause (clause_loc, OMP_CLAUSE_DETACH);
   OMP_CLAUSE_DECL (u) = t;
   OMP_CLAUSE_CHAIN (u) = list;
   parens.skip_until_found_close (parser);
@@ -21763,12 +21763,12 @@ c_parser_omp_clause_detach (c_parser *parser, tree list)
 /* OpenMP 5.0:
    destroy ( variable-list ) */
 
-static tree
-c_parser_omp_clause_destroy (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_destroy (c_parser *parser, पुनो list)
 {
-  tree nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_DESTROY, list);
-  for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
-    TREE_ADDRESSABLE (OMP_CLAUSE_DECL (c)) = 1;
+  पुनो nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_DESTROY, list);
+  for (पुनो c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+    पुनो_ADDRESSABLE (OMP_CLAUSE_DECL (c)) = 1;
   return nl;
 }
 
@@ -21795,11 +21795,11 @@ c_parser_omp_clause_destroy (c_parser *parser, tree list)
 	      (e) '\0'
     Tailing '\0'.  */
 
-static tree
+static पुनो
 c_parser_omp_modifier_prefer_type (c_parser *parser)
 {
   if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return error_mark_node;
+    return error_mark_बुहोल;
 
   std::string str;
 
@@ -21810,41 +21810,41 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
 	str += (char) GOMP_INTEROP_IFR_SEPARATOR;
 	if (c_parser_next_token_is (parser, CPP_STRING))
 	  {
-	    c_expr cval = c_parser_string_literal (parser, false, false);
-	    if (cval.value == error_mark_node)
-	      return error_mark_node;
-	    if ((size_t) TREE_STRING_LENGTH (cval.value)
-		!= strlen (TREE_STRING_POINTER (cval.value)) + 1)
+	    c_पाहायाग cval = c_parser_string_literal (parser, false, false);
+	    if (cval.हालागा == error_mark_बुहोल)
+	      return error_mark_बुहोल;
+	    if ((size_t) पुनो_STRING_LENGTH (cval.हालागा)
+		!= strlen (पुनो_STRING_POINTER (cval.हालागा)) + 1)
 	      {
 		error_at (cval.get_location (), "string literal must "
 						"not contain %<\\0%>");
 		parser->error = true;
-		return error_mark_node;
+		return error_mark_बुहोल;
 	      }
 
-	    char c = omp_get_fr_id_from_name (TREE_STRING_POINTER (cval.value));
+	    char c = omp_get_fr_id_from_name (पुनो_STRING_POINTER (cval.हालागा));
 	    if (c == GOMP_INTEROP_IFR_UNKNOWN)
 	      warning_at (cval.get_location (), OPT_Wopenmp,
 			  "unknown foreign runtime identifier %qs",
-			  TREE_STRING_POINTER (cval.value));
+			  पुनो_STRING_POINTER (cval.हालागा));
 	    str += c;
 	  }
 	else
 	  {
-	    c_expr cval = c_parser_expr_no_commas (parser, NULL);
-	    tree value = c_fully_fold (cval.value, false, NULL);
-	    if (INTEGRAL_TYPE_P (TREE_TYPE (value))
-		&& TREE_CODE (value) != INTEGER_CST)
-	      value = convert_lvalue_to_rvalue (cval.get_start (), cval,
-						false, true).value;
-	    if (TREE_CODE (value) != INTEGER_CST
-		|| !tree_fits_shwi_p (value))
+	    c_पाहायाग cval = c_parser_पाहायाग_no_commas (parser, NULL);
+	    पुनो हालागा = c_fully_fold (cval.हालागा, false, NULL);
+	    if (INTEGRAL_TYPE_P (पुनो_TYPE (हालागा))
+		&& पुनो_CODE (हालागा) != INTEGER_CST)
+	      हालागा = convert_lvalue_to_rvalue (cval.get_start (), cval,
+						false, true).हालागा;
+	    if (पुनो_CODE (हालागा) != INTEGER_CST
+		|| !पुनो_fits_shwi_p (हालागा))
 	      {
 		c_parser_error (parser, "expected string literal or constant "
 					"integer expression");
-		return error_mark_node;
+		return error_mark_बुहोल;
 	      }
-	    HOST_WIDE_INT n = tree_to_shwi (value);
+	    HOST_WIDE_INT n = पुनो_to_shwi (हालागा);
 	    if (n < 1 || n > GOMP_INTEROP_IFR_LAST)
 	      {
 		warning_at (cval.get_location (), OPT_Wopenmp,
@@ -21862,10 +21862,10 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
 	  }
 	if (!c_parser_require (parser, CPP_CLOSE_PAREN,
 			       "expected %<,%> or %<)%>"))
-	  return error_mark_node;
+	  return error_mark_बुहोल;
 	str += '\0';
-	tree res = build_string (str.length (), str.data ());
-	TREE_TYPE (res) = build_array_type_nelts (unsigned_char_type_node,
+	पुनो res = build_string (str.length (), str.data ());
+	पुनो_TYPE (res) = build_array_type_nelts (unsigned_char_type_बुहोल,
 						  str.length ());
 	return res;
       }
@@ -21875,7 +21875,7 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
   while (true)
     {
       if (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
-	return error_mark_node;
+	return error_mark_बुहोल;
       str += (char) GOMP_INTEROP_IFR_SEPARATOR;
       str2.clear ();
       bool has_fr = false;
@@ -21883,71 +21883,71 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
 	{
 	  c_token *tok = c_parser_peek_token (parser);
 	  if (tok->type != CPP_NAME
-	      || (strcmp("fr", IDENTIFIER_POINTER (tok->value)) != 0
-		  && strcmp("attr", IDENTIFIER_POINTER (tok->value)) != 0))
+	      || (strcmp("fr", IDENTIFIER_POINTER (tok->हालागा)) != 0
+		  && strcmp("attr", IDENTIFIER_POINTER (tok->हालागा)) != 0))
 	    {
 	      c_parser_error (parser, "expected %<fr%> or %<attr%> preference "
 				      "selector");
-	      return error_mark_node;
+	      return error_mark_बुहोल;
 	    }
 	  c_parser_consume_token (parser);
-	  bool is_fr = IDENTIFIER_POINTER (tok->value)[0] == 'f';
+	  bool is_fr = IDENTIFIER_POINTER (tok->हालागा)[0] == 'f';
 	  if (is_fr && has_fr)
 	    {
 	      c_parser_error (parser, "duplicated %<fr%> preference selector");
-	      return error_mark_node;
+	      return error_mark_बुहोल;
 	    }
 	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return error_mark_node;
+	    return error_mark_बुहोल;
 	  while (true)
 	    {
 	      if (c_parser_next_token_is (parser, CPP_STRING))
 		{
-		  c_expr cval = c_parser_string_literal (parser, false, false);
-		  tree value = cval.value;
-		  if (value == error_mark_node)
-		    return error_mark_node;
-		  if ((size_t) TREE_STRING_LENGTH (value)
-		      != strlen (TREE_STRING_POINTER (value)) + 1)
+		  c_पाहायाग cval = c_parser_string_literal (parser, false, false);
+		  पुनो हालागा = cval.हालागा;
+		  if (हालागा == error_mark_बुहोल)
+		    return error_mark_बुहोल;
+		  if ((size_t) पुनो_STRING_LENGTH (हालागा)
+		      != strlen (पुनो_STRING_POINTER (हालागा)) + 1)
 		    {
 		      error_at (cval.get_location (), "string literal must "
 						      "not contain %<\\0%>");
 		      parser->error = true;
-		      return error_mark_node;
+		      return error_mark_बुहोल;
 		    }
 		  if (!is_fr)
 		    {
-		      if (!startswith (TREE_STRING_POINTER (value), "ompx_"))
+		      if (!startswith (पुनो_STRING_POINTER (हालागा), "ompx_"))
 			{
 			  error_at (cval.get_location (),
 				    "%<attr%> string literal must start with "
 				    "%<ompx_%>");
 			  parser->error = true;
-			  return error_mark_node;
+			  return error_mark_बुहोल;
 			}
-		      if (strchr (TREE_STRING_POINTER (value), ','))
+		      if (strchr (पुनो_STRING_POINTER (हालागा), ','))
 			{
 			  error_at (cval.get_location (),
 				    "%<attr%> string literal must not contain "
 				    "a comma");
 			  parser->error = true;
-			  return error_mark_node;
+			  return error_mark_बुहोल;
 			}
-		      str2 += TREE_STRING_POINTER (value);
+		      str2 += पुनो_STRING_POINTER (हालागा);
 		      str2 += '\0';
 		    }
 		  else
 		    {
-		      if (*TREE_STRING_POINTER (value) == '\0')
+		      if (*पुनो_STRING_POINTER (हालागा) == '\0')
 			{
 			  c_parser_error (parser, "non-empty string literal expected");
-			  return error_mark_node;
+			  return error_mark_बुहोल;
 			}
-		      char c = omp_get_fr_id_from_name (TREE_STRING_POINTER (value));
+		      char c = omp_get_fr_id_from_name (पुनो_STRING_POINTER (हालागा));
 		      if (c == GOMP_INTEROP_IFR_UNKNOWN)
 			warning_at (cval.get_location (), OPT_Wopenmp,
 				    "unknown foreign runtime identifier %qs",
-				    TREE_STRING_POINTER (value));
+				    पुनो_STRING_POINTER (हालागा));
 		     str += c;
 		     has_fr = true;
 		    }
@@ -21955,25 +21955,25 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
 	      else if (!is_fr)
 		{
 		  c_parser_error (parser, "expected string literal");
-		  return error_mark_node;
+		  return error_mark_बुहोल;
 		}
 	      else
 		{
-		  c_expr cval = c_parser_expr_no_commas (parser, NULL);
-		  tree value = c_fully_fold (cval.value, false, NULL);
-		  if (INTEGRAL_TYPE_P (TREE_TYPE (value))
-		      && TREE_CODE (value) != INTEGER_CST)
-		    value = convert_lvalue_to_rvalue (cval.get_start (), cval,
-						      false, true).value;
+		  c_पाहायाग cval = c_parser_पाहायाग_no_commas (parser, NULL);
+		  पुनो हालागा = c_fully_fold (cval.हालागा, false, NULL);
+		  if (INTEGRAL_TYPE_P (पुनो_TYPE (हालागा))
+		      && पुनो_CODE (हालागा) != INTEGER_CST)
+		    हालागा = convert_lvalue_to_rvalue (cval.get_start (), cval,
+						      false, true).हालागा;
 
-		  if (TREE_CODE (value) != INTEGER_CST
-		      || !tree_fits_shwi_p (value))
+		  if (पुनो_CODE (हालागा) != INTEGER_CST
+		      || !पुनो_fits_shwi_p (हालागा))
 		    {
 		      c_parser_error (parser, "expected string literal or "
 					      "constant integer expression");
-		      return error_mark_node;
+		      return error_mark_बुहोल;
 		    }
-		  HOST_WIDE_INT n = tree_to_shwi (value);
+		  HOST_WIDE_INT n = पुनो_to_shwi (हालागा);
 		  if (n < 1 || n > GOMP_INTEROP_IFR_LAST)
 		    {
 		      warning_at (cval.get_location (), OPT_Wopenmp,
@@ -21992,7 +21992,7 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
 	      if (!c_parser_require (parser, CPP_CLOSE_PAREN,
 				     is_fr ? G_("expected %<)%>")
 					   : G_("expected %<)%> or %<,%>")))
-		return error_mark_node;
+		return error_mark_बुहोल;
 	      break;
 	    }
 	  if (c_parser_next_token_is (parser, CPP_COMMA))
@@ -22003,7 +22003,7 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
 	  if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 	    break;
 	  c_parser_error (parser, "expected %<,%> or %<}%>");
-	  return error_mark_node;
+	  return error_mark_बुहोल;
 	}
       str += (char) GOMP_INTEROP_IFR_SEPARATOR;
       str += str2;
@@ -22012,12 +22012,12 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
       if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	break;
       if (!c_parser_require (parser, CPP_COMMA, "expected %<)%> or %<,%>"))
-	return error_mark_node;
+	return error_mark_बुहोल;
     }
   c_parser_consume_token (parser);
   str += '\0';
-  tree res = build_string (str.length (), str.data ());
-  TREE_TYPE (res) = build_array_type_nelts (unsigned_char_type_node,
+  पुनो res = build_string (str.length (), str.data ());
+  पुनो_TYPE (res) = build_array_type_nelts (unsigned_char_type_बुहोल,
 						  str.length ());
   return res;
 }
@@ -22035,18 +22035,18 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
 
 static bool
 c_parser_omp_clause_init_modifiers (c_parser *parser, bool *target,
-				    bool *targetsync, tree *prefer_type_tree)
+				    bool *targetsync, पुनो *prefer_type_पुनो)
 {
   *target = false;
   *targetsync = false;
-  *prefer_type_tree = NULL_TREE;
+  *prefer_type_पुनो = NULL_पुनो;
 
   do
     {
       c_token *tok = c_parser_peek_token (parser);
       if (tok->type != CPP_NAME)
 	goto fail;
-      const char *p = IDENTIFIER_POINTER (tok->value);
+      const char *p = IDENTIFIER_POINTER (tok->हालागा);
       if (strcmp ("targetsync", p) == 0)
 	{
 	  if (*targetsync)
@@ -22063,11 +22063,11 @@ c_parser_omp_clause_init_modifiers (c_parser *parser, bool *target,
 	}
       else if (strcmp ("prefer_type", p) == 0)
 	{
-	  if (*prefer_type_tree != NULL_TREE)
+	  if (*prefer_type_पुनो != NULL_पुनो)
 	    error_at (tok->location, "duplicate %<prefer_type%> modifier");
 	  c_parser_consume_token (parser);
-	  *prefer_type_tree = c_parser_omp_modifier_prefer_type (parser);
-	  if (*prefer_type_tree == error_mark_node)
+	  *prefer_type_पुनो = c_parser_omp_modifier_prefer_type (parser);
+	  if (*prefer_type_पुनो == error_mark_बुहोल)
 	    return false;
 	}
       else
@@ -22097,8 +22097,8 @@ fail:
      targetsync
      prefer_type (preference-specification) */
 
-static tree
-c_parser_omp_clause_init (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_init (c_parser *parser, पुनो list)
 {
   location_t loc = c_parser_peek_token (parser)->location;
 
@@ -22108,13 +22108,13 @@ c_parser_omp_clause_init (c_parser *parser, tree list)
 
   bool target = false;
   bool targetsync = false;
-  tree prefer_type_tree = NULL_TREE;
+  पुनो prefer_type_पुनो = NULL_पुनो;
 
   if (!c_parser_omp_clause_init_modifiers (parser, &target, &targetsync,
-					   &prefer_type_tree)
+					   &prefer_type_पुनो)
       || !c_parser_require (parser, CPP_COLON, "expected %<:%>"))
     {
-      if (prefer_type_tree != error_mark_node)
+      if (prefer_type_पुनो != error_mark_बुहोल)
 	parens.skip_until_found_close (parser);
       return list;
     }
@@ -22123,19 +22123,19 @@ c_parser_omp_clause_init (c_parser *parser, tree list)
     error_at (loc,
 	      "missing required %<target%> and/or %<targetsync%> modifier");
 
-  tree nl = c_parser_omp_variable_list (parser, loc, OMP_CLAUSE_INIT, list,
+  पुनो nl = c_parser_omp_variable_list (parser, loc, OMP_CLAUSE_INIT, list,
 					false);
   parens.skip_until_found_close (parser);
 
-  for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  for (पुनो c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
     {
-      TREE_ADDRESSABLE (OMP_CLAUSE_DECL (c)) = 1;
+      पुनो_ADDRESSABLE (OMP_CLAUSE_DECL (c)) = 1;
       if (target)
 	OMP_CLAUSE_INIT_TARGET (c) = 1;
       if (targetsync)
 	OMP_CLAUSE_INIT_TARGETSYNC (c) = 1;
-      if (prefer_type_tree)
-	OMP_CLAUSE_INIT_PREFER_TYPE (c) = prefer_type_tree;
+      if (prefer_type_पुनो)
+	OMP_CLAUSE_INIT_PREFER_TYPE (c) = prefer_type_पुनो;
     }
   return nl;
 }
@@ -22143,8 +22143,8 @@ c_parser_omp_clause_init (c_parser *parser, tree list)
 /* OpenMP 5.0:
    use ( variable-list ) */
 
-static tree
-c_parser_omp_clause_use (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_use (c_parser *parser, पुनो list)
 {
   return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_USE, list);
 }
@@ -22152,14 +22152,14 @@ c_parser_omp_clause_use (c_parser *parser, tree list)
 /* OpenMP 6.0:
    interop ( variable-list ) */
 
-static tree
-c_parser_omp_clause_interop (c_parser *parser, tree list)
+static पुनो
+c_parser_omp_clause_interop (c_parser *parser, पुनो list)
 {
   check_no_duplicate_clause (list, OMP_CLAUSE_INTEROP, "interop");
-  tree nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_INTEROP, list);
-  for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  पुनो nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_INTEROP, list);
+  for (पुनो c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
     {
-      TREE_USED (OMP_CLAUSE_DECL (c)) = 1;
+      पुनो_USED (OMP_CLAUSE_DECL (c)) = 1;
       DECL_READ_P (OMP_CLAUSE_DECL (c)) = 1;
     }
   return nl;
@@ -22168,12 +22168,12 @@ c_parser_omp_clause_interop (c_parser *parser, tree list)
 /* Parse all OpenACC clauses.  The set clauses allowed by the directive
    is a bitmask in MASK.  Return the list of clauses found.  */
 
-static tree
+static पुनो
 c_parser_oacc_all_clauses (c_parser *parser, omp_clause_mask mask,
 			   const char *where, bool finish_p = true,
 			   bool target_p = false)
 {
-  tree clauses = NULL;
+  पुनो clauses = NULL;
   bool first = true;
 
   while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
@@ -22181,7 +22181,7 @@ c_parser_oacc_all_clauses (c_parser *parser, omp_clause_mask mask,
       location_t here;
       pragma_omp_clause c_kind;
       const char *c_name;
-      tree prev = clauses;
+      पुनो prev = clauses;
 
       if (!first && c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
@@ -22293,15 +22293,15 @@ c_parser_oacc_all_clauses (c_parser *parser, omp_clause_mask mask,
 						 clauses);
 	  c_name = "nohost";
 	  break;
-	case PRAGMA_OACC_CLAUSE_NUM_GANGS:
+	case PRAGMA_OACC_CLAUSE_नुमेरो_GANGS:
 	  clauses = c_parser_oacc_single_int_clause (parser,
-						     OMP_CLAUSE_NUM_GANGS,
+						     OMP_CLAUSE_नुमेरो_GANGS,
 						     clauses);
 	  c_name = "num_gangs";
 	  break;
-	case PRAGMA_OACC_CLAUSE_NUM_WORKERS:
+	case PRAGMA_OACC_CLAUSE_नुमेरो_WORKERS:
 	  clauses = c_parser_oacc_single_int_clause (parser,
-						     OMP_CLAUSE_NUM_WORKERS,
+						     OMP_CLAUSE_नुमेरो_WORKERS,
 						     clauses);
 	  c_name = "num_workers";
 	  break;
@@ -22394,12 +22394,12 @@ c_parser_oacc_all_clauses (c_parser *parser, omp_clause_mask mask,
    of end of pragma.  If it is 2, additionally commas are required in between
    the clauses.  */
 
-static tree
+static पुनो
 c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 			  const char *where, bool finish_p = true,
 			  int nested = 0)
 {
-  tree clauses = NULL;
+  पुनो clauses = NULL;
   bool first = true;
 
   while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
@@ -22407,7 +22407,7 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
       location_t here;
       pragma_omp_clause c_kind;
       const char *c_name;
-      tree prev = clauses;
+      पुनो prev = clauses;
 
       if (nested && c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	break;
@@ -22501,12 +22501,12 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 	  clauses = c_parser_omp_clause_nowait (parser, clauses);
 	  c_name = "nowait";
 	  break;
-	case PRAGMA_OMP_CLAUSE_NUM_TASKS:
-	  clauses = c_parser_omp_clause_num_tasks (parser, clauses);
+	case PRAGMA_OMP_CLAUSE_नुमेरो_TASKS:
+	  clauses = c_parser_omp_clause_नुमेरो_tasks (parser, clauses);
 	  c_name = "num_tasks";
 	  break;
-	case PRAGMA_OMP_CLAUSE_NUM_THREADS:
-	  clauses = c_parser_omp_clause_num_threads (parser, clauses);
+	case PRAGMA_OMP_CLAUSE_नुमेरो_THREADS:
+	  clauses = c_parser_omp_clause_नुमेरो_threads (parser, clauses);
 	  c_name = "num_threads";
 	  break;
 	case PRAGMA_OMP_CLAUSE_ORDER:
@@ -22618,9 +22618,9 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 	      warning_at (&richloc, OPT_Wdeprecated_openmp,
 			  "%<to%> clause with %<declare target%> deprecated "
 			  "since OpenMP 5.2, use %<enter%>");
-	      tree nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ENTER,
+	      पुनो nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ENTER,
 						      clauses);
-	      for (tree c = nl; c != clauses; c = OMP_CLAUSE_CHAIN (c))
+	      for (पुनो c = nl; c != clauses; c = OMP_CLAUSE_CHAIN (c))
 		OMP_CLAUSE_ENTER_TO (c) = 1;
 	      clauses = nl;
 	    }
@@ -22638,8 +22638,8 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 	  clauses = c_parser_omp_clause_uniform (parser, clauses);
 	  c_name = "uniform";
 	  break;
-	case PRAGMA_OMP_CLAUSE_NUM_TEAMS:
-	  clauses = c_parser_omp_clause_num_teams (parser, clauses);
+	case PRAGMA_OMP_CLAUSE_नुमेरो_TEAMS:
+	  clauses = c_parser_omp_clause_नुमेरो_teams (parser, clauses);
 	  c_name = "num_teams";
 	  break;
 	case PRAGMA_OMP_CLAUSE_THREAD_LIMIT:
@@ -22816,13 +22816,13 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
    outer node.  So it is convenient if we work around the fact that
    c_parser_statement calls add_stmt.  */
 
-static tree
+static पुनो
 c_parser_omp_structured_block (c_parser *parser, bool *if_p)
 {
-  tree stmt = push_stmt_list ();
+  पुनो stmt = इतुलाक_stmt_list ();
   parser->omp_attrs_forbidden_p = true;
   c_parser_statement (parser, if_p);
-  return pop_stmt_list (stmt);
+  return आलिसिन_stmt_list (stmt);
 }
 
 /* OpenACC 2.0:
@@ -22834,10 +22834,10 @@ c_parser_omp_structured_block (c_parser *parser, bool *if_p)
    LOC is the location of the #pragma token.
 */
 
-static tree
+static पुनो
 c_parser_oacc_cache (location_t loc, c_parser *parser)
 {
-  tree stmt, clauses = NULL_TREE;
+  पुनो stmt, clauses = NULL_पुनो;
   bool readonly = false;
   location_t open_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
@@ -22845,7 +22845,7 @@ c_parser_oacc_cache (location_t loc, c_parser *parser)
     {
       c_token *token = c_parser_peek_token (parser);
       if (token->type == CPP_NAME
-	  && !strcmp (IDENTIFIER_POINTER (token->value), "readonly")
+	  && !strcmp (IDENTIFIER_POINTER (token->हालागा), "readonly")
 	  && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	{
 	  c_parser_consume_token (parser);
@@ -22853,22 +22853,22 @@ c_parser_oacc_cache (location_t loc, c_parser *parser)
 	  readonly = true;
 	}
       clauses = c_parser_omp_variable_list (parser, open_loc,
-					    OMP_CLAUSE__CACHE_, NULL_TREE);
+					    OMP_CLAUSE__CACHE_, NULL_पुनो);
       parens.skip_until_found_close (parser);
     }
 
   if (readonly)
-    for (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+    for (पुनो c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
       OMP_CLAUSE__CACHE__READONLY (c) = 1;
 
   clauses = c_finish_omp_clauses (clauses, C_ORT_ACC);
 
   c_parser_skip_to_pragma_eol (parser);
 
-  stmt = make_node (OACC_CACHE);
-  TREE_TYPE (stmt) = void_type_node;
+  stmt = make_बुहोल (OACC_CACHE);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
   OACC_CACHE_CLAUSES (stmt) = clauses;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_पाहायाग_LOCATION (stmt, loc);
   add_stmt (stmt);
 
   return stmt;
@@ -22893,10 +22893,10 @@ c_parser_oacc_cache (location_t loc, c_parser *parser)
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_NO_CREATE)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_PRESENT))
 
-static tree
+static पुनो
 c_parser_oacc_data (location_t loc, c_parser *parser, bool *if_p)
 {
-  tree stmt, clauses, block;
+  पुनो stmt, clauses, block;
 
   clauses = c_parser_oacc_all_clauses (parser, OACC_DATA_CLAUSE_MASK,
 				       "#pragma acc data");
@@ -22927,7 +22927,7 @@ static void
 c_parser_oacc_declare (c_parser *parser)
 {
   location_t pragma_loc = c_parser_peek_token (parser)->location;
-  tree clauses, stmt, t, decl;
+  पुनो clauses, stmt, t, decl;
 
   bool error = false;
 
@@ -22964,7 +22964,7 @@ c_parser_oacc_declare (c_parser *parser)
 
 	case GOMP_MAP_LINK:
 	  if (!global_bindings_p ()
-	      && (TREE_STATIC (decl)
+	      && (पुनो_STATIC (decl)
 	       || !DECL_EXTERNAL (decl)))
 	    {
 	      error_at (loc,
@@ -22991,7 +22991,7 @@ c_parser_oacc_declare (c_parser *parser)
 	      error = true;
 	      continue;
 	    }
-	  else if (TREE_PUBLIC (decl))
+	  else if (पुनो_PUBLIC (decl))
 	    {
 	      error_at (loc,
 			"invalid use of %<global%> variable %qD "
@@ -23023,7 +23023,7 @@ c_parser_oacc_declare (c_parser *parser)
 
       if (!error)
 	{
-	  tree id;
+	  पुनो id;
 
 	  if (OMP_CLAUSE_MAP_KIND (t) == GOMP_MAP_LINK)
 	    id = get_identifier ("omp declare target link");
@@ -23031,19 +23031,19 @@ c_parser_oacc_declare (c_parser *parser)
 	    id = get_identifier ("omp declare target");
 
 	  DECL_ATTRIBUTES (decl)
-			   = tree_cons (id, NULL_TREE, DECL_ATTRIBUTES (decl));
+			   = पुनो_cons (id, NULL_पुनो, DECL_ATTRIBUTES (decl));
 
 	  if (global_bindings_p ())
 	    {
-	      symtab_node *node = symtab_node::get (decl);
-	      if (node != NULL)
+	      symtab_बुहोल *बुहोल = symtab_बुहोल::get (decl);
+	      if (बुहोल != NULL)
 		{
-		  node->offloadable = 1;
+		  बुहोल->offloadable = 1;
 		  if (ENABLE_OFFLOADING)
 		    {
 		      g->have_offload = true;
-		      if (is_a <varpool_node *> (node))
-			vec_safe_push (offload_vars, decl);
+		      if (is_a <varpool_बुहोल *> (बुहोल))
+			vec_safe_इतुलाक (offload_vars, decl);
 		    }
 		}
 	    }
@@ -23053,10 +23053,10 @@ c_parser_oacc_declare (c_parser *parser)
   if (error || global_bindings_p ())
     return;
 
-  stmt = make_node (OACC_DECLARE);
-  TREE_TYPE (stmt) = void_type_node;
+  stmt = make_बुहोल (OACC_DECLARE);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
   OACC_DECLARE_CLAUSES (stmt) = clauses;
-  SET_EXPR_LOCATION (stmt, pragma_loc);
+  SET_पाहायाग_LOCATION (stmt, pragma_loc);
 
   add_stmt (stmt);
 
@@ -23095,14 +23095,14 @@ static void
 c_parser_oacc_enter_exit_data (c_parser *parser, bool enter)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  tree clauses, stmt;
+  पुनो clauses, stmt;
   const char *p = "";
 
   c_parser_consume_pragma (parser);
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       c_parser_consume_token (parser);
     }
 
@@ -23122,17 +23122,17 @@ c_parser_oacc_enter_exit_data (c_parser *parser, bool enter)
     clauses = c_parser_oacc_all_clauses (parser, OACC_EXIT_DATA_CLAUSE_MASK,
 					 "#pragma acc exit data");
 
-  if (omp_find_clause (clauses, OMP_CLAUSE_MAP) == NULL_TREE)
+  if (omp_find_clause (clauses, OMP_CLAUSE_MAP) == NULL_पुनो)
     {
       error_at (loc, "%<#pragma acc %s data%> has no data movement clause",
 		enter ? "enter" : "exit");
       return;
     }
 
-  stmt = enter ? make_node (OACC_ENTER_DATA) : make_node (OACC_EXIT_DATA);
-  TREE_TYPE (stmt) = void_type_node;
+  stmt = enter ? make_बुहोल (OACC_ENTER_DATA) : make_बुहोल (OACC_EXIT_DATA);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
   OMP_STANDALONE_CLAUSES (stmt) = clauses;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_पाहायाग_LOCATION (stmt, loc);
   add_stmt (stmt);
 }
 
@@ -23147,17 +23147,17 @@ c_parser_oacc_enter_exit_data (c_parser *parser, bool enter)
 	 | (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_IF)                  \
 	 | (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_IF_PRESENT) )
 
-static tree
+static पुनो
 c_parser_oacc_host_data (location_t loc, c_parser *parser, bool *if_p)
 {
-  tree stmt, clauses, block;
+  पुनो stmt, clauses, block;
 
   clauses = c_parser_oacc_all_clauses (parser, OACC_HOST_DATA_CLAUSE_MASK,
 				       "#pragma acc host_data", false);
   if (!omp_find_clause (clauses, OMP_CLAUSE_USE_DEVICE_PTR))
     {
       error_at (loc, "%<host_data%> construct requires %<use_device%> clause");
-      return error_mark_node;
+      return error_mark_बुहोल;
     }
   clauses = c_finish_omp_clauses (clauses, C_ORT_ACC);
   block = c_begin_omp_parallel ();
@@ -23186,16 +23186,16 @@ c_parser_oacc_host_data (location_t loc, c_parser *parser, bool *if_p)
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_INDEPENDENT) 	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_SEQ)			\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_TILE) )
-static tree
+static पुनो
 c_parser_oacc_loop (location_t loc, c_parser *parser, char *p_name,
-		    omp_clause_mask mask, tree *cclauses, bool *if_p)
+		    omp_clause_mask mask, पुनो *cclauses, bool *if_p)
 {
   bool is_parallel = ((mask >> PRAGMA_OACC_CLAUSE_REDUCTION) & 1) == 1;
 
   strcat (p_name, " loop");
   mask |= OACC_LOOP_CLAUSE_MASK;
 
-  tree clauses = c_parser_oacc_all_clauses (parser, mask, p_name,
+  पुनो clauses = c_parser_oacc_all_clauses (parser, mask, p_name,
 					    /*finish_p=*/cclauses == NULL,
 					    /*target=*/is_parallel);
   if (cclauses)
@@ -23207,8 +23207,8 @@ c_parser_oacc_loop (location_t loc, c_parser *parser, char *p_name,
 	clauses = c_finish_omp_clauses (clauses, C_ORT_ACC);
     }
 
-  tree block = c_begin_compound_stmt (true);
-  tree stmt = c_parser_omp_for_loop (loc, parser, OACC_LOOP, clauses, NULL,
+  पुनो block = c_begin_compound_stmt (true);
+  पुनो stmt = c_parser_omp_for_loop (loc, parser, OACC_LOOP, clauses, NULL,
 				     if_p);
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
@@ -23244,8 +23244,8 @@ c_parser_oacc_loop (location_t loc, c_parser *parser, char *p_name,
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_DEVICEPTR)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_IF)			\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_NO_CREATE)		\
-	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_NUM_GANGS)		\
-	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_NUM_WORKERS)		\
+	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_नुमेरो_GANGS)		\
+	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_नुमेरो_WORKERS)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_PRESENT)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_SELF)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_VECTOR_LENGTH)	\
@@ -23264,8 +23264,8 @@ c_parser_oacc_loop (location_t loc, c_parser *parser, char *p_name,
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_NO_CREATE)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_PRIVATE)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_FIRSTPRIVATE)	\
-	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_NUM_GANGS)		\
-	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_NUM_WORKERS)		\
+	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_नुमेरो_GANGS)		\
+	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_नुमेरो_WORKERS)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_PRESENT)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_REDUCTION)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_SELF)		\
@@ -23290,12 +23290,12 @@ c_parser_oacc_loop (location_t loc, c_parser *parser, char *p_name,
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_SELF)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_WAIT) )
 
-static tree
+static पुनो
 c_parser_oacc_compute (location_t loc, c_parser *parser,
 		       enum pragma_kind p_kind, char *p_name, bool *if_p)
 {
   omp_clause_mask mask;
-  enum tree_code code;
+  enum पुनो_code code;
   switch (p_kind)
     {
     case PRAGMA_OACC_KERNELS:
@@ -23319,22 +23319,22 @@ c_parser_oacc_compute (location_t loc, c_parser *parser,
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "loop") == 0)
 	{
 	  c_parser_consume_token (parser);
-	  tree block = c_begin_omp_parallel ();
-	  tree clauses;
+	  पुनो block = c_begin_omp_parallel ();
+	  पुनो clauses;
 	  c_parser_oacc_loop (loc, parser, p_name, mask, &clauses, if_p);
 	  return c_finish_omp_construct (loc, code, block, clauses);
 	}
     }
 
-  tree clauses = c_parser_oacc_all_clauses (parser, mask, p_name,
+  पुनो clauses = c_parser_oacc_all_clauses (parser, mask, p_name,
 					    /*finish_p=*/true,
 					    /*target=*/true);
 
-  tree block = c_begin_omp_parallel ();
+  पुनो block = c_begin_omp_parallel ();
   add_stmt (c_parser_omp_structured_block (parser, if_p));
 
   return c_finish_omp_construct (loc, code, block, clauses);
@@ -23375,17 +23375,17 @@ c_parser_oacc_routine (c_parser *parser, enum pragma_context context)
     {
       c_parser_consume_token (parser); /* '(' */
 
-      tree decl = NULL_TREE;
+      पुनो decl = NULL_पुनो;
       c_token *name_token = c_parser_peek_token (parser);
       location_t name_loc = name_token->location;
       if (name_token->type == CPP_NAME
 	  && (name_token->id_kind == C_ID_ID
 	      || name_token->id_kind == C_ID_TYPENAME))
 	{
-	  decl = lookup_name (name_token->value);
+	  decl = lookup_name (name_token->हालागा);
 	  if (!decl)
 	    error_at (name_loc,
-		      "%qE has not been declared", name_token->value);
+		      "%qE has not been declared", name_token->हालागा);
 	  c_parser_consume_token (parser);
 	}
       else
@@ -23405,7 +23405,7 @@ c_parser_oacc_routine (c_parser *parser, enum pragma_context context)
 	 emission easier.  */
       data.clauses = nreverse (data.clauses);
 
-      if (TREE_CODE (decl) != FUNCTION_DECL)
+      if (पुनो_CODE (decl) != FUNCTION_DECL)
 	{
 	  error_at (name_loc, "%qD does not refer to a function", decl);
 	  return;
@@ -23459,12 +23459,12 @@ c_parser_oacc_routine (c_parser *parser, enum pragma_context context)
    IS_DEFN is true if we're applying it to the definition.  */
 
 static void
-c_finish_oacc_routine (struct oacc_routine_data *data, tree fndecl,
+c_finish_oacc_routine (struct oacc_routine_data *data, पुनो fndecl,
 		       bool is_defn)
 {
   /* Keep going if we're in error reporting mode.  */
   if (data->error_seen
-      || fndecl == error_mark_node)
+      || fndecl == error_mark_बुहोल)
     return;
 
   if (data->fndecl_seen)
@@ -23475,7 +23475,7 @@ c_finish_oacc_routine (struct oacc_routine_data *data, tree fndecl,
       data->error_seen = true;
       return;
     }
-  if (fndecl == NULL_TREE || TREE_CODE (fndecl) != FUNCTION_DECL)
+  if (fndecl == NULL_पुनो || पुनो_CODE (fndecl) != FUNCTION_DECL)
     {
       error_at (data->loc,
 		"%<#pragma acc routine%> not immediately followed by"
@@ -23497,10 +23497,10 @@ c_finish_oacc_routine (struct oacc_routine_data *data, tree fndecl,
     }
   else
     {
-      if (TREE_USED (fndecl) || (!is_defn && DECL_SAVED_TREE (fndecl)))
+      if (पुनो_USED (fndecl) || (!is_defn && DECL_SAVED_पुनो (fndecl)))
 	{
 	  error_at (data->loc,
-		    TREE_USED (fndecl)
+		    पुनो_USED (fndecl)
 		    ? G_("%<#pragma acc routine%> must be applied before use")
 		    : G_("%<#pragma acc routine%> must be applied before"
 			 " definition"));
@@ -23509,12 +23509,12 @@ c_finish_oacc_routine (struct oacc_routine_data *data, tree fndecl,
 	}
 
       /* Set the routine's level of parallelism.  */
-      tree dims = oacc_build_routine_dims (data->clauses);
+      पुनो dims = oacc_build_routine_dims (data->clauses);
       oacc_replace_fn_attrib (fndecl, dims);
 
       /* Add an "omp declare target" attribute.  */
       DECL_ATTRIBUTES (fndecl)
-	= tree_cons (get_identifier ("omp declare target"),
+	= पुनो_cons (get_identifier ("omp declare target"),
 		     data->clauses, DECL_ATTRIBUTES (fndecl));
     }
 
@@ -23542,9 +23542,9 @@ c_parser_oacc_update (c_parser *parser)
 
   c_parser_consume_pragma (parser);
 
-  tree clauses = c_parser_oacc_all_clauses (parser, OACC_UPDATE_CLAUSE_MASK,
+  पुनो clauses = c_parser_oacc_all_clauses (parser, OACC_UPDATE_CLAUSE_MASK,
 					    "#pragma acc update");
-  if (omp_find_clause (clauses, OMP_CLAUSE_MAP) == NULL_TREE)
+  if (omp_find_clause (clauses, OMP_CLAUSE_MAP) == NULL_पुनो)
     {
       error_at (loc,
 		"%<#pragma acc update%> must contain at least one "
@@ -23555,10 +23555,10 @@ c_parser_oacc_update (c_parser *parser)
   if (parser->error)
     return;
 
-  tree stmt = make_node (OACC_UPDATE);
-  TREE_TYPE (stmt) = void_type_node;
+  पुनो stmt = make_बुहोल (OACC_UPDATE);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
   OACC_UPDATE_CLAUSES (stmt) = clauses;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_पाहायाग_LOCATION (stmt, loc);
   add_stmt (stmt);
 }
 
@@ -23572,10 +23572,10 @@ c_parser_oacc_update (c_parser *parser)
 	( (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_ASYNC)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_IF) )
 
-static tree
+static पुनो
 c_parser_oacc_wait (location_t loc, c_parser *parser, char *p_name)
 {
-  tree clauses, list = NULL_TREE, stmt = NULL_TREE;
+  पुनो clauses, list = NULL_पुनो, stmt = NULL_पुनो;
 
   if (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
     list = c_parser_oacc_wait_list (parser, loc, list);
@@ -23588,22 +23588,22 @@ c_parser_oacc_wait (location_t loc, c_parser *parser, char *p_name)
   return stmt;
 }
 
-struct c_omp_loc_tree
+struct c_omp_loc_पुनो
 {
   location_t loc;
-  tree var;
+  पुनो var;
 };
 
 /* Check whether the expression used in the allocator clause is declared or
    modified between the variable declaration and its allocate directive.  */
-static tree
-c_check_omp_allocate_allocator_r (tree *tp, int *, void *data)
+static पुनो
+c_check_omp_allocate_allocator_r (पुनो *tp, int *, void *data)
 {
-  tree var = ((struct c_omp_loc_tree *) data)->var;
-  location_t loc = ((struct c_omp_loc_tree *) data)->loc;
-  if (TREE_CODE (*tp) == VAR_DECL && c_check_in_current_scope (*tp))
+  पुनो var = ((struct c_omp_loc_पुनो *) data)->var;
+  location_t loc = ((struct c_omp_loc_पुनो *) data)->loc;
+  if (पुनो_CODE (*tp) == VAR_DECL && c_check_in_current_scope (*tp))
     {
-      if (linemap_location_before_p (line_table, DECL_SOURCE_LOCATION (var),
+      if (linemap_location_before_p (लिन्या_table, DECL_SOURCE_LOCATION (var),
 				     DECL_SOURCE_LOCATION (*tp)))
 	{
 	  error_at (loc, "variable %qD used in the %<allocator%> clause must "
@@ -23616,22 +23616,22 @@ c_check_omp_allocate_allocator_r (tree *tp, int *, void *data)
       else
 	{
 	  gcc_assert (cur_stmt_list
-		      && TREE_CODE (cur_stmt_list) == STATEMENT_LIST);
+		      && पुनो_CODE (cur_stmt_list) == STATEMENT_LIST);
 
-	  tree_stmt_iterator l = tsi_last (cur_stmt_list);
+	  पुनो_stmt_iterator l = tsi_last (cur_stmt_list);
 	  while (!tsi_end_p (l))
 	    {
-	      if (linemap_location_before_p (line_table, EXPR_LOCATION (*l),
+	      if (linemap_location_before_p (लिन्या_table, पाहायाग_LOCATION (*l),
 					     DECL_SOURCE_LOCATION (var)))
 		  break;
-	      if (TREE_CODE (*l) == MODIFY_EXPR
-		  && TREE_OPERAND (*l, 0) == *tp)
+	      if (पुनो_CODE (*l) == MODIFY_पाहायाग
+		  && पुनो_OPERAND (*l, 0) == *tp)
 		{
 		  error_at (loc,
 			    "variable %qD used in the %<allocator%> clause "
 			    "must not be modified between declaration of %qD "
 			    "and its %<allocate%> directive", *tp, var);
-		  inform (EXPR_LOCATION (*l), "modified here");
+		  inform (पाहायाग_LOCATION (*l), "modified here");
 		  inform (DECL_SOURCE_LOCATION (var),
 			  "to be allocated variable declared here");
 		  return *tp;
@@ -23640,7 +23640,7 @@ c_check_omp_allocate_allocator_r (tree *tp, int *, void *data)
 	    }
 	}
     }
-  return NULL_TREE;
+  return NULL_पुनो;
 }
 
 /* OpenMP 5.x:
@@ -23655,12 +23655,12 @@ c_check_omp_allocate_allocator_r (tree *tp, int *, void *data)
 static void
 c_parser_omp_allocate (c_parser *parser)
 {
-  tree alignment = NULL_TREE;
-  tree allocator = NULL_TREE;
+  पुनो alignment = NULL_पुनो;
+  पुनो allocator = NULL_पुनो;
   c_parser_consume_pragma (parser);
   location_t loc = c_parser_peek_token (parser)->location;
   location_t allocator_loc = UNKNOWN_LOCATION;
-  tree nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ALLOCATE, NULL_TREE);
+  पुनो nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ALLOCATE, NULL_पुनो);
   do
     {
       if (c_parser_next_token_is (parser, CPP_COMMA)
@@ -23669,9 +23669,9 @@ c_parser_omp_allocate (c_parser *parser)
       if (!c_parser_next_token_is (parser, CPP_NAME))
 	break;
       matching_parens parens;
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       c_parser_consume_token (parser);
-      location_t expr_loc = c_parser_peek_token (parser)->location;
+      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
       if (strcmp ("align", p) != 0 && strcmp ("allocator", p) != 0)
 	{
 	  error_at (c_parser_peek_token (parser)->location,
@@ -23681,52 +23681,52 @@ c_parser_omp_allocate (c_parser *parser)
       if (!parens.require_open (parser))
 	break;
 
-      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-      expr_loc = c_parser_peek_token (parser)->location;
-      if (expr.value == error_mark_node)
+      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, false, true);
+      पाहायाग_loc = c_parser_peek_token (parser)->location;
+      if (पाहायाग.हालागा == error_mark_बुहोल)
 	;
       else if (p[2] == 'i' && alignment)
 	{
-	  error_at (expr_loc, "too many %qs clauses", "align");
+	  error_at (पाहायाग_loc, "too many %qs clauses", "align");
 	  break;
 	}
       else if (p[2] == 'i')
 	{
-	  alignment = c_fully_fold (expr.value, false, NULL);
-	  if (TREE_CODE (alignment) != INTEGER_CST
-	      || !INTEGRAL_TYPE_P (TREE_TYPE (alignment))
-	      || tree_int_cst_sgn (alignment) != 1
+	  alignment = c_fully_fold (पाहायाग.हालागा, false, NULL);
+	  if (पुनो_CODE (alignment) != INTEGER_CST
+	      || !INTEGRAL_TYPE_P (पुनो_TYPE (alignment))
+	      || पुनो_int_cst_sgn (alignment) != 1
 	      || !integer_pow2p (alignment))
 	    {
-	      error_at (expr_loc, "%<align%> clause argument needs to be "
+	      error_at (पाहायाग_loc, "%<align%> clause argument needs to be "
 				  "positive constant power of two integer "
 				  "expression");
-	      alignment = NULL_TREE;
+	      alignment = NULL_पुनो;
 	    }
 	}
       else if (allocator)
 	{
-	  error_at (expr_loc, "too many %qs clauses", "allocator");
+	  error_at (पाहायाग_loc, "too many %qs clauses", "allocator");
 	  break;
 	}
       else
 	{
-	  allocator = c_fully_fold (expr.value, false, NULL);
-	  allocator_loc = expr_loc;
-	  tree orig_type
-	    = expr.original_type ? expr.original_type : TREE_TYPE (allocator);
+	  allocator = c_fully_fold (पाहायाग.हालागा, false, NULL);
+	  allocator_loc = पाहायाग_loc;
+	  पुनो orig_type
+	    = पाहायाग.original_type ? पाहायाग.original_type : पुनो_TYPE (allocator);
 	  orig_type = TYPE_MAIN_VARIANT (orig_type);
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (allocator))
-	      || TREE_CODE (orig_type) != ENUMERAL_TYPE
+	  if (!INTEGRAL_TYPE_P (पुनो_TYPE (allocator))
+	      || पुनो_CODE (orig_type) != ENUMERAL_TYPE
 	      || TYPE_NAME (orig_type)
 		 != get_identifier ("omp_allocator_handle_t"))
 	    {
-	      error_at (expr_loc,
+	      error_at (पाहायाग_loc,
 			"%<allocator%> clause allocator expression has type "
 			"%qT rather than %<omp_allocator_handle_t%>",
-			TREE_TYPE (allocator));
-	      allocator = NULL_TREE;
+			पुनो_TYPE (allocator));
+	      allocator = NULL_पुनो;
 	    }
 	}
       parens.skip_until_found_close (parser);
@@ -23734,10 +23734,10 @@ c_parser_omp_allocate (c_parser *parser)
   c_parser_skip_to_pragma_eol (parser);
 
   c_mark_decl_jump_unsafe_in_current_scope ();
-  for (tree c = nl; c != NULL_TREE; c = OMP_CLAUSE_CHAIN (c))
+  for (पुनो c = nl; c != NULL_पुनो; c = OMP_CLAUSE_CHAIN (c))
     {
-      tree var = OMP_CLAUSE_DECL (c);
-      if (TREE_CODE (var) == PARM_DECL)
+      पुनो var = OMP_CLAUSE_DECL (c);
+      if (पुनो_CODE (var) == PARM_DECL)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (nl),
 		    "function parameter %qD may not appear as list item in an "
@@ -23759,9 +23759,9 @@ c_parser_omp_allocate (c_parser *parser)
 		    "%<allocate%> directive", var);
 	  continue;
 	}
-      if (TREE_STATIC (var))
+      if (पुनो_STATIC (var))
 	{
-	  if (allocator == NULL_TREE && allocator_loc == UNKNOWN_LOCATION)
+	  if (allocator == NULL_पुनो && allocator_loc == UNKNOWN_LOCATION)
 	    {
 	      error_at (loc,
 			"%<allocator%> clause required for "
@@ -23794,12 +23794,12 @@ c_parser_omp_allocate (c_parser *parser)
 	}
       if (allocator)
 	{
-	  struct c_omp_loc_tree data
-	    = {EXPR_LOC_OR_LOC (allocator, OMP_CLAUSE_LOCATION (nl)), var};
-	  walk_tree (&allocator, c_check_omp_allocate_allocator_r, &data, NULL);
+	  struct c_omp_loc_पुनो data
+	    = {पाहायाग_LOC_OR_LOC (allocator, OMP_CLAUSE_LOCATION (nl)), var};
+	  walk_पुनो (&allocator, c_check_omp_allocate_allocator_r, &data, NULL);
 	}
-      DECL_ATTRIBUTES (var) = tree_cons (get_identifier ("omp allocate"),
-					 build_tree_list (allocator, alignment),
+      DECL_ATTRIBUTES (var) = पुनो_cons (get_identifier ("omp allocate"),
+					 build_पुनो_list (allocator, alignment),
 					 DECL_ATTRIBUTES (var));
     }
 }
@@ -23891,17 +23891,17 @@ c_parser_omp_allocate (c_parser *parser)
 static void
 c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 {
-  tree lhs = NULL_TREE, rhs = NULL_TREE, v = NULL_TREE, r = NULL_TREE;
-  tree lhs1 = NULL_TREE, rhs1 = NULL_TREE;
-  tree stmt, orig_lhs, unfolded_lhs = NULL_TREE, unfolded_lhs1 = NULL_TREE;
-  enum tree_code code = ERROR_MARK, opcode = NOP_EXPR;
+  पुनो lhs = NULL_पुनो, rhs = NULL_पुनो, v = NULL_पुनो, r = NULL_पुनो;
+  पुनो lhs1 = NULL_पुनो, rhs1 = NULL_पुनो;
+  पुनो stmt, orig_lhs, unfolded_lhs = NULL_पुनो, unfolded_lhs1 = NULL_पुनो;
+  enum पुनो_code code = ERROR_MARK, opcode = NOP_पाहायाग;
   enum omp_memory_order memory_order = OMP_MEMORY_ORDER_UNSPECIFIED;
-  struct c_expr expr;
+  struct c_पाहायाग पाहायाग;
   location_t eloc;
   bool structured_block = false;
   bool swapped = false;
   bool non_lvalue_p;
-  tree clauses = NULL_TREE;
+  पुनो clauses = NULL_पुनो;
   bool capture = false;
   bool compare = false;
   bool weak = false;
@@ -23918,9 +23918,9 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
       if (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  const char *p
-	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 	  location_t cloc = c_parser_peek_token (parser)->location;
-	  enum tree_code new_code = ERROR_MARK;
+	  enum पुनो_code new_code = ERROR_MARK;
 	  enum omp_memory_order new_memory_order
 	    = OMP_MEMORY_ORDER_UNSPECIFIED;
 	  bool new_capture = false;
@@ -23931,7 +23931,7 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 	  if (!strcmp (p, "read"))
 	    new_code = OMP_ATOMIC_READ;
 	  else if (!strcmp (p, "write"))
-	    new_code = NOP_EXPR;
+	    new_code = NOP_पाहायाग;
 	  else if (!strcmp (p, "update"))
 	    new_code = OMP_ATOMIC;
 	  else if (openacc && !strcmp (p, "capture"))
@@ -23959,7 +23959,7 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 	      if (c_parser_next_token_is (parser, CPP_NAME))
 		{
 		  const char *q
-		    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+		    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
 		  if (!strcmp (q, "seq_cst"))
 		    new_fail = OMP_MEMORY_ORDER_SEQ_CST;
@@ -24101,7 +24101,7 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 	  memory_order = OMP_MEMORY_ORDER_SEQ_CST;
 	  break;
 	case OMP_MEMORY_ORDER_ACQUIRE:
-	  if (code == NOP_EXPR)  /* atomic write */
+	  if (code == NOP_पाहायाग)  /* atomic write */
 	    {
 	      error_at (loc, "%<#pragma omp atomic write%> incompatible with "
 			     "%<acquire%> clause implicitly provided by a "
@@ -24128,7 +24128,7 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 	    case OMP_ATOMIC_READ:
 	      memory_order = OMP_MEMORY_ORDER_ACQUIRE;
 	      break;
-	    case NOP_EXPR: /* atomic write */
+	    case NOP_पाहायाग: /* atomic write */
 	      memory_order = OMP_MEMORY_ORDER_RELEASE;
 	      break;
 	    default:
@@ -24153,7 +24153,7 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 	else if (memory_order == OMP_MEMORY_ORDER_ACQ_REL)
 	  memory_order = OMP_MEMORY_ORDER_ACQUIRE;
 	break;
-      case NOP_EXPR: /* atomic write */
+      case NOP_पाहायाग: /* atomic write */
 	if (memory_order == OMP_MEMORY_ORDER_ACQUIRE)
 	  {
 	    error_at (loc, "%<#pragma omp atomic write%> incompatible with "
@@ -24174,37 +24174,37 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
   switch (code)
     {
     case OMP_ATOMIC_READ:
-    case NOP_EXPR: /* atomic write */
-      v = c_parser_cast_expression (parser, NULL).value;
+    case NOP_पाहायाग: /* atomic write */
+      v = c_parser_cast_expression (parser, NULL).हालागा;
       non_lvalue_p = !lvalue_p (v);
       v = c_fully_fold (v, false, NULL, true);
-      if (v == error_mark_node)
+      if (v == error_mark_बुहोल)
 	goto saw_error;
       if (non_lvalue_p)
 	v = non_lvalue (v);
       loc = c_parser_peek_token (parser)->location;
       if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
 	goto saw_error;
-      if (code == NOP_EXPR)
+      if (code == NOP_पाहायाग)
 	{
 	  eloc = c_parser_peek_token (parser)->location;
-	  expr = c_parser_expression (parser);
-	  expr = default_function_array_read_conversion (eloc, expr);
+	  पाहायाग = c_parser_expression (parser);
+	  पाहायाग = default_function_array_read_conversion (eloc, पाहायाग);
 	  /* atomic write is represented by OMP_ATOMIC with NOP_EXPR
 	     opcode.  */
 	  code = OMP_ATOMIC;
 	  lhs = v;
-	  v = NULL_TREE;
-	  rhs = c_fully_fold (expr.value, false, NULL);
-	  if (rhs == error_mark_node)
+	  v = NULL_पुनो;
+	  rhs = c_fully_fold (पाहायाग.हालागा, false, NULL);
+	  if (rhs == error_mark_बुहोल)
 	    goto saw_error;
 	}
       else
 	{
-	  lhs = c_parser_cast_expression (parser, NULL).value;
+	  lhs = c_parser_cast_expression (parser, NULL).हालागा;
 	  non_lvalue_p = !lvalue_p (lhs);
 	  lhs = c_fully_fold (lhs, false, NULL, true);
-	  if (lhs == error_mark_node)
+	  if (lhs == error_mark_बुहोल)
 	    goto saw_error;
 	  if (non_lvalue_p)
 	    lhs = non_lvalue (lhs);
@@ -24221,10 +24221,10 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 	break;
       else
 	{
-	  v = c_parser_cast_expression (parser, NULL).value;
+	  v = c_parser_cast_expression (parser, NULL).हालागा;
 	  non_lvalue_p = !lvalue_p (v);
 	  v = c_fully_fold (v, false, NULL, true);
-	  if (v == error_mark_node)
+	  if (v == error_mark_बुहोल)
 	    goto saw_error;
 	  if (non_lvalue_p)
 	    v = non_lvalue (v);
@@ -24253,37 +24253,37 @@ restart:
       if (!parens.require_open (parser))
 	goto saw_error;
       eloc = c_parser_peek_token (parser)->location;
-      c_expr cmp_expr;
+      c_पाहायाग cmp_पाहायाग;
       if (r)
 	{
-	  cmp_expr = c_parser_cast_expression (parser, NULL);
-	  cmp_expr = default_function_array_conversion (eloc, cmp_expr);
+	  cmp_पाहायाग = c_parser_cast_expression (parser, NULL);
+	  cmp_पाहायाग = default_function_array_conversion (eloc, cmp_पाहायाग);
 	}
       else
-	cmp_expr = c_parser_binary_expression (parser, NULL, void_list_node);
+	cmp_पाहायाग = c_parser_दालावाहान_expression (parser, NULL, void_list_बुहोल);
       parens.skip_until_found_close (parser);
-      if (cmp_expr.value == error_mark_node)
+      if (cmp_पाहायाग.हालागा == error_mark_बुहोल)
 	goto saw_error;
       if (r)
 	{
-	  if (!c_tree_equal (cmp_expr.value, unfolded_lhs))
+	  if (!c_पुनो_equal (cmp_पाहायाग.हालागा, unfolded_lhs))
 	    goto bad_if;
-	  cmp_expr.value = rhs1;
-	  rhs1 = NULL_TREE;
-	  gcc_assert (TREE_CODE (cmp_expr.value) == EQ_EXPR);
+	  cmp_पाहायाग.हालागा = rhs1;
+	  rhs1 = NULL_पुनो;
+	  gcc_assert (पुनो_CODE (cmp_पाहायाग.हालागा) == EQ_पाहायाग);
 	}
-      if (TREE_CODE (cmp_expr.value) == EQ_EXPR)
+      if (पुनो_CODE (cmp_पाहायाग.हालागा) == EQ_पाहायाग)
 	;
       else if (!structured_block && code == OMP_ATOMIC_CAPTURE_NEW)
 	{
-	  error_at (EXPR_LOC_OR_LOC (cmp_expr.value, eloc),
+	  error_at (पाहायाग_LOC_OR_LOC (cmp_पाहायाग.हालागा, eloc),
 		    "expected %<==%> comparison in %<if%> condition");
 	  goto saw_error;
 	}
-      else if (TREE_CODE (cmp_expr.value) != GT_EXPR
-	       && TREE_CODE (cmp_expr.value) != LT_EXPR)
+      else if (पुनो_CODE (cmp_पाहायाग.हालागा) != GT_पाहायाग
+	       && पुनो_CODE (cmp_पाहायाग.हालागा) != LT_पाहायाग)
 	{
-	  error_at (EXPR_LOC_OR_LOC (cmp_expr.value, eloc),
+	  error_at (पाहायाग_LOC_OR_LOC (cmp_पाहायाग.हालागा, eloc),
 		    "expected %<==%>, %<<%> or %<>%> comparison in %<if%> "
 		    "condition");
 	  goto saw_error;
@@ -24293,13 +24293,13 @@ restart:
 
       extra_scope = true;
       eloc = c_parser_peek_token (parser)->location;
-      expr = c_parser_cast_expression (parser, NULL);
-      lhs = expr.value;
-      expr = default_function_array_conversion (eloc, expr);
-      unfolded_lhs = expr.value;
+      पाहायाग = c_parser_cast_expression (parser, NULL);
+      lhs = पाहायाग.हालागा;
+      पाहायाग = default_function_array_conversion (eloc, पाहायाग);
+      unfolded_lhs = पाहायाग.हालागा;
       lhs = c_fully_fold (lhs, false, NULL, true);
       orig_lhs = lhs;
-      if (lhs == error_mark_node)
+      if (lhs == error_mark_बुहोल)
 	goto saw_error;
       if (!lvalue_p (unfolded_lhs))
 	lhs = non_lvalue (lhs);
@@ -24310,8 +24310,8 @@ restart:
 	}
       c_parser_consume_token (parser);
       eloc = c_parser_peek_token (parser)->location;
-      expr = c_parser_expr_no_commas (parser, NULL);
-      rhs1 = expr.value;
+      पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+      rhs1 = पाहायाग.हालागा;
 
       if (!c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
 	goto saw_error;
@@ -24322,35 +24322,35 @@ restart:
       extra_scope = false;
       no_semicolon = true;
 
-      if (c_tree_equal (TREE_OPERAND (cmp_expr.value, 0), unfolded_lhs))
+      if (c_पुनो_equal (पुनो_OPERAND (cmp_पाहायाग.हालागा, 0), unfolded_lhs))
 	{
-	  if (TREE_CODE (cmp_expr.value) == EQ_EXPR)
+	  if (पुनो_CODE (cmp_पाहायाग.हालागा) == EQ_पाहायाग)
 	    {
-	      opcode = COND_EXPR;
-	      rhs = c_fully_fold (TREE_OPERAND (cmp_expr.value, 1),
+	      opcode = COND_पाहायाग;
+	      rhs = c_fully_fold (पुनो_OPERAND (cmp_पाहायाग.हालागा, 1),
 				  false, NULL, true);
 	      rhs1 = c_fully_fold (rhs1, false, NULL, true);
 	    }
-	  else if (c_tree_equal (TREE_OPERAND (cmp_expr.value, 1), rhs1))
+	  else if (c_पुनो_equal (पुनो_OPERAND (cmp_पाहायाग.हालागा, 1), rhs1))
 	    {
-	      opcode = (TREE_CODE (cmp_expr.value) == GT_EXPR
-			? MIN_EXPR : MAX_EXPR);
+	      opcode = (पुनो_CODE (cmp_पाहायाग.हालागा) == GT_पाहायाग
+			? MIN_पाहायाग : MAX_पाहायाग);
 	      rhs = c_fully_fold (rhs1, false, NULL, true);
-	      rhs1 = c_fully_fold (TREE_OPERAND (cmp_expr.value, 0),
+	      rhs1 = c_fully_fold (पुनो_OPERAND (cmp_पाहायाग.हालागा, 0),
 				   false, NULL, true);
 	    }
 	  else
 	    goto bad_if;
 	}
-      else if (TREE_CODE (cmp_expr.value) == EQ_EXPR)
+      else if (पुनो_CODE (cmp_पाहायाग.हालागा) == EQ_पाहायाग)
 	goto bad_if;
-      else if (c_tree_equal (TREE_OPERAND (cmp_expr.value, 1), unfolded_lhs)
-	       && c_tree_equal (TREE_OPERAND (cmp_expr.value, 0), rhs1))
+      else if (c_पुनो_equal (पुनो_OPERAND (cmp_पाहायाग.हालागा, 1), unfolded_lhs)
+	       && c_पुनो_equal (पुनो_OPERAND (cmp_पाहायाग.हालागा, 0), rhs1))
 	{
-	  opcode = (TREE_CODE (cmp_expr.value) == GT_EXPR
-		    ? MAX_EXPR : MIN_EXPR);
+	  opcode = (पुनो_CODE (cmp_पाहायाग.हालागा) == GT_पाहायाग
+		    ? MAX_पाहायाग : MIN_पाहायाग);
 	  rhs = c_fully_fold (rhs1, false, NULL, true);
-	  rhs1 = c_fully_fold (TREE_OPERAND (cmp_expr.value, 1),
+	  rhs1 = c_fully_fold (पुनो_OPERAND (cmp_पाहायाग.हालागा, 1),
 			       false, NULL, true);
 	}
       else
@@ -24364,8 +24364,8 @@ restart:
       if (c_parser_next_token_is_keyword (parser, RID_ELSE))
 	{
 	  if (code != OMP_ATOMIC_CAPTURE_NEW
-	      || (structured_block && r == NULL_TREE)
-	      || TREE_CODE (cmp_expr.value) != EQ_EXPR)
+	      || (structured_block && r == NULL_पुनो)
+	      || पुनो_CODE (cmp_पाहायाग.हालागा) != EQ_पाहायाग)
 	    {
 	      eloc = c_parser_peek_token (parser)->location;
 	      error_at (eloc, "unexpected %<else%>");
@@ -24378,19 +24378,19 @@ restart:
 	    goto saw_error;
 
 	  extra_scope = true;
-	  v = c_parser_cast_expression (parser, NULL).value;
+	  v = c_parser_cast_expression (parser, NULL).हालागा;
 	  non_lvalue_p = !lvalue_p (v);
 	  v = c_fully_fold (v, false, NULL, true);
-	  if (v == error_mark_node)
+	  if (v == error_mark_बुहोल)
 	    goto saw_error;
 	  if (non_lvalue_p)
 	    v = non_lvalue (v);
 	  if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
 	    goto saw_error;
 
-	  expr = c_parser_expr_no_commas (parser, NULL);
+	  पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
 
-	  if (!c_tree_equal (expr.value, unfolded_lhs))
+	  if (!c_पुनो_equal (पाहायाग.हालागा, unfolded_lhs))
 	    goto bad_if;
 
 	  if (!c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
@@ -24401,11 +24401,11 @@ restart:
 
 	  extra_scope = false;
 	  code = OMP_ATOMIC_CAPTURE_OLD;
-	  if (r == NULL_TREE)
+	  if (r == NULL_पुनो)
 	    /* Signal to c_finish_omp_atomic that in
 	       if (x == e) { x = d; } else { v = x; }
 	       case the store to v should be conditional.  */
-	    r = void_list_node;
+	    r = void_list_बुहोल;
 	}
       else if (code == OMP_ATOMIC_CAPTURE_NEW && !structured_block)
 	{
@@ -24413,19 +24413,19 @@ restart:
 	  goto saw_error;
 	}
       else if (code == OMP_ATOMIC_CAPTURE_NEW
-	       && r != NULL_TREE
-	       && v == NULL_TREE)
+	       && r != NULL_पुनो
+	       && v == NULL_पुनो)
 	code = OMP_ATOMIC;
       goto stmt_done;
     }
   eloc = c_parser_peek_token (parser)->location;
-  expr = c_parser_cast_expression (parser, NULL);
-  lhs = expr.value;
-  expr = default_function_array_conversion (eloc, expr);
-  unfolded_lhs = expr.value;
+  पाहायाग = c_parser_cast_expression (parser, NULL);
+  lhs = पाहायाग.हालागा;
+  पाहायाग = default_function_array_conversion (eloc, पाहायाग);
+  unfolded_lhs = पाहायाग.हालागा;
   lhs = c_fully_fold (lhs, false, NULL, true);
   orig_lhs = lhs;
-  switch (TREE_CODE (lhs))
+  switch (पुनो_CODE (lhs))
     {
     invalid_compare:
       error_at (eloc, "invalid form of %<pragma omp atomic compare%>");
@@ -24448,74 +24448,74 @@ restart:
 	}
       return;
 
-    case POSTINCREMENT_EXPR:
+    case POSTINCREMENT_पाहायाग:
       if (code == OMP_ATOMIC_CAPTURE_NEW && !structured_block)
 	code = OMP_ATOMIC_CAPTURE_OLD;
       /* FALLTHROUGH */
-    case PREINCREMENT_EXPR:
-      lhs = TREE_OPERAND (lhs, 0);
-      unfolded_lhs = NULL_TREE;
-      opcode = PLUS_EXPR;
-      rhs = integer_one_node;
+    case PREINCREMENT_पाहायाग:
+      lhs = पुनो_OPERAND (lhs, 0);
+      unfolded_lhs = NULL_पुनो;
+      opcode = PLUS_पाहायाग;
+      rhs = integer_one_बुहोल;
       if (compare)
 	goto invalid_compare;
       break;
 
-    case POSTDECREMENT_EXPR:
+    case POSTDECREMENT_पाहायाग:
       if (code == OMP_ATOMIC_CAPTURE_NEW && !structured_block)
 	code = OMP_ATOMIC_CAPTURE_OLD;
       /* FALLTHROUGH */
-    case PREDECREMENT_EXPR:
-      lhs = TREE_OPERAND (lhs, 0);
-      unfolded_lhs = NULL_TREE;
-      opcode = MINUS_EXPR;
-      rhs = integer_one_node;
+    case PREDECREMENT_पाहायाग:
+      lhs = पुनो_OPERAND (lhs, 0);
+      unfolded_lhs = NULL_पुनो;
+      opcode = MINUS_पाहायाग;
+      rhs = integer_one_बुहोल;
       if (compare)
 	goto invalid_compare;
       break;
 
-    case COMPOUND_EXPR:
-      if (TREE_CODE (TREE_OPERAND (lhs, 0)) == SAVE_EXPR
-	  && TREE_CODE (TREE_OPERAND (lhs, 1)) == COMPOUND_EXPR
-	  && TREE_CODE (TREE_OPERAND (TREE_OPERAND (lhs, 1), 0)) == MODIFY_EXPR
-	  && TREE_OPERAND (TREE_OPERAND (lhs, 1), 1) == TREE_OPERAND (lhs, 0)
-	  && C_BOOLEAN_TYPE_P (TREE_TYPE (TREE_OPERAND (TREE_OPERAND
-					      (TREE_OPERAND (lhs, 1), 0), 0))))
+    case COMPOUND_पाहायाग:
+      if (पुनो_CODE (पुनो_OPERAND (lhs, 0)) == SAVE_पाहायाग
+	  && पुनो_CODE (पुनो_OPERAND (lhs, 1)) == COMPOUND_पाहायाग
+	  && पुनो_CODE (पुनो_OPERAND (पुनो_OPERAND (lhs, 1), 0)) == MODIFY_पाहायाग
+	  && पुनो_OPERAND (पुनो_OPERAND (lhs, 1), 1) == पुनो_OPERAND (lhs, 0)
+	  && C_BOOLEAN_TYPE_P (पुनो_TYPE (पुनो_OPERAND (पुनो_OPERAND
+					      (पुनो_OPERAND (lhs, 1), 0), 0))))
 	/* Undo effects of boolean_increment for post {in,de}crement.  */
-	lhs = TREE_OPERAND (TREE_OPERAND (lhs, 1), 0);
+	lhs = पुनो_OPERAND (पुनो_OPERAND (lhs, 1), 0);
       /* FALLTHRU */
-    case MODIFY_EXPR:
-      if (TREE_CODE (lhs) == MODIFY_EXPR
-	  && C_BOOLEAN_TYPE_P (TREE_TYPE (TREE_OPERAND (lhs, 0))))
+    case MODIFY_पाहायाग:
+      if (पुनो_CODE (lhs) == MODIFY_पाहायाग
+	  && C_BOOLEAN_TYPE_P (पुनो_TYPE (पुनो_OPERAND (lhs, 0))))
 	{
 	  /* Undo effects of boolean_increment.  */
-	  if (integer_onep (TREE_OPERAND (lhs, 1)))
+	  if (integer_onep (पुनो_OPERAND (lhs, 1)))
 	    {
 	      /* This is pre or post increment.  */
-	      rhs = TREE_OPERAND (lhs, 1);
-	      lhs = TREE_OPERAND (lhs, 0);
-	      unfolded_lhs = NULL_TREE;
-	      opcode = NOP_EXPR;
+	      rhs = पुनो_OPERAND (lhs, 1);
+	      lhs = पुनो_OPERAND (lhs, 0);
+	      unfolded_lhs = NULL_पुनो;
+	      opcode = NOP_पाहायाग;
 	      if (code == OMP_ATOMIC_CAPTURE_NEW
 		  && !structured_block
-		  && TREE_CODE (orig_lhs) == COMPOUND_EXPR)
+		  && पुनो_CODE (orig_lhs) == COMPOUND_पाहायाग)
 		code = OMP_ATOMIC_CAPTURE_OLD;
 	      if (compare)
 		goto invalid_compare;
 	      break;
 	    }
-	  if (TREE_CODE (TREE_OPERAND (lhs, 1)) == TRUTH_NOT_EXPR
-	      && TREE_OPERAND (lhs, 0)
-		 == TREE_OPERAND (TREE_OPERAND (lhs, 1), 0))
+	  if (पुनो_CODE (पुनो_OPERAND (lhs, 1)) == TRUTH_NOT_पाहायाग
+	      && पुनो_OPERAND (lhs, 0)
+		 == पुनो_OPERAND (पुनो_OPERAND (lhs, 1), 0))
 	    {
 	      /* This is pre or post decrement.  */
-	      rhs = TREE_OPERAND (lhs, 1);
-	      lhs = TREE_OPERAND (lhs, 0);
-	      unfolded_lhs = NULL_TREE;
-	      opcode = NOP_EXPR;
+	      rhs = पुनो_OPERAND (lhs, 1);
+	      lhs = पुनो_OPERAND (lhs, 0);
+	      unfolded_lhs = NULL_पुनो;
+	      opcode = NOP_पाहायाग;
 	      if (code == OMP_ATOMIC_CAPTURE_NEW
 		  && !structured_block
-		  && TREE_CODE (orig_lhs) == COMPOUND_EXPR)
+		  && पुनो_CODE (orig_lhs) == COMPOUND_पाहायाग)
 		code = OMP_ATOMIC_CAPTURE_OLD;
 	      if (compare)
 		goto invalid_compare;
@@ -24534,128 +24534,128 @@ restart:
       switch (c_parser_peek_token (parser)->type)
 	{
 	case CPP_MULT_EQ:
-	  opcode = MULT_EXPR;
+	  opcode = MULT_पाहायाग;
 	  break;
 	case CPP_DIV_EQ:
-	  opcode = TRUNC_DIV_EXPR;
+	  opcode = TRUNC_DIV_पाहायाग;
 	  break;
 	case CPP_PLUS_EQ:
-	  opcode = PLUS_EXPR;
+	  opcode = PLUS_पाहायाग;
 	  break;
 	case CPP_MINUS_EQ:
-	  opcode = MINUS_EXPR;
+	  opcode = MINUS_पाहायाग;
 	  break;
 	case CPP_LSHIFT_EQ:
-	  opcode = LSHIFT_EXPR;
+	  opcode = LSHIFT_पाहायाग;
 	  break;
 	case CPP_RSHIFT_EQ:
-	  opcode = RSHIFT_EXPR;
+	  opcode = RSHIFT_पाहायाग;
 	  break;
 	case CPP_AND_EQ:
-	  opcode = BIT_AND_EXPR;
+	  opcode = BIT_AND_पाहायाग;
 	  break;
 	case CPP_OR_EQ:
-	  opcode = BIT_IOR_EXPR;
+	  opcode = BIT_IOR_पाहायाग;
 	  break;
 	case CPP_XOR_EQ:
-	  opcode = BIT_XOR_EXPR;
+	  opcode = BIT_XOR_पाहायाग;
 	  break;
 	case CPP_EQ:
 	  c_parser_consume_token (parser);
 	  eloc = c_parser_peek_token (parser)->location;
-	  expr = c_parser_expr_no_commas (parser, NULL, unfolded_lhs);
-	  rhs1 = expr.value;
-	  switch (TREE_CODE (rhs1))
+	  पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL, unfolded_lhs);
+	  rhs1 = पाहायाग.हालागा;
+	  switch (पुनो_CODE (rhs1))
 	    {
-	    case MULT_EXPR:
-	    case TRUNC_DIV_EXPR:
-	    case RDIV_EXPR:
-	    case PLUS_EXPR:
-	    case MINUS_EXPR:
-	    case LSHIFT_EXPR:
-	    case RSHIFT_EXPR:
-	    case BIT_AND_EXPR:
-	    case BIT_IOR_EXPR:
-	    case BIT_XOR_EXPR:
+	    case MULT_पाहायाग:
+	    case TRUNC_DIV_पाहायाग:
+	    case RDIV_पाहायाग:
+	    case PLUS_पाहायाग:
+	    case MINUS_पाहायाग:
+	    case LSHIFT_पाहायाग:
+	    case RSHIFT_पाहायाग:
+	    case BIT_AND_पाहायाग:
+	    case BIT_IOR_पाहायाग:
+	    case BIT_XOR_पाहायाग:
 	      if (compare)
 		break;
-	      if (c_tree_equal (TREE_OPERAND (rhs1, 0), unfolded_lhs))
+	      if (c_पुनो_equal (पुनो_OPERAND (rhs1, 0), unfolded_lhs))
 		{
-		  opcode = TREE_CODE (rhs1);
-		  rhs = c_fully_fold (TREE_OPERAND (rhs1, 1), false, NULL,
+		  opcode = पुनो_CODE (rhs1);
+		  rhs = c_fully_fold (पुनो_OPERAND (rhs1, 1), false, NULL,
 				      true);
-		  rhs1 = c_fully_fold (TREE_OPERAND (rhs1, 0), false, NULL,
+		  rhs1 = c_fully_fold (पुनो_OPERAND (rhs1, 0), false, NULL,
 				       true);
 		  goto stmt_done;
 		}
-	      if (c_tree_equal (TREE_OPERAND (rhs1, 1), unfolded_lhs))
+	      if (c_पुनो_equal (पुनो_OPERAND (rhs1, 1), unfolded_lhs))
 		{
-		  opcode = TREE_CODE (rhs1);
-		  rhs = c_fully_fold (TREE_OPERAND (rhs1, 0), false, NULL,
+		  opcode = पुनो_CODE (rhs1);
+		  rhs = c_fully_fold (पुनो_OPERAND (rhs1, 0), false, NULL,
 				      true);
-		  rhs1 = c_fully_fold (TREE_OPERAND (rhs1, 1), false, NULL,
+		  rhs1 = c_fully_fold (पुनो_OPERAND (rhs1, 1), false, NULL,
 				       true);
-		  swapped = !commutative_tree_code (opcode);
+		  swapped = !commutative_पुनो_code (opcode);
 		  goto stmt_done;
 		}
 	      break;
-	    case COND_EXPR:
+	    case COND_पाहायाग:
 	      if (!compare)
 		break;
-	      if (TREE_CODE (TREE_OPERAND (rhs1, 0)) != GT_EXPR
-		  && TREE_CODE (TREE_OPERAND (rhs1, 0)) != LT_EXPR
-		  && TREE_CODE (TREE_OPERAND (rhs1, 0)) != EQ_EXPR)
+	      if (पुनो_CODE (पुनो_OPERAND (rhs1, 0)) != GT_पाहायाग
+		  && पुनो_CODE (पुनो_OPERAND (rhs1, 0)) != LT_पाहायाग
+		  && पुनो_CODE (पुनो_OPERAND (rhs1, 0)) != EQ_पाहायाग)
 		break;
-	      if (!TREE_OPERAND (rhs1, 1))
+	      if (!पुनो_OPERAND (rhs1, 1))
 		break;
-	      if (!c_tree_equal (TREE_OPERAND (rhs1, 2), unfolded_lhs))
+	      if (!c_पुनो_equal (पुनो_OPERAND (rhs1, 2), unfolded_lhs))
 		break;
-	      if (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 0),
+	      if (c_पुनो_equal (पुनो_OPERAND (पुनो_OPERAND (rhs1, 0), 0),
 				unfolded_lhs))
 		{
-		  if (TREE_CODE (TREE_OPERAND (rhs1, 0)) == EQ_EXPR)
+		  if (पुनो_CODE (पुनो_OPERAND (rhs1, 0)) == EQ_पाहायाग)
 		    {
-		      opcode = COND_EXPR;
-		      rhs = c_fully_fold (TREE_OPERAND (TREE_OPERAND (rhs1,
+		      opcode = COND_पाहायाग;
+		      rhs = c_fully_fold (पुनो_OPERAND (पुनो_OPERAND (rhs1,
 								      0), 1),
 					  false, NULL, true);
-		      rhs1 = c_fully_fold (TREE_OPERAND (rhs1, 1), false,
+		      rhs1 = c_fully_fold (पुनो_OPERAND (rhs1, 1), false,
 					   NULL, true);
 		      goto stmt_done;
 		    }
-		  if (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 1),
-				    TREE_OPERAND (rhs1, 1)))
+		  if (c_पुनो_equal (पुनो_OPERAND (पुनो_OPERAND (rhs1, 0), 1),
+				    पुनो_OPERAND (rhs1, 1)))
 		    {
-		      opcode = (TREE_CODE (TREE_OPERAND (rhs1, 0)) == GT_EXPR
-				? MIN_EXPR : MAX_EXPR);
-		      rhs = c_fully_fold (TREE_OPERAND (rhs1, 1), false, NULL,
+		      opcode = (पुनो_CODE (पुनो_OPERAND (rhs1, 0)) == GT_पाहायाग
+				? MIN_पाहायाग : MAX_पाहायाग);
+		      rhs = c_fully_fold (पुनो_OPERAND (rhs1, 1), false, NULL,
 					  true);
-		      rhs1 = c_fully_fold (TREE_OPERAND (TREE_OPERAND (rhs1,
+		      rhs1 = c_fully_fold (पुनो_OPERAND (पुनो_OPERAND (rhs1,
 								       0), 0),
 					   false, NULL, true);
 		      goto stmt_done;
 		    }
 		}
-	      else if (TREE_CODE (TREE_OPERAND (rhs1, 0)) == EQ_EXPR)
+	      else if (पुनो_CODE (पुनो_OPERAND (rhs1, 0)) == EQ_पाहायाग)
 		break;
-	      else if (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 1),
+	      else if (c_पुनो_equal (पुनो_OPERAND (पुनो_OPERAND (rhs1, 0), 1),
 				     unfolded_lhs))
 		{
-		  if (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 0),
-				    TREE_OPERAND (rhs1, 1)))
+		  if (c_पुनो_equal (पुनो_OPERAND (पुनो_OPERAND (rhs1, 0), 0),
+				    पुनो_OPERAND (rhs1, 1)))
 		    {
-		      opcode = (TREE_CODE (TREE_OPERAND (rhs1, 0)) == GT_EXPR
-				? MAX_EXPR : MIN_EXPR);
-		      rhs = c_fully_fold (TREE_OPERAND (rhs1, 1), false, NULL,
+		      opcode = (पुनो_CODE (पुनो_OPERAND (rhs1, 0)) == GT_पाहायाग
+				? MAX_पाहायाग : MIN_पाहायाग);
+		      rhs = c_fully_fold (पुनो_OPERAND (rhs1, 1), false, NULL,
 					  true);
-		      rhs1 = c_fully_fold (TREE_OPERAND (TREE_OPERAND (rhs1,
+		      rhs1 = c_fully_fold (पुनो_OPERAND (पुनो_OPERAND (rhs1,
 								       0), 1),
 					   false, NULL, true);
 		      goto stmt_done;
 		    }
 		}
 	      break;
-	    case EQ_EXPR:
+	    case EQ_पाहायाग:
 	      if (!compare
 		  || code != OMP_ATOMIC_CAPTURE_NEW
 		  || !structured_block
@@ -24666,7 +24666,7 @@ restart:
 		  && c_parser_peek_2nd_token (parser)->keyword == RID_IF)
 		{
 		  r = lhs;
-		  lhs = NULL_TREE;
+		  lhs = NULL_पुनो;
 		  c_parser_consume_token (parser);
 		  goto restart;
 		}
@@ -24682,20 +24682,20 @@ restart:
 		{
 		  code = OMP_ATOMIC_CAPTURE_OLD;
 		  v = lhs;
-		  lhs = NULL_TREE;
-		  expr = default_function_array_read_conversion (eloc, expr);
-		  unfolded_lhs1 = expr.value;
+		  lhs = NULL_पुनो;
+		  पाहायाग = default_function_array_read_conversion (eloc, पाहायाग);
+		  unfolded_lhs1 = पाहायाग.हालागा;
 		  lhs1 = c_fully_fold (unfolded_lhs1, false, NULL, true);
-		  rhs1 = NULL_TREE;
+		  rhs1 = NULL_पुनो;
 		  c_parser_consume_token (parser);
 		  goto restart;
 		}
 	      if (structured_block && !compare)
 		{
-		  opcode = NOP_EXPR;
-		  expr = default_function_array_read_conversion (eloc, expr);
-		  rhs = c_fully_fold (expr.value, false, NULL, true);
-		  rhs1 = NULL_TREE;
+		  opcode = NOP_पाहायाग;
+		  पाहायाग = default_function_array_read_conversion (eloc, पाहायाग);
+		  rhs = c_fully_fold (पाहायाग.हालागा, false, NULL, true);
+		  rhs1 = NULL_पुनो;
 		  goto stmt_done;
 		}
 	    }
@@ -24712,35 +24712,35 @@ restart:
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
       eloc = c_parser_peek_token (parser)->location;
-      expr = c_parser_expression (parser);
-      expr = default_function_array_read_conversion (eloc, expr);
-      rhs = expr.value;
+      पाहायाग = c_parser_expression (parser);
+      पाहायाग = default_function_array_read_conversion (eloc, पाहायाग);
+      rhs = पाहायाग.हालागा;
       rhs = c_fully_fold (rhs, false, NULL, true);
       break;
     }
 stmt_done:
-  if (structured_block && code == OMP_ATOMIC_CAPTURE_NEW && r == NULL_TREE)
+  if (structured_block && code == OMP_ATOMIC_CAPTURE_NEW && r == NULL_पुनो)
     {
       if (!no_semicolon
 	  && !c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
 	goto saw_error;
       no_semicolon = false;
-      v = c_parser_cast_expression (parser, NULL).value;
+      v = c_parser_cast_expression (parser, NULL).हालागा;
       non_lvalue_p = !lvalue_p (v);
       v = c_fully_fold (v, false, NULL, true);
-      if (v == error_mark_node)
+      if (v == error_mark_बुहोल)
 	goto saw_error;
       if (non_lvalue_p)
 	v = non_lvalue (v);
       if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
 	goto saw_error;
       eloc = c_parser_peek_token (parser)->location;
-      expr = c_parser_cast_expression (parser, NULL);
-      lhs1 = expr.value;
-      expr = default_function_array_read_conversion (eloc, expr);
-      unfolded_lhs1 = expr.value;
+      पाहायाग = c_parser_cast_expression (parser, NULL);
+      lhs1 = पाहायाग.हालागा;
+      पाहायाग = default_function_array_read_conversion (eloc, पाहायाग);
+      unfolded_lhs1 = पाहायाग.हालागा;
       lhs1 = c_fully_fold (lhs1, false, NULL, true);
-      if (lhs1 == error_mark_node)
+      if (lhs1 == error_mark_बुहोल)
 	goto saw_error;
       if (!lvalue_p (unfolded_lhs1))
 	lhs1 = non_lvalue (lhs1);
@@ -24752,22 +24752,22 @@ stmt_done:
       c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>");
     }
 done:
-  if (weak && opcode != COND_EXPR)
+  if (weak && opcode != COND_पाहायाग)
     {
       error_at (loc, "%<weak%> clause requires atomic equality comparison");
       weak = false;
     }
   if (unfolded_lhs && unfolded_lhs1
-      && !c_tree_equal (unfolded_lhs, unfolded_lhs1))
+      && !c_पुनो_equal (unfolded_lhs, unfolded_lhs1))
     {
       error ("%<#pragma omp atomic capture%> uses two different "
 	     "expressions for memory");
-      stmt = error_mark_node;
+      stmt = error_mark_बुहोल;
     }
   else
     stmt = c_finish_omp_atomic (loc, code, opcode, lhs, rhs, v, lhs1, rhs1, r,
 				swapped, memory_order, weak);
-  if (stmt != error_mark_node)
+  if (stmt != error_mark_बुहोल)
     add_stmt (stmt);
 
   if (!structured_block && !no_semicolon)
@@ -24801,17 +24801,17 @@ c_parser_omp_barrier (c_parser *parser)
 #define OMP_CRITICAL_CLAUSE_MASK		\
 	( (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_HINT) )
 
-static tree
+static पुनो
 c_parser_omp_critical (location_t loc, c_parser *parser, bool *if_p)
 {
-  tree stmt, name = NULL_TREE, clauses = NULL_TREE;
+  पुनो stmt, name = NULL_पुनो, clauses = NULL_पुनो;
 
   if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       c_parser_consume_token (parser);
       if (c_parser_next_token_is (parser, CPP_NAME))
 	{
-	  name = c_parser_peek_token (parser)->value;
+	  name = c_parser_peek_token (parser)->हालागा;
 	  c_parser_consume_token (parser);
 	  c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>");
 	}
@@ -24857,44 +24857,44 @@ c_parser_omp_depobj (c_parser *parser)
       return;
     }
 
-  tree depobj = c_parser_expr_no_commas (parser, NULL).value;
-  if (depobj != error_mark_node)
+  पुनो depobj = c_parser_पाहायाग_no_commas (parser, NULL).हालागा;
+  if (depobj != error_mark_बुहोल)
     {
       if (!lvalue_p (depobj))
 	{
-	  error_at (EXPR_LOC_OR_LOC (depobj, loc),
+	  error_at (पाहायाग_LOC_OR_LOC (depobj, loc),
 		    "%<depobj%> expression is not lvalue expression");
-	  depobj = error_mark_node;
+	  depobj = error_mark_बुहोल;
 	}
       else
 	{
-	  tree addr = build_unary_op (EXPR_LOC_OR_LOC (depobj, loc), ADDR_EXPR,
+	  पुनो addr = build_unary_op (पाहायाग_LOC_OR_LOC (depobj, loc), ADDR_पाहायाग,
 				      depobj, false);
-	  if (addr == error_mark_node)
-	    depobj = error_mark_node;
+	  if (addr == error_mark_बुहोल)
+	    depobj = error_mark_बुहोल;
 	  else
-	    depobj = build_indirect_ref (EXPR_LOC_OR_LOC (depobj, loc),
+	    depobj = build_indirect_ref (पाहायाग_LOC_OR_LOC (depobj, loc),
 					 addr, RO_UNARY_STAR);
 	}
     }
 
   parens.skip_until_found_close (parser);
-  tree clause = NULL_TREE;
+  पुनो clause = NULL_पुनो;
   enum omp_clause_depend_kind kind = OMP_CLAUSE_DEPEND_INVALID;
   if (c_parser_next_token_is (parser, CPP_COMMA))
     c_parser_consume_token (parser);
   location_t c_loc = c_parser_peek_token (parser)->location;
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
       c_parser_consume_token (parser);
       if (!strcmp ("depend", p))
 	{
-	  clause = c_parser_omp_clause_depend (parser, NULL_TREE, c_loc);
+	  clause = c_parser_omp_clause_depend (parser, NULL_पुनो, c_loc);
 	  clause = c_finish_omp_clauses (clause, C_ORT_OMP);
 	  if (!clause)
-	    clause = error_mark_node;
+	    clause = error_mark_बुहोल;
 	}
       else if (!strcmp ("destroy", p))
 	{
@@ -24903,15 +24903,15 @@ c_parser_omp_depobj (c_parser *parser)
 	  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
 	      && c_parens.require_open (parser))
 	    {
-	      tree destobj = c_parser_expr_no_commas (parser, NULL).value;
+	      पुनो destobj = c_parser_पाहायाग_no_commas (parser, NULL).हालागा;
 	      if (!lvalue_p (destobj))
-		error_at (EXPR_LOC_OR_LOC (destobj, c_loc),
+		error_at (पाहायाग_LOC_OR_LOC (destobj, c_loc),
 			  "%<destroy%> expression is not lvalue expression");
-	      else if (depobj != error_mark_node
+	      else if (depobj != error_mark_बुहोल
 		       && !operand_equal_p (destobj, depobj,
 					    OEP_MATCH_SIDE_EFFECTS
 					    | OEP_LEXICOGRAPHIC))
-		warning_at (EXPR_LOC_OR_LOC (destobj, c_loc), OPT_Wopenmp,
+		warning_at (पाहायाग_LOC_OR_LOC (destobj, c_loc), OPT_Wopenmp,
 			    "the %<destroy%> expression %qE should be the same "
 			    "as the %<depobj%> argument %qE", destobj, depobj);
 	      c_parens.skip_until_found_close (parser);
@@ -24926,7 +24926,7 @@ c_parser_omp_depobj (c_parser *parser)
 	      if (c_parser_next_token_is (parser, CPP_NAME))
 		{
 		  const char *p2
-		    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+		    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
 		  c_parser_consume_token (parser);
 		  if (!strcmp ("in", p2))
@@ -24942,19 +24942,19 @@ c_parser_omp_depobj (c_parser *parser)
 		}
 	      if (kind == OMP_CLAUSE_DEPEND_INVALID)
 		{
-		  clause = error_mark_node;
+		  clause = error_mark_बुहोल;
 		  error_at (c2_loc, "expected %<in%>, %<out%>, %<inout%>, "
 				    "%<mutexinoutset%> or %<inoutset%>");
 		}
 	      c_parens.skip_until_found_close (parser);
 	    }
 	  else
-	    clause = error_mark_node;
+	    clause = error_mark_बुहोल;
 	}
     }
   if (!clause && kind == OMP_CLAUSE_DEPEND_INVALID)
     {
-      clause = error_mark_node;
+      clause = error_mark_बुहोल;
       error_at (c_loc, "expected %<depend%>, %<destroy%> or %<update%> clause");
     }
   c_parser_skip_to_pragma_eol (parser);
@@ -24984,7 +24984,7 @@ c_parser_omp_flush (c_parser *parser)
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p
-	= IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	= IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
       if (!strcmp (p, "seq_cst"))
 	mo = MEMMODEL_SEQ_CST;
@@ -25039,8 +25039,8 @@ c_parser_omp_section_scan (c_parser *parser, const char *directive,
       && c_parser_peek_nth_token_raw (parser, 4)->type == CPP_OPEN_PAREN
       && c_parser_peek_nth_token_raw (parser, 5)->type == CPP_NAME)
     {
-      tree first = c_parser_peek_nth_token_raw (parser, 3)->value;
-      tree second = c_parser_peek_nth_token_raw (parser, 5)->value;
+      पुनो first = c_parser_peek_nth_token_raw (parser, 3)->हालागा;
+      पुनो second = c_parser_peek_nth_token_raw (parser, 5)->हालागा;
       if (strcmp (IDENTIFIER_POINTER (first), "directive")
 	  && strcmp (IDENTIFIER_POINTER (first), "__directive__"))
 	return false;
@@ -25051,35 +25051,35 @@ c_parser_omp_section_scan (c_parser *parser, const char *directive,
     return true;
   location_t first_loc = c_parser_peek_token (parser)->location;
   location_t last_loc = c_parser_peek_nth_token_raw (parser, n + 1)->location;
-  location_t middle_loc = UNKNOWN_LOCATION;
-  tree std_attrs = c_parser_std_attribute_specifier_sequence (parser);
+  location_t गित्ना_loc = UNKNOWN_LOCATION;
+  पुनो std_attrs = c_parser_std_attribute_specifier_sequence (parser);
   bool seen = false;
   int cnt = 0;
-  for (tree attr = std_attrs; attr; attr = TREE_CHAIN (attr))
+  for (पुनो attr = std_attrs; attr; attr = पुनो_CHAIN (attr))
     if (is_attribute_namespace_p ("omp", attr)
 	&& is_attribute_p ("directive", get_attribute_name (attr)))
       {
-	for (tree a = TREE_VALUE (attr); a; a = TREE_CHAIN (a))
+	for (पुनो a = पुनो_हालागा (attr); a; a = पुनो_CHAIN (a))
 	  {
-	    tree d = TREE_VALUE (a);
-	    gcc_assert (TREE_CODE (d) == C_TOKEN_VEC);
+	    पुनो d = पुनो_हालागा (a);
+	    gcc_assert (पुनो_CODE (d) == C_TOKEN_VEC);
 	    c_token *first = C_TOKEN_VEC_TOKENS (d)->address ();
 	    cnt++;
 	    if (first->type == CPP_NAME
-		&& strcmp (IDENTIFIER_POINTER (first->value),
+		&& strcmp (IDENTIFIER_POINTER (first->हालागा),
 			   directive) == 0)
 	      {
 		seen = true;
-		if (middle_loc == UNKNOWN_LOCATION)
-		  middle_loc = first->location;
+		if (गित्ना_loc == UNKNOWN_LOCATION)
+		  गित्ना_loc = first->location;
 	      }
 	  }
       }
   if (!seen)
     return false;
-  if (cnt != 1 || TREE_CHAIN (std_attrs))
+  if (cnt != 1 || पुनो_CHAIN (std_attrs))
     {
-      error_at (make_location (first_loc, last_loc, middle_loc),
+      error_at (make_location (first_loc, last_loc, गित्ना_loc),
 		"%<[[omp::directive(%s)]]%> must be the only specified "
 		"attribute on a statement", directive);
       return false;
@@ -25091,11 +25091,11 @@ c_parser_omp_section_scan (c_parser *parser, const char *directive,
 /* Parse an OpenMP structured block sequence.  KIND is the corresponding
    separating directive.  */
 
-static tree
+static पुनो
 c_parser_omp_structured_block_sequence (c_parser *parser,
 					enum pragma_kind kind)
 {
-  tree stmt = push_stmt_list ();
+  पुनो stmt = इतुलाक_stmt_list ();
   c_parser_statement (parser, NULL);
   do
     {
@@ -25117,7 +25117,7 @@ c_parser_omp_structured_block_sequence (c_parser *parser,
       c_parser_statement (parser, NULL);
     }
   while (1);
-  return pop_stmt_list (stmt);
+  return आलिसिन_stmt_list (stmt);
 }
 
 /* OpenMP 5.0:
@@ -25128,9 +25128,9 @@ c_parser_omp_structured_block_sequence (c_parser *parser,
 static void
 c_parser_omp_scan_loop_body (c_parser *parser, bool open_brace_parsed)
 {
-  tree substmt;
+  पुनो substmt;
   location_t loc;
-  tree clauses = NULL_TREE;
+  पुनो clauses = NULL_पुनो;
   bool found_scan = false;
 
   loc = c_parser_peek_token (parser)->location;
@@ -25151,8 +25151,8 @@ c_parser_omp_scan_loop_body (c_parser *parser, bool open_brace_parsed)
 		  "statements");
       substmt = build_empty_stmt (loc);
     }
-  substmt = build2 (OMP_SCAN, void_type_node, substmt, NULL_TREE);
-  SET_EXPR_LOCATION (substmt, loc);
+  substmt = build2 (OMP_SCAN, void_type_बुहोल, substmt, NULL_पुनो);
+  SET_पाहायाग_LOCATION (substmt, loc);
   add_stmt (substmt);
 
   loc = c_parser_peek_token (parser)->location;
@@ -25169,7 +25169,7 @@ c_parser_omp_scan_loop_body (c_parser *parser, bool open_brace_parsed)
       if (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  const char *p
-	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 	  if (strcmp (p, "inclusive") == 0)
 	    clause = OMP_CLAUSE_INCLUSIVE;
 	  else if (strcmp (p, "exclusive") == 0)
@@ -25178,7 +25178,7 @@ c_parser_omp_scan_loop_body (c_parser *parser, bool open_brace_parsed)
       if (clause != OMP_CLAUSE_ERROR)
 	{
 	  c_parser_consume_token (parser);
-	  clauses = c_parser_omp_var_list_parens (parser, clause, NULL_TREE);
+	  clauses = c_parser_omp_var_list_parens (parser, clause, NULL_पुनो);
 	}
       else
 	c_parser_error (parser, "expected %<inclusive%> or "
@@ -25199,8 +25199,8 @@ c_parser_omp_scan_loop_body (c_parser *parser, bool open_brace_parsed)
 		    "statements");
       substmt = build_empty_stmt (loc);
     }
-  substmt = build2 (OMP_SCAN, void_type_node, substmt, clauses);
-  SET_EXPR_LOCATION (substmt, loc);
+  substmt = build2 (OMP_SCAN, void_type_बुहोल, substmt, clauses);
+  SET_पाहायाग_LOCATION (substmt, loc);
   add_stmt (substmt);
 
   c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
@@ -25212,7 +25212,7 @@ c_parser_omp_scan_loop_body (c_parser *parser, bool open_brace_parsed)
    otherwise diagnose an error if ERROR_P is true, and return false.  */
 static bool
 c_parser_omp_next_tokens_can_be_canon_loop (c_parser *parser,
-					    enum tree_code code,
+					    enum पुनो_code code,
 					    bool error_p)
 {
   if (code == OACC_LOOP)
@@ -25245,8 +25245,8 @@ c_parser_omp_next_tokens_can_be_canon_loop (c_parser *parser,
       /* TOKEN is a raw token that hasn't been converted to a keyword yet,
 	 we have to do the lookup explicitly.  */
       if (token->type == CPP_NAME
-	  && C_IS_RESERVED_WORD (token->value)
-	  && C_RID_CODE (token->value) == RID_FOR)
+	  && C_IS_RESERVED_WORD (token->हालागा)
+	  && C_RID_CODE (token->हालागा) == RID_FOR)
 	return true;
       if (error_p)
 	c_parser_error (parser,	"loop nest expected");
@@ -25255,8 +25255,8 @@ c_parser_omp_next_tokens_can_be_canon_loop (c_parser *parser,
   return false;
 }
 
-static tree c_parser_omp_tile (location_t, c_parser *, bool *);
-static tree c_parser_omp_unroll (location_t, c_parser *, bool *);
+static पुनो c_parser_omp_tile (location_t, c_parser *, bool *);
+static पुनो c_parser_omp_unroll (location_t, c_parser *, bool *);
 
 /* This function parses a single level of a loop nest, invoking itself
    recursively if necessary.
@@ -25278,15 +25278,15 @@ static tree c_parser_omp_unroll (location_t, c_parser *, bool *);
    parser->omp_for_parse_state->pre_body and ends up inserted directly
    into the OMP_FOR structure.  */
 
-static tree
+static पुनो
 c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
 {
-  tree decl = NULL_TREE, cond = NULL_TREE, incr = NULL_TREE, init = NULL_TREE;
-  tree body = NULL_TREE;
+  पुनो decl = NULL_पुनो, cond = NULL_पुनो, incr = NULL_पुनो, init = NULL_पुनो;
+  पुनो body = NULL_पुनो;
   matching_parens parens;
   bool moreloops;
   unsigned char save_in_statement;
-  tree loop_scope;
+  पुनो loop_scope;
   location_t loc;
   struct omp_for_parse_data *omp_for_parse_state
     = parser->omp_for_parse_state;
@@ -25297,7 +25297,7 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
      pragmas.  */
   if (c_parser_nth_token_starts_std_attributes (parser, 1))
     {
-      tree std_attrs = c_parser_std_attribute_specifier_sequence (parser);
+      पुनो std_attrs = c_parser_std_attribute_specifier_sequence (parser);
       c_parser_handle_statement_omp_attributes (parser, std_attrs, NULL);
       if (std_attrs)
 	error_at (c_parser_peek_token (parser)->location,
@@ -25310,84 +25310,84 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
   /* Handle loop transformations first.  */
   if (c_parser_next_token_is (parser, CPP_PRAGMA))
     {
-      tree transform = NULL_TREE, sizes, body = NULL_TREE;
-      int count = 0;
+      पुनो transform = NULL_पुनो, sizes, body = NULL_पुनो;
+      int बिलांग = 0;
       switch (c_parser_peek_token (parser)->pragma_kind)
 	{
 	case PRAGMA_OMP_UNROLL:
 	  c_parser_consume_pragma (parser);
-	  body = push_stmt_list ();
+	  body = इतुलाक_stmt_list ();
 	  transform = c_parser_omp_unroll (loc, parser, if_p);
-	  body = pop_stmt_list (body);
-	  if (transform == NULL_TREE || transform == error_mark_node)
+	  body = आलिसिन_stmt_list (body);
+	  if (transform == NULL_पुनो || transform == error_mark_बुहोल)
 	    {
-	      transform = error_mark_node;
+	      transform = error_mark_बुहोल;
 	      break;
 	    }
-	  gcc_assert (TREE_CODE (transform) == OMP_UNROLL);
+	  gcc_assert (पुनो_CODE (transform) == OMP_UNROLL);
 	  if (omp_find_clause (OMP_FOR_CLAUSES (transform),
 			       OMP_CLAUSE_PARTIAL))
 	    {
-	      if (omp_for_parse_state->count - depth > 1)
+	      if (omp_for_parse_state->बिलांग - depth > 1)
 		{
 		  error_at (loc, "%<unroll%> construct with %<partial%> "
 				 "clause generates just one loop with "
 				 "canonical form but %d loops are needed",
-			    omp_for_parse_state->count - depth);
-		  transform = error_mark_node;
+			    omp_for_parse_state->बिलांग - depth);
+		  transform = error_mark_बुहोल;
 		}
 	      else
-		count = 1;
+		बिलांग = 1;
 	    }
 	  else
 	    {
 	      error_at (loc, "generated loop of %<unroll%> construct "
 			     "without %<partial%> clause does not have "
 			     "canonical form");
-	      transform = error_mark_node;
+	      transform = error_mark_बुहोल;
 	    }
 	  break;
 	case PRAGMA_OMP_TILE:
 	  c_parser_consume_pragma (parser);
-	  body = push_stmt_list ();
+	  body = इतुलाक_stmt_list ();
 	  transform = c_parser_omp_tile (loc, parser, if_p);
-	  body = pop_stmt_list (body);
-	  if (transform == NULL_TREE || transform == error_mark_node)
+	  body = आलिसिन_stmt_list (body);
+	  if (transform == NULL_पुनो || transform == error_mark_बुहोल)
 	    {
-	      transform = error_mark_node;
+	      transform = error_mark_बुहोल;
 	      break;
 	    }
-	  gcc_assert (TREE_CODE (transform) == OMP_TILE);
+	  gcc_assert (पुनो_CODE (transform) == OMP_TILE);
 	  sizes = omp_find_clause (OMP_FOR_CLAUSES (transform),
 				   OMP_CLAUSE_SIZES);
 	  gcc_assert (sizes);
-	  count = list_length (OMP_CLAUSE_SIZES_LIST (sizes));
-	  if (depth + count < omp_for_parse_state->count)
+	  बिलांग = list_length (OMP_CLAUSE_SIZES_LIST (sizes));
+	  if (depth + बिलांग < omp_for_parse_state->बिलांग)
 	    {
 	      error_at (loc, "%<tile%> construct generates %d loops "
 			     "with canonical form but %d loops are needed",
-			count, omp_for_parse_state->count - depth);
-	      transform = error_mark_node;
+			बिलांग, omp_for_parse_state->बिलांग - depth);
+	      transform = error_mark_बुहोल;
 	    }
 	  break;
 	default:
-	  c_parser_pragma (parser, pragma_stmt, NULL, void_list_node);
+	  c_parser_pragma (parser, pragma_stmt, NULL, void_list_बुहोल);
 	  break;
 	}
-      if (transform == NULL_TREE)
+      if (transform == NULL_पुनो)
 	error_at (loc, "expected %<for%> loop or OpenMP loop "
 		       "transformation construct");
-      if (transform == NULL_TREE || transform == error_mark_node)
+      if (transform == NULL_पुनो || transform == error_mark_बुहोल)
 	{
 	  omp_for_parse_state->fail = true;
-	  return NULL_TREE;
+	  return NULL_पुनो;
 	}
-      for (count = omp_for_parse_state->count; depth < count; ++depth)
+      for (बिलांग = omp_for_parse_state->बिलांग; depth < बिलांग; ++depth)
 	{
-	  TREE_VEC_ELT (omp_for_parse_state->declv, depth) = NULL_TREE;
-	  TREE_VEC_ELT (omp_for_parse_state->initv, depth) = NULL_TREE;
-	  TREE_VEC_ELT (omp_for_parse_state->condv, depth) = NULL_TREE;
-	  TREE_VEC_ELT (omp_for_parse_state->incrv, depth) = NULL_TREE;
+	  पुनो_VEC_ELT (omp_for_parse_state->declv, depth) = NULL_पुनो;
+	  पुनो_VEC_ELT (omp_for_parse_state->initv, depth) = NULL_पुनो;
+	  पुनो_VEC_ELT (omp_for_parse_state->condv, depth) = NULL_पुनो;
+	  पुनो_VEC_ELT (omp_for_parse_state->incrv, depth) = NULL_पुनो;
 	}
       omp_for_parse_state->want_nested_loop = false;
       return body;
@@ -25408,7 +25408,7 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
   if (!parens.require_open (parser))
     {
       omp_for_parse_state->fail = true;
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
   /* An implicit scope block surrounds each level of FOR loop, for
@@ -25419,43 +25419,43 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
   if (c_parser_next_tokens_start_declaration (parser))
     {
       /* This is a declaration, which must be added to the pre_body code.  */
-      tree this_pre_body = push_stmt_list ();
+      पुनो this_pre_body = इतुलाक_stmt_list ();
       c_in_omp_for = true;
       c_parser_declaration_or_fndef (parser, true, true, true, true, true,
 				     false);
       c_in_omp_for = false;
-      this_pre_body = pop_stmt_list (this_pre_body);
+      this_pre_body = आलिसिन_stmt_list (this_pre_body);
       append_to_statement_list_force (this_pre_body,
 				      &(omp_for_parse_state->pre_body));
       decl = check_for_loop_decls (omp_for_parse_state->for_loc, flag_isoc99);
       if (decl == NULL)
 	goto error_init;
-      if (DECL_INITIAL (decl) == error_mark_node)
-	decl = error_mark_node;
+      if (DECL_INITIAL (decl) == error_mark_बुहोल)
+	decl = error_mark_बुहोल;
       init = decl;
     }
   else if (c_parser_next_token_is (parser, CPP_NAME)
 	   && c_parser_peek_2nd_token (parser)->type == CPP_EQ)
     {
-      struct c_expr decl_exp;
-      struct c_expr init_exp;
+      struct c_पाहायाग decl_exp;
+      struct c_पाहायाग init_exp;
       location_t init_loc;
 
       decl_exp = c_parser_postfix_expression (parser);
-      decl = decl_exp.value;
+      decl = decl_exp.हालागा;
 
       c_parser_require (parser, CPP_EQ, "expected %<=%>");
 
       init_loc = c_parser_peek_token (parser)->location;
-      init_exp = c_parser_expr_no_commas (parser, NULL);
+      init_exp = c_parser_पाहायाग_no_commas (parser, NULL);
       init_exp = default_function_array_read_conversion (init_loc,
 							 init_exp);
       c_in_omp_for = true;
-      init = build_modify_expr (init_loc, decl, decl_exp.original_type,
-				NOP_EXPR, init_loc, init_exp.value,
+      init = build_modify_पाहायाग (init_loc, decl, decl_exp.original_type,
+				NOP_पाहायाग, init_loc, init_exp.हालागा,
 				init_exp.original_type);
       c_in_omp_for = false;
-      init = c_process_expr_stmt (init_loc, init);
+      init = c_process_पाहायाग_stmt (init_loc, init);
 
       c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
     }
@@ -25475,30 +25475,30 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
     {
       location_t cond_loc = c_parser_peek_token (parser)->location;
       c_in_omp_for = true;
-      struct c_expr cond_expr
-	= c_parser_binary_expression (parser, NULL, NULL_TREE);
+      struct c_पाहायाग cond_पाहायाग
+	= c_parser_दालावाहान_expression (parser, NULL, NULL_पुनो);
       c_in_omp_for = false;
 
-      cond = cond_expr.value;
+      cond = cond_पाहायाग.हालागा;
       cond = c_objc_common_truthvalue_conversion (cond_loc, cond);
-      switch (cond_expr.original_code)
+      switch (cond_पाहायाग.original_code)
 	{
-	case GT_EXPR:
-	case GE_EXPR:
-	case LT_EXPR:
-	case LE_EXPR:
+	case GT_पाहायाग:
+	case GE_पाहायाग:
+	case LT_पाहायाग:
+	case LE_पाहायाग:
 	  break;
-	case NE_EXPR:
+	case NE_पाहायाग:
 	  if (omp_for_parse_state->code != OACC_LOOP)
 	    break;
 	  /* FALLTHRU.  */
 	default:
 	  /* Can't be cond = error_mark_node, because we want to preserve
 	     the location until c_finish_omp_for.  */
-	  cond = build1 (NOP_EXPR, boolean_type_node, error_mark_node);
+	  cond = build1 (NOP_पाहायाग, boolean_type_बुहोल, error_mark_बुहोल);
 	  break;
 	}
-      protected_set_expr_location (cond, cond_loc);
+      protected_set_पाहायाग_location (cond, cond_loc);
     }
   c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
 
@@ -25507,23 +25507,23 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
     {
       location_t incr_loc = c_parser_peek_token (parser)->location;
 
-      incr = c_process_expr_stmt (incr_loc,
-				  c_parser_expression (parser).value);
+      incr = c_process_पाहायाग_stmt (incr_loc,
+				  c_parser_expression (parser).हालागा);
     }
   parens.skip_until_found_close (parser);
 
-  if (decl == NULL || decl == error_mark_node || init == error_mark_node)
+  if (decl == NULL || decl == error_mark_बुहोल || init == error_mark_बुहोल)
     omp_for_parse_state->fail = true;
   else
     {
-      TREE_VEC_ELT (omp_for_parse_state->declv, depth) = decl;
-      TREE_VEC_ELT (omp_for_parse_state->initv, depth) = init;
-      TREE_VEC_ELT (omp_for_parse_state->condv, depth) = cond;
-      TREE_VEC_ELT (omp_for_parse_state->incrv, depth) = incr;
+      पुनो_VEC_ELT (omp_for_parse_state->declv, depth) = decl;
+      पुनो_VEC_ELT (omp_for_parse_state->initv, depth) = init;
+      पुनो_VEC_ELT (omp_for_parse_state->condv, depth) = cond;
+      पुनो_VEC_ELT (omp_for_parse_state->incrv, depth) = incr;
     }
 
 parse_next:
-  moreloops = depth < omp_for_parse_state->count - 1;
+  moreloops = depth < omp_for_parse_state->बिलांग - 1;
   omp_for_parse_state->want_nested_loop = moreloops;
   if (moreloops
       && c_parser_omp_next_tokens_can_be_canon_loop (parser,
@@ -25572,12 +25572,12 @@ parse_next:
 	}
       in_statement = IN_OMP_FOR;
       parser->omp_for_parse_state = NULL;
-      body = push_stmt_list ();
+      body = इतुलाक_stmt_list ();
       if (omp_for_parse_state->inscan)
 	c_parser_omp_scan_loop_body (parser, false);
       else
 	add_stmt (c_parser_c99_block_statement (parser, if_p));
-      body = pop_stmt_list (body);
+      body = आलिसिन_stmt_list (body);
       parser->omp_for_parse_state = omp_for_parse_state;
     }
   in_statement = save_in_statement;
@@ -25594,10 +25594,10 @@ parse_next:
   if (body)
     add_stmt (body);
   body = c_end_compound_stmt (loc, loop_scope, true);
-  if (decl && TREE_CODE (body) == BIND_EXPR)
+  if (decl && पुनो_CODE (body) == BIND_पाहायाग)
     {
-      tree t = BIND_EXPR_VARS (body);
-      tree prev = NULL_TREE, next = NULL_TREE;
+      पुनो t = BIND_पाहायाग_VARS (body);
+      पुनो prev = NULL_पुनो, next = NULL_पुनो;
       while (t)
 	{
 	  next = DECL_CHAIN (t);
@@ -25607,8 +25607,8 @@ parse_next:
 		DECL_CHAIN (prev) = next;
 	      else
 		{
-		  BIND_EXPR_VARS (body) = next;
-		  BLOCK_VARS (BIND_EXPR_BLOCK (body)) = next;
+		  BIND_पाहायाग_VARS (body) = next;
+		  BLOCK_VARS (BIND_पाहायाग_BLOCK (body)) = next;
 		}
 	      DECL_CHAIN (t) = omp_for_parse_state->bindings;
 	      omp_for_parse_state->bindings = t;
@@ -25620,8 +25620,8 @@ parse_next:
 	      t = next;
 	    }
 	}
-      if (BIND_EXPR_VARS (body) == NULL_TREE)
-	body = BIND_EXPR_BODY (body);
+      if (BIND_पाहायाग_VARS (body) == NULL_पुनो)
+	body = BIND_पाहायाग_BODY (body);
     }
 
   return body;
@@ -25633,14 +25633,14 @@ parse_next:
    LOC is the location of the "acc" or "omp" in "#pragma acc" or "#pragma omp",
    respectively.  */
 
-static tree
-c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
-		       tree clauses, tree *cclauses, bool *if_p)
+static पुनो
+c_parser_omp_for_loop (location_t loc, c_parser *parser, enum पुनो_code code,
+		       पुनो clauses, पुनो *cclauses, bool *if_p)
 {
-  tree body, stmt, cl;
-  tree ret = NULL_TREE;
-  tree ordered_cl = NULL_TREE;
-  int i, collapse = 1, ordered = 0, count;
+  पुनो body, stmt, cl;
+  पुनो ret = NULL_पुनो;
+  पुनो ordered_cl = NULL_पुनो;
+  int i, collapse = 1, ordered = 0, बिलांग;
   bool oacc_tiling = false;
   bool inscan = false;
   struct omp_for_parse_data data;
@@ -25648,7 +25648,7 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
 
   for (cl = clauses; cl; cl = OMP_CLAUSE_CHAIN (cl))
     if (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_COLLAPSE)
-      collapse = tree_to_shwi (OMP_CLAUSE_COLLAPSE_EXPR (cl));
+      collapse = पुनो_to_shwi (OMP_CLAUSE_COLLAPSE_पाहायाग (cl));
     else if (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_TILE)
       {
 	oacc_tiling = true;
@@ -25657,10 +25657,10 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
     else if (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_SIZES)
       collapse = list_length (OMP_CLAUSE_SIZES_LIST (cl));
     else if (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_ORDERED
-	     && OMP_CLAUSE_ORDERED_EXPR (cl))
+	     && OMP_CLAUSE_ORDERED_पाहायाग (cl))
       {
 	ordered_cl = cl;
-	ordered = tree_to_shwi (OMP_CLAUSE_ORDERED_EXPR (cl));
+	ordered = पुनो_to_shwi (OMP_CLAUSE_ORDERED_पाहायाग (cl));
       }
     else if (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_REDUCTION
 	     && OMP_CLAUSE_REDUCTION_INSCAN (cl)
@@ -25671,26 +25671,26 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
     {
       error_at (OMP_CLAUSE_LOCATION (ordered_cl),
 		"%<ordered%> clause parameter is less than %<collapse%>");
-      OMP_CLAUSE_ORDERED_EXPR (ordered_cl)
-	= build_int_cst (integer_type_node, collapse);
+      OMP_CLAUSE_ORDERED_पाहायाग (ordered_cl)
+	= build_int_cst (integer_type_बुहोल, collapse);
       ordered = collapse;
     }
 
   gcc_assert (oacc_tiling || (collapse >= 1 && ordered >= 0));
-  count = ordered ? ordered : collapse;
+  बिलांग = ordered ? ordered : collapse;
 
   if (!c_parser_omp_next_tokens_can_be_canon_loop (parser, code, true))
     return NULL;
 
   /* Initialize parse state for recursive descent.  */
-  data.declv = make_tree_vec (count);
-  data.initv = make_tree_vec (count);
-  data.condv = make_tree_vec (count);
-  data.incrv = make_tree_vec (count);
-  data.pre_body = NULL_TREE;
-  data.bindings = NULL_TREE;
+  data.declv = make_पुनो_vec (बिलांग);
+  data.initv = make_पुनो_vec (बिलांग);
+  data.condv = make_पुनो_vec (बिलांग);
+  data.incrv = make_पुनो_vec (बिलांग);
+  data.pre_body = NULL_पुनो;
+  data.bindings = NULL_पुनो;
   data.for_loc = c_parser_peek_token (parser)->location;
-  data.count = count;
+  data.बिलांग = बिलांग;
   data.depth = 0;
   data.want_nested_loop = true;
   data.ordered = ordered > 0;
@@ -25706,10 +25706,10 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
 
   /* Add saved bindings for iteration variables that were declared in
      the nested for loop to the scope surrounding the entire loop.  */
-  for (tree t = data.bindings; t; )
+  for (पुनो t = data.bindings; t; )
     {
-      tree n = TREE_CHAIN (t);
-      TREE_CHAIN (t) = NULL_TREE;
+      पुनो n = पुनो_CHAIN (t);
+      पुनो_CHAIN (t) = NULL_पुनो;
       pushdecl (t);
       t = n;
     }
@@ -25726,69 +25726,69 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
 
       /* Check for iterators appearing in lb, b or incr expressions.  */
       if (stmt && !c_omp_check_loop_iv (stmt, data.declv, NULL))
-	stmt = NULL_TREE;
+	stmt = NULL_पुनो;
 
       /* Check for errors involving lb/ub/incr expressions referencing
 	 variables declared in intervening code.  */
       if (data.saw_intervening_code
 	  && stmt
 	  && !c_omp_check_loop_binding_exprs (stmt, NULL))
-	stmt = NULL_TREE;
+	stmt = NULL_पुनो;
 
       if (stmt)
 	{
 	  add_stmt (stmt);
 
-	  for (i = 0; i < TREE_VEC_LENGTH (OMP_FOR_INIT (stmt)); i++)
+	  for (i = 0; i < पुनो_VEC_LENGTH (OMP_FOR_INIT (stmt)); i++)
 	    {
-	      tree init = TREE_VEC_ELT (OMP_FOR_INIT (stmt), i);
-	      if (init == NULL_TREE)
+	      पुनो init = पुनो_VEC_ELT (OMP_FOR_INIT (stmt), i);
+	      if (init == NULL_पुनो)
 		break;
-	      gcc_assert (TREE_CODE (init) == MODIFY_EXPR);
-	      tree decl = TREE_OPERAND (init, 0);
-	      tree cond = TREE_VEC_ELT (OMP_FOR_COND (stmt), i);
+	      gcc_assert (पुनो_CODE (init) == MODIFY_पाहायाग);
+	      पुनो decl = पुनो_OPERAND (init, 0);
+	      पुनो cond = पुनो_VEC_ELT (OMP_FOR_COND (stmt), i);
 	      gcc_assert (COMPARISON_CLASS_P (cond));
-	      gcc_assert (TREE_OPERAND (cond, 0) == decl);
+	      gcc_assert (पुनो_OPERAND (cond, 0) == decl);
 
-	      tree op0 = TREE_OPERAND (init, 1);
+	      पुनो op0 = पुनो_OPERAND (init, 1);
 	      if (!OMP_FOR_NON_RECTANGULAR (stmt)
-		  || TREE_CODE (op0) != TREE_VEC)
-		TREE_OPERAND (init, 1) = c_fully_fold (op0, false, NULL);
+		  || पुनो_CODE (op0) != पुनो_VEC)
+		पुनो_OPERAND (init, 1) = c_fully_fold (op0, false, NULL);
 	      else
 		{
-		  TREE_VEC_ELT (op0, 1)
-		    = c_fully_fold (TREE_VEC_ELT (op0, 1), false, NULL);
-		  TREE_VEC_ELT (op0, 2)
-		    = c_fully_fold (TREE_VEC_ELT (op0, 2), false, NULL);
+		  पुनो_VEC_ELT (op0, 1)
+		    = c_fully_fold (पुनो_VEC_ELT (op0, 1), false, NULL);
+		  पुनो_VEC_ELT (op0, 2)
+		    = c_fully_fold (पुनो_VEC_ELT (op0, 2), false, NULL);
 		}
 
-	      tree op1 = TREE_OPERAND (cond, 1);
+	      पुनो op1 = पुनो_OPERAND (cond, 1);
 	      if (!OMP_FOR_NON_RECTANGULAR (stmt)
-		  || TREE_CODE (op1) != TREE_VEC)
-		TREE_OPERAND (cond, 1) = c_fully_fold (op1, false, NULL);
+		  || पुनो_CODE (op1) != पुनो_VEC)
+		पुनो_OPERAND (cond, 1) = c_fully_fold (op1, false, NULL);
 	      else
 		{
-		  TREE_VEC_ELT (op1, 1)
-		    = c_fully_fold (TREE_VEC_ELT (op1, 1), false, NULL);
-		  TREE_VEC_ELT (op1, 2)
-		    = c_fully_fold (TREE_VEC_ELT (op1, 2), false, NULL);
+		  पुनो_VEC_ELT (op1, 1)
+		    = c_fully_fold (पुनो_VEC_ELT (op1, 1), false, NULL);
+		  पुनो_VEC_ELT (op1, 2)
+		    = c_fully_fold (पुनो_VEC_ELT (op1, 2), false, NULL);
 		}
 	    }
 
 	  if (cclauses != NULL
 	      && cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL] != NULL)
 	    {
-	      tree *c;
+	      पुनो *c;
 	      for (c = &cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL]; *c ; )
 		if (OMP_CLAUSE_CODE (*c) != OMP_CLAUSE_FIRSTPRIVATE
 		    && OMP_CLAUSE_CODE (*c) != OMP_CLAUSE_LASTPRIVATE)
 		  c = &OMP_CLAUSE_CHAIN (*c);
 		else
 		  {
-		    for (i = 0; i < count; i++)
-		      if (TREE_VEC_ELT (data.declv, i) == OMP_CLAUSE_DECL (*c))
+		    for (i = 0; i < बिलांग; i++)
+		      if (पुनो_VEC_ELT (data.declv, i) == OMP_CLAUSE_DECL (*c))
 			break;
-		    if (i == count)
+		    if (i == बिलांग)
 		      c = &OMP_CLAUSE_CHAIN (*c);
 		    else if (OMP_CLAUSE_CODE (*c) == OMP_CLAUSE_FIRSTPRIVATE)
 		      {
@@ -25801,7 +25801,7 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
 		      {
 			/* Move lastprivate (decl) clause to
 			   OMP_FOR_CLAUSES.  */
-			tree l = *c;
+			पुनो l = *c;
 			*c = OMP_CLAUSE_CHAIN (*c);
 			if (code == OMP_SIMD)
 			  {
@@ -25830,12 +25830,12 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
    finish_omp_clauses on each of the set of clauses afterwards.  */
 
 static void
-omp_split_clauses (location_t loc, enum tree_code code,
-		   omp_clause_mask mask, tree clauses, tree *cclauses)
+omp_split_clauses (location_t loc, enum पुनो_code code,
+		   omp_clause_mask mask, पुनो clauses, पुनो *cclauses)
 {
   int i;
   c_omp_split_clauses (loc, code, mask, clauses, cclauses);
-  for (i = 0; i < C_OMP_CLAUSE_SPLIT_COUNT; i++)
+  for (i = 0; i < C_OMP_CLAUSE_SPLIT_बिलांग; i++)
     if (cclauses[i])
       cclauses[i] = c_finish_omp_clauses (cclauses[i],
 					  i == C_OMP_CLAUSE_SPLIT_TARGET
@@ -25857,12 +25857,12 @@ omp_split_clauses (location_t loc, enum tree_code code,
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_BIND)		\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ORDER))
 
-static tree
+static पुनो
 c_parser_omp_loop (location_t loc, c_parser *parser,
-		   char *p_name, omp_clause_mask mask, tree *cclauses,
+		   char *p_name, omp_clause_mask mask, पुनो *cclauses,
 		   bool *if_p)
 {
-  tree block, clauses, ret;
+  पुनो block, clauses, ret;
 
   strcat (p_name, " loop");
   mask |= OMP_LOOP_CLAUSE_MASK;
@@ -25902,12 +25902,12 @@ c_parser_omp_loop (location_t loc, c_parser *parser,
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NONTEMPORAL)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ORDER))
 
-static tree
+static पुनो
 c_parser_omp_simd (location_t loc, c_parser *parser,
-		   char *p_name, omp_clause_mask mask, tree *cclauses,
+		   char *p_name, omp_clause_mask mask, पुनो *cclauses,
 		   bool *if_p)
 {
-  tree block, clauses, ret;
+  पुनो block, clauses, ret;
 
   strcat (p_name, " simd");
   mask |= OMP_SIMD_CLAUSE_MASK;
@@ -25951,12 +25951,12 @@ c_parser_omp_simd (location_t loc, c_parser *parser,
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ALLOCATE)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ORDER))
 
-static tree
+static पुनो
 c_parser_omp_for (location_t loc, c_parser *parser,
-		  char *p_name, omp_clause_mask mask, tree *cclauses,
+		  char *p_name, omp_clause_mask mask, पुनो *cclauses,
 		  bool *if_p)
 {
-  tree block, clauses, ret;
+  पुनो block, clauses, ret;
 
   strcat (p_name, " for");
   mask |= OMP_FOR_CLAUSE_MASK;
@@ -25970,11 +25970,11 @@ c_parser_omp_for (location_t loc, c_parser *parser,
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
       if (strcmp (p, "simd") == 0)
 	{
-	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  if (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
@@ -25985,13 +25985,13 @@ c_parser_omp_for (location_t loc, c_parser *parser,
 	  block = c_begin_compound_stmt (true);
 	  ret = c_parser_omp_simd (loc, parser, p_name, mask, cclauses, if_p);
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL_TREE)
+	  if (ret == NULL_पुनो)
 	    return ret;
-	  ret = make_node (OMP_FOR);
-	  TREE_TYPE (ret) = void_type_node;
+	  ret = make_बुहोल (OMP_FOR);
+	  पुनो_TYPE (ret) = void_type_बुहोल;
 	  OMP_FOR_BODY (ret) = block;
 	  OMP_FOR_CLAUSES (ret) = cclauses[C_OMP_CLAUSE_SPLIT_FOR];
-	  SET_EXPR_LOCATION (ret, loc);
+	  SET_पाहायाग_LOCATION (ret, loc);
 	  add_stmt (ret);
 	  return ret;
 	}
@@ -25999,7 +25999,7 @@ c_parser_omp_for (location_t loc, c_parser *parser,
   if (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
   /* Composite distribute parallel for disallows linear clause.  */
@@ -26021,8 +26021,8 @@ c_parser_omp_for (location_t loc, c_parser *parser,
   return ret;
 }
 
-static tree c_parser_omp_taskloop (location_t, c_parser *, char *,
-				   omp_clause_mask, tree *, bool *);
+static पुनो c_parser_omp_taskloop (location_t, c_parser *, char *,
+				   omp_clause_mask, पुनो *, bool *);
 
 /* OpenMP 2.5:
    # pragma omp master new-line
@@ -26031,12 +26031,12 @@ static tree c_parser_omp_taskloop (location_t, c_parser *, char *,
    LOC is the location of the #pragma token.
 */
 
-static tree
+static पुनो
 c_parser_omp_master (location_t loc, c_parser *parser,
-		     char *p_name, omp_clause_mask mask, tree *cclauses,
+		     char *p_name, omp_clause_mask mask, पुनो *cclauses,
 		     bool *if_p, location_t master_loc)
 {
-  tree block, clauses, ret;
+  पुनो block, clauses, ret;
   gcc_rich_location richloc (loc);
   if (master_loc != UNKNOWN_LOCATION)
     richloc.add_fixit_replace (master_loc, "masked");
@@ -26048,11 +26048,11 @@ c_parser_omp_master (location_t loc, c_parser *parser,
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
       if (strcmp (p, "taskloop") == 0)
 	{
-	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  if (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
@@ -26064,7 +26064,7 @@ c_parser_omp_master (location_t loc, c_parser *parser,
 	  ret = c_parser_omp_taskloop (loc, parser, p_name, mask, cclauses,
 				       if_p);
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL_TREE)
+	  if (ret == NULL_पुनो)
 	    return ret;
 	  ret = c_finish_omp_master (loc, block);
 	  OMP_MASTER_COMBINED (ret) = 1;
@@ -26074,7 +26074,7 @@ c_parser_omp_master (location_t loc, c_parser *parser,
   if (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
   if (cclauses)
@@ -26099,23 +26099,23 @@ c_parser_omp_master (location_t loc, c_parser *parser,
 #define OMP_MASKED_CLAUSE_MASK					\
 	(OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_FILTER)
 
-static tree
+static पुनो
 c_parser_omp_masked (location_t loc, c_parser *parser,
-		     char *p_name, omp_clause_mask mask, tree *cclauses,
+		     char *p_name, omp_clause_mask mask, पुनो *cclauses,
 		     bool *if_p)
 {
-  tree block, clauses, ret;
+  पुनो block, clauses, ret;
 
   strcat (p_name, " masked");
   mask |= OMP_MASKED_CLAUSE_MASK;
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
       if (strcmp (p, "taskloop") == 0)
 	{
-	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  if (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
@@ -26127,7 +26127,7 @@ c_parser_omp_masked (location_t loc, c_parser *parser,
 	  ret = c_parser_omp_taskloop (loc, parser, p_name, mask, cclauses,
 				       if_p);
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL_TREE)
+	  if (ret == NULL_पुनो)
 	    return ret;
 	  ret = c_finish_omp_masked (loc, block,
 				     cclauses[C_OMP_CLAUSE_SPLIT_MASKED]);
@@ -26138,7 +26138,7 @@ c_parser_omp_masked (location_t loc, c_parser *parser,
   if (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
@@ -26169,13 +26169,13 @@ c_parser_omp_interop (c_parser *parser)
 {
   location_t loc = c_parser_peek_token (parser)->location;
   c_parser_consume_pragma (parser);
-  tree clauses = c_parser_omp_all_clauses (parser,
+  पुनो clauses = c_parser_omp_all_clauses (parser,
 					   OMP_INTEROP_CLAUSE_MASK,
 					   "#pragma omp interop");
-  tree stmt = make_node (OMP_INTEROP);
-  TREE_TYPE (stmt) = void_type_node;
+  पुनो stmt = make_बुहोल (OMP_INTEROP);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
   OMP_INTEROP_CLAUSES (stmt) = clauses;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_पाहायाग_LOCATION (stmt, loc);
   add_stmt (stmt);
 }
 
@@ -26221,7 +26221,7 @@ c_parser_omp_ordered (c_parser *parser, enum pragma_context context,
   if (c_parser_peek_nth_token (parser, n)->type == CPP_NAME)
     {
       const char *p
-	= IDENTIFIER_POINTER (c_parser_peek_nth_token (parser, n)->value);
+	= IDENTIFIER_POINTER (c_parser_peek_nth_token (parser, n)->हालागा);
 
       if (!strcmp ("depend", p) || !strcmp ("doacross", p))
 	{
@@ -26239,20 +26239,20 @@ c_parser_omp_ordered (c_parser *parser, enum pragma_context context,
 	      return true;
 	    }
 
-	  tree clauses
+	  पुनो clauses
 	    = c_parser_omp_all_clauses (parser,
 					OMP_ORDERED_DEPEND_CLAUSE_MASK,
 					"#pragma omp ordered");
-	  c_finish_omp_ordered (loc, clauses, NULL_TREE);
+	  c_finish_omp_ordered (loc, clauses, NULL_पुनो);
 	  return false;
 	}
     }
 
-  tree clauses = c_parser_omp_all_clauses (parser, OMP_ORDERED_CLAUSE_MASK,
+  पुनो clauses = c_parser_omp_all_clauses (parser, OMP_ORDERED_CLAUSE_MASK,
 					   "#pragma omp ordered");
 
   if (!flag_openmp	/* flag_openmp_simd  */
-      && omp_find_clause (clauses, OMP_CLAUSE_SIMD) == NULL_TREE)
+      && omp_find_clause (clauses, OMP_CLAUSE_SIMD) == NULL_पुनो)
     return false;
 
   c_finish_omp_ordered (loc, clauses,
@@ -26273,10 +26273,10 @@ c_parser_omp_ordered (c_parser *parser, enum pragma_context context,
 
     SECTIONS_LOC is the location of the #pragma omp sections.  */
 
-static tree
+static पुनो
 c_parser_omp_sections_scope (location_t sections_loc, c_parser *parser)
 {
-  tree stmt, substmt;
+  पुनो stmt, substmt;
   bool error_suppress = false;
   location_t loc;
 
@@ -26285,18 +26285,18 @@ c_parser_omp_sections_scope (location_t sections_loc, c_parser *parser)
     {
       /* Avoid skipping until the end of the block.  */
       parser->error = false;
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
-  stmt = push_stmt_list ();
+  stmt = इतुलाक_stmt_list ();
 
   if (c_parser_peek_token (parser)->pragma_kind != PRAGMA_OMP_SECTION
       && !c_parser_omp_section_scan (parser, "section", true))
     {
       substmt = c_parser_omp_structured_block_sequence (parser,
 							PRAGMA_OMP_SECTION);
-      substmt = build1 (OMP_SECTION, void_type_node, substmt);
-      SET_EXPR_LOCATION (substmt, loc);
+      substmt = build1 (OMP_SECTION, void_type_बुहोल, substmt);
+      SET_पाहायाग_LOCATION (substmt, loc);
       add_stmt (substmt);
     }
 
@@ -26323,18 +26323,18 @@ c_parser_omp_sections_scope (location_t sections_loc, c_parser *parser)
 
       substmt = c_parser_omp_structured_block_sequence (parser,
 							PRAGMA_OMP_SECTION);
-      substmt = build1 (OMP_SECTION, void_type_node, substmt);
-      SET_EXPR_LOCATION (substmt, loc);
+      substmt = build1 (OMP_SECTION, void_type_बुहोल, substmt);
+      SET_पाहायाग_LOCATION (substmt, loc);
       add_stmt (substmt);
     }
   c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
 			     "expected %<#pragma omp section%> or %<}%>");
 
-  substmt = pop_stmt_list (stmt);
+  substmt = आलिसिन_stmt_list (stmt);
 
-  stmt = make_node (OMP_SECTIONS);
-  SET_EXPR_LOCATION (stmt, sections_loc);
-  TREE_TYPE (stmt) = void_type_node;
+  stmt = make_बुहोल (OMP_SECTIONS);
+  SET_पाहायाग_LOCATION (stmt, sections_loc);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
   OMP_SECTIONS_BODY (stmt) = substmt;
 
   return add_stmt (stmt);
@@ -26355,11 +26355,11 @@ c_parser_omp_sections_scope (location_t sections_loc, c_parser *parser)
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ALLOCATE)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NOWAIT))
 
-static tree
+static पुनो
 c_parser_omp_sections (location_t loc, c_parser *parser,
-		       char *p_name, omp_clause_mask mask, tree *cclauses)
+		       char *p_name, omp_clause_mask mask, पुनो *cclauses)
 {
-  tree block, clauses, ret;
+  पुनो block, clauses, ret;
 
   strcat (p_name, " sections");
   mask |= OMP_SECTIONS_CLAUSE_MASK;
@@ -26406,16 +26406,16 @@ c_parser_omp_sections (location_t loc, c_parser *parser,
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_SHARED)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_COPYIN)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_REDUCTION)	\
-	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NUM_THREADS)	\
+	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_नुमेरो_THREADS)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ALLOCATE)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_PROC_BIND))
 
-static tree
+static पुनो
 c_parser_omp_parallel (location_t loc, c_parser *parser,
-		       char *p_name, omp_clause_mask mask, tree *cclauses,
+		       char *p_name, omp_clause_mask mask, पुनो *cclauses,
 		       bool *if_p)
 {
-  tree stmt, clauses, block;
+  पुनो stmt, clauses, block;
 
   strcat (p_name, " parallel");
   mask |= OMP_PARALLEL_CLAUSE_MASK;
@@ -26426,7 +26426,7 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 
   if (c_parser_next_token_is_keyword (parser, RID_FOR))
     {
-      tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+      पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
       if (cclauses == NULL)
 	cclauses = cclauses_buf;
 
@@ -26434,11 +26434,11 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
       if (!flag_openmp)  /* flag_openmp_simd  */
 	return c_parser_omp_for (loc, parser, p_name, mask, cclauses, if_p);
       block = c_begin_omp_parallel ();
-      tree ret = c_parser_omp_for (loc, parser, p_name, mask, cclauses, if_p);
+      पुनो ret = c_parser_omp_for (loc, parser, p_name, mask, cclauses, if_p);
       stmt
 	= c_finish_omp_parallel (loc, cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL],
 				 block);
-      if (ret == NULL_TREE)
+      if (ret == NULL_पुनो)
 	return ret;
       OMP_PARALLEL_COMBINED (stmt) = 1;
       return stmt;
@@ -26451,15 +26451,15 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
     {
       error_at (loc, "expected %<for%> after %qs", p_name);
       c_parser_skip_to_pragma_eol (parser);
-      return NULL_TREE;
+      return NULL_पुनो;
     }
   else if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       location_t ploc = c_parser_peek_token (parser)->location;
       if (cclauses == NULL && strcmp (p, "masked") == 0)
 	{
-	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  cclauses = cclauses_buf;
 
 	  c_parser_consume_token (parser);
@@ -26467,7 +26467,7 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 	    return c_parser_omp_masked (loc, parser, p_name, mask, cclauses,
 					if_p);
 	  block = c_begin_omp_parallel ();
-	  tree ret = c_parser_omp_masked (loc, parser, p_name, mask, cclauses,
+	  पुनो ret = c_parser_omp_masked (loc, parser, p_name, mask, cclauses,
 					  if_p);
 	  stmt = c_finish_omp_parallel (loc,
 					cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL],
@@ -26488,7 +26488,7 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 	}
       else if (cclauses == NULL && strcmp (p, "master") == 0)
 	{
-	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  cclauses = cclauses_buf;
 
 	  c_parser_consume_token (parser);
@@ -26496,7 +26496,7 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 	    return c_parser_omp_master (loc, parser, p_name, mask, cclauses,
 					if_p, ploc);
 	  block = c_begin_omp_parallel ();
-	  tree ret = c_parser_omp_master (loc, parser, p_name, mask, cclauses,
+	  पुनो ret = c_parser_omp_master (loc, parser, p_name, mask, cclauses,
 					  if_p, ploc);
 	  stmt = c_finish_omp_parallel (loc,
 					cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL],
@@ -26517,7 +26517,7 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 	}
       else if (strcmp (p, "loop") == 0)
 	{
-	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  if (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
@@ -26526,13 +26526,13 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 	    return c_parser_omp_loop (loc, parser, p_name, mask, cclauses,
 				      if_p);
 	  block = c_begin_omp_parallel ();
-	  tree ret = c_parser_omp_loop (loc, parser, p_name, mask, cclauses,
+	  पुनो ret = c_parser_omp_loop (loc, parser, p_name, mask, cclauses,
 					if_p);
 	  stmt
 	    = c_finish_omp_parallel (loc,
 				     cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL],
 				     block);
-	  if (ret == NULL_TREE)
+	  if (ret == NULL_पुनो)
 	    return ret;
 	  OMP_PARALLEL_COMBINED (stmt) = 1;
 	  return stmt;
@@ -26540,11 +26540,11 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
       else if (!flag_openmp)  /* flag_openmp_simd  */
 	{
 	  c_parser_skip_to_pragma_eol (parser, false);
-	  return NULL_TREE;
+	  return NULL_पुनो;
 	}
       else if (cclauses == NULL && strcmp (p, "sections") == 0)
 	{
-	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  cclauses = cclauses_buf;
 
 	  c_parser_consume_token (parser);
@@ -26560,7 +26560,7 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
   else if (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
@@ -26592,12 +26592,12 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ALLOCATE)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NOWAIT))
 
-static tree
+static पुनो
 c_parser_omp_single (location_t loc, c_parser *parser, bool *if_p)
 {
-  tree stmt = make_node (OMP_SINGLE);
-  SET_EXPR_LOCATION (stmt, loc);
-  TREE_TYPE (stmt) = void_type_node;
+  पुनो stmt = make_बुहोल (OMP_SINGLE);
+  SET_पाहायाग_LOCATION (stmt, loc);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
 
   OMP_SINGLE_CLAUSES (stmt)
     = c_parser_omp_all_clauses (parser, OMP_SINGLE_CLAUSE_MASK,
@@ -26621,12 +26621,12 @@ c_parser_omp_single (location_t loc, c_parser *parser, bool *if_p)
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ALLOCATE)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NOWAIT))
 
-static tree
+static पुनो
 c_parser_omp_scope (location_t loc, c_parser *parser, bool *if_p)
 {
-  tree stmt = make_node (OMP_SCOPE);
-  SET_EXPR_LOCATION (stmt, loc);
-  TREE_TYPE (stmt) = void_type_node;
+  पुनो stmt = make_बुहोल (OMP_SCOPE);
+  SET_पाहायाग_LOCATION (stmt, loc);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
 
   OMP_SCOPE_CLAUSES (stmt)
     = c_parser_omp_all_clauses (parser, OMP_SCOPE_CLAUSE_MASK,
@@ -26645,59 +26645,59 @@ c_parser_omp_scope (location_t loc, c_parser *parser, bool *if_p)
    Adapted from c_parser_expr_no_commas and c_parser_postfix_expression
    (CPP_NAME/C_ID_ID) for the function name.
 */
-static tree
+static पुनो
 c_parser_omp_dispatch_body (c_parser *parser)
 {
-  struct c_expr lhs, rhs, ret;
-  location_t expr_loc = c_parser_peek_token (parser)->location;
+  struct c_पाहायाग lhs, rhs, ret;
+  location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
   source_range tok_range = c_parser_peek_token (parser)->get_range ();
 
   lhs = c_parser_conditional_expression (parser, NULL, NULL);
-  if (TREE_CODE (lhs.value) == CALL_EXPR)
-    return lhs.value;
+  if (पुनो_CODE (lhs.हालागा) == CALL_पाहायाग)
+    return lhs.हालागा;
 
   location_t op_location = c_parser_peek_token (parser)->location;
   if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
-    return error_mark_node;
+    return error_mark_बुहोल;
 
   /* Parse function name.  */
   if (!c_parser_next_token_is (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected a function name");
-      return error_mark_node;
+      return error_mark_बुहोल;
     }
-  expr_loc = c_parser_peek_token (parser)->location;
-  tree id = c_parser_peek_token (parser)->value;
+  पाहायाग_loc = c_parser_peek_token (parser)->location;
+  पुनो id = c_parser_peek_token (parser)->हालागा;
   c_parser_consume_token (parser);
   if (!c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       c_parser_error (parser, "expected a function name");
-      return error_mark_node;
+      return error_mark_बुहोल;
     }
 
-  rhs.value = build_external_ref (expr_loc, id, true, &rhs.original_type);
-  set_c_expr_source_range (&rhs, tok_range);
+  rhs.हालागा = build_external_ref (पाहायाग_loc, id, true, &rhs.original_type);
+  set_c_पाहायाग_source_range (&rhs, tok_range);
 
   /* Parse argument list.  */
   rhs = c_parser_postfix_expression_after_primary (
-    parser, EXPR_LOC_OR_LOC (rhs.value, expr_loc), rhs);
-  if (TREE_CODE (rhs.value) != CALL_EXPR)
+    parser, पाहायाग_LOC_OR_LOC (rhs.हालागा, पाहायाग_loc), rhs);
+  if (पुनो_CODE (rhs.हालागा) != CALL_पाहायाग)
     {
-      error_at (EXPR_LOC_OR_LOC (rhs.value, expr_loc),
+      error_at (पाहायाग_LOC_OR_LOC (rhs.हालागा, पाहायाग_loc),
 		"expected target-function call");
-      return error_mark_node;
+      return error_mark_बुहोल;
     }
 
   /* Build assignment. */
-  rhs = convert_lvalue_to_rvalue (expr_loc, rhs, true, true);
-  ret.value
-    = build_modify_expr (op_location, lhs.value, lhs.original_type, NOP_EXPR,
-			 expr_loc, rhs.value, rhs.original_type);
+  rhs = convert_lvalue_to_rvalue (पाहायाग_loc, rhs, true, true);
+  ret.हालागा
+    = build_modify_पाहायाग (op_location, lhs.हालागा, lhs.original_type, NOP_पाहायाग,
+			 पाहायाग_loc, rhs.हालागा, rhs.original_type);
   ret.m_decimal = 0;
-  set_c_expr_source_range (&ret, lhs.get_start (), rhs.get_finish ());
-  ret.original_code = MODIFY_EXPR;
+  set_c_पाहायाग_source_range (&ret, lhs.get_start (), rhs.get_finish ());
+  ret.original_code = MODIFY_पाहायाग;
   ret.original_type = NULL;
-  return ret.value;
+  return ret.हालागा;
 }
 
 /* OpenMP 5.1:
@@ -26717,21 +26717,21 @@ c_parser_omp_dispatch_body (c_parser *parser)
    | (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_IS_DEVICE_PTR)                    \
    | (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NOWAIT))
 
-static tree
+static पुनो
 c_parser_omp_dispatch (location_t loc, c_parser *parser)
 {
-  tree stmt = make_node (OMP_DISPATCH);
-  SET_EXPR_LOCATION (stmt, loc);
-  TREE_TYPE (stmt) = void_type_node;
+  पुनो stmt = make_बुहोल (OMP_DISPATCH);
+  SET_पाहायाग_LOCATION (stmt, loc);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
 
   OMP_DISPATCH_CLAUSES (stmt)
     = c_parser_omp_all_clauses (parser, OMP_DISPATCH_CLAUSE_MASK,
 				"#pragma omp dispatch");
 
   // Extract depend clauses and create taskwait
-  tree depend_clauses = NULL_TREE;
-  tree *depend_clauses_ptr = &depend_clauses;
-  for (tree c = OMP_DISPATCH_CLAUSES (stmt); c; c = OMP_CLAUSE_CHAIN (c))
+  पुनो depend_clauses = NULL_पुनो;
+  पुनो *depend_clauses_ptr = &depend_clauses;
+  for (पुनो c = OMP_DISPATCH_CLAUSES (stmt); c; c = OMP_CLAUSE_CHAIN (c))
     {
       if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND)
 	{
@@ -26739,40 +26739,40 @@ c_parser_omp_dispatch (location_t loc, c_parser *parser)
 	  depend_clauses_ptr = &OMP_CLAUSE_CHAIN (c);
 	}
     }
-  if (depend_clauses != NULL_TREE)
+  if (depend_clauses != NULL_पुनो)
     {
-      tree stmt = make_node (OMP_TASK);
-      TREE_TYPE (stmt) = void_node;
+      पुनो stmt = make_बुहोल (OMP_TASK);
+      पुनो_TYPE (stmt) = void_बुहोल;
       OMP_TASK_CLAUSES (stmt) = depend_clauses;
-      OMP_TASK_BODY (stmt) = NULL_TREE;
-      SET_EXPR_LOCATION (stmt, loc);
+      OMP_TASK_BODY (stmt) = NULL_पुनो;
+      SET_पाहायाग_LOCATION (stmt, loc);
       add_stmt (stmt);
     }
 
   // Parse body as expression statement
   loc = c_parser_peek_token (parser)->location;
-  tree dispatch_body = c_parser_omp_dispatch_body (parser);
-  if (dispatch_body == error_mark_node)
+  पुनो dispatch_body = c_parser_omp_dispatch_body (parser);
+  if (dispatch_body == error_mark_बुहोल)
     {
       inform (loc, "%<#pragma omp dispatch%> must be followed by a function "
 		   "call with optional assignment");
       c_parser_skip_to_end_of_block_or_statement (parser);
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
   // Walk the tree to find the dispatch function call and wrap it into an IFN
-  gcc_assert (TREE_CODE (dispatch_body) == CALL_EXPR
-	      || TREE_CODE (dispatch_body) == MODIFY_EXPR);
-  tree *dispatch_call = TREE_CODE (dispatch_body) == MODIFY_EXPR
-			  ? &TREE_OPERAND (dispatch_body, 1)
+  gcc_assert (पुनो_CODE (dispatch_body) == CALL_पाहायाग
+	      || पुनो_CODE (dispatch_body) == MODIFY_पाहायाग);
+  पुनो *dispatch_call = पुनो_CODE (dispatch_body) == MODIFY_पाहायाग
+			  ? &पुनो_OPERAND (dispatch_body, 1)
 			  : &dispatch_body;
-  while (TREE_CODE (*dispatch_call) == FLOAT_EXPR
-	 || TREE_CODE (*dispatch_call) == CONVERT_EXPR
-	 || TREE_CODE (*dispatch_call) == NOP_EXPR)
-    dispatch_call = &TREE_OPERAND (*dispatch_call, 0);
-  *dispatch_call = build_call_expr_internal_loc (
+  while (पुनो_CODE (*dispatch_call) == FLOAT_पाहायाग
+	 || पुनो_CODE (*dispatch_call) == CONVERT_पाहायाग
+	 || पुनो_CODE (*dispatch_call) == NOP_पाहायाग)
+    dispatch_call = &पुनो_OPERAND (*dispatch_call, 0);
+  *dispatch_call = build_call_पाहायाग_internal_loc (
     loc, IFN_GOMP_DISPATCH,
-    TREE_TYPE (TREE_TYPE (CALL_EXPR_FN (*dispatch_call))), 1, *dispatch_call);
+    पुनो_TYPE (पुनो_TYPE (CALL_पाहायाग_FN (*dispatch_call))), 1, *dispatch_call);
 
   c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
   OMP_DISPATCH_BODY (stmt) = dispatch_body;
@@ -26802,10 +26802,10 @@ c_parser_omp_dispatch (location_t loc, c_parser *parser)
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_DETACH)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_AFFINITY))
 
-static tree
+static पुनो
 c_parser_omp_task (location_t loc, c_parser *parser, bool *if_p)
 {
-  tree clauses, block;
+  पुनो clauses, block;
 
   clauses = c_parser_omp_all_clauses (parser, OMP_TASK_CLAUSE_MASK,
 				      "#pragma omp task");
@@ -26833,17 +26833,17 @@ c_parser_omp_taskwait (c_parser *parser)
   location_t loc = c_parser_peek_token (parser)->location;
   c_parser_consume_pragma (parser);
 
-  tree clauses
+  पुनो clauses
     = c_parser_omp_all_clauses (parser, OMP_TASKWAIT_CLAUSE_MASK,
 				"#pragma omp taskwait");
 
   if (clauses)
     {
-      tree stmt = make_node (OMP_TASK);
-      TREE_TYPE (stmt) = void_node;
+      पुनो stmt = make_बुहोल (OMP_TASK);
+      पुनो_TYPE (stmt) = void_बुहोल;
       OMP_TASK_CLAUSES (stmt) = clauses;
-      OMP_TASK_BODY (stmt) = NULL_TREE;
-      SET_EXPR_LOCATION (stmt, loc);
+      OMP_TASK_BODY (stmt) = NULL_पुनो;
+      SET_पाहायाग_LOCATION (stmt, loc);
       add_stmt (stmt);
     }
   else
@@ -26875,13 +26875,13 @@ c_parser_omp_taskyield (c_parser *parser)
 	( (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ALLOCATE)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_TASK_REDUCTION))
 
-static tree
+static पुनो
 c_parser_omp_taskgroup (location_t loc, c_parser *parser, bool *if_p)
 {
-  tree clauses = c_parser_omp_all_clauses (parser, OMP_TASKGROUP_CLAUSE_MASK,
+  पुनो clauses = c_parser_omp_all_clauses (parser, OMP_TASKGROUP_CLAUSE_MASK,
 					   "#pragma omp taskgroup");
 
-  tree body = c_parser_omp_structured_block (parser, if_p);
+  पुनो body = c_parser_omp_structured_block (parser, if_p);
   return c_finish_omp_taskgroup (loc, body, clauses);
 }
 
@@ -26904,7 +26904,7 @@ c_parser_omp_cancel (c_parser *parser)
   location_t loc = c_parser_peek_token (parser)->location;
 
   c_parser_consume_pragma (parser);
-  tree clauses = c_parser_omp_all_clauses (parser, OMP_CANCEL_CLAUSE_MASK,
+  पुनो clauses = c_parser_omp_all_clauses (parser, OMP_CANCEL_CLAUSE_MASK,
 					   "#pragma omp cancel");
 
   c_finish_omp_cancel (loc, clauses);
@@ -26926,13 +26926,13 @@ static bool
 c_parser_omp_cancellation_point (c_parser *parser, enum pragma_context context)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  tree clauses;
+  पुनो clauses;
   bool point_seen = false;
 
   c_parser_consume_pragma (parser);
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "point") == 0)
 	{
 	  c_parser_consume_token (parser);
@@ -26979,19 +26979,19 @@ c_parser_omp_cancellation_point (c_parser *parser, enum pragma_context context)
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_COLLAPSE)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ORDER))
 
-static tree
+static पुनो
 c_parser_omp_distribute (location_t loc, c_parser *parser,
-			 char *p_name, omp_clause_mask mask, tree *cclauses,
+			 char *p_name, omp_clause_mask mask, पुनो *cclauses,
 			 bool *if_p)
 {
-  tree clauses, block, ret;
+  पुनो clauses, block, ret;
 
   strcat (p_name, " distribute");
   mask |= OMP_DISTRIBUTE_CLAUSE_MASK;
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       bool simd = false;
       bool parallel = false;
 
@@ -27001,7 +27001,7 @@ c_parser_omp_distribute (location_t loc, c_parser *parser,
 	parallel = strcmp (p, "parallel") == 0;
       if (parallel || simd)
 	{
-	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  if (cclauses == NULL)
 	    cclauses = cclauses_buf;
 	  c_parser_consume_token (parser);
@@ -27024,11 +27024,11 @@ c_parser_omp_distribute (location_t loc, c_parser *parser,
 	  block = c_end_compound_stmt (loc, block, true);
 	  if (ret == NULL)
 	    return ret;
-	  ret = make_node (OMP_DISTRIBUTE);
-	  TREE_TYPE (ret) = void_type_node;
+	  ret = make_बुहोल (OMP_DISTRIBUTE);
+	  पुनो_TYPE (ret) = void_type_बुहोल;
 	  OMP_FOR_BODY (ret) = block;
 	  OMP_FOR_CLAUSES (ret) = cclauses[C_OMP_CLAUSE_SPLIT_DISTRIBUTE];
-	  SET_EXPR_LOCATION (ret, loc);
+	  SET_पाहायाग_LOCATION (ret, loc);
 	  add_stmt (ret);
 	  return ret;
 	}
@@ -27036,7 +27036,7 @@ c_parser_omp_distribute (location_t loc, c_parser *parser,
   if (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
@@ -27064,27 +27064,27 @@ c_parser_omp_distribute (location_t loc, c_parser *parser,
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_FIRSTPRIVATE)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_SHARED)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_REDUCTION)	\
-	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NUM_TEAMS)	\
+	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_नुमेरो_TEAMS)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_THREAD_LIMIT)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ALLOCATE)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_DEFAULT))
 
-static tree
+static पुनो
 c_parser_omp_teams (location_t loc, c_parser *parser,
-		    char *p_name, omp_clause_mask mask, tree *cclauses,
+		    char *p_name, omp_clause_mask mask, पुनो *cclauses,
 		    bool *if_p)
 {
-  tree clauses, block, ret;
+  पुनो clauses, block, ret;
 
   strcat (p_name, " teams");
   mask |= OMP_TEAMS_CLAUSE_MASK;
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "distribute") == 0)
 	{
-	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  if (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
@@ -27099,17 +27099,17 @@ c_parser_omp_teams (location_t loc, c_parser *parser,
 	  if (ret == NULL)
 	    return ret;
 	  clauses = cclauses[C_OMP_CLAUSE_SPLIT_TEAMS];
-	  ret = make_node (OMP_TEAMS);
-	  TREE_TYPE (ret) = void_type_node;
+	  ret = make_बुहोल (OMP_TEAMS);
+	  पुनो_TYPE (ret) = void_type_बुहोल;
 	  OMP_TEAMS_CLAUSES (ret) = clauses;
 	  OMP_TEAMS_BODY (ret) = block;
 	  OMP_TEAMS_COMBINED (ret) = 1;
-	  SET_EXPR_LOCATION (ret, loc);
+	  SET_पाहायाग_LOCATION (ret, loc);
 	  return add_stmt (ret);
 	}
       else if (strcmp (p, "loop") == 0)
 	{
-	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  if (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
@@ -27123,19 +27123,19 @@ c_parser_omp_teams (location_t loc, c_parser *parser,
 	  if (ret == NULL)
 	    return ret;
 	  clauses = cclauses[C_OMP_CLAUSE_SPLIT_TEAMS];
-	  ret = make_node (OMP_TEAMS);
-	  TREE_TYPE (ret) = void_type_node;
+	  ret = make_बुहोल (OMP_TEAMS);
+	  पुनो_TYPE (ret) = void_type_बुहोल;
 	  OMP_TEAMS_CLAUSES (ret) = clauses;
 	  OMP_TEAMS_BODY (ret) = block;
 	  OMP_TEAMS_COMBINED (ret) = 1;
-	  SET_EXPR_LOCATION (ret, loc);
+	  SET_पाहायाग_LOCATION (ret, loc);
 	  return add_stmt (ret);
 	}
     }
   if (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
@@ -27145,13 +27145,13 @@ c_parser_omp_teams (location_t loc, c_parser *parser,
       clauses = cclauses[C_OMP_CLAUSE_SPLIT_TEAMS];
     }
 
-  tree stmt = make_node (OMP_TEAMS);
-  TREE_TYPE (stmt) = void_type_node;
+  पुनो stmt = make_बुहोल (OMP_TEAMS);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
   OMP_TEAMS_CLAUSES (stmt) = clauses;
   block = c_begin_omp_parallel ();
   add_stmt (c_parser_omp_structured_block (parser, if_p));
   OMP_TEAMS_BODY (stmt) = c_end_compound_stmt (loc, block, true);
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_पाहायाग_LOCATION (stmt, loc);
 
   return add_stmt (stmt);
 }
@@ -27167,21 +27167,21 @@ c_parser_omp_teams (location_t loc, c_parser *parser,
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_USE_DEVICE_PTR) \
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_USE_DEVICE_ADDR))
 
-static tree
+static पुनो
 c_parser_omp_target_data (location_t loc, c_parser *parser, bool *if_p)
 {
   if (flag_openmp)
     omp_requires_mask
       = (enum omp_requires) (omp_requires_mask | OMP_REQUIRES_TARGET_USED);
 
-  tree clauses
+  पुनो clauses
     = c_parser_omp_all_clauses (parser, OMP_TARGET_DATA_CLAUSE_MASK,
 				"#pragma omp target data", false);
   clauses = c_omp_instantiate_mappers (clauses, C_ORT_OMP);
   clauses = c_finish_omp_clauses (clauses, C_ORT_OMP);
   c_omp_adjust_map_clauses (clauses, false);
   int map_seen = 0;
-  for (tree *pc = &clauses; *pc;)
+  for (पुनो *pc = &clauses; *pc;)
     {
       if (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_MAP)
 	switch (OMP_CLAUSE_MAP_KIND (*pc))
@@ -27229,18 +27229,18 @@ c_parser_omp_target_data (location_t loc, c_parser *parser, bool *if_p)
 		  "%<#pragma omp target data%> must contain at least "
 		  "one %<map%>, %<use_device_ptr%> or %<use_device_addr%> "
 		  "clause");
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
-  tree stmt = make_node (OMP_TARGET_DATA);
-  TREE_TYPE (stmt) = void_type_node;
+  पुनो stmt = make_बुहोल (OMP_TARGET_DATA);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
   OMP_TARGET_DATA_CLAUSES (stmt) = clauses;
   keep_next_level ();
-  tree block = c_begin_compound_stmt (true);
+  पुनो block = c_begin_compound_stmt (true);
   add_stmt (c_parser_omp_structured_block (parser, if_p));
   OMP_TARGET_DATA_BODY (stmt) = c_end_compound_stmt (loc, block, true);
 
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_पाहायाग_LOCATION (stmt, loc);
   return add_stmt (stmt);
 }
 
@@ -27267,15 +27267,15 @@ c_parser_omp_target_update (location_t loc, c_parser *parser,
       return true;
     }
 
-  tree clauses
+  पुनो clauses
     = c_parser_omp_all_clauses (parser, OMP_TARGET_UPDATE_CLAUSE_MASK,
 				"#pragma omp target update",
 				/* finish_p = */ false);
   clauses = c_omp_instantiate_mappers (clauses, C_ORT_OMP_UPDATE);
   clauses = c_finish_omp_clauses (clauses, C_ORT_OMP_UPDATE);
 
-  if (omp_find_clause (clauses, OMP_CLAUSE_TO) == NULL_TREE
-      && omp_find_clause (clauses, OMP_CLAUSE_FROM) == NULL_TREE)
+  if (omp_find_clause (clauses, OMP_CLAUSE_TO) == NULL_पुनो
+      && omp_find_clause (clauses, OMP_CLAUSE_FROM) == NULL_पुनो)
     {
       error_at (loc,
 		"%<#pragma omp target update%> must contain at least one "
@@ -27287,10 +27287,10 @@ c_parser_omp_target_update (location_t loc, c_parser *parser,
     omp_requires_mask
       = (enum omp_requires) (omp_requires_mask | OMP_REQUIRES_TARGET_USED);
 
-  tree stmt = make_node (OMP_TARGET_UPDATE);
-  TREE_TYPE (stmt) = void_type_node;
+  पुनो stmt = make_बुहोल (OMP_TARGET_UPDATE);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
   OMP_TARGET_UPDATE_CLAUSES (stmt) = clauses;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_पाहायाग_LOCATION (stmt, loc);
   add_stmt (stmt);
   return false;
 }
@@ -27312,7 +27312,7 @@ c_parser_omp_target_enter_data (location_t loc, c_parser *parser,
   bool data_seen = false;
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "data") == 0)
 	{
 	  c_parser_consume_token (parser);
@@ -27338,14 +27338,14 @@ c_parser_omp_target_enter_data (location_t loc, c_parser *parser,
     omp_requires_mask
       = (enum omp_requires) (omp_requires_mask | OMP_REQUIRES_TARGET_USED);
 
-  tree clauses
+  पुनो clauses
     = c_parser_omp_all_clauses (parser, OMP_TARGET_ENTER_DATA_CLAUSE_MASK,
 				"#pragma omp target enter data", false);
   clauses = c_omp_instantiate_mappers (clauses, C_ORT_OMP);
   clauses = c_finish_omp_clauses (clauses, C_ORT_OMP);
   c_omp_adjust_map_clauses (clauses, false);
   int map_seen = 0;
-  for (tree *pc = &clauses; *pc;)
+  for (पुनो *pc = &clauses; *pc;)
     {
       if (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_MAP)
 	switch (OMP_CLAUSE_MAP_KIND (*pc))
@@ -27399,10 +27399,10 @@ c_parser_omp_target_enter_data (location_t loc, c_parser *parser,
       return true;
     }
 
-  tree stmt = make_node (OMP_TARGET_ENTER_DATA);
-  TREE_TYPE (stmt) = void_type_node;
+  पुनो stmt = make_बुहोल (OMP_TARGET_ENTER_DATA);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
   OMP_TARGET_ENTER_DATA_CLAUSES (stmt) = clauses;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_पाहायाग_LOCATION (stmt, loc);
   add_stmt (stmt);
   return true;
 }
@@ -27424,7 +27424,7 @@ c_parser_omp_target_exit_data (location_t loc, c_parser *parser,
   bool data_seen = false;
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "data") == 0)
 	{
 	  c_parser_consume_token (parser);
@@ -27450,14 +27450,14 @@ c_parser_omp_target_exit_data (location_t loc, c_parser *parser,
     omp_requires_mask
       = (enum omp_requires) (omp_requires_mask | OMP_REQUIRES_TARGET_USED);
 
-  tree clauses
+  पुनो clauses
     = c_parser_omp_all_clauses (parser, OMP_TARGET_EXIT_DATA_CLAUSE_MASK,
 				"#pragma omp target exit data", false);
   clauses = c_omp_instantiate_mappers (clauses, C_ORT_OMP_EXIT_DATA);
   clauses = c_finish_omp_clauses (clauses, C_ORT_OMP_EXIT_DATA);
   c_omp_adjust_map_clauses (clauses, false);
   int map_seen = 0;
-  for (tree *pc = &clauses; *pc;)
+  for (पुनो *pc = &clauses; *pc;)
     {
       if (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_MAP)
 	switch (OMP_CLAUSE_MAP_KIND (*pc))
@@ -27512,10 +27512,10 @@ c_parser_omp_target_exit_data (location_t loc, c_parser *parser,
       return true;
     }
 
-  tree stmt = make_node (OMP_TARGET_EXIT_DATA);
-  TREE_TYPE (stmt) = void_type_node;
+  पुनो stmt = make_बुहोल (OMP_TARGET_EXIT_DATA);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
   OMP_TARGET_EXIT_DATA_CLAUSES (stmt) = clauses;
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_पाहायाग_LOCATION (stmt, loc);
   add_stmt (stmt);
   return true;
 }
@@ -27547,7 +27547,7 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
 {
   location_t loc = c_parser_peek_token (parser)->location;
   c_parser_consume_pragma (parser);
-  tree *pc = NULL, stmt, block, body, clauses;
+  पुनो *pc = NULL, stmt, block, body, clauses;
 
   if (context != pragma_stmt && context != pragma_compound)
     {
@@ -27562,8 +27562,8 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      enum tree_code ccode = ERROR_MARK;
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
+      enum पुनो_code ccode = ERROR_MARK;
 
       if (strcmp (p, "teams") == 0)
 	ccode = OMP_TEAMS;
@@ -27573,7 +27573,7 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
 	ccode = OMP_SIMD;
       if (ccode != ERROR_MARK)
 	{
-	  tree cclauses[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  char p_name[sizeof ("#pragma omp target teams distribute "
 			      "parallel for simd")];
 
@@ -27581,7 +27581,7 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
 	  strcpy (p_name, "#pragma omp target");
 	  if (!flag_openmp)  /* flag_openmp_simd  */
 	    {
-	      tree stmt;
+	      पुनो stmt;
 	      switch (ccode)
 		{
 		case OMP_TEAMS:
@@ -27602,10 +27602,10 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
 		default:
 		  gcc_unreachable ();
 		}
-	      return stmt != NULL_TREE;
+	      return stmt != NULL_पुनो;
 	    }
 	  keep_next_level ();
-	  tree block = c_begin_compound_stmt (true), ret;
+	  पुनो block = c_begin_compound_stmt (true), ret;
 	  switch (ccode)
 	    {
 	    case OMP_TEAMS:
@@ -27627,41 +27627,41 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
 	      gcc_unreachable ();
 	    }
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL_TREE)
+	  if (ret == NULL_पुनो)
 	    return false;
 	  if (ccode == OMP_TEAMS)
 	    /* For combined target teams, ensure the num_teams and
 	       thread_limit clause expressions are evaluated on the host,
 	       before entering the target construct.  */
-	    for (tree c = cclauses[C_OMP_CLAUSE_SPLIT_TEAMS];
+	    for (पुनो c = cclauses[C_OMP_CLAUSE_SPLIT_TEAMS];
 		 c; c = OMP_CLAUSE_CHAIN (c))
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_NUM_TEAMS
+	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_नुमेरो_TEAMS
 		  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_THREAD_LIMIT)
 		for (int i = 0;
-		     i <= (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_NUM_TEAMS); ++i)
+		     i <= (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_नुमेरो_TEAMS); ++i)
 		  if (OMP_CLAUSE_OPERAND (c, i)
-		      && TREE_CODE (OMP_CLAUSE_OPERAND (c, i)) != INTEGER_CST)
+		      && पुनो_CODE (OMP_CLAUSE_OPERAND (c, i)) != INTEGER_CST)
 		    {
-		      tree expr = OMP_CLAUSE_OPERAND (c, i);
-		      tree tmp = create_tmp_var_raw (TREE_TYPE (expr));
-		      expr = build4 (TARGET_EXPR, TREE_TYPE (expr), tmp,
-				     expr, NULL_TREE, NULL_TREE);
-		      add_stmt (expr);
-		      OMP_CLAUSE_OPERAND (c, i) = expr;
-		      tree tc = build_omp_clause (OMP_CLAUSE_LOCATION (c),
+		      पुनो पाहायाग = OMP_CLAUSE_OPERAND (c, i);
+		      पुनो tmp = create_tmp_var_raw (पुनो_TYPE (पाहायाग));
+		      पाहायाग = build4 (TARGET_पाहायाग, पुनो_TYPE (पाहायाग), tmp,
+				     पाहायाग, NULL_पुनो, NULL_पुनो);
+		      add_stmt (पाहायाग);
+		      OMP_CLAUSE_OPERAND (c, i) = पाहायाग;
+		      पुनो tc = build_omp_clause (OMP_CLAUSE_LOCATION (c),
 						  OMP_CLAUSE_FIRSTPRIVATE);
 		      OMP_CLAUSE_DECL (tc) = tmp;
 		      OMP_CLAUSE_CHAIN (tc)
 			= cclauses[C_OMP_CLAUSE_SPLIT_TARGET];
 		      cclauses[C_OMP_CLAUSE_SPLIT_TARGET] = tc;
 		    }
-	  tree stmt = make_node (OMP_TARGET);
-	  TREE_TYPE (stmt) = void_type_node;
+	  पुनो stmt = make_बुहोल (OMP_TARGET);
+	  पुनो_TYPE (stmt) = void_type_बुहोल;
 	  OMP_TARGET_CLAUSES (stmt) = cclauses[C_OMP_CLAUSE_SPLIT_TARGET];
 	  c_omp_adjust_map_clauses (OMP_TARGET_CLAUSES (stmt), true);
 	  OMP_TARGET_BODY (stmt) = block;
 	  OMP_TARGET_COMBINED (stmt) = 1;
-	  SET_EXPR_LOCATION (stmt, loc);
+	  SET_पाहायाग_LOCATION (stmt, loc);
 	  add_stmt (stmt);
 	  pc = &OMP_TARGET_CLAUSES (stmt);
 	  goto check_clauses;
@@ -27699,15 +27699,15 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
       return false;
     }
 
-  stmt = make_node (OMP_TARGET);
-  TREE_TYPE (stmt) = void_type_node;
+  stmt = make_बुहोल (OMP_TARGET);
+  पुनो_TYPE (stmt) = void_type_बुहोल;
 
   clauses = c_parser_omp_all_clauses (parser, OMP_TARGET_CLAUSE_MASK,
 				      "#pragma omp target", false);
-  for (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+  for (पुनो c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
     if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION)
       {
-	tree nc = build_omp_clause (OMP_CLAUSE_LOCATION (c), OMP_CLAUSE_MAP);
+	पुनो nc = build_omp_clause (OMP_CLAUSE_LOCATION (c), OMP_CLAUSE_MAP);
 	OMP_CLAUSE_DECL (nc) = OMP_CLAUSE_DECL (c);
 	OMP_CLAUSE_SET_MAP_KIND (nc, GOMP_MAP_ALWAYS_TOFROM);
 	OMP_CLAUSE_CHAIN (nc) = OMP_CLAUSE_CHAIN (c);
@@ -27728,7 +27728,7 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
   pc = &OMP_TARGET_CLAUSES (stmt);
   OMP_TARGET_BODY (stmt) = c_end_compound_stmt (loc, block, true);
 
-  SET_EXPR_LOCATION (stmt, loc);
+  SET_पाहायाग_LOCATION (stmt, loc);
   add_stmt (stmt);
 
 check_clauses:
@@ -27795,7 +27795,7 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
 {
   c_token *token = c_parser_peek_token (parser);
   gcc_assert (token->type == CPP_NAME);
-  tree kind = token->value;
+  पुनो kind = token->हालागा;
   gcc_assert (strcmp (IDENTIFIER_POINTER (kind), "simd") == 0
 	      || strcmp (IDENTIFIER_POINTER (kind), "variant") == 0);
 
@@ -27808,17 +27808,17 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
 	  c_parser_skip_to_pragma_eol (parser);
 	  return;
 	}
-      clauses.safe_push (*token);
+      clauses.safe_इतुलाक (*token);
       c_parser_consume_token (parser);
     }
-  clauses.safe_push (*c_parser_peek_token (parser));
+  clauses.safe_इतुलाक (*c_parser_peek_token (parser));
   c_parser_skip_to_pragma_eol (parser);
 
   while (c_parser_next_token_is (parser, CPP_PRAGMA))
     {
       if (c_parser_peek_token (parser)->pragma_kind != PRAGMA_OMP_DECLARE
 	  || c_parser_peek_2nd_token (parser)->type != CPP_NAME
-	  || c_parser_peek_2nd_token (parser)->value != kind)
+	  || c_parser_peek_2nd_token (parser)->हालागा != kind)
 	{
 	  error ("%<#pragma omp declare %s%> must be followed by "
 		 "function declaration or definition or another "
@@ -27835,10 +27835,10 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
 	      c_parser_skip_to_pragma_eol (parser);
 	      return;
 	    }
-	  clauses.safe_push (*token);
+	  clauses.safe_इतुलाक (*token);
 	  c_parser_consume_token (parser);
 	}
-      clauses.safe_push (*c_parser_peek_token (parser));
+      clauses.safe_इतुलाक (*c_parser_peek_token (parser));
       c_parser_skip_to_pragma_eol (parser);
     }
 
@@ -27846,8 +27846,8 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
   c_token eof_token;
   memset (&eof_token, 0, sizeof (eof_token));
   eof_token.type = CPP_EOF;
-  clauses.safe_push (eof_token);
-  clauses.safe_push (eof_token);
+  clauses.safe_इतुलाक (eof_token);
+  clauses.safe_इतुलाक (eof_token);
 
   switch (context)
     {
@@ -27877,12 +27877,12 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
       break;
     case pragma_compound:
       bool have_std_attrs;
-      tree std_attrs;
+      पुनो std_attrs;
       have_std_attrs = c_parser_nth_token_starts_std_attributes (parser, 1);
       if (have_std_attrs)
 	std_attrs = c_parser_std_attribute_specifier_sequence (parser);
       else
-	std_attrs = NULL_TREE;
+	std_attrs = NULL_पुनो;
       if (c_parser_next_token_is (parser, CPP_KEYWORD)
 	  && c_parser_peek_token (parser)->keyword == RID_EXTENSION)
 	{
@@ -27929,21 +27929,21 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
    Note that this function returns a list of trait selectors for the
    trait-selector-set SET.  */
 
-static tree
+static पुनो
 c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
-			       tree parms)
+			       पुनो parms)
 {
-  tree ret = NULL_TREE;
+  पुनो ret = NULL_पुनो;
   do
     {
-      tree selector;
+      पुनो selector;
       if (c_parser_next_token_is (parser, CPP_KEYWORD)
 	  || c_parser_next_token_is (parser, CPP_NAME))
-	selector = c_parser_peek_token (parser)->value;
+	selector = c_parser_peek_token (parser)->हालागा;
       else
 	{
 	  c_parser_error (parser, "expected trait selector name");
-	  return error_mark_node;
+	  return error_mark_बुहोल;
 	}
       enum omp_ts_code sel
 	= omp_lookup_ts_code (set, IDENTIFIER_POINTER (selector));
@@ -27957,7 +27957,7 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 		      "unknown selector %qs for context selector set %qs",
 		      IDENTIFIER_POINTER (selector),  omp_tss_map[set]);
 	  c_parser_consume_token (parser);
-	  ret = make_trait_selector (sel, NULL_TREE, NULL_TREE, ret);
+	  ret = make_trait_selector (sel, NULL_पुनो, NULL_पुनो, ret);
 	  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	    c_parser_balanced_token_sequence (parser);
 	  if (c_parser_next_token_is (parser, CPP_COMMA))
@@ -27971,11 +27971,11 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 
       c_parser_consume_token (parser);
 
-      tree properties = NULL_TREE;
-      tree scoreval = NULL_TREE;
+      पुनो properties = NULL_पुनो;
+      पुनो scoreval = NULL_पुनो;
       enum omp_tp_type property_kind = omp_ts_map[sel].tp_type;
       bool allow_score = omp_ts_map[sel].allow_score;
-      tree t;
+      पुनो t;
 
       if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	{
@@ -27984,7 +27984,7 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 	      error_at (c_parser_peek_token (parser)->location,
 			"selector %qs does not accept any properties",
 			IDENTIFIER_POINTER (selector));
-	      return error_mark_node;
+	      return error_mark_बुहोल;
 	    }
 
 	  matching_parens parens;
@@ -27992,14 +27992,14 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 
 	  c_token *token = c_parser_peek_token (parser);
 	  if (c_parser_next_token_is (parser, CPP_NAME)
-	      && strcmp (IDENTIFIER_POINTER (token->value), "score") == 0
+	      && strcmp (IDENTIFIER_POINTER (token->हालागा), "score") == 0
 	      && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN)
 	    {
 	      c_parser_consume_token (parser);
 
 	      matching_parens parens2;
 	      parens2.require_open (parser);
-	      tree score = c_parser_expr_no_commas (parser, NULL).value;
+	      पुनो score = c_parser_पाहायाग_no_commas (parser, NULL).हालागा;
 	      parens2.skip_until_found_close (parser);
 	      c_parser_require (parser, CPP_COLON, "expected %<:%>");
 	      if (!allow_score)
@@ -28007,15 +28007,15 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 			  "%<score%> cannot be specified in traits "
 			  "in the %qs trait-selector-set",
 			  omp_tss_map[set]);
-	      else if (score != error_mark_node)
+	      else if (score != error_mark_बुहोल)
 		{
 		  mark_exp_read (score);
 		  score = c_fully_fold (score, false, NULL);
-		  if (!INTEGRAL_TYPE_P (TREE_TYPE (score))
-		      || TREE_CODE (score) != INTEGER_CST)
+		  if (!INTEGRAL_TYPE_P (पुनो_TYPE (score))
+		      || पुनो_CODE (score) != INTEGER_CST)
 		    error_at (token->location, "%<score%> argument must "
 			      "be constant integer expression");
-		  else if (tree_int_cst_sgn (score) < 0)
+		  else if (पुनो_int_cst_sgn (score) < 0)
 		    error_at (token->location, "%<score%> argument must "
 			      "be non-negative");
 		  else
@@ -28030,39 +28030,39 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 	      if (c_parser_next_token_is (parser, CPP_KEYWORD)
 		  || c_parser_next_token_is (parser, CPP_NAME))
 		{
-		  tree prop = c_parser_peek_token (parser)->value;
+		  पुनो prop = c_parser_peek_token (parser)->हालागा;
 		  c_parser_consume_token (parser);
-		  properties = make_trait_property (prop, NULL_TREE,
+		  properties = make_trait_property (prop, NULL_पुनो,
 						    properties);
 		}
 	      else
 		{
 		  c_parser_error (parser, "expected identifier");
-		  return error_mark_node;
+		  return error_mark_बुहोल;
 		}
 	      break;
 	    case OMP_TRAIT_PROPERTY_NAME_LIST:
 	      do
 		{
-		  tree prop = OMP_TP_NAMELIST_NODE;
-		  tree value = NULL_TREE;
+		  पुनो prop = OMP_TP_NAMELIST_बुहोल;
+		  पुनो हालागा = NULL_पुनो;
 		  if (c_parser_next_token_is (parser, CPP_KEYWORD)
 		      || c_parser_next_token_is (parser, CPP_NAME))
 		    {
-		      value = c_parser_peek_token (parser)->value;
+		      हालागा = c_parser_peek_token (parser)->हालागा;
 		      c_parser_consume_token (parser);
 		    }
 		  else if (c_parser_next_token_is (parser, CPP_STRING))
-		    value = c_parser_string_literal (parser, false,
-						     false).value;
+		    हालागा = c_parser_string_literal (parser, false,
+						     false).हालागा;
 		  else
 		    {
 		      c_parser_error (parser, "expected identifier or "
 					      "string literal");
-		      return error_mark_node;
+		      return error_mark_बुहोल;
 		    }
 
-		  properties = make_trait_property (prop, value, properties);
+		  properties = make_trait_property (prop, हालागा, properties);
 
 		  if (c_parser_next_token_is (parser, CPP_COMMA))
 		    c_parser_consume_token (parser);
@@ -28071,51 +28071,51 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 		}
 	      while (1);
 	      break;
-	    case OMP_TRAIT_PROPERTY_DEV_NUM_EXPR:
-	    case OMP_TRAIT_PROPERTY_BOOL_EXPR:
+	    case OMP_TRAIT_PROPERTY_DEV_नुमेरो_पाहायाग:
+	    case OMP_TRAIT_PROPERTY_BOOL_पाहायाग:
 	      {
-		c_expr texpr = c_parser_expr_no_commas (parser, NULL);
+		c_पाहायाग texpr = c_parser_पाहायाग_no_commas (parser, NULL);
 		texpr = convert_lvalue_to_rvalue (token->location, texpr,
 						  true, true);
-		t = texpr.value;
+		t = texpr.हालागा;
 	      }
-	      if (t == error_mark_node)
-		return error_mark_node;
+	      if (t == error_mark_बुहोल)
+		return error_mark_बुहोल;
 	      mark_exp_read (t);
-	      if (property_kind == OMP_TRAIT_PROPERTY_BOOL_EXPR)
+	      if (property_kind == OMP_TRAIT_PROPERTY_BOOL_पाहायाग)
 		{
 		  t = c_objc_common_truthvalue_conversion (token->location,
 							   t,
-							   boolean_type_node);
-		  if (t == error_mark_node)
-		    return error_mark_node;
+							   boolean_type_बुहोल);
+		  if (t == error_mark_बुहोल)
+		    return error_mark_बुहोल;
 		}
-	      else if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+	      else if (!INTEGRAL_TYPE_P (पुनो_TYPE (t)))
 		{
 		  error_at (token->location,
 			    "property must be integer expression");
-		  return error_mark_node;
+		  return error_mark_बुहोल;
 		}
 	      t = c_fully_fold (t, false, NULL);
-	      properties = make_trait_property (NULL_TREE, t, properties);
+	      properties = make_trait_property (NULL_पुनो, t, properties);
 	      break;
 	    case OMP_TRAIT_PROPERTY_CLAUSE_LIST:
 	      if (sel == OMP_TRAIT_CONSTRUCT_SIMD)
 		{
-		  if (parms == NULL_TREE)
+		  if (parms == NULL_पुनो)
 		    {
 		      error_at (token->location, "properties for %<simd%> "
 				"selector may not be specified in "
 				"%<metadirective%>");
-		      return error_mark_node;
+		      return error_mark_बुहोल;
 		    }
-		  tree c;
+		  पुनो c;
 		  c = c_parser_omp_all_clauses (parser,
 						OMP_DECLARE_SIMD_CLAUSE_MASK,
 						"simd", true, 2);
 		  c = c_omp_declare_simd_clauses_to_numbers (parms
-							     == error_mark_node
-							     ? NULL_TREE : parms,
+							     == error_mark_बुहोल
+							     ? NULL_पुनो : parms,
 							     c);
 		  properties = c;
 		}
@@ -28126,7 +28126,7 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 		     from OpenMP 5.0 is supported.  */
 		  sorry_at (token->location,
 			    "%<requires%> selector is not supported yet");
-		  return error_mark_node;
+		  return error_mark_बुहोल;
 		}
 	      else
 		gcc_unreachable ();
@@ -28143,7 +28143,7 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 	       && property_kind != OMP_TRAIT_PROPERTY_EXTENSION)
 	{
 	  c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>");
-	  return error_mark_node;
+	  return error_mark_बुहोल;
 	}
 
       ret = make_trait_selector (sel, scoreval, properties, ret);
@@ -28171,39 +28171,39 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
      implementation
      user  */
 
-static tree
-c_parser_omp_context_selector_specification (c_parser *parser, tree parms)
+static पुनो
+c_parser_omp_context_selector_specification (c_parser *parser, पुनो parms)
 {
-  tree ret = NULL_TREE;
+  पुनो ret = NULL_पुनो;
   do
     {
       const char *setp = "";
       if (c_parser_next_token_is (parser, CPP_NAME))
-	setp = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	setp = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       enum omp_tss_code set = omp_lookup_tss_code (setp);
 
       if (set == OMP_TRAIT_SET_INVALID)
 	{
 	  c_parser_error (parser, "expected context selector set name");
-	  return error_mark_node;
+	  return error_mark_बुहोल;
 	}
 
       c_parser_consume_token (parser);
 
       if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
-	return error_mark_node;
+	return error_mark_बुहोल;
 
       matching_braces braces;
       if (!braces.require_open (parser))
-	return error_mark_node;
+	return error_mark_बुहोल;
 
-      tree selectors = c_parser_omp_context_selector (parser, set, parms);
-      if (selectors == error_mark_node)
+      पुनो selectors = c_parser_omp_context_selector (parser, set, parms);
+      if (selectors == error_mark_बुहोल)
 	{
 	  c_parser_skip_to_closing_brace (parser);
-	  ret = error_mark_node;
+	  ret = error_mark_बुहोल;
 	}
-      else if (ret != error_mark_node)
+      else if (ret != error_mark_बुहोल)
 	ret = make_trait_set_selector (set, selectors, ret);
 
       braces.require_close (parser);
@@ -28215,7 +28215,7 @@ c_parser_omp_context_selector_specification (c_parser *parser, tree parms)
     }
   while (1);
 
-  if (ret == error_mark_node)
+  if (ret == error_mark_बुहोल)
     return ret;
   return nreverse (ret);
 }
@@ -28224,7 +28224,7 @@ c_parser_omp_context_selector_specification (c_parser *parser, tree parms)
    that into "omp declare variant base" attribute.  */
 
 static void
-c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
+c_finish_omp_declare_variant (c_parser *parser, पुनो fndecl, पुनो parms)
 {
   matching_parens parens;
   if (!parens.require_open (parser))
@@ -28242,18 +28242,18 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
     }
 
   c_token *token = c_parser_peek_token (parser);
-  tree variant = lookup_name (token->value);
+  पुनो variant = lookup_name (token->हालागा);
 
-  if (variant == NULL_TREE)
+  if (variant == NULL_पुनो)
     {
-      undeclared_variable (token->location, token->value);
-      variant = error_mark_node;
+      undeclared_variable (token->location, token->हालागा);
+      variant = error_mark_बुहोल;
     }
-  else if (TREE_CODE (variant) != FUNCTION_DECL)
+  else if (पुनो_CODE (variant) != FUNCTION_DECL)
     {
       error_at (token->location, "variant %qD is not a function",
 		variant);
-      variant = error_mark_node;
+      variant = error_mark_बुहोल;
     }
   else if (fndecl_built_in_p (variant)
 	   && (strncmp (IDENTIFIER_POINTER (DECL_NAME (variant)),
@@ -28265,28 +28265,28 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
     {
       error_at (token->location, "variant %qD is a built-in",
 		variant);
-      variant = error_mark_node;
+      variant = error_mark_बुहोल;
     }
   else if (variant == fndecl)
     {
       error_at (token->location, "variant %qD is the same as base function",
 		variant);
-      variant = error_mark_node;
+      variant = error_mark_बुहोल;
     }
 
   c_parser_consume_token (parser);
 
   parens.require_close (parser);
 
-  tree append_args_tree = NULL_TREE;
-  tree append_args_last;
-  vec<tree> adjust_args_list = vNULL;
-  bool has_match = false, has_adjust_args = false;
-  location_t adjust_args_loc = UNKNOWN_LOCATION;
-  location_t append_args_loc = UNKNOWN_LOCATION;
+  पुनो append_मगा_कातविरान_पुनो = NULL_पुनो;
+  पुनो append_मगा_कातविरान_last;
+  vec<पुनो> adjust_मगा_कातविरान_list = vNULL;
+  bool has_match = false, has_adjust_मगा_कातविरान = false;
+  location_t adjust_मगा_कातविरान_loc = UNKNOWN_LOCATION;
+  location_t append_मगा_कातविरान_loc = UNKNOWN_LOCATION;
   location_t match_loc = UNKNOWN_LOCATION;
-  tree need_device_ptr_list = NULL_TREE;
-  tree ctx = error_mark_node;
+  पुनो need_device_ptr_list = NULL_पुनो;
+  पुनो ctx = error_mark_बुहोल;
 
   do
     {
@@ -28297,13 +28297,13 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
       const char *clause = "";
       location_t loc = c_parser_peek_token (parser)->location;
       if (c_parser_next_token_is (parser, CPP_NAME))
-	clause = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	clause = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
       enum clause
       {
 	match,
-	adjust_args,
-	append_args
+	adjust_मगा_कातविरान,
+	append_मगा_कातविरान
       } ccode;
 
       if (strcmp (clause, "match") == 0)
@@ -28313,13 +28313,13 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	}
       else if (strcmp (clause, "adjust_args") == 0)
 	{
-	  ccode = adjust_args;
-	  adjust_args_loc = loc;
+	  ccode = adjust_मगा_कातविरान;
+	  adjust_मगा_कातविरान_loc = loc;
 	}
       else if (strcmp (clause, "append_args") == 0)
 	{
-	  ccode = append_args;
-	  append_args_loc = loc;
+	  ccode = append_मगा_कातविरान;
+	  append_मगा_कातविरान_loc = loc;
 	}
       else
 	{
@@ -28333,8 +28333,8 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
       if (!parens.require_open (parser))
 	goto fail;
 
-      if (parms == NULL_TREE)
-	parms = error_mark_node;
+      if (parms == NULL_पुनो)
+	parms = error_mark_बुहोल;
 
       if (ccode == match)
 	{
@@ -28342,7 +28342,7 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	    error_at (match_loc, "too many %<match%> clauses");
 	  has_match = true;
 	  ctx  = c_parser_omp_context_selector_specification (parser, parms);
-	  if (ctx == error_mark_node)
+	  if (ctx == error_mark_बुहोल)
 	    goto fail;
 	  ctx = omp_check_context_selector (match_loc, ctx,
 					    OMP_CTX_DECLARE_VARIANT);
@@ -28351,24 +28351,24 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	     "begin declare variant" contexts apply to "declare variant
 	     directives" -- the term it uses to refer to both directive
 	     forms.  */
-	  if (ctx != error_mark_node
+	  if (ctx != error_mark_बुहोल
 	      && !vec_safe_is_empty (current_omp_declare_variant_attribute))
 	    {
 	      c_omp_declare_variant_attr a
 		= current_omp_declare_variant_attribute->last ();
-	      tree outer_ctx = a.selector;
+	      पुनो outer_ctx = a.selector;
 	      ctx = omp_merge_context_selectors (match_loc, outer_ctx, ctx,
 						 OMP_CTX_DECLARE_VARIANT);
 	    }
 	}
-      else if (ccode == adjust_args)
+      else if (ccode == adjust_मगा_कातविरान)
 	{
-	  has_adjust_args = true;
+	  has_adjust_मगा_कातविरान = true;
 	  if (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
 	      const char *p
-		= IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+		= IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 	      if (strcmp (p, "need_device_ptr") == 0
 		  || strcmp (p, "nothing") == 0)
 		{
@@ -28376,29 +28376,29 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 		  c_parser_consume_token (parser); // :
 
 		  loc = c_parser_peek_token (parser)->location;
-		  tree list
+		  पुनो list
 		    = c_parser_omp_variable_list (parser, loc, OMP_CLAUSE_ERROR,
-						  NULL_TREE);
+						  NULL_पुनो);
 
-		  tree arg;
-		  if (variant != error_mark_node)
-		    for (tree c = list; c != NULL_TREE; c = TREE_CHAIN (c))
+		  पुनो arg;
+		  if (variant != error_mark_बुहोल)
+		    for (पुनो c = list; c != NULL_पुनो; c = पुनो_CHAIN (c))
 		      {
-			tree decl = TREE_PURPOSE (c);
-			location_t arg_loc = EXPR_LOCATION (TREE_VALUE (c));
+			पुनो decl = पुनो_PURPOSE (c);
+			location_t arg_loc = पाहायाग_LOCATION (पुनो_हालागा (c));
 			int idx;
 			for (arg = parms, idx = 0; arg != NULL;
-			     arg = TREE_CHAIN (arg), idx++)
+			     arg = पुनो_CHAIN (arg), idx++)
 			  if (arg == decl)
 			    break;
-			if (arg == NULL_TREE)
+			if (arg == NULL_पुनो)
 			  {
 			    error_at (arg_loc,
 				      "%qD is not a function argument",
 				      decl);
 			    goto fail;
 			  }
-			if (adjust_args_list.contains (arg))
+			if (adjust_मगा_कातविरान_list.contains (arg))
 			  {
 			    error_at (arg_loc,
 				      "%qD is specified more than once",
@@ -28406,20 +28406,20 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 			    goto fail;
 			  }
 			if (strcmp (p, "need_device_ptr") == 0
-			    && TREE_CODE (TREE_TYPE (arg)) != POINTER_TYPE)
+			    && पुनो_CODE (पुनो_TYPE (arg)) != POINTER_TYPE)
 			  {
 			    error_at (loc, "%qD is not of pointer type", decl);
 			    goto fail;
 			  }
-			adjust_args_list.safe_push (arg);
+			adjust_मगा_कातविरान_list.safe_इतुलाक (arg);
 			if (strcmp (p, "need_device_ptr") == 0)
 			  {
 			    need_device_ptr_list = chainon (
 			      need_device_ptr_list,
-			      build_tree_list (
-				NULL_TREE,
+			      build_पुनो_list (
+				NULL_पुनो,
 				build_int_cst (
-				  integer_type_node,
+				  integer_type_बुहोल,
 				  idx))); // Store 0-based argument index,
 					  // as in gimplify_call_expr
 			  }
@@ -28443,12 +28443,12 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	      goto fail;
 	    }
 	}
-      else if (ccode == append_args)
+      else if (ccode == append_मगा_कातविरान)
 	{
-	  if (append_args_tree)
+	  if (append_मगा_कातविरान_पुनो)
 	    {
-	      error_at (append_args_loc, "too many %qs clauses", "append_args");
-	      append_args_tree = NULL_TREE;
+	      error_at (append_मगा_कातविरान_loc, "too many %qs clauses", "append_args");
+	      append_मगा_कातविरान_पुनो = NULL_पुनो;
 	    }
 	  do
 	    {
@@ -28456,7 +28456,7 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	      if (!c_parser_next_token_is (parser, CPP_NAME)
 		  || strcmp ("interop",
 			     IDENTIFIER_POINTER (
-			       c_parser_peek_token (parser)->value)))
+			       c_parser_peek_token (parser)->हालागा)))
 		{
 		  error_at (loc, "expected %<interop%>");
 		  goto fail;
@@ -28467,10 +28467,10 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 		goto fail;
 	      bool target = false;
 	      bool targetsync = false;
-	      tree prefer_type_tree = NULL_TREE;
+	      पुनो prefer_type_पुनो = NULL_पुनो;
 	      if (!c_parser_omp_clause_init_modifiers (parser, &target,
 						       &targetsync,
-						       &prefer_type_tree)
+						       &prefer_type_पुनो)
 		  || !c_parser_require (parser, CPP_CLOSE_PAREN,
 					"expected %<)%> or %<,%>"))
 		goto fail;
@@ -28478,19 +28478,19 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 		error_at (loc,
 			  "missing required %<target%> and/or "
 			  "%<targetsync%> modifier");
-	      tree t = build_tree_list (target ? boolean_true_node
-					       : boolean_false_node,
-					targetsync ? boolean_true_node
-						   : boolean_false_node);
-	      t = build1_loc (loc, NOP_EXPR, void_type_node, t);
-	      t = build_tree_list (t, prefer_type_tree);
-	      if (append_args_tree)
+	      पुनो t = build_पुनो_list (target ? boolean_true_बुहोल
+					       : boolean_false_बुहोल,
+					targetsync ? boolean_true_बुहोल
+						   : boolean_false_बुहोल);
+	      t = build1_loc (loc, NOP_पाहायाग, void_type_बुहोल, t);
+	      t = build_पुनो_list (t, prefer_type_पुनो);
+	      if (append_मगा_कातविरान_पुनो)
 		{
-		  TREE_CHAIN (append_args_last) = t;
-		  append_args_last = t;
+		  पुनो_CHAIN (append_मगा_कातविरान_last) = t;
+		  append_मगा_कातविरान_last = t;
 		}
 	      else
-		append_args_tree = append_args_last = t;
+		append_मगा_कातविरान_पुनो = append_मगा_कातविरान_last = t;
 	      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 		break;
 	      if (!c_parser_require (parser, CPP_COMMA, "expected %<)%> or %<,%>"))
@@ -28501,28 +28501,28 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 
       parens.require_close (parser);
   } while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL));
-  if (variant != error_mark_node && !has_match)
+  if (variant != error_mark_बुहोल && !has_match)
     {
       c_parser_error (parser, "expected %<match%> clause");
-      variant = error_mark_node;
+      variant = error_mark_बुहोल;
     }
   c_parser_skip_to_pragma_eol (parser);
 
   /* At this point, we have completed parsing of the pragma, now it's
      on to error checking.  */
-  if (variant == error_mark_node || ctx == error_mark_node)
+  if (variant == error_mark_बुहोल || ctx == error_mark_बुहोल)
     /* Previously diagnosed error.  */
     return;
 
-  if ((has_adjust_args || append_args_tree)
+  if ((has_adjust_मगा_कातविरान || append_मगा_कातविरान_पुनो)
       && !omp_get_context_selector (ctx, OMP_TRAIT_SET_CONSTRUCT,
 				    OMP_TRAIT_CONSTRUCT_DISPATCH))
     {
-      error_at (has_adjust_args ? adjust_args_loc : append_args_loc,
+      error_at (has_adjust_मगा_कातविरान ? adjust_मगा_कातविरान_loc : append_मगा_कातविरान_loc,
 		"an %qs clause can only be specified if the "
 		"%<dispatch%> selector of the %<construct%> selector "
 		"set appears in the %<match%> clause",
-		has_adjust_args ? "adjust_args" : "append_args");
+		has_adjust_मगा_कातविरान ? "adjust_args" : "append_args");
       return;
     }
 
@@ -28530,45 +28530,45 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 				 OMP_TRAIT_CONSTRUCT_SIMD))
     /* Check that the base and variant have compatible types.  */
     {
-      tree base_type = TREE_TYPE (fndecl);
-      tree variant_type = TREE_TYPE (variant);
+      पुनो base_type = पुनो_TYPE (fndecl);
+      पुनो variant_type = पुनो_TYPE (variant);
       bool unprototyped_variant
-	= (TYPE_ARG_TYPES (variant_type) == NULL_TREE
-	   && !TYPE_NO_NAMED_ARGS_STDARG_P (variant_type));
+	= (TYPE_ARG_TYPES (variant_type) == NULL_पुनो
+	   && !TYPE_NO_NAMED_मगा_कातविरान_STDARG_P (variant_type));
 
-      if (append_args_tree
-	  && TYPE_ARG_TYPES (base_type) == NULL_TREE
-	  && !TYPE_NO_NAMED_ARGS_STDARG_P (base_type))
+      if (append_मगा_कातविरान_पुनो
+	  && TYPE_ARG_TYPES (base_type) == NULL_पुनो
+	  && !TYPE_NO_NAMED_मगा_कातविरान_STDARG_P (base_type))
 	{
 	  /* The base function is a pre-C23 unprototyped function.  Without
 	     a prototype, we don't know the offset where the append_args go.
 	     That offset needs to be stored with the append_args in the
 	     variant function attributes, so we cannot presently handle
 	     this case.  */
-	  sorry_at (append_args_loc,
+	  sorry_at (append_मगा_कातविरान_loc,
 		    "%<append_args%> with unprototyped base function "
 		    "is not supported yet");
 	  inform (DECL_SOURCE_LOCATION (fndecl),
 		  "base function %qD declared here", fndecl);
 	  return;
 	}
-      else if (append_args_tree)
+      else if (append_मगा_कातविरान_पुनो)
 	{
 	  /* Find nbase_args, the number of fixed arguments in the base
 	     function.  */
-	  int nappend_args = 0;
-	  int nbase_args = 0;
-	  for (tree t = TYPE_ARG_TYPES (base_type);
-	       t && TREE_VALUE (t) != void_type_node; t = TREE_CHAIN (t))
-	    nbase_args++;
-	  for (tree t = append_args_tree; t; t = TREE_CHAIN (t))
-	    nappend_args++;
+	  int nappend_मगा_कातविरान = 0;
+	  int nbase_मगा_कातविरान = 0;
+	  for (पुनो t = TYPE_ARG_TYPES (base_type);
+	       t && पुनो_हालागा (t) != void_type_बुहोल; t = पुनो_CHAIN (t))
+	    nbase_मगा_कातविरान++;
+	  for (पुनो t = append_मगा_कातविरान_पुनो; t; t = पुनो_CHAIN (t))
+	    nappend_मगा_कातविरान++;
 
 	  /* Store as purpose = arg number after which to append
 	     and value = list of interop items.  */
-	  append_args_tree = build_tree_list (build_int_cst (integer_type_node,
-							     nbase_args),
-					      append_args_tree);
+	  append_मगा_कातविरान_पुनो = build_पुनो_list (build_int_cst (integer_type_बुहोल,
+							     nbase_मगा_कातविरान),
+					      append_मगा_कातविरान_पुनो);
 
 	  /* Give a specific diagnostic if the append_args parameters
 	     of the variant are of the wrong type, or missing.  The
@@ -28576,18 +28576,18 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	     the variant is a varargs function.  */
 	  if (!unprototyped_variant)
 	    {
-	      tree args = TYPE_ARG_TYPES (variant_type);
-	      for (int i = 0; args && i < nbase_args;
-		   i++, args = TREE_CHAIN (args))
+	      पुनो मगा_कातविरान = TYPE_ARG_TYPES (variant_type);
+	      for (int i = 0; मगा_कातविरान && i < nbase_मगा_कातविरान;
+		   i++, मगा_कातविरान = पुनो_CHAIN (मगा_कातविरान))
 		;
-	      for (int i = 0; i < nappend_args; i++, args = TREE_CHAIN (args))
-		if (!args || !c_omp_interop_t_p (TREE_VALUE (args)))
+	      for (int i = 0; i < nappend_मगा_कातविरान; i++, मगा_कातविरान = पुनो_CHAIN (मगा_कातविरान))
+		if (!मगा_कातविरान || !c_omp_interop_t_p (पुनो_हालागा (मगा_कातविरान)))
 		  {
 		    error_at (DECL_SOURCE_LOCATION (variant),
 			      "argument %d of %qD must be of "
 			      "%<omp_interop_t%>",
-			      nbase_args + i + 1, variant);
-		    inform (append_args_loc,
+			      nbase_मगा_कातविरान + i + 1, variant);
+		    inform (append_मगा_कातविरान_loc,
 			    "%<append_args%> specified here");
 		    return;
 		  }
@@ -28596,34 +28596,34 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	  /* Perform the "implementation defined transformation" on the type
 	     of the base function to add the append_args before checking it
 	     for compatibility with the function variant's type.  */
-	  tree args = TYPE_ARG_TYPES (base_type);
-	  tree newargs = NULL_TREE;
-	  tree lastarg = NULL_TREE;
-	  for (int j = 0; j < nbase_args; j++, args = TREE_CHAIN (args))
+	  पुनो मगा_कातविरान = TYPE_ARG_TYPES (base_type);
+	  पुनो newargs = NULL_पुनो;
+	  पुनो lastarg = NULL_पुनो;
+	  for (int j = 0; j < nbase_मगा_कातविरान; j++, मगा_कातविरान = पुनो_CHAIN (मगा_कातविरान))
 	    {
-	      tree t = tree_cons (TREE_PURPOSE (args),
-				  TREE_VALUE (args), NULL_TREE);
+	      पुनो t = पुनो_cons (पुनो_PURPOSE (मगा_कातविरान),
+				  पुनो_हालागा (मगा_कातविरान), NULL_पुनो);
 	      if (lastarg)
-		TREE_CHAIN (lastarg) = t;
+		पुनो_CHAIN (lastarg) = t;
 	      else
 		newargs = t;
 	      lastarg = t;
 	    }
-	  tree type = lookup_name (get_identifier ("omp_interop_t"));
-	  type = type ? TREE_TYPE (type) : pointer_sized_int_node;
-	  for (int j = 0; j < nappend_args; j++)
+	  पुनो type = lookup_name (get_identifier ("omp_interop_t"));
+	  type = type ? पुनो_TYPE (type) : pointer_sized_int_बुहोल;
+	  for (int j = 0; j < nappend_मगा_कातविरान; j++)
 	    {
-	      tree t = tree_cons (NULL_TREE, type, NULL_TREE);
+	      पुनो t = पुनो_cons (NULL_पुनो, type, NULL_पुनो);
 	      if (lastarg)
-		TREE_CHAIN (lastarg) = t;
+		पुनो_CHAIN (lastarg) = t;
 	      else
 		newargs = t;
 	      lastarg = t;
 	    }
-	  TREE_CHAIN (lastarg) = args;
+	  पुनो_CHAIN (lastarg) = मगा_कातविरान;
 
 	  /* Temporarily stuff newargs into the original base_type.  */
-	  tree saveargs = TYPE_ARG_TYPES (base_type);
+	  पुनो saveargs = TYPE_ARG_TYPES (base_type);
 	  TYPE_ARG_TYPES (base_type) = newargs;
 	  bool fail = !comptypes (base_type, variant_type);
 	  TYPE_ARG_TYPES (base_type) = saveargs;
@@ -28657,9 +28657,9 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 		      variant);
 	      return;
 	    }
-	  else if (TYPE_ARG_TYPES (variant_type) == NULL_TREE
-		   && !TYPE_NO_NAMED_ARGS_STDARG_P (variant_type)
-		   && TYPE_ARG_TYPES (base_type) != NULL_TREE)
+	  else if (TYPE_ARG_TYPES (variant_type) == NULL_पुनो
+		   && !TYPE_NO_NAMED_मगा_कातविरान_STDARG_P (variant_type)
+		   && TYPE_ARG_TYPES (base_type) != NULL_पुनो)
 	    /* If we've got an unprototyped variant but the base has
 	       a prototype, copy the base arg types to the variant.  */
 	    TYPE_ARG_TYPES (variant_type) = TYPE_ARG_TYPES (base_type);
@@ -28668,25 +28668,25 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 
   /* If we made it here, store the parsed information.  */
   C_DECL_USED (variant) = 1;
-  tree construct = omp_get_context_selector_list (ctx,
+  पुनो construct = omp_get_context_selector_list (ctx,
 						  OMP_TRAIT_SET_CONSTRUCT);
   omp_mark_declare_variant (match_loc, variant, construct);
-  if (omp_context_selector_matches (ctx, NULL_TREE, false))
+  if (omp_context_selector_matches (ctx, NULL_पुनो, false))
     {
-      tree attr = tree_cons (get_identifier ("omp declare variant base"),
-			     build_tree_list (variant, ctx),
+      पुनो attr = पुनो_cons (get_identifier ("omp declare variant base"),
+			     build_पुनो_list (variant, ctx),
 			     DECL_ATTRIBUTES (fndecl));
       DECL_ATTRIBUTES (fndecl) = attr;
     }
 
-  if (need_device_ptr_list || append_args_tree)
+  if (need_device_ptr_list || append_मगा_कातविरान_पुनो)
     {
-      tree variant_decl = tree_strip_nop_conversions (variant);
-      tree t = build_tree_list (need_device_ptr_list,
-				NULL_TREE /* need_device_addr */);
-      TREE_CHAIN (t) = append_args_tree;
+      पुनो variant_decl = पुनो_strip_nop_conversions (variant);
+      पुनो t = build_पुनो_list (need_device_ptr_list,
+				NULL_पुनो /* need_device_addr */);
+      पुनो_CHAIN (t) = append_मगा_कातविरान_पुनो;
       DECL_ATTRIBUTES (variant_decl)
-	= tree_cons (get_identifier ("omp declare variant variant args"), t,
+	= पुनो_cons (get_identifier ("omp declare variant variant args"), t,
 		     DECL_ATTRIBUTES (variant_decl));
     }
 }
@@ -28696,7 +28696,7 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
    or "omp declare variant base" attribute.  */
 
 static void
-c_finish_omp_declare_simd (c_parser *parser, tree fndecl, tree parms,
+c_finish_omp_declare_simd (c_parser *parser, पुनो fndecl, पुनो parms,
 			   vec<c_token> *pclauses)
 {
   vec<c_token> &clauses = *pclauses;
@@ -28709,9 +28709,9 @@ c_finish_omp_declare_simd (c_parser *parser, tree fndecl, tree parms,
   const char *kind = "simd";
   if (clauses.exists ()
       && (clauses[0].type == CPP_NAME || clauses[0].type == CPP_PRAGMA))
-    kind = IDENTIFIER_POINTER (clauses[0].value);
+    kind = IDENTIFIER_POINTER (clauses[0].हालागा);
   gcc_assert (strcmp (kind, "simd") == 0 || strcmp (kind, "variant") == 0);
-  if (fndecl == NULL_TREE || TREE_CODE (fndecl) != FUNCTION_DECL)
+  if (fndecl == NULL_पुनो || पुनो_CODE (fndecl) != FUNCTION_DECL)
     {
       error ("%<#pragma omp declare %s%> not immediately followed by "
 	     "a function declaration or definition", kind);
@@ -28734,7 +28734,7 @@ c_finish_omp_declare_simd (c_parser *parser, tree fndecl, tree parms,
       return;
     }
 
-  if (parms == NULL_TREE)
+  if (parms == NULL_पुनो)
     parms = DECL_ARGUMENTS (fndecl);
 
   unsigned int tokens_avail = parser->tokens_avail;
@@ -28748,20 +28748,20 @@ c_finish_omp_declare_simd (c_parser *parser, tree fndecl, tree parms,
     {
       c_token *token = c_parser_peek_token (parser);
       gcc_assert (token->type == CPP_NAME);
-      kind = IDENTIFIER_POINTER (token->value);
+      kind = IDENTIFIER_POINTER (token->हालागा);
       c_parser_consume_token (parser);
       parser->in_pragma = true;
 
       if (strcmp (kind, "simd") == 0)
 	{
-	  tree c;
+	  पुनो c;
 	  c = c_parser_omp_all_clauses (parser, OMP_DECLARE_SIMD_CLAUSE_MASK,
 					"#pragma omp declare simd");
 	  c = c_omp_declare_simd_clauses_to_numbers (parms, c);
-	  if (c != NULL_TREE)
-	    c = tree_cons (NULL_TREE, c, NULL_TREE);
-	  c = build_tree_list (get_identifier ("omp declare simd"), c);
-	  TREE_CHAIN (c) = DECL_ATTRIBUTES (fndecl);
+	  if (c != NULL_पुनो)
+	    c = पुनो_cons (NULL_पुनो, c, NULL_पुनो);
+	  c = build_पुनो_list (get_identifier ("omp declare simd"), c);
+	  पुनो_CHAIN (c) = DECL_ATTRIBUTES (fndecl);
 	  DECL_ATTRIBUTES (fndecl) = c;
 	}
       else
@@ -28792,8 +28792,8 @@ c_finish_omp_declare_simd (c_parser *parser, tree fndecl, tree parms,
    mangled according to the context selector CTX.  The DECLARATOR is
    modified in place to point to a new identifier; the original name of
    the function is returned.  */
-static tree
-omp_start_variant_function (c_declarator *declarator, tree ctx)
+static पुनो
+omp_start_variant_function (c_declarator *declarator, पुनो ctx)
 {
   c_declarator *id = declarator;
   while (id->kind != cdk_id)
@@ -28801,7 +28801,7 @@ omp_start_variant_function (c_declarator *declarator, tree ctx)
       id = id->declarator;
       gcc_assert (id);
     }
-  tree name = id->u.id.id;
+  पुनो name = id->u.id.id;
   id->u.id.id = omp_mangle_variant_name (name, ctx, JOIN_STR);
   return name;
 }
@@ -28812,12 +28812,12 @@ omp_start_variant_function (c_declarator *declarator, tree ctx)
    at CTX to the base decl, and an "omp declare variant variant"
    attribute to the variant DECL.  */
 static void
-omp_finish_variant_function (tree decl, tree base_name, tree ctx)
+omp_finish_variant_function (पुनो decl, पुनो base_name, पुनो ctx)
 {
   /* First look up BASE_NAME and ensure it matches DECL.  */
-  tree base_decl = lookup_name (base_name);
-  if (base_decl == error_mark_node)
-    base_decl = NULL_TREE;
+  पुनो base_decl = lookup_name (base_name);
+  if (base_decl == error_mark_बुहोल)
+    base_decl = NULL_पुनो;
   if (!base_decl)
     {
       error_at (DECL_SOURCE_LOCATION (decl),
@@ -28826,7 +28826,7 @@ omp_finish_variant_function (tree decl, tree base_name, tree ctx)
       return;
     }
 
-  if (!comptypes (TREE_TYPE (decl), TREE_TYPE (base_decl)))
+  if (!comptypes (पुनो_TYPE (decl), पुनो_TYPE (base_decl)))
     {
       error_at (DECL_SOURCE_LOCATION (decl),
 		"variant function definition does not match "
@@ -28840,23 +28840,23 @@ omp_finish_variant_function (tree decl, tree base_name, tree ctx)
      end.  */
   omp_check_for_duplicate_variant (DECL_SOURCE_LOCATION (decl),
 				   base_decl, ctx);
-  tree construct
+  पुनो construct
     = omp_get_context_selector_list (ctx, OMP_TRAIT_SET_CONSTRUCT);
   omp_mark_declare_variant (DECL_SOURCE_LOCATION (decl), decl, construct);
-  tree attrs = DECL_ATTRIBUTES (base_decl);
-  tree match_loc_node
-    = maybe_wrap_with_location (integer_zero_node,
+  पुनो attrs = DECL_ATTRIBUTES (base_decl);
+  पुनो match_loc_बुहोल
+    = maybe_wrap_with_location (integer_zero_बुहोल,
 				DECL_SOURCE_LOCATION (base_decl));
-  tree loc_node = tree_cons (match_loc_node, integer_zero_node,
-			     build_tree_list (match_loc_node,
-					      integer_zero_node));
-  attrs = tree_cons (get_identifier ("omp declare variant base"),
-		     tree_cons (decl, ctx, loc_node), attrs);
+  पुनो loc_बुहोल = पुनो_cons (match_loc_बुहोल, integer_zero_बुहोल,
+			     build_पुनो_list (match_loc_बुहोल,
+					      integer_zero_बुहोल));
+  attrs = पुनो_cons (get_identifier ("omp declare variant base"),
+		     पुनो_cons (decl, ctx, loc_बुहोल), attrs);
   DECL_ATTRIBUTES (base_decl) = attrs;
 
   /* Variant functions are essentially anonymous and cannot be referenced
      outside the compilation unit.  */
-  TREE_PUBLIC (decl) = 0;
+  पुनो_PUBLIC (decl) = 0;
   DECL_COMDAT (decl) = 0;
 }
 
@@ -28866,20 +28866,20 @@ omp_finish_variant_function (tree decl, tree base_name, tree ctx)
    return true and parse it for DECL.  */
 
 bool
-c_maybe_parse_omp_decl (tree decl, tree d)
+c_maybe_parse_omp_decl (पुनो decl, पुनो d)
 {
-  gcc_assert (TREE_CODE (d) == C_TOKEN_VEC);
+  gcc_assert (पुनो_CODE (d) == C_TOKEN_VEC);
   vec<c_token, va_gc> *toks = C_TOKEN_VEC_TOKENS (d);
   c_token *first = toks->address ();
   c_token *last = first + toks->length ();
   const char *directive[3] = {};
   for (int j = 0; j < 3; j++)
     {
-      tree id = NULL_TREE;
+      पुनो id = NULL_पुनो;
       if (first + j == last)
 	break;
       if (first[j].type == CPP_NAME)
-	id = first[j].value;
+	id = first[j].हालागा;
       else if (first[j].type == CPP_KEYWORD)
 	id = ridpointers[(int) first[j].keyword];
       else
@@ -28917,19 +28917,19 @@ c_maybe_parse_omp_decl (tree decl, tree d)
   tok.keyword = RID_MAX;
   tok.pragma_kind = pragma_kind (dir->id);
   tok.location = first->location;
-  toks->quick_push (tok);
+  toks->quick_इतुलाक (tok);
   while (++first < last)
-    toks->quick_push (*first);
+    toks->quick_इतुलाक (*first);
   tok = {};
   tok.type = CPP_PRAGMA_EOL;
   tok.keyword = RID_MAX;
   tok.location = last[-1].location;
-  toks->quick_push (tok);
+  toks->quick_इतुलाक (tok);
   tok = {};
   tok.type = CPP_EOF;
   tok.keyword = RID_MAX;
   tok.location = last[-1].location;
-  toks->quick_push (tok);
+  toks->quick_इतुलाक (tok);
   parser->in_omp_decl_attribute = decl;
   gcc_assert (!parser->in_omp_attribute_pragma);
   parser->in_omp_attribute_pragma = ggc_alloc<omp_attribute_pragma_state> ();
@@ -28938,8 +28938,8 @@ c_maybe_parse_omp_decl (tree decl, tree d)
   parser->in_omp_attribute_pragma->save_tokens_avail = tokens_avail;
   parser->tokens = toks->address ();
   parser->tokens_avail = toks->length ();
-  c_parser_pragma (parser, pragma_external, NULL, NULL_TREE);
-  parser->in_omp_decl_attribute = NULL_TREE;
+  c_parser_pragma (parser, pragma_external, NULL, NULL_पुनो);
+  parser->in_omp_decl_attribute = NULL_पुनो;
   return true;
 }
 
@@ -28964,7 +28964,7 @@ c_maybe_parse_omp_decl (tree decl, tree d)
 static void
 c_parser_omp_declare_target (c_parser *parser)
 {
-  tree clauses = NULL_TREE;
+  पुनो clauses = NULL_पुनो;
   int device_type = 0;
   bool indirect = false;
   bool only_device_type_or_indirect = true;
@@ -28994,24 +28994,24 @@ c_parser_omp_declare_target (c_parser *parser)
       bool attr_syntax = parser->in_omp_attribute_pragma != NULL;
       c_parser_skip_to_pragma_eol (parser);
       c_omp_declare_target_attr attr = { attr_syntax, -1, 0 };
-      vec_safe_push (current_omp_declare_target_attribute, attr);
+      vec_safe_इतुलाक (current_omp_declare_target_attribute, attr);
       return;
     }
-  for (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+  for (पुनो c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
     {
       if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEVICE_TYPE)
 	device_type |= OMP_CLAUSE_DEVICE_TYPE_KIND (c);
       if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INDIRECT)
-	indirect |= !integer_zerop (OMP_CLAUSE_INDIRECT_EXPR (c));
+	indirect |= !integer_zerop (OMP_CLAUSE_INDIRECT_पाहायाग (c));
     }
-  for (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+  for (पुनो c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
     {
       if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEVICE_TYPE
 	  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INDIRECT)
 	continue;
-      tree t = OMP_CLAUSE_DECL (c), id;
-      tree at1 = lookup_attribute ("omp declare target", DECL_ATTRIBUTES (t));
-      tree at2 = lookup_attribute ("omp declare target link",
+      पुनो t = OMP_CLAUSE_DECL (c), id;
+      पुनो at1 = lookup_attribute ("omp declare target", DECL_ATTRIBUTES (t));
+      पुनो at2 = lookup_attribute ("omp declare target link",
 				   DECL_ATTRIBUTES (t));
       only_device_type_or_indirect = false;
       if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LINK)
@@ -29028,7 +29028,7 @@ c_parser_omp_declare_target (c_parser *parser)
 		      "%qD specified both in declare target %<link%> and %qs"
 		      " clauses", t, OMP_CLAUSE_ENTER_TO (c) ? "to" : "enter");
 	  else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LOCAL
-		   || value_member (get_identifier ("local"), TREE_VALUE (at2)))
+		   || हालागा_member (get_identifier ("local"), पुनो_हालागा (at2)))
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qD specified both in declare target %<link%> and "
 		      "%<local%> clauses", t);
@@ -29040,32 +29040,32 @@ c_parser_omp_declare_target (c_parser *parser)
 	}
       if (!at1)
 	{
-	  DECL_ATTRIBUTES (t) = tree_cons (id, NULL_TREE, DECL_ATTRIBUTES (t));
+	  DECL_ATTRIBUTES (t) = पुनो_cons (id, NULL_पुनो, DECL_ATTRIBUTES (t));
 	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LOCAL)
-	    TREE_VALUE (DECL_ATTRIBUTES (t))
-	      = tree_cons (NULL_TREE, get_identifier ("local"),
-			   TREE_VALUE (DECL_ATTRIBUTES (t)));
+	    पुनो_हालागा (DECL_ATTRIBUTES (t))
+	      = पुनो_cons (NULL_पुनो, get_identifier ("local"),
+			   पुनो_हालागा (DECL_ATTRIBUTES (t)));
 
-	  if (TREE_CODE (t) != FUNCTION_DECL && !is_global_var (t))
+	  if (पुनो_CODE (t) != FUNCTION_DECL && !is_global_var (t))
 	    continue;
 
-	  symtab_node *node = symtab_node::get (t);
-	  if (node != NULL)
+	  symtab_बुहोल *बुहोल = symtab_बुहोल::get (t);
+	  if (बुहोल != NULL)
 	    {
-	      node->offloadable = 1;
+	      बुहोल->offloadable = 1;
 	      if (ENABLE_OFFLOADING)
 		{
 		  g->have_offload = true;
-		  if (is_a <varpool_node *> (node)
+		  if (is_a <varpool_बुहोल *> (बुहोल)
 		      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_LOCAL)
-		    vec_safe_push (offload_vars, t);
+		    vec_safe_इतुलाक (offload_vars, t);
 		}
 	    }
 	}
       else
 	{
-	  bool saw_local = value_member (get_identifier ("local"),
-					 TREE_VALUE (at1));
+	  bool saw_local = हालागा_member (get_identifier ("local"),
+					 पुनो_हालागा (at1));
 	  if (saw_local && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
@@ -29082,39 +29082,39 @@ c_parser_omp_declare_target (c_parser *parser)
 	      continue;
 	    }
 	}
-      if (TREE_CODE (t) != FUNCTION_DECL)
+      if (पुनो_CODE (t) != FUNCTION_DECL)
 	continue;
       if ((device_type & OMP_CLAUSE_DEVICE_TYPE_HOST) != 0)
 	{
-	  tree at3 = lookup_attribute ("omp declare target host",
+	  पुनो at3 = lookup_attribute ("omp declare target host",
 				       DECL_ATTRIBUTES (t));
-	  if (at3 == NULL_TREE)
+	  if (at3 == NULL_पुनो)
 	    {
 	      id = get_identifier ("omp declare target host");
 	      DECL_ATTRIBUTES (t)
-		= tree_cons (id, NULL_TREE, DECL_ATTRIBUTES (t));
+		= पुनो_cons (id, NULL_पुनो, DECL_ATTRIBUTES (t));
 	    }
 	}
       if ((device_type & OMP_CLAUSE_DEVICE_TYPE_NOHOST) != 0)
 	{
-	  tree at3 = lookup_attribute ("omp declare target nohost",
+	  पुनो at3 = lookup_attribute ("omp declare target nohost",
 				       DECL_ATTRIBUTES (t));
-	  if (at3 == NULL_TREE)
+	  if (at3 == NULL_पुनो)
 	    {
 	      id = get_identifier ("omp declare target nohost");
 	      DECL_ATTRIBUTES (t)
-		= tree_cons (id, NULL_TREE, DECL_ATTRIBUTES (t));
+		= पुनो_cons (id, NULL_पुनो, DECL_ATTRIBUTES (t));
 	    }
 	}
       if (indirect)
 	{
-	  tree at4 = lookup_attribute ("omp declare target indirect",
+	  पुनो at4 = lookup_attribute ("omp declare target indirect",
 				       DECL_ATTRIBUTES (t));
-	  if (at4 == NULL_TREE)
+	  if (at4 == NULL_पुनो)
 	    {
 	      id = get_identifier ("omp declare target indirect");
 	      DECL_ATTRIBUTES (t)
-		= tree_cons (id, NULL_TREE, DECL_ATTRIBUTES (t));
+		= पुनो_cons (id, NULL_पुनो, DECL_ATTRIBUTES (t));
 	    }
 	}
     }
@@ -29144,33 +29144,33 @@ c_parser_omp_begin (c_parser *parser)
   const char *p = "";
   c_parser_consume_pragma (parser);
   if (c_parser_next_token_is (parser, CPP_NAME))
-    p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+    p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
   if (strcmp (p, "declare") == 0)
     {
       c_parser_consume_token (parser);
       p = "";
       if (c_parser_next_token_is (parser, CPP_NAME))
-	p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "target") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  bool attr_syntax = parser->in_omp_attribute_pragma != NULL;
-	  tree clauses
+	  पुनो clauses
 	    = c_parser_omp_all_clauses (parser,
 					OMP_BEGIN_DECLARE_TARGET_CLAUSE_MASK,
 					"#pragma omp begin declare target");
 	  int device_type = 0;
 	  int indirect = 0;
-	  for (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+	  for (पुनो c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
 	    {
 	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEVICE_TYPE)
 		device_type |= OMP_CLAUSE_DEVICE_TYPE_KIND (c);
 	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INDIRECT)
-		indirect |= !integer_zerop (OMP_CLAUSE_INDIRECT_EXPR (c));
+		indirect |= !integer_zerop (OMP_CLAUSE_INDIRECT_पाहायाग (c));
 	    }
 	  c_omp_declare_target_attr attr = { attr_syntax, device_type,
 					     indirect };
-	  vec_safe_push (current_omp_declare_target_attribute, attr);
+	  vec_safe_इतुलाक (current_omp_declare_target_attribute, attr);
 	}
       else if (strcmp (p, "variant") == 0)
 	{
@@ -29182,7 +29182,7 @@ c_parser_omp_begin (c_parser *parser)
 	    c_parser_consume_token (parser);
 	  if (c_parser_next_token_is (parser, CPP_NAME))
 	    {
-	      tree id = c_parser_peek_token (parser)->value;
+	      पुनो id = c_parser_peek_token (parser)->हालागा;
 	      clause = IDENTIFIER_POINTER (id);
 	    }
 	  if (strcmp (clause, "match") != 0)
@@ -29200,24 +29200,24 @@ c_parser_omp_begin (c_parser *parser)
 	      return;
 	    }
 
-	  tree ctx =
-	    c_parser_omp_context_selector_specification (parser, NULL_TREE);
-	  if (ctx != error_mark_node)
+	  पुनो ctx =
+	    c_parser_omp_context_selector_specification (parser, NULL_पुनो);
+	  if (ctx != error_mark_बुहोल)
 	    ctx = omp_check_context_selector (match_loc, ctx,
 					      OMP_CTX_BEGIN_DECLARE_VARIANT);
 
-	  if (ctx != error_mark_node
+	  if (ctx != error_mark_बुहोल
 	      && !vec_safe_is_empty (current_omp_declare_variant_attribute))
 	    {
 	      c_omp_declare_variant_attr a
 		= current_omp_declare_variant_attribute->last ();
-	      tree outer_ctx = a.selector;
+	      पुनो outer_ctx = a.selector;
 	      ctx = omp_merge_context_selectors (match_loc, outer_ctx, ctx,
 						 OMP_CTX_BEGIN_DECLARE_VARIANT);
 	    }
 
-	  if (ctx == error_mark_node
-	      || !omp_context_selector_matches (ctx, NULL_TREE, false, true))
+	  if (ctx == error_mark_बुहोल
+	      || !omp_context_selector_matches (ctx, NULL_पुनो, false, true))
 	    {
 	      /* The context is either invalid or cannot possibly match.
 		 In the latter case the spec says all code in the begin/end
@@ -29232,7 +29232,7 @@ c_parser_omp_begin (c_parser *parser)
 	    {
 	      bool attr_syntax = parser->in_omp_attribute_pragma != NULL;
 	      c_omp_declare_variant_attr a = { attr_syntax, ctx };
-	      vec_safe_push (current_omp_declare_variant_attribute, a);
+	      vec_safe_इतुलाक (current_omp_declare_variant_attribute, a);
 	    }
 
 	  parens.require_close (parser);
@@ -29250,7 +29250,7 @@ c_parser_omp_begin (c_parser *parser)
       bool attr_syntax = parser->in_omp_attribute_pragma != NULL;
       c_parser_omp_assumption_clauses (parser, false);
       struct c_omp_begin_assumes_data a = { attr_syntax };
-      vec_safe_push (current_omp_begin_assumes, a);
+      vec_safe_इतुलाक (current_omp_begin_assumes, a);
     }
   else
     {
@@ -29274,13 +29274,13 @@ c_parser_omp_end (c_parser *parser)
   const char *p = "";
   c_parser_consume_pragma (parser);
   if (c_parser_next_token_is (parser, CPP_NAME))
-    p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+    p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
   if (strcmp (p, "declare") == 0)
     {
       c_parser_consume_token (parser);
       p = "";
       if (c_parser_next_token_is (parser, CPP_NAME))
-	p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "target") == 0)
 	{
 	  c_parser_consume_token (parser);
@@ -29293,7 +29293,7 @@ c_parser_omp_end (c_parser *parser)
 	  else
 	    {
 	      c_omp_declare_target_attr
-		a = current_omp_declare_target_attribute->pop ();
+		a = current_omp_declare_target_attribute->आलिसिन ();
 	      if (a.attr_syntax != attr_syntax)
 		{
 		  if (a.attr_syntax)
@@ -29324,7 +29324,7 @@ c_parser_omp_end (c_parser *parser)
 	  else
 	    {
 	      c_omp_declare_variant_attr
-		a = current_omp_declare_variant_attribute->pop ();
+		a = current_omp_declare_variant_attribute->आलिसिन ();
 	      if (a.attr_syntax != attr_syntax)
 		{
 		  if (a.attr_syntax)
@@ -29358,7 +29358,7 @@ c_parser_omp_end (c_parser *parser)
       else
 	{
 	  c_omp_begin_assumes_data
-	    a = current_omp_begin_assumes->pop ();
+	    a = current_omp_begin_assumes->आलिसिन ();
 	  if (a.attr_syntax != attr_syntax)
 	    {
 	      if (a.attr_syntax)
@@ -29388,8 +29388,8 @@ c_parser_omp_end (c_parser *parser)
 static void
 c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
 {
-  tree type, mapper_name = NULL_TREE, var = NULL_TREE, stmt, stmtlist;
-  tree maplist = NULL_TREE, mapper_id, mapper_decl, t;
+  पुनो type, mapper_name = NULL_पुनो, var = NULL_पुनो, stmt, stmtlist;
+  पुनो maplist = NULL_पुनो, mapper_id, mapper_decl, t;
   c_token *token;
 
   if (context == pragma_struct || context == pragma_param)
@@ -29408,13 +29408,13 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
       switch (token->type)
 	{
 	case CPP_NAME:
-	  mapper_name = token->value;
+	  mapper_name = token->हालागा;
 	  c_parser_consume_token (parser);
 	  break;
 	case CPP_KEYWORD:
 	  if (token->keyword == RID_DEFAULT)
 	    {
-	      mapper_name = NULL_TREE;
+	      mapper_name = NULL_पुनो;
 	      c_parser_consume_token (parser);
 	      break;
 	    }
@@ -29436,7 +29436,7 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
     location_t loc = c_parser_peek_token (parser)->location;
     struct c_type_name *ctype = c_parser_type_name (parser);
     type = groktypename (ctype, NULL, NULL);
-    if (type == error_mark_node)
+    if (type == error_mark_बुहोल)
       goto fail;
     if (!RECORD_OR_UNION_TYPE_P (type))
       {
@@ -29445,14 +29445,14 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
 	c_parser_skip_to_pragma_eol (parser, false);
 	return;
       }
-    for (tree t = DECL_INITIAL (mapper_decl); t; t = TREE_CHAIN (t))
-      if (comptypes (TREE_PURPOSE (t), type))
+    for (पुनो t = DECL_INITIAL (mapper_decl); t; t = पुनो_CHAIN (t))
+      if (comptypes (पुनो_PURPOSE (t), type))
 	{
 	  error_at (loc, "redeclaration of %qs %<#pragma omp declare "
 		    "mapper%> for type %qT", IDENTIFIER_POINTER (mapper_id)
 		      + sizeof ("omp declare mapper ") - 1,
 		    type);
-	  tree prevmapper = TREE_VALUE (t);
+	  पुनो prevmapper = पुनो_हालागा (t);
 	  /* Hmm, this location might not be very accurate.  */
 	  location_t ploc
 	    = DECL_SOURCE_LOCATION (OMP_DECLARE_MAPPER_DECL (prevmapper));
@@ -29466,7 +29466,7 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
   token = c_parser_peek_token (parser);
   if (token->type == CPP_NAME)
     {
-      var = build_decl (token->location, VAR_DECL, token->value, type);
+      var = build_decl (token->location, VAR_DECL, token->हालागा, type);
       c_parser_consume_token (parser);
       DECL_ARTIFICIAL (var) = 1;
     }
@@ -29479,8 +29479,8 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
   if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
     goto fail;
 
-  push_scope ();
-  stmtlist = push_stmt_list ();
+  इतुलाक_scope ();
+  stmtlist = इतुलाक_stmt_list ();
   pushdecl (var);
   DECL_CONTEXT (var) = current_function_decl;
 
@@ -29498,38 +29498,38 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
       maplist = c_parser_omp_clause_map (parser, maplist, true);
     }
 
-  if (maplist == NULL_TREE)
+  if (maplist == NULL_पुनो)
     {
-      error_at (input_location, "missing %<map%> clause");
+      error_at (पासोक_location, "missing %<map%> clause");
       goto fail;
     }
-  tree list;
+  पुनो list;
   for (list = maplist; list; list = OMP_CLAUSE_CHAIN (list))
     {
-      tree dvar = OMP_CLAUSE_DECL (list);
-      while (!DECL_P (dvar) && TREE_OPERAND_LENGTH (dvar))
-	dvar = TREE_OPERAND (dvar, 0);
+      पुनो dvar = OMP_CLAUSE_DECL (list);
+      while (!DECL_P (dvar) && पुनो_OPERAND_LENGTH (dvar))
+	dvar = पुनो_OPERAND (dvar, 0);
       if (dvar == var)
 	break;
     }
   if (!list)
-    error_at (input_location, "at least one %<map%> clause must map %qD or an "
+    error_at (पासोक_location, "at least one %<map%> clause must map %qD or an "
 			      "element of it", var);
 
-  stmt = make_node (OMP_DECLARE_MAPPER);
-  TREE_TYPE (stmt) = type;
+  stmt = make_बुहोल (OMP_DECLARE_MAPPER);
+  पुनो_TYPE (stmt) = type;
   OMP_DECLARE_MAPPER_ID (stmt) = mapper_name;
   OMP_DECLARE_MAPPER_DECL (stmt) = var;
   OMP_DECLARE_MAPPER_CLAUSES (stmt) = maplist;
 
   add_stmt (stmt);
 
-  pop_stmt_list (stmtlist);
-  pop_scope ();
+  आलिसिन_stmt_list (stmtlist);
+  आलिसिन_scope ();
 
   c_parser_skip_to_pragma_eol (parser);
 
-  t = tree_cons (type, stmt, DECL_INITIAL (mapper_decl));
+  t = पुनो_cons (type, stmt, DECL_INITIAL (mapper_decl));
   DECL_INITIAL (mapper_decl) = t;
 
   return;
@@ -29551,11 +29551,11 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 {
   unsigned int tokens_avail = 0, i;
   c_token *saved_tokens = NULL;
-  vec<tree> types = vNULL;
+  vec<पुनो> types = vNULL;
   vec<c_token> clauses = vNULL;
-  enum tree_code reduc_code = ERROR_MARK;
-  tree reduc_id = NULL_TREE;
-  tree type;
+  enum पुनो_code reduc_code = ERROR_MARK;
+  पुनो reduc_id = NULL_पुनो;
+  पुनो type;
   location_t rloc = c_parser_peek_token (parser)->location;
 
   if (context == pragma_struct || context == pragma_param)
@@ -29570,43 +29570,43 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
   switch (c_parser_peek_token (parser)->type)
     {
     case CPP_PLUS:
-      reduc_code = PLUS_EXPR;
+      reduc_code = PLUS_पाहायाग;
       break;
     case CPP_MULT:
-      reduc_code = MULT_EXPR;
+      reduc_code = MULT_पाहायाग;
       break;
     case CPP_MINUS:
-      reduc_code = MINUS_EXPR;
+      reduc_code = MINUS_पाहायाग;
       break;
     case CPP_AND:
-      reduc_code = BIT_AND_EXPR;
+      reduc_code = BIT_AND_पाहायाग;
       break;
     case CPP_XOR:
-      reduc_code = BIT_XOR_EXPR;
+      reduc_code = BIT_XOR_पाहायाग;
       break;
     case CPP_OR:
-      reduc_code = BIT_IOR_EXPR;
+      reduc_code = BIT_IOR_पाहायाग;
       break;
     case CPP_AND_AND:
-      reduc_code = TRUTH_ANDIF_EXPR;
+      reduc_code = TRUTH_ANDIF_पाहायाग;
       break;
     case CPP_OR_OR:
-      reduc_code = TRUTH_ORIF_EXPR;
+      reduc_code = TRUTH_ORIF_पाहायाग;
       break;
     case CPP_NAME:
       const char *p;
-      p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "min") == 0)
 	{
-	  reduc_code = MIN_EXPR;
+	  reduc_code = MIN_पाहायाग;
 	  break;
 	}
       if (strcmp (p, "max") == 0)
 	{
-	  reduc_code = MAX_EXPR;
+	  reduc_code = MAX_पाहायाग;
 	  break;
 	}
-      reduc_id = c_parser_peek_token (parser)->value;
+      reduc_id = c_parser_peek_token (parser)->हालागा;
       break;
     default:
       c_parser_error (parser,
@@ -29615,7 +29615,7 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
       goto fail;
     }
 
-  tree orig_reduc_id, reduc_decl;
+  पुनो orig_reduc_id, reduc_decl;
   orig_reduc_id = reduc_id;
   reduc_id = c_omp_reduction_id (reduc_code, reduc_id);
   reduc_decl = c_omp_reduction_decl (reduc_id);
@@ -29631,16 +29631,16 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
       if (ctype != NULL)
 	{
 	  type = groktypename (ctype, NULL, NULL);
-	  if (type == error_mark_node)
+	  if (type == error_mark_बुहोल)
 	    ;
 	  else if ((INTEGRAL_TYPE_P (type)
 		    || SCALAR_FLOAT_TYPE_P (type)
-		    || TREE_CODE (type) == COMPLEX_TYPE)
-		   && orig_reduc_id == NULL_TREE)
+		    || पुनो_CODE (type) == COMPLEX_TYPE)
+		   && orig_reduc_id == NULL_पुनो)
 	    error_at (loc, "predeclared arithmetic type in "
 			   "%<#pragma omp declare reduction%>");
-	  else if (TREE_CODE (type) == FUNCTION_TYPE
-		   || TREE_CODE (type) == ARRAY_TYPE)
+	  else if (पुनो_CODE (type) == FUNCTION_TYPE
+		   || पुनो_CODE (type) == ARRAY_TYPE)
 	    error_at (loc, "function or array type in "
 		      "%<#pragma omp declare reduction%>");
 	  else if (TYPE_ATOMIC (type))
@@ -29651,9 +29651,9 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 			   "%<#pragma omp declare reduction%>");
 	  else
 	    {
-	      tree t;
-	      for (t = DECL_INITIAL (reduc_decl); t; t = TREE_CHAIN (t))
-		if (comptypes (TREE_PURPOSE (t), type))
+	      पुनो t;
+	      for (t = DECL_INITIAL (reduc_decl); t; t = पुनो_CHAIN (t))
+		if (comptypes (पुनो_PURPOSE (t), type))
 		  {
 		    error_at (loc, "redeclaration of %qs "
 				   "%<#pragma omp declare reduction%> for "
@@ -29662,14 +29662,14 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 				   + sizeof ("omp declare reduction ") - 1,
 				   type);
 		    location_t ploc
-		      = DECL_SOURCE_LOCATION (TREE_VEC_ELT (TREE_VALUE (t),
+		      = DECL_SOURCE_LOCATION (पुनो_VEC_ELT (पुनो_हालागा (t),
 							    0));
 		    inform (ploc, "%<#pragma omp declare reduction%> "
 				  "previously declared here");
 		    break;
 		  }
-	      if (t == NULL_TREE)
-		types.safe_push (type);
+	      if (t == NULL_पुनो)
+		types.safe_इतुलाक (type);
 	    }
 	  if (c_parser_next_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
@@ -29704,18 +29704,18 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 	  c_token *token = c_parser_peek_token (parser);
 	  if (token->type == CPP_EOF)
 	    goto fail;
-	  clauses.safe_push (*token);
+	  clauses.safe_इतुलाक (*token);
 	  c_parser_consume_token (parser);
 	}
-      clauses.safe_push (*c_parser_peek_token (parser));
+      clauses.safe_इतुलाक (*c_parser_peek_token (parser));
       c_parser_skip_to_pragma_eol (parser);
 
       /* Make sure nothing tries to read past the end of the tokens.  */
       c_token eof_token;
       memset (&eof_token, 0, sizeof (eof_token));
       eof_token.type = CPP_EOF;
-      clauses.safe_push (eof_token);
-      clauses.safe_push (eof_token);
+      clauses.safe_इतुलाक (eof_token);
+      clauses.safe_इतुलाक (eof_token);
     }
 
   int errs = errorcount;
@@ -29730,30 +29730,30 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 	  parser->in_pragma = true;
 	}
 
-      bool nested = current_function_decl != NULL_TREE;
+      bool nested = current_function_decl != NULL_पुनो;
       if (nested)
-	c_push_function_context ();
-      tree fndecl = build_decl (BUILTINS_LOCATION, FUNCTION_DECL,
+	c_इतुलाक_function_context ();
+      पुनो fndecl = build_decl (BUILTINS_LOCATION, FUNCTION_DECL,
 				reduc_id, default_function_type);
       current_function_decl = fndecl;
       allocate_struct_function (fndecl, true);
-      push_scope ();
-      tree stmt = push_stmt_list ();
+      इतुलाक_scope ();
+      पुनो stmt = इतुलाक_stmt_list ();
       /* Intentionally BUILTINS_LOCATION, so that -Wshadow doesn't
 	 warn about these.  */
-      tree omp_out = build_decl (BUILTINS_LOCATION, VAR_DECL,
+      पुनो omp_out = build_decl (BUILTINS_LOCATION, VAR_DECL,
 				 get_identifier ("omp_out"), type);
       DECL_ARTIFICIAL (omp_out) = 1;
       DECL_CONTEXT (omp_out) = fndecl;
       pushdecl (omp_out);
-      tree omp_in = build_decl (BUILTINS_LOCATION, VAR_DECL,
+      पुनो omp_in = build_decl (BUILTINS_LOCATION, VAR_DECL,
 				get_identifier ("omp_in"), type);
       DECL_ARTIFICIAL (omp_in) = 1;
       DECL_CONTEXT (omp_in) = fndecl;
       pushdecl (omp_in);
-      struct c_expr combiner = c_parser_expression (parser);
-      struct c_expr initializer;
-      tree omp_priv = NULL_TREE, omp_orig = NULL_TREE;
+      struct c_पाहायाग combiner = c_parser_expression (parser);
+      struct c_पाहायाग initializer;
+      पुनो omp_priv = NULL_पुनो, omp_orig = NULL_पुनो;
       bool bad = false;
       initializer.set_error ();
       if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
@@ -29764,16 +29764,16 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
       if (!bad
 	  && (c_parser_next_token_is (parser, CPP_NAME)
 	      && strcmp (IDENTIFIER_POINTER
-				(c_parser_peek_token (parser)->value),
+				(c_parser_peek_token (parser)->हालागा),
 			  "initializer") == 0))
 	{
 	  c_parser_consume_token (parser);
-	  pop_scope ();
-	  push_scope ();
+	  आलिसिन_scope ();
+	  इतुलाक_scope ();
 	  omp_priv = build_decl (BUILTINS_LOCATION, VAR_DECL,
 				 get_identifier ("omp_priv"), type);
 	  DECL_ARTIFICIAL (omp_priv) = 1;
-	  DECL_INITIAL (omp_priv) = error_mark_node;
+	  DECL_INITIAL (omp_priv) = error_mark_बुहोल;
 	  DECL_CONTEXT (omp_priv) = fndecl;
 	  pushdecl (omp_priv);
 	  omp_orig = build_decl (BUILTINS_LOCATION, VAR_DECL,
@@ -29790,7 +29790,7 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 	      bad = true;
 	    }
 	  else if (strcmp (IDENTIFIER_POINTER
-				(c_parser_peek_token (parser)->value),
+				(c_parser_peek_token (parser)->हालागा),
 			   "omp_priv") != 0)
 	    {
 	      if (c_parser_peek_2nd_token (parser)->type != CPP_OPEN_PAREN
@@ -29801,20 +29801,20 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 		}
 	      else
 		initializer = c_parser_postfix_expression (parser);
-	      if (initializer.value
-		  && TREE_CODE (initializer.value) == CALL_EXPR)
+	      if (initializer.हालागा
+		  && पुनो_CODE (initializer.हालागा) == CALL_पाहायाग)
 		{
 		  int j;
-		  tree c = initializer.value;
-		  for (j = 0; j < call_expr_nargs (c); j++)
+		  पुनो c = initializer.हालागा;
+		  for (j = 0; j < call_पाहायाग_nargs (c); j++)
 		    {
-		      tree a = CALL_EXPR_ARG (c, j);
+		      पुनो a = CALL_पाहायाग_ARG (c, j);
 		      STRIP_NOPS (a);
-		      if (TREE_CODE (a) == ADDR_EXPR
-			  && TREE_OPERAND (a, 0) == omp_priv)
+		      if (पुनो_CODE (a) == ADDR_पाहायाग
+			  && पुनो_OPERAND (a, 0) == omp_priv)
 			break;
 		    }
-		  if (j == call_expr_nargs (c))
+		  if (j == call_पाहायाग_nargs (c))
 		    error ("one of the initializer call arguments should be "
 			   "%<&omp_priv%>");
 		}
@@ -29826,15 +29826,15 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 		bad = true;
 	      else
 		{
-		  tree st = push_stmt_list ();
+		  पुनो st = इतुलाक_stmt_list ();
 		  location_t loc = c_parser_peek_token (parser)->location;
-		  rich_location richloc (line_table, loc);
-		  start_init (omp_priv, NULL_TREE, false, false, &richloc);
-		  struct c_expr init = c_parser_initializer (parser, omp_priv);
+		  rich_location richloc (लिन्या_table, loc);
+		  start_init (omp_priv, NULL_पुनो, false, false, &richloc);
+		  struct c_पाहायाग init = c_parser_initializer (parser, omp_priv);
 		  finish_init ();
-		  finish_decl (omp_priv, loc, init.value,
-		      	       init.original_type, NULL_TREE);
-		  pop_stmt_list (st);
+		  finish_decl (omp_priv, loc, init.हालागा,
+		      	       init.original_type, NULL_पुनो);
+		  आलिसिन_stmt_list (st);
 		}
 	    }
 	  if (!bad
@@ -29846,40 +29846,40 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 	{
 	  c_parser_skip_to_pragma_eol (parser);
 
-	  tree t = tree_cons (type, make_tree_vec (omp_priv ? 6 : 3),
+	  पुनो t = पुनो_cons (type, make_पुनो_vec (omp_priv ? 6 : 3),
 			      DECL_INITIAL (reduc_decl));
 	  DECL_INITIAL (reduc_decl) = t;
 	  DECL_SOURCE_LOCATION (omp_out) = rloc;
-	  TREE_VEC_ELT (TREE_VALUE (t), 0) = omp_out;
-	  TREE_VEC_ELT (TREE_VALUE (t), 1) = omp_in;
-	  TREE_VEC_ELT (TREE_VALUE (t), 2) = combiner.value;
-	  walk_tree (&combiner.value, c_check_omp_declare_reduction_r,
-		     &TREE_VEC_ELT (TREE_VALUE (t), 0), NULL);
+	  पुनो_VEC_ELT (पुनो_हालागा (t), 0) = omp_out;
+	  पुनो_VEC_ELT (पुनो_हालागा (t), 1) = omp_in;
+	  पुनो_VEC_ELT (पुनो_हालागा (t), 2) = combiner.हालागा;
+	  walk_पुनो (&combiner.हालागा, c_check_omp_declare_reduction_r,
+		     &पुनो_VEC_ELT (पुनो_हालागा (t), 0), NULL);
 	  if (omp_priv)
 	    {
 	      DECL_SOURCE_LOCATION (omp_priv) = rloc;
-	      TREE_VEC_ELT (TREE_VALUE (t), 3) = omp_priv;
-	      TREE_VEC_ELT (TREE_VALUE (t), 4) = omp_orig;
-	      TREE_VEC_ELT (TREE_VALUE (t), 5) = initializer.value;
-	      walk_tree (&initializer.value, c_check_omp_declare_reduction_r,
-			 &TREE_VEC_ELT (TREE_VALUE (t), 3), NULL);
-	      walk_tree (&DECL_INITIAL (omp_priv),
+	      पुनो_VEC_ELT (पुनो_हालागा (t), 3) = omp_priv;
+	      पुनो_VEC_ELT (पुनो_हालागा (t), 4) = omp_orig;
+	      पुनो_VEC_ELT (पुनो_हालागा (t), 5) = initializer.हालागा;
+	      walk_पुनो (&initializer.हालागा, c_check_omp_declare_reduction_r,
+			 &पुनो_VEC_ELT (पुनो_हालागा (t), 3), NULL);
+	      walk_पुनो (&DECL_INITIAL (omp_priv),
 			 c_check_omp_declare_reduction_r,
-			 &TREE_VEC_ELT (TREE_VALUE (t), 3), NULL);
+			 &पुनो_VEC_ELT (पुनो_हालागा (t), 3), NULL);
 	    }
 	}
 
-      pop_stmt_list (stmt);
-      pop_scope ();
+      आलिसिन_stmt_list (stmt);
+      आलिसिन_scope ();
       if (cfun->language != NULL)
 	{
 	  ggc_free (cfun->language);
 	  cfun->language = NULL;
 	}
       set_cfun (NULL);
-      current_function_decl = NULL_TREE;
+      current_function_decl = NULL_पुनो;
       if (nested)
-	c_pop_function_context ();
+	c_आलिसिन_function_context ();
 
       if (!clauses.is_empty ())
 	{
@@ -29915,7 +29915,7 @@ c_parser_omp_declare (c_parser *parser, enum pragma_context context)
   c_parser_consume_pragma (parser);
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "simd") == 0)
 	{
 	  /* c_parser_consume_token (parser); done in
@@ -29981,7 +29981,7 @@ c_parser_omp_requires (c_parser *parser)
       if (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  const char *p
-	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 	  location_t cloc = c_parser_peek_token (parser)->location;
 	  enum omp_requires this_req = (enum omp_requires) 0;
 
@@ -30004,7 +30004,7 @@ c_parser_omp_requires (c_parser *parser)
 		{
 		  if (c_parser_next_token_is (parser, CPP_NAME))
 		    {
-		      tree v = c_parser_peek_token (parser)->value;
+		      पुनो v = c_parser_peek_token (parser)->हालागा;
 		      p = IDENTIFIER_POINTER (v);
 
 		      if (!strcmp (p, "seq_cst"))
@@ -30115,23 +30115,23 @@ c_parser_omp_requires (c_parser *parser)
 /* Helper function for c_parser_omp_taskloop.
    Disallow zero sized or potentially zero sized task reductions.  */
 
-static tree
-c_finish_taskloop_clauses (tree clauses)
+static पुनो
+c_finish_taskloop_clauses (पुनो clauses)
 {
-  tree *pc = &clauses;
-  for (tree c = clauses; c; c = *pc)
+  पुनो *pc = &clauses;
+  for (पुनो c = clauses; c; c = *pc)
     {
       bool remove = false;
       if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION)
 	{
-	  tree type = strip_array_types (TREE_TYPE (OMP_CLAUSE_DECL (c)));
+	  पुनो type = strip_array_types (पुनो_TYPE (OMP_CLAUSE_DECL (c)));
 	  if (integer_zerop (TYPE_SIZE_UNIT (type)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"zero sized type %qT in %<reduction%> clause", type);
 	      remove = true;
 	    }
-	  else if (TREE_CODE (TYPE_SIZE_UNIT (type)) != INTEGER_CST)
+	  else if (पुनो_CODE (TYPE_SIZE_UNIT (type)) != INTEGER_CST)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"variable sized type %qT in %<reduction%> clause",
@@ -30161,7 +30161,7 @@ c_finish_taskloop_clauses (tree clauses)
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_LASTPRIVATE)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_DEFAULT)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_GRAINSIZE)	\
-	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NUM_TASKS)	\
+	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_नुमेरो_TASKS)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_COLLAPSE)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_UNTIED)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_IF)		\
@@ -30173,27 +30173,27 @@ c_finish_taskloop_clauses (tree clauses)
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_REDUCTION)	\
 	| (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_IN_REDUCTION))
 
-static tree
+static पुनो
 c_parser_omp_taskloop (location_t loc, c_parser *parser,
-		       char *p_name, omp_clause_mask mask, tree *cclauses,
+		       char *p_name, omp_clause_mask mask, पुनो *cclauses,
 		       bool *if_p)
 {
-  tree clauses, block, ret;
+  पुनो clauses, block, ret;
 
   strcat (p_name, " taskloop");
   mask |= OMP_TASKLOOP_CLAUSE_MASK;
   /* #pragma omp parallel master taskloop{, simd} disallow in_reduction
      clause.  */
-  if ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NUM_THREADS)) != 0)
+  if ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_नुमेरो_THREADS)) != 0)
     mask &= ~(OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_IN_REDUCTION);
 
   if (c_parser_next_token_is (parser, CPP_NAME))
     {
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 
       if (strcmp (p, "simd") == 0)
 	{
-	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
+	  पुनो cclauses_buf[C_OMP_CLAUSE_SPLIT_बिलांग];
 	  if (cclauses == NULL)
 	    cclauses = cclauses_buf;
 	  c_parser_consume_token (parser);
@@ -30205,13 +30205,13 @@ c_parser_omp_taskloop (location_t loc, c_parser *parser,
 	  block = c_end_compound_stmt (loc, block, true);
 	  if (ret == NULL)
 	    return ret;
-	  ret = make_node (OMP_TASKLOOP);
-	  TREE_TYPE (ret) = void_type_node;
+	  ret = make_बुहोल (OMP_TASKLOOP);
+	  पुनो_TYPE (ret) = void_type_बुहोल;
 	  OMP_FOR_BODY (ret) = block;
 	  OMP_FOR_CLAUSES (ret) = cclauses[C_OMP_CLAUSE_SPLIT_TASKLOOP];
 	  OMP_FOR_CLAUSES (ret)
 	    = c_finish_taskloop_clauses (OMP_FOR_CLAUSES (ret));
-	  SET_EXPR_LOCATION (ret, loc);
+	  SET_पाहायाग_LOCATION (ret, loc);
 	  add_stmt (ret);
 	  return ret;
 	}
@@ -30219,7 +30219,7 @@ c_parser_omp_taskloop (location_t loc, c_parser *parser,
   if (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      return NULL_पुनो;
     }
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
@@ -30240,56 +30240,56 @@ c_parser_omp_taskloop (location_t loc, c_parser *parser,
 
 /* OpenMP 5.1: Parse sizes list for "omp tile sizes"
    sizes ( size-expr-list ) */
-static tree
+static पुनो
 c_parser_omp_tile_sizes (c_parser *parser, location_t loc)
 {
-  tree sizes = NULL_TREE;
+  पुनो sizes = NULL_पुनो;
 
   if (c_parser_next_token_is (parser, CPP_COMMA))
     c_parser_consume_token (parser);
 
   c_token *tok = c_parser_peek_token (parser);
   if (tok->type != CPP_NAME
-      || strcmp ("sizes", IDENTIFIER_POINTER (tok->value)))
+      || strcmp ("sizes", IDENTIFIER_POINTER (tok->हालागा)))
     {
       c_parser_error (parser, "expected %<sizes%>");
-      return error_mark_node;
+      return error_mark_बुहोल;
     }
   c_parser_consume_token (parser);
 
   matching_parens parens;
   if (!parens.require_open (parser))
-    return error_mark_node;
+    return error_mark_बुहोल;
 
-  vec<tree, va_gc> *sizes_vec
-    = c_parser_expr_list (parser, true, true, NULL, NULL, NULL, NULL);
-  sizes = build_tree_list_vec (sizes_vec);
-  release_tree_vector (sizes_vec);
+  vec<पुनो, va_gc> *sizes_vec
+    = c_parser_पाहायाग_list (parser, true, true, NULL, NULL, NULL, NULL);
+  sizes = build_पुनो_list_vec (sizes_vec);
+  release_पुनो_vector (sizes_vec);
 
-  for (tree s = sizes; s; s = TREE_CHAIN (s))
+  for (पुनो s = sizes; s; s = पुनो_CHAIN (s))
     {
-      tree expr = TREE_VALUE (s);
-      if (expr == error_mark_node)
+      पुनो पाहायाग = पुनो_हालागा (s);
+      if (पाहायाग == error_mark_बुहोल)
 	{
 	  parens.skip_until_found_close (parser);
-	  return error_mark_node;
+	  return error_mark_बुहोल;
 	}
 
       HOST_WIDE_INT n;
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (expr))
-	  || !tree_fits_shwi_p (expr)
-	  || (n = tree_to_shwi (expr)) <= 0
+      if (!INTEGRAL_TYPE_P (पुनो_TYPE (पाहायाग))
+	  || !पुनो_fits_shwi_p (पाहायाग)
+	  || (n = पुनो_to_shwi (पाहायाग)) <= 0
 	  || (int) n != n)
 	{
 	  c_parser_error (parser, "%<sizes%> argument needs positive"
 				  " integral constant");
-	  TREE_VALUE (s) = integer_one_node;
+	  पुनो_हालागा (s) = integer_one_बुहोल;
 	}
     }
   parens.require_close (parser);
 
   gcc_assert (sizes);
-  tree c = build_omp_clause (loc, OMP_CLAUSE_SIZES);
+  पुनो c = build_omp_clause (loc, OMP_CLAUSE_SIZES);
   OMP_CLAUSE_SIZES_LIST (c) = sizes;
 
   return c;
@@ -30301,17 +30301,17 @@ c_parser_omp_tile_sizes (c_parser *parser, location_t loc)
 
    LOC is the location of the #pragma token.  */
 
-static tree
+static पुनो
 c_parser_omp_tile (location_t loc, c_parser *parser, bool *if_p)
 {
-  tree clauses = c_parser_omp_tile_sizes (parser, loc);
+  पुनो clauses = c_parser_omp_tile_sizes (parser, loc);
   c_parser_skip_to_pragma_eol (parser);
 
-  if (!clauses || clauses == error_mark_node)
-    return error_mark_node;
+  if (!clauses || clauses == error_mark_बुहोल)
+    return error_mark_बुहोल;
 
-  tree block = c_begin_compound_stmt (true);
-  tree ret = c_parser_omp_for_loop (loc, parser, OMP_TILE, clauses,
+  पुनो block = c_begin_compound_stmt (true);
+  पुनो ret = c_parser_omp_for_loop (loc, parser, OMP_TILE, clauses,
 				    NULL, if_p);
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
@@ -30329,14 +30329,14 @@ c_parser_omp_tile (location_t loc, c_parser *parser, bool *if_p)
 
    LOC is the location of the #pragma token.  */
 
-static tree
+static पुनो
 c_parser_omp_unroll (location_t loc, c_parser *parser, bool *if_p)
 {
-  tree clauses = c_parser_omp_all_clauses (parser, OMP_UNROLL_CLAUSE_MASK,
+  पुनो clauses = c_parser_omp_all_clauses (parser, OMP_UNROLL_CLAUSE_MASK,
 					   "#pragma omp unroll", true);
 
-  tree block = c_begin_compound_stmt (true);
-  tree ret = c_parser_omp_for_loop (loc, parser, OMP_UNROLL, clauses,
+  पुनो block = c_begin_compound_stmt (true);
+  पुनो ret = c_parser_omp_for_loop (loc, parser, OMP_UNROLL, clauses,
 				    NULL, if_p);
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
@@ -30362,7 +30362,7 @@ c_parser_omp_error (c_parser *parser, enum pragma_context context)
 {
   int at_compilation = -1;
   int severity_fatal = -1;
-  tree message = NULL_TREE;
+  पुनो message = NULL_पुनो;
   bool bad = false;
   location_t loc = c_parser_peek_token (parser)->location;
 
@@ -30378,14 +30378,14 @@ c_parser_omp_error (c_parser *parser, enum pragma_context context)
 	break;
 
       const char *p
-	= IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	= IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       location_t cloc = c_parser_peek_token (parser)->location;
-      static const char *args[] = {
+      static const char *मगा_कातविरान[] = {
 	"execution", "compilation", "warning", "fatal"
       };
       int *v = NULL;
       int idx = 0, n = -1;
-      tree m = NULL_TREE;
+      पुनो m = NULL_पुनो;
 
       if (!strcmp (p, "at"))
 	v = &at_compilation;
@@ -30409,28 +30409,28 @@ c_parser_omp_error (c_parser *parser, enum pragma_context context)
 	{
 	  if (v == NULL)
 	    {
-	      location_t expr_loc = c_parser_peek_token (parser)->location;
-	      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-	      expr = convert_lvalue_to_rvalue (expr_loc, expr, true, true);
-	      m = convert (const_string_type_node, expr.value);
+	      location_t पाहायाग_loc = c_parser_peek_token (parser)->location;
+	      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	      पाहायाग = convert_lvalue_to_rvalue (पाहायाग_loc, पाहायाग, true, true);
+	      m = convert (const_string_type_बुहोल, पाहायाग.हालागा);
 	      m = c_fully_fold (m, false, NULL);
 	    }
 	  else
 	    {
 	      if (c_parser_next_token_is (parser, CPP_NAME))
 		{
-		  tree val = c_parser_peek_token (parser)->value;
+		  पुनो val = c_parser_peek_token (parser)->हालागा;
 		  const char *q = IDENTIFIER_POINTER (val);
 
-		  if (!strcmp (q, args[idx]))
+		  if (!strcmp (q, मगा_कातविरान[idx]))
 		    n = 0;
-		  else if (!strcmp (q, args[idx + 1]))
+		  else if (!strcmp (q, मगा_कातविरान[idx + 1]))
 		    n = 1;
 		}
 	      if (n == -1)
 		{
 		  error_at (c_parser_peek_token (parser)->location,
-			    "expected %qs or %qs", args[idx], args[idx + 1]);
+			    "expected %qs or %qs", मगा_कातविरान[idx], मगा_कातविरान[idx + 1]);
 		  bad = true;
 		  switch (c_parser_peek_token (parser)->type)
 		    {
@@ -30499,29 +30499,29 @@ c_parser_omp_error (c_parser *parser, enum pragma_context context)
 	  parser->omp_for_parse_state->fail = true;
 	  return true;
 	}
-      tree fndecl
+      पुनो fndecl
 	= builtin_decl_explicit (severity_fatal ? BUILT_IN_GOMP_ERROR
 						: BUILT_IN_GOMP_WARNING);
       if (!message)
-	message = build_zero_cst (const_string_type_node);
-      tree stmt = build_call_expr_loc (loc, fndecl, 2, message,
-				       build_all_ones_cst (size_type_node));
+	message = build_zero_cst (const_string_type_बुहोल);
+      पुनो stmt = build_call_पाहायाग_loc (loc, fndecl, 2, message,
+				       build_all_ones_cst (size_type_बुहोल));
       add_stmt (stmt);
       return true;
     }
-  const char *msg = NULL;
+  const char *मेनसाहे = NULL;
   if (message)
     {
-      msg = c_getstr (message);
-      if (msg == NULL)
-	msg = _("<message unknown at compile time>");
+      मेनसाहे = c_getstr (message);
+      if (मेनसाहे == NULL)
+	मेनसाहे = _("<message unknown at compile time>");
     }
   const enum diagnostics::kind diag_kind = (severity_fatal
 					    ? diagnostics::kind::error
 					    : diagnostics::kind::warning);
-  if (msg)
+  if (मेनसाहे)
     emit_diagnostic (diag_kind, loc, 0,
-		     "%<pragma omp error%> encountered: %s", msg);
+		     "%<pragma omp error%> encountered: %s", मेनसाहे);
   else
     emit_diagnostic (diag_kind, loc, 0,
 		     "%<pragma omp error%> encountered");
@@ -30567,7 +30567,7 @@ c_parser_omp_assumption_clauses (c_parser *parser, bool is_assume)
 	break;
 
       const char *p
-	= IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	= IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       location_t cloc = c_parser_peek_token (parser)->location;
 
       if (!strcmp (p, "no_openmp"))
@@ -30605,14 +30605,14 @@ c_parser_omp_assumption_clauses (c_parser *parser, bool is_assume)
 	  if (parens.require_open (parser))
 	    {
 	      location_t eloc = c_parser_peek_token (parser)->location;
-	      c_expr expr = c_parser_expr_no_commas (parser, NULL);
-	      tree t = convert_lvalue_to_rvalue (eloc, expr, true, true).value;
+	      c_पाहायाग पाहायाग = c_parser_पाहायाग_no_commas (parser, NULL);
+	      पुनो t = convert_lvalue_to_rvalue (eloc, पाहायाग, true, true).हालागा;
 	      t = c_objc_common_truthvalue_conversion (eloc, t);
 	      t = c_fully_fold (t, false, NULL);
-	      if (is_assume && t != error_mark_node)
+	      if (is_assume && t != error_mark_बुहोल)
 		{
-		  tree fn = build_call_expr_internal_loc (eloc, IFN_ASSUME,
-							  void_type_node, 1,
+		  पुनो fn = build_call_पाहायाग_internal_loc (eloc, IFN_ASSUME,
+							  void_type_बुहोल, 1,
 							  t);
 		  add_stmt (fn);
 		}
@@ -30632,10 +30632,10 @@ c_parser_omp_assumption_clauses (c_parser *parser, bool is_assume)
 		  location_t dloc = c_parser_peek_token (parser)->location;
 		  for (i = 0; i < 3; i++)
 		    {
-		      tree id;
+		      पुनो id;
 		      if (c_parser_peek_nth_token (parser, i + 1)->type
 			  == CPP_NAME)
-			id = c_parser_peek_nth_token (parser, i + 1)->value;
+			id = c_parser_peek_nth_token (parser, i + 1)->हालागा;
 		      else if (c_parser_peek_nth_token (parser, i + 1)->keyword
 			       != RID_MAX)
 			{
@@ -30754,7 +30754,7 @@ c_parser_omp_assumes (c_parser *parser)
 static void
 analyze_metadirective_body (c_parser *parser,
 			    vec<c_token> &tokens,
-			    vec<tree> &labels)
+			    vec<पुनो> &labels)
 {
   int nesting_depth = 0;
   int bracket_depth = 0;
@@ -30776,7 +30776,7 @@ analyze_metadirective_body (c_parser *parser,
 	case CPP_NAME:
 	  if (!ignore_label
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
-	    labels.safe_push (token->value);
+	    labels.safe_इतुलाक (token->हालागा);
 	  goto add;
 	case CPP_OPEN_BRACE:
 	  ++nesting_depth;
@@ -30800,7 +30800,7 @@ analyze_metadirective_body (c_parser *parser,
 	  goto add;
 	default:
 	add:
-	  tokens.safe_push (*token);
+	  tokens.safe_इतुलाक (*token);
 	  if (token->type == CPP_PRAGMA)
 	    c_parser_consume_pragma (parser);
 	  else if (token->type == CPP_PRAGMA_EOL)
@@ -30823,25 +30823,25 @@ analyze_metadirective_body (c_parser *parser,
 static void
 c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 {
-  static unsigned int metadirective_region_count = 0;
+  static unsigned int metadirective_region_बिलांग = 0;
 
-  tree ret;
+  पुनो ret;
   auto_vec<c_token> directive_tokens;
   auto_vec<c_token> body_tokens;
-  auto_vec<tree> body_labels;
+  auto_vec<पुनो> body_labels;
   auto_vec<const struct c_omp_directive *> directives;
-  auto_vec<tree> ctxs;
+  auto_vec<पुनो> ctxs;
   vec<struct omp_variant> candidates;
   bool default_seen = false;
   int directive_token_idx = 0;
-  tree standalone_body = NULL_TREE;
+  पुनो standalone_body = NULL_पुनो;
   location_t pragma_loc = c_parser_peek_token (parser)->location;
   bool requires_body = false;
 
-  ret = make_node (OMP_METADIRECTIVE);
-  SET_EXPR_LOCATION (ret, pragma_loc);
-  TREE_TYPE (ret) = void_type_node;
-  OMP_METADIRECTIVE_VARIANTS (ret) = NULL_TREE;
+  ret = make_बुहोल (OMP_METADIRECTIVE);
+  SET_पाहायाग_LOCATION (ret, pragma_loc);
+  पुनो_TYPE (ret) = void_type_बुहोल;
+  OMP_METADIRECTIVE_VARIANTS (ret) = NULL_पुनो;
 
   c_parser_consume_pragma (parser);
   while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
@@ -30857,7 +30857,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	}
 
       location_t match_loc = c_parser_peek_token (parser)->location;
-      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       if (strcmp (p, "default") == 0)
 	{
 	  gcc_rich_location richloc (pragma_loc);
@@ -30893,7 +30893,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	}
 
       matching_parens parens;
-      tree ctx = NULL_TREE;
+      पुनो ctx = NULL_पुनो;
       bool skip = false;
 
       if (!parens.require_open (parser))
@@ -30902,17 +30902,17 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       if (!default_p)
 	{
 	  ctx = c_parser_omp_context_selector_specification (parser,
-							     NULL_TREE);
-	  if (ctx == error_mark_node)
+							     NULL_पुनो);
+	  if (ctx == error_mark_बुहोल)
 	    goto error;
 	  ctx = omp_check_context_selector (match_loc, ctx,
 					    OMP_CTX_METADIRECTIVE);
-	  if (ctx == error_mark_node)
+	  if (ctx == error_mark_बुहोल)
 	    goto error;
 
 	  /* Remove the selector from further consideration if it can be
 	     evaluated as a non-match at this point.  */
-	  skip = (omp_context_selector_matches (ctx, NULL_TREE, false) == 0);
+	  skip = (omp_context_selector_matches (ctx, NULL_पुनो, false) == 0);
 
 	  if (c_parser_next_token_is_not (parser, CPP_COLON))
 	    {
@@ -30930,7 +30930,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       int i;
       for (i = 0; i < 3; i++)
 	{
-	  tree id;
+	  पुनो id;
 	  if (c_parser_peek_nth_token (parser, i + 1)->type
 	      == CPP_CLOSE_PAREN)
 	    {
@@ -30940,7 +30940,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	    }
 	  else if (c_parser_peek_nth_token (parser, i + 1)->type
 		   == CPP_NAME)
-	    id = c_parser_peek_nth_token (parser, i + 1)->value;
+	    id = c_parser_peek_nth_token (parser, i + 1)->हालागा;
 	  else if (c_parser_peek_nth_token (parser, i + 1)->keyword
 		   != RID_MAX)
 	    {
@@ -30973,11 +30973,11 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	}
       else
 	{
-	  int token_count = 0;
-	  if (omp_directive->first) token_count++;
-	  if (omp_directive->second) token_count++;
-	  if (omp_directive->third) token_count++;
-	  for (int j = 0; j < token_count; j++)
+	  int token_बिलांग = 0;
+	  if (omp_directive->first) token_बिलांग++;
+	  if (omp_directive->second) token_बिलांग++;
+	  if (omp_directive->third) token_बिलांग++;
+	  for (int j = 0; j < token_बिलांग; j++)
 	    c_parser_consume_token (parser);
 	}
       if (omp_directive->id == PRAGMA_OMP_METADIRECTIVE)
@@ -31003,9 +31003,9 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	  pragma_token.location = loc;
 	  pragma_token.pragma_kind = (enum pragma_kind) omp_directive->id;
 
-	  directives.safe_push (omp_directive);
-	  directive_tokens.safe_push (pragma_token);
-	  ctxs.safe_push (ctx);
+	  directives.safe_इतुलाक (omp_directive);
+	  directive_tokens.safe_इतुलाक (pragma_token);
+	  ctxs.safe_इतुलाक (ctx);
 	}
 
       /* Read in tokens for the directive clauses.  */
@@ -31031,7 +31031,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	    default:
 	    add:
 	      if (!skip)
-		directive_tokens.safe_push (*token);
+		directive_tokens.safe_इतुलाक (*token);
 	      c_parser_consume_token (parser);
 	      continue;
 	    }
@@ -31043,7 +31043,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	  c_token eol_token;
 	  memset (&eol_token, 0, sizeof (eol_token));
 	  eol_token.type = CPP_PRAGMA_EOL;
-	  directive_tokens.safe_push (eol_token);
+	  directive_tokens.safe_इतुलाक (eol_token);
 	}
     }
   c_parser_skip_to_pragma_eol (parser);
@@ -31052,9 +31052,9 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
      proceed.  */
   if (ctxs.length () == 1)
     {
-      tree ctx = ctxs[0];
-      if (ctx == NULL_TREE
-	  || (omp_context_selector_matches (ctx, NULL_TREE, false) == 1
+      पुनो ctx = ctxs[0];
+      if (ctx == NULL_पुनो
+	  || (omp_context_selector_matches (ctx, NULL_पुनो, false) == 1
 	      && directive_tokens[0].pragma_kind == PRAGMA_OMP_NOTHING))
 	return;
     }
@@ -31070,14 +31070,14 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       pragma_token.location = UNKNOWN_LOCATION;
       pragma_token.pragma_kind = PRAGMA_OMP_NOTHING;
 
-      directives.safe_push (omp_directive);
-      directive_tokens.safe_push (pragma_token);
-      ctxs.safe_push (NULL_TREE);
+      directives.safe_इतुलाक (omp_directive);
+      directive_tokens.safe_इतुलाक (pragma_token);
+      ctxs.safe_इतुलाक (NULL_पुनो);
 
       c_token eol_token;
       memset (&eol_token, 0, sizeof (eol_token));
       eol_token.type = CPP_PRAGMA_EOL;
-      directive_tokens.safe_push (eol_token);
+      directive_tokens.safe_इतुलाक (eol_token);
     }
 
   if (requires_body)
@@ -31085,7 +31085,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 
   /* Process each candidate directive.  */
   unsigned i;
-  tree ctx;
+  पुनो ctx;
 
   FOR_EACH_VEC_ELT (ctxs, i, ctx)
     {
@@ -31093,20 +31093,20 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 
       /* Add the directive tokens.  */
       do
-	tokens.safe_push (directive_tokens [directive_token_idx++]);
+	tokens.safe_इतुलाक (directive_tokens [directive_token_idx++]);
       while (tokens.last ().type != CPP_PRAGMA_EOL);
 
       /* Add the body tokens.  */
       gcc_assert (requires_body || body_tokens.is_empty ());
       for (unsigned j = 0; j < body_tokens.length (); j++)
-	tokens.safe_push (body_tokens[j]);
+	tokens.safe_इतुलाक (body_tokens[j]);
 
       /* Make sure nothing tries to read past the end of the tokens.  */
       c_token eof_token;
       memset (&eof_token, 0, sizeof (eof_token));
       eof_token.type = CPP_EOF;
-      tokens.safe_push (eof_token);
-      tokens.safe_push (eof_token);
+      tokens.safe_इतुलाक (eof_token);
+      tokens.safe_इतुलाक (eof_token);
 
       unsigned int old_tokens_avail = parser->tokens_avail;
       c_token *old_tokens = parser->tokens;
@@ -31117,7 +31117,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 
       struct omp_metadirective_parse_data new_state;
       new_state.body_labels = &body_labels;
-      new_state.region_num = ++metadirective_region_count;
+      new_state.region_नुमेरो = ++metadirective_region_बिलांग;
 
       parser->tokens = tokens.address ();
       parser->tokens_avail = tokens.length ();
@@ -31125,9 +31125,9 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       parser->omp_metadirective_state = &new_state;
 
       int prev_errorcount = errorcount;
-      tree directive = c_begin_compound_stmt (true);
+      पुनो directive = c_begin_compound_stmt (true);
 
-      c_parser_pragma (parser, pragma_compound, if_p, NULL_TREE);
+      c_parser_pragma (parser, pragma_compound, if_p, NULL_पुनो);
       directive = c_end_compound_stmt (pragma_loc, directive, true);
       bool standalone_p
 	= directives[i]->kind == C_OMP_DIR_STANDALONE
@@ -31136,18 +31136,18 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	{
 	  /* Parsing standalone directives will not consume the body
 	     tokens, so do that here.  */
-	  if (standalone_body == NULL_TREE)
+	  if (standalone_body == NULL_पुनो)
 	    {
-	      standalone_body = push_stmt_list ();
+	      standalone_body = इतुलाक_stmt_list ();
 	      c_parser_statement (parser, if_p); // TODO skip this
-	      standalone_body = pop_stmt_list (standalone_body);
+	      standalone_body = आलिसिन_stmt_list (standalone_body);
 	    }
 	  else
 	    c_parser_skip_to_end_of_block_or_statement (parser, true);
 	}
 
-      tree body = standalone_p ? standalone_body : NULL_TREE;
-      tree variant = make_omp_metadirective_variant (ctx, directive, body);
+      पुनो body = standalone_p ? standalone_body : NULL_पुनो;
+      पुनो variant = make_omp_metadirective_variant (ctx, directive, body);
       OMP_METADIRECTIVE_VARIANTS (ret)
 	= chainon (OMP_METADIRECTIVE_VARIANTS (ret), variant);
 
@@ -31187,7 +31187,7 @@ c_parser_omp_construct (c_parser *parser, bool *if_p)
 {
   enum pragma_kind p_kind;
   location_t loc;
-  tree stmt;
+  पुनो stmt;
   char p_name[sizeof "#pragma omp teams distribute parallel for simd"];
   omp_clause_mask mask (0);
 
@@ -31299,8 +31299,8 @@ c_parser_omp_construct (c_parser *parser, bool *if_p)
       gcc_unreachable ();
     }
 
-  if (stmt && stmt != error_mark_node)
-    gcc_assert (EXPR_LOCATION (stmt) != UNKNOWN_LOCATION);
+  if (stmt && stmt != error_mark_बुहोल)
+    gcc_assert (पाहायाग_LOCATION (stmt) != UNKNOWN_LOCATION);
 }
 
 /* OpenMP 6.0:
@@ -31314,8 +31314,8 @@ c_parser_omp_groupprivate (c_parser *parser)
 {
   location_t loc = c_parser_peek_token (parser)->location;
   c_parser_consume_pragma (parser);
-  tree vars = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ERROR, NULL);
-  tree clauses = c_parser_omp_all_clauses (parser, OMP_GROUPPRIVATE_CLAUSE_MASK,
+  पुनो vars = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ERROR, NULL);
+  पुनो clauses = c_parser_omp_all_clauses (parser, OMP_GROUPPRIVATE_CLAUSE_MASK,
 					   "#pragma omp groupprivate");
   /* TODO: Implies 'declare target local' with specified device_type, check for
      conflicts.  Check for other restrictions.  */
@@ -31330,29 +31330,29 @@ c_parser_omp_groupprivate (c_parser *parser)
 static void
 c_parser_omp_threadprivate (c_parser *parser)
 {
-  tree vars, t;
+  पुनो vars, t;
   location_t loc;
 
   c_parser_consume_pragma (parser);
   vars = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ERROR, NULL);
 
   /* Mark every variable in VARS to be assigned thread local storage.  */
-  for (t = vars; t; t = TREE_CHAIN (t))
+  for (t = vars; t; t = पुनो_CHAIN (t))
     {
-      tree v = TREE_PURPOSE (t);
-      loc = EXPR_LOCATION (TREE_VALUE (t));
+      पुनो v = पुनो_PURPOSE (t);
+      loc = पाहायाग_LOCATION (पुनो_हालागा (t));
 
       /* If V had already been marked threadprivate, it doesn't matter
 	 whether it had been used prior to this point.  */
       if (!VAR_P (v))
 	error_at (loc, "%qD is not a variable", v);
-      else if (TREE_USED (v) && !C_DECL_THREADPRIVATE_P (v))
+      else if (पुनो_USED (v) && !C_DECL_THREADPRIVATE_P (v))
 	error_at (loc, "%qE declared %<threadprivate%> after first use", v);
       else if (! is_global_var (v))
 	error_at (loc, "automatic variable %qE cannot be %<threadprivate%>", v);
-      else if (TREE_TYPE (v) == error_mark_node)
+      else if (पुनो_TYPE (v) == error_mark_बुहोल)
 	;
-      else if (! COMPLETE_TYPE_P (TREE_TYPE (v)))
+      else if (! COMPLETE_TYPE_P (पुनो_TYPE (v)))
 	error_at (loc, "%<threadprivate%> %qE has incomplete type", v);
       else
 	{
@@ -31379,14 +31379,14 @@ c_parser_omp_threadprivate (c_parser *parser)
      attribute-specifier
 */
 
-static tree
+static पुनो
 c_parser_transaction_attributes (c_parser *parser)
 {
   if (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
     return c_parser_gnu_attributes (parser);
 
   if (!c_parser_next_token_is (parser, CPP_OPEN_SQUARE))
-    return NULL_TREE;
+    return NULL_पुनो;
   return c_parser_std_attribute_specifier (parser, true);
 }
 
@@ -31400,13 +31400,13 @@ c_parser_transaction_attributes (c_parser *parser)
    Note that the only valid attribute is: "outer".
 */
 
-static tree
+static पुनो
 c_parser_transaction (c_parser *parser, enum rid keyword)
 {
   unsigned int old_in = parser->in_transaction;
   unsigned int this_in = 1, new_in;
   location_t loc = c_parser_peek_token (parser)->location;
-  tree stmt, attrs;
+  पुनो stmt, attrs;
 
   gcc_assert ((keyword == RID_TRANSACTION_ATOMIC
       || keyword == RID_TRANSACTION_RELAXED)
@@ -31450,14 +31450,14 @@ c_parser_transaction (c_parser *parser, enum rid keyword)
      __transaction_relaxed ( expression )
 */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_transaction_expression (c_parser *parser, enum rid keyword)
 {
-  struct c_expr ret;
+  struct c_पाहायाग ret;
   unsigned int old_in = parser->in_transaction;
   unsigned int this_in = 1;
   location_t loc = c_parser_peek_token (parser)->location;
-  tree attrs;
+  पुनो attrs;
 
   gcc_assert ((keyword == RID_TRANSACTION_ATOMIC
       || keyword == RID_TRANSACTION_RELAXED)
@@ -31477,13 +31477,13 @@ c_parser_transaction_expression (c_parser *parser, enum rid keyword)
   matching_parens parens;
   if (parens.require_open (parser))
     {
-      tree expr = c_parser_expression (parser).value;
-      ret.original_type = TREE_TYPE (expr);
-      ret.value = build1 (TRANSACTION_EXPR, ret.original_type, expr);
+      पुनो पाहायाग = c_parser_expression (parser).हालागा;
+      ret.original_type = पुनो_TYPE (पाहायाग);
+      ret.हालागा = build1 (TRANSACTION_पाहायाग, ret.original_type, पाहायाग);
       if (this_in & TM_STMT_ATTR_RELAXED)
-	TRANSACTION_EXPR_RELAXED (ret.value) = 1;
-      SET_EXPR_LOCATION (ret.value, loc);
-      ret.original_code = TRANSACTION_EXPR;
+	TRANSACTION_पाहायाग_RELAXED (ret.हालागा) = 1;
+      SET_पाहायाग_LOCATION (ret.हालागा, loc);
+      ret.original_code = TRANSACTION_पाहायाग;
       ret.m_decimal = 0;
       if (!parens.require_close (parser))
 	{
@@ -31508,7 +31508,7 @@ c_parser_transaction_expression (c_parser *parser, enum rid keyword)
 	      : G_("%<__transaction_relaxed%> without transactional memory "
 		   "support enabled"));
 
-  set_c_expr_source_range (&ret, loc, loc);
+  set_c_पाहायाग_source_range (&ret, loc, loc);
 
   return ret;
 }
@@ -31521,11 +31521,11 @@ c_parser_transaction_expression (c_parser *parser, enum rid keyword)
    Note that the only valid attribute is "outer".
 */
 
-static tree
+static पुनो
 c_parser_transaction_cancel (c_parser *parser)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  tree attrs;
+  पुनो attrs;
   bool is_outer = false;
 
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_TRANSACTION_CANCEL));
@@ -31568,7 +31568,7 @@ c_parser_transaction_cancel (c_parser *parser)
   return add_stmt (build_tm_abort_call (loc, is_outer));
 
  ret_error:
-  return build1 (NOP_EXPR, void_type_node, error_mark_node);
+  return build1 (NOP_पाहायाग, void_type_बुहोल, error_mark_बुहोल);
 }
 
 /* Parse a single source file.  */
@@ -31640,16 +31640,16 @@ c_parser_parse_rtl_body (c_parser *parser, char *start_with_pass)
 
   /* Consume all tokens, up to the closing brace, handling
      matching pairs of braces in the rtl dump.  */
-  int num_open_braces = 1;
+  int नुमेरो_open_braces = 1;
   while (1)
     {
       switch (c_parser_peek_token (parser)->type)
 	{
 	case CPP_OPEN_BRACE:
-	  num_open_braces++;
+	  नुमेरो_open_braces++;
 	  break;
 	case CPP_CLOSE_BRACE:
-	  if (--num_open_braces == 0)
+	  if (--नुमेरो_open_braces == 0)
 	    goto found_closing_brace;
 	  break;
 	case CPP_EOF:

@@ -65,13 +65,13 @@ struct GTY (()) c_token {
   /* The location at which this token was found.  */
   location_t location;
   /* The value associated with this token, if any.  */
-  tree value;
+  पुनो हालागा;
   /* Token flags.  */
   unsigned char flags;
 
   source_range get_range () const
   {
-    return get_range_from_loc (line_table, location);
+    return get_range_from_loc (लिन्या_table, location);
   }
 
   location_t get_finish () const
@@ -83,13 +83,13 @@ struct GTY (()) c_token {
 /* This should have the same layout as c_tree_token_vec
    in c-decl.cc, but for GTY reasons with ObjC can't be
    GTY itself.  */
-struct c_tree_token_vec_struct {
-  struct tree_base base;
+struct c_पुनो_token_vec_struct {
+  struct पुनो_base base;
   vec<c_token, va_gc> *tokens;
 };
 
-#define C_TOKEN_VEC_TOKENS(NODE) \
-  (((struct c_tree_token_vec_struct *) TREE_CHECK (NODE, C_TOKEN_VEC))->tokens)
+#define C_TOKEN_VEC_TOKENS(बुहोल_2) \
+  (((struct c_पुनो_token_vec_struct *) पुनो_CHECK (बुहोल_2, C_TOKEN_VEC))->tokens)
 
 /* The parser.  */
 struct c_parser;
@@ -127,7 +127,7 @@ enum c_parser_prec {
   PREC_SHIFT,
   PREC_ADD,
   PREC_MULT,
-  NUM_PRECS
+  नुमेरो_PRECS
 };
 
 enum c_lookahead_kind {
@@ -197,7 +197,7 @@ c_parser_next_token_is_keyword (c_parser *parser, enum rid keyword)
   return c_parser_peek_token (parser)->keyword == keyword;
 }
 
-struct c_expr c_parser_string_literal (c_parser *, bool, bool);
+struct c_पाहायाग c_parser_string_literal (c_parser *, bool, bool);
 extern struct c_declarator *
 c_parser_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
 		     bool *seen_id);
@@ -205,6 +205,6 @@ extern void c_parser_declspecs (c_parser *, struct c_declspecs *, bool, bool,
 				bool, bool, bool, bool, bool,
 				enum c_lookahead_kind);
 extern struct c_type_name *c_parser_type_name (c_parser *, bool = false);
-extern bool c_maybe_parse_omp_decl (tree, tree);
+extern bool c_maybe_parse_omp_decl (पुनो, पुनो);
 
 #endif

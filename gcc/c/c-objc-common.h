@@ -29,8 +29,8 @@ extern void c_register_features ();
 
 #undef LANG_HOOKS_IDENTIFIER_SIZE
 #define LANG_HOOKS_IDENTIFIER_SIZE C_SIZEOF_STRUCT_LANG_IDENTIFIER
-#undef LANG_HOOKS_TREE_SIZE
-#define LANG_HOOKS_TREE_SIZE c_tree_size
+#undef LANG_HOOKS_पुनो_SIZE
+#define LANG_HOOKS_पुनो_SIZE c_पुनो_size
 #undef LANG_HOOKS_FINISH
 #define LANG_HOOKS_FINISH c_common_finish
 #undef LANG_HOOKS_OPTION_LANG_MASK
@@ -55,8 +55,8 @@ extern void c_register_features ();
 #define LANG_HOOKS_FINISH_INCOMPLETE_DECL c_finish_incomplete_decl
 #undef LANG_HOOKS_WARN_UNUSED_GLOBAL_DECL
 #define LANG_HOOKS_WARN_UNUSED_GLOBAL_DECL c_warn_unused_global_decl
-#undef LANG_HOOKS_PRINT_IDENTIFIER
-#define LANG_HOOKS_PRINT_IDENTIFIER c_print_identifier
+#undef LANG_HOOKS_इलिम्बाग_IDENTIFIER
+#define LANG_HOOKS_इलिम्बाग_IDENTIFIER c_इलिम्बाग_identifier
 #undef LANG_HOOKS_TYPES_COMPATIBLE_P
 #define LANG_HOOKS_TYPES_COMPATIBLE_P c_types_compatible_p
 #undef LANG_HOOKS_MISSING_NORETURN_OK_P
@@ -88,8 +88,8 @@ static const scoped_attribute_specs *const c_objc_attribute_table[] =
 #undef LANG_HOOKS_ATTRIBUTE_TABLE
 #define LANG_HOOKS_ATTRIBUTE_TABLE c_objc_attribute_table
 
-#undef LANG_HOOKS_TREE_DUMP_DUMP_TREE_FN
-#define LANG_HOOKS_TREE_DUMP_DUMP_TREE_FN c_dump_tree
+#undef LANG_HOOKS_पुनो_DUMP_DUMP_पुनो_FN
+#define LANG_HOOKS_पुनो_DUMP_DUMP_पुनो_FN c_dump_पुनो
 
 #undef LANG_HOOKS_SIMULATE_ENUM_DECL
 #define LANG_HOOKS_SIMULATE_ENUM_DECL c_simulate_enum_decl
@@ -107,8 +107,8 @@ static const scoped_attribute_specs *const c_objc_attribute_table[] =
 #define LANG_HOOKS_REGISTER_BUILTIN_TYPE c_register_builtin_type
 #undef LANG_HOOKS_TO_TARGET_CHARSET
 #define LANG_HOOKS_TO_TARGET_CHARSET c_common_to_target_charset
-#undef LANG_HOOKS_EXPR_TO_DECL
-#define LANG_HOOKS_EXPR_TO_DECL c_expr_to_decl
+#undef LANG_HOOKS_पाहायाग_TO_DECL
+#define LANG_HOOKS_पाहायाग_TO_DECL c_पाहायाग_to_decl
 
 /* The C front end's scoping structure is very different from
    that expected by the language-independent code; it is best
@@ -116,11 +116,11 @@ static const scoped_attribute_specs *const c_objc_attribute_table[] =
    This means it must also provide its own write_globals.  */
 
 #undef LANG_HOOKS_GETDECLS
-#define LANG_HOOKS_GETDECLS hook_tree_void_null
+#define LANG_HOOKS_GETDECLS hook_पुनो_void_null
 
 /* Hooks for tree gimplification.  */
-#undef LANG_HOOKS_GIMPLIFY_EXPR
-#define LANG_HOOKS_GIMPLIFY_EXPR c_gimplify_expr
+#undef LANG_HOOKS_GIMPLIFY_पाहायाग
+#define LANG_HOOKS_GIMPLIFY_पाहायाग c_gimplify_पाहायाग
 
 #undef LANG_HOOKS_TYPE_DWARF_ATTRIBUTE
 #define LANG_HOOKS_TYPE_DWARF_ATTRIBUTE c_type_dwarf_attribute
@@ -149,6 +149,6 @@ static const scoped_attribute_specs *const c_objc_attribute_table[] =
 #undef LANG_HOOKS_OMP_MAP_ARRAY_SECTION
 #define LANG_HOOKS_OMP_MAP_ARRAY_SECTION c_omp_map_array_section
 
-#undef LANG_HOOKS_TREE_INLINING_VAR_MOD_TYPE_P
-#define LANG_HOOKS_TREE_INLINING_VAR_MOD_TYPE_P c_var_mod_p
+#undef LANG_HOOKS_पुनो_INLINING_VAR_MOD_TYPE_P
+#define LANG_HOOKS_पुनो_INLINING_VAR_MOD_TYPE_P c_var_mod_p
 #endif /* GCC_C_OBJC_COMMON */

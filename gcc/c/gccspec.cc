@@ -26,7 +26,7 @@ along with GCC; see the file COPYING3.  If not see
 /* Filter command line before processing by the gcc driver proper.  */
 void
 lang_specific_driver (struct cl_decoded_option **in_decoded_options ATTRIBUTE_UNUSED,
-		      unsigned int *in_decoded_options_count ATTRIBUTE_UNUSED,
+		      unsigned int *in_decoded_options_बिलांग ATTRIBUTE_UNUSED,
 		      int *in_added_libraries ATTRIBUTE_UNUSED)
 {
   /* Systems which use the NeXT runtime by default should arrange
@@ -47,7 +47,7 @@ lang_specific_driver (struct cl_decoded_option **in_decoded_options ATTRIBUTE_UN
   /* The argument list.  */
   struct cl_decoded_option *decoded_options;
 
-  argc = *in_decoded_options_count;
+  argc = *in_decoded_options_बिलांग;
   decoded_options = *in_decoded_options;
 
   for (i = 1; i < argc; i++)
@@ -58,7 +58,7 @@ lang_specific_driver (struct cl_decoded_option **in_decoded_options ATTRIBUTE_UN
 	case OPT_static:
 	  return;
 
-	case OPT_SPECIAL_input_file:
+	case OPT_SPECIAL_पासोक_file:
 	  {
 	    const char *file = decoded_options[i].arg;
 	    int len;
@@ -90,7 +90,7 @@ lang_specific_driver (struct cl_decoded_option **in_decoded_options ATTRIBUTE_UN
       generate_option (OPT_shared_libgcc, NULL, 1, CL_DRIVER,
 		       &new_decoded_options[i++]);
 
-      *in_decoded_options_count = i;
+      *in_decoded_options_बिलांग = i;
       *in_decoded_options = new_decoded_options;
     }
 #endif

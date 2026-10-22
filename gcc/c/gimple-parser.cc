@@ -88,11 +88,11 @@ public:
   auto_vec<gimple_parser_edge> edges;
   basic_block current_bb;
 
-  void push_edge (int, int, int, profile_probability);
+  void इतुलाक_edge (int, int, int, profile_probability);
 };
 
 void
-gimple_parser::push_edge (int src, int dest, int flags,
+gimple_parser::इतुलाक_edge (int src, int dest, int flags,
 			  profile_probability prob)
 {
   gimple_parser_edge e;
@@ -100,7 +100,7 @@ gimple_parser::push_edge (int src, int dest, int flags,
   e.dest = dest;
   e.flags = flags;
   e.probability = prob;
-  edges.safe_push (e);
+  edges.safe_इतुलाक (e);
 }
 
 
@@ -108,52 +108,52 @@ gimple_parser::push_edge (int src, int dest, int flags,
 static bool c_parser_gimple_compound_statement (gimple_parser &, gimple_seq *);
 static void c_parser_gimple_label (gimple_parser &, gimple_seq *);
 static void c_parser_gimple_statement (gimple_parser &, gimple_seq *);
-static struct c_expr c_parser_gimple_binary_expression (gimple_parser &, tree);
-static struct c_expr c_parser_gimple_unary_expression (gimple_parser &);
-static struct c_expr c_parser_gimple_postfix_expression
-			(gimple_parser &, tree = error_mark_node);
-static struct c_expr c_parser_gimple_postfix_expression_after_primary
-			(gimple_parser &, location_t, struct c_expr);
+static struct c_पाहायाग c_parser_gimple_दालावाहान_expression (gimple_parser &, पुनो);
+static struct c_पाहायाग c_parser_gimple_unary_expression (gimple_parser &);
+static struct c_पाहायाग c_parser_gimple_postfix_expression
+			(gimple_parser &, पुनो = error_mark_बुहोल);
+static struct c_पाहायाग c_parser_gimple_postfix_expression_after_primary
+			(gimple_parser &, location_t, struct c_पाहायाग);
 static void c_parser_gimple_declaration (gimple_parser &);
 static void c_parser_gimple_goto_stmt (gimple_parser &, location_t,
-				       tree, gimple_seq *);
+				       पुनो, gimple_seq *);
 static void c_parser_gimple_try_stmt (gimple_parser &, gimple_seq *);
 static void c_parser_gimple_if_stmt (gimple_parser &, gimple_seq *);
 static void c_parser_gimple_switch_stmt (gimple_parser &, gimple_seq *);
 static void c_parser_gimple_return_stmt (gimple_parser &, gimple_seq *);
-static void c_finish_gimple_return (location_t, tree);
-static tree c_parser_gimple_paren_condition (gimple_parser &);
-static void c_parser_gimple_expr_list (gimple_parser &, vec<tree> *);
+static void c_finish_gimple_return (location_t, पुनो);
+static पुनो c_parser_gimple_paren_condition (gimple_parser &);
+static void c_parser_gimple_पाहायाग_list (gimple_parser &, vec<पुनो> *);
 
 
 /* Much like parser_build_unary_op, but avoid applying default conversions.  */
 
-static c_expr
+static c_पाहायाग
 gimple_parser_build_unary_op (location_t loc,
-			      enum tree_code code, struct c_expr arg)
+			      enum पुनो_code code, struct c_पाहायाग arg)
 {
-  struct c_expr result;
+  struct c_पाहायाग result;
 
   result.original_code = code;
   result.original_type = NULL;
   result.m_decimal = 0;
 
-  if (reject_gcc_builtin (arg.value))
+  if (reject_gcc_builtin (arg.हालागा))
     {
-      result.value = error_mark_node;
+      result.हालागा = error_mark_बुहोल;
     }
   else
     {
-      result.value = build_unary_op (loc, code, arg.value, true);
+      result.हालागा = build_unary_op (loc, code, arg.हालागा, true);
 
-      if (TREE_OVERFLOW_P (result.value) && !TREE_OVERFLOW_P (arg.value))
-	overflow_warning (loc, result.value, arg.value);
+      if (पुनो_OVERFLOW_P (result.हालागा) && !पुनो_OVERFLOW_P (arg.हालागा))
+	overflow_warning (loc, result.हालागा, arg.हालागा);
     }
 
   /* We are typically called when parsing a prefix token at LOC acting on
      ARG.  Reflect this by updating the source range of the result to
      start at LOC and end at the end of ARG.  */
-  set_c_expr_source_range (&result,
+  set_c_पाहायाग_source_range (&result,
 			   loc, arg.get_finish ());
 
   return result;
@@ -163,7 +163,7 @@ gimple_parser_build_unary_op (location_t loc,
    in *INDEX.  */
 
 static bool
-c_parser_gimple_parse_bb_spec (tree val, int *index)
+c_parser_gimple_parse_bb_spec (पुनो val, int *index)
 {
   if (!startswith (IDENTIFIER_POINTER (val), "__BB"))
     return false;
@@ -174,13 +174,13 @@ c_parser_gimple_parse_bb_spec (tree val, int *index)
 
   char *pend;
   errno = 0;
-  const unsigned long number = strtoul (bb, &pend, 10);
+  const unsigned long नुमेरो_2 = strtoul (bb, &pend, 10);
   if (errno == ERANGE
       || *pend != '\0'
-      || number > INT_MAX)
+      || नुमेरो_2 > INT_MAX)
     return false;
 
-  *index = number;
+  *index = नुमेरो_2;
   return true;
 }
 
@@ -190,7 +190,7 @@ c_parser_gimple_parse_bb_spec (tree val, int *index)
 
 
 static bool
-c_parser_gimple_parse_bb_spec_edge_probability (tree val,
+c_parser_gimple_parse_bb_spec_edge_probability (पुनो val,
 						gimple_parser &parser,
 						int *index,
 						profile_probability
@@ -203,7 +203,7 @@ c_parser_gimple_parse_bb_spec_edge_probability (tree val,
       /* Parse frequency if provided.  */
       if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	{
-	  tree f;
+	  पुनो f;
 	  c_parser_consume_token (parser);
 	  if (!c_parser_next_token_is (parser, CPP_NAME))
 	    {
@@ -213,7 +213,7 @@ c_parser_gimple_parse_bb_spec_edge_probability (tree val,
 
 	  profile_quality quality;
 	  const char *v
-	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
 	  if (!parse_profile_quality (v, &quality))
 	    {
 	      c_parser_error (parser, "unknown profile quality");
@@ -224,16 +224,16 @@ c_parser_gimple_parse_bb_spec_edge_probability (tree val,
 	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 	    return false;
 
-	  if (!c_parser_next_token_is (parser, CPP_NUMBER)
-	      || (TREE_CODE (f = c_parser_peek_token (parser)->value)
+	  if (!c_parser_next_token_is (parser, CPP_नुमेरो)
+	      || (पुनो_CODE (f = c_parser_peek_token (parser)->हालागा)
 		  != INTEGER_CST))
 	    {
 	      c_parser_error (parser, "expected frequency value");
 	      return false;
 	    }
 
-	  unsigned int value = TREE_INT_CST_LOW (f);
-	  *probability = profile_probability (value, quality);
+	  unsigned int हालागा = पुनो_INT_CST_माबाबा (f);
+	  *probability = profile_probability (हालागा, quality);
 
 	  c_parser_consume_token (parser);
 	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
@@ -255,17 +255,17 @@ c_parser_gimple_parse_bb_spec_edge_probability (tree val,
 void
 c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
 			    enum c_declspec_il cdil,
-			    profile_count entry_bb_count)
+			    profile_बिलांग entry_bb_बिलांग)
 {
   gimple_parser parser (cparser);
   gimple_seq seq = NULL;
   gimple_seq body = NULL;
-  tree stmt = push_stmt_list ();
-  push_scope ();
+  पुनो stmt = इतुलाक_stmt_list ();
+  इतुलाक_scope ();
   location_t loc1 = c_parser_peek_token (parser)->location;
 
   cfun->pass_startwith = gimple_pass;
-  init_tree_ssa (cfun);
+  init_पुनो_ssa (cfun);
 
   if (cdil == cdil_gimple)
     /* While we have SSA names in the IL we do not have a CFG built yet
@@ -278,7 +278,7 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
     {
       /* We have at least cdil_gimple_cfg.  */
       gimple_register_cfg_hooks ();
-      init_empty_tree_cfg ();
+      init_empty_पुनो_cfg ();
       parser.current_bb = ENTRY_BLOCK_PTR_FOR_FN (cfun);
       /* Initialize the bare loop structure - we are going to only
          mark headers and leave the rest to fixup.  */
@@ -301,19 +301,19 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
       gimple_seq_add_stmt_without_update (&seq, ret);
     }
 
-  tree block = pop_scope ();
-  stmt = pop_stmt_list (stmt);
-  stmt = c_build_bind_expr (loc1, block, stmt);
+  पुनो block = आलिसिन_scope ();
+  stmt = आलिसिन_stmt_list (stmt);
+  stmt = c_build_bind_पाहायाग (loc1, block, stmt);
 
   block = DECL_INITIAL (current_function_decl);
-  BLOCK_SUBBLOCKS (block) = NULL_TREE;
-  BLOCK_CHAIN (block) = NULL_TREE;
-  TREE_ASM_WRITTEN (block) = 1;
+  BLOCK_SUBBLOCKS (block) = NULL_पुनो;
+  BLOCK_CHAIN (block) = NULL_पुनो;
+  पुनो_ASM_WRITTEN (block) = 1;
 
   if (cdil == cdil_gimple)
     {
-      gbind *bind_stmt = gimple_build_bind (BIND_EXPR_VARS (stmt), NULL,
-					    BIND_EXPR_BLOCK (stmt));
+      gbind *bind_stmt = gimple_build_bind (BIND_पाहायाग_VARS (stmt), NULL,
+					    BIND_पाहायाग_BLOCK (stmt));
       gimple_bind_set_body (bind_stmt, seq);
       gimple_seq_add_stmt_without_update (&body, bind_stmt);
       gimple_set_body (current_function_decl, body);
@@ -321,15 +321,15 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
   else
     {
       /* Control-flow and binds are lowered, record local decls.  */
-      for (tree var = BIND_EXPR_VARS (stmt); var; var = DECL_CHAIN (var))
+      for (पुनो var = BIND_पाहायाग_VARS (stmt); var; var = DECL_CHAIN (var))
 	if (VAR_P (var)
 	    && !DECL_EXTERNAL (var))
 	  {
 	    add_local_decl (cfun, var);
 	    /* When the middle-end re-gimplifies any expression we might
 	       run into the assertion that we've seen the decl in a BIND.  */
-	    if (!TREE_STATIC (var))
-	      DECL_SEEN_IN_BIND_EXPR_P (var) = 1;
+	    if (!पुनो_STATIC (var))
+	      DECL_SEEN_IN_BIND_पाहायाग_P (var) = 1;
 	  }
       /* We have a CFG.  Build the edges.  */
       for (unsigned i = 0; i < parser.edges.length (); ++i)
@@ -342,10 +342,10 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
       /* Add edges for case labels.  */
       basic_block bb;
       FOR_EACH_BB_FN (bb, cfun)
-	if (EDGE_COUNT (bb->succs) == 0)
+	if (EDGE_बिलांग (bb->succs) == 0)
 	  {
 	    if (gswitch *sw = safe_dyn_cast <gswitch *> (*gsi_last_bb (bb)))
-	      for (unsigned i = 0; i < gimple_switch_num_labels (sw); ++i)
+	      for (unsigned i = 0; i < gimple_switch_नुमेरो_labels (sw); ++i)
 		{
 		  basic_block label_bb = gimple_switch_label_bb (cfun, sw, i);
 		  make_edge (bb, label_bb, 0);
@@ -368,10 +368,10 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
 		  if (!gimple_call_internal_p (stmt, IFN_PHI))
 		    break;
 
-		  gphi *phi = create_phi_node (gimple_call_lhs (stmt), bb);
-		  for (unsigned i = 0; i < gimple_call_num_args (stmt); i += 2)
+		  gphi *phi = create_phi_बुहोल (gimple_call_lhs (stmt), bb);
+		  for (unsigned i = 0; i < gimple_call_नुमेरो_मगा_कातविरान (stmt); i += 2)
 		    {
-		      int srcidx = TREE_INT_CST_LOW (gimple_call_arg (stmt, i));
+		      int srcidx = पुनो_INT_CST_माबाबा (gimple_call_arg (stmt, i));
 		      edge e = find_edge (BASIC_BLOCK_FOR_FN (cfun, srcidx), bb);
 		      if (!e)
 			c_parser_error (parser, "edge not found");
@@ -386,10 +386,10 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
 	    }
 	  /* Fill SSA name gaps, putting them on the freelist and diagnose
 	     SSA names without definition.  */
-	  for (unsigned i = 1; i < num_ssa_names; ++i)
+	  for (unsigned i = 1; i < नुमेरो_ssa_names; ++i)
 	    if (!ssa_name (i))
 	      {
-		tree name = make_ssa_name_fn (cfun, integer_type_node, NULL, i);
+		पुनो name = make_ssa_name_fn (cfun, integer_type_बुहोल, NULL, i);
 		release_ssa_name_fn (cfun, name);
 	      }
 	    else if (!SSA_NAME_DEF_STMT (ssa_name (i)))
@@ -411,11 +411,11 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
 
   if (cfun->curr_properties & PROP_cfg)
     {
-      ENTRY_BLOCK_PTR_FOR_FN (cfun)->count = entry_bb_count;
+      ENTRY_BLOCK_PTR_FOR_FN (cfun)->बिलांग = entry_bb_बिलांग;
       gcov_type t = param_gimple_fe_computed_hot_bb_threshold;
       set_hot_bb_threshold (t);
-      update_max_bb_count ();
-      cgraph_node::get_create (cfun->decl);
+      update_max_bb_बिलांग ();
+      cgraph_बुहोल::get_create (cfun->decl);
       cgraph_edge::rebuild_edges ();
     }
 
@@ -423,7 +423,7 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
      of this function by zapping its body.  */
   if ((cfun->curr_properties & PROP_cfg)
       && verify_gimple_in_cfg (cfun, false, false))
-    init_empty_tree_cfg ();
+    init_empty_पुनो_cfg ();
   else if (!(cfun->curr_properties & PROP_cfg)
 	   && verify_gimple_in_seq (gimple_body (current_function_decl), false))
     gimple_set_body (current_function_decl, NULL);
@@ -494,7 +494,7 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 		c_parser_consume_token (parser);
 		if (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    tree label = c_parser_peek_token (parser)->value;
+		    पुनो label = c_parser_peek_token (parser)->हालागा;
 		    c_parser_consume_token (parser);
 		    c_parser_gimple_goto_stmt (parser, loc, label, seq);
 		    if (! c_parser_require (parser, CPP_SEMICOLON,
@@ -510,11 +510,11 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 				      "expected %<;%>"))
 		return return_p;
 	      if (cfun->curr_properties & PROP_cfg)
-		parser.push_edge (parser.current_bb->index, EXIT_BLOCK, 0,
+		parser.इतुलाक_edge (parser.current_bb->index, EXIT_BLOCK, 0,
 				  profile_probability::uninitialized ());
 	      break;
 	    default:
-	      goto expr_stmt;
+	      goto पाहायाग_stmt;
 	    }
 	  break;
 	case CPP_NAME:
@@ -525,7 +525,7 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 	    }
 	  if (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_token (parser)->id_kind == C_ID_ID
-	      && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	      && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा),
 			 "try") == 0)
 	    {
 	      c_parser_gimple_try_stmt (parser, seq);
@@ -535,25 +535,25 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 	     __BB (index, ...)  */
 	  if ((cfun->curr_properties & PROP_cfg)
 	      && !strcmp (IDENTIFIER_POINTER
-			    (c_parser_peek_token (parser)->value), "__BB"))
+			    (c_parser_peek_token (parser)->हालागा), "__BB"))
 	    {
 	      c_parser_consume_token (parser);
 	      if (! c_parser_require (parser, CPP_OPEN_PAREN,
 				      "expected %<(%>"))
 		return return_p;
-	      if (c_parser_next_token_is_not (parser, CPP_NUMBER))
+	      if (c_parser_next_token_is_not (parser, CPP_नुमेरो))
 		{
 		  c_parser_error (parser, "expected block index");
 		  return return_p;
 		}
-	      tree tnum = c_parser_peek_token (parser)->value;
-	      if (TREE_CODE (tnum) != INTEGER_CST)
+	      पुनो tnum = c_parser_peek_token (parser)->हालागा;
+	      if (पुनो_CODE (tnum) != INTEGER_CST)
 		{
 		  c_parser_error (parser, "expected block index");
 		  return return_p;
 		}
-	      int index = TREE_INT_CST_LOW (tnum);
-	      if (index < NUM_FIXED_BLOCKS
+	      int index = पुनो_INT_CST_माबाबा (tnum);
+	      if (index < नुमेरो_FIXED_BLOCKS
 		  || (index < last_basic_block_for_fn (cfun)
 		      && BASIC_BLOCK_FOR_FN (cfun, index) != NULL))
 		{
@@ -561,7 +561,7 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 		  return return_p;
 		}
 	      int is_loop_header_of = -1;
-	      profile_count bb_count = profile_count::uninitialized ();
+	      profile_बिलांग bb_बिलांग = profile_बिलांग::uninitialized ();
 	      c_parser_consume_token (parser);
 	      while (c_parser_next_token_is (parser, CPP_COMMA))
 		{
@@ -573,24 +573,24 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 		    }
 		  /* loop_header (NUM)  */
 		  if (!strcmp (IDENTIFIER_POINTER
-			         (c_parser_peek_token (parser)->value),
+			         (c_parser_peek_token (parser)->हालागा),
 			       "loop_header"))
 		    {
 		      c_parser_consume_token (parser);
 		      if (! c_parser_require (parser, CPP_OPEN_PAREN,
 					      "expected %<(%>"))
 			return return_p;
-		      tree loop_num;
-		      if (! c_parser_next_token_is (parser, CPP_NUMBER)
-			  || TREE_CODE (loop_num
-					  = c_parser_peek_token (parser)->value)
+		      पुनो loop_नुमेरो;
+		      if (! c_parser_next_token_is (parser, CPP_नुमेरो)
+			  || पुनो_CODE (loop_नुमेरो
+					  = c_parser_peek_token (parser)->हालागा)
 			       != INTEGER_CST)
 			{
 			  c_parser_error (parser, "expected loop number");
 			  return return_p;
 			}
 		      c_parser_consume_token (parser);
-		      is_loop_header_of = TREE_INT_CST_LOW (loop_num);
+		      is_loop_header_of = पुनो_INT_CST_माबाबा (loop_नुमेरो);
 		      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
 					      "expected %<)%>"))
 			return return_p;
@@ -598,9 +598,9 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 		  /* Parse profile: quality(value) */
 		  else
 		    {
-		      tree q;
+		      पुनो q;
 		      profile_quality quality;
-		      tree v = c_parser_peek_token (parser)->value;
+		      पुनो v = c_parser_peek_token (parser)->हालागा;
 		      if (!parse_profile_quality (IDENTIFIER_POINTER (v),
 						  &quality))
 			{
@@ -613,16 +613,16 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 					     "expected %<(%>"))
 			return false;
 
-		      if (!c_parser_next_token_is (parser, CPP_NUMBER)
-			  || (TREE_CODE (q = c_parser_peek_token (parser)->value)
+		      if (!c_parser_next_token_is (parser, CPP_नुमेरो)
+			  || (पुनो_CODE (q = c_parser_peek_token (parser)->हालागा)
 			      != INTEGER_CST))
 			{
 			  c_parser_error (parser, "expected count value");
 			  return false;
 			}
 
-		      bb_count
-			= profile_count::from_gcov_type (TREE_INT_CST_LOW (q),
+		      bb_बिलांग
+			= profile_बिलांग::from_gcov_type (पुनो_INT_CST_माबाबा (q),
 							 quality);
 		      c_parser_consume_token (parser);
 		      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
@@ -645,7 +645,7 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 		    {
 		      gimple_stmt_iterator gsi
 			= gsi_start_bb (parser.current_bb);
-		      gsi_insert_seq_after_without_update (&gsi, *seq,
+		      gsi_इसिंगित_seq_after_without_update (&gsi, *seq,
 							   GSI_CONTINUE_LINKING);
 		    }
 		  *seq = NULL;
@@ -665,17 +665,17 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 		last_basic_block_for_fn (cfun) = index + 1;
 	      n_basic_blocks_for_fn (cfun)++;
 	      if (parser.current_bb->index == ENTRY_BLOCK)
-		parser.push_edge (ENTRY_BLOCK, bb->index, EDGE_FALLTHRU,
+		parser.इतुलाक_edge (ENTRY_BLOCK, bb->index, EDGE_FALLTHRU,
 				  profile_probability::always ());
 
 	      /* We leave the proper setting to fixup.  */
-	      class loop *loop_father = loops_for_fn (cfun)->tree_root;
+	      class loop *loop_father = loops_for_fn (cfun)->पुनो_उगात;
 	      /* If the new block is a loop header, allocate a loop
 		 struct.  Fixup will take care of proper placement within
 		 the loop tree.  */
 	      if (is_loop_header_of != -1)
 		{
-		  if (number_of_loops (cfun) > (unsigned)is_loop_header_of
+		  if (नुमेरो_of_loops (cfun) > (unsigned)is_loop_header_of
 		      && get_loop (cfun, is_loop_header_of) != NULL)
 		    {
 		      c_parser_error (parser, "duplicate loop header");
@@ -683,25 +683,25 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 		  else
 		    {
 		      class loop *loop = alloc_loop ();
-		      loop->num = is_loop_header_of;
+		      loop->नुमेरो = is_loop_header_of;
 		      loop->header = bb;
-		      if (number_of_loops (cfun) <= (unsigned)is_loop_header_of)
+		      if (नुमेरो_of_loops (cfun) <= (unsigned)is_loop_header_of)
 			vec_safe_grow_cleared (loops_for_fn (cfun)->larray,
 					       is_loop_header_of + 1, true);
 		      (*loops_for_fn (cfun)->larray)[is_loop_header_of] = loop;
-		      flow_loop_tree_node_add (loops_for_fn (cfun)->tree_root,
+		      flow_loop_पुनो_बुहोल_add (loops_for_fn (cfun)->पुनो_उगात,
 					       loop);
 		    }
 		  loop_father = get_loop (cfun, is_loop_header_of);
 		}
 	      bb->loop_father = loop_father;
-	      bb->count = bb_count;
+	      bb->बिलांग = bb_बिलांग;
 
 	      /* Stmts now go to the new block.  */
 	      parser.current_bb = bb;
 	      break;
 	    }
-	  goto expr_stmt;
+	  goto पाहायाग_stmt;
 
 	case CPP_SEMICOLON:
 	  {
@@ -725,7 +725,7 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 	break;
 
 	default:
-expr_stmt:
+पाहायाग_stmt:
 	  c_parser_gimple_statement (parser, seq);
 	  if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
 	    c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
@@ -742,7 +742,7 @@ expr_stmt:
       else
 	{
 	  gimple_stmt_iterator gsi = gsi_start_bb (parser.current_bb);
-	  gsi_insert_seq_after_without_update (&gsi, *seq,
+	  gsi_इसिंगित_seq_after_without_update (&gsi, *seq,
 					       GSI_CONTINUE_LINKING);
 	}
       *seq = NULL;
@@ -781,22 +781,22 @@ expr_stmt:
 static void
 c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
 {
-  struct c_expr lhs, rhs;
+  struct c_पाहायाग lhs, rhs;
   gimple *assign = NULL;
   location_t loc;
-  tree arg = NULL_TREE;
-  auto_vec<tree> vargs;
+  पुनो arg = NULL_पुनो;
+  auto_vec<पुनो> vargs;
 
   lhs = c_parser_gimple_unary_expression (parser);
-  loc = EXPR_LOCATION (lhs.value);
+  loc = पाहायाग_LOCATION (lhs.हालागा);
   rhs.set_error ();
 
   /* GIMPLE call statement without LHS.  */
   if (c_parser_next_token_is (parser, CPP_SEMICOLON)
-      && TREE_CODE (lhs.value) == CALL_EXPR)
+      && पुनो_CODE (lhs.हालागा) == CALL_पाहायाग)
     {
       gimple *call;
-      call = gimple_build_call_from_tree (lhs.value, NULL);
+      call = gimple_build_call_from_पुनो (lhs.हालागा, NULL);
       gimple_seq_add_stmt_without_update (seq, call);
       gimple_set_location (call, loc);
       return;
@@ -813,7 +813,7 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
       && c_parser_peek_2nd_token (parser)->type == CPP_NAME
       && !(c_parser_peek_2nd_token (parser)->flags & PREV_WHITE)
       && strcmp ("v", IDENTIFIER_POINTER
-			(c_parser_peek_2nd_token (parser)->value)) == 0
+			(c_parser_peek_2nd_token (parser)->हालागा)) == 0
       && c_parser_peek_nth_token (parser, 3)->type == CPP_CLOSE_BRACE
       && !(c_parser_peek_nth_token (parser, 3)->flags & PREV_WHITE))
     {
@@ -834,17 +834,17 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
       /* ???  The actual type used in the cast expression is ignored as
          in GIMPLE it is encoded by the type of the LHS.  */
       rhs = c_parser_gimple_postfix_expression (parser);
-      if (lhs.value != error_mark_node
-	  && rhs.value != error_mark_node)
+      if (lhs.हालागा != error_mark_बुहोल
+	  && rhs.हालागा != error_mark_बुहोल)
 	{
-	  enum tree_code code = NOP_EXPR;
-	  if (FLOAT_TYPE_P (TREE_TYPE (lhs.value))
-	      && ! FLOAT_TYPE_P (TREE_TYPE (rhs.value)))
-	    code = FLOAT_EXPR;
-	  else if (! FLOAT_TYPE_P (TREE_TYPE (lhs.value))
-		   && FLOAT_TYPE_P (TREE_TYPE (rhs.value)))
-	    code = FIX_TRUNC_EXPR;
-	  assign = gimple_build_assign (lhs.value, code, rhs.value);
+	  enum पुनो_code code = NOP_पाहायाग;
+	  if (FLOAT_TYPE_P (पुनो_TYPE (lhs.हालागा))
+	      && ! FLOAT_TYPE_P (पुनो_TYPE (rhs.हालागा)))
+	    code = FLOAT_पाहायाग;
+	  else if (! FLOAT_TYPE_P (पुनो_TYPE (lhs.हालागा))
+		   && FLOAT_TYPE_P (पुनो_TYPE (rhs.हालागा)))
+	    code = FIX_TRUNC_पाहायाग;
+	  assign = gimple_build_assign (lhs.हालागा, code, rhs.हालागा);
 	  gimple_seq_add_stmt_without_update (seq, assign);
 	  gimple_set_location (assign, loc);
 	  return;
@@ -856,14 +856,14 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
     {
     case CPP_NAME:
       {
-	tree id = c_parser_peek_token (parser)->value;
+	पुनो id = c_parser_peek_token (parser)->हालागा;
 	if (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
-	  goto build_unary_expr;
+	  goto build_unary_पाहायाग;
 	break;
       }
     case CPP_KEYWORD:
@@ -877,11 +877,11 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
     case CPP_COMPL:
     case CPP_NOT:
     case CPP_MULT: /* pointer deref */
-    build_unary_expr:
+    build_unary_पाहायाग:
       rhs = c_parser_gimple_unary_expression (parser);
-      if (rhs.value != error_mark_node)
+      if (rhs.हालागा != error_mark_बुहोल)
 	{
-	  assign = gimple_build_assign (lhs.value, rhs.value);
+	  assign = gimple_build_assign (lhs.हालागा, rhs.हालागा);
 	  gimple_set_location (assign, loc);
 	  gimple_seq_add_stmt_without_update (seq, assign);
 	}
@@ -906,21 +906,21 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
 	  if (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
-	      arg = c_parser_peek_token (parser)->value;
+	      arg = c_parser_peek_token (parser)->हालागा;
 	      c_parser_consume_token (parser);
 	      if (c_parser_next_token_is (parser, CPP_COLON))
 		c_parser_consume_token (parser);
 	      int src_index = -1;
 	      if (!c_parser_gimple_parse_bb_spec (arg, &src_index))
 		c_parser_error (parser, "invalid source block specification");
-	      vargs.safe_push (size_int (src_index));
+	      vargs.safe_इतुलाक (size_int (src_index));
 	    }
 	  else if (c_parser_next_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
 	  else
 	    {
-	      arg = c_parser_gimple_unary_expression (parser).value;
-	      vargs.safe_push (arg);
+	      arg = c_parser_gimple_unary_expression (parser).हालागा;
+	      vargs.safe_इतुलाक (arg);
 	    }
 	}
 
@@ -929,7 +929,7 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
 
       /* Build internal function for PHI.  */
       gcall *call_stmt = gimple_build_call_internal_vec (IFN_PHI, vargs);
-      gimple_call_set_lhs (call_stmt, lhs.value);
+      gimple_call_set_lhs (call_stmt, lhs.हालागा);
       gimple_set_location (call_stmt, UNKNOWN_LOCATION);
       gimple_seq_add_stmt_without_update (seq, call_stmt);
       return;
@@ -939,48 +939,48 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
   if (c_parser_next_token_is (parser, CPP_DOT)
       || (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN
-	  && lookup_name (c_parser_peek_token (parser)->value)))
+	  && lookup_name (c_parser_peek_token (parser)->हालागा)))
     {
       rhs = c_parser_gimple_unary_expression (parser);
-      if (rhs.value != error_mark_node)
+      if (rhs.हालागा != error_mark_बुहोल)
 	{
-	  gimple *call = gimple_build_call_from_tree (rhs.value, NULL);
-	  gimple_call_set_lhs (call, lhs.value);
+	  gimple *call = gimple_build_call_from_पुनो (rhs.हालागा, NULL);
+	  gimple_call_set_lhs (call, lhs.हालागा);
 	  gimple_seq_add_stmt_without_update (seq, call);
 	  gimple_set_location (call, loc);
 	}
       return;
     }
 
-  rhs = c_parser_gimple_binary_expression (parser, TREE_TYPE (lhs.value));
-  if (lhs.value != error_mark_node
-      && rhs.value != error_mark_node)
+  rhs = c_parser_gimple_दालावाहान_expression (parser, पुनो_TYPE (lhs.हालागा));
+  if (lhs.हालागा != error_mark_बुहोल
+      && rhs.हालागा != error_mark_बुहोल)
     {
       /* If we parsed an identifier and the next token  is a '?' then parse
 	 a conditional expression.  */
-      if (SSA_VAR_P (rhs.value) && c_parser_next_token_is (parser, CPP_QUERY))
+      if (SSA_VAR_P (rhs.हालागा) && c_parser_next_token_is (parser, CPP_QUERY))
 	{
-	  struct c_expr trueval, falseval;
+	  struct c_पाहायाग trueval, falseval;
 	  c_parser_consume_token (parser);
 	  trueval = c_parser_gimple_postfix_expression (parser);
 	  falseval.set_error ();
 	  if (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    falseval = c_parser_gimple_postfix_expression (parser);
-	  if (trueval.value == error_mark_node
-	      || falseval.value == error_mark_node)
+	  if (trueval.हालागा == error_mark_बुहोल
+	      || falseval.हालागा == error_mark_बुहोल)
 	    return;
-	  rhs.value = build3_loc (loc,
-				  VECTOR_TYPE_P (TREE_TYPE (rhs.value))
-				  ? VEC_COND_EXPR : COND_EXPR,
-				  TREE_TYPE (trueval.value),
-				  rhs.value, trueval.value, falseval.value);
+	  rhs.हालागा = build3_loc (loc,
+				  VECTOR_TYPE_P (पुनो_TYPE (rhs.हालागा))
+				  ? VEC_COND_पाहायाग : COND_पाहायाग,
+				  पुनो_TYPE (trueval.हालागा),
+				  rhs.हालागा, trueval.हालागा, falseval.हालागा);
 	}
-      if (get_gimple_rhs_class (TREE_CODE (rhs.value)) == GIMPLE_INVALID_RHS)
+      if (get_gimple_rhs_class (पुनो_CODE (rhs.हालागा)) == GIMPLE_INVALID_RHS)
 	{
 	  c_parser_error (parser, "unexpected RHS for assignment");
 	  return;
 	}
-      assign = gimple_build_assign (lhs.value, rhs.value);
+      assign = gimple_build_assign (lhs.हालागा, rhs.हालागा);
       gimple_seq_add_stmt_without_update (seq, assign);
       gimple_set_location (assign, loc);
     }
@@ -988,26 +988,26 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
 }
 
 /* A mapping between an identifier to a tree code for binary operations. */
-static const std::pair<const char *, tree_code> gimple_binary_identifier_code[] =
+static const std::pair<const char *, पुनो_code> gimple_दालावाहान_identifier_code[] =
   {
-    {"__MULT_HIGHPART", MULT_HIGHPART_EXPR},
-    {"__UNLT", UNLT_EXPR},
-    {"__UNLE", UNLE_EXPR},
-    {"__UNGT", UNGT_EXPR},
-    {"__UNGE", UNGE_EXPR},
-    {"__UNEQ", UNEQ_EXPR},
-    {"__UNORDERED", UNORDERED_EXPR},
-    {"__ORDERED", ORDERED_EXPR},
-    {"__LTGT", LTGT_EXPR},
-    {"__FLOOR_DIV", FLOOR_DIV_EXPR},
-    {"__ROUND_DIV", ROUND_DIV_EXPR},
-    {"__EXACT_DIV", EXACT_DIV_EXPR},
-    {"__CEIL_DIV", CEIL_DIV_EXPR},
-    {"__FLOOR_MOD", FLOOR_MOD_EXPR},
-    {"__ROUND_MOD", ROUND_MOD_EXPR},
-    {"__CEIL_MOD", CEIL_MOD_EXPR},
-    {"__ROTATE_LEFT", LROTATE_EXPR},
-    {"__ROTATE_RIGHT", RROTATE_EXPR},
+    {"__MULT_HIGHPART", MULT_HIGHPART_पाहायाग},
+    {"__UNLT", UNLT_पाहायाग},
+    {"__UNLE", UNLE_पाहायाग},
+    {"__UNGT", UNGT_पाहायाग},
+    {"__UNGE", UNGE_पाहायाग},
+    {"__UNEQ", UNEQ_पाहायाग},
+    {"__UNORDERED", UNORDERED_पाहायाग},
+    {"__ORDERED", ORDERED_पाहायाग},
+    {"__LTGT", LTGT_पाहायाग},
+    {"__FLOOR_DIV", FLOOR_DIV_पाहायाग},
+    {"__ROUND_DIV", ROUND_DIV_पाहायाग},
+    {"__EXACT_DIV", EXACT_DIV_पाहायाग},
+    {"__CEIL_DIV", CEIL_DIV_पाहायाग},
+    {"__FLOOR_MOD", FLOOR_MOD_पाहायाग},
+    {"__ROUND_MOD", ROUND_MOD_पाहायाग},
+    {"__CEIL_MOD", CEIL_MOD_पाहायाग},
+    {"__ROTATE_LEFT", LROTATE_पाहायाग},
+    {"__ROTATE_RIGHT", RROTATE_पाहायाग},
   };
 
 /* Parse gimple binary expr.
@@ -1033,12 +1033,12 @@ static const std::pair<const char *, tree_code> gimple_binary_identifier_code[] 
 
 */
 
-static c_expr
-c_parser_gimple_binary_expression (gimple_parser &parser, tree ret_type)
+static c_पाहायाग
+c_parser_gimple_दालावाहान_expression (gimple_parser &parser, पुनो ret_type)
 {
   /* Location of the binary operator.  */
-  struct c_expr ret, lhs, rhs;
-  enum tree_code code = ERROR_MARK;
+  struct c_पाहायाग ret, lhs, rhs;
+  enum पुनो_code code = ERROR_MARK;
   ret.set_error ();
   lhs = c_parser_gimple_postfix_expression (parser, ret_type);
   if (c_parser_error (parser))
@@ -1046,58 +1046,58 @@ c_parser_gimple_binary_expression (gimple_parser &parser, tree ret_type)
   switch (c_parser_peek_token (parser)->type)
     {
     case CPP_MULT:
-      code = MULT_EXPR;
+      code = MULT_पाहायाग;
       break;
     case CPP_DIV:
-      code = TRUNC_DIV_EXPR;
+      code = TRUNC_DIV_पाहायाग;
       break;
     case CPP_MOD:
-      code = TRUNC_MOD_EXPR;
+      code = TRUNC_MOD_पाहायाग;
       break;
     case CPP_PLUS:
-      if (POINTER_TYPE_P (TREE_TYPE (lhs.value)))
-	code = POINTER_PLUS_EXPR;
+      if (POINTER_TYPE_P (पुनो_TYPE (lhs.हालागा)))
+	code = POINTER_PLUS_पाहायाग;
       else
-	code = PLUS_EXPR;
+	code = PLUS_पाहायाग;
       break;
     case CPP_MINUS:
-      if (POINTER_TYPE_P (TREE_TYPE (lhs.value)))
-	code = POINTER_DIFF_EXPR;
+      if (POINTER_TYPE_P (पुनो_TYPE (lhs.हालागा)))
+	code = POINTER_DIFF_पाहायाग;
       else
-	code = MINUS_EXPR;
+	code = MINUS_पाहायाग;
       break;
     case CPP_LSHIFT:
-      code = LSHIFT_EXPR;
+      code = LSHIFT_पाहायाग;
       break;
     case CPP_RSHIFT:
-      code = RSHIFT_EXPR;
+      code = RSHIFT_पाहायाग;
       break;
     case CPP_LESS:
-      code = LT_EXPR;
+      code = LT_पाहायाग;
       break;
     case CPP_GREATER:
-      code = GT_EXPR;
+      code = GT_पाहायाग;
       break;
     case CPP_LESS_EQ:
-      code = LE_EXPR;
+      code = LE_पाहायाग;
       break;
     case CPP_GREATER_EQ:
-      code = GE_EXPR;
+      code = GE_पाहायाग;
       break;
     case CPP_EQ_EQ:
-      code = EQ_EXPR;
+      code = EQ_पाहायाग;
       break;
     case CPP_NOT_EQ:
-      code = NE_EXPR;
+      code = NE_पाहायाग;
       break;
     case CPP_AND:
-      code = BIT_AND_EXPR;
+      code = BIT_AND_पाहायाग;
       break;
     case CPP_XOR:
-      code = BIT_XOR_EXPR;
+      code = BIT_XOR_पाहायाग;
       break;
     case CPP_OR:
-      code = BIT_IOR_EXPR;
+      code = BIT_IOR_पाहायाग;
       break;
     case CPP_AND_AND:
       c_parser_error (parser, "%<&&%> not valid in GIMPLE");
@@ -1107,8 +1107,8 @@ c_parser_gimple_binary_expression (gimple_parser &parser, tree ret_type)
       return ret;
     case CPP_NAME:
       {
-	tree id = c_parser_peek_token (parser)->value;
-	for (auto &p : gimple_binary_identifier_code)
+	पुनो id = c_parser_peek_token (parser)->हालागा;
+	for (auto &p : gimple_दालावाहान_identifier_code)
 	  {
 	    if (strcmp (IDENTIFIER_POINTER (id), p.first) == 0)
 	      {
@@ -1127,66 +1127,66 @@ c_parser_gimple_binary_expression (gimple_parser &parser, tree ret_type)
   location_t ret_loc = c_parser_peek_token (parser)->location;
   c_parser_consume_token (parser);
   rhs = c_parser_gimple_postfix_expression (parser);
-  if (lhs.value != error_mark_node && rhs.value != error_mark_node)
-    ret.value = build2_loc (ret_loc, code, ret_type, lhs.value, rhs.value);
+  if (lhs.हालागा != error_mark_बुहोल && rhs.हालागा != error_mark_बुहोल)
+    ret.हालागा = build2_loc (ret_loc, code, ret_type, lhs.हालागा, rhs.हालागा);
   return ret;
 }
 
 /* Parse a gimple parentized binary expression.  */
 
-static c_expr
-c_parser_gimple_parentized_binary_expression (gimple_parser &parser,
+static c_पाहायाग
+c_parser_gimple_parentized_दालावाहान_expression (gimple_parser &parser,
 					      location_t op_loc,
-					      tree_code code)
+					      पुनो_code code)
 {
-  struct c_expr ret;
+  struct c_पाहायाग ret;
   ret.set_error ();
 
   c_parser_consume_token (parser);
   if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
     return ret;
-  c_expr op1 = c_parser_gimple_postfix_expression (parser);
+  c_पाहायाग op1 = c_parser_gimple_postfix_expression (parser);
   if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
     return ret;
-  c_expr op2 = c_parser_gimple_postfix_expression (parser);
+  c_पाहायाग op2 = c_parser_gimple_postfix_expression (parser);
   if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
     return ret;
 
-  if (op1.value != error_mark_node && op2.value != error_mark_node)
-    ret.value = build2_loc (op_loc,
-			    code, TREE_TYPE (op1.value), op1.value, op2.value);
+  if (op1.हालागा != error_mark_बुहोल && op2.हालागा != error_mark_बुहोल)
+    ret.हालागा = build2_loc (op_loc,
+			    code, पुनो_TYPE (op1.हालागा), op1.हालागा, op2.हालागा);
   return ret;
 }
 
 /* Parse a gimple parentized binary expression.  */
 
-static c_expr
+static c_पाहायाग
 c_parser_gimple_parentized_ternary_expression (gimple_parser &parser,
 					       location_t op_loc,
-					       tree_code code)
+					       पुनो_code code)
 {
-  struct c_expr ret;
+  struct c_पाहायाग ret;
   ret.set_error ();
 
   c_parser_consume_token (parser);
   if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
     return ret;
-  c_expr op1 = c_parser_gimple_postfix_expression (parser);
+  c_पाहायाग op1 = c_parser_gimple_postfix_expression (parser);
   if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
     return ret;
-  c_expr op2 = c_parser_gimple_postfix_expression (parser);
+  c_पाहायाग op2 = c_parser_gimple_postfix_expression (parser);
   if (!c_parser_require (parser, CPP_COMMA, "expected %<)%>"))
     return ret;
-  c_expr op3 = c_parser_gimple_postfix_expression (parser);
+  c_पाहायाग op3 = c_parser_gimple_postfix_expression (parser);
   if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
     return ret;
 
-  if (op1.value != error_mark_node
-      && op2.value != error_mark_node
-      && op3.value != error_mark_node)
-    ret.value = build3_loc (op_loc,
-			    code, TREE_TYPE (op1.value),
-			    op1.value, op2.value, op3.value);
+  if (op1.हालागा != error_mark_बुहोल
+      && op2.हालागा != error_mark_बुहोल
+      && op3.हालागा != error_mark_बुहोल)
+    ret.हालागा = build3_loc (op_loc,
+			    code, पुनो_TYPE (op1.हालागा),
+			    op1.हालागा, op2.हालागा, op3.हालागा);
   return ret;
 }
 
@@ -1200,10 +1200,10 @@ c_parser_gimple_parentized_ternary_expression (gimple_parser &parser,
      & * + - ~ abs_expr
 */
 
-static c_expr
+static c_पाहायाग
 c_parser_gimple_unary_expression (gimple_parser &parser)
 {
-  struct c_expr ret, op;
+  struct c_पाहायाग ret, op;
   location_t op_loc = c_parser_peek_token (parser)->location;
   location_t finish;
   ret.set_error ();
@@ -1212,25 +1212,25 @@ c_parser_gimple_unary_expression (gimple_parser &parser)
     case CPP_AND:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      mark_exp_read (op.value);
-      return gimple_parser_build_unary_op (op_loc, ADDR_EXPR, op);
+      mark_exp_read (op.हालागा);
+      return gimple_parser_build_unary_op (op_loc, ADDR_पाहायाग, op);
     case CPP_MULT:
       {
 	c_parser_consume_token (parser);
 	op = c_parser_gimple_postfix_expression (parser);
-	if (op.value == error_mark_node)
+	if (op.हालागा == error_mark_बुहोल)
 	  return ret;
-	if (! POINTER_TYPE_P (TREE_TYPE (op.value)))
+	if (! POINTER_TYPE_P (पुनो_TYPE (op.हालागा)))
 	  {
 	    error_at (op_loc, "expected pointer as argument of unary %<*%>");
 	    return ret;
 	  }
 	finish = op.get_finish ();
 	location_t combined_loc = make_location (op_loc, op_loc, finish);
-	ret.value = build_simple_mem_ref_loc (combined_loc, op.value);
-	TREE_SIDE_EFFECTS (ret.value)
-	  = TREE_THIS_VOLATILE (ret.value)
-	  = TYPE_VOLATILE (TREE_TYPE (TREE_TYPE (op.value)));
+	ret.हालागा = build_simple_mem_ref_loc (combined_loc, op.हालागा);
+	पुनो_SIDE_EFFECTS (ret.हालागा)
+	  = पुनो_THIS_VOLATILE (ret.हालागा)
+	  = TYPE_VOLATILE (पुनो_TYPE (पुनो_TYPE (op.हालागा)));
 	ret.src_range.m_start = op_loc;
 	ret.src_range.m_finish = finish;
 	return ret;
@@ -1238,15 +1238,15 @@ c_parser_gimple_unary_expression (gimple_parser &parser)
     case CPP_PLUS:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, CONVERT_EXPR, op);
+      return gimple_parser_build_unary_op (op_loc, CONVERT_पाहायाग, op);
     case CPP_MINUS:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, NEGATE_EXPR, op);
+      return gimple_parser_build_unary_op (op_loc, NEGATE_पाहायाग, op);
     case CPP_COMPL:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, BIT_NOT_EXPR, op);
+      return gimple_parser_build_unary_op (op_loc, BIT_NOT_पाहायाग, op);
     case CPP_NOT:
       c_parser_error (parser, "%<!%> not valid in GIMPLE");
       return ret;
@@ -1256,40 +1256,40 @@ c_parser_gimple_unary_expression (gimple_parser &parser)
 	case RID_REALPART:
 	  c_parser_consume_token (parser);
 	  op = c_parser_gimple_postfix_expression (parser);
-	  return gimple_parser_build_unary_op (op_loc, REALPART_EXPR, op);
+	  return gimple_parser_build_unary_op (op_loc, REALPART_पाहायाग, op);
 	case RID_IMAGPART:
 	  c_parser_consume_token (parser);
 	  op = c_parser_gimple_postfix_expression (parser);
-	  return gimple_parser_build_unary_op (op_loc, IMAGPART_EXPR, op);
+	  return gimple_parser_build_unary_op (op_loc, IMAGPART_पाहायाग, op);
 	default:
 	  return c_parser_gimple_postfix_expression (parser);
 	}
     case CPP_NAME:
 	{
-	  tree id = c_parser_peek_token (parser)->value;
+	  पुनो id = c_parser_peek_token (parser)->हालागा;
 	  if (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0)
 	    {
 	      c_parser_consume_token (parser);
 	      op = c_parser_gimple_postfix_expression (parser);
-	      return gimple_parser_build_unary_op (op_loc, ABS_EXPR, op);
+	      return gimple_parser_build_unary_op (op_loc, ABS_पाहायाग, op);
 	    }
 	  else if (strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0)
 	    {
 	      c_parser_consume_token (parser);
 	      op = c_parser_gimple_postfix_expression (parser);
-	      return gimple_parser_build_unary_op (op_loc, ABSU_EXPR, op);
+	      return gimple_parser_build_unary_op (op_loc, ABSU_पाहायाग, op);
 	    }
 	  else if (strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0)
-	    return c_parser_gimple_parentized_binary_expression (parser,
+	    return c_parser_gimple_parentized_दालावाहान_expression (parser,
 								 op_loc,
-								 MIN_EXPR);
+								 MIN_पाहायाग);
 	  else if (strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0)
-	    return c_parser_gimple_parentized_binary_expression (parser,
+	    return c_parser_gimple_parentized_दालावाहान_expression (parser,
 								 op_loc,
-								 MAX_EXPR);
+								 MAX_पाहायाग);
 	  else if (strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
 	    return c_parser_gimple_parentized_ternary_expression
-			(parser, op_loc, VEC_PERM_EXPR);
+			(parser, op_loc, VEC_PERM_पाहायाग);
 	  else if (strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0)
 	    {
 	      /* __BIT_INSERT '(' postfix-expression, postfix-expression,
@@ -1298,26 +1298,26 @@ c_parser_gimple_unary_expression (gimple_parser &parser)
 	      c_parser_consume_token (parser);
 	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op0 = c_parser_gimple_postfix_expression (parser);
+		  c_पाहायाग op0 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op1 = c_parser_gimple_postfix_expression (parser);
+		  c_पाहायाग op1 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op2.value) != INTEGER_CST
-		      || !int_fits_type_p (op2.value, bitsizetype))
+		  c_पाहायाग op2 = c_parser_gimple_postfix_expression (parser);
+		  if (पुनो_CODE (op2.हालागा) != INTEGER_CST
+		      || !int_fits_type_p (op2.हालागा, bitsizetype))
 		    c_parser_error (parser, "expected constant offset");
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (op0.value != error_mark_node
-		      && op1.value != error_mark_node
-		      && TREE_CODE (op2.value) == INTEGER_CST)
-		    ret.value = build3_loc (loc, BIT_INSERT_EXPR,
-					    TREE_TYPE (op0.value),
-					    op0.value, op1.value,
+		  if (op0.हालागा != error_mark_बुहोल
+		      && op1.हालागा != error_mark_बुहोल
+		      && पुनो_CODE (op2.हालागा) == INTEGER_CST)
+		    ret.हालागा = build3_loc (loc, BIT_इसिंगित_पाहायाग,
+					    पुनो_TYPE (op0.हालागा),
+					    op0.हालागा, op1.हालागा,
 					    fold_convert (bitsizetype,
-							  op2.value));
+							  op2.हालागा));
 		}
 	      return ret;
 	    }
@@ -1333,7 +1333,7 @@ c_parser_gimple_unary_expression (gimple_parser &parser)
    true if ID matches a SSA name.  */
 
 static bool
-c_parser_parse_ssa_name_id (tree id, unsigned *version, unsigned *ver_offset)
+c_parser_parse_ssa_name_id (पुनो id, unsigned *version, unsigned *ver_offset)
 {
   const char *token = IDENTIFIER_POINTER (id);
   const char *var_version = strrchr (token, '_');
@@ -1351,32 +1351,32 @@ c_parser_parse_ssa_name_id (tree id, unsigned *version, unsigned *ver_offset)
 /* Get at the actual SSA name ID with VERSION starting at VER_OFFSET.
    TYPE is the type if the SSA name is being declared.  */
 
-static tree
+static पुनो
 c_parser_parse_ssa_name (gimple_parser &parser,
-			 tree id, tree type, unsigned version,
+			 पुनो id, पुनो type, unsigned version,
 			 unsigned ver_offset)
 {
-  tree name = NULL_TREE;
+  पुनो name = NULL_पुनो;
   const char *token = IDENTIFIER_POINTER (id);
 
   if (ver_offset == 0)
     {
       /* Anonymous unnamed SSA name.  */
-      if (version < num_ssa_names)
+      if (version < नुमेरो_ssa_names)
 	name = ssa_name (version);
       if (! name)
 	{
 	  if (! type)
 	    {
 	      c_parser_error (parser, "SSA name undeclared");
-	      return error_mark_node;
+	      return error_mark_बुहोल;
 	    }
 	  name = make_ssa_name_fn (cfun, type, NULL, version);
 	}
     }
   else
     {
-      if (version < num_ssa_names)
+      if (version < नुमेरो_ssa_names)
 	name = ssa_name (version);
       if (! name)
 	{
@@ -1386,19 +1386,19 @@ c_parser_parse_ssa_name (gimple_parser &parser,
 	  var_name[ver_offset] = '\0';
 	  /* lookup for parent decl.  */
 	  id = get_identifier (var_name);
-	  tree parent = lookup_name (id);
+	  पुनो parent = lookup_name (id);
 	  XDELETEVEC (var_name);
-	  if (! parent || parent == error_mark_node)
+	  if (! parent || parent == error_mark_बुहोल)
 	    {
 	      c_parser_error (parser, "base variable or SSA name undeclared");
-	      return error_mark_node;
+	      return error_mark_बुहोल;
 	    }
 	  if (!(VAR_P (parent)
-		|| TREE_CODE (parent) == PARM_DECL
-		|| TREE_CODE (parent) == RESULT_DECL))
+		|| पुनो_CODE (parent) == PARM_DECL
+		|| पुनो_CODE (parent) == RESULT_DECL))
 	    {
 	      error ("invalid base %qE for SSA name", parent);
-	      return error_mark_node;
+	      return error_mark_बुहोल;
 	    }
 	  name = make_ssa_name_fn (cfun, parent,
 				   gimple_build_nop (), version);
@@ -1413,11 +1413,11 @@ c_parser_parse_ssa_name (gimple_parser &parser,
    gimple-call-internal:
      . identifier ( gimple-argument-expression-list[opt] )  */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_gimple_call_internal (gimple_parser &parser)
 {
-  struct c_expr expr;
-  expr.set_error ();
+  struct c_पाहायाग पाहायाग;
+  पाहायाग.set_error ();
 
   gcc_assert (c_parser_next_token_is (parser, CPP_DOT));
   c_parser_consume_token (parser);
@@ -1426,40 +1426,40 @@ c_parser_gimple_call_internal (gimple_parser &parser)
       || c_parser_peek_token (parser)->id_kind != C_ID_ID)
     {
       c_parser_error (parser, "expecting internal function name");
-      return expr;
+      return पाहायाग;
     }
-  tree id = c_parser_peek_token (parser)->value;
+  पुनो id = c_parser_peek_token (parser)->हालागा;
   internal_fn ifn = lookup_internal_fn (IDENTIFIER_POINTER (id));
   c_parser_consume_token (parser);
   if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
     {
-      auto_vec<tree> exprlist;
+      auto_vec<पुनो> exprlist;
       if (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
-	c_parser_gimple_expr_list (parser, &exprlist);
+	c_parser_gimple_पाहायाग_list (parser, &exprlist);
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, "expected %<)%>");
       if (ifn == IFN_LAST)
 	error_at (loc, "unknown internal function %qE", id);
       else
 	{
-	  expr.value = build_call_expr_internal_loc_array
-	    (loc, ifn, void_type_node, exprlist.length (),
+	  पाहायाग.हालागा = build_call_पाहायाग_internal_loc_array
+	    (loc, ifn, void_type_बुहोल, exprlist.length (),
 	     exprlist.address ());
-	  expr.original_code = ERROR_MARK;
-	  expr.original_type = NULL;
-	  expr.m_decimal = 0;
+	  पाहायाग.original_code = ERROR_MARK;
+	  पाहायाग.original_type = NULL;
+	  पाहायाग.m_decimal = 0;
 	}
     }
-  return expr;
+  return पाहायाग;
 }
 
 /* Parse '<' type [',' alignment] '>' and return a type on success
    and NULL_TREE on error.  */
 
-static tree
+static पुनो
 c_parser_gimple_typespec (gimple_parser &parser)
 {
   struct c_type_name *type_name = NULL;
-  tree alignment = NULL_TREE;
+  पुनो alignment = NULL_पुनो;
   if (c_parser_require (parser, CPP_LESS, "expected %<<%>"))
     {
       type_name = c_parser_type_name (parser);
@@ -1468,17 +1468,17 @@ c_parser_gimple_typespec (gimple_parser &parser)
 	{
 	  c_parser_consume_token (parser);
 	  alignment
-	      = c_parser_gimple_postfix_expression (parser).value;
+	      = c_parser_gimple_postfix_expression (parser).हालागा;
 	}
       c_parser_skip_until_found (parser,
 				 CPP_GREATER, "expected %<>%>");
     }
   if (!type_name)
-    return NULL_TREE;
-  tree tem;
-  tree type = groktypename (type_name, &tem, NULL);
+    return NULL_पुनो;
+  पुनो tem;
+  पुनो type = groktypename (type_name, &tem, NULL);
   if (alignment)
-    type = build_aligned_type (type, tree_to_uhwi (alignment));
+    type = build_aligned_type (type, पुनो_to_uhwi (alignment));
   return type;
 }
 
@@ -1504,18 +1504,18 @@ c_parser_gimple_typespec (gimple_parser &parser)
 
 */
 
-static struct c_expr
-c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
+static struct c_पाहायाग
+c_parser_gimple_postfix_expression (gimple_parser &parser, पुनो ret_type)
 {
   location_t loc = c_parser_peek_token (parser)->location;
   source_range tok_range = c_parser_peek_token (parser)->get_range ();
-  struct c_expr expr;
-  expr.set_error ();
+  struct c_पाहायाग पाहायाग;
+  पाहायाग.set_error ();
   switch (c_parser_peek_token (parser)->type)
     {
-    case CPP_NUMBER:
-      expr.value = c_parser_peek_token (parser)->value;
-      set_c_expr_source_range (&expr, tok_range);
+    case CPP_नुमेरो:
+      पाहायाग.हालागा = c_parser_peek_token (parser)->हालागा;
+      set_c_पाहायाग_source_range (&पाहायाग, tok_range);
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
       break;
@@ -1524,8 +1524,8 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
     case CPP_CHAR32:
     case CPP_UTF8CHAR:
     case CPP_WCHAR:
-      expr.value = c_parser_peek_token (parser)->value;
-      set_c_expr_source_range (&expr, tok_range);
+      पाहायाग.हालागा = c_parser_peek_token (parser)->हालागा;
+      set_c_पाहायाग_source_range (&पाहायाग, tok_range);
       c_parser_consume_token (parser);
       break;
     case CPP_STRING:
@@ -1533,15 +1533,15 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
     case CPP_STRING32:
     case CPP_WSTRING:
     case CPP_UTF8STRING:
-      expr = c_parser_string_literal (parser, false, true);
+      पाहायाग = c_parser_string_literal (parser, false, true);
       break;
     case CPP_DOT:
-      expr = c_parser_gimple_call_internal (parser);
+      पाहायाग = c_parser_gimple_call_internal (parser);
       break;
     case CPP_NAME:
       if (c_parser_peek_token (parser)->id_kind == C_ID_ID)
 	{
-	  tree id = c_parser_peek_token (parser)->value;
+	  पुनो id = c_parser_peek_token (parser)->हालागा;
 	  if (strcmp (IDENTIFIER_POINTER (id), "__MEM") == 0)
 	    {
 	      /* __MEM '<' type-name [ ',' number ] '>'
@@ -1551,20 +1551,20 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 			   [ ',' number ':' number ] ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      struct c_expr ptr, alias_off, step, index, index2;
-	      ptr.value = error_mark_node;
-	      alias_off.value = NULL_TREE;
-	      step.value = NULL_TREE;
-	      index.value = NULL_TREE;
-	      index2.value = NULL_TREE;
+	      पुनो type = c_parser_gimple_typespec (parser);
+	      struct c_पाहायाग ptr, alias_off, step, index, index2;
+	      ptr.हालागा = error_mark_बुहोल;
+	      alias_off.हालागा = NULL_पुनो;
+	      step.हालागा = NULL_पुनो;
+	      index.हालागा = NULL_पुनो;
+	      index2.हालागा = NULL_पुनो;
 	      unsigned short clique = 0;
 	      unsigned short base = 0;
 	      bool reverse_order = false;
-	      struct c_expr ro;
+	      struct c_पाहायाग ro;
 	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  tree alias_type = NULL_TREE;
+		  पुनो alias_type = NULL_पुनो;
 		  /* Optional alias-type cast.  */
 		  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 		    {
@@ -1575,24 +1575,24 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 						 "expected %<)%>");
 		      if (alias_type_name)
 			{
-			  tree tem;
+			  पुनो tem;
 			  alias_type = groktypename (alias_type_name,
 						     &tem, NULL);
 			}
 		    }
 		  ptr = c_parser_gimple_unary_expression (parser);
-		  if (ptr.value == error_mark_node
-		      || ! POINTER_TYPE_P (TREE_TYPE (ptr.value)))
+		  if (ptr.हालागा == error_mark_बुहोल
+		      || ! POINTER_TYPE_P (पुनो_TYPE (ptr.हालागा)))
 		    {
-		      if (ptr.value != error_mark_node)
+		      if (ptr.हालागा != error_mark_बुहोल)
 			error_at (ptr.get_start (),
 				  "invalid type of %<__MEM%> operand");
 		      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 						 "expected %<)%>");
-		      return expr;
+		      return पाहायाग;
 		    }
 		  if (! alias_type)
-		    alias_type = TREE_TYPE (ptr.value);
+		    alias_type = पुनो_TYPE (ptr.हालागा);
 		  /* Optional constant offset.  */
 		  if (c_parser_next_token_is (parser, CPP_PLUS))
 		    {
@@ -1617,35 +1617,35 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 		      else
 			std::swap (index, index2);
 		    }
-		  else if (alias_off.value
-			   && TREE_CODE (alias_off.value) != INTEGER_CST)
+		  else if (alias_off.हालागा
+			   && पुनो_CODE (alias_off.हालागा) != INTEGER_CST)
 		    std::swap (alias_off, index2);
 		  if (c_parser_next_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
 		      index2 = c_parser_gimple_postfix_expression (parser);
 		    }
-		  if (alias_off.value)
+		  if (alias_off.हालागा)
 		    {
-		      if (TREE_CODE (alias_off.value) != INTEGER_CST)
+		      if (पुनो_CODE (alias_off.हालागा) != INTEGER_CST)
 			error_at (alias_off.get_start (),
 				  "expected constant offset for %<__MEM%> "
 				  "operand");
-		      alias_off.value = fold_convert (alias_type,
-						      alias_off.value);
+		      alias_off.हालागा = fold_convert (alias_type,
+						      alias_off.हालागा);
 		    }
 		  else
-		    alias_off.value = build_int_cst (alias_type, 0);
-		  if (step.value)
+		    alias_off.हालागा = build_int_cst (alias_type, 0);
+		  if (step.हालागा)
 		    {
-		      if (TREE_CODE (step.value) != INTEGER_CST)
+		      if (पुनो_CODE (step.हालागा) != INTEGER_CST)
 			error_at (step.get_start (),
 				  "expected constant step for %<__MEM%> "
 				  "operand");
 		    }
 		  if (c_parser_next_token_is (parser, CPP_COMMA))
 		    {
-		      struct c_expr cl, ba;
+		      struct c_पाहायाग cl, ba;
 		      bool has_clb = true;
 		      c_parser_consume_token (parser);
 		      cl = c_parser_gimple_postfix_expression (parser);
@@ -1653,8 +1653,8 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 			{
 			  ro = cl;
 			  unsigned HOST_WIDE_INT tmp = 0;
-			  if (!tree_fits_uhwi_p (ro.value)
-			      || (tmp = tree_to_uhwi (ro.value)) > 1)
+			  if (!पुनो_fits_uhwi_p (ro.हालागा)
+			      || (tmp = पुनो_to_uhwi (ro.हालागा)) > 1)
 			    error_at (ro.get_start (),
 				      "invalid reverse order value");
 			  reverse_order = tmp;
@@ -1671,14 +1671,14 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 					       CPP_COLON, "expected %<:%>"))
 			{
 			  ba = c_parser_gimple_postfix_expression (parser);
-			  if (!tree_fits_uhwi_p (cl.value)
-			      || !tree_fits_uhwi_p (ba.value)
-			      || compare_tree_int (cl.value,
-						   (clique = tree_to_uhwi
-								(cl.value)))
-			      || compare_tree_int (ba.value,
-						   (base = tree_to_uhwi
-								 (ba.value))))
+			  if (!पुनो_fits_uhwi_p (cl.हालागा)
+			      || !पुनो_fits_uhwi_p (ba.हालागा)
+			      || compare_पुनो_int (cl.हालागा,
+						   (clique = पुनो_to_uhwi
+								(cl.हालागा)))
+			      || compare_पुनो_int (ba.हालागा,
+						   (base = पुनो_to_uhwi
+								 (ba.हालागा))))
 			    error_at (cl.get_start (),
 				      "invalid clique/base pair");
 			}
@@ -1689,25 +1689,25 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 	      if (! type || c_parser_error (parser))
 		{
 		  c_parser_set_error (parser, false);
-		  return expr;
+		  return पाहायाग;
 		}
-	      if (index.value || step.value || index2.value)
-		expr.value = build5_loc (loc, TARGET_MEM_REF,
-					 type, ptr.value, alias_off.value,
-					 index.value, step.value, index2.value);
+	      if (index.हालागा || step.हालागा || index2.हालागा)
+		पाहायाग.हालागा = build5_loc (loc, TARGET_MEM_REF,
+					 type, ptr.हालागा, alias_off.हालागा,
+					 index.हालागा, step.हालागा, index2.हालागा);
 	      else
-		expr.value = build2_loc (loc, MEM_REF,
-					 type, ptr.value, alias_off.value);
+		पाहायाग.हालागा = build2_loc (loc, MEM_REF,
+					 type, ptr.हालागा, alias_off.हालागा);
 	      if (clique != 0)
 		{
 		  cfun->last_clique = MAX (cfun->last_clique, clique);
-		  MR_DEPENDENCE_CLIQUE (expr.value) = clique;
-		  MR_DEPENDENCE_BASE (expr.value) = base;
+		  MR_DEPENDENCE_CLIQUE (पाहायाग.हालागा) = clique;
+		  MR_DEPENDENCE_BASE (पाहायाग.हालागा) = base;
 		}
 	      if (reverse_order)
 		{
-		  if (TREE_CODE (expr.value) == MEM_REF)
-		    REF_REVERSE_STORAGE_ORDER (expr.value) = reverse_order;
+		  if (पुनो_CODE (पाहायाग.हालागा) == MEM_REF)
+		    REF_REVERSE_STORAGE_ORDER (पाहायाग.हालागा) = reverse_order;
 		  else
 		    error_at (ro.get_start (),
 			      "target mem ref cannot have reverse order");
@@ -1720,15 +1720,15 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 	                        '(' postfix-expression ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
+	      पुनो type = c_parser_gimple_typespec (parser);
 	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op = c_parser_gimple_postfix_expression (parser);
+		  c_पाहायाग op = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (type && op.value != error_mark_node)
-		    expr.value = build1_loc (loc, VIEW_CONVERT_EXPR,
-					     type, op.value);
+		  if (type && op.हालागा != error_mark_बुहोल)
+		    पाहायाग.हालागा = build1_loc (loc, VIEW_CONVERT_पाहायाग,
+					     type, op.हालागा);
 		}
 	      break;
 	    }
@@ -1738,34 +1738,34 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 	                        '(' postfix-expression, integer, integer ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
+	      पुनो type = c_parser_gimple_typespec (parser);
 	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op0 = c_parser_gimple_postfix_expression (parser);
+		  c_पाहायाग op0 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op1.value) != INTEGER_CST
-		      || !int_fits_type_p (op1.value, bitsizetype))
+		  c_पाहायाग op1 = c_parser_gimple_postfix_expression (parser);
+		  if (पुनो_CODE (op1.हालागा) != INTEGER_CST
+		      || !int_fits_type_p (op1.हालागा, bitsizetype))
 		    c_parser_error (parser, "expected constant size");
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op2.value) != INTEGER_CST
-		      || !int_fits_type_p (op2.value, bitsizetype))
+		  c_पाहायाग op2 = c_parser_gimple_postfix_expression (parser);
+		  if (पुनो_CODE (op2.हालागा) != INTEGER_CST
+		      || !int_fits_type_p (op2.हालागा, bitsizetype))
 		    c_parser_error (parser, "expected constant offset");
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
 		  if (type
-		      && op0.value != error_mark_node
-		      && TREE_CODE (op1.value) == INTEGER_CST
-		      && TREE_CODE (op2.value) == INTEGER_CST)
-		    expr.value = build3_loc (loc, BIT_FIELD_REF, type,
-					     op0.value,
+		      && op0.हालागा != error_mark_बुहोल
+		      && पुनो_CODE (op1.हालागा) == INTEGER_CST
+		      && पुनो_CODE (op2.हालागा) == INTEGER_CST)
+		    पाहायाग.हालागा = build3_loc (loc, BIT_FIELD_REF, type,
+					     op0.हालागा,
 					     fold_convert (bitsizetype,
-							   op1.value),
+							   op1.हालागा),
 					     fold_convert (bitsizetype,
-							   op2.value));
+							   op2.हालागा));
 		}
 	      break;
 	    }
@@ -1781,7 +1781,7 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 		  if (c_parser_require (parser, CPP_NAME,
 					"expected clobber kind"))
 		    {
-		      const char *kind_str = IDENTIFIER_POINTER (tok->value);
+		      const char *kind_str = IDENTIFIER_POINTER (tok->हालागा);
 		      if (strcmp (kind_str, "bos") == 0)
 			kind = CLOBBER_STORAGE_BEGIN;
 		      else if (strcmp (kind_str, "bob") == 0)
@@ -1798,18 +1798,18 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 					     "expected %<)%>");
 		}
 	      /* We infer the (redundant) type from the LHS.  */
-	      expr.value = build_clobber (ret_type, kind);
+	      पाहायाग.हालागा = build_clobber (ret_type, kind);
 	      break;
 	    }
 	  else if (strcmp (IDENTIFIER_POINTER (id), "_Literal") == 0)
 	    {
 	      /* _Literal '(' type-name ')' ( [ '-' ] constant | constructor ) */
 	      c_parser_consume_token (parser);
-	      tree type = NULL_TREE;
+	      पुनो type = NULL_पुनो;
 	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
 		  struct c_type_name *type_name = c_parser_type_name (parser);
-		  tree tem;
+		  पुनो tem;
 		  if (type_name)
 		    type = groktypename (type_name, &tem, NULL);
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
@@ -1818,7 +1818,7 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 	      if (! type)
 		{
 		  c_parser_error (parser, "invalid _Literal");
-		  return expr;
+		  return पाहायाग;
 		}
 	      if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 		{
@@ -1830,7 +1830,7 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 				      "constructor");
 		      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
 						 "expected %<}%>");
-		      return expr;
+		      return पाहायाग;
 		    }
 		  vec<constructor_elt, va_gc> *v = NULL;
 		  bool constant_p = true;
@@ -1840,17 +1840,17 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 		      vec_alloc (v, TYPE_VECTOR_SUBPARTS (type).to_constant ());
 		      do
 			{
-			  tree val
-			    = c_parser_gimple_postfix_expression (parser).value;
+			  पुनो val
+			    = c_parser_gimple_postfix_expression (parser).हालागा;
 			  if (! val
-			      || val == error_mark_node
+			      || val == error_mark_बुहोल
 			      || (! CONSTANT_CLASS_P (val)
 				  && ! SSA_VAR_P (val)))
 			    {
 			      c_parser_error (parser, "invalid _Literal");
-			      return expr;
+			      return पाहायाग;
 			    }
-			  CONSTRUCTOR_APPEND_ELT (v, NULL_TREE, val);
+			  CONSTRUCTOR_APPEND_ELT (v, NULL_पुनो, val);
 			  if (! CONSTANT_CLASS_P (val))
 			    constant_p = false;
 			  if (c_parser_next_token_is (parser, CPP_COMMA))
@@ -1864,15 +1864,15 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 					"expected %<}%>"))
 		    {
 		      if (v && constant_p)
-			expr.value = build_vector_from_ctor (type, v);
+			पाहायाग.हालागा = build_vector_from_ctor (type, v);
 		      else
-			expr.value = build_constructor (type, v);
+			पाहायाग.हालागा = build_constructor (type, v);
 		    }
 		  else
 		    {
 		      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
 						 "expected %<}%>");
-		      return expr;
+		      return पाहायाग;
 		    }
 		}
 	      else
@@ -1882,35 +1882,35 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 		    c_parser_consume_token (parser);
 		  if ((addr_p = c_parser_next_token_is (parser, CPP_AND)))
 		    c_parser_consume_token (parser);
-		  tree val = c_parser_gimple_postfix_expression (parser).value;
+		  पुनो val = c_parser_gimple_postfix_expression (parser).हालागा;
 		  if (! val
-		      || val == error_mark_node
+		      || val == error_mark_बुहोल
 		      || (!CONSTANT_CLASS_P (val) && !addr_p))
 		    {
 		      c_parser_error (parser, "invalid _Literal");
-		      return expr;
+		      return पाहायाग;
 		    }
 		  if (addr_p)
 		    {
-		      val = build1 (ADDR_EXPR, type, val);
+		      val = build1 (ADDR_पाहायाग, type, val);
 		      if (!is_gimple_invariant_address (val))
 			{
 			  c_parser_error (parser, "invalid _Literal");
-			  return expr;
+			  return पाहायाग;
 			}
 		    }
 		  if (neg_p)
 		    {
-		      val = const_unop (NEGATE_EXPR, TREE_TYPE (val), val);
+		      val = const_unop (NEGATE_पाहायाग, पुनो_TYPE (val), val);
 		      if (! val)
 			{
 			  c_parser_error (parser, "invalid _Literal");
-			  return expr;
+			  return पाहायाग;
 			}
 		    }
-		  expr.value = fold_convert (type, val);
+		  पाहायाग.हालागा = fold_convert (type, val);
 		}
-	      return expr;
+	      return पाहायाग;
 	    }
 
 	  /* SSA name.  */
@@ -1919,71 +1919,71 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 	      && c_parser_parse_ssa_name_id (id, &version, &ver_offset))
 	    {
 	      c_parser_consume_token (parser);
-	      expr.value = c_parser_parse_ssa_name (parser, id, NULL_TREE,
+	      पाहायाग.हालागा = c_parser_parse_ssa_name (parser, id, NULL_पुनो,
 						    version, ver_offset);
-	      if (expr.value == error_mark_node)
-		return expr;
-	      set_c_expr_source_range (&expr, tok_range);
+	      if (पाहायाग.हालागा == error_mark_बुहोल)
+		return पाहायाग;
+	      set_c_पाहायाग_source_range (&पाहायाग, tok_range);
 	      /* For default definition SSA names.  */
 	      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
 		  && c_parser_peek_2nd_token (parser)->type == CPP_NAME
 		  && strcmp ("D",
 			     IDENTIFIER_POINTER
-			       (c_parser_peek_2nd_token (parser)->value)) == 0
+			       (c_parser_peek_2nd_token (parser)->हालागा)) == 0
 		  && c_parser_peek_nth_token (parser, 3)->type == CPP_CLOSE_PAREN)
 		{
 		  c_parser_consume_token (parser);
 		  c_parser_consume_token (parser);
 		  c_parser_consume_token (parser);
-		  if (! SSA_NAME_IS_DEFAULT_DEF (expr.value))
+		  if (! SSA_NAME_IS_DEFAULT_DEF (पाहायाग.हालागा))
 		    {
-		      if (!SSA_NAME_VAR (expr.value))
+		      if (!SSA_NAME_VAR (पाहायाग.हालागा))
 			{
 			  error_at (loc, "anonymous SSA name cannot have"
 				    " default definition");
-			  expr.value = error_mark_node;
-			  return expr;
+			  पाहायाग.हालागा = error_mark_बुहोल;
+			  return पाहायाग;
 			}
-		      set_ssa_default_def (cfun, SSA_NAME_VAR (expr.value),
-					   expr.value);
-		      SSA_NAME_DEF_STMT (expr.value) = gimple_build_nop ();
+		      set_ssa_default_def (cfun, SSA_NAME_VAR (पाहायाग.हालागा),
+					   पाहायाग.हालागा);
+		      SSA_NAME_DEF_STMT (पाहायाग.हालागा) = gimple_build_nop ();
 		    }
 		}
 	    }
 	  else
 	    {
 	      c_parser_consume_token (parser);
-	      expr.value
+	      पाहायाग.हालागा
 		= build_external_ref (loc, id,
 				      (c_parser_peek_token (parser)->type
-				       == CPP_OPEN_PAREN), &expr.original_type);
-	      set_c_expr_source_range (&expr, tok_range);
+				       == CPP_OPEN_PAREN), &पाहायाग.original_type);
+	      set_c_पाहायाग_source_range (&पाहायाग, tok_range);
 	    }
 	  break;
 	}
       /* Fallthru.  */
     default:
       c_parser_error (parser, "expected expression");
-      expr.set_error ();
+      पाहायाग.set_error ();
       break;
     }
-  if (expr.value == error_mark_node)
-    return expr;
+  if (पाहायाग.हालागा == error_mark_बुहोल)
+    return पाहायाग;
   return c_parser_gimple_postfix_expression_after_primary
-    (parser, EXPR_LOC_OR_LOC (expr.value, loc), expr);
+    (parser, पाहायाग_LOC_OR_LOC (पाहायाग.हालागा, loc), पाहायाग);
 }
 
 /* Parse a gimple postfix expression after the initial primary or compound
    literal.  */
 
-static struct c_expr
+static struct c_पाहायाग
 c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
-						  location_t expr_loc,
-						  struct c_expr expr)
+						  location_t पाहायाग_loc,
+						  struct c_पाहायाग पाहायाग)
 {
   location_t start;
   location_t finish;
-  tree ident;
+  पुनो ident;
   location_t comp_loc;
 
   while (true)
@@ -1994,7 +1994,7 @@ c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
 	case CPP_OPEN_SQUARE:
 	  {
 	    c_parser_consume_token (parser);
-	    tree idx = c_parser_gimple_unary_expression (parser).value;
+	    पुनो idx = c_parser_gimple_unary_expression (parser).हालागा;
 
 	    if (! c_parser_require (parser, CPP_CLOSE_SQUARE, "expected %<]%>"))
 	      {
@@ -2002,37 +2002,37 @@ c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
 		break;
 	      }
 
-	    start = expr.get_start ();
+	    start = पाहायाग.get_start ();
 	    finish = c_parser_tokens_buf (parser, 0)->location;
-	    expr.value = build_array_ref (op_loc, expr.value, idx);
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
+	    पाहायाग.हालागा = build_array_ref (op_loc, पाहायाग.हालागा, idx);
+	    set_c_पाहायाग_source_range (&पाहायाग, start, finish);
+	    पाहायाग.m_decimal = 0;
 
-	    expr.original_code = ERROR_MARK;
-	    expr.original_type = NULL;
+	    पाहायाग.original_code = ERROR_MARK;
+	    पाहायाग.original_type = NULL;
 	    break;
 	  }
 	case CPP_OPEN_PAREN:
 	  {
 	    /* Function call.  */
 	    c_parser_consume_token (parser);
-	    auto_vec<tree> exprlist;
+	    auto_vec<पुनो> exprlist;
 	    if (! c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
-	      c_parser_gimple_expr_list (parser, &exprlist);
+	      c_parser_gimple_पाहायाग_list (parser, &exprlist);
 	    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				       "expected %<)%>");
-	    if (!FUNC_OR_METHOD_TYPE_P (TREE_TYPE (expr.value)))
+	    if (!FUNC_OR_METHOD_TYPE_P (पुनो_TYPE (पाहायाग.हालागा)))
 	      {
 		c_parser_error (parser, "invalid call to non-function");
-		expr.set_error ();
+		पाहायाग.set_error ();
 		break;
 	      }
-	    expr.value = build_call_array_loc
-		(expr_loc, TREE_TYPE (TREE_TYPE (expr.value)),
-		 expr.value, exprlist.length (), exprlist.address ());
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    expr.original_type = NULL;
+	    पाहायाग.हालागा = build_call_array_loc
+		(पाहायाग_loc, पुनो_TYPE (पुनो_TYPE (पाहायाग.हालागा)),
+		 पाहायाग.हालागा, exprlist.length (), exprlist.address ());
+	    पाहायाग.m_decimal = 0;
+	    पाहायाग.original_code = ERROR_MARK;
+	    पाहायाग.original_type = NULL;
 	    break;
 	  }
 	case CPP_DOT:
@@ -2042,90 +2042,90 @@ c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
 	    if (c_parser_next_token_is (parser, CPP_NAME))
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
-		ident = comp_tok->value;
+		ident = comp_tok->हालागा;
 		comp_loc = comp_tok->location;
 	      }
 	    else
 	      {
 		c_parser_error (parser, "expected identifier");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		पाहायाग.set_error ();
+		पाहायाग.original_code = ERROR_MARK;
+		पाहायाग.original_type = NULL;
+		return पाहायाग;
 	      }
-	    start = expr.get_start ();
+	    start = पाहायाग.get_start ();
 	    finish = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_consume_token (parser);
-	    expr.value = build_component_ref (op_loc, expr.value, ident,
+	    पाहायाग.हालागा = build_component_ref (op_loc, पाहायाग.हालागा, ident,
 					      comp_loc, UNKNOWN_LOCATION);
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    if (TREE_CODE (expr.value) != COMPONENT_REF)
-	      expr.original_type = NULL;
+	    set_c_पाहायाग_source_range (&पाहायाग, start, finish);
+	    पाहायाग.m_decimal = 0;
+	    पाहायाग.original_code = ERROR_MARK;
+	    if (पुनो_CODE (पाहायाग.हालागा) != COMPONENT_REF)
+	      पाहायाग.original_type = NULL;
 	    else
 	      {
 		/* Remember the original type of a bitfield.  */
-		tree field = TREE_OPERAND (expr.value, 1);
-		if (TREE_CODE (field) != FIELD_DECL)
-		  expr.original_type = NULL;
+		पुनो field = पुनो_OPERAND (पाहायाग.हालागा, 1);
+		if (पुनो_CODE (field) != FIELD_DECL)
+		  पाहायाग.original_type = NULL;
 		else
-		  expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		  पाहायाग.original_type = DECL_BIT_FIELD_TYPE (field);
 	      }
 	    break;
 	  }
 	case CPP_DEREF:
 	  {
 	    /* Structure element reference.  */
-	    if (!POINTER_TYPE_P (TREE_TYPE (expr.value)))
+	    if (!POINTER_TYPE_P (पुनो_TYPE (पाहायाग.हालागा)))
 	      {
 		c_parser_error (parser, "dereference of non-pointer");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		पाहायाग.set_error ();
+		पाहायाग.original_code = ERROR_MARK;
+		पाहायाग.original_type = NULL;
+		return पाहायाग;
 	      }
 	    c_parser_consume_token (parser);
 	    if (c_parser_next_token_is (parser, CPP_NAME))
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
-		ident = comp_tok->value;
+		ident = comp_tok->हालागा;
 		comp_loc = comp_tok->location;
 	      }
 	    else
 	      {
 		c_parser_error (parser, "expected identifier");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		पाहायाग.set_error ();
+		पाहायाग.original_code = ERROR_MARK;
+		पाहायाग.original_type = NULL;
+		return पाहायाग;
 	      }
-	    start = expr.get_start ();
+	    start = पाहायाग.get_start ();
 	    finish = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_consume_token (parser);
-	    expr.value = build_component_ref (op_loc,
+	    पाहायाग.हालागा = build_component_ref (op_loc,
 					      build_simple_mem_ref_loc
-					        (op_loc, expr.value),
+					        (op_loc, पाहायाग.हालागा),
 					      ident, comp_loc,
-					      expr.get_location ());
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    if (TREE_CODE (expr.value) != COMPONENT_REF)
-	      expr.original_type = NULL;
+					      पाहायाग.get_location ());
+	    set_c_पाहायाग_source_range (&पाहायाग, start, finish);
+	    पाहायाग.m_decimal = 0;
+	    पाहायाग.original_code = ERROR_MARK;
+	    if (पुनो_CODE (पाहायाग.हालागा) != COMPONENT_REF)
+	      पाहायाग.original_type = NULL;
 	    else
 	      {
 		/* Remember the original type of a bitfield.  */
-		tree field = TREE_OPERAND (expr.value, 1);
-		if (TREE_CODE (field) != FIELD_DECL)
-		  expr.original_type = NULL;
+		पुनो field = पुनो_OPERAND (पाहायाग.हालागा, 1);
+		if (पुनो_CODE (field) != FIELD_DECL)
+		  पाहायाग.original_type = NULL;
 		else
-		  expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		  पाहायाग.original_type = DECL_BIT_FIELD_TYPE (field);
 	      }
 	    break;
 	  }
 	default:
-	  return expr;
+	  return पाहायाग;
 	}
     }
 }
@@ -2139,17 +2139,17 @@ c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
  */
 
 static void
-c_parser_gimple_expr_list (gimple_parser &parser, vec<tree> *ret)
+c_parser_gimple_पाहायाग_list (gimple_parser &parser, vec<पुनो> *ret)
 {
-  struct c_expr expr;
+  struct c_पाहायाग पाहायाग;
 
-  expr = c_parser_gimple_unary_expression (parser);
-  ret->safe_push (expr.value);
+  पाहायाग = c_parser_gimple_unary_expression (parser);
+  ret->safe_इतुलाक (पाहायाग.हालागा);
   while (c_parser_next_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
-      expr = c_parser_gimple_unary_expression (parser);
-      ret->safe_push (expr.value);
+      पाहायाग = c_parser_gimple_unary_expression (parser);
+      ret->safe_इतुलाक (पाहायाग.हालागा);
     }
 }
 
@@ -2165,13 +2165,13 @@ c_parser_gimple_expr_list (gimple_parser &parser, vec<tree> *ret)
 static void
 c_parser_gimple_label (gimple_parser &parser, gimple_seq *seq)
 {
-  tree name = c_parser_peek_token (parser)->value;
+  पुनो name = c_parser_peek_token (parser)->हालागा;
   location_t loc1 = c_parser_peek_token (parser)->location;
   gcc_assert (c_parser_next_token_is (parser, CPP_NAME));
   c_parser_consume_token (parser);
   gcc_assert (c_parser_next_token_is (parser, CPP_COLON));
   c_parser_consume_token (parser);
-  tree label = define_label (loc1, name);
+  पुनो label = define_label (loc1, name);
   if (label)
     gimple_seq_add_stmt_without_update (seq, gimple_build_label (label));
   return;
@@ -2193,11 +2193,11 @@ c_parser_gimple_or_rtl_pass_list (c_parser *parser, c_declspecs *specs)
     return;
   c_parser_consume_token (parser);
 
-  specs->entry_bb_count = profile_count::uninitialized ();
+  specs->entry_bb_बिलांग = profile_बिलांग::uninitialized ();
   while (c_parser_next_token_is (parser, CPP_NAME))
     {
       profile_quality quality;
-      const char *op = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      const char *op = IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा);
       c_parser_consume_token (parser);
       if (! strcmp (op, "startwith"))
 	{
@@ -2209,28 +2209,28 @@ c_parser_gimple_or_rtl_pass_list (c_parser *parser, c_declspecs *specs)
 			"expected pass name");
 	      return;
 	    }
-	  pass = xstrdup (TREE_STRING_POINTER
+	  pass = xstrdup (पुनो_STRING_POINTER
 			  (c_parser_string_literal (parser, false,
-						    false).value));
+						    false).हालागा));
 	  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<(%>"))
 	    return;
 	}
       else if (parse_profile_quality (op, &quality))
 	{
-	  tree q;
+	  पुनो q;
 	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 	    return;
 
-	  if (!c_parser_next_token_is (parser, CPP_NUMBER)
-	      || (TREE_CODE (q = c_parser_peek_token (parser)->value)
+	  if (!c_parser_next_token_is (parser, CPP_नुमेरो)
+	      || (पुनो_CODE (q = c_parser_peek_token (parser)->हालागा)
 		  != INTEGER_CST))
 	    {
 	      c_parser_error (parser, "expected count value");
 	      return;
 	    }
 
-	  specs->entry_bb_count
-	    = profile_count::from_gcov_type (TREE_INT_CST_LOW (q), quality);
+	  specs->entry_bb_बिलांग
+	    = profile_बिलांग::from_gcov_type (पुनो_INT_CST_माबाबा (q), quality);
 	  c_parser_consume_token (parser);
 	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
 	    return;
@@ -2349,7 +2349,7 @@ c_parser_gimple_declaration (gimple_parser &parser)
 	  && ver_offset == 0)
 	{
 	  struct c_declarator *p = declarator;
-	  tree type = specs->type;
+	  पुनो type = specs->type;
 	  while (p->kind == cdk_pointer)
 	    {
 	      type = build_pointer_type (type);
@@ -2360,14 +2360,14 @@ c_parser_gimple_declaration (gimple_parser &parser)
 	}
       else
 	{
-	  tree postfix_attrs = NULL_TREE;
-	  tree all_prefix_attrs = specs->attrs;
+	  पुनो postfix_attrs = NULL_पुनो;
+	  पुनो all_prefix_attrs = specs->attrs;
 	  specs->attrs = NULL;
-	  tree decl = start_decl (declarator, specs, false,
+	  पुनो decl = start_decl (declarator, specs, false,
 				  chainon (postfix_attrs, all_prefix_attrs));
 	  if (decl)
-	    finish_decl (decl, UNKNOWN_LOCATION, NULL_TREE, NULL_TREE,
-			 NULL_TREE);
+	    finish_decl (decl, UNKNOWN_LOCATION, NULL_पुनो, NULL_पुनो,
+			 NULL_पुनो);
 	}
     }
 }
@@ -2376,7 +2376,7 @@ c_parser_gimple_declaration (gimple_parser &parser)
 
 static void
 c_parser_gimple_goto_stmt (gimple_parser &parser,
-			   location_t loc, tree label, gimple_seq *seq)
+			   location_t loc, पुनो label, gimple_seq *seq)
 {
   if (cfun->curr_properties & PROP_cfg)
     {
@@ -2385,12 +2385,12 @@ c_parser_gimple_goto_stmt (gimple_parser &parser,
       if (c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							  &dest_index, &prob))
 	{
-	  parser.push_edge (parser.current_bb->index, dest_index,
+	  parser.इतुलाक_edge (parser.current_bb->index, dest_index,
 			    EDGE_FALLTHRU, prob);
 	  return;
 	}
     }
-  tree decl = lookup_label_for_goto (loc, label);
+  पुनो decl = lookup_label_for_goto (loc, label);
   gimple_seq_add_stmt_without_update (seq, gimple_build_goto (decl));
 }
 
@@ -2398,23 +2398,23 @@ c_parser_gimple_goto_stmt (gimple_parser &parser,
    gimple-condition:
      ( gimple-binary-expression )    */
 
-static tree
+static पुनो
 c_parser_gimple_paren_condition (gimple_parser &parser)
 {
   if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return error_mark_node;
-  tree cond
-    = c_parser_gimple_binary_expression (parser, boolean_type_node).value;
-  if (cond != error_mark_node
+    return error_mark_बुहोल;
+  पुनो cond
+    = c_parser_gimple_दालावाहान_expression (parser, boolean_type_बुहोल).हालागा;
+  if (cond != error_mark_बुहोल
       && ! COMPARISON_CLASS_P (cond)
       && ! CONSTANT_CLASS_P (cond)
       && ! SSA_VAR_P (cond))
     {
       c_parser_error (parser, "comparison required");
-      cond = error_mark_node;
+      cond = error_mark_बुहोल;
     }
   if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return error_mark_node;
+    return error_mark_बुहोल;
   return cond;
 }
 
@@ -2438,7 +2438,7 @@ c_parser_gimple_try_stmt (gimple_parser &parser, gimple_seq *seq)
        && c_parser_peek_token (parser)->keyword == RID_AT_FINALLY)
       || (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_token (parser)->id_kind == C_ID_ID
-	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->हालागा),
 		     "finally") == 0))
     {
       gimple_seq finseq = NULL;
@@ -2478,10 +2478,10 @@ c_parser_gimple_try_stmt (gimple_parser &parser, gimple_seq *seq)
 static void
 c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  tree t_label = NULL_TREE, f_label = NULL_TREE, label;
+  पुनो t_label = NULL_पुनो, f_label = NULL_पुनो, label;
   location_t loc;
   c_parser_consume_token (parser);
-  tree cond = c_parser_gimple_paren_condition (parser);
+  पुनो cond = c_parser_gimple_paren_condition (parser);
 
   if (c_parser_next_token_is_keyword (parser, RID_GOTO))
     {
@@ -2492,15 +2492,15 @@ c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
 	  c_parser_error (parser, "expected label");
 	  return;
 	}
-      label = c_parser_peek_token (parser)->value;
+      label = c_parser_peek_token (parser)->हालागा;
       c_parser_consume_token (parser);
       int dest_index;
       profile_probability prob;
       if ((cfun->curr_properties & PROP_cfg)
 	  && c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							     &dest_index, &prob))
-	parser.push_edge (parser.current_bb->index, dest_index,
-			  EDGE_TRUE_VALUE, prob);
+	parser.इतुलाक_edge (parser.current_bb->index, dest_index,
+			  EDGE_TRUE_हालागा, prob);
       else
 	t_label = lookup_label_for_goto (loc, label);
       if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
@@ -2529,15 +2529,15 @@ c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
 	  c_parser_error (parser, "expected label");
 	  return;
 	}
-      label = c_parser_peek_token (parser)->value;
+      label = c_parser_peek_token (parser)->हालागा;
       c_parser_consume_token (parser);
       int dest_index;
       profile_probability prob;
       if ((cfun->curr_properties & PROP_cfg)
 	  && c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							     &dest_index, &prob))
-	parser.push_edge (parser.current_bb->index, dest_index,
-			  EDGE_FALSE_VALUE, prob);
+	parser.इतुलाक_edge (parser.current_bb->index, dest_index,
+			  EDGE_FALSE_हालागा, prob);
       else
 	f_label = lookup_label_for_goto (loc, label);
       if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
@@ -2549,8 +2549,8 @@ c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
       return;
     }
 
-  if (cond != error_mark_node)
-    gimple_seq_add_stmt_without_update (seq, gimple_build_cond_from_tree (cond, t_label,
+  if (cond != error_mark_बुहोल)
+    gimple_seq_add_stmt_without_update (seq, gimple_build_cond_from_पुनो (cond, t_label,
 							   f_label));
 }
 
@@ -2567,15 +2567,15 @@ c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
 static void
 c_parser_gimple_switch_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  c_expr cond_expr;
-  tree case_label, label;
-  auto_vec<tree> labels;
-  tree default_label = NULL_TREE;
+  c_पाहायाग cond_पाहायाग;
+  पुनो case_label, label;
+  auto_vec<पुनो> labels;
+  पुनो default_label = NULL_पुनो;
   c_parser_consume_token (parser);
 
   if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
     return;
-  cond_expr = c_parser_gimple_postfix_expression (parser);
+  cond_पाहायाग = c_parser_gimple_postfix_expression (parser);
   if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
     return;
 
@@ -2594,12 +2594,12 @@ c_parser_gimple_switch_stmt (gimple_parser &parser, gimple_seq *seq)
 	{
 	case RID_CASE:
 	  {
-	    c_expr exp1;
+	    c_पाहायाग exp1;
 	    location_t loc = c_parser_peek_token (parser)->location;
 	    c_parser_consume_token (parser);
 
 	    if (c_parser_next_token_is (parser, CPP_NAME)
-		|| c_parser_peek_token (parser)->type == CPP_NUMBER)
+		|| c_parser_peek_token (parser)->type == CPP_नुमेरो)
 	      exp1 = c_parser_gimple_postfix_expression (parser);
 	    else
 	      {
@@ -2612,12 +2612,12 @@ c_parser_gimple_switch_stmt (gimple_parser &parser, gimple_seq *seq)
 		c_parser_consume_token (parser);
 		if (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    label = c_parser_peek_token (parser)->value;
+		    label = c_parser_peek_token (parser)->हालागा;
 		    c_parser_consume_token (parser);
-		    tree decl = lookup_label_for_goto (loc, label);
-		    case_label = build_case_label (exp1.value, NULL_TREE,
+		    पुनो decl = lookup_label_for_goto (loc, label);
+		    case_label = build_case_label (exp1.हालागा, NULL_पुनो,
 						   decl);
-		    labels.safe_push (case_label);
+		    labels.safe_इतुलाक (case_label);
 		    if (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
 		      return;
@@ -2640,10 +2640,10 @@ c_parser_gimple_switch_stmt (gimple_parser &parser, gimple_seq *seq)
 		c_parser_consume_token (parser);
 		if (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    label = c_parser_peek_token (parser)->value;
+		    label = c_parser_peek_token (parser)->हालागा;
 		    c_parser_consume_token (parser);
-		    tree decl = lookup_label_for_goto (loc, label);
-		    default_label = build_case_label (NULL_TREE, NULL_TREE,
+		    पुनो decl = lookup_label_for_goto (loc, label);
+		    default_label = build_case_label (NULL_पुनो, NULL_पुनो,
 						      decl);
 		    if (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
@@ -2667,9 +2667,9 @@ c_parser_gimple_switch_stmt (gimple_parser &parser, gimple_seq *seq)
   if (! c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
     return;
 
-  if (cond_expr.value != error_mark_node)
+  if (cond_पाहायाग.हालागा != error_mark_बुहोल)
     {
-      gswitch *s = gimple_build_switch (cond_expr.value, default_label, labels);
+      gswitch *s = gimple_build_switch (cond_पाहायाग.हालागा, default_label, labels);
       gimple_seq_add_stmt_without_update (seq, s);
     }
 }
@@ -2684,18 +2684,18 @@ c_parser_gimple_return_stmt (gimple_parser &parser, gimple_seq *seq)
   c_parser_consume_token (parser);
   if (c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
-      c_finish_gimple_return (loc, NULL_TREE);
+      c_finish_gimple_return (loc, NULL_पुनो);
       ret = gimple_build_return (NULL);
       gimple_seq_add_stmt_without_update (seq, ret);
     }
   else
     {
       location_t xloc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_gimple_unary_expression (parser);
-      if (expr.value != error_mark_node)
+      c_पाहायाग पाहायाग = c_parser_gimple_unary_expression (parser);
+      if (पाहायाग.हालागा != error_mark_बुहोल)
 	{
-	  c_finish_gimple_return (xloc, expr.value);
-	  ret = gimple_build_return (expr.value);
+	  c_finish_gimple_return (xloc, पाहायाग.हालागा);
+	  ret = gimple_build_return (पाहायाग.हालागा);
 	  gimple_seq_add_stmt_without_update (seq, ret);
 	}
     }
@@ -2704,15 +2704,15 @@ c_parser_gimple_return_stmt (gimple_parser &parser, gimple_seq *seq)
 /* Support function for c_parser_gimple_return_stmt.  */
 
 static void
-c_finish_gimple_return (location_t loc, tree retval)
+c_finish_gimple_return (location_t loc, पुनो retval)
 {
-  tree valtype = TREE_TYPE (TREE_TYPE (current_function_decl));
+  पुनो valtype = पुनो_TYPE (पुनो_TYPE (current_function_decl));
 
   /* Use the expansion point to handle cases such as returning NULL
      in a function returning void.  */
   location_t xloc = expansion_point_location_if_in_system_header (loc);
 
-  if (TREE_THIS_VOLATILE (current_function_decl))
+  if (पुनो_THIS_VOLATILE (current_function_decl))
     warning_at (xloc, 0,
 		"function declared %<noreturn%> has a %<return%> statement");
 
@@ -2721,7 +2721,7 @@ c_finish_gimple_return (location_t loc, tree retval)
   else if (valtype == 0 || VOID_TYPE_P (valtype))
     {
       current_function_returns_null = 1;
-      if (TREE_CODE (TREE_TYPE (retval)) != VOID_TYPE)
+      if (पुनो_CODE (पुनो_TYPE (retval)) != VOID_TYPE)
 	{
 	  error_at
 	    (xloc, "%<return%> with a value, in function returning void");
@@ -2729,7 +2729,7 @@ c_finish_gimple_return (location_t loc, tree retval)
 		  "declared here");
 	}
     }
-  else if (TREE_CODE (valtype) != TREE_CODE (TREE_TYPE (retval)))
+  else if (पुनो_CODE (valtype) != पुनो_CODE (पुनो_TYPE (retval)))
     {
       error_at
 	(xloc, "invalid conversion in return statement");

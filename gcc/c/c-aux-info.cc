@@ -36,10 +36,10 @@ enum formals_style {
 static const char *data_type;
 
 static char *affix_data_type (const char *) ATTRIBUTE_MALLOC;
-static const char *gen_formal_list_for_type (tree, formals_style);
-static const char *gen_formal_list_for_func_def (tree, formals_style);
-static const char *gen_type (const char *, tree, formals_style);
-static const char *gen_decl (tree, int, formals_style);
+static const char *gen_formal_list_for_type (पुनो, formals_style);
+static const char *gen_formal_list_for_func_def (पुनो, formals_style);
+static const char *gen_type (const char *, पुनो, formals_style);
+static const char *gen_decl (पुनो, int, formals_style);
 
 /* Given a string representing an entire type or an entire declaration
    which only lacks the actual "data-type" specifier (at its left end),
@@ -102,29 +102,29 @@ affix_data_type (const char *param)
    of empty parens here.  */
 
 static const char *
-gen_formal_list_for_type (tree fntype, formals_style style)
+gen_formal_list_for_type (पुनो fntype, formals_style style)
 {
   const char *formal_list = "";
-  tree formal_type;
+  पुनो formal_type;
 
   if (style != ansi)
     return "()";
 
   formal_type = TYPE_ARG_TYPES (fntype);
-  while (formal_type && TREE_VALUE (formal_type) != void_type_node)
+  while (formal_type && पुनो_हालागा (formal_type) != void_type_बुहोल)
     {
       const char *this_type;
 
       if (*formal_list)
 	formal_list = concat (formal_list, ", ", NULL);
 
-      this_type = gen_type ("", TREE_VALUE (formal_type), ansi);
+      this_type = gen_type ("", पुनो_हालागा (formal_type), ansi);
       formal_list
 	= ((strlen (this_type))
 	   ? concat (formal_list, affix_data_type (this_type), NULL)
 	   : concat (formal_list, data_type, NULL));
 
-      formal_type = TREE_CHAIN (formal_type);
+      formal_type = पुनो_CHAIN (formal_type);
     }
 
   /* If we got to here, then we are trying to generate an ANSI style formal
@@ -197,10 +197,10 @@ gen_formal_list_for_type (tree fntype, formals_style style)
    function formal parameter list.  */
 
 static const char *
-gen_formal_list_for_func_def (tree fndecl, formals_style style)
+gen_formal_list_for_func_def (पुनो fndecl, formals_style style)
 {
   const char *formal_list = "";
-  tree formal_decl;
+  पुनो formal_decl;
 
   formal_decl = DECL_ARGUMENTS (fndecl);
   while (formal_decl)
@@ -214,13 +214,13 @@ gen_formal_list_for_func_def (tree fndecl, formals_style style)
 	formal_list = concat (formal_list, this_formal, "; ", NULL);
       else
 	formal_list = concat (formal_list, this_formal, NULL);
-      formal_decl = TREE_CHAIN (formal_decl);
+      formal_decl = पुनो_CHAIN (formal_decl);
     }
   if (style == ansi)
     {
       if (!DECL_ARGUMENTS (fndecl))
 	formal_list = concat (formal_list, "void", NULL);
-      if (stdarg_p (TREE_TYPE (fndecl)))
+      if (stdarg_p (पुनो_TYPE (fndecl)))
 	formal_list = concat (formal_list, ", ...", NULL);
     }
   if ((style == ansi) || (style == k_and_r_names))
@@ -270,16 +270,16 @@ gen_formal_list_for_func_def (tree fndecl, formals_style style)
    string onto the returned "seed".  */
 
 static const char *
-gen_type (const char *ret_val, tree t, formals_style style)
+gen_type (const char *ret_val, पुनो t, formals_style style)
 {
-  tree chain_p;
+  पुनो chain_p;
 
   /* If there is a typedef name for this type, use it.  */
-  if (TYPE_NAME (t) && TREE_CODE (TYPE_NAME (t)) == TYPE_DECL)
+  if (TYPE_NAME (t) && पुनो_CODE (TYPE_NAME (t)) == TYPE_DECL)
     data_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
   else
     {
-      switch (TREE_CODE (t))
+      switch (पुनो_CODE (t))
 	{
 	case POINTER_TYPE:
 	  if (TYPE_ATOMIC (t))
@@ -291,28 +291,28 @@ gen_type (const char *ret_val, tree t, formals_style style)
 
 	  ret_val = concat ("*", ret_val, NULL);
 
-	  if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE || TREE_CODE (TREE_TYPE (t)) == FUNCTION_TYPE)
+	  if (पुनो_CODE (पुनो_TYPE (t)) == ARRAY_TYPE || पुनो_CODE (पुनो_TYPE (t)) == FUNCTION_TYPE)
 	    ret_val = concat ("(", ret_val, ")", NULL);
 
-	  ret_val = gen_type (ret_val, TREE_TYPE (t), style);
+	  ret_val = gen_type (ret_val, पुनो_TYPE (t), style);
 
 	  return ret_val;
 
 	case ARRAY_TYPE:
-	  if (!COMPLETE_TYPE_P (t) || TREE_CODE (TYPE_SIZE (t)) != INTEGER_CST)
+	  if (!COMPLETE_TYPE_P (t) || पुनो_CODE (TYPE_SIZE (t)) != INTEGER_CST)
 	    ret_val = gen_type (concat (ret_val, "[]", NULL),
-				TREE_TYPE (t), style);
+				पुनो_TYPE (t), style);
 	  else if (int_size_in_bytes (t) == 0)
 	    ret_val = gen_type (concat (ret_val, "[0]", NULL),
-				TREE_TYPE (t), style);
+				पुनो_TYPE (t), style);
 	  else
 	    {
 	      char buff[23];
-	      sprintf (buff, "[" HOST_WIDE_INT_PRINT_DEC"]",
+	      sprintf (buff, "[" HOST_WIDE_INT_इलिम्बाग_DEC"]",
 		       int_size_in_bytes (t)
-		       / int_size_in_bytes (TREE_TYPE (t)));
+		       / int_size_in_bytes (पुनो_TYPE (t)));
 	      ret_val = gen_type (concat (ret_val, buff, NULL),
-				  TREE_TYPE (t), style);
+				  पुनो_TYPE (t), style);
 	    }
 	  break;
 
@@ -320,10 +320,10 @@ gen_type (const char *ret_val, tree t, formals_style style)
 	  ret_val = gen_type (concat (ret_val,
 				      gen_formal_list_for_type (t, style),
 				      NULL),
-			      TREE_TYPE (t), style);
+			      पुनो_TYPE (t), style);
 	  break;
 
-	case IDENTIFIER_NODE:
+	case IDENTIFIER_बुहोल:
 	  data_type = IDENTIFIER_POINTER (t);
 	  break;
 
@@ -349,7 +349,7 @@ gen_type (const char *ret_val, tree t, formals_style style)
 		{
 		  data_type = concat (data_type, gen_decl (chain_p, 0, ansi),
 				      NULL);
-		  chain_p = TREE_CHAIN (chain_p);
+		  chain_p = पुनो_CHAIN (chain_p);
 		  data_type = concat (data_type, "; ", NULL);
 		}
 	      data_type = concat ("{ ", data_type, "}", NULL);
@@ -368,7 +368,7 @@ gen_type (const char *ret_val, tree t, formals_style style)
 		{
 		  data_type = concat (data_type, gen_decl (chain_p, 0, ansi),
 				      NULL);
-		  chain_p = TREE_CHAIN (chain_p);
+		  chain_p = पुनो_CHAIN (chain_p);
 		  data_type = concat (data_type, "; ", NULL);
 		}
 	      data_type = concat ("{ ", data_type, "}", NULL);
@@ -382,12 +382,12 @@ gen_type (const char *ret_val, tree t, formals_style style)
 	  else
 	    {
 	      data_type = "";
-	      chain_p = TYPE_VALUES (t);
+	      chain_p = TYPE_मगा_हालागा (t);
 	      while (chain_p)
 		{
 		  data_type = concat (data_type,
-			IDENTIFIER_POINTER (TREE_PURPOSE (chain_p)), NULL);
-		  chain_p = TREE_CHAIN (chain_p);
+			IDENTIFIER_POINTER (पुनो_PURPOSE (chain_p)), NULL);
+		  chain_p = पुनो_CHAIN (chain_p);
 		  if (chain_p)
 		    data_type = concat (data_type, ", ", NULL);
 		}
@@ -459,7 +459,7 @@ gen_type (const char *ret_val, tree t, formals_style style)
    an attached list of DECL nodes for function formal arguments is present.  */
 
 static const char *
-gen_decl (tree decl, int is_func_definition, formals_style style)
+gen_decl (पुनो decl, int is_func_definition, formals_style style)
 {
   const char *ret_val;
 
@@ -482,9 +482,9 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
      the `type' of the entity.  Thus, for such declared entities, we have to
      generate the qualifiers here.  */
 
-  if (TREE_THIS_VOLATILE (decl))
+  if (पुनो_THIS_VOLATILE (decl))
     ret_val = concat ("volatile ", ret_val, NULL);
-  if (TREE_READONLY (decl))
+  if (पुनो_READONLY (decl))
     ret_val = concat ("const ", ret_val, NULL);
 
   data_type = "";
@@ -501,7 +501,7 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
      parameter list is considered to be a (suffix) part of the "type" of the
      function.  */
 
-  if (TREE_CODE (decl) == FUNCTION_DECL && is_func_definition)
+  if (पुनो_CODE (decl) == FUNCTION_DECL && is_func_definition)
     {
       ret_val = concat (ret_val, gen_formal_list_for_func_def (decl, ansi),
 			NULL);
@@ -513,18 +513,18 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
 	 the return-type of the function (and does not include the parameter
 	 list info).  */
 
-      ret_val = gen_type (ret_val, TREE_TYPE (TREE_TYPE (decl)), style);
+      ret_val = gen_type (ret_val, पुनो_TYPE (पुनो_TYPE (decl)), style);
     }
   else
-    ret_val = gen_type (ret_val, TREE_TYPE (decl), style);
+    ret_val = gen_type (ret_val, पुनो_TYPE (decl), style);
 
   ret_val = affix_data_type (ret_val);
 
-  if (TREE_CODE (decl) != FUNCTION_DECL && C_DECL_REGISTER (decl))
+  if (पुनो_CODE (decl) != FUNCTION_DECL && C_DECL_REGISTER (decl))
     ret_val = concat ("register ", ret_val, NULL);
-  if (TREE_PUBLIC (decl))
+  if (पुनो_PUBLIC (decl))
     ret_val = concat ("extern ", ret_val, NULL);
-  if (TREE_CODE (decl) == FUNCTION_DECL && !TREE_PUBLIC (decl))
+  if (पुनो_CODE (decl) == FUNCTION_DECL && !पुनो_PUBLIC (decl))
     ret_val = concat ("static ", ret_val, NULL);
 
   return ret_val;
@@ -537,7 +537,7 @@ extern FILE *aux_info_file;
    function definition (even the implicit ones).  */
 
 void
-gen_aux_info_record (tree fndecl, int is_definition, int is_implicit,
+gen_aux_info_record (पुनो fndecl, int is_definition, int is_implicit,
 		     int is_prototyped)
 {
   if (flag_gen_aux_info)
@@ -559,7 +559,7 @@ gen_aux_info_record (tree fndecl, int is_definition, int is_implicit,
       /* Write the actual line of auxiliary info.  */
 
       fprintf (aux_info_file, "/* %s:%d:%c%c */ %s;",
-	       xloc.file, xloc.line,
+	       xloc.file, xloc.लिन्या,
 	       (is_implicit) ? 'I' : (is_prototyped) ? 'N' : 'O',
 	       (is_definition) ? 'F' : 'C',
 	       gen_decl (fndecl, is_definition, ansi));
