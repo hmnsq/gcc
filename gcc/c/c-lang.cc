@@ -42,7 +42,7 @@ enum c_language_kind c_language = clk_c;
 #undef LANG_HOOKS_ENUM_UNDERLYING_BASE_TYPE
 #define LANG_HOOKS_ENUM_UNDERLYING_BASE_TYPE c_enum_underlying_base_type
 
-#if CHECKING_P
+#如果 CHECKING_P
 #undef LANG_HOOKS_RUN_LANG_SELFTESTS
 #define LANG_HOOKS_RUN_LANG_SELFTESTS selftest::run_c_tests
 #endif /* #if CHECKING_P */
@@ -62,7 +62,7 @@ struct lang_hooks lang_hooks = LANG_HOOKS_INITIALIZER;
 const char *
 c_get_sarif_source_language (const char *)
 {
-  return "c";
+  返回 "c";
 }
 
 /* Implement c-family hook to register language-specific features for
@@ -74,7 +74,7 @@ c_family_register_lang_features ()
   c_register_features ();
 }
 
-#if CHECKING_P
+#如果 CHECKING_P
 
 namespace selftest {
 

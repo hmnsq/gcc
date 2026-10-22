@@ -67,19 +67,19 @@ enum impl_conv {
 };
 
 /* The level of nesting inside "__alignof__".  */
-int in_alignof;
+整数 in_alignof;
 
 /* The level of nesting inside "sizeof".  */
-int in_sizeof;
+整数 in_sizeof;
 
 /* The level of nesting inside "countof".  */
-int in_countof;
+整数 in_countof;
 
 /* The level of nesting inside "typeof".  */
-int in_typeof;
+整数 in_typeof;
 
 /* The level of nesting inside "_Generic".  */
-int in_generic;
+整数 in_generic;
 
 /* True when parsing OpenMP loop expressions.  */
 bool c_in_omp_for;
@@ -94,7 +94,7 @@ location_t c_last_sizeof_loc;
 
 /* Nonzero if we might need to print a "missing braces around
    initializer" message within this initializer.  */
-static int found_missing_braces;
+static 整数 found_missing_braces;
 
 static bool require_constant_value;
 static bool require_constant_elements;
@@ -109,24 +109,24 @@ static bool function_types_compatible_p (const_tree, const_tree,
 					 struct comptypes_data *);
 static bool type_lists_compatible_p (const_tree, const_tree,
 				     struct comptypes_data *);
-static int convert_arguments (location_t, vec<location_t>, tree,
+static 整数 convert_arguments (location_t, vec<location_t>, tree,
 			      vec<tree, va_gc> *, vec<tree, va_gc> *, tree,
 			      tree);
 static tree pointer_diff (location_t, tree, tree, tree *);
 static tree convert_for_assignment (location_t, location_t, tree, tree, tree,
-				    enum impl_conv, bool, tree, tree, int,
-				    int = 0);
+				    enum impl_conv, bool, tree, tree, 整数,
+				    整数 = 0);
 static tree valid_compound_expr_initializer (tree, tree);
 static void push_string (const char *);
 static void push_member_name (tree);
-static int spelling_length (void);
+static 整数 spelling_length (void);
 static char *print_spelling (char *);
-static void warning_init (location_t, int, const char *);
+static void warning_init (location_t, 整数, const char *);
 static tree digest_init (location_t, tree, tree, tree, tree, bool, bool, bool,
 			 bool, bool, bool);
 static void output_init_element (location_t, tree, tree, bool, tree, tree, bool,
 				 bool, struct obstack *);
-static void output_pending_init_elements (int, struct obstack *);
+static void output_pending_init_elements (整数, struct obstack *);
 static bool set_designator (location_t, bool, struct obstack *);
 static void push_range_stack (tree, struct obstack *);
 static void add_pending_init (location_t, tree, tree, tree, bool,
@@ -135,7 +135,7 @@ static void set_nonincremental_init (struct obstack *);
 static void set_nonincremental_init_from_string (tree, struct obstack *);
 static tree find_init_member (tree, struct obstack *);
 static void readonly_warning (tree, enum lvalue_use);
-static int lvalue_or_else (location_t, const_tree, enum lvalue_use);
+static 整数 lvalue_or_else (location_t, const_tree, enum lvalue_use);
 static void record_maybe_used_decl (tree, bool address);
 static bool comptypes_internal (const_tree, const_tree,
 				struct comptypes_data *data);
@@ -156,10 +156,10 @@ null_pointer_constant_p (const_tree expr)
   /* An integer constant expression with the value 0, such an expression
      cast to type void*, or the predefined constant nullptr, are a null
      pointer constant.  */
-  if (expr == nullptr_node)
-    return true;
+  如果 (expr == nullptr_node)
+    返回 true;
 
-  return (TREE_CODE (expr) == INTEGER_CST
+  返回 (TREE_CODE (expr) == INTEGER_CST
 	  && !TREE_OVERFLOW (expr)
 	  && integer_zerop (expr)
 	  && (INTEGRAL_TYPE_P (type)
@@ -177,17 +177,17 @@ static tree
 note_integer_operands (tree expr)
 {
   tree ret;
-  if (TREE_CODE (expr) == INTEGER_CST && in_late_binary_op)
+  如果 (TREE_CODE (expr) == INTEGER_CST && in_late_binary_op)
     {
       ret = copy_node (expr);
       TREE_OVERFLOW (ret) = 1;
     }
-  else
+  否则
     {
       ret = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (expr), NULL_TREE, expr);
       C_MAYBE_CONST_EXPR_INT_OPERANDS (ret) = 1;
     }
-  return ret;
+  返回 ret;
 }
 
 /* Having checked whether EXPR may appear in an unevaluated part of an
@@ -198,10 +198,10 @@ note_integer_operands (tree expr)
 static inline tree
 remove_c_maybe_const_expr (tree expr)
 {
-  if (TREE_CODE (expr) == C_MAYBE_CONST_EXPR)
-    return C_MAYBE_CONST_EXPR_EXPR (expr);
-  else
-    return expr;
+  如果 (TREE_CODE (expr) == C_MAYBE_CONST_EXPR)
+    返回 C_MAYBE_CONST_EXPR_EXPR (expr);
+  否则
+    返回 expr;
 }
 
 /* This is a cache to hold if two types are seen.  */
@@ -221,15 +221,15 @@ require_complete_type (location_t loc, tree value)
 {
   tree type = TREE_TYPE (value);
 
-  if (error_operand_p (value))
-    return error_mark_node;
+  如果 (error_operand_p (value))
+    返回 error_mark_node;
 
   /* First, detect a valid value with a complete type.  */
-  if (COMPLETE_TYPE_P (type))
-    return value;
+  如果 (COMPLETE_TYPE_P (type))
+    返回 value;
 
   c_incomplete_type_error (loc, value, type);
-  return error_mark_node;
+  返回 error_mark_node;
 }
 
 /* Print an error message for invalid use of an incomplete type.
@@ -241,12 +241,12 @@ void
 c_incomplete_type_error (location_t loc, const_tree value, const_tree type)
 {
   /* Avoid duplicate error message.  */
-  if (TREE_CODE (type) == ERROR_MARK)
-    return;
+  如果 (TREE_CODE (type) == ERROR_MARK)
+    返回;
 
-  if (value != NULL_TREE && (VAR_P (value) || TREE_CODE (value) == PARM_DECL))
+  如果 (value != NULL_TREE && (VAR_P (value) || TREE_CODE (value) == PARM_DECL))
     error_at (loc, "%qD has an incomplete type %qT", value, type);
-  else
+  否则
     {
     retry:
       /* We must print an error message.  Be clever about what it says.  */
@@ -260,29 +260,29 @@ c_incomplete_type_error (location_t loc, const_tree value, const_tree type)
 
 	case VOID_TYPE:
 	  error_at (loc, "invalid use of void expression");
-	  return;
+	  返回;
 
 	case ARRAY_TYPE:
-	  if (TYPE_DOMAIN (type))
+	  如果 (TYPE_DOMAIN (type))
 	    {
-	      if (flexible_array_member_type_p (type))
+	      如果 (flexible_array_member_type_p (type))
 		{
 		  error_at (loc, "invalid use of flexible array member");
-		  return;
+		  返回;
 		}
 	      type = TREE_TYPE (type);
 	      goto retry;
 	    }
 	  error_at (loc, "invalid use of array with unspecified bounds");
-	  return;
+	  返回;
 
 	default:
 	  gcc_unreachable ();
 	}
 
-      if (TREE_CODE (TYPE_NAME (type)) == IDENTIFIER_NODE)
+      如果 (TREE_CODE (TYPE_NAME (type)) == IDENTIFIER_NODE)
 	error_at (loc, "invalid use of undefined type %qT", type);
-      else
+      否则
 	/* If this type has a typedef-name, the TYPE_NAME is a TYPE_DECL.  */
 	error_at (loc, "invalid use of incomplete typedef %qT", type);
     }
@@ -296,24 +296,24 @@ c_type_promotes_to (tree type)
 {
   tree ret = NULL_TREE;
 
-  if (TYPE_MAIN_VARIANT (type) == float_type_node)
+  如果 (TYPE_MAIN_VARIANT (type) == float_type_node)
     ret = double_type_node;
-  else if (c_promoting_integer_type_p (type))
+  否则 如果 (c_promoting_integer_type_p (type))
     {
       /* Preserve unsignedness if not really getting any wider.  */
-      if (TYPE_UNSIGNED (type)
+      如果 (TYPE_UNSIGNED (type)
 	  && (TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_node)))
 	ret = unsigned_type_node;
-      else
+      否则
 	ret = integer_type_node;
     }
 
-  if (ret != NULL_TREE)
-    return (TYPE_ATOMIC (type)
+  如果 (ret != NULL_TREE)
+    返回 (TYPE_ATOMIC (type)
 	    ? c_build_qualified_type (ret, TYPE_QUAL_ATOMIC)
 	    : ret);
 
-  return type;
+  返回 type;
 }
 
 /* Return true if between two named address spaces, whether there is a superset
@@ -323,23 +323,23 @@ c_type_promotes_to (tree type)
 static bool
 addr_space_superset (addr_space_t as1, addr_space_t as2, addr_space_t *common)
 {
-  if (as1 == as2)
+  如果 (as1 == as2)
     {
       *common = as1;
-      return true;
+      返回 true;
     }
-  else if (targetm.addr_space.subset_p (as1, as2))
+  否则 如果 (targetm.addr_space.subset_p (as1, as2))
     {
       *common = as2;
-      return true;
+      返回 true;
     }
-  else if (targetm.addr_space.subset_p (as2, as1))
+  否则 如果 (targetm.addr_space.subset_p (as2, as1))
     {
       *common = as1;
-      return true;
+      返回 true;
     }
-  else
-    return false;
+  否则
+    返回 false;
 }
 
 /* Return a variant of TYPE which has all the type qualifiers of LIKE
@@ -354,14 +354,14 @@ qualify_type (tree type, tree like)
 
   /* If the two named address spaces are different, determine the common
      superset address space.  If there isn't one, raise an error.  */
-  if (!addr_space_superset (as_type, as_like, &as_common))
+  如果 (!addr_space_superset (as_type, as_like, &as_common))
     {
       as_common = as_type;
       error ("%qT and %qT are in disjoint named address spaces",
 	     type, like);
     }
 
-  return c_build_qualified_type (type,
+  返回 c_build_qualified_type (type,
 				 TYPE_QUALS_NO_ADDR_SPACE (type)
 				 | TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (like)
 				 | ENCODE_QUAL_ADDR_SPACE (as_common));
@@ -384,14 +384,14 @@ c_verify_type (tree type)
     case ARRAY_TYPE:
       /* Pointer, array, functions are variably modified if and only if the
 	 target, element, return type is variably modified.  */
-      if (!TYPE_STRUCTURAL_EQUALITY_P (type)
+      如果 (!TYPE_STRUCTURAL_EQUALITY_P (type)
 	  && (C_TYPE_VARIABLY_MODIFIED (type)
 	      != C_TYPE_VARIABLY_MODIFIED (TREE_TYPE (type))))
-	return false;
+	返回 false;
       /* If the target type is structural equality, the type should also. */
-      if (!TYPE_STRUCTURAL_EQUALITY_P (type)
+      如果 (!TYPE_STRUCTURAL_EQUALITY_P (type)
 	  && TYPE_STRUCTURAL_EQUALITY_P (TREE_TYPE (type)))
-	return false;
+	返回 false;
     default:
        break;
     }
@@ -401,53 +401,53 @@ c_verify_type (tree type)
     case POINTER_TYPE:
     case FUNCTION_TYPE:
       /* Pointer and functions can not have variable size.  */
-      if (C_TYPE_VARIABLE_SIZE (type))
-	return false;
+      如果 (C_TYPE_VARIABLE_SIZE (type))
+	返回 false;
       break;
     case ARRAY_TYPE:
       /* An array has variable size if and only if it has a non-constant
 	 dimensions or its element type has variable size.  */
-      if ((C_TYPE_VARIABLE_SIZE (TREE_TYPE (type))
+      如果 ((C_TYPE_VARIABLE_SIZE (TREE_TYPE (type))
 	   || top_array_vla_p (type))
 	  != C_TYPE_VARIABLE_SIZE (type))
-	return false;
+	返回 false;
       /* If the element type or the array has variable size, then the
 	 array has variable size and is variably modified.  */
-      if (C_TYPE_VARIABLE_SIZE (TREE_TYPE (type))
+      如果 (C_TYPE_VARIABLE_SIZE (TREE_TYPE (type))
 	  || C_TYPE_VARIABLE_SIZE (type))
 	{
-	  if (!C_TYPE_VARIABLE_SIZE (type))
-	    return false;
-	  if (!C_TYPE_VARIABLY_MODIFIED (type))
-	    return false;
+	  如果 (!C_TYPE_VARIABLE_SIZE (type))
+	    返回 false;
+	  如果 (!C_TYPE_VARIABLY_MODIFIED (type))
+	    返回 false;
 	}
 
       /* va_list violates this, accept such types here.  */
-      if (!COMPLETE_TYPE_P (TREE_TYPE (type)))
-	return true;
+      如果 (!COMPLETE_TYPE_P (TREE_TYPE (type)))
+	返回 true;
 
-      if (COMPLETE_TYPE_P (type))
+      如果 (COMPLETE_TYPE_P (type))
 	{
 	  /* If the size is unknown, it can not be complete.  */
-	  if (NULL_TREE == TYPE_DOMAIN (type))
-	    return false;
+	  如果 (NULL_TREE == TYPE_DOMAIN (type))
+	    返回 false;
 
 	  /* Zero-length arrays must have size zero.  */
-	  if (zero_length_array_type_p (type)
+	  如果 (zero_length_array_type_p (type)
 	      && !integer_zerop (TYPE_SIZE (type)))
-	    return false;
+	    返回 false;
 	}
-      else
+      否则
 	{
 	  /* If not complete but has a domain, it must be a FAM.  */
-	  if (NULL_TREE != TYPE_DOMAIN (type)
+	  如果 (NULL_TREE != TYPE_DOMAIN (type)
 	      && !flexible_array_member_type_p (type))
-	    return false;
+	    返回 false;
 	}
     default:
       break;
     }
-  return true;
+  返回 true;
 }
 
 /* Propagate C_TYPE_VARIABLY_MODIFIED and C_TYPE_VARIABLE_SIZE
@@ -458,15 +458,15 @@ c_set_type_bits (tree new_type, tree old_type)
 {
   gcc_checking_assert (c_verify_type (old_type));
 
-  if (c_type_variably_modified_p (old_type))
+  如果 (c_type_variably_modified_p (old_type))
     C_TYPE_VARIABLY_MODIFIED (new_type) = true;
 
-  if (TREE_CODE (new_type) == ARRAY_TYPE && C_TYPE_VARIABLE_SIZE (old_type))
+  如果 (TREE_CODE (new_type) == ARRAY_TYPE && C_TYPE_VARIABLE_SIZE (old_type))
     {
       C_TYPE_VARIABLY_MODIFIED (new_type) = true;
       C_TYPE_VARIABLE_SIZE (new_type) = true;
     }
-  return new_type;
+  返回 new_type;
 }
 
 /* Build a pointer type using the default pointer mode.  */
@@ -478,12 +478,12 @@ c_build_pointer_type (tree to_type)
 					       : TYPE_ADDR_SPACE (to_type);
   machine_mode pointer_mode;
 
-  if (as != ADDR_SPACE_GENERIC || c_default_pointer_mode == VOIDmode)
+  如果 (as != ADDR_SPACE_GENERIC || c_default_pointer_mode == VOIDmode)
     pointer_mode = targetm.addr_space.pointer_mode (as);
-  else
+  否则
     pointer_mode = c_default_pointer_mode;
 
-  return c_build_pointer_type_for_mode (to_type, pointer_mode, false);
+  返回 c_build_pointer_type_for_mode (to_type, pointer_mode, false);
 }
 
 /* Build a pointer type using the given mode.  */
@@ -492,7 +492,7 @@ tree
 c_build_pointer_type_for_mode (tree type, machine_mode mode, bool m)
 {
   tree ret = build_pointer_type_for_mode (type, mode, m);
-  return c_set_type_bits (ret, type);
+  返回 c_set_type_bits (ret, type);
 }
 
 /* Build a function type.  */
@@ -501,7 +501,7 @@ tree
 c_build_function_type (tree type, tree args, bool no)
 {
   tree ret = build_function_type (type, args, no);
-  return c_set_type_bits (ret, type);
+  返回 c_set_type_bits (ret, type);
 }
 
 /* Build an array type.  This sets typeless storage as required
@@ -511,7 +511,7 @@ c_build_function_type (tree type, tree args, bool no)
 tree
 c_build_array_type (tree type, tree domain)
 {
-  int type_quals = TYPE_QUALS (type);
+  整数 type_quals = TYPE_QUALS (type);
 
   /* Identify typeless storage as introduced in C2Y
      and supported also in earlier language modes.  */
@@ -520,13 +520,13 @@ c_build_array_type (tree type, tree domain)
 
   tree ret = build_array_type (type, domain, typeless);
 
-  if (top_array_vla_p (ret))
+  如果 (top_array_vla_p (ret))
     {
       C_TYPE_VARIABLE_SIZE (ret) = 1;
       C_TYPE_VARIABLY_MODIFIED (ret) = 1;
     }
 
-  return c_set_type_bits (ret, type);
+  返回 c_set_type_bits (ret, type);
 }
 
 /* Build an array type of unspecified size.  */
@@ -535,7 +535,7 @@ c_build_array_type_unspecified (tree type)
 {
   tree upper = build2 (COMPOUND_EXPR, TREE_TYPE (size_zero_node),
 		       integer_zero_node, size_zero_node);
-  return c_build_array_type (type, build_index_type (upper));
+  返回 c_build_array_type (type, build_index_type (upper));
 }
 
 /* Build an array type of zero size.  */
@@ -550,20 +550,20 @@ c_build_array_type_zero_size (tree type)
   TYPE_SIZE (type) = bitsize_zero_node;
   TYPE_SIZE_UNIT (type) = size_zero_node;
   SET_TYPE_STRUCTURAL_EQUALITY (type);
-  return type;
+  返回 type;
 }
 
 tree
-c_build_type_attribute_qual_variant (tree type, tree attrs, int quals)
+c_build_type_attribute_qual_variant (tree type, tree attrs, 整数 quals)
 {
   tree ret = build_type_attribute_qual_variant (type, attrs, quals);
-  return c_set_type_bits (ret, type);
+  返回 c_set_type_bits (ret, type);
 }
 
 tree
 c_build_type_attribute_variant (tree type, tree attrs)
 {
-  return c_build_type_attribute_qual_variant (type, attrs, TYPE_QUALS (type));
+  返回 c_build_type_attribute_qual_variant (type, attrs, TYPE_QUALS (type));
 }
 
 /* Reconstruct a complex derived type.  This is used to re-construct types
@@ -574,18 +574,18 @@ c_reconstruct_complex_type (tree type, tree bottom)
 {
   tree inner, outer;
 
-  if (TREE_CODE (type) == POINTER_TYPE)
+  如果 (TREE_CODE (type) == POINTER_TYPE)
     {
       inner = c_reconstruct_complex_type (TREE_TYPE (type), bottom);
       outer = c_build_pointer_type_for_mode (inner, TYPE_MODE (type),
 					     TYPE_REF_CAN_ALIAS_ALL (type));
     }
-  else if (TREE_CODE (type) == ARRAY_TYPE)
+  否则 如果 (TREE_CODE (type) == ARRAY_TYPE)
     {
       bool rso = TYPE_REVERSE_STORAGE_ORDER (type);
       inner = c_reconstruct_complex_type (TREE_TYPE (type), bottom);
       outer = c_build_array_type (inner, TYPE_DOMAIN (type));
-      if (rso)
+      如果 (rso)
 	{
 	  outer = build_distinct_type_copy (outer);
 	  TYPE_REVERSE_STORAGE_ORDER (outer) = 1;
@@ -594,19 +594,19 @@ c_reconstruct_complex_type (tree type, tree bottom)
       gcc_checking_assert (C_TYPE_VARIABLE_SIZE (type)
 			   == C_TYPE_VARIABLE_SIZE (outer));
     }
-  else if (TREE_CODE (type) == FUNCTION_TYPE)
+  否则 如果 (TREE_CODE (type) == FUNCTION_TYPE)
     {
       inner = c_reconstruct_complex_type (TREE_TYPE (type), bottom);
       outer = c_build_function_type (inner, TYPE_ARG_TYPES (type),
 				     TYPE_NO_NAMED_ARGS_STDARG_P (type));
     }
-  else if (TREE_CODE (type) == REFERENCE_TYPE
+  否则 如果 (TREE_CODE (type) == REFERENCE_TYPE
 	   || TREE_CODE (type) == OFFSET_TYPE)
     gcc_unreachable ();
-  else
-    return bottom;
+  否则
+    返回 bottom;
 
-  return c_build_type_attribute_qual_variant (outer, TYPE_ATTRIBUTES (type),
+  返回 c_build_type_attribute_qual_variant (outer, TYPE_ATTRIBUTES (type),
 					      TYPE_QUALS (type));
 }
 
@@ -621,21 +621,21 @@ ptr_to_tagged_member (tree field)
   gcc_assert (FIELD_DECL == TREE_CODE (field));
   tree type = TREE_TYPE (field);
   bool ptr_seen = false;
-  while (TREE_CODE (type) == ARRAY_TYPE
+  当 (TREE_CODE (type) == ARRAY_TYPE
 	 || TREE_CODE (type) == FUNCTION_TYPE
 	 || TREE_CODE (type) == POINTER_TYPE)
     {
-      if (TREE_CODE (type) == POINTER_TYPE)
+      如果 (TREE_CODE (type) == POINTER_TYPE)
 	ptr_seen = true;
       type = TREE_TYPE (type);
     }
 
-  if (ptr_seen
+  如果 (ptr_seen
       && RECORD_OR_UNION_TYPE_P (type)
       && NULL_TREE != c_type_tag (type))
-    return type;
+    返回 type;
 
-  return NULL_TREE;
+  返回 NULL_TREE;
 }
 
 /* For a record or union type, make necessary adaptations so that the
@@ -654,23 +654,23 @@ c_type_canonical (tree type)
   gcc_assert (RECORD_OR_UNION_TYPE_P (type));
 
   bool needs_mod = false;
-  for (tree x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
+  为 (tree x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
     {
-      if (!ptr_to_tagged_member (x))
+      如果 (!ptr_to_tagged_member (x))
 	continue;
       needs_mod = true;
       break;
     }
-  if (!needs_mod)
-    return type;
+  如果 (!needs_mod)
+    返回 type;
 
   /* Construct new version with such members replaced.  */
   tree n = build_distinct_type_copy (type);
   tree *fields = &TYPE_FIELDS (n);
-  for (tree x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
+  为 (tree x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
     {
       tree f = copy_node (x);
-      if (tree m = ptr_to_tagged_member (x))
+      如果 (tree m = ptr_to_tagged_member (x))
 	{
 	  tree new_node = make_node (TREE_CODE (m));
 	  TYPE_NAME (new_node) = TYPE_NAME (m);
@@ -683,7 +683,7 @@ c_type_canonical (tree type)
       fields = &DECL_CHAIN (f);
     }
   TYPE_CANONICAL (n) = n;
-  return n;
+  返回 n;
 }
 
 
@@ -696,7 +696,7 @@ c_type_canonical (tree type)
 static tree
 c_build_functype_attribute_variant (tree ntype, tree otype, tree attrs)
 {
-  if (!prototype_p (otype)
+  如果 (!prototype_p (otype)
       && prototype_p (ntype)
       && lookup_attribute ("format", attrs))
     {
@@ -705,7 +705,7 @@ c_build_functype_attribute_variant (tree ntype, tree otype, tree attrs)
 		  "format");
       attrs = remove_attribute ("format", attrs);
     }
-  return c_build_type_attribute_variant (ntype, attrs);
+  返回 c_build_type_attribute_variant (ntype, attrs);
 
 }
 
@@ -717,11 +717,11 @@ c_type_original (const_tree t)
   /* It may even be a typedef of a typedef...
      In the case of compiler-created builtin structs the TYPE_DECL
      may be a dummy, with no DECL_ORIGINAL_TYPE.  Don't fault.  */
-  while (TYPE_NAME (t)
+  当 (TYPE_NAME (t)
 	 && TREE_CODE (TYPE_NAME (t)) == TYPE_DECL
 	 && DECL_ORIGINAL_TYPE (TYPE_NAME (t)))
     t = DECL_ORIGINAL_TYPE (TYPE_NAME (t));
-  return t;
+  返回 t;
 }
 
 /* Return the tag for a tagged type.  */
@@ -731,16 +731,16 @@ c_type_tag (const_tree t)
   gcc_assert (RECORD_OR_UNION_TYPE_P (t) || TREE_CODE (t) == ENUMERAL_TYPE);
   const_tree orig = c_type_original (t);
   tree name = TYPE_NAME (orig);
-  if (!name)
-    return NULL_TREE;
-  if (TREE_CODE (name) == TYPE_DECL)
+  如果 (!name)
+    返回 NULL_TREE;
+  如果 (TREE_CODE (name) == TYPE_DECL)
     {
-      if (!DECL_NAME (name))
-	return NULL_TREE;
+      如果 (!DECL_NAME (name))
+	返回 NULL_TREE;
       name = DECL_NAME (name);
     }
   gcc_checking_assert (TREE_CODE (name) == IDENTIFIER_NODE);
-  return name;
+  返回 name;
 }
 
 /* Remove qualifiers but not atomic.  For arrays remove qualifiers
@@ -748,9 +748,9 @@ c_type_tag (const_tree t)
 static tree
 remove_qualifiers (tree t)
 {
-  if (!t || t == error_mark_node)
-    return t;
-  return TYPE_ATOMIC (strip_array_types (t))
+  如果 (!t || t == error_mark_node)
+    返回 t;
+  返回 TYPE_ATOMIC (strip_array_types (t))
 	 ? c_build_qualified_type (TYPE_MAIN_VARIANT (t), TYPE_QUAL_ATOMIC)
 	 : TYPE_MAIN_VARIANT (t);
 }
@@ -762,24 +762,24 @@ remove_qualifiers (tree t)
 static tree
 transparent_union_replacement (tree u, tree t)
 {
-  if (u == error_mark_node || t == error_mark_node
+  如果 (u == error_mark_node || t == error_mark_node
       || TREE_CODE (u) != UNION_TYPE
       || !(TYPE_TRANSPARENT_AGGR (u) || TYPE_NAME (u) == NULL_TREE)
       || comptypes (u, t))
-    return u;
+    返回 u;
 
-  for (tree memb = TYPE_FIELDS (u); memb; memb = DECL_CHAIN (memb))
+  为 (tree memb = TYPE_FIELDS (u); memb; memb = DECL_CHAIN (memb))
     {
       tree m = remove_qualifiers (TREE_TYPE (memb));
-      if (comptypes (m, t))
+      如果 (comptypes (m, t))
 	{
 	  pedwarn (input_location, OPT_Wpedantic,
 		    "function types not truly compatible in ISO C");
-	  return m;
+	  返回 m;
 	}
     }
 
-  return u;
+  返回 u;
 }
 
 
@@ -807,13 +807,13 @@ composite_type_internal (tree t1, tree t2, tree cond,
 
   /* Save time if the two types are the same.  */
 
-  if (t1 == t2) return t1;
+  如果 (t1 == t2) 返回 t1;
 
   /* If one type is nonsense, use the other.  */
-  if (t1 == error_mark_node)
-    return t2;
-  if (t2 == error_mark_node)
-    return t1;
+  如果 (t1 == error_mark_node)
+    返回 t2;
+  如果 (t2 == error_mark_node)
+    返回 t1;
 
   code1 = TREE_CODE (t1);
   code2 = TREE_CODE (t2);
@@ -826,14 +826,14 @@ composite_type_internal (tree t1, tree t2, tree cond,
      (DR#013 question 3).  For consistency, use the enumerated type as
      the composite type.  */
 
-  if (code1 == ENUMERAL_TYPE
+  如果 (code1 == ENUMERAL_TYPE
       && (code2 == INTEGER_TYPE
 	  || code2 == BOOLEAN_TYPE))
-    return t1;
-  if (code2 == ENUMERAL_TYPE
+    返回 t1;
+  如果 (code2 == ENUMERAL_TYPE
       && (code1 == INTEGER_TYPE
 	  || code1 == BOOLEAN_TYPE))
-    return t2;
+    返回 t2;
 
   gcc_assert (code1 == code2);
 
@@ -846,7 +846,7 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	tree target = composite_type_internal (TREE_TYPE (t1), TREE_TYPE (t2),
 					       cond, cache);
 	tree n = c_build_pointer_type_for_mode (target, TYPE_MODE (t1), false);
-	return c_build_type_attribute_qual_variant (n, attributes,
+	返回 c_build_type_attribute_qual_variant (n, attributes,
 						    TYPE_QUALS (t2));
       }
 
@@ -871,7 +871,7 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	bool use2 = d2 && (d1_variable || !d1 || d1_zero || !d2_variable);
 
 	/* If the first is an unspecified size pick the other one.  */
-	if (d2_variable && c_type_unspecified_p (t1))
+	如果 (d2_variable && c_type_unspecified_p (t1))
 	  {
 	    gcc_assert (use1 && use2);
 	    use1 = false;
@@ -887,22 +887,22 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	tree elt = composite_type_internal (TREE_TYPE (t1), TREE_TYPE (t2),
 					    cond, cache);
 
-	if (!use0)
+	如果 (!use0)
 	  {
 	    /* Save space: see if the result is identical to one of the args.  */
-	    if (elt == TREE_TYPE (t1) && use1)
-	      return c_build_type_attribute_variant (t1, attributes);
-	    if (elt == TREE_TYPE (t2) && use2)
-	      return c_build_type_attribute_variant (t2, attributes);
+	    如果 (elt == TREE_TYPE (t1) && use1)
+	      返回 c_build_type_attribute_variant (t1, attributes);
+	    如果 (elt == TREE_TYPE (t2) && use2)
+	      返回 c_build_type_attribute_variant (t2, attributes);
 
-	    if (elt == TREE_TYPE (t1) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
-	      return c_build_type_attribute_variant (t1, attributes);
-	    if (elt == TREE_TYPE (t2) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
-	      return c_build_type_attribute_variant (t2, attributes);
+	    如果 (elt == TREE_TYPE (t1) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
+	      返回 c_build_type_attribute_variant (t1, attributes);
+	    如果 (elt == TREE_TYPE (t2) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
+	      返回 c_build_type_attribute_variant (t2, attributes);
 
 	    td = TYPE_DOMAIN (use1 ? t1 : t2);
 	  }
-	else
+	否则
 	  {
 	    /* Not used in C.  */
 	    gcc_assert (size_zero_node == TYPE_MIN_VALUE (d1));
@@ -920,12 +920,12 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	   up TYPE_MAIN_VARIANT correctly, we need to form the
 	   composite of the unqualified types and add the qualifiers
 	   back at the end.  */
-	int quals = TYPE_QUALS (strip_array_types (elt));
+	整数 quals = TYPE_QUALS (strip_array_types (elt));
 	tree unqual_elt = c_build_qualified_type (elt, TYPE_UNQUALIFIED);
 
-	if ((!d1 || d1_zero) && (!d2 || d2_zero) && (d1 || d2))
+	如果 ((!d1 || d1_zero) && (!d2 || d2_zero) && (d1 || d2))
 	  t1 = c_build_array_type_zero_size (unqual_elt);
-	else
+	否则
 	  t1 = c_build_array_type (unqual_elt, td);
 
 	/* Check that a type which has a varying outermost dimension
@@ -936,12 +936,12 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	gcc_checking_assert (!varsize || C_TYPE_VARIABLE_SIZE (t1));
 
 	t1 = c_build_qualified_type (t1, quals);
-	return c_build_type_attribute_variant (t1, attributes);
+	返回 c_build_type_attribute_variant (t1, attributes);
       }
 
     case RECORD_TYPE:
     case UNION_TYPE:
-      if (flag_isoc23 && !comptypes_same_p (t1, t2))
+      如果 (flag_isoc23 && !comptypes_same_p (t1, t2))
 	{
 	  /* Go to the original type to get the right tag.  */
 	  tree tag = c_type_tag (t1);
@@ -952,9 +952,9 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	  /* If a composite type for these two types is already under
 	     construction, return it.  */
 
-	  for (struct composite_cache *c = cache; c != NULL; c = c->next)
-	    if ((c->t1 == t1 && c->t2 == t2) || (c->t1 == t2 && c->t2 == t1))
-	       return c->composite;
+	  为 (struct composite_cache *c = cache; c != NULL; c = c->next)
+	    如果 ((c->t1 == t1 && c->t2 == t2) || (c->t1 == t2 && c->t2 == t1))
+	       返回 c->composite;
 
 	  /* Otherwise, create a new type node and link it into the cache.  */
 
@@ -969,13 +969,13 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	  tree f2 = TYPE_FIELDS (t2);
 	  tree fields = NULL_TREE;
 
-	  for (tree a = f1, b = f2; a && b;
+	  为 (tree a = f1, b = f2; a && b;
 	       a = DECL_CHAIN (a), b = DECL_CHAIN (b))
 	    {
 	      tree ta = TREE_TYPE (a);
 	      tree tb = TREE_TYPE (b);
 
-	      if (DECL_C_BIT_FIELD (a))
+	      如果 (DECL_C_BIT_FIELD (a))
 		{
 		  ta = DECL_BIT_FIELD_TYPE (a);
 		  tb = DECL_BIT_FIELD_TYPE (b);
@@ -996,7 +996,7 @@ composite_type_internal (tree t1, tree t2, tree cond,
 
 	      finish_decl (f, input_location, NULL, NULL, NULL);
 
-	      if (DECL_C_BIT_FIELD (a))
+	      如果 (DECL_C_BIT_FIELD (a))
 		{
 		  /* This will be processed by finish_struct.  */
 		  SET_DECL_C_BIT_FIELD (f);
@@ -1023,19 +1023,19 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	  n = finish_struct (input_location, n, fields, attributes, NULL,
 			     &expr);
 
-	  return qualify_type (n, t1);
+	  返回 qualify_type (n, t1);
 	}
       /* FALLTHRU */
     case ENUMERAL_TYPE:
-      if (attributes != NULL)
+      如果 (attributes != NULL)
 	{
 	  /* Try harder not to create a new aggregate type.  */
-	  if (attribute_list_equal (TYPE_ATTRIBUTES (t1), attributes))
-	    return t1;
-	  if (attribute_list_equal (TYPE_ATTRIBUTES (t2), attributes))
-	    return t2;
+	  如果 (attribute_list_equal (TYPE_ATTRIBUTES (t1), attributes))
+	    返回 t1;
+	  如果 (attribute_list_equal (TYPE_ATTRIBUTES (t2), attributes))
+	    返回 t2;
 	}
-      return c_build_type_attribute_variant (t1, attributes);
+      返回 c_build_type_attribute_variant (t1, attributes);
 
     case FUNCTION_TYPE:
       /* Function types: prefer the one that specified arg types.
@@ -1047,25 +1047,25 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	tree p2 = TYPE_ARG_TYPES (t2);
 
 	/* Save space: see if the result is identical to one of the args.  */
-	if (valtype == TREE_TYPE (t1) && !TYPE_ARG_TYPES (t2))
-	  return c_build_functype_attribute_variant (t1, t2, attributes);
-	if (valtype == TREE_TYPE (t2) && !TYPE_ARG_TYPES (t1))
-	  return c_build_functype_attribute_variant (t2, t1, attributes);
+	如果 (valtype == TREE_TYPE (t1) && !TYPE_ARG_TYPES (t2))
+	  返回 c_build_functype_attribute_variant (t1, t2, attributes);
+	如果 (valtype == TREE_TYPE (t2) && !TYPE_ARG_TYPES (t1))
+	  返回 c_build_functype_attribute_variant (t2, t1, attributes);
 
 	/* Simple way if one arg fails to specify argument types.  */
-	if (TYPE_ARG_TYPES (t1) == NULL_TREE)
+	如果 (TYPE_ARG_TYPES (t1) == NULL_TREE)
 	  {
 	    t1 = c_build_function_type (valtype, TYPE_ARG_TYPES (t2),
 					TYPE_NO_NAMED_ARGS_STDARG_P (t2));
 	    t1 = c_build_type_attribute_variant (t1, attributes);
-	    return qualify_type (t1, t2);
+	    返回 qualify_type (t1, t2);
 	 }
-	if (TYPE_ARG_TYPES (t2) == NULL_TREE)
+	如果 (TYPE_ARG_TYPES (t2) == NULL_TREE)
 	  {
 	    t1 = c_build_function_type (valtype, TYPE_ARG_TYPES (t1),
 					TYPE_NO_NAMED_ARGS_STDARG_P (t1));
 	    t1 = c_build_type_attribute_variant (t1, attributes);
-	    return qualify_type (t1, t2);
+	    返回 qualify_type (t1, t2);
 	  }
 
 	/* If both args specify argument types, we must merge the two
@@ -1073,9 +1073,9 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	tree newargs = NULL_TREE;
 	tree *endp = &newargs;
 
-	for (; p1; p1 = TREE_CHAIN (p1), p2 = TREE_CHAIN (p2))
+	为 (; p1; p1 = TREE_CHAIN (p1), p2 = TREE_CHAIN (p2))
 	  {
-	    if (p1 == void_list_node)
+	    如果 (p1 == void_list_node)
 	      {
 		*endp = void_list_node;
 		break;
@@ -1102,7 +1102,7 @@ composite_type_internal (tree t1, tree t2, tree cond,
       /* FALLTHRU */
 
     default:
-      return c_build_type_attribute_variant (t1, attributes);
+      返回 c_build_type_attribute_variant (t1, attributes);
     }
 }
 
@@ -1116,14 +1116,14 @@ composite_type_cond (tree t1, tree t2, tree cond)
 
   gcc_checking_assert (comptypes_check_for_composite (n, t1));
   gcc_checking_assert (comptypes_check_for_composite (n, t2));
-  return n;
+  返回 n;
 }
 
 
 tree
 composite_type (tree t1, tree t2)
 {
-  return composite_type_cond (t1, t2, NULL_TREE);
+  返回 composite_type_cond (t1, t2, NULL_TREE);
 }
 
 /* Return the type of a conditional expression between pointers to
@@ -1138,17 +1138,17 @@ common_pointer_type (tree t1, tree t2, tree cond)
   tree attributes;
   unsigned target_quals;
   addr_space_t as1, as2, as_common;
-  int quals1, quals2;
+  整数 quals1, quals2;
 
   /* Save time if the two types are the same.  */
 
-  if (t1 == t2) return t1;
+  如果 (t1 == t2) 返回 t1;
 
   /* If one type is nonsense, use the other.  */
-  if (t1 == error_mark_node)
-    return t2;
-  if (t2 == error_mark_node)
-    return t1;
+  如果 (t1 == error_mark_node)
+    返回 t2;
+  如果 (t2 == error_mark_node)
+    返回 t1;
 
   gcc_assert (TREE_CODE (t1) == POINTER_TYPE
 	      && TREE_CODE (t2) == POINTER_TYPE);
@@ -1170,9 +1170,9 @@ common_pointer_type (tree t1, tree t2, tree cond)
   /* For function types do not merge const qualifiers, but drop them
      if used inconsistently.  The middle-end uses these to mark const
      and noreturn functions.  */
-  if (TREE_CODE (pointed_to_1) == FUNCTION_TYPE)
+  如果 (TREE_CODE (pointed_to_1) == FUNCTION_TYPE)
     target_quals = (quals1 & quals2);
-  else
+  否则
     target_quals = (quals1 | quals2);
 
   /* If the two named address spaces are different, determine the common
@@ -1180,13 +1180,13 @@ common_pointer_type (tree t1, tree t2, tree cond)
      assumption that comp_target_type returned true.  */
   as1 = TYPE_ADDR_SPACE (pointed_to_1);
   as2 = TYPE_ADDR_SPACE (pointed_to_2);
-  if (!addr_space_superset (as1, as2, &as_common))
+  如果 (!addr_space_superset (as1, as2, &as_common))
     gcc_unreachable ();
 
   target_quals |= ENCODE_QUAL_ADDR_SPACE (as_common);
 
   t1 = c_build_pointer_type (c_build_qualified_type (target, target_quals));
-  return c_build_type_attribute_variant (t1, attributes);
+  返回 c_build_type_attribute_variant (t1, attributes);
 }
 
 /* Return the common type for two arithmetic types under the usual
@@ -1204,24 +1204,24 @@ c_common_type (tree t1, tree t2)
   enum tree_code code2;
 
   /* If one type is nonsense, use the other.  */
-  if (t1 == error_mark_node)
-    return t2;
-  if (t2 == error_mark_node)
-    return t1;
+  如果 (t1 == error_mark_node)
+    返回 t2;
+  如果 (t2 == error_mark_node)
+    返回 t1;
 
-  if (TYPE_QUALS (t1) != TYPE_UNQUALIFIED)
+  如果 (TYPE_QUALS (t1) != TYPE_UNQUALIFIED)
     t1 = TYPE_MAIN_VARIANT (t1);
 
-  if (TYPE_QUALS (t2) != TYPE_UNQUALIFIED)
+  如果 (TYPE_QUALS (t2) != TYPE_UNQUALIFIED)
     t2 = TYPE_MAIN_VARIANT (t2);
 
-  if (TYPE_ATTRIBUTES (t1) != NULL_TREE)
+  如果 (TYPE_ATTRIBUTES (t1) != NULL_TREE)
     {
       tree attrs = affects_type_identity_attributes (TYPE_ATTRIBUTES (t1));
       t1 = c_build_type_attribute_variant (t1, attrs);
     }
 
-  if (TYPE_ATTRIBUTES (t2) != NULL_TREE)
+  如果 (TYPE_ATTRIBUTES (t2) != NULL_TREE)
     {
       tree attrs = affects_type_identity_attributes (TYPE_ATTRIBUTES (t2));
       t2 = c_build_type_attribute_variant (t2, attrs);
@@ -1229,7 +1229,7 @@ c_common_type (tree t1, tree t2)
 
   /* Save time if the two types are the same.  */
 
-  if (t1 == t2) return t1;
+  如果 (t1 == t2) 返回 t1;
 
   code1 = TREE_CODE (t1);
   code2 = TREE_CODE (t2);
@@ -1244,107 +1244,107 @@ c_common_type (tree t1, tree t2)
   /* When one operand is a decimal float type, the other operand cannot be
      a generic float type or a complex type.  We also disallow vector types
      here.  */
-  if ((DECIMAL_FLOAT_TYPE_P (t1) || DECIMAL_FLOAT_TYPE_P (t2))
+  如果 ((DECIMAL_FLOAT_TYPE_P (t1) || DECIMAL_FLOAT_TYPE_P (t2))
       && !(DECIMAL_FLOAT_TYPE_P (t1) && DECIMAL_FLOAT_TYPE_P (t2)))
     {
-      if (code1 == VECTOR_TYPE || code2 == VECTOR_TYPE)
+      如果 (code1 == VECTOR_TYPE || code2 == VECTOR_TYPE)
 	{
 	  error ("cannot mix operands of decimal floating and vector types");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      if (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
+      如果 (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
 	{
 	  error ("cannot mix operands of decimal floating and complex types");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      if (code1 == REAL_TYPE && code2 == REAL_TYPE)
+      如果 (code1 == REAL_TYPE && code2 == REAL_TYPE)
 	{
 	  error ("cannot mix operands of decimal floating "
 		 "and other floating types");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
     }
 
   /* If one type is a vector type, return that type.  (How the usual
      arithmetic conversions apply to the vector types extension is not
      precisely specified.)  */
-  if (code1 == VECTOR_TYPE)
-    return t1;
+  如果 (code1 == VECTOR_TYPE)
+    返回 t1;
 
-  if (code2 == VECTOR_TYPE)
-    return t2;
+  如果 (code2 == VECTOR_TYPE)
+    返回 t2;
 
   /* If one type is complex, form the common type of the non-complex
      components, then make that complex.  Use T1 or T2 if it is the
      required type.  */
-  if (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
+  如果 (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
     {
       tree subtype1 = code1 == COMPLEX_TYPE ? TREE_TYPE (t1) : t1;
       tree subtype2 = code2 == COMPLEX_TYPE ? TREE_TYPE (t2) : t2;
       tree subtype = c_common_type (subtype1, subtype2);
 
-      if (code1 == COMPLEX_TYPE && TREE_TYPE (t1) == subtype)
-	return t1;
-      else if (code2 == COMPLEX_TYPE && TREE_TYPE (t2) == subtype)
-	return t2;
-      else if (TREE_CODE (subtype) == BITINT_TYPE)
+      如果 (code1 == COMPLEX_TYPE && TREE_TYPE (t1) == subtype)
+	返回 t1;
+      否则 如果 (code2 == COMPLEX_TYPE && TREE_TYPE (t2) == subtype)
+	返回 t2;
+      否则 如果 (TREE_CODE (subtype) == BITINT_TYPE)
 	{
 	  sorry ("%<_Complex _BitInt(%d)%> unsupported",
 		 TYPE_PRECISION (subtype));
-	  return code1 == COMPLEX_TYPE ? t1 : t2;
+	  返回 code1 == COMPLEX_TYPE ? t1 : t2;
 	}
-      else
-	return build_complex_type (subtype);
+      否则
+	返回 build_complex_type (subtype);
     }
 
   /* If only one is real, use it as the result.  */
 
-  if (code1 == REAL_TYPE && code2 != REAL_TYPE)
-    return t1;
+  如果 (code1 == REAL_TYPE && code2 != REAL_TYPE)
+    返回 t1;
 
-  if (code2 == REAL_TYPE && code1 != REAL_TYPE)
-    return t2;
+  如果 (code2 == REAL_TYPE && code1 != REAL_TYPE)
+    返回 t2;
 
   /* If both are real and either are decimal floating point types, use
      the decimal floating point type with the greater precision. */
 
-  if (code1 == REAL_TYPE && code2 == REAL_TYPE)
+  如果 (code1 == REAL_TYPE && code2 == REAL_TYPE)
     {
-      if (TYPE_MAIN_VARIANT (t1) == dfloat128_type_node
+      如果 (TYPE_MAIN_VARIANT (t1) == dfloat128_type_node
 	  || TYPE_MAIN_VARIANT (t2) == dfloat128_type_node)
-	return dfloat128_type_node;
+	返回 dfloat128_type_node;
       /* And prefer _Decimal128 over _Decimal64x which has in GCC's
 	 implementation the same mode.  */
-      else if (TYPE_MAIN_VARIANT (t1) == dfloat64x_type_node
+      否则 如果 (TYPE_MAIN_VARIANT (t1) == dfloat64x_type_node
 	       || TYPE_MAIN_VARIANT (t2) == dfloat64x_type_node)
-	return dfloat64x_type_node;
-      else if (TYPE_MAIN_VARIANT (t1) == dfloat64_type_node
+	返回 dfloat64x_type_node;
+      否则 如果 (TYPE_MAIN_VARIANT (t1) == dfloat64_type_node
 	       || TYPE_MAIN_VARIANT (t2) == dfloat64_type_node)
-	return dfloat64_type_node;
-      else if (TYPE_MAIN_VARIANT (t1) == dfloat32_type_node
+	返回 dfloat64_type_node;
+      否则 如果 (TYPE_MAIN_VARIANT (t1) == dfloat32_type_node
 	       || TYPE_MAIN_VARIANT (t2) == dfloat32_type_node)
-	return dfloat32_type_node;
+	返回 dfloat32_type_node;
     }
 
   /* Deal with fixed-point types.  */
-  if (code1 == FIXED_POINT_TYPE || code2 == FIXED_POINT_TYPE)
+  如果 (code1 == FIXED_POINT_TYPE || code2 == FIXED_POINT_TYPE)
     {
-      unsigned int unsignedp = 0, satp = 0;
+      unsigned 整数 unsignedp = 0, satp = 0;
       scalar_mode m1, m2;
-      unsigned int fbit1, ibit1, fbit2, ibit2, max_fbit, max_ibit;
+      unsigned 整数 fbit1, ibit1, fbit2, ibit2, max_fbit, max_ibit;
 
       m1 = SCALAR_TYPE_MODE (t1);
       m2 = SCALAR_TYPE_MODE (t2);
 
       /* If one input type is saturating, the result type is saturating.  */
-      if (TYPE_SATURATING (t1) || TYPE_SATURATING (t2))
+      如果 (TYPE_SATURATING (t1) || TYPE_SATURATING (t2))
 	satp = 1;
 
       /* If both fixed-point types are unsigned, the result type is unsigned.
 	 When mixing fixed-point and integer types, follow the sign of the
 	 fixed-point type.
 	 Otherwise, the result type is signed.  */
-      if ((TYPE_UNSIGNED (t1) && TYPE_UNSIGNED (t2)
+      如果 ((TYPE_UNSIGNED (t1) && TYPE_UNSIGNED (t2)
 	   && code1 == FIXED_POINT_TYPE && code2 == FIXED_POINT_TYPE)
 	  || (code1 == FIXED_POINT_TYPE && code2 != FIXED_POINT_TYPE
 	      && TYPE_UNSIGNED (t1))
@@ -1353,54 +1353,54 @@ c_common_type (tree t1, tree t2)
 	unsignedp = 1;
 
       /* The result type is signed.  */
-      if (unsignedp == 0)
+      如果 (unsignedp == 0)
 	{
 	  /* If the input type is unsigned, we need to convert to the
 	     signed type.  */
-	  if (code1 == FIXED_POINT_TYPE && TYPE_UNSIGNED (t1))
+	  如果 (code1 == FIXED_POINT_TYPE && TYPE_UNSIGNED (t1))
 	    {
 	      enum mode_class mclass = (enum mode_class) 0;
-	      if (GET_MODE_CLASS (m1) == MODE_UFRACT)
+	      如果 (GET_MODE_CLASS (m1) == MODE_UFRACT)
 		mclass = MODE_FRACT;
-	      else if (GET_MODE_CLASS (m1) == MODE_UACCUM)
+	      否则 如果 (GET_MODE_CLASS (m1) == MODE_UACCUM)
 		mclass = MODE_ACCUM;
-	      else
+	      否则
 		gcc_unreachable ();
 	      m1 = as_a <scalar_mode>
 		(mode_for_size (GET_MODE_PRECISION (m1), mclass, 0));
 	    }
-	  if (code2 == FIXED_POINT_TYPE && TYPE_UNSIGNED (t2))
+	  如果 (code2 == FIXED_POINT_TYPE && TYPE_UNSIGNED (t2))
 	    {
 	      enum mode_class mclass = (enum mode_class) 0;
-	      if (GET_MODE_CLASS (m2) == MODE_UFRACT)
+	      如果 (GET_MODE_CLASS (m2) == MODE_UFRACT)
 		mclass = MODE_FRACT;
-	      else if (GET_MODE_CLASS (m2) == MODE_UACCUM)
+	      否则 如果 (GET_MODE_CLASS (m2) == MODE_UACCUM)
 		mclass = MODE_ACCUM;
-	      else
+	      否则
 		gcc_unreachable ();
 	      m2 = as_a <scalar_mode>
 		(mode_for_size (GET_MODE_PRECISION (m2), mclass, 0));
 	    }
 	}
 
-      if (code1 == FIXED_POINT_TYPE)
+      如果 (code1 == FIXED_POINT_TYPE)
 	{
 	  fbit1 = GET_MODE_FBIT (m1);
 	  ibit1 = GET_MODE_IBIT (m1);
 	}
-      else
+      否则
 	{
 	  fbit1 = 0;
 	  /* Signed integers need to subtract one sign bit.  */
 	  ibit1 = TYPE_PRECISION (t1) - (!TYPE_UNSIGNED (t1));
 	}
 
-      if (code2 == FIXED_POINT_TYPE)
+      如果 (code2 == FIXED_POINT_TYPE)
 	{
 	  fbit2 = GET_MODE_FBIT (m2);
 	  ibit2 = GET_MODE_IBIT (m2);
 	}
-      else
+      否则
 	{
 	  fbit2 = 0;
 	  /* Signed integers need to subtract one sign bit.  */
@@ -1409,47 +1409,47 @@ c_common_type (tree t1, tree t2)
 
       max_ibit = ibit1 >= ibit2 ?  ibit1 : ibit2;
       max_fbit = fbit1 >= fbit2 ?  fbit1 : fbit2;
-      return c_common_fixed_point_type_for_size (max_ibit, max_fbit, unsignedp,
+      返回 c_common_fixed_point_type_for_size (max_ibit, max_fbit, unsignedp,
 						 satp);
     }
 
   /* Both real or both integers; use the one with greater precision.  */
 
-  if (TYPE_PRECISION (t1) > TYPE_PRECISION (t2))
-    return t1;
-  else if (TYPE_PRECISION (t2) > TYPE_PRECISION (t1))
-    return t2;
+  如果 (TYPE_PRECISION (t1) > TYPE_PRECISION (t2))
+    返回 t1;
+  否则 如果 (TYPE_PRECISION (t2) > TYPE_PRECISION (t1))
+    返回 t2;
 
   /* Same precision.  Prefer long longs to longs to ints when the
      same precision, following the C99 rules on integer type rank
      (which are equivalent to the C90 rules for C90 types).  */
 
-  if (TYPE_MAIN_VARIANT (t1) == long_long_unsigned_type_node
+  如果 (TYPE_MAIN_VARIANT (t1) == long_long_unsigned_type_node
       || TYPE_MAIN_VARIANT (t2) == long_long_unsigned_type_node)
-    return long_long_unsigned_type_node;
+    返回 long_long_unsigned_type_node;
 
-  if (TYPE_MAIN_VARIANT (t1) == long_long_integer_type_node
+  如果 (TYPE_MAIN_VARIANT (t1) == long_long_integer_type_node
       || TYPE_MAIN_VARIANT (t2) == long_long_integer_type_node)
     {
-      if (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
-	return long_long_unsigned_type_node;
-      else
-	return long_long_integer_type_node;
+      如果 (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
+	返回 long_long_unsigned_type_node;
+      否则
+	返回 long_long_integer_type_node;
     }
 
-  if (TYPE_MAIN_VARIANT (t1) == long_unsigned_type_node
+  如果 (TYPE_MAIN_VARIANT (t1) == long_unsigned_type_node
       || TYPE_MAIN_VARIANT (t2) == long_unsigned_type_node)
-    return long_unsigned_type_node;
+    返回 long_unsigned_type_node;
 
-  if (TYPE_MAIN_VARIANT (t1) == long_integer_type_node
+  如果 (TYPE_MAIN_VARIANT (t1) == long_integer_type_node
       || TYPE_MAIN_VARIANT (t2) == long_integer_type_node)
     {
       /* But preserve unsignedness from the other type,
 	 since long cannot hold all the values of an unsigned int.  */
-      if (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
-	return long_unsigned_type_node;
-      else
-	return long_integer_type_node;
+      如果 (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
+	返回 long_unsigned_type_node;
+      否则
+	返回 long_integer_type_node;
     }
 
   /* For floating types of the same TYPE_PRECISION (which we here
@@ -1466,47 +1466,47 @@ c_common_type (tree t1, tree t2)
   tree mv1 = TYPE_MAIN_VARIANT (t1);
   tree mv2 = TYPE_MAIN_VARIANT (t2);
 
-  for (int i = NUM_FLOATN_TYPES - 1; i >= 0; i--)
-    if (mv1 == FLOATN_TYPE_NODE (i) || mv2 == FLOATN_TYPE_NODE (i))
-      return FLOATN_TYPE_NODE (i);
+  为 (整数 i = NUM_FLOATN_TYPES - 1; i >= 0; i--)
+    如果 (mv1 == FLOATN_TYPE_NODE (i) || mv2 == FLOATN_TYPE_NODE (i))
+      返回 FLOATN_TYPE_NODE (i);
 
   /* Likewise, prefer long double to double even if same size.  */
-  if (mv1 == long_double_type_node || mv2 == long_double_type_node)
-    return long_double_type_node;
+  如果 (mv1 == long_double_type_node || mv2 == long_double_type_node)
+    返回 long_double_type_node;
 
   /* Likewise, prefer double to float even if same size.
      We got a couple of embedded targets with 32 bit doubles, and the
      pdp11 might have 64 bit floats.  */
-  if (mv1 == double_type_node || mv2 == double_type_node)
-    return double_type_node;
+  如果 (mv1 == double_type_node || mv2 == double_type_node)
+    返回 double_type_node;
 
-  if (mv1 == float_type_node || mv2 == float_type_node)
-    return float_type_node;
+  如果 (mv1 == float_type_node || mv2 == float_type_node)
+    返回 float_type_node;
 
-  for (int i = NUM_FLOATNX_TYPES - 1; i >= 0; i--)
-    if (mv1 == FLOATNX_TYPE_NODE (i) || mv2 == FLOATNX_TYPE_NODE (i))
-      return FLOATNX_TYPE_NODE (i);
+  为 (整数 i = NUM_FLOATNX_TYPES - 1; i >= 0; i--)
+    如果 (mv1 == FLOATNX_TYPE_NODE (i) || mv2 == FLOATNX_TYPE_NODE (i))
+      返回 FLOATNX_TYPE_NODE (i);
 
-  if ((code1 == BITINT_TYPE || code2 == BITINT_TYPE) && code1 != code2)
+  如果 ((code1 == BITINT_TYPE || code2 == BITINT_TYPE) && code1 != code2)
     {
       /* Prefer any other integral types over bit-precise integer types.  */
-      if (TYPE_UNSIGNED (t1) == TYPE_UNSIGNED (t2))
-	return code1 == BITINT_TYPE ? t2 : t1;
+      如果 (TYPE_UNSIGNED (t1) == TYPE_UNSIGNED (t2))
+	返回 code1 == BITINT_TYPE ? t2 : t1;
       /* If BITINT_TYPE is unsigned and the other type is signed
 	 non-BITINT_TYPE with the same precision, the latter has higher rank.
 	 In that case:
 	 Otherwise, both operands are converted to the unsigned integer type
 	 corresponding to the type of the operand with signed integer type.  */
-      if (TYPE_UNSIGNED (code1 == BITINT_TYPE ? t1 : t2))
-	return c_common_unsigned_type (code1 == BITINT_TYPE ? t2 : t1);
+      如果 (TYPE_UNSIGNED (code1 == BITINT_TYPE ? t1 : t2))
+	返回 c_common_unsigned_type (code1 == BITINT_TYPE ? t2 : t1);
     }
 
   /* Otherwise prefer the unsigned one.  */
 
-  if (TYPE_UNSIGNED (t1))
-    return t1;
-  else
-    return t2;
+  如果 (TYPE_UNSIGNED (t1))
+    返回 t1;
+  否则
+    返回 t2;
 }
 
 /* Wrapper around c_common_type that is used by c-common.cc and other
@@ -1517,23 +1517,23 @@ c_common_type (tree t1, tree t2)
 tree
 common_type (tree t1, tree t2)
 {
-  if (TREE_CODE (t1) == ENUMERAL_TYPE)
+  如果 (TREE_CODE (t1) == ENUMERAL_TYPE)
     t1 = ENUM_UNDERLYING_TYPE (t1);
-  if (TREE_CODE (t2) == ENUMERAL_TYPE)
+  如果 (TREE_CODE (t2) == ENUMERAL_TYPE)
     t2 = ENUM_UNDERLYING_TYPE (t2);
 
   /* If both types are BOOLEAN_TYPE, then return boolean_type_node.  */
-  if (TREE_CODE (t1) == BOOLEAN_TYPE
+  如果 (TREE_CODE (t1) == BOOLEAN_TYPE
       && TREE_CODE (t2) == BOOLEAN_TYPE)
-    return boolean_type_node;
+    返回 boolean_type_node;
 
   /* If either type is BOOLEAN_TYPE, then return the other.  */
-  if (TREE_CODE (t1) == BOOLEAN_TYPE)
-    return t2;
-  if (TREE_CODE (t2) == BOOLEAN_TYPE)
-    return t1;
+  如果 (TREE_CODE (t1) == BOOLEAN_TYPE)
+    返回 t2;
+  如果 (TREE_CODE (t2) == BOOLEAN_TYPE)
+    返回 t1;
 
-  return c_common_type (t1, t2);
+  返回 c_common_type (t1, t2);
 }
 
 
@@ -1545,24 +1545,24 @@ common_type (tree t1, tree t2)
 static bool
 comptypes_verify (tree type1, tree type2)
 {
-  if (type1 == type2 || !type1 || !type2
+  如果 (type1 == type2 || !type1 || !type2
       || TREE_CODE (type1) == ERROR_MARK || TREE_CODE (type2) == ERROR_MARK)
-    return true;
+    返回 true;
 
   gcc_checking_assert (c_verify_type (type1));
   gcc_checking_assert (c_verify_type (type2));
 
-  if (TYPE_CANONICAL (type1) != TYPE_CANONICAL (type2)
+  如果 (TYPE_CANONICAL (type1) != TYPE_CANONICAL (type2)
       && !TYPE_STRUCTURAL_EQUALITY_P (type1)
       && !TYPE_STRUCTURAL_EQUALITY_P (type2))
     {
       /* FIXME: check other types. */
-      if (RECORD_OR_UNION_TYPE_P (type1)
+      如果 (RECORD_OR_UNION_TYPE_P (type1)
 	  || TREE_CODE (type1) == ENUMERAL_TYPE
 	  || TREE_CODE (type2) == ENUMERAL_TYPE)
-	return false;
+	返回 false;
     }
-  return true;
+  返回 true;
 }
 
 struct comptypes_data {
@@ -1595,7 +1595,7 @@ comptypes_check_for_composite (tree t1, tree t2)
 {
   struct comptypes_data data = { };
   data.ignore_promoting_args = FUNCTION_TYPE == TREE_CODE (t1);
-  return comptypes_internal (t1, t2, &data);
+  返回 comptypes_internal (t1, t2, &data);
 }
 
 
@@ -1604,7 +1604,7 @@ comptypes_check_for_composite (tree t1, tree t2)
 bool
 compatible_types_for_indirection_note_p (tree type1, tree type2)
 {
-  return comptypes (type1, type2);
+  返回 comptypes (type1, type2);
 }
 
 /* Return true if TYPE1 and TYPE2 are compatible types for assignment
@@ -1618,7 +1618,7 @@ comptypes (tree type1, tree type2)
 
   gcc_checking_assert (!ret || comptypes_verify (type1, type2));
 
-  return ret;
+  返回 ret;
 }
 
 
@@ -1633,10 +1633,10 @@ comptypes_same_p (tree type1, tree type2)
 
   gcc_checking_assert (!ret || comptypes_verify (type1, type2));
 
-  if (data.different_types_p)
-    return false;
+  如果 (data.different_types_p)
+    返回 false;
 
-  return ret;
+  返回 ret;
 }
 
 
@@ -1652,7 +1652,7 @@ comptypes_check_enum_int (tree type1, tree type2, bool *enum_and_int_p)
 
   gcc_checking_assert (!ret || comptypes_verify (type1, type2));
 
-  return ret;
+  返回 ret;
 }
 
 
@@ -1699,7 +1699,7 @@ comptypes_equiv_p (tree type1, tree type2)
      to types that are not compatible.  */
   gcc_checking_assert (ret || !comptypes (type1, type2));
 
-  return ret;
+  返回 ret;
 }
 
 
@@ -1726,65 +1726,65 @@ comptypes_internal (const_tree type1, const_tree type2,
 
   /* Suppress errors caused by previously reported errors.  */
 
-  if (t1 == t2 || !t1 || !t2
+  如果 (t1 == t2 || !t1 || !t2
       || TREE_CODE (t1) == ERROR_MARK || TREE_CODE (t2) == ERROR_MARK)
-    return true;
+    返回 true;
 
   /* Qualifiers must match. C99 6.7.3p9 */
 
-  if (TYPE_QUALS (t1) != TYPE_QUALS (t2))
-    return false;
+  如果 (TYPE_QUALS (t1) != TYPE_QUALS (t2))
+    返回 false;
 
   /* Enumerated types are compatible with integer types, but this is
      not transitive: two enumerated types in the same translation unit
      are compatible with each other only if they are the same type.  */
 
-  if (TREE_CODE (t1) == ENUMERAL_TYPE
+  如果 (TREE_CODE (t1) == ENUMERAL_TYPE
       && COMPLETE_TYPE_P (t1)
       && TREE_CODE (t2) != ENUMERAL_TYPE)
     {
       t1 = ENUM_UNDERLYING_TYPE (t1);
-      if (TREE_CODE (t2) != VOID_TYPE)
+      如果 (TREE_CODE (t2) != VOID_TYPE)
 	{
 	  data->enum_and_int_p = true;
 	  data->different_types_p = true;
 	}
     }
-  else if (TREE_CODE (t2) == ENUMERAL_TYPE
+  否则 如果 (TREE_CODE (t2) == ENUMERAL_TYPE
 	   && COMPLETE_TYPE_P (t2)
 	   && TREE_CODE (t1) != ENUMERAL_TYPE)
     {
       t2 = ENUM_UNDERLYING_TYPE (t2);
-      if (TREE_CODE (t1) != VOID_TYPE)
+      如果 (TREE_CODE (t1) != VOID_TYPE)
 	{
 	  data->enum_and_int_p = true;
 	  data->different_types_p = true;
 	}
     }
 
-  if (t1 == t2)
-    return true;
+  如果 (t1 == t2)
+    返回 true;
 
   /* Different classes of types can't be compatible.  */
 
-  if (TREE_CODE (t1) != TREE_CODE (t2))
-    return false;
+  如果 (TREE_CODE (t1) != TREE_CODE (t2))
+    返回 false;
 
   /* Allow for two different type nodes which have essentially the same
      definition.  Note that we already checked for equality of the type
      qualifiers (just above).  */
 
-  if (TREE_CODE (t1) != ARRAY_TYPE
+  如果 (TREE_CODE (t1) != ARRAY_TYPE
       && TYPE_MAIN_VARIANT (t1) == TYPE_MAIN_VARIANT (t2))
-    return true;
+    返回 true;
 
-  int attrval;
+  整数 attrval;
 
   /* 1 if no need for warning yet, 2 if warning cause has been seen.  */
-  if (!(attrval = comp_type_attributes (t1, t2)))
-    return false;
+  如果 (!(attrval = comp_type_attributes (t1, t2)))
+    返回 false;
 
-  if (2 == attrval)
+  如果 (2 == attrval)
     data->warning_needed = true;
 
   switch (TREE_CODE (t1))
@@ -1807,17 +1807,17 @@ comptypes_internal (const_tree type1, const_tree type2,
 	 have identical properties, different TYPE_MAIN_VARIANTs, but
 	 represent the same type.  The canonical type system keeps
 	 track of equivalence in this case, so we fall back on it.  */
-      return TYPE_CANONICAL (t1) == TYPE_CANONICAL (t2);
+      返回 TYPE_CANONICAL (t1) == TYPE_CANONICAL (t2);
 
     case POINTER_TYPE:
       /* Do not remove mode information.  */
-      if (TYPE_MODE (t1) != TYPE_MODE (t2))
-	return false;
+      如果 (TYPE_MODE (t1) != TYPE_MODE (t2))
+	返回 false;
       data->pointedto = true;
-      return comptypes_internal (TREE_TYPE (t1), TREE_TYPE (t2), data);
+      返回 comptypes_internal (TREE_TYPE (t1), TREE_TYPE (t2), data);
 
     case FUNCTION_TYPE:
-      return function_types_compatible_p (t1, t2, data);
+      返回 function_types_compatible_p (t1, t2, data);
 
     case ARRAY_TYPE:
       {
@@ -1825,25 +1825,25 @@ comptypes_internal (const_tree type1, const_tree type2,
 	tree d2 = TYPE_DOMAIN (t2);
 
 	/* Target types must match incl. qualifiers.  */
-	if (!comptypes_internal (TREE_TYPE (t1), TREE_TYPE (t2), data))
-	  return false;
+	如果 (!comptypes_internal (TREE_TYPE (t1), TREE_TYPE (t2), data))
+	  返回 false;
 
-	if ((d1 == NULL_TREE) != (d2 == NULL_TREE))
+	如果 ((d1 == NULL_TREE) != (d2 == NULL_TREE))
 	  data->different_types_p = true;
 	/* Ignore size mismatches when forming equivalence classes.  */
-	if (data->equiv)
-	  return true;
+	如果 (data->equiv)
+	  返回 true;
 	/* Sizes must match unless one is missing or variable.  */
-	if (d1 == NULL_TREE || d2 == NULL_TREE || d1 == d2)
-	  return true;
+	如果 (d1 == NULL_TREE || d2 == NULL_TREE || d1 == d2)
+	  返回 true;
 
 	bool d1_variable = top_array_vla_p (t1);
 	bool d2_variable = top_array_vla_p (t2);
 
-	if (d1_variable != d2_variable)
+	如果 (d1_variable != d2_variable)
 	  data->different_types_p = true;
-	if (d1_variable || d2_variable)
-	  return true;
+	如果 (d1_variable || d2_variable)
+	  返回 true;
 
 	bool d1_zero = zero_length_array_type_p (t1)
 		       || flexible_array_member_type_p (t1);
@@ -1851,33 +1851,33 @@ comptypes_internal (const_tree type1, const_tree type2,
 	bool d2_zero = zero_length_array_type_p (t2)
 		       || flexible_array_member_type_p (t2);
 
-	if (d1_zero && d2_zero)
-	  return true;
-	if (d1_zero || d2_zero)
-	  return false;
+	如果 (d1_zero && d2_zero)
+	  返回 true;
+	如果 (d1_zero || d2_zero)
+	  返回 false;
 
-	if (!tree_int_cst_equal (TYPE_MIN_VALUE (d1), TYPE_MIN_VALUE (d2))
+	如果 (!tree_int_cst_equal (TYPE_MIN_VALUE (d1), TYPE_MIN_VALUE (d2))
 	    || !tree_int_cst_equal (TYPE_MAX_VALUE (d1), TYPE_MAX_VALUE (d2)))
-	  return false;
+	  返回 false;
 
-	return true;
+	返回 true;
       }
 
     case ENUMERAL_TYPE:
     case RECORD_TYPE:
     case UNION_TYPE:
 
-      if (!flag_isoc23)
-	return false;
+      如果 (!flag_isoc23)
+	返回 false;
 
-      return tagged_types_tu_compatible_p (t1, t2, data);
+      返回 tagged_types_tu_compatible_p (t1, t2, data);
 
     case VECTOR_TYPE:
-      return known_eq (TYPE_VECTOR_SUBPARTS (t1), TYPE_VECTOR_SUBPARTS (t2))
+      返回 known_eq (TYPE_VECTOR_SUBPARTS (t1), TYPE_VECTOR_SUBPARTS (t2))
 	     && comptypes_internal (TREE_TYPE (t1), TREE_TYPE (t2), data);
 
     default:
-      return false;
+      返回 false;
     }
   gcc_unreachable ();
 }
@@ -1897,33 +1897,33 @@ comp_target_types (location_t location, tree ttl, tree ttr)
   addr_space_t as_common;
 
   /* Fail if pointers point to incompatible address spaces.  */
-  if (!addr_space_superset (asl, asr, &as_common))
-    return 0;
+  如果 (!addr_space_superset (asl, asr, &as_common))
+    返回 0;
 
   /* Qualifiers on element types of array types that are
      pointer targets are also removed.  */
   struct comptypes_data data = { };
-  if (!comptypes_internal (remove_qualifiers (mvl),
+  如果 (!comptypes_internal (remove_qualifiers (mvl),
 			   remove_qualifiers (mvr), &data))
-    return false;
+    返回 false;
 
   /* For pedantic use comptypes on arrays before removing
      qualifiers on the element type. */
-  if (TREE_CODE (mvl) == ARRAY_TYPE
+  如果 (TREE_CODE (mvl) == ARRAY_TYPE
       && TREE_CODE (mvr) == ARRAY_TYPE
       && !comptypes (mvl, mvr))
     pedwarn_c11 (location, OPT_Wpedantic, "invalid use of pointers to arrays "
 					  "with different qualifiers in ISO C "
 					  "before C23");
 
-  if (data.warning_needed)
+  如果 (data.warning_needed)
     pedwarn (location, OPT_Wpedantic, "types are not quite compatible");
 
-  if (data.enum_and_int_p && warn_cxx_compat)
+  如果 (data.enum_and_int_p && warn_cxx_compat)
     warning_at (location, OPT_Wc___compat,
 		"pointer target types incompatible in C++");
 
-  return true;
+  返回 true;
 }
 
 /* Subroutines of `comptypes'.  */
@@ -1938,43 +1938,43 @@ tagged_types_tu_compatible_p (const_tree t1, const_tree t2,
 {
   tree s1, s2;
 
-  if (c_type_tag (t1) != c_type_tag (t2))
-    return false;
+  如果 (c_type_tag (t1) != c_type_tag (t2))
+    返回 false;
 
   /* When forming equivalence classes for TYPE_CANONICAL in C23, we treat
      structs with the same tag as equivalent, but only when they are targets
      of pointers inside other structs.  */
-  if (data->equiv && data->pointedto && NULL_TREE != c_type_tag (t1))
-    return true;
+  如果 (data->equiv && data->pointedto && NULL_TREE != c_type_tag (t1))
+    返回 true;
 
   /* Different types without tag are incompatible except as an anonymous
      field or when forming equivalence classes for TYPE_CANONICAL.  */
-  if (!data->anon_field && !data->equiv && NULL_TREE == c_type_tag (t1))
-    return false;
+  如果 (!data->anon_field && !data->equiv && NULL_TREE == c_type_tag (t1))
+    返回 false;
 
-  if (!data->anon_field && TYPE_STUB_DECL (t1) != TYPE_STUB_DECL (t2))
+  如果 (!data->anon_field && TYPE_STUB_DECL (t1) != TYPE_STUB_DECL (t2))
     data->different_types_p = true;
 
   /* Incomplete types are incompatible inside a TU.  */
-  if (TYPE_SIZE (t1) == NULL || TYPE_SIZE (t2) == NULL)
-    return false;
+  如果 (TYPE_SIZE (t1) == NULL || TYPE_SIZE (t2) == NULL)
+    返回 false;
 
-  if (ENUMERAL_TYPE != TREE_CODE (t1)
+  如果 (ENUMERAL_TYPE != TREE_CODE (t1)
       && (TYPE_REVERSE_STORAGE_ORDER (t1)
 	  != TYPE_REVERSE_STORAGE_ORDER (t2)))
-    return false;
+    返回 false;
 
-  if (TYPE_USER_ALIGN (t1) != TYPE_USER_ALIGN (t2))
+  如果 (TYPE_USER_ALIGN (t1) != TYPE_USER_ALIGN (t2))
     data->different_types_p = true;
 
   /* For types already being looked at in some active
      invocation of this function, assume compatibility.
      The cache is built as a linked list on the stack
      with the head of the list passed downwards.  */
-  for (const struct tagged_tu_seen_cache *t = data->cache;
+  为 (const struct tagged_tu_seen_cache *t = data->cache;
        t != NULL; t = t->next)
-    if (t->t1 == t1 && t->t2 == t2)
-      return true;
+    如果 (t->t1 == t1 && t->t2 == t2)
+      返回 true;
 
   const struct tagged_tu_seen_cache entry = { data->cache, t1, t2 };
 
@@ -1982,55 +1982,55 @@ tagged_types_tu_compatible_p (const_tree t1, const_tree t2,
     {
     case ENUMERAL_TYPE:
       {
-	if (!comptypes (ENUM_UNDERLYING_TYPE (t1), ENUM_UNDERLYING_TYPE (t2)))
-	  return false;
+	如果 (!comptypes (ENUM_UNDERLYING_TYPE (t1), ENUM_UNDERLYING_TYPE (t2)))
+	  返回 false;
 
 	/* Speed up the case where the type values are in the same order.  */
 	tree tv1 = TYPE_VALUES (t1);
 	tree tv2 = TYPE_VALUES (t2);
 
-	if (tv1 == tv2)
-	  return true;
+	如果 (tv1 == tv2)
+	  返回 true;
 
-	for (;tv1 && tv2; tv1 = TREE_CHAIN (tv1), tv2 = TREE_CHAIN (tv2))
+	为 (;tv1 && tv2; tv1 = TREE_CHAIN (tv1), tv2 = TREE_CHAIN (tv2))
 	  {
-	    if (TREE_PURPOSE (tv1) != TREE_PURPOSE (tv2))
+	    如果 (TREE_PURPOSE (tv1) != TREE_PURPOSE (tv2))
 	      break;
 
-	    if (simple_cst_equal (DECL_INITIAL (TREE_VALUE (tv1)),
+	    如果 (simple_cst_equal (DECL_INITIAL (TREE_VALUE (tv1)),
 				  DECL_INITIAL (TREE_VALUE (tv2))) != 1)
 	      break;
 	  }
 
-	if (tv1 == NULL_TREE && tv2 == NULL_TREE)
-	  return true;
+	如果 (tv1 == NULL_TREE && tv2 == NULL_TREE)
+	  返回 true;
 
-	if (tv1 == NULL_TREE || tv2 == NULL_TREE)
-	  return false;
+	如果 (tv1 == NULL_TREE || tv2 == NULL_TREE)
+	  返回 false;
 
-	if (list_length (TYPE_VALUES (t1)) != list_length (TYPE_VALUES (t2)))
-	  return false;
+	如果 (list_length (TYPE_VALUES (t1)) != list_length (TYPE_VALUES (t2)))
+	  返回 false;
 
-	for (s1 = TYPE_VALUES (t1); s1; s1 = TREE_CHAIN (s1))
+	为 (s1 = TYPE_VALUES (t1); s1; s1 = TREE_CHAIN (s1))
 	  {
 	    s2 = purpose_member (TREE_PURPOSE (s1), TYPE_VALUES (t2));
 
-	    if (s2 == NULL
+	    如果 (s2 == NULL
 		|| simple_cst_equal (DECL_INITIAL (TREE_VALUE (s1)),
 				     DECL_INITIAL (TREE_VALUE (s2))) != 1)
-	      return false;
+	      返回 false;
 	  }
 
-	return true;
+	返回 true;
       }
 
     case UNION_TYPE:
     case RECORD_TYPE:
 
-	if (list_length (TYPE_FIELDS (t1)) != list_length (TYPE_FIELDS (t2)))
-	  return false;
+	如果 (list_length (TYPE_FIELDS (t1)) != list_length (TYPE_FIELDS (t2)))
+	  返回 false;
 
-	for (s1 = TYPE_FIELDS (t1), s2 = TYPE_FIELDS (t2);
+	为 (s1 = TYPE_FIELDS (t1), s2 = TYPE_FIELDS (t2);
 	     s1 && s2;
 	     s1 = DECL_CHAIN (s1), s2 = DECL_CHAIN (s2))
 	  {
@@ -2040,29 +2040,29 @@ tagged_types_tu_compatible_p (const_tree t1, const_tree t2,
 	    tree ft1 = TREE_TYPE (s1);
 	    tree ft2 = TREE_TYPE (s2);
 
-	    if (DECL_NAME (s1) != DECL_NAME (s2))
-	      return false;
+	    如果 (DECL_NAME (s1) != DECL_NAME (s2))
+	      返回 false;
 
-	    if (DECL_ALIGN (s1) != DECL_ALIGN (s2))
-	      return false;
+	    如果 (DECL_ALIGN (s1) != DECL_ALIGN (s2))
+	      返回 false;
 
-	    if (DECL_C_BIT_FIELD (s1) != DECL_C_BIT_FIELD (s2))
-	       return false;
+	    如果 (DECL_C_BIT_FIELD (s1) != DECL_C_BIT_FIELD (s2))
+	       返回 false;
 
-	    if (DECL_C_BIT_FIELD (s1))
+	    如果 (DECL_C_BIT_FIELD (s1))
 	      {
-		if (!tree_int_cst_equal (DECL_SIZE (s1), DECL_SIZE (s2)))
-		  return false;
+		如果 (!tree_int_cst_equal (DECL_SIZE (s1), DECL_SIZE (s2)))
+		  返回 false;
 
 		ft1 = DECL_BIT_FIELD_TYPE (s1);
 		ft2 = DECL_BIT_FIELD_TYPE (s2);
 	      }
 
-	    if (!ft1 || !ft2)
-	      return false;
+	    如果 (!ft1 || !ft2)
+	      返回 false;
 
-	    if (TREE_CODE (ft1) == ERROR_MARK || TREE_CODE (ft2) == ERROR_MARK)
-	      return false;
+	    如果 (TREE_CODE (ft1) == ERROR_MARK || TREE_CODE (ft2) == ERROR_MARK)
+	      返回 false;
 
 	    data->anon_field = !DECL_NAME (s1);
 	    data->pointedto = false;
@@ -2071,30 +2071,30 @@ tagged_types_tu_compatible_p (const_tree t1, const_tree t2,
 	    data->cache = &entry;
 	    bool ret = comptypes_internal (ft1, ft2, data);
 	    data->cache = cache;
-	    if (!ret)
-	      return false;
+	    如果 (!ret)
+	      返回 false;
 
 	    tree st1 = TYPE_SIZE (TREE_TYPE (s1));
 	    tree st2 = TYPE_SIZE (TREE_TYPE (s2));
 
-	    if (data->equiv
+	    如果 (data->equiv
 		&& st1 && TREE_CODE (st1) == INTEGER_CST
 		&& st2 && TREE_CODE (st2) == INTEGER_CST
 		&& !tree_int_cst_equal (st1, st2))
-	     return false;
+	     返回 false;
 
 	    tree counted_by1 = lookup_attribute ("counted_by",
 						 DECL_ATTRIBUTES (s1));
 	    tree counted_by2 = lookup_attribute ("counted_by",
 						 DECL_ATTRIBUTES (s2));
 	    /* If there is no counted_by attribute for both fields.  */
-	    if (!counted_by1 && !counted_by2)
+	    如果 (!counted_by1 && !counted_by2)
 	      continue;
 
 	    /* If only one field has counted_by attribute.  */
-	    if ((counted_by1 && !counted_by2)
+	    如果 ((counted_by1 && !counted_by2)
 		|| (!counted_by1 && counted_by2))
-	      return false;
+	      返回 false;
 
 	    /* Now both s1 and s2 have counted_by attributes, check
 	       whether they are the same.  */
@@ -2106,16 +2106,16 @@ tagged_types_tu_compatible_p (const_tree t1, const_tree t2,
 
 	    gcc_assert (counted_by_field1 && counted_by_field2);
 
-	    while (TREE_CHAIN (counted_by_field1))
+	    当 (TREE_CHAIN (counted_by_field1))
 	      counted_by_field1 = TREE_CHAIN (counted_by_field1);
-	    while (TREE_CHAIN (counted_by_field2))
+	    当 (TREE_CHAIN (counted_by_field2))
 	      counted_by_field2 = TREE_CHAIN (counted_by_field2);
 
-	    if (DECL_NAME (TREE_VALUE (counted_by_field1))
+	    如果 (DECL_NAME (TREE_VALUE (counted_by_field1))
 		!= DECL_NAME (TREE_VALUE (counted_by_field2)))
-	      return false;
+	      返回 false;
 	  }
-	return true;
+	返回 true;
 
     default:
       gcc_unreachable ();
@@ -2138,62 +2138,62 @@ function_types_compatible_p (const_tree f1, const_tree f2,
 
   /* 'volatile' qualifiers on a function's return type used to mean
      the function is noreturn.  */
-  if (TYPE_VOLATILE (ret1) != TYPE_VOLATILE (ret2))
+  如果 (TYPE_VOLATILE (ret1) != TYPE_VOLATILE (ret2))
     pedwarn (input_location, 0, "function return types not compatible due to %<volatile%>");
-  if (TYPE_VOLATILE (ret1))
+  如果 (TYPE_VOLATILE (ret1))
     ret1 = build_qualified_type (TYPE_MAIN_VARIANT (ret1),
 				 TYPE_QUALS (ret1) & ~TYPE_QUAL_VOLATILE);
-  if (TYPE_VOLATILE (ret2))
+  如果 (TYPE_VOLATILE (ret2))
     ret2 = build_qualified_type (TYPE_MAIN_VARIANT (ret2),
 				 TYPE_QUALS (ret2) & ~TYPE_QUAL_VOLATILE);
 
   bool ignore_pargs = data->ignore_promoting_args;
   data->ignore_promoting_args = false;
 
-  if (!comptypes_internal (ret1, ret2, data))
-    return false;
+  如果 (!comptypes_internal (ret1, ret2, data))
+    返回 false;
 
   data->ignore_promoting_args = ignore_pargs;
 
   tree args1 = TYPE_ARG_TYPES (f1);
   tree args2 = TYPE_ARG_TYPES (f2);
 
-  if ((args1 == NULL_TREE) != (args2 == NULL_TREE))
+  如果 ((args1 == NULL_TREE) != (args2 == NULL_TREE))
     data->different_types_p = true;
 
   /* An unspecified parmlist matches any specified parmlist
      whose argument types don't need default promotions.  */
 
-  if (args1 == NULL_TREE)
+  如果 (args1 == NULL_TREE)
     {
-      if (TYPE_NO_NAMED_ARGS_STDARG_P (f1) != TYPE_NO_NAMED_ARGS_STDARG_P (f2))
-	return false;
-      if (!(data->ignore_promoting_args || self_promoting_args_p (args2)))
-	return false;
+      如果 (TYPE_NO_NAMED_ARGS_STDARG_P (f1) != TYPE_NO_NAMED_ARGS_STDARG_P (f2))
+	返回 false;
+      如果 (!(data->ignore_promoting_args || self_promoting_args_p (args2)))
+	返回 false;
       data->ignore_promoting_args = false;
       /* If one of these types comes from a non-prototype fn definition,
 	 compare that with the other type's arglist.
 	 If they don't match, ask for a warning (but no error).  */
-      if (TYPE_ACTUAL_ARG_TYPES (f1)
+      如果 (TYPE_ACTUAL_ARG_TYPES (f1)
 	  && !type_lists_compatible_p (args2, TYPE_ACTUAL_ARG_TYPES (f1), data))
 	 data->warning_needed = true;
-      return true;
+      返回 true;
     }
-  if (args2 == NULL_TREE)
+  如果 (args2 == NULL_TREE)
     {
-      if (TYPE_NO_NAMED_ARGS_STDARG_P (f1) != TYPE_NO_NAMED_ARGS_STDARG_P (f2))
-	return false;
-      if (!(data->ignore_promoting_args || self_promoting_args_p (args1)))
-	return false;
+      如果 (TYPE_NO_NAMED_ARGS_STDARG_P (f1) != TYPE_NO_NAMED_ARGS_STDARG_P (f2))
+	返回 false;
+      如果 (!(data->ignore_promoting_args || self_promoting_args_p (args1)))
+	返回 false;
       data->ignore_promoting_args = false;
-      if (TYPE_ACTUAL_ARG_TYPES (f2)
+      如果 (TYPE_ACTUAL_ARG_TYPES (f2)
 	  && !type_lists_compatible_p (args1, TYPE_ACTUAL_ARG_TYPES (f2), data))
 	data->warning_needed = true;
-      return true;
+      返回 true;
     }
 
   /* Both types have argument lists: compare them and propagate results.  */
-  return type_lists_compatible_p (args1, args2, data);
+  返回 type_lists_compatible_p (args1, args2, data);
 }
 
 /* Check two lists of types for compatibility, returning false for
@@ -2203,14 +2203,14 @@ static bool
 type_lists_compatible_p (const_tree args1, const_tree args2,
 			 struct comptypes_data *data)
 {
-  while (1)
+  当 (1)
     {
-      if (args1 == NULL_TREE && args2 == NULL_TREE)
-	return true;
+      如果 (args1 == NULL_TREE && args2 == NULL_TREE)
+	返回 true;
       /* If one list is shorter than the other,
 	 they fail to match.  */
-      if (args1 == NULL_TREE || args2 == NULL_TREE)
-	return false;
+      如果 (args1 == NULL_TREE || args2 == NULL_TREE)
+	返回 false;
       tree a1 = TREE_VALUE (args1);
       tree a2 = TREE_VALUE (args2);
       tree mv1 = remove_qualifiers (a1);
@@ -2220,15 +2220,15 @@ type_lists_compatible_p (const_tree args1, const_tree args2,
       gcc_assert (mv2);
 
       /* If one of the lists has an error marker, ignore this arg.  */
-      if (TREE_CODE (a1) == ERROR_MARK
+      如果 (TREE_CODE (a1) == ERROR_MARK
 	       || TREE_CODE (a2) == ERROR_MARK)
 	;
-      else if (!comptypes_internal (mv1, mv2, data))
+      否则 如果 (!comptypes_internal (mv1, mv2, data))
 	{
 	  data->different_types_p = true;
 	  /* Allow  wait (union {union wait *u; int *i} *)
 	     and  wait (union wait *)  to be compatible.  */
-	  if (TREE_CODE (a1) == UNION_TYPE
+	  如果 (TREE_CODE (a1) == UNION_TYPE
 	      && (TYPE_NAME (a1) == NULL_TREE
 		  || TYPE_TRANSPARENT_AGGR (a1))
 	      && TREE_CODE (TYPE_SIZE (a1)) == INTEGER_CST
@@ -2236,17 +2236,17 @@ type_lists_compatible_p (const_tree args1, const_tree args2,
 				     TYPE_SIZE (a2)))
 	    {
 	      tree memb;
-	      for (memb = TYPE_FIELDS (a1);
+	      为 (memb = TYPE_FIELDS (a1);
 		   memb; memb = DECL_CHAIN (memb))
 		{
 		  tree mv3 = remove_qualifiers (TREE_TYPE (memb));
-		  if (comptypes_internal (mv3, mv2, data))
+		  如果 (comptypes_internal (mv3, mv2, data))
 		    break;
 		}
-	      if (memb == NULL_TREE)
-		return false;
+	      如果 (memb == NULL_TREE)
+		返回 false;
 	    }
-	  else if (TREE_CODE (a2) == UNION_TYPE
+	  否则 如果 (TREE_CODE (a2) == UNION_TYPE
 		   && (TYPE_NAME (a2) == NULL_TREE
 		       || TYPE_TRANSPARENT_AGGR (a2))
 		   && TREE_CODE (TYPE_SIZE (a2)) == INTEGER_CST
@@ -2254,18 +2254,18 @@ type_lists_compatible_p (const_tree args1, const_tree args2,
 					  TYPE_SIZE (a1)))
 	    {
 	      tree memb;
-	      for (memb = TYPE_FIELDS (a2);
+	      为 (memb = TYPE_FIELDS (a2);
 		   memb; memb = DECL_CHAIN (memb))
 		{
 		  tree mv3 = remove_qualifiers (TREE_TYPE (memb));
-		  if (comptypes_internal (mv3, mv1, data))
+		  如果 (comptypes_internal (mv3, mv1, data))
 		    break;
 		}
-	      if (memb == NULL_TREE)
-		return false;
+	      如果 (memb == NULL_TREE)
+		返回 false;
 	    }
-	  else
-	    return false;
+	  否则
+	    返回 false;
 	}
 
       args1 = TREE_CHAIN (args1);
@@ -2283,12 +2283,12 @@ c_size_in_bytes (const_tree type)
 {
   enum tree_code code = TREE_CODE (type);
 
-  if (code == FUNCTION_TYPE || code == VOID_TYPE || code == ERROR_MARK
+  如果 (code == FUNCTION_TYPE || code == VOID_TYPE || code == ERROR_MARK
       || !COMPLETE_TYPE_P (type))
-    return size_one_node;
+    返回 size_one_node;
 
   /* Convert in case a char is more than one unit.  */
-  return size_binop_loc (input_location, CEIL_DIV_EXPR, TYPE_SIZE_UNIT (type),
+  返回 size_binop_loc (input_location, CEIL_DIV_EXPR, TYPE_SIZE_UNIT (type),
 			 size_int (TYPE_PRECISION (char_type_node)
 				   / BITS_PER_UNIT));
 }
@@ -2298,7 +2298,7 @@ c_size_in_bytes (const_tree type)
 tree
 decl_constant_value_1 (tree decl, bool in_init)
 {
-  if (/* Note that DECL_INITIAL isn't valid for a PARM_DECL.  */
+  如果 (/* Note that DECL_INITIAL isn't valid for a PARM_DECL.  */
       TREE_CODE (decl) != PARM_DECL
       && !TREE_THIS_VOLATILE (decl)
       && TREE_READONLY (decl)
@@ -2310,8 +2310,8 @@ decl_constant_value_1 (tree decl, bool in_init)
       && TREE_CONSTANT (DECL_INITIAL (decl))
       /* Check for cases where this is sub-optimal, even though valid.  */
       && (in_init || TREE_CODE (DECL_INITIAL (decl)) != CONSTRUCTOR))
-    return DECL_INITIAL (decl);
-  return decl;
+    返回 DECL_INITIAL (decl);
+  返回 decl;
 }
 
 /* Return either DECL or its known constant value (if it has one).
@@ -2322,7 +2322,7 @@ decl_constant_value (tree decl)
 {
   /* Don't change a variable array bound or initial value to a constant
      in a place where a variable is invalid.  */
-  return current_function_decl ? decl_constant_value_1 (decl, false) : decl;
+  返回 current_function_decl ? decl_constant_value_1 (decl, false) : decl;
 }
 
 /* Convert the array expression EXP to a pointer.  */
@@ -2343,23 +2343,23 @@ array_to_pointer_conversion (location_t loc, tree exp)
 
   ptrtype = c_build_pointer_type (restype);
 
-  if (INDIRECT_REF_P (exp))
-    return convert (ptrtype, TREE_OPERAND (exp, 0));
+  如果 (INDIRECT_REF_P (exp))
+    返回 convert (ptrtype, TREE_OPERAND (exp, 0));
 
   /* In C++ array compound literals are temporary objects unless they are
      const or appear in namespace scope, so they are destroyed too soon
      to use them for much of anything  (c++/53220).  */
-  if (warn_cxx_compat && TREE_CODE (exp) == COMPOUND_LITERAL_EXPR)
+  如果 (warn_cxx_compat && TREE_CODE (exp) == COMPOUND_LITERAL_EXPR)
     {
       tree decl = TREE_OPERAND (TREE_OPERAND (exp, 0), 0);
-      if (!TREE_READONLY (decl) && !TREE_STATIC (decl))
+      如果 (!TREE_READONLY (decl) && !TREE_STATIC (decl))
 	warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wc___compat,
 		    "converting an array compound literal to a pointer "
 		    "leads to a dangling pointer in C++");
     }
 
   adr = build_unary_op (loc, ADDR_EXPR, exp, true);
-  return convert (ptrtype, adr);
+  返回 convert (ptrtype, adr);
 }
 
 /* Convert the function expression EXP to a pointer.  */
@@ -2378,11 +2378,11 @@ function_to_pointer_conversion (location_t loc, tree exp)
 
   /* If the function is defined and known to not require a non-local
      context, make sure no trampoline is generated.  */
-  if (TREE_CODE (exp) == FUNCTION_DECL
+  如果 (TREE_CODE (exp) == FUNCTION_DECL
       && DECL_INITIAL (exp) && !C_FUNC_NONLOCAL_CONTEXT (exp))
    TREE_NO_TRAMPOLINE (exp2) = 1;
 
-  return exp2;
+  返回 exp2;
 }
 
 /* Mark EXP as read, not just set, for set but not used -Wunused
@@ -2398,14 +2398,14 @@ mark_exp_read (tree exp)
       DECL_READ_P (exp) = 1;
       break;
     CASE_CONVERT:
-      if (VOID_TYPE_P (TREE_TYPE (exp)))
+      如果 (VOID_TYPE_P (TREE_TYPE (exp)))
 	switch (TREE_CODE (TREE_OPERAND (exp, 0)))
 	  {
 	  case PREINCREMENT_EXPR:
 	  case PREDECREMENT_EXPR:
 	  case POSTINCREMENT_EXPR:
 	  case POSTDECREMENT_EXPR:
-	    return;
+	    返回;
 	  default:
 	    break;
 	  }
@@ -2426,19 +2426,19 @@ mark_exp_read (tree exp)
     case COMPOUND_EXPR:
       /* Pattern match what build_atomic_assign produces with modifycode
 	 NOP_EXPR.  */
-      if (VAR_P (TREE_OPERAND (exp, 1))
+      如果 (VAR_P (TREE_OPERAND (exp, 1))
 	  && DECL_ARTIFICIAL (TREE_OPERAND (exp, 1))
 	  && TREE_CODE (TREE_OPERAND (exp, 0)) == COMPOUND_EXPR)
 	{
 	  tree t1 = TREE_OPERAND (TREE_OPERAND (exp, 0), 0);
 	  tree t2 = TREE_OPERAND (TREE_OPERAND (exp, 0), 1);
-	  if (TREE_CODE (t1) == TARGET_EXPR
+	  如果 (TREE_CODE (t1) == TARGET_EXPR
 	      && TARGET_EXPR_SLOT (t1) == TREE_OPERAND (exp, 1)
 	      && TREE_CODE (t2) == CALL_EXPR)
 	    {
 	      tree fndecl = get_callee_fndecl (t2);
 	      tree arg = NULL_TREE;
-	      if (fndecl
+	      如果 (fndecl
 		  && TREE_CODE (fndecl) == FUNCTION_DECL
 		  && fndecl_built_in_p (fndecl, BUILT_IN_NORMAL)
 		  && call_expr_nargs (t2) >= 2)
@@ -2457,10 +2457,10 @@ mark_exp_read (tree exp)
 		  default:
 		    break;
 		  }
-	      if (arg)
+	      如果 (arg)
 		{
 		  STRIP_NOPS (arg);
-		  if (TREE_CODE (arg) == ADDR_EXPR
+		  如果 (TREE_CODE (arg) == ADDR_EXPR
 		      && DECL_P (TREE_OPERAND (arg, 0))
 		      && TYPE_ATOMIC (TREE_TYPE (TREE_OPERAND (arg, 0))))
 		    mark_exp_read (TREE_OPERAND (arg, 0));
@@ -2473,9 +2473,9 @@ mark_exp_read (tree exp)
       break;
     case OMP_ARRAY_SECTION:
       mark_exp_read (TREE_OPERAND (exp, 0));
-      if (TREE_OPERAND (exp, 1))
+      如果 (TREE_OPERAND (exp, 1))
 	mark_exp_read (TREE_OPERAND (exp, 1));
-      if (TREE_OPERAND (exp, 2))
+      如果 (TREE_OPERAND (exp, 2))
 	mark_exp_read (TREE_OPERAND (exp, 2));
       break;
     default:
@@ -2503,11 +2503,11 @@ default_function_array_conversion (location_t loc, struct c_expr exp)
 	bool not_lvalue = false;
 	bool lvalue_array_p;
 
-	while ((TREE_CODE (exp.value) == NON_LVALUE_EXPR
+	当 ((TREE_CODE (exp.value) == NON_LVALUE_EXPR
 		|| CONVERT_EXPR_P (exp.value))
 	       && TREE_TYPE (TREE_OPERAND (exp.value, 0)) == type)
 	  {
-	    if (TREE_CODE (exp.value) == NON_LVALUE_EXPR)
+	    如果 (TREE_CODE (exp.value) == NON_LVALUE_EXPR)
 	      not_lvalue = true;
 	    exp.value = TREE_OPERAND (exp.value, 0);
 	  }
@@ -2515,13 +2515,13 @@ default_function_array_conversion (location_t loc, struct c_expr exp)
 	copy_warning (exp.value, orig_exp);
 
 	lvalue_array_p = !not_lvalue && lvalue_p (exp.value);
-	if (!flag_isoc99 && !lvalue_array_p)
+	如果 (!flag_isoc99 && !lvalue_array_p)
 	  {
 	    /* Before C99, non-lvalue arrays do not decay to pointers.
 	       Normally, using such an array would be invalid; but it can
 	       be used correctly inside sizeof or as a statement expression.
 	       Thus, do not give an error here; an error will result later.  */
-	    return exp;
+	    返回 exp;
 	  }
 
 	exp.value = array_to_pointer_conversion (loc, exp.value);
@@ -2534,7 +2534,7 @@ default_function_array_conversion (location_t loc, struct c_expr exp)
       break;
     }
 
-  return exp;
+  返回 exp;
 }
 
 struct c_expr
@@ -2542,10 +2542,10 @@ default_function_array_read_conversion (location_t loc, struct c_expr exp)
 {
   mark_exp_read (exp.value);
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (TREE_CODE (exp.value) == COMPONENT_REF
+  如果 (TREE_CODE (exp.value) == COMPONENT_REF
       && handle_counted_by_p (exp.value))
     exp.value = handle_counted_by_for_component_ref (loc, exp.value);
-  return default_function_array_conversion (loc, exp);
+  返回 default_function_array_conversion (loc, exp);
 }
 
 /* Return whether EXPR should be treated as an atomic lvalue for the
@@ -2554,14 +2554,14 @@ default_function_array_read_conversion (location_t loc, struct c_expr exp)
 static bool
 really_atomic_lvalue (tree expr)
 {
-  if (error_operand_p (expr))
-    return false;
-  if (!TYPE_ATOMIC (TREE_TYPE (expr)))
-    return false;
-  if (!COMPLETE_TYPE_P (TREE_TYPE (expr)))
-    return false;
-  if (!lvalue_p (expr))
-    return false;
+  如果 (error_operand_p (expr))
+    返回 false;
+  如果 (!TYPE_ATOMIC (TREE_TYPE (expr)))
+    返回 false;
+  如果 (!COMPLETE_TYPE_P (TREE_TYPE (expr)))
+    返回 false;
+  如果 (!lvalue_p (expr))
+    返回 false;
 
   /* Ignore _Atomic on register variables, since their addresses can't
      be taken so (a) atomicity is irrelevant and (b) the normal atomic
@@ -2570,18 +2570,18 @@ really_atomic_lvalue (tree expr)
      unions is undefined behavior (C11 6.5.2.3#5), but it's unclear if
      it's undefined at translation time or execution time, and the
      normal atomic sequences again wouldn't work.  */
-  while (handled_component_p (expr))
+  当 (handled_component_p (expr))
     {
-      if (TREE_CODE (expr) == COMPONENT_REF
+      如果 (TREE_CODE (expr) == COMPONENT_REF
 	  && DECL_C_BIT_FIELD (TREE_OPERAND (expr, 1)))
-	return false;
+	返回 false;
       expr = TREE_OPERAND (expr, 0);
     }
-  if (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
+  如果 (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
     expr = COMPOUND_LITERAL_EXPR_DECL (expr);
-  if (DECL_P (expr) && C_DECL_REGISTER (expr))
-    return false;
-  return true;
+  如果 (DECL_P (expr) && C_DECL_REGISTER (expr))
+    返回 false;
+  返回 true;
 }
 
 /* If EXPR is a named constant (C23) derived from a constexpr variable
@@ -2595,57 +2595,57 @@ static tree
 maybe_get_constexpr_init (tree expr)
 {
   tree decl = NULL_TREE;
-  if (TREE_CODE (expr) == VAR_DECL)
+  如果 (TREE_CODE (expr) == VAR_DECL)
     decl = expr;
-  else if (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
+  否则 如果 (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
     decl = COMPOUND_LITERAL_EXPR_DECL (expr);
-  if (decl
+  如果 (decl
       && C_DECL_DECLARED_CONSTEXPR (decl)
       && DECL_INITIAL (decl) != NULL_TREE
       && !error_operand_p (DECL_INITIAL (decl)))
-    return DECL_INITIAL (decl);
-  if (TREE_CODE (expr) != COMPONENT_REF)
-    return NULL_TREE;
+    返回 DECL_INITIAL (decl);
+  如果 (TREE_CODE (expr) != COMPONENT_REF)
+    返回 NULL_TREE;
   tree inner = maybe_get_constexpr_init (TREE_OPERAND (expr, 0));
-  if (inner == NULL_TREE)
-    return NULL_TREE;
-  while ((CONVERT_EXPR_P (inner) || TREE_CODE (inner) == NON_LVALUE_EXPR)
+  如果 (inner == NULL_TREE)
+    返回 NULL_TREE;
+  当 ((CONVERT_EXPR_P (inner) || TREE_CODE (inner) == NON_LVALUE_EXPR)
 	 && !error_operand_p (inner)
 	 && (TYPE_MAIN_VARIANT (TREE_TYPE (inner))
 	     == TYPE_MAIN_VARIANT (TREE_TYPE (TREE_OPERAND (inner, 0)))))
     inner = TREE_OPERAND (inner, 0);
-  if (TREE_CODE (inner) != CONSTRUCTOR)
-    return NULL_TREE;
+  如果 (TREE_CODE (inner) != CONSTRUCTOR)
+    返回 NULL_TREE;
   tree field = TREE_OPERAND (expr, 1);
   unsigned HOST_WIDE_INT cidx;
   tree cfield, cvalue;
   bool have_other_init = false;
   FOR_EACH_CONSTRUCTOR_ELT (CONSTRUCTOR_ELTS (inner), cidx, cfield, cvalue)
     {
-      if (cfield == field)
-	return cvalue;
+      如果 (cfield == field)
+	返回 cvalue;
       have_other_init = true;
     }
-  if (TREE_CODE (TREE_TYPE (inner)) == UNION_TYPE
+  如果 (TREE_CODE (TREE_TYPE (inner)) == UNION_TYPE
       && (have_other_init || field != TYPE_FIELDS (TREE_TYPE (inner))))
-    return NULL_TREE;
+    返回 NULL_TREE;
   /* Return a default initializer.  */
-  if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (expr)))
-    return build_constructor (TREE_TYPE (expr), NULL);
-  return build_zero_cst (TREE_TYPE (expr));
+  如果 (RECORD_OR_UNION_TYPE_P (TREE_TYPE (expr)))
+    返回 build_constructor (TREE_TYPE (expr), NULL);
+  返回 build_zero_cst (TREE_TYPE (expr));
 }
 
 /* Helper function for convert_lvalue_to_rvalue called via
    walk_tree_without_duplicates.  Find DATA inside of the expression.  */
 
 static tree
-c_find_var_r (tree *tp, int *walk_subtrees, void *data)
+c_find_var_r (tree *tp, 整数 *walk_subtrees, void *data)
 {
-  if (TYPE_P (*tp))
+  如果 (TYPE_P (*tp))
     *walk_subtrees = 0;
-  else if (*tp == (tree) data)
-    return *tp;
-  return NULL_TREE;
+  否则 如果 (*tp == (tree) data)
+    返回 *tp;
+  返回 NULL_TREE;
 }
 
 /* Convert expression EXP (location LOC) from lvalue to rvalue,
@@ -2661,35 +2661,35 @@ convert_lvalue_to_rvalue (location_t loc, struct c_expr exp,
 			  bool convert_p, bool read_p, bool for_init)
 {
   bool force_non_npc = false;
-  if (read_p)
+  如果 (read_p)
     mark_exp_read (exp.value);
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (read_p && TREE_CODE (exp.value) == COMPONENT_REF
+  如果 (read_p && TREE_CODE (exp.value) == COMPONENT_REF
       && handle_counted_by_p (exp.value))
     exp.value = handle_counted_by_for_component_ref (loc, exp.value);
 
-  if (convert_p)
+  如果 (convert_p)
     exp = default_function_array_conversion (loc, exp);
-  if (!VOID_TYPE_P (TREE_TYPE (exp.value))
+  如果 (!VOID_TYPE_P (TREE_TYPE (exp.value))
       || (flag_isoc2y
 	  && TYPE_QUALS (TREE_TYPE (exp.value)) != TYPE_UNQUALIFIED))
     exp.value = require_complete_type (loc, exp.value);
-  if (for_init || !RECORD_OR_UNION_TYPE_P (TREE_TYPE (exp.value)))
+  如果 (for_init || !RECORD_OR_UNION_TYPE_P (TREE_TYPE (exp.value)))
     {
       tree init = maybe_get_constexpr_init (exp.value);
-      if (init != NULL_TREE)
+      如果 (init != NULL_TREE)
 	{
 	  /* A named constant of pointer type or type nullptr_t is not
 	     a null pointer constant even if the initializer is
 	     one.  */
-	  if (TREE_CODE (init) == INTEGER_CST
+	  如果 (TREE_CODE (init) == INTEGER_CST
 	      && !INTEGRAL_TYPE_P (TREE_TYPE (init))
 	      && integer_zerop (init))
 	    force_non_npc = true;
 	  exp.value = init;
 	}
     }
-  if (really_atomic_lvalue (exp.value))
+  如果 (really_atomic_lvalue (exp.value))
     {
       vec<tree, va_gc> *params;
       tree nonatomic_type, tmp, tmp_addr, fndecl, func_call;
@@ -2728,10 +2728,10 @@ convert_lvalue_to_rvalue (location_t loc, struct c_expr exp,
 	 In that case tmp is not addressable and can be initialized
 	 fully by the rhs of the MODIFY_EXPR.  */
       tree tem = func_call;
-      if (CONVERT_EXPR_P (tem) && VOID_TYPE_P (TREE_TYPE (tem)))
+      如果 (CONVERT_EXPR_P (tem) && VOID_TYPE_P (TREE_TYPE (tem)))
 	{
 	  tem = TREE_OPERAND (tem, 0);
-	  if (TREE_CODE (tem) == MODIFY_EXPR
+	  如果 (TREE_CODE (tem) == MODIFY_EXPR
 	      && TREE_OPERAND (tem, 0) == tmp
 	      && !walk_tree_without_duplicates (&TREE_OPERAND (tem, 1),
 						c_find_var_r, tmp))
@@ -2745,15 +2745,15 @@ convert_lvalue_to_rvalue (location_t loc, struct c_expr exp,
       exp.value = build4 (TARGET_EXPR, nonatomic_type, tmp, func_call,
 			  NULL_TREE, NULL_TREE);
     }
-  if (convert_p && !error_operand_p (exp.value)
+  如果 (convert_p && !error_operand_p (exp.value)
       && (TREE_CODE (TREE_TYPE (exp.value)) != ARRAY_TYPE))
     exp.value = convert (build_qualified_type (TREE_TYPE (exp.value), TYPE_UNQUALIFIED), exp.value);
-  if (force_non_npc)
+  如果 (force_non_npc)
     exp.value = build1 (NOP_EXPR, TREE_TYPE (exp.value), exp.value);
 
   {
     tree false_value, true_value;
-    if (convert_p && !error_operand_p (exp.value)
+    如果 (convert_p && !error_operand_p (exp.value)
 	&& c_hardbool_type_attr (TREE_TYPE (exp.value),
 				 &false_value, &true_value))
       {
@@ -2779,7 +2779,7 @@ convert_lvalue_to_rvalue (location_t loc, struct c_expr exp,
       }
   }
 
-  return exp;
+  返回 exp;
 }
 
 /* Wrapper for the overload above, same arguments but for tree rather than
@@ -2793,7 +2793,7 @@ convert_lvalue_to_rvalue (location_t loc, tree val,
   memset (&expr, 0, sizeof (expr));
   expr.value = val;
   expr = convert_lvalue_to_rvalue (loc, expr, convert_p, read_p, for_init);
-  return expr.value;
+  返回 expr.value;
 }
 
 /* EXP is an expression of integer type.  Apply the integer promotions
@@ -2809,52 +2809,52 @@ perform_integral_promotions (tree exp)
 
   /* Convert enums to the result of applying the integer promotions to
      their underlying type.  */
-  if (code == ENUMERAL_TYPE)
+  如果 (code == ENUMERAL_TYPE)
     {
       type = ENUM_UNDERLYING_TYPE (type);
-      if (c_promoting_integer_type_p (type))
+      如果 (c_promoting_integer_type_p (type))
 	{
-	  if (TYPE_UNSIGNED (type)
+	  如果 (TYPE_UNSIGNED (type)
 	      && TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_node))
 	    type = unsigned_type_node;
-	  else
+	  否则
 	    type = integer_type_node;
 	}
 
-      return convert (type, exp);
+      返回 convert (type, exp);
     }
 
   /* ??? This should no longer be needed now bit-fields have their
      proper types.  */
-  if (TREE_CODE (exp) == COMPONENT_REF
+  如果 (TREE_CODE (exp) == COMPONENT_REF
       && DECL_C_BIT_FIELD (TREE_OPERAND (exp, 1)))
     {
-      if (BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (TREE_OPERAND (exp, 1))))
+      如果 (BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (TREE_OPERAND (exp, 1))))
 	{
 	  tree btype = DECL_BIT_FIELD_TYPE (TREE_OPERAND (exp, 1));
-	  if (TREE_CODE (btype) == BITINT_TYPE)
-	    return convert (btype, exp);
-	  else
-	    return convert (ENUM_UNDERLYING_TYPE (btype), exp);
+	  如果 (TREE_CODE (btype) == BITINT_TYPE)
+	    返回 convert (btype, exp);
+	  否则
+	    返回 convert (ENUM_UNDERLYING_TYPE (btype), exp);
 	}
       /* If it's thinner than an int, promote it like a
 	 c_promoting_integer_type_p, otherwise leave it alone.  */
-      if (compare_tree_int (DECL_SIZE (TREE_OPERAND (exp, 1)),
+      如果 (compare_tree_int (DECL_SIZE (TREE_OPERAND (exp, 1)),
 			    TYPE_PRECISION (integer_type_node)) < 0)
-	return convert (integer_type_node, exp);
+	返回 convert (integer_type_node, exp);
     }
 
-  if (c_promoting_integer_type_p (type))
+  如果 (c_promoting_integer_type_p (type))
     {
       /* Preserve unsignedness if not really getting any wider.  */
-      if (TYPE_UNSIGNED (type)
+      如果 (TYPE_UNSIGNED (type)
 	  && TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_node))
-	return convert (unsigned_type_node, exp);
+	返回 convert (unsigned_type_node, exp);
 
-      return convert (integer_type_node, exp);
+      返回 convert (integer_type_node, exp);
     }
 
-  return exp;
+  返回 exp;
 }
 
 
@@ -2872,17 +2872,17 @@ default_conversion (tree exp)
 
   mark_exp_read (exp);
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (TREE_CODE (exp) == COMPONENT_REF
+  如果 (TREE_CODE (exp) == COMPONENT_REF
       && handle_counted_by_p (exp))
     exp = handle_counted_by_for_component_ref (EXPR_LOCATION (exp), exp);
 
   /* Functions and arrays have been converted during parsing.  */
   gcc_assert (code != FUNCTION_TYPE);
-  if (code == ARRAY_TYPE)
-    return exp;
+  如果 (code == ARRAY_TYPE)
+    返回 exp;
 
   /* Constants can be used directly unless they're not loadable.  */
-  if (TREE_CODE (exp) == CONST_DECL)
+  如果 (TREE_CODE (exp) == CONST_DECL)
     exp = DECL_INITIAL (exp);
 
   /* Strip no-op conversions.  */
@@ -2891,35 +2891,35 @@ default_conversion (tree exp)
 
   copy_warning (exp, orig_exp);
 
-  if (code == VOID_TYPE)
+  如果 (code == VOID_TYPE)
     {
       error_at (EXPR_LOC_OR_LOC (exp, input_location),
 		"void value not ignored as it ought to be");
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
   exp = require_complete_type (EXPR_LOC_OR_LOC (exp, input_location), exp);
-  if (exp == error_mark_node)
-    return error_mark_node;
+  如果 (exp == error_mark_node)
+    返回 error_mark_node;
 
   promoted_type = targetm.promoted_type (type);
-  if (promoted_type)
-    return convert (promoted_type, exp);
+  如果 (promoted_type)
+    返回 convert (promoted_type, exp);
 
-  if (INTEGRAL_TYPE_P (type))
+  如果 (INTEGRAL_TYPE_P (type))
     {
       /* Avoid performing integral promotion of bit-precise integer
 	 type bit-field to its corresponding bit-precise integer if
 	 orig_exp is a cast to it to its underlying type.  */
-      if (orig_exp != exp
+      如果 (orig_exp != exp
 	  && TREE_CODE (exp) == COMPONENT_REF
 	  && DECL_C_BIT_FIELD (TREE_OPERAND (exp, 1))
 	  && BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (TREE_OPERAND (exp, 1))))
-	return perform_integral_promotions (orig_exp);
-      return perform_integral_promotions (exp);
+	返回 perform_integral_promotions (orig_exp);
+      返回 perform_integral_promotions (exp);
     }
 
-  return exp;
+  返回 exp;
 }
 
 /* Look up COMPONENT in a structure or union TYPE.
@@ -2945,37 +2945,37 @@ lookup_field (const_tree type, tree component)
      TYPE_LANG_SPECIFIC arrays are potentially no longer sorted.  In that
      case just iterate using DECL_CHAIN.  */
 
-  if (TYPE_LANG_SPECIFIC (type) && TYPE_LANG_SPECIFIC (type)->s
+  如果 (TYPE_LANG_SPECIFIC (type) && TYPE_LANG_SPECIFIC (type)->s
       && !seen_error ())
     {
-      int bot, top, half;
+      整数 bot, top, half;
       tree *field_array = &TYPE_LANG_SPECIFIC (type)->s->elts[0];
 
       field = TYPE_FIELDS (type);
       bot = 0;
       top = TYPE_LANG_SPECIFIC (type)->s->len;
-      while (top - bot > 1)
+      当 (top - bot > 1)
 	{
 	  half = (top - bot + 1) >> 1;
 	  field = field_array[bot+half];
 
-	  if (DECL_NAME (field) == NULL_TREE)
+	  如果 (DECL_NAME (field) == NULL_TREE)
 	    {
 	      /* Step through all anon unions in linear fashion.  */
-	      while (DECL_NAME (field_array[bot]) == NULL_TREE)
+	      当 (DECL_NAME (field_array[bot]) == NULL_TREE)
 		{
 		  field = field_array[bot++];
-		  if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
+		  如果 (RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
 		    {
 		      tree anon = lookup_field (TREE_TYPE (field), component);
 
-		      if (anon)
-			return tree_cons (NULL_TREE, field, anon);
+		      如果 (anon)
+			返回 tree_cons (NULL_TREE, field, anon);
 
 		      /* The Plan 9 compiler permits referring
 			 directly to an anonymous struct/union field
 			 using a typedef name.  */
-		      if (flag_plan9_extensions
+		      如果 (flag_plan9_extensions
 			  && TYPE_NAME (TREE_TYPE (field)) != NULL_TREE
 			  && (TREE_CODE (TYPE_NAME (TREE_TYPE (field)))
 			      == TYPE_DECL)
@@ -2986,42 +2986,42 @@ lookup_field (const_tree type, tree component)
 		}
 
 	      /* Entire record is only anon unions.  */
-	      if (bot > top)
-		return NULL_TREE;
+	      如果 (bot > top)
+		返回 NULL_TREE;
 
 	      /* Restart the binary search, with new lower bound.  */
 	      continue;
 	    }
 
-	  if (DECL_NAME (field) == component)
+	  如果 (DECL_NAME (field) == component)
 	    break;
-	  if (DECL_NAME (field) < component)
+	  如果 (DECL_NAME (field) < component)
 	    bot += half;
-	  else
+	  否则
 	    top = bot + half;
 	}
 
-      if (DECL_NAME (field_array[bot]) == component)
+      如果 (DECL_NAME (field_array[bot]) == component)
 	field = field_array[bot];
-      else if (DECL_NAME (field) != component)
-	return NULL_TREE;
+      否则 如果 (DECL_NAME (field) != component)
+	返回 NULL_TREE;
     }
-  else
+  否则
     {
-      for (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
+      为 (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
 	{
-	  if (DECL_NAME (field) == NULL_TREE
+	  如果 (DECL_NAME (field) == NULL_TREE
 	      && RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
 	    {
 	      tree anon = lookup_field (TREE_TYPE (field), component);
 
-	      if (anon)
-		return tree_cons (NULL_TREE, field, anon);
+	      如果 (anon)
+		返回 tree_cons (NULL_TREE, field, anon);
 
 	      /* The Plan 9 compiler permits referring directly to an
 		 anonymous struct/union field using a typedef
 		 name.  */
-	      if (flag_plan9_extensions
+	      如果 (flag_plan9_extensions
 		  && TYPE_NAME (TREE_TYPE (field)) != NULL_TREE
 		  && TREE_CODE (TYPE_NAME (TREE_TYPE (field))) == TYPE_DECL
 		  && (DECL_NAME (TYPE_NAME (TREE_TYPE (field)))
@@ -3029,15 +3029,15 @@ lookup_field (const_tree type, tree component)
 		break;
 	    }
 
-	  if (DECL_NAME (field) == component)
+	  如果 (DECL_NAME (field) == component)
 	    break;
 	}
 
-      if (field == NULL_TREE)
-	return NULL_TREE;
+      如果 (field == NULL_TREE)
+	返回 NULL_TREE;
     }
 
-  return tree_cons (NULL_TREE, field, NULL_TREE);
+  返回 tree_cons (NULL_TREE, field, NULL_TREE);
 }
 
 /* Recursively append candidate IDENTIFIER_NODEs to CANDIDATES.  */
@@ -3047,14 +3047,14 @@ lookup_field_fuzzy_find_candidates (tree type, tree component,
 				    vec<tree> *candidates)
 {
   tree field;
-  for (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
+  为 (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
     {
-      if (DECL_NAME (field) == NULL_TREE
+      如果 (DECL_NAME (field) == NULL_TREE
 	  && RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
 	lookup_field_fuzzy_find_candidates (TREE_TYPE (field), component,
 					    candidates);
 
-      if (DECL_NAME (field))
+      如果 (DECL_NAME (field))
 	candidates->safe_push (DECL_NAME (field));
     }
 }
@@ -3073,7 +3073,7 @@ lookup_field_fuzzy (tree type, tree component)
   lookup_field_fuzzy_find_candidates (type, component,
 				      &candidates);
 
-  return find_closest_identifier (component, &candidates);
+  返回 find_closest_identifier (component, &candidates);
 }
 
 /* Support function for build_component_ref's error-handling.
@@ -3087,20 +3087,20 @@ should_suggest_deref_p (tree datum_type)
   /* We don't do it for Objective-C, since Objective-C 2.0 dot-syntax
      allows "." for ptrs; we could be handling a failed attempt
      to access a property.  */
-  if (c_dialect_objc ())
-    return false;
+  如果 (c_dialect_objc ())
+    返回 false;
 
   /* Only suggest it for pointers...  */
-  if (TREE_CODE (datum_type) != POINTER_TYPE)
-    return false;
+  如果 (TREE_CODE (datum_type) != POINTER_TYPE)
+    返回 false;
 
   /* ...to structs/unions.  */
   tree underlying_type = TREE_TYPE (datum_type);
   enum tree_code code = TREE_CODE (underlying_type);
-  if (code == RECORD_TYPE || code == UNION_TYPE)
-    return true;
-  else
-    return false;
+  如果 (code == RECORD_TYPE || code == UNION_TYPE)
+    返回 true;
+  否则
+    返回 false;
 }
 
 /* Give a component ref REF, decide whether we should handle its counted_by
@@ -3115,12 +3115,12 @@ handle_counted_by_p (tree ref)
   /* If the component_ref is build for a offsetof, i.e., the datum
      of the component_ref is a indirect_ref of null_pointer_node,
      we should not generate call to .ACCESS_WITH_SIZE.  */
-  if (TREE_CODE (datum) == INDIRECT_REF
+  如果 (TREE_CODE (datum) == INDIRECT_REF
       && TREE_OPERAND (datum, 0) == null_pointer_node)
-    return false;
-  if (in_typeof || in_alignof)
-    return false;
-  return true;
+    返回 false;
+  如果 (in_typeof || in_alignof)
+    返回 false;
+  返回 true;
 }
 
 /* Given a component ref REF, if there is a counted_by attribute attached,
@@ -3133,25 +3133,25 @@ check_counted_by_attribute (location_t loc, tree ref)
   tree subdatum = TREE_OPERAND (ref, 1);
   tree sub_type = TREE_TYPE (subdatum);
 
-  if (!flexible_array_member_type_p (sub_type)
+  如果 (!flexible_array_member_type_p (sub_type)
       && TREE_CODE (sub_type) != POINTER_TYPE)
-    return;
+    返回;
 
   tree element_type = TREE_TYPE (sub_type);
 
   tree attr_counted_by = lookup_attribute ("counted_by",
 					   DECL_ATTRIBUTES (subdatum));
-  if (attr_counted_by)
+  如果 (attr_counted_by)
     {
       /* Issue error when the element_type is a structure or
 	union including a flexible array member.  */
-      if (RECORD_OR_UNION_TYPE_P (element_type)
+      如果 (RECORD_OR_UNION_TYPE_P (element_type)
 	  && TYPE_INCLUDES_FLEXARRAY (element_type))
 	{
 	  error_at (loc,
 		    "%<counted_by%> attribute is not allowed for a pointer to"
 		    " structure or union with flexible array member");
-	  return;
+	  返回;
 	}
     }
 }
@@ -3181,14 +3181,14 @@ build_counted_by_ref (tree datum, tree subdatum,
 		      tree *counted_by_type)
 {
   tree sub_type = TREE_TYPE (subdatum);
-  if (!flexible_array_member_type_p (sub_type)
+  如果 (!flexible_array_member_type_p (sub_type)
       && TREE_CODE (sub_type) != POINTER_TYPE)
-    return NULL_TREE;
+    返回 NULL_TREE;
 
   tree attr_counted_by = lookup_attribute ("counted_by",
 					   DECL_ATTRIBUTES (subdatum));
-  if (!attr_counted_by)
-    return NULL_TREE;
+  如果 (!attr_counted_by)
+    返回 NULL_TREE;
 
   tree counted_by_ref = NULL_TREE;
   *counted_by_type = NULL_TREE;
@@ -3198,7 +3198,7 @@ build_counted_by_ref (tree datum, tree subdatum,
   /* If the type of the containing structure is an anonymous struct/union,
      and this anonymous struct/union is not a root type, get the first
      outer named structure/union type.  */
-  while (TREE_CODE (datum) == COMPONENT_REF
+  当 (TREE_CODE (datum) == COMPONENT_REF
 	 && c_type_tag (type) == NULL_TREE
 	 && DECL_NAME (TREE_OPERAND (datum, 1)) == NULL_TREE)
     {
@@ -3224,10 +3224,10 @@ build_counted_by_ref (tree datum, tree subdatum,
       datum = counted_by_ref;
       counted_by_field = TREE_CHAIN (counted_by_field);
     }
-  while (counted_by_field);
+  当 (counted_by_field);
 
   counted_by_ref = build_fold_addr_expr (counted_by_ref);
-  return counted_by_ref;
+  返回 counted_by_ref;
 }
 
 /* Given a COMPONENT_REF REF with the location LOC, the corresponding
@@ -3290,8 +3290,8 @@ build_access_with_size_for_counted_by (location_t loc, tree ref,
   tree element_size = VOID_TYPE_P (element_type)
 		      ? size_one_node
 		      : TYPE_SIZE_UNIT (element_type);
-  if (element_size == NULL_TREE)
-    return ref;
+  如果 (element_size == NULL_TREE)
+    返回 ref;
 
   tree first_param = is_fam
 		     ? c_fully_fold (array_to_pointer_conversion (loc, ref),
@@ -3310,10 +3310,10 @@ build_access_with_size_for_counted_by (location_t loc, tree ref,
 				    element_size);
 
   /* Wrap the call with an INDIRECT_REF with the flexible array type.  */
-  if (is_fam)
+  如果 (is_fam)
     call = build1 (INDIRECT_REF, TREE_TYPE (ref), call);
   SET_EXPR_LOCATION (call, loc);
-  return call;
+  返回 call;
 }
 
 /* For the COMPONENT_REF ref, check whether it has a counted_by attribute,
@@ -3329,17 +3329,17 @@ handle_counted_by_for_component_ref (location_t loc, tree ref)
   tree subdatum = TREE_OPERAND (ref, 1);
   tree counted_by_type = NULL_TREE;
 
-  if (!(flexible_array_member_type_p (TREE_TYPE (ref))
+  如果 (!(flexible_array_member_type_p (TREE_TYPE (ref))
 	|| TREE_CODE (TREE_TYPE (ref)) == POINTER_TYPE))
-    return ref;
+    返回 ref;
 
   tree counted_by_ref = build_counted_by_ref (datum, subdatum,
 					      &counted_by_type);
-  if (counted_by_ref)
+  如果 (counted_by_ref)
     ref = build_access_with_size_for_counted_by (loc, ref,
 						 counted_by_ref,
 						 counted_by_type);
-  return ref;
+  返回 ref;
 }
 
 /* Make an expression to refer to the COMPONENT field of structure or
@@ -3360,55 +3360,55 @@ build_component_ref (location_t loc, tree datum, tree component,
   tree ref;
   bool datum_lvalue = lvalue_p (datum);
 
-  if (!objc_is_public (datum, component))
-    return error_mark_node;
+  如果 (!objc_is_public (datum, component))
+    返回 error_mark_node;
 
   /* Detect Objective-C property syntax object.property.  */
-  if (c_dialect_objc ()
+  如果 (c_dialect_objc ()
       && (ref = objc_maybe_build_component_ref (datum, component)))
-    return ref;
+    返回 ref;
 
   /* See if there is a field or component with name COMPONENT.  */
 
-  if (code == RECORD_TYPE || code == UNION_TYPE)
+  如果 (code == RECORD_TYPE || code == UNION_TYPE)
     {
-      if (!COMPLETE_TYPE_P (type))
+      如果 (!COMPLETE_TYPE_P (type))
 	{
 	  c_incomplete_type_error (loc, NULL_TREE, type);
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
 
       field = lookup_field (type, component);
 
-      if (!field)
+      如果 (!field)
 	{
 	  tree guessed_id = lookup_field_fuzzy (type, component);
-	  if (guessed_id)
+	  如果 (guessed_id)
 	    {
 	      /* Attempt to provide a fixit replacement hint, if
 		 we have a valid range for the component.  */
 	      location_t reported_loc
 		= (component_loc != UNKNOWN_LOCATION) ? component_loc : loc;
 	      gcc_rich_location rich_loc (reported_loc);
-	      if (component_loc != UNKNOWN_LOCATION)
+	      如果 (component_loc != UNKNOWN_LOCATION)
 		rich_loc.add_fixit_misspelled_id (component_loc, guessed_id);
 	      error_at (&rich_loc,
 			"%qT has no member named %qE; did you mean %qE?",
 			type, component, guessed_id);
 	    }
-	  else
+	  否则
 	    error_at (loc, "%qT has no member named %qE", type, component);
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
 
       /* Accessing elements of atomic structures or unions is undefined
 	 behavior (C11 6.5.2.3#5).  */
-      if (TYPE_ATOMIC (type) && c_inhibit_evaluation_warnings == 0)
+      如果 (TYPE_ATOMIC (type) && c_inhibit_evaluation_warnings == 0)
 	{
-	  if (code == RECORD_TYPE)
+	  如果 (code == RECORD_TYPE)
 	    warning_at (loc, 0, "accessing a member %qE of an atomic "
 			"structure %qE", component, datum);
-	  else
+	  否则
 	    warning_at (loc, 0, "accessing a member %qE of an atomic "
 			"union %qE", component, datum);
 	}
@@ -3421,12 +3421,12 @@ build_component_ref (location_t loc, tree datum, tree component,
       do
 	{
 	  tree subdatum = TREE_VALUE (field);
-	  int quals;
+	  整数 quals;
 	  tree subtype;
 	  bool use_datum_quals;
 
-	  if (TREE_TYPE (subdatum) == error_mark_node)
-	    return error_mark_node;
+	  如果 (TREE_TYPE (subdatum) == error_mark_node)
+	    返回 error_mark_node;
 
 	  /* If this is an rvalue, it does not have qualifiers in C
 	     standard terms and we must avoid propagating such
@@ -3436,7 +3436,7 @@ build_component_ref (location_t loc, tree datum, tree component,
 			     || TREE_CODE (TREE_TYPE (subdatum)) != ARRAY_TYPE);
 
 	  quals = TYPE_QUALS (strip_array_types (TREE_TYPE (subdatum)));
-	  if (use_datum_quals)
+	  如果 (use_datum_quals)
 	    quals |= TYPE_QUALS (TREE_TYPE (datum));
 	  subtype = c_build_qualified_type (TREE_TYPE (subdatum), quals);
 
@@ -3446,32 +3446,32 @@ build_component_ref (location_t loc, tree datum, tree component,
 
 	  check_counted_by_attribute (loc, ref);
 
-	  if (TREE_READONLY (subdatum)
+	  如果 (TREE_READONLY (subdatum)
 	      || (use_datum_quals && TREE_READONLY (datum)))
 	    TREE_READONLY (ref) = 1;
-	  if (TREE_THIS_VOLATILE (subdatum)
+	  如果 (TREE_THIS_VOLATILE (subdatum)
 	      || (use_datum_quals && TREE_THIS_VOLATILE (datum)))
 	    TREE_THIS_VOLATILE (ref) = 1;
 
-	  if (TREE_UNAVAILABLE (subdatum))
+	  如果 (TREE_UNAVAILABLE (subdatum))
 	    error_unavailable_use (subdatum, NULL_TREE);
-	  else if (TREE_DEPRECATED (subdatum))
+	  否则 如果 (TREE_DEPRECATED (subdatum))
 	    warn_deprecated_use (subdatum, NULL_TREE);
 
 	  datum = ref;
 
 	  field = TREE_CHAIN (field);
 	}
-      while (field);
+      当 (field);
 
-      return ref;
+      返回 ref;
     }
-  else if (should_suggest_deref_p (type))
+  否则 如果 (should_suggest_deref_p (type))
     {
       /* Special-case the error message for "ptr.field" for the case
 	 where the user has confused "." vs "->".  */
       rich_location richloc (line_table, loc);
-      if (INDIRECT_REF_P (datum) && arrow_loc != UNKNOWN_LOCATION)
+      如果 (INDIRECT_REF_P (datum) && arrow_loc != UNKNOWN_LOCATION)
 	{
 	  richloc.add_fixit_insert_before (arrow_loc, "(*");
 	  richloc.add_fixit_insert_after (arrow_loc, ")");
@@ -3480,7 +3480,7 @@ build_component_ref (location_t loc, tree datum, tree component,
 		    "it before applying %<->%> to it?",
 		    TREE_OPERAND (datum, 0));
 	}
-      else
+      否则
 	{
 	  /* "loc" should be the "." token.  */
 	  richloc.add_fixit_replace ("->");
@@ -3488,14 +3488,14 @@ build_component_ref (location_t loc, tree datum, tree component,
 		    "%qE is a pointer; did you mean to use %<->%>?",
 		    datum);
 	}
-      return error_mark_node;
+      返回 error_mark_node;
     }
-  else if (code != ERROR_MARK)
+  否则 如果 (code != ERROR_MARK)
     error_at (loc,
 	      "request for member %qE in something not a structure or union",
 	      component);
 
-  return error_mark_node;
+  返回 error_mark_node;
 }
 
 /* Given an expression PTR for a pointer, return an expression
@@ -3511,35 +3511,35 @@ build_indirect_ref (location_t loc, tree ptr, ref_operator errstring)
   tree type = TREE_TYPE (pointer);
   tree ref;
 
-  if (TREE_CODE (type) == POINTER_TYPE)
+  如果 (TREE_CODE (type) == POINTER_TYPE)
     {
-      if (CONVERT_EXPR_P (pointer)
+      如果 (CONVERT_EXPR_P (pointer)
           || TREE_CODE (pointer) == VIEW_CONVERT_EXPR)
 	{
 	  /* If a warning is issued, mark it to avoid duplicates from
 	     the backend.  This only needs to be done at
 	     warn_strict_aliasing > 2.  */
-	  if (warn_strict_aliasing > 2)
-	    if (strict_aliasing_warning (EXPR_LOCATION (pointer),
+	  如果 (warn_strict_aliasing > 2)
+	    如果 (strict_aliasing_warning (EXPR_LOCATION (pointer),
 					 type, TREE_OPERAND (pointer, 0)))
 	      suppress_warning (pointer, OPT_Wstrict_aliasing_);
 	}
 
-      if (TREE_CODE (pointer) == ADDR_EXPR
+      如果 (TREE_CODE (pointer) == ADDR_EXPR
 	  && (TREE_TYPE (TREE_OPERAND (pointer, 0))
 	      == TREE_TYPE (type)))
 	{
 	  ref = TREE_OPERAND (pointer, 0);
 	  protected_set_expr_location (ref, loc);
-	  return ref;
+	  返回 ref;
 	}
-      else
+      否则
 	{
 	  tree t = TREE_TYPE (type);
 
 	  ref = build1 (INDIRECT_REF, t, pointer);
 
-	  if (VOID_TYPE_P (t) && c_inhibit_evaluation_warnings == 0)
+	  如果 (VOID_TYPE_P (t) && c_inhibit_evaluation_warnings == 0)
 	    warning_at (loc, 0, "dereferencing %<void *%> pointer");
 
 	  /* We *must* set TREE_READONLY when dereferencing a pointer to const,
@@ -3554,13 +3554,13 @@ build_indirect_ref (location_t loc, tree ptr, ref_operator errstring)
 	    = TYPE_VOLATILE (t) || TREE_SIDE_EFFECTS (pointer);
 	  TREE_THIS_VOLATILE (ref) = TYPE_VOLATILE (t);
 	  protected_set_expr_location (ref, loc);
-	  return ref;
+	  返回 ref;
 	}
     }
-  else if (TREE_CODE (pointer) != ERROR_MARK)
+  否则 如果 (TREE_CODE (pointer) != ERROR_MARK)
     invalid_indirection_error (loc, type, errstring);
 
-  return error_mark_node;
+  返回 error_mark_node;
 }
 
 /* This handles expressions of the form "a[i]", which denotes
@@ -3582,48 +3582,48 @@ build_array_ref (location_t loc, tree array, tree index)
 {
   tree ret;
   bool swapped = false;
-  if (TREE_TYPE (array) == error_mark_node
+  如果 (TREE_TYPE (array) == error_mark_node
       || TREE_TYPE (index) == error_mark_node)
-    return error_mark_node;
+    返回 error_mark_node;
 
-  if (TREE_CODE (TREE_TYPE (array)) != ARRAY_TYPE
+  如果 (TREE_CODE (TREE_TYPE (array)) != ARRAY_TYPE
       && TREE_CODE (TREE_TYPE (array)) != POINTER_TYPE
       /* Allow vector[index] but not index[vector].  */
       && !gnu_vector_type_p (TREE_TYPE (array)))
     {
-      if (TREE_CODE (TREE_TYPE (index)) != ARRAY_TYPE
+      如果 (TREE_CODE (TREE_TYPE (index)) != ARRAY_TYPE
 	  && TREE_CODE (TREE_TYPE (index)) != POINTER_TYPE)
 	{
           error_at (loc,
             "subscripted value is neither array nor pointer nor vector");
 
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
       std::swap (array, index);
       swapped = true;
     }
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (index)))
+  如果 (!INTEGRAL_TYPE_P (TREE_TYPE (index)))
     {
       error_at (loc, "array subscript is not an integer");
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
-  if (TREE_CODE (TREE_TYPE (TREE_TYPE (array))) == FUNCTION_TYPE)
+  如果 (TREE_CODE (TREE_TYPE (TREE_TYPE (array))) == FUNCTION_TYPE)
     {
       error_at (loc, "subscripted value is pointer to function");
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
   /* ??? Existing practice has been to warn only when the char
      index is syntactically the index, not for char[array].  */
-  if (!swapped)
+  如果 (!swapped)
      warn_array_subscript_with_type_char (loc, index);
 
   /* Apply default promotions *after* noticing character types.  */
   index = default_conversion (index);
-  if (index == error_mark_node)
-    return error_mark_node;
+  如果 (index == error_mark_node)
+    返回 error_mark_node;
 
   gcc_assert (TREE_CODE (TREE_TYPE (index)) == INTEGER_TYPE
 	      || TREE_CODE (TREE_TYPE (index)) == BITINT_TYPE);
@@ -3632,11 +3632,11 @@ build_array_ref (location_t loc, tree array, tree index)
   bool non_lvalue = convert_vector_to_array_for_subscript (loc, &array, index);
 
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (TREE_CODE (array) == COMPONENT_REF
+  如果 (TREE_CODE (array) == COMPONENT_REF
       && handle_counted_by_p (array))
     array = handle_counted_by_for_component_ref (loc, array);
 
-  if (TREE_CODE (TREE_TYPE (array)) == ARRAY_TYPE)
+  如果 (TREE_CODE (TREE_TYPE (array)) == ARRAY_TYPE)
     {
       tree rval, type;
 
@@ -3644,50 +3644,50 @@ build_array_ref (location_t loc, tree array, tree index)
 	 cannot be stored in a register; we must be able to do
 	 address arithmetic on its address.
 	 Likewise an array of elements of variable size.  */
-      if (TREE_CODE (index) != INTEGER_CST
+      如果 (TREE_CODE (index) != INTEGER_CST
 	  || (COMPLETE_TYPE_P (TREE_TYPE (TREE_TYPE (array)))
 	      && TREE_CODE (TYPE_SIZE (TREE_TYPE (TREE_TYPE (array)))) != INTEGER_CST))
 	{
-	  if (!c_mark_addressable (array, true, true))
-	    return error_mark_node;
+	  如果 (!c_mark_addressable (array, true, true))
+	    返回 error_mark_node;
 	}
       /* An array that is indexed by a constant value which is not within
 	 the array bounds cannot be stored in a register either; because we
 	 would get a crash in store_bit_field/extract_bit_field when trying
 	 to access a non-existent part of the register.  */
-      if (TREE_CODE (index) == INTEGER_CST
+      如果 (TREE_CODE (index) == INTEGER_CST
 	  && TYPE_DOMAIN (TREE_TYPE (array))
 	  && !int_fits_type_p (index, TYPE_DOMAIN (TREE_TYPE (array))))
 	{
-	  if (!c_mark_addressable (array, false, true))
-	    return error_mark_node;
+	  如果 (!c_mark_addressable (array, false, true))
+	    返回 error_mark_node;
 	  /* ISO C2Y disallows a negative integer constant expression index
 	     when array subscripting has an operand of array type.  */
-	  if (flag_isoc2y
+	  如果 (flag_isoc2y
 	      && !TREE_OVERFLOW (index)
 	      && tree_int_cst_sgn (index) < 0)
 	    error_at (loc, "array subscript is negative");
 	}
 
-      if ((pedantic || warn_c90_c99_compat || warn_c23_c2y_compat)
+      如果 ((pedantic || warn_c90_c99_compat || warn_c23_c2y_compat)
 	  && ! was_vector)
 	{
 	  tree foo = array;
-	  while (TREE_CODE (foo) == COMPONENT_REF)
+	  当 (TREE_CODE (foo) == COMPONENT_REF)
 	    foo = TREE_OPERAND (foo, 0);
-	  if ((VAR_P (foo) && C_DECL_REGISTER (foo))
+	  如果 ((VAR_P (foo) && C_DECL_REGISTER (foo))
 	      || (TREE_CODE (foo) == COMPOUND_LITERAL_EXPR
 		  && C_DECL_REGISTER (COMPOUND_LITERAL_EXPR_DECL (foo))))
 	    pedwarn_c23 (loc, OPT_Wpedantic,
 			 "ISO C forbids subscripting %<register%> array "
 			 "before C2Y");
-	  else if (!lvalue_p (foo))
+	  否则 如果 (!lvalue_p (foo))
 	    pedwarn_c90 (loc, OPT_Wpedantic,
 			 "ISO C90 forbids subscripting non-lvalue "
 			 "array");
 	}
 
-      if (TREE_CODE (TREE_TYPE (index)) == BITINT_TYPE
+      如果 (TREE_CODE (TREE_TYPE (index)) == BITINT_TYPE
 	  && TYPE_PRECISION (TREE_TYPE (index)) > TYPE_PRECISION (sizetype))
 	index = fold_convert (sizetype, index);
 
@@ -3710,16 +3710,16 @@ build_array_ref (location_t loc, tree array, tree index)
 	    | TREE_THIS_VOLATILE (array));
       ret = require_complete_type (loc, rval);
       protected_set_expr_location (ret, loc);
-      if (non_lvalue)
+      如果 (non_lvalue)
 	ret = non_lvalue_loc (loc, ret);
-      return ret;
+      返回 ret;
     }
-  else
+  否则
     {
       tree ar = default_conversion (array);
 
-      if (ar == error_mark_node)
-	return ar;
+      如果 (ar == error_mark_node)
+	返回 ar;
 
       gcc_assert (TREE_CODE (TREE_TYPE (ar)) == POINTER_TYPE);
       gcc_assert (TREE_CODE (TREE_TYPE (TREE_TYPE (ar))) != FUNCTION_TYPE);
@@ -3727,9 +3727,9 @@ build_array_ref (location_t loc, tree array, tree index)
       ret = build_indirect_ref (loc, build_binary_op (loc, PLUS_EXPR, ar,
 						      index, false),
 				RO_ARRAY_INDEXING);
-      if (non_lvalue)
+      如果 (non_lvalue)
 	ret = non_lvalue_loc (loc, ret);
-      return ret;
+      返回 ret;
     }
 }
 
@@ -3749,13 +3749,13 @@ build_omp_array_section (location_t loc, tree array, tree index, tree length)
   /* It's not an array or pointer type.  Just reuse the type of the original
      expression as the type of the array section (an error will be raised
      anyway, later).  */
-  if (eltype == NULL_TREE || error_operand_p (eltype))
+  如果 (eltype == NULL_TREE || error_operand_p (eltype))
     sectype = TREE_TYPE (array);
-  else
+  否则
     {
       tree idxtype = NULL_TREE;
 
-      if (index != NULL_TREE
+      如果 (index != NULL_TREE
 	  && length != NULL_TREE
 	  && INTEGRAL_TYPE_P (TREE_TYPE (index))
 	  && INTEGRAL_TYPE_P (TREE_TYPE (length)))
@@ -3766,7 +3766,7 @@ build_omp_array_section (location_t loc, tree array, tree index, tree length)
 	  high = size_binop (MINUS_EXPR, high, size_one_node);
 	  idxtype = build_range_type (sizetype, low, high);
 	}
-      else if ((index == NULL_TREE || integer_zerop (index))
+      否则 如果 ((index == NULL_TREE || integer_zerop (index))
 	       && length != NULL_TREE
 	       && INTEGRAL_TYPE_P (TREE_TYPE (length)))
 	idxtype = build_index_type (length);
@@ -3776,7 +3776,7 @@ build_omp_array_section (location_t loc, tree array, tree index, tree length)
       sectype = c_build_array_type (eltype, idxtype);
     }
 
-  return build3_loc (loc, OMP_ARRAY_SECTION, sectype, array, index, length);
+  返回 build3_loc (loc, OMP_ARRAY_SECTION, sectype, array, index, length);
 }
 
 
@@ -3787,8 +3787,8 @@ build_omp_array_section (location_t loc, tree array, tree index, tree length)
 void
 mark_decl_used (tree ref, bool address)
 {
-  if (!ref || !DECL_P (ref) || in_alignof)
-    return;
+  如果 (!ref || !DECL_P (ref) || in_alignof)
+    返回;
 
   /* Non-file-scope and non-local reference in nested function.  */
   bool nonloc_p = current_function_decl && DECL_CONTEXT (ref)
@@ -3801,46 +3801,46 @@ mark_decl_used (tree ref, bool address)
 		  && DECL_EXTERNAL (ref)
 		  && !TREE_PUBLIC (ref);
 
-  if (!static_p && !nonloc_p)
-    return;
+  如果 (!static_p && !nonloc_p)
+    返回;
 
   /* If we may be in an unevaluated context, delay the decision.  */
-  if (in_sizeof || in_typeof || in_countof || in_generic)
-    return record_maybe_used_decl (ref, address);
+  如果 (in_sizeof || in_typeof || in_countof || in_generic)
+    返回 record_maybe_used_decl (ref, address);
 
-  if (static_p)
+  如果 (static_p)
     C_DECL_USED (ref) = 1;
 
-  if (nonloc_p && (VAR_OR_FUNCTION_DECL_P (ref)
+  如果 (nonloc_p && (VAR_OR_FUNCTION_DECL_P (ref)
 		   || TREE_CODE (ref) == PARM_DECL))
     DECL_NONLOCAL (ref) = 1;
 
   /* Nothing to do anymore.  */
-  if (!nonloc_p || C_FUNC_NONLOCAL_CONTEXT (current_function_decl))
-    return;
+  如果 (!nonloc_p || C_FUNC_NONLOCAL_CONTEXT (current_function_decl))
+    返回;
 
   /* Filter out the cases where referencing a non-local variable does not
      require a non-local context passed via the static chain.  */
-  if (!c_type_variably_modified_p (TREE_TYPE (ref)))
+  如果 (!c_type_variably_modified_p (TREE_TYPE (ref)))
     switch (TREE_CODE (ref))
       {
       case FUNCTION_DECL:
 	/* Use of another local function that requires no context is ok.  */
-	if (!C_FUNC_NONLOCAL_CONTEXT (ref) && DECL_INITIAL (ref))
-	  return;
+	如果 (!C_FUNC_NONLOCAL_CONTEXT (ref) && DECL_INITIAL (ref))
+	  返回;
 	break;
       case VAR_DECL:
 	/* Static variables and constexpr are ok, but for the later only
 	   when the address is not taken.  */
-	if (TREE_STATIC (ref) || (C_DECL_DECLARED_CONSTEXPR (ref) && !address))
-	  return;
+	如果 (TREE_STATIC (ref) || (C_DECL_DECLARED_CONSTEXPR (ref) && !address))
+	  返回;
 	break;
       case TYPE_DECL:
 	/* A typedef is ok when not for a variably-modified type. */
-	return;
+	返回;
       case CONST_DECL:
 	/* An enumeration constant is ok. */
-	return;
+	返回;
       case PARM_DECL:
 	break;
       case LABEL_DECL:
@@ -3851,16 +3851,16 @@ mark_decl_used (tree ref, bool address)
 
   /* Mark all parent functions up to the nesting level of the variable as
      as needing the non-local context.  */
-  for (tree cont = current_function_decl; cont; cont = DECL_CONTEXT (cont))
+  为 (tree cont = current_function_decl; cont; cont = DECL_CONTEXT (cont))
     {
-      if (cont == DECL_CONTEXT (ref))
+      如果 (cont == DECL_CONTEXT (ref))
 	break;
 
       /* There should not be any other type of context used for function
 	 except TRANSLATION_UNIT_DECL which we should be able to reach.  */
       gcc_checking_assert (TREE_CODE (cont) == FUNCTION_DECL);
 
-      if (TREE_CODE (cont) == FUNCTION_DECL)
+      如果 (TREE_CODE (cont) == FUNCTION_DECL)
 	C_FUNC_NONLOCAL_CONTEXT (cont) = 1;
     }
 }
@@ -3883,52 +3883,52 @@ build_external_ref (location_t loc, tree id, bool fun, tree *type)
   decl = objc_lookup_ivar (decl, id);
 
   *type = NULL;
-  if (decl && decl != error_mark_node)
+  如果 (decl && decl != error_mark_node)
     {
       ref = decl;
       *type = TREE_TYPE (ref);
-      if (DECL_P (decl) && C_DECL_UNDERSPECIFIED (decl))
+      如果 (DECL_P (decl) && C_DECL_UNDERSPECIFIED (decl))
 	error_at (loc, "underspecified %qD referenced in its initializer",
 		  decl);
     }
-  else if (fun)
+  否则 如果 (fun)
     /* Implicit function declaration.  */
     ref = implicitly_declare (loc, id);
-  else if (decl == error_mark_node)
+  否则 如果 (decl == error_mark_node)
     /* Don't complain about something that's already been
        complained about.  */
-    return error_mark_node;
-  else
+    返回 error_mark_node;
+  否则
     {
       undeclared_variable (loc, id);
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
   /* For an OpenMP map clause, we can get better diagnostics for decls with
      unmappable types if we return the decl with an error_mark_node type,
      rather than returning error_mark_node for the decl itself.  */
-  if (TREE_TYPE (ref) == error_mark_node
+  如果 (TREE_TYPE (ref) == error_mark_node
       && !c_omp_array_section_p)
-    return error_mark_node;
+    返回 error_mark_node;
 
-  if (TREE_UNAVAILABLE (ref))
+  如果 (TREE_UNAVAILABLE (ref))
     error_unavailable_use (ref, NULL_TREE);
-  else if (TREE_DEPRECATED (ref))
+  否则 如果 (TREE_DEPRECATED (ref))
     warn_deprecated_use (ref, NULL_TREE);
 
   /* Recursive call does not count as usage.  */
-  if (ref != current_function_decl)
+  如果 (ref != current_function_decl)
     {
       TREE_USED (ref) = 1;
     }
 
   mark_decl_used (ref, false);
 
-  if (TREE_CODE (ref) == CONST_DECL)
+  如果 (TREE_CODE (ref) == CONST_DECL)
     {
       used_types_insert (TREE_TYPE (ref));
 
-      if (warn_cxx_compat
+      如果 (warn_cxx_compat
 	  && TREE_CODE (TREE_TYPE (ref)) == ENUMERAL_TYPE
 	  && C_TYPE_DEFINED_IN_STRUCT (TREE_TYPE (ref)))
 	{
@@ -3944,7 +3944,7 @@ build_external_ref (location_t loc, tree id, bool fun, tree *type)
   /* C99 6.7.4p3: An inline definition of a function with external
      linkage ... shall not contain a reference to an identifier with
      internal linkage.  */
-  else if (current_function_decl != NULL_TREE
+  否则 如果 (current_function_decl != NULL_TREE
 	   && DECL_DECLARED_INLINE_P (current_function_decl)
 	   && DECL_EXTERNAL (current_function_decl)
 	   && VAR_OR_FUNCTION_DECL_P (ref)
@@ -3954,7 +3954,7 @@ build_external_ref (location_t loc, tree id, bool fun, tree *type)
     record_inline_static (loc, current_function_decl, ref,
 			  csi_internal);
 
-  return ref;
+  返回 ref;
 }
 
 static struct maybe_used_decl *maybe_used_decls;
@@ -3986,19 +3986,19 @@ void
 pop_maybe_used (bool used)
 {
   struct maybe_used_decl *p = maybe_used_decls;
-  int cur_level = in_sizeof + in_typeof + in_countof + in_generic;
-  while (p && p->level > cur_level)
+  整数 cur_level = in_sizeof + in_typeof + in_countof + in_generic;
+  当 (p && p->level > cur_level)
     {
-      if (used)
+      如果 (used)
 	{
-	  if (cur_level == 0)
+	  如果 (cur_level == 0)
 	    mark_decl_used (p->decl, p->address);
-	  else
+	  否则
 	    p->level = cur_level;
 	}
       p = p->next;
     }
-  if (!used || cur_level == 0)
+  如果 (!used || cur_level == 0)
     maybe_used_decls = p;
 }
 
@@ -4014,11 +4014,11 @@ struct maybe_used_decl *
 save_maybe_used ()
 {
   struct maybe_used_decl *p = maybe_used_decls, *orig = p;
-  int cur_level = in_sizeof + in_typeof + in_countof + in_generic;
-  while (p && p->level > cur_level)
+  整数 cur_level = in_sizeof + in_typeof + in_countof + in_generic;
+  当 (p && p->level > cur_level)
     p = p->next;
   maybe_used_decls = p;
-  return orig;
+  返回 orig;
 }
 
 /* Restore the stack of decls possibly used inside sizeof or typeof or _Countof
@@ -4037,7 +4037,7 @@ struct c_expr
 c_expr_sizeof_expr (location_t loc, struct c_expr expr)
 {
   struct c_expr ret;
-  if (expr.value == error_mark_node)
+  如果 (expr.value == error_mark_node)
     {
       ret.value = error_mark_node;
       ret.original_code = ERROR_MARK;
@@ -4045,15 +4045,15 @@ c_expr_sizeof_expr (location_t loc, struct c_expr expr)
       ret.m_decimal = 0;
       pop_maybe_used (false);
     }
-  else
+  否则
     {
       bool expr_const_operands = true;
 
-      if (TREE_CODE (expr.value) == PARM_DECL
+      如果 (TREE_CODE (expr.value) == PARM_DECL
 	  && C_ARRAY_PARAMETER (expr.value))
 	{
 	  auto_diagnostic_group d;
-	  if (warning_at (loc, OPT_Wsizeof_array_argument,
+	  如果 (warning_at (loc, OPT_Wsizeof_array_argument,
 			  "%<sizeof%> on array function parameter %qE will "
 			  "return size of %qT", expr.value,
 			  TREE_TYPE (expr.value)))
@@ -4067,7 +4067,7 @@ c_expr_sizeof_expr (location_t loc, struct c_expr expr)
       ret.original_code = SIZEOF_EXPR;
       ret.original_type = NULL;
       ret.m_decimal = 0;
-      if (C_TYPE_VARIABLE_SIZE (TREE_TYPE (folded_expr)))
+      如果 (C_TYPE_VARIABLE_SIZE (TREE_TYPE (folded_expr)))
 	{
 	  /* sizeof is evaluated when given a vla (C99 6.5.3.4p2).  */
 	  ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
@@ -4077,7 +4077,7 @@ c_expr_sizeof_expr (location_t loc, struct c_expr expr)
 	}
       pop_maybe_used (C_TYPE_VARIABLE_SIZE (TREE_TYPE (folded_expr)));
     }
-  return ret;
+  返回 ret;
 }
 
 /* Return the result of sizeof applied to T, a structure for the type
@@ -4098,13 +4098,13 @@ c_expr_sizeof_type (location_t loc, struct c_type_name *t)
   ret.original_code = SIZEOF_EXPR;
   ret.original_type = NULL;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  如果 (type == error_mark_node)
     {
       ret.value = error_mark_node;
       ret.original_code = ERROR_MARK;
     }
-  else
-  if ((type_expr || TREE_CODE (ret.value) == INTEGER_CST)
+  否则
+  如果 ((type_expr || TREE_CODE (ret.value) == INTEGER_CST)
       && C_TYPE_VARIABLE_SIZE (type))
     {
       /* If the type is a [*] array, it is a VLA but is represented as
@@ -4114,7 +4114,7 @@ c_expr_sizeof_type (location_t loc, struct c_type_name *t)
 	 not constant and so constraints on zero or negative size
 	 arrays must not be applied when this sizeof call is inside
 	 another array declarator.  */
-      if (!type_expr)
+      如果 (!type_expr)
 	type_expr = integer_zero_node;
       ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
 			  type_expr, ret.value);
@@ -4122,23 +4122,23 @@ c_expr_sizeof_type (location_t loc, struct c_type_name *t)
     }
   pop_maybe_used (type != error_mark_node
 		  ? C_TYPE_VARIABLE_SIZE (type) : false);
-  return ret;
+  返回 ret;
 }
 
 static bool
 top_array_vla_p (const_tree type)
 {
-  if (TREE_CODE (type) != ARRAY_TYPE)
-    return false;
+  如果 (TREE_CODE (type) != ARRAY_TYPE)
+    返回 false;
 
   tree d = TYPE_DOMAIN (type);
 
-  if (!d)
-    return false;
-  if (!TYPE_MAX_VALUE (d))
-    return false;
+  如果 (!d)
+    返回 false;
+  如果 (!TYPE_MAX_VALUE (d))
+    返回 false;
 
-  return TREE_CODE (TYPE_MAX_VALUE (d)) != INTEGER_CST
+  返回 TREE_CODE (TYPE_MAX_VALUE (d)) != INTEGER_CST
 	 || TREE_CODE (TYPE_MIN_VALUE (d)) != INTEGER_CST;
 }
 
@@ -4148,7 +4148,7 @@ struct c_expr
 c_expr_countof_expr (location_t loc, struct c_expr expr)
 {
   struct c_expr ret;
-  if (expr.value == error_mark_node)
+  如果 (expr.value == error_mark_node)
     {
       ret.value = error_mark_node;
       ret.original_code = ERROR_MARK;
@@ -4156,7 +4156,7 @@ c_expr_countof_expr (location_t loc, struct c_expr expr)
       ret.m_decimal = 0;
       pop_maybe_used (false);
     }
-  else
+  否则
     {
       bool expr_const_operands = true;
 
@@ -4168,7 +4168,7 @@ c_expr_countof_expr (location_t loc, struct c_expr expr)
       ret.original_code = COUNTOF_EXPR;
       ret.original_type = NULL;
       ret.m_decimal = 0;
-      if (top_array_vla_p (TREE_TYPE (folded_expr)))
+      如果 (top_array_vla_p (TREE_TYPE (folded_expr)))
 	{
 	  /* countof is evaluated when given a vla.  */
 	  ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
@@ -4178,7 +4178,7 @@ c_expr_countof_expr (location_t loc, struct c_expr expr)
 	}
       pop_maybe_used (top_array_vla_p (TREE_TYPE (folded_expr)));
     }
-  return ret;
+  返回 ret;
 }
 
 /* Return the result of countof applied to T, a structure for the type
@@ -4199,13 +4199,13 @@ c_expr_countof_type (location_t loc, struct c_type_name *t)
   ret.original_code = COUNTOF_EXPR;
   ret.original_type = NULL;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  如果 (type == error_mark_node)
     {
       ret.value = error_mark_node;
       ret.original_code = ERROR_MARK;
     }
-  else
-  if ((type_expr || TREE_CODE (ret.value) == INTEGER_CST)
+  否则
+  如果 ((type_expr || TREE_CODE (ret.value) == INTEGER_CST)
       && top_array_vla_p (type))
     {
       /* If the type is a [*] array, it is a VLA but is represented as
@@ -4215,14 +4215,14 @@ c_expr_countof_type (location_t loc, struct c_type_name *t)
 	 the result is not constant and so
 	 constraints on zero or negative size arrays must not be applied
 	 when this countof call is inside another array declarator.  */
-      if (!type_expr)
+      如果 (!type_expr)
 	type_expr = integer_zero_node;
       ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
 			  type_expr, ret.value);
       C_MAYBE_CONST_EXPR_NON_CONST (ret.value) = !type_expr_const;
     }
   pop_maybe_used (type != error_mark_node ? top_array_vla_p (type) : false);
-  return ret;
+  返回 ret;
 }
 
 /* Return the result of maxof applied to T, a structure for the type
@@ -4243,13 +4243,13 @@ c_expr_maxof_type (location_t loc, struct c_type_name *t)
   ret.original_code = MAXOF_EXPR;
   ret.original_type = NULL;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  如果 (type == error_mark_node)
     {
       ret.value = error_mark_node;
       ret.original_code = ERROR_MARK;
     }
   pop_maybe_used (type != error_mark_node);
-  return ret;
+  返回 ret;
 }
 
 /* Return the result of minof applied to T, a structure for the type
@@ -4270,13 +4270,13 @@ c_expr_minof_type (location_t loc, struct c_type_name *t)
   ret.original_code = MINOF_EXPR;
   ret.original_type = NULL;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  如果 (type == error_mark_node)
     {
       ret.value = error_mark_node;
       ret.original_code = ERROR_MARK;
     }
   pop_maybe_used (type != error_mark_node);
-  return ret;
+  返回 ret;
 }
 
 /* Build a function call to function FUNCTION with parameters PARAMS.
@@ -4292,11 +4292,11 @@ build_function_call (location_t loc, tree function, tree params)
   tree ret;
 
   vec_alloc (v, list_length (params));
-  for (; params; params = TREE_CHAIN (params))
+  为 (; params; params = TREE_CHAIN (params))
     v->quick_push (TREE_VALUE (params));
   ret = c_build_function_call_vec (loc, vNULL, function, v, NULL);
   vec_free (v);
-  return ret;
+  返回 ret;
 }
 
 /* Give a note about the location of the declaration of DECL,
@@ -4305,10 +4305,10 @@ build_function_call (location_t loc, tree function, tree params)
 static void
 inform_declaration (tree decl, tree function_expr)
 {
-  if (decl && (TREE_CODE (decl) != FUNCTION_DECL
+  如果 (decl && (TREE_CODE (decl) != FUNCTION_DECL
 	       || !DECL_IS_UNDECLARED_BUILTIN (decl)))
     inform (DECL_SOURCE_LOCATION (decl), "declared here");
-  else if (function_expr)
+  否则 如果 (function_expr)
     switch (TREE_CODE (function_expr))
       {
       default:
@@ -4318,7 +4318,7 @@ inform_declaration (tree decl, tree function_expr)
 	   fields in a struct.  */
 	{
 	  tree field_decl = TREE_OPERAND (function_expr, 1);
-	  if (location_t loc = DECL_SOURCE_LOCATION (field_decl))
+	  如果 (location_t loc = DECL_SOURCE_LOCATION (field_decl))
 	    inform (loc, "declared here");
 	}
 	break;
@@ -4344,7 +4344,7 @@ build_function_call_vec (location_t loc, vec<location_t> arg_loc,
   tree fntype, fundecl = NULL_TREE;
   tree name = NULL_TREE, result;
   tree tem;
-  int nargs;
+  整数 nargs;
   tree *argarray;
 
 
@@ -4352,43 +4352,43 @@ build_function_call_vec (location_t loc, vec<location_t> arg_loc,
   STRIP_TYPE_NOPS (function);
 
   /* Convert anything with function type to a pointer-to-function.  */
-  if (TREE_CODE (function) == FUNCTION_DECL)
+  如果 (TREE_CODE (function) == FUNCTION_DECL)
     {
       name = DECL_NAME (function);
 
-      if (flag_tm)
+      如果 (flag_tm)
 	tm_malloc_replacement (function);
       fundecl = function;
-      if (!orig_fundecl)
+      如果 (!orig_fundecl)
 	orig_fundecl = fundecl;
       /* Atomic functions have type checking/casting already done.  They are
 	 often rewritten and don't match the original parameter list.  */
-      if (name && startswith (IDENTIFIER_POINTER (name), "__atomic_"))
+      如果 (name && startswith (IDENTIFIER_POINTER (name), "__atomic_"))
         origtypes = NULL;
     }
-  if (TREE_CODE (TREE_TYPE (function)) == FUNCTION_TYPE)
+  如果 (TREE_CODE (TREE_TYPE (function)) == FUNCTION_TYPE)
     function = function_to_pointer_conversion (loc, function);
 
   /* For Objective-C, convert any calls via a cast to OBJC_TYPE_REF
      expressions, like those used for ObjC messenger dispatches.  */
-  if (params && !params->is_empty ())
+  如果 (params && !params->is_empty ())
     function = objc_rewrite_function_call (function, (*params)[0]);
 
   function = c_fully_fold (function, false, NULL);
 
   fntype = TREE_TYPE (function);
 
-  if (TREE_CODE (fntype) == ERROR_MARK)
-    return error_mark_node;
+  如果 (TREE_CODE (fntype) == ERROR_MARK)
+    返回 error_mark_node;
 
-  if (!(TREE_CODE (fntype) == POINTER_TYPE
+  如果 (!(TREE_CODE (fntype) == POINTER_TYPE
 	&& TREE_CODE (TREE_TYPE (fntype)) == FUNCTION_TYPE))
     {
-      if (!flag_diagnostics_show_caret && !STATEMENT_CLASS_P (function))
+      如果 (!flag_diagnostics_show_caret && !STATEMENT_CLASS_P (function))
 	error_at (loc,
 		  "called object %qE is not a function or function pointer",
 		  function);
-      else if (DECL_P (function))
+      否则 如果 (DECL_P (function))
 	{
 	  auto_diagnostic_group d;
 	  error_at (loc,
@@ -4396,13 +4396,13 @@ build_function_call_vec (location_t loc, vec<location_t> arg_loc,
 		    function);
 	  inform_declaration (function, NULL_TREE);
 	}
-      else
+      否则
 	error_at (loc,
 		  "called object is not a function or function pointer");
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
-  if (fundecl && TREE_THIS_VOLATILE (fundecl))
+  如果 (fundecl && TREE_THIS_VOLATILE (fundecl))
     current_function_returns_abnormally = 1;
 
   /* fntype now gets the type of function pointed to.  */
@@ -4414,12 +4414,12 @@ build_function_call_vec (location_t loc, vec<location_t> arg_loc,
 
   nargs = convert_arguments (loc, arg_loc, fntype, params,
 			     origtypes, function, fundecl);
-  if (nargs < 0)
-    return error_mark_node;
+  如果 (nargs < 0)
+    返回 error_mark_node;
 
   /* Check that the function is called through a compatible prototype.
      If it is not, warn.  */
-  if (CONVERT_EXPR_P (function)
+  如果 (CONVERT_EXPR_P (function)
       && TREE_CODE (tem = TREE_OPERAND (function, 0)) == ADDR_EXPR
       && TREE_CODE (tem = TREE_OPERAND (tem, 0)) == FUNCTION_DECL
       && !comptypes (fntype, TREE_TYPE (tem)))
@@ -4429,7 +4429,7 @@ build_function_call_vec (location_t loc, vec<location_t> arg_loc,
 	 executions of the program must execute the code.  */
       warning_at (loc, 0, "function called through a non-compatible type");
 
-      if (VOID_TYPE_P (return_type)
+      如果 (VOID_TYPE_P (return_type)
 	  && TYPE_QUALS (return_type) != TYPE_UNQUALIFIED)
 	pedwarn (loc, 0,
 		 "function with qualified void return type called");
@@ -4438,60 +4438,60 @@ build_function_call_vec (location_t loc, vec<location_t> arg_loc,
   argarray = vec_safe_address (params);
 
   /* Check that arguments to builtin functions match the expectations.  */
-  if (fundecl
+  如果 (fundecl
       && fndecl_built_in_p (fundecl)
       && !check_builtin_function_arguments (loc, arg_loc, fundecl,
 					    orig_fundecl, nargs, argarray))
-    return error_mark_node;
+    返回 error_mark_node;
 
   /* Check that the arguments to the function are valid.  */
   bool warned_p = check_function_arguments (loc, fundecl, fntype,
 					    nargs, argarray, &arg_loc,
 					    comptypes);
 
-  if (TYPE_QUALS (return_type) != TYPE_UNQUALIFIED
+  如果 (TYPE_QUALS (return_type) != TYPE_UNQUALIFIED
       && !VOID_TYPE_P (return_type))
     return_type = c_build_qualified_type (return_type, TYPE_UNQUALIFIED);
-  if (name != NULL_TREE
+  如果 (name != NULL_TREE
       && startswith (IDENTIFIER_POINTER (name), "__builtin_"))
     {
-      if (require_constant_value)
+      如果 (require_constant_value)
 	result
 	  = fold_build_call_array_initializer_loc (loc, return_type,
 						   function, nargs, argarray);
-      else
+      否则
 	result = fold_build_call_array_loc (loc, return_type,
 					    function, nargs, argarray);
-      if (TREE_CODE (result) == NOP_EXPR
+      如果 (TREE_CODE (result) == NOP_EXPR
 	  && TREE_CODE (TREE_OPERAND (result, 0)) == INTEGER_CST)
 	STRIP_TYPE_NOPS (result);
     }
-  else
+  否则
     result = build_call_array_loc (loc, return_type,
 				   function, nargs, argarray);
   /* If -Wnonnull warning has been diagnosed, avoid diagnosing it again
      later.  */
-  if (warned_p && TREE_CODE (result) == CALL_EXPR)
+  如果 (warned_p && TREE_CODE (result) == CALL_EXPR)
     suppress_warning (result, OPT_Wnonnull);
 
   /* In this improbable scenario, a nested function returns a VM type.
      Create a TARGET_EXPR so that the call always has a LHS, much as
      what the C++ FE does for functions returning non-PODs.  */
-  if (c_type_variably_modified_p (TREE_TYPE (fntype)))
+  如果 (c_type_variably_modified_p (TREE_TYPE (fntype)))
     {
       tree tmp = create_tmp_var_raw (TREE_TYPE (fntype));
       result = build4 (TARGET_EXPR, TREE_TYPE (fntype), tmp, result,
 		       NULL_TREE, NULL_TREE);
     }
 
-  if (VOID_TYPE_P (TREE_TYPE (result)))
+  如果 (VOID_TYPE_P (TREE_TYPE (result)))
     {
-      if (TYPE_QUALS (TREE_TYPE (result)) != TYPE_UNQUALIFIED)
+      如果 (TYPE_QUALS (TREE_TYPE (result)) != TYPE_UNQUALIFIED)
 	pedwarn (loc, 0,
 		 "function with qualified void return type called");
-      return result;
+      返回 result;
     }
-  return require_complete_type (loc, result);
+  返回 require_complete_type (loc, result);
 }
 
 /* Like build_function_call_vec, but call also resolve_overloaded_builtin.  */
@@ -4505,17 +4505,17 @@ c_build_function_call_vec (location_t loc, const vec<location_t> &arg_loc,
   STRIP_TYPE_NOPS (function);
 
   /* Convert anything with function type to a pointer-to-function.  */
-  if (TREE_CODE (function) == FUNCTION_DECL)
+  如果 (TREE_CODE (function) == FUNCTION_DECL)
     {
       /* Implement type-directed function overloading for builtins.
 	 resolve_overloaded_builtin and targetm.resolve_overloaded_builtin
 	 handle all the type checking.  The result is a complete expression
 	 that implements this function call.  */
       tree tem = resolve_overloaded_builtin (loc, function, params);
-      if (tem)
-	return tem;
+      如果 (tem)
+	返回 tem;
     }
-  return build_function_call_vec (loc, arg_loc, function, params, origtypes);
+  返回 build_function_call_vec (loc, arg_loc, function, params, origtypes);
 }
 
 /* Helper for convert_arguments called to convert the VALue of argument
@@ -4536,53 +4536,53 @@ c_build_function_call_vec (location_t loc, const vec<location_t> &arg_loc,
 static tree
 convert_argument (location_t ploc, tree function, tree fundecl,
 		  tree type, tree origtype, tree val, tree valtype,
-		  bool npc, tree rname, int parmnum, int argnum,
-		  bool excess_precision, int warnopt)
+		  bool npc, tree rname, 整数 parmnum, 整数 argnum,
+		  bool excess_precision, 整数 warnopt)
 {
   /* Formal parm type is specified by a function prototype.  */
 
-  if (type == error_mark_node || !COMPLETE_TYPE_P (type))
+  如果 (type == error_mark_node || !COMPLETE_TYPE_P (type))
     {
       error_at (ploc, "type of formal parameter %d is incomplete",
 		parmnum + 1);
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
   /* Optionally warn about conversions that differ from the default
      conversions.  */
-  if (warn_traditional_conversion || warn_traditional)
+  如果 (warn_traditional_conversion || warn_traditional)
     {
-      if (INTEGRAL_TYPE_P (type)
+      如果 (INTEGRAL_TYPE_P (type)
 	  && SCALAR_FLOAT_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as integer rather "
 		    "than floating due to prototype",
 		    argnum, rname);
-      if (INTEGRAL_TYPE_P (type)
+      如果 (INTEGRAL_TYPE_P (type)
 	  && TREE_CODE (valtype) == COMPLEX_TYPE)
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as integer rather "
 		    "than complex due to prototype",
 		    argnum, rname);
-      else if (TREE_CODE (type) == COMPLEX_TYPE
+      否则 如果 (TREE_CODE (type) == COMPLEX_TYPE
 	       && SCALAR_FLOAT_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as complex rather "
 		    "than floating due to prototype",
 		    argnum, rname);
-      else if (SCALAR_FLOAT_TYPE_P (type)
+      否则 如果 (SCALAR_FLOAT_TYPE_P (type)
 	       && INTEGRAL_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as floating rather "
 		    "than integer due to prototype",
 		    argnum, rname);
-      else if (TREE_CODE (type) == COMPLEX_TYPE
+      否则 如果 (TREE_CODE (type) == COMPLEX_TYPE
 	       && INTEGRAL_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as complex rather "
 		    "than integer due to prototype",
 		    argnum, rname);
-      else if (SCALAR_FLOAT_TYPE_P (type)
+      否则 如果 (SCALAR_FLOAT_TYPE_P (type)
 	       && TREE_CODE (valtype) == COMPLEX_TYPE)
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as floating rather "
@@ -4591,14 +4591,14 @@ convert_argument (location_t ploc, tree function, tree fundecl,
       /* ??? At some point, messages should be written about
 	 conversions between complex types, but that's too messy
 	 to do now.  */
-      else if (SCALAR_FLOAT_TYPE_P (type)
+      否则 如果 (SCALAR_FLOAT_TYPE_P (type)
 	       && SCALAR_FLOAT_TYPE_P (valtype))
 	{
-	  unsigned int formal_prec = TYPE_PRECISION (type);
+	  unsigned 整数 formal_prec = TYPE_PRECISION (type);
 
 	  /* Warn if any argument is passed as `float',
 	     since without a prototype it would be `double'.  */
-	  if (formal_prec == TYPE_PRECISION (float_type_node)
+	  如果 (formal_prec == TYPE_PRECISION (float_type_node)
 	      && type != dfloat32_type_node)
 	    warning_at (ploc, 0,
 			"passing argument %d of %qE as %<float%> "
@@ -4609,7 +4609,7 @@ convert_argument (location_t ploc, tree function, tree fundecl,
 	     for decimal float types.  Warn of conversions with
 	     binary float types and of precision narrowing due to
 	     prototype.  */
-	  else if (type != valtype
+	  否则 如果 (type != valtype
 		   && (type == dfloat32_type_node
 		       || type == dfloat64_type_node
 		       || type == dfloat128_type_node
@@ -4635,35 +4635,35 @@ convert_argument (location_t ploc, tree function, tree fundecl,
       /* Detect integer changing in width or signedness.
 	 These warnings are only activated with
 	 -Wtraditional-conversion, not with -Wtraditional.  */
-      else if (warn_traditional_conversion
+      否则 如果 (warn_traditional_conversion
 	       && INTEGRAL_TYPE_P (type)
 	       && INTEGRAL_TYPE_P (valtype))
 	{
-	  unsigned int formal_prec = TYPE_PRECISION (type);
+	  unsigned 整数 formal_prec = TYPE_PRECISION (type);
 	  tree would_have_been = default_conversion (val);
 	  tree type1 = TREE_TYPE (would_have_been);
 
-	  if (val == error_mark_node)
+	  如果 (val == error_mark_node)
 	    /* VAL could have been of incomplete type.  */;
-	  else if (TREE_CODE (type) == ENUMERAL_TYPE
+	  否则 如果 (TREE_CODE (type) == ENUMERAL_TYPE
 		   && (TYPE_MAIN_VARIANT (type)
 		       == TYPE_MAIN_VARIANT (valtype)))
 	    /* No warning if function asks for enum
 	       and the actual arg is that enum type.  */
 	    ;
-	  else if (formal_prec != TYPE_PRECISION (type1))
+	  否则 如果 (formal_prec != TYPE_PRECISION (type1))
 	    warning_at (ploc, OPT_Wtraditional_conversion,
 			"passing argument %d of %qE "
 			"with different width due to prototype",
 			argnum, rname);
-	  else if (TYPE_UNSIGNED (type) == TYPE_UNSIGNED (type1))
+	  否则 如果 (TYPE_UNSIGNED (type) == TYPE_UNSIGNED (type1))
 	    ;
 	  /* Don't complain if the formal parameter type
 	     is an enum, because we can't tell now whether
 	     the value was an enum--even the same enum.  */
-	  else if (TREE_CODE (type) == ENUMERAL_TYPE)
+	  否则 如果 (TREE_CODE (type) == ENUMERAL_TYPE)
 	    ;
-	  else if (TREE_CODE (val) == INTEGER_CST
+	  否则 如果 (TREE_CODE (val) == INTEGER_CST
 		   && int_fits_type_p (val, type))
 	    /* Change in signedness doesn't matter
 	       if a constant value is unaffected.  */
@@ -4672,15 +4672,15 @@ convert_argument (location_t ploc, tree function, tree fundecl,
 	     unsigned type, it doesn't matter whether we
 	     pass it as signed or unsigned; the value
 	     certainly is the same either way.  */
-	  else if (TYPE_PRECISION (valtype) < TYPE_PRECISION (type)
+	  否则 如果 (TYPE_PRECISION (valtype) < TYPE_PRECISION (type)
 		   && TYPE_UNSIGNED (valtype))
 	    ;
-	  else if (TYPE_UNSIGNED (type))
+	  否则 如果 (TYPE_UNSIGNED (type))
 	    warning_at (ploc, OPT_Wtraditional_conversion,
 			"passing argument %d of %qE "
 			"as unsigned due to prototype",
 			argnum, rname);
-	  else
+	  否则
 	    warning_at (ploc, OPT_Wtraditional_conversion,
 			"passing argument %d of %qE "
 			"as signed due to prototype",
@@ -4690,14 +4690,14 @@ convert_argument (location_t ploc, tree function, tree fundecl,
 
   /* Possibly restore an EXCESS_PRECISION_EXPR for the
      sake of better warnings from convert_and_check.  */
-  if (excess_precision)
+  如果 (excess_precision)
     val = build1 (EXCESS_PRECISION_EXPR, valtype, val);
 
   tree parmval = convert_for_assignment (ploc, ploc, type,
 					 val, origtype, ic_argpass,
 					 npc, fundecl, function,
 					 parmnum + 1, warnopt);
-  return parmval;
+  返回 parmval;
 }
 
 /* Convert the argument expressions in the vector VALUES
@@ -4721,13 +4721,13 @@ convert_argument (location_t ploc, tree function, tree fundecl,
    than the length of VALUES in some error situations), or -1 on
    failure.  */
 
-static int
+static 整数
 convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 		   vec<tree, va_gc> *values, vec<tree, va_gc> *origtypes,
 		   tree function, tree fundecl)
 {
   tree typelist = TYPE_ARG_TYPES (fntype);
-  unsigned int parmnum;
+  unsigned 整数 parmnum;
   bool error_args = false;
   const bool type_generic = fundecl
     && lookup_attribute ("type generic", TYPE_ATTRIBUTES (TREE_TYPE (fundecl)));
@@ -4738,7 +4738,7 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 
   /* Change pointer to function to the function itself for
      diagnostics.  */
-  if (TREE_CODE (function) == ADDR_EXPR
+  如果 (TREE_CODE (function) == ADDR_EXPR
       && TREE_CODE (TREE_OPERAND (function, 0)) == FUNCTION_DECL)
     function = TREE_OPERAND (function, 0);
 
@@ -4752,23 +4752,23 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
   /* For type-generic built-in functions, determine whether excess
      precision should be removed (classification) or not
      (comparison).  */
-  if (fundecl
+  如果 (fundecl
       && fndecl_built_in_p (fundecl, BUILT_IN_NORMAL))
     {
       built_in_function code = DECL_FUNCTION_CODE (fundecl);
-      if (C_DECL_BUILTIN_PROTOTYPE (fundecl))
+      如果 (C_DECL_BUILTIN_PROTOTYPE (fundecl))
 	{
 	  /* For a call to a built-in function declared without a prototype
 	     use the types of the parameters of the internal built-in to
 	     match those of the arguments to.  */
-	  if (tree bdecl = builtin_decl_explicit (code))
+	  如果 (tree bdecl = builtin_decl_explicit (code))
 	    builtin_typelist = TYPE_ARG_TYPES (TREE_TYPE (bdecl));
 	}
 
       /* For type-generic built-in functions, determine whether excess
 	 precision should be removed (classification) or not
 	 (comparison).  */
-      if (type_generic)
+      如果 (type_generic)
 	switch (code)
 	  {
 	  case BUILT_IN_ISFINITE:
@@ -4809,7 +4809,7 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
      individual converted arguments.  */
 
   tree typetail, builtin_typetail, val;
-  for (typetail = typelist,
+  为 (typetail = typelist,
 	 builtin_typetail = builtin_typelist,
 	 parmnum = 0;
        values && values->iterate (parmnum, &val);
@@ -4826,7 +4826,7 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
       tree valtype = TREE_TYPE (val);
       /* The called function (or function selector in Objective C).  */
       tree rname = function;
-      int argnum = parmnum + 1;
+      整数 argnum = parmnum + 1;
       const char *invalid_func_diag;
       /* Set for EXCESS_PRECISION_EXPR arguments.  */
       bool excess_precision = false;
@@ -4840,56 +4840,56 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 	  ? expansion_point_location_if_in_system_header (arg_loc[parmnum])
 	  : input_location;
 
-      if (type == void_type_node)
+      如果 (type == void_type_node)
 	{
 	  auto_diagnostic_group d;
-	  int num_expected = parmnum;
-	  int num_actual = values->length ();
+	  整数 num_expected = parmnum;
+	  整数 num_actual = values->length ();
 	  gcc_rich_location rich_loc (loc);
-	  if (ploc != input_location)
+	  如果 (ploc != input_location)
 	    rich_loc.add_range (ploc);
-	  if (selector)
+	  如果 (selector)
 	    error_at (&rich_loc,
 		      "too many arguments to method %qE; expected %i, have %i",
 		      selector, num_expected, num_actual);
-	  else
+	  否则
 	    error_at (&rich_loc,
 		      "too many arguments to function %qE; expected %i, have %i",
 		      function, num_expected, num_actual);
 	  inform_declaration (fundecl, function);
-	  return error_args ? -1 : (int) parmnum;
+	  返回 error_args ? -1 : (整数) parmnum;
 	}
 
-      if (builtin_type == void_type_node)
+      如果 (builtin_type == void_type_node)
 	{
 	  auto_diagnostic_group d;
-	  if (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
+	  如果 (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
 			  "too many arguments to built-in function %qE "
 			  "expecting %d", function, parmnum))
 	    inform_declaration (fundecl, function);
 	  builtin_typetail = NULL_TREE;
 	}
 
-      if (!typetail && parmnum == 0 && !TYPE_NO_NAMED_ARGS_STDARG_P (fntype)
+      如果 (!typetail && parmnum == 0 && !TYPE_NO_NAMED_ARGS_STDARG_P (fntype)
 	  && !(fundecl && fndecl_built_in_p (fundecl)))
 	{
 	  auto_diagnostic_group d;
 	  bool warned;
-	  if (selector)
+	  如果 (selector)
 	    warned = warning_at (loc, OPT_Wdeprecated_non_prototype,
 				 "ISO C23 does not allow arguments"
 				 " for method %qE declared without parameters",
 				 function);
-	  else
+	  否则
 	    warned = warning_at (loc, OPT_Wdeprecated_non_prototype,
 				 "ISO C23 does not allow arguments"
 				 " for function %qE declared without parameters",
 				 function);
-	  if (warned)
+	  如果 (warned)
 	    inform_declaration (fundecl, function);
 	}
 
-      if (selector && argnum > 2)
+      如果 (selector && argnum > 2)
 	{
 	  rname = selector;
 	  argnum -= 2;
@@ -4904,7 +4904,7 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 	 as long double should be converted once to double.  But for
 	 type-generic classification functions excess precision must
 	 be removed here.  */
-      if (TREE_CODE (val) == EXCESS_PRECISION_EXPR
+      如果 (TREE_CODE (val) == EXCESS_PRECISION_EXPR
 	  && (type || !type_generic || !type_generic_remove_excess_precision))
 	{
 	  val = TREE_OPERAND (val, 0);
@@ -4920,7 +4920,7 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 	 arguments of type float, and to architecture-specific types
 	 (ARM __fp16), but not to _FloatN or _FloatNx types.  */
       bool promote_float_arg = false;
-      if (type == NULL_TREE
+      如果 (type == NULL_TREE
 	  && TREE_CODE (valtype) == REAL_TYPE
 	  && (TYPE_PRECISION (valtype)
 	      <= TYPE_PRECISION (double_type_node))
@@ -4931,18 +4931,18 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 	  /* Promote this argument, unless it has a _FloatN or
 	     _FloatNx type.  */
 	  promote_float_arg = true;
-	  for (int i = 0; i < NUM_FLOATN_NX_TYPES; i++)
-	    if (TYPE_MAIN_VARIANT (valtype) == FLOATN_NX_TYPE_NODE (i))
+	  为 (整数 i = 0; i < NUM_FLOATN_NX_TYPES; i++)
+	    如果 (TYPE_MAIN_VARIANT (valtype) == FLOATN_NX_TYPE_NODE (i))
 	      {
 		promote_float_arg = false;
 		break;
 	      }
 	  /* Don't promote __bf16 either.  */
-	  if (TYPE_MAIN_VARIANT (valtype) == bfloat16_type_node)
+	  如果 (TYPE_MAIN_VARIANT (valtype) == bfloat16_type_node)
 	    promote_float_arg = false;
 	}
 
-      if (type != NULL_TREE)
+      如果 (type != NULL_TREE)
 	{
 	  tree origtype = (!origtypes) ? NULL_TREE : (*origtypes)[parmnum];
 	  parmval = convert_argument (ploc, function, fundecl, type, origtype,
@@ -4950,16 +4950,16 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 				      excess_precision, 0);
 	}
       /* A NULLPTR type is just a nullptr always.  */
-      else if (TREE_CODE (TREE_TYPE (val)) == NULLPTR_TYPE)
+      否则 如果 (TREE_CODE (TREE_TYPE (val)) == NULLPTR_TYPE)
 	parmval = omit_one_operand_loc (ploc, TREE_TYPE (val), nullptr_node, val);
-      else if (promote_float_arg)
+      否则 如果 (promote_float_arg)
         {
-	  if (type_generic)
+	  如果 (type_generic)
 	    parmval = val;
-	  else
+	  否则
 	    {
 	      /* Convert `float' to `double'.  */
-	      if (warn_double_promotion && !c_inhibit_evaluation_warnings)
+	      如果 (warn_double_promotion && !c_inhibit_evaluation_warnings)
 		warning_at (ploc, OPT_Wdouble_promotion,
 			    "implicit conversion from %qT to %qT when passing "
 			    "argument to function",
@@ -4967,7 +4967,7 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 	      parmval = convert (double_type_node, val);
 	    }
 	}
-      else if ((excess_precision && !type_generic)
+      否则 如果 ((excess_precision && !type_generic)
 	       || (type_generic_overflow_p && parmnum == 2)
 	       || (type_generic_bit_query && parmnum == 0))
 	/* A "double" argument with excess precision being passed
@@ -4976,25 +4976,25 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 	   promoted, similarly the first argument of
 	   __builtin_{clz,ctz,clrsb,ffs,parity,popcount}g.  */
 	parmval = convert (valtype, val);
-      else if ((invalid_func_diag =
+      否则 如果 ((invalid_func_diag =
 		targetm.calls.invalid_arg_for_unprototyped_fn (typelist, fundecl, val)))
 	{
 	  error (invalid_func_diag);
-	  return -1;
+	  返回 -1;
 	}
-      else if (TREE_CODE (val) == ADDR_EXPR && reject_gcc_builtin (val))
+      否则 如果 (TREE_CODE (val) == ADDR_EXPR && reject_gcc_builtin (val))
 	{
-	  return -1;
+	  返回 -1;
 	}
-      else
+      否则
 	/* Convert `short' and `char' to full-size `int'.  */
 	parmval = default_conversion (val);
 
       (*values)[parmnum] = parmval;
-      if (parmval == error_mark_node)
+      如果 (parmval == error_mark_node)
 	error_args = true;
 
-      if (!type && builtin_type && TREE_CODE (builtin_type) != VOID_TYPE)
+      如果 (!type && builtin_type && TREE_CODE (builtin_type) != VOID_TYPE)
 	{
 	  /* For a call to a built-in function declared without a prototype,
 	     perform the conversions from the argument to the expected type
@@ -5008,61 +5008,61 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 			    OPT_Wbuiltin_declaration_mismatch);
 	}
 
-      if (typetail)
+      如果 (typetail)
 	typetail = TREE_CHAIN (typetail);
 
-      if (builtin_typetail)
+      如果 (builtin_typetail)
 	builtin_typetail = TREE_CHAIN (builtin_typetail);
     }
 
   gcc_assert (parmnum == vec_safe_length (values));
 
-  if (typetail != NULL_TREE && TREE_VALUE (typetail) != void_type_node)
+  如果 (typetail != NULL_TREE && TREE_VALUE (typetail) != void_type_node)
     {
       /* Not enough args.
 	 Determine minimum number of arguments required.  */
-      int min_expected_num = 0;
+      整数 min_expected_num = 0;
       bool at_least_p = false;
       tree iter = typelist;
-      while (true)
+      当 (true)
 	{
-	  if (!iter)
+	  如果 (!iter)
 	    {
 	      /* Variadic arguments; stop iterating.  */
 	      at_least_p = true;
 	      break;
 	    }
-	  if (iter == void_list_node)
+	  如果 (iter == void_list_node)
 	    /* End of arguments; stop iterating.  */
 	    break;
 	  ++min_expected_num;
 	  iter = TREE_CHAIN (iter);
 	}
       auto_diagnostic_group d;
-      int actual_num = vec_safe_length (values);
+      整数 actual_num = vec_safe_length (values);
       error_at (loc,
 		at_least_p
 		? G_("too few arguments to function %qE; expected at least %i, have %i")
 		: G_("too few arguments to function %qE; expected %i, have %i"),
 		function, min_expected_num, actual_num);
       inform_declaration (fundecl, function);
-      return -1;
+      返回 -1;
     }
 
-  if (builtin_typetail && TREE_VALUE (builtin_typetail) != void_type_node)
+  如果 (builtin_typetail && TREE_VALUE (builtin_typetail) != void_type_node)
     {
       unsigned nargs = parmnum;
-      for (tree t = builtin_typetail; t; t = TREE_CHAIN (t))
+      为 (tree t = builtin_typetail; t; t = TREE_CHAIN (t))
 	++nargs;
 
       auto_diagnostic_group d;
-      if (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
+      如果 (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
 		      "too few arguments to built-in function %qE "
 		      "expecting %u", function, nargs - 1))
 	inform_declaration (fundecl, function);
     }
 
-  return error_args ? -1 : (int) parmnum;
+  返回 error_args ? -1 : (整数) parmnum;
 }
 
 /* This is the entry point used by the parser to build unary operators
@@ -5082,15 +5082,15 @@ parser_build_unary_op (location_t loc, enum tree_code code, struct c_expr arg)
   result.original_type = NULL;
   result.m_decimal = 0;
 
-  if (reject_gcc_builtin (arg.value))
+  如果 (reject_gcc_builtin (arg.value))
     {
       result.value = error_mark_node;
     }
-  else
+  否则
     {
       result.value = build_unary_op (loc, code, arg.value, false);
 
-      if (TREE_OVERFLOW_P (result.value) && !TREE_OVERFLOW_P (arg.value))
+      如果 (TREE_OVERFLOW_P (result.value) && !TREE_OVERFLOW_P (arg.value))
 	overflow_warning (loc, result.value, arg.value);
     }
 
@@ -5100,7 +5100,7 @@ parser_build_unary_op (location_t loc, enum tree_code code, struct c_expr arg)
   set_c_expr_source_range (&result,
 			   loc, arg.get_finish ());
 
-  return result;
+  返回 result;
 }
 
 /* Returns true if TYPE is a character type, *not* including wchar_t.  */
@@ -5108,7 +5108,7 @@ parser_build_unary_op (location_t loc, enum tree_code code, struct c_expr arg)
 bool
 char_type_p (tree type)
 {
-  return (type == char_type_node
+  返回 (type == char_type_node
 	  || type == unsigned_char_type_node
 	  || type == signed_char_type_node
 	  || type == char16_type_node
@@ -5147,15 +5147,15 @@ parser_build_binary_op (location_t location, enum tree_code code,
   result.original_type = NULL;
   result.m_decimal = 0;
 
-  if (TREE_CODE (result.value) == ERROR_MARK)
+  如果 (TREE_CODE (result.value) == ERROR_MARK)
     {
       set_c_expr_source_range (&result,
 			       arg1.get_start (),
 			       arg2.get_finish ());
-      return result;
+      返回 result;
     }
 
-  if (location != UNKNOWN_LOCATION)
+  如果 (location != UNKNOWN_LOCATION)
     protected_set_expr_location (result.value, location);
 
   set_c_expr_source_range (&result,
@@ -5164,76 +5164,76 @@ parser_build_binary_op (location_t location, enum tree_code code,
 
   /* Check for cases such as x+y<<z which users are likely
      to misinterpret.  */
-  if (warn_parentheses)
+  如果 (warn_parentheses)
     warn_about_parentheses (location, code, code1, arg1.value, code2,
 			    arg2.value);
 
-  if (warn_logical_op)
+  如果 (warn_logical_op)
     warn_logical_operator (location, code, TREE_TYPE (result.value),
 			   code1, arg1.value, code2, arg2.value);
 
-  if (warn_constant_logical_operand
+  如果 (warn_constant_logical_operand
       && (code == TRUTH_ANDIF_EXPR || code == TRUTH_ORIF_EXPR)
       && INTEGRAL_NB_TYPE_P (type1)
       && INTEGRAL_NB_TYPE_P (type2))
     {
       const char *name = code == TRUTH_ANDIF_EXPR ? "&&" : "||";
-      if (orig_arg1 == NULL_TREE)
+      如果 (orig_arg1 == NULL_TREE)
 	orig_arg1 = arg1.value;
       auto enum_other_than_0_1 = [] (tree type) {
-	if (TREE_CODE (type) != ENUMERAL_TYPE)
-	  return false;
-	for (tree l = TYPE_VALUES (type); l; l = TREE_CHAIN (l))
+	如果 (TREE_CODE (type) != ENUMERAL_TYPE)
+	  返回 false;
+	为 (tree l = TYPE_VALUES (type); l; l = TREE_CHAIN (l))
 	  {
 	    tree v = DECL_INITIAL (TREE_VALUE (l));
-	    if (!integer_zerop (v) && !integer_onep (v))
-	      return true;
+	    如果 (!integer_zerop (v) && !integer_onep (v))
+	      返回 true;
 	  }
-	return false;
+	返回 false;
       };
       auto diagnose_constant_logical_operand = [=] (tree val, tree type) {
-	if (TREE_CODE (val) != INTEGER_CST || integer_zerop (val))
-	  return false;
-	if (integer_onep (val) && !enum_other_than_0_1 (type))
-	  return false;
+	如果 (TREE_CODE (val) != INTEGER_CST || integer_zerop (val))
+	  返回 false;
+	如果 (integer_onep (val) && !enum_other_than_0_1 (type))
+	  返回 false;
 	gcc_rich_location richloc (location);
 	richloc.add_fixit_replace (name + 1);
 	auto_diagnostic_group d;
-	if (warning_at (location, OPT_Wconstant_logical_operand,
+	如果 (warning_at (location, OPT_Wconstant_logical_operand,
 			"use of logical %qs with constant operand %qE",
 			name, val))
 	  inform (&richloc, "use %qs for bitwise operation", name + 1);
-	return true;
+	返回 true;
       };
-      if (!diagnose_constant_logical_operand (arg2.value, type2))
+      如果 (!diagnose_constant_logical_operand (arg2.value, type2))
 	diagnose_constant_logical_operand (orig_arg1, type1);
     }
 
-  if (warn_tautological_compare)
+  如果 (warn_tautological_compare)
     {
       tree lhs = arg1.value;
       tree rhs = arg2.value;
-      if (TREE_CODE (lhs) == C_MAYBE_CONST_EXPR)
+      如果 (TREE_CODE (lhs) == C_MAYBE_CONST_EXPR)
 	{
-	  if (C_MAYBE_CONST_EXPR_PRE (lhs) != NULL_TREE
+	  如果 (C_MAYBE_CONST_EXPR_PRE (lhs) != NULL_TREE
 	      && TREE_SIDE_EFFECTS (C_MAYBE_CONST_EXPR_PRE (lhs)))
 	    lhs = NULL_TREE;
-	  else
+	  否则
 	    lhs = C_MAYBE_CONST_EXPR_EXPR (lhs);
 	}
-      if (TREE_CODE (rhs) == C_MAYBE_CONST_EXPR)
+      如果 (TREE_CODE (rhs) == C_MAYBE_CONST_EXPR)
 	{
-	  if (C_MAYBE_CONST_EXPR_PRE (rhs) != NULL_TREE
+	  如果 (C_MAYBE_CONST_EXPR_PRE (rhs) != NULL_TREE
 	      && TREE_SIDE_EFFECTS (C_MAYBE_CONST_EXPR_PRE (rhs)))
 	    rhs = NULL_TREE;
-	  else
+	  否则
 	    rhs = C_MAYBE_CONST_EXPR_EXPR (rhs);
 	}
-      if (lhs != NULL_TREE && rhs != NULL_TREE)
+      如果 (lhs != NULL_TREE && rhs != NULL_TREE)
 	warn_tautological_cmp (location, code, lhs, rhs);
     }
 
-  if (warn_logical_not_paren
+  如果 (warn_logical_not_paren
       && TREE_CODE_CLASS (code) == tcc_comparison
       && code1 == TRUTH_NOT_EXPR
       && code2 != TRUTH_NOT_EXPR
@@ -5243,80 +5243,80 @@ parser_build_binary_op (location_t location, enum tree_code code,
     {
       /* Avoid warning for !b == y where b has _Bool type.  */
       tree t = integer_zero_node;
-      if (TREE_CODE (arg1.value) == EQ_EXPR
+      如果 (TREE_CODE (arg1.value) == EQ_EXPR
 	  && integer_zerop (TREE_OPERAND (arg1.value, 1))
 	  && TREE_TYPE (TREE_OPERAND (arg1.value, 0)) == integer_type_node)
 	{
 	  t = TREE_OPERAND (arg1.value, 0);
 	  do
 	    {
-	      if (TREE_TYPE (t) != integer_type_node)
+	      如果 (TREE_TYPE (t) != integer_type_node)
 		break;
-	      if (TREE_CODE (t) == C_MAYBE_CONST_EXPR)
+	      如果 (TREE_CODE (t) == C_MAYBE_CONST_EXPR)
 		t = C_MAYBE_CONST_EXPR_EXPR (t);
-	      else if (CONVERT_EXPR_P (t))
+	      否则 如果 (CONVERT_EXPR_P (t))
 		t = TREE_OPERAND (t, 0);
-	      else
+	      否则
 		break;
 	    }
-	  while (1);
+	  当 (1);
 	}
-      if (!C_BOOLEAN_TYPE_P (TREE_TYPE (t)))
+      如果 (!C_BOOLEAN_TYPE_P (TREE_TYPE (t)))
 	warn_logical_not_parentheses (location, code, arg1.value, arg2.value);
     }
 
   /* Warn about comparisons against string literals, with the exception
      of testing for equality or inequality of a string literal with NULL.  */
-  if (code == EQ_EXPR || code == NE_EXPR)
+  如果 (code == EQ_EXPR || code == NE_EXPR)
     {
-      if ((code1 == STRING_CST
+      如果 ((code1 == STRING_CST
 	   && !integer_zerop (tree_strip_nop_conversions (arg2.value)))
 	  || (code2 == STRING_CST
 	      && !integer_zerop (tree_strip_nop_conversions (arg1.value))))
 	warning_at (location, OPT_Waddress,
 		    "comparison with string literal results in unspecified behavior");
       /* Warn for ptr == '\0', it's likely that it should've been ptr[0].  */
-      if (POINTER_TYPE_P (type1)
+      如果 (POINTER_TYPE_P (type1)
 	  && null_pointer_constant_p (arg2.value)
 	  && char_type_p (type2))
 	{
 	  auto_diagnostic_group d;
-	  if (warning_at (location, OPT_Wpointer_compare,
+	  如果 (warning_at (location, OPT_Wpointer_compare,
 			    "comparison between pointer and zero character "
 			    "constant"))
 	    inform (arg1.get_start (),
 		      "did you mean to dereference the pointer?");
 	}
-      else if (POINTER_TYPE_P (type2)
+      否则 如果 (POINTER_TYPE_P (type2)
 	       && null_pointer_constant_p (arg1.value)
 	       && char_type_p (type1))
 	{
 	  auto_diagnostic_group d;
-	  if (warning_at (location, OPT_Wpointer_compare,
+	  如果 (warning_at (location, OPT_Wpointer_compare,
 			    "comparison between pointer and zero character "
 			    "constant"))
 	    inform (arg2.get_start (),
 		      "did you mean to dereference the pointer?");
 	}
     }
-  else if (TREE_CODE_CLASS (code) == tcc_comparison
+  否则 如果 (TREE_CODE_CLASS (code) == tcc_comparison
 	   && (code1 == STRING_CST || code2 == STRING_CST))
     warning_at (location, OPT_Waddress,
 		"comparison with string literal results in unspecified "
 		"behavior");
 
-  if (warn_zero_as_null_pointer_constant
+  如果 (warn_zero_as_null_pointer_constant
       && c_inhibit_evaluation_warnings == 0
       && TREE_CODE_CLASS (code) == tcc_comparison)
     {
-      if ((TREE_CODE (type1) == POINTER_TYPE
+      如果 ((TREE_CODE (type1) == POINTER_TYPE
 	   || TREE_CODE (type1) == NULLPTR_TYPE)
 	  && INTEGRAL_TYPE_P (type2)
 	  && null_pointer_constant_p (arg2.value))
 	warning_at (arg2.get_location(), OPT_Wzero_as_null_pointer_constant,
 		    "zero as null pointer constant");
 
-      if ((TREE_CODE (type2) == POINTER_TYPE
+      如果 ((TREE_CODE (type2) == POINTER_TYPE
 	   || TREE_CODE (type2) == NULLPTR_TYPE)
 	  && INTEGRAL_TYPE_P (type1)
 	  && null_pointer_constant_p (arg1.value))
@@ -5324,19 +5324,19 @@ parser_build_binary_op (location_t location, enum tree_code code,
 		    "zero as null pointer constant");
     }
 
-  if (warn_array_compare
+  如果 (warn_array_compare
       && TREE_CODE_CLASS (code) == tcc_comparison
       && TREE_CODE (type1) == ARRAY_TYPE
       && TREE_CODE (type2) == ARRAY_TYPE)
     do_warn_array_compare (location, code, arg1.value, arg2.value);
 
-  if (TREE_OVERFLOW_P (result.value)
+  如果 (TREE_OVERFLOW_P (result.value)
       && !TREE_OVERFLOW_P (arg1.value)
       && !TREE_OVERFLOW_P (arg2.value))
     overflow_warning (location, result.value);
 
   /* Warn about comparisons of different enum types.  */
-  if (warn_enum_compare
+  如果 (warn_enum_compare
       && TREE_CODE_CLASS (code) == tcc_comparison
       && TREE_CODE (type1) == ENUMERAL_TYPE
       && TREE_CODE (type2) == ENUMERAL_TYPE
@@ -5345,7 +5345,7 @@ parser_build_binary_op (location_t location, enum tree_code code,
 		"comparison between %qT and %qT",
 		type1, type2);
 
-  if (warn_xor_used_as_pow
+  如果 (warn_xor_used_as_pow
       && code == BIT_XOR_EXPR
       && arg1.m_decimal
       && arg2.m_decimal)
@@ -5353,7 +5353,7 @@ parser_build_binary_op (location_t location, enum tree_code code,
 			       location,
 			       arg2.get_location (), arg2.value);
 
-  return result;
+  返回 result;
 }
 
 /* Return a tree for the difference of pointers OP0 and OP1.
@@ -5375,7 +5375,7 @@ pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
   /* If the operands point into different address spaces, we need to
      explicitly convert them to pointers into the common address space
      before we can subtract the numerical address values.  */
-  if (as0 != as1)
+  如果 (as0 != as1)
     {
       addr_space_t as_common;
       tree common_type;
@@ -5383,7 +5383,7 @@ pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
       /* Determine the common superset address space.  This is guaranteed
 	 to exist because the caller verified that comp_target_types
 	 returned non-zero.  */
-      if (!addr_space_superset (as0, as1, &as_common))
+      如果 (!addr_space_superset (as0, as1, &as_common))
 	gcc_unreachable ();
 
       common_type = common_pointer_type (TREE_TYPE (op0), TREE_TYPE (op1), NULL_TREE);
@@ -5394,19 +5394,19 @@ pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
   /* Determine integer type result of the subtraction.  This will usually
      be the same as the result type (ptrdiff_t), but may need to be a wider
      type if pointers for the address space are wider than ptrdiff_t.  */
-  if (TYPE_PRECISION (restype) < TYPE_PRECISION (TREE_TYPE (op0)))
+  如果 (TYPE_PRECISION (restype) < TYPE_PRECISION (TREE_TYPE (op0)))
     inttype = c_common_type_for_size (TYPE_PRECISION (TREE_TYPE (op0)), 0);
-  else
+  否则
     inttype = restype;
 
-  if (VOID_TYPE_P (target_type))
+  如果 (VOID_TYPE_P (target_type))
     pedwarn (loc, OPT_Wpointer_arith,
 	     "pointer of type %<void *%> used in subtraction");
-  if (TREE_CODE (target_type) == FUNCTION_TYPE)
+  如果 (TREE_CODE (target_type) == FUNCTION_TYPE)
     pedwarn (loc, OPT_Wpointer_arith,
 	     "pointer to a function used in subtraction");
 
-  if (current_function_decl != NULL_TREE
+  如果 (current_function_decl != NULL_TREE
       && sanitize_flags_p (SANITIZE_POINTER_SUBTRACT))
     {
       op0 = save_expr (c_fully_fold (op0, false, NULL));
@@ -5425,10 +5425,10 @@ pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
      ptrdiff_type to support differences larger than half the address
      space, cast the pointers to some larger integer type and do the
      computations in that type.  */
-  if (TYPE_PRECISION (inttype) > TYPE_PRECISION (TREE_TYPE (op0)))
+  如果 (TYPE_PRECISION (inttype) > TYPE_PRECISION (TREE_TYPE (op0)))
     op0 = build_binary_op (loc, MINUS_EXPR, convert (inttype, op0),
 			   convert (inttype, op1), false);
-  else
+  否则
     {
       /* Cast away qualifiers.  */
       op0 = convert (c_common_type (TREE_TYPE (op0), TREE_TYPE (op0)), op0);
@@ -5437,16 +5437,16 @@ pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
     }
 
   /* This generates an error if op1 is pointer to incomplete type.  */
-  if (!COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (TREE_TYPE (orig_op1))))
+  如果 (!COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (TREE_TYPE (orig_op1))))
     error_at (loc, "arithmetic on pointer to an incomplete type");
-  else if (verify_type_context (loc, TCTX_POINTER_ARITH,
+  否则 如果 (verify_type_context (loc, TCTX_POINTER_ARITH,
 				TREE_TYPE (TREE_TYPE (orig_op0))))
     verify_type_context (loc, TCTX_POINTER_ARITH,
 			 TREE_TYPE (TREE_TYPE (orig_op1)));
 
   op1 = c_size_in_bytes (target_type);
 
-  if (pointer_to_zero_sized_aggr_p (TREE_TYPE (orig_op1)))
+  如果 (pointer_to_zero_sized_aggr_p (TREE_TYPE (orig_op1)))
     error_at (loc, "arithmetic on pointer to an empty aggregate");
 
   /* Divide by the size, in easiest possible way.  */
@@ -5454,7 +5454,7 @@ pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
 			    op0, convert (inttype, op1));
 
   /* Convert to final result type if necessary.  */
-  return convert (restype, result);
+  返回 convert (restype, result);
 }
 
 /* Expand atomic compound assignments into an appropriate sequence as
@@ -5531,7 +5531,7 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
 
   gcc_assert (TYPE_ATOMIC (lhs_type));
 
-  if (return_old_p)
+  如果 (return_old_p)
     gcc_assert (modifycode == PLUS_EXPR || modifycode == MINUS_EXPR);
 
   /* Allocate enough vector items for a compare_exchange.  */
@@ -5539,7 +5539,7 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
 
   /* Create a compound statement to hold the sequence of statements
      with a loop.  */
-  if (modifycode != NOP_EXPR)
+  如果 (modifycode != NOP_EXPR)
     {
       compound_stmt = c_begin_compound_stmt (false);
 
@@ -5551,7 +5551,7 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
 
   /* Remove any excess precision (which is only present here in the
      case of compound assignments).  */
-  if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
+  如果 (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
     {
       gcc_assert (modifycode != NOP_EXPR);
       rhs = TREE_OPERAND (rhs, 0);
@@ -5559,7 +5559,7 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
   rhs_type = TREE_TYPE (rhs);
 
   /* Fold the RHS if it hasn't already been folded.  */
-  if (modifycode != NOP_EXPR)
+  如果 (modifycode != NOP_EXPR)
     rhs = c_fully_fold (rhs, false, NULL);
 
   /* Remove the qualifiers for the rest of the expressions and create
@@ -5575,12 +5575,12 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
 		NULL_TREE);
   TREE_SIDE_EFFECTS (rhs) = 1;
   SET_EXPR_LOCATION (rhs, loc);
-  if (modifycode != NOP_EXPR)
+  如果 (modifycode != NOP_EXPR)
     add_stmt (rhs);
 
   /* NOP_EXPR indicates it's a straight store of the RHS. Simply issue
      an atomic_store.  */
-  if (modifycode == NOP_EXPR)
+  如果 (modifycode == NOP_EXPR)
     {
       compound_stmt = rhs;
       /* Build __atomic_store (&lhs, &val, SEQ_CST)  */
@@ -5596,13 +5596,13 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
 
       /* VAL is the value which was stored, return a COMPOUND_STMT of
 	 the statement and that value.  */
-      return build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt, val);
+      返回 build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt, val);
     }
 
   /* Attempt to implement the atomic operation as an __atomic_fetch_* or
      __atomic_*_fetch built-in rather than a CAS loop.  atomic_bool type
      isn't applicable for such builtins.  ??? Do we want to handle enums?  */
-  if ((TREE_CODE (lhs_type) == INTEGER_TYPE || POINTER_TYPE_P (lhs_type))
+  如果 ((TREE_CODE (lhs_type) == INTEGER_TYPE || POINTER_TYPE_P (lhs_type))
       && TREE_CODE (rhs_type) == INTEGER_TYPE)
     {
       built_in_function fncode;
@@ -5641,14 +5641,14 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
       /* We can only use "_1" through "_16" variants of the atomic fetch
 	 built-ins.  */
       unsigned HOST_WIDE_INT size = tree_to_uhwi (TYPE_SIZE_UNIT (lhs_type));
-      if (size != 1 && size != 2 && size != 4 && size != 8 && size != 16)
+      如果 (size != 1 && size != 2 && size != 4 && size != 8 && size != 16)
 	goto cas_loop;
 
       /* If this is a pointer type, we need to multiply by the size of
 	 the pointer target type.  */
-      if (POINTER_TYPE_P (lhs_type))
+      如果 (POINTER_TYPE_P (lhs_type))
 	{
-	  if (!COMPLETE_TYPE_P (TREE_TYPE (lhs_type))
+	  如果 (!COMPLETE_TYPE_P (TREE_TYPE (lhs_type))
 	      /* ??? This would introduce -Wdiscarded-qualifiers
 		 warning: __atomic_fetch_* expect volatile void *
 		 type as the first argument.  (Assignments between
@@ -5682,7 +5682,7 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
 
       /* NEWVAL is the value which was stored, return a COMPOUND_STMT of
 	 the statement and that value.  */
-      return build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt, newval);
+      返回 build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt, newval);
     }
 
 cas_loop:
@@ -5719,28 +5719,28 @@ cas_loop:
   bool need_fenv = (flag_trapping_math
 		    && (FLOAT_TYPE_P (lhs_type) || FLOAT_TYPE_P (rhs_type)));
   tree hold_call = NULL_TREE, clear_call = NULL_TREE, update_call = NULL_TREE;
-  if (need_fenv)
+  如果 (need_fenv)
     targetm.atomic_assign_expand_fenv (&hold_call, &clear_call, &update_call);
 
-  if (hold_call)
+  如果 (hold_call)
     add_stmt (hold_call);
 
   /* loop:  */
   add_stmt (loop_label);
 
   /* newval = old + val;  */
-  if (rhs_type != rhs_semantic_type)
+  如果 (rhs_type != rhs_semantic_type)
     val = build1 (EXCESS_PRECISION_EXPR, nonatomic_rhs_semantic_type, val);
   rhs = build_binary_op (loc, modifycode,
 			 convert_lvalue_to_rvalue (loc, old, true, true),
 			 val, true);
-  if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
+  如果 (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
     {
       tree eptype = TREE_TYPE (rhs);
       rhs = c_fully_fold (TREE_OPERAND (rhs, 0), false, NULL);
       rhs = build1 (EXCESS_PRECISION_EXPR, eptype, rhs);
     }
-  else
+  否则
     rhs = c_fully_fold (rhs, false, NULL);
   rhs = convert_for_assignment (loc, UNKNOWN_LOCATION, nonatomic_lhs_type,
 				rhs, NULL_TREE, ic_assign, false, NULL_TREE,
@@ -5749,7 +5749,7 @@ cas_loop:
      particular, given a DECL_CONTEXT) if used in a TARGET_EXPR.  To avoid
      subsequent ICEs in nested function processing after an error, ensure such
      a TARGET_EXPR is built even after an error.  */
-  if (rhs == error_mark_node)
+  如果 (rhs == error_mark_node)
     rhs = old;
   rhs = build4 (TARGET_EXPR, nonatomic_lhs_type, newval, rhs, NULL_TREE,
 		NULL_TREE);
@@ -5774,7 +5774,7 @@ cas_loop:
   SET_EXPR_LOCATION (stmt, loc);
   add_stmt (stmt);
 
-  if (clear_call)
+  如果 (clear_call)
     add_stmt (clear_call);
 
   /* goto loop;  */
@@ -5785,7 +5785,7 @@ cas_loop:
   /* done:  */
   add_stmt (done_label);
 
-  if (update_call)
+  如果 (update_call)
     add_stmt (update_call);
 
   /* Finish the compound statement.  */
@@ -5793,7 +5793,7 @@ cas_loop:
 
   /* NEWVAL is the value that was successfully stored, return a
      COMPOUND_EXPR of the statement and the appropriate value.  */
-  return build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt,
+  返回 build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt,
 		 return_old_p ? old : newval);
 }
 
@@ -5830,32 +5830,32 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
      handle the wrapped form.  PR123569 fixed the ++/-- side of this by
      suppressing wrapper creation in the parser; the rvalue-consuming
      ops still receive the wrapper and need to strip it here.  */
-  if (is_access_with_size_p (arg))
+  如果 (is_access_with_size_p (arg))
     xarg = arg = get_ref_from_access_with_size (arg);
 
   gcc_checking_assert (!is_access_with_size_p (arg));
 
   bool int_operands = EXPR_INT_CONST_OPERANDS (xarg);
-  if (int_operands)
+  如果 (int_operands)
     arg = remove_c_maybe_const_expr (arg);
 
-  if (code != ADDR_EXPR)
+  如果 (code != ADDR_EXPR)
     arg = require_complete_type (location, arg);
 
   typecode = TREE_CODE (TREE_TYPE (arg));
-  if (typecode == ERROR_MARK)
-    return error_mark_node;
-  if (typecode == ENUMERAL_TYPE || typecode == BOOLEAN_TYPE)
+  如果 (typecode == ERROR_MARK)
+    返回 error_mark_node;
+  如果 (typecode == ENUMERAL_TYPE || typecode == BOOLEAN_TYPE)
     typecode = INTEGER_TYPE;
 
-  if ((invalid_op_diag
+  如果 ((invalid_op_diag
        = targetm.invalid_unary_op (code, TREE_TYPE (xarg))))
     {
       error_at (location, invalid_op_diag);
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
-  if (TREE_CODE (arg) == EXCESS_PRECISION_EXPR)
+  如果 (TREE_CODE (arg) == EXCESS_PRECISION_EXPR)
     {
       eptype = TREE_TYPE (arg);
       arg = TREE_OPERAND (arg, 0);
@@ -5867,35 +5867,35 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
       /* This is used for unary plus, because a CONVERT_EXPR
 	 is enough to prevent anybody from looking inside for
 	 associativity, but won't generate any code.  */
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
+      如果 (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
 	    || typecode == FIXED_POINT_TYPE || typecode == COMPLEX_TYPE
 	    || typecode == BITINT_TYPE
 	    || gnu_vector_type_p (TREE_TYPE (arg))))
 	{
 	  error_at (location, "wrong type argument to unary plus");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      else if (!noconvert)
+      否则 如果 (!noconvert)
 	arg = default_conversion (arg);
       arg = non_lvalue_loc (location, arg);
       break;
 
     case NEGATE_EXPR:
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
+      如果 (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
 	    || typecode == FIXED_POINT_TYPE || typecode == COMPLEX_TYPE
 	    || typecode == BITINT_TYPE
 	    || gnu_vector_type_p (TREE_TYPE (arg))))
 	{
 	  error_at (location, "wrong type argument to unary minus");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      else if (!noconvert)
+      否则 如果 (!noconvert)
 	arg = default_conversion (arg);
       break;
 
     case BIT_NOT_EXPR:
       /* ~ works on integer types and non float vectors. */
-      if (typecode == INTEGER_TYPE
+      如果 (typecode == INTEGER_TYPE
 	  || typecode == BITINT_TYPE
 	  || (gnu_vector_type_p (TREE_TYPE (arg))
 	      && !VECTOR_FLOAT_TYPE_P (TREE_TYPE (arg))))
@@ -5903,14 +5903,14 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 	  tree e = arg;
 
 	  /* Warn if the expression has boolean value.  */
-	  while (TREE_CODE (e) == COMPOUND_EXPR)
+	  当 (TREE_CODE (e) == COMPOUND_EXPR)
 	    e = TREE_OPERAND (e, 1);
 
-	  if ((C_BOOLEAN_TYPE_P (TREE_TYPE (arg))
+	  如果 ((C_BOOLEAN_TYPE_P (TREE_TYPE (arg))
 	       || truth_value_p (TREE_CODE (e))))
 	    {
 	      auto_diagnostic_group d;
-	      if (warning_at (location, OPT_Wbool_operation,
+	      如果 (warning_at (location, OPT_Wbool_operation,
 				"%<~%> on a boolean expression"))
 		{
 		  gcc_rich_location richloc (location);
@@ -5918,86 +5918,86 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 		  inform (&richloc, "did you mean to use logical not?");
 		}
 	    }
-	  if (!noconvert)
+	  如果 (!noconvert)
 	    arg = default_conversion (arg);
 	}
-      else if (typecode == COMPLEX_TYPE)
+      否则 如果 (typecode == COMPLEX_TYPE)
 	{
 	  code = CONJ_EXPR;
 	  pedwarn (location, OPT_Wpedantic,
 		   "ISO C does not support %<~%> for complex conjugation");
-	  if (!noconvert)
+	  如果 (!noconvert)
 	    arg = default_conversion (arg);
 	}
-      else
+      否则
 	{
 	  error_at (location, "wrong type argument to bit-complement");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
       break;
 
     case ABS_EXPR:
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE))
+      如果 (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE))
 	{
 	  error_at (location, "wrong type argument to abs");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      else if (!noconvert)
+      否则 如果 (!noconvert)
 	arg = default_conversion (arg);
       break;
 
     case ABSU_EXPR:
-      if (!(typecode == INTEGER_TYPE))
+      如果 (!(typecode == INTEGER_TYPE))
 	{
 	  error_at (location, "wrong type argument to absu");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      else if (!noconvert)
+      否则 如果 (!noconvert)
 	arg = default_conversion (arg);
       break;
 
     case CONJ_EXPR:
       /* Conjugating a real value is a no-op, but allow it anyway.  */
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
+      如果 (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
 	    || typecode == COMPLEX_TYPE))
 	{
 	  error_at (location, "wrong type argument to conjugation");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      else if (!noconvert)
+      否则 如果 (!noconvert)
 	arg = default_conversion (arg);
       break;
 
     case TRUTH_NOT_EXPR:
-      if (typecode != INTEGER_TYPE && typecode != FIXED_POINT_TYPE
+      如果 (typecode != INTEGER_TYPE && typecode != FIXED_POINT_TYPE
 	  && typecode != REAL_TYPE && typecode != POINTER_TYPE
 	  && typecode != COMPLEX_TYPE && typecode != NULLPTR_TYPE
 	  && typecode != BITINT_TYPE)
 	{
 	  error_at (location,
 		    "wrong type argument to unary exclamation mark");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      if (int_operands)
+      如果 (int_operands)
 	{
 	  arg = c_objc_common_truthvalue_conversion (location, xarg);
 	  arg = remove_c_maybe_const_expr (arg);
 	}
-      else
+      否则
 	arg = c_objc_common_truthvalue_conversion (location, arg);
       ret = invert_truthvalue_loc (location, arg);
       eptype = NULL_TREE;
       /* If the TRUTH_NOT_EXPR has been folded, reset the location.  */
-      if (EXPR_P (ret) && EXPR_HAS_LOCATION (ret))
+      如果 (EXPR_P (ret) && EXPR_HAS_LOCATION (ret))
 	location = EXPR_LOCATION (ret);
       goto return_build_unary_op;
 
     case REALPART_EXPR:
     case IMAGPART_EXPR:
       ret = build_real_imag_expr (location, code, arg);
-      if (ret == error_mark_node)
-	return error_mark_node;
-      if (eptype && TREE_CODE (eptype) == COMPLEX_TYPE)
+      如果 (ret == error_mark_node)
+	返回 error_mark_node;
+      如果 (eptype && TREE_CODE (eptype) == COMPLEX_TYPE)
 	eptype = TREE_TYPE (eptype);
       goto return_build_unary_op;
 
@@ -6006,13 +6006,13 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
     case PREDECREMENT_EXPR:
     case POSTDECREMENT_EXPR:
 
-      if (TREE_CODE (arg) == C_MAYBE_CONST_EXPR)
+      如果 (TREE_CODE (arg) == C_MAYBE_CONST_EXPR)
 	{
 	  tree inner = build_unary_op (location, code,
 				       C_MAYBE_CONST_EXPR_EXPR (arg),
 				       noconvert);
-	  if (inner == error_mark_node)
-	    return error_mark_node;
+	  如果 (inner == error_mark_node)
+	    返回 error_mark_node;
 	  ret = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (inner),
 			C_MAYBE_CONST_EXPR_PRE (arg), inner);
 	  gcc_assert (!C_MAYBE_CONST_EXPR_INT_OPERANDS (arg));
@@ -6022,30 +6022,30 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 
       /* Complain about anything that is not a true lvalue.  In
 	 Objective-C, skip this check for property_refs.  */
-      if (!objc_is_property_ref (arg)
+      如果 (!objc_is_property_ref (arg)
 	  && !lvalue_or_else (location,
 			      arg, ((code == PREINCREMENT_EXPR
 				     || code == POSTINCREMENT_EXPR)
 				    ? lv_increment
 				    : lv_decrement)))
-	return error_mark_node;
+	返回 error_mark_node;
 
-      if (warn_cxx_compat && TREE_CODE (TREE_TYPE (arg)) == ENUMERAL_TYPE)
+      如果 (warn_cxx_compat && TREE_CODE (TREE_TYPE (arg)) == ENUMERAL_TYPE)
 	{
-	  if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+	  如果 (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
 	    warning_at (location, OPT_Wc___compat,
 			"increment of enumeration value is invalid in C++");
-	  else
+	  否则
 	    warning_at (location, OPT_Wc___compat,
 			"decrement of enumeration value is invalid in C++");
 	}
 
-      if (C_BOOLEAN_TYPE_P (TREE_TYPE (arg)))
+      如果 (C_BOOLEAN_TYPE_P (TREE_TYPE (arg)))
 	{
-	  if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+	  如果 (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
 	    warning_at (location, OPT_Wbool_operation,
 			"increment of a boolean expression");
-	  else
+	  否则
 	    warning_at (location, OPT_Wbool_operation,
 			"decrement of a boolean expression");
 	}
@@ -6058,7 +6058,7 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 
       /* Increment or decrement the real part of the value,
 	 and don't change the imaginary part.  */
-      if (typecode == COMPLEX_TYPE)
+      如果 (typecode == COMPLEX_TYPE)
 	{
 	  tree real, imag;
 
@@ -6066,7 +6066,7 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 		       "ISO C does not support %<++%> and %<--%> on complex "
 		       "types before C2Y");
 
-	  if (!atomic_op)
+	  如果 (!atomic_op)
 	    {
 	      arg = stabilize_reference (arg);
 	      real = build_unary_op (EXPR_LOCATION (arg), REALPART_EXPR, arg,
@@ -6074,8 +6074,8 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 	      imag = build_unary_op (EXPR_LOCATION (arg), IMAGPART_EXPR, arg,
 				     true);
 	      real = build_unary_op (EXPR_LOCATION (arg), code, real, true);
-	      if (real == error_mark_node || imag == error_mark_node)
-		return error_mark_node;
+	      如果 (real == error_mark_node || imag == error_mark_node)
+		返回 error_mark_node;
 	      ret = build2 (COMPLEX_EXPR, TREE_TYPE (arg),
 			    real, imag);
 	      goto return_build_unary_op;
@@ -6084,17 +6084,17 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 
       /* Report invalid types.  */
 
-      if (typecode != POINTER_TYPE && typecode != FIXED_POINT_TYPE
+      如果 (typecode != POINTER_TYPE && typecode != FIXED_POINT_TYPE
 	  && typecode != INTEGER_TYPE && typecode != REAL_TYPE
 	  && typecode != COMPLEX_TYPE && typecode != BITINT_TYPE
 	  && !gnu_vector_type_p (TREE_TYPE (arg)))
 	{
-	  if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+	  如果 (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
 	    error_at (location, "wrong type argument to increment");
-	  else
+	  否则
 	    error_at (location, "wrong type argument to decrement");
 
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
 
       {
@@ -6104,58 +6104,58 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 
 	/* Compute the increment.  */
 
-	if (typecode == POINTER_TYPE)
+	如果 (typecode == POINTER_TYPE)
 	  {
 	    /* If pointer target is an incomplete type,
 	       we just cannot know how to do the arithmetic.  */
-	    if (!COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (argtype)))
+	    如果 (!COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (argtype)))
 	      {
-		if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+		如果 (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
 		  error_at (location,
 			    "increment of pointer to an incomplete type %qT",
 			    TREE_TYPE (argtype));
-		else
+		否则
 		  error_at (location,
 			    "decrement of pointer to an incomplete type %qT",
 			    TREE_TYPE (argtype));
 	      }
-	    else if (TREE_CODE (TREE_TYPE (argtype)) == FUNCTION_TYPE
+	    否则 如果 (TREE_CODE (TREE_TYPE (argtype)) == FUNCTION_TYPE
 		     || VOID_TYPE_P (TREE_TYPE (argtype)))
 	      {
-		if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+		如果 (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
 		  pedwarn (location, OPT_Wpointer_arith,
 			   "wrong type argument to increment");
-		else
+		否则
 		  pedwarn (location, OPT_Wpointer_arith,
 			   "wrong type argument to decrement");
 	      }
-	    else
+	    否则
 	      verify_type_context (location, TCTX_POINTER_ARITH,
 				   TREE_TYPE (argtype));
 
 	    inc = c_size_in_bytes (TREE_TYPE (argtype));
 	    inc = convert_to_ptrofftype_loc (location, inc);
 	  }
-	else if (FRACT_MODE_P (TYPE_MODE (argtype)))
+	否则 如果 (FRACT_MODE_P (TYPE_MODE (argtype)))
 	  {
 	    /* For signed fract types, we invert ++ to -- or
 	       -- to ++, and change inc from 1 to -1, because
 	       it is not possible to represent 1 in signed fract constants.
 	       For unsigned fract types, the result always overflows and
 	       we get an undefined (original) or the maximum value.  */
-	    if (code == PREINCREMENT_EXPR)
+	    如果 (code == PREINCREMENT_EXPR)
 	      code = PREDECREMENT_EXPR;
-	    else if (code == PREDECREMENT_EXPR)
+	    否则 如果 (code == PREDECREMENT_EXPR)
 	      code = PREINCREMENT_EXPR;
-	    else if (code == POSTINCREMENT_EXPR)
+	    否则 如果 (code == POSTINCREMENT_EXPR)
 	      code = POSTDECREMENT_EXPR;
-	    else /* code == POSTDECREMENT_EXPR  */
+	    否则 /* code == POSTDECREMENT_EXPR  */
 	      code = POSTINCREMENT_EXPR;
 
 	    inc = integer_minus_one_node;
 	    inc = convert (argtype, inc);
 	  }
-	else
+	否则
 	  {
 	    inc = VECTOR_TYPE_P (argtype)
 	      ? build_one_cst (argtype)
@@ -6166,20 +6166,20 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 	/* If 'arg' is an Objective-C PROPERTY_REF expression, then we
 	   need to ask Objective-C to build the increment or decrement
 	   expression for it.  */
-	if (objc_is_property_ref (arg))
-	  return objc_build_incr_expr_for_property_ref (location, code,
+	如果 (objc_is_property_ref (arg))
+	  返回 objc_build_incr_expr_for_property_ref (location, code,
 							arg, inc);
 
 	/* Report a read-only lvalue.  */
-	if (TYPE_READONLY (argtype))
+	如果 (TYPE_READONLY (argtype))
 	  {
 	    readonly_error (location, arg,
 			    ((code == PREINCREMENT_EXPR
 			      || code == POSTINCREMENT_EXPR)
 			     ? lv_increment : lv_decrement));
-	    return error_mark_node;
+	    返回 error_mark_node;
 	  }
-	else if (TREE_READONLY (arg))
+	否则 如果 (TREE_READONLY (arg))
 	  readonly_warning (arg,
 			    ((code == PREINCREMENT_EXPR
 			      || code == POSTINCREMENT_EXPR)
@@ -6187,7 +6187,7 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 
 	/* If the argument is atomic, use the special code sequences for
 	   atomic compound assignment.  */
-	if (atomic_op)
+	如果 (atomic_op)
 	  {
 	    arg = stabilize_reference (arg);
 	    ret = build_atomic_assign (location, arg,
@@ -6204,7 +6204,7 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 	  }
 
 	tree true_res;
-	if (c_hardbool_type_attr (TREE_TYPE (arg), NULL, &true_res))
+	如果 (c_hardbool_type_attr (TREE_TYPE (arg), NULL, &true_res))
 	  {
 	    tree larg = stabilize_reference (arg);
 	    tree sarg = save_expr (larg);
@@ -6244,12 +6244,12 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 	      }
 	    TREE_SIDE_EFFECTS (val) = 1;
 	  }
-	else if (C_BOOLEAN_TYPE_P (TREE_TYPE (arg)))
+	否则 如果 (C_BOOLEAN_TYPE_P (TREE_TYPE (arg)))
 	  val = boolean_increment (code, arg);
-	else
+	否则
 	  val = build2 (code, TREE_TYPE (arg), arg, inc);
 	TREE_SIDE_EFFECTS (val) = 1;
-	if (TYPE_QUALS (TREE_TYPE (val)) != TYPE_UNQUALIFIED)
+	如果 (TYPE_QUALS (TREE_TYPE (val)) != TYPE_UNQUALIFIED)
 	  TREE_TYPE (val) = c_build_qualified_type (TREE_TYPE (val),
 						    TYPE_UNQUALIFIED);
 	ret = val;
@@ -6262,30 +6262,30 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
       /* The operand of unary '&' must be an lvalue (which excludes
 	 expressions of type void), or, in C99, the result of a [] or
 	 unary '*' operator.  */
-      if (VOID_TYPE_P (TREE_TYPE (arg))
+      如果 (VOID_TYPE_P (TREE_TYPE (arg))
 	  && TYPE_QUALS (TREE_TYPE (arg)) == TYPE_UNQUALIFIED
 	  && (!INDIRECT_REF_P (arg) || !flag_isoc99))
 	pedwarn (location, 0, "taking address of expression of type %<void%>");
 
       /* Let &* cancel out to simplify resulting code.  */
-      if (INDIRECT_REF_P (arg))
+      如果 (INDIRECT_REF_P (arg))
 	{
 	  /* Don't let this be an lvalue.  */
-	  if (lvalue_p (TREE_OPERAND (arg, 0)))
-	    return non_lvalue_loc (location, TREE_OPERAND (arg, 0));
+	  如果 (lvalue_p (TREE_OPERAND (arg, 0)))
+	    返回 non_lvalue_loc (location, TREE_OPERAND (arg, 0));
 	  ret = TREE_OPERAND (arg, 0);
 	  goto return_build_unary_op;
 	}
 
       /* Anything not already handled and not a true memory reference
 	 or a non-lvalue array is an error.  */
-      if (typecode != FUNCTION_TYPE && !noconvert
+      如果 (typecode != FUNCTION_TYPE && !noconvert
 	  && !lvalue_or_else (location, arg, lv_addressof))
-	return error_mark_node;
+	返回 error_mark_node;
 
       /* Move address operations inside C_MAYBE_CONST_EXPR to simplify
 	 folding later.  */
-      if (TREE_CODE (arg) == C_MAYBE_CONST_EXPR)
+      如果 (TREE_CODE (arg) == C_MAYBE_CONST_EXPR)
 	{
 	  tree inner = build_unary_op (location, code,
 				       C_MAYBE_CONST_EXPR_EXPR (arg),
@@ -6305,16 +6305,16 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
       /* If the lvalue is const or volatile, merge that into the type
 	 to which the address will point.  This is only needed
 	 for function types.  */
-      if ((DECL_P (arg) || REFERENCE_CLASS_P (arg))
+      如果 ((DECL_P (arg) || REFERENCE_CLASS_P (arg))
 	  && (TREE_READONLY (arg) || TREE_THIS_VOLATILE (arg))
 	  && TREE_CODE (argtype) == FUNCTION_TYPE)
 	{
-	  int orig_quals = TYPE_QUALS (strip_array_types (argtype));
-	  int quals = orig_quals;
+	  整数 orig_quals = TYPE_QUALS (strip_array_types (argtype));
+	  整数 quals = orig_quals;
 
-	  if (TREE_READONLY (arg))
+	  如果 (TREE_READONLY (arg))
 	    quals |= TYPE_QUAL_CONST;
-	  if (TREE_THIS_VOLATILE (arg))
+	  如果 (TREE_THIS_VOLATILE (arg))
 	    quals |= TYPE_QUAL_VOLATILE;
 
 	  argtype = c_build_qualified_type (argtype, quals);
@@ -6323,28 +6323,28 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
       switch (TREE_CODE (arg))
 	{
 	case COMPONENT_REF:
-	  if (DECL_C_BIT_FIELD (TREE_OPERAND (arg, 1)))
+	  如果 (DECL_C_BIT_FIELD (TREE_OPERAND (arg, 1)))
 	    {
 	      error_at (location, "cannot take address of bit-field %qD",
 			TREE_OPERAND (arg, 1));
-	      return error_mark_node;
+	      返回 error_mark_node;
 	    }
 
 	  /* fall through */
 
 	case ARRAY_REF:
-	  if (TYPE_REVERSE_STORAGE_ORDER (TREE_TYPE (TREE_OPERAND (arg, 0))))
+	  如果 (TYPE_REVERSE_STORAGE_ORDER (TREE_TYPE (TREE_OPERAND (arg, 0))))
 	    {
-	      if (!AGGREGATE_TYPE_P (TREE_TYPE (arg))
+	      如果 (!AGGREGATE_TYPE_P (TREE_TYPE (arg))
 		  && !POINTER_TYPE_P (TREE_TYPE (arg))
 		  && !VECTOR_TYPE_P (TREE_TYPE (arg)))
 		{
 		  error_at (location, "cannot take address of scalar with "
 			    "reverse storage order");
-		  return error_mark_node;
+		  返回 error_mark_node;
 		}
 
-	      if (TREE_CODE (TREE_TYPE (arg)) == ARRAY_TYPE
+	      如果 (TREE_CODE (TREE_TYPE (arg)) == ARRAY_TYPE
 		  && TYPE_REVERSE_STORAGE_ORDER (TREE_TYPE (arg)))
 		warning_at (location, OPT_Wscalar_storage_order,
 			    "address of array with reverse scalar storage "
@@ -6355,8 +6355,8 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
 	  break;
 	}
 
-      if (!c_mark_addressable (arg))
-	return error_mark_node;
+      如果 (!c_mark_addressable (arg))
+	返回 error_mark_node;
 
       gcc_assert (TREE_CODE (arg) != COMPONENT_REF
 		  || !DECL_C_BIT_FIELD (TREE_OPERAND (arg, 1)));
@@ -6366,7 +6366,7 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
       /* ??? Cope with user tricks that amount to offsetof.  Delete this
 	 when we have proper support for integer constant expressions.  */
       val = get_base_address (arg);
-      if (val && INDIRECT_REF_P (val)
+      如果 (val && INDIRECT_REF_P (val)
           && TREE_CONSTANT (TREE_OPERAND (val, 0)))
 	{
 	  ret = fold_offsetof (arg, argtype);
@@ -6386,25 +6386,25 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
       gcc_unreachable ();
     }
 
-  if (argtype == NULL_TREE)
+  如果 (argtype == NULL_TREE)
     argtype = TREE_TYPE (arg);
-  if (TREE_CODE (arg) == INTEGER_CST)
+  如果 (TREE_CODE (arg) == INTEGER_CST)
     ret = (require_constant_value
 	   ? fold_build1_initializer_loc (location, code, argtype, arg)
 	   : fold_build1_loc (location, code, argtype, arg));
-  else
+  否则
     ret = build1 (code, argtype, arg);
  return_build_unary_op:
   gcc_assert (ret != error_mark_node);
-  if (TREE_CODE (ret) == INTEGER_CST && !TREE_OVERFLOW (ret)
+  如果 (TREE_CODE (ret) == INTEGER_CST && !TREE_OVERFLOW (ret)
       && !(TREE_CODE (xarg) == INTEGER_CST && !TREE_OVERFLOW (xarg)))
     ret = build1 (NOP_EXPR, TREE_TYPE (ret), ret);
-  else if (TREE_CODE (ret) != INTEGER_CST && int_operands)
+  否则 如果 (TREE_CODE (ret) != INTEGER_CST && int_operands)
     ret = note_integer_operands (ret);
-  if (eptype)
+  如果 (eptype)
     ret = build1 (EXCESS_PRECISION_EXPR, eptype, ret);
   protected_set_expr_location (ret, location);
-  return ret;
+  返回 ret;
 }
 
 /* Return nonzero if REF is an lvalue valid for this language.
@@ -6421,14 +6421,14 @@ lvalue_p (const_tree ref)
     case REALPART_EXPR:
     case IMAGPART_EXPR:
     case COMPONENT_REF:
-      return lvalue_p (TREE_OPERAND (ref, 0));
+      返回 lvalue_p (TREE_OPERAND (ref, 0));
 
     case C_MAYBE_CONST_EXPR:
-      return lvalue_p (TREE_OPERAND (ref, 1));
+      返回 lvalue_p (TREE_OPERAND (ref, 1));
 
     case COMPOUND_LITERAL_EXPR:
     case STRING_CST:
-      return true;
+      返回 true;
 
     case MEM_REF:
     case TARGET_MEM_REF:
@@ -6440,17 +6440,17 @@ lvalue_p (const_tree ref)
     case PARM_DECL:
     case RESULT_DECL:
     case ERROR_MARK:
-      return (TREE_CODE (TREE_TYPE (ref)) != FUNCTION_TYPE
+      返回 (TREE_CODE (TREE_TYPE (ref)) != FUNCTION_TYPE
 	      && TREE_CODE (TREE_TYPE (ref)) != METHOD_TYPE);
 
     case BIND_EXPR:
-      return TREE_CODE (TREE_TYPE (ref)) == ARRAY_TYPE;
+      返回 TREE_CODE (TREE_TYPE (ref)) == ARRAY_TYPE;
 
     case CALL_EXPR:
-      return is_access_with_size_p (ref);
+      返回 is_access_with_size_p (ref);
 
     default:
-      return false;
+      返回 false;
     }
 }
 
@@ -6474,7 +6474,7 @@ readonly_warning (tree arg, enum lvalue_use use)
     default:
       gcc_unreachable ();
     }
-  return;
+  返回;
 }
 
 
@@ -6483,15 +6483,15 @@ readonly_warning (tree arg, enum lvalue_use use)
    how the lvalue is being used and so selects the error message.
    LOCATION is the location at which any error should be reported.  */
 
-static int
+static 整数
 lvalue_or_else (location_t loc, const_tree ref, enum lvalue_use use)
 {
-  int win = lvalue_p (ref);
+  整数 win = lvalue_p (ref);
 
-  if (!win)
+  如果 (!win)
     lvalue_error (loc, use);
 
-  return win;
+  返回 win;
 }
 
 /* Mark EXP saying that we need to be able to take the
@@ -6508,23 +6508,23 @@ c_mark_addressable (tree exp, bool array_ref_p, bool override_register)
 {
   tree x = exp;
 
-  while (1)
+  当 (1)
     switch (TREE_CODE (x))
       {
       case VIEW_CONVERT_EXPR:
-	if (array_ref_p
+	如果 (array_ref_p
 	    && TREE_CODE (TREE_TYPE (x)) == ARRAY_TYPE
 	    && VECTOR_TYPE_P (TREE_TYPE (TREE_OPERAND (x, 0))))
-	  return true;
+	  返回 true;
 	x = TREE_OPERAND (x, 0);
 	break;
 
       case COMPONENT_REF:
-	if (DECL_C_BIT_FIELD (TREE_OPERAND (x, 1)))
+	如果 (DECL_C_BIT_FIELD (TREE_OPERAND (x, 1)))
 	  {
 	    error ("cannot take address of bit-field %qD",
 		   TREE_OPERAND (x, 1));
-	    return false;
+	    返回 false;
 	  }
 	/* FALLTHRU */
       case ADDR_EXPR:
@@ -6535,53 +6535,53 @@ c_mark_addressable (tree exp, bool array_ref_p, bool override_register)
 	break;
 
       case COMPOUND_LITERAL_EXPR:
-	if (C_DECL_REGISTER (COMPOUND_LITERAL_EXPR_DECL (x)))
+	如果 (C_DECL_REGISTER (COMPOUND_LITERAL_EXPR_DECL (x)))
 	  {
-	    if (override_register)
+	    如果 (override_register)
 	      DECL_REGISTER (COMPOUND_LITERAL_EXPR_DECL (x)) = 0;
-	    else
+	    否则
 	      {
 		error ("address of register compound literal requested");
-		return false;
+		返回 false;
 	      }
 	  }
 	TREE_ADDRESSABLE (x) = 1;
 	TREE_ADDRESSABLE (COMPOUND_LITERAL_EXPR_DECL (x)) = 1;
-	return true;
+	返回 true;
 
       case CONSTRUCTOR:
 	TREE_ADDRESSABLE (x) = 1;
-	return true;
+	返回 true;
 
       case VAR_DECL:
       case CONST_DECL:
       case PARM_DECL:
       case RESULT_DECL:
-	if (C_DECL_REGISTER (x)
+	如果 (C_DECL_REGISTER (x)
 	    && DECL_NONLOCAL (x))
 	  {
-	    if (TREE_PUBLIC (x) || is_global_var (x))
+	    如果 (TREE_PUBLIC (x) || is_global_var (x))
 	      {
 		error
 		  ("global register variable %qD used in nested function", x);
-		return false;
+		返回 false;
 	      }
 	    pedwarn (input_location, 0, "register variable %qD used in nested function", x);
 	  }
-	else if (C_DECL_REGISTER (x))
+	否则 如果 (C_DECL_REGISTER (x))
 	  {
-	    if (TREE_PUBLIC (x) || is_global_var (x))
+	    如果 (TREE_PUBLIC (x) || is_global_var (x))
 	      error ("address of global register variable %qD requested", x);
-	    else if (override_register && !DECL_HARD_REGISTER (x))
+	    否则 如果 (override_register && !DECL_HARD_REGISTER (x))
 	      {
 		DECL_REGISTER (x) = 0;
 		TREE_ADDRESSABLE (x) = 1;
 		mark_decl_used (x, true);
-		return true;
+		返回 true;
 	      }
-	    else
+	    否则
 	      error ("address of register variable %qD requested", x);
-	    return false;
+	    返回 false;
 	  }
 
 	/* FALLTHRU */
@@ -6590,7 +6590,7 @@ c_mark_addressable (tree exp, bool array_ref_p, bool override_register)
 	mark_decl_used (x, true);
 	/* FALLTHRU */
       default:
-	return true;
+	返回 true;
     }
 }
 
@@ -6605,15 +6605,15 @@ static tree
 ep_convert_and_check (location_t loc, tree type, tree expr,
 		      tree semantic_type)
 {
-  if (TREE_TYPE (expr) == type)
-    return expr;
+  如果 (TREE_TYPE (expr) == type)
+    返回 expr;
 
   /* For C11, integer conversions may have results with excess
      precision.  */
-  if (flag_isoc11 || !semantic_type)
-    return convert_and_check (loc, type, expr);
+  如果 (flag_isoc11 || !semantic_type)
+    返回 convert_and_check (loc, type, expr);
 
-  if (TREE_CODE (TREE_TYPE (expr)) == INTEGER_TYPE
+  如果 (TREE_CODE (TREE_TYPE (expr)) == INTEGER_TYPE
       && TREE_TYPE (expr) != semantic_type)
     {
       /* For integers, we need to check the real conversion, not
@@ -6622,7 +6622,7 @@ ep_convert_and_check (location_t loc, tree type, tree expr,
     }
   /* Result type is the excess precision type, which should be
      large enough, so do not check.  */
-  return convert (type, expr);
+  返回 convert (type, expr);
 }
 
 /* If EXPR refers to a built-in declared without a prototype returns
@@ -6634,29 +6634,29 @@ static tree
 type_or_builtin_type (tree expr, tree *bltin = NULL)
 {
   tree dummy;
-  if (!bltin)
+  如果 (!bltin)
     bltin = &dummy;
 
   *bltin = NULL_TREE;
 
   tree type = TREE_TYPE (expr);
-  if (TREE_CODE (expr) != ADDR_EXPR)
-    return type;
+  如果 (TREE_CODE (expr) != ADDR_EXPR)
+    返回 type;
 
   tree oper = TREE_OPERAND (expr, 0);
-  if (!DECL_P (oper)
+  如果 (!DECL_P (oper)
       || TREE_CODE (oper) != FUNCTION_DECL
       || !fndecl_built_in_p (oper, BUILT_IN_NORMAL))
-    return type;
+    返回 type;
 
   built_in_function code = DECL_FUNCTION_CODE (oper);
-  if (!C_DECL_BUILTIN_PROTOTYPE (oper))
-    return type;
+  如果 (!C_DECL_BUILTIN_PROTOTYPE (oper))
+    返回 type;
 
-  if ((*bltin = builtin_decl_implicit (code)))
+  如果 ((*bltin = builtin_decl_implicit (code)))
     type = c_build_pointer_type (TREE_TYPE (*bltin));
 
-  return type;
+  返回 type;
 }
 
 /* Build and return a conditional expression IFEXP ? OP1 : OP2.  If
@@ -6680,26 +6680,26 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
   tree ret;
 
   op1_int_operands = EXPR_INT_CONST_OPERANDS (orig_op1);
-  if (op1_int_operands)
+  如果 (op1_int_operands)
     op1 = remove_c_maybe_const_expr (op1);
   op2_int_operands = EXPR_INT_CONST_OPERANDS (orig_op2);
-  if (op2_int_operands)
+  如果 (op2_int_operands)
     op2 = remove_c_maybe_const_expr (op2);
   ifexp_int_operands = EXPR_INT_CONST_OPERANDS (ifexp);
-  if (ifexp_int_operands)
+  如果 (ifexp_int_operands)
     ifexp = remove_c_maybe_const_expr (ifexp);
 
   /* Promote both alternatives.  */
 
-  if (TREE_CODE (TREE_TYPE (op1)) != VOID_TYPE)
+  如果 (TREE_CODE (TREE_TYPE (op1)) != VOID_TYPE)
     op1 = default_conversion (op1);
-  if (TREE_CODE (TREE_TYPE (op2)) != VOID_TYPE)
+  如果 (TREE_CODE (TREE_TYPE (op2)) != VOID_TYPE)
     op2 = default_conversion (op2);
 
-  if (TREE_CODE (ifexp) == ERROR_MARK
+  如果 (TREE_CODE (ifexp) == ERROR_MARK
       || TREE_CODE (TREE_TYPE (op1)) == ERROR_MARK
       || TREE_CODE (TREE_TYPE (op2)) == ERROR_MARK)
-    return error_mark_node;
+    返回 error_mark_node;
 
   tree bltin1 = NULL_TREE;
   tree bltin2 = NULL_TREE;
@@ -6708,21 +6708,21 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
   type2 = type_or_builtin_type (op2, &bltin2);
   const enum tree_code code2 = TREE_CODE (type2);
 
-  if (code1 == POINTER_TYPE && reject_gcc_builtin (op1))
-    return error_mark_node;
+  如果 (code1 == POINTER_TYPE && reject_gcc_builtin (op1))
+    返回 error_mark_node;
 
-  if (code2 == POINTER_TYPE && reject_gcc_builtin (op2))
-    return error_mark_node;
+  如果 (code2 == POINTER_TYPE && reject_gcc_builtin (op2))
+    返回 error_mark_node;
 
   /* C90 does not permit non-lvalue arrays in conditional expressions.
      In C99 they will be pointers by now.  */
-  if (code1 == ARRAY_TYPE || code2 == ARRAY_TYPE)
+  如果 (code1 == ARRAY_TYPE || code2 == ARRAY_TYPE)
     {
       error_at (colon_loc, "non-lvalue array in conditional expression");
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
-  if ((TREE_CODE (op1) == EXCESS_PRECISION_EXPR
+  如果 ((TREE_CODE (op1) == EXCESS_PRECISION_EXPR
        || TREE_CODE (op2) == EXCESS_PRECISION_EXPR)
       && (code1 == INTEGER_TYPE || code1 == REAL_TYPE
 	  || code1 == COMPLEX_TYPE || code1 == BITINT_TYPE)
@@ -6730,13 +6730,13 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	  || code2 == COMPLEX_TYPE || code2 == BITINT_TYPE))
     {
       semantic_result_type = c_common_type (type1, type2);
-      if (TREE_CODE (op1) == EXCESS_PRECISION_EXPR)
+      如果 (TREE_CODE (op1) == EXCESS_PRECISION_EXPR)
 	{
 	  op1 = TREE_OPERAND (op1, 0);
 	  type1 = TREE_TYPE (op1);
 	  gcc_assert (TREE_CODE (type1) == code1);
 	}
-      if (TREE_CODE (op2) == EXCESS_PRECISION_EXPR)
+      如果 (TREE_CODE (op2) == EXCESS_PRECISION_EXPR)
 	{
 	  op2 = TREE_OPERAND (op2, 0);
 	  type2 = TREE_TYPE (op2);
@@ -6744,12 +6744,12 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	}
     }
 
-  if (warn_cxx_compat)
+  如果 (warn_cxx_compat)
     {
       tree t1 = op1_original_type ? op1_original_type : TREE_TYPE (orig_op1);
       tree t2 = op2_original_type ? op2_original_type : TREE_TYPE (orig_op2);
 
-      if (TREE_CODE (t1) == ENUMERAL_TYPE
+      如果 (TREE_CODE (t1) == ENUMERAL_TYPE
 	  && TREE_CODE (t2) == ENUMERAL_TYPE
 	  && TYPE_MAIN_VARIANT (t1) != TYPE_MAIN_VARIANT (t2))
 	warning_at (colon_loc, OPT_Wc___compat,
@@ -6757,15 +6757,15 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 		    "invalid in C++: %qT vs %qT", t1, t2);
     }
 
-  if (warn_zero_as_null_pointer_constant
+  如果 (warn_zero_as_null_pointer_constant
       && c_inhibit_evaluation_warnings == 0)
     {
-      if ((code1 == POINTER_TYPE || code1 == NULLPTR_TYPE)
+      如果 ((code1 == POINTER_TYPE || code1 == NULLPTR_TYPE)
 	  && INTEGRAL_TYPE_P (type2) && null_pointer_constant_p (orig_op2))
 	warning_at (op2_loc, OPT_Wzero_as_null_pointer_constant,
 		    "zero as null pointer constant");
 
-      if ((code2 == POINTER_TYPE || code2 == NULLPTR_TYPE)
+      如果 ((code2 == POINTER_TYPE || code2 == NULLPTR_TYPE)
 	  && INTEGRAL_TYPE_P (type1) && null_pointer_constant_p (orig_op1))
 	warning_at (op1_loc, OPT_Wzero_as_null_pointer_constant,
 		    "zero as null pointer constant");
@@ -6773,14 +6773,14 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 
   /* Quickly detect the usual case where op1 and op2 have the same type
      after promotion.  */
-  if (TYPE_MAIN_VARIANT (type1) == TYPE_MAIN_VARIANT (type2))
+  如果 (TYPE_MAIN_VARIANT (type1) == TYPE_MAIN_VARIANT (type2))
     {
-      if (type1 == type2)
+      如果 (type1 == type2)
 	result_type = type1;
-      else
+      否则
 	result_type = TYPE_MAIN_VARIANT (type1);
     }
-  else if ((code1 == INTEGER_TYPE || code1 == REAL_TYPE
+  否则 如果 ((code1 == INTEGER_TYPE || code1 == REAL_TYPE
 	    || code1 == COMPLEX_TYPE || code1 == BITINT_TYPE)
 	   && (code2 == INTEGER_TYPE || code2 == REAL_TYPE
 	       || code2 == COMPLEX_TYPE || code2 == BITINT_TYPE))
@@ -6791,27 +6791,27 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	 possible excess precision.  */
       tree eptype1 = type1;
       tree eptype2 = type2;
-      if (flag_isoc11)
+      如果 (flag_isoc11)
 	{
 	  tree eptype;
-	  if (ANY_INTEGRAL_TYPE_P (type1)
+	  如果 (ANY_INTEGRAL_TYPE_P (type1)
 	      && (eptype = excess_precision_type (type2)) != NULL_TREE)
 	    {
 	      eptype2 = eptype;
-	      if (!semantic_result_type)
+	      如果 (!semantic_result_type)
 		semantic_result_type = c_common_type (type1, type2);
 	    }
-	  else if (ANY_INTEGRAL_TYPE_P (type2)
+	  否则 如果 (ANY_INTEGRAL_TYPE_P (type2)
 		   && (eptype = excess_precision_type (type1)) != NULL_TREE)
 	    {
 	      eptype1 = eptype;
-	      if (!semantic_result_type)
+	      如果 (!semantic_result_type)
 		semantic_result_type = c_common_type (type1, type2);
 	    }
 	}
       result_type = c_common_type (eptype1, eptype2);
-      if (result_type == error_mark_node)
-	return error_mark_node;
+      如果 (result_type == error_mark_node)
+	返回 error_mark_node;
       do_warn_double_promotion (result_type, type1, type2,
 				"implicit conversion from %qT to %qT to "
 				"match other result of conditional",
@@ -6822,19 +6822,19 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	 and later code won't know it used to be different.
 	 Do this check on the original types, so that explicit casts
 	 will be considered, but default promotions won't.  */
-      if (c_inhibit_evaluation_warnings == 0)
+      如果 (c_inhibit_evaluation_warnings == 0)
 	{
-	  int unsigned_op1 = TYPE_UNSIGNED (TREE_TYPE (orig_op1));
-	  int unsigned_op2 = TYPE_UNSIGNED (TREE_TYPE (orig_op2));
+	  整数 unsigned_op1 = TYPE_UNSIGNED (TREE_TYPE (orig_op1));
+	  整数 unsigned_op2 = TYPE_UNSIGNED (TREE_TYPE (orig_op2));
 
-	  if (unsigned_op1 ^ unsigned_op2)
+	  如果 (unsigned_op1 ^ unsigned_op2)
 	    {
 	      /* Do not warn if the result type is signed, since the
 		 signed type will only be chosen if it can represent
 		 all the values of the unsigned type.  */
-	      if (!TYPE_UNSIGNED (result_type))
+	      如果 (!TYPE_UNSIGNED (result_type))
 		/* OK */;
-	      else
+	      否则
 		{
 		  bool op1_maybe_const = true;
 		  bool op2_maybe_const = true;
@@ -6861,70 +6861,70 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 		  c_inhibit_evaluation_warnings
 		    -= (ifexp == truthvalue_true_node);
 
-		  if (warn_sign_compare)
+		  如果 (warn_sign_compare)
 		    {
-		      if ((unsigned_op2
+		      如果 ((unsigned_op2
 			   && tree_expr_nonnegative_p (op1))
 			  || (unsigned_op1
 			      && tree_expr_nonnegative_p (op2)))
 			/* OK */;
-		      else if (unsigned_op2)
+		      否则 如果 (unsigned_op2)
 			warning_at (op1_loc, OPT_Wsign_compare,
 				    "operand of %<?:%> changes signedness from "
 				    "%qT to %qT due to unsignedness of other "
 				    "operand", TREE_TYPE (orig_op1),
 				    TREE_TYPE (orig_op2));
-		      else
+		      否则
 			warning_at (op2_loc, OPT_Wsign_compare,
 				    "operand of %<?:%> changes signedness from "
 				    "%qT to %qT due to unsignedness of other "
 				    "operand", TREE_TYPE (orig_op2),
 				    TREE_TYPE (orig_op1));
 		    }
-		  if (!op1_maybe_const || TREE_CODE (op1) != INTEGER_CST)
+		  如果 (!op1_maybe_const || TREE_CODE (op1) != INTEGER_CST)
 		    op1 = c_wrap_maybe_const (op1, !op1_maybe_const);
-		  if (!op2_maybe_const || TREE_CODE (op2) != INTEGER_CST)
+		  如果 (!op2_maybe_const || TREE_CODE (op2) != INTEGER_CST)
 		    op2 = c_wrap_maybe_const (op2, !op2_maybe_const);
 		}
 	    }
 	}
     }
-  else if (code1 == VOID_TYPE || code2 == VOID_TYPE)
+  否则 如果 (code1 == VOID_TYPE || code2 == VOID_TYPE)
     {
-      if (code1 != VOID_TYPE || code2 != VOID_TYPE)
+      如果 (code1 != VOID_TYPE || code2 != VOID_TYPE)
 	pedwarn (colon_loc, OPT_Wpedantic,
 		 "ISO C forbids conditional expr with only one void side");
       result_type = void_type_node;
     }
-  else if (code1 == POINTER_TYPE && code2 == POINTER_TYPE)
+  否则 如果 (code1 == POINTER_TYPE && code2 == POINTER_TYPE)
     {
       addr_space_t as1 = TYPE_ADDR_SPACE (TREE_TYPE (type1));
       addr_space_t as2 = TYPE_ADDR_SPACE (TREE_TYPE (type2));
       addr_space_t as_common;
 
-      if (comp_target_types (colon_loc, type1, type2))
+      如果 (comp_target_types (colon_loc, type1, type2))
 	{
 	  ifexp = save_expr (ifexp);
 	  result_type = common_pointer_type (type1, type2, ifexp);
 	}
-      else if (null_pointer_constant_p (orig_op1))
+      否则 如果 (null_pointer_constant_p (orig_op1))
 	result_type = type2;
-      else if (null_pointer_constant_p (orig_op2))
+      否则 如果 (null_pointer_constant_p (orig_op2))
 	result_type = type1;
-      else if (!addr_space_superset (as1, as2, &as_common))
+      否则 如果 (!addr_space_superset (as1, as2, &as_common))
 	{
 	  error_at (colon_loc, "pointers to disjoint address spaces "
 		    "used in conditional expression");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      else if ((VOID_TYPE_P (TREE_TYPE (type1))
+      否则 如果 ((VOID_TYPE_P (TREE_TYPE (type1))
 		&& !TYPE_ATOMIC (TREE_TYPE (type1)))
 	       || (VOID_TYPE_P (TREE_TYPE (type2))
 		   && !TYPE_ATOMIC (TREE_TYPE (type2))))
 	{
 	  tree t1 = TREE_TYPE (type1);
 	  tree t2 = TREE_TYPE (type2);
-	  if (!(VOID_TYPE_P (t1)
+	  如果 (!(VOID_TYPE_P (t1)
 		&& !TYPE_ATOMIC (t1)))
 	   {
 	     /* roles are swapped */
@@ -6932,35 +6932,35 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	     t2 = TREE_TYPE (type1);
 	   }
 	  tree t2_stripped = strip_array_types (t2);
-	  if ((TREE_CODE (t2) == ARRAY_TYPE)
+	  如果 ((TREE_CODE (t2) == ARRAY_TYPE)
 	      && (TYPE_QUALS (t2_stripped) & ~TYPE_QUALS (t1)))
 	    {
-	      if (!flag_isoc23)
+	      如果 (!flag_isoc23)
 		warning_at (colon_loc, OPT_Wdiscarded_array_qualifiers,
 			    "pointer to array loses qualifier "
 			    "in conditional expression");
-	      else if (warn_c11_c23_compat > 0)
+	      否则 如果 (warn_c11_c23_compat > 0)
 		warning_at (colon_loc, OPT_Wc11_c23_compat,
 			    "pointer to array loses qualifier "
 			    "in conditional expression in ISO C before C23");
 	    }
-	  if (TREE_CODE (t2) == FUNCTION_TYPE)
+	  如果 (TREE_CODE (t2) == FUNCTION_TYPE)
 	    pedwarn (colon_loc, OPT_Wpedantic,
 		     "ISO C forbids conditional expr between "
 		     "%<void *%> and function pointer");
 	  /* for array, use qualifiers of element type */
-	  if (flag_isoc23)
+	  如果 (flag_isoc23)
 	    t2 = t2_stripped;
 	  result_type = c_build_pointer_type (qualify_type (t1, t2));
 	}
       /* Objective-C pointer comparisons are a bit more lenient.  */
-      else if (objc_have_common_type (type1, type2, -3, NULL_TREE))
+      否则 如果 (objc_have_common_type (type1, type2, -3, NULL_TREE))
 	result_type = objc_common_type (type1, type2);
-      else
+      否则
 	{
-	  int qual = ENCODE_QUAL_ADDR_SPACE (as_common);
+	  整数 qual = ENCODE_QUAL_ADDR_SPACE (as_common);
 	  enum diagnostics::kind kind = diagnostics::kind::permerror;
-	  if (!flag_isoc99)
+	  如果 (!flag_isoc99)
 	    /* This downgrade to a warning ensures that -std=gnu89
 	       -pedantic-errors does not flag these mismatches between
 	       builtins as errors (as diagnostics::kind::permerror would)
@@ -6969,7 +6969,7 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	    kind = (bltin1 && bltin2
 		    ? diagnostics::kind::warning
 		    : diagnostics::kind::pedwarn);
-	  if (emit_diagnostic (kind, colon_loc, OPT_Wincompatible_pointer_types,
+	  如果 (emit_diagnostic (kind, colon_loc, OPT_Wincompatible_pointer_types,
 			       "pointer type mismatch "
 			       "in conditional expression"))
 	    {
@@ -6980,27 +6980,27 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 			  (c_build_qualified_type (void_type_node, qual));
 	}
     }
-  else if (code1 == POINTER_TYPE
+  否则 如果 (code1 == POINTER_TYPE
 	   && (code2 == INTEGER_TYPE || code2 == BITINT_TYPE))
     {
-      if (!null_pointer_constant_p (orig_op2))
+      如果 (!null_pointer_constant_p (orig_op2))
 	permerror_opt (colon_loc, OPT_Wint_conversion,
 		       "pointer/integer type mismatch "
 		       "in conditional expression");
-      else
+      否则
 	{
 	  op2 = null_pointer_node;
 	}
       result_type = type1;
     }
-  else if (code2 == POINTER_TYPE
+  否则 如果 (code2 == POINTER_TYPE
 	   && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
     {
-      if (!null_pointer_constant_p (orig_op1))
+      如果 (!null_pointer_constant_p (orig_op1))
 	permerror_opt (colon_loc, OPT_Wint_conversion,
 		       "pointer/integer type mismatch "
 		       "in conditional expression");
-      else
+      否则
 	{
 	  op1 = null_pointer_node;
 	}
@@ -7009,24 +7009,24 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
   /* 6.5.15: "if one is a null pointer constant (other than a pointer) or has
      type nullptr_t and the other is a pointer, the result type is the pointer
      type."  */
-  else if (code1 == NULLPTR_TYPE && code2 == POINTER_TYPE)
+  否则 如果 (code1 == NULLPTR_TYPE && code2 == POINTER_TYPE)
     result_type = type2;
-  else if (code1 == POINTER_TYPE && code2 == NULLPTR_TYPE)
+  否则 如果 (code1 == POINTER_TYPE && code2 == NULLPTR_TYPE)
     result_type = type1;
-  else if (RECORD_OR_UNION_TYPE_P (type1) && RECORD_OR_UNION_TYPE_P (type2)
+  否则 如果 (RECORD_OR_UNION_TYPE_P (type1) && RECORD_OR_UNION_TYPE_P (type2)
 	   && comptypes (TYPE_MAIN_VARIANT (type1),
 			 TYPE_MAIN_VARIANT (type2)))
     result_type = composite_type (TYPE_MAIN_VARIANT (type1),
 				  TYPE_MAIN_VARIANT (type2));
 
-  if (!result_type)
+  如果 (!result_type)
     {
-      if (flag_cond_mismatch)
+      如果 (flag_cond_mismatch)
 	result_type = void_type_node;
-      else
+      否则
 	{
 	  error_at (colon_loc, "type mismatch in conditional expression");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
     }
 
@@ -7041,12 +7041,12 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
   op2 = ep_convert_and_check (colon_loc, result_type, op2,
 			      semantic_result_type);
 
-  if (ifexp_bcp && ifexp == truthvalue_true_node)
+  如果 (ifexp_bcp && ifexp == truthvalue_true_node)
     {
       op2_int_operands = true;
       op1 = c_fully_fold (op1, require_constant_value, NULL);
     }
-  if (ifexp_bcp && ifexp == truthvalue_false_node)
+  如果 (ifexp_bcp && ifexp == truthvalue_false_node)
     {
       op1_int_operands = true;
       op2 = c_fully_fold (op2, require_constant_value, NULL);
@@ -7054,7 +7054,7 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
   int_const = int_operands = (ifexp_int_operands
 			      && op1_int_operands
 			      && op2_int_operands);
-  if (int_operands)
+  如果 (int_operands)
     {
       int_const = ((ifexp == truthvalue_true_node
 		    && TREE_CODE (orig_op1) == INTEGER_CST
@@ -7065,7 +7065,7 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
     }
 
   /* Need to convert condition operand into a vector mask.  */
-  if (VECTOR_TYPE_P (TREE_TYPE (ifexp)))
+  如果 (VECTOR_TYPE_P (TREE_TYPE (ifexp)))
     {
       tree vectype = TREE_TYPE (ifexp);
       tree elem_type = TREE_TYPE (vectype);
@@ -7075,11 +7075,11 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
       ifexp = build2 (NE_EXPR, cmp_type, ifexp, zero_vec);
     }
 
-  if (int_const || (ifexp_bcp && TREE_CODE (ifexp) == INTEGER_CST))
+  如果 (int_const || (ifexp_bcp && TREE_CODE (ifexp) == INTEGER_CST))
     ret = fold_build3_loc (colon_loc, COND_EXPR, result_type, ifexp, op1, op2);
-  else
+  否则
     {
-      if (int_operands)
+      如果 (int_operands)
 	{
 	  /* Use c_fully_fold here, since C_MAYBE_CONST_EXPR might be
 	     nested inside of the expression.  */
@@ -7087,23 +7087,23 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	  op2 = c_fully_fold (op2, false, NULL);
 	}
       ret = build3 (COND_EXPR, result_type, ifexp, op1, op2);
-      if (int_operands)
+      如果 (int_operands)
 	ret = note_integer_operands (ret);
     }
-  if (semantic_result_type)
+  如果 (semantic_result_type)
     ret = build1 (EXCESS_PRECISION_EXPR, semantic_result_type, ret);
 
   protected_set_expr_location (ret, colon_loc);
 
   /* If the OP1 and OP2 are the same and don't have side-effects,
      warn here, because the COND_EXPR will be turned into OP1.  */
-  if (warn_duplicated_branches
+  如果 (warn_duplicated_branches
       && TREE_CODE (ret) == COND_EXPR
       && (op1 == op2 || operand_equal_p (op1, op2, OEP_ADDRESS_OF_SAME_FIELD)))
     warning_at (EXPR_LOCATION (ret), OPT_Wduplicated_branches,
 		"this condition has identical branches");
 
-  return ret;
+  返回 ret;
 }
 
 /* EXPR is an expression, location LOC, whose result is discarded.
@@ -7113,70 +7113,70 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 static void
 maybe_warn_nodiscard (location_t loc, tree expr)
 {
-  if (VOID_TYPE_P (TREE_TYPE (expr)))
-    return;
-  while (TREE_CODE (expr) == COMPOUND_EXPR)
+  如果 (VOID_TYPE_P (TREE_TYPE (expr)))
+    返回;
+  当 (TREE_CODE (expr) == COMPOUND_EXPR)
     {
       expr = TREE_OPERAND (expr, 1);
-      if (EXPR_HAS_LOCATION (expr))
+      如果 (EXPR_HAS_LOCATION (expr))
 	loc = EXPR_LOCATION (expr);
     }
-  if (TREE_CODE (expr) != CALL_EXPR)
-    return;
+  如果 (TREE_CODE (expr) != CALL_EXPR)
+    返回;
   tree fn = CALL_EXPR_FN (expr);
-  if (!fn)
-    return;
+  如果 (!fn)
+    返回;
   tree attr;
-  if (TREE_CODE (fn) == ADDR_EXPR
+  如果 (TREE_CODE (fn) == ADDR_EXPR
       && TREE_CODE (TREE_OPERAND (fn, 0)) == FUNCTION_DECL
       && (attr = lookup_attribute ("nodiscard",
 				   DECL_ATTRIBUTES (TREE_OPERAND (fn, 0)))))
     {
       fn = TREE_OPERAND (fn, 0);
       tree args = TREE_VALUE (attr);
-      if (args)
+      如果 (args)
 	args = TREE_VALUE (args);
       auto_diagnostic_group d;
       auto_urlify_attributes sentinel;
-      int warned;
-      if (args)
+      整数 warned;
+      如果 (args)
 	warned = warning_at (loc, OPT_Wunused_result,
 			     "ignoring return value of %qD, declared with "
 			     "attribute %<nodiscard%>: %E", fn, args);
-      else
+      否则
 	warned = warning_at (loc, OPT_Wunused_result,
 			     "ignoring return value of %qD, declared with "
 			     "attribute %<nodiscard%>", fn);
-      if (warned)
+      如果 (warned)
 	inform (DECL_SOURCE_LOCATION (fn), "declared here");
     }
-  else
+  否则
     {
       tree rettype = TREE_TYPE (TREE_TYPE (TREE_TYPE (fn)));
       attr = lookup_attribute ("nodiscard", TYPE_ATTRIBUTES (rettype));
-      if (!attr)
-	return;
+      如果 (!attr)
+	返回;
       tree args = TREE_VALUE (attr);
-      if (args)
+      如果 (args)
 	args = TREE_VALUE (args);
       auto_diagnostic_group d;
       auto_urlify_attributes sentinel;
-      int warned;
-      if (args)
+      整数 warned;
+      如果 (args)
 	warned = warning_at (loc, OPT_Wunused_result,
 			     "ignoring return value of type %qT, declared "
 			     "with attribute %<nodiscard%>: %E",
 			     rettype, args);
-      else
+      否则
 	warned = warning_at (loc, OPT_Wunused_result,
 			     "ignoring return value of type %qT, declared "
 			     "with attribute %<nodiscard%>", rettype);
-      if (warned)
+      如果 (warned)
 	{
-	  if (TREE_CODE (fn) == ADDR_EXPR)
+	  如果 (TREE_CODE (fn) == ADDR_EXPR)
 	    {
 	      fn = TREE_OPERAND (fn, 0);
-	      if (TREE_CODE (fn) == FUNCTION_DECL)
+	      如果 (TREE_CODE (fn) == FUNCTION_DECL)
 		inform (DECL_SOURCE_LOCATION (fn),
 			"in call to %qD, declared here", fn);
 	    }
@@ -7197,51 +7197,51 @@ build_compound_expr (location_t loc, tree expr1, tree expr2)
   tree ret;
 
   expr1_int_operands = EXPR_INT_CONST_OPERANDS (expr1);
-  if (expr1_int_operands)
+  如果 (expr1_int_operands)
     expr1 = remove_c_maybe_const_expr (expr1);
   expr2_int_operands = EXPR_INT_CONST_OPERANDS (expr2);
-  if (expr2_int_operands)
+  如果 (expr2_int_operands)
     expr2 = remove_c_maybe_const_expr (expr2);
 
-  if (TREE_CODE (expr1) == EXCESS_PRECISION_EXPR)
+  如果 (TREE_CODE (expr1) == EXCESS_PRECISION_EXPR)
     expr1 = TREE_OPERAND (expr1, 0);
-  if (TREE_CODE (expr2) == EXCESS_PRECISION_EXPR)
+  如果 (TREE_CODE (expr2) == EXCESS_PRECISION_EXPR)
     {
       eptype = TREE_TYPE (expr2);
       expr2 = TREE_OPERAND (expr2, 0);
     }
 
-  if (!TREE_SIDE_EFFECTS (expr1))
+  如果 (!TREE_SIDE_EFFECTS (expr1))
     {
       /* The left-hand operand of a comma expression is like an expression
 	 statement: with -Wunused, we should warn if it doesn't have
 	 any side-effects, unless it was explicitly cast to (void).  */
-      if (warn_unused_value)
+      如果 (warn_unused_value)
 	{
-	  if (VOID_TYPE_P (TREE_TYPE (expr1))
+	  如果 (VOID_TYPE_P (TREE_TYPE (expr1))
 	      && CONVERT_EXPR_P (expr1))
 	    ; /* (void) a, b */
-	  else if (VOID_TYPE_P (TREE_TYPE (expr1))
+	  否则 如果 (VOID_TYPE_P (TREE_TYPE (expr1))
 		   && TREE_CODE (expr1) == COMPOUND_EXPR
 		   && CONVERT_EXPR_P (TREE_OPERAND (expr1, 1)))
 	    ; /* (void) a, (void) b, c */
-	  else
+	  否则
 	    warning_at (loc, OPT_Wunused_value,
 			"left-hand operand of comma expression has no effect");
 	}
     }
-  else if (TREE_CODE (expr1) == COMPOUND_EXPR
+  否则 如果 (TREE_CODE (expr1) == COMPOUND_EXPR
 	   && warn_unused_value)
     {
       tree r = expr1;
       location_t cloc = loc;
-      while (TREE_CODE (r) == COMPOUND_EXPR)
+      当 (TREE_CODE (r) == COMPOUND_EXPR)
         {
-	  if (EXPR_HAS_LOCATION (r))
+	  如果 (EXPR_HAS_LOCATION (r))
 	    cloc = EXPR_LOCATION (r);
 	  r = TREE_OPERAND (r, 1);
 	}
-      if (!TREE_SIDE_EFFECTS (r)
+      如果 (!TREE_SIDE_EFFECTS (r)
 	  && !VOID_TYPE_P (TREE_TYPE (r))
 	  && !CONVERT_EXPR_P (r))
 	warning_at (cloc, OPT_Wunused_value,
@@ -7252,26 +7252,26 @@ build_compound_expr (location_t loc, tree expr1, tree expr2)
      side-effects, but computes a value which is not used.  For example, in
      `foo() + bar(), baz()' the result of the `+' operator is not used,
      so we should issue a warning.  */
-  else if (warn_unused_value)
+  否则 如果 (warn_unused_value)
     warn_if_unused_value (expr1, loc);
 
   maybe_warn_nodiscard (loc, expr1);
 
-  if (expr2 == error_mark_node)
-    return error_mark_node;
+  如果 (expr2 == error_mark_node)
+    返回 error_mark_node;
 
   ret = build2 (COMPOUND_EXPR, TREE_TYPE (expr2), expr1, expr2);
 
-  if (flag_isoc99
+  如果 (flag_isoc99
       && expr1_int_operands
       && expr2_int_operands)
     ret = note_integer_operands (ret);
 
-  if (eptype)
+  如果 (eptype)
     ret = build1 (EXCESS_PRECISION_EXPR, eptype, ret);
 
   protected_set_expr_location (ret, loc);
-  return ret;
+  返回 ret;
 }
 
 /* Issue -Wcast-qual warnings when appropriate.  TYPE is the type to
@@ -7286,8 +7286,8 @@ handle_warn_cast_qual (location_t loc, tree type, tree otype)
 {
   tree in_type = type;
   tree in_otype = otype;
-  int added = 0;
-  int discarded = 0;
+  整数 added = 0;
+  整数 discarded = 0;
   bool is_const;
 
   /* Check that the qualifiers on IN_TYPE are a superset of the
@@ -7303,30 +7303,30 @@ handle_warn_cast_qual (location_t loc, tree type, tree otype)
 	 function is very pure, 'volatile' means it can't return.  We
 	 need to warn when such qualifiers are added, not when they're
 	 taken away.  */
-      if (TREE_CODE (in_otype) == FUNCTION_TYPE
+      如果 (TREE_CODE (in_otype) == FUNCTION_TYPE
 	  && TREE_CODE (in_type) == FUNCTION_TYPE)
 	added |= (TYPE_QUALS_NO_ADDR_SPACE (in_type)
 		  & ~TYPE_QUALS_NO_ADDR_SPACE (in_otype));
-      else
+      否则
 	discarded |= (TYPE_QUALS_NO_ADDR_SPACE (in_otype)
 		      & ~TYPE_QUALS_NO_ADDR_SPACE (in_type));
     }
-  while (TREE_CODE (in_type) == POINTER_TYPE
+  当 (TREE_CODE (in_type) == POINTER_TYPE
 	 && TREE_CODE (in_otype) == POINTER_TYPE);
 
-  if (added)
+  如果 (added)
     warning_at (loc, OPT_Wcast_qual,
 		"cast adds %q#v qualifier to function type", added);
 
-  if (discarded)
+  如果 (discarded)
     /* There are qualifiers present in IN_OTYPE that are not present
        in IN_TYPE.  */
     warning_at (loc, OPT_Wcast_qual,
 		"cast discards %qv qualifier from pointer target type",
 		discarded);
 
-  if (added || discarded)
-    return;
+  如果 (added || discarded)
+    返回;
 
   /* A cast from **T to const **T is unsafe, because it can cause a
      const value to be changed with no additional warning.  We only
@@ -7341,10 +7341,10 @@ handle_warn_cast_qual (location_t loc, tree type, tree otype)
      case function types, as they won't have the same
      TYPE_MAIN_VARIANT.  */
 
-  if (TYPE_MAIN_VARIANT (in_type) != TYPE_MAIN_VARIANT (in_otype))
-    return;
-  if (TREE_CODE (TREE_TYPE (type)) != POINTER_TYPE)
-    return;
+  如果 (TYPE_MAIN_VARIANT (in_type) != TYPE_MAIN_VARIANT (in_otype))
+    返回;
+  如果 (TREE_CODE (TREE_TYPE (type)) != POINTER_TYPE)
+    返回;
 
   in_type = type;
   in_otype = otype;
@@ -7353,7 +7353,7 @@ handle_warn_cast_qual (location_t loc, tree type, tree otype)
     {
       in_type = TREE_TYPE (in_type);
       in_otype = TREE_TYPE (in_otype);
-      if ((TYPE_QUALS (in_type) &~ TYPE_QUALS (in_otype)) != 0
+      如果 ((TYPE_QUALS (in_type) &~ TYPE_QUALS (in_otype)) != 0
 	  && !is_const)
 	{
 	  warning_at (loc, OPT_Wcast_qual,
@@ -7362,10 +7362,10 @@ handle_warn_cast_qual (location_t loc, tree type, tree otype)
 		      otype, type);
 	  break;
 	}
-      if (is_const)
+      如果 (is_const)
 	is_const = TYPE_READONLY (in_type);
     }
-  while (TREE_CODE (in_type) == POINTER_TYPE);
+  当 (TREE_CODE (in_type) == POINTER_TYPE);
 }
 
 /* Heuristic check if two parameter types can be considered ABI-equivalent.  */
@@ -7373,25 +7373,25 @@ handle_warn_cast_qual (location_t loc, tree type, tree otype)
 static bool
 c_safe_arg_type_equiv_p (tree t1, tree t2)
 {
-  if (error_operand_p (t1) || error_operand_p (t2))
-    return true;
+  如果 (error_operand_p (t1) || error_operand_p (t2))
+    返回 true;
 
   t1 = TYPE_MAIN_VARIANT (t1);
   t2 = TYPE_MAIN_VARIANT (t2);
 
-  if (TREE_CODE (t1) == POINTER_TYPE
+  如果 (TREE_CODE (t1) == POINTER_TYPE
       && TREE_CODE (t2) == POINTER_TYPE)
-    return true;
+    返回 true;
 
   /* Only the precision of the parameter matters.  This check should
      make sure that the callee does not see undefined values in argument
      registers.  */
-  if (INTEGRAL_TYPE_P (t1)
+  如果 (INTEGRAL_TYPE_P (t1)
       && INTEGRAL_TYPE_P (t2)
       && TYPE_PRECISION (t1) == TYPE_PRECISION (t2))
-    return true;
+    返回 true;
 
-  return comptypes (t1, t2);
+  返回 comptypes (t1, t2);
 }
 
 /* Check if a type cast between two function types can be considered safe.  */
@@ -7399,24 +7399,24 @@ c_safe_arg_type_equiv_p (tree t1, tree t2)
 static bool
 c_safe_function_type_cast_p (tree t1, tree t2)
 {
-  if (TREE_TYPE (t1) == void_type_node &&
+  如果 (TREE_TYPE (t1) == void_type_node &&
       TYPE_ARG_TYPES (t1) == void_list_node)
-    return true;
+    返回 true;
 
-  if (TREE_TYPE (t2) == void_type_node &&
+  如果 (TREE_TYPE (t2) == void_type_node &&
       TYPE_ARG_TYPES (t2) == void_list_node)
-    return true;
+    返回 true;
 
-  if (!c_safe_arg_type_equiv_p (TREE_TYPE (t1), TREE_TYPE (t2)))
-    return false;
+  如果 (!c_safe_arg_type_equiv_p (TREE_TYPE (t1), TREE_TYPE (t2)))
+    返回 false;
 
-  for (t1 = TYPE_ARG_TYPES (t1), t2 = TYPE_ARG_TYPES (t2);
+  为 (t1 = TYPE_ARG_TYPES (t1), t2 = TYPE_ARG_TYPES (t2);
        t1 && t2;
        t1 = TREE_CHAIN (t1), t2 = TREE_CHAIN (t2))
-    if (!c_safe_arg_type_equiv_p (TREE_VALUE (t1), TREE_VALUE (t2)))
-      return false;
+    如果 (!c_safe_arg_type_equiv_p (TREE_VALUE (t1), TREE_VALUE (t2)))
+      返回 false;
 
-  return true;
+  返回 true;
 }
 
 /* Build an expression representing a cast to type TYPE of expression EXPR.
@@ -7429,67 +7429,67 @@ build_c_cast (location_t loc, tree type, tree expr)
 
   bool int_operands = EXPR_INT_CONST_OPERANDS (expr);
 
-  if (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
+  如果 (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
     expr = TREE_OPERAND (expr, 0);
 
   value = expr;
-  if (int_operands)
+  如果 (int_operands)
     value = remove_c_maybe_const_expr (value);
 
-  if (type == error_mark_node || expr == error_mark_node)
-    return error_mark_node;
+  如果 (type == error_mark_node || expr == error_mark_node)
+    返回 error_mark_node;
 
   /* The ObjC front-end uses TYPE_MAIN_VARIANT to tie together types differing
      only in <protocol> qualifications.  But when constructing cast expressions,
      the protocols do matter and must be kept around.  */
-  if (objc_is_object_ptr (type) && objc_is_object_ptr (TREE_TYPE (expr)))
-    return build1 (NOP_EXPR, type, expr);
+  如果 (objc_is_object_ptr (type) && objc_is_object_ptr (TREE_TYPE (expr)))
+    返回 build1 (NOP_EXPR, type, expr);
 
   type = TYPE_MAIN_VARIANT (type);
 
-  if (TREE_CODE (type) == ARRAY_TYPE)
+  如果 (TREE_CODE (type) == ARRAY_TYPE)
     {
       error_at (loc, "cast specifies array type");
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
-  if (TREE_CODE (type) == FUNCTION_TYPE)
+  如果 (TREE_CODE (type) == FUNCTION_TYPE)
     {
       error_at (loc, "cast specifies function type");
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
-  if (!VOID_TYPE_P (type))
+  如果 (!VOID_TYPE_P (type))
     {
       value = require_complete_type (loc, value);
-      if (value == error_mark_node)
-	return error_mark_node;
+      如果 (value == error_mark_node)
+	返回 error_mark_node;
     }
 
-  if (type == TYPE_MAIN_VARIANT (TREE_TYPE (value)))
+  如果 (type == TYPE_MAIN_VARIANT (TREE_TYPE (value)))
     {
-      if (RECORD_OR_UNION_TYPE_P (type)
+      如果 (RECORD_OR_UNION_TYPE_P (type)
 	  && pedwarn (loc, OPT_Wpedantic,
 		      "ISO C forbids casting nonscalar to the same type"))
 	      ;
-      else if (warn_useless_cast && c_inhibit_evaluation_warnings == 0)
+      否则 如果 (warn_useless_cast && c_inhibit_evaluation_warnings == 0)
 	warning_at (loc, OPT_Wuseless_cast,
 		    "useless cast to type %qT", type);
 
       /* Convert to remove any qualifiers from VALUE's type.  */
       value = convert (type, value);
     }
-  else if (TREE_CODE (type) == UNION_TYPE)
+  否则 如果 (TREE_CODE (type) == UNION_TYPE)
     {
       tree field;
 
-      for (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
-	if (TREE_TYPE (field) != error_mark_node
+      为 (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
+	如果 (TREE_TYPE (field) != error_mark_node
 	    && comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (field)),
 			  TYPE_MAIN_VARIANT (TREE_TYPE (value))))
 	  break;
 
-      if (field)
+      如果 (field)
 	{
 	  tree t;
 	  bool maybe_const = true;
@@ -7497,38 +7497,38 @@ build_c_cast (location_t loc, tree type, tree expr)
 	  pedwarn (loc, OPT_Wpedantic, "ISO C forbids casts to union type");
 	  t = c_fully_fold (value, false, &maybe_const);
 	  t = build_constructor_single (type, field, t);
-	  if (!maybe_const)
+	  如果 (!maybe_const)
 	    t = c_wrap_maybe_const (t, true);
 	  t = digest_init (loc, field, type, t,
 			   NULL_TREE, false, false, false, true, false, false);
 	  TREE_CONSTANT (t) = TREE_CONSTANT (value);
-	  return t;
+	  返回 t;
 	}
       error_at (loc, "cast to union type from type not present in union");
-      return error_mark_node;
+      返回 error_mark_node;
     }
-  else
+  否则
     {
       tree otype, ovalue;
 
-      if (type == void_type_node)
+      如果 (type == void_type_node)
 	{
 	  tree t = build1 (CONVERT_EXPR, type, value);
 	  SET_EXPR_LOCATION (t, loc);
-	  return t;
+	  返回 t;
 	}
 
       otype = TREE_TYPE (value);
 
       /* Optionally warn about potentially worrisome casts.  */
-      if (warn_cast_qual
+      如果 (warn_cast_qual
 	  && TREE_CODE (type) == POINTER_TYPE
 	  && TREE_CODE (otype) == POINTER_TYPE)
 	handle_warn_cast_qual (loc, type, otype);
 
       /* Warn about conversions between pointers to disjoint
 	 address spaces.  */
-      if (TREE_CODE (type) == POINTER_TYPE
+      如果 (TREE_CODE (type) == POINTER_TYPE
 	  && TREE_CODE (otype) == POINTER_TYPE
 	  && !null_pointer_constant_p (value))
 	{
@@ -7536,19 +7536,19 @@ build_c_cast (location_t loc, tree type, tree expr)
 	  addr_space_t as_from = TYPE_ADDR_SPACE (TREE_TYPE (otype));
 	  addr_space_t as_common;
 
-	  if (!addr_space_superset (as_to, as_from, &as_common))
+	  如果 (!addr_space_superset (as_to, as_from, &as_common))
 	    {
-	      if (ADDR_SPACE_GENERIC_P (as_from))
+	      如果 (ADDR_SPACE_GENERIC_P (as_from))
 		warning_at (loc, 0, "cast to %qs address space pointer "
 			    "from disjoint generic address space pointer",
 			    c_addr_space_name (as_to));
 
-	      else if (ADDR_SPACE_GENERIC_P (as_to))
+	      否则 如果 (ADDR_SPACE_GENERIC_P (as_to))
 		warning_at (loc, 0, "cast to generic address space pointer "
 			    "from disjoint %qs address space pointer",
 			    c_addr_space_name (as_from));
 
-	      else
+	      否则
 		warning_at (loc, 0, "cast to %qs address space pointer "
 			    "from disjoint %qs address space pointer",
 			    c_addr_space_name (as_to),
@@ -7557,20 +7557,20 @@ build_c_cast (location_t loc, tree type, tree expr)
 
 	  /* Warn of new allocations that are not big enough for the target
 	     type.  */
-	  if (warn_alloc_size && TREE_CODE (value) == CALL_EXPR)
-	    if (tree fndecl = get_callee_fndecl (value))
-	      if (DECL_IS_MALLOC (fndecl))
+	  如果 (warn_alloc_size && TREE_CODE (value) == CALL_EXPR)
+	    如果 (tree fndecl = get_callee_fndecl (value))
+	      如果 (DECL_IS_MALLOC (fndecl))
 		{
 		  tree attrs = TYPE_ATTRIBUTES (TREE_TYPE (fndecl));
 		  tree alloc_size = lookup_attribute ("alloc_size", attrs);
-		  if (alloc_size)
+		  如果 (alloc_size)
 		    warn_for_alloc_size (loc, TREE_TYPE (type), value,
 					 alloc_size);
 		}
 	}
 
       /* Warn about possible alignment problems.  */
-      if ((STRICT_ALIGNMENT || warn_cast_align == 2)
+      如果 ((STRICT_ALIGNMENT || warn_cast_align == 2)
 	  && TREE_CODE (type) == POINTER_TYPE
 	  && TREE_CODE (otype) == POINTER_TYPE
 	  && TREE_CODE (TREE_TYPE (otype)) != VOID_TYPE
@@ -7584,7 +7584,7 @@ build_c_cast (location_t loc, tree type, tree expr)
 	warning_at (loc, OPT_Wcast_align,
 		    "cast increases required alignment of target type");
 
-      if ((TREE_CODE (type) == INTEGER_TYPE
+      如果 ((TREE_CODE (type) == INTEGER_TYPE
 	   || TREE_CODE (type) == BITINT_TYPE)
 	  && TREE_CODE (otype) == POINTER_TYPE
 	  && TYPE_PRECISION (type) != TYPE_PRECISION (otype))
@@ -7596,14 +7596,14 @@ build_c_cast (location_t loc, tree type, tree expr)
 	warning_at (loc, OPT_Wpointer_to_int_cast,
 		    "cast from pointer to integer of different size");
 
-      if ((TREE_CODE (value) == CALL_EXPR
+      如果 ((TREE_CODE (value) == CALL_EXPR
 	   && !is_access_with_size_p (value))
 	  && TREE_CODE (type) != TREE_CODE (otype))
 	warning_at (loc, OPT_Wbad_function_cast,
 		    "cast from function call of type %qT "
 		    "to non-matching type %qT", otype, type);
 
-      if (TREE_CODE (type) == POINTER_TYPE
+      如果 (TREE_CODE (type) == POINTER_TYPE
 	  && (TREE_CODE (otype) == INTEGER_TYPE
 	      || TREE_CODE (otype) == BITINT_TYPE)
 	  && TYPE_PRECISION (type) != TYPE_PRECISION (otype)
@@ -7613,13 +7613,13 @@ build_c_cast (location_t loc, tree type, tree expr)
 		    OPT_Wint_to_pointer_cast, "cast to pointer from integer "
 		    "of different size");
 
-      if (warn_strict_aliasing <= 2)
+      如果 (warn_strict_aliasing <= 2)
         strict_aliasing_warning (EXPR_LOCATION (value), type, expr);
 
       /* If pedantic, warn for conversions between function and object
 	 pointer types, except for converting a null pointer constant
 	 to function pointer type.  */
-      if (pedantic
+      如果 (pedantic
 	  && TREE_CODE (type) == POINTER_TYPE
 	  && TREE_CODE (otype) == POINTER_TYPE
 	  && TREE_CODE (TREE_TYPE (otype)) == FUNCTION_TYPE
@@ -7627,7 +7627,7 @@ build_c_cast (location_t loc, tree type, tree expr)
 	pedwarn (loc, OPT_Wpedantic, "ISO C forbids "
 		 "conversion of function pointer to object pointer type");
 
-      if (pedantic
+      如果 (pedantic
 	  && TREE_CODE (type) == POINTER_TYPE
 	  && TREE_CODE (otype) == POINTER_TYPE
 	  && TREE_CODE (TREE_TYPE (type)) == FUNCTION_TYPE
@@ -7636,7 +7636,7 @@ build_c_cast (location_t loc, tree type, tree expr)
 	pedwarn (loc, OPT_Wpedantic, "ISO C forbids "
 		 "conversion of object pointer to function pointer type");
 
-      if (TREE_CODE (type) == POINTER_TYPE
+      如果 (TREE_CODE (type) == POINTER_TYPE
 	  && TREE_CODE (otype) == POINTER_TYPE
 	  && TREE_CODE (TREE_TYPE (type)) == FUNCTION_TYPE
 	  && TREE_CODE (TREE_TYPE (otype)) == FUNCTION_TYPE
@@ -7656,7 +7656,7 @@ build_c_cast (location_t loc, tree type, tree expr)
 	 C_MAYBE_CONST_EXPR, ensure that
 	 c_objc_common_truthvalue_conversion receives an argument
 	 properly marked as having integer operands in that case.  */
-      if (int_operands
+      如果 (int_operands
 	  && TREE_CODE (value) != INTEGER_CST
 	  && (TREE_CODE (type) == BOOLEAN_TYPE
 	      || (TREE_CODE (type) == ENUMERAL_TYPE
@@ -7666,25 +7666,25 @@ build_c_cast (location_t loc, tree type, tree expr)
       value = convert (type, value);
 
       /* Ignore any integer overflow caused by the cast.  */
-      if (TREE_CODE (value) == INTEGER_CST && !FLOAT_TYPE_P (otype))
+      如果 (TREE_CODE (value) == INTEGER_CST && !FLOAT_TYPE_P (otype))
 	{
-	  if (TREE_OVERFLOW_P (ovalue))
+	  如果 (TREE_OVERFLOW_P (ovalue))
 	    {
-	      if (!TREE_OVERFLOW (value))
+	      如果 (!TREE_OVERFLOW (value))
 		{
 		  /* Avoid clobbering a shared constant.  */
 		  value = copy_node (value);
 		  TREE_OVERFLOW (value) = TREE_OVERFLOW (ovalue);
 		}
 	    }
-	  else if (TREE_OVERFLOW (value))
+	  否则 如果 (TREE_OVERFLOW (value))
 	    /* Reset VALUE's overflow flags, ensuring constant sharing.  */
 	    value = wide_int_to_tree (TREE_TYPE (value), wi::to_wide (value));
 	}
     }
 
   /* Don't let a cast be an lvalue.  */
-  if (lvalue_p (value)
+  如果 (lvalue_p (value)
       /* Also, don't let a cast be a bit-field of a bit-precise integer type,
 	 otherwise it could be incorrectly subject of integer promotions.  */
       || (TREE_CODE (value) == COMPONENT_REF
@@ -7697,7 +7697,7 @@ build_c_cast (location_t loc, tree type, tree expr)
      integer and pointer types other than direct integer-to-integer
      and integer-to-pointer be confused with integer constant
      expressions and null pointer constants.  */
-  if (TREE_CODE (value) == REAL_CST
+  如果 (TREE_CODE (value) == REAL_CST
       || TREE_CODE (value) == COMPLEX_CST
       || (TREE_CODE (value) == INTEGER_CST
 	  && !((TREE_CODE (expr) == INTEGER_CST
@@ -7709,14 +7709,14 @@ build_c_cast (location_t loc, tree type, tree expr)
   /* If the expression has integer operands and so can occur in an
      unevaluated part of an integer constant expression, ensure the
      return value reflects this.  */
-  if (int_operands
+  如果 (int_operands
       && INTEGRAL_TYPE_P (type)
       && value != error_mark_node
       && !EXPR_INT_CONST_OPERANDS (value))
     value = note_integer_operands (value);
 
   protected_set_expr_location (value, loc);
-  return value;
+  返回 value;
 }
 
 /* Interpret a cast of expression EXPR to type TYPE.  LOC is the
@@ -7729,24 +7729,24 @@ c_cast_expr (location_t loc, struct c_type_name *type_name, tree expr)
   tree type_expr = NULL_TREE;
   bool type_expr_const = true;
   tree ret;
-  int saved_wsp = warn_strict_prototypes;
+  整数 saved_wsp = warn_strict_prototypes;
 
   /* This avoids warnings about unprototyped casts on
      integers.  E.g. "#define SIG_DFL (void(*)())0".  */
-  if (TREE_CODE (expr) == INTEGER_CST)
+  如果 (TREE_CODE (expr) == INTEGER_CST)
     warn_strict_prototypes = 0;
   type = groktypename (type_name, &type_expr, &type_expr_const);
   warn_strict_prototypes = saved_wsp;
 
-  if (TREE_CODE (expr) == ADDR_EXPR && !VOID_TYPE_P (type)
+  如果 (TREE_CODE (expr) == ADDR_EXPR && !VOID_TYPE_P (type)
       && reject_gcc_builtin (expr))
-    return error_mark_node;
+    返回 error_mark_node;
 
   ret = build_c_cast (loc, type, expr);
-  if (ret == error_mark_node)
-    return error_mark_node;
+  如果 (ret == error_mark_node)
+    返回 error_mark_node;
 
-  if (type_expr)
+  如果 (type_expr)
     {
       bool inner_expr_const = true;
       ret = c_fully_fold (ret, require_constant_value, &inner_expr_const);
@@ -7756,16 +7756,16 @@ c_cast_expr (location_t loc, struct c_type_name *type_name, tree expr)
       SET_EXPR_LOCATION (ret, loc);
     }
 
-  if (!EXPR_HAS_LOCATION (ret))
+  如果 (!EXPR_HAS_LOCATION (ret))
     protected_set_expr_location (ret, loc);
 
   /* C++ does not permits types to be defined in a cast, but it
      allows references to incomplete types.  */
-  if (warn_cxx_compat && type_name->specs->typespec_kind == ctsk_tagdef)
+  如果 (warn_cxx_compat && type_name->specs->typespec_kind == ctsk_tagdef)
     warning_at (loc, OPT_Wc___compat,
 		"defining a type in a cast is invalid in C++");
 
-  return ret;
+  返回 ret;
 }
 
 /* Build an assignment expression of lvalue LHS from value RHS.
@@ -7798,74 +7798,74 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
   rhs = require_complete_type (location, rhs);
 
   /* Avoid duplicate error messages from operands that had errors.  */
-  if (TREE_CODE (lhs) == ERROR_MARK || TREE_CODE (rhs) == ERROR_MARK)
-    return error_mark_node;
+  如果 (TREE_CODE (lhs) == ERROR_MARK || TREE_CODE (rhs) == ERROR_MARK)
+    返回 error_mark_node;
 
   /* Ensure an error for assigning a non-lvalue array to an array in
      C90.  */
-  if (TREE_CODE (lhstype) == ARRAY_TYPE)
+  如果 (TREE_CODE (lhstype) == ARRAY_TYPE)
     {
       error_at (location, "assignment to expression with array type");
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
   /* For ObjC properties, defer this check.  */
-  if (!objc_is_property_ref (lhs) && !lvalue_or_else (location, lhs, lv_assign))
-    return error_mark_node;
+  如果 (!objc_is_property_ref (lhs) && !lvalue_or_else (location, lhs, lv_assign))
+    返回 error_mark_node;
 
   is_atomic_op = really_atomic_lvalue (lhs);
 
   newrhs = rhs;
 
-  if (TREE_CODE (lhs) == C_MAYBE_CONST_EXPR)
+  如果 (TREE_CODE (lhs) == C_MAYBE_CONST_EXPR)
     {
       tree inner = build_modify_expr (location, C_MAYBE_CONST_EXPR_EXPR (lhs),
 				      lhs_origtype, modifycode, rhs_loc, rhs,
 				      rhs_origtype);
-      if (inner == error_mark_node)
-	return error_mark_node;
+      如果 (inner == error_mark_node)
+	返回 error_mark_node;
       result = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (inner),
 		       C_MAYBE_CONST_EXPR_PRE (lhs), inner);
       gcc_assert (!C_MAYBE_CONST_EXPR_INT_OPERANDS (lhs));
       C_MAYBE_CONST_EXPR_NON_CONST (result) = 1;
       protected_set_expr_location (result, location);
-      return result;
+      返回 result;
     }
 
   /* If a binary op has been requested, combine the old LHS value with the RHS
      producing the value we should actually store into the LHS.  */
 
-  if (modifycode != NOP_EXPR)
+  如果 (modifycode != NOP_EXPR)
     {
       lhs = c_fully_fold (lhs, false, NULL, true);
       lhs = stabilize_reference (lhs);
 
       /* Construct the RHS for any non-atomic compound assignment. */
-      if (!is_atomic_op)
+      如果 (!is_atomic_op)
         {
 	  /* If in LHS op= RHS the RHS has side-effects, ensure they
 	     are preevaluated before the rest of the assignment expression's
 	     side-effects, because RHS could contain e.g. function calls
 	     that modify LHS.  */
-	  if (TREE_SIDE_EFFECTS (rhs))
+	  如果 (TREE_SIDE_EFFECTS (rhs))
 	    {
-	      if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
+	      如果 (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
 		newrhs = save_expr (TREE_OPERAND (rhs, 0));
-	      else
+	      否则
 		newrhs = save_expr (rhs);
 	      rhseval = newrhs;
-	      if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
+	      如果 (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
 		newrhs = build1 (EXCESS_PRECISION_EXPR, TREE_TYPE (rhs),
 				 newrhs);
 	    }
 	  bool clear_decl_read = false;
-	  if ((VAR_P (lhs) || TREE_CODE (lhs) == PARM_DECL)
+	  如果 ((VAR_P (lhs) || TREE_CODE (lhs) == PARM_DECL)
 	      && !DECL_READ_P (lhs)
 	      && (VAR_P (lhs) ? warn_unused_but_set_variable
 			      : warn_unused_but_set_parameter) > 2)
 	    {
 	      mark_exp_read (newrhs);
-	      if (!DECL_READ_P (lhs))
+	      如果 (!DECL_READ_P (lhs))
 		clear_decl_read = true;
 	    }
 
@@ -7873,7 +7873,7 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
 				    convert_lvalue_to_rvalue (location, lhs,
 							      true, true),
 				    newrhs, true);
-	  if (clear_decl_read)
+	  如果 (clear_decl_read)
 	    DECL_READ_P (lhs) = 0;
 
 	  /* The original type of the right hand side is no longer
@@ -7882,32 +7882,32 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
 	}
     }
 
-  if (c_dialect_objc ())
+  如果 (c_dialect_objc ())
     {
       /* Check if we are modifying an Objective-C property reference;
 	 if so, we need to generate setter calls.  */
-      if (TREE_CODE (newrhs) == EXCESS_PRECISION_EXPR)
+      如果 (TREE_CODE (newrhs) == EXCESS_PRECISION_EXPR)
 	result = objc_maybe_build_modify_expr (lhs, TREE_OPERAND (newrhs, 0));
-      else
+      否则
 	result = objc_maybe_build_modify_expr (lhs, newrhs);
-      if (result)
+      如果 (result)
 	goto return_result;
 
       /* Else, do the check that we postponed for Objective-C.  */
-      if (!lvalue_or_else (location, lhs, lv_assign))
-	return error_mark_node;
+      如果 (!lvalue_or_else (location, lhs, lv_assign))
+	返回 error_mark_node;
     }
 
   /* Give an error for storing in something that is 'const'.  */
 
-  if (TYPE_READONLY (lhstype)
+  如果 (TYPE_READONLY (lhstype)
       || (RECORD_OR_UNION_TYPE_P (lhstype)
 	  && C_TYPE_FIELDS_READONLY (lhstype)))
     {
       readonly_error (location, lhs, lv_assign);
-      return error_mark_node;
+      返回 error_mark_node;
     }
-  else if (TREE_READONLY (lhs))
+  否则 如果 (TREE_READONLY (lhs))
     readonly_warning (lhs, lv_assign);
 
   /* If storing into a structure or union member,
@@ -7915,7 +7915,7 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
      Compute the type that would go with
      the actual amount of storage the member occupies.  */
 
-  if (TREE_CODE (lhs) == COMPONENT_REF
+  如果 (TREE_CODE (lhs) == COMPONENT_REF
       && (TREE_CODE (lhstype) == INTEGER_TYPE
 	  || TREE_CODE (lhstype) == BOOLEAN_TYPE
 	  || SCALAR_FLOAT_TYPE_P (lhstype)
@@ -7925,7 +7925,7 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
   /* If storing in a field that is in actuality a short or narrower than one,
      we must store in the field in its actual type.  */
 
-  if (lhstype != TREE_TYPE (lhs))
+  如果 (lhstype != TREE_TYPE (lhs))
     {
       lhs = copy_node (lhs);
       TREE_TYPE (lhs) = lhstype;
@@ -7934,7 +7934,7 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
   /* Issue -Wc++-compat warnings about an assignment to an enum type
      when LHS does not have its original type.  This happens for,
      e.g., an enum bitfield in a struct.  */
-  if (warn_cxx_compat
+  如果 (warn_cxx_compat
       && lhs_origtype != NULL_TREE
       && lhs_origtype != lhstype
       && TREE_CODE (lhs_origtype) == ENUMERAL_TYPE)
@@ -7942,7 +7942,7 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
       tree checktype = (rhs_origtype != NULL_TREE
 			? rhs_origtype
 			: TREE_TYPE (rhs));
-      if (checktype != error_mark_node
+      如果 (checktype != error_mark_node
 	  && (TYPE_MAIN_VARIANT (checktype) != TYPE_MAIN_VARIANT (lhs_origtype)
 	      || (is_atomic_op && modifycode != NOP_EXPR)))
 	warning_at (location, OPT_Wc___compat,
@@ -7957,35 +7957,35 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
      restore any excess precision information, for the sake of
      conversion warnings.  */
 
-  if (!(is_atomic_op && modifycode != NOP_EXPR))
+  如果 (!(is_atomic_op && modifycode != NOP_EXPR))
     {
       tree rhs_semantic_type = NULL_TREE;
-      if (!c_in_omp_for)
+      如果 (!c_in_omp_for)
 	{
-	  if (TREE_CODE (newrhs) == EXCESS_PRECISION_EXPR)
+	  如果 (TREE_CODE (newrhs) == EXCESS_PRECISION_EXPR)
 	    {
 	      rhs_semantic_type = TREE_TYPE (newrhs);
 	      newrhs = TREE_OPERAND (newrhs, 0);
 	    }
 	  npc = null_pointer_constant_p (newrhs);
 	  newrhs = c_fully_fold (newrhs, false, NULL);
-	  if (rhs_semantic_type)
+	  如果 (rhs_semantic_type)
 	    newrhs = build1 (EXCESS_PRECISION_EXPR, rhs_semantic_type, newrhs);
 	}
-      else
+      否则
 	npc = null_pointer_constant_p (newrhs);
       newrhs = convert_for_assignment (location, rhs_loc, lhstype, newrhs,
 				       rhs_origtype, ic_assign, npc,
 				       NULL_TREE, NULL_TREE, 0);
-      if (TREE_CODE (newrhs) == ERROR_MARK)
-	return error_mark_node;
+      如果 (TREE_CODE (newrhs) == ERROR_MARK)
+	返回 error_mark_node;
     }
 
   /* Emit ObjC write barrier, if necessary.  */
-  if (c_dialect_objc () && flag_objc_gc)
+  如果 (c_dialect_objc () && flag_objc_gc)
     {
       result = objc_generate_write_barrier (lhs, modifycode, newrhs);
-      if (result)
+      如果 (result)
 	{
 	  protected_set_expr_location (result, location);
 	  goto return_result;
@@ -7994,9 +7994,9 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
 
   /* Scan operands.  */
 
-  if (is_atomic_op)
+  如果 (is_atomic_op)
     result = build_atomic_assign (location, lhs, modifycode, newrhs, false);
-  else
+  否则
     {
       result = build2 (MODIFY_EXPR, lhstype, lhs, newrhs);
       TREE_SIDE_EFFECTS (result) = 1;
@@ -8008,7 +8008,7 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
      so that the value we return always has the same type
      as the LHS argument.  */
 
-  if (olhstype == TREE_TYPE (result))
+  如果 (olhstype == TREE_TYPE (result))
     goto return_result;
 
   result = convert_for_assignment (location, rhs_loc, olhstype, result,
@@ -8017,9 +8017,9 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
   protected_set_expr_location (result, location);
 
 return_result:
-  if (rhseval)
+  如果 (rhseval)
     result = build2 (COMPOUND_EXPR, TREE_TYPE (result), rhseval, result);
-  return result;
+  返回 result;
 }
 
 /* Return whether STRUCT_TYPE has an anonymous field with type TYPE.
@@ -8033,28 +8033,28 @@ find_anonymous_field_with_type (tree struct_type, tree type)
 
   gcc_assert (RECORD_OR_UNION_TYPE_P (struct_type));
   found = false;
-  for (field = TYPE_FIELDS (struct_type);
+  为 (field = TYPE_FIELDS (struct_type);
        field != NULL_TREE;
        field = TREE_CHAIN (field))
     {
       tree fieldtype = remove_qualifiers (TREE_TYPE (field));
-      if (DECL_NAME (field) == NULL
+      如果 (DECL_NAME (field) == NULL
 	  && comptypes (type, fieldtype))
 	{
-	  if (found)
-	    return false;
+	  如果 (found)
+	    返回 false;
 	  found = true;
 	}
-      else if (DECL_NAME (field) == NULL
+      否则 如果 (DECL_NAME (field) == NULL
 	       && RECORD_OR_UNION_TYPE_P (TREE_TYPE (field))
 	       && find_anonymous_field_with_type (TREE_TYPE (field), type))
 	{
-	  if (found)
-	    return false;
+	  如果 (found)
+	    返回 false;
 	  found = true;
 	}
     }
-  return found;
+  返回 found;
 }
 
 /* RHS is an expression whose type is pointer to struct.  If there is
@@ -8079,45 +8079,45 @@ convert_to_anonymous_field (location_t location, tree type, tree rhs)
 
   found_field = NULL_TREE;
   found_sub_field = false;
-  for (field = TYPE_FIELDS (rhs_struct_type);
+  为 (field = TYPE_FIELDS (rhs_struct_type);
        field != NULL_TREE;
        field = TREE_CHAIN (field))
     {
-      if (DECL_NAME (field) != NULL_TREE
+      如果 (DECL_NAME (field) != NULL_TREE
 	  || !RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
 	continue;
       tree fieldtype = remove_qualifiers (TREE_TYPE (field));
-      if (comptypes (lhs_main_type, fieldtype))
+      如果 (comptypes (lhs_main_type, fieldtype))
 	{
-	  if (found_field != NULL_TREE)
-	    return NULL_TREE;
+	  如果 (found_field != NULL_TREE)
+	    返回 NULL_TREE;
 	  found_field = field;
 	}
-      else if (find_anonymous_field_with_type (TREE_TYPE (field),
+      否则 如果 (find_anonymous_field_with_type (TREE_TYPE (field),
 					       lhs_main_type))
 	{
-	  if (found_field != NULL_TREE)
-	    return NULL_TREE;
+	  如果 (found_field != NULL_TREE)
+	    返回 NULL_TREE;
 	  found_field = field;
 	  found_sub_field = true;
 	}
     }
 
-  if (found_field == NULL_TREE)
-    return NULL_TREE;
+  如果 (found_field == NULL_TREE)
+    返回 NULL_TREE;
 
   ret = fold_build3_loc (location, COMPONENT_REF, TREE_TYPE (found_field),
 			 build_fold_indirect_ref (rhs), found_field,
 			 NULL_TREE);
   ret = build_fold_addr_expr_loc (location, ret);
 
-  if (found_sub_field)
+  如果 (found_sub_field)
     {
       ret = convert_to_anonymous_field (location, type, ret);
       gcc_assert (ret != NULL_TREE);
     }
 
-  return ret;
+  返回 ret;
 }
 
 /* Issue an error message for a bad initializer component.
@@ -8139,14 +8139,14 @@ error_init (location_t loc, const char *gmsgid, ...)
   va_end (ap);
 
   ofwhat = print_spelling ((char *) alloca (spelling_length () + 1));
-  if (*ofwhat && warned)
+  如果 (*ofwhat && warned)
     inform (loc, "(near initialization for %qs)", ofwhat);
 }
 
 /* Used to implement pedwarn_init and permerror_init.  */
 
 static bool ATTRIBUTE_GCC_DIAG (3,0)
-pedwarn_permerror_init (location_t loc, int opt, const char *gmsgid,
+pedwarn_permerror_init (location_t loc, 整数 opt, const char *gmsgid,
 			va_list *ap, enum diagnostics::kind kind)
 {
   /* Use the location where a macro was expanded rather than where
@@ -8155,13 +8155,13 @@ pedwarn_permerror_init (location_t loc, int opt, const char *gmsgid,
   location_t exploc = expansion_point_location_if_in_system_header (loc);
   auto_diagnostic_group d;
   bool warned = emit_diagnostic_valist (kind, exploc, opt, gmsgid, ap);
-  if (warned)
+  如果 (warned)
     {
       char *ofwhat = print_spelling ((char *) alloca (spelling_length () + 1));
-      if (*ofwhat)
+      如果 (*ofwhat)
 	inform (exploc, "(near initialization for %qs)", ofwhat);
     }
-  return warned;
+  返回 warned;
 }
 
 /* Issue a pedantic warning for a bad initializer component.  OPT is
@@ -8170,27 +8170,27 @@ pedwarn_permerror_init (location_t loc, int opt, const char *gmsgid,
    component name is taken from the spelling stack.  */
 
 static bool ATTRIBUTE_GCC_DIAG (3,0)
-pedwarn_init (location_t loc, int opt, const char *gmsgid, ...)
+pedwarn_init (location_t loc, 整数 opt, const char *gmsgid, ...)
 {
   va_list ap;
   va_start (ap, gmsgid);
   bool warned = pedwarn_permerror_init (loc, opt, gmsgid, &ap,
 					diagnostics::kind::pedwarn);
   va_end (ap);
-  return warned;
+  返回 warned;
 }
 
 /* Like pedwarn_init, but issue a permerror.  */
 
 static bool ATTRIBUTE_GCC_DIAG (3,0)
-permerror_init (location_t loc, int opt, const char *gmsgid, ...)
+permerror_init (location_t loc, 整数 opt, const char *gmsgid, ...)
 {
   va_list ap;
   va_start (ap, gmsgid);
   bool warned = pedwarn_permerror_init (loc, opt, gmsgid, &ap,
 					diagnostics::kind::permerror);
   va_end (ap);
-  return warned;
+  返回 warned;
 }
 
 /* Issue a warning for a bad initializer component.
@@ -8200,7 +8200,7 @@ permerror_init (location_t loc, int opt, const char *gmsgid, ...)
    component name is taken from the spelling stack.  */
 
 static void
-warning_init (location_t loc, int opt, const char *gmsgid)
+warning_init (location_t loc, 整数 opt, const char *gmsgid)
 {
   char *ofwhat;
   bool warned;
@@ -8214,10 +8214,10 @@ warning_init (location_t loc, int opt, const char *gmsgid)
 
   /* The gmsgid may be a format string with %< and %>. */
   warned = warning_at (exploc, opt, gmsgid);
-  if (warned)
+  如果 (warned)
     {
       ofwhat = print_spelling ((char *) alloca (spelling_length () + 1));
-      if (*ofwhat)
+      如果 (*ofwhat)
 	inform (exploc, "(near initialization for %qs)", ofwhat);
     }
 }
@@ -8229,7 +8229,7 @@ warning_init (location_t loc, int opt, const char *gmsgid)
 void
 maybe_warn_string_init (location_t loc, tree type, struct c_expr expr)
 {
-  if (pedantic
+  如果 (pedantic
       && TREE_CODE (type) == ARRAY_TYPE
       && TREE_CODE (expr.value) == STRING_CST
       && expr.original_code != STRING_CST)
@@ -8241,23 +8241,23 @@ maybe_warn_string_init (location_t loc, tree type, struct c_expr expr)
    returning DECL_SOURCE_LOCATION (FNDECL) if it can't be found.  */
 
 static location_t
-get_fndecl_argument_location (tree fndecl, int argnum)
+get_fndecl_argument_location (tree fndecl, 整数 argnum)
 {
-  int i;
+  整数 i;
   tree param;
 
   /* Locate param by index within DECL_ARGUMENTS (fndecl).  */
-  for (i = 0, param = DECL_ARGUMENTS (fndecl);
+  为 (i = 0, param = DECL_ARGUMENTS (fndecl);
        i < argnum && param;
        i++, param = TREE_CHAIN (param))
     ;
 
   /* If something went wrong (e.g. if we have a builtin and thus no arguments),
      return DECL_SOURCE_LOCATION (FNDECL).  */
-  if (param == NULL)
-    return DECL_SOURCE_LOCATION (fndecl);
+  如果 (param == NULL)
+    返回 DECL_SOURCE_LOCATION (fndecl);
 
-  return DECL_SOURCE_LOCATION (param);
+  返回 DECL_SOURCE_LOCATION (param);
 }
 
 /* Issue a note about a mismatching argument for parameter PARMNUM
@@ -8270,13 +8270,13 @@ get_fndecl_argument_location (tree fndecl, int argnum)
    parameter of FUNDECL*/
 
 static void
-inform_for_arg (tree fundecl, location_t ploc, int parmnum,
+inform_for_arg (tree fundecl, location_t ploc, 整数 parmnum,
 		tree expected_type, tree actual_type)
 {
   location_t loc;
-  if (fundecl && !DECL_IS_UNDECLARED_BUILTIN (fundecl))
+  如果 (fundecl && !DECL_IS_UNDECLARED_BUILTIN (fundecl))
     loc = get_fndecl_argument_location (fundecl, parmnum - 1);
-  else
+  否则
     loc = ploc;
 
   gcc_rich_location richloc (loc, nullptr, highlight_colors::expected);
@@ -8293,7 +8293,7 @@ inform_for_arg (tree fundecl, location_t ploc, int parmnum,
    PARMTYPE when ARGTYPE does not promote to PARMTYPE.  */
 
 static void
-maybe_warn_builtin_no_proto_arg (location_t loc, tree fundecl, int parmnum,
+maybe_warn_builtin_no_proto_arg (location_t loc, tree fundecl, 整数 parmnum,
 				 tree parmtype, tree argtype)
 {
   tree_code parmcode = TREE_CODE (parmtype);
@@ -8302,21 +8302,21 @@ maybe_warn_builtin_no_proto_arg (location_t loc, tree fundecl, int parmnum,
 
   /* Avoid warning for enum arguments that promote to an integer type
      of the same size/mode.  */
-  if (parmcode == INTEGER_TYPE
+  如果 (parmcode == INTEGER_TYPE
       && argcode == ENUMERAL_TYPE
       && TYPE_MODE (parmtype) == TYPE_MODE (argtype))
-    return;
+    返回;
 
-  if ((parmcode == argcode
+  如果 ((parmcode == argcode
        || (parmcode == INTEGER_TYPE
 	   && argcode == ENUMERAL_TYPE))
       && TYPE_MAIN_VARIANT (parmtype) == TYPE_MAIN_VARIANT (promoted))
-    return;
+    返回;
 
   /* This diagnoses even signed/unsigned mismatches.  Those might be
      safe in many cases but GCC may emit suboptimal code for them so
      warning on those cases drives efficiency improvements.  */
-  if (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
+  如果 (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
 		  TYPE_MAIN_VARIANT (promoted) == argtype
 		  ? G_("%qD argument %d type is %qT where %qT is expected "
 		       "in a call to built-in function declared without "
@@ -8357,9 +8357,9 @@ public:
   {
     pretty_printer *const pp = &ctxt.m_pp;
     pp->set_padding (pp_none);
-    if (DECL_NAME (m_decl))
+    如果 (DECL_NAME (m_decl))
       pp_identifier (pp, lang_hooks.decl_printable_name (m_decl, 2));
-    else
+    否则
       pp_string (pp, _("({anonymous})"));
   }
 
@@ -8375,8 +8375,8 @@ private:
 static void
 maybe_inform_typedef_location (tree type, const char *highlight_color)
 {
-  if (!typedef_variant_p (type))
-    return;
+  如果 (!typedef_variant_p (type))
+    返回;
 
   tree typedef_decl = TYPE_NAME (type);
   gcc_assert (TREE_CODE (typedef_decl) == TYPE_DECL);
@@ -8419,7 +8419,7 @@ static tree
 convert_for_assignment (location_t location, location_t expr_loc, tree type,
 			tree rhs, tree origtype, enum impl_conv errtype,
 			bool null_pointer_constant, tree fundecl,
-			tree function, int parmnum, int warnopt /* = 0 */)
+			tree function, 整数 parmnum, 整数 warnopt /* = 0 */)
 {
   enum tree_code codel = TREE_CODE (type);
   tree orig_rhs = rhs;
@@ -8432,19 +8432,19 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
      function returning a wrong-type macro defined in a system header.  */
   location = expansion_point_location_if_in_system_header (location);
 
-  if (errtype == ic_argpass)
+  如果 (errtype == ic_argpass)
     {
       tree selector;
       /* Change pointer to function to the function itself for
 	 diagnostics.  */
-      if (TREE_CODE (function) == ADDR_EXPR
+      如果 (TREE_CODE (function) == ADDR_EXPR
 	  && TREE_CODE (TREE_OPERAND (function, 0)) == FUNCTION_DECL)
 	function = TREE_OPERAND (function, 0);
 
       /* Handle an ObjC selector specially for diagnostics.  */
       selector = objc_message_selector ();
       rname = function;
-      if (selector && parmnum > 2)
+      如果 (selector && parmnum > 2)
 	{
 	  rname = selector;
 	  parmnum -= 2;
@@ -8461,7 +8461,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       case ic_argpass:                                                   \
 	{								\
 	  auto_diagnostic_group d;						\
-	  if (pedwarn (PLOC, OPT, AR, parmnum, rname))		\
+	  如果 (pedwarn (PLOC, OPT, AR, parmnum, rname))		\
 	    inform_for_arg (fundecl, (PLOC), parmnum, type, rhstype); \
 	}								\
         break;                                                           \
@@ -8478,7 +8478,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       default:                                                           \
         gcc_unreachable ();                                              \
       }                                                                  \
-  } while (0)
+  } 当 (0)
 
   /* This macro is used to emit diagnostics to ensure that all format
      strings are complete sentences, visible to gettext and checked at
@@ -8490,38 +8490,38 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       case ic_argpass:                                                   \
 	{								 \
 	  auto_diagnostic_group d;					 \
-	  if (PEDWARN) {						 \
-	    if (pedwarn (PLOC, OPT, AR, parmnum, rname, QUALS))          \
+	  如果 (PEDWARN) {						 \
+	    如果 (pedwarn (PLOC, OPT, AR, parmnum, rname, QUALS))          \
 	      inform_for_arg (fundecl, (PLOC), parmnum, type, rhstype);  \
-	  } else {							 \
-	    if (warning_at (PLOC, OPT, AR, parmnum, rname, QUALS))	 \
+	  } 否则 {							 \
+	    如果 (warning_at (PLOC, OPT, AR, parmnum, rname, QUALS))	 \
 	      inform_for_arg (fundecl, (PLOC), parmnum, type, rhstype);  \
 	  }								 \
 	}								 \
         break;                                                           \
       case ic_assign:                                                    \
-	if (PEDWARN)							 \
+	如果 (PEDWARN)							 \
 	  pedwarn (LOCATION, OPT, AS, QUALS);                            \
-	else								 \
+	否则								 \
 	  warning_at (LOCATION, OPT, AS, QUALS);                         \
         break;                                                           \
       case ic_init:                                                      \
       case ic_init_const:                                                \
-	if (PEDWARN)							 \
+	如果 (PEDWARN)							 \
 	  pedwarn (LOCATION, OPT, IN, QUALS);                            \
-	else								 \
+	否则								 \
 	  warning_at (LOCATION, OPT, IN, QUALS);                         \
         break;                                                           \
       case ic_return:                                                    \
-	if (PEDWARN)							 \
+	如果 (PEDWARN)							 \
 	  pedwarn (LOCATION, OPT, RE, QUALS);                            \
-	else								 \
+	否则								 \
 	  warning_at (LOCATION, OPT, RE, QUALS);                         \
         break;                                                           \
       default:                                                           \
         gcc_unreachable ();                                              \
       }                                                                  \
-  } while (0)
+  } 当 (0)
 
   /* This macro is used to emit diagnostics to ensure that all format
      strings are complete sentences, visible to gettext and checked at
@@ -8531,18 +8531,18 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
    WARNING_FOR_QUALIFIERS (true, LOCATION, PLOC, OPT, AR, AS, IN, RE, QUALS)
 
 
-  if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
+  如果 (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
     rhs = TREE_OPERAND (rhs, 0);
 
   rhstype = TREE_TYPE (rhs);
   coder = TREE_CODE (rhstype);
 
-  if (coder == ERROR_MARK)
-    return error_mark_node;
+  如果 (coder == ERROR_MARK)
+    返回 error_mark_node;
 
-  if (c_dialect_objc ())
+  如果 (c_dialect_objc ())
     {
-      int parmno;
+      整数 parmno;
 
       switch (errtype)
 	{
@@ -8567,16 +8567,16 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       objc_ok = objc_compare_types (type, rhstype, parmno, rname);
     }
 
-  if (warn_cxx_compat)
+  如果 (warn_cxx_compat)
     {
       tree checktype = origtype != NULL_TREE ? origtype : rhstype;
-      if (checktype != error_mark_node
+      如果 (checktype != error_mark_node
 	  && TREE_CODE (type) == ENUMERAL_TYPE
 	  && TYPE_MAIN_VARIANT (checktype) != TYPE_MAIN_VARIANT (type))
 	switch (errtype)
 	  {
 	  case ic_argpass:
-	    if (pedwarn (expr_loc, OPT_Wc___compat, "enum conversion when "
+	    如果 (pedwarn (expr_loc, OPT_Wc___compat, "enum conversion when "
 			 "passing argument %d of %qE is invalid in C++",
 			 parmnum, rname))
 	      inform ((fundecl && !DECL_IS_UNDECLARED_BUILTIN (fundecl))
@@ -8603,10 +8603,10 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	  }
     }
 
-  if (warn_enum_conversion)
+  如果 (warn_enum_conversion)
     {
       tree checktype = origtype != NULL_TREE ? origtype : rhstype;
-      if (checktype != error_mark_node
+      如果 (checktype != error_mark_node
 	  && TREE_CODE (checktype) == ENUMERAL_TYPE
 	  && TREE_CODE (type) == ENUMERAL_TYPE
 	  && !comptypes (TYPE_MAIN_VARIANT (checktype), TYPE_MAIN_VARIANT (type)))
@@ -8618,16 +8618,16 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
        }
     }
 
-  if (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (rhstype))
+  如果 (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (rhstype))
     {
       warn_for_address_of_packed_member (type, orig_rhs);
-      if (type != rhstype)
+      如果 (type != rhstype)
 	/* Convert RHS to TYPE in order to not lose TYPE in diagnostics.  */
 	rhs = convert (type, rhs);
-      return rhs;
+      返回 rhs;
     }
 
-  if (coder == VOID_TYPE)
+  如果 (coder == VOID_TYPE)
     {
       /* Except for passing an argument to an unprototyped function,
 	 this is a constraint violation.  When passing an argument to
@@ -8635,34 +8635,34 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	 making it a constraint in that case was rejected in
 	 DR#252.  */
       const char msg[] = "void value not ignored as it ought to be";
-      if (warnopt)
+      如果 (warnopt)
 	warning_at (location, warnopt, msg);
-      else
+      否则
 	error_at (location, msg);
-      return error_mark_node;
+      返回 error_mark_node;
     }
   rhs = require_complete_type (location, rhs);
-  if (rhs == error_mark_node)
-    return error_mark_node;
+  如果 (rhs == error_mark_node)
+    返回 error_mark_node;
 
-  if (coder == POINTER_TYPE && reject_gcc_builtin (rhs))
-    return error_mark_node;
+  如果 (coder == POINTER_TYPE && reject_gcc_builtin (rhs))
+    返回 error_mark_node;
 
   /* A non-reference type can convert to a reference.  This handles
      va_start, va_copy and possibly port built-ins.  */
-  if (codel == REFERENCE_TYPE && coder != REFERENCE_TYPE)
+  如果 (codel == REFERENCE_TYPE && coder != REFERENCE_TYPE)
     {
-      if (!lvalue_p (rhs))
+      如果 (!lvalue_p (rhs))
 	{
 	  const char msg[] = "cannot pass rvalue to reference parameter";
-	  if (warnopt)
+	  如果 (warnopt)
 	    warning_at (location, warnopt, msg);
-	  else
+	  否则
 	    error_at (location, msg);
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      if (!c_mark_addressable (rhs))
-	return error_mark_node;
+      如果 (!c_mark_addressable (rhs))
+	返回 error_mark_node;
       rhs = build1 (ADDR_EXPR, c_build_pointer_type (TREE_TYPE (rhs)), rhs);
       SET_EXPR_LOCATION (rhs, location);
 
@@ -8671,19 +8671,19 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 				    rhs, origtype, errtype,
 				    null_pointer_constant, fundecl, function,
 				    parmnum, warnopt);
-      if (rhs == error_mark_node)
-	return error_mark_node;
+      如果 (rhs == error_mark_node)
+	返回 error_mark_node;
 
       rhs = build1 (NOP_EXPR, type, rhs);
       SET_EXPR_LOCATION (rhs, location);
-      return rhs;
+      返回 rhs;
     }
   /* Some types can interconvert without explicit casts.  */
-  else if (codel == VECTOR_TYPE && coder == VECTOR_TYPE
+  否则 如果 (codel == VECTOR_TYPE && coder == VECTOR_TYPE
 	   && vector_types_convertible_p (type, TREE_TYPE (rhs), true))
-    return convert (type, rhs);
+    返回 convert (type, rhs);
   /* Arithmetic types all interconvert, and enum is treated like int.  */
-  else if ((codel == INTEGER_TYPE || codel == REAL_TYPE
+  否则 如果 ((codel == INTEGER_TYPE || codel == REAL_TYPE
 	    || codel == FIXED_POINT_TYPE
 	    || codel == ENUMERAL_TYPE || codel == COMPLEX_TYPE
 	    || codel == BOOLEAN_TYPE || codel == BITINT_TYPE)
@@ -8692,12 +8692,12 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	       || coder == ENUMERAL_TYPE || coder == COMPLEX_TYPE
 	       || coder == BOOLEAN_TYPE || coder == BITINT_TYPE))
     {
-      if (warnopt && errtype == ic_argpass)
+      如果 (warnopt && errtype == ic_argpass)
 	maybe_warn_builtin_no_proto_arg (expr_loc, fundecl, parmnum, type,
 					 rhstype);
 
       bool save = in_late_binary_op;
-      if (C_BOOLEAN_TYPE_P (type) || codel == COMPLEX_TYPE
+      如果 (C_BOOLEAN_TYPE_P (type) || codel == COMPLEX_TYPE
 	  || (coder == REAL_TYPE
 	      && (codel == INTEGER_TYPE || codel == ENUMERAL_TYPE)
 	      && sanitize_flags_p (SANITIZE_FLOAT_CAST)))
@@ -8706,36 +8706,36 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 				    ? expr_loc : location, type, orig_rhs,
 				    errtype == ic_init_const);
       in_late_binary_op = save;
-      return ret;
+      返回 ret;
     }
 
   /* Aggregates in different TUs might need conversion.  */
-  if ((codel == RECORD_TYPE || codel == UNION_TYPE)
+  如果 ((codel == RECORD_TYPE || codel == UNION_TYPE)
       && codel == coder
       && comptypes (TYPE_MAIN_VARIANT (type), TYPE_MAIN_VARIANT (rhstype)))
-    return convert_and_check (expr_loc != UNKNOWN_LOCATION
+    返回 convert_and_check (expr_loc != UNKNOWN_LOCATION
 			      ? expr_loc : location, type, rhs);
 
   /* Conversion to a transparent union or record from its member types.
      This applies only to function arguments.  */
-  if (((codel == UNION_TYPE || codel == RECORD_TYPE)
+  如果 (((codel == UNION_TYPE || codel == RECORD_TYPE)
       && TYPE_TRANSPARENT_AGGR (type))
       && errtype == ic_argpass)
     {
       tree memb, marginal_memb = NULL_TREE;
 
-      for (memb = TYPE_FIELDS (type); memb ; memb = DECL_CHAIN (memb))
+      为 (memb = TYPE_FIELDS (type); memb ; memb = DECL_CHAIN (memb))
 	{
 	  tree memb_type = TREE_TYPE (memb);
 
-	  if (comptypes (TYPE_MAIN_VARIANT (memb_type),
+	  如果 (comptypes (TYPE_MAIN_VARIANT (memb_type),
 			 TYPE_MAIN_VARIANT (rhstype)))
 	    break;
 
-	  if (TREE_CODE (memb_type) != POINTER_TYPE)
+	  如果 (TREE_CODE (memb_type) != POINTER_TYPE)
 	    continue;
 
-	  if (coder == POINTER_TYPE)
+	  如果 (coder == POINTER_TYPE)
 	    {
 	      tree ttl = TREE_TYPE (memb_type);
 	      tree ttr = TREE_TYPE (rhstype);
@@ -8744,14 +8744,14 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 		 and vice versa; otherwise, targets must be the same.
 		 Meanwhile, the lhs target must have all the qualifiers of
 		 the rhs.  */
-	      if ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
+	      如果 ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
 		  || (VOID_TYPE_P (ttr) && !TYPE_ATOMIC (ttr))
 		  || comp_target_types (location, memb_type, rhstype))
 		{
-		  int lquals = TYPE_QUALS (ttl) & ~TYPE_QUAL_ATOMIC;
-		  int rquals = TYPE_QUALS (ttr) & ~TYPE_QUAL_ATOMIC;
+		  整数 lquals = TYPE_QUALS (ttl) & ~TYPE_QUAL_ATOMIC;
+		  整数 rquals = TYPE_QUALS (ttr) & ~TYPE_QUAL_ATOMIC;
 		  /* If this type won't generate any warnings, use it.  */
-		  if (lquals == rquals
+		  如果 (lquals == rquals
 		      || ((TREE_CODE (ttr) == FUNCTION_TYPE
 			   && TREE_CODE (ttl) == FUNCTION_TYPE)
 			  ? ((lquals | rquals) == rquals)
@@ -8759,22 +8759,22 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 		    break;
 
 		  /* Keep looking for a better type, but remember this one.  */
-		  if (!marginal_memb)
+		  如果 (!marginal_memb)
 		    marginal_memb = memb;
 		}
 	    }
 
 	  /* Can convert integer zero to any pointer type.  */
-	  if (null_pointer_constant)
+	  如果 (null_pointer_constant)
 	    {
 	      rhs = null_pointer_node;
 	      break;
 	    }
 	}
 
-      if (memb || marginal_memb)
+      如果 (memb || marginal_memb)
 	{
-	  if (!memb)
+	  如果 (!memb)
 	    {
 	      /* We have only a marginally acceptable member type;
 		 it needs a warning.  */
@@ -8783,7 +8783,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 
 	      /* Const and volatile mean something different for function
 		 types, so the usual warnings are not appropriate.  */
-	      if (TREE_CODE (ttr) == FUNCTION_TYPE
+	      如果 (TREE_CODE (ttr) == FUNCTION_TYPE
 		  && TREE_CODE (ttl) == FUNCTION_TYPE)
 		{
 		  /* Because const and volatile on functions are
@@ -8791,7 +8791,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 		     certain things, it is okay to use a const or volatile
 		     function where an ordinary one is wanted, but not
 		     vice-versa.  */
-		  if (TYPE_QUALS_NO_ADDR_SPACE (ttl)
+		  如果 (TYPE_QUALS_NO_ADDR_SPACE (ttl)
 		      & ~TYPE_QUALS_NO_ADDR_SPACE (ttr))
 		    PEDWARN_FOR_QUALIFIERS (location, expr_loc,
 					    OPT_Wdiscarded_qualifiers,
@@ -8808,7 +8808,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 					       "pointer from unqualified"),
 					    TYPE_QUALS (ttl) & ~TYPE_QUALS (ttr));
 		}
-	      else if (TYPE_QUALS_NO_ADDR_SPACE (ttr)
+	      否则 如果 (TYPE_QUALS_NO_ADDR_SPACE (ttr)
 		       & ~TYPE_QUALS_NO_ADDR_SPACE (ttl))
 		PEDWARN_FOR_QUALIFIERS (location, expr_loc,
 				        OPT_Wdiscarded_qualifiers,
@@ -8825,17 +8825,17 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	      memb = marginal_memb;
 	    }
 
-	  if (!fundecl || !DECL_IN_SYSTEM_HEADER (fundecl))
+	  如果 (!fundecl || !DECL_IN_SYSTEM_HEADER (fundecl))
 	    pedwarn (location, OPT_Wpedantic,
 		     "ISO C prohibits argument conversion to union type");
 
 	  rhs = fold_convert_loc (location, TREE_TYPE (memb), rhs);
-	  return build_constructor_single (type, memb, rhs);
+	  返回 build_constructor_single (type, memb, rhs);
 	}
     }
 
   /* Conversions among pointers */
-  else if ((codel == POINTER_TYPE || codel == REFERENCE_TYPE)
+  否则 如果 ((codel == POINTER_TYPE || codel == REFERENCE_TYPE)
 	   && (coder == codel))
     {
       /* If RHS refers to a built-in declared without a prototype
@@ -8860,13 +8860,13 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       /* The Plan 9 compiler permits a pointer to a struct to be
 	 automatically converted into a pointer to an anonymous field
 	 within the struct.  */
-      if (flag_plan9_extensions
+      如果 (flag_plan9_extensions
 	  && RECORD_OR_UNION_TYPE_P (mvl)
 	  && RECORD_OR_UNION_TYPE_P (mvr)
 	  && mvl != mvr)
 	{
 	  tree new_rhs = convert_to_anonymous_field (location, type, rhs);
-	  if (new_rhs != NULL_TREE)
+	  如果 (new_rhs != NULL_TREE)
 	    {
 	      rhs = new_rhs;
 	      rhstype = TREE_TYPE (rhs);
@@ -8883,7 +8883,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 		int *p = NULL;
 
 	 where NULL is typically defined in C to be '(void *) 0'.  */
-      if (VOID_TYPE_P (ttr) && rhs != null_pointer_node && !VOID_TYPE_P (ttl))
+      如果 (VOID_TYPE_P (ttr) && rhs != null_pointer_node && !VOID_TYPE_P (ttl))
 	warning_at (errtype == ic_argpass ? expr_loc : location,
 		    OPT_Wc___compat,
 		    "request for implicit conversion "
@@ -8891,20 +8891,20 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 
       /* Warn of new allocations that are not big enough for the target
 	 type.  */
-      if (warn_alloc_size && TREE_CODE (rhs) == CALL_EXPR)
-	if (tree fndecl = get_callee_fndecl (rhs))
-	  if (DECL_IS_MALLOC (fndecl))
+      如果 (warn_alloc_size && TREE_CODE (rhs) == CALL_EXPR)
+	如果 (tree fndecl = get_callee_fndecl (rhs))
+	  如果 (DECL_IS_MALLOC (fndecl))
 	    {
 	      tree attrs = TYPE_ATTRIBUTES (TREE_TYPE (fndecl));
 	      tree alloc_size = lookup_attribute ("alloc_size", attrs);
-	      if (alloc_size)
+	      如果 (alloc_size)
 		warn_for_alloc_size (location, ttl, rhs, alloc_size);
 	    }
 
       /* See if the pointers point to incompatible address spaces.  */
       asl = TYPE_ADDR_SPACE (ttl);
       asr = TYPE_ADDR_SPACE (ttr);
-      if (!null_pointer_constant_p (rhs)
+      如果 (!null_pointer_constant_p (rhs)
 	  && asr != asl && !targetm.addr_space.subset_p (asr, asl))
 	{
 	  auto_diagnostic_group d;
@@ -8915,10 +8915,10 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	      {
 		const char msg[] = G_("passing argument %d of %qE from "
 				      "pointer to non-enclosed address space");
-		if (warnopt)
+		如果 (warnopt)
 		  diagnosed
 		    = warning_at (expr_loc, warnopt, msg, parmnum, rname);
-		else
+		否则
 		  error_at (expr_loc, msg, parmnum, rname);
 	      break;
 	      }
@@ -8926,9 +8926,9 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	      {
 		const char msg[] = G_("assignment from pointer to "
 				      "non-enclosed address space");
-		if (warnopt)
+		如果 (warnopt)
 		  diagnosed = warning_at (location, warnopt, msg);
-		else
+		否则
 		  error_at (location, msg);
 		break;
 	      }
@@ -8937,9 +8937,9 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	      {
 		const char msg[] = G_("initialization from pointer to "
 				      "non-enclosed address space");
-		if (warnopt)
+		如果 (warnopt)
 		  diagnosed = warning_at (location, warnopt, msg);
-		else
+		否则
 		  error_at (location, msg);
 		break;
 	      }
@@ -8947,29 +8947,29 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	      {
 		const char msg[] = G_("return from pointer to "
 				      "non-enclosed address space");
-		if (warnopt)
+		如果 (warnopt)
 		  diagnosed = warning_at (location, warnopt, msg);
-		else
+		否则
 		  error_at (location, msg);
 		break;
 	      }
 	    default:
 	      gcc_unreachable ();
 	    }
-	  if (diagnosed)
+	  如果 (diagnosed)
 	    {
-	      if (errtype == ic_argpass)
+	      如果 (errtype == ic_argpass)
 		inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
-	      else
+	      否则
 		inform (location, "expected %qT but pointer is of type %qT",
 			type, rhstype);
 	    }
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
 
       /* Check if the right-hand side has a format attribute but the
 	 left-hand side doesn't.  */
-      if (warn_suggest_attribute_format
+      如果 (warn_suggest_attribute_format
 	  && check_missing_format_attribute (type, rhstype))
 	{
 	  switch (errtype)
@@ -9002,7 +9002,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	}
 
       /* See if the pointers point to incompatible scalar storage orders.  */
-      if (warn_scalar_storage_order
+      如果 (warn_scalar_storage_order
 	  && !null_pointer_constant_p (rhs)
 	  && (AGGREGATE_TYPE_P (ttl) && TYPE_REVERSE_STORAGE_ORDER (ttl))
 	     != (AGGREGATE_TYPE_P (ttr) && TYPE_REVERSE_STORAGE_ORDER (ttr)))
@@ -9014,7 +9014,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	  case ic_argpass:
 	    /* Do not warn for built-in functions, for example memcpy, since we
 	       control how they behave and they can be useful in this area.  */
-	    if (TREE_CODE (rname) != FUNCTION_DECL
+	    如果 (TREE_CODE (rname) != FUNCTION_DECL
 		|| !fndecl_built_in_p (rname))
 	      warning_at (location, OPT_Wscalar_storage_order,
 			  "passing argument %d of %qE from incompatible "
@@ -9023,7 +9023,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	  case ic_assign:
 	    /* Do not warn if the RHS is a call to a function that returns a
 	       pointer that is not an alias.  */
-	    if (TREE_CODE (rhs) != CALL_EXPR
+	    如果 (TREE_CODE (rhs) != CALL_EXPR
 		|| (t = get_callee_fndecl (rhs)) == NULL_TREE
 		|| !DECL_IS_MALLOC (t))
 	      warning_at (location, OPT_Wscalar_storage_order,
@@ -9033,7 +9033,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	  case ic_init:
 	  case ic_init_const:
 	    /* Likewise.  */
-	    if (TREE_CODE (rhs) != CALL_EXPR
+	    如果 (TREE_CODE (rhs) != CALL_EXPR
 		|| (t = get_callee_fndecl (rhs)) == NULL_TREE
 		|| !DECL_IS_MALLOC (t))
 	      warning_at (location, OPT_Wscalar_storage_order,
@@ -9053,7 +9053,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       /* Any non-function converts to a [const][volatile] void *
 	 and vice versa; otherwise, targets must be the same.
 	 Meanwhile, the lhs target must have all the qualifiers of the rhs.  */
-      if ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
+      如果 ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
 	  || (VOID_TYPE_P (ttr) && !TYPE_ATOMIC (ttr))
 	  || (target_cmp = comp_target_types (location, type, rhstype))
 	  || is_opaque_pointer
@@ -9065,12 +9065,12 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	{
 	  /* Warn about loss of qualifers from pointers to arrays with
 	     qualifiers on the element type. */
-	  if (TREE_CODE (ttr) == ARRAY_TYPE)
+	  如果 (TREE_CODE (ttr) == ARRAY_TYPE)
 	    {
 	      ttr = strip_array_types (ttr);
 	      ttl = strip_array_types (ttl);
 
-	      if (TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
+	      如果 (TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
 		  & ~TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttl))
 		WARNING_FOR_QUALIFIERS (flag_isoc23,
 					location, expr_loc,
@@ -9085,7 +9085,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 					   "pointer target type"),
 					TYPE_QUALS (ttr) & ~TYPE_QUALS (ttl));
             }
-          else if (pedantic
+          否则 如果 (pedantic
 	      && ((VOID_TYPE_P (ttl) && TREE_CODE (ttr) == FUNCTION_TYPE)
 		  ||
 		  (VOID_TYPE_P (ttr)
@@ -9103,7 +9103,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 				       "pointer and %<void *%>"));
 	  /* Const and volatile mean something different for function types,
 	     so the usual warnings are not appropriate.  */
-	  else if (TREE_CODE (ttr) != FUNCTION_TYPE
+	  否则 如果 (TREE_CODE (ttr) != FUNCTION_TYPE
 		   && TREE_CODE (ttl) != FUNCTION_TYPE)
 	    {
 	       /* Assignments between atomic and non-atomic objects are OK.  */
@@ -9115,7 +9115,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	      /* Don't warn about loss of qualifier for conversions from
 		 qualified void* to pointers to arrays with corresponding
 		 qualifier on the element type (except for pedantic before C23). */
-	      if (warn_quals || (warn_quals_ped && pedantic && !flag_isoc23))
+	      如果 (warn_quals || (warn_quals_ped && pedantic && !flag_isoc23))
 		PEDWARN_FOR_QUALIFIERS (location, expr_loc,
 					OPT_Wdiscarded_qualifiers,
 					G_("passing argument %d of %qE discards "
@@ -9127,17 +9127,17 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 					G_("return discards %qv qualifier from "
 					   "pointer target type"),
 					TYPE_QUALS (ttr) & ~TYPE_QUALS (ttl));
-	      else if (warn_quals_ped)
+	      否则 如果 (warn_quals_ped)
 		pedwarn_c11 (location, OPT_Wc11_c23_compat,
 			     "array with qualifier on the element is not qualified before C23");
 
 	      /* If this is not a case of ignoring a mismatch in signedness,
 		 no warning.  */
-	      else if (VOID_TYPE_P (ttl) || VOID_TYPE_P (ttr)
+	      否则 如果 (VOID_TYPE_P (ttl) || VOID_TYPE_P (ttr)
 		       || target_cmp)
 		;
 	      /* If there is a mismatch, do warn.  */
-	      else if (warn_pointer_sign)
+	      否则 如果 (warn_pointer_sign)
 		switch (errtype)
 		  {
 		  case ic_argpass:
@@ -9146,7 +9146,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 		      range_label_for_type_mismatch rhs_label (rhstype, type);
 		      gcc_rich_location richloc (expr_loc, &rhs_label,
 						 highlight_colors::actual);
-		      if (pedwarn (&richloc, OPT_Wpointer_sign,
+		      如果 (pedwarn (&richloc, OPT_Wpointer_sign,
 				   "pointer targets in passing argument %d of "
 				   "%qE differ in signedness", parmnum, rname))
 			inform_for_arg (fundecl, expr_loc, parmnum, type,
@@ -9174,14 +9174,14 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 		    gcc_unreachable ();
 		  }
 	    }
-	  else if (TREE_CODE (ttl) == FUNCTION_TYPE
+	  否则 如果 (TREE_CODE (ttl) == FUNCTION_TYPE
 		   && TREE_CODE (ttr) == FUNCTION_TYPE)
 	    {
 	      /* Because const and volatile on functions are restrictions
 		 that say the function will not do certain things,
 		 it is okay to use a const or volatile function
 		 where an ordinary one is wanted, but not vice-versa.  */
-	      if (TYPE_QUALS_NO_ADDR_SPACE (ttl)
+	      如果 (TYPE_QUALS_NO_ADDR_SPACE (ttl)
 		  & ~TYPE_QUALS_NO_ADDR_SPACE (ttr))
 		PEDWARN_FOR_QUALIFIERS (location, expr_loc,
 				        OPT_Wdiscarded_qualifiers,
@@ -9198,7 +9198,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	    }
 	}
       /* Avoid warning about the volatile ObjC EH puts on decls.  */
-      else if (!objc_ok)
+      否则 如果 (!objc_ok)
 	{
 	  auto_diagnostic_group d;
 	  bool warned = false;
@@ -9216,18 +9216,18 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 				   "passing argument %d of %qE from "
 				   "incompatible pointer type",
 				   parmnum, rname);
-		if (warned)
+		如果 (warned)
 		  inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
 	      }
 	      break;
 	    case ic_assign:
-	      if (bltin)
+	      如果 (bltin)
 		warned
 		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
 				   "assignment to %e from pointer to "
 				   "%qD with incompatible type %e",
 				   &e_type, bltin, &e_rhstype);
-	      else
+	      否则
 		warned
 		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
 				   "assignment to %e from incompatible "
@@ -9236,13 +9236,13 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	      break;
 	    case ic_init:
 	    case ic_init_const:
-	      if (bltin)
+	      如果 (bltin)
 		warned
 		  = permerror_init (location, OPT_Wincompatible_pointer_types,
 				    "initialization of %e from pointer to "
 				    "%qD with incompatible type %e",
 				    &e_type, bltin, &e_rhstype);
-	      else
+	      否则
 		warned
 		  = permerror_init (location, OPT_Wincompatible_pointer_types,
 				    "initialization of %e from incompatible "
@@ -9250,13 +9250,13 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 				    &e_type, &e_rhstype);
 	      break;
 	    case ic_return:
-	      if (bltin)
+	      如果 (bltin)
 		warned
 		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
 				   "returning pointer to %qD of type %e from "
 				   "a function with incompatible type %e",
 				   bltin, &e_rhstype, &e_type);
-	      else
+	      否则
 		warned
 		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
 				   "returning %e from a function with "
@@ -9266,15 +9266,15 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	    default:
 	      gcc_unreachable ();
 	    }
-	  if (warned)
+	  如果 (warned)
 	    {
 	      /* If the mismatching function type is a pointer to a function,
 		 try to show the decl of the function.  */
-	      if (TREE_CODE (rhs) == ADDR_EXPR
+	      如果 (TREE_CODE (rhs) == ADDR_EXPR
 		  && TREE_CODE (TREE_OPERAND (rhs, 0)) == FUNCTION_DECL)
 		{
 		  tree rhs_fndecl = TREE_OPERAND (rhs, 0);
-		  if (!DECL_IS_UNDECLARED_BUILTIN (rhs_fndecl))
+		  如果 (!DECL_IS_UNDECLARED_BUILTIN (rhs_fndecl))
 		    {
 		      gcc_rich_location richloc
 			(DECL_SOURCE_LOCATION (rhs_fndecl), nullptr,
@@ -9297,37 +9297,37 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	 struct or union.  */
       warn_for_address_of_packed_member (type, orig_rhs);
 
-      return convert (type, rhs);
+      返回 convert (type, rhs);
     }
-  else if (codel == POINTER_TYPE && coder == ARRAY_TYPE)
+  否则 如果 (codel == POINTER_TYPE && coder == ARRAY_TYPE)
     {
       /* ??? This should not be an error when inlining calls to
 	 unprototyped functions.  */
       const char msg[] = "invalid use of non-lvalue array";
-      if (warnopt)
+      如果 (warnopt)
 	warning_at (location, warnopt, msg);
-      else
+      否则
 	error_at (location, msg);
-      return error_mark_node;
+      返回 error_mark_node;
     }
-  else if (codel == POINTER_TYPE
+  否则 如果 (codel == POINTER_TYPE
 	   && (coder == INTEGER_TYPE
 	       || coder == ENUMERAL_TYPE
 	       || coder == BOOLEAN_TYPE
 	       || coder == NULLPTR_TYPE
 	       || coder == BITINT_TYPE))
     {
-      if (null_pointer_constant && c_inhibit_evaluation_warnings == 0
+      如果 (null_pointer_constant && c_inhibit_evaluation_warnings == 0
 	  && coder != NULLPTR_TYPE)
 	warning_at (location, OPT_Wzero_as_null_pointer_constant,
 		    "zero as null pointer constant");
       /* A NULLPTR type is just a nullptr always.  */
-      if (coder == NULLPTR_TYPE)
-	return omit_one_operand_loc (expr_loc, type, nullptr_node, rhs);
+      如果 (coder == NULLPTR_TYPE)
+	返回 omit_one_operand_loc (expr_loc, type, nullptr_node, rhs);
       /* An explicit constant 0 or type nullptr_t can convert to a pointer,
 	 or one that results from arithmetic, even including a cast to
 	 integer type.  */
-      else if (!null_pointer_constant)
+      否则 如果 (!null_pointer_constant)
 	switch (errtype)
 	  {
 	  case ic_argpass:
@@ -9336,7 +9336,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	      range_label_for_type_mismatch rhs_label (rhstype, type);
 	      gcc_rich_location richloc (expr_loc, &rhs_label,
 					 highlight_colors::actual);
-	      if (permerror_opt (&richloc, OPT_Wint_conversion,
+	      如果 (permerror_opt (&richloc, OPT_Wint_conversion,
 				 "passing argument %d of %qE makes pointer "
 				 "from integer without a cast", parmnum, rname))
 		{
@@ -9366,9 +9366,9 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	    gcc_unreachable ();
 	  }
 
-      return convert (type, rhs);
+      返回 convert (type, rhs);
     }
-  else if ((codel == INTEGER_TYPE || codel == BITINT_TYPE)
+  否则 如果 ((codel == INTEGER_TYPE || codel == BITINT_TYPE)
 	   && coder == POINTER_TYPE)
     {
       switch (errtype)
@@ -9379,7 +9379,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	    range_label_for_type_mismatch rhs_label (rhstype, type);
 	    gcc_rich_location richloc (expr_loc, &rhs_label,
 				       highlight_colors::actual);
-	    if (permerror_opt (&richloc, OPT_Wint_conversion,
+	    如果 (permerror_opt (&richloc, OPT_Wint_conversion,
 			       "passing argument %d of %qE makes integer from "
 			       "pointer without a cast", parmnum, rname))
 	      {
@@ -9408,9 +9408,9 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	  gcc_unreachable ();
 	}
 
-      return convert (type, rhs);
+      返回 convert (type, rhs);
     }
-  else if (C_BOOLEAN_TYPE_P (type)
+  否则 如果 (C_BOOLEAN_TYPE_P (type)
 	   /* The type nullptr_t may be converted to bool.  The
 	      result is false.  */
 	   && (coder == POINTER_TYPE || coder == NULLPTR_TYPE))
@@ -9420,10 +9420,10 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       in_late_binary_op = true;
       ret = convert (type, rhs);
       in_late_binary_op = save;
-      return ret;
+      返回 ret;
     }
-  else if (codel == NULLPTR_TYPE && null_pointer_constant)
-    return convert (type, rhs);
+  否则 如果 (codel == NULLPTR_TYPE && null_pointer_constant)
+    返回 convert (type, rhs);
 
   switch (errtype)
     {
@@ -9434,9 +9434,9 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	gcc_rich_location richloc (expr_loc, &rhs_label,
 				   highlight_colors::actual);
 	const char msg[] = G_("incompatible type for argument %d of %qE");
-	if (warnopt)
+	如果 (warnopt)
 	  warning_at (expr_loc, warnopt, msg, parmnum, rname);
-	else
+	否则
 	  error_at (&richloc, msg, parmnum, rname);
 	inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
       }
@@ -9445,9 +9445,9 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       {
 	const char msg[]
 	  = G_("incompatible types when assigning to type %qT from type %qT");
-	if (warnopt)
+	如果 (warnopt)
 	  warning_at (expr_loc, 0, msg, type, rhstype);
-	else
+	否则
 	  error_at (expr_loc, msg, type, rhstype);
 	break;
       }
@@ -9456,9 +9456,9 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       {
 	const char msg[]
 	  = G_("incompatible types when initializing type %qT using type %qT");
-	if (warnopt)
+	如果 (warnopt)
 	  warning_at (location, 0, msg, type, rhstype);
-	else
+	否则
 	  error_at (location, msg, type, rhstype);
 	break;
       }
@@ -9466,9 +9466,9 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       {
 	const char msg[]
 	  = G_("incompatible types when returning type %qT but %qT was expected");
-	if (warnopt)
+	如果 (warnopt)
 	  warning_at (location, 0, msg, rhstype, type);
-	else
+	否则
 	  error_at (location, msg, rhstype, type);
 	break;
       }
@@ -9476,7 +9476,7 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       gcc_unreachable ();
     }
 
-  return error_mark_node;
+  返回 error_mark_node;
 }
 
 /* If VALUE is a compound expr all of whose expressions are constant, then
@@ -9488,18 +9488,18 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 static tree
 valid_compound_expr_initializer (tree value, tree endtype)
 {
-  if (TREE_CODE (value) == COMPOUND_EXPR)
+  如果 (TREE_CODE (value) == COMPOUND_EXPR)
     {
-      if (valid_compound_expr_initializer (TREE_OPERAND (value, 0), endtype)
+      如果 (valid_compound_expr_initializer (TREE_OPERAND (value, 0), endtype)
 	  == error_mark_node)
-	return error_mark_node;
-      return valid_compound_expr_initializer (TREE_OPERAND (value, 1),
+	返回 error_mark_node;
+      返回 valid_compound_expr_initializer (TREE_OPERAND (value, 1),
 					      endtype);
     }
-  else if (!initializer_constant_valid_p (value, endtype))
-    return error_mark_node;
-  else
-    return value;
+  否则 如果 (!initializer_constant_valid_p (value, endtype))
+    返回 error_mark_node;
+  否则
+    返回 value;
 }
 
 /* Perform appropriate conversions on the initial value of a variable,
@@ -9521,12 +9521,12 @@ store_init_value (location_t init_loc, tree decl, tree init, tree origtype)
   /* If variable's type was invalidly declared, just ignore it.  */
 
   type = TREE_TYPE (decl);
-  if (TREE_CODE (type) == ERROR_MARK)
-    return;
+  如果 (TREE_CODE (type) == ERROR_MARK)
+    返回;
 
   /* Digest the specified initializer into an expression.  */
 
-  if (init)
+  如果 (init)
     {
       npc = null_pointer_constant_p (init);
       int_const_expr = (TREE_CODE (init) == INTEGER_CST
@@ -9543,21 +9543,21 @@ store_init_value (location_t init_loc, tree decl, tree init, tree origtype)
 
   /* Store the expression if valid; else report error.  */
 
-  if (!in_system_header_at (input_location)
+  如果 (!in_system_header_at (input_location)
       && AGGREGATE_TYPE_P (TREE_TYPE (decl)) && !TREE_STATIC (decl))
     warning (OPT_Wtraditional, "traditional C rejects automatic "
 	     "aggregate initialization");
 
-  if (value != error_mark_node || TREE_CODE (decl) != FUNCTION_DECL)
+  如果 (value != error_mark_node || TREE_CODE (decl) != FUNCTION_DECL)
     DECL_INITIAL (decl) = value;
 
   /* ANSI wants warnings about out-of-range constant initializers.  */
   STRIP_TYPE_NOPS (value);
-  if (TREE_STATIC (decl))
+  如果 (TREE_STATIC (decl))
     constant_expression_warning (value);
 
   /* Check if we need to set array size from compound literal size.  */
-  if (TREE_CODE (type) == ARRAY_TYPE
+  如果 (TREE_CODE (type) == ARRAY_TYPE
       && TYPE_DOMAIN (type) == NULL_TREE
       && value != error_mark_node)
     {
@@ -9566,11 +9566,11 @@ store_init_value (location_t init_loc, tree decl, tree init, tree origtype)
       STRIP_TYPE_NOPS (inside_init);
       inside_init = fold (inside_init);
 
-      if (TREE_CODE (inside_init) == COMPOUND_LITERAL_EXPR)
+      如果 (TREE_CODE (inside_init) == COMPOUND_LITERAL_EXPR)
 	{
 	  tree cldecl = COMPOUND_LITERAL_EXPR_DECL (inside_init);
 
-	  if (TYPE_DOMAIN (TREE_TYPE (cldecl)))
+	  如果 (TYPE_DOMAIN (TREE_TYPE (cldecl)))
 	    {
 	      /* For int foo[] = (int [3]){1}; we need to set array size
 		 now since later on array initializer will be just the
@@ -9594,7 +9594,7 @@ store_init_value (location_t init_loc, tree decl, tree init, tree origtype)
 
 struct spelling
 {
-  int kind;
+  整数 kind;
   union
     {
       unsigned HOST_WIDE_INT i;
@@ -9608,7 +9608,7 @@ struct spelling
 
 static struct spelling *spelling;	/* Next stack element (unused).  */
 static struct spelling *spelling_base;	/* Spelling stack base.  */
-static int spelling_size;		/* Size of the spelling stack.  */
+static 整数 spelling_size;		/* Size of the spelling stack.  */
 
 /* Macros to save and restore the spelling stack around push_... functions.
    Alternative to SAVE_SPELLING_STACK.  */
@@ -9621,9 +9621,9 @@ static int spelling_size;		/* Size of the spelling stack.  */
 
 #define PUSH_SPELLING(KIND, VALUE, MEMBER)				\
 {									\
-  int depth = SPELLING_DEPTH ();					\
+  整数 depth = SPELLING_DEPTH ();					\
 									\
-  if (depth >= spelling_size)						\
+  如果 (depth >= spelling_size)						\
     {									\
       spelling_size += 10;						\
       spelling_base = XRESIZEVEC (struct spelling, spelling_base,	\
@@ -9666,21 +9666,21 @@ push_array_bounds (unsigned HOST_WIDE_INT bounds)
 
 /* Compute the maximum size in bytes of the printed spelling.  */
 
-static int
+static 整数
 spelling_length (void)
 {
-  int size = 0;
+  整数 size = 0;
   struct spelling *p;
 
-  for (p = spelling_base; p < spelling; p++)
+  为 (p = spelling_base; p < spelling; p++)
     {
-      if (p->kind == SPELLING_BOUNDS)
+      如果 (p->kind == SPELLING_BOUNDS)
 	size += 25;
-      else
+      否则
 	size += strlen (p->u.s) + 1;
     }
 
-  return size;
+  返回 size;
 }
 
 /* Print the spelling to BUFFER and return it.  */
@@ -9691,22 +9691,22 @@ print_spelling (char *buffer)
   char *d = buffer;
   struct spelling *p;
 
-  for (p = spelling_base; p < spelling; p++)
-    if (p->kind == SPELLING_BOUNDS)
+  为 (p = spelling_base; p < spelling; p++)
+    如果 (p->kind == SPELLING_BOUNDS)
       {
 	sprintf (d, "[" HOST_WIDE_INT_PRINT_UNSIGNED "]", p->u.i);
 	d += strlen (d);
       }
-    else
+    否则
       {
 	const char *s;
-	if (p->kind == SPELLING_MEMBER)
+	如果 (p->kind == SPELLING_MEMBER)
 	  *d++ = '.';
-	for (s = p->u.s; (*d = *s++); d++)
+	为 (s = p->u.s; (*d = *s++); d++)
 	  ;
       }
   *d++ = '\0';
-  return buffer;
+  返回 buffer;
 }
 
 /* Check whether INIT, a floating or integer constant, is
@@ -9718,34 +9718,34 @@ constexpr_init_fits_real_type (tree type, tree init)
 {
   gcc_assert (SCALAR_FLOAT_TYPE_P (type));
   gcc_assert (TREE_CODE (init) == INTEGER_CST || TREE_CODE (init) == REAL_CST);
-  if (TREE_CODE (init) == REAL_CST
+  如果 (TREE_CODE (init) == REAL_CST
       && TYPE_MODE (TREE_TYPE (init)) == TYPE_MODE (type))
     {
       /* Same mode, no conversion required except for the case of
 	 signaling NaNs if the types are incompatible (e.g. double and
 	 long double with the same mode).  */
-      if (REAL_VALUE_ISSIGNALING_NAN (TREE_REAL_CST (init))
+      如果 (REAL_VALUE_ISSIGNALING_NAN (TREE_REAL_CST (init))
 	  && !comptypes (TYPE_MAIN_VARIANT (type),
 			 TYPE_MAIN_VARIANT (TREE_TYPE (init))))
-	return false;
-      return true;
+	返回 false;
+      返回 true;
     }
-  if (TREE_CODE (init) == INTEGER_CST)
+  如果 (TREE_CODE (init) == INTEGER_CST)
     {
       tree converted = build_real_from_int_cst (type, init);
       bool fail = false;
       wide_int w = real_to_integer (&TREE_REAL_CST (converted), &fail,
 				    TYPE_PRECISION (TREE_TYPE (init)));
-      return !fail && wi::eq_p (w, wi::to_wide (init));
+      返回 !fail && wi::eq_p (w, wi::to_wide (init));
     }
-  if (REAL_VALUE_ISSIGNALING_NAN (TREE_REAL_CST (init)))
-    return false;
-  if ((REAL_VALUE_ISINF (TREE_REAL_CST (init))
+  如果 (REAL_VALUE_ISSIGNALING_NAN (TREE_REAL_CST (init)))
+    返回 false;
+  如果 ((REAL_VALUE_ISINF (TREE_REAL_CST (init))
        && MODE_HAS_INFINITIES (TYPE_MODE (type)))
       || (REAL_VALUE_ISNAN (TREE_REAL_CST (init))
 	  && MODE_HAS_NANS (TYPE_MODE (type))))
-    return true;
-  if (DECIMAL_FLOAT_TYPE_P (type)
+    返回 true;
+  如果 (DECIMAL_FLOAT_TYPE_P (type)
       && !DECIMAL_FLOAT_TYPE_P (TREE_TYPE (init)))
     {
       /* This is valid if the real number represented by the
@@ -9763,13 +9763,13 @@ constexpr_init_fits_real_type (tree type, tree init)
 		  && mpfr_equal_p (bin_val, dec_val));
       mpfr_clear (bin_val);
       mpfr_clear (dec_val);
-      return res;
+      返回 res;
     }
   /* exact_real_truncate is not quite right here, since it doesn't
      allow even an exact conversion to subnormal values.  */
   REAL_VALUE_TYPE t;
   real_convert (&t, TYPE_MODE (type), &TREE_REAL_CST (init));
-  return real_identical (&t, &TREE_REAL_CST (init));
+  返回 real_identical (&t, &TREE_REAL_CST (init));
 }
 
 /* Check whether INIT (location LOC) is valid as a 'constexpr'
@@ -9783,79 +9783,79 @@ static void
 check_constexpr_init (location_t loc, tree type, tree init,
 		      bool int_const_expr, bool arith_const_expr)
 {
-  if (POINTER_TYPE_P (type))
+  如果 (POINTER_TYPE_P (type))
     {
       /* The initializer must be null.  */
-      if (TREE_CODE (init) != INTEGER_CST || !integer_zerop (init))
+      如果 (TREE_CODE (init) != INTEGER_CST || !integer_zerop (init))
 	error_at (loc, "%<constexpr%> pointer initializer is not null");
-      return;
+      返回;
     }
-  if (INTEGRAL_TYPE_P (type))
+  如果 (INTEGRAL_TYPE_P (type))
     {
       /* The initializer must be an integer constant expression,
 	 representable in the target type.  */
-      if (!int_const_expr)
+      如果 (!int_const_expr)
 	{
-	  if (TREE_CODE (init) == RAW_DATA_CST
+	  如果 (TREE_CODE (init) == RAW_DATA_CST
 	      && TYPE_PRECISION (type) == CHAR_BIT)
 	    {
-	      if (!TYPE_UNSIGNED (type))
-		for (unsigned int i = 0;
+	      如果 (!TYPE_UNSIGNED (type))
+		为 (unsigned 整数 i = 0;
 		     i < (unsigned) RAW_DATA_LENGTH (init); ++i)
-		  if (RAW_DATA_SCHAR_ELT (init, i) < 0)
+		  如果 (RAW_DATA_SCHAR_ELT (init, i) < 0)
 		    {
 		      error_at (loc, "%<constexpr%> initializer not "
 				"representable in type of object");
 		      break;
 		    }
 	    }
-	  else
+	  否则
 	    error_at (loc, "%<constexpr%> integer initializer is not an "
 		      "integer constant expression");
 	}
-      else if (!int_fits_type_p (init, type))
+      否则 如果 (!int_fits_type_p (init, type))
 	error_at (loc, "%<constexpr%> initializer not representable in "
 		  "type of object");
-      return;
+      返回;
     }
   /* We don't apply any extra checks to extension types such as vector
      or fixed-point types.  */
-  if (TREE_CODE (type) != REAL_TYPE && TREE_CODE (type) != COMPLEX_TYPE)
-    return;
-  if (!arith_const_expr)
+  如果 (TREE_CODE (type) != REAL_TYPE && TREE_CODE (type) != COMPLEX_TYPE)
+    返回;
+  如果 (!arith_const_expr)
     {
       error_at (loc, "%<constexpr%> initializer is not an arithmetic "
 		"constant expression");
-      return;
+      返回;
     }
   /* We don't apply any extra checks to complex integers.  */
-  if (TREE_CODE (type) == COMPLEX_TYPE
+  如果 (TREE_CODE (type) == COMPLEX_TYPE
       && TREE_CODE (TREE_TYPE (type)) != REAL_TYPE)
-    return;
+    返回;
   /* Following N3082, a real type cannot be initialized from a complex
      type and a binary type cannot be initialized from a decimal type
      (but initializing a decimal type from a binary type is OK).
      Signaling NaN initializers are OK only if the types are
      compatible (not just the same mode); all quiet NaN and infinity
      initializations are considered to preserve the value.  */
-  if (TREE_CODE (TREE_TYPE (init)) == COMPLEX_TYPE
+  如果 (TREE_CODE (TREE_TYPE (init)) == COMPLEX_TYPE
       && SCALAR_FLOAT_TYPE_P (type))
     {
       error_at (loc, "%<constexpr%> initializer for a real type is of "
 		"complex type");
-      return;
+      返回;
     }
-  if (SCALAR_FLOAT_TYPE_P (type)
+  如果 (SCALAR_FLOAT_TYPE_P (type)
       && SCALAR_FLOAT_TYPE_P (TREE_TYPE (init))
       && DECIMAL_FLOAT_TYPE_P (TREE_TYPE (init))
       && !DECIMAL_FLOAT_TYPE_P (type))
     {
       error_at (loc, "%<constexpr%> initializer for a binary "
 		"floating-point type is of decimal type");
-      return;
+      返回;
     }
   bool fits;
-  if (TREE_CODE (type) == COMPLEX_TYPE)
+  如果 (TREE_CODE (type) == COMPLEX_TYPE)
     {
       switch (TREE_CODE (init))
 	{
@@ -9873,9 +9873,9 @@ check_constexpr_init (location_t loc, tree type, tree init,
 	  gcc_unreachable ();
 	}
     }
-  else
+  否则
     fits = constexpr_init_fits_real_type (type, init);
-  if (!fits)
+  如果 (!fits)
     error_at (loc, "%<constexpr%> initializer not representable in "
 	      "type of object");
 }
@@ -9914,10 +9914,10 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
   tree semantic_type = NULL_TREE;
   bool maybe_const = true;
 
-  if (type == error_mark_node
+  如果 (type == error_mark_node
       || !init
       || error_operand_p (init))
-    return error_mark_node;
+    返回 error_mark_node;
 
   STRIP_TYPE_NOPS (inside_init);
 
@@ -9928,16 +9928,16 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
      will be converted to
      y = &static_annotated.c.  */
 
-  if (require_constant
+  如果 (require_constant
       && TREE_CODE (inside_init) == NOP_EXPR
       && TREE_CODE (TREE_OPERAND (inside_init, 0)) == CALL_EXPR
       && is_access_with_size_p (TREE_OPERAND (inside_init, 0)))
     inside_init
       = get_ref_from_access_with_size (TREE_OPERAND (inside_init, 0));
 
-  if (!c_in_omp_for)
+  如果 (!c_in_omp_for)
     {
-      if (TREE_CODE (inside_init) == EXCESS_PRECISION_EXPR)
+      如果 (TREE_CODE (inside_init) == EXCESS_PRECISION_EXPR)
 	{
 	  semantic_type = TREE_TYPE (inside_init);
 	  inside_init = TREE_OPERAND (inside_init, 0);
@@ -9946,24 +9946,24 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
     }
   /* TODO: this may not detect all cases of expressions folding to
      constants that are not arithmetic constant expressions.  */
-  if (!maybe_const)
+  如果 (!maybe_const)
     arith_const_expr = false;
-  else if (!INTEGRAL_TYPE_P (TREE_TYPE (inside_init))
+  否则 如果 (!INTEGRAL_TYPE_P (TREE_TYPE (inside_init))
 	   && TREE_CODE (TREE_TYPE (inside_init)) != REAL_TYPE
 	   && TREE_CODE (TREE_TYPE (inside_init)) != COMPLEX_TYPE)
     arith_const_expr = false;
-  else if (TREE_CODE (inside_init) != INTEGER_CST
+  否则 如果 (TREE_CODE (inside_init) != INTEGER_CST
 	   && TREE_CODE (inside_init) != REAL_CST
 	   && TREE_CODE (inside_init) != COMPLEX_CST
 	   && TREE_CODE (inside_init) != RAW_DATA_CST)
     arith_const_expr = false;
-  else if (TREE_OVERFLOW (inside_init))
+  否则 如果 (TREE_OVERFLOW (inside_init))
     arith_const_expr = false;
 
   /* Initialization of an array of chars from a string constant
      optionally enclosed in braces.  */
 
-  if (code == ARRAY_TYPE && inside_init
+  如果 (code == ARRAY_TYPE && inside_init
       && TREE_CODE (inside_init) == STRING_CST)
     {
       tree typ1
@@ -9981,7 +9981,7 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
       bool char16_array = comptypes (typ1, char16_type_node);
       bool char32_array = comptypes (typ1, char32_type_node);
 
-      if (char_array || wchar_array || char16_array || char32_array)
+      如果 (char_array || wchar_array || char16_array || char32_array)
 	{
 	  struct c_expr expr;
 	  tree typ2 = TYPE_MAIN_VARIANT (TREE_TYPE (TREE_TYPE (inside_init)));
@@ -9992,31 +9992,31 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 	  expr.m_decimal = 0;
 	  maybe_warn_string_init (init_loc, type, expr);
 
-	  if (flexible_array_member_type_p (type))
+	  如果 (flexible_array_member_type_p (type))
 	    pedwarn_init (init_loc, OPT_Wpedantic,
 			  "initialization of a flexible array member");
 
-	  if (comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (inside_init)),
+	  如果 (comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (inside_init)),
 			 TYPE_MAIN_VARIANT (type)))
-	    return inside_init;
+	    返回 inside_init;
 
-	  if (char_array)
+	  如果 (char_array)
 	    {
-	      if (typ2 != char_type_node && typ2 != char8_type_node)
+	      如果 (typ2 != char_type_node && typ2 != char8_type_node)
 		incompat_string_cst = true;
 	    }
-	  else if (!comptypes (typ1, typ2))
+	  否则 如果 (!comptypes (typ1, typ2))
 	    incompat_string_cst = true;
 
-          if (incompat_string_cst)
+          如果 (incompat_string_cst)
             {
 	      error_init (init_loc, "cannot initialize array of %qT from "
 			  "a string literal with type array of %qT",
 			  typ1, typ2);
-	      return error_mark_node;
+	      返回 error_mark_node;
             }
 
-	  if (require_constexpr
+	  如果 (require_constexpr
 	      && TYPE_UNSIGNED (typ1) != TYPE_UNSIGNED (typ2))
 	    {
 	      /* Check if all characters of the string can be
@@ -10026,8 +10026,8 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 	      const unsigned char *p =
 		(const unsigned char *) TREE_STRING_POINTER (inside_init);
 	      gcc_assert (CHAR_TYPE_SIZE == 8 && CHAR_BIT == 8);
-	      for (unsigned i = 0; i < len; i++)
-		if (p[i] > 127)
+	      为 (unsigned i = 0; i < len; i++)
+		如果 (p[i] > 127)
 		  {
 		    error_init (init_loc, "%<constexpr%> initializer not "
 				"representable in type of object");
@@ -10035,13 +10035,13 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 		  }
 	    }
 
-	  if (TYPE_DOMAIN (type) != NULL_TREE
+	  如果 (TYPE_DOMAIN (type) != NULL_TREE
 	      && TYPE_SIZE (type) != NULL_TREE
 	      && TREE_CODE (TYPE_SIZE (type)) == INTEGER_CST)
 	    {
 	      unsigned HOST_WIDE_INT len = TREE_STRING_LENGTH (inside_init);
 
-	      if (compare_tree_int (TYPE_SIZE_UNIT (type), len) < 0)
+	      如果 (compare_tree_int (TYPE_SIZE_UNIT (type), len) < 0)
 		{
 		  unsigned HOST_WIDE_INT avail
 		    = tree_to_uhwi (TYPE_SIZE_UNIT (type));
@@ -10054,17 +10054,17 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 		  /* Subtract the size of a single (possibly wide) character
 		     because it may be ok to ignore the terminating NUL char
 		     that is counted in the length of the constant.  */
-		  if (len - unit > avail)
+		  如果 (len - unit > avail)
 		    pedwarn_init (init_loc, 0,
 				  "initializer-string for array of %qT "
 				  "is too long (%wu chars into %wu "
 				  "available)", typ1, len, avail);
-		  else if (warn_cxx_compat)
+		  否则 如果 (warn_cxx_compat)
 		    warning_at (init_loc, OPT_Wc___compat,
 				"initializer-string for array of %qT "
 				"is too long for C++ (%wu chars into %wu "
 				"available)", typ1, len, avail);
-		  else if (warn_unterminated_string_initialization
+		  否则 如果 (warn_unterminated_string_initialization
 			   && get_attr_nonstring_decl (decl) == NULL_TREE)
 		    warning_at (init_loc,
 				OPT_Wunterminated_string_initialization,
@@ -10076,30 +10076,30 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 	    }
 
 	  TREE_TYPE (inside_init) = type;
-	  return inside_init;
+	  返回 inside_init;
 	}
-      else if (INTEGRAL_TYPE_P (typ1))
+      否则 如果 (INTEGRAL_TYPE_P (typ1))
 	{
 	  error_init (init_loc, "array of inappropriate type initialized "
 		      "from string constant");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
     }
 
   /* Build a VECTOR_CST from a *constant* vector constructor.  If the
      vector constructor is not constant (e.g. {1,2,3,foo()}) then punt
      below and handle as a constructor.  */
-  if (code == VECTOR_TYPE
+  如果 (code == VECTOR_TYPE
       && VECTOR_TYPE_P (TREE_TYPE (inside_init))
       && vector_types_convertible_p (TREE_TYPE (inside_init), type, true)
       && TREE_CONSTANT (inside_init))
     {
-      if (TREE_CODE (inside_init) == VECTOR_CST
+      如果 (TREE_CODE (inside_init) == VECTOR_CST
 	  && comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (inside_init)),
 			TYPE_MAIN_VARIANT (type)))
-	return inside_init;
+	返回 inside_init;
 
-      if (TREE_CODE (inside_init) == CONSTRUCTOR)
+      如果 (TREE_CODE (inside_init) == CONSTRUCTOR)
 	{
 	  unsigned HOST_WIDE_INT ix;
 	  tree value;
@@ -10108,25 +10108,25 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 	  /* Iterate through elements and check if all constructor
 	     elements are *_CSTs.  */
 	  FOR_EACH_CONSTRUCTOR_VALUE (CONSTRUCTOR_ELTS (inside_init), ix, value)
-	    if (!CONSTANT_CLASS_P (value))
+	    如果 (!CONSTANT_CLASS_P (value))
 	      {
 		constant_p = false;
 		break;
 	      }
 
-	  if (constant_p)
-	    return build_vector_from_ctor (type,
+	  如果 (constant_p)
+	    返回 build_vector_from_ctor (type,
 					   CONSTRUCTOR_ELTS (inside_init));
 	}
     }
 
-  if (warn_sequence_point)
+  如果 (warn_sequence_point)
     verify_sequence_points (inside_init);
 
   /* Any type can be initialized
      from an expression of the same type, optionally with braces.  */
 
-  if (inside_init && TREE_TYPE (inside_init) != NULL_TREE
+  如果 (inside_init && TREE_TYPE (inside_init) != NULL_TREE
       && (comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (inside_init)),
 		     TYPE_MAIN_VARIANT (type))
 	  || (code == ARRAY_TYPE
@@ -10138,125 +10138,125 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 	      && comptypes (TREE_TYPE (TREE_TYPE (inside_init)),
 			    TREE_TYPE (type)))))
     {
-      if (code == POINTER_TYPE)
+      如果 (code == POINTER_TYPE)
 	{
-	  if (TREE_CODE (TREE_TYPE (inside_init)) == ARRAY_TYPE)
+	  如果 (TREE_CODE (TREE_TYPE (inside_init)) == ARRAY_TYPE)
 	    {
-	      if (TREE_CODE (inside_init) == STRING_CST
+	      如果 (TREE_CODE (inside_init) == STRING_CST
 		  || TREE_CODE (inside_init) == COMPOUND_LITERAL_EXPR)
 		inside_init = array_to_pointer_conversion
 		  (init_loc, inside_init);
-	      else
+	      否则
 		{
 		  error_init (init_loc, "invalid use of non-lvalue array");
-		  return error_mark_node;
+		  返回 error_mark_node;
 		}
 	    }
 	}
 
-      if (code == VECTOR_TYPE || c_hardbool_type_attr (type))
+      如果 (code == VECTOR_TYPE || c_hardbool_type_attr (type))
 	/* Although the types are compatible, we may require a
 	   conversion.  */
 	inside_init = convert (type, inside_init);
 
-      if ((code == RECORD_TYPE || code == UNION_TYPE)
+      如果 ((code == RECORD_TYPE || code == UNION_TYPE)
 	  && !comptypes (TYPE_MAIN_VARIANT (type), TYPE_MAIN_VARIANT (TREE_TYPE (inside_init))))
 	{
 	  error_init (init_loc, "invalid initializer");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
 
-      if (require_constant
+      如果 (require_constant
 	  && TREE_CODE (inside_init) == COMPOUND_LITERAL_EXPR)
 	{
 	  /* As an extension, allow initializing objects with static storage
 	     duration with compound literals (which are then treated just as
 	     the brace enclosed list they contain).  Also allow this for
 	     vectors, as we can only assign them with compound literals.  */
-	  if (flag_isoc99 && code != VECTOR_TYPE)
+	  如果 (flag_isoc99 && code != VECTOR_TYPE)
 	    pedwarn_init (init_loc, OPT_Wpedantic, "initializer element "
 			  "is not constant");
 	  tree decl = COMPOUND_LITERAL_EXPR_DECL (inside_init);
 	  inside_init = DECL_INITIAL (decl);
 	}
 
-      if (code == ARRAY_TYPE && TREE_CODE (inside_init) != STRING_CST
+      如果 (code == ARRAY_TYPE && TREE_CODE (inside_init) != STRING_CST
 	  && TREE_CODE (inside_init) != CONSTRUCTOR)
 	{
 	  error_init (init_loc, "array initialized from non-constant array "
 		      "expression");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
 
       /* Compound expressions can only occur here if -Wpedantic or
 	 -pedantic-errors is specified.  In the later case, we always want
 	 an error.  In the former case, we simply want a warning.  */
-      if (require_constant && pedantic
+      如果 (require_constant && pedantic
 	  && TREE_CODE (inside_init) == COMPOUND_EXPR)
 	{
 	  inside_init
 	    = valid_compound_expr_initializer (inside_init,
 					       TREE_TYPE (inside_init));
-	  if (inside_init == error_mark_node)
+	  如果 (inside_init == error_mark_node)
 	    error_init (init_loc, "initializer element is not constant");
-	  else
+	  否则
 	    pedwarn_init (init_loc, OPT_Wpedantic,
 			  "initializer element is not constant");
-	  if (flag_pedantic_errors)
+	  如果 (flag_pedantic_errors)
 	    inside_init = error_mark_node;
 	}
-      else if (require_constant
+      否则 如果 (require_constant
 	       && !initializer_constant_valid_p (inside_init,
 						 TREE_TYPE (inside_init)))
 	{
 	  error_init (init_loc, "initializer element is not constant");
 	  inside_init = error_mark_node;
 	}
-      else if (require_constant && !maybe_const)
+      否则 如果 (require_constant && !maybe_const)
 	pedwarn_init (init_loc, OPT_Wpedantic,
 		      "initializer element is not a constant expression");
-      else if (require_constexpr)
+      否则 如果 (require_constexpr)
 	check_constexpr_init (init_loc, type, inside_init,
 			      int_const_expr, arith_const_expr);
 
       /* Added to enable additional -Wsuggest-attribute=format warnings.  */
-      if (TREE_CODE (TREE_TYPE (inside_init)) == POINTER_TYPE)
+      如果 (TREE_CODE (TREE_TYPE (inside_init)) == POINTER_TYPE)
 	inside_init = convert_for_assignment (init_loc, UNKNOWN_LOCATION,
 					      type, inside_init, origtype,
 					      (require_constant
 					       ? ic_init_const
 					       : ic_init), null_pointer_constant,
 					      NULL_TREE, NULL_TREE, 0);
-      if (TREE_CODE (inside_init) == RAW_DATA_CST
+      如果 (TREE_CODE (inside_init) == RAW_DATA_CST
 	  && c_inhibit_evaluation_warnings == 0
 	  && warn_conversion
 	  && !TYPE_UNSIGNED (type)
 	  && TYPE_PRECISION (type) == CHAR_BIT)
-	for (unsigned int i = 0;
+	为 (unsigned 整数 i = 0;
 	     i < (unsigned) RAW_DATA_LENGTH (inside_init); ++i)
-	  if (RAW_DATA_SCHAR_ELT (inside_init, i) < 0)
+	  如果 (RAW_DATA_SCHAR_ELT (inside_init, i) < 0)
 	    warning_at (init_loc, OPT_Wconversion,
 			"conversion from %qT to %qT changes value from "
 			"%qd to %qd",
 			integer_type_node, type,
 			RAW_DATA_UCHAR_ELT (inside_init, i),
 			RAW_DATA_SCHAR_ELT (inside_init, i));
-      return inside_init;
+      返回 inside_init;
     }
 
   /* Handle scalar types, including conversions.  */
 
-  if (code == INTEGER_TYPE || code == REAL_TYPE || code == FIXED_POINT_TYPE
+  如果 (code == INTEGER_TYPE || code == REAL_TYPE || code == FIXED_POINT_TYPE
       || code == POINTER_TYPE || code == ENUMERAL_TYPE || code == BOOLEAN_TYPE
       || code == COMPLEX_TYPE || code == VECTOR_TYPE || code == NULLPTR_TYPE
       || code == BITINT_TYPE)
     {
       tree unconverted_init = inside_init;
-      if (TREE_CODE (TREE_TYPE (init)) == ARRAY_TYPE
+      如果 (TREE_CODE (TREE_TYPE (init)) == ARRAY_TYPE
 	  && (TREE_CODE (init) == STRING_CST
 	      || TREE_CODE (init) == COMPOUND_LITERAL_EXPR))
 	inside_init = init = array_to_pointer_conversion (init_loc, init);
-      if (semantic_type)
+      如果 (semantic_type)
 	inside_init = build1 (EXCESS_PRECISION_EXPR, semantic_type,
 			      inside_init);
       inside_init
@@ -10267,14 +10267,14 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 				  0);
 
       /* Check to see if we have already given an error message.  */
-      if (inside_init == error_mark_node)
+      如果 (inside_init == error_mark_node)
 	;
-      else if (require_constant && !TREE_CONSTANT (inside_init))
+      否则 如果 (require_constant && !TREE_CONSTANT (inside_init))
 	{
 	  error_init (init_loc, "initializer element is not constant");
 	  inside_init = error_mark_node;
 	}
-      else if (require_constant
+      否则 如果 (require_constant
 	       && !initializer_constant_valid_p (inside_init,
 						 TREE_TYPE (inside_init)))
 	{
@@ -10282,28 +10282,28 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 		      "load time");
 	  inside_init = error_mark_node;
 	}
-      else if (require_constant && !maybe_const)
+      否则 如果 (require_constant && !maybe_const)
 	pedwarn_init (init_loc, OPT_Wpedantic,
 		      "initializer element is not a constant expression");
-      else if (require_constexpr)
+      否则 如果 (require_constexpr)
 	check_constexpr_init (init_loc, type, unconverted_init,
 			      int_const_expr, arith_const_expr);
 
-      return inside_init;
+      返回 inside_init;
     }
 
   /* Come here only for records and arrays.  */
 
-  if (COMPLETE_TYPE_P (type) && TREE_CODE (TYPE_SIZE (type)) != INTEGER_CST)
+  如果 (COMPLETE_TYPE_P (type) && TREE_CODE (TYPE_SIZE (type)) != INTEGER_CST)
     {
       error_init (init_loc,
 		  "variable-sized object may not be initialized except "
 		  "with an empty initializer");
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
   error_init (init_loc, "invalid initializer");
-  return error_mark_node;
+  返回 error_mark_node;
 }
 
 /* Handle initializers that use braces.  */
@@ -10341,23 +10341,23 @@ static vec<constructor_elt, va_gc> *constructor_elements;
 
 /* 1 if constructor should be incrementally stored into a constructor chain,
    0 if all the elements should be kept in AVL tree.  */
-static int constructor_incremental;
+static 整数 constructor_incremental;
 
 /* 1 if so far this constructor's elements are all compile-time constants.  */
-static int constructor_constant;
+static 整数 constructor_constant;
 
 /* 1 if so far this constructor's elements are all valid address constants.  */
-static int constructor_simple;
+static 整数 constructor_simple;
 
 /* 1 if this constructor has an element that cannot be part of a
    constant expression.  */
-static int constructor_nonconst;
+static 整数 constructor_nonconst;
 
 /* 1 if this constructor is erroneous so far.  */
-static int constructor_erroneous;
+static 整数 constructor_erroneous;
 
 /* 1 if this constructor is the universal zero initializer { 0 }.  */
-static int constructor_zeroinit;
+static 整数 constructor_zeroinit;
 
 /* 1 if this constructor should have padding bits zeroed (C23 {}.  */
 static bool constructor_zero_padding_bits;
@@ -10373,7 +10373,7 @@ struct init_node
 {
   struct init_node *left, *right;
   struct init_node *parent;
-  int balance;
+  整数 balance;
   tree purpose;
   tree value;
   tree origtype;
@@ -10387,7 +10387,7 @@ struct init_node
 static struct init_node *constructor_pending_elts;
 
 /* The SPELLING_DEPTH of this constructor.  */
-static int constructor_depth;
+static 整数 constructor_depth;
 
 /* DECL node for which an initializer is being read.
    0 means we are reading a constructor expression
@@ -10395,13 +10395,13 @@ static int constructor_depth;
 static tree constructor_decl;
 
 /* Nonzero if there were any member designators in this initializer.  */
-static int constructor_designated;
+static 整数 constructor_designated;
 
 /* Nesting depth of designator list.  */
-static int designator_depth;
+static 整数 designator_depth;
 
 /* Nonzero if there were diagnosed errors in this designator list.  */
-static int designator_erroneous;
+static 整数 designator_erroneous;
 
 
 /* This stack has a level for each implicit or explicit level of
@@ -10422,8 +10422,8 @@ struct constructor_stack
   tree bit_index;
   vec<constructor_elt, va_gc> *elements;
   struct init_node *pending_elts;
-  int offset;
-  int depth;
+  整数 offset;
+  整数 depth;
   /* If value nonzero, this value should replace the entire
      constructor at this level.  */
   struct c_expr replacement_value;
@@ -10438,7 +10438,7 @@ struct constructor_stack
   char designated;
   bool zero_padding_bits;
   bool braced_scalar;
-  int designator_depth;
+  整数 designator_depth;
 };
 
 static struct constructor_stack *constructor_stack;
@@ -10471,7 +10471,7 @@ struct initializer_stack
   vec<constructor_elt, va_gc> *elements;
   struct spelling *spelling;
   struct spelling *spelling_base;
-  int spelling_size;
+  整数 spelling_size;
   char require_constant_value;
   char require_constant_elements;
   char require_constexpr_value;
@@ -10511,7 +10511,7 @@ start_init (tree decl, tree asmspec_tree ATTRIBUTE_UNUSED,
 
   require_constant_value = init_require_constant;
   require_constexpr_value = init_require_constexpr;
-  if (decl != NULL_TREE && decl != error_mark_node)
+  如果 (decl != NULL_TREE && decl != error_mark_node)
     {
       require_constant_elements
 	= ((init_require_constant || (pedantic && !flag_isoc99))
@@ -10520,7 +10520,7 @@ start_init (tree decl, tree asmspec_tree ATTRIBUTE_UNUSED,
 	   && AGGREGATE_TYPE_P (TREE_TYPE (decl)));
       locus = identifier_to_locale (IDENTIFIER_POINTER (DECL_NAME (decl)));
     }
-  else
+  否则
     {
       require_constant_elements = false;
       locus = _("(anonymous)");
@@ -10535,7 +10535,7 @@ start_init (tree decl, tree asmspec_tree ATTRIBUTE_UNUSED,
   spelling_size = 0;
   RESTORE_SPELLING_DEPTH (0);
 
-  if (locus)
+  如果 (locus)
     push_string (locus);
 }
 
@@ -10545,7 +10545,7 @@ finish_init (void)
   struct initializer_stack *p = initializer_stack;
 
   /* Free the whole constructor stack of this initializer.  */
-  while (constructor_stack)
+  当 (constructor_stack)
     {
       struct constructor_stack *q = constructor_stack;
       constructor_stack = q->next;
@@ -10584,10 +10584,10 @@ really_start_incremental_init (tree type)
 {
   struct constructor_stack *p = XNEW (struct constructor_stack);
 
-  if (type == NULL_TREE)
+  如果 (type == NULL_TREE)
     type = TREE_TYPE (constructor_decl);
 
-  if (VECTOR_TYPE_P (type)
+  如果 (VECTOR_TYPE_P (type)
       && TYPE_VECTOR_OPAQUE (type))
     error ("opaque vector types cannot be initialized");
 
@@ -10634,26 +10634,26 @@ really_start_incremental_init (tree type)
   designator_depth = 0;
   designator_erroneous = 0;
 
-  if (RECORD_OR_UNION_TYPE_P (constructor_type))
+  如果 (RECORD_OR_UNION_TYPE_P (constructor_type))
     {
       constructor_fields = TYPE_FIELDS (constructor_type);
       /* Skip any nameless bit fields at the beginning.  */
-      while (constructor_fields != NULL_TREE
+      当 (constructor_fields != NULL_TREE
 	     && DECL_UNNAMED_BIT_FIELD (constructor_fields))
 	constructor_fields = DECL_CHAIN (constructor_fields);
 
       constructor_unfilled_fields = constructor_fields;
       constructor_bit_index = bitsize_zero_node;
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  否则 如果 (TREE_CODE (constructor_type) == ARRAY_TYPE)
     {
-      if (TYPE_DOMAIN (constructor_type))
+      如果 (TYPE_DOMAIN (constructor_type))
 	{
 	  constructor_max_index
 	    = TYPE_MAX_VALUE (TYPE_DOMAIN (constructor_type));
 
 	  /* Detect non-empty initializations of zero-length arrays.  */
-	  if (constructor_max_index == NULL_TREE
+	  如果 (constructor_max_index == NULL_TREE
 	      && TYPE_SIZE (constructor_type))
 	    constructor_max_index = integer_minus_one_node;
 
@@ -10661,7 +10661,7 @@ really_start_incremental_init (tree type)
 	     to initialize VLAs with a nonempty initializer will cause a
 	     proper error; avoid tree checking errors as well by setting a
 	     safe value.  */
-	  if (constructor_max_index
+	  如果 (constructor_max_index
 	      && TREE_CODE (constructor_max_index) != INTEGER_CST)
 	    constructor_max_index = integer_minus_one_node;
 
@@ -10669,7 +10669,7 @@ really_start_incremental_init (tree type)
 	    = convert (bitsizetype,
 		       TYPE_MIN_VALUE (TYPE_DOMAIN (constructor_type)));
 	}
-      else
+      否则
 	{
 	  constructor_index = bitsize_zero_node;
 	  constructor_max_index = NULL_TREE;
@@ -10677,7 +10677,7 @@ really_start_incremental_init (tree type)
 
       constructor_unfilled_index = constructor_index;
     }
-  else if (gnu_vector_type_p (constructor_type))
+  否则 如果 (gnu_vector_type_p (constructor_type))
     {
       /* Vectors are like simple fixed-size arrays.  */
       constructor_max_index =
@@ -10685,7 +10685,7 @@ really_start_incremental_init (tree type)
       constructor_index = bitsize_zero_node;
       constructor_unfilled_index = constructor_index;
     }
-  else
+  否则
     {
       /* Handle the case of int x = {5}; */
       constructor_fields = constructor_type;
@@ -10701,15 +10701,15 @@ extern location_t last_init_list_comma;
 void
 finish_implicit_inits (location_t loc, struct obstack *braced_init_obstack)
 {
-  while (constructor_stack->implicit)
+  当 (constructor_stack->implicit)
     {
-      if (RECORD_OR_UNION_TYPE_P (constructor_type)
+      如果 (RECORD_OR_UNION_TYPE_P (constructor_type)
 	  && constructor_fields == NULL_TREE)
 	process_init_element (input_location,
 			      pop_init_level (loc, 1, braced_init_obstack,
 					      last_init_list_comma),
 			      true, braced_init_obstack);
-      else if (TREE_CODE (constructor_type) == ARRAY_TYPE
+      否则 如果 (TREE_CODE (constructor_type) == ARRAY_TYPE
 	       && constructor_max_index
 	       && tree_int_cst_lt (constructor_max_index,
 				   constructor_index))
@@ -10717,7 +10717,7 @@ finish_implicit_inits (location_t loc, struct obstack *braced_init_obstack)
 			      pop_init_level (loc, 1, braced_init_obstack,
 					      last_init_list_comma),
 			      true, braced_init_obstack);
-      else
+      否则
 	break;
     }
 }
@@ -10728,7 +10728,7 @@ finish_implicit_inits (location_t loc, struct obstack *braced_init_obstack)
    IMPLICIT is 1 (or 2 if the push is because of designator list).  */
 
 void
-push_init_level (location_t loc, int implicit,
+push_init_level (location_t loc, 整数 implicit,
 		 struct obstack *braced_init_obstack)
 {
   struct constructor_stack *p;
@@ -10736,11 +10736,11 @@ push_init_level (location_t loc, int implicit,
 
   /* Unless this is an explicit brace, we need to preserve previous
      content if any.  */
-  if (implicit)
+  如果 (implicit)
     {
-      if (RECORD_OR_UNION_TYPE_P (constructor_type) && constructor_fields)
+      如果 (RECORD_OR_UNION_TYPE_P (constructor_type) && constructor_fields)
 	value = find_init_member (constructor_fields, braced_init_obstack);
-      else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+      否则 如果 (TREE_CODE (constructor_type) == ARRAY_TYPE)
 	value = find_init_member (constructor_index, braced_init_obstack);
     }
 
@@ -10787,7 +10787,7 @@ push_init_level (location_t loc, int implicit,
   constructor_zero_padding_bits = p->zero_padding_bits;
   constructor_braced_scalar = false;
   constructor_pending_elts = 0;
-  if (!implicit)
+  如果 (!implicit)
     {
       p->range_stack = constructor_range_stack;
       constructor_range_stack = 0;
@@ -10797,68 +10797,68 @@ push_init_level (location_t loc, int implicit,
 
   /* Don't die if an entire brace-pair level is superfluous
      in the containing level.  */
-  if (constructor_type == NULL_TREE)
+  如果 (constructor_type == NULL_TREE)
     ;
-  else if (RECORD_OR_UNION_TYPE_P (constructor_type))
+  否则 如果 (RECORD_OR_UNION_TYPE_P (constructor_type))
     {
       /* Don't die if there are extra init elts at the end.  */
-      if (constructor_fields == NULL_TREE)
+      如果 (constructor_fields == NULL_TREE)
 	constructor_type = NULL_TREE;
-      else
+      否则
 	{
 	  constructor_type = TREE_TYPE (constructor_fields);
 	  push_member_name (constructor_fields);
 	  constructor_depth++;
 	}
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  否则 如果 (TREE_CODE (constructor_type) == ARRAY_TYPE)
     {
       constructor_type = TREE_TYPE (constructor_type);
       push_array_bounds (tree_to_uhwi (constructor_index));
       constructor_depth++;
     }
 
-  if (constructor_type == NULL_TREE)
+  如果 (constructor_type == NULL_TREE)
     {
       error_init (loc, "extra brace group at end of initializer");
       constructor_fields = NULL_TREE;
       constructor_unfilled_fields = NULL_TREE;
-      return;
+      返回;
     }
 
-  if (value && TREE_CODE (value) == CONSTRUCTOR)
+  如果 (value && TREE_CODE (value) == CONSTRUCTOR)
     {
       constructor_constant = TREE_CONSTANT (value);
       constructor_simple = TREE_STATIC (value);
       constructor_nonconst = CONSTRUCTOR_NON_CONST (value);
       constructor_elements = CONSTRUCTOR_ELTS (value);
       constructor_zero_padding_bits |= CONSTRUCTOR_ZERO_PADDING_BITS (value);
-      if (!vec_safe_is_empty (constructor_elements)
+      如果 (!vec_safe_is_empty (constructor_elements)
 	  && (TREE_CODE (constructor_type) == RECORD_TYPE
 	      || TREE_CODE (constructor_type) == ARRAY_TYPE))
 	set_nonincremental_init (braced_init_obstack);
     }
 
-  if (implicit == 1)
+  如果 (implicit == 1)
     {
       found_missing_braces = 1;
-      if (initializer_stack->missing_brace_richloc)
+      如果 (initializer_stack->missing_brace_richloc)
 	initializer_stack->missing_brace_richloc->add_fixit_insert_before
 	  (loc, "{");
     }
 
-  if (RECORD_OR_UNION_TYPE_P (constructor_type))
+  如果 (RECORD_OR_UNION_TYPE_P (constructor_type))
     {
       constructor_fields = TYPE_FIELDS (constructor_type);
       /* Skip any nameless bit fields at the beginning.  */
-      while (constructor_fields != NULL_TREE
+      当 (constructor_fields != NULL_TREE
 	     && DECL_UNNAMED_BIT_FIELD (constructor_fields))
 	constructor_fields = DECL_CHAIN (constructor_fields);
 
       constructor_unfilled_fields = constructor_fields;
       constructor_bit_index = bitsize_zero_node;
     }
-  else if (gnu_vector_type_p (constructor_type))
+  否则 如果 (gnu_vector_type_p (constructor_type))
     {
       /* Vectors are like simple fixed-size arrays.  */
       constructor_max_index =
@@ -10866,22 +10866,22 @@ push_init_level (location_t loc, int implicit,
       constructor_index = bitsize_int (0);
       constructor_unfilled_index = constructor_index;
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  否则 如果 (TREE_CODE (constructor_type) == ARRAY_TYPE)
     {
-      if (TYPE_DOMAIN (constructor_type))
+      如果 (TYPE_DOMAIN (constructor_type))
 	{
 	  constructor_max_index
 	    = TYPE_MAX_VALUE (TYPE_DOMAIN (constructor_type));
 
 	  /* Detect non-empty initializations of zero-length arrays.  */
-	  if (constructor_max_index == NULL_TREE
+	  如果 (constructor_max_index == NULL_TREE
 	      && TYPE_SIZE (constructor_type))
 	    constructor_max_index = integer_minus_one_node;
 
 	  /* constructor_max_index needs to be an INTEGER_CST.  Attempts
 	     to initialize VLAs will cause a proper error; avoid tree
 	     checking errors as well by setting a safe value.  */
-	  if (constructor_max_index
+	  如果 (constructor_max_index
 	      && TREE_CODE (constructor_max_index) != INTEGER_CST)
 	    constructor_max_index = integer_minus_one_node;
 
@@ -10889,11 +10889,11 @@ push_init_level (location_t loc, int implicit,
 	    = convert (bitsizetype,
 		       TYPE_MIN_VALUE (TYPE_DOMAIN (constructor_type)));
 	}
-      else
+      否则
 	constructor_index = bitsize_zero_node;
 
       constructor_unfilled_index = constructor_index;
-      if (value && TREE_CODE (value) == STRING_CST)
+      如果 (value && TREE_CODE (value) == STRING_CST)
 	{
 	  /* We need to split the char/wchar array into individual
 	     characters, so that we don't have to special case it
@@ -10901,14 +10901,14 @@ push_init_level (location_t loc, int implicit,
 	  set_nonincremental_init_from_string (value, braced_init_obstack);
 	}
     }
-  else
+  否则
     {
-      if (constructor_type != error_mark_node)
+      如果 (constructor_type != error_mark_node)
 	{
-	  if (p->braced_scalar)
+	  如果 (p->braced_scalar)
 	    permerror_init (input_location, 0,
 			    "braces around scalar initializer");
-	  else
+	  否则
 	    warning_init (input_location, 0,
 			  "braces around scalar initializer");
 	  constructor_braced_scalar = true;
@@ -10930,7 +10930,7 @@ push_init_level (location_t loc, int implicit,
    Otherwise, return a CONSTRUCTOR expression as the value.  */
 
 struct c_expr
-pop_init_level (location_t loc, int implicit,
+pop_init_level (location_t loc, 整数 implicit,
 		struct obstack *braced_init_obstack,
 		location_t insert_before)
 {
@@ -10941,19 +10941,19 @@ pop_init_level (location_t loc, int implicit,
   ret.original_type = NULL;
   ret.m_decimal = 0;
 
-  if (implicit == 0)
+  如果 (implicit == 0)
     {
       /* When we come to an explicit close brace,
 	 pop any inner levels that didn't have explicit braces.  */
-      while (constructor_stack->implicit)
+      当 (constructor_stack->implicit)
 	process_init_element (input_location,
 			      pop_init_level (loc, 1, braced_init_obstack,
 					      insert_before),
 			      true, braced_init_obstack);
       gcc_assert (!constructor_range_stack);
     }
-  else
-    if (initializer_stack->missing_brace_richloc)
+  否则
+    如果 (initializer_stack->missing_brace_richloc)
       initializer_stack->missing_brace_richloc->add_fixit_insert_before
 	(insert_before, "}");
 
@@ -10964,24 +10964,24 @@ pop_init_level (location_t loc, int implicit,
   p = constructor_stack;
 
   /* Error for initializing a flexible array member.  */
-  if (constructor_type && constructor_fields
+  如果 (constructor_type && constructor_fields
       && flexible_array_member_type_p (constructor_type))
     {
       /* Silently discard empty initializations.  The parser will
 	 already have pedwarned for empty brackets for C17 and earlier.  */
-      if (integer_zerop (constructor_unfilled_index))
+      如果 (integer_zerop (constructor_unfilled_index))
 	constructor_type = NULL_TREE;
-      if (constructor_type || flag_isoc23)
+      如果 (constructor_type || flag_isoc23)
 	{
 	  gcc_assert (!constructor_type || !TYPE_SIZE (constructor_type));
 
-	  if (constructor_depth <= 2)
+	  如果 (constructor_depth <= 2)
 	    pedwarn_init (loc, OPT_Wpedantic,
 			  "initialization of a flexible array member");
-	  else if (constructor_type)
+	  否则 如果 (constructor_type)
 	    error_init (loc, "initialization of flexible array member "
 			     "in a nested context");
-	  else
+	  否则
 	    pedwarn_init (loc, OPT_Wpedantic,
 			  "initialization of flexible array member "
 			  "in a nested context");
@@ -10989,7 +10989,7 @@ pop_init_level (location_t loc, int implicit,
 	  /* We have already issued an error message for the existence
 	     of a flexible array member not at the end of the structure.
 	     Discard the initializer so that we do not die later.  */
-	  if (constructor_type
+	  如果 (constructor_type
 	      && DECL_CHAIN (constructor_fields) != NULL_TREE
 	      && (!p->type || TREE_CODE (p->type) != UNION_TYPE))
 	    constructor_type = NULL_TREE;
@@ -11004,7 +11004,7 @@ pop_init_level (location_t loc, int implicit,
       break;
     case 1:
       /* This might be zeroinit as well.  */
-      if (integer_zerop ((*constructor_elements)[0].value))
+      如果 (integer_zerop ((*constructor_elements)[0].value))
 	constructor_zeroinit = 1;
       break;
     default:
@@ -11014,7 +11014,7 @@ pop_init_level (location_t loc, int implicit,
     }
 
   /* Warn when some structs are initialized with direct aggregation.  */
-  if (!implicit && found_missing_braces && warn_missing_braces
+  如果 (!implicit && found_missing_braces && warn_missing_braces
       && !constructor_zeroinit)
     {
       gcc_assert (initializer_stack->missing_brace_richloc);
@@ -11024,25 +11024,25 @@ pop_init_level (location_t loc, int implicit,
     }
 
   /* Warn when some struct elements are implicitly initialized to zero.  */
-  if (warn_missing_field_initializers
+  如果 (warn_missing_field_initializers
       && constructor_type
       && TREE_CODE (constructor_type) == RECORD_TYPE
       && constructor_unfilled_fields)
     {
 	/* Do not warn for flexible array members or zero-length arrays.  */
-	while (constructor_unfilled_fields
+	当 (constructor_unfilled_fields
 	       && (!DECL_SIZE (constructor_unfilled_fields)
 		   || integer_zerop (DECL_SIZE (constructor_unfilled_fields))))
 	  constructor_unfilled_fields = DECL_CHAIN (constructor_unfilled_fields);
 
-	if (constructor_unfilled_fields
+	如果 (constructor_unfilled_fields
 	    /* Do not warn if this level of the initializer uses member
 	       designators; it is likely to be deliberate.  */
 	    && !constructor_designated
 	    /* Do not warn about initializing with { 0 } or with { }.  */
 	    && !constructor_zeroinit)
 	  {
-	    if (warning_at (input_location, OPT_Wmissing_field_initializers,
+	    如果 (warning_at (input_location, OPT_Wmissing_field_initializers,
 			    "missing initializer for field %qD of %qT",
 			    constructor_unfilled_fields,
 			    constructor_type))
@@ -11052,67 +11052,67 @@ pop_init_level (location_t loc, int implicit,
     }
 
   /* Pad out the end of the structure.  */
-  if (p->replacement_value.value)
+  如果 (p->replacement_value.value)
     /* If this closes a superfluous brace pair,
        just pass out the element between them.  */
     ret = p->replacement_value;
-  else if (constructor_type == NULL_TREE)
+  否则 如果 (constructor_type == NULL_TREE)
     ;
-  else if (!RECORD_OR_UNION_TYPE_P (constructor_type)
+  否则 如果 (!RECORD_OR_UNION_TYPE_P (constructor_type)
 	   && TREE_CODE (constructor_type) != ARRAY_TYPE
 	   && !gnu_vector_type_p (constructor_type))
     {
       /* A nonincremental scalar initializer--just return
 	 the element, after verifying there is just one.
          Empty scalar initializers are supported in C23.  */
-      if (vec_safe_is_empty (constructor_elements))
+      如果 (vec_safe_is_empty (constructor_elements))
 	{
-	  if (constructor_erroneous || constructor_type == error_mark_node)
+	  如果 (constructor_erroneous || constructor_type == error_mark_node)
 	    ret.value = error_mark_node;
-	  else if (TREE_CODE (constructor_type) == FUNCTION_TYPE)
+	  否则 如果 (TREE_CODE (constructor_type) == FUNCTION_TYPE)
 	    {
 	      error_init (loc, "invalid initializer");
 	      ret.value = error_mark_node;
 	    }
-	  else if (TREE_CODE (constructor_type) == POINTER_TYPE)
+	  否则 如果 (TREE_CODE (constructor_type) == POINTER_TYPE)
 	    /* Ensure this is a null pointer constant in the case of a
 	       'constexpr' object initialized with {}.  */
 	    ret.value = build_zero_cst (ptr_type_node);
-	  else
+	  否则
 	    ret.value = build_zero_cst (constructor_type);
 	}
-      else if (vec_safe_length (constructor_elements) != 1)
+      否则 如果 (vec_safe_length (constructor_elements) != 1)
 	{
 	  error_init (loc, "extra elements in scalar initializer");
 	  ret.value = (*constructor_elements)[0].value;
 	}
-      else
+      否则
 	ret.value = (*constructor_elements)[0].value;
     }
-  else
+  否则
     {
-      if (constructor_erroneous)
+      如果 (constructor_erroneous)
 	ret.value = error_mark_node;
-      else
+      否则
 	{
 	  ret.value = build_constructor (constructor_type,
 					 constructor_elements);
-	  if (constructor_constant)
+	  如果 (constructor_constant)
 	    TREE_CONSTANT (ret.value) = 1;
-	  if (constructor_constant && constructor_simple)
+	  如果 (constructor_constant && constructor_simple)
 	    TREE_STATIC (ret.value) = 1;
-	  if (constructor_nonconst)
+	  如果 (constructor_nonconst)
 	    CONSTRUCTOR_NON_CONST (ret.value) = 1;
-	  if (constructor_zero_padding_bits)
+	  如果 (constructor_zero_padding_bits)
 	    CONSTRUCTOR_ZERO_PADDING_BITS (ret.value) = 1;
 	}
     }
 
-  if (ret.value && TREE_CODE (ret.value) != CONSTRUCTOR)
+  如果 (ret.value && TREE_CODE (ret.value) != CONSTRUCTOR)
     {
-      if (constructor_nonconst)
+      如果 (constructor_nonconst)
 	ret.original_code = C_MAYBE_CONST_EXPR;
-      else if (ret.original_code == C_MAYBE_CONST_EXPR)
+      否则 如果 (ret.original_code == C_MAYBE_CONST_EXPR)
 	ret.original_code = ERROR_MARK;
     }
 
@@ -11135,16 +11135,16 @@ pop_init_level (location_t loc, int implicit,
   designator_depth = p->designator_depth;
   constructor_pending_elts = p->pending_elts;
   constructor_depth = p->depth;
-  if (!p->implicit)
+  如果 (!p->implicit)
     constructor_range_stack = p->range_stack;
   RESTORE_SPELLING_DEPTH (constructor_depth);
 
   constructor_stack = p->next;
   XDELETE (p);
 
-  if (ret.value == NULL_TREE && constructor_stack == 0)
+  如果 (ret.value == NULL_TREE && constructor_stack == 0)
     ret.value = error_mark_node;
-  return ret;
+  返回 ret;
 }
 
 /* Common handling for both array range and field name designators.
@@ -11159,33 +11159,33 @@ set_designator (location_t loc, bool array,
 
   /* Don't die if an entire brace-pair level is superfluous
      in the containing level, or for an erroneous type.  */
-  if (constructor_type == NULL_TREE || constructor_type == error_mark_node)
-    return true;
+  如果 (constructor_type == NULL_TREE || constructor_type == error_mark_node)
+    返回 true;
 
   /* If there were errors in this designator list already, bail out
      silently.  */
-  if (designator_erroneous)
-    return true;
+  如果 (designator_erroneous)
+    返回 true;
 
   /* Likewise for an initializer for a variable-size type.  Those are
      diagnosed in the parser, except for empty initializer braces.  */
-  if (COMPLETE_TYPE_P (constructor_type)
+  如果 (COMPLETE_TYPE_P (constructor_type)
       && TREE_CODE (TYPE_SIZE (constructor_type)) != INTEGER_CST)
-    return true;
+    返回 true;
 
-  if (!designator_depth)
+  如果 (!designator_depth)
     {
       gcc_assert (!constructor_range_stack);
 
       /* Designator list starts at the level of closest explicit
 	 braces.  */
-      while (constructor_stack->implicit)
+      当 (constructor_stack->implicit)
 	process_init_element (input_location,
 			      pop_init_level (loc, 1, braced_init_obstack,
 					      last_init_list_comma),
 			      true, braced_init_obstack);
       constructor_designated = 1;
-      return false;
+      返回 false;
     }
 
   switch (TREE_CODE (constructor_type))
@@ -11193,7 +11193,7 @@ set_designator (location_t loc, bool array,
     case  RECORD_TYPE:
     case  UNION_TYPE:
       subtype = TREE_TYPE (constructor_fields);
-      if (subtype != error_mark_node)
+      如果 (subtype != error_mark_node)
 	subtype = TYPE_MAIN_VARIANT (subtype);
       break;
     case ARRAY_TYPE:
@@ -11204,21 +11204,21 @@ set_designator (location_t loc, bool array,
     }
 
   subcode = TREE_CODE (subtype);
-  if (array && subcode != ARRAY_TYPE)
+  如果 (array && subcode != ARRAY_TYPE)
     {
       error_init (loc, "array index in non-array initializer");
-      return true;
+      返回 true;
     }
-  else if (!array && subcode != RECORD_TYPE && subcode != UNION_TYPE)
+  否则 如果 (!array && subcode != RECORD_TYPE && subcode != UNION_TYPE)
     {
       error_init (loc, "field name not in record or union initializer");
-      return true;
+      返回 true;
     }
 
   constructor_designated = 1;
   finish_implicit_inits (loc, braced_init_obstack);
   push_init_level (loc, 2, braced_init_obstack);
-  return false;
+  返回 false;
 }
 
 /* If there are range designators in designator list, push a new designator
@@ -11240,7 +11240,7 @@ push_range_stack (tree range_end, struct obstack * braced_init_obstack)
   p->index = constructor_index;
   p->stack = constructor_stack;
   p->range_end = range_end;
-  if (constructor_range_stack)
+  如果 (constructor_range_stack)
     constructor_range_stack->next = p;
   constructor_range_stack = p;
 }
@@ -11253,72 +11253,72 @@ void
 set_init_index (location_t loc, tree first, tree last,
 		struct obstack *braced_init_obstack)
 {
-  if (set_designator (loc, true, braced_init_obstack))
-    return;
+  如果 (set_designator (loc, true, braced_init_obstack))
+    返回;
 
   designator_erroneous = 1;
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (first))
+  如果 (!INTEGRAL_TYPE_P (TREE_TYPE (first))
       || (last && !INTEGRAL_TYPE_P (TREE_TYPE (last))))
     {
       error_init (loc, "array index in initializer not of integer type");
-      return;
+      返回;
     }
 
-  if (TREE_CODE (first) != INTEGER_CST)
+  如果 (TREE_CODE (first) != INTEGER_CST)
     {
       first = c_fully_fold (first, false, NULL);
-      if (TREE_CODE (first) == INTEGER_CST)
+      如果 (TREE_CODE (first) == INTEGER_CST)
 	pedwarn_init (loc, OPT_Wpedantic,
 		      "array index in initializer is not "
 		      "an integer constant expression");
     }
 
-  if (last && TREE_CODE (last) != INTEGER_CST)
+  如果 (last && TREE_CODE (last) != INTEGER_CST)
     {
       last = c_fully_fold (last, false, NULL);
-      if (TREE_CODE (last) == INTEGER_CST)
+      如果 (TREE_CODE (last) == INTEGER_CST)
 	pedwarn_init (loc, OPT_Wpedantic,
 		      "array index in initializer is not "
 		      "an integer constant expression");
     }
 
-  if (TREE_CODE (first) != INTEGER_CST)
+  如果 (TREE_CODE (first) != INTEGER_CST)
     error_init (loc, "nonconstant array index in initializer");
-  else if (last != NULL_TREE && TREE_CODE (last) != INTEGER_CST)
+  否则 如果 (last != NULL_TREE && TREE_CODE (last) != INTEGER_CST)
     error_init (loc, "nonconstant array index in initializer");
-  else if (TREE_CODE (constructor_type) != ARRAY_TYPE)
+  否则 如果 (TREE_CODE (constructor_type) != ARRAY_TYPE)
     error_init (loc, "array index in non-array initializer");
-  else if (tree_int_cst_sgn (first) == -1)
+  否则 如果 (tree_int_cst_sgn (first) == -1)
     error_init (loc, "array index in initializer exceeds array bounds");
-  else if (constructor_max_index
+  否则 如果 (constructor_max_index
 	   && tree_int_cst_lt (constructor_max_index, first))
     error_init (loc, "array index in initializer exceeds array bounds");
-  else
+  否则
     {
       constant_expression_warning (first);
-      if (last)
+      如果 (last)
 	constant_expression_warning (last);
       constructor_index = convert (bitsizetype, first);
-      if (tree_int_cst_lt (constructor_index, first))
+      如果 (tree_int_cst_lt (constructor_index, first))
 	{
 	  constructor_index = copy_node (constructor_index);
 	  TREE_OVERFLOW (constructor_index) = 1;
 	}
 
-      if (last)
+      如果 (last)
 	{
-	  if (tree_int_cst_equal (first, last))
+	  如果 (tree_int_cst_equal (first, last))
 	    last = NULL_TREE;
-	  else if (tree_int_cst_lt (last, first))
+	  否则 如果 (tree_int_cst_lt (last, first))
 	    {
 	      error_init (loc, "empty index range in initializer");
 	      last = NULL_TREE;
 	    }
-	  else
+	  否则
 	    {
 	      last = convert (bitsizetype, last);
-	      if (constructor_max_index != NULL_TREE
+	      如果 (constructor_max_index != NULL_TREE
 		  && tree_int_cst_lt (constructor_max_index, last))
 		{
 		  error_init (loc, "array index range in initializer exceeds "
@@ -11330,7 +11330,7 @@ set_init_index (location_t loc, tree first, tree last,
 
       designator_depth++;
       designator_erroneous = 0;
-      if (constructor_range_stack || last)
+      如果 (constructor_range_stack || last)
 	push_range_stack (last, braced_init_obstack);
     }
 }
@@ -11343,23 +11343,23 @@ set_init_label (location_t loc, tree fieldname, location_t fieldname_loc,
 {
   tree field;
 
-  if (set_designator (loc, false, braced_init_obstack))
-    return;
+  如果 (set_designator (loc, false, braced_init_obstack))
+    返回;
 
   designator_erroneous = 1;
 
-  if (!RECORD_OR_UNION_TYPE_P (constructor_type))
+  如果 (!RECORD_OR_UNION_TYPE_P (constructor_type))
     {
       error_init (loc, "field name not in record or union initializer");
-      return;
+      返回;
     }
 
   field = lookup_field (constructor_type, fieldname);
 
-  if (field == NULL_TREE)
+  如果 (field == NULL_TREE)
     {
       tree guessed_id = lookup_field_fuzzy (constructor_type, fieldname);
-      if (guessed_id)
+      如果 (guessed_id)
 	{
 	  gcc_rich_location rich_loc (fieldname_loc);
 	  rich_loc.add_fixit_misspelled_id (fieldname_loc, guessed_id);
@@ -11367,26 +11367,26 @@ set_init_label (location_t loc, tree fieldname, location_t fieldname_loc,
 		    "%qT has no member named %qE; did you mean %qE?",
 		    constructor_type, fieldname, guessed_id);
 	}
-      else
+      否则
 	error_at (fieldname_loc, "%qT has no member named %qE",
 		  constructor_type, fieldname);
     }
-  else
+  否则
     do
       {
 	constructor_fields = TREE_VALUE (field);
 	designator_depth++;
 	designator_erroneous = 0;
-	if (constructor_range_stack)
+	如果 (constructor_range_stack)
 	  push_range_stack (NULL_TREE, braced_init_obstack);
 	field = TREE_CHAIN (field);
-	if (field)
+	如果 (field)
 	  {
-	    if (set_designator (loc, false, braced_init_obstack))
-	      return;
+	    如果 (set_designator (loc, false, braced_init_obstack))
+	      返回;
 	  }
       }
-    while (field != NULL_TREE);
+    当 (field != NULL_TREE);
 }
 
 /* Helper function for add_pending_init.  Find inorder successor of P
@@ -11395,20 +11395,20 @@ static struct init_node *
 init_node_successor (struct init_node *p)
 {
   struct init_node *r;
-  if (p->right)
+  如果 (p->right)
     {
       r = p->right;
-      while (r->left)
+      当 (r->left)
 	r = r->left;
-      return r;
+      返回 r;
     }
   r = p->parent;
-  while (r && p == r->right)
+  当 (r && p == r->right)
     {
       p = r;
       r = r->parent;
     }
-  return r;
+  返回 r;
 }
 
 /* Add a new initializer to the tree of pending initializers.  PURPOSE
@@ -11430,64 +11430,64 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
   q = &constructor_pending_elts;
   p = 0;
 
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  如果 (TREE_CODE (constructor_type) == ARRAY_TYPE)
     {
-      while (*q != 0)
+      当 (*q != 0)
 	{
 	  p = *q;
-	  if (tree_int_cst_lt (purpose, p->purpose))
+	  如果 (tree_int_cst_lt (purpose, p->purpose))
 	    q = &p->left;
-	  else if (tree_int_cst_lt (p->purpose, purpose))
+	  否则 如果 (tree_int_cst_lt (p->purpose, purpose))
 	    {
-	      if (TREE_CODE (p->value) != RAW_DATA_CST
+	      如果 (TREE_CODE (p->value) != RAW_DATA_CST
 		  || (p->right
 		      && tree_int_cst_le (p->right->purpose, purpose)))
 		q = &p->right;
-	      else
+	      否则
 		{
 		  widest_int pp = wi::to_widest (p->purpose);
 		  widest_int pw = wi::to_widest (purpose);
-		  if (pp + RAW_DATA_LENGTH (p->value) <= pw)
+		  如果 (pp + RAW_DATA_LENGTH (p->value) <= pw)
 		    q = &p->right;
-		  else
+		  否则
 		    {
 		      /* Override which should split the old RAW_DATA_CST
 			 into 2 or 3 pieces.  */
-		      if (!implicit && warn_override_init)
+		      如果 (!implicit && warn_override_init)
 			warning_init (loc, OPT_Woverride_init,
 				      "initialized field overwritten");
 		      unsigned HOST_WIDE_INT start = (pw - pp).to_uhwi ();
 		      unsigned HOST_WIDE_INT len = 1;
-		      if (TREE_CODE (value) == RAW_DATA_CST)
+		      如果 (TREE_CODE (value) == RAW_DATA_CST)
 			len = RAW_DATA_LENGTH (value);
 		      unsigned HOST_WIDE_INT end = 0;
 		      unsigned plen = RAW_DATA_LENGTH (p->value);
 		      gcc_checking_assert (start < plen && start);
-		      if (plen - start > len)
+		      如果 (plen - start > len)
 			end = plen - start - len;
 		      tree v = p->value;
 		      tree origtype = p->origtype;
-		      if (start == 1)
+		      如果 (start == 1)
 			p->value = build_int_cst (TREE_TYPE (v),
 						  RAW_DATA_UCHAR_ELT (v, 0));
-		      else
+		      否则
 			{
 			  p->value = v;
-			  if (end > 1)
+			  如果 (end > 1)
 			    v = copy_node (v);
 			  RAW_DATA_LENGTH (p->value) = start;
 			}
-		      if (end)
+		      如果 (end)
 			{
 			  tree epurpose
 			    = size_binop (PLUS_EXPR, purpose,
 					  bitsize_int (len));
-			  if (end > 1)
+			  如果 (end > 1)
 			    {
 			      RAW_DATA_LENGTH (v) -= plen - end;
 			      RAW_DATA_POINTER (v) += plen - end;
 			    }
-			  else
+			  否则
 			    v = build_int_cst (TREE_TYPE (v),
 					       RAW_DATA_UCHAR_ELT (v, plen
 								      - end));
@@ -11499,29 +11499,29 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 		    }
 		}
 	    }
-	  else
+	  否则
 	    {
-	      if (TREE_CODE (p->value) == RAW_DATA_CST
+	      如果 (TREE_CODE (p->value) == RAW_DATA_CST
 		  && (RAW_DATA_LENGTH (p->value)
 		      > (TREE_CODE (value) == RAW_DATA_CST
 			 ? RAW_DATA_LENGTH (value) : 1)))
 		{
 		  /* Override which should split the old RAW_DATA_CST
 		     into 2 pieces.  */
-		  if (!implicit && warn_override_init)
+		  如果 (!implicit && warn_override_init)
 		    warning_init (loc, OPT_Woverride_init,
 				  "initialized field overwritten");
 		  unsigned HOST_WIDE_INT len = 1;
-		  if (TREE_CODE (value) == RAW_DATA_CST)
+		  如果 (TREE_CODE (value) == RAW_DATA_CST)
 		    len = RAW_DATA_LENGTH (value);
-		  if ((unsigned) RAW_DATA_LENGTH (p->value) > len + 1)
+		  如果 ((unsigned) RAW_DATA_LENGTH (p->value) > len + 1)
 		    {
 		      RAW_DATA_LENGTH (p->value) -= len;
 		      RAW_DATA_POINTER (p->value) += len;
 		    }
-		  else
+		  否则
 		    {
-		      unsigned int l = RAW_DATA_LENGTH (p->value) - 1;
+		      unsigned 整数 l = RAW_DATA_LENGTH (p->value) - 1;
 		      p->value
 			= build_int_cst (TREE_TYPE (p->value),
 					 RAW_DATA_UCHAR_ELT (p->value, l));
@@ -11530,7 +11530,7 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 					   bitsize_int (len));
 		  continue;
 		}
-	      if (TREE_CODE (value) == RAW_DATA_CST)
+	      如果 (TREE_CODE (value) == RAW_DATA_CST)
 		{
 		handle_raw_data:
 		  /* RAW_DATA_CST value might overlap various further
@@ -11540,15 +11540,15 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 		    = wi::to_widest (purpose) + RAW_DATA_LENGTH (value);
 		  struct init_node *r = p, *last = NULL;
 		  bool override_init = warn_override_init;
-		  while ((r = init_node_successor (r))
+		  当 ((r = init_node_successor (r))
 			 && wi::to_widest (r->purpose) < w)
 		    {
 		      ++cnt;
-		      if (TREE_SIDE_EFFECTS (r->value))
+		      如果 (TREE_SIDE_EFFECTS (r->value))
 			warning_init (loc, OPT_Woverride_init_side_effects,
 				      "initialized field with side-effects "
 				      "overwritten");
-		      else if (override_init)
+		      否则 如果 (override_init)
 			{
 			  warning_init (loc, OPT_Woverride_init,
 					"initialized field overwritten");
@@ -11556,21 +11556,21 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 			}
 		      last = r;
 		    }
-		  if (cnt)
+		  如果 (cnt)
 		    {
-		      if (TREE_CODE (last->value) == RAW_DATA_CST
+		      如果 (TREE_CODE (last->value) == RAW_DATA_CST
 			  && (wi::to_widest (last->purpose)
 			      + RAW_DATA_LENGTH (last->value) > w))
 			{
 			  /* The last overlapping prior initval overlaps
 			     only partially.  Shrink it and decrease cnt.  */
-			  unsigned int l = (wi::to_widest (last->purpose)
+			  unsigned 整数 l = (wi::to_widest (last->purpose)
 					    + RAW_DATA_LENGTH (last->value)
 					    - w).to_uhwi ();
 			  --cnt;
 			  RAW_DATA_LENGTH (last->value) -= l;
 			  RAW_DATA_POINTER (last->value) += l;
-			  if (RAW_DATA_LENGTH (last->value) == 1)
+			  如果 (RAW_DATA_LENGTH (last->value) == 1)
 			    last->value
 			      = build_int_cst (TREE_TYPE (last->value),
 					       RAW_DATA_UCHAR_ELT (last->value,
@@ -11589,8 +11589,8 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 		      RAW_DATA_LENGTH (value) -= cnt;
 		      const unsigned char *s
 			= &RAW_DATA_UCHAR_ELT (value, RAW_DATA_LENGTH (value));
-		      unsigned int o = RAW_DATA_LENGTH (value);
-		      for (r = p; cnt--; ++o, ++s)
+		      unsigned 整数 o = RAW_DATA_LENGTH (value);
+		      为 (r = p; cnt--; ++o, ++s)
 			{
 			  r = init_node_successor (r);
 			  r->purpose = size_binop (PLUS_EXPR, purpose,
@@ -11598,34 +11598,34 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 			  r->value = build_int_cst (TREE_TYPE (value), *s);
 			  r->origtype = origtype;
 			}
-		      if (RAW_DATA_LENGTH (value) == 1)
+		      如果 (RAW_DATA_LENGTH (value) == 1)
 			value = build_int_cst (TREE_TYPE (value),
 					       RAW_DATA_UCHAR_ELT (value, 0));
 		    }
 		}
-	      if (!implicit)
+	      如果 (!implicit)
 		{
-		  if (TREE_SIDE_EFFECTS (p->value))
+		  如果 (TREE_SIDE_EFFECTS (p->value))
 		    warning_init (loc, OPT_Woverride_init_side_effects,
 				  "initialized field with side-effects "
 				  "overwritten");
-		  else if (warn_override_init)
+		  否则 如果 (warn_override_init)
 		    warning_init (loc, OPT_Woverride_init,
 				  "initialized field overwritten");
 		}
 	      p->value = value;
 	      p->origtype = origtype;
-	      return;
+	      返回;
 	    }
 	}
-      if (TREE_CODE (value) == RAW_DATA_CST && p)
+      如果 (TREE_CODE (value) == RAW_DATA_CST && p)
 	{
 	  struct init_node *r;
-	  if (q == &p->left)
+	  如果 (q == &p->left)
 	    r = p;
-	  else
+	  否则
 	    r = init_node_successor (p);
-	  if (r && wi::to_widest (r->purpose) < (wi::to_widest (purpose)
+	  如果 (r && wi::to_widest (r->purpose) < (wi::to_widest (purpose)
 						 + RAW_DATA_LENGTH (value)))
 	    {
 	      /* Overlap with at least one prior initval in the range but
@@ -11636,33 +11636,33 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 	    }
 	}
     }
-  else
+  否则
     {
       tree bitpos;
 
       bitpos = bit_position (purpose);
-      while (*q != NULL)
+      当 (*q != NULL)
 	{
 	  p = *q;
-	  if (tree_int_cst_lt (bitpos, bit_position (p->purpose)))
+	  如果 (tree_int_cst_lt (bitpos, bit_position (p->purpose)))
 	    q = &p->left;
-	  else if (p->purpose != purpose)
+	  否则 如果 (p->purpose != purpose)
 	    q = &p->right;
-	  else
+	  否则
 	    {
-	      if (!implicit)
+	      如果 (!implicit)
 		{
-		  if (TREE_SIDE_EFFECTS (p->value))
+		  如果 (TREE_SIDE_EFFECTS (p->value))
 		    warning_init (loc, OPT_Woverride_init_side_effects,
 				  "initialized field with side-effects "
 				  "overwritten");
-		  else if (warn_override_init)
+		  否则 如果 (warn_override_init)
 		    warning_init (loc, OPT_Woverride_init,
 				  "initialized field overwritten");
 		}
 	      p->value = value;
 	      p->origtype = origtype;
-	      return;
+	      返回;
 	    }
 	}
     }
@@ -11679,21 +11679,21 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
   r->right = 0;
   r->balance = 0;
 
-  while (p)
+  当 (p)
     {
       struct init_node *s;
 
-      if (r == p->left)
+      如果 (r == p->left)
 	{
-	  if (p->balance == 0)
+	  如果 (p->balance == 0)
 	    p->balance = -1;
-	  else if (p->balance < 0)
+	  否则 如果 (p->balance < 0)
 	    {
-	      if (r->balance < 0)
+	      如果 (r->balance < 0)
 		{
 		  /* L rotation.  */
 		  p->left = r->right;
-		  if (p->left)
+		  如果 (p->left)
 		    p->left->parent = p;
 		  r->right = p;
 
@@ -11703,28 +11703,28 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 		  s = p->parent;
 		  p->parent = r;
 		  r->parent = s;
-		  if (s)
+		  如果 (s)
 		    {
-		      if (s->left == p)
+		      如果 (s->left == p)
 			s->left = r;
-		      else
+		      否则
 			s->right = r;
 		    }
-		  else
+		  否则
 		    constructor_pending_elts = r;
 		}
-	      else
+	      否则
 		{
 		  /* LR rotation.  */
 		  struct init_node *t = r->right;
 
 		  r->right = t->left;
-		  if (r->right)
+		  如果 (r->right)
 		    r->right->parent = r;
 		  t->left = r;
 
 		  p->left = t->right;
-		  if (p->left)
+		  如果 (p->left)
 		    p->left->parent = p;
 		  t->right = p;
 
@@ -11736,37 +11736,37 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 		  p->parent = t;
 		  r->parent = t;
 		  t->parent = s;
-		  if (s)
+		  如果 (s)
 		    {
-		      if (s->left == p)
+		      如果 (s->left == p)
 			s->left = t;
-		      else
+		      否则
 			s->right = t;
 		    }
-		  else
+		  否则
 		    constructor_pending_elts = t;
 		}
 	      break;
 	    }
-	  else
+	  否则
 	    {
 	      /* p->balance == +1; growth of left side balances the node.  */
 	      p->balance = 0;
 	      break;
 	    }
 	}
-      else /* r == p->right */
+      否则 /* r == p->right */
 	{
-	  if (p->balance == 0)
+	  如果 (p->balance == 0)
 	    /* Growth propagation from right side.  */
 	    p->balance++;
-	  else if (p->balance > 0)
+	  否则 如果 (p->balance > 0)
 	    {
-	      if (r->balance > 0)
+	      如果 (r->balance > 0)
 		{
 		  /* R rotation.  */
 		  p->right = r->left;
-		  if (p->right)
+		  如果 (p->right)
 		    p->right->parent = p;
 		  r->left = p;
 
@@ -11776,28 +11776,28 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 		  s = p->parent;
 		  p->parent = r;
 		  r->parent = s;
-		  if (s)
+		  如果 (s)
 		    {
-		      if (s->left == p)
+		      如果 (s->left == p)
 			s->left = r;
-		      else
+		      否则
 			s->right = r;
 		    }
-		  else
+		  否则
 		    constructor_pending_elts = r;
 		}
-	      else /* r->balance == -1 */
+	      否则 /* r->balance == -1 */
 		{
 		  /* RL rotation */
 		  struct init_node *t = r->left;
 
 		  r->left = t->right;
-		  if (r->left)
+		  如果 (r->left)
 		    r->left->parent = r;
 		  t->right = r;
 
 		  p->right = t->left;
-		  if (p->right)
+		  如果 (p->right)
 		    p->right->parent = p;
 		  t->left = p;
 
@@ -11809,19 +11809,19 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 		  p->parent = t;
 		  r->parent = t;
 		  t->parent = s;
-		  if (s)
+		  如果 (s)
 		    {
-		      if (s->left == p)
+		      如果 (s->left == p)
 			s->left = t;
-		      else
+		      否则
 			s->right = t;
 		    }
-		  else
+		  否则
 		    constructor_pending_elts = t;
 		}
 	      break;
 	    }
-	  else
+	  否则
 	    {
 	      /* p->balance == -1; growth of right side balances the node.  */
 	      p->balance = 0;
@@ -11842,30 +11842,30 @@ set_nonincremental_init (struct obstack * braced_init_obstack)
   unsigned HOST_WIDE_INT ix;
   tree index, value;
 
-  if (TREE_CODE (constructor_type) != RECORD_TYPE
+  如果 (TREE_CODE (constructor_type) != RECORD_TYPE
       && TREE_CODE (constructor_type) != ARRAY_TYPE)
-    return;
+    返回;
 
   FOR_EACH_CONSTRUCTOR_ELT (constructor_elements, ix, index, value)
     add_pending_init (input_location, index, value, NULL_TREE, true,
 		      braced_init_obstack);
   constructor_elements = NULL;
-  if (TREE_CODE (constructor_type) == RECORD_TYPE)
+  如果 (TREE_CODE (constructor_type) == RECORD_TYPE)
     {
       constructor_unfilled_fields = TYPE_FIELDS (constructor_type);
       /* Skip any nameless bit fields at the beginning.  */
-      while (constructor_unfilled_fields != NULL_TREE
+      当 (constructor_unfilled_fields != NULL_TREE
 	     && DECL_UNNAMED_BIT_FIELD (constructor_unfilled_fields))
 	constructor_unfilled_fields = TREE_CHAIN (constructor_unfilled_fields);
 
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  否则 如果 (TREE_CODE (constructor_type) == ARRAY_TYPE)
     {
-      if (TYPE_DOMAIN (constructor_type))
+      如果 (TYPE_DOMAIN (constructor_type))
 	constructor_unfilled_index
 	  = convert (bitsizetype,
 		     TYPE_MIN_VALUE (TYPE_DOMAIN (constructor_type)));
-      else
+      否则
 	constructor_unfilled_index = bitsize_zero_node;
     }
   constructor_incremental = 0;
@@ -11880,7 +11880,7 @@ set_nonincremental_init_from_string (tree str,
   tree value, purpose, type;
   HOST_WIDE_INT val[2];
   const char *p, *end;
-  int byte, wchar_bytes, charwidth, bitpos;
+  整数 byte, wchar_bytes, charwidth, bitpos;
 
   gcc_assert (TREE_CODE (constructor_type) == ARRAY_TYPE);
 
@@ -11892,26 +11892,26 @@ set_nonincremental_init_from_string (tree str,
   p = TREE_STRING_POINTER (str);
   end = p + TREE_STRING_LENGTH (str);
 
-  for (purpose = bitsize_zero_node;
+  为 (purpose = bitsize_zero_node;
        p < end
        && !(constructor_max_index
 	    && tree_int_cst_lt (constructor_max_index, purpose));
        purpose = size_binop (PLUS_EXPR, purpose, bitsize_one_node))
     {
-      if (wchar_bytes == 1)
+      如果 (wchar_bytes == 1)
 	{
 	  val[0] = (unsigned char) *p++;
 	  val[1] = 0;
 	}
-      else
+      否则
 	{
 	  val[1] = 0;
 	  val[0] = 0;
-	  for (byte = 0; byte < wchar_bytes; byte++)
+	  为 (byte = 0; byte < wchar_bytes; byte++)
 	    {
-	      if (BYTES_BIG_ENDIAN)
+	      如果 (BYTES_BIG_ENDIAN)
 		bitpos = (wchar_bytes - byte - 1) * charwidth;
-	      else
+	      否则
 		bitpos = byte * charwidth;
 	      val[bitpos / HOST_BITS_PER_WIDE_INT]
 		|= ((unsigned HOST_WIDE_INT) ((unsigned char) *p++))
@@ -11919,23 +11919,23 @@ set_nonincremental_init_from_string (tree str,
 	    }
 	}
 
-      if (!TYPE_UNSIGNED (type))
+      如果 (!TYPE_UNSIGNED (type))
 	{
 	  bitpos = ((wchar_bytes - 1) * charwidth) + HOST_BITS_PER_CHAR;
-	  if (bitpos < HOST_BITS_PER_WIDE_INT)
+	  如果 (bitpos < HOST_BITS_PER_WIDE_INT)
 	    {
-	      if (val[0] & (HOST_WIDE_INT_1 << (bitpos - 1)))
+	      如果 (val[0] & (HOST_WIDE_INT_1 << (bitpos - 1)))
 		{
 		  val[0] |= HOST_WIDE_INT_M1U << bitpos;
 		  val[1] = -1;
 		}
 	    }
-	  else if (bitpos == HOST_BITS_PER_WIDE_INT)
+	  否则 如果 (bitpos == HOST_BITS_PER_WIDE_INT)
 	    {
-	      if (val[0] < 0)
+	      如果 (val[0] < 0)
 		val[1] = -1;
 	    }
-	  else if (val[1] & (HOST_WIDE_INT_1
+	  否则 如果 (val[1] & (HOST_WIDE_INT_1
 			     << (bitpos - 1 - HOST_BITS_PER_WIDE_INT)))
 	    val[1] |= HOST_WIDE_INT_M1U << (bitpos - HOST_BITS_PER_WIDE_INT);
 	}
@@ -11958,51 +11958,51 @@ find_init_member (tree field, struct obstack * braced_init_obstack)
 {
   struct init_node *p;
 
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  如果 (TREE_CODE (constructor_type) == ARRAY_TYPE)
     {
-      if (constructor_incremental
+      如果 (constructor_incremental
 	  && tree_int_cst_lt (field, constructor_unfilled_index))
 	set_nonincremental_init (braced_init_obstack);
 
       p = constructor_pending_elts;
-      while (p)
+      当 (p)
 	{
-	  if (tree_int_cst_lt (field, p->purpose))
+	  如果 (tree_int_cst_lt (field, p->purpose))
 	    p = p->left;
-	  else if (tree_int_cst_lt (p->purpose, field))
+	  否则 如果 (tree_int_cst_lt (p->purpose, field))
 	    p = p->right;
-	  else
-	    return p->value;
+	  否则
+	    返回 p->value;
 	}
     }
-  else if (TREE_CODE (constructor_type) == RECORD_TYPE)
+  否则 如果 (TREE_CODE (constructor_type) == RECORD_TYPE)
     {
       tree bitpos = bit_position (field);
 
-      if (constructor_incremental
+      如果 (constructor_incremental
 	  && (!constructor_unfilled_fields
 	      || tree_int_cst_lt (bitpos,
 				  bit_position (constructor_unfilled_fields))))
 	set_nonincremental_init (braced_init_obstack);
 
       p = constructor_pending_elts;
-      while (p)
+      当 (p)
 	{
-	  if (field == p->purpose)
-	    return p->value;
-	  else if (tree_int_cst_lt (bitpos, bit_position (p->purpose)))
+	  如果 (field == p->purpose)
+	    返回 p->value;
+	  否则 如果 (tree_int_cst_lt (bitpos, bit_position (p->purpose)))
 	    p = p->left;
-	  else
+	  否则
 	    p = p->right;
 	}
     }
-  else if (TREE_CODE (constructor_type) == UNION_TYPE)
+  否则 如果 (TREE_CODE (constructor_type) == UNION_TYPE)
     {
-      if (!vec_safe_is_empty (constructor_elements)
+      如果 (!vec_safe_is_empty (constructor_elements)
 	  && (constructor_elements->last ().index == field))
-	return constructor_elements->last ().value;
+	返回 constructor_elements->last ().value;
     }
-  return NULL_TREE;
+  返回 NULL_TREE;
 }
 
 /* "Output" the next constructor element.
@@ -12033,12 +12033,12 @@ output_init_element (location_t loc, tree value, tree origtype,
   bool maybe_const = true;
   bool npc, int_const_expr, arith_const_expr;
 
-  if (type == error_mark_node || value == error_mark_node)
+  如果 (type == error_mark_node || value == error_mark_node)
     {
       constructor_erroneous = 1;
-      return;
+      返回;
     }
-  if (TREE_CODE (TREE_TYPE (value)) == ARRAY_TYPE
+  如果 (TREE_CODE (TREE_TYPE (value)) == ARRAY_TYPE
       && (TREE_CODE (value) == STRING_CST
 	  || TREE_CODE (value) == COMPOUND_LITERAL_EXPR)
       && !(TREE_CODE (value) == STRING_CST
@@ -12048,13 +12048,13 @@ output_init_element (location_t loc, tree value, tree origtype,
 		     TYPE_MAIN_VARIANT (type)))
     value = array_to_pointer_conversion (input_location, value);
 
-  if (TREE_CODE (value) == COMPOUND_LITERAL_EXPR
+  如果 (TREE_CODE (value) == COMPOUND_LITERAL_EXPR
       && require_constant_value && pending)
     {
       /* As an extension, allow initializing objects with static storage
 	 duration with compound literals (which are then treated just as
 	 the brace enclosed list they contain).  */
-      if (flag_isoc99)
+      如果 (flag_isoc99)
 	pedwarn_init (loc, OPT_Wpedantic, "initializer element is not "
 		      "constant");
       tree decl = COMPOUND_LITERAL_EXPR_DECL (value);
@@ -12067,7 +12067,7 @@ output_init_element (location_t loc, tree value, tree origtype,
 		    && INTEGRAL_TYPE_P (TREE_TYPE (value)));
   /* Not fully determined before folding.  */
   arith_const_expr = true;
-  if (TREE_CODE (value) == EXCESS_PRECISION_EXPR)
+  如果 (TREE_CODE (value) == EXCESS_PRECISION_EXPR)
     {
       semantic_type = TREE_TYPE (value);
       value = TREE_OPERAND (value, 0);
@@ -12075,25 +12075,25 @@ output_init_element (location_t loc, tree value, tree origtype,
   value = c_fully_fold (value, require_constant_value, &maybe_const);
   /* TODO: this may not detect all cases of expressions folding to
      constants that are not arithmetic constant expressions.  */
-  if (!maybe_const)
+  如果 (!maybe_const)
     arith_const_expr = false;
-  else if (!INTEGRAL_TYPE_P (TREE_TYPE (value))
+  否则 如果 (!INTEGRAL_TYPE_P (TREE_TYPE (value))
 	   && TREE_CODE (TREE_TYPE (value)) != REAL_TYPE
 	   && TREE_CODE (TREE_TYPE (value)) != COMPLEX_TYPE)
     arith_const_expr = false;
-  else if (TREE_CODE (value) != INTEGER_CST
+  否则 如果 (TREE_CODE (value) != INTEGER_CST
 	   && TREE_CODE (value) != REAL_CST
 	   && TREE_CODE (value) != COMPLEX_CST
 	   && TREE_CODE (value) != RAW_DATA_CST)
     arith_const_expr = false;
-  else if (TREE_OVERFLOW (value))
+  否则 如果 (TREE_OVERFLOW (value))
     arith_const_expr = false;
 
-  if (value == error_mark_node)
+  如果 (value == error_mark_node)
     constructor_erroneous = 1;
-  else if (!TREE_CONSTANT (value))
+  否则 如果 (!TREE_CONSTANT (value))
     constructor_constant = 0;
-  else if (!initializer_constant_valid_p (value,
+  否则 如果 (!initializer_constant_valid_p (value,
 					  TREE_TYPE (value),
 					  AGGREGATE_TYPE_P (constructor_type)
 					  && TYPE_REVERSE_STORAGE_ORDER
@@ -12102,13 +12102,13 @@ output_init_element (location_t loc, tree value, tree origtype,
 	       && DECL_C_BIT_FIELD (field)
 	       && TREE_CODE (value) != INTEGER_CST))
     constructor_simple = 0;
-  if (!maybe_const)
+  如果 (!maybe_const)
     constructor_nonconst = 1;
 
   /* Digest the initializer and issue any errors about incompatible
      types before issuing errors about non-constant initializers.  */
   tree new_value = value;
-  if (semantic_type)
+  如果 (semantic_type)
     new_value = build1 (EXCESS_PRECISION_EXPR, semantic_type, value);
   /* In the case of braces around a scalar initializer, the result of
      this initializer processing goes through digest_init again at the
@@ -12116,7 +12116,7 @@ output_init_element (location_t loc, tree value, tree origtype,
      pointer, avoid converting a null pointer constant to something
      that is not a null pointer constant to avoid a spurious error
      from that second processing.  */
-  if (!require_constexpr_value
+  如果 (!require_constexpr_value
       || !npc
       || TREE_CODE (constructor_type) != POINTER_TYPE)
     new_value = digest_init (loc,
@@ -12126,27 +12126,27 @@ output_init_element (location_t loc, tree value, tree origtype,
 			     type, new_value, origtype, npc,
 			     int_const_expr, arith_const_expr, strict_string,
 			     require_constant_value, require_constexpr_value);
-  if (new_value == error_mark_node)
+  如果 (new_value == error_mark_node)
     {
       constructor_erroneous = 1;
-      return;
+      返回;
     }
-  if (require_constant_value || require_constant_elements)
+  如果 (require_constant_value || require_constant_elements)
     constant_expression_warning (new_value);
 
   /* Proceed to check the constness of the original initializer.  */
-  if (!initializer_constant_valid_p (value, TREE_TYPE (value)))
+  如果 (!initializer_constant_valid_p (value, TREE_TYPE (value)))
     {
-      if (require_constant_value)
+      如果 (require_constant_value)
 	{
 	  error_init (loc, "initializer element is not constant");
 	  value = error_mark_node;
 	}
-      else if (require_constant_elements)
+      否则 如果 (require_constant_elements)
 	pedwarn (loc, OPT_Wpedantic,
 		 "initializer element is not computable at load time");
     }
-  else if (!maybe_const
+  否则 如果 (!maybe_const
 	   && (require_constant_value || require_constant_elements))
     pedwarn_init (loc, OPT_Wpedantic,
 		  "initializer element is not a constant expression");
@@ -12158,7 +12158,7 @@ output_init_element (location_t loc, tree value, tree origtype,
 
   /* Issue -Wc++-compat warnings about initializing a bitfield with
      enum type.  */
-  if (warn_cxx_compat
+  如果 (warn_cxx_compat
       && field != NULL_TREE
       && TREE_CODE (field) == FIELD_DECL
       && DECL_BIT_FIELD_TYPE (field) != NULL_TREE
@@ -12167,7 +12167,7 @@ output_init_element (location_t loc, tree value, tree origtype,
       && TREE_CODE (DECL_BIT_FIELD_TYPE (field)) == ENUMERAL_TYPE)
     {
       tree checktype = origtype != NULL_TREE ? origtype : TREE_TYPE (value);
-      if (checktype != error_mark_node
+      如果 (checktype != error_mark_node
 	  && (TYPE_MAIN_VARIANT (checktype)
 	      != TYPE_MAIN_VARIANT (DECL_BIT_FIELD_TYPE (field))))
 	warning_init (loc, OPT_Wc___compat,
@@ -12177,28 +12177,28 @@ output_init_element (location_t loc, tree value, tree origtype,
   /* If this field is empty and does not have side effects (and is not at
      the end of structure), don't do anything other than checking the
      initializer.  */
-  if (field
+  如果 (field
       && (TREE_TYPE (field) == error_mark_node
 	  || (COMPLETE_TYPE_P (TREE_TYPE (field))
 	      && integer_zerop (TYPE_SIZE (TREE_TYPE (field)))
 	      && !TREE_SIDE_EFFECTS (new_value)
 	      && (TREE_CODE (constructor_type) == ARRAY_TYPE
 		  || DECL_CHAIN (field)))))
-    return;
+    返回;
 
   /* Finally, set VALUE to the initializer value digested above.  */
   value = new_value;
 
   /* If this element doesn't come next in sequence,
      put it on constructor_pending_elts.  */
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE
+  如果 (TREE_CODE (constructor_type) == ARRAY_TYPE
       && (!constructor_incremental
 	  || !tree_int_cst_equal (field, constructor_unfilled_index)
 	  || (TREE_CODE (value) == RAW_DATA_CST
 	      && constructor_pending_elts
 	      && pending)))
     {
-      if (constructor_incremental
+      如果 (constructor_incremental
 	  && (tree_int_cst_lt (field, constructor_unfilled_index)
 	      || (TREE_CODE (value) == RAW_DATA_CST
 		  && constructor_pending_elts
@@ -12207,44 +12207,44 @@ output_init_element (location_t loc, tree value, tree origtype,
 
       add_pending_init (loc, field, value, origtype, implicit,
 			braced_init_obstack);
-      return;
+      返回;
     }
-  else if (TREE_CODE (constructor_type) == RECORD_TYPE
+  否则 如果 (TREE_CODE (constructor_type) == RECORD_TYPE
 	   && (!constructor_incremental
 	       || field != constructor_unfilled_fields))
     {
       /* We do this for records but not for unions.  In a union,
 	 no matter which field is specified, it can be initialized
 	 right away since it starts at the beginning of the union.  */
-      if (constructor_incremental)
+      如果 (constructor_incremental)
 	{
-	  if (!constructor_unfilled_fields)
+	  如果 (!constructor_unfilled_fields)
 	    set_nonincremental_init (braced_init_obstack);
-	  else
+	  否则
 	    {
 	      tree bitpos, unfillpos;
 
 	      bitpos = bit_position (field);
 	      unfillpos = bit_position (constructor_unfilled_fields);
 
-	      if (tree_int_cst_lt (bitpos, unfillpos))
+	      如果 (tree_int_cst_lt (bitpos, unfillpos))
 		set_nonincremental_init (braced_init_obstack);
 	    }
 	}
 
       add_pending_init (loc, field, value, origtype, implicit,
 			braced_init_obstack);
-      return;
+      返回;
     }
-  else if (TREE_CODE (constructor_type) == UNION_TYPE
+  否则 如果 (TREE_CODE (constructor_type) == UNION_TYPE
 	   && !vec_safe_is_empty (constructor_elements))
     {
-      if (!implicit)
+      如果 (!implicit)
 	{
-	  if (TREE_SIDE_EFFECTS (constructor_elements->last ().value))
+	  如果 (TREE_SIDE_EFFECTS (constructor_elements->last ().value))
 	    warning_init (loc, OPT_Woverride_init_side_effects,
 			  "initialized field with side-effects overwritten");
-	  else if (warn_override_init)
+	  否则 如果 (warn_override_init)
 	    warning_init (loc, OPT_Woverride_init,
 			  "initialized field overwritten");
 	}
@@ -12260,31 +12260,31 @@ output_init_element (location_t loc, tree value, tree origtype,
   vec_safe_push (constructor_elements, celt);
 
   /* Advance the variable that indicates sequential elements output.  */
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  如果 (TREE_CODE (constructor_type) == ARRAY_TYPE)
     {
       tree inc = bitsize_one_node;
-      if (value && TREE_CODE (value) == RAW_DATA_CST)
+      如果 (value && TREE_CODE (value) == RAW_DATA_CST)
 	inc = bitsize_int (RAW_DATA_LENGTH (value));
       constructor_unfilled_index
 	= size_binop_loc (input_location, PLUS_EXPR,
 			  constructor_unfilled_index, inc);
     }
-  else if (TREE_CODE (constructor_type) == RECORD_TYPE)
+  否则 如果 (TREE_CODE (constructor_type) == RECORD_TYPE)
     {
       constructor_unfilled_fields
 	= DECL_CHAIN (constructor_unfilled_fields);
 
       /* Skip any nameless bit fields.  */
-      while (constructor_unfilled_fields != NULL_TREE
+      当 (constructor_unfilled_fields != NULL_TREE
 	     && DECL_UNNAMED_BIT_FIELD (constructor_unfilled_fields))
 	constructor_unfilled_fields
 	  = DECL_CHAIN (constructor_unfilled_fields);
     }
-  else if (TREE_CODE (constructor_type) == UNION_TYPE)
+  否则 如果 (TREE_CODE (constructor_type) == UNION_TYPE)
     constructor_unfilled_fields = NULL_TREE;
 
   /* Now output any pending elements which have become next.  */
-  if (pending)
+  如果 (pending)
     output_pending_init_elements (0, braced_init_obstack);
 }
 
@@ -12292,59 +12292,59 @@ output_init_element (location_t loc, tree value, tree origtype,
    comes before field2, 1 if field1 comes after field2 and
    0 if field1 == field2.  */
 
-static int
+static 整数
 init_field_decl_cmp (tree field1, tree field2)
 {
-  if (field1 == field2)
-    return 0;
+  如果 (field1 == field2)
+    返回 0;
 
   tree bitpos1 = bit_position (field1);
   tree bitpos2 = bit_position (field2);
-  if (tree_int_cst_equal (bitpos1, bitpos2))
+  如果 (tree_int_cst_equal (bitpos1, bitpos2))
     {
       /* If one of the fields has non-zero bitsize, then that
 	 field must be the last one in a sequence of zero
 	 sized fields, fields after it will have bigger
 	 bit_position.  */
-      if (TREE_TYPE (field1) != error_mark_node
+      如果 (TREE_TYPE (field1) != error_mark_node
 	  && COMPLETE_TYPE_P (TREE_TYPE (field1))
 	  && integer_nonzerop (TREE_TYPE (field1)))
-	return 1;
-      if (TREE_TYPE (field2) != error_mark_node
+	返回 1;
+      如果 (TREE_TYPE (field2) != error_mark_node
 	  && COMPLETE_TYPE_P (TREE_TYPE (field2))
 	  && integer_nonzerop (TREE_TYPE (field2)))
-	return -1;
+	返回 -1;
       /* Otherwise, fallback to DECL_CHAIN walk to find out
 	 which field comes earlier.  Walk chains of both
 	 fields, so that if field1 and field2 are close to each
 	 other in either order, it is found soon even for large
 	 sequences of zero sized fields.  */
       tree f1 = field1, f2 = field2;
-      while (1)
+      当 (1)
 	{
 	  f1 = DECL_CHAIN (f1);
 	  f2 = DECL_CHAIN (f2);
-	  if (f1 == NULL_TREE)
+	  如果 (f1 == NULL_TREE)
 	    {
 	      gcc_assert (f2);
-	      return 1;
+	      返回 1;
 	    }
-	  if (f2 == NULL_TREE)
-	    return -1;
-	  if (f1 == field2)
-	    return -1;
-	  if (f2 == field1)
-	    return 1;
-	  if (!tree_int_cst_equal (bit_position (f1), bitpos1))
-	    return 1;
-	  if (!tree_int_cst_equal (bit_position (f2), bitpos1))
-	    return -1;
+	  如果 (f2 == NULL_TREE)
+	    返回 -1;
+	  如果 (f1 == field2)
+	    返回 -1;
+	  如果 (f2 == field1)
+	    返回 1;
+	  如果 (!tree_int_cst_equal (bit_position (f1), bitpos1))
+	    返回 1;
+	  如果 (!tree_int_cst_equal (bit_position (f2), bitpos1))
+	    返回 -1;
 	}
     }
-  else if (tree_int_cst_lt (bitpos1, bitpos2))
-    return -1;
-  else
-    return 1;
+  否则 如果 (tree_int_cst_lt (bitpos1, bitpos2))
+    返回 -1;
+  否则
+    返回 1;
 }
 
 /* Output any pending elements which have become next.
@@ -12358,7 +12358,7 @@ init_field_decl_cmp (tree field1, tree field2)
    If ALL is 1, we output space as necessary so that
    we can output all the pending elements.  */
 static void
-output_pending_init_elements (int all, struct obstack * braced_init_obstack)
+output_pending_init_elements (整数 all, struct obstack * braced_init_obstack)
 {
   struct init_node *elt = constructor_pending_elts;
   tree next;
@@ -12371,23 +12371,23 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
      that comes first among those still pending.  */
 
   next = NULL_TREE;
-  while (elt)
+  当 (elt)
     {
-      if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+      如果 (TREE_CODE (constructor_type) == ARRAY_TYPE)
 	{
-	  if (tree_int_cst_equal (elt->purpose,
+	  如果 (tree_int_cst_equal (elt->purpose,
 				  constructor_unfilled_index))
 	    output_init_element (input_location, elt->value, elt->origtype,
 				 true, TREE_TYPE (constructor_type),
 				 constructor_unfilled_index, false, false,
 				 braced_init_obstack);
-	  else if (tree_int_cst_lt (constructor_unfilled_index,
+	  否则 如果 (tree_int_cst_lt (constructor_unfilled_index,
 				    elt->purpose))
 	    {
 	      /* Advance to the next smaller node.  */
-	      if (elt->left)
+	      如果 (elt->left)
 		elt = elt->left;
-	      else
+	      否则
 		{
 		  /* We have reached the smallest node bigger than the
 		     current unfilled index.  Fill the space first.  */
@@ -12395,19 +12395,19 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
 		  break;
 		}
 	    }
-	  else
+	  否则
 	    {
 	      /* Advance to the next bigger node.  */
-	      if (elt->right)
+	      如果 (elt->right)
 		elt = elt->right;
-	      else
+	      否则
 		{
 		  /* We have reached the biggest node in a subtree.  Find
 		     the parent of it, which is the next bigger node.  */
-		  while (elt->parent && elt->parent->right == elt)
+		  当 (elt->parent && elt->parent->right == elt)
 		    elt = elt->parent;
 		  elt = elt->parent;
-		  if (elt && tree_int_cst_lt (constructor_unfilled_index,
+		  如果 (elt && tree_int_cst_lt (constructor_unfilled_index,
 					      elt->purpose))
 		    {
 		      next = elt->purpose;
@@ -12416,25 +12416,25 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
 		}
 	    }
 	}
-      else if (RECORD_OR_UNION_TYPE_P (constructor_type))
+      否则 如果 (RECORD_OR_UNION_TYPE_P (constructor_type))
 	{
 	  /* If the current record is complete we are done.  */
-	  if (constructor_unfilled_fields == NULL_TREE)
+	  如果 (constructor_unfilled_fields == NULL_TREE)
 	    break;
 
-	  int cmp = init_field_decl_cmp (constructor_unfilled_fields,
+	  整数 cmp = init_field_decl_cmp (constructor_unfilled_fields,
 					 elt->purpose);
-	  if (cmp == 0)
+	  如果 (cmp == 0)
 	    output_init_element (input_location, elt->value, elt->origtype,
 				 true, TREE_TYPE (elt->purpose),
 				 elt->purpose, false, false,
 				 braced_init_obstack);
-	  else if (cmp < 0)
+	  否则 如果 (cmp < 0)
 	    {
 	      /* Advance to the next smaller node.  */
-	      if (elt->left)
+	      如果 (elt->left)
 		elt = elt->left;
-	      else
+	      否则
 		{
 		  /* We have reached the smallest node bigger than the
 		     current unfilled field.  Fill the space first.  */
@@ -12442,19 +12442,19 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
 		  break;
 		}
 	    }
-	  else
+	  否则
 	    {
 	      /* Advance to the next bigger node.  */
-	      if (elt->right)
+	      如果 (elt->right)
 		elt = elt->right;
-	      else
+	      否则
 		{
 		  /* We have reached the biggest node in a subtree.  Find
 		     the parent of it, which is the next bigger node.  */
-		  while (elt->parent && elt->parent->right == elt)
+		  当 (elt->parent && elt->parent->right == elt)
 		    elt = elt->parent;
 		  elt = elt->parent;
-		  if (elt
+		  如果 (elt
 		      && init_field_decl_cmp (constructor_unfilled_fields,
 					      elt->purpose) < 0)
 		    {
@@ -12468,14 +12468,14 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
 
   /* Ordinarily return, but not if we want to output all
      and there are elements left.  */
-  if (!(all && next != NULL_TREE))
-    return;
+  如果 (!(all && next != NULL_TREE))
+    返回;
 
   /* If it's not incremental, just skip over the gap, so that after
      jumping to retry we will output the next successive element.  */
-  if (RECORD_OR_UNION_TYPE_P (constructor_type))
+  如果 (RECORD_OR_UNION_TYPE_P (constructor_type))
     constructor_unfilled_fields = next;
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  否则 如果 (TREE_CODE (constructor_type) == ARRAY_TYPE)
     constructor_unfilled_index = next;
 
   /* ELT now points to the node in the pending tree with the next
@@ -12494,14 +12494,14 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
 static bool
 initialize_elementwise_p (tree type, tree value)
 {
-  if (type == error_mark_node || value == error_mark_node)
-    return false;
+  如果 (type == error_mark_node || value == error_mark_node)
+    返回 false;
 
   gcc_checking_assert (TYPE_MAIN_VARIANT (type) == type);
 
   tree value_type = TREE_TYPE (value);
-  if (value_type == error_mark_node)
-    return false;
+  如果 (value_type == error_mark_node)
+    返回 false;
 
   /* GNU vectors can be initialized elementwise.  However, treat any
      kind of vector value as initializing the vector type as a whole,
@@ -12515,13 +12515,13 @@ initialize_elementwise_p (tree type, tree value)
      worst wrong.  For example, when -flax-vector-conversions is in effect,
      it's possible to initialize a V8HI from a V4SI, even though the vectors
      have different element types and different numbers of elements.  */
-  if (gnu_vector_type_p (type))
-    return !VECTOR_TYPE_P (value_type);
+  如果 (gnu_vector_type_p (type))
+    返回 !VECTOR_TYPE_P (value_type);
 
-  if (AGGREGATE_TYPE_P (type))
-    return !comptypes (type, TYPE_MAIN_VARIANT (value_type));
+  如果 (AGGREGATE_TYPE_P (type))
+    返回 !comptypes (type, TYPE_MAIN_VARIANT (value_type));
 
-  return false;
+  返回 false;
 }
 
 /* Helper function for process_init_element.  Split first element of
@@ -12530,14 +12530,14 @@ initialize_elementwise_p (tree type, tree value)
 static inline tree
 maybe_split_raw_data (tree value, tree *raw_data)
 {
-  if (value == NULL_TREE || TREE_CODE (value) != RAW_DATA_CST)
-    return value;
+  如果 (value == NULL_TREE || TREE_CODE (value) != RAW_DATA_CST)
+    返回 value;
   *raw_data = value;
   value = build_int_cst (integer_type_node,
 			 RAW_DATA_UCHAR_ELT (*raw_data, 0));
   ++RAW_DATA_POINTER (*raw_data);
   --RAW_DATA_LENGTH (*raw_data);
-  return value;
+  返回 value;
 }
 
 /* Return non-zero if c_parser_initval should attempt to optimize
@@ -12547,33 +12547,33 @@ maybe_split_raw_data (tree value, tree *raw_data)
 unsigned
 c_maybe_optimize_large_byte_initializer (void)
 {
-  if (!constructor_type
+  如果 (!constructor_type
       || TREE_CODE (constructor_type) != ARRAY_TYPE
       || constructor_stack->implicit)
-    return 0;
+    返回 0;
   tree elttype = TYPE_MAIN_VARIANT (TREE_TYPE (constructor_type));
-  if (TREE_CODE (elttype) != INTEGER_TYPE
+  如果 (TREE_CODE (elttype) != INTEGER_TYPE
       && TREE_CODE (elttype) != BITINT_TYPE)
-    return 0;
-  if (TYPE_PRECISION (elttype) != CHAR_BIT
+    返回 0;
+  如果 (TYPE_PRECISION (elttype) != CHAR_BIT
       || constructor_stack->replacement_value.value
       || (COMPLETE_TYPE_P (constructor_type)
 	  && !poly_int_tree_p (TYPE_SIZE (constructor_type)))
       || constructor_range_stack)
-    return 0;
-  if (constructor_max_index == NULL_TREE)
-    return INT_MAX;
-  if (tree_int_cst_le (constructor_max_index, constructor_index)
+    返回 0;
+  如果 (constructor_max_index == NULL_TREE)
+    返回 INT_MAX;
+  如果 (tree_int_cst_le (constructor_max_index, constructor_index)
       || integer_all_onesp (constructor_max_index))
-    return 0;
+    返回 0;
   widest_int w = wi::to_widest (constructor_max_index);
   w -= wi::to_widest (constructor_index);
   w += 1;
-  if (w < 64)
-    return 0;
-  if (w > INT_MAX)
-    return INT_MAX;
-  return w.to_uhwi ();
+  如果 (w < 64)
+    返回 0;
+  如果 (w > INT_MAX)
+    返回 INT_MAX;
+  返回 w.to_uhwi ();
 }
 
 /* Add one non-braced element to the current constructor level.
@@ -12594,7 +12594,7 @@ process_init_element (location_t loc, struct c_expr value, bool implicit,
 		      struct obstack * braced_init_obstack)
 {
   tree orig_value = value.value;
-  int string_flag
+  整数 string_flag
     = (orig_value != NULL_TREE && TREE_CODE (orig_value) == STRING_CST);
   bool strict_string = value.original_code == STRING_CST;
   bool was_designated = designator_depth != 0;
@@ -12604,47 +12604,47 @@ retry:
   designator_depth = 0;
   designator_erroneous = 0;
 
-  if (!implicit && value.value && !integer_zerop (value.value))
+  如果 (!implicit && value.value && !integer_zerop (value.value))
     constructor_zeroinit = 0;
 
   /* Handle superfluous braces around string cst as in
      char x[] = {"foo"}; */
-  if (constructor_type
+  如果 (constructor_type
       && !was_designated
       && TREE_CODE (constructor_type) == ARRAY_TYPE
       && INTEGRAL_TYPE_P (TREE_TYPE (constructor_type))
       && integer_zerop (constructor_unfilled_index))
     {
-      if (constructor_stack->replacement_value.value)
+      如果 (constructor_stack->replacement_value.value)
 	{
 	  error_init (loc, "excess elements in %qT initializer", constructor_type);
-	  return;
+	  返回;
 	}
-      else if (string_flag)
+      否则 如果 (string_flag)
 	{
 	  constructor_stack->replacement_value = value;
-	  return;
+	  返回;
 	}
     }
 
-  if (constructor_stack->replacement_value.value != NULL_TREE)
+  如果 (constructor_stack->replacement_value.value != NULL_TREE)
     {
       error_init (loc, "excess elements in struct initializer");
-      return;
+      返回;
     }
 
   /* Ignore elements of a brace group if it is entirely superfluous
      and has already been diagnosed, or if the type is erroneous.  */
-  if (constructor_type == NULL_TREE || constructor_type == error_mark_node)
-    return;
+  如果 (constructor_type == NULL_TREE || constructor_type == error_mark_node)
+    返回;
 
   /* Ignore elements of an initializer for a variable-size type.
      Those are diagnosed in the parser (empty initializer braces are OK).  */
-  if (COMPLETE_TYPE_P (constructor_type)
+  如果 (COMPLETE_TYPE_P (constructor_type)
       && !poly_int_tree_p (TYPE_SIZE (constructor_type)))
-    return;
+    返回;
 
-  if (!implicit && warn_designated_init && !was_designated
+  如果 (!implicit && warn_designated_init && !was_designated
       && TREE_CODE (constructor_type) == RECORD_TYPE
       && lookup_attribute ("designated_init",
 			   TYPE_ATTRIBUTES (constructor_type)))
@@ -12655,15 +12655,15 @@ retry:
 
   /* If we've exhausted any levels that didn't have braces,
      pop them now.  */
-  while (constructor_stack->implicit)
+  当 (constructor_stack->implicit)
     {
-      if (RECORD_OR_UNION_TYPE_P (constructor_type)
+      如果 (RECORD_OR_UNION_TYPE_P (constructor_type)
 	  && constructor_fields == NULL_TREE)
 	process_init_element (loc,
 			      pop_init_level (loc, 1, braced_init_obstack,
 					      last_init_list_comma),
 			      true, braced_init_obstack);
-      else if ((TREE_CODE (constructor_type) == ARRAY_TYPE
+      否则 如果 ((TREE_CODE (constructor_type) == ARRAY_TYPE
 		|| gnu_vector_type_p (constructor_type))
 	       && constructor_max_index
 	       && tree_int_cst_lt (constructor_max_index,
@@ -12672,51 +12672,51 @@ retry:
 			      pop_init_level (loc, 1, braced_init_obstack,
 					      last_init_list_comma),
 			      true, braced_init_obstack);
-      else
+      否则
 	break;
     }
 
   /* In the case of [LO ... HI] = VALUE, only evaluate VALUE once.  */
-  if (constructor_range_stack)
+  如果 (constructor_range_stack)
     {
       /* If value is a compound literal and we'll be just using its
 	 content, don't put it into a SAVE_EXPR.  */
-      if (TREE_CODE (value.value) != COMPOUND_LITERAL_EXPR
+      如果 (TREE_CODE (value.value) != COMPOUND_LITERAL_EXPR
 	  || !require_constant_value)
 	{
 	  tree semantic_type = NULL_TREE;
-	  if (TREE_CODE (value.value) == EXCESS_PRECISION_EXPR)
+	  如果 (TREE_CODE (value.value) == EXCESS_PRECISION_EXPR)
 	    {
 	      semantic_type = TREE_TYPE (value.value);
 	      value.value = TREE_OPERAND (value.value, 0);
 	    }
 	  value.value = save_expr (value.value);
-	  if (semantic_type)
+	  如果 (semantic_type)
 	    value.value = build1 (EXCESS_PRECISION_EXPR, semantic_type,
 				  value.value);
 	}
     }
 
-  while (1)
+  当 (1)
     {
-      if (TREE_CODE (constructor_type) == RECORD_TYPE)
+      如果 (TREE_CODE (constructor_type) == RECORD_TYPE)
 	{
 	  tree fieldtype;
 	  enum tree_code fieldcode;
 
-	  if (constructor_fields == NULL_TREE)
+	  如果 (constructor_fields == NULL_TREE)
 	    {
 	      pedwarn_init (loc, 0, "excess elements in struct initializer");
 	      break;
 	    }
 
 	  fieldtype = TREE_TYPE (constructor_fields);
-	  if (fieldtype != error_mark_node)
+	  如果 (fieldtype != error_mark_node)
 	    fieldtype = TYPE_MAIN_VARIANT (fieldtype);
 	  fieldcode = TREE_CODE (fieldtype);
 
 	  /* Error for non-static initialization of a flexible array member.  */
-	  if (fieldcode == ARRAY_TYPE
+	  如果 (fieldcode == ARRAY_TYPE
 	      && !require_constant_value
 	      && TYPE_SIZE (fieldtype) == NULL_TREE
 	      && DECL_CHAIN (constructor_fields) == NULL_TREE)
@@ -12731,21 +12731,21 @@ retry:
 	     struct S { int x; char y[]; };
 	     struct S s[] = { { 1, "foo" } };
 	     is invalid.  */
-	  if (string_flag
+	  如果 (string_flag
 	      && fieldcode == ARRAY_TYPE
 	      && constructor_depth > 1
 	      && TYPE_SIZE (fieldtype) == NULL_TREE
 	      && DECL_CHAIN (constructor_fields) == NULL_TREE)
 	    {
 	      bool in_array_p = false;
-	      for (struct constructor_stack *p = constructor_stack;
+	      为 (struct constructor_stack *p = constructor_stack;
 		   p && p->type; p = p->next)
-		if (TREE_CODE (p->type) == ARRAY_TYPE)
+		如果 (TREE_CODE (p->type) == ARRAY_TYPE)
 		  {
 		    in_array_p = true;
 		    break;
 		  }
-	      if (in_array_p)
+	      如果 (in_array_p)
 		{
 		  error_init (loc, "initialization of flexible array "
 			      "member in a nested context");
@@ -12754,14 +12754,14 @@ retry:
 	    }
 
 	  /* Accept a string constant to initialize a subarray.  */
-	  if (value.value != NULL_TREE
+	  如果 (value.value != NULL_TREE
 	      && fieldcode == ARRAY_TYPE
 	      && INTEGRAL_TYPE_P (TREE_TYPE (fieldtype))
 	      && string_flag)
 	    value.value = orig_value;
 	  /* Otherwise, if we have come to a subaggregate,
 	     and we don't have an element of its type, push into it.  */
-	  else if (value.value != NULL_TREE
+	  否则 如果 (value.value != NULL_TREE
 		   && initialize_elementwise_p (fieldtype, value.value))
 	    {
 	      push_init_level (loc, 1, braced_init_obstack);
@@ -12769,7 +12769,7 @@ retry:
 	    }
 
 	  value.value = maybe_split_raw_data (value.value, &raw_data);
-	  if (value.value)
+	  如果 (value.value)
 	    {
 	      push_member_name (constructor_fields);
 	      output_init_element (loc, value.value, value.original_type,
@@ -12778,12 +12778,12 @@ retry:
 				   braced_init_obstack);
 	      RESTORE_SPELLING_DEPTH (constructor_depth);
 	    }
-	  else
+	  否则
 	    /* Do the bookkeeping for an element that was
 	       directly output as a constructor.  */
 	    {
 	      /* For a record, keep track of end position of last field.  */
-	      if (DECL_SIZE (constructor_fields))
+	      如果 (DECL_SIZE (constructor_fields))
 		constructor_bit_index
 		  = size_binop_loc (input_location, PLUS_EXPR,
 				    bit_position (constructor_fields),
@@ -12791,11 +12791,11 @@ retry:
 
 	      /* If the current field was the first one not yet written out,
 		 it isn't now, so update.  */
-	      if (constructor_unfilled_fields == constructor_fields)
+	      如果 (constructor_unfilled_fields == constructor_fields)
 		{
 		  constructor_unfilled_fields = DECL_CHAIN (constructor_fields);
 		  /* Skip any nameless bit fields.  */
-		  while (constructor_unfilled_fields != 0
+		  当 (constructor_unfilled_fields != 0
 			 && (DECL_UNNAMED_BIT_FIELD
 			     (constructor_unfilled_fields)))
 		    constructor_unfilled_fields =
@@ -12805,16 +12805,16 @@ retry:
 
 	  constructor_fields = DECL_CHAIN (constructor_fields);
 	  /* Skip any nameless bit fields at the beginning.  */
-	  while (constructor_fields != NULL_TREE
+	  当 (constructor_fields != NULL_TREE
 		 && DECL_UNNAMED_BIT_FIELD (constructor_fields))
 	    constructor_fields = DECL_CHAIN (constructor_fields);
 	}
-      else if (TREE_CODE (constructor_type) == UNION_TYPE)
+      否则 如果 (TREE_CODE (constructor_type) == UNION_TYPE)
 	{
 	  tree fieldtype;
 	  enum tree_code fieldcode;
 
-	  if (constructor_fields == NULL_TREE)
+	  如果 (constructor_fields == NULL_TREE)
 	    {
 	      pedwarn_init (loc, 0,
 			    "excess elements in union initializer");
@@ -12822,7 +12822,7 @@ retry:
 	    }
 
 	  fieldtype = TREE_TYPE (constructor_fields);
-	  if (fieldtype != error_mark_node)
+	  如果 (fieldtype != error_mark_node)
 	    fieldtype = TYPE_MAIN_VARIANT (fieldtype);
 	  fieldcode = TREE_CODE (fieldtype);
 
@@ -12836,14 +12836,14 @@ retry:
 	     again on the assumption that this must be conditional on
 	     __STDC__ anyway (and we've already complained about the
 	     member-designator already).  */
-	  if (!in_system_header_at (input_location) && !constructor_designated
+	  如果 (!in_system_header_at (input_location) && !constructor_designated
 	      && !(value.value && (integer_zerop (value.value)
 				   || real_zerop (value.value))))
 	    warning (OPT_Wtraditional, "traditional C rejects initialization "
 		     "of unions");
 
 	  /* Error for non-static initialization of a flexible array member.  */
-	  if (fieldcode == ARRAY_TYPE
+	  如果 (fieldcode == ARRAY_TYPE
 	      && !require_constant_value
 	      && TYPE_SIZE (fieldtype) == NULL_TREE)
 	    {
@@ -12857,20 +12857,20 @@ retry:
 	     union U { int x; char y[]; };
 	     union U s[] = { { 1, "foo" } };
 	     is invalid.  */
-	  if (string_flag
+	  如果 (string_flag
 	      && fieldcode == ARRAY_TYPE
 	      && constructor_depth > 1
 	      && TYPE_SIZE (fieldtype) == NULL_TREE)
 	    {
 	      bool in_array_p = false;
-	      for (struct constructor_stack *p = constructor_stack;
+	      为 (struct constructor_stack *p = constructor_stack;
 		   p && p->type; p = p->next)
-		if (TREE_CODE (p->type) == ARRAY_TYPE)
+		如果 (TREE_CODE (p->type) == ARRAY_TYPE)
 		  {
 		    in_array_p = true;
 		    break;
 		  }
-	      if (in_array_p)
+	      如果 (in_array_p)
 		{
 		  error_init (loc, "initialization of flexible array "
 			      "member in a nested context");
@@ -12879,14 +12879,14 @@ retry:
 	    }
 
 	  /* Accept a string constant to initialize a subarray.  */
-	  if (value.value != NULL_TREE
+	  如果 (value.value != NULL_TREE
 	      && fieldcode == ARRAY_TYPE
 	      && INTEGRAL_TYPE_P (TREE_TYPE (fieldtype))
 	      && string_flag)
 	    value.value = orig_value;
 	  /* Otherwise, if we have come to a subaggregate,
 	     and we don't have an element of its type, push into it.  */
-	  else if (value.value != NULL_TREE
+	  否则 如果 (value.value != NULL_TREE
 		   && initialize_elementwise_p (fieldtype, value.value))
 	    {
 	      push_init_level (loc, 1, braced_init_obstack);
@@ -12894,7 +12894,7 @@ retry:
 	    }
 
 	  value.value = maybe_split_raw_data (value.value, &raw_data);
-	  if (value.value)
+	  如果 (value.value)
 	    {
 	      push_member_name (constructor_fields);
 	      output_init_element (loc, value.value, value.original_type,
@@ -12903,7 +12903,7 @@ retry:
 				   braced_init_obstack);
 	      RESTORE_SPELLING_DEPTH (constructor_depth);
 	    }
-	  else
+	  否则
 	    /* Do the bookkeeping for an element that was
 	       directly output as a constructor.  */
 	    {
@@ -12913,27 +12913,27 @@ retry:
 
 	  constructor_fields = NULL_TREE;
 	}
-      else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+      否则 如果 (TREE_CODE (constructor_type) == ARRAY_TYPE)
 	{
 	  tree elttype = TYPE_MAIN_VARIANT (TREE_TYPE (constructor_type));
 	  enum tree_code eltcode = TREE_CODE (elttype);
 
 	  /* Accept a string constant to initialize a subarray.  */
-	  if (value.value != NULL_TREE
+	  如果 (value.value != NULL_TREE
 	      && eltcode == ARRAY_TYPE
 	      && INTEGRAL_TYPE_P (TREE_TYPE (elttype))
 	      && string_flag)
 	    value.value = orig_value;
 	  /* Otherwise, if we have come to a subaggregate,
 	     and we don't have an element of its type, push into it.  */
-	  else if (value.value != NULL_TREE
+	  否则 如果 (value.value != NULL_TREE
 		   && initialize_elementwise_p (elttype, value.value))
 	    {
 	      push_init_level (loc, 1, braced_init_obstack);
 	      continue;
 	    }
 
-	  if (constructor_max_index != NULL_TREE
+	  如果 (constructor_max_index != NULL_TREE
 	      && (tree_int_cst_lt (constructor_max_index, constructor_index)
 		  || integer_all_onesp (constructor_max_index))
 	      /* For VLA we got an error already.  */
@@ -12944,7 +12944,7 @@ retry:
 	      break;
 	    }
 
-	  if (value.value
+	  如果 (value.value
 	      && TREE_CODE (value.value) == RAW_DATA_CST
 	      && RAW_DATA_LENGTH (value.value) > 1
 	      && (TREE_CODE (elttype) == INTEGER_TYPE
@@ -12954,16 +12954,16 @@ retry:
 		  || tree_int_cst_lt (constructor_index,
 				      constructor_max_index)))
 	    {
-	      unsigned int len = RAW_DATA_LENGTH (value.value);
-	      if (constructor_max_index)
+	      unsigned 整数 len = RAW_DATA_LENGTH (value.value);
+	      如果 (constructor_max_index)
 		{
 		  widest_int w = wi::to_widest (constructor_max_index);
 		  w -= wi::to_widest (constructor_index);
 		  w += 1;
-		  if (w < len)
+		  如果 (w < len)
 		    len = w.to_uhwi ();
 		}
-	      if (len < (unsigned) RAW_DATA_LENGTH (value.value))
+	      如果 (len < (unsigned) RAW_DATA_LENGTH (value.value))
 		{
 		  raw_data = copy_node (value.value);
 		  RAW_DATA_LENGTH (raw_data) -= len;
@@ -12980,11 +12980,11 @@ retry:
 		= size_binop_loc (input_location, PLUS_EXPR,
 				  constructor_index, bitsize_int (len));
 	    }
-	  else
+	  否则
 	    {
 	      value.value = maybe_split_raw_data (value.value, &raw_data);
 	      /* Now output the actual element.  */
-	      if (value.value)
+	      如果 (value.value)
 		{
 		  push_array_bounds (tree_to_uhwi (constructor_index));
 		  output_init_element (loc, value.value, value.original_type,
@@ -12998,27 +12998,27 @@ retry:
 		= size_binop_loc (input_location, PLUS_EXPR,
 				  constructor_index, bitsize_one_node);
 
-	      if (!value.value)
+	      如果 (!value.value)
 		/* If we are doing the bookkeeping for an element that was
 		   directly output as a constructor, we must update
 		   constructor_unfilled_index.  */
 		constructor_unfilled_index = constructor_index;
 	    }
 	}
-      else if (gnu_vector_type_p (constructor_type))
+      否则 如果 (gnu_vector_type_p (constructor_type))
 	{
 	  tree elttype = TYPE_MAIN_VARIANT (TREE_TYPE (constructor_type));
 
 	  /* Do a basic check of initializer size.  Note that vectors
 	     may not always have a fixed size derived from their type.  */
-	  if (maybe_lt (tree_to_poly_uint64 (constructor_max_index),
+	  如果 (maybe_lt (tree_to_poly_uint64 (constructor_max_index),
 			tree_to_poly_uint64 (constructor_index)))
 	    {
 	      /* Diagose VLA out-of-bounds as errors.  */
-	      if (tree_to_poly_uint64 (constructor_max_index).is_constant())
+	      如果 (tree_to_poly_uint64 (constructor_max_index).is_constant())
 		pedwarn_init (loc, 0,
 			      "excess elements in vector initializer");
-	      else
+	      否则
 		error_init (loc, "excess elements in vector initializer");
 
 	      break;
@@ -13026,9 +13026,9 @@ retry:
 
 	  value.value = maybe_split_raw_data (value.value, &raw_data);
 	  /* Now output the actual element.  */
-	  if (value.value)
+	  如果 (value.value)
 	    {
-	      if (TREE_CODE (value.value) == VECTOR_CST)
+	      如果 (TREE_CODE (value.value) == VECTOR_CST)
 		elttype = TYPE_MAIN_VARIANT (constructor_type);
 	      output_init_element (loc, value.value, value.original_type,
 				   strict_string, elttype,
@@ -13040,7 +13040,7 @@ retry:
 	    = size_binop_loc (input_location,
 			      PLUS_EXPR, constructor_index, bitsize_one_node);
 
-	  if (!value.value)
+	  如果 (!value.value)
 	    /* If we are doing the bookkeeping for an element that was
 	       directly output as a constructor, we must update
 	       constructor_unfilled_index.  */
@@ -13049,17 +13049,17 @@ retry:
 
       /* Handle the sole element allowed in a braced initializer
 	 for a scalar variable.  */
-      else if (constructor_type != error_mark_node
+      否则 如果 (constructor_type != error_mark_node
 	       && constructor_fields == NULL_TREE)
 	{
 	  pedwarn_init (loc, 0,
 			"excess elements in scalar initializer");
 	  break;
 	}
-      else
+      否则
 	{
 	  value.value = maybe_split_raw_data (value.value, &raw_data);
-	  if (value.value)
+	  如果 (value.value)
 	    output_init_element (loc, value.value, value.original_type,
 				 strict_string, constructor_type,
 				 NULL_TREE, true, implicit,
@@ -13069,14 +13069,14 @@ retry:
 
       /* Handle range initializers either at this level or anywhere higher
 	 in the designator stack.  */
-      if (constructor_range_stack)
+      如果 (constructor_range_stack)
 	{
 	  struct constructor_range_stack *p, *range_stack;
-	  int finish = 0;
+	  整数 finish = 0;
 
 	  range_stack = constructor_range_stack;
 	  constructor_range_stack = 0;
-	  while (constructor_stack != range_stack->stack)
+	  当 (constructor_stack != range_stack->stack)
 	    {
 	      gcc_assert (constructor_stack->implicit);
 	      process_init_element (loc,
@@ -13085,7 +13085,7 @@ retry:
 						    last_init_list_comma),
 				    true, braced_init_obstack);
 	    }
-	  for (p = range_stack;
+	  为 (p = range_stack;
 	       !p->range_end || tree_int_cst_equal (p->index, p->range_end);
 	       p = p->prev)
 	    {
@@ -13099,29 +13099,29 @@ retry:
 
 	  p->index = size_binop_loc (input_location,
 				     PLUS_EXPR, p->index, bitsize_one_node);
-	  if (tree_int_cst_equal (p->index, p->range_end) && !p->prev)
+	  如果 (tree_int_cst_equal (p->index, p->range_end) && !p->prev)
 	    finish = 1;
 
-	  while (1)
+	  当 (1)
 	    {
 	      constructor_index = p->index;
 	      constructor_fields = p->fields;
-	      if (finish && p->range_end && p->index == p->range_start)
+	      如果 (finish && p->range_end && p->index == p->range_start)
 		{
 		  finish = 0;
 		  p->prev = 0;
 		}
 	      p = p->next;
-	      if (!p)
+	      如果 (!p)
 		break;
 	      finish_implicit_inits (loc, braced_init_obstack);
 	      push_init_level (loc, 2, braced_init_obstack);
 	      p->stack = constructor_stack;
-	      if (p->range_end && tree_int_cst_equal (p->index, p->range_end))
+	      如果 (p->range_end && tree_int_cst_equal (p->index, p->range_end))
 		p->index = p->range_start;
 	    }
 
-	  if (!finish)
+	  如果 (!finish)
 	    constructor_range_stack = range_stack;
 	  continue;
 	}
@@ -13131,7 +13131,7 @@ retry:
 
   constructor_range_stack = 0;
 
-  if (raw_data && RAW_DATA_LENGTH (raw_data))
+  如果 (raw_data && RAW_DATA_LENGTH (raw_data))
     {
       gcc_assert (!string_flag && !was_designated);
       value.value = raw_data;
@@ -13146,9 +13146,9 @@ retry:
 tree
 build_asm_stmt (bool is_volatile, tree args)
 {
-  if (is_volatile)
+  如果 (is_volatile)
     ASM_VOLATILE_P (args) = 1;
-  return add_stmt (args);
+  返回 add_stmt (args);
 }
 
 /* Build an asm-expr, whose components are a STRING, some OUTPUTS,
@@ -13164,11 +13164,11 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
 {
   tree tail;
   tree args;
-  int i;
+  整数 i;
   const char *constraint;
   const char **oconstraints;
   bool allows_mem, allows_reg, is_inout;
-  int ninputs, noutputs;
+  整数 ninputs, noutputs;
 
   ninputs = list_length (inputs);
   noutputs = list_length (outputs);
@@ -13177,7 +13177,7 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
   string = resolve_asm_operand_names (string, outputs, inputs, labels);
 
   /* Remove output conversions that change the type but not the mode.  */
-  for (i = 0, tail = outputs; tail; ++i, tail = TREE_CHAIN (tail))
+  为 (i = 0, tail = outputs; tail; ++i, tail = TREE_CHAIN (tail))
     {
       tree output = TREE_VALUE (tail);
 
@@ -13191,10 +13191,10 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
 	 get an error.  Gross, but ...  */
       STRIP_NOPS (output);
 
-      if (!lvalue_or_else (loc, output, lv_asm))
+      如果 (!lvalue_or_else (loc, output, lv_asm))
 	output = error_mark_node;
 
-      if (output != error_mark_node
+      如果 (output != error_mark_node
 	  && (TREE_READONLY (output)
 	      || TYPE_READONLY (TREE_TYPE (output))
 	      || (RECORD_OR_UNION_TYPE_P (TREE_TYPE (output))
@@ -13204,45 +13204,45 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
       constraint = TREE_STRING_POINTER (TREE_VALUE (TREE_PURPOSE (tail)));
       oconstraints[i] = constraint;
 
-      if (parse_output_constraint (&constraint, i, ninputs, noutputs,
+      如果 (parse_output_constraint (&constraint, i, ninputs, noutputs,
 				   &allows_mem, &allows_reg, &is_inout,
 				   nullptr))
 	{
 	  /* If the operand is going to end up in memory,
 	     mark it addressable.  */
-	  if (!allows_reg && !c_mark_addressable (output))
+	  如果 (!allows_reg && !c_mark_addressable (output))
 	    output = error_mark_node;
-	  if (!(!allows_reg && allows_mem)
+	  如果 (!(!allows_reg && allows_mem)
 	      && output != error_mark_node
 	      && VOID_TYPE_P (TREE_TYPE (output)))
 	    {
 	      error_at (loc, "invalid use of void expression");
 	      output = error_mark_node;
 	    }
-	  if (allows_reg && current_function_decl == NULL_TREE)
+	  如果 (allows_reg && current_function_decl == NULL_TREE)
 	    {
 	      error_at (loc, "constraint allows registers outside of "
 			     "a function");
 	      output = error_mark_node;
 	    }
 	}
-      else
+      否则
 	output = error_mark_node;
 
-      if (current_function_decl == NULL_TREE && output != error_mark_node)
+      如果 (current_function_decl == NULL_TREE && output != error_mark_node)
 	{
-	  if (TREE_SIDE_EFFECTS (output))
+	  如果 (TREE_SIDE_EFFECTS (output))
 	    {
 	      error_at (loc, "side-effects in output operand outside "
 			     "of a function");
 	      output = error_mark_node;
 	    }
-	  else
+	  否则
 	    {
 	      tree addr = build_unary_op (loc, ADDR_EXPR, output, false);
-	      if (addr == error_mark_node)
+	      如果 (addr == error_mark_node)
 		output = error_mark_node;
-	      else if (!initializer_constant_valid_p (addr, TREE_TYPE (addr)))
+	      否则 如果 (!initializer_constant_valid_p (addr, TREE_TYPE (addr)))
 		{
 		  error_at (loc, "output operand outside of a function is not "
 				 "constant");
@@ -13250,7 +13250,7 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
 		}
 	    }
 	}
-      else if (output != error_mark_node && strstr (constraint, "-"))
+      否则 如果 (output != error_mark_node && strstr (constraint, "-"))
 	{
 	  error_at (loc, "%<-%> modifier used inside of a function");
 	  output = error_mark_node;
@@ -13259,52 +13259,52 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
       TREE_VALUE (tail) = output;
     }
 
-  for (i = 0, tail = inputs; tail; ++i, tail = TREE_CHAIN (tail))
+  为 (i = 0, tail = inputs; tail; ++i, tail = TREE_CHAIN (tail))
     {
       tree input;
 
       constraint = TREE_STRING_POINTER (TREE_VALUE (TREE_PURPOSE (tail)));
       input = TREE_VALUE (tail);
 
-      if (parse_input_constraint (&constraint, i, ninputs, noutputs, 0,
+      如果 (parse_input_constraint (&constraint, i, ninputs, noutputs, 0,
 				  oconstraints, &allows_mem, &allows_reg,
 				  nullptr))
 	{
 	  /* If the operand is going to end up in memory,
 	     mark it addressable.  */
-	  if (!allows_reg && allows_mem)
+	  如果 (!allows_reg && allows_mem)
 	    {
 	      input = c_fully_fold (input, false, NULL, true);
 
 	      /* Strip the nops as we allow this case.  FIXME, this really
 		 should be rejected or made deprecated.  */
 	      STRIP_NOPS (input);
-	      if (!c_mark_addressable (input))
+	      如果 (!c_mark_addressable (input))
 		input = error_mark_node;
 	    }
-	  else
+	  否则
 	    {
 	      input = c_fully_fold (convert_lvalue_to_rvalue (loc, input,
 							      true, false),
 				    false, NULL);
 
-	      if (input != error_mark_node && VOID_TYPE_P (TREE_TYPE (input)))
+	      如果 (input != error_mark_node && VOID_TYPE_P (TREE_TYPE (input)))
 		{
 		  error_at (loc, "invalid use of void expression");
 		  input = error_mark_node;
 		}
 	    }
-	  if (allows_reg && current_function_decl == NULL_TREE)
+	  如果 (allows_reg && current_function_decl == NULL_TREE)
 	    {
 	      error_at (loc, "constraint allows registers outside of "
 			     "a function");
 	      input = error_mark_node;
 	    }
-	  if (constraint[0] == ':' && input != error_mark_node)
+	  如果 (constraint[0] == ':' && input != error_mark_node)
 	    {
 	      tree t = input;
 	      STRIP_NOPS (t);
-	      if (TREE_CODE (t) != ADDR_EXPR
+	      如果 (TREE_CODE (t) != ADDR_EXPR
 		  || !(TREE_CODE (TREE_OPERAND (t, 0)) == FUNCTION_DECL
 		       || (VAR_P (TREE_OPERAND (t, 0))
 			   && is_global_var (TREE_OPERAND (t, 0)))))
@@ -13313,27 +13313,27 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
 				 "of a function or non-automatic variable");
 		  input = error_mark_node;
 		}
-	      else if (TREE_CODE (TREE_OPERAND (t, 0)) == FUNCTION_DECL)
+	      否则 如果 (TREE_CODE (TREE_OPERAND (t, 0)) == FUNCTION_DECL)
 		suppress_warning (TREE_OPERAND (t, 0), OPT_Wunused);
 	    }
 	}
-      else
+      否则
 	input = error_mark_node;
 
-      if (current_function_decl == NULL_TREE && input != error_mark_node)
+      如果 (current_function_decl == NULL_TREE && input != error_mark_node)
 	{
-	  if (TREE_SIDE_EFFECTS (input))
+	  如果 (TREE_SIDE_EFFECTS (input))
 	    {
 	      error_at (loc, "side-effects in input operand outside "
 			     "of a function");
 	      input = error_mark_node;
 	    }
-	  else
+	  否则
 	    {
 	      tree tem = input;
-	      if (allows_mem && lvalue_p (input))
+	      如果 (allows_mem && lvalue_p (input))
 		tem = build_unary_op (loc, ADDR_EXPR, input, false);
-	      if (!initializer_constant_valid_p (tem, TREE_TYPE (tem)))
+	      如果 (!initializer_constant_valid_p (tem, TREE_TYPE (tem)))
 		{
 		  error_at (loc, "input operand outside of a function is not "
 				 "constant");
@@ -13341,7 +13341,7 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
 		}
 	    }
 	}
-      else if (input != error_mark_node && strstr (constraint, "-"))
+      否则 如果 (input != error_mark_node && strstr (constraint, "-"))
 	{
 	  error_at (loc, "%<-%> modifier used inside of a function");
 	  input = error_mark_node;
@@ -13358,7 +13358,7 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
   ASM_VOLATILE_P (args) = (noutputs == 0);
   ASM_INLINE_P (args) = is_inline;
 
-  return args;
+  返回 args;
 }
 
 /* Generate a goto statement to LABEL.  LOC is the location of the
@@ -13368,15 +13368,15 @@ tree
 c_finish_goto_label (location_t loc, tree label)
 {
   tree decl = lookup_label_for_goto (loc, label);
-  if (!decl)
-    return NULL_TREE;
+  如果 (!decl)
+    返回 NULL_TREE;
   TREE_USED (decl) = 1;
   mark_decl_used (decl, false);
   {
     add_stmt (build_predict_expr (PRED_GOTO, NOT_TAKEN));
     tree t = build1 (GOTO_EXPR, void_type_node, decl);
     SET_EXPR_LOCATION (t, loc);
-    return add_stmt (t);
+    返回 add_stmt (t);
   }
 }
 
@@ -13389,7 +13389,7 @@ c_finish_goto_ptr (location_t loc, c_expr val)
   tree expr = val.value;
   tree t;
   pedwarn (loc, OPT_Wpedantic, "ISO C forbids %<goto *expr;%>");
-  if (expr != error_mark_node
+  如果 (expr != error_mark_node
       && !POINTER_TYPE_P (TREE_TYPE (expr))
       && !null_pointer_constant_p (expr))
     {
@@ -13401,7 +13401,7 @@ c_finish_goto_ptr (location_t loc, c_expr val)
   expr = convert (ptr_type_node, expr);
   t = build1 (GOTO_EXPR, void_type_node, expr);
   SET_EXPR_LOCATION (t, loc);
-  return add_stmt (t);
+  返回 add_stmt (t);
 }
 
 /* Generate a C `return' statement.  RETVAL is the expression for what
@@ -13422,36 +13422,36 @@ c_finish_return (location_t loc, tree retval, tree origtype, bool musttail_p)
      in a function returning void.  */
   location_t xloc = expansion_point_location_if_in_system_header (loc);
 
-  if (TREE_THIS_VOLATILE (current_function_decl))
+  如果 (TREE_THIS_VOLATILE (current_function_decl))
     warning_at (xloc, 0,
 		"function declared %<noreturn%> has a %<return%> statement");
 
   set_musttail_on_return (retval, xloc, musttail_p);
 
-  if (retval)
+  如果 (retval)
     {
       tree semantic_type = NULL_TREE;
       npc = null_pointer_constant_p (retval);
-      if (TREE_CODE (retval) == EXCESS_PRECISION_EXPR)
+      如果 (TREE_CODE (retval) == EXCESS_PRECISION_EXPR)
 	{
 	  semantic_type = TREE_TYPE (retval);
 	  retval = TREE_OPERAND (retval, 0);
 	}
       retval = c_fully_fold (retval, false, NULL);
-      if (semantic_type
+      如果 (semantic_type
 	  && valtype != NULL_TREE
 	  && TREE_CODE (valtype) != VOID_TYPE)
 	retval = build1 (EXCESS_PRECISION_EXPR, semantic_type, retval);
     }
 
-  if (!retval)
+  如果 (!retval)
     {
       current_function_returns_null = 1;
-      if ((warn_return_type >= 0 || flag_isoc99)
+      如果 ((warn_return_type >= 0 || flag_isoc99)
 	  && valtype != NULL_TREE && TREE_CODE (valtype) != VOID_TYPE)
 	{
 	  no_warning = true;
-	  if (emit_diagnostic (flag_isoc99
+	  如果 (emit_diagnostic (flag_isoc99
 			       ? diagnostics::kind::permerror
 			       : diagnostics::kind::warning,
 			       loc, OPT_Wreturn_mismatch,
@@ -13461,23 +13461,23 @@ c_finish_return (location_t loc, tree retval, tree origtype, bool musttail_p)
 		    "declared here");
 	}
     }
-  else if (valtype == NULL_TREE || VOID_TYPE_P (valtype))
+  否则 如果 (valtype == NULL_TREE || VOID_TYPE_P (valtype))
     {
       current_function_returns_null = 1;
       bool warned_here;
-      if (TREE_CODE (TREE_TYPE (retval)) != VOID_TYPE)
+      如果 (TREE_CODE (TREE_TYPE (retval)) != VOID_TYPE)
 	warned_here = permerror_opt
 	  (xloc, OPT_Wreturn_mismatch,
 	   "%<return%> with a value, in function returning void");
-      else
+      否则
 	warned_here = pedwarn
 	  (xloc, OPT_Wpedantic, "ISO C forbids "
 	   "%<return%> with expression, in function returning void");
-      if (warned_here)
+      如果 (warned_here)
 	inform (DECL_SOURCE_LOCATION (current_function_decl),
 		"declared here");
     }
-  else
+  否则
     {
       tree t = convert_for_assignment (loc, UNKNOWN_LOCATION, valtype,
 				       retval, origtype, ic_return,
@@ -13487,16 +13487,16 @@ c_finish_return (location_t loc, tree retval, tree origtype, bool musttail_p)
       bool save;
 
       current_function_returns_value = 1;
-      if (t == error_mark_node)
+      如果 (t == error_mark_node)
 	{
 	  /* Suppress -Wreturn-type for this function.  */
-	  if (warn_return_type)
+	  如果 (warn_return_type)
 	    suppress_warning (current_function_decl, OPT_Wreturn_type);
-	  return NULL_TREE;
+	  返回 NULL_TREE;
 	}
 
       save = in_late_binary_op;
-      if (C_BOOLEAN_TYPE_P (TREE_TYPE (res))
+      如果 (C_BOOLEAN_TYPE_P (TREE_TYPE (res))
 	  || TREE_CODE (TREE_TYPE (res)) == COMPLEX_TYPE
 	  || (SCALAR_FLOAT_TYPE_P (TREE_TYPE (t))
 	      && (TREE_CODE (TREE_TYPE (res)) == INTEGER_TYPE
@@ -13508,7 +13508,7 @@ c_finish_return (location_t loc, tree retval, tree origtype, bool musttail_p)
 
       /* Strip any conversions, additions, and subtractions, and see if
 	 we are returning the address of a local variable.  Warn if so.  */
-      while (1)
+      当 (1)
 	{
 	  switch (TREE_CODE (inner))
 	    {
@@ -13526,12 +13526,12 @@ c_finish_return (location_t loc, tree retval, tree origtype, bool musttail_p)
 	      {
 		tree op1 = TREE_OPERAND (inner, 1);
 
-		while (!POINTER_TYPE_P (TREE_TYPE (op1))
+		当 (!POINTER_TYPE_P (TREE_TYPE (op1))
 		       && (CONVERT_EXPR_P (op1)
 			   || TREE_CODE (op1) == NON_LVALUE_EXPR))
 		  op1 = TREE_OPERAND (op1, 0);
 
-		if (POINTER_TYPE_P (TREE_TYPE (op1)))
+		如果 (POINTER_TYPE_P (TREE_TYPE (op1)))
 		  break;
 
 		inner = TREE_OPERAND (inner, 0);
@@ -13541,25 +13541,25 @@ c_finish_return (location_t loc, tree retval, tree origtype, bool musttail_p)
 	    case ADDR_EXPR:
 	      inner = TREE_OPERAND (inner, 0);
 
-	      while (REFERENCE_CLASS_P (inner)
+	      当 (REFERENCE_CLASS_P (inner)
 		     && !INDIRECT_REF_P (inner))
 		inner = TREE_OPERAND (inner, 0);
 
-	      if (DECL_P (inner)
+	      如果 (DECL_P (inner)
 		  && !DECL_EXTERNAL (inner)
 		  && DECL_CONTEXT (inner) == current_function_decl
 		  && POINTER_TYPE_P (TREE_TYPE (TREE_TYPE (current_function_decl))))
 		{
-		  if (TREE_CODE (inner) == LABEL_DECL)
+		  如果 (TREE_CODE (inner) == LABEL_DECL)
 		    warning_at (loc, OPT_Wreturn_local_addr,
 				"function returns address of label");
-		  else if (TREE_CODE (inner) == FUNCTION_DECL
+		  否则 如果 (TREE_CODE (inner) == FUNCTION_DECL
 			   && (C_FUNC_NONLOCAL_CONTEXT (inner)
 			       || !DECL_INITIAL (inner)))
 		    warning_at (loc, OPT_Wreturn_local_addr,
 				"function returns address of nested function "
 				"referencing local context");
-		  else if (TREE_CODE (inner) != FUNCTION_DECL
+		  否则 如果 (TREE_CODE (inner) != FUNCTION_DECL
 			   && !TREE_STATIC (inner))
 		    {
 		      warning_at (loc, OPT_Wreturn_local_addr,
@@ -13580,14 +13580,14 @@ c_finish_return (location_t loc, tree retval, tree origtype, bool musttail_p)
       retval = build2 (MODIFY_EXPR, TREE_TYPE (res), res, t);
       SET_EXPR_LOCATION (retval, loc);
 
-      if (warn_sequence_point)
+      如果 (warn_sequence_point)
 	verify_sequence_points (retval);
     }
 
   ret_stmt = build_stmt (loc, RETURN_EXPR, retval);
-  if (no_warning)
+  如果 (no_warning)
     suppress_warning (ret_stmt, OPT_Wreturn_type);
-  return add_stmt (ret_stmt);
+  返回 add_stmt (ret_stmt);
 }
 
 struct c_switch {
@@ -13642,36 +13642,36 @@ c_start_switch (location_t switch_loc,
   bool bool_cond_p = false;
   struct c_switch *cs;
 
-  if (exp != error_mark_node)
+  如果 (exp != error_mark_node)
     {
       orig_type = TREE_TYPE (exp);
 
-      if (!INTEGRAL_TYPE_P (orig_type))
+      如果 (!INTEGRAL_TYPE_P (orig_type))
 	{
-	  if (orig_type != error_mark_node)
+	  如果 (orig_type != error_mark_node)
 	    {
 	      error_at (switch_cond_loc, "switch quantity not an integer");
 	      orig_type = error_mark_node;
 	    }
 	  exp = integer_zero_node;
 	}
-      else
+      否则
 	{
 	  tree type = TYPE_MAIN_VARIANT (orig_type);
 	  tree e = exp;
 
 	  /* Warn if the condition has boolean value.  */
-	  while (TREE_CODE (e) == COMPOUND_EXPR)
+	  当 (TREE_CODE (e) == COMPOUND_EXPR)
 	    e = TREE_OPERAND (e, 1);
 
-	  if ((C_BOOLEAN_TYPE_P (type)
+	  如果 ((C_BOOLEAN_TYPE_P (type)
 	       || truth_value_p (TREE_CODE (e)))
 	      /* Explicit cast to int suppresses this warning.  */
 	      && !(TREE_CODE (type) == INTEGER_TYPE
 		   && explicit_cast_p))
 	    bool_cond_p = true;
 
-	  if (!in_system_header_at (input_location)
+	  如果 (!in_system_header_at (input_location)
 	      && (type == long_integer_type_node
 		  || type == long_unsigned_type_node))
 	    warning_at (switch_cond_loc,
@@ -13681,7 +13681,7 @@ c_start_switch (location_t switch_loc,
 	  exp = c_fully_fold (exp, false, NULL);
 	  exp = default_conversion (exp);
 
-	  if (warn_sequence_point)
+	  如果 (warn_sequence_point)
 	    verify_sequence_points (exp);
 	}
     }
@@ -13698,7 +13698,7 @@ c_start_switch (location_t switch_loc,
   cs->next = c_switch_stack;
   c_switch_stack = cs;
 
-  return add_stmt (cs->switch_stmt);
+  返回 add_stmt (cs->switch_stmt);
 }
 
 /* Process a case label at location LOC, with attributes ATTRS.  */
@@ -13708,42 +13708,42 @@ do_case (location_t loc, tree low_value, tree high_value, tree attrs)
 {
   tree label = NULL_TREE;
 
-  if (low_value && TREE_CODE (low_value) != INTEGER_CST)
+  如果 (low_value && TREE_CODE (low_value) != INTEGER_CST)
     {
       low_value = c_fully_fold (low_value, false, NULL);
-      if (TREE_CODE (low_value) == INTEGER_CST)
+      如果 (TREE_CODE (low_value) == INTEGER_CST)
 	pedwarn (loc, OPT_Wpedantic,
 		 "case label is not an integer constant expression");
     }
 
-  if (high_value && TREE_CODE (high_value) != INTEGER_CST)
+  如果 (high_value && TREE_CODE (high_value) != INTEGER_CST)
     {
       high_value = c_fully_fold (high_value, false, NULL);
-      if (TREE_CODE (high_value) == INTEGER_CST)
+      如果 (TREE_CODE (high_value) == INTEGER_CST)
 	pedwarn (input_location, OPT_Wpedantic,
 		 "case label is not an integer constant expression");
     }
 
-  if (c_switch_stack == NULL)
+  如果 (c_switch_stack == NULL)
     {
-      if (low_value)
+      如果 (low_value)
 	error_at (loc, "case label not within a switch statement");
-      else
+      否则
 	error_at (loc, "%<default%> label not within a switch statement");
-      return NULL_TREE;
+      返回 NULL_TREE;
     }
 
-  if (c_check_switch_jump_warnings (c_switch_stack->bindings,
+  如果 (c_check_switch_jump_warnings (c_switch_stack->bindings,
 				    EXPR_LOCATION (c_switch_stack->switch_stmt),
 				    loc))
-    return NULL_TREE;
+    返回 NULL_TREE;
 
   label = c_add_case_label (loc, c_switch_stack->cases,
 			    SWITCH_STMT_COND (c_switch_stack->switch_stmt),
 			    low_value, high_value, attrs);
-  if (label == error_mark_node)
+  如果 (label == error_mark_node)
     label = NULL_TREE;
-  return label;
+  返回 label;
 }
 
 /* Finish the switch statement.  TYPE is the original type of the
@@ -13762,7 +13762,7 @@ c_finish_switch (tree body, tree type)
   c_do_switch_warnings (cs->cases, switch_location,
 			type ? type : SWITCH_STMT_TYPE (cs->switch_stmt),
 			SWITCH_STMT_COND (cs->switch_stmt), cs->bool_cond_p);
-  if (c_switch_covers_all_cases_p (cs->cases,
+  如果 (c_switch_covers_all_cases_p (cs->cases,
 				   SWITCH_STMT_TYPE (cs->switch_stmt)))
     SWITCH_STMT_ALL_CASES_P (cs->switch_stmt) = 1;
   SWITCH_STMT_NO_BREAK_P (cs->switch_stmt) = !cs->break_stmt_seen_p;
@@ -13801,18 +13801,18 @@ c_finish_bc_stmt (location_t loc, tree label, bool is_break, tree name)
      understand.  */
   bool skip = !block_may_fallthru (cur_stmt_list);
 
-  if (is_break)
+  如果 (is_break)
     switch (in_statement & ~IN_NAMED_STMT)
       {
       case 0:
 	error_at (loc, "break statement not within loop or switch");
-	return NULL_TREE;
+	返回 NULL_TREE;
       case IN_OMP_BLOCK:
 	error_at (loc, "invalid exit from OpenMP structured block");
-	return NULL_TREE;
+	返回 NULL_TREE;
       case IN_OMP_FOR:
 	error_at (loc, "break statement used with OpenMP for loop");
-	return NULL_TREE;
+	返回 NULL_TREE;
       case IN_ITERATION_STMT:
       case IN_OBJC_FOREACH:
 	break;
@@ -13821,15 +13821,15 @@ c_finish_bc_stmt (location_t loc, tree label, bool is_break, tree name)
 	c_switch_stack->break_stmt_seen_p = true;
 	break;
       }
-  else
+  否则
     switch (in_statement & ~(IN_SWITCH_STMT | IN_NAMED_STMT))
       {
       case 0:
 	error_at (loc, "continue statement not within a loop");
-	return NULL_TREE;
+	返回 NULL_TREE;
       case IN_OMP_BLOCK:
 	error_at (loc, "invalid exit from OpenMP structured block");
-	return NULL_TREE;
+	返回 NULL_TREE;
       case IN_ITERATION_STMT:
       case IN_OMP_FOR:
       case IN_OBJC_FOREACH:
@@ -13838,26 +13838,26 @@ c_finish_bc_stmt (location_t loc, tree label, bool is_break, tree name)
 	gcc_unreachable ();
       }
 
-  if (skip)
-    return NULL_TREE;
-  else if ((in_statement & IN_OBJC_FOREACH)
+  如果 (skip)
+    返回 NULL_TREE;
+  否则 如果 ((in_statement & IN_OBJC_FOREACH)
 	   && !(is_break && (in_statement & IN_SWITCH_STMT))
 	   && name == NULL_TREE)
     {
       /* The foreach expander produces low-level code using gotos instead
 	 of a structured loop construct.  */
       gcc_assert (label);
-      return add_stmt (build_stmt (loc, GOTO_EXPR, label));
+      返回 add_stmt (build_stmt (loc, GOTO_EXPR, label));
     }
-  else if (name && C_DECL_LOOP_NAME (name) && C_DECL_SWITCH_NAME (name))
+  否则 如果 (name && C_DECL_LOOP_NAME (name) && C_DECL_SWITCH_NAME (name))
     {
       label = DECL_CHAIN (name);
-      if (!is_break)
+      如果 (!is_break)
 	label = DECL_CHAIN (label);
       /* Foreach expander from some outer level.  */
-      return add_stmt (build_stmt (loc, GOTO_EXPR, label));
+      返回 add_stmt (build_stmt (loc, GOTO_EXPR, label));
     }
-  return add_stmt (build_stmt (loc, is_break ? BREAK_STMT : CONTINUE_STMT,
+  返回 add_stmt (build_stmt (loc, is_break ? BREAK_STMT : CONTINUE_STMT,
 			       name));
 }
 
@@ -13867,27 +13867,27 @@ static void
 emit_side_effect_warnings (location_t loc, tree expr)
 {
   maybe_warn_nodiscard (loc, expr);
-  if (!warn_unused_value)
-    return;
-  if (expr == error_mark_node)
+  如果 (!warn_unused_value)
+    返回;
+  如果 (expr == error_mark_node)
     ;
-  else if (!TREE_SIDE_EFFECTS (expr))
+  否则 如果 (!TREE_SIDE_EFFECTS (expr))
     {
-      if (!VOID_TYPE_P (TREE_TYPE (expr))
+      如果 (!VOID_TYPE_P (TREE_TYPE (expr))
 	  && !warning_suppressed_p (expr, OPT_Wunused_value))
 	warning_at (loc, OPT_Wunused_value, "statement with no effect");
     }
-  else if (TREE_CODE (expr) == COMPOUND_EXPR)
+  否则 如果 (TREE_CODE (expr) == COMPOUND_EXPR)
     {
       tree r = expr;
       location_t cloc = loc;
-      while (TREE_CODE (r) == COMPOUND_EXPR)
+      当 (TREE_CODE (r) == COMPOUND_EXPR)
 	{
-	  if (EXPR_HAS_LOCATION (r))
+	  如果 (EXPR_HAS_LOCATION (r))
 	    cloc = EXPR_LOCATION (r);
 	  r = TREE_OPERAND (r, 1);
 	}
-      if (!TREE_SIDE_EFFECTS (r)
+      如果 (!TREE_SIDE_EFFECTS (r)
 	  && !VOID_TYPE_P (TREE_TYPE (r))
 	  && !CONVERT_EXPR_P (r)
 	  && !warning_suppressed_p (r, OPT_Wunused_value)
@@ -13895,7 +13895,7 @@ emit_side_effect_warnings (location_t loc, tree expr)
 	warning_at (cloc, OPT_Wunused_value,
 		    "right-hand operand of comma expression has no effect");
     }
-  else
+  否则
     warn_if_unused_value (expr, loc);
 }
 
@@ -13908,15 +13908,15 @@ c_process_expr_stmt (location_t loc, tree expr)
 {
   tree exprv;
 
-  if (!expr)
-    return NULL_TREE;
+  如果 (!expr)
+    返回 NULL_TREE;
 
   expr = c_fully_fold (expr, false, NULL);
 
-  if (warn_sequence_point)
+  如果 (warn_sequence_point)
     verify_sequence_points (expr);
 
-  if (TREE_TYPE (expr) != error_mark_node
+  如果 (TREE_TYPE (expr) != error_mark_node
       && !COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (expr))
       && TREE_CODE (TREE_TYPE (expr)) != ARRAY_TYPE)
     error_at (loc, "expression statement has incomplete type");
@@ -13924,29 +13924,29 @@ c_process_expr_stmt (location_t loc, tree expr)
   /* If we're not processing a statement expression, warn about unused values.
      Warnings for statement expressions will be emitted later, once we figure
      out which is the result.  */
-  if (!STATEMENT_LIST_STMT_EXPR (cur_stmt_list)
+  如果 (!STATEMENT_LIST_STMT_EXPR (cur_stmt_list)
       && (warn_unused_value || warn_unused_result))
     emit_side_effect_warnings (EXPR_LOC_OR_LOC (expr, loc), expr);
 
   exprv = expr;
-  while (TREE_CODE (exprv) == COMPOUND_EXPR)
+  当 (TREE_CODE (exprv) == COMPOUND_EXPR)
     exprv = TREE_OPERAND (exprv, 1);
-  while (CONVERT_EXPR_P (exprv))
+  当 (CONVERT_EXPR_P (exprv))
     exprv = TREE_OPERAND (exprv, 0);
-  if (DECL_P (exprv)
+  如果 (DECL_P (exprv)
       || handled_component_p (exprv)
       || TREE_CODE (exprv) == ADDR_EXPR)
     mark_exp_read (exprv);
 
   /* If the expression is not of a type to which we cannot assign a line
      number, wrap the thing in a no-op NOP_EXPR.  */
-  if (DECL_P (expr) || CONSTANT_CLASS_P (expr))
+  如果 (DECL_P (expr) || CONSTANT_CLASS_P (expr))
     {
       expr = build1 (NOP_EXPR, TREE_TYPE (expr), expr);
       SET_EXPR_LOCATION (expr, loc);
     }
 
-  return expr;
+  返回 expr;
 }
 
 /* Emit an expression as a statement.  LOC is the location of the
@@ -13955,10 +13955,10 @@ c_process_expr_stmt (location_t loc, tree expr)
 tree
 c_finish_expr_stmt (location_t loc, tree expr)
 {
-  if (expr)
-    return add_stmt (c_process_expr_stmt (loc, expr));
-  else
-    return NULL;
+  如果 (expr)
+    返回 add_stmt (c_process_expr_stmt (loc, expr));
+  否则
+    返回 NULL;
 }
 
 /* Do the opposite and emit a statement as an expression.  To begin,
@@ -13982,7 +13982,7 @@ c_begin_stmt_expr (void)
   /* Mark the current statement list as belonging to a statement list.  */
   STATEMENT_LIST_STMT_EXPR (ret) = 1;
 
-  return ret;
+  返回 ret;
 }
 
 /* LOC is the location of the compound statement to which this body
@@ -14006,22 +14006,22 @@ c_finish_stmt_expr (location_t loc, tree body)
   last = BIND_EXPR_BODY (body);
 
  continue_searching:
-  if (TREE_CODE (last) == STATEMENT_LIST)
+  如果 (TREE_CODE (last) == STATEMENT_LIST)
     {
       tree_stmt_iterator l = tsi_last (last);
 
-      while (!tsi_end_p (l) && TREE_CODE (tsi_stmt (l)) == DEBUG_BEGIN_STMT)
+      当 (!tsi_end_p (l) && TREE_CODE (tsi_stmt (l)) == DEBUG_BEGIN_STMT)
 	tsi_prev (&l);
 
       /* This can happen with degenerate cases like ({ }).  No value.  */
-      if (tsi_end_p (l))
-	return body;
+      如果 (tsi_end_p (l))
+	返回 body;
 
       /* If we're supposed to generate side effects warnings, process
 	 all of the statements except the last.  */
-      if (warn_unused_value || warn_unused_result)
+      如果 (warn_unused_value || warn_unused_result)
 	{
-	  for (tree_stmt_iterator i = tsi_start (last);
+	  为 (tree_stmt_iterator i = tsi_start (last);
 	       tsi_stmt (i) != tsi_stmt (l); tsi_next (&i))
 	    {
 	      location_t tloc;
@@ -14037,7 +14037,7 @@ c_finish_stmt_expr (location_t loc, tree body)
 
   /* If the end of the list is exception related, then the list was split
      by a call to push_cleanup.  Continue searching.  */
-  if (TREE_CODE (last) == TRY_FINALLY_EXPR
+  如果 (TREE_CODE (last) == TRY_FINALLY_EXPR
       || TREE_CODE (last) == TRY_CATCH_EXPR)
     {
       last_p = &TREE_OPERAND (last, 0);
@@ -14045,12 +14045,12 @@ c_finish_stmt_expr (location_t loc, tree body)
       goto continue_searching;
     }
 
-  if (last == error_mark_node)
-    return last;
+  如果 (last == error_mark_node)
+    返回 last;
 
   /* In the case that the BIND_EXPR is not necessary, return the
      expression out from inside it.  */
-  if ((last == BIND_EXPR_BODY (body)
+  如果 ((last == BIND_EXPR_BODY (body)
        /* Skip nested debug stmts.  */
        || last == expr_first (BIND_EXPR_BODY (body)))
       && BIND_EXPR_VARS (body) == NULL)
@@ -14061,7 +14061,7 @@ c_finish_stmt_expr (location_t loc, tree body)
       /* Do not warn if the return value of a statement expression is
 	 unused.  */
       suppress_warning (last, OPT_Wunused);
-      return last;
+      返回 last;
     }
 
   /* Extract the type of said expression.  */
@@ -14069,8 +14069,8 @@ c_finish_stmt_expr (location_t loc, tree body)
 
   /* If we're not returning a value at all, then the BIND_EXPR that
      we already have is a fine expression to return.  */
-  if (!type || VOID_TYPE_P (type))
-    return body;
+  如果 (!type || VOID_TYPE_P (type))
+    返回 body;
 
   /* Now that we've located the expression containing the value, it seems
      silly to make voidify_wrapper_expr repeat the process.  Create a
@@ -14080,7 +14080,7 @@ c_finish_stmt_expr (location_t loc, tree body)
   /* Unwrap a no-op NOP_EXPR as added by c_finish_expr_stmt.  This avoids
      tree_expr_nonnegative_p giving up immediately.  */
   val = last;
-  if (TREE_CODE (val) == NOP_EXPR
+  如果 (TREE_CODE (val) == NOP_EXPR
       && TREE_TYPE (val) == TREE_TYPE (TREE_OPERAND (val, 0)))
     val = TREE_OPERAND (val, 0);
 
@@ -14090,7 +14090,7 @@ c_finish_stmt_expr (location_t loc, tree body)
   {
     tree t = build4 (TARGET_EXPR, type, tmp, body, NULL_TREE, NULL_TREE);
     SET_EXPR_LOCATION (t, loc);
-    return t;
+    返回 t;
   }
 }
 
@@ -14101,9 +14101,9 @@ tree
 c_begin_compound_stmt (bool do_scope)
 {
   tree stmt = push_stmt_list ();
-  if (do_scope)
+  如果 (do_scope)
     push_scope ();
-  return stmt;
+  返回 stmt;
 }
 
 /* End a compound statement.  STMT is the statement.  LOC is the
@@ -14115,9 +14115,9 @@ c_end_compound_stmt (location_t loc, tree stmt, bool do_scope)
 {
   tree block = NULL;
 
-  if (do_scope)
+  如果 (do_scope)
     {
-      if (c_dialect_objc ())
+      如果 (c_dialect_objc ())
 	objc_clear_super_receiver ();
       block = pop_scope ();
     }
@@ -14130,7 +14130,7 @@ c_end_compound_stmt (location_t loc, tree stmt, bool do_scope)
      do the wrong thing for ({ { 1; } }) or ({ 1; { } }).  In particular,
      STATEMENT_LISTs merge, and thus we can lose track of what statement
      was really last.  */
-  if (building_stmt_list_p ()
+  如果 (building_stmt_list_p ()
       && STATEMENT_LIST_STMT_EXPR (cur_stmt_list)
       && TREE_CODE (stmt) != BIND_EXPR)
     {
@@ -14139,7 +14139,7 @@ c_end_compound_stmt (location_t loc, tree stmt, bool do_scope)
       SET_EXPR_LOCATION (stmt, loc);
     }
 
-  return stmt;
+  返回 stmt;
 }
 
 /* Queue a cleanup.  CLEANUP is an expression/statement to be executed
@@ -14173,7 +14173,7 @@ build_vec_cmp (tree_code code, tree type,
   tree minus_one_vec = build_minus_one_cst (type);
   tree cmp_type = truth_type_for (TREE_TYPE (arg0));
   tree cmp = build2 (code, cmp_type, arg0, arg1);
-  return build3 (VEC_COND_EXPR, type, cmp, minus_one_vec, zero_vec);
+  返回 build3 (VEC_COND_EXPR, type, cmp, minus_one_vec, zero_vec);
 }
 
 /* Possibly warn about an address of OP never being NULL in a comparison
@@ -14183,65 +14183,65 @@ static void
 maybe_warn_for_null_address (location_t loc, tree op, tree_code code)
 {
   /* Prevent warnings issued for macro expansion.  */
-  if (!warn_address
+  如果 (!warn_address
       || warning_suppressed_p (op, OPT_Waddress)
       || from_macro_expansion_at (loc))
-    return;
+    返回;
 
-  if (TREE_CODE (op) == NOP_EXPR)
+  如果 (TREE_CODE (op) == NOP_EXPR)
     {
       /* Allow casts to intptr_t to suppress the warning.  */
       tree type = TREE_TYPE (op);
-      if (TREE_CODE (type) == INTEGER_TYPE)
-	return;
+      如果 (TREE_CODE (type) == INTEGER_TYPE)
+	返回;
       op = TREE_OPERAND (op, 0);
     }
 
-  if (TREE_CODE (op) == POINTER_PLUS_EXPR)
+  如果 (TREE_CODE (op) == POINTER_PLUS_EXPR)
     {
       /* Allow a cast to void* to suppress the warning.  */
       tree type = TREE_TYPE (TREE_TYPE (op));
-      if (VOID_TYPE_P (type))
-	return;
+      如果 (VOID_TYPE_P (type))
+	返回;
 
       /* Adding any value to a null pointer, including zero, is undefined
 	 in C.  This includes the expression &p[0] where p is the null
 	 pointer, although &p[0] will have been folded to p by this point
 	 and so not diagnosed.  */
-      if (code == EQ_EXPR)
+      如果 (code == EQ_EXPR)
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<false%> "
 		    "for the pointer operand in %qE must not be NULL",
 		    op);
-      else
+      否则
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<true%> "
 		    "for the pointer operand in %qE must not be NULL",
 		    op);
 
-      return;
+      返回;
     }
 
-  if (TREE_CODE (op) != ADDR_EXPR)
-    return;
+  如果 (TREE_CODE (op) != ADDR_EXPR)
+    返回;
 
   op = TREE_OPERAND (op, 0);
 
-  if (TREE_CODE (op) == IMAGPART_EXPR
+  如果 (TREE_CODE (op) == IMAGPART_EXPR
       || TREE_CODE (op) == REALPART_EXPR)
     {
       /* The address of either complex part may not be null.  */
-      if (code == EQ_EXPR)
+      如果 (code == EQ_EXPR)
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<false%> "
 		    "for the address of %qE will never be NULL",
 		    op);
-      else
+      否则
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<true%> "
 		    "for the address of %qE will never be NULL",
 		    op);
-      return;
+      返回;
     }
 
   /* Set to true in the loop below if OP dereferences is operand.
@@ -14250,9 +14250,9 @@ maybe_warn_for_null_address (location_t loc, tree op, tree_code code)
   bool deref = false;
 
   /* Get the outermost array or object, or member.  */
-  while (handled_component_p (op))
+  当 (handled_component_p (op))
     {
-      if (TREE_CODE (op) == COMPONENT_REF)
+      如果 (TREE_CODE (op) == COMPONENT_REF)
 	{
 	  /* Get the member (its address is never null).  */
 	  op = TREE_OPERAND (op, 1);
@@ -14264,23 +14264,23 @@ maybe_warn_for_null_address (location_t loc, tree op, tree_code code)
       deref = true;
     }
 
-  if ((!deref && !decl_with_nonnull_addr_p (op))
+  如果 ((!deref && !decl_with_nonnull_addr_p (op))
       || from_macro_expansion_at (loc))
-    return;
+    返回;
 
   bool w;
-  if (code == EQ_EXPR)
+  如果 (code == EQ_EXPR)
     w = warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<false%> "
 		    "for the address of %qE will never be NULL",
 		    op);
-  else
+  否则
     w = warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<true%> "
 		    "for the address of %qE will never be NULL",
 		    op);
 
-  if (w && DECL_P (op))
+  如果 (w && DECL_P (op))
     inform (DECL_SOURCE_LOCATION (op), "%qD declared here", op);
 }
 
@@ -14329,7 +14329,7 @@ build_binary_op (location_t location, enum tree_code code,
   /* Nonzero means operands have already been type-converted
      in whatever way is necessary.
      Zero means they need to be converted to RESULT_TYPE.  */
-  int converted = 0;
+  整数 converted = 0;
 
   /* Nonzero means create the expression with this type, rather than
      RESULT_TYPE.  */
@@ -14345,19 +14345,19 @@ build_binary_op (location_t location, enum tree_code code,
      -1 indicates a bitwise operation; this makes a difference
      in the exact conditions for when it is safe to do the operation
      in a narrower mode.  */
-  int shorten = 0;
+  整数 shorten = 0;
 
   /* Nonzero if this is a comparison operation;
      if both args are promoted shorts, compare the original shorts.
      Also implies COMMON.  */
-  int short_compare = 0;
+  整数 short_compare = 0;
 
   /* Nonzero if this is a right-shift operation, which can be computed on the
      original short and then promoted if the operand is a promoted short.  */
-  int short_shift = 0;
+  整数 short_shift = 0;
 
   /* Nonzero means set RESULT_TYPE to the common type of the args.  */
-  int common = 0;
+  整数 common = 0;
 
   /* True means types are compatible as far as ObjC is concerned.  */
   bool objc_ok;
@@ -14379,20 +14379,20 @@ build_binary_op (location_t location, enum tree_code code,
   /* Tree holding instrumentation expression.  */
   tree instrument_expr = NULL;
 
-  if (location == UNKNOWN_LOCATION)
+  如果 (location == UNKNOWN_LOCATION)
     location = input_location;
 
   op0 = orig_op0;
   op1 = orig_op1;
 
   op0_int_operands = EXPR_INT_CONST_OPERANDS (orig_op0);
-  if (op0_int_operands)
+  如果 (op0_int_operands)
     op0 = remove_c_maybe_const_expr (op0);
   op1_int_operands = EXPR_INT_CONST_OPERANDS (orig_op1);
-  if (op1_int_operands)
+  如果 (op1_int_operands)
     op1 = remove_c_maybe_const_expr (op1);
   int_operands = (op0_int_operands && op1_int_operands);
-  if (int_operands)
+  如果 (int_operands)
     {
       int_const_or_overflow = (TREE_CODE (orig_op0) == INTEGER_CST
 			       && TREE_CODE (orig_op1) == INTEGER_CST);
@@ -14400,11 +14400,11 @@ build_binary_op (location_t location, enum tree_code code,
 		   && !TREE_OVERFLOW (orig_op0)
 		   && !TREE_OVERFLOW (orig_op1));
     }
-  else
+  否则
     int_const = int_const_or_overflow = false;
 
   /* Do not apply default conversion in mixed vector/scalar expression.  */
-  if (convert_p
+  如果 (convert_p
       && VECTOR_TYPE_P (TREE_TYPE (op0)) == VECTOR_TYPE_P (TREE_TYPE (op1)))
     {
       op0 = default_conversion (op0);
@@ -14427,22 +14427,22 @@ build_binary_op (location_t location, enum tree_code code,
   /* If an error was already reported for one of the arguments,
      avoid reporting another error.  */
 
-  if (code0 == ERROR_MARK || code1 == ERROR_MARK)
-    return error_mark_node;
+  如果 (code0 == ERROR_MARK || code1 == ERROR_MARK)
+    返回 error_mark_node;
 
-  if (code0 == POINTER_TYPE
+  如果 (code0 == POINTER_TYPE
       && reject_gcc_builtin (op0, EXPR_LOCATION (orig_op0)))
-    return error_mark_node;
+    返回 error_mark_node;
 
-  if (code1 == POINTER_TYPE
+  如果 (code1 == POINTER_TYPE
       && reject_gcc_builtin (op1, EXPR_LOCATION (orig_op1)))
-    return error_mark_node;
+    返回 error_mark_node;
 
-  if ((invalid_op_diag
+  如果 ((invalid_op_diag
        = targetm.invalid_binary_op (code, type0, type1)))
     {
       error_at (location, invalid_op_diag);
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
   switch (code)
@@ -14475,23 +14475,23 @@ build_binary_op (location_t location, enum tree_code code,
       may_need_excess_precision = false;
       break;
     }
-  if (TREE_CODE (op0) == EXCESS_PRECISION_EXPR)
+  如果 (TREE_CODE (op0) == EXCESS_PRECISION_EXPR)
     {
       op0 = TREE_OPERAND (op0, 0);
       type0 = TREE_TYPE (op0);
     }
-  else if (may_need_excess_precision
+  否则 如果 (may_need_excess_precision
 	   && (eptype = excess_precision_type (type0)) != NULL_TREE)
     {
       type0 = eptype;
       op0 = convert (eptype, op0);
     }
-  if (TREE_CODE (op1) == EXCESS_PRECISION_EXPR)
+  如果 (TREE_CODE (op1) == EXCESS_PRECISION_EXPR)
     {
       op1 = TREE_OPERAND (op1, 0);
       type1 = TREE_TYPE (op1);
     }
-  else if (may_need_excess_precision
+  否则 如果 (may_need_excess_precision
 	   && (eptype = excess_precision_type (type1)) != NULL_TREE)
     {
       type1 = eptype;
@@ -14502,7 +14502,7 @@ build_binary_op (location_t location, enum tree_code code,
 
   /* In case when one of the operands of the binary operation is
      a vector and another is a scalar -- convert scalar to vector.  */
-  if ((gnu_vector_type_p (type0) && code1 != VECTOR_TYPE)
+  如果 ((gnu_vector_type_p (type0) && code1 != VECTOR_TYPE)
       || (gnu_vector_type_p (type1) && code0 != VECTOR_TYPE))
     {
       enum stv_conv convert_flag = scalar_to_vector (location, code, orig_op0,
@@ -14511,7 +14511,7 @@ build_binary_op (location_t location, enum tree_code code,
       switch (convert_flag)
 	{
 	  case stv_error:
-	    return error_mark_node;
+	    返回 error_mark_node;
 	  case stv_firstarg:
 	    {
               bool maybe_const = true;
@@ -14520,7 +14520,7 @@ build_binary_op (location_t location, enum tree_code code,
               sc = save_expr (sc);
               sc = convert (TREE_TYPE (type1), sc);
               op0 = build_vector_from_val (type1, sc);
-              if (!maybe_const)
+              如果 (!maybe_const)
                 op0 = c_wrap_maybe_const (op0, true);
               orig_type0 = type0 = TREE_TYPE (op0);
               code0 = TREE_CODE (type0);
@@ -14535,7 +14535,7 @@ build_binary_op (location_t location, enum tree_code code,
 	      sc = save_expr (sc);
 	      sc = convert (TREE_TYPE (type0), sc);
 	      op1 = build_vector_from_val (type0, sc);
-	      if (!maybe_const)
+	      如果 (!maybe_const)
 		op1 = c_wrap_maybe_const (op1, true);
 	      orig_type1 = type1 = TREE_TYPE (op1);
 	      code1 = TREE_CODE (type1);
@@ -14551,39 +14551,39 @@ build_binary_op (location_t location, enum tree_code code,
     {
     case PLUS_EXPR:
       /* Handle the pointer + int case.  */
-      if (code0 == POINTER_TYPE
+      如果 (code0 == POINTER_TYPE
 	  && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
 	  ret = pointer_int_sum (location, PLUS_EXPR, op0, op1);
 	  goto return_build_binary_op;
 	}
-      else if (code1 == POINTER_TYPE
+      否则 如果 (code1 == POINTER_TYPE
 	       && (code0 == INTEGER_TYPE || code0 == BITINT_TYPE))
 	{
 	  ret = pointer_int_sum (location, PLUS_EXPR, op1, op0);
 	  goto return_build_binary_op;
 	}
-      else
+      否则
 	common = 1;
       break;
 
     case MINUS_EXPR:
       /* Subtraction of two similar pointers.
 	 We must subtract them as integers, then divide by object size.  */
-      if (code0 == POINTER_TYPE && code1 == POINTER_TYPE
+      如果 (code0 == POINTER_TYPE && code1 == POINTER_TYPE
 	  && comp_target_types (location, type0, type1))
 	{
 	  ret = pointer_diff (location, op0, op1, &instrument_expr);
 	  goto return_build_binary_op;
 	}
       /* Handle pointer minus int.  Just like pointer plus int.  */
-      else if (code0 == POINTER_TYPE
+      否则 如果 (code0 == POINTER_TYPE
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
 	  ret = pointer_int_sum (location, MINUS_EXPR, op0, op1);
 	  goto return_build_binary_op;
 	}
-      else
+      否则
 	common = 1;
       break;
 
@@ -14599,7 +14599,7 @@ build_binary_op (location_t location, enum tree_code code,
       doing_div_or_mod = true;
       warn_for_div_by_zero (location, op1);
 
-      if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
+      如果 ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
 	   || code0 == FIXED_POINT_TYPE || code0 == BITINT_TYPE
 	   || code0 == COMPLEX_TYPE
 	   || gnu_vector_type_p (type0))
@@ -14610,18 +14610,18 @@ build_binary_op (location_t location, enum tree_code code,
 	{
 	  enum tree_code tcode0 = code0, tcode1 = code1;
 
-	  if (code0 == COMPLEX_TYPE || code0 == VECTOR_TYPE)
+	  如果 (code0 == COMPLEX_TYPE || code0 == VECTOR_TYPE)
 	    tcode0 = TREE_CODE (TREE_TYPE (TREE_TYPE (op0)));
-	  if (code1 == COMPLEX_TYPE || code1 == VECTOR_TYPE)
+	  如果 (code1 == COMPLEX_TYPE || code1 == VECTOR_TYPE)
 	    tcode1 = TREE_CODE (TREE_TYPE (TREE_TYPE (op1)));
 
-	  if (!(((tcode0 == INTEGER_TYPE || tcode0 == BITINT_TYPE
+	  如果 (!(((tcode0 == INTEGER_TYPE || tcode0 == BITINT_TYPE
 		  || (tcode0 == ENUMERAL_TYPE && code0 == VECTOR_TYPE))
 		 && (tcode1 == INTEGER_TYPE || tcode1 == BITINT_TYPE
 		     || (tcode1 == ENUMERAL_TYPE && code1 == VECTOR_TYPE)))
 		|| (tcode0 == FIXED_POINT_TYPE && tcode1 == FIXED_POINT_TYPE)))
 	    resultcode = RDIV_EXPR;
-	  else
+	  否则
 	    /* Although it would be tempting to shorten always here, that
 	       loses on some targets, since the modulo instruction is
 	       undefined if the quotient can't be represented in the
@@ -14635,11 +14635,11 @@ build_binary_op (location_t location, enum tree_code code,
     case BIT_AND_EXPR:
     case BIT_IOR_EXPR:
     case BIT_XOR_EXPR:
-      if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+      如果 ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
 	  && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	shorten = -1;
       /* Allow vector types which are not floating point types.   */
-      else if (gnu_vector_type_p (type0)
+      否则 如果 (gnu_vector_type_p (type0)
 	       && gnu_vector_type_p (type1)
 	       && !VECTOR_FLOAT_TYPE_P (type0)
 	       && !VECTOR_FLOAT_TYPE_P (type1))
@@ -14651,12 +14651,12 @@ build_binary_op (location_t location, enum tree_code code,
       doing_div_or_mod = true;
       warn_for_div_by_zero (location, op1);
 
-      if (gnu_vector_type_p (type0)
+      如果 (gnu_vector_type_p (type0)
 	  && gnu_vector_type_p (type1)
 	  && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE
 	  && TREE_CODE (TREE_TYPE (type1)) == INTEGER_TYPE)
 	common = 1;
-      else if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+      否则 如果 ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
 	  /* Although it would be tempting to shorten always here, that loses
@@ -14673,7 +14673,7 @@ build_binary_op (location_t location, enum tree_code code,
     case TRUTH_AND_EXPR:
     case TRUTH_OR_EXPR:
     case TRUTH_XOR_EXPR:
-      if ((code0 == INTEGER_TYPE || code0 == POINTER_TYPE
+      如果 ((code0 == INTEGER_TYPE || code0 == POINTER_TYPE
 	   || code0 == REAL_TYPE || code0 == COMPLEX_TYPE
 	   || code0 == FIXED_POINT_TYPE || code0 == NULLPTR_TYPE
 	   || code0 == BITINT_TYPE)
@@ -14686,24 +14686,24 @@ build_binary_op (location_t location, enum tree_code code,
 	     but that does not mean the operands should be
 	     converted to ints!  */
 	  result_type = integer_type_node;
-	  if (op0_int_operands)
+	  如果 (op0_int_operands)
 	    {
 	      op0 = c_objc_common_truthvalue_conversion (location, orig_op0);
 	      op0 = remove_c_maybe_const_expr (op0);
 	    }
-	  else
+	  否则
 	    op0 = c_objc_common_truthvalue_conversion (location, op0);
-	  if (op1_int_operands)
+	  如果 (op1_int_operands)
 	    {
 	      op1 = c_objc_common_truthvalue_conversion (location, orig_op1);
 	      op1 = remove_c_maybe_const_expr (op1);
 	    }
-	  else
+	  否则
 	    op1 = c_objc_common_truthvalue_conversion (location, op1);
 	  converted = 1;
 	  boolean_op = true;
 	}
-      if (code == TRUTH_ANDIF_EXPR)
+      如果 (code == TRUTH_ANDIF_EXPR)
 	{
 	  int_const_or_overflow = (int_operands
 				   && TREE_CODE (orig_op0) == INTEGER_CST
@@ -14714,7 +14714,7 @@ build_binary_op (location_t location, enum tree_code code,
 		       && (op0 == truthvalue_false_node
 			   || !TREE_OVERFLOW (orig_op1)));
 	}
-      else if (code == TRUTH_ORIF_EXPR)
+      否则 如果 (code == TRUTH_ORIF_EXPR)
 	{
 	  int_const_or_overflow = (int_operands
 				   && TREE_CODE (orig_op0) == INTEGER_CST
@@ -14732,7 +14732,7 @@ build_binary_op (location_t location, enum tree_code code,
 	 Also set SHORT_SHIFT if shifting rightward.  */
 
     case RSHIFT_EXPR:
-      if (gnu_vector_type_p (type0)
+      如果 (gnu_vector_type_p (type0)
 	  && gnu_vector_type_p (type1)
 	  && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE
 	  && TREE_CODE (TREE_TYPE (type1)) == INTEGER_TYPE
@@ -14742,43 +14742,43 @@ build_binary_op (location_t location, enum tree_code code,
 	  result_type = type0;
 	  converted = 1;
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == FIXED_POINT_TYPE
+      否则 如果 ((code0 == INTEGER_TYPE || code0 == FIXED_POINT_TYPE
 		|| code0 == BITINT_TYPE
 		|| (gnu_vector_type_p (type0)
 		    && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE))
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
 	  doing_shift = true;
-	  if (TREE_CODE (op1) == INTEGER_CST)
+	  如果 (TREE_CODE (op1) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_sgn (op1) < 0)
+	      如果 (tree_int_cst_sgn (op1) < 0)
 		{
 		  int_const = false;
-		  if (c_inhibit_evaluation_warnings == 0)
+		  如果 (c_inhibit_evaluation_warnings == 0)
 		    warning_at (location, OPT_Wshift_count_negative,
 				"right shift count is negative");
 		}
-	      else if (code0 == VECTOR_TYPE)
+	      否则 如果 (code0 == VECTOR_TYPE)
 		{
-		  if (compare_tree_int (op1,
+		  如果 (compare_tree_int (op1,
 					TYPE_PRECISION (TREE_TYPE (type0)))
 		      >= 0)
 		    {
 		      int_const = false;
-		      if (c_inhibit_evaluation_warnings == 0)
+		      如果 (c_inhibit_evaluation_warnings == 0)
 			warning_at (location, OPT_Wshift_count_overflow,
 				    "right shift count >= width of vector element");
 		    }
 		}
-	      else
+	      否则
 		{
-		  if (!integer_zerop (op1))
+		  如果 (!integer_zerop (op1))
 		    short_shift = 1;
 
-		  if (compare_tree_int (op1, TYPE_PRECISION (type0)) >= 0)
+		  如果 (compare_tree_int (op1, TYPE_PRECISION (type0)) >= 0)
 		    {
 		      int_const = false;
-		      if (c_inhibit_evaluation_warnings == 0)
+		      如果 (c_inhibit_evaluation_warnings == 0)
 			warning_at (location, OPT_Wshift_count_overflow,
 				    "right shift count >= width of type");
 		    }
@@ -14793,7 +14793,7 @@ build_binary_op (location_t location, enum tree_code code,
       break;
 
     case LSHIFT_EXPR:
-      if (gnu_vector_type_p (type0)
+      如果 (gnu_vector_type_p (type0)
 	  && gnu_vector_type_p (type1)
 	  && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE
 	  && TREE_CODE (TREE_TYPE (type1)) == INTEGER_TYPE
@@ -14803,54 +14803,54 @@ build_binary_op (location_t location, enum tree_code code,
 	  result_type = type0;
 	  converted = 1;
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == FIXED_POINT_TYPE
+      否则 如果 ((code0 == INTEGER_TYPE || code0 == FIXED_POINT_TYPE
 		|| code0 == BITINT_TYPE
 		|| (gnu_vector_type_p (type0)
 		    && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE))
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
 	  doing_shift = true;
-	  if (TREE_CODE (op0) == INTEGER_CST
+	  如果 (TREE_CODE (op0) == INTEGER_CST
 	      && tree_int_cst_sgn (op0) < 0
 	      && !TYPE_OVERFLOW_WRAPS (type0))
 	    {
 	      /* Don't reject a left shift of a negative value in a context
 		 where a constant expression is needed in C90.  */
-	      if (flag_isoc99)
+	      如果 (flag_isoc99)
 		int_const = false;
-	      if (c_inhibit_evaluation_warnings == 0)
+	      如果 (c_inhibit_evaluation_warnings == 0)
 		warning_at (location, OPT_Wshift_negative_value,
 			    "left shift of negative value");
 	    }
-	  if (TREE_CODE (op1) == INTEGER_CST)
+	  如果 (TREE_CODE (op1) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_sgn (op1) < 0)
+	      如果 (tree_int_cst_sgn (op1) < 0)
 		{
 		  int_const = false;
-		  if (c_inhibit_evaluation_warnings == 0)
+		  如果 (c_inhibit_evaluation_warnings == 0)
 		    warning_at (location, OPT_Wshift_count_negative,
 				"left shift count is negative");
 		}
-	      else if (code0 == VECTOR_TYPE)
+	      否则 如果 (code0 == VECTOR_TYPE)
 		{
-		  if (compare_tree_int (op1,
+		  如果 (compare_tree_int (op1,
 					TYPE_PRECISION (TREE_TYPE (type0)))
 		      >= 0)
 		    {
 		      int_const = false;
-		      if (c_inhibit_evaluation_warnings == 0)
+		      如果 (c_inhibit_evaluation_warnings == 0)
 			warning_at (location, OPT_Wshift_count_overflow,
 				    "left shift count >= width of vector element");
 		    }
 		}
-	      else if (compare_tree_int (op1, TYPE_PRECISION (type0)) >= 0)
+	      否则 如果 (compare_tree_int (op1, TYPE_PRECISION (type0)) >= 0)
 		{
 		  int_const = false;
-		  if (c_inhibit_evaluation_warnings == 0)
+		  如果 (c_inhibit_evaluation_warnings == 0)
 		    warning_at (location, OPT_Wshift_count_overflow,
 				"left shift count >= width of type");
 		}
-	      else if (TREE_CODE (op0) == INTEGER_CST
+	      否则 如果 (TREE_CODE (op0) == INTEGER_CST
 		       && maybe_warn_shift_overflow (location, op0, op1)
 		       && flag_isoc99)
 		int_const = false;
@@ -14865,54 +14865,54 @@ build_binary_op (location_t location, enum tree_code code,
 
     case EQ_EXPR:
     case NE_EXPR:
-      if (gnu_vector_type_p (type0) && gnu_vector_type_p (type1))
+      如果 (gnu_vector_type_p (type0) && gnu_vector_type_p (type1))
         {
           tree intt;
-	  if (!vector_types_compatible_elements_p (type0, type1))
+	  如果 (!vector_types_compatible_elements_p (type0, type1))
             {
               error_at (location, "comparing vectors with different "
                                   "element types");
-              return error_mark_node;
+              返回 error_mark_node;
             }
 
-	  if (maybe_ne (TYPE_VECTOR_SUBPARTS (type0),
+	  如果 (maybe_ne (TYPE_VECTOR_SUBPARTS (type0),
 			TYPE_VECTOR_SUBPARTS (type1)))
             {
               error_at (location, "comparing vectors with different "
                                   "number of elements");
-              return error_mark_node;
+              返回 error_mark_node;
             }
 
 	  /* It's not precisely specified how the usual arithmetic
 	     conversions apply to the vector types.  Here, we use
 	     the unsigned type if one of the operands is signed and
 	     the other one is unsigned.  */
-	  if (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
+	  如果 (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
 	    {
-	      if (!TYPE_UNSIGNED (type0))
+	      如果 (!TYPE_UNSIGNED (type0))
 		op0 = build1 (VIEW_CONVERT_EXPR, type1, op0);
-	      else
+	      否则
 		op1 = build1 (VIEW_CONVERT_EXPR, type0, op1);
 	      warning_at (location, OPT_Wsign_compare, "comparison between "
 			  "types %qT and %qT", type0, type1);
 	    }
 
           /* Always construct signed integer vector type.  */
-	  if (VECTOR_BOOLEAN_TYPE_P (type0) && VECTOR_BOOLEAN_TYPE_P (type1))
+	  如果 (VECTOR_BOOLEAN_TYPE_P (type0) && VECTOR_BOOLEAN_TYPE_P (type1))
 	    result_type = type0;
-	  else
+	  否则
 	    {
 	      auto nelts = TYPE_VECTOR_SUBPARTS (type0);
 
 	      intt = c_common_type_for_size (GET_MODE_BITSIZE
 					     (SCALAR_TYPE_MODE
 						(TREE_TYPE (type0))), 0);
-	      if (!intt)
+	      如果 (!intt)
 		{
 		  error_at (location, "could not find an integer type "
 				      "of the same size as %qT",
 			    TREE_TYPE (type0));
-		  return error_mark_node;
+		  返回 error_mark_node;
 		}
 	      result_type = build_opaque_vector_type (intt, nelts);
 	    }
@@ -14920,34 +14920,34 @@ build_binary_op (location_t location, enum tree_code code,
 	  ret = build_vec_cmp (resultcode, result_type, op0, op1);
 	  goto return_build_binary_op;
         }
-      if (FLOAT_TYPE_P (type0) || FLOAT_TYPE_P (type1))
+      如果 (FLOAT_TYPE_P (type0) || FLOAT_TYPE_P (type1))
 	warning_at (location,
 		    OPT_Wfloat_equal,
 		    "comparing floating-point with %<==%> or %<!=%> is unsafe");
       /* Result of comparison is always int,
 	 but don't convert the args to int!  */
       build_type = integer_type_node;
-      if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == BITINT_TYPE
+      如果 ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == BITINT_TYPE
 	   || code0 == FIXED_POINT_TYPE || code0 == COMPLEX_TYPE)
 	  && (code1 == INTEGER_TYPE || code1 == REAL_TYPE
 	      || code1 == BITINT_TYPE
 	      || code1 == FIXED_POINT_TYPE || code1 == COMPLEX_TYPE))
 	short_compare = 1;
-      else if (code0 == POINTER_TYPE
+      否则 如果 (code0 == POINTER_TYPE
 	       && (code1 == NULLPTR_TYPE
 		   || null_pointer_constant_p (orig_op1)))
 	{
 	  maybe_warn_for_null_address (location, op0, code);
 	  result_type = type0;
 	}
-      else if (code1 == POINTER_TYPE
+      否则 如果 (code1 == POINTER_TYPE
 	       && (code0 == NULLPTR_TYPE
 		   || null_pointer_constant_p (orig_op0)))
 	{
 	  maybe_warn_for_null_address (location, op1, code);
 	  result_type = type1;
 	}
-      else if (code0 == POINTER_TYPE && code1 == POINTER_TYPE)
+      否则 如果 (code0 == POINTER_TYPE && code1 == POINTER_TYPE)
 	{
 	  tree tt0 = TREE_TYPE (type0);
 	  tree tt1 = TREE_TYPE (type1);
@@ -14958,46 +14958,46 @@ build_binary_op (location_t location, enum tree_code code,
 	  /* Anything compares with void *.  void * compares with anything.
 	     Otherwise, the targets must be compatible
 	     and both must be object or both incomplete.  */
-	  if (comp_target_types (location, type0, type1))
+	  如果 (comp_target_types (location, type0, type1))
 	    result_type = common_pointer_type (type0, type1, NULL_TREE);
-	  else if (!addr_space_superset (as0, as1, &as_common))
+	  否则 如果 (!addr_space_superset (as0, as1, &as_common))
 	    {
 	      error_at (location, "comparison of pointers to "
 			"disjoint address spaces");
-	      return error_mark_node;
+	      返回 error_mark_node;
 	    }
-	  else if (VOID_TYPE_P (tt0) && !TYPE_ATOMIC (tt0))
+	  否则 如果 (VOID_TYPE_P (tt0) && !TYPE_ATOMIC (tt0))
 	    {
-	      if (pedantic && TREE_CODE (tt1) == FUNCTION_TYPE)
+	      如果 (pedantic && TREE_CODE (tt1) == FUNCTION_TYPE)
 		pedwarn (location, OPT_Wpedantic, "ISO C forbids "
 			 "comparison of %<void *%> with function pointer");
 	    }
-	  else if (VOID_TYPE_P (tt1) && !TYPE_ATOMIC (tt1))
+	  否则 如果 (VOID_TYPE_P (tt1) && !TYPE_ATOMIC (tt1))
 	    {
-	      if (pedantic && TREE_CODE (tt0) == FUNCTION_TYPE)
+	      如果 (pedantic && TREE_CODE (tt0) == FUNCTION_TYPE)
 		pedwarn (location, OPT_Wpedantic, "ISO C forbids "
 			 "comparison of %<void *%> with function pointer");
 	    }
-	  else
+	  否则
 	    /* Avoid warning about the volatile ObjC EH puts on decls.  */
-	    if (!objc_ok)
+	    如果 (!objc_ok)
 	      pedwarn (location, OPT_Wcompare_distinct_pointer_types,
 		       "comparison of distinct pointer types lacks a cast");
 
-	  if (result_type == NULL_TREE)
+	  如果 (result_type == NULL_TREE)
 	    {
-	      int qual = ENCODE_QUAL_ADDR_SPACE (as_common);
+	      整数 qual = ENCODE_QUAL_ADDR_SPACE (as_common);
 	      result_type = c_build_pointer_type
 			      (c_build_qualified_type (void_type_node, qual));
 	    }
 	}
-      else if (code0 == POINTER_TYPE
+      否则 如果 (code0 == POINTER_TYPE
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
 	  result_type = type0;
 	  pedwarn (location, 0, "comparison between pointer and integer");
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+      否则 如果 ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
 	       && code1 == POINTER_TYPE)
 	{
 	  result_type = type1;
@@ -15005,7 +15005,7 @@ build_binary_op (location_t location, enum tree_code code,
 	}
       /* 6.5.9: One of the following shall hold:
 	 -- both operands have type nullptr_t;  */
-      else if (code0 == NULLPTR_TYPE && code1 == NULLPTR_TYPE)
+      否则 如果 (code0 == NULLPTR_TYPE && code1 == NULLPTR_TYPE)
 	{
 	  result_type = nullptr_type_node;
 	  /* No need to convert the operands to result_type later.  */
@@ -15018,13 +15018,13 @@ build_binary_op (location_t location, enum tree_code code,
        type, since only nullptr_t can be converted to nullptr_t.  Also,
        even a constant 0 is a null pointer constant, so we may have to
        create a pointer type from its type.  */
-      else if (code0 == NULLPTR_TYPE && null_pointer_constant_p (orig_op1))
+      否则 如果 (code0 == NULLPTR_TYPE && null_pointer_constant_p (orig_op1))
 	result_type = (INTEGRAL_TYPE_P (type1)
 		       ? c_build_pointer_type (type1) : type1);
-      else if (code1 == NULLPTR_TYPE && null_pointer_constant_p (orig_op0))
+      否则 如果 (code1 == NULLPTR_TYPE && null_pointer_constant_p (orig_op0))
 	result_type = (INTEGRAL_TYPE_P (type0)
 		       ? c_build_pointer_type (type0) : type0);
-      if ((C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op0))
+      如果 ((C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op0))
 	   || truth_value_p (TREE_CODE (orig_op0)))
 	  ^ (C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op1))
 	     || truth_value_p (TREE_CODE (orig_op1))))
@@ -15035,33 +15035,33 @@ build_binary_op (location_t location, enum tree_code code,
     case GE_EXPR:
     case LT_EXPR:
     case GT_EXPR:
-      if (gnu_vector_type_p (type0) && gnu_vector_type_p (type1))
+      如果 (gnu_vector_type_p (type0) && gnu_vector_type_p (type1))
         {
           tree intt;
-	  if (!vector_types_compatible_elements_p (type0, type1))
+	  如果 (!vector_types_compatible_elements_p (type0, type1))
             {
               error_at (location, "comparing vectors with different "
                                   "element types");
-              return error_mark_node;
+              返回 error_mark_node;
             }
 
-	  if (maybe_ne (TYPE_VECTOR_SUBPARTS (type0),
+	  如果 (maybe_ne (TYPE_VECTOR_SUBPARTS (type0),
 			TYPE_VECTOR_SUBPARTS (type1)))
             {
               error_at (location, "comparing vectors with different "
                                   "number of elements");
-              return error_mark_node;
+              返回 error_mark_node;
             }
 
 	  /* It's not precisely specified how the usual arithmetic
 	     conversions apply to the vector types.  Here, we use
 	     the unsigned type if one of the operands is signed and
 	     the other one is unsigned.  */
-	  if (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
+	  如果 (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
 	    {
-	      if (!TYPE_UNSIGNED (type0))
+	      如果 (!TYPE_UNSIGNED (type0))
 		op0 = build1 (VIEW_CONVERT_EXPR, type1, op0);
-	      else
+	      否则
 		op1 = build1 (VIEW_CONVERT_EXPR, type0, op1);
 	      warning_at (location, OPT_Wsign_compare, "comparison between "
 			  "types %qT and %qT", type0, type1);
@@ -15071,12 +15071,12 @@ build_binary_op (location_t location, enum tree_code code,
           intt = c_common_type_for_size (GET_MODE_BITSIZE
 					 (SCALAR_TYPE_MODE
 					  (TREE_TYPE (type0))), 0);
-	  if (!intt)
+	  如果 (!intt)
 	    {
 	      error_at (location, "could not find an integer type "
 				  "of the same size as %qT",
 			TREE_TYPE (type0));
-	      return error_mark_node;
+	      返回 error_mark_node;
 	    }
           result_type = build_opaque_vector_type (intt,
 						  TYPE_VECTOR_SUBPARTS (type0));
@@ -15085,82 +15085,82 @@ build_binary_op (location_t location, enum tree_code code,
 	  goto return_build_binary_op;
         }
       build_type = integer_type_node;
-      if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
+      如果 ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
 	   || code0 == BITINT_TYPE || code0 == FIXED_POINT_TYPE)
 	  && (code1 == INTEGER_TYPE || code1 == REAL_TYPE
 	      || code1 == BITINT_TYPE || code1 == FIXED_POINT_TYPE))
 	short_compare = 1;
-      else if (code0 == POINTER_TYPE && code1 == POINTER_TYPE)
+      否则 如果 (code0 == POINTER_TYPE && code1 == POINTER_TYPE)
 	{
 	  addr_space_t as0 = TYPE_ADDR_SPACE (TREE_TYPE (type0));
 	  addr_space_t as1 = TYPE_ADDR_SPACE (TREE_TYPE (type1));
 	  addr_space_t as_common;
 
-	  if (comp_target_types (location, type0, type1))
+	  如果 (comp_target_types (location, type0, type1))
 	    {
 	      result_type = common_pointer_type (type0, type1, NULL_TREE);
-	      if (!COMPLETE_TYPE_P (TREE_TYPE (type0))
+	      如果 (!COMPLETE_TYPE_P (TREE_TYPE (type0))
 		  != !COMPLETE_TYPE_P (TREE_TYPE (type1)))
 		pedwarn_c99 (location, OPT_Wpedantic,
 			     "comparison of complete and incomplete pointers");
-	      else if (TREE_CODE (TREE_TYPE (type0)) == FUNCTION_TYPE)
+	      否则 如果 (TREE_CODE (TREE_TYPE (type0)) == FUNCTION_TYPE)
 		pedwarn (location, OPT_Wpedantic, "ISO C forbids "
 			 "ordered comparisons of pointers to functions");
-	      else if (null_pointer_constant_p (orig_op0)
+	      否则 如果 (null_pointer_constant_p (orig_op0)
 		       || null_pointer_constant_p (orig_op1))
 		warning_at (location, OPT_Wextra,
 			    "ordered comparison of pointer with null pointer");
 
 	    }
-	  else if (!addr_space_superset (as0, as1, &as_common))
+	  否则 如果 (!addr_space_superset (as0, as1, &as_common))
 	    {
 	      error_at (location, "comparison of pointers to "
 			"disjoint address spaces");
-	      return error_mark_node;
+	      返回 error_mark_node;
 	    }
-	  else
+	  否则
 	    {
-	      int qual = ENCODE_QUAL_ADDR_SPACE (as_common);
+	      整数 qual = ENCODE_QUAL_ADDR_SPACE (as_common);
 	      result_type = c_build_pointer_type
 			      (c_build_qualified_type (void_type_node, qual));
               pedwarn (location, OPT_Wcompare_distinct_pointer_types,
                        "comparison of distinct pointer types lacks a cast");
 	    }
 	}
-      else if (code0 == POINTER_TYPE && null_pointer_constant_p (orig_op1))
+      否则 如果 (code0 == POINTER_TYPE && null_pointer_constant_p (orig_op1))
 	{
 	  result_type = type0;
-	  if (pedantic)
+	  如果 (pedantic)
 	    pedwarn (location, OPT_Wpedantic,
 		     "ordered comparison of pointer with integer zero");
-	  else if (extra_warnings)
+	  否则 如果 (extra_warnings)
 	    warning_at (location, OPT_Wextra,
 			"ordered comparison of pointer with integer zero");
 	}
-      else if (code1 == POINTER_TYPE && null_pointer_constant_p (orig_op0))
+      否则 如果 (code1 == POINTER_TYPE && null_pointer_constant_p (orig_op0))
 	{
 	  result_type = type1;
-	  if (pedantic)
+	  如果 (pedantic)
 	    pedwarn (location, OPT_Wpedantic,
 		     "ordered comparison of pointer with integer zero");
-	  else if (extra_warnings)
+	  否则 如果 (extra_warnings)
 	    warning_at (location, OPT_Wextra,
 			"ordered comparison of pointer with integer zero");
 	}
-      else if (code0 == POINTER_TYPE
+      否则 如果 (code0 == POINTER_TYPE
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
 	  result_type = type0;
 	  pedwarn (location, 0, "comparison between pointer and integer");
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+      否则 如果 ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
 	       && code1 == POINTER_TYPE)
 	{
 	  result_type = type1;
 	  pedwarn (location, 0, "comparison between pointer and integer");
 	}
 
-      if ((code0 == POINTER_TYPE || code1 == POINTER_TYPE)
+      如果 ((code0 == POINTER_TYPE || code1 == POINTER_TYPE)
 	  && current_function_decl != NULL_TREE
 	  && sanitize_flags_p (SANITIZE_POINTER_COMPARE))
 	{
@@ -15171,7 +15171,7 @@ build_binary_op (location_t location, enum tree_code code,
 	  instrument_expr = build_call_expr_loc (location, tt, 2, op0, op1);
 	}
 
-      if ((C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op0))
+      如果 ((C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op0))
 	   || truth_value_p (TREE_CODE (orig_op0)))
 	  ^ (C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op1))
 	     || truth_value_p (TREE_CODE (orig_op1))))
@@ -15189,10 +15189,10 @@ build_binary_op (location_t location, enum tree_code code,
       gcc_unreachable ();
     }
 
-  if (code0 == ERROR_MARK || code1 == ERROR_MARK)
-    return error_mark_node;
+  如果 (code0 == ERROR_MARK || code1 == ERROR_MARK)
+    返回 error_mark_node;
 
-  if (gnu_vector_type_p (type0)
+  如果 (gnu_vector_type_p (type0)
       && gnu_vector_type_p (type1)
       && (!tree_int_cst_equal (TYPE_SIZE (type0), TYPE_SIZE (type1))
 	  || !vector_types_compatible_elements_p (type0, type1)))
@@ -15204,10 +15204,10 @@ build_binary_op (location_t location, enum tree_code code,
       richloc.maybe_add_expr (orig_op0, &label_for_op0, highlight_colors::lhs);
       richloc.maybe_add_expr (orig_op1, &label_for_op1, highlight_colors::rhs);
       binary_op_error (&richloc, code, type0, type1);
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
-  if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == COMPLEX_TYPE
+  如果 ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == COMPLEX_TYPE
        || code0 == FIXED_POINT_TYPE || code0 == BITINT_TYPE
        || gnu_vector_type_p (type0))
       && (code1 == INTEGER_TYPE || code1 == REAL_TYPE || code1 == COMPLEX_TYPE
@@ -15216,9 +15216,9 @@ build_binary_op (location_t location, enum tree_code code,
     {
       bool first_complex = (code0 == COMPLEX_TYPE);
       bool second_complex = (code1 == COMPLEX_TYPE);
-      int none_complex = (!first_complex && !second_complex);
+      整数 none_complex = (!first_complex && !second_complex);
 
-      if (shorten || common || short_compare)
+      如果 (shorten || common || short_compare)
 	{
 	  result_type = c_common_type (type0, type1);
 	  do_warn_double_promotion (result_type, type0, type1,
@@ -15226,11 +15226,11 @@ build_binary_op (location_t location, enum tree_code code,
 				    "to match other operand of binary "
 				    "expression",
 				    location);
-	  if (result_type == error_mark_node)
-	    return error_mark_node;
+	  如果 (result_type == error_mark_node)
+	    返回 error_mark_node;
 	}
 
-      if (first_complex != second_complex
+      如果 (first_complex != second_complex
 	  && (code == PLUS_EXPR
 	      || code == MINUS_EXPR
 	      || code == MULT_EXPR
@@ -15244,28 +15244,28 @@ build_binary_op (location_t location, enum tree_code code,
 	     -fno-signed-zeros.  */
 	  tree real_type = TREE_TYPE (result_type);
 	  tree real, imag;
-	  if (type0 != orig_type0 || type1 != orig_type1)
+	  如果 (type0 != orig_type0 || type1 != orig_type1)
 	    {
 	      gcc_assert (may_need_excess_precision && common);
 	      semantic_result_type = c_common_type (orig_type0, orig_type1);
 	    }
-	  if (first_complex)
+	  如果 (first_complex)
 	    {
-	      if (TREE_TYPE (op0) != result_type)
+	      如果 (TREE_TYPE (op0) != result_type)
 		op0 = convert_and_check (location, result_type, op0);
-	      if (TREE_TYPE (op1) != real_type)
+	      如果 (TREE_TYPE (op1) != real_type)
 		op1 = convert_and_check (location, real_type, op1);
 	    }
-	  else
+	  否则
 	    {
-	      if (TREE_TYPE (op0) != real_type)
+	      如果 (TREE_TYPE (op0) != real_type)
 		op0 = convert_and_check (location, real_type, op0);
-	      if (TREE_TYPE (op1) != result_type)
+	      如果 (TREE_TYPE (op1) != result_type)
 		op1 = convert_and_check (location, result_type, op1);
 	    }
-	  if (TREE_CODE (op0) == ERROR_MARK || TREE_CODE (op1) == ERROR_MARK)
-	    return error_mark_node;
-	  if (first_complex)
+	  如果 (TREE_CODE (op0) == ERROR_MARK || TREE_CODE (op1) == ERROR_MARK)
+	    返回 error_mark_node;
+	  如果 (first_complex)
 	    {
 	      op0 = save_expr (op0);
 	      real = build_unary_op (EXPR_LOCATION (orig_op0), REALPART_EXPR,
@@ -15287,7 +15287,7 @@ build_binary_op (location_t location, enum tree_code code,
 		  gcc_unreachable();
 		}
 	    }
-	  else
+	  否则
 	    {
 	      op1 = save_expr (op1);
 	      real = build_unary_op (EXPR_LOCATION (orig_op1), REALPART_EXPR,
@@ -15326,7 +15326,7 @@ build_binary_op (location_t location, enum tree_code code,
 	 Eg, (short)-1 | (unsigned short)-1 is (int)-1
 	 but calculated in (unsigned short) it would be (unsigned short)-1.  */
 
-      if (shorten && none_complex)
+      如果 (shorten && none_complex)
 	{
 	  final_type = result_type;
 	  result_type = shorten_binary_op (result_type, op0, op1,
@@ -15335,17 +15335,17 @@ build_binary_op (location_t location, enum tree_code code,
 
       /* Shifts can be shortened if shifting right.  */
 
-      if (short_shift)
+      如果 (short_shift)
 	{
-	  int unsigned_arg;
+	  整数 unsigned_arg;
 	  tree arg0 = get_narrower (op0, &unsigned_arg);
 
 	  final_type = result_type;
 
-	  if (arg0 == op0 && final_type == TREE_TYPE (op0))
+	  如果 (arg0 == op0 && final_type == TREE_TYPE (op0))
 	    unsigned_arg = TYPE_UNSIGNED (TREE_TYPE (op0));
 
-	  if (TYPE_PRECISION (TREE_TYPE (arg0)) < TYPE_PRECISION (result_type)
+	  如果 (TYPE_PRECISION (TREE_TYPE (arg0)) < TYPE_PRECISION (result_type)
 	      && tree_int_cst_sgn (op1) > 0
 	      /* We can shorten only if the shift count is less than the
 		 number of bits in the smaller type size.  */
@@ -15358,7 +15358,7 @@ build_binary_op (location_t location, enum tree_code code,
 		= c_common_signed_or_unsigned_type (unsigned_arg,
 						    TREE_TYPE (arg0));
 	      /* Convert value-to-be-shifted to that type.  */
-	      if (TREE_TYPE (op0) != result_type)
+	      如果 (TREE_TYPE (op0) != result_type)
 		op0 = convert (result_type, op0);
 	      converted = 1;
 	    }
@@ -15367,7 +15367,7 @@ build_binary_op (location_t location, enum tree_code code,
       /* Comparison operations are shortened too but differently.
 	 They identify themselves by setting short_compare = 1.  */
 
-      if (short_compare)
+      如果 (short_compare)
 	{
 	  /* Don't write &op0, etc., because that would prevent op0
 	     from being kept in a register.
@@ -15379,7 +15379,7 @@ build_binary_op (location_t location, enum tree_code code,
 	    = shorten_compare (location, &xop0, &xop1, &xresult_type,
 			       &xresultcode);
 
-	  if (val != NULL_TREE)
+	  如果 (val != NULL_TREE)
 	    {
 	      ret = val;
 	      goto return_build_binary_op;
@@ -15389,18 +15389,18 @@ build_binary_op (location_t location, enum tree_code code,
 	  converted = 1;
 	  resultcode = xresultcode;
 
-	  if (c_inhibit_evaluation_warnings == 0 && !c_in_omp_for)
+	  如果 (c_inhibit_evaluation_warnings == 0 && !c_in_omp_for)
 	    {
 	      bool op0_maybe_const = true;
 	      bool op1_maybe_const = true;
 	      tree orig_op0_folded, orig_op1_folded;
 
-	      if (in_late_binary_op)
+	      如果 (in_late_binary_op)
 		{
 		  orig_op0_folded = orig_op0;
 		  orig_op1_folded = orig_op1;
 		}
-	      else
+	      否则
 		{
 		  /* Fold for the sake of possible warnings, as in
 		     build_conditional_expr.  This requires the
@@ -15420,15 +15420,15 @@ build_binary_op (location_t location, enum tree_code code,
 						  NULL);
 		}
 
-	      if (warn_sign_compare)
+	      如果 (warn_sign_compare)
 		warn_for_sign_compare (location, orig_op0_folded,
 				       orig_op1_folded, op0, op1,
 				       result_type, resultcode);
-	      if (!in_late_binary_op && !int_operands)
+	      如果 (!in_late_binary_op && !int_operands)
 		{
-		  if (!op0_maybe_const || TREE_CODE (op0) != INTEGER_CST)
+		  如果 (!op0_maybe_const || TREE_CODE (op0) != INTEGER_CST)
 		    op0 = c_wrap_maybe_const (op0, !op0_maybe_const);
-		  if (!op1_maybe_const || TREE_CODE (op1) != INTEGER_CST)
+		  如果 (!op1_maybe_const || TREE_CODE (op1) != INTEGER_CST)
 		    op1 = c_wrap_maybe_const (op1, !op1_maybe_const);
 		}
 	    }
@@ -15441,19 +15441,19 @@ build_binary_op (location_t location, enum tree_code code,
      It will be given type FINAL_TYPE if that is nonzero;
      otherwise, it will be given type RESULT_TYPE.  */
 
-  if (!result_type)
+  如果 (!result_type)
     {
       /* Favor showing any expression locations that are available. */
       op_location_t oploc (location, UNKNOWN_LOCATION);
       binary_op_rich_location richloc (oploc, orig_op0, orig_op1, true);
       binary_op_error (&richloc, code, TREE_TYPE (op0), TREE_TYPE (op1));
-      return error_mark_node;
+      返回 error_mark_node;
     }
 
-  if (build_type == NULL_TREE)
+  如果 (build_type == NULL_TREE)
     {
       build_type = result_type;
-      if ((type0 != orig_type0 || type1 != orig_type1)
+      如果 ((type0 != orig_type0 || type1 != orig_type1)
 	  && !boolean_op)
 	{
 	  gcc_assert (may_need_excess_precision && common);
@@ -15461,7 +15461,7 @@ build_binary_op (location_t location, enum tree_code code,
 	}
     }
 
-  if (!converted)
+  如果 (!converted)
     {
       op0 = ep_convert_and_check (location, result_type, op0,
 				  semantic_result_type);
@@ -15470,11 +15470,11 @@ build_binary_op (location_t location, enum tree_code code,
 
       /* This can happen if one operand has a vector type, and the other
 	 has a different type.  */
-      if (TREE_CODE (op0) == ERROR_MARK || TREE_CODE (op1) == ERROR_MARK)
-	return error_mark_node;
+      如果 (TREE_CODE (op0) == ERROR_MARK || TREE_CODE (op1) == ERROR_MARK)
+	返回 error_mark_node;
     }
 
-  if (sanitize_flags_p ((SANITIZE_SHIFT
+  如果 (sanitize_flags_p ((SANITIZE_SHIFT
 			 | SANITIZE_DIVIDE
 			 | SANITIZE_FLOAT_DIVIDE
 			 | SANITIZE_SI_OVERFLOW))
@@ -15487,45 +15487,45 @@ build_binary_op (location_t location, enum tree_code code,
       op1 = save_expr (op1);
       op0 = c_fully_fold (op0, false, NULL);
       op1 = c_fully_fold (op1, false, NULL);
-      if (doing_div_or_mod && (sanitize_flags_p ((SANITIZE_DIVIDE
+      如果 (doing_div_or_mod && (sanitize_flags_p ((SANITIZE_DIVIDE
 						  | SANITIZE_FLOAT_DIVIDE
 						  | SANITIZE_SI_OVERFLOW))))
 	instrument_expr = ubsan_instrument_division (location, op0, op1);
-      else if (doing_shift && sanitize_flags_p (SANITIZE_SHIFT))
+      否则 如果 (doing_shift && sanitize_flags_p (SANITIZE_SHIFT))
 	instrument_expr = ubsan_instrument_shift (location, code, op0, op1);
     }
 
   /* Treat expressions in initializers specially as they can't trap.  */
-  if (int_const_or_overflow)
+  如果 (int_const_or_overflow)
     ret = (require_constant_value
 	   ? fold_build2_initializer_loc (location, resultcode, build_type,
 					  op0, op1)
 	   : fold_build2_loc (location, resultcode, build_type, op0, op1));
-  else
+  否则
     ret = build2 (resultcode, build_type, op0, op1);
-  if (final_type != NULL_TREE)
+  如果 (final_type != NULL_TREE)
     ret = convert (final_type, ret);
 
  return_build_binary_op:
   gcc_assert (ret != error_mark_node);
-  if (TREE_CODE (ret) == INTEGER_CST && !TREE_OVERFLOW (ret) && !int_const)
+  如果 (TREE_CODE (ret) == INTEGER_CST && !TREE_OVERFLOW (ret) && !int_const)
     ret = (int_operands
 	   ? note_integer_operands (ret)
 	   : build1 (NOP_EXPR, TREE_TYPE (ret), ret));
-  else if (TREE_CODE (ret) != INTEGER_CST && int_operands
+  否则 如果 (TREE_CODE (ret) != INTEGER_CST && int_operands
 	   && !in_late_binary_op)
     ret = note_integer_operands (ret);
   protected_set_expr_location (ret, location);
 
-  if (instrument_expr != NULL)
+  如果 (instrument_expr != NULL)
     ret = fold_build2 (COMPOUND_EXPR, TREE_TYPE (ret),
 		       instrument_expr, ret);
 
-  if (semantic_result_type)
+  如果 (semantic_result_type)
     ret = build1_loc (location, EXCESS_PRECISION_EXPR,
 		      semantic_result_type, ret);
 
-  return ret;
+  返回 ret;
 }
 
 
@@ -15541,23 +15541,23 @@ c_objc_common_truthvalue_conversion (location_t location, tree expr, tree type)
     {
     case ARRAY_TYPE:
       error_at (location, "used array that cannot be converted to pointer where scalar is required");
-      return error_mark_node;
+      返回 error_mark_node;
 
     case RECORD_TYPE:
       error_at (location, "used struct type value where scalar is required");
-      return error_mark_node;
+      返回 error_mark_node;
 
     case UNION_TYPE:
       error_at (location, "used union type value where scalar is required");
-      return error_mark_node;
+      返回 error_mark_node;
 
     case VOID_TYPE:
       error_at (location, "void value not ignored as it ought to be");
-      return error_mark_node;
+      返回 error_mark_node;
 
     case POINTER_TYPE:
-      if (reject_gcc_builtin (expr))
-	return error_mark_node;
+      如果 (reject_gcc_builtin (expr))
+	返回 error_mark_node;
       break;
 
     case FUNCTION_TYPE:
@@ -15565,7 +15565,7 @@ c_objc_common_truthvalue_conversion (location_t location, tree expr, tree type)
 
     case VECTOR_TYPE:
       error_at (location, "used vector type where scalar is required");
-      return error_mark_node;
+      返回 error_mark_node;
 
     default:
       break;
@@ -15583,14 +15583,14 @@ c_objc_common_truthvalue_conversion (location_t location, tree expr, tree type)
 			   && (TREE_CODE (ENUM_UNDERLYING_TYPE (type))
 			       == BOOLEAN_TYPE)))));
   int_operands = EXPR_INT_CONST_OPERANDS (expr);
-  if (int_operands && TREE_CODE (expr) != INTEGER_CST)
+  如果 (int_operands && TREE_CODE (expr) != INTEGER_CST)
     {
       expr = remove_c_maybe_const_expr (expr);
       expr = build2 (NE_EXPR, type, expr,
 		     convert (TREE_TYPE (expr), integer_zero_node));
       expr = note_integer_operands (expr);
     }
-  else
+  否则
     {
       /* ??? Should we also give an error for vectors rather than leaving
 	 those to give errors later?  */
@@ -15598,16 +15598,16 @@ c_objc_common_truthvalue_conversion (location_t location, tree expr, tree type)
       expr = fold_convert_loc (location, type, expr);
     }
 
-  if (TREE_CODE (expr) == INTEGER_CST && int_operands && !int_const)
+  如果 (TREE_CODE (expr) == INTEGER_CST && int_operands && !int_const)
     {
-      if (TREE_OVERFLOW (expr))
-	return expr;
-      else
-	return note_integer_operands (expr);
+      如果 (TREE_OVERFLOW (expr))
+	返回 expr;
+      否则
+	返回 note_integer_operands (expr);
     }
-  if (TREE_CODE (expr) == INTEGER_CST && !int_const)
-    return build1 (NOP_EXPR, TREE_TYPE (expr), expr);
-  return expr;
+  如果 (TREE_CODE (expr) == INTEGER_CST && !int_const)
+    返回 build1 (NOP_EXPR, TREE_TYPE (expr), expr);
+  返回 expr;
 }
 
 
@@ -15617,17 +15617,17 @@ c_objc_common_truthvalue_conversion (location_t location, tree expr, tree type)
 tree
 c_expr_to_decl (tree expr, bool *tc ATTRIBUTE_UNUSED, bool *se)
 {
-  if (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
+  如果 (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
     {
       tree decl = COMPOUND_LITERAL_EXPR_DECL (expr);
       /* Executing a compound literal inside a function reinitializes
 	 it.  */
-      if (!TREE_STATIC (decl))
+      如果 (!TREE_STATIC (decl))
 	*se = true;
-      return decl;
+      返回 decl;
     }
-  else
-    return expr;
+  否则
+    返回 expr;
 }
 
 /* Generate OMP construct CODE, with BODY and CLAUSES as its compound
@@ -15645,7 +15645,7 @@ c_finish_omp_construct (location_t loc, enum tree_code code, tree body,
   OMP_CLAUSES (stmt) = clauses;
   SET_EXPR_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  返回 add_stmt (stmt);
 }
 
 /* Generate OACC_DATA, with CLAUSES and BLOCK as its compound
@@ -15664,7 +15664,7 @@ c_finish_oacc_data (location_t loc, tree clauses, tree block)
   OACC_DATA_BODY (stmt) = block;
   SET_EXPR_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  返回 add_stmt (stmt);
 }
 
 /* Generate OACC_HOST_DATA, with CLAUSES and BLOCK as its compound
@@ -15683,7 +15683,7 @@ c_finish_oacc_host_data (location_t loc, tree clauses, tree block)
   OACC_HOST_DATA_BODY (stmt) = block;
   SET_EXPR_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  返回 add_stmt (stmt);
 }
 
 /* Like c_begin_compound_stmt, except force the retention of the BLOCK.  */
@@ -15696,7 +15696,7 @@ c_begin_omp_parallel (void)
   keep_next_level ();
   block = c_begin_compound_stmt (true);
 
-  return block;
+  返回 block;
 }
 
 /* Generate OMP_PARALLEL, with CLAUSES and BLOCK as its compound
@@ -15715,7 +15715,7 @@ c_finish_omp_parallel (location_t loc, tree clauses, tree block)
   OMP_PARALLEL_BODY (stmt) = block;
   SET_EXPR_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  返回 add_stmt (stmt);
 }
 
 /* Like c_begin_compound_stmt, except force the retention of the BLOCK.  */
@@ -15728,7 +15728,7 @@ c_begin_omp_task (void)
   keep_next_level ();
   block = c_begin_compound_stmt (true);
 
-  return block;
+  返回 block;
 }
 
 /* Generate OMP_TASK, with CLAUSES and BLOCK as its compound
@@ -15747,7 +15747,7 @@ c_finish_omp_task (location_t loc, tree clauses, tree block)
   OMP_TASK_BODY (stmt) = block;
   SET_EXPR_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  返回 add_stmt (stmt);
 }
 
 /* Generate GOMP_cancel call for #pragma omp cancel.  */
@@ -15756,33 +15756,33 @@ void
 c_finish_omp_cancel (location_t loc, tree clauses)
 {
   tree fn = builtin_decl_explicit (BUILT_IN_GOMP_CANCEL);
-  int mask = 0;
-  if (omp_find_clause (clauses, OMP_CLAUSE_PARALLEL))
+  整数 mask = 0;
+  如果 (omp_find_clause (clauses, OMP_CLAUSE_PARALLEL))
     mask = 1;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_FOR))
+  否则 如果 (omp_find_clause (clauses, OMP_CLAUSE_FOR))
     mask = 2;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_SECTIONS))
+  否则 如果 (omp_find_clause (clauses, OMP_CLAUSE_SECTIONS))
     mask = 4;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_TASKGROUP))
+  否则 如果 (omp_find_clause (clauses, OMP_CLAUSE_TASKGROUP))
     mask = 8;
-  else
+  否则
     {
       error_at (loc, "%<#pragma omp cancel%> must specify one of "
 		     "%<parallel%>, %<for%>, %<sections%> or %<taskgroup%> "
 		     "clauses");
-      return;
+      返回;
     }
   tree ifc = omp_find_clause (clauses, OMP_CLAUSE_IF);
-  if (ifc != NULL_TREE)
+  如果 (ifc != NULL_TREE)
     {
-      if (OMP_CLAUSE_IF_MODIFIER (ifc) != ERROR_MARK
+      如果 (OMP_CLAUSE_IF_MODIFIER (ifc) != ERROR_MARK
 	  && OMP_CLAUSE_IF_MODIFIER (ifc) != VOID_CST)
 	error_at (OMP_CLAUSE_LOCATION (ifc),
 		  "expected %<cancel%> %<if%> clause modifier");
-      else
+      否则
 	{
 	  tree ifc2 = omp_find_clause (OMP_CLAUSE_CHAIN (ifc), OMP_CLAUSE_IF);
-	  if (ifc2 != NULL_TREE)
+	  如果 (ifc2 != NULL_TREE)
 	    {
 	      gcc_assert (OMP_CLAUSE_IF_MODIFIER (ifc) == VOID_CST
 			  && OMP_CLAUSE_IF_MODIFIER (ifc2) != ERROR_MARK
@@ -15797,7 +15797,7 @@ c_finish_omp_cancel (location_t loc, tree clauses)
 			     boolean_type_node, OMP_CLAUSE_IF_EXPR (ifc),
 			     build_zero_cst (type));
     }
-  else
+  否则
     ifc = boolean_true_node;
   tree stmt = build_call_expr_loc (loc, fn, 2,
 				   build_int_cst (integer_type_node, mask),
@@ -15812,21 +15812,21 @@ void
 c_finish_omp_cancellation_point (location_t loc, tree clauses)
 {
   tree fn = builtin_decl_explicit (BUILT_IN_GOMP_CANCELLATION_POINT);
-  int mask = 0;
-  if (omp_find_clause (clauses, OMP_CLAUSE_PARALLEL))
+  整数 mask = 0;
+  如果 (omp_find_clause (clauses, OMP_CLAUSE_PARALLEL))
     mask = 1;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_FOR))
+  否则 如果 (omp_find_clause (clauses, OMP_CLAUSE_FOR))
     mask = 2;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_SECTIONS))
+  否则 如果 (omp_find_clause (clauses, OMP_CLAUSE_SECTIONS))
     mask = 4;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_TASKGROUP))
+  否则 如果 (omp_find_clause (clauses, OMP_CLAUSE_TASKGROUP))
     mask = 8;
-  else
+  否则
     {
       error_at (loc, "%<#pragma omp cancellation point%> must specify one of "
 		     "%<parallel%>, %<for%>, %<sections%> or %<taskgroup%> "
 		     "clauses");
-      return;
+      返回;
     }
   tree stmt = build_call_expr_loc (loc, fn, 1,
 				   build_int_cst (integer_type_node, mask));
@@ -15855,59 +15855,59 @@ c_finish_omp_cancellation_point (location_t loc, tree clauses)
 
 static tree
 handle_omp_array_sections_1 (tree c, tree t, vec<tree> &types,
-			     bool &maybe_zero_len, unsigned int &first_non_one,
+			     bool &maybe_zero_len, unsigned 整数 &first_non_one,
 			     enum c_omp_region_type ort)
 {
   tree ret, low_bound, length, type;
   bool openacc = (ort & C_ORT_ACC) != 0;
-  if (TREE_CODE (t) != OMP_ARRAY_SECTION)
+  如果 (TREE_CODE (t) != OMP_ARRAY_SECTION)
     {
-      if (error_operand_p (t))
-	return error_mark_node;
+      如果 (error_operand_p (t))
+	返回 error_mark_node;
       c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
       ret = t;
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
+      如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
 	  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
 	  && TYPE_ATOMIC (strip_array_types (TREE_TYPE (t))))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c), "%<_Atomic%> %qE in %qs clause",
 		    t, omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      if (!ai.check_clause (c))
-	return error_mark_node;
-      else if (ai.component_access_p ()
+      如果 (!ai.check_clause (c))
+	返回 error_mark_node;
+      否则 如果 (ai.component_access_p ()
 	       && (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TO
 		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_FROM))
 	t = ai.get_root_term (true);
-      else
+      否则
 	t = ai.unconverted_ref_origin ();
-      if (t == error_mark_node)
-	return error_mark_node;
-      if (!VAR_P (t)
+      如果 (t == error_mark_node)
+	返回 error_mark_node;
+      如果 (!VAR_P (t)
 	  && (ort == C_ORT_ACC || !EXPR_P (t))
 	  && TREE_CODE (t) != PARM_DECL)
 	{
-	  if (DECL_P (t))
+	  如果 (DECL_P (t))
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qD is not a variable in %qs clause", t,
 		      omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  else
+	  否则
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qE is not a variable in %qs clause", t,
 		      omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      else if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
+      否则 如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
 	       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
 	       && TYPE_ATOMIC (TREE_TYPE (t)))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c), "%<_Atomic%> %qD in %qs clause",
 		    t, omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      else if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
+      否则 如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
 	       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
 	       && VAR_P (t)
 	       && DECL_THREAD_LOCAL_P (t))
@@ -15915,9 +15915,9 @@ handle_omp_array_sections_1 (tree c, tree t, vec<tree> &types,
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "%qD is threadprivate variable in %qs clause", t,
 		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
+      如果 ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
 	   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND)
 	  && TYPE_ATOMIC (TREE_TYPE (t))
 	  && POINTER_TYPE_P (TREE_TYPE (t)))
@@ -15928,113 +15928,113 @@ handle_omp_array_sections_1 (tree c, tree t, vec<tree> &types,
 	  ret = convert_lvalue_to_rvalue (OMP_CLAUSE_LOCATION (c),
 					  ret, false, false);
 	}
-      return ret;
+      返回 ret;
     }
 
   ret = handle_omp_array_sections_1 (c, TREE_OPERAND (t, 0), types,
 				     maybe_zero_len, first_non_one, ort);
-  if (ret == error_mark_node || ret == NULL_TREE)
-    return ret;
+  如果 (ret == error_mark_node || ret == NULL_TREE)
+    返回 ret;
 
   type = TREE_TYPE (ret);
   low_bound = TREE_OPERAND (t, 1);
   length = TREE_OPERAND (t, 2);
 
-  if (low_bound == error_mark_node || length == error_mark_node)
-    return error_mark_node;
+  如果 (low_bound == error_mark_node || length == error_mark_node)
+    返回 error_mark_node;
 
-  if (low_bound && !INTEGRAL_TYPE_P (TREE_TYPE (low_bound)))
+  如果 (low_bound && !INTEGRAL_TYPE_P (TREE_TYPE (low_bound)))
     {
       error_at (OMP_CLAUSE_LOCATION (c),
 		"low bound %qE of array section does not have integral type",
 		low_bound);
-      return error_mark_node;
+      返回 error_mark_node;
     }
-  if (length && !INTEGRAL_TYPE_P (TREE_TYPE (length)))
+  如果 (length && !INTEGRAL_TYPE_P (TREE_TYPE (length)))
     {
       error_at (OMP_CLAUSE_LOCATION (c),
 		"length %qE of array section does not have integral type",
 		length);
-      return error_mark_node;
+      返回 error_mark_node;
     }
-  if (low_bound
+  如果 (low_bound
       && TREE_CODE (low_bound) == INTEGER_CST
       && TYPE_PRECISION (TREE_TYPE (low_bound))
 	 > TYPE_PRECISION (sizetype))
     low_bound = fold_convert (sizetype, low_bound);
-  if (length
+  如果 (length
       && TREE_CODE (length) == INTEGER_CST
       && TYPE_PRECISION (TREE_TYPE (length))
 	 > TYPE_PRECISION (sizetype))
     length = fold_convert (sizetype, length);
-  if (low_bound == NULL_TREE)
+  如果 (low_bound == NULL_TREE)
     low_bound = integer_zero_node;
-  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+  如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
       && (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
 	  || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH))
     {
-      if (length != integer_one_node)
+      如果 (length != integer_one_node)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "expected single pointer in %qs clause",
 		    user_omp_clause_code_name (c, openacc));
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
     }
-  if (length != NULL_TREE)
+  如果 (length != NULL_TREE)
     {
-      if (!integer_nonzerop (length))
+      如果 (!integer_nonzerop (length))
 	{
-	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
+	  如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
 	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
 	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION)
 	    {
-	      if (integer_zerop (length))
+	      如果 (integer_zerop (length))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "zero length array section in %qs clause",
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+		  返回 error_mark_node;
 		}
 	    }
-	  else
+	  否则
 	    maybe_zero_len = true;
 	}
-      if (first_non_one == types.length ()
+      如果 (first_non_one == types.length ()
 	  && (TREE_CODE (length) != INTEGER_CST || integer_onep (length)))
 	first_non_one++;
     }
-  if (TREE_CODE (type) == ARRAY_TYPE)
+  如果 (TREE_CODE (type) == ARRAY_TYPE)
     {
-      if (length == NULL_TREE
+      如果 (length == NULL_TREE
 	  && (TYPE_DOMAIN (type) == NULL_TREE
 	      || TYPE_MAX_VALUE (TYPE_DOMAIN (type)) == NULL_TREE))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "for unknown bound array type length expression must "
 		    "be specified");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      if (TREE_CODE (low_bound) == INTEGER_CST
+      如果 (TREE_CODE (low_bound) == INTEGER_CST
 	  && tree_int_cst_sgn (low_bound) == -1)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "negative low bound in array section in %qs clause",
 		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      if (length != NULL_TREE
+      如果 (length != NULL_TREE
 	  && TREE_CODE (length) == INTEGER_CST
 	  && tree_int_cst_sgn (length) == -1)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "negative length in array section in %qs clause",
 		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      if (TYPE_DOMAIN (type)
+      如果 (TYPE_DOMAIN (type)
 	  && TYPE_MAX_VALUE (TYPE_DOMAIN (type))
 	  && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (type)))
 			== INTEGER_CST)
@@ -16042,19 +16042,19 @@ handle_omp_array_sections_1 (tree c, tree t, vec<tree> &types,
 	  tree size
 	    = fold_convert (sizetype, TYPE_MAX_VALUE (TYPE_DOMAIN (type)));
 	  size = size_binop (PLUS_EXPR, size, size_one_node);
-	  if (TREE_CODE (low_bound) == INTEGER_CST)
+	  如果 (TREE_CODE (low_bound) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_lt (size, low_bound))
+	      如果 (tree_int_cst_lt (size, low_bound))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "low bound %qE above array section size "
 			    "in %qs clause", low_bound,
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+		  返回 error_mark_node;
 		}
-	      if (tree_int_cst_equal (size, low_bound))
+	      如果 (tree_int_cst_equal (size, low_bound))
 		{
-		  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
+		  如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
@@ -16063,141 +16063,141 @@ handle_omp_array_sections_1 (tree c, tree t, vec<tree> &types,
 		      error_at (OMP_CLAUSE_LOCATION (c),
 				"zero length array section in %qs clause",
 				omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		      return error_mark_node;
+		      返回 error_mark_node;
 		    }
 		  maybe_zero_len = true;
 		}
-	      else if (length == NULL_TREE
+	      否则 如果 (length == NULL_TREE
 		       && first_non_one == types.length ()
 		       && tree_int_cst_equal
 			    (TYPE_MAX_VALUE (TYPE_DOMAIN (type)),
 			     low_bound))
 		first_non_one++;
 	    }
-	  else if (length == NULL_TREE)
+	  否则 如果 (length == NULL_TREE)
 	    {
-	      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
+	      如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
 		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
 		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_REDUCTION
 		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_IN_REDUCTION
 		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_TASK_REDUCTION)
 		maybe_zero_len = true;
-	      if (first_non_one == types.length ())
+	      如果 (first_non_one == types.length ())
 		first_non_one++;
 	    }
-	  if (length && TREE_CODE (length) == INTEGER_CST)
+	  如果 (length && TREE_CODE (length) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_lt (size, length))
+	      如果 (tree_int_cst_lt (size, length))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "length %qE above array section size "
 			    "in %qs clause", length,
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+		  返回 error_mark_node;
 		}
-	      if (TREE_CODE (low_bound) == INTEGER_CST)
+	      如果 (TREE_CODE (low_bound) == INTEGER_CST)
 		{
 		  tree lbpluslen
 		    = size_binop (PLUS_EXPR,
 				  fold_convert (sizetype, low_bound),
 				  fold_convert (sizetype, length));
-		  if (TREE_CODE (lbpluslen) == INTEGER_CST
+		  如果 (TREE_CODE (lbpluslen) == INTEGER_CST
 		      && tree_int_cst_lt (size, lbpluslen))
 		    {
 		      error_at (OMP_CLAUSE_LOCATION (c),
 				"high bound %qE above array section size "
 				"in %qs clause", lbpluslen,
 				omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		      return error_mark_node;
+		      返回 error_mark_node;
 		    }
 		}
 	    }
 	}
-      else if (length == NULL_TREE)
+      否则 如果 (length == NULL_TREE)
 	{
-	  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
+	  如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
 	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
 	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_REDUCTION
 	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_IN_REDUCTION
 	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_TASK_REDUCTION)
 	    maybe_zero_len = true;
-	  if (first_non_one == types.length ())
+	  如果 (first_non_one == types.length ())
 	    first_non_one++;
 	}
 
       /* For [lb:] we will need to evaluate lb more than once.  */
-      if (length == NULL_TREE && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND)
+      如果 (length == NULL_TREE && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND)
 	{
 	  tree lb = save_expr (low_bound);
-	  if (lb != low_bound)
+	  如果 (lb != low_bound)
 	    {
 	      TREE_OPERAND (t, 1) = lb;
 	      low_bound = lb;
 	    }
 	}
     }
-  else if (TREE_CODE (type) == POINTER_TYPE)
+  否则 如果 (TREE_CODE (type) == POINTER_TYPE)
     {
-      if (length == NULL_TREE)
+      如果 (length == NULL_TREE)
 	{
-	  if (TREE_CODE (ret) == PARM_DECL && C_ARRAY_PARAMETER (ret))
+	  如果 (TREE_CODE (ret) == PARM_DECL && C_ARRAY_PARAMETER (ret))
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "for array function parameter length expression "
 		      "must be specified");
-	  else
+	  否则
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "for pointer type length expression must be specified");
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
-      if (length != NULL_TREE
+      如果 (length != NULL_TREE
 	  && TREE_CODE (length) == INTEGER_CST
 	  && tree_int_cst_sgn (length) == -1)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "negative length in array section in %qs clause",
 		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+	  返回 error_mark_node;
 	}
       /* If there is a pointer type anywhere but in the very first
 	 array-section-subscript, the array section could be non-contiguous.  */
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
+      如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
 	  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
 	  && TREE_CODE (TREE_OPERAND (t, 0)) == OMP_ARRAY_SECTION)
 	{
 	  /* If any prior dimension has a non-one length, then deem this
 	     array section as non-contiguous.  */
-	  for (tree d = TREE_OPERAND (t, 0);
+	  为 (tree d = TREE_OPERAND (t, 0);
 	       TREE_CODE (d) == OMP_ARRAY_SECTION;
 	       d = TREE_OPERAND (d, 0))
 	    {
 	      tree d_length = TREE_OPERAND (d, 2);
-	      if (d_length == NULL_TREE || !integer_onep (d_length))
+	      如果 (d_length == NULL_TREE || !integer_onep (d_length))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "array section is not contiguous in %qs clause",
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+		  返回 error_mark_node;
 		}
 	    }
 	}
     }
-  else
+  否则
     {
       error_at (OMP_CLAUSE_LOCATION (c),
 		"%qE does not have pointer or array type", ret);
-      return error_mark_node;
+      返回 error_mark_node;
     }
-  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND)
+  如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND)
     types.safe_push (TREE_TYPE (ret));
   /* We will need to evaluate lb more than once.  */
   tree lb = save_expr (low_bound);
-  if (lb != low_bound)
+  如果 (lb != low_bound)
     {
       TREE_OPERAND (t, 1) = lb;
       low_bound = lb;
     }
   ret = build_array_ref (OMP_CLAUSE_LOCATION (c), ret, low_bound);
-  return ret;
+  返回 ret;
 }
 
 /* Handle array sections for clause C.  */
@@ -16206,77 +16206,77 @@ static bool
 handle_omp_array_sections (tree &c, enum c_omp_region_type ort)
 {
   bool maybe_zero_len = false;
-  unsigned int first_non_one = 0;
+  unsigned 整数 first_non_one = 0;
   auto_vec<tree, 10> types;
   tree *tp = &OMP_CLAUSE_DECL (c);
-  if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+  如果 ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
        || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY)
       && OMP_ITERATOR_DECL_P (*tp))
     tp = &TREE_VALUE (*tp);
   tree first = handle_omp_array_sections_1 (c, *tp, types,
 					    maybe_zero_len, first_non_one,
 					    ort);
-  if (first == error_mark_node)
-    return true;
-  if (first == NULL_TREE)
-    return false;
-  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+  如果 (first == error_mark_node)
+    返回 true;
+  如果 (first == NULL_TREE)
+    返回 false;
+  如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
       || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY)
     {
       tree t = *tp;
       tree tem = NULL_TREE;
       /* Need to evaluate side effects in the length expressions
 	 if any.  */
-      while (TREE_CODE (t) == TREE_LIST)
+      当 (TREE_CODE (t) == TREE_LIST)
 	{
-	  if (TREE_VALUE (t) && TREE_SIDE_EFFECTS (TREE_VALUE (t)))
+	  如果 (TREE_VALUE (t) && TREE_SIDE_EFFECTS (TREE_VALUE (t)))
 	    {
-	      if (tem == NULL_TREE)
+	      如果 (tem == NULL_TREE)
 		tem = TREE_VALUE (t);
-	      else
+	      否则
 		tem = build2 (COMPOUND_EXPR, TREE_TYPE (tem),
 			      TREE_VALUE (t), tem);
 	    }
 	  t = TREE_CHAIN (t);
 	}
-      if (tem)
+      如果 (tem)
 	first = build2 (COMPOUND_EXPR, TREE_TYPE (first), tem, first);
       first = c_fully_fold (first, false, NULL, true);
       *tp = first;
     }
-  else
+  否则
     {
-      unsigned int num = types.length (), i;
+      unsigned 整数 num = types.length (), i;
       tree t, side_effects = NULL_TREE, size = NULL_TREE;
       tree condition = NULL_TREE;
 
-      if (int_size_in_bytes (TREE_TYPE (first)) <= 0)
+      如果 (int_size_in_bytes (TREE_TYPE (first)) <= 0)
 	maybe_zero_len = true;
 
-      for (i = num, t = OMP_CLAUSE_DECL (c); i > 0;
+      为 (i = num, t = OMP_CLAUSE_DECL (c); i > 0;
 	   t = TREE_OPERAND (t, 0))
 	{
 	  tree low_bound = TREE_OPERAND (t, 1);
 	  tree length = TREE_OPERAND (t, 2);
 
 	  i--;
-	  if (low_bound
+	  如果 (low_bound
 	      && TREE_CODE (low_bound) == INTEGER_CST
 	      && TYPE_PRECISION (TREE_TYPE (low_bound))
 		 > TYPE_PRECISION (sizetype))
 	    low_bound = fold_convert (sizetype, low_bound);
-	  if (length
+	  如果 (length
 	      && TREE_CODE (length) == INTEGER_CST
 	      && TYPE_PRECISION (TREE_TYPE (length))
 		 > TYPE_PRECISION (sizetype))
 	    length = fold_convert (sizetype, length);
-	  if (low_bound == NULL_TREE)
+	  如果 (low_bound == NULL_TREE)
 	    low_bound = integer_zero_node;
-	  if (!maybe_zero_len && i > first_non_one)
+	  如果 (!maybe_zero_len && i > first_non_one)
 	    {
-	      if (integer_nonzerop (low_bound))
+	      如果 (integer_nonzerop (low_bound))
 		goto do_warn_noncontiguous;
-	      if (length != NULL_TREE
+	      如果 (length != NULL_TREE
 		  && TREE_CODE (length) == INTEGER_CST
 		  && TYPE_DOMAIN (types[i])
 		  && TYPE_MAX_VALUE (TYPE_DOMAIN (types[i]))
@@ -16287,40 +16287,40 @@ handle_omp_array_sections (tree &c, enum c_omp_region_type ort)
 		  size = size_binop (PLUS_EXPR,
 				     TYPE_MAX_VALUE (TYPE_DOMAIN (types[i])),
 				     size_one_node);
-		  if (!tree_int_cst_equal (length, size))
+		  如果 (!tree_int_cst_equal (length, size))
 		    {
 		     do_warn_noncontiguous:
 		      error_at (OMP_CLAUSE_LOCATION (c),
 				"array section is not contiguous in %qs "
 				"clause",
 				omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		      return true;
+		      返回 true;
 		    }
 		}
-	      if (length != NULL_TREE
+	      如果 (length != NULL_TREE
 		  && TREE_SIDE_EFFECTS (length))
 		{
-		  if (side_effects == NULL_TREE)
+		  如果 (side_effects == NULL_TREE)
 		    side_effects = length;
-		  else
+		  否则
 		    side_effects = build2 (COMPOUND_EXPR,
 					   TREE_TYPE (side_effects),
 					   length, side_effects);
 		}
 	    }
-	  else
+	  否则
 	    {
 	      tree l;
 
-	      if (i > first_non_one
+	      如果 (i > first_non_one
 		  && ((length && integer_nonzerop (length))
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION))
 		continue;
-	      if (length)
+	      如果 (length)
 		l = fold_convert (sizetype, length);
-	      else
+	      否则
 		{
 		  l = size_binop (PLUS_EXPR,
 				  TYPE_MAX_VALUE (TYPE_DOMAIN (types[i])),
@@ -16328,49 +16328,49 @@ handle_omp_array_sections (tree &c, enum c_omp_region_type ort)
 		  l = size_binop (MINUS_EXPR, l,
 				  fold_convert (sizetype, low_bound));
 		}
-	      if (i > first_non_one)
+	      如果 (i > first_non_one)
 		{
 		  l = fold_build2 (NE_EXPR, boolean_type_node, l,
 				   size_zero_node);
-		  if (condition == NULL_TREE)
+		  如果 (condition == NULL_TREE)
 		    condition = l;
-		  else
+		  否则
 		    condition = fold_build2 (BIT_AND_EXPR, boolean_type_node,
 					     l, condition);
 		}
-	      else if (size == NULL_TREE)
+	      否则 如果 (size == NULL_TREE)
 		{
 		  size = size_in_bytes (TREE_TYPE (types[i]));
 		  tree eltype = TREE_TYPE (types[num - 1]);
-		  while (TREE_CODE (eltype) == ARRAY_TYPE)
+		  当 (TREE_CODE (eltype) == ARRAY_TYPE)
 		    eltype = TREE_TYPE (eltype);
-		  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
+		  如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
 		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION)
 		    {
-		      if (integer_zerop (size)
+		      如果 (integer_zerop (size)
 			  || integer_zerop (size_in_bytes (eltype)))
 			{
 			  error_at (OMP_CLAUSE_LOCATION (c),
 				    "zero length array section in %qs clause",
 				    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-			  return error_mark_node;
+			  返回 error_mark_node;
 			}
 		      size = size_binop (EXACT_DIV_EXPR, size,
 					 size_in_bytes (eltype));
 		    }
 		  size = size_binop (MULT_EXPR, size, l);
-		  if (condition)
+		  如果 (condition)
 		    size = fold_build3 (COND_EXPR, sizetype, condition,
 					size, size_zero_node);
 		}
-	      else
+	      否则
 		size = size_binop (MULT_EXPR, size, l);
 	    }
 	}
-      if (side_effects)
+      如果 (side_effects)
 	size = build2 (COMPOUND_EXPR, sizetype, side_effects, size);
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
+      如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 	  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
 	  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION)
 	{
@@ -16379,11 +16379,11 @@ handle_omp_array_sections (tree &c, enum c_omp_region_type ort)
 	  size = save_expr (size);
 	  tree index_type = build_index_type (size);
 	  tree eltype = TREE_TYPE (first);
-	  while (TREE_CODE (eltype) == ARRAY_TYPE)
+	  当 (TREE_CODE (eltype) == ARRAY_TYPE)
 	    eltype = TREE_TYPE (eltype);
 	  tree type = c_build_array_type (eltype, index_type);
 	  tree ptype = c_build_pointer_type (eltype);
-	  if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE)
+	  如果 (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE)
 	    t = build_fold_addr_expr (t);
 	  tree t2 = build_fold_addr_expr (first);
 	  t2 = fold_convert_loc (OMP_CLAUSE_LOCATION (c),
@@ -16393,10 +16393,10 @@ handle_omp_array_sections (tree &c, enum c_omp_region_type ort)
 				fold_convert_loc (OMP_CLAUSE_LOCATION (c),
 						  ptrdiff_type_node, t));
 	  t2 = c_fully_fold (t2, false, NULL);
-	  if (tree_fits_shwi_p (t2))
+	  如果 (tree_fits_shwi_p (t2))
 	    t = build2 (MEM_REF, type, t,
 			build_int_cst (ptype, tree_to_shwi (t2)));
-	  else
+	  否则
 	    {
 	      t2 = fold_convert_loc (OMP_CLAUSE_LOCATION (c), sizetype, t2);
 	      t = build2_loc (OMP_CLAUSE_LOCATION (c), POINTER_PLUS_EXPR,
@@ -16404,55 +16404,55 @@ handle_omp_array_sections (tree &c, enum c_omp_region_type ort)
 	      t = build2 (MEM_REF, type, t, build_int_cst (ptype, 0));
 	    }
 	  OMP_CLAUSE_DECL (c) = t;
-	  return false;
+	  返回 false;
 	}
       first = c_fully_fold (first, false, NULL);
       OMP_CLAUSE_DECL (c) = first;
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_HAS_DEVICE_ADDR)
-	return false;
+      如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_HAS_DEVICE_ADDR)
+	返回 false;
       /* Don't set OMP_CLAUSE_SIZE for bare attach/detach clauses.  */
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
+      如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
 	  || (OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_ATTACH
 	      && OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_DETACH
 	      && OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_FORCE_DETACH))
 	{
-	  if (size)
+	  如果 (size)
 	    size = c_fully_fold (size, false, NULL);
 	  OMP_CLAUSE_SIZE (c) = size;
 	}
 
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
-	return false;
+      如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
+	返回 false;
 
       auto_vec<omp_addr_token *, 10> addr_tokens;
 
-      if (!omp_parse_expr (addr_tokens, first))
-	return true;
+      如果 (!omp_parse_expr (addr_tokens, first))
+	返回 true;
 
       c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
 
       tree nc = ai.expand_map_clause (c, first, addr_tokens, ort);
-      if (nc != error_mark_node)
+      如果 (nc != error_mark_node)
 	{
 	  using namespace omp_addr_tokenizer;
 
-	  if (ai.maybe_zero_length_array_section (c))
+	  如果 (ai.maybe_zero_length_array_section (c))
 	    OMP_CLAUSE_MAP_MAYBE_ZERO_LENGTH_ARRAY_SECTION (c) = 1;
 
 	  /* !!! If we're accessing a base decl via chained access
 	     methods (e.g. multiple indirections), duplicate clause
 	     detection won't work properly.  Skip it in that case.  */
-	  if ((addr_tokens[0]->type == STRUCTURE_BASE
+	  如果 ((addr_tokens[0]->type == STRUCTURE_BASE
 	       || addr_tokens[0]->type == ARRAY_BASE)
 	      && addr_tokens[0]->u.structure_base_kind == BASE_DECL
 	      && addr_tokens[1]->type == ACCESS_METHOD
 	      && omp_access_chain_p (addr_tokens, 1))
 	    c = nc;
 
-	  return false;
+	  返回 false;
 	}
     }
-  return false;
+  返回 false;
 }
 
 /* Helper function of finish_omp_clauses.  Clone STMT as if we were making
@@ -16481,18 +16481,18 @@ c_clone_omp_udr (tree stmt, tree omp_decl1, tree omp_decl2,
   id.transform_return_to_modify = false;
   id.eh_lp_nr = 0;
   walk_tree (&stmt, copy_tree_body_r, &id, NULL);
-  return stmt;
+  返回 stmt;
 }
 
 /* Helper function of c_finish_omp_clauses, called via walk_tree.
    Find OMP_CLAUSE_PLACEHOLDER (passed in DATA) in *TP.  */
 
 static tree
-c_find_omp_placeholder_r (tree *tp, int *, void *data)
+c_find_omp_placeholder_r (tree *tp, 整数 *, void *data)
 {
-  if (*tp == (tree) data)
-    return *tp;
-  return NULL_TREE;
+  如果 (*tp == (tree) data)
+    返回 *tp;
+  返回 NULL_TREE;
 }
 
 /* Similarly, but also walk aggregate fields.  */
@@ -16500,39 +16500,39 @@ c_find_omp_placeholder_r (tree *tp, int *, void *data)
 struct c_find_omp_var_s { tree var; hash_set<tree> *pset; };
 
 static tree
-c_find_omp_var_r (tree *tp, int *, void *data)
+c_find_omp_var_r (tree *tp, 整数 *, void *data)
 {
-  if (*tp == ((struct c_find_omp_var_s *) data)->var)
-    return *tp;
-  if (RECORD_OR_UNION_TYPE_P (*tp))
+  如果 (*tp == ((struct c_find_omp_var_s *) data)->var)
+    返回 *tp;
+  如果 (RECORD_OR_UNION_TYPE_P (*tp))
     {
       tree field;
       hash_set<tree> *pset = ((struct c_find_omp_var_s *) data)->pset;
 
-      for (field = TYPE_FIELDS (*tp); field;
+      为 (field = TYPE_FIELDS (*tp); field;
 	   field = DECL_CHAIN (field))
-	if (TREE_CODE (field) == FIELD_DECL)
+	如果 (TREE_CODE (field) == FIELD_DECL)
 	  {
 	    tree ret = walk_tree (&DECL_FIELD_OFFSET (field),
 				  c_find_omp_var_r, data, pset);
-	    if (ret)
-	      return ret;
+	    如果 (ret)
+	      返回 ret;
 	    ret = walk_tree (&DECL_SIZE (field), c_find_omp_var_r, data, pset);
-	    if (ret)
-	      return ret;
+	    如果 (ret)
+	      返回 ret;
 	    ret = walk_tree (&DECL_SIZE_UNIT (field), c_find_omp_var_r, data,
 			     pset);
-	    if (ret)
-	      return ret;
+	    如果 (ret)
+	      返回 ret;
 	    ret = walk_tree (&TREE_TYPE (field), c_find_omp_var_r, data, pset);
-	    if (ret)
-	      return ret;
+	    如果 (ret)
+	      返回 ret;
 	  }
     }
-  else if (INTEGRAL_TYPE_P (*tp))
-    return walk_tree (&TYPE_MAX_VALUE (*tp), c_find_omp_var_r, data,
+  否则 如果 (INTEGRAL_TYPE_P (*tp))
+    返回 walk_tree (&TYPE_MAX_VALUE (*tp), c_find_omp_var_r, data,
 		      ((struct c_find_omp_var_s *) data)->pset);
-  return NULL_TREE;
+  返回 NULL_TREE;
 }
 
 /* Finish OpenMP iterators ITER.  Return true if they are erroneous
@@ -16542,7 +16542,7 @@ static bool
 c_omp_finish_iterators (tree iter)
 {
   bool ret = false;
-  for (tree it = iter; it; it = TREE_CHAIN (it))
+  为 (tree it = iter; it; it = TREE_CHAIN (it))
     {
       tree var = OMP_ITERATOR_VAR (it);
       tree begin = OMP_ITERATOR_BEGIN (it);
@@ -16551,37 +16551,37 @@ c_omp_finish_iterators (tree iter)
       tree orig_step;
       tree type = TREE_TYPE (var);
       location_t loc = DECL_SOURCE_LOCATION (var);
-      if (type == error_mark_node)
+      如果 (type == error_mark_node)
 	{
 	  ret = true;
 	  continue;
 	}
-      if (!INTEGRAL_TYPE_P (type) && !POINTER_TYPE_P (type))
+      如果 (!INTEGRAL_TYPE_P (type) && !POINTER_TYPE_P (type))
 	{
 	  error_at (loc, "iterator %qD has neither integral nor pointer type",
 		    var);
 	  ret = true;
 	  continue;
 	}
-      else if (TYPE_ATOMIC (type))
+      否则 如果 (TYPE_ATOMIC (type))
 	{
 	  error_at (loc, "iterator %qD has %<_Atomic%> qualified type", var);
 	  ret = true;
 	  continue;
 	}
-      else if (TYPE_READONLY (type))
+      否则 如果 (TYPE_READONLY (type))
 	{
 	  error_at (loc, "iterator %qD has const qualified type", var);
 	  ret = true;
 	  continue;
 	}
-      else if (step == error_mark_node
+      否则 如果 (step == error_mark_node
 	       || TREE_TYPE (step) == error_mark_node)
 	{
 	  ret = true;
 	  continue;
 	}
-      else if (!INTEGRAL_TYPE_P (TREE_TYPE (step)))
+      否则 如果 (!INTEGRAL_TYPE_P (TREE_TYPE (step)))
 	{
 	  error_at (EXPR_LOC_OR_LOC (step, loc),
 		    "iterator step with non-integral type");
@@ -16593,7 +16593,7 @@ c_omp_finish_iterators (tree iter)
       orig_step = save_expr (c_fully_fold (step, false, NULL));
       tree stype = POINTER_TYPE_P (type) ? sizetype : type;
       step = c_fully_fold (build_c_cast (loc, stype, orig_step), false, NULL);
-      if (POINTER_TYPE_P (type))
+      如果 (POINTER_TYPE_P (type))
 	{
 	  begin = save_expr (begin);
 	  step = pointer_int_sum (loc, PLUS_EXPR, begin, step);
@@ -16602,14 +16602,14 @@ c_omp_finish_iterators (tree iter)
 				  fold_convert (sizetype, begin));
 	  step = fold_convert (ssizetype, step);
 	}
-      if (integer_zerop (step))
+      如果 (integer_zerop (step))
 	{
 	  error_at (loc, "iterator %qD has zero step", var);
 	  ret = true;
 	  continue;
 	}
 
-      if (begin == error_mark_node
+      如果 (begin == error_mark_node
 	  || end == error_mark_node
 	  || step == error_mark_node
 	  || orig_step == error_mark_node)
@@ -16619,7 +16619,7 @@ c_omp_finish_iterators (tree iter)
 	}
       hash_set<tree> pset;
       tree it2;
-      for (it2 = TREE_CHAIN (it); it2; it2 = TREE_CHAIN (it2))
+      为 (it2 = TREE_CHAIN (it); it2; it2 = TREE_CHAIN (it2))
 	{
 	  tree var2 = OMP_ITERATOR_VAR (it2);
 	  tree begin2 = OMP_ITERATOR_BEGIN (it2);
@@ -16628,33 +16628,33 @@ c_omp_finish_iterators (tree iter)
 	  tree type2 = TREE_TYPE (var2);
 	  location_t loc2 = DECL_SOURCE_LOCATION (var2);
 	  struct c_find_omp_var_s data = { var, &pset };
-	  if (walk_tree (&type2, c_find_omp_var_r, &data, &pset))
+	  如果 (walk_tree (&type2, c_find_omp_var_r, &data, &pset))
 	    {
 	      error_at (loc2,
 			"type of iterator %qD refers to outer iterator %qD",
 			var2, var);
 	      break;
 	    }
-	  else if (walk_tree (&begin2, c_find_omp_var_r, &data, &pset))
+	  否则 如果 (walk_tree (&begin2, c_find_omp_var_r, &data, &pset))
 	    {
 	      error_at (EXPR_LOC_OR_LOC (begin2, loc2),
 			"begin expression refers to outer iterator %qD", var);
 	      break;
 	    }
-	  else if (walk_tree (&end2, c_find_omp_var_r, &data, &pset))
+	  否则 如果 (walk_tree (&end2, c_find_omp_var_r, &data, &pset))
 	    {
 	      error_at (EXPR_LOC_OR_LOC (end2, loc2),
 			"end expression refers to outer iterator %qD", var);
 	      break;
 	    }
-	  else if (walk_tree (&step2, c_find_omp_var_r, &data, &pset))
+	  否则 如果 (walk_tree (&step2, c_find_omp_var_r, &data, &pset))
 	    {
 	      error_at (EXPR_LOC_OR_LOC (step2, loc2),
 			"step expression refers to outer iterator %qD", var);
 	      break;
 	    }
 	}
-      if (it2)
+      如果 (it2)
 	{
 	  ret = true;
 	  continue;
@@ -16664,7 +16664,7 @@ c_omp_finish_iterators (tree iter)
       OMP_ITERATOR_STEP (it) = step;
       OMP_ITERATOR_ORIG_STEP (it) = orig_step;
     }
-  return ret;
+  返回 ret;
 }
 
 /* Ensure that pointers are used in OpenACC attach and detach clauses.
@@ -16673,27 +16673,27 @@ c_omp_finish_iterators (tree iter)
 static bool
 c_oacc_check_attachments (tree c)
 {
-  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
-    return false;
+  如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
+    返回 false;
 
   /* OpenACC attach / detach clauses must be pointers.  */
-  if (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
+  如果 (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
       || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH)
     {
       tree t = OMP_CLAUSE_DECL (c);
 
-      while (TREE_CODE (t) == OMP_ARRAY_SECTION)
+      当 (TREE_CODE (t) == OMP_ARRAY_SECTION)
 	t = TREE_OPERAND (t, 0);
 
-      if (TREE_CODE (TREE_TYPE (t)) != POINTER_TYPE)
+      如果 (TREE_CODE (TREE_TYPE (t)) != POINTER_TYPE)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c), "expected pointer in %qs clause",
 		    user_omp_clause_code_name (c, true));
-	  return true;
+	  返回 true;
 	}
     }
 
-  return false;
+  返回 false;
 }
 
 /* For all elements of CLAUSES, validate them against their constraints.
@@ -16724,7 +16724,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
   tree *order_clause = NULL;
   /* 1 if normal/task reduction has been seen, -1 if inscan reduction
      has been seen, -2 if mixed inscan/normal reduction diagnosed.  */
-  int reduction_seen = 0;
+  整数 reduction_seen = 0;
   bool allocate_seen = false;
   bool implicit_moved = false;
   bool target_in_reduction_seen = false;
@@ -16736,7 +16736,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
   tree init_no_targetsync_clause = NULL_TREE;
   tree depend_clause = NULL_TREE;
 
-  if (!openacc)
+  如果 (!openacc)
     clauses = omp_remove_duplicate_maps (clauses, true);
 
   bitmap_obstack_initialize (NULL);
@@ -16753,9 +16753,9 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
   bitmap_initialize (&oacc_reduction_head, &bitmap_default_obstack);
   bitmap_initialize (&is_on_device_head, &bitmap_default_obstack);
 
-  if (openacc)
-    for (c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ASYNC)
+  如果 (openacc)
+    为 (c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+      如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ASYNC)
 	{
 	  oacc_async = true;
 	  break;
@@ -16763,7 +16763,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
   tree *grp_start_p = NULL, grp_sentinel = NULL_TREE;
 
-  for (pc = &clauses, c = clauses; c ; c = *pc)
+  为 (pc = &clauses, c = clauses; c ; c = *pc)
     {
       bool remove = false;
       bool need_complete = false;
@@ -16771,11 +16771,11 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
       /* We've reached the end of a list of expanded nodes.  Reset the group
 	 start pointer.  */
-      if (c == grp_sentinel)
+      如果 (c == grp_sentinel)
 	{
-	  if (grp_start_p
+	  如果 (grp_start_p
 	      && OMP_CLAUSE_HAS_ITERATORS (*grp_start_p))
-	    for (tree gc = *grp_start_p; gc != grp_sentinel;
+	    为 (tree gc = *grp_start_p; gc != grp_sentinel;
 		 gc = OMP_CLAUSE_CHAIN (gc))
 	      OMP_CLAUSE_ITERATORS (gc) = OMP_CLAUSE_ITERATORS (*grp_start_p);
 	  grp_start_p = NULL;
@@ -16793,9 +16793,9 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	  goto check_dup_generic;
 
 	case OMP_CLAUSE_REDUCTION:
-	  if (reduction_seen == 0)
+	  如果 (reduction_seen == 0)
 	    reduction_seen = OMP_CLAUSE_REDUCTION_INSCAN (c) ? -1 : 1;
-	  else if (reduction_seen != -2
+	  否则 如果 (reduction_seen != -2
 		   && reduction_seen != (OMP_CLAUSE_REDUCTION_INSCAN (c)
 					 ? -1 : 1))
 	    {
@@ -16809,16 +16809,16 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	case OMP_CLAUSE_TASK_REDUCTION:
 	  need_implicitly_determined = true;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	  如果 (TREE_CODE (t) == OMP_ARRAY_SECTION)
 	    {
-	      if (handle_omp_array_sections (c, ort))
+	      如果 (handle_omp_array_sections (c, ort))
 		{
 		  remove = true;
 		  break;
 		}
 
 	      t = OMP_CLAUSE_DECL (c);
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
+	      如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 		  && OMP_CLAUSE_REDUCTION_INSCAN (c))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
@@ -16829,23 +16829,23 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		}
 	    }
 	  t = require_complete_type (OMP_CLAUSE_LOCATION (c), t);
-	  if (t == error_mark_node)
+	  如果 (t == error_mark_node)
 	    {
 	      remove = true;
 	      break;
 	    }
-	  if (oacc_async)
+	  如果 (oacc_async)
 	    c_mark_addressable (t);
 	  type = TREE_TYPE (t);
-	  if (TREE_CODE (t) == MEM_REF)
+	  如果 (TREE_CODE (t) == MEM_REF)
 	    type = TREE_TYPE (type);
-	  if (TREE_CODE (type) == ARRAY_TYPE)
+	  如果 (TREE_CODE (type) == ARRAY_TYPE)
 	    {
 	      tree oatype = type;
 	      gcc_assert (TREE_CODE (t) != MEM_REF);
-	      while (TREE_CODE (type) == ARRAY_TYPE)
+	      当 (TREE_CODE (type) == ARRAY_TYPE)
 		type = TREE_TYPE (type);
-	      if (integer_zerop (TYPE_SIZE_UNIT (type)))
+	      如果 (integer_zerop (TYPE_SIZE_UNIT (type)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD in %<reduction%> clause is a zero size array",
@@ -16855,7 +16855,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		}
 	      tree size = size_binop (EXACT_DIV_EXPR, TYPE_SIZE_UNIT (oatype),
 				      TYPE_SIZE_UNIT (type));
-	      if (integer_zerop (size))
+	      如果 (integer_zerop (size))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD in %<reduction%> clause is a zero size array",
@@ -16870,24 +16870,24 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 					       index_type);
 	      atype = c_build_qualified_type (atype, TYPE_QUALS (type));
 	      tree ptype = c_build_pointer_type (type);
-	      if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE)
+	      如果 (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE)
 		t = build_fold_addr_expr (t);
 	      t = build2 (MEM_REF, atype, t, build_int_cst (ptype, 0));
 	      OMP_CLAUSE_DECL (c) = t;
 	    }
-	  if (TYPE_ATOMIC (type))
+	  如果 (TYPE_ATOMIC (type))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<_Atomic%> %qE in %<reduction%> clause", t);
 	      remove = true;
 	      break;
 	    }
-	  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_REDUCTION
+	  如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_REDUCTION
 	      || OMP_CLAUSE_REDUCTION_TASK (c))
 	    {
 	      /* Disallow zero sized or potentially zero sized task
 		 reductions.  */
-	      if (integer_zerop (TYPE_SIZE_UNIT (type)))
+	      如果 (integer_zerop (TYPE_SIZE_UNIT (type)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "zero sized type %qT in %qs clause", type,
@@ -16895,7 +16895,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		  remove = true;
 		  break;
 		}
-	      else if (TREE_CODE (TYPE_SIZE_UNIT (type)) != INTEGER_CST)
+	      否则 如果 (TREE_CODE (TYPE_SIZE_UNIT (type)) != INTEGER_CST)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "variable sized type %qT in %qs clause", type,
@@ -16904,7 +16904,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		  break;
 		}
 	    }
-	  if (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == NULL_TREE
+	  如果 (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == NULL_TREE
 	      && (FLOAT_TYPE_P (type)
 		  || TREE_CODE (type) == COMPLEX_TYPE))
 	    {
@@ -16920,11 +16920,11 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		case TRUTH_ORIF_EXPR:
 		  break;
 		case MIN_EXPR:
-		  if (TREE_CODE (type) == COMPLEX_TYPE)
+		  如果 (TREE_CODE (type) == COMPLEX_TYPE)
 		    r_name = "min";
 		  break;
 		case MAX_EXPR:
-		  if (TREE_CODE (type) == COMPLEX_TYPE)
+		  如果 (TREE_CODE (type) == COMPLEX_TYPE)
 		    r_name = "max";
 		  break;
 		case BIT_AND_EXPR:
@@ -16939,7 +16939,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		default:
 		  gcc_unreachable ();
 		}
-	      if (r_name)
+	      如果 (r_name)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qE has invalid type for %<reduction(%s)%>",
@@ -16948,14 +16948,14 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		  break;
 		}
 	    }
-	  else if (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == error_mark_node)
+	  否则 如果 (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == error_mark_node)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"user defined reduction not found for %qE", t);
 	      remove = true;
 	      break;
 	    }
-	  else if (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c))
+	  否则 如果 (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c))
 	    {
 	      tree list = OMP_CLAUSE_REDUCTION_PLACEHOLDER (c);
 	      type = TYPE_MAIN_VARIANT (type);
@@ -16965,7 +16965,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	      OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) = placeholder;
 	      DECL_ARTIFICIAL (placeholder) = 1;
 	      DECL_IGNORED_P (placeholder) = 1;
-	      if (TREE_CODE (t) == MEM_REF)
+	      如果 (TREE_CODE (t) == MEM_REF)
 		{
 		  decl_placeholder = build_decl (OMP_CLAUSE_LOCATION (c),
 						 VAR_DECL, NULL_TREE, type);
@@ -16973,9 +16973,9 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		  DECL_ARTIFICIAL (decl_placeholder) = 1;
 		  DECL_IGNORED_P (decl_placeholder) = 1;
 		}
-	      if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 0)))
+	      如果 (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 0)))
 		c_mark_addressable (placeholder);
-	      if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 1)))
+	      如果 (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 1)))
 		c_mark_addressable (decl_placeholder ? decl_placeholder
 				    : OMP_CLAUSE_DECL (c));
 	      OMP_CLAUSE_REDUCTION_MERGE (c)
@@ -16989,40 +16989,40 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			      void_type_node, NULL_TREE,
 			      OMP_CLAUSE_REDUCTION_MERGE (c), NULL_TREE);
 	      TREE_SIDE_EFFECTS (OMP_CLAUSE_REDUCTION_MERGE (c)) = 1;
-	      if (TREE_VEC_LENGTH (list) == 6)
+	      如果 (TREE_VEC_LENGTH (list) == 6)
 		{
-		  if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 3)))
+		  如果 (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 3)))
 		    c_mark_addressable (decl_placeholder ? decl_placeholder
 					: OMP_CLAUSE_DECL (c));
-		  if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 4)))
+		  如果 (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 4)))
 		    c_mark_addressable (placeholder);
 		  tree init = TREE_VEC_ELT (list, 5);
-		  if (init == error_mark_node)
+		  如果 (init == error_mark_node)
 		    init = DECL_INITIAL (TREE_VEC_ELT (list, 3));
 		  OMP_CLAUSE_REDUCTION_INIT (c)
 		    = c_clone_omp_udr (init, TREE_VEC_ELT (list, 4),
 				       TREE_VEC_ELT (list, 3),
 				       decl_placeholder ? decl_placeholder
 				       : OMP_CLAUSE_DECL (c), placeholder);
-		  if (TREE_VEC_ELT (list, 5) == error_mark_node)
+		  如果 (TREE_VEC_ELT (list, 5) == error_mark_node)
 		    {
 		      tree v = decl_placeholder ? decl_placeholder : t;
 		      OMP_CLAUSE_REDUCTION_INIT (c)
 			= build2 (INIT_EXPR, TREE_TYPE (v), v,
 				  OMP_CLAUSE_REDUCTION_INIT (c));
 		    }
-		  if (walk_tree (&OMP_CLAUSE_REDUCTION_INIT (c),
+		  如果 (walk_tree (&OMP_CLAUSE_REDUCTION_INIT (c),
 				 c_find_omp_placeholder_r,
 				 placeholder, NULL))
 		    OMP_CLAUSE_REDUCTION_OMP_ORIG_REF (c) = 1;
 		}
-	      else
+	      否则
 		{
 		  tree init;
 		  tree v = decl_placeholder ? decl_placeholder : t;
-		  if (AGGREGATE_TYPE_P (TREE_TYPE (v)))
+		  如果 (AGGREGATE_TYPE_P (TREE_TYPE (v)))
 		    init = build_constructor (TREE_TYPE (v), NULL);
-		  else
+		  否则
 		    init = fold_convert (TREE_TYPE (v), integer_zero_node);
 		  OMP_CLAUSE_REDUCTION_INIT (c)
 		    = build2 (INIT_EXPR, TREE_TYPE (v), v, init);
@@ -17033,9 +17033,9 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			       OMP_CLAUSE_REDUCTION_INIT (c), NULL_TREE);
 	      TREE_SIDE_EFFECTS (OMP_CLAUSE_REDUCTION_INIT (c)) = 1;
 	    }
-	  if (TREE_CODE (t) == MEM_REF)
+	  如果 (TREE_CODE (t) == MEM_REF)
 	    {
-	      if (TYPE_SIZE_UNIT (TREE_TYPE (TREE_TYPE (t))) == NULL_TREE
+	      如果 (TYPE_SIZE_UNIT (TREE_TYPE (TREE_TYPE (t))) == NULL_TREE
 		  || TREE_CODE (TYPE_SIZE_UNIT (TREE_TYPE (TREE_TYPE (t))))
 		     != INTEGER_CST)
 		{
@@ -17045,16 +17045,16 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		  break;
 		}
 	      t = TREE_OPERAND (t, 0);
-	      if (TREE_CODE (t) == POINTER_PLUS_EXPR)
+	      如果 (TREE_CODE (t) == POINTER_PLUS_EXPR)
 		t = TREE_OPERAND (t, 0);
-	      if (TREE_CODE (t) == ADDR_EXPR)
+	      如果 (TREE_CODE (t) == ADDR_EXPR)
 		t = TREE_OPERAND (t, 0);
 	    }
 	  goto check_dup_generic_t;
 
 	case OMP_CLAUSE_COPYPRIVATE:
 	  copyprivate_seen = true;
-	  if (nowait_clause)
+	  如果 (nowait_clause)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (*nowait_clause),
 			"%<nowait%> clause must not be used together "
@@ -17066,7 +17066,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
 	case OMP_CLAUSE_COPYIN:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) || !DECL_THREAD_LOCAL_P (t))
+	  如果 (!VAR_P (t) || !DECL_THREAD_LOCAL_P (t))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE must be %<threadprivate%> for %<copyin%>", t);
@@ -17076,10 +17076,10 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	  goto check_dup_generic;
 
 	case OMP_CLAUSE_LINEAR:
-	  if (ort != C_ORT_OMP_DECLARE_SIMD)
+	  如果 (ort != C_ORT_OMP_DECLARE_SIMD)
 	    need_implicitly_determined = true;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (ort != C_ORT_OMP_DECLARE_SIMD
+	  如果 (ort != C_ORT_OMP_DECLARE_SIMD
 	      && OMP_CLAUSE_LINEAR_KIND (c) != OMP_CLAUSE_LINEAR_DEFAULT
 	      && OMP_CLAUSE_LINEAR_OLD_LINEAR_MODIFIER (c))
 	    {
@@ -17089,7 +17089,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			"using OpenMP 5.2 modifiers");
 	      OMP_CLAUSE_LINEAR_KIND (c) = OMP_CLAUSE_LINEAR_DEFAULT;
 	    }
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (t))
+	  如果 (!INTEGRAL_TYPE_P (TREE_TYPE (t))
 	      && TREE_CODE (TREE_TYPE (t)) != POINTER_TYPE)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
@@ -17098,26 +17098,26 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	      remove = true;
 	      break;
 	    }
-	  if (TYPE_ATOMIC (TREE_TYPE (t)))
+	  如果 (TYPE_ATOMIC (TREE_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<_Atomic%> %qD in %<linear%> clause", t);
 	      remove = true;
 	      break;
 	    }
-	  if (ort == C_ORT_OMP_DECLARE_SIMD)
+	  如果 (ort == C_ORT_OMP_DECLARE_SIMD)
 	    {
 	      tree s = OMP_CLAUSE_LINEAR_STEP (c);
-	      if (TREE_CODE (s) == PARM_DECL)
+	      如果 (TREE_CODE (s) == PARM_DECL)
 		{
 		  OMP_CLAUSE_LINEAR_VARIABLE_STRIDE (c) = 1;
 		  /* map_head bitmap is used as uniform_head if
 		     declare_simd.  */
-		  if (!bitmap_bit_p (&map_head, DECL_UID (s)))
+		  如果 (!bitmap_bit_p (&map_head, DECL_UID (s)))
 		    linear_variable_step_check = true;
 		  goto check_dup_generic;
 		}
-	      if (TREE_CODE (s) != INTEGER_CST)
+	      如果 (TREE_CODE (s) != INTEGER_CST)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%<linear%> clause step %qE is neither constant "
@@ -17126,7 +17126,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		  break;
 		}
 	    }
-	  if (TREE_CODE (TREE_TYPE (OMP_CLAUSE_DECL (c))) == POINTER_TYPE)
+	  如果 (TREE_CODE (TREE_TYPE (OMP_CLAUSE_DECL (c))) == POINTER_TYPE)
 	    {
 	      tree s = OMP_CLAUSE_LINEAR_STEP (c);
 	      s = pointer_int_sum (OMP_CLAUSE_LOCATION (c), PLUS_EXPR,
@@ -17135,11 +17135,11 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 				   sizetype, fold_convert (sizetype, s),
 				   fold_convert
 				     (sizetype, OMP_CLAUSE_DECL (c)));
-	      if (s == error_mark_node)
+	      如果 (s == error_mark_node)
 		s = size_one_node;
 	      OMP_CLAUSE_LINEAR_STEP (c) = s;
 	    }
-	  else
+	  否则
 	    OMP_CLAUSE_LINEAR_STEP (c)
 	      = fold_convert (TREE_TYPE (t), OMP_CLAUSE_LINEAR_STEP (c));
 	  goto check_dup_generic;
@@ -17147,14 +17147,14 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	check_dup_generic:
 	  t = OMP_CLAUSE_DECL (c);
 	check_dup_generic_t:
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  如果 (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %qs", t,
 			omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
 	      remove = true;
 	    }
-	  else if ((openacc && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION)
+	  否则 如果 ((openacc && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION)
 		   || (ort == C_ORT_OMP
 		       && (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_USE_DEVICE_PTR
 			   || (OMP_CLAUSE_CODE (c)
@@ -17162,7 +17162,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		   || (ort == C_ORT_OMP_TARGET
 		       && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION))
 	    {
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
+	      如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
 		  && (bitmap_bit_p (&generic_head, DECL_UID (t))
 		      || bitmap_bit_p (&firstprivate_head, DECL_UID (t))))
 		{
@@ -17172,9 +17172,9 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		  remove = true;
 		  break;
 		}
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION)
+	      如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION)
 		target_in_reduction_seen = true;
-	      if (bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
+	      如果 (bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    openacc
@@ -17183,10 +17183,10 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			    t);
 		  remove = true;
 		}
-	      else
+	      否则
 		bitmap_set_bit (&oacc_reduction_head, DECL_UID (t));
 	    }
-	  else if (bitmap_bit_p (&generic_head, DECL_UID (t))
+	  否则 如果 (bitmap_bit_p (&generic_head, DECL_UID (t))
 		   || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
 		   || bitmap_bit_p (&lastprivate_head, DECL_UID (t))
 		   || bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
@@ -17195,25 +17195,25 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			"%qE appears more than once in data clauses", t);
 	      remove = true;
 	    }
-	  else if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_PRIVATE
+	  否则 如果 ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_PRIVATE
 		    || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_HAS_DEVICE_ADDR
 		    || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IS_DEVICE_PTR)
 		   && bitmap_bit_p (&map_head, DECL_UID (t)))
 	    {
-	      if (openacc)
+	      如果 (openacc)
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears more than once in data clauses", t);
-	      else
+	      否则
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears both in data and map clauses", t);
 	      remove = true;
 	    }
-	  else
+	  否则
 	    bitmap_set_bit (&generic_head, DECL_UID (t));
 	  break;
 
 	case OMP_CLAUSE_FIRSTPRIVATE:
-	  if (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c) && !implicit_moved)
+	  如果 (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c) && !implicit_moved)
 	    {
 	    move_implicit:
 	      implicit_moved = true;
@@ -17222,22 +17222,22 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		 clauses chain.  */
 	      tree cl1 = NULL_TREE, cl2 = NULL_TREE;
 	      tree *pc1 = pc, *pc2 = &cl1, *pc3 = &cl2;
-	      while (*pc1)
-		if (OMP_CLAUSE_CODE (*pc1) == OMP_CLAUSE_FIRSTPRIVATE
+	      当 (*pc1)
+		如果 (OMP_CLAUSE_CODE (*pc1) == OMP_CLAUSE_FIRSTPRIVATE
 		    && OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (*pc1))
 		  {
 		    *pc3 = *pc1;
 		    pc3 = &OMP_CLAUSE_CHAIN (*pc3);
 		    *pc1 = OMP_CLAUSE_CHAIN (*pc1);
 		  }
-		else if (OMP_CLAUSE_CODE (*pc1) == OMP_CLAUSE_MAP
+		否则 如果 (OMP_CLAUSE_CODE (*pc1) == OMP_CLAUSE_MAP
 			 && OMP_CLAUSE_MAP_IMPLICIT (*pc1))
 		  {
 		    *pc2 = *pc1;
 		    pc2 = &OMP_CLAUSE_CHAIN (*pc2);
 		    *pc1 = OMP_CLAUSE_CHAIN (*pc1);
 		  }
-		else
+		否则
 		  pc1 = &OMP_CLAUSE_CHAIN (*pc1);
 	      *pc3 = NULL;
 	      *pc2 = cl2;
@@ -17247,17 +17247,17 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	  t = OMP_CLAUSE_DECL (c);
 	  need_complete = true;
 	  need_implicitly_determined = true;
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  如果 (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %<firstprivate%>", t);
 	      remove = true;
 	    }
-	  else if (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
+	  否则 如果 (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
 		   && !OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT_TARGET (c)
 		   && bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
 	    remove = true;
-	  else if (bitmap_bit_p (&generic_head, DECL_UID (t))
+	  否则 如果 (bitmap_bit_p (&generic_head, DECL_UID (t))
 		   || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
 		   || bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
 	    {
@@ -17265,21 +17265,21 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			"%qE appears more than once in data clauses", t);
 	      remove = true;
 	    }
-	  else if (bitmap_bit_p (&map_head, DECL_UID (t))
+	  否则 如果 (bitmap_bit_p (&map_head, DECL_UID (t))
 		   || bitmap_bit_p (&map_field_head, DECL_UID (t)))
 	    {
-	      if (openacc)
+	      如果 (openacc)
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears more than once in data clauses", t);
-	      else if (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
+	      否则 如果 (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
 		       && !OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT_TARGET (c))
 		/* Silently drop the clause.  */;
-	      else
+	      否则
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears both in data and map clauses", t);
 	      remove = true;
 	    }
-	  else
+	  否则
 	    bitmap_set_bit (&firstprivate_head, DECL_UID (t));
 	  break;
 
@@ -17287,32 +17287,32 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	  t = OMP_CLAUSE_DECL (c);
 	  need_complete = true;
 	  need_implicitly_determined = true;
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  如果 (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %<lastprivate%>", t);
 	      remove = true;
 	    }
-	  else if (bitmap_bit_p (&generic_head, DECL_UID (t))
+	  否则 如果 (bitmap_bit_p (&generic_head, DECL_UID (t))
 		   || bitmap_bit_p (&lastprivate_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 		     "%qE appears more than once in data clauses", t);
 	      remove = true;
 	    }
-	  else
+	  否则
 	    bitmap_set_bit (&lastprivate_head, DECL_UID (t));
 	  break;
 
 	case OMP_CLAUSE_ALIGNED:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  如果 (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in %<aligned%> clause", t);
 	      remove = true;
 	    }
-	  else if (!POINTER_TYPE_P (TREE_TYPE (t))
+	  否则 如果 (!POINTER_TYPE_P (TREE_TYPE (t))
 		   && TREE_CODE (TREE_TYPE (t)) != ARRAY_TYPE)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
@@ -17320,77 +17320,77 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			"an array", t);
 	      remove = true;
 	    }
-	  else if (TYPE_ATOMIC (TREE_TYPE (t)))
+	  否则 如果 (TYPE_ATOMIC (TREE_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<_Atomic%> %qD in %<aligned%> clause", t);
 	      remove = true;
 	      break;
 	    }
-	  else if (bitmap_bit_p (&aligned_head, DECL_UID (t)))
+	  否则 如果 (bitmap_bit_p (&aligned_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in %<aligned%> clauses",
 			t);
 	      remove = true;
 	    }
-	  else
+	  否则
 	    bitmap_set_bit (&aligned_head, DECL_UID (t));
 	  break;
 
 	case OMP_CLAUSE_NONTEMPORAL:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  如果 (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in %<nontemporal%> clause", t);
 	      remove = true;
 	    }
-	  else if (bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
+	  否则 如果 (bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in %<nontemporal%> "
 			"clauses", t);
 	      remove = true;
 	    }
-	  else
+	  否则
 	    bitmap_set_bit (&oacc_reduction_head, DECL_UID (t));
 	  break;
 
 	case OMP_CLAUSE_ALLOCATE:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  如果 (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in %<allocate%> clause", t);
 	      remove = true;
 	    }
-	  else if (bitmap_bit_p (&aligned_head, DECL_UID (t)))
+	  否则 如果 (bitmap_bit_p (&aligned_head, DECL_UID (t)))
 	    {
 	      warning_at (OMP_CLAUSE_LOCATION (c), OPT_Wopenmp,
 			  "%qE appears more than once in %<allocate%> clauses",
 			  t);
 	      remove = true;
 	    }
-	  else
+	  否则
 	    {
 	      bitmap_set_bit (&aligned_head, DECL_UID (t));
-	      if (!OMP_CLAUSE_ALLOCATE_COMBINED (c))
+	      如果 (!OMP_CLAUSE_ALLOCATE_COMBINED (c))
 		allocate_seen = true;
 	    }
 	  break;
 
 	case OMP_CLAUSE_DOACROSS:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (t == NULL_TREE)
+	  如果 (t == NULL_TREE)
 	    break;
-	  if (OMP_CLAUSE_DOACROSS_KIND (c) == OMP_CLAUSE_DOACROSS_SINK)
+	  如果 (OMP_CLAUSE_DOACROSS_KIND (c) == OMP_CLAUSE_DOACROSS_SINK)
 	    {
 	      gcc_assert (TREE_CODE (t) == TREE_LIST);
-	      for (; t; t = TREE_CHAIN (t))
+	      为 (; t; t = TREE_CHAIN (t))
 		{
 		  tree decl = TREE_VALUE (t);
-		  if (TREE_CODE (TREE_TYPE (decl)) == POINTER_TYPE)
+		  如果 (TREE_CODE (TREE_TYPE (decl)) == POINTER_TYPE)
 		    {
 		      tree offset = TREE_PURPOSE (t);
 		      bool neg = wi::neg_p (wi::to_wide (offset));
@@ -17402,7 +17402,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 					    sizetype,
 					    fold_convert (sizetype, t2),
 					    fold_convert (sizetype, decl));
-		      if (t2 == error_mark_node)
+		      如果 (t2 == error_mark_node)
 			{
 			  remove = true;
 			  break;
@@ -17416,12 +17416,12 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
 	case OMP_CLAUSE_USES_ALLOCATORS:
 	  t = OMP_CLAUSE_USES_ALLOCATORS_ALLOCATOR (c);
-	  if (t == error_mark_node)
+	  如果 (t == error_mark_node)
 	    {
 	      remove = true;
 	      break;
 	    }
-	  if ((VAR_P (t) || TREE_CODE (t) == PARM_DECL)
+	  如果 ((VAR_P (t) || TREE_CODE (t) == PARM_DECL)
 	      && (bitmap_bit_p (&generic_head, DECL_UID (t))
 		  || bitmap_bit_p (&map_head, DECL_UID (t))
 		  || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
@@ -17432,9 +17432,9 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	      remove = true;
 	      break;
 	    }
-	  else
+	  否则
 	    bitmap_set_bit (&generic_head, DECL_UID (t));
-	  if (TREE_CODE (TREE_TYPE (t)) != ENUMERAL_TYPE
+	  如果 (TREE_CODE (TREE_TYPE (t)) != ENUMERAL_TYPE
 	      || strcmp (IDENTIFIER_POINTER (TYPE_IDENTIFIER (TREE_TYPE (t))),
 			 "omp_allocator_handle_t") != 0)
 	    {
@@ -17445,7 +17445,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	      break;
 	    }
 	  tree init;
-	  if (!DECL_P (t)
+	  如果 (!DECL_P (t)
 	      || (TREE_CODE (t) == CONST_DECL
 		  && ((init = DECL_INITIAL(t)) == nullptr
 		      || TREE_CODE (init) != INTEGER_CST
@@ -17461,13 +17461,13 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			"predefined allocator", t);
 	      break;
 	    }
-	  else if (TREE_CODE (t) == CONST_DECL)
+	  否则 如果 (TREE_CODE (t) == CONST_DECL)
 	    {
 	      /* omp_null_allocator is ignored and for predefined allocators,
 		 no special handling is required; thus, mark them removed. */
 	      remove = true;
 
-	      if (OMP_CLAUSE_USES_ALLOCATORS_MEMSPACE (c)
+	      如果 (OMP_CLAUSE_USES_ALLOCATORS_MEMSPACE (c)
 		  || OMP_CLAUSE_USES_ALLOCATORS_TRAITS (c))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
@@ -17477,12 +17477,12 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		}
 	    }
 	  t = OMP_CLAUSE_USES_ALLOCATORS_MEMSPACE (c);
-	  if (t == error_mark_node)
+	  如果 (t == error_mark_node)
 	    {
 	      remove = true;
 	      break;
 	    }
-	  if (t != NULL_TREE
+	  如果 (t != NULL_TREE
 	      && ((TREE_CODE (t) != CONST_DECL && TREE_CODE (t) != INTEGER_CST)
 		  || TREE_CODE (TREE_TYPE (t)) != ENUMERAL_TYPE
 		  || strcmp (IDENTIFIER_POINTER (TYPE_IDENTIFIER (TREE_TYPE (t))),
@@ -17494,12 +17494,12 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	      break;
 	    }
 	  t = OMP_CLAUSE_USES_ALLOCATORS_TRAITS (c);
-	  if (t == error_mark_node)
+	  如果 (t == error_mark_node)
 	    {
 	      remove = true;
 	      break;
 	    }
-	  if (t != NULL_TREE
+	  如果 (t != NULL_TREE
 	      && t != error_mark_node
 	      && (DECL_EXTERNAL (t)
 		  || TREE_CODE (t) == PARM_DECL))
@@ -17509,37 +17509,37 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			"clause appears", t);
 	      remove = true;
 	    }
-	  if (t != NULL_TREE)
+	  如果 (t != NULL_TREE)
 	    {
 	      bool type_err = false;
 
-	      if (TREE_CODE (TREE_TYPE (t)) != ARRAY_TYPE
+	      如果 (TREE_CODE (TREE_TYPE (t)) != ARRAY_TYPE
 		  || DECL_SIZE (t) == NULL_TREE
 		  || !COMPLETE_TYPE_P (TREE_TYPE (t)))
 		type_err = true;
-	      else
+	      否则
 		{
 		  tree elem_t = TREE_TYPE (TREE_TYPE (t));
-		  if (TREE_CODE (elem_t) != RECORD_TYPE
+		  如果 (TREE_CODE (elem_t) != RECORD_TYPE
 		      || strcmp (IDENTIFIER_POINTER (TYPE_IDENTIFIER (elem_t)),
 				 "omp_alloctrait_t") != 0
 		      || !TYPE_READONLY (elem_t))
 		    type_err = true;
 		}
-	      if (type_err)
+	      如果 (type_err)
 		{
-		  if (t != error_mark_node)
+		  如果 (t != error_mark_node)
 		    error_at (OMP_CLAUSE_LOCATION (c), "traits array %qE must "
 			      "be of %<const omp_alloctrait_t []%> type", t);
-		  else
+		  否则
 		    error_at (OMP_CLAUSE_LOCATION (c), "traits array must "
 			      "be of %<const omp_alloctrait_t []%> type");
 		  remove = true;
 		}
-	      else
+	      否则
 		{
 		  tree cst_val = decl_constant_value_1 (t, true);
-		  if (cst_val == t)
+		  如果 (cst_val == t)
 		    {
 		      error_at (OMP_CLAUSE_LOCATION (c), "traits array must be "
 				"initialized with constants");
@@ -17548,7 +17548,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		    }
 		}
 	    }
-	  if (remove)
+	  如果 (remove)
 	    break;
 	  pc = &OMP_CLAUSE_CHAIN (c);
 	  continue;
@@ -17557,23 +17557,23 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	  /* FALLTHRU */
 	case OMP_CLAUSE_AFFINITY:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (OMP_ITERATOR_DECL_P (t))
+	  如果 (OMP_ITERATOR_DECL_P (t))
 	    {
-	      if (TREE_PURPOSE (t) != last_iterators)
+	      如果 (TREE_PURPOSE (t) != last_iterators)
 		last_iterators_remove
 		  = c_omp_finish_iterators (TREE_PURPOSE (t));
 	      last_iterators = TREE_PURPOSE (t);
 	      t = TREE_VALUE (t);
-	      if (last_iterators_remove)
+	      如果 (last_iterators_remove)
 		t = error_mark_node;
 	    }
-	  else
+	  否则
 	    last_iterators = NULL_TREE;
-	  if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	  如果 (TREE_CODE (t) == OMP_ARRAY_SECTION)
 	    {
-	      if (handle_omp_array_sections (c, ort))
+	      如果 (handle_omp_array_sections (c, ort))
 		remove = true;
-	      else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+	      否则 如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 		       && OMP_CLAUSE_DEPEND_KIND (c) == OMP_CLAUSE_DEPEND_DEPOBJ)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
@@ -17583,12 +17583,12 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		}
 	      break;
 	    }
-	  if (t == error_mark_node)
+	  如果 (t == error_mark_node)
 	    remove = true;
-	  else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+	  否则 如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 		   && t == ridpointers[RID_OMP_ALL_MEMORY])
 	    {
-	      if (OMP_CLAUSE_DEPEND_KIND (c) != OMP_CLAUSE_DEPEND_OUT
+	      如果 (OMP_CLAUSE_DEPEND_KIND (c) != OMP_CLAUSE_DEPEND_OUT
 		  && OMP_CLAUSE_DEPEND_KIND (c) != OMP_CLAUSE_DEPEND_INOUT)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
@@ -17597,7 +17597,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		  remove = true;
 		}
 	    }
-	  else if (!lvalue_p (t))
+	  否则 如果 (!lvalue_p (t))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not lvalue expression nor array section in "
@@ -17605,7 +17605,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
 	      remove = true;
 	    }
-	  else if (TREE_CODE (t) == COMPONENT_REF
+	  否则 如果 (TREE_CODE (t) == COMPONENT_REF
 		   && DECL_C_BIT_FIELD (TREE_OPERAND (t, 1)))
 	    {
 	      gcc_assert (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
@@ -17615,10 +17615,10 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
 	      remove = true;
 	    }
-	  else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+	  否则 如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 		   && OMP_CLAUSE_DEPEND_KIND (c) == OMP_CLAUSE_DEPEND_DEPOBJ)
 	    {
-	      if (!c_omp_depend_t_p (TREE_TYPE (t)))
+	      如果 (!c_omp_depend_t_p (TREE_TYPE (t)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qE does not have %<omp_depend_t%> type in "
@@ -17627,7 +17627,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		  remove = true;
 		}
 	    }
-	  else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
+	  否则 如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
 		   && c_omp_depend_t_p (TREE_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
@@ -17636,38 +17636,38 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			"%<depobj%>", t);
 	      remove = true;
 	    }
-	  if (!remove)
+	  如果 (!remove)
 	    {
-	      if (t == ridpointers[RID_OMP_ALL_MEMORY])
+	      如果 (t == ridpointers[RID_OMP_ALL_MEMORY])
 		t = null_pointer_node;
-	      else
+	      否则
 		{
 		  tree addr = build_unary_op (OMP_CLAUSE_LOCATION (c),
 					      ADDR_EXPR, t, false);
-		  if (addr == error_mark_node)
+		  如果 (addr == error_mark_node)
 		    {
 		      remove = true;
 		      break;
 		    }
 		  t = build_indirect_ref (OMP_CLAUSE_LOCATION (c), addr,
 					  RO_UNARY_STAR);
-		  if (t == error_mark_node)
+		  如果 (t == error_mark_node)
 		    {
 		      remove = true;
 		      break;
 		    }
 		}
-	      if (OMP_ITERATOR_DECL_P (OMP_CLAUSE_DECL (c)))
+	      如果 (OMP_ITERATOR_DECL_P (OMP_CLAUSE_DECL (c)))
 		TREE_VALUE (OMP_CLAUSE_DECL (c)) = t;
-	      else
+	      否则
 		OMP_CLAUSE_DECL (c) = t;
 	    }
 	  break;
 
 	case OMP_CLAUSE_MAP:
-	  if (OMP_CLAUSE_MAP_IMPLICIT (c) && !implicit_moved)
+	  如果 (OMP_CLAUSE_MAP_IMPLICIT (c) && !implicit_moved)
 	    goto move_implicit;
-	  if (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_PUSH_MAPPER_NAME
+	  如果 (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_PUSH_MAPPER_NAME
 	      || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_POP_MAPPER_NAME)
 	    {
 	      remove = true;
@@ -17676,7 +17676,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	  /* FALLTHRU */
 	case OMP_CLAUSE_TO:
 	case OMP_CLAUSE_FROM:
-	  if (OMP_CLAUSE_ITERATORS (c)
+	  如果 (OMP_CLAUSE_ITERATORS (c)
 	      && c_omp_finish_iterators (OMP_CLAUSE_ITERATORS (c)))
 	    {
 	      t = error_mark_node;
@@ -17689,17 +17689,17 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	    auto_vec<omp_addr_token *, 10> addr_tokens;
 
 	    t = OMP_CLAUSE_DECL (c);
-	    if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	    如果 (TREE_CODE (t) == OMP_ARRAY_SECTION)
 	      {
 		grp_start_p = pc;
 		grp_sentinel = OMP_CLAUSE_CHAIN (c);
 
-		if (handle_omp_array_sections (c, ort))
+		如果 (handle_omp_array_sections (c, ort))
 		  remove = true;
-		else
+		否则
 		  {
 		    t = OMP_CLAUSE_DECL (c);
-		    if (!omp_mappable_type (TREE_TYPE (t)))
+		    如果 (!omp_mappable_type (TREE_TYPE (t)))
 		      {
 			error_at (OMP_CLAUSE_LOCATION (c),
 				  "array section does not have mappable type "
@@ -17707,19 +17707,19 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 				  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
 			remove = true;
 		      }
-		    else if (TYPE_ATOMIC (TREE_TYPE (t)))
+		    否则 如果 (TYPE_ATOMIC (TREE_TYPE (t)))
 		      {
 			error_at (OMP_CLAUSE_LOCATION (c),
 				  "%<_Atomic%> %qE in %qs clause", t,
 				  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
 			remove = true;
 		      }
-		    while (TREE_CODE (t) == ARRAY_REF)
+		    当 (TREE_CODE (t) == ARRAY_REF)
 		      t = TREE_OPERAND (t, 0);
 
 		    c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
 
-		    if (!omp_parse_expr (addr_tokens, t))
+		    如果 (!omp_parse_expr (addr_tokens, t))
 		      {
 			sorry_at (OMP_CLAUSE_LOCATION (c),
 				  "unsupported map expression %qE",
@@ -17732,7 +17732,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		       node created for this clause.  Otherwise, we'll check
 		       the following FIRSTPRIVATE_POINTER or ATTACH_DETACH
 		       node on the next iteration(s) of the loop.   */
-		    if (addr_tokens.length () >= 4
+		    如果 (addr_tokens.length () >= 4
 			&& addr_tokens[0]->type == STRUCTURE_BASE
 			&& addr_tokens[0]->u.structure_base_kind == BASE_DECL
 			&& addr_tokens[1]->type == ACCESS_METHOD
@@ -17746,7 +17746,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
 			gcc_assert (DECL_P (rt));
 
-			if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+			如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 			    && OMP_CLAUSE_MAP_IMPLICIT (c)
 			    && (bitmap_bit_p (&map_head, DECL_UID (rt))
 				|| bitmap_bit_p (&map_field_head, DECL_UID (rt))
@@ -17756,34 +17756,34 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			    remove = true;
 			    break;
 			  }
-			if (bitmap_bit_p (&map_field_head, DECL_UID (rt)))
+			如果 (bitmap_bit_p (&map_field_head, DECL_UID (rt)))
 			  break;
-			if (bitmap_bit_p (&map_head, DECL_UID (rt)))
+			如果 (bitmap_bit_p (&map_head, DECL_UID (rt)))
 			  {
-			    if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
+			    如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
 			      error_at (OMP_CLAUSE_LOCATION (c),
 					"%qD appears more than once in motion "
 					"clauses", rt);
-			    else if (openacc)
+			    否则 如果 (openacc)
 			      error_at (OMP_CLAUSE_LOCATION (c),
 					"%qD appears more than once in data "
 					"clauses", rt);
-			    else
+			    否则
 			      error_at (OMP_CLAUSE_LOCATION (c),
 					"%qD appears more than once in map "
 					"clauses", rt);
 			    remove = true;
 			  }
-			else
+			否则
 			  {
 			    bitmap_set_bit (&map_head, DECL_UID (rt));
 			    bitmap_set_bit (&map_field_head, DECL_UID (rt));
 			  }
 		      }
 		  }
-		if (c_oacc_check_attachments (c))
+		如果 (c_oacc_check_attachments (c))
 		  remove = true;
-		if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+		如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		    && (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
 			|| OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH)
 		    && !OMP_CLAUSE_SIZE (c))
@@ -17795,7 +17795,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		  OMP_CLAUSE_SIZE (c) = size_zero_node;
 		break;
 	      }
-	    else if (!omp_parse_expr (addr_tokens, t))
+	    否则 如果 (!omp_parse_expr (addr_tokens, t))
 	      {
 		sorry_at (OMP_CLAUSE_LOCATION (c),
 			  "unsupported map expression %qE",
@@ -17803,14 +17803,14 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		remove = true;
 		break;
 	      }
-	    if (t == error_mark_node)
+	    如果 (t == error_mark_node)
 	      {
 		remove = true;
 		break;
 	      }
 
 	    tree attr;
-	    if (DECL_P (t)
+	    如果 (DECL_P (t)
 		&& OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		&& (attr = lookup_attribute ("omp declare target",
 					     DECL_ATTRIBUTES (t)))
@@ -17825,12 +17825,12 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	      }
 
 	    /* OpenACC attach / detach clauses must be pointers.  */
-	    if (c_oacc_check_attachments (c))
+	    如果 (c_oacc_check_attachments (c))
 	      {
 		remove = true;
 		break;
 	      }
-	    if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+	    如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		&& (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
 		    || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH)
 		&& !OMP_CLAUSE_SIZE (c))
@@ -17841,13 +17841,13 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
 	    c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
 
-	    if (!ai.check_clause (c))
+	    如果 (!ai.check_clause (c))
 	      {
 		remove = true;
 		break;
 	      }
 
-	    if (!ai.map_supported_p ())
+	    如果 (!ai.map_supported_p ())
 	      {
 		sorry_at (OMP_CLAUSE_LOCATION (c),
 			  "unsupported map expression %qE",
@@ -17862,20 +17862,20 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
 	    t = addr_tokens[1]->expr;
 
-	    if (addr_tokens[0]->u.structure_base_kind != BASE_DECL)
+	    如果 (addr_tokens[0]->u.structure_base_kind != BASE_DECL)
 	      goto skip_decl_checks;
 
 	    /* For OpenMP, we can access a struct "t" and "t.d" on the same
 	       mapping.  OpenACC allows multiple fields of the same structure
 	       to be written.  */
-	    if (addr_tokens[0]->type == STRUCTURE_BASE
+	    如果 (addr_tokens[0]->type == STRUCTURE_BASE
 		&& (bitmap_bit_p (&map_field_head, DECL_UID (t))
 		    || (!openacc && bitmap_bit_p (&map_head, DECL_UID (t)))))
 	      goto skip_decl_checks;
 
-	    if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	    如果 (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
 	      {
-		if (ort != C_ORT_ACC && EXPR_P (t))
+		如果 (ort != C_ORT_ACC && EXPR_P (t))
 		  break;
 
 		error_at (OMP_CLAUSE_LOCATION (c),
@@ -17883,19 +17883,19 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
 		remove = true;
 	      }
-	    else if (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
+	    否则 如果 (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD is threadprivate variable in %qs clause", t,
 			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
 		remove = true;
 	      }
-	    else if ((OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
+	    否则 如果 ((OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
 		      || (OMP_CLAUSE_MAP_KIND (c)
 			  != GOMP_MAP_FIRSTPRIVATE_POINTER))
 		     && !c_mark_addressable (t))
 	      remove = true;
-	    else if (!(OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+	    否则 如果 (!(OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		       && (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_POINTER
 			   || (OMP_CLAUSE_MAP_KIND (c)
 			       == GOMP_MAP_FIRSTPRIVATE_POINTER)
@@ -17909,27 +17909,27 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
 		remove = true;
 	      }
-	    else if (TREE_TYPE (t) == error_mark_node)
+	    否则 如果 (TREE_TYPE (t) == error_mark_node)
 	      remove = true;
-	    else if (TYPE_ATOMIC (strip_array_types (TREE_TYPE (t))))
+	    否则 如果 (TYPE_ATOMIC (strip_array_types (TREE_TYPE (t))))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%<_Atomic%> %qE in %qs clause", t,
 			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
 		remove = true;
 	      }
-	    else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+	    否则 如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		     && OMP_CLAUSE_MAP_IMPLICIT (c)
 		     && (bitmap_bit_p (&map_head, DECL_UID (t))
 			 || bitmap_bit_p (&map_field_head, DECL_UID (t))
 			 || bitmap_bit_p (&map_firstprivate_head,
 					  DECL_UID (t))))
 	      remove = true;
-	    else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+	    否则 如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
 		     && (OMP_CLAUSE_MAP_KIND (c)
 			 == GOMP_MAP_FIRSTPRIVATE_POINTER))
 	      {
-		if (bitmap_bit_p (&generic_head, DECL_UID (t))
+		如果 (bitmap_bit_p (&generic_head, DECL_UID (t))
 		    || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
 		    || bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
 		  {
@@ -17937,7 +17937,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			      "%qD appears more than once in data clauses", t);
 		    remove = true;
 		  }
-		else if (bitmap_bit_p (&map_head, DECL_UID (t))
+		否则 如果 (bitmap_bit_p (&map_head, DECL_UID (t))
 			 && !bitmap_bit_p (&map_field_head, DECL_UID (t))
 			 && openacc)
 		  {
@@ -17945,47 +17945,47 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			      "%qD appears more than once in data clauses", t);
 		    remove = true;
 		  }
-		else
+		否则
 		  bitmap_set_bit (&map_firstprivate_head, DECL_UID (t));
 	      }
-	    else if (bitmap_bit_p (&map_head, DECL_UID (t))
+	    否则 如果 (bitmap_bit_p (&map_head, DECL_UID (t))
 		     && !bitmap_bit_p (&map_field_head, DECL_UID (t))
 		     && ort != C_ORT_OMP
 		     && ort != C_ORT_OMP_TARGET
 		     && ort != C_ORT_OMP_EXIT_DATA)
 	      {
-		if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
+		如果 (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in motion clauses", t);
-		else if (openacc)
+		否则 如果 (openacc)
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in data clauses", t);
-		else
+		否则
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in map clauses", t);
 		remove = true;
 	      }
-	    else if (openacc && bitmap_bit_p (&generic_head, DECL_UID (t)))
+	    否则 如果 (openacc && bitmap_bit_p (&generic_head, DECL_UID (t)))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears more than once in data clauses", t);
 		remove = true;
 	      }
-	    else if (bitmap_bit_p (&firstprivate_head, DECL_UID (t))
+	    否则 如果 (bitmap_bit_p (&firstprivate_head, DECL_UID (t))
 		     || bitmap_bit_p (&is_on_device_head, DECL_UID (t)))
 	      {
-		if (openacc)
+		如果 (openacc)
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in data clauses", t);
-		else
+		否则
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears both in data and map clauses", t);
 		remove = true;
 	      }
-	    else if (!omp_access_chain_p (addr_tokens, 1))
+	    否则 如果 (!omp_access_chain_p (addr_tokens, 1))
 	      {
 		bitmap_set_bit (&map_head, DECL_UID (t));
-		if (t != OMP_CLAUSE_DECL (c)
+		如果 (t != OMP_CLAUSE_DECL (c)
 		    && TREE_CODE (OMP_CLAUSE_DECL (c)) == COMPONENT_REF)
 		  bitmap_set_bit (&map_field_head, DECL_UID (t));
 	      }
@@ -17995,7 +17995,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	       the containing loop (here) iterates through the new nodes
 	       created by that expansion.  Avoid expanding those again (just
 	       by checking the node type).  */
-	    if (!remove
+	    如果 (!remove
 		&& ort != C_ORT_DECLARE_SIMD
 		&& (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
 		    || (OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_FIRSTPRIVATE_POINTER
@@ -18010,7 +18010,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		grp_sentinel = OMP_CLAUSE_CHAIN (c);
 		tree nc = ai.expand_map_clause (c, OMP_CLAUSE_DECL (c),
 						addr_tokens, ort);
-		if (nc != error_mark_node)
+		如果 (nc != error_mark_node)
 		  c = nc;
 	      }
 	  }
@@ -18022,58 +18022,58 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	  t = OMP_CLAUSE_DECL (c);
 	  const char *cname;
 	  cname = omp_clause_code_name[OMP_CLAUSE_CODE (c)];
-	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER
+	  如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER
 	      && OMP_CLAUSE_ENTER_TO (c))
 	    cname = "to";
-	  if (TREE_CODE (t) == FUNCTION_DECL
+	  如果 (TREE_CODE (t) == FUNCTION_DECL
 	      && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
 	    ;
-	  else if (!VAR_P (t))
+	  否则 如果 (!VAR_P (t))
 	    {
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
+	      如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qE is neither a variable nor a function name in "
 			  "clause %qs", t, cname);
-	      else
+	      否则
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qE is not a variable in clause %qs", t, cname);
 	      remove = true;
 	    }
-	  else if (DECL_THREAD_LOCAL_P (t))
+	  否则 如果 (DECL_THREAD_LOCAL_P (t))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD is threadprivate variable in %qs clause", t,
 			cname);
 	      remove = true;
 	    }
-	  else if (!omp_mappable_type (TREE_TYPE (t)))
+	  否则 如果 (!omp_mappable_type (TREE_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD does not have a mappable type in %qs clause", t,
 			cname);
 	      remove = true;
 	    }
-	  if (remove)
+	  如果 (remove)
 	    break;
-	  if (bitmap_bit_p (&generic_head, DECL_UID (t)))
+	  如果 (bitmap_bit_p (&generic_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once on the same "
 			"%<declare target%> directive", t);
 	      remove = true;
 	    }
-	  else
+	  否则
 	    bitmap_set_bit (&generic_head, DECL_UID (t));
 	  break;
 
 	case OMP_CLAUSE_UNIFORM:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (TREE_CODE (t) != PARM_DECL)
+	  如果 (TREE_CODE (t) != PARM_DECL)
 	    {
-	      if (DECL_P (t))
+	      如果 (DECL_P (t))
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD is not an argument in %<uniform%> clause", t);
-	      else
+	      否则
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qE is not an argument in %<uniform%> clause", t);
 	      remove = true;
@@ -18086,11 +18086,11 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	case OMP_CLAUSE_IS_DEVICE_PTR:
 	case OMP_CLAUSE_USE_DEVICE_PTR:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IS_DEVICE_PTR)
+	  如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IS_DEVICE_PTR)
 	    bitmap_set_bit (&is_on_device_head, DECL_UID (t));
-	  if (TREE_CODE (TREE_TYPE (t)) != POINTER_TYPE)
+	  如果 (TREE_CODE (TREE_TYPE (t)) != POINTER_TYPE)
 	    {
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_USE_DEVICE_PTR
+	      如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_USE_DEVICE_PTR
 		  && !openacc)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
@@ -18098,7 +18098,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
 		  remove = true;
 		}
-	      else if (TREE_CODE (TREE_TYPE (t)) != ARRAY_TYPE)
+	      否则 如果 (TREE_CODE (TREE_TYPE (t)) != ARRAY_TYPE)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qs variable is neither a pointer nor an array",
@@ -18110,30 +18110,30 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
 	case OMP_CLAUSE_HAS_DEVICE_ADDR:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	  如果 (TREE_CODE (t) == OMP_ARRAY_SECTION)
 	    {
-	      if (handle_omp_array_sections (c, ort))
+	      如果 (handle_omp_array_sections (c, ort))
 		remove = true;
-	      else
+	      否则
 		{
 		  t = OMP_CLAUSE_DECL (c);
-		  while (TREE_CODE (t) == ARRAY_REF)
+		  当 (TREE_CODE (t) == ARRAY_REF)
 		    t = TREE_OPERAND (t, 0);
 		}
 	    }
 	  bitmap_set_bit (&is_on_device_head, DECL_UID (t));
-	  if (VAR_P (t) || TREE_CODE (t) == PARM_DECL)
+	  如果 (VAR_P (t) || TREE_CODE (t) == PARM_DECL)
 	    c_mark_addressable (t);
 	  goto check_dup_generic_t;
 
 	case OMP_CLAUSE_USE_DEVICE_ADDR:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (VAR_P (t) || TREE_CODE (t) == PARM_DECL)
+	  如果 (VAR_P (t) || TREE_CODE (t) == PARM_DECL)
 	    c_mark_addressable (t);
 	  goto check_dup_generic;
 
 	case OMP_CLAUSE_NOWAIT:
-	  if (copyprivate_seen)
+	  如果 (copyprivate_seen)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<nowait%> clause must not be used together "
@@ -18146,7 +18146,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	  continue;
 
 	case OMP_CLAUSE_ORDER:
-	  if (ordered_clause)
+	  如果 (ordered_clause)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<order%> clause must not be used together "
@@ -18154,7 +18154,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	      remove = true;
 	      break;
 	    }
-	  else if (order_clause)
+	  否则 如果 (order_clause)
 	    {
 	      /* Silently remove duplicates.  */
 	      remove = true;
@@ -18166,7 +18166,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
 	case OMP_CLAUSE_DETACH:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (detach_seen)
+	  如果 (detach_seen)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"too many %qs clauses on a task construct",
@@ -18252,7 +18252,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
 	case OMP_CLAUSE_ORDERED:
 	  ordered_clause = c;
-	  if (order_clause)
+	  如果 (order_clause)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (*order_clause),
 			"%<order%> clause must not be used together "
@@ -18288,7 +18288,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
 	case OMP_CLAUSE_INBRANCH:
 	case OMP_CLAUSE_NOTINBRANCH:
-	  if (branch_seen)
+	  如果 (branch_seen)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<inbranch%> clause is incompatible with "
@@ -18305,7 +18305,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	  need_complete = true;
 	  need_implicitly_determined = true;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  如果 (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %qs", t,
@@ -18316,14 +18316,14 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 
 	case OMP_CLAUSE_INIT:
 	  init_seen = true;
-	  if (!OMP_CLAUSE_INIT_TARGETSYNC (c))
+	  如果 (!OMP_CLAUSE_INIT_TARGETSYNC (c))
 	    init_no_targetsync_clause = c;
 	  /* FALLTHRU */
 	case OMP_CLAUSE_DESTROY:
 	case OMP_CLAUSE_USE:
 	  init_use_destroy_seen = true;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (bitmap_bit_p (&generic_head, DECL_UID (t)))
+	  如果 (bitmap_bit_p (&generic_head, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD appears more than once in action clauses", t);
@@ -18333,7 +18333,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	  bitmap_set_bit (&generic_head, DECL_UID (t));
 	  /* FALLTHRU */
 	case OMP_CLAUSE_INTEROP:
-	  if (/* ort == C_ORT_OMP_INTEROP [uncomment for depobj init]  */
+	  如果 (/* ort == C_ORT_OMP_INTEROP [uncomment for depobj init]  */
 		   !c_omp_interop_t_p (TREE_TYPE (OMP_CLAUSE_DECL (c))))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
@@ -18341,7 +18341,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			OMP_CLAUSE_DECL (c));
 	      remove = true;
 	    }
-	  else if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INIT
+	  否则 如果 ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INIT
 		    || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DESTROY)
 		   && TREE_READONLY (OMP_CLAUSE_DECL (c)))
 	    {
@@ -18355,29 +18355,29 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	  gcc_unreachable ();
 	}
 
-      if (!remove)
+      如果 (!remove)
 	{
 	  t = OMP_CLAUSE_DECL (c);
 
-	  if (need_complete)
+	  如果 (need_complete)
 	    {
 	      t = require_complete_type (OMP_CLAUSE_LOCATION (c), t);
-	      if (t == error_mark_node)
+	      如果 (t == error_mark_node)
 		remove = true;
 	    }
 
-	  if (need_implicitly_determined)
+	  如果 (need_implicitly_determined)
 	    {
 	      const char *share_name = NULL;
 
-	      if (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
+	      如果 (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
 		share_name = "threadprivate";
-	      else switch (c_omp_predetermined_sharing (t))
+	      否则 switch (c_omp_predetermined_sharing (t))
 		{
 		case OMP_CLAUSE_DEFAULT_UNSPECIFIED:
 		  break;
 		case OMP_CLAUSE_DEFAULT_SHARED:
-		  if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SHARED
+		  如果 ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SHARED
 		       || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_FIRSTPRIVATE)
 		      && c_omp_predefined_variable (t))
 		    /* The __func__ variable and similar function-local
@@ -18392,7 +18392,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		default:
 		  gcc_unreachable ();
 		}
-	      if (share_name)
+	      如果 (share_name)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qE is predetermined %qs for %qs",
@@ -18400,7 +18400,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
 		  remove = true;
 		}
-	      else if (TREE_READONLY (t)
+	      否则 如果 (TREE_READONLY (t)
 		       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_SHARED
 		       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_FIRSTPRIVATE)
 		{
@@ -18412,9 +18412,9 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	    }
 	}
 
-      if (remove)
+      如果 (remove)
 	{
-	  if (grp_start_p)
+	  如果 (grp_start_p)
 	    {
 	      /* If we found a clause to remove, we want to remove the whole
 		 expanded group, otherwise gimplify
@@ -18423,19 +18423,19 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	      pc = grp_start_p;
 	      grp_start_p = NULL;
 	    }
-	  else
+	  否则
 	    *pc = OMP_CLAUSE_CHAIN (c);
 	}
-      else
+      否则
 	pc = &OMP_CLAUSE_CHAIN (c);
     }
 
-  if (grp_start_p
+  如果 (grp_start_p
       && OMP_CLAUSE_HAS_ITERATORS (*grp_start_p))
-    for (tree gc = *grp_start_p; gc; gc = OMP_CLAUSE_CHAIN (gc))
+    为 (tree gc = *grp_start_p; gc; gc = OMP_CLAUSE_CHAIN (gc))
       OMP_CLAUSE_ITERATORS (gc) = OMP_CLAUSE_ITERATORS (*grp_start_p);
 
-  if (simdlen
+  如果 (simdlen
       && safelen
       && tree_int_cst_lt (OMP_CLAUSE_SAFELEN_EXPR (safelen),
 			  OMP_CLAUSE_SIMDLEN_EXPR (simdlen)))
@@ -18455,7 +18455,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	= OMP_CLAUSE_SAFELEN_EXPR (safelen);
     }
 
-  if (ordered_clause
+  如果 (ordered_clause
       && schedule_clause
       && (OMP_CLAUSE_SCHEDULE_KIND (schedule_clause)
 	  & OMP_CLAUSE_SCHEDULE_NONMONOTONIC))
@@ -18469,7 +18469,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	   & ~OMP_CLAUSE_SCHEDULE_NONMONOTONIC);
     }
 
-  if (reduction_seen < 0 && ordered_clause)
+  如果 (reduction_seen < 0 && ordered_clause)
     {
       error_at (OMP_CLAUSE_LOCATION (ordered_clause),
 		"%qs clause specified together with %<inscan%> "
@@ -18477,7 +18477,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       reduction_seen = -2;
     }
 
-  if (reduction_seen < 0 && schedule_clause)
+  如果 (reduction_seen < 0 && schedule_clause)
     {
       error_at (OMP_CLAUSE_LOCATION (schedule_clause),
 		"%qs clause specified together with %<inscan%> "
@@ -18485,28 +18485,28 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       reduction_seen = -2;
     }
 
-  if (linear_variable_step_check
+  如果 (linear_variable_step_check
       || reduction_seen == -2
       || allocate_seen
       || target_in_reduction_seen)
-    for (pc = &clauses, c = clauses; c ; c = *pc)
+    为 (pc = &clauses, c = clauses; c ; c = *pc)
       {
 	bool remove = false;
-	if (allocate_seen)
+	如果 (allocate_seen)
 	  switch (OMP_CLAUSE_CODE (c))
 	    {
 	    case OMP_CLAUSE_REDUCTION:
 	    case OMP_CLAUSE_IN_REDUCTION:
 	    case OMP_CLAUSE_TASK_REDUCTION:
-	      if (TREE_CODE (OMP_CLAUSE_DECL (c)) == MEM_REF)
+	      如果 (TREE_CODE (OMP_CLAUSE_DECL (c)) == MEM_REF)
 		{
 		  t = TREE_OPERAND (OMP_CLAUSE_DECL (c), 0);
-		  if (TREE_CODE (t) == POINTER_PLUS_EXPR)
+		  如果 (TREE_CODE (t) == POINTER_PLUS_EXPR)
 		    t = TREE_OPERAND (t, 0);
-		  if (TREE_CODE (t) == ADDR_EXPR
+		  如果 (TREE_CODE (t) == ADDR_EXPR
 		      || INDIRECT_REF_P (t))
 		    t = TREE_OPERAND (t, 0);
-		  if (DECL_P (t))
+		  如果 (DECL_P (t))
 		    bitmap_clear_bit (&aligned_head, DECL_UID (t));
 		  break;
 		}
@@ -18515,14 +18515,14 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	    case OMP_CLAUSE_FIRSTPRIVATE:
 	    case OMP_CLAUSE_LASTPRIVATE:
 	    case OMP_CLAUSE_LINEAR:
-	      if (DECL_P (OMP_CLAUSE_DECL (c)))
+	      如果 (DECL_P (OMP_CLAUSE_DECL (c)))
 		bitmap_clear_bit (&aligned_head,
 				  DECL_UID (OMP_CLAUSE_DECL (c)));
 	      break;
 	    default:
 	      break;
 	    }
-	if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LINEAR
+	如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LINEAR
 	    && OMP_CLAUSE_LINEAR_VARIABLE_STRIDE (c)
 	    && !bitmap_bit_p (&map_head,
 			      DECL_UID (OMP_CLAUSE_LINEAR_STEP (c))))
@@ -18533,35 +18533,35 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		      OMP_CLAUSE_LINEAR_STEP (c));
 	    remove = true;
 	  }
-	else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
+	否则 如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
 		 && reduction_seen == -2)
 	  OMP_CLAUSE_REDUCTION_INSCAN (c) = 0;
-	if (target_in_reduction_seen
+	如果 (target_in_reduction_seen
 	    && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP)
 	  {
 	    tree t = OMP_CLAUSE_DECL (c);
-	    while (handled_component_p (t)
+	    当 (handled_component_p (t)
 		   || INDIRECT_REF_P (t)
 		   || TREE_CODE (t) == ADDR_EXPR
 		   || TREE_CODE (t) == MEM_REF
 		   || TREE_CODE (t) == NON_LVALUE_EXPR)
 	      t = TREE_OPERAND (t, 0);
-	    if (DECL_P (t)
+	    如果 (DECL_P (t)
 		&& bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
 	      OMP_CLAUSE_MAP_IN_REDUCTION (c) = 1;
 	  }
 
-	if (remove)
+	如果 (remove)
 	  *pc = OMP_CLAUSE_CHAIN (c);
-	else
+	否则
 	  pc = &OMP_CLAUSE_CHAIN (c);
       }
 
-  if (allocate_seen)
-    for (pc = &clauses, c = clauses; c ; c = *pc)
+  如果 (allocate_seen)
+    为 (pc = &clauses, c = clauses; c ; c = *pc)
       {
 	bool remove = false;
-	if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ALLOCATE
+	如果 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ALLOCATE
 	    && !OMP_CLAUSE_ALLOCATE_COMBINED (c)
 	    && bitmap_bit_p (&aligned_head, DECL_UID (OMP_CLAUSE_DECL (c))))
 	  {
@@ -18570,13 +18570,13 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 		      "an explicit privatization clause", OMP_CLAUSE_DECL (c));
 	    remove = true;
 	  }
-	if (remove)
+	如果 (remove)
 	  *pc = OMP_CLAUSE_CHAIN (c);
-	else
+	否则
 	  pc = &OMP_CLAUSE_CHAIN (c);
       }
 
-  if (nogroup_seen && reduction_seen)
+  如果 (nogroup_seen && reduction_seen)
     {
       error_at (OMP_CLAUSE_LOCATION (*nogroup_seen),
 		"%<nogroup%> clause must not be used together with "
@@ -18584,7 +18584,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       *nogroup_seen = OMP_CLAUSE_CHAIN (*nogroup_seen);
     }
 
-  if (grainsize_seen && num_tasks_seen)
+  如果 (grainsize_seen && num_tasks_seen)
     {
       error_at (OMP_CLAUSE_LOCATION (*grainsize_seen),
 		"%<grainsize%> clause must not be used together with "
@@ -18592,7 +18592,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       *grainsize_seen = OMP_CLAUSE_CHAIN (*grainsize_seen);
     }
 
-  if (full_seen && partial_seen)
+  如果 (full_seen && partial_seen)
     {
       error_at (OMP_CLAUSE_LOCATION (*full_seen),
 		"%<full%> clause must not be used together with "
@@ -18600,23 +18600,23 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       *full_seen = OMP_CLAUSE_CHAIN (*full_seen);
     }
 
-  if (detach_seen)
+  如果 (detach_seen)
     {
-      if (mergeable_seen)
+      如果 (mergeable_seen)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (*detach_seen),
 		    "%<detach%> clause must not be used together with "
 		    "%<mergeable%> clause");
 	  *detach_seen = OMP_CLAUSE_CHAIN (*detach_seen);
 	}
-      else
+      否则
 	{
 	  tree detach_decl = OMP_CLAUSE_DECL (*detach_seen);
 
-	  for (pc = &clauses, c = clauses; c ; c = *pc)
+	  为 (pc = &clauses, c = clauses; c ; c = *pc)
 	    {
 	      bool remove = false;
-	      if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SHARED
+	      如果 ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SHARED
 		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_PRIVATE
 		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_FIRSTPRIVATE
 		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LASTPRIVATE)
@@ -18627,15 +18627,15 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 			    "should not be in a data-sharing clause");
 		  remove = true;
 		}
-	      if (remove)
+	      如果 (remove)
 		*pc = OMP_CLAUSE_CHAIN (c);
-	      else
+	      否则
 		pc = &OMP_CLAUSE_CHAIN (c);
 	    }
 	}
     }
 
-  if (ort == C_ORT_OMP_INTEROP
+  如果 (ort == C_ORT_OMP_INTEROP
       && depend_clause
       && (!init_use_destroy_seen
 	  || (init_seen && init_no_targetsync_clause)))
@@ -18643,13 +18643,13 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       error_at (OMP_CLAUSE_LOCATION (depend_clause),
 		"%<depend%> clause requires action clauses with "
 		"%<targetsync%> interop-type");
-      if (init_no_targetsync_clause)
+      如果 (init_no_targetsync_clause)
 	inform (OMP_CLAUSE_LOCATION (init_no_targetsync_clause),
 		"%<init%> clause lacks the %<targetsync%> modifier");
     }
 
   bitmap_obstack_release (NULL);
-  return clauses;
+  返回 clauses;
 }
 
 /* Do processing necessary to make CLAUSES well-formed, where CLAUSES result
@@ -18658,7 +18658,7 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 tree
 c_omp_finish_mapper_clauses (tree clauses)
 {
-  return c_finish_omp_clauses (clauses, C_ORT_OMP);
+  返回 c_finish_omp_clauses (clauses, C_ORT_OMP);
 }
 
 /* Return code to initialize DST with a copy constructor from SRC.
@@ -18669,8 +18669,8 @@ c_omp_finish_mapper_clauses (tree clauses)
 tree
 c_omp_clause_copy_ctor (tree clause, tree dst, tree src)
 {
-  if (!really_atomic_lvalue (dst) && !really_atomic_lvalue (src))
-    return build2 (MODIFY_EXPR, TREE_TYPE (dst), dst, src);
+  如果 (!really_atomic_lvalue (dst) && !really_atomic_lvalue (src))
+    返回 build2 (MODIFY_EXPR, TREE_TYPE (dst), dst, src);
 
   location_t loc = OMP_CLAUSE_LOCATION (clause);
   tree type = TREE_TYPE (dst);
@@ -18702,20 +18702,20 @@ c_omp_clause_copy_ctor (tree clause, tree dst, tree src)
   params->quick_push (tmp_addr);
   params->quick_push (seq_cst);
   tree store = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
-  return build2 (COMPOUND_EXPR, void_type_node, load, store);
+  返回 build2 (COMPOUND_EXPR, void_type_node, load, store);
 }
 
 /* Create a transaction node.  */
 
 tree
-c_finish_transaction (location_t loc, tree block, int flags)
+c_finish_transaction (location_t loc, tree block, 整数 flags)
 {
   tree stmt = build_stmt (loc, TRANSACTION_EXPR, block);
-  if (flags & TM_STMT_ATTR_OUTER)
+  如果 (flags & TM_STMT_ATTR_OUTER)
     TRANSACTION_EXPR_OUTER (stmt) = 1;
-  if (flags & TM_STMT_ATTR_RELAXED)
+  如果 (flags & TM_STMT_ATTR_RELAXED)
     TRANSACTION_EXPR_RELAXED (stmt) = 1;
-  return add_stmt (stmt);
+  返回 add_stmt (stmt);
 }
 
 /* Make a variant type in the proper way for C/C++, propagating qualifiers
@@ -18726,13 +18726,13 @@ c_finish_transaction (location_t loc, tree block, int flags)
    type was derived).  */
 
 tree
-c_build_qualified_type (tree type, int type_quals, tree orig_qual_type,
+c_build_qualified_type (tree type, 整数 type_quals, tree orig_qual_type,
 			size_t orig_qual_indirect)
 {
-  if (type == error_mark_node)
-    return type;
+  如果 (type == error_mark_node)
+    返回 type;
 
-  if (TREE_CODE (type) == ARRAY_TYPE)
+  如果 (TREE_CODE (type) == ARRAY_TYPE)
     {
       tree t;
       tree element_type = c_build_qualified_type (TREE_TYPE (type),
@@ -18740,19 +18740,19 @@ c_build_qualified_type (tree type, int type_quals, tree orig_qual_type,
 						  orig_qual_indirect - 1);
 
       /* See if we already have an identically qualified type.  */
-      if (orig_qual_type && orig_qual_indirect == 0)
+      如果 (orig_qual_type && orig_qual_indirect == 0)
 	t = orig_qual_type;
-      else
-	for (t = TYPE_MAIN_VARIANT (type); t; t = TYPE_NEXT_VARIANT (t))
+      否则
+	为 (t = TYPE_MAIN_VARIANT (type); t; t = TYPE_NEXT_VARIANT (t))
 	  {
-	    if (TYPE_QUALS (strip_array_types (t)) == type_quals
+	    如果 (TYPE_QUALS (strip_array_types (t)) == type_quals
 		&& TYPE_NAME (t) == TYPE_NAME (type)
 		&& TYPE_CONTEXT (t) == TYPE_CONTEXT (type)
 		&& attribute_list_equal (TYPE_ATTRIBUTES (t),
 					 TYPE_ATTRIBUTES (type)))
 	      break;
 	  }
-      if (!t)
+      如果 (!t)
 	{
           tree domain = TYPE_DOMAIN (type);
 
@@ -18760,17 +18760,17 @@ c_build_qualified_type (tree type, int type_quals, tree orig_qual_type,
 	  TREE_TYPE (t) = element_type;
 	  TYPE_ADDR_SPACE (t) = TYPE_ADDR_SPACE (element_type);
 
-          if (TYPE_STRUCTURAL_EQUALITY_P (element_type)
+          如果 (TYPE_STRUCTURAL_EQUALITY_P (element_type)
               || (domain && TYPE_STRUCTURAL_EQUALITY_P (domain)))
             SET_TYPE_STRUCTURAL_EQUALITY (t);
-          else if (TYPE_CANONICAL (element_type) != element_type
+          否则 如果 (TYPE_CANONICAL (element_type) != element_type
                    || (domain && TYPE_CANONICAL (domain) != domain))
             {
               tree unqualified_canon
 		= c_build_array_type (TYPE_CANONICAL (element_type),
 				      domain ? TYPE_CANONICAL (domain)
 					     : NULL_TREE);
-              if (TYPE_REVERSE_STORAGE_ORDER (type))
+              如果 (TYPE_REVERSE_STORAGE_ORDER (type))
                 {
                   unqualified_canon
 		    = build_distinct_type_copy (unqualified_canon);
@@ -18779,16 +18779,16 @@ c_build_qualified_type (tree type, int type_quals, tree orig_qual_type,
               TYPE_CANONICAL (t)
 		= c_build_qualified_type (unqualified_canon, type_quals);
             }
-          else
+          否则
             TYPE_CANONICAL (t) = t;
 	}
-      return t;
+      返回 t;
     }
 
   /* A restrict-qualified pointer type must be a pointer to object or
      incomplete type.  Note that the use of POINTER_TYPE_P also allows
      REFERENCE_TYPEs, which is appropriate for C++.  */
-  if ((type_quals & TYPE_QUAL_RESTRICT)
+  如果 ((type_quals & TYPE_QUAL_RESTRICT)
       && (!POINTER_TYPE_P (type)
 	  || !C_TYPE_OBJECT_OR_INCOMPLETE_P (TREE_TYPE (type))))
     {
@@ -18807,11 +18807,11 @@ c_build_qualified_type (tree type, int type_quals, tree orig_qual_type,
 
   /* A variant type does not inherit the list of incomplete vars from the
      type main variant.  */
-  if ((RECORD_OR_UNION_TYPE_P (var_type)
+  如果 ((RECORD_OR_UNION_TYPE_P (var_type)
        || TREE_CODE (var_type) == ENUMERAL_TYPE)
       && TYPE_MAIN_VARIANT (var_type) != var_type)
     C_TYPE_INCOMPLETE_VARS (var_type) = 0;
-  return var_type;
+  返回 var_type;
 }
 
 /* Build a VA_ARG_EXPR for the C parser.  */
@@ -18820,40 +18820,40 @@ tree
 c_build_va_arg (location_t loc1, tree expr, location_t loc2, tree type,
 		tree type_expr)
 {
-  if (error_operand_p (type))
-    return error_mark_node;
+  如果 (error_operand_p (type))
+    返回 error_mark_node;
   /* VA_ARG_EXPR cannot be used for a scalar va_list with reverse storage
      order because it takes the address of the expression.  */
-  else if (handled_component_p (expr)
+  否则 如果 (handled_component_p (expr)
 	   && reverse_storage_order_for_component_p (expr))
     {
       error_at (loc1, "cannot use %<va_arg%> with reverse storage order");
-      return error_mark_node;
+      返回 error_mark_node;
     }
-  else if (!COMPLETE_TYPE_P (type))
+  否则 如果 (!COMPLETE_TYPE_P (type))
     {
       error_at (loc2, "second argument to %<va_arg%> is of incomplete "
 		"type %qT", type);
-      return error_mark_node;
+      返回 error_mark_node;
     }
-  else if (TREE_CODE (type) == FUNCTION_TYPE)
+  否则 如果 (TREE_CODE (type) == FUNCTION_TYPE)
     {
       error_at (loc2, "second argument to %<va_arg%> is a function type %qT",
 		type);
-      return error_mark_node;
+      返回 error_mark_node;
     }
-  else if (TREE_CODE (type) == ARRAY_TYPE && C_TYPE_VARIABLE_SIZE (type)
+  否则 如果 (TREE_CODE (type) == ARRAY_TYPE && C_TYPE_VARIABLE_SIZE (type)
 	   && !flag_isoc99)
     {
       error_at (loc2, "second argument to %<va_arg%> is an array type %qT",
 		type);
-      return error_mark_node;
+      返回 error_mark_node;
     }
-  else if (warn_cxx_compat && TREE_CODE (type) == ENUMERAL_TYPE)
+  否则 如果 (warn_cxx_compat && TREE_CODE (type) == ENUMERAL_TYPE)
     warning_at (loc2, OPT_Wc___compat,
 		"C++ requires promoted type, not enum type, in %<va_arg%>");
 
-  if (flag_isoc99 && TREE_CODE (type) == ARRAY_TYPE)
+  如果 (flag_isoc99 && TREE_CODE (type) == ARRAY_TYPE)
     {
       warning_at (loc2, 0, "second argument to %<va_arg%> is an array type %qT",
 		  type);
@@ -18865,13 +18865,13 @@ c_build_va_arg (location_t loc1, tree expr, location_t loc2, tree type,
       tree e1 = build_compound_literal (loc2, type, NULL, true, 0, NULL);
       expr = build2 (COMPOUND_EXPR, type, e2, e1);
     }
-  else
+  否则
     expr = build_va_arg (loc2, expr, type);
 
-  if (type_expr)
+  如果 (type_expr)
     expr = build2 (COMPOUND_EXPR, TREE_TYPE (expr), type_expr, expr);
 
-  return expr;
+  返回 expr;
 }
 
 /* Return truthvalue of whether T1 is the same tree structure as T2.
@@ -18882,98 +18882,98 @@ c_tree_equal (tree t1, tree t2)
 {
   enum tree_code code1, code2;
 
-  if (t1 == t2)
-    return true;
-  if (!t1 || !t2)
-    return false;
+  如果 (t1 == t2)
+    返回 true;
+  如果 (!t1 || !t2)
+    返回 false;
 
-  for (code1 = TREE_CODE (t1); code1 == NON_LVALUE_EXPR;
+  为 (code1 = TREE_CODE (t1); code1 == NON_LVALUE_EXPR;
        code1 = TREE_CODE (t1))
     t1 = TREE_OPERAND (t1, 0);
-  for (code2 = TREE_CODE (t2); code2 == NON_LVALUE_EXPR;
+  为 (code2 = TREE_CODE (t2); code2 == NON_LVALUE_EXPR;
        code2 = TREE_CODE (t2))
     t2 = TREE_OPERAND (t2, 0);
 
   /* They might have become equal now.  */
-  if (t1 == t2)
-    return true;
+  如果 (t1 == t2)
+    返回 true;
 
-  if (code1 != code2)
-    return false;
+  如果 (code1 != code2)
+    返回 false;
 
-  if (CONSTANT_CLASS_P (t1) && !comptypes (TREE_TYPE (t1), TREE_TYPE (t2)))
-    return false;
+  如果 (CONSTANT_CLASS_P (t1) && !comptypes (TREE_TYPE (t1), TREE_TYPE (t2)))
+    返回 false;
 
   switch (code1)
     {
     case INTEGER_CST:
-      return wi::to_wide (t1) == wi::to_wide (t2);
+      返回 wi::to_wide (t1) == wi::to_wide (t2);
 
     case REAL_CST:
-      return real_equal (&TREE_REAL_CST (t1), &TREE_REAL_CST (t2));
+      返回 real_equal (&TREE_REAL_CST (t1), &TREE_REAL_CST (t2));
 
     case STRING_CST:
-      return TREE_STRING_LENGTH (t1) == TREE_STRING_LENGTH (t2)
+      返回 TREE_STRING_LENGTH (t1) == TREE_STRING_LENGTH (t2)
 	&& !memcmp (TREE_STRING_POINTER (t1), TREE_STRING_POINTER (t2),
 		    TREE_STRING_LENGTH (t1));
 
     case FIXED_CST:
-      return FIXED_VALUES_IDENTICAL (TREE_FIXED_CST (t1),
+      返回 FIXED_VALUES_IDENTICAL (TREE_FIXED_CST (t1),
 				     TREE_FIXED_CST (t2));
 
     case COMPLEX_CST:
-      return c_tree_equal (TREE_REALPART (t1), TREE_REALPART (t2))
+      返回 c_tree_equal (TREE_REALPART (t1), TREE_REALPART (t2))
 	     && c_tree_equal (TREE_IMAGPART (t1), TREE_IMAGPART (t2));
 
     case VECTOR_CST:
-      return operand_equal_p (t1, t2, OEP_ONLY_CONST);
+      返回 operand_equal_p (t1, t2, OEP_ONLY_CONST);
 
     case CONSTRUCTOR:
       /* We need to do this when determining whether or not two
 	 non-type pointer to member function template arguments
 	 are the same.  */
-      if (!comptypes (TREE_TYPE (t1), TREE_TYPE (t2))
+      如果 (!comptypes (TREE_TYPE (t1), TREE_TYPE (t2))
 	  || CONSTRUCTOR_NELTS (t1) != CONSTRUCTOR_NELTS (t2))
-	return false;
+	返回 false;
       {
 	tree field, value;
-	unsigned int i;
+	unsigned 整数 i;
 	FOR_EACH_CONSTRUCTOR_ELT (CONSTRUCTOR_ELTS (t1), i, field, value)
 	  {
 	    constructor_elt *elt2 = CONSTRUCTOR_ELT (t2, i);
-	    if (!c_tree_equal (field, elt2->index)
+	    如果 (!c_tree_equal (field, elt2->index)
 		|| !c_tree_equal (value, elt2->value))
-	      return false;
+	      返回 false;
 	  }
       }
-      return true;
+      返回 true;
 
     case TREE_LIST:
-      if (!c_tree_equal (TREE_PURPOSE (t1), TREE_PURPOSE (t2)))
-	return false;
-      if (!c_tree_equal (TREE_VALUE (t1), TREE_VALUE (t2)))
-	return false;
-      return c_tree_equal (TREE_CHAIN (t1), TREE_CHAIN (t2));
+      如果 (!c_tree_equal (TREE_PURPOSE (t1), TREE_PURPOSE (t2)))
+	返回 false;
+      如果 (!c_tree_equal (TREE_VALUE (t1), TREE_VALUE (t2)))
+	返回 false;
+      返回 c_tree_equal (TREE_CHAIN (t1), TREE_CHAIN (t2));
 
     case SAVE_EXPR:
-      return c_tree_equal (TREE_OPERAND (t1, 0), TREE_OPERAND (t2, 0));
+      返回 c_tree_equal (TREE_OPERAND (t1, 0), TREE_OPERAND (t2, 0));
 
     case CALL_EXPR:
       {
 	tree arg1, arg2;
 	call_expr_arg_iterator iter1, iter2;
-	if (!c_tree_equal (CALL_EXPR_FN (t1), CALL_EXPR_FN (t2)))
-	  return false;
-	for (arg1 = first_call_expr_arg (t1, &iter1),
+	如果 (!c_tree_equal (CALL_EXPR_FN (t1), CALL_EXPR_FN (t2)))
+	  返回 false;
+	为 (arg1 = first_call_expr_arg (t1, &iter1),
 	       arg2 = first_call_expr_arg (t2, &iter2);
 	     arg1 && arg2;
 	     arg1 = next_call_expr_arg (&iter1),
 	       arg2 = next_call_expr_arg (&iter2))
-	  if (!c_tree_equal (arg1, arg2))
-	    return false;
-	if (arg1 || arg2)
-	  return false;
-	return true;
+	  如果 (!c_tree_equal (arg1, arg2))
+	    返回 false;
+	如果 (arg1 || arg2)
+	  返回 false;
+	返回 true;
       }
 
     case TARGET_EXPR:
@@ -18985,22 +18985,22 @@ c_tree_equal (tree t1, tree t2)
 	   it means that it's going to be unified with whatever the
 	   TARGET_EXPR is really supposed to initialize, so treat it
 	   as being equivalent to anything.  */
-	if (VAR_P (o1) && DECL_NAME (o1) == NULL_TREE
+	如果 (VAR_P (o1) && DECL_NAME (o1) == NULL_TREE
 	    && !DECL_RTL_SET_P (o1))
 	  /*Nop*/;
-	else if (VAR_P (o2) && DECL_NAME (o2) == NULL_TREE
+	否则 如果 (VAR_P (o2) && DECL_NAME (o2) == NULL_TREE
 		 && !DECL_RTL_SET_P (o2))
 	  /*Nop*/;
-	else if (!c_tree_equal (o1, o2))
-	  return false;
+	否则 如果 (!c_tree_equal (o1, o2))
+	  返回 false;
 
-	return c_tree_equal (TREE_OPERAND (t1, 1), TREE_OPERAND (t2, 1));
+	返回 c_tree_equal (TREE_OPERAND (t1, 1), TREE_OPERAND (t2, 1));
       }
 
     case COMPONENT_REF:
-      if (TREE_OPERAND (t1, 1) != TREE_OPERAND (t2, 1))
-	return false;
-      return c_tree_equal (TREE_OPERAND (t1, 0), TREE_OPERAND (t2, 0));
+      如果 (TREE_OPERAND (t1, 1) != TREE_OPERAND (t2, 1))
+	返回 false;
+      返回 c_tree_equal (TREE_OPERAND (t1, 0), TREE_OPERAND (t2, 0));
 
     case PARM_DECL:
     case VAR_DECL:
@@ -19009,23 +19009,23 @@ c_tree_equal (tree t1, tree t2)
     case FUNCTION_DECL:
     case IDENTIFIER_NODE:
     case SSA_NAME:
-      return false;
+      返回 false;
 
     case TREE_VEC:
       {
 	unsigned ix;
-	if (TREE_VEC_LENGTH (t1) != TREE_VEC_LENGTH (t2))
-	  return false;
-	for (ix = TREE_VEC_LENGTH (t1); ix--;)
-	  if (!c_tree_equal (TREE_VEC_ELT (t1, ix),
+	如果 (TREE_VEC_LENGTH (t1) != TREE_VEC_LENGTH (t2))
+	  返回 false;
+	为 (ix = TREE_VEC_LENGTH (t1); ix--;)
+	  如果 (!c_tree_equal (TREE_VEC_ELT (t1, ix),
 			     TREE_VEC_ELT (t2, ix)))
-	    return false;
-	return true;
+	    返回 false;
+	返回 true;
       }
 
     CASE_CONVERT:
-      if (!comptypes (TREE_TYPE (t1), TREE_TYPE (t2)))
-	return false;
+      如果 (!comptypes (TREE_TYPE (t1), TREE_TYPE (t2)))
+	返回 false;
       break;
 
     default:
@@ -19042,7 +19042,7 @@ c_tree_equal (tree t1, tree t2)
     case tcc_reference:
     case tcc_statement:
       {
-	int i, n = TREE_OPERAND_LENGTH (t1);
+	整数 i, n = TREE_OPERAND_LENGTH (t1);
 
 	switch (code1)
 	  {
@@ -19059,19 +19059,19 @@ c_tree_equal (tree t1, tree t2)
 	    break;
 	  }
 
-	if (TREE_CODE_CLASS (code1) == tcc_vl_exp
+	如果 (TREE_CODE_CLASS (code1) == tcc_vl_exp
 	    && n != TREE_OPERAND_LENGTH (t2))
-	  return false;
+	  返回 false;
 
-	for (i = 0; i < n; ++i)
-	  if (!c_tree_equal (TREE_OPERAND (t1, i), TREE_OPERAND (t2, i)))
-	    return false;
+	为 (i = 0; i < n; ++i)
+	  如果 (!c_tree_equal (TREE_OPERAND (t1, i), TREE_OPERAND (t2, i)))
+	    返回 false;
 
-	return true;
+	返回 true;
       }
 
     case tcc_type:
-      return comptypes (t1, t2);
+      返回 comptypes (t1, t2);
     default:
       gcc_unreachable ();
     }
@@ -19084,5 +19084,5 @@ c_tree_equal (tree t1, tree t2)
 bool
 c_decl_implicit (const_tree fndecl)
 {
-  return C_DECL_IMPLICIT (fndecl);
+  返回 C_DECL_IMPLICIT (fndecl);
 }
