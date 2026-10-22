@@ -23,149 +23,149 @@ along with GCC; see the file COPYING3.  If not see
    including computing the types of the result, C-specific error checks,
    and some optimization.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "memmodel.h"
-#include "target.h"
-#include "function.h"
-#include "bitmap.h"
-#include "c-tree.h"
-#include "gimple-expr.h"
-#include "predict.h"
-#include "stor-layout.h"
-#include "trans-mem.h"
-#include "varasm.h"
-#include "stmt.h"
-#include "langhooks.h"
-#include "c-lang.h"
-#include "intl.h"
-#include "tree-iterator.h"
-#include "gimplify.h"
-#include "tree-inline.h"
-#include "omp-general.h"
-#include "c-family/c-objc.h"
-#include "c-family/c-ubsan.h"
-#include "gomp-constants.h"
-#include "spellcheck-tree.h"
-#include "c-family/c-type-mismatch.h"
-#include "stringpool.h"
-#include "attribs.h"
-#include "asan.h"
-#include "realmpfr.h"
-#include "tree-pretty-print-markup.h"
-#include "gcc-urlifier.h"
+#ضمن "config.h"
+#ضمن "system.h"
+#ضمن "coretypes.h"
+#ضمن "memmodel.h"
+#ضمن "target.h"
+#ضمن "function.h"
+#ضمن "bitmap.h"
+#ضمن "c-tree.h"
+#ضمن "gimple-expr.h"
+#ضمن "predict.h"
+#ضمن "stor-layout.h"
+#ضمن "trans-mem.h"
+#ضمن "varasm.h"
+#ضمن "stmt.h"
+#ضمن "langhooks.h"
+#ضمن "c-lang.h"
+#ضمن "intl.h"
+#ضمن "tree-iterator.h"
+#ضمن "gimplify.h"
+#ضمن "tree-inline.h"
+#ضمن "omp-general.h"
+#ضمن "c-family/c-objc.h"
+#ضمن "c-family/c-ubsan.h"
+#ضمن "gomp-constants.h"
+#ضمن "spellcheck-tree.h"
+#ضمن "c-family/c-type-mismatch.h"
+#ضمن "stringpool.h"
+#ضمن "attribs.h"
+#ضمن "asan.h"
+#ضمن "realmpfr.h"
+#ضمن "tree-pretty-print-markup.h"
+#ضمن "gcc-urlifier.h"
 
 /* Possible cases of implicit conversions.  Used to select diagnostic messages
    and control folding initializers in convert_for_assignment.  */
-enum impl_conv {
+تعداد impl_conv {
   ic_argpass,
-  ic_assign,
+  ic_ټاکل,
   ic_init,
   ic_init_const,
   ic_return
 };
 
 /* The level of nesting inside "__alignof__".  */
-int in_alignof;
+صحيح دننه_alignof;
 
 /* The level of nesting inside "sizeof".  */
-int in_sizeof;
+صحيح دننه_sizeof;
 
 /* The level of nesting inside "countof".  */
-int in_countof;
+صحيح دننه_countof;
 
 /* The level of nesting inside "typeof".  */
-int in_typeof;
+صحيح دننه_typeof;
 
 /* The level of nesting inside "_Generic".  */
-int in_generic;
+صحيح دننه_generic;
 
 /* True when parsing OpenMP loop expressions.  */
-bool c_in_omp_for;
+منطقي c_دننه_omp_for;
 
 /* True when parsing OpenMP map clause.  */
-bool c_omp_array_section_p;
+منطقي c_omp_array_section_p;
 
 /* The argument of last parsed sizeof expression, only to be tested
    if expr.original_code == SIZEOF_EXPR.  */
-tree c_last_sizeof_arg;
-location_t c_last_sizeof_loc;
+ونه c_وروستی_sizeof_arg;
+location_t c_وروستی_sizeof_loc;
 
 /* Nonzero if we might need to print a "missing braces around
    initializer" message within this initializer.  */
-static int found_missing_braces;
+ساكن صحيح وموندل_missing_braces;
 
-static bool require_constant_value;
-static bool require_constant_elements;
-static bool require_constexpr_value;
+ساكن منطقي require_constant_ارزښت;
+ساكن منطقي require_constant_elements;
+ساكن منطقي require_constexpr_ارزښت;
 
-static tree qualify_type (tree, tree);
-struct comptypes_data;
-static bool tagged_types_tu_compatible_p (const_tree, const_tree,
-					  struct comptypes_data *);
-static bool comp_target_types (location_t, tree, tree);
-static bool function_types_compatible_p (const_tree, const_tree,
-					 struct comptypes_data *);
-static bool type_lists_compatible_p (const_tree, const_tree,
-				     struct comptypes_data *);
-static int convert_arguments (location_t, vec<location_t>, tree,
-			      vec<tree, va_gc> *, vec<tree, va_gc> *, tree,
-			      tree);
-static tree pointer_diff (location_t, tree, tree, tree *);
-static tree convert_for_assignment (location_t, location_t, tree, tree, tree,
-				    enum impl_conv, bool, tree, tree, int,
-				    int = 0);
-static tree valid_compound_expr_initializer (tree, tree);
-static void push_string (const char *);
-static void push_member_name (tree);
-static int spelling_length (void);
-static char *print_spelling (char *);
-static void warning_init (location_t, int, const char *);
-static tree digest_init (location_t, tree, tree, tree, tree, bool, bool, bool,
-			 bool, bool, bool);
-static void output_init_element (location_t, tree, tree, bool, tree, tree, bool,
-				 bool, struct obstack *);
-static void output_pending_init_elements (int, struct obstack *);
-static bool set_designator (location_t, bool, struct obstack *);
-static void push_range_stack (tree, struct obstack *);
-static void add_pending_init (location_t, tree, tree, tree, bool,
-			      struct obstack *);
-static void set_nonincremental_init (struct obstack *);
-static void set_nonincremental_init_from_string (tree, struct obstack *);
-static tree find_init_member (tree, struct obstack *);
-static void readonly_warning (tree, enum lvalue_use);
-static int lvalue_or_else (location_t, const_tree, enum lvalue_use);
-static void record_maybe_used_decl (tree, bool address);
-static bool comptypes_internal (const_tree, const_tree,
-				struct comptypes_data *data);
-static bool comptypes_check_for_composite (tree t1, tree t2);
-static bool handle_counted_by_p (tree);
-static bool top_array_vla_p (const_tree type);
+ساكن ونه qualify_type (ونه, ونه);
+بنية comptypes_معلومات;
+ساكن منطقي tagged_types_tu_compatible_p (const_ونه, const_ونه,
+					  بنية comptypes_معلومات *);
+ساكن منطقي comp_موخه_types (location_t, ونه, ونه);
+ساكن منطقي function_types_compatible_p (const_ونه, const_ونه,
+					 بنية comptypes_معلومات *);
+ساكن منطقي type_lists_compatible_p (const_ونه, const_ونه,
+				     بنية comptypes_معلومات *);
+ساكن صحيح convert_arguments (location_t, vec<location_t>, ونه,
+			      vec<ونه, va_gc> *, vec<ونه, va_gc> *, ونه,
+			      ونه);
+ساكن ونه اشاره_ګر_diff (location_t, ونه, ونه, ونه *);
+ساكن ونه convert_for_assignment (location_t, location_t, ونه, ونه, ونه,
+				    تعداد impl_conv, منطقي, ونه, ونه, صحيح,
+				    صحيح = 0);
+ساكن ونه valid_compound_بیان_initializer (ونه, ونه);
+ساكن فراغ ټېل_string (ثابت حرف *);
+ساكن فراغ ټېل_member_name (ونه);
+ساكن صحيح spelling_اوږدتیا (فراغ);
+ساكن حرف *print_spelling (حرف *);
+ساكن فراغ warning_init (location_t, صحيح, ثابت حرف *);
+ساكن ونه digest_init (location_t, ونه, ونه, ونه, ونه, منطقي, منطقي, منطقي,
+			 منطقي, منطقي, منطقي);
+ساكن فراغ output_init_element (location_t, ونه, ونه, منطقي, ونه, ونه, منطقي,
+				 منطقي, بنية obstack *);
+ساكن فراغ output_pending_init_elements (صحيح, بنية obstack *);
+ساكن منطقي سېټ_designator (location_t, منطقي, بنية obstack *);
+ساكن فراغ ټېل_range_ډېری (ونه, بنية obstack *);
+ساكن فراغ جمع_کړه_pending_init (location_t, ونه, ونه, ونه, منطقي,
+			      بنية obstack *);
+ساكن فراغ سېټ_nonincremental_init (بنية obstack *);
+ساكن فراغ سېټ_nonincremental_init_from_string (ونه, بنية obstack *);
+ساكن ونه پیدا_کړه_init_member (ونه, بنية obstack *);
+ساكن فراغ readonly_warning (ونه, تعداد lvalue_use);
+ساكن صحيح lvalue_or_else (location_t, const_ونه, تعداد lvalue_use);
+ساكن فراغ ریکارډ_maybe_کارول_شوی_decl (ونه, منطقي پته);
+ساكن منطقي comptypes_دننی (const_ونه, const_ونه,
+				بنية comptypes_معلومات *معلومات);
+ساكن منطقي comptypes_check_for_مرکب (ونه t1, ونه t2);
+ساكن منطقي handle_counted_by_p (ونه);
+ساكن منطقي سر_array_vla_p (const_ونه type);
 
 
 /* Return true if EXP is a null pointer constant, false otherwise.  */
 
-bool
-null_pointer_constant_p (const_tree expr)
+منطقي
+null_اشاره_ګر_constant_p (const_ونه بیان)
 {
   /* This should really operate on c_expr structures, but they aren't
      yet available everywhere required.  */
-  tree type = TREE_TYPE (expr);
+  ونه type = ونه_TYPE (بیان);
 
   /* An integer constant expression with the value 0, such an expression
      cast to type void*, or the predefined constant nullptr, are a null
      pointer constant.  */
-  if (expr == nullptr_node)
-    return true;
+  إذا (بیان == nullptr_غوټه)
+    أرجع ریښتیا;
 
-  return (TREE_CODE (expr) == INTEGER_CST
-	  && !TREE_OVERFLOW (expr)
-	  && integer_zerop (expr)
+  أرجع (ونه_کوډ (بیان) == INTEGER_CST
+	  && !ونه_ډکېدنه (بیان)
+	  && integer_zerop (بیان)
 	  && (INTEGRAL_TYPE_P (type)
-	      || (TREE_CODE (type) == POINTER_TYPE
-		  && VOID_TYPE_P (TREE_TYPE (type))
-		  && TYPE_QUALS (TREE_TYPE (type)) == TYPE_UNQUALIFIED)));
+	      || (ونه_کوډ (type) == اشاره_ګر_TYPE
+		  && VOID_TYPE_P (ونه_TYPE (type))
+		  && TYPE_QUALS (ونه_TYPE (type)) == TYPE_UNQUALIFIED)));
 }
 
 /* EXPR may appear in an unevaluated part of an integer constant
@@ -173,21 +173,21 @@ null_pointer_constant_p (const_tree expr)
    C_MAYBE_CONST_EXPR, or mark it with TREE_OVERFLOW if it is just an
    INTEGER_CST and we cannot create a C_MAYBE_CONST_EXPR.  */
 
-static tree
-note_integer_operands (tree expr)
+ساكن ونه
+note_integer_operands (ونه بیان)
 {
-  tree ret;
-  if (TREE_CODE (expr) == INTEGER_CST && in_late_binary_op)
+  ونه ret;
+  إذا (ونه_کوډ (بیان) == INTEGER_CST && دننه_late_دوګونی_op)
     {
-      ret = copy_node (expr);
-      TREE_OVERFLOW (ret) = 1;
+      ret = copy_غوټه (بیان);
+      ونه_ډکېدنه (ret) = 1;
     }
-  else
+  وإلا
     {
-      ret = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (expr), NULL_TREE, expr);
-      C_MAYBE_CONST_EXPR_INT_OPERANDS (ret) = 1;
+      ret = build2 (C_MAYBE_CONST_بیان, ونه_TYPE (بیان), NULL_ونه, بیان);
+      C_MAYBE_CONST_بیان_INT_OPERANDS (ret) = 1;
     }
-  return ret;
+  أرجع ret;
 }
 
 /* Having checked whether EXPR may appear in an unevaluated part of an
@@ -195,41 +195,41 @@ note_integer_operands (tree expr)
    C_MAYBE_CONST_EXPR noting this fact and return the resulting
    expression.  */
 
-static inline tree
-remove_c_maybe_const_expr (tree expr)
+ساكن مضمن ونه
+remove_c_maybe_const_بیان (ونه بیان)
 {
-  if (TREE_CODE (expr) == C_MAYBE_CONST_EXPR)
-    return C_MAYBE_CONST_EXPR_EXPR (expr);
-  else
-    return expr;
+  إذا (ونه_کوډ (بیان) == C_MAYBE_CONST_بیان)
+    أرجع C_MAYBE_CONST_بیان_بیان (بیان);
+  وإلا
+    أرجع بیان;
 }
 
 /* This is a cache to hold if two types are seen.  */
 
-struct tagged_tu_seen_cache {
-  const struct tagged_tu_seen_cache * next;
-  const_tree t1;
-  const_tree t2;
+بنية tagged_tu_کتل_شوی_cache {
+  ثابت بنية tagged_tu_کتل_شوی_cache * بل;
+  const_ونه t1;
+  const_ونه t2;
 };
 
 /* Do `exp = require_complete_type (loc, exp);' to make sure exp
    does not have an incomplete type.  (That includes void types.)
    LOC is the location of the use.  */
 
-tree
-require_complete_type (location_t loc, tree value)
+ونه
+require_complete_type (location_t loc, ونه ارزښت)
 {
-  tree type = TREE_TYPE (value);
+  ونه type = ونه_TYPE (ارزښت);
 
-  if (error_operand_p (value))
-    return error_mark_node;
+  إذا (error_عملوند_p (ارزښت))
+    أرجع error_mark_غوټه;
 
   /* First, detect a valid value with a complete type.  */
-  if (COMPLETE_TYPE_P (type))
-    return value;
+  إذا (COMPLETE_TYPE_P (type))
+    أرجع ارزښت;
 
-  c_incomplete_type_error (loc, value, type);
-  return error_mark_node;
+  c_incomplete_type_error (loc, ارزښت, type);
+  أرجع error_mark_غوټه;
 }
 
 /* Print an error message for invalid use of an incomplete type.
@@ -237,52 +237,52 @@ require_complete_type (location_t loc, tree value)
    and TYPE is the type that was invalid.  LOC is the location for
    the error.  */
 
-void
-c_incomplete_type_error (location_t loc, const_tree value, const_tree type)
+فراغ
+c_incomplete_type_error (location_t loc, const_ونه ارزښت, const_ونه type)
 {
   /* Avoid duplicate error message.  */
-  if (TREE_CODE (type) == ERROR_MARK)
-    return;
+  إذا (ونه_کوډ (type) == ERROR_MARK)
+    أرجع;
 
-  if (value != NULL_TREE && (VAR_P (value) || TREE_CODE (value) == PARM_DECL))
-    error_at (loc, "%qD has an incomplete type %qT", value, type);
-  else
+  إذا (ارزښت != NULL_ونه && (VAR_P (ارزښت) || ونه_کوډ (ارزښت) == PARM_DECL))
+    error_at (loc, "%qD has an incomplete type %qT", ارزښت, type);
+  وإلا
     {
     retry:
       /* We must print an error message.  Be clever about what it says.  */
 
-      switch (TREE_CODE (type))
+      بدل (ونه_کوډ (type))
 	{
-	case RECORD_TYPE:
-	case UNION_TYPE:
-	case ENUMERAL_TYPE:
-	  break;
+	حالة ریکارډ_TYPE:
+	حالة UNION_TYPE:
+	حالة ENUMERAL_TYPE:
+	  اكسر;
 
-	case VOID_TYPE:
+	حالة VOID_TYPE:
 	  error_at (loc, "invalid use of void expression");
-	  return;
+	  أرجع;
 
-	case ARRAY_TYPE:
-	  if (TYPE_DOMAIN (type))
+	حالة ARRAY_TYPE:
+	  إذا (TYPE_DOMAIN (type))
 	    {
-	      if (flexible_array_member_type_p (type))
+	      إذا (flexible_array_member_type_p (type))
 		{
 		  error_at (loc, "invalid use of flexible array member");
-		  return;
+		  أرجع;
 		}
-	      type = TREE_TYPE (type);
-	      goto retry;
+	      type = ونه_TYPE (type);
+	      اذهب retry;
 	    }
 	  error_at (loc, "invalid use of array with unspecified bounds");
-	  return;
+	  أرجع;
 
-	default:
+	افتراضي:
 	  gcc_unreachable ();
 	}
 
-      if (TREE_CODE (TYPE_NAME (type)) == IDENTIFIER_NODE)
+      إذا (ونه_کوډ (TYPE_NAME (type)) == IDENTIFIER_غوټه)
 	error_at (loc, "invalid use of undefined type %qT", type);
-      else
+      وإلا
 	/* If this type has a typedef-name, the TYPE_NAME is a TYPE_DECL.  */
 	error_at (loc, "invalid use of incomplete typedef %qT", type);
     }
@@ -291,62 +291,62 @@ c_incomplete_type_error (location_t loc, const_tree value, const_tree type)
 /* Given a type, apply default promotions wrt unnamed function
    arguments and return the new type.  */
 
-tree
-c_type_promotes_to (tree type)
+ونه
+c_type_promotes_منزل (ونه type)
 {
-  tree ret = NULL_TREE;
+  ونه ret = NULL_ونه;
 
-  if (TYPE_MAIN_VARIANT (type) == float_type_node)
-    ret = double_type_node;
-  else if (c_promoting_integer_type_p (type))
+  إذا (TYPE_MAIN_VARIANT (type) == float_type_غوټه)
+    ret = double_type_غوټه;
+  وإلا إذا (c_promoting_integer_type_p (type))
     {
       /* Preserve unsignedness if not really getting any wider.  */
-      if (TYPE_UNSIGNED (type)
-	  && (TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_node)))
-	ret = unsigned_type_node;
-      else
-	ret = integer_type_node;
+      إذا (TYPE_UNSIGNED (type)
+	  && (TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_غوټه)))
+	ret = unsigned_type_غوټه;
+      وإلا
+	ret = integer_type_غوټه;
     }
 
-  if (ret != NULL_TREE)
-    return (TYPE_ATOMIC (type)
+  إذا (ret != NULL_ونه)
+    أرجع (TYPE_ATOMIC (type)
 	    ? c_build_qualified_type (ret, TYPE_QUAL_ATOMIC)
 	    : ret);
 
-  return type;
+  أرجع type;
 }
 
 /* Return true if between two named address spaces, whether there is a superset
    named address space that encompasses both address spaces.  If there is a
    superset, return which address space is the superset.  */
 
-static bool
+ساكن منطقي
 addr_space_superset (addr_space_t as1, addr_space_t as2, addr_space_t *common)
 {
-  if (as1 == as2)
+  إذا (as1 == as2)
     {
       *common = as1;
-      return true;
+      أرجع ریښتیا;
     }
-  else if (targetm.addr_space.subset_p (as1, as2))
+  وإلا إذا (targetm.addr_space.subset_p (as1, as2))
     {
       *common = as2;
-      return true;
+      أرجع ریښتیا;
     }
-  else if (targetm.addr_space.subset_p (as2, as1))
+  وإلا إذا (targetm.addr_space.subset_p (as2, as1))
     {
       *common = as1;
-      return true;
+      أرجع ریښتیا;
     }
-  else
-    return false;
+  وإلا
+    أرجع خطأ;
 }
 
 /* Return a variant of TYPE which has all the type qualifiers of LIKE
    as well as those of TYPE.  */
 
-static tree
-qualify_type (tree type, tree like)
+ساكن ونه
+qualify_type (ونه type, ونه like)
 {
   addr_space_t as_type = TYPE_ADDR_SPACE (type);
   addr_space_t as_like = TYPE_ADDR_SPACE (like);
@@ -354,14 +354,14 @@ qualify_type (tree type, tree like)
 
   /* If the two named address spaces are different, determine the common
      superset address space.  If there isn't one, raise an error.  */
-  if (!addr_space_superset (as_type, as_like, &as_common))
+  إذا (!addr_space_superset (as_type, as_like, &as_common))
     {
       as_common = as_type;
       error ("%qT and %qT are in disjoint named address spaces",
 	     type, like);
     }
 
-  return c_build_qualified_type (type,
+  أرجع c_build_qualified_type (type,
 				 TYPE_QUALS_NO_ADDR_SPACE (type)
 				 | TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (like)
 				 | ENCODE_QUAL_ADDR_SPACE (as_common));
@@ -374,239 +374,239 @@ qualify_type (tree type, tree like)
    non-constant length are marked with C_TYPE_VARIABLE_SIZE. If any
    inconsistency is detected false is returned and true otherwise.  */
 
-static bool
-c_verify_type (tree type)
+ساكن منطقي
+c_verify_type (ونه type)
 {
-  switch (TREE_CODE (type))
+  بدل (ونه_کوډ (type))
     {
-    case POINTER_TYPE:
-    case FUNCTION_TYPE:
-    case ARRAY_TYPE:
+    حالة اشاره_ګر_TYPE:
+    حالة FUNCTION_TYPE:
+    حالة ARRAY_TYPE:
       /* Pointer, array, functions are variably modified if and only if the
 	 target, element, return type is variably modified.  */
-      if (!TYPE_STRUCTURAL_EQUALITY_P (type)
+      إذا (!TYPE_STRUCTURAL_EQUALITY_P (type)
 	  && (C_TYPE_VARIABLY_MODIFIED (type)
-	      != C_TYPE_VARIABLY_MODIFIED (TREE_TYPE (type))))
-	return false;
+	      != C_TYPE_VARIABLY_MODIFIED (ونه_TYPE (type))))
+	أرجع خطأ;
       /* If the target type is structural equality, the type should also. */
-      if (!TYPE_STRUCTURAL_EQUALITY_P (type)
-	  && TYPE_STRUCTURAL_EQUALITY_P (TREE_TYPE (type)))
-	return false;
-    default:
-       break;
+      إذا (!TYPE_STRUCTURAL_EQUALITY_P (type)
+	  && TYPE_STRUCTURAL_EQUALITY_P (ونه_TYPE (type)))
+	أرجع خطأ;
+    افتراضي:
+       اكسر;
     }
 
-  switch (TREE_CODE (type))
+  بدل (ونه_کوډ (type))
     {
-    case POINTER_TYPE:
-    case FUNCTION_TYPE:
+    حالة اشاره_ګر_TYPE:
+    حالة FUNCTION_TYPE:
       /* Pointer and functions can not have variable size.  */
-      if (C_TYPE_VARIABLE_SIZE (type))
-	return false;
-      break;
-    case ARRAY_TYPE:
+      إذا (C_TYPE_VARIABLE_اندازه (type))
+	أرجع خطأ;
+      اكسر;
+    حالة ARRAY_TYPE:
       /* An array has variable size if and only if it has a non-constant
 	 dimensions or its element type has variable size.  */
-      if ((C_TYPE_VARIABLE_SIZE (TREE_TYPE (type))
-	   || top_array_vla_p (type))
-	  != C_TYPE_VARIABLE_SIZE (type))
-	return false;
+      إذا ((C_TYPE_VARIABLE_اندازه (ونه_TYPE (type))
+	   || سر_array_vla_p (type))
+	  != C_TYPE_VARIABLE_اندازه (type))
+	أرجع خطأ;
       /* If the element type or the array has variable size, then the
 	 array has variable size and is variably modified.  */
-      if (C_TYPE_VARIABLE_SIZE (TREE_TYPE (type))
-	  || C_TYPE_VARIABLE_SIZE (type))
+      إذا (C_TYPE_VARIABLE_اندازه (ونه_TYPE (type))
+	  || C_TYPE_VARIABLE_اندازه (type))
 	{
-	  if (!C_TYPE_VARIABLE_SIZE (type))
-	    return false;
-	  if (!C_TYPE_VARIABLY_MODIFIED (type))
-	    return false;
+	  إذا (!C_TYPE_VARIABLE_اندازه (type))
+	    أرجع خطأ;
+	  إذا (!C_TYPE_VARIABLY_MODIFIED (type))
+	    أرجع خطأ;
 	}
 
       /* va_list violates this, accept such types here.  */
-      if (!COMPLETE_TYPE_P (TREE_TYPE (type)))
-	return true;
+      إذا (!COMPLETE_TYPE_P (ونه_TYPE (type)))
+	أرجع ریښتیا;
 
-      if (COMPLETE_TYPE_P (type))
+      إذا (COMPLETE_TYPE_P (type))
 	{
 	  /* If the size is unknown, it can not be complete.  */
-	  if (NULL_TREE == TYPE_DOMAIN (type))
-	    return false;
+	  إذا (NULL_ونه == TYPE_DOMAIN (type))
+	    أرجع خطأ;
 
 	  /* Zero-length arrays must have size zero.  */
-	  if (zero_length_array_type_p (type)
-	      && !integer_zerop (TYPE_SIZE (type)))
-	    return false;
+	  إذا (zero_اوږدتیا_array_type_p (type)
+	      && !integer_zerop (TYPE_اندازه (type)))
+	    أرجع خطأ;
 	}
-      else
+      وإلا
 	{
 	  /* If not complete but has a domain, it must be a FAM.  */
-	  if (NULL_TREE != TYPE_DOMAIN (type)
+	  إذا (NULL_ونه != TYPE_DOMAIN (type)
 	      && !flexible_array_member_type_p (type))
-	    return false;
+	    أرجع خطأ;
 	}
-    default:
-      break;
+    افتراضي:
+      اكسر;
     }
-  return true;
+  أرجع ریښتیا;
 }
 
 /* Propagate C_TYPE_VARIABLY_MODIFIED and C_TYPE_VARIABLE_SIZE
    from a base type to a newly built derived or qualified type.  */
 
-static tree
-c_set_type_bits (tree new_type, tree old_type)
+ساكن ونه
+c_سېټ_type_بټونه (ونه new_type, ونه old_type)
 {
   gcc_checking_assert (c_verify_type (old_type));
 
-  if (c_type_variably_modified_p (old_type))
-    C_TYPE_VARIABLY_MODIFIED (new_type) = true;
+  إذا (c_type_variably_modified_p (old_type))
+    C_TYPE_VARIABLY_MODIFIED (new_type) = ریښتیا;
 
-  if (TREE_CODE (new_type) == ARRAY_TYPE && C_TYPE_VARIABLE_SIZE (old_type))
+  إذا (ونه_کوډ (new_type) == ARRAY_TYPE && C_TYPE_VARIABLE_اندازه (old_type))
     {
-      C_TYPE_VARIABLY_MODIFIED (new_type) = true;
-      C_TYPE_VARIABLE_SIZE (new_type) = true;
+      C_TYPE_VARIABLY_MODIFIED (new_type) = ریښتیا;
+      C_TYPE_VARIABLE_اندازه (new_type) = ریښتیا;
     }
-  return new_type;
+  أرجع new_type;
 }
 
 /* Build a pointer type using the default pointer mode.  */
 
-tree
-c_build_pointer_type (tree to_type)
+ونه
+c_build_اشاره_ګر_type (ونه منزل_type)
 {
-  addr_space_t as = to_type == error_mark_node ? ADDR_SPACE_GENERIC
-					       : TYPE_ADDR_SPACE (to_type);
-  machine_mode pointer_mode;
+  addr_space_t as = منزل_type == error_mark_غوټه ? ADDR_SPACE_GENERIC
+					       : TYPE_ADDR_SPACE (منزل_type);
+  machine_ډېرپېښ اشاره_ګر_ډېرپېښ;
 
-  if (as != ADDR_SPACE_GENERIC || c_default_pointer_mode == VOIDmode)
-    pointer_mode = targetm.addr_space.pointer_mode (as);
-  else
-    pointer_mode = c_default_pointer_mode;
+  إذا (as != ADDR_SPACE_GENERIC || c_default_اشاره_ګر_ډېرپېښ == VOIDmode)
+    اشاره_ګر_ډېرپېښ = targetm.addr_space.اشاره_ګر_ډېرپېښ (as);
+  وإلا
+    اشاره_ګر_ډېرپېښ = c_default_اشاره_ګر_ډېرپېښ;
 
-  return c_build_pointer_type_for_mode (to_type, pointer_mode, false);
+  أرجع c_build_اشاره_ګر_type_for_ډېرپېښ (منزل_type, اشاره_ګر_ډېرپېښ, خطأ);
 }
 
 /* Build a pointer type using the given mode.  */
 
-tree
-c_build_pointer_type_for_mode (tree type, machine_mode mode, bool m)
+ونه
+c_build_اشاره_ګر_type_for_ډېرپېښ (ونه type, machine_ډېرپېښ ډېرپېښ, منطقي m)
 {
-  tree ret = build_pointer_type_for_mode (type, mode, m);
-  return c_set_type_bits (ret, type);
+  ونه ret = build_اشاره_ګر_type_for_ډېرپېښ (type, ډېرپېښ, m);
+  أرجع c_سېټ_type_بټونه (ret, type);
 }
 
 /* Build a function type.  */
 
-tree
-c_build_function_type (tree type, tree args, bool no)
+ونه
+c_build_function_type (ونه type, ونه دلیلونه, منطقي no)
 {
-  tree ret = build_function_type (type, args, no);
-  return c_set_type_bits (ret, type);
+  ونه ret = build_function_type (type, دلیلونه, no);
+  أرجع c_سېټ_type_بټونه (ret, type);
 }
 
 /* Build an array type.  This sets typeless storage as required
    by C2Y and C_TYPE_VARIABLY_MODIFIED and C_TYPE_VARIABLE_SIZE
    based on the element type and domain.  */
 
-tree
-c_build_array_type (tree type, tree domain)
+ونه
+c_build_array_type (ونه type, ونه domain)
 {
-  int type_quals = TYPE_QUALS (type);
+  صحيح type_quals = TYPE_QUALS (type);
 
   /* Identify typeless storage as introduced in C2Y
      and supported also in earlier language modes.  */
-  bool typeless = (char_type_p (type) && !(type_quals & TYPE_QUAL_ATOMIC))
+  منطقي typeless = (char_type_p (type) && !(type_quals & TYPE_QUAL_ATOMIC))
 		  || (AGGREGATE_TYPE_P (type) && TYPE_TYPELESS_STORAGE (type));
 
-  tree ret = build_array_type (type, domain, typeless);
+  ونه ret = build_array_type (type, domain, typeless);
 
-  if (top_array_vla_p (ret))
+  إذا (سر_array_vla_p (ret))
     {
-      C_TYPE_VARIABLE_SIZE (ret) = 1;
+      C_TYPE_VARIABLE_اندازه (ret) = 1;
       C_TYPE_VARIABLY_MODIFIED (ret) = 1;
     }
 
-  return c_set_type_bits (ret, type);
+  أرجع c_سېټ_type_بټونه (ret, type);
 }
 
 /* Build an array type of unspecified size.  */
-tree
-c_build_array_type_unspecified (tree type)
+ونه
+c_build_array_type_unspecified (ونه type)
 {
-  tree upper = build2 (COMPOUND_EXPR, TREE_TYPE (size_zero_node),
-		       integer_zero_node, size_zero_node);
-  return c_build_array_type (type, build_index_type (upper));
+  ونه پاسنی = build2 (COMPOUND_بیان, ونه_TYPE (اندازه_zero_غوټه),
+		       integer_zero_غوټه, اندازه_zero_غوټه);
+  أرجع c_build_array_type (type, build_شاخص_type (پاسنی));
 }
 
 /* Build an array type of zero size.  */
-tree
-c_build_array_type_zero_size (tree type)
+ونه
+c_build_array_type_zero_اندازه (ونه type)
 {
   /* The GCC extension for zero-length arrays differs from
      ISO flexible array members in that sizeof yields
      zero.  */
-  type = c_build_array_type (type, build_index_type (NULL_TREE));
+  type = c_build_array_type (type, build_شاخص_type (NULL_ونه));
   type = build_distinct_type_copy (TYPE_MAIN_VARIANT (type));
-  TYPE_SIZE (type) = bitsize_zero_node;
-  TYPE_SIZE_UNIT (type) = size_zero_node;
-  SET_TYPE_STRUCTURAL_EQUALITY (type);
-  return type;
+  TYPE_اندازه (type) = bitsize_zero_غوټه;
+  TYPE_اندازه_UNIT (type) = اندازه_zero_غوټه;
+  سېټ_TYPE_STRUCTURAL_EQUALITY (type);
+  أرجع type;
 }
 
-tree
-c_build_type_attribute_qual_variant (tree type, tree attrs, int quals)
+ونه
+c_build_type_attribute_qual_variant (ونه type, ونه attrs, صحيح quals)
 {
-  tree ret = build_type_attribute_qual_variant (type, attrs, quals);
-  return c_set_type_bits (ret, type);
+  ونه ret = build_type_attribute_qual_variant (type, attrs, quals);
+  أرجع c_سېټ_type_بټونه (ret, type);
 }
 
-tree
-c_build_type_attribute_variant (tree type, tree attrs)
+ونه
+c_build_type_attribute_variant (ونه type, ونه attrs)
 {
-  return c_build_type_attribute_qual_variant (type, attrs, TYPE_QUALS (type));
+  أرجع c_build_type_attribute_qual_variant (type, attrs, TYPE_QUALS (type));
 }
 
 /* Reconstruct a complex derived type.  This is used to re-construct types
    with the vector attribute.  It is called via a langhook.  */
 
-tree
-c_reconstruct_complex_type (tree type, tree bottom)
+ونه
+c_reconstruct_complex_type (ونه type, ونه bottom)
 {
-  tree inner, outer;
+  ونه inner, outer;
 
-  if (TREE_CODE (type) == POINTER_TYPE)
+  إذا (ونه_کوډ (type) == اشاره_ګر_TYPE)
     {
-      inner = c_reconstruct_complex_type (TREE_TYPE (type), bottom);
-      outer = c_build_pointer_type_for_mode (inner, TYPE_MODE (type),
+      inner = c_reconstruct_complex_type (ونه_TYPE (type), bottom);
+      outer = c_build_اشاره_ګر_type_for_ډېرپېښ (inner, TYPE_ډېرپېښ (type),
 					     TYPE_REF_CAN_ALIAS_ALL (type));
     }
-  else if (TREE_CODE (type) == ARRAY_TYPE)
+  وإلا إذا (ونه_کوډ (type) == ARRAY_TYPE)
     {
-      bool rso = TYPE_REVERSE_STORAGE_ORDER (type);
-      inner = c_reconstruct_complex_type (TREE_TYPE (type), bottom);
+      منطقي rso = TYPE_سرچپه_STORAGE_ترتیب (type);
+      inner = c_reconstruct_complex_type (ونه_TYPE (type), bottom);
       outer = c_build_array_type (inner, TYPE_DOMAIN (type));
-      if (rso)
+      إذا (rso)
 	{
 	  outer = build_distinct_type_copy (outer);
-	  TYPE_REVERSE_STORAGE_ORDER (outer) = 1;
+	  TYPE_سرچپه_STORAGE_ترتیب (outer) = 1;
 	}
 
-      gcc_checking_assert (C_TYPE_VARIABLE_SIZE (type)
-			   == C_TYPE_VARIABLE_SIZE (outer));
+      gcc_checking_assert (C_TYPE_VARIABLE_اندازه (type)
+			   == C_TYPE_VARIABLE_اندازه (outer));
     }
-  else if (TREE_CODE (type) == FUNCTION_TYPE)
+  وإلا إذا (ونه_کوډ (type) == FUNCTION_TYPE)
     {
-      inner = c_reconstruct_complex_type (TREE_TYPE (type), bottom);
+      inner = c_reconstruct_complex_type (ونه_TYPE (type), bottom);
       outer = c_build_function_type (inner, TYPE_ARG_TYPES (type),
-				     TYPE_NO_NAMED_ARGS_STDARG_P (type));
+				     TYPE_NO_NAMED_دلیلونه_STDARG_P (type));
     }
-  else if (TREE_CODE (type) == REFERENCE_TYPE
-	   || TREE_CODE (type) == OFFSET_TYPE)
+  وإلا إذا (ونه_کوډ (type) == REFERENCE_TYPE
+	   || ونه_کوډ (type) == دننه_واټن_TYPE)
     gcc_unreachable ();
-  else
-    return bottom;
+  وإلا
+    أرجع bottom;
 
-  return c_build_type_attribute_qual_variant (outer, TYPE_ATTRIBUTES (type),
+  أرجع c_build_type_attribute_qual_variant (outer, TYPE_ځانګړتیاوې (type),
 					      TYPE_QUALS (type));
 }
 
@@ -615,27 +615,27 @@ c_reconstruct_complex_type (tree type, tree bottom)
    contains a pointer to a structure or union with tag,
    possibly nested in other type derivations, and return the
    type of this nested structure or union.  */
-static tree
-ptr_to_tagged_member (tree field)
+ساكن ونه
+ptr_منزل_tagged_member (ونه ډګر_2)
 {
-  gcc_assert (FIELD_DECL == TREE_CODE (field));
-  tree type = TREE_TYPE (field);
-  bool ptr_seen = false;
-  while (TREE_CODE (type) == ARRAY_TYPE
-	 || TREE_CODE (type) == FUNCTION_TYPE
-	 || TREE_CODE (type) == POINTER_TYPE)
+  gcc_assert (ډګر_DECL == ونه_کوډ (ډګر_2));
+  ونه type = ونه_TYPE (ډګر_2);
+  منطقي ptr_کتل_شوی = خطأ;
+  طالما (ونه_کوډ (type) == ARRAY_TYPE
+	 || ونه_کوډ (type) == FUNCTION_TYPE
+	 || ونه_کوډ (type) == اشاره_ګر_TYPE)
     {
-      if (TREE_CODE (type) == POINTER_TYPE)
-	ptr_seen = true;
-      type = TREE_TYPE (type);
+      إذا (ونه_کوډ (type) == اشاره_ګر_TYPE)
+	ptr_کتل_شوی = ریښتیا;
+      type = ونه_TYPE (type);
     }
 
-  if (ptr_seen
-      && RECORD_OR_UNION_TYPE_P (type)
-      && NULL_TREE != c_type_tag (type))
-    return type;
+  إذا (ptr_کتل_شوی
+      && ریکارډ_OR_UNION_TYPE_P (type)
+      && NULL_ونه != c_type_نښان (type))
+    أرجع type;
 
-  return NULL_TREE;
+  أرجع NULL_ونه;
 }
 
 /* For a record or union type, make necessary adaptations so that the
@@ -648,42 +648,42 @@ ptr_to_tagged_member (tree field)
    have formed equivalency classes that include types for which these
    member pointers end up pointing to other structure or unions types
    which have the same tag but are not compatible.  */
-tree
-c_type_canonical (tree type)
+ونه
+c_type_canonical (ونه type)
 {
-  gcc_assert (RECORD_OR_UNION_TYPE_P (type));
+  gcc_assert (ریکارډ_OR_UNION_TYPE_P (type));
 
-  bool needs_mod = false;
-  for (tree x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
+  منطقي needs_mod = خطأ;
+  لكل (ونه x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
     {
-      if (!ptr_to_tagged_member (x))
-	continue;
-      needs_mod = true;
-      break;
+      إذا (!ptr_منزل_tagged_member (x))
+	استمر;
+      needs_mod = ریښتیا;
+      اكسر;
     }
-  if (!needs_mod)
-    return type;
+  إذا (!needs_mod)
+    أرجع type;
 
   /* Construct new version with such members replaced.  */
-  tree n = build_distinct_type_copy (type);
-  tree *fields = &TYPE_FIELDS (n);
-  for (tree x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
+  ونه n = build_distinct_type_copy (type);
+  ونه *fields = &TYPE_FIELDS (n);
+  لكل (ونه x = TYPE_FIELDS (type); x; x = DECL_CHAIN (x))
     {
-      tree f = copy_node (x);
-      if (tree m = ptr_to_tagged_member (x))
+      ونه f = copy_غوټه (x);
+      إذا (ونه m = ptr_منزل_tagged_member (x))
 	{
-	  tree new_node = make_node (TREE_CODE (m));
-	  TYPE_NAME (new_node) = TYPE_NAME (m);
-	  SET_TYPE_STRUCTURAL_EQUALITY (new_node);
-	  new_node = qualify_type (new_node, m);
-	  TREE_TYPE (f) = c_reconstruct_complex_type (TREE_TYPE (x),
-						      new_node);
+	  ونه new_غوټه = make_غوټه (ونه_کوډ (m));
+	  TYPE_NAME (new_غوټه) = TYPE_NAME (m);
+	  سېټ_TYPE_STRUCTURAL_EQUALITY (new_غوټه);
+	  new_غوټه = qualify_type (new_غوټه, m);
+	  ونه_TYPE (f) = c_reconstruct_complex_type (ونه_TYPE (x),
+						      new_غوټه);
 	}
       *fields = f;
       fields = &DECL_CHAIN (f);
     }
   TYPE_CANONICAL (n) = n;
-  return n;
+  أرجع n;
 }
 
 
@@ -693,64 +693,64 @@ c_type_canonical (tree type)
    Returns the result of build_type_attribute_variant of NTYPE and
    the (possibly) modified ATTRS.  */
 
-static tree
-c_build_functype_attribute_variant (tree ntype, tree otype, tree attrs)
+ساكن ونه
+c_build_functype_attribute_variant (ونه ntype, ونه otype, ونه attrs)
 {
-  if (!prototype_p (otype)
+  إذا (!prototype_p (otype)
       && prototype_p (ntype)
       && lookup_attribute ("format", attrs))
     {
-      warning_at (input_location, OPT_Wattributes,
+      warning_at (ننوت_location, OPT_Wattributes,
 		  "%qs attribute can only be applied to variadic functions",
 		  "format");
       attrs = remove_attribute ("format", attrs);
     }
-  return c_build_type_attribute_variant (ntype, attrs);
+  أرجع c_build_type_attribute_variant (ntype, attrs);
 
 }
 
 /* Given a type which could be a typedef name, make sure to return the
    original type.  See set_underlying_type. */
-static const_tree
-c_type_original (const_tree t)
+ساكن const_ونه
+c_type_original (const_ونه t)
 {
   /* It may even be a typedef of a typedef...
      In the case of compiler-created builtin structs the TYPE_DECL
      may be a dummy, with no DECL_ORIGINAL_TYPE.  Don't fault.  */
-  while (TYPE_NAME (t)
-	 && TREE_CODE (TYPE_NAME (t)) == TYPE_DECL
+  طالما (TYPE_NAME (t)
+	 && ونه_کوډ (TYPE_NAME (t)) == TYPE_DECL
 	 && DECL_ORIGINAL_TYPE (TYPE_NAME (t)))
     t = DECL_ORIGINAL_TYPE (TYPE_NAME (t));
-  return t;
+  أرجع t;
 }
 
 /* Return the tag for a tagged type.  */
-tree
-c_type_tag (const_tree t)
+ونه
+c_type_نښان (const_ونه t)
 {
-  gcc_assert (RECORD_OR_UNION_TYPE_P (t) || TREE_CODE (t) == ENUMERAL_TYPE);
-  const_tree orig = c_type_original (t);
-  tree name = TYPE_NAME (orig);
-  if (!name)
-    return NULL_TREE;
-  if (TREE_CODE (name) == TYPE_DECL)
+  gcc_assert (ریکارډ_OR_UNION_TYPE_P (t) || ونه_کوډ (t) == ENUMERAL_TYPE);
+  const_ونه orig = c_type_original (t);
+  ونه name = TYPE_NAME (orig);
+  إذا (!name)
+    أرجع NULL_ونه;
+  إذا (ونه_کوډ (name) == TYPE_DECL)
     {
-      if (!DECL_NAME (name))
-	return NULL_TREE;
+      إذا (!DECL_NAME (name))
+	أرجع NULL_ونه;
       name = DECL_NAME (name);
     }
-  gcc_checking_assert (TREE_CODE (name) == IDENTIFIER_NODE);
-  return name;
+  gcc_checking_assert (ونه_کوډ (name) == IDENTIFIER_غوټه);
+  أرجع name;
 }
 
 /* Remove qualifiers but not atomic.  For arrays remove qualifiers
    on the element type but also do not remove atomic.  */
-static tree
-remove_qualifiers (tree t)
+ساكن ونه
+remove_qualifiers (ونه t)
 {
-  if (!t || t == error_mark_node)
-    return t;
-  return TYPE_ATOMIC (strip_array_types (t))
+  إذا (!t || t == error_mark_غوټه)
+    أرجع t;
+  أرجع TYPE_ATOMIC (strip_array_types (t))
 	 ? c_build_qualified_type (TYPE_MAIN_VARIANT (t), TYPE_QUAL_ATOMIC)
 	 : TYPE_MAIN_VARIANT (t);
 }
@@ -759,27 +759,27 @@ remove_qualifiers (tree t)
 /* Helper function for composite_type_internal.  Find a compatible type
    in a (transparent) union U compatible to T.  If found, return the
    type of the corresponding member.  Otherwise, return the union type U.  */
-static tree
-transparent_union_replacement (tree u, tree t)
+ساكن ونه
+transparent_union_replacement (ونه u, ونه t)
 {
-  if (u == error_mark_node || t == error_mark_node
-      || TREE_CODE (u) != UNION_TYPE
-      || !(TYPE_TRANSPARENT_AGGR (u) || TYPE_NAME (u) == NULL_TREE)
+  إذا (u == error_mark_غوټه || t == error_mark_غوټه
+      || ونه_کوډ (u) != UNION_TYPE
+      || !(TYPE_TRANSPARENT_AGGR (u) || TYPE_NAME (u) == NULL_ونه)
       || comptypes (u, t))
-    return u;
+    أرجع u;
 
-  for (tree memb = TYPE_FIELDS (u); memb; memb = DECL_CHAIN (memb))
+  لكل (ونه memb = TYPE_FIELDS (u); memb; memb = DECL_CHAIN (memb))
     {
-      tree m = remove_qualifiers (TREE_TYPE (memb));
-      if (comptypes (m, t))
+      ونه m = remove_qualifiers (ونه_TYPE (memb));
+      إذا (comptypes (m, t))
 	{
-	  pedwarn (input_location, OPT_Wpedantic,
+	  pedwarn (ننوت_location, OPT_Wpedantic,
 		    "function types not truly compatible in ISO C");
-	  return m;
+	  أرجع m;
 	}
     }
 
-  return u;
+  أرجع u;
 }
 
 
@@ -790,129 +790,129 @@ transparent_union_replacement (tree u, tree t)
    nonzero; if that isn't so, this may crash.  In particular, we
    assume that qualifiers match.  */
 
-struct composite_cache {
-  tree t1;
-  tree t2;
-  tree composite;
-  struct composite_cache* next;
+بنية مرکب_cache {
+  ونه t1;
+  ونه t2;
+  ونه مرکب;
+  بنية مرکب_cache* بل;
 };
 
-tree
-composite_type_internal (tree t1, tree t2, tree cond,
-			 struct composite_cache* cache)
+ونه
+مرکب_type_دننی (ونه t1, ونه t2, ونه cond,
+			 بنية مرکب_cache* cache)
 {
-  enum tree_code code1;
-  enum tree_code code2;
-  tree attributes;
+  تعداد ونه_کوډ_2 code1;
+  تعداد ونه_کوډ_2 code2;
+  ونه ځانګړتیاوې;
 
   /* Save time if the two types are the same.  */
 
-  if (t1 == t2) return t1;
+  إذا (t1 == t2) أرجع t1;
 
   /* If one type is nonsense, use the other.  */
-  if (t1 == error_mark_node)
-    return t2;
-  if (t2 == error_mark_node)
-    return t1;
+  إذا (t1 == error_mark_غوټه)
+    أرجع t2;
+  إذا (t2 == error_mark_غوټه)
+    أرجع t1;
 
-  code1 = TREE_CODE (t1);
-  code2 = TREE_CODE (t2);
+  code1 = ونه_کوډ (t1);
+  code2 = ونه_کوډ (t2);
 
   /* Merge the attributes.  */
-  attributes = targetm.merge_type_attributes (t1, t2);
+  ځانګړتیاوې = targetm.یوځای_type_ځانګړتیاوې (t1, t2);
 
   /* If one is an enumerated type and the other is the compatible
      integer type, the composite type might be either of the two
      (DR#013 question 3).  For consistency, use the enumerated type as
      the composite type.  */
 
-  if (code1 == ENUMERAL_TYPE
+  إذا (code1 == ENUMERAL_TYPE
       && (code2 == INTEGER_TYPE
 	  || code2 == BOOLEAN_TYPE))
-    return t1;
-  if (code2 == ENUMERAL_TYPE
+    أرجع t1;
+  إذا (code2 == ENUMERAL_TYPE
       && (code1 == INTEGER_TYPE
 	  || code1 == BOOLEAN_TYPE))
-    return t2;
+    أرجع t2;
 
   gcc_assert (code1 == code2);
 
-  switch (code1)
+  بدل (code1)
     {
-    case POINTER_TYPE:
+    حالة اشاره_ګر_TYPE:
       /* For two pointers, do this recursively on the target type.  */
       {
 	gcc_checking_assert (TYPE_QUALS (t1) == TYPE_QUALS (t2));
-	tree target = composite_type_internal (TREE_TYPE (t1), TREE_TYPE (t2),
+	ونه موخه = مرکب_type_دننی (ونه_TYPE (t1), ونه_TYPE (t2),
 					       cond, cache);
-	tree n = c_build_pointer_type_for_mode (target, TYPE_MODE (t1), false);
-	return c_build_type_attribute_qual_variant (n, attributes,
+	ونه n = c_build_اشاره_ګر_type_for_ډېرپېښ (موخه, TYPE_ډېرپېښ (t1), خطأ);
+	أرجع c_build_type_attribute_qual_variant (n, ځانګړتیاوې,
 						    TYPE_QUALS (t2));
       }
 
-    case ARRAY_TYPE:
+    حالة ARRAY_TYPE:
       {
-	tree d1 = TYPE_DOMAIN (t1);
-	tree d2 = TYPE_DOMAIN (t2);
+	ونه d1 = TYPE_DOMAIN (t1);
+	ونه d2 = TYPE_DOMAIN (t2);
 
 	/* We should not have any type quals on arrays at all.  */
 	gcc_assert (!TYPE_QUALS_NO_ADDR_SPACE (t1)
 		    && !TYPE_QUALS_NO_ADDR_SPACE (t2));
 
-	bool d1_zero = zero_length_array_type_p (t1)
+	منطقي d1_zero = zero_اوږدتیا_array_type_p (t1)
 		       || flexible_array_member_type_p (t1);
-	bool d2_zero = zero_length_array_type_p (t2)
+	منطقي d2_zero = zero_اوږدتیا_array_type_p (t2)
 		       || flexible_array_member_type_p (t2);
 
-	bool d1_variable = top_array_vla_p (t1);
-	bool d2_variable = top_array_vla_p (t2);
+	منطقي d1_variable = سر_array_vla_p (t1);
+	منطقي d2_variable = سر_array_vla_p (t2);
 
-	bool use1 = d1 && (d2_variable || !d2 || d2_zero || !d1_variable);
-	bool use2 = d2 && (d1_variable || !d1 || d1_zero || !d2_variable);
+	منطقي use1 = d1 && (d2_variable || !d2 || d2_zero || !d1_variable);
+	منطقي use2 = d2 && (d1_variable || !d1 || d1_zero || !d2_variable);
 
 	/* If the first is an unspecified size pick the other one.  */
-	if (d2_variable && c_type_unspecified_p (t1))
+	إذا (d2_variable && c_type_unspecified_p (t1))
 	  {
 	    gcc_assert (use1 && use2);
-	    use1 = false;
+	    use1 = خطأ;
 	  }
 
 	/* If both are VLAs but not unspecified and we are in the
 	   conditional operator, we create a conditional to select
 	   the size of the active branch.  */
-	bool use0 = cond && d1_variable && !c_type_unspecified_p (t1)
+	منطقي use0 = cond && d1_variable && !c_type_unspecified_p (t1)
 			 && d2_variable && !c_type_unspecified_p (t2);
 
-	tree td;
-	tree elt = composite_type_internal (TREE_TYPE (t1), TREE_TYPE (t2),
+	ونه td;
+	ونه elt = مرکب_type_دننی (ونه_TYPE (t1), ونه_TYPE (t2),
 					    cond, cache);
 
-	if (!use0)
+	إذا (!use0)
 	  {
 	    /* Save space: see if the result is identical to one of the args.  */
-	    if (elt == TREE_TYPE (t1) && use1)
-	      return c_build_type_attribute_variant (t1, attributes);
-	    if (elt == TREE_TYPE (t2) && use2)
-	      return c_build_type_attribute_variant (t2, attributes);
+	    إذا (elt == ونه_TYPE (t1) && use1)
+	      أرجع c_build_type_attribute_variant (t1, ځانګړتیاوې);
+	    إذا (elt == ونه_TYPE (t2) && use2)
+	      أرجع c_build_type_attribute_variant (t2, ځانګړتیاوې);
 
-	    if (elt == TREE_TYPE (t1) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
-	      return c_build_type_attribute_variant (t1, attributes);
-	    if (elt == TREE_TYPE (t2) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
-	      return c_build_type_attribute_variant (t2, attributes);
+	    إذا (elt == ونه_TYPE (t1) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
+	      أرجع c_build_type_attribute_variant (t1, ځانګړتیاوې);
+	    إذا (elt == ونه_TYPE (t2) && !TYPE_DOMAIN (t2) && !TYPE_DOMAIN (t1))
+	      أرجع c_build_type_attribute_variant (t2, ځانګړتیاوې);
 
 	    td = TYPE_DOMAIN (use1 ? t1 : t2);
 	  }
-	else
+	وإلا
 	  {
 	    /* Not used in C.  */
-	    gcc_assert (size_zero_node == TYPE_MIN_VALUE (d1));
-	    gcc_assert (size_zero_node == TYPE_MIN_VALUE (d2));
+	    gcc_assert (اندازه_zero_غوټه == TYPE_MIN_ارزښت (d1));
+	    gcc_assert (اندازه_zero_غوټه == TYPE_MIN_ارزښت (d2));
 
-	    tree d = fold_build3_loc (UNKNOWN_LOCATION, COND_EXPR, sizetype,
-				      cond, TYPE_MAX_VALUE (d1),
-				      TYPE_MAX_VALUE (d2));
+	    ونه d = fold_build3_loc (UNKNOWN_LOCATION, COND_بیان, sizetype,
+				      cond, TYPE_MAX_ارزښت (d1),
+				      TYPE_MAX_ارزښت (d2));
 
-	    td = build_index_type (d);
+	    td = build_شاخص_type (d);
 	  }
 
 	/* Merge the element types, and have a size if either arg has
@@ -920,89 +920,89 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	   up TYPE_MAIN_VARIANT correctly, we need to form the
 	   composite of the unqualified types and add the qualifiers
 	   back at the end.  */
-	int quals = TYPE_QUALS (strip_array_types (elt));
-	tree unqual_elt = c_build_qualified_type (elt, TYPE_UNQUALIFIED);
+	صحيح quals = TYPE_QUALS (strip_array_types (elt));
+	ونه unqual_elt = c_build_qualified_type (elt, TYPE_UNQUALIFIED);
 
-	if ((!d1 || d1_zero) && (!d2 || d2_zero) && (d1 || d2))
-	  t1 = c_build_array_type_zero_size (unqual_elt);
-	else
+	إذا ((!d1 || d1_zero) && (!d2 || d2_zero) && (d1 || d2))
+	  t1 = c_build_array_type_zero_اندازه (unqual_elt);
+	وإلا
 	  t1 = c_build_array_type (unqual_elt, td);
 
 	/* Check that a type which has a varying outermost dimension
 	   got marked as having a variable size.  */
-	bool varsize = (d1_variable && d2_variable)
+	منطقي varsize = (d1_variable && d2_variable)
 		       || (d1_variable && !d2)
 		       || (d2_variable && !d1);
-	gcc_checking_assert (!varsize || C_TYPE_VARIABLE_SIZE (t1));
+	gcc_checking_assert (!varsize || C_TYPE_VARIABLE_اندازه (t1));
 
 	t1 = c_build_qualified_type (t1, quals);
-	return c_build_type_attribute_variant (t1, attributes);
+	أرجع c_build_type_attribute_variant (t1, ځانګړتیاوې);
       }
 
-    case RECORD_TYPE:
-    case UNION_TYPE:
-      if (flag_isoc23 && !comptypes_same_p (t1, t2))
+    حالة ریکارډ_TYPE:
+    حالة UNION_TYPE:
+      إذا (flag_isoc23 && !comptypes_same_p (t1, t2))
 	{
 	  /* Go to the original type to get the right tag.  */
-	  tree tag = c_type_tag (t1);
+	  ونه نښان = c_type_نښان (t1);
 
 	  gcc_checking_assert (COMPLETE_TYPE_P (t1) && COMPLETE_TYPE_P (t2));
-	  gcc_checking_assert (!tag || comptypes (t1, t2));
+	  gcc_checking_assert (!نښان || comptypes (t1, t2));
 
 	  /* If a composite type for these two types is already under
 	     construction, return it.  */
 
-	  for (struct composite_cache *c = cache; c != NULL; c = c->next)
-	    if ((c->t1 == t1 && c->t2 == t2) || (c->t1 == t2 && c->t2 == t1))
-	       return c->composite;
+	  لكل (بنية مرکب_cache *c = cache; c != عدم; c = c->بل)
+	    إذا ((c->t1 == t1 && c->t2 == t2) || (c->t1 == t2 && c->t2 == t1))
+	       أرجع c->مرکب;
 
 	  /* Otherwise, create a new type node and link it into the cache.  */
 
-	  tree n = make_node (code1);
-	  SET_TYPE_STRUCTURAL_EQUALITY (n);
-	  TYPE_NAME (n) = tag;
+	  ونه n = make_غوټه (code1);
+	  سېټ_TYPE_STRUCTURAL_EQUALITY (n);
+	  TYPE_NAME (n) = نښان;
 
-	  struct composite_cache cache2 = { t1, t2, n, cache };
+	  بنية مرکب_cache cache2 = { t1, t2, n, cache };
 	  cache = &cache2;
 
-	  tree f1 = TYPE_FIELDS (t1);
-	  tree f2 = TYPE_FIELDS (t2);
-	  tree fields = NULL_TREE;
+	  ونه f1 = TYPE_FIELDS (t1);
+	  ونه f2 = TYPE_FIELDS (t2);
+	  ونه fields = NULL_ونه;
 
-	  for (tree a = f1, b = f2; a && b;
+	  لكل (ونه a = f1, b = f2; a && b;
 	       a = DECL_CHAIN (a), b = DECL_CHAIN (b))
 	    {
-	      tree ta = TREE_TYPE (a);
-	      tree tb = TREE_TYPE (b);
+	      ونه ta = ونه_TYPE (a);
+	      ونه tb = ونه_TYPE (b);
 
-	      if (DECL_C_BIT_FIELD (a))
+	      إذا (DECL_C_بټ_ډګر (a))
 		{
-		  ta = DECL_BIT_FIELD_TYPE (a);
-		  tb = DECL_BIT_FIELD_TYPE (b);
+		  ta = DECL_بټ_ډګر_TYPE (a);
+		  tb = DECL_بټ_ډګر_TYPE (b);
 		}
 
 	      gcc_assert (DECL_NAME (a) == DECL_NAME (b));
 	      gcc_checking_assert (!DECL_NAME (a) || comptypes (ta, tb));
 
-	      tree t = composite_type_internal (ta, tb, cond, cache);
-	      tree f = build_decl (input_location, FIELD_DECL, DECL_NAME (a), t);
+	      ونه t = مرکب_type_دننی (ta, tb, cond, cache);
+	      ونه f = build_decl (ننوت_location, ډګر_DECL, DECL_NAME (a), t);
 
 	      DECL_PACKED (f) = DECL_PACKED (a);
-	      SET_DECL_ALIGN (f, DECL_ALIGN (a));
-	      DECL_ATTRIBUTES (f) = DECL_ATTRIBUTES (a);
-	      C_DECL_VARIABLE_SIZE (f) = C_TYPE_VARIABLE_SIZE (t);
+	      سېټ_DECL_ALIGN (f, DECL_ALIGN (a));
+	      DECL_ځانګړتیاوې (f) = DECL_ځانګړتیاوې (a);
+	      C_DECL_VARIABLE_اندازه (f) = C_TYPE_VARIABLE_اندازه (t);
 
-	      decl_attributes (&f, DECL_ATTRIBUTES (f), 0);
+	      decl_ځانګړتیاوې (&f, DECL_ځانګړتیاوې (f), 0);
 
-	      finish_decl (f, input_location, NULL, NULL, NULL);
+	      پای_decl (f, ننوت_location, عدم, عدم, عدم);
 
-	      if (DECL_C_BIT_FIELD (a))
+	      إذا (DECL_C_بټ_ډګر (a))
 		{
 		  /* This will be processed by finish_struct.  */
-		  SET_DECL_C_BIT_FIELD (f);
-		  DECL_INITIAL (f) = build_int_cst (integer_type_node,
-						    tree_to_uhwi (DECL_SIZE (a)));
-		  DECL_NONADDRESSABLE_P (f) = true;
+		  سېټ_DECL_C_بټ_ډګر (f);
+		  DECL_INITIAL (f) = build_int_cst (integer_type_غوټه,
+						    ونه_منزل_uhwi (DECL_اندازه (a)));
+		  DECL_NONADDRESSABLE_P (f) = ریښتیا;
 		  DECL_PADDING_P (f) = !DECL_NAME (a);
 		}
 
@@ -1014,74 +1014,74 @@ composite_type_internal (tree t1, tree t2, tree cond,
 
 	  /* Setup the struct/union type.  Because we inherit all variably
 	     modified components, we can ignore the size expression.  */
-	  tree expr = NULL_TREE;
+	  ونه بیان = NULL_ونه;
 
 	  /* Set TYPE_STUB_DECL for debugging symbols.  */
-	  TYPE_STUB_DECL (n) = pushdecl (build_decl (input_location, TYPE_DECL,
-						     NULL_TREE, n));
+	  TYPE_STUB_DECL (n) = pushdecl (build_decl (ننوت_location, TYPE_DECL,
+						     NULL_ونه, n));
 
-	  n = finish_struct (input_location, n, fields, attributes, NULL,
-			     &expr);
+	  n = پای_struct (ننوت_location, n, fields, ځانګړتیاوې, عدم,
+			     &بیان);
 
-	  return qualify_type (n, t1);
+	  أرجع qualify_type (n, t1);
 	}
       /* FALLTHRU */
-    case ENUMERAL_TYPE:
-      if (attributes != NULL)
+    حالة ENUMERAL_TYPE:
+      إذا (ځانګړتیاوې != عدم)
 	{
 	  /* Try harder not to create a new aggregate type.  */
-	  if (attribute_list_equal (TYPE_ATTRIBUTES (t1), attributes))
-	    return t1;
-	  if (attribute_list_equal (TYPE_ATTRIBUTES (t2), attributes))
-	    return t2;
+	  إذا (attribute_list_equal (TYPE_ځانګړتیاوې (t1), ځانګړتیاوې))
+	    أرجع t1;
+	  إذا (attribute_list_equal (TYPE_ځانګړتیاوې (t2), ځانګړتیاوې))
+	    أرجع t2;
 	}
-      return c_build_type_attribute_variant (t1, attributes);
+      أرجع c_build_type_attribute_variant (t1, ځانګړتیاوې);
 
-    case FUNCTION_TYPE:
+    حالة FUNCTION_TYPE:
       /* Function types: prefer the one that specified arg types.
 	 If both do, merge the arg types.  Also merge the return types.  */
       {
-	tree valtype = composite_type_internal (TREE_TYPE (t1), TREE_TYPE (t2),
+	ونه valtype = مرکب_type_دننی (ونه_TYPE (t1), ونه_TYPE (t2),
 						cond, cache);
-	tree p1 = TYPE_ARG_TYPES (t1);
-	tree p2 = TYPE_ARG_TYPES (t2);
+	ونه p1 = TYPE_ARG_TYPES (t1);
+	ونه p2 = TYPE_ARG_TYPES (t2);
 
 	/* Save space: see if the result is identical to one of the args.  */
-	if (valtype == TREE_TYPE (t1) && !TYPE_ARG_TYPES (t2))
-	  return c_build_functype_attribute_variant (t1, t2, attributes);
-	if (valtype == TREE_TYPE (t2) && !TYPE_ARG_TYPES (t1))
-	  return c_build_functype_attribute_variant (t2, t1, attributes);
+	إذا (valtype == ونه_TYPE (t1) && !TYPE_ARG_TYPES (t2))
+	  أرجع c_build_functype_attribute_variant (t1, t2, ځانګړتیاوې);
+	إذا (valtype == ونه_TYPE (t2) && !TYPE_ARG_TYPES (t1))
+	  أرجع c_build_functype_attribute_variant (t2, t1, ځانګړتیاوې);
 
 	/* Simple way if one arg fails to specify argument types.  */
-	if (TYPE_ARG_TYPES (t1) == NULL_TREE)
+	إذا (TYPE_ARG_TYPES (t1) == NULL_ونه)
 	  {
 	    t1 = c_build_function_type (valtype, TYPE_ARG_TYPES (t2),
-					TYPE_NO_NAMED_ARGS_STDARG_P (t2));
-	    t1 = c_build_type_attribute_variant (t1, attributes);
-	    return qualify_type (t1, t2);
+					TYPE_NO_NAMED_دلیلونه_STDARG_P (t2));
+	    t1 = c_build_type_attribute_variant (t1, ځانګړتیاوې);
+	    أرجع qualify_type (t1, t2);
 	 }
-	if (TYPE_ARG_TYPES (t2) == NULL_TREE)
+	إذا (TYPE_ARG_TYPES (t2) == NULL_ونه)
 	  {
 	    t1 = c_build_function_type (valtype, TYPE_ARG_TYPES (t1),
-					TYPE_NO_NAMED_ARGS_STDARG_P (t1));
-	    t1 = c_build_type_attribute_variant (t1, attributes);
-	    return qualify_type (t1, t2);
+					TYPE_NO_NAMED_دلیلونه_STDARG_P (t1));
+	    t1 = c_build_type_attribute_variant (t1, ځانګړتیاوې);
+	    أرجع qualify_type (t1, t2);
 	  }
 
 	/* If both args specify argument types, we must merge the two
 	   lists, argument by argument.  */
-	tree newargs = NULL_TREE;
-	tree *endp = &newargs;
+	ونه newargs = NULL_ونه;
+	ونه *endp = &newargs;
 
-	for (; p1; p1 = TREE_CHAIN (p1), p2 = TREE_CHAIN (p2))
+	لكل (; p1; p1 = ونه_CHAIN (p1), p2 = ونه_CHAIN (p2))
 	  {
-	    if (p1 == void_list_node)
+	    إذا (p1 == void_list_غوټه)
 	      {
-		*endp = void_list_node;
-		break;
+		*endp = void_list_غوټه;
+		اكسر;
 	      }
-	    tree mv1 = remove_qualifiers (TREE_VALUE (p1));
-	    tree mv2 = remove_qualifiers (TREE_VALUE (p2));
+	    ونه mv1 = remove_qualifiers (ونه_ارزښت (p1));
+	    ونه mv2 = remove_qualifiers (ونه_ارزښت (p2));
 
 	    gcc_assert (mv1);
 	    gcc_assert (mv2);
@@ -1089,11 +1089,11 @@ composite_type_internal (tree t1, tree t2, tree cond,
 	    mv1 = transparent_union_replacement (mv1, mv2);
 	    mv2 = transparent_union_replacement (mv2, mv1);
 
-	    *endp = tree_cons (NULL_TREE,
-			       composite_type_internal (mv1, mv2, cond, cache),
-			       NULL_TREE);
+	    *endp = ونه_cons (NULL_ونه,
+			       مرکب_type_دننی (mv1, mv2, cond, cache),
+			       NULL_ونه);
 
-	    endp = &TREE_CHAIN (*endp);
+	    endp = &ونه_CHAIN (*endp);
 	  }
 
 	t1 = c_build_function_type (valtype, newargs);
@@ -1101,29 +1101,29 @@ composite_type_internal (tree t1, tree t2, tree cond,
       }
       /* FALLTHRU */
 
-    default:
-      return c_build_type_attribute_variant (t1, attributes);
+    افتراضي:
+      أرجع c_build_type_attribute_variant (t1, ځانګړتیاوې);
     }
 }
 
-tree
-composite_type_cond (tree t1, tree t2, tree cond)
+ونه
+مرکب_type_cond (ونه t1, ونه t2, ونه cond)
 {
-  gcc_checking_assert (comptypes_check_for_composite (t1, t2));
+  gcc_checking_assert (comptypes_check_for_مرکب (t1, t2));
 
-  struct composite_cache cache = { };
-  tree n = composite_type_internal (t1, t2, cond, &cache);
+  بنية مرکب_cache cache = { };
+  ونه n = مرکب_type_دننی (t1, t2, cond, &cache);
 
-  gcc_checking_assert (comptypes_check_for_composite (n, t1));
-  gcc_checking_assert (comptypes_check_for_composite (n, t2));
-  return n;
+  gcc_checking_assert (comptypes_check_for_مرکب (n, t1));
+  gcc_checking_assert (comptypes_check_for_مرکب (n, t2));
+  أرجع n;
 }
 
 
-tree
-composite_type (tree t1, tree t2)
+ونه
+مرکب_type (ونه t1, ونه t2)
 {
-  return composite_type_cond (t1, t2, NULL_TREE);
+  أرجع مرکب_type_cond (t1, t2, NULL_ونه);
 }
 
 /* Return the type of a conditional expression between pointers to
@@ -1132,61 +1132,61 @@ composite_type (tree t1, tree t2)
    We assume that comp_target_types has already been done and returned
    true; if that isn't so, this may crash.  */
 
-static tree
-common_pointer_type (tree t1, tree t2, tree cond)
+ساكن ونه
+common_اشاره_ګر_type (ونه t1, ونه t2, ونه cond)
 {
-  tree attributes;
-  unsigned target_quals;
+  ونه ځانګړتیاوې;
+  بینښه موخه_quals;
   addr_space_t as1, as2, as_common;
-  int quals1, quals2;
+  صحيح quals1, quals2;
 
   /* Save time if the two types are the same.  */
 
-  if (t1 == t2) return t1;
+  إذا (t1 == t2) أرجع t1;
 
   /* If one type is nonsense, use the other.  */
-  if (t1 == error_mark_node)
-    return t2;
-  if (t2 == error_mark_node)
-    return t1;
+  إذا (t1 == error_mark_غوټه)
+    أرجع t2;
+  إذا (t2 == error_mark_غوټه)
+    أرجع t1;
 
-  gcc_assert (TREE_CODE (t1) == POINTER_TYPE
-	      && TREE_CODE (t2) == POINTER_TYPE);
+  gcc_assert (ونه_کوډ (t1) == اشاره_ګر_TYPE
+	      && ونه_کوډ (t2) == اشاره_ګر_TYPE);
 
   /* Merge the attributes.  */
-  attributes = targetm.merge_type_attributes (t1, t2);
+  ځانګړتیاوې = targetm.یوځای_type_ځانګړتیاوې (t1, t2);
 
   /* Find the composite type of the target types, and combine the
      qualifiers of the two types' targets.  */
-  tree pointed_to_1 = TREE_TYPE (t1);
-  tree pointed_to_2 = TREE_TYPE (t2);
-  tree target = composite_type_cond (TYPE_MAIN_VARIANT (pointed_to_1),
-				     TYPE_MAIN_VARIANT (pointed_to_2), cond);
+  ونه pointed_منزل_1 = ونه_TYPE (t1);
+  ونه pointed_منزل_2 = ونه_TYPE (t2);
+  ونه موخه = مرکب_type_cond (TYPE_MAIN_VARIANT (pointed_منزل_1),
+				     TYPE_MAIN_VARIANT (pointed_منزل_2), cond);
 
   /* Strip array types to get correct qualifier for pointers to arrays */
-  quals1 = TYPE_QUALS_NO_ADDR_SPACE (strip_array_types (pointed_to_1));
-  quals2 = TYPE_QUALS_NO_ADDR_SPACE (strip_array_types (pointed_to_2));
+  quals1 = TYPE_QUALS_NO_ADDR_SPACE (strip_array_types (pointed_منزل_1));
+  quals2 = TYPE_QUALS_NO_ADDR_SPACE (strip_array_types (pointed_منزل_2));
 
   /* For function types do not merge const qualifiers, but drop them
      if used inconsistently.  The middle-end uses these to mark const
      and noreturn functions.  */
-  if (TREE_CODE (pointed_to_1) == FUNCTION_TYPE)
-    target_quals = (quals1 & quals2);
-  else
-    target_quals = (quals1 | quals2);
+  إذا (ونه_کوډ (pointed_منزل_1) == FUNCTION_TYPE)
+    موخه_quals = (quals1 & quals2);
+  وإلا
+    موخه_quals = (quals1 | quals2);
 
   /* If the two named address spaces are different, determine the common
      superset address space.  This is guaranteed to exist due to the
      assumption that comp_target_type returned true.  */
-  as1 = TYPE_ADDR_SPACE (pointed_to_1);
-  as2 = TYPE_ADDR_SPACE (pointed_to_2);
-  if (!addr_space_superset (as1, as2, &as_common))
+  as1 = TYPE_ADDR_SPACE (pointed_منزل_1);
+  as2 = TYPE_ADDR_SPACE (pointed_منزل_2);
+  إذا (!addr_space_superset (as1, as2, &as_common))
     gcc_unreachable ();
 
-  target_quals |= ENCODE_QUAL_ADDR_SPACE (as_common);
+  موخه_quals |= ENCODE_QUAL_ADDR_SPACE (as_common);
 
-  t1 = c_build_pointer_type (c_build_qualified_type (target, target_quals));
-  return c_build_type_attribute_variant (t1, attributes);
+  t1 = c_build_اشاره_ګر_type (c_build_qualified_type (موخه, موخه_quals));
+  أرجع c_build_type_attribute_variant (t1, ځانګړتیاوې);
 }
 
 /* Return the common type for two arithmetic types under the usual
@@ -1197,210 +1197,210 @@ common_pointer_type (tree t1, tree t2, tree cond)
    This is the type for the result of most arithmetic operations
    if the operands have the given two types.  */
 
-static tree
-c_common_type (tree t1, tree t2)
+ساكن ونه
+c_common_type (ونه t1, ونه t2)
 {
-  enum tree_code code1;
-  enum tree_code code2;
+  تعداد ونه_کوډ_2 code1;
+  تعداد ونه_کوډ_2 code2;
 
   /* If one type is nonsense, use the other.  */
-  if (t1 == error_mark_node)
-    return t2;
-  if (t2 == error_mark_node)
-    return t1;
+  إذا (t1 == error_mark_غوټه)
+    أرجع t2;
+  إذا (t2 == error_mark_غوټه)
+    أرجع t1;
 
-  if (TYPE_QUALS (t1) != TYPE_UNQUALIFIED)
+  إذا (TYPE_QUALS (t1) != TYPE_UNQUALIFIED)
     t1 = TYPE_MAIN_VARIANT (t1);
 
-  if (TYPE_QUALS (t2) != TYPE_UNQUALIFIED)
+  إذا (TYPE_QUALS (t2) != TYPE_UNQUALIFIED)
     t2 = TYPE_MAIN_VARIANT (t2);
 
-  if (TYPE_ATTRIBUTES (t1) != NULL_TREE)
+  إذا (TYPE_ځانګړتیاوې (t1) != NULL_ونه)
     {
-      tree attrs = affects_type_identity_attributes (TYPE_ATTRIBUTES (t1));
+      ونه attrs = affects_type_بې_اغېزه_عنصر_ځانګړتیاوې (TYPE_ځانګړتیاوې (t1));
       t1 = c_build_type_attribute_variant (t1, attrs);
     }
 
-  if (TYPE_ATTRIBUTES (t2) != NULL_TREE)
+  إذا (TYPE_ځانګړتیاوې (t2) != NULL_ونه)
     {
-      tree attrs = affects_type_identity_attributes (TYPE_ATTRIBUTES (t2));
+      ونه attrs = affects_type_بې_اغېزه_عنصر_ځانګړتیاوې (TYPE_ځانګړتیاوې (t2));
       t2 = c_build_type_attribute_variant (t2, attrs);
     }
 
   /* Save time if the two types are the same.  */
 
-  if (t1 == t2) return t1;
+  إذا (t1 == t2) أرجع t1;
 
-  code1 = TREE_CODE (t1);
-  code2 = TREE_CODE (t2);
+  code1 = ونه_کوډ (t1);
+  code2 = ونه_کوډ (t2);
 
-  gcc_assert (code1 == VECTOR_TYPE || code1 == COMPLEX_TYPE
-	      || code1 == FIXED_POINT_TYPE || code1 == REAL_TYPE
+  gcc_assert (code1 == ویکټور_TYPE || code1 == COMPLEX_TYPE
+	      || code1 == FIXED_ټکی_TYPE || code1 == REAL_TYPE
 	      || code1 == INTEGER_TYPE || code1 == BITINT_TYPE);
-  gcc_assert (code2 == VECTOR_TYPE || code2 == COMPLEX_TYPE
-	      || code2 == FIXED_POINT_TYPE || code2 == REAL_TYPE
+  gcc_assert (code2 == ویکټور_TYPE || code2 == COMPLEX_TYPE
+	      || code2 == FIXED_ټکی_TYPE || code2 == REAL_TYPE
 	      || code2 == INTEGER_TYPE || code2 == BITINT_TYPE);
 
   /* When one operand is a decimal float type, the other operand cannot be
      a generic float type or a complex type.  We also disallow vector types
      here.  */
-  if ((DECIMAL_FLOAT_TYPE_P (t1) || DECIMAL_FLOAT_TYPE_P (t2))
+  إذا ((DECIMAL_FLOAT_TYPE_P (t1) || DECIMAL_FLOAT_TYPE_P (t2))
       && !(DECIMAL_FLOAT_TYPE_P (t1) && DECIMAL_FLOAT_TYPE_P (t2)))
     {
-      if (code1 == VECTOR_TYPE || code2 == VECTOR_TYPE)
+      إذا (code1 == ویکټور_TYPE || code2 == ویکټور_TYPE)
 	{
 	  error ("cannot mix operands of decimal floating and vector types");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      if (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
+      إذا (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
 	{
 	  error ("cannot mix operands of decimal floating and complex types");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      if (code1 == REAL_TYPE && code2 == REAL_TYPE)
+      إذا (code1 == REAL_TYPE && code2 == REAL_TYPE)
 	{
 	  error ("cannot mix operands of decimal floating "
 		 "and other floating types");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
     }
 
   /* If one type is a vector type, return that type.  (How the usual
      arithmetic conversions apply to the vector types extension is not
      precisely specified.)  */
-  if (code1 == VECTOR_TYPE)
-    return t1;
+  إذا (code1 == ویکټور_TYPE)
+    أرجع t1;
 
-  if (code2 == VECTOR_TYPE)
-    return t2;
+  إذا (code2 == ویکټور_TYPE)
+    أرجع t2;
 
   /* If one type is complex, form the common type of the non-complex
      components, then make that complex.  Use T1 or T2 if it is the
      required type.  */
-  if (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
+  إذا (code1 == COMPLEX_TYPE || code2 == COMPLEX_TYPE)
     {
-      tree subtype1 = code1 == COMPLEX_TYPE ? TREE_TYPE (t1) : t1;
-      tree subtype2 = code2 == COMPLEX_TYPE ? TREE_TYPE (t2) : t2;
-      tree subtype = c_common_type (subtype1, subtype2);
+      ونه subtype1 = code1 == COMPLEX_TYPE ? ونه_TYPE (t1) : t1;
+      ونه subtype2 = code2 == COMPLEX_TYPE ? ونه_TYPE (t2) : t2;
+      ونه subtype = c_common_type (subtype1, subtype2);
 
-      if (code1 == COMPLEX_TYPE && TREE_TYPE (t1) == subtype)
-	return t1;
-      else if (code2 == COMPLEX_TYPE && TREE_TYPE (t2) == subtype)
-	return t2;
-      else if (TREE_CODE (subtype) == BITINT_TYPE)
+      إذا (code1 == COMPLEX_TYPE && ونه_TYPE (t1) == subtype)
+	أرجع t1;
+      وإلا إذا (code2 == COMPLEX_TYPE && ونه_TYPE (t2) == subtype)
+	أرجع t2;
+      وإلا إذا (ونه_کوډ (subtype) == BITINT_TYPE)
 	{
 	  sorry ("%<_Complex _BitInt(%d)%> unsupported",
 		 TYPE_PRECISION (subtype));
-	  return code1 == COMPLEX_TYPE ? t1 : t2;
+	  أرجع code1 == COMPLEX_TYPE ? t1 : t2;
 	}
-      else
-	return build_complex_type (subtype);
+      وإلا
+	أرجع build_complex_type (subtype);
     }
 
   /* If only one is real, use it as the result.  */
 
-  if (code1 == REAL_TYPE && code2 != REAL_TYPE)
-    return t1;
+  إذا (code1 == REAL_TYPE && code2 != REAL_TYPE)
+    أرجع t1;
 
-  if (code2 == REAL_TYPE && code1 != REAL_TYPE)
-    return t2;
+  إذا (code2 == REAL_TYPE && code1 != REAL_TYPE)
+    أرجع t2;
 
   /* If both are real and either are decimal floating point types, use
      the decimal floating point type with the greater precision. */
 
-  if (code1 == REAL_TYPE && code2 == REAL_TYPE)
+  إذا (code1 == REAL_TYPE && code2 == REAL_TYPE)
     {
-      if (TYPE_MAIN_VARIANT (t1) == dfloat128_type_node
-	  || TYPE_MAIN_VARIANT (t2) == dfloat128_type_node)
-	return dfloat128_type_node;
+      إذا (TYPE_MAIN_VARIANT (t1) == dfloat128_type_غوټه
+	  || TYPE_MAIN_VARIANT (t2) == dfloat128_type_غوټه)
+	أرجع dfloat128_type_غوټه;
       /* And prefer _Decimal128 over _Decimal64x which has in GCC's
 	 implementation the same mode.  */
-      else if (TYPE_MAIN_VARIANT (t1) == dfloat64x_type_node
-	       || TYPE_MAIN_VARIANT (t2) == dfloat64x_type_node)
-	return dfloat64x_type_node;
-      else if (TYPE_MAIN_VARIANT (t1) == dfloat64_type_node
-	       || TYPE_MAIN_VARIANT (t2) == dfloat64_type_node)
-	return dfloat64_type_node;
-      else if (TYPE_MAIN_VARIANT (t1) == dfloat32_type_node
-	       || TYPE_MAIN_VARIANT (t2) == dfloat32_type_node)
-	return dfloat32_type_node;
+      وإلا إذا (TYPE_MAIN_VARIANT (t1) == dfloat64x_type_غوټه
+	       || TYPE_MAIN_VARIANT (t2) == dfloat64x_type_غوټه)
+	أرجع dfloat64x_type_غوټه;
+      وإلا إذا (TYPE_MAIN_VARIANT (t1) == dfloat64_type_غوټه
+	       || TYPE_MAIN_VARIANT (t2) == dfloat64_type_غوټه)
+	أرجع dfloat64_type_غوټه;
+      وإلا إذا (TYPE_MAIN_VARIANT (t1) == dfloat32_type_غوټه
+	       || TYPE_MAIN_VARIANT (t2) == dfloat32_type_غوټه)
+	أرجع dfloat32_type_غوټه;
     }
 
   /* Deal with fixed-point types.  */
-  if (code1 == FIXED_POINT_TYPE || code2 == FIXED_POINT_TYPE)
+  إذا (code1 == FIXED_ټکی_TYPE || code2 == FIXED_ټکی_TYPE)
     {
-      unsigned int unsignedp = 0, satp = 0;
-      scalar_mode m1, m2;
-      unsigned int fbit1, ibit1, fbit2, ibit2, max_fbit, max_ibit;
+      بینښه صحيح unsignedp = 0, satp = 0;
+      scalar_ډېرپېښ m1, m2;
+      بینښه صحيح fbit1, ibit1, fbit2, ibit2, max_fbit, max_ibit;
 
-      m1 = SCALAR_TYPE_MODE (t1);
-      m2 = SCALAR_TYPE_MODE (t2);
+      m1 = SCALAR_TYPE_ډېرپېښ (t1);
+      m2 = SCALAR_TYPE_ډېرپېښ (t2);
 
       /* If one input type is saturating, the result type is saturating.  */
-      if (TYPE_SATURATING (t1) || TYPE_SATURATING (t2))
+      إذا (TYPE_SATURATING (t1) || TYPE_SATURATING (t2))
 	satp = 1;
 
       /* If both fixed-point types are unsigned, the result type is unsigned.
 	 When mixing fixed-point and integer types, follow the sign of the
 	 fixed-point type.
 	 Otherwise, the result type is signed.  */
-      if ((TYPE_UNSIGNED (t1) && TYPE_UNSIGNED (t2)
-	   && code1 == FIXED_POINT_TYPE && code2 == FIXED_POINT_TYPE)
-	  || (code1 == FIXED_POINT_TYPE && code2 != FIXED_POINT_TYPE
+      إذا ((TYPE_UNSIGNED (t1) && TYPE_UNSIGNED (t2)
+	   && code1 == FIXED_ټکی_TYPE && code2 == FIXED_ټکی_TYPE)
+	  || (code1 == FIXED_ټکی_TYPE && code2 != FIXED_ټکی_TYPE
 	      && TYPE_UNSIGNED (t1))
-	  || (code1 != FIXED_POINT_TYPE && code2 == FIXED_POINT_TYPE
+	  || (code1 != FIXED_ټکی_TYPE && code2 == FIXED_ټکی_TYPE
 	      && TYPE_UNSIGNED (t2)))
 	unsignedp = 1;
 
       /* The result type is signed.  */
-      if (unsignedp == 0)
+      إذا (unsignedp == 0)
 	{
 	  /* If the input type is unsigned, we need to convert to the
 	     signed type.  */
-	  if (code1 == FIXED_POINT_TYPE && TYPE_UNSIGNED (t1))
+	  إذا (code1 == FIXED_ټکی_TYPE && TYPE_UNSIGNED (t1))
 	    {
-	      enum mode_class mclass = (enum mode_class) 0;
-	      if (GET_MODE_CLASS (m1) == MODE_UFRACT)
-		mclass = MODE_FRACT;
-	      else if (GET_MODE_CLASS (m1) == MODE_UACCUM)
-		mclass = MODE_ACCUM;
-	      else
+	      تعداد ډېرپېښ_class mclass = (تعداد ډېرپېښ_class) 0;
+	      إذا (GET_ډېرپېښ_CLASS (m1) == ډېرپېښ_UFRACT)
+		mclass = ډېرپېښ_FRACT;
+	      وإلا إذا (GET_ډېرپېښ_CLASS (m1) == ډېرپېښ_UACCUM)
+		mclass = ډېرپېښ_ACCUM;
+	      وإلا
 		gcc_unreachable ();
-	      m1 = as_a <scalar_mode>
-		(mode_for_size (GET_MODE_PRECISION (m1), mclass, 0));
+	      m1 = as_a <scalar_ډېرپېښ>
+		(ډېرپېښ_for_اندازه (GET_ډېرپېښ_PRECISION (m1), mclass, 0));
 	    }
-	  if (code2 == FIXED_POINT_TYPE && TYPE_UNSIGNED (t2))
+	  إذا (code2 == FIXED_ټکی_TYPE && TYPE_UNSIGNED (t2))
 	    {
-	      enum mode_class mclass = (enum mode_class) 0;
-	      if (GET_MODE_CLASS (m2) == MODE_UFRACT)
-		mclass = MODE_FRACT;
-	      else if (GET_MODE_CLASS (m2) == MODE_UACCUM)
-		mclass = MODE_ACCUM;
-	      else
+	      تعداد ډېرپېښ_class mclass = (تعداد ډېرپېښ_class) 0;
+	      إذا (GET_ډېرپېښ_CLASS (m2) == ډېرپېښ_UFRACT)
+		mclass = ډېرپېښ_FRACT;
+	      وإلا إذا (GET_ډېرپېښ_CLASS (m2) == ډېرپېښ_UACCUM)
+		mclass = ډېرپېښ_ACCUM;
+	      وإلا
 		gcc_unreachable ();
-	      m2 = as_a <scalar_mode>
-		(mode_for_size (GET_MODE_PRECISION (m2), mclass, 0));
+	      m2 = as_a <scalar_ډېرپېښ>
+		(ډېرپېښ_for_اندازه (GET_ډېرپېښ_PRECISION (m2), mclass, 0));
 	    }
 	}
 
-      if (code1 == FIXED_POINT_TYPE)
+      إذا (code1 == FIXED_ټکی_TYPE)
 	{
-	  fbit1 = GET_MODE_FBIT (m1);
-	  ibit1 = GET_MODE_IBIT (m1);
+	  fbit1 = GET_ډېرپېښ_FBIT (m1);
+	  ibit1 = GET_ډېرپېښ_IBIT (m1);
 	}
-      else
+      وإلا
 	{
 	  fbit1 = 0;
 	  /* Signed integers need to subtract one sign bit.  */
 	  ibit1 = TYPE_PRECISION (t1) - (!TYPE_UNSIGNED (t1));
 	}
 
-      if (code2 == FIXED_POINT_TYPE)
+      إذا (code2 == FIXED_ټکی_TYPE)
 	{
-	  fbit2 = GET_MODE_FBIT (m2);
-	  ibit2 = GET_MODE_IBIT (m2);
+	  fbit2 = GET_ډېرپېښ_FBIT (m2);
+	  ibit2 = GET_ډېرپېښ_IBIT (m2);
 	}
-      else
+      وإلا
 	{
 	  fbit2 = 0;
 	  /* Signed integers need to subtract one sign bit.  */
@@ -1409,47 +1409,47 @@ c_common_type (tree t1, tree t2)
 
       max_ibit = ibit1 >= ibit2 ?  ibit1 : ibit2;
       max_fbit = fbit1 >= fbit2 ?  fbit1 : fbit2;
-      return c_common_fixed_point_type_for_size (max_ibit, max_fbit, unsignedp,
+      أرجع c_common_fixed_ټکی_type_for_اندازه (max_ibit, max_fbit, unsignedp,
 						 satp);
     }
 
   /* Both real or both integers; use the one with greater precision.  */
 
-  if (TYPE_PRECISION (t1) > TYPE_PRECISION (t2))
-    return t1;
-  else if (TYPE_PRECISION (t2) > TYPE_PRECISION (t1))
-    return t2;
+  إذا (TYPE_PRECISION (t1) > TYPE_PRECISION (t2))
+    أرجع t1;
+  وإلا إذا (TYPE_PRECISION (t2) > TYPE_PRECISION (t1))
+    أرجع t2;
 
   /* Same precision.  Prefer long longs to longs to ints when the
      same precision, following the C99 rules on integer type rank
      (which are equivalent to the C90 rules for C90 types).  */
 
-  if (TYPE_MAIN_VARIANT (t1) == long_long_unsigned_type_node
-      || TYPE_MAIN_VARIANT (t2) == long_long_unsigned_type_node)
-    return long_long_unsigned_type_node;
+  إذا (TYPE_MAIN_VARIANT (t1) == long_long_unsigned_type_غوټه
+      || TYPE_MAIN_VARIANT (t2) == long_long_unsigned_type_غوټه)
+    أرجع long_long_unsigned_type_غوټه;
 
-  if (TYPE_MAIN_VARIANT (t1) == long_long_integer_type_node
-      || TYPE_MAIN_VARIANT (t2) == long_long_integer_type_node)
+  إذا (TYPE_MAIN_VARIANT (t1) == long_long_integer_type_غوټه
+      || TYPE_MAIN_VARIANT (t2) == long_long_integer_type_غوټه)
     {
-      if (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
-	return long_long_unsigned_type_node;
-      else
-	return long_long_integer_type_node;
+      إذا (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
+	أرجع long_long_unsigned_type_غوټه;
+      وإلا
+	أرجع long_long_integer_type_غوټه;
     }
 
-  if (TYPE_MAIN_VARIANT (t1) == long_unsigned_type_node
-      || TYPE_MAIN_VARIANT (t2) == long_unsigned_type_node)
-    return long_unsigned_type_node;
+  إذا (TYPE_MAIN_VARIANT (t1) == long_unsigned_type_غوټه
+      || TYPE_MAIN_VARIANT (t2) == long_unsigned_type_غوټه)
+    أرجع long_unsigned_type_غوټه;
 
-  if (TYPE_MAIN_VARIANT (t1) == long_integer_type_node
-      || TYPE_MAIN_VARIANT (t2) == long_integer_type_node)
+  إذا (TYPE_MAIN_VARIANT (t1) == long_integer_type_غوټه
+      || TYPE_MAIN_VARIANT (t2) == long_integer_type_غوټه)
     {
       /* But preserve unsignedness from the other type,
 	 since long cannot hold all the values of an unsigned int.  */
-      if (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
-	return long_unsigned_type_node;
-      else
-	return long_integer_type_node;
+      إذا (TYPE_UNSIGNED (t1) || TYPE_UNSIGNED (t2))
+	أرجع long_unsigned_type_غوټه;
+      وإلا
+	أرجع long_integer_type_غوټه;
     }
 
   /* For floating types of the same TYPE_PRECISION (which we here
@@ -1463,50 +1463,50 @@ c_common_type (tree t1, tree t2)
      types, also check in that order for consistency although it's not
      possible for more than one of them to have the same
      precision.  */
-  tree mv1 = TYPE_MAIN_VARIANT (t1);
-  tree mv2 = TYPE_MAIN_VARIANT (t2);
+  ونه mv1 = TYPE_MAIN_VARIANT (t1);
+  ونه mv2 = TYPE_MAIN_VARIANT (t2);
 
-  for (int i = NUM_FLOATN_TYPES - 1; i >= 0; i--)
-    if (mv1 == FLOATN_TYPE_NODE (i) || mv2 == FLOATN_TYPE_NODE (i))
-      return FLOATN_TYPE_NODE (i);
+  لكل (صحيح i = عدد_FLOATN_TYPES - 1; i >= 0; i--)
+    إذا (mv1 == FLOATN_TYPE_غوټه (i) || mv2 == FLOATN_TYPE_غوټه (i))
+      أرجع FLOATN_TYPE_غوټه (i);
 
   /* Likewise, prefer long double to double even if same size.  */
-  if (mv1 == long_double_type_node || mv2 == long_double_type_node)
-    return long_double_type_node;
+  إذا (mv1 == long_double_type_غوټه || mv2 == long_double_type_غوټه)
+    أرجع long_double_type_غوټه;
 
   /* Likewise, prefer double to float even if same size.
      We got a couple of embedded targets with 32 bit doubles, and the
      pdp11 might have 64 bit floats.  */
-  if (mv1 == double_type_node || mv2 == double_type_node)
-    return double_type_node;
+  إذا (mv1 == double_type_غوټه || mv2 == double_type_غوټه)
+    أرجع double_type_غوټه;
 
-  if (mv1 == float_type_node || mv2 == float_type_node)
-    return float_type_node;
+  إذا (mv1 == float_type_غوټه || mv2 == float_type_غوټه)
+    أرجع float_type_غوټه;
 
-  for (int i = NUM_FLOATNX_TYPES - 1; i >= 0; i--)
-    if (mv1 == FLOATNX_TYPE_NODE (i) || mv2 == FLOATNX_TYPE_NODE (i))
-      return FLOATNX_TYPE_NODE (i);
+  لكل (صحيح i = عدد_FLOATNX_TYPES - 1; i >= 0; i--)
+    إذا (mv1 == FLOATNX_TYPE_غوټه (i) || mv2 == FLOATNX_TYPE_غوټه (i))
+      أرجع FLOATNX_TYPE_غوټه (i);
 
-  if ((code1 == BITINT_TYPE || code2 == BITINT_TYPE) && code1 != code2)
+  إذا ((code1 == BITINT_TYPE || code2 == BITINT_TYPE) && code1 != code2)
     {
       /* Prefer any other integral types over bit-precise integer types.  */
-      if (TYPE_UNSIGNED (t1) == TYPE_UNSIGNED (t2))
-	return code1 == BITINT_TYPE ? t2 : t1;
+      إذا (TYPE_UNSIGNED (t1) == TYPE_UNSIGNED (t2))
+	أرجع code1 == BITINT_TYPE ? t2 : t1;
       /* If BITINT_TYPE is unsigned and the other type is signed
 	 non-BITINT_TYPE with the same precision, the latter has higher rank.
 	 In that case:
 	 Otherwise, both operands are converted to the unsigned integer type
 	 corresponding to the type of the operand with signed integer type.  */
-      if (TYPE_UNSIGNED (code1 == BITINT_TYPE ? t1 : t2))
-	return c_common_unsigned_type (code1 == BITINT_TYPE ? t2 : t1);
+      إذا (TYPE_UNSIGNED (code1 == BITINT_TYPE ? t1 : t2))
+	أرجع c_common_unsigned_type (code1 == BITINT_TYPE ? t2 : t1);
     }
 
   /* Otherwise prefer the unsigned one.  */
 
-  if (TYPE_UNSIGNED (t1))
-    return t1;
-  else
-    return t2;
+  إذا (TYPE_UNSIGNED (t1))
+    أرجع t1;
+  وإلا
+    أرجع t2;
 }
 
 /* Wrapper around c_common_type that is used by c-common.cc and other
@@ -1514,26 +1514,26 @@ c_common_type (tree t1, tree t2)
    are allowed here and are converted to their compatible integer types.
    BOOLEAN_TYPEs are allowed here and return either boolean_type_node or
    preferably a non-Boolean type as the common type.  */
-tree
-common_type (tree t1, tree t2)
+ونه
+common_type (ونه t1, ونه t2)
 {
-  if (TREE_CODE (t1) == ENUMERAL_TYPE)
+  إذا (ونه_کوډ (t1) == ENUMERAL_TYPE)
     t1 = ENUM_UNDERLYING_TYPE (t1);
-  if (TREE_CODE (t2) == ENUMERAL_TYPE)
+  إذا (ونه_کوډ (t2) == ENUMERAL_TYPE)
     t2 = ENUM_UNDERLYING_TYPE (t2);
 
   /* If both types are BOOLEAN_TYPE, then return boolean_type_node.  */
-  if (TREE_CODE (t1) == BOOLEAN_TYPE
-      && TREE_CODE (t2) == BOOLEAN_TYPE)
-    return boolean_type_node;
+  إذا (ونه_کوډ (t1) == BOOLEAN_TYPE
+      && ونه_کوډ (t2) == BOOLEAN_TYPE)
+    أرجع boolean_type_غوټه;
 
   /* If either type is BOOLEAN_TYPE, then return the other.  */
-  if (TREE_CODE (t1) == BOOLEAN_TYPE)
-    return t2;
-  if (TREE_CODE (t2) == BOOLEAN_TYPE)
-    return t1;
+  إذا (ونه_کوډ (t1) == BOOLEAN_TYPE)
+    أرجع t2;
+  إذا (ونه_کوډ (t2) == BOOLEAN_TYPE)
+    أرجع t1;
 
-  return c_common_type (t1, t2);
+  أرجع c_common_type (t1, t2);
 }
 
 
@@ -1542,45 +1542,45 @@ common_type (tree t1, tree t2)
    if they pass consistency checks.  In particular we test that
    TYPE_CANONICAL is set correctly, i.e. the two types can alias.  */
 
-static bool
-comptypes_verify (tree type1, tree type2)
+ساكن منطقي
+comptypes_verify (ونه type1, ونه type2)
 {
-  if (type1 == type2 || !type1 || !type2
-      || TREE_CODE (type1) == ERROR_MARK || TREE_CODE (type2) == ERROR_MARK)
-    return true;
+  إذا (type1 == type2 || !type1 || !type2
+      || ونه_کوډ (type1) == ERROR_MARK || ونه_کوډ (type2) == ERROR_MARK)
+    أرجع ریښتیا;
 
   gcc_checking_assert (c_verify_type (type1));
   gcc_checking_assert (c_verify_type (type2));
 
-  if (TYPE_CANONICAL (type1) != TYPE_CANONICAL (type2)
+  إذا (TYPE_CANONICAL (type1) != TYPE_CANONICAL (type2)
       && !TYPE_STRUCTURAL_EQUALITY_P (type1)
       && !TYPE_STRUCTURAL_EQUALITY_P (type2))
     {
       /* FIXME: check other types. */
-      if (RECORD_OR_UNION_TYPE_P (type1)
-	  || TREE_CODE (type1) == ENUMERAL_TYPE
-	  || TREE_CODE (type2) == ENUMERAL_TYPE)
-	return false;
+      إذا (ریکارډ_OR_UNION_TYPE_P (type1)
+	  || ونه_کوډ (type1) == ENUMERAL_TYPE
+	  || ونه_کوډ (type2) == ENUMERAL_TYPE)
+	أرجع خطأ;
     }
-  return true;
+  أرجع ریښتیا;
 }
 
-struct comptypes_data {
+بنية comptypes_معلومات {
 
   /* output */
-  bool enum_and_int_p;
-  bool different_types_p;
-  bool warning_needed;
+  منطقي enum_and_int_p;
+  منطقي different_types_p;
+  منطقي warning_needed;
 
   /* context */
-  bool anon_field;
-  bool pointedto;
+  منطقي anon_ډګر;
+  منطقي pointedto;
 
   /* configuration */
-  bool equiv;
-  bool ignore_promoting_args;
+  منطقي equiv;
+  منطقي ignore_promoting_دلیلونه;
 
-  const struct tagged_tu_seen_cache* cache;
+  ثابت بنية tagged_tu_کتل_شوی_cache* cache;
 };
 
 
@@ -1590,69 +1590,69 @@ struct comptypes_data {
    self-promoting.  This is ignored only for function types but not
    ignored in a nested context.  */
 
-static bool
-comptypes_check_for_composite (tree t1, tree t2)
+ساكن منطقي
+comptypes_check_for_مرکب (ونه t1, ونه t2)
 {
-  struct comptypes_data data = { };
-  data.ignore_promoting_args = FUNCTION_TYPE == TREE_CODE (t1);
-  return comptypes_internal (t1, t2, &data);
+  بنية comptypes_معلومات معلومات = { };
+  معلومات.ignore_promoting_دلیلونه = FUNCTION_TYPE == ونه_کوډ (t1);
+  أرجع comptypes_دننی (t1, t2, &معلومات);
 }
 
 
 /* C implementation of compatible_types_for_indirection_note_p.  */
 
-bool
-compatible_types_for_indirection_note_p (tree type1, tree type2)
+منطقي
+compatible_types_for_indirection_note_p (ونه type1, ونه type2)
 {
-  return comptypes (type1, type2);
+  أرجع comptypes (type1, type2);
 }
 
 /* Return true if TYPE1 and TYPE2 are compatible types for assignment
    or various other operations.  */
 
-bool
-comptypes (tree type1, tree type2)
+منطقي
+comptypes (ونه type1, ونه type2)
 {
-  struct comptypes_data data = { };
-  bool ret = comptypes_internal (type1, type2, &data);
+  بنية comptypes_معلومات معلومات = { };
+  منطقي ret = comptypes_دننی (type1, type2, &معلومات);
 
   gcc_checking_assert (!ret || comptypes_verify (type1, type2));
 
-  return ret;
+  أرجع ret;
 }
 
 
 /* Like comptypes, but it returns non-zero only for identical
    types.  */
 
-bool
-comptypes_same_p (tree type1, tree type2)
+منطقي
+comptypes_same_p (ونه type1, ونه type2)
 {
-  struct comptypes_data data = { };
-  bool ret = comptypes_internal (type1, type2, &data);
+  بنية comptypes_معلومات معلومات = { };
+  منطقي ret = comptypes_دننی (type1, type2, &معلومات);
 
   gcc_checking_assert (!ret || comptypes_verify (type1, type2));
 
-  if (data.different_types_p)
-    return false;
+  إذا (معلومات.different_types_p)
+    أرجع خطأ;
 
-  return ret;
+  أرجع ret;
 }
 
 
 /* Like comptypes, but if it returns true because enum and int are
    compatible, it sets *ENUM_AND_INT_P to true.  */
 
-bool
-comptypes_check_enum_int (tree type1, tree type2, bool *enum_and_int_p)
+منطقي
+comptypes_check_enum_int (ونه type1, ونه type2, منطقي *enum_and_int_p)
 {
-  struct comptypes_data data = { };
-  bool ret = comptypes_internal (type1, type2, &data);
-  *enum_and_int_p = data.enum_and_int_p;
+  بنية comptypes_معلومات معلومات = { };
+  منطقي ret = comptypes_دننی (type1, type2, &معلومات);
+  *enum_and_int_p = معلومات.enum_and_int_p;
 
   gcc_checking_assert (!ret || comptypes_verify (type1, type2));
 
-  return ret;
+  أرجع ret;
 }
 
 
@@ -1688,18 +1688,18 @@ comptypes_check_enum_int (tree type1, tree type2, bool *enum_and_int_p)
    struct foo { struct bar { int a; } *x };
    struct foo { struct bar { char b; } *x };  */
 
-bool
-comptypes_equiv_p (tree type1, tree type2)
+منطقي
+comptypes_equiv_p (ونه type1, ونه type2)
 {
-  struct comptypes_data data = { };
-  data.equiv = true;
-  bool ret = comptypes_internal (type1, type2, &data);
+  بنية comptypes_معلومات معلومات = { };
+  معلومات.equiv = ریښتیا;
+  منطقي ret = comptypes_دننی (type1, type2, &معلومات);
 
   /* check that different equivance classes are assigned only
      to types that are not compatible.  */
   gcc_checking_assert (ret || !comptypes (type1, type2));
 
-  return ret;
+  أرجع ret;
 }
 
 
@@ -1717,82 +1717,82 @@ comptypes_equiv_p (tree type1, tree type2)
    then this can be ignored by setting 'ignore_promoting_args_p'.
    For 'equiv' we can compute equivalency classes (see above).  */
 
-static bool
-comptypes_internal (const_tree type1, const_tree type2,
-		    struct comptypes_data *data)
+ساكن منطقي
+comptypes_دننی (const_ونه type1, const_ونه type2,
+		    بنية comptypes_معلومات *معلومات)
 {
-  const_tree t1 = type1;
-  const_tree t2 = type2;
+  const_ونه t1 = type1;
+  const_ونه t2 = type2;
 
   /* Suppress errors caused by previously reported errors.  */
 
-  if (t1 == t2 || !t1 || !t2
-      || TREE_CODE (t1) == ERROR_MARK || TREE_CODE (t2) == ERROR_MARK)
-    return true;
+  إذا (t1 == t2 || !t1 || !t2
+      || ونه_کوډ (t1) == ERROR_MARK || ونه_کوډ (t2) == ERROR_MARK)
+    أرجع ریښتیا;
 
   /* Qualifiers must match. C99 6.7.3p9 */
 
-  if (TYPE_QUALS (t1) != TYPE_QUALS (t2))
-    return false;
+  إذا (TYPE_QUALS (t1) != TYPE_QUALS (t2))
+    أرجع خطأ;
 
   /* Enumerated types are compatible with integer types, but this is
      not transitive: two enumerated types in the same translation unit
      are compatible with each other only if they are the same type.  */
 
-  if (TREE_CODE (t1) == ENUMERAL_TYPE
+  إذا (ونه_کوډ (t1) == ENUMERAL_TYPE
       && COMPLETE_TYPE_P (t1)
-      && TREE_CODE (t2) != ENUMERAL_TYPE)
+      && ونه_کوډ (t2) != ENUMERAL_TYPE)
     {
       t1 = ENUM_UNDERLYING_TYPE (t1);
-      if (TREE_CODE (t2) != VOID_TYPE)
+      إذا (ونه_کوډ (t2) != VOID_TYPE)
 	{
-	  data->enum_and_int_p = true;
-	  data->different_types_p = true;
+	  معلومات->enum_and_int_p = ریښتیا;
+	  معلومات->different_types_p = ریښتیا;
 	}
     }
-  else if (TREE_CODE (t2) == ENUMERAL_TYPE
+  وإلا إذا (ونه_کوډ (t2) == ENUMERAL_TYPE
 	   && COMPLETE_TYPE_P (t2)
-	   && TREE_CODE (t1) != ENUMERAL_TYPE)
+	   && ونه_کوډ (t1) != ENUMERAL_TYPE)
     {
       t2 = ENUM_UNDERLYING_TYPE (t2);
-      if (TREE_CODE (t1) != VOID_TYPE)
+      إذا (ونه_کوډ (t1) != VOID_TYPE)
 	{
-	  data->enum_and_int_p = true;
-	  data->different_types_p = true;
+	  معلومات->enum_and_int_p = ریښتیا;
+	  معلومات->different_types_p = ریښتیا;
 	}
     }
 
-  if (t1 == t2)
-    return true;
+  إذا (t1 == t2)
+    أرجع ریښتیا;
 
   /* Different classes of types can't be compatible.  */
 
-  if (TREE_CODE (t1) != TREE_CODE (t2))
-    return false;
+  إذا (ونه_کوډ (t1) != ونه_کوډ (t2))
+    أرجع خطأ;
 
   /* Allow for two different type nodes which have essentially the same
      definition.  Note that we already checked for equality of the type
      qualifiers (just above).  */
 
-  if (TREE_CODE (t1) != ARRAY_TYPE
+  إذا (ونه_کوډ (t1) != ARRAY_TYPE
       && TYPE_MAIN_VARIANT (t1) == TYPE_MAIN_VARIANT (t2))
-    return true;
+    أرجع ریښتیا;
 
-  int attrval;
+  صحيح attrval;
 
   /* 1 if no need for warning yet, 2 if warning cause has been seen.  */
-  if (!(attrval = comp_type_attributes (t1, t2)))
-    return false;
+  إذا (!(attrval = comp_type_ځانګړتیاوې (t1, t2)))
+    أرجع خطأ;
 
-  if (2 == attrval)
-    data->warning_needed = true;
+  إذا (2 == attrval)
+    معلومات->warning_needed = ریښتیا;
 
-  switch (TREE_CODE (t1))
+  بدل (ونه_کوډ (t1))
     {
-    case INTEGER_TYPE:
-    case FIXED_POINT_TYPE:
-    case REAL_TYPE:
-    case BITINT_TYPE:
+    حالة INTEGER_TYPE:
+    حالة FIXED_ټکی_TYPE:
+    حالة REAL_TYPE:
+    حالة BITINT_TYPE:
       /* With these nodes, we can't determine type equivalence by
 	 looking at what is stored in the nodes themselves, because
 	 two nodes might have different TYPE_MAIN_VARIANTs but still
@@ -1807,77 +1807,77 @@ comptypes_internal (const_tree type1, const_tree type2,
 	 have identical properties, different TYPE_MAIN_VARIANTs, but
 	 represent the same type.  The canonical type system keeps
 	 track of equivalence in this case, so we fall back on it.  */
-      return TYPE_CANONICAL (t1) == TYPE_CANONICAL (t2);
+      أرجع TYPE_CANONICAL (t1) == TYPE_CANONICAL (t2);
 
-    case POINTER_TYPE:
+    حالة اشاره_ګر_TYPE:
       /* Do not remove mode information.  */
-      if (TYPE_MODE (t1) != TYPE_MODE (t2))
-	return false;
-      data->pointedto = true;
-      return comptypes_internal (TREE_TYPE (t1), TREE_TYPE (t2), data);
+      إذا (TYPE_ډېرپېښ (t1) != TYPE_ډېرپېښ (t2))
+	أرجع خطأ;
+      معلومات->pointedto = ریښتیا;
+      أرجع comptypes_دننی (ونه_TYPE (t1), ونه_TYPE (t2), معلومات);
 
-    case FUNCTION_TYPE:
-      return function_types_compatible_p (t1, t2, data);
+    حالة FUNCTION_TYPE:
+      أرجع function_types_compatible_p (t1, t2, معلومات);
 
-    case ARRAY_TYPE:
+    حالة ARRAY_TYPE:
       {
-	tree d1 = TYPE_DOMAIN (t1);
-	tree d2 = TYPE_DOMAIN (t2);
+	ونه d1 = TYPE_DOMAIN (t1);
+	ونه d2 = TYPE_DOMAIN (t2);
 
 	/* Target types must match incl. qualifiers.  */
-	if (!comptypes_internal (TREE_TYPE (t1), TREE_TYPE (t2), data))
-	  return false;
+	إذا (!comptypes_دننی (ونه_TYPE (t1), ونه_TYPE (t2), معلومات))
+	  أرجع خطأ;
 
-	if ((d1 == NULL_TREE) != (d2 == NULL_TREE))
-	  data->different_types_p = true;
+	إذا ((d1 == NULL_ونه) != (d2 == NULL_ونه))
+	  معلومات->different_types_p = ریښتیا;
 	/* Ignore size mismatches when forming equivalence classes.  */
-	if (data->equiv)
-	  return true;
+	إذا (معلومات->equiv)
+	  أرجع ریښتیا;
 	/* Sizes must match unless one is missing or variable.  */
-	if (d1 == NULL_TREE || d2 == NULL_TREE || d1 == d2)
-	  return true;
+	إذا (d1 == NULL_ونه || d2 == NULL_ونه || d1 == d2)
+	  أرجع ریښتیا;
 
-	bool d1_variable = top_array_vla_p (t1);
-	bool d2_variable = top_array_vla_p (t2);
+	منطقي d1_variable = سر_array_vla_p (t1);
+	منطقي d2_variable = سر_array_vla_p (t2);
 
-	if (d1_variable != d2_variable)
-	  data->different_types_p = true;
-	if (d1_variable || d2_variable)
-	  return true;
+	إذا (d1_variable != d2_variable)
+	  معلومات->different_types_p = ریښتیا;
+	إذا (d1_variable || d2_variable)
+	  أرجع ریښتیا;
 
-	bool d1_zero = zero_length_array_type_p (t1)
+	منطقي d1_zero = zero_اوږدتیا_array_type_p (t1)
 		       || flexible_array_member_type_p (t1);
 
-	bool d2_zero = zero_length_array_type_p (t2)
+	منطقي d2_zero = zero_اوږدتیا_array_type_p (t2)
 		       || flexible_array_member_type_p (t2);
 
-	if (d1_zero && d2_zero)
-	  return true;
-	if (d1_zero || d2_zero)
-	  return false;
+	إذا (d1_zero && d2_zero)
+	  أرجع ریښتیا;
+	إذا (d1_zero || d2_zero)
+	  أرجع خطأ;
 
-	if (!tree_int_cst_equal (TYPE_MIN_VALUE (d1), TYPE_MIN_VALUE (d2))
-	    || !tree_int_cst_equal (TYPE_MAX_VALUE (d1), TYPE_MAX_VALUE (d2)))
-	  return false;
+	إذا (!ونه_int_cst_equal (TYPE_MIN_ارزښت (d1), TYPE_MIN_ارزښت (d2))
+	    || !ونه_int_cst_equal (TYPE_MAX_ارزښت (d1), TYPE_MAX_ارزښت (d2)))
+	  أرجع خطأ;
 
-	return true;
+	أرجع ریښتیا;
       }
 
-    case ENUMERAL_TYPE:
-    case RECORD_TYPE:
-    case UNION_TYPE:
+    حالة ENUMERAL_TYPE:
+    حالة ریکارډ_TYPE:
+    حالة UNION_TYPE:
 
-      if (!flag_isoc23)
-	return false;
+      إذا (!flag_isoc23)
+	أرجع خطأ;
 
-      return tagged_types_tu_compatible_p (t1, t2, data);
+      أرجع tagged_types_tu_compatible_p (t1, t2, معلومات);
 
-    case VECTOR_TYPE:
-      return known_eq (TYPE_VECTOR_SUBPARTS (t1), TYPE_VECTOR_SUBPARTS (t2))
-	     && comptypes_internal (TREE_TYPE (t1), TREE_TYPE (t2), data);
+    حالة ویکټور_TYPE:
+      أرجع معلوم_eq (TYPE_ویکټور_SUBPARTS (t1), TYPE_ویکټور_SUBPARTS (t2))
+	     && comptypes_دننی (ونه_TYPE (t1), ونه_TYPE (t2), معلومات);
 
-    default:
-      return false;
+    افتراضي:
+      أرجع خطأ;
     }
   gcc_unreachable ();
 }
@@ -1887,43 +1887,43 @@ comptypes_internal (const_tree type1, const_tree type2,
    different named addresses, then we must determine if one address space is a
    subset of the other.  */
 
-static bool
-comp_target_types (location_t location, tree ttl, tree ttr)
+ساكن منطقي
+comp_موخه_types (location_t location, ونه ttl, ونه ttr)
 {
-  tree mvl = TREE_TYPE (ttl);
-  tree mvr = TREE_TYPE (ttr);
+  ونه mvl = ونه_TYPE (ttl);
+  ونه mvr = ونه_TYPE (ttr);
   addr_space_t asl = TYPE_ADDR_SPACE (mvl);
   addr_space_t asr = TYPE_ADDR_SPACE (mvr);
   addr_space_t as_common;
 
   /* Fail if pointers point to incompatible address spaces.  */
-  if (!addr_space_superset (asl, asr, &as_common))
-    return 0;
+  إذا (!addr_space_superset (asl, asr, &as_common))
+    أرجع 0;
 
   /* Qualifiers on element types of array types that are
      pointer targets are also removed.  */
-  struct comptypes_data data = { };
-  if (!comptypes_internal (remove_qualifiers (mvl),
-			   remove_qualifiers (mvr), &data))
-    return false;
+  بنية comptypes_معلومات معلومات = { };
+  إذا (!comptypes_دننی (remove_qualifiers (mvl),
+			   remove_qualifiers (mvr), &معلومات))
+    أرجع خطأ;
 
   /* For pedantic use comptypes on arrays before removing
      qualifiers on the element type. */
-  if (TREE_CODE (mvl) == ARRAY_TYPE
-      && TREE_CODE (mvr) == ARRAY_TYPE
+  إذا (ونه_کوډ (mvl) == ARRAY_TYPE
+      && ونه_کوډ (mvr) == ARRAY_TYPE
       && !comptypes (mvl, mvr))
     pedwarn_c11 (location, OPT_Wpedantic, "invalid use of pointers to arrays "
 					  "with different qualifiers in ISO C "
 					  "before C23");
 
-  if (data.warning_needed)
+  إذا (معلومات.warning_needed)
     pedwarn (location, OPT_Wpedantic, "types are not quite compatible");
 
-  if (data.enum_and_int_p && warn_cxx_compat)
+  إذا (معلومات.enum_and_int_p && warn_cxx_compat)
     warning_at (location, OPT_Wc___compat,
 		"pointer target types incompatible in C++");
 
-  return true;
+  أرجع ریښتیا;
 }
 
 /* Subroutines of `comptypes'.  */
@@ -1932,192 +1932,192 @@ comp_target_types (location_t location, tree ttl, tree ttr)
    compatible.  The two types are not the same (which has been
    checked earlier in comptypes_internal).  */
 
-static bool
-tagged_types_tu_compatible_p (const_tree t1, const_tree t2,
-			      struct comptypes_data *data)
+ساكن منطقي
+tagged_types_tu_compatible_p (const_ونه t1, const_ونه t2,
+			      بنية comptypes_معلومات *معلومات)
 {
-  tree s1, s2;
+  ونه s1, s2;
 
-  if (c_type_tag (t1) != c_type_tag (t2))
-    return false;
+  إذا (c_type_نښان (t1) != c_type_نښان (t2))
+    أرجع خطأ;
 
   /* When forming equivalence classes for TYPE_CANONICAL in C23, we treat
      structs with the same tag as equivalent, but only when they are targets
      of pointers inside other structs.  */
-  if (data->equiv && data->pointedto && NULL_TREE != c_type_tag (t1))
-    return true;
+  إذا (معلومات->equiv && معلومات->pointedto && NULL_ونه != c_type_نښان (t1))
+    أرجع ریښتیا;
 
   /* Different types without tag are incompatible except as an anonymous
      field or when forming equivalence classes for TYPE_CANONICAL.  */
-  if (!data->anon_field && !data->equiv && NULL_TREE == c_type_tag (t1))
-    return false;
+  إذا (!معلومات->anon_ډګر && !معلومات->equiv && NULL_ونه == c_type_نښان (t1))
+    أرجع خطأ;
 
-  if (!data->anon_field && TYPE_STUB_DECL (t1) != TYPE_STUB_DECL (t2))
-    data->different_types_p = true;
+  إذا (!معلومات->anon_ډګر && TYPE_STUB_DECL (t1) != TYPE_STUB_DECL (t2))
+    معلومات->different_types_p = ریښتیا;
 
   /* Incomplete types are incompatible inside a TU.  */
-  if (TYPE_SIZE (t1) == NULL || TYPE_SIZE (t2) == NULL)
-    return false;
+  إذا (TYPE_اندازه (t1) == عدم || TYPE_اندازه (t2) == عدم)
+    أرجع خطأ;
 
-  if (ENUMERAL_TYPE != TREE_CODE (t1)
-      && (TYPE_REVERSE_STORAGE_ORDER (t1)
-	  != TYPE_REVERSE_STORAGE_ORDER (t2)))
-    return false;
+  إذا (ENUMERAL_TYPE != ونه_کوډ (t1)
+      && (TYPE_سرچپه_STORAGE_ترتیب (t1)
+	  != TYPE_سرچپه_STORAGE_ترتیب (t2)))
+    أرجع خطأ;
 
-  if (TYPE_USER_ALIGN (t1) != TYPE_USER_ALIGN (t2))
-    data->different_types_p = true;
+  إذا (TYPE_USER_ALIGN (t1) != TYPE_USER_ALIGN (t2))
+    معلومات->different_types_p = ریښتیا;
 
   /* For types already being looked at in some active
      invocation of this function, assume compatibility.
      The cache is built as a linked list on the stack
      with the head of the list passed downwards.  */
-  for (const struct tagged_tu_seen_cache *t = data->cache;
-       t != NULL; t = t->next)
-    if (t->t1 == t1 && t->t2 == t2)
-      return true;
+  لكل (ثابت بنية tagged_tu_کتل_شوی_cache *t = معلومات->cache;
+       t != عدم; t = t->بل)
+    إذا (t->t1 == t1 && t->t2 == t2)
+      أرجع ریښتیا;
 
-  const struct tagged_tu_seen_cache entry = { data->cache, t1, t2 };
+  ثابت بنية tagged_tu_کتل_شوی_cache ثبت = { معلومات->cache, t1, t2 };
 
-  switch (TREE_CODE (t1))
+  بدل (ونه_کوډ (t1))
     {
-    case ENUMERAL_TYPE:
+    حالة ENUMERAL_TYPE:
       {
-	if (!comptypes (ENUM_UNDERLYING_TYPE (t1), ENUM_UNDERLYING_TYPE (t2)))
-	  return false;
+	إذا (!comptypes (ENUM_UNDERLYING_TYPE (t1), ENUM_UNDERLYING_TYPE (t2)))
+	  أرجع خطأ;
 
 	/* Speed up the case where the type values are in the same order.  */
-	tree tv1 = TYPE_VALUES (t1);
-	tree tv2 = TYPE_VALUES (t2);
+	ونه tv1 = TYPE_ارزښتونه (t1);
+	ونه tv2 = TYPE_ارزښتونه (t2);
 
-	if (tv1 == tv2)
-	  return true;
+	إذا (tv1 == tv2)
+	  أرجع ریښتیا;
 
-	for (;tv1 && tv2; tv1 = TREE_CHAIN (tv1), tv2 = TREE_CHAIN (tv2))
+	لكل (;tv1 && tv2; tv1 = ونه_CHAIN (tv1), tv2 = ونه_CHAIN (tv2))
 	  {
-	    if (TREE_PURPOSE (tv1) != TREE_PURPOSE (tv2))
-	      break;
+	    إذا (ونه_PURPOSE (tv1) != ونه_PURPOSE (tv2))
+	      اكسر;
 
-	    if (simple_cst_equal (DECL_INITIAL (TREE_VALUE (tv1)),
-				  DECL_INITIAL (TREE_VALUE (tv2))) != 1)
-	      break;
+	    إذا (simple_cst_equal (DECL_INITIAL (ونه_ارزښت (tv1)),
+				  DECL_INITIAL (ونه_ارزښت (tv2))) != 1)
+	      اكسر;
 	  }
 
-	if (tv1 == NULL_TREE && tv2 == NULL_TREE)
-	  return true;
+	إذا (tv1 == NULL_ونه && tv2 == NULL_ونه)
+	  أرجع ریښتیا;
 
-	if (tv1 == NULL_TREE || tv2 == NULL_TREE)
-	  return false;
+	إذا (tv1 == NULL_ونه || tv2 == NULL_ونه)
+	  أرجع خطأ;
 
-	if (list_length (TYPE_VALUES (t1)) != list_length (TYPE_VALUES (t2)))
-	  return false;
+	إذا (list_اوږدتیا (TYPE_ارزښتونه (t1)) != list_اوږدتیا (TYPE_ارزښتونه (t2)))
+	  أرجع خطأ;
 
-	for (s1 = TYPE_VALUES (t1); s1; s1 = TREE_CHAIN (s1))
+	لكل (s1 = TYPE_ارزښتونه (t1); s1; s1 = ونه_CHAIN (s1))
 	  {
-	    s2 = purpose_member (TREE_PURPOSE (s1), TYPE_VALUES (t2));
+	    s2 = purpose_member (ونه_PURPOSE (s1), TYPE_ارزښتونه (t2));
 
-	    if (s2 == NULL
-		|| simple_cst_equal (DECL_INITIAL (TREE_VALUE (s1)),
-				     DECL_INITIAL (TREE_VALUE (s2))) != 1)
-	      return false;
+	    إذا (s2 == عدم
+		|| simple_cst_equal (DECL_INITIAL (ونه_ارزښت (s1)),
+				     DECL_INITIAL (ونه_ارزښت (s2))) != 1)
+	      أرجع خطأ;
 	  }
 
-	return true;
+	أرجع ریښتیا;
       }
 
-    case UNION_TYPE:
-    case RECORD_TYPE:
+    حالة UNION_TYPE:
+    حالة ریکارډ_TYPE:
 
-	if (list_length (TYPE_FIELDS (t1)) != list_length (TYPE_FIELDS (t2)))
-	  return false;
+	إذا (list_اوږدتیا (TYPE_FIELDS (t1)) != list_اوږدتیا (TYPE_FIELDS (t2)))
+	  أرجع خطأ;
 
-	for (s1 = TYPE_FIELDS (t1), s2 = TYPE_FIELDS (t2);
+	لكل (s1 = TYPE_FIELDS (t1), s2 = TYPE_FIELDS (t2);
 	     s1 && s2;
 	     s1 = DECL_CHAIN (s1), s2 = DECL_CHAIN (s2))
 	  {
-	    gcc_assert (TREE_CODE (s1) == FIELD_DECL);
-	    gcc_assert (TREE_CODE (s2) == FIELD_DECL);
+	    gcc_assert (ونه_کوډ (s1) == ډګر_DECL);
+	    gcc_assert (ونه_کوډ (s2) == ډګر_DECL);
 
-	    tree ft1 = TREE_TYPE (s1);
-	    tree ft2 = TREE_TYPE (s2);
+	    ونه ft1 = ونه_TYPE (s1);
+	    ونه ft2 = ونه_TYPE (s2);
 
-	    if (DECL_NAME (s1) != DECL_NAME (s2))
-	      return false;
+	    إذا (DECL_NAME (s1) != DECL_NAME (s2))
+	      أرجع خطأ;
 
-	    if (DECL_ALIGN (s1) != DECL_ALIGN (s2))
-	      return false;
+	    إذا (DECL_ALIGN (s1) != DECL_ALIGN (s2))
+	      أرجع خطأ;
 
-	    if (DECL_C_BIT_FIELD (s1) != DECL_C_BIT_FIELD (s2))
-	       return false;
+	    إذا (DECL_C_بټ_ډګر (s1) != DECL_C_بټ_ډګر (s2))
+	       أرجع خطأ;
 
-	    if (DECL_C_BIT_FIELD (s1))
+	    إذا (DECL_C_بټ_ډګر (s1))
 	      {
-		if (!tree_int_cst_equal (DECL_SIZE (s1), DECL_SIZE (s2)))
-		  return false;
+		إذا (!ونه_int_cst_equal (DECL_اندازه (s1), DECL_اندازه (s2)))
+		  أرجع خطأ;
 
-		ft1 = DECL_BIT_FIELD_TYPE (s1);
-		ft2 = DECL_BIT_FIELD_TYPE (s2);
+		ft1 = DECL_بټ_ډګر_TYPE (s1);
+		ft2 = DECL_بټ_ډګر_TYPE (s2);
 	      }
 
-	    if (!ft1 || !ft2)
-	      return false;
+	    إذا (!ft1 || !ft2)
+	      أرجع خطأ;
 
-	    if (TREE_CODE (ft1) == ERROR_MARK || TREE_CODE (ft2) == ERROR_MARK)
-	      return false;
+	    إذا (ونه_کوډ (ft1) == ERROR_MARK || ونه_کوډ (ft2) == ERROR_MARK)
+	      أرجع خطأ;
 
-	    data->anon_field = !DECL_NAME (s1);
-	    data->pointedto = false;
+	    معلومات->anon_ډګر = !DECL_NAME (s1);
+	    معلومات->pointedto = خطأ;
 
-	    const struct tagged_tu_seen_cache *cache = data->cache;
-	    data->cache = &entry;
-	    bool ret = comptypes_internal (ft1, ft2, data);
-	    data->cache = cache;
-	    if (!ret)
-	      return false;
+	    ثابت بنية tagged_tu_کتل_شوی_cache *cache = معلومات->cache;
+	    معلومات->cache = &ثبت;
+	    منطقي ret = comptypes_دننی (ft1, ft2, معلومات);
+	    معلومات->cache = cache;
+	    إذا (!ret)
+	      أرجع خطأ;
 
-	    tree st1 = TYPE_SIZE (TREE_TYPE (s1));
-	    tree st2 = TYPE_SIZE (TREE_TYPE (s2));
+	    ونه st1 = TYPE_اندازه (ونه_TYPE (s1));
+	    ونه st2 = TYPE_اندازه (ونه_TYPE (s2));
 
-	    if (data->equiv
-		&& st1 && TREE_CODE (st1) == INTEGER_CST
-		&& st2 && TREE_CODE (st2) == INTEGER_CST
-		&& !tree_int_cst_equal (st1, st2))
-	     return false;
+	    إذا (معلومات->equiv
+		&& st1 && ونه_کوډ (st1) == INTEGER_CST
+		&& st2 && ونه_کوډ (st2) == INTEGER_CST
+		&& !ونه_int_cst_equal (st1, st2))
+	     أرجع خطأ;
 
-	    tree counted_by1 = lookup_attribute ("counted_by",
-						 DECL_ATTRIBUTES (s1));
-	    tree counted_by2 = lookup_attribute ("counted_by",
-						 DECL_ATTRIBUTES (s2));
+	    ونه counted_by1 = lookup_attribute ("counted_by",
+						 DECL_ځانګړتیاوې (s1));
+	    ونه counted_by2 = lookup_attribute ("counted_by",
+						 DECL_ځانګړتیاوې (s2));
 	    /* If there is no counted_by attribute for both fields.  */
-	    if (!counted_by1 && !counted_by2)
-	      continue;
+	    إذا (!counted_by1 && !counted_by2)
+	      استمر;
 
 	    /* If only one field has counted_by attribute.  */
-	    if ((counted_by1 && !counted_by2)
+	    إذا ((counted_by1 && !counted_by2)
 		|| (!counted_by1 && counted_by2))
-	      return false;
+	      أرجع خطأ;
 
 	    /* Now both s1 and s2 have counted_by attributes, check
 	       whether they are the same.  */
 
-	    tree counted_by_field1
-	      = lookup_field (t1, TREE_VALUE (TREE_VALUE (counted_by1)));
-	    tree counted_by_field2
-	      = lookup_field (t2, TREE_VALUE (TREE_VALUE (counted_by2)));
+	    ونه counted_by_field1
+	      = lookup_ډګر (t1, ونه_ارزښت (ونه_ارزښت (counted_by1)));
+	    ونه counted_by_field2
+	      = lookup_ډګر (t2, ونه_ارزښت (ونه_ارزښت (counted_by2)));
 
 	    gcc_assert (counted_by_field1 && counted_by_field2);
 
-	    while (TREE_CHAIN (counted_by_field1))
-	      counted_by_field1 = TREE_CHAIN (counted_by_field1);
-	    while (TREE_CHAIN (counted_by_field2))
-	      counted_by_field2 = TREE_CHAIN (counted_by_field2);
+	    طالما (ونه_CHAIN (counted_by_field1))
+	      counted_by_field1 = ونه_CHAIN (counted_by_field1);
+	    طالما (ونه_CHAIN (counted_by_field2))
+	      counted_by_field2 = ونه_CHAIN (counted_by_field2);
 
-	    if (DECL_NAME (TREE_VALUE (counted_by_field1))
-		!= DECL_NAME (TREE_VALUE (counted_by_field2)))
-	      return false;
+	    إذا (DECL_NAME (ونه_ارزښت (counted_by_field1))
+		!= DECL_NAME (ونه_ارزښت (counted_by_field2)))
+	      أرجع خطأ;
 	  }
-	return true;
+	أرجع ریښتیا;
 
-    default:
+    افتراضي:
       gcc_unreachable ();
     }
 }
@@ -2129,147 +2129,147 @@ tagged_types_tu_compatible_p (const_tree t1, const_tree t2,
    the other must specify that number of self-promoting arg types.
    Otherwise, the argument types must match.  */
 
-static bool
-function_types_compatible_p (const_tree f1, const_tree f2,
-			     struct comptypes_data *data)
+ساكن منطقي
+function_types_compatible_p (const_ونه f1, const_ونه f2,
+			     بنية comptypes_معلومات *معلومات)
 {
-  tree ret1 = TREE_TYPE (f1);
-  tree ret2 = TREE_TYPE (f2);
+  ونه ret1 = ونه_TYPE (f1);
+  ونه ret2 = ونه_TYPE (f2);
 
   /* 'volatile' qualifiers on a function's return type used to mean
      the function is noreturn.  */
-  if (TYPE_VOLATILE (ret1) != TYPE_VOLATILE (ret2))
-    pedwarn (input_location, 0, "function return types not compatible due to %<volatile%>");
-  if (TYPE_VOLATILE (ret1))
+  إذا (TYPE_VOLATILE (ret1) != TYPE_VOLATILE (ret2))
+    pedwarn (ننوت_location, 0, "function return types not compatible due to %<volatile%>");
+  إذا (TYPE_VOLATILE (ret1))
     ret1 = build_qualified_type (TYPE_MAIN_VARIANT (ret1),
 				 TYPE_QUALS (ret1) & ~TYPE_QUAL_VOLATILE);
-  if (TYPE_VOLATILE (ret2))
+  إذا (TYPE_VOLATILE (ret2))
     ret2 = build_qualified_type (TYPE_MAIN_VARIANT (ret2),
 				 TYPE_QUALS (ret2) & ~TYPE_QUAL_VOLATILE);
 
-  bool ignore_pargs = data->ignore_promoting_args;
-  data->ignore_promoting_args = false;
+  منطقي ignore_pargs = معلومات->ignore_promoting_دلیلونه;
+  معلومات->ignore_promoting_دلیلونه = خطأ;
 
-  if (!comptypes_internal (ret1, ret2, data))
-    return false;
+  إذا (!comptypes_دننی (ret1, ret2, معلومات))
+    أرجع خطأ;
 
-  data->ignore_promoting_args = ignore_pargs;
+  معلومات->ignore_promoting_دلیلونه = ignore_pargs;
 
-  tree args1 = TYPE_ARG_TYPES (f1);
-  tree args2 = TYPE_ARG_TYPES (f2);
+  ونه args1 = TYPE_ARG_TYPES (f1);
+  ونه args2 = TYPE_ARG_TYPES (f2);
 
-  if ((args1 == NULL_TREE) != (args2 == NULL_TREE))
-    data->different_types_p = true;
+  إذا ((args1 == NULL_ونه) != (args2 == NULL_ونه))
+    معلومات->different_types_p = ریښتیا;
 
   /* An unspecified parmlist matches any specified parmlist
      whose argument types don't need default promotions.  */
 
-  if (args1 == NULL_TREE)
+  إذا (args1 == NULL_ونه)
     {
-      if (TYPE_NO_NAMED_ARGS_STDARG_P (f1) != TYPE_NO_NAMED_ARGS_STDARG_P (f2))
-	return false;
-      if (!(data->ignore_promoting_args || self_promoting_args_p (args2)))
-	return false;
-      data->ignore_promoting_args = false;
+      إذا (TYPE_NO_NAMED_دلیلونه_STDARG_P (f1) != TYPE_NO_NAMED_دلیلونه_STDARG_P (f2))
+	أرجع خطأ;
+      إذا (!(معلومات->ignore_promoting_دلیلونه || self_promoting_دلیلونه_p (args2)))
+	أرجع خطأ;
+      معلومات->ignore_promoting_دلیلونه = خطأ;
       /* If one of these types comes from a non-prototype fn definition,
 	 compare that with the other type's arglist.
 	 If they don't match, ask for a warning (but no error).  */
-      if (TYPE_ACTUAL_ARG_TYPES (f1)
-	  && !type_lists_compatible_p (args2, TYPE_ACTUAL_ARG_TYPES (f1), data))
-	 data->warning_needed = true;
-      return true;
+      إذا (TYPE_ACTUAL_ARG_TYPES (f1)
+	  && !type_lists_compatible_p (args2, TYPE_ACTUAL_ARG_TYPES (f1), معلومات))
+	 معلومات->warning_needed = ریښتیا;
+      أرجع ریښتیا;
     }
-  if (args2 == NULL_TREE)
+  إذا (args2 == NULL_ونه)
     {
-      if (TYPE_NO_NAMED_ARGS_STDARG_P (f1) != TYPE_NO_NAMED_ARGS_STDARG_P (f2))
-	return false;
-      if (!(data->ignore_promoting_args || self_promoting_args_p (args1)))
-	return false;
-      data->ignore_promoting_args = false;
-      if (TYPE_ACTUAL_ARG_TYPES (f2)
-	  && !type_lists_compatible_p (args1, TYPE_ACTUAL_ARG_TYPES (f2), data))
-	data->warning_needed = true;
-      return true;
+      إذا (TYPE_NO_NAMED_دلیلونه_STDARG_P (f1) != TYPE_NO_NAMED_دلیلونه_STDARG_P (f2))
+	أرجع خطأ;
+      إذا (!(معلومات->ignore_promoting_دلیلونه || self_promoting_دلیلونه_p (args1)))
+	أرجع خطأ;
+      معلومات->ignore_promoting_دلیلونه = خطأ;
+      إذا (TYPE_ACTUAL_ARG_TYPES (f2)
+	  && !type_lists_compatible_p (args1, TYPE_ACTUAL_ARG_TYPES (f2), معلومات))
+	معلومات->warning_needed = ریښتیا;
+      أرجع ریښتیا;
     }
 
   /* Both types have argument lists: compare them and propagate results.  */
-  return type_lists_compatible_p (args1, args2, data);
+  أرجع type_lists_compatible_p (args1, args2, معلومات);
 }
 
 /* Check two lists of types for compatibility, returning false for
    incompatible, true for compatible.  */
 
-static bool
-type_lists_compatible_p (const_tree args1, const_tree args2,
-			 struct comptypes_data *data)
+ساكن منطقي
+type_lists_compatible_p (const_ونه args1, const_ونه args2,
+			 بنية comptypes_معلومات *معلومات)
 {
-  while (1)
+  طالما (1)
     {
-      if (args1 == NULL_TREE && args2 == NULL_TREE)
-	return true;
+      إذا (args1 == NULL_ونه && args2 == NULL_ونه)
+	أرجع ریښتیا;
       /* If one list is shorter than the other,
 	 they fail to match.  */
-      if (args1 == NULL_TREE || args2 == NULL_TREE)
-	return false;
-      tree a1 = TREE_VALUE (args1);
-      tree a2 = TREE_VALUE (args2);
-      tree mv1 = remove_qualifiers (a1);
-      tree mv2 = remove_qualifiers (a2);
+      إذا (args1 == NULL_ونه || args2 == NULL_ونه)
+	أرجع خطأ;
+      ونه a1 = ونه_ارزښت (args1);
+      ونه a2 = ونه_ارزښت (args2);
+      ونه mv1 = remove_qualifiers (a1);
+      ونه mv2 = remove_qualifiers (a2);
 
       gcc_assert (mv2);
       gcc_assert (mv2);
 
       /* If one of the lists has an error marker, ignore this arg.  */
-      if (TREE_CODE (a1) == ERROR_MARK
-	       || TREE_CODE (a2) == ERROR_MARK)
+      إذا (ونه_کوډ (a1) == ERROR_MARK
+	       || ونه_کوډ (a2) == ERROR_MARK)
 	;
-      else if (!comptypes_internal (mv1, mv2, data))
+      وإلا إذا (!comptypes_دننی (mv1, mv2, معلومات))
 	{
-	  data->different_types_p = true;
+	  معلومات->different_types_p = ریښتیا;
 	  /* Allow  wait (union {union wait *u; int *i} *)
 	     and  wait (union wait *)  to be compatible.  */
-	  if (TREE_CODE (a1) == UNION_TYPE
-	      && (TYPE_NAME (a1) == NULL_TREE
+	  إذا (ونه_کوډ (a1) == UNION_TYPE
+	      && (TYPE_NAME (a1) == NULL_ونه
 		  || TYPE_TRANSPARENT_AGGR (a1))
-	      && TREE_CODE (TYPE_SIZE (a1)) == INTEGER_CST
-	      && tree_int_cst_equal (TYPE_SIZE (a1),
-				     TYPE_SIZE (a2)))
+	      && ونه_کوډ (TYPE_اندازه (a1)) == INTEGER_CST
+	      && ونه_int_cst_equal (TYPE_اندازه (a1),
+				     TYPE_اندازه (a2)))
 	    {
-	      tree memb;
-	      for (memb = TYPE_FIELDS (a1);
+	      ونه memb;
+	      لكل (memb = TYPE_FIELDS (a1);
 		   memb; memb = DECL_CHAIN (memb))
 		{
-		  tree mv3 = remove_qualifiers (TREE_TYPE (memb));
-		  if (comptypes_internal (mv3, mv2, data))
-		    break;
+		  ونه mv3 = remove_qualifiers (ونه_TYPE (memb));
+		  إذا (comptypes_دننی (mv3, mv2, معلومات))
+		    اكسر;
 		}
-	      if (memb == NULL_TREE)
-		return false;
+	      إذا (memb == NULL_ونه)
+		أرجع خطأ;
 	    }
-	  else if (TREE_CODE (a2) == UNION_TYPE
-		   && (TYPE_NAME (a2) == NULL_TREE
+	  وإلا إذا (ونه_کوډ (a2) == UNION_TYPE
+		   && (TYPE_NAME (a2) == NULL_ونه
 		       || TYPE_TRANSPARENT_AGGR (a2))
-		   && TREE_CODE (TYPE_SIZE (a2)) == INTEGER_CST
-		   && tree_int_cst_equal (TYPE_SIZE (a2),
-					  TYPE_SIZE (a1)))
+		   && ونه_کوډ (TYPE_اندازه (a2)) == INTEGER_CST
+		   && ونه_int_cst_equal (TYPE_اندازه (a2),
+					  TYPE_اندازه (a1)))
 	    {
-	      tree memb;
-	      for (memb = TYPE_FIELDS (a2);
+	      ونه memb;
+	      لكل (memb = TYPE_FIELDS (a2);
 		   memb; memb = DECL_CHAIN (memb))
 		{
-		  tree mv3 = remove_qualifiers (TREE_TYPE (memb));
-		  if (comptypes_internal (mv3, mv1, data))
-		    break;
+		  ونه mv3 = remove_qualifiers (ونه_TYPE (memb));
+		  إذا (comptypes_دننی (mv3, mv1, معلومات))
+		    اكسر;
 		}
-	      if (memb == NULL_TREE)
-		return false;
+	      إذا (memb == NULL_ونه)
+		أرجع خطأ;
 	    }
-	  else
-	    return false;
+	  وإلا
+	    أرجع خطأ;
 	}
 
-      args1 = TREE_CHAIN (args1);
-      args2 = TREE_CHAIN (args2);
+      args1 = ونه_CHAIN (args1);
+      args2 = ونه_CHAIN (args2);
     }
 }
 
@@ -2278,208 +2278,208 @@ type_lists_compatible_p (const_tree args1, const_tree args2,
    This function does not emit any diagnostics; the caller is responsible
    for that.  */
 
-static tree
-c_size_in_bytes (const_tree type)
+ساكن ونه
+c_اندازه_دننه_بایټونه (const_ونه type)
 {
-  enum tree_code code = TREE_CODE (type);
+  تعداد ونه_کوډ_2 کوډ = ونه_کوډ (type);
 
-  if (code == FUNCTION_TYPE || code == VOID_TYPE || code == ERROR_MARK
+  إذا (کوډ == FUNCTION_TYPE || کوډ == VOID_TYPE || کوډ == ERROR_MARK
       || !COMPLETE_TYPE_P (type))
-    return size_one_node;
+    أرجع اندازه_one_غوټه;
 
   /* Convert in case a char is more than one unit.  */
-  return size_binop_loc (input_location, CEIL_DIV_EXPR, TYPE_SIZE_UNIT (type),
-			 size_int (TYPE_PRECISION (char_type_node)
-				   / BITS_PER_UNIT));
+  أرجع اندازه_binop_loc (ننوت_location, CEIL_DIV_بیان, TYPE_اندازه_UNIT (type),
+			 اندازه_int (TYPE_PRECISION (char_type_غوټه)
+				   / بټونه_فی_UNIT));
 }
 
 /* Return either DECL or its known constant value (if it has one).  */
 
-tree
-decl_constant_value_1 (tree decl, bool in_init)
+ونه
+decl_constant_ارزښت_1 (ونه decl, منطقي دننه_init)
 {
-  if (/* Note that DECL_INITIAL isn't valid for a PARM_DECL.  */
-      TREE_CODE (decl) != PARM_DECL
-      && !TREE_THIS_VOLATILE (decl)
-      && TREE_READONLY (decl)
-      && DECL_INITIAL (decl) != NULL_TREE
-      && !error_operand_p (DECL_INITIAL (decl))
+  إذا (/* Note that DECL_INITIAL isn't valid for a PARM_DECL.  */
+      ونه_کوډ (decl) != PARM_DECL
+      && !ونه_THIS_VOLATILE (decl)
+      && ونه_READONLY (decl)
+      && DECL_INITIAL (decl) != NULL_ونه
+      && !error_عملوند_p (DECL_INITIAL (decl))
       /* This is invalid if initial value is not constant.
 	 If it has either a function call, a memory reference,
 	 or a variable, then re-evaluating it could give different results.  */
-      && TREE_CONSTANT (DECL_INITIAL (decl))
+      && ونه_CONSTANT (DECL_INITIAL (decl))
       /* Check for cases where this is sub-optimal, even though valid.  */
-      && (in_init || TREE_CODE (DECL_INITIAL (decl)) != CONSTRUCTOR))
-    return DECL_INITIAL (decl);
-  return decl;
+      && (دننه_init || ونه_کوډ (DECL_INITIAL (decl)) != CONSTRUCTOR))
+    أرجع DECL_INITIAL (decl);
+  أرجع decl;
 }
 
 /* Return either DECL or its known constant value (if it has one).
    Like the above, but always return decl outside of functions.  */
 
-tree
-decl_constant_value (tree decl)
+ونه
+decl_constant_ارزښت (ونه decl)
 {
   /* Don't change a variable array bound or initial value to a constant
      in a place where a variable is invalid.  */
-  return current_function_decl ? decl_constant_value_1 (decl, false) : decl;
+  أرجع current_function_decl ? decl_constant_ارزښت_1 (decl, خطأ) : decl;
 }
 
 /* Convert the array expression EXP to a pointer.  */
-static tree
-array_to_pointer_conversion (location_t loc, tree exp)
+ساكن ونه
+array_منزل_اشاره_ګر_conversion (location_t loc, ونه توانیز_تابع)
 {
-  tree orig_exp = exp;
-  tree type = TREE_TYPE (exp);
-  tree adr;
-  tree restype = TREE_TYPE (type);
-  tree ptrtype;
+  ونه orig_exp = توانیز_تابع;
+  ونه type = ونه_TYPE (توانیز_تابع);
+  ونه adr;
+  ونه restype = ونه_TYPE (type);
+  ونه ptrtype;
 
-  gcc_assert (TREE_CODE (type) == ARRAY_TYPE);
+  gcc_assert (ونه_کوډ (type) == ARRAY_TYPE);
 
-  STRIP_TYPE_NOPS (exp);
+  STRIP_TYPE_NOPS (توانیز_تابع);
 
-  copy_warning (exp, orig_exp);
+  copy_warning (توانیز_تابع, orig_exp);
 
-  ptrtype = c_build_pointer_type (restype);
+  ptrtype = c_build_اشاره_ګر_type (restype);
 
-  if (INDIRECT_REF_P (exp))
-    return convert (ptrtype, TREE_OPERAND (exp, 0));
+  إذا (غیرمستقیم_REF_P (توانیز_تابع))
+    أرجع convert (ptrtype, ونه_عملوند (توانیز_تابع, 0));
 
   /* In C++ array compound literals are temporary objects unless they are
      const or appear in namespace scope, so they are destroyed too soon
      to use them for much of anything  (c++/53220).  */
-  if (warn_cxx_compat && TREE_CODE (exp) == COMPOUND_LITERAL_EXPR)
+  إذا (warn_cxx_compat && ونه_کوډ (توانیز_تابع) == COMPOUND_LITERAL_بیان)
     {
-      tree decl = TREE_OPERAND (TREE_OPERAND (exp, 0), 0);
-      if (!TREE_READONLY (decl) && !TREE_STATIC (decl))
-	warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wc___compat,
+      ونه decl = ونه_عملوند (ونه_عملوند (توانیز_تابع, 0), 0);
+      إذا (!ونه_READONLY (decl) && !ونه_STATIC (decl))
+	warning_at (DECL_سرچینه_LOCATION (decl), OPT_Wc___compat,
 		    "converting an array compound literal to a pointer "
 		    "leads to a dangling pointer in C++");
     }
 
-  adr = build_unary_op (loc, ADDR_EXPR, exp, true);
-  return convert (ptrtype, adr);
+  adr = build_unary_op (loc, ADDR_بیان, توانیز_تابع, ریښتیا);
+  أرجع convert (ptrtype, adr);
 }
 
 /* Convert the function expression EXP to a pointer.  */
-static tree
-function_to_pointer_conversion (location_t loc, tree exp)
+ساكن ونه
+function_منزل_اشاره_ګر_conversion (location_t loc, ونه توانیز_تابع)
 {
-  tree orig_exp = exp;
+  ونه orig_exp = توانیز_تابع;
 
-  gcc_assert (TREE_CODE (TREE_TYPE (exp)) == FUNCTION_TYPE);
+  gcc_assert (ونه_کوډ (ونه_TYPE (توانیز_تابع)) == FUNCTION_TYPE);
 
-  STRIP_TYPE_NOPS (exp);
+  STRIP_TYPE_NOPS (توانیز_تابع);
 
-  copy_warning (exp, orig_exp);
+  copy_warning (توانیز_تابع, orig_exp);
 
-  tree exp2 = build_unary_op (loc, ADDR_EXPR, exp, false);
+  ونه exp2 = build_unary_op (loc, ADDR_بیان, توانیز_تابع, خطأ);
 
   /* If the function is defined and known to not require a non-local
      context, make sure no trampoline is generated.  */
-  if (TREE_CODE (exp) == FUNCTION_DECL
-      && DECL_INITIAL (exp) && !C_FUNC_NONLOCAL_CONTEXT (exp))
-   TREE_NO_TRAMPOLINE (exp2) = 1;
+  إذا (ونه_کوډ (توانیز_تابع) == FUNCTION_DECL
+      && DECL_INITIAL (توانیز_تابع) && !C_FUNC_NONLOCAL_CONTEXT (توانیز_تابع))
+   ونه_NO_TRAMPOLINE (exp2) = 1;
 
-  return exp2;
+  أرجع exp2;
 }
 
 /* Mark EXP as read, not just set, for set but not used -Wunused
    warning purposes.  */
 
-void
-mark_exp_read (tree exp)
+فراغ
+mark_exp_read (ونه توانیز_تابع)
 {
-  switch (TREE_CODE (exp))
+  بدل (ونه_کوډ (توانیز_تابع))
     {
-    case VAR_DECL:
-    case PARM_DECL:
-      DECL_READ_P (exp) = 1;
-      break;
+    حالة VAR_DECL:
+    حالة PARM_DECL:
+      DECL_READ_P (توانیز_تابع) = 1;
+      اكسر;
     CASE_CONVERT:
-      if (VOID_TYPE_P (TREE_TYPE (exp)))
-	switch (TREE_CODE (TREE_OPERAND (exp, 0)))
+      إذا (VOID_TYPE_P (ونه_TYPE (توانیز_تابع)))
+	بدل (ونه_کوډ (ونه_عملوند (توانیز_تابع, 0)))
 	  {
-	  case PREINCREMENT_EXPR:
-	  case PREDECREMENT_EXPR:
-	  case POSTINCREMENT_EXPR:
-	  case POSTDECREMENT_EXPR:
-	    return;
-	  default:
-	    break;
+	  حالة PREINCREMENT_بیان:
+	  حالة PREDECREMENT_بیان:
+	  حالة POSTINCREMENT_بیان:
+	  حالة POSTDECREMENT_بیان:
+	    أرجع;
+	  افتراضي:
+	    اكسر;
 	  }
       /* FALLTHRU */
-    case ARRAY_REF:
-    case COMPONENT_REF:
-    case MODIFY_EXPR:
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-    case ADDR_EXPR:
-    case VIEW_CONVERT_EXPR:
-    case PREINCREMENT_EXPR:
-    case PREDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-      mark_exp_read (TREE_OPERAND (exp, 0));
-      break;
-    case COMPOUND_EXPR:
+    حالة ARRAY_REF:
+    حالة COMPONENT_REF:
+    حالة MODIFY_بیان:
+    حالة REALPART_بیان:
+    حالة IMAGPART_بیان:
+    حالة ADDR_بیان:
+    حالة VIEW_CONVERT_بیان:
+    حالة PREINCREMENT_بیان:
+    حالة PREDECREMENT_بیان:
+    حالة POSTINCREMENT_بیان:
+    حالة POSTDECREMENT_بیان:
+      mark_exp_read (ونه_عملوند (توانیز_تابع, 0));
+      اكسر;
+    حالة COMPOUND_بیان:
       /* Pattern match what build_atomic_assign produces with modifycode
 	 NOP_EXPR.  */
-      if (VAR_P (TREE_OPERAND (exp, 1))
-	  && DECL_ARTIFICIAL (TREE_OPERAND (exp, 1))
-	  && TREE_CODE (TREE_OPERAND (exp, 0)) == COMPOUND_EXPR)
+      إذا (VAR_P (ونه_عملوند (توانیز_تابع, 1))
+	  && DECL_ARTIFICIAL (ونه_عملوند (توانیز_تابع, 1))
+	  && ونه_کوډ (ونه_عملوند (توانیز_تابع, 0)) == COMPOUND_بیان)
 	{
-	  tree t1 = TREE_OPERAND (TREE_OPERAND (exp, 0), 0);
-	  tree t2 = TREE_OPERAND (TREE_OPERAND (exp, 0), 1);
-	  if (TREE_CODE (t1) == TARGET_EXPR
-	      && TARGET_EXPR_SLOT (t1) == TREE_OPERAND (exp, 1)
-	      && TREE_CODE (t2) == CALL_EXPR)
+	  ونه t1 = ونه_عملوند (ونه_عملوند (توانیز_تابع, 0), 0);
+	  ونه t2 = ونه_عملوند (ونه_عملوند (توانیز_تابع, 0), 1);
+	  إذا (ونه_کوډ (t1) == موخه_بیان
+	      && موخه_بیان_خونه (t1) == ونه_عملوند (توانیز_تابع, 1)
+	      && ونه_کوډ (t2) == CALL_بیان)
 	    {
-	      tree fndecl = get_callee_fndecl (t2);
-	      tree arg = NULL_TREE;
-	      if (fndecl
-		  && TREE_CODE (fndecl) == FUNCTION_DECL
-		  && fndecl_built_in_p (fndecl, BUILT_IN_NORMAL)
-		  && call_expr_nargs (t2) >= 2)
-		switch (DECL_FUNCTION_CODE (fndecl))
+	      ونه fndecl = get_callee_fndecl (t2);
+	      ونه arg = NULL_ونه;
+	      إذا (fndecl
+		  && ونه_کوډ (fndecl) == FUNCTION_DECL
+		  && fndecl_built_دننه_p (fndecl, BUILT_دننه_نورمال)
+		  && call_بیان_nargs (t2) >= 2)
+		بدل (DECL_FUNCTION_کوډ (fndecl))
 		  {
-		  case BUILT_IN_ATOMIC_STORE:
-		    arg = CALL_EXPR_ARG (t2, 1);
-		    break;
-		  case BUILT_IN_ATOMIC_STORE_1:
-		  case BUILT_IN_ATOMIC_STORE_2:
-		  case BUILT_IN_ATOMIC_STORE_4:
-		  case BUILT_IN_ATOMIC_STORE_8:
-		  case BUILT_IN_ATOMIC_STORE_16:
-		    arg = CALL_EXPR_ARG (t2, 0);
-		    break;
-		  default:
-		    break;
+		  حالة BUILT_دننه_ATOMIC_STORE:
+		    arg = CALL_بیان_ARG (t2, 1);
+		    اكسر;
+		  حالة BUILT_دننه_ATOMIC_STORE_1:
+		  حالة BUILT_دننه_ATOMIC_STORE_2:
+		  حالة BUILT_دننه_ATOMIC_STORE_4:
+		  حالة BUILT_دننه_ATOMIC_STORE_8:
+		  حالة BUILT_دننه_ATOMIC_STORE_16:
+		    arg = CALL_بیان_ARG (t2, 0);
+		    اكسر;
+		  افتراضي:
+		    اكسر;
 		  }
-	      if (arg)
+	      إذا (arg)
 		{
 		  STRIP_NOPS (arg);
-		  if (TREE_CODE (arg) == ADDR_EXPR
-		      && DECL_P (TREE_OPERAND (arg, 0))
-		      && TYPE_ATOMIC (TREE_TYPE (TREE_OPERAND (arg, 0))))
-		    mark_exp_read (TREE_OPERAND (arg, 0));
+		  إذا (ونه_کوډ (arg) == ADDR_بیان
+		      && DECL_P (ونه_عملوند (arg, 0))
+		      && TYPE_ATOMIC (ونه_TYPE (ونه_عملوند (arg, 0))))
+		    mark_exp_read (ونه_عملوند (arg, 0));
 		}
 	    }
 	}
       /* FALLTHRU */
-    case C_MAYBE_CONST_EXPR:
-      mark_exp_read (TREE_OPERAND (exp, 1));
-      break;
-    case OMP_ARRAY_SECTION:
-      mark_exp_read (TREE_OPERAND (exp, 0));
-      if (TREE_OPERAND (exp, 1))
-	mark_exp_read (TREE_OPERAND (exp, 1));
-      if (TREE_OPERAND (exp, 2))
-	mark_exp_read (TREE_OPERAND (exp, 2));
-      break;
-    default:
-      break;
+    حالة C_MAYBE_CONST_بیان:
+      mark_exp_read (ونه_عملوند (توانیز_تابع, 1));
+      اكسر;
+    حالة OMP_ARRAY_SECTION:
+      mark_exp_read (ونه_عملوند (توانیز_تابع, 0));
+      إذا (ونه_عملوند (توانیز_تابع, 1))
+	mark_exp_read (ونه_عملوند (توانیز_تابع, 1));
+      إذا (ونه_عملوند (توانیز_تابع, 2))
+	mark_exp_read (ونه_عملوند (توانیز_تابع, 2));
+      اكسر;
+    افتراضي:
+      اكسر;
     }
 }
 
@@ -2489,79 +2489,79 @@ mark_exp_read (tree exp)
 
    LOC is the location of the expression.  */
 
-struct c_expr
-default_function_array_conversion (location_t loc, struct c_expr exp)
+بنية c_بیان
+default_function_array_conversion (location_t loc, بنية c_بیان توانیز_تابع)
 {
-  tree orig_exp = exp.value;
-  tree type = TREE_TYPE (exp.value);
-  enum tree_code code = TREE_CODE (type);
+  ونه orig_exp = توانیز_تابع.ارزښت;
+  ونه type = ونه_TYPE (توانیز_تابع.ارزښت);
+  تعداد ونه_کوډ_2 کوډ = ونه_کوډ (type);
 
-  switch (code)
+  بدل (کوډ)
     {
-    case ARRAY_TYPE:
+    حالة ARRAY_TYPE:
       {
-	bool not_lvalue = false;
-	bool lvalue_array_p;
+	منطقي not_lvalue = خطأ;
+	منطقي lvalue_array_p;
 
-	while ((TREE_CODE (exp.value) == NON_LVALUE_EXPR
-		|| CONVERT_EXPR_P (exp.value))
-	       && TREE_TYPE (TREE_OPERAND (exp.value, 0)) == type)
+	طالما ((ونه_کوډ (توانیز_تابع.ارزښت) == NON_LVALUE_بیان
+		|| CONVERT_بیان_P (توانیز_تابع.ارزښت))
+	       && ونه_TYPE (ونه_عملوند (توانیز_تابع.ارزښت, 0)) == type)
 	  {
-	    if (TREE_CODE (exp.value) == NON_LVALUE_EXPR)
-	      not_lvalue = true;
-	    exp.value = TREE_OPERAND (exp.value, 0);
+	    إذا (ونه_کوډ (توانیز_تابع.ارزښت) == NON_LVALUE_بیان)
+	      not_lvalue = ریښتیا;
+	    توانیز_تابع.ارزښت = ونه_عملوند (توانیز_تابع.ارزښت, 0);
 	  }
 
-	copy_warning (exp.value, orig_exp);
+	copy_warning (توانیز_تابع.ارزښت, orig_exp);
 
-	lvalue_array_p = !not_lvalue && lvalue_p (exp.value);
-	if (!flag_isoc99 && !lvalue_array_p)
+	lvalue_array_p = !not_lvalue && lvalue_p (توانیز_تابع.ارزښت);
+	إذا (!flag_isoc99 && !lvalue_array_p)
 	  {
 	    /* Before C99, non-lvalue arrays do not decay to pointers.
 	       Normally, using such an array would be invalid; but it can
 	       be used correctly inside sizeof or as a statement expression.
 	       Thus, do not give an error here; an error will result later.  */
-	    return exp;
+	    أرجع توانیز_تابع;
 	  }
 
-	exp.value = array_to_pointer_conversion (loc, exp.value);
+	توانیز_تابع.ارزښت = array_منزل_اشاره_ګر_conversion (loc, توانیز_تابع.ارزښت);
       }
-      break;
-    case FUNCTION_TYPE:
-      exp.value = function_to_pointer_conversion (loc, exp.value);
-      break;
-    default:
-      break;
+      اكسر;
+    حالة FUNCTION_TYPE:
+      توانیز_تابع.ارزښت = function_منزل_اشاره_ګر_conversion (loc, توانیز_تابع.ارزښت);
+      اكسر;
+    افتراضي:
+      اكسر;
     }
 
-  return exp;
+  أرجع توانیز_تابع;
 }
 
-struct c_expr
-default_function_array_read_conversion (location_t loc, struct c_expr exp)
+بنية c_بیان
+default_function_array_read_conversion (location_t loc, بنية c_بیان توانیز_تابع)
 {
-  mark_exp_read (exp.value);
+  mark_exp_read (توانیز_تابع.ارزښت);
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (TREE_CODE (exp.value) == COMPONENT_REF
-      && handle_counted_by_p (exp.value))
-    exp.value = handle_counted_by_for_component_ref (loc, exp.value);
-  return default_function_array_conversion (loc, exp);
+  إذا (ونه_کوډ (توانیز_تابع.ارزښت) == COMPONENT_REF
+      && handle_counted_by_p (توانیز_تابع.ارزښت))
+    توانیز_تابع.ارزښت = handle_counted_by_for_component_ref (loc, توانیز_تابع.ارزښت);
+  أرجع default_function_array_conversion (loc, توانیز_تابع);
 }
 
 /* Return whether EXPR should be treated as an atomic lvalue for the
    purposes of load and store handling.  */
 
-static bool
-really_atomic_lvalue (tree expr)
+ساكن منطقي
+really_atomic_lvalue (ونه بیان)
 {
-  if (error_operand_p (expr))
-    return false;
-  if (!TYPE_ATOMIC (TREE_TYPE (expr)))
-    return false;
-  if (!COMPLETE_TYPE_P (TREE_TYPE (expr)))
-    return false;
-  if (!lvalue_p (expr))
-    return false;
+  إذا (error_عملوند_p (بیان))
+    أرجع خطأ;
+  إذا (!TYPE_ATOMIC (ونه_TYPE (بیان)))
+    أرجع خطأ;
+  إذا (!COMPLETE_TYPE_P (ونه_TYPE (بیان)))
+    أرجع خطأ;
+  إذا (!lvalue_p (بیان))
+    أرجع خطأ;
 
   /* Ignore _Atomic on register variables, since their addresses can't
      be taken so (a) atomicity is irrelevant and (b) the normal atomic
@@ -2570,18 +2570,18 @@ really_atomic_lvalue (tree expr)
      unions is undefined behavior (C11 6.5.2.3#5), but it's unclear if
      it's undefined at translation time or execution time, and the
      normal atomic sequences again wouldn't work.  */
-  while (handled_component_p (expr))
+  طالما (handled_component_p (بیان))
     {
-      if (TREE_CODE (expr) == COMPONENT_REF
-	  && DECL_C_BIT_FIELD (TREE_OPERAND (expr, 1)))
-	return false;
-      expr = TREE_OPERAND (expr, 0);
+      إذا (ونه_کوډ (بیان) == COMPONENT_REF
+	  && DECL_C_بټ_ډګر (ونه_عملوند (بیان, 1)))
+	أرجع خطأ;
+      بیان = ونه_عملوند (بیان, 0);
     }
-  if (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
-    expr = COMPOUND_LITERAL_EXPR_DECL (expr);
-  if (DECL_P (expr) && C_DECL_REGISTER (expr))
-    return false;
-  return true;
+  إذا (ونه_کوډ (بیان) == COMPOUND_LITERAL_بیان)
+    بیان = COMPOUND_LITERAL_بیان_DECL (بیان);
+  إذا (DECL_P (بیان) && C_DECL_ثبتوونکی (بیان))
+    أرجع خطأ;
+  أرجع ریښتیا;
 }
 
 /* If EXPR is a named constant (C23) derived from a constexpr variable
@@ -2591,61 +2591,61 @@ really_atomic_lvalue (tree expr)
    initialized) - then return the corresponding initializer;
    otherwise, return NULL_TREE.  */
 
-static tree
-maybe_get_constexpr_init (tree expr)
+ساكن ونه
+maybe_get_constexpr_init (ونه بیان)
 {
-  tree decl = NULL_TREE;
-  if (TREE_CODE (expr) == VAR_DECL)
-    decl = expr;
-  else if (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
-    decl = COMPOUND_LITERAL_EXPR_DECL (expr);
-  if (decl
+  ونه decl = NULL_ونه;
+  إذا (ونه_کوډ (بیان) == VAR_DECL)
+    decl = بیان;
+  وإلا إذا (ونه_کوډ (بیان) == COMPOUND_LITERAL_بیان)
+    decl = COMPOUND_LITERAL_بیان_DECL (بیان);
+  إذا (decl
       && C_DECL_DECLARED_CONSTEXPR (decl)
-      && DECL_INITIAL (decl) != NULL_TREE
-      && !error_operand_p (DECL_INITIAL (decl)))
-    return DECL_INITIAL (decl);
-  if (TREE_CODE (expr) != COMPONENT_REF)
-    return NULL_TREE;
-  tree inner = maybe_get_constexpr_init (TREE_OPERAND (expr, 0));
-  if (inner == NULL_TREE)
-    return NULL_TREE;
-  while ((CONVERT_EXPR_P (inner) || TREE_CODE (inner) == NON_LVALUE_EXPR)
-	 && !error_operand_p (inner)
-	 && (TYPE_MAIN_VARIANT (TREE_TYPE (inner))
-	     == TYPE_MAIN_VARIANT (TREE_TYPE (TREE_OPERAND (inner, 0)))))
-    inner = TREE_OPERAND (inner, 0);
-  if (TREE_CODE (inner) != CONSTRUCTOR)
-    return NULL_TREE;
-  tree field = TREE_OPERAND (expr, 1);
-  unsigned HOST_WIDE_INT cidx;
-  tree cfield, cvalue;
-  bool have_other_init = false;
+      && DECL_INITIAL (decl) != NULL_ونه
+      && !error_عملوند_p (DECL_INITIAL (decl)))
+    أرجع DECL_INITIAL (decl);
+  إذا (ونه_کوډ (بیان) != COMPONENT_REF)
+    أرجع NULL_ونه;
+  ونه inner = maybe_get_constexpr_init (ونه_عملوند (بیان, 0));
+  إذا (inner == NULL_ونه)
+    أرجع NULL_ونه;
+  طالما ((CONVERT_بیان_P (inner) || ونه_کوډ (inner) == NON_LVALUE_بیان)
+	 && !error_عملوند_p (inner)
+	 && (TYPE_MAIN_VARIANT (ونه_TYPE (inner))
+	     == TYPE_MAIN_VARIANT (ونه_TYPE (ونه_عملوند (inner, 0)))))
+    inner = ونه_عملوند (inner, 0);
+  إذا (ونه_کوډ (inner) != CONSTRUCTOR)
+    أرجع NULL_ونه;
+  ونه ډګر_2 = ونه_عملوند (بیان, 1);
+  بینښه HOST_WIDE_INT cidx;
+  ونه cfield, cvalue;
+  منطقي have_other_init = خطأ;
   FOR_EACH_CONSTRUCTOR_ELT (CONSTRUCTOR_ELTS (inner), cidx, cfield, cvalue)
     {
-      if (cfield == field)
-	return cvalue;
-      have_other_init = true;
+      إذا (cfield == ډګر_2)
+	أرجع cvalue;
+      have_other_init = ریښتیا;
     }
-  if (TREE_CODE (TREE_TYPE (inner)) == UNION_TYPE
-      && (have_other_init || field != TYPE_FIELDS (TREE_TYPE (inner))))
-    return NULL_TREE;
+  إذا (ونه_کوډ (ونه_TYPE (inner)) == UNION_TYPE
+      && (have_other_init || ډګر_2 != TYPE_FIELDS (ونه_TYPE (inner))))
+    أرجع NULL_ونه;
   /* Return a default initializer.  */
-  if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (expr)))
-    return build_constructor (TREE_TYPE (expr), NULL);
-  return build_zero_cst (TREE_TYPE (expr));
+  إذا (ریکارډ_OR_UNION_TYPE_P (ونه_TYPE (بیان)))
+    أرجع build_constructor (ونه_TYPE (بیان), عدم);
+  أرجع build_zero_cst (ونه_TYPE (بیان));
 }
 
 /* Helper function for convert_lvalue_to_rvalue called via
    walk_tree_without_duplicates.  Find DATA inside of the expression.  */
 
-static tree
-c_find_var_r (tree *tp, int *walk_subtrees, void *data)
+ساكن ونه
+c_پیدا_کړه_var_r (ونه *tp, صحيح *walk_subtrees, فراغ *معلومات)
 {
-  if (TYPE_P (*tp))
+  إذا (TYPE_P (*tp))
     *walk_subtrees = 0;
-  else if (*tp == (tree) data)
-    return *tp;
-  return NULL_TREE;
+  وإلا إذا (*tp == (ونه) معلومات)
+    أرجع *tp;
+  أرجع NULL_ونه;
 }
 
 /* Convert expression EXP (location LOC) from lvalue to rvalue,
@@ -2656,48 +2656,48 @@ c_find_var_r (tree *tp, int *walk_subtrees, void *data)
    constexpr scalars (including elements of structures and unions) are
    replaced by their initializers.  */
 
-struct c_expr
-convert_lvalue_to_rvalue (location_t loc, struct c_expr exp,
-			  bool convert_p, bool read_p, bool for_init)
+بنية c_بیان
+convert_lvalue_منزل_rvalue (location_t loc, بنية c_بیان توانیز_تابع,
+			  منطقي convert_p, منطقي read_p, منطقي for_init)
 {
-  bool force_non_npc = false;
-  if (read_p)
-    mark_exp_read (exp.value);
+  منطقي force_non_npc = خطأ;
+  إذا (read_p)
+    mark_exp_read (توانیز_تابع.ارزښت);
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (read_p && TREE_CODE (exp.value) == COMPONENT_REF
-      && handle_counted_by_p (exp.value))
-    exp.value = handle_counted_by_for_component_ref (loc, exp.value);
+  إذا (read_p && ونه_کوډ (توانیز_تابع.ارزښت) == COMPONENT_REF
+      && handle_counted_by_p (توانیز_تابع.ارزښت))
+    توانیز_تابع.ارزښت = handle_counted_by_for_component_ref (loc, توانیز_تابع.ارزښت);
 
-  if (convert_p)
-    exp = default_function_array_conversion (loc, exp);
-  if (!VOID_TYPE_P (TREE_TYPE (exp.value))
+  إذا (convert_p)
+    توانیز_تابع = default_function_array_conversion (loc, توانیز_تابع);
+  إذا (!VOID_TYPE_P (ونه_TYPE (توانیز_تابع.ارزښت))
       || (flag_isoc2y
-	  && TYPE_QUALS (TREE_TYPE (exp.value)) != TYPE_UNQUALIFIED))
-    exp.value = require_complete_type (loc, exp.value);
-  if (for_init || !RECORD_OR_UNION_TYPE_P (TREE_TYPE (exp.value)))
+	  && TYPE_QUALS (ونه_TYPE (توانیز_تابع.ارزښت)) != TYPE_UNQUALIFIED))
+    توانیز_تابع.ارزښت = require_complete_type (loc, توانیز_تابع.ارزښت);
+  إذا (for_init || !ریکارډ_OR_UNION_TYPE_P (ونه_TYPE (توانیز_تابع.ارزښت)))
     {
-      tree init = maybe_get_constexpr_init (exp.value);
-      if (init != NULL_TREE)
+      ونه init = maybe_get_constexpr_init (توانیز_تابع.ارزښت);
+      إذا (init != NULL_ونه)
 	{
 	  /* A named constant of pointer type or type nullptr_t is not
 	     a null pointer constant even if the initializer is
 	     one.  */
-	  if (TREE_CODE (init) == INTEGER_CST
-	      && !INTEGRAL_TYPE_P (TREE_TYPE (init))
+	  إذا (ونه_کوډ (init) == INTEGER_CST
+	      && !INTEGRAL_TYPE_P (ونه_TYPE (init))
 	      && integer_zerop (init))
-	    force_non_npc = true;
-	  exp.value = init;
+	    force_non_npc = ریښتیا;
+	  توانیز_تابع.ارزښت = init;
 	}
     }
-  if (really_atomic_lvalue (exp.value))
+  إذا (really_atomic_lvalue (توانیز_تابع.ارزښت))
     {
-      vec<tree, va_gc> *params;
-      tree nonatomic_type, tmp, tmp_addr, fndecl, func_call;
-      tree expr_type = TREE_TYPE (exp.value);
-      tree expr_addr = build_unary_op (loc, ADDR_EXPR, exp.value, false);
-      tree seq_cst = build_int_cst (integer_type_node, MEMMODEL_SEQ_CST);
+      vec<ونه, va_gc> *params;
+      ونه nonatomic_type, tmp, tmp_addr, fndecl, func_call;
+      ونه بیان_type = ونه_TYPE (توانیز_تابع.ارزښت);
+      ونه بیان_addr = build_unary_op (loc, ADDR_بیان, توانیز_تابع.ارزښت, خطأ);
+      ونه seq_cst = build_int_cst (integer_type_غوټه, MEMMODEL_SEQ_CST);
 
-      gcc_assert (TYPE_ATOMIC (expr_type));
+      gcc_assert (TYPE_ATOMIC (بیان_type));
 
       /* Expansion of a generic atomic load may require an addition
 	 element, so allocate enough to prevent a resize.  */
@@ -2705,156 +2705,156 @@ convert_lvalue_to_rvalue (location_t loc, struct c_expr exp,
 
       /* Remove the qualifiers for the rest of the expressions and
 	 create the VAL temp variable to hold the RHS.  */
-      nonatomic_type = build_qualified_type (expr_type, TYPE_UNQUALIFIED);
+      nonatomic_type = build_qualified_type (بیان_type, TYPE_UNQUALIFIED);
       tmp = create_tmp_var_raw (nonatomic_type);
-      tmp_addr = build_unary_op (loc, ADDR_EXPR, tmp, false);
-      TREE_ADDRESSABLE (tmp) = 1;
+      tmp_addr = build_unary_op (loc, ADDR_بیان, tmp, خطأ);
+      ونه_ADDRESSABLE (tmp) = 1;
       /* Do not disable warnings for TMP even though it's artificial.
 	 -Winvalid-memory-model depends on it.  */
 
       /* Issue __atomic_load (&expr, &tmp, SEQ_CST);  */
-      fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_LOAD);
-      params->quick_push (expr_addr);
-      params->quick_push (tmp_addr);
-      params->quick_push (seq_cst);
-      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
+      fndecl = builtin_decl_explicit (BUILT_دننه_ATOMIC_بارول);
+      params->چټک_ټېل (بیان_addr);
+      params->چټک_ټېل (tmp_addr);
+      params->چټک_ټېل (seq_cst);
+      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, عدم);
 
       /* EXPR is always read.  */
-      mark_exp_read (exp.value);
+      mark_exp_read (توانیز_تابع.ارزښت);
 
       /* Optimize the common case where c_build_function_call_vec
 	 immediately folds __atomic_load (&expr, &tmp, SEQ_CST); into
 	 tmp = __atomic_load_<N> (&expr, SEQ_CST);
 	 In that case tmp is not addressable and can be initialized
 	 fully by the rhs of the MODIFY_EXPR.  */
-      tree tem = func_call;
-      if (CONVERT_EXPR_P (tem) && VOID_TYPE_P (TREE_TYPE (tem)))
+      ونه tem = func_call;
+      إذا (CONVERT_بیان_P (tem) && VOID_TYPE_P (ونه_TYPE (tem)))
 	{
-	  tem = TREE_OPERAND (tem, 0);
-	  if (TREE_CODE (tem) == MODIFY_EXPR
-	      && TREE_OPERAND (tem, 0) == tmp
-	      && !walk_tree_without_duplicates (&TREE_OPERAND (tem, 1),
-						c_find_var_r, tmp))
+	  tem = ونه_عملوند (tem, 0);
+	  إذا (ونه_کوډ (tem) == MODIFY_بیان
+	      && ونه_عملوند (tem, 0) == tmp
+	      && !walk_ونه_without_duplicates (&ونه_عملوند (tem, 1),
+						c_پیدا_کړه_var_r, tmp))
 	    {
-	      TREE_ADDRESSABLE (tmp) = 0;
-	      func_call = TREE_OPERAND (tem, 1);
+	      ونه_ADDRESSABLE (tmp) = 0;
+	      func_call = ونه_عملوند (tem, 1);
 	    }
 	}
 
       /* Return tmp which contains the value loaded.  */
-      exp.value = build4 (TARGET_EXPR, nonatomic_type, tmp, func_call,
-			  NULL_TREE, NULL_TREE);
+      توانیز_تابع.ارزښت = build4 (موخه_بیان, nonatomic_type, tmp, func_call,
+			  NULL_ونه, NULL_ونه);
     }
-  if (convert_p && !error_operand_p (exp.value)
-      && (TREE_CODE (TREE_TYPE (exp.value)) != ARRAY_TYPE))
-    exp.value = convert (build_qualified_type (TREE_TYPE (exp.value), TYPE_UNQUALIFIED), exp.value);
-  if (force_non_npc)
-    exp.value = build1 (NOP_EXPR, TREE_TYPE (exp.value), exp.value);
+  إذا (convert_p && !error_عملوند_p (توانیز_تابع.ارزښت)
+      && (ونه_کوډ (ونه_TYPE (توانیز_تابع.ارزښت)) != ARRAY_TYPE))
+    توانیز_تابع.ارزښت = convert (build_qualified_type (ونه_TYPE (توانیز_تابع.ارزښت), TYPE_UNQUALIFIED), توانیز_تابع.ارزښت);
+  إذا (force_non_npc)
+    توانیز_تابع.ارزښت = build1 (NOP_بیان, ونه_TYPE (توانیز_تابع.ارزښت), توانیز_تابع.ارزښت);
 
   {
-    tree false_value, true_value;
-    if (convert_p && !error_operand_p (exp.value)
-	&& c_hardbool_type_attr (TREE_TYPE (exp.value),
-				 &false_value, &true_value))
+    ونه false_ارزښت, true_ارزښت;
+    إذا (convert_p && !error_عملوند_p (توانیز_تابع.ارزښت)
+	&& c_hardbool_type_attr (ونه_TYPE (توانیز_تابع.ارزښت),
+				 &false_ارزښت, &true_ارزښت))
       {
-	tree t = save_expr (exp.value);
+	ونه t = save_بیان (توانیز_تابع.ارزښت);
 
-	mark_exp_read (exp.value);
+	mark_exp_read (توانیز_تابع.ارزښت);
 
-	tree trapfn = builtin_decl_explicit (BUILT_IN_TRAP);
-	tree expr = build_call_expr_loc (loc, trapfn, 0);
-	expr = build_compound_expr (loc, expr, boolean_true_node);
-	expr = fold_build3_loc (loc, COND_EXPR, boolean_type_node,
-				fold_build2_loc (loc, NE_EXPR,
-						 boolean_type_node,
-						 t, true_value),
-				expr, boolean_true_node);
-	expr = fold_build3_loc (loc, COND_EXPR, boolean_type_node,
-				fold_build2_loc (loc, NE_EXPR,
-						 boolean_type_node,
-						 t, false_value),
-				expr, boolean_false_node);
+	ونه trapfn = builtin_decl_explicit (BUILT_دننه_TRAP);
+	ونه بیان = build_call_بیان_loc (loc, trapfn, 0);
+	بیان = build_compound_بیان (loc, بیان, boolean_true_غوټه);
+	بیان = fold_build3_loc (loc, COND_بیان, boolean_type_غوټه,
+				fold_build2_loc (loc, NE_بیان,
+						 boolean_type_غوټه,
+						 t, true_ارزښت),
+				بیان, boolean_true_غوټه);
+	بیان = fold_build3_loc (loc, COND_بیان, boolean_type_غوټه,
+				fold_build2_loc (loc, NE_بیان,
+						 boolean_type_غوټه,
+						 t, false_ارزښت),
+				بیان, boolean_false_غوټه);
 
-	exp.value = expr;
+	توانیز_تابع.ارزښت = بیان;
       }
   }
 
-  return exp;
+  أرجع توانیز_تابع;
 }
 
 /* Wrapper for the overload above, same arguments but for tree rather than
    c_expr.  This is important for hardbools to decay to bools.  */
 
-static inline tree
-convert_lvalue_to_rvalue (location_t loc, tree val,
-			  bool convert_p, bool read_p, bool for_init = false)
+ساكن مضمن ونه
+convert_lvalue_منزل_rvalue (location_t loc, ونه val,
+			  منطقي convert_p, منطقي read_p, منطقي for_init = خطأ)
 {
-  struct c_expr expr;
-  memset (&expr, 0, sizeof (expr));
-  expr.value = val;
-  expr = convert_lvalue_to_rvalue (loc, expr, convert_p, read_p, for_init);
-  return expr.value;
+  بنية c_بیان بیان;
+  memset (&بیان, 0, حجم (بیان));
+  بیان.ارزښت = val;
+  بیان = convert_lvalue_منزل_rvalue (loc, بیان, convert_p, read_p, for_init);
+  أرجع بیان.ارزښت;
 }
 
 /* EXP is an expression of integer type.  Apply the integer promotions
    to it and return the promoted value.  */
 
-tree
-perform_integral_promotions (tree exp)
+ونه
+perform_integral_promotions (ونه توانیز_تابع)
 {
-  tree type = TREE_TYPE (exp);
-  enum tree_code code = TREE_CODE (type);
+  ونه type = ونه_TYPE (توانیز_تابع);
+  تعداد ونه_کوډ_2 کوډ = ونه_کوډ (type);
 
   gcc_assert (INTEGRAL_TYPE_P (type));
 
   /* Convert enums to the result of applying the integer promotions to
      their underlying type.  */
-  if (code == ENUMERAL_TYPE)
+  إذا (کوډ == ENUMERAL_TYPE)
     {
       type = ENUM_UNDERLYING_TYPE (type);
-      if (c_promoting_integer_type_p (type))
+      إذا (c_promoting_integer_type_p (type))
 	{
-	  if (TYPE_UNSIGNED (type)
-	      && TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_node))
-	    type = unsigned_type_node;
-	  else
-	    type = integer_type_node;
+	  إذا (TYPE_UNSIGNED (type)
+	      && TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_غوټه))
+	    type = unsigned_type_غوټه;
+	  وإلا
+	    type = integer_type_غوټه;
 	}
 
-      return convert (type, exp);
+      أرجع convert (type, توانیز_تابع);
     }
 
   /* ??? This should no longer be needed now bit-fields have their
      proper types.  */
-  if (TREE_CODE (exp) == COMPONENT_REF
-      && DECL_C_BIT_FIELD (TREE_OPERAND (exp, 1)))
+  إذا (ونه_کوډ (توانیز_تابع) == COMPONENT_REF
+      && DECL_C_بټ_ډګر (ونه_عملوند (توانیز_تابع, 1)))
     {
-      if (BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (TREE_OPERAND (exp, 1))))
+      إذا (BITINT_TYPE_P (DECL_بټ_ډګر_TYPE (ونه_عملوند (توانیز_تابع, 1))))
 	{
-	  tree btype = DECL_BIT_FIELD_TYPE (TREE_OPERAND (exp, 1));
-	  if (TREE_CODE (btype) == BITINT_TYPE)
-	    return convert (btype, exp);
-	  else
-	    return convert (ENUM_UNDERLYING_TYPE (btype), exp);
+	  ونه btype = DECL_بټ_ډګر_TYPE (ونه_عملوند (توانیز_تابع, 1));
+	  إذا (ونه_کوډ (btype) == BITINT_TYPE)
+	    أرجع convert (btype, توانیز_تابع);
+	  وإلا
+	    أرجع convert (ENUM_UNDERLYING_TYPE (btype), توانیز_تابع);
 	}
       /* If it's thinner than an int, promote it like a
 	 c_promoting_integer_type_p, otherwise leave it alone.  */
-      if (compare_tree_int (DECL_SIZE (TREE_OPERAND (exp, 1)),
-			    TYPE_PRECISION (integer_type_node)) < 0)
-	return convert (integer_type_node, exp);
+      إذا (compare_ونه_int (DECL_اندازه (ونه_عملوند (توانیز_تابع, 1)),
+			    TYPE_PRECISION (integer_type_غوټه)) < 0)
+	أرجع convert (integer_type_غوټه, توانیز_تابع);
     }
 
-  if (c_promoting_integer_type_p (type))
+  إذا (c_promoting_integer_type_p (type))
     {
       /* Preserve unsignedness if not really getting any wider.  */
-      if (TYPE_UNSIGNED (type)
-	  && TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_node))
-	return convert (unsigned_type_node, exp);
+      إذا (TYPE_UNSIGNED (type)
+	  && TYPE_PRECISION (type) == TYPE_PRECISION (integer_type_غوټه))
+	أرجع convert (unsigned_type_غوټه, توانیز_تابع);
 
-      return convert (integer_type_node, exp);
+      أرجع convert (integer_type_غوټه, توانیز_تابع);
     }
 
-  return exp;
+  أرجع توانیز_تابع;
 }
 
 
@@ -2862,64 +2862,64 @@ perform_integral_promotions (tree exp)
    Enumeral types or short or char are converted to int.
    In addition, manifest constants symbols are replaced by their values.  */
 
-tree
-default_conversion (tree exp)
+ونه
+default_conversion (ونه توانیز_تابع)
 {
-  tree orig_exp;
-  tree type = TREE_TYPE (exp);
-  enum tree_code code = TREE_CODE (type);
-  tree promoted_type;
+  ونه orig_exp;
+  ونه type = ونه_TYPE (توانیز_تابع);
+  تعداد ونه_کوډ_2 کوډ = ونه_کوډ (type);
+  ونه promoted_type;
 
-  mark_exp_read (exp);
+  mark_exp_read (توانیز_تابع);
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (TREE_CODE (exp) == COMPONENT_REF
-      && handle_counted_by_p (exp))
-    exp = handle_counted_by_for_component_ref (EXPR_LOCATION (exp), exp);
+  إذا (ونه_کوډ (توانیز_تابع) == COMPONENT_REF
+      && handle_counted_by_p (توانیز_تابع))
+    توانیز_تابع = handle_counted_by_for_component_ref (بیان_LOCATION (توانیز_تابع), توانیز_تابع);
 
   /* Functions and arrays have been converted during parsing.  */
-  gcc_assert (code != FUNCTION_TYPE);
-  if (code == ARRAY_TYPE)
-    return exp;
+  gcc_assert (کوډ != FUNCTION_TYPE);
+  إذا (کوډ == ARRAY_TYPE)
+    أرجع توانیز_تابع;
 
   /* Constants can be used directly unless they're not loadable.  */
-  if (TREE_CODE (exp) == CONST_DECL)
-    exp = DECL_INITIAL (exp);
+  إذا (ونه_کوډ (توانیز_تابع) == CONST_DECL)
+    توانیز_تابع = DECL_INITIAL (توانیز_تابع);
 
   /* Strip no-op conversions.  */
-  orig_exp = exp;
-  STRIP_TYPE_NOPS (exp);
+  orig_exp = توانیز_تابع;
+  STRIP_TYPE_NOPS (توانیز_تابع);
 
-  copy_warning (exp, orig_exp);
+  copy_warning (توانیز_تابع, orig_exp);
 
-  if (code == VOID_TYPE)
+  إذا (کوډ == VOID_TYPE)
     {
-      error_at (EXPR_LOC_OR_LOC (exp, input_location),
+      error_at (بیان_LOC_OR_LOC (توانیز_تابع, ننوت_location),
 		"void value not ignored as it ought to be");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
-  exp = require_complete_type (EXPR_LOC_OR_LOC (exp, input_location), exp);
-  if (exp == error_mark_node)
-    return error_mark_node;
+  توانیز_تابع = require_complete_type (بیان_LOC_OR_LOC (توانیز_تابع, ننوت_location), توانیز_تابع);
+  إذا (توانیز_تابع == error_mark_غوټه)
+    أرجع error_mark_غوټه;
 
   promoted_type = targetm.promoted_type (type);
-  if (promoted_type)
-    return convert (promoted_type, exp);
+  إذا (promoted_type)
+    أرجع convert (promoted_type, توانیز_تابع);
 
-  if (INTEGRAL_TYPE_P (type))
+  إذا (INTEGRAL_TYPE_P (type))
     {
       /* Avoid performing integral promotion of bit-precise integer
 	 type bit-field to its corresponding bit-precise integer if
 	 orig_exp is a cast to it to its underlying type.  */
-      if (orig_exp != exp
-	  && TREE_CODE (exp) == COMPONENT_REF
-	  && DECL_C_BIT_FIELD (TREE_OPERAND (exp, 1))
-	  && BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (TREE_OPERAND (exp, 1))))
-	return perform_integral_promotions (orig_exp);
-      return perform_integral_promotions (exp);
+      إذا (orig_exp != توانیز_تابع
+	  && ونه_کوډ (توانیز_تابع) == COMPONENT_REF
+	  && DECL_C_بټ_ډګر (ونه_عملوند (توانیز_تابع, 1))
+	  && BITINT_TYPE_P (DECL_بټ_ډګر_TYPE (ونه_عملوند (توانیز_تابع, 1))))
+	أرجع perform_integral_promotions (orig_exp);
+      أرجع perform_integral_promotions (توانیز_تابع);
     }
 
-  return exp;
+  أرجع توانیز_تابع;
 }
 
 /* Look up COMPONENT in a structure or union TYPE.
@@ -2931,10 +2931,10 @@ default_conversion (tree exp)
    the component is embedded within (nested) anonymous structures or
    unions, the list steps down the chain to the component.  */
 
-tree
-lookup_field (const_tree type, tree component)
+ونه
+lookup_ډګر (const_ونه type, ونه component)
 {
-  tree field;
+  ونه ډګر_2;
 
   /* If TYPE_LANG_SPECIFIC is set, then it is a sorted array of pointers
      to the field elements.  Use a binary search on this array to quickly
@@ -2945,135 +2945,135 @@ lookup_field (const_tree type, tree component)
      TYPE_LANG_SPECIFIC arrays are potentially no longer sorted.  In that
      case just iterate using DECL_CHAIN.  */
 
-  if (TYPE_LANG_SPECIFIC (type) && TYPE_LANG_SPECIFIC (type)->s
-      && !seen_error ())
+  إذا (TYPE_LANG_SPECIFIC (type) && TYPE_LANG_SPECIFIC (type)->s
+      && !کتل_شوی_error ())
     {
-      int bot, top, half;
-      tree *field_array = &TYPE_LANG_SPECIFIC (type)->s->elts[0];
+      صحيح bot, سر, half;
+      ونه *ډګر_array = &TYPE_LANG_SPECIFIC (type)->s->elts[0];
 
-      field = TYPE_FIELDS (type);
+      ډګر_2 = TYPE_FIELDS (type);
       bot = 0;
-      top = TYPE_LANG_SPECIFIC (type)->s->len;
-      while (top - bot > 1)
+      سر = TYPE_LANG_SPECIFIC (type)->s->len;
+      طالما (سر - bot > 1)
 	{
-	  half = (top - bot + 1) >> 1;
-	  field = field_array[bot+half];
+	  half = (سر - bot + 1) >> 1;
+	  ډګر_2 = ډګر_array[bot+half];
 
-	  if (DECL_NAME (field) == NULL_TREE)
+	  إذا (DECL_NAME (ډګر_2) == NULL_ونه)
 	    {
 	      /* Step through all anon unions in linear fashion.  */
-	      while (DECL_NAME (field_array[bot]) == NULL_TREE)
+	      طالما (DECL_NAME (ډګر_array[bot]) == NULL_ونه)
 		{
-		  field = field_array[bot++];
-		  if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
+		  ډګر_2 = ډګر_array[bot++];
+		  إذا (ریکارډ_OR_UNION_TYPE_P (ونه_TYPE (ډګر_2)))
 		    {
-		      tree anon = lookup_field (TREE_TYPE (field), component);
+		      ونه anon = lookup_ډګر (ونه_TYPE (ډګر_2), component);
 
-		      if (anon)
-			return tree_cons (NULL_TREE, field, anon);
+		      إذا (anon)
+			أرجع ونه_cons (NULL_ونه, ډګر_2, anon);
 
 		      /* The Plan 9 compiler permits referring
 			 directly to an anonymous struct/union field
 			 using a typedef name.  */
-		      if (flag_plan9_extensions
-			  && TYPE_NAME (TREE_TYPE (field)) != NULL_TREE
-			  && (TREE_CODE (TYPE_NAME (TREE_TYPE (field)))
+		      إذا (flag_plan9_extensions
+			  && TYPE_NAME (ونه_TYPE (ډګر_2)) != NULL_ونه
+			  && (ونه_کوډ (TYPE_NAME (ونه_TYPE (ډګر_2)))
 			      == TYPE_DECL)
-			  && (DECL_NAME (TYPE_NAME (TREE_TYPE (field)))
+			  && (DECL_NAME (TYPE_NAME (ونه_TYPE (ډګر_2)))
 			      == component))
-			break;
+			اكسر;
 		    }
 		}
 
 	      /* Entire record is only anon unions.  */
-	      if (bot > top)
-		return NULL_TREE;
+	      إذا (bot > سر)
+		أرجع NULL_ونه;
 
 	      /* Restart the binary search, with new lower bound.  */
-	      continue;
+	      استمر;
 	    }
 
-	  if (DECL_NAME (field) == component)
-	    break;
-	  if (DECL_NAME (field) < component)
+	  إذا (DECL_NAME (ډګر_2) == component)
+	    اكسر;
+	  إذا (DECL_NAME (ډګر_2) < component)
 	    bot += half;
-	  else
-	    top = bot + half;
+	  وإلا
+	    سر = bot + half;
 	}
 
-      if (DECL_NAME (field_array[bot]) == component)
-	field = field_array[bot];
-      else if (DECL_NAME (field) != component)
-	return NULL_TREE;
+      إذا (DECL_NAME (ډګر_array[bot]) == component)
+	ډګر_2 = ډګر_array[bot];
+      وإلا إذا (DECL_NAME (ډګر_2) != component)
+	أرجع NULL_ونه;
     }
-  else
+  وإلا
     {
-      for (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
+      لكل (ډګر_2 = TYPE_FIELDS (type); ډګر_2; ډګر_2 = DECL_CHAIN (ډګر_2))
 	{
-	  if (DECL_NAME (field) == NULL_TREE
-	      && RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
+	  إذا (DECL_NAME (ډګر_2) == NULL_ونه
+	      && ریکارډ_OR_UNION_TYPE_P (ونه_TYPE (ډګر_2)))
 	    {
-	      tree anon = lookup_field (TREE_TYPE (field), component);
+	      ونه anon = lookup_ډګر (ونه_TYPE (ډګر_2), component);
 
-	      if (anon)
-		return tree_cons (NULL_TREE, field, anon);
+	      إذا (anon)
+		أرجع ونه_cons (NULL_ونه, ډګر_2, anon);
 
 	      /* The Plan 9 compiler permits referring directly to an
 		 anonymous struct/union field using a typedef
 		 name.  */
-	      if (flag_plan9_extensions
-		  && TYPE_NAME (TREE_TYPE (field)) != NULL_TREE
-		  && TREE_CODE (TYPE_NAME (TREE_TYPE (field))) == TYPE_DECL
-		  && (DECL_NAME (TYPE_NAME (TREE_TYPE (field)))
+	      إذا (flag_plan9_extensions
+		  && TYPE_NAME (ونه_TYPE (ډګر_2)) != NULL_ونه
+		  && ونه_کوډ (TYPE_NAME (ونه_TYPE (ډګر_2))) == TYPE_DECL
+		  && (DECL_NAME (TYPE_NAME (ونه_TYPE (ډګر_2)))
 		      == component))
-		break;
+		اكسر;
 	    }
 
-	  if (DECL_NAME (field) == component)
-	    break;
+	  إذا (DECL_NAME (ډګر_2) == component)
+	    اكسر;
 	}
 
-      if (field == NULL_TREE)
-	return NULL_TREE;
+      إذا (ډګر_2 == NULL_ونه)
+	أرجع NULL_ونه;
     }
 
-  return tree_cons (NULL_TREE, field, NULL_TREE);
+  أرجع ونه_cons (NULL_ونه, ډګر_2, NULL_ونه);
 }
 
 /* Recursively append candidate IDENTIFIER_NODEs to CANDIDATES.  */
 
-static void
-lookup_field_fuzzy_find_candidates (tree type, tree component,
-				    vec<tree> *candidates)
+ساكن فراغ
+lookup_ډګر_fuzzy_پیدا_کړه_candidates (ونه type, ونه component,
+				    vec<ونه> *candidates)
 {
-  tree field;
-  for (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
+  ونه ډګر_2;
+  لكل (ډګر_2 = TYPE_FIELDS (type); ډګر_2; ډګر_2 = DECL_CHAIN (ډګر_2))
     {
-      if (DECL_NAME (field) == NULL_TREE
-	  && RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
-	lookup_field_fuzzy_find_candidates (TREE_TYPE (field), component,
+      إذا (DECL_NAME (ډګر_2) == NULL_ونه
+	  && ریکارډ_OR_UNION_TYPE_P (ونه_TYPE (ډګر_2)))
+	lookup_ډګر_fuzzy_پیدا_کړه_candidates (ونه_TYPE (ډګر_2), component,
 					    candidates);
 
-      if (DECL_NAME (field))
-	candidates->safe_push (DECL_NAME (field));
+      إذا (DECL_NAME (ډګر_2))
+	candidates->خوندي_ټېل (DECL_NAME (ډګر_2));
     }
 }
 
 /* Like "lookup_field", but find the closest matching IDENTIFIER_NODE,
    rather than returning a TREE_LIST for an exact match.  */
 
-static tree
-lookup_field_fuzzy (tree type, tree component)
+ساكن ونه
+lookup_ډګر_fuzzy (ونه type, ونه component)
 {
-  gcc_assert (TREE_CODE (component) == IDENTIFIER_NODE);
+  gcc_assert (ونه_کوډ (component) == IDENTIFIER_غوټه);
 
   /* First, gather a list of candidates.  */
-  auto_vec <tree> candidates;
+  auto_vec <ونه> candidates;
 
-  lookup_field_fuzzy_find_candidates (type, component,
+  lookup_ډګر_fuzzy_پیدا_کړه_candidates (type, component,
 				      &candidates);
 
-  return find_closest_identifier (component, &candidates);
+  أرجع پیدا_کړه_closest_identifier (component, &candidates);
 }
 
 /* Support function for build_component_ref's error-handling.
@@ -3081,77 +3081,77 @@ lookup_field_fuzzy (tree type, tree component)
    Given DATUM_TYPE, and "DATUM.COMPONENT", where DATUM is *not* a
    struct or union, should we suggest "DATUM->COMPONENT" as a hint?  */
 
-static bool
-should_suggest_deref_p (tree datum_type)
+ساكن منطقي
+should_suggest_deref_p (ونه datum_type)
 {
   /* We don't do it for Objective-C, since Objective-C 2.0 dot-syntax
      allows "." for ptrs; we could be handling a failed attempt
      to access a property.  */
-  if (c_dialect_objc ())
-    return false;
+  إذا (c_dialect_objc ())
+    أرجع خطأ;
 
   /* Only suggest it for pointers...  */
-  if (TREE_CODE (datum_type) != POINTER_TYPE)
-    return false;
+  إذا (ونه_کوډ (datum_type) != اشاره_ګر_TYPE)
+    أرجع خطأ;
 
   /* ...to structs/unions.  */
-  tree underlying_type = TREE_TYPE (datum_type);
-  enum tree_code code = TREE_CODE (underlying_type);
-  if (code == RECORD_TYPE || code == UNION_TYPE)
-    return true;
-  else
-    return false;
+  ونه underlying_type = ونه_TYPE (datum_type);
+  تعداد ونه_کوډ_2 کوډ = ونه_کوډ (underlying_type);
+  إذا (کوډ == ریکارډ_TYPE || کوډ == UNION_TYPE)
+    أرجع ریښتیا;
+  وإلا
+    أرجع خطأ;
 }
 
 /* Give a component ref REF, decide whether we should handle its counted_by
    attribute based on its context:
    Do not handle counted_by when in offsetof, typeof and alignof operator.  */
 
-static bool
-handle_counted_by_p (tree ref)
+ساكن منطقي
+handle_counted_by_p (ونه ref)
 {
-  gcc_assert (TREE_CODE (ref) == COMPONENT_REF);
-  tree datum = TREE_OPERAND (ref, 0);
+  gcc_assert (ونه_کوډ (ref) == COMPONENT_REF);
+  ونه datum = ونه_عملوند (ref, 0);
   /* If the component_ref is build for a offsetof, i.e., the datum
      of the component_ref is a indirect_ref of null_pointer_node,
      we should not generate call to .ACCESS_WITH_SIZE.  */
-  if (TREE_CODE (datum) == INDIRECT_REF
-      && TREE_OPERAND (datum, 0) == null_pointer_node)
-    return false;
-  if (in_typeof || in_alignof)
-    return false;
-  return true;
+  إذا (ونه_کوډ (datum) == غیرمستقیم_REF
+      && ونه_عملوند (datum, 0) == null_اشاره_ګر_غوټه)
+    أرجع خطأ;
+  إذا (دننه_typeof || دننه_alignof)
+    أرجع خطأ;
+  أرجع ریښتیا;
 }
 
 /* Given a component ref REF, if there is a counted_by attribute attached,
    issue error when the element_type is a structure or union including a
    flexible array member.  */
 
-static void
-check_counted_by_attribute (location_t loc, tree ref)
+ساكن فراغ
+check_counted_by_attribute (location_t loc, ونه ref)
 {
-  tree subdatum = TREE_OPERAND (ref, 1);
-  tree sub_type = TREE_TYPE (subdatum);
+  ونه subdatum = ونه_عملوند (ref, 1);
+  ونه sub_type = ونه_TYPE (subdatum);
 
-  if (!flexible_array_member_type_p (sub_type)
-      && TREE_CODE (sub_type) != POINTER_TYPE)
-    return;
+  إذا (!flexible_array_member_type_p (sub_type)
+      && ونه_کوډ (sub_type) != اشاره_ګر_TYPE)
+    أرجع;
 
-  tree element_type = TREE_TYPE (sub_type);
+  ونه element_type = ونه_TYPE (sub_type);
 
-  tree attr_counted_by = lookup_attribute ("counted_by",
-					   DECL_ATTRIBUTES (subdatum));
-  if (attr_counted_by)
+  ونه attr_counted_by = lookup_attribute ("counted_by",
+					   DECL_ځانګړتیاوې (subdatum));
+  إذا (attr_counted_by)
     {
       /* Issue error when the element_type is a structure or
 	union including a flexible array member.  */
-      if (RECORD_OR_UNION_TYPE_P (element_type)
+      إذا (ریکارډ_OR_UNION_TYPE_P (element_type)
 	  && TYPE_INCLUDES_FLEXARRAY (element_type))
 	{
 	  error_at (loc,
 		    "%<counted_by%> attribute is not allowed for a pointer to"
 		    " structure or union with flexible array member");
-	  return;
+	  أرجع;
 	}
     }
 }
@@ -3176,58 +3176,58 @@ check_counted_by_attribute (location_t loc, tree ref)
     &(p->k)
 */
 
-static tree
-build_counted_by_ref (tree datum, tree subdatum,
-		      tree *counted_by_type)
+ساكن ونه
+build_counted_by_ref (ونه datum, ونه subdatum,
+		      ونه *counted_by_type)
 {
-  tree sub_type = TREE_TYPE (subdatum);
-  if (!flexible_array_member_type_p (sub_type)
-      && TREE_CODE (sub_type) != POINTER_TYPE)
-    return NULL_TREE;
+  ونه sub_type = ونه_TYPE (subdatum);
+  إذا (!flexible_array_member_type_p (sub_type)
+      && ونه_کوډ (sub_type) != اشاره_ګر_TYPE)
+    أرجع NULL_ونه;
 
-  tree attr_counted_by = lookup_attribute ("counted_by",
-					   DECL_ATTRIBUTES (subdatum));
-  if (!attr_counted_by)
-    return NULL_TREE;
+  ونه attr_counted_by = lookup_attribute ("counted_by",
+					   DECL_ځانګړتیاوې (subdatum));
+  إذا (!attr_counted_by)
+    أرجع NULL_ونه;
 
-  tree counted_by_ref = NULL_TREE;
-  *counted_by_type = NULL_TREE;
+  ونه counted_by_ref = NULL_ونه;
+  *counted_by_type = NULL_ونه;
 
-  tree type = TREE_TYPE (datum);
+  ونه type = ونه_TYPE (datum);
 
   /* If the type of the containing structure is an anonymous struct/union,
      and this anonymous struct/union is not a root type, get the first
      outer named structure/union type.  */
-  while (TREE_CODE (datum) == COMPONENT_REF
-	 && c_type_tag (type) == NULL_TREE
-	 && DECL_NAME (TREE_OPERAND (datum, 1)) == NULL_TREE)
+  طالما (ونه_کوډ (datum) == COMPONENT_REF
+	 && c_type_نښان (type) == NULL_ونه
+	 && DECL_NAME (ونه_عملوند (datum, 1)) == NULL_ونه)
     {
-      datum = TREE_OPERAND (datum, 0);
-      type = TREE_TYPE (datum);
+      datum = ونه_عملوند (datum, 0);
+      type = ونه_TYPE (datum);
     }
 
-  tree field_id = TREE_VALUE (TREE_VALUE (attr_counted_by));
-  tree counted_by_field = lookup_field (type, field_id);
-  gcc_assert (counted_by_field);
+  ونه ډګر_id = ونه_ارزښت (ونه_ارزښت (attr_counted_by));
+  ونه counted_by_ډګر = lookup_ډګر (type, ډګر_id);
+  gcc_assert (counted_by_ډګر);
 
-  tree counted_by_subdatum;
-  do
+  ونه counted_by_subdatum;
+  افعل
     {
-      counted_by_subdatum = TREE_VALUE (counted_by_field);
+      counted_by_subdatum = ونه_ارزښت (counted_by_ډګر);
       /* Get the TYPE of the counted_by field.  */
-      *counted_by_type = TREE_TYPE (counted_by_subdatum);
+      *counted_by_type = ونه_TYPE (counted_by_subdatum);
 
       counted_by_ref
-	= build3 (COMPONENT_REF, TREE_TYPE (counted_by_subdatum),
-		  datum, counted_by_subdatum, NULL_TREE);
+	= build3 (COMPONENT_REF, ونه_TYPE (counted_by_subdatum),
+		  datum, counted_by_subdatum, NULL_ونه);
 
       datum = counted_by_ref;
-      counted_by_field = TREE_CHAIN (counted_by_field);
+      counted_by_ډګر = ونه_CHAIN (counted_by_ډګر);
     }
-  while (counted_by_field);
+  طالما (counted_by_ډګر);
 
-  counted_by_ref = build_fold_addr_expr (counted_by_ref);
-  return counted_by_ref;
+  counted_by_ref = build_fold_addr_بیان (counted_by_ref);
+  أرجع counted_by_ref;
 }
 
 /* Given a COMPONENT_REF REF with the location LOC, the corresponding
@@ -3271,49 +3271,49 @@ build_counted_by_ref (tree datum, tree subdatum,
    of the array.
 
   */
-static tree
-build_access_with_size_for_counted_by (location_t loc, tree ref,
-				       tree counted_by_ref,
-				       tree counted_by_type)
+ساكن ونه
+build_access_with_اندازه_for_counted_by (location_t loc, ونه ref,
+				       ونه counted_by_ref,
+				       ونه counted_by_type)
 {
-  gcc_assert (flexible_array_member_type_p (TREE_TYPE (ref))
-	      || TREE_CODE (TREE_TYPE (ref)) == POINTER_TYPE);
+  gcc_assert (flexible_array_member_type_p (ونه_TYPE (ref))
+	      || ونه_کوډ (ونه_TYPE (ref)) == اشاره_ګر_TYPE);
 
-  bool is_fam = flexible_array_member_type_p (TREE_TYPE (ref));
+  منطقي is_fam = flexible_array_member_type_p (ونه_TYPE (ref));
 
   /* The result type of the call is a pointer to the flexible array type;
      or is the original pointer type to the pointer field with counted_by.  */
-  tree result_type = is_fam ? c_build_pointer_type (TREE_TYPE (ref))
-		     : TREE_TYPE (ref);
+  ونه پایله_type = is_fam ? c_build_اشاره_ګر_type (ونه_TYPE (ref))
+		     : ونه_TYPE (ref);
 
-  tree element_type = TREE_TYPE (TREE_TYPE (ref));
-  tree element_size = VOID_TYPE_P (element_type)
-		      ? size_one_node
-		      : TYPE_SIZE_UNIT (element_type);
-  if (element_size == NULL_TREE)
-    return ref;
+  ونه element_type = ونه_TYPE (ونه_TYPE (ref));
+  ونه element_اندازه = VOID_TYPE_P (element_type)
+		      ? اندازه_one_غوټه
+		      : TYPE_اندازه_UNIT (element_type);
+  إذا (element_اندازه == NULL_ونه)
+    أرجع ref;
 
-  tree first_param = is_fam
-		     ? c_fully_fold (array_to_pointer_conversion (loc, ref),
-				     false, NULL)
-		     : c_fully_fold (ref, false, NULL);
-  tree second_param
-    = c_fully_fold (counted_by_ref, false, NULL);
-  tree third_param = build_int_cst (c_build_pointer_type (counted_by_type), 0);
+  ونه لومړی_param = is_fam
+		     ? c_fully_fold (array_منزل_اشاره_ګر_conversion (loc, ref),
+				     خطأ, عدم)
+		     : c_fully_fold (ref, خطأ, عدم);
+  ونه دوهم_param
+    = c_fully_fold (counted_by_ref, خطأ, عدم);
+  ونه دریم_param = build_int_cst (c_build_اشاره_ګر_type (counted_by_type), 0);
 
-  tree call
-    = build_call_expr_internal_loc (loc, IFN_ACCESS_WITH_SIZE,
-				    result_type, 4,
-				    first_param,
-				    second_param,
-				    third_param,
-				    element_size);
+  ونه call
+    = build_call_بیان_دننی_loc (loc, IFN_ACCESS_WITH_اندازه,
+				    پایله_type, 4,
+				    لومړی_param,
+				    دوهم_param,
+				    دریم_param,
+				    element_اندازه);
 
   /* Wrap the call with an INDIRECT_REF with the flexible array type.  */
-  if (is_fam)
-    call = build1 (INDIRECT_REF, TREE_TYPE (ref), call);
-  SET_EXPR_LOCATION (call, loc);
-  return call;
+  إذا (is_fam)
+    call = build1 (غیرمستقیم_REF, ونه_TYPE (ref), call);
+  سېټ_بیان_LOCATION (call, loc);
+  أرجع call;
 }
 
 /* For the COMPONENT_REF ref, check whether it has a counted_by attribute,
@@ -3321,25 +3321,25 @@ build_access_with_size_for_counted_by (location_t loc, tree ref,
    function .ACCESS_WITH_SIZE.
    Otherwise, return the ref itself.  */
 
-tree
-handle_counted_by_for_component_ref (location_t loc, tree ref)
+ونه
+handle_counted_by_for_component_ref (location_t loc, ونه ref)
 {
-  gcc_assert (TREE_CODE (ref) == COMPONENT_REF);
-  tree datum = TREE_OPERAND (ref, 0);
-  tree subdatum = TREE_OPERAND (ref, 1);
-  tree counted_by_type = NULL_TREE;
+  gcc_assert (ونه_کوډ (ref) == COMPONENT_REF);
+  ونه datum = ونه_عملوند (ref, 0);
+  ونه subdatum = ونه_عملوند (ref, 1);
+  ونه counted_by_type = NULL_ونه;
 
-  if (!(flexible_array_member_type_p (TREE_TYPE (ref))
-	|| TREE_CODE (TREE_TYPE (ref)) == POINTER_TYPE))
-    return ref;
+  إذا (!(flexible_array_member_type_p (ونه_TYPE (ref))
+	|| ونه_کوډ (ونه_TYPE (ref)) == اشاره_ګر_TYPE))
+    أرجع ref;
 
-  tree counted_by_ref = build_counted_by_ref (datum, subdatum,
+  ونه counted_by_ref = build_counted_by_ref (datum, subdatum,
 					      &counted_by_type);
-  if (counted_by_ref)
-    ref = build_access_with_size_for_counted_by (loc, ref,
+  إذا (counted_by_ref)
+    ref = build_access_with_اندازه_for_counted_by (loc, ref,
 						 counted_by_ref,
 						 counted_by_type);
-  return ref;
+  أرجع ref;
 }
 
 /* Make an expression to refer to the COMPONENT field of structure or
@@ -3350,65 +3350,65 @@ handle_counted_by_for_component_ref (location_t loc, tree ref)
    If HANDLE_COUNTED_BY is true, check the counted_by attribute and generate
    a call to .ACCESS_WITH_SIZE.  Otherwise, ignore the attribute.  */
 
-tree
-build_component_ref (location_t loc, tree datum, tree component,
+ونه
+build_component_ref (location_t loc, ونه datum, ونه component,
 		     location_t component_loc, location_t arrow_loc)
 {
-  tree type = TREE_TYPE (datum);
-  enum tree_code code = TREE_CODE (type);
-  tree field = NULL;
-  tree ref;
-  bool datum_lvalue = lvalue_p (datum);
+  ونه type = ونه_TYPE (datum);
+  تعداد ونه_کوډ_2 کوډ = ونه_کوډ (type);
+  ونه ډګر_2 = عدم;
+  ونه ref;
+  منطقي datum_lvalue = lvalue_p (datum);
 
-  if (!objc_is_public (datum, component))
-    return error_mark_node;
+  إذا (!objc_is_عامه (datum, component))
+    أرجع error_mark_غوټه;
 
   /* Detect Objective-C property syntax object.property.  */
-  if (c_dialect_objc ()
+  إذا (c_dialect_objc ()
       && (ref = objc_maybe_build_component_ref (datum, component)))
-    return ref;
+    أرجع ref;
 
   /* See if there is a field or component with name COMPONENT.  */
 
-  if (code == RECORD_TYPE || code == UNION_TYPE)
+  إذا (کوډ == ریکارډ_TYPE || کوډ == UNION_TYPE)
     {
-      if (!COMPLETE_TYPE_P (type))
+      إذا (!COMPLETE_TYPE_P (type))
 	{
-	  c_incomplete_type_error (loc, NULL_TREE, type);
-	  return error_mark_node;
+	  c_incomplete_type_error (loc, NULL_ونه, type);
+	  أرجع error_mark_غوټه;
 	}
 
-      field = lookup_field (type, component);
+      ډګر_2 = lookup_ډګر (type, component);
 
-      if (!field)
+      إذا (!ډګر_2)
 	{
-	  tree guessed_id = lookup_field_fuzzy (type, component);
-	  if (guessed_id)
+	  ونه guessed_id = lookup_ډګر_fuzzy (type, component);
+	  إذا (guessed_id)
 	    {
 	      /* Attempt to provide a fixit replacement hint, if
 		 we have a valid range for the component.  */
 	      location_t reported_loc
 		= (component_loc != UNKNOWN_LOCATION) ? component_loc : loc;
 	      gcc_rich_location rich_loc (reported_loc);
-	      if (component_loc != UNKNOWN_LOCATION)
-		rich_loc.add_fixit_misspelled_id (component_loc, guessed_id);
+	      إذا (component_loc != UNKNOWN_LOCATION)
+		rich_loc.جمع_کړه_fixit_misspelled_id (component_loc, guessed_id);
 	      error_at (&rich_loc,
 			"%qT has no member named %qE; did you mean %qE?",
 			type, component, guessed_id);
 	    }
-	  else
+	  وإلا
 	    error_at (loc, "%qT has no member named %qE", type, component);
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
 
       /* Accessing elements of atomic structures or unions is undefined
 	 behavior (C11 6.5.2.3#5).  */
-      if (TYPE_ATOMIC (type) && c_inhibit_evaluation_warnings == 0)
+      إذا (TYPE_ATOMIC (type) && c_inhibit_evaluation_warnings == 0)
 	{
-	  if (code == RECORD_TYPE)
+	  إذا (کوډ == ریکارډ_TYPE)
 	    warning_at (loc, 0, "accessing a member %qE of an atomic "
 			"structure %qE", component, datum);
-	  else
+	  وإلا
 	    warning_at (loc, 0, "accessing a member %qE of an atomic "
 			"union %qE", component, datum);
 	}
@@ -3418,84 +3418,84 @@ build_component_ref (location_t loc, tree datum, tree component,
 	 end does it - by giving the anonymous entities each a
 	 separate name and type, and then have build_component_ref
 	 recursively call itself.  We can't do that here.  */
-      do
+      افعل
 	{
-	  tree subdatum = TREE_VALUE (field);
-	  int quals;
-	  tree subtype;
-	  bool use_datum_quals;
+	  ونه subdatum = ونه_ارزښت (ډګر_2);
+	  صحيح quals;
+	  ونه subtype;
+	  منطقي use_datum_quals;
 
-	  if (TREE_TYPE (subdatum) == error_mark_node)
-	    return error_mark_node;
+	  إذا (ونه_TYPE (subdatum) == error_mark_غوټه)
+	    أرجع error_mark_غوټه;
 
 	  /* If this is an rvalue, it does not have qualifiers in C
 	     standard terms and we must avoid propagating such
 	     qualifiers down to a non-lvalue array that is then
 	     converted to a pointer.  */
 	  use_datum_quals = (datum_lvalue
-			     || TREE_CODE (TREE_TYPE (subdatum)) != ARRAY_TYPE);
+			     || ونه_کوډ (ونه_TYPE (subdatum)) != ARRAY_TYPE);
 
-	  quals = TYPE_QUALS (strip_array_types (TREE_TYPE (subdatum)));
-	  if (use_datum_quals)
-	    quals |= TYPE_QUALS (TREE_TYPE (datum));
-	  subtype = c_build_qualified_type (TREE_TYPE (subdatum), quals);
+	  quals = TYPE_QUALS (strip_array_types (ونه_TYPE (subdatum)));
+	  إذا (use_datum_quals)
+	    quals |= TYPE_QUALS (ونه_TYPE (datum));
+	  subtype = c_build_qualified_type (ونه_TYPE (subdatum), quals);
 
 	  ref = build3 (COMPONENT_REF, subtype, datum, subdatum,
-			NULL_TREE);
-	  SET_EXPR_LOCATION (ref, loc);
+			NULL_ونه);
+	  سېټ_بیان_LOCATION (ref, loc);
 
 	  check_counted_by_attribute (loc, ref);
 
-	  if (TREE_READONLY (subdatum)
-	      || (use_datum_quals && TREE_READONLY (datum)))
-	    TREE_READONLY (ref) = 1;
-	  if (TREE_THIS_VOLATILE (subdatum)
-	      || (use_datum_quals && TREE_THIS_VOLATILE (datum)))
-	    TREE_THIS_VOLATILE (ref) = 1;
+	  إذا (ونه_READONLY (subdatum)
+	      || (use_datum_quals && ونه_READONLY (datum)))
+	    ونه_READONLY (ref) = 1;
+	  إذا (ونه_THIS_VOLATILE (subdatum)
+	      || (use_datum_quals && ونه_THIS_VOLATILE (datum)))
+	    ونه_THIS_VOLATILE (ref) = 1;
 
-	  if (TREE_UNAVAILABLE (subdatum))
-	    error_unavailable_use (subdatum, NULL_TREE);
-	  else if (TREE_DEPRECATED (subdatum))
-	    warn_deprecated_use (subdatum, NULL_TREE);
+	  إذا (ونه_UNAVAILABLE (subdatum))
+	    error_unavailable_use (subdatum, NULL_ونه);
+	  وإلا إذا (ونه_DEPRECATED (subdatum))
+	    warn_deprecated_use (subdatum, NULL_ونه);
 
 	  datum = ref;
 
-	  field = TREE_CHAIN (field);
+	  ډګر_2 = ونه_CHAIN (ډګر_2);
 	}
-      while (field);
+      طالما (ډګر_2);
 
-      return ref;
+      أرجع ref;
     }
-  else if (should_suggest_deref_p (type))
+  وإلا إذا (should_suggest_deref_p (type))
     {
       /* Special-case the error message for "ptr.field" for the case
 	 where the user has confused "." vs "->".  */
-      rich_location richloc (line_table, loc);
-      if (INDIRECT_REF_P (datum) && arrow_loc != UNKNOWN_LOCATION)
+      rich_location richloc (کرښه_جدول, loc);
+      إذا (غیرمستقیم_REF_P (datum) && arrow_loc != UNKNOWN_LOCATION)
 	{
-	  richloc.add_fixit_insert_before (arrow_loc, "(*");
-	  richloc.add_fixit_insert_after (arrow_loc, ")");
+	  richloc.جمع_کړه_fixit_ورننباسه_before (arrow_loc, "(*");
+	  richloc.جمع_کړه_fixit_ورننباسه_after (arrow_loc, ")");
 	  error_at (&richloc,
 		    "%qE is a pointer to pointer; did you mean to dereference "
 		    "it before applying %<->%> to it?",
-		    TREE_OPERAND (datum, 0));
+		    ونه_عملوند (datum, 0));
 	}
-      else
+      وإلا
 	{
 	  /* "loc" should be the "." token.  */
-	  richloc.add_fixit_replace ("->");
+	  richloc.جمع_کړه_fixit_replace ("->");
 	  error_at (&richloc,
 		    "%qE is a pointer; did you mean to use %<->%>?",
 		    datum);
 	}
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
-  else if (code != ERROR_MARK)
+  وإلا إذا (کوډ != ERROR_MARK)
     error_at (loc,
 	      "request for member %qE in something not a structure or union",
 	      component);
 
-  return error_mark_node;
+  أرجع error_mark_غوټه;
 }
 
 /* Given an expression PTR for a pointer, return an expression
@@ -3504,42 +3504,42 @@ build_component_ref (location_t loc, tree datum, tree component,
 
    LOC is the location to use for the generated tree.  */
 
-tree
-build_indirect_ref (location_t loc, tree ptr, ref_operator errstring)
+ونه
+build_غیرمستقیم_ref (location_t loc, ونه ptr, ref_operator errstring)
 {
-  tree pointer = default_conversion (ptr);
-  tree type = TREE_TYPE (pointer);
-  tree ref;
+  ونه اشاره_ګر = default_conversion (ptr);
+  ونه type = ونه_TYPE (اشاره_ګر);
+  ونه ref;
 
-  if (TREE_CODE (type) == POINTER_TYPE)
+  إذا (ونه_کوډ (type) == اشاره_ګر_TYPE)
     {
-      if (CONVERT_EXPR_P (pointer)
-          || TREE_CODE (pointer) == VIEW_CONVERT_EXPR)
+      إذا (CONVERT_بیان_P (اشاره_ګر)
+          || ونه_کوډ (اشاره_ګر) == VIEW_CONVERT_بیان)
 	{
 	  /* If a warning is issued, mark it to avoid duplicates from
 	     the backend.  This only needs to be done at
 	     warn_strict_aliasing > 2.  */
-	  if (warn_strict_aliasing > 2)
-	    if (strict_aliasing_warning (EXPR_LOCATION (pointer),
-					 type, TREE_OPERAND (pointer, 0)))
-	      suppress_warning (pointer, OPT_Wstrict_aliasing_);
+	  إذا (warn_strict_aliasing > 2)
+	    إذا (strict_aliasing_warning (بیان_LOCATION (اشاره_ګر),
+					 type, ونه_عملوند (اشاره_ګر, 0)))
+	      suppress_warning (اشاره_ګر, OPT_Wstrict_aliasing_);
 	}
 
-      if (TREE_CODE (pointer) == ADDR_EXPR
-	  && (TREE_TYPE (TREE_OPERAND (pointer, 0))
-	      == TREE_TYPE (type)))
+      إذا (ونه_کوډ (اشاره_ګر) == ADDR_بیان
+	  && (ونه_TYPE (ونه_عملوند (اشاره_ګر, 0))
+	      == ونه_TYPE (type)))
 	{
-	  ref = TREE_OPERAND (pointer, 0);
-	  protected_set_expr_location (ref, loc);
-	  return ref;
+	  ref = ونه_عملوند (اشاره_ګر, 0);
+	  protected_سېټ_بیان_location (ref, loc);
+	  أرجع ref;
 	}
-      else
+      وإلا
 	{
-	  tree t = TREE_TYPE (type);
+	  ونه t = ونه_TYPE (type);
 
-	  ref = build1 (INDIRECT_REF, t, pointer);
+	  ref = build1 (غیرمستقیم_REF, t, اشاره_ګر);
 
-	  if (VOID_TYPE_P (t) && c_inhibit_evaluation_warnings == 0)
+	  إذا (VOID_TYPE_P (t) && c_inhibit_evaluation_warnings == 0)
 	    warning_at (loc, 0, "dereferencing %<void *%> pointer");
 
 	  /* We *must* set TREE_READONLY when dereferencing a pointer to const,
@@ -3549,18 +3549,18 @@ build_indirect_ref (location_t loc, tree ptr, ref_operator errstring)
 	     should be the const type.  */
 	  /* A de-reference of a pointer to const is not a const.  It is valid
 	     to change it via some other pointer.  */
-	  TREE_READONLY (ref) = TYPE_READONLY (t);
-	  TREE_SIDE_EFFECTS (ref)
-	    = TYPE_VOLATILE (t) || TREE_SIDE_EFFECTS (pointer);
-	  TREE_THIS_VOLATILE (ref) = TYPE_VOLATILE (t);
-	  protected_set_expr_location (ref, loc);
-	  return ref;
+	  ونه_READONLY (ref) = TYPE_READONLY (t);
+	  ونه_SIDE_EFFECTS (ref)
+	    = TYPE_VOLATILE (t) || ونه_SIDE_EFFECTS (اشاره_ګر);
+	  ونه_THIS_VOLATILE (ref) = TYPE_VOLATILE (t);
+	  protected_سېټ_بیان_location (ref, loc);
+	  أرجع ref;
 	}
     }
-  else if (TREE_CODE (pointer) != ERROR_MARK)
+  وإلا إذا (ونه_کوډ (اشاره_ګر) != ERROR_MARK)
     invalid_indirection_error (loc, type, errstring);
 
-  return error_mark_node;
+  أرجع error_mark_غوټه;
 }
 
 /* This handles expressions of the form "a[i]", which denotes
@@ -3577,159 +3577,159 @@ build_indirect_ref (location_t loc, tree ptr, ref_operator errstring)
 
    LOC is the location to use for the returned expression.  */
 
-tree
-build_array_ref (location_t loc, tree array, tree index)
+ونه
+build_array_ref (location_t loc, ونه array, ونه شاخص)
 {
-  tree ret;
-  bool swapped = false;
-  if (TREE_TYPE (array) == error_mark_node
-      || TREE_TYPE (index) == error_mark_node)
-    return error_mark_node;
+  ونه ret;
+  منطقي swapped = خطأ;
+  إذا (ونه_TYPE (array) == error_mark_غوټه
+      || ونه_TYPE (شاخص) == error_mark_غوټه)
+    أرجع error_mark_غوټه;
 
-  if (TREE_CODE (TREE_TYPE (array)) != ARRAY_TYPE
-      && TREE_CODE (TREE_TYPE (array)) != POINTER_TYPE
+  إذا (ونه_کوډ (ونه_TYPE (array)) != ARRAY_TYPE
+      && ونه_کوډ (ونه_TYPE (array)) != اشاره_ګر_TYPE
       /* Allow vector[index] but not index[vector].  */
-      && !gnu_vector_type_p (TREE_TYPE (array)))
+      && !gnu_ویکټور_type_p (ونه_TYPE (array)))
     {
-      if (TREE_CODE (TREE_TYPE (index)) != ARRAY_TYPE
-	  && TREE_CODE (TREE_TYPE (index)) != POINTER_TYPE)
+      إذا (ونه_کوډ (ونه_TYPE (شاخص)) != ARRAY_TYPE
+	  && ونه_کوډ (ونه_TYPE (شاخص)) != اشاره_ګر_TYPE)
 	{
           error_at (loc,
             "subscripted value is neither array nor pointer nor vector");
 
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      std::swap (array, index);
-      swapped = true;
+      std::بدلون (array, شاخص);
+      swapped = ریښتیا;
     }
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (index)))
+  إذا (!INTEGRAL_TYPE_P (ونه_TYPE (شاخص)))
     {
       error_at (loc, "array subscript is not an integer");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
-  if (TREE_CODE (TREE_TYPE (TREE_TYPE (array))) == FUNCTION_TYPE)
+  إذا (ونه_کوډ (ونه_TYPE (ونه_TYPE (array))) == FUNCTION_TYPE)
     {
       error_at (loc, "subscripted value is pointer to function");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
   /* ??? Existing practice has been to warn only when the char
      index is syntactically the index, not for char[array].  */
-  if (!swapped)
-     warn_array_subscript_with_type_char (loc, index);
+  إذا (!swapped)
+     warn_array_subscript_with_type_char (loc, شاخص);
 
   /* Apply default promotions *after* noticing character types.  */
-  index = default_conversion (index);
-  if (index == error_mark_node)
-    return error_mark_node;
+  شاخص = default_conversion (شاخص);
+  إذا (شاخص == error_mark_غوټه)
+    أرجع error_mark_غوټه;
 
-  gcc_assert (TREE_CODE (TREE_TYPE (index)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (index)) == BITINT_TYPE);
+  gcc_assert (ونه_کوډ (ونه_TYPE (شاخص)) == INTEGER_TYPE
+	      || ونه_کوډ (ونه_TYPE (شاخص)) == BITINT_TYPE);
 
-  bool was_vector = VECTOR_TYPE_P (TREE_TYPE (array));
-  bool non_lvalue = convert_vector_to_array_for_subscript (loc, &array, index);
+  منطقي was_ویکټور = ویکټور_TYPE_P (ونه_TYPE (array));
+  منطقي non_lvalue = convert_ویکټور_منزل_array_for_subscript (loc, &array, شاخص);
 
   /* We only generate a call to .ACCESS_WITH_SIZE when it is a read.  */
-  if (TREE_CODE (array) == COMPONENT_REF
+  إذا (ونه_کوډ (array) == COMPONENT_REF
       && handle_counted_by_p (array))
     array = handle_counted_by_for_component_ref (loc, array);
 
-  if (TREE_CODE (TREE_TYPE (array)) == ARRAY_TYPE)
+  إذا (ونه_کوډ (ونه_TYPE (array)) == ARRAY_TYPE)
     {
-      tree rval, type;
+      ونه rval, type;
 
       /* An array that is indexed by a non-constant
 	 cannot be stored in a register; we must be able to do
 	 address arithmetic on its address.
 	 Likewise an array of elements of variable size.  */
-      if (TREE_CODE (index) != INTEGER_CST
-	  || (COMPLETE_TYPE_P (TREE_TYPE (TREE_TYPE (array)))
-	      && TREE_CODE (TYPE_SIZE (TREE_TYPE (TREE_TYPE (array)))) != INTEGER_CST))
+      إذا (ونه_کوډ (شاخص) != INTEGER_CST
+	  || (COMPLETE_TYPE_P (ونه_TYPE (ونه_TYPE (array)))
+	      && ونه_کوډ (TYPE_اندازه (ونه_TYPE (ونه_TYPE (array)))) != INTEGER_CST))
 	{
-	  if (!c_mark_addressable (array, true, true))
-	    return error_mark_node;
+	  إذا (!c_mark_addressable (array, ریښتیا, ریښتیا))
+	    أرجع error_mark_غوټه;
 	}
       /* An array that is indexed by a constant value which is not within
 	 the array bounds cannot be stored in a register either; because we
 	 would get a crash in store_bit_field/extract_bit_field when trying
 	 to access a non-existent part of the register.  */
-      if (TREE_CODE (index) == INTEGER_CST
-	  && TYPE_DOMAIN (TREE_TYPE (array))
-	  && !int_fits_type_p (index, TYPE_DOMAIN (TREE_TYPE (array))))
+      إذا (ونه_کوډ (شاخص) == INTEGER_CST
+	  && TYPE_DOMAIN (ونه_TYPE (array))
+	  && !int_ځاییږي_type_p (شاخص, TYPE_DOMAIN (ونه_TYPE (array))))
 	{
-	  if (!c_mark_addressable (array, false, true))
-	    return error_mark_node;
+	  إذا (!c_mark_addressable (array, خطأ, ریښتیا))
+	    أرجع error_mark_غوټه;
 	  /* ISO C2Y disallows a negative integer constant expression index
 	     when array subscripting has an operand of array type.  */
-	  if (flag_isoc2y
-	      && !TREE_OVERFLOW (index)
-	      && tree_int_cst_sgn (index) < 0)
+	  إذا (flag_isoc2y
+	      && !ونه_ډکېدنه (شاخص)
+	      && ونه_int_cst_sgn (شاخص) < 0)
 	    error_at (loc, "array subscript is negative");
 	}
 
-      if ((pedantic || warn_c90_c99_compat || warn_c23_c2y_compat)
-	  && ! was_vector)
+      إذا ((pedantic || warn_c90_c99_compat || warn_c23_c2y_compat)
+	  && ! was_ویکټور)
 	{
-	  tree foo = array;
-	  while (TREE_CODE (foo) == COMPONENT_REF)
-	    foo = TREE_OPERAND (foo, 0);
-	  if ((VAR_P (foo) && C_DECL_REGISTER (foo))
-	      || (TREE_CODE (foo) == COMPOUND_LITERAL_EXPR
-		  && C_DECL_REGISTER (COMPOUND_LITERAL_EXPR_DECL (foo))))
+	  ونه foo = array;
+	  طالما (ونه_کوډ (foo) == COMPONENT_REF)
+	    foo = ونه_عملوند (foo, 0);
+	  إذا ((VAR_P (foo) && C_DECL_ثبتوونکی (foo))
+	      || (ونه_کوډ (foo) == COMPOUND_LITERAL_بیان
+		  && C_DECL_ثبتوونکی (COMPOUND_LITERAL_بیان_DECL (foo))))
 	    pedwarn_c23 (loc, OPT_Wpedantic,
 			 "ISO C forbids subscripting %<register%> array "
 			 "before C2Y");
-	  else if (!lvalue_p (foo))
+	  وإلا إذا (!lvalue_p (foo))
 	    pedwarn_c90 (loc, OPT_Wpedantic,
 			 "ISO C90 forbids subscripting non-lvalue "
 			 "array");
 	}
 
-      if (TREE_CODE (TREE_TYPE (index)) == BITINT_TYPE
-	  && TYPE_PRECISION (TREE_TYPE (index)) > TYPE_PRECISION (sizetype))
-	index = fold_convert (sizetype, index);
+      إذا (ونه_کوډ (ونه_TYPE (شاخص)) == BITINT_TYPE
+	  && TYPE_PRECISION (ونه_TYPE (شاخص)) > TYPE_PRECISION (sizetype))
+	شاخص = fold_convert (sizetype, شاخص);
 
-      type = TREE_TYPE (TREE_TYPE (array));
-      rval = build4 (ARRAY_REF, type, array, index, NULL_TREE, NULL_TREE);
+      type = ونه_TYPE (ونه_TYPE (array));
+      rval = build4 (ARRAY_REF, type, array, شاخص, NULL_ونه, NULL_ونه);
       /* Array ref is const/volatile if the array elements are
 	 or if the array is.  */
-      TREE_READONLY (rval)
-	|= (TYPE_READONLY (TREE_TYPE (TREE_TYPE (array)))
-	    | TREE_READONLY (array));
-      TREE_SIDE_EFFECTS (rval)
-	|= (TYPE_VOLATILE (TREE_TYPE (TREE_TYPE (array)))
-	    | TREE_SIDE_EFFECTS (array));
-      TREE_THIS_VOLATILE (rval)
-	|= (TYPE_VOLATILE (TREE_TYPE (TREE_TYPE (array)))
+      ونه_READONLY (rval)
+	|= (TYPE_READONLY (ونه_TYPE (ونه_TYPE (array)))
+	    | ونه_READONLY (array));
+      ونه_SIDE_EFFECTS (rval)
+	|= (TYPE_VOLATILE (ونه_TYPE (ونه_TYPE (array)))
+	    | ونه_SIDE_EFFECTS (array));
+      ونه_THIS_VOLATILE (rval)
+	|= (TYPE_VOLATILE (ونه_TYPE (ونه_TYPE (array)))
 	    /* This was added by rms on 16 Nov 91.
 	       It fixes  vol struct foo *a;  a->elts[1]
 	       in an inline function.
 	       Hope it doesn't break something else.  */
-	    | TREE_THIS_VOLATILE (array));
+	    | ونه_THIS_VOLATILE (array));
       ret = require_complete_type (loc, rval);
-      protected_set_expr_location (ret, loc);
-      if (non_lvalue)
+      protected_سېټ_بیان_location (ret, loc);
+      إذا (non_lvalue)
 	ret = non_lvalue_loc (loc, ret);
-      return ret;
+      أرجع ret;
     }
-  else
+  وإلا
     {
-      tree ar = default_conversion (array);
+      ونه ar = default_conversion (array);
 
-      if (ar == error_mark_node)
-	return ar;
+      إذا (ar == error_mark_غوټه)
+	أرجع ar;
 
-      gcc_assert (TREE_CODE (TREE_TYPE (ar)) == POINTER_TYPE);
-      gcc_assert (TREE_CODE (TREE_TYPE (TREE_TYPE (ar))) != FUNCTION_TYPE);
+      gcc_assert (ونه_کوډ (ونه_TYPE (ar)) == اشاره_ګر_TYPE);
+      gcc_assert (ونه_کوډ (ونه_TYPE (ونه_TYPE (ar))) != FUNCTION_TYPE);
 
-      ret = build_indirect_ref (loc, build_binary_op (loc, PLUS_EXPR, ar,
-						      index, false),
+      ret = build_غیرمستقیم_ref (loc, build_دوګونی_op (loc, PLUS_بیان, ar,
+						      شاخص, خطأ),
 				RO_ARRAY_INDEXING);
-      if (non_lvalue)
+      إذا (non_lvalue)
 	ret = non_lvalue_loc (loc, ret);
-      return ret;
+      أرجع ret;
     }
 }
 
@@ -3738,45 +3738,45 @@ build_array_ref (location_t loc, tree array, tree index)
    we have variable bounds, create an incomplete array type for the result
    instead.  */
 
-tree
-build_omp_array_section (location_t loc, tree array, tree index, tree length)
+ونه
+build_omp_array_section (location_t loc, ونه array, ونه شاخص, ونه اوږدتیا)
 {
-  tree type = TREE_TYPE (array);
+  ونه type = ونه_TYPE (array);
   gcc_assert (type);
 
-  tree sectype, eltype = TREE_TYPE (type);
+  ونه sectype, eltype = ونه_TYPE (type);
 
   /* It's not an array or pointer type.  Just reuse the type of the original
      expression as the type of the array section (an error will be raised
      anyway, later).  */
-  if (eltype == NULL_TREE || error_operand_p (eltype))
-    sectype = TREE_TYPE (array);
-  else
+  إذا (eltype == NULL_ونه || error_عملوند_p (eltype))
+    sectype = ونه_TYPE (array);
+  وإلا
     {
-      tree idxtype = NULL_TREE;
+      ونه idxtype = NULL_ونه;
 
-      if (index != NULL_TREE
-	  && length != NULL_TREE
-	  && INTEGRAL_TYPE_P (TREE_TYPE (index))
-	  && INTEGRAL_TYPE_P (TREE_TYPE (length)))
+      إذا (شاخص != NULL_ونه
+	  && اوږدتیا != NULL_ونه
+	  && INTEGRAL_TYPE_P (ونه_TYPE (شاخص))
+	  && INTEGRAL_TYPE_P (ونه_TYPE (اوږدتیا)))
 	{
-	  tree low = fold_convert (sizetype, index);
-	  tree high = fold_convert (sizetype, length);
-	  high = size_binop (PLUS_EXPR, low, high);
-	  high = size_binop (MINUS_EXPR, high, size_one_node);
-	  idxtype = build_range_type (sizetype, low, high);
+	  ونه ټیټ = fold_convert (sizetype, شاخص);
+	  ونه لوړ = fold_convert (sizetype, اوږدتیا);
+	  لوړ = اندازه_binop (PLUS_بیان, ټیټ, لوړ);
+	  لوړ = اندازه_binop (MINUS_بیان, لوړ, اندازه_one_غوټه);
+	  idxtype = build_range_type (sizetype, ټیټ, لوړ);
 	}
-      else if ((index == NULL_TREE || integer_zerop (index))
-	       && length != NULL_TREE
-	       && INTEGRAL_TYPE_P (TREE_TYPE (length)))
-	idxtype = build_index_type (length);
+      وإلا إذا ((شاخص == NULL_ونه || integer_zerop (شاخص))
+	       && اوږدتیا != NULL_ونه
+	       && INTEGRAL_TYPE_P (ونه_TYPE (اوږدتیا)))
+	idxtype = build_شاخص_type (اوږدتیا);
 
-      gcc_assert (!error_operand_p (idxtype));
+      gcc_assert (!error_عملوند_p (idxtype));
 
       sectype = c_build_array_type (eltype, idxtype);
     }
 
-  return build3_loc (loc, OMP_ARRAY_SECTION, sectype, array, index, length);
+  أرجع build3_loc (loc, OMP_ARRAY_SECTION, sectype, array, شاخص, اوږدتیا);
 }
 
 
@@ -3784,83 +3784,83 @@ build_omp_array_section (location_t loc, tree array, tree index, tree length)
    function and declarations referenced from a non-local context.
    ADDRESS indicates whether the address is taken.  */
 
-void
-mark_decl_used (tree ref, bool address)
+فراغ
+mark_decl_کارول_شوی (ونه ref, منطقي پته)
 {
-  if (!ref || !DECL_P (ref) || in_alignof)
-    return;
+  إذا (!ref || !DECL_P (ref) || دننه_alignof)
+    أرجع;
 
   /* Non-file-scope and non-local reference in nested function.  */
-  bool nonloc_p = current_function_decl && DECL_CONTEXT (ref)
+  منطقي nonloc_p = current_function_decl && DECL_CONTEXT (ref)
 		  && DECL_CONTEXT (current_function_decl)
 		  && DECL_CONTEXT (ref) != current_function_decl;
 
   /* An undeclared static function.  */
-  bool static_p = TREE_CODE (ref) == FUNCTION_DECL
-		  && DECL_INITIAL (ref) == NULL_TREE
+  منطقي static_p = ونه_کوډ (ref) == FUNCTION_DECL
+		  && DECL_INITIAL (ref) == NULL_ونه
 		  && DECL_EXTERNAL (ref)
-		  && !TREE_PUBLIC (ref);
+		  && !ونه_عامه (ref);
 
-  if (!static_p && !nonloc_p)
-    return;
+  إذا (!static_p && !nonloc_p)
+    أرجع;
 
   /* If we may be in an unevaluated context, delay the decision.  */
-  if (in_sizeof || in_typeof || in_countof || in_generic)
-    return record_maybe_used_decl (ref, address);
+  إذا (دننه_sizeof || دننه_typeof || دننه_countof || دننه_generic)
+    أرجع ریکارډ_maybe_کارول_شوی_decl (ref, پته);
 
-  if (static_p)
-    C_DECL_USED (ref) = 1;
+  إذا (static_p)
+    C_DECL_کارول_شوی (ref) = 1;
 
-  if (nonloc_p && (VAR_OR_FUNCTION_DECL_P (ref)
-		   || TREE_CODE (ref) == PARM_DECL))
+  إذا (nonloc_p && (VAR_OR_FUNCTION_DECL_P (ref)
+		   || ونه_کوډ (ref) == PARM_DECL))
     DECL_NONLOCAL (ref) = 1;
 
   /* Nothing to do anymore.  */
-  if (!nonloc_p || C_FUNC_NONLOCAL_CONTEXT (current_function_decl))
-    return;
+  إذا (!nonloc_p || C_FUNC_NONLOCAL_CONTEXT (current_function_decl))
+    أرجع;
 
   /* Filter out the cases where referencing a non-local variable does not
      require a non-local context passed via the static chain.  */
-  if (!c_type_variably_modified_p (TREE_TYPE (ref)))
-    switch (TREE_CODE (ref))
+  إذا (!c_type_variably_modified_p (ونه_TYPE (ref)))
+    بدل (ونه_کوډ (ref))
       {
-      case FUNCTION_DECL:
+      حالة FUNCTION_DECL:
 	/* Use of another local function that requires no context is ok.  */
-	if (!C_FUNC_NONLOCAL_CONTEXT (ref) && DECL_INITIAL (ref))
-	  return;
-	break;
-      case VAR_DECL:
+	إذا (!C_FUNC_NONLOCAL_CONTEXT (ref) && DECL_INITIAL (ref))
+	  أرجع;
+	اكسر;
+      حالة VAR_DECL:
 	/* Static variables and constexpr are ok, but for the later only
 	   when the address is not taken.  */
-	if (TREE_STATIC (ref) || (C_DECL_DECLARED_CONSTEXPR (ref) && !address))
-	  return;
-	break;
-      case TYPE_DECL:
+	إذا (ونه_STATIC (ref) || (C_DECL_DECLARED_CONSTEXPR (ref) && !پته))
+	  أرجع;
+	اكسر;
+      حالة TYPE_DECL:
 	/* A typedef is ok when not for a variably-modified type. */
-	return;
-      case CONST_DECL:
+	أرجع;
+      حالة CONST_DECL:
 	/* An enumeration constant is ok. */
-	return;
-      case PARM_DECL:
-	break;
-      case LABEL_DECL:
-	break;
-      default:
+	أرجع;
+      حالة PARM_DECL:
+	اكسر;
+      حالة LABEL_DECL:
+	اكسر;
+      افتراضي:
 	gcc_unreachable ();
     }
 
   /* Mark all parent functions up to the nesting level of the variable as
      as needing the non-local context.  */
-  for (tree cont = current_function_decl; cont; cont = DECL_CONTEXT (cont))
+  لكل (ونه cont = current_function_decl; cont; cont = DECL_CONTEXT (cont))
     {
-      if (cont == DECL_CONTEXT (ref))
-	break;
+      إذا (cont == DECL_CONTEXT (ref))
+	اكسر;
 
       /* There should not be any other type of context used for function
 	 except TRANSLATION_UNIT_DECL which we should be able to reach.  */
-      gcc_checking_assert (TREE_CODE (cont) == FUNCTION_DECL);
+      gcc_checking_assert (ونه_کوډ (cont) == FUNCTION_DECL);
 
-      if (TREE_CODE (cont) == FUNCTION_DECL)
+      إذا (ونه_کوډ (cont) == FUNCTION_DECL)
 	C_FUNC_NONLOCAL_CONTEXT (cont) = 1;
     }
 }
@@ -3872,92 +3872,92 @@ mark_decl_used (tree ref, bool address)
    identifier, which is not the same as the type of the returned value
    for CONST_DECLs defined as enum constants.  If the type of the
    identifier is not available, *TYPE is set to NULL.  */
-tree
-build_external_ref (location_t loc, tree id, bool fun, tree *type)
+ونه
+build_external_ref (location_t loc, ونه id, منطقي fun, ونه *type)
 {
-  tree ref;
-  tree decl = lookup_name (id);
+  ونه ref;
+  ونه decl = lookup_name (id);
 
   /* In Objective-C, an instance variable (ivar) may be preferred to
      whatever lookup_name() found.  */
   decl = objc_lookup_ivar (decl, id);
 
-  *type = NULL;
-  if (decl && decl != error_mark_node)
+  *type = عدم;
+  إذا (decl && decl != error_mark_غوټه)
     {
       ref = decl;
-      *type = TREE_TYPE (ref);
-      if (DECL_P (decl) && C_DECL_UNDERSPECIFIED (decl))
+      *type = ونه_TYPE (ref);
+      إذا (DECL_P (decl) && C_DECL_UNDERSPECIFIED (decl))
 	error_at (loc, "underspecified %qD referenced in its initializer",
 		  decl);
     }
-  else if (fun)
+  وإلا إذا (fun)
     /* Implicit function declaration.  */
     ref = implicitly_declare (loc, id);
-  else if (decl == error_mark_node)
+  وإلا إذا (decl == error_mark_غوټه)
     /* Don't complain about something that's already been
        complained about.  */
-    return error_mark_node;
-  else
+    أرجع error_mark_غوټه;
+  وإلا
     {
       undeclared_variable (loc, id);
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
   /* For an OpenMP map clause, we can get better diagnostics for decls with
      unmappable types if we return the decl with an error_mark_node type,
      rather than returning error_mark_node for the decl itself.  */
-  if (TREE_TYPE (ref) == error_mark_node
+  إذا (ونه_TYPE (ref) == error_mark_غوټه
       && !c_omp_array_section_p)
-    return error_mark_node;
+    أرجع error_mark_غوټه;
 
-  if (TREE_UNAVAILABLE (ref))
-    error_unavailable_use (ref, NULL_TREE);
-  else if (TREE_DEPRECATED (ref))
-    warn_deprecated_use (ref, NULL_TREE);
+  إذا (ونه_UNAVAILABLE (ref))
+    error_unavailable_use (ref, NULL_ونه);
+  وإلا إذا (ونه_DEPRECATED (ref))
+    warn_deprecated_use (ref, NULL_ونه);
 
   /* Recursive call does not count as usage.  */
-  if (ref != current_function_decl)
+  إذا (ref != current_function_decl)
     {
-      TREE_USED (ref) = 1;
+      ونه_کارول_شوی (ref) = 1;
     }
 
-  mark_decl_used (ref, false);
+  mark_decl_کارول_شوی (ref, خطأ);
 
-  if (TREE_CODE (ref) == CONST_DECL)
+  إذا (ونه_کوډ (ref) == CONST_DECL)
     {
-      used_types_insert (TREE_TYPE (ref));
+      کارول_شوی_types_ورننباسه (ونه_TYPE (ref));
 
-      if (warn_cxx_compat
-	  && TREE_CODE (TREE_TYPE (ref)) == ENUMERAL_TYPE
-	  && C_TYPE_DEFINED_IN_STRUCT (TREE_TYPE (ref)))
+      إذا (warn_cxx_compat
+	  && ونه_کوډ (ونه_TYPE (ref)) == ENUMERAL_TYPE
+	  && C_TYPE_DEFINED_دننه_STRUCT (ونه_TYPE (ref)))
 	{
 	  warning_at (loc, OPT_Wc___compat,
 		      "enum constant defined in struct or union "
 		      "is not visible in C++");
-	  inform (DECL_SOURCE_LOCATION (ref), "enum constant defined here");
+	  inform (DECL_سرچینه_LOCATION (ref), "enum constant defined here");
 	}
 
       ref = DECL_INITIAL (ref);
-      TREE_CONSTANT (ref) = 1;
+      ونه_CONSTANT (ref) = 1;
     }
   /* C99 6.7.4p3: An inline definition of a function with external
      linkage ... shall not contain a reference to an identifier with
      internal linkage.  */
-  else if (current_function_decl != NULL_TREE
+  وإلا إذا (current_function_decl != NULL_ونه
 	   && DECL_DECLARED_INLINE_P (current_function_decl)
 	   && DECL_EXTERNAL (current_function_decl)
 	   && VAR_OR_FUNCTION_DECL_P (ref)
-	   && (!VAR_P (ref) || TREE_STATIC (ref))
-	   && ! TREE_PUBLIC (ref)
+	   && (!VAR_P (ref) || ونه_STATIC (ref))
+	   && ! ونه_عامه (ref)
 	   && DECL_CONTEXT (ref) != current_function_decl)
-    record_inline_static (loc, current_function_decl, ref,
-			  csi_internal);
+    ریکارډ_inline_static (loc, current_function_decl, ref,
+			  csi_دننی);
 
-  return ref;
+  أرجع ref;
 }
 
-static struct maybe_used_decl *maybe_used_decls;
+ساكن بنية maybe_کارول_شوی_decl *maybe_کارول_شوی_decls;
 
 /* Record that DECL, a reference seen inside sizeof or typeof or _Countof or
    _Generic, might be used if the operand of sizeof is a VLA type or the
@@ -3965,15 +3965,15 @@ static struct maybe_used_decl *maybe_used_decls;
    a variable number of elements or the operand of _Generic is the one selected
    as the result.  */
 
-static void
-record_maybe_used_decl (tree decl, bool address)
+ساكن فراغ
+ریکارډ_maybe_کارول_شوی_decl (ونه decl, منطقي پته)
 {
-  struct maybe_used_decl *t = XOBNEW (&parser_obstack, struct maybe_used_decl);
+  بنية maybe_کارول_شوی_decl *t = XOBNEW (&parser_obstack, بنية maybe_کارول_شوی_decl);
   t->decl = decl;
-  t->level = in_sizeof + in_typeof + in_countof + in_generic;
-  t->address = address;
-  t->next = maybe_used_decls;
-  maybe_used_decls = t;
+  t->level = دننه_sizeof + دننه_typeof + دننه_countof + دننه_generic;
+  t->پته = پته;
+  t->بل = maybe_کارول_شوی_decls;
+  maybe_کارول_شوی_decls = t;
 }
 
 /* Pop the stack of decls possibly used inside sizeof or typeof or _Countof or
@@ -3982,24 +3982,24 @@ record_maybe_used_decl (tree decl, bool address)
    them to the next level up (if still inside sizeof or typeof or _Countof or
    _Generic).  */
 
-void
-pop_maybe_used (bool used)
+فراغ
+راوباسه_maybe_کارول_شوی (منطقي کارول_شوی)
 {
-  struct maybe_used_decl *p = maybe_used_decls;
-  int cur_level = in_sizeof + in_typeof + in_countof + in_generic;
-  while (p && p->level > cur_level)
+  بنية maybe_کارول_شوی_decl *p = maybe_کارول_شوی_decls;
+  صحيح cur_level = دننه_sizeof + دننه_typeof + دننه_countof + دننه_generic;
+  طالما (p && p->level > cur_level)
     {
-      if (used)
+      إذا (کارول_شوی)
 	{
-	  if (cur_level == 0)
-	    mark_decl_used (p->decl, p->address);
-	  else
+	  إذا (cur_level == 0)
+	    mark_decl_کارول_شوی (p->decl, p->پته);
+	  وإلا
 	    p->level = cur_level;
 	}
-      p = p->next;
+      p = p->بل;
     }
-  if (!used || cur_level == 0)
-    maybe_used_decls = p;
+  إذا (!کارول_شوی || cur_level == 0)
+    maybe_کارول_شوی_decls = p;
 }
 
 /* Pop the stack of decls possibly used inside sizeof or typeof or _Countof or
@@ -4010,102 +4010,102 @@ pop_maybe_used (bool used)
    should be called on the return value followed by pop_maybe_used (true);
    otherwise, the return value can be discarded.  */
 
-struct maybe_used_decl *
-save_maybe_used ()
+بنية maybe_کارول_شوی_decl *
+save_maybe_کارول_شوی ()
 {
-  struct maybe_used_decl *p = maybe_used_decls, *orig = p;
-  int cur_level = in_sizeof + in_typeof + in_countof + in_generic;
-  while (p && p->level > cur_level)
-    p = p->next;
-  maybe_used_decls = p;
-  return orig;
+  بنية maybe_کارول_شوی_decl *p = maybe_کارول_شوی_decls, *orig = p;
+  صحيح cur_level = دننه_sizeof + دننه_typeof + دننه_countof + دننه_generic;
+  طالما (p && p->level > cur_level)
+    p = p->بل;
+  maybe_کارول_شوی_decls = p;
+  أرجع orig;
 }
 
 /* Restore the stack of decls possibly used inside sizeof or typeof or _Countof
    or _Generic returned by save_maybe_used.  It is required that the stack is
    at exactly the point where it was left by save_maybe_used.  */
 
-void
-restore_maybe_used (struct maybe_used_decl *stack)
+فراغ
+restore_maybe_کارول_شوی (بنية maybe_کارول_شوی_decl *ډېری)
 {
-  maybe_used_decls = stack;
+  maybe_کارول_شوی_decls = ډېری;
 }
 
 /* Return the result of sizeof applied to EXPR.  */
 
-struct c_expr
-c_expr_sizeof_expr (location_t loc, struct c_expr expr)
+بنية c_بیان
+c_بیان_sizeof_بیان (location_t loc, بنية c_بیان بیان)
 {
-  struct c_expr ret;
-  if (expr.value == error_mark_node)
+  بنية c_بیان ret;
+  إذا (بیان.ارزښت == error_mark_غوټه)
     {
-      ret.value = error_mark_node;
-      ret.original_code = ERROR_MARK;
-      ret.original_type = NULL;
+      ret.ارزښت = error_mark_غوټه;
+      ret.original_کوډ = ERROR_MARK;
+      ret.original_type = عدم;
       ret.m_decimal = 0;
-      pop_maybe_used (false);
+      راوباسه_maybe_کارول_شوی (خطأ);
     }
-  else
+  وإلا
     {
-      bool expr_const_operands = true;
+      منطقي بیان_const_operands = ریښتیا;
 
-      if (TREE_CODE (expr.value) == PARM_DECL
-	  && C_ARRAY_PARAMETER (expr.value))
+      إذا (ونه_کوډ (بیان.ارزښت) == PARM_DECL
+	  && C_ARRAY_PARAMETER (بیان.ارزښت))
 	{
-	  auto_diagnostic_group d;
-	  if (warning_at (loc, OPT_Wsizeof_array_argument,
+	  auto_diagnostic_ډله d;
+	  إذا (warning_at (loc, OPT_Wsizeof_array_دلیل,
 			  "%<sizeof%> on array function parameter %qE will "
-			  "return size of %qT", expr.value,
-			  TREE_TYPE (expr.value)))
-	    inform (DECL_SOURCE_LOCATION (expr.value), "declared here");
+			  "return size of %qT", بیان.ارزښت,
+			  ونه_TYPE (بیان.ارزښت)))
+	    inform (DECL_سرچینه_LOCATION (بیان.ارزښت), "declared here");
 	}
-      tree folded_expr = c_fully_fold (expr.value, require_constant_value,
-				       &expr_const_operands);
-      ret.value = c_sizeof (loc, TREE_TYPE (folded_expr));
-      c_last_sizeof_arg = expr.value;
-      c_last_sizeof_loc = loc;
-      ret.original_code = SIZEOF_EXPR;
-      ret.original_type = NULL;
+      ونه folded_بیان = c_fully_fold (بیان.ارزښت, require_constant_ارزښت,
+				       &بیان_const_operands);
+      ret.ارزښت = c_sizeof (loc, ونه_TYPE (folded_بیان));
+      c_وروستی_sizeof_arg = بیان.ارزښت;
+      c_وروستی_sizeof_loc = loc;
+      ret.original_کوډ = SIZEOF_بیان;
+      ret.original_type = عدم;
       ret.m_decimal = 0;
-      if (C_TYPE_VARIABLE_SIZE (TREE_TYPE (folded_expr)))
+      إذا (C_TYPE_VARIABLE_اندازه (ونه_TYPE (folded_بیان)))
 	{
 	  /* sizeof is evaluated when given a vla (C99 6.5.3.4p2).  */
-	  ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
-			      folded_expr, ret.value);
-	  C_MAYBE_CONST_EXPR_NON_CONST (ret.value) = !expr_const_operands;
-	  SET_EXPR_LOCATION (ret.value, loc);
+	  ret.ارزښت = build2 (C_MAYBE_CONST_بیان, ونه_TYPE (ret.ارزښت),
+			      folded_بیان, ret.ارزښت);
+	  C_MAYBE_CONST_بیان_NON_CONST (ret.ارزښت) = !بیان_const_operands;
+	  سېټ_بیان_LOCATION (ret.ارزښت, loc);
 	}
-      pop_maybe_used (C_TYPE_VARIABLE_SIZE (TREE_TYPE (folded_expr)));
+      راوباسه_maybe_کارول_شوی (C_TYPE_VARIABLE_اندازه (ونه_TYPE (folded_بیان)));
     }
-  return ret;
+  أرجع ret;
 }
 
 /* Return the result of sizeof applied to T, a structure for the type
    name passed to sizeof (rather than the type itself).  LOC is the
    location of the original expression.  */
 
-struct c_expr
-c_expr_sizeof_type (location_t loc, struct c_type_name *t)
+بنية c_بیان
+c_بیان_sizeof_type (location_t loc, بنية c_type_name *t)
 {
-  tree type;
-  struct c_expr ret;
-  tree type_expr = NULL_TREE;
-  bool type_expr_const = true;
-  type = groktypename (t, &type_expr, &type_expr_const);
-  ret.value = c_sizeof (loc, type);
-  c_last_sizeof_arg = type;
-  c_last_sizeof_loc = loc;
-  ret.original_code = SIZEOF_EXPR;
-  ret.original_type = NULL;
+  ونه type;
+  بنية c_بیان ret;
+  ونه type_بیان = NULL_ونه;
+  منطقي type_بیان_const = ریښتیا;
+  type = groktypename (t, &type_بیان, &type_بیان_const);
+  ret.ارزښت = c_sizeof (loc, type);
+  c_وروستی_sizeof_arg = type;
+  c_وروستی_sizeof_loc = loc;
+  ret.original_کوډ = SIZEOF_بیان;
+  ret.original_type = عدم;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  إذا (type == error_mark_غوټه)
     {
-      ret.value = error_mark_node;
-      ret.original_code = ERROR_MARK;
+      ret.ارزښت = error_mark_غوټه;
+      ret.original_کوډ = ERROR_MARK;
     }
-  else
-  if ((type_expr || TREE_CODE (ret.value) == INTEGER_CST)
-      && C_TYPE_VARIABLE_SIZE (type))
+  وإلا
+  إذا ((type_بیان || ونه_کوډ (ret.ارزښت) == INTEGER_CST)
+      && C_TYPE_VARIABLE_اندازه (type))
     {
       /* If the type is a [*] array, it is a VLA but is represented as
 	 having a size of zero.  In such a case we must ensure that
@@ -4114,99 +4114,99 @@ c_expr_sizeof_type (location_t loc, struct c_type_name *t)
 	 not constant and so constraints on zero or negative size
 	 arrays must not be applied when this sizeof call is inside
 	 another array declarator.  */
-      if (!type_expr)
-	type_expr = integer_zero_node;
-      ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
-			  type_expr, ret.value);
-      C_MAYBE_CONST_EXPR_NON_CONST (ret.value) = !type_expr_const;
+      إذا (!type_بیان)
+	type_بیان = integer_zero_غوټه;
+      ret.ارزښت = build2 (C_MAYBE_CONST_بیان, ونه_TYPE (ret.ارزښت),
+			  type_بیان, ret.ارزښت);
+      C_MAYBE_CONST_بیان_NON_CONST (ret.ارزښت) = !type_بیان_const;
     }
-  pop_maybe_used (type != error_mark_node
-		  ? C_TYPE_VARIABLE_SIZE (type) : false);
-  return ret;
+  راوباسه_maybe_کارول_شوی (type != error_mark_غوټه
+		  ? C_TYPE_VARIABLE_اندازه (type) : خطأ);
+  أرجع ret;
 }
 
-static bool
-top_array_vla_p (const_tree type)
+ساكن منطقي
+سر_array_vla_p (const_ونه type)
 {
-  if (TREE_CODE (type) != ARRAY_TYPE)
-    return false;
+  إذا (ونه_کوډ (type) != ARRAY_TYPE)
+    أرجع خطأ;
 
-  tree d = TYPE_DOMAIN (type);
+  ونه d = TYPE_DOMAIN (type);
 
-  if (!d)
-    return false;
-  if (!TYPE_MAX_VALUE (d))
-    return false;
+  إذا (!d)
+    أرجع خطأ;
+  إذا (!TYPE_MAX_ارزښت (d))
+    أرجع خطأ;
 
-  return TREE_CODE (TYPE_MAX_VALUE (d)) != INTEGER_CST
-	 || TREE_CODE (TYPE_MIN_VALUE (d)) != INTEGER_CST;
+  أرجع ونه_کوډ (TYPE_MAX_ارزښت (d)) != INTEGER_CST
+	 || ونه_کوډ (TYPE_MIN_ارزښت (d)) != INTEGER_CST;
 }
 
 /* Return the result of countof applied to EXPR.  */
 
-struct c_expr
-c_expr_countof_expr (location_t loc, struct c_expr expr)
+بنية c_بیان
+c_بیان_countof_بیان (location_t loc, بنية c_بیان بیان)
 {
-  struct c_expr ret;
-  if (expr.value == error_mark_node)
+  بنية c_بیان ret;
+  إذا (بیان.ارزښت == error_mark_غوټه)
     {
-      ret.value = error_mark_node;
-      ret.original_code = ERROR_MARK;
-      ret.original_type = NULL;
+      ret.ارزښت = error_mark_غوټه;
+      ret.original_کوډ = ERROR_MARK;
+      ret.original_type = عدم;
       ret.m_decimal = 0;
-      pop_maybe_used (false);
+      راوباسه_maybe_کارول_شوی (خطأ);
     }
-  else
+  وإلا
     {
-      bool expr_const_operands = true;
+      منطقي بیان_const_operands = ریښتیا;
 
-      tree folded_expr = c_fully_fold (expr.value, require_constant_value,
-				       &expr_const_operands);
-      ret.value = c_countof_type (loc, TREE_TYPE (folded_expr));
-      c_last_sizeof_arg = expr.value;
-      c_last_sizeof_loc = loc;
-      ret.original_code = COUNTOF_EXPR;
-      ret.original_type = NULL;
+      ونه folded_بیان = c_fully_fold (بیان.ارزښت, require_constant_ارزښت,
+				       &بیان_const_operands);
+      ret.ارزښت = c_countof_type (loc, ونه_TYPE (folded_بیان));
+      c_وروستی_sizeof_arg = بیان.ارزښت;
+      c_وروستی_sizeof_loc = loc;
+      ret.original_کوډ = COUNTOF_بیان;
+      ret.original_type = عدم;
       ret.m_decimal = 0;
-      if (top_array_vla_p (TREE_TYPE (folded_expr)))
+      إذا (سر_array_vla_p (ونه_TYPE (folded_بیان)))
 	{
 	  /* countof is evaluated when given a vla.  */
-	  ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
-			      folded_expr, ret.value);
-	  C_MAYBE_CONST_EXPR_NON_CONST (ret.value) = !expr_const_operands;
-	  SET_EXPR_LOCATION (ret.value, loc);
+	  ret.ارزښت = build2 (C_MAYBE_CONST_بیان, ونه_TYPE (ret.ارزښت),
+			      folded_بیان, ret.ارزښت);
+	  C_MAYBE_CONST_بیان_NON_CONST (ret.ارزښت) = !بیان_const_operands;
+	  سېټ_بیان_LOCATION (ret.ارزښت, loc);
 	}
-      pop_maybe_used (top_array_vla_p (TREE_TYPE (folded_expr)));
+      راوباسه_maybe_کارول_شوی (سر_array_vla_p (ونه_TYPE (folded_بیان)));
     }
-  return ret;
+  أرجع ret;
 }
 
 /* Return the result of countof applied to T, a structure for the type
    name passed to countof (rather than the type itself).  LOC is the
    location of the original expression.  */
 
-struct c_expr
-c_expr_countof_type (location_t loc, struct c_type_name *t)
+بنية c_بیان
+c_بیان_countof_type (location_t loc, بنية c_type_name *t)
 {
-  tree type;
-  struct c_expr ret;
-  tree type_expr = NULL_TREE;
-  bool type_expr_const = true;
-  type = groktypename (t, &type_expr, &type_expr_const);
-  ret.value = c_countof_type (loc, type);
-  c_last_sizeof_arg = type;
-  c_last_sizeof_loc = loc;
-  ret.original_code = COUNTOF_EXPR;
-  ret.original_type = NULL;
+  ونه type;
+  بنية c_بیان ret;
+  ونه type_بیان = NULL_ونه;
+  منطقي type_بیان_const = ریښتیا;
+  type = groktypename (t, &type_بیان, &type_بیان_const);
+  ret.ارزښت = c_countof_type (loc, type);
+  c_وروستی_sizeof_arg = type;
+  c_وروستی_sizeof_loc = loc;
+  ret.original_کوډ = COUNTOF_بیان;
+  ret.original_type = عدم;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  إذا (type == error_mark_غوټه)
     {
-      ret.value = error_mark_node;
-      ret.original_code = ERROR_MARK;
+      ret.ارزښت = error_mark_غوټه;
+      ret.original_کوډ = ERROR_MARK;
     }
-  else
-  if ((type_expr || TREE_CODE (ret.value) == INTEGER_CST)
-      && top_array_vla_p (type))
+  وإلا
+  إذا ((type_بیان || ونه_کوډ (ret.ارزښت) == INTEGER_CST)
+      && سر_array_vla_p (type))
     {
       /* If the type is a [*] array, it is a VLA but is represented as
 	 having a size of zero.  In such a case we must ensure that
@@ -4215,68 +4215,68 @@ c_expr_countof_type (location_t loc, struct c_type_name *t)
 	 the result is not constant and so
 	 constraints on zero or negative size arrays must not be applied
 	 when this countof call is inside another array declarator.  */
-      if (!type_expr)
-	type_expr = integer_zero_node;
-      ret.value = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret.value),
-			  type_expr, ret.value);
-      C_MAYBE_CONST_EXPR_NON_CONST (ret.value) = !type_expr_const;
+      إذا (!type_بیان)
+	type_بیان = integer_zero_غوټه;
+      ret.ارزښت = build2 (C_MAYBE_CONST_بیان, ونه_TYPE (ret.ارزښت),
+			  type_بیان, ret.ارزښت);
+      C_MAYBE_CONST_بیان_NON_CONST (ret.ارزښت) = !type_بیان_const;
     }
-  pop_maybe_used (type != error_mark_node ? top_array_vla_p (type) : false);
-  return ret;
+  راوباسه_maybe_کارول_شوی (type != error_mark_غوټه ? سر_array_vla_p (type) : خطأ);
+  أرجع ret;
 }
 
 /* Return the result of maxof applied to T, a structure for the type
    name passed to maxof (rather than the type itself).  LOC is the
    location of the original expression.  */
 
-struct c_expr
-c_expr_maxof_type (location_t loc, struct c_type_name *t)
+بنية c_بیان
+c_بیان_maxof_type (location_t loc, بنية c_type_name *t)
 {
-  tree type;
-  struct c_expr ret;
-  tree type_expr = NULL_TREE;
-  bool type_expr_const = true;
-  type = groktypename (t, &type_expr, &type_expr_const);
-  ret.value = c_maxof_type (loc, type);
-  c_last_sizeof_arg = type;
-  c_last_sizeof_loc = loc;
-  ret.original_code = MAXOF_EXPR;
-  ret.original_type = NULL;
+  ونه type;
+  بنية c_بیان ret;
+  ونه type_بیان = NULL_ونه;
+  منطقي type_بیان_const = ریښتیا;
+  type = groktypename (t, &type_بیان, &type_بیان_const);
+  ret.ارزښت = c_maxof_type (loc, type);
+  c_وروستی_sizeof_arg = type;
+  c_وروستی_sizeof_loc = loc;
+  ret.original_کوډ = MAXOF_بیان;
+  ret.original_type = عدم;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  إذا (type == error_mark_غوټه)
     {
-      ret.value = error_mark_node;
-      ret.original_code = ERROR_MARK;
+      ret.ارزښت = error_mark_غوټه;
+      ret.original_کوډ = ERROR_MARK;
     }
-  pop_maybe_used (type != error_mark_node);
-  return ret;
+  راوباسه_maybe_کارول_شوی (type != error_mark_غوټه);
+  أرجع ret;
 }
 
 /* Return the result of minof applied to T, a structure for the type
    name passed to minof (rather than the type itself).  LOC is the
    location of the original expression.  */
 
-struct c_expr
-c_expr_minof_type (location_t loc, struct c_type_name *t)
+بنية c_بیان
+c_بیان_minof_type (location_t loc, بنية c_type_name *t)
 {
-  tree type;
-  struct c_expr ret;
-  tree type_expr = NULL_TREE;
-  bool type_expr_const = true;
-  type = groktypename (t, &type_expr, &type_expr_const);
-  ret.value = c_minof_type (loc, type);
-  c_last_sizeof_arg = type;
-  c_last_sizeof_loc = loc;
-  ret.original_code = MINOF_EXPR;
-  ret.original_type = NULL;
+  ونه type;
+  بنية c_بیان ret;
+  ونه type_بیان = NULL_ونه;
+  منطقي type_بیان_const = ریښتیا;
+  type = groktypename (t, &type_بیان, &type_بیان_const);
+  ret.ارزښت = c_minof_type (loc, type);
+  c_وروستی_sizeof_arg = type;
+  c_وروستی_sizeof_loc = loc;
+  ret.original_کوډ = MINOF_بیان;
+  ret.original_type = عدم;
   ret.m_decimal = 0;
-  if (type == error_mark_node)
+  إذا (type == error_mark_غوټه)
     {
-      ret.value = error_mark_node;
-      ret.original_code = ERROR_MARK;
+      ret.ارزښت = error_mark_غوټه;
+      ret.original_کوډ = ERROR_MARK;
     }
-  pop_maybe_used (type != error_mark_node);
-  return ret;
+  راوباسه_maybe_کارول_شوی (type != error_mark_غوټه);
+  أرجع ret;
 }
 
 /* Build a function call to function FUNCTION with parameters PARAMS.
@@ -4285,43 +4285,43 @@ c_expr_minof_type (location_t loc, struct c_type_name *t)
    TREE_VALUE of each node is a parameter-expression.
    FUNCTION's data type may be a function type or a pointer-to-function.  */
 
-tree
-build_function_call (location_t loc, tree function, tree params)
+ونه
+build_function_call (location_t loc, ونه function, ونه params)
 {
-  vec<tree, va_gc> *v;
-  tree ret;
+  vec<ونه, va_gc> *v;
+  ونه ret;
 
-  vec_alloc (v, list_length (params));
-  for (; params; params = TREE_CHAIN (params))
-    v->quick_push (TREE_VALUE (params));
-  ret = c_build_function_call_vec (loc, vNULL, function, v, NULL);
+  vec_alloc (v, list_اوږدتیا (params));
+  لكل (; params; params = ونه_CHAIN (params))
+    v->چټک_ټېل (ونه_ارزښت (params));
+  ret = c_build_function_call_vec (loc, vNULL, function, v, عدم);
   vec_free (v);
-  return ret;
+  أرجع ret;
 }
 
 /* Give a note about the location of the declaration of DECL,
    or, failing that, a pertinent declaration for FUNCTION_EXPR.  */
 
-static void
-inform_declaration (tree decl, tree function_expr)
+ساكن فراغ
+inform_declaration (ونه decl, ونه function_بیان)
 {
-  if (decl && (TREE_CODE (decl) != FUNCTION_DECL
+  إذا (decl && (ونه_کوډ (decl) != FUNCTION_DECL
 	       || !DECL_IS_UNDECLARED_BUILTIN (decl)))
-    inform (DECL_SOURCE_LOCATION (decl), "declared here");
-  else if (function_expr)
-    switch (TREE_CODE (function_expr))
+    inform (DECL_سرچینه_LOCATION (decl), "declared here");
+  وإلا إذا (function_بیان)
+    بدل (ونه_کوډ (function_بیان))
       {
-      default:
-	break;
-      case COMPONENT_REF:
+      افتراضي:
+	اكسر;
+      حالة COMPONENT_REF:
 	/* Show the decl of the pertinent field (e.g. for callback
 	   fields in a struct.  */
 	{
-	  tree field_decl = TREE_OPERAND (function_expr, 1);
-	  if (location_t loc = DECL_SOURCE_LOCATION (field_decl))
+	  ونه ډګر_decl = ونه_عملوند (function_بیان, 1);
+	  إذا (location_t loc = DECL_سرچینه_LOCATION (ډګر_decl))
 	    inform (loc, "declared here");
 	}
-	break;
+	اكسر;
       }
 }
 
@@ -4336,186 +4336,186 @@ inform_declaration (tree decl, tree function_expr)
    or pointer-to-function.  This function changes the elements of
    PARAMS.  */
 
-tree
+ونه
 build_function_call_vec (location_t loc, vec<location_t> arg_loc,
-			 tree function, vec<tree, va_gc> *params,
-			 vec<tree, va_gc> *origtypes, tree orig_fundecl)
+			 ونه function, vec<ونه, va_gc> *params,
+			 vec<ونه, va_gc> *origtypes, ونه orig_fundecl)
 {
-  tree fntype, fundecl = NULL_TREE;
-  tree name = NULL_TREE, result;
-  tree tem;
-  int nargs;
-  tree *argarray;
+  ونه fntype, fundecl = NULL_ونه;
+  ونه name = NULL_ونه, پایله;
+  ونه tem;
+  صحيح nargs;
+  ونه *argarray;
 
 
   /* Strip NON_LVALUE_EXPRs, etc., since we aren't using as an lvalue.  */
   STRIP_TYPE_NOPS (function);
 
   /* Convert anything with function type to a pointer-to-function.  */
-  if (TREE_CODE (function) == FUNCTION_DECL)
+  إذا (ونه_کوډ (function) == FUNCTION_DECL)
     {
       name = DECL_NAME (function);
 
-      if (flag_tm)
+      إذا (flag_tm)
 	tm_malloc_replacement (function);
       fundecl = function;
-      if (!orig_fundecl)
+      إذا (!orig_fundecl)
 	orig_fundecl = fundecl;
       /* Atomic functions have type checking/casting already done.  They are
 	 often rewritten and don't match the original parameter list.  */
-      if (name && startswith (IDENTIFIER_POINTER (name), "__atomic_"))
-        origtypes = NULL;
+      إذا (name && startswith (IDENTIFIER_اشاره_ګر (name), "__atomic_"))
+        origtypes = عدم;
     }
-  if (TREE_CODE (TREE_TYPE (function)) == FUNCTION_TYPE)
-    function = function_to_pointer_conversion (loc, function);
+  إذا (ونه_کوډ (ونه_TYPE (function)) == FUNCTION_TYPE)
+    function = function_منزل_اشاره_ګر_conversion (loc, function);
 
   /* For Objective-C, convert any calls via a cast to OBJC_TYPE_REF
      expressions, like those used for ObjC messenger dispatches.  */
-  if (params && !params->is_empty ())
+  إذا (params && !params->is_تشه ())
     function = objc_rewrite_function_call (function, (*params)[0]);
 
-  function = c_fully_fold (function, false, NULL);
+  function = c_fully_fold (function, خطأ, عدم);
 
-  fntype = TREE_TYPE (function);
+  fntype = ونه_TYPE (function);
 
-  if (TREE_CODE (fntype) == ERROR_MARK)
-    return error_mark_node;
+  إذا (ونه_کوډ (fntype) == ERROR_MARK)
+    أرجع error_mark_غوټه;
 
-  if (!(TREE_CODE (fntype) == POINTER_TYPE
-	&& TREE_CODE (TREE_TYPE (fntype)) == FUNCTION_TYPE))
+  إذا (!(ونه_کوډ (fntype) == اشاره_ګر_TYPE
+	&& ونه_کوډ (ونه_TYPE (fntype)) == FUNCTION_TYPE))
     {
-      if (!flag_diagnostics_show_caret && !STATEMENT_CLASS_P (function))
+      إذا (!flag_diagnostics_show_caret && !STATEMENT_CLASS_P (function))
 	error_at (loc,
 		  "called object %qE is not a function or function pointer",
 		  function);
-      else if (DECL_P (function))
+      وإلا إذا (DECL_P (function))
 	{
-	  auto_diagnostic_group d;
+	  auto_diagnostic_ډله d;
 	  error_at (loc,
 		    "called object %qD is not a function or function pointer",
 		    function);
-	  inform_declaration (function, NULL_TREE);
+	  inform_declaration (function, NULL_ونه);
 	}
-      else
+      وإلا
 	error_at (loc,
 		  "called object is not a function or function pointer");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
-  if (fundecl && TREE_THIS_VOLATILE (fundecl))
+  إذا (fundecl && ونه_THIS_VOLATILE (fundecl))
     current_function_returns_abnormally = 1;
 
   /* fntype now gets the type of function pointed to.  */
-  fntype = TREE_TYPE (fntype);
-  tree return_type = TREE_TYPE (fntype);
+  fntype = ونه_TYPE (fntype);
+  ونه return_type = ونه_TYPE (fntype);
 
   /* Convert the parameters to the types declared in the
      function prototype, or apply default promotions.  */
 
   nargs = convert_arguments (loc, arg_loc, fntype, params,
 			     origtypes, function, fundecl);
-  if (nargs < 0)
-    return error_mark_node;
+  إذا (nargs < 0)
+    أرجع error_mark_غوټه;
 
   /* Check that the function is called through a compatible prototype.
      If it is not, warn.  */
-  if (CONVERT_EXPR_P (function)
-      && TREE_CODE (tem = TREE_OPERAND (function, 0)) == ADDR_EXPR
-      && TREE_CODE (tem = TREE_OPERAND (tem, 0)) == FUNCTION_DECL
-      && !comptypes (fntype, TREE_TYPE (tem)))
+  إذا (CONVERT_بیان_P (function)
+      && ونه_کوډ (tem = ونه_عملوند (function, 0)) == ADDR_بیان
+      && ونه_کوډ (tem = ونه_عملوند (tem, 0)) == FUNCTION_DECL
+      && !comptypes (fntype, ونه_TYPE (tem)))
     {
       /* This situation leads to run-time undefined behavior.  We can't,
 	 therefore, simply error unless we can prove that all possible
 	 executions of the program must execute the code.  */
       warning_at (loc, 0, "function called through a non-compatible type");
 
-      if (VOID_TYPE_P (return_type)
+      إذا (VOID_TYPE_P (return_type)
 	  && TYPE_QUALS (return_type) != TYPE_UNQUALIFIED)
 	pedwarn (loc, 0,
 		 "function with qualified void return type called");
      }
 
-  argarray = vec_safe_address (params);
+  argarray = vec_خوندي_پته (params);
 
   /* Check that arguments to builtin functions match the expectations.  */
-  if (fundecl
-      && fndecl_built_in_p (fundecl)
+  إذا (fundecl
+      && fndecl_built_دننه_p (fundecl)
       && !check_builtin_function_arguments (loc, arg_loc, fundecl,
 					    orig_fundecl, nargs, argarray))
-    return error_mark_node;
+    أرجع error_mark_غوټه;
 
   /* Check that the arguments to the function are valid.  */
-  bool warned_p = check_function_arguments (loc, fundecl, fntype,
+  منطقي warned_p = check_function_arguments (loc, fundecl, fntype,
 					    nargs, argarray, &arg_loc,
 					    comptypes);
 
-  if (TYPE_QUALS (return_type) != TYPE_UNQUALIFIED
+  إذا (TYPE_QUALS (return_type) != TYPE_UNQUALIFIED
       && !VOID_TYPE_P (return_type))
     return_type = c_build_qualified_type (return_type, TYPE_UNQUALIFIED);
-  if (name != NULL_TREE
-      && startswith (IDENTIFIER_POINTER (name), "__builtin_"))
+  إذا (name != NULL_ونه
+      && startswith (IDENTIFIER_اشاره_ګر (name), "__builtin_"))
     {
-      if (require_constant_value)
-	result
+      إذا (require_constant_ارزښت)
+	پایله
 	  = fold_build_call_array_initializer_loc (loc, return_type,
 						   function, nargs, argarray);
-      else
-	result = fold_build_call_array_loc (loc, return_type,
+      وإلا
+	پایله = fold_build_call_array_loc (loc, return_type,
 					    function, nargs, argarray);
-      if (TREE_CODE (result) == NOP_EXPR
-	  && TREE_CODE (TREE_OPERAND (result, 0)) == INTEGER_CST)
-	STRIP_TYPE_NOPS (result);
+      إذا (ونه_کوډ (پایله) == NOP_بیان
+	  && ونه_کوډ (ونه_عملوند (پایله, 0)) == INTEGER_CST)
+	STRIP_TYPE_NOPS (پایله);
     }
-  else
-    result = build_call_array_loc (loc, return_type,
+  وإلا
+    پایله = build_call_array_loc (loc, return_type,
 				   function, nargs, argarray);
   /* If -Wnonnull warning has been diagnosed, avoid diagnosing it again
      later.  */
-  if (warned_p && TREE_CODE (result) == CALL_EXPR)
-    suppress_warning (result, OPT_Wnonnull);
+  إذا (warned_p && ونه_کوډ (پایله) == CALL_بیان)
+    suppress_warning (پایله, OPT_Wnonnull);
 
   /* In this improbable scenario, a nested function returns a VM type.
      Create a TARGET_EXPR so that the call always has a LHS, much as
      what the C++ FE does for functions returning non-PODs.  */
-  if (c_type_variably_modified_p (TREE_TYPE (fntype)))
+  إذا (c_type_variably_modified_p (ونه_TYPE (fntype)))
     {
-      tree tmp = create_tmp_var_raw (TREE_TYPE (fntype));
-      result = build4 (TARGET_EXPR, TREE_TYPE (fntype), tmp, result,
-		       NULL_TREE, NULL_TREE);
+      ونه tmp = create_tmp_var_raw (ونه_TYPE (fntype));
+      پایله = build4 (موخه_بیان, ونه_TYPE (fntype), tmp, پایله,
+		       NULL_ونه, NULL_ونه);
     }
 
-  if (VOID_TYPE_P (TREE_TYPE (result)))
+  إذا (VOID_TYPE_P (ونه_TYPE (پایله)))
     {
-      if (TYPE_QUALS (TREE_TYPE (result)) != TYPE_UNQUALIFIED)
+      إذا (TYPE_QUALS (ونه_TYPE (پایله)) != TYPE_UNQUALIFIED)
 	pedwarn (loc, 0,
 		 "function with qualified void return type called");
-      return result;
+      أرجع پایله;
     }
-  return require_complete_type (loc, result);
+  أرجع require_complete_type (loc, پایله);
 }
 
 /* Like build_function_call_vec, but call also resolve_overloaded_builtin.  */
 
-tree
-c_build_function_call_vec (location_t loc, const vec<location_t> &arg_loc,
-			   tree function, vec<tree, va_gc> *params,
-			   vec<tree, va_gc> *origtypes)
+ونه
+c_build_function_call_vec (location_t loc, ثابت vec<location_t> &arg_loc,
+			   ونه function, vec<ونه, va_gc> *params,
+			   vec<ونه, va_gc> *origtypes)
 {
   /* Strip NON_LVALUE_EXPRs, etc., since we aren't using as an lvalue.  */
   STRIP_TYPE_NOPS (function);
 
   /* Convert anything with function type to a pointer-to-function.  */
-  if (TREE_CODE (function) == FUNCTION_DECL)
+  إذا (ونه_کوډ (function) == FUNCTION_DECL)
     {
       /* Implement type-directed function overloading for builtins.
 	 resolve_overloaded_builtin and targetm.resolve_overloaded_builtin
 	 handle all the type checking.  The result is a complete expression
 	 that implements this function call.  */
-      tree tem = resolve_overloaded_builtin (loc, function, params);
-      if (tem)
-	return tem;
+      ونه tem = resolve_overloaded_builtin (loc, function, params);
+      إذا (tem)
+	أرجع tem;
     }
-  return build_function_call_vec (loc, arg_loc, function, params, origtypes);
+  أرجع build_function_call_vec (loc, arg_loc, function, params, origtypes);
 }
 
 /* Helper for convert_arguments called to convert the VALue of argument
@@ -4533,57 +4533,57 @@ c_build_function_call_vec (location_t loc, const vec<location_t> &arg_loc,
    as EXCESS_PRECISION_EXPR.
    WARNOPT is the same as in convert_for_assignment.  */
 
-static tree
-convert_argument (location_t ploc, tree function, tree fundecl,
-		  tree type, tree origtype, tree val, tree valtype,
-		  bool npc, tree rname, int parmnum, int argnum,
-		  bool excess_precision, int warnopt)
+ساكن ونه
+convert_دلیل (location_t ploc, ونه function, ونه fundecl,
+		  ونه type, ونه origtype, ونه val, ونه valtype,
+		  منطقي npc, ونه rname, صحيح parmnum, صحيح argnum,
+		  منطقي excess_precision, صحيح warnopt)
 {
   /* Formal parm type is specified by a function prototype.  */
 
-  if (type == error_mark_node || !COMPLETE_TYPE_P (type))
+  إذا (type == error_mark_غوټه || !COMPLETE_TYPE_P (type))
     {
       error_at (ploc, "type of formal parameter %d is incomplete",
 		parmnum + 1);
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
   /* Optionally warn about conversions that differ from the default
      conversions.  */
-  if (warn_traditional_conversion || warn_traditional)
+  إذا (warn_traditional_conversion || warn_traditional)
     {
-      if (INTEGRAL_TYPE_P (type)
+      إذا (INTEGRAL_TYPE_P (type)
 	  && SCALAR_FLOAT_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as integer rather "
 		    "than floating due to prototype",
 		    argnum, rname);
-      if (INTEGRAL_TYPE_P (type)
-	  && TREE_CODE (valtype) == COMPLEX_TYPE)
+      إذا (INTEGRAL_TYPE_P (type)
+	  && ونه_کوډ (valtype) == COMPLEX_TYPE)
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as integer rather "
 		    "than complex due to prototype",
 		    argnum, rname);
-      else if (TREE_CODE (type) == COMPLEX_TYPE
+      وإلا إذا (ونه_کوډ (type) == COMPLEX_TYPE
 	       && SCALAR_FLOAT_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as complex rather "
 		    "than floating due to prototype",
 		    argnum, rname);
-      else if (SCALAR_FLOAT_TYPE_P (type)
+      وإلا إذا (SCALAR_FLOAT_TYPE_P (type)
 	       && INTEGRAL_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as floating rather "
 		    "than integer due to prototype",
 		    argnum, rname);
-      else if (TREE_CODE (type) == COMPLEX_TYPE
+      وإلا إذا (ونه_کوډ (type) == COMPLEX_TYPE
 	       && INTEGRAL_TYPE_P (valtype))
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as complex rather "
 		    "than integer due to prototype",
 		    argnum, rname);
-      else if (SCALAR_FLOAT_TYPE_P (type)
-	       && TREE_CODE (valtype) == COMPLEX_TYPE)
+      وإلا إذا (SCALAR_FLOAT_TYPE_P (type)
+	       && ونه_کوډ (valtype) == COMPLEX_TYPE)
 	warning_at (ploc, OPT_Wtraditional_conversion,
 		    "passing argument %d of %qE as floating rather "
 		    "than complex due to prototype",
@@ -4591,15 +4591,15 @@ convert_argument (location_t ploc, tree function, tree fundecl,
       /* ??? At some point, messages should be written about
 	 conversions between complex types, but that's too messy
 	 to do now.  */
-      else if (SCALAR_FLOAT_TYPE_P (type)
+      وإلا إذا (SCALAR_FLOAT_TYPE_P (type)
 	       && SCALAR_FLOAT_TYPE_P (valtype))
 	{
-	  unsigned int formal_prec = TYPE_PRECISION (type);
+	  بینښه صحيح formal_prec = TYPE_PRECISION (type);
 
 	  /* Warn if any argument is passed as `float',
 	     since without a prototype it would be `double'.  */
-	  if (formal_prec == TYPE_PRECISION (float_type_node)
-	      && type != dfloat32_type_node)
+	  إذا (formal_prec == TYPE_PRECISION (float_type_غوټه)
+	      && type != dfloat32_type_غوټه)
 	    warning_at (ploc, 0,
 			"passing argument %d of %qE as %<float%> "
 			"rather than %<double%> due to prototype",
@@ -4609,23 +4609,23 @@ convert_argument (location_t ploc, tree function, tree fundecl,
 	     for decimal float types.  Warn of conversions with
 	     binary float types and of precision narrowing due to
 	     prototype.  */
-	  else if (type != valtype
-		   && (type == dfloat32_type_node
-		       || type == dfloat64_type_node
-		       || type == dfloat128_type_node
-		       || valtype == dfloat32_type_node
-		       || valtype == dfloat64_type_node
-		       || valtype == dfloat128_type_node)
+	  وإلا إذا (type != valtype
+		   && (type == dfloat32_type_غوټه
+		       || type == dfloat64_type_غوټه
+		       || type == dfloat128_type_غوټه
+		       || valtype == dfloat32_type_غوټه
+		       || valtype == dfloat64_type_غوټه
+		       || valtype == dfloat128_type_غوټه)
 		   && (formal_prec
 		       <= TYPE_PRECISION (valtype)
-		       || (type == dfloat128_type_node
+		       || (type == dfloat128_type_غوټه
 			   && (valtype
-			       != dfloat64_type_node
+			       != dfloat64_type_غوټه
 			       && (valtype
-				   != dfloat32_type_node)))
-		       || (type == dfloat64_type_node
+				   != dfloat32_type_غوټه)))
+		       || (type == dfloat64_type_غوټه
 			   && (valtype
-			       != dfloat32_type_node))))
+			       != dfloat32_type_غوټه))))
 	    warning_at (ploc, 0,
 			"passing argument %d of %qE as %qT "
 			"rather than %qT due to prototype",
@@ -4635,36 +4635,36 @@ convert_argument (location_t ploc, tree function, tree fundecl,
       /* Detect integer changing in width or signedness.
 	 These warnings are only activated with
 	 -Wtraditional-conversion, not with -Wtraditional.  */
-      else if (warn_traditional_conversion
+      وإلا إذا (warn_traditional_conversion
 	       && INTEGRAL_TYPE_P (type)
 	       && INTEGRAL_TYPE_P (valtype))
 	{
-	  unsigned int formal_prec = TYPE_PRECISION (type);
-	  tree would_have_been = default_conversion (val);
-	  tree type1 = TREE_TYPE (would_have_been);
+	  بینښه صحيح formal_prec = TYPE_PRECISION (type);
+	  ونه would_have_been = default_conversion (val);
+	  ونه type1 = ونه_TYPE (would_have_been);
 
-	  if (val == error_mark_node)
+	  إذا (val == error_mark_غوټه)
 	    /* VAL could have been of incomplete type.  */;
-	  else if (TREE_CODE (type) == ENUMERAL_TYPE
+	  وإلا إذا (ونه_کوډ (type) == ENUMERAL_TYPE
 		   && (TYPE_MAIN_VARIANT (type)
 		       == TYPE_MAIN_VARIANT (valtype)))
 	    /* No warning if function asks for enum
 	       and the actual arg is that enum type.  */
 	    ;
-	  else if (formal_prec != TYPE_PRECISION (type1))
+	  وإلا إذا (formal_prec != TYPE_PRECISION (type1))
 	    warning_at (ploc, OPT_Wtraditional_conversion,
 			"passing argument %d of %qE "
 			"with different width due to prototype",
 			argnum, rname);
-	  else if (TYPE_UNSIGNED (type) == TYPE_UNSIGNED (type1))
+	  وإلا إذا (TYPE_UNSIGNED (type) == TYPE_UNSIGNED (type1))
 	    ;
 	  /* Don't complain if the formal parameter type
 	     is an enum, because we can't tell now whether
 	     the value was an enum--even the same enum.  */
-	  else if (TREE_CODE (type) == ENUMERAL_TYPE)
+	  وإلا إذا (ونه_کوډ (type) == ENUMERAL_TYPE)
 	    ;
-	  else if (TREE_CODE (val) == INTEGER_CST
-		   && int_fits_type_p (val, type))
+	  وإلا إذا (ونه_کوډ (val) == INTEGER_CST
+		   && int_ځاییږي_type_p (val, type))
 	    /* Change in signedness doesn't matter
 	       if a constant value is unaffected.  */
 	    ;
@@ -4672,15 +4672,15 @@ convert_argument (location_t ploc, tree function, tree fundecl,
 	     unsigned type, it doesn't matter whether we
 	     pass it as signed or unsigned; the value
 	     certainly is the same either way.  */
-	  else if (TYPE_PRECISION (valtype) < TYPE_PRECISION (type)
+	  وإلا إذا (TYPE_PRECISION (valtype) < TYPE_PRECISION (type)
 		   && TYPE_UNSIGNED (valtype))
 	    ;
-	  else if (TYPE_UNSIGNED (type))
+	  وإلا إذا (TYPE_UNSIGNED (type))
 	    warning_at (ploc, OPT_Wtraditional_conversion,
 			"passing argument %d of %qE "
 			"as unsigned due to prototype",
 			argnum, rname);
-	  else
+	  وإلا
 	    warning_at (ploc, OPT_Wtraditional_conversion,
 			"passing argument %d of %qE "
 			"as signed due to prototype",
@@ -4690,14 +4690,14 @@ convert_argument (location_t ploc, tree function, tree fundecl,
 
   /* Possibly restore an EXCESS_PRECISION_EXPR for the
      sake of better warnings from convert_and_check.  */
-  if (excess_precision)
-    val = build1 (EXCESS_PRECISION_EXPR, valtype, val);
+  إذا (excess_precision)
+    val = build1 (EXCESS_PRECISION_بیان, valtype, val);
 
-  tree parmval = convert_for_assignment (ploc, ploc, type,
+  ونه parmval = convert_for_assignment (ploc, ploc, type,
 					 val, origtype, ic_argpass,
 					 npc, fundecl, function,
 					 parmnum + 1, warnopt);
-  return parmval;
+  أرجع parmval;
 }
 
 /* Convert the argument expressions in the vector VALUES
@@ -4721,182 +4721,182 @@ convert_argument (location_t ploc, tree function, tree fundecl,
    than the length of VALUES in some error situations), or -1 on
    failure.  */
 
-static int
-convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
-		   vec<tree, va_gc> *values, vec<tree, va_gc> *origtypes,
-		   tree function, tree fundecl)
+ساكن صحيح
+convert_arguments (location_t loc, vec<location_t> arg_loc, ونه fntype,
+		   vec<ونه, va_gc> *ارزښتونه, vec<ونه, va_gc> *origtypes,
+		   ونه function, ونه fundecl)
 {
-  tree typelist = TYPE_ARG_TYPES (fntype);
-  unsigned int parmnum;
-  bool error_args = false;
-  const bool type_generic = fundecl
-    && lookup_attribute ("type generic", TYPE_ATTRIBUTES (TREE_TYPE (fundecl)));
-  bool type_generic_remove_excess_precision = false;
-  bool type_generic_overflow_p = false;
-  bool type_generic_bit_query = false;
-  tree selector;
+  ونه typelist = TYPE_ARG_TYPES (fntype);
+  بینښه صحيح parmnum;
+  منطقي error_دلیلونه = خطأ;
+  ثابت منطقي type_generic = fundecl
+    && lookup_attribute ("type generic", TYPE_ځانګړتیاوې (ونه_TYPE (fundecl)));
+  منطقي type_generic_remove_excess_precision = خطأ;
+  منطقي type_generic_ډکېدنه_p = خطأ;
+  منطقي type_generic_بټ_query = خطأ;
+  ونه selector;
 
   /* Change pointer to function to the function itself for
      diagnostics.  */
-  if (TREE_CODE (function) == ADDR_EXPR
-      && TREE_CODE (TREE_OPERAND (function, 0)) == FUNCTION_DECL)
-    function = TREE_OPERAND (function, 0);
+  إذا (ونه_کوډ (function) == ADDR_بیان
+      && ونه_کوډ (ونه_عملوند (function, 0)) == FUNCTION_DECL)
+    function = ونه_عملوند (function, 0);
 
   /* Handle an ObjC selector specially for diagnostics.  */
-  selector = objc_message_selector ();
+  selector = objc_پیغام_selector ();
 
   /* For a call to a built-in function declared without a prototype,
      set to the built-in function's argument list.  */
-  tree builtin_typelist = NULL_TREE;
+  ونه builtin_typelist = NULL_ونه;
 
   /* For type-generic built-in functions, determine whether excess
      precision should be removed (classification) or not
      (comparison).  */
-  if (fundecl
-      && fndecl_built_in_p (fundecl, BUILT_IN_NORMAL))
+  إذا (fundecl
+      && fndecl_built_دننه_p (fundecl, BUILT_دننه_نورمال))
     {
-      built_in_function code = DECL_FUNCTION_CODE (fundecl);
-      if (C_DECL_BUILTIN_PROTOTYPE (fundecl))
+      built_دننه_function کوډ = DECL_FUNCTION_کوډ (fundecl);
+      إذا (C_DECL_BUILTIN_PROTOTYPE (fundecl))
 	{
 	  /* For a call to a built-in function declared without a prototype
 	     use the types of the parameters of the internal built-in to
 	     match those of the arguments to.  */
-	  if (tree bdecl = builtin_decl_explicit (code))
-	    builtin_typelist = TYPE_ARG_TYPES (TREE_TYPE (bdecl));
+	  إذا (ونه bdecl = builtin_decl_explicit (کوډ))
+	    builtin_typelist = TYPE_ARG_TYPES (ونه_TYPE (bdecl));
 	}
 
       /* For type-generic built-in functions, determine whether excess
 	 precision should be removed (classification) or not
 	 (comparison).  */
-      if (type_generic)
-	switch (code)
+      إذا (type_generic)
+	بدل (کوډ)
 	  {
-	  case BUILT_IN_ISFINITE:
-	  case BUILT_IN_ISINF:
-	  case BUILT_IN_ISINF_SIGN:
-	  case BUILT_IN_ISNAN:
-	  case BUILT_IN_ISNORMAL:
-	  case BUILT_IN_ISSIGNALING:
-	  case BUILT_IN_FPCLASSIFY:
-	    type_generic_remove_excess_precision = true;
-	    break;
+	  حالة BUILT_دننه_ISFINITE:
+	  حالة BUILT_دننه_ISINF:
+	  حالة BUILT_دننه_ISINF_SIGN:
+	  حالة BUILT_دننه_ISNAN:
+	  حالة BUILT_دننه_ISNORMAL:
+	  حالة BUILT_دننه_ISSIGNALING:
+	  حالة BUILT_دننه_FPCLASSIFY:
+	    type_generic_remove_excess_precision = ریښتیا;
+	    اكسر;
 
-	  case BUILT_IN_ADD_OVERFLOW_P:
-	  case BUILT_IN_SUB_OVERFLOW_P:
-	  case BUILT_IN_MUL_OVERFLOW_P:
+	  حالة BUILT_دننه_جمع_کړه_ډکېدنه_P:
+	  حالة BUILT_دننه_SUB_ډکېدنه_P:
+	  حالة BUILT_دننه_MUL_ډکېدنه_P:
 	    /* The last argument of these type-generic builtins
 	       should not be promoted.  */
-	    type_generic_overflow_p = true;
-	    break;
+	    type_generic_ډکېدنه_p = ریښتیا;
+	    اكسر;
 
-	  case BUILT_IN_CLZG:
-	  case BUILT_IN_CTZG:
-	  case BUILT_IN_CLRSBG:
-	  case BUILT_IN_FFSG:
-	  case BUILT_IN_PARITYG:
-	  case BUILT_IN_POPCOUNTG:
+	  حالة BUILT_دننه_CLZG:
+	  حالة BUILT_دننه_CTZG:
+	  حالة BUILT_دننه_CLRSBG:
+	  حالة BUILT_دننه_FFSG:
+	  حالة BUILT_دننه_PARITYG:
+	  حالة BUILT_دننه_POPCOUNTG:
 	    /* The first argument of these type-generic builtins
 	       should not be promoted.  */
-	    type_generic_bit_query = true;
-	    break;
+	    type_generic_بټ_query = ریښتیا;
+	    اكسر;
 
-	  default:
-	    break;
+	  افتراضي:
+	    اكسر;
 	  }
     }
 
   /* Scan the given expressions (VALUES) and types (TYPELIST), producing
      individual converted arguments.  */
 
-  tree typetail, builtin_typetail, val;
-  for (typetail = typelist,
+  ونه typetail, builtin_typetail, val;
+  لكل (typetail = typelist,
 	 builtin_typetail = builtin_typelist,
 	 parmnum = 0;
-       values && values->iterate (parmnum, &val);
+       ارزښتونه && ارزښتونه->iterate (parmnum, &val);
        ++parmnum)
     {
       /* The type of the function parameter (if it was declared with one).  */
-      tree type = typetail ? TREE_VALUE (typetail) : NULL_TREE;
+      ونه type = typetail ? ونه_ارزښت (typetail) : NULL_ونه;
       /* The type of the built-in function parameter (if the function
 	 is a built-in).  Used to detect type incompatibilities in
 	 calls to built-ins declared without a prototype.  */
-      tree builtin_type = (builtin_typetail
-			   ? TREE_VALUE (builtin_typetail) : NULL_TREE);
+      ونه builtin_type = (builtin_typetail
+			   ? ونه_ارزښت (builtin_typetail) : NULL_ونه);
       /* The original type of the argument being passed to the function.  */
-      tree valtype = TREE_TYPE (val);
+      ونه valtype = ونه_TYPE (val);
       /* The called function (or function selector in Objective C).  */
-      tree rname = function;
-      int argnum = parmnum + 1;
-      const char *invalid_func_diag;
+      ونه rname = function;
+      صحيح argnum = parmnum + 1;
+      ثابت حرف *invalid_func_diag;
       /* Set for EXCESS_PRECISION_EXPR arguments.  */
-      bool excess_precision = false;
+      منطقي excess_precision = خطأ;
       /* The value of the argument after conversion to the type
 	 of the function parameter it is passed to.  */
-      tree parmval;
+      ونه parmval;
       /* Some __atomic_* builtins have additional hidden argument at
 	 position 0.  */
       location_t ploc
-	= !arg_loc.is_empty () && values->length () == arg_loc.length ()
-	  ? expansion_point_location_if_in_system_header (arg_loc[parmnum])
-	  : input_location;
+	= !arg_loc.is_تشه () && ارزښتونه->اوږدتیا () == arg_loc.اوږدتیا ()
+	  ? expansion_ټکی_location_if_دننه_system_سرلیک (arg_loc[parmnum])
+	  : ننوت_location;
 
-      if (type == void_type_node)
+      إذا (type == void_type_غوټه)
 	{
-	  auto_diagnostic_group d;
-	  int num_expected = parmnum;
-	  int num_actual = values->length ();
+	  auto_diagnostic_ډله d;
+	  صحيح عدد_expected = parmnum;
+	  صحيح عدد_actual = ارزښتونه->اوږدتیا ();
 	  gcc_rich_location rich_loc (loc);
-	  if (ploc != input_location)
-	    rich_loc.add_range (ploc);
-	  if (selector)
+	  إذا (ploc != ننوت_location)
+	    rich_loc.جمع_کړه_range (ploc);
+	  إذا (selector)
 	    error_at (&rich_loc,
 		      "too many arguments to method %qE; expected %i, have %i",
-		      selector, num_expected, num_actual);
-	  else
+		      selector, عدد_expected, عدد_actual);
+	  وإلا
 	    error_at (&rich_loc,
 		      "too many arguments to function %qE; expected %i, have %i",
-		      function, num_expected, num_actual);
+		      function, عدد_expected, عدد_actual);
 	  inform_declaration (fundecl, function);
-	  return error_args ? -1 : (int) parmnum;
+	  أرجع error_دلیلونه ? -1 : (صحيح) parmnum;
 	}
 
-      if (builtin_type == void_type_node)
+      إذا (builtin_type == void_type_غوټه)
 	{
-	  auto_diagnostic_group d;
-	  if (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
+	  auto_diagnostic_ډله d;
+	  إذا (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
 			  "too many arguments to built-in function %qE "
 			  "expecting %d", function, parmnum))
 	    inform_declaration (fundecl, function);
-	  builtin_typetail = NULL_TREE;
+	  builtin_typetail = NULL_ونه;
 	}
 
-      if (!typetail && parmnum == 0 && !TYPE_NO_NAMED_ARGS_STDARG_P (fntype)
-	  && !(fundecl && fndecl_built_in_p (fundecl)))
+      إذا (!typetail && parmnum == 0 && !TYPE_NO_NAMED_دلیلونه_STDARG_P (fntype)
+	  && !(fundecl && fndecl_built_دننه_p (fundecl)))
 	{
-	  auto_diagnostic_group d;
-	  bool warned;
-	  if (selector)
+	  auto_diagnostic_ډله d;
+	  منطقي warned;
+	  إذا (selector)
 	    warned = warning_at (loc, OPT_Wdeprecated_non_prototype,
 				 "ISO C23 does not allow arguments"
 				 " for method %qE declared without parameters",
 				 function);
-	  else
+	  وإلا
 	    warned = warning_at (loc, OPT_Wdeprecated_non_prototype,
 				 "ISO C23 does not allow arguments"
 				 " for function %qE declared without parameters",
 				 function);
-	  if (warned)
+	  إذا (warned)
 	    inform_declaration (fundecl, function);
 	}
 
-      if (selector && argnum > 2)
+      إذا (selector && argnum > 2)
 	{
 	  rname = selector;
 	  argnum -= 2;
 	}
 
       /* Determine if VAL is a null pointer constant before folding it.  */
-      bool npc = null_pointer_constant_p (val);
+      منطقي npc = null_اشاره_ګر_constant_p (val);
 
       /* If there is excess precision and a prototype, convert once to
 	 the required type rather than converting via the semantic
@@ -4904,13 +4904,13 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 	 as long double should be converted once to double.  But for
 	 type-generic classification functions excess precision must
 	 be removed here.  */
-      if (TREE_CODE (val) == EXCESS_PRECISION_EXPR
+      إذا (ونه_کوډ (val) == EXCESS_PRECISION_بیان
 	  && (type || !type_generic || !type_generic_remove_excess_precision))
 	{
-	  val = TREE_OPERAND (val, 0);
-	  excess_precision = true;
+	  val = ونه_عملوند (val, 0);
+	  excess_precision = ریښتیا;
 	}
-      val = c_fully_fold (val, false, NULL);
+      val = c_fully_fold (val, خطأ, عدم);
       STRIP_TYPE_NOPS (val);
 
       val = require_complete_type (ploc, val);
@@ -4919,150 +4919,150 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
 	 no type is specified by a prototype.  This applies to
 	 arguments of type float, and to architecture-specific types
 	 (ARM __fp16), but not to _FloatN or _FloatNx types.  */
-      bool promote_float_arg = false;
-      if (type == NULL_TREE
-	  && TREE_CODE (valtype) == REAL_TYPE
+      منطقي promote_float_arg = خطأ;
+      إذا (type == NULL_ونه
+	  && ونه_کوډ (valtype) == REAL_TYPE
 	  && (TYPE_PRECISION (valtype)
-	      <= TYPE_PRECISION (double_type_node))
-	  && TYPE_MAIN_VARIANT (valtype) != double_type_node
-	  && TYPE_MAIN_VARIANT (valtype) != long_double_type_node
-	  && !DECIMAL_FLOAT_MODE_P (TYPE_MODE (valtype)))
+	      <= TYPE_PRECISION (double_type_غوټه))
+	  && TYPE_MAIN_VARIANT (valtype) != double_type_غوټه
+	  && TYPE_MAIN_VARIANT (valtype) != long_double_type_غوټه
+	  && !DECIMAL_FLOAT_ډېرپېښ_P (TYPE_ډېرپېښ (valtype)))
 	{
 	  /* Promote this argument, unless it has a _FloatN or
 	     _FloatNx type.  */
-	  promote_float_arg = true;
-	  for (int i = 0; i < NUM_FLOATN_NX_TYPES; i++)
-	    if (TYPE_MAIN_VARIANT (valtype) == FLOATN_NX_TYPE_NODE (i))
+	  promote_float_arg = ریښتیا;
+	  لكل (صحيح i = 0; i < عدد_FLOATN_NX_TYPES; i++)
+	    إذا (TYPE_MAIN_VARIANT (valtype) == FLOATN_NX_TYPE_غوټه (i))
 	      {
-		promote_float_arg = false;
-		break;
+		promote_float_arg = خطأ;
+		اكسر;
 	      }
 	  /* Don't promote __bf16 either.  */
-	  if (TYPE_MAIN_VARIANT (valtype) == bfloat16_type_node)
-	    promote_float_arg = false;
+	  إذا (TYPE_MAIN_VARIANT (valtype) == bfloat16_type_غوټه)
+	    promote_float_arg = خطأ;
 	}
 
-      if (type != NULL_TREE)
+      إذا (type != NULL_ونه)
 	{
-	  tree origtype = (!origtypes) ? NULL_TREE : (*origtypes)[parmnum];
-	  parmval = convert_argument (ploc, function, fundecl, type, origtype,
+	  ونه origtype = (!origtypes) ? NULL_ونه : (*origtypes)[parmnum];
+	  parmval = convert_دلیل (ploc, function, fundecl, type, origtype,
 				      val, valtype, npc, rname, parmnum, argnum,
 				      excess_precision, 0);
 	}
       /* A NULLPTR type is just a nullptr always.  */
-      else if (TREE_CODE (TREE_TYPE (val)) == NULLPTR_TYPE)
-	parmval = omit_one_operand_loc (ploc, TREE_TYPE (val), nullptr_node, val);
-      else if (promote_float_arg)
+      وإلا إذا (ونه_کوډ (ونه_TYPE (val)) == NULLPTR_TYPE)
+	parmval = omit_one_عملوند_loc (ploc, ونه_TYPE (val), nullptr_غوټه, val);
+      وإلا إذا (promote_float_arg)
         {
-	  if (type_generic)
+	  إذا (type_generic)
 	    parmval = val;
-	  else
+	  وإلا
 	    {
 	      /* Convert `float' to `double'.  */
-	      if (warn_double_promotion && !c_inhibit_evaluation_warnings)
+	      إذا (warn_double_promotion && !c_inhibit_evaluation_warnings)
 		warning_at (ploc, OPT_Wdouble_promotion,
 			    "implicit conversion from %qT to %qT when passing "
 			    "argument to function",
-			    valtype, double_type_node);
-	      parmval = convert (double_type_node, val);
+			    valtype, double_type_غوټه);
+	      parmval = convert (double_type_غوټه, val);
 	    }
 	}
-      else if ((excess_precision && !type_generic)
-	       || (type_generic_overflow_p && parmnum == 2)
-	       || (type_generic_bit_query && parmnum == 0))
+      وإلا إذا ((excess_precision && !type_generic)
+	       || (type_generic_ډکېدنه_p && parmnum == 2)
+	       || (type_generic_بټ_query && parmnum == 0))
 	/* A "double" argument with excess precision being passed
 	   without a prototype or in variable arguments.
 	   The last argument of __builtin_*_overflow_p should not be
 	   promoted, similarly the first argument of
 	   __builtin_{clz,ctz,clrsb,ffs,parity,popcount}g.  */
 	parmval = convert (valtype, val);
-      else if ((invalid_func_diag =
+      وإلا إذا ((invalid_func_diag =
 		targetm.calls.invalid_arg_for_unprototyped_fn (typelist, fundecl, val)))
 	{
 	  error (invalid_func_diag);
-	  return -1;
+	  أرجع -1;
 	}
-      else if (TREE_CODE (val) == ADDR_EXPR && reject_gcc_builtin (val))
+      وإلا إذا (ونه_کوډ (val) == ADDR_بیان && reject_gcc_builtin (val))
 	{
-	  return -1;
+	  أرجع -1;
 	}
-      else
+      وإلا
 	/* Convert `short' and `char' to full-size `int'.  */
 	parmval = default_conversion (val);
 
-      (*values)[parmnum] = parmval;
-      if (parmval == error_mark_node)
-	error_args = true;
+      (*ارزښتونه)[parmnum] = parmval;
+      إذا (parmval == error_mark_غوټه)
+	error_دلیلونه = ریښتیا;
 
-      if (!type && builtin_type && TREE_CODE (builtin_type) != VOID_TYPE)
+      إذا (!type && builtin_type && ونه_کوډ (builtin_type) != VOID_TYPE)
 	{
 	  /* For a call to a built-in function declared without a prototype,
 	     perform the conversions from the argument to the expected type
 	     but issue warnings rather than errors for any mismatches.
 	     Ignore the converted argument and use the PARMVAL obtained
 	     above by applying default conversions instead.  */
-	  tree origtype = (!origtypes) ? NULL_TREE : (*origtypes)[parmnum];
-	  convert_argument (ploc, function, fundecl, builtin_type, origtype,
+	  ونه origtype = (!origtypes) ? NULL_ونه : (*origtypes)[parmnum];
+	  convert_دلیل (ploc, function, fundecl, builtin_type, origtype,
 			    val, valtype, npc, rname, parmnum, argnum,
 			    excess_precision,
 			    OPT_Wbuiltin_declaration_mismatch);
 	}
 
-      if (typetail)
-	typetail = TREE_CHAIN (typetail);
+      إذا (typetail)
+	typetail = ونه_CHAIN (typetail);
 
-      if (builtin_typetail)
-	builtin_typetail = TREE_CHAIN (builtin_typetail);
+      إذا (builtin_typetail)
+	builtin_typetail = ونه_CHAIN (builtin_typetail);
     }
 
-  gcc_assert (parmnum == vec_safe_length (values));
+  gcc_assert (parmnum == vec_خوندي_اوږدتیا (ارزښتونه));
 
-  if (typetail != NULL_TREE && TREE_VALUE (typetail) != void_type_node)
+  إذا (typetail != NULL_ونه && ونه_ارزښت (typetail) != void_type_غوټه)
     {
       /* Not enough args.
 	 Determine minimum number of arguments required.  */
-      int min_expected_num = 0;
-      bool at_least_p = false;
-      tree iter = typelist;
-      while (true)
+      صحيح min_expected_عدد = 0;
+      منطقي at_لږترلږه_p = خطأ;
+      ونه iter = typelist;
+      طالما (ریښتیا)
 	{
-	  if (!iter)
+	  إذا (!iter)
 	    {
 	      /* Variadic arguments; stop iterating.  */
-	      at_least_p = true;
-	      break;
+	      at_لږترلږه_p = ریښتیا;
+	      اكسر;
 	    }
-	  if (iter == void_list_node)
+	  إذا (iter == void_list_غوټه)
 	    /* End of arguments; stop iterating.  */
-	    break;
-	  ++min_expected_num;
-	  iter = TREE_CHAIN (iter);
+	    اكسر;
+	  ++min_expected_عدد;
+	  iter = ونه_CHAIN (iter);
 	}
-      auto_diagnostic_group d;
-      int actual_num = vec_safe_length (values);
+      auto_diagnostic_ډله d;
+      صحيح actual_عدد = vec_خوندي_اوږدتیا (ارزښتونه);
       error_at (loc,
-		at_least_p
+		at_لږترلږه_p
 		? G_("too few arguments to function %qE; expected at least %i, have %i")
 		: G_("too few arguments to function %qE; expected %i, have %i"),
-		function, min_expected_num, actual_num);
+		function, min_expected_عدد, actual_عدد);
       inform_declaration (fundecl, function);
-      return -1;
+      أرجع -1;
     }
 
-  if (builtin_typetail && TREE_VALUE (builtin_typetail) != void_type_node)
+  إذا (builtin_typetail && ونه_ارزښت (builtin_typetail) != void_type_غوټه)
     {
-      unsigned nargs = parmnum;
-      for (tree t = builtin_typetail; t; t = TREE_CHAIN (t))
+      بینښه nargs = parmnum;
+      لكل (ونه t = builtin_typetail; t; t = ونه_CHAIN (t))
 	++nargs;
 
-      auto_diagnostic_group d;
-      if (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
+      auto_diagnostic_ډله d;
+      إذا (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
 		      "too few arguments to built-in function %qE "
 		      "expecting %u", function, nargs - 1))
 	inform_declaration (fundecl, function);
     }
 
-  return error_args ? -1 : (int) parmnum;
+  أرجع error_دلیلونه ? -1 : (صحيح) parmnum;
 }
 
 /* This is the entry point used by the parser to build unary operators
@@ -5073,46 +5073,46 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree fntype,
    LOC is the location to use for the tree generated.
 */
 
-struct c_expr
-parser_build_unary_op (location_t loc, enum tree_code code, struct c_expr arg)
+بنية c_بیان
+parser_build_unary_op (location_t loc, تعداد ونه_کوډ_2 کوډ, بنية c_بیان arg)
 {
-  struct c_expr result;
+  بنية c_بیان پایله;
 
-  result.original_code = code;
-  result.original_type = NULL;
-  result.m_decimal = 0;
+  پایله.original_کوډ = کوډ;
+  پایله.original_type = عدم;
+  پایله.m_decimal = 0;
 
-  if (reject_gcc_builtin (arg.value))
+  إذا (reject_gcc_builtin (arg.ارزښت))
     {
-      result.value = error_mark_node;
+      پایله.ارزښت = error_mark_غوټه;
     }
-  else
+  وإلا
     {
-      result.value = build_unary_op (loc, code, arg.value, false);
+      پایله.ارزښت = build_unary_op (loc, کوډ, arg.ارزښت, خطأ);
 
-      if (TREE_OVERFLOW_P (result.value) && !TREE_OVERFLOW_P (arg.value))
-	overflow_warning (loc, result.value, arg.value);
+      إذا (ونه_ډکېدنه_P (پایله.ارزښت) && !ونه_ډکېدنه_P (arg.ارزښت))
+	ډکېدنه_warning (loc, پایله.ارزښت, arg.ارزښت);
     }
 
   /* We are typically called when parsing a prefix token at LOC acting on
      ARG.  Reflect this by updating the source range of the result to
      start at LOC and end at the end of ARG.  */
-  set_c_expr_source_range (&result,
-			   loc, arg.get_finish ());
+  سېټ_c_بیان_سرچینه_range (&پایله,
+			   loc, arg.get_پای ());
 
-  return result;
+  أرجع پایله;
 }
 
 /* Returns true if TYPE is a character type, *not* including wchar_t.  */
 
-bool
-char_type_p (tree type)
+منطقي
+char_type_p (ونه type)
 {
-  return (type == char_type_node
-	  || type == unsigned_char_type_node
-	  || type == signed_char_type_node
-	  || type == char16_type_node
-	  || type == char32_type_node);
+  أرجع (type == char_type_غوټه
+	  || type == unsigned_char_type_غوټه
+	  || type == signed_char_type_غوټه
+	  || type == char16_type_غوټه
+	  || type == char32_type_غوټه);
 }
 
 /* This is the entry point used by the parser to build binary operators
@@ -5125,268 +5125,268 @@ char_type_p (tree type)
 
    LOCATION is the location of the binary operator.  */
 
-struct c_expr
-parser_build_binary_op (location_t location, enum tree_code code,
-			struct c_expr arg1, struct c_expr arg2, tree orig_arg1)
+بنية c_بیان
+parser_build_دوګونی_op (location_t location, تعداد ونه_کوډ_2 کوډ,
+			بنية c_بیان arg1, بنية c_بیان arg2, ونه orig_arg1)
 {
-  struct c_expr result;
-  result.m_decimal = 0;
+  بنية c_بیان پایله;
+  پایله.m_decimal = 0;
 
-  enum tree_code code1 = arg1.original_code;
-  enum tree_code code2 = arg2.original_code;
-  tree type1 = (arg1.original_type
+  تعداد ونه_کوډ_2 code1 = arg1.original_کوډ;
+  تعداد ونه_کوډ_2 code2 = arg2.original_کوډ;
+  ونه type1 = (arg1.original_type
                 ? arg1.original_type
-                : TREE_TYPE (arg1.value));
-  tree type2 = (arg2.original_type
+                : ونه_TYPE (arg1.ارزښت));
+  ونه type2 = (arg2.original_type
                 ? arg2.original_type
-                : TREE_TYPE (arg2.value));
+                : ونه_TYPE (arg2.ارزښت));
 
-  result.value = build_binary_op (location, code,
-				  arg1.value, arg2.value, true);
-  result.original_code = code;
-  result.original_type = NULL;
-  result.m_decimal = 0;
+  پایله.ارزښت = build_دوګونی_op (location, کوډ,
+				  arg1.ارزښت, arg2.ارزښت, ریښتیا);
+  پایله.original_کوډ = کوډ;
+  پایله.original_type = عدم;
+  پایله.m_decimal = 0;
 
-  if (TREE_CODE (result.value) == ERROR_MARK)
+  إذا (ونه_کوډ (پایله.ارزښت) == ERROR_MARK)
     {
-      set_c_expr_source_range (&result,
-			       arg1.get_start (),
-			       arg2.get_finish ());
-      return result;
+      سېټ_c_بیان_سرچینه_range (&پایله,
+			       arg1.get_پیل (),
+			       arg2.get_پای ());
+      أرجع پایله;
     }
 
-  if (location != UNKNOWN_LOCATION)
-    protected_set_expr_location (result.value, location);
+  إذا (location != UNKNOWN_LOCATION)
+    protected_سېټ_بیان_location (پایله.ارزښت, location);
 
-  set_c_expr_source_range (&result,
-			   arg1.get_start (),
-			   arg2.get_finish ());
+  سېټ_c_بیان_سرچینه_range (&پایله,
+			   arg1.get_پیل (),
+			   arg2.get_پای ());
 
   /* Check for cases such as x+y<<z which users are likely
      to misinterpret.  */
-  if (warn_parentheses)
-    warn_about_parentheses (location, code, code1, arg1.value, code2,
-			    arg2.value);
+  إذا (warn_parentheses)
+    warn_about_parentheses (location, کوډ, code1, arg1.ارزښت, code2,
+			    arg2.ارزښت);
 
-  if (warn_logical_op)
-    warn_logical_operator (location, code, TREE_TYPE (result.value),
-			   code1, arg1.value, code2, arg2.value);
+  إذا (warn_logical_op)
+    warn_logical_operator (location, کوډ, ونه_TYPE (پایله.ارزښت),
+			   code1, arg1.ارزښت, code2, arg2.ارزښت);
 
-  if (warn_constant_logical_operand
-      && (code == TRUTH_ANDIF_EXPR || code == TRUTH_ORIF_EXPR)
+  إذا (warn_constant_logical_عملوند
+      && (کوډ == TRUTH_ANDIF_بیان || کوډ == TRUTH_ORIF_بیان)
       && INTEGRAL_NB_TYPE_P (type1)
       && INTEGRAL_NB_TYPE_P (type2))
     {
-      const char *name = code == TRUTH_ANDIF_EXPR ? "&&" : "||";
-      if (orig_arg1 == NULL_TREE)
-	orig_arg1 = arg1.value;
-      auto enum_other_than_0_1 = [] (tree type) {
-	if (TREE_CODE (type) != ENUMERAL_TYPE)
-	  return false;
-	for (tree l = TYPE_VALUES (type); l; l = TREE_CHAIN (l))
+      ثابت حرف *name = کوډ == TRUTH_ANDIF_بیان ? "&&" : "||";
+      إذا (orig_arg1 == NULL_ونه)
+	orig_arg1 = arg1.ارزښت;
+      خپلکاری enum_other_than_0_1 = [] (ونه type) {
+	إذا (ونه_کوډ (type) != ENUMERAL_TYPE)
+	  أرجع خطأ;
+	لكل (ونه l = TYPE_ارزښتونه (type); l; l = ونه_CHAIN (l))
 	  {
-	    tree v = DECL_INITIAL (TREE_VALUE (l));
-	    if (!integer_zerop (v) && !integer_onep (v))
-	      return true;
+	    ونه v = DECL_INITIAL (ونه_ارزښت (l));
+	    إذا (!integer_zerop (v) && !integer_onep (v))
+	      أرجع ریښتیا;
 	  }
-	return false;
+	أرجع خطأ;
       };
-      auto diagnose_constant_logical_operand = [=] (tree val, tree type) {
-	if (TREE_CODE (val) != INTEGER_CST || integer_zerop (val))
-	  return false;
-	if (integer_onep (val) && !enum_other_than_0_1 (type))
-	  return false;
+      خپلکاری diagnose_constant_logical_عملوند = [=] (ونه val, ونه type) {
+	إذا (ونه_کوډ (val) != INTEGER_CST || integer_zerop (val))
+	  أرجع خطأ;
+	إذا (integer_onep (val) && !enum_other_than_0_1 (type))
+	  أرجع خطأ;
 	gcc_rich_location richloc (location);
-	richloc.add_fixit_replace (name + 1);
-	auto_diagnostic_group d;
-	if (warning_at (location, OPT_Wconstant_logical_operand,
+	richloc.جمع_کړه_fixit_replace (name + 1);
+	auto_diagnostic_ډله d;
+	إذا (warning_at (location, OPT_Wconstant_logical_عملوند,
 			"use of logical %qs with constant operand %qE",
 			name, val))
 	  inform (&richloc, "use %qs for bitwise operation", name + 1);
-	return true;
+	أرجع ریښتیا;
       };
-      if (!diagnose_constant_logical_operand (arg2.value, type2))
-	diagnose_constant_logical_operand (orig_arg1, type1);
+      إذا (!diagnose_constant_logical_عملوند (arg2.ارزښت, type2))
+	diagnose_constant_logical_عملوند (orig_arg1, type1);
     }
 
-  if (warn_tautological_compare)
+  إذا (warn_tautological_compare)
     {
-      tree lhs = arg1.value;
-      tree rhs = arg2.value;
-      if (TREE_CODE (lhs) == C_MAYBE_CONST_EXPR)
+      ونه lhs = arg1.ارزښت;
+      ونه rhs = arg2.ارزښت;
+      إذا (ونه_کوډ (lhs) == C_MAYBE_CONST_بیان)
 	{
-	  if (C_MAYBE_CONST_EXPR_PRE (lhs) != NULL_TREE
-	      && TREE_SIDE_EFFECTS (C_MAYBE_CONST_EXPR_PRE (lhs)))
-	    lhs = NULL_TREE;
-	  else
-	    lhs = C_MAYBE_CONST_EXPR_EXPR (lhs);
+	  إذا (C_MAYBE_CONST_بیان_PRE (lhs) != NULL_ونه
+	      && ونه_SIDE_EFFECTS (C_MAYBE_CONST_بیان_PRE (lhs)))
+	    lhs = NULL_ونه;
+	  وإلا
+	    lhs = C_MAYBE_CONST_بیان_بیان (lhs);
 	}
-      if (TREE_CODE (rhs) == C_MAYBE_CONST_EXPR)
+      إذا (ونه_کوډ (rhs) == C_MAYBE_CONST_بیان)
 	{
-	  if (C_MAYBE_CONST_EXPR_PRE (rhs) != NULL_TREE
-	      && TREE_SIDE_EFFECTS (C_MAYBE_CONST_EXPR_PRE (rhs)))
-	    rhs = NULL_TREE;
-	  else
-	    rhs = C_MAYBE_CONST_EXPR_EXPR (rhs);
+	  إذا (C_MAYBE_CONST_بیان_PRE (rhs) != NULL_ونه
+	      && ونه_SIDE_EFFECTS (C_MAYBE_CONST_بیان_PRE (rhs)))
+	    rhs = NULL_ونه;
+	  وإلا
+	    rhs = C_MAYBE_CONST_بیان_بیان (rhs);
 	}
-      if (lhs != NULL_TREE && rhs != NULL_TREE)
-	warn_tautological_cmp (location, code, lhs, rhs);
+      إذا (lhs != NULL_ونه && rhs != NULL_ونه)
+	warn_tautological_cmp (location, کوډ, lhs, rhs);
     }
 
-  if (warn_logical_not_paren
-      && TREE_CODE_CLASS (code) == tcc_comparison
-      && code1 == TRUTH_NOT_EXPR
-      && code2 != TRUTH_NOT_EXPR
+  إذا (warn_logical_not_paren
+      && ونه_کوډ_CLASS (کوډ) == tcc_comparison
+      && code1 == TRUTH_NOT_بیان
+      && code2 != TRUTH_NOT_بیان
       /* Avoid warning for !!x == y.  */
-      && (TREE_CODE (arg1.value) != NE_EXPR
-	  || !integer_zerop (TREE_OPERAND (arg1.value, 1))))
+      && (ونه_کوډ (arg1.ارزښت) != NE_بیان
+	  || !integer_zerop (ونه_عملوند (arg1.ارزښت, 1))))
     {
       /* Avoid warning for !b == y where b has _Bool type.  */
-      tree t = integer_zero_node;
-      if (TREE_CODE (arg1.value) == EQ_EXPR
-	  && integer_zerop (TREE_OPERAND (arg1.value, 1))
-	  && TREE_TYPE (TREE_OPERAND (arg1.value, 0)) == integer_type_node)
+      ونه t = integer_zero_غوټه;
+      إذا (ونه_کوډ (arg1.ارزښت) == EQ_بیان
+	  && integer_zerop (ونه_عملوند (arg1.ارزښت, 1))
+	  && ونه_TYPE (ونه_عملوند (arg1.ارزښت, 0)) == integer_type_غوټه)
 	{
-	  t = TREE_OPERAND (arg1.value, 0);
-	  do
+	  t = ونه_عملوند (arg1.ارزښت, 0);
+	  افعل
 	    {
-	      if (TREE_TYPE (t) != integer_type_node)
-		break;
-	      if (TREE_CODE (t) == C_MAYBE_CONST_EXPR)
-		t = C_MAYBE_CONST_EXPR_EXPR (t);
-	      else if (CONVERT_EXPR_P (t))
-		t = TREE_OPERAND (t, 0);
-	      else
-		break;
+	      إذا (ونه_TYPE (t) != integer_type_غوټه)
+		اكسر;
+	      إذا (ونه_کوډ (t) == C_MAYBE_CONST_بیان)
+		t = C_MAYBE_CONST_بیان_بیان (t);
+	      وإلا إذا (CONVERT_بیان_P (t))
+		t = ونه_عملوند (t, 0);
+	      وإلا
+		اكسر;
 	    }
-	  while (1);
+	  طالما (1);
 	}
-      if (!C_BOOLEAN_TYPE_P (TREE_TYPE (t)))
-	warn_logical_not_parentheses (location, code, arg1.value, arg2.value);
+      إذا (!C_BOOLEAN_TYPE_P (ونه_TYPE (t)))
+	warn_logical_not_parentheses (location, کوډ, arg1.ارزښت, arg2.ارزښت);
     }
 
   /* Warn about comparisons against string literals, with the exception
      of testing for equality or inequality of a string literal with NULL.  */
-  if (code == EQ_EXPR || code == NE_EXPR)
+  إذا (کوډ == EQ_بیان || کوډ == NE_بیان)
     {
-      if ((code1 == STRING_CST
-	   && !integer_zerop (tree_strip_nop_conversions (arg2.value)))
+      إذا ((code1 == STRING_CST
+	   && !integer_zerop (ونه_strip_nop_conversions (arg2.ارزښت)))
 	  || (code2 == STRING_CST
-	      && !integer_zerop (tree_strip_nop_conversions (arg1.value))))
+	      && !integer_zerop (ونه_strip_nop_conversions (arg1.ارزښت))))
 	warning_at (location, OPT_Waddress,
 		    "comparison with string literal results in unspecified behavior");
       /* Warn for ptr == '\0', it's likely that it should've been ptr[0].  */
-      if (POINTER_TYPE_P (type1)
-	  && null_pointer_constant_p (arg2.value)
+      إذا (اشاره_ګر_TYPE_P (type1)
+	  && null_اشاره_ګر_constant_p (arg2.ارزښت)
 	  && char_type_p (type2))
 	{
-	  auto_diagnostic_group d;
-	  if (warning_at (location, OPT_Wpointer_compare,
+	  auto_diagnostic_ډله d;
+	  إذا (warning_at (location, OPT_Wpointer_compare,
 			    "comparison between pointer and zero character "
 			    "constant"))
-	    inform (arg1.get_start (),
+	    inform (arg1.get_پیل (),
 		      "did you mean to dereference the pointer?");
 	}
-      else if (POINTER_TYPE_P (type2)
-	       && null_pointer_constant_p (arg1.value)
+      وإلا إذا (اشاره_ګر_TYPE_P (type2)
+	       && null_اشاره_ګر_constant_p (arg1.ارزښت)
 	       && char_type_p (type1))
 	{
-	  auto_diagnostic_group d;
-	  if (warning_at (location, OPT_Wpointer_compare,
+	  auto_diagnostic_ډله d;
+	  إذا (warning_at (location, OPT_Wpointer_compare,
 			    "comparison between pointer and zero character "
 			    "constant"))
-	    inform (arg2.get_start (),
+	    inform (arg2.get_پیل (),
 		      "did you mean to dereference the pointer?");
 	}
     }
-  else if (TREE_CODE_CLASS (code) == tcc_comparison
+  وإلا إذا (ونه_کوډ_CLASS (کوډ) == tcc_comparison
 	   && (code1 == STRING_CST || code2 == STRING_CST))
     warning_at (location, OPT_Waddress,
 		"comparison with string literal results in unspecified "
 		"behavior");
 
-  if (warn_zero_as_null_pointer_constant
+  إذا (warn_zero_as_null_اشاره_ګر_constant
       && c_inhibit_evaluation_warnings == 0
-      && TREE_CODE_CLASS (code) == tcc_comparison)
+      && ونه_کوډ_CLASS (کوډ) == tcc_comparison)
     {
-      if ((TREE_CODE (type1) == POINTER_TYPE
-	   || TREE_CODE (type1) == NULLPTR_TYPE)
+      إذا ((ونه_کوډ (type1) == اشاره_ګر_TYPE
+	   || ونه_کوډ (type1) == NULLPTR_TYPE)
 	  && INTEGRAL_TYPE_P (type2)
-	  && null_pointer_constant_p (arg2.value))
-	warning_at (arg2.get_location(), OPT_Wzero_as_null_pointer_constant,
+	  && null_اشاره_ګر_constant_p (arg2.ارزښت))
+	warning_at (arg2.get_location(), OPT_Wzero_as_null_اشاره_ګر_constant,
 		    "zero as null pointer constant");
 
-      if ((TREE_CODE (type2) == POINTER_TYPE
-	   || TREE_CODE (type2) == NULLPTR_TYPE)
+      إذا ((ونه_کوډ (type2) == اشاره_ګر_TYPE
+	   || ونه_کوډ (type2) == NULLPTR_TYPE)
 	  && INTEGRAL_TYPE_P (type1)
-	  && null_pointer_constant_p (arg1.value))
-	warning_at (arg1.get_location(), OPT_Wzero_as_null_pointer_constant,
+	  && null_اشاره_ګر_constant_p (arg1.ارزښت))
+	warning_at (arg1.get_location(), OPT_Wzero_as_null_اشاره_ګر_constant,
 		    "zero as null pointer constant");
     }
 
-  if (warn_array_compare
-      && TREE_CODE_CLASS (code) == tcc_comparison
-      && TREE_CODE (type1) == ARRAY_TYPE
-      && TREE_CODE (type2) == ARRAY_TYPE)
-    do_warn_array_compare (location, code, arg1.value, arg2.value);
+  إذا (warn_array_compare
+      && ونه_کوډ_CLASS (کوډ) == tcc_comparison
+      && ونه_کوډ (type1) == ARRAY_TYPE
+      && ونه_کوډ (type2) == ARRAY_TYPE)
+    do_warn_array_compare (location, کوډ, arg1.ارزښت, arg2.ارزښت);
 
-  if (TREE_OVERFLOW_P (result.value)
-      && !TREE_OVERFLOW_P (arg1.value)
-      && !TREE_OVERFLOW_P (arg2.value))
-    overflow_warning (location, result.value);
+  إذا (ونه_ډکېدنه_P (پایله.ارزښت)
+      && !ونه_ډکېدنه_P (arg1.ارزښت)
+      && !ونه_ډکېدنه_P (arg2.ارزښت))
+    ډکېدنه_warning (location, پایله.ارزښت);
 
   /* Warn about comparisons of different enum types.  */
-  if (warn_enum_compare
-      && TREE_CODE_CLASS (code) == tcc_comparison
-      && TREE_CODE (type1) == ENUMERAL_TYPE
-      && TREE_CODE (type2) == ENUMERAL_TYPE
+  إذا (warn_enum_compare
+      && ونه_کوډ_CLASS (کوډ) == tcc_comparison
+      && ونه_کوډ (type1) == ENUMERAL_TYPE
+      && ونه_کوډ (type2) == ENUMERAL_TYPE
       && TYPE_MAIN_VARIANT (type1) != TYPE_MAIN_VARIANT (type2))
     warning_at (location, OPT_Wenum_compare,
 		"comparison between %qT and %qT",
 		type1, type2);
 
-  if (warn_xor_used_as_pow
-      && code == BIT_XOR_EXPR
+  إذا (warn_xor_کارول_شوی_as_pow
+      && کوډ == بټ_XOR_بیان
       && arg1.m_decimal
       && arg2.m_decimal)
-    check_for_xor_used_as_pow (arg1.get_location (), arg1.value,
+    check_for_xor_کارول_شوی_as_pow (arg1.get_location (), arg1.ارزښت,
 			       location,
-			       arg2.get_location (), arg2.value);
+			       arg2.get_location (), arg2.ارزښت);
 
-  return result;
+  أرجع پایله;
 }
 
 /* Return a tree for the difference of pointers OP0 and OP1.
    The resulting tree has type ptrdiff_t.  If POINTER_SUBTRACT sanitization is
    enabled, assign to INSTRUMENT_EXPR call to libsanitizer.  */
 
-static tree
-pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
+ساكن ونه
+اشاره_ګر_diff (location_t loc, ونه op0, ونه op1, ونه *instrument_بیان)
 {
-  tree restype = ptrdiff_type_node;
-  tree result, inttype;
+  ونه restype = ptrdiff_type_غوټه;
+  ونه پایله, inttype;
 
-  addr_space_t as0 = TYPE_ADDR_SPACE (TREE_TYPE (TREE_TYPE (op0)));
-  addr_space_t as1 = TYPE_ADDR_SPACE (TREE_TYPE (TREE_TYPE (op1)));
-  tree target_type = TREE_TYPE (TREE_TYPE (op0));
-  tree orig_op0 = op0;
-  tree orig_op1 = op1;
+  addr_space_t as0 = TYPE_ADDR_SPACE (ونه_TYPE (ونه_TYPE (op0)));
+  addr_space_t as1 = TYPE_ADDR_SPACE (ونه_TYPE (ونه_TYPE (op1)));
+  ونه موخه_type = ونه_TYPE (ونه_TYPE (op0));
+  ونه orig_op0 = op0;
+  ونه orig_op1 = op1;
 
   /* If the operands point into different address spaces, we need to
      explicitly convert them to pointers into the common address space
      before we can subtract the numerical address values.  */
-  if (as0 != as1)
+  إذا (as0 != as1)
     {
       addr_space_t as_common;
-      tree common_type;
+      ونه common_type;
 
       /* Determine the common superset address space.  This is guaranteed
 	 to exist because the caller verified that comp_target_types
 	 returned non-zero.  */
-      if (!addr_space_superset (as0, as1, &as_common))
+      إذا (!addr_space_superset (as0, as1, &as_common))
 	gcc_unreachable ();
 
-      common_type = common_pointer_type (TREE_TYPE (op0), TREE_TYPE (op1), NULL_TREE);
+      common_type = common_اشاره_ګر_type (ونه_TYPE (op0), ونه_TYPE (op1), NULL_ونه);
       op0 = convert (common_type, op0);
       op1 = convert (common_type, op1);
     }
@@ -5394,26 +5394,26 @@ pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
   /* Determine integer type result of the subtraction.  This will usually
      be the same as the result type (ptrdiff_t), but may need to be a wider
      type if pointers for the address space are wider than ptrdiff_t.  */
-  if (TYPE_PRECISION (restype) < TYPE_PRECISION (TREE_TYPE (op0)))
-    inttype = c_common_type_for_size (TYPE_PRECISION (TREE_TYPE (op0)), 0);
-  else
+  إذا (TYPE_PRECISION (restype) < TYPE_PRECISION (ونه_TYPE (op0)))
+    inttype = c_common_type_for_اندازه (TYPE_PRECISION (ونه_TYPE (op0)), 0);
+  وإلا
     inttype = restype;
 
-  if (VOID_TYPE_P (target_type))
+  إذا (VOID_TYPE_P (موخه_type))
     pedwarn (loc, OPT_Wpointer_arith,
 	     "pointer of type %<void *%> used in subtraction");
-  if (TREE_CODE (target_type) == FUNCTION_TYPE)
+  إذا (ونه_کوډ (موخه_type) == FUNCTION_TYPE)
     pedwarn (loc, OPT_Wpointer_arith,
 	     "pointer to a function used in subtraction");
 
-  if (current_function_decl != NULL_TREE
-      && sanitize_flags_p (SANITIZE_POINTER_SUBTRACT))
+  إذا (current_function_decl != NULL_ونه
+      && sanitize_flags_p (SANITIZE_اشاره_ګر_کمول))
     {
-      op0 = save_expr (c_fully_fold (op0, false, NULL));
-      op1 = save_expr (c_fully_fold (op1, false, NULL));
+      op0 = save_بیان (c_fully_fold (op0, خطأ, عدم));
+      op1 = save_بیان (c_fully_fold (op1, خطأ, عدم));
 
-      tree tt = builtin_decl_explicit (BUILT_IN_ASAN_POINTER_SUBTRACT);
-      *instrument_expr = build_call_expr_loc (loc, tt, 2, op0, op1);
+      ونه tt = builtin_decl_explicit (BUILT_دننه_ASAN_اشاره_ګر_کمول);
+      *instrument_بیان = build_call_بیان_loc (loc, tt, 2, op0, op1);
     }
 
   /* First do the subtraction, then build the divide operator
@@ -5425,36 +5425,36 @@ pointer_diff (location_t loc, tree op0, tree op1, tree *instrument_expr)
      ptrdiff_type to support differences larger than half the address
      space, cast the pointers to some larger integer type and do the
      computations in that type.  */
-  if (TYPE_PRECISION (inttype) > TYPE_PRECISION (TREE_TYPE (op0)))
-    op0 = build_binary_op (loc, MINUS_EXPR, convert (inttype, op0),
-			   convert (inttype, op1), false);
-  else
+  إذا (TYPE_PRECISION (inttype) > TYPE_PRECISION (ونه_TYPE (op0)))
+    op0 = build_دوګونی_op (loc, MINUS_بیان, convert (inttype, op0),
+			   convert (inttype, op1), خطأ);
+  وإلا
     {
       /* Cast away qualifiers.  */
-      op0 = convert (c_common_type (TREE_TYPE (op0), TREE_TYPE (op0)), op0);
-      op1 = convert (c_common_type (TREE_TYPE (op1), TREE_TYPE (op1)), op1);
-      op0 = build2_loc (loc, POINTER_DIFF_EXPR, inttype, op0, op1);
+      op0 = convert (c_common_type (ونه_TYPE (op0), ونه_TYPE (op0)), op0);
+      op1 = convert (c_common_type (ونه_TYPE (op1), ونه_TYPE (op1)), op1);
+      op0 = build2_loc (loc, اشاره_ګر_DIFF_بیان, inttype, op0, op1);
     }
 
   /* This generates an error if op1 is pointer to incomplete type.  */
-  if (!COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (TREE_TYPE (orig_op1))))
+  إذا (!COMPLETE_OR_VOID_TYPE_P (ونه_TYPE (ونه_TYPE (orig_op1))))
     error_at (loc, "arithmetic on pointer to an incomplete type");
-  else if (verify_type_context (loc, TCTX_POINTER_ARITH,
-				TREE_TYPE (TREE_TYPE (orig_op0))))
-    verify_type_context (loc, TCTX_POINTER_ARITH,
-			 TREE_TYPE (TREE_TYPE (orig_op1)));
+  وإلا إذا (verify_type_context (loc, TCTX_اشاره_ګر_ARITH,
+				ونه_TYPE (ونه_TYPE (orig_op0))))
+    verify_type_context (loc, TCTX_اشاره_ګر_ARITH,
+			 ونه_TYPE (ونه_TYPE (orig_op1)));
 
-  op1 = c_size_in_bytes (target_type);
+  op1 = c_اندازه_دننه_بایټونه (موخه_type);
 
-  if (pointer_to_zero_sized_aggr_p (TREE_TYPE (orig_op1)))
+  إذا (اشاره_ګر_منزل_zero_sized_aggr_p (ونه_TYPE (orig_op1)))
     error_at (loc, "arithmetic on pointer to an empty aggregate");
 
   /* Divide by the size, in easiest possible way.  */
-  result = fold_build2_loc (loc, EXACT_DIV_EXPR, inttype,
+  پایله = fold_build2_loc (loc, EXACT_DIV_بیان, inttype,
 			    op0, convert (inttype, op1));
 
   /* Convert to final result type if necessary.  */
-  return convert (restype, result);
+  أرجع convert (restype, پایله);
 }
 
 /* Expand atomic compound assignments into an appropriate sequence as
@@ -5510,38 +5510,38 @@ done:
    return the old value of LHS (this is only for postincrement and
    postdecrement).  */
 
-static tree
-build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
-		     tree rhs, bool return_old_p)
+ساكن ونه
+build_atomic_ټاکل (location_t loc, ونه lhs, تعداد ونه_کوډ_2 modifycode,
+		     ونه rhs, منطقي return_old_p)
 {
-  tree fndecl, func_call;
-  vec<tree, va_gc> *params;
-  tree val, nonatomic_lhs_type, nonatomic_rhs_type, newval, newval_addr;
-  tree old, old_addr;
-  tree compound_stmt = NULL_TREE;
-  tree stmt, goto_stmt;
-  tree loop_label, loop_decl, done_label, done_decl;
+  ونه fndecl, func_call;
+  vec<ونه, va_gc> *params;
+  ونه val, nonatomic_lhs_type, nonatomic_rhs_type, newval, newval_addr;
+  ونه old, old_addr;
+  ونه compound_stmt = NULL_ونه;
+  ونه stmt, goto_stmt;
+  ونه loop_label, loop_decl, بشپړ_label, بشپړ_decl;
 
-  tree lhs_type = TREE_TYPE (lhs);
-  tree lhs_addr = build_unary_op (loc, ADDR_EXPR, lhs, false);
-  tree seq_cst = build_int_cst (integer_type_node, MEMMODEL_SEQ_CST);
-  tree rhs_semantic_type = TREE_TYPE (rhs);
-  tree nonatomic_rhs_semantic_type;
-  tree rhs_type;
+  ونه lhs_type = ونه_TYPE (lhs);
+  ونه lhs_addr = build_unary_op (loc, ADDR_بیان, lhs, خطأ);
+  ونه seq_cst = build_int_cst (integer_type_غوټه, MEMMODEL_SEQ_CST);
+  ونه rhs_semantic_type = ونه_TYPE (rhs);
+  ونه nonatomic_rhs_semantic_type;
+  ونه rhs_type;
 
   gcc_assert (TYPE_ATOMIC (lhs_type));
 
-  if (return_old_p)
-    gcc_assert (modifycode == PLUS_EXPR || modifycode == MINUS_EXPR);
+  إذا (return_old_p)
+    gcc_assert (modifycode == PLUS_بیان || modifycode == MINUS_بیان);
 
   /* Allocate enough vector items for a compare_exchange.  */
   vec_alloc (params, 6);
 
   /* Create a compound statement to hold the sequence of statements
      with a loop.  */
-  if (modifycode != NOP_EXPR)
+  إذا (modifycode != NOP_بیان)
     {
-      compound_stmt = c_begin_compound_stmt (false);
+      compound_stmt = c_begin_compound_stmt (خطأ);
 
       /* For consistency with build_modify_expr on non-_Atomic,
 	 mark the lhs as read.  Also, it would be very hard to match
@@ -5551,16 +5551,16 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
 
   /* Remove any excess precision (which is only present here in the
      case of compound assignments).  */
-  if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
+  إذا (ونه_کوډ (rhs) == EXCESS_PRECISION_بیان)
     {
-      gcc_assert (modifycode != NOP_EXPR);
-      rhs = TREE_OPERAND (rhs, 0);
+      gcc_assert (modifycode != NOP_بیان);
+      rhs = ونه_عملوند (rhs, 0);
     }
-  rhs_type = TREE_TYPE (rhs);
+  rhs_type = ونه_TYPE (rhs);
 
   /* Fold the RHS if it hasn't already been folded.  */
-  if (modifycode != NOP_EXPR)
-    rhs = c_fully_fold (rhs, false, NULL);
+  إذا (modifycode != NOP_بیان)
+    rhs = c_fully_fold (rhs, خطأ, عدم);
 
   /* Remove the qualifiers for the rest of the expressions and create
      the VAL temp variable to hold the RHS.  */
@@ -5569,231 +5569,231 @@ build_atomic_assign (location_t loc, tree lhs, enum tree_code modifycode,
   nonatomic_rhs_semantic_type = build_qualified_type (rhs_semantic_type,
 						      TYPE_UNQUALIFIED);
   val = create_tmp_var_raw (nonatomic_rhs_type);
-  TREE_ADDRESSABLE (val) = 1;
+  ونه_ADDRESSABLE (val) = 1;
   suppress_warning (val);
-  rhs = build4 (TARGET_EXPR, nonatomic_rhs_type, val, rhs, NULL_TREE,
-		NULL_TREE);
-  TREE_SIDE_EFFECTS (rhs) = 1;
-  SET_EXPR_LOCATION (rhs, loc);
-  if (modifycode != NOP_EXPR)
-    add_stmt (rhs);
+  rhs = build4 (موخه_بیان, nonatomic_rhs_type, val, rhs, NULL_ونه,
+		NULL_ونه);
+  ونه_SIDE_EFFECTS (rhs) = 1;
+  سېټ_بیان_LOCATION (rhs, loc);
+  إذا (modifycode != NOP_بیان)
+    جمع_کړه_stmt (rhs);
 
   /* NOP_EXPR indicates it's a straight store of the RHS. Simply issue
      an atomic_store.  */
-  if (modifycode == NOP_EXPR)
+  إذا (modifycode == NOP_بیان)
     {
       compound_stmt = rhs;
       /* Build __atomic_store (&lhs, &val, SEQ_CST)  */
-      rhs = build_unary_op (loc, ADDR_EXPR, val, false);
-      fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_STORE);
-      params->quick_push (lhs_addr);
-      params->quick_push (rhs);
-      params->quick_push (seq_cst);
-      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
+      rhs = build_unary_op (loc, ADDR_بیان, val, خطأ);
+      fndecl = builtin_decl_explicit (BUILT_دننه_ATOMIC_STORE);
+      params->چټک_ټېل (lhs_addr);
+      params->چټک_ټېل (rhs);
+      params->چټک_ټېل (seq_cst);
+      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, عدم);
 
-      compound_stmt = build2 (COMPOUND_EXPR, void_type_node,
+      compound_stmt = build2 (COMPOUND_بیان, void_type_غوټه,
 			      compound_stmt, func_call);
 
       /* VAL is the value which was stored, return a COMPOUND_STMT of
 	 the statement and that value.  */
-      return build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt, val);
+      أرجع build2 (COMPOUND_بیان, nonatomic_lhs_type, compound_stmt, val);
     }
 
   /* Attempt to implement the atomic operation as an __atomic_fetch_* or
      __atomic_*_fetch built-in rather than a CAS loop.  atomic_bool type
      isn't applicable for such builtins.  ??? Do we want to handle enums?  */
-  if ((TREE_CODE (lhs_type) == INTEGER_TYPE || POINTER_TYPE_P (lhs_type))
-      && TREE_CODE (rhs_type) == INTEGER_TYPE)
+  إذا ((ونه_کوډ (lhs_type) == INTEGER_TYPE || اشاره_ګر_TYPE_P (lhs_type))
+      && ونه_کوډ (rhs_type) == INTEGER_TYPE)
     {
-      built_in_function fncode;
-      switch (modifycode)
+      built_دننه_function fncode;
+      بدل (modifycode)
 	{
-	case PLUS_EXPR:
-	case POINTER_PLUS_EXPR:
+	حالة PLUS_بیان:
+	حالة اشاره_ګر_PLUS_بیان:
 	  fncode = (return_old_p
-		    ? BUILT_IN_ATOMIC_FETCH_ADD_N
-		    : BUILT_IN_ATOMIC_ADD_FETCH_N);
-	  break;
-	case MINUS_EXPR:
+		    ? BUILT_دننه_ATOMIC_FETCH_جمع_کړه_N
+		    : BUILT_دننه_ATOMIC_جمع_کړه_FETCH_N);
+	  اكسر;
+	حالة MINUS_بیان:
 	  fncode = (return_old_p
-		    ? BUILT_IN_ATOMIC_FETCH_SUB_N
-		    : BUILT_IN_ATOMIC_SUB_FETCH_N);
-	  break;
-	case BIT_AND_EXPR:
+		    ? BUILT_دننه_ATOMIC_FETCH_SUB_N
+		    : BUILT_دننه_ATOMIC_SUB_FETCH_N);
+	  اكسر;
+	حالة بټ_AND_بیان:
 	  fncode = (return_old_p
-		    ? BUILT_IN_ATOMIC_FETCH_AND_N
-		    : BUILT_IN_ATOMIC_AND_FETCH_N);
-	  break;
-	case BIT_IOR_EXPR:
+		    ? BUILT_دننه_ATOMIC_FETCH_AND_N
+		    : BUILT_دننه_ATOMIC_AND_FETCH_N);
+	  اكسر;
+	حالة بټ_IOR_بیان:
 	  fncode = (return_old_p
-		    ? BUILT_IN_ATOMIC_FETCH_OR_N
-		    : BUILT_IN_ATOMIC_OR_FETCH_N);
-	  break;
-	case BIT_XOR_EXPR:
+		    ? BUILT_دننه_ATOMIC_FETCH_OR_N
+		    : BUILT_دننه_ATOMIC_OR_FETCH_N);
+	  اكسر;
+	حالة بټ_XOR_بیان:
 	  fncode = (return_old_p
-		    ? BUILT_IN_ATOMIC_FETCH_XOR_N
-		    : BUILT_IN_ATOMIC_XOR_FETCH_N);
-	  break;
-	default:
-	  goto cas_loop;
+		    ? BUILT_دننه_ATOMIC_FETCH_XOR_N
+		    : BUILT_دننه_ATOMIC_XOR_FETCH_N);
+	  اكسر;
+	افتراضي:
+	  اذهب cas_loop;
 	}
 
       /* We can only use "_1" through "_16" variants of the atomic fetch
 	 built-ins.  */
-      unsigned HOST_WIDE_INT size = tree_to_uhwi (TYPE_SIZE_UNIT (lhs_type));
-      if (size != 1 && size != 2 && size != 4 && size != 8 && size != 16)
-	goto cas_loop;
+      بینښه HOST_WIDE_INT اندازه = ونه_منزل_uhwi (TYPE_اندازه_UNIT (lhs_type));
+      إذا (اندازه != 1 && اندازه != 2 && اندازه != 4 && اندازه != 8 && اندازه != 16)
+	اذهب cas_loop;
 
       /* If this is a pointer type, we need to multiply by the size of
 	 the pointer target type.  */
-      if (POINTER_TYPE_P (lhs_type))
+      إذا (اشاره_ګر_TYPE_P (lhs_type))
 	{
-	  if (!COMPLETE_TYPE_P (TREE_TYPE (lhs_type))
+	  إذا (!COMPLETE_TYPE_P (ونه_TYPE (lhs_type))
 	      /* ??? This would introduce -Wdiscarded-qualifiers
 		 warning: __atomic_fetch_* expect volatile void *
 		 type as the first argument.  (Assignments between
 		 atomic and non-atomic objects are OK.) */
 	      || TYPE_RESTRICT (lhs_type))
-	    goto cas_loop;
-	  tree sz = TYPE_SIZE_UNIT (TREE_TYPE (lhs_type));
-	  rhs = fold_build2_loc (loc, MULT_EXPR, ptrdiff_type_node,
-				 convert (ptrdiff_type_node, rhs),
-				 convert (ptrdiff_type_node, sz));
+	    اذهب cas_loop;
+	  ونه sz = TYPE_اندازه_UNIT (ونه_TYPE (lhs_type));
+	  rhs = fold_build2_loc (loc, MULT_بیان, ptrdiff_type_غوټه,
+				 convert (ptrdiff_type_غوټه, rhs),
+				 convert (ptrdiff_type_غوټه, sz));
 	}
 
       /* Build __atomic_fetch_* (&lhs, &val, SEQ_CST), or
 	 __atomic_*_fetch (&lhs, &val, SEQ_CST).  */
       fndecl = builtin_decl_explicit (fncode);
-      params->quick_push (lhs_addr);
-      params->quick_push (rhs);
-      params->quick_push (seq_cst);
-      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
+      params->چټک_ټېل (lhs_addr);
+      params->چټک_ټېل (rhs);
+      params->چټک_ټېل (seq_cst);
+      func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, عدم);
 
       newval = create_tmp_var_raw (nonatomic_lhs_type);
-      TREE_ADDRESSABLE (newval) = 1;
+      ونه_ADDRESSABLE (newval) = 1;
       suppress_warning (newval);
-      rhs = build4 (TARGET_EXPR, nonatomic_lhs_type, newval, func_call,
-		    NULL_TREE, NULL_TREE);
-      SET_EXPR_LOCATION (rhs, loc);
-      add_stmt (rhs);
+      rhs = build4 (موخه_بیان, nonatomic_lhs_type, newval, func_call,
+		    NULL_ونه, NULL_ونه);
+      سېټ_بیان_LOCATION (rhs, loc);
+      جمع_کړه_stmt (rhs);
 
       /* Finish the compound statement.  */
-      compound_stmt = c_end_compound_stmt (loc, compound_stmt, false);
+      compound_stmt = c_پای_ټکی_compound_stmt (loc, compound_stmt, خطأ);
 
       /* NEWVAL is the value which was stored, return a COMPOUND_STMT of
 	 the statement and that value.  */
-      return build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt, newval);
+      أرجع build2 (COMPOUND_بیان, nonatomic_lhs_type, compound_stmt, newval);
     }
 
 cas_loop:
   /* Create the variables and labels required for the op= form.  */
   old = create_tmp_var_raw (nonatomic_lhs_type);
-  old_addr = build_unary_op (loc, ADDR_EXPR, old, false);
-  TREE_ADDRESSABLE (old) = 1;
+  old_addr = build_unary_op (loc, ADDR_بیان, old, خطأ);
+  ونه_ADDRESSABLE (old) = 1;
   suppress_warning (old);
 
   newval = create_tmp_var_raw (nonatomic_lhs_type);
-  newval_addr = build_unary_op (loc, ADDR_EXPR, newval, false);
-  TREE_ADDRESSABLE (newval) = 1;
+  newval_addr = build_unary_op (loc, ADDR_بیان, newval, خطأ);
+  ونه_ADDRESSABLE (newval) = 1;
   suppress_warning (newval);
 
   loop_decl = create_artificial_label (loc);
-  loop_label = build1 (LABEL_EXPR, void_type_node, loop_decl);
+  loop_label = build1 (LABEL_بیان, void_type_غوټه, loop_decl);
 
-  done_decl = create_artificial_label (loc);
-  done_label = build1 (LABEL_EXPR, void_type_node, done_decl);
+  بشپړ_decl = create_artificial_label (loc);
+  بشپړ_label = build1 (LABEL_بیان, void_type_غوټه, بشپړ_decl);
 
   /* __atomic_load (addr, &old, SEQ_CST).  */
-  fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_LOAD);
-  params->quick_push (lhs_addr);
-  params->quick_push (old_addr);
-  params->quick_push (seq_cst);
-  func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
-  old = build4 (TARGET_EXPR, nonatomic_lhs_type, old, func_call, NULL_TREE,
-		NULL_TREE);
-  add_stmt (old);
+  fndecl = builtin_decl_explicit (BUILT_دننه_ATOMIC_بارول);
+  params->چټک_ټېل (lhs_addr);
+  params->چټک_ټېل (old_addr);
+  params->چټک_ټېل (seq_cst);
+  func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, عدم);
+  old = build4 (موخه_بیان, nonatomic_lhs_type, old, func_call, NULL_ونه,
+		NULL_ونه);
+  جمع_کړه_stmt (old);
   params->truncate (0);
 
   /* Create the expressions for floating-point environment
      manipulation, if required.  */
-  bool need_fenv = (flag_trapping_math
+  منطقي need_fenv = (flag_trapping_math
 		    && (FLOAT_TYPE_P (lhs_type) || FLOAT_TYPE_P (rhs_type)));
-  tree hold_call = NULL_TREE, clear_call = NULL_TREE, update_call = NULL_TREE;
-  if (need_fenv)
-    targetm.atomic_assign_expand_fenv (&hold_call, &clear_call, &update_call);
+  ونه hold_call = NULL_ونه, clear_call = NULL_ونه, update_call = NULL_ونه;
+  إذا (need_fenv)
+    targetm.atomic_ټاکل_expand_fenv (&hold_call, &clear_call, &update_call);
 
-  if (hold_call)
-    add_stmt (hold_call);
+  إذا (hold_call)
+    جمع_کړه_stmt (hold_call);
 
   /* loop:  */
-  add_stmt (loop_label);
+  جمع_کړه_stmt (loop_label);
 
   /* newval = old + val;  */
-  if (rhs_type != rhs_semantic_type)
-    val = build1 (EXCESS_PRECISION_EXPR, nonatomic_rhs_semantic_type, val);
-  rhs = build_binary_op (loc, modifycode,
-			 convert_lvalue_to_rvalue (loc, old, true, true),
-			 val, true);
-  if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
+  إذا (rhs_type != rhs_semantic_type)
+    val = build1 (EXCESS_PRECISION_بیان, nonatomic_rhs_semantic_type, val);
+  rhs = build_دوګونی_op (loc, modifycode,
+			 convert_lvalue_منزل_rvalue (loc, old, ریښتیا, ریښتیا),
+			 val, ریښتیا);
+  إذا (ونه_کوډ (rhs) == EXCESS_PRECISION_بیان)
     {
-      tree eptype = TREE_TYPE (rhs);
-      rhs = c_fully_fold (TREE_OPERAND (rhs, 0), false, NULL);
-      rhs = build1 (EXCESS_PRECISION_EXPR, eptype, rhs);
+      ونه eptype = ونه_TYPE (rhs);
+      rhs = c_fully_fold (ونه_عملوند (rhs, 0), خطأ, عدم);
+      rhs = build1 (EXCESS_PRECISION_بیان, eptype, rhs);
     }
-  else
-    rhs = c_fully_fold (rhs, false, NULL);
+  وإلا
+    rhs = c_fully_fold (rhs, خطأ, عدم);
   rhs = convert_for_assignment (loc, UNKNOWN_LOCATION, nonatomic_lhs_type,
-				rhs, NULL_TREE, ic_assign, false, NULL_TREE,
-				NULL_TREE, 0);
+				rhs, NULL_ونه, ic_ټاکل, خطأ, NULL_ونه,
+				NULL_ونه, 0);
   /* The temporary variable for NEWVAL is only gimplified correctly (in
      particular, given a DECL_CONTEXT) if used in a TARGET_EXPR.  To avoid
      subsequent ICEs in nested function processing after an error, ensure such
      a TARGET_EXPR is built even after an error.  */
-  if (rhs == error_mark_node)
+  إذا (rhs == error_mark_غوټه)
     rhs = old;
-  rhs = build4 (TARGET_EXPR, nonatomic_lhs_type, newval, rhs, NULL_TREE,
-		NULL_TREE);
-  SET_EXPR_LOCATION (rhs, loc);
-  add_stmt (rhs);
+  rhs = build4 (موخه_بیان, nonatomic_lhs_type, newval, rhs, NULL_ونه,
+		NULL_ونه);
+  سېټ_بیان_LOCATION (rhs, loc);
+  جمع_کړه_stmt (rhs);
 
   /* if (__atomic_compare_exchange (addr, &old, &new, false, SEQ_CST, SEQ_CST))
        goto done;  */
-  fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_COMPARE_EXCHANGE);
-  params->quick_push (lhs_addr);
-  params->quick_push (old_addr);
-  params->quick_push (newval_addr);
-  params->quick_push (integer_zero_node);
-  params->quick_push (seq_cst);
-  params->quick_push (seq_cst);
-  func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
+  fndecl = builtin_decl_explicit (BUILT_دننه_ATOMIC_COMPARE_EXCHANGE);
+  params->چټک_ټېل (lhs_addr);
+  params->چټک_ټېل (old_addr);
+  params->چټک_ټېل (newval_addr);
+  params->چټک_ټېل (integer_zero_غوټه);
+  params->چټک_ټېل (seq_cst);
+  params->چټک_ټېل (seq_cst);
+  func_call = c_build_function_call_vec (loc, vNULL, fndecl, params, عدم);
 
-  goto_stmt = build1 (GOTO_EXPR, void_type_node, done_decl);
-  SET_EXPR_LOCATION (goto_stmt, loc);
+  goto_stmt = build1 (GOTO_بیان, void_type_غوټه, بشپړ_decl);
+  سېټ_بیان_LOCATION (goto_stmt, loc);
 
-  stmt = build3 (COND_EXPR, void_type_node, func_call, goto_stmt, NULL_TREE);
-  SET_EXPR_LOCATION (stmt, loc);
-  add_stmt (stmt);
+  stmt = build3 (COND_بیان, void_type_غوټه, func_call, goto_stmt, NULL_ونه);
+  سېټ_بیان_LOCATION (stmt, loc);
+  جمع_کړه_stmt (stmt);
 
-  if (clear_call)
-    add_stmt (clear_call);
+  إذا (clear_call)
+    جمع_کړه_stmt (clear_call);
 
   /* goto loop;  */
-  goto_stmt  = build1 (GOTO_EXPR, void_type_node, loop_decl);
-  SET_EXPR_LOCATION (goto_stmt, loc);
-  add_stmt (goto_stmt);
+  goto_stmt  = build1 (GOTO_بیان, void_type_غوټه, loop_decl);
+  سېټ_بیان_LOCATION (goto_stmt, loc);
+  جمع_کړه_stmt (goto_stmt);
 
   /* done:  */
-  add_stmt (done_label);
+  جمع_کړه_stmt (بشپړ_label);
 
-  if (update_call)
-    add_stmt (update_call);
+  إذا (update_call)
+    جمع_کړه_stmt (update_call);
 
   /* Finish the compound statement.  */
-  compound_stmt = c_end_compound_stmt (loc, compound_stmt, false);
+  compound_stmt = c_پای_ټکی_compound_stmt (loc, compound_stmt, خطأ);
 
   /* NEWVAL is the value that was successfully stored, return a
      COMPOUND_EXPR of the statement and the appropriate value.  */
-  return build2 (COMPOUND_EXPR, nonatomic_lhs_type, compound_stmt,
+  أرجع build2 (COMPOUND_بیان, nonatomic_lhs_type, compound_stmt,
 		 return_old_p ? old : newval);
 }
 
@@ -5808,18 +5808,18 @@ cas_loop:
 
    LOCATION is the location of the operator.  */
 
-tree
-build_unary_op (location_t location, enum tree_code code, tree xarg,
-		bool noconvert)
+ونه
+build_unary_op (location_t location, تعداد ونه_کوډ_2 کوډ, ونه xarg,
+		منطقي noconvert)
 {
   /* No default_conversion here.  It causes trouble for ADDR_EXPR.  */
-  tree arg = xarg;
-  tree argtype = NULL_TREE;
-  enum tree_code typecode;
-  tree val;
-  tree ret = error_mark_node;
-  tree eptype = NULL_TREE;
-  const char *invalid_op_diag;
+  ونه arg = xarg;
+  ونه argtype = NULL_ونه;
+  تعداد ونه_کوډ_2 typecode;
+  ونه val;
+  ونه ret = error_mark_غوټه;
+  ونه eptype = NULL_ونه;
+  ثابت حرف *invalid_op_diag;
 
   /* If ARG is wrapped in a call to .ACCESS_WITH_SIZE — created when the
      C parser rvalue-converts a counted_by-annotated member access (see
@@ -5830,651 +5830,651 @@ build_unary_op (location_t location, enum tree_code code, tree xarg,
      handle the wrapped form.  PR123569 fixed the ++/-- side of this by
      suppressing wrapper creation in the parser; the rvalue-consuming
      ops still receive the wrapper and need to strip it here.  */
-  if (is_access_with_size_p (arg))
-    xarg = arg = get_ref_from_access_with_size (arg);
+  إذا (is_access_with_اندازه_p (arg))
+    xarg = arg = get_ref_from_access_with_اندازه (arg);
 
-  gcc_checking_assert (!is_access_with_size_p (arg));
+  gcc_checking_assert (!is_access_with_اندازه_p (arg));
 
-  bool int_operands = EXPR_INT_CONST_OPERANDS (xarg);
-  if (int_operands)
-    arg = remove_c_maybe_const_expr (arg);
+  منطقي int_operands = بیان_INT_CONST_OPERANDS (xarg);
+  إذا (int_operands)
+    arg = remove_c_maybe_const_بیان (arg);
 
-  if (code != ADDR_EXPR)
+  إذا (کوډ != ADDR_بیان)
     arg = require_complete_type (location, arg);
 
-  typecode = TREE_CODE (TREE_TYPE (arg));
-  if (typecode == ERROR_MARK)
-    return error_mark_node;
-  if (typecode == ENUMERAL_TYPE || typecode == BOOLEAN_TYPE)
+  typecode = ونه_کوډ (ونه_TYPE (arg));
+  إذا (typecode == ERROR_MARK)
+    أرجع error_mark_غوټه;
+  إذا (typecode == ENUMERAL_TYPE || typecode == BOOLEAN_TYPE)
     typecode = INTEGER_TYPE;
 
-  if ((invalid_op_diag
-       = targetm.invalid_unary_op (code, TREE_TYPE (xarg))))
+  إذا ((invalid_op_diag
+       = targetm.invalid_unary_op (کوډ, ونه_TYPE (xarg))))
     {
       error_at (location, invalid_op_diag);
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
-  if (TREE_CODE (arg) == EXCESS_PRECISION_EXPR)
+  إذا (ونه_کوډ (arg) == EXCESS_PRECISION_بیان)
     {
-      eptype = TREE_TYPE (arg);
-      arg = TREE_OPERAND (arg, 0);
+      eptype = ونه_TYPE (arg);
+      arg = ونه_عملوند (arg, 0);
     }
 
-  switch (code)
+  بدل (کوډ)
     {
-    case CONVERT_EXPR:
+    حالة CONVERT_بیان:
       /* This is used for unary plus, because a CONVERT_EXPR
 	 is enough to prevent anybody from looking inside for
 	 associativity, but won't generate any code.  */
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
-	    || typecode == FIXED_POINT_TYPE || typecode == COMPLEX_TYPE
+      إذا (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
+	    || typecode == FIXED_ټکی_TYPE || typecode == COMPLEX_TYPE
 	    || typecode == BITINT_TYPE
-	    || gnu_vector_type_p (TREE_TYPE (arg))))
+	    || gnu_ویکټور_type_p (ونه_TYPE (arg))))
 	{
 	  error_at (location, "wrong type argument to unary plus");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      else if (!noconvert)
+      وإلا إذا (!noconvert)
 	arg = default_conversion (arg);
       arg = non_lvalue_loc (location, arg);
-      break;
+      اكسر;
 
-    case NEGATE_EXPR:
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
-	    || typecode == FIXED_POINT_TYPE || typecode == COMPLEX_TYPE
+    حالة NEGATE_بیان:
+      إذا (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
+	    || typecode == FIXED_ټکی_TYPE || typecode == COMPLEX_TYPE
 	    || typecode == BITINT_TYPE
-	    || gnu_vector_type_p (TREE_TYPE (arg))))
+	    || gnu_ویکټور_type_p (ونه_TYPE (arg))))
 	{
 	  error_at (location, "wrong type argument to unary minus");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      else if (!noconvert)
+      وإلا إذا (!noconvert)
 	arg = default_conversion (arg);
-      break;
+      اكسر;
 
-    case BIT_NOT_EXPR:
+    حالة بټ_NOT_بیان:
       /* ~ works on integer types and non float vectors. */
-      if (typecode == INTEGER_TYPE
+      إذا (typecode == INTEGER_TYPE
 	  || typecode == BITINT_TYPE
-	  || (gnu_vector_type_p (TREE_TYPE (arg))
-	      && !VECTOR_FLOAT_TYPE_P (TREE_TYPE (arg))))
+	  || (gnu_ویکټور_type_p (ونه_TYPE (arg))
+	      && !ویکټور_FLOAT_TYPE_P (ونه_TYPE (arg))))
 	{
-	  tree e = arg;
+	  ونه e = arg;
 
 	  /* Warn if the expression has boolean value.  */
-	  while (TREE_CODE (e) == COMPOUND_EXPR)
-	    e = TREE_OPERAND (e, 1);
+	  طالما (ونه_کوډ (e) == COMPOUND_بیان)
+	    e = ونه_عملوند (e, 1);
 
-	  if ((C_BOOLEAN_TYPE_P (TREE_TYPE (arg))
-	       || truth_value_p (TREE_CODE (e))))
+	  إذا ((C_BOOLEAN_TYPE_P (ونه_TYPE (arg))
+	       || truth_ارزښت_p (ونه_کوډ (e))))
 	    {
-	      auto_diagnostic_group d;
-	      if (warning_at (location, OPT_Wbool_operation,
+	      auto_diagnostic_ډله d;
+	      إذا (warning_at (location, OPT_Wbool_operation,
 				"%<~%> on a boolean expression"))
 		{
 		  gcc_rich_location richloc (location);
-		  richloc.add_fixit_insert_before (location, "!");
+		  richloc.جمع_کړه_fixit_ورننباسه_before (location, "!");
 		  inform (&richloc, "did you mean to use logical not?");
 		}
 	    }
-	  if (!noconvert)
+	  إذا (!noconvert)
 	    arg = default_conversion (arg);
 	}
-      else if (typecode == COMPLEX_TYPE)
+      وإلا إذا (typecode == COMPLEX_TYPE)
 	{
-	  code = CONJ_EXPR;
+	  کوډ = CONJ_بیان;
 	  pedwarn (location, OPT_Wpedantic,
 		   "ISO C does not support %<~%> for complex conjugation");
-	  if (!noconvert)
+	  إذا (!noconvert)
 	    arg = default_conversion (arg);
 	}
-      else
+      وإلا
 	{
 	  error_at (location, "wrong type argument to bit-complement");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      break;
+      اكسر;
 
-    case ABS_EXPR:
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE))
+    حالة ABS_بیان:
+      إذا (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE))
 	{
 	  error_at (location, "wrong type argument to abs");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      else if (!noconvert)
+      وإلا إذا (!noconvert)
 	arg = default_conversion (arg);
-      break;
+      اكسر;
 
-    case ABSU_EXPR:
-      if (!(typecode == INTEGER_TYPE))
+    حالة ABSU_بیان:
+      إذا (!(typecode == INTEGER_TYPE))
 	{
 	  error_at (location, "wrong type argument to absu");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      else if (!noconvert)
+      وإلا إذا (!noconvert)
 	arg = default_conversion (arg);
-      break;
+      اكسر;
 
-    case CONJ_EXPR:
+    حالة CONJ_بیان:
       /* Conjugating a real value is a no-op, but allow it anyway.  */
-      if (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
+      إذا (!(typecode == INTEGER_TYPE || typecode == REAL_TYPE
 	    || typecode == COMPLEX_TYPE))
 	{
 	  error_at (location, "wrong type argument to conjugation");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      else if (!noconvert)
+      وإلا إذا (!noconvert)
 	arg = default_conversion (arg);
-      break;
+      اكسر;
 
-    case TRUTH_NOT_EXPR:
-      if (typecode != INTEGER_TYPE && typecode != FIXED_POINT_TYPE
-	  && typecode != REAL_TYPE && typecode != POINTER_TYPE
+    حالة TRUTH_NOT_بیان:
+      إذا (typecode != INTEGER_TYPE && typecode != FIXED_ټکی_TYPE
+	  && typecode != REAL_TYPE && typecode != اشاره_ګر_TYPE
 	  && typecode != COMPLEX_TYPE && typecode != NULLPTR_TYPE
 	  && typecode != BITINT_TYPE)
 	{
 	  error_at (location,
 		    "wrong type argument to unary exclamation mark");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      if (int_operands)
+      إذا (int_operands)
 	{
 	  arg = c_objc_common_truthvalue_conversion (location, xarg);
-	  arg = remove_c_maybe_const_expr (arg);
+	  arg = remove_c_maybe_const_بیان (arg);
 	}
-      else
+      وإلا
 	arg = c_objc_common_truthvalue_conversion (location, arg);
       ret = invert_truthvalue_loc (location, arg);
-      eptype = NULL_TREE;
+      eptype = NULL_ونه;
       /* If the TRUTH_NOT_EXPR has been folded, reset the location.  */
-      if (EXPR_P (ret) && EXPR_HAS_LOCATION (ret))
-	location = EXPR_LOCATION (ret);
-      goto return_build_unary_op;
+      إذا (بیان_P (ret) && بیان_HAS_LOCATION (ret))
+	location = بیان_LOCATION (ret);
+      اذهب return_build_unary_op;
 
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-      ret = build_real_imag_expr (location, code, arg);
-      if (ret == error_mark_node)
-	return error_mark_node;
-      if (eptype && TREE_CODE (eptype) == COMPLEX_TYPE)
-	eptype = TREE_TYPE (eptype);
-      goto return_build_unary_op;
+    حالة REALPART_بیان:
+    حالة IMAGPART_بیان:
+      ret = build_real_imag_بیان (location, کوډ, arg);
+      إذا (ret == error_mark_غوټه)
+	أرجع error_mark_غوټه;
+      إذا (eptype && ونه_کوډ (eptype) == COMPLEX_TYPE)
+	eptype = ونه_TYPE (eptype);
+      اذهب return_build_unary_op;
 
-    case PREINCREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-    case PREDECREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
+    حالة PREINCREMENT_بیان:
+    حالة POSTINCREMENT_بیان:
+    حالة PREDECREMENT_بیان:
+    حالة POSTDECREMENT_بیان:
 
-      if (TREE_CODE (arg) == C_MAYBE_CONST_EXPR)
+      إذا (ونه_کوډ (arg) == C_MAYBE_CONST_بیان)
 	{
-	  tree inner = build_unary_op (location, code,
-				       C_MAYBE_CONST_EXPR_EXPR (arg),
+	  ونه inner = build_unary_op (location, کوډ,
+				       C_MAYBE_CONST_بیان_بیان (arg),
 				       noconvert);
-	  if (inner == error_mark_node)
-	    return error_mark_node;
-	  ret = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (inner),
-			C_MAYBE_CONST_EXPR_PRE (arg), inner);
-	  gcc_assert (!C_MAYBE_CONST_EXPR_INT_OPERANDS (arg));
-	  C_MAYBE_CONST_EXPR_NON_CONST (ret) = 1;
-	  goto return_build_unary_op;
+	  إذا (inner == error_mark_غوټه)
+	    أرجع error_mark_غوټه;
+	  ret = build2 (C_MAYBE_CONST_بیان, ونه_TYPE (inner),
+			C_MAYBE_CONST_بیان_PRE (arg), inner);
+	  gcc_assert (!C_MAYBE_CONST_بیان_INT_OPERANDS (arg));
+	  C_MAYBE_CONST_بیان_NON_CONST (ret) = 1;
+	  اذهب return_build_unary_op;
 	}
 
       /* Complain about anything that is not a true lvalue.  In
 	 Objective-C, skip this check for property_refs.  */
-      if (!objc_is_property_ref (arg)
+      إذا (!objc_is_property_ref (arg)
 	  && !lvalue_or_else (location,
-			      arg, ((code == PREINCREMENT_EXPR
-				     || code == POSTINCREMENT_EXPR)
+			      arg, ((کوډ == PREINCREMENT_بیان
+				     || کوډ == POSTINCREMENT_بیان)
 				    ? lv_increment
 				    : lv_decrement)))
-	return error_mark_node;
+	أرجع error_mark_غوټه;
 
-      if (warn_cxx_compat && TREE_CODE (TREE_TYPE (arg)) == ENUMERAL_TYPE)
+      إذا (warn_cxx_compat && ونه_کوډ (ونه_TYPE (arg)) == ENUMERAL_TYPE)
 	{
-	  if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+	  إذا (کوډ == PREINCREMENT_بیان || کوډ == POSTINCREMENT_بیان)
 	    warning_at (location, OPT_Wc___compat,
 			"increment of enumeration value is invalid in C++");
-	  else
+	  وإلا
 	    warning_at (location, OPT_Wc___compat,
 			"decrement of enumeration value is invalid in C++");
 	}
 
-      if (C_BOOLEAN_TYPE_P (TREE_TYPE (arg)))
+      إذا (C_BOOLEAN_TYPE_P (ونه_TYPE (arg)))
 	{
-	  if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+	  إذا (کوډ == PREINCREMENT_بیان || کوډ == POSTINCREMENT_بیان)
 	    warning_at (location, OPT_Wbool_operation,
 			"increment of a boolean expression");
-	  else
+	  وإلا
 	    warning_at (location, OPT_Wbool_operation,
 			"decrement of a boolean expression");
 	}
 
       /* Ensure the argument is fully folded inside any SAVE_EXPR.  */
-      arg = c_fully_fold (arg, false, NULL, true);
+      arg = c_fully_fold (arg, خطأ, عدم, ریښتیا);
 
-      bool atomic_op;
+      منطقي atomic_op;
       atomic_op = really_atomic_lvalue (arg);
 
       /* Increment or decrement the real part of the value,
 	 and don't change the imaginary part.  */
-      if (typecode == COMPLEX_TYPE)
+      إذا (typecode == COMPLEX_TYPE)
 	{
-	  tree real, imag;
+	  ونه real, imag;
 
 	  pedwarn_c23 (location, OPT_Wpedantic,
 		       "ISO C does not support %<++%> and %<--%> on complex "
 		       "types before C2Y");
 
-	  if (!atomic_op)
+	  إذا (!atomic_op)
 	    {
 	      arg = stabilize_reference (arg);
-	      real = build_unary_op (EXPR_LOCATION (arg), REALPART_EXPR, arg,
-				     true);
-	      imag = build_unary_op (EXPR_LOCATION (arg), IMAGPART_EXPR, arg,
-				     true);
-	      real = build_unary_op (EXPR_LOCATION (arg), code, real, true);
-	      if (real == error_mark_node || imag == error_mark_node)
-		return error_mark_node;
-	      ret = build2 (COMPLEX_EXPR, TREE_TYPE (arg),
+	      real = build_unary_op (بیان_LOCATION (arg), REALPART_بیان, arg,
+				     ریښتیا);
+	      imag = build_unary_op (بیان_LOCATION (arg), IMAGPART_بیان, arg,
+				     ریښتیا);
+	      real = build_unary_op (بیان_LOCATION (arg), کوډ, real, ریښتیا);
+	      إذا (real == error_mark_غوټه || imag == error_mark_غوټه)
+		أرجع error_mark_غوټه;
+	      ret = build2 (COMPLEX_بیان, ونه_TYPE (arg),
 			    real, imag);
-	      goto return_build_unary_op;
+	      اذهب return_build_unary_op;
 	    }
 	}
 
       /* Report invalid types.  */
 
-      if (typecode != POINTER_TYPE && typecode != FIXED_POINT_TYPE
+      إذا (typecode != اشاره_ګر_TYPE && typecode != FIXED_ټکی_TYPE
 	  && typecode != INTEGER_TYPE && typecode != REAL_TYPE
 	  && typecode != COMPLEX_TYPE && typecode != BITINT_TYPE
-	  && !gnu_vector_type_p (TREE_TYPE (arg)))
+	  && !gnu_ویکټور_type_p (ونه_TYPE (arg)))
 	{
-	  if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+	  إذا (کوډ == PREINCREMENT_بیان || کوډ == POSTINCREMENT_بیان)
 	    error_at (location, "wrong type argument to increment");
-	  else
+	  وإلا
 	    error_at (location, "wrong type argument to decrement");
 
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
 
       {
-	tree inc;
+	ونه inc;
 
-	argtype = TREE_TYPE (arg);
+	argtype = ونه_TYPE (arg);
 
 	/* Compute the increment.  */
 
-	if (typecode == POINTER_TYPE)
+	إذا (typecode == اشاره_ګر_TYPE)
 	  {
 	    /* If pointer target is an incomplete type,
 	       we just cannot know how to do the arithmetic.  */
-	    if (!COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (argtype)))
+	    إذا (!COMPLETE_OR_VOID_TYPE_P (ونه_TYPE (argtype)))
 	      {
-		if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+		إذا (کوډ == PREINCREMENT_بیان || کوډ == POSTINCREMENT_بیان)
 		  error_at (location,
 			    "increment of pointer to an incomplete type %qT",
-			    TREE_TYPE (argtype));
-		else
+			    ونه_TYPE (argtype));
+		وإلا
 		  error_at (location,
 			    "decrement of pointer to an incomplete type %qT",
-			    TREE_TYPE (argtype));
+			    ونه_TYPE (argtype));
 	      }
-	    else if (TREE_CODE (TREE_TYPE (argtype)) == FUNCTION_TYPE
-		     || VOID_TYPE_P (TREE_TYPE (argtype)))
+	    وإلا إذا (ونه_کوډ (ونه_TYPE (argtype)) == FUNCTION_TYPE
+		     || VOID_TYPE_P (ونه_TYPE (argtype)))
 	      {
-		if (code == PREINCREMENT_EXPR || code == POSTINCREMENT_EXPR)
+		إذا (کوډ == PREINCREMENT_بیان || کوډ == POSTINCREMENT_بیان)
 		  pedwarn (location, OPT_Wpointer_arith,
 			   "wrong type argument to increment");
-		else
+		وإلا
 		  pedwarn (location, OPT_Wpointer_arith,
 			   "wrong type argument to decrement");
 	      }
-	    else
-	      verify_type_context (location, TCTX_POINTER_ARITH,
-				   TREE_TYPE (argtype));
+	    وإلا
+	      verify_type_context (location, TCTX_اشاره_ګر_ARITH,
+				   ونه_TYPE (argtype));
 
-	    inc = c_size_in_bytes (TREE_TYPE (argtype));
-	    inc = convert_to_ptrofftype_loc (location, inc);
+	    inc = c_اندازه_دننه_بایټونه (ونه_TYPE (argtype));
+	    inc = convert_منزل_ptrofftype_loc (location, inc);
 	  }
-	else if (FRACT_MODE_P (TYPE_MODE (argtype)))
+	وإلا إذا (FRACT_ډېرپېښ_P (TYPE_ډېرپېښ (argtype)))
 	  {
 	    /* For signed fract types, we invert ++ to -- or
 	       -- to ++, and change inc from 1 to -1, because
 	       it is not possible to represent 1 in signed fract constants.
 	       For unsigned fract types, the result always overflows and
 	       we get an undefined (original) or the maximum value.  */
-	    if (code == PREINCREMENT_EXPR)
-	      code = PREDECREMENT_EXPR;
-	    else if (code == PREDECREMENT_EXPR)
-	      code = PREINCREMENT_EXPR;
-	    else if (code == POSTINCREMENT_EXPR)
-	      code = POSTDECREMENT_EXPR;
-	    else /* code == POSTDECREMENT_EXPR  */
-	      code = POSTINCREMENT_EXPR;
+	    إذا (کوډ == PREINCREMENT_بیان)
+	      کوډ = PREDECREMENT_بیان;
+	    وإلا إذا (کوډ == PREDECREMENT_بیان)
+	      کوډ = PREINCREMENT_بیان;
+	    وإلا إذا (کوډ == POSTINCREMENT_بیان)
+	      کوډ = POSTDECREMENT_بیان;
+	    وإلا /* code == POSTDECREMENT_EXPR  */
+	      کوډ = POSTINCREMENT_بیان;
 
-	    inc = integer_minus_one_node;
+	    inc = integer_minus_one_غوټه;
 	    inc = convert (argtype, inc);
 	  }
-	else
+	وإلا
 	  {
-	    inc = VECTOR_TYPE_P (argtype)
+	    inc = ویکټور_TYPE_P (argtype)
 	      ? build_one_cst (argtype)
-	      : integer_one_node;
+	      : integer_one_غوټه;
 	    inc = convert (argtype, inc);
 	  }
 
 	/* If 'arg' is an Objective-C PROPERTY_REF expression, then we
 	   need to ask Objective-C to build the increment or decrement
 	   expression for it.  */
-	if (objc_is_property_ref (arg))
-	  return objc_build_incr_expr_for_property_ref (location, code,
+	إذا (objc_is_property_ref (arg))
+	  أرجع objc_build_incr_بیان_for_property_ref (location, کوډ,
 							arg, inc);
 
 	/* Report a read-only lvalue.  */
-	if (TYPE_READONLY (argtype))
+	إذا (TYPE_READONLY (argtype))
 	  {
 	    readonly_error (location, arg,
-			    ((code == PREINCREMENT_EXPR
-			      || code == POSTINCREMENT_EXPR)
+			    ((کوډ == PREINCREMENT_بیان
+			      || کوډ == POSTINCREMENT_بیان)
 			     ? lv_increment : lv_decrement));
-	    return error_mark_node;
+	    أرجع error_mark_غوټه;
 	  }
-	else if (TREE_READONLY (arg))
+	وإلا إذا (ونه_READONLY (arg))
 	  readonly_warning (arg,
-			    ((code == PREINCREMENT_EXPR
-			      || code == POSTINCREMENT_EXPR)
+			    ((کوډ == PREINCREMENT_بیان
+			      || کوډ == POSTINCREMENT_بیان)
 			     ? lv_increment : lv_decrement));
 
 	/* If the argument is atomic, use the special code sequences for
 	   atomic compound assignment.  */
-	if (atomic_op)
+	إذا (atomic_op)
 	  {
 	    arg = stabilize_reference (arg);
-	    ret = build_atomic_assign (location, arg,
-				       ((code == PREINCREMENT_EXPR
-					 || code == POSTINCREMENT_EXPR)
-					? PLUS_EXPR
-					: MINUS_EXPR),
-				       (FRACT_MODE_P (TYPE_MODE (argtype))
+	    ret = build_atomic_ټاکل (location, arg,
+				       ((کوډ == PREINCREMENT_بیان
+					 || کوډ == POSTINCREMENT_بیان)
+					? PLUS_بیان
+					: MINUS_بیان),
+				       (FRACT_ډېرپېښ_P (TYPE_ډېرپېښ (argtype))
 					? inc
-					: integer_one_node),
-				       (code == POSTINCREMENT_EXPR
-					|| code == POSTDECREMENT_EXPR));
-	    goto return_build_unary_op;
+					: integer_one_غوټه),
+				       (کوډ == POSTINCREMENT_بیان
+					|| کوډ == POSTDECREMENT_بیان));
+	    اذهب return_build_unary_op;
 	  }
 
-	tree true_res;
-	if (c_hardbool_type_attr (TREE_TYPE (arg), NULL, &true_res))
+	ونه true_res;
+	إذا (c_hardbool_type_attr (ونه_TYPE (arg), عدم, &true_res))
 	  {
-	    tree larg = stabilize_reference (arg);
-	    tree sarg = save_expr (larg);
-	    switch (code)
+	    ونه larg = stabilize_reference (arg);
+	    ونه sarg = save_بیان (larg);
+	    بدل (کوډ)
 	      {
-	      case PREINCREMENT_EXPR:
-		val = build2 (MODIFY_EXPR, TREE_TYPE (larg), larg, true_res);
-		val = build2 (COMPOUND_EXPR, TREE_TYPE (larg), sarg, val);
-		break;
-	      case POSTINCREMENT_EXPR:
-		val = build2 (MODIFY_EXPR, TREE_TYPE (larg), larg, true_res);
-		val = build2 (COMPOUND_EXPR, TREE_TYPE (larg), val, sarg);
-		val = build2 (COMPOUND_EXPR, TREE_TYPE (larg), sarg, val);
-		break;
-	      case PREDECREMENT_EXPR:
+	      حالة PREINCREMENT_بیان:
+		val = build2 (MODIFY_بیان, ونه_TYPE (larg), larg, true_res);
+		val = build2 (COMPOUND_بیان, ونه_TYPE (larg), sarg, val);
+		اكسر;
+	      حالة POSTINCREMENT_بیان:
+		val = build2 (MODIFY_بیان, ونه_TYPE (larg), larg, true_res);
+		val = build2 (COMPOUND_بیان, ونه_TYPE (larg), val, sarg);
+		val = build2 (COMPOUND_بیان, ونه_TYPE (larg), sarg, val);
+		اكسر;
+	      حالة PREDECREMENT_بیان:
 		{
-		  tree rarg = convert_lvalue_to_rvalue (location, sarg,
-							true, true);
+		  ونه rarg = convert_lvalue_منزل_rvalue (location, sarg,
+							ریښتیا, ریښتیا);
 		  rarg = invert_truthvalue_loc (location, rarg);
-		  rarg = convert (TREE_TYPE (sarg), rarg);
-		  val = build2 (MODIFY_EXPR, TREE_TYPE (larg), larg, rarg);
+		  rarg = convert (ونه_TYPE (sarg), rarg);
+		  val = build2 (MODIFY_بیان, ونه_TYPE (larg), larg, rarg);
 		}
-		break;
-	      case POSTDECREMENT_EXPR:
+		اكسر;
+	      حالة POSTDECREMENT_بیان:
 		{
-		  tree rarg = convert_lvalue_to_rvalue (location, sarg,
-							true, true);
+		  ونه rarg = convert_lvalue_منزل_rvalue (location, sarg,
+							ریښتیا, ریښتیا);
 		  rarg = invert_truthvalue_loc (location, rarg);
-		  tree iarg = convert (TREE_TYPE (larg), rarg);
-		  val = build2 (MODIFY_EXPR, TREE_TYPE (larg), larg, iarg);
-		  val = build2 (COMPOUND_EXPR, TREE_TYPE (larg), val, sarg);
-		  val = build2 (COMPOUND_EXPR, TREE_TYPE (larg), sarg, val);
+		  ونه iarg = convert (ونه_TYPE (larg), rarg);
+		  val = build2 (MODIFY_بیان, ونه_TYPE (larg), larg, iarg);
+		  val = build2 (COMPOUND_بیان, ونه_TYPE (larg), val, sarg);
+		  val = build2 (COMPOUND_بیان, ونه_TYPE (larg), sarg, val);
 		}
-		break;
-	      default:
+		اكسر;
+	      افتراضي:
 		gcc_unreachable ();
 	      }
-	    TREE_SIDE_EFFECTS (val) = 1;
+	    ونه_SIDE_EFFECTS (val) = 1;
 	  }
-	else if (C_BOOLEAN_TYPE_P (TREE_TYPE (arg)))
-	  val = boolean_increment (code, arg);
-	else
-	  val = build2 (code, TREE_TYPE (arg), arg, inc);
-	TREE_SIDE_EFFECTS (val) = 1;
-	if (TYPE_QUALS (TREE_TYPE (val)) != TYPE_UNQUALIFIED)
-	  TREE_TYPE (val) = c_build_qualified_type (TREE_TYPE (val),
+	وإلا إذا (C_BOOLEAN_TYPE_P (ونه_TYPE (arg)))
+	  val = boolean_increment (کوډ, arg);
+	وإلا
+	  val = build2 (کوډ, ونه_TYPE (arg), arg, inc);
+	ونه_SIDE_EFFECTS (val) = 1;
+	إذا (TYPE_QUALS (ونه_TYPE (val)) != TYPE_UNQUALIFIED)
+	  ونه_TYPE (val) = c_build_qualified_type (ونه_TYPE (val),
 						    TYPE_UNQUALIFIED);
 	ret = val;
-	goto return_build_unary_op;
+	اذهب return_build_unary_op;
       }
 
-    case ADDR_EXPR:
+    حالة ADDR_بیان:
       /* Note that this operation never does default_conversion.  */
 
       /* The operand of unary '&' must be an lvalue (which excludes
 	 expressions of type void), or, in C99, the result of a [] or
 	 unary '*' operator.  */
-      if (VOID_TYPE_P (TREE_TYPE (arg))
-	  && TYPE_QUALS (TREE_TYPE (arg)) == TYPE_UNQUALIFIED
-	  && (!INDIRECT_REF_P (arg) || !flag_isoc99))
+      إذا (VOID_TYPE_P (ونه_TYPE (arg))
+	  && TYPE_QUALS (ونه_TYPE (arg)) == TYPE_UNQUALIFIED
+	  && (!غیرمستقیم_REF_P (arg) || !flag_isoc99))
 	pedwarn (location, 0, "taking address of expression of type %<void%>");
 
       /* Let &* cancel out to simplify resulting code.  */
-      if (INDIRECT_REF_P (arg))
+      إذا (غیرمستقیم_REF_P (arg))
 	{
 	  /* Don't let this be an lvalue.  */
-	  if (lvalue_p (TREE_OPERAND (arg, 0)))
-	    return non_lvalue_loc (location, TREE_OPERAND (arg, 0));
-	  ret = TREE_OPERAND (arg, 0);
-	  goto return_build_unary_op;
+	  إذا (lvalue_p (ونه_عملوند (arg, 0)))
+	    أرجع non_lvalue_loc (location, ونه_عملوند (arg, 0));
+	  ret = ونه_عملوند (arg, 0);
+	  اذهب return_build_unary_op;
 	}
 
       /* Anything not already handled and not a true memory reference
 	 or a non-lvalue array is an error.  */
-      if (typecode != FUNCTION_TYPE && !noconvert
+      إذا (typecode != FUNCTION_TYPE && !noconvert
 	  && !lvalue_or_else (location, arg, lv_addressof))
-	return error_mark_node;
+	أرجع error_mark_غوټه;
 
       /* Move address operations inside C_MAYBE_CONST_EXPR to simplify
 	 folding later.  */
-      if (TREE_CODE (arg) == C_MAYBE_CONST_EXPR)
+      إذا (ونه_کوډ (arg) == C_MAYBE_CONST_بیان)
 	{
-	  tree inner = build_unary_op (location, code,
-				       C_MAYBE_CONST_EXPR_EXPR (arg),
+	  ونه inner = build_unary_op (location, کوډ,
+				       C_MAYBE_CONST_بیان_بیان (arg),
 				       noconvert);
-	  ret = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (inner),
-			C_MAYBE_CONST_EXPR_PRE (arg), inner);
-	  gcc_assert (!C_MAYBE_CONST_EXPR_INT_OPERANDS (arg));
-	  C_MAYBE_CONST_EXPR_NON_CONST (ret)
-	    = C_MAYBE_CONST_EXPR_NON_CONST (arg);
-	  goto return_build_unary_op;
+	  ret = build2 (C_MAYBE_CONST_بیان, ونه_TYPE (inner),
+			C_MAYBE_CONST_بیان_PRE (arg), inner);
+	  gcc_assert (!C_MAYBE_CONST_بیان_INT_OPERANDS (arg));
+	  C_MAYBE_CONST_بیان_NON_CONST (ret)
+	    = C_MAYBE_CONST_بیان_NON_CONST (arg);
+	  اذهب return_build_unary_op;
 	}
 
       /* Ordinary case; arg is a COMPONENT_REF or a decl.  */
 
-      argtype = TREE_TYPE (arg);
+      argtype = ونه_TYPE (arg);
 
       /* If the lvalue is const or volatile, merge that into the type
 	 to which the address will point.  This is only needed
 	 for function types.  */
-      if ((DECL_P (arg) || REFERENCE_CLASS_P (arg))
-	  && (TREE_READONLY (arg) || TREE_THIS_VOLATILE (arg))
-	  && TREE_CODE (argtype) == FUNCTION_TYPE)
+      إذا ((DECL_P (arg) || REFERENCE_CLASS_P (arg))
+	  && (ونه_READONLY (arg) || ونه_THIS_VOLATILE (arg))
+	  && ونه_کوډ (argtype) == FUNCTION_TYPE)
 	{
-	  int orig_quals = TYPE_QUALS (strip_array_types (argtype));
-	  int quals = orig_quals;
+	  صحيح orig_quals = TYPE_QUALS (strip_array_types (argtype));
+	  صحيح quals = orig_quals;
 
-	  if (TREE_READONLY (arg))
+	  إذا (ونه_READONLY (arg))
 	    quals |= TYPE_QUAL_CONST;
-	  if (TREE_THIS_VOLATILE (arg))
+	  إذا (ونه_THIS_VOLATILE (arg))
 	    quals |= TYPE_QUAL_VOLATILE;
 
 	  argtype = c_build_qualified_type (argtype, quals);
 	}
 
-      switch (TREE_CODE (arg))
+      بدل (ونه_کوډ (arg))
 	{
-	case COMPONENT_REF:
-	  if (DECL_C_BIT_FIELD (TREE_OPERAND (arg, 1)))
+	حالة COMPONENT_REF:
+	  إذا (DECL_C_بټ_ډګر (ونه_عملوند (arg, 1)))
 	    {
 	      error_at (location, "cannot take address of bit-field %qD",
-			TREE_OPERAND (arg, 1));
-	      return error_mark_node;
+			ونه_عملوند (arg, 1));
+	      أرجع error_mark_غوټه;
 	    }
 
 	  /* fall through */
 
-	case ARRAY_REF:
-	  if (TYPE_REVERSE_STORAGE_ORDER (TREE_TYPE (TREE_OPERAND (arg, 0))))
+	حالة ARRAY_REF:
+	  إذا (TYPE_سرچپه_STORAGE_ترتیب (ونه_TYPE (ونه_عملوند (arg, 0))))
 	    {
-	      if (!AGGREGATE_TYPE_P (TREE_TYPE (arg))
-		  && !POINTER_TYPE_P (TREE_TYPE (arg))
-		  && !VECTOR_TYPE_P (TREE_TYPE (arg)))
+	      إذا (!AGGREGATE_TYPE_P (ونه_TYPE (arg))
+		  && !اشاره_ګر_TYPE_P (ونه_TYPE (arg))
+		  && !ویکټور_TYPE_P (ونه_TYPE (arg)))
 		{
 		  error_at (location, "cannot take address of scalar with "
 			    "reverse storage order");
-		  return error_mark_node;
+		  أرجع error_mark_غوټه;
 		}
 
-	      if (TREE_CODE (TREE_TYPE (arg)) == ARRAY_TYPE
-		  && TYPE_REVERSE_STORAGE_ORDER (TREE_TYPE (arg)))
-		warning_at (location, OPT_Wscalar_storage_order,
+	      إذا (ونه_کوډ (ونه_TYPE (arg)) == ARRAY_TYPE
+		  && TYPE_سرچپه_STORAGE_ترتیب (ونه_TYPE (arg)))
+		warning_at (location, OPT_Wscalar_storage_ترتیب,
 			    "address of array with reverse scalar storage "
 			    "order requested");
 	    }
 
-	default:
-	  break;
+	افتراضي:
+	  اكسر;
 	}
 
-      if (!c_mark_addressable (arg))
-	return error_mark_node;
+      إذا (!c_mark_addressable (arg))
+	أرجع error_mark_غوټه;
 
-      gcc_assert (TREE_CODE (arg) != COMPONENT_REF
-		  || !DECL_C_BIT_FIELD (TREE_OPERAND (arg, 1)));
+      gcc_assert (ونه_کوډ (arg) != COMPONENT_REF
+		  || !DECL_C_بټ_ډګر (ونه_عملوند (arg, 1)));
 
-      argtype = c_build_pointer_type (argtype);
+      argtype = c_build_اشاره_ګر_type (argtype);
 
       /* ??? Cope with user tricks that amount to offsetof.  Delete this
 	 when we have proper support for integer constant expressions.  */
-      val = get_base_address (arg);
-      if (val && INDIRECT_REF_P (val)
-          && TREE_CONSTANT (TREE_OPERAND (val, 0)))
+      val = get_بنسټ_پته (arg);
+      إذا (val && غیرمستقیم_REF_P (val)
+          && ونه_CONSTANT (ونه_عملوند (val, 0)))
 	{
 	  ret = fold_offsetof (arg, argtype);
-	  goto return_build_unary_op;
+	  اذهب return_build_unary_op;
 	}
 
-      val = build1 (ADDR_EXPR, argtype, arg);
+      val = build1 (ADDR_بیان, argtype, arg);
 
       ret = val;
-      goto return_build_unary_op;
+      اذهب return_build_unary_op;
 
-    case PAREN_EXPR:
-      ret = build1 (code, TREE_TYPE (arg), arg);
-      goto return_build_unary_op;
+    حالة PAREN_بیان:
+      ret = build1 (کوډ, ونه_TYPE (arg), arg);
+      اذهب return_build_unary_op;
 
-    default:
+    افتراضي:
       gcc_unreachable ();
     }
 
-  if (argtype == NULL_TREE)
-    argtype = TREE_TYPE (arg);
-  if (TREE_CODE (arg) == INTEGER_CST)
-    ret = (require_constant_value
-	   ? fold_build1_initializer_loc (location, code, argtype, arg)
-	   : fold_build1_loc (location, code, argtype, arg));
-  else
-    ret = build1 (code, argtype, arg);
+  إذا (argtype == NULL_ونه)
+    argtype = ونه_TYPE (arg);
+  إذا (ونه_کوډ (arg) == INTEGER_CST)
+    ret = (require_constant_ارزښت
+	   ? fold_build1_initializer_loc (location, کوډ, argtype, arg)
+	   : fold_build1_loc (location, کوډ, argtype, arg));
+  وإلا
+    ret = build1 (کوډ, argtype, arg);
  return_build_unary_op:
-  gcc_assert (ret != error_mark_node);
-  if (TREE_CODE (ret) == INTEGER_CST && !TREE_OVERFLOW (ret)
-      && !(TREE_CODE (xarg) == INTEGER_CST && !TREE_OVERFLOW (xarg)))
-    ret = build1 (NOP_EXPR, TREE_TYPE (ret), ret);
-  else if (TREE_CODE (ret) != INTEGER_CST && int_operands)
+  gcc_assert (ret != error_mark_غوټه);
+  إذا (ونه_کوډ (ret) == INTEGER_CST && !ونه_ډکېدنه (ret)
+      && !(ونه_کوډ (xarg) == INTEGER_CST && !ونه_ډکېدنه (xarg)))
+    ret = build1 (NOP_بیان, ونه_TYPE (ret), ret);
+  وإلا إذا (ونه_کوډ (ret) != INTEGER_CST && int_operands)
     ret = note_integer_operands (ret);
-  if (eptype)
-    ret = build1 (EXCESS_PRECISION_EXPR, eptype, ret);
-  protected_set_expr_location (ret, location);
-  return ret;
+  إذا (eptype)
+    ret = build1 (EXCESS_PRECISION_بیان, eptype, ret);
+  protected_سېټ_بیان_location (ret, location);
+  أرجع ret;
 }
 
 /* Return nonzero if REF is an lvalue valid for this language.
    Lvalues can be assigned, unless their type has TYPE_READONLY.
    Lvalues can have their address taken, unless they have C_DECL_REGISTER.  */
 
-bool
-lvalue_p (const_tree ref)
+منطقي
+lvalue_p (const_ونه ref)
 {
-  const enum tree_code code = TREE_CODE (ref);
+  ثابت تعداد ونه_کوډ_2 کوډ = ونه_کوډ (ref);
 
-  switch (code)
+  بدل (کوډ)
     {
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-    case COMPONENT_REF:
-      return lvalue_p (TREE_OPERAND (ref, 0));
+    حالة REALPART_بیان:
+    حالة IMAGPART_بیان:
+    حالة COMPONENT_REF:
+      أرجع lvalue_p (ونه_عملوند (ref, 0));
 
-    case C_MAYBE_CONST_EXPR:
-      return lvalue_p (TREE_OPERAND (ref, 1));
+    حالة C_MAYBE_CONST_بیان:
+      أرجع lvalue_p (ونه_عملوند (ref, 1));
 
-    case COMPOUND_LITERAL_EXPR:
-    case STRING_CST:
-      return true;
+    حالة COMPOUND_LITERAL_بیان:
+    حالة STRING_CST:
+      أرجع ریښتیا;
 
-    case MEM_REF:
-    case TARGET_MEM_REF:
+    حالة MEM_REF:
+    حالة موخه_MEM_REF:
       /* MEM_REFs can appear from -fgimple parsing or folding, so allow them
 	 here as well.  */
-    case INDIRECT_REF:
-    case ARRAY_REF:
-    case VAR_DECL:
-    case PARM_DECL:
-    case RESULT_DECL:
-    case ERROR_MARK:
-      return (TREE_CODE (TREE_TYPE (ref)) != FUNCTION_TYPE
-	      && TREE_CODE (TREE_TYPE (ref)) != METHOD_TYPE);
+    حالة غیرمستقیم_REF:
+    حالة ARRAY_REF:
+    حالة VAR_DECL:
+    حالة PARM_DECL:
+    حالة پایله_DECL:
+    حالة ERROR_MARK:
+      أرجع (ونه_کوډ (ونه_TYPE (ref)) != FUNCTION_TYPE
+	      && ونه_کوډ (ونه_TYPE (ref)) != لاره_TYPE);
 
-    case BIND_EXPR:
-      return TREE_CODE (TREE_TYPE (ref)) == ARRAY_TYPE;
+    حالة BIND_بیان:
+      أرجع ونه_کوډ (ونه_TYPE (ref)) == ARRAY_TYPE;
 
-    case CALL_EXPR:
-      return is_access_with_size_p (ref);
+    حالة CALL_بیان:
+      أرجع is_access_with_اندازه_p (ref);
 
-    default:
-      return false;
+    افتراضي:
+      أرجع خطأ;
     }
 }
 
 /* Give a warning for storing in something that is read-only in GCC
    terms but not const in ISO C terms.  */
 
-static void
-readonly_warning (tree arg, enum lvalue_use use)
+ساكن فراغ
+readonly_warning (ونه arg, تعداد lvalue_use use)
 {
-  switch (use)
+  بدل (use)
     {
-    case lv_assign:
+    حالة lv_ټاکل:
       warning (0, "assignment of read-only location %qE", arg);
-      break;
-    case lv_increment:
+      اكسر;
+    حالة lv_increment:
       warning (0, "increment of read-only location %qE", arg);
-      break;
-    case lv_decrement:
+      اكسر;
+    حالة lv_decrement:
       warning (0, "decrement of read-only location %qE", arg);
-      break;
-    default:
+      اكسر;
+    افتراضي:
       gcc_unreachable ();
     }
-  return;
+  أرجع;
 }
 
 
@@ -6483,15 +6483,15 @@ readonly_warning (tree arg, enum lvalue_use use)
    how the lvalue is being used and so selects the error message.
    LOCATION is the location at which any error should be reported.  */
 
-static int
-lvalue_or_else (location_t loc, const_tree ref, enum lvalue_use use)
+ساكن صحيح
+lvalue_or_else (location_t loc, const_ونه ref, تعداد lvalue_use use)
 {
-  int win = lvalue_p (ref);
+  صحيح win = lvalue_p (ref);
 
-  if (!win)
+  إذا (!win)
     lvalue_error (loc, use);
 
-  return win;
+  أرجع win;
 }
 
 /* Mark EXP saying that we need to be able to take the
@@ -6503,94 +6503,94 @@ lvalue_or_else (location_t loc, const_tree ref, enum lvalue_use use)
    register variables.  If OVERRIDE_REGISTER, clear DECL_REGISTER rather
    than producing an error for taking the address of a register.  */
 
-bool
-c_mark_addressable (tree exp, bool array_ref_p, bool override_register)
+منطقي
+c_mark_addressable (ونه توانیز_تابع, منطقي array_ref_p, منطقي override_ثبتوونکی)
 {
-  tree x = exp;
+  ونه x = توانیز_تابع;
 
-  while (1)
-    switch (TREE_CODE (x))
+  طالما (1)
+    بدل (ونه_کوډ (x))
       {
-      case VIEW_CONVERT_EXPR:
-	if (array_ref_p
-	    && TREE_CODE (TREE_TYPE (x)) == ARRAY_TYPE
-	    && VECTOR_TYPE_P (TREE_TYPE (TREE_OPERAND (x, 0))))
-	  return true;
-	x = TREE_OPERAND (x, 0);
-	break;
+      حالة VIEW_CONVERT_بیان:
+	إذا (array_ref_p
+	    && ونه_کوډ (ونه_TYPE (x)) == ARRAY_TYPE
+	    && ویکټور_TYPE_P (ونه_TYPE (ونه_عملوند (x, 0))))
+	  أرجع ریښتیا;
+	x = ونه_عملوند (x, 0);
+	اكسر;
 
-      case COMPONENT_REF:
-	if (DECL_C_BIT_FIELD (TREE_OPERAND (x, 1)))
+      حالة COMPONENT_REF:
+	إذا (DECL_C_بټ_ډګر (ونه_عملوند (x, 1)))
 	  {
 	    error ("cannot take address of bit-field %qD",
-		   TREE_OPERAND (x, 1));
-	    return false;
+		   ونه_عملوند (x, 1));
+	    أرجع خطأ;
 	  }
 	/* FALLTHRU */
-      case ADDR_EXPR:
-      case ARRAY_REF:
-      case REALPART_EXPR:
-      case IMAGPART_EXPR:
-	x = TREE_OPERAND (x, 0);
-	break;
+      حالة ADDR_بیان:
+      حالة ARRAY_REF:
+      حالة REALPART_بیان:
+      حالة IMAGPART_بیان:
+	x = ونه_عملوند (x, 0);
+	اكسر;
 
-      case COMPOUND_LITERAL_EXPR:
-	if (C_DECL_REGISTER (COMPOUND_LITERAL_EXPR_DECL (x)))
+      حالة COMPOUND_LITERAL_بیان:
+	إذا (C_DECL_ثبتوونکی (COMPOUND_LITERAL_بیان_DECL (x)))
 	  {
-	    if (override_register)
-	      DECL_REGISTER (COMPOUND_LITERAL_EXPR_DECL (x)) = 0;
-	    else
+	    إذا (override_ثبتوونکی)
+	      DECL_ثبتوونکی (COMPOUND_LITERAL_بیان_DECL (x)) = 0;
+	    وإلا
 	      {
 		error ("address of register compound literal requested");
-		return false;
+		أرجع خطأ;
 	      }
 	  }
-	TREE_ADDRESSABLE (x) = 1;
-	TREE_ADDRESSABLE (COMPOUND_LITERAL_EXPR_DECL (x)) = 1;
-	return true;
+	ونه_ADDRESSABLE (x) = 1;
+	ونه_ADDRESSABLE (COMPOUND_LITERAL_بیان_DECL (x)) = 1;
+	أرجع ریښتیا;
 
-      case CONSTRUCTOR:
-	TREE_ADDRESSABLE (x) = 1;
-	return true;
+      حالة CONSTRUCTOR:
+	ونه_ADDRESSABLE (x) = 1;
+	أرجع ریښتیا;
 
-      case VAR_DECL:
-      case CONST_DECL:
-      case PARM_DECL:
-      case RESULT_DECL:
-	if (C_DECL_REGISTER (x)
+      حالة VAR_DECL:
+      حالة CONST_DECL:
+      حالة PARM_DECL:
+      حالة پایله_DECL:
+	إذا (C_DECL_ثبتوونکی (x)
 	    && DECL_NONLOCAL (x))
 	  {
-	    if (TREE_PUBLIC (x) || is_global_var (x))
+	    إذا (ونه_عامه (x) || is_global_var (x))
 	      {
 		error
 		  ("global register variable %qD used in nested function", x);
-		return false;
+		أرجع خطأ;
 	      }
-	    pedwarn (input_location, 0, "register variable %qD used in nested function", x);
+	    pedwarn (ننوت_location, 0, "register variable %qD used in nested function", x);
 	  }
-	else if (C_DECL_REGISTER (x))
+	وإلا إذا (C_DECL_ثبتوونکی (x))
 	  {
-	    if (TREE_PUBLIC (x) || is_global_var (x))
+	    إذا (ونه_عامه (x) || is_global_var (x))
 	      error ("address of global register variable %qD requested", x);
-	    else if (override_register && !DECL_HARD_REGISTER (x))
+	    وإلا إذا (override_ثبتوونکی && !DECL_HARD_ثبتوونکی (x))
 	      {
-		DECL_REGISTER (x) = 0;
-		TREE_ADDRESSABLE (x) = 1;
-		mark_decl_used (x, true);
-		return true;
+		DECL_ثبتوونکی (x) = 0;
+		ونه_ADDRESSABLE (x) = 1;
+		mark_decl_کارول_شوی (x, ریښتیا);
+		أرجع ریښتیا;
 	      }
-	    else
+	    وإلا
 	      error ("address of register variable %qD requested", x);
-	    return false;
+	    أرجع خطأ;
 	  }
 
 	/* FALLTHRU */
-      case FUNCTION_DECL:
-	TREE_ADDRESSABLE (x) = 1;
-	mark_decl_used (x, true);
+      حالة FUNCTION_DECL:
+	ونه_ADDRESSABLE (x) = 1;
+	mark_decl_کارول_شوی (x, ریښتیا);
 	/* FALLTHRU */
-      default:
-	return true;
+      افتراضي:
+	أرجع ریښتیا;
     }
 }
 
@@ -6601,28 +6601,28 @@ c_mark_addressable (tree exp, bool array_ref_p, bool override_register)
    handles conversions that may be different than
    the usual ones because of excess precision.  */
 
-static tree
-ep_convert_and_check (location_t loc, tree type, tree expr,
-		      tree semantic_type)
+ساكن ونه
+ep_convert_and_check (location_t loc, ونه type, ونه بیان,
+		      ونه semantic_type)
 {
-  if (TREE_TYPE (expr) == type)
-    return expr;
+  إذا (ونه_TYPE (بیان) == type)
+    أرجع بیان;
 
   /* For C11, integer conversions may have results with excess
      precision.  */
-  if (flag_isoc11 || !semantic_type)
-    return convert_and_check (loc, type, expr);
+  إذا (flag_isoc11 || !semantic_type)
+    أرجع convert_and_check (loc, type, بیان);
 
-  if (TREE_CODE (TREE_TYPE (expr)) == INTEGER_TYPE
-      && TREE_TYPE (expr) != semantic_type)
+  إذا (ونه_کوډ (ونه_TYPE (بیان)) == INTEGER_TYPE
+      && ونه_TYPE (بیان) != semantic_type)
     {
       /* For integers, we need to check the real conversion, not
 	 the conversion to the excess precision type.  */
-      expr = convert_and_check (loc, semantic_type, expr);
+      بیان = convert_and_check (loc, semantic_type, بیان);
     }
   /* Result type is the excess precision type, which should be
      large enough, so do not check.  */
-  return convert (type, expr);
+  أرجع convert (type, بیان);
 }
 
 /* If EXPR refers to a built-in declared without a prototype returns
@@ -6630,33 +6630,33 @@ ep_convert_and_check (location_t loc, tree type, tree expr,
    a pointer to the built-in.  Otherwise return the type of EXPR
    and clear *BLTIN if non-null.  */
 
-static tree
-type_or_builtin_type (tree expr, tree *bltin = NULL)
+ساكن ونه
+type_or_builtin_type (ونه بیان, ونه *bltin = عدم)
 {
-  tree dummy;
-  if (!bltin)
+  ونه dummy;
+  إذا (!bltin)
     bltin = &dummy;
 
-  *bltin = NULL_TREE;
+  *bltin = NULL_ونه;
 
-  tree type = TREE_TYPE (expr);
-  if (TREE_CODE (expr) != ADDR_EXPR)
-    return type;
+  ونه type = ونه_TYPE (بیان);
+  إذا (ونه_کوډ (بیان) != ADDR_بیان)
+    أرجع type;
 
-  tree oper = TREE_OPERAND (expr, 0);
-  if (!DECL_P (oper)
-      || TREE_CODE (oper) != FUNCTION_DECL
-      || !fndecl_built_in_p (oper, BUILT_IN_NORMAL))
-    return type;
+  ونه oper = ونه_عملوند (بیان, 0);
+  إذا (!DECL_P (oper)
+      || ونه_کوډ (oper) != FUNCTION_DECL
+      || !fndecl_built_دننه_p (oper, BUILT_دننه_نورمال))
+    أرجع type;
 
-  built_in_function code = DECL_FUNCTION_CODE (oper);
-  if (!C_DECL_BUILTIN_PROTOTYPE (oper))
-    return type;
+  built_دننه_function کوډ = DECL_FUNCTION_کوډ (oper);
+  إذا (!C_DECL_BUILTIN_PROTOTYPE (oper))
+    أرجع type;
 
-  if ((*bltin = builtin_decl_implicit (code)))
-    type = c_build_pointer_type (TREE_TYPE (*bltin));
+  إذا ((*bltin = builtin_decl_implicit (کوډ)))
+    type = c_build_اشاره_ګر_type (ونه_TYPE (*bltin));
 
-  return type;
+  أرجع type;
 }
 
 /* Build and return a conditional expression IFEXP ? OP1 : OP2.  If
@@ -6665,122 +6665,122 @@ type_or_builtin_type (tree expr, tree *bltin = NULL)
    contain arbitrary operations not normally permitted in constant
    expressions.  Set the location of the expression to LOC.  */
 
-tree
-build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
-			tree op1, tree op1_original_type, location_t op1_loc,
-			tree op2, tree op2_original_type, location_t op2_loc)
+ونه
+build_conditional_بیان (location_t colon_loc, ونه ifexp, منطقي ifexp_bcp,
+			ونه op1, ونه op1_original_type, location_t op1_loc,
+			ونه op2, ونه op2_original_type, location_t op2_loc)
 {
-  tree type1;
-  tree type2;
-  tree result_type = NULL;
-  tree semantic_result_type = NULL;
-  tree orig_op1 = op1, orig_op2 = op2;
-  bool int_const, op1_int_operands, op2_int_operands, int_operands;
-  bool ifexp_int_operands;
-  tree ret;
+  ونه type1;
+  ونه type2;
+  ونه پایله_type = عدم;
+  ونه semantic_پایله_type = عدم;
+  ونه orig_op1 = op1, orig_op2 = op2;
+  منطقي int_const, op1_int_operands, op2_int_operands, int_operands;
+  منطقي ifexp_int_operands;
+  ونه ret;
 
-  op1_int_operands = EXPR_INT_CONST_OPERANDS (orig_op1);
-  if (op1_int_operands)
-    op1 = remove_c_maybe_const_expr (op1);
-  op2_int_operands = EXPR_INT_CONST_OPERANDS (orig_op2);
-  if (op2_int_operands)
-    op2 = remove_c_maybe_const_expr (op2);
-  ifexp_int_operands = EXPR_INT_CONST_OPERANDS (ifexp);
-  if (ifexp_int_operands)
-    ifexp = remove_c_maybe_const_expr (ifexp);
+  op1_int_operands = بیان_INT_CONST_OPERANDS (orig_op1);
+  إذا (op1_int_operands)
+    op1 = remove_c_maybe_const_بیان (op1);
+  op2_int_operands = بیان_INT_CONST_OPERANDS (orig_op2);
+  إذا (op2_int_operands)
+    op2 = remove_c_maybe_const_بیان (op2);
+  ifexp_int_operands = بیان_INT_CONST_OPERANDS (ifexp);
+  إذا (ifexp_int_operands)
+    ifexp = remove_c_maybe_const_بیان (ifexp);
 
   /* Promote both alternatives.  */
 
-  if (TREE_CODE (TREE_TYPE (op1)) != VOID_TYPE)
+  إذا (ونه_کوډ (ونه_TYPE (op1)) != VOID_TYPE)
     op1 = default_conversion (op1);
-  if (TREE_CODE (TREE_TYPE (op2)) != VOID_TYPE)
+  إذا (ونه_کوډ (ونه_TYPE (op2)) != VOID_TYPE)
     op2 = default_conversion (op2);
 
-  if (TREE_CODE (ifexp) == ERROR_MARK
-      || TREE_CODE (TREE_TYPE (op1)) == ERROR_MARK
-      || TREE_CODE (TREE_TYPE (op2)) == ERROR_MARK)
-    return error_mark_node;
+  إذا (ونه_کوډ (ifexp) == ERROR_MARK
+      || ونه_کوډ (ونه_TYPE (op1)) == ERROR_MARK
+      || ونه_کوډ (ونه_TYPE (op2)) == ERROR_MARK)
+    أرجع error_mark_غوټه;
 
-  tree bltin1 = NULL_TREE;
-  tree bltin2 = NULL_TREE;
+  ونه bltin1 = NULL_ونه;
+  ونه bltin2 = NULL_ونه;
   type1 = type_or_builtin_type (op1, &bltin1);
-  const enum tree_code code1 = TREE_CODE (type1);
+  ثابت تعداد ونه_کوډ_2 code1 = ونه_کوډ (type1);
   type2 = type_or_builtin_type (op2, &bltin2);
-  const enum tree_code code2 = TREE_CODE (type2);
+  ثابت تعداد ونه_کوډ_2 code2 = ونه_کوډ (type2);
 
-  if (code1 == POINTER_TYPE && reject_gcc_builtin (op1))
-    return error_mark_node;
+  إذا (code1 == اشاره_ګر_TYPE && reject_gcc_builtin (op1))
+    أرجع error_mark_غوټه;
 
-  if (code2 == POINTER_TYPE && reject_gcc_builtin (op2))
-    return error_mark_node;
+  إذا (code2 == اشاره_ګر_TYPE && reject_gcc_builtin (op2))
+    أرجع error_mark_غوټه;
 
   /* C90 does not permit non-lvalue arrays in conditional expressions.
      In C99 they will be pointers by now.  */
-  if (code1 == ARRAY_TYPE || code2 == ARRAY_TYPE)
+  إذا (code1 == ARRAY_TYPE || code2 == ARRAY_TYPE)
     {
       error_at (colon_loc, "non-lvalue array in conditional expression");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
-  if ((TREE_CODE (op1) == EXCESS_PRECISION_EXPR
-       || TREE_CODE (op2) == EXCESS_PRECISION_EXPR)
+  إذا ((ونه_کوډ (op1) == EXCESS_PRECISION_بیان
+       || ونه_کوډ (op2) == EXCESS_PRECISION_بیان)
       && (code1 == INTEGER_TYPE || code1 == REAL_TYPE
 	  || code1 == COMPLEX_TYPE || code1 == BITINT_TYPE)
       && (code2 == INTEGER_TYPE || code2 == REAL_TYPE
 	  || code2 == COMPLEX_TYPE || code2 == BITINT_TYPE))
     {
-      semantic_result_type = c_common_type (type1, type2);
-      if (TREE_CODE (op1) == EXCESS_PRECISION_EXPR)
+      semantic_پایله_type = c_common_type (type1, type2);
+      إذا (ونه_کوډ (op1) == EXCESS_PRECISION_بیان)
 	{
-	  op1 = TREE_OPERAND (op1, 0);
-	  type1 = TREE_TYPE (op1);
-	  gcc_assert (TREE_CODE (type1) == code1);
+	  op1 = ونه_عملوند (op1, 0);
+	  type1 = ونه_TYPE (op1);
+	  gcc_assert (ونه_کوډ (type1) == code1);
 	}
-      if (TREE_CODE (op2) == EXCESS_PRECISION_EXPR)
+      إذا (ونه_کوډ (op2) == EXCESS_PRECISION_بیان)
 	{
-	  op2 = TREE_OPERAND (op2, 0);
-	  type2 = TREE_TYPE (op2);
-	  gcc_assert (TREE_CODE (type2) == code2);
+	  op2 = ونه_عملوند (op2, 0);
+	  type2 = ونه_TYPE (op2);
+	  gcc_assert (ونه_کوډ (type2) == code2);
 	}
     }
 
-  if (warn_cxx_compat)
+  إذا (warn_cxx_compat)
     {
-      tree t1 = op1_original_type ? op1_original_type : TREE_TYPE (orig_op1);
-      tree t2 = op2_original_type ? op2_original_type : TREE_TYPE (orig_op2);
+      ونه t1 = op1_original_type ? op1_original_type : ونه_TYPE (orig_op1);
+      ونه t2 = op2_original_type ? op2_original_type : ونه_TYPE (orig_op2);
 
-      if (TREE_CODE (t1) == ENUMERAL_TYPE
-	  && TREE_CODE (t2) == ENUMERAL_TYPE
+      إذا (ونه_کوډ (t1) == ENUMERAL_TYPE
+	  && ونه_کوډ (t2) == ENUMERAL_TYPE
 	  && TYPE_MAIN_VARIANT (t1) != TYPE_MAIN_VARIANT (t2))
 	warning_at (colon_loc, OPT_Wc___compat,
 		    "different enum types in conditional is "
 		    "invalid in C++: %qT vs %qT", t1, t2);
     }
 
-  if (warn_zero_as_null_pointer_constant
+  إذا (warn_zero_as_null_اشاره_ګر_constant
       && c_inhibit_evaluation_warnings == 0)
     {
-      if ((code1 == POINTER_TYPE || code1 == NULLPTR_TYPE)
-	  && INTEGRAL_TYPE_P (type2) && null_pointer_constant_p (orig_op2))
-	warning_at (op2_loc, OPT_Wzero_as_null_pointer_constant,
+      إذا ((code1 == اشاره_ګر_TYPE || code1 == NULLPTR_TYPE)
+	  && INTEGRAL_TYPE_P (type2) && null_اشاره_ګر_constant_p (orig_op2))
+	warning_at (op2_loc, OPT_Wzero_as_null_اشاره_ګر_constant,
 		    "zero as null pointer constant");
 
-      if ((code2 == POINTER_TYPE || code2 == NULLPTR_TYPE)
-	  && INTEGRAL_TYPE_P (type1) && null_pointer_constant_p (orig_op1))
-	warning_at (op1_loc, OPT_Wzero_as_null_pointer_constant,
+      إذا ((code2 == اشاره_ګر_TYPE || code2 == NULLPTR_TYPE)
+	  && INTEGRAL_TYPE_P (type1) && null_اشاره_ګر_constant_p (orig_op1))
+	warning_at (op1_loc, OPT_Wzero_as_null_اشاره_ګر_constant,
 		    "zero as null pointer constant");
     }
 
   /* Quickly detect the usual case where op1 and op2 have the same type
      after promotion.  */
-  if (TYPE_MAIN_VARIANT (type1) == TYPE_MAIN_VARIANT (type2))
+  إذا (TYPE_MAIN_VARIANT (type1) == TYPE_MAIN_VARIANT (type2))
     {
-      if (type1 == type2)
-	result_type = type1;
-      else
-	result_type = TYPE_MAIN_VARIANT (type1);
+      إذا (type1 == type2)
+	پایله_type = type1;
+      وإلا
+	پایله_type = TYPE_MAIN_VARIANT (type1);
     }
-  else if ((code1 == INTEGER_TYPE || code1 == REAL_TYPE
+  وإلا إذا ((code1 == INTEGER_TYPE || code1 == REAL_TYPE
 	    || code1 == COMPLEX_TYPE || code1 == BITINT_TYPE)
 	   && (code2 == INTEGER_TYPE || code2 == REAL_TYPE
 	       || code2 == COMPLEX_TYPE || code2 == BITINT_TYPE))
@@ -6789,30 +6789,30 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	 type and an integer type should convert the integer type to
 	 the evaluation format of the floating-point type, with
 	 possible excess precision.  */
-      tree eptype1 = type1;
-      tree eptype2 = type2;
-      if (flag_isoc11)
+      ونه eptype1 = type1;
+      ونه eptype2 = type2;
+      إذا (flag_isoc11)
 	{
-	  tree eptype;
-	  if (ANY_INTEGRAL_TYPE_P (type1)
-	      && (eptype = excess_precision_type (type2)) != NULL_TREE)
+	  ونه eptype;
+	  إذا (ANY_INTEGRAL_TYPE_P (type1)
+	      && (eptype = excess_precision_type (type2)) != NULL_ونه)
 	    {
 	      eptype2 = eptype;
-	      if (!semantic_result_type)
-		semantic_result_type = c_common_type (type1, type2);
+	      إذا (!semantic_پایله_type)
+		semantic_پایله_type = c_common_type (type1, type2);
 	    }
-	  else if (ANY_INTEGRAL_TYPE_P (type2)
-		   && (eptype = excess_precision_type (type1)) != NULL_TREE)
+	  وإلا إذا (ANY_INTEGRAL_TYPE_P (type2)
+		   && (eptype = excess_precision_type (type1)) != NULL_ونه)
 	    {
 	      eptype1 = eptype;
-	      if (!semantic_result_type)
-		semantic_result_type = c_common_type (type1, type2);
+	      إذا (!semantic_پایله_type)
+		semantic_پایله_type = c_common_type (type1, type2);
 	    }
 	}
-      result_type = c_common_type (eptype1, eptype2);
-      if (result_type == error_mark_node)
-	return error_mark_node;
-      do_warn_double_promotion (result_type, type1, type2,
+      پایله_type = c_common_type (eptype1, eptype2);
+      إذا (پایله_type == error_mark_غوټه)
+	أرجع error_mark_غوټه;
+      do_warn_double_promotion (پایله_type, type1, type2,
 				"implicit conversion from %qT to %qT to "
 				"match other result of conditional",
 				colon_loc);
@@ -6822,22 +6822,22 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 	 and later code won't know it used to be different.
 	 Do this check on the original types, so that explicit casts
 	 will be considered, but default promotions won't.  */
-      if (c_inhibit_evaluation_warnings == 0)
+      إذا (c_inhibit_evaluation_warnings == 0)
 	{
-	  int unsigned_op1 = TYPE_UNSIGNED (TREE_TYPE (orig_op1));
-	  int unsigned_op2 = TYPE_UNSIGNED (TREE_TYPE (orig_op2));
+	  صحيح unsigned_op1 = TYPE_UNSIGNED (ونه_TYPE (orig_op1));
+	  صحيح unsigned_op2 = TYPE_UNSIGNED (ونه_TYPE (orig_op2));
 
-	  if (unsigned_op1 ^ unsigned_op2)
+	  إذا (unsigned_op1 ^ unsigned_op2)
 	    {
 	      /* Do not warn if the result type is signed, since the
 		 signed type will only be chosen if it can represent
 		 all the values of the unsigned type.  */
-	      if (!TYPE_UNSIGNED (result_type))
+	      إذا (!TYPE_UNSIGNED (پایله_type))
 		/* OK */;
-	      else
+	      وإلا
 		{
-		  bool op1_maybe_const = true;
-		  bool op2_maybe_const = true;
+		  منطقي op1_maybe_const = ریښتیا;
+		  منطقي op2_maybe_const = ریښتیا;
 
 		  /* Do not warn if the signed quantity is an
 		     unsuffixed integer literal (or some static
@@ -6848,336 +6848,336 @@ build_conditional_expr (location_t colon_loc, tree ifexp, bool ifexp_bcp,
 		     warn_sign_compare to avoid warning options
 		     possibly affecting code generation.  */
 		  c_inhibit_evaluation_warnings
-		    += (ifexp == truthvalue_false_node);
-		  op1 = c_fully_fold (op1, require_constant_value,
+		    += (ifexp == truthvalue_false_غوټه);
+		  op1 = c_fully_fold (op1, require_constant_ارزښت,
 				      &op1_maybe_const);
 		  c_inhibit_evaluation_warnings
-		    -= (ifexp == truthvalue_false_node);
+		    -= (ifexp == truthvalue_false_غوټه);
 
 		  c_inhibit_evaluation_warnings
-		    += (ifexp == truthvalue_true_node);
-		  op2 = c_fully_fold (op2, require_constant_value,
+		    += (ifexp == truthvalue_true_غوټه);
+		  op2 = c_fully_fold (op2, require_constant_ارزښت,
 				      &op2_maybe_const);
 		  c_inhibit_evaluation_warnings
-		    -= (ifexp == truthvalue_true_node);
+		    -= (ifexp == truthvalue_true_غوټه);
 
-		  if (warn_sign_compare)
+		  إذا (warn_sign_compare)
 		    {
-		      if ((unsigned_op2
-			   && tree_expr_nonnegative_p (op1))
+		      إذا ((unsigned_op2
+			   && ونه_بیان_nonnegative_p (op1))
 			  || (unsigned_op1
-			      && tree_expr_nonnegative_p (op2)))
+			      && ونه_بیان_nonnegative_p (op2)))
 			/* OK */;
-		      else if (unsigned_op2)
+		      وإلا إذا (unsigned_op2)
 			warning_at (op1_loc, OPT_Wsign_compare,
 				    "operand of %<?:%> changes signedness from "
 				    "%qT to %qT due to unsignedness of other "
-				    "operand", TREE_TYPE (orig_op1),
-				    TREE_TYPE (orig_op2));
-		      else
+				    "operand", ونه_TYPE (orig_op1),
+				    ونه_TYPE (orig_op2));
+		      وإلا
 			warning_at (op2_loc, OPT_Wsign_compare,
 				    "operand of %<?:%> changes signedness from "
 				    "%qT to %qT due to unsignedness of other "
-				    "operand", TREE_TYPE (orig_op2),
-				    TREE_TYPE (orig_op1));
+				    "operand", ونه_TYPE (orig_op2),
+				    ونه_TYPE (orig_op1));
 		    }
-		  if (!op1_maybe_const || TREE_CODE (op1) != INTEGER_CST)
+		  إذا (!op1_maybe_const || ونه_کوډ (op1) != INTEGER_CST)
 		    op1 = c_wrap_maybe_const (op1, !op1_maybe_const);
-		  if (!op2_maybe_const || TREE_CODE (op2) != INTEGER_CST)
+		  إذا (!op2_maybe_const || ونه_کوډ (op2) != INTEGER_CST)
 		    op2 = c_wrap_maybe_const (op2, !op2_maybe_const);
 		}
 	    }
 	}
     }
-  else if (code1 == VOID_TYPE || code2 == VOID_TYPE)
+  وإلا إذا (code1 == VOID_TYPE || code2 == VOID_TYPE)
     {
-      if (code1 != VOID_TYPE || code2 != VOID_TYPE)
+      إذا (code1 != VOID_TYPE || code2 != VOID_TYPE)
 	pedwarn (colon_loc, OPT_Wpedantic,
 		 "ISO C forbids conditional expr with only one void side");
-      result_type = void_type_node;
+      پایله_type = void_type_غوټه;
     }
-  else if (code1 == POINTER_TYPE && code2 == POINTER_TYPE)
+  وإلا إذا (code1 == اشاره_ګر_TYPE && code2 == اشاره_ګر_TYPE)
     {
-      addr_space_t as1 = TYPE_ADDR_SPACE (TREE_TYPE (type1));
-      addr_space_t as2 = TYPE_ADDR_SPACE (TREE_TYPE (type2));
+      addr_space_t as1 = TYPE_ADDR_SPACE (ونه_TYPE (type1));
+      addr_space_t as2 = TYPE_ADDR_SPACE (ونه_TYPE (type2));
       addr_space_t as_common;
 
-      if (comp_target_types (colon_loc, type1, type2))
+      إذا (comp_موخه_types (colon_loc, type1, type2))
 	{
-	  ifexp = save_expr (ifexp);
-	  result_type = common_pointer_type (type1, type2, ifexp);
+	  ifexp = save_بیان (ifexp);
+	  پایله_type = common_اشاره_ګر_type (type1, type2, ifexp);
 	}
-      else if (null_pointer_constant_p (orig_op1))
-	result_type = type2;
-      else if (null_pointer_constant_p (orig_op2))
-	result_type = type1;
-      else if (!addr_space_superset (as1, as2, &as_common))
+      وإلا إذا (null_اشاره_ګر_constant_p (orig_op1))
+	پایله_type = type2;
+      وإلا إذا (null_اشاره_ګر_constant_p (orig_op2))
+	پایله_type = type1;
+      وإلا إذا (!addr_space_superset (as1, as2, &as_common))
 	{
 	  error_at (colon_loc, "pointers to disjoint address spaces "
 		    "used in conditional expression");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      else if ((VOID_TYPE_P (TREE_TYPE (type1))
-		&& !TYPE_ATOMIC (TREE_TYPE (type1)))
-	       || (VOID_TYPE_P (TREE_TYPE (type2))
-		   && !TYPE_ATOMIC (TREE_TYPE (type2))))
+      وإلا إذا ((VOID_TYPE_P (ونه_TYPE (type1))
+		&& !TYPE_ATOMIC (ونه_TYPE (type1)))
+	       || (VOID_TYPE_P (ونه_TYPE (type2))
+		   && !TYPE_ATOMIC (ونه_TYPE (type2))))
 	{
-	  tree t1 = TREE_TYPE (type1);
-	  tree t2 = TREE_TYPE (type2);
-	  if (!(VOID_TYPE_P (t1)
+	  ونه t1 = ونه_TYPE (type1);
+	  ونه t2 = ونه_TYPE (type2);
+	  إذا (!(VOID_TYPE_P (t1)
 		&& !TYPE_ATOMIC (t1)))
 	   {
 	     /* roles are swapped */
 	     t1 = t2;
-	     t2 = TREE_TYPE (type1);
+	     t2 = ونه_TYPE (type1);
 	   }
-	  tree t2_stripped = strip_array_types (t2);
-	  if ((TREE_CODE (t2) == ARRAY_TYPE)
+	  ونه t2_stripped = strip_array_types (t2);
+	  إذا ((ونه_کوډ (t2) == ARRAY_TYPE)
 	      && (TYPE_QUALS (t2_stripped) & ~TYPE_QUALS (t1)))
 	    {
-	      if (!flag_isoc23)
+	      إذا (!flag_isoc23)
 		warning_at (colon_loc, OPT_Wdiscarded_array_qualifiers,
 			    "pointer to array loses qualifier "
 			    "in conditional expression");
-	      else if (warn_c11_c23_compat > 0)
+	      وإلا إذا (warn_c11_c23_compat > 0)
 		warning_at (colon_loc, OPT_Wc11_c23_compat,
 			    "pointer to array loses qualifier "
 			    "in conditional expression in ISO C before C23");
 	    }
-	  if (TREE_CODE (t2) == FUNCTION_TYPE)
+	  إذا (ونه_کوډ (t2) == FUNCTION_TYPE)
 	    pedwarn (colon_loc, OPT_Wpedantic,
 		     "ISO C forbids conditional expr between "
 		     "%<void *%> and function pointer");
 	  /* for array, use qualifiers of element type */
-	  if (flag_isoc23)
+	  إذا (flag_isoc23)
 	    t2 = t2_stripped;
-	  result_type = c_build_pointer_type (qualify_type (t1, t2));
+	  پایله_type = c_build_اشاره_ګر_type (qualify_type (t1, t2));
 	}
       /* Objective-C pointer comparisons are a bit more lenient.  */
-      else if (objc_have_common_type (type1, type2, -3, NULL_TREE))
-	result_type = objc_common_type (type1, type2);
-      else
+      وإلا إذا (objc_have_common_type (type1, type2, -3, NULL_ونه))
+	پایله_type = objc_common_type (type1, type2);
+      وإلا
 	{
-	  int qual = ENCODE_QUAL_ADDR_SPACE (as_common);
-	  enum diagnostics::kind kind = diagnostics::kind::permerror;
-	  if (!flag_isoc99)
+	  صحيح qual = ENCODE_QUAL_ADDR_SPACE (as_common);
+	  تعداد diagnostics::ډول ډول = diagnostics::ډول::permerror;
+	  إذا (!flag_isoc99)
 	    /* This downgrade to a warning ensures that -std=gnu89
 	       -pedantic-errors does not flag these mismatches between
 	       builtins as errors (as diagnostics::kind::permerror would)
 	       ISO C99 and later do not have implicit function declarations,
 	       so the mismatch cannot occur naturally there.  */
-	    kind = (bltin1 && bltin2
-		    ? diagnostics::kind::warning
-		    : diagnostics::kind::pedwarn);
-	  if (emit_diagnostic (kind, colon_loc, OPT_Wincompatible_pointer_types,
+	    ډول = (bltin1 && bltin2
+		    ? diagnostics::ډول::warning
+		    : diagnostics::ډول::pedwarn);
+	  إذا (emit_diagnostic (ډول, colon_loc, OPT_Wincompatible_اشاره_ګر_types,
 			       "pointer type mismatch "
 			       "in conditional expression"))
 	    {
 	      inform (op1_loc, "first expression has type %qT", type1);
 	      inform (op2_loc, "second expression has type %qT", type2);
 	    }
-	  result_type = c_build_pointer_type
-			  (c_build_qualified_type (void_type_node, qual));
+	  پایله_type = c_build_اشاره_ګر_type
+			  (c_build_qualified_type (void_type_غوټه, qual));
 	}
     }
-  else if (code1 == POINTER_TYPE
+  وإلا إذا (code1 == اشاره_ګر_TYPE
 	   && (code2 == INTEGER_TYPE || code2 == BITINT_TYPE))
     {
-      if (!null_pointer_constant_p (orig_op2))
+      إذا (!null_اشاره_ګر_constant_p (orig_op2))
 	permerror_opt (colon_loc, OPT_Wint_conversion,
 		       "pointer/integer type mismatch "
 		       "in conditional expression");
-      else
+      وإلا
 	{
-	  op2 = null_pointer_node;
+	  op2 = null_اشاره_ګر_غوټه;
 	}
-      result_type = type1;
+      پایله_type = type1;
     }
-  else if (code2 == POINTER_TYPE
+  وإلا إذا (code2 == اشاره_ګر_TYPE
 	   && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
     {
-      if (!null_pointer_constant_p (orig_op1))
+      إذا (!null_اشاره_ګر_constant_p (orig_op1))
 	permerror_opt (colon_loc, OPT_Wint_conversion,
 		       "pointer/integer type mismatch "
 		       "in conditional expression");
-      else
+      وإلا
 	{
-	  op1 = null_pointer_node;
+	  op1 = null_اشاره_ګر_غوټه;
 	}
-      result_type = type2;
+      پایله_type = type2;
     }
   /* 6.5.15: "if one is a null pointer constant (other than a pointer) or has
      type nullptr_t and the other is a pointer, the result type is the pointer
      type."  */
-  else if (code1 == NULLPTR_TYPE && code2 == POINTER_TYPE)
-    result_type = type2;
-  else if (code1 == POINTER_TYPE && code2 == NULLPTR_TYPE)
-    result_type = type1;
-  else if (RECORD_OR_UNION_TYPE_P (type1) && RECORD_OR_UNION_TYPE_P (type2)
+  وإلا إذا (code1 == NULLPTR_TYPE && code2 == اشاره_ګر_TYPE)
+    پایله_type = type2;
+  وإلا إذا (code1 == اشاره_ګر_TYPE && code2 == NULLPTR_TYPE)
+    پایله_type = type1;
+  وإلا إذا (ریکارډ_OR_UNION_TYPE_P (type1) && ریکارډ_OR_UNION_TYPE_P (type2)
 	   && comptypes (TYPE_MAIN_VARIANT (type1),
 			 TYPE_MAIN_VARIANT (type2)))
-    result_type = composite_type (TYPE_MAIN_VARIANT (type1),
+    پایله_type = مرکب_type (TYPE_MAIN_VARIANT (type1),
 				  TYPE_MAIN_VARIANT (type2));
 
-  if (!result_type)
+  إذا (!پایله_type)
     {
-      if (flag_cond_mismatch)
-	result_type = void_type_node;
-      else
+      إذا (flag_cond_mismatch)
+	پایله_type = void_type_غوټه;
+      وإلا
 	{
 	  error_at (colon_loc, "type mismatch in conditional expression");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
     }
 
   /* Merge const and volatile flags of the incoming types.  */
-  result_type
-    = build_type_variant (result_type,
+  پایله_type
+    = build_type_variant (پایله_type,
 			  TYPE_READONLY (type1) || TYPE_READONLY (type2),
 			  TYPE_VOLATILE (type1) || TYPE_VOLATILE (type2));
 
-  op1 = ep_convert_and_check (colon_loc, result_type, op1,
-			      semantic_result_type);
-  op2 = ep_convert_and_check (colon_loc, result_type, op2,
-			      semantic_result_type);
+  op1 = ep_convert_and_check (colon_loc, پایله_type, op1,
+			      semantic_پایله_type);
+  op2 = ep_convert_and_check (colon_loc, پایله_type, op2,
+			      semantic_پایله_type);
 
-  if (ifexp_bcp && ifexp == truthvalue_true_node)
+  إذا (ifexp_bcp && ifexp == truthvalue_true_غوټه)
     {
-      op2_int_operands = true;
-      op1 = c_fully_fold (op1, require_constant_value, NULL);
+      op2_int_operands = ریښتیا;
+      op1 = c_fully_fold (op1, require_constant_ارزښت, عدم);
     }
-  if (ifexp_bcp && ifexp == truthvalue_false_node)
+  إذا (ifexp_bcp && ifexp == truthvalue_false_غوټه)
     {
-      op1_int_operands = true;
-      op2 = c_fully_fold (op2, require_constant_value, NULL);
+      op1_int_operands = ریښتیا;
+      op2 = c_fully_fold (op2, require_constant_ارزښت, عدم);
     }
   int_const = int_operands = (ifexp_int_operands
 			      && op1_int_operands
 			      && op2_int_operands);
-  if (int_operands)
+  إذا (int_operands)
     {
-      int_const = ((ifexp == truthvalue_true_node
-		    && TREE_CODE (orig_op1) == INTEGER_CST
-		    && !TREE_OVERFLOW (orig_op1))
-		   || (ifexp == truthvalue_false_node
-		       && TREE_CODE (orig_op2) == INTEGER_CST
-		       && !TREE_OVERFLOW (orig_op2)));
+      int_const = ((ifexp == truthvalue_true_غوټه
+		    && ونه_کوډ (orig_op1) == INTEGER_CST
+		    && !ونه_ډکېدنه (orig_op1))
+		   || (ifexp == truthvalue_false_غوټه
+		       && ونه_کوډ (orig_op2) == INTEGER_CST
+		       && !ونه_ډکېدنه (orig_op2)));
     }
 
   /* Need to convert condition operand into a vector mask.  */
-  if (VECTOR_TYPE_P (TREE_TYPE (ifexp)))
+  إذا (ویکټور_TYPE_P (ونه_TYPE (ifexp)))
     {
-      tree vectype = TREE_TYPE (ifexp);
-      tree elem_type = TREE_TYPE (vectype);
-      tree zero = build_int_cst (elem_type, 0);
-      tree zero_vec = build_vector_from_val (vectype, zero);
-      tree cmp_type = truth_type_for (vectype);
-      ifexp = build2 (NE_EXPR, cmp_type, ifexp, zero_vec);
+      ونه vectype = ونه_TYPE (ifexp);
+      ونه elem_type = ونه_TYPE (vectype);
+      ونه zero = build_int_cst (elem_type, 0);
+      ونه zero_vec = build_ویکټور_from_val (vectype, zero);
+      ونه cmp_type = truth_type_for (vectype);
+      ifexp = build2 (NE_بیان, cmp_type, ifexp, zero_vec);
     }
 
-  if (int_const || (ifexp_bcp && TREE_CODE (ifexp) == INTEGER_CST))
-    ret = fold_build3_loc (colon_loc, COND_EXPR, result_type, ifexp, op1, op2);
-  else
+  إذا (int_const || (ifexp_bcp && ونه_کوډ (ifexp) == INTEGER_CST))
+    ret = fold_build3_loc (colon_loc, COND_بیان, پایله_type, ifexp, op1, op2);
+  وإلا
     {
-      if (int_operands)
+      إذا (int_operands)
 	{
 	  /* Use c_fully_fold here, since C_MAYBE_CONST_EXPR might be
 	     nested inside of the expression.  */
-	  op1 = c_fully_fold (op1, false, NULL);
-	  op2 = c_fully_fold (op2, false, NULL);
+	  op1 = c_fully_fold (op1, خطأ, عدم);
+	  op2 = c_fully_fold (op2, خطأ, عدم);
 	}
-      ret = build3 (COND_EXPR, result_type, ifexp, op1, op2);
-      if (int_operands)
+      ret = build3 (COND_بیان, پایله_type, ifexp, op1, op2);
+      إذا (int_operands)
 	ret = note_integer_operands (ret);
     }
-  if (semantic_result_type)
-    ret = build1 (EXCESS_PRECISION_EXPR, semantic_result_type, ret);
+  إذا (semantic_پایله_type)
+    ret = build1 (EXCESS_PRECISION_بیان, semantic_پایله_type, ret);
 
-  protected_set_expr_location (ret, colon_loc);
+  protected_سېټ_بیان_location (ret, colon_loc);
 
   /* If the OP1 and OP2 are the same and don't have side-effects,
      warn here, because the COND_EXPR will be turned into OP1.  */
-  if (warn_duplicated_branches
-      && TREE_CODE (ret) == COND_EXPR
-      && (op1 == op2 || operand_equal_p (op1, op2, OEP_ADDRESS_OF_SAME_FIELD)))
-    warning_at (EXPR_LOCATION (ret), OPT_Wduplicated_branches,
+  إذا (warn_duplicated_branches
+      && ونه_کوډ (ret) == COND_بیان
+      && (op1 == op2 || عملوند_equal_p (op1, op2, OEP_پته_د_SAME_ډګر)))
+    warning_at (بیان_LOCATION (ret), OPT_Wduplicated_branches,
 		"this condition has identical branches");
 
-  return ret;
+  أرجع ret;
 }
 
 /* EXPR is an expression, location LOC, whose result is discarded.
    Warn if it is a call to a nodiscard function (or a COMPOUND_EXPR
    whose right-hand operand is such a call, possibly recursively).  */
 
-static void
-maybe_warn_nodiscard (location_t loc, tree expr)
+ساكن فراغ
+maybe_warn_nodiscard (location_t loc, ونه بیان)
 {
-  if (VOID_TYPE_P (TREE_TYPE (expr)))
-    return;
-  while (TREE_CODE (expr) == COMPOUND_EXPR)
+  إذا (VOID_TYPE_P (ونه_TYPE (بیان)))
+    أرجع;
+  طالما (ونه_کوډ (بیان) == COMPOUND_بیان)
     {
-      expr = TREE_OPERAND (expr, 1);
-      if (EXPR_HAS_LOCATION (expr))
-	loc = EXPR_LOCATION (expr);
+      بیان = ونه_عملوند (بیان, 1);
+      إذا (بیان_HAS_LOCATION (بیان))
+	loc = بیان_LOCATION (بیان);
     }
-  if (TREE_CODE (expr) != CALL_EXPR)
-    return;
-  tree fn = CALL_EXPR_FN (expr);
-  if (!fn)
-    return;
-  tree attr;
-  if (TREE_CODE (fn) == ADDR_EXPR
-      && TREE_CODE (TREE_OPERAND (fn, 0)) == FUNCTION_DECL
+  إذا (ونه_کوډ (بیان) != CALL_بیان)
+    أرجع;
+  ونه fn = CALL_بیان_FN (بیان);
+  إذا (!fn)
+    أرجع;
+  ونه attr;
+  إذا (ونه_کوډ (fn) == ADDR_بیان
+      && ونه_کوډ (ونه_عملوند (fn, 0)) == FUNCTION_DECL
       && (attr = lookup_attribute ("nodiscard",
-				   DECL_ATTRIBUTES (TREE_OPERAND (fn, 0)))))
+				   DECL_ځانګړتیاوې (ونه_عملوند (fn, 0)))))
     {
-      fn = TREE_OPERAND (fn, 0);
-      tree args = TREE_VALUE (attr);
-      if (args)
-	args = TREE_VALUE (args);
-      auto_diagnostic_group d;
-      auto_urlify_attributes sentinel;
-      int warned;
-      if (args)
-	warned = warning_at (loc, OPT_Wunused_result,
+      fn = ونه_عملوند (fn, 0);
+      ونه دلیلونه = ونه_ارزښت (attr);
+      إذا (دلیلونه)
+	دلیلونه = ونه_ارزښت (دلیلونه);
+      auto_diagnostic_ډله d;
+      auto_urlify_ځانګړتیاوې sentinel;
+      صحيح warned;
+      إذا (دلیلونه)
+	warned = warning_at (loc, OPT_Wunused_پایله,
 			     "ignoring return value of %qD, declared with "
-			     "attribute %<nodiscard%>: %E", fn, args);
-      else
-	warned = warning_at (loc, OPT_Wunused_result,
+			     "attribute %<nodiscard%>: %E", fn, دلیلونه);
+      وإلا
+	warned = warning_at (loc, OPT_Wunused_پایله,
 			     "ignoring return value of %qD, declared with "
 			     "attribute %<nodiscard%>", fn);
-      if (warned)
-	inform (DECL_SOURCE_LOCATION (fn), "declared here");
+      إذا (warned)
+	inform (DECL_سرچینه_LOCATION (fn), "declared here");
     }
-  else
+  وإلا
     {
-      tree rettype = TREE_TYPE (TREE_TYPE (TREE_TYPE (fn)));
-      attr = lookup_attribute ("nodiscard", TYPE_ATTRIBUTES (rettype));
-      if (!attr)
-	return;
-      tree args = TREE_VALUE (attr);
-      if (args)
-	args = TREE_VALUE (args);
-      auto_diagnostic_group d;
-      auto_urlify_attributes sentinel;
-      int warned;
-      if (args)
-	warned = warning_at (loc, OPT_Wunused_result,
+      ونه rettype = ونه_TYPE (ونه_TYPE (ونه_TYPE (fn)));
+      attr = lookup_attribute ("nodiscard", TYPE_ځانګړتیاوې (rettype));
+      إذا (!attr)
+	أرجع;
+      ونه دلیلونه = ونه_ارزښت (attr);
+      إذا (دلیلونه)
+	دلیلونه = ونه_ارزښت (دلیلونه);
+      auto_diagnostic_ډله d;
+      auto_urlify_ځانګړتیاوې sentinel;
+      صحيح warned;
+      إذا (دلیلونه)
+	warned = warning_at (loc, OPT_Wunused_پایله,
 			     "ignoring return value of type %qT, declared "
 			     "with attribute %<nodiscard%>: %E",
-			     rettype, args);
-      else
-	warned = warning_at (loc, OPT_Wunused_result,
+			     rettype, دلیلونه);
+      وإلا
+	warned = warning_at (loc, OPT_Wunused_پایله,
 			     "ignoring return value of type %qT, declared "
 			     "with attribute %<nodiscard%>", rettype);
-      if (warned)
+      إذا (warned)
 	{
-	  if (TREE_CODE (fn) == ADDR_EXPR)
+	  إذا (ونه_کوډ (fn) == ADDR_بیان)
 	    {
-	      fn = TREE_OPERAND (fn, 0);
-	      if (TREE_CODE (fn) == FUNCTION_DECL)
-		inform (DECL_SOURCE_LOCATION (fn),
+	      fn = ونه_عملوند (fn, 0);
+	      إذا (ونه_کوډ (fn) == FUNCTION_DECL)
+		inform (DECL_سرچینه_LOCATION (fn),
 			"in call to %qD, declared here", fn);
 	    }
 	}
@@ -7189,62 +7189,62 @@ maybe_warn_nodiscard (location_t loc, tree expr)
 
    LOC is the location of the COMPOUND_EXPR.  */
 
-tree
-build_compound_expr (location_t loc, tree expr1, tree expr2)
+ونه
+build_compound_بیان (location_t loc, ونه expr1, ونه expr2)
 {
-  bool expr1_int_operands, expr2_int_operands;
-  tree eptype = NULL_TREE;
-  tree ret;
+  منطقي expr1_int_operands, expr2_int_operands;
+  ونه eptype = NULL_ونه;
+  ونه ret;
 
-  expr1_int_operands = EXPR_INT_CONST_OPERANDS (expr1);
-  if (expr1_int_operands)
-    expr1 = remove_c_maybe_const_expr (expr1);
-  expr2_int_operands = EXPR_INT_CONST_OPERANDS (expr2);
-  if (expr2_int_operands)
-    expr2 = remove_c_maybe_const_expr (expr2);
+  expr1_int_operands = بیان_INT_CONST_OPERANDS (expr1);
+  إذا (expr1_int_operands)
+    expr1 = remove_c_maybe_const_بیان (expr1);
+  expr2_int_operands = بیان_INT_CONST_OPERANDS (expr2);
+  إذا (expr2_int_operands)
+    expr2 = remove_c_maybe_const_بیان (expr2);
 
-  if (TREE_CODE (expr1) == EXCESS_PRECISION_EXPR)
-    expr1 = TREE_OPERAND (expr1, 0);
-  if (TREE_CODE (expr2) == EXCESS_PRECISION_EXPR)
+  إذا (ونه_کوډ (expr1) == EXCESS_PRECISION_بیان)
+    expr1 = ونه_عملوند (expr1, 0);
+  إذا (ونه_کوډ (expr2) == EXCESS_PRECISION_بیان)
     {
-      eptype = TREE_TYPE (expr2);
-      expr2 = TREE_OPERAND (expr2, 0);
+      eptype = ونه_TYPE (expr2);
+      expr2 = ونه_عملوند (expr2, 0);
     }
 
-  if (!TREE_SIDE_EFFECTS (expr1))
+  إذا (!ونه_SIDE_EFFECTS (expr1))
     {
       /* The left-hand operand of a comma expression is like an expression
 	 statement: with -Wunused, we should warn if it doesn't have
 	 any side-effects, unless it was explicitly cast to (void).  */
-      if (warn_unused_value)
+      إذا (warn_ناکارول_شوی_ارزښت)
 	{
-	  if (VOID_TYPE_P (TREE_TYPE (expr1))
-	      && CONVERT_EXPR_P (expr1))
+	  إذا (VOID_TYPE_P (ونه_TYPE (expr1))
+	      && CONVERT_بیان_P (expr1))
 	    ; /* (void) a, b */
-	  else if (VOID_TYPE_P (TREE_TYPE (expr1))
-		   && TREE_CODE (expr1) == COMPOUND_EXPR
-		   && CONVERT_EXPR_P (TREE_OPERAND (expr1, 1)))
+	  وإلا إذا (VOID_TYPE_P (ونه_TYPE (expr1))
+		   && ونه_کوډ (expr1) == COMPOUND_بیان
+		   && CONVERT_بیان_P (ونه_عملوند (expr1, 1)))
 	    ; /* (void) a, (void) b, c */
-	  else
-	    warning_at (loc, OPT_Wunused_value,
+	  وإلا
+	    warning_at (loc, OPT_Wunused_ارزښت,
 			"left-hand operand of comma expression has no effect");
 	}
     }
-  else if (TREE_CODE (expr1) == COMPOUND_EXPR
-	   && warn_unused_value)
+  وإلا إذا (ونه_کوډ (expr1) == COMPOUND_بیان
+	   && warn_ناکارول_شوی_ارزښت)
     {
-      tree r = expr1;
+      ونه r = expr1;
       location_t cloc = loc;
-      while (TREE_CODE (r) == COMPOUND_EXPR)
+      طالما (ونه_کوډ (r) == COMPOUND_بیان)
         {
-	  if (EXPR_HAS_LOCATION (r))
-	    cloc = EXPR_LOCATION (r);
-	  r = TREE_OPERAND (r, 1);
+	  إذا (بیان_HAS_LOCATION (r))
+	    cloc = بیان_LOCATION (r);
+	  r = ونه_عملوند (r, 1);
 	}
-      if (!TREE_SIDE_EFFECTS (r)
-	  && !VOID_TYPE_P (TREE_TYPE (r))
-	  && !CONVERT_EXPR_P (r))
-	warning_at (cloc, OPT_Wunused_value,
+      إذا (!ونه_SIDE_EFFECTS (r)
+	  && !VOID_TYPE_P (ونه_TYPE (r))
+	  && !CONVERT_بیان_P (r))
+	warning_at (cloc, OPT_Wunused_ارزښت,
 	            "right-hand operand of comma expression has no effect");
     }
 
@@ -7252,26 +7252,26 @@ build_compound_expr (location_t loc, tree expr1, tree expr2)
      side-effects, but computes a value which is not used.  For example, in
      `foo() + bar(), baz()' the result of the `+' operator is not used,
      so we should issue a warning.  */
-  else if (warn_unused_value)
-    warn_if_unused_value (expr1, loc);
+  وإلا إذا (warn_ناکارول_شوی_ارزښت)
+    warn_if_ناکارول_شوی_ارزښت (expr1, loc);
 
   maybe_warn_nodiscard (loc, expr1);
 
-  if (expr2 == error_mark_node)
-    return error_mark_node;
+  إذا (expr2 == error_mark_غوټه)
+    أرجع error_mark_غوټه;
 
-  ret = build2 (COMPOUND_EXPR, TREE_TYPE (expr2), expr1, expr2);
+  ret = build2 (COMPOUND_بیان, ونه_TYPE (expr2), expr1, expr2);
 
-  if (flag_isoc99
+  إذا (flag_isoc99
       && expr1_int_operands
       && expr2_int_operands)
     ret = note_integer_operands (ret);
 
-  if (eptype)
-    ret = build1 (EXCESS_PRECISION_EXPR, eptype, ret);
+  إذا (eptype)
+    ret = build1 (EXCESS_PRECISION_بیان, eptype, ret);
 
-  protected_set_expr_location (ret, loc);
-  return ret;
+  protected_سېټ_بیان_location (ret, loc);
+  أرجع ret;
 }
 
 /* Issue -Wcast-qual warnings when appropriate.  TYPE is the type to
@@ -7281,52 +7281,52 @@ build_compound_expr (location_t loc, tree expr1, tree expr2)
    address space qualifiers are not handled here, because they result
    in different warnings.  */
 
-static void
-handle_warn_cast_qual (location_t loc, tree type, tree otype)
+ساكن فراغ
+handle_warn_cast_qual (location_t loc, ونه type, ونه otype)
 {
-  tree in_type = type;
-  tree in_otype = otype;
-  int added = 0;
-  int discarded = 0;
-  bool is_const;
+  ونه دننه_type = type;
+  ونه دننه_otype = otype;
+  صحيح added = 0;
+  صحيح discarded = 0;
+  منطقي is_const;
 
   /* Check that the qualifiers on IN_TYPE are a superset of the
      qualifiers of IN_OTYPE.  The outermost level of POINTER_TYPE
      nodes is uninteresting and we stop as soon as we hit a
      non-POINTER_TYPE node on either type.  */
-  do
+  افعل
     {
-      in_otype = TREE_TYPE (in_otype);
-      in_type = TREE_TYPE (in_type);
+      دننه_otype = ونه_TYPE (دننه_otype);
+      دننه_type = ونه_TYPE (دننه_type);
 
       /* GNU C allows cv-qualified function types.  'const' means the
 	 function is very pure, 'volatile' means it can't return.  We
 	 need to warn when such qualifiers are added, not when they're
 	 taken away.  */
-      if (TREE_CODE (in_otype) == FUNCTION_TYPE
-	  && TREE_CODE (in_type) == FUNCTION_TYPE)
-	added |= (TYPE_QUALS_NO_ADDR_SPACE (in_type)
-		  & ~TYPE_QUALS_NO_ADDR_SPACE (in_otype));
-      else
-	discarded |= (TYPE_QUALS_NO_ADDR_SPACE (in_otype)
-		      & ~TYPE_QUALS_NO_ADDR_SPACE (in_type));
+      إذا (ونه_کوډ (دننه_otype) == FUNCTION_TYPE
+	  && ونه_کوډ (دننه_type) == FUNCTION_TYPE)
+	added |= (TYPE_QUALS_NO_ADDR_SPACE (دننه_type)
+		  & ~TYPE_QUALS_NO_ADDR_SPACE (دننه_otype));
+      وإلا
+	discarded |= (TYPE_QUALS_NO_ADDR_SPACE (دننه_otype)
+		      & ~TYPE_QUALS_NO_ADDR_SPACE (دننه_type));
     }
-  while (TREE_CODE (in_type) == POINTER_TYPE
-	 && TREE_CODE (in_otype) == POINTER_TYPE);
+  طالما (ونه_کوډ (دننه_type) == اشاره_ګر_TYPE
+	 && ونه_کوډ (دننه_otype) == اشاره_ګر_TYPE);
 
-  if (added)
+  إذا (added)
     warning_at (loc, OPT_Wcast_qual,
 		"cast adds %q#v qualifier to function type", added);
 
-  if (discarded)
+  إذا (discarded)
     /* There are qualifiers present in IN_OTYPE that are not present
        in IN_TYPE.  */
     warning_at (loc, OPT_Wcast_qual,
 		"cast discards %qv qualifier from pointer target type",
 		discarded);
 
-  if (added || discarded)
-    return;
+  إذا (added || discarded)
+    أرجع;
 
   /* A cast from **T to const **T is unsafe, because it can cause a
      const value to be changed with no additional warning.  We only
@@ -7341,312 +7341,312 @@ handle_warn_cast_qual (location_t loc, tree type, tree otype)
      case function types, as they won't have the same
      TYPE_MAIN_VARIANT.  */
 
-  if (TYPE_MAIN_VARIANT (in_type) != TYPE_MAIN_VARIANT (in_otype))
-    return;
-  if (TREE_CODE (TREE_TYPE (type)) != POINTER_TYPE)
-    return;
+  إذا (TYPE_MAIN_VARIANT (دننه_type) != TYPE_MAIN_VARIANT (دننه_otype))
+    أرجع;
+  إذا (ونه_کوډ (ونه_TYPE (type)) != اشاره_ګر_TYPE)
+    أرجع;
 
-  in_type = type;
-  in_otype = otype;
-  is_const = TYPE_READONLY (TREE_TYPE (in_type));
-  do
+  دننه_type = type;
+  دننه_otype = otype;
+  is_const = TYPE_READONLY (ونه_TYPE (دننه_type));
+  افعل
     {
-      in_type = TREE_TYPE (in_type);
-      in_otype = TREE_TYPE (in_otype);
-      if ((TYPE_QUALS (in_type) &~ TYPE_QUALS (in_otype)) != 0
+      دننه_type = ونه_TYPE (دننه_type);
+      دننه_otype = ونه_TYPE (دننه_otype);
+      إذا ((TYPE_QUALS (دننه_type) &~ TYPE_QUALS (دننه_otype)) != 0
 	  && !is_const)
 	{
 	  warning_at (loc, OPT_Wcast_qual,
 		      "to be safe all intermediate pointers in cast from "
                       "%qT to %qT must be %<const%> qualified",
 		      otype, type);
-	  break;
+	  اكسر;
 	}
-      if (is_const)
-	is_const = TYPE_READONLY (in_type);
+      إذا (is_const)
+	is_const = TYPE_READONLY (دننه_type);
     }
-  while (TREE_CODE (in_type) == POINTER_TYPE);
+  طالما (ونه_کوډ (دننه_type) == اشاره_ګر_TYPE);
 }
 
 /* Heuristic check if two parameter types can be considered ABI-equivalent.  */
 
-static bool
-c_safe_arg_type_equiv_p (tree t1, tree t2)
+ساكن منطقي
+c_خوندي_arg_type_equiv_p (ونه t1, ونه t2)
 {
-  if (error_operand_p (t1) || error_operand_p (t2))
-    return true;
+  إذا (error_عملوند_p (t1) || error_عملوند_p (t2))
+    أرجع ریښتیا;
 
   t1 = TYPE_MAIN_VARIANT (t1);
   t2 = TYPE_MAIN_VARIANT (t2);
 
-  if (TREE_CODE (t1) == POINTER_TYPE
-      && TREE_CODE (t2) == POINTER_TYPE)
-    return true;
+  إذا (ونه_کوډ (t1) == اشاره_ګر_TYPE
+      && ونه_کوډ (t2) == اشاره_ګر_TYPE)
+    أرجع ریښتیا;
 
   /* Only the precision of the parameter matters.  This check should
      make sure that the callee does not see undefined values in argument
      registers.  */
-  if (INTEGRAL_TYPE_P (t1)
+  إذا (INTEGRAL_TYPE_P (t1)
       && INTEGRAL_TYPE_P (t2)
       && TYPE_PRECISION (t1) == TYPE_PRECISION (t2))
-    return true;
+    أرجع ریښتیا;
 
-  return comptypes (t1, t2);
+  أرجع comptypes (t1, t2);
 }
 
 /* Check if a type cast between two function types can be considered safe.  */
 
-static bool
-c_safe_function_type_cast_p (tree t1, tree t2)
+ساكن منطقي
+c_خوندي_function_type_cast_p (ونه t1, ونه t2)
 {
-  if (TREE_TYPE (t1) == void_type_node &&
-      TYPE_ARG_TYPES (t1) == void_list_node)
-    return true;
+  إذا (ونه_TYPE (t1) == void_type_غوټه &&
+      TYPE_ARG_TYPES (t1) == void_list_غوټه)
+    أرجع ریښتیا;
 
-  if (TREE_TYPE (t2) == void_type_node &&
-      TYPE_ARG_TYPES (t2) == void_list_node)
-    return true;
+  إذا (ونه_TYPE (t2) == void_type_غوټه &&
+      TYPE_ARG_TYPES (t2) == void_list_غوټه)
+    أرجع ریښتیا;
 
-  if (!c_safe_arg_type_equiv_p (TREE_TYPE (t1), TREE_TYPE (t2)))
-    return false;
+  إذا (!c_خوندي_arg_type_equiv_p (ونه_TYPE (t1), ونه_TYPE (t2)))
+    أرجع خطأ;
 
-  for (t1 = TYPE_ARG_TYPES (t1), t2 = TYPE_ARG_TYPES (t2);
+  لكل (t1 = TYPE_ARG_TYPES (t1), t2 = TYPE_ARG_TYPES (t2);
        t1 && t2;
-       t1 = TREE_CHAIN (t1), t2 = TREE_CHAIN (t2))
-    if (!c_safe_arg_type_equiv_p (TREE_VALUE (t1), TREE_VALUE (t2)))
-      return false;
+       t1 = ونه_CHAIN (t1), t2 = ونه_CHAIN (t2))
+    إذا (!c_خوندي_arg_type_equiv_p (ونه_ارزښت (t1), ونه_ارزښت (t2)))
+      أرجع خطأ;
 
-  return true;
+  أرجع ریښتیا;
 }
 
 /* Build an expression representing a cast to type TYPE of expression EXPR.
    LOC is the location of the cast-- typically the open paren of the cast.  */
 
-tree
-build_c_cast (location_t loc, tree type, tree expr)
+ونه
+build_c_cast (location_t loc, ونه type, ونه بیان)
 {
-  tree value;
+  ونه ارزښت;
 
-  bool int_operands = EXPR_INT_CONST_OPERANDS (expr);
+  منطقي int_operands = بیان_INT_CONST_OPERANDS (بیان);
 
-  if (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
-    expr = TREE_OPERAND (expr, 0);
+  إذا (ونه_کوډ (بیان) == EXCESS_PRECISION_بیان)
+    بیان = ونه_عملوند (بیان, 0);
 
-  value = expr;
-  if (int_operands)
-    value = remove_c_maybe_const_expr (value);
+  ارزښت = بیان;
+  إذا (int_operands)
+    ارزښت = remove_c_maybe_const_بیان (ارزښت);
 
-  if (type == error_mark_node || expr == error_mark_node)
-    return error_mark_node;
+  إذا (type == error_mark_غوټه || بیان == error_mark_غوټه)
+    أرجع error_mark_غوټه;
 
   /* The ObjC front-end uses TYPE_MAIN_VARIANT to tie together types differing
      only in <protocol> qualifications.  But when constructing cast expressions,
      the protocols do matter and must be kept around.  */
-  if (objc_is_object_ptr (type) && objc_is_object_ptr (TREE_TYPE (expr)))
-    return build1 (NOP_EXPR, type, expr);
+  إذا (objc_is_object_ptr (type) && objc_is_object_ptr (ونه_TYPE (بیان)))
+    أرجع build1 (NOP_بیان, type, بیان);
 
   type = TYPE_MAIN_VARIANT (type);
 
-  if (TREE_CODE (type) == ARRAY_TYPE)
+  إذا (ونه_کوډ (type) == ARRAY_TYPE)
     {
       error_at (loc, "cast specifies array type");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
-  if (TREE_CODE (type) == FUNCTION_TYPE)
+  إذا (ونه_کوډ (type) == FUNCTION_TYPE)
     {
       error_at (loc, "cast specifies function type");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
-  if (!VOID_TYPE_P (type))
+  إذا (!VOID_TYPE_P (type))
     {
-      value = require_complete_type (loc, value);
-      if (value == error_mark_node)
-	return error_mark_node;
+      ارزښت = require_complete_type (loc, ارزښت);
+      إذا (ارزښت == error_mark_غوټه)
+	أرجع error_mark_غوټه;
     }
 
-  if (type == TYPE_MAIN_VARIANT (TREE_TYPE (value)))
+  إذا (type == TYPE_MAIN_VARIANT (ونه_TYPE (ارزښت)))
     {
-      if (RECORD_OR_UNION_TYPE_P (type)
+      إذا (ریکارډ_OR_UNION_TYPE_P (type)
 	  && pedwarn (loc, OPT_Wpedantic,
 		      "ISO C forbids casting nonscalar to the same type"))
 	      ;
-      else if (warn_useless_cast && c_inhibit_evaluation_warnings == 0)
+      وإلا إذا (warn_useless_cast && c_inhibit_evaluation_warnings == 0)
 	warning_at (loc, OPT_Wuseless_cast,
 		    "useless cast to type %qT", type);
 
       /* Convert to remove any qualifiers from VALUE's type.  */
-      value = convert (type, value);
+      ارزښت = convert (type, ارزښت);
     }
-  else if (TREE_CODE (type) == UNION_TYPE)
+  وإلا إذا (ونه_کوډ (type) == UNION_TYPE)
     {
-      tree field;
+      ونه ډګر_2;
 
-      for (field = TYPE_FIELDS (type); field; field = DECL_CHAIN (field))
-	if (TREE_TYPE (field) != error_mark_node
-	    && comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (field)),
-			  TYPE_MAIN_VARIANT (TREE_TYPE (value))))
-	  break;
+      لكل (ډګر_2 = TYPE_FIELDS (type); ډګر_2; ډګر_2 = DECL_CHAIN (ډګر_2))
+	إذا (ونه_TYPE (ډګر_2) != error_mark_غوټه
+	    && comptypes (TYPE_MAIN_VARIANT (ونه_TYPE (ډګر_2)),
+			  TYPE_MAIN_VARIANT (ونه_TYPE (ارزښت))))
+	  اكسر;
 
-      if (field)
+      إذا (ډګر_2)
 	{
-	  tree t;
-	  bool maybe_const = true;
+	  ونه t;
+	  منطقي maybe_const = ریښتیا;
 
 	  pedwarn (loc, OPT_Wpedantic, "ISO C forbids casts to union type");
-	  t = c_fully_fold (value, false, &maybe_const);
-	  t = build_constructor_single (type, field, t);
-	  if (!maybe_const)
-	    t = c_wrap_maybe_const (t, true);
-	  t = digest_init (loc, field, type, t,
-			   NULL_TREE, false, false, false, true, false, false);
-	  TREE_CONSTANT (t) = TREE_CONSTANT (value);
-	  return t;
+	  t = c_fully_fold (ارزښت, خطأ, &maybe_const);
+	  t = build_constructor_single (type, ډګر_2, t);
+	  إذا (!maybe_const)
+	    t = c_wrap_maybe_const (t, ریښتیا);
+	  t = digest_init (loc, ډګر_2, type, t,
+			   NULL_ونه, خطأ, خطأ, خطأ, ریښتیا, خطأ, خطأ);
+	  ونه_CONSTANT (t) = ونه_CONSTANT (ارزښت);
+	  أرجع t;
 	}
       error_at (loc, "cast to union type from type not present in union");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
-  else
+  وإلا
     {
-      tree otype, ovalue;
+      ونه otype, ovalue;
 
-      if (type == void_type_node)
+      إذا (type == void_type_غوټه)
 	{
-	  tree t = build1 (CONVERT_EXPR, type, value);
-	  SET_EXPR_LOCATION (t, loc);
-	  return t;
+	  ونه t = build1 (CONVERT_بیان, type, ارزښت);
+	  سېټ_بیان_LOCATION (t, loc);
+	  أرجع t;
 	}
 
-      otype = TREE_TYPE (value);
+      otype = ونه_TYPE (ارزښت);
 
       /* Optionally warn about potentially worrisome casts.  */
-      if (warn_cast_qual
-	  && TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE)
+      إذا (warn_cast_qual
+	  && ونه_کوډ (type) == اشاره_ګر_TYPE
+	  && ونه_کوډ (otype) == اشاره_ګر_TYPE)
 	handle_warn_cast_qual (loc, type, otype);
 
       /* Warn about conversions between pointers to disjoint
 	 address spaces.  */
-      if (TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE
-	  && !null_pointer_constant_p (value))
+      إذا (ونه_کوډ (type) == اشاره_ګر_TYPE
+	  && ونه_کوډ (otype) == اشاره_ګر_TYPE
+	  && !null_اشاره_ګر_constant_p (ارزښت))
 	{
-	  addr_space_t as_to = TYPE_ADDR_SPACE (TREE_TYPE (type));
-	  addr_space_t as_from = TYPE_ADDR_SPACE (TREE_TYPE (otype));
+	  addr_space_t as_منزل = TYPE_ADDR_SPACE (ونه_TYPE (type));
+	  addr_space_t as_from = TYPE_ADDR_SPACE (ونه_TYPE (otype));
 	  addr_space_t as_common;
 
-	  if (!addr_space_superset (as_to, as_from, &as_common))
+	  إذا (!addr_space_superset (as_منزل, as_from, &as_common))
 	    {
-	      if (ADDR_SPACE_GENERIC_P (as_from))
+	      إذا (ADDR_SPACE_GENERIC_P (as_from))
 		warning_at (loc, 0, "cast to %qs address space pointer "
 			    "from disjoint generic address space pointer",
-			    c_addr_space_name (as_to));
+			    c_addr_space_name (as_منزل));
 
-	      else if (ADDR_SPACE_GENERIC_P (as_to))
+	      وإلا إذا (ADDR_SPACE_GENERIC_P (as_منزل))
 		warning_at (loc, 0, "cast to generic address space pointer "
 			    "from disjoint %qs address space pointer",
 			    c_addr_space_name (as_from));
 
-	      else
+	      وإلا
 		warning_at (loc, 0, "cast to %qs address space pointer "
 			    "from disjoint %qs address space pointer",
-			    c_addr_space_name (as_to),
+			    c_addr_space_name (as_منزل),
 			    c_addr_space_name (as_from));
 	    }
 
 	  /* Warn of new allocations that are not big enough for the target
 	     type.  */
-	  if (warn_alloc_size && TREE_CODE (value) == CALL_EXPR)
-	    if (tree fndecl = get_callee_fndecl (value))
-	      if (DECL_IS_MALLOC (fndecl))
+	  إذا (warn_alloc_اندازه && ونه_کوډ (ارزښت) == CALL_بیان)
+	    إذا (ونه fndecl = get_callee_fndecl (ارزښت))
+	      إذا (DECL_IS_MALLOC (fndecl))
 		{
-		  tree attrs = TYPE_ATTRIBUTES (TREE_TYPE (fndecl));
-		  tree alloc_size = lookup_attribute ("alloc_size", attrs);
-		  if (alloc_size)
-		    warn_for_alloc_size (loc, TREE_TYPE (type), value,
-					 alloc_size);
+		  ونه attrs = TYPE_ځانګړتیاوې (ونه_TYPE (fndecl));
+		  ونه alloc_اندازه = lookup_attribute ("alloc_size", attrs);
+		  إذا (alloc_اندازه)
+		    warn_for_alloc_اندازه (loc, ونه_TYPE (type), ارزښت,
+					 alloc_اندازه);
 		}
 	}
 
       /* Warn about possible alignment problems.  */
-      if ((STRICT_ALIGNMENT || warn_cast_align == 2)
-	  && TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE
-	  && TREE_CODE (TREE_TYPE (otype)) != VOID_TYPE
-	  && TREE_CODE (TREE_TYPE (otype)) != FUNCTION_TYPE
+      إذا ((STRICT_ALIGNMENT || warn_cast_align == 2)
+	  && ونه_کوډ (type) == اشاره_ګر_TYPE
+	  && ونه_کوډ (otype) == اشاره_ګر_TYPE
+	  && ونه_کوډ (ونه_TYPE (otype)) != VOID_TYPE
+	  && ونه_کوډ (ونه_TYPE (otype)) != FUNCTION_TYPE
 	  /* Don't warn about opaque types, where the actual alignment
 	     restriction is unknown.  */
-	  && !(RECORD_OR_UNION_TYPE_P (TREE_TYPE (otype))
-	       && TYPE_MODE (TREE_TYPE (otype)) == VOIDmode)
-	  && min_align_of_type (TREE_TYPE (type))
-	     > min_align_of_type (TREE_TYPE (otype)))
+	  && !(ریکارډ_OR_UNION_TYPE_P (ونه_TYPE (otype))
+	       && TYPE_ډېرپېښ (ونه_TYPE (otype)) == VOIDmode)
+	  && min_align_د_type (ونه_TYPE (type))
+	     > min_align_د_type (ونه_TYPE (otype)))
 	warning_at (loc, OPT_Wcast_align,
 		    "cast increases required alignment of target type");
 
-      if ((TREE_CODE (type) == INTEGER_TYPE
-	   || TREE_CODE (type) == BITINT_TYPE)
-	  && TREE_CODE (otype) == POINTER_TYPE
+      إذا ((ونه_کوډ (type) == INTEGER_TYPE
+	   || ونه_کوډ (type) == BITINT_TYPE)
+	  && ونه_کوډ (otype) == اشاره_ګر_TYPE
 	  && TYPE_PRECISION (type) != TYPE_PRECISION (otype))
       /* Unlike conversion of integers to pointers, where the
          warning is disabled for converting constants because
          of cases such as SIG_*, warn about converting constant
          pointers to integers. In some cases it may cause unwanted
          sign extension, and a warning is appropriate.  */
-	warning_at (loc, OPT_Wpointer_to_int_cast,
+	warning_at (loc, OPT_Wpointer_منزل_int_cast,
 		    "cast from pointer to integer of different size");
 
-      if ((TREE_CODE (value) == CALL_EXPR
-	   && !is_access_with_size_p (value))
-	  && TREE_CODE (type) != TREE_CODE (otype))
+      إذا ((ونه_کوډ (ارزښت) == CALL_بیان
+	   && !is_access_with_اندازه_p (ارزښت))
+	  && ونه_کوډ (type) != ونه_کوډ (otype))
 	warning_at (loc, OPT_Wbad_function_cast,
 		    "cast from function call of type %qT "
 		    "to non-matching type %qT", otype, type);
 
-      if (TREE_CODE (type) == POINTER_TYPE
-	  && (TREE_CODE (otype) == INTEGER_TYPE
-	      || TREE_CODE (otype) == BITINT_TYPE)
+      إذا (ونه_کوډ (type) == اشاره_ګر_TYPE
+	  && (ونه_کوډ (otype) == INTEGER_TYPE
+	      || ونه_کوډ (otype) == BITINT_TYPE)
 	  && TYPE_PRECISION (type) != TYPE_PRECISION (otype)
 	  /* Don't warn about converting any constant.  */
-	  && !TREE_CONSTANT (value))
+	  && !ونه_CONSTANT (ارزښت))
 	warning_at (loc,
-		    OPT_Wint_to_pointer_cast, "cast to pointer from integer "
+		    OPT_Wint_منزل_اشاره_ګر_cast, "cast to pointer from integer "
 		    "of different size");
 
-      if (warn_strict_aliasing <= 2)
-        strict_aliasing_warning (EXPR_LOCATION (value), type, expr);
+      إذا (warn_strict_aliasing <= 2)
+        strict_aliasing_warning (بیان_LOCATION (ارزښت), type, بیان);
 
       /* If pedantic, warn for conversions between function and object
 	 pointer types, except for converting a null pointer constant
 	 to function pointer type.  */
-      if (pedantic
-	  && TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE
-	  && TREE_CODE (TREE_TYPE (otype)) == FUNCTION_TYPE
-	  && TREE_CODE (TREE_TYPE (type)) != FUNCTION_TYPE)
+      إذا (pedantic
+	  && ونه_کوډ (type) == اشاره_ګر_TYPE
+	  && ونه_کوډ (otype) == اشاره_ګر_TYPE
+	  && ونه_کوډ (ونه_TYPE (otype)) == FUNCTION_TYPE
+	  && ونه_کوډ (ونه_TYPE (type)) != FUNCTION_TYPE)
 	pedwarn (loc, OPT_Wpedantic, "ISO C forbids "
 		 "conversion of function pointer to object pointer type");
 
-      if (pedantic
-	  && TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE
-	  && TREE_CODE (TREE_TYPE (type)) == FUNCTION_TYPE
-	  && TREE_CODE (TREE_TYPE (otype)) != FUNCTION_TYPE
-	  && !null_pointer_constant_p (value))
+      إذا (pedantic
+	  && ونه_کوډ (type) == اشاره_ګر_TYPE
+	  && ونه_کوډ (otype) == اشاره_ګر_TYPE
+	  && ونه_کوډ (ونه_TYPE (type)) == FUNCTION_TYPE
+	  && ونه_کوډ (ونه_TYPE (otype)) != FUNCTION_TYPE
+	  && !null_اشاره_ګر_constant_p (ارزښت))
 	pedwarn (loc, OPT_Wpedantic, "ISO C forbids "
 		 "conversion of object pointer to function pointer type");
 
-      if (TREE_CODE (type) == POINTER_TYPE
-	  && TREE_CODE (otype) == POINTER_TYPE
-	  && TREE_CODE (TREE_TYPE (type)) == FUNCTION_TYPE
-	  && TREE_CODE (TREE_TYPE (otype)) == FUNCTION_TYPE
-	  && !c_safe_function_type_cast_p (TREE_TYPE (type),
-					   TREE_TYPE (otype)))
+      إذا (ونه_کوډ (type) == اشاره_ګر_TYPE
+	  && ونه_کوډ (otype) == اشاره_ګر_TYPE
+	  && ونه_کوډ (ونه_TYPE (type)) == FUNCTION_TYPE
+	  && ونه_کوډ (ونه_TYPE (otype)) == FUNCTION_TYPE
+	  && !c_خوندي_function_type_cast_p (ونه_TYPE (type),
+					   ونه_TYPE (otype)))
 	warning_at (loc, OPT_Wcast_function_type,
 		    "cast between incompatible function types"
 		    " from %qT to %qT", otype, type);
 
-      ovalue = value;
+      ovalue = ارزښت;
       /* If converting to boolean a value with integer operands that
 	 is not itself represented as an INTEGER_CST, the call below
 	 to note_integer_operands may insert a C_MAYBE_CONST_EXPR, but
@@ -7656,116 +7656,116 @@ build_c_cast (location_t loc, tree type, tree expr)
 	 C_MAYBE_CONST_EXPR, ensure that
 	 c_objc_common_truthvalue_conversion receives an argument
 	 properly marked as having integer operands in that case.  */
-      if (int_operands
-	  && TREE_CODE (value) != INTEGER_CST
-	  && (TREE_CODE (type) == BOOLEAN_TYPE
-	      || (TREE_CODE (type) == ENUMERAL_TYPE
-		  && ENUM_UNDERLYING_TYPE (type) != NULL_TREE
-		  && TREE_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)))
-	value = note_integer_operands (value);
-      value = convert (type, value);
+      إذا (int_operands
+	  && ونه_کوډ (ارزښت) != INTEGER_CST
+	  && (ونه_کوډ (type) == BOOLEAN_TYPE
+	      || (ونه_کوډ (type) == ENUMERAL_TYPE
+		  && ENUM_UNDERLYING_TYPE (type) != NULL_ونه
+		  && ونه_کوډ (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)))
+	ارزښت = note_integer_operands (ارزښت);
+      ارزښت = convert (type, ارزښت);
 
       /* Ignore any integer overflow caused by the cast.  */
-      if (TREE_CODE (value) == INTEGER_CST && !FLOAT_TYPE_P (otype))
+      إذا (ونه_کوډ (ارزښت) == INTEGER_CST && !FLOAT_TYPE_P (otype))
 	{
-	  if (TREE_OVERFLOW_P (ovalue))
+	  إذا (ونه_ډکېدنه_P (ovalue))
 	    {
-	      if (!TREE_OVERFLOW (value))
+	      إذا (!ونه_ډکېدنه (ارزښت))
 		{
 		  /* Avoid clobbering a shared constant.  */
-		  value = copy_node (value);
-		  TREE_OVERFLOW (value) = TREE_OVERFLOW (ovalue);
+		  ارزښت = copy_غوټه (ارزښت);
+		  ونه_ډکېدنه (ارزښت) = ونه_ډکېدنه (ovalue);
 		}
 	    }
-	  else if (TREE_OVERFLOW (value))
+	  وإلا إذا (ونه_ډکېدنه (ارزښت))
 	    /* Reset VALUE's overflow flags, ensuring constant sharing.  */
-	    value = wide_int_to_tree (TREE_TYPE (value), wi::to_wide (value));
+	    ارزښت = wide_int_منزل_ونه (ونه_TYPE (ارزښت), wi::منزل_wide (ارزښت));
 	}
     }
 
   /* Don't let a cast be an lvalue.  */
-  if (lvalue_p (value)
+  إذا (lvalue_p (ارزښت)
       /* Also, don't let a cast be a bit-field of a bit-precise integer type,
 	 otherwise it could be incorrectly subject of integer promotions.  */
-      || (TREE_CODE (value) == COMPONENT_REF
-	  && DECL_C_BIT_FIELD (TREE_OPERAND (value, 1))
-	  && BITINT_TYPE_P (DECL_BIT_FIELD_TYPE (TREE_OPERAND (value, 1)))))
-    value = non_lvalue_loc (loc, value);
+      || (ونه_کوډ (ارزښت) == COMPONENT_REF
+	  && DECL_C_بټ_ډګر (ونه_عملوند (ارزښت, 1))
+	  && BITINT_TYPE_P (DECL_بټ_ډګر_TYPE (ونه_عملوند (ارزښت, 1)))))
+    ارزښت = non_lvalue_loc (loc, ارزښت);
 
   /* Don't allow the results of casting to floating-point or complex
      types be confused with actual constants, or casts involving
      integer and pointer types other than direct integer-to-integer
      and integer-to-pointer be confused with integer constant
      expressions and null pointer constants.  */
-  if (TREE_CODE (value) == REAL_CST
-      || TREE_CODE (value) == COMPLEX_CST
-      || (TREE_CODE (value) == INTEGER_CST
-	  && !((TREE_CODE (expr) == INTEGER_CST
-		&& INTEGRAL_TYPE_P (TREE_TYPE (expr)))
-	       || TREE_CODE (expr) == REAL_CST
-	       || TREE_CODE (expr) == COMPLEX_CST)))
-      value = build1 (NOP_EXPR, type, value);
+  إذا (ونه_کوډ (ارزښت) == REAL_CST
+      || ونه_کوډ (ارزښت) == COMPLEX_CST
+      || (ونه_کوډ (ارزښت) == INTEGER_CST
+	  && !((ونه_کوډ (بیان) == INTEGER_CST
+		&& INTEGRAL_TYPE_P (ونه_TYPE (بیان)))
+	       || ونه_کوډ (بیان) == REAL_CST
+	       || ونه_کوډ (بیان) == COMPLEX_CST)))
+      ارزښت = build1 (NOP_بیان, type, ارزښت);
 
   /* If the expression has integer operands and so can occur in an
      unevaluated part of an integer constant expression, ensure the
      return value reflects this.  */
-  if (int_operands
+  إذا (int_operands
       && INTEGRAL_TYPE_P (type)
-      && value != error_mark_node
-      && !EXPR_INT_CONST_OPERANDS (value))
-    value = note_integer_operands (value);
+      && ارزښت != error_mark_غوټه
+      && !بیان_INT_CONST_OPERANDS (ارزښت))
+    ارزښت = note_integer_operands (ارزښت);
 
-  protected_set_expr_location (value, loc);
-  return value;
+  protected_سېټ_بیان_location (ارزښت, loc);
+  أرجع ارزښت;
 }
 
 /* Interpret a cast of expression EXPR to type TYPE.  LOC is the
    location of the open paren of the cast, or the position of the cast
    expr.  */
-tree
-c_cast_expr (location_t loc, struct c_type_name *type_name, tree expr)
+ونه
+c_cast_بیان (location_t loc, بنية c_type_name *type_name, ونه بیان)
 {
-  tree type;
-  tree type_expr = NULL_TREE;
-  bool type_expr_const = true;
-  tree ret;
-  int saved_wsp = warn_strict_prototypes;
+  ونه type;
+  ونه type_بیان = NULL_ونه;
+  منطقي type_بیان_const = ریښتیا;
+  ونه ret;
+  صحيح saved_wsp = warn_strict_prototypes;
 
   /* This avoids warnings about unprototyped casts on
      integers.  E.g. "#define SIG_DFL (void(*)())0".  */
-  if (TREE_CODE (expr) == INTEGER_CST)
+  إذا (ونه_کوډ (بیان) == INTEGER_CST)
     warn_strict_prototypes = 0;
-  type = groktypename (type_name, &type_expr, &type_expr_const);
+  type = groktypename (type_name, &type_بیان, &type_بیان_const);
   warn_strict_prototypes = saved_wsp;
 
-  if (TREE_CODE (expr) == ADDR_EXPR && !VOID_TYPE_P (type)
-      && reject_gcc_builtin (expr))
-    return error_mark_node;
+  إذا (ونه_کوډ (بیان) == ADDR_بیان && !VOID_TYPE_P (type)
+      && reject_gcc_builtin (بیان))
+    أرجع error_mark_غوټه;
 
-  ret = build_c_cast (loc, type, expr);
-  if (ret == error_mark_node)
-    return error_mark_node;
+  ret = build_c_cast (loc, type, بیان);
+  إذا (ret == error_mark_غوټه)
+    أرجع error_mark_غوټه;
 
-  if (type_expr)
+  إذا (type_بیان)
     {
-      bool inner_expr_const = true;
-      ret = c_fully_fold (ret, require_constant_value, &inner_expr_const);
-      ret = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (ret), type_expr, ret);
-      C_MAYBE_CONST_EXPR_NON_CONST (ret) = !(type_expr_const
-					     && inner_expr_const);
-      SET_EXPR_LOCATION (ret, loc);
+      منطقي inner_بیان_const = ریښتیا;
+      ret = c_fully_fold (ret, require_constant_ارزښت, &inner_بیان_const);
+      ret = build2 (C_MAYBE_CONST_بیان, ونه_TYPE (ret), type_بیان, ret);
+      C_MAYBE_CONST_بیان_NON_CONST (ret) = !(type_بیان_const
+					     && inner_بیان_const);
+      سېټ_بیان_LOCATION (ret, loc);
     }
 
-  if (!EXPR_HAS_LOCATION (ret))
-    protected_set_expr_location (ret, loc);
+  إذا (!بیان_HAS_LOCATION (ret))
+    protected_سېټ_بیان_location (ret, loc);
 
   /* C++ does not permits types to be defined in a cast, but it
      allows references to incomplete types.  */
-  if (warn_cxx_compat && type_name->specs->typespec_kind == ctsk_tagdef)
+  إذا (warn_cxx_compat && type_name->specs->typespec_ډول == ctsk_tagdef)
     warning_at (loc, OPT_Wc___compat,
 		"defining a type in a cast is invalid in C++");
 
-  return ret;
+  أرجع ret;
 }
 
 /* Build an assignment expression of lvalue LHS from value RHS.
@@ -7780,171 +7780,171 @@ c_cast_expr (location_t loc, struct c_type_name *type_name, tree expr)
    LOCATION is the location of the MODIFYCODE operator.
    RHS_LOC is the location of the RHS.  */
 
-tree
-build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
-		   enum tree_code modifycode,
-		   location_t rhs_loc, tree rhs, tree rhs_origtype)
+ونه
+build_modify_بیان (location_t location, ونه lhs, ونه lhs_origtype,
+		   تعداد ونه_کوډ_2 modifycode,
+		   location_t rhs_loc, ونه rhs, ونه rhs_origtype)
 {
-  tree result;
-  tree newrhs;
-  tree rhseval = NULL_TREE;
-  tree lhstype = TREE_TYPE (lhs);
-  tree olhstype = lhstype;
-  bool npc;
-  bool is_atomic_op;
+  ونه پایله;
+  ونه newrhs;
+  ونه rhseval = NULL_ونه;
+  ونه lhstype = ونه_TYPE (lhs);
+  ونه olhstype = lhstype;
+  منطقي npc;
+  منطقي is_atomic_op;
 
   /* Types that aren't fully specified cannot be used in assignments.  */
   lhs = require_complete_type (location, lhs);
   rhs = require_complete_type (location, rhs);
 
   /* Avoid duplicate error messages from operands that had errors.  */
-  if (TREE_CODE (lhs) == ERROR_MARK || TREE_CODE (rhs) == ERROR_MARK)
-    return error_mark_node;
+  إذا (ونه_کوډ (lhs) == ERROR_MARK || ونه_کوډ (rhs) == ERROR_MARK)
+    أرجع error_mark_غوټه;
 
   /* Ensure an error for assigning a non-lvalue array to an array in
      C90.  */
-  if (TREE_CODE (lhstype) == ARRAY_TYPE)
+  إذا (ونه_کوډ (lhstype) == ARRAY_TYPE)
     {
       error_at (location, "assignment to expression with array type");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
   /* For ObjC properties, defer this check.  */
-  if (!objc_is_property_ref (lhs) && !lvalue_or_else (location, lhs, lv_assign))
-    return error_mark_node;
+  إذا (!objc_is_property_ref (lhs) && !lvalue_or_else (location, lhs, lv_ټاکل))
+    أرجع error_mark_غوټه;
 
   is_atomic_op = really_atomic_lvalue (lhs);
 
   newrhs = rhs;
 
-  if (TREE_CODE (lhs) == C_MAYBE_CONST_EXPR)
+  إذا (ونه_کوډ (lhs) == C_MAYBE_CONST_بیان)
     {
-      tree inner = build_modify_expr (location, C_MAYBE_CONST_EXPR_EXPR (lhs),
+      ونه inner = build_modify_بیان (location, C_MAYBE_CONST_بیان_بیان (lhs),
 				      lhs_origtype, modifycode, rhs_loc, rhs,
 				      rhs_origtype);
-      if (inner == error_mark_node)
-	return error_mark_node;
-      result = build2 (C_MAYBE_CONST_EXPR, TREE_TYPE (inner),
-		       C_MAYBE_CONST_EXPR_PRE (lhs), inner);
-      gcc_assert (!C_MAYBE_CONST_EXPR_INT_OPERANDS (lhs));
-      C_MAYBE_CONST_EXPR_NON_CONST (result) = 1;
-      protected_set_expr_location (result, location);
-      return result;
+      إذا (inner == error_mark_غوټه)
+	أرجع error_mark_غوټه;
+      پایله = build2 (C_MAYBE_CONST_بیان, ونه_TYPE (inner),
+		       C_MAYBE_CONST_بیان_PRE (lhs), inner);
+      gcc_assert (!C_MAYBE_CONST_بیان_INT_OPERANDS (lhs));
+      C_MAYBE_CONST_بیان_NON_CONST (پایله) = 1;
+      protected_سېټ_بیان_location (پایله, location);
+      أرجع پایله;
     }
 
   /* If a binary op has been requested, combine the old LHS value with the RHS
      producing the value we should actually store into the LHS.  */
 
-  if (modifycode != NOP_EXPR)
+  إذا (modifycode != NOP_بیان)
     {
-      lhs = c_fully_fold (lhs, false, NULL, true);
+      lhs = c_fully_fold (lhs, خطأ, عدم, ریښتیا);
       lhs = stabilize_reference (lhs);
 
       /* Construct the RHS for any non-atomic compound assignment. */
-      if (!is_atomic_op)
+      إذا (!is_atomic_op)
         {
 	  /* If in LHS op= RHS the RHS has side-effects, ensure they
 	     are preevaluated before the rest of the assignment expression's
 	     side-effects, because RHS could contain e.g. function calls
 	     that modify LHS.  */
-	  if (TREE_SIDE_EFFECTS (rhs))
+	  إذا (ونه_SIDE_EFFECTS (rhs))
 	    {
-	      if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
-		newrhs = save_expr (TREE_OPERAND (rhs, 0));
-	      else
-		newrhs = save_expr (rhs);
+	      إذا (ونه_کوډ (rhs) == EXCESS_PRECISION_بیان)
+		newrhs = save_بیان (ونه_عملوند (rhs, 0));
+	      وإلا
+		newrhs = save_بیان (rhs);
 	      rhseval = newrhs;
-	      if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
-		newrhs = build1 (EXCESS_PRECISION_EXPR, TREE_TYPE (rhs),
+	      إذا (ونه_کوډ (rhs) == EXCESS_PRECISION_بیان)
+		newrhs = build1 (EXCESS_PRECISION_بیان, ونه_TYPE (rhs),
 				 newrhs);
 	    }
-	  bool clear_decl_read = false;
-	  if ((VAR_P (lhs) || TREE_CODE (lhs) == PARM_DECL)
+	  منطقي clear_decl_read = خطأ;
+	  إذا ((VAR_P (lhs) || ونه_کوډ (lhs) == PARM_DECL)
 	      && !DECL_READ_P (lhs)
-	      && (VAR_P (lhs) ? warn_unused_but_set_variable
-			      : warn_unused_but_set_parameter) > 2)
+	      && (VAR_P (lhs) ? warn_ناکارول_شوی_but_سېټ_variable
+			      : warn_ناکارول_شوی_but_سېټ_parameter) > 2)
 	    {
 	      mark_exp_read (newrhs);
-	      if (!DECL_READ_P (lhs))
-		clear_decl_read = true;
+	      إذا (!DECL_READ_P (lhs))
+		clear_decl_read = ریښتیا;
 	    }
 
-	  newrhs = build_binary_op (location, modifycode,
-				    convert_lvalue_to_rvalue (location, lhs,
-							      true, true),
-				    newrhs, true);
-	  if (clear_decl_read)
+	  newrhs = build_دوګونی_op (location, modifycode,
+				    convert_lvalue_منزل_rvalue (location, lhs,
+							      ریښتیا, ریښتیا),
+				    newrhs, ریښتیا);
+	  إذا (clear_decl_read)
 	    DECL_READ_P (lhs) = 0;
 
 	  /* The original type of the right hand side is no longer
 	     meaningful.  */
-	  rhs_origtype = NULL_TREE;
+	  rhs_origtype = NULL_ونه;
 	}
     }
 
-  if (c_dialect_objc ())
+  إذا (c_dialect_objc ())
     {
       /* Check if we are modifying an Objective-C property reference;
 	 if so, we need to generate setter calls.  */
-      if (TREE_CODE (newrhs) == EXCESS_PRECISION_EXPR)
-	result = objc_maybe_build_modify_expr (lhs, TREE_OPERAND (newrhs, 0));
-      else
-	result = objc_maybe_build_modify_expr (lhs, newrhs);
-      if (result)
-	goto return_result;
+      إذا (ونه_کوډ (newrhs) == EXCESS_PRECISION_بیان)
+	پایله = objc_maybe_build_modify_بیان (lhs, ونه_عملوند (newrhs, 0));
+      وإلا
+	پایله = objc_maybe_build_modify_بیان (lhs, newrhs);
+      إذا (پایله)
+	اذهب return_پایله;
 
       /* Else, do the check that we postponed for Objective-C.  */
-      if (!lvalue_or_else (location, lhs, lv_assign))
-	return error_mark_node;
+      إذا (!lvalue_or_else (location, lhs, lv_ټاکل))
+	أرجع error_mark_غوټه;
     }
 
   /* Give an error for storing in something that is 'const'.  */
 
-  if (TYPE_READONLY (lhstype)
-      || (RECORD_OR_UNION_TYPE_P (lhstype)
+  إذا (TYPE_READONLY (lhstype)
+      || (ریکارډ_OR_UNION_TYPE_P (lhstype)
 	  && C_TYPE_FIELDS_READONLY (lhstype)))
     {
-      readonly_error (location, lhs, lv_assign);
-      return error_mark_node;
+      readonly_error (location, lhs, lv_ټاکل);
+      أرجع error_mark_غوټه;
     }
-  else if (TREE_READONLY (lhs))
-    readonly_warning (lhs, lv_assign);
+  وإلا إذا (ونه_READONLY (lhs))
+    readonly_warning (lhs, lv_ټاکل);
 
   /* If storing into a structure or union member,
      it has probably been given type `int'.
      Compute the type that would go with
      the actual amount of storage the member occupies.  */
 
-  if (TREE_CODE (lhs) == COMPONENT_REF
-      && (TREE_CODE (lhstype) == INTEGER_TYPE
-	  || TREE_CODE (lhstype) == BOOLEAN_TYPE
+  إذا (ونه_کوډ (lhs) == COMPONENT_REF
+      && (ونه_کوډ (lhstype) == INTEGER_TYPE
+	  || ونه_کوډ (lhstype) == BOOLEAN_TYPE
 	  || SCALAR_FLOAT_TYPE_P (lhstype)
-	  || TREE_CODE (lhstype) == ENUMERAL_TYPE))
-    lhstype = TREE_TYPE (get_unwidened (lhs, 0));
+	  || ونه_کوډ (lhstype) == ENUMERAL_TYPE))
+    lhstype = ونه_TYPE (get_unwidened (lhs, 0));
 
   /* If storing in a field that is in actuality a short or narrower than one,
      we must store in the field in its actual type.  */
 
-  if (lhstype != TREE_TYPE (lhs))
+  إذا (lhstype != ونه_TYPE (lhs))
     {
-      lhs = copy_node (lhs);
-      TREE_TYPE (lhs) = lhstype;
+      lhs = copy_غوټه (lhs);
+      ونه_TYPE (lhs) = lhstype;
     }
 
   /* Issue -Wc++-compat warnings about an assignment to an enum type
      when LHS does not have its original type.  This happens for,
      e.g., an enum bitfield in a struct.  */
-  if (warn_cxx_compat
-      && lhs_origtype != NULL_TREE
+  إذا (warn_cxx_compat
+      && lhs_origtype != NULL_ونه
       && lhs_origtype != lhstype
-      && TREE_CODE (lhs_origtype) == ENUMERAL_TYPE)
+      && ونه_کوډ (lhs_origtype) == ENUMERAL_TYPE)
     {
-      tree checktype = (rhs_origtype != NULL_TREE
+      ونه checktype = (rhs_origtype != NULL_ونه
 			? rhs_origtype
-			: TREE_TYPE (rhs));
-      if (checktype != error_mark_node
+			: ونه_TYPE (rhs));
+      إذا (checktype != error_mark_غوټه
 	  && (TYPE_MAIN_VARIANT (checktype) != TYPE_MAIN_VARIANT (lhs_origtype)
-	      || (is_atomic_op && modifycode != NOP_EXPR)))
+	      || (is_atomic_op && modifycode != NOP_بیان)))
 	warning_at (location, OPT_Wc___compat,
 		    "enum conversion in assignment is invalid in C++");
     }
@@ -7957,50 +7957,50 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
      restore any excess precision information, for the sake of
      conversion warnings.  */
 
-  if (!(is_atomic_op && modifycode != NOP_EXPR))
+  إذا (!(is_atomic_op && modifycode != NOP_بیان))
     {
-      tree rhs_semantic_type = NULL_TREE;
-      if (!c_in_omp_for)
+      ونه rhs_semantic_type = NULL_ونه;
+      إذا (!c_دننه_omp_for)
 	{
-	  if (TREE_CODE (newrhs) == EXCESS_PRECISION_EXPR)
+	  إذا (ونه_کوډ (newrhs) == EXCESS_PRECISION_بیان)
 	    {
-	      rhs_semantic_type = TREE_TYPE (newrhs);
-	      newrhs = TREE_OPERAND (newrhs, 0);
+	      rhs_semantic_type = ونه_TYPE (newrhs);
+	      newrhs = ونه_عملوند (newrhs, 0);
 	    }
-	  npc = null_pointer_constant_p (newrhs);
-	  newrhs = c_fully_fold (newrhs, false, NULL);
-	  if (rhs_semantic_type)
-	    newrhs = build1 (EXCESS_PRECISION_EXPR, rhs_semantic_type, newrhs);
+	  npc = null_اشاره_ګر_constant_p (newrhs);
+	  newrhs = c_fully_fold (newrhs, خطأ, عدم);
+	  إذا (rhs_semantic_type)
+	    newrhs = build1 (EXCESS_PRECISION_بیان, rhs_semantic_type, newrhs);
 	}
-      else
-	npc = null_pointer_constant_p (newrhs);
+      وإلا
+	npc = null_اشاره_ګر_constant_p (newrhs);
       newrhs = convert_for_assignment (location, rhs_loc, lhstype, newrhs,
-				       rhs_origtype, ic_assign, npc,
-				       NULL_TREE, NULL_TREE, 0);
-      if (TREE_CODE (newrhs) == ERROR_MARK)
-	return error_mark_node;
+				       rhs_origtype, ic_ټاکل, npc,
+				       NULL_ونه, NULL_ونه, 0);
+      إذا (ونه_کوډ (newrhs) == ERROR_MARK)
+	أرجع error_mark_غوټه;
     }
 
   /* Emit ObjC write barrier, if necessary.  */
-  if (c_dialect_objc () && flag_objc_gc)
+  إذا (c_dialect_objc () && flag_objc_gc)
     {
-      result = objc_generate_write_barrier (lhs, modifycode, newrhs);
-      if (result)
+      پایله = objc_generate_write_barrier (lhs, modifycode, newrhs);
+      إذا (پایله)
 	{
-	  protected_set_expr_location (result, location);
-	  goto return_result;
+	  protected_سېټ_بیان_location (پایله, location);
+	  اذهب return_پایله;
 	}
     }
 
   /* Scan operands.  */
 
-  if (is_atomic_op)
-    result = build_atomic_assign (location, lhs, modifycode, newrhs, false);
-  else
+  إذا (is_atomic_op)
+    پایله = build_atomic_ټاکل (location, lhs, modifycode, newrhs, خطأ);
+  وإلا
     {
-      result = build2 (MODIFY_EXPR, lhstype, lhs, newrhs);
-      TREE_SIDE_EFFECTS (result) = 1;
-      protected_set_expr_location (result, location);
+      پایله = build2 (MODIFY_بیان, lhstype, lhs, newrhs);
+      ونه_SIDE_EFFECTS (پایله) = 1;
+      protected_سېټ_بیان_location (پایله, location);
     }
 
   /* If we got the LHS in a different type for storing in,
@@ -8008,53 +8008,53 @@ build_modify_expr (location_t location, tree lhs, tree lhs_origtype,
      so that the value we return always has the same type
      as the LHS argument.  */
 
-  if (olhstype == TREE_TYPE (result))
-    goto return_result;
+  إذا (olhstype == ونه_TYPE (پایله))
+    اذهب return_پایله;
 
-  result = convert_for_assignment (location, rhs_loc, olhstype, result,
-				   rhs_origtype, ic_assign, false, NULL_TREE,
-				   NULL_TREE, 0);
-  protected_set_expr_location (result, location);
+  پایله = convert_for_assignment (location, rhs_loc, olhstype, پایله,
+				   rhs_origtype, ic_ټاکل, خطأ, NULL_ونه,
+				   NULL_ونه, 0);
+  protected_سېټ_بیان_location (پایله, location);
 
-return_result:
-  if (rhseval)
-    result = build2 (COMPOUND_EXPR, TREE_TYPE (result), rhseval, result);
-  return result;
+return_پایله:
+  إذا (rhseval)
+    پایله = build2 (COMPOUND_بیان, ونه_TYPE (پایله), rhseval, پایله);
+  أرجع پایله;
 }
 
 /* Return whether STRUCT_TYPE has an anonymous field with type TYPE.
    This is used to implement -fplan9-extensions.  */
 
-static bool
-find_anonymous_field_with_type (tree struct_type, tree type)
+ساكن منطقي
+پیدا_کړه_anonymous_ډګر_with_type (ونه struct_type, ونه type)
 {
-  tree field;
-  bool found;
+  ونه ډګر_2;
+  منطقي وموندل;
 
-  gcc_assert (RECORD_OR_UNION_TYPE_P (struct_type));
-  found = false;
-  for (field = TYPE_FIELDS (struct_type);
-       field != NULL_TREE;
-       field = TREE_CHAIN (field))
+  gcc_assert (ریکارډ_OR_UNION_TYPE_P (struct_type));
+  وموندل = خطأ;
+  لكل (ډګر_2 = TYPE_FIELDS (struct_type);
+       ډګر_2 != NULL_ونه;
+       ډګر_2 = ونه_CHAIN (ډګر_2))
     {
-      tree fieldtype = remove_qualifiers (TREE_TYPE (field));
-      if (DECL_NAME (field) == NULL
+      ونه fieldtype = remove_qualifiers (ونه_TYPE (ډګر_2));
+      إذا (DECL_NAME (ډګر_2) == عدم
 	  && comptypes (type, fieldtype))
 	{
-	  if (found)
-	    return false;
-	  found = true;
+	  إذا (وموندل)
+	    أرجع خطأ;
+	  وموندل = ریښتیا;
 	}
-      else if (DECL_NAME (field) == NULL
-	       && RECORD_OR_UNION_TYPE_P (TREE_TYPE (field))
-	       && find_anonymous_field_with_type (TREE_TYPE (field), type))
+      وإلا إذا (DECL_NAME (ډګر_2) == عدم
+	       && ریکارډ_OR_UNION_TYPE_P (ونه_TYPE (ډګر_2))
+	       && پیدا_کړه_anonymous_ډګر_with_type (ونه_TYPE (ډګر_2), type))
 	{
-	  if (found)
-	    return false;
-	  found = true;
+	  إذا (وموندل)
+	    أرجع خطأ;
+	  وموندل = ریښتیا;
 	}
     }
-  return found;
+  أرجع وموندل;
 }
 
 /* RHS is an expression whose type is pointer to struct.  If there is
@@ -8062,106 +8062,106 @@ find_anonymous_field_with_type (tree struct_type, tree type)
    that field in RHS.  This is used with -fplan9-extensions.  This
    returns NULL if no conversion could be found.  */
 
-static tree
-convert_to_anonymous_field (location_t location, tree type, tree rhs)
+ساكن ونه
+convert_منزل_anonymous_ډګر (location_t location, ونه type, ونه rhs)
 {
-  tree rhs_struct_type, lhs_main_type;
-  tree field, found_field;
-  bool found_sub_field;
-  tree ret;
+  ونه rhs_struct_type, lhs_main_type;
+  ونه ډګر_2, وموندل_ډګر;
+  منطقي وموندل_sub_ډګر;
+  ونه ret;
 
-  gcc_assert (POINTER_TYPE_P (TREE_TYPE (rhs)));
-  rhs_struct_type = TREE_TYPE (TREE_TYPE (rhs));
-  gcc_assert (RECORD_OR_UNION_TYPE_P (rhs_struct_type));
+  gcc_assert (اشاره_ګر_TYPE_P (ونه_TYPE (rhs)));
+  rhs_struct_type = ونه_TYPE (ونه_TYPE (rhs));
+  gcc_assert (ریکارډ_OR_UNION_TYPE_P (rhs_struct_type));
 
-  gcc_assert (POINTER_TYPE_P (type));
-  lhs_main_type = remove_qualifiers (TREE_TYPE (type));
+  gcc_assert (اشاره_ګر_TYPE_P (type));
+  lhs_main_type = remove_qualifiers (ونه_TYPE (type));
 
-  found_field = NULL_TREE;
-  found_sub_field = false;
-  for (field = TYPE_FIELDS (rhs_struct_type);
-       field != NULL_TREE;
-       field = TREE_CHAIN (field))
+  وموندل_ډګر = NULL_ونه;
+  وموندل_sub_ډګر = خطأ;
+  لكل (ډګر_2 = TYPE_FIELDS (rhs_struct_type);
+       ډګر_2 != NULL_ونه;
+       ډګر_2 = ونه_CHAIN (ډګر_2))
     {
-      if (DECL_NAME (field) != NULL_TREE
-	  || !RECORD_OR_UNION_TYPE_P (TREE_TYPE (field)))
-	continue;
-      tree fieldtype = remove_qualifiers (TREE_TYPE (field));
-      if (comptypes (lhs_main_type, fieldtype))
+      إذا (DECL_NAME (ډګر_2) != NULL_ونه
+	  || !ریکارډ_OR_UNION_TYPE_P (ونه_TYPE (ډګر_2)))
+	استمر;
+      ونه fieldtype = remove_qualifiers (ونه_TYPE (ډګر_2));
+      إذا (comptypes (lhs_main_type, fieldtype))
 	{
-	  if (found_field != NULL_TREE)
-	    return NULL_TREE;
-	  found_field = field;
+	  إذا (وموندل_ډګر != NULL_ونه)
+	    أرجع NULL_ونه;
+	  وموندل_ډګر = ډګر_2;
 	}
-      else if (find_anonymous_field_with_type (TREE_TYPE (field),
+      وإلا إذا (پیدا_کړه_anonymous_ډګر_with_type (ونه_TYPE (ډګر_2),
 					       lhs_main_type))
 	{
-	  if (found_field != NULL_TREE)
-	    return NULL_TREE;
-	  found_field = field;
-	  found_sub_field = true;
+	  إذا (وموندل_ډګر != NULL_ونه)
+	    أرجع NULL_ونه;
+	  وموندل_ډګر = ډګر_2;
+	  وموندل_sub_ډګر = ریښتیا;
 	}
     }
 
-  if (found_field == NULL_TREE)
-    return NULL_TREE;
+  إذا (وموندل_ډګر == NULL_ونه)
+    أرجع NULL_ونه;
 
-  ret = fold_build3_loc (location, COMPONENT_REF, TREE_TYPE (found_field),
-			 build_fold_indirect_ref (rhs), found_field,
-			 NULL_TREE);
-  ret = build_fold_addr_expr_loc (location, ret);
+  ret = fold_build3_loc (location, COMPONENT_REF, ونه_TYPE (وموندل_ډګر),
+			 build_fold_غیرمستقیم_ref (rhs), وموندل_ډګر,
+			 NULL_ونه);
+  ret = build_fold_addr_بیان_loc (location, ret);
 
-  if (found_sub_field)
+  إذا (وموندل_sub_ډګر)
     {
-      ret = convert_to_anonymous_field (location, type, ret);
-      gcc_assert (ret != NULL_TREE);
+      ret = convert_منزل_anonymous_ډګر (location, type, ret);
+      gcc_assert (ret != NULL_ونه);
     }
 
-  return ret;
+  أرجع ret;
 }
 
 /* Issue an error message for a bad initializer component.
    GMSGID identifies the message.
    The component name is taken from the spelling stack.  */
 
-static void ATTRIBUTE_GCC_DIAG (2,0)
-error_init (location_t loc, const char *gmsgid, ...)
+ساكن فراغ ATTRIBUTE_GCC_DIAG (2,0)
+error_init (location_t loc, ثابت حرف *gmsgid, ...)
 {
-  char *ofwhat;
+  حرف *ofwhat;
 
-  auto_diagnostic_group d;
+  auto_diagnostic_ډله d;
 
   /* The gmsgid may be a format string with %< and %>. */
   va_list ap;
-  va_start (ap, gmsgid);
-  bool warned = emit_diagnostic_valist (diagnostics::kind::error,
+  va_پیل (ap, gmsgid);
+  منطقي warned = emit_diagnostic_valist (diagnostics::ډول::error,
 					loc, -1, gmsgid, &ap);
-  va_end (ap);
+  va_پای_ټکی (ap);
 
-  ofwhat = print_spelling ((char *) alloca (spelling_length () + 1));
-  if (*ofwhat && warned)
+  ofwhat = print_spelling ((حرف *) alloca (spelling_اوږدتیا () + 1));
+  إذا (*ofwhat && warned)
     inform (loc, "(near initialization for %qs)", ofwhat);
 }
 
 /* Used to implement pedwarn_init and permerror_init.  */
 
-static bool ATTRIBUTE_GCC_DIAG (3,0)
-pedwarn_permerror_init (location_t loc, int opt, const char *gmsgid,
-			va_list *ap, enum diagnostics::kind kind)
+ساكن منطقي ATTRIBUTE_GCC_DIAG (3,0)
+pedwarn_permerror_init (location_t loc, صحيح opt, ثابت حرف *gmsgid,
+			va_list *ap, تعداد diagnostics::ډول ډول)
 {
   /* Use the location where a macro was expanded rather than where
      it was defined to make sure macros defined in system headers
      but used incorrectly elsewhere are diagnosed.  */
-  location_t exploc = expansion_point_location_if_in_system_header (loc);
-  auto_diagnostic_group d;
-  bool warned = emit_diagnostic_valist (kind, exploc, opt, gmsgid, ap);
-  if (warned)
+  location_t exploc = expansion_ټکی_location_if_دننه_system_سرلیک (loc);
+  auto_diagnostic_ډله d;
+  منطقي warned = emit_diagnostic_valist (ډول, exploc, opt, gmsgid, ap);
+  إذا (warned)
     {
-      char *ofwhat = print_spelling ((char *) alloca (spelling_length () + 1));
-      if (*ofwhat)
+      حرف *ofwhat = print_spelling ((حرف *) alloca (spelling_اوږدتیا () + 1));
+      إذا (*ofwhat)
 	inform (exploc, "(near initialization for %qs)", ofwhat);
     }
-  return warned;
+  أرجع warned;
 }
 
 /* Issue a pedantic warning for a bad initializer component.  OPT is
@@ -8169,28 +8169,28 @@ pedwarn_permerror_init (location_t loc, int opt, const char *gmsgid,
    it is unconditionally given.  GMSGID identifies the message.  The
    component name is taken from the spelling stack.  */
 
-static bool ATTRIBUTE_GCC_DIAG (3,0)
-pedwarn_init (location_t loc, int opt, const char *gmsgid, ...)
+ساكن منطقي ATTRIBUTE_GCC_DIAG (3,0)
+pedwarn_init (location_t loc, صحيح opt, ثابت حرف *gmsgid, ...)
 {
   va_list ap;
-  va_start (ap, gmsgid);
-  bool warned = pedwarn_permerror_init (loc, opt, gmsgid, &ap,
-					diagnostics::kind::pedwarn);
-  va_end (ap);
-  return warned;
+  va_پیل (ap, gmsgid);
+  منطقي warned = pedwarn_permerror_init (loc, opt, gmsgid, &ap,
+					diagnostics::ډول::pedwarn);
+  va_پای_ټکی (ap);
+  أرجع warned;
 }
 
 /* Like pedwarn_init, but issue a permerror.  */
 
-static bool ATTRIBUTE_GCC_DIAG (3,0)
-permerror_init (location_t loc, int opt, const char *gmsgid, ...)
+ساكن منطقي ATTRIBUTE_GCC_DIAG (3,0)
+permerror_init (location_t loc, صحيح opt, ثابت حرف *gmsgid, ...)
 {
   va_list ap;
-  va_start (ap, gmsgid);
-  bool warned = pedwarn_permerror_init (loc, opt, gmsgid, &ap,
-					diagnostics::kind::permerror);
-  va_end (ap);
-  return warned;
+  va_پیل (ap, gmsgid);
+  منطقي warned = pedwarn_permerror_init (loc, opt, gmsgid, &ap,
+					diagnostics::ډول::permerror);
+  va_پای_ټکی (ap);
+  أرجع warned;
 }
 
 /* Issue a warning for a bad initializer component.
@@ -8199,25 +8199,25 @@ permerror_init (location_t loc, int opt, const char *gmsgid, ...)
    controls this warning.  GMSGID identifies the message.  The
    component name is taken from the spelling stack.  */
 
-static void
-warning_init (location_t loc, int opt, const char *gmsgid)
+ساكن فراغ
+warning_init (location_t loc, صحيح opt, ثابت حرف *gmsgid)
 {
-  char *ofwhat;
-  bool warned;
+  حرف *ofwhat;
+  منطقي warned;
 
-  auto_diagnostic_group d;
+  auto_diagnostic_ډله d;
 
   /* Use the location where a macro was expanded rather than where
      it was defined to make sure macros defined in system headers
      but used incorrectly elsewhere are diagnosed.  */
-  location_t exploc = expansion_point_location_if_in_system_header (loc);
+  location_t exploc = expansion_ټکی_location_if_دننه_system_سرلیک (loc);
 
   /* The gmsgid may be a format string with %< and %>. */
   warned = warning_at (exploc, opt, gmsgid);
-  if (warned)
+  إذا (warned)
     {
-      ofwhat = print_spelling ((char *) alloca (spelling_length () + 1));
-      if (*ofwhat)
+      ofwhat = print_spelling ((حرف *) alloca (spelling_اوږدتیا () + 1));
+      إذا (*ofwhat)
 	inform (exploc, "(near initialization for %qs)", ofwhat);
     }
 }
@@ -8226,13 +8226,13 @@ warning_init (location_t loc, int opt, const char *gmsgid)
    constant, warn if pedantic that EXPR is being used to initialize an
    object of type TYPE.  */
 
-void
-maybe_warn_string_init (location_t loc, tree type, struct c_expr expr)
+فراغ
+maybe_warn_string_init (location_t loc, ونه type, بنية c_بیان بیان)
 {
-  if (pedantic
-      && TREE_CODE (type) == ARRAY_TYPE
-      && TREE_CODE (expr.value) == STRING_CST
-      && expr.original_code != STRING_CST)
+  إذا (pedantic
+      && ونه_کوډ (type) == ARRAY_TYPE
+      && ونه_کوډ (بیان.ارزښت) == STRING_CST
+      && بیان.original_کوډ != STRING_CST)
     pedwarn_init (loc, OPT_Wpedantic,
 		  "array initialized from parenthesized string constant");
 }
@@ -8240,24 +8240,24 @@ maybe_warn_string_init (location_t loc, tree type, struct c_expr expr)
 /* Attempt to locate the parameter with the given index within FNDECL,
    returning DECL_SOURCE_LOCATION (FNDECL) if it can't be found.  */
 
-static location_t
-get_fndecl_argument_location (tree fndecl, int argnum)
+ساكن location_t
+get_fndecl_دلیل_location (ونه fndecl, صحيح argnum)
 {
-  int i;
-  tree param;
+  صحيح i;
+  ونه param;
 
   /* Locate param by index within DECL_ARGUMENTS (fndecl).  */
-  for (i = 0, param = DECL_ARGUMENTS (fndecl);
+  لكل (i = 0, param = DECL_ARGUMENTS (fndecl);
        i < argnum && param;
-       i++, param = TREE_CHAIN (param))
+       i++, param = ونه_CHAIN (param))
     ;
 
   /* If something went wrong (e.g. if we have a builtin and thus no arguments),
      return DECL_SOURCE_LOCATION (FNDECL).  */
-  if (param == NULL)
-    return DECL_SOURCE_LOCATION (fndecl);
+  إذا (param == عدم)
+    أرجع DECL_سرچینه_LOCATION (fndecl);
 
-  return DECL_SOURCE_LOCATION (param);
+  أرجع DECL_سرچینه_LOCATION (param);
 }
 
 /* Issue a note about a mismatching argument for parameter PARMNUM
@@ -8269,17 +8269,17 @@ get_fndecl_argument_location (tree fndecl, int argnum)
    and highlight_colors::expected for EXPECTED_TYPE and the
    parameter of FUNDECL*/
 
-static void
-inform_for_arg (tree fundecl, location_t ploc, int parmnum,
-		tree expected_type, tree actual_type)
+ساكن فراغ
+inform_for_arg (ونه fundecl, location_t ploc, صحيح parmnum,
+		ونه expected_type, ونه actual_type)
 {
   location_t loc;
-  if (fundecl && !DECL_IS_UNDECLARED_BUILTIN (fundecl))
-    loc = get_fndecl_argument_location (fundecl, parmnum - 1);
-  else
+  إذا (fundecl && !DECL_IS_UNDECLARED_BUILTIN (fundecl))
+    loc = get_fndecl_دلیل_location (fundecl, parmnum - 1);
+  وإلا
     loc = ploc;
 
-  gcc_rich_location richloc (loc, nullptr, highlight_colors::expected);
+  gcc_rich_location richloc (loc, تش_اشاره, highlight_colors::expected);
 
   pp_markup::element_expected_type elem_expected_type (expected_type);
   pp_markup::element_actual_type elem_actual_type (actual_type);
@@ -8292,31 +8292,31 @@ inform_for_arg (tree fundecl, location_t ploc, int parmnum,
    function FUNDECL declared without prototype to parameter PARMNUM of
    PARMTYPE when ARGTYPE does not promote to PARMTYPE.  */
 
-static void
-maybe_warn_builtin_no_proto_arg (location_t loc, tree fundecl, int parmnum,
-				 tree parmtype, tree argtype)
+ساكن فراغ
+maybe_warn_builtin_no_proto_arg (location_t loc, ونه fundecl, صحيح parmnum,
+				 ونه parmtype, ونه argtype)
 {
-  tree_code parmcode = TREE_CODE (parmtype);
-  tree_code argcode = TREE_CODE (argtype);
-  tree promoted = c_type_promotes_to (argtype);
+  ونه_کوډ_2 parmcode = ونه_کوډ (parmtype);
+  ونه_کوډ_2 argcode = ونه_کوډ (argtype);
+  ونه promoted = c_type_promotes_منزل (argtype);
 
   /* Avoid warning for enum arguments that promote to an integer type
      of the same size/mode.  */
-  if (parmcode == INTEGER_TYPE
+  إذا (parmcode == INTEGER_TYPE
       && argcode == ENUMERAL_TYPE
-      && TYPE_MODE (parmtype) == TYPE_MODE (argtype))
-    return;
+      && TYPE_ډېرپېښ (parmtype) == TYPE_ډېرپېښ (argtype))
+    أرجع;
 
-  if ((parmcode == argcode
+  إذا ((parmcode == argcode
        || (parmcode == INTEGER_TYPE
 	   && argcode == ENUMERAL_TYPE))
       && TYPE_MAIN_VARIANT (parmtype) == TYPE_MAIN_VARIANT (promoted))
-    return;
+    أرجع;
 
   /* This diagnoses even signed/unsigned mismatches.  Those might be
      safe in many cases but GCC may emit suboptimal code for them so
      warning on those cases drives efficiency improvements.  */
-  if (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
+  إذا (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
 		  TYPE_MAIN_VARIANT (promoted) == argtype
 		  ? G_("%qD argument %d type is %qT where %qT is expected "
 		       "in a call to built-in function declared without "
@@ -8325,7 +8325,7 @@ maybe_warn_builtin_no_proto_arg (location_t loc, tree fundecl, int parmnum,
 		       "in a call to built-in function declared without "
 		       "prototype"),
 		  fundecl, parmnum, promoted, parmtype))
-    inform (DECL_SOURCE_LOCATION (fundecl),
+    inform (DECL_سرچینه_LOCATION (fundecl),
 	    "built-in %qD declared here",
 	    fundecl);
 }
@@ -8333,55 +8333,55 @@ maybe_warn_builtin_no_proto_arg (location_t loc, tree fundecl, int parmnum,
 /* Print a declaration in quotes, with the given highlight_color.
    Analogous to handler for %qD, but with a specific highlight color.  */
 
-class pp_element_quoted_decl : public pp_element
+صنف pp_element_quoted_decl : عام pp_element
 {
-public:
-  pp_element_quoted_decl (tree decl, const char *highlight_color)
+عام:
+  pp_element_quoted_decl (ونه decl, ثابت حرف *highlight_color)
   : m_decl (decl),
     m_highlight_color (highlight_color)
   {
   }
 
-  void add_to_phase_2 (pp_markup::context &ctxt) override
+  فراغ جمع_کړه_منزل_phase_2 (pp_markup::context &ctxt) override
   {
     ctxt.begin_quote ();
     ctxt.begin_highlight_color (m_highlight_color);
 
     print_decl (ctxt);
 
-    ctxt.end_highlight_color ();
-    ctxt.end_quote ();
+    ctxt.پای_ټکی_highlight_color ();
+    ctxt.پای_ټکی_quote ();
   }
 
-  void print_decl (pp_markup::context &ctxt)
+  فراغ print_decl (pp_markup::context &ctxt)
   {
-    pretty_printer *const pp = &ctxt.m_pp;
-    pp->set_padding (pp_none);
-    if (DECL_NAME (m_decl))
+    pretty_printer *ثابت pp = &ctxt.m_pp;
+    pp->سېټ_padding (pp_none);
+    إذا (DECL_NAME (m_decl))
       pp_identifier (pp, lang_hooks.decl_printable_name (m_decl, 2));
-    else
+    وإلا
       pp_string (pp, _("({anonymous})"));
   }
 
-private:
-  tree m_decl;
-  const char *m_highlight_color;
+خاص:
+  ونه m_decl;
+  ثابت حرف *m_highlight_color;
 };
 
 /* If TYPE is from a typedef, issue a note showing the location
    to the user.
    Use HIGHLIGHT_COLOR as the highlight color.  */
 
-static void
-maybe_inform_typedef_location (tree type, const char *highlight_color)
+ساكن فراغ
+maybe_inform_typedef_location (ونه type, ثابت حرف *highlight_color)
 {
-  if (!typedef_variant_p (type))
-    return;
+  إذا (!typedef_variant_p (type))
+    أرجع;
 
-  tree typedef_decl = TYPE_NAME (type);
-  gcc_assert (TREE_CODE (typedef_decl) == TYPE_DECL);
-  gcc_rich_location richloc (DECL_SOURCE_LOCATION (typedef_decl),
-			     nullptr, highlight_color);
+  ونه typedef_decl = TYPE_NAME (type);
+  gcc_assert (ونه_کوډ (typedef_decl) == TYPE_DECL);
+  gcc_rich_location richloc (DECL_سرچینه_LOCATION (typedef_decl),
+			     تش_اشاره, highlight_color);
   pp_element_quoted_decl e_typedef_decl (typedef_decl, highlight_color);
   inform (&richloc, "%e declared here", &e_typedef_decl);
 }
@@ -8415,36 +8415,36 @@ maybe_inform_typedef_location (tree type, const char *highlight_color)
    rather than an error for invalid conversions.  Used for calls to built-in
    functions declared without a prototype.  */
 
-static tree
-convert_for_assignment (location_t location, location_t expr_loc, tree type,
-			tree rhs, tree origtype, enum impl_conv errtype,
-			bool null_pointer_constant, tree fundecl,
-			tree function, int parmnum, int warnopt /* = 0 */)
+ساكن ونه
+convert_for_assignment (location_t location, location_t بیان_loc, ونه type,
+			ونه rhs, ونه origtype, تعداد impl_conv errtype,
+			منطقي null_اشاره_ګر_constant, ونه fundecl,
+			ونه function, صحيح parmnum, صحيح warnopt /* = 0 */)
 {
-  enum tree_code codel = TREE_CODE (type);
-  tree orig_rhs = rhs;
-  tree rhstype;
-  enum tree_code coder;
-  tree rname = NULL_TREE;
-  bool objc_ok = false;
+  تعداد ونه_کوډ_2 codel = ونه_کوډ (type);
+  ونه orig_rhs = rhs;
+  ونه rhstype;
+  تعداد ونه_کوډ_2 coder;
+  ونه rname = NULL_ونه;
+  منطقي objc_ok = خطأ;
 
   /* Use the expansion point location to handle cases such as user's
      function returning a wrong-type macro defined in a system header.  */
-  location = expansion_point_location_if_in_system_header (location);
+  location = expansion_ټکی_location_if_دننه_system_سرلیک (location);
 
-  if (errtype == ic_argpass)
+  إذا (errtype == ic_argpass)
     {
-      tree selector;
+      ونه selector;
       /* Change pointer to function to the function itself for
 	 diagnostics.  */
-      if (TREE_CODE (function) == ADDR_EXPR
-	  && TREE_CODE (TREE_OPERAND (function, 0)) == FUNCTION_DECL)
-	function = TREE_OPERAND (function, 0);
+      إذا (ونه_کوډ (function) == ADDR_بیان
+	  && ونه_کوډ (ونه_عملوند (function, 0)) == FUNCTION_DECL)
+	function = ونه_عملوند (function, 0);
 
       /* Handle an ObjC selector specially for diagnostics.  */
-      selector = objc_message_selector ();
+      selector = objc_پیغام_selector ();
       rname = function;
-      if (selector && parmnum > 2)
+      إذا (selector && parmnum > 2)
 	{
 	  rname = selector;
 	  parmnum -= 2;
@@ -8454,161 +8454,161 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
   /* This macro is used to emit diagnostics to ensure that all format
      strings are complete sentences, visible to gettext and checked at
      compile time.  */
-#define PEDWARN_FOR_ASSIGNMENT(LOCATION, PLOC, OPT, AR, AS, IN, RE)	 \
-  do {                                                                   \
-    switch (errtype)                                                     \
+#تعریف_کړه PEDWARN_FOR_ASSIGNMENT(LOCATION, PLOC, OPT, AR, AS, دننه, RE)	 \
+  افعل {                                                                   \
+    بدل (errtype)                                                     \
       {                                                                  \
-      case ic_argpass:                                                   \
+      حالة ic_argpass:                                                   \
 	{								\
-	  auto_diagnostic_group d;						\
-	  if (pedwarn (PLOC, OPT, AR, parmnum, rname))		\
+	  auto_diagnostic_ډله d;						\
+	  إذا (pedwarn (PLOC, OPT, AR, parmnum, rname))		\
 	    inform_for_arg (fundecl, (PLOC), parmnum, type, rhstype); \
 	}								\
-        break;                                                           \
-      case ic_assign:                                                    \
+        اكسر;                                                           \
+      حالة ic_ټاکل:                                                    \
         pedwarn (LOCATION, OPT, AS);                                     \
-        break;                                                           \
-      case ic_init:                                                      \
-      case ic_init_const:                                                \
-        pedwarn_init (LOCATION, OPT, IN);                                \
-        break;                                                           \
-      case ic_return:                                                    \
+        اكسر;                                                           \
+      حالة ic_init:                                                      \
+      حالة ic_init_const:                                                \
+        pedwarn_init (LOCATION, OPT, دننه);                                \
+        اكسر;                                                           \
+      حالة ic_return:                                                    \
         pedwarn (LOCATION, OPT, RE);					 \
-        break;                                                           \
-      default:                                                           \
+        اكسر;                                                           \
+      افتراضي:                                                           \
         gcc_unreachable ();                                              \
       }                                                                  \
-  } while (0)
+  } طالما (0)
 
   /* This macro is used to emit diagnostics to ensure that all format
      strings are complete sentences, visible to gettext and checked at
      compile time.  It can be called with 'pedwarn' or 'warning_at'.  */
-#define WARNING_FOR_QUALIFIERS(PEDWARN, LOCATION, PLOC, OPT, AR, AS, IN, RE, QUALS) \
-  do {                                                                   \
-    switch (errtype)                                                     \
+#تعریف_کړه WARNING_FOR_QUALIFIERS(PEDWARN, LOCATION, PLOC, OPT, AR, AS, دننه, RE, QUALS) \
+  افعل {                                                                   \
+    بدل (errtype)                                                     \
       {                                                                  \
-      case ic_argpass:                                                   \
+      حالة ic_argpass:                                                   \
 	{								 \
-	  auto_diagnostic_group d;					 \
-	  if (PEDWARN) {						 \
-	    if (pedwarn (PLOC, OPT, AR, parmnum, rname, QUALS))          \
+	  auto_diagnostic_ډله d;					 \
+	  إذا (PEDWARN) {						 \
+	    إذا (pedwarn (PLOC, OPT, AR, parmnum, rname, QUALS))          \
 	      inform_for_arg (fundecl, (PLOC), parmnum, type, rhstype);  \
-	  } else {							 \
-	    if (warning_at (PLOC, OPT, AR, parmnum, rname, QUALS))	 \
+	  } وإلا {							 \
+	    إذا (warning_at (PLOC, OPT, AR, parmnum, rname, QUALS))	 \
 	      inform_for_arg (fundecl, (PLOC), parmnum, type, rhstype);  \
 	  }								 \
 	}								 \
-        break;                                                           \
-      case ic_assign:                                                    \
-	if (PEDWARN)							 \
+        اكسر;                                                           \
+      حالة ic_ټاکل:                                                    \
+	إذا (PEDWARN)							 \
 	  pedwarn (LOCATION, OPT, AS, QUALS);                            \
-	else								 \
+	وإلا								 \
 	  warning_at (LOCATION, OPT, AS, QUALS);                         \
-        break;                                                           \
-      case ic_init:                                                      \
-      case ic_init_const:                                                \
-	if (PEDWARN)							 \
-	  pedwarn (LOCATION, OPT, IN, QUALS);                            \
-	else								 \
-	  warning_at (LOCATION, OPT, IN, QUALS);                         \
-        break;                                                           \
-      case ic_return:                                                    \
-	if (PEDWARN)							 \
+        اكسر;                                                           \
+      حالة ic_init:                                                      \
+      حالة ic_init_const:                                                \
+	إذا (PEDWARN)							 \
+	  pedwarn (LOCATION, OPT, دننه, QUALS);                            \
+	وإلا								 \
+	  warning_at (LOCATION, OPT, دننه, QUALS);                         \
+        اكسر;                                                           \
+      حالة ic_return:                                                    \
+	إذا (PEDWARN)							 \
 	  pedwarn (LOCATION, OPT, RE, QUALS);                            \
-	else								 \
+	وإلا								 \
 	  warning_at (LOCATION, OPT, RE, QUALS);                         \
-        break;                                                           \
-      default:                                                           \
+        اكسر;                                                           \
+      افتراضي:                                                           \
         gcc_unreachable ();                                              \
       }                                                                  \
-  } while (0)
+  } طالما (0)
 
   /* This macro is used to emit diagnostics to ensure that all format
      strings are complete sentences, visible to gettext and checked at
      compile time.  It is the same as PEDWARN_FOR_ASSIGNMENT but with an
      extra parameter to enumerate qualifiers.  */
-#define PEDWARN_FOR_QUALIFIERS(LOCATION, PLOC, OPT, AR, AS, IN, RE, QUALS) \
-   WARNING_FOR_QUALIFIERS (true, LOCATION, PLOC, OPT, AR, AS, IN, RE, QUALS)
+#تعریف_کړه PEDWARN_FOR_QUALIFIERS(LOCATION, PLOC, OPT, AR, AS, دننه, RE, QUALS) \
+   WARNING_FOR_QUALIFIERS (ریښتیا, LOCATION, PLOC, OPT, AR, AS, دننه, RE, QUALS)
 
 
-  if (TREE_CODE (rhs) == EXCESS_PRECISION_EXPR)
-    rhs = TREE_OPERAND (rhs, 0);
+  إذا (ونه_کوډ (rhs) == EXCESS_PRECISION_بیان)
+    rhs = ونه_عملوند (rhs, 0);
 
-  rhstype = TREE_TYPE (rhs);
-  coder = TREE_CODE (rhstype);
+  rhstype = ونه_TYPE (rhs);
+  coder = ونه_کوډ (rhstype);
 
-  if (coder == ERROR_MARK)
-    return error_mark_node;
+  إذا (coder == ERROR_MARK)
+    أرجع error_mark_غوټه;
 
-  if (c_dialect_objc ())
+  إذا (c_dialect_objc ())
     {
-      int parmno;
+      صحيح parmno;
 
-      switch (errtype)
+      بدل (errtype)
 	{
-	case ic_return:
+	حالة ic_return:
 	  parmno = 0;
-	  break;
+	  اكسر;
 
-	case ic_assign:
+	حالة ic_ټاکل:
 	  parmno = -1;
-	  break;
+	  اكسر;
 
-	case ic_init:
-	case ic_init_const:
+	حالة ic_init:
+	حالة ic_init_const:
 	  parmno = -2;
-	  break;
+	  اكسر;
 
-	default:
+	افتراضي:
 	  parmno = parmnum;
-	  break;
+	  اكسر;
 	}
 
       objc_ok = objc_compare_types (type, rhstype, parmno, rname);
     }
 
-  if (warn_cxx_compat)
+  إذا (warn_cxx_compat)
     {
-      tree checktype = origtype != NULL_TREE ? origtype : rhstype;
-      if (checktype != error_mark_node
-	  && TREE_CODE (type) == ENUMERAL_TYPE
+      ونه checktype = origtype != NULL_ونه ? origtype : rhstype;
+      إذا (checktype != error_mark_غوټه
+	  && ونه_کوډ (type) == ENUMERAL_TYPE
 	  && TYPE_MAIN_VARIANT (checktype) != TYPE_MAIN_VARIANT (type))
-	switch (errtype)
+	بدل (errtype)
 	  {
-	  case ic_argpass:
-	    if (pedwarn (expr_loc, OPT_Wc___compat, "enum conversion when "
+	  حالة ic_argpass:
+	    إذا (pedwarn (بیان_loc, OPT_Wc___compat, "enum conversion when "
 			 "passing argument %d of %qE is invalid in C++",
 			 parmnum, rname))
 	      inform ((fundecl && !DECL_IS_UNDECLARED_BUILTIN (fundecl))
-		      ? DECL_SOURCE_LOCATION (fundecl) : expr_loc,
+		      ? DECL_سرچینه_LOCATION (fundecl) : بیان_loc,
 		      "expected %qT but argument is of type %qT",
 		      type, rhstype);
-	    break;
-	  case ic_assign:
+	    اكسر;
+	  حالة ic_ټاکل:
 	    pedwarn (location, OPT_Wc___compat, "enum conversion from %qT to "
 		     "%qT in assignment is invalid in C++", rhstype, type);
-	    break;
-	  case ic_init:
-	  case ic_init_const:
+	    اكسر;
+	  حالة ic_init:
+	  حالة ic_init_const:
 	    pedwarn_init (location, OPT_Wc___compat, "enum conversion from "
 			  "%qT to %qT in initialization is invalid in C++",
 			  rhstype, type);
-	    break;
-	  case ic_return:
+	    اكسر;
+	  حالة ic_return:
 	    pedwarn (location, OPT_Wc___compat, "enum conversion from %qT to "
 		     "%qT in return is invalid in C++", rhstype, type);
-	    break;
-	  default:
+	    اكسر;
+	  افتراضي:
 	    gcc_unreachable ();
 	  }
     }
 
-  if (warn_enum_conversion)
+  إذا (warn_enum_conversion)
     {
-      tree checktype = origtype != NULL_TREE ? origtype : rhstype;
-      if (checktype != error_mark_node
-	  && TREE_CODE (checktype) == ENUMERAL_TYPE
-	  && TREE_CODE (type) == ENUMERAL_TYPE
+      ونه checktype = origtype != NULL_ونه ? origtype : rhstype;
+      إذا (checktype != error_mark_غوټه
+	  && ونه_کوډ (checktype) == ENUMERAL_TYPE
+	  && ونه_کوډ (type) == ENUMERAL_TYPE
 	  && !comptypes (TYPE_MAIN_VARIANT (checktype), TYPE_MAIN_VARIANT (type)))
        {
 	  gcc_rich_location loc (location);
@@ -8618,182 +8618,182 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
        }
     }
 
-  if (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (rhstype))
+  إذا (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (rhstype))
     {
-      warn_for_address_of_packed_member (type, orig_rhs);
-      if (type != rhstype)
+      warn_for_پته_د_packed_member (type, orig_rhs);
+      إذا (type != rhstype)
 	/* Convert RHS to TYPE in order to not lose TYPE in diagnostics.  */
 	rhs = convert (type, rhs);
-      return rhs;
+      أرجع rhs;
     }
 
-  if (coder == VOID_TYPE)
+  إذا (coder == VOID_TYPE)
     {
       /* Except for passing an argument to an unprototyped function,
 	 this is a constraint violation.  When passing an argument to
 	 an unprototyped function, it is compile-time undefined;
 	 making it a constraint in that case was rejected in
 	 DR#252.  */
-      const char msg[] = "void value not ignored as it ought to be";
-      if (warnopt)
-	warning_at (location, warnopt, msg);
-      else
-	error_at (location, msg);
-      return error_mark_node;
+      ثابت حرف پیغام_2[] = "void value not ignored as it ought to be";
+      إذا (warnopt)
+	warning_at (location, warnopt, پیغام_2);
+      وإلا
+	error_at (location, پیغام_2);
+      أرجع error_mark_غوټه;
     }
   rhs = require_complete_type (location, rhs);
-  if (rhs == error_mark_node)
-    return error_mark_node;
+  إذا (rhs == error_mark_غوټه)
+    أرجع error_mark_غوټه;
 
-  if (coder == POINTER_TYPE && reject_gcc_builtin (rhs))
-    return error_mark_node;
+  إذا (coder == اشاره_ګر_TYPE && reject_gcc_builtin (rhs))
+    أرجع error_mark_غوټه;
 
   /* A non-reference type can convert to a reference.  This handles
      va_start, va_copy and possibly port built-ins.  */
-  if (codel == REFERENCE_TYPE && coder != REFERENCE_TYPE)
+  إذا (codel == REFERENCE_TYPE && coder != REFERENCE_TYPE)
     {
-      if (!lvalue_p (rhs))
+      إذا (!lvalue_p (rhs))
 	{
-	  const char msg[] = "cannot pass rvalue to reference parameter";
-	  if (warnopt)
-	    warning_at (location, warnopt, msg);
-	  else
-	    error_at (location, msg);
-	  return error_mark_node;
+	  ثابت حرف پیغام_2[] = "cannot pass rvalue to reference parameter";
+	  إذا (warnopt)
+	    warning_at (location, warnopt, پیغام_2);
+	  وإلا
+	    error_at (location, پیغام_2);
+	  أرجع error_mark_غوټه;
 	}
-      if (!c_mark_addressable (rhs))
-	return error_mark_node;
-      rhs = build1 (ADDR_EXPR, c_build_pointer_type (TREE_TYPE (rhs)), rhs);
-      SET_EXPR_LOCATION (rhs, location);
+      إذا (!c_mark_addressable (rhs))
+	أرجع error_mark_غوټه;
+      rhs = build1 (ADDR_بیان, c_build_اشاره_ګر_type (ونه_TYPE (rhs)), rhs);
+      سېټ_بیان_LOCATION (rhs, location);
 
-      rhs = convert_for_assignment (location, expr_loc,
-				    c_build_pointer_type (TREE_TYPE (type)),
+      rhs = convert_for_assignment (location, بیان_loc,
+				    c_build_اشاره_ګر_type (ونه_TYPE (type)),
 				    rhs, origtype, errtype,
-				    null_pointer_constant, fundecl, function,
+				    null_اشاره_ګر_constant, fundecl, function,
 				    parmnum, warnopt);
-      if (rhs == error_mark_node)
-	return error_mark_node;
+      إذا (rhs == error_mark_غوټه)
+	أرجع error_mark_غوټه;
 
-      rhs = build1 (NOP_EXPR, type, rhs);
-      SET_EXPR_LOCATION (rhs, location);
-      return rhs;
+      rhs = build1 (NOP_بیان, type, rhs);
+      سېټ_بیان_LOCATION (rhs, location);
+      أرجع rhs;
     }
   /* Some types can interconvert without explicit casts.  */
-  else if (codel == VECTOR_TYPE && coder == VECTOR_TYPE
-	   && vector_types_convertible_p (type, TREE_TYPE (rhs), true))
-    return convert (type, rhs);
+  وإلا إذا (codel == ویکټور_TYPE && coder == ویکټور_TYPE
+	   && ویکټور_types_convertible_p (type, ونه_TYPE (rhs), ریښتیا))
+    أرجع convert (type, rhs);
   /* Arithmetic types all interconvert, and enum is treated like int.  */
-  else if ((codel == INTEGER_TYPE || codel == REAL_TYPE
-	    || codel == FIXED_POINT_TYPE
+  وإلا إذا ((codel == INTEGER_TYPE || codel == REAL_TYPE
+	    || codel == FIXED_ټکی_TYPE
 	    || codel == ENUMERAL_TYPE || codel == COMPLEX_TYPE
 	    || codel == BOOLEAN_TYPE || codel == BITINT_TYPE)
 	   && (coder == INTEGER_TYPE || coder == REAL_TYPE
-	       || coder == FIXED_POINT_TYPE
+	       || coder == FIXED_ټکی_TYPE
 	       || coder == ENUMERAL_TYPE || coder == COMPLEX_TYPE
 	       || coder == BOOLEAN_TYPE || coder == BITINT_TYPE))
     {
-      if (warnopt && errtype == ic_argpass)
-	maybe_warn_builtin_no_proto_arg (expr_loc, fundecl, parmnum, type,
+      إذا (warnopt && errtype == ic_argpass)
+	maybe_warn_builtin_no_proto_arg (بیان_loc, fundecl, parmnum, type,
 					 rhstype);
 
-      bool save = in_late_binary_op;
-      if (C_BOOLEAN_TYPE_P (type) || codel == COMPLEX_TYPE
+      منطقي save = دننه_late_دوګونی_op;
+      إذا (C_BOOLEAN_TYPE_P (type) || codel == COMPLEX_TYPE
 	  || (coder == REAL_TYPE
 	      && (codel == INTEGER_TYPE || codel == ENUMERAL_TYPE)
 	      && sanitize_flags_p (SANITIZE_FLOAT_CAST)))
-	in_late_binary_op = true;
-      tree ret = convert_and_check (expr_loc != UNKNOWN_LOCATION
-				    ? expr_loc : location, type, orig_rhs,
+	دننه_late_دوګونی_op = ریښتیا;
+      ونه ret = convert_and_check (بیان_loc != UNKNOWN_LOCATION
+				    ? بیان_loc : location, type, orig_rhs,
 				    errtype == ic_init_const);
-      in_late_binary_op = save;
-      return ret;
+      دننه_late_دوګونی_op = save;
+      أرجع ret;
     }
 
   /* Aggregates in different TUs might need conversion.  */
-  if ((codel == RECORD_TYPE || codel == UNION_TYPE)
+  إذا ((codel == ریکارډ_TYPE || codel == UNION_TYPE)
       && codel == coder
       && comptypes (TYPE_MAIN_VARIANT (type), TYPE_MAIN_VARIANT (rhstype)))
-    return convert_and_check (expr_loc != UNKNOWN_LOCATION
-			      ? expr_loc : location, type, rhs);
+    أرجع convert_and_check (بیان_loc != UNKNOWN_LOCATION
+			      ? بیان_loc : location, type, rhs);
 
   /* Conversion to a transparent union or record from its member types.
      This applies only to function arguments.  */
-  if (((codel == UNION_TYPE || codel == RECORD_TYPE)
+  إذا (((codel == UNION_TYPE || codel == ریکارډ_TYPE)
       && TYPE_TRANSPARENT_AGGR (type))
       && errtype == ic_argpass)
     {
-      tree memb, marginal_memb = NULL_TREE;
+      ونه memb, marginal_memb = NULL_ونه;
 
-      for (memb = TYPE_FIELDS (type); memb ; memb = DECL_CHAIN (memb))
+      لكل (memb = TYPE_FIELDS (type); memb ; memb = DECL_CHAIN (memb))
 	{
-	  tree memb_type = TREE_TYPE (memb);
+	  ونه memb_type = ونه_TYPE (memb);
 
-	  if (comptypes (TYPE_MAIN_VARIANT (memb_type),
+	  إذا (comptypes (TYPE_MAIN_VARIANT (memb_type),
 			 TYPE_MAIN_VARIANT (rhstype)))
-	    break;
+	    اكسر;
 
-	  if (TREE_CODE (memb_type) != POINTER_TYPE)
-	    continue;
+	  إذا (ونه_کوډ (memb_type) != اشاره_ګر_TYPE)
+	    استمر;
 
-	  if (coder == POINTER_TYPE)
+	  إذا (coder == اشاره_ګر_TYPE)
 	    {
-	      tree ttl = TREE_TYPE (memb_type);
-	      tree ttr = TREE_TYPE (rhstype);
+	      ونه ttl = ونه_TYPE (memb_type);
+	      ونه ttr = ونه_TYPE (rhstype);
 
 	      /* Any non-function converts to a [const][volatile] void *
 		 and vice versa; otherwise, targets must be the same.
 		 Meanwhile, the lhs target must have all the qualifiers of
 		 the rhs.  */
-	      if ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
+	      إذا ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
 		  || (VOID_TYPE_P (ttr) && !TYPE_ATOMIC (ttr))
-		  || comp_target_types (location, memb_type, rhstype))
+		  || comp_موخه_types (location, memb_type, rhstype))
 		{
-		  int lquals = TYPE_QUALS (ttl) & ~TYPE_QUAL_ATOMIC;
-		  int rquals = TYPE_QUALS (ttr) & ~TYPE_QUAL_ATOMIC;
+		  صحيح lquals = TYPE_QUALS (ttl) & ~TYPE_QUAL_ATOMIC;
+		  صحيح rquals = TYPE_QUALS (ttr) & ~TYPE_QUAL_ATOMIC;
 		  /* If this type won't generate any warnings, use it.  */
-		  if (lquals == rquals
-		      || ((TREE_CODE (ttr) == FUNCTION_TYPE
-			   && TREE_CODE (ttl) == FUNCTION_TYPE)
+		  إذا (lquals == rquals
+		      || ((ونه_کوډ (ttr) == FUNCTION_TYPE
+			   && ونه_کوډ (ttl) == FUNCTION_TYPE)
 			  ? ((lquals | rquals) == rquals)
 			  : ((lquals | rquals) == lquals)))
-		    break;
+		    اكسر;
 
 		  /* Keep looking for a better type, but remember this one.  */
-		  if (!marginal_memb)
+		  إذا (!marginal_memb)
 		    marginal_memb = memb;
 		}
 	    }
 
 	  /* Can convert integer zero to any pointer type.  */
-	  if (null_pointer_constant)
+	  إذا (null_اشاره_ګر_constant)
 	    {
-	      rhs = null_pointer_node;
-	      break;
+	      rhs = null_اشاره_ګر_غوټه;
+	      اكسر;
 	    }
 	}
 
-      if (memb || marginal_memb)
+      إذا (memb || marginal_memb)
 	{
-	  if (!memb)
+	  إذا (!memb)
 	    {
 	      /* We have only a marginally acceptable member type;
 		 it needs a warning.  */
-	      tree ttl = TREE_TYPE (TREE_TYPE (marginal_memb));
-	      tree ttr = TREE_TYPE (rhstype);
+	      ونه ttl = ونه_TYPE (ونه_TYPE (marginal_memb));
+	      ونه ttr = ونه_TYPE (rhstype);
 
 	      /* Const and volatile mean something different for function
 		 types, so the usual warnings are not appropriate.  */
-	      if (TREE_CODE (ttr) == FUNCTION_TYPE
-		  && TREE_CODE (ttl) == FUNCTION_TYPE)
+	      إذا (ونه_کوډ (ttr) == FUNCTION_TYPE
+		  && ونه_کوډ (ttl) == FUNCTION_TYPE)
 		{
 		  /* Because const and volatile on functions are
 		     restrictions that say the function will not do
 		     certain things, it is okay to use a const or volatile
 		     function where an ordinary one is wanted, but not
 		     vice-versa.  */
-		  if (TYPE_QUALS_NO_ADDR_SPACE (ttl)
+		  إذا (TYPE_QUALS_NO_ADDR_SPACE (ttl)
 		      & ~TYPE_QUALS_NO_ADDR_SPACE (ttr))
-		    PEDWARN_FOR_QUALIFIERS (location, expr_loc,
+		    PEDWARN_FOR_QUALIFIERS (location, بیان_loc,
 					    OPT_Wdiscarded_qualifiers,
 					    G_("passing argument %d of %qE "
 					       "makes %q#v qualified function "
@@ -8808,9 +8808,9 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 					       "pointer from unqualified"),
 					    TYPE_QUALS (ttl) & ~TYPE_QUALS (ttr));
 		}
-	      else if (TYPE_QUALS_NO_ADDR_SPACE (ttr)
+	      وإلا إذا (TYPE_QUALS_NO_ADDR_SPACE (ttr)
 		       & ~TYPE_QUALS_NO_ADDR_SPACE (ttl))
-		PEDWARN_FOR_QUALIFIERS (location, expr_loc,
+		PEDWARN_FOR_QUALIFIERS (location, بیان_loc,
 				        OPT_Wdiscarded_qualifiers,
 				        G_("passing argument %d of %qE discards "
 					   "%qv qualifier from pointer target type"),
@@ -8825,53 +8825,53 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	      memb = marginal_memb;
 	    }
 
-	  if (!fundecl || !DECL_IN_SYSTEM_HEADER (fundecl))
+	  إذا (!fundecl || !DECL_دننه_SYSTEM_سرلیک (fundecl))
 	    pedwarn (location, OPT_Wpedantic,
 		     "ISO C prohibits argument conversion to union type");
 
-	  rhs = fold_convert_loc (location, TREE_TYPE (memb), rhs);
-	  return build_constructor_single (type, memb, rhs);
+	  rhs = fold_convert_loc (location, ونه_TYPE (memb), rhs);
+	  أرجع build_constructor_single (type, memb, rhs);
 	}
     }
 
   /* Conversions among pointers */
-  else if ((codel == POINTER_TYPE || codel == REFERENCE_TYPE)
+  وإلا إذا ((codel == اشاره_ګر_TYPE || codel == REFERENCE_TYPE)
 	   && (coder == codel))
     {
       /* If RHS refers to a built-in declared without a prototype
 	 BLTIN is the declaration of the built-in with a prototype
 	 and RHSTYPE is set to the actual type of the built-in.  */
-      tree bltin;
+      ونه bltin;
       rhstype = type_or_builtin_type (rhs, &bltin);
 
-      tree ttl = TREE_TYPE (type);
-      tree ttr = TREE_TYPE (rhstype);
-      bool is_opaque_pointer;
-      bool target_cmp = false;   /* Cache comp_target_types () result.  */
+      ونه ttl = ونه_TYPE (type);
+      ونه ttr = ونه_TYPE (rhstype);
+      منطقي is_opaque_اشاره_ګر;
+      منطقي موخه_cmp = خطأ;   /* Cache comp_target_types () result.  */
       addr_space_t asl;
       addr_space_t asr;
 
-      tree mvl = remove_qualifiers (ttl);
-      tree mvr = remove_qualifiers (ttr);
+      ونه mvl = remove_qualifiers (ttl);
+      ونه mvr = remove_qualifiers (ttr);
 
       /* Opaque pointers are treated like void pointers.  */
-      is_opaque_pointer = vector_targets_convertible_p (ttl, ttr);
+      is_opaque_اشاره_ګر = ویکټور_targets_convertible_p (ttl, ttr);
 
       /* The Plan 9 compiler permits a pointer to a struct to be
 	 automatically converted into a pointer to an anonymous field
 	 within the struct.  */
-      if (flag_plan9_extensions
-	  && RECORD_OR_UNION_TYPE_P (mvl)
-	  && RECORD_OR_UNION_TYPE_P (mvr)
+      إذا (flag_plan9_extensions
+	  && ریکارډ_OR_UNION_TYPE_P (mvl)
+	  && ریکارډ_OR_UNION_TYPE_P (mvr)
 	  && mvl != mvr)
 	{
-	  tree new_rhs = convert_to_anonymous_field (location, type, rhs);
-	  if (new_rhs != NULL_TREE)
+	  ونه new_rhs = convert_منزل_anonymous_ډګر (location, type, rhs);
+	  إذا (new_rhs != NULL_ونه)
 	    {
 	      rhs = new_rhs;
-	      rhstype = TREE_TYPE (rhs);
-	      coder = TREE_CODE (rhstype);
-	      ttr = TREE_TYPE (rhstype);
+	      rhstype = ونه_TYPE (rhs);
+	      coder = ونه_کوډ (rhstype);
+	      ttr = ونه_TYPE (rhstype);
 	      mvr = TYPE_MAIN_VARIANT (ttr);
 	    }
 	}
@@ -8883,169 +8883,169 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 		int *p = NULL;
 
 	 where NULL is typically defined in C to be '(void *) 0'.  */
-      if (VOID_TYPE_P (ttr) && rhs != null_pointer_node && !VOID_TYPE_P (ttl))
-	warning_at (errtype == ic_argpass ? expr_loc : location,
+      إذا (VOID_TYPE_P (ttr) && rhs != null_اشاره_ګر_غوټه && !VOID_TYPE_P (ttl))
+	warning_at (errtype == ic_argpass ? بیان_loc : location,
 		    OPT_Wc___compat,
 		    "request for implicit conversion "
 		    "from %qT to %qT not permitted in C++", rhstype, type);
 
       /* Warn of new allocations that are not big enough for the target
 	 type.  */
-      if (warn_alloc_size && TREE_CODE (rhs) == CALL_EXPR)
-	if (tree fndecl = get_callee_fndecl (rhs))
-	  if (DECL_IS_MALLOC (fndecl))
+      إذا (warn_alloc_اندازه && ونه_کوډ (rhs) == CALL_بیان)
+	إذا (ونه fndecl = get_callee_fndecl (rhs))
+	  إذا (DECL_IS_MALLOC (fndecl))
 	    {
-	      tree attrs = TYPE_ATTRIBUTES (TREE_TYPE (fndecl));
-	      tree alloc_size = lookup_attribute ("alloc_size", attrs);
-	      if (alloc_size)
-		warn_for_alloc_size (location, ttl, rhs, alloc_size);
+	      ونه attrs = TYPE_ځانګړتیاوې (ونه_TYPE (fndecl));
+	      ونه alloc_اندازه = lookup_attribute ("alloc_size", attrs);
+	      إذا (alloc_اندازه)
+		warn_for_alloc_اندازه (location, ttl, rhs, alloc_اندازه);
 	    }
 
       /* See if the pointers point to incompatible address spaces.  */
       asl = TYPE_ADDR_SPACE (ttl);
       asr = TYPE_ADDR_SPACE (ttr);
-      if (!null_pointer_constant_p (rhs)
+      إذا (!null_اشاره_ګر_constant_p (rhs)
 	  && asr != asl && !targetm.addr_space.subset_p (asr, asl))
 	{
-	  auto_diagnostic_group d;
-	  bool diagnosed = true;
-	  switch (errtype)
+	  auto_diagnostic_ډله d;
+	  منطقي diagnosed = ریښتیا;
+	  بدل (errtype)
 	    {
-	    case ic_argpass:
+	    حالة ic_argpass:
 	      {
-		const char msg[] = G_("passing argument %d of %qE from "
+		ثابت حرف پیغام_2[] = G_("passing argument %d of %qE from "
 				      "pointer to non-enclosed address space");
-		if (warnopt)
+		إذا (warnopt)
 		  diagnosed
-		    = warning_at (expr_loc, warnopt, msg, parmnum, rname);
-		else
-		  error_at (expr_loc, msg, parmnum, rname);
-	      break;
+		    = warning_at (بیان_loc, warnopt, پیغام_2, parmnum, rname);
+		وإلا
+		  error_at (بیان_loc, پیغام_2, parmnum, rname);
+	      اكسر;
 	      }
-	    case ic_assign:
+	    حالة ic_ټاکل:
 	      {
-		const char msg[] = G_("assignment from pointer to "
+		ثابت حرف پیغام_2[] = G_("assignment from pointer to "
 				      "non-enclosed address space");
-		if (warnopt)
-		  diagnosed = warning_at (location, warnopt, msg);
-		else
-		  error_at (location, msg);
-		break;
+		إذا (warnopt)
+		  diagnosed = warning_at (location, warnopt, پیغام_2);
+		وإلا
+		  error_at (location, پیغام_2);
+		اكسر;
 	      }
-	    case ic_init:
-	    case ic_init_const:
+	    حالة ic_init:
+	    حالة ic_init_const:
 	      {
-		const char msg[] = G_("initialization from pointer to "
+		ثابت حرف پیغام_2[] = G_("initialization from pointer to "
 				      "non-enclosed address space");
-		if (warnopt)
-		  diagnosed = warning_at (location, warnopt, msg);
-		else
-		  error_at (location, msg);
-		break;
+		إذا (warnopt)
+		  diagnosed = warning_at (location, warnopt, پیغام_2);
+		وإلا
+		  error_at (location, پیغام_2);
+		اكسر;
 	      }
-	    case ic_return:
+	    حالة ic_return:
 	      {
-		const char msg[] = G_("return from pointer to "
+		ثابت حرف پیغام_2[] = G_("return from pointer to "
 				      "non-enclosed address space");
-		if (warnopt)
-		  diagnosed = warning_at (location, warnopt, msg);
-		else
-		  error_at (location, msg);
-		break;
+		إذا (warnopt)
+		  diagnosed = warning_at (location, warnopt, پیغام_2);
+		وإلا
+		  error_at (location, پیغام_2);
+		اكسر;
 	      }
-	    default:
+	    افتراضي:
 	      gcc_unreachable ();
 	    }
-	  if (diagnosed)
+	  إذا (diagnosed)
 	    {
-	      if (errtype == ic_argpass)
-		inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
-	      else
+	      إذا (errtype == ic_argpass)
+		inform_for_arg (fundecl, بیان_loc, parmnum, type, rhstype);
+	      وإلا
 		inform (location, "expected %qT but pointer is of type %qT",
 			type, rhstype);
 	    }
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
 
       /* Check if the right-hand side has a format attribute but the
 	 left-hand side doesn't.  */
-      if (warn_suggest_attribute_format
+      إذا (warn_suggest_attribute_format
 	  && check_missing_format_attribute (type, rhstype))
 	{
-	  switch (errtype)
+	  بدل (errtype)
 	  {
-	  case ic_argpass:
-	    warning_at (expr_loc, OPT_Wsuggest_attribute_format,
+	  حالة ic_argpass:
+	    warning_at (بیان_loc, OPT_Wsuggest_attribute_format,
 			"argument %d of %qE might be "
 			"a candidate for a format attribute",
 			parmnum, rname);
-	    break;
-	  case ic_assign:
+	    اكسر;
+	  حالة ic_ټاکل:
 	    warning_at (location, OPT_Wsuggest_attribute_format,
 			"assignment left-hand side might be "
 			"a candidate for a format attribute");
-	    break;
-	  case ic_init:
-	  case ic_init_const:
+	    اكسر;
+	  حالة ic_init:
+	  حالة ic_init_const:
 	    warning_at (location, OPT_Wsuggest_attribute_format,
 			"initialization left-hand side might be "
 			"a candidate for a format attribute");
-	    break;
-	  case ic_return:
+	    اكسر;
+	  حالة ic_return:
 	    warning_at (location, OPT_Wsuggest_attribute_format,
 			"return type might be "
 			"a candidate for a format attribute");
-	    break;
-	  default:
+	    اكسر;
+	  افتراضي:
 	    gcc_unreachable ();
 	  }
 	}
 
       /* See if the pointers point to incompatible scalar storage orders.  */
-      if (warn_scalar_storage_order
-	  && !null_pointer_constant_p (rhs)
-	  && (AGGREGATE_TYPE_P (ttl) && TYPE_REVERSE_STORAGE_ORDER (ttl))
-	     != (AGGREGATE_TYPE_P (ttr) && TYPE_REVERSE_STORAGE_ORDER (ttr)))
+      إذا (warn_scalar_storage_ترتیب
+	  && !null_اشاره_ګر_constant_p (rhs)
+	  && (AGGREGATE_TYPE_P (ttl) && TYPE_سرچپه_STORAGE_ترتیب (ttl))
+	     != (AGGREGATE_TYPE_P (ttr) && TYPE_سرچپه_STORAGE_ترتیب (ttr)))
 	{
-	  tree t;
+	  ونه t;
 
-	  switch (errtype)
+	  بدل (errtype)
 	  {
-	  case ic_argpass:
+	  حالة ic_argpass:
 	    /* Do not warn for built-in functions, for example memcpy, since we
 	       control how they behave and they can be useful in this area.  */
-	    if (TREE_CODE (rname) != FUNCTION_DECL
-		|| !fndecl_built_in_p (rname))
-	      warning_at (location, OPT_Wscalar_storage_order,
+	    إذا (ونه_کوډ (rname) != FUNCTION_DECL
+		|| !fndecl_built_دننه_p (rname))
+	      warning_at (location, OPT_Wscalar_storage_ترتیب,
 			  "passing argument %d of %qE from incompatible "
 			  "scalar storage order", parmnum, rname);
-	    break;
-	  case ic_assign:
+	    اكسر;
+	  حالة ic_ټاکل:
 	    /* Do not warn if the RHS is a call to a function that returns a
 	       pointer that is not an alias.  */
-	    if (TREE_CODE (rhs) != CALL_EXPR
-		|| (t = get_callee_fndecl (rhs)) == NULL_TREE
+	    إذا (ونه_کوډ (rhs) != CALL_بیان
+		|| (t = get_callee_fndecl (rhs)) == NULL_ونه
 		|| !DECL_IS_MALLOC (t))
-	      warning_at (location, OPT_Wscalar_storage_order,
+	      warning_at (location, OPT_Wscalar_storage_ترتیب,
 			  "assignment to %qT from pointer type %qT with "
 			  "incompatible scalar storage order", type, rhstype);
-	    break;
-	  case ic_init:
-	  case ic_init_const:
+	    اكسر;
+	  حالة ic_init:
+	  حالة ic_init_const:
 	    /* Likewise.  */
-	    if (TREE_CODE (rhs) != CALL_EXPR
-		|| (t = get_callee_fndecl (rhs)) == NULL_TREE
+	    إذا (ونه_کوډ (rhs) != CALL_بیان
+		|| (t = get_callee_fndecl (rhs)) == NULL_ونه
 		|| !DECL_IS_MALLOC (t))
-	      warning_at (location, OPT_Wscalar_storage_order,
+	      warning_at (location, OPT_Wscalar_storage_ترتیب,
 			  "initialization of %qT from pointer type %qT with "
 			  "incompatible scalar storage order", type, rhstype);
-	    break;
-	  case ic_return:
-	    warning_at (location, OPT_Wscalar_storage_order,
+	    اكسر;
+	  حالة ic_return:
+	    warning_at (location, OPT_Wscalar_storage_ترتیب,
 			"returning %qT from pointer type with incompatible "
 			"scalar storage order %qT", rhstype, type);
-	    break;
-	  default:
+	    اكسر;
+	  افتراضي:
 	    gcc_unreachable ();
 	  }
 	}
@@ -9053,10 +9053,10 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
       /* Any non-function converts to a [const][volatile] void *
 	 and vice versa; otherwise, targets must be the same.
 	 Meanwhile, the lhs target must have all the qualifiers of the rhs.  */
-      if ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
+      إذا ((VOID_TYPE_P (ttl) && !TYPE_ATOMIC (ttl))
 	  || (VOID_TYPE_P (ttr) && !TYPE_ATOMIC (ttr))
-	  || (target_cmp = comp_target_types (location, type, rhstype))
-	  || is_opaque_pointer
+	  || (موخه_cmp = comp_موخه_types (location, type, rhstype))
+	  || is_opaque_اشاره_ګر
 	  || ((c_common_unsigned_type (mvl)
 	       == c_common_unsigned_type (mvr))
 	      && (c_common_signed_type (mvl)
@@ -9065,15 +9065,15 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	{
 	  /* Warn about loss of qualifers from pointers to arrays with
 	     qualifiers on the element type. */
-	  if (TREE_CODE (ttr) == ARRAY_TYPE)
+	  إذا (ونه_کوډ (ttr) == ARRAY_TYPE)
 	    {
 	      ttr = strip_array_types (ttr);
 	      ttl = strip_array_types (ttl);
 
-	      if (TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
+	      إذا (TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
 		  & ~TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttl))
 		WARNING_FOR_QUALIFIERS (flag_isoc23,
-					location, expr_loc,
+					location, بیان_loc,
 					OPT_Wdiscarded_array_qualifiers,
 					G_("passing argument %d of %qE discards "
 					   "%qv qualifier from pointer target type"),
@@ -9085,13 +9085,13 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 					   "pointer target type"),
 					TYPE_QUALS (ttr) & ~TYPE_QUALS (ttl));
             }
-          else if (pedantic
-	      && ((VOID_TYPE_P (ttl) && TREE_CODE (ttr) == FUNCTION_TYPE)
+          وإلا إذا (pedantic
+	      && ((VOID_TYPE_P (ttl) && ونه_کوډ (ttr) == FUNCTION_TYPE)
 		  ||
 		  (VOID_TYPE_P (ttr)
-		   && !null_pointer_constant
-		   && TREE_CODE (ttl) == FUNCTION_TYPE)))
-	    PEDWARN_FOR_ASSIGNMENT (location, expr_loc, OPT_Wpedantic,
+		   && !null_اشاره_ګر_constant
+		   && ونه_کوډ (ttl) == FUNCTION_TYPE)))
+	    PEDWARN_FOR_ASSIGNMENT (location, بیان_loc, OPT_Wpedantic,
 				    G_("ISO C forbids passing argument %d of "
 				       "%qE between function pointer "
 				       "and %<void *%>"),
@@ -9103,20 +9103,20 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 				       "pointer and %<void *%>"));
 	  /* Const and volatile mean something different for function types,
 	     so the usual warnings are not appropriate.  */
-	  else if (TREE_CODE (ttr) != FUNCTION_TYPE
-		   && TREE_CODE (ttl) != FUNCTION_TYPE)
+	  وإلا إذا (ونه_کوډ (ttr) != FUNCTION_TYPE
+		   && ونه_کوډ (ttl) != FUNCTION_TYPE)
 	    {
 	       /* Assignments between atomic and non-atomic objects are OK.  */
-	       bool warn_quals_ped = TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
+	       منطقي warn_quals_ped = TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
 				     & ~TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttl);
-	       bool warn_quals = TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
+	       منطقي warn_quals = TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (ttr)
 				 & ~TYPE_QUALS_NO_ADDR_SPACE_NO_ATOMIC (strip_array_types (ttl));
 
 	      /* Don't warn about loss of qualifier for conversions from
 		 qualified void* to pointers to arrays with corresponding
 		 qualifier on the element type (except for pedantic before C23). */
-	      if (warn_quals || (warn_quals_ped && pedantic && !flag_isoc23))
-		PEDWARN_FOR_QUALIFIERS (location, expr_loc,
+	      إذا (warn_quals || (warn_quals_ped && pedantic && !flag_isoc23))
+		PEDWARN_FOR_QUALIFIERS (location, بیان_loc,
 					OPT_Wdiscarded_qualifiers,
 					G_("passing argument %d of %qE discards "
 					   "%qv qualifier from pointer target type"),
@@ -9127,63 +9127,63 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 					G_("return discards %qv qualifier from "
 					   "pointer target type"),
 					TYPE_QUALS (ttr) & ~TYPE_QUALS (ttl));
-	      else if (warn_quals_ped)
+	      وإلا إذا (warn_quals_ped)
 		pedwarn_c11 (location, OPT_Wc11_c23_compat,
 			     "array with qualifier on the element is not qualified before C23");
 
 	      /* If this is not a case of ignoring a mismatch in signedness,
 		 no warning.  */
-	      else if (VOID_TYPE_P (ttl) || VOID_TYPE_P (ttr)
-		       || target_cmp)
+	      وإلا إذا (VOID_TYPE_P (ttl) || VOID_TYPE_P (ttr)
+		       || موخه_cmp)
 		;
 	      /* If there is a mismatch, do warn.  */
-	      else if (warn_pointer_sign)
-		switch (errtype)
+	      وإلا إذا (warn_اشاره_ګر_sign)
+		بدل (errtype)
 		  {
-		  case ic_argpass:
+		  حالة ic_argpass:
 		    {
-		      auto_diagnostic_group d;
+		      auto_diagnostic_ډله d;
 		      range_label_for_type_mismatch rhs_label (rhstype, type);
-		      gcc_rich_location richloc (expr_loc, &rhs_label,
+		      gcc_rich_location richloc (بیان_loc, &rhs_label,
 						 highlight_colors::actual);
-		      if (pedwarn (&richloc, OPT_Wpointer_sign,
+		      إذا (pedwarn (&richloc, OPT_Wpointer_sign,
 				   "pointer targets in passing argument %d of "
 				   "%qE differ in signedness", parmnum, rname))
-			inform_for_arg (fundecl, expr_loc, parmnum, type,
+			inform_for_arg (fundecl, بیان_loc, parmnum, type,
 					rhstype);
 		    }
-		    break;
-		  case ic_assign:
+		    اكسر;
+		  حالة ic_ټاکل:
 		    pedwarn (location, OPT_Wpointer_sign,
 			     "pointer targets in assignment from %qT to %qT "
 			     "differ in signedness", rhstype, type);
-		    break;
-		  case ic_init:
-		  case ic_init_const:
+		    اكسر;
+		  حالة ic_init:
+		  حالة ic_init_const:
 		    pedwarn_init (location, OPT_Wpointer_sign,
 				  "pointer targets in initialization of %qT "
 				  "from %qT differ in signedness", type,
 				  rhstype);
-		    break;
-		  case ic_return:
+		    اكسر;
+		  حالة ic_return:
 		    pedwarn (location, OPT_Wpointer_sign, "pointer targets in "
 			     "returning %qT from a function with return type "
 			     "%qT differ in signedness", rhstype, type);
-		    break;
-		  default:
+		    اكسر;
+		  افتراضي:
 		    gcc_unreachable ();
 		  }
 	    }
-	  else if (TREE_CODE (ttl) == FUNCTION_TYPE
-		   && TREE_CODE (ttr) == FUNCTION_TYPE)
+	  وإلا إذا (ونه_کوډ (ttl) == FUNCTION_TYPE
+		   && ونه_کوډ (ttr) == FUNCTION_TYPE)
 	    {
 	      /* Because const and volatile on functions are restrictions
 		 that say the function will not do certain things,
 		 it is okay to use a const or volatile function
 		 where an ordinary one is wanted, but not vice-versa.  */
-	      if (TYPE_QUALS_NO_ADDR_SPACE (ttl)
+	      إذا (TYPE_QUALS_NO_ADDR_SPACE (ttl)
 		  & ~TYPE_QUALS_NO_ADDR_SPACE (ttr))
-		PEDWARN_FOR_QUALIFIERS (location, expr_loc,
+		PEDWARN_FOR_QUALIFIERS (location, بیان_loc,
 				        OPT_Wdiscarded_qualifiers,
 				        G_("passing argument %d of %qE makes "
 					   "%q#v qualified function pointer "
@@ -9198,86 +9198,86 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 	    }
 	}
       /* Avoid warning about the volatile ObjC EH puts on decls.  */
-      else if (!objc_ok)
+      وإلا إذا (!objc_ok)
 	{
-	  auto_diagnostic_group d;
-	  bool warned = false;
+	  auto_diagnostic_ډله d;
+	  منطقي warned = خطأ;
 	  pp_markup::element_expected_type e_type (type);
 	  pp_markup::element_actual_type e_rhstype (rhstype);
-	  switch (errtype)
+	  بدل (errtype)
 	    {
-	    case ic_argpass:
+	    حالة ic_argpass:
 	      {
 		range_label_for_type_mismatch rhs_label (rhstype, type);
-		gcc_rich_location richloc (expr_loc, &rhs_label,
+		gcc_rich_location richloc (بیان_loc, &rhs_label,
 					   highlight_colors::actual);
 		warned
-		  = permerror_opt (&richloc, OPT_Wincompatible_pointer_types,
+		  = permerror_opt (&richloc, OPT_Wincompatible_اشاره_ګر_types,
 				   "passing argument %d of %qE from "
 				   "incompatible pointer type",
 				   parmnum, rname);
-		if (warned)
-		  inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
+		إذا (warned)
+		  inform_for_arg (fundecl, بیان_loc, parmnum, type, rhstype);
 	      }
-	      break;
-	    case ic_assign:
-	      if (bltin)
+	      اكسر;
+	    حالة ic_ټاکل:
+	      إذا (bltin)
 		warned
-		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
+		  = permerror_opt (location, OPT_Wincompatible_اشاره_ګر_types,
 				   "assignment to %e from pointer to "
 				   "%qD with incompatible type %e",
 				   &e_type, bltin, &e_rhstype);
-	      else
+	      وإلا
 		warned
-		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
+		  = permerror_opt (location, OPT_Wincompatible_اشاره_ګر_types,
 				   "assignment to %e from incompatible "
 				   "pointer type %e",
 				   &e_type, &e_rhstype);
-	      break;
-	    case ic_init:
-	    case ic_init_const:
-	      if (bltin)
+	      اكسر;
+	    حالة ic_init:
+	    حالة ic_init_const:
+	      إذا (bltin)
 		warned
-		  = permerror_init (location, OPT_Wincompatible_pointer_types,
+		  = permerror_init (location, OPT_Wincompatible_اشاره_ګر_types,
 				    "initialization of %e from pointer to "
 				    "%qD with incompatible type %e",
 				    &e_type, bltin, &e_rhstype);
-	      else
+	      وإلا
 		warned
-		  = permerror_init (location, OPT_Wincompatible_pointer_types,
+		  = permerror_init (location, OPT_Wincompatible_اشاره_ګر_types,
 				    "initialization of %e from incompatible "
 				    "pointer type %e",
 				    &e_type, &e_rhstype);
-	      break;
-	    case ic_return:
-	      if (bltin)
+	      اكسر;
+	    حالة ic_return:
+	      إذا (bltin)
 		warned
-		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
+		  = permerror_opt (location, OPT_Wincompatible_اشاره_ګر_types,
 				   "returning pointer to %qD of type %e from "
 				   "a function with incompatible type %e",
 				   bltin, &e_rhstype, &e_type);
-	      else
+	      وإلا
 		warned
-		  = permerror_opt (location, OPT_Wincompatible_pointer_types,
+		  = permerror_opt (location, OPT_Wincompatible_اشاره_ګر_types,
 				   "returning %e from a function with "
 				   "incompatible return type %e",
 				   &e_rhstype, &e_type);
-	      break;
-	    default:
+	      اكسر;
+	    افتراضي:
 	      gcc_unreachable ();
 	    }
-	  if (warned)
+	  إذا (warned)
 	    {
 	      /* If the mismatching function type is a pointer to a function,
 		 try to show the decl of the function.  */
-	      if (TREE_CODE (rhs) == ADDR_EXPR
-		  && TREE_CODE (TREE_OPERAND (rhs, 0)) == FUNCTION_DECL)
+	      إذا (ونه_کوډ (rhs) == ADDR_بیان
+		  && ونه_کوډ (ونه_عملوند (rhs, 0)) == FUNCTION_DECL)
 		{
-		  tree rhs_fndecl = TREE_OPERAND (rhs, 0);
-		  if (!DECL_IS_UNDECLARED_BUILTIN (rhs_fndecl))
+		  ونه rhs_fndecl = ونه_عملوند (rhs, 0);
+		  إذا (!DECL_IS_UNDECLARED_BUILTIN (rhs_fndecl))
 		    {
 		      gcc_rich_location richloc
-			(DECL_SOURCE_LOCATION (rhs_fndecl), nullptr,
+			(DECL_سرچینه_LOCATION (rhs_fndecl), تش_اشاره,
 			 highlight_colors::actual);
 		      pp_element_quoted_decl e_rhs_fndecl
 			(rhs_fndecl, highlight_colors::actual);
@@ -9295,188 +9295,188 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
 
       /* If RHS isn't an address, check pointer or array of packed
 	 struct or union.  */
-      warn_for_address_of_packed_member (type, orig_rhs);
+      warn_for_پته_د_packed_member (type, orig_rhs);
 
-      return convert (type, rhs);
+      أرجع convert (type, rhs);
     }
-  else if (codel == POINTER_TYPE && coder == ARRAY_TYPE)
+  وإلا إذا (codel == اشاره_ګر_TYPE && coder == ARRAY_TYPE)
     {
       /* ??? This should not be an error when inlining calls to
 	 unprototyped functions.  */
-      const char msg[] = "invalid use of non-lvalue array";
-      if (warnopt)
-	warning_at (location, warnopt, msg);
-      else
-	error_at (location, msg);
-      return error_mark_node;
+      ثابت حرف پیغام_2[] = "invalid use of non-lvalue array";
+      إذا (warnopt)
+	warning_at (location, warnopt, پیغام_2);
+      وإلا
+	error_at (location, پیغام_2);
+      أرجع error_mark_غوټه;
     }
-  else if (codel == POINTER_TYPE
+  وإلا إذا (codel == اشاره_ګر_TYPE
 	   && (coder == INTEGER_TYPE
 	       || coder == ENUMERAL_TYPE
 	       || coder == BOOLEAN_TYPE
 	       || coder == NULLPTR_TYPE
 	       || coder == BITINT_TYPE))
     {
-      if (null_pointer_constant && c_inhibit_evaluation_warnings == 0
+      إذا (null_اشاره_ګر_constant && c_inhibit_evaluation_warnings == 0
 	  && coder != NULLPTR_TYPE)
-	warning_at (location, OPT_Wzero_as_null_pointer_constant,
+	warning_at (location, OPT_Wzero_as_null_اشاره_ګر_constant,
 		    "zero as null pointer constant");
       /* A NULLPTR type is just a nullptr always.  */
-      if (coder == NULLPTR_TYPE)
-	return omit_one_operand_loc (expr_loc, type, nullptr_node, rhs);
+      إذا (coder == NULLPTR_TYPE)
+	أرجع omit_one_عملوند_loc (بیان_loc, type, nullptr_غوټه, rhs);
       /* An explicit constant 0 or type nullptr_t can convert to a pointer,
 	 or one that results from arithmetic, even including a cast to
 	 integer type.  */
-      else if (!null_pointer_constant)
-	switch (errtype)
+      وإلا إذا (!null_اشاره_ګر_constant)
+	بدل (errtype)
 	  {
-	  case ic_argpass:
+	  حالة ic_argpass:
 	    {
-	      auto_diagnostic_group d;
+	      auto_diagnostic_ډله d;
 	      range_label_for_type_mismatch rhs_label (rhstype, type);
-	      gcc_rich_location richloc (expr_loc, &rhs_label,
+	      gcc_rich_location richloc (بیان_loc, &rhs_label,
 					 highlight_colors::actual);
-	      if (permerror_opt (&richloc, OPT_Wint_conversion,
+	      إذا (permerror_opt (&richloc, OPT_Wint_conversion,
 				 "passing argument %d of %qE makes pointer "
 				 "from integer without a cast", parmnum, rname))
 		{
-		  maybe_emit_indirection_note (expr_loc, rhs, type);
-		  inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
+		  maybe_emit_indirection_note (بیان_loc, rhs, type);
+		  inform_for_arg (fundecl, بیان_loc, parmnum, type, rhstype);
 		}
 	    }
-	    break;
-	  case ic_assign:
+	    اكسر;
+	  حالة ic_ټاکل:
 	    permerror_opt (location, OPT_Wint_conversion,
 			   "assignment to %qT from %qT makes pointer from "
 			   "integer without a cast", type, rhstype);
-	    break;
-	  case ic_init:
-	  case ic_init_const:
+	    اكسر;
+	  حالة ic_init:
+	  حالة ic_init_const:
 	    permerror_init (location, OPT_Wint_conversion,
 			    "initialization of %qT from %qT makes pointer "
 			    "from integer without a cast", type, rhstype);
-	    break;
-	  case ic_return:
+	    اكسر;
+	  حالة ic_return:
 	    permerror_init (location, OPT_Wint_conversion,
 			    "returning %qT from a function with return type "
 			    "%qT makes pointer from integer without a cast",
 			    rhstype, type);
-	    break;
-	  default:
+	    اكسر;
+	  افتراضي:
 	    gcc_unreachable ();
 	  }
 
-      return convert (type, rhs);
+      أرجع convert (type, rhs);
     }
-  else if ((codel == INTEGER_TYPE || codel == BITINT_TYPE)
-	   && coder == POINTER_TYPE)
+  وإلا إذا ((codel == INTEGER_TYPE || codel == BITINT_TYPE)
+	   && coder == اشاره_ګر_TYPE)
     {
-      switch (errtype)
+      بدل (errtype)
 	{
-	case ic_argpass:
+	حالة ic_argpass:
 	  {
-	    auto_diagnostic_group d;
+	    auto_diagnostic_ډله d;
 	    range_label_for_type_mismatch rhs_label (rhstype, type);
-	    gcc_rich_location richloc (expr_loc, &rhs_label,
+	    gcc_rich_location richloc (بیان_loc, &rhs_label,
 				       highlight_colors::actual);
-	    if (permerror_opt (&richloc, OPT_Wint_conversion,
+	    إذا (permerror_opt (&richloc, OPT_Wint_conversion,
 			       "passing argument %d of %qE makes integer from "
 			       "pointer without a cast", parmnum, rname))
 	      {
-		maybe_emit_indirection_note (expr_loc, rhs, type);
-		inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
+		maybe_emit_indirection_note (بیان_loc, rhs, type);
+		inform_for_arg (fundecl, بیان_loc, parmnum, type, rhstype);
 	      }
 	  }
-	  break;
-	case ic_assign:
+	  اكسر;
+	حالة ic_ټاکل:
 	  permerror_opt (location, OPT_Wint_conversion,
 			 "assignment to %qT from %qT makes integer from "
 			 "pointer without a cast", type, rhstype);
-	  break;
-	case ic_init:
-	case ic_init_const:
+	  اكسر;
+	حالة ic_init:
+	حالة ic_init_const:
 	  permerror_init (location, OPT_Wint_conversion,
 			  "initialization of %qT from %qT makes integer "
 			  "from pointer without a cast", type, rhstype);
-	  break;
-	case ic_return:
+	  اكسر;
+	حالة ic_return:
 	  permerror_opt (location, OPT_Wint_conversion, "returning %qT from a "
 			 "function with return type %qT makes integer from "
 			 "pointer without a cast", rhstype, type);
-	  break;
-	default:
+	  اكسر;
+	افتراضي:
 	  gcc_unreachable ();
 	}
 
-      return convert (type, rhs);
+      أرجع convert (type, rhs);
     }
-  else if (C_BOOLEAN_TYPE_P (type)
+  وإلا إذا (C_BOOLEAN_TYPE_P (type)
 	   /* The type nullptr_t may be converted to bool.  The
 	      result is false.  */
-	   && (coder == POINTER_TYPE || coder == NULLPTR_TYPE))
+	   && (coder == اشاره_ګر_TYPE || coder == NULLPTR_TYPE))
     {
-      tree ret;
-      bool save = in_late_binary_op;
-      in_late_binary_op = true;
+      ونه ret;
+      منطقي save = دننه_late_دوګونی_op;
+      دننه_late_دوګونی_op = ریښتیا;
       ret = convert (type, rhs);
-      in_late_binary_op = save;
-      return ret;
+      دننه_late_دوګونی_op = save;
+      أرجع ret;
     }
-  else if (codel == NULLPTR_TYPE && null_pointer_constant)
-    return convert (type, rhs);
+  وإلا إذا (codel == NULLPTR_TYPE && null_اشاره_ګر_constant)
+    أرجع convert (type, rhs);
 
-  switch (errtype)
+  بدل (errtype)
     {
-    case ic_argpass:
+    حالة ic_argpass:
       {
-	auto_diagnostic_group d;
+	auto_diagnostic_ډله d;
 	range_label_for_type_mismatch rhs_label (rhstype, type);
-	gcc_rich_location richloc (expr_loc, &rhs_label,
+	gcc_rich_location richloc (بیان_loc, &rhs_label,
 				   highlight_colors::actual);
-	const char msg[] = G_("incompatible type for argument %d of %qE");
-	if (warnopt)
-	  warning_at (expr_loc, warnopt, msg, parmnum, rname);
-	else
-	  error_at (&richloc, msg, parmnum, rname);
-	inform_for_arg (fundecl, expr_loc, parmnum, type, rhstype);
+	ثابت حرف پیغام_2[] = G_("incompatible type for argument %d of %qE");
+	إذا (warnopt)
+	  warning_at (بیان_loc, warnopt, پیغام_2, parmnum, rname);
+	وإلا
+	  error_at (&richloc, پیغام_2, parmnum, rname);
+	inform_for_arg (fundecl, بیان_loc, parmnum, type, rhstype);
       }
-      break;
-    case ic_assign:
+      اكسر;
+    حالة ic_ټاکل:
       {
-	const char msg[]
+	ثابت حرف پیغام_2[]
 	  = G_("incompatible types when assigning to type %qT from type %qT");
-	if (warnopt)
-	  warning_at (expr_loc, 0, msg, type, rhstype);
-	else
-	  error_at (expr_loc, msg, type, rhstype);
-	break;
+	إذا (warnopt)
+	  warning_at (بیان_loc, 0, پیغام_2, type, rhstype);
+	وإلا
+	  error_at (بیان_loc, پیغام_2, type, rhstype);
+	اكسر;
       }
-    case ic_init:
-    case ic_init_const:
+    حالة ic_init:
+    حالة ic_init_const:
       {
-	const char msg[]
+	ثابت حرف پیغام_2[]
 	  = G_("incompatible types when initializing type %qT using type %qT");
-	if (warnopt)
-	  warning_at (location, 0, msg, type, rhstype);
-	else
-	  error_at (location, msg, type, rhstype);
-	break;
+	إذا (warnopt)
+	  warning_at (location, 0, پیغام_2, type, rhstype);
+	وإلا
+	  error_at (location, پیغام_2, type, rhstype);
+	اكسر;
       }
-    case ic_return:
+    حالة ic_return:
       {
-	const char msg[]
+	ثابت حرف پیغام_2[]
 	  = G_("incompatible types when returning type %qT but %qT was expected");
-	if (warnopt)
-	  warning_at (location, 0, msg, rhstype, type);
-	else
-	  error_at (location, msg, rhstype, type);
-	break;
+	إذا (warnopt)
+	  warning_at (location, 0, پیغام_2, rhstype, type);
+	وإلا
+	  error_at (location, پیغام_2, rhstype, type);
+	اكسر;
       }
-    default:
+    افتراضي:
       gcc_unreachable ();
     }
 
-  return error_mark_node;
+  أرجع error_mark_غوټه;
 }
 
 /* If VALUE is a compound expr all of whose expressions are constant, then
@@ -9485,21 +9485,21 @@ convert_for_assignment (location_t location, location_t expr_loc, tree type,
    This is for handling COMPOUND_EXPRs as initializer elements
    which is allowed with a warning when -pedantic is specified.  */
 
-static tree
-valid_compound_expr_initializer (tree value, tree endtype)
+ساكن ونه
+valid_compound_بیان_initializer (ونه ارزښت, ونه endtype)
 {
-  if (TREE_CODE (value) == COMPOUND_EXPR)
+  إذا (ونه_کوډ (ارزښت) == COMPOUND_بیان)
     {
-      if (valid_compound_expr_initializer (TREE_OPERAND (value, 0), endtype)
-	  == error_mark_node)
-	return error_mark_node;
-      return valid_compound_expr_initializer (TREE_OPERAND (value, 1),
+      إذا (valid_compound_بیان_initializer (ونه_عملوند (ارزښت, 0), endtype)
+	  == error_mark_غوټه)
+	أرجع error_mark_غوټه;
+      أرجع valid_compound_بیان_initializer (ونه_عملوند (ارزښت, 1),
 					      endtype);
     }
-  else if (!initializer_constant_valid_p (value, endtype))
-    return error_mark_node;
-  else
-    return value;
+  وإلا إذا (!initializer_constant_valid_p (ارزښت, endtype))
+    أرجع error_mark_غوټه;
+  وإلا
+    أرجع ارزښت;
 }
 
 /* Perform appropriate conversions on the initial value of a variable,
@@ -9510,77 +9510,77 @@ valid_compound_expr_initializer (tree value, tree endtype)
 
    INIT_LOC is the location of the initial value.  */
 
-void
-store_init_value (location_t init_loc, tree decl, tree init, tree origtype)
+فراغ
+store_init_ارزښت (location_t init_loc, ونه decl, ونه init, ونه origtype)
 {
-  tree value, type;
-  bool npc = false;
-  bool int_const_expr = false;
-  bool arith_const_expr = false;
+  ونه ارزښت, type;
+  منطقي npc = خطأ;
+  منطقي int_const_بیان = خطأ;
+  منطقي arith_const_بیان = خطأ;
 
   /* If variable's type was invalidly declared, just ignore it.  */
 
-  type = TREE_TYPE (decl);
-  if (TREE_CODE (type) == ERROR_MARK)
-    return;
+  type = ونه_TYPE (decl);
+  إذا (ونه_کوډ (type) == ERROR_MARK)
+    أرجع;
 
   /* Digest the specified initializer into an expression.  */
 
-  if (init)
+  إذا (init)
     {
-      npc = null_pointer_constant_p (init);
-      int_const_expr = (TREE_CODE (init) == INTEGER_CST
-			&& !TREE_OVERFLOW (init)
-			&& INTEGRAL_TYPE_P (TREE_TYPE (init)));
+      npc = null_اشاره_ګر_constant_p (init);
+      int_const_بیان = (ونه_کوډ (init) == INTEGER_CST
+			&& !ونه_ډکېدنه (init)
+			&& INTEGRAL_TYPE_P (ونه_TYPE (init)));
       /* Not fully determined before folding.  */
-      arith_const_expr = true;
+      arith_const_بیان = ریښتیا;
     }
-  bool constexpr_p = (VAR_P (decl)
+  منطقي constexpr_p = (VAR_P (decl)
 		      && C_DECL_DECLARED_CONSTEXPR (decl));
-  value = digest_init (init_loc, decl, type, init, origtype, npc,
-		       int_const_expr, arith_const_expr, true,
-		       TREE_STATIC (decl) || constexpr_p, constexpr_p);
+  ارزښت = digest_init (init_loc, decl, type, init, origtype, npc,
+		       int_const_بیان, arith_const_بیان, ریښتیا,
+		       ونه_STATIC (decl) || constexpr_p, constexpr_p);
 
   /* Store the expression if valid; else report error.  */
 
-  if (!in_system_header_at (input_location)
-      && AGGREGATE_TYPE_P (TREE_TYPE (decl)) && !TREE_STATIC (decl))
+  إذا (!دننه_system_سرلیک_at (ننوت_location)
+      && AGGREGATE_TYPE_P (ونه_TYPE (decl)) && !ونه_STATIC (decl))
     warning (OPT_Wtraditional, "traditional C rejects automatic "
 	     "aggregate initialization");
 
-  if (value != error_mark_node || TREE_CODE (decl) != FUNCTION_DECL)
-    DECL_INITIAL (decl) = value;
+  إذا (ارزښت != error_mark_غوټه || ونه_کوډ (decl) != FUNCTION_DECL)
+    DECL_INITIAL (decl) = ارزښت;
 
   /* ANSI wants warnings about out-of-range constant initializers.  */
-  STRIP_TYPE_NOPS (value);
-  if (TREE_STATIC (decl))
-    constant_expression_warning (value);
+  STRIP_TYPE_NOPS (ارزښت);
+  إذا (ونه_STATIC (decl))
+    constant_افاده_warning (ارزښت);
 
   /* Check if we need to set array size from compound literal size.  */
-  if (TREE_CODE (type) == ARRAY_TYPE
-      && TYPE_DOMAIN (type) == NULL_TREE
-      && value != error_mark_node)
+  إذا (ونه_کوډ (type) == ARRAY_TYPE
+      && TYPE_DOMAIN (type) == NULL_ونه
+      && ارزښت != error_mark_غوټه)
     {
-      tree inside_init = init;
+      ونه inside_init = init;
 
       STRIP_TYPE_NOPS (inside_init);
       inside_init = fold (inside_init);
 
-      if (TREE_CODE (inside_init) == COMPOUND_LITERAL_EXPR)
+      إذا (ونه_کوډ (inside_init) == COMPOUND_LITERAL_بیان)
 	{
-	  tree cldecl = COMPOUND_LITERAL_EXPR_DECL (inside_init);
+	  ونه cldecl = COMPOUND_LITERAL_بیان_DECL (inside_init);
 
-	  if (TYPE_DOMAIN (TREE_TYPE (cldecl)))
+	  إذا (TYPE_DOMAIN (ونه_TYPE (cldecl)))
 	    {
 	      /* For int foo[] = (int [3]){1}; we need to set array size
 		 now since later on array initializer will be just the
 		 brace enclosed list of the compound literal.  */
-	      tree etype = strip_array_types (TREE_TYPE (decl));
+	      ونه etype = strip_array_types (ونه_TYPE (decl));
 	      type = build_distinct_type_copy (TYPE_MAIN_VARIANT (type));
-	      TYPE_DOMAIN (type) = TYPE_DOMAIN (TREE_TYPE (cldecl));
+	      TYPE_DOMAIN (type) = TYPE_DOMAIN (ونه_TYPE (cldecl));
 	      layout_type (type);
 	      layout_decl (cldecl, 0);
-	      TREE_TYPE (decl)
+	      ونه_TYPE (decl)
 		= c_build_qualified_type (type, TYPE_QUALS (etype));
 	    }
 	}
@@ -9592,184 +9592,184 @@ store_init_value (location_t init_loc, tree decl, tree init, tree origtype)
 /* Implement a spelling stack that allows components of a name to be pushed
    and popped.  Each element on the stack is this structure.  */
 
-struct spelling
+بنية spelling
 {
-  int kind;
-  union
+  صحيح ډول;
+  اتحاد
     {
-      unsigned HOST_WIDE_INT i;
-      const char *s;
+      بینښه HOST_WIDE_INT i;
+      ثابت حرف *s;
     } u;
 };
 
-#define SPELLING_STRING 1
-#define SPELLING_MEMBER 2
-#define SPELLING_BOUNDS 3
+#تعریف_کړه SPELLING_STRING 1
+#تعریف_کړه SPELLING_MEMBER 2
+#تعریف_کړه SPELLING_BOUNDS 3
 
-static struct spelling *spelling;	/* Next stack element (unused).  */
-static struct spelling *spelling_base;	/* Spelling stack base.  */
-static int spelling_size;		/* Size of the spelling stack.  */
+ساكن بنية spelling *spelling;	/* Next stack element (unused).  */
+ساكن بنية spelling *spelling_بنسټ;	/* Spelling stack base.  */
+ساكن صحيح spelling_اندازه;		/* Size of the spelling stack.  */
 
 /* Macros to save and restore the spelling stack around push_... functions.
    Alternative to SAVE_SPELLING_STACK.  */
 
-#define SPELLING_DEPTH() (spelling - spelling_base)
-#define RESTORE_SPELLING_DEPTH(DEPTH) (spelling = spelling_base + (DEPTH))
+#تعریف_کړه SPELLING_ژوروالی() (spelling - spelling_بنسټ)
+#تعریف_کړه RESTORE_SPELLING_ژوروالی(ژوروالی_2) (spelling = spelling_بنسټ + (ژوروالی_2))
 
 /* Push an element on the spelling stack with type KIND and assign VALUE
    to MEMBER.  */
 
-#define PUSH_SPELLING(KIND, VALUE, MEMBER)				\
+#تعریف_کړه ټېل_SPELLING(ډول_2, ارزښت_2, MEMBER)				\
 {									\
-  int depth = SPELLING_DEPTH ();					\
+  صحيح ژوروالی = SPELLING_ژوروالی ();					\
 									\
-  if (depth >= spelling_size)						\
+  إذا (ژوروالی >= spelling_اندازه)						\
     {									\
-      spelling_size += 10;						\
-      spelling_base = XRESIZEVEC (struct spelling, spelling_base,	\
-				  spelling_size);			\
-      RESTORE_SPELLING_DEPTH (depth);					\
+      spelling_اندازه += 10;						\
+      spelling_بنسټ = XRESIZEVEC (بنية spelling, spelling_بنسټ,	\
+				  spelling_اندازه);			\
+      RESTORE_SPELLING_ژوروالی (ژوروالی);					\
     }									\
 									\
-  spelling->kind = (KIND);						\
-  spelling->MEMBER = (VALUE);						\
+  spelling->ډول = (ډول_2);						\
+  spelling->MEMBER = (ارزښت_2);						\
   spelling++;								\
 }
 
 /* Push STRING on the stack.  Printed literally.  */
 
-static void
-push_string (const char *string)
+ساكن فراغ
+ټېل_string (ثابت حرف *string)
 {
-  PUSH_SPELLING (SPELLING_STRING, string, u.s);
+  ټېل_SPELLING (SPELLING_STRING, string, u.s);
 }
 
 /* Push a member name on the stack.  Printed as '.' STRING.  */
 
-static void
-push_member_name (tree decl)
+ساكن فراغ
+ټېل_member_name (ونه decl)
 {
-  const char *const string
+  ثابت حرف *ثابت string
     = (DECL_NAME (decl)
-       ? identifier_to_locale (IDENTIFIER_POINTER (DECL_NAME (decl)))
+       ? identifier_منزل_locale (IDENTIFIER_اشاره_ګر (DECL_NAME (decl)))
        : _("<anonymous>"));
-  PUSH_SPELLING (SPELLING_MEMBER, string, u.s);
+  ټېل_SPELLING (SPELLING_MEMBER, string, u.s);
 }
 
 /* Push an array bounds on the stack.  Printed as [BOUNDS].  */
 
-static void
-push_array_bounds (unsigned HOST_WIDE_INT bounds)
+ساكن فراغ
+ټېل_array_bounds (بینښه HOST_WIDE_INT bounds)
 {
-  PUSH_SPELLING (SPELLING_BOUNDS, bounds, u.i);
+  ټېل_SPELLING (SPELLING_BOUNDS, bounds, u.i);
 }
 
 /* Compute the maximum size in bytes of the printed spelling.  */
 
-static int
-spelling_length (void)
+ساكن صحيح
+spelling_اوږدتیا (فراغ)
 {
-  int size = 0;
-  struct spelling *p;
+  صحيح اندازه = 0;
+  بنية spelling *p;
 
-  for (p = spelling_base; p < spelling; p++)
+  لكل (p = spelling_بنسټ; p < spelling; p++)
     {
-      if (p->kind == SPELLING_BOUNDS)
-	size += 25;
-      else
-	size += strlen (p->u.s) + 1;
+      إذا (p->ډول == SPELLING_BOUNDS)
+	اندازه += 25;
+      وإلا
+	اندازه += مزي_اوږدوالی (p->u.s) + 1;
     }
 
-  return size;
+  أرجع اندازه;
 }
 
 /* Print the spelling to BUFFER and return it.  */
 
-static char *
-print_spelling (char *buffer)
+ساكن حرف *
+print_spelling (حرف *بفر)
 {
-  char *d = buffer;
-  struct spelling *p;
+  حرف *d = بفر;
+  بنية spelling *p;
 
-  for (p = spelling_base; p < spelling; p++)
-    if (p->kind == SPELLING_BOUNDS)
+  لكل (p = spelling_بنسټ; p < spelling; p++)
+    إذا (p->ډول == SPELLING_BOUNDS)
       {
 	sprintf (d, "[" HOST_WIDE_INT_PRINT_UNSIGNED "]", p->u.i);
-	d += strlen (d);
+	d += مزي_اوږدوالی (d);
       }
-    else
+    وإلا
       {
-	const char *s;
-	if (p->kind == SPELLING_MEMBER)
+	ثابت حرف *s;
+	إذا (p->ډول == SPELLING_MEMBER)
 	  *d++ = '.';
-	for (s = p->u.s; (*d = *s++); d++)
+	لكل (s = p->u.s; (*d = *s++); d++)
 	  ;
       }
   *d++ = '\0';
-  return buffer;
+  أرجع بفر;
 }
 
 /* Check whether INIT, a floating or integer constant, is
    representable in TYPE, a real floating type with the same radix or
    a decimal floating type initialized with a binary floating
    constant.  Return true if OK, false if not.  */
-static bool
-constexpr_init_fits_real_type (tree type, tree init)
+ساكن منطقي
+constexpr_init_ځاییږي_real_type (ونه type, ونه init)
 {
   gcc_assert (SCALAR_FLOAT_TYPE_P (type));
-  gcc_assert (TREE_CODE (init) == INTEGER_CST || TREE_CODE (init) == REAL_CST);
-  if (TREE_CODE (init) == REAL_CST
-      && TYPE_MODE (TREE_TYPE (init)) == TYPE_MODE (type))
+  gcc_assert (ونه_کوډ (init) == INTEGER_CST || ونه_کوډ (init) == REAL_CST);
+  إذا (ونه_کوډ (init) == REAL_CST
+      && TYPE_ډېرپېښ (ونه_TYPE (init)) == TYPE_ډېرپېښ (type))
     {
       /* Same mode, no conversion required except for the case of
 	 signaling NaNs if the types are incompatible (e.g. double and
 	 long double with the same mode).  */
-      if (REAL_VALUE_ISSIGNALING_NAN (TREE_REAL_CST (init))
+      إذا (REAL_ارزښت_ISSIGNALING_NAN (ونه_REAL_CST (init))
 	  && !comptypes (TYPE_MAIN_VARIANT (type),
-			 TYPE_MAIN_VARIANT (TREE_TYPE (init))))
-	return false;
-      return true;
+			 TYPE_MAIN_VARIANT (ونه_TYPE (init))))
+	أرجع خطأ;
+      أرجع ریښتیا;
     }
-  if (TREE_CODE (init) == INTEGER_CST)
+  إذا (ونه_کوډ (init) == INTEGER_CST)
     {
-      tree converted = build_real_from_int_cst (type, init);
-      bool fail = false;
-      wide_int w = real_to_integer (&TREE_REAL_CST (converted), &fail,
-				    TYPE_PRECISION (TREE_TYPE (init)));
-      return !fail && wi::eq_p (w, wi::to_wide (init));
+      ونه converted = build_real_from_int_cst (type, init);
+      منطقي fail = خطأ;
+      wide_int w = real_منزل_integer (&ونه_REAL_CST (converted), &fail,
+				    TYPE_PRECISION (ونه_TYPE (init)));
+      أرجع !fail && wi::eq_p (w, wi::منزل_wide (init));
     }
-  if (REAL_VALUE_ISSIGNALING_NAN (TREE_REAL_CST (init)))
-    return false;
-  if ((REAL_VALUE_ISINF (TREE_REAL_CST (init))
-       && MODE_HAS_INFINITIES (TYPE_MODE (type)))
-      || (REAL_VALUE_ISNAN (TREE_REAL_CST (init))
-	  && MODE_HAS_NANS (TYPE_MODE (type))))
-    return true;
-  if (DECIMAL_FLOAT_TYPE_P (type)
-      && !DECIMAL_FLOAT_TYPE_P (TREE_TYPE (init)))
+  إذا (REAL_ارزښت_ISSIGNALING_NAN (ونه_REAL_CST (init)))
+    أرجع خطأ;
+  إذا ((REAL_ارزښت_ISINF (ونه_REAL_CST (init))
+       && ډېرپېښ_HAS_INFINITIES (TYPE_ډېرپېښ (type)))
+      || (REAL_ارزښت_ISNAN (ونه_REAL_CST (init))
+	  && ډېرپېښ_HAS_NANS (TYPE_ډېرپېښ (type))))
+    أرجع ریښتیا;
+  إذا (DECIMAL_FLOAT_TYPE_P (type)
+      && !DECIMAL_FLOAT_TYPE_P (ونه_TYPE (init)))
     {
       /* This is valid if the real number represented by the
 	 initializer can be exactly represented in the decimal
 	 type.  Compare the values using MPFR.  */
-      REAL_VALUE_TYPE t;
-      real_convert (&t, TYPE_MODE (type), &TREE_REAL_CST (init));
+      REAL_ارزښت_TYPE t;
+      real_convert (&t, TYPE_ډېرپېښ (type), &ونه_REAL_CST (init));
       mpfr_t bin_val, dec_val;
-      mpfr_init2 (bin_val, REAL_MODE_FORMAT (TYPE_MODE (TREE_TYPE (init)))->p);
-      mpfr_init2 (dec_val, REAL_MODE_FORMAT (TYPE_MODE (TREE_TYPE (init)))->p);
-      mpfr_from_real (bin_val, &TREE_REAL_CST (init), MPFR_RNDN);
-      char string[256];
-      real_to_decimal (string, &t, sizeof string, 0, 1);
-      bool res = (mpfr_strtofr (dec_val, string, NULL, 10, MPFR_RNDN) == 0
+      mpfr_init2 (bin_val, REAL_ډېرپېښ_FORMAT (TYPE_ډېرپېښ (ونه_TYPE (init)))->p);
+      mpfr_init2 (dec_val, REAL_ډېرپېښ_FORMAT (TYPE_ډېرپېښ (ونه_TYPE (init)))->p);
+      mpfr_from_real (bin_val, &ونه_REAL_CST (init), MPFR_RNDN);
+      حرف string[256];
+      real_منزل_decimal (string, &t, حجم string, 0, 1);
+      منطقي res = (mpfr_strtofr (dec_val, string, عدم, 10, MPFR_RNDN) == 0
 		  && mpfr_equal_p (bin_val, dec_val));
       mpfr_clear (bin_val);
       mpfr_clear (dec_val);
-      return res;
+      أرجع res;
     }
   /* exact_real_truncate is not quite right here, since it doesn't
      allow even an exact conversion to subnormal values.  */
-  REAL_VALUE_TYPE t;
-  real_convert (&t, TYPE_MODE (type), &TREE_REAL_CST (init));
-  return real_identical (&t, &TREE_REAL_CST (init));
+  REAL_ارزښت_TYPE t;
+  real_convert (&t, TYPE_ډېرپېښ (type), &ونه_REAL_CST (init));
+  أرجع real_identical (&t, &ونه_REAL_CST (init));
 }
 
 /* Check whether INIT (location LOC) is valid as a 'constexpr'
@@ -9779,103 +9779,103 @@ constexpr_init_fits_real_type (tree type, tree init)
    expression or arithmetic constant expression, respectively.  If
    TYPE is not a scalar type, this function does nothing.  */
 
-static void
-check_constexpr_init (location_t loc, tree type, tree init,
-		      bool int_const_expr, bool arith_const_expr)
+ساكن فراغ
+check_constexpr_init (location_t loc, ونه type, ونه init,
+		      منطقي int_const_بیان, منطقي arith_const_بیان)
 {
-  if (POINTER_TYPE_P (type))
+  إذا (اشاره_ګر_TYPE_P (type))
     {
       /* The initializer must be null.  */
-      if (TREE_CODE (init) != INTEGER_CST || !integer_zerop (init))
+      إذا (ونه_کوډ (init) != INTEGER_CST || !integer_zerop (init))
 	error_at (loc, "%<constexpr%> pointer initializer is not null");
-      return;
+      أرجع;
     }
-  if (INTEGRAL_TYPE_P (type))
+  إذا (INTEGRAL_TYPE_P (type))
     {
       /* The initializer must be an integer constant expression,
 	 representable in the target type.  */
-      if (!int_const_expr)
+      إذا (!int_const_بیان)
 	{
-	  if (TREE_CODE (init) == RAW_DATA_CST
-	      && TYPE_PRECISION (type) == CHAR_BIT)
+	  إذا (ونه_کوډ (init) == RAW_معلومات_CST
+	      && TYPE_PRECISION (type) == CHAR_بټ)
 	    {
-	      if (!TYPE_UNSIGNED (type))
-		for (unsigned int i = 0;
-		     i < (unsigned) RAW_DATA_LENGTH (init); ++i)
-		  if (RAW_DATA_SCHAR_ELT (init, i) < 0)
+	      إذا (!TYPE_UNSIGNED (type))
+		لكل (بینښه صحيح i = 0;
+		     i < (بینښه) RAW_معلومات_اوږدتیا (init); ++i)
+		  إذا (RAW_معلومات_SCHAR_ELT (init, i) < 0)
 		    {
 		      error_at (loc, "%<constexpr%> initializer not "
 				"representable in type of object");
-		      break;
+		      اكسر;
 		    }
 	    }
-	  else
+	  وإلا
 	    error_at (loc, "%<constexpr%> integer initializer is not an "
 		      "integer constant expression");
 	}
-      else if (!int_fits_type_p (init, type))
+      وإلا إذا (!int_ځاییږي_type_p (init, type))
 	error_at (loc, "%<constexpr%> initializer not representable in "
 		  "type of object");
-      return;
+      أرجع;
     }
   /* We don't apply any extra checks to extension types such as vector
      or fixed-point types.  */
-  if (TREE_CODE (type) != REAL_TYPE && TREE_CODE (type) != COMPLEX_TYPE)
-    return;
-  if (!arith_const_expr)
+  إذا (ونه_کوډ (type) != REAL_TYPE && ونه_کوډ (type) != COMPLEX_TYPE)
+    أرجع;
+  إذا (!arith_const_بیان)
     {
       error_at (loc, "%<constexpr%> initializer is not an arithmetic "
 		"constant expression");
-      return;
+      أرجع;
     }
   /* We don't apply any extra checks to complex integers.  */
-  if (TREE_CODE (type) == COMPLEX_TYPE
-      && TREE_CODE (TREE_TYPE (type)) != REAL_TYPE)
-    return;
+  إذا (ونه_کوډ (type) == COMPLEX_TYPE
+      && ونه_کوډ (ونه_TYPE (type)) != REAL_TYPE)
+    أرجع;
   /* Following N3082, a real type cannot be initialized from a complex
      type and a binary type cannot be initialized from a decimal type
      (but initializing a decimal type from a binary type is OK).
      Signaling NaN initializers are OK only if the types are
      compatible (not just the same mode); all quiet NaN and infinity
      initializations are considered to preserve the value.  */
-  if (TREE_CODE (TREE_TYPE (init)) == COMPLEX_TYPE
+  إذا (ونه_کوډ (ونه_TYPE (init)) == COMPLEX_TYPE
       && SCALAR_FLOAT_TYPE_P (type))
     {
       error_at (loc, "%<constexpr%> initializer for a real type is of "
 		"complex type");
-      return;
+      أرجع;
     }
-  if (SCALAR_FLOAT_TYPE_P (type)
-      && SCALAR_FLOAT_TYPE_P (TREE_TYPE (init))
-      && DECIMAL_FLOAT_TYPE_P (TREE_TYPE (init))
+  إذا (SCALAR_FLOAT_TYPE_P (type)
+      && SCALAR_FLOAT_TYPE_P (ونه_TYPE (init))
+      && DECIMAL_FLOAT_TYPE_P (ونه_TYPE (init))
       && !DECIMAL_FLOAT_TYPE_P (type))
     {
       error_at (loc, "%<constexpr%> initializer for a binary "
 		"floating-point type is of decimal type");
-      return;
+      أرجع;
     }
-  bool fits;
-  if (TREE_CODE (type) == COMPLEX_TYPE)
+  منطقي ځاییږي;
+  إذا (ونه_کوډ (type) == COMPLEX_TYPE)
     {
-      switch (TREE_CODE (init))
+      بدل (ونه_کوډ (init))
 	{
-	case INTEGER_CST:
-	case REAL_CST:
-	  fits = constexpr_init_fits_real_type (TREE_TYPE (type), init);
-	  break;
-	case COMPLEX_CST:
-	  fits = (constexpr_init_fits_real_type (TREE_TYPE (type),
-						 TREE_REALPART (init))
-		  && constexpr_init_fits_real_type (TREE_TYPE (type),
-						    TREE_IMAGPART (init)));
-	  break;
-	default:
+	حالة INTEGER_CST:
+	حالة REAL_CST:
+	  ځاییږي = constexpr_init_ځاییږي_real_type (ونه_TYPE (type), init);
+	  اكسر;
+	حالة COMPLEX_CST:
+	  ځاییږي = (constexpr_init_ځاییږي_real_type (ونه_TYPE (type),
+						 ونه_REALPART (init))
+		  && constexpr_init_ځاییږي_real_type (ونه_TYPE (type),
+						    ونه_IMAGPART (init)));
+	  اكسر;
+	افتراضي:
 	  gcc_unreachable ();
 	}
     }
-  else
-    fits = constexpr_init_fits_real_type (type, init);
-  if (!fits)
+  وإلا
+    ځاییږي = constexpr_init_ځاییږي_real_type (type, init);
+  إذا (!ځاییږي)
     error_at (loc, "%<constexpr%> initializer not representable in "
 	      "type of object");
 }
@@ -9903,21 +9903,21 @@ check_constexpr_init (location_t loc, tree type, tree init,
    elements are seen.  REQUIRE_CONSTEXPR means the stricter requirements
    on initializers for 'constexpr' objects apply.  */
 
-static tree
-digest_init (location_t init_loc, tree decl, tree type, tree init,
-	     tree origtype, bool null_pointer_constant, bool int_const_expr,
-	     bool arith_const_expr, bool strict_string,
-	     bool require_constant, bool require_constexpr)
+ساكن ونه
+digest_init (location_t init_loc, ونه decl, ونه type, ونه init,
+	     ونه origtype, منطقي null_اشاره_ګر_constant, منطقي int_const_بیان,
+	     منطقي arith_const_بیان, منطقي strict_string,
+	     منطقي require_constant, منطقي require_constexpr)
 {
-  enum tree_code code = TREE_CODE (type);
-  tree inside_init = init;
-  tree semantic_type = NULL_TREE;
-  bool maybe_const = true;
+  تعداد ونه_کوډ_2 کوډ = ونه_کوډ (type);
+  ونه inside_init = init;
+  ونه semantic_type = NULL_ونه;
+  منطقي maybe_const = ریښتیا;
 
-  if (type == error_mark_node
+  إذا (type == error_mark_غوټه
       || !init
-      || error_operand_p (init))
-    return error_mark_node;
+      || error_عملوند_p (init))
+    أرجع error_mark_غوټه;
 
   STRIP_TYPE_NOPS (inside_init);
 
@@ -9928,125 +9928,125 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
      will be converted to
      y = &static_annotated.c.  */
 
-  if (require_constant
-      && TREE_CODE (inside_init) == NOP_EXPR
-      && TREE_CODE (TREE_OPERAND (inside_init, 0)) == CALL_EXPR
-      && is_access_with_size_p (TREE_OPERAND (inside_init, 0)))
+  إذا (require_constant
+      && ونه_کوډ (inside_init) == NOP_بیان
+      && ونه_کوډ (ونه_عملوند (inside_init, 0)) == CALL_بیان
+      && is_access_with_اندازه_p (ونه_عملوند (inside_init, 0)))
     inside_init
-      = get_ref_from_access_with_size (TREE_OPERAND (inside_init, 0));
+      = get_ref_from_access_with_اندازه (ونه_عملوند (inside_init, 0));
 
-  if (!c_in_omp_for)
+  إذا (!c_دننه_omp_for)
     {
-      if (TREE_CODE (inside_init) == EXCESS_PRECISION_EXPR)
+      إذا (ونه_کوډ (inside_init) == EXCESS_PRECISION_بیان)
 	{
-	  semantic_type = TREE_TYPE (inside_init);
-	  inside_init = TREE_OPERAND (inside_init, 0);
+	  semantic_type = ونه_TYPE (inside_init);
+	  inside_init = ونه_عملوند (inside_init, 0);
 	}
       inside_init = c_fully_fold (inside_init, require_constant, &maybe_const);
     }
   /* TODO: this may not detect all cases of expressions folding to
      constants that are not arithmetic constant expressions.  */
-  if (!maybe_const)
-    arith_const_expr = false;
-  else if (!INTEGRAL_TYPE_P (TREE_TYPE (inside_init))
-	   && TREE_CODE (TREE_TYPE (inside_init)) != REAL_TYPE
-	   && TREE_CODE (TREE_TYPE (inside_init)) != COMPLEX_TYPE)
-    arith_const_expr = false;
-  else if (TREE_CODE (inside_init) != INTEGER_CST
-	   && TREE_CODE (inside_init) != REAL_CST
-	   && TREE_CODE (inside_init) != COMPLEX_CST
-	   && TREE_CODE (inside_init) != RAW_DATA_CST)
-    arith_const_expr = false;
-  else if (TREE_OVERFLOW (inside_init))
-    arith_const_expr = false;
+  إذا (!maybe_const)
+    arith_const_بیان = خطأ;
+  وإلا إذا (!INTEGRAL_TYPE_P (ونه_TYPE (inside_init))
+	   && ونه_کوډ (ونه_TYPE (inside_init)) != REAL_TYPE
+	   && ونه_کوډ (ونه_TYPE (inside_init)) != COMPLEX_TYPE)
+    arith_const_بیان = خطأ;
+  وإلا إذا (ونه_کوډ (inside_init) != INTEGER_CST
+	   && ونه_کوډ (inside_init) != REAL_CST
+	   && ونه_کوډ (inside_init) != COMPLEX_CST
+	   && ونه_کوډ (inside_init) != RAW_معلومات_CST)
+    arith_const_بیان = خطأ;
+  وإلا إذا (ونه_ډکېدنه (inside_init))
+    arith_const_بیان = خطأ;
 
   /* Initialization of an array of chars from a string constant
      optionally enclosed in braces.  */
 
-  if (code == ARRAY_TYPE && inside_init
-      && TREE_CODE (inside_init) == STRING_CST)
+  إذا (کوډ == ARRAY_TYPE && inside_init
+      && ونه_کوډ (inside_init) == STRING_CST)
     {
-      tree typ1
-	= (TYPE_ATOMIC (TREE_TYPE (type))
-	   ? c_build_qualified_type (TYPE_MAIN_VARIANT (TREE_TYPE (type)),
+      ونه typ1
+	= (TYPE_ATOMIC (ونه_TYPE (type))
+	   ? c_build_qualified_type (TYPE_MAIN_VARIANT (ونه_TYPE (type)),
 				     TYPE_QUAL_ATOMIC)
-	   : TYPE_MAIN_VARIANT (TREE_TYPE (type)));
+	   : TYPE_MAIN_VARIANT (ونه_TYPE (type)));
       /* Note that an array could be both an array of character type
 	 and an array of wchar_t if wchar_t is signed char or unsigned
 	 char.  */
-      bool char_array = (typ1 == char_type_node
-			 || typ1 == signed_char_type_node
-			 || typ1 == unsigned_char_type_node);
-      bool wchar_array = comptypes (typ1, wchar_type_node);
-      bool char16_array = comptypes (typ1, char16_type_node);
-      bool char32_array = comptypes (typ1, char32_type_node);
+      منطقي char_array = (typ1 == char_type_غوټه
+			 || typ1 == signed_char_type_غوټه
+			 || typ1 == unsigned_char_type_غوټه);
+      منطقي wchar_array = comptypes (typ1, wchar_type_غوټه);
+      منطقي char16_array = comptypes (typ1, char16_type_غوټه);
+      منطقي char32_array = comptypes (typ1, char32_type_غوټه);
 
-      if (char_array || wchar_array || char16_array || char32_array)
+      إذا (char_array || wchar_array || char16_array || char32_array)
 	{
-	  struct c_expr expr;
-	  tree typ2 = TYPE_MAIN_VARIANT (TREE_TYPE (TREE_TYPE (inside_init)));
-	  bool incompat_string_cst = false;
-	  expr.value = inside_init;
-	  expr.original_code = (strict_string ? STRING_CST : ERROR_MARK);
-	  expr.original_type = NULL;
-	  expr.m_decimal = 0;
-	  maybe_warn_string_init (init_loc, type, expr);
+	  بنية c_بیان بیان;
+	  ونه typ2 = TYPE_MAIN_VARIANT (ونه_TYPE (ونه_TYPE (inside_init)));
+	  منطقي incompat_string_cst = خطأ;
+	  بیان.ارزښت = inside_init;
+	  بیان.original_کوډ = (strict_string ? STRING_CST : ERROR_MARK);
+	  بیان.original_type = عدم;
+	  بیان.m_decimal = 0;
+	  maybe_warn_string_init (init_loc, type, بیان);
 
-	  if (flexible_array_member_type_p (type))
+	  إذا (flexible_array_member_type_p (type))
 	    pedwarn_init (init_loc, OPT_Wpedantic,
 			  "initialization of a flexible array member");
 
-	  if (comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (inside_init)),
+	  إذا (comptypes (TYPE_MAIN_VARIANT (ونه_TYPE (inside_init)),
 			 TYPE_MAIN_VARIANT (type)))
-	    return inside_init;
+	    أرجع inside_init;
 
-	  if (char_array)
+	  إذا (char_array)
 	    {
-	      if (typ2 != char_type_node && typ2 != char8_type_node)
-		incompat_string_cst = true;
+	      إذا (typ2 != char_type_غوټه && typ2 != char8_type_غوټه)
+		incompat_string_cst = ریښتیا;
 	    }
-	  else if (!comptypes (typ1, typ2))
-	    incompat_string_cst = true;
+	  وإلا إذا (!comptypes (typ1, typ2))
+	    incompat_string_cst = ریښتیا;
 
-          if (incompat_string_cst)
+          إذا (incompat_string_cst)
             {
 	      error_init (init_loc, "cannot initialize array of %qT from "
 			  "a string literal with type array of %qT",
 			  typ1, typ2);
-	      return error_mark_node;
+	      أرجع error_mark_غوټه;
             }
 
-	  if (require_constexpr
+	  إذا (require_constexpr
 	      && TYPE_UNSIGNED (typ1) != TYPE_UNSIGNED (typ2))
 	    {
 	      /* Check if all characters of the string can be
 		 represented in the type of the constexpr object being
 		 initialized.  */
-	      unsigned HOST_WIDE_INT len = TREE_STRING_LENGTH (inside_init);
-	      const unsigned char *p =
-		(const unsigned char *) TREE_STRING_POINTER (inside_init);
-	      gcc_assert (CHAR_TYPE_SIZE == 8 && CHAR_BIT == 8);
-	      for (unsigned i = 0; i < len; i++)
-		if (p[i] > 127)
+	      بینښه HOST_WIDE_INT len = ونه_STRING_اوږدتیا (inside_init);
+	      ثابت بینښه حرف *p =
+		(ثابت بینښه حرف *) ونه_STRING_اشاره_ګر (inside_init);
+	      gcc_assert (CHAR_TYPE_اندازه == 8 && CHAR_بټ == 8);
+	      لكل (بینښه i = 0; i < len; i++)
+		إذا (p[i] > 127)
 		  {
 		    error_init (init_loc, "%<constexpr%> initializer not "
 				"representable in type of object");
-		    break;
+		    اكسر;
 		  }
 	    }
 
-	  if (TYPE_DOMAIN (type) != NULL_TREE
-	      && TYPE_SIZE (type) != NULL_TREE
-	      && TREE_CODE (TYPE_SIZE (type)) == INTEGER_CST)
+	  إذا (TYPE_DOMAIN (type) != NULL_ونه
+	      && TYPE_اندازه (type) != NULL_ونه
+	      && ونه_کوډ (TYPE_اندازه (type)) == INTEGER_CST)
 	    {
-	      unsigned HOST_WIDE_INT len = TREE_STRING_LENGTH (inside_init);
+	      بینښه HOST_WIDE_INT len = ونه_STRING_اوږدتیا (inside_init);
 
-	      if (compare_tree_int (TYPE_SIZE_UNIT (type), len) < 0)
+	      إذا (compare_ونه_int (TYPE_اندازه_UNIT (type), len) < 0)
 		{
-		  unsigned HOST_WIDE_INT avail
-		    = tree_to_uhwi (TYPE_SIZE_UNIT (type));
-		  unsigned unit = TYPE_PRECISION (typ1) / BITS_PER_UNIT;
-		  const char *p = TREE_STRING_POINTER (inside_init);
+		  بینښه HOST_WIDE_INT avail
+		    = ونه_منزل_uhwi (TYPE_اندازه_UNIT (type));
+		  بینښه unit = TYPE_PRECISION (typ1) / بټونه_فی_UNIT;
+		  ثابت حرف *p = ونه_STRING_اشاره_ګر (inside_init);
 
 		  /* Construct truncated string.  */
 		  inside_init = build_string (avail, p);
@@ -10054,18 +10054,18 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 		  /* Subtract the size of a single (possibly wide) character
 		     because it may be ok to ignore the terminating NUL char
 		     that is counted in the length of the constant.  */
-		  if (len - unit > avail)
+		  إذا (len - unit > avail)
 		    pedwarn_init (init_loc, 0,
 				  "initializer-string for array of %qT "
 				  "is too long (%wu chars into %wu "
 				  "available)", typ1, len, avail);
-		  else if (warn_cxx_compat)
+		  وإلا إذا (warn_cxx_compat)
 		    warning_at (init_loc, OPT_Wc___compat,
 				"initializer-string for array of %qT "
 				"is too long for C++ (%wu chars into %wu "
 				"available)", typ1, len, avail);
-		  else if (warn_unterminated_string_initialization
-			   && get_attr_nonstring_decl (decl) == NULL_TREE)
+		  وإلا إذا (warn_unterminated_string_initialization
+			   && get_attr_nonstring_decl (decl) == NULL_ونه)
 		    warning_at (init_loc,
 				OPT_Wunterminated_string_initialization,
 				"initializer-string for array of %qT "
@@ -10075,308 +10075,308 @@ digest_init (location_t init_loc, tree decl, tree type, tree init,
 		}
 	    }
 
-	  TREE_TYPE (inside_init) = type;
-	  return inside_init;
+	  ونه_TYPE (inside_init) = type;
+	  أرجع inside_init;
 	}
-      else if (INTEGRAL_TYPE_P (typ1))
+      وإلا إذا (INTEGRAL_TYPE_P (typ1))
 	{
 	  error_init (init_loc, "array of inappropriate type initialized "
 		      "from string constant");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
     }
 
   /* Build a VECTOR_CST from a *constant* vector constructor.  If the
      vector constructor is not constant (e.g. {1,2,3,foo()}) then punt
      below and handle as a constructor.  */
-  if (code == VECTOR_TYPE
-      && VECTOR_TYPE_P (TREE_TYPE (inside_init))
-      && vector_types_convertible_p (TREE_TYPE (inside_init), type, true)
-      && TREE_CONSTANT (inside_init))
+  إذا (کوډ == ویکټور_TYPE
+      && ویکټور_TYPE_P (ونه_TYPE (inside_init))
+      && ویکټور_types_convertible_p (ونه_TYPE (inside_init), type, ریښتیا)
+      && ونه_CONSTANT (inside_init))
     {
-      if (TREE_CODE (inside_init) == VECTOR_CST
-	  && comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (inside_init)),
+      إذا (ونه_کوډ (inside_init) == ویکټور_CST
+	  && comptypes (TYPE_MAIN_VARIANT (ونه_TYPE (inside_init)),
 			TYPE_MAIN_VARIANT (type)))
-	return inside_init;
+	أرجع inside_init;
 
-      if (TREE_CODE (inside_init) == CONSTRUCTOR)
+      إذا (ونه_کوډ (inside_init) == CONSTRUCTOR)
 	{
-	  unsigned HOST_WIDE_INT ix;
-	  tree value;
-	  bool constant_p = true;
+	  بینښه HOST_WIDE_INT ix;
+	  ونه ارزښت;
+	  منطقي constant_p = ریښتیا;
 
 	  /* Iterate through elements and check if all constructor
 	     elements are *_CSTs.  */
-	  FOR_EACH_CONSTRUCTOR_VALUE (CONSTRUCTOR_ELTS (inside_init), ix, value)
-	    if (!CONSTANT_CLASS_P (value))
+	  FOR_EACH_CONSTRUCTOR_ارزښت (CONSTRUCTOR_ELTS (inside_init), ix, ارزښت)
+	    إذا (!CONSTANT_CLASS_P (ارزښت))
 	      {
-		constant_p = false;
-		break;
+		constant_p = خطأ;
+		اكسر;
 	      }
 
-	  if (constant_p)
-	    return build_vector_from_ctor (type,
+	  إذا (constant_p)
+	    أرجع build_ویکټور_from_ctor (type,
 					   CONSTRUCTOR_ELTS (inside_init));
 	}
     }
 
-  if (warn_sequence_point)
+  إذا (warn_sequence_ټکی)
     verify_sequence_points (inside_init);
 
   /* Any type can be initialized
      from an expression of the same type, optionally with braces.  */
 
-  if (inside_init && TREE_TYPE (inside_init) != NULL_TREE
-      && (comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (inside_init)),
+  إذا (inside_init && ونه_TYPE (inside_init) != NULL_ونه
+      && (comptypes (TYPE_MAIN_VARIANT (ونه_TYPE (inside_init)),
 		     TYPE_MAIN_VARIANT (type))
-	  || (code == ARRAY_TYPE
-	      && comptypes (TREE_TYPE (inside_init), type))
-	  || (gnu_vector_type_p (type)
-	      && comptypes (TREE_TYPE (inside_init), type))
-	  || (code == POINTER_TYPE
-	      && TREE_CODE (TREE_TYPE (inside_init)) == ARRAY_TYPE
-	      && comptypes (TREE_TYPE (TREE_TYPE (inside_init)),
-			    TREE_TYPE (type)))))
+	  || (کوډ == ARRAY_TYPE
+	      && comptypes (ونه_TYPE (inside_init), type))
+	  || (gnu_ویکټور_type_p (type)
+	      && comptypes (ونه_TYPE (inside_init), type))
+	  || (کوډ == اشاره_ګر_TYPE
+	      && ونه_کوډ (ونه_TYPE (inside_init)) == ARRAY_TYPE
+	      && comptypes (ونه_TYPE (ونه_TYPE (inside_init)),
+			    ونه_TYPE (type)))))
     {
-      if (code == POINTER_TYPE)
+      إذا (کوډ == اشاره_ګر_TYPE)
 	{
-	  if (TREE_CODE (TREE_TYPE (inside_init)) == ARRAY_TYPE)
+	  إذا (ونه_کوډ (ونه_TYPE (inside_init)) == ARRAY_TYPE)
 	    {
-	      if (TREE_CODE (inside_init) == STRING_CST
-		  || TREE_CODE (inside_init) == COMPOUND_LITERAL_EXPR)
-		inside_init = array_to_pointer_conversion
+	      إذا (ونه_کوډ (inside_init) == STRING_CST
+		  || ونه_کوډ (inside_init) == COMPOUND_LITERAL_بیان)
+		inside_init = array_منزل_اشاره_ګر_conversion
 		  (init_loc, inside_init);
-	      else
+	      وإلا
 		{
 		  error_init (init_loc, "invalid use of non-lvalue array");
-		  return error_mark_node;
+		  أرجع error_mark_غوټه;
 		}
 	    }
 	}
 
-      if (code == VECTOR_TYPE || c_hardbool_type_attr (type))
+      إذا (کوډ == ویکټور_TYPE || c_hardbool_type_attr (type))
 	/* Although the types are compatible, we may require a
 	   conversion.  */
 	inside_init = convert (type, inside_init);
 
-      if ((code == RECORD_TYPE || code == UNION_TYPE)
-	  && !comptypes (TYPE_MAIN_VARIANT (type), TYPE_MAIN_VARIANT (TREE_TYPE (inside_init))))
+      إذا ((کوډ == ریکارډ_TYPE || کوډ == UNION_TYPE)
+	  && !comptypes (TYPE_MAIN_VARIANT (type), TYPE_MAIN_VARIANT (ونه_TYPE (inside_init))))
 	{
 	  error_init (init_loc, "invalid initializer");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
 
-      if (require_constant
-	  && TREE_CODE (inside_init) == COMPOUND_LITERAL_EXPR)
+      إذا (require_constant
+	  && ونه_کوډ (inside_init) == COMPOUND_LITERAL_بیان)
 	{
 	  /* As an extension, allow initializing objects with static storage
 	     duration with compound literals (which are then treated just as
 	     the brace enclosed list they contain).  Also allow this for
 	     vectors, as we can only assign them with compound literals.  */
-	  if (flag_isoc99 && code != VECTOR_TYPE)
+	  إذا (flag_isoc99 && کوډ != ویکټور_TYPE)
 	    pedwarn_init (init_loc, OPT_Wpedantic, "initializer element "
 			  "is not constant");
-	  tree decl = COMPOUND_LITERAL_EXPR_DECL (inside_init);
+	  ونه decl = COMPOUND_LITERAL_بیان_DECL (inside_init);
 	  inside_init = DECL_INITIAL (decl);
 	}
 
-      if (code == ARRAY_TYPE && TREE_CODE (inside_init) != STRING_CST
-	  && TREE_CODE (inside_init) != CONSTRUCTOR)
+      إذا (کوډ == ARRAY_TYPE && ونه_کوډ (inside_init) != STRING_CST
+	  && ونه_کوډ (inside_init) != CONSTRUCTOR)
 	{
 	  error_init (init_loc, "array initialized from non-constant array "
 		      "expression");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
 
       /* Compound expressions can only occur here if -Wpedantic or
 	 -pedantic-errors is specified.  In the later case, we always want
 	 an error.  In the former case, we simply want a warning.  */
-      if (require_constant && pedantic
-	  && TREE_CODE (inside_init) == COMPOUND_EXPR)
+      إذا (require_constant && pedantic
+	  && ونه_کوډ (inside_init) == COMPOUND_بیان)
 	{
 	  inside_init
-	    = valid_compound_expr_initializer (inside_init,
-					       TREE_TYPE (inside_init));
-	  if (inside_init == error_mark_node)
+	    = valid_compound_بیان_initializer (inside_init,
+					       ونه_TYPE (inside_init));
+	  إذا (inside_init == error_mark_غوټه)
 	    error_init (init_loc, "initializer element is not constant");
-	  else
+	  وإلا
 	    pedwarn_init (init_loc, OPT_Wpedantic,
 			  "initializer element is not constant");
-	  if (flag_pedantic_errors)
-	    inside_init = error_mark_node;
+	  إذا (flag_pedantic_errors)
+	    inside_init = error_mark_غوټه;
 	}
-      else if (require_constant
+      وإلا إذا (require_constant
 	       && !initializer_constant_valid_p (inside_init,
-						 TREE_TYPE (inside_init)))
+						 ونه_TYPE (inside_init)))
 	{
 	  error_init (init_loc, "initializer element is not constant");
-	  inside_init = error_mark_node;
+	  inside_init = error_mark_غوټه;
 	}
-      else if (require_constant && !maybe_const)
+      وإلا إذا (require_constant && !maybe_const)
 	pedwarn_init (init_loc, OPT_Wpedantic,
 		      "initializer element is not a constant expression");
-      else if (require_constexpr)
+      وإلا إذا (require_constexpr)
 	check_constexpr_init (init_loc, type, inside_init,
-			      int_const_expr, arith_const_expr);
+			      int_const_بیان, arith_const_بیان);
 
       /* Added to enable additional -Wsuggest-attribute=format warnings.  */
-      if (TREE_CODE (TREE_TYPE (inside_init)) == POINTER_TYPE)
+      إذا (ونه_کوډ (ونه_TYPE (inside_init)) == اشاره_ګر_TYPE)
 	inside_init = convert_for_assignment (init_loc, UNKNOWN_LOCATION,
 					      type, inside_init, origtype,
 					      (require_constant
 					       ? ic_init_const
-					       : ic_init), null_pointer_constant,
-					      NULL_TREE, NULL_TREE, 0);
-      if (TREE_CODE (inside_init) == RAW_DATA_CST
+					       : ic_init), null_اشاره_ګر_constant,
+					      NULL_ونه, NULL_ونه, 0);
+      إذا (ونه_کوډ (inside_init) == RAW_معلومات_CST
 	  && c_inhibit_evaluation_warnings == 0
 	  && warn_conversion
 	  && !TYPE_UNSIGNED (type)
-	  && TYPE_PRECISION (type) == CHAR_BIT)
-	for (unsigned int i = 0;
-	     i < (unsigned) RAW_DATA_LENGTH (inside_init); ++i)
-	  if (RAW_DATA_SCHAR_ELT (inside_init, i) < 0)
+	  && TYPE_PRECISION (type) == CHAR_بټ)
+	لكل (بینښه صحيح i = 0;
+	     i < (بینښه) RAW_معلومات_اوږدتیا (inside_init); ++i)
+	  إذا (RAW_معلومات_SCHAR_ELT (inside_init, i) < 0)
 	    warning_at (init_loc, OPT_Wconversion,
 			"conversion from %qT to %qT changes value from "
 			"%qd to %qd",
-			integer_type_node, type,
-			RAW_DATA_UCHAR_ELT (inside_init, i),
-			RAW_DATA_SCHAR_ELT (inside_init, i));
-      return inside_init;
+			integer_type_غوټه, type,
+			RAW_معلومات_UCHAR_ELT (inside_init, i),
+			RAW_معلومات_SCHAR_ELT (inside_init, i));
+      أرجع inside_init;
     }
 
   /* Handle scalar types, including conversions.  */
 
-  if (code == INTEGER_TYPE || code == REAL_TYPE || code == FIXED_POINT_TYPE
-      || code == POINTER_TYPE || code == ENUMERAL_TYPE || code == BOOLEAN_TYPE
-      || code == COMPLEX_TYPE || code == VECTOR_TYPE || code == NULLPTR_TYPE
-      || code == BITINT_TYPE)
+  إذا (کوډ == INTEGER_TYPE || کوډ == REAL_TYPE || کوډ == FIXED_ټکی_TYPE
+      || کوډ == اشاره_ګر_TYPE || کوډ == ENUMERAL_TYPE || کوډ == BOOLEAN_TYPE
+      || کوډ == COMPLEX_TYPE || کوډ == ویکټور_TYPE || کوډ == NULLPTR_TYPE
+      || کوډ == BITINT_TYPE)
     {
-      tree unconverted_init = inside_init;
-      if (TREE_CODE (TREE_TYPE (init)) == ARRAY_TYPE
-	  && (TREE_CODE (init) == STRING_CST
-	      || TREE_CODE (init) == COMPOUND_LITERAL_EXPR))
-	inside_init = init = array_to_pointer_conversion (init_loc, init);
-      if (semantic_type)
-	inside_init = build1 (EXCESS_PRECISION_EXPR, semantic_type,
+      ونه unconverted_init = inside_init;
+      إذا (ونه_کوډ (ونه_TYPE (init)) == ARRAY_TYPE
+	  && (ونه_کوډ (init) == STRING_CST
+	      || ونه_کوډ (init) == COMPOUND_LITERAL_بیان))
+	inside_init = init = array_منزل_اشاره_ګر_conversion (init_loc, init);
+      إذا (semantic_type)
+	inside_init = build1 (EXCESS_PRECISION_بیان, semantic_type,
 			      inside_init);
       inside_init
 	= convert_for_assignment (init_loc, UNKNOWN_LOCATION, type,
 				  inside_init, origtype,
 				  require_constant ? ic_init_const : ic_init,
-				  null_pointer_constant, NULL_TREE, NULL_TREE,
+				  null_اشاره_ګر_constant, NULL_ونه, NULL_ونه,
 				  0);
 
       /* Check to see if we have already given an error message.  */
-      if (inside_init == error_mark_node)
+      إذا (inside_init == error_mark_غوټه)
 	;
-      else if (require_constant && !TREE_CONSTANT (inside_init))
+      وإلا إذا (require_constant && !ونه_CONSTANT (inside_init))
 	{
 	  error_init (init_loc, "initializer element is not constant");
-	  inside_init = error_mark_node;
+	  inside_init = error_mark_غوټه;
 	}
-      else if (require_constant
+      وإلا إذا (require_constant
 	       && !initializer_constant_valid_p (inside_init,
-						 TREE_TYPE (inside_init)))
+						 ونه_TYPE (inside_init)))
 	{
 	  error_init (init_loc, "initializer element is not computable at "
 		      "load time");
-	  inside_init = error_mark_node;
+	  inside_init = error_mark_غوټه;
 	}
-      else if (require_constant && !maybe_const)
+      وإلا إذا (require_constant && !maybe_const)
 	pedwarn_init (init_loc, OPT_Wpedantic,
 		      "initializer element is not a constant expression");
-      else if (require_constexpr)
+      وإلا إذا (require_constexpr)
 	check_constexpr_init (init_loc, type, unconverted_init,
-			      int_const_expr, arith_const_expr);
+			      int_const_بیان, arith_const_بیان);
 
-      return inside_init;
+      أرجع inside_init;
     }
 
   /* Come here only for records and arrays.  */
 
-  if (COMPLETE_TYPE_P (type) && TREE_CODE (TYPE_SIZE (type)) != INTEGER_CST)
+  إذا (COMPLETE_TYPE_P (type) && ونه_کوډ (TYPE_اندازه (type)) != INTEGER_CST)
     {
       error_init (init_loc,
 		  "variable-sized object may not be initialized except "
 		  "with an empty initializer");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
   error_init (init_loc, "invalid initializer");
-  return error_mark_node;
+  أرجع error_mark_غوټه;
 }
 
 /* Handle initializers that use braces.  */
 
 /* Type of object we are accumulating a constructor for.
    This type is always a RECORD_TYPE, UNION_TYPE or ARRAY_TYPE.  */
-static tree constructor_type;
+ساكن ونه constructor_type;
 
 /* For a RECORD_TYPE or UNION_TYPE, this is the chain of fields
    left to fill.  */
-static tree constructor_fields;
+ساكن ونه constructor_fields;
 
 /* For an ARRAY_TYPE, this is the specified index
    at which to store the next element we get.  */
-static tree constructor_index;
+ساكن ونه constructor_شاخص;
 
 /* For an ARRAY_TYPE, this is the maximum index.  */
-static tree constructor_max_index;
+ساكن ونه constructor_max_شاخص;
 
 /* For a RECORD_TYPE, this is the first field not yet written out.  */
-static tree constructor_unfilled_fields;
+ساكن ونه constructor_unfilled_fields;
 
 /* For an ARRAY_TYPE, this is the index of the first element
    not yet written out.  */
-static tree constructor_unfilled_index;
+ساكن ونه constructor_unfilled_شاخص;
 
 /* In a RECORD_TYPE, the byte index of the next consecutive field.
    This is so we can generate gaps between fields, when appropriate.  */
-static tree constructor_bit_index;
+ساكن ونه constructor_بټ_شاخص;
 
 /* If we are saving up the elements rather than allocating them,
    this is the list of elements so far (in reverse order,
    most recent first).  */
-static vec<constructor_elt, va_gc> *constructor_elements;
+ساكن vec<constructor_elt, va_gc> *constructor_elements;
 
 /* 1 if constructor should be incrementally stored into a constructor chain,
    0 if all the elements should be kept in AVL tree.  */
-static int constructor_incremental;
+ساكن صحيح constructor_incremental;
 
 /* 1 if so far this constructor's elements are all compile-time constants.  */
-static int constructor_constant;
+ساكن صحيح constructor_constant;
 
 /* 1 if so far this constructor's elements are all valid address constants.  */
-static int constructor_simple;
+ساكن صحيح constructor_simple;
 
 /* 1 if this constructor has an element that cannot be part of a
    constant expression.  */
-static int constructor_nonconst;
+ساكن صحيح constructor_nonconst;
 
 /* 1 if this constructor is erroneous so far.  */
-static int constructor_erroneous;
+ساكن صحيح constructor_erroneous;
 
 /* 1 if this constructor is the universal zero initializer { 0 }.  */
-static int constructor_zeroinit;
+ساكن صحيح constructor_zeroinit;
 
 /* 1 if this constructor should have padding bits zeroed (C23 {}.  */
-static bool constructor_zero_padding_bits;
+ساكن منطقي constructor_zero_padding_بټونه;
 
 /* 1 if this constructor is a braced scalar initializer (further nested levels
    of braces are an error).  */
-static bool constructor_braced_scalar;
+ساكن منطقي constructor_braced_scalar;
 
 /* Structure for managing pending initializer elements, organized as an
    AVL tree.  */
 
-struct init_node
+بنية init_غوټه
 {
-  struct init_node *left, *right;
-  struct init_node *parent;
-  int balance;
-  tree purpose;
-  tree value;
-  tree origtype;
+  بنية init_غوټه *کیڼ, *ښی;
+  بنية init_غوټه *پلار;
+  صحيح balance;
+  ونه purpose;
+  ونه ارزښت;
+  ونه origtype;
 };
 
 /* Tree of pending elements at this constructor level.
@@ -10384,191 +10384,191 @@ struct init_node
    which belong at places we haven't reached yet in actually
    writing the output.
    Will never hold tree nodes across GC runs.  */
-static struct init_node *constructor_pending_elts;
+ساكن بنية init_غوټه *constructor_pending_elts;
 
 /* The SPELLING_DEPTH of this constructor.  */
-static int constructor_depth;
+ساكن صحيح constructor_ژوروالی;
 
 /* DECL node for which an initializer is being read.
    0 means we are reading a constructor expression
    such as (struct foo) {...}.  */
-static tree constructor_decl;
+ساكن ونه constructor_decl;
 
 /* Nonzero if there were any member designators in this initializer.  */
-static int constructor_designated;
+ساكن صحيح constructor_designated;
 
 /* Nesting depth of designator list.  */
-static int designator_depth;
+ساكن صحيح designator_ژوروالی;
 
 /* Nonzero if there were diagnosed errors in this designator list.  */
-static int designator_erroneous;
+ساكن صحيح designator_erroneous;
 
 
 /* This stack has a level for each implicit or explicit level of
    structuring in the initializer, including the outermost one.  It
    saves the values of most of the variables above.  */
 
-struct constructor_range_stack;
+بنية constructor_range_ډېری;
 
-struct constructor_stack
+بنية constructor_ډېری
 {
-  struct constructor_stack *next;
-  tree type;
-  tree fields;
-  tree index;
-  tree max_index;
-  tree unfilled_index;
-  tree unfilled_fields;
-  tree bit_index;
+  بنية constructor_ډېری *بل;
+  ونه type;
+  ونه fields;
+  ونه شاخص;
+  ونه max_شاخص;
+  ونه unfilled_شاخص;
+  ونه unfilled_fields;
+  ونه بټ_شاخص;
   vec<constructor_elt, va_gc> *elements;
-  struct init_node *pending_elts;
-  int offset;
-  int depth;
+  بنية init_غوټه *pending_elts;
+  صحيح دننه_واټن;
+  صحيح ژوروالی;
   /* If value nonzero, this value should replace the entire
      constructor at this level.  */
-  struct c_expr replacement_value;
-  struct constructor_range_stack *range_stack;
-  char constant;
-  char simple;
-  char nonconst;
-  char implicit;
-  char erroneous;
-  char outer;
-  char incremental;
-  char designated;
-  bool zero_padding_bits;
-  bool braced_scalar;
-  int designator_depth;
+  بنية c_بیان replacement_ارزښت;
+  بنية constructor_range_ډېری *range_ډېری;
+  حرف constant;
+  حرف simple;
+  حرف nonconst;
+  حرف implicit;
+  حرف erroneous;
+  حرف outer;
+  حرف incremental;
+  حرف designated;
+  منطقي zero_padding_بټونه;
+  منطقي braced_scalar;
+  صحيح designator_ژوروالی;
 };
 
-static struct constructor_stack *constructor_stack;
+ساكن بنية constructor_ډېری *constructor_ډېری;
 
 /* This stack represents designators from some range designator up to
    the last designator in the list.  */
 
-struct constructor_range_stack
+بنية constructor_range_ډېری
 {
-  struct constructor_range_stack *next, *prev;
-  struct constructor_stack *stack;
-  tree range_start;
-  tree index;
-  tree range_end;
-  tree fields;
+  بنية constructor_range_ډېری *بل, *prev;
+  بنية constructor_ډېری *ډېری;
+  ونه range_پیل;
+  ونه شاخص;
+  ونه range_پای_ټکی;
+  ونه fields;
 };
 
-static struct constructor_range_stack *constructor_range_stack;
+ساكن بنية constructor_range_ډېری *constructor_range_ډېری;
 
 /* This stack records separate initializers that are nested.
    Nested initializers can't happen in ANSI C, but GNU C allows them
    in cases like { ... (struct foo) { ... } ... }.  */
 
-struct initializer_stack
+بنية initializer_ډېری
 {
-  struct initializer_stack *next;
-  tree decl;
-  struct constructor_stack *constructor_stack;
-  struct constructor_range_stack *constructor_range_stack;
+  بنية initializer_ډېری *بل;
+  ونه decl;
+  بنية constructor_ډېری *constructor_ډېری;
+  بنية constructor_range_ډېری *constructor_range_ډېری;
   vec<constructor_elt, va_gc> *elements;
-  struct spelling *spelling;
-  struct spelling *spelling_base;
-  int spelling_size;
-  char require_constant_value;
-  char require_constant_elements;
-  char require_constexpr_value;
-  char designated;
+  بنية spelling *spelling;
+  بنية spelling *spelling_بنسټ;
+  صحيح spelling_اندازه;
+  حرف require_constant_ارزښت;
+  حرف require_constant_elements;
+  حرف require_constexpr_ارزښت;
+  حرف designated;
   rich_location *missing_brace_richloc;
 };
 
-static struct initializer_stack *initializer_stack;
+ساكن بنية initializer_ډېری *initializer_ډېری;
 
 /* Prepare to parse and output the initializer for variable DECL.  */
 
-void
-start_init (tree decl, tree asmspec_tree ATTRIBUTE_UNUSED,
-	    bool init_require_constant, bool init_require_constexpr,
+فراغ
+پیل_init (ونه decl, ونه asmspec_ونه ATTRIBUTE_ناکارول_شوی,
+	    منطقي init_require_constant, منطقي init_require_constexpr,
 	    rich_location *richloc)
 {
-  const char *locus;
-  struct initializer_stack *p = XNEW (struct initializer_stack);
+  ثابت حرف *locus;
+  بنية initializer_ډېری *p = XNEW (بنية initializer_ډېری);
 
   p->decl = constructor_decl;
-  p->require_constant_value = require_constant_value;
+  p->require_constant_ارزښت = require_constant_ارزښت;
   p->require_constant_elements = require_constant_elements;
-  p->require_constexpr_value = require_constexpr_value;
-  p->constructor_stack = constructor_stack;
-  p->constructor_range_stack = constructor_range_stack;
+  p->require_constexpr_ارزښت = require_constexpr_ارزښت;
+  p->constructor_ډېری = constructor_ډېری;
+  p->constructor_range_ډېری = constructor_range_ډېری;
   p->elements = constructor_elements;
   p->spelling = spelling;
-  p->spelling_base = spelling_base;
-  p->spelling_size = spelling_size;
-  p->next = initializer_stack;
+  p->spelling_بنسټ = spelling_بنسټ;
+  p->spelling_اندازه = spelling_اندازه;
+  p->بل = initializer_ډېری;
   p->missing_brace_richloc = richloc;
   p->designated = constructor_designated;
-  initializer_stack = p;
+  initializer_ډېری = p;
 
   constructor_decl = decl;
   constructor_designated = 0;
 
-  require_constant_value = init_require_constant;
-  require_constexpr_value = init_require_constexpr;
-  if (decl != NULL_TREE && decl != error_mark_node)
+  require_constant_ارزښت = init_require_constant;
+  require_constexpr_ارزښت = init_require_constexpr;
+  إذا (decl != NULL_ونه && decl != error_mark_غوټه)
     {
       require_constant_elements
 	= ((init_require_constant || (pedantic && !flag_isoc99))
 	   /* For a scalar, you can always use any value to initialize,
 	      even within braces.  */
-	   && AGGREGATE_TYPE_P (TREE_TYPE (decl)));
-      locus = identifier_to_locale (IDENTIFIER_POINTER (DECL_NAME (decl)));
+	   && AGGREGATE_TYPE_P (ونه_TYPE (decl)));
+      locus = identifier_منزل_locale (IDENTIFIER_اشاره_ګر (DECL_NAME (decl)));
     }
-  else
+  وإلا
     {
-      require_constant_elements = false;
+      require_constant_elements = خطأ;
       locus = _("(anonymous)");
     }
 
-  constructor_stack = 0;
-  constructor_range_stack = 0;
+  constructor_ډېری = 0;
+  constructor_range_ډېری = 0;
 
-  found_missing_braces = 0;
+  وموندل_missing_braces = 0;
 
-  spelling_base = 0;
-  spelling_size = 0;
-  RESTORE_SPELLING_DEPTH (0);
+  spelling_بنسټ = 0;
+  spelling_اندازه = 0;
+  RESTORE_SPELLING_ژوروالی (0);
 
-  if (locus)
-    push_string (locus);
+  إذا (locus)
+    ټېل_string (locus);
 }
 
-void
-finish_init (void)
+فراغ
+پای_init (فراغ)
 {
-  struct initializer_stack *p = initializer_stack;
+  بنية initializer_ډېری *p = initializer_ډېری;
 
   /* Free the whole constructor stack of this initializer.  */
-  while (constructor_stack)
+  طالما (constructor_ډېری)
     {
-      struct constructor_stack *q = constructor_stack;
-      constructor_stack = q->next;
+      بنية constructor_ډېری *q = constructor_ډېری;
+      constructor_ډېری = q->بل;
       XDELETE (q);
     }
 
-  gcc_assert (!constructor_range_stack);
+  gcc_assert (!constructor_range_ډېری);
 
   /* Pop back to the data of the outer initializer (if any).  */
-  XDELETE (spelling_base);
+  XDELETE (spelling_بنسټ);
 
   constructor_decl = p->decl;
-  require_constant_value = p->require_constant_value;
+  require_constant_ارزښت = p->require_constant_ارزښت;
   require_constant_elements = p->require_constant_elements;
-  require_constexpr_value = p->require_constexpr_value;
-  constructor_stack = p->constructor_stack;
+  require_constexpr_ارزښت = p->require_constexpr_ارزښت;
+  constructor_ډېری = p->constructor_ډېری;
   constructor_designated = p->designated;
-  constructor_range_stack = p->constructor_range_stack;
+  constructor_range_ډېری = p->constructor_range_ډېری;
   constructor_elements = p->elements;
   spelling = p->spelling;
-  spelling_base = p->spelling_base;
-  spelling_size = p->spelling_size;
-  initializer_stack = p->next;
+  spelling_بنسټ = p->spelling_بنسټ;
+  spelling_اندازه = p->spelling_اندازه;
+  initializer_ډېری = p->بل;
   XDELETE (p);
 }
 
@@ -10579,146 +10579,146 @@ finish_init (void)
    TYPE is the type to initialize, for a constructor expression.
    For an initializer for a decl, TYPE is zero.  */
 
-void
-really_start_incremental_init (tree type)
+فراغ
+really_پیل_incremental_init (ونه type)
 {
-  struct constructor_stack *p = XNEW (struct constructor_stack);
+  بنية constructor_ډېری *p = XNEW (بنية constructor_ډېری);
 
-  if (type == NULL_TREE)
-    type = TREE_TYPE (constructor_decl);
+  إذا (type == NULL_ونه)
+    type = ونه_TYPE (constructor_decl);
 
-  if (VECTOR_TYPE_P (type)
-      && TYPE_VECTOR_OPAQUE (type))
+  إذا (ویکټور_TYPE_P (type)
+      && TYPE_ویکټور_OPAQUE (type))
     error ("opaque vector types cannot be initialized");
 
   p->type = constructor_type;
   p->fields = constructor_fields;
-  p->index = constructor_index;
-  p->max_index = constructor_max_index;
-  p->unfilled_index = constructor_unfilled_index;
+  p->شاخص = constructor_شاخص;
+  p->max_شاخص = constructor_max_شاخص;
+  p->unfilled_شاخص = constructor_unfilled_شاخص;
   p->unfilled_fields = constructor_unfilled_fields;
-  p->bit_index = constructor_bit_index;
+  p->بټ_شاخص = constructor_بټ_شاخص;
   p->elements = constructor_elements;
   p->constant = constructor_constant;
   p->simple = constructor_simple;
   p->nonconst = constructor_nonconst;
   p->erroneous = constructor_erroneous;
   p->pending_elts = constructor_pending_elts;
-  p->depth = constructor_depth;
-  p->replacement_value.value = 0;
-  p->replacement_value.original_code = ERROR_MARK;
-  p->replacement_value.original_type = NULL;
+  p->ژوروالی = constructor_ژوروالی;
+  p->replacement_ارزښت.ارزښت = 0;
+  p->replacement_ارزښت.original_کوډ = ERROR_MARK;
+  p->replacement_ارزښت.original_type = عدم;
   p->implicit = 0;
-  p->range_stack = 0;
+  p->range_ډېری = 0;
   p->outer = 0;
   p->incremental = constructor_incremental;
   p->designated = constructor_designated;
-  p->zero_padding_bits = constructor_zero_padding_bits;
+  p->zero_padding_بټونه = constructor_zero_padding_بټونه;
   p->braced_scalar = constructor_braced_scalar;
-  p->designator_depth = designator_depth;
-  p->next = 0;
-  constructor_stack = p;
+  p->designator_ژوروالی = designator_ژوروالی;
+  p->بل = 0;
+  constructor_ډېری = p;
 
   constructor_constant = 1;
   constructor_simple = 1;
   constructor_nonconst = 0;
-  constructor_depth = SPELLING_DEPTH ();
-  constructor_elements = NULL;
+  constructor_ژوروالی = SPELLING_ژوروالی ();
+  constructor_elements = عدم;
   constructor_pending_elts = 0;
   constructor_type = type;
   constructor_incremental = 1;
   constructor_designated = 0;
-  constructor_zero_padding_bits = false;
+  constructor_zero_padding_بټونه = خطأ;
   constructor_zeroinit = 1;
-  constructor_braced_scalar = false;
-  designator_depth = 0;
+  constructor_braced_scalar = خطأ;
+  designator_ژوروالی = 0;
   designator_erroneous = 0;
 
-  if (RECORD_OR_UNION_TYPE_P (constructor_type))
+  إذا (ریکارډ_OR_UNION_TYPE_P (constructor_type))
     {
       constructor_fields = TYPE_FIELDS (constructor_type);
       /* Skip any nameless bit fields at the beginning.  */
-      while (constructor_fields != NULL_TREE
-	     && DECL_UNNAMED_BIT_FIELD (constructor_fields))
+      طالما (constructor_fields != NULL_ونه
+	     && DECL_UNNAMED_بټ_ډګر (constructor_fields))
 	constructor_fields = DECL_CHAIN (constructor_fields);
 
       constructor_unfilled_fields = constructor_fields;
-      constructor_bit_index = bitsize_zero_node;
+      constructor_بټ_شاخص = bitsize_zero_غوټه;
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  وإلا إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE)
     {
-      if (TYPE_DOMAIN (constructor_type))
+      إذا (TYPE_DOMAIN (constructor_type))
 	{
-	  constructor_max_index
-	    = TYPE_MAX_VALUE (TYPE_DOMAIN (constructor_type));
+	  constructor_max_شاخص
+	    = TYPE_MAX_ارزښت (TYPE_DOMAIN (constructor_type));
 
 	  /* Detect non-empty initializations of zero-length arrays.  */
-	  if (constructor_max_index == NULL_TREE
-	      && TYPE_SIZE (constructor_type))
-	    constructor_max_index = integer_minus_one_node;
+	  إذا (constructor_max_شاخص == NULL_ونه
+	      && TYPE_اندازه (constructor_type))
+	    constructor_max_شاخص = integer_minus_one_غوټه;
 
 	  /* constructor_max_index needs to be an INTEGER_CST.  Attempts
 	     to initialize VLAs with a nonempty initializer will cause a
 	     proper error; avoid tree checking errors as well by setting a
 	     safe value.  */
-	  if (constructor_max_index
-	      && TREE_CODE (constructor_max_index) != INTEGER_CST)
-	    constructor_max_index = integer_minus_one_node;
+	  إذا (constructor_max_شاخص
+	      && ونه_کوډ (constructor_max_شاخص) != INTEGER_CST)
+	    constructor_max_شاخص = integer_minus_one_غوټه;
 
-	  constructor_index
+	  constructor_شاخص
 	    = convert (bitsizetype,
-		       TYPE_MIN_VALUE (TYPE_DOMAIN (constructor_type)));
+		       TYPE_MIN_ارزښت (TYPE_DOMAIN (constructor_type)));
 	}
-      else
+      وإلا
 	{
-	  constructor_index = bitsize_zero_node;
-	  constructor_max_index = NULL_TREE;
+	  constructor_شاخص = bitsize_zero_غوټه;
+	  constructor_max_شاخص = NULL_ونه;
 	}
 
-      constructor_unfilled_index = constructor_index;
+      constructor_unfilled_شاخص = constructor_شاخص;
     }
-  else if (gnu_vector_type_p (constructor_type))
+  وإلا إذا (gnu_ویکټور_type_p (constructor_type))
     {
       /* Vectors are like simple fixed-size arrays.  */
-      constructor_max_index =
-	bitsize_int (TYPE_VECTOR_SUBPARTS (constructor_type) - 1);
-      constructor_index = bitsize_zero_node;
-      constructor_unfilled_index = constructor_index;
+      constructor_max_شاخص =
+	bitsize_int (TYPE_ویکټور_SUBPARTS (constructor_type) - 1);
+      constructor_شاخص = bitsize_zero_غوټه;
+      constructor_unfilled_شاخص = constructor_شاخص;
     }
-  else
+  وإلا
     {
       /* Handle the case of int x = {5}; */
       constructor_fields = constructor_type;
       constructor_unfilled_fields = constructor_type;
-      constructor_braced_scalar = true;
+      constructor_braced_scalar = ریښتیا;
     }
 }
 
-extern location_t last_init_list_comma;
+خارجي location_t وروستی_init_list_comma;
 
 /* Called when we see an open brace for a nested initializer.  Finish
    off any pending levels with implicit braces.  */
-void
-finish_implicit_inits (location_t loc, struct obstack *braced_init_obstack)
+فراغ
+پای_implicit_inits (location_t loc, بنية obstack *braced_init_obstack)
 {
-  while (constructor_stack->implicit)
+  طالما (constructor_ډېری->implicit)
     {
-      if (RECORD_OR_UNION_TYPE_P (constructor_type)
-	  && constructor_fields == NULL_TREE)
-	process_init_element (input_location,
-			      pop_init_level (loc, 1, braced_init_obstack,
-					      last_init_list_comma),
-			      true, braced_init_obstack);
-      else if (TREE_CODE (constructor_type) == ARRAY_TYPE
-	       && constructor_max_index
-	       && tree_int_cst_lt (constructor_max_index,
-				   constructor_index))
-	process_init_element (input_location,
-			      pop_init_level (loc, 1, braced_init_obstack,
-					      last_init_list_comma),
-			      true, braced_init_obstack);
-      else
-	break;
+      إذا (ریکارډ_OR_UNION_TYPE_P (constructor_type)
+	  && constructor_fields == NULL_ونه)
+	process_init_element (ننوت_location,
+			      راوباسه_init_level (loc, 1, braced_init_obstack,
+					      وروستی_init_list_comma),
+			      ریښتیا, braced_init_obstack);
+      وإلا إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE
+	       && constructor_max_شاخص
+	       && ونه_int_cst_lt (constructor_max_شاخص,
+				   constructor_شاخص))
+	process_init_element (ننوت_location,
+			      راوباسه_init_level (loc, 1, braced_init_obstack,
+					      وروستی_init_list_comma),
+			      ریښتیا, braced_init_obstack);
+      وإلا
+	اكسر;
     }
 }
 
@@ -10727,191 +10727,191 @@ finish_implicit_inits (location_t loc, struct obstack *braced_init_obstack)
    If it is because the next element belongs at a lower level,
    IMPLICIT is 1 (or 2 if the push is because of designator list).  */
 
-void
-push_init_level (location_t loc, int implicit,
-		 struct obstack *braced_init_obstack)
+فراغ
+ټېل_init_level (location_t loc, صحيح implicit,
+		 بنية obstack *braced_init_obstack)
 {
-  struct constructor_stack *p;
-  tree value = NULL_TREE;
+  بنية constructor_ډېری *p;
+  ونه ارزښت = NULL_ونه;
 
   /* Unless this is an explicit brace, we need to preserve previous
      content if any.  */
-  if (implicit)
+  إذا (implicit)
     {
-      if (RECORD_OR_UNION_TYPE_P (constructor_type) && constructor_fields)
-	value = find_init_member (constructor_fields, braced_init_obstack);
-      else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
-	value = find_init_member (constructor_index, braced_init_obstack);
+      إذا (ریکارډ_OR_UNION_TYPE_P (constructor_type) && constructor_fields)
+	ارزښت = پیدا_کړه_init_member (constructor_fields, braced_init_obstack);
+      وإلا إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE)
+	ارزښت = پیدا_کړه_init_member (constructor_شاخص, braced_init_obstack);
     }
 
-  p = XNEW (struct constructor_stack);
+  p = XNEW (بنية constructor_ډېری);
   p->type = constructor_type;
   p->fields = constructor_fields;
-  p->index = constructor_index;
-  p->max_index = constructor_max_index;
-  p->unfilled_index = constructor_unfilled_index;
+  p->شاخص = constructor_شاخص;
+  p->max_شاخص = constructor_max_شاخص;
+  p->unfilled_شاخص = constructor_unfilled_شاخص;
   p->unfilled_fields = constructor_unfilled_fields;
-  p->bit_index = constructor_bit_index;
+  p->بټ_شاخص = constructor_بټ_شاخص;
   p->elements = constructor_elements;
   p->constant = constructor_constant;
   p->simple = constructor_simple;
   p->nonconst = constructor_nonconst;
   p->erroneous = constructor_erroneous;
   p->pending_elts = constructor_pending_elts;
-  p->depth = constructor_depth;
-  p->replacement_value.value = NULL_TREE;
-  p->replacement_value.original_code = ERROR_MARK;
-  p->replacement_value.original_type = NULL;
+  p->ژوروالی = constructor_ژوروالی;
+  p->replacement_ارزښت.ارزښت = NULL_ونه;
+  p->replacement_ارزښت.original_کوډ = ERROR_MARK;
+  p->replacement_ارزښت.original_type = عدم;
   p->implicit = implicit;
   p->outer = 0;
   p->incremental = constructor_incremental;
   p->designated = constructor_designated;
-  p->zero_padding_bits = constructor_zero_padding_bits;
+  p->zero_padding_بټونه = constructor_zero_padding_بټونه;
   p->braced_scalar = constructor_braced_scalar;
-  p->designator_depth = designator_depth;
-  p->next = constructor_stack;
-  p->range_stack = 0;
-  constructor_stack = p;
+  p->designator_ژوروالی = designator_ژوروالی;
+  p->بل = constructor_ډېری;
+  p->range_ډېری = 0;
+  constructor_ډېری = p;
 
   constructor_constant = 1;
   constructor_simple = 1;
   constructor_nonconst = 0;
-  constructor_depth = SPELLING_DEPTH ();
-  constructor_elements = NULL;
+  constructor_ژوروالی = SPELLING_ژوروالی ();
+  constructor_elements = عدم;
   constructor_incremental = 1;
   /* If the upper initializer is designated, then mark this as
      designated too to prevent bogus warnings.  */
   constructor_designated = p->designated;
   /* If the upper initializer has padding bits zeroed, that includes
      all nested initializers as well.  */
-  constructor_zero_padding_bits = p->zero_padding_bits;
-  constructor_braced_scalar = false;
+  constructor_zero_padding_بټونه = p->zero_padding_بټونه;
+  constructor_braced_scalar = خطأ;
   constructor_pending_elts = 0;
-  if (!implicit)
+  إذا (!implicit)
     {
-      p->range_stack = constructor_range_stack;
-      constructor_range_stack = 0;
-      designator_depth = 0;
+      p->range_ډېری = constructor_range_ډېری;
+      constructor_range_ډېری = 0;
+      designator_ژوروالی = 0;
       designator_erroneous = 0;
     }
 
   /* Don't die if an entire brace-pair level is superfluous
      in the containing level.  */
-  if (constructor_type == NULL_TREE)
+  إذا (constructor_type == NULL_ونه)
     ;
-  else if (RECORD_OR_UNION_TYPE_P (constructor_type))
+  وإلا إذا (ریکارډ_OR_UNION_TYPE_P (constructor_type))
     {
       /* Don't die if there are extra init elts at the end.  */
-      if (constructor_fields == NULL_TREE)
-	constructor_type = NULL_TREE;
-      else
+      إذا (constructor_fields == NULL_ونه)
+	constructor_type = NULL_ونه;
+      وإلا
 	{
-	  constructor_type = TREE_TYPE (constructor_fields);
-	  push_member_name (constructor_fields);
-	  constructor_depth++;
+	  constructor_type = ونه_TYPE (constructor_fields);
+	  ټېل_member_name (constructor_fields);
+	  constructor_ژوروالی++;
 	}
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  وإلا إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE)
     {
-      constructor_type = TREE_TYPE (constructor_type);
-      push_array_bounds (tree_to_uhwi (constructor_index));
-      constructor_depth++;
+      constructor_type = ونه_TYPE (constructor_type);
+      ټېل_array_bounds (ونه_منزل_uhwi (constructor_شاخص));
+      constructor_ژوروالی++;
     }
 
-  if (constructor_type == NULL_TREE)
+  إذا (constructor_type == NULL_ونه)
     {
       error_init (loc, "extra brace group at end of initializer");
-      constructor_fields = NULL_TREE;
-      constructor_unfilled_fields = NULL_TREE;
-      return;
+      constructor_fields = NULL_ونه;
+      constructor_unfilled_fields = NULL_ونه;
+      أرجع;
     }
 
-  if (value && TREE_CODE (value) == CONSTRUCTOR)
+  إذا (ارزښت && ونه_کوډ (ارزښت) == CONSTRUCTOR)
     {
-      constructor_constant = TREE_CONSTANT (value);
-      constructor_simple = TREE_STATIC (value);
-      constructor_nonconst = CONSTRUCTOR_NON_CONST (value);
-      constructor_elements = CONSTRUCTOR_ELTS (value);
-      constructor_zero_padding_bits |= CONSTRUCTOR_ZERO_PADDING_BITS (value);
-      if (!vec_safe_is_empty (constructor_elements)
-	  && (TREE_CODE (constructor_type) == RECORD_TYPE
-	      || TREE_CODE (constructor_type) == ARRAY_TYPE))
-	set_nonincremental_init (braced_init_obstack);
+      constructor_constant = ونه_CONSTANT (ارزښت);
+      constructor_simple = ونه_STATIC (ارزښت);
+      constructor_nonconst = CONSTRUCTOR_NON_CONST (ارزښت);
+      constructor_elements = CONSTRUCTOR_ELTS (ارزښت);
+      constructor_zero_padding_بټونه |= CONSTRUCTOR_ZERO_PADDING_بټونه (ارزښت);
+      إذا (!vec_خوندي_is_تشه (constructor_elements)
+	  && (ونه_کوډ (constructor_type) == ریکارډ_TYPE
+	      || ونه_کوډ (constructor_type) == ARRAY_TYPE))
+	سېټ_nonincremental_init (braced_init_obstack);
     }
 
-  if (implicit == 1)
+  إذا (implicit == 1)
     {
-      found_missing_braces = 1;
-      if (initializer_stack->missing_brace_richloc)
-	initializer_stack->missing_brace_richloc->add_fixit_insert_before
+      وموندل_missing_braces = 1;
+      إذا (initializer_ډېری->missing_brace_richloc)
+	initializer_ډېری->missing_brace_richloc->جمع_کړه_fixit_ورننباسه_before
 	  (loc, "{");
     }
 
-  if (RECORD_OR_UNION_TYPE_P (constructor_type))
+  إذا (ریکارډ_OR_UNION_TYPE_P (constructor_type))
     {
       constructor_fields = TYPE_FIELDS (constructor_type);
       /* Skip any nameless bit fields at the beginning.  */
-      while (constructor_fields != NULL_TREE
-	     && DECL_UNNAMED_BIT_FIELD (constructor_fields))
+      طالما (constructor_fields != NULL_ونه
+	     && DECL_UNNAMED_بټ_ډګر (constructor_fields))
 	constructor_fields = DECL_CHAIN (constructor_fields);
 
       constructor_unfilled_fields = constructor_fields;
-      constructor_bit_index = bitsize_zero_node;
+      constructor_بټ_شاخص = bitsize_zero_غوټه;
     }
-  else if (gnu_vector_type_p (constructor_type))
+  وإلا إذا (gnu_ویکټور_type_p (constructor_type))
     {
       /* Vectors are like simple fixed-size arrays.  */
-      constructor_max_index =
-	bitsize_int (TYPE_VECTOR_SUBPARTS (constructor_type) - 1);
-      constructor_index = bitsize_int (0);
-      constructor_unfilled_index = constructor_index;
+      constructor_max_شاخص =
+	bitsize_int (TYPE_ویکټور_SUBPARTS (constructor_type) - 1);
+      constructor_شاخص = bitsize_int (0);
+      constructor_unfilled_شاخص = constructor_شاخص;
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  وإلا إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE)
     {
-      if (TYPE_DOMAIN (constructor_type))
+      إذا (TYPE_DOMAIN (constructor_type))
 	{
-	  constructor_max_index
-	    = TYPE_MAX_VALUE (TYPE_DOMAIN (constructor_type));
+	  constructor_max_شاخص
+	    = TYPE_MAX_ارزښت (TYPE_DOMAIN (constructor_type));
 
 	  /* Detect non-empty initializations of zero-length arrays.  */
-	  if (constructor_max_index == NULL_TREE
-	      && TYPE_SIZE (constructor_type))
-	    constructor_max_index = integer_minus_one_node;
+	  إذا (constructor_max_شاخص == NULL_ونه
+	      && TYPE_اندازه (constructor_type))
+	    constructor_max_شاخص = integer_minus_one_غوټه;
 
 	  /* constructor_max_index needs to be an INTEGER_CST.  Attempts
 	     to initialize VLAs will cause a proper error; avoid tree
 	     checking errors as well by setting a safe value.  */
-	  if (constructor_max_index
-	      && TREE_CODE (constructor_max_index) != INTEGER_CST)
-	    constructor_max_index = integer_minus_one_node;
+	  إذا (constructor_max_شاخص
+	      && ونه_کوډ (constructor_max_شاخص) != INTEGER_CST)
+	    constructor_max_شاخص = integer_minus_one_غوټه;
 
-	  constructor_index
+	  constructor_شاخص
 	    = convert (bitsizetype,
-		       TYPE_MIN_VALUE (TYPE_DOMAIN (constructor_type)));
+		       TYPE_MIN_ارزښت (TYPE_DOMAIN (constructor_type)));
 	}
-      else
-	constructor_index = bitsize_zero_node;
+      وإلا
+	constructor_شاخص = bitsize_zero_غوټه;
 
-      constructor_unfilled_index = constructor_index;
-      if (value && TREE_CODE (value) == STRING_CST)
+      constructor_unfilled_شاخص = constructor_شاخص;
+      إذا (ارزښت && ونه_کوډ (ارزښت) == STRING_CST)
 	{
 	  /* We need to split the char/wchar array into individual
 	     characters, so that we don't have to special case it
 	     everywhere.  */
-	  set_nonincremental_init_from_string (value, braced_init_obstack);
+	  سېټ_nonincremental_init_from_string (ارزښت, braced_init_obstack);
 	}
     }
-  else
+  وإلا
     {
-      if (constructor_type != error_mark_node)
+      إذا (constructor_type != error_mark_غوټه)
 	{
-	  if (p->braced_scalar)
-	    permerror_init (input_location, 0,
+	  إذا (p->braced_scalar)
+	    permerror_init (ننوت_location, 0,
 			    "braces around scalar initializer");
-	  else
-	    warning_init (input_location, 0,
+	  وإلا
+	    warning_init (ننوت_location, 0,
 			  "braces around scalar initializer");
-	  constructor_braced_scalar = true;
+	  constructor_braced_scalar = ریښتیا;
 	}
       constructor_fields = constructor_type;
       constructor_unfilled_fields = constructor_type;
@@ -10929,59 +10929,59 @@ push_init_level (location_t loc, int implicit,
    (that's what we want to put in DECL_INITIAL).
    Otherwise, return a CONSTRUCTOR expression as the value.  */
 
-struct c_expr
-pop_init_level (location_t loc, int implicit,
-		struct obstack *braced_init_obstack,
-		location_t insert_before)
+بنية c_بیان
+راوباسه_init_level (location_t loc, صحيح implicit,
+		بنية obstack *braced_init_obstack,
+		location_t ورننباسه_before)
 {
-  struct constructor_stack *p;
-  struct c_expr ret;
-  ret.value = NULL_TREE;
-  ret.original_code = ERROR_MARK;
-  ret.original_type = NULL;
+  بنية constructor_ډېری *p;
+  بنية c_بیان ret;
+  ret.ارزښت = NULL_ونه;
+  ret.original_کوډ = ERROR_MARK;
+  ret.original_type = عدم;
   ret.m_decimal = 0;
 
-  if (implicit == 0)
+  إذا (implicit == 0)
     {
       /* When we come to an explicit close brace,
 	 pop any inner levels that didn't have explicit braces.  */
-      while (constructor_stack->implicit)
-	process_init_element (input_location,
-			      pop_init_level (loc, 1, braced_init_obstack,
-					      insert_before),
-			      true, braced_init_obstack);
-      gcc_assert (!constructor_range_stack);
+      طالما (constructor_ډېری->implicit)
+	process_init_element (ننوت_location,
+			      راوباسه_init_level (loc, 1, braced_init_obstack,
+					      ورننباسه_before),
+			      ریښتیا, braced_init_obstack);
+      gcc_assert (!constructor_range_ډېری);
     }
-  else
-    if (initializer_stack->missing_brace_richloc)
-      initializer_stack->missing_brace_richloc->add_fixit_insert_before
-	(insert_before, "}");
+  وإلا
+    إذا (initializer_ډېری->missing_brace_richloc)
+      initializer_ډېری->missing_brace_richloc->جمع_کړه_fixit_ورننباسه_before
+	(ورننباسه_before, "}");
 
   /* Now output all pending elements.  */
   constructor_incremental = 1;
   output_pending_init_elements (1, braced_init_obstack);
 
-  p = constructor_stack;
+  p = constructor_ډېری;
 
   /* Error for initializing a flexible array member.  */
-  if (constructor_type && constructor_fields
+  إذا (constructor_type && constructor_fields
       && flexible_array_member_type_p (constructor_type))
     {
       /* Silently discard empty initializations.  The parser will
 	 already have pedwarned for empty brackets for C17 and earlier.  */
-      if (integer_zerop (constructor_unfilled_index))
-	constructor_type = NULL_TREE;
-      if (constructor_type || flag_isoc23)
+      إذا (integer_zerop (constructor_unfilled_شاخص))
+	constructor_type = NULL_ونه;
+      إذا (constructor_type || flag_isoc23)
 	{
-	  gcc_assert (!constructor_type || !TYPE_SIZE (constructor_type));
+	  gcc_assert (!constructor_type || !TYPE_اندازه (constructor_type));
 
-	  if (constructor_depth <= 2)
+	  إذا (constructor_ژوروالی <= 2)
 	    pedwarn_init (loc, OPT_Wpedantic,
 			  "initialization of a flexible array member");
-	  else if (constructor_type)
+	  وإلا إذا (constructor_type)
 	    error_init (loc, "initialization of flexible array member "
 			     "in a nested context");
-	  else
+	  وإلا
 	    pedwarn_init (loc, OPT_Wpedantic,
 			  "initialization of flexible array member "
 			  "in a nested context");
@@ -10989,140 +10989,140 @@ pop_init_level (location_t loc, int implicit,
 	  /* We have already issued an error message for the existence
 	     of a flexible array member not at the end of the structure.
 	     Discard the initializer so that we do not die later.  */
-	  if (constructor_type
-	      && DECL_CHAIN (constructor_fields) != NULL_TREE
-	      && (!p->type || TREE_CODE (p->type) != UNION_TYPE))
-	    constructor_type = NULL_TREE;
+	  إذا (constructor_type
+	      && DECL_CHAIN (constructor_fields) != NULL_ونه
+	      && (!p->type || ونه_کوډ (p->type) != UNION_TYPE))
+	    constructor_type = NULL_ونه;
 	}
     }
 
-  switch (vec_safe_length (constructor_elements))
+  بدل (vec_خوندي_اوږدتیا (constructor_elements))
     {
-    case 0:
+    حالة 0:
       /* Initialization with { } counts as zeroinit.  */
       constructor_zeroinit = 1;
-      break;
-    case 1:
+      اكسر;
+    حالة 1:
       /* This might be zeroinit as well.  */
-      if (integer_zerop ((*constructor_elements)[0].value))
+      إذا (integer_zerop ((*constructor_elements)[0].ارزښت))
 	constructor_zeroinit = 1;
-      break;
-    default:
+      اكسر;
+    افتراضي:
       /* If the constructor has more than one element, it can't be { 0 }.  */
       constructor_zeroinit = 0;
-      break;
+      اكسر;
     }
 
   /* Warn when some structs are initialized with direct aggregation.  */
-  if (!implicit && found_missing_braces && warn_missing_braces
+  إذا (!implicit && وموندل_missing_braces && warn_missing_braces
       && !constructor_zeroinit)
     {
-      gcc_assert (initializer_stack->missing_brace_richloc);
-      warning_at (initializer_stack->missing_brace_richloc,
+      gcc_assert (initializer_ډېری->missing_brace_richloc);
+      warning_at (initializer_ډېری->missing_brace_richloc,
 		  OPT_Wmissing_braces,
 		  "missing braces around initializer");
     }
 
   /* Warn when some struct elements are implicitly initialized to zero.  */
-  if (warn_missing_field_initializers
+  إذا (warn_missing_ډګر_initializers
       && constructor_type
-      && TREE_CODE (constructor_type) == RECORD_TYPE
+      && ونه_کوډ (constructor_type) == ریکارډ_TYPE
       && constructor_unfilled_fields)
     {
 	/* Do not warn for flexible array members or zero-length arrays.  */
-	while (constructor_unfilled_fields
-	       && (!DECL_SIZE (constructor_unfilled_fields)
-		   || integer_zerop (DECL_SIZE (constructor_unfilled_fields))))
+	طالما (constructor_unfilled_fields
+	       && (!DECL_اندازه (constructor_unfilled_fields)
+		   || integer_zerop (DECL_اندازه (constructor_unfilled_fields))))
 	  constructor_unfilled_fields = DECL_CHAIN (constructor_unfilled_fields);
 
-	if (constructor_unfilled_fields
+	إذا (constructor_unfilled_fields
 	    /* Do not warn if this level of the initializer uses member
 	       designators; it is likely to be deliberate.  */
 	    && !constructor_designated
 	    /* Do not warn about initializing with { 0 } or with { }.  */
 	    && !constructor_zeroinit)
 	  {
-	    if (warning_at (input_location, OPT_Wmissing_field_initializers,
+	    إذا (warning_at (ننوت_location, OPT_Wmissing_ډګر_initializers,
 			    "missing initializer for field %qD of %qT",
 			    constructor_unfilled_fields,
 			    constructor_type))
-	      inform (DECL_SOURCE_LOCATION (constructor_unfilled_fields),
+	      inform (DECL_سرچینه_LOCATION (constructor_unfilled_fields),
 		      "%qD declared here", constructor_unfilled_fields);
 	  }
     }
 
   /* Pad out the end of the structure.  */
-  if (p->replacement_value.value)
+  إذا (p->replacement_ارزښت.ارزښت)
     /* If this closes a superfluous brace pair,
        just pass out the element between them.  */
-    ret = p->replacement_value;
-  else if (constructor_type == NULL_TREE)
+    ret = p->replacement_ارزښت;
+  وإلا إذا (constructor_type == NULL_ونه)
     ;
-  else if (!RECORD_OR_UNION_TYPE_P (constructor_type)
-	   && TREE_CODE (constructor_type) != ARRAY_TYPE
-	   && !gnu_vector_type_p (constructor_type))
+  وإلا إذا (!ریکارډ_OR_UNION_TYPE_P (constructor_type)
+	   && ونه_کوډ (constructor_type) != ARRAY_TYPE
+	   && !gnu_ویکټور_type_p (constructor_type))
     {
       /* A nonincremental scalar initializer--just return
 	 the element, after verifying there is just one.
          Empty scalar initializers are supported in C23.  */
-      if (vec_safe_is_empty (constructor_elements))
+      إذا (vec_خوندي_is_تشه (constructor_elements))
 	{
-	  if (constructor_erroneous || constructor_type == error_mark_node)
-	    ret.value = error_mark_node;
-	  else if (TREE_CODE (constructor_type) == FUNCTION_TYPE)
+	  إذا (constructor_erroneous || constructor_type == error_mark_غوټه)
+	    ret.ارزښت = error_mark_غوټه;
+	  وإلا إذا (ونه_کوډ (constructor_type) == FUNCTION_TYPE)
 	    {
 	      error_init (loc, "invalid initializer");
-	      ret.value = error_mark_node;
+	      ret.ارزښت = error_mark_غوټه;
 	    }
-	  else if (TREE_CODE (constructor_type) == POINTER_TYPE)
+	  وإلا إذا (ونه_کوډ (constructor_type) == اشاره_ګر_TYPE)
 	    /* Ensure this is a null pointer constant in the case of a
 	       'constexpr' object initialized with {}.  */
-	    ret.value = build_zero_cst (ptr_type_node);
-	  else
-	    ret.value = build_zero_cst (constructor_type);
+	    ret.ارزښت = build_zero_cst (ptr_type_غوټه);
+	  وإلا
+	    ret.ارزښت = build_zero_cst (constructor_type);
 	}
-      else if (vec_safe_length (constructor_elements) != 1)
+      وإلا إذا (vec_خوندي_اوږدتیا (constructor_elements) != 1)
 	{
 	  error_init (loc, "extra elements in scalar initializer");
-	  ret.value = (*constructor_elements)[0].value;
+	  ret.ارزښت = (*constructor_elements)[0].ارزښت;
 	}
-      else
-	ret.value = (*constructor_elements)[0].value;
+      وإلا
+	ret.ارزښت = (*constructor_elements)[0].ارزښت;
     }
-  else
+  وإلا
     {
-      if (constructor_erroneous)
-	ret.value = error_mark_node;
-      else
+      إذا (constructor_erroneous)
+	ret.ارزښت = error_mark_غوټه;
+      وإلا
 	{
-	  ret.value = build_constructor (constructor_type,
+	  ret.ارزښت = build_constructor (constructor_type,
 					 constructor_elements);
-	  if (constructor_constant)
-	    TREE_CONSTANT (ret.value) = 1;
-	  if (constructor_constant && constructor_simple)
-	    TREE_STATIC (ret.value) = 1;
-	  if (constructor_nonconst)
-	    CONSTRUCTOR_NON_CONST (ret.value) = 1;
-	  if (constructor_zero_padding_bits)
-	    CONSTRUCTOR_ZERO_PADDING_BITS (ret.value) = 1;
+	  إذا (constructor_constant)
+	    ونه_CONSTANT (ret.ارزښت) = 1;
+	  إذا (constructor_constant && constructor_simple)
+	    ونه_STATIC (ret.ارزښت) = 1;
+	  إذا (constructor_nonconst)
+	    CONSTRUCTOR_NON_CONST (ret.ارزښت) = 1;
+	  إذا (constructor_zero_padding_بټونه)
+	    CONSTRUCTOR_ZERO_PADDING_بټونه (ret.ارزښت) = 1;
 	}
     }
 
-  if (ret.value && TREE_CODE (ret.value) != CONSTRUCTOR)
+  إذا (ret.ارزښت && ونه_کوډ (ret.ارزښت) != CONSTRUCTOR)
     {
-      if (constructor_nonconst)
-	ret.original_code = C_MAYBE_CONST_EXPR;
-      else if (ret.original_code == C_MAYBE_CONST_EXPR)
-	ret.original_code = ERROR_MARK;
+      إذا (constructor_nonconst)
+	ret.original_کوډ = C_MAYBE_CONST_بیان;
+      وإلا إذا (ret.original_کوډ == C_MAYBE_CONST_بیان)
+	ret.original_کوډ = ERROR_MARK;
     }
 
   constructor_type = p->type;
   constructor_fields = p->fields;
-  constructor_index = p->index;
-  constructor_max_index = p->max_index;
-  constructor_unfilled_index = p->unfilled_index;
+  constructor_شاخص = p->شاخص;
+  constructor_max_شاخص = p->max_شاخص;
+  constructor_unfilled_شاخص = p->unfilled_شاخص;
   constructor_unfilled_fields = p->unfilled_fields;
-  constructor_bit_index = p->bit_index;
+  constructor_بټ_شاخص = p->بټ_شاخص;
   constructor_elements = p->elements;
   constructor_constant = p->constant;
   constructor_simple = p->simple;
@@ -11130,285 +11130,285 @@ pop_init_level (location_t loc, int implicit,
   constructor_erroneous = p->erroneous;
   constructor_incremental = p->incremental;
   constructor_designated = p->designated;
-  constructor_zero_padding_bits = p->zero_padding_bits;
+  constructor_zero_padding_بټونه = p->zero_padding_بټونه;
   constructor_braced_scalar = p->braced_scalar;
-  designator_depth = p->designator_depth;
+  designator_ژوروالی = p->designator_ژوروالی;
   constructor_pending_elts = p->pending_elts;
-  constructor_depth = p->depth;
-  if (!p->implicit)
-    constructor_range_stack = p->range_stack;
-  RESTORE_SPELLING_DEPTH (constructor_depth);
+  constructor_ژوروالی = p->ژوروالی;
+  إذا (!p->implicit)
+    constructor_range_ډېری = p->range_ډېری;
+  RESTORE_SPELLING_ژوروالی (constructor_ژوروالی);
 
-  constructor_stack = p->next;
+  constructor_ډېری = p->بل;
   XDELETE (p);
 
-  if (ret.value == NULL_TREE && constructor_stack == 0)
-    ret.value = error_mark_node;
-  return ret;
+  إذا (ret.ارزښت == NULL_ونه && constructor_ډېری == 0)
+    ret.ارزښت = error_mark_غوټه;
+  أرجع ret;
 }
 
 /* Common handling for both array range and field name designators.
    ARRAY argument is nonzero for array ranges.  Returns false for success.  */
 
-static bool
-set_designator (location_t loc, bool array,
-		struct obstack *braced_init_obstack)
+ساكن منطقي
+سېټ_designator (location_t loc, منطقي array,
+		بنية obstack *braced_init_obstack)
 {
-  tree subtype;
-  enum tree_code subcode;
+  ونه subtype;
+  تعداد ونه_کوډ_2 subcode;
 
   /* Don't die if an entire brace-pair level is superfluous
      in the containing level, or for an erroneous type.  */
-  if (constructor_type == NULL_TREE || constructor_type == error_mark_node)
-    return true;
+  إذا (constructor_type == NULL_ونه || constructor_type == error_mark_غوټه)
+    أرجع ریښتیا;
 
   /* If there were errors in this designator list already, bail out
      silently.  */
-  if (designator_erroneous)
-    return true;
+  إذا (designator_erroneous)
+    أرجع ریښتیا;
 
   /* Likewise for an initializer for a variable-size type.  Those are
      diagnosed in the parser, except for empty initializer braces.  */
-  if (COMPLETE_TYPE_P (constructor_type)
-      && TREE_CODE (TYPE_SIZE (constructor_type)) != INTEGER_CST)
-    return true;
+  إذا (COMPLETE_TYPE_P (constructor_type)
+      && ونه_کوډ (TYPE_اندازه (constructor_type)) != INTEGER_CST)
+    أرجع ریښتیا;
 
-  if (!designator_depth)
+  إذا (!designator_ژوروالی)
     {
-      gcc_assert (!constructor_range_stack);
+      gcc_assert (!constructor_range_ډېری);
 
       /* Designator list starts at the level of closest explicit
 	 braces.  */
-      while (constructor_stack->implicit)
-	process_init_element (input_location,
-			      pop_init_level (loc, 1, braced_init_obstack,
-					      last_init_list_comma),
-			      true, braced_init_obstack);
+      طالما (constructor_ډېری->implicit)
+	process_init_element (ننوت_location,
+			      راوباسه_init_level (loc, 1, braced_init_obstack,
+					      وروستی_init_list_comma),
+			      ریښتیا, braced_init_obstack);
       constructor_designated = 1;
-      return false;
+      أرجع خطأ;
     }
 
-  switch (TREE_CODE (constructor_type))
+  بدل (ونه_کوډ (constructor_type))
     {
-    case  RECORD_TYPE:
-    case  UNION_TYPE:
-      subtype = TREE_TYPE (constructor_fields);
-      if (subtype != error_mark_node)
+    حالة  ریکارډ_TYPE:
+    حالة  UNION_TYPE:
+      subtype = ونه_TYPE (constructor_fields);
+      إذا (subtype != error_mark_غوټه)
 	subtype = TYPE_MAIN_VARIANT (subtype);
-      break;
-    case ARRAY_TYPE:
-      subtype = TYPE_MAIN_VARIANT (TREE_TYPE (constructor_type));
-      break;
-    default:
+      اكسر;
+    حالة ARRAY_TYPE:
+      subtype = TYPE_MAIN_VARIANT (ونه_TYPE (constructor_type));
+      اكسر;
+    افتراضي:
       gcc_unreachable ();
     }
 
-  subcode = TREE_CODE (subtype);
-  if (array && subcode != ARRAY_TYPE)
+  subcode = ونه_کوډ (subtype);
+  إذا (array && subcode != ARRAY_TYPE)
     {
       error_init (loc, "array index in non-array initializer");
-      return true;
+      أرجع ریښتیا;
     }
-  else if (!array && subcode != RECORD_TYPE && subcode != UNION_TYPE)
+  وإلا إذا (!array && subcode != ریکارډ_TYPE && subcode != UNION_TYPE)
     {
       error_init (loc, "field name not in record or union initializer");
-      return true;
+      أرجع ریښتیا;
     }
 
   constructor_designated = 1;
-  finish_implicit_inits (loc, braced_init_obstack);
-  push_init_level (loc, 2, braced_init_obstack);
-  return false;
+  پای_implicit_inits (loc, braced_init_obstack);
+  ټېل_init_level (loc, 2, braced_init_obstack);
+  أرجع خطأ;
 }
 
 /* If there are range designators in designator list, push a new designator
    to constructor_range_stack.  RANGE_END is end of such stack range or
    NULL_TREE if there is no range designator at this level.  */
 
-static void
-push_range_stack (tree range_end, struct obstack * braced_init_obstack)
+ساكن فراغ
+ټېل_range_ډېری (ونه range_پای_ټکی, بنية obstack * braced_init_obstack)
 {
-  struct constructor_range_stack *p;
+  بنية constructor_range_ډېری *p;
 
-  p = (struct constructor_range_stack *)
+  p = (بنية constructor_range_ډېری *)
     obstack_alloc (braced_init_obstack,
-		   sizeof (struct constructor_range_stack));
-  p->prev = constructor_range_stack;
-  p->next = 0;
+		   حجم (بنية constructor_range_ډېری));
+  p->prev = constructor_range_ډېری;
+  p->بل = 0;
   p->fields = constructor_fields;
-  p->range_start = constructor_index;
-  p->index = constructor_index;
-  p->stack = constructor_stack;
-  p->range_end = range_end;
-  if (constructor_range_stack)
-    constructor_range_stack->next = p;
-  constructor_range_stack = p;
+  p->range_پیل = constructor_شاخص;
+  p->شاخص = constructor_شاخص;
+  p->ډېری = constructor_ډېری;
+  p->range_پای_ټکی = range_پای_ټکی;
+  إذا (constructor_range_ډېری)
+    constructor_range_ډېری->بل = p;
+  constructor_range_ډېری = p;
 }
 
 /* Within an array initializer, specify the next index to be initialized.
    FIRST is that index.  If LAST is nonzero, then initialize a range
    of indices, running from FIRST through LAST.  */
 
-void
-set_init_index (location_t loc, tree first, tree last,
-		struct obstack *braced_init_obstack)
+فراغ
+سېټ_init_شاخص (location_t loc, ونه لومړی, ونه وروستی,
+		بنية obstack *braced_init_obstack)
 {
-  if (set_designator (loc, true, braced_init_obstack))
-    return;
+  إذا (سېټ_designator (loc, ریښتیا, braced_init_obstack))
+    أرجع;
 
   designator_erroneous = 1;
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (first))
-      || (last && !INTEGRAL_TYPE_P (TREE_TYPE (last))))
+  إذا (!INTEGRAL_TYPE_P (ونه_TYPE (لومړی))
+      || (وروستی && !INTEGRAL_TYPE_P (ونه_TYPE (وروستی))))
     {
       error_init (loc, "array index in initializer not of integer type");
-      return;
+      أرجع;
     }
 
-  if (TREE_CODE (first) != INTEGER_CST)
+  إذا (ونه_کوډ (لومړی) != INTEGER_CST)
     {
-      first = c_fully_fold (first, false, NULL);
-      if (TREE_CODE (first) == INTEGER_CST)
+      لومړی = c_fully_fold (لومړی, خطأ, عدم);
+      إذا (ونه_کوډ (لومړی) == INTEGER_CST)
 	pedwarn_init (loc, OPT_Wpedantic,
 		      "array index in initializer is not "
 		      "an integer constant expression");
     }
 
-  if (last && TREE_CODE (last) != INTEGER_CST)
+  إذا (وروستی && ونه_کوډ (وروستی) != INTEGER_CST)
     {
-      last = c_fully_fold (last, false, NULL);
-      if (TREE_CODE (last) == INTEGER_CST)
+      وروستی = c_fully_fold (وروستی, خطأ, عدم);
+      إذا (ونه_کوډ (وروستی) == INTEGER_CST)
 	pedwarn_init (loc, OPT_Wpedantic,
 		      "array index in initializer is not "
 		      "an integer constant expression");
     }
 
-  if (TREE_CODE (first) != INTEGER_CST)
+  إذا (ونه_کوډ (لومړی) != INTEGER_CST)
     error_init (loc, "nonconstant array index in initializer");
-  else if (last != NULL_TREE && TREE_CODE (last) != INTEGER_CST)
+  وإلا إذا (وروستی != NULL_ونه && ونه_کوډ (وروستی) != INTEGER_CST)
     error_init (loc, "nonconstant array index in initializer");
-  else if (TREE_CODE (constructor_type) != ARRAY_TYPE)
+  وإلا إذا (ونه_کوډ (constructor_type) != ARRAY_TYPE)
     error_init (loc, "array index in non-array initializer");
-  else if (tree_int_cst_sgn (first) == -1)
+  وإلا إذا (ونه_int_cst_sgn (لومړی) == -1)
     error_init (loc, "array index in initializer exceeds array bounds");
-  else if (constructor_max_index
-	   && tree_int_cst_lt (constructor_max_index, first))
+  وإلا إذا (constructor_max_شاخص
+	   && ونه_int_cst_lt (constructor_max_شاخص, لومړی))
     error_init (loc, "array index in initializer exceeds array bounds");
-  else
+  وإلا
     {
-      constant_expression_warning (first);
-      if (last)
-	constant_expression_warning (last);
-      constructor_index = convert (bitsizetype, first);
-      if (tree_int_cst_lt (constructor_index, first))
+      constant_افاده_warning (لومړی);
+      إذا (وروستی)
+	constant_افاده_warning (وروستی);
+      constructor_شاخص = convert (bitsizetype, لومړی);
+      إذا (ونه_int_cst_lt (constructor_شاخص, لومړی))
 	{
-	  constructor_index = copy_node (constructor_index);
-	  TREE_OVERFLOW (constructor_index) = 1;
+	  constructor_شاخص = copy_غوټه (constructor_شاخص);
+	  ونه_ډکېدنه (constructor_شاخص) = 1;
 	}
 
-      if (last)
+      إذا (وروستی)
 	{
-	  if (tree_int_cst_equal (first, last))
-	    last = NULL_TREE;
-	  else if (tree_int_cst_lt (last, first))
+	  إذا (ونه_int_cst_equal (لومړی, وروستی))
+	    وروستی = NULL_ونه;
+	  وإلا إذا (ونه_int_cst_lt (وروستی, لومړی))
 	    {
 	      error_init (loc, "empty index range in initializer");
-	      last = NULL_TREE;
+	      وروستی = NULL_ونه;
 	    }
-	  else
+	  وإلا
 	    {
-	      last = convert (bitsizetype, last);
-	      if (constructor_max_index != NULL_TREE
-		  && tree_int_cst_lt (constructor_max_index, last))
+	      وروستی = convert (bitsizetype, وروستی);
+	      إذا (constructor_max_شاخص != NULL_ونه
+		  && ونه_int_cst_lt (constructor_max_شاخص, وروستی))
 		{
 		  error_init (loc, "array index range in initializer exceeds "
 			      "array bounds");
-		  last = NULL_TREE;
+		  وروستی = NULL_ونه;
 		}
 	    }
 	}
 
-      designator_depth++;
+      designator_ژوروالی++;
       designator_erroneous = 0;
-      if (constructor_range_stack || last)
-	push_range_stack (last, braced_init_obstack);
+      إذا (constructor_range_ډېری || وروستی)
+	ټېل_range_ډېری (وروستی, braced_init_obstack);
     }
 }
 
 /* Within a struct initializer, specify the next field to be initialized.  */
 
-void
-set_init_label (location_t loc, tree fieldname, location_t fieldname_loc,
-		struct obstack *braced_init_obstack)
+فراغ
+سېټ_init_label (location_t loc, ونه fieldname, location_t fieldname_loc,
+		بنية obstack *braced_init_obstack)
 {
-  tree field;
+  ونه ډګر_2;
 
-  if (set_designator (loc, false, braced_init_obstack))
-    return;
+  إذا (سېټ_designator (loc, خطأ, braced_init_obstack))
+    أرجع;
 
   designator_erroneous = 1;
 
-  if (!RECORD_OR_UNION_TYPE_P (constructor_type))
+  إذا (!ریکارډ_OR_UNION_TYPE_P (constructor_type))
     {
       error_init (loc, "field name not in record or union initializer");
-      return;
+      أرجع;
     }
 
-  field = lookup_field (constructor_type, fieldname);
+  ډګر_2 = lookup_ډګر (constructor_type, fieldname);
 
-  if (field == NULL_TREE)
+  إذا (ډګر_2 == NULL_ونه)
     {
-      tree guessed_id = lookup_field_fuzzy (constructor_type, fieldname);
-      if (guessed_id)
+      ونه guessed_id = lookup_ډګر_fuzzy (constructor_type, fieldname);
+      إذا (guessed_id)
 	{
 	  gcc_rich_location rich_loc (fieldname_loc);
-	  rich_loc.add_fixit_misspelled_id (fieldname_loc, guessed_id);
+	  rich_loc.جمع_کړه_fixit_misspelled_id (fieldname_loc, guessed_id);
 	  error_at (&rich_loc,
 		    "%qT has no member named %qE; did you mean %qE?",
 		    constructor_type, fieldname, guessed_id);
 	}
-      else
+      وإلا
 	error_at (fieldname_loc, "%qT has no member named %qE",
 		  constructor_type, fieldname);
     }
-  else
-    do
+  وإلا
+    افعل
       {
-	constructor_fields = TREE_VALUE (field);
-	designator_depth++;
+	constructor_fields = ونه_ارزښت (ډګر_2);
+	designator_ژوروالی++;
 	designator_erroneous = 0;
-	if (constructor_range_stack)
-	  push_range_stack (NULL_TREE, braced_init_obstack);
-	field = TREE_CHAIN (field);
-	if (field)
+	إذا (constructor_range_ډېری)
+	  ټېل_range_ډېری (NULL_ونه, braced_init_obstack);
+	ډګر_2 = ونه_CHAIN (ډګر_2);
+	إذا (ډګر_2)
 	  {
-	    if (set_designator (loc, false, braced_init_obstack))
-	      return;
+	    إذا (سېټ_designator (loc, خطأ, braced_init_obstack))
+	      أرجع;
 	  }
       }
-    while (field != NULL_TREE);
+    طالما (ډګر_2 != NULL_ونه);
 }
 
 /* Helper function for add_pending_init.  Find inorder successor of P
    in AVL tree.  */
-static struct init_node *
-init_node_successor (struct init_node *p)
+ساكن بنية init_غوټه *
+init_غوټه_successor (بنية init_غوټه *p)
 {
-  struct init_node *r;
-  if (p->right)
+  بنية init_غوټه *r;
+  إذا (p->ښی)
     {
-      r = p->right;
-      while (r->left)
-	r = r->left;
-      return r;
+      r = p->ښی;
+      طالما (r->کیڼ)
+	r = r->کیڼ;
+      أرجع r;
     }
-  r = p->parent;
-  while (r && p == r->right)
+  r = p->پلار;
+  طالما (r && p == r->ښی)
     {
       p = r;
-      r = r->parent;
+      r = r->پلار;
     }
-  return r;
+  أرجع r;
 }
 
 /* Add a new initializer to the tree of pending initializers.  PURPOSE
@@ -11421,162 +11421,162 @@ init_node_successor (struct init_node *p)
    and thus no warnings should be emitted about overriding an
    existing initializer.  */
 
-static void
-add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
-		  bool implicit, struct obstack *braced_init_obstack)
+ساكن فراغ
+جمع_کړه_pending_init (location_t loc, ونه purpose, ونه ارزښت, ونه origtype,
+		  منطقي implicit, بنية obstack *braced_init_obstack)
 {
-  struct init_node *p, **q, *r;
+  بنية init_غوټه *p, **q, *r;
 
   q = &constructor_pending_elts;
   p = 0;
 
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE)
     {
-      while (*q != 0)
+      طالما (*q != 0)
 	{
 	  p = *q;
-	  if (tree_int_cst_lt (purpose, p->purpose))
-	    q = &p->left;
-	  else if (tree_int_cst_lt (p->purpose, purpose))
+	  إذا (ونه_int_cst_lt (purpose, p->purpose))
+	    q = &p->کیڼ;
+	  وإلا إذا (ونه_int_cst_lt (p->purpose, purpose))
 	    {
-	      if (TREE_CODE (p->value) != RAW_DATA_CST
-		  || (p->right
-		      && tree_int_cst_le (p->right->purpose, purpose)))
-		q = &p->right;
-	      else
+	      إذا (ونه_کوډ (p->ارزښت) != RAW_معلومات_CST
+		  || (p->ښی
+		      && ونه_int_cst_le (p->ښی->purpose, purpose)))
+		q = &p->ښی;
+	      وإلا
 		{
-		  widest_int pp = wi::to_widest (p->purpose);
-		  widest_int pw = wi::to_widest (purpose);
-		  if (pp + RAW_DATA_LENGTH (p->value) <= pw)
-		    q = &p->right;
-		  else
+		  widest_int pp = wi::منزل_widest (p->purpose);
+		  widest_int pw = wi::منزل_widest (purpose);
+		  إذا (pp + RAW_معلومات_اوږدتیا (p->ارزښت) <= pw)
+		    q = &p->ښی;
+		  وإلا
 		    {
 		      /* Override which should split the old RAW_DATA_CST
 			 into 2 or 3 pieces.  */
-		      if (!implicit && warn_override_init)
+		      إذا (!implicit && warn_override_init)
 			warning_init (loc, OPT_Woverride_init,
 				      "initialized field overwritten");
-		      unsigned HOST_WIDE_INT start = (pw - pp).to_uhwi ();
-		      unsigned HOST_WIDE_INT len = 1;
-		      if (TREE_CODE (value) == RAW_DATA_CST)
-			len = RAW_DATA_LENGTH (value);
-		      unsigned HOST_WIDE_INT end = 0;
-		      unsigned plen = RAW_DATA_LENGTH (p->value);
-		      gcc_checking_assert (start < plen && start);
-		      if (plen - start > len)
-			end = plen - start - len;
-		      tree v = p->value;
-		      tree origtype = p->origtype;
-		      if (start == 1)
-			p->value = build_int_cst (TREE_TYPE (v),
-						  RAW_DATA_UCHAR_ELT (v, 0));
-		      else
+		      بینښه HOST_WIDE_INT پیل = (pw - pp).منزل_uhwi ();
+		      بینښه HOST_WIDE_INT len = 1;
+		      إذا (ونه_کوډ (ارزښت) == RAW_معلومات_CST)
+			len = RAW_معلومات_اوږدتیا (ارزښت);
+		      بینښه HOST_WIDE_INT پای_ټکی = 0;
+		      بینښه plen = RAW_معلومات_اوږدتیا (p->ارزښت);
+		      gcc_checking_assert (پیل < plen && پیل);
+		      إذا (plen - پیل > len)
+			پای_ټکی = plen - پیل - len;
+		      ونه v = p->ارزښت;
+		      ونه origtype = p->origtype;
+		      إذا (پیل == 1)
+			p->ارزښت = build_int_cst (ونه_TYPE (v),
+						  RAW_معلومات_UCHAR_ELT (v, 0));
+		      وإلا
 			{
-			  p->value = v;
-			  if (end > 1)
-			    v = copy_node (v);
-			  RAW_DATA_LENGTH (p->value) = start;
+			  p->ارزښت = v;
+			  إذا (پای_ټکی > 1)
+			    v = copy_غوټه (v);
+			  RAW_معلومات_اوږدتیا (p->ارزښت) = پیل;
 			}
-		      if (end)
+		      إذا (پای_ټکی)
 			{
-			  tree epurpose
-			    = size_binop (PLUS_EXPR, purpose,
+			  ونه epurpose
+			    = اندازه_binop (PLUS_بیان, purpose,
 					  bitsize_int (len));
-			  if (end > 1)
+			  إذا (پای_ټکی > 1)
 			    {
-			      RAW_DATA_LENGTH (v) -= plen - end;
-			      RAW_DATA_POINTER (v) += plen - end;
+			      RAW_معلومات_اوږدتیا (v) -= plen - پای_ټکی;
+			      RAW_معلومات_اشاره_ګر (v) += plen - پای_ټکی;
 			    }
-			  else
-			    v = build_int_cst (TREE_TYPE (v),
-					       RAW_DATA_UCHAR_ELT (v, plen
-								      - end));
-			  add_pending_init (loc, epurpose, v, origtype,
+			  وإلا
+			    v = build_int_cst (ونه_TYPE (v),
+					       RAW_معلومات_UCHAR_ELT (v, plen
+								      - پای_ټکی));
+			  جمع_کړه_pending_init (loc, epurpose, v, origtype,
 					    implicit, braced_init_obstack);
 			}
 		      q = &constructor_pending_elts;
-		      continue;
+		      استمر;
 		    }
 		}
 	    }
-	  else
+	  وإلا
 	    {
-	      if (TREE_CODE (p->value) == RAW_DATA_CST
-		  && (RAW_DATA_LENGTH (p->value)
-		      > (TREE_CODE (value) == RAW_DATA_CST
-			 ? RAW_DATA_LENGTH (value) : 1)))
+	      إذا (ونه_کوډ (p->ارزښت) == RAW_معلومات_CST
+		  && (RAW_معلومات_اوږدتیا (p->ارزښت)
+		      > (ونه_کوډ (ارزښت) == RAW_معلومات_CST
+			 ? RAW_معلومات_اوږدتیا (ارزښت) : 1)))
 		{
 		  /* Override which should split the old RAW_DATA_CST
 		     into 2 pieces.  */
-		  if (!implicit && warn_override_init)
+		  إذا (!implicit && warn_override_init)
 		    warning_init (loc, OPT_Woverride_init,
 				  "initialized field overwritten");
-		  unsigned HOST_WIDE_INT len = 1;
-		  if (TREE_CODE (value) == RAW_DATA_CST)
-		    len = RAW_DATA_LENGTH (value);
-		  if ((unsigned) RAW_DATA_LENGTH (p->value) > len + 1)
+		  بینښه HOST_WIDE_INT len = 1;
+		  إذا (ونه_کوډ (ارزښت) == RAW_معلومات_CST)
+		    len = RAW_معلومات_اوږدتیا (ارزښت);
+		  إذا ((بینښه) RAW_معلومات_اوږدتیا (p->ارزښت) > len + 1)
 		    {
-		      RAW_DATA_LENGTH (p->value) -= len;
-		      RAW_DATA_POINTER (p->value) += len;
+		      RAW_معلومات_اوږدتیا (p->ارزښت) -= len;
+		      RAW_معلومات_اشاره_ګر (p->ارزښت) += len;
 		    }
-		  else
+		  وإلا
 		    {
-		      unsigned int l = RAW_DATA_LENGTH (p->value) - 1;
-		      p->value
-			= build_int_cst (TREE_TYPE (p->value),
-					 RAW_DATA_UCHAR_ELT (p->value, l));
+		      بینښه صحيح l = RAW_معلومات_اوږدتیا (p->ارزښت) - 1;
+		      p->ارزښت
+			= build_int_cst (ونه_TYPE (p->ارزښت),
+					 RAW_معلومات_UCHAR_ELT (p->ارزښت, l));
 		    }
-		  p->purpose = size_binop (PLUS_EXPR, p->purpose,
+		  p->purpose = اندازه_binop (PLUS_بیان, p->purpose,
 					   bitsize_int (len));
-		  continue;
+		  استمر;
 		}
-	      if (TREE_CODE (value) == RAW_DATA_CST)
+	      إذا (ونه_کوډ (ارزښت) == RAW_معلومات_CST)
 		{
-		handle_raw_data:
+		handle_raw_معلومات:
 		  /* RAW_DATA_CST value might overlap various further
 		     prior initval entries.  Find out how many.  */
-		  unsigned cnt = 0;
+		  بینښه cnt = 0;
 		  widest_int w
-		    = wi::to_widest (purpose) + RAW_DATA_LENGTH (value);
-		  struct init_node *r = p, *last = NULL;
-		  bool override_init = warn_override_init;
-		  while ((r = init_node_successor (r))
-			 && wi::to_widest (r->purpose) < w)
+		    = wi::منزل_widest (purpose) + RAW_معلومات_اوږدتیا (ارزښت);
+		  بنية init_غوټه *r = p, *وروستی = عدم;
+		  منطقي override_init = warn_override_init;
+		  طالما ((r = init_غوټه_successor (r))
+			 && wi::منزل_widest (r->purpose) < w)
 		    {
 		      ++cnt;
-		      if (TREE_SIDE_EFFECTS (r->value))
+		      إذا (ونه_SIDE_EFFECTS (r->ارزښت))
 			warning_init (loc, OPT_Woverride_init_side_effects,
 				      "initialized field with side-effects "
 				      "overwritten");
-		      else if (override_init)
+		      وإلا إذا (override_init)
 			{
 			  warning_init (loc, OPT_Woverride_init,
 					"initialized field overwritten");
-			  override_init = false;
+			  override_init = خطأ;
 			}
-		      last = r;
+		      وروستی = r;
 		    }
-		  if (cnt)
+		  إذا (cnt)
 		    {
-		      if (TREE_CODE (last->value) == RAW_DATA_CST
-			  && (wi::to_widest (last->purpose)
-			      + RAW_DATA_LENGTH (last->value) > w))
+		      إذا (ونه_کوډ (وروستی->ارزښت) == RAW_معلومات_CST
+			  && (wi::منزل_widest (وروستی->purpose)
+			      + RAW_معلومات_اوږدتیا (وروستی->ارزښت) > w))
 			{
 			  /* The last overlapping prior initval overlaps
 			     only partially.  Shrink it and decrease cnt.  */
-			  unsigned int l = (wi::to_widest (last->purpose)
-					    + RAW_DATA_LENGTH (last->value)
-					    - w).to_uhwi ();
+			  بینښه صحيح l = (wi::منزل_widest (وروستی->purpose)
+					    + RAW_معلومات_اوږدتیا (وروستی->ارزښت)
+					    - w).منزل_uhwi ();
 			  --cnt;
-			  RAW_DATA_LENGTH (last->value) -= l;
-			  RAW_DATA_POINTER (last->value) += l;
-			  if (RAW_DATA_LENGTH (last->value) == 1)
-			    last->value
-			      = build_int_cst (TREE_TYPE (last->value),
-					       RAW_DATA_UCHAR_ELT (last->value,
+			  RAW_معلومات_اوږدتیا (وروستی->ارزښت) -= l;
+			  RAW_معلومات_اشاره_ګر (وروستی->ارزښت) += l;
+			  إذا (RAW_معلومات_اوږدتیا (وروستی->ارزښت) == 1)
+			    وروستی->ارزښت
+			      = build_int_cst (ونه_TYPE (وروستی->ارزښت),
+					       RAW_معلومات_UCHAR_ELT (وروستی->ارزښت,
 								   0));
-			  last->purpose
-			    = size_binop (PLUS_EXPR, last->purpose,
+			  وروستی->purpose
+			    = اندازه_binop (PLUS_بیان, وروستی->purpose,
 					  bitsize_int (l));
 			}
 		      /* Instead of deleting cnt nodes from the AVL tree
@@ -11584,366 +11584,366 @@ add_pending_init (location_t loc, tree purpose, tree value, tree origtype,
 			 RAW_DATA_CST.  Overriding thousands of previously
 			 initialized array elements with #embed needs to work,
 			 but doesn't need to be super efficient.  */
-		      gcc_checking_assert ((unsigned) RAW_DATA_LENGTH (value)
+		      gcc_checking_assert ((بینښه) RAW_معلومات_اوږدتیا (ارزښت)
 					   > cnt);
-		      RAW_DATA_LENGTH (value) -= cnt;
-		      const unsigned char *s
-			= &RAW_DATA_UCHAR_ELT (value, RAW_DATA_LENGTH (value));
-		      unsigned int o = RAW_DATA_LENGTH (value);
-		      for (r = p; cnt--; ++o, ++s)
+		      RAW_معلومات_اوږدتیا (ارزښت) -= cnt;
+		      ثابت بینښه حرف *s
+			= &RAW_معلومات_UCHAR_ELT (ارزښت, RAW_معلومات_اوږدتیا (ارزښت));
+		      بینښه صحيح o = RAW_معلومات_اوږدتیا (ارزښت);
+		      لكل (r = p; cnt--; ++o, ++s)
 			{
-			  r = init_node_successor (r);
-			  r->purpose = size_binop (PLUS_EXPR, purpose,
+			  r = init_غوټه_successor (r);
+			  r->purpose = اندازه_binop (PLUS_بیان, purpose,
 						   bitsize_int (o));
-			  r->value = build_int_cst (TREE_TYPE (value), *s);
+			  r->ارزښت = build_int_cst (ونه_TYPE (ارزښت), *s);
 			  r->origtype = origtype;
 			}
-		      if (RAW_DATA_LENGTH (value) == 1)
-			value = build_int_cst (TREE_TYPE (value),
-					       RAW_DATA_UCHAR_ELT (value, 0));
+		      إذا (RAW_معلومات_اوږدتیا (ارزښت) == 1)
+			ارزښت = build_int_cst (ونه_TYPE (ارزښت),
+					       RAW_معلومات_UCHAR_ELT (ارزښت, 0));
 		    }
 		}
-	      if (!implicit)
+	      إذا (!implicit)
 		{
-		  if (TREE_SIDE_EFFECTS (p->value))
+		  إذا (ونه_SIDE_EFFECTS (p->ارزښت))
 		    warning_init (loc, OPT_Woverride_init_side_effects,
 				  "initialized field with side-effects "
 				  "overwritten");
-		  else if (warn_override_init)
+		  وإلا إذا (warn_override_init)
 		    warning_init (loc, OPT_Woverride_init,
 				  "initialized field overwritten");
 		}
-	      p->value = value;
+	      p->ارزښت = ارزښت;
 	      p->origtype = origtype;
-	      return;
+	      أرجع;
 	    }
 	}
-      if (TREE_CODE (value) == RAW_DATA_CST && p)
+      إذا (ونه_کوډ (ارزښت) == RAW_معلومات_CST && p)
 	{
-	  struct init_node *r;
-	  if (q == &p->left)
+	  بنية init_غوټه *r;
+	  إذا (q == &p->کیڼ)
 	    r = p;
-	  else
-	    r = init_node_successor (p);
-	  if (r && wi::to_widest (r->purpose) < (wi::to_widest (purpose)
-						 + RAW_DATA_LENGTH (value)))
+	  وإلا
+	    r = init_غوټه_successor (p);
+	  إذا (r && wi::منزل_widest (r->purpose) < (wi::منزل_widest (purpose)
+						 + RAW_معلومات_اوږدتیا (ارزښت)))
 	    {
 	      /* Overlap with at least one prior initval in the range but
 		 not at the start.  */
 	      p = r;
 	      p->purpose = purpose;
-	      goto handle_raw_data;
+	      اذهب handle_raw_معلومات;
 	    }
 	}
     }
-  else
+  وإلا
     {
-      tree bitpos;
+      ونه bitpos;
 
-      bitpos = bit_position (purpose);
-      while (*q != NULL)
+      bitpos = بټ_position (purpose);
+      طالما (*q != عدم)
 	{
 	  p = *q;
-	  if (tree_int_cst_lt (bitpos, bit_position (p->purpose)))
-	    q = &p->left;
-	  else if (p->purpose != purpose)
-	    q = &p->right;
-	  else
+	  إذا (ونه_int_cst_lt (bitpos, بټ_position (p->purpose)))
+	    q = &p->کیڼ;
+	  وإلا إذا (p->purpose != purpose)
+	    q = &p->ښی;
+	  وإلا
 	    {
-	      if (!implicit)
+	      إذا (!implicit)
 		{
-		  if (TREE_SIDE_EFFECTS (p->value))
+		  إذا (ونه_SIDE_EFFECTS (p->ارزښت))
 		    warning_init (loc, OPT_Woverride_init_side_effects,
 				  "initialized field with side-effects "
 				  "overwritten");
-		  else if (warn_override_init)
+		  وإلا إذا (warn_override_init)
 		    warning_init (loc, OPT_Woverride_init,
 				  "initialized field overwritten");
 		}
-	      p->value = value;
+	      p->ارزښت = ارزښت;
 	      p->origtype = origtype;
-	      return;
+	      أرجع;
 	    }
 	}
     }
 
-  r = (struct init_node *) obstack_alloc (braced_init_obstack,
-					  sizeof (struct init_node));
+  r = (بنية init_غوټه *) obstack_alloc (braced_init_obstack,
+					  حجم (بنية init_غوټه));
   r->purpose = purpose;
-  r->value = value;
+  r->ارزښت = ارزښت;
   r->origtype = origtype;
 
   *q = r;
-  r->parent = p;
-  r->left = 0;
-  r->right = 0;
+  r->پلار = p;
+  r->کیڼ = 0;
+  r->ښی = 0;
   r->balance = 0;
 
-  while (p)
+  طالما (p)
     {
-      struct init_node *s;
+      بنية init_غوټه *s;
 
-      if (r == p->left)
+      إذا (r == p->کیڼ)
 	{
-	  if (p->balance == 0)
+	  إذا (p->balance == 0)
 	    p->balance = -1;
-	  else if (p->balance < 0)
+	  وإلا إذا (p->balance < 0)
 	    {
-	      if (r->balance < 0)
+	      إذا (r->balance < 0)
 		{
 		  /* L rotation.  */
-		  p->left = r->right;
-		  if (p->left)
-		    p->left->parent = p;
-		  r->right = p;
+		  p->کیڼ = r->ښی;
+		  إذا (p->کیڼ)
+		    p->کیڼ->پلار = p;
+		  r->ښی = p;
 
 		  p->balance = 0;
 		  r->balance = 0;
 
-		  s = p->parent;
-		  p->parent = r;
-		  r->parent = s;
-		  if (s)
+		  s = p->پلار;
+		  p->پلار = r;
+		  r->پلار = s;
+		  إذا (s)
 		    {
-		      if (s->left == p)
-			s->left = r;
-		      else
-			s->right = r;
+		      إذا (s->کیڼ == p)
+			s->کیڼ = r;
+		      وإلا
+			s->ښی = r;
 		    }
-		  else
+		  وإلا
 		    constructor_pending_elts = r;
 		}
-	      else
+	      وإلا
 		{
 		  /* LR rotation.  */
-		  struct init_node *t = r->right;
+		  بنية init_غوټه *t = r->ښی;
 
-		  r->right = t->left;
-		  if (r->right)
-		    r->right->parent = r;
-		  t->left = r;
+		  r->ښی = t->کیڼ;
+		  إذا (r->ښی)
+		    r->ښی->پلار = r;
+		  t->کیڼ = r;
 
-		  p->left = t->right;
-		  if (p->left)
-		    p->left->parent = p;
-		  t->right = p;
+		  p->کیڼ = t->ښی;
+		  إذا (p->کیڼ)
+		    p->کیڼ->پلار = p;
+		  t->ښی = p;
 
 		  p->balance = t->balance < 0;
 		  r->balance = -(t->balance > 0);
 		  t->balance = 0;
 
-		  s = p->parent;
-		  p->parent = t;
-		  r->parent = t;
-		  t->parent = s;
-		  if (s)
+		  s = p->پلار;
+		  p->پلار = t;
+		  r->پلار = t;
+		  t->پلار = s;
+		  إذا (s)
 		    {
-		      if (s->left == p)
-			s->left = t;
-		      else
-			s->right = t;
+		      إذا (s->کیڼ == p)
+			s->کیڼ = t;
+		      وإلا
+			s->ښی = t;
 		    }
-		  else
+		  وإلا
 		    constructor_pending_elts = t;
 		}
-	      break;
+	      اكسر;
 	    }
-	  else
+	  وإلا
 	    {
 	      /* p->balance == +1; growth of left side balances the node.  */
 	      p->balance = 0;
-	      break;
+	      اكسر;
 	    }
 	}
-      else /* r == p->right */
+      وإلا /* r == p->right */
 	{
-	  if (p->balance == 0)
+	  إذا (p->balance == 0)
 	    /* Growth propagation from right side.  */
 	    p->balance++;
-	  else if (p->balance > 0)
+	  وإلا إذا (p->balance > 0)
 	    {
-	      if (r->balance > 0)
+	      إذا (r->balance > 0)
 		{
 		  /* R rotation.  */
-		  p->right = r->left;
-		  if (p->right)
-		    p->right->parent = p;
-		  r->left = p;
+		  p->ښی = r->کیڼ;
+		  إذا (p->ښی)
+		    p->ښی->پلار = p;
+		  r->کیڼ = p;
 
 		  p->balance = 0;
 		  r->balance = 0;
 
-		  s = p->parent;
-		  p->parent = r;
-		  r->parent = s;
-		  if (s)
+		  s = p->پلار;
+		  p->پلار = r;
+		  r->پلار = s;
+		  إذا (s)
 		    {
-		      if (s->left == p)
-			s->left = r;
-		      else
-			s->right = r;
+		      إذا (s->کیڼ == p)
+			s->کیڼ = r;
+		      وإلا
+			s->ښی = r;
 		    }
-		  else
+		  وإلا
 		    constructor_pending_elts = r;
 		}
-	      else /* r->balance == -1 */
+	      وإلا /* r->balance == -1 */
 		{
 		  /* RL rotation */
-		  struct init_node *t = r->left;
+		  بنية init_غوټه *t = r->کیڼ;
 
-		  r->left = t->right;
-		  if (r->left)
-		    r->left->parent = r;
-		  t->right = r;
+		  r->کیڼ = t->ښی;
+		  إذا (r->کیڼ)
+		    r->کیڼ->پلار = r;
+		  t->ښی = r;
 
-		  p->right = t->left;
-		  if (p->right)
-		    p->right->parent = p;
-		  t->left = p;
+		  p->ښی = t->کیڼ;
+		  إذا (p->ښی)
+		    p->ښی->پلار = p;
+		  t->کیڼ = p;
 
 		  r->balance = (t->balance < 0);
 		  p->balance = -(t->balance > 0);
 		  t->balance = 0;
 
-		  s = p->parent;
-		  p->parent = t;
-		  r->parent = t;
-		  t->parent = s;
-		  if (s)
+		  s = p->پلار;
+		  p->پلار = t;
+		  r->پلار = t;
+		  t->پلار = s;
+		  إذا (s)
 		    {
-		      if (s->left == p)
-			s->left = t;
-		      else
-			s->right = t;
+		      إذا (s->کیڼ == p)
+			s->کیڼ = t;
+		      وإلا
+			s->ښی = t;
 		    }
-		  else
+		  وإلا
 		    constructor_pending_elts = t;
 		}
-	      break;
+	      اكسر;
 	    }
-	  else
+	  وإلا
 	    {
 	      /* p->balance == -1; growth of right side balances the node.  */
 	      p->balance = 0;
-	      break;
+	      اكسر;
 	    }
 	}
 
       r = p;
-      p = p->parent;
+      p = p->پلار;
     }
 }
 
 /* Build AVL tree from a sorted chain.  */
 
-static void
-set_nonincremental_init (struct obstack * braced_init_obstack)
+ساكن فراغ
+سېټ_nonincremental_init (بنية obstack * braced_init_obstack)
 {
-  unsigned HOST_WIDE_INT ix;
-  tree index, value;
+  بینښه HOST_WIDE_INT ix;
+  ونه شاخص, ارزښت;
 
-  if (TREE_CODE (constructor_type) != RECORD_TYPE
-      && TREE_CODE (constructor_type) != ARRAY_TYPE)
-    return;
+  إذا (ونه_کوډ (constructor_type) != ریکارډ_TYPE
+      && ونه_کوډ (constructor_type) != ARRAY_TYPE)
+    أرجع;
 
-  FOR_EACH_CONSTRUCTOR_ELT (constructor_elements, ix, index, value)
-    add_pending_init (input_location, index, value, NULL_TREE, true,
+  FOR_EACH_CONSTRUCTOR_ELT (constructor_elements, ix, شاخص, ارزښت)
+    جمع_کړه_pending_init (ننوت_location, شاخص, ارزښت, NULL_ونه, ریښتیا,
 		      braced_init_obstack);
-  constructor_elements = NULL;
-  if (TREE_CODE (constructor_type) == RECORD_TYPE)
+  constructor_elements = عدم;
+  إذا (ونه_کوډ (constructor_type) == ریکارډ_TYPE)
     {
       constructor_unfilled_fields = TYPE_FIELDS (constructor_type);
       /* Skip any nameless bit fields at the beginning.  */
-      while (constructor_unfilled_fields != NULL_TREE
-	     && DECL_UNNAMED_BIT_FIELD (constructor_unfilled_fields))
-	constructor_unfilled_fields = TREE_CHAIN (constructor_unfilled_fields);
+      طالما (constructor_unfilled_fields != NULL_ونه
+	     && DECL_UNNAMED_بټ_ډګر (constructor_unfilled_fields))
+	constructor_unfilled_fields = ونه_CHAIN (constructor_unfilled_fields);
 
     }
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  وإلا إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE)
     {
-      if (TYPE_DOMAIN (constructor_type))
-	constructor_unfilled_index
+      إذا (TYPE_DOMAIN (constructor_type))
+	constructor_unfilled_شاخص
 	  = convert (bitsizetype,
-		     TYPE_MIN_VALUE (TYPE_DOMAIN (constructor_type)));
-      else
-	constructor_unfilled_index = bitsize_zero_node;
+		     TYPE_MIN_ارزښت (TYPE_DOMAIN (constructor_type)));
+      وإلا
+	constructor_unfilled_شاخص = bitsize_zero_غوټه;
     }
   constructor_incremental = 0;
 }
 
 /* Build AVL tree from a string constant.  */
 
-static void
-set_nonincremental_init_from_string (tree str,
-				     struct obstack * braced_init_obstack)
+ساكن فراغ
+سېټ_nonincremental_init_from_string (ونه str,
+				     بنية obstack * braced_init_obstack)
 {
-  tree value, purpose, type;
+  ونه ارزښت, purpose, type;
   HOST_WIDE_INT val[2];
-  const char *p, *end;
-  int byte, wchar_bytes, charwidth, bitpos;
+  ثابت حرف *p, *پای_ټکی;
+  صحيح byte, wchar_بایټونه, charwidth, bitpos;
 
-  gcc_assert (TREE_CODE (constructor_type) == ARRAY_TYPE);
+  gcc_assert (ونه_کوډ (constructor_type) == ARRAY_TYPE);
 
-  wchar_bytes = TYPE_PRECISION (TREE_TYPE (TREE_TYPE (str))) / BITS_PER_UNIT;
-  charwidth = TYPE_PRECISION (char_type_node);
-  gcc_assert ((size_t) wchar_bytes * charwidth
-	      <= ARRAY_SIZE (val) * HOST_BITS_PER_WIDE_INT);
-  type = TREE_TYPE (constructor_type);
-  p = TREE_STRING_POINTER (str);
-  end = p + TREE_STRING_LENGTH (str);
+  wchar_بایټونه = TYPE_PRECISION (ونه_TYPE (ونه_TYPE (str))) / بټونه_فی_UNIT;
+  charwidth = TYPE_PRECISION (char_type_غوټه);
+  gcc_assert ((اندازه_t) wchar_بایټونه * charwidth
+	      <= ARRAY_اندازه (val) * HOST_بټونه_فی_WIDE_INT);
+  type = ونه_TYPE (constructor_type);
+  p = ونه_STRING_اشاره_ګر (str);
+  پای_ټکی = p + ونه_STRING_اوږدتیا (str);
 
-  for (purpose = bitsize_zero_node;
-       p < end
-       && !(constructor_max_index
-	    && tree_int_cst_lt (constructor_max_index, purpose));
-       purpose = size_binop (PLUS_EXPR, purpose, bitsize_one_node))
+  لكل (purpose = bitsize_zero_غوټه;
+       p < پای_ټکی
+       && !(constructor_max_شاخص
+	    && ونه_int_cst_lt (constructor_max_شاخص, purpose));
+       purpose = اندازه_binop (PLUS_بیان, purpose, bitsize_one_غوټه))
     {
-      if (wchar_bytes == 1)
+      إذا (wchar_بایټونه == 1)
 	{
-	  val[0] = (unsigned char) *p++;
+	  val[0] = (بینښه حرف) *p++;
 	  val[1] = 0;
 	}
-      else
+      وإلا
 	{
 	  val[1] = 0;
 	  val[0] = 0;
-	  for (byte = 0; byte < wchar_bytes; byte++)
+	  لكل (byte = 0; byte < wchar_بایټونه; byte++)
 	    {
-	      if (BYTES_BIG_ENDIAN)
-		bitpos = (wchar_bytes - byte - 1) * charwidth;
-	      else
+	      إذا (بایټونه_BIG_ENDIAN)
+		bitpos = (wchar_بایټونه - byte - 1) * charwidth;
+	      وإلا
 		bitpos = byte * charwidth;
-	      val[bitpos / HOST_BITS_PER_WIDE_INT]
-		|= ((unsigned HOST_WIDE_INT) ((unsigned char) *p++))
-		   << (bitpos % HOST_BITS_PER_WIDE_INT);
+	      val[bitpos / HOST_بټونه_فی_WIDE_INT]
+		|= ((بینښه HOST_WIDE_INT) ((بینښه حرف) *p++))
+		   << (bitpos % HOST_بټونه_فی_WIDE_INT);
 	    }
 	}
 
-      if (!TYPE_UNSIGNED (type))
+      إذا (!TYPE_UNSIGNED (type))
 	{
-	  bitpos = ((wchar_bytes - 1) * charwidth) + HOST_BITS_PER_CHAR;
-	  if (bitpos < HOST_BITS_PER_WIDE_INT)
+	  bitpos = ((wchar_بایټونه - 1) * charwidth) + HOST_بټونه_فی_CHAR;
+	  إذا (bitpos < HOST_بټونه_فی_WIDE_INT)
 	    {
-	      if (val[0] & (HOST_WIDE_INT_1 << (bitpos - 1)))
+	      إذا (val[0] & (HOST_WIDE_INT_1 << (bitpos - 1)))
 		{
 		  val[0] |= HOST_WIDE_INT_M1U << bitpos;
 		  val[1] = -1;
 		}
 	    }
-	  else if (bitpos == HOST_BITS_PER_WIDE_INT)
+	  وإلا إذا (bitpos == HOST_بټونه_فی_WIDE_INT)
 	    {
-	      if (val[0] < 0)
+	      إذا (val[0] < 0)
 		val[1] = -1;
 	    }
-	  else if (val[1] & (HOST_WIDE_INT_1
-			     << (bitpos - 1 - HOST_BITS_PER_WIDE_INT)))
-	    val[1] |= HOST_WIDE_INT_M1U << (bitpos - HOST_BITS_PER_WIDE_INT);
+	  وإلا إذا (val[1] & (HOST_WIDE_INT_1
+			     << (bitpos - 1 - HOST_بټونه_فی_WIDE_INT)))
+	    val[1] |= HOST_WIDE_INT_M1U << (bitpos - HOST_بټونه_فی_WIDE_INT);
 	}
 
-      value = wide_int_to_tree (type,
+      ارزښت = wide_int_منزل_ونه (type,
 				wide_int::from_array (val, 2,
-						      HOST_BITS_PER_WIDE_INT * 2));
-      add_pending_init (input_location, purpose, value, NULL_TREE, true,
+						      HOST_بټونه_فی_WIDE_INT * 2));
+      جمع_کړه_pending_init (ننوت_location, purpose, ارزښت, NULL_ونه, ریښتیا,
                         braced_init_obstack);
     }
 
@@ -11953,56 +11953,56 @@ set_nonincremental_init_from_string (tree str,
 /* Return value of FIELD in pending initializer or NULL_TREE if the field was
    not initialized yet.  */
 
-static tree
-find_init_member (tree field, struct obstack * braced_init_obstack)
+ساكن ونه
+پیدا_کړه_init_member (ونه ډګر_2, بنية obstack * braced_init_obstack)
 {
-  struct init_node *p;
+  بنية init_غوټه *p;
 
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE)
     {
-      if (constructor_incremental
-	  && tree_int_cst_lt (field, constructor_unfilled_index))
-	set_nonincremental_init (braced_init_obstack);
+      إذا (constructor_incremental
+	  && ونه_int_cst_lt (ډګر_2, constructor_unfilled_شاخص))
+	سېټ_nonincremental_init (braced_init_obstack);
 
       p = constructor_pending_elts;
-      while (p)
+      طالما (p)
 	{
-	  if (tree_int_cst_lt (field, p->purpose))
-	    p = p->left;
-	  else if (tree_int_cst_lt (p->purpose, field))
-	    p = p->right;
-	  else
-	    return p->value;
+	  إذا (ونه_int_cst_lt (ډګر_2, p->purpose))
+	    p = p->کیڼ;
+	  وإلا إذا (ونه_int_cst_lt (p->purpose, ډګر_2))
+	    p = p->ښی;
+	  وإلا
+	    أرجع p->ارزښت;
 	}
     }
-  else if (TREE_CODE (constructor_type) == RECORD_TYPE)
+  وإلا إذا (ونه_کوډ (constructor_type) == ریکارډ_TYPE)
     {
-      tree bitpos = bit_position (field);
+      ونه bitpos = بټ_position (ډګر_2);
 
-      if (constructor_incremental
+      إذا (constructor_incremental
 	  && (!constructor_unfilled_fields
-	      || tree_int_cst_lt (bitpos,
-				  bit_position (constructor_unfilled_fields))))
-	set_nonincremental_init (braced_init_obstack);
+	      || ونه_int_cst_lt (bitpos,
+				  بټ_position (constructor_unfilled_fields))))
+	سېټ_nonincremental_init (braced_init_obstack);
 
       p = constructor_pending_elts;
-      while (p)
+      طالما (p)
 	{
-	  if (field == p->purpose)
-	    return p->value;
-	  else if (tree_int_cst_lt (bitpos, bit_position (p->purpose)))
-	    p = p->left;
-	  else
-	    p = p->right;
+	  إذا (ډګر_2 == p->purpose)
+	    أرجع p->ارزښت;
+	  وإلا إذا (ونه_int_cst_lt (bitpos, بټ_position (p->purpose)))
+	    p = p->کیڼ;
+	  وإلا
+	    p = p->ښی;
 	}
     }
-  else if (TREE_CODE (constructor_type) == UNION_TYPE)
+  وإلا إذا (ونه_کوډ (constructor_type) == UNION_TYPE)
     {
-      if (!vec_safe_is_empty (constructor_elements)
-	  && (constructor_elements->last ().index == field))
-	return constructor_elements->last ().value;
+      إذا (!vec_خوندي_is_تشه (constructor_elements)
+	  && (constructor_elements->وروستی ().شاخص == ډګر_2))
+	أرجع constructor_elements->وروستی ().ارزښت;
     }
-  return NULL_TREE;
+  أرجع NULL_ونه;
 }
 
 /* "Output" the next constructor element.
@@ -12024,130 +12024,130 @@ find_init_member (tree field, struct obstack * braced_init_obstack)
    and thus no warnings should be emitted about overriding an
    existing initializer.  */
 
-static void
-output_init_element (location_t loc, tree value, tree origtype,
-		     bool strict_string, tree type, tree field, bool pending,
-		     bool implicit, struct obstack * braced_init_obstack)
+ساكن فراغ
+output_init_element (location_t loc, ونه ارزښت, ونه origtype,
+		     منطقي strict_string, ونه type, ونه ډګر_2, منطقي pending,
+		     منطقي implicit, بنية obstack * braced_init_obstack)
 {
-  tree semantic_type = NULL_TREE;
-  bool maybe_const = true;
-  bool npc, int_const_expr, arith_const_expr;
+  ونه semantic_type = NULL_ونه;
+  منطقي maybe_const = ریښتیا;
+  منطقي npc, int_const_بیان, arith_const_بیان;
 
-  if (type == error_mark_node || value == error_mark_node)
+  إذا (type == error_mark_غوټه || ارزښت == error_mark_غوټه)
     {
       constructor_erroneous = 1;
-      return;
+      أرجع;
     }
-  if (TREE_CODE (TREE_TYPE (value)) == ARRAY_TYPE
-      && (TREE_CODE (value) == STRING_CST
-	  || TREE_CODE (value) == COMPOUND_LITERAL_EXPR)
-      && !(TREE_CODE (value) == STRING_CST
-	   && TREE_CODE (type) == ARRAY_TYPE
-	   && INTEGRAL_TYPE_P (TREE_TYPE (type)))
-      && !comptypes (TYPE_MAIN_VARIANT (TREE_TYPE (value)),
+  إذا (ونه_کوډ (ونه_TYPE (ارزښت)) == ARRAY_TYPE
+      && (ونه_کوډ (ارزښت) == STRING_CST
+	  || ونه_کوډ (ارزښت) == COMPOUND_LITERAL_بیان)
+      && !(ونه_کوډ (ارزښت) == STRING_CST
+	   && ونه_کوډ (type) == ARRAY_TYPE
+	   && INTEGRAL_TYPE_P (ونه_TYPE (type)))
+      && !comptypes (TYPE_MAIN_VARIANT (ونه_TYPE (ارزښت)),
 		     TYPE_MAIN_VARIANT (type)))
-    value = array_to_pointer_conversion (input_location, value);
+    ارزښت = array_منزل_اشاره_ګر_conversion (ننوت_location, ارزښت);
 
-  if (TREE_CODE (value) == COMPOUND_LITERAL_EXPR
-      && require_constant_value && pending)
+  إذا (ونه_کوډ (ارزښت) == COMPOUND_LITERAL_بیان
+      && require_constant_ارزښت && pending)
     {
       /* As an extension, allow initializing objects with static storage
 	 duration with compound literals (which are then treated just as
 	 the brace enclosed list they contain).  */
-      if (flag_isoc99)
+      إذا (flag_isoc99)
 	pedwarn_init (loc, OPT_Wpedantic, "initializer element is not "
 		      "constant");
-      tree decl = COMPOUND_LITERAL_EXPR_DECL (value);
-      value = DECL_INITIAL (decl);
+      ونه decl = COMPOUND_LITERAL_بیان_DECL (ارزښت);
+      ارزښت = DECL_INITIAL (decl);
     }
 
-  npc = null_pointer_constant_p (value);
-  int_const_expr = (TREE_CODE (value) == INTEGER_CST
-		    && !TREE_OVERFLOW (value)
-		    && INTEGRAL_TYPE_P (TREE_TYPE (value)));
+  npc = null_اشاره_ګر_constant_p (ارزښت);
+  int_const_بیان = (ونه_کوډ (ارزښت) == INTEGER_CST
+		    && !ونه_ډکېدنه (ارزښت)
+		    && INTEGRAL_TYPE_P (ونه_TYPE (ارزښت)));
   /* Not fully determined before folding.  */
-  arith_const_expr = true;
-  if (TREE_CODE (value) == EXCESS_PRECISION_EXPR)
+  arith_const_بیان = ریښتیا;
+  إذا (ونه_کوډ (ارزښت) == EXCESS_PRECISION_بیان)
     {
-      semantic_type = TREE_TYPE (value);
-      value = TREE_OPERAND (value, 0);
+      semantic_type = ونه_TYPE (ارزښت);
+      ارزښت = ونه_عملوند (ارزښت, 0);
     }
-  value = c_fully_fold (value, require_constant_value, &maybe_const);
+  ارزښت = c_fully_fold (ارزښت, require_constant_ارزښت, &maybe_const);
   /* TODO: this may not detect all cases of expressions folding to
      constants that are not arithmetic constant expressions.  */
-  if (!maybe_const)
-    arith_const_expr = false;
-  else if (!INTEGRAL_TYPE_P (TREE_TYPE (value))
-	   && TREE_CODE (TREE_TYPE (value)) != REAL_TYPE
-	   && TREE_CODE (TREE_TYPE (value)) != COMPLEX_TYPE)
-    arith_const_expr = false;
-  else if (TREE_CODE (value) != INTEGER_CST
-	   && TREE_CODE (value) != REAL_CST
-	   && TREE_CODE (value) != COMPLEX_CST
-	   && TREE_CODE (value) != RAW_DATA_CST)
-    arith_const_expr = false;
-  else if (TREE_OVERFLOW (value))
-    arith_const_expr = false;
+  إذا (!maybe_const)
+    arith_const_بیان = خطأ;
+  وإلا إذا (!INTEGRAL_TYPE_P (ونه_TYPE (ارزښت))
+	   && ونه_کوډ (ونه_TYPE (ارزښت)) != REAL_TYPE
+	   && ونه_کوډ (ونه_TYPE (ارزښت)) != COMPLEX_TYPE)
+    arith_const_بیان = خطأ;
+  وإلا إذا (ونه_کوډ (ارزښت) != INTEGER_CST
+	   && ونه_کوډ (ارزښت) != REAL_CST
+	   && ونه_کوډ (ارزښت) != COMPLEX_CST
+	   && ونه_کوډ (ارزښت) != RAW_معلومات_CST)
+    arith_const_بیان = خطأ;
+  وإلا إذا (ونه_ډکېدنه (ارزښت))
+    arith_const_بیان = خطأ;
 
-  if (value == error_mark_node)
+  إذا (ارزښت == error_mark_غوټه)
     constructor_erroneous = 1;
-  else if (!TREE_CONSTANT (value))
+  وإلا إذا (!ونه_CONSTANT (ارزښت))
     constructor_constant = 0;
-  else if (!initializer_constant_valid_p (value,
-					  TREE_TYPE (value),
+  وإلا إذا (!initializer_constant_valid_p (ارزښت,
+					  ونه_TYPE (ارزښت),
 					  AGGREGATE_TYPE_P (constructor_type)
-					  && TYPE_REVERSE_STORAGE_ORDER
+					  && TYPE_سرچپه_STORAGE_ترتیب
 					     (constructor_type))
-	   || (RECORD_OR_UNION_TYPE_P (constructor_type)
-	       && DECL_C_BIT_FIELD (field)
-	       && TREE_CODE (value) != INTEGER_CST))
+	   || (ریکارډ_OR_UNION_TYPE_P (constructor_type)
+	       && DECL_C_بټ_ډګر (ډګر_2)
+	       && ونه_کوډ (ارزښت) != INTEGER_CST))
     constructor_simple = 0;
-  if (!maybe_const)
+  إذا (!maybe_const)
     constructor_nonconst = 1;
 
   /* Digest the initializer and issue any errors about incompatible
      types before issuing errors about non-constant initializers.  */
-  tree new_value = value;
-  if (semantic_type)
-    new_value = build1 (EXCESS_PRECISION_EXPR, semantic_type, value);
+  ونه new_ارزښت = ارزښت;
+  إذا (semantic_type)
+    new_ارزښت = build1 (EXCESS_PRECISION_بیان, semantic_type, ارزښت);
   /* In the case of braces around a scalar initializer, the result of
      this initializer processing goes through digest_init again at the
      outer level.  In the case of a constexpr initializer for a
      pointer, avoid converting a null pointer constant to something
      that is not a null pointer constant to avoid a spurious error
      from that second processing.  */
-  if (!require_constexpr_value
+  إذا (!require_constexpr_ارزښت
       || !npc
-      || TREE_CODE (constructor_type) != POINTER_TYPE)
-    new_value = digest_init (loc,
-			     RECORD_OR_UNION_TYPE_P (constructor_type)
-			     ? field : constructor_fields
+      || ونه_کوډ (constructor_type) != اشاره_ګر_TYPE)
+    new_ارزښت = digest_init (loc,
+			     ریکارډ_OR_UNION_TYPE_P (constructor_type)
+			     ? ډګر_2 : constructor_fields
 			     ? constructor_fields : constructor_decl,
-			     type, new_value, origtype, npc,
-			     int_const_expr, arith_const_expr, strict_string,
-			     require_constant_value, require_constexpr_value);
-  if (new_value == error_mark_node)
+			     type, new_ارزښت, origtype, npc,
+			     int_const_بیان, arith_const_بیان, strict_string,
+			     require_constant_ارزښت, require_constexpr_ارزښت);
+  إذا (new_ارزښت == error_mark_غوټه)
     {
       constructor_erroneous = 1;
-      return;
+      أرجع;
     }
-  if (require_constant_value || require_constant_elements)
-    constant_expression_warning (new_value);
+  إذا (require_constant_ارزښت || require_constant_elements)
+    constant_افاده_warning (new_ارزښت);
 
   /* Proceed to check the constness of the original initializer.  */
-  if (!initializer_constant_valid_p (value, TREE_TYPE (value)))
+  إذا (!initializer_constant_valid_p (ارزښت, ونه_TYPE (ارزښت)))
     {
-      if (require_constant_value)
+      إذا (require_constant_ارزښت)
 	{
 	  error_init (loc, "initializer element is not constant");
-	  value = error_mark_node;
+	  ارزښت = error_mark_غوټه;
 	}
-      else if (require_constant_elements)
+      وإلا إذا (require_constant_elements)
 	pedwarn (loc, OPT_Wpedantic,
 		 "initializer element is not computable at load time");
     }
-  else if (!maybe_const
-	   && (require_constant_value || require_constant_elements))
+  وإلا إذا (!maybe_const
+	   && (require_constant_ارزښت || require_constant_elements))
     pedwarn_init (loc, OPT_Wpedantic,
 		  "initializer element is not a constant expression");
   /* digest_init has already carried out the additional checks
@@ -12158,18 +12158,18 @@ output_init_element (location_t loc, tree value, tree origtype,
 
   /* Issue -Wc++-compat warnings about initializing a bitfield with
      enum type.  */
-  if (warn_cxx_compat
-      && field != NULL_TREE
-      && TREE_CODE (field) == FIELD_DECL
-      && DECL_BIT_FIELD_TYPE (field) != NULL_TREE
-      && (TYPE_MAIN_VARIANT (DECL_BIT_FIELD_TYPE (field))
+  إذا (warn_cxx_compat
+      && ډګر_2 != NULL_ونه
+      && ونه_کوډ (ډګر_2) == ډګر_DECL
+      && DECL_بټ_ډګر_TYPE (ډګر_2) != NULL_ونه
+      && (TYPE_MAIN_VARIANT (DECL_بټ_ډګر_TYPE (ډګر_2))
 	  != TYPE_MAIN_VARIANT (type))
-      && TREE_CODE (DECL_BIT_FIELD_TYPE (field)) == ENUMERAL_TYPE)
+      && ونه_کوډ (DECL_بټ_ډګر_TYPE (ډګر_2)) == ENUMERAL_TYPE)
     {
-      tree checktype = origtype != NULL_TREE ? origtype : TREE_TYPE (value);
-      if (checktype != error_mark_node
+      ونه checktype = origtype != NULL_ونه ? origtype : ونه_TYPE (ارزښت);
+      إذا (checktype != error_mark_غوټه
 	  && (TYPE_MAIN_VARIANT (checktype)
-	      != TYPE_MAIN_VARIANT (DECL_BIT_FIELD_TYPE (field))))
+	      != TYPE_MAIN_VARIANT (DECL_بټ_ډګر_TYPE (ډګر_2))))
 	warning_init (loc, OPT_Wc___compat,
 		      "enum conversion in initialization is invalid in C++");
     }
@@ -12177,114 +12177,114 @@ output_init_element (location_t loc, tree value, tree origtype,
   /* If this field is empty and does not have side effects (and is not at
      the end of structure), don't do anything other than checking the
      initializer.  */
-  if (field
-      && (TREE_TYPE (field) == error_mark_node
-	  || (COMPLETE_TYPE_P (TREE_TYPE (field))
-	      && integer_zerop (TYPE_SIZE (TREE_TYPE (field)))
-	      && !TREE_SIDE_EFFECTS (new_value)
-	      && (TREE_CODE (constructor_type) == ARRAY_TYPE
-		  || DECL_CHAIN (field)))))
-    return;
+  إذا (ډګر_2
+      && (ونه_TYPE (ډګر_2) == error_mark_غوټه
+	  || (COMPLETE_TYPE_P (ونه_TYPE (ډګر_2))
+	      && integer_zerop (TYPE_اندازه (ونه_TYPE (ډګر_2)))
+	      && !ونه_SIDE_EFFECTS (new_ارزښت)
+	      && (ونه_کوډ (constructor_type) == ARRAY_TYPE
+		  || DECL_CHAIN (ډګر_2)))))
+    أرجع;
 
   /* Finally, set VALUE to the initializer value digested above.  */
-  value = new_value;
+  ارزښت = new_ارزښت;
 
   /* If this element doesn't come next in sequence,
      put it on constructor_pending_elts.  */
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE
+  إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE
       && (!constructor_incremental
-	  || !tree_int_cst_equal (field, constructor_unfilled_index)
-	  || (TREE_CODE (value) == RAW_DATA_CST
+	  || !ونه_int_cst_equal (ډګر_2, constructor_unfilled_شاخص)
+	  || (ونه_کوډ (ارزښت) == RAW_معلومات_CST
 	      && constructor_pending_elts
 	      && pending)))
     {
-      if (constructor_incremental
-	  && (tree_int_cst_lt (field, constructor_unfilled_index)
-	      || (TREE_CODE (value) == RAW_DATA_CST
+      إذا (constructor_incremental
+	  && (ونه_int_cst_lt (ډګر_2, constructor_unfilled_شاخص)
+	      || (ونه_کوډ (ارزښت) == RAW_معلومات_CST
 		  && constructor_pending_elts
 		  && pending)))
-	set_nonincremental_init (braced_init_obstack);
+	سېټ_nonincremental_init (braced_init_obstack);
 
-      add_pending_init (loc, field, value, origtype, implicit,
+      جمع_کړه_pending_init (loc, ډګر_2, ارزښت, origtype, implicit,
 			braced_init_obstack);
-      return;
+      أرجع;
     }
-  else if (TREE_CODE (constructor_type) == RECORD_TYPE
+  وإلا إذا (ونه_کوډ (constructor_type) == ریکارډ_TYPE
 	   && (!constructor_incremental
-	       || field != constructor_unfilled_fields))
+	       || ډګر_2 != constructor_unfilled_fields))
     {
       /* We do this for records but not for unions.  In a union,
 	 no matter which field is specified, it can be initialized
 	 right away since it starts at the beginning of the union.  */
-      if (constructor_incremental)
+      إذا (constructor_incremental)
 	{
-	  if (!constructor_unfilled_fields)
-	    set_nonincremental_init (braced_init_obstack);
-	  else
+	  إذا (!constructor_unfilled_fields)
+	    سېټ_nonincremental_init (braced_init_obstack);
+	  وإلا
 	    {
-	      tree bitpos, unfillpos;
+	      ونه bitpos, unfillpos;
 
-	      bitpos = bit_position (field);
-	      unfillpos = bit_position (constructor_unfilled_fields);
+	      bitpos = بټ_position (ډګر_2);
+	      unfillpos = بټ_position (constructor_unfilled_fields);
 
-	      if (tree_int_cst_lt (bitpos, unfillpos))
-		set_nonincremental_init (braced_init_obstack);
+	      إذا (ونه_int_cst_lt (bitpos, unfillpos))
+		سېټ_nonincremental_init (braced_init_obstack);
 	    }
 	}
 
-      add_pending_init (loc, field, value, origtype, implicit,
+      جمع_کړه_pending_init (loc, ډګر_2, ارزښت, origtype, implicit,
 			braced_init_obstack);
-      return;
+      أرجع;
     }
-  else if (TREE_CODE (constructor_type) == UNION_TYPE
-	   && !vec_safe_is_empty (constructor_elements))
+  وإلا إذا (ونه_کوډ (constructor_type) == UNION_TYPE
+	   && !vec_خوندي_is_تشه (constructor_elements))
     {
-      if (!implicit)
+      إذا (!implicit)
 	{
-	  if (TREE_SIDE_EFFECTS (constructor_elements->last ().value))
+	  إذا (ونه_SIDE_EFFECTS (constructor_elements->وروستی ().ارزښت))
 	    warning_init (loc, OPT_Woverride_init_side_effects,
 			  "initialized field with side-effects overwritten");
-	  else if (warn_override_init)
+	  وإلا إذا (warn_override_init)
 	    warning_init (loc, OPT_Woverride_init,
 			  "initialized field overwritten");
 	}
 
       /* We can have just one union field set.  */
-      constructor_elements = NULL;
+      constructor_elements = عدم;
     }
 
   /* Otherwise, output this element either to
      constructor_elements or to the assembler file.  */
 
-  constructor_elt celt = {field, value};
-  vec_safe_push (constructor_elements, celt);
+  constructor_elt celt = {ډګر_2, ارزښت};
+  vec_خوندي_ټېل (constructor_elements, celt);
 
   /* Advance the variable that indicates sequential elements output.  */
-  if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+  إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE)
     {
-      tree inc = bitsize_one_node;
-      if (value && TREE_CODE (value) == RAW_DATA_CST)
-	inc = bitsize_int (RAW_DATA_LENGTH (value));
-      constructor_unfilled_index
-	= size_binop_loc (input_location, PLUS_EXPR,
-			  constructor_unfilled_index, inc);
+      ونه inc = bitsize_one_غوټه;
+      إذا (ارزښت && ونه_کوډ (ارزښت) == RAW_معلومات_CST)
+	inc = bitsize_int (RAW_معلومات_اوږدتیا (ارزښت));
+      constructor_unfilled_شاخص
+	= اندازه_binop_loc (ننوت_location, PLUS_بیان,
+			  constructor_unfilled_شاخص, inc);
     }
-  else if (TREE_CODE (constructor_type) == RECORD_TYPE)
+  وإلا إذا (ونه_کوډ (constructor_type) == ریکارډ_TYPE)
     {
       constructor_unfilled_fields
 	= DECL_CHAIN (constructor_unfilled_fields);
 
       /* Skip any nameless bit fields.  */
-      while (constructor_unfilled_fields != NULL_TREE
-	     && DECL_UNNAMED_BIT_FIELD (constructor_unfilled_fields))
+      طالما (constructor_unfilled_fields != NULL_ونه
+	     && DECL_UNNAMED_بټ_ډګر (constructor_unfilled_fields))
 	constructor_unfilled_fields
 	  = DECL_CHAIN (constructor_unfilled_fields);
     }
-  else if (TREE_CODE (constructor_type) == UNION_TYPE)
-    constructor_unfilled_fields = NULL_TREE;
+  وإلا إذا (ونه_کوډ (constructor_type) == UNION_TYPE)
+    constructor_unfilled_fields = NULL_ونه;
 
   /* Now output any pending elements which have become next.  */
-  if (pending)
+  إذا (pending)
     output_pending_init_elements (0, braced_init_obstack);
 }
 
@@ -12292,59 +12292,59 @@ output_init_element (location_t loc, tree value, tree origtype,
    comes before field2, 1 if field1 comes after field2 and
    0 if field1 == field2.  */
 
-static int
-init_field_decl_cmp (tree field1, tree field2)
+ساكن صحيح
+init_ډګر_decl_cmp (ونه field1, ونه field2)
 {
-  if (field1 == field2)
-    return 0;
+  إذا (field1 == field2)
+    أرجع 0;
 
-  tree bitpos1 = bit_position (field1);
-  tree bitpos2 = bit_position (field2);
-  if (tree_int_cst_equal (bitpos1, bitpos2))
+  ونه bitpos1 = بټ_position (field1);
+  ونه bitpos2 = بټ_position (field2);
+  إذا (ونه_int_cst_equal (bitpos1, bitpos2))
     {
       /* If one of the fields has non-zero bitsize, then that
 	 field must be the last one in a sequence of zero
 	 sized fields, fields after it will have bigger
 	 bit_position.  */
-      if (TREE_TYPE (field1) != error_mark_node
-	  && COMPLETE_TYPE_P (TREE_TYPE (field1))
-	  && integer_nonzerop (TREE_TYPE (field1)))
-	return 1;
-      if (TREE_TYPE (field2) != error_mark_node
-	  && COMPLETE_TYPE_P (TREE_TYPE (field2))
-	  && integer_nonzerop (TREE_TYPE (field2)))
-	return -1;
+      إذا (ونه_TYPE (field1) != error_mark_غوټه
+	  && COMPLETE_TYPE_P (ونه_TYPE (field1))
+	  && integer_nonzerop (ونه_TYPE (field1)))
+	أرجع 1;
+      إذا (ونه_TYPE (field2) != error_mark_غوټه
+	  && COMPLETE_TYPE_P (ونه_TYPE (field2))
+	  && integer_nonzerop (ونه_TYPE (field2)))
+	أرجع -1;
       /* Otherwise, fallback to DECL_CHAIN walk to find out
 	 which field comes earlier.  Walk chains of both
 	 fields, so that if field1 and field2 are close to each
 	 other in either order, it is found soon even for large
 	 sequences of zero sized fields.  */
-      tree f1 = field1, f2 = field2;
-      while (1)
+      ونه f1 = field1, f2 = field2;
+      طالما (1)
 	{
 	  f1 = DECL_CHAIN (f1);
 	  f2 = DECL_CHAIN (f2);
-	  if (f1 == NULL_TREE)
+	  إذا (f1 == NULL_ونه)
 	    {
 	      gcc_assert (f2);
-	      return 1;
+	      أرجع 1;
 	    }
-	  if (f2 == NULL_TREE)
-	    return -1;
-	  if (f1 == field2)
-	    return -1;
-	  if (f2 == field1)
-	    return 1;
-	  if (!tree_int_cst_equal (bit_position (f1), bitpos1))
-	    return 1;
-	  if (!tree_int_cst_equal (bit_position (f2), bitpos1))
-	    return -1;
+	  إذا (f2 == NULL_ونه)
+	    أرجع -1;
+	  إذا (f1 == field2)
+	    أرجع -1;
+	  إذا (f2 == field1)
+	    أرجع 1;
+	  إذا (!ونه_int_cst_equal (بټ_position (f1), bitpos1))
+	    أرجع 1;
+	  إذا (!ونه_int_cst_equal (بټ_position (f2), bitpos1))
+	    أرجع -1;
 	}
     }
-  else if (tree_int_cst_lt (bitpos1, bitpos2))
-    return -1;
-  else
-    return 1;
+  وإلا إذا (ونه_int_cst_lt (bitpos1, bitpos2))
+    أرجع -1;
+  وإلا
+    أرجع 1;
 }
 
 /* Output any pending elements which have become next.
@@ -12357,11 +12357,11 @@ init_field_decl_cmp (tree field1, tree field2)
 
    If ALL is 1, we output space as necessary so that
    we can output all the pending elements.  */
-static void
-output_pending_init_elements (int all, struct obstack * braced_init_obstack)
+ساكن فراغ
+output_pending_init_elements (صحيح all, بنية obstack * braced_init_obstack)
 {
-  struct init_node *elt = constructor_pending_elts;
-  tree next;
+  بنية init_غوټه *elt = constructor_pending_elts;
+  ونه بل;
 
  retry:
 
@@ -12370,96 +12370,96 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
      output it.  Otherwise, set NEXT to the element
      that comes first among those still pending.  */
 
-  next = NULL_TREE;
-  while (elt)
+  بل = NULL_ونه;
+  طالما (elt)
     {
-      if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+      إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE)
 	{
-	  if (tree_int_cst_equal (elt->purpose,
-				  constructor_unfilled_index))
-	    output_init_element (input_location, elt->value, elt->origtype,
-				 true, TREE_TYPE (constructor_type),
-				 constructor_unfilled_index, false, false,
+	  إذا (ونه_int_cst_equal (elt->purpose,
+				  constructor_unfilled_شاخص))
+	    output_init_element (ننوت_location, elt->ارزښت, elt->origtype,
+				 ریښتیا, ونه_TYPE (constructor_type),
+				 constructor_unfilled_شاخص, خطأ, خطأ,
 				 braced_init_obstack);
-	  else if (tree_int_cst_lt (constructor_unfilled_index,
+	  وإلا إذا (ونه_int_cst_lt (constructor_unfilled_شاخص,
 				    elt->purpose))
 	    {
 	      /* Advance to the next smaller node.  */
-	      if (elt->left)
-		elt = elt->left;
-	      else
+	      إذا (elt->کیڼ)
+		elt = elt->کیڼ;
+	      وإلا
 		{
 		  /* We have reached the smallest node bigger than the
 		     current unfilled index.  Fill the space first.  */
-		  next = elt->purpose;
-		  break;
+		  بل = elt->purpose;
+		  اكسر;
 		}
 	    }
-	  else
+	  وإلا
 	    {
 	      /* Advance to the next bigger node.  */
-	      if (elt->right)
-		elt = elt->right;
-	      else
+	      إذا (elt->ښی)
+		elt = elt->ښی;
+	      وإلا
 		{
 		  /* We have reached the biggest node in a subtree.  Find
 		     the parent of it, which is the next bigger node.  */
-		  while (elt->parent && elt->parent->right == elt)
-		    elt = elt->parent;
-		  elt = elt->parent;
-		  if (elt && tree_int_cst_lt (constructor_unfilled_index,
+		  طالما (elt->پلار && elt->پلار->ښی == elt)
+		    elt = elt->پلار;
+		  elt = elt->پلار;
+		  إذا (elt && ونه_int_cst_lt (constructor_unfilled_شاخص,
 					      elt->purpose))
 		    {
-		      next = elt->purpose;
-		      break;
+		      بل = elt->purpose;
+		      اكسر;
 		    }
 		}
 	    }
 	}
-      else if (RECORD_OR_UNION_TYPE_P (constructor_type))
+      وإلا إذا (ریکارډ_OR_UNION_TYPE_P (constructor_type))
 	{
 	  /* If the current record is complete we are done.  */
-	  if (constructor_unfilled_fields == NULL_TREE)
-	    break;
+	  إذا (constructor_unfilled_fields == NULL_ونه)
+	    اكسر;
 
-	  int cmp = init_field_decl_cmp (constructor_unfilled_fields,
+	  صحيح cmp = init_ډګر_decl_cmp (constructor_unfilled_fields,
 					 elt->purpose);
-	  if (cmp == 0)
-	    output_init_element (input_location, elt->value, elt->origtype,
-				 true, TREE_TYPE (elt->purpose),
-				 elt->purpose, false, false,
+	  إذا (cmp == 0)
+	    output_init_element (ننوت_location, elt->ارزښت, elt->origtype,
+				 ریښتیا, ونه_TYPE (elt->purpose),
+				 elt->purpose, خطأ, خطأ,
 				 braced_init_obstack);
-	  else if (cmp < 0)
+	  وإلا إذا (cmp < 0)
 	    {
 	      /* Advance to the next smaller node.  */
-	      if (elt->left)
-		elt = elt->left;
-	      else
+	      إذا (elt->کیڼ)
+		elt = elt->کیڼ;
+	      وإلا
 		{
 		  /* We have reached the smallest node bigger than the
 		     current unfilled field.  Fill the space first.  */
-		  next = elt->purpose;
-		  break;
+		  بل = elt->purpose;
+		  اكسر;
 		}
 	    }
-	  else
+	  وإلا
 	    {
 	      /* Advance to the next bigger node.  */
-	      if (elt->right)
-		elt = elt->right;
-	      else
+	      إذا (elt->ښی)
+		elt = elt->ښی;
+	      وإلا
 		{
 		  /* We have reached the biggest node in a subtree.  Find
 		     the parent of it, which is the next bigger node.  */
-		  while (elt->parent && elt->parent->right == elt)
-		    elt = elt->parent;
-		  elt = elt->parent;
-		  if (elt
-		      && init_field_decl_cmp (constructor_unfilled_fields,
+		  طالما (elt->پلار && elt->پلار->ښی == elt)
+		    elt = elt->پلار;
+		  elt = elt->پلار;
+		  إذا (elt
+		      && init_ډګر_decl_cmp (constructor_unfilled_fields,
 					      elt->purpose) < 0)
 		    {
-		      next = elt->purpose;
-		      break;
+		      بل = elt->purpose;
+		      اكسر;
 		    }
 		}
 	    }
@@ -12468,19 +12468,19 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
 
   /* Ordinarily return, but not if we want to output all
      and there are elements left.  */
-  if (!(all && next != NULL_TREE))
-    return;
+  إذا (!(all && بل != NULL_ونه))
+    أرجع;
 
   /* If it's not incremental, just skip over the gap, so that after
      jumping to retry we will output the next successive element.  */
-  if (RECORD_OR_UNION_TYPE_P (constructor_type))
-    constructor_unfilled_fields = next;
-  else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
-    constructor_unfilled_index = next;
+  إذا (ریکارډ_OR_UNION_TYPE_P (constructor_type))
+    constructor_unfilled_fields = بل;
+  وإلا إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE)
+    constructor_unfilled_شاخص = بل;
 
   /* ELT now points to the node in the pending tree with the next
      initializer to output.  */
-  goto retry;
+  اذهب retry;
 }
 
 /* Expression VALUE coincides with the start of type TYPE in a braced
@@ -12491,17 +12491,17 @@ output_pending_init_elements (int all, struct obstack * braced_init_obstack)
    If the initializer is clearly invalid, the question becomes:
    which choice gives the best error message?  */
 
-static bool
-initialize_elementwise_p (tree type, tree value)
+ساكن منطقي
+initialize_elementwise_p (ونه type, ونه ارزښت)
 {
-  if (type == error_mark_node || value == error_mark_node)
-    return false;
+  إذا (type == error_mark_غوټه || ارزښت == error_mark_غوټه)
+    أرجع خطأ;
 
   gcc_checking_assert (TYPE_MAIN_VARIANT (type) == type);
 
-  tree value_type = TREE_TYPE (value);
-  if (value_type == error_mark_node)
-    return false;
+  ونه ارزښت_type = ونه_TYPE (ارزښت);
+  إذا (ارزښت_type == error_mark_غوټه)
+    أرجع خطأ;
 
   /* GNU vectors can be initialized elementwise.  However, treat any
      kind of vector value as initializing the vector type as a whole,
@@ -12515,65 +12515,65 @@ initialize_elementwise_p (tree type, tree value)
      worst wrong.  For example, when -flax-vector-conversions is in effect,
      it's possible to initialize a V8HI from a V4SI, even though the vectors
      have different element types and different numbers of elements.  */
-  if (gnu_vector_type_p (type))
-    return !VECTOR_TYPE_P (value_type);
+  إذا (gnu_ویکټور_type_p (type))
+    أرجع !ویکټور_TYPE_P (ارزښت_type);
 
-  if (AGGREGATE_TYPE_P (type))
-    return !comptypes (type, TYPE_MAIN_VARIANT (value_type));
+  إذا (AGGREGATE_TYPE_P (type))
+    أرجع !comptypes (type, TYPE_MAIN_VARIANT (ارزښت_type));
 
-  return false;
+  أرجع خطأ;
 }
 
 /* Helper function for process_init_element.  Split first element of
    RAW_DATA_CST and save the rest to *RAW_DATA.  */
 
-static inline tree
-maybe_split_raw_data (tree value, tree *raw_data)
+ساكن مضمن ونه
+maybe_وېشل_raw_معلومات (ونه ارزښت, ونه *raw_معلومات)
 {
-  if (value == NULL_TREE || TREE_CODE (value) != RAW_DATA_CST)
-    return value;
-  *raw_data = value;
-  value = build_int_cst (integer_type_node,
-			 RAW_DATA_UCHAR_ELT (*raw_data, 0));
-  ++RAW_DATA_POINTER (*raw_data);
-  --RAW_DATA_LENGTH (*raw_data);
-  return value;
+  إذا (ارزښت == NULL_ونه || ونه_کوډ (ارزښت) != RAW_معلومات_CST)
+    أرجع ارزښت;
+  *raw_معلومات = ارزښت;
+  ارزښت = build_int_cst (integer_type_غوټه,
+			 RAW_معلومات_UCHAR_ELT (*raw_معلومات, 0));
+  ++RAW_معلومات_اشاره_ګر (*raw_معلومات);
+  --RAW_معلومات_اوږدتیا (*raw_معلومات);
+  أرجع ارزښت;
 }
 
 /* Return non-zero if c_parser_initval should attempt to optimize
    large initializers into RAW_DATA_CST.  In that case return how
    many elements to optimize at most.  */
 
-unsigned
-c_maybe_optimize_large_byte_initializer (void)
+بینښه
+c_maybe_optimize_large_byte_initializer (فراغ)
 {
-  if (!constructor_type
-      || TREE_CODE (constructor_type) != ARRAY_TYPE
-      || constructor_stack->implicit)
-    return 0;
-  tree elttype = TYPE_MAIN_VARIANT (TREE_TYPE (constructor_type));
-  if (TREE_CODE (elttype) != INTEGER_TYPE
-      && TREE_CODE (elttype) != BITINT_TYPE)
-    return 0;
-  if (TYPE_PRECISION (elttype) != CHAR_BIT
-      || constructor_stack->replacement_value.value
+  إذا (!constructor_type
+      || ونه_کوډ (constructor_type) != ARRAY_TYPE
+      || constructor_ډېری->implicit)
+    أرجع 0;
+  ونه elttype = TYPE_MAIN_VARIANT (ونه_TYPE (constructor_type));
+  إذا (ونه_کوډ (elttype) != INTEGER_TYPE
+      && ونه_کوډ (elttype) != BITINT_TYPE)
+    أرجع 0;
+  إذا (TYPE_PRECISION (elttype) != CHAR_بټ
+      || constructor_ډېری->replacement_ارزښت.ارزښت
       || (COMPLETE_TYPE_P (constructor_type)
-	  && !poly_int_tree_p (TYPE_SIZE (constructor_type)))
-      || constructor_range_stack)
-    return 0;
-  if (constructor_max_index == NULL_TREE)
-    return INT_MAX;
-  if (tree_int_cst_le (constructor_max_index, constructor_index)
-      || integer_all_onesp (constructor_max_index))
-    return 0;
-  widest_int w = wi::to_widest (constructor_max_index);
-  w -= wi::to_widest (constructor_index);
+	  && !poly_int_ونه_p (TYPE_اندازه (constructor_type)))
+      || constructor_range_ډېری)
+    أرجع 0;
+  إذا (constructor_max_شاخص == NULL_ونه)
+    أرجع لوی_عدد;
+  إذا (ونه_int_cst_le (constructor_max_شاخص, constructor_شاخص)
+      || integer_all_onesp (constructor_max_شاخص))
+    أرجع 0;
+  widest_int w = wi::منزل_widest (constructor_max_شاخص);
+  w -= wi::منزل_widest (constructor_شاخص);
   w += 1;
-  if (w < 64)
-    return 0;
-  if (w > INT_MAX)
-    return INT_MAX;
-  return w.to_uhwi ();
+  إذا (w < 64)
+    أرجع 0;
+  إذا (w > لوی_عدد)
+    أرجع لوی_عدد;
+  أرجع w.منزل_uhwi ();
 }
 
 /* Add one non-braced element to the current constructor level.
@@ -12589,65 +12589,65 @@ c_maybe_optimize_large_byte_initializer (void)
    and thus no warnings should be emitted about overriding an
    existing initializer.  */
 
-void
-process_init_element (location_t loc, struct c_expr value, bool implicit,
-		      struct obstack * braced_init_obstack)
+فراغ
+process_init_element (location_t loc, بنية c_بیان ارزښت, منطقي implicit,
+		      بنية obstack * braced_init_obstack)
 {
-  tree orig_value = value.value;
-  int string_flag
-    = (orig_value != NULL_TREE && TREE_CODE (orig_value) == STRING_CST);
-  bool strict_string = value.original_code == STRING_CST;
-  bool was_designated = designator_depth != 0;
-  tree raw_data = NULL_TREE;
+  ونه orig_ارزښت = ارزښت.ارزښت;
+  صحيح string_flag
+    = (orig_ارزښت != NULL_ونه && ونه_کوډ (orig_ارزښت) == STRING_CST);
+  منطقي strict_string = ارزښت.original_کوډ == STRING_CST;
+  منطقي was_designated = designator_ژوروالی != 0;
+  ونه raw_معلومات = NULL_ونه;
 
 retry:
-  designator_depth = 0;
+  designator_ژوروالی = 0;
   designator_erroneous = 0;
 
-  if (!implicit && value.value && !integer_zerop (value.value))
+  إذا (!implicit && ارزښت.ارزښت && !integer_zerop (ارزښت.ارزښت))
     constructor_zeroinit = 0;
 
   /* Handle superfluous braces around string cst as in
      char x[] = {"foo"}; */
-  if (constructor_type
+  إذا (constructor_type
       && !was_designated
-      && TREE_CODE (constructor_type) == ARRAY_TYPE
-      && INTEGRAL_TYPE_P (TREE_TYPE (constructor_type))
-      && integer_zerop (constructor_unfilled_index))
+      && ونه_کوډ (constructor_type) == ARRAY_TYPE
+      && INTEGRAL_TYPE_P (ونه_TYPE (constructor_type))
+      && integer_zerop (constructor_unfilled_شاخص))
     {
-      if (constructor_stack->replacement_value.value)
+      إذا (constructor_ډېری->replacement_ارزښت.ارزښت)
 	{
 	  error_init (loc, "excess elements in %qT initializer", constructor_type);
-	  return;
+	  أرجع;
 	}
-      else if (string_flag)
+      وإلا إذا (string_flag)
 	{
-	  constructor_stack->replacement_value = value;
-	  return;
+	  constructor_ډېری->replacement_ارزښت = ارزښت;
+	  أرجع;
 	}
     }
 
-  if (constructor_stack->replacement_value.value != NULL_TREE)
+  إذا (constructor_ډېری->replacement_ارزښت.ارزښت != NULL_ونه)
     {
       error_init (loc, "excess elements in struct initializer");
-      return;
+      أرجع;
     }
 
   /* Ignore elements of a brace group if it is entirely superfluous
      and has already been diagnosed, or if the type is erroneous.  */
-  if (constructor_type == NULL_TREE || constructor_type == error_mark_node)
-    return;
+  إذا (constructor_type == NULL_ونه || constructor_type == error_mark_غوټه)
+    أرجع;
 
   /* Ignore elements of an initializer for a variable-size type.
      Those are diagnosed in the parser (empty initializer braces are OK).  */
-  if (COMPLETE_TYPE_P (constructor_type)
-      && !poly_int_tree_p (TYPE_SIZE (constructor_type)))
-    return;
+  إذا (COMPLETE_TYPE_P (constructor_type)
+      && !poly_int_ونه_p (TYPE_اندازه (constructor_type)))
+    أرجع;
 
-  if (!implicit && warn_designated_init && !was_designated
-      && TREE_CODE (constructor_type) == RECORD_TYPE
+  إذا (!implicit && warn_designated_init && !was_designated
+      && ونه_کوډ (constructor_type) == ریکارډ_TYPE
       && lookup_attribute ("designated_init",
-			   TYPE_ATTRIBUTES (constructor_type)))
+			   TYPE_ځانګړتیاوې (constructor_type)))
     warning_init (loc,
 		  OPT_Wdesignated_init,
 		  "positional initialization of field "
@@ -12655,75 +12655,75 @@ retry:
 
   /* If we've exhausted any levels that didn't have braces,
      pop them now.  */
-  while (constructor_stack->implicit)
+  طالما (constructor_ډېری->implicit)
     {
-      if (RECORD_OR_UNION_TYPE_P (constructor_type)
-	  && constructor_fields == NULL_TREE)
+      إذا (ریکارډ_OR_UNION_TYPE_P (constructor_type)
+	  && constructor_fields == NULL_ونه)
 	process_init_element (loc,
-			      pop_init_level (loc, 1, braced_init_obstack,
-					      last_init_list_comma),
-			      true, braced_init_obstack);
-      else if ((TREE_CODE (constructor_type) == ARRAY_TYPE
-		|| gnu_vector_type_p (constructor_type))
-	       && constructor_max_index
-	       && tree_int_cst_lt (constructor_max_index,
-				   constructor_index))
+			      راوباسه_init_level (loc, 1, braced_init_obstack,
+					      وروستی_init_list_comma),
+			      ریښتیا, braced_init_obstack);
+      وإلا إذا ((ونه_کوډ (constructor_type) == ARRAY_TYPE
+		|| gnu_ویکټور_type_p (constructor_type))
+	       && constructor_max_شاخص
+	       && ونه_int_cst_lt (constructor_max_شاخص,
+				   constructor_شاخص))
 	process_init_element (loc,
-			      pop_init_level (loc, 1, braced_init_obstack,
-					      last_init_list_comma),
-			      true, braced_init_obstack);
-      else
-	break;
+			      راوباسه_init_level (loc, 1, braced_init_obstack,
+					      وروستی_init_list_comma),
+			      ریښتیا, braced_init_obstack);
+      وإلا
+	اكسر;
     }
 
   /* In the case of [LO ... HI] = VALUE, only evaluate VALUE once.  */
-  if (constructor_range_stack)
+  إذا (constructor_range_ډېری)
     {
       /* If value is a compound literal and we'll be just using its
 	 content, don't put it into a SAVE_EXPR.  */
-      if (TREE_CODE (value.value) != COMPOUND_LITERAL_EXPR
-	  || !require_constant_value)
+      إذا (ونه_کوډ (ارزښت.ارزښت) != COMPOUND_LITERAL_بیان
+	  || !require_constant_ارزښت)
 	{
-	  tree semantic_type = NULL_TREE;
-	  if (TREE_CODE (value.value) == EXCESS_PRECISION_EXPR)
+	  ونه semantic_type = NULL_ونه;
+	  إذا (ونه_کوډ (ارزښت.ارزښت) == EXCESS_PRECISION_بیان)
 	    {
-	      semantic_type = TREE_TYPE (value.value);
-	      value.value = TREE_OPERAND (value.value, 0);
+	      semantic_type = ونه_TYPE (ارزښت.ارزښت);
+	      ارزښت.ارزښت = ونه_عملوند (ارزښت.ارزښت, 0);
 	    }
-	  value.value = save_expr (value.value);
-	  if (semantic_type)
-	    value.value = build1 (EXCESS_PRECISION_EXPR, semantic_type,
-				  value.value);
+	  ارزښت.ارزښت = save_بیان (ارزښت.ارزښت);
+	  إذا (semantic_type)
+	    ارزښت.ارزښت = build1 (EXCESS_PRECISION_بیان, semantic_type,
+				  ارزښت.ارزښت);
 	}
     }
 
-  while (1)
+  طالما (1)
     {
-      if (TREE_CODE (constructor_type) == RECORD_TYPE)
+      إذا (ونه_کوډ (constructor_type) == ریکارډ_TYPE)
 	{
-	  tree fieldtype;
-	  enum tree_code fieldcode;
+	  ونه fieldtype;
+	  تعداد ونه_کوډ_2 fieldcode;
 
-	  if (constructor_fields == NULL_TREE)
+	  إذا (constructor_fields == NULL_ونه)
 	    {
 	      pedwarn_init (loc, 0, "excess elements in struct initializer");
-	      break;
+	      اكسر;
 	    }
 
-	  fieldtype = TREE_TYPE (constructor_fields);
-	  if (fieldtype != error_mark_node)
+	  fieldtype = ونه_TYPE (constructor_fields);
+	  إذا (fieldtype != error_mark_غوټه)
 	    fieldtype = TYPE_MAIN_VARIANT (fieldtype);
-	  fieldcode = TREE_CODE (fieldtype);
+	  fieldcode = ونه_کوډ (fieldtype);
 
 	  /* Error for non-static initialization of a flexible array member.  */
-	  if (fieldcode == ARRAY_TYPE
-	      && !require_constant_value
-	      && TYPE_SIZE (fieldtype) == NULL_TREE
-	      && DECL_CHAIN (constructor_fields) == NULL_TREE)
+	  إذا (fieldcode == ARRAY_TYPE
+	      && !require_constant_ارزښت
+	      && TYPE_اندازه (fieldtype) == NULL_ونه
+	      && DECL_CHAIN (constructor_fields) == NULL_ونه)
 	    {
 	      error_init (loc, "non-static initialization of a flexible "
 			  "array member");
-	      break;
+	      اكسر;
 	    }
 
 	  /* Error for initialization of a flexible array member with
@@ -12731,72 +12731,72 @@ retry:
 	     struct S { int x; char y[]; };
 	     struct S s[] = { { 1, "foo" } };
 	     is invalid.  */
-	  if (string_flag
+	  إذا (string_flag
 	      && fieldcode == ARRAY_TYPE
-	      && constructor_depth > 1
-	      && TYPE_SIZE (fieldtype) == NULL_TREE
-	      && DECL_CHAIN (constructor_fields) == NULL_TREE)
+	      && constructor_ژوروالی > 1
+	      && TYPE_اندازه (fieldtype) == NULL_ونه
+	      && DECL_CHAIN (constructor_fields) == NULL_ونه)
 	    {
-	      bool in_array_p = false;
-	      for (struct constructor_stack *p = constructor_stack;
-		   p && p->type; p = p->next)
-		if (TREE_CODE (p->type) == ARRAY_TYPE)
+	      منطقي دننه_array_p = خطأ;
+	      لكل (بنية constructor_ډېری *p = constructor_ډېری;
+		   p && p->type; p = p->بل)
+		إذا (ونه_کوډ (p->type) == ARRAY_TYPE)
 		  {
-		    in_array_p = true;
-		    break;
+		    دننه_array_p = ریښتیا;
+		    اكسر;
 		  }
-	      if (in_array_p)
+	      إذا (دننه_array_p)
 		{
 		  error_init (loc, "initialization of flexible array "
 			      "member in a nested context");
-		  break;
+		  اكسر;
 		}
 	    }
 
 	  /* Accept a string constant to initialize a subarray.  */
-	  if (value.value != NULL_TREE
+	  إذا (ارزښت.ارزښت != NULL_ونه
 	      && fieldcode == ARRAY_TYPE
-	      && INTEGRAL_TYPE_P (TREE_TYPE (fieldtype))
+	      && INTEGRAL_TYPE_P (ونه_TYPE (fieldtype))
 	      && string_flag)
-	    value.value = orig_value;
+	    ارزښت.ارزښت = orig_ارزښت;
 	  /* Otherwise, if we have come to a subaggregate,
 	     and we don't have an element of its type, push into it.  */
-	  else if (value.value != NULL_TREE
-		   && initialize_elementwise_p (fieldtype, value.value))
+	  وإلا إذا (ارزښت.ارزښت != NULL_ونه
+		   && initialize_elementwise_p (fieldtype, ارزښت.ارزښت))
 	    {
-	      push_init_level (loc, 1, braced_init_obstack);
-	      continue;
+	      ټېل_init_level (loc, 1, braced_init_obstack);
+	      استمر;
 	    }
 
-	  value.value = maybe_split_raw_data (value.value, &raw_data);
-	  if (value.value)
+	  ارزښت.ارزښت = maybe_وېشل_raw_معلومات (ارزښت.ارزښت, &raw_معلومات);
+	  إذا (ارزښت.ارزښت)
 	    {
-	      push_member_name (constructor_fields);
-	      output_init_element (loc, value.value, value.original_type,
+	      ټېل_member_name (constructor_fields);
+	      output_init_element (loc, ارزښت.ارزښت, ارزښت.original_type,
 				   strict_string, fieldtype,
-				   constructor_fields, true, implicit,
+				   constructor_fields, ریښتیا, implicit,
 				   braced_init_obstack);
-	      RESTORE_SPELLING_DEPTH (constructor_depth);
+	      RESTORE_SPELLING_ژوروالی (constructor_ژوروالی);
 	    }
-	  else
+	  وإلا
 	    /* Do the bookkeeping for an element that was
 	       directly output as a constructor.  */
 	    {
 	      /* For a record, keep track of end position of last field.  */
-	      if (DECL_SIZE (constructor_fields))
-		constructor_bit_index
-		  = size_binop_loc (input_location, PLUS_EXPR,
-				    bit_position (constructor_fields),
-				    DECL_SIZE (constructor_fields));
+	      إذا (DECL_اندازه (constructor_fields))
+		constructor_بټ_شاخص
+		  = اندازه_binop_loc (ننوت_location, PLUS_بیان,
+				    بټ_position (constructor_fields),
+				    DECL_اندازه (constructor_fields));
 
 	      /* If the current field was the first one not yet written out,
 		 it isn't now, so update.  */
-	      if (constructor_unfilled_fields == constructor_fields)
+	      إذا (constructor_unfilled_fields == constructor_fields)
 		{
 		  constructor_unfilled_fields = DECL_CHAIN (constructor_fields);
 		  /* Skip any nameless bit fields.  */
-		  while (constructor_unfilled_fields != 0
-			 && (DECL_UNNAMED_BIT_FIELD
+		  طالما (constructor_unfilled_fields != 0
+			 && (DECL_UNNAMED_بټ_ډګر
 			     (constructor_unfilled_fields)))
 		    constructor_unfilled_fields =
 		      DECL_CHAIN (constructor_unfilled_fields);
@@ -12805,26 +12805,26 @@ retry:
 
 	  constructor_fields = DECL_CHAIN (constructor_fields);
 	  /* Skip any nameless bit fields at the beginning.  */
-	  while (constructor_fields != NULL_TREE
-		 && DECL_UNNAMED_BIT_FIELD (constructor_fields))
+	  طالما (constructor_fields != NULL_ونه
+		 && DECL_UNNAMED_بټ_ډګر (constructor_fields))
 	    constructor_fields = DECL_CHAIN (constructor_fields);
 	}
-      else if (TREE_CODE (constructor_type) == UNION_TYPE)
+      وإلا إذا (ونه_کوډ (constructor_type) == UNION_TYPE)
 	{
-	  tree fieldtype;
-	  enum tree_code fieldcode;
+	  ونه fieldtype;
+	  تعداد ونه_کوډ_2 fieldcode;
 
-	  if (constructor_fields == NULL_TREE)
+	  إذا (constructor_fields == NULL_ونه)
 	    {
 	      pedwarn_init (loc, 0,
 			    "excess elements in union initializer");
-	      break;
+	      اكسر;
 	    }
 
-	  fieldtype = TREE_TYPE (constructor_fields);
-	  if (fieldtype != error_mark_node)
+	  fieldtype = ونه_TYPE (constructor_fields);
+	  إذا (fieldtype != error_mark_غوټه)
 	    fieldtype = TYPE_MAIN_VARIANT (fieldtype);
-	  fieldcode = TREE_CODE (fieldtype);
+	  fieldcode = ونه_کوډ (fieldtype);
 
 	  /* Warn that traditional C rejects initialization of unions.
 	     We skip the warning if the value is zero.  This is done
@@ -12836,20 +12836,20 @@ retry:
 	     again on the assumption that this must be conditional on
 	     __STDC__ anyway (and we've already complained about the
 	     member-designator already).  */
-	  if (!in_system_header_at (input_location) && !constructor_designated
-	      && !(value.value && (integer_zerop (value.value)
-				   || real_zerop (value.value))))
+	  إذا (!دننه_system_سرلیک_at (ننوت_location) && !constructor_designated
+	      && !(ارزښت.ارزښت && (integer_zerop (ارزښت.ارزښت)
+				   || real_zerop (ارزښت.ارزښت))))
 	    warning (OPT_Wtraditional, "traditional C rejects initialization "
 		     "of unions");
 
 	  /* Error for non-static initialization of a flexible array member.  */
-	  if (fieldcode == ARRAY_TYPE
-	      && !require_constant_value
-	      && TYPE_SIZE (fieldtype) == NULL_TREE)
+	  إذا (fieldcode == ARRAY_TYPE
+	      && !require_constant_ارزښت
+	      && TYPE_اندازه (fieldtype) == NULL_ونه)
 	    {
 	      error_init (loc, "non-static initialization of a flexible "
 			  "array member");
-	      break;
+	      اكسر;
 	    }
 
 	  /* Error for initialization of a flexible array member with
@@ -12857,298 +12857,298 @@ retry:
 	     union U { int x; char y[]; };
 	     union U s[] = { { 1, "foo" } };
 	     is invalid.  */
-	  if (string_flag
+	  إذا (string_flag
 	      && fieldcode == ARRAY_TYPE
-	      && constructor_depth > 1
-	      && TYPE_SIZE (fieldtype) == NULL_TREE)
+	      && constructor_ژوروالی > 1
+	      && TYPE_اندازه (fieldtype) == NULL_ونه)
 	    {
-	      bool in_array_p = false;
-	      for (struct constructor_stack *p = constructor_stack;
-		   p && p->type; p = p->next)
-		if (TREE_CODE (p->type) == ARRAY_TYPE)
+	      منطقي دننه_array_p = خطأ;
+	      لكل (بنية constructor_ډېری *p = constructor_ډېری;
+		   p && p->type; p = p->بل)
+		إذا (ونه_کوډ (p->type) == ARRAY_TYPE)
 		  {
-		    in_array_p = true;
-		    break;
+		    دننه_array_p = ریښتیا;
+		    اكسر;
 		  }
-	      if (in_array_p)
+	      إذا (دننه_array_p)
 		{
 		  error_init (loc, "initialization of flexible array "
 			      "member in a nested context");
-		  break;
+		  اكسر;
 		}
 	    }
 
 	  /* Accept a string constant to initialize a subarray.  */
-	  if (value.value != NULL_TREE
+	  إذا (ارزښت.ارزښت != NULL_ونه
 	      && fieldcode == ARRAY_TYPE
-	      && INTEGRAL_TYPE_P (TREE_TYPE (fieldtype))
+	      && INTEGRAL_TYPE_P (ونه_TYPE (fieldtype))
 	      && string_flag)
-	    value.value = orig_value;
+	    ارزښت.ارزښت = orig_ارزښت;
 	  /* Otherwise, if we have come to a subaggregate,
 	     and we don't have an element of its type, push into it.  */
-	  else if (value.value != NULL_TREE
-		   && initialize_elementwise_p (fieldtype, value.value))
+	  وإلا إذا (ارزښت.ارزښت != NULL_ونه
+		   && initialize_elementwise_p (fieldtype, ارزښت.ارزښت))
 	    {
-	      push_init_level (loc, 1, braced_init_obstack);
-	      continue;
+	      ټېل_init_level (loc, 1, braced_init_obstack);
+	      استمر;
 	    }
 
-	  value.value = maybe_split_raw_data (value.value, &raw_data);
-	  if (value.value)
+	  ارزښت.ارزښت = maybe_وېشل_raw_معلومات (ارزښت.ارزښت, &raw_معلومات);
+	  إذا (ارزښت.ارزښت)
 	    {
-	      push_member_name (constructor_fields);
-	      output_init_element (loc, value.value, value.original_type,
+	      ټېل_member_name (constructor_fields);
+	      output_init_element (loc, ارزښت.ارزښت, ارزښت.original_type,
 				   strict_string, fieldtype,
-				   constructor_fields, true, implicit,
+				   constructor_fields, ریښتیا, implicit,
 				   braced_init_obstack);
-	      RESTORE_SPELLING_DEPTH (constructor_depth);
+	      RESTORE_SPELLING_ژوروالی (constructor_ژوروالی);
 	    }
-	  else
+	  وإلا
 	    /* Do the bookkeeping for an element that was
 	       directly output as a constructor.  */
 	    {
-	      constructor_bit_index = DECL_SIZE (constructor_fields);
+	      constructor_بټ_شاخص = DECL_اندازه (constructor_fields);
 	      constructor_unfilled_fields = DECL_CHAIN (constructor_fields);
 	    }
 
-	  constructor_fields = NULL_TREE;
+	  constructor_fields = NULL_ونه;
 	}
-      else if (TREE_CODE (constructor_type) == ARRAY_TYPE)
+      وإلا إذا (ونه_کوډ (constructor_type) == ARRAY_TYPE)
 	{
-	  tree elttype = TYPE_MAIN_VARIANT (TREE_TYPE (constructor_type));
-	  enum tree_code eltcode = TREE_CODE (elttype);
+	  ونه elttype = TYPE_MAIN_VARIANT (ونه_TYPE (constructor_type));
+	  تعداد ونه_کوډ_2 eltcode = ونه_کوډ (elttype);
 
 	  /* Accept a string constant to initialize a subarray.  */
-	  if (value.value != NULL_TREE
+	  إذا (ارزښت.ارزښت != NULL_ونه
 	      && eltcode == ARRAY_TYPE
-	      && INTEGRAL_TYPE_P (TREE_TYPE (elttype))
+	      && INTEGRAL_TYPE_P (ونه_TYPE (elttype))
 	      && string_flag)
-	    value.value = orig_value;
+	    ارزښت.ارزښت = orig_ارزښت;
 	  /* Otherwise, if we have come to a subaggregate,
 	     and we don't have an element of its type, push into it.  */
-	  else if (value.value != NULL_TREE
-		   && initialize_elementwise_p (elttype, value.value))
+	  وإلا إذا (ارزښت.ارزښت != NULL_ونه
+		   && initialize_elementwise_p (elttype, ارزښت.ارزښت))
 	    {
-	      push_init_level (loc, 1, braced_init_obstack);
-	      continue;
+	      ټېل_init_level (loc, 1, braced_init_obstack);
+	      استمر;
 	    }
 
-	  if (constructor_max_index != NULL_TREE
-	      && (tree_int_cst_lt (constructor_max_index, constructor_index)
-		  || integer_all_onesp (constructor_max_index))
+	  إذا (constructor_max_شاخص != NULL_ونه
+	      && (ونه_int_cst_lt (constructor_max_شاخص, constructor_شاخص)
+		  || integer_all_onesp (constructor_max_شاخص))
 	      /* For VLA we got an error already.  */
-	      && !C_TYPE_VARIABLE_SIZE (constructor_type))
+	      && !C_TYPE_VARIABLE_اندازه (constructor_type))
 	    {
 	      pedwarn_init (loc, 0,
 			    "excess elements in array initializer");
-	      break;
+	      اكسر;
 	    }
 
-	  if (value.value
-	      && TREE_CODE (value.value) == RAW_DATA_CST
-	      && RAW_DATA_LENGTH (value.value) > 1
-	      && (TREE_CODE (elttype) == INTEGER_TYPE
-		  || TREE_CODE (elttype) == BITINT_TYPE)
-	      && TYPE_PRECISION (elttype) == CHAR_BIT
-	      && (constructor_max_index == NULL_TREE
-		  || tree_int_cst_lt (constructor_index,
-				      constructor_max_index)))
+	  إذا (ارزښت.ارزښت
+	      && ونه_کوډ (ارزښت.ارزښت) == RAW_معلومات_CST
+	      && RAW_معلومات_اوږدتیا (ارزښت.ارزښت) > 1
+	      && (ونه_کوډ (elttype) == INTEGER_TYPE
+		  || ونه_کوډ (elttype) == BITINT_TYPE)
+	      && TYPE_PRECISION (elttype) == CHAR_بټ
+	      && (constructor_max_شاخص == NULL_ونه
+		  || ونه_int_cst_lt (constructor_شاخص,
+				      constructor_max_شاخص)))
 	    {
-	      unsigned int len = RAW_DATA_LENGTH (value.value);
-	      if (constructor_max_index)
+	      بینښه صحيح len = RAW_معلومات_اوږدتیا (ارزښت.ارزښت);
+	      إذا (constructor_max_شاخص)
 		{
-		  widest_int w = wi::to_widest (constructor_max_index);
-		  w -= wi::to_widest (constructor_index);
+		  widest_int w = wi::منزل_widest (constructor_max_شاخص);
+		  w -= wi::منزل_widest (constructor_شاخص);
 		  w += 1;
-		  if (w < len)
-		    len = w.to_uhwi ();
+		  إذا (w < len)
+		    len = w.منزل_uhwi ();
 		}
-	      if (len < (unsigned) RAW_DATA_LENGTH (value.value))
+	      إذا (len < (بینښه) RAW_معلومات_اوږدتیا (ارزښت.ارزښت))
 		{
-		  raw_data = copy_node (value.value);
-		  RAW_DATA_LENGTH (raw_data) -= len;
-		  RAW_DATA_POINTER (raw_data) += len;
-		  RAW_DATA_LENGTH (value.value) = len;
+		  raw_معلومات = copy_غوټه (ارزښت.ارزښت);
+		  RAW_معلومات_اوږدتیا (raw_معلومات) -= len;
+		  RAW_معلومات_اشاره_ګر (raw_معلومات) += len;
+		  RAW_معلومات_اوږدتیا (ارزښت.ارزښت) = len;
 		}
-	      TREE_TYPE (value.value) = elttype;
-	      push_array_bounds (tree_to_uhwi (constructor_index));
-	      output_init_element (loc, value.value, value.original_type,
-				   false, elttype, constructor_index, true,
+	      ونه_TYPE (ارزښت.ارزښت) = elttype;
+	      ټېل_array_bounds (ونه_منزل_uhwi (constructor_شاخص));
+	      output_init_element (loc, ارزښت.ارزښت, ارزښت.original_type,
+				   خطأ, elttype, constructor_شاخص, ریښتیا,
 				   implicit, braced_init_obstack);
-	      RESTORE_SPELLING_DEPTH (constructor_depth);
-	      constructor_index
-		= size_binop_loc (input_location, PLUS_EXPR,
-				  constructor_index, bitsize_int (len));
+	      RESTORE_SPELLING_ژوروالی (constructor_ژوروالی);
+	      constructor_شاخص
+		= اندازه_binop_loc (ننوت_location, PLUS_بیان,
+				  constructor_شاخص, bitsize_int (len));
 	    }
-	  else
+	  وإلا
 	    {
-	      value.value = maybe_split_raw_data (value.value, &raw_data);
+	      ارزښت.ارزښت = maybe_وېشل_raw_معلومات (ارزښت.ارزښت, &raw_معلومات);
 	      /* Now output the actual element.  */
-	      if (value.value)
+	      إذا (ارزښت.ارزښت)
 		{
-		  push_array_bounds (tree_to_uhwi (constructor_index));
-		  output_init_element (loc, value.value, value.original_type,
+		  ټېل_array_bounds (ونه_منزل_uhwi (constructor_شاخص));
+		  output_init_element (loc, ارزښت.ارزښت, ارزښت.original_type,
 				       strict_string, elttype,
-				       constructor_index, true, implicit,
+				       constructor_شاخص, ریښتیا, implicit,
 				       braced_init_obstack);
-		  RESTORE_SPELLING_DEPTH (constructor_depth);
+		  RESTORE_SPELLING_ژوروالی (constructor_ژوروالی);
 		}
 
-	      constructor_index
-		= size_binop_loc (input_location, PLUS_EXPR,
-				  constructor_index, bitsize_one_node);
+	      constructor_شاخص
+		= اندازه_binop_loc (ننوت_location, PLUS_بیان,
+				  constructor_شاخص, bitsize_one_غوټه);
 
-	      if (!value.value)
+	      إذا (!ارزښت.ارزښت)
 		/* If we are doing the bookkeeping for an element that was
 		   directly output as a constructor, we must update
 		   constructor_unfilled_index.  */
-		constructor_unfilled_index = constructor_index;
+		constructor_unfilled_شاخص = constructor_شاخص;
 	    }
 	}
-      else if (gnu_vector_type_p (constructor_type))
+      وإلا إذا (gnu_ویکټور_type_p (constructor_type))
 	{
-	  tree elttype = TYPE_MAIN_VARIANT (TREE_TYPE (constructor_type));
+	  ونه elttype = TYPE_MAIN_VARIANT (ونه_TYPE (constructor_type));
 
 	  /* Do a basic check of initializer size.  Note that vectors
 	     may not always have a fixed size derived from their type.  */
-	  if (maybe_lt (tree_to_poly_uint64 (constructor_max_index),
-			tree_to_poly_uint64 (constructor_index)))
+	  إذا (maybe_lt (ونه_منزل_poly_uint64 (constructor_max_شاخص),
+			ونه_منزل_poly_uint64 (constructor_شاخص)))
 	    {
 	      /* Diagose VLA out-of-bounds as errors.  */
-	      if (tree_to_poly_uint64 (constructor_max_index).is_constant())
+	      إذا (ونه_منزل_poly_uint64 (constructor_max_شاخص).is_constant())
 		pedwarn_init (loc, 0,
 			      "excess elements in vector initializer");
-	      else
+	      وإلا
 		error_init (loc, "excess elements in vector initializer");
 
-	      break;
+	      اكسر;
 	    }
 
-	  value.value = maybe_split_raw_data (value.value, &raw_data);
+	  ارزښت.ارزښت = maybe_وېشل_raw_معلومات (ارزښت.ارزښت, &raw_معلومات);
 	  /* Now output the actual element.  */
-	  if (value.value)
+	  إذا (ارزښت.ارزښت)
 	    {
-	      if (TREE_CODE (value.value) == VECTOR_CST)
+	      إذا (ونه_کوډ (ارزښت.ارزښت) == ویکټور_CST)
 		elttype = TYPE_MAIN_VARIANT (constructor_type);
-	      output_init_element (loc, value.value, value.original_type,
+	      output_init_element (loc, ارزښت.ارزښت, ارزښت.original_type,
 				   strict_string, elttype,
-				   constructor_index, true, implicit,
+				   constructor_شاخص, ریښتیا, implicit,
 				   braced_init_obstack);
 	    }
 
-	  constructor_index
-	    = size_binop_loc (input_location,
-			      PLUS_EXPR, constructor_index, bitsize_one_node);
+	  constructor_شاخص
+	    = اندازه_binop_loc (ننوت_location,
+			      PLUS_بیان, constructor_شاخص, bitsize_one_غوټه);
 
-	  if (!value.value)
+	  إذا (!ارزښت.ارزښت)
 	    /* If we are doing the bookkeeping for an element that was
 	       directly output as a constructor, we must update
 	       constructor_unfilled_index.  */
-	    constructor_unfilled_index = constructor_index;
+	    constructor_unfilled_شاخص = constructor_شاخص;
 	}
 
       /* Handle the sole element allowed in a braced initializer
 	 for a scalar variable.  */
-      else if (constructor_type != error_mark_node
-	       && constructor_fields == NULL_TREE)
+      وإلا إذا (constructor_type != error_mark_غوټه
+	       && constructor_fields == NULL_ونه)
 	{
 	  pedwarn_init (loc, 0,
 			"excess elements in scalar initializer");
-	  break;
+	  اكسر;
 	}
-      else
+      وإلا
 	{
-	  value.value = maybe_split_raw_data (value.value, &raw_data);
-	  if (value.value)
-	    output_init_element (loc, value.value, value.original_type,
+	  ارزښت.ارزښت = maybe_وېشل_raw_معلومات (ارزښت.ارزښت, &raw_معلومات);
+	  إذا (ارزښت.ارزښت)
+	    output_init_element (loc, ارزښت.ارزښت, ارزښت.original_type,
 				 strict_string, constructor_type,
-				 NULL_TREE, true, implicit,
+				 NULL_ونه, ریښتیا, implicit,
 				 braced_init_obstack);
-	  constructor_fields = NULL_TREE;
+	  constructor_fields = NULL_ونه;
 	}
 
       /* Handle range initializers either at this level or anywhere higher
 	 in the designator stack.  */
-      if (constructor_range_stack)
+      إذا (constructor_range_ډېری)
 	{
-	  struct constructor_range_stack *p, *range_stack;
-	  int finish = 0;
+	  بنية constructor_range_ډېری *p, *range_ډېری;
+	  صحيح پای = 0;
 
-	  range_stack = constructor_range_stack;
-	  constructor_range_stack = 0;
-	  while (constructor_stack != range_stack->stack)
+	  range_ډېری = constructor_range_ډېری;
+	  constructor_range_ډېری = 0;
+	  طالما (constructor_ډېری != range_ډېری->ډېری)
 	    {
-	      gcc_assert (constructor_stack->implicit);
+	      gcc_assert (constructor_ډېری->implicit);
 	      process_init_element (loc,
-				    pop_init_level (loc, 1,
+				    راوباسه_init_level (loc, 1,
 						    braced_init_obstack,
-						    last_init_list_comma),
-				    true, braced_init_obstack);
+						    وروستی_init_list_comma),
+				    ریښتیا, braced_init_obstack);
 	    }
-	  for (p = range_stack;
-	       !p->range_end || tree_int_cst_equal (p->index, p->range_end);
+	  لكل (p = range_ډېری;
+	       !p->range_پای_ټکی || ونه_int_cst_equal (p->شاخص, p->range_پای_ټکی);
 	       p = p->prev)
 	    {
-	      gcc_assert (constructor_stack->implicit);
+	      gcc_assert (constructor_ډېری->implicit);
 	      process_init_element (loc,
-				    pop_init_level (loc, 1,
+				    راوباسه_init_level (loc, 1,
 						    braced_init_obstack,
-						    last_init_list_comma),
-				    true, braced_init_obstack);
+						    وروستی_init_list_comma),
+				    ریښتیا, braced_init_obstack);
 	    }
 
-	  p->index = size_binop_loc (input_location,
-				     PLUS_EXPR, p->index, bitsize_one_node);
-	  if (tree_int_cst_equal (p->index, p->range_end) && !p->prev)
-	    finish = 1;
+	  p->شاخص = اندازه_binop_loc (ننوت_location,
+				     PLUS_بیان, p->شاخص, bitsize_one_غوټه);
+	  إذا (ونه_int_cst_equal (p->شاخص, p->range_پای_ټکی) && !p->prev)
+	    پای = 1;
 
-	  while (1)
+	  طالما (1)
 	    {
-	      constructor_index = p->index;
+	      constructor_شاخص = p->شاخص;
 	      constructor_fields = p->fields;
-	      if (finish && p->range_end && p->index == p->range_start)
+	      إذا (پای && p->range_پای_ټکی && p->شاخص == p->range_پیل)
 		{
-		  finish = 0;
+		  پای = 0;
 		  p->prev = 0;
 		}
-	      p = p->next;
-	      if (!p)
-		break;
-	      finish_implicit_inits (loc, braced_init_obstack);
-	      push_init_level (loc, 2, braced_init_obstack);
-	      p->stack = constructor_stack;
-	      if (p->range_end && tree_int_cst_equal (p->index, p->range_end))
-		p->index = p->range_start;
+	      p = p->بل;
+	      إذا (!p)
+		اكسر;
+	      پای_implicit_inits (loc, braced_init_obstack);
+	      ټېل_init_level (loc, 2, braced_init_obstack);
+	      p->ډېری = constructor_ډېری;
+	      إذا (p->range_پای_ټکی && ونه_int_cst_equal (p->شاخص, p->range_پای_ټکی))
+		p->شاخص = p->range_پیل;
 	    }
 
-	  if (!finish)
-	    constructor_range_stack = range_stack;
-	  continue;
+	  إذا (!پای)
+	    constructor_range_ډېری = range_ډېری;
+	  استمر;
 	}
 
-      break;
+      اكسر;
     }
 
-  constructor_range_stack = 0;
+  constructor_range_ډېری = 0;
 
-  if (raw_data && RAW_DATA_LENGTH (raw_data))
+  إذا (raw_معلومات && RAW_معلومات_اوږدتیا (raw_معلومات))
     {
       gcc_assert (!string_flag && !was_designated);
-      value.value = raw_data;
-      raw_data = NULL_TREE;
-      goto retry;
+      ارزښت.ارزښت = raw_معلومات;
+      raw_معلومات = NULL_ونه;
+      اذهب retry;
     }
 }
 
 /* Build a complete asm-statement, whose components are a CV_QUALIFIER
    (guaranteed to be 'volatile' or null) and ARGS (represented using
    an ASM_EXPR node).  */
-tree
-build_asm_stmt (bool is_volatile, tree args)
+ونه
+build_asm_stmt (منطقي is_volatile, ونه دلیلونه)
 {
-  if (is_volatile)
-    ASM_VOLATILE_P (args) = 1;
-  return add_stmt (args);
+  إذا (is_volatile)
+    ASM_VOLATILE_P (دلیلونه) = 1;
+  أرجع جمع_کړه_stmt (دلیلونه);
 }
 
 /* Build an asm-expr, whose components are a STRING, some OUTPUTS,
@@ -13158,30 +13158,30 @@ build_asm_stmt (bool is_volatile, tree args)
    are subtly different.  We use a ASM_EXPR node to represent this.
    LOC is the location of the asm, and IS_INLINE says whether this
    is asm inline.  */
-tree
-build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
-		tree clobbers, tree labels, bool simple, bool is_inline)
+ونه
+build_asm_بیان (location_t loc, ونه string, ونه outputs, ونه inputs,
+		ونه clobbers, ونه labels, منطقي simple, منطقي is_inline)
 {
-  tree tail;
-  tree args;
-  int i;
-  const char *constraint;
-  const char **oconstraints;
-  bool allows_mem, allows_reg, is_inout;
-  int ninputs, noutputs;
+  ونه لکۍ;
+  ونه دلیلونه;
+  صحيح i;
+  ثابت حرف *constraint;
+  ثابت حرف **oconstraints;
+  منطقي allows_mem, allows_reg, is_inout;
+  صحيح ninputs, noutputs;
 
-  ninputs = list_length (inputs);
-  noutputs = list_length (outputs);
-  oconstraints = (const char **) alloca (noutputs * sizeof (const char *));
+  ninputs = list_اوږدتیا (inputs);
+  noutputs = list_اوږدتیا (outputs);
+  oconstraints = (ثابت حرف **) alloca (noutputs * حجم (ثابت حرف *));
 
-  string = resolve_asm_operand_names (string, outputs, inputs, labels);
+  string = resolve_asm_عملوند_نومونه (string, outputs, inputs, labels);
 
   /* Remove output conversions that change the type but not the mode.  */
-  for (i = 0, tail = outputs; tail; ++i, tail = TREE_CHAIN (tail))
+  لكل (i = 0, لکۍ = outputs; لکۍ; ++i, لکۍ = ونه_CHAIN (لکۍ))
     {
-      tree output = TREE_VALUE (tail);
+      ونه output = ونه_ارزښت (لکۍ);
 
-      output = c_fully_fold (output, false, NULL, true);
+      output = c_fully_fold (output, خطأ, عدم, ریښتیا);
 
       /* ??? Really, this should not be here.  Users should be using a
 	 proper lvalue, dammit.  But there's a long history of using casts
@@ -13191,217 +13191,217 @@ build_asm_expr (location_t loc, tree string, tree outputs, tree inputs,
 	 get an error.  Gross, but ...  */
       STRIP_NOPS (output);
 
-      if (!lvalue_or_else (loc, output, lv_asm))
-	output = error_mark_node;
+      إذا (!lvalue_or_else (loc, output, lv_asm))
+	output = error_mark_غوټه;
 
-      if (output != error_mark_node
-	  && (TREE_READONLY (output)
-	      || TYPE_READONLY (TREE_TYPE (output))
-	      || (RECORD_OR_UNION_TYPE_P (TREE_TYPE (output))
-		  && C_TYPE_FIELDS_READONLY (TREE_TYPE (output)))))
+      إذا (output != error_mark_غوټه
+	  && (ونه_READONLY (output)
+	      || TYPE_READONLY (ونه_TYPE (output))
+	      || (ریکارډ_OR_UNION_TYPE_P (ونه_TYPE (output))
+		  && C_TYPE_FIELDS_READONLY (ونه_TYPE (output)))))
 	readonly_error (loc, output, lv_asm);
 
-      constraint = TREE_STRING_POINTER (TREE_VALUE (TREE_PURPOSE (tail)));
+      constraint = ونه_STRING_اشاره_ګر (ونه_ارزښت (ونه_PURPOSE (لکۍ)));
       oconstraints[i] = constraint;
 
-      if (parse_output_constraint (&constraint, i, ninputs, noutputs,
+      إذا (parse_output_constraint (&constraint, i, ninputs, noutputs,
 				   &allows_mem, &allows_reg, &is_inout,
-				   nullptr))
+				   تش_اشاره))
 	{
 	  /* If the operand is going to end up in memory,
 	     mark it addressable.  */
-	  if (!allows_reg && !c_mark_addressable (output))
-	    output = error_mark_node;
-	  if (!(!allows_reg && allows_mem)
-	      && output != error_mark_node
-	      && VOID_TYPE_P (TREE_TYPE (output)))
+	  إذا (!allows_reg && !c_mark_addressable (output))
+	    output = error_mark_غوټه;
+	  إذا (!(!allows_reg && allows_mem)
+	      && output != error_mark_غوټه
+	      && VOID_TYPE_P (ونه_TYPE (output)))
 	    {
 	      error_at (loc, "invalid use of void expression");
-	      output = error_mark_node;
+	      output = error_mark_غوټه;
 	    }
-	  if (allows_reg && current_function_decl == NULL_TREE)
+	  إذا (allows_reg && current_function_decl == NULL_ونه)
 	    {
 	      error_at (loc, "constraint allows registers outside of "
 			     "a function");
-	      output = error_mark_node;
+	      output = error_mark_غوټه;
 	    }
 	}
-      else
-	output = error_mark_node;
+      وإلا
+	output = error_mark_غوټه;
 
-      if (current_function_decl == NULL_TREE && output != error_mark_node)
+      إذا (current_function_decl == NULL_ونه && output != error_mark_غوټه)
 	{
-	  if (TREE_SIDE_EFFECTS (output))
+	  إذا (ونه_SIDE_EFFECTS (output))
 	    {
 	      error_at (loc, "side-effects in output operand outside "
 			     "of a function");
-	      output = error_mark_node;
+	      output = error_mark_غوټه;
 	    }
-	  else
+	  وإلا
 	    {
-	      tree addr = build_unary_op (loc, ADDR_EXPR, output, false);
-	      if (addr == error_mark_node)
-		output = error_mark_node;
-	      else if (!initializer_constant_valid_p (addr, TREE_TYPE (addr)))
+	      ونه addr = build_unary_op (loc, ADDR_بیان, output, خطأ);
+	      إذا (addr == error_mark_غوټه)
+		output = error_mark_غوټه;
+	      وإلا إذا (!initializer_constant_valid_p (addr, ونه_TYPE (addr)))
 		{
 		  error_at (loc, "output operand outside of a function is not "
 				 "constant");
-		  output = error_mark_node;
+		  output = error_mark_غوټه;
 		}
 	    }
 	}
-      else if (output != error_mark_node && strstr (constraint, "-"))
+      وإلا إذا (output != error_mark_غوټه && مزي_پلټنه (constraint, "-"))
 	{
 	  error_at (loc, "%<-%> modifier used inside of a function");
-	  output = error_mark_node;
+	  output = error_mark_غوټه;
 	}
 
-      TREE_VALUE (tail) = output;
+      ونه_ارزښت (لکۍ) = output;
     }
 
-  for (i = 0, tail = inputs; tail; ++i, tail = TREE_CHAIN (tail))
+  لكل (i = 0, لکۍ = inputs; لکۍ; ++i, لکۍ = ونه_CHAIN (لکۍ))
     {
-      tree input;
+      ونه ننوت;
 
-      constraint = TREE_STRING_POINTER (TREE_VALUE (TREE_PURPOSE (tail)));
-      input = TREE_VALUE (tail);
+      constraint = ونه_STRING_اشاره_ګر (ونه_ارزښت (ونه_PURPOSE (لکۍ)));
+      ننوت = ونه_ارزښت (لکۍ);
 
-      if (parse_input_constraint (&constraint, i, ninputs, noutputs, 0,
+      إذا (parse_ننوت_constraint (&constraint, i, ninputs, noutputs, 0,
 				  oconstraints, &allows_mem, &allows_reg,
-				  nullptr))
+				  تش_اشاره))
 	{
 	  /* If the operand is going to end up in memory,
 	     mark it addressable.  */
-	  if (!allows_reg && allows_mem)
+	  إذا (!allows_reg && allows_mem)
 	    {
-	      input = c_fully_fold (input, false, NULL, true);
+	      ننوت = c_fully_fold (ننوت, خطأ, عدم, ریښتیا);
 
 	      /* Strip the nops as we allow this case.  FIXME, this really
 		 should be rejected or made deprecated.  */
-	      STRIP_NOPS (input);
-	      if (!c_mark_addressable (input))
-		input = error_mark_node;
+	      STRIP_NOPS (ننوت);
+	      إذا (!c_mark_addressable (ننوت))
+		ننوت = error_mark_غوټه;
 	    }
-	  else
+	  وإلا
 	    {
-	      input = c_fully_fold (convert_lvalue_to_rvalue (loc, input,
-							      true, false),
-				    false, NULL);
+	      ننوت = c_fully_fold (convert_lvalue_منزل_rvalue (loc, ننوت,
+							      ریښتیا, خطأ),
+				    خطأ, عدم);
 
-	      if (input != error_mark_node && VOID_TYPE_P (TREE_TYPE (input)))
+	      إذا (ننوت != error_mark_غوټه && VOID_TYPE_P (ونه_TYPE (ننوت)))
 		{
 		  error_at (loc, "invalid use of void expression");
-		  input = error_mark_node;
+		  ننوت = error_mark_غوټه;
 		}
 	    }
-	  if (allows_reg && current_function_decl == NULL_TREE)
+	  إذا (allows_reg && current_function_decl == NULL_ونه)
 	    {
 	      error_at (loc, "constraint allows registers outside of "
 			     "a function");
-	      input = error_mark_node;
+	      ننوت = error_mark_غوټه;
 	    }
-	  if (constraint[0] == ':' && input != error_mark_node)
+	  إذا (constraint[0] == ':' && ننوت != error_mark_غوټه)
 	    {
-	      tree t = input;
+	      ونه t = ننوت;
 	      STRIP_NOPS (t);
-	      if (TREE_CODE (t) != ADDR_EXPR
-		  || !(TREE_CODE (TREE_OPERAND (t, 0)) == FUNCTION_DECL
-		       || (VAR_P (TREE_OPERAND (t, 0))
-			   && is_global_var (TREE_OPERAND (t, 0)))))
+	      إذا (ونه_کوډ (t) != ADDR_بیان
+		  || !(ونه_کوډ (ونه_عملوند (t, 0)) == FUNCTION_DECL
+		       || (VAR_P (ونه_عملوند (t, 0))
+			   && is_global_var (ونه_عملوند (t, 0)))))
 		{
 		  error_at (loc, "%<:%> constraint operand is not address "
 				 "of a function or non-automatic variable");
-		  input = error_mark_node;
+		  ننوت = error_mark_غوټه;
 		}
-	      else if (TREE_CODE (TREE_OPERAND (t, 0)) == FUNCTION_DECL)
-		suppress_warning (TREE_OPERAND (t, 0), OPT_Wunused);
+	      وإلا إذا (ونه_کوډ (ونه_عملوند (t, 0)) == FUNCTION_DECL)
+		suppress_warning (ونه_عملوند (t, 0), OPT_Wunused);
 	    }
 	}
-      else
-	input = error_mark_node;
+      وإلا
+	ننوت = error_mark_غوټه;
 
-      if (current_function_decl == NULL_TREE && input != error_mark_node)
+      إذا (current_function_decl == NULL_ونه && ننوت != error_mark_غوټه)
 	{
-	  if (TREE_SIDE_EFFECTS (input))
+	  إذا (ونه_SIDE_EFFECTS (ننوت))
 	    {
 	      error_at (loc, "side-effects in input operand outside "
 			     "of a function");
-	      input = error_mark_node;
+	      ننوت = error_mark_غوټه;
 	    }
-	  else
+	  وإلا
 	    {
-	      tree tem = input;
-	      if (allows_mem && lvalue_p (input))
-		tem = build_unary_op (loc, ADDR_EXPR, input, false);
-	      if (!initializer_constant_valid_p (tem, TREE_TYPE (tem)))
+	      ونه tem = ننوت;
+	      إذا (allows_mem && lvalue_p (ننوت))
+		tem = build_unary_op (loc, ADDR_بیان, ننوت, خطأ);
+	      إذا (!initializer_constant_valid_p (tem, ونه_TYPE (tem)))
 		{
 		  error_at (loc, "input operand outside of a function is not "
 				 "constant");
-		  input = error_mark_node;
+		  ننوت = error_mark_غوټه;
 		}
 	    }
 	}
-      else if (input != error_mark_node && strstr (constraint, "-"))
+      وإلا إذا (ننوت != error_mark_غوټه && مزي_پلټنه (constraint, "-"))
 	{
 	  error_at (loc, "%<-%> modifier used inside of a function");
-	  input = error_mark_node;
+	  ننوت = error_mark_غوټه;
 	}
 
-      TREE_VALUE (tail) = input;
+      ونه_ارزښت (لکۍ) = ننوت;
     }
 
-  args = build_stmt (loc, ASM_EXPR, string, outputs, inputs, clobbers, labels);
+  دلیلونه = build_stmt (loc, ASM_بیان, string, outputs, inputs, clobbers, labels);
 
   /* asm statements without outputs, including simple ones, are treated
      as volatile.  */
-  ASM_BASIC_P (args) = simple;
-  ASM_VOLATILE_P (args) = (noutputs == 0);
-  ASM_INLINE_P (args) = is_inline;
+  ASM_BASIC_P (دلیلونه) = simple;
+  ASM_VOLATILE_P (دلیلونه) = (noutputs == 0);
+  ASM_INLINE_P (دلیلونه) = is_inline;
 
-  return args;
+  أرجع دلیلونه;
 }
 
 /* Generate a goto statement to LABEL.  LOC is the location of the
    GOTO.  */
 
-tree
-c_finish_goto_label (location_t loc, tree label)
+ونه
+c_پای_goto_label (location_t loc, ونه label)
 {
-  tree decl = lookup_label_for_goto (loc, label);
-  if (!decl)
-    return NULL_TREE;
-  TREE_USED (decl) = 1;
-  mark_decl_used (decl, false);
+  ونه decl = lookup_label_for_goto (loc, label);
+  إذا (!decl)
+    أرجع NULL_ونه;
+  ونه_کارول_شوی (decl) = 1;
+  mark_decl_کارول_شوی (decl, خطأ);
   {
-    add_stmt (build_predict_expr (PRED_GOTO, NOT_TAKEN));
-    tree t = build1 (GOTO_EXPR, void_type_node, decl);
-    SET_EXPR_LOCATION (t, loc);
-    return add_stmt (t);
+    جمع_کړه_stmt (build_predict_بیان (PRED_GOTO, NOT_اخیستل_شوی));
+    ونه t = build1 (GOTO_بیان, void_type_غوټه, decl);
+    سېټ_بیان_LOCATION (t, loc);
+    أرجع جمع_کړه_stmt (t);
   }
 }
 
 /* Generate a computed goto statement to EXPR.  LOC is the location of
    the GOTO.  */
 
-tree
-c_finish_goto_ptr (location_t loc, c_expr val)
+ونه
+c_پای_goto_ptr (location_t loc, c_بیان val)
 {
-  tree expr = val.value;
-  tree t;
+  ونه بیان = val.ارزښت;
+  ونه t;
   pedwarn (loc, OPT_Wpedantic, "ISO C forbids %<goto *expr;%>");
-  if (expr != error_mark_node
-      && !POINTER_TYPE_P (TREE_TYPE (expr))
-      && !null_pointer_constant_p (expr))
+  إذا (بیان != error_mark_غوټه
+      && !اشاره_ګر_TYPE_P (ونه_TYPE (بیان))
+      && !null_اشاره_ګر_constant_p (بیان))
     {
       error_at (val.get_location (),
 		"computed goto must be pointer type");
-      expr = build_zero_cst (ptr_type_node);
+      بیان = build_zero_cst (ptr_type_غوټه);
     }
-  expr = c_fully_fold (expr, false, NULL);
-  expr = convert (ptr_type_node, expr);
-  t = build1 (GOTO_EXPR, void_type_node, expr);
-  SET_EXPR_LOCATION (t, loc);
-  return add_stmt (t);
+  بیان = c_fully_fold (بیان, خطأ, عدم);
+  بیان = convert (ptr_type_غوټه, بیان);
+  t = build1 (GOTO_بیان, void_type_غوټه, بیان);
+  سېټ_بیان_LOCATION (t, loc);
+  أرجع جمع_کړه_stmt (t);
 }
 
 /* Generate a C `return' statement.  RETVAL is the expression for what
@@ -13411,213 +13411,213 @@ c_finish_goto_ptr (location_t loc, c_expr val)
    is the original type of RETVAL.  MUSTTAIL_P indicates a musttail
    attribute.  */
 
-tree
-c_finish_return (location_t loc, tree retval, tree origtype, bool musttail_p)
+ونه
+c_پای_return (location_t loc, ونه retval, ونه origtype, منطقي musttail_p)
 {
-  tree valtype = TREE_TYPE (TREE_TYPE (current_function_decl)), ret_stmt;
-  bool no_warning = false;
-  bool npc = false;
+  ونه valtype = ونه_TYPE (ونه_TYPE (current_function_decl)), ret_stmt;
+  منطقي no_warning = خطأ;
+  منطقي npc = خطأ;
 
   /* Use the expansion point to handle cases such as returning NULL
      in a function returning void.  */
-  location_t xloc = expansion_point_location_if_in_system_header (loc);
+  location_t xloc = expansion_ټکی_location_if_دننه_system_سرلیک (loc);
 
-  if (TREE_THIS_VOLATILE (current_function_decl))
+  إذا (ونه_THIS_VOLATILE (current_function_decl))
     warning_at (xloc, 0,
 		"function declared %<noreturn%> has a %<return%> statement");
 
-  set_musttail_on_return (retval, xloc, musttail_p);
+  سېټ_musttail_on_return (retval, xloc, musttail_p);
 
-  if (retval)
+  إذا (retval)
     {
-      tree semantic_type = NULL_TREE;
-      npc = null_pointer_constant_p (retval);
-      if (TREE_CODE (retval) == EXCESS_PRECISION_EXPR)
+      ونه semantic_type = NULL_ونه;
+      npc = null_اشاره_ګر_constant_p (retval);
+      إذا (ونه_کوډ (retval) == EXCESS_PRECISION_بیان)
 	{
-	  semantic_type = TREE_TYPE (retval);
-	  retval = TREE_OPERAND (retval, 0);
+	  semantic_type = ونه_TYPE (retval);
+	  retval = ونه_عملوند (retval, 0);
 	}
-      retval = c_fully_fold (retval, false, NULL);
-      if (semantic_type
-	  && valtype != NULL_TREE
-	  && TREE_CODE (valtype) != VOID_TYPE)
-	retval = build1 (EXCESS_PRECISION_EXPR, semantic_type, retval);
+      retval = c_fully_fold (retval, خطأ, عدم);
+      إذا (semantic_type
+	  && valtype != NULL_ونه
+	  && ونه_کوډ (valtype) != VOID_TYPE)
+	retval = build1 (EXCESS_PRECISION_بیان, semantic_type, retval);
     }
 
-  if (!retval)
+  إذا (!retval)
     {
       current_function_returns_null = 1;
-      if ((warn_return_type >= 0 || flag_isoc99)
-	  && valtype != NULL_TREE && TREE_CODE (valtype) != VOID_TYPE)
+      إذا ((warn_return_type >= 0 || flag_isoc99)
+	  && valtype != NULL_ونه && ونه_کوډ (valtype) != VOID_TYPE)
 	{
-	  no_warning = true;
-	  if (emit_diagnostic (flag_isoc99
-			       ? diagnostics::kind::permerror
-			       : diagnostics::kind::warning,
+	  no_warning = ریښتیا;
+	  إذا (emit_diagnostic (flag_isoc99
+			       ? diagnostics::ډول::permerror
+			       : diagnostics::ډول::warning,
 			       loc, OPT_Wreturn_mismatch,
 			       "%<return%> with no value,"
 			       " in function returning non-void"))
-	    inform (DECL_SOURCE_LOCATION (current_function_decl),
+	    inform (DECL_سرچینه_LOCATION (current_function_decl),
 		    "declared here");
 	}
     }
-  else if (valtype == NULL_TREE || VOID_TYPE_P (valtype))
+  وإلا إذا (valtype == NULL_ونه || VOID_TYPE_P (valtype))
     {
       current_function_returns_null = 1;
-      bool warned_here;
-      if (TREE_CODE (TREE_TYPE (retval)) != VOID_TYPE)
-	warned_here = permerror_opt
+      منطقي warned_دلته;
+      إذا (ونه_کوډ (ونه_TYPE (retval)) != VOID_TYPE)
+	warned_دلته = permerror_opt
 	  (xloc, OPT_Wreturn_mismatch,
 	   "%<return%> with a value, in function returning void");
-      else
-	warned_here = pedwarn
+      وإلا
+	warned_دلته = pedwarn
 	  (xloc, OPT_Wpedantic, "ISO C forbids "
 	   "%<return%> with expression, in function returning void");
-      if (warned_here)
-	inform (DECL_SOURCE_LOCATION (current_function_decl),
+      إذا (warned_دلته)
+	inform (DECL_سرچینه_LOCATION (current_function_decl),
 		"declared here");
     }
-  else
+  وإلا
     {
-      tree t = convert_for_assignment (loc, UNKNOWN_LOCATION, valtype,
+      ونه t = convert_for_assignment (loc, UNKNOWN_LOCATION, valtype,
 				       retval, origtype, ic_return,
-				       npc, NULL_TREE, NULL_TREE, 0);
-      tree res = DECL_RESULT (current_function_decl);
-      tree inner;
-      bool save;
+				       npc, NULL_ونه, NULL_ونه, 0);
+      ونه res = DECL_پایله (current_function_decl);
+      ونه inner;
+      منطقي save;
 
-      current_function_returns_value = 1;
-      if (t == error_mark_node)
+      current_function_returns_ارزښت = 1;
+      إذا (t == error_mark_غوټه)
 	{
 	  /* Suppress -Wreturn-type for this function.  */
-	  if (warn_return_type)
+	  إذا (warn_return_type)
 	    suppress_warning (current_function_decl, OPT_Wreturn_type);
-	  return NULL_TREE;
+	  أرجع NULL_ونه;
 	}
 
-      save = in_late_binary_op;
-      if (C_BOOLEAN_TYPE_P (TREE_TYPE (res))
-	  || TREE_CODE (TREE_TYPE (res)) == COMPLEX_TYPE
-	  || (SCALAR_FLOAT_TYPE_P (TREE_TYPE (t))
-	      && (TREE_CODE (TREE_TYPE (res)) == INTEGER_TYPE
-		  || TREE_CODE (TREE_TYPE (res)) == ENUMERAL_TYPE)
+      save = دننه_late_دوګونی_op;
+      إذا (C_BOOLEAN_TYPE_P (ونه_TYPE (res))
+	  || ونه_کوډ (ونه_TYPE (res)) == COMPLEX_TYPE
+	  || (SCALAR_FLOAT_TYPE_P (ونه_TYPE (t))
+	      && (ونه_کوډ (ونه_TYPE (res)) == INTEGER_TYPE
+		  || ونه_کوډ (ونه_TYPE (res)) == ENUMERAL_TYPE)
 	      && sanitize_flags_p (SANITIZE_FLOAT_CAST)))
-        in_late_binary_op = true;
-      inner = t = convert (TREE_TYPE (res), t);
-      in_late_binary_op = save;
+        دننه_late_دوګونی_op = ریښتیا;
+      inner = t = convert (ونه_TYPE (res), t);
+      دننه_late_دوګونی_op = save;
 
       /* Strip any conversions, additions, and subtractions, and see if
 	 we are returning the address of a local variable.  Warn if so.  */
-      while (1)
+      طالما (1)
 	{
-	  switch (TREE_CODE (inner))
+	  بدل (ونه_کوډ (inner))
 	    {
 	    CASE_CONVERT:
-	    case NON_LVALUE_EXPR:
-	    case PLUS_EXPR:
-	    case POINTER_PLUS_EXPR:
-	      inner = TREE_OPERAND (inner, 0);
-	      continue;
+	    حالة NON_LVALUE_بیان:
+	    حالة PLUS_بیان:
+	    حالة اشاره_ګر_PLUS_بیان:
+	      inner = ونه_عملوند (inner, 0);
+	      استمر;
 
-	    case MINUS_EXPR:
+	    حالة MINUS_بیان:
 	      /* If the second operand of the MINUS_EXPR has a pointer
 		 type (or is converted from it), this may be valid, so
 		 don't give a warning.  */
 	      {
-		tree op1 = TREE_OPERAND (inner, 1);
+		ونه op1 = ونه_عملوند (inner, 1);
 
-		while (!POINTER_TYPE_P (TREE_TYPE (op1))
-		       && (CONVERT_EXPR_P (op1)
-			   || TREE_CODE (op1) == NON_LVALUE_EXPR))
-		  op1 = TREE_OPERAND (op1, 0);
+		طالما (!اشاره_ګر_TYPE_P (ونه_TYPE (op1))
+		       && (CONVERT_بیان_P (op1)
+			   || ونه_کوډ (op1) == NON_LVALUE_بیان))
+		  op1 = ونه_عملوند (op1, 0);
 
-		if (POINTER_TYPE_P (TREE_TYPE (op1)))
-		  break;
+		إذا (اشاره_ګر_TYPE_P (ونه_TYPE (op1)))
+		  اكسر;
 
-		inner = TREE_OPERAND (inner, 0);
-		continue;
+		inner = ونه_عملوند (inner, 0);
+		استمر;
 	      }
 
-	    case ADDR_EXPR:
-	      inner = TREE_OPERAND (inner, 0);
+	    حالة ADDR_بیان:
+	      inner = ونه_عملوند (inner, 0);
 
-	      while (REFERENCE_CLASS_P (inner)
-		     && !INDIRECT_REF_P (inner))
-		inner = TREE_OPERAND (inner, 0);
+	      طالما (REFERENCE_CLASS_P (inner)
+		     && !غیرمستقیم_REF_P (inner))
+		inner = ونه_عملوند (inner, 0);
 
-	      if (DECL_P (inner)
+	      إذا (DECL_P (inner)
 		  && !DECL_EXTERNAL (inner)
 		  && DECL_CONTEXT (inner) == current_function_decl
-		  && POINTER_TYPE_P (TREE_TYPE (TREE_TYPE (current_function_decl))))
+		  && اشاره_ګر_TYPE_P (ونه_TYPE (ونه_TYPE (current_function_decl))))
 		{
-		  if (TREE_CODE (inner) == LABEL_DECL)
+		  إذا (ونه_کوډ (inner) == LABEL_DECL)
 		    warning_at (loc, OPT_Wreturn_local_addr,
 				"function returns address of label");
-		  else if (TREE_CODE (inner) == FUNCTION_DECL
+		  وإلا إذا (ونه_کوډ (inner) == FUNCTION_DECL
 			   && (C_FUNC_NONLOCAL_CONTEXT (inner)
 			       || !DECL_INITIAL (inner)))
 		    warning_at (loc, OPT_Wreturn_local_addr,
 				"function returns address of nested function "
 				"referencing local context");
-		  else if (TREE_CODE (inner) != FUNCTION_DECL
-			   && !TREE_STATIC (inner))
+		  وإلا إذا (ونه_کوډ (inner) != FUNCTION_DECL
+			   && !ونه_STATIC (inner))
 		    {
 		      warning_at (loc, OPT_Wreturn_local_addr,
 				  "function returns address of local variable");
-		      tree zero = build_zero_cst (TREE_TYPE (res));
-		      t = build2 (COMPOUND_EXPR, TREE_TYPE (res), t, zero);
+		      ونه zero = build_zero_cst (ونه_TYPE (res));
+		      t = build2 (COMPOUND_بیان, ونه_TYPE (res), t, zero);
 		    }
 		}
-	      break;
+	      اكسر;
 
-	    default:
-	      break;
+	    افتراضي:
+	      اكسر;
 	    }
 
-	  break;
+	  اكسر;
 	}
 
-      retval = build2 (MODIFY_EXPR, TREE_TYPE (res), res, t);
-      SET_EXPR_LOCATION (retval, loc);
+      retval = build2 (MODIFY_بیان, ونه_TYPE (res), res, t);
+      سېټ_بیان_LOCATION (retval, loc);
 
-      if (warn_sequence_point)
+      إذا (warn_sequence_ټکی)
 	verify_sequence_points (retval);
     }
 
-  ret_stmt = build_stmt (loc, RETURN_EXPR, retval);
-  if (no_warning)
+  ret_stmt = build_stmt (loc, RETURN_بیان, retval);
+  إذا (no_warning)
     suppress_warning (ret_stmt, OPT_Wreturn_type);
-  return add_stmt (ret_stmt);
+  أرجع جمع_کړه_stmt (ret_stmt);
 }
 
-struct c_switch {
+بنية c_switch {
   /* The SWITCH_STMT being built.  */
-  tree switch_stmt;
+  ونه switch_stmt;
 
   /* The original type of the testing expression, i.e. before the
      default conversion is applied.  */
-  tree orig_type;
+  ونه orig_type;
 
   /* A splay-tree mapping the low element of a case range to the high
      element, or NULL_TREE if there is no high element.  Used to
      determine whether or not a new case label duplicates an old case
      label.  We need a tree, rather than simply a hash table, because
      of the GNU case range extension.  */
-  splay_tree cases;
+  splay_ونه cases;
 
   /* The bindings at the point of the switch.  This is used for
      warnings crossing decls when branching to a case label.  */
-  struct c_spot_bindings *bindings;
+  بنية c_spot_bindings *bindings;
 
   /* Whether the switch includes any break statements.  */
-  bool break_stmt_seen_p;
+  منطقي break_stmt_کتل_شوی_p;
 
   /* The next node on the stack.  */
-  struct c_switch *next;
+  بنية c_switch *بل;
 
   /* Remember whether the controlling expression had boolean type
      before integer promotions for the sake of -Wswitch-bool.  */
-  bool bool_cond_p;
+  منطقي bool_cond_p;
 };
 
 /* A stack of the currently active switch statements.  The innermost
@@ -13626,150 +13626,150 @@ struct c_switch {
    during the processing of the body of a function, and we never
    collect at that point.  */
 
-struct c_switch *c_switch_stack;
+بنية c_switch *c_switch_ډېری;
 
 /* Start a C switch statement, testing expression EXP.  Return the new
    SWITCH_STMT.  SWITCH_LOC is the location of the `switch'.
    SWITCH_COND_LOC is the location of the switch's condition.
    EXPLICIT_CAST_P is true if the expression EXP has an explicit cast.  */
 
-tree
-c_start_switch (location_t switch_loc,
+ونه
+c_پیل_switch (location_t switch_loc,
 		location_t switch_cond_loc,
-		tree exp, bool explicit_cast_p, tree switch_name)
+		ونه توانیز_تابع, منطقي explicit_cast_p, ونه switch_name)
 {
-  tree orig_type = error_mark_node;
-  bool bool_cond_p = false;
-  struct c_switch *cs;
+  ونه orig_type = error_mark_غوټه;
+  منطقي bool_cond_p = خطأ;
+  بنية c_switch *cs;
 
-  if (exp != error_mark_node)
+  إذا (توانیز_تابع != error_mark_غوټه)
     {
-      orig_type = TREE_TYPE (exp);
+      orig_type = ونه_TYPE (توانیز_تابع);
 
-      if (!INTEGRAL_TYPE_P (orig_type))
+      إذا (!INTEGRAL_TYPE_P (orig_type))
 	{
-	  if (orig_type != error_mark_node)
+	  إذا (orig_type != error_mark_غوټه)
 	    {
 	      error_at (switch_cond_loc, "switch quantity not an integer");
-	      orig_type = error_mark_node;
+	      orig_type = error_mark_غوټه;
 	    }
-	  exp = integer_zero_node;
+	  توانیز_تابع = integer_zero_غوټه;
 	}
-      else
+      وإلا
 	{
-	  tree type = TYPE_MAIN_VARIANT (orig_type);
-	  tree e = exp;
+	  ونه type = TYPE_MAIN_VARIANT (orig_type);
+	  ونه e = توانیز_تابع;
 
 	  /* Warn if the condition has boolean value.  */
-	  while (TREE_CODE (e) == COMPOUND_EXPR)
-	    e = TREE_OPERAND (e, 1);
+	  طالما (ونه_کوډ (e) == COMPOUND_بیان)
+	    e = ونه_عملوند (e, 1);
 
-	  if ((C_BOOLEAN_TYPE_P (type)
-	       || truth_value_p (TREE_CODE (e)))
+	  إذا ((C_BOOLEAN_TYPE_P (type)
+	       || truth_ارزښت_p (ونه_کوډ (e)))
 	      /* Explicit cast to int suppresses this warning.  */
-	      && !(TREE_CODE (type) == INTEGER_TYPE
+	      && !(ونه_کوډ (type) == INTEGER_TYPE
 		   && explicit_cast_p))
-	    bool_cond_p = true;
+	    bool_cond_p = ریښتیا;
 
-	  if (!in_system_header_at (input_location)
-	      && (type == long_integer_type_node
-		  || type == long_unsigned_type_node))
+	  إذا (!دننه_system_سرلیک_at (ننوت_location)
+	      && (type == long_integer_type_غوټه
+		  || type == long_unsigned_type_غوټه))
 	    warning_at (switch_cond_loc,
 			OPT_Wtraditional, "%<long%> switch expression not "
 			"converted to %<int%> in ISO C");
 
-	  exp = c_fully_fold (exp, false, NULL);
-	  exp = default_conversion (exp);
+	  توانیز_تابع = c_fully_fold (توانیز_تابع, خطأ, عدم);
+	  توانیز_تابع = default_conversion (توانیز_تابع);
 
-	  if (warn_sequence_point)
-	    verify_sequence_points (exp);
+	  إذا (warn_sequence_ټکی)
+	    verify_sequence_points (توانیز_تابع);
 	}
     }
 
   /* Add this new SWITCH_STMT to the stack.  */
-  cs = XNEW (struct c_switch);
-  cs->switch_stmt = build_stmt (switch_loc, SWITCH_STMT, exp,
-				NULL_TREE, orig_type, NULL_TREE, switch_name);
+  cs = XNEW (بنية c_switch);
+  cs->switch_stmt = build_stmt (switch_loc, SWITCH_STMT, توانیز_تابع,
+				NULL_ونه, orig_type, NULL_ونه, switch_name);
   cs->orig_type = orig_type;
-  cs->cases = splay_tree_new (case_compare, NULL, NULL);
+  cs->cases = splay_ونه_new (case_compare, عدم, عدم);
   cs->bindings = c_get_switch_bindings ();
-  cs->break_stmt_seen_p = false;
+  cs->break_stmt_کتل_شوی_p = خطأ;
   cs->bool_cond_p = bool_cond_p;
-  cs->next = c_switch_stack;
-  c_switch_stack = cs;
+  cs->بل = c_switch_ډېری;
+  c_switch_ډېری = cs;
 
-  return add_stmt (cs->switch_stmt);
+  أرجع جمع_کړه_stmt (cs->switch_stmt);
 }
 
 /* Process a case label at location LOC, with attributes ATTRS.  */
 
-tree
-do_case (location_t loc, tree low_value, tree high_value, tree attrs)
+ونه
+do_case (location_t loc, ونه ټیټ_ارزښت, ونه لوړ_ارزښت, ونه attrs)
 {
-  tree label = NULL_TREE;
+  ونه label = NULL_ونه;
 
-  if (low_value && TREE_CODE (low_value) != INTEGER_CST)
+  إذا (ټیټ_ارزښت && ونه_کوډ (ټیټ_ارزښت) != INTEGER_CST)
     {
-      low_value = c_fully_fold (low_value, false, NULL);
-      if (TREE_CODE (low_value) == INTEGER_CST)
+      ټیټ_ارزښت = c_fully_fold (ټیټ_ارزښت, خطأ, عدم);
+      إذا (ونه_کوډ (ټیټ_ارزښت) == INTEGER_CST)
 	pedwarn (loc, OPT_Wpedantic,
 		 "case label is not an integer constant expression");
     }
 
-  if (high_value && TREE_CODE (high_value) != INTEGER_CST)
+  إذا (لوړ_ارزښت && ونه_کوډ (لوړ_ارزښت) != INTEGER_CST)
     {
-      high_value = c_fully_fold (high_value, false, NULL);
-      if (TREE_CODE (high_value) == INTEGER_CST)
-	pedwarn (input_location, OPT_Wpedantic,
+      لوړ_ارزښت = c_fully_fold (لوړ_ارزښت, خطأ, عدم);
+      إذا (ونه_کوډ (لوړ_ارزښت) == INTEGER_CST)
+	pedwarn (ننوت_location, OPT_Wpedantic,
 		 "case label is not an integer constant expression");
     }
 
-  if (c_switch_stack == NULL)
+  إذا (c_switch_ډېری == عدم)
     {
-      if (low_value)
+      إذا (ټیټ_ارزښت)
 	error_at (loc, "case label not within a switch statement");
-      else
+      وإلا
 	error_at (loc, "%<default%> label not within a switch statement");
-      return NULL_TREE;
+      أرجع NULL_ونه;
     }
 
-  if (c_check_switch_jump_warnings (c_switch_stack->bindings,
-				    EXPR_LOCATION (c_switch_stack->switch_stmt),
+  إذا (c_check_switch_jump_warnings (c_switch_ډېری->bindings,
+				    بیان_LOCATION (c_switch_ډېری->switch_stmt),
 				    loc))
-    return NULL_TREE;
+    أرجع NULL_ونه;
 
-  label = c_add_case_label (loc, c_switch_stack->cases,
-			    SWITCH_STMT_COND (c_switch_stack->switch_stmt),
-			    low_value, high_value, attrs);
-  if (label == error_mark_node)
-    label = NULL_TREE;
-  return label;
+  label = c_جمع_کړه_case_label (loc, c_switch_ډېری->cases,
+			    SWITCH_STMT_COND (c_switch_ډېری->switch_stmt),
+			    ټیټ_ارزښت, لوړ_ارزښت, attrs);
+  إذا (label == error_mark_غوټه)
+    label = NULL_ونه;
+  أرجع label;
 }
 
 /* Finish the switch statement.  TYPE is the original type of the
    controlling expression of the switch, or NULL_TREE.  */
 
-void
-c_finish_switch (tree body, tree type)
+فراغ
+c_پای_switch (ونه body, ونه type)
 {
-  struct c_switch *cs = c_switch_stack;
+  بنية c_switch *cs = c_switch_ډېری;
   location_t switch_location;
 
   SWITCH_STMT_BODY (cs->switch_stmt) = body;
 
   /* Emit warnings as needed.  */
-  switch_location = EXPR_LOCATION (cs->switch_stmt);
+  switch_location = بیان_LOCATION (cs->switch_stmt);
   c_do_switch_warnings (cs->cases, switch_location,
 			type ? type : SWITCH_STMT_TYPE (cs->switch_stmt),
 			SWITCH_STMT_COND (cs->switch_stmt), cs->bool_cond_p);
-  if (c_switch_covers_all_cases_p (cs->cases,
+  إذا (c_switch_covers_all_cases_p (cs->cases,
 				   SWITCH_STMT_TYPE (cs->switch_stmt)))
     SWITCH_STMT_ALL_CASES_P (cs->switch_stmt) = 1;
-  SWITCH_STMT_NO_BREAK_P (cs->switch_stmt) = !cs->break_stmt_seen_p;
+  SWITCH_STMT_NO_BREAK_P (cs->switch_stmt) = !cs->break_stmt_کتل_شوی_p;
 
   /* Pop the stack.  */
-  c_switch_stack = cs->next;
-  splay_tree_delete (cs->cases);
+  c_switch_ډېری = cs->بل;
+  splay_ونه_delete (cs->cases);
   c_release_switch_bindings (cs->bindings);
   XDELETE (cs);
 }
@@ -13778,19 +13778,19 @@ c_finish_switch (tree body, tree type)
    THEN_BLOCK and ELSE_BLOCK are expressions to be used; ELSE_BLOCK
    may be null.  */
 
-void
-c_finish_if_stmt (location_t if_locus, tree cond, tree then_block,
-		  tree else_block)
+فراغ
+c_پای_if_stmt (location_t if_locus, ونه cond, ونه then_بلاک,
+		  ونه else_بلاک)
 {
-  tree stmt;
+  ونه stmt;
 
-  stmt = build3 (COND_EXPR, void_type_node, cond, then_block, else_block);
-  SET_EXPR_LOCATION (stmt, if_locus);
-  add_stmt (stmt);
+  stmt = build3 (COND_بیان, void_type_غوټه, cond, then_بلاک, else_بلاک);
+  سېټ_بیان_LOCATION (stmt, if_locus);
+  جمع_کړه_stmt (stmt);
 }
 
-tree
-c_finish_bc_stmt (location_t loc, tree label, bool is_break, tree name)
+ونه
+c_پای_bc_stmt (location_t loc, ونه label, منطقي is_break, ونه name)
 {
   /* In switch statements break is sometimes stylistically used after
      a return statement.  This can lead to spurious warnings about
@@ -13799,278 +13799,278 @@ c_finish_bc_stmt (location_t loc, tree label, bool is_break, tree name)
      language specific tree nodes; this works because
      block_may_fallthru returns true when given something it does not
      understand.  */
-  bool skip = !block_may_fallthru (cur_stmt_list);
+  منطقي skip = !بلاک_may_fallthru (cur_stmt_list);
 
-  if (is_break)
-    switch (in_statement & ~IN_NAMED_STMT)
+  إذا (is_break)
+    بدل (دننه_statement & ~دننه_NAMED_STMT)
       {
-      case 0:
+      حالة 0:
 	error_at (loc, "break statement not within loop or switch");
-	return NULL_TREE;
-      case IN_OMP_BLOCK:
+	أرجع NULL_ونه;
+      حالة دننه_OMP_بلاک:
 	error_at (loc, "invalid exit from OpenMP structured block");
-	return NULL_TREE;
-      case IN_OMP_FOR:
+	أرجع NULL_ونه;
+      حالة دننه_OMP_FOR:
 	error_at (loc, "break statement used with OpenMP for loop");
-	return NULL_TREE;
-      case IN_ITERATION_STMT:
-      case IN_OBJC_FOREACH:
-	break;
-      default:
-	gcc_assert (in_statement & IN_SWITCH_STMT);
-	c_switch_stack->break_stmt_seen_p = true;
-	break;
+	أرجع NULL_ونه;
+      حالة دننه_ITERATION_STMT:
+      حالة دننه_OBJC_FOREACH:
+	اكسر;
+      افتراضي:
+	gcc_assert (دننه_statement & دننه_SWITCH_STMT);
+	c_switch_ډېری->break_stmt_کتل_شوی_p = ریښتیا;
+	اكسر;
       }
-  else
-    switch (in_statement & ~(IN_SWITCH_STMT | IN_NAMED_STMT))
+  وإلا
+    بدل (دننه_statement & ~(دننه_SWITCH_STMT | دننه_NAMED_STMT))
       {
-      case 0:
+      حالة 0:
 	error_at (loc, "continue statement not within a loop");
-	return NULL_TREE;
-      case IN_OMP_BLOCK:
+	أرجع NULL_ونه;
+      حالة دننه_OMP_بلاک:
 	error_at (loc, "invalid exit from OpenMP structured block");
-	return NULL_TREE;
-      case IN_ITERATION_STMT:
-      case IN_OMP_FOR:
-      case IN_OBJC_FOREACH:
-	break;
-      default:
+	أرجع NULL_ونه;
+      حالة دننه_ITERATION_STMT:
+      حالة دننه_OMP_FOR:
+      حالة دننه_OBJC_FOREACH:
+	اكسر;
+      افتراضي:
 	gcc_unreachable ();
       }
 
-  if (skip)
-    return NULL_TREE;
-  else if ((in_statement & IN_OBJC_FOREACH)
-	   && !(is_break && (in_statement & IN_SWITCH_STMT))
-	   && name == NULL_TREE)
+  إذا (skip)
+    أرجع NULL_ونه;
+  وإلا إذا ((دننه_statement & دننه_OBJC_FOREACH)
+	   && !(is_break && (دننه_statement & دننه_SWITCH_STMT))
+	   && name == NULL_ونه)
     {
       /* The foreach expander produces low-level code using gotos instead
 	 of a structured loop construct.  */
       gcc_assert (label);
-      return add_stmt (build_stmt (loc, GOTO_EXPR, label));
+      أرجع جمع_کړه_stmt (build_stmt (loc, GOTO_بیان, label));
     }
-  else if (name && C_DECL_LOOP_NAME (name) && C_DECL_SWITCH_NAME (name))
+  وإلا إذا (name && C_DECL_LOOP_NAME (name) && C_DECL_SWITCH_NAME (name))
     {
       label = DECL_CHAIN (name);
-      if (!is_break)
+      إذا (!is_break)
 	label = DECL_CHAIN (label);
       /* Foreach expander from some outer level.  */
-      return add_stmt (build_stmt (loc, GOTO_EXPR, label));
+      أرجع جمع_کړه_stmt (build_stmt (loc, GOTO_بیان, label));
     }
-  return add_stmt (build_stmt (loc, is_break ? BREAK_STMT : CONTINUE_STMT,
+  أرجع جمع_کړه_stmt (build_stmt (loc, is_break ? BREAK_STMT : CONTINUE_STMT,
 			       name));
 }
 
 /* A helper routine for c_process_expr_stmt and c_finish_stmt_expr.  */
 
-static void
-emit_side_effect_warnings (location_t loc, tree expr)
+ساكن فراغ
+emit_side_effect_warnings (location_t loc, ونه بیان)
 {
-  maybe_warn_nodiscard (loc, expr);
-  if (!warn_unused_value)
-    return;
-  if (expr == error_mark_node)
+  maybe_warn_nodiscard (loc, بیان);
+  إذا (!warn_ناکارول_شوی_ارزښت)
+    أرجع;
+  إذا (بیان == error_mark_غوټه)
     ;
-  else if (!TREE_SIDE_EFFECTS (expr))
+  وإلا إذا (!ونه_SIDE_EFFECTS (بیان))
     {
-      if (!VOID_TYPE_P (TREE_TYPE (expr))
-	  && !warning_suppressed_p (expr, OPT_Wunused_value))
-	warning_at (loc, OPT_Wunused_value, "statement with no effect");
+      إذا (!VOID_TYPE_P (ونه_TYPE (بیان))
+	  && !warning_suppressed_p (بیان, OPT_Wunused_ارزښت))
+	warning_at (loc, OPT_Wunused_ارزښت, "statement with no effect");
     }
-  else if (TREE_CODE (expr) == COMPOUND_EXPR)
+  وإلا إذا (ونه_کوډ (بیان) == COMPOUND_بیان)
     {
-      tree r = expr;
+      ونه r = بیان;
       location_t cloc = loc;
-      while (TREE_CODE (r) == COMPOUND_EXPR)
+      طالما (ونه_کوډ (r) == COMPOUND_بیان)
 	{
-	  if (EXPR_HAS_LOCATION (r))
-	    cloc = EXPR_LOCATION (r);
-	  r = TREE_OPERAND (r, 1);
+	  إذا (بیان_HAS_LOCATION (r))
+	    cloc = بیان_LOCATION (r);
+	  r = ونه_عملوند (r, 1);
 	}
-      if (!TREE_SIDE_EFFECTS (r)
-	  && !VOID_TYPE_P (TREE_TYPE (r))
-	  && !CONVERT_EXPR_P (r)
-	  && !warning_suppressed_p (r, OPT_Wunused_value)
-	  && !warning_suppressed_p (expr, OPT_Wunused_value))
-	warning_at (cloc, OPT_Wunused_value,
+      إذا (!ونه_SIDE_EFFECTS (r)
+	  && !VOID_TYPE_P (ونه_TYPE (r))
+	  && !CONVERT_بیان_P (r)
+	  && !warning_suppressed_p (r, OPT_Wunused_ارزښت)
+	  && !warning_suppressed_p (بیان, OPT_Wunused_ارزښت))
+	warning_at (cloc, OPT_Wunused_ارزښت,
 		    "right-hand operand of comma expression has no effect");
     }
-  else
-    warn_if_unused_value (expr, loc);
+  وإلا
+    warn_if_ناکارول_شوی_ارزښت (بیان, loc);
 }
 
 /* Process an expression as if it were a complete statement.  Emit
    diagnostics, but do not call ADD_STMT.  LOC is the location of the
    statement.  */
 
-tree
-c_process_expr_stmt (location_t loc, tree expr)
+ونه
+c_process_بیان_stmt (location_t loc, ونه بیان)
 {
-  tree exprv;
+  ونه exprv;
 
-  if (!expr)
-    return NULL_TREE;
+  إذا (!بیان)
+    أرجع NULL_ونه;
 
-  expr = c_fully_fold (expr, false, NULL);
+  بیان = c_fully_fold (بیان, خطأ, عدم);
 
-  if (warn_sequence_point)
-    verify_sequence_points (expr);
+  إذا (warn_sequence_ټکی)
+    verify_sequence_points (بیان);
 
-  if (TREE_TYPE (expr) != error_mark_node
-      && !COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (expr))
-      && TREE_CODE (TREE_TYPE (expr)) != ARRAY_TYPE)
+  إذا (ونه_TYPE (بیان) != error_mark_غوټه
+      && !COMPLETE_OR_VOID_TYPE_P (ونه_TYPE (بیان))
+      && ونه_کوډ (ونه_TYPE (بیان)) != ARRAY_TYPE)
     error_at (loc, "expression statement has incomplete type");
 
   /* If we're not processing a statement expression, warn about unused values.
      Warnings for statement expressions will be emitted later, once we figure
      out which is the result.  */
-  if (!STATEMENT_LIST_STMT_EXPR (cur_stmt_list)
-      && (warn_unused_value || warn_unused_result))
-    emit_side_effect_warnings (EXPR_LOC_OR_LOC (expr, loc), expr);
+  إذا (!STATEMENT_LIST_STMT_بیان (cur_stmt_list)
+      && (warn_ناکارول_شوی_ارزښت || warn_ناکارول_شوی_پایله))
+    emit_side_effect_warnings (بیان_LOC_OR_LOC (بیان, loc), بیان);
 
-  exprv = expr;
-  while (TREE_CODE (exprv) == COMPOUND_EXPR)
-    exprv = TREE_OPERAND (exprv, 1);
-  while (CONVERT_EXPR_P (exprv))
-    exprv = TREE_OPERAND (exprv, 0);
-  if (DECL_P (exprv)
+  exprv = بیان;
+  طالما (ونه_کوډ (exprv) == COMPOUND_بیان)
+    exprv = ونه_عملوند (exprv, 1);
+  طالما (CONVERT_بیان_P (exprv))
+    exprv = ونه_عملوند (exprv, 0);
+  إذا (DECL_P (exprv)
       || handled_component_p (exprv)
-      || TREE_CODE (exprv) == ADDR_EXPR)
+      || ونه_کوډ (exprv) == ADDR_بیان)
     mark_exp_read (exprv);
 
   /* If the expression is not of a type to which we cannot assign a line
      number, wrap the thing in a no-op NOP_EXPR.  */
-  if (DECL_P (expr) || CONSTANT_CLASS_P (expr))
+  إذا (DECL_P (بیان) || CONSTANT_CLASS_P (بیان))
     {
-      expr = build1 (NOP_EXPR, TREE_TYPE (expr), expr);
-      SET_EXPR_LOCATION (expr, loc);
+      بیان = build1 (NOP_بیان, ونه_TYPE (بیان), بیان);
+      سېټ_بیان_LOCATION (بیان, loc);
     }
 
-  return expr;
+  أرجع بیان;
 }
 
 /* Emit an expression as a statement.  LOC is the location of the
    expression.  */
 
-tree
-c_finish_expr_stmt (location_t loc, tree expr)
+ونه
+c_پای_بیان_stmt (location_t loc, ونه بیان)
 {
-  if (expr)
-    return add_stmt (c_process_expr_stmt (loc, expr));
-  else
-    return NULL;
+  إذا (بیان)
+    أرجع جمع_کړه_stmt (c_process_بیان_stmt (loc, بیان));
+  وإلا
+    أرجع عدم;
 }
 
 /* Do the opposite and emit a statement as an expression.  To begin,
    create a new binding level and return it.  */
 
-tree
-c_begin_stmt_expr (void)
+ونه
+c_begin_stmt_بیان (فراغ)
 {
-  tree ret;
+  ونه ret;
 
   /* We must force a BLOCK for this level so that, if it is not expanded
      later, there is a way to turn off the entire subtree of blocks that
      are contained in it.  */
-  keep_next_level ();
-  ret = c_begin_compound_stmt (true);
+  keep_بل_level ();
+  ret = c_begin_compound_stmt (ریښتیا);
 
-  c_bindings_start_stmt_expr (c_switch_stack == NULL
-			      ? NULL
-			      : c_switch_stack->bindings);
+  c_bindings_پیل_stmt_بیان (c_switch_ډېری == عدم
+			      ? عدم
+			      : c_switch_ډېری->bindings);
 
   /* Mark the current statement list as belonging to a statement list.  */
-  STATEMENT_LIST_STMT_EXPR (ret) = 1;
+  STATEMENT_LIST_STMT_بیان (ret) = 1;
 
-  return ret;
+  أرجع ret;
 }
 
 /* LOC is the location of the compound statement to which this body
    belongs.  */
 
-tree
-c_finish_stmt_expr (location_t loc, tree body)
+ونه
+c_پای_stmt_بیان (location_t loc, ونه body)
 {
-  tree last, type, tmp, val;
-  tree *last_p;
+  ونه وروستی, type, tmp, val;
+  ونه *وروستی_p;
 
-  body = c_end_compound_stmt (loc, body, true);
+  body = c_پای_ټکی_compound_stmt (loc, body, ریښتیا);
 
-  c_bindings_end_stmt_expr (c_switch_stack == NULL
-			    ? NULL
-			    : c_switch_stack->bindings);
+  c_bindings_پای_ټکی_stmt_بیان (c_switch_ډېری == عدم
+			    ? عدم
+			    : c_switch_ډېری->bindings);
 
   /* Locate the last statement in BODY.  See c_end_compound_stmt
      about always returning a BIND_EXPR.  */
-  last_p = &BIND_EXPR_BODY (body);
-  last = BIND_EXPR_BODY (body);
+  وروستی_p = &BIND_بیان_BODY (body);
+  وروستی = BIND_بیان_BODY (body);
 
  continue_searching:
-  if (TREE_CODE (last) == STATEMENT_LIST)
+  إذا (ونه_کوډ (وروستی) == STATEMENT_LIST)
     {
-      tree_stmt_iterator l = tsi_last (last);
+      ونه_stmt_iterator l = tsi_وروستی (وروستی);
 
-      while (!tsi_end_p (l) && TREE_CODE (tsi_stmt (l)) == DEBUG_BEGIN_STMT)
+      طالما (!tsi_پای_ټکی_p (l) && ونه_کوډ (tsi_stmt (l)) == DEBUG_BEGIN_STMT)
 	tsi_prev (&l);
 
       /* This can happen with degenerate cases like ({ }).  No value.  */
-      if (tsi_end_p (l))
-	return body;
+      إذا (tsi_پای_ټکی_p (l))
+	أرجع body;
 
       /* If we're supposed to generate side effects warnings, process
 	 all of the statements except the last.  */
-      if (warn_unused_value || warn_unused_result)
+      إذا (warn_ناکارول_شوی_ارزښت || warn_ناکارول_شوی_پایله)
 	{
-	  for (tree_stmt_iterator i = tsi_start (last);
-	       tsi_stmt (i) != tsi_stmt (l); tsi_next (&i))
+	  لكل (ونه_stmt_iterator i = tsi_پیل (وروستی);
+	       tsi_stmt (i) != tsi_stmt (l); tsi_بل (&i))
 	    {
 	      location_t tloc;
-	      tree t = tsi_stmt (i);
+	      ونه t = tsi_stmt (i);
 
-	      tloc = EXPR_HAS_LOCATION (t) ? EXPR_LOCATION (t) : loc;
+	      tloc = بیان_HAS_LOCATION (t) ? بیان_LOCATION (t) : loc;
 	      emit_side_effect_warnings (tloc, t);
 	    }
 	}
-      last_p = tsi_stmt_ptr (l);
-      last = *last_p;
+      وروستی_p = tsi_stmt_ptr (l);
+      وروستی = *وروستی_p;
     }
 
   /* If the end of the list is exception related, then the list was split
      by a call to push_cleanup.  Continue searching.  */
-  if (TREE_CODE (last) == TRY_FINALLY_EXPR
-      || TREE_CODE (last) == TRY_CATCH_EXPR)
+  إذا (ونه_کوډ (وروستی) == TRY_FINALLY_بیان
+      || ونه_کوډ (وروستی) == TRY_CATCH_بیان)
     {
-      last_p = &TREE_OPERAND (last, 0);
-      last = *last_p;
-      goto continue_searching;
+      وروستی_p = &ونه_عملوند (وروستی, 0);
+      وروستی = *وروستی_p;
+      اذهب continue_searching;
     }
 
-  if (last == error_mark_node)
-    return last;
+  إذا (وروستی == error_mark_غوټه)
+    أرجع وروستی;
 
   /* In the case that the BIND_EXPR is not necessary, return the
      expression out from inside it.  */
-  if ((last == BIND_EXPR_BODY (body)
+  إذا ((وروستی == BIND_بیان_BODY (body)
        /* Skip nested debug stmts.  */
-       || last == expr_first (BIND_EXPR_BODY (body)))
-      && BIND_EXPR_VARS (body) == NULL)
+       || وروستی == بیان_لومړی (BIND_بیان_BODY (body)))
+      && BIND_بیان_VARS (body) == عدم)
     {
       /* Even if this looks constant, do not allow it in a constant
 	 expression.  */
-      last = c_wrap_maybe_const (last, true);
+      وروستی = c_wrap_maybe_const (وروستی, ریښتیا);
       /* Do not warn if the return value of a statement expression is
 	 unused.  */
-      suppress_warning (last, OPT_Wunused);
-      return last;
+      suppress_warning (وروستی, OPT_Wunused);
+      أرجع وروستی;
     }
 
   /* Extract the type of said expression.  */
-  type = TREE_TYPE (last);
+  type = ونه_TYPE (وروستی);
 
   /* If we're not returning a value at all, then the BIND_EXPR that
      we already have is a fine expression to return.  */
-  if (!type || VOID_TYPE_P (type))
-    return body;
+  إذا (!type || VOID_TYPE_P (type))
+    أرجع body;
 
   /* Now that we've located the expression containing the value, it seems
      silly to make voidify_wrapper_expr repeat the process.  Create a
@@ -14079,209 +14079,209 @@ c_finish_stmt_expr (location_t loc, tree body)
 
   /* Unwrap a no-op NOP_EXPR as added by c_finish_expr_stmt.  This avoids
      tree_expr_nonnegative_p giving up immediately.  */
-  val = last;
-  if (TREE_CODE (val) == NOP_EXPR
-      && TREE_TYPE (val) == TREE_TYPE (TREE_OPERAND (val, 0)))
-    val = TREE_OPERAND (val, 0);
+  val = وروستی;
+  إذا (ونه_کوډ (val) == NOP_بیان
+      && ونه_TYPE (val) == ونه_TYPE (ونه_عملوند (val, 0)))
+    val = ونه_عملوند (val, 0);
 
-  *last_p = build2 (MODIFY_EXPR, void_type_node, tmp, val);
-  SET_EXPR_LOCATION (*last_p, EXPR_LOCATION (last));
+  *وروستی_p = build2 (MODIFY_بیان, void_type_غوټه, tmp, val);
+  سېټ_بیان_LOCATION (*وروستی_p, بیان_LOCATION (وروستی));
 
   {
-    tree t = build4 (TARGET_EXPR, type, tmp, body, NULL_TREE, NULL_TREE);
-    SET_EXPR_LOCATION (t, loc);
-    return t;
+    ونه t = build4 (موخه_بیان, type, tmp, body, NULL_ونه, NULL_ونه);
+    سېټ_بیان_LOCATION (t, loc);
+    أرجع t;
   }
 }
 
 /* Begin and end compound statements.  This is as simple as pushing
    and popping new statement lists from the tree.  */
 
-tree
-c_begin_compound_stmt (bool do_scope)
+ونه
+c_begin_compound_stmt (منطقي do_scope)
 {
-  tree stmt = push_stmt_list ();
-  if (do_scope)
-    push_scope ();
-  return stmt;
+  ونه stmt = ټېل_stmt_list ();
+  إذا (do_scope)
+    ټېل_scope ();
+  أرجع stmt;
 }
 
 /* End a compound statement.  STMT is the statement.  LOC is the
    location of the compound statement-- this is usually the location
    of the opening brace.  */
 
-tree
-c_end_compound_stmt (location_t loc, tree stmt, bool do_scope)
+ونه
+c_پای_ټکی_compound_stmt (location_t loc, ونه stmt, منطقي do_scope)
 {
-  tree block = NULL;
+  ونه بلاک = عدم;
 
-  if (do_scope)
+  إذا (do_scope)
     {
-      if (c_dialect_objc ())
+      إذا (c_dialect_objc ())
 	objc_clear_super_receiver ();
-      block = pop_scope ();
+      بلاک = راوباسه_scope ();
     }
 
-  stmt = pop_stmt_list (stmt);
-  stmt = c_build_bind_expr (loc, block, stmt);
+  stmt = راوباسه_stmt_list (stmt);
+  stmt = c_build_bind_بیان (loc, بلاک, stmt);
 
   /* If this compound statement is nested immediately inside a statement
      expression, then force a BIND_EXPR to be created.  Otherwise we'll
      do the wrong thing for ({ { 1; } }) or ({ 1; { } }).  In particular,
      STATEMENT_LISTs merge, and thus we can lose track of what statement
      was really last.  */
-  if (building_stmt_list_p ()
-      && STATEMENT_LIST_STMT_EXPR (cur_stmt_list)
-      && TREE_CODE (stmt) != BIND_EXPR)
+  إذا (building_stmt_list_p ()
+      && STATEMENT_LIST_STMT_بیان (cur_stmt_list)
+      && ونه_کوډ (stmt) != BIND_بیان)
     {
-      stmt = build3 (BIND_EXPR, void_type_node, NULL, stmt, NULL);
-      TREE_SIDE_EFFECTS (stmt) = 1;
-      SET_EXPR_LOCATION (stmt, loc);
+      stmt = build3 (BIND_بیان, void_type_غوټه, عدم, stmt, عدم);
+      ونه_SIDE_EFFECTS (stmt) = 1;
+      سېټ_بیان_LOCATION (stmt, loc);
     }
 
-  return stmt;
+  أرجع stmt;
 }
 
 /* Queue a cleanup.  CLEANUP is an expression/statement to be executed
    when the current scope is exited.  EH_ONLY is true when this is not
    meant to apply to normal control flow transfer.  */
 
-void
-push_cleanup (tree decl, tree cleanup, bool eh_only)
+فراغ
+ټېل_cleanup (ونه decl, ونه cleanup, منطقي eh_only)
 {
-  enum tree_code code;
-  tree stmt, list;
-  bool stmt_expr;
+  تعداد ونه_کوډ_2 کوډ;
+  ونه stmt, list;
+  منطقي stmt_بیان;
 
-  code = eh_only ? TRY_CATCH_EXPR : TRY_FINALLY_EXPR;
-  stmt = build_stmt (DECL_SOURCE_LOCATION (decl), code, NULL, cleanup);
-  add_stmt (stmt);
-  stmt_expr = STATEMENT_LIST_STMT_EXPR (cur_stmt_list);
-  list = push_stmt_list ();
-  TREE_OPERAND (stmt, 0) = list;
-  STATEMENT_LIST_STMT_EXPR (list) = stmt_expr;
+  کوډ = eh_only ? TRY_CATCH_بیان : TRY_FINALLY_بیان;
+  stmt = build_stmt (DECL_سرچینه_LOCATION (decl), کوډ, عدم, cleanup);
+  جمع_کړه_stmt (stmt);
+  stmt_بیان = STATEMENT_LIST_STMT_بیان (cur_stmt_list);
+  list = ټېل_stmt_list ();
+  ونه_عملوند (stmt, 0) = list;
+  STATEMENT_LIST_STMT_بیان (list) = stmt_بیان;
 }
 
 /* Build a vector comparison of ARG0 and ARG1 using CODE opcode
    into a value of TYPE type.  Comparison is done via VEC_COND_EXPR.  */
 
-static tree
-build_vec_cmp (tree_code code, tree type,
-	       tree arg0, tree arg1)
+ساكن ونه
+build_vec_cmp (ونه_کوډ_2 کوډ, ونه type,
+	       ونه arg0, ونه arg1)
 {
-  tree zero_vec = build_zero_cst (type);
-  tree minus_one_vec = build_minus_one_cst (type);
-  tree cmp_type = truth_type_for (TREE_TYPE (arg0));
-  tree cmp = build2 (code, cmp_type, arg0, arg1);
-  return build3 (VEC_COND_EXPR, type, cmp, minus_one_vec, zero_vec);
+  ونه zero_vec = build_zero_cst (type);
+  ونه minus_one_vec = build_minus_one_cst (type);
+  ونه cmp_type = truth_type_for (ونه_TYPE (arg0));
+  ونه cmp = build2 (کوډ, cmp_type, arg0, arg1);
+  أرجع build3 (VEC_COND_بیان, type, cmp, minus_one_vec, zero_vec);
 }
 
 /* Possibly warn about an address of OP never being NULL in a comparison
    operation CODE involving null.  */
 
-static void
-maybe_warn_for_null_address (location_t loc, tree op, tree_code code)
+ساكن فراغ
+maybe_warn_for_null_پته (location_t loc, ونه op, ونه_کوډ_2 کوډ)
 {
   /* Prevent warnings issued for macro expansion.  */
-  if (!warn_address
+  إذا (!warn_پته
       || warning_suppressed_p (op, OPT_Waddress)
       || from_macro_expansion_at (loc))
-    return;
+    أرجع;
 
-  if (TREE_CODE (op) == NOP_EXPR)
+  إذا (ونه_کوډ (op) == NOP_بیان)
     {
       /* Allow casts to intptr_t to suppress the warning.  */
-      tree type = TREE_TYPE (op);
-      if (TREE_CODE (type) == INTEGER_TYPE)
-	return;
-      op = TREE_OPERAND (op, 0);
+      ونه type = ونه_TYPE (op);
+      إذا (ونه_کوډ (type) == INTEGER_TYPE)
+	أرجع;
+      op = ونه_عملوند (op, 0);
     }
 
-  if (TREE_CODE (op) == POINTER_PLUS_EXPR)
+  إذا (ونه_کوډ (op) == اشاره_ګر_PLUS_بیان)
     {
       /* Allow a cast to void* to suppress the warning.  */
-      tree type = TREE_TYPE (TREE_TYPE (op));
-      if (VOID_TYPE_P (type))
-	return;
+      ونه type = ونه_TYPE (ونه_TYPE (op));
+      إذا (VOID_TYPE_P (type))
+	أرجع;
 
       /* Adding any value to a null pointer, including zero, is undefined
 	 in C.  This includes the expression &p[0] where p is the null
 	 pointer, although &p[0] will have been folded to p by this point
 	 and so not diagnosed.  */
-      if (code == EQ_EXPR)
+      إذا (کوډ == EQ_بیان)
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<false%> "
 		    "for the pointer operand in %qE must not be NULL",
 		    op);
-      else
+      وإلا
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<true%> "
 		    "for the pointer operand in %qE must not be NULL",
 		    op);
 
-      return;
+      أرجع;
     }
 
-  if (TREE_CODE (op) != ADDR_EXPR)
-    return;
+  إذا (ونه_کوډ (op) != ADDR_بیان)
+    أرجع;
 
-  op = TREE_OPERAND (op, 0);
+  op = ونه_عملوند (op, 0);
 
-  if (TREE_CODE (op) == IMAGPART_EXPR
-      || TREE_CODE (op) == REALPART_EXPR)
+  إذا (ونه_کوډ (op) == IMAGPART_بیان
+      || ونه_کوډ (op) == REALPART_بیان)
     {
       /* The address of either complex part may not be null.  */
-      if (code == EQ_EXPR)
+      إذا (کوډ == EQ_بیان)
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<false%> "
 		    "for the address of %qE will never be NULL",
 		    op);
-      else
+      وإلا
 	warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<true%> "
 		    "for the address of %qE will never be NULL",
 		    op);
-      return;
+      أرجع;
     }
 
   /* Set to true in the loop below if OP dereferences is operand.
      In such a case the ultimate target need not be a decl for
      the null [in]equality test to be constant.  */
-  bool deref = false;
+  منطقي deref = خطأ;
 
   /* Get the outermost array or object, or member.  */
-  while (handled_component_p (op))
+  طالما (handled_component_p (op))
     {
-      if (TREE_CODE (op) == COMPONENT_REF)
+      إذا (ونه_کوډ (op) == COMPONENT_REF)
 	{
 	  /* Get the member (its address is never null).  */
-	  op = TREE_OPERAND (op, 1);
-	  break;
+	  op = ونه_عملوند (op, 1);
+	  اكسر;
 	}
 
       /* Get the outer array/object to refer to in the warning.  */
-      op = TREE_OPERAND (op, 0);
-      deref = true;
+      op = ونه_عملوند (op, 0);
+      deref = ریښتیا;
     }
 
-  if ((!deref && !decl_with_nonnull_addr_p (op))
+  إذا ((!deref && !decl_with_nonnull_addr_p (op))
       || from_macro_expansion_at (loc))
-    return;
+    أرجع;
 
-  bool w;
-  if (code == EQ_EXPR)
+  منطقي w;
+  إذا (کوډ == EQ_بیان)
     w = warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<false%> "
 		    "for the address of %qE will never be NULL",
 		    op);
-  else
+  وإلا
     w = warning_at (loc, OPT_Waddress,
 		    "the comparison will always evaluate as %<true%> "
 		    "for the address of %qE will never be NULL",
 		    op);
 
-  if (w && DECL_P (op))
-    inform (DECL_SOURCE_LOCATION (op), "%qD declared here", op);
+  إذا (w && DECL_P (op))
+    inform (DECL_سرچینه_LOCATION (op), "%qD declared here", op);
 }
 
 /* Build a binary-operation expression without default conversions.
@@ -14300,44 +14300,44 @@ maybe_warn_for_null_address (location_t loc, tree op, tree_code code)
    performed or they have both just been converted to some other type in which
    the arithmetic is to be done.  */
 
-tree
-build_binary_op (location_t location, enum tree_code code,
-		 tree orig_op0, tree orig_op1, bool convert_p)
+ونه
+build_دوګونی_op (location_t location, تعداد ونه_کوډ_2 کوډ,
+		 ونه orig_op0, ونه orig_op1, منطقي convert_p)
 {
-  tree type0, type1, orig_type0, orig_type1;
-  tree eptype;
-  enum tree_code code0, code1;
-  tree op0, op1;
-  tree ret = error_mark_node;
-  const char *invalid_op_diag;
-  bool op0_int_operands, op1_int_operands;
-  bool int_const, int_const_or_overflow, int_operands;
+  ونه type0, type1, orig_type0, orig_type1;
+  ونه eptype;
+  تعداد ونه_کوډ_2 code0, code1;
+  ونه op0, op1;
+  ونه ret = error_mark_غوټه;
+  ثابت حرف *invalid_op_diag;
+  منطقي op0_int_operands, op1_int_operands;
+  منطقي int_const, int_const_or_ډکېدنه, int_operands;
 
   /* Expression code to give to the expression when it is built.
      Normally this is CODE, which is what the caller asked for,
      but in some special cases we change it.  */
-  enum tree_code resultcode = code;
+  تعداد ونه_کوډ_2 resultcode = کوډ;
 
   /* Data type in which the computation is to be performed.
      In the simplest cases this is the common type of the arguments.  */
-  tree result_type = NULL;
+  ونه پایله_type = عدم;
 
   /* When the computation is in excess precision, the type of the
      final EXCESS_PRECISION_EXPR.  */
-  tree semantic_result_type = NULL;
+  ونه semantic_پایله_type = عدم;
 
   /* Nonzero means operands have already been type-converted
      in whatever way is necessary.
      Zero means they need to be converted to RESULT_TYPE.  */
-  int converted = 0;
+  صحيح converted = 0;
 
   /* Nonzero means create the expression with this type, rather than
      RESULT_TYPE.  */
-  tree build_type = NULL_TREE;
+  ونه build_type = NULL_ونه;
 
   /* Nonzero means after finally constructing the expression
      convert it to this type.  */
-  tree final_type = NULL_TREE;
+  ونه final_type = NULL_ونه;
 
   /* Nonzero if this is an operation like MIN or MAX which can
      safely be computed in short if both args are promoted shorts.
@@ -14345,80 +14345,80 @@ build_binary_op (location_t location, enum tree_code code,
      -1 indicates a bitwise operation; this makes a difference
      in the exact conditions for when it is safe to do the operation
      in a narrower mode.  */
-  int shorten = 0;
+  صحيح shorten = 0;
 
   /* Nonzero if this is a comparison operation;
      if both args are promoted shorts, compare the original shorts.
      Also implies COMMON.  */
-  int short_compare = 0;
+  صحيح short_compare = 0;
 
   /* Nonzero if this is a right-shift operation, which can be computed on the
      original short and then promoted if the operand is a promoted short.  */
-  int short_shift = 0;
+  صحيح short_ښويدنه = 0;
 
   /* Nonzero means set RESULT_TYPE to the common type of the args.  */
-  int common = 0;
+  صحيح common = 0;
 
   /* True means types are compatible as far as ObjC is concerned.  */
-  bool objc_ok;
+  منطقي objc_ok;
 
   /* True means this is an arithmetic operation that may need excess
      precision.  */
-  bool may_need_excess_precision;
+  منطقي may_need_excess_precision;
 
   /* True means this is a boolean operation that converts both its
      operands to truth-values.  */
-  bool boolean_op = false;
+  منطقي boolean_op = خطأ;
 
   /* Remember whether we're doing / or %.  */
-  bool doing_div_or_mod = false;
+  منطقي doing_div_or_mod = خطأ;
 
   /* Remember whether we're doing << or >>.  */
-  bool doing_shift = false;
+  منطقي doing_ښويدنه = خطأ;
 
   /* Tree holding instrumentation expression.  */
-  tree instrument_expr = NULL;
+  ونه instrument_بیان = عدم;
 
-  if (location == UNKNOWN_LOCATION)
-    location = input_location;
+  إذا (location == UNKNOWN_LOCATION)
+    location = ننوت_location;
 
   op0 = orig_op0;
   op1 = orig_op1;
 
-  op0_int_operands = EXPR_INT_CONST_OPERANDS (orig_op0);
-  if (op0_int_operands)
-    op0 = remove_c_maybe_const_expr (op0);
-  op1_int_operands = EXPR_INT_CONST_OPERANDS (orig_op1);
-  if (op1_int_operands)
-    op1 = remove_c_maybe_const_expr (op1);
+  op0_int_operands = بیان_INT_CONST_OPERANDS (orig_op0);
+  إذا (op0_int_operands)
+    op0 = remove_c_maybe_const_بیان (op0);
+  op1_int_operands = بیان_INT_CONST_OPERANDS (orig_op1);
+  إذا (op1_int_operands)
+    op1 = remove_c_maybe_const_بیان (op1);
   int_operands = (op0_int_operands && op1_int_operands);
-  if (int_operands)
+  إذا (int_operands)
     {
-      int_const_or_overflow = (TREE_CODE (orig_op0) == INTEGER_CST
-			       && TREE_CODE (orig_op1) == INTEGER_CST);
-      int_const = (int_const_or_overflow
-		   && !TREE_OVERFLOW (orig_op0)
-		   && !TREE_OVERFLOW (orig_op1));
+      int_const_or_ډکېدنه = (ونه_کوډ (orig_op0) == INTEGER_CST
+			       && ونه_کوډ (orig_op1) == INTEGER_CST);
+      int_const = (int_const_or_ډکېدنه
+		   && !ونه_ډکېدنه (orig_op0)
+		   && !ونه_ډکېدنه (orig_op1));
     }
-  else
-    int_const = int_const_or_overflow = false;
+  وإلا
+    int_const = int_const_or_ډکېدنه = خطأ;
 
   /* Do not apply default conversion in mixed vector/scalar expression.  */
-  if (convert_p
-      && VECTOR_TYPE_P (TREE_TYPE (op0)) == VECTOR_TYPE_P (TREE_TYPE (op1)))
+  إذا (convert_p
+      && ویکټور_TYPE_P (ونه_TYPE (op0)) == ویکټور_TYPE_P (ونه_TYPE (op1)))
     {
       op0 = default_conversion (op0);
       op1 = default_conversion (op1);
     }
 
-  orig_type0 = type0 = TREE_TYPE (op0);
+  orig_type0 = type0 = ونه_TYPE (op0);
 
-  orig_type1 = type1 = TREE_TYPE (op1);
+  orig_type1 = type1 = ونه_TYPE (op1);
 
   /* The expression codes of the data types of the arguments tell us
      whether the arguments are integers, floating, pointers, etc.  */
-  code0 = TREE_CODE (type0);
-  code1 = TREE_CODE (type1);
+  code0 = ونه_کوډ (type0);
+  code1 = ونه_کوډ (type1);
 
   /* Strip NON_LVALUE_EXPRs, etc., since we aren't using as an lvalue.  */
   STRIP_TYPE_NOPS (op0);
@@ -14427,201 +14427,201 @@ build_binary_op (location_t location, enum tree_code code,
   /* If an error was already reported for one of the arguments,
      avoid reporting another error.  */
 
-  if (code0 == ERROR_MARK || code1 == ERROR_MARK)
-    return error_mark_node;
+  إذا (code0 == ERROR_MARK || code1 == ERROR_MARK)
+    أرجع error_mark_غوټه;
 
-  if (code0 == POINTER_TYPE
-      && reject_gcc_builtin (op0, EXPR_LOCATION (orig_op0)))
-    return error_mark_node;
+  إذا (code0 == اشاره_ګر_TYPE
+      && reject_gcc_builtin (op0, بیان_LOCATION (orig_op0)))
+    أرجع error_mark_غوټه;
 
-  if (code1 == POINTER_TYPE
-      && reject_gcc_builtin (op1, EXPR_LOCATION (orig_op1)))
-    return error_mark_node;
+  إذا (code1 == اشاره_ګر_TYPE
+      && reject_gcc_builtin (op1, بیان_LOCATION (orig_op1)))
+    أرجع error_mark_غوټه;
 
-  if ((invalid_op_diag
-       = targetm.invalid_binary_op (code, type0, type1)))
+  إذا ((invalid_op_diag
+       = targetm.invalid_دوګونی_op (کوډ, type0, type1)))
     {
       error_at (location, invalid_op_diag);
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
 
-  switch (code)
+  بدل (کوډ)
     {
-    case PLUS_EXPR:
-    case MINUS_EXPR:
-    case MULT_EXPR:
-    case TRUNC_DIV_EXPR:
-    case CEIL_DIV_EXPR:
-    case FLOOR_DIV_EXPR:
-    case ROUND_DIV_EXPR:
-    case EXACT_DIV_EXPR:
-      may_need_excess_precision = true;
-      break;
+    حالة PLUS_بیان:
+    حالة MINUS_بیان:
+    حالة MULT_بیان:
+    حالة TRUNC_DIV_بیان:
+    حالة CEIL_DIV_بیان:
+    حالة FLOOR_DIV_بیان:
+    حالة پړاو_DIV_بیان:
+    حالة EXACT_DIV_بیان:
+      may_need_excess_precision = ریښتیا;
+      اكسر;
 
-    case EQ_EXPR:
-    case NE_EXPR:
-    case LE_EXPR:
-    case GE_EXPR:
-    case LT_EXPR:
-    case GT_EXPR:
+    حالة EQ_بیان:
+    حالة NE_بیان:
+    حالة LE_بیان:
+    حالة GE_بیان:
+    حالة LT_بیان:
+    حالة GT_بیان:
       /* Excess precision for implicit conversions of integers to
 	 floating point in C11 and later.  */
       may_need_excess_precision = (flag_isoc11
 				   && (ANY_INTEGRAL_TYPE_P (type0)
 				       || ANY_INTEGRAL_TYPE_P (type1)));
-      break;
+      اكسر;
 
-    default:
-      may_need_excess_precision = false;
-      break;
+    افتراضي:
+      may_need_excess_precision = خطأ;
+      اكسر;
     }
-  if (TREE_CODE (op0) == EXCESS_PRECISION_EXPR)
+  إذا (ونه_کوډ (op0) == EXCESS_PRECISION_بیان)
     {
-      op0 = TREE_OPERAND (op0, 0);
-      type0 = TREE_TYPE (op0);
+      op0 = ونه_عملوند (op0, 0);
+      type0 = ونه_TYPE (op0);
     }
-  else if (may_need_excess_precision
-	   && (eptype = excess_precision_type (type0)) != NULL_TREE)
+  وإلا إذا (may_need_excess_precision
+	   && (eptype = excess_precision_type (type0)) != NULL_ونه)
     {
       type0 = eptype;
       op0 = convert (eptype, op0);
     }
-  if (TREE_CODE (op1) == EXCESS_PRECISION_EXPR)
+  إذا (ونه_کوډ (op1) == EXCESS_PRECISION_بیان)
     {
-      op1 = TREE_OPERAND (op1, 0);
-      type1 = TREE_TYPE (op1);
+      op1 = ونه_عملوند (op1, 0);
+      type1 = ونه_TYPE (op1);
     }
-  else if (may_need_excess_precision
-	   && (eptype = excess_precision_type (type1)) != NULL_TREE)
+  وإلا إذا (may_need_excess_precision
+	   && (eptype = excess_precision_type (type1)) != NULL_ونه)
     {
       type1 = eptype;
       op1 = convert (eptype, op1);
     }
 
-  objc_ok = objc_compare_types (type0, type1, -3, NULL_TREE);
+  objc_ok = objc_compare_types (type0, type1, -3, NULL_ونه);
 
   /* In case when one of the operands of the binary operation is
      a vector and another is a scalar -- convert scalar to vector.  */
-  if ((gnu_vector_type_p (type0) && code1 != VECTOR_TYPE)
-      || (gnu_vector_type_p (type1) && code0 != VECTOR_TYPE))
+  إذا ((gnu_ویکټور_type_p (type0) && code1 != ویکټور_TYPE)
+      || (gnu_ویکټور_type_p (type1) && code0 != ویکټور_TYPE))
     {
-      enum stv_conv convert_flag = scalar_to_vector (location, code, orig_op0,
-						     orig_op1, true);
+      تعداد stv_conv convert_flag = scalar_منزل_ویکټور (location, کوډ, orig_op0,
+						     orig_op1, ریښتیا);
 
-      switch (convert_flag)
+      بدل (convert_flag)
 	{
-	  case stv_error:
-	    return error_mark_node;
-	  case stv_firstarg:
+	  حالة stv_error:
+	    أرجع error_mark_غوټه;
+	  حالة stv_firstarg:
 	    {
-              bool maybe_const = true;
-              tree sc;
-              sc = c_fully_fold (op0, false, &maybe_const);
-              sc = save_expr (sc);
-              sc = convert (TREE_TYPE (type1), sc);
-              op0 = build_vector_from_val (type1, sc);
-              if (!maybe_const)
-                op0 = c_wrap_maybe_const (op0, true);
-              orig_type0 = type0 = TREE_TYPE (op0);
-              code0 = TREE_CODE (type0);
+              منطقي maybe_const = ریښتیا;
+              ونه sc;
+              sc = c_fully_fold (op0, خطأ, &maybe_const);
+              sc = save_بیان (sc);
+              sc = convert (ونه_TYPE (type1), sc);
+              op0 = build_ویکټور_from_val (type1, sc);
+              إذا (!maybe_const)
+                op0 = c_wrap_maybe_const (op0, ریښتیا);
+              orig_type0 = type0 = ونه_TYPE (op0);
+              code0 = ونه_کوډ (type0);
               converted = 1;
-              break;
+              اكسر;
 	    }
-	  case stv_secondarg:
+	  حالة stv_secondarg:
 	    {
-	      bool maybe_const = true;
-	      tree sc;
-	      sc = c_fully_fold (op1, false, &maybe_const);
-	      sc = save_expr (sc);
-	      sc = convert (TREE_TYPE (type0), sc);
-	      op1 = build_vector_from_val (type0, sc);
-	      if (!maybe_const)
-		op1 = c_wrap_maybe_const (op1, true);
-	      orig_type1 = type1 = TREE_TYPE (op1);
-	      code1 = TREE_CODE (type1);
+	      منطقي maybe_const = ریښتیا;
+	      ونه sc;
+	      sc = c_fully_fold (op1, خطأ, &maybe_const);
+	      sc = save_بیان (sc);
+	      sc = convert (ونه_TYPE (type0), sc);
+	      op1 = build_ویکټور_from_val (type0, sc);
+	      إذا (!maybe_const)
+		op1 = c_wrap_maybe_const (op1, ریښتیا);
+	      orig_type1 = type1 = ونه_TYPE (op1);
+	      code1 = ونه_کوډ (type1);
 	      converted = 1;
-	      break;
+	      اكسر;
 	    }
-	  default:
-	    break;
+	  افتراضي:
+	    اكسر;
 	}
     }
 
-  switch (code)
+  بدل (کوډ)
     {
-    case PLUS_EXPR:
+    حالة PLUS_بیان:
       /* Handle the pointer + int case.  */
-      if (code0 == POINTER_TYPE
+      إذا (code0 == اشاره_ګر_TYPE
 	  && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
-	  ret = pointer_int_sum (location, PLUS_EXPR, op0, op1);
-	  goto return_build_binary_op;
+	  ret = اشاره_ګر_int_مجموعه (location, PLUS_بیان, op0, op1);
+	  اذهب return_build_دوګونی_op;
 	}
-      else if (code1 == POINTER_TYPE
+      وإلا إذا (code1 == اشاره_ګر_TYPE
 	       && (code0 == INTEGER_TYPE || code0 == BITINT_TYPE))
 	{
-	  ret = pointer_int_sum (location, PLUS_EXPR, op1, op0);
-	  goto return_build_binary_op;
+	  ret = اشاره_ګر_int_مجموعه (location, PLUS_بیان, op1, op0);
+	  اذهب return_build_دوګونی_op;
 	}
-      else
+      وإلا
 	common = 1;
-      break;
+      اكسر;
 
-    case MINUS_EXPR:
+    حالة MINUS_بیان:
       /* Subtraction of two similar pointers.
 	 We must subtract them as integers, then divide by object size.  */
-      if (code0 == POINTER_TYPE && code1 == POINTER_TYPE
-	  && comp_target_types (location, type0, type1))
+      إذا (code0 == اشاره_ګر_TYPE && code1 == اشاره_ګر_TYPE
+	  && comp_موخه_types (location, type0, type1))
 	{
-	  ret = pointer_diff (location, op0, op1, &instrument_expr);
-	  goto return_build_binary_op;
+	  ret = اشاره_ګر_diff (location, op0, op1, &instrument_بیان);
+	  اذهب return_build_دوګونی_op;
 	}
       /* Handle pointer minus int.  Just like pointer plus int.  */
-      else if (code0 == POINTER_TYPE
+      وإلا إذا (code0 == اشاره_ګر_TYPE
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
-	  ret = pointer_int_sum (location, MINUS_EXPR, op0, op1);
-	  goto return_build_binary_op;
+	  ret = اشاره_ګر_int_مجموعه (location, MINUS_بیان, op0, op1);
+	  اذهب return_build_دوګونی_op;
 	}
-      else
+      وإلا
 	common = 1;
-      break;
+      اكسر;
 
-    case MULT_EXPR:
+    حالة MULT_بیان:
       common = 1;
-      break;
+      اكسر;
 
-    case TRUNC_DIV_EXPR:
-    case CEIL_DIV_EXPR:
-    case FLOOR_DIV_EXPR:
-    case ROUND_DIV_EXPR:
-    case EXACT_DIV_EXPR:
-      doing_div_or_mod = true;
+    حالة TRUNC_DIV_بیان:
+    حالة CEIL_DIV_بیان:
+    حالة FLOOR_DIV_بیان:
+    حالة پړاو_DIV_بیان:
+    حالة EXACT_DIV_بیان:
+      doing_div_or_mod = ریښتیا;
       warn_for_div_by_zero (location, op1);
 
-      if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
-	   || code0 == FIXED_POINT_TYPE || code0 == BITINT_TYPE
+      إذا ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
+	   || code0 == FIXED_ټکی_TYPE || code0 == BITINT_TYPE
 	   || code0 == COMPLEX_TYPE
-	   || gnu_vector_type_p (type0))
+	   || gnu_ویکټور_type_p (type0))
 	  && (code1 == INTEGER_TYPE || code1 == REAL_TYPE
-	      || code1 == FIXED_POINT_TYPE || code1 == BITINT_TYPE
+	      || code1 == FIXED_ټکی_TYPE || code1 == BITINT_TYPE
 	      || code1 == COMPLEX_TYPE
-	      || gnu_vector_type_p (type1)))
+	      || gnu_ویکټور_type_p (type1)))
 	{
-	  enum tree_code tcode0 = code0, tcode1 = code1;
+	  تعداد ونه_کوډ_2 tcode0 = code0, tcode1 = code1;
 
-	  if (code0 == COMPLEX_TYPE || code0 == VECTOR_TYPE)
-	    tcode0 = TREE_CODE (TREE_TYPE (TREE_TYPE (op0)));
-	  if (code1 == COMPLEX_TYPE || code1 == VECTOR_TYPE)
-	    tcode1 = TREE_CODE (TREE_TYPE (TREE_TYPE (op1)));
+	  إذا (code0 == COMPLEX_TYPE || code0 == ویکټور_TYPE)
+	    tcode0 = ونه_کوډ (ونه_TYPE (ونه_TYPE (op0)));
+	  إذا (code1 == COMPLEX_TYPE || code1 == ویکټور_TYPE)
+	    tcode1 = ونه_کوډ (ونه_TYPE (ونه_TYPE (op1)));
 
-	  if (!(((tcode0 == INTEGER_TYPE || tcode0 == BITINT_TYPE
-		  || (tcode0 == ENUMERAL_TYPE && code0 == VECTOR_TYPE))
+	  إذا (!(((tcode0 == INTEGER_TYPE || tcode0 == BITINT_TYPE
+		  || (tcode0 == ENUMERAL_TYPE && code0 == ویکټور_TYPE))
 		 && (tcode1 == INTEGER_TYPE || tcode1 == BITINT_TYPE
-		     || (tcode1 == ENUMERAL_TYPE && code1 == VECTOR_TYPE)))
-		|| (tcode0 == FIXED_POINT_TYPE && tcode1 == FIXED_POINT_TYPE)))
-	    resultcode = RDIV_EXPR;
-	  else
+		     || (tcode1 == ENUMERAL_TYPE && code1 == ویکټور_TYPE)))
+		|| (tcode0 == FIXED_ټکی_TYPE && tcode1 == FIXED_ټکی_TYPE)))
+	    resultcode = RDIV_بیان;
+	  وإلا
 	    /* Although it would be tempting to shorten always here, that
 	       loses on some targets, since the modulo instruction is
 	       undefined if the quotient can't be represented in the
@@ -14630,33 +14630,33 @@ build_binary_op (location_t location, enum tree_code code,
 	    shorten = may_shorten_divmod (op0, op1);
 	  common = 1;
 	}
-      break;
+      اكسر;
 
-    case BIT_AND_EXPR:
-    case BIT_IOR_EXPR:
-    case BIT_XOR_EXPR:
-      if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+    حالة بټ_AND_بیان:
+    حالة بټ_IOR_بیان:
+    حالة بټ_XOR_بیان:
+      إذا ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
 	  && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	shorten = -1;
       /* Allow vector types which are not floating point types.   */
-      else if (gnu_vector_type_p (type0)
-	       && gnu_vector_type_p (type1)
-	       && !VECTOR_FLOAT_TYPE_P (type0)
-	       && !VECTOR_FLOAT_TYPE_P (type1))
+      وإلا إذا (gnu_ویکټور_type_p (type0)
+	       && gnu_ویکټور_type_p (type1)
+	       && !ویکټور_FLOAT_TYPE_P (type0)
+	       && !ویکټور_FLOAT_TYPE_P (type1))
 	common = 1;
-      break;
+      اكسر;
 
-    case TRUNC_MOD_EXPR:
-    case FLOOR_MOD_EXPR:
-      doing_div_or_mod = true;
+    حالة TRUNC_MOD_بیان:
+    حالة FLOOR_MOD_بیان:
+      doing_div_or_mod = ریښتیا;
       warn_for_div_by_zero (location, op1);
 
-      if (gnu_vector_type_p (type0)
-	  && gnu_vector_type_p (type1)
-	  && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE
-	  && TREE_CODE (TREE_TYPE (type1)) == INTEGER_TYPE)
+      إذا (gnu_ویکټور_type_p (type0)
+	  && gnu_ویکټور_type_p (type1)
+	  && ونه_کوډ (ونه_TYPE (type0)) == INTEGER_TYPE
+	  && ونه_کوډ (ونه_TYPE (type1)) == INTEGER_TYPE)
 	common = 1;
-      else if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+      وإلا إذا ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
 	  /* Although it would be tempting to shorten always here, that loses
@@ -14666,291 +14666,291 @@ build_binary_op (location_t location, enum tree_code code,
 	  shorten = may_shorten_divmod (op0, op1);
 	  common = 1;
 	}
-      break;
+      اكسر;
 
-    case TRUTH_ANDIF_EXPR:
-    case TRUTH_ORIF_EXPR:
-    case TRUTH_AND_EXPR:
-    case TRUTH_OR_EXPR:
-    case TRUTH_XOR_EXPR:
-      if ((code0 == INTEGER_TYPE || code0 == POINTER_TYPE
+    حالة TRUTH_ANDIF_بیان:
+    حالة TRUTH_ORIF_بیان:
+    حالة TRUTH_AND_بیان:
+    حالة TRUTH_OR_بیان:
+    حالة TRUTH_XOR_بیان:
+      إذا ((code0 == INTEGER_TYPE || code0 == اشاره_ګر_TYPE
 	   || code0 == REAL_TYPE || code0 == COMPLEX_TYPE
-	   || code0 == FIXED_POINT_TYPE || code0 == NULLPTR_TYPE
+	   || code0 == FIXED_ټکی_TYPE || code0 == NULLPTR_TYPE
 	   || code0 == BITINT_TYPE)
-	  && (code1 == INTEGER_TYPE || code1 == POINTER_TYPE
+	  && (code1 == INTEGER_TYPE || code1 == اشاره_ګر_TYPE
 	      || code1 == REAL_TYPE || code1 == COMPLEX_TYPE
-	      || code1 == FIXED_POINT_TYPE || code1 == NULLPTR_TYPE
+	      || code1 == FIXED_ټکی_TYPE || code1 == NULLPTR_TYPE
 	      || code1 == BITINT_TYPE))
 	{
 	  /* Result of these operations is always an int,
 	     but that does not mean the operands should be
 	     converted to ints!  */
-	  result_type = integer_type_node;
-	  if (op0_int_operands)
+	  پایله_type = integer_type_غوټه;
+	  إذا (op0_int_operands)
 	    {
 	      op0 = c_objc_common_truthvalue_conversion (location, orig_op0);
-	      op0 = remove_c_maybe_const_expr (op0);
+	      op0 = remove_c_maybe_const_بیان (op0);
 	    }
-	  else
+	  وإلا
 	    op0 = c_objc_common_truthvalue_conversion (location, op0);
-	  if (op1_int_operands)
+	  إذا (op1_int_operands)
 	    {
 	      op1 = c_objc_common_truthvalue_conversion (location, orig_op1);
-	      op1 = remove_c_maybe_const_expr (op1);
+	      op1 = remove_c_maybe_const_بیان (op1);
 	    }
-	  else
+	  وإلا
 	    op1 = c_objc_common_truthvalue_conversion (location, op1);
 	  converted = 1;
-	  boolean_op = true;
+	  boolean_op = ریښتیا;
 	}
-      if (code == TRUTH_ANDIF_EXPR)
+      إذا (کوډ == TRUTH_ANDIF_بیان)
 	{
-	  int_const_or_overflow = (int_operands
-				   && TREE_CODE (orig_op0) == INTEGER_CST
-				   && (op0 == truthvalue_false_node
-				       || TREE_CODE (orig_op1) == INTEGER_CST));
-	  int_const = (int_const_or_overflow
-		       && !TREE_OVERFLOW (orig_op0)
-		       && (op0 == truthvalue_false_node
-			   || !TREE_OVERFLOW (orig_op1)));
+	  int_const_or_ډکېدنه = (int_operands
+				   && ونه_کوډ (orig_op0) == INTEGER_CST
+				   && (op0 == truthvalue_false_غوټه
+				       || ونه_کوډ (orig_op1) == INTEGER_CST));
+	  int_const = (int_const_or_ډکېدنه
+		       && !ونه_ډکېدنه (orig_op0)
+		       && (op0 == truthvalue_false_غوټه
+			   || !ونه_ډکېدنه (orig_op1)));
 	}
-      else if (code == TRUTH_ORIF_EXPR)
+      وإلا إذا (کوډ == TRUTH_ORIF_بیان)
 	{
-	  int_const_or_overflow = (int_operands
-				   && TREE_CODE (orig_op0) == INTEGER_CST
-				   && (op0 == truthvalue_true_node
-				       || TREE_CODE (orig_op1) == INTEGER_CST));
-	  int_const = (int_const_or_overflow
-		       && !TREE_OVERFLOW (orig_op0)
-		       && (op0 == truthvalue_true_node
-			   || !TREE_OVERFLOW (orig_op1)));
+	  int_const_or_ډکېدنه = (int_operands
+				   && ونه_کوډ (orig_op0) == INTEGER_CST
+				   && (op0 == truthvalue_true_غوټه
+				       || ونه_کوډ (orig_op1) == INTEGER_CST));
+	  int_const = (int_const_or_ډکېدنه
+		       && !ونه_ډکېدنه (orig_op0)
+		       && (op0 == truthvalue_true_غوټه
+			   || !ونه_ډکېدنه (orig_op1)));
 	}
-      break;
+      اكسر;
 
       /* Shift operations: result has same type as first operand;
 	 always convert second operand to int.
 	 Also set SHORT_SHIFT if shifting rightward.  */
 
-    case RSHIFT_EXPR:
-      if (gnu_vector_type_p (type0)
-	  && gnu_vector_type_p (type1)
-	  && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE
-	  && TREE_CODE (TREE_TYPE (type1)) == INTEGER_TYPE
-	  && known_eq (TYPE_VECTOR_SUBPARTS (type0),
-		       TYPE_VECTOR_SUBPARTS (type1)))
+    حالة RSHIFT_بیان:
+      إذا (gnu_ویکټور_type_p (type0)
+	  && gnu_ویکټور_type_p (type1)
+	  && ونه_کوډ (ونه_TYPE (type0)) == INTEGER_TYPE
+	  && ونه_کوډ (ونه_TYPE (type1)) == INTEGER_TYPE
+	  && معلوم_eq (TYPE_ویکټور_SUBPARTS (type0),
+		       TYPE_ویکټور_SUBPARTS (type1)))
 	{
-	  result_type = type0;
+	  پایله_type = type0;
 	  converted = 1;
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == FIXED_POINT_TYPE
+      وإلا إذا ((code0 == INTEGER_TYPE || code0 == FIXED_ټکی_TYPE
 		|| code0 == BITINT_TYPE
-		|| (gnu_vector_type_p (type0)
-		    && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE))
+		|| (gnu_ویکټور_type_p (type0)
+		    && ونه_کوډ (ونه_TYPE (type0)) == INTEGER_TYPE))
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
-	  doing_shift = true;
-	  if (TREE_CODE (op1) == INTEGER_CST)
+	  doing_ښويدنه = ریښتیا;
+	  إذا (ونه_کوډ (op1) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_sgn (op1) < 0)
+	      إذا (ونه_int_cst_sgn (op1) < 0)
 		{
-		  int_const = false;
-		  if (c_inhibit_evaluation_warnings == 0)
-		    warning_at (location, OPT_Wshift_count_negative,
+		  int_const = خطأ;
+		  إذا (c_inhibit_evaluation_warnings == 0)
+		    warning_at (location, OPT_Wshift_شمېر_negative,
 				"right shift count is negative");
 		}
-	      else if (code0 == VECTOR_TYPE)
+	      وإلا إذا (code0 == ویکټور_TYPE)
 		{
-		  if (compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (type0)))
+		  إذا (compare_ونه_int (op1,
+					TYPE_PRECISION (ونه_TYPE (type0)))
 		      >= 0)
 		    {
-		      int_const = false;
-		      if (c_inhibit_evaluation_warnings == 0)
-			warning_at (location, OPT_Wshift_count_overflow,
+		      int_const = خطأ;
+		      إذا (c_inhibit_evaluation_warnings == 0)
+			warning_at (location, OPT_Wshift_شمېر_ډکېدنه,
 				    "right shift count >= width of vector element");
 		    }
 		}
-	      else
+	      وإلا
 		{
-		  if (!integer_zerop (op1))
-		    short_shift = 1;
+		  إذا (!integer_zerop (op1))
+		    short_ښويدنه = 1;
 
-		  if (compare_tree_int (op1, TYPE_PRECISION (type0)) >= 0)
+		  إذا (compare_ونه_int (op1, TYPE_PRECISION (type0)) >= 0)
 		    {
-		      int_const = false;
-		      if (c_inhibit_evaluation_warnings == 0)
-			warning_at (location, OPT_Wshift_count_overflow,
+		      int_const = خطأ;
+		      إذا (c_inhibit_evaluation_warnings == 0)
+			warning_at (location, OPT_Wshift_شمېر_ډکېدنه,
 				    "right shift count >= width of type");
 		    }
 		}
 	    }
 
 	  /* Use the type of the value to be shifted.  */
-	  result_type = type0;
+	  پایله_type = type0;
 	  /* Avoid converting op1 to result_type later.  */
 	  converted = 1;
 	}
-      break;
+      اكسر;
 
-    case LSHIFT_EXPR:
-      if (gnu_vector_type_p (type0)
-	  && gnu_vector_type_p (type1)
-	  && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE
-	  && TREE_CODE (TREE_TYPE (type1)) == INTEGER_TYPE
-	  && known_eq (TYPE_VECTOR_SUBPARTS (type0),
-		       TYPE_VECTOR_SUBPARTS (type1)))
+    حالة LSHIFT_بیان:
+      إذا (gnu_ویکټور_type_p (type0)
+	  && gnu_ویکټور_type_p (type1)
+	  && ونه_کوډ (ونه_TYPE (type0)) == INTEGER_TYPE
+	  && ونه_کوډ (ونه_TYPE (type1)) == INTEGER_TYPE
+	  && معلوم_eq (TYPE_ویکټور_SUBPARTS (type0),
+		       TYPE_ویکټور_SUBPARTS (type1)))
 	{
-	  result_type = type0;
+	  پایله_type = type0;
 	  converted = 1;
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == FIXED_POINT_TYPE
+      وإلا إذا ((code0 == INTEGER_TYPE || code0 == FIXED_ټکی_TYPE
 		|| code0 == BITINT_TYPE
-		|| (gnu_vector_type_p (type0)
-		    && TREE_CODE (TREE_TYPE (type0)) == INTEGER_TYPE))
+		|| (gnu_ویکټور_type_p (type0)
+		    && ونه_کوډ (ونه_TYPE (type0)) == INTEGER_TYPE))
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
-	  doing_shift = true;
-	  if (TREE_CODE (op0) == INTEGER_CST
-	      && tree_int_cst_sgn (op0) < 0
-	      && !TYPE_OVERFLOW_WRAPS (type0))
+	  doing_ښويدنه = ریښتیا;
+	  إذا (ونه_کوډ (op0) == INTEGER_CST
+	      && ونه_int_cst_sgn (op0) < 0
+	      && !TYPE_ډکېدنه_WRAPS (type0))
 	    {
 	      /* Don't reject a left shift of a negative value in a context
 		 where a constant expression is needed in C90.  */
-	      if (flag_isoc99)
-		int_const = false;
-	      if (c_inhibit_evaluation_warnings == 0)
-		warning_at (location, OPT_Wshift_negative_value,
+	      إذا (flag_isoc99)
+		int_const = خطأ;
+	      إذا (c_inhibit_evaluation_warnings == 0)
+		warning_at (location, OPT_Wshift_negative_ارزښت,
 			    "left shift of negative value");
 	    }
-	  if (TREE_CODE (op1) == INTEGER_CST)
+	  إذا (ونه_کوډ (op1) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_sgn (op1) < 0)
+	      إذا (ونه_int_cst_sgn (op1) < 0)
 		{
-		  int_const = false;
-		  if (c_inhibit_evaluation_warnings == 0)
-		    warning_at (location, OPT_Wshift_count_negative,
+		  int_const = خطأ;
+		  إذا (c_inhibit_evaluation_warnings == 0)
+		    warning_at (location, OPT_Wshift_شمېر_negative,
 				"left shift count is negative");
 		}
-	      else if (code0 == VECTOR_TYPE)
+	      وإلا إذا (code0 == ویکټور_TYPE)
 		{
-		  if (compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (type0)))
+		  إذا (compare_ونه_int (op1,
+					TYPE_PRECISION (ونه_TYPE (type0)))
 		      >= 0)
 		    {
-		      int_const = false;
-		      if (c_inhibit_evaluation_warnings == 0)
-			warning_at (location, OPT_Wshift_count_overflow,
+		      int_const = خطأ;
+		      إذا (c_inhibit_evaluation_warnings == 0)
+			warning_at (location, OPT_Wshift_شمېر_ډکېدنه,
 				    "left shift count >= width of vector element");
 		    }
 		}
-	      else if (compare_tree_int (op1, TYPE_PRECISION (type0)) >= 0)
+	      وإلا إذا (compare_ونه_int (op1, TYPE_PRECISION (type0)) >= 0)
 		{
-		  int_const = false;
-		  if (c_inhibit_evaluation_warnings == 0)
-		    warning_at (location, OPT_Wshift_count_overflow,
+		  int_const = خطأ;
+		  إذا (c_inhibit_evaluation_warnings == 0)
+		    warning_at (location, OPT_Wshift_شمېر_ډکېدنه,
 				"left shift count >= width of type");
 		}
-	      else if (TREE_CODE (op0) == INTEGER_CST
-		       && maybe_warn_shift_overflow (location, op0, op1)
+	      وإلا إذا (ونه_کوډ (op0) == INTEGER_CST
+		       && maybe_warn_ښويدنه_ډکېدنه (location, op0, op1)
 		       && flag_isoc99)
-		int_const = false;
+		int_const = خطأ;
 	    }
 
 	  /* Use the type of the value to be shifted.  */
-	  result_type = type0;
+	  پایله_type = type0;
 	  /* Avoid converting op1 to result_type later.  */
 	  converted = 1;
 	}
-      break;
+      اكسر;
 
-    case EQ_EXPR:
-    case NE_EXPR:
-      if (gnu_vector_type_p (type0) && gnu_vector_type_p (type1))
+    حالة EQ_بیان:
+    حالة NE_بیان:
+      إذا (gnu_ویکټور_type_p (type0) && gnu_ویکټور_type_p (type1))
         {
-          tree intt;
-	  if (!vector_types_compatible_elements_p (type0, type1))
+          ونه intt;
+	  إذا (!ویکټور_types_compatible_elements_p (type0, type1))
             {
               error_at (location, "comparing vectors with different "
                                   "element types");
-              return error_mark_node;
+              أرجع error_mark_غوټه;
             }
 
-	  if (maybe_ne (TYPE_VECTOR_SUBPARTS (type0),
-			TYPE_VECTOR_SUBPARTS (type1)))
+	  إذا (maybe_ne (TYPE_ویکټور_SUBPARTS (type0),
+			TYPE_ویکټور_SUBPARTS (type1)))
             {
               error_at (location, "comparing vectors with different "
                                   "number of elements");
-              return error_mark_node;
+              أرجع error_mark_غوټه;
             }
 
 	  /* It's not precisely specified how the usual arithmetic
 	     conversions apply to the vector types.  Here, we use
 	     the unsigned type if one of the operands is signed and
 	     the other one is unsigned.  */
-	  if (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
+	  إذا (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
 	    {
-	      if (!TYPE_UNSIGNED (type0))
-		op0 = build1 (VIEW_CONVERT_EXPR, type1, op0);
-	      else
-		op1 = build1 (VIEW_CONVERT_EXPR, type0, op1);
+	      إذا (!TYPE_UNSIGNED (type0))
+		op0 = build1 (VIEW_CONVERT_بیان, type1, op0);
+	      وإلا
+		op1 = build1 (VIEW_CONVERT_بیان, type0, op1);
 	      warning_at (location, OPT_Wsign_compare, "comparison between "
 			  "types %qT and %qT", type0, type1);
 	    }
 
           /* Always construct signed integer vector type.  */
-	  if (VECTOR_BOOLEAN_TYPE_P (type0) && VECTOR_BOOLEAN_TYPE_P (type1))
-	    result_type = type0;
-	  else
+	  إذا (ویکټور_BOOLEAN_TYPE_P (type0) && ویکټور_BOOLEAN_TYPE_P (type1))
+	    پایله_type = type0;
+	  وإلا
 	    {
-	      auto nelts = TYPE_VECTOR_SUBPARTS (type0);
+	      خپلکاری nelts = TYPE_ویکټور_SUBPARTS (type0);
 
-	      intt = c_common_type_for_size (GET_MODE_BITSIZE
-					     (SCALAR_TYPE_MODE
-						(TREE_TYPE (type0))), 0);
-	      if (!intt)
+	      intt = c_common_type_for_اندازه (GET_ډېرپېښ_BITSIZE
+					     (SCALAR_TYPE_ډېرپېښ
+						(ونه_TYPE (type0))), 0);
+	      إذا (!intt)
 		{
 		  error_at (location, "could not find an integer type "
 				      "of the same size as %qT",
-			    TREE_TYPE (type0));
-		  return error_mark_node;
+			    ونه_TYPE (type0));
+		  أرجع error_mark_غوټه;
 		}
-	      result_type = build_opaque_vector_type (intt, nelts);
+	      پایله_type = build_opaque_ویکټور_type (intt, nelts);
 	    }
           converted = 1;
-	  ret = build_vec_cmp (resultcode, result_type, op0, op1);
-	  goto return_build_binary_op;
+	  ret = build_vec_cmp (resultcode, پایله_type, op0, op1);
+	  اذهب return_build_دوګونی_op;
         }
-      if (FLOAT_TYPE_P (type0) || FLOAT_TYPE_P (type1))
+      إذا (FLOAT_TYPE_P (type0) || FLOAT_TYPE_P (type1))
 	warning_at (location,
 		    OPT_Wfloat_equal,
 		    "comparing floating-point with %<==%> or %<!=%> is unsafe");
       /* Result of comparison is always int,
 	 but don't convert the args to int!  */
-      build_type = integer_type_node;
-      if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == BITINT_TYPE
-	   || code0 == FIXED_POINT_TYPE || code0 == COMPLEX_TYPE)
+      build_type = integer_type_غوټه;
+      إذا ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == BITINT_TYPE
+	   || code0 == FIXED_ټکی_TYPE || code0 == COMPLEX_TYPE)
 	  && (code1 == INTEGER_TYPE || code1 == REAL_TYPE
 	      || code1 == BITINT_TYPE
-	      || code1 == FIXED_POINT_TYPE || code1 == COMPLEX_TYPE))
+	      || code1 == FIXED_ټکی_TYPE || code1 == COMPLEX_TYPE))
 	short_compare = 1;
-      else if (code0 == POINTER_TYPE
+      وإلا إذا (code0 == اشاره_ګر_TYPE
 	       && (code1 == NULLPTR_TYPE
-		   || null_pointer_constant_p (orig_op1)))
+		   || null_اشاره_ګر_constant_p (orig_op1)))
 	{
-	  maybe_warn_for_null_address (location, op0, code);
-	  result_type = type0;
+	  maybe_warn_for_null_پته (location, op0, کوډ);
+	  پایله_type = type0;
 	}
-      else if (code1 == POINTER_TYPE
+      وإلا إذا (code1 == اشاره_ګر_TYPE
 	       && (code0 == NULLPTR_TYPE
-		   || null_pointer_constant_p (orig_op0)))
+		   || null_اشاره_ګر_constant_p (orig_op0)))
 	{
-	  maybe_warn_for_null_address (location, op1, code);
-	  result_type = type1;
+	  maybe_warn_for_null_پته (location, op1, کوډ);
+	  پایله_type = type1;
 	}
-      else if (code0 == POINTER_TYPE && code1 == POINTER_TYPE)
+      وإلا إذا (code0 == اشاره_ګر_TYPE && code1 == اشاره_ګر_TYPE)
 	{
-	  tree tt0 = TREE_TYPE (type0);
-	  tree tt1 = TREE_TYPE (type1);
+	  ونه tt0 = ونه_TYPE (type0);
+	  ونه tt1 = ونه_TYPE (type1);
 	  addr_space_t as0 = TYPE_ADDR_SPACE (tt0);
 	  addr_space_t as1 = TYPE_ADDR_SPACE (tt1);
 	  addr_space_t as_common = ADDR_SPACE_GENERIC;
@@ -14958,56 +14958,56 @@ build_binary_op (location_t location, enum tree_code code,
 	  /* Anything compares with void *.  void * compares with anything.
 	     Otherwise, the targets must be compatible
 	     and both must be object or both incomplete.  */
-	  if (comp_target_types (location, type0, type1))
-	    result_type = common_pointer_type (type0, type1, NULL_TREE);
-	  else if (!addr_space_superset (as0, as1, &as_common))
+	  إذا (comp_موخه_types (location, type0, type1))
+	    پایله_type = common_اشاره_ګر_type (type0, type1, NULL_ونه);
+	  وإلا إذا (!addr_space_superset (as0, as1, &as_common))
 	    {
 	      error_at (location, "comparison of pointers to "
 			"disjoint address spaces");
-	      return error_mark_node;
+	      أرجع error_mark_غوټه;
 	    }
-	  else if (VOID_TYPE_P (tt0) && !TYPE_ATOMIC (tt0))
+	  وإلا إذا (VOID_TYPE_P (tt0) && !TYPE_ATOMIC (tt0))
 	    {
-	      if (pedantic && TREE_CODE (tt1) == FUNCTION_TYPE)
+	      إذا (pedantic && ونه_کوډ (tt1) == FUNCTION_TYPE)
 		pedwarn (location, OPT_Wpedantic, "ISO C forbids "
 			 "comparison of %<void *%> with function pointer");
 	    }
-	  else if (VOID_TYPE_P (tt1) && !TYPE_ATOMIC (tt1))
+	  وإلا إذا (VOID_TYPE_P (tt1) && !TYPE_ATOMIC (tt1))
 	    {
-	      if (pedantic && TREE_CODE (tt0) == FUNCTION_TYPE)
+	      إذا (pedantic && ونه_کوډ (tt0) == FUNCTION_TYPE)
 		pedwarn (location, OPT_Wpedantic, "ISO C forbids "
 			 "comparison of %<void *%> with function pointer");
 	    }
-	  else
+	  وإلا
 	    /* Avoid warning about the volatile ObjC EH puts on decls.  */
-	    if (!objc_ok)
-	      pedwarn (location, OPT_Wcompare_distinct_pointer_types,
+	    إذا (!objc_ok)
+	      pedwarn (location, OPT_Wcompare_distinct_اشاره_ګر_types,
 		       "comparison of distinct pointer types lacks a cast");
 
-	  if (result_type == NULL_TREE)
+	  إذا (پایله_type == NULL_ونه)
 	    {
-	      int qual = ENCODE_QUAL_ADDR_SPACE (as_common);
-	      result_type = c_build_pointer_type
-			      (c_build_qualified_type (void_type_node, qual));
+	      صحيح qual = ENCODE_QUAL_ADDR_SPACE (as_common);
+	      پایله_type = c_build_اشاره_ګر_type
+			      (c_build_qualified_type (void_type_غوټه, qual));
 	    }
 	}
-      else if (code0 == POINTER_TYPE
+      وإلا إذا (code0 == اشاره_ګر_TYPE
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
-	  result_type = type0;
+	  پایله_type = type0;
 	  pedwarn (location, 0, "comparison between pointer and integer");
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
-	       && code1 == POINTER_TYPE)
+      وإلا إذا ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+	       && code1 == اشاره_ګر_TYPE)
 	{
-	  result_type = type1;
+	  پایله_type = type1;
 	  pedwarn (location, 0, "comparison between pointer and integer");
 	}
       /* 6.5.9: One of the following shall hold:
 	 -- both operands have type nullptr_t;  */
-      else if (code0 == NULLPTR_TYPE && code1 == NULLPTR_TYPE)
+      وإلا إذا (code0 == NULLPTR_TYPE && code1 == NULLPTR_TYPE)
 	{
-	  result_type = nullptr_type_node;
+	  پایله_type = nullptr_type_غوټه;
 	  /* No need to convert the operands to result_type later.  */
 	  converted = 1;
 	}
@@ -15018,301 +15018,301 @@ build_binary_op (location_t location, enum tree_code code,
        type, since only nullptr_t can be converted to nullptr_t.  Also,
        even a constant 0 is a null pointer constant, so we may have to
        create a pointer type from its type.  */
-      else if (code0 == NULLPTR_TYPE && null_pointer_constant_p (orig_op1))
-	result_type = (INTEGRAL_TYPE_P (type1)
-		       ? c_build_pointer_type (type1) : type1);
-      else if (code1 == NULLPTR_TYPE && null_pointer_constant_p (orig_op0))
-	result_type = (INTEGRAL_TYPE_P (type0)
-		       ? c_build_pointer_type (type0) : type0);
-      if ((C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op0))
-	   || truth_value_p (TREE_CODE (orig_op0)))
-	  ^ (C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op1))
-	     || truth_value_p (TREE_CODE (orig_op1))))
-	maybe_warn_bool_compare (location, code, orig_op0, orig_op1);
-      break;
+      وإلا إذا (code0 == NULLPTR_TYPE && null_اشاره_ګر_constant_p (orig_op1))
+	پایله_type = (INTEGRAL_TYPE_P (type1)
+		       ? c_build_اشاره_ګر_type (type1) : type1);
+      وإلا إذا (code1 == NULLPTR_TYPE && null_اشاره_ګر_constant_p (orig_op0))
+	پایله_type = (INTEGRAL_TYPE_P (type0)
+		       ? c_build_اشاره_ګر_type (type0) : type0);
+      إذا ((C_BOOLEAN_TYPE_P (ونه_TYPE (orig_op0))
+	   || truth_ارزښت_p (ونه_کوډ (orig_op0)))
+	  ^ (C_BOOLEAN_TYPE_P (ونه_TYPE (orig_op1))
+	     || truth_ارزښت_p (ونه_کوډ (orig_op1))))
+	maybe_warn_bool_compare (location, کوډ, orig_op0, orig_op1);
+      اكسر;
 
-    case LE_EXPR:
-    case GE_EXPR:
-    case LT_EXPR:
-    case GT_EXPR:
-      if (gnu_vector_type_p (type0) && gnu_vector_type_p (type1))
+    حالة LE_بیان:
+    حالة GE_بیان:
+    حالة LT_بیان:
+    حالة GT_بیان:
+      إذا (gnu_ویکټور_type_p (type0) && gnu_ویکټور_type_p (type1))
         {
-          tree intt;
-	  if (!vector_types_compatible_elements_p (type0, type1))
+          ونه intt;
+	  إذا (!ویکټور_types_compatible_elements_p (type0, type1))
             {
               error_at (location, "comparing vectors with different "
                                   "element types");
-              return error_mark_node;
+              أرجع error_mark_غوټه;
             }
 
-	  if (maybe_ne (TYPE_VECTOR_SUBPARTS (type0),
-			TYPE_VECTOR_SUBPARTS (type1)))
+	  إذا (maybe_ne (TYPE_ویکټور_SUBPARTS (type0),
+			TYPE_ویکټور_SUBPARTS (type1)))
             {
               error_at (location, "comparing vectors with different "
                                   "number of elements");
-              return error_mark_node;
+              أرجع error_mark_غوټه;
             }
 
 	  /* It's not precisely specified how the usual arithmetic
 	     conversions apply to the vector types.  Here, we use
 	     the unsigned type if one of the operands is signed and
 	     the other one is unsigned.  */
-	  if (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
+	  إذا (TYPE_UNSIGNED (type0) != TYPE_UNSIGNED (type1))
 	    {
-	      if (!TYPE_UNSIGNED (type0))
-		op0 = build1 (VIEW_CONVERT_EXPR, type1, op0);
-	      else
-		op1 = build1 (VIEW_CONVERT_EXPR, type0, op1);
+	      إذا (!TYPE_UNSIGNED (type0))
+		op0 = build1 (VIEW_CONVERT_بیان, type1, op0);
+	      وإلا
+		op1 = build1 (VIEW_CONVERT_بیان, type0, op1);
 	      warning_at (location, OPT_Wsign_compare, "comparison between "
 			  "types %qT and %qT", type0, type1);
 	    }
 
           /* Always construct signed integer vector type.  */
-          intt = c_common_type_for_size (GET_MODE_BITSIZE
-					 (SCALAR_TYPE_MODE
-					  (TREE_TYPE (type0))), 0);
-	  if (!intt)
+          intt = c_common_type_for_اندازه (GET_ډېرپېښ_BITSIZE
+					 (SCALAR_TYPE_ډېرپېښ
+					  (ونه_TYPE (type0))), 0);
+	  إذا (!intt)
 	    {
 	      error_at (location, "could not find an integer type "
 				  "of the same size as %qT",
-			TREE_TYPE (type0));
-	      return error_mark_node;
+			ونه_TYPE (type0));
+	      أرجع error_mark_غوټه;
 	    }
-          result_type = build_opaque_vector_type (intt,
-						  TYPE_VECTOR_SUBPARTS (type0));
+          پایله_type = build_opaque_ویکټور_type (intt,
+						  TYPE_ویکټور_SUBPARTS (type0));
           converted = 1;
-	  ret = build_vec_cmp (resultcode, result_type, op0, op1);
-	  goto return_build_binary_op;
+	  ret = build_vec_cmp (resultcode, پایله_type, op0, op1);
+	  اذهب return_build_دوګونی_op;
         }
-      build_type = integer_type_node;
-      if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
-	   || code0 == BITINT_TYPE || code0 == FIXED_POINT_TYPE)
+      build_type = integer_type_غوټه;
+      إذا ((code0 == INTEGER_TYPE || code0 == REAL_TYPE
+	   || code0 == BITINT_TYPE || code0 == FIXED_ټکی_TYPE)
 	  && (code1 == INTEGER_TYPE || code1 == REAL_TYPE
-	      || code1 == BITINT_TYPE || code1 == FIXED_POINT_TYPE))
+	      || code1 == BITINT_TYPE || code1 == FIXED_ټکی_TYPE))
 	short_compare = 1;
-      else if (code0 == POINTER_TYPE && code1 == POINTER_TYPE)
+      وإلا إذا (code0 == اشاره_ګر_TYPE && code1 == اشاره_ګر_TYPE)
 	{
-	  addr_space_t as0 = TYPE_ADDR_SPACE (TREE_TYPE (type0));
-	  addr_space_t as1 = TYPE_ADDR_SPACE (TREE_TYPE (type1));
+	  addr_space_t as0 = TYPE_ADDR_SPACE (ونه_TYPE (type0));
+	  addr_space_t as1 = TYPE_ADDR_SPACE (ونه_TYPE (type1));
 	  addr_space_t as_common;
 
-	  if (comp_target_types (location, type0, type1))
+	  إذا (comp_موخه_types (location, type0, type1))
 	    {
-	      result_type = common_pointer_type (type0, type1, NULL_TREE);
-	      if (!COMPLETE_TYPE_P (TREE_TYPE (type0))
-		  != !COMPLETE_TYPE_P (TREE_TYPE (type1)))
+	      پایله_type = common_اشاره_ګر_type (type0, type1, NULL_ونه);
+	      إذا (!COMPLETE_TYPE_P (ونه_TYPE (type0))
+		  != !COMPLETE_TYPE_P (ونه_TYPE (type1)))
 		pedwarn_c99 (location, OPT_Wpedantic,
 			     "comparison of complete and incomplete pointers");
-	      else if (TREE_CODE (TREE_TYPE (type0)) == FUNCTION_TYPE)
+	      وإلا إذا (ونه_کوډ (ونه_TYPE (type0)) == FUNCTION_TYPE)
 		pedwarn (location, OPT_Wpedantic, "ISO C forbids "
 			 "ordered comparisons of pointers to functions");
-	      else if (null_pointer_constant_p (orig_op0)
-		       || null_pointer_constant_p (orig_op1))
+	      وإلا إذا (null_اشاره_ګر_constant_p (orig_op0)
+		       || null_اشاره_ګر_constant_p (orig_op1))
 		warning_at (location, OPT_Wextra,
 			    "ordered comparison of pointer with null pointer");
 
 	    }
-	  else if (!addr_space_superset (as0, as1, &as_common))
+	  وإلا إذا (!addr_space_superset (as0, as1, &as_common))
 	    {
 	      error_at (location, "comparison of pointers to "
 			"disjoint address spaces");
-	      return error_mark_node;
+	      أرجع error_mark_غوټه;
 	    }
-	  else
+	  وإلا
 	    {
-	      int qual = ENCODE_QUAL_ADDR_SPACE (as_common);
-	      result_type = c_build_pointer_type
-			      (c_build_qualified_type (void_type_node, qual));
-              pedwarn (location, OPT_Wcompare_distinct_pointer_types,
+	      صحيح qual = ENCODE_QUAL_ADDR_SPACE (as_common);
+	      پایله_type = c_build_اشاره_ګر_type
+			      (c_build_qualified_type (void_type_غوټه, qual));
+              pedwarn (location, OPT_Wcompare_distinct_اشاره_ګر_types,
                        "comparison of distinct pointer types lacks a cast");
 	    }
 	}
-      else if (code0 == POINTER_TYPE && null_pointer_constant_p (orig_op1))
+      وإلا إذا (code0 == اشاره_ګر_TYPE && null_اشاره_ګر_constant_p (orig_op1))
 	{
-	  result_type = type0;
-	  if (pedantic)
+	  پایله_type = type0;
+	  إذا (pedantic)
 	    pedwarn (location, OPT_Wpedantic,
 		     "ordered comparison of pointer with integer zero");
-	  else if (extra_warnings)
+	  وإلا إذا (extra_warnings)
 	    warning_at (location, OPT_Wextra,
 			"ordered comparison of pointer with integer zero");
 	}
-      else if (code1 == POINTER_TYPE && null_pointer_constant_p (orig_op0))
+      وإلا إذا (code1 == اشاره_ګر_TYPE && null_اشاره_ګر_constant_p (orig_op0))
 	{
-	  result_type = type1;
-	  if (pedantic)
+	  پایله_type = type1;
+	  إذا (pedantic)
 	    pedwarn (location, OPT_Wpedantic,
 		     "ordered comparison of pointer with integer zero");
-	  else if (extra_warnings)
+	  وإلا إذا (extra_warnings)
 	    warning_at (location, OPT_Wextra,
 			"ordered comparison of pointer with integer zero");
 	}
-      else if (code0 == POINTER_TYPE
+      وإلا إذا (code0 == اشاره_ګر_TYPE
 	       && (code1 == INTEGER_TYPE || code1 == BITINT_TYPE))
 	{
-	  result_type = type0;
+	  پایله_type = type0;
 	  pedwarn (location, 0, "comparison between pointer and integer");
 	}
-      else if ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
-	       && code1 == POINTER_TYPE)
+      وإلا إذا ((code0 == INTEGER_TYPE || code0 == BITINT_TYPE)
+	       && code1 == اشاره_ګر_TYPE)
 	{
-	  result_type = type1;
+	  پایله_type = type1;
 	  pedwarn (location, 0, "comparison between pointer and integer");
 	}
 
-      if ((code0 == POINTER_TYPE || code1 == POINTER_TYPE)
-	  && current_function_decl != NULL_TREE
-	  && sanitize_flags_p (SANITIZE_POINTER_COMPARE))
+      إذا ((code0 == اشاره_ګر_TYPE || code1 == اشاره_ګر_TYPE)
+	  && current_function_decl != NULL_ونه
+	  && sanitize_flags_p (SANITIZE_اشاره_ګر_COMPARE))
 	{
-	  op0 = save_expr (c_fully_fold (op0, false, NULL));
-	  op1 = save_expr (c_fully_fold (op1, false, NULL));
+	  op0 = save_بیان (c_fully_fold (op0, خطأ, عدم));
+	  op1 = save_بیان (c_fully_fold (op1, خطأ, عدم));
 
-	  tree tt = builtin_decl_explicit (BUILT_IN_ASAN_POINTER_COMPARE);
-	  instrument_expr = build_call_expr_loc (location, tt, 2, op0, op1);
+	  ونه tt = builtin_decl_explicit (BUILT_دننه_ASAN_اشاره_ګر_COMPARE);
+	  instrument_بیان = build_call_بیان_loc (location, tt, 2, op0, op1);
 	}
 
-      if ((C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op0))
-	   || truth_value_p (TREE_CODE (orig_op0)))
-	  ^ (C_BOOLEAN_TYPE_P (TREE_TYPE (orig_op1))
-	     || truth_value_p (TREE_CODE (orig_op1))))
-	maybe_warn_bool_compare (location, code, orig_op0, orig_op1);
-      break;
+      إذا ((C_BOOLEAN_TYPE_P (ونه_TYPE (orig_op0))
+	   || truth_ارزښت_p (ونه_کوډ (orig_op0)))
+	  ^ (C_BOOLEAN_TYPE_P (ونه_TYPE (orig_op1))
+	     || truth_ارزښت_p (ونه_کوډ (orig_op1))))
+	maybe_warn_bool_compare (location, کوډ, orig_op0, orig_op1);
+      اكسر;
 
-    case MIN_EXPR:
-    case MAX_EXPR:
+    حالة MIN_بیان:
+    حالة MAX_بیان:
       /* Used for OpenMP atomics.  */
       gcc_assert (flag_openmp);
       common = 1;
-      break;
+      اكسر;
 
-    default:
+    افتراضي:
       gcc_unreachable ();
     }
 
-  if (code0 == ERROR_MARK || code1 == ERROR_MARK)
-    return error_mark_node;
+  إذا (code0 == ERROR_MARK || code1 == ERROR_MARK)
+    أرجع error_mark_غوټه;
 
-  if (gnu_vector_type_p (type0)
-      && gnu_vector_type_p (type1)
-      && (!tree_int_cst_equal (TYPE_SIZE (type0), TYPE_SIZE (type1))
-	  || !vector_types_compatible_elements_p (type0, type1)))
+  إذا (gnu_ویکټور_type_p (type0)
+      && gnu_ویکټور_type_p (type1)
+      && (!ونه_int_cst_equal (TYPE_اندازه (type0), TYPE_اندازه (type1))
+	  || !ویکټور_types_compatible_elements_p (type0, type1)))
     {
       gcc_rich_location richloc (location);
-      maybe_range_label_for_tree_type_mismatch
+      maybe_range_label_for_ونه_type_mismatch
 	label_for_op0 (orig_op0, orig_op1),
 	label_for_op1 (orig_op1, orig_op0);
-      richloc.maybe_add_expr (orig_op0, &label_for_op0, highlight_colors::lhs);
-      richloc.maybe_add_expr (orig_op1, &label_for_op1, highlight_colors::rhs);
-      binary_op_error (&richloc, code, type0, type1);
-      return error_mark_node;
+      richloc.maybe_جمع_کړه_بیان (orig_op0, &label_for_op0, highlight_colors::lhs);
+      richloc.maybe_جمع_کړه_بیان (orig_op1, &label_for_op1, highlight_colors::rhs);
+      دوګونی_op_error (&richloc, کوډ, type0, type1);
+      أرجع error_mark_غوټه;
     }
 
-  if ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == COMPLEX_TYPE
-       || code0 == FIXED_POINT_TYPE || code0 == BITINT_TYPE
-       || gnu_vector_type_p (type0))
+  إذا ((code0 == INTEGER_TYPE || code0 == REAL_TYPE || code0 == COMPLEX_TYPE
+       || code0 == FIXED_ټکی_TYPE || code0 == BITINT_TYPE
+       || gnu_ویکټور_type_p (type0))
       && (code1 == INTEGER_TYPE || code1 == REAL_TYPE || code1 == COMPLEX_TYPE
-	  || code1 == FIXED_POINT_TYPE || code1 == BITINT_TYPE
-	  || gnu_vector_type_p (type1)))
+	  || code1 == FIXED_ټکی_TYPE || code1 == BITINT_TYPE
+	  || gnu_ویکټور_type_p (type1)))
     {
-      bool first_complex = (code0 == COMPLEX_TYPE);
-      bool second_complex = (code1 == COMPLEX_TYPE);
-      int none_complex = (!first_complex && !second_complex);
+      منطقي لومړی_complex = (code0 == COMPLEX_TYPE);
+      منطقي دوهم_complex = (code1 == COMPLEX_TYPE);
+      صحيح none_complex = (!لومړی_complex && !دوهم_complex);
 
-      if (shorten || common || short_compare)
+      إذا (shorten || common || short_compare)
 	{
-	  result_type = c_common_type (type0, type1);
-	  do_warn_double_promotion (result_type, type0, type1,
+	  پایله_type = c_common_type (type0, type1);
+	  do_warn_double_promotion (پایله_type, type0, type1,
 				    "implicit conversion from %qT to %qT "
 				    "to match other operand of binary "
 				    "expression",
 				    location);
-	  if (result_type == error_mark_node)
-	    return error_mark_node;
+	  إذا (پایله_type == error_mark_غوټه)
+	    أرجع error_mark_غوټه;
 	}
 
-      if (first_complex != second_complex
-	  && (code == PLUS_EXPR
-	      || code == MINUS_EXPR
-	      || code == MULT_EXPR
-	      || (code == TRUNC_DIV_EXPR && first_complex))
-	  && TREE_CODE (TREE_TYPE (result_type)) == REAL_TYPE
+      إذا (لومړی_complex != دوهم_complex
+	  && (کوډ == PLUS_بیان
+	      || کوډ == MINUS_بیان
+	      || کوډ == MULT_بیان
+	      || (کوډ == TRUNC_DIV_بیان && لومړی_complex))
+	  && ونه_کوډ (ونه_TYPE (پایله_type)) == REAL_TYPE
 	  && flag_signed_zeros)
 	{
 	  /* An operation on mixed real/complex operands must be
 	     handled specially, but the language-independent code can
 	     more easily optimize the plain complex arithmetic if
 	     -fno-signed-zeros.  */
-	  tree real_type = TREE_TYPE (result_type);
-	  tree real, imag;
-	  if (type0 != orig_type0 || type1 != orig_type1)
+	  ونه real_type = ونه_TYPE (پایله_type);
+	  ونه real, imag;
+	  إذا (type0 != orig_type0 || type1 != orig_type1)
 	    {
 	      gcc_assert (may_need_excess_precision && common);
-	      semantic_result_type = c_common_type (orig_type0, orig_type1);
+	      semantic_پایله_type = c_common_type (orig_type0, orig_type1);
 	    }
-	  if (first_complex)
+	  إذا (لومړی_complex)
 	    {
-	      if (TREE_TYPE (op0) != result_type)
-		op0 = convert_and_check (location, result_type, op0);
-	      if (TREE_TYPE (op1) != real_type)
+	      إذا (ونه_TYPE (op0) != پایله_type)
+		op0 = convert_and_check (location, پایله_type, op0);
+	      إذا (ونه_TYPE (op1) != real_type)
 		op1 = convert_and_check (location, real_type, op1);
 	    }
-	  else
+	  وإلا
 	    {
-	      if (TREE_TYPE (op0) != real_type)
+	      إذا (ونه_TYPE (op0) != real_type)
 		op0 = convert_and_check (location, real_type, op0);
-	      if (TREE_TYPE (op1) != result_type)
-		op1 = convert_and_check (location, result_type, op1);
+	      إذا (ونه_TYPE (op1) != پایله_type)
+		op1 = convert_and_check (location, پایله_type, op1);
 	    }
-	  if (TREE_CODE (op0) == ERROR_MARK || TREE_CODE (op1) == ERROR_MARK)
-	    return error_mark_node;
-	  if (first_complex)
+	  إذا (ونه_کوډ (op0) == ERROR_MARK || ونه_کوډ (op1) == ERROR_MARK)
+	    أرجع error_mark_غوټه;
+	  إذا (لومړی_complex)
 	    {
-	      op0 = save_expr (op0);
-	      real = build_unary_op (EXPR_LOCATION (orig_op0), REALPART_EXPR,
-				     op0, true);
-	      imag = build_unary_op (EXPR_LOCATION (orig_op0), IMAGPART_EXPR,
-				     op0, true);
-	      switch (code)
+	      op0 = save_بیان (op0);
+	      real = build_unary_op (بیان_LOCATION (orig_op0), REALPART_بیان,
+				     op0, ریښتیا);
+	      imag = build_unary_op (بیان_LOCATION (orig_op0), IMAGPART_بیان,
+				     op0, ریښتیا);
+	      بدل (کوډ)
 		{
-		case MULT_EXPR:
-		case TRUNC_DIV_EXPR:
-		  op1 = save_expr (op1);
+		حالة MULT_بیان:
+		حالة TRUNC_DIV_بیان:
+		  op1 = save_بیان (op1);
 		  imag = build2 (resultcode, real_type, imag, op1);
 		  /* Fall through.  */
-		case PLUS_EXPR:
-		case MINUS_EXPR:
+		حالة PLUS_بیان:
+		حالة MINUS_بیان:
 		  real = build2 (resultcode, real_type, real, op1);
-		  break;
-		default:
+		  اكسر;
+		افتراضي:
 		  gcc_unreachable();
 		}
 	    }
-	  else
+	  وإلا
 	    {
-	      op1 = save_expr (op1);
-	      real = build_unary_op (EXPR_LOCATION (orig_op1), REALPART_EXPR,
-				     op1, true);
-	      imag = build_unary_op (EXPR_LOCATION (orig_op1), IMAGPART_EXPR,
-				     op1, true);
-	      switch (code)
+	      op1 = save_بیان (op1);
+	      real = build_unary_op (بیان_LOCATION (orig_op1), REALPART_بیان,
+				     op1, ریښتیا);
+	      imag = build_unary_op (بیان_LOCATION (orig_op1), IMAGPART_بیان,
+				     op1, ریښتیا);
+	      بدل (کوډ)
 		{
-		case MULT_EXPR:
-		  op0 = save_expr (op0);
+		حالة MULT_بیان:
+		  op0 = save_بیان (op0);
 		  imag = build2 (resultcode, real_type, op0, imag);
 		  /* Fall through.  */
-		case PLUS_EXPR:
+		حالة PLUS_بیان:
 		  real = build2 (resultcode, real_type, op0, real);
-		  break;
-		case MINUS_EXPR:
+		  اكسر;
+		حالة MINUS_بیان:
 		  real = build2 (resultcode, real_type, op0, real);
-		  imag = build1 (NEGATE_EXPR, real_type, imag);
-		  break;
-		default:
+		  imag = build1 (NEGATE_بیان, real_type, imag);
+		  اكسر;
+		افتراضي:
 		  gcc_unreachable();
 		}
 	    }
-	  ret = build2 (COMPLEX_EXPR, result_type, real, imag);
-	  goto return_build_binary_op;
+	  ret = build2 (COMPLEX_بیان, پایله_type, real, imag);
+	  اذهب return_build_دوګونی_op;
 	}
 
       /* For certain operations (which identify themselves by shorten != 0)
@@ -15326,40 +15326,40 @@ build_binary_op (location_t location, enum tree_code code,
 	 Eg, (short)-1 | (unsigned short)-1 is (int)-1
 	 but calculated in (unsigned short) it would be (unsigned short)-1.  */
 
-      if (shorten && none_complex)
+      إذا (shorten && none_complex)
 	{
-	  final_type = result_type;
-	  result_type = shorten_binary_op (result_type, op0, op1,
+	  final_type = پایله_type;
+	  پایله_type = shorten_دوګونی_op (پایله_type, op0, op1,
 					   shorten == -1);
 	}
 
       /* Shifts can be shortened if shifting right.  */
 
-      if (short_shift)
+      إذا (short_ښويدنه)
 	{
-	  int unsigned_arg;
-	  tree arg0 = get_narrower (op0, &unsigned_arg);
+	  صحيح unsigned_arg;
+	  ونه arg0 = get_narrower (op0, &unsigned_arg);
 
-	  final_type = result_type;
+	  final_type = پایله_type;
 
-	  if (arg0 == op0 && final_type == TREE_TYPE (op0))
-	    unsigned_arg = TYPE_UNSIGNED (TREE_TYPE (op0));
+	  إذا (arg0 == op0 && final_type == ونه_TYPE (op0))
+	    unsigned_arg = TYPE_UNSIGNED (ونه_TYPE (op0));
 
-	  if (TYPE_PRECISION (TREE_TYPE (arg0)) < TYPE_PRECISION (result_type)
-	      && tree_int_cst_sgn (op1) > 0
+	  إذا (TYPE_PRECISION (ونه_TYPE (arg0)) < TYPE_PRECISION (پایله_type)
+	      && ونه_int_cst_sgn (op1) > 0
 	      /* We can shorten only if the shift count is less than the
 		 number of bits in the smaller type size.  */
-	      && compare_tree_int (op1, TYPE_PRECISION (TREE_TYPE (arg0))) < 0
+	      && compare_ونه_int (op1, TYPE_PRECISION (ونه_TYPE (arg0))) < 0
 	      /* We cannot drop an unsigned shift after sign-extension.  */
 	      && (!TYPE_UNSIGNED (final_type) || unsigned_arg))
 	    {
 	      /* Do an unsigned shift if the operand was zero-extended.  */
-	      result_type
+	      پایله_type
 		= c_common_signed_or_unsigned_type (unsigned_arg,
-						    TREE_TYPE (arg0));
+						    ونه_TYPE (arg0));
 	      /* Convert value-to-be-shifted to that type.  */
-	      if (TREE_TYPE (op0) != result_type)
-		op0 = convert (result_type, op0);
+	      إذا (ونه_TYPE (op0) != پایله_type)
+		op0 = convert (پایله_type, op0);
 	      converted = 1;
 	    }
 	}
@@ -15367,68 +15367,68 @@ build_binary_op (location_t location, enum tree_code code,
       /* Comparison operations are shortened too but differently.
 	 They identify themselves by setting short_compare = 1.  */
 
-      if (short_compare)
+      إذا (short_compare)
 	{
 	  /* Don't write &op0, etc., because that would prevent op0
 	     from being kept in a register.
 	     Instead, make copies of the our local variables and
 	     pass the copies by reference, then copy them back afterward.  */
-	  tree xop0 = op0, xop1 = op1, xresult_type = result_type;
-	  enum tree_code xresultcode = resultcode;
-	  tree val
+	  ونه xop0 = op0, xop1 = op1, xresult_type = پایله_type;
+	  تعداد ونه_کوډ_2 xresultcode = resultcode;
+	  ونه val
 	    = shorten_compare (location, &xop0, &xop1, &xresult_type,
 			       &xresultcode);
 
-	  if (val != NULL_TREE)
+	  إذا (val != NULL_ونه)
 	    {
 	      ret = val;
-	      goto return_build_binary_op;
+	      اذهب return_build_دوګونی_op;
 	    }
 
 	  op0 = xop0, op1 = xop1;
 	  converted = 1;
 	  resultcode = xresultcode;
 
-	  if (c_inhibit_evaluation_warnings == 0 && !c_in_omp_for)
+	  إذا (c_inhibit_evaluation_warnings == 0 && !c_دننه_omp_for)
 	    {
-	      bool op0_maybe_const = true;
-	      bool op1_maybe_const = true;
-	      tree orig_op0_folded, orig_op1_folded;
+	      منطقي op0_maybe_const = ریښتیا;
+	      منطقي op1_maybe_const = ریښتیا;
+	      ونه orig_op0_folded, orig_op1_folded;
 
-	      if (in_late_binary_op)
+	      إذا (دننه_late_دوګونی_op)
 		{
 		  orig_op0_folded = orig_op0;
 		  orig_op1_folded = orig_op1;
 		}
-	      else
+	      وإلا
 		{
 		  /* Fold for the sake of possible warnings, as in
 		     build_conditional_expr.  This requires the
 		     "original" values to be folded, not just op0 and
 		     op1.  */
 		  c_inhibit_evaluation_warnings++;
-		  op0 = c_fully_fold (op0, require_constant_value,
+		  op0 = c_fully_fold (op0, require_constant_ارزښت,
 				      &op0_maybe_const);
-		  op1 = c_fully_fold (op1, require_constant_value,
+		  op1 = c_fully_fold (op1, require_constant_ارزښت,
 				      &op1_maybe_const);
 		  c_inhibit_evaluation_warnings--;
 		  orig_op0_folded = c_fully_fold (orig_op0,
-						  require_constant_value,
-						  NULL);
+						  require_constant_ارزښت,
+						  عدم);
 		  orig_op1_folded = c_fully_fold (orig_op1,
-						  require_constant_value,
-						  NULL);
+						  require_constant_ارزښت,
+						  عدم);
 		}
 
-	      if (warn_sign_compare)
+	      إذا (warn_sign_compare)
 		warn_for_sign_compare (location, orig_op0_folded,
 				       orig_op1_folded, op0, op1,
-				       result_type, resultcode);
-	      if (!in_late_binary_op && !int_operands)
+				       پایله_type, resultcode);
+	      إذا (!دننه_late_دوګونی_op && !int_operands)
 		{
-		  if (!op0_maybe_const || TREE_CODE (op0) != INTEGER_CST)
+		  إذا (!op0_maybe_const || ونه_کوډ (op0) != INTEGER_CST)
 		    op0 = c_wrap_maybe_const (op0, !op0_maybe_const);
-		  if (!op1_maybe_const || TREE_CODE (op1) != INTEGER_CST)
+		  إذا (!op1_maybe_const || ونه_کوډ (op1) != INTEGER_CST)
 		    op1 = c_wrap_maybe_const (op1, !op1_maybe_const);
 		}
 	    }
@@ -15441,348 +15441,348 @@ build_binary_op (location_t location, enum tree_code code,
      It will be given type FINAL_TYPE if that is nonzero;
      otherwise, it will be given type RESULT_TYPE.  */
 
-  if (!result_type)
+  إذا (!پایله_type)
     {
       /* Favor showing any expression locations that are available. */
       op_location_t oploc (location, UNKNOWN_LOCATION);
-      binary_op_rich_location richloc (oploc, orig_op0, orig_op1, true);
-      binary_op_error (&richloc, code, TREE_TYPE (op0), TREE_TYPE (op1));
-      return error_mark_node;
+      دوګونی_op_rich_location richloc (oploc, orig_op0, orig_op1, ریښتیا);
+      دوګونی_op_error (&richloc, کوډ, ونه_TYPE (op0), ونه_TYPE (op1));
+      أرجع error_mark_غوټه;
     }
 
-  if (build_type == NULL_TREE)
+  إذا (build_type == NULL_ونه)
     {
-      build_type = result_type;
-      if ((type0 != orig_type0 || type1 != orig_type1)
+      build_type = پایله_type;
+      إذا ((type0 != orig_type0 || type1 != orig_type1)
 	  && !boolean_op)
 	{
 	  gcc_assert (may_need_excess_precision && common);
-	  semantic_result_type = c_common_type (orig_type0, orig_type1);
+	  semantic_پایله_type = c_common_type (orig_type0, orig_type1);
 	}
     }
 
-  if (!converted)
+  إذا (!converted)
     {
-      op0 = ep_convert_and_check (location, result_type, op0,
-				  semantic_result_type);
-      op1 = ep_convert_and_check (location, result_type, op1,
-				  semantic_result_type);
+      op0 = ep_convert_and_check (location, پایله_type, op0,
+				  semantic_پایله_type);
+      op1 = ep_convert_and_check (location, پایله_type, op1,
+				  semantic_پایله_type);
 
       /* This can happen if one operand has a vector type, and the other
 	 has a different type.  */
-      if (TREE_CODE (op0) == ERROR_MARK || TREE_CODE (op1) == ERROR_MARK)
-	return error_mark_node;
+      إذا (ونه_کوډ (op0) == ERROR_MARK || ونه_کوډ (op1) == ERROR_MARK)
+	أرجع error_mark_غوټه;
     }
 
-  if (sanitize_flags_p ((SANITIZE_SHIFT
+  إذا (sanitize_flags_p ((SANITIZE_ښويدنه
 			 | SANITIZE_DIVIDE
 			 | SANITIZE_FLOAT_DIVIDE
-			 | SANITIZE_SI_OVERFLOW))
-      && current_function_decl != NULL_TREE
-      && (doing_div_or_mod || doing_shift)
-      && !require_constant_value)
+			 | SANITIZE_SI_ډکېدنه))
+      && current_function_decl != NULL_ونه
+      && (doing_div_or_mod || doing_ښويدنه)
+      && !require_constant_ارزښت)
     {
       /* OP0 and/or OP1 might have side-effects.  */
-      op0 = save_expr (op0);
-      op1 = save_expr (op1);
-      op0 = c_fully_fold (op0, false, NULL);
-      op1 = c_fully_fold (op1, false, NULL);
-      if (doing_div_or_mod && (sanitize_flags_p ((SANITIZE_DIVIDE
+      op0 = save_بیان (op0);
+      op1 = save_بیان (op1);
+      op0 = c_fully_fold (op0, خطأ, عدم);
+      op1 = c_fully_fold (op1, خطأ, عدم);
+      إذا (doing_div_or_mod && (sanitize_flags_p ((SANITIZE_DIVIDE
 						  | SANITIZE_FLOAT_DIVIDE
-						  | SANITIZE_SI_OVERFLOW))))
-	instrument_expr = ubsan_instrument_division (location, op0, op1);
-      else if (doing_shift && sanitize_flags_p (SANITIZE_SHIFT))
-	instrument_expr = ubsan_instrument_shift (location, code, op0, op1);
+						  | SANITIZE_SI_ډکېدنه))))
+	instrument_بیان = ubsan_instrument_division (location, op0, op1);
+      وإلا إذا (doing_ښويدنه && sanitize_flags_p (SANITIZE_ښويدنه))
+	instrument_بیان = ubsan_instrument_ښويدنه (location, کوډ, op0, op1);
     }
 
   /* Treat expressions in initializers specially as they can't trap.  */
-  if (int_const_or_overflow)
-    ret = (require_constant_value
+  إذا (int_const_or_ډکېدنه)
+    ret = (require_constant_ارزښت
 	   ? fold_build2_initializer_loc (location, resultcode, build_type,
 					  op0, op1)
 	   : fold_build2_loc (location, resultcode, build_type, op0, op1));
-  else
+  وإلا
     ret = build2 (resultcode, build_type, op0, op1);
-  if (final_type != NULL_TREE)
+  إذا (final_type != NULL_ونه)
     ret = convert (final_type, ret);
 
- return_build_binary_op:
-  gcc_assert (ret != error_mark_node);
-  if (TREE_CODE (ret) == INTEGER_CST && !TREE_OVERFLOW (ret) && !int_const)
+ return_build_دوګونی_op:
+  gcc_assert (ret != error_mark_غوټه);
+  إذا (ونه_کوډ (ret) == INTEGER_CST && !ونه_ډکېدنه (ret) && !int_const)
     ret = (int_operands
 	   ? note_integer_operands (ret)
-	   : build1 (NOP_EXPR, TREE_TYPE (ret), ret));
-  else if (TREE_CODE (ret) != INTEGER_CST && int_operands
-	   && !in_late_binary_op)
+	   : build1 (NOP_بیان, ونه_TYPE (ret), ret));
+  وإلا إذا (ونه_کوډ (ret) != INTEGER_CST && int_operands
+	   && !دننه_late_دوګونی_op)
     ret = note_integer_operands (ret);
-  protected_set_expr_location (ret, location);
+  protected_سېټ_بیان_location (ret, location);
 
-  if (instrument_expr != NULL)
-    ret = fold_build2 (COMPOUND_EXPR, TREE_TYPE (ret),
-		       instrument_expr, ret);
+  إذا (instrument_بیان != عدم)
+    ret = fold_build2 (COMPOUND_بیان, ونه_TYPE (ret),
+		       instrument_بیان, ret);
 
-  if (semantic_result_type)
-    ret = build1_loc (location, EXCESS_PRECISION_EXPR,
-		      semantic_result_type, ret);
+  إذا (semantic_پایله_type)
+    ret = build1_loc (location, EXCESS_PRECISION_بیان,
+		      semantic_پایله_type, ret);
 
-  return ret;
+  أرجع ret;
 }
 
 
 /* Convert EXPR to be a truth-value (type TYPE), validating its type for this
    purpose.  LOCATION is the source location for the expression.  */
 
-tree
-c_objc_common_truthvalue_conversion (location_t location, tree expr, tree type)
+ونه
+c_objc_common_truthvalue_conversion (location_t location, ونه بیان, ونه type)
 {
-  bool int_const, int_operands;
+  منطقي int_const, int_operands;
 
-  switch (TREE_CODE (TREE_TYPE (expr)))
+  بدل (ونه_کوډ (ونه_TYPE (بیان)))
     {
-    case ARRAY_TYPE:
+    حالة ARRAY_TYPE:
       error_at (location, "used array that cannot be converted to pointer where scalar is required");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
 
-    case RECORD_TYPE:
+    حالة ریکارډ_TYPE:
       error_at (location, "used struct type value where scalar is required");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
 
-    case UNION_TYPE:
+    حالة UNION_TYPE:
       error_at (location, "used union type value where scalar is required");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
 
-    case VOID_TYPE:
+    حالة VOID_TYPE:
       error_at (location, "void value not ignored as it ought to be");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
 
-    case POINTER_TYPE:
-      if (reject_gcc_builtin (expr))
-	return error_mark_node;
-      break;
+    حالة اشاره_ګر_TYPE:
+      إذا (reject_gcc_builtin (بیان))
+	أرجع error_mark_غوټه;
+      اكسر;
 
-    case FUNCTION_TYPE:
+    حالة FUNCTION_TYPE:
       gcc_unreachable ();
 
-    case VECTOR_TYPE:
+    حالة ویکټور_TYPE:
       error_at (location, "used vector type where scalar is required");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
 
-    default:
-      break;
+    افتراضي:
+      اكسر;
     }
 
   /* Conversion of a floating constant to boolean goes through here
      and yields an integer constant expression.  Otherwise, the result
      is only an integer constant expression if the argument is.  */
-  int_const = ((TREE_CODE (expr) == INTEGER_CST && !TREE_OVERFLOW (expr))
-	       || ((TREE_CODE (expr) == REAL_CST
-		    || TREE_CODE (expr) == COMPLEX_CST)
-		   && (TREE_CODE (type) == BOOLEAN_TYPE
-		       || (TREE_CODE (type) == ENUMERAL_TYPE
-			   && ENUM_UNDERLYING_TYPE (type) != NULL_TREE
-			   && (TREE_CODE (ENUM_UNDERLYING_TYPE (type))
+  int_const = ((ونه_کوډ (بیان) == INTEGER_CST && !ونه_ډکېدنه (بیان))
+	       || ((ونه_کوډ (بیان) == REAL_CST
+		    || ونه_کوډ (بیان) == COMPLEX_CST)
+		   && (ونه_کوډ (type) == BOOLEAN_TYPE
+		       || (ونه_کوډ (type) == ENUMERAL_TYPE
+			   && ENUM_UNDERLYING_TYPE (type) != NULL_ونه
+			   && (ونه_کوډ (ENUM_UNDERLYING_TYPE (type))
 			       == BOOLEAN_TYPE)))));
-  int_operands = EXPR_INT_CONST_OPERANDS (expr);
-  if (int_operands && TREE_CODE (expr) != INTEGER_CST)
+  int_operands = بیان_INT_CONST_OPERANDS (بیان);
+  إذا (int_operands && ونه_کوډ (بیان) != INTEGER_CST)
     {
-      expr = remove_c_maybe_const_expr (expr);
-      expr = build2 (NE_EXPR, type, expr,
-		     convert (TREE_TYPE (expr), integer_zero_node));
-      expr = note_integer_operands (expr);
+      بیان = remove_c_maybe_const_بیان (بیان);
+      بیان = build2 (NE_بیان, type, بیان,
+		     convert (ونه_TYPE (بیان), integer_zero_غوټه));
+      بیان = note_integer_operands (بیان);
     }
-  else
+  وإلا
     {
       /* ??? Should we also give an error for vectors rather than leaving
 	 those to give errors later?  */
-      expr = c_common_truthvalue_conversion (location, expr);
-      expr = fold_convert_loc (location, type, expr);
+      بیان = c_common_truthvalue_conversion (location, بیان);
+      بیان = fold_convert_loc (location, type, بیان);
     }
 
-  if (TREE_CODE (expr) == INTEGER_CST && int_operands && !int_const)
+  إذا (ونه_کوډ (بیان) == INTEGER_CST && int_operands && !int_const)
     {
-      if (TREE_OVERFLOW (expr))
-	return expr;
-      else
-	return note_integer_operands (expr);
+      إذا (ونه_ډکېدنه (بیان))
+	أرجع بیان;
+      وإلا
+	أرجع note_integer_operands (بیان);
     }
-  if (TREE_CODE (expr) == INTEGER_CST && !int_const)
-    return build1 (NOP_EXPR, TREE_TYPE (expr), expr);
-  return expr;
+  إذا (ونه_کوډ (بیان) == INTEGER_CST && !int_const)
+    أرجع build1 (NOP_بیان, ونه_TYPE (بیان), بیان);
+  أرجع بیان;
 }
 
 
 /* Convert EXPR to a contained DECL, updating *TC, *TI and *SE as
    required.  */
 
-tree
-c_expr_to_decl (tree expr, bool *tc ATTRIBUTE_UNUSED, bool *se)
+ونه
+c_بیان_منزل_decl (ونه بیان, منطقي *tc ATTRIBUTE_ناکارول_شوی, منطقي *se)
 {
-  if (TREE_CODE (expr) == COMPOUND_LITERAL_EXPR)
+  إذا (ونه_کوډ (بیان) == COMPOUND_LITERAL_بیان)
     {
-      tree decl = COMPOUND_LITERAL_EXPR_DECL (expr);
+      ونه decl = COMPOUND_LITERAL_بیان_DECL (بیان);
       /* Executing a compound literal inside a function reinitializes
 	 it.  */
-      if (!TREE_STATIC (decl))
-	*se = true;
-      return decl;
+      إذا (!ونه_STATIC (decl))
+	*se = ریښتیا;
+      أرجع decl;
     }
-  else
-    return expr;
+  وإلا
+    أرجع بیان;
 }
 
 /* Generate OMP construct CODE, with BODY and CLAUSES as its compound
    statement.  LOC is the location of the construct.  */
 
-tree
-c_finish_omp_construct (location_t loc, enum tree_code code, tree body,
-			tree clauses)
+ونه
+c_پای_omp_construct (location_t loc, تعداد ونه_کوډ_2 کوډ, ونه body,
+			ونه clauses)
 {
-  body = c_end_compound_stmt (loc, body, true);
+  body = c_پای_ټکی_compound_stmt (loc, body, ریښتیا);
 
-  tree stmt = make_node (code);
-  TREE_TYPE (stmt) = void_type_node;
+  ونه stmt = make_غوټه (کوډ);
+  ونه_TYPE (stmt) = void_type_غوټه;
   OMP_BODY (stmt) = body;
   OMP_CLAUSES (stmt) = clauses;
-  SET_EXPR_LOCATION (stmt, loc);
+  سېټ_بیان_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  أرجع جمع_کړه_stmt (stmt);
 }
 
 /* Generate OACC_DATA, with CLAUSES and BLOCK as its compound
    statement.  LOC is the location of the OACC_DATA.  */
 
-tree
-c_finish_oacc_data (location_t loc, tree clauses, tree block)
+ونه
+c_پای_oacc_معلومات (location_t loc, ونه clauses, ونه بلاک)
 {
-  tree stmt;
+  ونه stmt;
 
-  block = c_end_compound_stmt (loc, block, true);
+  بلاک = c_پای_ټکی_compound_stmt (loc, بلاک, ریښتیا);
 
-  stmt = make_node (OACC_DATA);
-  TREE_TYPE (stmt) = void_type_node;
-  OACC_DATA_CLAUSES (stmt) = clauses;
-  OACC_DATA_BODY (stmt) = block;
-  SET_EXPR_LOCATION (stmt, loc);
+  stmt = make_غوټه (OACC_معلومات);
+  ونه_TYPE (stmt) = void_type_غوټه;
+  OACC_معلومات_CLAUSES (stmt) = clauses;
+  OACC_معلومات_BODY (stmt) = بلاک;
+  سېټ_بیان_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  أرجع جمع_کړه_stmt (stmt);
 }
 
 /* Generate OACC_HOST_DATA, with CLAUSES and BLOCK as its compound
    statement.  LOC is the location of the OACC_HOST_DATA.  */
 
-tree
-c_finish_oacc_host_data (location_t loc, tree clauses, tree block)
+ونه
+c_پای_oacc_host_معلومات (location_t loc, ونه clauses, ونه بلاک)
 {
-  tree stmt;
+  ونه stmt;
 
-  block = c_end_compound_stmt (loc, block, true);
+  بلاک = c_پای_ټکی_compound_stmt (loc, بلاک, ریښتیا);
 
-  stmt = make_node (OACC_HOST_DATA);
-  TREE_TYPE (stmt) = void_type_node;
-  OACC_HOST_DATA_CLAUSES (stmt) = clauses;
-  OACC_HOST_DATA_BODY (stmt) = block;
-  SET_EXPR_LOCATION (stmt, loc);
+  stmt = make_غوټه (OACC_HOST_معلومات);
+  ونه_TYPE (stmt) = void_type_غوټه;
+  OACC_HOST_معلومات_CLAUSES (stmt) = clauses;
+  OACC_HOST_معلومات_BODY (stmt) = بلاک;
+  سېټ_بیان_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  أرجع جمع_کړه_stmt (stmt);
 }
 
 /* Like c_begin_compound_stmt, except force the retention of the BLOCK.  */
 
-tree
-c_begin_omp_parallel (void)
+ونه
+c_begin_omp_parallel (فراغ)
 {
-  tree block;
+  ونه بلاک;
 
-  keep_next_level ();
-  block = c_begin_compound_stmt (true);
+  keep_بل_level ();
+  بلاک = c_begin_compound_stmt (ریښتیا);
 
-  return block;
+  أرجع بلاک;
 }
 
 /* Generate OMP_PARALLEL, with CLAUSES and BLOCK as its compound
    statement.  LOC is the location of the OMP_PARALLEL.  */
 
-tree
-c_finish_omp_parallel (location_t loc, tree clauses, tree block)
+ونه
+c_پای_omp_parallel (location_t loc, ونه clauses, ونه بلاک)
 {
-  tree stmt;
+  ونه stmt;
 
-  block = c_end_compound_stmt (loc, block, true);
+  بلاک = c_پای_ټکی_compound_stmt (loc, بلاک, ریښتیا);
 
-  stmt = make_node (OMP_PARALLEL);
-  TREE_TYPE (stmt) = void_type_node;
+  stmt = make_غوټه (OMP_PARALLEL);
+  ونه_TYPE (stmt) = void_type_غوټه;
   OMP_PARALLEL_CLAUSES (stmt) = clauses;
-  OMP_PARALLEL_BODY (stmt) = block;
-  SET_EXPR_LOCATION (stmt, loc);
+  OMP_PARALLEL_BODY (stmt) = بلاک;
+  سېټ_بیان_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  أرجع جمع_کړه_stmt (stmt);
 }
 
 /* Like c_begin_compound_stmt, except force the retention of the BLOCK.  */
 
-tree
-c_begin_omp_task (void)
+ونه
+c_begin_omp_task (فراغ)
 {
-  tree block;
+  ونه بلاک;
 
-  keep_next_level ();
-  block = c_begin_compound_stmt (true);
+  keep_بل_level ();
+  بلاک = c_begin_compound_stmt (ریښتیا);
 
-  return block;
+  أرجع بلاک;
 }
 
 /* Generate OMP_TASK, with CLAUSES and BLOCK as its compound
    statement.  LOC is the location of the #pragma.  */
 
-tree
-c_finish_omp_task (location_t loc, tree clauses, tree block)
+ونه
+c_پای_omp_task (location_t loc, ونه clauses, ونه بلاک)
 {
-  tree stmt;
+  ونه stmt;
 
-  block = c_end_compound_stmt (loc, block, true);
+  بلاک = c_پای_ټکی_compound_stmt (loc, بلاک, ریښتیا);
 
-  stmt = make_node (OMP_TASK);
-  TREE_TYPE (stmt) = void_type_node;
+  stmt = make_غوټه (OMP_TASK);
+  ونه_TYPE (stmt) = void_type_غوټه;
   OMP_TASK_CLAUSES (stmt) = clauses;
-  OMP_TASK_BODY (stmt) = block;
-  SET_EXPR_LOCATION (stmt, loc);
+  OMP_TASK_BODY (stmt) = بلاک;
+  سېټ_بیان_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  أرجع جمع_کړه_stmt (stmt);
 }
 
 /* Generate GOMP_cancel call for #pragma omp cancel.  */
 
-void
-c_finish_omp_cancel (location_t loc, tree clauses)
+فراغ
+c_پای_omp_cancel (location_t loc, ونه clauses)
 {
-  tree fn = builtin_decl_explicit (BUILT_IN_GOMP_CANCEL);
-  int mask = 0;
-  if (omp_find_clause (clauses, OMP_CLAUSE_PARALLEL))
-    mask = 1;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_FOR))
-    mask = 2;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_SECTIONS))
-    mask = 4;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_TASKGROUP))
-    mask = 8;
-  else
+  ونه fn = builtin_decl_explicit (BUILT_دننه_GOMP_CANCEL);
+  صحيح ماسک = 0;
+  إذا (omp_پیدا_کړه_clause (clauses, OMP_CLAUSE_PARALLEL))
+    ماسک = 1;
+  وإلا إذا (omp_پیدا_کړه_clause (clauses, OMP_CLAUSE_FOR))
+    ماسک = 2;
+  وإلا إذا (omp_پیدا_کړه_clause (clauses, OMP_CLAUSE_SECTIONS))
+    ماسک = 4;
+  وإلا إذا (omp_پیدا_کړه_clause (clauses, OMP_CLAUSE_TASKGROUP))
+    ماسک = 8;
+  وإلا
     {
       error_at (loc, "%<#pragma omp cancel%> must specify one of "
 		     "%<parallel%>, %<for%>, %<sections%> or %<taskgroup%> "
 		     "clauses");
-      return;
+      أرجع;
     }
-  tree ifc = omp_find_clause (clauses, OMP_CLAUSE_IF);
-  if (ifc != NULL_TREE)
+  ونه ifc = omp_پیدا_کړه_clause (clauses, OMP_CLAUSE_IF);
+  إذا (ifc != NULL_ونه)
     {
-      if (OMP_CLAUSE_IF_MODIFIER (ifc) != ERROR_MARK
+      إذا (OMP_CLAUSE_IF_MODIFIER (ifc) != ERROR_MARK
 	  && OMP_CLAUSE_IF_MODIFIER (ifc) != VOID_CST)
 	error_at (OMP_CLAUSE_LOCATION (ifc),
 		  "expected %<cancel%> %<if%> clause modifier");
-      else
+      وإلا
 	{
-	  tree ifc2 = omp_find_clause (OMP_CLAUSE_CHAIN (ifc), OMP_CLAUSE_IF);
-	  if (ifc2 != NULL_TREE)
+	  ونه ifc2 = omp_پیدا_کړه_clause (OMP_CLAUSE_CHAIN (ifc), OMP_CLAUSE_IF);
+	  إذا (ifc2 != NULL_ونه)
 	    {
 	      gcc_assert (OMP_CLAUSE_IF_MODIFIER (ifc) == VOID_CST
 			  && OMP_CLAUSE_IF_MODIFIER (ifc2) != ERROR_MARK
@@ -15792,45 +15792,45 @@ c_finish_omp_cancel (location_t loc, tree clauses)
 	    }
 	}
 
-      tree type = TREE_TYPE (OMP_CLAUSE_IF_EXPR (ifc));
-      ifc = fold_build2_loc (OMP_CLAUSE_LOCATION (ifc), NE_EXPR,
-			     boolean_type_node, OMP_CLAUSE_IF_EXPR (ifc),
+      ونه type = ونه_TYPE (OMP_CLAUSE_IF_بیان (ifc));
+      ifc = fold_build2_loc (OMP_CLAUSE_LOCATION (ifc), NE_بیان,
+			     boolean_type_غوټه, OMP_CLAUSE_IF_بیان (ifc),
 			     build_zero_cst (type));
     }
-  else
-    ifc = boolean_true_node;
-  tree stmt = build_call_expr_loc (loc, fn, 2,
-				   build_int_cst (integer_type_node, mask),
+  وإلا
+    ifc = boolean_true_غوټه;
+  ونه stmt = build_call_بیان_loc (loc, fn, 2,
+				   build_int_cst (integer_type_غوټه, ماسک),
 				   ifc);
-  add_stmt (stmt);
+  جمع_کړه_stmt (stmt);
 }
 
 /* Generate GOMP_cancellation_point call for
    #pragma omp cancellation point.  */
 
-void
-c_finish_omp_cancellation_point (location_t loc, tree clauses)
+فراغ
+c_پای_omp_cancellation_ټکی (location_t loc, ونه clauses)
 {
-  tree fn = builtin_decl_explicit (BUILT_IN_GOMP_CANCELLATION_POINT);
-  int mask = 0;
-  if (omp_find_clause (clauses, OMP_CLAUSE_PARALLEL))
-    mask = 1;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_FOR))
-    mask = 2;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_SECTIONS))
-    mask = 4;
-  else if (omp_find_clause (clauses, OMP_CLAUSE_TASKGROUP))
-    mask = 8;
-  else
+  ونه fn = builtin_decl_explicit (BUILT_دننه_GOMP_CANCELLATION_ټکی);
+  صحيح ماسک = 0;
+  إذا (omp_پیدا_کړه_clause (clauses, OMP_CLAUSE_PARALLEL))
+    ماسک = 1;
+  وإلا إذا (omp_پیدا_کړه_clause (clauses, OMP_CLAUSE_FOR))
+    ماسک = 2;
+  وإلا إذا (omp_پیدا_کړه_clause (clauses, OMP_CLAUSE_SECTIONS))
+    ماسک = 4;
+  وإلا إذا (omp_پیدا_کړه_clause (clauses, OMP_CLAUSE_TASKGROUP))
+    ماسک = 8;
+  وإلا
     {
       error_at (loc, "%<#pragma omp cancellation point%> must specify one of "
 		     "%<parallel%>, %<for%>, %<sections%> or %<taskgroup%> "
 		     "clauses");
-      return;
+      أرجع;
     }
-  tree stmt = build_call_expr_loc (loc, fn, 1,
-				   build_int_cst (integer_type_node, mask));
-  add_stmt (stmt);
+  ونه stmt = build_call_بیان_loc (loc, fn, 1,
+				   build_int_cst (integer_type_غوټه, ماسک));
+  جمع_کړه_stmt (stmt);
 }
 
 /* Helper function for handle_omp_array_sections.  Called recursively
@@ -15853,606 +15853,606 @@ c_finish_omp_cancellation_point (location_t loc, tree clauses)
    can if MAYBE_ZERO_LEN is false.  MAYBE_ZERO_LEN will be true in the above
    case though, as some lengths could be zero.  */
 
-static tree
-handle_omp_array_sections_1 (tree c, tree t, vec<tree> &types,
-			     bool &maybe_zero_len, unsigned int &first_non_one,
-			     enum c_omp_region_type ort)
+ساكن ونه
+handle_omp_array_sections_1 (ونه c, ونه t, vec<ونه> &types,
+			     منطقي &maybe_zero_len, بینښه صحيح &لومړی_non_one,
+			     تعداد c_omp_region_type ort)
 {
-  tree ret, low_bound, length, type;
-  bool openacc = (ort & C_ORT_ACC) != 0;
-  if (TREE_CODE (t) != OMP_ARRAY_SECTION)
+  ونه ret, ټیټ_bound, اوږدتیا, type;
+  منطقي openacc = (ort & C_ORT_ACC) != 0;
+  إذا (ونه_کوډ (t) != OMP_ARRAY_SECTION)
     {
-      if (error_operand_p (t))
-	return error_mark_node;
-      c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
+      إذا (error_عملوند_p (t))
+	أرجع error_mark_غوټه;
+      c_omp_پته_inspector ai (OMP_CLAUSE_LOCATION (c), t);
       ret = t;
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
-	  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
-	  && TYPE_ATOMIC (strip_array_types (TREE_TYPE (t))))
+      إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_AFFINITY
+	  && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_DEPEND
+	  && TYPE_ATOMIC (strip_array_types (ونه_TYPE (t))))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c), "%<_Atomic%> %qE in %qs clause",
-		    t, omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+		    t, omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	  أرجع error_mark_غوټه;
 	}
-      if (!ai.check_clause (c))
-	return error_mark_node;
-      else if (ai.component_access_p ()
-	       && (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
-		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TO
-		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_FROM))
-	t = ai.get_root_term (true);
-      else
+      إذا (!ai.check_clause (c))
+	أرجع error_mark_غوټه;
+      وإلا إذا (ai.component_access_p ()
+	       && (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_MAP
+		   || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_منزل
+		   || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_FROM))
+	t = ai.get_ریښه_غړی (ریښتیا);
+      وإلا
 	t = ai.unconverted_ref_origin ();
-      if (t == error_mark_node)
-	return error_mark_node;
-      if (!VAR_P (t)
-	  && (ort == C_ORT_ACC || !EXPR_P (t))
-	  && TREE_CODE (t) != PARM_DECL)
+      إذا (t == error_mark_غوټه)
+	أرجع error_mark_غوټه;
+      إذا (!VAR_P (t)
+	  && (ort == C_ORT_ACC || !بیان_P (t))
+	  && ونه_کوډ (t) != PARM_DECL)
 	{
-	  if (DECL_P (t))
+	  إذا (DECL_P (t))
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qD is not a variable in %qs clause", t,
-		      omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  else
+		      omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	  وإلا
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qE is not a variable in %qs clause", t,
-		      omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+		      omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	  أرجع error_mark_غوټه;
 	}
-      else if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
-	       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
-	       && TYPE_ATOMIC (TREE_TYPE (t)))
+      وإلا إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_AFFINITY
+	       && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_DEPEND
+	       && TYPE_ATOMIC (ونه_TYPE (t)))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c), "%<_Atomic%> %qD in %qs clause",
-		    t, omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+		    t, omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	  أرجع error_mark_غوټه;
 	}
-      else if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
-	       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
+      وإلا إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_AFFINITY
+	       && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_DEPEND
 	       && VAR_P (t)
 	       && DECL_THREAD_LOCAL_P (t))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "%qD is threadprivate variable in %qs clause", t,
-		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+		    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	  أرجع error_mark_غوټه;
 	}
-      if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
-	   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND)
-	  && TYPE_ATOMIC (TREE_TYPE (t))
-	  && POINTER_TYPE_P (TREE_TYPE (t)))
+      إذا ((OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_AFFINITY
+	   || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_DEPEND)
+	  && TYPE_ATOMIC (ونه_TYPE (t))
+	  && اشاره_ګر_TYPE_P (ونه_TYPE (t)))
 	{
 	  /* If the array section is pointer based and the pointer
 	     itself is _Atomic qualified, we need to atomically load
 	     the pointer.  */
-	  ret = convert_lvalue_to_rvalue (OMP_CLAUSE_LOCATION (c),
-					  ret, false, false);
+	  ret = convert_lvalue_منزل_rvalue (OMP_CLAUSE_LOCATION (c),
+					  ret, خطأ, خطأ);
 	}
-      return ret;
+      أرجع ret;
     }
 
-  ret = handle_omp_array_sections_1 (c, TREE_OPERAND (t, 0), types,
-				     maybe_zero_len, first_non_one, ort);
-  if (ret == error_mark_node || ret == NULL_TREE)
-    return ret;
+  ret = handle_omp_array_sections_1 (c, ونه_عملوند (t, 0), types,
+				     maybe_zero_len, لومړی_non_one, ort);
+  إذا (ret == error_mark_غوټه || ret == NULL_ونه)
+    أرجع ret;
 
-  type = TREE_TYPE (ret);
-  low_bound = TREE_OPERAND (t, 1);
-  length = TREE_OPERAND (t, 2);
+  type = ونه_TYPE (ret);
+  ټیټ_bound = ونه_عملوند (t, 1);
+  اوږدتیا = ونه_عملوند (t, 2);
 
-  if (low_bound == error_mark_node || length == error_mark_node)
-    return error_mark_node;
+  إذا (ټیټ_bound == error_mark_غوټه || اوږدتیا == error_mark_غوټه)
+    أرجع error_mark_غوټه;
 
-  if (low_bound && !INTEGRAL_TYPE_P (TREE_TYPE (low_bound)))
+  إذا (ټیټ_bound && !INTEGRAL_TYPE_P (ونه_TYPE (ټیټ_bound)))
     {
       error_at (OMP_CLAUSE_LOCATION (c),
 		"low bound %qE of array section does not have integral type",
-		low_bound);
-      return error_mark_node;
+		ټیټ_bound);
+      أرجع error_mark_غوټه;
     }
-  if (length && !INTEGRAL_TYPE_P (TREE_TYPE (length)))
+  إذا (اوږدتیا && !INTEGRAL_TYPE_P (ونه_TYPE (اوږدتیا)))
     {
       error_at (OMP_CLAUSE_LOCATION (c),
 		"length %qE of array section does not have integral type",
-		length);
-      return error_mark_node;
+		اوږدتیا);
+      أرجع error_mark_غوټه;
     }
-  if (low_bound
-      && TREE_CODE (low_bound) == INTEGER_CST
-      && TYPE_PRECISION (TREE_TYPE (low_bound))
+  إذا (ټیټ_bound
+      && ونه_کوډ (ټیټ_bound) == INTEGER_CST
+      && TYPE_PRECISION (ونه_TYPE (ټیټ_bound))
 	 > TYPE_PRECISION (sizetype))
-    low_bound = fold_convert (sizetype, low_bound);
-  if (length
-      && TREE_CODE (length) == INTEGER_CST
-      && TYPE_PRECISION (TREE_TYPE (length))
+    ټیټ_bound = fold_convert (sizetype, ټیټ_bound);
+  إذا (اوږدتیا
+      && ونه_کوډ (اوږدتیا) == INTEGER_CST
+      && TYPE_PRECISION (ونه_TYPE (اوږدتیا))
 	 > TYPE_PRECISION (sizetype))
-    length = fold_convert (sizetype, length);
-  if (low_bound == NULL_TREE)
-    low_bound = integer_zero_node;
-  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
-      && (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
-	  || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH))
+    اوږدتیا = fold_convert (sizetype, اوږدتیا);
+  إذا (ټیټ_bound == NULL_ونه)
+    ټیټ_bound = integer_zero_غوټه;
+  إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_MAP
+      && (OMP_CLAUSE_MAP_ډول (c) == GOMP_MAP_ATTACH
+	  || OMP_CLAUSE_MAP_ډول (c) == GOMP_MAP_DETACH))
     {
-      if (length != integer_one_node)
+      إذا (اوږدتیا != integer_one_غوټه)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "expected single pointer in %qs clause",
-		    user_omp_clause_code_name (c, openacc));
-	  return error_mark_node;
+		    user_omp_clause_کوډ_name (c, openacc));
+	  أرجع error_mark_غوټه;
 	}
     }
-  if (length != NULL_TREE)
+  إذا (اوږدتیا != NULL_ونه)
     {
-      if (!integer_nonzerop (length))
+      إذا (!integer_nonzerop (اوږدتیا))
 	{
-	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
-	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
-	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
-	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
-	      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION)
+	  إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_AFFINITY
+	      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_DEPEND
+	      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_REDUCTION
+	      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_دننه_REDUCTION
+	      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_TASK_REDUCTION)
 	    {
-	      if (integer_zerop (length))
+	      إذا (integer_zerop (اوږدتیا))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "zero length array section in %qs clause",
-			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+			    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		  أرجع error_mark_غوټه;
 		}
 	    }
-	  else
-	    maybe_zero_len = true;
+	  وإلا
+	    maybe_zero_len = ریښتیا;
 	}
-      if (first_non_one == types.length ()
-	  && (TREE_CODE (length) != INTEGER_CST || integer_onep (length)))
-	first_non_one++;
+      إذا (لومړی_non_one == types.اوږدتیا ()
+	  && (ونه_کوډ (اوږدتیا) != INTEGER_CST || integer_onep (اوږدتیا)))
+	لومړی_non_one++;
     }
-  if (TREE_CODE (type) == ARRAY_TYPE)
+  إذا (ونه_کوډ (type) == ARRAY_TYPE)
     {
-      if (length == NULL_TREE
-	  && (TYPE_DOMAIN (type) == NULL_TREE
-	      || TYPE_MAX_VALUE (TYPE_DOMAIN (type)) == NULL_TREE))
+      إذا (اوږدتیا == NULL_ونه
+	  && (TYPE_DOMAIN (type) == NULL_ونه
+	      || TYPE_MAX_ارزښت (TYPE_DOMAIN (type)) == NULL_ونه))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "for unknown bound array type length expression must "
 		    "be specified");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      if (TREE_CODE (low_bound) == INTEGER_CST
-	  && tree_int_cst_sgn (low_bound) == -1)
+      إذا (ونه_کوډ (ټیټ_bound) == INTEGER_CST
+	  && ونه_int_cst_sgn (ټیټ_bound) == -1)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "negative low bound in array section in %qs clause",
-		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+		    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	  أرجع error_mark_غوټه;
 	}
-      if (length != NULL_TREE
-	  && TREE_CODE (length) == INTEGER_CST
-	  && tree_int_cst_sgn (length) == -1)
+      إذا (اوږدتیا != NULL_ونه
+	  && ونه_کوډ (اوږدتیا) == INTEGER_CST
+	  && ونه_int_cst_sgn (اوږدتیا) == -1)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "negative length in array section in %qs clause",
-		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+		    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	  أرجع error_mark_غوټه;
 	}
-      if (TYPE_DOMAIN (type)
-	  && TYPE_MAX_VALUE (TYPE_DOMAIN (type))
-	  && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (type)))
+      إذا (TYPE_DOMAIN (type)
+	  && TYPE_MAX_ارزښت (TYPE_DOMAIN (type))
+	  && ونه_کوډ (TYPE_MAX_ارزښت (TYPE_DOMAIN (type)))
 			== INTEGER_CST)
 	{
-	  tree size
-	    = fold_convert (sizetype, TYPE_MAX_VALUE (TYPE_DOMAIN (type)));
-	  size = size_binop (PLUS_EXPR, size, size_one_node);
-	  if (TREE_CODE (low_bound) == INTEGER_CST)
+	  ونه اندازه
+	    = fold_convert (sizetype, TYPE_MAX_ارزښت (TYPE_DOMAIN (type)));
+	  اندازه = اندازه_binop (PLUS_بیان, اندازه, اندازه_one_غوټه);
+	  إذا (ونه_کوډ (ټیټ_bound) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_lt (size, low_bound))
+	      إذا (ونه_int_cst_lt (اندازه, ټیټ_bound))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "low bound %qE above array section size "
-			    "in %qs clause", low_bound,
-			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+			    "in %qs clause", ټیټ_bound,
+			    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		  أرجع error_mark_غوټه;
 		}
-	      if (tree_int_cst_equal (size, low_bound))
+	      إذا (ونه_int_cst_equal (اندازه, ټیټ_bound))
 		{
-		  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY
-		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
-		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
-		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
-		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION)
+		  إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_AFFINITY
+		      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_DEPEND
+		      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_REDUCTION
+		      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_دننه_REDUCTION
+		      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_TASK_REDUCTION)
 		    {
 		      error_at (OMP_CLAUSE_LOCATION (c),
 				"zero length array section in %qs clause",
-				omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		      return error_mark_node;
+				omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		      أرجع error_mark_غوټه;
 		    }
-		  maybe_zero_len = true;
+		  maybe_zero_len = ریښتیا;
 		}
-	      else if (length == NULL_TREE
-		       && first_non_one == types.length ()
-		       && tree_int_cst_equal
-			    (TYPE_MAX_VALUE (TYPE_DOMAIN (type)),
-			     low_bound))
-		first_non_one++;
+	      وإلا إذا (اوږدتیا == NULL_ونه
+		       && لومړی_non_one == types.اوږدتیا ()
+		       && ونه_int_cst_equal
+			    (TYPE_MAX_ارزښت (TYPE_DOMAIN (type)),
+			     ټیټ_bound))
+		لومړی_non_one++;
 	    }
-	  else if (length == NULL_TREE)
+	  وإلا إذا (اوږدتیا == NULL_ونه)
 	    {
-	      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
-		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
-		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_REDUCTION
-		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_IN_REDUCTION
-		  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_TASK_REDUCTION)
-		maybe_zero_len = true;
-	      if (first_non_one == types.length ())
-		first_non_one++;
+	      إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_AFFINITY
+		  && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_DEPEND
+		  && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_REDUCTION
+		  && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_دننه_REDUCTION
+		  && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_TASK_REDUCTION)
+		maybe_zero_len = ریښتیا;
+	      إذا (لومړی_non_one == types.اوږدتیا ())
+		لومړی_non_one++;
 	    }
-	  if (length && TREE_CODE (length) == INTEGER_CST)
+	  إذا (اوږدتیا && ونه_کوډ (اوږدتیا) == INTEGER_CST)
 	    {
-	      if (tree_int_cst_lt (size, length))
+	      إذا (ونه_int_cst_lt (اندازه, اوږدتیا))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "length %qE above array section size "
-			    "in %qs clause", length,
-			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+			    "in %qs clause", اوږدتیا,
+			    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		  أرجع error_mark_غوټه;
 		}
-	      if (TREE_CODE (low_bound) == INTEGER_CST)
+	      إذا (ونه_کوډ (ټیټ_bound) == INTEGER_CST)
 		{
-		  tree lbpluslen
-		    = size_binop (PLUS_EXPR,
-				  fold_convert (sizetype, low_bound),
-				  fold_convert (sizetype, length));
-		  if (TREE_CODE (lbpluslen) == INTEGER_CST
-		      && tree_int_cst_lt (size, lbpluslen))
+		  ونه lbpluslen
+		    = اندازه_binop (PLUS_بیان,
+				  fold_convert (sizetype, ټیټ_bound),
+				  fold_convert (sizetype, اوږدتیا));
+		  إذا (ونه_کوډ (lbpluslen) == INTEGER_CST
+		      && ونه_int_cst_lt (اندازه, lbpluslen))
 		    {
 		      error_at (OMP_CLAUSE_LOCATION (c),
 				"high bound %qE above array section size "
 				"in %qs clause", lbpluslen,
-				omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		      return error_mark_node;
+				omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		      أرجع error_mark_غوټه;
 		    }
 		}
 	    }
 	}
-      else if (length == NULL_TREE)
+      وإلا إذا (اوږدتیا == NULL_ونه)
 	{
-	  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
-	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
-	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_REDUCTION
-	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_IN_REDUCTION
-	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_TASK_REDUCTION)
-	    maybe_zero_len = true;
-	  if (first_non_one == types.length ())
-	    first_non_one++;
+	  إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_AFFINITY
+	      && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_DEPEND
+	      && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_REDUCTION
+	      && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_دننه_REDUCTION
+	      && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_TASK_REDUCTION)
+	    maybe_zero_len = ریښتیا;
+	  إذا (لومړی_non_one == types.اوږدتیا ())
+	    لومړی_non_one++;
 	}
 
       /* For [lb:] we will need to evaluate lb more than once.  */
-      if (length == NULL_TREE && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND)
+      إذا (اوږدتیا == NULL_ونه && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_DEPEND)
 	{
-	  tree lb = save_expr (low_bound);
-	  if (lb != low_bound)
+	  ونه lb = save_بیان (ټیټ_bound);
+	  إذا (lb != ټیټ_bound)
 	    {
-	      TREE_OPERAND (t, 1) = lb;
-	      low_bound = lb;
+	      ونه_عملوند (t, 1) = lb;
+	      ټیټ_bound = lb;
 	    }
 	}
     }
-  else if (TREE_CODE (type) == POINTER_TYPE)
+  وإلا إذا (ونه_کوډ (type) == اشاره_ګر_TYPE)
     {
-      if (length == NULL_TREE)
+      إذا (اوږدتیا == NULL_ونه)
 	{
-	  if (TREE_CODE (ret) == PARM_DECL && C_ARRAY_PARAMETER (ret))
+	  إذا (ونه_کوډ (ret) == PARM_DECL && C_ARRAY_PARAMETER (ret))
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "for array function parameter length expression "
 		      "must be specified");
-	  else
+	  وإلا
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "for pointer type length expression must be specified");
-	  return error_mark_node;
+	  أرجع error_mark_غوټه;
 	}
-      if (length != NULL_TREE
-	  && TREE_CODE (length) == INTEGER_CST
-	  && tree_int_cst_sgn (length) == -1)
+      إذا (اوږدتیا != NULL_ونه
+	  && ونه_کوډ (اوږدتیا) == INTEGER_CST
+	  && ونه_int_cst_sgn (اوږدتیا) == -1)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c),
 		    "negative length in array section in %qs clause",
-		    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	  return error_mark_node;
+		    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	  أرجع error_mark_غوټه;
 	}
       /* If there is a pointer type anywhere but in the very first
 	 array-section-subscript, the array section could be non-contiguous.  */
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND
-	  && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_AFFINITY
-	  && TREE_CODE (TREE_OPERAND (t, 0)) == OMP_ARRAY_SECTION)
+      إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_DEPEND
+	  && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_AFFINITY
+	  && ونه_کوډ (ونه_عملوند (t, 0)) == OMP_ARRAY_SECTION)
 	{
 	  /* If any prior dimension has a non-one length, then deem this
 	     array section as non-contiguous.  */
-	  for (tree d = TREE_OPERAND (t, 0);
-	       TREE_CODE (d) == OMP_ARRAY_SECTION;
-	       d = TREE_OPERAND (d, 0))
+	  لكل (ونه d = ونه_عملوند (t, 0);
+	       ونه_کوډ (d) == OMP_ARRAY_SECTION;
+	       d = ونه_عملوند (d, 0))
 	    {
-	      tree d_length = TREE_OPERAND (d, 2);
-	      if (d_length == NULL_TREE || !integer_onep (d_length))
+	      ونه d_اوږدتیا = ونه_عملوند (d, 2);
+	      إذا (d_اوږدتیا == NULL_ونه || !integer_onep (d_اوږدتیا))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "array section is not contiguous in %qs clause",
-			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  return error_mark_node;
+			    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		  أرجع error_mark_غوټه;
 		}
 	    }
 	}
     }
-  else
+  وإلا
     {
       error_at (OMP_CLAUSE_LOCATION (c),
 		"%qE does not have pointer or array type", ret);
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
-  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_DEPEND)
-    types.safe_push (TREE_TYPE (ret));
+  إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_DEPEND)
+    types.خوندي_ټېل (ونه_TYPE (ret));
   /* We will need to evaluate lb more than once.  */
-  tree lb = save_expr (low_bound);
-  if (lb != low_bound)
+  ونه lb = save_بیان (ټیټ_bound);
+  إذا (lb != ټیټ_bound)
     {
-      TREE_OPERAND (t, 1) = lb;
-      low_bound = lb;
+      ونه_عملوند (t, 1) = lb;
+      ټیټ_bound = lb;
     }
-  ret = build_array_ref (OMP_CLAUSE_LOCATION (c), ret, low_bound);
-  return ret;
+  ret = build_array_ref (OMP_CLAUSE_LOCATION (c), ret, ټیټ_bound);
+  أرجع ret;
 }
 
 /* Handle array sections for clause C.  */
 
-static bool
-handle_omp_array_sections (tree &c, enum c_omp_region_type ort)
+ساكن منطقي
+handle_omp_array_sections (ونه &c, تعداد c_omp_region_type ort)
 {
-  bool maybe_zero_len = false;
-  unsigned int first_non_one = 0;
-  auto_vec<tree, 10> types;
-  tree *tp = &OMP_CLAUSE_DECL (c);
-  if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
-       || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY)
+  منطقي maybe_zero_len = خطأ;
+  بینښه صحيح لومړی_non_one = 0;
+  auto_vec<ونه, 10> types;
+  ونه *tp = &OMP_CLAUSE_DECL (c);
+  إذا ((OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_DEPEND
+       || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_AFFINITY)
       && OMP_ITERATOR_DECL_P (*tp))
-    tp = &TREE_VALUE (*tp);
-  tree first = handle_omp_array_sections_1 (c, *tp, types,
-					    maybe_zero_len, first_non_one,
+    tp = &ونه_ارزښت (*tp);
+  ونه لومړی = handle_omp_array_sections_1 (c, *tp, types,
+					    maybe_zero_len, لومړی_non_one,
 					    ort);
-  if (first == error_mark_node)
-    return true;
-  if (first == NULL_TREE)
-    return false;
-  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
-      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY)
+  إذا (لومړی == error_mark_غوټه)
+    أرجع ریښتیا;
+  إذا (لومړی == NULL_ونه)
+    أرجع خطأ;
+  إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_DEPEND
+      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_AFFINITY)
     {
-      tree t = *tp;
-      tree tem = NULL_TREE;
+      ونه t = *tp;
+      ونه tem = NULL_ونه;
       /* Need to evaluate side effects in the length expressions
 	 if any.  */
-      while (TREE_CODE (t) == TREE_LIST)
+      طالما (ونه_کوډ (t) == ونه_LIST)
 	{
-	  if (TREE_VALUE (t) && TREE_SIDE_EFFECTS (TREE_VALUE (t)))
+	  إذا (ونه_ارزښت (t) && ونه_SIDE_EFFECTS (ونه_ارزښت (t)))
 	    {
-	      if (tem == NULL_TREE)
-		tem = TREE_VALUE (t);
-	      else
-		tem = build2 (COMPOUND_EXPR, TREE_TYPE (tem),
-			      TREE_VALUE (t), tem);
+	      إذا (tem == NULL_ونه)
+		tem = ونه_ارزښت (t);
+	      وإلا
+		tem = build2 (COMPOUND_بیان, ونه_TYPE (tem),
+			      ونه_ارزښت (t), tem);
 	    }
-	  t = TREE_CHAIN (t);
+	  t = ونه_CHAIN (t);
 	}
-      if (tem)
-	first = build2 (COMPOUND_EXPR, TREE_TYPE (first), tem, first);
-      first = c_fully_fold (first, false, NULL, true);
-      *tp = first;
+      إذا (tem)
+	لومړی = build2 (COMPOUND_بیان, ونه_TYPE (لومړی), tem, لومړی);
+      لومړی = c_fully_fold (لومړی, خطأ, عدم, ریښتیا);
+      *tp = لومړی;
     }
-  else
+  وإلا
     {
-      unsigned int num = types.length (), i;
-      tree t, side_effects = NULL_TREE, size = NULL_TREE;
-      tree condition = NULL_TREE;
+      بینښه صحيح عدد = types.اوږدتیا (), i;
+      ونه t, side_effects = NULL_ونه, اندازه = NULL_ونه;
+      ونه condition = NULL_ونه;
 
-      if (int_size_in_bytes (TREE_TYPE (first)) <= 0)
-	maybe_zero_len = true;
+      إذا (int_اندازه_دننه_بایټونه (ونه_TYPE (لومړی)) <= 0)
+	maybe_zero_len = ریښتیا;
 
-      for (i = num, t = OMP_CLAUSE_DECL (c); i > 0;
-	   t = TREE_OPERAND (t, 0))
+      لكل (i = عدد, t = OMP_CLAUSE_DECL (c); i > 0;
+	   t = ونه_عملوند (t, 0))
 	{
-	  tree low_bound = TREE_OPERAND (t, 1);
-	  tree length = TREE_OPERAND (t, 2);
+	  ونه ټیټ_bound = ونه_عملوند (t, 1);
+	  ونه اوږدتیا = ونه_عملوند (t, 2);
 
 	  i--;
-	  if (low_bound
-	      && TREE_CODE (low_bound) == INTEGER_CST
-	      && TYPE_PRECISION (TREE_TYPE (low_bound))
+	  إذا (ټیټ_bound
+	      && ونه_کوډ (ټیټ_bound) == INTEGER_CST
+	      && TYPE_PRECISION (ونه_TYPE (ټیټ_bound))
 		 > TYPE_PRECISION (sizetype))
-	    low_bound = fold_convert (sizetype, low_bound);
-	  if (length
-	      && TREE_CODE (length) == INTEGER_CST
-	      && TYPE_PRECISION (TREE_TYPE (length))
+	    ټیټ_bound = fold_convert (sizetype, ټیټ_bound);
+	  إذا (اوږدتیا
+	      && ونه_کوډ (اوږدتیا) == INTEGER_CST
+	      && TYPE_PRECISION (ونه_TYPE (اوږدتیا))
 		 > TYPE_PRECISION (sizetype))
-	    length = fold_convert (sizetype, length);
-	  if (low_bound == NULL_TREE)
-	    low_bound = integer_zero_node;
-	  if (!maybe_zero_len && i > first_non_one)
+	    اوږدتیا = fold_convert (sizetype, اوږدتیا);
+	  إذا (ټیټ_bound == NULL_ونه)
+	    ټیټ_bound = integer_zero_غوټه;
+	  إذا (!maybe_zero_len && i > لومړی_non_one)
 	    {
-	      if (integer_nonzerop (low_bound))
-		goto do_warn_noncontiguous;
-	      if (length != NULL_TREE
-		  && TREE_CODE (length) == INTEGER_CST
+	      إذا (integer_nonzerop (ټیټ_bound))
+		اذهب do_warn_noncontiguous;
+	      إذا (اوږدتیا != NULL_ونه
+		  && ونه_کوډ (اوږدتیا) == INTEGER_CST
 		  && TYPE_DOMAIN (types[i])
-		  && TYPE_MAX_VALUE (TYPE_DOMAIN (types[i]))
-		  && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (types[i])))
+		  && TYPE_MAX_ارزښت (TYPE_DOMAIN (types[i]))
+		  && ونه_کوډ (TYPE_MAX_ارزښت (TYPE_DOMAIN (types[i])))
 		     == INTEGER_CST)
 		{
-		  tree size;
-		  size = size_binop (PLUS_EXPR,
-				     TYPE_MAX_VALUE (TYPE_DOMAIN (types[i])),
-				     size_one_node);
-		  if (!tree_int_cst_equal (length, size))
+		  ونه اندازه;
+		  اندازه = اندازه_binop (PLUS_بیان,
+				     TYPE_MAX_ارزښت (TYPE_DOMAIN (types[i])),
+				     اندازه_one_غوټه);
+		  إذا (!ونه_int_cst_equal (اوږدتیا, اندازه))
 		    {
 		     do_warn_noncontiguous:
 		      error_at (OMP_CLAUSE_LOCATION (c),
 				"array section is not contiguous in %qs "
 				"clause",
-				omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		      return true;
+				omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		      أرجع ریښتیا;
 		    }
 		}
-	      if (length != NULL_TREE
-		  && TREE_SIDE_EFFECTS (length))
+	      إذا (اوږدتیا != NULL_ونه
+		  && ونه_SIDE_EFFECTS (اوږدتیا))
 		{
-		  if (side_effects == NULL_TREE)
-		    side_effects = length;
-		  else
-		    side_effects = build2 (COMPOUND_EXPR,
-					   TREE_TYPE (side_effects),
-					   length, side_effects);
+		  إذا (side_effects == NULL_ونه)
+		    side_effects = اوږدتیا;
+		  وإلا
+		    side_effects = build2 (COMPOUND_بیان,
+					   ونه_TYPE (side_effects),
+					   اوږدتیا, side_effects);
 		}
 	    }
-	  else
+	  وإلا
 	    {
-	      tree l;
+	      ونه l;
 
-	      if (i > first_non_one
-		  && ((length && integer_nonzerop (length))
-		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
-		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
-		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION))
-		continue;
-	      if (length)
-		l = fold_convert (sizetype, length);
-	      else
+	      إذا (i > لومړی_non_one
+		  && ((اوږدتیا && integer_nonzerop (اوږدتیا))
+		      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_REDUCTION
+		      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_دننه_REDUCTION
+		      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_TASK_REDUCTION))
+		استمر;
+	      إذا (اوږدتیا)
+		l = fold_convert (sizetype, اوږدتیا);
+	      وإلا
 		{
-		  l = size_binop (PLUS_EXPR,
-				  TYPE_MAX_VALUE (TYPE_DOMAIN (types[i])),
-				  size_one_node);
-		  l = size_binop (MINUS_EXPR, l,
-				  fold_convert (sizetype, low_bound));
+		  l = اندازه_binop (PLUS_بیان,
+				  TYPE_MAX_ارزښت (TYPE_DOMAIN (types[i])),
+				  اندازه_one_غوټه);
+		  l = اندازه_binop (MINUS_بیان, l,
+				  fold_convert (sizetype, ټیټ_bound));
 		}
-	      if (i > first_non_one)
+	      إذا (i > لومړی_non_one)
 		{
-		  l = fold_build2 (NE_EXPR, boolean_type_node, l,
-				   size_zero_node);
-		  if (condition == NULL_TREE)
+		  l = fold_build2 (NE_بیان, boolean_type_غوټه, l,
+				   اندازه_zero_غوټه);
+		  إذا (condition == NULL_ونه)
 		    condition = l;
-		  else
-		    condition = fold_build2 (BIT_AND_EXPR, boolean_type_node,
+		  وإلا
+		    condition = fold_build2 (بټ_AND_بیان, boolean_type_غوټه,
 					     l, condition);
 		}
-	      else if (size == NULL_TREE)
+	      وإلا إذا (اندازه == NULL_ونه)
 		{
-		  size = size_in_bytes (TREE_TYPE (types[i]));
-		  tree eltype = TREE_TYPE (types[num - 1]);
-		  while (TREE_CODE (eltype) == ARRAY_TYPE)
-		    eltype = TREE_TYPE (eltype);
-		  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
-		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
-		      || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION)
+		  اندازه = اندازه_دننه_بایټونه (ونه_TYPE (types[i]));
+		  ونه eltype = ونه_TYPE (types[عدد - 1]);
+		  طالما (ونه_کوډ (eltype) == ARRAY_TYPE)
+		    eltype = ونه_TYPE (eltype);
+		  إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_REDUCTION
+		      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_دننه_REDUCTION
+		      || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_TASK_REDUCTION)
 		    {
-		      if (integer_zerop (size)
-			  || integer_zerop (size_in_bytes (eltype)))
+		      إذا (integer_zerop (اندازه)
+			  || integer_zerop (اندازه_دننه_بایټونه (eltype)))
 			{
 			  error_at (OMP_CLAUSE_LOCATION (c),
 				    "zero length array section in %qs clause",
-				    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-			  return error_mark_node;
+				    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+			  أرجع error_mark_غوټه;
 			}
-		      size = size_binop (EXACT_DIV_EXPR, size,
-					 size_in_bytes (eltype));
+		      اندازه = اندازه_binop (EXACT_DIV_بیان, اندازه,
+					 اندازه_دننه_بایټونه (eltype));
 		    }
-		  size = size_binop (MULT_EXPR, size, l);
-		  if (condition)
-		    size = fold_build3 (COND_EXPR, sizetype, condition,
-					size, size_zero_node);
+		  اندازه = اندازه_binop (MULT_بیان, اندازه, l);
+		  إذا (condition)
+		    اندازه = fold_build3 (COND_بیان, sizetype, condition,
+					اندازه, اندازه_zero_غوټه);
 		}
-	      else
-		size = size_binop (MULT_EXPR, size, l);
+	      وإلا
+		اندازه = اندازه_binop (MULT_بیان, اندازه, l);
 	    }
 	}
-      if (side_effects)
-	size = build2 (COMPOUND_EXPR, sizetype, side_effects, size);
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
-	  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
-	  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_TASK_REDUCTION)
+      إذا (side_effects)
+	اندازه = build2 (COMPOUND_بیان, sizetype, side_effects, اندازه);
+      إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_REDUCTION
+	  || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_دننه_REDUCTION
+	  || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_TASK_REDUCTION)
 	{
-	  size = size_binop (MINUS_EXPR, size, size_one_node);
-	  size = c_fully_fold (size, false, NULL);
-	  size = save_expr (size);
-	  tree index_type = build_index_type (size);
-	  tree eltype = TREE_TYPE (first);
-	  while (TREE_CODE (eltype) == ARRAY_TYPE)
-	    eltype = TREE_TYPE (eltype);
-	  tree type = c_build_array_type (eltype, index_type);
-	  tree ptype = c_build_pointer_type (eltype);
-	  if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE)
-	    t = build_fold_addr_expr (t);
-	  tree t2 = build_fold_addr_expr (first);
+	  اندازه = اندازه_binop (MINUS_بیان, اندازه, اندازه_one_غوټه);
+	  اندازه = c_fully_fold (اندازه, خطأ, عدم);
+	  اندازه = save_بیان (اندازه);
+	  ونه شاخص_type = build_شاخص_type (اندازه);
+	  ونه eltype = ونه_TYPE (لومړی);
+	  طالما (ونه_کوډ (eltype) == ARRAY_TYPE)
+	    eltype = ونه_TYPE (eltype);
+	  ونه type = c_build_array_type (eltype, شاخص_type);
+	  ونه ptype = c_build_اشاره_ګر_type (eltype);
+	  إذا (ونه_کوډ (ونه_TYPE (t)) == ARRAY_TYPE)
+	    t = build_fold_addr_بیان (t);
+	  ونه t2 = build_fold_addr_بیان (لومړی);
 	  t2 = fold_convert_loc (OMP_CLAUSE_LOCATION (c),
-				 ptrdiff_type_node, t2);
-	  t2 = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_EXPR,
-				ptrdiff_type_node, t2,
+				 ptrdiff_type_غوټه, t2);
+	  t2 = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_بیان,
+				ptrdiff_type_غوټه, t2,
 				fold_convert_loc (OMP_CLAUSE_LOCATION (c),
-						  ptrdiff_type_node, t));
-	  t2 = c_fully_fold (t2, false, NULL);
-	  if (tree_fits_shwi_p (t2))
+						  ptrdiff_type_غوټه, t));
+	  t2 = c_fully_fold (t2, خطأ, عدم);
+	  إذا (ونه_ځاییږي_shwi_p (t2))
 	    t = build2 (MEM_REF, type, t,
-			build_int_cst (ptype, tree_to_shwi (t2)));
-	  else
+			build_int_cst (ptype, ونه_منزل_shwi (t2)));
+	  وإلا
 	    {
 	      t2 = fold_convert_loc (OMP_CLAUSE_LOCATION (c), sizetype, t2);
-	      t = build2_loc (OMP_CLAUSE_LOCATION (c), POINTER_PLUS_EXPR,
-			      TREE_TYPE (t), t, t2);
+	      t = build2_loc (OMP_CLAUSE_LOCATION (c), اشاره_ګر_PLUS_بیان,
+			      ونه_TYPE (t), t, t2);
 	      t = build2 (MEM_REF, type, t, build_int_cst (ptype, 0));
 	    }
 	  OMP_CLAUSE_DECL (c) = t;
-	  return false;
+	  أرجع خطأ;
 	}
-      first = c_fully_fold (first, false, NULL);
-      OMP_CLAUSE_DECL (c) = first;
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_HAS_DEVICE_ADDR)
-	return false;
+      لومړی = c_fully_fold (لومړی, خطأ, عدم);
+      OMP_CLAUSE_DECL (c) = لومړی;
+      إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_HAS_DEVICE_ADDR)
+	أرجع خطأ;
       /* Don't set OMP_CLAUSE_SIZE for bare attach/detach clauses.  */
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
-	  || (OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_ATTACH
-	      && OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_DETACH
-	      && OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_FORCE_DETACH))
+      إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_MAP
+	  || (OMP_CLAUSE_MAP_ډول (c) != GOMP_MAP_ATTACH
+	      && OMP_CLAUSE_MAP_ډول (c) != GOMP_MAP_DETACH
+	      && OMP_CLAUSE_MAP_ډول (c) != GOMP_MAP_FORCE_DETACH))
 	{
-	  if (size)
-	    size = c_fully_fold (size, false, NULL);
-	  OMP_CLAUSE_SIZE (c) = size;
+	  إذا (اندازه)
+	    اندازه = c_fully_fold (اندازه, خطأ, عدم);
+	  OMP_CLAUSE_اندازه (c) = اندازه;
 	}
 
-      if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
-	return false;
+      إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_MAP)
+	أرجع خطأ;
 
-      auto_vec<omp_addr_token *, 10> addr_tokens;
+      auto_vec<omp_addr_token *, 10> addr_نښې;
 
-      if (!omp_parse_expr (addr_tokens, first))
-	return true;
+      إذا (!omp_parse_بیان (addr_نښې, لومړی))
+	أرجع ریښتیا;
 
-      c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
+      c_omp_پته_inspector ai (OMP_CLAUSE_LOCATION (c), t);
 
-      tree nc = ai.expand_map_clause (c, first, addr_tokens, ort);
-      if (nc != error_mark_node)
+      ونه nc = ai.expand_map_clause (c, لومړی, addr_نښې, ort);
+      إذا (nc != error_mark_غوټه)
 	{
-	  using namespace omp_addr_tokenizer;
+	  کارول نطاق omp_addr_tokenizer;
 
-	  if (ai.maybe_zero_length_array_section (c))
-	    OMP_CLAUSE_MAP_MAYBE_ZERO_LENGTH_ARRAY_SECTION (c) = 1;
+	  إذا (ai.maybe_zero_اوږدتیا_array_section (c))
+	    OMP_CLAUSE_MAP_MAYBE_ZERO_اوږدتیا_ARRAY_SECTION (c) = 1;
 
 	  /* !!! If we're accessing a base decl via chained access
 	     methods (e.g. multiple indirections), duplicate clause
 	     detection won't work properly.  Skip it in that case.  */
-	  if ((addr_tokens[0]->type == STRUCTURE_BASE
-	       || addr_tokens[0]->type == ARRAY_BASE)
-	      && addr_tokens[0]->u.structure_base_kind == BASE_DECL
-	      && addr_tokens[1]->type == ACCESS_METHOD
-	      && omp_access_chain_p (addr_tokens, 1))
+	  إذا ((addr_نښې[0]->type == STRUCTURE_بنسټ
+	       || addr_نښې[0]->type == ARRAY_بنسټ)
+	      && addr_نښې[0]->u.structure_بنسټ_ډول == بنسټ_DECL
+	      && addr_نښې[1]->type == ACCESS_لاره
+	      && omp_access_chain_p (addr_نښې, 1))
 	    c = nc;
 
-	  return false;
+	  أرجع خطأ;
 	}
     }
-  return false;
+  أرجع خطأ;
 }
 
 /* Helper function of finish_omp_clauses.  Clone STMT as if we were making
@@ -16460,1534 +16460,1534 @@ handle_omp_array_sections (tree &c, enum c_omp_region_type ort)
    the OMP_DECL1 VAR_DECL (omp_out resp. omp_orig) to PLACEHOLDER
    and OMP_DECL2 VAR_DECL (omp_in resp. omp_priv) to DECL.  */
 
-static tree
-c_clone_omp_udr (tree stmt, tree omp_decl1, tree omp_decl2,
-		 tree decl, tree placeholder)
+ساكن ونه
+c_clone_omp_udr (ونه stmt, ونه omp_decl1, ونه omp_decl2,
+		 ونه decl, ونه placeholder)
 {
-  copy_body_data id;
-  hash_map<tree, tree> decl_map;
+  copy_body_معلومات id;
+  hash_map<ونه, ونه> decl_map;
 
   decl_map.put (omp_decl1, placeholder);
   decl_map.put (omp_decl2, decl);
-  memset (&id, 0, sizeof (id));
+  memset (&id, 0, حجم (id));
   id.src_fn = DECL_CONTEXT (omp_decl1);
   id.dst_fn = current_function_decl;
   id.src_cfun = DECL_STRUCT_FUNCTION (id.src_fn);
   id.decl_map = &decl_map;
 
   id.copy_decl = copy_decl_no_change;
-  id.transform_call_graph_edges = CB_CGE_DUPLICATE;
-  id.transform_new_cfg = true;
-  id.transform_return_to_modify = false;
+  id.transform_call_ګراف_څنډې = CB_CGE_DUPLICATE;
+  id.transform_new_cfg = ریښتیا;
+  id.transform_return_منزل_modify = خطأ;
   id.eh_lp_nr = 0;
-  walk_tree (&stmt, copy_tree_body_r, &id, NULL);
-  return stmt;
+  walk_ونه (&stmt, copy_ونه_body_r, &id, عدم);
+  أرجع stmt;
 }
 
 /* Helper function of c_finish_omp_clauses, called via walk_tree.
    Find OMP_CLAUSE_PLACEHOLDER (passed in DATA) in *TP.  */
 
-static tree
-c_find_omp_placeholder_r (tree *tp, int *, void *data)
+ساكن ونه
+c_پیدا_کړه_omp_placeholder_r (ونه *tp, صحيح *, فراغ *معلومات)
 {
-  if (*tp == (tree) data)
-    return *tp;
-  return NULL_TREE;
+  إذا (*tp == (ونه) معلومات)
+    أرجع *tp;
+  أرجع NULL_ونه;
 }
 
 /* Similarly, but also walk aggregate fields.  */
 
-struct c_find_omp_var_s { tree var; hash_set<tree> *pset; };
+بنية c_پیدا_کړه_omp_var_s { ونه var; hash_سېټ<ونه> *pset; };
 
-static tree
-c_find_omp_var_r (tree *tp, int *, void *data)
+ساكن ونه
+c_پیدا_کړه_omp_var_r (ونه *tp, صحيح *, فراغ *معلومات)
 {
-  if (*tp == ((struct c_find_omp_var_s *) data)->var)
-    return *tp;
-  if (RECORD_OR_UNION_TYPE_P (*tp))
+  إذا (*tp == ((بنية c_پیدا_کړه_omp_var_s *) معلومات)->var)
+    أرجع *tp;
+  إذا (ریکارډ_OR_UNION_TYPE_P (*tp))
     {
-      tree field;
-      hash_set<tree> *pset = ((struct c_find_omp_var_s *) data)->pset;
+      ونه ډګر_2;
+      hash_سېټ<ونه> *pset = ((بنية c_پیدا_کړه_omp_var_s *) معلومات)->pset;
 
-      for (field = TYPE_FIELDS (*tp); field;
-	   field = DECL_CHAIN (field))
-	if (TREE_CODE (field) == FIELD_DECL)
+      لكل (ډګر_2 = TYPE_FIELDS (*tp); ډګر_2;
+	   ډګر_2 = DECL_CHAIN (ډګر_2))
+	إذا (ونه_کوډ (ډګر_2) == ډګر_DECL)
 	  {
-	    tree ret = walk_tree (&DECL_FIELD_OFFSET (field),
-				  c_find_omp_var_r, data, pset);
-	    if (ret)
-	      return ret;
-	    ret = walk_tree (&DECL_SIZE (field), c_find_omp_var_r, data, pset);
-	    if (ret)
-	      return ret;
-	    ret = walk_tree (&DECL_SIZE_UNIT (field), c_find_omp_var_r, data,
+	    ونه ret = walk_ونه (&DECL_ډګر_دننه_واټن (ډګر_2),
+				  c_پیدا_کړه_omp_var_r, معلومات, pset);
+	    إذا (ret)
+	      أرجع ret;
+	    ret = walk_ونه (&DECL_اندازه (ډګر_2), c_پیدا_کړه_omp_var_r, معلومات, pset);
+	    إذا (ret)
+	      أرجع ret;
+	    ret = walk_ونه (&DECL_اندازه_UNIT (ډګر_2), c_پیدا_کړه_omp_var_r, معلومات,
 			     pset);
-	    if (ret)
-	      return ret;
-	    ret = walk_tree (&TREE_TYPE (field), c_find_omp_var_r, data, pset);
-	    if (ret)
-	      return ret;
+	    إذا (ret)
+	      أرجع ret;
+	    ret = walk_ونه (&ونه_TYPE (ډګر_2), c_پیدا_کړه_omp_var_r, معلومات, pset);
+	    إذا (ret)
+	      أرجع ret;
 	  }
     }
-  else if (INTEGRAL_TYPE_P (*tp))
-    return walk_tree (&TYPE_MAX_VALUE (*tp), c_find_omp_var_r, data,
-		      ((struct c_find_omp_var_s *) data)->pset);
-  return NULL_TREE;
+  وإلا إذا (INTEGRAL_TYPE_P (*tp))
+    أرجع walk_ونه (&TYPE_MAX_ارزښت (*tp), c_پیدا_کړه_omp_var_r, معلومات,
+		      ((بنية c_پیدا_کړه_omp_var_s *) معلومات)->pset);
+  أرجع NULL_ونه;
 }
 
 /* Finish OpenMP iterators ITER.  Return true if they are erroneous
    and clauses containing them should be removed.  */
 
-static bool
-c_omp_finish_iterators (tree iter)
+ساكن منطقي
+c_omp_پای_iterators (ونه iter)
 {
-  bool ret = false;
-  for (tree it = iter; it; it = TREE_CHAIN (it))
+  منطقي ret = خطأ;
+  لكل (ونه it = iter; it; it = ونه_CHAIN (it))
     {
-      tree var = OMP_ITERATOR_VAR (it);
-      tree begin = OMP_ITERATOR_BEGIN (it);
-      tree end = OMP_ITERATOR_END (it);
-      tree step = OMP_ITERATOR_STEP (it);
-      tree orig_step;
-      tree type = TREE_TYPE (var);
-      location_t loc = DECL_SOURCE_LOCATION (var);
-      if (type == error_mark_node)
+      ونه var = OMP_ITERATOR_VAR (it);
+      ونه begin = OMP_ITERATOR_BEGIN (it);
+      ونه پای_ټکی = OMP_ITERATOR_پای_ټکی (it);
+      ونه ګام = OMP_ITERATOR_ګام (it);
+      ونه orig_ګام;
+      ونه type = ونه_TYPE (var);
+      location_t loc = DECL_سرچینه_LOCATION (var);
+      إذا (type == error_mark_غوټه)
 	{
-	  ret = true;
-	  continue;
+	  ret = ریښتیا;
+	  استمر;
 	}
-      if (!INTEGRAL_TYPE_P (type) && !POINTER_TYPE_P (type))
+      إذا (!INTEGRAL_TYPE_P (type) && !اشاره_ګر_TYPE_P (type))
 	{
 	  error_at (loc, "iterator %qD has neither integral nor pointer type",
 		    var);
-	  ret = true;
-	  continue;
+	  ret = ریښتیا;
+	  استمر;
 	}
-      else if (TYPE_ATOMIC (type))
+      وإلا إذا (TYPE_ATOMIC (type))
 	{
 	  error_at (loc, "iterator %qD has %<_Atomic%> qualified type", var);
-	  ret = true;
-	  continue;
+	  ret = ریښتیا;
+	  استمر;
 	}
-      else if (TYPE_READONLY (type))
+      وإلا إذا (TYPE_READONLY (type))
 	{
 	  error_at (loc, "iterator %qD has const qualified type", var);
-	  ret = true;
-	  continue;
+	  ret = ریښتیا;
+	  استمر;
 	}
-      else if (step == error_mark_node
-	       || TREE_TYPE (step) == error_mark_node)
+      وإلا إذا (ګام == error_mark_غوټه
+	       || ونه_TYPE (ګام) == error_mark_غوټه)
 	{
-	  ret = true;
-	  continue;
+	  ret = ریښتیا;
+	  استمر;
 	}
-      else if (!INTEGRAL_TYPE_P (TREE_TYPE (step)))
+      وإلا إذا (!INTEGRAL_TYPE_P (ونه_TYPE (ګام)))
 	{
-	  error_at (EXPR_LOC_OR_LOC (step, loc),
+	  error_at (بیان_LOC_OR_LOC (ګام, loc),
 		    "iterator step with non-integral type");
-	  ret = true;
-	  continue;
+	  ret = ریښتیا;
+	  استمر;
 	}
-      begin = c_fully_fold (build_c_cast (loc, type, begin), false, NULL);
-      end = c_fully_fold (build_c_cast (loc, type, end), false, NULL);
-      orig_step = save_expr (c_fully_fold (step, false, NULL));
-      tree stype = POINTER_TYPE_P (type) ? sizetype : type;
-      step = c_fully_fold (build_c_cast (loc, stype, orig_step), false, NULL);
-      if (POINTER_TYPE_P (type))
+      begin = c_fully_fold (build_c_cast (loc, type, begin), خطأ, عدم);
+      پای_ټکی = c_fully_fold (build_c_cast (loc, type, پای_ټکی), خطأ, عدم);
+      orig_ګام = save_بیان (c_fully_fold (ګام, خطأ, عدم));
+      ونه stype = اشاره_ګر_TYPE_P (type) ? sizetype : type;
+      ګام = c_fully_fold (build_c_cast (loc, stype, orig_ګام), خطأ, عدم);
+      إذا (اشاره_ګر_TYPE_P (type))
 	{
-	  begin = save_expr (begin);
-	  step = pointer_int_sum (loc, PLUS_EXPR, begin, step);
-	  step = fold_build2_loc (loc, MINUS_EXPR, sizetype,
-				  fold_convert (sizetype, step),
+	  begin = save_بیان (begin);
+	  ګام = اشاره_ګر_int_مجموعه (loc, PLUS_بیان, begin, ګام);
+	  ګام = fold_build2_loc (loc, MINUS_بیان, sizetype,
+				  fold_convert (sizetype, ګام),
 				  fold_convert (sizetype, begin));
-	  step = fold_convert (ssizetype, step);
+	  ګام = fold_convert (ssizetype, ګام);
 	}
-      if (integer_zerop (step))
+      إذا (integer_zerop (ګام))
 	{
 	  error_at (loc, "iterator %qD has zero step", var);
-	  ret = true;
-	  continue;
+	  ret = ریښتیا;
+	  استمر;
 	}
 
-      if (begin == error_mark_node
-	  || end == error_mark_node
-	  || step == error_mark_node
-	  || orig_step == error_mark_node)
+      إذا (begin == error_mark_غوټه
+	  || پای_ټکی == error_mark_غوټه
+	  || ګام == error_mark_غوټه
+	  || orig_ګام == error_mark_غوټه)
 	{
-	  ret = true;
-	  continue;
+	  ret = ریښتیا;
+	  استمر;
 	}
-      hash_set<tree> pset;
-      tree it2;
-      for (it2 = TREE_CHAIN (it); it2; it2 = TREE_CHAIN (it2))
+      hash_سېټ<ونه> pset;
+      ونه it2;
+      لكل (it2 = ونه_CHAIN (it); it2; it2 = ونه_CHAIN (it2))
 	{
-	  tree var2 = OMP_ITERATOR_VAR (it2);
-	  tree begin2 = OMP_ITERATOR_BEGIN (it2);
-	  tree end2 = OMP_ITERATOR_END (it2);
-	  tree step2 = OMP_ITERATOR_STEP (it2);
-	  tree type2 = TREE_TYPE (var2);
-	  location_t loc2 = DECL_SOURCE_LOCATION (var2);
-	  struct c_find_omp_var_s data = { var, &pset };
-	  if (walk_tree (&type2, c_find_omp_var_r, &data, &pset))
+	  ونه var2 = OMP_ITERATOR_VAR (it2);
+	  ونه begin2 = OMP_ITERATOR_BEGIN (it2);
+	  ونه end2 = OMP_ITERATOR_پای_ټکی (it2);
+	  ونه step2 = OMP_ITERATOR_ګام (it2);
+	  ونه type2 = ونه_TYPE (var2);
+	  location_t loc2 = DECL_سرچینه_LOCATION (var2);
+	  بنية c_پیدا_کړه_omp_var_s معلومات = { var, &pset };
+	  إذا (walk_ونه (&type2, c_پیدا_کړه_omp_var_r, &معلومات, &pset))
 	    {
 	      error_at (loc2,
 			"type of iterator %qD refers to outer iterator %qD",
 			var2, var);
-	      break;
+	      اكسر;
 	    }
-	  else if (walk_tree (&begin2, c_find_omp_var_r, &data, &pset))
+	  وإلا إذا (walk_ونه (&begin2, c_پیدا_کړه_omp_var_r, &معلومات, &pset))
 	    {
-	      error_at (EXPR_LOC_OR_LOC (begin2, loc2),
+	      error_at (بیان_LOC_OR_LOC (begin2, loc2),
 			"begin expression refers to outer iterator %qD", var);
-	      break;
+	      اكسر;
 	    }
-	  else if (walk_tree (&end2, c_find_omp_var_r, &data, &pset))
+	  وإلا إذا (walk_ونه (&end2, c_پیدا_کړه_omp_var_r, &معلومات, &pset))
 	    {
-	      error_at (EXPR_LOC_OR_LOC (end2, loc2),
+	      error_at (بیان_LOC_OR_LOC (end2, loc2),
 			"end expression refers to outer iterator %qD", var);
-	      break;
+	      اكسر;
 	    }
-	  else if (walk_tree (&step2, c_find_omp_var_r, &data, &pset))
+	  وإلا إذا (walk_ونه (&step2, c_پیدا_کړه_omp_var_r, &معلومات, &pset))
 	    {
-	      error_at (EXPR_LOC_OR_LOC (step2, loc2),
+	      error_at (بیان_LOC_OR_LOC (step2, loc2),
 			"step expression refers to outer iterator %qD", var);
-	      break;
+	      اكسر;
 	    }
 	}
-      if (it2)
+      إذا (it2)
 	{
-	  ret = true;
-	  continue;
+	  ret = ریښتیا;
+	  استمر;
 	}
       OMP_ITERATOR_BEGIN (it) = begin;
-      OMP_ITERATOR_END (it) = end;
-      OMP_ITERATOR_STEP (it) = step;
-      OMP_ITERATOR_ORIG_STEP (it) = orig_step;
+      OMP_ITERATOR_پای_ټکی (it) = پای_ټکی;
+      OMP_ITERATOR_ګام (it) = ګام;
+      OMP_ITERATOR_ORIG_ګام (it) = orig_ګام;
     }
-  return ret;
+  أرجع ret;
 }
 
 /* Ensure that pointers are used in OpenACC attach and detach clauses.
    Return true if an error has been detected.  */
 
-static bool
-c_oacc_check_attachments (tree c)
+ساكن منطقي
+c_oacc_check_attachments (ونه c)
 {
-  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
-    return false;
+  إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_MAP)
+    أرجع خطأ;
 
   /* OpenACC attach / detach clauses must be pointers.  */
-  if (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
-      || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH)
+  إذا (OMP_CLAUSE_MAP_ډول (c) == GOMP_MAP_ATTACH
+      || OMP_CLAUSE_MAP_ډول (c) == GOMP_MAP_DETACH)
     {
-      tree t = OMP_CLAUSE_DECL (c);
+      ونه t = OMP_CLAUSE_DECL (c);
 
-      while (TREE_CODE (t) == OMP_ARRAY_SECTION)
-	t = TREE_OPERAND (t, 0);
+      طالما (ونه_کوډ (t) == OMP_ARRAY_SECTION)
+	t = ونه_عملوند (t, 0);
 
-      if (TREE_CODE (TREE_TYPE (t)) != POINTER_TYPE)
+      إذا (ونه_کوډ (ونه_TYPE (t)) != اشاره_ګر_TYPE)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (c), "expected pointer in %qs clause",
-		    user_omp_clause_code_name (c, true));
-	  return true;
+		    user_omp_clause_کوډ_name (c, ریښتیا));
+	  أرجع ریښتیا;
 	}
     }
 
-  return false;
+  أرجع خطأ;
 }
 
 /* For all elements of CLAUSES, validate them against their constraints.
    Remove any elements from the list that are invalid.  */
 
-tree
-c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
+ونه
+c_پای_omp_clauses (ونه clauses, تعداد c_omp_region_type ort)
 {
-  bitmap_head generic_head, firstprivate_head, lastprivate_head;
-  bitmap_head aligned_head, map_head, map_field_head, map_firstprivate_head;
-  bitmap_head oacc_reduction_head, is_on_device_head;
-  tree c, t, type, *pc;
-  tree simdlen = NULL_TREE, safelen = NULL_TREE;
-  bool branch_seen = false;
-  bool copyprivate_seen = false;
-  bool mergeable_seen = false;
-  tree *detach_seen = NULL;
-  bool linear_variable_step_check = false;
-  tree *nowait_clause = NULL;
-  tree *grainsize_seen = NULL;
-  bool num_tasks_seen = false;
-  tree ordered_clause = NULL_TREE;
-  tree schedule_clause = NULL_TREE;
-  bool oacc_async = false;
-  tree last_iterators = NULL_TREE;
-  bool last_iterators_remove = false;
-  tree *nogroup_seen = NULL;
-  tree *order_clause = NULL;
+  bitmap_سر generic_سر, firstprivate_سر, lastprivate_سر;
+  bitmap_سر aligned_سر, map_سر, map_ډګر_سر, map_firstprivate_سر;
+  bitmap_سر oacc_reduction_سر, is_on_device_سر;
+  ونه c, t, type, *pc;
+  ونه simdlen = NULL_ونه, safelen = NULL_ونه;
+  منطقي branch_کتل_شوی = خطأ;
+  منطقي copyprivate_کتل_شوی = خطأ;
+  منطقي mergeable_کتل_شوی = خطأ;
+  ونه *detach_کتل_شوی = عدم;
+  منطقي خطي_variable_ګام_check = خطأ;
+  ونه *nowait_clause = عدم;
+  ونه *grainsize_کتل_شوی = عدم;
+  منطقي عدد_tasks_کتل_شوی = خطأ;
+  ونه ordered_clause = NULL_ونه;
+  ونه مهالوېش_clause = NULL_ونه;
+  منطقي oacc_async = خطأ;
+  ونه وروستی_iterators = NULL_ونه;
+  منطقي وروستی_iterators_remove = خطأ;
+  ونه *nogroup_کتل_شوی = عدم;
+  ونه *ترتیب_clause = عدم;
   /* 1 if normal/task reduction has been seen, -1 if inscan reduction
      has been seen, -2 if mixed inscan/normal reduction diagnosed.  */
-  int reduction_seen = 0;
-  bool allocate_seen = false;
-  bool implicit_moved = false;
-  bool target_in_reduction_seen = false;
-  tree *full_seen = NULL;
-  bool partial_seen = false;
-  bool openacc = (ort & C_ORT_ACC) != 0;
-  bool init_seen = false;
-  bool init_use_destroy_seen = false;
-  tree init_no_targetsync_clause = NULL_TREE;
-  tree depend_clause = NULL_TREE;
+  صحيح reduction_کتل_شوی = 0;
+  منطقي allocate_کتل_شوی = خطأ;
+  منطقي implicit_moved = خطأ;
+  منطقي موخه_دننه_reduction_کتل_شوی = خطأ;
+  ونه *ډک_کتل_شوی = عدم;
+  منطقي partial_کتل_شوی = خطأ;
+  منطقي openacc = (ort & C_ORT_ACC) != 0;
+  منطقي init_کتل_شوی = خطأ;
+  منطقي init_use_destroy_کتل_شوی = خطأ;
+  ونه init_no_targetsync_clause = NULL_ونه;
+  ونه depend_clause = NULL_ونه;
 
-  if (!openacc)
-    clauses = omp_remove_duplicate_maps (clauses, true);
+  إذا (!openacc)
+    clauses = omp_remove_duplicate_maps (clauses, ریښتیا);
 
-  bitmap_obstack_initialize (NULL);
-  bitmap_initialize (&generic_head, &bitmap_default_obstack);
-  bitmap_initialize (&firstprivate_head, &bitmap_default_obstack);
-  bitmap_initialize (&lastprivate_head, &bitmap_default_obstack);
-  bitmap_initialize (&aligned_head, &bitmap_default_obstack);
+  bitmap_obstack_initialize (عدم);
+  bitmap_initialize (&generic_سر, &bitmap_default_obstack);
+  bitmap_initialize (&firstprivate_سر, &bitmap_default_obstack);
+  bitmap_initialize (&lastprivate_سر, &bitmap_default_obstack);
+  bitmap_initialize (&aligned_سر, &bitmap_default_obstack);
   /* If ort == C_ORT_OMP_DECLARE_SIMD used as uniform_head instead.  */
-  bitmap_initialize (&map_head, &bitmap_default_obstack);
-  bitmap_initialize (&map_field_head, &bitmap_default_obstack);
-  bitmap_initialize (&map_firstprivate_head, &bitmap_default_obstack);
+  bitmap_initialize (&map_سر, &bitmap_default_obstack);
+  bitmap_initialize (&map_ډګر_سر, &bitmap_default_obstack);
+  bitmap_initialize (&map_firstprivate_سر, &bitmap_default_obstack);
   /* If ort == C_ORT_OMP used as nontemporal_head or use_device_xxx_head
      instead and for ort == C_ORT_OMP_TARGET used as in_reduction_head.  */
-  bitmap_initialize (&oacc_reduction_head, &bitmap_default_obstack);
-  bitmap_initialize (&is_on_device_head, &bitmap_default_obstack);
+  bitmap_initialize (&oacc_reduction_سر, &bitmap_default_obstack);
+  bitmap_initialize (&is_on_device_سر, &bitmap_default_obstack);
 
-  if (openacc)
-    for (c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ASYNC)
+  إذا (openacc)
+    لكل (c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+      إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_ASYNC)
 	{
-	  oacc_async = true;
-	  break;
+	  oacc_async = ریښتیا;
+	  اكسر;
 	}
 
-  tree *grp_start_p = NULL, grp_sentinel = NULL_TREE;
+  ونه *grp_پیل_p = عدم, grp_sentinel = NULL_ونه;
 
-  for (pc = &clauses, c = clauses; c ; c = *pc)
+  لكل (pc = &clauses, c = clauses; c ; c = *pc)
     {
-      bool remove = false;
-      bool need_complete = false;
-      bool need_implicitly_determined = false;
+      منطقي remove = خطأ;
+      منطقي need_complete = خطأ;
+      منطقي need_implicitly_determined = خطأ;
 
       /* We've reached the end of a list of expanded nodes.  Reset the group
 	 start pointer.  */
-      if (c == grp_sentinel)
+      إذا (c == grp_sentinel)
 	{
-	  if (grp_start_p
-	      && OMP_CLAUSE_HAS_ITERATORS (*grp_start_p))
-	    for (tree gc = *grp_start_p; gc != grp_sentinel;
+	  إذا (grp_پیل_p
+	      && OMP_CLAUSE_HAS_ITERATORS (*grp_پیل_p))
+	    لكل (ونه gc = *grp_پیل_p; gc != grp_sentinel;
 		 gc = OMP_CLAUSE_CHAIN (gc))
-	      OMP_CLAUSE_ITERATORS (gc) = OMP_CLAUSE_ITERATORS (*grp_start_p);
-	  grp_start_p = NULL;
+	      OMP_CLAUSE_ITERATORS (gc) = OMP_CLAUSE_ITERATORS (*grp_پیل_p);
+	  grp_پیل_p = عدم;
 	}
 
-      switch (OMP_CLAUSE_CODE (c))
+      بدل (OMP_CLAUSE_کوډ (c))
 	{
-	case OMP_CLAUSE_SHARED:
-	  need_implicitly_determined = true;
-	  goto check_dup_generic;
+	حالة OMP_CLAUSE_SHARED:
+	  need_implicitly_determined = ریښتیا;
+	  اذهب check_dup_generic;
 
-	case OMP_CLAUSE_PRIVATE:
-	  need_complete = true;
-	  need_implicitly_determined = true;
-	  goto check_dup_generic;
+	حالة OMP_CLAUSE_شخصي:
+	  need_complete = ریښتیا;
+	  need_implicitly_determined = ریښتیا;
+	  اذهب check_dup_generic;
 
-	case OMP_CLAUSE_REDUCTION:
-	  if (reduction_seen == 0)
-	    reduction_seen = OMP_CLAUSE_REDUCTION_INSCAN (c) ? -1 : 1;
-	  else if (reduction_seen != -2
-		   && reduction_seen != (OMP_CLAUSE_REDUCTION_INSCAN (c)
+	حالة OMP_CLAUSE_REDUCTION:
+	  إذا (reduction_کتل_شوی == 0)
+	    reduction_کتل_شوی = OMP_CLAUSE_REDUCTION_INSCAN (c) ? -1 : 1;
+	  وإلا إذا (reduction_کتل_شوی != -2
+		   && reduction_کتل_شوی != (OMP_CLAUSE_REDUCTION_INSCAN (c)
 					 ? -1 : 1))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<inscan%> and non-%<inscan%> %<reduction%> clauses "
 			"on the same construct");
-	      reduction_seen = -2;
+	      reduction_کتل_شوی = -2;
 	    }
 	  /* FALLTHRU */
-	case OMP_CLAUSE_IN_REDUCTION:
-	case OMP_CLAUSE_TASK_REDUCTION:
-	  need_implicitly_determined = true;
+	حالة OMP_CLAUSE_دننه_REDUCTION:
+	حالة OMP_CLAUSE_TASK_REDUCTION:
+	  need_implicitly_determined = ریښتیا;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	  إذا (ونه_کوډ (t) == OMP_ARRAY_SECTION)
 	    {
-	      if (handle_omp_array_sections (c, ort))
+	      إذا (handle_omp_array_sections (c, ort))
 		{
-		  remove = true;
-		  break;
+		  remove = ریښتیا;
+		  اكسر;
 		}
 
 	      t = OMP_CLAUSE_DECL (c);
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
+	      إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_REDUCTION
 		  && OMP_CLAUSE_REDUCTION_INSCAN (c))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%<inscan%> %<reduction%> clause with array "
 			    "section");
-		  remove = true;
-		  break;
+		  remove = ریښتیا;
+		  اكسر;
 		}
 	    }
 	  t = require_complete_type (OMP_CLAUSE_LOCATION (c), t);
-	  if (t == error_mark_node)
+	  إذا (t == error_mark_غوټه)
 	    {
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  if (oacc_async)
+	  إذا (oacc_async)
 	    c_mark_addressable (t);
-	  type = TREE_TYPE (t);
-	  if (TREE_CODE (t) == MEM_REF)
-	    type = TREE_TYPE (type);
-	  if (TREE_CODE (type) == ARRAY_TYPE)
+	  type = ونه_TYPE (t);
+	  إذا (ونه_کوډ (t) == MEM_REF)
+	    type = ونه_TYPE (type);
+	  إذا (ونه_کوډ (type) == ARRAY_TYPE)
 	    {
-	      tree oatype = type;
-	      gcc_assert (TREE_CODE (t) != MEM_REF);
-	      while (TREE_CODE (type) == ARRAY_TYPE)
-		type = TREE_TYPE (type);
-	      if (integer_zerop (TYPE_SIZE_UNIT (type)))
+	      ونه oatype = type;
+	      gcc_assert (ونه_کوډ (t) != MEM_REF);
+	      طالما (ونه_کوډ (type) == ARRAY_TYPE)
+		type = ونه_TYPE (type);
+	      إذا (integer_zerop (TYPE_اندازه_UNIT (type)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD in %<reduction%> clause is a zero size array",
 			    t);
-		  remove = true;
-		  break;
+		  remove = ریښتیا;
+		  اكسر;
 		}
-	      tree size = size_binop (EXACT_DIV_EXPR, TYPE_SIZE_UNIT (oatype),
-				      TYPE_SIZE_UNIT (type));
-	      if (integer_zerop (size))
+	      ونه اندازه = اندازه_binop (EXACT_DIV_بیان, TYPE_اندازه_UNIT (oatype),
+				      TYPE_اندازه_UNIT (type));
+	      إذا (integer_zerop (اندازه))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD in %<reduction%> clause is a zero size array",
 			    t);
-		  remove = true;
-		  break;
+		  remove = ریښتیا;
+		  اكسر;
 		}
-	      size = size_binop (MINUS_EXPR, size, size_one_node);
-	      size = save_expr (size);
-	      tree index_type = build_index_type (size);
-	      tree atype = c_build_array_type (TYPE_MAIN_VARIANT (type),
-					       index_type);
+	      اندازه = اندازه_binop (MINUS_بیان, اندازه, اندازه_one_غوټه);
+	      اندازه = save_بیان (اندازه);
+	      ونه شاخص_type = build_شاخص_type (اندازه);
+	      ونه atype = c_build_array_type (TYPE_MAIN_VARIANT (type),
+					       شاخص_type);
 	      atype = c_build_qualified_type (atype, TYPE_QUALS (type));
-	      tree ptype = c_build_pointer_type (type);
-	      if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE)
-		t = build_fold_addr_expr (t);
+	      ونه ptype = c_build_اشاره_ګر_type (type);
+	      إذا (ونه_کوډ (ونه_TYPE (t)) == ARRAY_TYPE)
+		t = build_fold_addr_بیان (t);
 	      t = build2 (MEM_REF, atype, t, build_int_cst (ptype, 0));
 	      OMP_CLAUSE_DECL (c) = t;
 	    }
-	  if (TYPE_ATOMIC (type))
+	  إذا (TYPE_ATOMIC (type))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<_Atomic%> %qE in %<reduction%> clause", t);
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_REDUCTION
+	  إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_REDUCTION
 	      || OMP_CLAUSE_REDUCTION_TASK (c))
 	    {
 	      /* Disallow zero sized or potentially zero sized task
 		 reductions.  */
-	      if (integer_zerop (TYPE_SIZE_UNIT (type)))
+	      إذا (integer_zerop (TYPE_اندازه_UNIT (type)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "zero sized type %qT in %qs clause", type,
-			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  remove = true;
-		  break;
+			    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		  remove = ریښتیا;
+		  اكسر;
 		}
-	      else if (TREE_CODE (TYPE_SIZE_UNIT (type)) != INTEGER_CST)
+	      وإلا إذا (ونه_کوډ (TYPE_اندازه_UNIT (type)) != INTEGER_CST)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "variable sized type %qT in %qs clause", type,
-			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  remove = true;
-		  break;
+			    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		  remove = ریښتیا;
+		  اكسر;
 		}
 	    }
-	  if (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == NULL_TREE
+	  إذا (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == NULL_ونه
 	      && (FLOAT_TYPE_P (type)
-		  || TREE_CODE (type) == COMPLEX_TYPE))
+		  || ونه_کوډ (type) == COMPLEX_TYPE))
 	    {
-	      enum tree_code r_code = OMP_CLAUSE_REDUCTION_CODE (c);
-	      const char *r_name = NULL;
+	      تعداد ونه_کوډ_2 r_کوډ = OMP_CLAUSE_REDUCTION_کوډ (c);
+	      ثابت حرف *r_name = عدم;
 
-	      switch (r_code)
+	      بدل (r_کوډ)
 		{
-		case PLUS_EXPR:
-		case MULT_EXPR:
-		case MINUS_EXPR:
-		case TRUTH_ANDIF_EXPR:
-		case TRUTH_ORIF_EXPR:
-		  break;
-		case MIN_EXPR:
-		  if (TREE_CODE (type) == COMPLEX_TYPE)
+		حالة PLUS_بیان:
+		حالة MULT_بیان:
+		حالة MINUS_بیان:
+		حالة TRUTH_ANDIF_بیان:
+		حالة TRUTH_ORIF_بیان:
+		  اكسر;
+		حالة MIN_بیان:
+		  إذا (ونه_کوډ (type) == COMPLEX_TYPE)
 		    r_name = "min";
-		  break;
-		case MAX_EXPR:
-		  if (TREE_CODE (type) == COMPLEX_TYPE)
+		  اكسر;
+		حالة MAX_بیان:
+		  إذا (ونه_کوډ (type) == COMPLEX_TYPE)
 		    r_name = "max";
-		  break;
-		case BIT_AND_EXPR:
+		  اكسر;
+		حالة بټ_AND_بیان:
 		  r_name = "&";
-		  break;
-		case BIT_XOR_EXPR:
+		  اكسر;
+		حالة بټ_XOR_بیان:
 		  r_name = "^";
-		  break;
-		case BIT_IOR_EXPR:
+		  اكسر;
+		حالة بټ_IOR_بیان:
 		  r_name = "|";
-		  break;
-		default:
+		  اكسر;
+		افتراضي:
 		  gcc_unreachable ();
 		}
-	      if (r_name)
+	      إذا (r_name)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qE has invalid type for %<reduction(%s)%>",
 			    t, r_name);
-		  remove = true;
-		  break;
+		  remove = ریښتیا;
+		  اكسر;
 		}
 	    }
-	  else if (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == error_mark_node)
+	  وإلا إذا (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) == error_mark_غوټه)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"user defined reduction not found for %qE", t);
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  else if (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c))
+	  وإلا إذا (OMP_CLAUSE_REDUCTION_PLACEHOLDER (c))
 	    {
-	      tree list = OMP_CLAUSE_REDUCTION_PLACEHOLDER (c);
+	      ونه list = OMP_CLAUSE_REDUCTION_PLACEHOLDER (c);
 	      type = TYPE_MAIN_VARIANT (type);
-	      tree placeholder = build_decl (OMP_CLAUSE_LOCATION (c),
-					     VAR_DECL, NULL_TREE, type);
-	      tree decl_placeholder = NULL_TREE;
+	      ونه placeholder = build_decl (OMP_CLAUSE_LOCATION (c),
+					     VAR_DECL, NULL_ونه, type);
+	      ونه decl_placeholder = NULL_ونه;
 	      OMP_CLAUSE_REDUCTION_PLACEHOLDER (c) = placeholder;
 	      DECL_ARTIFICIAL (placeholder) = 1;
 	      DECL_IGNORED_P (placeholder) = 1;
-	      if (TREE_CODE (t) == MEM_REF)
+	      إذا (ونه_کوډ (t) == MEM_REF)
 		{
 		  decl_placeholder = build_decl (OMP_CLAUSE_LOCATION (c),
-						 VAR_DECL, NULL_TREE, type);
+						 VAR_DECL, NULL_ونه, type);
 		  OMP_CLAUSE_REDUCTION_DECL_PLACEHOLDER (c) = decl_placeholder;
 		  DECL_ARTIFICIAL (decl_placeholder) = 1;
 		  DECL_IGNORED_P (decl_placeholder) = 1;
 		}
-	      if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 0)))
+	      إذا (ونه_ADDRESSABLE (ونه_VEC_ELT (list, 0)))
 		c_mark_addressable (placeholder);
-	      if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 1)))
+	      إذا (ونه_ADDRESSABLE (ونه_VEC_ELT (list, 1)))
 		c_mark_addressable (decl_placeholder ? decl_placeholder
 				    : OMP_CLAUSE_DECL (c));
-	      OMP_CLAUSE_REDUCTION_MERGE (c)
-		= c_clone_omp_udr (TREE_VEC_ELT (list, 2),
-				   TREE_VEC_ELT (list, 0),
-				   TREE_VEC_ELT (list, 1),
+	      OMP_CLAUSE_REDUCTION_یوځای (c)
+		= c_clone_omp_udr (ونه_VEC_ELT (list, 2),
+				   ونه_VEC_ELT (list, 0),
+				   ونه_VEC_ELT (list, 1),
 				   decl_placeholder ? decl_placeholder
 				   : OMP_CLAUSE_DECL (c), placeholder);
-	      OMP_CLAUSE_REDUCTION_MERGE (c)
-		= build3_loc (OMP_CLAUSE_LOCATION (c), BIND_EXPR,
-			      void_type_node, NULL_TREE,
-			      OMP_CLAUSE_REDUCTION_MERGE (c), NULL_TREE);
-	      TREE_SIDE_EFFECTS (OMP_CLAUSE_REDUCTION_MERGE (c)) = 1;
-	      if (TREE_VEC_LENGTH (list) == 6)
+	      OMP_CLAUSE_REDUCTION_یوځای (c)
+		= build3_loc (OMP_CLAUSE_LOCATION (c), BIND_بیان,
+			      void_type_غوټه, NULL_ونه,
+			      OMP_CLAUSE_REDUCTION_یوځای (c), NULL_ونه);
+	      ونه_SIDE_EFFECTS (OMP_CLAUSE_REDUCTION_یوځای (c)) = 1;
+	      إذا (ونه_VEC_اوږدتیا (list) == 6)
 		{
-		  if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 3)))
+		  إذا (ونه_ADDRESSABLE (ونه_VEC_ELT (list, 3)))
 		    c_mark_addressable (decl_placeholder ? decl_placeholder
 					: OMP_CLAUSE_DECL (c));
-		  if (TREE_ADDRESSABLE (TREE_VEC_ELT (list, 4)))
+		  إذا (ونه_ADDRESSABLE (ونه_VEC_ELT (list, 4)))
 		    c_mark_addressable (placeholder);
-		  tree init = TREE_VEC_ELT (list, 5);
-		  if (init == error_mark_node)
-		    init = DECL_INITIAL (TREE_VEC_ELT (list, 3));
+		  ونه init = ونه_VEC_ELT (list, 5);
+		  إذا (init == error_mark_غوټه)
+		    init = DECL_INITIAL (ونه_VEC_ELT (list, 3));
 		  OMP_CLAUSE_REDUCTION_INIT (c)
-		    = c_clone_omp_udr (init, TREE_VEC_ELT (list, 4),
-				       TREE_VEC_ELT (list, 3),
+		    = c_clone_omp_udr (init, ونه_VEC_ELT (list, 4),
+				       ونه_VEC_ELT (list, 3),
 				       decl_placeholder ? decl_placeholder
 				       : OMP_CLAUSE_DECL (c), placeholder);
-		  if (TREE_VEC_ELT (list, 5) == error_mark_node)
+		  إذا (ونه_VEC_ELT (list, 5) == error_mark_غوټه)
 		    {
-		      tree v = decl_placeholder ? decl_placeholder : t;
+		      ونه v = decl_placeholder ? decl_placeholder : t;
 		      OMP_CLAUSE_REDUCTION_INIT (c)
-			= build2 (INIT_EXPR, TREE_TYPE (v), v,
+			= build2 (INIT_بیان, ونه_TYPE (v), v,
 				  OMP_CLAUSE_REDUCTION_INIT (c));
 		    }
-		  if (walk_tree (&OMP_CLAUSE_REDUCTION_INIT (c),
-				 c_find_omp_placeholder_r,
-				 placeholder, NULL))
+		  إذا (walk_ونه (&OMP_CLAUSE_REDUCTION_INIT (c),
+				 c_پیدا_کړه_omp_placeholder_r,
+				 placeholder, عدم))
 		    OMP_CLAUSE_REDUCTION_OMP_ORIG_REF (c) = 1;
 		}
-	      else
+	      وإلا
 		{
-		  tree init;
-		  tree v = decl_placeholder ? decl_placeholder : t;
-		  if (AGGREGATE_TYPE_P (TREE_TYPE (v)))
-		    init = build_constructor (TREE_TYPE (v), NULL);
-		  else
-		    init = fold_convert (TREE_TYPE (v), integer_zero_node);
+		  ونه init;
+		  ونه v = decl_placeholder ? decl_placeholder : t;
+		  إذا (AGGREGATE_TYPE_P (ونه_TYPE (v)))
+		    init = build_constructor (ونه_TYPE (v), عدم);
+		  وإلا
+		    init = fold_convert (ونه_TYPE (v), integer_zero_غوټه);
 		  OMP_CLAUSE_REDUCTION_INIT (c)
-		    = build2 (INIT_EXPR, TREE_TYPE (v), v, init);
+		    = build2 (INIT_بیان, ونه_TYPE (v), v, init);
 		}
 	      OMP_CLAUSE_REDUCTION_INIT (c)
-		= build3_loc (OMP_CLAUSE_LOCATION (c), BIND_EXPR,
-			      void_type_node, NULL_TREE,
-			       OMP_CLAUSE_REDUCTION_INIT (c), NULL_TREE);
-	      TREE_SIDE_EFFECTS (OMP_CLAUSE_REDUCTION_INIT (c)) = 1;
+		= build3_loc (OMP_CLAUSE_LOCATION (c), BIND_بیان,
+			      void_type_غوټه, NULL_ونه,
+			       OMP_CLAUSE_REDUCTION_INIT (c), NULL_ونه);
+	      ونه_SIDE_EFFECTS (OMP_CLAUSE_REDUCTION_INIT (c)) = 1;
 	    }
-	  if (TREE_CODE (t) == MEM_REF)
+	  إذا (ونه_کوډ (t) == MEM_REF)
 	    {
-	      if (TYPE_SIZE_UNIT (TREE_TYPE (TREE_TYPE (t))) == NULL_TREE
-		  || TREE_CODE (TYPE_SIZE_UNIT (TREE_TYPE (TREE_TYPE (t))))
+	      إذا (TYPE_اندازه_UNIT (ونه_TYPE (ونه_TYPE (t))) == NULL_ونه
+		  || ونه_کوډ (TYPE_اندازه_UNIT (ونه_TYPE (ونه_TYPE (t))))
 		     != INTEGER_CST)
 		{
 		  sorry ("variable length element type in array "
 			 "%<reduction%> clause");
-		  remove = true;
-		  break;
+		  remove = ریښتیا;
+		  اكسر;
 		}
-	      t = TREE_OPERAND (t, 0);
-	      if (TREE_CODE (t) == POINTER_PLUS_EXPR)
-		t = TREE_OPERAND (t, 0);
-	      if (TREE_CODE (t) == ADDR_EXPR)
-		t = TREE_OPERAND (t, 0);
+	      t = ونه_عملوند (t, 0);
+	      إذا (ونه_کوډ (t) == اشاره_ګر_PLUS_بیان)
+		t = ونه_عملوند (t, 0);
+	      إذا (ونه_کوډ (t) == ADDR_بیان)
+		t = ونه_عملوند (t, 0);
 	    }
-	  goto check_dup_generic_t;
+	  اذهب check_dup_generic_t;
 
-	case OMP_CLAUSE_COPYPRIVATE:
-	  copyprivate_seen = true;
-	  if (nowait_clause)
+	حالة OMP_CLAUSE_COPYPRIVATE:
+	  copyprivate_کتل_شوی = ریښتیا;
+	  إذا (nowait_clause)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (*nowait_clause),
 			"%<nowait%> clause must not be used together "
 			"with %<copyprivate%> clause");
 	      *nowait_clause = OMP_CLAUSE_CHAIN (*nowait_clause);
-	      nowait_clause = NULL;
+	      nowait_clause = عدم;
 	    }
-	  goto check_dup_generic;
+	  اذهب check_dup_generic;
 
-	case OMP_CLAUSE_COPYIN:
+	حالة OMP_CLAUSE_COPYIN:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) || !DECL_THREAD_LOCAL_P (t))
+	  إذا (!VAR_P (t) || !DECL_THREAD_LOCAL_P (t))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE must be %<threadprivate%> for %<copyin%>", t);
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  goto check_dup_generic;
+	  اذهب check_dup_generic;
 
-	case OMP_CLAUSE_LINEAR:
-	  if (ort != C_ORT_OMP_DECLARE_SIMD)
-	    need_implicitly_determined = true;
+	حالة OMP_CLAUSE_خطي:
+	  إذا (ort != C_ORT_OMP_DECLARE_SIMD)
+	    need_implicitly_determined = ریښتیا;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (ort != C_ORT_OMP_DECLARE_SIMD
-	      && OMP_CLAUSE_LINEAR_KIND (c) != OMP_CLAUSE_LINEAR_DEFAULT
-	      && OMP_CLAUSE_LINEAR_OLD_LINEAR_MODIFIER (c))
+	  إذا (ort != C_ORT_OMP_DECLARE_SIMD
+	      && OMP_CLAUSE_خطي_ډول (c) != OMP_CLAUSE_خطي_DEFAULT
+	      && OMP_CLAUSE_خطي_OLD_خطي_MODIFIER (c))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"modifier should not be specified in %<linear%> "
 			"clause on %<simd%> or %<for%> constructs when not "
 			"using OpenMP 5.2 modifiers");
-	      OMP_CLAUSE_LINEAR_KIND (c) = OMP_CLAUSE_LINEAR_DEFAULT;
+	      OMP_CLAUSE_خطي_ډول (c) = OMP_CLAUSE_خطي_DEFAULT;
 	    }
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (t))
-	      && TREE_CODE (TREE_TYPE (t)) != POINTER_TYPE)
+	  إذا (!INTEGRAL_TYPE_P (ونه_TYPE (t))
+	      && ونه_کوډ (ونه_TYPE (t)) != اشاره_ګر_TYPE)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"linear clause applied to non-integral non-pointer "
-			"variable with type %qT", TREE_TYPE (t));
-	      remove = true;
-	      break;
+			"variable with type %qT", ونه_TYPE (t));
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  if (TYPE_ATOMIC (TREE_TYPE (t)))
+	  إذا (TYPE_ATOMIC (ونه_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<_Atomic%> %qD in %<linear%> clause", t);
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  if (ort == C_ORT_OMP_DECLARE_SIMD)
+	  إذا (ort == C_ORT_OMP_DECLARE_SIMD)
 	    {
-	      tree s = OMP_CLAUSE_LINEAR_STEP (c);
-	      if (TREE_CODE (s) == PARM_DECL)
+	      ونه s = OMP_CLAUSE_خطي_ګام (c);
+	      إذا (ونه_کوډ (s) == PARM_DECL)
 		{
-		  OMP_CLAUSE_LINEAR_VARIABLE_STRIDE (c) = 1;
+		  OMP_CLAUSE_خطي_VARIABLE_STRIDE (c) = 1;
 		  /* map_head bitmap is used as uniform_head if
 		     declare_simd.  */
-		  if (!bitmap_bit_p (&map_head, DECL_UID (s)))
-		    linear_variable_step_check = true;
-		  goto check_dup_generic;
+		  إذا (!bitmap_بټ_p (&map_سر, DECL_UID (s)))
+		    خطي_variable_ګام_check = ریښتیا;
+		  اذهب check_dup_generic;
 		}
-	      if (TREE_CODE (s) != INTEGER_CST)
+	      إذا (ونه_کوډ (s) != INTEGER_CST)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%<linear%> clause step %qE is neither constant "
 			    "nor a parameter", s);
-		  remove = true;
-		  break;
+		  remove = ریښتیا;
+		  اكسر;
 		}
 	    }
-	  if (TREE_CODE (TREE_TYPE (OMP_CLAUSE_DECL (c))) == POINTER_TYPE)
+	  إذا (ونه_کوډ (ونه_TYPE (OMP_CLAUSE_DECL (c))) == اشاره_ګر_TYPE)
 	    {
-	      tree s = OMP_CLAUSE_LINEAR_STEP (c);
-	      s = pointer_int_sum (OMP_CLAUSE_LOCATION (c), PLUS_EXPR,
+	      ونه s = OMP_CLAUSE_خطي_ګام (c);
+	      s = اشاره_ګر_int_مجموعه (OMP_CLAUSE_LOCATION (c), PLUS_بیان,
 				   OMP_CLAUSE_DECL (c), s);
-	      s = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_EXPR,
+	      s = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_بیان,
 				   sizetype, fold_convert (sizetype, s),
 				   fold_convert
 				     (sizetype, OMP_CLAUSE_DECL (c)));
-	      if (s == error_mark_node)
-		s = size_one_node;
-	      OMP_CLAUSE_LINEAR_STEP (c) = s;
+	      إذا (s == error_mark_غوټه)
+		s = اندازه_one_غوټه;
+	      OMP_CLAUSE_خطي_ګام (c) = s;
 	    }
-	  else
-	    OMP_CLAUSE_LINEAR_STEP (c)
-	      = fold_convert (TREE_TYPE (t), OMP_CLAUSE_LINEAR_STEP (c));
-	  goto check_dup_generic;
+	  وإلا
+	    OMP_CLAUSE_خطي_ګام (c)
+	      = fold_convert (ونه_TYPE (t), OMP_CLAUSE_خطي_ګام (c));
+	  اذهب check_dup_generic;
 
 	check_dup_generic:
 	  t = OMP_CLAUSE_DECL (c);
 	check_dup_generic_t:
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  إذا (!VAR_P (t) && ونه_کوډ (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %qs", t,
-			omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	      remove = true;
+			omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	      remove = ریښتیا;
 	    }
-	  else if ((openacc && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION)
+	  وإلا إذا ((openacc && OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_REDUCTION)
 		   || (ort == C_ORT_OMP
-		       && (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_USE_DEVICE_PTR
-			   || (OMP_CLAUSE_CODE (c)
+		       && (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_USE_DEVICE_PTR
+			   || (OMP_CLAUSE_کوډ (c)
 			       == OMP_CLAUSE_USE_DEVICE_ADDR)))
-		   || (ort == C_ORT_OMP_TARGET
-		       && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION))
+		   || (ort == C_ORT_OMP_موخه
+		       && OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_دننه_REDUCTION))
 	    {
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION
-		  && (bitmap_bit_p (&generic_head, DECL_UID (t))
-		      || bitmap_bit_p (&firstprivate_head, DECL_UID (t))))
+	      إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_دننه_REDUCTION
+		  && (bitmap_بټ_p (&generic_سر, DECL_UID (t))
+		      || bitmap_بټ_p (&firstprivate_سر, DECL_UID (t))))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in data-sharing "
 			    "clauses", t);
-		  remove = true;
-		  break;
+		  remove = ریښتیا;
+		  اكسر;
 		}
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION)
-		target_in_reduction_seen = true;
-	      if (bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
+	      إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_دننه_REDUCTION)
+		موخه_دننه_reduction_کتل_شوی = ریښتیا;
+	      إذا (bitmap_بټ_p (&oacc_reduction_سر, DECL_UID (t)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    openacc
 			    ? "%qD appears more than once in reduction clauses"
 			    : "%qD appears more than once in data clauses",
 			    t);
-		  remove = true;
+		  remove = ریښتیا;
 		}
-	      else
-		bitmap_set_bit (&oacc_reduction_head, DECL_UID (t));
+	      وإلا
+		bitmap_سېټ_بټ (&oacc_reduction_سر, DECL_UID (t));
 	    }
-	  else if (bitmap_bit_p (&generic_head, DECL_UID (t))
-		   || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
-		   || bitmap_bit_p (&lastprivate_head, DECL_UID (t))
-		   || bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
+	  وإلا إذا (bitmap_بټ_p (&generic_سر, DECL_UID (t))
+		   || bitmap_بټ_p (&firstprivate_سر, DECL_UID (t))
+		   || bitmap_بټ_p (&lastprivate_سر, DECL_UID (t))
+		   || bitmap_بټ_p (&map_firstprivate_سر, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in data clauses", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_PRIVATE
-		    || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_HAS_DEVICE_ADDR
-		    || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IS_DEVICE_PTR)
-		   && bitmap_bit_p (&map_head, DECL_UID (t)))
+	  وإلا إذا ((OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_شخصي
+		    || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_HAS_DEVICE_ADDR
+		    || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_IS_DEVICE_PTR)
+		   && bitmap_بټ_p (&map_سر, DECL_UID (t)))
 	    {
-	      if (openacc)
+	      إذا (openacc)
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears more than once in data clauses", t);
-	      else
+	      وإلا
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears both in data and map clauses", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else
-	    bitmap_set_bit (&generic_head, DECL_UID (t));
-	  break;
+	  وإلا
+	    bitmap_سېټ_بټ (&generic_سر, DECL_UID (t));
+	  اكسر;
 
-	case OMP_CLAUSE_FIRSTPRIVATE:
-	  if (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c) && !implicit_moved)
+	حالة OMP_CLAUSE_FIRSTPRIVATE:
+	  إذا (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c) && !implicit_moved)
 	    {
 	    move_implicit:
-	      implicit_moved = true;
+	      implicit_moved = ریښتیا;
 	      /* Move firstprivate and map clauses with
 		 OMP_CLAUSE_{FIRSTPRIVATE,MAP}_IMPLICIT set to the end of
 		 clauses chain.  */
-	      tree cl1 = NULL_TREE, cl2 = NULL_TREE;
-	      tree *pc1 = pc, *pc2 = &cl1, *pc3 = &cl2;
-	      while (*pc1)
-		if (OMP_CLAUSE_CODE (*pc1) == OMP_CLAUSE_FIRSTPRIVATE
+	      ونه cl1 = NULL_ونه, cl2 = NULL_ونه;
+	      ونه *pc1 = pc, *pc2 = &cl1, *pc3 = &cl2;
+	      طالما (*pc1)
+		إذا (OMP_CLAUSE_کوډ (*pc1) == OMP_CLAUSE_FIRSTPRIVATE
 		    && OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (*pc1))
 		  {
 		    *pc3 = *pc1;
 		    pc3 = &OMP_CLAUSE_CHAIN (*pc3);
 		    *pc1 = OMP_CLAUSE_CHAIN (*pc1);
 		  }
-		else if (OMP_CLAUSE_CODE (*pc1) == OMP_CLAUSE_MAP
+		وإلا إذا (OMP_CLAUSE_کوډ (*pc1) == OMP_CLAUSE_MAP
 			 && OMP_CLAUSE_MAP_IMPLICIT (*pc1))
 		  {
 		    *pc2 = *pc1;
 		    pc2 = &OMP_CLAUSE_CHAIN (*pc2);
 		    *pc1 = OMP_CLAUSE_CHAIN (*pc1);
 		  }
-		else
+		وإلا
 		  pc1 = &OMP_CLAUSE_CHAIN (*pc1);
-	      *pc3 = NULL;
+	      *pc3 = عدم;
 	      *pc2 = cl2;
 	      *pc1 = cl1;
-	      continue;
+	      استمر;
 	    }
 	  t = OMP_CLAUSE_DECL (c);
-	  need_complete = true;
-	  need_implicitly_determined = true;
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  need_complete = ریښتیا;
+	  need_implicitly_determined = ریښتیا;
+	  إذا (!VAR_P (t) && ونه_کوډ (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %<firstprivate%>", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else if (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
-		   && !OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT_TARGET (c)
-		   && bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
-	    remove = true;
-	  else if (bitmap_bit_p (&generic_head, DECL_UID (t))
-		   || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
-		   || bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
+	  وإلا إذا (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
+		   && !OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT_موخه (c)
+		   && bitmap_بټ_p (&map_firstprivate_سر, DECL_UID (t)))
+	    remove = ریښتیا;
+	  وإلا إذا (bitmap_بټ_p (&generic_سر, DECL_UID (t))
+		   || bitmap_بټ_p (&firstprivate_سر, DECL_UID (t))
+		   || bitmap_بټ_p (&map_firstprivate_سر, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in data clauses", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else if (bitmap_bit_p (&map_head, DECL_UID (t))
-		   || bitmap_bit_p (&map_field_head, DECL_UID (t)))
+	  وإلا إذا (bitmap_بټ_p (&map_سر, DECL_UID (t))
+		   || bitmap_بټ_p (&map_ډګر_سر, DECL_UID (t)))
 	    {
-	      if (openacc)
+	      إذا (openacc)
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears more than once in data clauses", t);
-	      else if (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
-		       && !OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT_TARGET (c))
+	      وإلا إذا (OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT (c)
+		       && !OMP_CLAUSE_FIRSTPRIVATE_IMPLICIT_موخه (c))
 		/* Silently drop the clause.  */;
-	      else
+	      وإلا
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears both in data and map clauses", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else
-	    bitmap_set_bit (&firstprivate_head, DECL_UID (t));
-	  break;
+	  وإلا
+	    bitmap_سېټ_بټ (&firstprivate_سر, DECL_UID (t));
+	  اكسر;
 
-	case OMP_CLAUSE_LASTPRIVATE:
+	حالة OMP_CLAUSE_LASTPRIVATE:
 	  t = OMP_CLAUSE_DECL (c);
-	  need_complete = true;
-	  need_implicitly_determined = true;
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  need_complete = ریښتیا;
+	  need_implicitly_determined = ریښتیا;
+	  إذا (!VAR_P (t) && ونه_کوډ (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %<lastprivate%>", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else if (bitmap_bit_p (&generic_head, DECL_UID (t))
-		   || bitmap_bit_p (&lastprivate_head, DECL_UID (t)))
+	  وإلا إذا (bitmap_بټ_p (&generic_سر, DECL_UID (t))
+		   || bitmap_بټ_p (&lastprivate_سر, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 		     "%qE appears more than once in data clauses", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else
-	    bitmap_set_bit (&lastprivate_head, DECL_UID (t));
-	  break;
+	  وإلا
+	    bitmap_سېټ_بټ (&lastprivate_سر, DECL_UID (t));
+	  اكسر;
 
-	case OMP_CLAUSE_ALIGNED:
+	حالة OMP_CLAUSE_ALIGNED:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  إذا (!VAR_P (t) && ونه_کوډ (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in %<aligned%> clause", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else if (!POINTER_TYPE_P (TREE_TYPE (t))
-		   && TREE_CODE (TREE_TYPE (t)) != ARRAY_TYPE)
+	  وإلا إذا (!اشاره_ګر_TYPE_P (ونه_TYPE (t))
+		   && ونه_کوډ (ونه_TYPE (t)) != ARRAY_TYPE)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE in %<aligned%> clause is neither a pointer nor "
 			"an array", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else if (TYPE_ATOMIC (TREE_TYPE (t)))
+	  وإلا إذا (TYPE_ATOMIC (ونه_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<_Atomic%> %qD in %<aligned%> clause", t);
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  else if (bitmap_bit_p (&aligned_head, DECL_UID (t)))
+	  وإلا إذا (bitmap_بټ_p (&aligned_سر, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in %<aligned%> clauses",
 			t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else
-	    bitmap_set_bit (&aligned_head, DECL_UID (t));
-	  break;
+	  وإلا
+	    bitmap_سېټ_بټ (&aligned_سر, DECL_UID (t));
+	  اكسر;
 
-	case OMP_CLAUSE_NONTEMPORAL:
+	حالة OMP_CLAUSE_NONTEMPORAL:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  إذا (!VAR_P (t) && ونه_کوډ (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in %<nontemporal%> clause", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else if (bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
+	  وإلا إذا (bitmap_بټ_p (&oacc_reduction_سر, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in %<nontemporal%> "
 			"clauses", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else
-	    bitmap_set_bit (&oacc_reduction_head, DECL_UID (t));
-	  break;
+	  وإلا
+	    bitmap_سېټ_بټ (&oacc_reduction_سر, DECL_UID (t));
+	  اكسر;
 
-	case OMP_CLAUSE_ALLOCATE:
+	حالة OMP_CLAUSE_ALLOCATE:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  إذا (!VAR_P (t) && ونه_کوډ (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in %<allocate%> clause", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else if (bitmap_bit_p (&aligned_head, DECL_UID (t)))
+	  وإلا إذا (bitmap_بټ_p (&aligned_سر, DECL_UID (t)))
 	    {
 	      warning_at (OMP_CLAUSE_LOCATION (c), OPT_Wopenmp,
 			  "%qE appears more than once in %<allocate%> clauses",
 			  t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else
+	  وإلا
 	    {
-	      bitmap_set_bit (&aligned_head, DECL_UID (t));
-	      if (!OMP_CLAUSE_ALLOCATE_COMBINED (c))
-		allocate_seen = true;
+	      bitmap_سېټ_بټ (&aligned_سر, DECL_UID (t));
+	      إذا (!OMP_CLAUSE_ALLOCATE_COMBINED (c))
+		allocate_کتل_شوی = ریښتیا;
 	    }
-	  break;
+	  اكسر;
 
-	case OMP_CLAUSE_DOACROSS:
+	حالة OMP_CLAUSE_DOACROSS:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (t == NULL_TREE)
-	    break;
-	  if (OMP_CLAUSE_DOACROSS_KIND (c) == OMP_CLAUSE_DOACROSS_SINK)
+	  إذا (t == NULL_ونه)
+	    اكسر;
+	  إذا (OMP_CLAUSE_DOACROSS_ډول (c) == OMP_CLAUSE_DOACROSS_SINK)
 	    {
-	      gcc_assert (TREE_CODE (t) == TREE_LIST);
-	      for (; t; t = TREE_CHAIN (t))
+	      gcc_assert (ونه_کوډ (t) == ونه_LIST);
+	      لكل (; t; t = ونه_CHAIN (t))
 		{
-		  tree decl = TREE_VALUE (t);
-		  if (TREE_CODE (TREE_TYPE (decl)) == POINTER_TYPE)
+		  ونه decl = ونه_ارزښت (t);
+		  إذا (ونه_کوډ (ونه_TYPE (decl)) == اشاره_ګر_TYPE)
 		    {
-		      tree offset = TREE_PURPOSE (t);
-		      bool neg = wi::neg_p (wi::to_wide (offset));
-		      offset = fold_unary (ABS_EXPR, TREE_TYPE (offset), offset);
-		      tree t2 = pointer_int_sum (OMP_CLAUSE_LOCATION (c),
-						 neg ? MINUS_EXPR : PLUS_EXPR,
-						 decl, offset);
-		      t2 = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_EXPR,
+		      ونه دننه_واټن = ونه_PURPOSE (t);
+		      منطقي neg = wi::neg_p (wi::منزل_wide (دننه_واټن));
+		      دننه_واټن = fold_unary (ABS_بیان, ونه_TYPE (دننه_واټن), دننه_واټن);
+		      ونه t2 = اشاره_ګر_int_مجموعه (OMP_CLAUSE_LOCATION (c),
+						 neg ? MINUS_بیان : PLUS_بیان,
+						 decl, دننه_واټن);
+		      t2 = fold_build2_loc (OMP_CLAUSE_LOCATION (c), MINUS_بیان,
 					    sizetype,
 					    fold_convert (sizetype, t2),
 					    fold_convert (sizetype, decl));
-		      if (t2 == error_mark_node)
+		      إذا (t2 == error_mark_غوټه)
 			{
-			  remove = true;
-			  break;
+			  remove = ریښتیا;
+			  اكسر;
 			}
-		      TREE_PURPOSE (t) = t2;
+		      ونه_PURPOSE (t) = t2;
 		    }
 		}
-	      break;
+	      اكسر;
 	    }
 	  gcc_unreachable ();
 
-	case OMP_CLAUSE_USES_ALLOCATORS:
-	  t = OMP_CLAUSE_USES_ALLOCATORS_ALLOCATOR (c);
-	  if (t == error_mark_node)
+	حالة OMP_CLAUSE_کاروي_ALLOCATORS:
+	  t = OMP_CLAUSE_کاروي_ALLOCATORS_ALLOCATOR (c);
+	  إذا (t == error_mark_غوټه)
 	    {
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  if ((VAR_P (t) || TREE_CODE (t) == PARM_DECL)
-	      && (bitmap_bit_p (&generic_head, DECL_UID (t))
-		  || bitmap_bit_p (&map_head, DECL_UID (t))
-		  || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
-		  || bitmap_bit_p (&lastprivate_head, DECL_UID (t))))
+	  إذا ((VAR_P (t) || ونه_کوډ (t) == PARM_DECL)
+	      && (bitmap_بټ_p (&generic_سر, DECL_UID (t))
+		  || bitmap_بټ_p (&map_سر, DECL_UID (t))
+		  || bitmap_بټ_p (&firstprivate_سر, DECL_UID (t))
+		  || bitmap_بټ_p (&lastprivate_سر, DECL_UID (t))))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once in data clauses", t);
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  else
-	    bitmap_set_bit (&generic_head, DECL_UID (t));
-	  if (TREE_CODE (TREE_TYPE (t)) != ENUMERAL_TYPE
-	      || strcmp (IDENTIFIER_POINTER (TYPE_IDENTIFIER (TREE_TYPE (t))),
+	  وإلا
+	    bitmap_سېټ_بټ (&generic_سر, DECL_UID (t));
+	  إذا (ونه_کوډ (ونه_TYPE (t)) != ENUMERAL_TYPE
+	      || strcmp (IDENTIFIER_اشاره_ګر (TYPE_IDENTIFIER (ونه_TYPE (t))),
 			 "omp_allocator_handle_t") != 0)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"allocator %qE must be of %<omp_allocator_handle_t%> "
 			"type", t);
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  tree init;
-	  if (!DECL_P (t)
-	      || (TREE_CODE (t) == CONST_DECL
-		  && ((init = DECL_INITIAL(t)) == nullptr
-		      || TREE_CODE (init) != INTEGER_CST
-		      || ((wi::to_widest (init) < 0
-			   || wi::to_widest (init) > GOMP_OMP_PREDEF_ALLOC_MAX)
-			  && (wi::to_widest (init) < GOMP_OMPX_PREDEF_ALLOC_MIN
-			      || (wi::to_widest (init)
+	  ونه init;
+	  إذا (!DECL_P (t)
+	      || (ونه_کوډ (t) == CONST_DECL
+		  && ((init = DECL_INITIAL(t)) == تش_اشاره
+		      || ونه_کوډ (init) != INTEGER_CST
+		      || ((wi::منزل_widest (init) < 0
+			   || wi::منزل_widest (init) > GOMP_OMP_PREDEF_ALLOC_MAX)
+			  && (wi::منزل_widest (init) < GOMP_OMPX_PREDEF_ALLOC_MIN
+			      || (wi::منزل_widest (init)
 				  > GOMP_OMPX_PREDEF_ALLOC_MAX))))))
 	    {
-	      remove = true;
+	      remove = ریښتیا;
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"allocator %qE must be either a variable or a "
 			"predefined allocator", t);
-	      break;
+	      اكسر;
 	    }
-	  else if (TREE_CODE (t) == CONST_DECL)
+	  وإلا إذا (ونه_کوډ (t) == CONST_DECL)
 	    {
 	      /* omp_null_allocator is ignored and for predefined allocators,
 		 no special handling is required; thus, mark them removed. */
-	      remove = true;
+	      remove = ریښتیا;
 
-	      if (OMP_CLAUSE_USES_ALLOCATORS_MEMSPACE (c)
-		  || OMP_CLAUSE_USES_ALLOCATORS_TRAITS (c))
+	      إذا (OMP_CLAUSE_کاروي_ALLOCATORS_MEMSPACE (c)
+		  || OMP_CLAUSE_کاروي_ALLOCATORS_TRAITS (c))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "modifiers cannot be used with predefined "
 			    "allocator %qE", t);
-		  break;
+		  اكسر;
 		}
 	    }
-	  t = OMP_CLAUSE_USES_ALLOCATORS_MEMSPACE (c);
-	  if (t == error_mark_node)
+	  t = OMP_CLAUSE_کاروي_ALLOCATORS_MEMSPACE (c);
+	  إذا (t == error_mark_غوټه)
 	    {
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  if (t != NULL_TREE
-	      && ((TREE_CODE (t) != CONST_DECL && TREE_CODE (t) != INTEGER_CST)
-		  || TREE_CODE (TREE_TYPE (t)) != ENUMERAL_TYPE
-		  || strcmp (IDENTIFIER_POINTER (TYPE_IDENTIFIER (TREE_TYPE (t))),
+	  إذا (t != NULL_ونه
+	      && ((ونه_کوډ (t) != CONST_DECL && ونه_کوډ (t) != INTEGER_CST)
+		  || ونه_کوډ (ونه_TYPE (t)) != ENUMERAL_TYPE
+		  || strcmp (IDENTIFIER_اشاره_ګر (TYPE_IDENTIFIER (ونه_TYPE (t))),
 			     "omp_memspace_handle_t") != 0))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c), "memspace modifier %qE must be"
 			" constant enum of %<omp_memspace_handle_t%> type", t);
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  t = OMP_CLAUSE_USES_ALLOCATORS_TRAITS (c);
-	  if (t == error_mark_node)
+	  t = OMP_CLAUSE_کاروي_ALLOCATORS_TRAITS (c);
+	  إذا (t == error_mark_غوټه)
 	    {
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  if (t != NULL_TREE
-	      && t != error_mark_node
+	  إذا (t != NULL_ونه
+	      && t != error_mark_غوټه
 	      && (DECL_EXTERNAL (t)
-		  || TREE_CODE (t) == PARM_DECL))
+		  || ونه_کوډ (t) == PARM_DECL))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c), "traits array %qE must be "
 			"defined in same scope as the construct on which the "
 			"clause appears", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  if (t != NULL_TREE)
+	  إذا (t != NULL_ونه)
 	    {
-	      bool type_err = false;
+	      منطقي type_err = خطأ;
 
-	      if (TREE_CODE (TREE_TYPE (t)) != ARRAY_TYPE
-		  || DECL_SIZE (t) == NULL_TREE
-		  || !COMPLETE_TYPE_P (TREE_TYPE (t)))
-		type_err = true;
-	      else
+	      إذا (ونه_کوډ (ونه_TYPE (t)) != ARRAY_TYPE
+		  || DECL_اندازه (t) == NULL_ونه
+		  || !COMPLETE_TYPE_P (ونه_TYPE (t)))
+		type_err = ریښتیا;
+	      وإلا
 		{
-		  tree elem_t = TREE_TYPE (TREE_TYPE (t));
-		  if (TREE_CODE (elem_t) != RECORD_TYPE
-		      || strcmp (IDENTIFIER_POINTER (TYPE_IDENTIFIER (elem_t)),
+		  ونه elem_t = ونه_TYPE (ونه_TYPE (t));
+		  إذا (ونه_کوډ (elem_t) != ریکارډ_TYPE
+		      || strcmp (IDENTIFIER_اشاره_ګر (TYPE_IDENTIFIER (elem_t)),
 				 "omp_alloctrait_t") != 0
 		      || !TYPE_READONLY (elem_t))
-		    type_err = true;
+		    type_err = ریښتیا;
 		}
-	      if (type_err)
+	      إذا (type_err)
 		{
-		  if (t != error_mark_node)
+		  إذا (t != error_mark_غوټه)
 		    error_at (OMP_CLAUSE_LOCATION (c), "traits array %qE must "
 			      "be of %<const omp_alloctrait_t []%> type", t);
-		  else
+		  وإلا
 		    error_at (OMP_CLAUSE_LOCATION (c), "traits array must "
 			      "be of %<const omp_alloctrait_t []%> type");
-		  remove = true;
+		  remove = ریښتیا;
 		}
-	      else
+	      وإلا
 		{
-		  tree cst_val = decl_constant_value_1 (t, true);
-		  if (cst_val == t)
+		  ونه cst_val = decl_constant_ارزښت_1 (t, ریښتیا);
+		  إذا (cst_val == t)
 		    {
 		      error_at (OMP_CLAUSE_LOCATION (c), "traits array must be "
 				"initialized with constants");
 
-		      remove = true;
+		      remove = ریښتیا;
 		    }
 		}
 	    }
-	  if (remove)
-	    break;
+	  إذا (remove)
+	    اكسر;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
-	case OMP_CLAUSE_DEPEND:
+	  استمر;
+	حالة OMP_CLAUSE_DEPEND:
 	  depend_clause = c;
 	  /* FALLTHRU */
-	case OMP_CLAUSE_AFFINITY:
+	حالة OMP_CLAUSE_AFFINITY:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (OMP_ITERATOR_DECL_P (t))
+	  إذا (OMP_ITERATOR_DECL_P (t))
 	    {
-	      if (TREE_PURPOSE (t) != last_iterators)
-		last_iterators_remove
-		  = c_omp_finish_iterators (TREE_PURPOSE (t));
-	      last_iterators = TREE_PURPOSE (t);
-	      t = TREE_VALUE (t);
-	      if (last_iterators_remove)
-		t = error_mark_node;
+	      إذا (ونه_PURPOSE (t) != وروستی_iterators)
+		وروستی_iterators_remove
+		  = c_omp_پای_iterators (ونه_PURPOSE (t));
+	      وروستی_iterators = ونه_PURPOSE (t);
+	      t = ونه_ارزښت (t);
+	      إذا (وروستی_iterators_remove)
+		t = error_mark_غوټه;
 	    }
-	  else
-	    last_iterators = NULL_TREE;
-	  if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	  وإلا
+	    وروستی_iterators = NULL_ونه;
+	  إذا (ونه_کوډ (t) == OMP_ARRAY_SECTION)
 	    {
-	      if (handle_omp_array_sections (c, ort))
-		remove = true;
-	      else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
-		       && OMP_CLAUSE_DEPEND_KIND (c) == OMP_CLAUSE_DEPEND_DEPOBJ)
+	      إذا (handle_omp_array_sections (c, ort))
+		remove = ریښتیا;
+	      وإلا إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_DEPEND
+		       && OMP_CLAUSE_DEPEND_ډول (c) == OMP_CLAUSE_DEPEND_DEPOBJ)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%<depend%> clause with %<depobj%> dependence "
 			    "type on array section");
-		  remove = true;
+		  remove = ریښتیا;
 		}
-	      break;
+	      اكسر;
 	    }
-	  if (t == error_mark_node)
-	    remove = true;
-	  else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
-		   && t == ridpointers[RID_OMP_ALL_MEMORY])
+	  إذا (t == error_mark_غوټه)
+	    remove = ریښتیا;
+	  وإلا إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_DEPEND
+		   && t == ridpointers[RID_OMP_ALL_حافظه])
 	    {
-	      if (OMP_CLAUSE_DEPEND_KIND (c) != OMP_CLAUSE_DEPEND_OUT
-		  && OMP_CLAUSE_DEPEND_KIND (c) != OMP_CLAUSE_DEPEND_INOUT)
+	      إذا (OMP_CLAUSE_DEPEND_ډول (c) != OMP_CLAUSE_DEPEND_بهر
+		  && OMP_CLAUSE_DEPEND_ډول (c) != OMP_CLAUSE_DEPEND_INOUT)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%<omp_all_memory%> used with %<depend%> kind "
 			    "other than %<out%> or %<inout%>");
-		  remove = true;
+		  remove = ریښتیا;
 		}
 	    }
-	  else if (!lvalue_p (t))
+	  وإلا إذا (!lvalue_p (t))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not lvalue expression nor array section in "
 			"%qs clause", t,
-			omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	      remove = true;
+			omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	      remove = ریښتیا;
 	    }
-	  else if (TREE_CODE (t) == COMPONENT_REF
-		   && DECL_C_BIT_FIELD (TREE_OPERAND (t, 1)))
+	  وإلا إذا (ونه_کوډ (t) == COMPONENT_REF
+		   && DECL_C_بټ_ډګر (ونه_عملوند (t, 1)))
 	    {
-	      gcc_assert (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
-			  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_AFFINITY);
+	      gcc_assert (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_DEPEND
+			  || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_AFFINITY);
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"bit-field %qE in %qs clause", t,
-			omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	      remove = true;
+			omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	      remove = ریښتیا;
 	    }
-	  else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
-		   && OMP_CLAUSE_DEPEND_KIND (c) == OMP_CLAUSE_DEPEND_DEPOBJ)
+	  وإلا إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_DEPEND
+		   && OMP_CLAUSE_DEPEND_ډول (c) == OMP_CLAUSE_DEPEND_DEPOBJ)
 	    {
-	      if (!c_omp_depend_t_p (TREE_TYPE (t)))
+	      إذا (!c_omp_depend_t_p (ونه_TYPE (t)))
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qE does not have %<omp_depend_t%> type in "
 			    "%<depend%> clause with %<depobj%> dependence "
 			    "type", t);
-		  remove = true;
+		  remove = ریښتیا;
 		}
 	    }
-	  else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND
-		   && c_omp_depend_t_p (TREE_TYPE (t)))
+	  وإلا إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_DEPEND
+		   && c_omp_depend_t_p (ونه_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE should not have %<omp_depend_t%> type in "
 			"%<depend%> clause with dependence type other than "
 			"%<depobj%>", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  if (!remove)
+	  إذا (!remove)
 	    {
-	      if (t == ridpointers[RID_OMP_ALL_MEMORY])
-		t = null_pointer_node;
-	      else
+	      إذا (t == ridpointers[RID_OMP_ALL_حافظه])
+		t = null_اشاره_ګر_غوټه;
+	      وإلا
 		{
-		  tree addr = build_unary_op (OMP_CLAUSE_LOCATION (c),
-					      ADDR_EXPR, t, false);
-		  if (addr == error_mark_node)
+		  ونه addr = build_unary_op (OMP_CLAUSE_LOCATION (c),
+					      ADDR_بیان, t, خطأ);
+		  إذا (addr == error_mark_غوټه)
 		    {
-		      remove = true;
-		      break;
+		      remove = ریښتیا;
+		      اكسر;
 		    }
-		  t = build_indirect_ref (OMP_CLAUSE_LOCATION (c), addr,
-					  RO_UNARY_STAR);
-		  if (t == error_mark_node)
+		  t = build_غیرمستقیم_ref (OMP_CLAUSE_LOCATION (c), addr,
+					  RO_UNARY_ستوری);
+		  إذا (t == error_mark_غوټه)
 		    {
-		      remove = true;
-		      break;
+		      remove = ریښتیا;
+		      اكسر;
 		    }
 		}
-	      if (OMP_ITERATOR_DECL_P (OMP_CLAUSE_DECL (c)))
-		TREE_VALUE (OMP_CLAUSE_DECL (c)) = t;
-	      else
+	      إذا (OMP_ITERATOR_DECL_P (OMP_CLAUSE_DECL (c)))
+		ونه_ارزښت (OMP_CLAUSE_DECL (c)) = t;
+	      وإلا
 		OMP_CLAUSE_DECL (c) = t;
 	    }
-	  break;
+	  اكسر;
 
-	case OMP_CLAUSE_MAP:
-	  if (OMP_CLAUSE_MAP_IMPLICIT (c) && !implicit_moved)
-	    goto move_implicit;
-	  if (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_PUSH_MAPPER_NAME
-	      || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_POP_MAPPER_NAME)
+	حالة OMP_CLAUSE_MAP:
+	  إذا (OMP_CLAUSE_MAP_IMPLICIT (c) && !implicit_moved)
+	    اذهب move_implicit;
+	  إذا (OMP_CLAUSE_MAP_ډول (c) == GOMP_MAP_ټېل_MAPPER_NAME
+	      || OMP_CLAUSE_MAP_ډول (c) == GOMP_MAP_راوباسه_MAPPER_NAME)
 	    {
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
 	  /* FALLTHRU */
-	case OMP_CLAUSE_TO:
-	case OMP_CLAUSE_FROM:
-	  if (OMP_CLAUSE_ITERATORS (c)
-	      && c_omp_finish_iterators (OMP_CLAUSE_ITERATORS (c)))
+	حالة OMP_CLAUSE_منزل:
+	حالة OMP_CLAUSE_FROM:
+	  إذا (OMP_CLAUSE_ITERATORS (c)
+	      && c_omp_پای_iterators (OMP_CLAUSE_ITERATORS (c)))
 	    {
-	      t = error_mark_node;
-	      break;
+	      t = error_mark_غوټه;
+	      اكسر;
 	    }
 	  /* FALLTHRU */
-	case OMP_CLAUSE__CACHE_:
+	حالة OMP_CLAUSE__CACHE_:
 	  {
-	    using namespace omp_addr_tokenizer;
-	    auto_vec<omp_addr_token *, 10> addr_tokens;
+	    کارول نطاق omp_addr_tokenizer;
+	    auto_vec<omp_addr_token *, 10> addr_نښې;
 
 	    t = OMP_CLAUSE_DECL (c);
-	    if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	    إذا (ونه_کوډ (t) == OMP_ARRAY_SECTION)
 	      {
-		grp_start_p = pc;
+		grp_پیل_p = pc;
 		grp_sentinel = OMP_CLAUSE_CHAIN (c);
 
-		if (handle_omp_array_sections (c, ort))
-		  remove = true;
-		else
+		إذا (handle_omp_array_sections (c, ort))
+		  remove = ریښتیا;
+		وإلا
 		  {
 		    t = OMP_CLAUSE_DECL (c);
-		    if (!omp_mappable_type (TREE_TYPE (t)))
+		    إذا (!omp_mappable_type (ونه_TYPE (t)))
 		      {
 			error_at (OMP_CLAUSE_LOCATION (c),
 				  "array section does not have mappable type "
 				  "in %qs clause",
-				  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-			remove = true;
+				  omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+			remove = ریښتیا;
 		      }
-		    else if (TYPE_ATOMIC (TREE_TYPE (t)))
+		    وإلا إذا (TYPE_ATOMIC (ونه_TYPE (t)))
 		      {
 			error_at (OMP_CLAUSE_LOCATION (c),
 				  "%<_Atomic%> %qE in %qs clause", t,
-				  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-			remove = true;
+				  omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+			remove = ریښتیا;
 		      }
-		    while (TREE_CODE (t) == ARRAY_REF)
-		      t = TREE_OPERAND (t, 0);
+		    طالما (ونه_کوډ (t) == ARRAY_REF)
+		      t = ونه_عملوند (t, 0);
 
-		    c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
+		    c_omp_پته_inspector ai (OMP_CLAUSE_LOCATION (c), t);
 
-		    if (!omp_parse_expr (addr_tokens, t))
+		    إذا (!omp_parse_بیان (addr_نښې, t))
 		      {
 			sorry_at (OMP_CLAUSE_LOCATION (c),
 				  "unsupported map expression %qE",
 				  OMP_CLAUSE_DECL (c));
-			remove = true;
-			break;
+			remove = ریښتیا;
+			اكسر;
 		      }
 
 		    /* This check is to determine if this will be the only map
 		       node created for this clause.  Otherwise, we'll check
 		       the following FIRSTPRIVATE_POINTER or ATTACH_DETACH
 		       node on the next iteration(s) of the loop.   */
-		    if (addr_tokens.length () >= 4
-			&& addr_tokens[0]->type == STRUCTURE_BASE
-			&& addr_tokens[0]->u.structure_base_kind == BASE_DECL
-			&& addr_tokens[1]->type == ACCESS_METHOD
-			&& addr_tokens[2]->type == COMPONENT_SELECTOR
-			&& addr_tokens[3]->type == ACCESS_METHOD
-			&& (addr_tokens[3]->u.access_kind == ACCESS_DIRECT
-			    || (addr_tokens[3]->u.access_kind
-				== ACCESS_INDEXED_ARRAY)))
+		    إذا (addr_نښې.اوږدتیا () >= 4
+			&& addr_نښې[0]->type == STRUCTURE_بنسټ
+			&& addr_نښې[0]->u.structure_بنسټ_ډول == بنسټ_DECL
+			&& addr_نښې[1]->type == ACCESS_لاره
+			&& addr_نښې[2]->type == COMPONENT_SELECTOR
+			&& addr_نښې[3]->type == ACCESS_لاره
+			&& (addr_نښې[3]->u.access_ډول == ACCESS_مستقیم
+			    || (addr_نښې[3]->u.access_ډول
+				== ACCESS_شاخصي_ARRAY)))
 		      {
-			tree rt = addr_tokens[1]->expr;
+			ونه rt = addr_نښې[1]->بیان;
 
 			gcc_assert (DECL_P (rt));
 
-			if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+			إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_MAP
 			    && OMP_CLAUSE_MAP_IMPLICIT (c)
-			    && (bitmap_bit_p (&map_head, DECL_UID (rt))
-				|| bitmap_bit_p (&map_field_head, DECL_UID (rt))
-				|| bitmap_bit_p (&map_firstprivate_head,
+			    && (bitmap_بټ_p (&map_سر, DECL_UID (rt))
+				|| bitmap_بټ_p (&map_ډګر_سر, DECL_UID (rt))
+				|| bitmap_بټ_p (&map_firstprivate_سر,
 						 DECL_UID (rt))))
 			  {
-			    remove = true;
-			    break;
+			    remove = ریښتیا;
+			    اكسر;
 			  }
-			if (bitmap_bit_p (&map_field_head, DECL_UID (rt)))
-			  break;
-			if (bitmap_bit_p (&map_head, DECL_UID (rt)))
+			إذا (bitmap_بټ_p (&map_ډګر_سر, DECL_UID (rt)))
+			  اكسر;
+			إذا (bitmap_بټ_p (&map_سر, DECL_UID (rt)))
 			  {
-			    if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
+			    إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_MAP)
 			      error_at (OMP_CLAUSE_LOCATION (c),
 					"%qD appears more than once in motion "
 					"clauses", rt);
-			    else if (openacc)
+			    وإلا إذا (openacc)
 			      error_at (OMP_CLAUSE_LOCATION (c),
 					"%qD appears more than once in data "
 					"clauses", rt);
-			    else
+			    وإلا
 			      error_at (OMP_CLAUSE_LOCATION (c),
 					"%qD appears more than once in map "
 					"clauses", rt);
-			    remove = true;
+			    remove = ریښتیا;
 			  }
-			else
+			وإلا
 			  {
-			    bitmap_set_bit (&map_head, DECL_UID (rt));
-			    bitmap_set_bit (&map_field_head, DECL_UID (rt));
+			    bitmap_سېټ_بټ (&map_سر, DECL_UID (rt));
+			    bitmap_سېټ_بټ (&map_ډګر_سر, DECL_UID (rt));
 			  }
 		      }
 		  }
-		if (c_oacc_check_attachments (c))
-		  remove = true;
-		if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
-		    && (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
-			|| OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH)
-		    && !OMP_CLAUSE_SIZE (c))
+		إذا (c_oacc_check_attachments (c))
+		  remove = ریښتیا;
+		إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_MAP
+		    && (OMP_CLAUSE_MAP_ډول (c) == GOMP_MAP_ATTACH
+			|| OMP_CLAUSE_MAP_ډول (c) == GOMP_MAP_DETACH)
+		    && !OMP_CLAUSE_اندازه (c))
 		  /* In this case, we have a single array element which is a
 		     pointer, and we already set OMP_CLAUSE_SIZE in
 		     handle_omp_array_sections above.  For attach/detach
 		     clauses, reset the OMP_CLAUSE_SIZE (representing a bias)
 		     to zero here.  */
-		  OMP_CLAUSE_SIZE (c) = size_zero_node;
-		break;
+		  OMP_CLAUSE_اندازه (c) = اندازه_zero_غوټه;
+		اكسر;
 	      }
-	    else if (!omp_parse_expr (addr_tokens, t))
+	    وإلا إذا (!omp_parse_بیان (addr_نښې, t))
 	      {
 		sorry_at (OMP_CLAUSE_LOCATION (c),
 			  "unsupported map expression %qE",
 			  OMP_CLAUSE_DECL (c));
-		remove = true;
-		break;
+		remove = ریښتیا;
+		اكسر;
 	      }
-	    if (t == error_mark_node)
+	    إذا (t == error_mark_غوټه)
 	      {
-		remove = true;
-		break;
+		remove = ریښتیا;
+		اكسر;
 	      }
 
-	    tree attr;
-	    if (DECL_P (t)
-		&& OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+	    ونه attr;
+	    إذا (DECL_P (t)
+		&& OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_MAP
 		&& (attr = lookup_attribute ("omp declare target",
-					     DECL_ATTRIBUTES (t)))
-		&& value_member (get_identifier ("local"),
-				 TREE_VALUE (attr)))
+					     DECL_ځانګړتیاوې (t)))
+		&& ارزښت_member (get_identifier ("local"),
+				 ونه_ارزښت (attr)))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "device-local variable %qD cannot appear "
 			  "in map clause", t);
-		remove = true;
-		break;
+		remove = ریښتیا;
+		اكسر;
 	      }
 
 	    /* OpenACC attach / detach clauses must be pointers.  */
-	    if (c_oacc_check_attachments (c))
+	    إذا (c_oacc_check_attachments (c))
 	      {
-		remove = true;
-		break;
+		remove = ریښتیا;
+		اكسر;
 	      }
-	    if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
-		&& (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_ATTACH
-		    || OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_DETACH)
-		&& !OMP_CLAUSE_SIZE (c))
+	    إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_MAP
+		&& (OMP_CLAUSE_MAP_ډول (c) == GOMP_MAP_ATTACH
+		    || OMP_CLAUSE_MAP_ډول (c) == GOMP_MAP_DETACH)
+		&& !OMP_CLAUSE_اندازه (c))
 	      /* For attach/detach clauses, set OMP_CLAUSE_SIZE (representing a
 		 bias) to zero here, so it is not set erroneously to the pointer
 		 size later on in gimplify.cc.  */
-	      OMP_CLAUSE_SIZE (c) = size_zero_node;
+	      OMP_CLAUSE_اندازه (c) = اندازه_zero_غوټه;
 
-	    c_omp_address_inspector ai (OMP_CLAUSE_LOCATION (c), t);
+	    c_omp_پته_inspector ai (OMP_CLAUSE_LOCATION (c), t);
 
-	    if (!ai.check_clause (c))
+	    إذا (!ai.check_clause (c))
 	      {
-		remove = true;
-		break;
+		remove = ریښتیا;
+		اكسر;
 	      }
 
-	    if (!ai.map_supported_p ())
+	    إذا (!ai.map_supported_p ())
 	      {
 		sorry_at (OMP_CLAUSE_LOCATION (c),
 			  "unsupported map expression %qE",
 			  OMP_CLAUSE_DECL (c));
-		remove = true;
-		break;
+		remove = ریښتیا;
+		اكسر;
 	      }
 
-	    gcc_assert ((addr_tokens[0]->type == ARRAY_BASE
-			 || addr_tokens[0]->type == STRUCTURE_BASE)
-			&& addr_tokens[1]->type == ACCESS_METHOD);
+	    gcc_assert ((addr_نښې[0]->type == ARRAY_بنسټ
+			 || addr_نښې[0]->type == STRUCTURE_بنسټ)
+			&& addr_نښې[1]->type == ACCESS_لاره);
 
-	    t = addr_tokens[1]->expr;
+	    t = addr_نښې[1]->بیان;
 
-	    if (addr_tokens[0]->u.structure_base_kind != BASE_DECL)
-	      goto skip_decl_checks;
+	    إذا (addr_نښې[0]->u.structure_بنسټ_ډول != بنسټ_DECL)
+	      اذهب skip_decl_checks;
 
 	    /* For OpenMP, we can access a struct "t" and "t.d" on the same
 	       mapping.  OpenACC allows multiple fields of the same structure
 	       to be written.  */
-	    if (addr_tokens[0]->type == STRUCTURE_BASE
-		&& (bitmap_bit_p (&map_field_head, DECL_UID (t))
-		    || (!openacc && bitmap_bit_p (&map_head, DECL_UID (t)))))
-	      goto skip_decl_checks;
+	    إذا (addr_نښې[0]->type == STRUCTURE_بنسټ
+		&& (bitmap_بټ_p (&map_ډګر_سر, DECL_UID (t))
+		    || (!openacc && bitmap_بټ_p (&map_سر, DECL_UID (t)))))
+	      اذهب skip_decl_checks;
 
-	    if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	    إذا (!VAR_P (t) && ونه_کوډ (t) != PARM_DECL)
 	      {
-		if (ort != C_ORT_ACC && EXPR_P (t))
-		  break;
+		إذا (ort != C_ORT_ACC && بیان_P (t))
+		  اكسر;
 
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qE is not a variable in %qs clause", t,
-			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		remove = true;
+			  omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		remove = ریښتیا;
 	      }
-	    else if (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
+	    وإلا إذا (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD is threadprivate variable in %qs clause", t,
-			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		remove = true;
+			  omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		remove = ریښتیا;
 	      }
-	    else if ((OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
-		      || (OMP_CLAUSE_MAP_KIND (c)
-			  != GOMP_MAP_FIRSTPRIVATE_POINTER))
+	    وإلا إذا ((OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_MAP
+		      || (OMP_CLAUSE_MAP_ډول (c)
+			  != GOMP_MAP_FIRSTPRIVATE_اشاره_ګر))
 		     && !c_mark_addressable (t))
-	      remove = true;
-	    else if (!(OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
-		       && (OMP_CLAUSE_MAP_KIND (c) == GOMP_MAP_POINTER
-			   || (OMP_CLAUSE_MAP_KIND (c)
-			       == GOMP_MAP_FIRSTPRIVATE_POINTER)
-			   || (OMP_CLAUSE_MAP_KIND (c)
+	      remove = ریښتیا;
+	    وإلا إذا (!(OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_MAP
+		       && (OMP_CLAUSE_MAP_ډول (c) == GOMP_MAP_اشاره_ګر
+			   || (OMP_CLAUSE_MAP_ډول (c)
+			       == GOMP_MAP_FIRSTPRIVATE_اشاره_ګر)
+			   || (OMP_CLAUSE_MAP_ډول (c)
 			       == GOMP_MAP_FORCE_DEVICEPTR)))
 		     && t == OMP_CLAUSE_DECL (c)
-		     && !omp_mappable_type (TREE_TYPE (t)))
+		     && !omp_mappable_type (ونه_TYPE (t)))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD does not have a mappable type in %qs clause", t,
-			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		remove = true;
+			  omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		remove = ریښتیا;
 	      }
-	    else if (TREE_TYPE (t) == error_mark_node)
-	      remove = true;
-	    else if (TYPE_ATOMIC (strip_array_types (TREE_TYPE (t))))
+	    وإلا إذا (ونه_TYPE (t) == error_mark_غوټه)
+	      remove = ریښتیا;
+	    وإلا إذا (TYPE_ATOMIC (strip_array_types (ونه_TYPE (t))))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%<_Atomic%> %qE in %qs clause", t,
-			  omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		remove = true;
+			  omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		remove = ریښتیا;
 	      }
-	    else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
+	    وإلا إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_MAP
 		     && OMP_CLAUSE_MAP_IMPLICIT (c)
-		     && (bitmap_bit_p (&map_head, DECL_UID (t))
-			 || bitmap_bit_p (&map_field_head, DECL_UID (t))
-			 || bitmap_bit_p (&map_firstprivate_head,
+		     && (bitmap_بټ_p (&map_سر, DECL_UID (t))
+			 || bitmap_بټ_p (&map_ډګر_سر, DECL_UID (t))
+			 || bitmap_بټ_p (&map_firstprivate_سر,
 					  DECL_UID (t))))
-	      remove = true;
-	    else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP
-		     && (OMP_CLAUSE_MAP_KIND (c)
-			 == GOMP_MAP_FIRSTPRIVATE_POINTER))
+	      remove = ریښتیا;
+	    وإلا إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_MAP
+		     && (OMP_CLAUSE_MAP_ډول (c)
+			 == GOMP_MAP_FIRSTPRIVATE_اشاره_ګر))
 	      {
-		if (bitmap_bit_p (&generic_head, DECL_UID (t))
-		    || bitmap_bit_p (&firstprivate_head, DECL_UID (t))
-		    || bitmap_bit_p (&map_firstprivate_head, DECL_UID (t)))
+		إذا (bitmap_بټ_p (&generic_سر, DECL_UID (t))
+		    || bitmap_بټ_p (&firstprivate_سر, DECL_UID (t))
+		    || bitmap_بټ_p (&map_firstprivate_سر, DECL_UID (t)))
 		  {
 		    error_at (OMP_CLAUSE_LOCATION (c),
 			      "%qD appears more than once in data clauses", t);
-		    remove = true;
+		    remove = ریښتیا;
 		  }
-		else if (bitmap_bit_p (&map_head, DECL_UID (t))
-			 && !bitmap_bit_p (&map_field_head, DECL_UID (t))
+		وإلا إذا (bitmap_بټ_p (&map_سر, DECL_UID (t))
+			 && !bitmap_بټ_p (&map_ډګر_سر, DECL_UID (t))
 			 && openacc)
 		  {
 		    error_at (OMP_CLAUSE_LOCATION (c),
 			      "%qD appears more than once in data clauses", t);
-		    remove = true;
+		    remove = ریښتیا;
 		  }
-		else
-		  bitmap_set_bit (&map_firstprivate_head, DECL_UID (t));
+		وإلا
+		  bitmap_سېټ_بټ (&map_firstprivate_سر, DECL_UID (t));
 	      }
-	    else if (bitmap_bit_p (&map_head, DECL_UID (t))
-		     && !bitmap_bit_p (&map_field_head, DECL_UID (t))
+	    وإلا إذا (bitmap_بټ_p (&map_سر, DECL_UID (t))
+		     && !bitmap_بټ_p (&map_ډګر_سر, DECL_UID (t))
 		     && ort != C_ORT_OMP
-		     && ort != C_ORT_OMP_TARGET
-		     && ort != C_ORT_OMP_EXIT_DATA)
+		     && ort != C_ORT_OMP_موخه
+		     && ort != C_ORT_OMP_EXIT_معلومات)
 	      {
-		if (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP)
+		إذا (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_MAP)
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in motion clauses", t);
-		else if (openacc)
+		وإلا إذا (openacc)
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in data clauses", t);
-		else
+		وإلا
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in map clauses", t);
-		remove = true;
+		remove = ریښتیا;
 	      }
-	    else if (openacc && bitmap_bit_p (&generic_head, DECL_UID (t)))
+	    وإلا إذا (openacc && bitmap_بټ_p (&generic_سر, DECL_UID (t)))
 	      {
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD appears more than once in data clauses", t);
-		remove = true;
+		remove = ریښتیا;
 	      }
-	    else if (bitmap_bit_p (&firstprivate_head, DECL_UID (t))
-		     || bitmap_bit_p (&is_on_device_head, DECL_UID (t)))
+	    وإلا إذا (bitmap_بټ_p (&firstprivate_سر, DECL_UID (t))
+		     || bitmap_بټ_p (&is_on_device_سر, DECL_UID (t)))
 	      {
-		if (openacc)
+		إذا (openacc)
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears more than once in data clauses", t);
-		else
+		وإلا
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qD appears both in data and map clauses", t);
-		remove = true;
+		remove = ریښتیا;
 	      }
-	    else if (!omp_access_chain_p (addr_tokens, 1))
+	    وإلا إذا (!omp_access_chain_p (addr_نښې, 1))
 	      {
-		bitmap_set_bit (&map_head, DECL_UID (t));
-		if (t != OMP_CLAUSE_DECL (c)
-		    && TREE_CODE (OMP_CLAUSE_DECL (c)) == COMPONENT_REF)
-		  bitmap_set_bit (&map_field_head, DECL_UID (t));
+		bitmap_سېټ_بټ (&map_سر, DECL_UID (t));
+		إذا (t != OMP_CLAUSE_DECL (c)
+		    && ونه_کوډ (OMP_CLAUSE_DECL (c)) == COMPONENT_REF)
+		  bitmap_سېټ_بټ (&map_ډګر_سر, DECL_UID (t));
 	      }
 
 	  skip_decl_checks:
@@ -17995,450 +17995,450 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	       the containing loop (here) iterates through the new nodes
 	       created by that expansion.  Avoid expanding those again (just
 	       by checking the node type).  */
-	    if (!remove
+	    إذا (!remove
 		&& ort != C_ORT_DECLARE_SIMD
-		&& (OMP_CLAUSE_CODE (c) != OMP_CLAUSE_MAP
-		    || (OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_FIRSTPRIVATE_POINTER
-			&& (OMP_CLAUSE_MAP_KIND (c)
+		&& (OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_MAP
+		    || (OMP_CLAUSE_MAP_ډول (c) != GOMP_MAP_FIRSTPRIVATE_اشاره_ګر
+			&& (OMP_CLAUSE_MAP_ډول (c)
 			    != GOMP_MAP_FIRSTPRIVATE_REFERENCE)
-			&& OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_ALWAYS_POINTER
-			&& OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_ATTACH_DETACH
-			&& OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_ATTACH
-			&& OMP_CLAUSE_MAP_KIND (c) != GOMP_MAP_DETACH)))
+			&& OMP_CLAUSE_MAP_ډول (c) != GOMP_MAP_ALWAYS_اشاره_ګر
+			&& OMP_CLAUSE_MAP_ډول (c) != GOMP_MAP_ATTACH_DETACH
+			&& OMP_CLAUSE_MAP_ډول (c) != GOMP_MAP_ATTACH
+			&& OMP_CLAUSE_MAP_ډول (c) != GOMP_MAP_DETACH)))
 	      {
-		grp_start_p = pc;
+		grp_پیل_p = pc;
 		grp_sentinel = OMP_CLAUSE_CHAIN (c);
-		tree nc = ai.expand_map_clause (c, OMP_CLAUSE_DECL (c),
-						addr_tokens, ort);
-		if (nc != error_mark_node)
+		ونه nc = ai.expand_map_clause (c, OMP_CLAUSE_DECL (c),
+						addr_نښې, ort);
+		إذا (nc != error_mark_غوټه)
 		  c = nc;
 	      }
 	  }
-	  break;
+	  اكسر;
 
-	case OMP_CLAUSE_ENTER:
-	case OMP_CLAUSE_LINK:
-	case OMP_CLAUSE_LOCAL:
+	حالة OMP_CLAUSE_ENTER:
+	حالة OMP_CLAUSE_LINK:
+	حالة OMP_CLAUSE_LOCAL:
 	  t = OMP_CLAUSE_DECL (c);
-	  const char *cname;
-	  cname = omp_clause_code_name[OMP_CLAUSE_CODE (c)];
-	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER
-	      && OMP_CLAUSE_ENTER_TO (c))
+	  ثابت حرف *cname;
+	  cname = omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)];
+	  إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_ENTER
+	      && OMP_CLAUSE_ENTER_منزل (c))
 	    cname = "to";
-	  if (TREE_CODE (t) == FUNCTION_DECL
-	      && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
+	  إذا (ونه_کوډ (t) == FUNCTION_DECL
+	      && OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_ENTER)
 	    ;
-	  else if (!VAR_P (t))
+	  وإلا إذا (!VAR_P (t))
 	    {
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
+	      إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_ENTER)
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qE is neither a variable nor a function name in "
 			  "clause %qs", t, cname);
-	      else
+	      وإلا
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qE is not a variable in clause %qs", t, cname);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else if (DECL_THREAD_LOCAL_P (t))
+	  وإلا إذا (DECL_THREAD_LOCAL_P (t))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD is threadprivate variable in %qs clause", t,
 			cname);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else if (!omp_mappable_type (TREE_TYPE (t)))
+	  وإلا إذا (!omp_mappable_type (ونه_TYPE (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD does not have a mappable type in %qs clause", t,
 			cname);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  if (remove)
-	    break;
-	  if (bitmap_bit_p (&generic_head, DECL_UID (t)))
+	  إذا (remove)
+	    اكسر;
+	  إذا (bitmap_بټ_p (&generic_سر, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE appears more than once on the same "
 			"%<declare target%> directive", t);
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else
-	    bitmap_set_bit (&generic_head, DECL_UID (t));
-	  break;
+	  وإلا
+	    bitmap_سېټ_بټ (&generic_سر, DECL_UID (t));
+	  اكسر;
 
-	case OMP_CLAUSE_UNIFORM:
+	حالة OMP_CLAUSE_یوشان:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (TREE_CODE (t) != PARM_DECL)
+	  إذا (ونه_کوډ (t) != PARM_DECL)
 	    {
-	      if (DECL_P (t))
+	      إذا (DECL_P (t))
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qD is not an argument in %<uniform%> clause", t);
-	      else
+	      وإلا
 		error_at (OMP_CLAUSE_LOCATION (c),
 			  "%qE is not an argument in %<uniform%> clause", t);
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
 	  /* map_head bitmap is used as uniform_head if declare_simd.  */
-	  bitmap_set_bit (&map_head, DECL_UID (t));
-	  goto check_dup_generic;
+	  bitmap_سېټ_بټ (&map_سر, DECL_UID (t));
+	  اذهب check_dup_generic;
 
-	case OMP_CLAUSE_IS_DEVICE_PTR:
-	case OMP_CLAUSE_USE_DEVICE_PTR:
+	حالة OMP_CLAUSE_IS_DEVICE_PTR:
+	حالة OMP_CLAUSE_USE_DEVICE_PTR:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IS_DEVICE_PTR)
-	    bitmap_set_bit (&is_on_device_head, DECL_UID (t));
-	  if (TREE_CODE (TREE_TYPE (t)) != POINTER_TYPE)
+	  إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_IS_DEVICE_PTR)
+	    bitmap_سېټ_بټ (&is_on_device_سر, DECL_UID (t));
+	  إذا (ونه_کوډ (ونه_TYPE (t)) != اشاره_ګر_TYPE)
 	    {
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_USE_DEVICE_PTR
+	      إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_USE_DEVICE_PTR
 		  && !openacc)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qs variable is not a pointer",
-			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  remove = true;
+			    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		  remove = ریښتیا;
 		}
-	      else if (TREE_CODE (TREE_TYPE (t)) != ARRAY_TYPE)
+	      وإلا إذا (ونه_کوډ (ونه_TYPE (t)) != ARRAY_TYPE)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qs variable is neither a pointer nor an array",
-			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  remove = true;
+			    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		  remove = ریښتیا;
 		}
 	    }
-	  goto check_dup_generic;
+	  اذهب check_dup_generic;
 
-	case OMP_CLAUSE_HAS_DEVICE_ADDR:
+	حالة OMP_CLAUSE_HAS_DEVICE_ADDR:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (TREE_CODE (t) == OMP_ARRAY_SECTION)
+	  إذا (ونه_کوډ (t) == OMP_ARRAY_SECTION)
 	    {
-	      if (handle_omp_array_sections (c, ort))
-		remove = true;
-	      else
+	      إذا (handle_omp_array_sections (c, ort))
+		remove = ریښتیا;
+	      وإلا
 		{
 		  t = OMP_CLAUSE_DECL (c);
-		  while (TREE_CODE (t) == ARRAY_REF)
-		    t = TREE_OPERAND (t, 0);
+		  طالما (ونه_کوډ (t) == ARRAY_REF)
+		    t = ونه_عملوند (t, 0);
 		}
 	    }
-	  bitmap_set_bit (&is_on_device_head, DECL_UID (t));
-	  if (VAR_P (t) || TREE_CODE (t) == PARM_DECL)
+	  bitmap_سېټ_بټ (&is_on_device_سر, DECL_UID (t));
+	  إذا (VAR_P (t) || ونه_کوډ (t) == PARM_DECL)
 	    c_mark_addressable (t);
-	  goto check_dup_generic_t;
+	  اذهب check_dup_generic_t;
 
-	case OMP_CLAUSE_USE_DEVICE_ADDR:
+	حالة OMP_CLAUSE_USE_DEVICE_ADDR:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (VAR_P (t) || TREE_CODE (t) == PARM_DECL)
+	  إذا (VAR_P (t) || ونه_کوډ (t) == PARM_DECL)
 	    c_mark_addressable (t);
-	  goto check_dup_generic;
+	  اذهب check_dup_generic;
 
-	case OMP_CLAUSE_NOWAIT:
-	  if (copyprivate_seen)
+	حالة OMP_CLAUSE_NOWAIT:
+	  إذا (copyprivate_کتل_شوی)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<nowait%> clause must not be used together "
 			"with %<copyprivate%> clause");
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
 	  nowait_clause = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_ORDER:
-	  if (ordered_clause)
+	حالة OMP_CLAUSE_ترتیب:
+	  إذا (ordered_clause)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<order%> clause must not be used together "
 			"with %<ordered%> clause");
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  else if (order_clause)
+	  وإلا إذا (ترتیب_clause)
 	    {
 	      /* Silently remove duplicates.  */
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  order_clause = pc;
+	  ترتیب_clause = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_DETACH:
+	حالة OMP_CLAUSE_DETACH:
 	  t = OMP_CLAUSE_DECL (c);
-	  if (detach_seen)
+	  إذا (detach_کتل_شوی)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"too many %qs clauses on a task construct",
 			"detach");
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  detach_seen = pc;
+	  detach_کتل_شوی = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
 	  c_mark_addressable (t);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_IF:
-	case OMP_CLAUSE_SELF:
-	case OMP_CLAUSE_NUM_THREADS:
-	case OMP_CLAUSE_NUM_TEAMS:
-	case OMP_CLAUSE_THREAD_LIMIT:
-	case OMP_CLAUSE_DEFAULT:
-	case OMP_CLAUSE_UNTIED:
-	case OMP_CLAUSE_COLLAPSE:
-	case OMP_CLAUSE_FINAL:
-	case OMP_CLAUSE_DEVICE:
-	case OMP_CLAUSE_DIST_SCHEDULE:
-	case OMP_CLAUSE_DYN_GROUPPRIVATE:
-	case OMP_CLAUSE_PARALLEL:
-	case OMP_CLAUSE_FOR:
-	case OMP_CLAUSE_SECTIONS:
-	case OMP_CLAUSE_TASKGROUP:
-	case OMP_CLAUSE_PROC_BIND:
-	case OMP_CLAUSE_DEVICE_TYPE:
-	case OMP_CLAUSE_PRIORITY:
-	case OMP_CLAUSE_THREADS:
-	case OMP_CLAUSE_SIMD:
-	case OMP_CLAUSE_HINT:
-	case OMP_CLAUSE_FILTER:
-	case OMP_CLAUSE_DEFAULTMAP:
-	case OMP_CLAUSE_BIND:
-	case OMP_CLAUSE_NUM_GANGS:
-	case OMP_CLAUSE_NUM_WORKERS:
-	case OMP_CLAUSE_VECTOR_LENGTH:
-	case OMP_CLAUSE_ASYNC:
-	case OMP_CLAUSE_WAIT:
-	case OMP_CLAUSE_AUTO:
-	case OMP_CLAUSE_INDEPENDENT:
-	case OMP_CLAUSE_SEQ:
-	case OMP_CLAUSE_GANG:
-	case OMP_CLAUSE_WORKER:
-	case OMP_CLAUSE_VECTOR:
-	case OMP_CLAUSE_TILE:
-	case OMP_CLAUSE_IF_PRESENT:
-	case OMP_CLAUSE_FINALIZE:
-	case OMP_CLAUSE_NOHOST:
-	case OMP_CLAUSE_INDIRECT:
-	case OMP_CLAUSE_NOVARIANTS:
-	case OMP_CLAUSE_NOCONTEXT:
+	حالة OMP_CLAUSE_IF:
+	حالة OMP_CLAUSE_SELF:
+	حالة OMP_CLAUSE_عدد_تارونه:
+	حالة OMP_CLAUSE_عدد_TEAMS:
+	حالة OMP_CLAUSE_THREAD_حد:
+	حالة OMP_CLAUSE_DEFAULT:
+	حالة OMP_CLAUSE_UNTIED:
+	حالة OMP_CLAUSE_COLLAPSE:
+	حالة OMP_CLAUSE_FINAL:
+	حالة OMP_CLAUSE_DEVICE:
+	حالة OMP_CLAUSE_DIST_مهالوېش:
+	حالة OMP_CLAUSE_DYN_GROUPPRIVATE:
+	حالة OMP_CLAUSE_PARALLEL:
+	حالة OMP_CLAUSE_FOR:
+	حالة OMP_CLAUSE_SECTIONS:
+	حالة OMP_CLAUSE_TASKGROUP:
+	حالة OMP_CLAUSE_PROC_BIND:
+	حالة OMP_CLAUSE_DEVICE_TYPE:
+	حالة OMP_CLAUSE_لومړیتوب:
+	حالة OMP_CLAUSE_تارونه:
+	حالة OMP_CLAUSE_SIMD:
+	حالة OMP_CLAUSE_HINT:
+	حالة OMP_CLAUSE_FILTER:
+	حالة OMP_CLAUSE_DEFAULTMAP:
+	حالة OMP_CLAUSE_BIND:
+	حالة OMP_CLAUSE_عدد_GANGS:
+	حالة OMP_CLAUSE_عدد_WORKERS:
+	حالة OMP_CLAUSE_ویکټور_اوږدتیا:
+	حالة OMP_CLAUSE_ASYNC:
+	حالة OMP_CLAUSE_WAIT:
+	حالة OMP_CLAUSE_AUTO:
+	حالة OMP_CLAUSE_INDEPENDENT:
+	حالة OMP_CLAUSE_SEQ:
+	حالة OMP_CLAUSE_GANG:
+	حالة OMP_CLAUSE_کارګر:
+	حالة OMP_CLAUSE_ویکټور:
+	حالة OMP_CLAUSE_TILE:
+	حالة OMP_CLAUSE_IF_PRESENT:
+	حالة OMP_CLAUSE_FINALIZE:
+	حالة OMP_CLAUSE_NOHOST:
+	حالة OMP_CLAUSE_غیرمستقیم:
+	حالة OMP_CLAUSE_NOVARIANTS:
+	حالة OMP_CLAUSE_NOCONTEXT:
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_GRAINSIZE:
-	  grainsize_seen = pc;
+	حالة OMP_CLAUSE_GRAINSIZE:
+	  grainsize_کتل_شوی = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_NUM_TASKS:
-	  num_tasks_seen = true;
+	حالة OMP_CLAUSE_عدد_TASKS:
+	  عدد_tasks_کتل_شوی = ریښتیا;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_MERGEABLE:
-	  mergeable_seen = true;
+	حالة OMP_CLAUSE_MERGEABLE:
+	  mergeable_کتل_شوی = ریښتیا;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_NOGROUP:
-	  nogroup_seen = pc;
+	حالة OMP_CLAUSE_NOGROUP:
+	  nogroup_کتل_شوی = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_SCHEDULE:
-	  schedule_clause = c;
+	حالة OMP_CLAUSE_مهالوېش:
+	  مهالوېش_clause = c;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_ORDERED:
+	حالة OMP_CLAUSE_ORDERED:
 	  ordered_clause = c;
-	  if (order_clause)
+	  إذا (ترتیب_clause)
 	    {
-	      error_at (OMP_CLAUSE_LOCATION (*order_clause),
+	      error_at (OMP_CLAUSE_LOCATION (*ترتیب_clause),
 			"%<order%> clause must not be used together "
 			"with %<ordered%> clause");
-	      *order_clause = OMP_CLAUSE_CHAIN (*order_clause);
-	      order_clause = NULL;
+	      *ترتیب_clause = OMP_CLAUSE_CHAIN (*ترتیب_clause);
+	      ترتیب_clause = عدم;
 	    }
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_SAFELEN:
+	حالة OMP_CLAUSE_SAFELEN:
 	  safelen = c;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
-	case OMP_CLAUSE_SIMDLEN:
+	  استمر;
+	حالة OMP_CLAUSE_SIMDLEN:
 	  simdlen = c;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_FULL:
-	  full_seen = pc;
+	حالة OMP_CLAUSE_ډک:
+	  ډک_کتل_شوی = pc;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_PARTIAL:
-	  partial_seen = true;
+	حالة OMP_CLAUSE_PARTIAL:
+	  partial_کتل_شوی = ریښتیا;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_SIZES:
+	حالة OMP_CLAUSE_SIZES:
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_INBRANCH:
-	case OMP_CLAUSE_NOTINBRANCH:
-	  if (branch_seen)
+	حالة OMP_CLAUSE_INBRANCH:
+	حالة OMP_CLAUSE_NOTINBRANCH:
+	  إذا (branch_کتل_شوی)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%<inbranch%> clause is incompatible with "
 			"%<notinbranch%>");
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  branch_seen = true;
+	  branch_کتل_شوی = ریښتیا;
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  continue;
+	  استمر;
 
-	case OMP_CLAUSE_INCLUSIVE:
-	case OMP_CLAUSE_EXCLUSIVE:
-	  need_complete = true;
-	  need_implicitly_determined = true;
+	حالة OMP_CLAUSE_INCLUSIVE:
+	حالة OMP_CLAUSE_EXCLUSIVE:
+	  need_complete = ریښتیا;
+	  need_implicitly_determined = ریښتیا;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (!VAR_P (t) && TREE_CODE (t) != PARM_DECL)
+	  إذا (!VAR_P (t) && ونه_کوډ (t) != PARM_DECL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qE is not a variable in clause %qs", t,
-			omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-	      remove = true;
+			omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+	      remove = ریښتیا;
 	    }
-	  break;
+	  اكسر;
 
-	case OMP_CLAUSE_INIT:
-	  init_seen = true;
-	  if (!OMP_CLAUSE_INIT_TARGETSYNC (c))
+	حالة OMP_CLAUSE_INIT:
+	  init_کتل_شوی = ریښتیا;
+	  إذا (!OMP_CLAUSE_INIT_TARGETSYNC (c))
 	    init_no_targetsync_clause = c;
 	  /* FALLTHRU */
-	case OMP_CLAUSE_DESTROY:
-	case OMP_CLAUSE_USE:
-	  init_use_destroy_seen = true;
+	حالة OMP_CLAUSE_DESTROY:
+	حالة OMP_CLAUSE_USE:
+	  init_use_destroy_کتل_شوی = ریښتیا;
 	  t = OMP_CLAUSE_DECL (c);
-	  if (bitmap_bit_p (&generic_head, DECL_UID (t)))
+	  إذا (bitmap_بټ_p (&generic_سر, DECL_UID (t)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD appears more than once in action clauses", t);
-	      remove = true;
-	      break;
+	      remove = ریښتیا;
+	      اكسر;
 	    }
-	  bitmap_set_bit (&generic_head, DECL_UID (t));
+	  bitmap_سېټ_بټ (&generic_سر, DECL_UID (t));
 	  /* FALLTHRU */
-	case OMP_CLAUSE_INTEROP:
-	  if (/* ort == C_ORT_OMP_INTEROP [uncomment for depobj init]  */
-		   !c_omp_interop_t_p (TREE_TYPE (OMP_CLAUSE_DECL (c))))
+	حالة OMP_CLAUSE_INTEROP:
+	  إذا (/* ort == C_ORT_OMP_INTEROP [uncomment for depobj init]  */
+		   !c_omp_interop_t_p (ونه_TYPE (OMP_CLAUSE_DECL (c))))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD must be of %<omp_interop_t%>",
 			OMP_CLAUSE_DECL (c));
-	      remove = true;
+	      remove = ریښتیا;
 	    }
-	  else if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INIT
-		    || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DESTROY)
-		   && TREE_READONLY (OMP_CLAUSE_DECL (c)))
+	  وإلا إذا ((OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_INIT
+		    || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_DESTROY)
+		   && ونه_READONLY (OMP_CLAUSE_DECL (c)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qD shall not be const", OMP_CLAUSE_DECL (c));
-	      remove = true;
+	      remove = ریښتیا;
 	    }
 	  pc = &OMP_CLAUSE_CHAIN (c);
-	  break;
-	default:
+	  اكسر;
+	افتراضي:
 	  gcc_unreachable ();
 	}
 
-      if (!remove)
+      إذا (!remove)
 	{
 	  t = OMP_CLAUSE_DECL (c);
 
-	  if (need_complete)
+	  إذا (need_complete)
 	    {
 	      t = require_complete_type (OMP_CLAUSE_LOCATION (c), t);
-	      if (t == error_mark_node)
-		remove = true;
+	      إذا (t == error_mark_غوټه)
+		remove = ریښتیا;
 	    }
 
-	  if (need_implicitly_determined)
+	  إذا (need_implicitly_determined)
 	    {
-	      const char *share_name = NULL;
+	      ثابت حرف *share_name = عدم;
 
-	      if (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
+	      إذا (VAR_P (t) && DECL_THREAD_LOCAL_P (t))
 		share_name = "threadprivate";
-	      else switch (c_omp_predetermined_sharing (t))
+	      وإلا بدل (c_omp_predetermined_sharing (t))
 		{
-		case OMP_CLAUSE_DEFAULT_UNSPECIFIED:
-		  break;
-		case OMP_CLAUSE_DEFAULT_SHARED:
-		  if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SHARED
-		       || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_FIRSTPRIVATE)
+		حالة OMP_CLAUSE_DEFAULT_UNSPECIFIED:
+		  اكسر;
+		حالة OMP_CLAUSE_DEFAULT_SHARED:
+		  إذا ((OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_SHARED
+		       || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_FIRSTPRIVATE)
 		      && c_omp_predefined_variable (t))
 		    /* The __func__ variable and similar function-local
 		       predefined variables may be listed in a shared or
 		       firstprivate clause.  */
-		    break;
+		    اكسر;
 		  share_name = "shared";
-		  break;
-		case OMP_CLAUSE_DEFAULT_PRIVATE:
+		  اكسر;
+		حالة OMP_CLAUSE_DEFAULT_شخصي:
 		  share_name = "private";
-		  break;
-		default:
+		  اكسر;
+		افتراضي:
 		  gcc_unreachable ();
 		}
-	      if (share_name)
+	      إذا (share_name)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%qE is predetermined %qs for %qs",
 			    t, share_name,
-			    omp_clause_code_name[OMP_CLAUSE_CODE (c)]);
-		  remove = true;
+			    omp_clause_کوډ_name[OMP_CLAUSE_کوډ (c)]);
+		  remove = ریښتیا;
 		}
-	      else if (TREE_READONLY (t)
-		       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_SHARED
-		       && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_FIRSTPRIVATE)
+	      وإلا إذا (ونه_READONLY (t)
+		       && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_SHARED
+		       && OMP_CLAUSE_کوډ (c) != OMP_CLAUSE_FIRSTPRIVATE)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "%<const%> qualified %qE may appear only in "
 			    "%<shared%> or %<firstprivate%> clauses", t);
-		  remove = true;
+		  remove = ریښتیا;
 		}
 	    }
 	}
 
-      if (remove)
+      إذا (remove)
 	{
-	  if (grp_start_p)
+	  إذا (grp_پیل_p)
 	    {
 	      /* If we found a clause to remove, we want to remove the whole
 		 expanded group, otherwise gimplify
 		 (omp_resolve_clause_dependencies) can get confused.  */
-	      *grp_start_p = grp_sentinel;
-	      pc = grp_start_p;
-	      grp_start_p = NULL;
+	      *grp_پیل_p = grp_sentinel;
+	      pc = grp_پیل_p;
+	      grp_پیل_p = عدم;
 	    }
-	  else
+	  وإلا
 	    *pc = OMP_CLAUSE_CHAIN (c);
 	}
-      else
+      وإلا
 	pc = &OMP_CLAUSE_CHAIN (c);
     }
 
-  if (grp_start_p
-      && OMP_CLAUSE_HAS_ITERATORS (*grp_start_p))
-    for (tree gc = *grp_start_p; gc; gc = OMP_CLAUSE_CHAIN (gc))
-      OMP_CLAUSE_ITERATORS (gc) = OMP_CLAUSE_ITERATORS (*grp_start_p);
+  إذا (grp_پیل_p
+      && OMP_CLAUSE_HAS_ITERATORS (*grp_پیل_p))
+    لكل (ونه gc = *grp_پیل_p; gc; gc = OMP_CLAUSE_CHAIN (gc))
+      OMP_CLAUSE_ITERATORS (gc) = OMP_CLAUSE_ITERATORS (*grp_پیل_p);
 
-  if (simdlen
+  إذا (simdlen
       && safelen
-      && tree_int_cst_lt (OMP_CLAUSE_SAFELEN_EXPR (safelen),
-			  OMP_CLAUSE_SIMDLEN_EXPR (simdlen)))
+      && ونه_int_cst_lt (OMP_CLAUSE_SAFELEN_بیان (safelen),
+			  OMP_CLAUSE_SIMDLEN_بیان (simdlen)))
     {
       /* Note: How a scaling factor affects this, is underspecified in OpenMP;
 	 cf. OpenMP spec issue #5160.  Presumably, it means:
@@ -18451,214 +18451,214 @@ c_finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
       error_at (OMP_CLAUSE_LOCATION (simdlen),
 		"%<simdlen%> clause value is bigger than "
 		"%<safelen%> clause value");
-      OMP_CLAUSE_SIMDLEN_EXPR (simdlen)
-	= OMP_CLAUSE_SAFELEN_EXPR (safelen);
+      OMP_CLAUSE_SIMDLEN_بیان (simdlen)
+	= OMP_CLAUSE_SAFELEN_بیان (safelen);
     }
 
-  if (ordered_clause
-      && schedule_clause
-      && (OMP_CLAUSE_SCHEDULE_KIND (schedule_clause)
-	  & OMP_CLAUSE_SCHEDULE_NONMONOTONIC))
+  إذا (ordered_clause
+      && مهالوېش_clause
+      && (OMP_CLAUSE_مهالوېش_ډول (مهالوېش_clause)
+	  & OMP_CLAUSE_مهالوېش_NONMONOTONIC))
     {
-      error_at (OMP_CLAUSE_LOCATION (schedule_clause),
+      error_at (OMP_CLAUSE_LOCATION (مهالوېش_clause),
 		"%<nonmonotonic%> schedule modifier specified together "
 		"with %<ordered%> clause");
-      OMP_CLAUSE_SCHEDULE_KIND (schedule_clause)
-	= (enum omp_clause_schedule_kind)
-	  (OMP_CLAUSE_SCHEDULE_KIND (schedule_clause)
-	   & ~OMP_CLAUSE_SCHEDULE_NONMONOTONIC);
+      OMP_CLAUSE_مهالوېش_ډول (مهالوېش_clause)
+	= (تعداد omp_clause_مهالوېش_ډول)
+	  (OMP_CLAUSE_مهالوېش_ډول (مهالوېش_clause)
+	   & ~OMP_CLAUSE_مهالوېش_NONMONOTONIC);
     }
 
-  if (reduction_seen < 0 && ordered_clause)
+  إذا (reduction_کتل_شوی < 0 && ordered_clause)
     {
       error_at (OMP_CLAUSE_LOCATION (ordered_clause),
 		"%qs clause specified together with %<inscan%> "
 		"%<reduction%> clause", "ordered");
-      reduction_seen = -2;
+      reduction_کتل_شوی = -2;
     }
 
-  if (reduction_seen < 0 && schedule_clause)
+  إذا (reduction_کتل_شوی < 0 && مهالوېش_clause)
     {
-      error_at (OMP_CLAUSE_LOCATION (schedule_clause),
+      error_at (OMP_CLAUSE_LOCATION (مهالوېش_clause),
 		"%qs clause specified together with %<inscan%> "
 		"%<reduction%> clause", "schedule");
-      reduction_seen = -2;
+      reduction_کتل_شوی = -2;
     }
 
-  if (linear_variable_step_check
-      || reduction_seen == -2
-      || allocate_seen
-      || target_in_reduction_seen)
-    for (pc = &clauses, c = clauses; c ; c = *pc)
+  إذا (خطي_variable_ګام_check
+      || reduction_کتل_شوی == -2
+      || allocate_کتل_شوی
+      || موخه_دننه_reduction_کتل_شوی)
+    لكل (pc = &clauses, c = clauses; c ; c = *pc)
       {
-	bool remove = false;
-	if (allocate_seen)
-	  switch (OMP_CLAUSE_CODE (c))
+	منطقي remove = خطأ;
+	إذا (allocate_کتل_شوی)
+	  بدل (OMP_CLAUSE_کوډ (c))
 	    {
-	    case OMP_CLAUSE_REDUCTION:
-	    case OMP_CLAUSE_IN_REDUCTION:
-	    case OMP_CLAUSE_TASK_REDUCTION:
-	      if (TREE_CODE (OMP_CLAUSE_DECL (c)) == MEM_REF)
+	    حالة OMP_CLAUSE_REDUCTION:
+	    حالة OMP_CLAUSE_دننه_REDUCTION:
+	    حالة OMP_CLAUSE_TASK_REDUCTION:
+	      إذا (ونه_کوډ (OMP_CLAUSE_DECL (c)) == MEM_REF)
 		{
-		  t = TREE_OPERAND (OMP_CLAUSE_DECL (c), 0);
-		  if (TREE_CODE (t) == POINTER_PLUS_EXPR)
-		    t = TREE_OPERAND (t, 0);
-		  if (TREE_CODE (t) == ADDR_EXPR
-		      || INDIRECT_REF_P (t))
-		    t = TREE_OPERAND (t, 0);
-		  if (DECL_P (t))
-		    bitmap_clear_bit (&aligned_head, DECL_UID (t));
-		  break;
+		  t = ونه_عملوند (OMP_CLAUSE_DECL (c), 0);
+		  إذا (ونه_کوډ (t) == اشاره_ګر_PLUS_بیان)
+		    t = ونه_عملوند (t, 0);
+		  إذا (ونه_کوډ (t) == ADDR_بیان
+		      || غیرمستقیم_REF_P (t))
+		    t = ونه_عملوند (t, 0);
+		  إذا (DECL_P (t))
+		    bitmap_clear_بټ (&aligned_سر, DECL_UID (t));
+		  اكسر;
 		}
 	      /* FALLTHRU */
-	    case OMP_CLAUSE_PRIVATE:
-	    case OMP_CLAUSE_FIRSTPRIVATE:
-	    case OMP_CLAUSE_LASTPRIVATE:
-	    case OMP_CLAUSE_LINEAR:
-	      if (DECL_P (OMP_CLAUSE_DECL (c)))
-		bitmap_clear_bit (&aligned_head,
+	    حالة OMP_CLAUSE_شخصي:
+	    حالة OMP_CLAUSE_FIRSTPRIVATE:
+	    حالة OMP_CLAUSE_LASTPRIVATE:
+	    حالة OMP_CLAUSE_خطي:
+	      إذا (DECL_P (OMP_CLAUSE_DECL (c)))
+		bitmap_clear_بټ (&aligned_سر,
 				  DECL_UID (OMP_CLAUSE_DECL (c)));
-	      break;
-	    default:
-	      break;
+	      اكسر;
+	    افتراضي:
+	      اكسر;
 	    }
-	if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LINEAR
-	    && OMP_CLAUSE_LINEAR_VARIABLE_STRIDE (c)
-	    && !bitmap_bit_p (&map_head,
-			      DECL_UID (OMP_CLAUSE_LINEAR_STEP (c))))
+	إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_خطي
+	    && OMP_CLAUSE_خطي_VARIABLE_STRIDE (c)
+	    && !bitmap_بټ_p (&map_سر,
+			      DECL_UID (OMP_CLAUSE_خطي_ګام (c))))
 	  {
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%<linear%> clause step is a parameter %qD not "
 		      "specified in %<uniform%> clause",
-		      OMP_CLAUSE_LINEAR_STEP (c));
-	    remove = true;
+		      OMP_CLAUSE_خطي_ګام (c));
+	    remove = ریښتیا;
 	  }
-	else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION
-		 && reduction_seen == -2)
+	وإلا إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_REDUCTION
+		 && reduction_کتل_شوی == -2)
 	  OMP_CLAUSE_REDUCTION_INSCAN (c) = 0;
-	if (target_in_reduction_seen
-	    && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_MAP)
+	إذا (موخه_دننه_reduction_کتل_شوی
+	    && OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_MAP)
 	  {
-	    tree t = OMP_CLAUSE_DECL (c);
-	    while (handled_component_p (t)
-		   || INDIRECT_REF_P (t)
-		   || TREE_CODE (t) == ADDR_EXPR
-		   || TREE_CODE (t) == MEM_REF
-		   || TREE_CODE (t) == NON_LVALUE_EXPR)
-	      t = TREE_OPERAND (t, 0);
-	    if (DECL_P (t)
-		&& bitmap_bit_p (&oacc_reduction_head, DECL_UID (t)))
-	      OMP_CLAUSE_MAP_IN_REDUCTION (c) = 1;
+	    ونه t = OMP_CLAUSE_DECL (c);
+	    طالما (handled_component_p (t)
+		   || غیرمستقیم_REF_P (t)
+		   || ونه_کوډ (t) == ADDR_بیان
+		   || ونه_کوډ (t) == MEM_REF
+		   || ونه_کوډ (t) == NON_LVALUE_بیان)
+	      t = ونه_عملوند (t, 0);
+	    إذا (DECL_P (t)
+		&& bitmap_بټ_p (&oacc_reduction_سر, DECL_UID (t)))
+	      OMP_CLAUSE_MAP_دننه_REDUCTION (c) = 1;
 	  }
 
-	if (remove)
+	إذا (remove)
 	  *pc = OMP_CLAUSE_CHAIN (c);
-	else
+	وإلا
 	  pc = &OMP_CLAUSE_CHAIN (c);
       }
 
-  if (allocate_seen)
-    for (pc = &clauses, c = clauses; c ; c = *pc)
+  إذا (allocate_کتل_شوی)
+    لكل (pc = &clauses, c = clauses; c ; c = *pc)
       {
-	bool remove = false;
-	if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ALLOCATE
+	منطقي remove = خطأ;
+	إذا (OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_ALLOCATE
 	    && !OMP_CLAUSE_ALLOCATE_COMBINED (c)
-	    && bitmap_bit_p (&aligned_head, DECL_UID (OMP_CLAUSE_DECL (c))))
+	    && bitmap_بټ_p (&aligned_سر, DECL_UID (OMP_CLAUSE_DECL (c))))
 	  {
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qD specified in %<allocate%> clause but not in "
 		      "an explicit privatization clause", OMP_CLAUSE_DECL (c));
-	    remove = true;
+	    remove = ریښتیا;
 	  }
-	if (remove)
+	إذا (remove)
 	  *pc = OMP_CLAUSE_CHAIN (c);
-	else
+	وإلا
 	  pc = &OMP_CLAUSE_CHAIN (c);
       }
 
-  if (nogroup_seen && reduction_seen)
+  إذا (nogroup_کتل_شوی && reduction_کتل_شوی)
     {
-      error_at (OMP_CLAUSE_LOCATION (*nogroup_seen),
+      error_at (OMP_CLAUSE_LOCATION (*nogroup_کتل_شوی),
 		"%<nogroup%> clause must not be used together with "
 		"%<reduction%> clause");
-      *nogroup_seen = OMP_CLAUSE_CHAIN (*nogroup_seen);
+      *nogroup_کتل_شوی = OMP_CLAUSE_CHAIN (*nogroup_کتل_شوی);
     }
 
-  if (grainsize_seen && num_tasks_seen)
+  إذا (grainsize_کتل_شوی && عدد_tasks_کتل_شوی)
     {
-      error_at (OMP_CLAUSE_LOCATION (*grainsize_seen),
+      error_at (OMP_CLAUSE_LOCATION (*grainsize_کتل_شوی),
 		"%<grainsize%> clause must not be used together with "
 		"%<num_tasks%> clause");
-      *grainsize_seen = OMP_CLAUSE_CHAIN (*grainsize_seen);
+      *grainsize_کتل_شوی = OMP_CLAUSE_CHAIN (*grainsize_کتل_شوی);
     }
 
-  if (full_seen && partial_seen)
+  إذا (ډک_کتل_شوی && partial_کتل_شوی)
     {
-      error_at (OMP_CLAUSE_LOCATION (*full_seen),
+      error_at (OMP_CLAUSE_LOCATION (*ډک_کتل_شوی),
 		"%<full%> clause must not be used together with "
 		"%<partial%> clause");
-      *full_seen = OMP_CLAUSE_CHAIN (*full_seen);
+      *ډک_کتل_شوی = OMP_CLAUSE_CHAIN (*ډک_کتل_شوی);
     }
 
-  if (detach_seen)
+  إذا (detach_کتل_شوی)
     {
-      if (mergeable_seen)
+      إذا (mergeable_کتل_شوی)
 	{
-	  error_at (OMP_CLAUSE_LOCATION (*detach_seen),
+	  error_at (OMP_CLAUSE_LOCATION (*detach_کتل_شوی),
 		    "%<detach%> clause must not be used together with "
 		    "%<mergeable%> clause");
-	  *detach_seen = OMP_CLAUSE_CHAIN (*detach_seen);
+	  *detach_کتل_شوی = OMP_CLAUSE_CHAIN (*detach_کتل_شوی);
 	}
-      else
+      وإلا
 	{
-	  tree detach_decl = OMP_CLAUSE_DECL (*detach_seen);
+	  ونه detach_decl = OMP_CLAUSE_DECL (*detach_کتل_شوی);
 
-	  for (pc = &clauses, c = clauses; c ; c = *pc)
+	  لكل (pc = &clauses, c = clauses; c ; c = *pc)
 	    {
-	      bool remove = false;
-	      if ((OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SHARED
-		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_PRIVATE
-		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_FIRSTPRIVATE
-		   || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LASTPRIVATE)
+	      منطقي remove = خطأ;
+	      إذا ((OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_SHARED
+		   || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_شخصي
+		   || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_FIRSTPRIVATE
+		   || OMP_CLAUSE_کوډ (c) == OMP_CLAUSE_LASTPRIVATE)
 		  && OMP_CLAUSE_DECL (c) == detach_decl)
 		{
 		  error_at (OMP_CLAUSE_LOCATION (c),
 			    "the event handle of a %<detach%> clause "
 			    "should not be in a data-sharing clause");
-		  remove = true;
+		  remove = ریښتیا;
 		}
-	      if (remove)
+	      إذا (remove)
 		*pc = OMP_CLAUSE_CHAIN (c);
-	      else
+	      وإلا
 		pc = &OMP_CLAUSE_CHAIN (c);
 	    }
 	}
     }
 
-  if (ort == C_ORT_OMP_INTEROP
+  إذا (ort == C_ORT_OMP_INTEROP
       && depend_clause
-      && (!init_use_destroy_seen
-	  || (init_seen && init_no_targetsync_clause)))
+      && (!init_use_destroy_کتل_شوی
+	  || (init_کتل_شوی && init_no_targetsync_clause)))
     {
       error_at (OMP_CLAUSE_LOCATION (depend_clause),
 		"%<depend%> clause requires action clauses with "
 		"%<targetsync%> interop-type");
-      if (init_no_targetsync_clause)
+      إذا (init_no_targetsync_clause)
 	inform (OMP_CLAUSE_LOCATION (init_no_targetsync_clause),
 		"%<init%> clause lacks the %<targetsync%> modifier");
     }
 
-  bitmap_obstack_release (NULL);
-  return clauses;
+  bitmap_obstack_release (عدم);
+  أرجع clauses;
 }
 
 /* Do processing necessary to make CLAUSES well-formed, where CLAUSES result
    from implicit instantiation of user-defined mappers (in gimplify.cc).  */
 
-tree
-c_omp_finish_mapper_clauses (tree clauses)
+ونه
+c_omp_پای_mapper_clauses (ونه clauses)
 {
-  return c_finish_omp_clauses (clauses, C_ORT_OMP);
+  أرجع c_پای_omp_clauses (clauses, C_ORT_OMP);
 }
 
 /* Return code to initialize DST with a copy constructor from SRC.
@@ -18666,56 +18666,56 @@ c_omp_finish_mapper_clauses (tree clauses)
    _Atomic vars we need to perform __atomic_load from src into a temporary
    followed by __atomic_store of the temporary to dst.  */
 
-tree
-c_omp_clause_copy_ctor (tree clause, tree dst, tree src)
+ونه
+c_omp_clause_copy_ctor (ونه clause, ونه dst, ونه src)
 {
-  if (!really_atomic_lvalue (dst) && !really_atomic_lvalue (src))
-    return build2 (MODIFY_EXPR, TREE_TYPE (dst), dst, src);
+  إذا (!really_atomic_lvalue (dst) && !really_atomic_lvalue (src))
+    أرجع build2 (MODIFY_بیان, ونه_TYPE (dst), dst, src);
 
   location_t loc = OMP_CLAUSE_LOCATION (clause);
-  tree type = TREE_TYPE (dst);
-  tree nonatomic_type = build_qualified_type (type, TYPE_UNQUALIFIED);
-  tree tmp = create_tmp_var (nonatomic_type);
-  tree tmp_addr = build_fold_addr_expr (tmp);
-  TREE_ADDRESSABLE (tmp) = 1;
+  ونه type = ونه_TYPE (dst);
+  ونه nonatomic_type = build_qualified_type (type, TYPE_UNQUALIFIED);
+  ونه tmp = create_tmp_var (nonatomic_type);
+  ونه tmp_addr = build_fold_addr_بیان (tmp);
+  ونه_ADDRESSABLE (tmp) = 1;
   suppress_warning (tmp);
-  tree src_addr = build_fold_addr_expr (src);
-  tree dst_addr = build_fold_addr_expr (dst);
-  tree seq_cst = build_int_cst (integer_type_node, MEMMODEL_SEQ_CST);
-  vec<tree, va_gc> *params;
+  ونه src_addr = build_fold_addr_بیان (src);
+  ونه dst_addr = build_fold_addr_بیان (dst);
+  ونه seq_cst = build_int_cst (integer_type_غوټه, MEMMODEL_SEQ_CST);
+  vec<ونه, va_gc> *params;
   /* Expansion of a generic atomic load may require an addition
      element, so allocate enough to prevent a resize.  */
   vec_alloc (params, 4);
 
   /* Build __atomic_load (&src, &tmp, SEQ_CST);  */
-  tree fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_LOAD);
-  params->quick_push (src_addr);
-  params->quick_push (tmp_addr);
-  params->quick_push (seq_cst);
-  tree load = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
+  ونه fndecl = builtin_decl_explicit (BUILT_دننه_ATOMIC_بارول);
+  params->چټک_ټېل (src_addr);
+  params->چټک_ټېل (tmp_addr);
+  params->چټک_ټېل (seq_cst);
+  ونه بارول = c_build_function_call_vec (loc, vNULL, fndecl, params, عدم);
 
   vec_alloc (params, 4);
 
   /* Build __atomic_store (&dst, &tmp, SEQ_CST);  */
-  fndecl = builtin_decl_explicit (BUILT_IN_ATOMIC_STORE);
-  params->quick_push (dst_addr);
-  params->quick_push (tmp_addr);
-  params->quick_push (seq_cst);
-  tree store = c_build_function_call_vec (loc, vNULL, fndecl, params, NULL);
-  return build2 (COMPOUND_EXPR, void_type_node, load, store);
+  fndecl = builtin_decl_explicit (BUILT_دننه_ATOMIC_STORE);
+  params->چټک_ټېل (dst_addr);
+  params->چټک_ټېل (tmp_addr);
+  params->چټک_ټېل (seq_cst);
+  ونه store = c_build_function_call_vec (loc, vNULL, fndecl, params, عدم);
+  أرجع build2 (COMPOUND_بیان, void_type_غوټه, بارول, store);
 }
 
 /* Create a transaction node.  */
 
-tree
-c_finish_transaction (location_t loc, tree block, int flags)
+ونه
+c_پای_transaction (location_t loc, ونه بلاک, صحيح flags)
 {
-  tree stmt = build_stmt (loc, TRANSACTION_EXPR, block);
-  if (flags & TM_STMT_ATTR_OUTER)
-    TRANSACTION_EXPR_OUTER (stmt) = 1;
-  if (flags & TM_STMT_ATTR_RELAXED)
-    TRANSACTION_EXPR_RELAXED (stmt) = 1;
-  return add_stmt (stmt);
+  ونه stmt = build_stmt (loc, TRANSACTION_بیان, بلاک);
+  إذا (flags & TM_STMT_ATTR_OUTER)
+    TRANSACTION_بیان_OUTER (stmt) = 1;
+  إذا (flags & TM_STMT_ATTR_RELAXED)
+    TRANSACTION_بیان_RELAXED (stmt) = 1;
+  أرجع جمع_کړه_stmt (stmt);
 }
 
 /* Make a variant type in the proper way for C/C++, propagating qualifiers
@@ -18725,354 +18725,354 @@ c_finish_transaction (location_t loc, tree block, int flags)
    preserve information about the typedef name from which an array
    type was derived).  */
 
-tree
-c_build_qualified_type (tree type, int type_quals, tree orig_qual_type,
-			size_t orig_qual_indirect)
+ونه
+c_build_qualified_type (ونه type, صحيح type_quals, ونه orig_qual_type,
+			اندازه_t orig_qual_غیرمستقیم)
 {
-  if (type == error_mark_node)
-    return type;
+  إذا (type == error_mark_غوټه)
+    أرجع type;
 
-  if (TREE_CODE (type) == ARRAY_TYPE)
+  إذا (ونه_کوډ (type) == ARRAY_TYPE)
     {
-      tree t;
-      tree element_type = c_build_qualified_type (TREE_TYPE (type),
+      ونه t;
+      ونه element_type = c_build_qualified_type (ونه_TYPE (type),
 						  type_quals, orig_qual_type,
-						  orig_qual_indirect - 1);
+						  orig_qual_غیرمستقیم - 1);
 
       /* See if we already have an identically qualified type.  */
-      if (orig_qual_type && orig_qual_indirect == 0)
+      إذا (orig_qual_type && orig_qual_غیرمستقیم == 0)
 	t = orig_qual_type;
-      else
-	for (t = TYPE_MAIN_VARIANT (type); t; t = TYPE_NEXT_VARIANT (t))
+      وإلا
+	لكل (t = TYPE_MAIN_VARIANT (type); t; t = TYPE_بل_VARIANT (t))
 	  {
-	    if (TYPE_QUALS (strip_array_types (t)) == type_quals
+	    إذا (TYPE_QUALS (strip_array_types (t)) == type_quals
 		&& TYPE_NAME (t) == TYPE_NAME (type)
 		&& TYPE_CONTEXT (t) == TYPE_CONTEXT (type)
-		&& attribute_list_equal (TYPE_ATTRIBUTES (t),
-					 TYPE_ATTRIBUTES (type)))
-	      break;
+		&& attribute_list_equal (TYPE_ځانګړتیاوې (t),
+					 TYPE_ځانګړتیاوې (type)))
+	      اكسر;
 	  }
-      if (!t)
+      إذا (!t)
 	{
-          tree domain = TYPE_DOMAIN (type);
+          ونه domain = TYPE_DOMAIN (type);
 
 	  t = build_variant_type_copy (type);
-	  TREE_TYPE (t) = element_type;
+	  ونه_TYPE (t) = element_type;
 	  TYPE_ADDR_SPACE (t) = TYPE_ADDR_SPACE (element_type);
 
-          if (TYPE_STRUCTURAL_EQUALITY_P (element_type)
+          إذا (TYPE_STRUCTURAL_EQUALITY_P (element_type)
               || (domain && TYPE_STRUCTURAL_EQUALITY_P (domain)))
-            SET_TYPE_STRUCTURAL_EQUALITY (t);
-          else if (TYPE_CANONICAL (element_type) != element_type
+            سېټ_TYPE_STRUCTURAL_EQUALITY (t);
+          وإلا إذا (TYPE_CANONICAL (element_type) != element_type
                    || (domain && TYPE_CANONICAL (domain) != domain))
             {
-              tree unqualified_canon
+              ونه unqualified_canon
 		= c_build_array_type (TYPE_CANONICAL (element_type),
 				      domain ? TYPE_CANONICAL (domain)
-					     : NULL_TREE);
-              if (TYPE_REVERSE_STORAGE_ORDER (type))
+					     : NULL_ونه);
+              إذا (TYPE_سرچپه_STORAGE_ترتیب (type))
                 {
                   unqualified_canon
 		    = build_distinct_type_copy (unqualified_canon);
-                  TYPE_REVERSE_STORAGE_ORDER (unqualified_canon) = 1;
+                  TYPE_سرچپه_STORAGE_ترتیب (unqualified_canon) = 1;
                 }
               TYPE_CANONICAL (t)
 		= c_build_qualified_type (unqualified_canon, type_quals);
             }
-          else
+          وإلا
             TYPE_CANONICAL (t) = t;
 	}
-      return t;
+      أرجع t;
     }
 
   /* A restrict-qualified pointer type must be a pointer to object or
      incomplete type.  Note that the use of POINTER_TYPE_P also allows
      REFERENCE_TYPEs, which is appropriate for C++.  */
-  if ((type_quals & TYPE_QUAL_RESTRICT)
-      && (!POINTER_TYPE_P (type)
-	  || !C_TYPE_OBJECT_OR_INCOMPLETE_P (TREE_TYPE (type))))
+  إذا ((type_quals & TYPE_QUAL_RESTRICT)
+      && (!اشاره_ګر_TYPE_P (type)
+	  || !C_TYPE_OBJECT_OR_INCOMPLETE_P (ونه_TYPE (type))))
     {
       error ("invalid use of %<restrict%>");
       type_quals &= ~TYPE_QUAL_RESTRICT;
     }
 
-  tree var_type = (orig_qual_type && orig_qual_indirect == 0
+  ونه var_type = (orig_qual_type && orig_qual_غیرمستقیم == 0
 		   ? orig_qual_type
 		   : build_qualified_type (type, type_quals));
 
-  gcc_checking_assert (C_TYPE_VARIABLE_SIZE (var_type)
-		       == C_TYPE_VARIABLE_SIZE (type));
+  gcc_checking_assert (C_TYPE_VARIABLE_اندازه (var_type)
+		       == C_TYPE_VARIABLE_اندازه (type));
   gcc_checking_assert (c_type_variably_modified_p (var_type)
 		       == c_type_variably_modified_p (type));
 
   /* A variant type does not inherit the list of incomplete vars from the
      type main variant.  */
-  if ((RECORD_OR_UNION_TYPE_P (var_type)
-       || TREE_CODE (var_type) == ENUMERAL_TYPE)
+  إذا ((ریکارډ_OR_UNION_TYPE_P (var_type)
+       || ونه_کوډ (var_type) == ENUMERAL_TYPE)
       && TYPE_MAIN_VARIANT (var_type) != var_type)
     C_TYPE_INCOMPLETE_VARS (var_type) = 0;
-  return var_type;
+  أرجع var_type;
 }
 
 /* Build a VA_ARG_EXPR for the C parser.  */
 
-tree
-c_build_va_arg (location_t loc1, tree expr, location_t loc2, tree type,
-		tree type_expr)
+ونه
+c_build_va_arg (location_t loc1, ونه بیان, location_t loc2, ونه type,
+		ونه type_بیان)
 {
-  if (error_operand_p (type))
-    return error_mark_node;
+  إذا (error_عملوند_p (type))
+    أرجع error_mark_غوټه;
   /* VA_ARG_EXPR cannot be used for a scalar va_list with reverse storage
      order because it takes the address of the expression.  */
-  else if (handled_component_p (expr)
-	   && reverse_storage_order_for_component_p (expr))
+  وإلا إذا (handled_component_p (بیان)
+	   && سرچپه_storage_ترتیب_for_component_p (بیان))
     {
       error_at (loc1, "cannot use %<va_arg%> with reverse storage order");
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
-  else if (!COMPLETE_TYPE_P (type))
+  وإلا إذا (!COMPLETE_TYPE_P (type))
     {
       error_at (loc2, "second argument to %<va_arg%> is of incomplete "
 		"type %qT", type);
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
-  else if (TREE_CODE (type) == FUNCTION_TYPE)
+  وإلا إذا (ونه_کوډ (type) == FUNCTION_TYPE)
     {
       error_at (loc2, "second argument to %<va_arg%> is a function type %qT",
 		type);
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
-  else if (TREE_CODE (type) == ARRAY_TYPE && C_TYPE_VARIABLE_SIZE (type)
+  وإلا إذا (ونه_کوډ (type) == ARRAY_TYPE && C_TYPE_VARIABLE_اندازه (type)
 	   && !flag_isoc99)
     {
       error_at (loc2, "second argument to %<va_arg%> is an array type %qT",
 		type);
-      return error_mark_node;
+      أرجع error_mark_غوټه;
     }
-  else if (warn_cxx_compat && TREE_CODE (type) == ENUMERAL_TYPE)
+  وإلا إذا (warn_cxx_compat && ونه_کوډ (type) == ENUMERAL_TYPE)
     warning_at (loc2, OPT_Wc___compat,
 		"C++ requires promoted type, not enum type, in %<va_arg%>");
 
-  if (flag_isoc99 && TREE_CODE (type) == ARRAY_TYPE)
+  إذا (flag_isoc99 && ونه_کوډ (type) == ARRAY_TYPE)
     {
       warning_at (loc2, 0, "second argument to %<va_arg%> is an array type %qT",
 		  type);
       /* We create a trap but evaluate side effects first.  */
-      tree trapfn = builtin_decl_explicit (BUILT_IN_TRAP);
-      trapfn = build_call_expr_loc (loc2, trapfn, 0);
-      tree e2 = build2 (COMPOUND_EXPR, void_type_node, expr, trapfn);
+      ونه trapfn = builtin_decl_explicit (BUILT_دننه_TRAP);
+      trapfn = build_call_بیان_loc (loc2, trapfn, 0);
+      ونه e2 = build2 (COMPOUND_بیان, void_type_غوټه, بیان, trapfn);
       /* Return a compound literal of the right type.  */
-      tree e1 = build_compound_literal (loc2, type, NULL, true, 0, NULL);
-      expr = build2 (COMPOUND_EXPR, type, e2, e1);
+      ونه e1 = build_compound_literal (loc2, type, عدم, ریښتیا, 0, عدم);
+      بیان = build2 (COMPOUND_بیان, type, e2, e1);
     }
-  else
-    expr = build_va_arg (loc2, expr, type);
+  وإلا
+    بیان = build_va_arg (loc2, بیان, type);
 
-  if (type_expr)
-    expr = build2 (COMPOUND_EXPR, TREE_TYPE (expr), type_expr, expr);
+  إذا (type_بیان)
+    بیان = build2 (COMPOUND_بیان, ونه_TYPE (بیان), type_بیان, بیان);
 
-  return expr;
+  أرجع بیان;
 }
 
 /* Return truthvalue of whether T1 is the same tree structure as T2.
    Return 1 if they are the same. Return false if they are different.  */
 
-bool
-c_tree_equal (tree t1, tree t2)
+منطقي
+c_ونه_equal (ونه t1, ونه t2)
 {
-  enum tree_code code1, code2;
+  تعداد ونه_کوډ_2 code1, code2;
 
-  if (t1 == t2)
-    return true;
-  if (!t1 || !t2)
-    return false;
+  إذا (t1 == t2)
+    أرجع ریښتیا;
+  إذا (!t1 || !t2)
+    أرجع خطأ;
 
-  for (code1 = TREE_CODE (t1); code1 == NON_LVALUE_EXPR;
-       code1 = TREE_CODE (t1))
-    t1 = TREE_OPERAND (t1, 0);
-  for (code2 = TREE_CODE (t2); code2 == NON_LVALUE_EXPR;
-       code2 = TREE_CODE (t2))
-    t2 = TREE_OPERAND (t2, 0);
+  لكل (code1 = ونه_کوډ (t1); code1 == NON_LVALUE_بیان;
+       code1 = ونه_کوډ (t1))
+    t1 = ونه_عملوند (t1, 0);
+  لكل (code2 = ونه_کوډ (t2); code2 == NON_LVALUE_بیان;
+       code2 = ونه_کوډ (t2))
+    t2 = ونه_عملوند (t2, 0);
 
   /* They might have become equal now.  */
-  if (t1 == t2)
-    return true;
+  إذا (t1 == t2)
+    أرجع ریښتیا;
 
-  if (code1 != code2)
-    return false;
+  إذا (code1 != code2)
+    أرجع خطأ;
 
-  if (CONSTANT_CLASS_P (t1) && !comptypes (TREE_TYPE (t1), TREE_TYPE (t2)))
-    return false;
+  إذا (CONSTANT_CLASS_P (t1) && !comptypes (ونه_TYPE (t1), ونه_TYPE (t2)))
+    أرجع خطأ;
 
-  switch (code1)
+  بدل (code1)
     {
-    case INTEGER_CST:
-      return wi::to_wide (t1) == wi::to_wide (t2);
+    حالة INTEGER_CST:
+      أرجع wi::منزل_wide (t1) == wi::منزل_wide (t2);
 
-    case REAL_CST:
-      return real_equal (&TREE_REAL_CST (t1), &TREE_REAL_CST (t2));
+    حالة REAL_CST:
+      أرجع real_equal (&ونه_REAL_CST (t1), &ونه_REAL_CST (t2));
 
-    case STRING_CST:
-      return TREE_STRING_LENGTH (t1) == TREE_STRING_LENGTH (t2)
-	&& !memcmp (TREE_STRING_POINTER (t1), TREE_STRING_POINTER (t2),
-		    TREE_STRING_LENGTH (t1));
+    حالة STRING_CST:
+      أرجع ونه_STRING_اوږدتیا (t1) == ونه_STRING_اوږدتیا (t2)
+	&& !memcmp (ونه_STRING_اشاره_ګر (t1), ونه_STRING_اشاره_ګر (t2),
+		    ونه_STRING_اوږدتیا (t1));
 
-    case FIXED_CST:
-      return FIXED_VALUES_IDENTICAL (TREE_FIXED_CST (t1),
-				     TREE_FIXED_CST (t2));
+    حالة FIXED_CST:
+      أرجع FIXED_ارزښتونه_IDENTICAL (ونه_FIXED_CST (t1),
+				     ونه_FIXED_CST (t2));
 
-    case COMPLEX_CST:
-      return c_tree_equal (TREE_REALPART (t1), TREE_REALPART (t2))
-	     && c_tree_equal (TREE_IMAGPART (t1), TREE_IMAGPART (t2));
+    حالة COMPLEX_CST:
+      أرجع c_ونه_equal (ونه_REALPART (t1), ونه_REALPART (t2))
+	     && c_ونه_equal (ونه_IMAGPART (t1), ونه_IMAGPART (t2));
 
-    case VECTOR_CST:
-      return operand_equal_p (t1, t2, OEP_ONLY_CONST);
+    حالة ویکټور_CST:
+      أرجع عملوند_equal_p (t1, t2, OEP_ONLY_CONST);
 
-    case CONSTRUCTOR:
+    حالة CONSTRUCTOR:
       /* We need to do this when determining whether or not two
 	 non-type pointer to member function template arguments
 	 are the same.  */
-      if (!comptypes (TREE_TYPE (t1), TREE_TYPE (t2))
+      إذا (!comptypes (ونه_TYPE (t1), ونه_TYPE (t2))
 	  || CONSTRUCTOR_NELTS (t1) != CONSTRUCTOR_NELTS (t2))
-	return false;
+	أرجع خطأ;
       {
-	tree field, value;
-	unsigned int i;
-	FOR_EACH_CONSTRUCTOR_ELT (CONSTRUCTOR_ELTS (t1), i, field, value)
+	ونه ډګر_2, ارزښت;
+	بینښه صحيح i;
+	FOR_EACH_CONSTRUCTOR_ELT (CONSTRUCTOR_ELTS (t1), i, ډګر_2, ارزښت)
 	  {
 	    constructor_elt *elt2 = CONSTRUCTOR_ELT (t2, i);
-	    if (!c_tree_equal (field, elt2->index)
-		|| !c_tree_equal (value, elt2->value))
-	      return false;
+	    إذا (!c_ونه_equal (ډګر_2, elt2->شاخص)
+		|| !c_ونه_equal (ارزښت, elt2->ارزښت))
+	      أرجع خطأ;
 	  }
       }
-      return true;
+      أرجع ریښتیا;
 
-    case TREE_LIST:
-      if (!c_tree_equal (TREE_PURPOSE (t1), TREE_PURPOSE (t2)))
-	return false;
-      if (!c_tree_equal (TREE_VALUE (t1), TREE_VALUE (t2)))
-	return false;
-      return c_tree_equal (TREE_CHAIN (t1), TREE_CHAIN (t2));
+    حالة ونه_LIST:
+      إذا (!c_ونه_equal (ونه_PURPOSE (t1), ونه_PURPOSE (t2)))
+	أرجع خطأ;
+      إذا (!c_ونه_equal (ونه_ارزښت (t1), ونه_ارزښت (t2)))
+	أرجع خطأ;
+      أرجع c_ونه_equal (ونه_CHAIN (t1), ونه_CHAIN (t2));
 
-    case SAVE_EXPR:
-      return c_tree_equal (TREE_OPERAND (t1, 0), TREE_OPERAND (t2, 0));
+    حالة SAVE_بیان:
+      أرجع c_ونه_equal (ونه_عملوند (t1, 0), ونه_عملوند (t2, 0));
 
-    case CALL_EXPR:
+    حالة CALL_بیان:
       {
-	tree arg1, arg2;
-	call_expr_arg_iterator iter1, iter2;
-	if (!c_tree_equal (CALL_EXPR_FN (t1), CALL_EXPR_FN (t2)))
-	  return false;
-	for (arg1 = first_call_expr_arg (t1, &iter1),
-	       arg2 = first_call_expr_arg (t2, &iter2);
+	ونه arg1, arg2;
+	call_بیان_arg_iterator iter1, iter2;
+	إذا (!c_ونه_equal (CALL_بیان_FN (t1), CALL_بیان_FN (t2)))
+	  أرجع خطأ;
+	لكل (arg1 = لومړی_call_بیان_arg (t1, &iter1),
+	       arg2 = لومړی_call_بیان_arg (t2, &iter2);
 	     arg1 && arg2;
-	     arg1 = next_call_expr_arg (&iter1),
-	       arg2 = next_call_expr_arg (&iter2))
-	  if (!c_tree_equal (arg1, arg2))
-	    return false;
-	if (arg1 || arg2)
-	  return false;
-	return true;
+	     arg1 = بل_call_بیان_arg (&iter1),
+	       arg2 = بل_call_بیان_arg (&iter2))
+	  إذا (!c_ونه_equal (arg1, arg2))
+	    أرجع خطأ;
+	إذا (arg1 || arg2)
+	  أرجع خطأ;
+	أرجع ریښتیا;
       }
 
-    case TARGET_EXPR:
+    حالة موخه_بیان:
       {
-	tree o1 = TREE_OPERAND (t1, 0);
-	tree o2 = TREE_OPERAND (t2, 0);
+	ونه o1 = ونه_عملوند (t1, 0);
+	ونه o2 = ونه_عملوند (t2, 0);
 
 	/* Special case: if either target is an unallocated VAR_DECL,
 	   it means that it's going to be unified with whatever the
 	   TARGET_EXPR is really supposed to initialize, so treat it
 	   as being equivalent to anything.  */
-	if (VAR_P (o1) && DECL_NAME (o1) == NULL_TREE
-	    && !DECL_RTL_SET_P (o1))
+	إذا (VAR_P (o1) && DECL_NAME (o1) == NULL_ونه
+	    && !DECL_RTL_سېټ_P (o1))
 	  /*Nop*/;
-	else if (VAR_P (o2) && DECL_NAME (o2) == NULL_TREE
-		 && !DECL_RTL_SET_P (o2))
+	وإلا إذا (VAR_P (o2) && DECL_NAME (o2) == NULL_ونه
+		 && !DECL_RTL_سېټ_P (o2))
 	  /*Nop*/;
-	else if (!c_tree_equal (o1, o2))
-	  return false;
+	وإلا إذا (!c_ونه_equal (o1, o2))
+	  أرجع خطأ;
 
-	return c_tree_equal (TREE_OPERAND (t1, 1), TREE_OPERAND (t2, 1));
+	أرجع c_ونه_equal (ونه_عملوند (t1, 1), ونه_عملوند (t2, 1));
       }
 
-    case COMPONENT_REF:
-      if (TREE_OPERAND (t1, 1) != TREE_OPERAND (t2, 1))
-	return false;
-      return c_tree_equal (TREE_OPERAND (t1, 0), TREE_OPERAND (t2, 0));
+    حالة COMPONENT_REF:
+      إذا (ونه_عملوند (t1, 1) != ونه_عملوند (t2, 1))
+	أرجع خطأ;
+      أرجع c_ونه_equal (ونه_عملوند (t1, 0), ونه_عملوند (t2, 0));
 
-    case PARM_DECL:
-    case VAR_DECL:
-    case CONST_DECL:
-    case FIELD_DECL:
-    case FUNCTION_DECL:
-    case IDENTIFIER_NODE:
-    case SSA_NAME:
-      return false;
+    حالة PARM_DECL:
+    حالة VAR_DECL:
+    حالة CONST_DECL:
+    حالة ډګر_DECL:
+    حالة FUNCTION_DECL:
+    حالة IDENTIFIER_غوټه:
+    حالة SSA_NAME:
+      أرجع خطأ;
 
-    case TREE_VEC:
+    حالة ونه_VEC:
       {
-	unsigned ix;
-	if (TREE_VEC_LENGTH (t1) != TREE_VEC_LENGTH (t2))
-	  return false;
-	for (ix = TREE_VEC_LENGTH (t1); ix--;)
-	  if (!c_tree_equal (TREE_VEC_ELT (t1, ix),
-			     TREE_VEC_ELT (t2, ix)))
-	    return false;
-	return true;
+	بینښه ix;
+	إذا (ونه_VEC_اوږدتیا (t1) != ونه_VEC_اوږدتیا (t2))
+	  أرجع خطأ;
+	لكل (ix = ونه_VEC_اوږدتیا (t1); ix--;)
+	  إذا (!c_ونه_equal (ونه_VEC_ELT (t1, ix),
+			     ونه_VEC_ELT (t2, ix)))
+	    أرجع خطأ;
+	أرجع ریښتیا;
       }
 
     CASE_CONVERT:
-      if (!comptypes (TREE_TYPE (t1), TREE_TYPE (t2)))
-	return false;
-      break;
+      إذا (!comptypes (ونه_TYPE (t1), ونه_TYPE (t2)))
+	أرجع خطأ;
+      اكسر;
 
-    default:
-      break;
+    افتراضي:
+      اكسر;
     }
 
-  switch (TREE_CODE_CLASS (code1))
+  بدل (ونه_کوډ_CLASS (code1))
     {
-    case tcc_unary:
-    case tcc_binary:
-    case tcc_comparison:
-    case tcc_expression:
-    case tcc_vl_exp:
-    case tcc_reference:
-    case tcc_statement:
+    حالة tcc_unary:
+    حالة tcc_دوګونی:
+    حالة tcc_comparison:
+    حالة tcc_افاده:
+    حالة tcc_vl_exp:
+    حالة tcc_reference:
+    حالة tcc_statement:
       {
-	int i, n = TREE_OPERAND_LENGTH (t1);
+	صحيح i, n = ونه_عملوند_اوږدتیا (t1);
 
-	switch (code1)
+	بدل (code1)
 	  {
-	  case PREINCREMENT_EXPR:
-	  case PREDECREMENT_EXPR:
-	  case POSTINCREMENT_EXPR:
-	  case POSTDECREMENT_EXPR:
+	  حالة PREINCREMENT_بیان:
+	  حالة PREDECREMENT_بیان:
+	  حالة POSTINCREMENT_بیان:
+	  حالة POSTDECREMENT_بیان:
 	    n = 1;
-	    break;
-	  case ARRAY_REF:
+	    اكسر;
+	  حالة ARRAY_REF:
 	    n = 2;
-	    break;
-	  default:
-	    break;
+	    اكسر;
+	  افتراضي:
+	    اكسر;
 	  }
 
-	if (TREE_CODE_CLASS (code1) == tcc_vl_exp
-	    && n != TREE_OPERAND_LENGTH (t2))
-	  return false;
+	إذا (ونه_کوډ_CLASS (code1) == tcc_vl_exp
+	    && n != ونه_عملوند_اوږدتیا (t2))
+	  أرجع خطأ;
 
-	for (i = 0; i < n; ++i)
-	  if (!c_tree_equal (TREE_OPERAND (t1, i), TREE_OPERAND (t2, i)))
-	    return false;
+	لكل (i = 0; i < n; ++i)
+	  إذا (!c_ونه_equal (ونه_عملوند (t1, i), ونه_عملوند (t2, i)))
+	    أرجع خطأ;
 
-	return true;
+	أرجع ریښتیا;
       }
 
-    case tcc_type:
-      return comptypes (t1, t2);
-    default:
+    حالة tcc_type:
+      أرجع comptypes (t1, t2);
+    افتراضي:
       gcc_unreachable ();
     }
 }
@@ -19081,8 +19081,8 @@ c_tree_equal (tree t1, tree t2)
    introduced as a result of a call to an otherwise undeclared
    function, and false otherwise.  */
 
-bool
-c_decl_implicit (const_tree fndecl)
+منطقي
+c_decl_implicit (const_ونه fndecl)
 {
-  return C_DECL_IMPLICIT (fndecl);
+  أرجع C_DECL_IMPLICIT (fndecl);
 }
