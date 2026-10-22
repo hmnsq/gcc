@@ -39,7 +39,7 @@ static char *affix_data_type (const char *) ATTRIBUTE_MALLOC;
 static const char *gen_formal_list_for_type (tree, formals_style);
 static const char *gen_formal_list_for_func_def (tree, formals_style);
 static const char *gen_type (const char *, tree, formals_style);
-static const char *gen_decl (tree, int, formals_style);
+static const char *gen_decl (tree, số_nguyên, formals_style);
 
 /* Given a string representing an entire type or an entire declaration
    which only lacks the actual "data-type" specifier (at its left end),
@@ -65,14 +65,14 @@ affix_data_type (const char *param)
 
   /* Skip as many leading const's or volatile's as there are.  */
 
-  for (;;)
+  cho (;;)
     {
-      if (startswith (p, "volatile "))
+      nếu (startswith (p, "volatile "))
 	{
 	  p += 9;
 	  continue;
 	}
-      if (startswith (p, "const "))
+      nếu (startswith (p, "const "))
 	{
 	  p += 6;
 	  continue;
@@ -83,14 +83,14 @@ affix_data_type (const char *param)
   /* p now points to the place where we can insert the data type.  We have to
      add a blank after the data-type of course.  */
 
-  if (p == type_or_decl)
-    return concat (data_type, " ", type_or_decl, NULL);
+  nếu (p == type_or_decl)
+    trả_về concat (data_type, " ", type_or_decl, NULL);
 
   saved = *p;
   *p = '\0';
   qualifiers_then_data_type = concat (type_or_decl, data_type, NULL);
   *p = saved;
-  return reconcat (qualifiers_then_data_type,
+  trả_về reconcat (qualifiers_then_data_type,
 		   qualifiers_then_data_type, " ", p, NULL);
 }
 
@@ -107,15 +107,15 @@ gen_formal_list_for_type (tree fntype, formals_style style)
   const char *formal_list = "";
   tree formal_type;
 
-  if (style != ansi)
-    return "()";
+  nếu (style != ansi)
+    trả_về "()";
 
   formal_type = TYPE_ARG_TYPES (fntype);
-  while (formal_type && TREE_VALUE (formal_type) != void_type_node)
+  trong_khi (formal_type && TREE_VALUE (formal_type) != void_type_node)
     {
       const char *this_type;
 
-      if (*formal_list)
+      nếu (*formal_list)
 	formal_list = concat (formal_list, ", ", NULL);
 
       this_type = gen_type ("", TREE_VALUE (formal_type), ansi);
@@ -157,24 +157,24 @@ gen_formal_list_for_type (tree fntype, formals_style style)
 
      The string chosen here is a comment with question marks in it.  */
 
-  if (!*formal_list)
+  nếu (!*formal_list)
     {
-      if (prototype_p (fntype))
+      nếu (prototype_p (fntype))
 	/* assert (TREE_VALUE (TYPE_ARG_TYPES (fntype)) == void_type_node);  */
 	formal_list = "void";
-      else
+      không_thì
 	formal_list = "/* ??? */";
     }
-  else
+  không_thì
     {
       /* If there were at least some parameters, and if the formals-types-list
 	 petered out to a NULL (i.e. without being terminated by a
 	 void_type_node) then we need to tack on an ellipsis.  */
-      if (!formal_type)
+      nếu (!formal_type)
 	formal_list = concat (formal_list, ", ...", NULL);
     }
 
-  return concat (" (", formal_list, ")", NULL);
+  trả_về concat (" (", formal_list, ")", NULL);
 }
 
 /* Generate a parameter list for a function definition (in some given style).
@@ -203,29 +203,29 @@ gen_formal_list_for_func_def (tree fndecl, formals_style style)
   tree formal_decl;
 
   formal_decl = DECL_ARGUMENTS (fndecl);
-  while (formal_decl)
+  trong_khi (formal_decl)
     {
       const char *this_formal;
 
-      if (*formal_list && ((style == ansi) || (style == k_and_r_names)))
+      nếu (*formal_list && ((style == ansi) || (style == k_and_r_names)))
 	formal_list = concat (formal_list, ", ", NULL);
       this_formal = gen_decl (formal_decl, 0, style);
-      if (style == k_and_r_decls)
+      nếu (style == k_and_r_decls)
 	formal_list = concat (formal_list, this_formal, "; ", NULL);
-      else
+      không_thì
 	formal_list = concat (formal_list, this_formal, NULL);
       formal_decl = TREE_CHAIN (formal_decl);
     }
-  if (style == ansi)
+  nếu (style == ansi)
     {
-      if (!DECL_ARGUMENTS (fndecl))
+      nếu (!DECL_ARGUMENTS (fndecl))
 	formal_list = concat (formal_list, "void", NULL);
-      if (stdarg_p (TREE_TYPE (fndecl)))
+      nếu (stdarg_p (TREE_TYPE (fndecl)))
 	formal_list = concat (formal_list, ", ...", NULL);
     }
-  if ((style == ansi) || (style == k_and_r_names))
+  nếu ((style == ansi) || (style == k_and_r_names))
     formal_list = concat (" (", formal_list, ")", NULL);
-  return formal_list;
+  trả_về formal_list;
 }
 
 /* Generate a string which is the source code form for a given type (t).  This
@@ -275,37 +275,37 @@ gen_type (const char *ret_val, tree t, formals_style style)
   tree chain_p;
 
   /* If there is a typedef name for this type, use it.  */
-  if (TYPE_NAME (t) && TREE_CODE (TYPE_NAME (t)) == TYPE_DECL)
+  nếu (TYPE_NAME (t) && TREE_CODE (TYPE_NAME (t)) == TYPE_DECL)
     data_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
-  else
+  không_thì
     {
       switch (TREE_CODE (t))
 	{
 	case POINTER_TYPE:
-	  if (TYPE_ATOMIC (t))
+	  nếu (TYPE_ATOMIC (t))
 	    ret_val = concat ("_Atomic ", ret_val, NULL);
-	  if (TYPE_READONLY (t))
+	  nếu (TYPE_READONLY (t))
 	    ret_val = concat ("const ", ret_val, NULL);
-	  if (TYPE_VOLATILE (t))
+	  nếu (TYPE_VOLATILE (t))
 	    ret_val = concat ("volatile ", ret_val, NULL);
 
 	  ret_val = concat ("*", ret_val, NULL);
 
-	  if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE || TREE_CODE (TREE_TYPE (t)) == FUNCTION_TYPE)
+	  nếu (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE || TREE_CODE (TREE_TYPE (t)) == FUNCTION_TYPE)
 	    ret_val = concat ("(", ret_val, ")", NULL);
 
 	  ret_val = gen_type (ret_val, TREE_TYPE (t), style);
 
-	  return ret_val;
+	  trả_về ret_val;
 
 	case ARRAY_TYPE:
-	  if (!COMPLETE_TYPE_P (t) || TREE_CODE (TYPE_SIZE (t)) != INTEGER_CST)
+	  nếu (!COMPLETE_TYPE_P (t) || TREE_CODE (TYPE_SIZE (t)) != INTEGER_CST)
 	    ret_val = gen_type (concat (ret_val, "[]", NULL),
 				TREE_TYPE (t), style);
-	  else if (int_size_in_bytes (t) == 0)
+	  không_thì nếu (int_size_in_bytes (t) == 0)
 	    ret_val = gen_type (concat (ret_val, "[0]", NULL),
 				TREE_TYPE (t), style);
-	  else
+	  không_thì
 	    {
 	      char buff[23];
 	      sprintf (buff, "[" HOST_WIDE_INT_PRINT_DEC"]",
@@ -339,13 +339,13 @@ gen_type (const char *ret_val, tree t, formals_style style)
 	   whole darn type specification.  Yuck!  */
 
 	case RECORD_TYPE:
-	  if (TYPE_NAME (t))
+	  nếu (TYPE_NAME (t))
 	    data_type = IDENTIFIER_POINTER (TYPE_NAME (t));
-	  else
+	  không_thì
 	    {
 	      data_type = "";
 	      chain_p = TYPE_FIELDS (t);
-	      while (chain_p)
+	      trong_khi (chain_p)
 		{
 		  data_type = concat (data_type, gen_decl (chain_p, 0, ansi),
 				      NULL);
@@ -358,13 +358,13 @@ gen_type (const char *ret_val, tree t, formals_style style)
 	  break;
 
 	case UNION_TYPE:
-	  if (TYPE_NAME (t))
+	  nếu (TYPE_NAME (t))
 	    data_type = IDENTIFIER_POINTER (TYPE_NAME (t));
-	  else
+	  không_thì
 	    {
 	      data_type = "";
 	      chain_p = TYPE_FIELDS (t);
-	      while (chain_p)
+	      trong_khi (chain_p)
 		{
 		  data_type = concat (data_type, gen_decl (chain_p, 0, ansi),
 				      NULL);
@@ -377,18 +377,18 @@ gen_type (const char *ret_val, tree t, formals_style style)
 	  break;
 
 	case ENUMERAL_TYPE:
-	  if (TYPE_NAME (t))
+	  nếu (TYPE_NAME (t))
 	    data_type = IDENTIFIER_POINTER (TYPE_NAME (t));
-	  else
+	  không_thì
 	    {
 	      data_type = "";
 	      chain_p = TYPE_VALUES (t);
-	      while (chain_p)
+	      trong_khi (chain_p)
 		{
 		  data_type = concat (data_type,
 			IDENTIFIER_POINTER (TREE_PURPOSE (chain_p)), NULL);
 		  chain_p = TREE_CHAIN (chain_p);
-		  if (chain_p)
+		  nếu (chain_p)
 		    data_type = concat (data_type, ", ", NULL);
 		}
 	      data_type = concat ("{ ", data_type, " }", NULL);
@@ -405,7 +405,7 @@ gen_type (const char *ret_val, tree t, formals_style style)
 	  data_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
 	  /* Normally, `unsigned' is part of the deal.  Not so if it comes
 	     with a type qualifier.  */
-	  if (TYPE_UNSIGNED (t) && TYPE_QUALS (t))
+	  nếu (TYPE_UNSIGNED (t) && TYPE_QUALS (t))
 	    data_type = concat ("unsigned ", data_type, NULL);
 	  break;
 
@@ -413,9 +413,9 @@ gen_type (const char *ret_val, tree t, formals_style style)
 	  {
 	    char buf[sizeof ("2147483647")];
 	    sprintf (buf, "%d", TYPE_PRECISION (t));
-	    if (TYPE_UNSIGNED (t))
+	    nếu (TYPE_UNSIGNED (t))
 	      data_type = concat ("unsigned _BitInt(", buf, ")", NULL);
-	    else
+	    không_thì
 	      data_type = concat ("_BitInt(", buf, ")", NULL);
 	    break;
 	  }
@@ -437,15 +437,15 @@ gen_type (const char *ret_val, tree t, formals_style style)
 	  gcc_unreachable ();
 	}
     }
-  if (TYPE_ATOMIC (t))
+  nếu (TYPE_ATOMIC (t))
     ret_val = concat ("_Atomic ", ret_val, NULL);
-  if (TYPE_READONLY (t))
+  nếu (TYPE_READONLY (t))
     ret_val = concat ("const ", ret_val, NULL);
-  if (TYPE_VOLATILE (t))
+  nếu (TYPE_VOLATILE (t))
     ret_val = concat ("volatile ", ret_val, NULL);
-  if (TYPE_RESTRICT (t))
+  nếu (TYPE_RESTRICT (t))
     ret_val = concat ("restrict ", ret_val, NULL);
-  return ret_val;
+  trả_về ret_val;
 }
 
 /* Generate a string (source) representation of an entire entity declaration
@@ -459,21 +459,21 @@ gen_type (const char *ret_val, tree t, formals_style style)
    an attached list of DECL nodes for function formal arguments is present.  */
 
 static const char *
-gen_decl (tree decl, int is_func_definition, formals_style style)
+gen_decl (tree decl, số_nguyên is_func_definition, formals_style style)
 {
   const char *ret_val;
 
-  if (DECL_NAME (decl))
+  nếu (DECL_NAME (decl))
     ret_val = IDENTIFIER_POINTER (DECL_NAME (decl));
-  else
+  không_thì
     ret_val = "";
 
   /* If we are just generating a list of names of formal parameters, we can
      simply return the formal parameter name (with no typing information
      attached to it) now.  */
 
-  if (style == k_and_r_names)
-    return ret_val;
+  nếu (style == k_and_r_names)
+    trả_về ret_val;
 
   /* Note that for the declaration of some entity (either a function or a
      data object, like for instance a parameter) if the entity itself was
@@ -482,9 +482,9 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
      the `type' of the entity.  Thus, for such declared entities, we have to
      generate the qualifiers here.  */
 
-  if (TREE_THIS_VOLATILE (decl))
+  nếu (TREE_THIS_VOLATILE (decl))
     ret_val = concat ("volatile ", ret_val, NULL);
-  if (TREE_READONLY (decl))
+  nếu (TREE_READONLY (decl))
     ret_val = concat ("const ", ret_val, NULL);
 
   data_type = "";
@@ -501,7 +501,7 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
      parameter list is considered to be a (suffix) part of the "type" of the
      function.  */
 
-  if (TREE_CODE (decl) == FUNCTION_DECL && is_func_definition)
+  nếu (TREE_CODE (decl) == FUNCTION_DECL && is_func_definition)
     {
       ret_val = concat (ret_val, gen_formal_list_for_func_def (decl, ansi),
 			NULL);
@@ -515,19 +515,19 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
 
       ret_val = gen_type (ret_val, TREE_TYPE (TREE_TYPE (decl)), style);
     }
-  else
+  không_thì
     ret_val = gen_type (ret_val, TREE_TYPE (decl), style);
 
   ret_val = affix_data_type (ret_val);
 
-  if (TREE_CODE (decl) != FUNCTION_DECL && C_DECL_REGISTER (decl))
+  nếu (TREE_CODE (decl) != FUNCTION_DECL && C_DECL_REGISTER (decl))
     ret_val = concat ("register ", ret_val, NULL);
-  if (TREE_PUBLIC (decl))
+  nếu (TREE_PUBLIC (decl))
     ret_val = concat ("extern ", ret_val, NULL);
-  if (TREE_CODE (decl) == FUNCTION_DECL && !TREE_PUBLIC (decl))
+  nếu (TREE_CODE (decl) == FUNCTION_DECL && !TREE_PUBLIC (decl))
     ret_val = concat ("static ", ret_val, NULL);
 
-  return ret_val;
+  trả_về ret_val;
 }
 
 extern FILE *aux_info_file;
@@ -537,18 +537,18 @@ extern FILE *aux_info_file;
    function definition (even the implicit ones).  */
 
 void
-gen_aux_info_record (tree fndecl, int is_definition, int is_implicit,
-		     int is_prototyped)
+gen_aux_info_record (tree fndecl, số_nguyên is_definition, số_nguyên is_implicit,
+		     số_nguyên is_prototyped)
 {
-  if (flag_gen_aux_info)
+  nếu (flag_gen_aux_info)
     {
-      static int compiled_from_record = 0;
+      static số_nguyên compiled_from_record = 0;
       expanded_location xloc = expand_location (DECL_SOURCE_LOCATION (fndecl));
 
       /* Each output .X file must have a header line.  Write one now if we
 	 have not yet done so.  */
 
-      if (!compiled_from_record++)
+      nếu (!compiled_from_record++)
 	{
 	  /* The first line tells which directory file names are relative to.
 	     Currently, -aux-info works only for files in the working
@@ -568,7 +568,7 @@ gen_aux_info_record (tree fndecl, int is_definition, int is_implicit,
 	 out an old-style (i.e. K&R) function header, just in case the user
 	 wants to run unprotoize.  */
 
-      if (is_definition)
+      nếu (is_definition)
 	{
 	  fprintf (aux_info_file, " /*%s %s*/",
 		   gen_formal_list_for_func_def (fndecl, k_and_r_names),

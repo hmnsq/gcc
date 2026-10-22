@@ -37,7 +37,7 @@ static tree c_fully_fold_internal (tree expr, bool, bool *, bool *, bool,
 static void
 c_disable_warnings (bool disable)
 {
-  if (disable)
+  nếu (disable)
     {
       ++c_inhibit_evaluation_warnings;
     }
@@ -48,7 +48,7 @@ c_disable_warnings (bool disable)
 static void
 c_enable_warnings (bool enable)
 {
-  if (enable)
+  nếu (enable)
     {
       --c_inhibit_evaluation_warnings;
     }
@@ -60,12 +60,12 @@ c_enable_warnings (bool enable)
 static tree
 c_fold_array_ref (tree type, tree ary, tree index)
 {
-  if (TREE_CODE (ary) != STRING_CST
+  nếu (TREE_CODE (ary) != STRING_CST
       || TREE_CODE (index) != INTEGER_CST
       || TREE_OVERFLOW (index)
       || TREE_CODE (TREE_TYPE (ary)) != ARRAY_TYPE
       || !tree_fits_uhwi_p (index))
-    return NULL_TREE;
+    trả_về NULL_TREE;
 
   tree elem_type = TREE_TYPE (TREE_TYPE (ary));
   unsigned elem_nchars = (TYPE_PRECISION (elem_type)
@@ -76,17 +76,17 @@ c_fold_array_ref (tree type, tree ary, tree index)
   nelts_minus_one = c_fully_fold_internal (nelts_minus_one, true, &dummy1,
 					   &dummy2, false, false);
   unsigned HOST_WIDE_INT i = tree_to_uhwi (index);
-  if (!tree_int_cst_le (index, nelts_minus_one)
+  nếu (!tree_int_cst_le (index, nelts_minus_one)
       || i >= len
       || i + elem_nchars > len)
-    return NULL_TREE;
+    trả_về NULL_TREE;
 
-  if (elem_nchars == 1)
-    return build_int_cst (type, TREE_STRING_POINTER (ary)[i]);
+  nếu (elem_nchars == 1)
+    trả_về build_int_cst (type, TREE_STRING_POINTER (ary)[i]);
 
   const unsigned char *ptr
     = ((const unsigned char *)TREE_STRING_POINTER (ary) + i * elem_nchars);
-  return native_interpret_expr (type, ptr, elem_nchars);
+  trả_về native_interpret_expr (type, ptr, elem_nchars);
 }
 
 /* Fully fold EXPR, an expression that was not folded (beyond integer
@@ -114,19 +114,19 @@ c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
   bool maybe_const_itself = true;
   location_t loc = EXPR_LOCATION (expr);
 
-  if (!maybe_const)
+  nếu (!maybe_const)
     maybe_const = &dummy;
-  if (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
+  nếu (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
     {
       eptype = TREE_TYPE (expr);
       expr = TREE_OPERAND (expr, 0);
     }
   ret = c_fully_fold_internal (expr, in_init, maybe_const,
 			       &maybe_const_itself, false, lval);
-  if (eptype)
+  nếu (eptype)
     ret = fold_convert_loc (loc, eptype, ret);
   *maybe_const &= maybe_const_itself;
-  return ret;
+  trả_về ret;
 }
 
 /* Internal helper for c_fully_fold.  EXPR and IN_INIT are as for
@@ -161,59 +161,59 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
   /* Constants, declarations, statements, errors, and anything else not
      counted as an expression cannot usefully be folded further at this
      point.  */
-  if (!IS_EXPR_CODE_CLASS (kind) || kind == tcc_statement)
+  nếu (!IS_EXPR_CODE_CLASS (kind) || kind == tcc_statement)
     {
       /* Except for variables which we can optimize to its initializer.  */
-      if (VAR_P (expr) && !lval && (optimize || in_init))
+      nếu (VAR_P (expr) && !lval && (optimize || in_init))
 	{
-	  if (in_init)
+	  nếu (in_init)
 	    ret = decl_constant_value_1 (expr, true);
-	  else
+	  không_thì
 	    {
 	      ret = decl_constant_value (expr);
-	      if (ret != expr
+	      nếu (ret != expr
 		  && (TYPE_MODE (TREE_TYPE (ret)) == BLKmode
 		      || TREE_CODE (TREE_TYPE (ret)) == ARRAY_TYPE))
-		return expr;
+		trả_về expr;
 	    }
 	  /* Avoid unwanted tree sharing between the initializer and current
 	     function's body where the tree can be modified e.g. by the
 	     gimplifier.  */
-	  if (ret != expr && TREE_STATIC (expr))
+	  nếu (ret != expr && TREE_STATIC (expr))
 	    ret = unshare_expr (ret);
-	  return ret;
+	  trả_về ret;
 	}
-      return expr;
+      trả_về expr;
     }
 
-  if (IS_EXPR_CODE_CLASS (kind))
+  nếu (IS_EXPR_CODE_CLASS (kind))
     old_range = EXPR_LOCATION_RANGE (expr);
 
   /* Operands of variable-length expressions (function calls) have
      already been folded, as have __builtin_* function calls, and such
      expressions cannot occur in constant expressions.  */
-  if (kind == tcc_vl_exp)
+  nếu (kind == tcc_vl_exp)
     {
       *maybe_const_operands = false;
       ret = fold (expr);
       goto out;
     }
 
-  if (code == C_MAYBE_CONST_EXPR)
+  nếu (code == C_MAYBE_CONST_EXPR)
     {
       tree pre = C_MAYBE_CONST_EXPR_PRE (expr);
       tree inner = C_MAYBE_CONST_EXPR_EXPR (expr);
-      if (C_MAYBE_CONST_EXPR_NON_CONST (expr))
+      nếu (C_MAYBE_CONST_EXPR_NON_CONST (expr))
 	*maybe_const_operands = false;
-      if (C_MAYBE_CONST_EXPR_INT_OPERANDS (expr))
+      nếu (C_MAYBE_CONST_EXPR_INT_OPERANDS (expr))
 	{
 	  *maybe_const_itself = false;
 	  inner = c_fully_fold_internal (inner, in_init, maybe_const_operands,
 					 maybe_const_itself, true, lval);
 	}
-      if (pre && !in_init)
+      nếu (pre && !in_init)
 	ret = build2 (COMPOUND_EXPR, TREE_TYPE (expr), pre, inner);
-      else
+      không_thì
 	ret = inner;
       goto out;
     }
@@ -262,14 +262,14 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
-      if (op0 != orig_op0)
+      nếu (op0 != orig_op0)
 	ret = build3 (COMPONENT_REF, TREE_TYPE (expr), op0, op1, op2);
-      if (ret != expr)
+      nếu (ret != expr)
 	{
 	  TREE_READONLY (ret) = TREE_READONLY (expr);
 	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
 	}
-      if (!lval)
+      nếu (!lval)
 	ret = fold (ret);
       goto out;
 
@@ -285,22 +285,22 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 				   maybe_const_itself, for_int_const, false);
       STRIP_TYPE_NOPS (op1);
       /* Fold "foo"[2] in initializers.  */
-      if (!lval && in_init)
+      nếu (!lval && in_init)
 	{
 	  ret = c_fold_array_ref (TREE_TYPE (expr), op0, op1);
-	  if (ret)
+	  nếu (ret)
 	    goto out;
 	  ret = expr;
 	}
-      if (op0 != orig_op0 || op1 != orig_op1)
+      nếu (op0 != orig_op0 || op1 != orig_op1)
 	ret = build4 (ARRAY_REF, TREE_TYPE (expr), op0, op1, op2, op3);
-      if (ret != expr)
+      nếu (ret != expr)
 	{
 	  TREE_READONLY (ret) = TREE_READONLY (expr);
 	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
 	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
 	}
-      if (!lval)
+      nếu (!lval)
 	ret = fold (ret);
       goto out;
 
@@ -358,16 +358,16 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
       STRIP_TYPE_NOPS (op0);
       /* The RHS of a MODIFY_EXPR was fully folded when building that
 	 expression for the sake of conversion warnings.  */
-      if (code != MODIFY_EXPR)
+      nếu (code != MODIFY_EXPR)
 	op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
 				     maybe_const_itself, for_int_const, false);
       STRIP_TYPE_NOPS (op1);
 
-      if (for_int_const && (TREE_CODE (op0) != INTEGER_CST
+      nếu (for_int_const && (TREE_CODE (op0) != INTEGER_CST
 			    || TREE_CODE (op1) != INTEGER_CST))
 	goto out;
 
-      if (TREE_CODE_CLASS (code) == tcc_comparison
+      nếu (TREE_CODE_CLASS (code) == tcc_comparison
 	  && TREE_CODE (TREE_TYPE (op0)) == NULLPTR_TYPE
 	  && TREE_CODE (TREE_TYPE (op1)) == NULLPTR_TYPE)
 	{
@@ -385,18 +385,18 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  ret = omit_two_operands_loc (loc, TREE_TYPE (expr), ret,
 				       op0, op1);
 	}
-      else if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      không_thì nếu (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
 	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
 	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
+      không_thì
 	ret = fold (expr);
-      if (TREE_OVERFLOW_P (ret)
+      nếu (TREE_OVERFLOW_P (ret)
 	  && !TREE_OVERFLOW_P (op0)
 	  && !(BINARY_CLASS_P (op0) && TREE_OVERFLOW_P (TREE_OPERAND (op0, 1)))
 	  && !TREE_OVERFLOW_P (op1))
 	overflow_warning (EXPR_LOC_OR_LOC (expr, input_location), ret, expr);
-      if (code == LSHIFT_EXPR
+      nếu (code == LSHIFT_EXPR
 	  && TREE_CODE (orig_op0) != INTEGER_CST
 	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
 	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
@@ -406,7 +406,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  && tree_int_cst_sgn (op0) < 0)
 	warning_at (loc, OPT_Wshift_negative_value,
 		    "left shift of negative value");
-      if ((code == LSHIFT_EXPR
+      nếu ((code == LSHIFT_EXPR
 	   || code == RSHIFT_EXPR
 	   || code == LROTATE_EXPR
 	   || code == RROTATE_EXPR)
@@ -415,12 +415,12 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  && TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
 	  && c_inhibit_evaluation_warnings == 0)
 	{
-	  if (tree_int_cst_sgn (op1) < 0)
+	  nếu (tree_int_cst_sgn (op1) < 0)
 	    warning_at (loc, OPT_Wshift_count_negative,
 			(code == LSHIFT_EXPR
 			 ? G_("left shift count is negative")
 			 : G_("right shift count is negative")));
-	  else if ((TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
+	  không_thì nếu ((TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
 		    || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
 		    || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
 		   && compare_tree_int (op1,
@@ -431,7 +431,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 			(code == LSHIFT_EXPR
 			 ? G_("left shift count >= width of type")
 			 : G_("right shift count >= width of type")));
-	  else if (TREE_CODE (TREE_TYPE (orig_op0)) == VECTOR_TYPE
+	  không_thì nếu (TREE_CODE (TREE_TYPE (orig_op0)) == VECTOR_TYPE
 		   && compare_tree_int (op1,
 					TYPE_PRECISION (TREE_TYPE (TREE_TYPE (orig_op0))))
 		      >= 0)
@@ -440,7 +440,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 			? G_("left shift count >= width of vector element")
 			: G_("right shift count >= width of vector element"));
 	}
-      if (code == LSHIFT_EXPR
+      nếu (code == LSHIFT_EXPR
 	  /* If either OP0 has been folded to INTEGER_CST...  */
 	  && ((TREE_CODE (orig_op0) != INTEGER_CST
 	       && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
@@ -454,7 +454,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  && c_inhibit_evaluation_warnings == 0)
 	/* ...then maybe we can detect an overflow.  */
 	maybe_warn_shift_overflow (loc, op0, op1);
-      if ((code == TRUNC_DIV_EXPR
+      nếu ((code == TRUNC_DIV_EXPR
 	   || code == CEIL_DIV_EXPR
 	   || code == FLOOR_DIV_EXPR
 	   || code == EXACT_DIV_EXPR
@@ -467,7 +467,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
 	      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE))
 	warn_for_div_by_zero (loc, op1);
-      if (code == MEM_REF
+      nếu (code == MEM_REF
 	  && ret != expr
 	  && TREE_CODE (ret) == MEM_REF)
 	{
@@ -504,24 +504,24 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
 
-      if (for_int_const && TREE_CODE (op0) != INTEGER_CST)
+      nếu (for_int_const && TREE_CODE (op0) != INTEGER_CST)
 	goto out;
 
       /* ??? Cope with user tricks that amount to offsetof.  The middle-end is
 	 not prepared to deal with them if they occur in initializers.  */
-      if (op0 != orig_op0
+      nếu (op0 != orig_op0
 	  && code == ADDR_EXPR
 	  && (op1 = get_base_address (op0)) != NULL_TREE
 	  && INDIRECT_REF_P (op1)
 	  && TREE_CONSTANT (TREE_OPERAND (op1, 0)))
 	ret = fold_offsetof (op0, TREE_TYPE (expr));
-      else if (op0 != orig_op0 || in_init)
+      không_thì nếu (op0 != orig_op0 || in_init)
 	ret = in_init
 	  ? fold_build1_initializer_loc (loc, code, TREE_TYPE (expr), op0)
 	  : fold_build1_loc (loc, code, TREE_TYPE (expr), op0);
-      else
+      không_thì
 	ret = fold (expr);
-      if (code == INDIRECT_REF
+      nếu (code == INDIRECT_REF
 	  && ret != expr
 	  && INDIRECT_REF_P (ret))
 	{
@@ -539,7 +539,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  break;
 
 	default:
-	  if (TREE_OVERFLOW_P (ret) && !TREE_OVERFLOW_P (op0))
+	  nếu (TREE_OVERFLOW_P (ret) && !TREE_OVERFLOW_P (op0))
 	    overflow_warning (EXPR_LOCATION (expr), ret, op0);
 	  break;
 	}
@@ -564,28 +564,28 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
       STRIP_TYPE_NOPS (op1);
       c_enable_warnings (unused_p);
 
-      if (for_int_const
+      nếu (for_int_const
 	  && (TREE_CODE (op0) != INTEGER_CST
 	      /* Require OP1 be an INTEGER_CST only if it's evaluated.  */
 	      || (!unused_p && TREE_CODE (op1) != INTEGER_CST)))
 	goto out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      nếu (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
 	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
 	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
+      không_thì
 	ret = fold (expr);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      nếu (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
 	    && (code == TRUTH_ANDIF_EXPR
 		? op0 == truthvalue_false_node
 		: op0 == truthvalue_true_node)))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      nếu (!(op0_const
 	    && op0_const_self
 	    && (code == TRUTH_ANDIF_EXPR
 		? op0 == truthvalue_false_node
@@ -613,7 +613,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
       STRIP_TYPE_NOPS (op2);
       c_enable_warnings (op0 == truthvalue_true_node);
 
-      if (for_int_const
+      nếu (for_int_const
 	  && (TREE_CODE (op0) != INTEGER_CST
 	      /* Only the evaluated operand must be an INTEGER_CST.  */
 	      || (op0 == truthvalue_true_node
@@ -621,27 +621,27 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 		  : TREE_CODE (op2) != INTEGER_CST)))
 	goto out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+      nếu (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
 	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
+      không_thì
 	ret = fold (expr);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      nếu (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
 	    && op0 == truthvalue_false_node))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      nếu (!(op0_const
 	    && op0_const_self
 	    && op0 == truthvalue_false_node))
 	*maybe_const_itself &= op1_const_self;
-      if (!(flag_isoc99
+      nếu (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
 	    && op0 == truthvalue_true_node))
 	*maybe_const_operands &= op2_const;
-      if (!(op0_const
+      nếu (!(op0_const
 	    && op0_const_self
 	    && op0 == truthvalue_true_node))
 	*maybe_const_itself &= op2_const_self;
@@ -661,9 +661,9 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 				   maybe_const_itself, for_int_const, false);
       STRIP_TYPE_NOPS (op2);
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+      nếu (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
 	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
+      không_thì
 	ret = fold (expr);
       goto out;
 
@@ -679,7 +679,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
     case SAVE_EXPR:
       /* Make sure to fold the contents of a SAVE_EXPR exactly once.  */
       op0 = TREE_OPERAND (expr, 0);
-      if (!SAVE_EXPR_FOLDED_P (expr))
+      nếu (!SAVE_EXPR_FOLDED_P (expr))
 	{
 	  op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				       maybe_const_itself, for_int_const,
@@ -688,7 +688,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  SAVE_EXPR_FOLDED_P (expr) = true;
 	}
       /* Return the SAVE_EXPR operand if it is invariant.  */
-      if (tree_invariant_p (op0))
+      nếu (tree_invariant_p (op0))
 	ret = op0;
       goto out;
 
@@ -703,19 +703,19 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      have been done by this point, so remove them again.  */
   nowarning |= warning_suppressed_p (ret, OPT_Woverflow);
   STRIP_TYPE_NOPS (ret);
-  if (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
+  nếu (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
     {
-      if (!CAN_HAVE_LOCATION_P (ret))
+      nếu (!CAN_HAVE_LOCATION_P (ret))
 	ret = build1 (NOP_EXPR, TREE_TYPE (ret), ret);
       suppress_warning (ret, OPT_Woverflow);
     }
-  if (ret != expr)
+  nếu (ret != expr)
     {
       protected_set_expr_location (ret, loc);
-      if (IS_EXPR_CODE_CLASS (kind))
+      nếu (IS_EXPR_CODE_CLASS (kind))
 	set_source_range (ret, old_range.m_start, old_range.m_finish);
     }
-  return ret;
+  trả_về ret;
 }
 
 /* Fold X for consideration by one of the warning functions when checking
@@ -725,5 +725,5 @@ tree
 fold_for_warn (tree x)
 {
   /* The C front-end has already folded X appropriately.  */
-  return x;
+  trả_về x;
 }
