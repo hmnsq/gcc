@@ -17,27 +17,27 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "function.h"
-#include "bitmap.h"
-#include "c-tree.h"
-#include "intl.h"
-#include "gimplify.h"
+#ಅನ್ತರ್ಭಾವ "config.h"
+#ಅನ್ತರ್ಭಾವ "system.h"
+#ಅನ್ತರ್ಭಾವ "coretypes.h"
+#ಅನ್ತರ್ಭಾವ "target.h"
+#ಅನ್ತರ್ಭಾವ "function.h"
+#ಅನ್ತರ್ಭಾವ "bitmap.h"
+#ಅನ್ತರ್ಭಾವ "c-tree.h"
+#ಅನ್ತರ್ಭಾವ "intl.h"
+#ಅನ್ತರ್ಭಾವ "gimplify.h"
 
-static tree c_fully_fold_internal (tree expr, bool, bool *, bool *, bool,
-				   bool);
+ಸ್ಥಿರ ವೃಕ್ಷ c_fully_fold_internal (ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ, ತಾರ್ಕಿಕ, ತಾರ್ಕಿಕ *, ತಾರ್ಕಿಕ *, ತಾರ್ಕಿಕ,
+				   ತಾರ್ಕಿಕ);
 
 /* If DISABLE is true, stop issuing warnings.  This is used when
    parsing code that we know will not be executed.  This function may
    be called multiple times, and works as a stack.  */
 
-static void
-c_disable_warnings (bool disable)
+ಸ್ಥಿರ ಶೂನ್ಯ
+c_disable_warnings (ತಾರ್ಕಿಕ disable)
 {
-  if (disable)
+  ಯದಿ (disable)
     {
       ++c_inhibit_evaluation_warnings;
     }
@@ -45,10 +45,10 @@ c_disable_warnings (bool disable)
 
 /* If ENABLE is true, re-enable issuing warnings.  */
 
-static void
-c_enable_warnings (bool enable)
+ಸ್ಥಿರ ಶೂನ್ಯ
+c_enable_warnings (ತಾರ್ಕಿಕ enable)
 {
-  if (enable)
+  ಯದಿ (enable)
     {
       --c_inhibit_evaluation_warnings;
     }
@@ -57,36 +57,36 @@ c_enable_warnings (bool enable)
 /* Try to fold ARRAY_REF ary[index] if possible and not handled by
    normal fold, return NULL_TREE otherwise.  */
 
-static tree
-c_fold_array_ref (tree type, tree ary, tree index)
+ಸ್ಥಿರ ವೃಕ್ಷ
+c_fold_array_ref (ವೃಕ್ಷ type, ವೃಕ್ಷ ary, ವೃಕ್ಷ index)
 {
-  if (TREE_CODE (ary) != STRING_CST
-      || TREE_CODE (index) != INTEGER_CST
-      || TREE_OVERFLOW (index)
-      || TREE_CODE (TREE_TYPE (ary)) != ARRAY_TYPE
-      || !tree_fits_uhwi_p (index))
-    return NULL_TREE;
+  ಯದಿ (ವೃಕ್ಷ_CODE (ary) != STRING_CST
+      || ವೃಕ್ಷ_CODE (index) != INTEGER_CST
+      || ವೃಕ್ಷ_OVERFLOW (index)
+      || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (ary)) != ARRAY_TYPE
+      || !ವೃಕ್ಷ_fits_uhwi_p (index))
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
-  tree elem_type = TREE_TYPE (TREE_TYPE (ary));
+  ವೃಕ್ಷ elem_type = ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (ary));
   unsigned elem_nchars = (TYPE_PRECISION (elem_type)
-			  / TYPE_PRECISION (char_type_node));
-  unsigned len = (unsigned) TREE_STRING_LENGTH (ary) / elem_nchars;
-  tree nelts_minus_one = array_type_nelts_minus_one (TREE_TYPE (ary));
-  bool dummy1 = true, dummy2 = true;
-  nelts_minus_one = c_fully_fold_internal (nelts_minus_one, true, &dummy1,
-					   &dummy2, false, false);
-  unsigned HOST_WIDE_INT i = tree_to_uhwi (index);
-  if (!tree_int_cst_le (index, nelts_minus_one)
+			  / TYPE_PRECISION (char_type_ಗಂಟು));
+  unsigned len = (unsigned) ವೃಕ್ಷ_STRING_LENGTH (ary) / elem_nchars;
+  ವೃಕ್ಷ nelts_minus_one = array_type_nelts_minus_one (ವೃಕ್ಷ_TYPE (ary));
+  ತಾರ್ಕಿಕ dummy1 = ಸತ್ಯ, dummy2 = ಸತ್ಯ;
+  nelts_minus_one = c_fully_fold_internal (nelts_minus_one, ಸತ್ಯ, &dummy1,
+					   &dummy2, ಅಸತ್ಯ, ಅಸತ್ಯ);
+  unsigned HOST_WIDE_INT i = ವೃಕ್ಷ_to_uhwi (index);
+  ಯದಿ (!ವೃಕ್ಷ_int_cst_le (index, nelts_minus_one)
       || i >= len
       || i + elem_nchars > len)
-    return NULL_TREE;
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
-  if (elem_nchars == 1)
-    return build_int_cst (type, TREE_STRING_POINTER (ary)[i]);
+  ಯದಿ (elem_nchars == 1)
+    ಪ್ರತ್ಯಾಗಮ build_int_cst (type, ವೃಕ್ಷ_STRING_POINTER (ary)[i]);
 
-  const unsigned char *ptr
-    = ((const unsigned char *)TREE_STRING_POINTER (ary) + i * elem_nchars);
-  return native_interpret_expr (type, ptr, elem_nchars);
+  ಧ್ರುವ unsigned ವರ್ಣ *ptr
+    = ((ಧ್ರುವ unsigned ವರ್ಣ *)ವೃಕ್ಷ_STRING_POINTER (ary) + i * elem_nchars);
+  ಪ್ರತ್ಯಾಗಮ native_interpret_ಅಭಿವ್ಯಕ್ತಿ (type, ptr, elem_nchars);
 }
 
 /* Fully fold EXPR, an expression that was not folded (beyond integer
@@ -105,28 +105,28 @@ c_fold_array_ref (tree type, tree ary, tree index)
    C_MAYBE_CONST_EXPR.  LVAL is true if it should be treated as an
    lvalue.  */
 
-tree
-c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
+ವೃಕ್ಷ
+c_fully_fold (ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ, ತಾರ್ಕಿಕ in_init, ತಾರ್ಕಿಕ *maybe_const, ತಾರ್ಕಿಕ lval)
 {
-  tree ret;
-  tree eptype = NULL_TREE;
-  bool dummy = true;
-  bool maybe_const_itself = true;
-  location_t loc = EXPR_LOCATION (expr);
+  ವೃಕ್ಷ ret;
+  ವೃಕ್ಷ eptype = NULL_ವೃಕ್ಷ;
+  ತಾರ್ಕಿಕ dummy = ಸತ್ಯ;
+  ತಾರ್ಕಿಕ maybe_const_itself = ಸತ್ಯ;
+  location_t loc = ಅಭಿವ್ಯಕ್ತಿ_LOCATION (ಅಭಿವ್ಯಕ್ತಿ);
 
-  if (!maybe_const)
+  ಯದಿ (!maybe_const)
     maybe_const = &dummy;
-  if (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
+  ಯದಿ (ವೃಕ್ಷ_CODE (ಅಭಿವ್ಯಕ್ತಿ) == EXCESS_PRECISION_ಅಭಿವ್ಯಕ್ತಿ)
     {
-      eptype = TREE_TYPE (expr);
-      expr = TREE_OPERAND (expr, 0);
+      eptype = ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ);
+      ಅಭಿವ್ಯಕ್ತಿ = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 0);
     }
-  ret = c_fully_fold_internal (expr, in_init, maybe_const,
-			       &maybe_const_itself, false, lval);
-  if (eptype)
+  ret = c_fully_fold_internal (ಅಭಿವ್ಯಕ್ತಿ, in_init, maybe_const,
+			       &maybe_const_itself, ಅಸತ್ಯ, lval);
+  ಯದಿ (eptype)
     ret = fold_convert_loc (loc, eptype, ret);
   *maybe_const &= maybe_const_itself;
-  return ret;
+  ಪ್ರತ್ಯಾಗಮ ret;
 }
 
 /* Internal helper for c_fully_fold.  EXPR and IN_INIT are as for
@@ -141,81 +141,81 @@ c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
    LVAL indicates folding of lvalue, where we can't replace it with
    an rvalue.  */
 
-static tree
-c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
-		       bool *maybe_const_itself, bool for_int_const, bool lval)
+ಸ್ಥಿರ ವೃಕ್ಷ
+c_fully_fold_internal (ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ, ತಾರ್ಕಿಕ in_init, ತಾರ್ಕಿಕ *maybe_const_operands,
+		       ತಾರ್ಕಿಕ *maybe_const_itself, ತಾರ್ಕಿಕ for_int_const, ತಾರ್ಕಿಕ lval)
 {
-  tree ret = expr;
-  enum tree_code code = TREE_CODE (expr);
-  enum tree_code_class kind = TREE_CODE_CLASS (code);
-  location_t loc = EXPR_LOCATION (expr);
-  tree op0, op1, op2, op3;
-  tree orig_op0, orig_op1, orig_op2;
-  bool op0_const = true, op1_const = true, op2_const = true;
-  bool op0_const_self = true, op1_const_self = true, op2_const_self = true;
-  bool nowarning = warning_suppressed_p (expr, OPT_Woverflow);
-  bool unused_p;
-  bool op0_lval = false;
+  ವೃಕ್ಷ ret = ಅಭಿವ್ಯಕ್ತಿ;
+  ಗಣನಾ ವೃಕ್ಷ_code code = ವೃಕ್ಷ_CODE (ಅಭಿವ್ಯಕ್ತಿ);
+  ಗಣನಾ ವೃಕ್ಷ_code_class kind = ವೃಕ್ಷ_CODE_CLASS (code);
+  location_t loc = ಅಭಿವ್ಯಕ್ತಿ_LOCATION (ಅಭಿವ್ಯಕ್ತಿ);
+  ವೃಕ್ಷ op0, op1, op2, op3;
+  ವೃಕ್ಷ orig_op0, orig_op1, orig_op2;
+  ತಾರ್ಕಿಕ op0_const = ಸತ್ಯ, op1_const = ಸತ್ಯ, op2_const = ಸತ್ಯ;
+  ತಾರ್ಕಿಕ op0_const_self = ಸತ್ಯ, op1_const_self = ಸತ್ಯ, op2_const_self = ಸತ್ಯ;
+  ತಾರ್ಕಿಕ nowarning = warning_suppressed_p (ಅಭಿವ್ಯಕ್ತಿ, OPT_Woverflow);
+  ತಾರ್ಕಿಕ unused_p;
+  ತಾರ್ಕಿಕ op0_lval = ಅಸತ್ಯ;
   source_range old_range;
 
   /* Constants, declarations, statements, errors, and anything else not
      counted as an expression cannot usefully be folded further at this
      point.  */
-  if (!IS_EXPR_CODE_CLASS (kind) || kind == tcc_statement)
+  ಯದಿ (!IS_ಅಭಿವ್ಯಕ್ತಿ_CODE_CLASS (kind) || kind == tcc_statement)
     {
       /* Except for variables which we can optimize to its initializer.  */
-      if (VAR_P (expr) && !lval && (optimize || in_init))
+      ಯದಿ (VAR_P (ಅಭಿವ್ಯಕ್ತಿ) && !lval && (optimize || in_init))
 	{
-	  if (in_init)
-	    ret = decl_constant_value_1 (expr, true);
-	  else
+	  ಯದಿ (in_init)
+	    ret = decl_constant_ಮೌಲ್ಯ_1 (ಅಭಿವ್ಯಕ್ತಿ, ಸತ್ಯ);
+	  ಅನ್ಯಥಾ
 	    {
-	      ret = decl_constant_value (expr);
-	      if (ret != expr
-		  && (TYPE_MODE (TREE_TYPE (ret)) == BLKmode
-		      || TREE_CODE (TREE_TYPE (ret)) == ARRAY_TYPE))
-		return expr;
+	      ret = decl_constant_ಮೌಲ್ಯ (ಅಭಿವ್ಯಕ್ತಿ);
+	      ಯದಿ (ret != ಅಭಿವ್ಯಕ್ತಿ
+		  && (TYPE_MODE (ವೃಕ್ಷ_TYPE (ret)) == BLKmode
+		      || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (ret)) == ARRAY_TYPE))
+		ಪ್ರತ್ಯಾಗಮ ಅಭಿವ್ಯಕ್ತಿ;
 	    }
 	  /* Avoid unwanted tree sharing between the initializer and current
 	     function's body where the tree can be modified e.g. by the
 	     gimplifier.  */
-	  if (ret != expr && TREE_STATIC (expr))
-	    ret = unshare_expr (ret);
-	  return ret;
+	  ಯದಿ (ret != ಅಭಿವ್ಯಕ್ತಿ && ವೃಕ್ಷ_STATIC (ಅಭಿವ್ಯಕ್ತಿ))
+	    ret = unshare_ಅಭಿವ್ಯಕ್ತಿ (ret);
+	  ಪ್ರತ್ಯಾಗಮ ret;
 	}
-      return expr;
+      ಪ್ರತ್ಯಾಗಮ ಅಭಿವ್ಯಕ್ತಿ;
     }
 
-  if (IS_EXPR_CODE_CLASS (kind))
-    old_range = EXPR_LOCATION_RANGE (expr);
+  ಯದಿ (IS_ಅಭಿವ್ಯಕ್ತಿ_CODE_CLASS (kind))
+    old_range = ಅಭಿವ್ಯಕ್ತಿ_LOCATION_RANGE (ಅಭಿವ್ಯಕ್ತಿ);
 
   /* Operands of variable-length expressions (function calls) have
      already been folded, as have __builtin_* function calls, and such
      expressions cannot occur in constant expressions.  */
-  if (kind == tcc_vl_exp)
+  ಯದಿ (kind == tcc_vl_exp)
     {
-      *maybe_const_operands = false;
-      ret = fold (expr);
-      goto out;
+      *maybe_const_operands = ಅಸತ್ಯ;
+      ret = fold (ಅಭಿವ್ಯಕ್ತಿ);
+      ಗಚ್ಛ out;
     }
 
-  if (code == C_MAYBE_CONST_EXPR)
+  ಯದಿ (code == C_MAYBE_CONST_ಅಭಿವ್ಯಕ್ತಿ)
     {
-      tree pre = C_MAYBE_CONST_EXPR_PRE (expr);
-      tree inner = C_MAYBE_CONST_EXPR_EXPR (expr);
-      if (C_MAYBE_CONST_EXPR_NON_CONST (expr))
-	*maybe_const_operands = false;
-      if (C_MAYBE_CONST_EXPR_INT_OPERANDS (expr))
+      ವೃಕ್ಷ pre = C_MAYBE_CONST_ಅಭಿವ್ಯಕ್ತಿ_PRE (ಅಭಿವ್ಯಕ್ತಿ);
+      ವೃಕ್ಷ inner = C_MAYBE_CONST_ಅಭಿವ್ಯಕ್ತಿ_ಅಭಿವ್ಯಕ್ತಿ (ಅಭಿವ್ಯಕ್ತಿ);
+      ಯದಿ (C_MAYBE_CONST_ಅಭಿವ್ಯಕ್ತಿ_NON_CONST (ಅಭಿವ್ಯಕ್ತಿ))
+	*maybe_const_operands = ಅಸತ್ಯ;
+      ಯದಿ (C_MAYBE_CONST_ಅಭಿವ್ಯಕ್ತಿ_INT_OPERANDS (ಅಭಿವ್ಯಕ್ತಿ))
 	{
-	  *maybe_const_itself = false;
+	  *maybe_const_itself = ಅಸತ್ಯ;
 	  inner = c_fully_fold_internal (inner, in_init, maybe_const_operands,
-					 maybe_const_itself, true, lval);
+					 maybe_const_itself, ಸತ್ಯ, lval);
 	}
-      if (pre && !in_init)
-	ret = build2 (COMPOUND_EXPR, TREE_TYPE (expr), pre, inner);
-      else
+      ಯದಿ (pre && !in_init)
+	ret = build2 (COMPOUND_ಅಭಿವ್ಯಕ್ತಿ, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), pre, inner);
+      ಅನ್ಯಥಾ
 	ret = inner;
-      goto out;
+      ಗಚ್ಛ out;
     }
 
   /* Assignment, increment, decrement, function call and comma
@@ -224,450 +224,450 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      were handled above, though VA_ARG_EXPR is treated like a function
      call here, and statement expressions are handled through
      C_MAYBE_CONST_EXPR to avoid folding inside them.)  */
-  switch (code)
+  ವಿಕಲ್ಪ (code)
     {
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-    case COMPOUND_EXPR:
-      *maybe_const_operands = false;
-      break;
+    ಪಕ್ಷ MODIFY_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ PREDECREMENT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ PREINCREMENT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ POSTDECREMENT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ POSTINCREMENT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ COMPOUND_ಅಭಿವ್ಯಕ್ತಿ:
+      *maybe_const_operands = ಅಸತ್ಯ;
+      ಭಙ್ಗ;
 
-    case VA_ARG_EXPR:
-    case TARGET_EXPR:
-    case BIND_EXPR:
-    case OBJ_TYPE_REF:
-      *maybe_const_operands = false;
-      ret = fold (expr);
-      goto out;
+    ಪಕ್ಷ VA_ARG_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ TARGET_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ BIND_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ OBJ_TYPE_REF:
+      *maybe_const_operands = ಅಸತ್ಯ;
+      ret = fold (ಅಭಿವ್ಯಕ್ತಿ);
+      ಗಚ್ಛ out;
 
-    default:
-      break;
+    ಸ್ವಭಾವ:
+      ಭಙ್ಗ;
     }
 
   /* Fold individual tree codes as appropriate.  */
-  switch (code)
+  ವಿಕಲ್ಪ (code)
     {
-    case COMPOUND_LITERAL_EXPR:
+    ಪಕ್ಷ COMPOUND_LITERAL_ಅಭಿವ್ಯಕ್ತಿ:
       /* Any non-constancy will have been marked in a containing
 	 C_MAYBE_CONST_EXPR; there is no more folding to do here.  */
-      goto out;
+      ಗಚ್ಛ out;
 
-    case COMPONENT_REF:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      op1 = TREE_OPERAND (expr, 1);
-      op2 = TREE_OPERAND (expr, 2);
+    ಪಕ್ಷ COMPONENT_REF:
+      orig_op0 = op0 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 0);
+      op1 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 1);
+      op2 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 2);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
-      if (op0 != orig_op0)
-	ret = build3 (COMPONENT_REF, TREE_TYPE (expr), op0, op1, op2);
-      if (ret != expr)
+      ಯದಿ (op0 != orig_op0)
+	ret = build3 (COMPONENT_REF, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), op0, op1, op2);
+      ಯದಿ (ret != ಅಭಿವ್ಯಕ್ತಿ)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  ವೃಕ್ಷ_READONLY (ret) = ವೃಕ್ಷ_READONLY (ಅಭಿವ್ಯಕ್ತಿ);
+	  ವೃಕ್ಷ_THIS_VOLATILE (ret) = ವೃಕ್ಷ_THIS_VOLATILE (ಅಭಿವ್ಯಕ್ತಿ);
 	}
-      if (!lval)
+      ಯದಿ (!lval)
 	ret = fold (ret);
-      goto out;
+      ಗಚ್ಛ out;
 
-    case ARRAY_REF:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      op2 = TREE_OPERAND (expr, 2);
-      op3 = TREE_OPERAND (expr, 3);
+    ಪಕ್ಷ ARRAY_REF:
+      orig_op0 = op0 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 0);
+      orig_op1 = op1 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 1);
+      op2 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 2);
+      op3 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 3);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
       op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, ಅಸತ್ಯ);
       STRIP_TYPE_NOPS (op1);
       /* Fold "foo"[2] in initializers.  */
-      if (!lval && in_init)
+      ಯದಿ (!lval && in_init)
 	{
-	  ret = c_fold_array_ref (TREE_TYPE (expr), op0, op1);
-	  if (ret)
-	    goto out;
-	  ret = expr;
+	  ret = c_fold_array_ref (ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), op0, op1);
+	  ಯದಿ (ret)
+	    ಗಚ್ಛ out;
+	  ret = ಅಭಿವ್ಯಕ್ತಿ;
 	}
-      if (op0 != orig_op0 || op1 != orig_op1)
-	ret = build4 (ARRAY_REF, TREE_TYPE (expr), op0, op1, op2, op3);
-      if (ret != expr)
+      ಯದಿ (op0 != orig_op0 || op1 != orig_op1)
+	ret = build4 (ARRAY_REF, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), op0, op1, op2, op3);
+      ಯದಿ (ret != ಅಭಿವ್ಯಕ್ತಿ)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  ವೃಕ್ಷ_READONLY (ret) = ವೃಕ್ಷ_READONLY (ಅಭಿವ್ಯಕ್ತಿ);
+	  ವೃಕ್ಷ_SIDE_EFFECTS (ret) = ವೃಕ್ಷ_SIDE_EFFECTS (ಅಭಿವ್ಯಕ್ತಿ);
+	  ವೃಕ್ಷ_THIS_VOLATILE (ret) = ವೃಕ್ಷ_THIS_VOLATILE (ಅಭಿವ್ಯಕ್ತಿ);
 	}
-      if (!lval)
+      ಯದಿ (!lval)
 	ret = fold (ret);
-      goto out;
+      ಗಚ್ಛ out;
 
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-      op0_lval = true;
+    ಪಕ್ಷ MODIFY_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ PREDECREMENT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ PREINCREMENT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ POSTDECREMENT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ POSTINCREMENT_ಅಭಿವ್ಯಕ್ತಿ:
+      op0_lval = ಸತ್ಯ;
       /* FALLTHRU */
-    case COMPOUND_EXPR:
-    case PLUS_EXPR:
-    case MINUS_EXPR:
-    case MULT_EXPR:
-    case POINTER_PLUS_EXPR:
-    case POINTER_DIFF_EXPR:
-    case TRUNC_DIV_EXPR:
-    case CEIL_DIV_EXPR:
-    case FLOOR_DIV_EXPR:
-    case TRUNC_MOD_EXPR:
-    case RDIV_EXPR:
-    case EXACT_DIV_EXPR:
-    case LSHIFT_EXPR:
-    case RSHIFT_EXPR:
-    case LROTATE_EXPR:
-    case RROTATE_EXPR:
-    case BIT_IOR_EXPR:
-    case BIT_XOR_EXPR:
-    case BIT_AND_EXPR:
-    case LT_EXPR:
-    case LE_EXPR:
-    case GT_EXPR:
-    case GE_EXPR:
-    case EQ_EXPR:
-    case NE_EXPR:
-    case COMPLEX_EXPR:
-    case TRUTH_AND_EXPR:
-    case TRUTH_OR_EXPR:
-    case TRUTH_XOR_EXPR:
-    case UNORDERED_EXPR:
-    case ORDERED_EXPR:
-    case UNLT_EXPR:
-    case UNLE_EXPR:
-    case UNGT_EXPR:
-    case UNGE_EXPR:
-    case UNEQ_EXPR:
-    case MEM_REF:
+    ಪಕ್ಷ COMPOUND_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ PLUS_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ MINUS_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ MULT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ POINTER_PLUS_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ POINTER_DIFF_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ TRUNC_DIV_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ CEIL_DIV_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ FLOOR_DIV_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ TRUNC_MOD_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ RDIV_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ EXACT_DIV_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ LSHIFT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ RSHIFT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ LROTATE_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ RROTATE_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ BIT_IOR_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ BIT_XOR_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ BIT_AND_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ LT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ LE_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ GT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ GE_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ EQ_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ NE_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ COMPLEX_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ TRUTH_AND_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ TRUTH_OR_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ TRUTH_XOR_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ UNORDERED_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ ORDERED_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ UNLT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ UNLE_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ UNGT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ UNGE_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ UNEQ_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ MEM_REF:
       /* Binary operations evaluating both arguments (increment and
 	 decrement are binary internally in GCC).  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
+      orig_op0 = op0 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 0);
+      orig_op1 = op1 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 1);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
       /* The RHS of a MODIFY_EXPR was fully folded when building that
 	 expression for the sake of conversion warnings.  */
-      if (code != MODIFY_EXPR)
+      ಯದಿ (code != MODIFY_ಅಭಿವ್ಯಕ್ತಿ)
 	op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				     maybe_const_itself, for_int_const, false);
+				     maybe_const_itself, for_int_const, ಅಸತ್ಯ);
       STRIP_TYPE_NOPS (op1);
 
-      if (for_int_const && (TREE_CODE (op0) != INTEGER_CST
-			    || TREE_CODE (op1) != INTEGER_CST))
-	goto out;
+      ಯದಿ (for_int_const && (ವೃಕ್ಷ_CODE (op0) != INTEGER_CST
+			    || ವೃಕ್ಷ_CODE (op1) != INTEGER_CST))
+	ಗಚ್ಛ out;
 
-      if (TREE_CODE_CLASS (code) == tcc_comparison
-	  && TREE_CODE (TREE_TYPE (op0)) == NULLPTR_TYPE
-	  && TREE_CODE (TREE_TYPE (op1)) == NULLPTR_TYPE)
+      ಯದಿ (ವೃಕ್ಷ_CODE_CLASS (code) == tcc_comparison
+	  && ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (op0)) == NULLPTR_TYPE
+	  && ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (op1)) == NULLPTR_TYPE)
 	{
-	  switch (code)
+	  ವಿಕಲ್ಪ (code)
 	    {
-	    case EQ_EXPR:
-	      ret = constant_boolean_node (true, TREE_TYPE (expr));
-	      break;
-	    case NE_EXPR:
-	      ret = constant_boolean_node (false, TREE_TYPE (expr));
-	      break;
-	    default:
+	    ಪಕ್ಷ EQ_ಅಭಿವ್ಯಕ್ತಿ:
+	      ret = constant_boolean_ಗಂಟು (ಸತ್ಯ, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ));
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ NE_ಅಭಿವ್ಯಕ್ತಿ:
+	      ret = constant_boolean_ಗಂಟು (ಅಸತ್ಯ, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ));
+	      ಭಙ್ಗ;
+	    ಸ್ವಭಾವ:
 	      gcc_unreachable ();
 	    }
-	  ret = omit_two_operands_loc (loc, TREE_TYPE (expr), ret,
+	  ret = omit_two_operands_loc (loc, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), ret,
 				       op0, op1);
 	}
-      else if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      ಅನ್ಯಥಾ ಯದಿ (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
-	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
-	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
-	ret = fold (expr);
-      if (TREE_OVERFLOW_P (ret)
-	  && !TREE_OVERFLOW_P (op0)
-	  && !(BINARY_CLASS_P (op0) && TREE_OVERFLOW_P (TREE_OPERAND (op0, 1)))
-	  && !TREE_OVERFLOW_P (op1))
-	overflow_warning (EXPR_LOC_OR_LOC (expr, input_location), ret, expr);
-      if (code == LSHIFT_EXPR
-	  && TREE_CODE (orig_op0) != INTEGER_CST
-	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
-	  && TREE_CODE (op0) == INTEGER_CST
+	  ? fold_build2_initializer_loc (loc, code, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), op0, op1)
+	  : fold_build2_loc (loc, code, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), op0, op1);
+      ಅನ್ಯಥಾ
+	ret = fold (ಅಭಿವ್ಯಕ್ತಿ);
+      ಯದಿ (ವೃಕ್ಷ_OVERFLOW_P (ret)
+	  && !ವೃಕ್ಷ_OVERFLOW_P (op0)
+	  && !(ದ್ವಿಮಾನ_CLASS_P (op0) && ವೃಕ್ಷ_OVERFLOW_P (ವೃಕ್ಷ_OPERAND (op0, 1)))
+	  && !ವೃಕ್ಷ_OVERFLOW_P (op1))
+	overflow_warning (ಅಭಿವ್ಯಕ್ತಿ_LOC_OR_LOC (ಅಭಿವ್ಯಕ್ತಿ, ಒಳಹರಿವು_location), ret, ಅಭಿವ್ಯಕ್ತಿ);
+      ಯದಿ (code == LSHIFT_ಅಭಿವ್ಯಕ್ತಿ
+	  && ವೃಕ್ಷ_CODE (orig_op0) != INTEGER_CST
+	  && (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op0)) == INTEGER_TYPE
+	      || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op0)) == BITINT_TYPE)
+	  && ವೃಕ್ಷ_CODE (op0) == INTEGER_CST
 	  && c_inhibit_evaluation_warnings == 0
-	  && !TYPE_OVERFLOW_WRAPS (TREE_TYPE (orig_op0))
-	  && tree_int_cst_sgn (op0) < 0)
-	warning_at (loc, OPT_Wshift_negative_value,
+	  && !TYPE_OVERFLOW_WRAPS (ವೃಕ್ಷ_TYPE (orig_op0))
+	  && ವೃಕ್ಷ_int_cst_sgn (op0) < 0)
+	warning_at (loc, OPT_Wshift_negative_ಮೌಲ್ಯ,
 		    "left shift of negative value");
-      if ((code == LSHIFT_EXPR
-	   || code == RSHIFT_EXPR
-	   || code == LROTATE_EXPR
-	   || code == RROTATE_EXPR)
-	  && TREE_CODE (orig_op1) != INTEGER_CST
-	  && TREE_CODE (op1) == INTEGER_CST
-	  && TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
+      ಯದಿ ((code == LSHIFT_ಅಭಿವ್ಯಕ್ತಿ
+	   || code == RSHIFT_ಅಭಿವ್ಯಕ್ತಿ
+	   || code == LROTATE_ಅಭಿವ್ಯಕ್ತಿ
+	   || code == RROTATE_ಅಭಿವ್ಯಕ್ತಿ)
+	  && ವೃಕ್ಷ_CODE (orig_op1) != INTEGER_CST
+	  && ವೃಕ್ಷ_CODE (op1) == INTEGER_CST
+	  && ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op1)) == INTEGER_TYPE
 	  && c_inhibit_evaluation_warnings == 0)
 	{
-	  if (tree_int_cst_sgn (op1) < 0)
-	    warning_at (loc, OPT_Wshift_count_negative,
-			(code == LSHIFT_EXPR
+	  ಯದಿ (ವೃಕ್ಷ_int_cst_sgn (op1) < 0)
+	    warning_at (loc, OPT_Wshift_ಎಣಿಕೆ_negative,
+			(code == LSHIFT_ಅಭಿವ್ಯಕ್ತಿ
 			 ? G_("left shift count is negative")
 			 : G_("right shift count is negative")));
-	  else if ((TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-		    || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
-		    || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
-		   && compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (orig_op0)))
+	  ಅನ್ಯಥಾ ಯದಿ ((ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op0)) == INTEGER_TYPE
+		    || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op0)) == BITINT_TYPE
+		    || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op0)) == FIXED_POINT_TYPE)
+		   && compare_ವೃಕ್ಷ_int (op1,
+					TYPE_PRECISION (ವೃಕ್ಷ_TYPE (orig_op0)))
 		      >= 0
-		   && !warning_suppressed_p (expr, OPT_Wshift_count_overflow))
-	    warning_at (loc, OPT_Wshift_count_overflow,
-			(code == LSHIFT_EXPR
+		   && !warning_suppressed_p (ಅಭಿವ್ಯಕ್ತಿ, OPT_Wshift_ಎಣಿಕೆ_overflow))
+	    warning_at (loc, OPT_Wshift_ಎಣಿಕೆ_overflow,
+			(code == LSHIFT_ಅಭಿವ್ಯಕ್ತಿ
 			 ? G_("left shift count >= width of type")
 			 : G_("right shift count >= width of type")));
-	  else if (TREE_CODE (TREE_TYPE (orig_op0)) == VECTOR_TYPE
-		   && compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (TREE_TYPE (orig_op0))))
+	  ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op0)) == VECTOR_TYPE
+		   && compare_ವೃಕ್ಷ_int (op1,
+					TYPE_PRECISION (ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (orig_op0))))
 		      >= 0)
-	    warning_at (loc, OPT_Wshift_count_overflow,
-			code == LSHIFT_EXPR
+	    warning_at (loc, OPT_Wshift_ಎಣಿಕೆ_overflow,
+			code == LSHIFT_ಅಭಿವ್ಯಕ್ತಿ
 			? G_("left shift count >= width of vector element")
 			: G_("right shift count >= width of vector element"));
 	}
-      if (code == LSHIFT_EXPR
+      ಯದಿ (code == LSHIFT_ಅಭಿವ್ಯಕ್ತಿ
 	  /* If either OP0 has been folded to INTEGER_CST...  */
-	  && ((TREE_CODE (orig_op0) != INTEGER_CST
-	       && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-		   || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
-	       && TREE_CODE (op0) == INTEGER_CST)
+	  && ((ವೃಕ್ಷ_CODE (orig_op0) != INTEGER_CST
+	       && (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op0)) == INTEGER_TYPE
+		   || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op0)) == BITINT_TYPE)
+	       && ವೃಕ್ಷ_CODE (op0) == INTEGER_CST)
 	      /* ...or if OP1 has been folded to INTEGER_CST...  */
-	      || (TREE_CODE (orig_op1) != INTEGER_CST
-		  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
-		      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE)
-		  && TREE_CODE (op1) == INTEGER_CST))
+	      || (ವೃಕ್ಷ_CODE (orig_op1) != INTEGER_CST
+		  && (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op1)) == INTEGER_TYPE
+		      || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op1)) == BITINT_TYPE)
+		  && ವೃಕ್ಷ_CODE (op1) == INTEGER_CST))
 	  && c_inhibit_evaluation_warnings == 0)
 	/* ...then maybe we can detect an overflow.  */
 	maybe_warn_shift_overflow (loc, op0, op1);
-      if ((code == TRUNC_DIV_EXPR
-	   || code == CEIL_DIV_EXPR
-	   || code == FLOOR_DIV_EXPR
-	   || code == EXACT_DIV_EXPR
-	   || code == TRUNC_MOD_EXPR)
-	  && TREE_CODE (orig_op1) != INTEGER_CST
-	  && TREE_CODE (op1) == INTEGER_CST
-	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
-	  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE))
+      ಯದಿ ((code == TRUNC_DIV_ಅಭಿವ್ಯಕ್ತಿ
+	   || code == CEIL_DIV_ಅಭಿವ್ಯಕ್ತಿ
+	   || code == FLOOR_DIV_ಅಭಿವ್ಯಕ್ತಿ
+	   || code == EXACT_DIV_ಅಭಿವ್ಯಕ್ತಿ
+	   || code == TRUNC_MOD_ಅಭಿವ್ಯಕ್ತಿ)
+	  && ವೃಕ್ಷ_CODE (orig_op1) != INTEGER_CST
+	  && ವೃಕ್ಷ_CODE (op1) == INTEGER_CST
+	  && (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op0)) == INTEGER_TYPE
+	      || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op0)) == BITINT_TYPE
+	      || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op0)) == FIXED_POINT_TYPE)
+	  && (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op1)) == INTEGER_TYPE
+	      || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (orig_op1)) == BITINT_TYPE))
 	warn_for_div_by_zero (loc, op1);
-      if (code == MEM_REF
-	  && ret != expr
-	  && TREE_CODE (ret) == MEM_REF)
+      ಯದಿ (code == MEM_REF
+	  && ret != ಅಭಿವ್ಯಕ್ತಿ
+	  && ವೃಕ್ಷ_CODE (ret) == MEM_REF)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  ವೃಕ್ಷ_READONLY (ret) = ವೃಕ್ಷ_READONLY (ಅಭಿವ್ಯಕ್ತಿ);
+	  ವೃಕ್ಷ_SIDE_EFFECTS (ret) = ವೃಕ್ಷ_SIDE_EFFECTS (ಅಭಿವ್ಯಕ್ತಿ);
+	  ವೃಕ್ಷ_THIS_VOLATILE (ret) = ವೃಕ್ಷ_THIS_VOLATILE (ಅಭಿವ್ಯಕ್ತಿ);
 	}
-      goto out;
+      ಗಚ್ಛ out;
 
-    case ADDR_EXPR:
-      op0_lval = true;
-      goto unary;
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-    case VIEW_CONVERT_EXPR:
+    ಪಕ್ಷ ADDR_ಅಭಿವ್ಯಕ್ತಿ:
+      op0_lval = ಸತ್ಯ;
+      ಗಚ್ಛ unary;
+    ಪಕ್ಷ REALPART_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ IMAGPART_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ VIEW_CONVERT_ಅಭಿವ್ಯಕ್ತಿ:
       op0_lval = lval;
       /* FALLTHRU */
-    case INDIRECT_REF:
-    case FIX_TRUNC_EXPR:
-    case FLOAT_EXPR:
+    ಪಕ್ಷ INDIRECT_REF:
+    ಪಕ್ಷ FIX_TRUNC_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ FLOAT_ಅಭಿವ್ಯಕ್ತಿ:
     CASE_CONVERT:
-    case ADDR_SPACE_CONVERT_EXPR:
-    case NON_LVALUE_EXPR:
-    case NEGATE_EXPR:
-    case BIT_NOT_EXPR:
-    case TRUTH_NOT_EXPR:
-    case CONJ_EXPR:
-    case PAREN_EXPR:
+    ಪಕ್ಷ ADDR_SPACE_CONVERT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ NON_LVALUE_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ NEGATE_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ BIT_NOT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ TRUTH_NOT_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ CONJ_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ PAREN_ಅಭಿವ್ಯಕ್ತಿ:
     unary:
       /* Unary operations.  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
+      orig_op0 = op0 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 0);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
 
-      if (for_int_const && TREE_CODE (op0) != INTEGER_CST)
-	goto out;
+      ಯದಿ (for_int_const && ವೃಕ್ಷ_CODE (op0) != INTEGER_CST)
+	ಗಚ್ಛ out;
 
       /* ??? Cope with user tricks that amount to offsetof.  The middle-end is
 	 not prepared to deal with them if they occur in initializers.  */
-      if (op0 != orig_op0
-	  && code == ADDR_EXPR
-	  && (op1 = get_base_address (op0)) != NULL_TREE
+      ಯದಿ (op0 != orig_op0
+	  && code == ADDR_ಅಭಿವ್ಯಕ್ತಿ
+	  && (op1 = get_base_address (op0)) != NULL_ವೃಕ್ಷ
 	  && INDIRECT_REF_P (op1)
-	  && TREE_CONSTANT (TREE_OPERAND (op1, 0)))
-	ret = fold_offsetof (op0, TREE_TYPE (expr));
-      else if (op0 != orig_op0 || in_init)
+	  && ವೃಕ್ಷ_CONSTANT (ವೃಕ್ಷ_OPERAND (op1, 0)))
+	ret = fold_offsetof (op0, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ));
+      ಅನ್ಯಥಾ ಯದಿ (op0 != orig_op0 || in_init)
 	ret = in_init
-	  ? fold_build1_initializer_loc (loc, code, TREE_TYPE (expr), op0)
-	  : fold_build1_loc (loc, code, TREE_TYPE (expr), op0);
-      else
-	ret = fold (expr);
-      if (code == INDIRECT_REF
-	  && ret != expr
+	  ? fold_build1_initializer_loc (loc, code, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), op0)
+	  : fold_build1_loc (loc, code, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), op0);
+      ಅನ್ಯಥಾ
+	ret = fold (ಅಭಿವ್ಯಕ್ತಿ);
+      ಯದಿ (code == INDIRECT_REF
+	  && ret != ಅಭಿವ್ಯಕ್ತಿ
 	  && INDIRECT_REF_P (ret))
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  ವೃಕ್ಷ_READONLY (ret) = ವೃಕ್ಷ_READONLY (ಅಭಿವ್ಯಕ್ತಿ);
+	  ವೃಕ್ಷ_SIDE_EFFECTS (ret) = ವೃಕ್ಷ_SIDE_EFFECTS (ಅಭಿವ್ಯಕ್ತಿ);
+	  ವೃಕ್ಷ_THIS_VOLATILE (ret) = ವೃಕ್ಷ_THIS_VOLATILE (ಅಭಿವ್ಯಕ್ತಿ);
 	}
-      switch (code)
+      ವಿಕಲ್ಪ (code)
 	{
-	case FIX_TRUNC_EXPR:
-	case FLOAT_EXPR:
+	ಪಕ್ಷ FIX_TRUNC_ಅಭಿವ್ಯಕ್ತಿ:
+	ಪಕ್ಷ FLOAT_ಅಭಿವ್ಯಕ್ತಿ:
 	CASE_CONVERT:
 	  /* Don't warn about explicit conversions.  We will already
 	     have warned about suspect implicit conversions.  */
-	  break;
+	  ಭಙ್ಗ;
 
-	default:
-	  if (TREE_OVERFLOW_P (ret) && !TREE_OVERFLOW_P (op0))
-	    overflow_warning (EXPR_LOCATION (expr), ret, op0);
-	  break;
+	ಸ್ವಭಾವ:
+	  ಯದಿ (ವೃಕ್ಷ_OVERFLOW_P (ret) && !ವೃಕ್ಷ_OVERFLOW_P (op0))
+	    overflow_warning (ಅಭಿವ್ಯಕ್ತಿ_LOCATION (ಅಭಿವ್ಯಕ್ತಿ), ret, op0);
+	  ಭಙ್ಗ;
 	}
-      goto out;
+      ಗಚ್ಛ out;
 
-    case TRUTH_ANDIF_EXPR:
-    case TRUTH_ORIF_EXPR:
+    ಪಕ್ಷ TRUTH_ANDIF_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ TRUTH_ORIF_ಅಭಿವ್ಯಕ್ತಿ:
       /* Binary operations not necessarily evaluating both
 	 arguments.  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
+      orig_op0 = op0 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 0);
+      orig_op1 = op1 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 1);
       op0 = c_fully_fold_internal (op0, in_init, &op0_const, &op0_const_self,
-				   for_int_const, false);
+				   for_int_const, ಅಸತ್ಯ);
       STRIP_TYPE_NOPS (op0);
 
-      unused_p = (op0 == (code == TRUTH_ANDIF_EXPR
-			  ? truthvalue_false_node
-			  : truthvalue_true_node));
+      unused_p = (op0 == (code == TRUTH_ANDIF_ಅಭಿವ್ಯಕ್ತಿ
+			  ? truthvalue_false_ಗಂಟು
+			  : truthvalue_true_ಗಂಟು));
       c_disable_warnings (unused_p);
       op1 = c_fully_fold_internal (op1, in_init, &op1_const, &op1_const_self,
-				   for_int_const, false);
+				   for_int_const, ಅಸತ್ಯ);
       STRIP_TYPE_NOPS (op1);
       c_enable_warnings (unused_p);
 
-      if (for_int_const
-	  && (TREE_CODE (op0) != INTEGER_CST
+      ಯದಿ (for_int_const
+	  && (ವೃಕ್ಷ_CODE (op0) != INTEGER_CST
 	      /* Require OP1 be an INTEGER_CST only if it's evaluated.  */
-	      || (!unused_p && TREE_CODE (op1) != INTEGER_CST)))
-	goto out;
+	      || (!unused_p && ವೃಕ್ಷ_CODE (op1) != INTEGER_CST)))
+	ಗಚ್ಛ out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      ಯದಿ (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
-	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
-	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
-	ret = fold (expr);
+	  ? fold_build2_initializer_loc (loc, code, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), op0, op1)
+	  : fold_build2_loc (loc, code, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), op0, op1);
+      ಅನ್ಯಥಾ
+	ret = fold (ಅಭಿವ್ಯಕ್ತಿ);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      ಯದಿ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && (code == TRUTH_ANDIF_EXPR
-		? op0 == truthvalue_false_node
-		: op0 == truthvalue_true_node)))
+	    && (code == TRUTH_ANDIF_ಅಭಿವ್ಯಕ್ತಿ
+		? op0 == truthvalue_false_ಗಂಟು
+		: op0 == truthvalue_true_ಗಂಟು)))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      ಯದಿ (!(op0_const
 	    && op0_const_self
-	    && (code == TRUTH_ANDIF_EXPR
-		? op0 == truthvalue_false_node
-		: op0 == truthvalue_true_node)))
+	    && (code == TRUTH_ANDIF_ಅಭಿವ್ಯಕ್ತಿ
+		? op0 == truthvalue_false_ಗಂಟು
+		: op0 == truthvalue_true_ಗಂಟು)))
 	*maybe_const_itself &= op1_const_self;
-      goto out;
+      ಗಚ್ಛ out;
 
-    case COND_EXPR:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      orig_op2 = op2 = TREE_OPERAND (expr, 2);
+    ಪಕ್ಷ COND_ಅಭಿವ್ಯಕ್ತಿ:
+      orig_op0 = op0 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 0);
+      orig_op1 = op1 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 1);
+      orig_op2 = op2 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 2);
       op0 = c_fully_fold_internal (op0, in_init, &op0_const, &op0_const_self,
-				   for_int_const, false);
+				   for_int_const, ಅಸತ್ಯ);
 
       STRIP_TYPE_NOPS (op0);
-      c_disable_warnings (op0 == truthvalue_false_node);
+      c_disable_warnings (op0 == truthvalue_false_ಗಂಟು);
       op1 = c_fully_fold_internal (op1, in_init, &op1_const, &op1_const_self,
-				   for_int_const, false);
+				   for_int_const, ಅಸತ್ಯ);
       STRIP_TYPE_NOPS (op1);
-      c_enable_warnings (op0 == truthvalue_false_node);
+      c_enable_warnings (op0 == truthvalue_false_ಗಂಟು);
 
-      c_disable_warnings (op0 == truthvalue_true_node);
+      c_disable_warnings (op0 == truthvalue_true_ಗಂಟು);
       op2 = c_fully_fold_internal (op2, in_init, &op2_const, &op2_const_self,
-				   for_int_const, false);
+				   for_int_const, ಅಸತ್ಯ);
       STRIP_TYPE_NOPS (op2);
-      c_enable_warnings (op0 == truthvalue_true_node);
+      c_enable_warnings (op0 == truthvalue_true_ಗಂಟು);
 
-      if (for_int_const
-	  && (TREE_CODE (op0) != INTEGER_CST
+      ಯದಿ (for_int_const
+	  && (ವೃಕ್ಷ_CODE (op0) != INTEGER_CST
 	      /* Only the evaluated operand must be an INTEGER_CST.  */
-	      || (op0 == truthvalue_true_node
-		  ? TREE_CODE (op1) != INTEGER_CST
-		  : TREE_CODE (op2) != INTEGER_CST)))
-	goto out;
+	      || (op0 == truthvalue_true_ಗಂಟು
+		  ? ವೃಕ್ಷ_CODE (op1) != INTEGER_CST
+		  : ವೃಕ್ಷ_CODE (op2) != INTEGER_CST)))
+	ಗಚ್ಛ out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
-	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
-	ret = fold (expr);
+      ಯದಿ (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+	ret = fold_build3_loc (loc, code, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), op0, op1, op2);
+      ಅನ್ಯಥಾ
+	ret = fold (ಅಭಿವ್ಯಕ್ತಿ);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      ಯದಿ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_false_node))
+	    && op0 == truthvalue_false_ಗಂಟು))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      ಯದಿ (!(op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_false_node))
+	    && op0 == truthvalue_false_ಗಂಟು))
 	*maybe_const_itself &= op1_const_self;
-      if (!(flag_isoc99
+      ಯದಿ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_true_node))
+	    && op0 == truthvalue_true_ಗಂಟು))
 	*maybe_const_operands &= op2_const;
-      if (!(op0_const
+      ಯದಿ (!(op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_true_node))
+	    && op0 == truthvalue_true_ಗಂಟು))
 	*maybe_const_itself &= op2_const_self;
-      goto out;
+      ಗಚ್ಛ out;
 
-    case VEC_COND_EXPR:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      orig_op2 = op2 = TREE_OPERAND (expr, 2);
+    ಪಕ್ಷ VEC_COND_ಅಭಿವ್ಯಕ್ತಿ:
+      orig_op0 = op0 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 0);
+      orig_op1 = op1 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 1);
+      orig_op2 = op2 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 2);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, ಅಸತ್ಯ);
       STRIP_TYPE_NOPS (op0);
       op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, ಅಸತ್ಯ);
       STRIP_TYPE_NOPS (op1);
       op2 = c_fully_fold_internal (op2, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, ಅಸತ್ಯ);
       STRIP_TYPE_NOPS (op2);
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
-	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
-	ret = fold (expr);
-      goto out;
+      ಯದಿ (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+	ret = fold_build3_loc (loc, code, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ), op0, op1, op2);
+      ಅನ್ಯಥಾ
+	ret = fold (ಅಭಿವ್ಯಕ್ತಿ);
+      ಗಚ್ಛ out;
 
-    case EXCESS_PRECISION_EXPR:
+    ಪಕ್ಷ EXCESS_PRECISION_ಅಭಿವ್ಯಕ್ತಿ:
       /* Each case where an operand with excess precision may be
 	 encountered must remove the EXCESS_PRECISION_EXPR around
 	 inner operands and possibly put one around the whole
@@ -676,26 +676,26 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	 appropriate in any particular case.  */
       gcc_unreachable ();
 
-    case SAVE_EXPR:
+    ಪಕ್ಷ SAVE_ಅಭಿವ್ಯಕ್ತಿ:
       /* Make sure to fold the contents of a SAVE_EXPR exactly once.  */
-      op0 = TREE_OPERAND (expr, 0);
-      if (!SAVE_EXPR_FOLDED_P (expr))
+      op0 = ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 0);
+      ಯದಿ (!SAVE_ಅಭಿವ್ಯಕ್ತಿ_FOLDED_P (ಅಭಿವ್ಯಕ್ತಿ))
 	{
 	  op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				       maybe_const_itself, for_int_const,
-				       false);
-	  TREE_OPERAND (expr, 0) = op0;
-	  SAVE_EXPR_FOLDED_P (expr) = true;
+				       ಅಸತ್ಯ);
+	  ವೃಕ್ಷ_OPERAND (ಅಭಿವ್ಯಕ್ತಿ, 0) = op0;
+	  SAVE_ಅಭಿವ್ಯಕ್ತಿ_FOLDED_P (ಅಭಿವ್ಯಕ್ತಿ) = ಸತ್ಯ;
 	}
       /* Return the SAVE_EXPR operand if it is invariant.  */
-      if (tree_invariant_p (op0))
+      ಯದಿ (ವೃಕ್ಷ_invariant_p (op0))
 	ret = op0;
-      goto out;
+      ಗಚ್ಛ out;
 
-    default:
+    ಸ್ವಭಾವ:
       /* Various codes may appear through folding built-in functions
 	 and their arguments.  */
-      goto out;
+      ಗಚ್ಛ out;
     }
 
  out:
@@ -703,27 +703,27 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      have been done by this point, so remove them again.  */
   nowarning |= warning_suppressed_p (ret, OPT_Woverflow);
   STRIP_TYPE_NOPS (ret);
-  if (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
+  ಯದಿ (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
     {
-      if (!CAN_HAVE_LOCATION_P (ret))
-	ret = build1 (NOP_EXPR, TREE_TYPE (ret), ret);
+      ಯದಿ (!CAN_HAVE_LOCATION_P (ret))
+	ret = build1 (NOP_ಅಭಿವ್ಯಕ್ತಿ, ವೃಕ್ಷ_TYPE (ret), ret);
       suppress_warning (ret, OPT_Woverflow);
     }
-  if (ret != expr)
+  ಯದಿ (ret != ಅಭಿವ್ಯಕ್ತಿ)
     {
-      protected_set_expr_location (ret, loc);
-      if (IS_EXPR_CODE_CLASS (kind))
+      protected_set_ಅಭಿವ್ಯಕ್ತಿ_location (ret, loc);
+      ಯದಿ (IS_ಅಭಿವ್ಯಕ್ತಿ_CODE_CLASS (kind))
 	set_source_range (ret, old_range.m_start, old_range.m_finish);
     }
-  return ret;
+  ಪ್ರತ್ಯಾಗಮ ret;
 }
 
 /* Fold X for consideration by one of the warning functions when checking
    whether an expression has a constant value.  */
 
-tree
-fold_for_warn (tree x)
+ವೃಕ್ಷ
+fold_for_warn (ವೃಕ್ಷ x)
 {
   /* The C front-end has already folded X appropriately.  */
-  return x;
+  ಪ್ರತ್ಯಾಗಮ x;
 }

@@ -24,49 +24,49 @@ along with GCC; see the file COPYING3.  If not see
 /* ??? not all decl nodes are given the most useful possible
    line numbers.  For example, the CONST_DECLs for enum values.  */
 
-#include "config.h"
+#ಅನ್ತರ್ಭಾವ "config.h"
 #define INCLUDE_STRING
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "function.h"
-#include "c-tree.h"
-#include "timevar.h"
-#include "stringpool.h"
-#include "cgraph.h"
-#include "intl.h"
-#include "print-tree.h"
-#include "stor-layout.h"
-#include "varasm.h"
-#include "attribs.h"
-#include "toplev.h"
-#include "debug.h"
-#include "c-family/c-objc.h"
-#include "c-family/c-pragma.h"
-#include "c-family/c-ubsan.h"
-#include "c-lang.h"
-#include "langhooks.h"
-#include "tree-iterator.h"
-#include "dumpfile.h"
-#include "plugin.h"
-#include "c-family/c-ada-spec.h"
-#include "builtins.h"
-#include "spellcheck-tree.h"
-#include "gcc-rich-location.h"
-#include "asan.h"
-#include "c-family/name-hint.h"
-#include "c-family/known-headers.h"
-#include "c-family/c-spellcheck.h"
-#include "context.h"  /* For 'g'.  */
-#include "omp-general.h"
-#include "omp-offload.h"  /* For offload_vars.  */
-#include "c-parser.h"
-#include "gcc-urlifier.h"
+#ಅನ್ತರ್ಭಾವ "system.h"
+#ಅನ್ತರ್ಭಾವ "coretypes.h"
+#ಅನ್ತರ್ಭಾವ "target.h"
+#ಅನ್ತರ್ಭಾವ "function.h"
+#ಅನ್ತರ್ಭಾವ "c-tree.h"
+#ಅನ್ತರ್ಭಾವ "timevar.h"
+#ಅನ್ತರ್ಭಾವ "stringpool.h"
+#ಅನ್ತರ್ಭಾವ "cgraph.h"
+#ಅನ್ತರ್ಭಾವ "intl.h"
+#ಅನ್ತರ್ಭಾವ "print-tree.h"
+#ಅನ್ತರ್ಭಾವ "stor-layout.h"
+#ಅನ್ತರ್ಭಾವ "varasm.h"
+#ಅನ್ತರ್ಭಾವ "attribs.h"
+#ಅನ್ತರ್ಭಾವ "toplev.h"
+#ಅನ್ತರ್ಭಾವ "debug.h"
+#ಅನ್ತರ್ಭಾವ "c-family/c-objc.h"
+#ಅನ್ತರ್ಭಾವ "c-family/c-pragma.h"
+#ಅನ್ತರ್ಭಾವ "c-family/c-ubsan.h"
+#ಅನ್ತರ್ಭಾವ "c-lang.h"
+#ಅನ್ತರ್ಭಾವ "langhooks.h"
+#ಅನ್ತರ್ಭಾವ "tree-iterator.h"
+#ಅನ್ತರ್ಭಾವ "dumpfile.h"
+#ಅನ್ತರ್ಭಾವ "plugin.h"
+#ಅನ್ತರ್ಭಾವ "c-family/c-ada-spec.h"
+#ಅನ್ತರ್ಭಾವ "builtins.h"
+#ಅನ್ತರ್ಭಾವ "spellcheck-tree.h"
+#ಅನ್ತರ್ಭಾವ "gcc-rich-location.h"
+#ಅನ್ತರ್ಭಾವ "asan.h"
+#ಅನ್ತರ್ಭಾವ "c-family/name-hint.h"
+#ಅನ್ತರ್ಭಾವ "c-family/known-headers.h"
+#ಅನ್ತರ್ಭಾವ "c-family/c-spellcheck.h"
+#ಅನ್ತರ್ಭಾವ "context.h"  /* For 'g'.  */
+#ಅನ್ತರ್ಭಾವ "omp-general.h"
+#ಅನ್ತರ್ಭಾವ "omp-offload.h"  /* For offload_vars.  */
+#ಅನ್ತರ್ಭಾವ "c-parser.h"
+#ಅನ್ತರ್ಭಾವ "gcc-urlifier.h"
 
-#include "tree-pretty-print.h"
+#ಅನ್ತರ್ಭಾವ "tree-pretty-print.h"
 
 /* In grokdeclarator, distinguish syntactic contexts of declarators.  */
-enum decl_context
+ಗಣನಾ decl_context
 { NORMAL,			/* Ordinary declaration */
   FUNCDEF,			/* Function definition */
   PARM,				/* Declaration of parm before function body */
@@ -81,7 +81,7 @@ enum decl_context
    An object declared as __attribute__((deprecated)) should suppress
    warnings of uses of other deprecated items.  */
 
-enum deprecated_states {
+ಗಣನಾ deprecated_states {
   DEPRECATED_NORMAL,
   DEPRECATED_SUPPRESS,
   UNAVAILABLE_DEPRECATED_SUPPRESS
@@ -90,7 +90,7 @@ enum deprecated_states {
 
 /* Nonzero if we have seen an invalid cross reference
    to a struct, union, or enum, but not yet printed the message.  */
-tree pending_invalid_xref;
+ವೃಕ್ಷ pending_invalid_xref;
 
 /* File and line to appear in the eventual error message.  */
 location_t pending_invalid_xref_location;
@@ -99,61 +99,61 @@ location_t pending_invalid_xref_location;
    old-style definition; used for diagnostics in
    store_parm_decls_oldstyle.  */
 
-static location_t current_function_prototype_locus;
+ಸ್ಥಿರ location_t current_function_prototype_locus;
 
 /* Whether this prototype was built-in.  */
 
-static bool current_function_prototype_built_in;
+ಸ್ಥಿರ ತಾರ್ಕಿಕ current_function_prototype_built_in;
 
 /* The argument type information of this prototype.  */
 
-static tree current_function_prototype_arg_types;
+ಸ್ಥಿರ ವೃಕ್ಷ current_function_prototype_arg_types;
 
 /* The argument information structure for the function currently being
    defined.  */
 
-static struct c_arg_info *current_function_arg_info;
+ಸ್ಥಿರ ಸಂರಚನಾ c_arg_info *current_function_arg_info;
 
 /* The obstack on which parser and related data structures, which are
    not live beyond their top-level declaration or definition, are
    allocated.  */
-struct obstack parser_obstack;
+ಸಂರಚನಾ obstack parser_obstack;
 
 /* The current statement tree.  */
 
-static GTY(()) struct stmt_tree_s c_stmt_tree;
+ಸ್ಥಿರ GTY(()) ಸಂರಚನಾ stmt_ವೃಕ್ಷ_s c_stmt_ವೃಕ್ಷ;
 
 /* Zero if we are not in an iteration or switch statement, otherwise
    a bitmask.  See bitmask definitions in c-tree.h.  */
-unsigned char in_statement;
+unsigned ವರ್ಣ in_statement;
 
 /* A list of decls to be made automatically visible in each file scope.  */
-static GTY(()) tree visible_builtins;
+ಸ್ಥಿರ GTY(()) ವೃಕ್ಷ visible_builtins;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement that specifies a return value is seen.  */
 
-int current_function_returns_value;
+ಪೂರ್ಣಾಙ್ಕ current_function_returns_ಮೌಲ್ಯ;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement with no argument is seen.  */
 
-int current_function_returns_null;
+ಪೂರ್ಣಾಙ್ಕ current_function_returns_null;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a call to a noreturn function is seen.  */
 
-int current_function_returns_abnormally;
+ಪೂರ್ಣಾಙ್ಕ current_function_returns_abnormally;
 
 /* Set to nonzero by `grokdeclarator' for a function
    whose return type is defaulted, if warnings for this are desired.  */
 
-static int warn_about_return_type;
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ warn_about_return_type;
 
 /* Nonzero when the current toplevel function contains a declaration
    of a nested function which is never defined.  */
 
-static bool undef_nested_function;
+ಸ್ಥಿರ ತಾರ್ಕಿಕ undef_nested_function;
 
 /* Vector of implicit "omp declare target" attributes to be added into
    the attribute lists.  */
@@ -169,11 +169,11 @@ vec<c_omp_declare_variant_attr, va_gc> *current_omp_declare_variant_attribute;
 
 /* Vector of loop names with C_DECL_LOOP_NAME or C_DECL_SWITCH_NAME marked
    LABEL_DECL as the last and canonical for each loop or switch.  */
-static vec<tree> loop_names;
+ಸ್ಥಿರ vec<ವೃಕ್ಷ> loop_names;
 
 /* Hash table mapping LABEL_DECLs to the canonical LABEL_DECLs if LOOP_NAMES
    vector becomes too long.  */
-static decl_tree_map *loop_names_hash;
+ಸ್ಥಿರ decl_ವೃಕ್ಷ_map *loop_names_hash;
 
 /* Each c_binding structure describes one binding of an identifier to
    a decl.  All the decls in a scope - irrespective of namespace - are
@@ -211,20 +211,20 @@ static decl_tree_map *loop_names_hash;
    in all such cases, the binding in the outer scope will have its
    invisible bit true.  */
 
-struct GTY((chain_next ("%h.prev"))) c_binding {
-  union GTY(()) {		/* first so GTY desc can use decl */
-    tree GTY((tag ("0"))) type; /* the type in this scope */
-    struct c_label_vars * GTY((tag ("1"))) label; /* for warnings */
+ಸಂರಚನಾ GTY((chain_next ("%h.prev"))) c_binding {
+  ಸಙ್ಘ GTY(()) {		/* first so GTY desc can use decl */
+    ವೃಕ್ಷ GTY((tag ("0"))) type; /* the type in this scope */
+    ಸಂರಚನಾ c_label_vars * GTY((tag ("1"))) label; /* for warnings */
   } GTY((desc ("TREE_CODE (%0.decl) == LABEL_DECL"))) u;
-  tree decl;			/* the decl bound */
-  tree id;			/* the identifier it's bound to */
-  struct c_binding *prev;	/* the previous decl in this scope */
-  struct c_binding *shadowed;	/* the innermost decl shadowed by this one */
-  unsigned int depth : 28;      /* depth of this scope */
-  bool invisible : 1;  /* normal lookup should ignore this binding */
-  bool nested : 1;     /* do not set DECL_CONTEXT when popping */
-  bool inner_comp : 1; /* incomplete array completed in inner scope */
-  bool in_struct : 1;	/* currently defined as struct field */
+  ವೃಕ್ಷ decl;			/* the decl bound */
+  ವೃಕ್ಷ id;			/* the identifier it's bound to */
+  ಸಂರಚನಾ c_binding *prev;	/* the previous decl in this scope */
+  ಸಂರಚನಾ c_binding *shadowed;	/* the innermost decl shadowed by this one */
+  unsigned ಪೂರ್ಣಾಙ್ಕ depth : 28;      /* depth of this scope */
+  ತಾರ್ಕಿಕ invisible : 1;  /* normal lookup should ignore this binding */
+  ತಾರ್ಕಿಕ nested : 1;     /* do not set DECL_CONTEXT when popping */
+  ತಾರ್ಕಿಕ inner_comp : 1; /* incomplete array completed in inner scope */
+  ತಾರ್ಕಿಕ in_struct : 1;	/* currently defined as struct field */
   location_t locus;		/* location for nested bindings */
 };
 #define B_IN_SCOPE(b1, b2) ((b1)->depth == (b2)->depth)
@@ -236,143 +236,143 @@ struct GTY((chain_next ("%h.prev"))) c_binding {
    These describe the values of the identifier in the three different
    namespaces defined by the language.  */
 
-struct GTY(()) lang_identifier {
-  struct c_common_identifier common_id;
-  struct c_binding *symbol_binding; /* vars, funcs, constants, typedefs */
-  struct c_binding *tag_binding;    /* struct/union/enum tags */
-  struct c_binding *label_binding;  /* labels */
+ಸಂರಚನಾ GTY(()) lang_identifier {
+  ಸಂರಚನಾ c_common_identifier common_id;
+  ಸಂರಚನಾ c_binding *ಚಿಹ್ನೆ_binding; /* vars, funcs, constants, typedefs */
+  ಸಂರಚನಾ c_binding *tag_binding;    /* struct/union/enum tags */
+  ಸಂರಚನಾ c_binding *label_binding;  /* labels */
 };
 
 /* Validate c-lang.cc's assumptions.  */
-extern char C_SIZEOF_STRUCT_LANG_IDENTIFIER_isnt_accurate
-[(sizeof(struct lang_identifier) == C_SIZEOF_STRUCT_LANG_IDENTIFIER) ? 1 : -1];
+ಬಾಹ್ಯ ವರ್ಣ C_SIZEOF_STRUCT_LANG_IDENTIFIER_isnt_accurate
+[(ಪರಿಮಾಣ(ಸಂರಚನಾ lang_identifier) == C_SIZEOF_STRUCT_LANG_IDENTIFIER) ? 1 : -1];
 
 /* The binding oracle; see c-tree.h.  */
-void (*c_binding_oracle) (enum c_oracle_request, tree identifier);
+ಶೂನ್ಯ (*c_binding_oracle) (ಗಣನಾ c_oracle_request, ವೃಕ್ಷ identifier);
 
 /* This flag is set on an identifier if we have previously asked the
    binding oracle for this identifier's symbol binding.  */
-#define I_SYMBOL_CHECKED(node) \
-  (TREE_LANG_FLAG_4 (IDENTIFIER_NODE_CHECK (node)))
+#define I_ಚಿಹ್ನೆ_CHECKED(ಗಂಟು) \
+  (ವೃಕ್ಷ_LANG_FLAG_4 (IDENTIFIER_ಗಂಟು_CHECK (ಗಂಟು)))
 
-static inline struct c_binding* *
-i_symbol_binding (tree node)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಸಂರಚನಾ c_binding* *
+i_ಚಿಹ್ನೆ_binding (ವೃಕ್ಷ ಗಂಟು)
 {
-  struct lang_identifier *lid
-    = (struct lang_identifier *) IDENTIFIER_NODE_CHECK (node);
+  ಸಂರಚನಾ lang_identifier *lid
+    = (ಸಂರಚನಾ lang_identifier *) IDENTIFIER_ಗಂಟು_CHECK (ಗಂಟು);
 
-  if (lid->symbol_binding == NULL
-      && c_binding_oracle != NULL
-      && !I_SYMBOL_CHECKED (node))
+  ಯದಿ (lid->ಚಿಹ್ನೆ_binding == ರಿಕ್ತ
+      && c_binding_oracle != ರಿಕ್ತ
+      && !I_ಚಿಹ್ನೆ_CHECKED (ಗಂಟು))
     {
       /* Set the "checked" flag first, to avoid infinite recursion
 	 when the binding oracle calls back into gcc.  */
-      I_SYMBOL_CHECKED (node) = 1;
-      c_binding_oracle (C_ORACLE_SYMBOL, node);
+      I_ಚಿಹ್ನೆ_CHECKED (ಗಂಟು) = 1;
+      c_binding_oracle (C_ORACLE_ಚಿಹ್ನೆ, ಗಂಟು);
     }
 
-  return &lid->symbol_binding;
+  ಪ್ರತ್ಯಾಗಮ &lid->ಚಿಹ್ನೆ_binding;
 }
 
-#define I_SYMBOL_BINDING(node) (*i_symbol_binding (node))
+#define I_ಚಿಹ್ನೆ_BINDING(ಗಂಟು) (*i_ಚಿಹ್ನೆ_binding (ಗಂಟು))
 
-#define I_SYMBOL_DECL(node) \
- (I_SYMBOL_BINDING(node) ? I_SYMBOL_BINDING(node)->decl : 0)
+#define I_ಚಿಹ್ನೆ_DECL(ಗಂಟು) \
+ (I_ಚಿಹ್ನೆ_BINDING(ಗಂಟು) ? I_ಚಿಹ್ನೆ_BINDING(ಗಂಟು)->decl : 0)
 
 /* This flag is set on an identifier if we have previously asked the
    binding oracle for this identifier's tag binding.  */
-#define I_TAG_CHECKED(node) \
-  (TREE_LANG_FLAG_5 (IDENTIFIER_NODE_CHECK (node)))
+#define I_TAG_CHECKED(ಗಂಟು) \
+  (ವೃಕ್ಷ_LANG_FLAG_5 (IDENTIFIER_ಗಂಟು_CHECK (ಗಂಟು)))
 
-static inline struct c_binding **
-i_tag_binding (tree node)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಸಂರಚನಾ c_binding **
+i_tag_binding (ವೃಕ್ಷ ಗಂಟು)
 {
-  struct lang_identifier *lid
-    = (struct lang_identifier *) IDENTIFIER_NODE_CHECK (node);
+  ಸಂರಚನಾ lang_identifier *lid
+    = (ಸಂರಚನಾ lang_identifier *) IDENTIFIER_ಗಂಟು_CHECK (ಗಂಟು);
 
-  if (lid->tag_binding == NULL
-      && c_binding_oracle != NULL
-      && !I_TAG_CHECKED (node))
+  ಯದಿ (lid->tag_binding == ರಿಕ್ತ
+      && c_binding_oracle != ರಿಕ್ತ
+      && !I_TAG_CHECKED (ಗಂಟು))
     {
       /* Set the "checked" flag first, to avoid infinite recursion
 	 when the binding oracle calls back into gcc.  */
-      I_TAG_CHECKED (node) = 1;
-      c_binding_oracle (C_ORACLE_TAG, node);
+      I_TAG_CHECKED (ಗಂಟು) = 1;
+      c_binding_oracle (C_ORACLE_TAG, ಗಂಟು);
     }
 
-  return &lid->tag_binding;
+  ಪ್ರತ್ಯಾಗಮ &lid->tag_binding;
 }
 
-#define I_TAG_BINDING(node) (*i_tag_binding (node))
+#define I_TAG_BINDING(ಗಂಟು) (*i_tag_binding (ಗಂಟು))
 
-#define I_TAG_DECL(node) \
- (I_TAG_BINDING(node) ? I_TAG_BINDING(node)->decl : 0)
+#define I_TAG_DECL(ಗಂಟು) \
+ (I_TAG_BINDING(ಗಂಟು) ? I_TAG_BINDING(ಗಂಟು)->decl : 0)
 
 /* This flag is set on an identifier if we have previously asked the
    binding oracle for this identifier's label binding.  */
-#define I_LABEL_CHECKED(node) \
-  (TREE_LANG_FLAG_6 (IDENTIFIER_NODE_CHECK (node)))
+#define I_LABEL_CHECKED(ಗಂಟು) \
+  (ವೃಕ್ಷ_LANG_FLAG_6 (IDENTIFIER_ಗಂಟು_CHECK (ಗಂಟು)))
 
-static inline struct c_binding **
-i_label_binding (tree node)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಸಂರಚನಾ c_binding **
+i_label_binding (ವೃಕ್ಷ ಗಂಟು)
 {
-  struct lang_identifier *lid
-    = (struct lang_identifier *) IDENTIFIER_NODE_CHECK (node);
+  ಸಂರಚನಾ lang_identifier *lid
+    = (ಸಂರಚನಾ lang_identifier *) IDENTIFIER_ಗಂಟು_CHECK (ಗಂಟು);
 
-  if (lid->label_binding == NULL
-      && c_binding_oracle != NULL
-      && !I_LABEL_CHECKED (node))
+  ಯದಿ (lid->label_binding == ರಿಕ್ತ
+      && c_binding_oracle != ರಿಕ್ತ
+      && !I_LABEL_CHECKED (ಗಂಟು))
     {
       /* Set the "checked" flag first, to avoid infinite recursion
 	 when the binding oracle calls back into gcc.  */
-      I_LABEL_CHECKED (node) = 1;
-      c_binding_oracle (C_ORACLE_LABEL, node);
+      I_LABEL_CHECKED (ಗಂಟು) = 1;
+      c_binding_oracle (C_ORACLE_LABEL, ಗಂಟು);
     }
 
-  return &lid->label_binding;
+  ಪ್ರತ್ಯಾಗಮ &lid->label_binding;
 }
 
-#define I_LABEL_BINDING(node) (*i_label_binding (node))
+#define I_LABEL_BINDING(ಗಂಟು) (*i_label_binding (ಗಂಟು))
 
-#define I_LABEL_DECL(node) \
- (I_LABEL_BINDING(node) ? I_LABEL_BINDING(node)->decl : 0)
+#define I_LABEL_DECL(ಗಂಟು) \
+ (I_LABEL_BINDING(ಗಂಟು) ? I_LABEL_BINDING(ಗಂಟು)->decl : 0)
 
 /* Used by C_TOKEN_VEC tree.  */
-struct GTY (()) c_tree_token_vec {
-  struct tree_base base;
+ಸಂರಚನಾ GTY (()) c_ವೃಕ್ಷ_token_vec {
+  ಸಂರಚನಾ ವೃಕ್ಷ_base base;
   vec<c_token, va_gc> *tokens;
 };
 
-STATIC_ASSERT (sizeof (c_tree_token_vec) == sizeof (c_tree_token_vec_struct));
-STATIC_ASSERT (offsetof (c_tree_token_vec, tokens)
-	       == offsetof (c_tree_token_vec_struct, tokens));
+STATIC_ASSERT (ಪರಿಮಾಣ (c_ವೃಕ್ಷ_token_vec) == ಪರಿಮಾಣ (c_ವೃಕ್ಷ_token_vec_struct));
+STATIC_ASSERT (offsetof (c_ವೃಕ್ಷ_token_vec, tokens)
+	       == offsetof (c_ವೃಕ್ಷ_token_vec_struct, tokens));
 
 /* The resulting tree type.  */
 
-union GTY((desc ("TREE_CODE (&%h.generic) == IDENTIFIER_NODE + 2 * (TREE_CODE (&%h.generic) == C_TOKEN_VEC)"),
-       chain_next ("(union lang_tree_node *) c_tree_chain_next (&%h.generic)"))) lang_tree_node
+ಸಙ್ಘ GTY((desc ("TREE_CODE (&%h.generic) == IDENTIFIER_NODE + 2 * (TREE_CODE (&%h.generic) == C_TOKEN_VEC)"),
+       chain_next ("(union lang_tree_node *) c_tree_chain_next (&%h.generic)"))) lang_ವೃಕ್ಷ_ಗಂಟು
  {
-  union tree_node GTY ((tag ("0"),
+  ಸಙ್ಘ ವೃಕ್ಷ_ಗಂಟು GTY ((tag ("0"),
 			desc ("tree_node_structure (&%h)")))
     generic;
-  struct lang_identifier GTY ((tag ("1"))) identifier;
-  struct c_tree_token_vec GTY ((tag ("2"))) c_token_vec;
+  ಸಂರಚನಾ lang_identifier GTY ((tag ("1"))) identifier;
+  ಸಂರಚನಾ c_ವೃಕ್ಷ_token_vec GTY ((tag ("2"))) c_token_vec;
 };
 
 /* Langhook for tree_size.  */
 size_t
-c_tree_size (enum tree_code code)
+c_ವೃಕ್ಷ_size (ಗಣನಾ ವೃಕ್ಷ_code code)
 {
-  gcc_checking_assert (code >= NUM_TREE_CODES);
-  switch (code)
+  gcc_checking_assert (code >= ಅಂಕೆ_ವೃಕ್ಷ_CODES);
+  ವಿಕಲ್ಪ (code)
     {
-    case C_TOKEN_VEC: return sizeof (c_tree_token_vec);
-    default:
-      switch (TREE_CODE_CLASS (code))
+    ಪಕ್ಷ C_TOKEN_VEC: ಪ್ರತ್ಯಾಗಮ ಪರಿಮಾಣ (c_ವೃಕ್ಷ_token_vec);
+    ಸ್ವಭಾವ:
+      ವಿಕಲ್ಪ (ವೃಕ್ಷ_CODE_CLASS (code))
 	{
-	case tcc_declaration: return sizeof (tree_decl_non_common);
-	case tcc_type: return sizeof (tree_type_non_common);
-	default: gcc_unreachable ();
+	ಪಕ್ಷ tcc_declaration: ಪ್ರತ್ಯಾಗಮ ಪರಿಮಾಣ (ವೃಕ್ಷ_decl_non_common);
+	ಪಕ್ಷ tcc_type: ಪ್ರತ್ಯಾಗಮ ಪರಿಮಾಣ (ವೃಕ್ಷ_type_non_common);
+	ಸ್ವಭಾವ: gcc_unreachable ();
 	}
     }
 }
@@ -383,53 +383,53 @@ c_tree_size (enum tree_code code)
    scopes are popped, we update these structures and gather the decls
    that matter at that time.  */
 
-struct GTY(()) c_spot_bindings {
+ಸಂರಚನಾ GTY(()) c_spot_bindings {
   /* The currently open scope which holds bindings defined when the
      label was defined or the goto statement was found.  */
-  struct c_scope *scope;
+  ಸಂರಚನಾ c_scope *scope;
   /* The bindings in the scope field which were defined at the point
      of the label or goto.  This lets us look at older or newer
      bindings in the scope, as appropriate.  */
-  struct c_binding *bindings_in_scope;
+  ಸಂರಚನಾ c_binding *bindings_in_scope;
   /* The number of statement expressions that have started since this
      label or goto statement was defined.  This is zero if we are at
      the same statement expression level.  It is positive if we are in
      a statement expression started since this spot.  It is negative
      if this spot was in a statement expression and we have left
      it.  */
-  int stmt_exprs;
+  ಪೂರ್ಣಾಙ್ಕ stmt_exprs;
   /* Whether we started in a statement expression but are no longer in
      it.  This is set to true if stmt_exprs ever goes negative.  */
-  bool left_stmt_expr;
+  ತಾರ್ಕಿಕ ಎಡ_stmt_ಅಭಿವ್ಯಕ್ತಿ;
 };
 
 /* This structure is used to keep track of bindings seen when a goto
    statement is defined.  This is only used if we see the goto
    statement before we see the label.  */
 
-struct GTY(()) c_goto_bindings {
+ಸಂರಚನಾ GTY(()) c_goto_bindings {
   /* The location of the goto statement.  */
   location_t loc;
   /* The bindings of the goto statement.  */
-  struct c_spot_bindings goto_bindings;
+  ಸಂರಚನಾ c_spot_bindings goto_bindings;
 };
 
-typedef struct c_goto_bindings *c_goto_bindings_p;
+ಪ್ರಕಾರನಿರ್ದೇಶ ಸಂರಚನಾ c_goto_bindings *c_goto_bindings_p;
 
 /* The additional information we keep track of for a label binding.
    These fields are updated as scopes are popped.  */
 
-struct GTY(()) c_label_vars {
+ಸಂರಚನಾ GTY(()) c_label_vars {
   /* The shadowed c_label_vars, when one label shadows another (which
      can only happen using a __label__ declaration).  */
-  struct c_label_vars *shadowed;
+  ಸಂರಚನಾ c_label_vars *shadowed;
   /* The bindings when the label was defined.  */
-  struct c_spot_bindings label_bindings;
+  ಸಂರಚನಾ c_spot_bindings label_bindings;
   /* A list of decls that we care about: decls about which we should
      warn if a goto branches to this label from later in the function.
      Decls are added to this list as scopes are popped.  We only add
      the decls that matter.  */
-  vec<tree, va_gc> *decls_in_scope;
+  vec<ವೃಕ್ಷ, va_gc> *decls_in_scope;
   /* A list of goto statements to this label.  This is only used for
      goto statements seen before the label was defined, so that we can
      issue appropriate warnings for them.  */
@@ -481,159 +481,159 @@ struct GTY(()) c_label_vars {
    pop_scope relies on this.  */
 
 
-struct GTY((chain_next ("%h.outer"))) c_scope {
+ಸಂರಚನಾ GTY((chain_next ("%h.outer"))) c_scope {
   /* The scope containing this one.  */
-  struct c_scope *outer;
+  ಸಂರಚನಾ c_scope *outer;
 
   /* The next outermost function scope.  */
-  struct c_scope *outer_function;
+  ಸಂರಚನಾ c_scope *outer_function;
 
   /* All bindings in this scope.  */
-  struct c_binding *bindings;
+  ಸಂರಚನಾ c_binding *bindings;
 
   /* For each scope (except the global one), a chain of BLOCK nodes
      for all the scopes that were entered and exited one level down.  */
-  tree blocks;
-  tree blocks_last;
+  ವೃಕ್ಷ blocks;
+  ವೃಕ್ಷ blocks_last;
 
   /* The depth of this scope.  Used to keep the ->shadowed chain of
      bindings sorted innermost to outermost.  */
-  unsigned int depth : 28;
+  unsigned ಪೂರ್ಣಾಙ್ಕ depth : 28;
 
   /* True if we are currently filling this scope with parameter
      declarations.  */
-  bool parm_flag : 1;
+  ತಾರ್ಕಿಕ parm_flag : 1;
 
   /* True if we saw [*] in this scope.  Used to give an error messages
      if these appears in a function definition.  */
-  bool had_vla_unspec : 1;
+  ತಾರ್ಕಿಕ had_vla_unspec : 1;
 
   /* True if we parsed a list of forward parameter decls in this scope.  */
-  bool had_forward_parm_decls : 1;
+  ತಾರ್ಕಿಕ had_forward_parm_decls : 1;
 
   /* True if this is the outermost block scope of a function body.
      This scope contains the parameters, the local variables declared
      in the outermost block, and all the labels (except those in
      nested functions, or declared at block scope with __label__).  */
-  bool function_body : 1;
+  ತಾರ್ಕಿಕ function_body : 1;
 
   /* True means make a BLOCK for this scope no matter what.  */
-  bool keep : 1;
+  ತಾರ್ಕಿಕ keep : 1;
 
   /* True means that an unsuffixed float constant is _Decimal64.  */
-  bool float_const_decimal64 : 1;
+  ತಾರ್ಕಿಕ float_const_decimal64 : 1;
 
   /* True if this scope has any label bindings.  This is used to speed
      up searching for labels when popping scopes, particularly since
      labels are normally only found at function scope.  */
-  bool has_label_bindings : 1;
+  ತಾರ್ಕಿಕ has_label_bindings : 1;
 
   /* True if we should issue a warning if a goto statement crosses any
      of the bindings.  We still need to check the list of bindings to
      find the specific ones we need to warn about.  This is true if
      decl_jump_unsafe would return true for any of the bindings.  This
      is used to avoid looping over all the bindings unnecessarily.  */
-  bool has_jump_unsafe_decl : 1;
+  ತಾರ್ಕಿಕ has_jump_unsafe_decl : 1;
 };
 
 /* The scope currently in effect.  */
 
-static GTY(()) struct c_scope *current_scope;
+ಸ್ಥಿರ GTY(()) ಸಂರಚನಾ c_scope *current_scope;
 
 /* The innermost function scope.  Ordinary (not explicitly declared)
    labels, bindings to error_mark_node, and the lazily-created
    bindings of __func__ and its friends get this scope.  */
 
-static GTY(()) struct c_scope *current_function_scope;
+ಸ್ಥಿರ GTY(()) ಸಂರಚನಾ c_scope *current_function_scope;
 
 /* The C file scope.  This is reset for each input translation unit.  */
 
-static GTY(()) struct c_scope *file_scope;
+ಸ್ಥಿರ GTY(()) ಸಂರಚನಾ c_scope *file_scope;
 
 /* The outermost scope.  This is used for all declarations with
    external linkage, and only these, hence the name.  */
 
-static GTY(()) struct c_scope *external_scope;
+ಸ್ಥಿರ GTY(()) ಸಂರಚನಾ c_scope *external_scope;
 
 /* A chain of c_scope structures awaiting reuse.  */
 
-static GTY((deletable)) struct c_scope *scope_freelist;
+ಸ್ಥಿರ GTY((deletable)) ಸಂರಚನಾ c_scope *scope_freelist;
 
 /* A chain of c_binding structures awaiting reuse.  */
 
-static GTY((deletable)) struct c_binding *binding_freelist;
+ಸ್ಥಿರ GTY((deletable)) ಸಂರಚನಾ c_binding *binding_freelist;
 
 /* Append VAR to LIST in scope SCOPE.  */
-#define SCOPE_LIST_APPEND(scope, list, decl) do {	\
-  struct c_scope *s_ = (scope);				\
-  tree d_ = (decl);					\
-  if (s_->list##_last)					\
+#define SCOPE_LIST_APPEND(scope, list, decl) ಕುರು {	\
+  ಸಂರಚನಾ c_scope *s_ = (scope);				\
+  ವೃಕ್ಷ d_ = (decl);					\
+  ಯದಿ (s_->list##_last)					\
     BLOCK_CHAIN (s_->list##_last) = d_;			\
-  else							\
+  ಅನ್ಯಥಾ							\
     s_->list = d_;					\
   s_->list##_last = d_;					\
-} while (0)
+} ಯಾವತ್ (0)
 
 /* Concatenate FROM in scope FSCOPE onto TO in scope TSCOPE.  */
-#define SCOPE_LIST_CONCAT(tscope, to, fscope, from) do {	\
-  struct c_scope *t_ = (tscope);				\
-  struct c_scope *f_ = (fscope);				\
-  if (t_->to##_last)						\
+#define SCOPE_LIST_CONCAT(tscope, to, fscope, from) ಕುರು {	\
+  ಸಂರಚನಾ c_scope *t_ = (tscope);				\
+  ಸಂರಚನಾ c_scope *f_ = (fscope);				\
+  ಯದಿ (t_->to##_last)						\
     BLOCK_CHAIN (t_->to##_last) = f_->from;			\
-  else								\
+  ಅನ್ಯಥಾ								\
     t_->to = f_->from;						\
   t_->to##_last = f_->from##_last;				\
-} while (0)
+} ಯಾವತ್ (0)
 
 /* A c_inline_static structure stores details of a static identifier
    referenced in a definition of a function that may be an inline
    definition if no subsequent declaration of that function uses
    "extern" or does not use "inline".  */
 
-struct GTY((chain_next ("%h.next"))) c_inline_static {
+ಸಂರಚನಾ GTY((chain_next ("%h.next"))) c_inline_static {
   /* The location for a diagnostic.  */
   location_t location;
 
   /* The function that may be an inline definition.  */
-  tree function;
+  ವೃಕ್ಷ function;
 
   /* The object or function referenced.  */
-  tree static_decl;
+  ವೃಕ್ಷ static_decl;
 
   /* What sort of reference this is.  */
-  enum c_inline_static_type type;
+  ಗಣನಾ c_inline_static_type type;
 
   /* The next such structure or NULL.  */
-  struct c_inline_static *next;
+  ಸಂರಚನಾ c_inline_static *next;
 };
 
 /* List of static identifiers used or referenced in functions that may
    be inline definitions.  */
-static GTY(()) struct c_inline_static *c_inline_statics;
+ಸ್ಥಿರ GTY(()) ಸಂರಚನಾ c_inline_static *c_inline_statics;
 
 /* True means unconditionally make a BLOCK for the next scope pushed.  */
 
-static bool keep_next_level_flag;
+ಸ್ಥಿರ ತಾರ್ಕಿಕ keep_next_level_flag;
 
 /* True means the next call to push_scope will be the outermost scope
    of a function body, so do not push a new scope, merely cease
    expecting parameter decls.  */
 
-static bool next_is_function_body;
+ಸ್ಥಿರ ತಾರ್ಕಿಕ next_is_function_body;
 
 /* A vector of pointers to c_binding structures.  */
 
-typedef struct c_binding *c_binding_ptr;
+ಪ್ರಕಾರನಿರ್ದೇಶ ಸಂರಚನಾ c_binding *c_binding_ptr;
 
 /* Information that we keep for a struct or union while it is being
    parsed.  */
 
-class c_struct_parse_info
+ವರ್ಗ c_struct_parse_info
 {
-public:
+ಸಾರ್ವಜನಿಕ:
   /* If warn_cxx_compat, a list of types defined within this
      struct.  */
-  auto_vec<tree> struct_types;
+  auto_vec<ವೃಕ್ಷ> struct_types;
   /* If warn_cxx_compat, a list of field names which have bindings,
      and which are defined in this struct, but which are not defined
      in any enclosing struct.  This is used to clear the in_struct
@@ -641,83 +641,83 @@ public:
   auto_vec<c_binding_ptr> fields;
   /* If warn_cxx_compat, a list of typedef names used when defining
      fields in this struct.  */
-  auto_vec<tree> typedefs_seen;
+  auto_vec<ವೃಕ್ಷ> typedefs_seen;
   /* The location of a previous definition of this struct.  */
   location_t refloc;
 };
 
 
 /* Hash table for structs and unions.  */
-struct c_struct_hasher : ggc_ptr_hash<tree_node>
+ಸಂರಚನಾ c_struct_hasher : ggc_ptr_hash<ವೃಕ್ಷ_ಗಂಟು>
 {
-  static hashval_t hash (tree t);
-  static bool equal (tree, tree);
+  ಸ್ಥಿರ hashval_t hash (ವೃಕ್ಷ t);
+  ಸ್ಥಿರ ತಾರ್ಕಿಕ equal (ವೃಕ್ಷ, ವೃಕ್ಷ);
 };
 
 /* Hash an RECORD OR UNION.  */
 hashval_t
-c_struct_hasher::hash (tree type)
+c_struct_hasher::hash (ವೃಕ್ಷ type)
 {
   inchash::hash hstate;
 
-  hstate.add_int (TREE_CODE (type));
-  tree tag = c_type_tag (type);
+  hstate.add_int (ವೃಕ್ಷ_CODE (type));
+  ವೃಕ್ಷ tag = c_type_tag (type);
   hstate.add_object (tag);
 
-  return hstate.end ();
+  ಪ್ರತ್ಯಾಗಮ hstate.end ();
 }
 
 /* Compare two RECORD or UNION types.  */
-bool
-c_struct_hasher::equal (tree t1,  tree t2)
+ತಾರ್ಕಿಕ
+c_struct_hasher::equal (ವೃಕ್ಷ t1,  ವೃಕ್ಷ t2)
 {
-  return comptypes_equiv_p (t1, t2);
+  ಪ್ರತ್ಯಾಗಮ comptypes_equiv_p (t1, t2);
 }
 
 /* All tagged typed so that TYPE_CANONICAL can be set correctly.  */
-static GTY (()) hash_table<c_struct_hasher> *c_struct_htab;
+ಸ್ಥಿರ GTY (()) hash_table<c_struct_hasher> *c_struct_htab;
 
 /* Information for the struct or union currently being parsed, or
    NULL if not parsing a struct or union.  */
-static class c_struct_parse_info *struct_parse_info;
+ಸ್ಥಿರ ವರ್ಗ c_struct_parse_info *struct_parse_info;
 
 /* Forward declarations.  */
-static tree lookup_name_in_scope (tree, struct c_scope *);
-static tree c_make_fname_decl (location_t, tree, int);
-static tree grokdeclarator (const struct c_declarator *,
-			    struct c_declspecs *,
-			    enum decl_context, bool, tree *, tree *, tree *,
-			    bool *, enum deprecated_states);
-static tree grokparms (struct c_arg_info *, bool);
-static void layout_array_type (tree);
-static const char *header_for_builtin_fn (tree);
+ಸ್ಥಿರ ವೃಕ್ಷ lookup_name_in_scope (ವೃಕ್ಷ, ಸಂರಚನಾ c_scope *);
+ಸ್ಥಿರ ವೃಕ್ಷ c_make_fname_decl (location_t, ವೃಕ್ಷ, ಪೂರ್ಣಾಙ್ಕ);
+ಸ್ಥಿರ ವೃಕ್ಷ grokdeclarator (ಧ್ರುವ ಸಂರಚನಾ c_declarator *,
+			    ಸಂರಚನಾ c_declspecs *,
+			    ಗಣನಾ decl_context, ತಾರ್ಕಿಕ, ವೃಕ್ಷ *, ವೃಕ್ಷ *, ವೃಕ್ಷ *,
+			    ತಾರ್ಕಿಕ *, ಗಣನಾ deprecated_states);
+ಸ್ಥಿರ ವೃಕ್ಷ grokparms (ಸಂರಚನಾ c_arg_info *, ತಾರ್ಕಿಕ);
+ಸ್ಥಿರ ಶೂನ್ಯ layout_array_type (ವೃಕ್ಷ);
+ಸ್ಥಿರ ಧ್ರುವ ವರ್ಣ *header_for_builtin_fn (ವೃಕ್ಷ);
 
 /* T is a statement.  Add it to the statement-tree.  This is the
    C/ObjC version--C++ has a slightly different version of this
    function.  */
 
-tree
-add_stmt (tree t)
+ವೃಕ್ಷ
+add_stmt (ವೃಕ್ಷ t)
 {
-  enum tree_code code = TREE_CODE (t);
+  ಗಣನಾ ವೃಕ್ಷ_code code = ವೃಕ್ಷ_CODE (t);
 
-  if (CAN_HAVE_LOCATION_P (t) && code != LABEL_EXPR)
+  ಯದಿ (CAN_HAVE_LOCATION_P (t) && code != LABEL_ಅಭಿವ್ಯಕ್ತಿ)
     {
-      if (!EXPR_HAS_LOCATION (t))
-	SET_EXPR_LOCATION (t, input_location);
+      ಯದಿ (!ಅಭಿವ್ಯಕ್ತಿ_HAS_LOCATION (t))
+	SET_ಅಭಿವ್ಯಕ್ತಿ_LOCATION (t, ಒಳಹರಿವು_location);
     }
 
   /* Add T to the statement-tree.  Non-side-effect statements need to be
      recorded during statement expressions.  */
-  if (!building_stmt_list_p ())
-    push_stmt_list ();
+  ಯದಿ (!building_stmt_list_p ())
+    ತಳ್ಳು_stmt_list ();
 
-  if (code == LABEL_EXPR || code == CASE_LABEL_EXPR)
+  ಯದಿ (code == LABEL_ಅಭಿವ್ಯಕ್ತಿ || code == CASE_LABEL_ಅಭಿವ್ಯಕ್ತಿ)
     STATEMENT_LIST_HAS_LABEL (cur_stmt_list) = 1;
 
   append_to_statement_list_force (t, &cur_stmt_list);
 
-  return t;
+  ಪ್ರತ್ಯಾಗಮ t;
 }
 
 
@@ -727,63 +727,63 @@ add_stmt (tree t)
 /* Return true if we will want to say something if a goto statement
    crosses DECL.  */
 
-static bool
-decl_jump_unsafe (tree decl)
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+decl_jump_unsafe (ವೃಕ್ಷ decl)
 {
-  if (error_operand_p (decl))
-    return false;
+  ಯದಿ (error_operand_p (decl))
+    ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 
   /* Don't warn for compound literals.  If a goto statement crosses
      their initialization, it should cross also all the places where
      the complit is used or where the complit address might be saved
      into some variable, so code after the label to which goto jumps
      should not be able to refer to the compound literal.  */
-  if (VAR_P (decl) && C_DECL_COMPOUND_LITERAL_P (decl))
-    return false;
+  ಯದಿ (VAR_P (decl) && C_DECL_COMPOUND_LITERAL_P (decl))
+    ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 
-  if (flag_openmp
+  ಯದಿ (flag_openmp
       && VAR_P (decl)
       && lookup_attribute ("omp allocate", DECL_ATTRIBUTES (decl)))
-    return true;
+    ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
 
   /* Always warn about crossing variably modified types.  */
-  if ((VAR_P (decl) || TREE_CODE (decl) == TYPE_DECL)
-      && c_type_variably_modified_p (TREE_TYPE (decl)))
-    return true;
+  ಯದಿ ((VAR_P (decl) || ವೃಕ್ಷ_CODE (decl) == TYPE_DECL)
+      && c_type_variably_modified_p (ವೃಕ್ಷ_TYPE (decl)))
+    ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
 
   /* Otherwise, only warn if -Wgoto-misses-init and this is an
      initialized automatic decl.  */
-  if (warn_jump_misses_init
+  ಯದಿ (warn_jump_misses_init
       && VAR_P (decl)
-      && !TREE_STATIC (decl)
-      && DECL_INITIAL (decl) != NULL_TREE)
-    return true;
+      && !ವೃಕ್ಷ_STATIC (decl)
+      && DECL_INITIAL (decl) != NULL_ವೃಕ್ಷ)
+    ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
 
-  return false;
+  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 }
 
 
-void
-c_print_identifier (FILE *file, tree node, int indent)
+ಶೂನ್ಯ
+c_print_identifier (FILE *file, ವೃಕ್ಷ ಗಂಟು, ಪೂರ್ಣಾಙ್ಕ indent)
 {
-  void (*save) (enum c_oracle_request, tree identifier);
+  ಶೂನ್ಯ (*save) (ಗಣನಾ c_oracle_request, ವೃಕ್ಷ identifier);
 
   /* Temporarily hide any binding oracle.  Without this, calls to
      debug_tree from the debugger will end up calling into the oracle,
      making for a confusing debug session.  As the oracle isn't needed
      here for normal operation, it's simplest to suppress it.  */
   save = c_binding_oracle;
-  c_binding_oracle = NULL;
+  c_binding_oracle = ರಿಕ್ತ;
 
-  print_node (file, "symbol", I_SYMBOL_DECL (node), indent + 4);
-  print_node (file, "tag", I_TAG_DECL (node), indent + 4);
-  print_node (file, "label", I_LABEL_DECL (node), indent + 4);
-  if (C_IS_RESERVED_WORD (node) && C_RID_CODE (node) != RID_CXX_COMPAT_WARN)
+  print_ಗಂಟು (file, "symbol", I_ಚಿಹ್ನೆ_DECL (ಗಂಟು), indent + 4);
+  print_ಗಂಟು (file, "tag", I_TAG_DECL (ಗಂಟು), indent + 4);
+  print_ಗಂಟು (file, "label", I_LABEL_DECL (ಗಂಟು), indent + 4);
+  ಯದಿ (C_IS_RESERVED_WORD (ಗಂಟು) && C_RID_CODE (ಗಂಟು) != RID_CXX_COMPAT_WARN)
     {
-      tree rid = ridpointers[C_RID_CODE (node)];
+      ವೃಕ್ಷ rid = ridpointers[C_RID_CODE (ಗಂಟು)];
       indent_to (file, indent + 4);
       fprintf (file, "rid " HOST_PTR_PRINTF " \"%s\"",
-	       (void *) rid, IDENTIFIER_POINTER (rid));
+	       (ಶೂನ್ಯ *) rid, IDENTIFIER_POINTER (rid));
     }
 
   c_binding_oracle = save;
@@ -792,7 +792,7 @@ c_print_identifier (FILE *file, tree node, int indent)
 /* Establish that the scope contains declarations that are sensitive to
    jumps that cross a binding.  Together with decl_jump_unsafe, this is
    used to diagnose such jumps.  */
-void
+ಶೂನ್ಯ
 c_mark_decl_jump_unsafe_in_current_scope ()
 {
   current_scope->has_jump_unsafe_decl = 1;
@@ -801,18 +801,18 @@ c_mark_decl_jump_unsafe_in_current_scope ()
 /* Establish a binding between NAME, an IDENTIFIER_NODE, and DECL,
    which may be any of several kinds of DECL or TYPE or error_mark_node,
    in the scope SCOPE.  */
-static void
-bind (tree name, tree decl, struct c_scope *scope, bool invisible,
-      bool nested, location_t locus)
+ಸ್ಥಿರ ಶೂನ್ಯ
+bind (ವೃಕ್ಷ name, ವೃಕ್ಷ decl, ಸಂರಚನಾ c_scope *scope, ತಾರ್ಕಿಕ invisible,
+      ತಾರ್ಕಿಕ nested, location_t locus)
 {
-  struct c_binding *b, **here;
+  ಸಂರಚನಾ c_binding *b, **here;
 
-  if (binding_freelist)
+  ಯದಿ (binding_freelist)
     {
       b = binding_freelist;
       binding_freelist = b->prev;
     }
-  else
+  ಅನ್ಯಥಾ
     b = ggc_alloc<c_binding> ();
 
   b->shadowed = 0;
@@ -825,38 +825,38 @@ bind (tree name, tree decl, struct c_scope *scope, bool invisible,
   b->in_struct = 0;
   b->locus = locus;
 
-  b->u.type = NULL;
+  b->u.type = ರಿಕ್ತ;
 
   b->prev = scope->bindings;
   scope->bindings = b;
 
-  if (decl_jump_unsafe (decl))
+  ಯದಿ (decl_jump_unsafe (decl))
     scope->has_jump_unsafe_decl = 1;
 
-  if (!name)
-    return;
+  ಯದಿ (!name)
+    ಪ್ರತ್ಯಾಗಮ;
 
-  switch (TREE_CODE (decl))
+  ವಿಕಲ್ಪ (ವೃಕ್ಷ_CODE (decl))
     {
-    case LABEL_DECL:     here = &I_LABEL_BINDING (name);   break;
-    case ENUMERAL_TYPE:
-    case UNION_TYPE:
-    case RECORD_TYPE:    here = &I_TAG_BINDING (name);     break;
-    case VAR_DECL:
-    case FUNCTION_DECL:
-    case TYPE_DECL:
-    case CONST_DECL:
-    case PARM_DECL:
-    case ERROR_MARK:     here = &I_SYMBOL_BINDING (name);  break;
+    ಪಕ್ಷ LABEL_DECL:     here = &I_LABEL_BINDING (name);   ಭಙ್ಗ;
+    ಪಕ್ಷ ENUMERAL_TYPE:
+    ಪಕ್ಷ UNION_TYPE:
+    ಪಕ್ಷ RECORD_TYPE:    here = &I_TAG_BINDING (name);     ಭಙ್ಗ;
+    ಪಕ್ಷ VAR_DECL:
+    ಪಕ್ಷ FUNCTION_DECL:
+    ಪಕ್ಷ TYPE_DECL:
+    ಪಕ್ಷ CONST_DECL:
+    ಪಕ್ಷ PARM_DECL:
+    ಪಕ್ಷ ERROR_MARK:     here = &I_ಚಿಹ್ನೆ_BINDING (name);  ಭಙ್ಗ;
 
-    default:
+    ಸ್ವಭಾವ:
       gcc_unreachable ();
     }
 
   /* Locate the appropriate place in the chain of shadowed decls
      to insert this binding.  Normally, scope == current_scope and
      this does nothing.  */
-  while (*here && (*here)->depth > scope->depth)
+  ಯಾವತ್ (*here && (*here)->depth > scope->depth)
     here = &(*here)->shadowed;
 
   b->shadowed = *here;
@@ -867,30 +867,30 @@ bind (tree name, tree decl, struct c_scope *scope, bool invisible,
    and return the former value of b->prev.  This is used by pop_scope
    and get_parm_info to iterate destructively over all the bindings
    from a given scope.  */
-static struct c_binding *
-free_binding_and_advance (struct c_binding *b)
+ಸ್ಥಿರ ಸಂರಚನಾ c_binding *
+free_binding_and_advance (ಸಂರಚನಾ c_binding *b)
 {
-  struct c_binding *prev = b->prev;
+  ಸಂರಚನಾ c_binding *prev = b->prev;
 
-  memset (b, 0, sizeof (struct c_binding));
+  memset (b, 0, ಪರಿಮಾಣ (ಸಂರಚನಾ c_binding));
   b->prev = binding_freelist;
   binding_freelist = b;
 
-  return prev;
+  ಪ್ರತ್ಯಾಗಮ prev;
 }
 
 /* Bind a label.  Like bind, but skip fields which aren't used for
    labels, and add the LABEL_VARS value.  */
-static void
-bind_label (tree name, tree label, struct c_scope *scope,
-	    struct c_label_vars *label_vars)
+ಸ್ಥಿರ ಶೂನ್ಯ
+bind_label (ವೃಕ್ಷ name, ವೃಕ್ಷ label, ಸಂರಚನಾ c_scope *scope,
+	    ಸಂರಚನಾ c_label_vars *label_vars)
 {
-  struct c_binding *b;
+  ಸಂರಚನಾ c_binding *b;
 
-  bind (name, label, scope, /*invisible=*/false, /*nested=*/false,
+  bind (name, label, scope, /*invisible=*/ಅಸತ್ಯ, /*nested=*/ಅಸತ್ಯ,
 	UNKNOWN_LOCATION);
 
-  scope->has_label_bindings = true;
+  scope->has_label_bindings = ಸತ್ಯ;
 
   b = scope->bindings;
   gcc_assert (b->decl == label);
@@ -901,25 +901,25 @@ bind_label (tree name, tree label, struct c_scope *scope,
 /* Hook called at end of compilation to assume 1 elt
    for a file-scope tentative array defn that wasn't complete before.  */
 
-void
-c_finish_incomplete_decl (tree decl)
+ಶೂನ್ಯ
+c_finish_incomplete_decl (ವೃಕ್ಷ decl)
 {
-  if (VAR_P (decl))
+  ಯದಿ (VAR_P (decl))
     {
-      tree type = TREE_TYPE (decl);
-      if (type != error_mark_node
-	  && TREE_CODE (type) == ARRAY_TYPE
+      ವೃಕ್ಷ type = ವೃಕ್ಷ_TYPE (decl);
+      ಯದಿ (type != error_mark_ಗಂಟು
+	  && ವೃಕ್ಷ_CODE (type) == ARRAY_TYPE
 	  && !DECL_EXTERNAL (decl)
-	  && TYPE_DOMAIN (type) == NULL_TREE)
+	  && TYPE_DOMAIN (type) == NULL_ವೃಕ್ಷ)
 	{
-	  if (flag_isoc2y && !TREE_PUBLIC (decl))
+	  ಯದಿ (flag_isoc2y && !ವೃಕ್ಷ_PUBLIC (decl))
 	    error_at (DECL_SOURCE_LOCATION (decl),
 		      "array size missing in %q+D", decl);
-	  else
+	  ಅನ್ಯಥಾ
 	    warning_at (DECL_SOURCE_LOCATION (decl),
 			0, "array %q+D assumed to have one element", decl);
 
-	  complete_array_type (&TREE_TYPE (decl), NULL_TREE, true);
+	  complete_array_type (&ವೃಕ್ಷ_TYPE (decl), NULL_ವೃಕ್ಷ, ಸತ್ಯ);
 
 	  relayout_decl (decl);
 	}
@@ -930,9 +930,9 @@ c_finish_incomplete_decl (tree decl)
    LOC) to static DECL (file-scope or function-local according to
    TYPE).  */
 
-void
-record_inline_static (location_t loc, tree func, tree decl,
-		      enum c_inline_static_type type)
+ಶೂನ್ಯ
+record_inline_static (location_t loc, ವೃಕ್ಷ func, ವೃಕ್ಷ decl,
+		      ಗಣನಾ c_inline_static_type type)
 {
   c_inline_static *csi = ggc_alloc<c_inline_static> ();
   csi->location = loc;
@@ -947,64 +947,64 @@ record_inline_static (location_t loc, tree func, tree decl,
    the end of the translation unit and diagnose them if the functions
    are still inline definitions.  */
 
-static void
-check_inline_statics (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+check_inline_statics (ಶೂನ್ಯ)
 {
-  struct c_inline_static *csi;
-  for (csi = c_inline_statics; csi; csi = csi->next)
+  ಸಂರಚನಾ c_inline_static *csi;
+  ಪ್ರತಿ (csi = c_inline_statics; csi; csi = csi->next)
     {
-      if (DECL_EXTERNAL (csi->function))
-	switch (csi->type)
+      ಯದಿ (DECL_EXTERNAL (csi->function))
+	ವಿಕಲ್ಪ (csi->type)
 	  {
-	  case csi_internal:
+	  ಪಕ್ಷ csi_internal:
 	    pedwarn (csi->location, 0,
 		     "%qD is static but used in inline function %qD "
 		     "which is not static", csi->static_decl, csi->function);
-	    break;
-	  case csi_modifiable:
+	    ಭಙ್ಗ;
+	  ಪಕ್ಷ csi_modifiable:
 	    pedwarn (csi->location, 0,
 		     "%q+D is static but declared in inline function %qD "
 		     "which is not static", csi->static_decl, csi->function);
-	    break;
-	  default:
+	    ಭಙ್ಗ;
+	  ಸ್ವಭಾವ:
 	    gcc_unreachable ();
 	  }
     }
-  c_inline_statics = NULL;
+  c_inline_statics = ರಿಕ್ತ;
 }
 
 /* Fill in a c_spot_bindings structure.  If DEFINING is true, set it
    for the current state, otherwise set it to uninitialized.  */
 
-static void
-set_spot_bindings (struct c_spot_bindings *p, bool defining)
+ಸ್ಥಿರ ಶೂನ್ಯ
+set_spot_bindings (ಸಂರಚನಾ c_spot_bindings *p, ತಾರ್ಕಿಕ defining)
 {
-  if (defining)
+  ಯದಿ (defining)
     {
       p->scope = current_scope;
       p->bindings_in_scope = current_scope->bindings;
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      p->scope = NULL;
-      p->bindings_in_scope = NULL;
+      p->scope = ರಿಕ್ತ;
+      p->bindings_in_scope = ರಿಕ್ತ;
     }
   p->stmt_exprs = 0;
-  p->left_stmt_expr = false;
+  p->ಎಡ_stmt_ಅಭಿವ್ಯಕ್ತಿ = ಅಸತ್ಯ;
 }
 
 /* Update spot bindings P as we pop out of SCOPE.  Return true if we
    should push decls for a label.  */
 
-static bool
-update_spot_bindings (struct c_scope *scope, struct c_spot_bindings *p)
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+update_spot_bindings (ಸಂರಚನಾ c_scope *scope, ಸಂರಚನಾ c_spot_bindings *p)
 {
-  if (p->scope != scope)
+  ಯದಿ (p->scope != scope)
     {
       /* This label or goto is defined in some other scope, or it is a
 	 label which is not yet defined.  There is nothing to
 	 update.  */
-      return false;
+      ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
     }
 
   /* Adjust the spot bindings to refer to the bindings already defined
@@ -1012,100 +1012,100 @@ update_spot_bindings (struct c_scope *scope, struct c_spot_bindings *p)
   p->scope = scope->outer;
   p->bindings_in_scope = p->scope->bindings;
 
-  return true;
+  ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
 }
 
 /* The Objective-C front-end often needs to determine the current scope.  */
 
-void *
-objc_get_current_scope (void)
+ಶೂನ್ಯ *
+objc_get_current_scope (ಶೂನ್ಯ)
 {
-  return current_scope;
+  ಪ್ರತ್ಯಾಗಮ current_scope;
 }
 
 /* The following function is used only by Objective-C.  It needs to live here
    because it accesses the innards of c_scope.  */
 
-void
-objc_mark_locals_volatile (void *enclosing_blk)
+ಶೂನ್ಯ
+objc_mark_locals_volatile (ಶೂನ್ಯ *enclosing_blk)
 {
-  struct c_scope *scope;
-  struct c_binding *b;
+  ಸಂರಚನಾ c_scope *scope;
+  ಸಂರಚನಾ c_binding *b;
 
-  for (scope = current_scope;
+  ಪ್ರತಿ (scope = current_scope;
        scope && scope != enclosing_blk;
        scope = scope->outer)
     {
-      for (b = scope->bindings; b; b = b->prev)
+      ಪ್ರತಿ (b = scope->bindings; b; b = b->prev)
 	objc_volatilize_decl (b->decl);
 
       /* Do not climb up past the current function.  */
-      if (scope->function_body)
-	break;
+      ಯದಿ (scope->function_body)
+	ಭಙ್ಗ;
     }
 }
 
 /* Return true if we are in the global binding level.  */
 
-bool
-global_bindings_p (void)
+ತಾರ್ಕಿಕ
+global_bindings_p (ಶೂನ್ಯ)
 {
-  return current_scope == file_scope;
+  ಪ್ರತ್ಯಾಗಮ current_scope == file_scope;
 }
 
 /* Return true if we're declaring parameters in an old-style function
    declaration.  */
 
-bool
-old_style_parameter_scope (void)
+ತಾರ್ಕಿಕ
+old_style_parameter_scope (ಶೂನ್ಯ)
 {
   /* If processing parameters and there is no function statement list, we
    * have an old-style function declaration.  */
-  return (current_scope->parm_flag && !DECL_SAVED_TREE (current_function_decl));
+  ಪ್ರತ್ಯಾಗಮ (current_scope->parm_flag && !DECL_SAVED_ವೃಕ್ಷ (current_function_decl));
 }
 
-void
-keep_next_level (void)
+ಶೂನ್ಯ
+keep_next_level (ಶೂನ್ಯ)
 {
-  keep_next_level_flag = true;
+  keep_next_level_flag = ಸತ್ಯ;
 }
 
 /* Set the flag for the FLOAT_CONST_DECIMAL64 pragma being ON.  */
 
-void
-set_float_const_decimal64 (void)
+ಶೂನ್ಯ
+set_float_const_decimal64 (ಶೂನ್ಯ)
 {
-  current_scope->float_const_decimal64 = true;
+  current_scope->float_const_decimal64 = ಸತ್ಯ;
 }
 
 /* Clear the flag for the FLOAT_CONST_DECIMAL64 pragma.  */
 
-void
-clear_float_const_decimal64 (void)
+ಶೂನ್ಯ
+clear_float_const_decimal64 (ಶೂನ್ಯ)
 {
-  current_scope->float_const_decimal64 = false;
+  current_scope->float_const_decimal64 = ಅಸತ್ಯ;
 }
 
 /* Return nonzero if an unsuffixed float constant is _Decimal64.  */
 
-bool
-float_const_decimal64_p (void)
+ತಾರ್ಕಿಕ
+float_const_decimal64_p (ಶೂನ್ಯ)
 {
-  return current_scope->float_const_decimal64;
+  ಪ್ರತ್ಯಾಗಮ current_scope->float_const_decimal64;
 }
 
 /* Identify this scope as currently being filled with parameters.  */
 
-void
-declare_parm_level (void)
+ಶೂನ್ಯ
+declare_parm_level (ಶೂನ್ಯ)
 {
-  current_scope->parm_flag = true;
+  current_scope->parm_flag = ಸತ್ಯ;
 }
 
-void
-push_scope (void)
+ಶೂನ್ಯ
+ತಳ್ಳು_scope (ಶೂನ್ಯ)
 {
-  if (next_is_function_body)
+  ಯದಿ (next_is_function_body)
     {
       /* This is the transition from the parameters to the top level
 	 of the function body.  These are the same scope
@@ -1117,38 +1117,38 @@ push_scope (void)
 	 The outermost block of a function always gets a BLOCK node,
 	 because the debugging output routines expect that each
 	 function has at least one BLOCK.  */
-      current_scope->parm_flag         = false;
-      current_scope->function_body     = true;
-      current_scope->keep              = true;
+      current_scope->parm_flag         = ಅಸತ್ಯ;
+      current_scope->function_body     = ಸತ್ಯ;
+      current_scope->keep              = ಸತ್ಯ;
       current_scope->outer_function    = current_function_scope;
       current_function_scope           = current_scope;
 
-      keep_next_level_flag = false;
-      next_is_function_body = false;
+      keep_next_level_flag = ಅಸತ್ಯ;
+      next_is_function_body = ಅಸತ್ಯ;
 
       /* The FLOAT_CONST_DECIMAL64 pragma applies to nested scopes.  */
-      if (current_scope->outer)
+      ಯದಿ (current_scope->outer)
 	current_scope->float_const_decimal64
 	  = current_scope->outer->float_const_decimal64;
-      else
-	current_scope->float_const_decimal64 = false;
+      ಅನ್ಯಥಾ
+	current_scope->float_const_decimal64 = ಅಸತ್ಯ;
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      struct c_scope *scope;
-      if (scope_freelist)
+      ಸಂರಚನಾ c_scope *scope;
+      ಯದಿ (scope_freelist)
 	{
 	  scope = scope_freelist;
 	  scope_freelist = scope->outer;
 	}
-      else
+      ಅನ್ಯಥಾ
 	scope = ggc_cleared_alloc<c_scope> ();
 
       /* The FLOAT_CONST_DECIMAL64 pragma applies to nested scopes.  */
-      if (current_scope)
+      ಯದಿ (current_scope)
 	scope->float_const_decimal64 = current_scope->float_const_decimal64;
-      else
-	scope->float_const_decimal64 = false;
+      ಅನ್ಯಥಾ
+	scope->float_const_decimal64 = ಅಸತ್ಯ;
 
       scope->keep          = keep_next_level_flag;
       scope->outer         = current_scope;
@@ -1156,14 +1156,14 @@ push_scope (void)
 
       /* Check for scope depth overflow.  Unlikely (2^28 == 268,435,456) but
 	 possible.  */
-      if (current_scope && scope->depth == 0)
+      ಯದಿ (current_scope && scope->depth == 0)
 	{
 	  scope->depth--;
 	  sorry ("GCC supports only %u nested scopes", scope->depth);
 	}
 
       current_scope        = scope;
-      keep_next_level_flag = false;
+      keep_next_level_flag = ಅಸತ್ಯ;
     }
 }
 
@@ -1172,48 +1172,48 @@ push_scope (void)
    These are the decls whose initialization will be skipped by a goto
    later in the function.  */
 
-static void
-update_label_decls (struct c_scope *scope)
+ಸ್ಥಿರ ಶೂನ್ಯ
+update_label_decls (ಸಂರಚನಾ c_scope *scope)
 {
-  struct c_scope *s;
+  ಸಂರಚನಾ c_scope *s;
 
   s = scope;
-  while (s != NULL)
+  ಯಾವತ್ (s != ರಿಕ್ತ)
     {
-      if (s->has_label_bindings)
+      ಯದಿ (s->has_label_bindings)
 	{
-	  struct c_binding *b;
+	  ಸಂರಚನಾ c_binding *b;
 
-	  for (b = s->bindings; b != NULL; b = b->prev)
+	  ಪ್ರತಿ (b = s->bindings; b != ರಿಕ್ತ; b = b->prev)
 	    {
-	      struct c_label_vars *label_vars;
-	      struct c_binding *b1;
-	      bool hjud;
-	      unsigned int ix;
-	      struct c_goto_bindings *g;
+	      ಸಂರಚನಾ c_label_vars *label_vars;
+	      ಸಂರಚನಾ c_binding *b1;
+	      ತಾರ್ಕಿಕ hjud;
+	      unsigned ಪೂರ್ಣಾಙ್ಕ ix;
+	      ಸಂರಚನಾ c_goto_bindings *g;
 
-	      if (TREE_CODE (b->decl) != LABEL_DECL)
-		continue;
+	      ಯದಿ (ವೃಕ್ಷ_CODE (b->decl) != LABEL_DECL)
+		ಅನುವರ್ತ;
 	      label_vars = b->u.label;
 
 	      b1 = label_vars->label_bindings.bindings_in_scope;
-	      if (label_vars->label_bindings.scope == NULL)
-		hjud = false;
-	      else
+	      ಯದಿ (label_vars->label_bindings.scope == ರಿಕ್ತ)
+		hjud = ಅಸತ್ಯ;
+	      ಅನ್ಯಥಾ
 		hjud = label_vars->label_bindings.scope->has_jump_unsafe_decl;
-	      if (update_spot_bindings (scope, &label_vars->label_bindings))
+	      ಯದಿ (update_spot_bindings (scope, &label_vars->label_bindings))
 		{
 		  /* This label is defined in this scope.  */
-		  if (hjud)
+		  ಯದಿ (hjud)
 		    {
-		      for (; b1 != NULL; b1 = b1->prev)
+		      ಪ್ರತಿ (; b1 != ರಿಕ್ತ; b1 = b1->prev)
 			{
 			  /* A goto from later in the function to this
 			     label will never see the initialization
 			     of B1, if any.  Save it to issue a
 			     warning if needed.  */
-			  if (decl_jump_unsafe (b1->decl))
-			    vec_safe_push(label_vars->decls_in_scope, b1->decl);
+			  ಯದಿ (decl_jump_unsafe (b1->decl))
+			    vec_safe_ತಳ್ಳು(label_vars->decls_in_scope, b1->decl);
 			}
 		    }
 		}
@@ -1226,8 +1226,8 @@ update_label_decls (struct c_scope *scope)
 	}
 
       /* Don't search beyond the current function.  */
-      if (s == current_function_scope)
-	break;
+      ಯದಿ (s == current_function_scope)
+	ಭಙ್ಗ;
 
       s = s->outer;
     }
@@ -1238,32 +1238,32 @@ update_label_decls (struct c_scope *scope)
    node containing all the DECLs in this scope that are of interest
    to debug info generation.  */
 
-tree
-pop_scope (void)
+ವೃಕ್ಷ
+ತೆಗೆ_scope (ಶೂನ್ಯ)
 {
-  struct c_scope *scope = current_scope;
-  tree block, context, p;
-  struct c_binding *b;
+  ಸಂರಚನಾ c_scope *scope = current_scope;
+  ವೃಕ್ಷ block, context, p;
+  ಸಂರಚನಾ c_binding *b;
 
-  bool functionbody = scope->function_body;
-  bool keep = functionbody || scope->keep || scope->bindings;
+  ತಾರ್ಕಿಕ functionbody = scope->function_body;
+  ತಾರ್ಕಿಕ keep = functionbody || scope->keep || scope->bindings;
 
   update_label_decls (scope);
 
   /* If appropriate, create a BLOCK to record the decls for the life
      of this function.  */
-  block = NULL_TREE;
-  if (keep)
+  block = NULL_ವೃಕ್ಷ;
+  ಯದಿ (keep)
     {
-      block = make_node (BLOCK);
+      block = make_ಗಂಟು (BLOCK);
       BLOCK_SUBBLOCKS (block) = scope->blocks;
-      TREE_USED (block) = 1;
+      ವೃಕ್ಷ_USED (block) = 1;
 
       /* In each subblock, record that this is its superior.  */
-      for (p = scope->blocks; p; p = BLOCK_CHAIN (p))
+      ಪ್ರತಿ (p = scope->blocks; p; p = BLOCK_CHAIN (p))
 	BLOCK_SUPERCONTEXT (p) = block;
 
-      BLOCK_VARS (block) = NULL_TREE;
+      BLOCK_VARS (block) = NULL_ವೃಕ್ಷ;
     }
 
   /* The TYPE_CONTEXTs for all of the tagged types belonging to this
@@ -1279,32 +1279,32 @@ pop_scope (void)
      type nodes get set in `grokdeclarator' as soon as we have created
      the FUNCTION_TYPE node which will represent the "scope" for these
      "parameter list local" tagged types.  */
-  if (scope->function_body)
+  ಯದಿ (scope->function_body)
     context = current_function_decl;
-  else if (scope == file_scope)
+  ಅನ್ಯಥಾ ಯದಿ (scope == file_scope)
     {
-      tree file_decl
-	= build_translation_unit_decl (get_identifier (main_input_filename));
+      ವೃಕ್ಷ file_decl
+	= build_translation_unit_decl (get_identifier (main_ಒಳಹರಿವು_filename));
       context = file_decl;
       debug_hooks->register_main_translation_unit (file_decl);
     }
-  else
+  ಅನ್ಯಥಾ
     context = block;
 
   /* Clear all bindings in this scope.  */
-  for (b = scope->bindings; b; b = free_binding_and_advance (b))
+  ಪ್ರತಿ (b = scope->bindings; b; b = free_binding_and_advance (b))
     {
       p = b->decl;
-      switch (TREE_CODE (p))
+      ವಿಕಲ್ಪ (ವೃಕ್ಷ_CODE (p))
 	{
-	case LABEL_DECL:
+	ಪಕ್ಷ LABEL_DECL:
 	  /* Warnings for unused labels, errors for undefined labels.  */
-	  if (TREE_USED (p) && !DECL_INITIAL (p))
+	  ಯದಿ (ವೃಕ್ಷ_USED (p) && !DECL_INITIAL (p))
 	    {
 	      error ("label %q+D used but not defined", p);
-	      DECL_INITIAL (p) = error_mark_node;
+	      DECL_INITIAL (p) = error_mark_ಗಂಟು;
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    warn_for_unused_label (p);
 
 	  /* Labels go in BLOCK_VARS.  */
@@ -1314,61 +1314,61 @@ pop_scope (void)
 	  I_LABEL_BINDING (b->id) = b->shadowed;
 
 	  /* Also pop back to the shadowed label_vars.  */
-	  release_tree_vector (b->u.label->decls_in_scope);
+	  release_ವೃಕ್ಷ_vector (b->u.label->decls_in_scope);
 	  b->u.label = b->u.label->shadowed;
-	  break;
+	  ಭಙ್ಗ;
 
-	case ENUMERAL_TYPE:
-	case UNION_TYPE:
-	case RECORD_TYPE:
+	ಪಕ್ಷ ENUMERAL_TYPE:
+	ಪಕ್ಷ UNION_TYPE:
+	ಪಕ್ಷ RECORD_TYPE:
 
 	  /* Types may not have tag-names, in which case the type
 	     appears in the bindings list with b->id NULL.  */
-	  if (b->id)
+	  ಯದಿ (b->id)
 	    {
 	      gcc_assert (I_TAG_BINDING (b->id) == b);
 	      I_TAG_BINDING (b->id) = b->shadowed;
 	    }
-	  break;
+	  ಭಙ್ಗ;
 
-	case FUNCTION_DECL:
+	ಪಕ್ಷ FUNCTION_DECL:
 	  /* Propagate TREE_ADDRESSABLE from nested functions to their
 	     containing functions.  */
-	  if (!TREE_ASM_WRITTEN (p)
-	      && DECL_INITIAL (p) != NULL_TREE
-	      && TREE_ADDRESSABLE (p)
-	      && DECL_ABSTRACT_ORIGIN (p) != NULL_TREE
+	  ಯದಿ (!ವೃಕ್ಷ_ASM_WRITTEN (p)
+	      && DECL_INITIAL (p) != NULL_ವೃಕ್ಷ
+	      && ವೃಕ್ಷ_ADDRESSABLE (p)
+	      && DECL_ABSTRACT_ORIGIN (p) != NULL_ವೃಕ್ಷ
 	      && DECL_ABSTRACT_ORIGIN (p) != p)
-	    TREE_ADDRESSABLE (DECL_ABSTRACT_ORIGIN (p)) = 1;
-	  if (!TREE_PUBLIC (p)
+	    ವೃಕ್ಷ_ADDRESSABLE (DECL_ABSTRACT_ORIGIN (p)) = 1;
+	  ಯದಿ (!ವೃಕ್ಷ_PUBLIC (p)
 	      && !DECL_INITIAL (p)
 	      && !b->nested
 	      && scope != file_scope
 	      && scope != external_scope)
 	    {
 	      error ("nested function %q+D declared but never defined", p);
-	      undef_nested_function = true;
+	      undef_nested_function = ಸತ್ಯ;
 	    }
-	  else if (DECL_DECLARED_INLINE_P (p)
-		   && TREE_PUBLIC (p)
+	  ಅನ್ಯಥಾ ಯದಿ (DECL_DECLARED_INLINE_P (p)
+		   && ವೃಕ್ಷ_PUBLIC (p)
 		   && !DECL_INITIAL (p))
 	    {
 	      /* C99 6.7.4p6: "a function with external linkage... declared
 		 with an inline function specifier ... shall also be defined
 		 in the same translation unit."  */
-	      if (!flag_gnu89_inline
+	      ಯದಿ (!flag_gnu89_inline
 		  && !lookup_attribute ("gnu_inline", DECL_ATTRIBUTES (p))
 		  && scope == external_scope)
-		pedwarn (input_location, 0,
+		pedwarn (ಒಳಹರಿವು_location, 0,
 			 "inline function %q+D declared but never defined", p);
 	      DECL_EXTERNAL (p) = 1;
 	    }
 
-	  goto common_symbol;
+	  ಗಚ್ಛ common_ಚಿಹ್ನೆ;
 
-	case VAR_DECL:
+	ಪಕ್ಷ VAR_DECL:
 	  /* Warnings for unused variables.  */
-	  if ((!TREE_USED (p) || !DECL_READ_P (p))
+	  ಯದಿ ((!ವೃಕ್ಷ_USED (p) || !DECL_READ_P (p))
 	      && !warning_suppressed_p (p, OPT_Wunused_but_set_variable_)
 	      && !DECL_IN_SYSTEM_HEADER (p)
 	      && DECL_NAME (p)
@@ -1376,53 +1376,53 @@ pop_scope (void)
 	      && scope != file_scope
 	      && scope != external_scope)
 	    {
-	      if (!TREE_USED (p))
+	      ಯದಿ (!ವೃಕ್ಷ_USED (p))
 		{
 		  warning (OPT_Wunused_variable, "unused variable %q+D", p);
 		  suppress_warning (p, OPT_Wunused_variable);
 		}
-	      else if (DECL_CONTEXT (p) == current_function_decl)
+	      ಅನ್ಯಥಾ ಯದಿ (DECL_CONTEXT (p) == current_function_decl)
 		warning_at (DECL_SOURCE_LOCATION (p),
 			    OPT_Wunused_but_set_variable_,
 			    "variable %qD set but not used", p);
 	    }
 
-	  if (b->inner_comp)
+	  ಯದಿ (b->inner_comp)
 	    {
 	      error ("type of array %q+D completed incompatibly with"
 		     " implicit initialization", p);
 	    }
 
 	  /* Fall through.  */
-	case TYPE_DECL:
-	case CONST_DECL:
-	common_symbol:
+	ಪಕ್ಷ TYPE_DECL:
+	ಪಕ್ಷ CONST_DECL:
+	common_ಚಿಹ್ನೆ:
 	  /* All of these go in BLOCK_VARS, but only if this is the
 	     binding in the home scope.  */
-	  if (!b->nested)
+	  ಯದಿ (!b->nested)
 	    {
 	      DECL_CHAIN (p) = BLOCK_VARS (block);
 	      BLOCK_VARS (block) = p;
 	    }
-	  else if (VAR_OR_FUNCTION_DECL_P (p) && scope != file_scope)
+	  ಅನ್ಯಥಾ ಯದಿ (VAR_OR_FUNCTION_DECL_P (p) && scope != file_scope)
 	    {
 	      /* For block local externs add a special
 		 DECL_EXTERNAL decl for debug info generation.  */
-	      tree extp = copy_node (p);
+	      ವೃಕ್ಷ extp = copy_ಗಂಟು (p);
 
 	      DECL_EXTERNAL (extp) = 1;
-	      TREE_STATIC (extp) = 0;
-	      TREE_PUBLIC (extp) = 1;
-	      DECL_INITIAL (extp) = NULL_TREE;
-	      DECL_LANG_SPECIFIC (extp) = NULL;
+	      ವೃಕ್ಷ_STATIC (extp) = 0;
+	      ವೃಕ್ಷ_PUBLIC (extp) = 1;
+	      DECL_INITIAL (extp) = NULL_ವೃಕ್ಷ;
+	      DECL_LANG_SPECIFIC (extp) = ರಿಕ್ತ;
 	      DECL_CONTEXT (extp) = current_function_decl;
-	      if (TREE_CODE (p) == FUNCTION_DECL)
+	      ಯದಿ (ವೃಕ್ಷ_CODE (p) == FUNCTION_DECL)
 		{
-		  DECL_RESULT (extp) = NULL_TREE;
-		  DECL_SAVED_TREE (extp) = NULL_TREE;
-		  DECL_STRUCT_FUNCTION (extp) = NULL;
+		  DECL_RESULT (extp) = NULL_ವೃಕ್ಷ;
+		  DECL_SAVED_ವೃಕ್ಷ (extp) = NULL_ವೃಕ್ಷ;
+		  DECL_STRUCT_FUNCTION (extp) = ರಿಕ್ತ;
 		}
-	      if (b->locus != UNKNOWN_LOCATION)
+	      ಯದಿ (b->locus != UNKNOWN_LOCATION)
 		DECL_SOURCE_LOCATION (extp) = b->locus;
 	      DECL_CHAIN (extp) = BLOCK_VARS (block);
 	      BLOCK_VARS (block) = extp;
@@ -1430,7 +1430,7 @@ pop_scope (void)
 	  /* If this is the file scope set DECL_CONTEXT of each decl to
 	     the TRANSLATION_UNIT_DECL.  This makes same_translation_unit_p
 	     work.  */
-	  if (scope == file_scope)
+	  ಯದಿ (scope == file_scope)
 	      DECL_CONTEXT (p) = context;
 
 	  gcc_fallthrough ();
@@ -1439,88 +1439,88 @@ pop_scope (void)
 	     parameter warnings are handled by function.cc.
 	     error_mark_node obviously does not go in BLOCK_VARS and
 	     does not get unused-variable warnings.  */
-	case PARM_DECL:
-	case ERROR_MARK:
+	ಪಕ್ಷ PARM_DECL:
+	ಪಕ್ಷ ERROR_MARK:
 	  /* It is possible for a decl not to have a name.  We get
 	     here with b->id NULL in this case.  */
-	  if (b->id)
+	  ಯದಿ (b->id)
 	    {
-	      gcc_assert (I_SYMBOL_BINDING (b->id) == b);
-	      I_SYMBOL_BINDING (b->id) = b->shadowed;
-	      if (b->shadowed && b->shadowed->u.type)
-		TREE_TYPE (b->shadowed->decl) = b->shadowed->u.type;
+	      gcc_assert (I_ಚಿಹ್ನೆ_BINDING (b->id) == b);
+	      I_ಚಿಹ್ನೆ_BINDING (b->id) = b->shadowed;
+	      ಯದಿ (b->shadowed && b->shadowed->u.type)
+		ವೃಕ್ಷ_TYPE (b->shadowed->decl) = b->shadowed->u.type;
 	    }
-	  break;
+	  ಭಙ್ಗ;
 
-	default:
+	ಸ್ವಭಾವ:
 	  gcc_unreachable ();
 	}
     }
 
 
   /* Dispose of the block that we just made inside some higher level.  */
-  if ((scope->function_body || scope == file_scope) && context)
+  ಯದಿ ((scope->function_body || scope == file_scope) && context)
     {
       DECL_INITIAL (context) = block;
       BLOCK_SUPERCONTEXT (block) = context;
     }
-  else if (scope->outer)
+  ಅನ್ಯಥಾ ಯದಿ (scope->outer)
     {
-      if (block)
+      ಯದಿ (block)
 	SCOPE_LIST_APPEND (scope->outer, blocks, block);
       /* If we did not make a block for the scope just exited, any
 	 blocks made for inner scopes must be carried forward so they
 	 will later become subblocks of something else.  */
-      else if (scope->blocks)
+      ಅನ್ಯಥಾ ಯದಿ (scope->blocks)
 	SCOPE_LIST_CONCAT (scope->outer, blocks, scope, blocks);
     }
 
   /* Pop the current scope, and free the structure for reuse.  */
   current_scope = scope->outer;
-  if (scope->function_body)
+  ಯದಿ (scope->function_body)
     current_function_scope = scope->outer_function;
 
-  memset (scope, 0, sizeof (struct c_scope));
+  memset (scope, 0, ಪರಿಮಾಣ (ಸಂರಚನಾ c_scope));
   scope->outer = scope_freelist;
   scope_freelist = scope;
 
-  return block;
+  ಪ್ರತ್ಯಾಗಮ block;
 }
 
-void
-push_file_scope (void)
+ಶೂನ್ಯ
+ತಳ್ಳು_file_scope (ಶೂನ್ಯ)
 {
-  tree decl;
+  ವೃಕ್ಷ decl;
 
-  if (file_scope)
-    return;
+  ಯದಿ (file_scope)
+    ಪ್ರತ್ಯಾಗಮ;
 
   /* Call the target stack_protect_guard hook if the stack protection
      guard is declared as a global symbol.  */
-  if (targetm.stack_protect_guard_symbol_p ())
+  ಯದಿ (targetm.ರಾಶಿ_protect_guard_ಚಿಹ್ನೆ_p ())
     {
-      tree decl = targetm.stack_protect_guard ();
+      ವೃಕ್ಷ decl = targetm.ರಾಶಿ_protect_guard ();
       DECL_CHAIN (decl) = visible_builtins;
       visible_builtins = decl;
     }
 
-  push_scope ();
+  ತಳ್ಳು_scope ();
   file_scope = current_scope;
 
   start_fname_decls ();
 
-  for (decl = visible_builtins; decl; decl = DECL_CHAIN (decl))
+  ಪ್ರತಿ (decl = visible_builtins; decl; decl = DECL_CHAIN (decl))
     bind (DECL_NAME (decl), decl, file_scope,
-	  /*invisible=*/false, /*nested=*/true, DECL_SOURCE_LOCATION (decl));
+	  /*invisible=*/ಅಸತ್ಯ, /*nested=*/ಸತ್ಯ, DECL_SOURCE_LOCATION (decl));
 }
 
-void
-pop_file_scope (void)
+ಶೂನ್ಯ
+ತೆಗೆ_file_scope (ಶೂನ್ಯ)
 {
   /* In case there were missing closebraces, get us back to the global
      binding level.  */
-  while (current_scope != file_scope)
-    pop_scope ();
+  ಯಾವತ್ (current_scope != file_scope)
+    ತೆಗೆ_scope ();
 
   /* __FUNCTION__ is defined at file scope ("").  This
      call may not be necessary as my tests indicate it
@@ -1531,16 +1531,16 @@ pop_file_scope (void)
 
   /* This is the point to write out a PCH if we're doing that.
      In that case we do not want to do anything else.  */
-  if (pch_file)
+  ಯದಿ (pch_file)
     {
       c_common_write_pch ();
       /* Ensure even the callers don't try to finalize the CU.  */
       flag_syntax_only = 1;
-      return;
+      ಪ್ರತ್ಯಾಗಮ;
     }
 
   /* Pop off the file scope and close this translation unit.  */
-  pop_scope ();
+  ತೆಗೆ_scope ();
   file_scope = 0;
 
   maybe_apply_pending_pragma_weaks ();
@@ -1548,7 +1548,7 @@ pop_file_scope (void)
 
 /* Whether we are currently inside the initializer for an
    underspecified object definition (C23 auto or constexpr).  */
-static bool in_underspecified_init;
+ಸ್ಥಿರ ತಾರ್ಕಿಕ in_underspecified_init;
 
 /* Start an underspecified object definition for NAME at LOC.  This
    means that NAME is shadowed inside its initializer, so neither the
@@ -1558,33 +1558,33 @@ static bool in_underspecified_init;
    underspecified object is a (constexpr) compound literal; there is
    no shadowing in that case, but all the other restrictions on
    underspecified object definitions still apply.  */
-unsigned int
-start_underspecified_init (location_t loc, tree name)
+unsigned ಪೂರ್ಣಾಙ್ಕ
+start_underspecified_init (location_t loc, ವೃಕ್ಷ name)
 {
-  bool prev = in_underspecified_init;
-  bool ok;
-  if (name == NULL_TREE)
-    ok = true;
-  else
+  ತಾರ್ಕಿಕ prev = in_underspecified_init;
+  ತಾರ್ಕಿಕ ok;
+  ಯದಿ (name == NULL_ವೃಕ್ಷ)
+    ok = ಸತ್ಯ;
+  ಅನ್ಯಥಾ
     {
-      tree decl = build_decl (loc, VAR_DECL, name, error_mark_node);
+      ವೃಕ್ಷ decl = build_decl (loc, VAR_DECL, name, error_mark_ಗಂಟು);
       C_DECL_UNDERSPECIFIED (decl) = 1;
-      struct c_scope *scope = current_scope;
-      struct c_binding *b = I_SYMBOL_BINDING (name);
-      if (b && B_IN_SCOPE (b, scope))
+      ಸಂರಚನಾ c_scope *scope = current_scope;
+      ಸಂರಚನಾ c_binding *b = I_ಚಿಹ್ನೆ_BINDING (name);
+      ಯದಿ (b && B_IN_SCOPE (b, scope))
 	{
 	  error_at (loc, "underspecified declaration of %qE, which is already "
 		    "declared in this scope", name);
-	  ok = false;
+	  ok = ಅಸತ್ಯ;
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
-	  bind (name, decl, scope, false, false, loc);
-	  ok = true;
+	  bind (name, decl, scope, ಅಸತ್ಯ, ಅಸತ್ಯ, loc);
+	  ok = ಸತ್ಯ;
 	}
     }
-  in_underspecified_init = true;
-  return ok | (prev << 1);
+  in_underspecified_init = ಸತ್ಯ;
+  ಪ್ರತ್ಯಾಗಮ ok | (prev << 1);
 }
 
 /* Finish an underspecified object definition for NAME, before that
@@ -1592,24 +1592,24 @@ start_underspecified_init (location_t loc, tree name)
    PREV_STATE is the value returned by the call to
    start_underspecified_init.  If NAME is NULL_TREE, this means a
    compound literal, as for start_underspecified_init.  */
-void
-finish_underspecified_init (tree name, unsigned int prev_state)
+ಶೂನ್ಯ
+finish_underspecified_init (ವೃಕ್ಷ name, unsigned ಪೂರ್ಣಾಙ್ಕ prev_state)
 {
-  if (name != NULL_TREE && (prev_state & 1))
+  ಯದಿ (name != NULL_ವೃಕ್ಷ && (prev_state & 1))
     {
       /* A VAR_DECL was bound to the name to shadow any previous
 	 declarations for the name; remove that binding now.  */
-      struct c_scope *scope = current_scope;
-      struct c_binding *b = I_SYMBOL_BINDING (name);
+      ಸಂರಚನಾ c_scope *scope = current_scope;
+      ಸಂರಚನಾ c_binding *b = I_ಚಿಹ್ನೆ_BINDING (name);
       gcc_assert (b);
       gcc_assert (B_IN_SCOPE (b, scope));
       gcc_assert (VAR_P (b->decl));
       gcc_assert (C_DECL_UNDERSPECIFIED (b->decl));
-      I_SYMBOL_BINDING (name) = b->shadowed;
+      I_ಚಿಹ್ನೆ_BINDING (name) = b->shadowed;
       /* In erroneous cases there may be other bindings added to this
 	 scope during the initializer.  */
-      struct c_binding **p = &scope->bindings;
-      while (*p != b)
+      ಸಂರಚನಾ c_binding **p = &scope->bindings;
+      ಯಾವತ್ (*p != b)
 	p = &((*p)->prev);
       *p = free_binding_and_advance (*p);
     }
@@ -1618,26 +1618,26 @@ finish_underspecified_init (tree name, unsigned int prev_state)
 
 /* Adjust the bindings for the start of a statement expression.  */
 
-void
-c_bindings_start_stmt_expr (struct c_spot_bindings* switch_bindings)
+ಶೂನ್ಯ
+c_bindings_start_stmt_ಅಭಿವ್ಯಕ್ತಿ (ಸಂರಚನಾ c_spot_bindings* switch_bindings)
 {
-  struct c_scope *scope;
+  ಸಂರಚನಾ c_scope *scope;
 
-  for (scope = current_scope; scope != NULL; scope = scope->outer)
+  ಪ್ರತಿ (scope = current_scope; scope != ರಿಕ್ತ; scope = scope->outer)
     {
-      struct c_binding *b;
+      ಸಂರಚನಾ c_binding *b;
 
-      if (!scope->has_label_bindings)
-	continue;
+      ಯದಿ (!scope->has_label_bindings)
+	ಅನುವರ್ತ;
 
-      for (b = scope->bindings; b != NULL; b = b->prev)
+      ಪ್ರತಿ (b = scope->bindings; b != ರಿಕ್ತ; b = b->prev)
 	{
-	  struct c_label_vars *label_vars;
-	  unsigned int ix;
-	  struct c_goto_bindings *g;
+	  ಸಂರಚನಾ c_label_vars *label_vars;
+	  unsigned ಪೂರ್ಣಾಙ್ಕ ix;
+	  ಸಂರಚನಾ c_goto_bindings *g;
 
-	  if (TREE_CODE (b->decl) != LABEL_DECL)
-	    continue;
+	  ಯದಿ (ವೃಕ್ಷ_CODE (b->decl) != LABEL_DECL)
+	    ಅನುವರ್ತ;
 	  label_vars = b->u.label;
 	  ++label_vars->label_bindings.stmt_exprs;
 	  FOR_EACH_VEC_SAFE_ELT (label_vars->gotos, ix, g)
@@ -1645,52 +1645,52 @@ c_bindings_start_stmt_expr (struct c_spot_bindings* switch_bindings)
 	}
     }
 
-  if (switch_bindings != NULL)
+  ಯದಿ (switch_bindings != ರಿಕ್ತ)
     ++switch_bindings->stmt_exprs;
 }
 
 /* Adjust the bindings for the end of a statement expression.  */
 
-void
-c_bindings_end_stmt_expr (struct c_spot_bindings *switch_bindings)
+ಶೂನ್ಯ
+c_bindings_end_stmt_ಅಭಿವ್ಯಕ್ತಿ (ಸಂರಚನಾ c_spot_bindings *switch_bindings)
 {
-  struct c_scope *scope;
+  ಸಂರಚನಾ c_scope *scope;
 
-  for (scope = current_scope; scope != NULL; scope = scope->outer)
+  ಪ್ರತಿ (scope = current_scope; scope != ರಿಕ್ತ; scope = scope->outer)
     {
-      struct c_binding *b;
+      ಸಂರಚನಾ c_binding *b;
 
-      if (!scope->has_label_bindings)
-	continue;
+      ಯದಿ (!scope->has_label_bindings)
+	ಅನುವರ್ತ;
 
-      for (b = scope->bindings; b != NULL; b = b->prev)
+      ಪ್ರತಿ (b = scope->bindings; b != ರಿಕ್ತ; b = b->prev)
 	{
-	  struct c_label_vars *label_vars;
-	  unsigned int ix;
-	  struct c_goto_bindings *g;
+	  ಸಂರಚನಾ c_label_vars *label_vars;
+	  unsigned ಪೂರ್ಣಾಙ್ಕ ix;
+	  ಸಂರಚನಾ c_goto_bindings *g;
 
-	  if (TREE_CODE (b->decl) != LABEL_DECL)
-	    continue;
+	  ಯದಿ (ವೃಕ್ಷ_CODE (b->decl) != LABEL_DECL)
+	    ಅನುವರ್ತ;
 	  label_vars = b->u.label;
 	  --label_vars->label_bindings.stmt_exprs;
-	  if (label_vars->label_bindings.stmt_exprs < 0)
+	  ಯದಿ (label_vars->label_bindings.stmt_exprs < 0)
 	    {
-	      label_vars->label_bindings.left_stmt_expr = true;
+	      label_vars->label_bindings.ಎಡ_stmt_ಅಭಿವ್ಯಕ್ತಿ = ಸತ್ಯ;
 	      label_vars->label_bindings.stmt_exprs = 0;
 	    }
 	  FOR_EACH_VEC_SAFE_ELT (label_vars->gotos, ix, g)
 	    {
 	      --g->goto_bindings.stmt_exprs;
-	      if (g->goto_bindings.stmt_exprs < 0)
+	      ಯದಿ (g->goto_bindings.stmt_exprs < 0)
 		{
-		  g->goto_bindings.left_stmt_expr = true;
+		  g->goto_bindings.ಎಡ_stmt_ಅಭಿವ್ಯಕ್ತಿ = ಸತ್ಯ;
 		  g->goto_bindings.stmt_exprs = 0;
 		}
 	    }
 	}
     }
 
-  if (switch_bindings != NULL)
+  ಯದಿ (switch_bindings != ರಿಕ್ತ)
     {
       --switch_bindings->stmt_exprs;
       gcc_assert (switch_bindings->stmt_exprs >= 0);
@@ -1705,13 +1705,13 @@ c_bindings_end_stmt_expr (struct c_spot_bindings *switch_bindings)
    Note that the definition may really be just a forward reference.
    In that case, the TYPE_SIZE will be zero.  */
 
-static void
-pushtag (location_t loc, tree name, tree type)
+ಸ್ಥಿರ ಶೂನ್ಯ
+pushtag (location_t loc, ವೃಕ್ಷ name, ವೃಕ್ಷ type)
 {
   /* Record the identifier as the type's name if it has none.  */
-  if (name && !TYPE_NAME (type))
+  ಯದಿ (name && !TYPE_NAME (type))
     TYPE_NAME (type) = name;
-  bind (name, type, current_scope, /*invisible=*/false, /*nested=*/false, loc);
+  bind (name, type, current_scope, /*invisible=*/ಅಸತ್ಯ, /*nested=*/ಅಸತ್ಯ, loc);
 
   /* Create a fake NULL-named TYPE_DECL node whose TREE_TYPE will be the
      tagged type we just added to the current scope.  This fake
@@ -1722,26 +1722,26 @@ pushtag (location_t loc, tree name, tree type)
      in a non-local context via mark_decl_used.  */
 
   TYPE_STUB_DECL (type) = pushdecl (build_decl (loc,
-						TYPE_DECL, NULL_TREE, type));
+						TYPE_DECL, NULL_ವೃಕ್ಷ, type));
 
   /* An approximation for now, so we can tell this is a function-scope tag.
      This will be updated in pop_scope.  */
   TYPE_CONTEXT (type) = DECL_CONTEXT (TYPE_STUB_DECL (type));
 
-  if (warn_cxx_compat && name != NULL_TREE)
+  ಯದಿ (warn_cxx_compat && name != NULL_ವೃಕ್ಷ)
     {
-      struct c_binding *b = I_SYMBOL_BINDING (name);
+      ಸಂರಚನಾ c_binding *b = I_ಚಿಹ್ನೆ_BINDING (name);
 
-      if (b != NULL
-	  && b->decl != NULL_TREE
-	  && TREE_CODE (b->decl) == TYPE_DECL
+      ಯದಿ (b != ರಿಕ್ತ
+	  && b->decl != NULL_ವೃಕ್ಷ
+	  && ವೃಕ್ಷ_CODE (b->decl) == TYPE_DECL
 	  && (B_IN_CURRENT_SCOPE (b)
 	      || (current_scope == file_scope && B_IN_EXTERNAL_SCOPE (b)))
-	  && (TYPE_MAIN_VARIANT (TREE_TYPE (b->decl))
+	  && (TYPE_MAIN_VARIANT (ವೃಕ್ಷ_TYPE (b->decl))
 	      != TYPE_MAIN_VARIANT (type)))
 	{
 	  auto_diagnostic_group d;
-	  if (warning_at (loc, OPT_Wc___compat,
+	  ಯದಿ (warning_at (loc, OPT_Wc___compat,
 			  "using %qD as both a typedef and a tag is "
 			  "invalid in C++", b->decl)
 	      && b->locus != UNKNOWN_LOCATION)
@@ -1753,8 +1753,8 @@ pushtag (location_t loc, tree name, tree type)
 /* An exported interface to pushtag.  This is used by the gdb plugin's
    binding oracle to introduce a new tag binding.  */
 
-void
-c_pushtag (location_t loc, tree name, tree type)
+ಶೂನ್ಯ
+c_pushtag (location_t loc, ವೃಕ್ಷ name, ವೃಕ್ಷ type)
 {
   pushtag (loc, name, type);
 }
@@ -1766,36 +1766,36 @@ c_pushtag (location_t loc, tree name, tree type)
    and external) scope or the current function's scope; if DECL is not
    a VAR_DECL then it is always put into the file scope.  */
 
-void
-c_bind (location_t loc, tree decl, bool is_global)
+ಶೂನ್ಯ
+c_bind (location_t loc, ವೃಕ್ಷ decl, ತಾರ್ಕಿಕ is_global)
 {
-  struct c_scope *scope;
-  bool nested = false;
+  ಸಂರಚನಾ c_scope *scope;
+  ತಾರ್ಕಿಕ nested = ಅಸತ್ಯ;
 
-  if (!VAR_P (decl) || current_function_scope == NULL)
+  ಯದಿ (!VAR_P (decl) || current_function_scope == ರಿಕ್ತ)
     {
       /* Types and functions are always considered to be global.  */
       scope = file_scope;
       DECL_EXTERNAL (decl) = 1;
-      TREE_PUBLIC (decl) = 1;
+      ವೃಕ್ಷ_PUBLIC (decl) = 1;
     }
-  else if (is_global)
+  ಅನ್ಯಥಾ ಯದಿ (is_global)
     {
       /* Also bind it into the external scope.  */
-      bind (DECL_NAME (decl), decl, external_scope, true, false, loc);
-      nested = true;
+      bind (DECL_NAME (decl), decl, external_scope, ಸತ್ಯ, ಅಸತ್ಯ, loc);
+      nested = ಸತ್ಯ;
       scope = file_scope;
       DECL_EXTERNAL (decl) = 1;
-      TREE_PUBLIC (decl) = 1;
+      ವೃಕ್ಷ_PUBLIC (decl) = 1;
     }
-  else
+  ಅನ್ಯಥಾ
     {
       DECL_CONTEXT (decl) = current_function_decl;
-      TREE_PUBLIC (decl) = 0;
+      ವೃಕ್ಷ_PUBLIC (decl) = 0;
       scope = current_function_scope;
     }
 
-  bind (DECL_NAME (decl), decl, scope, false, nested, loc);
+  bind (DECL_NAME (decl), decl, scope, ಅಸತ್ಯ, nested, loc);
 }
 
 
@@ -1806,19 +1806,19 @@ c_bind (location_t loc, tree decl, bool is_global)
    etc. which is just void* (or to any other type).
    Used only by match_builtin_function_types.  */
 
-static const unsigned builtin_structptr_type_count
+ಸ್ಥಿರ ಧ್ರುವ unsigned builtin_structptr_type_ಎಣಿಕೆ
   = ARRAY_SIZE (builtin_structptr_types);
 
-static GTY(()) tree last_structptr_types[builtin_structptr_type_count];
+ಸ್ಥಿರ GTY(()) ವೃಕ್ಷ last_structptr_types[builtin_structptr_type_ಎಣಿಕೆ];
 
 /* Returns true if types T1 and T2 representing return types or types
    of function arguments are close enough to be considered interchangeable
    in redeclarations of built-in functions.  */
 
-static bool
-types_close_enough_to_match (tree t1, tree t2)
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+types_close_enough_to_match (ವೃಕ್ಷ t1, ವೃಕ್ಷ t2)
 {
-  return (TYPE_MODE (t1) == TYPE_MODE (t2)
+  ಪ್ರತ್ಯಾಗಮ (TYPE_MODE (t1) == TYPE_MODE (t2)
 	  && POINTER_TYPE_P (t1) == POINTER_TYPE_P (t2)
 	  && FUNCTION_POINTER_TYPE_P (t1) == FUNCTION_POINTER_TYPE_P (t2));
 }
@@ -1829,157 +1829,157 @@ types_close_enough_to_match (tree t1, tree t2)
    an argument type mismatch or null and zero otherwise.  Return
    a unified type given a suitable match, and 0 otherwise.  */
 
-static tree
-match_builtin_function_types (tree newtype, tree oldtype,
-			      tree *strict, unsigned *argno)
+ಸ್ಥಿರ ವೃಕ್ಷ
+match_builtin_function_types (ವೃಕ್ಷ newtype, ವೃಕ್ಷ oldtype,
+			      ವೃಕ್ಷ *strict, unsigned *argno)
 {
   *argno = 0;
-  *strict = NULL_TREE;
+  *strict = NULL_ವೃಕ್ಷ;
 
   /* Accept the return type of the new declaration if it has the same
      mode and if they're both pointers or if neither is.  */
-  tree oldrettype = TREE_TYPE (oldtype);
-  tree newrettype = TREE_TYPE (newtype);
+  ವೃಕ್ಷ oldrettype = ವೃಕ್ಷ_TYPE (oldtype);
+  ವೃಕ್ಷ newrettype = ವೃಕ್ಷ_TYPE (newtype);
 
-  if (!types_close_enough_to_match (oldrettype, newrettype))
-    return NULL_TREE;
+  ಯದಿ (!types_close_enough_to_match (oldrettype, newrettype))
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
   /* Check that the return types are compatible but don't fail if they
      are not (e.g., int vs long in ILP32) and just let the caller know.  */
-  if (!comptypes (TYPE_MAIN_VARIANT (oldrettype),
+  ಯದಿ (!comptypes (TYPE_MAIN_VARIANT (oldrettype),
 		  TYPE_MAIN_VARIANT (newrettype)))
     *strict = oldrettype;
 
-  tree oldargs = TYPE_ARG_TYPES (oldtype);
-  tree newargs = TYPE_ARG_TYPES (newtype);
-  tree tryargs = newargs;
+  ವೃಕ್ಷ oldargs = TYPE_ARG_TYPES (oldtype);
+  ವೃಕ್ಷ newargs = TYPE_ARG_TYPES (newtype);
+  ವೃಕ್ಷ tryargs = newargs;
 
-  const unsigned nlst = ARRAY_SIZE (last_structptr_types);
-  const unsigned nbst = ARRAY_SIZE (builtin_structptr_types);
+  ಧ್ರುವ unsigned nlst = ARRAY_SIZE (last_structptr_types);
+  ಧ್ರುವ unsigned nbst = ARRAY_SIZE (builtin_structptr_types);
 
   gcc_checking_assert (nlst == nbst);
 
-  for (unsigned i = 1; oldargs || newargs; ++i)
+  ಪ್ರತಿ (unsigned i = 1; oldargs || newargs; ++i)
     {
-      if (!oldargs
+      ಯದಿ (!oldargs
 	  || !newargs
-	  || !TREE_VALUE (oldargs)
-	  || !TREE_VALUE (newargs))
-	return NULL_TREE;
+	  || !ವೃಕ್ಷ_ಮೌಲ್ಯ (oldargs)
+	  || !ವೃಕ್ಷ_ಮೌಲ್ಯ (newargs))
+	ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
-      tree oldtype = TYPE_MAIN_VARIANT (TREE_VALUE (oldargs));
-      tree newtype = TREE_VALUE (newargs);
-      if (newtype == error_mark_node)
-       return NULL_TREE;
+      ವೃಕ್ಷ oldtype = TYPE_MAIN_VARIANT (ವೃಕ್ಷ_ಮೌಲ್ಯ (oldargs));
+      ವೃಕ್ಷ newtype = ವೃಕ್ಷ_ಮೌಲ್ಯ (newargs);
+      ಯದಿ (newtype == error_mark_ಗಂಟು)
+       ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
       newtype = TYPE_MAIN_VARIANT (newtype);
 
-      if (!types_close_enough_to_match (oldtype, newtype))
-	return NULL_TREE;
+      ಯದಿ (!types_close_enough_to_match (oldtype, newtype))
+	ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
       unsigned j = nbst;
-      if (POINTER_TYPE_P (oldtype))
+      ಯದಿ (POINTER_TYPE_P (oldtype))
 	/* Iterate over well-known struct types like FILE (whose types
 	   aren't known to us) and compare the pointer to each to
 	   the pointer argument.  */
-	for (j = 0; j < nbst; ++j)
+	ಪ್ರತಿ (j = 0; j < nbst; ++j)
 	  {
-	    if (TREE_VALUE (oldargs) != builtin_structptr_types[j].node)
-	      continue;
+	    ಯದಿ (ವೃಕ್ಷ_ಮೌಲ್ಯ (oldargs) != builtin_structptr_types[j].ಗಂಟು)
+	      ಅನುವರ್ತ;
 	    /* Store the first FILE* etc. argument type (whatever it is), and
 	       expect any subsequent declarations of file I/O etc. built-ins
 	       to refer to it rather than to fileptr_type_node etc. which is
 	       just void* (or const void*).  */
-	    if (last_structptr_types[j])
+	    ಯದಿ (last_structptr_types[j])
 	      {
-		if (!comptypes (last_structptr_types[j], newtype))
+		ಯದಿ (!comptypes (last_structptr_types[j], newtype))
 		  {
 		    *argno = i;
 		    *strict = last_structptr_types[j];
 		  }
 	      }
-	    else
+	    ಅನ್ಯಥಾ
 	      last_structptr_types[j] = newtype;
-	    break;
+	    ಭಙ್ಗ;
 	  }
 
-      if (j == nbst && !comptypes (oldtype, newtype))
+      ಯದಿ (j == nbst && !comptypes (oldtype, newtype))
 	{
-	  if (POINTER_TYPE_P (oldtype))
+	  ಯದಿ (POINTER_TYPE_P (oldtype))
 	    {
 	      /* For incompatible pointers, only reject differences in
 		 the unqualified variants of the referenced types but
 		 consider differences in qualifiers as benign (report
 		 those to caller via *STRICT below).  */
-	      tree oldref = TYPE_MAIN_VARIANT (TREE_TYPE (oldtype));
-	      tree newref = TYPE_MAIN_VARIANT (TREE_TYPE (newtype));
-	      if (!comptypes (oldref, newref))
-		return NULL_TREE;
+	      ವೃಕ್ಷ oldref = TYPE_MAIN_VARIANT (ವೃಕ್ಷ_TYPE (oldtype));
+	      ವೃಕ್ಷ newref = TYPE_MAIN_VARIANT (ವೃಕ್ಷ_TYPE (newtype));
+	      ಯದಿ (!comptypes (oldref, newref))
+		ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 	    }
 
-	  if (!*strict)
+	  ಯದಿ (!*strict)
 	    {
 	      *argno = i;
 	      *strict = oldtype;
 	    }
 	}
 
-      oldargs = TREE_CHAIN (oldargs);
-      newargs = TREE_CHAIN (newargs);
+      oldargs = ವೃಕ್ಷ_CHAIN (oldargs);
+      newargs = ವೃಕ್ಷ_CHAIN (newargs);
     }
 
-  tree trytype = c_build_function_type (newrettype, tryargs);
+  ವೃಕ್ಷ trytype = c_build_function_type (newrettype, tryargs);
 
   /* Allow declaration to change transaction_safe attribute.  */
-  tree oldattrs = TYPE_ATTRIBUTES (oldtype);
-  tree oldtsafe = lookup_attribute ("transaction_safe", oldattrs);
-  tree newattrs = TYPE_ATTRIBUTES (newtype);
-  tree newtsafe = lookup_attribute ("transaction_safe", newattrs);
-  if (oldtsafe && !newtsafe)
+  ವೃಕ್ಷ oldattrs = TYPE_ATTRIBUTES (oldtype);
+  ವೃಕ್ಷ oldtsafe = lookup_attribute ("transaction_safe", oldattrs);
+  ವೃಕ್ಷ newattrs = TYPE_ATTRIBUTES (newtype);
+  ವೃಕ್ಷ newtsafe = lookup_attribute ("transaction_safe", newattrs);
+  ಯದಿ (oldtsafe && !newtsafe)
     oldattrs = remove_attribute ("transaction_safe", oldattrs);
-  else if (newtsafe && !oldtsafe)
-    oldattrs = tree_cons (get_identifier ("transaction_safe"),
-			  NULL_TREE, oldattrs);
+  ಅನ್ಯಥಾ ಯದಿ (newtsafe && !oldtsafe)
+    oldattrs = ವೃಕ್ಷ_cons (get_identifier ("transaction_safe"),
+			  NULL_ವೃಕ್ಷ, oldattrs);
 
-  return c_build_type_attribute_variant (trytype, oldattrs);
+  ಪ್ರತ್ಯಾಗಮ c_build_type_attribute_variant (trytype, oldattrs);
 }
 
 /* Subroutine of diagnose_mismatched_decls.  Check for function type
    mismatch involving an empty arglist vs a nonempty one and give clearer
    diagnostics.  */
-static void
-diagnose_arglist_conflict (tree newdecl, tree olddecl,
-			   tree newtype, tree oldtype)
+ಸ್ಥಿರ ಶೂನ್ಯ
+diagnose_arglist_conflict (ವೃಕ್ಷ newdecl, ವೃಕ್ಷ olddecl,
+			   ವೃಕ್ಷ newtype, ವೃಕ್ಷ oldtype)
 {
-  tree t;
+  ವೃಕ್ಷ t;
 
-  if (TREE_CODE (olddecl) != FUNCTION_DECL
-      || !comptypes (TREE_TYPE (oldtype), TREE_TYPE (newtype))
-      || !((!prototype_p (oldtype) && DECL_INITIAL (olddecl) == NULL_TREE)
-	   || (!prototype_p (newtype) && DECL_INITIAL (newdecl) == NULL_TREE)))
-    return;
+  ಯದಿ (ವೃಕ್ಷ_CODE (olddecl) != FUNCTION_DECL
+      || !comptypes (ವೃಕ್ಷ_TYPE (oldtype), ವೃಕ್ಷ_TYPE (newtype))
+      || !((!prototype_p (oldtype) && DECL_INITIAL (olddecl) == NULL_ವೃಕ್ಷ)
+	   || (!prototype_p (newtype) && DECL_INITIAL (newdecl) == NULL_ವೃಕ್ಷ)))
+    ಪ್ರತ್ಯಾಗಮ;
 
   t = TYPE_ARG_TYPES (oldtype);
-  if (t == NULL_TREE)
+  ಯದಿ (t == NULL_ವೃಕ್ಷ)
     t = TYPE_ARG_TYPES (newtype);
-  for (; t; t = TREE_CHAIN (t))
+  ಪ್ರತಿ (; t; t = ವೃಕ್ಷ_CHAIN (t))
     {
-      tree type = TREE_VALUE (t);
+      ವೃಕ್ಷ type = ವೃಕ್ಷ_ಮೌಲ್ಯ (t);
 
-      if (TREE_CHAIN (t) == NULL_TREE
-	  && TYPE_MAIN_VARIANT (type) != void_type_node)
+      ಯದಿ (ವೃಕ್ಷ_CHAIN (t) == NULL_ವೃಕ್ಷ
+	  && TYPE_MAIN_VARIANT (type) != void_type_ಗಂಟು)
 	{
-	  inform (input_location, "a parameter list with an ellipsis "
+	  inform (ಒಳಹರಿವು_location, "a parameter list with an ellipsis "
 		  "cannot match an empty parameter name list declaration");
-	  break;
+	  ಭಙ್ಗ;
 	}
 
-      if (!error_operand_p (type)
+      ಯದಿ (!error_operand_p (type)
 	  && c_type_promotes_to (type) != type)
 	{
-	  inform (input_location, "an argument type that has a default "
+	  inform (ಒಳಹರಿವು_location, "an argument type that has a default "
 		  "promotion cannot match an empty parameter name list "
 		  "declaration");
-	  break;
+	  ಭಙ್ಗ;
 	}
     }
 }
@@ -1988,25 +1988,25 @@ diagnose_arglist_conflict (tree newdecl, tree olddecl,
    old-style function definition, NEWDECL is a prototype declaration.
    Diagnose inconsistencies in the argument list.  Returns TRUE if
    the prototype is compatible, FALSE if not.  */
-static bool
-validate_proto_after_old_defn (tree newdecl, tree newtype, tree oldtype)
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+validate_proto_after_old_defn (ವೃಕ್ಷ newdecl, ವೃಕ್ಷ newtype, ವೃಕ್ಷ oldtype)
 {
-  tree newargs, oldargs;
-  int i;
+  ವೃಕ್ಷ newargs, oldargs;
+  ಪೂರ್ಣಾಙ್ಕ i;
 
-#define END_OF_ARGLIST(t) ((t) == void_type_node)
+#define END_OF_ARGLIST(t) ((t) == void_type_ಗಂಟು)
 
   oldargs = TYPE_ACTUAL_ARG_TYPES (oldtype);
   newargs = TYPE_ARG_TYPES (newtype);
   i = 1;
 
-  for (;;)
+  ಪ್ರತಿ (;;)
     {
-      tree oldargtype = TREE_VALUE (oldargs);
-      tree newargtype = TREE_VALUE (newargs);
+      ವೃಕ್ಷ oldargtype = ವೃಕ್ಷ_ಮೌಲ್ಯ (oldargs);
+      ವೃಕ್ಷ newargtype = ವೃಕ್ಷ_ಮೌಲ್ಯ (newargs);
 
-      if (oldargtype == error_mark_node || newargtype == error_mark_node)
-	return false;
+      ಯದಿ (oldargtype == error_mark_ಗಂಟು || newargtype == error_mark_ಗಂಟು)
+	ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 
       oldargtype = (TYPE_ATOMIC (oldargtype)
 		    ? c_build_qualified_type (TYPE_MAIN_VARIANT (oldargtype),
@@ -2017,36 +2017,36 @@ validate_proto_after_old_defn (tree newdecl, tree newtype, tree oldtype)
 					      TYPE_QUAL_ATOMIC)
 		    : TYPE_MAIN_VARIANT (newargtype));
 
-      if (END_OF_ARGLIST (oldargtype) && END_OF_ARGLIST (newargtype))
-	break;
+      ಯದಿ (END_OF_ARGLIST (oldargtype) && END_OF_ARGLIST (newargtype))
+	ಭಙ್ಗ;
 
       /* Reaching the end of just one list means the two decls don't
 	 agree on the number of arguments.  */
-      if (END_OF_ARGLIST (oldargtype))
+      ಯದಿ (END_OF_ARGLIST (oldargtype))
 	{
 	  error ("prototype for %q+D declares more arguments "
 		 "than previous old-style definition", newdecl);
-	  return false;
+	  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	}
-      else if (END_OF_ARGLIST (newargtype))
+      ಅನ್ಯಥಾ ಯದಿ (END_OF_ARGLIST (newargtype))
 	{
 	  error ("prototype for %q+D declares fewer arguments "
 		 "than previous old-style definition", newdecl);
-	  return false;
+	  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	}
 
       /* Type for passing arg must be consistent with that declared
 	 for the arg.  */
-      else if (!comptypes (oldargtype, newargtype))
+      ಅನ್ಯಥಾ ಯದಿ (!comptypes (oldargtype, newargtype))
 	{
 	  error ("prototype for %q+D declares argument %d"
 		 " with incompatible type",
 		 newdecl, i);
-	  return false;
+	  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	}
 
-      oldargs = TREE_CHAIN (oldargs);
-      newargs = TREE_CHAIN (newargs);
+      oldargs = ವೃಕ್ಷ_CHAIN (oldargs);
+      newargs = ವೃಕ್ಷ_CHAIN (newargs);
       i++;
     }
 
@@ -2054,80 +2054,80 @@ validate_proto_after_old_defn (tree newdecl, tree newtype, tree oldtype)
      for this poor-style construct.  */
   warning (0, "prototype for %q+D follows non-prototype definition",
 	   newdecl);
-  return true;
+  ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
 #undef END_OF_ARGLIST
 }
 
 /* Subroutine of diagnose_mismatched_decls.  Report the location of DECL,
    first in a pair of mismatched declarations, using the diagnostic
    function DIAG.  */
-static void
-locate_old_decl (tree decl)
+ಸ್ಥಿರ ಶೂನ್ಯ
+locate_old_decl (ವೃಕ್ಷ decl)
 {
-  if (TREE_CODE (decl) == FUNCTION_DECL
+  ಯದಿ (ವೃಕ್ಷ_CODE (decl) == FUNCTION_DECL
       && fndecl_built_in_p (decl)
       && !C_DECL_DECLARED_BUILTIN (decl))
     ;
-  else if (DECL_INITIAL (decl))
-    inform (input_location,
+  ಅನ್ಯಥಾ ಯದಿ (DECL_INITIAL (decl))
+    inform (ಒಳಹರಿವು_location,
 	    "previous definition of %q+D with type %qT",
-	    decl, TREE_TYPE (decl));
-  else if (C_DECL_IMPLICIT (decl))
-    inform (input_location,
+	    decl, ವೃಕ್ಷ_TYPE (decl));
+  ಅನ್ಯಥಾ ಯದಿ (C_DECL_IMPLICIT (decl))
+    inform (ಒಳಹರಿವು_location,
 	    "previous implicit declaration of %q+D with type %qT",
-	    decl, TREE_TYPE (decl));
-  else
-    inform (input_location,
+	    decl, ವೃಕ್ಷ_TYPE (decl));
+  ಅನ್ಯಥಾ
+    inform (ಒಳಹರಿವು_location,
 	    "previous declaration of %q+D with type %qT",
-	    decl, TREE_TYPE (decl));
+	    decl, ವೃಕ್ಷ_TYPE (decl));
 }
 
 
 /* Helper function.  For a tagged type, it finds the declaration
    for a visible tag declared in the same scope if such a
    declaration exists.  */
-static tree
-previous_tag (tree type)
+ಸ್ಥಿರ ವೃಕ್ಷ
+previous_tag (ವೃಕ್ಷ type)
 {
-  struct c_binding *b = NULL;
-  tree name = c_type_tag (type);
+  ಸಂರಚನಾ c_binding *b = ರಿಕ್ತ;
+  ವೃಕ್ಷ name = c_type_tag (type);
 
-  if (name)
+  ಯದಿ (name)
     b = I_TAG_BINDING (name);
 
-  if (b)
+  ಯದಿ (b)
     b = b->shadowed;
 
-  if (b && B_IN_CURRENT_SCOPE (b))
-    return b->decl;
+  ಯದಿ (b && B_IN_CURRENT_SCOPE (b))
+    ಪ್ರತ್ಯಾಗಮ b->decl;
 
-  return NULL_TREE;
+  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 }
 
 /* Subroutine to mark functions as versioned when using the attribute
    'target_version'.  */
 
-static void
-maybe_mark_function_versioned (tree decl)
+ಸ್ಥಿರ ಶೂನ್ಯ
+maybe_mark_function_versioned (ವೃಕ್ಷ decl)
 {
-  if (!DECL_FUNCTION_VERSIONED (decl))
+  ಯದಿ (!DECL_FUNCTION_VERSIONED (decl))
     {
       /* Check if the name of the function has been overridden.  */
-      if (DECL_ASSEMBLER_NAME_SET_P (decl)
+      ಯದಿ (DECL_ASSEMBLER_NAME_SET_P (decl)
 	  && IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (decl))[0] == '*')
 	error_at (DECL_SOURCE_LOCATION (decl),
 		  "cannot use function multiversioning on a renamed function");
 
       /* We need to insert function version now to make sure the correct
 	 pre-mangled assembler name is recorded.  */
-      cgraph_node *node = cgraph_node::get_create (decl);
+      cgraph_ಗಂಟು *ಗಂಟು = cgraph_ಗಂಟು::get_create (decl);
 
-      if (!node->function_version ())
-	node->insert_new_function_version ();
+      ಯದಿ (!ಗಂಟು->function_version ())
+	ಗಂಟು->ಸೇರಿಸು_new_function_version ();
 
       DECL_FUNCTION_VERSIONED (decl) = 1;
 
-      tree mangled_name
+      ವೃಕ್ಷ mangled_name
 	= targetm.mangle_decl_assembler_name (decl, DECL_NAME (decl));
       SET_DECL_ASSEMBLER_NAME (decl, mangled_name);
     }
@@ -2141,30 +2141,30 @@ maybe_mark_function_versioned (tree decl)
    *NEWTYPEP and *OLDTYPEP - these may have been adjusted from
    TREE_TYPE (NEWDECL, OLDDECL) respectively.  */
 
-static bool
-diagnose_mismatched_decls (tree newdecl, tree olddecl,
-			   tree *newtypep, tree *oldtypep)
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+diagnose_mismatched_decls (ವೃಕ್ಷ newdecl, ವೃಕ್ಷ olddecl,
+			   ವೃಕ್ಷ *newtypep, ವೃಕ್ಷ *oldtypep)
 {
-  tree newtype, oldtype;
-  bool retval = true;
+  ವೃಕ್ಷ newtype, oldtype;
+  ತಾರ್ಕಿಕ retval = ಸತ್ಯ;
 
 #define DECL_EXTERN_INLINE(DECL) (DECL_DECLARED_INLINE_P (DECL)  \
 				  && DECL_EXTERNAL (DECL))
 
   /* If we have error_mark_node for either decl or type, just discard
      the previous decl - we're in an error cascade already.  */
-  if (olddecl == error_mark_node || newdecl == error_mark_node)
-    return false;
-  *oldtypep = oldtype = TREE_TYPE (olddecl);
-  *newtypep = newtype = TREE_TYPE (newdecl);
-  if (oldtype == error_mark_node || newtype == error_mark_node)
-    return false;
+  ಯದಿ (olddecl == error_mark_ಗಂಟು || newdecl == error_mark_ಗಂಟು)
+    ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
+  *oldtypep = oldtype = ವೃಕ್ಷ_TYPE (olddecl);
+  *newtypep = newtype = ವೃಕ್ಷ_TYPE (newdecl);
+  ಯದಿ (oldtype == error_mark_ಗಂಟು || newtype == error_mark_ಗಂಟು)
+    ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 
   /* Two different categories of symbol altogether.  This is an error
      unless OLDDECL is a builtin.  OLDDECL will be discarded in any case.  */
-  if (TREE_CODE (olddecl) != TREE_CODE (newdecl))
+  ಯದಿ (ವೃಕ್ಷ_CODE (olddecl) != ವೃಕ್ಷ_CODE (newdecl))
     {
-      if (!(TREE_CODE (olddecl) == FUNCTION_DECL
+      ಯದಿ (!(ವೃಕ್ಷ_CODE (olddecl) == FUNCTION_DECL
 	    && fndecl_built_in_p (olddecl)
 	    && !C_DECL_DECLARED_BUILTIN (olddecl)))
 	{
@@ -2172,51 +2172,51 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	  error ("%q+D redeclared as different kind of symbol", newdecl);
 	  locate_old_decl (olddecl);
 	}
-      else if (TREE_PUBLIC (newdecl))
+      ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_PUBLIC (newdecl))
 	warning (OPT_Wbuiltin_declaration_mismatch,
 		 "built-in function %q+D declared as non-function",
 		 newdecl);
-      else
+      ಅನ್ಯಥಾ
 	warning (OPT_Wshadow, "declaration of %q+D shadows "
 		 "a built-in function", newdecl);
-      return false;
+      ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
     }
 
   /* Enumerators have no linkage, so may only be declared once in a
      given scope.  */
-  if (TREE_CODE (olddecl) == CONST_DECL)
+  ಯದಿ (ವೃಕ್ಷ_CODE (olddecl) == CONST_DECL)
     {
-      if (flag_isoc23
+      ಯದಿ (flag_isoc23
 	  && TYPE_NAME (DECL_CONTEXT (newdecl))
 	  && DECL_CONTEXT (newdecl) != DECL_CONTEXT (olddecl)
 	  && TYPE_NAME (DECL_CONTEXT (newdecl)) == TYPE_NAME (DECL_CONTEXT (olddecl)))
 	{
-	  if (!simple_cst_equal (DECL_INITIAL (olddecl), DECL_INITIAL (newdecl)))
+	  ಯದಿ (!simple_cst_equal (DECL_INITIAL (olddecl), DECL_INITIAL (newdecl)))
 	    {
 	      auto_diagnostic_group d;
 	      error ("conflicting redeclaration of enumerator %q+D", newdecl);
 	      locate_old_decl (olddecl);
 	    }
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
 	  auto_diagnostic_group d;
 	  error ("redeclaration of enumerator %q+D", newdecl);
 	  locate_old_decl (olddecl);
 	}
-      return false;
+      ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
     }
 
-  bool pedwarned = false;
-  bool warned = false;
-  bool enum_and_int_p = false;
+  ತಾರ್ಕಿಕ pedwarned = ಅಸತ್ಯ;
+  ತಾರ್ಕಿಕ warned = ಅಸತ್ಯ;
+  ತಾರ್ಕಿಕ enum_and_int_p = ಅಸತ್ಯ;
   auto_diagnostic_group d;
 
-  bool comptypes_result = comptypes_check_enum_int (oldtype, newtype,
+  ತಾರ್ಕಿಕ comptypes_result = comptypes_check_enum_int (oldtype, newtype,
 						    &enum_and_int_p);
-  if (!comptypes_result)
+  ಯದಿ (!comptypes_result)
     {
-      if (TREE_CODE (olddecl) == FUNCTION_DECL
+      ಯದಿ (ವೃಕ್ಷ_CODE (olddecl) == FUNCTION_DECL
 	  && fndecl_built_in_p (olddecl, BUILT_IN_NORMAL)
 	  && !C_DECL_DECLARED_BUILTIN (olddecl))
 	{
@@ -2224,23 +2224,23 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	     as missing qualifiers or int vs long when they're the same
 	     size.  However, diagnose return and argument types that are
 	     incompatible according to language rules.  */
-	  tree mismatch_expect;
+	  ವೃಕ್ಷ mismatch_expect;
 	  unsigned mismatch_argno;
 
-	  tree trytype = match_builtin_function_types (newtype, oldtype,
+	  ವೃಕ್ಷ trytype = match_builtin_function_types (newtype, oldtype,
 						       &mismatch_expect,
 						       &mismatch_argno);
 
-	  if (trytype && comptypes (newtype, trytype))
+	  ಯದಿ (trytype && comptypes (newtype, trytype))
 	    *oldtypep = oldtype = trytype;
-	  else
+	  ಅನ್ಯಥಾ
 	    {
 	      /* If types don't match for a built-in, throw away the
 		 built-in.  No point in calling locate_old_decl here, it
 		 won't print anything.  */
-	      const char *header = header_for_builtin_fn (olddecl);
+	      ಧ್ರುವ ವರ್ಣ *header = header_for_builtin_fn (olddecl);
 	      location_t loc = DECL_SOURCE_LOCATION (newdecl);
-	      if (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
+	      ಯದಿ (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
 			      "conflicting types for built-in function %q+D; "
 			      "expected %qT",
 			      newdecl, oldtype)
@@ -2248,39 +2248,39 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 		{
 		  /* Suggest the right header to include as the preferred
 		     solution rather than the spelling of the declaration.  */
-		  rich_location richloc (line_table, loc);
-		  maybe_add_include_fixit (&richloc, header, true);
+		  rich_location richloc (ಸಾಲು_table, loc);
+		  maybe_add_include_fixit (&richloc, header, ಸತ್ಯ);
 		  inform (&richloc,
 			  "%qD is declared in header %qs", olddecl, header);
 		}
-	      return false;
+	      ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	    }
 
-	  if (mismatch_expect && extra_warnings)
+	  ಯದಿ (mismatch_expect && extra_warnings)
 	    {
 	      location_t newloc = DECL_SOURCE_LOCATION (newdecl);
-	      bool warned = false;
-	      if (mismatch_argno)
+	      ತಾರ್ಕಿಕ warned = ಅಸತ್ಯ;
+	      ಯದಿ (mismatch_argno)
 		warned = warning_at (newloc, OPT_Wbuiltin_declaration_mismatch,
 				     "mismatch in argument %u type of built-in "
 				     "function %qD; expected %qT",
 				     mismatch_argno, newdecl, mismatch_expect);
-	      else
+	      ಅನ್ಯಥಾ
 		warned = warning_at (newloc, OPT_Wbuiltin_declaration_mismatch,
 				     "mismatch in return type of built-in "
 				     "function %qD; expected %qT",
 				     newdecl, mismatch_expect);
-	      const char *header = header_for_builtin_fn (olddecl);
-	      if (warned && header)
+	      ಧ್ರುವ ವರ್ಣ *header = header_for_builtin_fn (olddecl);
+	      ಯದಿ (warned && header)
 		{
-		  rich_location richloc (line_table, newloc);
-		  maybe_add_include_fixit (&richloc, header, true);
+		  rich_location richloc (ಸಾಲು_table, newloc);
+		  maybe_add_include_fixit (&richloc, header, ಸತ್ಯ);
 		  inform (&richloc,
 			  "%qD is declared in header %qs", olddecl, header);
 		}
 	    }
 	}
-      else if (TREE_CODE (olddecl) == FUNCTION_DECL
+      ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (olddecl) == FUNCTION_DECL
 	       && DECL_IS_UNDECLARED_BUILTIN (olddecl))
 	{
 	  /* A conflicting function declaration for a predeclared
@@ -2288,56 +2288,56 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	     these.  The new declaration silently overrides everything
 	     but the volatility (i.e. noreturn) indication.  See also
 	     below.  FIXME: Make Objective C use normal builtins.  */
-	  TREE_THIS_VOLATILE (newdecl) |= TREE_THIS_VOLATILE (olddecl);
-	  return false;
+	  ವೃಕ್ಷ_THIS_VOLATILE (newdecl) |= ವೃಕ್ಷ_THIS_VOLATILE (olddecl);
+	  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	}
       /* Permit void foo (...) to match int foo (...) if the latter is
 	 the definition and implicit int was used.  See
 	 c-torture/compile/920625-2.c.  */
-      else if (TREE_CODE (newdecl) == FUNCTION_DECL && DECL_INITIAL (newdecl)
-	       && TYPE_MAIN_VARIANT (TREE_TYPE (oldtype)) == void_type_node
-	       && TYPE_MAIN_VARIANT (TREE_TYPE (newtype)) == integer_type_node
+      ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL && DECL_INITIAL (newdecl)
+	       && TYPE_MAIN_VARIANT (ವೃಕ್ಷ_TYPE (oldtype)) == void_type_ಗಂಟು
+	       && TYPE_MAIN_VARIANT (ವೃಕ್ಷ_TYPE (newtype)) == integer_type_ಗಂಟು
 	       && C_FUNCTION_IMPLICIT_INT (newdecl) && !DECL_INITIAL (olddecl))
 	{
-	  pedwarned = pedwarn (input_location, 0,
+	  pedwarned = pedwarn (ಒಳಹರಿವು_location, 0,
 			       "conflicting types for %q+D", newdecl);
 	  /* Make sure we keep void as the return type.  */
-	  TREE_TYPE (newdecl) = *newtypep = newtype = oldtype;
+	  ವೃಕ್ಷ_TYPE (newdecl) = *newtypep = newtype = oldtype;
 	  C_FUNCTION_IMPLICIT_INT (newdecl) = 0;
 	}
       /* Permit void foo (...) to match an earlier call to foo (...) with
 	 no declared type (thus, implicitly int).  */
-      else if (TREE_CODE (newdecl) == FUNCTION_DECL
-	       && TYPE_MAIN_VARIANT (TREE_TYPE (newtype)) == void_type_node
-	       && TYPE_MAIN_VARIANT (TREE_TYPE (oldtype)) == integer_type_node
+      ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL
+	       && TYPE_MAIN_VARIANT (ವೃಕ್ಷ_TYPE (newtype)) == void_type_ಗಂಟು
+	       && TYPE_MAIN_VARIANT (ವೃಕ್ಷ_TYPE (oldtype)) == integer_type_ಗಂಟು
 	       && C_DECL_IMPLICIT (olddecl) && !DECL_INITIAL (olddecl))
 	{
-	  pedwarned = pedwarn (input_location, 0,
+	  pedwarned = pedwarn (ಒಳಹರಿವು_location, 0,
 			       "conflicting types for %q+D; have %qT",
 			       newdecl, newtype);
 	  /* Make sure we keep void as the return type.  */
-	  TREE_TYPE (olddecl) = *oldtypep = oldtype = newtype;
+	  ವೃಕ್ಷ_TYPE (olddecl) = *oldtypep = oldtype = newtype;
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
-	  int new_quals = TYPE_QUALS (newtype);
-	  int old_quals = TYPE_QUALS (oldtype);
+	  ಪೂರ್ಣಾಙ್ಕ new_quals = TYPE_QUALS (newtype);
+	  ಪೂರ್ಣಾಙ್ಕ old_quals = TYPE_QUALS (oldtype);
 
-	  if (new_quals != old_quals)
+	  ಯದಿ (new_quals != old_quals)
 	    {
 	      addr_space_t new_addr = DECODE_QUAL_ADDR_SPACE (new_quals);
 	      addr_space_t old_addr = DECODE_QUAL_ADDR_SPACE (old_quals);
-	      if (new_addr != old_addr)
+	      ಯದಿ (new_addr != old_addr)
 		{
-		  if (ADDR_SPACE_GENERIC_P (new_addr))
+		  ಯದಿ (ADDR_SPACE_GENERIC_P (new_addr))
 		    error ("conflicting named address spaces (generic vs %s) "
 			   "for %q+D",
 			   c_addr_space_name (old_addr), newdecl);
-		  else if (ADDR_SPACE_GENERIC_P (old_addr))
+		  ಅನ್ಯಥಾ ಯದಿ (ADDR_SPACE_GENERIC_P (old_addr))
 		    error ("conflicting named address spaces (%s vs generic) "
 			   "for %q+D",
 			   c_addr_space_name (new_addr), newdecl);
-		  else
+		  ಅನ್ಯಥಾ
 		    error ("conflicting named address spaces (%s vs %s) "
 			   "for %q+D",
 			   c_addr_space_name (new_addr),
@@ -2345,55 +2345,55 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 			   newdecl);
 		}
 
-	      if (CLEAR_QUAL_ADDR_SPACE (new_quals)
+	      ಯದಿ (CLEAR_QUAL_ADDR_SPACE (new_quals)
 		  != CLEAR_QUAL_ADDR_SPACE (old_quals))
 		error ("conflicting type qualifiers for %q+D", newdecl);
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    {
-	      if (TREE_CODE (olddecl) == FUNCTION_DECL)
+	      ಯದಿ (ವೃಕ್ಷ_CODE (olddecl) == FUNCTION_DECL)
 		{
-		  tree attrs = TYPE_ATTRIBUTES (TREE_TYPE (olddecl));
-		  if (attrs && !TYPE_ATTRIBUTES (TREE_TYPE (newdecl)))
+		  ವೃಕ್ಷ attrs = TYPE_ATTRIBUTES (ವೃಕ್ಷ_TYPE (olddecl));
+		  ಯದಿ (attrs && !TYPE_ATTRIBUTES (ವೃಕ್ಷ_TYPE (newdecl)))
 		    {
 		      /* Similar to the C++ front-end, for FUNCTION_DECL,
 			 if OLDDECL has attributes and NEWDECL doesn't,
 			 try the type with OLDDECL attributes.  */
-		      tree rettype = TREE_TYPE (newtype);
-		      tree tryargs = TYPE_ARG_TYPES (newtype);
-		      tree trytype = c_build_function_type (rettype,
+		      ವೃಕ್ಷ rettype = ವೃಕ್ಷ_TYPE (newtype);
+		      ವೃಕ್ಷ tryargs = TYPE_ARG_TYPES (newtype);
+		      ವೃಕ್ಷ trytype = c_build_function_type (rettype,
 							    tryargs);
 		      trytype = c_build_type_attribute_variant (trytype,
 								attrs);
-		      if (comptypes (oldtype, trytype))
+		      ಯದಿ (comptypes (oldtype, trytype))
 			{
 			  *newtypep = newtype = trytype;
-			  comptypes_result = true;
+			  comptypes_result = ಸತ್ಯ;
 			}
 		    }
 		}
 
-	      if (!comptypes_result)
+	      ಯದಿ (!comptypes_result)
 		error ("conflicting types for %q+D; have %qT", newdecl,
 		       newtype);
 	    }
-	  if (!comptypes_result)
+	  ಯದಿ (!comptypes_result)
 	    {
 	      diagnose_arglist_conflict (newdecl, olddecl, newtype,
 					 oldtype);
 	      locate_old_decl (olddecl);
-	      return false;
+	      ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	    }
 	}
     }
   /* Warn about enum/integer type mismatches.  They are compatible types
      (C23 6.7.2.2/5), but may pose portability problems.  */
-  else if (enum_and_int_p
-	   && TREE_CODE (newdecl) != TYPE_DECL
+  ಅನ್ಯಥಾ ಯದಿ (enum_and_int_p
+	   && ವೃಕ್ಷ_CODE (newdecl) != TYPE_DECL
 	   /* Don't warn about acc_on_device built-in redeclaration,
 	      the built-in is declared with int rather than enum because
 	      the enum isn't intrinsic.  */
-	   && !(TREE_CODE (olddecl) == FUNCTION_DECL
+	   && !(ವೃಕ್ಷ_CODE (olddecl) == FUNCTION_DECL
 		&& fndecl_built_in_p (olddecl, BUILT_IN_ACC_ON_DEVICE)
 		&& !C_DECL_DECLARED_BUILTIN (olddecl)))
     warned = warning_at (DECL_SOURCE_LOCATION (newdecl),
@@ -2406,32 +2406,32 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
      header.  (Conflicting redeclarations were handled above.)  This
      is allowed for C11 if the types are the same, not just
      compatible.  */
-  if (TREE_CODE (newdecl) == TYPE_DECL)
+  ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == TYPE_DECL)
     {
-      if (!comptypes_same_p (oldtype, newtype))
+      ಯದಿ (!comptypes_same_p (oldtype, newtype))
 	{
 	  error ("redefinition of typedef %q+D with different type", newdecl);
 	  locate_old_decl (olddecl);
-	  return false;
+	  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	}
 
-      if (DECL_IN_SYSTEM_HEADER (newdecl)
+      ಯದಿ (DECL_IN_SYSTEM_HEADER (newdecl)
 	  || DECL_IN_SYSTEM_HEADER (olddecl)
 	  || warning_suppressed_p (newdecl, OPT_Wpedantic)
 	  || warning_suppressed_p (olddecl, OPT_Wpedantic))
-	return true;  /* Allow OLDDECL to continue in use.  */
+	ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;  /* Allow OLDDECL to continue in use.  */
 
-      if (c_type_variably_modified_p (newtype))
+      ಯದಿ (c_type_variably_modified_p (newtype))
 	{
 	  error ("redefinition of typedef %q+D with variably modified type",
 		 newdecl);
 	  locate_old_decl (olddecl);
 	}
-      else if (pedwarn_c99 (input_location, OPT_Wpedantic,
+      ಅನ್ಯಥಾ ಯದಿ (pedwarn_c99 (ಒಳಹರಿವು_location, OPT_Wpedantic,
 			    "redefinition of typedef %q+D", newdecl))
 	locate_old_decl (olddecl);
 
-      return true;
+      ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
     }
 
   /* Function declarations can either be 'static' or 'extern' (no
@@ -2442,50 +2442,50 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
      one is not.  The non- extern-inline definition supersedes the
      extern-inline definition.  */
 
-  else if (TREE_CODE (newdecl) == FUNCTION_DECL)
+  ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL)
     {
       /* If you declare a built-in function name as static, or
 	 define the built-in with an old-style definition (so we
 	 can't validate the argument list) the built-in definition is
 	 overridden, but optionally warn this was a bad choice of name.  */
-      if (fndecl_built_in_p (olddecl)
+      ಯದಿ (fndecl_built_in_p (olddecl)
 	  && !C_DECL_DECLARED_BUILTIN (olddecl))
 	{
-	  if (!TREE_PUBLIC (newdecl)
+	  ಯದಿ (!ವೃಕ್ಷ_PUBLIC (newdecl)
 	      || (DECL_INITIAL (newdecl)
-		  && !prototype_p (TREE_TYPE (newdecl))))
+		  && !prototype_p (ವೃಕ್ಷ_TYPE (newdecl))))
 	    {
 	      warning_at (DECL_SOURCE_LOCATION (newdecl),
 			  OPT_Wshadow, "declaration of %qD shadows "
 			  "a built-in function", newdecl);
 	      /* Discard the old built-in function.  */
-	      return false;
+	      ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	    }
 
-	  if (!prototype_p (TREE_TYPE (newdecl)))
+	  ಯದಿ (!prototype_p (ವೃಕ್ಷ_TYPE (newdecl)))
 	    {
 	      /* Set for built-ins that take no arguments.  */
-	      bool func_void_args = false;
-	      if (tree at = TYPE_ARG_TYPES (oldtype))
-		func_void_args = VOID_TYPE_P (TREE_VALUE (at));
+	      ತಾರ್ಕಿಕ func_void_args = ಅಸತ್ಯ;
+	      ಯದಿ (ವೃಕ್ಷ at = TYPE_ARG_TYPES (oldtype))
+		func_void_args = VOID_TYPE_P (ವೃಕ್ಷ_ಮೌಲ್ಯ (at));
 
-	      if (extra_warnings && !func_void_args)
+	      ಯದಿ (extra_warnings && !func_void_args)
 		warning_at (DECL_SOURCE_LOCATION (newdecl),
 			    OPT_Wbuiltin_declaration_mismatch,
 			    "declaration of built-in function %qD without "
 			    "a prototype; expected %qT",
-			    newdecl, TREE_TYPE (olddecl));
+			    newdecl, ವೃಕ್ಷ_TYPE (olddecl));
 	    }
 	}
 
-      if (DECL_INITIAL (newdecl))
+      ಯದಿ (DECL_INITIAL (newdecl))
 	{
-	  if (DECL_INITIAL (olddecl))
+	  ಯದಿ (DECL_INITIAL (olddecl))
 	    {
 	      /* If the new declaration isn't overriding an extern inline
 		 reject the new decl. In c99, no overriding is allowed
 		 in the same translation unit.  */
-	      if (!DECL_EXTERN_INLINE (olddecl)
+	      ಯದಿ (!DECL_EXTERN_INLINE (olddecl)
 		  || DECL_EXTERN_INLINE (newdecl)
 		  || (!flag_gnu89_inline
 		      && (!DECL_DECLARED_INLINE_P (olddecl)
@@ -2498,21 +2498,21 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 		  auto_diagnostic_group d;
 		  error ("redefinition of %q+D", newdecl);
 		  locate_old_decl (olddecl);
-		  return false;
+		  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 		}
 	    }
 	}
       /* If we have a prototype after an old-style function definition,
 	 the argument types must be checked specially.  */
-      else if (DECL_INITIAL (olddecl)
+      ಅನ್ಯಥಾ ಯದಿ (DECL_INITIAL (olddecl)
 	       && !prototype_p (oldtype) && prototype_p (newtype)
 	       && TYPE_ACTUAL_ARG_TYPES (oldtype))
 	{
 	  auto_diagnostic_group d;
-	  if (!validate_proto_after_old_defn (newdecl, newtype, oldtype))
+	  ಯದಿ (!validate_proto_after_old_defn (newdecl, newtype, oldtype))
 	    {
 	      locate_old_decl (olddecl);
-	      return false;
+	      ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	    }
 	}
       /* A non-static declaration (even an "extern") followed by a
@@ -2524,14 +2524,14 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	 some effects (see e.g.  what unwind-dw2-fde-glibc.c does to
 	 the definition of _Unwind_Find_FDE in unwind-dw2-fde.c), but
 	 we do diagnose it if -Wtraditional.  */
-      if (TREE_PUBLIC (olddecl) && !TREE_PUBLIC (newdecl))
+      ಯದಿ (ವೃಕ್ಷ_PUBLIC (olddecl) && !ವೃಕ್ಷ_PUBLIC (newdecl))
 	{
 	  /* Two exceptions to the rule.  If olddecl is an extern
 	     inline, or a predeclared function that isn't actually
 	     built in, newdecl silently overrides olddecl.  The latter
 	     occur only in Objective C; see also above.  (FIXME: Make
 	     Objective C use normal builtins.)  */
-	  if (!DECL_IS_UNDECLARED_BUILTIN (olddecl)
+	  ಯದಿ (!DECL_IS_UNDECLARED_BUILTIN (olddecl)
 	      && !DECL_EXTERN_INLINE (olddecl))
 	    {
 	      auto_diagnostic_group d;
@@ -2539,19 +2539,19 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 		     "non-static declaration", newdecl);
 	      locate_old_decl (olddecl);
 	    }
-	  return false;
+	  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	}
-      else if (TREE_PUBLIC (newdecl) && !TREE_PUBLIC (olddecl))
+      ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_PUBLIC (newdecl) && !ವೃಕ್ಷ_PUBLIC (olddecl))
 	{
-	  if (DECL_CONTEXT (olddecl))
+	  ಯದಿ (DECL_CONTEXT (olddecl))
 	    {
 	      auto_diagnostic_group d;
 	      error ("non-static declaration of %q+D follows "
 		     "static declaration", newdecl);
 	      locate_old_decl (olddecl);
-	      return false;
+	      ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	    }
-	  else if (warn_traditional)
+	  ಅನ್ಯಥಾ ಯದಿ (warn_traditional)
 	    {
 	      warned |= warning (OPT_Wtraditional,
 				 "non-static declaration of %q+D "
@@ -2561,50 +2561,50 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 
       /* Make sure gnu_inline attribute is either not present, or
 	 present on all inline decls.  */
-      if (DECL_DECLARED_INLINE_P (olddecl)
+      ಯದಿ (DECL_DECLARED_INLINE_P (olddecl)
 	  && DECL_DECLARED_INLINE_P (newdecl))
 	{
-	  bool newa = lookup_attribute ("gnu_inline",
-					DECL_ATTRIBUTES (newdecl)) != NULL;
-	  bool olda = lookup_attribute ("gnu_inline",
-					DECL_ATTRIBUTES (olddecl)) != NULL;
-	  if (newa != olda)
+	  ತಾರ್ಕಿಕ newa = lookup_attribute ("gnu_inline",
+					DECL_ATTRIBUTES (newdecl)) != ರಿಕ್ತ;
+	  ತಾರ್ಕಿಕ olda = lookup_attribute ("gnu_inline",
+					DECL_ATTRIBUTES (olddecl)) != ರಿಕ್ತ;
+	  ಯದಿ (newa != olda)
 	    {
 	      auto_diagnostic_group d;
-	      error_at (input_location, "%<gnu_inline%> attribute present on %q+D",
+	      error_at (ಒಳಹರಿವು_location, "%<gnu_inline%> attribute present on %q+D",
 			newa ? newdecl : olddecl);
 	      error_at (DECL_SOURCE_LOCATION (newa ? olddecl : newdecl),
 			"but not here");
 	    }
 	}
       /* Check if these are unmergeable overlapping FMV declarations.  */
-      if (!TARGET_HAS_FMV_TARGET_ATTRIBUTE
+      ಯದಿ (!TARGET_HAS_FMV_TARGET_ATTRIBUTE
 	  && diagnose_versioned_decls (olddecl, newdecl))
-	return false;
+	ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
     }
-  else if (VAR_P (newdecl))
+  ಅನ್ಯಥಾ ಯದಿ (VAR_P (newdecl))
     {
       /* Only variables can be thread-local, and all declarations must
 	 agree on this property.  */
-      if (C_DECL_THREADPRIVATE_P (olddecl) && !DECL_THREAD_LOCAL_P (newdecl))
+      ಯದಿ (C_DECL_THREADPRIVATE_P (olddecl) && !DECL_THREAD_LOCAL_P (newdecl))
 	{
 	  /* Nothing to check.  Since OLDDECL is marked threadprivate
 	     and NEWDECL does not have a thread-local attribute, we
 	     will merge the threadprivate attribute into NEWDECL.  */
 	  ;
 	}
-      else if (DECL_THREAD_LOCAL_P (newdecl) != DECL_THREAD_LOCAL_P (olddecl))
+      ಅನ್ಯಥಾ ಯದಿ (DECL_THREAD_LOCAL_P (newdecl) != DECL_THREAD_LOCAL_P (olddecl))
 	{
 	  auto_diagnostic_group d;
-	  if (DECL_THREAD_LOCAL_P (newdecl))
+	  ಯದಿ (DECL_THREAD_LOCAL_P (newdecl))
 	    error ("thread-local declaration of %q+D follows "
 		   "non-thread-local declaration", newdecl);
-	  else
+	  ಅನ್ಯಥಾ
 	    error ("non-thread-local declaration of %q+D follows "
 		   "thread-local declaration", newdecl);
 
 	  locate_old_decl (olddecl);
-	  return false;
+	  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	}
 
       /* Multiple initialized definitions are not allowed (6.9p3,5).
@@ -2616,7 +2616,7 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	 definitions only if they also used static, but without saying
 	 explicitly whether or not other cases count as
 	 definitions at all.  */
-      if ((DECL_INITIAL (newdecl) && DECL_INITIAL (olddecl))
+      ಯದಿ ((DECL_INITIAL (newdecl) && DECL_INITIAL (olddecl))
 	  || (flag_isoc23
 	      && DECL_THREAD_LOCAL_P (newdecl)
 	      && !DECL_EXTERNAL (newdecl)
@@ -2625,7 +2625,7 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	  auto_diagnostic_group d;
 	  error ("redefinition of %q+D", newdecl);
 	  locate_old_decl (olddecl);
-	  return false;
+	  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	}
 
       /* Objects declared at file scope: if the first declaration had
@@ -2636,69 +2636,69 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	 case the composite declaration still has internal linkage).
 	 As for function declarations, we warn about the static-then-
 	 extern case only for -Wtraditional.  See generally 6.2.2p3-5,7.  */
-      if (DECL_FILE_SCOPE_P (newdecl)
-	  && TREE_PUBLIC (newdecl) != TREE_PUBLIC (olddecl))
+      ಯದಿ (DECL_FILE_SCOPE_P (newdecl)
+	  && ವೃಕ್ಷ_PUBLIC (newdecl) != ವೃಕ್ಷ_PUBLIC (olddecl))
 	{
-	  if (DECL_EXTERNAL (newdecl))
+	  ಯದಿ (DECL_EXTERNAL (newdecl))
 	    {
-	      if (!DECL_FILE_SCOPE_P (olddecl))
+	      ಯದಿ (!DECL_FILE_SCOPE_P (olddecl))
 		{
 		  auto_diagnostic_group d;
 		  error ("extern declaration of %q+D follows "
 			 "declaration with no linkage", newdecl);
 		  locate_old_decl (olddecl);
-		  return false;
+		  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 		}
-	      else if (warn_traditional)
+	      ಅನ್ಯಥಾ ಯದಿ (warn_traditional)
 		{
 		  warned |= warning (OPT_Wtraditional,
 				     "non-static declaration of %q+D "
 				     "follows static declaration", newdecl);
 		}
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    {
 	      auto_diagnostic_group d;
-	      if (TREE_PUBLIC (newdecl))
+	      ಯದಿ (ವೃಕ್ಷ_PUBLIC (newdecl))
 		error ("non-static declaration of %q+D follows "
 		       "static declaration", newdecl);
-	      else
+	      ಅನ್ಯಥಾ
 		error ("static declaration of %q+D follows "
 		       "non-static declaration", newdecl);
 
 	      locate_old_decl (olddecl);
-	      return false;
+	      ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	    }
 	}
       /* Two objects with the same name declared at the same block
 	 scope must both be external references (6.7p3).  */
-      else if (!DECL_FILE_SCOPE_P (newdecl))
+      ಅನ್ಯಥಾ ಯದಿ (!DECL_FILE_SCOPE_P (newdecl))
 	{
-	  if (DECL_EXTERNAL (newdecl))
+	  ಯದಿ (DECL_EXTERNAL (newdecl))
 	    {
 	      /* Extern with initializer at block scope, which will
 		 already have received an error.  */
 	    }
-	  else if (DECL_EXTERNAL (olddecl))
+	  ಅನ್ಯಥಾ ಯದಿ (DECL_EXTERNAL (olddecl))
 	    {
 	      auto_diagnostic_group d;
 	      error ("declaration of %q+D with no linkage follows "
 		     "extern declaration", newdecl);
 	      locate_old_decl (olddecl);
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    {
 	      auto_diagnostic_group d;
 	      error ("redeclaration of %q+D with no linkage", newdecl);
 	      locate_old_decl (olddecl);
 	    }
 
-	  return false;
+	  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	}
 
       /* C++ does not permit a decl to appear multiple times at file
 	 scope.  */
-      if (warn_cxx_compat
+      ಯದಿ (warn_cxx_compat
 	  && DECL_FILE_SCOPE_P (newdecl)
 	  && !DECL_EXTERNAL (newdecl)
 	  && !DECL_EXTERNAL (olddecl))
@@ -2710,7 +2710,7 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 
   /* warnings */
   /* All decls must agree on a visibility.  */
-  if (CODE_CONTAINS_STRUCT (TREE_CODE (newdecl), TS_DECL_WITH_VIS)
+  ಯದಿ (CODE_CONTAINS_STRUCT (ವೃಕ್ಷ_CODE (newdecl), TS_DECL_WITH_VIS)
       && DECL_VISIBILITY_SPECIFIED (newdecl) && DECL_VISIBILITY_SPECIFIED (olddecl)
       && DECL_VISIBILITY (newdecl) != DECL_VISIBILITY (olddecl))
     {
@@ -2718,9 +2718,9 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 			 "(old visibility preserved)", newdecl);
     }
 
-  if (TREE_CODE (newdecl) == FUNCTION_DECL)
+  ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL)
     warned |= diagnose_mismatched_attributes (olddecl, newdecl);
-  else /* PARM_DECL, VAR_DECL */
+  ಅನ್ಯಥಾ /* PARM_DECL, VAR_DECL */
     {
       /* Redeclaration of a parameter is a constraint violation (this is
 	 not explicitly stated, but follows from C99 6.7p3 [no more than
@@ -2731,33 +2731,33 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	 an extension, the mandatory diagnostic for which is handled by
 	 mark_forward_parm_decls.  */
 
-      if (TREE_CODE (newdecl) == PARM_DECL
-	  && (!TREE_ASM_WRITTEN (olddecl) || TREE_ASM_WRITTEN (newdecl)))
+      ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == PARM_DECL
+	  && (!ವೃಕ್ಷ_ASM_WRITTEN (olddecl) || ವೃಕ್ಷ_ASM_WRITTEN (newdecl)))
 	{
 	  auto_diagnostic_group d;
 	  error ("redefinition of parameter %q+D", newdecl);
 	  locate_old_decl (olddecl);
-	  return false;
+	  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 	}
     }
 
   /* Optional warning for completely redundant decls.  */
-  if (!warned && !pedwarned
+  ಯದಿ (!warned && !pedwarned
       && warn_redundant_decls
       /* Don't warn about a function declaration followed by a
 	 definition.  */
-      && !(TREE_CODE (newdecl) == FUNCTION_DECL
+      && !(ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL
 	   && DECL_INITIAL (newdecl) && !DECL_INITIAL (olddecl))
       /* Don't warn about redundant redeclarations of builtins.  */
-      && !(TREE_CODE (newdecl) == FUNCTION_DECL
+      && !(ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL
 	   && !fndecl_built_in_p (newdecl)
 	   && fndecl_built_in_p (olddecl)
 	   && !C_DECL_DECLARED_BUILTIN (olddecl))
       /* Don't warn about an extern followed by a definition.  */
       && !(DECL_EXTERNAL (olddecl) && !DECL_EXTERNAL (newdecl))
       /* Don't warn about forward parameter decls.  */
-      && !(TREE_CODE (newdecl) == PARM_DECL
-	   && TREE_ASM_WRITTEN (olddecl) && !TREE_ASM_WRITTEN (newdecl))
+      && !(ವೃಕ್ಷ_CODE (newdecl) == PARM_DECL
+	   && ವೃಕ್ಷ_ASM_WRITTEN (olddecl) && !ವೃಕ್ಷ_ASM_WRITTEN (newdecl))
       /* Don't warn about a variable definition following a declaration.  */
       && !(VAR_P (newdecl)
 	   && DECL_INITIAL (newdecl) && !DECL_INITIAL (olddecl)))
@@ -2767,12 +2767,12 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
     }
 
   /* Report location of previous decl/defn.  */
-  if (warned || pedwarned)
+  ಯದಿ (warned || pedwarned)
     locate_old_decl (olddecl);
 
 #undef DECL_EXTERN_INLINE
 
-  return retval;
+  ಪ್ರತ್ಯಾಗಮ retval;
 }
 
 /* Subroutine of duplicate_decls.  NEWDECL has been found to be
@@ -2780,27 +2780,27 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
    new information into OLDDECL.  This function issues no
    diagnostics.  */
 
-static void
-merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
+ಸ್ಥಿರ ಶೂನ್ಯ
+merge_decls (ವೃಕ್ಷ newdecl, ವೃಕ್ಷ olddecl, ವೃಕ್ಷ newtype, ವೃಕ್ಷ oldtype)
 {
-  bool new_is_definition = (TREE_CODE (newdecl) == FUNCTION_DECL
-			    && DECL_INITIAL (newdecl) != NULL_TREE);
-  bool new_is_prototype = (TREE_CODE (newdecl) == FUNCTION_DECL
-			   && prototype_p (TREE_TYPE (newdecl)));
-  bool old_is_prototype = (TREE_CODE (olddecl) == FUNCTION_DECL
-			   && prototype_p (TREE_TYPE (olddecl)));
+  ತಾರ್ಕಿಕ new_is_definition = (ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL
+			    && DECL_INITIAL (newdecl) != NULL_ವೃಕ್ಷ);
+  ತಾರ್ಕಿಕ new_is_prototype = (ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL
+			   && prototype_p (ವೃಕ್ಷ_TYPE (newdecl)));
+  ತಾರ್ಕಿಕ old_is_prototype = (ವೃಕ್ಷ_CODE (olddecl) == FUNCTION_DECL
+			   && prototype_p (ವೃಕ್ಷ_TYPE (olddecl)));
 
   /* For real parm decl following a forward decl, rechain the old decl
      in its new location and clear TREE_ASM_WRITTEN (it's not a
      forward decl anymore).  */
-  if (TREE_CODE (newdecl) == PARM_DECL
-      && TREE_ASM_WRITTEN (olddecl) && !TREE_ASM_WRITTEN (newdecl))
+  ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == PARM_DECL
+      && ವೃಕ್ಷ_ASM_WRITTEN (olddecl) && !ವೃಕ್ಷ_ASM_WRITTEN (newdecl))
     {
-      struct c_binding *b, **here;
+      ಸಂರಚನಾ c_binding *b, **here;
 
-      for (here = &current_scope->bindings; *here; here = &(*here)->prev)
-	if ((*here)->decl == olddecl)
-	  goto found;
+      ಪ್ರತಿ (here = &current_scope->bindings; *here; here = &(*here)->prev)
+	ಯದಿ ((*here)->decl == olddecl)
+	  ಗಚ್ಛ found;
       gcc_unreachable ();
 
     found:
@@ -2809,7 +2809,7 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
       b->prev = current_scope->bindings;
       current_scope->bindings = b;
 
-      TREE_ASM_WRITTEN (olddecl) = 0;
+      ವೃಕ್ಷ_ASM_WRITTEN (olddecl) = 0;
     }
 
   DECL_ATTRIBUTES (newdecl)
@@ -2817,49 +2817,49 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
 
   /* For typedefs use the old type, as the new type's DECL_NAME points
      at newdecl, which will be ggc_freed.  */
-  if (TREE_CODE (newdecl) == TYPE_DECL)
+  ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == TYPE_DECL)
     {
       /* But NEWTYPE might have an attribute, honor that.  */
-      tree tem = newtype;
+      ವೃಕ್ಷ tem = newtype;
       newtype = oldtype;
 
-      if (TYPE_USER_ALIGN (tem))
+      ಯದಿ (TYPE_USER_ALIGN (tem))
 	{
-	  if (TYPE_ALIGN (tem) > TYPE_ALIGN (newtype))
+	  ಯದಿ (TYPE_ALIGN (tem) > TYPE_ALIGN (newtype))
 	    SET_TYPE_ALIGN (newtype, TYPE_ALIGN (tem));
-	  TYPE_USER_ALIGN (newtype) = true;
+	  TYPE_USER_ALIGN (newtype) = ಸತ್ಯ;
 	}
 
       /* And remove the new type from the variants list.  */
-      if (TYPE_NAME (TREE_TYPE (newdecl)) == newdecl)
+      ಯದಿ (TYPE_NAME (ವೃಕ್ಷ_TYPE (newdecl)) == newdecl)
 	{
-	  tree remove = TREE_TYPE (newdecl);
-	  if (TYPE_MAIN_VARIANT (remove) == remove)
+	  ವೃಕ್ಷ remove = ವೃಕ್ಷ_TYPE (newdecl);
+	  ಯದಿ (TYPE_MAIN_VARIANT (remove) == remove)
 	    {
-	      gcc_assert (TYPE_NEXT_VARIANT (remove) == NULL_TREE);
+	      gcc_assert (TYPE_NEXT_VARIANT (remove) == NULL_ವೃಕ್ಷ);
 	      /* If remove is the main variant, no need to remove that
 		 from the list.  One of the DECL_ORIGINAL_TYPE
 		 variants, e.g. created for aligned attribute, might still
 		 refer to the newdecl TYPE_DECL though, so remove that one
 		 in that case.  */
-	      if (DECL_ORIGINAL_TYPE (newdecl)
+	      ಯದಿ (DECL_ORIGINAL_TYPE (newdecl)
 		  && DECL_ORIGINAL_TYPE (newdecl) != remove)
-		for (tree t = TYPE_MAIN_VARIANT (DECL_ORIGINAL_TYPE (newdecl));
+		ಪ್ರತಿ (ವೃಕ್ಷ t = TYPE_MAIN_VARIANT (DECL_ORIGINAL_TYPE (newdecl));
 		     t; t = TYPE_MAIN_VARIANT (t))
-		  if (TYPE_NAME (TYPE_NEXT_VARIANT (t)) == newdecl)
+		  ಯದಿ (TYPE_NAME (TYPE_NEXT_VARIANT (t)) == newdecl)
 		    {
 		      TYPE_NEXT_VARIANT (t)
 			= TYPE_NEXT_VARIANT (TYPE_NEXT_VARIANT (t));
-		      break;
+		      ಭಙ್ಗ;
 		    }
 	    }
-	  else
-	    for (tree t = TYPE_MAIN_VARIANT (remove); ;
+	  ಅನ್ಯಥಾ
+	    ಪ್ರತಿ (ವೃಕ್ಷ t = TYPE_MAIN_VARIANT (remove); ;
 		 t = TYPE_NEXT_VARIANT (t))
-	      if (TYPE_NEXT_VARIANT (t) == remove)
+	      ಯದಿ (TYPE_NEXT_VARIANT (t) == remove)
 		{
 		  TYPE_NEXT_VARIANT (t) = TYPE_NEXT_VARIANT (remove);
-		  break;
+		  ಭಙ್ಗ;
 		}
 	}
 
@@ -2868,121 +2868,121 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
     }
 
   /* Merge the data types specified in the two decls.  */
-  TREE_TYPE (newdecl)
-    = TREE_TYPE (olddecl)
+  ವೃಕ್ಷ_TYPE (newdecl)
+    = ವೃಕ್ಷ_TYPE (olddecl)
     = composite_type (newtype, oldtype);
 
   /* Lay the type out, unless already done.  */
-  if (!comptypes (oldtype, TREE_TYPE (newdecl)))
+  ಯದಿ (!comptypes (oldtype, ವೃಕ್ಷ_TYPE (newdecl)))
     {
-      if (TREE_TYPE (newdecl) != error_mark_node)
-	layout_type (TREE_TYPE (newdecl));
-      if (TREE_CODE (newdecl) != FUNCTION_DECL
-	  && TREE_CODE (newdecl) != TYPE_DECL
-	  && TREE_CODE (newdecl) != CONST_DECL)
+      ಯದಿ (ವೃಕ್ಷ_TYPE (newdecl) != error_mark_ಗಂಟು)
+	layout_type (ವೃಕ್ಷ_TYPE (newdecl));
+      ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) != FUNCTION_DECL
+	  && ವೃಕ್ಷ_CODE (newdecl) != TYPE_DECL
+	  && ವೃಕ್ಷ_CODE (newdecl) != CONST_DECL)
 	layout_decl (newdecl, 0);
     }
-  else
+  ಅನ್ಯಥಾ
     {
       /* Since the type is OLDDECL's, make OLDDECL's size go with.  */
       DECL_SIZE (newdecl) = DECL_SIZE (olddecl);
       DECL_SIZE_UNIT (newdecl) = DECL_SIZE_UNIT (olddecl);
       SET_DECL_MODE (newdecl, DECL_MODE (olddecl));
-      if (DECL_ALIGN (olddecl) > DECL_ALIGN (newdecl))
+      ಯದಿ (DECL_ALIGN (olddecl) > DECL_ALIGN (newdecl))
 	{
 	  SET_DECL_ALIGN (newdecl, DECL_ALIGN (olddecl));
 	  DECL_USER_ALIGN (newdecl) |= DECL_USER_ALIGN (olddecl);
 	}
-      else if (DECL_ALIGN (olddecl) == DECL_ALIGN (newdecl)
+      ಅನ್ಯಥಾ ಯದಿ (DECL_ALIGN (olddecl) == DECL_ALIGN (newdecl)
 	       && DECL_USER_ALIGN (olddecl) != DECL_USER_ALIGN (newdecl))
 	DECL_USER_ALIGN (newdecl) = 1;
-      if (DECL_WARN_IF_NOT_ALIGN (olddecl)
+      ಯದಿ (DECL_WARN_IF_NOT_ALIGN (olddecl)
 	  > DECL_WARN_IF_NOT_ALIGN (newdecl))
 	SET_DECL_WARN_IF_NOT_ALIGN (newdecl,
 				    DECL_WARN_IF_NOT_ALIGN (olddecl));
     }
 
   /* Keep the old rtl since we can safely use it.  */
-  if (HAS_RTL_P (olddecl))
+  ಯದಿ (HAS_RTL_P (olddecl))
     COPY_DECL_RTL (olddecl, newdecl);
 
   /* Merge the type qualifiers.  */
-  if (TREE_READONLY (newdecl))
-    TREE_READONLY (olddecl) = 1;
+  ಯದಿ (ವೃಕ್ಷ_READONLY (newdecl))
+    ವೃಕ್ಷ_READONLY (olddecl) = 1;
 
-  if (TREE_THIS_VOLATILE (newdecl))
-    TREE_THIS_VOLATILE (olddecl) = 1;
+  ಯದಿ (ವೃಕ್ಷ_THIS_VOLATILE (newdecl))
+    ವೃಕ್ಷ_THIS_VOLATILE (olddecl) = 1;
 
   /* Merge deprecatedness.  */
-  if (TREE_DEPRECATED (newdecl))
-    TREE_DEPRECATED (olddecl) = 1;
+  ಯದಿ (ವೃಕ್ಷ_DEPRECATED (newdecl))
+    ವೃಕ್ಷ_DEPRECATED (olddecl) = 1;
 
   /* Merge unavailability.  */
-  if (TREE_UNAVAILABLE (newdecl))
-    TREE_UNAVAILABLE (olddecl) = 1;
+  ಯದಿ (ವೃಕ್ಷ_UNAVAILABLE (newdecl))
+    ವೃಕ್ಷ_UNAVAILABLE (olddecl) = 1;
 
   /* If a decl is in a system header and the other isn't, keep the one on the
      system header. Otherwise, keep source location of definition rather than
      declaration and of prototype rather than non-prototype unless that
      prototype is built-in.  */
-  if (HAS_DECL_ASSEMBLER_NAME_P (olddecl)
+  ಯದಿ (HAS_DECL_ASSEMBLER_NAME_P (olddecl)
       && DECL_IN_SYSTEM_HEADER (olddecl)
       && !DECL_IN_SYSTEM_HEADER (newdecl) )
     DECL_SOURCE_LOCATION (newdecl) = DECL_SOURCE_LOCATION (olddecl);
-  else if (HAS_DECL_ASSEMBLER_NAME_P (olddecl)
+  ಅನ್ಯಥಾ ಯದಿ (HAS_DECL_ASSEMBLER_NAME_P (olddecl)
 	   && DECL_IN_SYSTEM_HEADER (newdecl)
 	   && !DECL_IN_SYSTEM_HEADER (olddecl))
     DECL_SOURCE_LOCATION (olddecl) = DECL_SOURCE_LOCATION (newdecl);
-  else if ((DECL_INITIAL (newdecl) == NULL_TREE
-	    && DECL_INITIAL (olddecl) != NULL_TREE)
+  ಅನ್ಯಥಾ ಯದಿ ((DECL_INITIAL (newdecl) == NULL_ವೃಕ್ಷ
+	    && DECL_INITIAL (olddecl) != NULL_ವೃಕ್ಷ)
 	   || (old_is_prototype && !new_is_prototype
 	       && !C_DECL_BUILTIN_PROTOTYPE (olddecl)))
     DECL_SOURCE_LOCATION (newdecl) = DECL_SOURCE_LOCATION (olddecl);
 
   /* Merge the initialization information.  */
-   if (DECL_INITIAL (newdecl) == NULL_TREE)
+   ಯದಿ (DECL_INITIAL (newdecl) == NULL_ವೃಕ್ಷ)
     DECL_INITIAL (newdecl) = DECL_INITIAL (olddecl);
 
   /* Merge 'constexpr' information.  */
-  if (VAR_P (olddecl) && VAR_P (newdecl))
+  ಯದಿ (VAR_P (olddecl) && VAR_P (newdecl))
     {
-      if (C_DECL_DECLARED_CONSTEXPR (olddecl))
+      ಯದಿ (C_DECL_DECLARED_CONSTEXPR (olddecl))
 	C_DECL_DECLARED_CONSTEXPR (newdecl) = 1;
-      else if (C_DECL_DECLARED_CONSTEXPR (newdecl))
+      ಅನ್ಯಥಾ ಯದಿ (C_DECL_DECLARED_CONSTEXPR (newdecl))
 	C_DECL_DECLARED_CONSTEXPR (olddecl) = 1;
     }
 
   /* Merge the threadprivate attribute.  */
-  if (VAR_P (olddecl) && C_DECL_THREADPRIVATE_P (olddecl))
+  ಯದಿ (VAR_P (olddecl) && C_DECL_THREADPRIVATE_P (olddecl))
     C_DECL_THREADPRIVATE_P (newdecl) = 1;
 
-  if (HAS_DECL_ASSEMBLER_NAME_P (olddecl))
+  ಯದಿ (HAS_DECL_ASSEMBLER_NAME_P (olddecl))
     {
       /* Copy the assembler name.
 	 Currently, it can only be defined in the prototype.  */
       COPY_DECL_ASSEMBLER_NAME (olddecl, newdecl);
 
       /* Use visibility of whichever declaration had it specified */
-      if (DECL_VISIBILITY_SPECIFIED (olddecl))
+      ಯದಿ (DECL_VISIBILITY_SPECIFIED (olddecl))
 	{
 	  DECL_VISIBILITY (newdecl) = DECL_VISIBILITY (olddecl);
 	  DECL_VISIBILITY_SPECIFIED (newdecl) = 1;
 	}
 
-      if (TREE_CODE (newdecl) == FUNCTION_DECL)
+      ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL)
 	{
 	  DECL_STATIC_CONSTRUCTOR(newdecl) |= DECL_STATIC_CONSTRUCTOR(olddecl);
 	  DECL_STATIC_DESTRUCTOR (newdecl) |= DECL_STATIC_DESTRUCTOR (olddecl);
-	  DECL_NO_LIMIT_STACK (newdecl) |= DECL_NO_LIMIT_STACK (olddecl);
+	  DECL_NO_LIMIT_ರಾಶಿ (newdecl) |= DECL_NO_LIMIT_ರಾಶಿ (olddecl);
 	  DECL_NO_INSTRUMENT_FUNCTION_ENTRY_EXIT (newdecl)
 	    |= DECL_NO_INSTRUMENT_FUNCTION_ENTRY_EXIT (olddecl);
-	  TREE_THIS_VOLATILE (newdecl) |= TREE_THIS_VOLATILE (olddecl);
+	  ವೃಕ್ಷ_THIS_VOLATILE (newdecl) |= ವೃಕ್ಷ_THIS_VOLATILE (olddecl);
 	  DECL_IS_MALLOC (newdecl) |= DECL_IS_MALLOC (olddecl);
-	  if (DECL_IS_OPERATOR_NEW_P (olddecl))
-	    DECL_SET_IS_OPERATOR_NEW (newdecl, true);
-	  if (DECL_IS_OPERATOR_DELETE_P (olddecl))
-	    DECL_SET_IS_OPERATOR_DELETE (newdecl, true);
-	  TREE_READONLY (newdecl) |= TREE_READONLY (olddecl);
+	  ಯದಿ (DECL_IS_OPERATOR_NEW_P (olddecl))
+	    DECL_SET_IS_OPERATOR_NEW (newdecl, ಸತ್ಯ);
+	  ಯದಿ (DECL_IS_OPERATOR_DELETE_P (olddecl))
+	    DECL_SET_IS_OPERATOR_DELETE (newdecl, ಸತ್ಯ);
+	  ವೃಕ್ಷ_READONLY (newdecl) |= ವೃಕ್ಷ_READONLY (olddecl);
 	  DECL_PURE_P (newdecl) |= DECL_PURE_P (olddecl);
 	  DECL_IS_NOVOPS (newdecl) |= DECL_IS_NOVOPS (olddecl);
 	}
@@ -2991,22 +2991,22 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
       merge_weak (newdecl, olddecl);
 
       /* For functions, static overrides non-static.  */
-      if (TREE_CODE (newdecl) == FUNCTION_DECL)
+      ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL)
 	{
-	  TREE_PUBLIC (newdecl) &= TREE_PUBLIC (olddecl);
+	  ವೃಕ್ಷ_PUBLIC (newdecl) &= ವೃಕ್ಷ_PUBLIC (olddecl);
 	  /* This is since we don't automatically
 	     copy the attributes of NEWDECL into OLDDECL.  */
-	  TREE_PUBLIC (olddecl) = TREE_PUBLIC (newdecl);
+	  ವೃಕ್ಷ_PUBLIC (olddecl) = ವೃಕ್ಷ_PUBLIC (newdecl);
 	  /* If this clears `static', clear it in the identifier too.  */
-	  if (!TREE_PUBLIC (olddecl))
-	    TREE_PUBLIC (DECL_NAME (olddecl)) = 0;
+	  ಯದಿ (!ವೃಕ್ಷ_PUBLIC (olddecl))
+	    ವೃಕ್ಷ_PUBLIC (DECL_NAME (olddecl)) = 0;
 	}
     }
 
   /* In c99, 'extern' declaration before (or after) 'inline' means this
      function is not DECL_EXTERNAL, unless 'gnu_inline' attribute
      is present.  */
-  if (TREE_CODE (newdecl) == FUNCTION_DECL
+  ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL
       && !flag_gnu89_inline
       && (DECL_DECLARED_INLINE_P (newdecl)
 	  || DECL_DECLARED_INLINE_P (olddecl))
@@ -3020,34 +3020,34 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
 
   /* An inline definition following a static declaration is not
      DECL_EXTERNAL.  */
-  if (new_is_definition
+  ಯದಿ (new_is_definition
       && (DECL_DECLARED_INLINE_P (newdecl)
 	  || DECL_DECLARED_INLINE_P (olddecl))
-      && !TREE_PUBLIC (olddecl))
+      && !ವೃಕ್ಷ_PUBLIC (olddecl))
     DECL_EXTERNAL (newdecl) = 0;
 
-  if (DECL_EXTERNAL (newdecl))
+  ಯದಿ (DECL_EXTERNAL (newdecl))
     {
-      TREE_STATIC (newdecl) = TREE_STATIC (olddecl);
+      ವೃಕ್ಷ_STATIC (newdecl) = ವೃಕ್ಷ_STATIC (olddecl);
       DECL_EXTERNAL (newdecl) = DECL_EXTERNAL (olddecl);
 
       /* An extern decl does not override previous storage class.  */
-      TREE_PUBLIC (newdecl) = TREE_PUBLIC (olddecl);
-      if (!DECL_EXTERNAL (newdecl))
+      ವೃಕ್ಷ_PUBLIC (newdecl) = ವೃಕ್ಷ_PUBLIC (olddecl);
+      ಯದಿ (!DECL_EXTERNAL (newdecl))
 	{
 	  DECL_CONTEXT (newdecl) = DECL_CONTEXT (olddecl);
 	  DECL_COMMON (newdecl) = DECL_COMMON (olddecl);
 	}
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      TREE_STATIC (olddecl) = TREE_STATIC (newdecl);
-      TREE_PUBLIC (olddecl) = TREE_PUBLIC (newdecl);
+      ವೃಕ್ಷ_STATIC (olddecl) = ವೃಕ್ಷ_STATIC (newdecl);
+      ವೃಕ್ಷ_PUBLIC (olddecl) = ವೃಕ್ಷ_PUBLIC (newdecl);
     }
 
-  if (TREE_CODE (newdecl) == FUNCTION_DECL)
+  ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL)
     {
-      if (DECL_FUNCTION_VERSIONED (olddecl)
+      ಯದಿ (DECL_FUNCTION_VERSIONED (olddecl)
 	  || DECL_FUNCTION_VERSIONED (newdecl))
 	{
 	  maybe_mark_function_versioned (olddecl);
@@ -3057,14 +3057,14 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
 	 inline, make sure we emit debug info for the inline before we
 	 throw it away, in case it was inlined into a function that
 	 hasn't been written out yet.  */
-      if (new_is_definition && DECL_INITIAL (olddecl))
+      ಯದಿ (new_is_definition && DECL_INITIAL (olddecl))
 	/* The new defn must not be inline.  */
 	DECL_UNINLINABLE (newdecl) = 1;
-      else
+      ಅನ್ಯಥಾ
 	{
 	  /* If either decl says `inline', this fn is inline, unless
 	     its definition was passed already.  */
-	  if (DECL_DECLARED_INLINE_P (newdecl)
+	  ಯದಿ (DECL_DECLARED_INLINE_P (newdecl)
 	      || DECL_DECLARED_INLINE_P (olddecl))
 	    DECL_DECLARED_INLINE_P (newdecl) = 1;
 
@@ -3077,85 +3077,85 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
 	       || DECL_DISREGARD_INLINE_LIMITS (olddecl));
 	}
 
-      if (fndecl_built_in_p (olddecl))
+      ಯದಿ (fndecl_built_in_p (olddecl))
 	{
 	  /* If redeclaring a builtin function, it stays built in.
 	     But it gets tagged as having been declared.  */
 	  copy_decl_built_in_function (newdecl, olddecl);
 	  C_DECL_DECLARED_BUILTIN (newdecl) = 1;
-	  if (new_is_prototype)
+	  ಯದಿ (new_is_prototype)
 	    {
 	      C_DECL_BUILTIN_PROTOTYPE (newdecl) = 0;
-	      if (DECL_BUILT_IN_CLASS (newdecl) == BUILT_IN_NORMAL)
+	      ಯದಿ (DECL_BUILT_IN_CLASS (newdecl) == BUILT_IN_NORMAL)
 		{
-		  enum built_in_function fncode = DECL_FUNCTION_CODE (newdecl);
-		  switch (fncode)
+		  ಗಣನಾ built_in_function fncode = DECL_FUNCTION_CODE (newdecl);
+		  ವಿಕಲ್ಪ (fncode)
 		    {
 		      /* If a compatible prototype of these builtin functions
 			 is seen, assume the runtime implements it with the
 			 expected semantics.  */
-		    case BUILT_IN_STPCPY:
-		      if (builtin_decl_explicit_p (fncode))
-			set_builtin_decl_implicit_p (fncode, true);
-		      break;
-		    default:
-		      if (builtin_decl_explicit_p (fncode))
-			set_builtin_decl_declared_p (fncode, true);
-		      break;
+		    ಪಕ್ಷ BUILT_IN_STPCPY:
+		      ಯದಿ (builtin_decl_explicit_p (fncode))
+			set_builtin_decl_implicit_p (fncode, ಸತ್ಯ);
+		      ಭಙ್ಗ;
+		    ಸ್ವಭಾವ:
+		      ಯದಿ (builtin_decl_explicit_p (fncode))
+			set_builtin_decl_declared_p (fncode, ಸತ್ಯ);
+		      ಭಙ್ಗ;
 		    }
 
 		  copy_attributes_to_builtin (newdecl);
 		}
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    C_DECL_BUILTIN_PROTOTYPE (newdecl)
 	      = C_DECL_BUILTIN_PROTOTYPE (olddecl);
 	}
 
       /* Preserve function specific target and optimization options */
-      if (DECL_FUNCTION_SPECIFIC_TARGET (olddecl)
+      ಯದಿ (DECL_FUNCTION_SPECIFIC_TARGET (olddecl)
 	  && !DECL_FUNCTION_SPECIFIC_TARGET (newdecl))
 	DECL_FUNCTION_SPECIFIC_TARGET (newdecl)
 	  = DECL_FUNCTION_SPECIFIC_TARGET (olddecl);
 
-      if (DECL_FUNCTION_SPECIFIC_OPTIMIZATION (olddecl)
+      ಯದಿ (DECL_FUNCTION_SPECIFIC_OPTIMIZATION (olddecl)
 	  && !DECL_FUNCTION_SPECIFIC_OPTIMIZATION (newdecl))
 	DECL_FUNCTION_SPECIFIC_OPTIMIZATION (newdecl)
 	  = DECL_FUNCTION_SPECIFIC_OPTIMIZATION (olddecl);
 
       /* Also preserve various other info from the definition.  */
-      if (!new_is_definition)
+      ಯದಿ (!new_is_definition)
 	{
-	  tree t;
+	  ವೃಕ್ಷ t;
 	  DECL_RESULT (newdecl) = DECL_RESULT (olddecl);
 	  DECL_INITIAL (newdecl) = DECL_INITIAL (olddecl);
 	  DECL_STRUCT_FUNCTION (newdecl) = DECL_STRUCT_FUNCTION (olddecl);
-	  DECL_SAVED_TREE (newdecl) = DECL_SAVED_TREE (olddecl);
+	  DECL_SAVED_ವೃಕ್ಷ (newdecl) = DECL_SAVED_ವೃಕ್ಷ (olddecl);
 	  DECL_ARGUMENTS (newdecl) = copy_list (DECL_ARGUMENTS (olddecl));
-	  for (t = DECL_ARGUMENTS (newdecl); t ; t = DECL_CHAIN (t))
+	  ಪ್ರತಿ (t = DECL_ARGUMENTS (newdecl); t ; t = DECL_CHAIN (t))
 	    DECL_CONTEXT (t) = newdecl;
 
 	  /* See if we've got a function to instantiate from.  */
-	  if (DECL_SAVED_TREE (olddecl))
+	  ಯದಿ (DECL_SAVED_ವೃಕ್ಷ (olddecl))
 	    DECL_ABSTRACT_ORIGIN (newdecl)
 	      = DECL_ABSTRACT_ORIGIN (olddecl);
 	}
     }
 
   /* Merge the USED information.  */
-  if (TREE_USED (olddecl))
-    TREE_USED (newdecl) = 1;
-  else if (TREE_USED (newdecl))
-    TREE_USED (olddecl) = 1;
-  if (VAR_P (olddecl) || TREE_CODE (olddecl) == PARM_DECL)
+  ಯದಿ (ವೃಕ್ಷ_USED (olddecl))
+    ವೃಕ್ಷ_USED (newdecl) = 1;
+  ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_USED (newdecl))
+    ವೃಕ್ಷ_USED (olddecl) = 1;
+  ಯದಿ (VAR_P (olddecl) || ವೃಕ್ಷ_CODE (olddecl) == PARM_DECL)
     DECL_READ_P (newdecl) |= DECL_READ_P (olddecl);
-  if (DECL_PRESERVE_P (olddecl))
+  ಯದಿ (DECL_PRESERVE_P (olddecl))
     DECL_PRESERVE_P (newdecl) = 1;
-  else if (DECL_PRESERVE_P (newdecl))
+  ಅನ್ಯಥಾ ಯದಿ (DECL_PRESERVE_P (newdecl))
     DECL_PRESERVE_P (olddecl) = 1;
 
   /* Merge DECL_COMMON */
-  if (VAR_P (olddecl) && VAR_P (newdecl)
+  ಯದಿ (VAR_P (olddecl) && VAR_P (newdecl)
       && !lookup_attribute ("common", DECL_ATTRIBUTES (newdecl))
       && !lookup_attribute ("nocommon", DECL_ATTRIBUTES (newdecl)))
     DECL_COMMON (newdecl) = DECL_COMMON (newdecl) && DECL_COMMON (olddecl);
@@ -3165,71 +3165,71 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
      DECL_ARGUMENTS (if appropriate).  */
   {
     unsigned olddecl_uid = DECL_UID (olddecl);
-    tree olddecl_context = DECL_CONTEXT (olddecl);
-    tree olddecl_arguments = NULL;
-    if (TREE_CODE (olddecl) == FUNCTION_DECL)
+    ವೃಕ್ಷ olddecl_context = DECL_CONTEXT (olddecl);
+    ವೃಕ್ಷ olddecl_arguments = ರಿಕ್ತ;
+    ಯದಿ (ವೃಕ್ಷ_CODE (olddecl) == FUNCTION_DECL)
       olddecl_arguments = DECL_ARGUMENTS (olddecl);
 
-    memcpy ((char *) olddecl + sizeof (struct tree_common),
-	    (char *) newdecl + sizeof (struct tree_common),
-	    sizeof (struct tree_decl_common) - sizeof (struct tree_common));
+    memcpy ((ವರ್ಣ *) olddecl + ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_common),
+	    (ವರ್ಣ *) newdecl + ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_common),
+	    ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_decl_common) - ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_common));
     DECL_USER_ALIGN (olddecl) = DECL_USER_ALIGN (newdecl);
-    switch (TREE_CODE (olddecl))
+    ವಿಕಲ್ಪ (ವೃಕ್ಷ_CODE (olddecl))
       {
-      case FUNCTION_DECL:
-      case VAR_DECL:
+      ಪಕ್ಷ FUNCTION_DECL:
+      ಪಕ್ಷ VAR_DECL:
 	{
-	  struct symtab_node *snode = olddecl->decl_with_vis.symtab_node;
+	  ಸಂರಚನಾ symtab_ಗಂಟು *snode = olddecl->decl_with_vis.symtab_ಗಂಟು;
 
-	  memcpy ((char *) olddecl + sizeof (struct tree_decl_common),
-		  (char *) newdecl + sizeof (struct tree_decl_common),
-		  tree_code_size (TREE_CODE (olddecl)) - sizeof (struct tree_decl_common));
-	  olddecl->decl_with_vis.symtab_node = snode;
+	  memcpy ((ವರ್ಣ *) olddecl + ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_decl_common),
+		  (ವರ್ಣ *) newdecl + ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_decl_common),
+		  ವೃಕ್ಷ_code_size (ವೃಕ್ಷ_CODE (olddecl)) - ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_decl_common));
+	  olddecl->decl_with_vis.symtab_ಗಂಟು = snode;
 
-	  if ((DECL_EXTERNAL (olddecl)
-	       || TREE_PUBLIC (olddecl)
-	       || TREE_STATIC (olddecl))
-	      && DECL_SECTION_NAME (newdecl) != NULL)
+	  ಯದಿ ((DECL_EXTERNAL (olddecl)
+	       || ವೃಕ್ಷ_PUBLIC (olddecl)
+	       || ವೃಕ್ಷ_STATIC (olddecl))
+	      && DECL_SECTION_NAME (newdecl) != ರಿಕ್ತ)
 	    set_decl_section_name (olddecl, newdecl);
 
 	  /* This isn't quite correct for something like
 		int __thread x attribute ((tls_model ("local-exec")));
 		extern int __thread x;
 	     as we'll lose the "local-exec" model.  */
-	  if (VAR_P (olddecl) && DECL_THREAD_LOCAL_P (newdecl))
+	  ಯದಿ (VAR_P (olddecl) && DECL_THREAD_LOCAL_P (newdecl))
 	    set_decl_tls_model (olddecl, DECL_TLS_MODEL (newdecl));
-	  break;
+	  ಭಙ್ಗ;
 	}
 
-      case FIELD_DECL:
-      case PARM_DECL:
-      case LABEL_DECL:
-      case RESULT_DECL:
-      case CONST_DECL:
-      case TYPE_DECL:
-	memcpy ((char *) olddecl + sizeof (struct tree_decl_common),
-		(char *) newdecl + sizeof (struct tree_decl_common),
-		tree_code_size (TREE_CODE (olddecl)) - sizeof (struct tree_decl_common));
-	break;
+      ಪಕ್ಷ FIELD_DECL:
+      ಪಕ್ಷ PARM_DECL:
+      ಪಕ್ಷ LABEL_DECL:
+      ಪಕ್ಷ RESULT_DECL:
+      ಪಕ್ಷ CONST_DECL:
+      ಪಕ್ಷ TYPE_DECL:
+	memcpy ((ವರ್ಣ *) olddecl + ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_decl_common),
+		(ವರ್ಣ *) newdecl + ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_decl_common),
+		ವೃಕ್ಷ_code_size (ವೃಕ್ಷ_CODE (olddecl)) - ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_decl_common));
+	ಭಙ್ಗ;
 
-      default:
+      ಸ್ವಭಾವ:
 
-	memcpy ((char *) olddecl + sizeof (struct tree_decl_common),
-		(char *) newdecl + sizeof (struct tree_decl_common),
-		sizeof (struct tree_decl_non_common) - sizeof (struct tree_decl_common));
+	memcpy ((ವರ್ಣ *) olddecl + ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_decl_common),
+		(ವರ್ಣ *) newdecl + ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_decl_common),
+		ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_decl_non_common) - ಪರಿಮಾಣ (ಸಂರಚನಾ ವೃಕ್ಷ_decl_common));
       }
     DECL_UID (olddecl) = olddecl_uid;
     DECL_CONTEXT (olddecl) = olddecl_context;
-    if (TREE_CODE (olddecl) == FUNCTION_DECL)
+    ಯದಿ (ವೃಕ್ಷ_CODE (olddecl) == FUNCTION_DECL)
       DECL_ARGUMENTS (olddecl) = olddecl_arguments;
   }
 
   /* If OLDDECL had its DECL_RTL instantiated, re-invoke make_decl_rtl
      so that encode_section_info has a chance to look at the new decl
      flags and attributes.  */
-  if (DECL_RTL_SET_P (olddecl)
-      && (TREE_CODE (olddecl) == FUNCTION_DECL
-	  || (VAR_P (olddecl) && TREE_STATIC (olddecl))))
+  ಯದಿ (DECL_RTL_SET_P (olddecl)
+      && (ವೃಕ್ಷ_CODE (olddecl) == FUNCTION_DECL
+	  || (VAR_P (olddecl) && ವೃಕ್ಷ_STATIC (olddecl))))
     make_decl_rtl (olddecl);
 }
 
@@ -3240,27 +3240,27 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
    If safely possible, alter OLDDECL to look like NEWDECL, and return
    true.  Otherwise, return false.  */
 
-static bool
-duplicate_decls (tree newdecl, tree olddecl)
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+duplicate_decls (ವೃಕ್ಷ newdecl, ವೃಕ್ಷ olddecl)
 {
-  tree newtype = NULL, oldtype = NULL;
+  ವೃಕ್ಷ newtype = ರಿಕ್ತ, oldtype = ರಿಕ್ತ;
 
-  if (!diagnose_mismatched_decls (newdecl, olddecl, &newtype, &oldtype))
+  ಯದಿ (!diagnose_mismatched_decls (newdecl, olddecl, &newtype, &oldtype))
     {
       /* Avoid `unused variable' and other warnings for OLDDECL.  */
       suppress_warning (olddecl, OPT_Wunused);
       /* If the types are completely different, poison them both with
  	 error_mark_node.  */
-      if (TREE_CODE (TREE_TYPE (newdecl)) != TREE_CODE (TREE_TYPE (olddecl))
-	  && olddecl != error_mark_node
+      ಯದಿ (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (newdecl)) != ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (olddecl))
+	  && olddecl != error_mark_ಗಂಟು
 	  && seen_error ())
 	{
-	  if (TREE_CODE (olddecl) != FUNCTION_DECL)
-	    TREE_TYPE (olddecl) = error_mark_node;
-	  if (TREE_CODE (newdecl) != FUNCTION_DECL)
-	    TREE_TYPE (newdecl) = error_mark_node;
+	  ಯದಿ (ವೃಕ್ಷ_CODE (olddecl) != FUNCTION_DECL)
+	    ವೃಕ್ಷ_TYPE (olddecl) = error_mark_ಗಂಟು;
+	  ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) != FUNCTION_DECL)
+	    ವೃಕ್ಷ_TYPE (newdecl) = error_mark_ಗಂಟು;
 	}
-      return false;
+      ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
     }
 
   merge_decls (newdecl, olddecl, newtype, oldtype);
@@ -3271,114 +3271,114 @@ duplicate_decls (tree newdecl, tree olddecl)
      table that might have been inserted there to record comdat group.
      Be sure to however do not free DECL_STRUCT_FUNCTION because this
      structure is shared in between NEWDECL and OLDECL.  */
-  if (TREE_CODE (newdecl) == FUNCTION_DECL)
-    DECL_STRUCT_FUNCTION (newdecl) = NULL;
-  if (VAR_OR_FUNCTION_DECL_P (newdecl))
+  ಯದಿ (ವೃಕ್ಷ_CODE (newdecl) == FUNCTION_DECL)
+    DECL_STRUCT_FUNCTION (newdecl) = ರಿಕ್ತ;
+  ಯದಿ (VAR_OR_FUNCTION_DECL_P (newdecl))
     {
-      struct symtab_node *snode = symtab_node::get (newdecl);
-      if (snode)
+      ಸಂರಚನಾ symtab_ಗಂಟು *snode = symtab_ಗಂಟು::get (newdecl);
+      ಯದಿ (snode)
 	snode->remove ();
     }
   ggc_free (newdecl);
-  return true;
+  ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
 }
 
 
 /* Check whether decl-node NEW_DECL shadows an existing declaration.  */
-static void
-warn_if_shadowing (tree new_decl)
+ಸ್ಥಿರ ಶೂನ್ಯ
+warn_if_shadowing (ವೃಕ್ಷ new_decl)
 {
-  struct c_binding *b;
+  ಸಂರಚನಾ c_binding *b;
 
   /* Shadow warnings wanted?  */
-  if (!(warn_shadow
+  ಯದಿ (!(warn_shadow
         || warn_shadow_local
         || warn_shadow_compatible_local)
       /* No shadow warnings for internally generated vars.  */
       || DECL_IS_UNDECLARED_BUILTIN (new_decl))
-    return;
+    ಪ್ರತ್ಯಾಗಮ;
 
   /* Is anything being shadowed?  Invisible decls do not count.  */
-  for (b = I_SYMBOL_BINDING (DECL_NAME (new_decl)); b; b = b->shadowed)
-    if (b->decl && b->decl != new_decl && !b->invisible
-	&& (b->decl == error_mark_node
+  ಪ್ರತಿ (b = I_ಚಿಹ್ನೆ_BINDING (DECL_NAME (new_decl)); b; b = b->shadowed)
+    ಯದಿ (b->decl && b->decl != new_decl && !b->invisible
+	&& (b->decl == error_mark_ಗಂಟು
 	    || diagnostic_report_warnings_p (global_dc,
 					     DECL_SOURCE_LOCATION (b->decl))))
       {
-	tree old_decl = b->decl;
+	ವೃಕ್ಷ old_decl = b->decl;
 
-	if (old_decl == error_mark_node)
+	ಯದಿ (old_decl == error_mark_ಗಂಟು)
 	  {
 	    warning (OPT_Wshadow, "declaration of %q+D shadows previous "
 		     "non-variable", new_decl);
-	    break;
+	    ಭಙ್ಗ;
 	  }
 
-	bool warned = false;
+	ತಾರ್ಕಿಕ warned = ಅಸತ್ಯ;
 	auto_diagnostic_group d;
-	if (TREE_CODE (old_decl) == PARM_DECL)
+	ಯದಿ (ವೃಕ್ಷ_CODE (old_decl) == PARM_DECL)
 	  {
-	    enum opt_code warning_code;
+	    ಗಣನಾ opt_code warning_code;
 
 	    /* If '-Wshadow=compatible-local' is specified without other
 	       -Wshadow= flags, we will warn only when the types of the
 	       shadowing variable (i.e. new_decl) and the shadowed variable
 	       (old_decl) are compatible.  */
-	    if (warn_shadow)
+	    ಯದಿ (warn_shadow)
 	      warning_code = OPT_Wshadow;
-	    else if (comptypes (TREE_TYPE (old_decl), TREE_TYPE (new_decl)))
+	    ಅನ್ಯಥಾ ಯದಿ (comptypes (ವೃಕ್ಷ_TYPE (old_decl), ವೃಕ್ಷ_TYPE (new_decl)))
 	      warning_code = OPT_Wshadow_compatible_local;
-	    else
+	    ಅನ್ಯಥಾ
 	      warning_code = OPT_Wshadow_local;
 	    warned = warning_at (DECL_SOURCE_LOCATION (new_decl), warning_code,
 				 "declaration of %qD shadows a parameter",
 				 new_decl);
 	  }
-	else if (DECL_FILE_SCOPE_P (old_decl))
+	ಅನ್ಯಥಾ ಯದಿ (DECL_FILE_SCOPE_P (old_decl))
 	  {
 	    /* Do not warn if a variable shadows a function, unless
 	       the variable is a function or a pointer-to-function.  */
-	    if (TREE_CODE (old_decl) == FUNCTION_DECL
-		&& TREE_CODE (new_decl) != FUNCTION_DECL
-		&& !FUNCTION_POINTER_TYPE_P (TREE_TYPE (new_decl)))
-		continue;
+	    ಯದಿ (ವೃಕ್ಷ_CODE (old_decl) == FUNCTION_DECL
+		&& ವೃಕ್ಷ_CODE (new_decl) != FUNCTION_DECL
+		&& !FUNCTION_POINTER_TYPE_P (ವೃಕ್ಷ_TYPE (new_decl)))
+		ಅನುವರ್ತ;
 
 	    warned = warning_at (DECL_SOURCE_LOCATION (new_decl), OPT_Wshadow,
 				 "declaration of %qD shadows a global "
 				 "declaration",
 				 new_decl);
 	  }
-	else if (TREE_CODE (old_decl) == FUNCTION_DECL
+	ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (old_decl) == FUNCTION_DECL
 		 && fndecl_built_in_p (old_decl))
 	  {
 	    warning (OPT_Wshadow, "declaration of %q+D shadows "
 		     "a built-in function", new_decl);
-	    break;
+	    ಭಙ್ಗ;
 	  }
-	else
+	ಅನ್ಯಥಾ
 	  {
-	    enum opt_code warning_code;
+	    ಗಣನಾ opt_code warning_code;
 
 	    /* If '-Wshadow=compatible-local' is specified without other
 	       -Wshadow= flags, we will warn only when the types of the
 	       shadowing variable (i.e. new_decl) and the shadowed variable
 	       (old_decl) are compatible.  */
-	    if (warn_shadow)
+	    ಯದಿ (warn_shadow)
 	      warning_code = OPT_Wshadow;
-	    else if (comptypes (TREE_TYPE (old_decl), TREE_TYPE (new_decl)))
+	    ಅನ್ಯಥಾ ಯದಿ (comptypes (ವೃಕ್ಷ_TYPE (old_decl), ವೃಕ್ಷ_TYPE (new_decl)))
 	      warning_code = OPT_Wshadow_compatible_local;
-	    else
+	    ಅನ್ಯಥಾ
 	      warning_code = OPT_Wshadow_local;
 	    warned = warning_at (DECL_SOURCE_LOCATION (new_decl), warning_code,
 				 "declaration of %qD shadows a previous local",
 				 new_decl);
 	  }
 
-	if (warned)
+	ಯದಿ (warned)
 	  inform (DECL_SOURCE_LOCATION (old_decl),
 		  "shadowed declaration is here");
 
-	break;
+	ಭಙ್ಗ;
       }
 }
 
@@ -3390,13 +3390,13 @@ warn_if_shadowing (tree new_decl)
    If an old decl is returned, it may have been smashed
    to agree with what X says.  */
 
-tree
-pushdecl (tree x)
+ವೃಕ್ಷ
+pushdecl (ವೃಕ್ಷ x)
 {
-  tree name = DECL_NAME (x);
-  struct c_scope *scope = current_scope;
-  struct c_binding *b;
-  bool nested = false;
+  ವೃಕ್ಷ name = DECL_NAME (x);
+  ಸಂರಚನಾ c_scope *scope = current_scope;
+  ಸಂರಚನಾ c_binding *b;
+  ತಾರ್ಕಿಕ nested = ಅಸತ್ಯ;
   location_t locus = DECL_SOURCE_LOCATION (x);
 
   /* Must set DECL_CONTEXT for everything not at file scope or
@@ -3404,18 +3404,18 @@ pushdecl (tree x)
      unless they have initializers (which generate code).  We
      also exclude CONST_DECLs because enumerators will get the
      type of the enum as context.  */
-  if (current_function_decl
-      && TREE_CODE (x) != CONST_DECL
+  ಯದಿ (current_function_decl
+      && ವೃಕ್ಷ_CODE (x) != CONST_DECL
       && (!VAR_OR_FUNCTION_DECL_P (x)
-	  || DECL_INITIAL (x) || !TREE_PUBLIC (x)))
+	  || DECL_INITIAL (x) || !ವೃಕ್ಷ_PUBLIC (x)))
     DECL_CONTEXT (x) = current_function_decl;
 
   /* Anonymous decls are just inserted in the scope.  */
-  if (!name)
+  ಯದಿ (!name)
     {
-      bind (name, x, scope, /*invisible=*/false, /*nested=*/false,
+      bind (name, x, scope, /*invisible=*/ಅಸತ್ಯ, /*nested=*/ಅಸತ್ಯ,
 	    locus);
-      return x;
+      ಪ್ರತ್ಯಾಗಮ x;
     }
 
   /* First, see if there is another declaration with the same name in
@@ -3425,40 +3425,40 @@ pushdecl (tree x)
      replace the old one (duplicate_decls has issued all appropriate
      diagnostics).  In particular, we should not consider possible
      duplicates in the external scope, or shadowing.  */
-  b = I_SYMBOL_BINDING (name);
-  if (b && B_IN_SCOPE (b, scope))
+  b = I_ಚಿಹ್ನೆ_BINDING (name);
+  ಯದಿ (b && B_IN_SCOPE (b, scope))
     {
-      struct c_binding *b_ext, *b_use;
-      tree type = TREE_TYPE (x);
-      tree visdecl = b->decl;
-      tree vistype = TREE_TYPE (visdecl);
-      if (TREE_CODE (TREE_TYPE (x)) == ARRAY_TYPE
-	  && COMPLETE_TYPE_P (TREE_TYPE (x)))
-	b->inner_comp = false;
+      ಸಂರಚನಾ c_binding *b_ext, *b_use;
+      ವೃಕ್ಷ type = ವೃಕ್ಷ_TYPE (x);
+      ವೃಕ್ಷ visdecl = b->decl;
+      ವೃಕ್ಷ vistype = ವೃಕ್ಷ_TYPE (visdecl);
+      ಯದಿ (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (x)) == ARRAY_TYPE
+	  && COMPLETE_TYPE_P (ವೃಕ್ಷ_TYPE (x)))
+	b->inner_comp = ಅಸತ್ಯ;
       b_use = b;
       b_ext = b;
       /* If this is an external linkage declaration, we should check
 	 for compatibility with the type in the external scope before
 	 setting the type at this scope based on the visible
 	 information only.  */
-      if (TREE_PUBLIC (x) && TREE_PUBLIC (visdecl))
+      ಯದಿ (ವೃಕ್ಷ_PUBLIC (x) && ವೃಕ್ಷ_PUBLIC (visdecl))
 	{
-	  while (b_ext && !B_IN_EXTERNAL_SCOPE (b_ext))
+	  ಯಾವತ್ (b_ext && !B_IN_EXTERNAL_SCOPE (b_ext))
 	    b_ext = b_ext->shadowed;
-	  if (b_ext)
+	  ಯದಿ (b_ext)
 	    {
 	      b_use = b_ext;
-	      if (b_use->u.type)
-		TREE_TYPE (b_use->decl) = b_use->u.type;
+	      ಯದಿ (b_use->u.type)
+		ವೃಕ್ಷ_TYPE (b_use->decl) = b_use->u.type;
 	    }
 	}
 
       /* Check if x is part of a FMV set with b_use.
 	 FMV is only supported in c for targets with target_version
 	 attributes.  */
-      if (!TARGET_HAS_FMV_TARGET_ATTRIBUTE
-	  && b_use && TREE_CODE (b_use->decl) == FUNCTION_DECL
-	  && TREE_CODE (x) == FUNCTION_DECL && DECL_FILE_SCOPE_P (b_use->decl)
+      ಯದಿ (!TARGET_HAS_FMV_TARGET_ATTRIBUTE
+	  && b_use && ವೃಕ್ಷ_CODE (b_use->decl) == FUNCTION_DECL
+	  && ವೃಕ್ಷ_CODE (x) == FUNCTION_DECL && DECL_FILE_SCOPE_P (b_use->decl)
 	  && DECL_FILE_SCOPE_P (x)
 	  && disjoint_version_decls (x, b_use->decl)
 	  && comptypes (vistype, type))
@@ -3467,65 +3467,65 @@ pushdecl (tree x)
 	  maybe_mark_function_versioned (b->decl);
 	  maybe_mark_function_versioned (x);
 
-	  cgraph_node *b_node = cgraph_node::get_create (b_use->decl);
-	  cgraph_function_version_info *b_v = b_node->function_version ();
-	  if (!b_v)
-	    b_v = b_node->insert_new_function_version ();
+	  cgraph_ಗಂಟು *b_ಗಂಟು = cgraph_ಗಂಟು::get_create (b_use->decl);
+	  cgraph_function_version_info *b_v = b_ಗಂಟು->function_version ();
+	  ಯದಿ (!b_v)
+	    b_v = b_ಗಂಟು->ಸೇರಿಸು_new_function_version ();
 
 	  /* Check if this new node conflicts with any previous functions
 	     in the set.  */
 	  cgraph_function_version_info *version = b_v;
-	  for (; version; version = version->next)
-	    if (!disjoint_version_decls (version->this_node->decl, x))
+	  ಪ್ರತಿ (; version; version = version->next)
+	    ಯದಿ (!disjoint_version_decls (version->this_ಗಂಟು->decl, x))
 	      {
 		/* The decls define overlapping version, so attempt to merge
 		   or diagnose the conflict.  */
-		if (duplicate_decls (x, version->this_node->decl))
-		  return version->this_node->decl;
-		else
-		  return error_mark_node;
+		ಯದಿ (duplicate_decls (x, version->this_ಗಂಟು->decl))
+		  ಪ್ರತ್ಯಾಗಮ version->this_ಗಂಟು->decl;
+		ಅನ್ಯಥಾ
+		  ಪ್ರತ್ಯಾಗಮ error_mark_ಗಂಟು;
 	      }
 
 	  /* This is a new version to be added to FMV structure.  */
-	  cgraph_node::add_function_version (b_v, x);
+	  cgraph_ಗಂಟು::add_function_version (b_v, x);
 
 	  /* Get the first node from the structure.  */
 	  cgraph_function_version_info *default_v = b_v;
-	  while (default_v->prev)
+	  ಯಾವತ್ (default_v->prev)
 	    default_v = default_v->prev;
 	  /* Always use the default node for the bindings.  */
-	  b_use->decl = default_v->this_node->decl;
-	  b->decl = default_v->this_node->decl;
+	  b_use->decl = default_v->this_ಗಂಟು->decl;
+	  b->decl = default_v->this_ಗಂಟು->decl;
 
 	  /* Node is not a duplicate, so no need to do the rest of the
 	     checks.  */
-	  return x;
+	  ಪ್ರತ್ಯಾಗಮ x;
 	}
 
-      if (duplicate_decls (x, b_use->decl))
+      ಯದಿ (duplicate_decls (x, b_use->decl))
 	{
-	  if (b_use != b)
+	  ಯದಿ (b_use != b)
 	    {
 	      /* Save the updated type in the external scope and
 		 restore the proper type for this scope.  */
-	      tree thistype;
-	      if (comptypes (vistype, type))
+	      ವೃಕ್ಷ thistype;
+	      ಯದಿ (comptypes (vistype, type))
 		thistype = composite_type (vistype, type);
-	      else
-		thistype = TREE_TYPE (b_use->decl);
-	      b_use->u.type = TREE_TYPE (b_use->decl);
-	      if (TREE_CODE (b_use->decl) == FUNCTION_DECL
+	      ಅನ್ಯಥಾ
+		thistype = ವೃಕ್ಷ_TYPE (b_use->decl);
+	      b_use->u.type = ವೃಕ್ಷ_TYPE (b_use->decl);
+	      ಯದಿ (ವೃಕ್ಷ_CODE (b_use->decl) == FUNCTION_DECL
 		  && fndecl_built_in_p (b_use->decl))
 		thistype
 		  = c_build_type_attribute_variant (thistype,
 						    TYPE_ATTRIBUTES
 						    (b_use->u.type));
-	      TREE_TYPE (b_use->decl) = thistype;
+	      ವೃಕ್ಷ_TYPE (b_use->decl) = thistype;
 	    }
-	  return b_use->decl;
+	  ಪ್ರತ್ಯಾಗಮ b_use->decl;
 	}
-      else
-	goto skip_external_and_shadow_checks;
+      ಅನ್ಯಥಾ
+	ಗಚ್ಛ skip_external_and_shadow_checks;
     }
 
   /* All declarations with external linkage, and all external
@@ -3542,26 +3542,26 @@ pushdecl (tree x)
      have compatible type; otherwise, the behavior is undefined.)
      However, in Objective-C, we also want to detect declarations
      conflicting with those of the basic types.  */
-  if ((DECL_EXTERNAL (x) || scope == file_scope)
+  ಯದಿ ((DECL_EXTERNAL (x) || scope == file_scope)
       && (VAR_OR_FUNCTION_DECL_P (x) || c_dialect_objc ()))
     {
-      tree type = TREE_TYPE (x);
-      tree vistype = NULL_TREE;
-      tree visdecl = NULL_TREE;
-      bool type_saved = false;
-      if (b && !B_IN_EXTERNAL_SCOPE (b)
+      ವೃಕ್ಷ type = ವೃಕ್ಷ_TYPE (x);
+      ವೃಕ್ಷ vistype = NULL_ವೃಕ್ಷ;
+      ವೃಕ್ಷ visdecl = NULL_ವೃಕ್ಷ;
+      ತಾರ್ಕಿಕ type_saved = ಅಸತ್ಯ;
+      ಯದಿ (b && !B_IN_EXTERNAL_SCOPE (b)
 	  && VAR_OR_FUNCTION_DECL_P (b->decl)
 	  && DECL_FILE_SCOPE_P (b->decl))
 	{
 	  visdecl = b->decl;
-	  vistype = TREE_TYPE (visdecl);
+	  vistype = ವೃಕ್ಷ_TYPE (visdecl);
 	}
-      if (scope != file_scope
+      ಯದಿ (scope != file_scope
 	  && !DECL_IN_SYSTEM_HEADER (x))
 	warning_at (locus, OPT_Wnested_externs,
 		    "nested extern declaration of %qD", x);
 
-      while (b && !B_IN_EXTERNAL_SCOPE (b))
+      ಯಾವತ್ (b && !B_IN_EXTERNAL_SCOPE (b))
 	{
 	  /* If this decl might be modified, save its type.  This is
 	     done here rather than when the decl is first bound
@@ -3571,25 +3571,25 @@ pushdecl (tree x)
 	     its type saved; the others will already have had their
 	     proper types saved and the types will not have changed as
 	     their scopes will not have been re-entered.  */
-	  if (DECL_P (b->decl) && DECL_FILE_SCOPE_P (b->decl) && !type_saved)
+	  ಯದಿ (DECL_P (b->decl) && DECL_FILE_SCOPE_P (b->decl) && !type_saved)
 	    {
-	      b->u.type = TREE_TYPE (b->decl);
-	      type_saved = true;
+	      b->u.type = ವೃಕ್ಷ_TYPE (b->decl);
+	      type_saved = ಸತ್ಯ;
 	    }
-	  if (B_IN_FILE_SCOPE (b)
+	  ಯದಿ (B_IN_FILE_SCOPE (b)
 	      && VAR_P (b->decl)
-	      && TREE_STATIC (b->decl)
-	      && TREE_CODE (TREE_TYPE (b->decl)) == ARRAY_TYPE
-	      && !TYPE_DOMAIN (TREE_TYPE (b->decl))
-	      && TREE_CODE (type) == ARRAY_TYPE
+	      && ವೃಕ್ಷ_STATIC (b->decl)
+	      && ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (b->decl)) == ARRAY_TYPE
+	      && !TYPE_DOMAIN (ವೃಕ್ಷ_TYPE (b->decl))
+	      && ವೃಕ್ಷ_CODE (type) == ARRAY_TYPE
 	      && TYPE_DOMAIN (type)
-	      && TYPE_MAX_VALUE (TYPE_DOMAIN (type))
-	      && !integer_zerop (TYPE_MAX_VALUE (TYPE_DOMAIN (type))))
+	      && TYPE_MAX_ಮೌಲ್ಯ (TYPE_DOMAIN (type))
+	      && !integer_zerop (TYPE_MAX_ಮೌಲ್ಯ (TYPE_DOMAIN (type))))
 	    {
 	      /* Array type completed in inner scope, which should be
 		 diagnosed if the completion does not have size 1 and
 		 it does not get completed in the file scope.  */
-	      b->inner_comp = true;
+	      b->inner_comp = ಸತ್ಯ;
 	    }
 	  b = b->shadowed;
 	}
@@ -3598,58 +3598,58 @@ pushdecl (tree x)
 	 type to the composite of all the types of that declaration.
 	 After the consistency checks, it will be reset to the
 	 composite of the visible types only.  */
-      if (b && b->u.type)
-	TREE_TYPE (b->decl) = b->u.type;
+      ಯದಿ (b && b->u.type)
+	ವೃಕ್ಷ_TYPE (b->decl) = b->u.type;
 
       /* the static does not go in the externals scope.  */
-      if (b && duplicate_decls (x, b->decl))
+      ಯದಿ (b && duplicate_decls (x, b->decl))
 	{
-	  tree thistype;
-	  if (vistype)
+	  ವೃಕ್ಷ thistype;
+	  ಯದಿ (vistype)
 	    {
-	      if (comptypes (vistype, type))
+	      ಯದಿ (comptypes (vistype, type))
 		thistype = composite_type (vistype, type);
-	      else
-		thistype = TREE_TYPE (b->decl);
+	      ಅನ್ಯಥಾ
+		thistype = ವೃಕ್ಷ_TYPE (b->decl);
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    thistype = type;
-	  b->u.type = TREE_TYPE (b->decl);
+	  b->u.type = ವೃಕ್ಷ_TYPE (b->decl);
 	  /* Propagate the type attributes to the decl.  */
 	  thistype
 	    = c_build_type_attribute_variant (thistype,
 					      TYPE_ATTRIBUTES (b->u.type));
-	  TREE_TYPE (b->decl) = thistype;
-	  bind (name, b->decl, scope, /*invisible=*/false, /*nested=*/true,
+	  ವೃಕ್ಷ_TYPE (b->decl) = thistype;
+	  bind (name, b->decl, scope, /*invisible=*/ಅಸತ್ಯ, /*nested=*/ಸತ್ಯ,
 		locus);
-	  return b->decl;
+	  ಪ್ರತ್ಯಾಗಮ b->decl;
 	}
-      else if (TREE_PUBLIC (x))
+      ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_PUBLIC (x))
 	{
-	  if (visdecl && !b && duplicate_decls (x, visdecl))
+	  ಯದಿ (visdecl && !b && duplicate_decls (x, visdecl))
 	    {
 	      /* An external declaration at block scope referring to a
 		 visible entity with internal linkage.  The composite
 		 type will already be correct for this scope, so we
 		 just need to fall through to make the declaration in
 		 this scope.  */
-	      nested = true;
+	      nested = ಸತ್ಯ;
 	      x = visdecl;
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    {
-	      bind (name, x, external_scope, /*invisible=*/true,
-		    /*nested=*/false, locus);
-	      nested = true;
+	      bind (name, x, external_scope, /*invisible=*/ಸತ್ಯ,
+		    /*nested=*/ಅಸತ್ಯ, locus);
+	      nested = ಸತ್ಯ;
 	    }
 	}
     }
 
-  if (TREE_CODE (x) != PARM_DECL)
+  ಯದಿ (ವೃಕ್ಷ_CODE (x) != PARM_DECL)
     warn_if_shadowing (x);
 
  skip_external_and_shadow_checks:
-  if (TREE_CODE (x) == TYPE_DECL)
+  ಯದಿ (ವೃಕ್ಷ_CODE (x) == TYPE_DECL)
     {
       /* So this is a typedef, set its underlying type.  */
       set_underlying_type (x);
@@ -3660,7 +3660,7 @@ pushdecl (tree x)
       record_locally_defined_typedef (x);
     }
 
-  bind (name, x, scope, /*invisible=*/false, nested, locus);
+  bind (name, x, scope, /*invisible=*/ಅಸತ್ಯ, nested, locus);
 
   /* If x's type is incomplete because it's based on a
      structure or union which has not yet been fully declared,
@@ -3671,24 +3671,24 @@ pushdecl (tree x)
      If the input is erroneous, we can have error_mark in the type
      slot (e.g. "f(void a, ...)") - that doesn't count as an
      incomplete type.  */
-  if (TREE_TYPE (x) != error_mark_node
-      && !COMPLETE_TYPE_P (TREE_TYPE (x)))
+  ಯದಿ (ವೃಕ್ಷ_TYPE (x) != error_mark_ಗಂಟು
+      && !COMPLETE_TYPE_P (ವೃಕ್ಷ_TYPE (x)))
     {
-      tree element = TREE_TYPE (x);
+      ವೃಕ್ಷ element = ವೃಕ್ಷ_TYPE (x);
 
-      while (TREE_CODE (element) == ARRAY_TYPE)
-	element = TREE_TYPE (element);
+      ಯಾವತ್ (ವೃಕ್ಷ_CODE (element) == ARRAY_TYPE)
+	element = ವೃಕ್ಷ_TYPE (element);
       element = TYPE_MAIN_VARIANT (element);
 
-      if ((RECORD_OR_UNION_TYPE_P (element)
-	   || TREE_CODE (element) == ENUMERAL_TYPE)
-	  && (TREE_CODE (x) != TYPE_DECL
-	      || TREE_CODE (TREE_TYPE (x)) == ARRAY_TYPE)
+      ಯದಿ ((RECORD_OR_UNION_TYPE_P (element)
+	   || ವೃಕ್ಷ_CODE (element) == ENUMERAL_TYPE)
+	  && (ವೃಕ್ಷ_CODE (x) != TYPE_DECL
+	      || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (x)) == ARRAY_TYPE)
 	  && !COMPLETE_TYPE_P (element))
 	C_TYPE_INCOMPLETE_VARS (element)
-	  = tree_cons (NULL_TREE, x, C_TYPE_INCOMPLETE_VARS (element));
+	  = ವೃಕ್ಷ_cons (NULL_ವೃಕ್ಷ, x, C_TYPE_INCOMPLETE_VARS (element));
     }
-  return x;
+  ಪ್ರತ್ಯಾಗಮ x;
 }
 
 
@@ -3696,21 +3696,21 @@ pushdecl (tree x)
    identifier, OLDDECL is a declaration of the function in a different scope,
    or NULL_TREE.  */
 
-static void
-implicit_decl_permerror (location_t loc, tree id, tree olddecl)
+ಸ್ಥಿರ ಶೂನ್ಯ
+implicit_decl_permerror (location_t loc, ವೃಕ್ಷ id, ವೃಕ್ಷ olddecl)
 {
-  if (!warn_implicit_function_declaration)
-    return;
+  ಯದಿ (!warn_implicit_function_declaration)
+    ಪ್ರತ್ಯಾಗಮ;
 
-  bool warned;
+  ತಾರ್ಕಿಕ warned;
   auto_diagnostic_group d;
   name_hint hint;
-  if (!olddecl)
+  ಯದಿ (!olddecl)
     hint = lookup_name_fuzzy (id, FUZZY_LOOKUP_FUNCTION_NAME, loc);
 
-  if (flag_isoc99)
+  ಯದಿ (flag_isoc99)
     {
-      if (const char *suggestion = hint.suggestion ())
+      ಯದಿ (ಧ್ರುವ ವರ್ಣ *suggestion = hint.suggestion ())
 	{
 	  gcc_rich_location richloc (loc);
 	  richloc.add_fixit_replace (suggestion);
@@ -3719,11 +3719,11 @@ implicit_decl_permerror (location_t loc, tree id, tree olddecl)
 				  " did you mean %qs?",
 				  id, suggestion);
 	}
-      else
+      ಅನ್ಯಥಾ
 	warned = permerror_opt (loc, OPT_Wimplicit_function_declaration,
 				"implicit declaration of function %qE", id);
     }
-  else if (const char *suggestion = hint.suggestion ())
+  ಅನ್ಯಥಾ ಯದಿ (ಧ್ರುವ ವರ್ಣ *suggestion = hint.suggestion ())
     {
       gcc_rich_location richloc (loc);
       richloc.add_fixit_replace (suggestion);
@@ -3732,36 +3732,36 @@ implicit_decl_permerror (location_t loc, tree id, tree olddecl)
 	 G_("implicit declaration of function %qE; did you mean %qs?"),
 	 id, suggestion);
     }
-  else
+  ಅನ್ಯಥಾ
     warned = warning_at (loc, OPT_Wimplicit_function_declaration,
 			 G_("implicit declaration of function %qE"), id);
 
-  if (warned)
+  ಯದಿ (warned)
     {
       /* Whether the olddecl is an undeclared builtin function.
 	 locate_old_decl will not generate a diagnostic for those,
 	 so in that case we want to look elsewhere.  */
-      bool undeclared_builtin = (olddecl
-				 && TREE_CODE (olddecl) == FUNCTION_DECL
+      ತಾರ್ಕಿಕ undeclared_builtin = (olddecl
+				 && ವೃಕ್ಷ_CODE (olddecl) == FUNCTION_DECL
 				 && fndecl_built_in_p (olddecl)
 				 && !C_DECL_DECLARED_BUILTIN (olddecl));
-      if (undeclared_builtin)
+      ಯದಿ (undeclared_builtin)
 	{
-	  const char *header = header_for_builtin_fn (olddecl);
-	  if (header)
+	  ಧ್ರುವ ವರ್ಣ *header = header_for_builtin_fn (olddecl);
+	  ಯದಿ (header)
 	    {
-	      rich_location richloc (line_table, loc);
-	      maybe_add_include_fixit (&richloc, header, true);
+	      rich_location richloc (ಸಾಲು_table, loc);
+	      maybe_add_include_fixit (&richloc, header, ಸತ್ಯ);
 	      inform (&richloc,
 		      "include %qs or provide a declaration of %qE",
 		      header, id);
 	    }
 	}
-      else if (olddecl)
+      ಅನ್ಯಥಾ ಯದಿ (olddecl)
 	locate_old_decl (olddecl);
     }
 
-  if (!warned)
+  ಯದಿ (!warned)
     hint.suppress ();
 }
 
@@ -3769,13 +3769,13 @@ implicit_decl_permerror (location_t loc, tree id, tree olddecl)
    FNDECL, or null if either we don't know or don't expect to see an
    explicit declaration.  */
 
-static const char *
-header_for_builtin_fn (tree fndecl)
+ಸ್ಥಿರ ಧ್ರುವ ವರ್ಣ *
+header_for_builtin_fn (ವೃಕ್ಷ fndecl)
 {
-  if (DECL_BUILT_IN_CLASS (fndecl) != BUILT_IN_NORMAL)
-    return NULL;
+  ಯದಿ (DECL_BUILT_IN_CLASS (fndecl) != BUILT_IN_NORMAL)
+    ಪ್ರತ್ಯಾಗಮ ರಿಕ್ತ;
 
-  switch (DECL_FUNCTION_CODE (fndecl))
+  ವಿಕಲ್ಪ (DECL_FUNCTION_CODE (fndecl))
     {
     CASE_FLT_FN (BUILT_IN_ACOS):
     CASE_FLT_FN (BUILT_IN_ACOSH):
@@ -3847,9 +3847,9 @@ header_for_builtin_fn (tree fndecl)
     CASE_FLT_FN (BUILT_IN_TGAMMA):
     CASE_FLT_FN (BUILT_IN_TRUNC):
     CASE_FLT_FN_FLOATN_NX (BUILT_IN_TRUNC):
-    case BUILT_IN_ISINF:
-    case BUILT_IN_ISNAN:
-      return "<math.h>";
+    ಪಕ್ಷ BUILT_IN_ISINF:
+    ಪಕ್ಷ BUILT_IN_ISNAN:
+      ಪ್ರತ್ಯಾಗಮ "<math.h>";
     CASE_FLT_FN (BUILT_IN_CABS):
     CASE_FLT_FN (BUILT_IN_CACOS):
     CASE_FLT_FN (BUILT_IN_CACOSH):
@@ -3872,177 +3872,177 @@ header_for_builtin_fn (tree fndecl)
     CASE_FLT_FN (BUILT_IN_CSQRT):
     CASE_FLT_FN (BUILT_IN_CTAN):
     CASE_FLT_FN (BUILT_IN_CTANH):
-      return "<complex.h>";
-    case BUILT_IN_MEMCHR:
-    case BUILT_IN_MEMCMP:
-    case BUILT_IN_MEMCPY:
-    case BUILT_IN_MEMMOVE:
-    case BUILT_IN_MEMSET:
-    case BUILT_IN_STRCAT:
-    case BUILT_IN_STRCHR:
-    case BUILT_IN_STRCMP:
-    case BUILT_IN_STRCPY:
-    case BUILT_IN_STRCSPN:
-    case BUILT_IN_STRLEN:
-    case BUILT_IN_STRNCAT:
-    case BUILT_IN_STRNCMP:
-    case BUILT_IN_STRNCPY:
-    case BUILT_IN_STRPBRK:
-    case BUILT_IN_STRRCHR:
-    case BUILT_IN_STRSPN:
-    case BUILT_IN_STRSTR:
-      return "<string.h>";
-    case BUILT_IN_FPRINTF:
-    case BUILT_IN_PUTC:
-    case BUILT_IN_FPUTC:
-    case BUILT_IN_FPUTS:
-    case BUILT_IN_FSCANF:
-    case BUILT_IN_FWRITE:
-    case BUILT_IN_PRINTF:
-    case BUILT_IN_PUTCHAR:
-    case BUILT_IN_PUTS:
-    case BUILT_IN_SCANF:
-    case BUILT_IN_SNPRINTF:
-    case BUILT_IN_SPRINTF:
-    case BUILT_IN_SSCANF:
-    case BUILT_IN_VFPRINTF:
-    case BUILT_IN_VFSCANF:
-    case BUILT_IN_VPRINTF:
-    case BUILT_IN_VSCANF:
-    case BUILT_IN_VSNPRINTF:
-    case BUILT_IN_VSPRINTF:
-    case BUILT_IN_VSSCANF:
-      return "<stdio.h>";
-    case BUILT_IN_ISALNUM:
-    case BUILT_IN_ISALPHA:
-    case BUILT_IN_ISBLANK:
-    case BUILT_IN_ISCNTRL:
-    case BUILT_IN_ISDIGIT:
-    case BUILT_IN_ISGRAPH:
-    case BUILT_IN_ISLOWER:
-    case BUILT_IN_ISPRINT:
-    case BUILT_IN_ISPUNCT:
-    case BUILT_IN_ISSPACE:
-    case BUILT_IN_ISUPPER:
-    case BUILT_IN_ISXDIGIT:
-    case BUILT_IN_TOLOWER:
-    case BUILT_IN_TOUPPER:
-      return "<ctype.h>";
-    case BUILT_IN_ISWALNUM:
-    case BUILT_IN_ISWALPHA:
-    case BUILT_IN_ISWBLANK:
-    case BUILT_IN_ISWCNTRL:
-    case BUILT_IN_ISWDIGIT:
-    case BUILT_IN_ISWGRAPH:
-    case BUILT_IN_ISWLOWER:
-    case BUILT_IN_ISWPRINT:
-    case BUILT_IN_ISWPUNCT:
-    case BUILT_IN_ISWSPACE:
-    case BUILT_IN_ISWUPPER:
-    case BUILT_IN_ISWXDIGIT:
-    case BUILT_IN_TOWLOWER:
-    case BUILT_IN_TOWUPPER:
-      return "<wctype.h>";
-    case BUILT_IN_ABORT:
-    case BUILT_IN_ABS:
-    case BUILT_IN_CALLOC:
-    case BUILT_IN_EXIT:
-    case BUILT_IN_FREE:
-    case BUILT_IN_LABS:
-    case BUILT_IN_LLABS:
-    case BUILT_IN_MALLOC:
-    case BUILT_IN_REALLOC:
-    case BUILT_IN__EXIT2:
-    case BUILT_IN_ALIGNED_ALLOC:
-      return "<stdlib.h>";
-    case BUILT_IN_IMAXABS:
-      return "<inttypes.h>";
-    case BUILT_IN_STRFTIME:
-      return "<time.h>";
-    default:
-      return NULL;
+      ಪ್ರತ್ಯಾಗಮ "<complex.h>";
+    ಪಕ್ಷ BUILT_IN_MEMCHR:
+    ಪಕ್ಷ BUILT_IN_MEMCMP:
+    ಪಕ್ಷ BUILT_IN_MEMCPY:
+    ಪಕ್ಷ BUILT_IN_MEMMOVE:
+    ಪಕ್ಷ BUILT_IN_MEMSET:
+    ಪಕ್ಷ BUILT_IN_STRCAT:
+    ಪಕ್ಷ BUILT_IN_STRCHR:
+    ಪಕ್ಷ BUILT_IN_STRCMP:
+    ಪಕ್ಷ BUILT_IN_STRCPY:
+    ಪಕ್ಷ BUILT_IN_STRCSPN:
+    ಪಕ್ಷ BUILT_IN_STRLEN:
+    ಪಕ್ಷ BUILT_IN_STRNCAT:
+    ಪಕ್ಷ BUILT_IN_STRNCMP:
+    ಪಕ್ಷ BUILT_IN_STRNCPY:
+    ಪಕ್ಷ BUILT_IN_STRPBRK:
+    ಪಕ್ಷ BUILT_IN_STRRCHR:
+    ಪಕ್ಷ BUILT_IN_STRSPN:
+    ಪಕ್ಷ BUILT_IN_STRSTR:
+      ಪ್ರತ್ಯಾಗಮ "<string.h>";
+    ಪಕ್ಷ BUILT_IN_FPRINTF:
+    ಪಕ್ಷ BUILT_IN_PUTC:
+    ಪಕ್ಷ BUILT_IN_FPUTC:
+    ಪಕ್ಷ BUILT_IN_FPUTS:
+    ಪಕ್ಷ BUILT_IN_FSCANF:
+    ಪಕ್ಷ BUILT_IN_FWRITE:
+    ಪಕ್ಷ BUILT_IN_PRINTF:
+    ಪಕ್ಷ BUILT_IN_PUTCHAR:
+    ಪಕ್ಷ BUILT_IN_PUTS:
+    ಪಕ್ಷ BUILT_IN_SCANF:
+    ಪಕ್ಷ BUILT_IN_SNPRINTF:
+    ಪಕ್ಷ BUILT_IN_SPRINTF:
+    ಪಕ್ಷ BUILT_IN_SSCANF:
+    ಪಕ್ಷ BUILT_IN_VFPRINTF:
+    ಪಕ್ಷ BUILT_IN_VFSCANF:
+    ಪಕ್ಷ BUILT_IN_VPRINTF:
+    ಪಕ್ಷ BUILT_IN_VSCANF:
+    ಪಕ್ಷ BUILT_IN_VSNPRINTF:
+    ಪಕ್ಷ BUILT_IN_VSPRINTF:
+    ಪಕ್ಷ BUILT_IN_VSSCANF:
+      ಪ್ರತ್ಯಾಗಮ "<stdio.h>";
+    ಪಕ್ಷ BUILT_IN_ISALNUM:
+    ಪಕ್ಷ BUILT_IN_ISALPHA:
+    ಪಕ್ಷ BUILT_IN_ISBLANK:
+    ಪಕ್ಷ BUILT_IN_ISCNTRL:
+    ಪಕ್ಷ BUILT_IN_ISDIGIT:
+    ಪಕ್ಷ BUILT_IN_ISGRAPH:
+    ಪಕ್ಷ BUILT_IN_ISLOWER:
+    ಪಕ್ಷ BUILT_IN_ISPRINT:
+    ಪಕ್ಷ BUILT_IN_ISPUNCT:
+    ಪಕ್ಷ BUILT_IN_ISSPACE:
+    ಪಕ್ಷ BUILT_IN_ISUPPER:
+    ಪಕ್ಷ BUILT_IN_ISXDIGIT:
+    ಪಕ್ಷ BUILT_IN_TOLOWER:
+    ಪಕ್ಷ BUILT_IN_TOUPPER:
+      ಪ್ರತ್ಯಾಗಮ "<ctype.h>";
+    ಪಕ್ಷ BUILT_IN_ISWALNUM:
+    ಪಕ್ಷ BUILT_IN_ISWALPHA:
+    ಪಕ್ಷ BUILT_IN_ISWBLANK:
+    ಪಕ್ಷ BUILT_IN_ISWCNTRL:
+    ಪಕ್ಷ BUILT_IN_ISWDIGIT:
+    ಪಕ್ಷ BUILT_IN_ISWGRAPH:
+    ಪಕ್ಷ BUILT_IN_ISWLOWER:
+    ಪಕ್ಷ BUILT_IN_ISWPRINT:
+    ಪಕ್ಷ BUILT_IN_ISWPUNCT:
+    ಪಕ್ಷ BUILT_IN_ISWSPACE:
+    ಪಕ್ಷ BUILT_IN_ISWUPPER:
+    ಪಕ್ಷ BUILT_IN_ISWXDIGIT:
+    ಪಕ್ಷ BUILT_IN_TOWLOWER:
+    ಪಕ್ಷ BUILT_IN_TOWUPPER:
+      ಪ್ರತ್ಯಾಗಮ "<wctype.h>";
+    ಪಕ್ಷ BUILT_IN_ABORT:
+    ಪಕ್ಷ BUILT_IN_ABS:
+    ಪಕ್ಷ BUILT_IN_CALLOC:
+    ಪಕ್ಷ BUILT_IN_EXIT:
+    ಪಕ್ಷ BUILT_IN_FREE:
+    ಪಕ್ಷ BUILT_IN_LABS:
+    ಪಕ್ಷ BUILT_IN_LLABS:
+    ಪಕ್ಷ BUILT_IN_MALLOC:
+    ಪಕ್ಷ BUILT_IN_REALLOC:
+    ಪಕ್ಷ BUILT_IN__EXIT2:
+    ಪಕ್ಷ BUILT_IN_ALIGNED_ALLOC:
+      ಪ್ರತ್ಯಾಗಮ "<stdlib.h>";
+    ಪಕ್ಷ BUILT_IN_IMAXABS:
+      ಪ್ರತ್ಯಾಗಮ "<inttypes.h>";
+    ಪಕ್ಷ BUILT_IN_STRFTIME:
+      ಪ್ರತ್ಯಾಗಮ "<time.h>";
+    ಸ್ವಭಾವ:
+      ಪ್ರತ್ಯಾಗಮ ರಿಕ್ತ;
     }
 }
 
 /* Generate an implicit declaration for identifier FUNCTIONID at LOC as a
    function of type int ().  */
 
-tree
-implicitly_declare (location_t loc, tree functionid)
+ವೃಕ್ಷ
+implicitly_declare (location_t loc, ವೃಕ್ಷ functionid)
 {
-  struct c_binding *b;
-  tree decl = NULL_TREE;
-  tree asmspec_tree;
+  ಸಂರಚನಾ c_binding *b;
+  ವೃಕ್ಷ decl = NULL_ವೃಕ್ಷ;
+  ವೃಕ್ಷ asmspec_ವೃಕ್ಷ;
 
-  for (b = I_SYMBOL_BINDING (functionid); b; b = b->shadowed)
+  ಪ್ರತಿ (b = I_ಚಿಹ್ನೆ_BINDING (functionid); b; b = b->shadowed)
     {
-      if (B_IN_SCOPE (b, external_scope))
+      ಯದಿ (B_IN_SCOPE (b, external_scope))
 	{
 	  decl = b->decl;
-	  break;
+	  ಭಙ್ಗ;
 	}
     }
 
-  if (decl)
+  ಯದಿ (decl)
     {
-      if (TREE_CODE (decl) != FUNCTION_DECL)
-	return decl;
+      ಯದಿ (ವೃಕ್ಷ_CODE (decl) != FUNCTION_DECL)
+	ಪ್ರತ್ಯಾಗಮ decl;
 
       /* FIXME: Objective-C has weird not-really-builtin functions
 	 which are supposed to be visible automatically.  They wind up
 	 in the external scope because they're pushed before the file
 	 scope gets created.  Catch this here and rebind them into the
 	 file scope.  */
-      if (!fndecl_built_in_p (decl) && DECL_IS_UNDECLARED_BUILTIN (decl))
+      ಯದಿ (!fndecl_built_in_p (decl) && DECL_IS_UNDECLARED_BUILTIN (decl))
 	{
 	  bind (functionid, decl, file_scope,
-		/*invisible=*/false, /*nested=*/true,
+		/*invisible=*/ಅಸತ್ಯ, /*nested=*/ಸತ್ಯ,
 		DECL_SOURCE_LOCATION (decl));
-	  return decl;
+	  ಪ್ರತ್ಯಾಗಮ decl;
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
-	  tree newtype = default_function_type;
-	  if (b->u.type)
-	    TREE_TYPE (decl) = b->u.type;
+	  ವೃಕ್ಷ newtype = default_function_type;
+	  ಯದಿ (b->u.type)
+	    ವೃಕ್ಷ_TYPE (decl) = b->u.type;
 	  /* Implicit declaration of a function already declared
 	     (somehow) in a different scope, or as a built-in.
 	     If this is the first time this has happened, warn;
 	     then recycle the old declaration but with the new type.  */
-	  if (!C_DECL_IMPLICIT (decl))
+	  ಯದಿ (!C_DECL_IMPLICIT (decl))
 	    {
 	      implicit_decl_permerror (loc, functionid, decl);
 	      C_DECL_IMPLICIT (decl) = 1;
 	    }
-	  if (fndecl_built_in_p (decl))
+	  ಯದಿ (fndecl_built_in_p (decl))
 	    {
 	      newtype = c_build_type_attribute_variant (newtype,
 							TYPE_ATTRIBUTES
-							(TREE_TYPE (decl)));
-	      if (!comptypes (newtype, TREE_TYPE (decl)))
+							(ವೃಕ್ಷ_TYPE (decl)));
+	      ಯದಿ (!comptypes (newtype, ವೃಕ್ಷ_TYPE (decl)))
 		{
 		  auto_diagnostic_group d;
-		  bool warned = warning_at (loc,
+		  ತಾರ್ಕಿಕ warned = warning_at (loc,
 					    OPT_Wbuiltin_declaration_mismatch,
 					    "incompatible implicit "
 					    "declaration of built-in "
 					    "function %qD", decl);
 		  /* See if we can hint which header to include.  */
-		  const char *header = header_for_builtin_fn (decl);
-		  if (header != NULL && warned)
+		  ಧ್ರುವ ವರ್ಣ *header = header_for_builtin_fn (decl);
+		  ಯದಿ (header != ರಿಕ್ತ && warned)
 		    {
-		      rich_location richloc (line_table, loc);
-		      maybe_add_include_fixit (&richloc, header, true);
+		      rich_location richloc (ಸಾಲು_table, loc);
+		      maybe_add_include_fixit (&richloc, header, ಸತ್ಯ);
 		      inform (&richloc,
 			      "include %qs or provide a declaration of %qD",
 			      header, decl);
 		    }
-		  newtype = TREE_TYPE (decl);
+		  newtype = ವೃಕ್ಷ_TYPE (decl);
 		}
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    {
-	      if (!comptypes (newtype, TREE_TYPE (decl)))
+	      ಯದಿ (!comptypes (newtype, ವೃಕ್ಷ_TYPE (decl)))
 		{
 		  auto_diagnostic_group d;
 		  error_at (loc, "incompatible implicit declaration of "
@@ -4050,24 +4050,24 @@ implicitly_declare (location_t loc, tree functionid)
 		  locate_old_decl (decl);
 		}
 	    }
-	  b->u.type = TREE_TYPE (decl);
-	  TREE_TYPE (decl) = newtype;
+	  b->u.type = ವೃಕ್ಷ_TYPE (decl);
+	  ವೃಕ್ಷ_TYPE (decl) = newtype;
 	  bind (functionid, decl, current_scope,
-		/*invisible=*/false, /*nested=*/true,
+		/*invisible=*/ಅಸತ್ಯ, /*nested=*/ಸತ್ಯ,
 		DECL_SOURCE_LOCATION (decl));
-	  return decl;
+	  ಪ್ರತ್ಯಾಗಮ decl;
 	}
     }
 
   /* Not seen before.  */
   decl = build_decl (loc, FUNCTION_DECL, functionid, default_function_type);
   DECL_EXTERNAL (decl) = 1;
-  TREE_PUBLIC (decl) = 1;
+  ವೃಕ್ಷ_PUBLIC (decl) = 1;
   C_DECL_IMPLICIT (decl) = 1;
   implicit_decl_permerror (loc, functionid, 0);
-  asmspec_tree = maybe_apply_renaming_pragma (decl, /*asmname=*/NULL);
-  if (asmspec_tree)
-    set_user_assembler_name (decl, TREE_STRING_POINTER (asmspec_tree));
+  asmspec_ವೃಕ್ಷ = maybe_apply_renaming_pragma (decl, /*asmname=*/ರಿಕ್ತ);
+  ಯದಿ (asmspec_ವೃಕ್ಷ)
+    set_user_assembler_name (decl, ವೃಕ್ಷ_STRING_POINTER (asmspec_ವೃಕ್ಷ));
 
   /* C89 says implicit declarations are in the innermost block.
      So we record the decl in the standard fashion.  */
@@ -4081,9 +4081,9 @@ implicitly_declare (location_t loc, tree functionid)
   gen_aux_info_record (decl, 0, 1, 0);
 
   /* Possibly apply some default attributes to this implicit declaration.  */
-  decl_attributes (&decl, NULL_TREE, 0);
+  decl_attributes (&decl, NULL_ವೃಕ್ಷ, 0);
 
-  return decl;
+  ಪ್ರತ್ಯಾಗಮ decl;
 }
 
 /* Issue an error message for a reference to an undeclared variable
@@ -4091,17 +4091,17 @@ implicitly_declare (location_t loc, tree functionid)
    context.  Establish a binding of the identifier to error_mark_node
    in an appropriate scope, which will suppress further errors for the
    same identifier.  The error message should be given location LOC.  */
-void
-undeclared_variable (location_t loc, tree id)
+ಶೂನ್ಯ
+undeclared_variable (location_t loc, ವೃಕ್ಷ id)
 {
-  static bool already = false;
-  struct c_scope *scope;
+  ಸ್ಥಿರ ತಾರ್ಕಿಕ already = ಅಸತ್ಯ;
+  ಸಂರಚನಾ c_scope *scope;
 
   auto_diagnostic_group d;
-  if (current_function_decl == NULL_TREE)
+  ಯದಿ (current_function_decl == NULL_ವೃಕ್ಷ)
     {
       name_hint guessed_id = lookup_name_fuzzy (id, FUZZY_LOOKUP_NAME, loc);
-      if (const char *suggestion = guessed_id.suggestion ())
+      ಯದಿ (ಧ್ರುವ ವರ್ಣ *suggestion = guessed_id.suggestion ())
 	{
 	  gcc_rich_location richloc (loc);
 	  richloc.add_fixit_replace (suggestion);
@@ -4110,16 +4110,16 @@ undeclared_variable (location_t loc, tree id)
 		    " did you mean %qs?",
 		    id, suggestion);
 	}
-      else
+      ಅನ್ಯಥಾ
 	error_at (loc, "%qE undeclared here (not in a function)", id);
       scope = current_scope;
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      if (!objc_diagnose_private_ivar (id))
+      ಯದಿ (!objc_diagnose_private_ivar (id))
 	{
 	  name_hint guessed_id = lookup_name_fuzzy (id, FUZZY_LOOKUP_NAME, loc);
-	  if (const char *suggestion = guessed_id.suggestion ())
+	  ಯದಿ (ಧ್ರುವ ವರ್ಣ *suggestion = guessed_id.suggestion ())
 	    {
 	      gcc_rich_location richloc (loc);
 	      richloc.add_fixit_replace (suggestion);
@@ -4128,21 +4128,21 @@ undeclared_variable (location_t loc, tree id)
 			" did you mean %qs?",
 			id, suggestion);
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    error_at (loc, "%qE undeclared (first use in this function)", id);
 	}
-      if (!already)
+      ಯದಿ (!already)
 	{
           inform (loc, "each undeclared identifier is reported only"
                   " once for each function it appears in");
-	  already = true;
+	  already = ಸತ್ಯ;
 	}
 
       /* If we are parsing old-style parameter decls, current_function_decl
 	 will be nonnull but current_function_scope will be null.  */
       scope = current_function_scope ? current_function_scope : current_scope;
     }
-  bind (id, error_mark_node, scope, /*invisible=*/false, /*nested=*/false,
+  bind (id, error_mark_ಗಂಟು, scope, /*invisible=*/ಅಸತ್ಯ, /*nested=*/ಅಸತ್ಯ,
 	UNKNOWN_LOCATION);
 }
 
@@ -4150,22 +4150,22 @@ undeclared_variable (location_t loc, tree id)
    LABEL_DECL with all the proper frills.  Also create a struct
    c_label_vars initialized for the current scope.  */
 
-static tree
-make_label (location_t location, tree name, bool defining,
-	    struct c_label_vars **p_label_vars)
+ಸ್ಥಿರ ವೃಕ್ಷ
+make_label (location_t location, ವೃಕ್ಷ name, ತಾರ್ಕಿಕ defining,
+	    ಸಂರಚನಾ c_label_vars **p_label_vars)
 {
-  tree label = build_decl (location, LABEL_DECL, name, void_type_node);
+  ವೃಕ್ಷ label = build_decl (location, LABEL_DECL, name, void_type_ಗಂಟು);
   DECL_CONTEXT (label) = current_function_decl;
   SET_DECL_MODE (label, VOIDmode);
 
   c_label_vars *label_vars = ggc_alloc<c_label_vars> ();
-  label_vars->shadowed = NULL;
+  label_vars->shadowed = ರಿಕ್ತ;
   set_spot_bindings (&label_vars->label_bindings, defining);
-  label_vars->decls_in_scope = make_tree_vector ();
-  label_vars->gotos = NULL;
+  label_vars->decls_in_scope = make_ವೃಕ್ಷ_vector ();
+  label_vars->gotos = ರಿಕ್ತ;
   *p_label_vars = label_vars;
 
-  return label;
+  ಪ್ರತ್ಯಾಗಮ label;
 }
 
 /* Get the LABEL_DECL corresponding to identifier NAME as a label.
@@ -4173,59 +4173,59 @@ make_label (location_t location, tree name, bool defining,
    This is called when a label is used in a goto expression or
    has its address taken.  */
 
-tree
-lookup_label (tree name)
+ವೃಕ್ಷ
+lookup_label (ವೃಕ್ಷ name)
 {
-  tree label;
-  struct c_label_vars *label_vars;
+  ವೃಕ್ಷ label;
+  ಸಂರಚನಾ c_label_vars *label_vars;
 
-  if (current_function_scope == 0)
+  ಯದಿ (current_function_scope == 0)
     {
       error ("label %qE referenced outside of any function", name);
-      return NULL_TREE;
+      ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
     }
 
   /* Use a label already defined or ref'd with this name, but not if
      it is inherited from a containing function and wasn't declared
      using __label__.  */
   label = I_LABEL_DECL (name);
-  if (label && (DECL_CONTEXT (label) == current_function_decl
+  ಯದಿ (label && (DECL_CONTEXT (label) == current_function_decl
 		|| C_DECLARED_LABEL_FLAG (label)))
     {
       /* If the label has only been declared, update its apparent
 	 location to point here, for better diagnostics if it
 	 turns out not to have been defined.  */
-      if (DECL_INITIAL (label) == NULL_TREE)
-	DECL_SOURCE_LOCATION (label) = input_location;
-      return label;
+      ಯದಿ (DECL_INITIAL (label) == NULL_ವೃಕ್ಷ)
+	DECL_SOURCE_LOCATION (label) = ಒಳಹರಿವು_location;
+      ಪ್ರತ್ಯಾಗಮ label;
     }
 
   /* No label binding for that identifier; make one.  */
-  label = make_label (input_location, name, false, &label_vars);
+  label = make_label (ಒಳಹರಿವು_location, name, ಅಸತ್ಯ, &label_vars);
 
   /* Ordinary labels go in the current function scope.  */
   bind_label (name, label, current_function_scope, label_vars);
 
-  return label;
+  ಪ್ರತ್ಯಾಗಮ label;
 }
 
 /* Issue a warning about DECL for a goto statement at GOTO_LOC going
    to LABEL.  */
 
-static void
-warn_about_goto (location_t goto_loc, tree label, tree decl)
+ಸ್ಥಿರ ಶೂನ್ಯ
+warn_about_goto (location_t goto_loc, ವೃಕ್ಷ label, ವೃಕ್ಷ decl)
 {
   auto_diagnostic_group d;
-  if (c_type_variably_modified_p (TREE_TYPE (decl)))
+  ಯದಿ (c_type_variably_modified_p (ವೃಕ್ಷ_TYPE (decl)))
     error_at (goto_loc,
 	      "jump into scope of identifier with variably modified type");
-  else if (flag_openmp
+  ಅನ್ಯಥಾ ಯದಿ (flag_openmp
 	   && lookup_attribute ("omp allocate", DECL_ATTRIBUTES (decl)))
     error_at (goto_loc, "jump skips OpenMP %<allocate%> allocation");
-  else
-    if (!warning_at (goto_loc, OPT_Wjump_misses_init,
+  ಅನ್ಯಥಾ
+    ಯದಿ (!warning_at (goto_loc, OPT_Wjump_misses_init,
 		     "jump skips variable initialization"))
-      return;
+      ಪ್ರತ್ಯಾಗಮ;
   inform (DECL_SOURCE_LOCATION (label), "label %qD defined here", label);
   inform (DECL_SOURCE_LOCATION (decl), "%qD declared here", decl);
 }
@@ -4233,38 +4233,38 @@ warn_about_goto (location_t goto_loc, tree label, tree decl)
 /* Look up a label because of a goto statement.  This is like
    lookup_label, but also issues any appropriate warnings.  */
 
-tree
-lookup_label_for_goto (location_t loc, tree name)
+ವೃಕ್ಷ
+lookup_label_for_goto (location_t loc, ವೃಕ್ಷ name)
 {
-  tree label;
-  struct c_label_vars *label_vars;
-  unsigned int ix;
-  tree decl;
+  ವೃಕ್ಷ label;
+  ಸಂರಚನಾ c_label_vars *label_vars;
+  unsigned ಪೂರ್ಣಾಙ್ಕ ix;
+  ವೃಕ್ಷ decl;
 
   label = lookup_label (name);
-  if (label == NULL_TREE)
-    return NULL_TREE;
+  ಯದಿ (label == NULL_ವೃಕ್ಷ)
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
   /* If we are jumping to a different function, we can't issue any
      useful warnings.  */
-  if (DECL_CONTEXT (label) != current_function_decl)
+  ಯದಿ (DECL_CONTEXT (label) != current_function_decl)
     {
       gcc_assert (C_DECLARED_LABEL_FLAG (label));
-      return label;
+      ಪ್ರತ್ಯಾಗಮ label;
     }
 
   label_vars = I_LABEL_BINDING (name)->u.label;
 
   /* If the label has not yet been defined, then push this goto on a
      list for possible later warnings.  */
-  if (label_vars->label_bindings.scope == NULL)
+  ಯದಿ (label_vars->label_bindings.scope == ರಿಕ್ತ)
     {
       c_goto_bindings *g = ggc_alloc<c_goto_bindings> ();
 
       g->loc = loc;
-      set_spot_bindings (&g->goto_bindings, true);
-      vec_safe_push (label_vars->gotos, g);
-      return label;
+      set_spot_bindings (&g->goto_bindings, ಸತ್ಯ);
+      vec_safe_ತಳ್ಳು (label_vars->gotos, g);
+      ಪ್ರತ್ಯಾಗಮ label;
     }
 
   /* If there are any decls in label_vars->decls_in_scope, then this
@@ -4278,98 +4278,98 @@ lookup_label_for_goto (location_t loc, tree name)
   FOR_EACH_VEC_SAFE_ELT (label_vars->decls_in_scope, ix, decl)
     warn_about_goto (loc, label, decl);
 
-  if (label_vars->label_bindings.left_stmt_expr)
+  ಯದಿ (label_vars->label_bindings.ಎಡ_stmt_ಅಭಿವ್ಯಕ್ತಿ)
     {
       auto_diagnostic_group d;
       error_at (loc, "jump into statement expression");
       inform (DECL_SOURCE_LOCATION (label), "label %qD defined here", label);
     }
 
-  return label;
+  ಪ್ರತ್ಯಾಗಮ label;
 }
 
 /* Make a label named NAME in the current function, shadowing silently
    any that may be inherited from containing functions or containing
    scopes.  This is called for __label__ declarations.  */
 
-tree
-declare_label (tree name)
+ವೃಕ್ಷ
+declare_label (ವೃಕ್ಷ name)
 {
-  struct c_binding *b = I_LABEL_BINDING (name);
-  tree label;
-  struct c_label_vars *label_vars;
+  ಸಂರಚನಾ c_binding *b = I_LABEL_BINDING (name);
+  ವೃಕ್ಷ label;
+  ಸಂರಚನಾ c_label_vars *label_vars;
 
   /* Check to make sure that the label hasn't already been declared
      at this scope */
-  if (b && B_IN_CURRENT_SCOPE (b))
+  ಯದಿ (b && B_IN_CURRENT_SCOPE (b))
     {
       auto_diagnostic_group d;
       error ("duplicate label declaration %qE", name);
       locate_old_decl (b->decl);
 
       /* Just use the previous declaration.  */
-      return b->decl;
+      ಪ್ರತ್ಯಾಗಮ b->decl;
     }
 
-  label = make_label (input_location, name, false, &label_vars);
+  label = make_label (ಒಳಹರಿವು_location, name, ಅಸತ್ಯ, &label_vars);
   C_DECLARED_LABEL_FLAG (label) = 1;
 
   /* Declared labels go in the current scope.  */
   bind_label (name, label, current_scope, label_vars);
 
-  return label;
+  ಪ್ರತ್ಯಾಗಮ label;
 }
 
 /* When we define a label, issue any appropriate warnings if there are
    any gotos earlier in the function which jump to this label.  */
 
-static void
-check_earlier_gotos (tree label, struct c_label_vars* label_vars)
+ಸ್ಥಿರ ಶೂನ್ಯ
+check_earlier_gotos (ವೃಕ್ಷ label, ಸಂರಚನಾ c_label_vars* label_vars)
 {
-  unsigned int ix;
-  struct c_goto_bindings *g;
+  unsigned ಪೂರ್ಣಾಙ್ಕ ix;
+  ಸಂರಚನಾ c_goto_bindings *g;
 
   FOR_EACH_VEC_SAFE_ELT (label_vars->gotos, ix, g)
     {
-      struct c_binding *b;
-      struct c_scope *scope;
+      ಸಂರಚನಾ c_binding *b;
+      ಸಂರಚನಾ c_scope *scope;
 
       /* We have a goto to this label.  The goto is going forward.  In
 	 g->scope, the goto is going to skip any binding which was
 	 defined after g->bindings_in_scope.  */
-      if (g->goto_bindings.scope->has_jump_unsafe_decl)
+      ಯದಿ (g->goto_bindings.scope->has_jump_unsafe_decl)
 	{
-	  for (b = g->goto_bindings.scope->bindings;
+	  ಪ್ರತಿ (b = g->goto_bindings.scope->bindings;
 	       b != g->goto_bindings.bindings_in_scope;
 	       b = b->prev)
 	    {
-	      if (decl_jump_unsafe (b->decl))
+	      ಯದಿ (decl_jump_unsafe (b->decl))
 		warn_about_goto (g->loc, label, b->decl);
 	    }
 	}
 
       /* We also need to warn about decls defined in any scopes
 	 between the scope of the label and the scope of the goto.  */
-      for (scope = label_vars->label_bindings.scope;
+      ಪ್ರತಿ (scope = label_vars->label_bindings.scope;
 	   scope != g->goto_bindings.scope;
 	   scope = scope->outer)
 	{
-	  gcc_assert (scope != NULL);
-	  if (scope->has_jump_unsafe_decl)
+	  gcc_assert (scope != ರಿಕ್ತ);
+	  ಯದಿ (scope->has_jump_unsafe_decl)
 	    {
-	      if (scope == label_vars->label_bindings.scope)
+	      ಯದಿ (scope == label_vars->label_bindings.scope)
 		b = label_vars->label_bindings.bindings_in_scope;
-	      else
+	      ಅನ್ಯಥಾ
 		b = scope->bindings;
-	      for (; b != NULL; b = b->prev)
+	      ಪ್ರತಿ (; b != ರಿಕ್ತ; b = b->prev)
 		{
-		  if (decl_jump_unsafe (b->decl))
+		  ಯದಿ (decl_jump_unsafe (b->decl))
 		    warn_about_goto (g->loc, label, b->decl);
 		}
 	    }
 	}
 
-      if (g->goto_bindings.stmt_exprs > 0)
+      ಯದಿ (g->goto_bindings.stmt_exprs > 0)
 	{
 	  auto_diagnostic_group d;
 	  error_at (g->loc, "jump into statement expression");
@@ -4381,86 +4381,86 @@ check_earlier_gotos (tree label, struct c_label_vars* label_vars)
   /* Now that the label is defined, we will issue warnings about
      subsequent gotos to this label when we see them.  */
   vec_safe_truncate (label_vars->gotos, 0);
-  label_vars->gotos = NULL;
+  label_vars->gotos = ರಿಕ್ತ;
 }
 
 /* Define a label, specifying the location in the source file.
    Return the LABEL_DECL node for the label, if the definition is valid.
    Otherwise return NULL_TREE.  */
 
-tree
-define_label (location_t location, tree name)
+ವೃಕ್ಷ
+define_label (location_t location, ವೃಕ್ಷ name)
 {
   /* Find any preexisting label with this name.  It is an error
      if that label has already been defined in this function, or
      if there is a containing function with a declared label with
      the same name.  */
-  tree label = I_LABEL_DECL (name);
+  ವೃಕ್ಷ label = I_LABEL_DECL (name);
 
-  if (label
+  ಯದಿ (label
       && ((DECL_CONTEXT (label) == current_function_decl
-	   && DECL_INITIAL (label) != NULL_TREE)
+	   && DECL_INITIAL (label) != NULL_ವೃಕ್ಷ)
 	  || (DECL_CONTEXT (label) != current_function_decl
 	      && C_DECLARED_LABEL_FLAG (label))))
     {
       auto_diagnostic_group d;
       error_at (location, "duplicate label %qD", label);
       locate_old_decl (label);
-      return NULL_TREE;
+      ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
     }
-  else if (label && DECL_CONTEXT (label) == current_function_decl)
+  ಅನ್ಯಥಾ ಯದಿ (label && DECL_CONTEXT (label) == current_function_decl)
     {
-      struct c_label_vars *label_vars = I_LABEL_BINDING (name)->u.label;
+      ಸಂರಚನಾ c_label_vars *label_vars = I_LABEL_BINDING (name)->u.label;
 
       /* The label has been used or declared already in this function,
 	 but not defined.  Update its location to point to this
 	 definition.  */
       DECL_SOURCE_LOCATION (label) = location;
-      set_spot_bindings (&label_vars->label_bindings, true);
+      set_spot_bindings (&label_vars->label_bindings, ಸತ್ಯ);
 
       /* Issue warnings as required about any goto statements from
 	 earlier in the function.  */
       check_earlier_gotos (label, label_vars);
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      struct c_label_vars *label_vars;
+      ಸಂರಚನಾ c_label_vars *label_vars;
 
       /* No label binding for that identifier; make one.  */
-      label = make_label (location, name, true, &label_vars);
+      label = make_label (location, name, ಸತ್ಯ, &label_vars);
 
       /* Ordinary labels go in the current function scope.  */
       bind_label (name, label, current_function_scope, label_vars);
     }
 
-  if (!in_system_header_at (input_location) && lookup_name (name))
+  ಯದಿ (!in_system_header_at (ಒಳಹರಿವು_location) && lookup_name (name))
     warning_at (location, OPT_Wtraditional,
 		"traditional C lacks a separate namespace "
 		"for labels, identifier %qE conflicts", name);
 
   /* Mark label as having been defined.  */
-  DECL_INITIAL (label) = error_mark_node;
-  return label;
+  DECL_INITIAL (label) = error_mark_ಗಂಟು;
+  ಪ್ರತ್ಯಾಗಮ label;
 }
 
 /* Get the bindings for a new switch statement.  This is used to issue
    warnings as appropriate for jumps from the switch to case or
    default labels.  */
 
-struct c_spot_bindings *
-c_get_switch_bindings (void)
+ಸಂರಚನಾ c_spot_bindings *
+c_get_switch_bindings (ಶೂನ್ಯ)
 {
-  struct c_spot_bindings *switch_bindings;
+  ಸಂರಚನಾ c_spot_bindings *switch_bindings;
 
-  switch_bindings = XNEW (struct c_spot_bindings);
-  set_spot_bindings (switch_bindings, true);
-  return switch_bindings;
+  switch_bindings = XNEW (ಸಂರಚನಾ c_spot_bindings);
+  set_spot_bindings (switch_bindings, ಸತ್ಯ);
+  ಪ್ರತ್ಯಾಗಮ switch_bindings;
 }
 
-void
-c_release_switch_bindings (struct c_spot_bindings *bindings)
+ಶೂನ್ಯ
+c_release_switch_bindings (ಸಂರಚನಾ c_spot_bindings *bindings)
 {
-  gcc_assert (bindings->stmt_exprs == 0 && !bindings->left_stmt_expr);
+  gcc_assert (bindings->stmt_exprs == 0 && !bindings->ಎಡ_stmt_ಅಭಿವ್ಯಕ್ತಿ);
   XDELETE (bindings);
 }
 
@@ -4468,53 +4468,53 @@ c_release_switch_bindings (struct c_spot_bindings *bindings)
    warnings about decls as needed.  It returns true if it found an
    error, not just a warning.  */
 
-bool
-c_check_switch_jump_warnings (struct c_spot_bindings *switch_bindings,
+ತಾರ್ಕಿಕ
+c_check_switch_jump_warnings (ಸಂರಚನಾ c_spot_bindings *switch_bindings,
 			      location_t switch_loc, location_t case_loc)
 {
-  bool saw_error;
-  struct c_scope *scope;
+  ತಾರ್ಕಿಕ saw_error;
+  ಸಂರಚನಾ c_scope *scope;
 
-  saw_error = false;
-  for (scope = current_scope;
+  saw_error = ಅಸತ್ಯ;
+  ಪ್ರತಿ (scope = current_scope;
        scope != switch_bindings->scope;
        scope = scope->outer)
     {
-      struct c_binding *b;
+      ಸಂರಚನಾ c_binding *b;
 
-      gcc_assert (scope != NULL);
+      gcc_assert (scope != ರಿಕ್ತ);
 
-      if (!scope->has_jump_unsafe_decl)
-	continue;
+      ಯದಿ (!scope->has_jump_unsafe_decl)
+	ಅನುವರ್ತ;
 
-      for (b = scope->bindings; b != NULL; b = b->prev)
+      ಪ್ರತಿ (b = scope->bindings; b != ರಿಕ್ತ; b = b->prev)
 	{
-	  if (decl_jump_unsafe (b->decl))
+	  ಯದಿ (decl_jump_unsafe (b->decl))
 	    {
 	      auto_diagnostic_group d;
-	      bool emitted;
-	      if (c_type_variably_modified_p (TREE_TYPE (b->decl)))
+	      ತಾರ್ಕಿಕ emitted;
+	      ಯದಿ (c_type_variably_modified_p (ವೃಕ್ಷ_TYPE (b->decl)))
 		{
-		  saw_error = true;
+		  saw_error = ಸತ್ಯ;
 		  error_at (case_loc,
 			    "switch jumps into scope of identifier with "
 			    "variably modified type");
-		  emitted = true;
+		  emitted = ಸತ್ಯ;
 		}
-	      else if (flag_openmp
+	      ಅನ್ಯಥಾ ಯದಿ (flag_openmp
 		       && lookup_attribute ("omp allocate",
 					    DECL_ATTRIBUTES (b->decl)))
 		{
-		  saw_error = true;
+		  saw_error = ಸತ್ಯ;
 		  error_at (case_loc,
 			    "switch jumps over OpenMP %<allocate%> allocation");
-		  emitted = true;
+		  emitted = ಸತ್ಯ;
 		}
-	      else
+	      ಅನ್ಯಥಾ
 		emitted
 		  = warning_at (case_loc, OPT_Wjump_misses_init,
 				"switch jumps over variable initialization");
-	      if (emitted)
+	      ಯದಿ (emitted)
 		{
 		  inform (switch_loc, "switch starts here");
 		  inform (DECL_SOURCE_LOCATION (b->decl), "%qD declared here",
@@ -4524,15 +4524,15 @@ c_check_switch_jump_warnings (struct c_spot_bindings *switch_bindings,
 	}
     }
 
-  if (switch_bindings->stmt_exprs > 0)
+  ಯದಿ (switch_bindings->stmt_exprs > 0)
     {
-      saw_error = true;
+      saw_error = ಸತ್ಯ;
       auto_diagnostic_group d;
       error_at (case_loc, "switch jumps into statement expression");
       inform (switch_loc, "switch starts here");
     }
 
-  return saw_error;
+  ಪ್ರತ್ಯಾಗಮ saw_error;
 }
 
 /* Given NAME, an IDENTIFIER_NODE,
@@ -4544,62 +4544,62 @@ c_check_switch_jump_warnings (struct c_spot_bindings *switch_bindings,
    location where the tag was defined.
    If the wrong kind of type is found, an error is reported.  */
 
-static tree
-lookup_tag (enum tree_code code, tree name, bool thislevel_only,
+ಸ್ಥಿರ ವೃಕ್ಷ
+lookup_tag (ಗಣನಾ ವೃಕ್ಷ_code code, ವೃಕ್ಷ name, ತಾರ್ಕಿಕ thislevel_only,
 	    location_t *ploc)
 {
-  struct c_binding *b = I_TAG_BINDING (name);
-  bool thislevel = false;
+  ಸಂರಚನಾ c_binding *b = I_TAG_BINDING (name);
+  ತಾರ್ಕಿಕ thislevel = ಅಸತ್ಯ;
 
-  if (!b || !b->decl)
-    return NULL_TREE;
+  ಯದಿ (!b || !b->decl)
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
   /* We only care about whether it's in this level if
      thislevel_only was set or it might be a type clash.  */
-  if (thislevel_only || TREE_CODE (b->decl) != code)
+  ಯದಿ (thislevel_only || ವೃಕ್ಷ_CODE (b->decl) != code)
     {
       /* For our purposes, a tag in the external scope is the same as
 	 a tag in the file scope.  (Primarily relevant to Objective-C
 	 and its builtin structure tags, which get pushed before the
 	 file scope is created.)  */
-      if (B_IN_CURRENT_SCOPE (b)
+      ಯದಿ (B_IN_CURRENT_SCOPE (b)
 	  || (current_scope == file_scope && B_IN_EXTERNAL_SCOPE (b)))
-	thislevel = true;
+	thislevel = ಸತ್ಯ;
     }
 
-  if (thislevel_only && !thislevel)
-    return NULL_TREE;
+  ಯದಿ (thislevel_only && !thislevel)
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
-  if (TREE_CODE (b->decl) != code)
+  ಯದಿ (ವೃಕ್ಷ_CODE (b->decl) != code)
     {
       /* Definition isn't the kind we were looking for.  */
       pending_invalid_xref = name;
-      pending_invalid_xref_location = input_location;
+      pending_invalid_xref_location = ಒಳಹರಿವು_location;
 
       /* If in the same binding level as a declaration as a tag
 	 of a different type, this must not be allowed to
 	 shadow that tag, so give the error immediately.
 	 (For example, "struct foo; union foo;" is invalid.)  */
-      if (thislevel)
+      ಯದಿ (thislevel)
 	pending_xref_error ();
     }
 
-  if (ploc != NULL)
+  ಯದಿ (ploc != ರಿಕ್ತ)
     *ploc = b->locus;
 
-  return b->decl;
+  ಪ್ರತ್ಯಾಗಮ b->decl;
 }
 
 /* Return true if a definition exists for NAME with code CODE.  */
 
-bool
-tag_exists_p (enum tree_code code, tree name)
+ತಾರ್ಕಿಕ
+tag_exists_p (ಗಣನಾ ವೃಕ್ಷ_code code, ವೃಕ್ಷ name)
 {
-  struct c_binding *b = I_TAG_BINDING (name);
+  ಸಂರಚನಾ c_binding *b = I_TAG_BINDING (name);
 
-  if (b == NULL || b->decl == NULL_TREE)
-    return false;
-  return TREE_CODE (b->decl) == code;
+  ಯದಿ (b == ರಿಕ್ತ || b->decl == NULL_ವೃಕ್ಷ)
+    ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
+  ಪ್ರತ್ಯಾಗಮ ವೃಕ್ಷ_CODE (b->decl) == code;
 }
 
 /* Print an error message now
@@ -4607,13 +4607,13 @@ tag_exists_p (enum tree_code code, tree name)
    We don't print them immediately because they are not invalid
    when used in the `struct foo;' construct for shadowing.  */
 
-void
-pending_xref_error (void)
+ಶೂನ್ಯ
+pending_xref_error (ಶೂನ್ಯ)
 {
-  if (pending_invalid_xref != NULL_TREE)
+  ಯದಿ (pending_invalid_xref != NULL_ವೃಕ್ಷ)
     error_at (pending_invalid_xref_location, "%qE defined as wrong kind of tag",
 	      pending_invalid_xref);
-  pending_invalid_xref = NULL_TREE;
+  pending_invalid_xref = NULL_ವೃಕ್ಷ;
 }
 
 
@@ -4622,35 +4622,35 @@ pending_xref_error (void)
    Return a ..._DECL node of some kind representing its definition,
    or return NULL_TREE if it is undefined.  */
 
-tree
-lookup_name (tree name)
+ವೃಕ್ಷ
+lookup_name (ವೃಕ್ಷ name)
 {
-  struct c_binding *b = I_SYMBOL_BINDING (name);
+  ಸಂರಚನಾ c_binding *b = I_ಚಿಹ್ನೆ_BINDING (name);
   /* Do not resolve non-default function versions.  */
-  if (b
-      && TREE_CODE (b->decl) == FUNCTION_DECL
+  ಯದಿ (b
+      && ವೃಕ್ಷ_CODE (b->decl) == FUNCTION_DECL
       && DECL_FUNCTION_VERSIONED (b->decl)
       && !is_function_default_version (b->decl))
-    return NULL_TREE;
-  if (b && !b->invisible)
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
+  ಯದಿ (b && !b->invisible)
     {
       maybe_record_typedef_use (b->decl);
-      return b->decl;
+      ಪ್ರತ್ಯಾಗಮ b->decl;
     }
-  return NULL_TREE;
+  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 }
 
 /* Similar to `lookup_name' but look only at the indicated scope.  */
 
-static tree
-lookup_name_in_scope (tree name, struct c_scope *scope)
+ಸ್ಥಿರ ವೃಕ್ಷ
+lookup_name_in_scope (ವೃಕ್ಷ name, ಸಂರಚನಾ c_scope *scope)
 {
-  struct c_binding *b;
+  ಸಂರಚನಾ c_binding *b;
 
-  for (b = I_SYMBOL_BINDING (name); b; b = b->shadowed)
-    if (B_IN_SCOPE (b, scope))
-      return b->decl;
-  return NULL_TREE;
+  ಪ್ರತಿ (b = I_ಚಿಹ್ನೆ_BINDING (name); b; b = b->shadowed)
+    ಯದಿ (B_IN_SCOPE (b, scope))
+      ಪ್ರತ್ಯಾಗಮ b->decl;
+  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 }
 
 /* Look for the closest match for NAME within the currently valid
@@ -4672,27 +4672,27 @@ lookup_name_in_scope (tree name, struct c_scope *scope)
    Use LOC for any deferred diagnostics.  */
 
 name_hint
-lookup_name_fuzzy (tree name, enum lookup_name_fuzzy_kind kind, location_t loc)
+lookup_name_fuzzy (ವೃಕ್ಷ name, ಗಣನಾ lookup_name_fuzzy_kind kind, location_t loc)
 {
-  gcc_assert (TREE_CODE (name) == IDENTIFIER_NODE);
+  gcc_assert (ವೃಕ್ಷ_CODE (name) == IDENTIFIER_ಗಂಟು);
 
   /* Look up function-like macros first; maybe misusing them. */
-  auto cpp_node = cpp_lookup (parse_in,
-			      (const unsigned char*)IDENTIFIER_POINTER (name),
+  auto cpp_ಗಂಟು = cpp_lookup (parse_in,
+			      (ಧ್ರುವ unsigned ವರ್ಣ*)IDENTIFIER_POINTER (name),
 			      IDENTIFIER_LENGTH (name));
-  if (cpp_node && cpp_fun_like_macro_p (cpp_node))
-    return name_hint
+  ಯದಿ (cpp_ಗಂಟು && cpp_fun_like_macro_p (cpp_ಗಂಟು))
+    ಪ್ರತ್ಯಾಗಮ name_hint
       (nullptr,
        std::make_unique<macro_like_function_used> (loc,
 						   IDENTIFIER_POINTER (name)));
 
   /* Next, try some well-known names in the C standard library, in case
      the user forgot a #include.  */
-  const char *header_hint
+  ಧ್ರುವ ವರ್ಣ *header_hint
     = get_c_stdlib_header_for_name (IDENTIFIER_POINTER (name));
 
-  if (header_hint)
-    return name_hint
+  ಯದಿ (header_hint)
+    ಪ್ರತ್ಯಾಗಮ name_hint
       (nullptr,
        std::make_unique<suggest_missing_header> (loc,
 						 IDENTIFIER_POINTER (name),
@@ -4703,8 +4703,8 @@ lookup_name_fuzzy (tree name, enum lookup_name_fuzzy_kind kind, location_t loc)
      for "_OPENMP").  */
   diagnostics::option_id option_id
     = get_option_for_builtin_define (IDENTIFIER_POINTER (name));
-  if (option_id.m_idx > 0)
-    return name_hint
+  ಯದಿ (option_id.m_idx > 0)
+    ಪ್ರತ್ಯಾಗಮ name_hint
       (nullptr,
        std::make_unique<suggest_missing_option> (loc,
 						 IDENTIFIER_POINTER (name),
@@ -4712,54 +4712,54 @@ lookup_name_fuzzy (tree name, enum lookup_name_fuzzy_kind kind, location_t loc)
 
   /* Only suggest names reserved for the implementation if NAME begins
      with an underscore.  */
-  bool consider_implementation_names = (IDENTIFIER_POINTER (name)[0] == '_');
+  ತಾರ್ಕಿಕ consider_implementation_names = (IDENTIFIER_POINTER (name)[0] == '_');
 
-  best_match<tree, tree> bm (name);
+  best_match<ವೃಕ್ಷ, ವೃಕ್ಷ> bm (name);
 
   /* Look within currently valid scopes.  */
-  for (c_scope *scope = current_scope; scope; scope = scope->outer)
-    for (c_binding *binding = scope->bindings; binding; binding = binding->prev)
+  ಪ್ರತಿ (c_scope *scope = current_scope; scope; scope = scope->outer)
+    ಪ್ರತಿ (c_binding *binding = scope->bindings; binding; binding = binding->prev)
       {
-	if (!binding->id || binding->invisible)
-	  continue;
-	if (binding->decl == error_mark_node)
-	  continue;
+	ಯದಿ (!binding->id || binding->invisible)
+	  ಅನುವರ್ತ;
+	ಯದಿ (binding->decl == error_mark_ಗಂಟು)
+	  ಅನುವರ್ತ;
 	/* Don't use bindings from implicitly declared functions,
 	   as they were likely misspellings themselves.  */
-	if (TREE_CODE (binding->decl) == FUNCTION_DECL)
-	  if (C_DECL_IMPLICIT (binding->decl))
-	    continue;
+	ಯದಿ (ವೃಕ್ಷ_CODE (binding->decl) == FUNCTION_DECL)
+	  ಯದಿ (C_DECL_IMPLICIT (binding->decl))
+	    ಅನುವರ್ತ;
 	/* Don't suggest names that are reserved for use by the
 	   implementation, unless NAME began with an underscore.  */
-	if (!consider_implementation_names)
+	ಯದಿ (!consider_implementation_names)
 	  {
-	    const char *suggestion_str = IDENTIFIER_POINTER (binding->id);
-	    if (name_reserved_for_implementation_p (suggestion_str))
-	      continue;
+	    ಧ್ರುವ ವರ್ಣ *suggestion_str = IDENTIFIER_POINTER (binding->id);
+	    ಯದಿ (name_reserved_for_implementation_p (suggestion_str))
+	      ಅನುವರ್ತ;
 	  }
-	switch (kind)
+	ವಿಕಲ್ಪ (kind)
 	  {
-	  case FUZZY_LOOKUP_TYPENAME:
-	    if (TREE_CODE (binding->decl) != TYPE_DECL)
-	      continue;
-	    break;
+	  ಪಕ್ಷ FUZZY_LOOKUP_TYPENAME:
+	    ಯದಿ (ವೃಕ್ಷ_CODE (binding->decl) != TYPE_DECL)
+	      ಅನುವರ್ತ;
+	    ಭಙ್ಗ;
 
-	  case FUZZY_LOOKUP_FUNCTION_NAME:
-	    if (TREE_CODE (binding->decl) != FUNCTION_DECL)
+	  ಪಕ್ಷ FUZZY_LOOKUP_FUNCTION_NAME:
+	    ಯದಿ (ವೃಕ್ಷ_CODE (binding->decl) != FUNCTION_DECL)
 	      {
 		/* Allow function pointers.  */
-		if ((VAR_P (binding->decl)
-		     || TREE_CODE (binding->decl) == PARM_DECL)
-		    && TREE_CODE (TREE_TYPE (binding->decl)) == POINTER_TYPE
-		    && (TREE_CODE (TREE_TYPE (TREE_TYPE (binding->decl)))
+		ಯದಿ ((VAR_P (binding->decl)
+		     || ವೃಕ್ಷ_CODE (binding->decl) == PARM_DECL)
+		    && ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (binding->decl)) == POINTER_TYPE
+		    && (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (binding->decl)))
 			== FUNCTION_TYPE))
-		  break;
-		continue;
+		  ಭಙ್ಗ;
+		ಅನುವರ್ತ;
 	      }
-	    break;
+	    ಭಙ್ಗ;
 
-	  default:
-	    break;
+	  ಸ್ವಭಾವ:
+	    ಭಙ್ಗ;
 	  }
 	bm.consider (binding->id);
       }
@@ -4781,10 +4781,10 @@ lookup_name_fuzzy (tree name, enum lookup_name_fuzzy_kind kind, location_t loc)
   cpp_hashnode *best_macro = bmm.get_best_meaningful_candidate ();
   /* If a macro is the closest so far to NAME, use it, creating an
      identifier tree node for it.  */
-  if (best_macro)
+  ಯದಿ (best_macro)
     {
-      const char *id = (const char *)best_macro->ident.str;
-      tree macro_as_identifier
+      ಧ್ರುವ ವರ್ಣ *id = (ಧ್ರುವ ವರ್ಣ *)best_macro->ident.str;
+      ವೃಕ್ಷ macro_as_identifier
 	= get_identifier_with_length (id, best_macro->ident.len);
       bm.set_best_so_far (macro_as_identifier,
 			  bmm.get_best_distance (),
@@ -4793,132 +4793,132 @@ lookup_name_fuzzy (tree name, enum lookup_name_fuzzy_kind kind, location_t loc)
 
   /* Try the "start_typename" keywords to detect
      "singed" vs "signed" typos.  */
-  if (kind == FUZZY_LOOKUP_TYPENAME)
+  ಯದಿ (kind == FUZZY_LOOKUP_TYPENAME)
     {
-      for (unsigned i = 0; i < num_c_common_reswords; i++)
+      ಪ್ರತಿ (unsigned i = 0; i < ಅಂಕೆ_c_common_reswords; i++)
 	{
-	  const c_common_resword *resword = &c_common_reswords[i];
-	  if (!c_keyword_starts_typename (resword->rid))
-	    continue;
-	  tree resword_identifier = ridpointers [resword->rid];
-	  if (!resword_identifier)
-	    continue;
-	  gcc_assert (TREE_CODE (resword_identifier) == IDENTIFIER_NODE);
+	  ಧ್ರುವ c_common_resword *resword = &c_common_reswords[i];
+	  ಯದಿ (!c_keyword_starts_typename (resword->rid))
+	    ಅನುವರ್ತ;
+	  ವೃಕ್ಷ resword_identifier = ridpointers [resword->rid];
+	  ಯದಿ (!resword_identifier)
+	    ಅನುವರ್ತ;
+	  gcc_assert (ವೃಕ್ಷ_CODE (resword_identifier) == IDENTIFIER_ಗಂಟು);
 	  bm.consider (resword_identifier);
 	}
     }
 
-  tree best = bm.get_best_meaningful_candidate ();
-  if (best)
-    return name_hint (IDENTIFIER_POINTER (best), NULL);
-  else
-    return name_hint (NULL, NULL);
+  ವೃಕ್ಷ best = bm.get_best_meaningful_candidate ();
+  ಯದಿ (best)
+    ಪ್ರತ್ಯಾಗಮ name_hint (IDENTIFIER_POINTER (best), ರಿಕ್ತ);
+  ಅನ್ಯಥಾ
+    ಪ್ರತ್ಯಾಗಮ name_hint (ರಿಕ್ತ, ರಿಕ್ತ);
 }
 
 
 /* Handle the standard [[nodiscard]] attribute.  */
 
-static tree
-handle_nodiscard_attribute (tree *node, tree name, tree /*args*/,
-			    int /*flags*/, bool *no_add_attrs)
+ಸ್ಥಿರ ವೃಕ್ಷ
+handle_nodiscard_attribute (ವೃಕ್ಷ *ಗಂಟು, ವೃಕ್ಷ name, ವೃಕ್ಷ /*args*/,
+			    ಪೂರ್ಣಾಙ್ಕ /*flags*/, ತಾರ್ಕಿಕ *no_add_attrs)
 {
-  if (TREE_CODE (*node) == FUNCTION_DECL)
+  ಯದಿ (ವೃಕ್ಷ_CODE (*ಗಂಟು) == FUNCTION_DECL)
     {
-      if (VOID_TYPE_P (TREE_TYPE (TREE_TYPE (*node))))
-	warning_at (DECL_SOURCE_LOCATION (*node),
+      ಯದಿ (VOID_TYPE_P (ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (*ಗಂಟು))))
+	warning_at (DECL_SOURCE_LOCATION (*ಗಂಟು),
 		    OPT_Wattributes, "%qE attribute applied to %qD with void "
-		    "return type", name, *node);
+		    "return type", name, *ಗಂಟು);
     }
-  else if (RECORD_OR_UNION_TYPE_P (*node)
-	   || TREE_CODE (*node) == ENUMERAL_TYPE)
+  ಅನ್ಯಥಾ ಯದಿ (RECORD_OR_UNION_TYPE_P (*ಗಂಟು)
+	   || ವೃಕ್ಷ_CODE (*ಗಂಟು) == ENUMERAL_TYPE)
     /* OK */;
-  else
+  ಅನ್ಯಥಾ
     {
-      pedwarn (input_location,
+      pedwarn (ಒಳಹರಿವು_location,
 	       OPT_Wattributes, "%qE attribute can only be applied to "
 	       "functions or to structure, union or enumeration types", name);
-      *no_add_attrs = true;
+      *no_add_attrs = ಸತ್ಯ;
     }
-  return NULL_TREE;
+  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 }
 
 /* Handle the standard [[noreturn]] attribute.  */
 
-static tree
-handle_std_noreturn_attribute (tree *node, tree name, tree args,
-			       int flags, bool *no_add_attrs)
+ಸ್ಥಿರ ವೃಕ್ಷ
+handle_std_noreturn_attribute (ವೃಕ್ಷ *ಗಂಟು, ವೃಕ್ಷ name, ವೃಕ್ಷ args,
+			       ಪೂರ್ಣಾಙ್ಕ flags, ತಾರ್ಕಿಕ *no_add_attrs)
 {
   /* Unlike GNU __attribute__ ((noreturn)), the standard [[noreturn]]
      only applies to functions, not function pointers.  */
-  if (TREE_CODE (*node) == FUNCTION_DECL)
-    return handle_noreturn_attribute (node, name, args, flags, no_add_attrs);
-  else
+  ಯದಿ (ವೃಕ್ಷ_CODE (*ಗಂಟು) == FUNCTION_DECL)
+    ಪ್ರತ್ಯಾಗಮ handle_noreturn_attribute (ಗಂಟು, name, args, flags, no_add_attrs);
+  ಅನ್ಯಥಾ
     {
-      pedwarn (input_location, OPT_Wattributes,
+      pedwarn (ಒಳಹರಿವು_location, OPT_Wattributes,
 	       "standard %qE attribute can only be applied to functions",
 	       name);
-      *no_add_attrs = true;
-      return NULL_TREE;
+      *no_add_attrs = ಸತ್ಯ;
+      ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
     }
 }
 
 /* Handle the standard [[unsequenced]] attribute.  */
 
-static tree
-handle_std_unsequenced_attribute (tree *node, tree name, tree args,
-				  int flags, bool *no_add_attrs)
+ಸ್ಥಿರ ವೃಕ್ಷ
+handle_std_unsequenced_attribute (ವೃಕ್ಷ *ಗಂಟು, ವೃಕ್ಷ name, ವೃಕ್ಷ args,
+				  ಪೂರ್ಣಾಙ್ಕ flags, ತಾರ್ಕಿಕ *no_add_attrs)
 {
   /* Unlike GNU __attribute__ ((unsequenced)), the standard [[unsequenced]]
      should be only applied to function declarators or type specifiers which
      have function type.  */
-  if (node[2])
+  ಯದಿ (ಗಂಟು[2])
     {
       auto_diagnostic_group d;
-      if (pedwarn (input_location, OPT_Wattributes,
+      ಯದಿ (pedwarn (ಒಳಹರಿವು_location, OPT_Wattributes,
 		   "standard %qE attribute can only be applied to function "
 		   "declarators or type specifiers with function type", name))
-	inform (input_location, "did you mean to specify it after %<)%> "
+	inform (ಒಳಹರಿವು_location, "did you mean to specify it after %<)%> "
 				"following function parameters?");
-      *no_add_attrs = true;
-      return NULL_TREE;
+      *no_add_attrs = ಸತ್ಯ;
+      ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
     }
-  return handle_unsequenced_attribute (node, name, args, flags, no_add_attrs);
+  ಪ್ರತ್ಯಾಗಮ handle_unsequenced_attribute (ಗಂಟು, name, args, flags, no_add_attrs);
 }
 
 /* Handle the standard [[reproducible]] attribute.  */
 
-static tree
-handle_std_reproducible_attribute (tree *node, tree name, tree args,
-				   int flags, bool *no_add_attrs)
+ಸ್ಥಿರ ವೃಕ್ಷ
+handle_std_reproducible_attribute (ವೃಕ್ಷ *ಗಂಟು, ವೃಕ್ಷ name, ವೃಕ್ಷ args,
+				   ಪೂರ್ಣಾಙ್ಕ flags, ತಾರ್ಕಿಕ *no_add_attrs)
 {
-  return handle_std_unsequenced_attribute (node, name, args, flags,
+  ಪ್ರತ್ಯಾಗಮ handle_std_unsequenced_attribute (ಗಂಟು, name, args, flags,
 					   no_add_attrs);
 }
 
 /* Table of supported standard (C23) attributes.  */
-static const attribute_spec std_attributes[] =
+ಸ್ಥಿರ ಧ್ರುವ attribute_spec std_attributes[] =
 {
   /* { name, min_len, max_len, decl_req, type_req, fn_type_req,
        affects_type_identity, handler, exclude } */
-  { "_Noreturn", 0, 0, false, false, false, false,
-    handle_std_noreturn_attribute, NULL },
-  { "deprecated", 0, 1, false, false, false, false,
-    handle_deprecated_attribute, NULL },
-  { "fallthrough", 0, 0, false, false, false, false,
-    handle_fallthrough_attribute, NULL },
-  { "maybe_unused", 0, 0, false, false, false, false,
-    handle_unused_attribute, NULL },
-  { "nodiscard", 0, 1, false, false, false, false,
-    handle_nodiscard_attribute, NULL },
-  { "noreturn", 0, 0, false, false, false, false,
-    handle_std_noreturn_attribute, NULL },
-  { "reproducible", 0, 0, false, true, true, false,
-    handle_std_reproducible_attribute, NULL },
-  { "unsequenced", 0, 0, false, true, true, false,
-    handle_std_unsequenced_attribute, NULL }
+  { "_Noreturn", 0, 0, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ,
+    handle_std_noreturn_attribute, ರಿಕ್ತ },
+  { "deprecated", 0, 1, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ,
+    handle_deprecated_attribute, ರಿಕ್ತ },
+  { "fallthrough", 0, 0, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ,
+    handle_fallthrough_attribute, ರಿಕ್ತ },
+  { "maybe_unused", 0, 0, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ,
+    handle_unused_attribute, ರಿಕ್ತ },
+  { "nodiscard", 0, 1, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ,
+    handle_nodiscard_attribute, ರಿಕ್ತ },
+  { "noreturn", 0, 0, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ, ಅಸತ್ಯ,
+    handle_std_noreturn_attribute, ರಿಕ್ತ },
+  { "reproducible", 0, 0, ಅಸತ್ಯ, ಸತ್ಯ, ಸತ್ಯ, ಅಸತ್ಯ,
+    handle_std_reproducible_attribute, ರಿಕ್ತ },
+  { "unsequenced", 0, 0, ಅಸತ್ಯ, ಸತ್ಯ, ಸತ್ಯ, ಅಸತ್ಯ,
+    handle_std_unsequenced_attribute, ರಿಕ್ತ }
 };
 
-const scoped_attribute_specs std_attribute_table =
+ಧ್ರುವ scoped_attribute_specs std_attribute_table =
 {
   nullptr, { std_attributes }
 };
@@ -4928,66 +4928,66 @@ const scoped_attribute_specs std_attribute_table =
    Initialize the global scope.
    Make definitions for built-in primitive functions.  */
 
-void
-c_init_decl_processing (void)
+ಶೂನ್ಯ
+c_init_decl_processing (ಶೂನ್ಯ)
 {
-  location_t save_loc = input_location;
+  location_t save_loc = ಒಳಹರಿವು_location;
 
   /* Initialize reserved words for parser.  */
   c_parse_init ();
 
-  current_function_decl = NULL_TREE;
+  current_function_decl = NULL_ವೃಕ್ಷ;
 
   gcc_obstack_init (&parser_obstack);
 
   /* Make the externals scope.  */
-  push_scope ();
+  ತಳ್ಳು_scope ();
   external_scope = current_scope;
 
   /* Declarations from c_common_nodes_and_builtins must not be associated
      with this input file, lest we get differences between using and not
      using preprocessed headers.  */
-  input_location = BUILTINS_LOCATION;
+  ಒಳಹರಿವು_location = BUILTINS_LOCATION;
 
   c_common_nodes_and_builtins ();
 
   /* In C, comparisons and TRUTH_* expressions have type int.  */
-  truthvalue_type_node = integer_type_node;
-  truthvalue_true_node = integer_one_node;
-  truthvalue_false_node = integer_zero_node;
+  truthvalue_type_ಗಂಟು = integer_type_ಗಂಟು;
+  truthvalue_true_ಗಂಟು = integer_one_ಗಂಟು;
+  truthvalue_false_ಗಂಟು = integer_zero_ಗಂಟು;
 
   /* Even in C99, which has a real boolean type.  */
   pushdecl (build_decl (UNKNOWN_LOCATION, TYPE_DECL,
 			get_identifier (flag_isoc23 ? "bool" : "_Bool"),
-			boolean_type_node));
+			boolean_type_ಗಂಟು));
 
   /* C-specific nullptr initialization.  */
-  record_builtin_type (RID_MAX, "typeof (nullptr)", nullptr_type_node);
+  record_builtin_type (RID_MAX, "typeof (nullptr)", nullptr_type_ಗಂಟು);
   /* The size and alignment of nullptr_t is the same as for a pointer to
      character type.  */
-  SET_TYPE_ALIGN (nullptr_type_node, GET_MODE_ALIGNMENT (ptr_mode));
+  SET_TYPE_ALIGN (nullptr_type_ಗಂಟು, GET_MODE_ALIGNMENT (ptr_mode));
 
-  input_location = save_loc;
+  ಒಳಹರಿವು_location = save_loc;
 
   make_fname_decl = c_make_fname_decl;
   start_fname_decls ();
 
-  if (warn_keyword_macro)
+  ಯದಿ (warn_keyword_macro)
     {
-      for (unsigned int i = 0; i < num_c_common_reswords; ++i)
+      ಪ್ರತಿ (unsigned ಪೂರ್ಣಾಙ್ಕ i = 0; i < ಅಂಕೆ_c_common_reswords; ++i)
 	/* For C register keywords which don't start with underscore
 	   or start with just single underscore.  Don't complain about
 	   ObjC or Transactional Memory keywords.  */
-	if (c_common_reswords[i].word[0] == '_'
+	ಯದಿ (c_common_reswords[i].word[0] == '_'
 	    && c_common_reswords[i].word[1] == '_')
-	  continue;
-	else if (c_common_reswords[i].disable
+	  ಅನುವರ್ತ;
+	ಅನ್ಯಥಾ ಯದಿ (c_common_reswords[i].disable
 		 & (D_TRANSMEM | D_OBJC | D_CXX_OBJC))
-	  continue;
-	else
+	  ಅನುವರ್ತ;
+	ಅನ್ಯಥಾ
 	  {
-	    tree id = get_identifier (c_common_reswords[i].word);
-	    if (C_IS_RESERVED_WORD (id)
+	    ವೃಕ್ಷ id = get_identifier (c_common_reswords[i].word);
+	    ಯದಿ (C_IS_RESERVED_WORD (id)
 		&& C_RID_CODE (id) != RID_CXX_COMPAT_WARN)
 	      cpp_warn (parse_in, IDENTIFIER_POINTER (id),
 			IDENTIFIER_LENGTH (id));
@@ -5003,31 +5003,31 @@ c_init_decl_processing (void)
    it must therefore pull out the STRING_CST initializer directly.
    FIXME.  */
 
-static tree
-c_make_fname_decl (location_t loc, tree id, int type_dep)
+ಸ್ಥಿರ ವೃಕ್ಷ
+c_make_fname_decl (location_t loc, ವೃಕ್ಷ id, ಪೂರ್ಣಾಙ್ಕ type_dep)
 {
-  const char *name = fname_as_string (type_dep);
-  tree decl, type, init;
+  ಧ್ರುವ ವರ್ಣ *name = fname_as_string (type_dep);
+  ವೃಕ್ಷ decl, type, init;
   size_t length = strlen (name);
 
-  type = c_build_array_type (char_type_node,
+  type = c_build_array_type (char_type_ಗಂಟು,
 			     build_index_type (size_int (length)));
   type = c_build_qualified_type (type, TYPE_QUAL_CONST);
 
   decl = build_decl (loc, VAR_DECL, id, type);
 
-  TREE_STATIC (decl) = 1;
-  TREE_READONLY (decl) = 1;
+  ವೃಕ್ಷ_STATIC (decl) = 1;
+  ವೃಕ್ಷ_READONLY (decl) = 1;
   DECL_ARTIFICIAL (decl) = 1;
 
   init = build_string (length + 1, name);
-  free (const_cast<char *> (name));
-  TREE_TYPE (init) = type;
+  ಮುಕ್ತ (const_cast<ವರ್ಣ *> (name));
+  ವೃಕ್ಷ_TYPE (init) = type;
   DECL_INITIAL (decl) = init;
 
-  TREE_USED (decl) = 1;
+  ವೃಕ್ಷ_USED (decl) = 1;
 
-  if (current_function_decl
+  ಯದಿ (current_function_decl
       /* For invalid programs like this:
 
          void foo()
@@ -5040,88 +5040,88 @@ c_make_fname_decl (location_t loc, tree id, int type_dep)
     {
       DECL_CONTEXT (decl) = current_function_decl;
       bind (id, decl, current_function_scope,
-	    /*invisible=*/false, /*nested=*/false, UNKNOWN_LOCATION);
+	    /*invisible=*/ಅಸತ್ಯ, /*nested=*/ಅಸತ್ಯ, UNKNOWN_LOCATION);
     }
 
-  finish_decl (decl, loc, init, NULL_TREE, NULL_TREE);
+  finish_decl (decl, loc, init, NULL_ವೃಕ್ಷ, NULL_ವೃಕ್ಷ);
 
-  return decl;
+  ಪ್ರತ್ಯಾಗಮ decl;
 }
 
-tree
-c_builtin_function (tree decl)
+ವೃಕ್ಷ
+c_builtin_function (ವೃಕ್ಷ decl)
 {
-  tree type = TREE_TYPE (decl);
-  tree   id = DECL_NAME (decl);
+  ವೃಕ್ಷ type = ವೃಕ್ಷ_TYPE (decl);
+  ವೃಕ್ಷ   id = DECL_NAME (decl);
 
-  const char *name = IDENTIFIER_POINTER (id);
+  ಧ್ರುವ ವರ್ಣ *name = IDENTIFIER_POINTER (id);
   C_DECL_BUILTIN_PROTOTYPE (decl) = prototype_p (type);
 
   /* Should never be called on a symbol with a preexisting meaning.  */
-  gcc_assert (!I_SYMBOL_BINDING (id));
+  gcc_assert (!I_ಚಿಹ್ನೆ_BINDING (id));
 
-  bind (id, decl, external_scope, /*invisible=*/true, /*nested=*/false,
+  bind (id, decl, external_scope, /*invisible=*/ಸತ್ಯ, /*nested=*/ಅಸತ್ಯ,
 	UNKNOWN_LOCATION);
 
   /* Builtins in the implementation namespace are made visible without
      needing to be explicitly declared.  See push_file_scope.  */
-  if (name[0] == '_' && (name[1] == '_' || ISUPPER (name[1])))
+  ಯದಿ (name[0] == '_' && (name[1] == '_' || ISUPPER (name[1])))
     {
       DECL_CHAIN (decl) = visible_builtins;
       visible_builtins = decl;
     }
 
-  return decl;
+  ಪ್ರತ್ಯಾಗಮ decl;
 }
 
-tree
-c_builtin_function_ext_scope (tree decl)
+ವೃಕ್ಷ
+c_builtin_function_ext_scope (ವೃಕ್ಷ decl)
 {
-  tree type = TREE_TYPE (decl);
-  tree   id = DECL_NAME (decl);
+  ವೃಕ್ಷ type = ವೃಕ್ಷ_TYPE (decl);
+  ವೃಕ್ಷ   id = DECL_NAME (decl);
 
-  const char *name = IDENTIFIER_POINTER (id);
+  ಧ್ರುವ ವರ್ಣ *name = IDENTIFIER_POINTER (id);
   C_DECL_BUILTIN_PROTOTYPE (decl) = prototype_p (type);
 
-  if (external_scope)
-    bind (id, decl, external_scope, /*invisible=*/false, /*nested=*/false,
+  ಯದಿ (external_scope)
+    bind (id, decl, external_scope, /*invisible=*/ಅಸತ್ಯ, /*nested=*/ಅಸತ್ಯ,
 	  UNKNOWN_LOCATION);
 
   /* Builtins in the implementation namespace are made visible without
      needing to be explicitly declared.  See push_file_scope.  */
-  if (name[0] == '_' && (name[1] == '_' || ISUPPER (name[1])))
+  ಯದಿ (name[0] == '_' && (name[1] == '_' || ISUPPER (name[1])))
     {
       DECL_CHAIN (decl) = visible_builtins;
       visible_builtins = decl;
     }
 
-  return decl;
+  ಪ್ರತ್ಯಾಗಮ decl;
 }
 
 /* Implement LANG_HOOKS_SIMULATE_BUILTIN_FUNCTION_DECL.  */
 
-tree
-c_simulate_builtin_function_decl (tree decl)
+ವೃಕ್ಷ
+c_simulate_builtin_function_decl (ವೃಕ್ಷ decl)
 {
-  tree type = TREE_TYPE (decl);
+  ವೃಕ್ಷ type = ವೃಕ್ಷ_TYPE (decl);
   C_DECL_BUILTIN_PROTOTYPE (decl) = prototype_p (type);
-  return pushdecl (decl);
+  ಪ್ರತ್ಯಾಗಮ pushdecl (decl);
 }
 
 /* Warn about attributes in a context where they are unused
    (attribute-declarations, except for the "fallthrough" case, and
    attributes on statements).  */
 
-void
-c_warn_unused_attributes (tree attrs)
+ಶೂನ್ಯ
+c_warn_unused_attributes (ವೃಕ್ಷ attrs)
 {
-  for (tree t = attrs; t != NULL_TREE; t = TREE_CHAIN (t))
-    if (get_attribute_namespace (t) == NULL_TREE)
+  ಪ್ರತಿ (ವೃಕ್ಷ t = attrs; t != NULL_ವೃಕ್ಷ; t = ವೃಕ್ಷ_CHAIN (t))
+    ಯದಿ (get_attribute_namespace (t) == NULL_ವೃಕ್ಷ)
       /* The specifications of standard attributes mean this is a
 	 constraint violation.  */
-      pedwarn (input_location, OPT_Wattributes, "%qE attribute ignored",
+      pedwarn (ಒಳಹರಿವು_location, OPT_Wattributes, "%qE attribute ignored",
 	       get_attribute_name (t));
-    else if (!attribute_ignored_p (t))
+    ಅನ್ಯಥಾ ಯದಿ (!attribute_ignored_p (t))
       warning (OPT_Wattributes, "%qE attribute ignored",
 	       get_attribute_name (t));
 }
@@ -5130,32 +5130,32 @@ c_warn_unused_attributes (tree attrs)
    being defined, where that is a constraint violation, and return a
    list of attributes with them removed.  */
 
-tree
-c_warn_type_attributes (tree type, tree attrs)
+ವೃಕ್ಷ
+c_warn_type_attributes (ವೃಕ್ಷ type, ವೃಕ್ಷ attrs)
 {
-  tree *attr_ptr = &attrs;
-  while (*attr_ptr)
-    if (get_attribute_namespace (*attr_ptr) == NULL_TREE)
+  ವೃಕ್ಷ *attr_ptr = &attrs;
+  ಯಾವತ್ (*attr_ptr)
+    ಯದಿ (get_attribute_namespace (*attr_ptr) == NULL_ವೃಕ್ಷ)
       {
-	if (TREE_CODE (type) == FUNCTION_TYPE)
+	ಯದಿ (ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
 	  {
-	    tree name = get_attribute_name (*attr_ptr);
+	    ವೃಕ್ಷ name = get_attribute_name (*attr_ptr);
 	    /* [[unsequenced]] and [[reproducible]] is fine on function
 	       types that aren't being defined.  */
-	    if (is_attribute_p ("unsequenced", name)
+	    ಯದಿ (is_attribute_p ("unsequenced", name)
 		|| is_attribute_p ("reproducible", name))
 	      {
-		attr_ptr = &TREE_CHAIN (*attr_ptr);
-		continue;
+		attr_ptr = &ವೃಕ್ಷ_CHAIN (*attr_ptr);
+		ಅನುವರ್ತ;
 	      }
 	  }
-	pedwarn (input_location, OPT_Wattributes, "%qE attribute ignored",
+	pedwarn (ಒಳಹರಿವು_location, OPT_Wattributes, "%qE attribute ignored",
 		 get_attribute_name (*attr_ptr));
-	*attr_ptr = TREE_CHAIN (*attr_ptr);
+	*attr_ptr = ವೃಕ್ಷ_CHAIN (*attr_ptr);
       }
-    else
-      attr_ptr = &TREE_CHAIN (*attr_ptr);
-  return attrs;
+    ಅನ್ಯಥಾ
+      attr_ptr = &ವೃಕ್ಷ_CHAIN (*attr_ptr);
+  ಪ್ರತ್ಯಾಗಮ attrs;
 }
 
 /* Called when a declaration is seen that contains no names to declare.
@@ -5166,73 +5166,73 @@ c_warn_type_attributes (tree type, tree attrs)
    or defines an enum, it is valid but we need not do anything here.
    Otherwise, it is an error.  */
 
-void
-shadow_tag (const struct c_declspecs *declspecs)
+ಶೂನ್ಯ
+shadow_tag (ಧ್ರುವ ಸಂರಚನಾ c_declspecs *declspecs)
 {
   shadow_tag_warned (declspecs, 0);
 }
 
 /* WARNED is 1 if we have done a pedwarn, 2 if we have done a warning,
    but no pedwarn.  */
-void
-shadow_tag_warned (const struct c_declspecs *declspecs, int warned)
+ಶೂನ್ಯ
+shadow_tag_warned (ಧ್ರುವ ಸಂರಚನಾ c_declspecs *declspecs, ಪೂರ್ಣಾಙ್ಕ warned)
 {
-  bool found_tag = false;
+  ತಾರ್ಕಿಕ found_tag = ಅಸತ್ಯ;
 
-  if (declspecs->type && !declspecs->default_int_p && !declspecs->typedef_p)
+  ಯದಿ (declspecs->type && !declspecs->default_int_p && !declspecs->typedef_p)
     {
-      tree value = declspecs->type;
-      enum tree_code code = TREE_CODE (value);
+      ವೃಕ್ಷ ಮೌಲ್ಯ = declspecs->type;
+      ಗಣನಾ ವೃಕ್ಷ_code code = ವೃಕ್ಷ_CODE (ಮೌಲ್ಯ);
 
-      if (code == RECORD_TYPE || code == UNION_TYPE || code == ENUMERAL_TYPE)
+      ಯದಿ (code == RECORD_TYPE || code == UNION_TYPE || code == ENUMERAL_TYPE)
 	/* Used to test also that TYPE_SIZE (value) != 0.
 	   That caused warning for `struct foo;' at top level in the file.  */
 	{
-	  tree name = TYPE_NAME (value);
-	  tree t;
+	  ವೃಕ್ಷ name = TYPE_NAME (ಮೌಲ್ಯ);
+	  ವೃಕ್ಷ t;
 
-	  found_tag = true;
+	  found_tag = ಸತ್ಯ;
 
-	  if (declspecs->restrict_p)
+	  ಯದಿ (declspecs->restrict_p)
 	    {
 	      error ("invalid use of %<restrict%>");
 	      warned = 1;
 	    }
 
-	  if (in_underspecified_init)
+	  ಯದಿ (in_underspecified_init)
 	    {
 	      /* This can only occur with extensions such as statement
 		 expressions, but is still appropriate as an error to
 		 avoid types declared in such a context escaping to
 		 the type of an auto variable.  */
 	      error ("%qT declared in underspecified object initializer",
-		     value);
+		     ಮೌಲ್ಯ);
 	      warned = 1;
 	    }
 
-	  if (name == NULL_TREE)
+	  ಯದಿ (name == NULL_ವೃಕ್ಷ)
 	    {
-	      if (warned != 1 && code != ENUMERAL_TYPE)
+	      ಯದಿ (warned != 1 && code != ENUMERAL_TYPE)
 		/* Empty unnamed enum OK */
 		{
-		  pedwarn (input_location, 0,
+		  pedwarn (ಒಳಹರಿವು_location, 0,
 			   "unnamed struct/union that defines no instances");
 		  warned = 1;
 		}
 	    }
-	  else if (declspecs->typespec_kind != ctsk_tagdef
+	  ಅನ್ಯಥಾ ಯದಿ (declspecs->typespec_kind != ctsk_tagdef
                    && declspecs->typespec_kind != ctsk_tagfirstref
 		   && declspecs->typespec_kind != ctsk_tagfirstref_attrs
 		   && declspecs->storage_class != csc_none)
 	    {
-	      if (warned != 1)
-		pedwarn (input_location, 0,
+	      ಯದಿ (warned != 1)
+		pedwarn (ಒಳಹರಿವು_location, 0,
 			 "empty declaration with storage class specifier "
 			 "does not redeclare tag");
 	      warned = 1;
 	      pending_xref_error ();
 	    }
-	  else if (declspecs->typespec_kind != ctsk_tagdef
+	  ಅನ್ಯಥಾ ಯದಿ (declspecs->typespec_kind != ctsk_tagdef
                    && declspecs->typespec_kind != ctsk_tagfirstref
                    && declspecs->typespec_kind != ctsk_tagfirstref_attrs
 		   && (declspecs->const_p
@@ -5241,118 +5241,118 @@ shadow_tag_warned (const struct c_declspecs *declspecs, int warned)
 		       || declspecs->restrict_p
 		       || declspecs->address_space))
 	    {
-	      if (warned != 1)
-		pedwarn (input_location, 0,
+	      ಯದಿ (warned != 1)
+		pedwarn (ಒಳಹರಿವು_location, 0,
 			 "empty declaration with type qualifier "
 			  "does not redeclare tag");
 	      warned = 1;
 	      pending_xref_error ();
 	    }
-	  else if (declspecs->typespec_kind != ctsk_tagdef
+	  ಅನ್ಯಥಾ ಯದಿ (declspecs->typespec_kind != ctsk_tagdef
                    && declspecs->typespec_kind != ctsk_tagfirstref
                    && declspecs->typespec_kind != ctsk_tagfirstref_attrs
 		   && declspecs->alignas_p)
 	    {
-	      if (warned != 1)
-		pedwarn (input_location, 0,
+	      ಯದಿ (warned != 1)
+		pedwarn (ಒಳಹರಿವು_location, 0,
 			 "empty declaration with %<_Alignas%> "
 			  "does not redeclare tag");
 	      warned = 1;
 	      pending_xref_error ();
 	    }
-	  else if (declspecs->typespec_kind != ctsk_tagdef
+	  ಅನ್ಯಥಾ ಯದಿ (declspecs->typespec_kind != ctsk_tagdef
 		   && declspecs->typespec_kind != ctsk_tagfirstref
 		   && declspecs->typespec_kind != ctsk_tagfirstref_attrs
 		   && code == ENUMERAL_TYPE
 		   && !declspecs->enum_type_specifier_ref_p)
 	    {
-	      bool warned_enum = false;
-	      if (warned != 1)
-		warned_enum = pedwarn (input_location, OPT_Wpedantic,
+	      ತಾರ್ಕಿಕ warned_enum = ಅಸತ್ಯ;
+	      ಯದಿ (warned != 1)
+		warned_enum = pedwarn (ಒಳಹರಿವು_location, OPT_Wpedantic,
 				       "empty declaration of %<enum%> type "
 				       "does not redeclare tag");
-	      if (warned_enum)
+	      ಯದಿ (warned_enum)
 		warned = 1;
 	      pending_xref_error ();
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    {
-	      pending_invalid_xref = NULL_TREE;
-	      t = lookup_tag (code, name, true, NULL);
+	      pending_invalid_xref = NULL_ವೃಕ್ಷ;
+	      t = lookup_tag (code, name, ಸತ್ಯ, ರಿಕ್ತ);
 
-	      if (t == NULL_TREE)
+	      ಯದಿ (t == NULL_ವೃಕ್ಷ)
 		{
-		  t = make_node (code);
-		  if (flag_isoc23 || code == ENUMERAL_TYPE)
+		  t = make_ಗಂಟು (code);
+		  ಯದಿ (flag_isoc23 || code == ENUMERAL_TYPE)
 		    SET_TYPE_STRUCTURAL_EQUALITY (t);
-		  pushtag (input_location, name, t);
+		  pushtag (ಒಳಹರಿವು_location, name, t);
 		}
 	    }
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
-	  if (warned != 1 && !in_system_header_at (input_location))
+	  ಯದಿ (warned != 1 && !in_system_header_at (ಒಳಹರಿವು_location))
 	    {
-	      pedwarn (input_location, 0,
+	      pedwarn (ಒಳಹರಿವು_location, 0,
 		       "useless type name in empty declaration");
 	      warned = 1;
 	    }
 	}
     }
-  else if (warned != 1 && !in_system_header_at (input_location)
+  ಅನ್ಯಥಾ ಯದಿ (warned != 1 && !in_system_header_at (ಒಳಹರಿವು_location)
 	   && declspecs->typedef_p)
     {
-      pedwarn (input_location, 0, "useless type name in empty declaration");
+      pedwarn (ಒಳಹರಿವು_location, 0, "useless type name in empty declaration");
       warned = 1;
     }
 
-  pending_invalid_xref = NULL_TREE;
+  pending_invalid_xref = NULL_ವೃಕ್ಷ;
 
-  if (declspecs->inline_p)
+  ಯದಿ (declspecs->inline_p)
     {
       error ("%<inline%> in empty declaration");
       warned = 1;
     }
 
-  if (declspecs->noreturn_p)
+  ಯದಿ (declspecs->noreturn_p)
     {
       error ("%<_Noreturn%> in empty declaration");
       warned = 1;
     }
 
-  if (declspecs->constexpr_p)
+  ಯದಿ (declspecs->constexpr_p)
     {
       error ("%<constexpr%> in empty declaration");
       warned = 1;
     }
 
-  if (current_scope == file_scope && declspecs->storage_class == csc_auto)
+  ಯದಿ (current_scope == file_scope && declspecs->storage_class == csc_auto)
     {
       error ("%<auto%> in file-scope empty declaration");
       warned = 1;
     }
 
-  if (current_scope == file_scope && declspecs->storage_class == csc_register)
+  ಯದಿ (current_scope == file_scope && declspecs->storage_class == csc_register)
     {
       error ("%<register%> in file-scope empty declaration");
       warned = 1;
     }
 
-  if (declspecs->enum_type_specifier_ref_p && !warned)
+  ಯದಿ (declspecs->enum_type_specifier_ref_p && !warned)
     {
-      if (declspecs->storage_class != csc_none)
+      ಯದಿ (declspecs->storage_class != csc_none)
 	{
 	  error ("storage class specifier in empty declaration with %<enum%> "
 		 "underlying type");
 	  warned = 1;
 	}
-      else if (declspecs->thread_p)
+      ಅನ್ಯಥಾ ಯದಿ (declspecs->thread_p)
 	{
 	  error ("%qs in empty declaration with %<enum%> underlying type",
 		 declspecs->thread_gnu_p ? "__thread" : "_Thread_local");
 	  warned = 1;
 	}
-      else if (declspecs->const_p
+      ಅನ್ಯಥಾ ಯದಿ (declspecs->const_p
 	       || declspecs->volatile_p
 	       || declspecs->atomic_p
 	       || declspecs->restrict_p
@@ -5362,7 +5362,7 @@ shadow_tag_warned (const struct c_declspecs *declspecs, int warned)
 		 "underlying type");
 	  warned = 1;
 	}
-      else if (declspecs->alignas_p)
+      ಅನ್ಯಥಾ ಯದಿ (declspecs->alignas_p)
 	{
 	  error ("%<alignas%> in empty declaration with %<enum%> "
 		 "underlying type");
@@ -5370,22 +5370,22 @@ shadow_tag_warned (const struct c_declspecs *declspecs, int warned)
 	}
     }
 
-  if (!warned && !in_system_header_at (input_location)
+  ಯದಿ (!warned && !in_system_header_at (ಒಳಹರಿವು_location)
       && declspecs->storage_class != csc_none)
     {
       warning (0, "useless storage class specifier in empty declaration");
       warned = 2;
     }
 
-  if (!warned && !in_system_header_at (input_location) && declspecs->thread_p)
+  ಯದಿ (!warned && !in_system_header_at (ಒಳಹರಿವು_location) && declspecs->thread_p)
     {
       warning (0, "useless %qs in empty declaration",
 	       declspecs->thread_gnu_p ? "__thread" : "_Thread_local");
       warned = 2;
     }
 
-  if (!warned
-      && !in_system_header_at (input_location)
+  ಯದಿ (!warned
+      && !in_system_header_at (ಒಳಹರಿವು_location)
       && (declspecs->const_p
 	  || declspecs->volatile_p
 	  || declspecs->atomic_p
@@ -5396,14 +5396,14 @@ shadow_tag_warned (const struct c_declspecs *declspecs, int warned)
       warned = 2;
     }
 
-  if (!warned && !in_system_header_at (input_location)
+  ಯದಿ (!warned && !in_system_header_at (ಒಳಹರಿವು_location)
       && declspecs->alignas_p)
     {
       warning (0, "useless %<_Alignas%> in empty declaration");
       warned = 2;
     }
 
-  if (found_tag
+  ಯದಿ (found_tag
       && warned == 2
       && (declspecs->typespec_kind == ctsk_tagref_attrs
 	  || declspecs->typespec_kind == ctsk_tagfirstref_attrs))
@@ -5416,22 +5416,22 @@ shadow_tag_warned (const struct c_declspecs *declspecs, int warned)
 	 elements of the declaration result in a pedwarn, not just a
 	 warning.  Forward declarations of enum types are not part of
 	 standard C, but handle them the same.  */
-      pedwarn (input_location, 0,
+      pedwarn (ಒಳಹರಿವು_location, 0,
 	       "invalid use of attributes in empty declaration");
       warned = 1;
     }
 
-  if (warned != 1)
+  ಯದಿ (warned != 1)
     {
-      if (declspecs->declspecs_seen_p
+      ಯದಿ (declspecs->declspecs_seen_p
 	  && !declspecs->non_std_attrs_seen_p)
 	/* An attribute declaration (but not a fallthrough attribute
 	   declaration, which was handled separately); warn if there
 	   are any attributes being ignored (but not if the attributes
 	   were empty).  */
 	c_warn_unused_attributes (declspecs->attrs);
-      else if (!found_tag)
-	pedwarn (input_location, 0, "empty declaration");
+      ಅನ್ಯಥಾ ಯದಿ (!found_tag)
+	pedwarn (ಒಳಹರಿವು_location, 0, "empty declaration");
     }
 }
 
@@ -5440,10 +5440,10 @@ shadow_tag_warned (const struct c_declspecs *declspecs, int warned)
    bits.  SPECS represents declaration specifiers that the grammar
    only permits to contain type qualifiers and attributes.  */
 
-int
-quals_from_declspecs (const struct c_declspecs *specs)
+ಪೂರ್ಣಾಙ್ಕ
+quals_from_declspecs (ಧ್ರುವ ಸಂರಚನಾ c_declspecs *specs)
 {
-  int quals = ((specs->const_p ? TYPE_QUAL_CONST : 0)
+  ಪೂರ್ಣಾಙ್ಕ quals = ((specs->const_p ? TYPE_QUAL_CONST : 0)
 	       | (specs->volatile_p ? TYPE_QUAL_VOLATILE : 0)
 	       | (specs->restrict_p ? TYPE_QUAL_RESTRICT : 0)
 	       | (specs->atomic_p ? TYPE_QUAL_ATOMIC : 0)
@@ -5465,7 +5465,7 @@ quals_from_declspecs (const struct c_declspecs *specs)
 	      && !specs->inline_p
 	      && !specs->noreturn_p
 	      && !specs->thread_p);
-  return quals;
+  ಪ್ರತ್ಯಾಗಮ quals;
 }
 
 /* Construct an array declarator.  LOC is the location of the
@@ -5478,75 +5478,75 @@ quals_from_declspecs (const struct c_declspecs *specs)
    false otherwise.  The field for the contained declarator is left to
    be filled in by set_array_declarator_inner.  */
 
-struct c_declarator *
+ಸಂರಚನಾ c_declarator *
 build_array_declarator (location_t loc,
-			tree expr, struct c_declspecs *quals, bool static_p,
-			bool vla_unspec_p)
+			ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ, ಸಂರಚನಾ c_declspecs *quals, ತಾರ್ಕಿಕ static_p,
+			ತಾರ್ಕಿಕ vla_unspec_p)
 {
-  struct c_declarator *declarator = XOBNEW (&parser_obstack,
-					    struct c_declarator);
+  ಸಂರಚನಾ c_declarator *declarator = XOBNEW (&parser_obstack,
+					    ಸಂರಚನಾ c_declarator);
   declarator->id_loc = loc;
   declarator->kind = cdk_array;
   declarator->declarator = 0;
-  declarator->u.array.dimen = expr;
-  if (quals)
+  declarator->u.array.dimen = ಅಭಿವ್ಯಕ್ತಿ;
+  ಯದಿ (quals)
     {
       declarator->u.array.attrs = quals->attrs;
       declarator->u.array.quals = quals_from_declspecs (quals);
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      declarator->u.array.attrs = NULL_TREE;
+      declarator->u.array.attrs = NULL_ವೃಕ್ಷ;
       declarator->u.array.quals = 0;
     }
   declarator->u.array.static_p = static_p;
   declarator->u.array.vla_unspec_p = vla_unspec_p;
-  if (static_p || quals != NULL)
+  ಯದಿ (static_p || quals != ರಿಕ್ತ)
     pedwarn_c90 (loc, OPT_Wpedantic,
 		 "ISO C90 does not support %<static%> or type "
 		 "qualifiers in parameter array declarators");
-  if (vla_unspec_p)
+  ಯದಿ (vla_unspec_p)
     {
       pedwarn_c90 (loc, OPT_Wpedantic,
 		   "ISO C90 does not support %<[*]%> array declarators");
-      if (current_scope->parm_flag)
-	current_scope->had_vla_unspec = true;
+      ಯದಿ (current_scope->parm_flag)
+	current_scope->had_vla_unspec = ಸತ್ಯ;
     }
-  return declarator;
+  ಪ್ರತ್ಯಾಗಮ declarator;
 }
 
 /* Set the contained declarator of an array declarator.  DECL is the
    declarator, as constructed by build_array_declarator; INNER is what
    appears on the left of the [].  */
 
-struct c_declarator *
-set_array_declarator_inner (struct c_declarator *decl,
-			    struct c_declarator *inner)
+ಸಂರಚನಾ c_declarator *
+set_array_declarator_inner (ಸಂರಚನಾ c_declarator *decl,
+			    ಸಂರಚನಾ c_declarator *inner)
 {
   decl->declarator = inner;
-  return decl;
+  ಪ್ರತ್ಯಾಗಮ decl;
 }
 
 /* Determine whether TYPE is a one-element array type "[1]".  */
-static bool
-one_element_array_type_p (const_tree type)
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+one_element_array_type_p (const_ವೃಕ್ಷ type)
 {
-  if (TREE_CODE (type) != ARRAY_TYPE)
-    return false;
-  return integer_zerop (array_type_nelts_minus_one (type));
+  ಯದಿ (ವೃಕ್ಷ_CODE (type) != ARRAY_TYPE)
+    ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
+  ಪ್ರತ್ಯಾಗಮ integer_zerop (array_type_nelts_minus_one (type));
 }
 
 /* Determine whether TYPE is a zero-length array type "[0]".  */
-bool
-zero_length_array_type_p (const_tree type)
+ತಾರ್ಕಿಕ
+zero_length_array_type_p (const_ವೃಕ್ಷ type)
 {
-  if (TREE_CODE (type) == ARRAY_TYPE
+  ಯದಿ (ವೃಕ್ಷ_CODE (type) == ARRAY_TYPE
       && COMPLETE_TYPE_P (type)
-      && TYPE_DOMAIN (type) != NULL_TREE
-      && (TYPE_MAX_VALUE (TYPE_DOMAIN (type)) == NULL_TREE
-	  || integer_all_onesp (TYPE_MAX_VALUE (TYPE_DOMAIN (type)))))
-    return true;
-  return false;
+      && TYPE_DOMAIN (type) != NULL_ವೃಕ್ಷ
+      && (TYPE_MAX_ಮೌಲ್ಯ (TYPE_DOMAIN (type)) == NULL_ವೃಕ್ಷ
+	  || integer_all_onesp (TYPE_MAX_ಮೌಲ್ಯ (TYPE_DOMAIN (type)))))
+    ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
+  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 }
 
 /* INIT is a constructor that forms DECL's initializer.  If the final
@@ -5554,37 +5554,37 @@ zero_length_array_type_p (const_tree type)
    DECL with the initializer based on whether the DECL is a union or
    a structure.  */
 
-static void
-add_flexible_array_elts_to_size (tree decl, tree init)
+ಸ್ಥಿರ ಶೂನ್ಯ
+add_flexible_array_elts_to_size (ವೃಕ್ಷ decl, ವೃಕ್ಷ init)
 {
-  tree elt, type;
+  ವೃಕ್ಷ elt, type;
 
-  if (vec_safe_is_empty (CONSTRUCTOR_ELTS (init)))
-    return;
+  ಯದಿ (vec_safe_is_empty (CONSTRUCTOR_ELTS (init)))
+    ಪ್ರತ್ಯಾಗಮ;
 
-  elt = CONSTRUCTOR_ELTS (init)->last ().value;
-  type = TREE_TYPE (elt);
-  if (flexible_array_member_type_p (type))
+  elt = CONSTRUCTOR_ELTS (init)->last ().ಮೌಲ್ಯ;
+  type = ವೃಕ್ಷ_TYPE (elt);
+  ಯದಿ (flexible_array_member_type_p (type))
     {
-      complete_array_type (&type, elt, false);
+      complete_array_type (&type, elt, ಅಸತ್ಯ);
       /* For a structure, add the size of the initializer to the DECL's
 	 size.  */
-      if (TREE_CODE (TREE_TYPE (decl)) == RECORD_TYPE)
+      ಯದಿ (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (decl)) == RECORD_TYPE)
 	{
 	  DECL_SIZE (decl)
-	    = size_binop (PLUS_EXPR, DECL_SIZE (decl), TYPE_SIZE (type));
+	    = size_binop (PLUS_ಅಭಿವ್ಯಕ್ತಿ, DECL_SIZE (decl), TYPE_SIZE (type));
 	  DECL_SIZE_UNIT (decl)
-	    = size_binop (PLUS_EXPR, DECL_SIZE_UNIT (decl),
+	    = size_binop (PLUS_ಅಭಿವ್ಯಕ್ತಿ, DECL_SIZE_UNIT (decl),
 			  TYPE_SIZE_UNIT (type));
 	}
       /* For a union, the DECL's size is the maximum of the current size
 	 and the size of the initializer.  */
-      else
+      ಅನ್ಯಥಾ
 	{
 	  DECL_SIZE (decl)
-	    = size_binop (MAX_EXPR, DECL_SIZE (decl), TYPE_SIZE (type));
+	    = size_binop (MAX_ಅಭಿವ್ಯಕ್ತಿ, DECL_SIZE (decl), TYPE_SIZE (type));
 	  DECL_SIZE_UNIT (decl)
-	    = size_binop (MAX_EXPR, DECL_SIZE_UNIT (decl),
+	    = size_binop (MAX_ಅಭಿವ್ಯಕ್ತಿ, DECL_SIZE_UNIT (decl),
 			  TYPE_SIZE_UNIT (type));
 	}
     }
@@ -5596,143 +5596,143 @@ add_flexible_array_elts_to_size (tree decl, tree init)
    EXPR_CONST_OPERANDS not NULL, to indicate whether the type name may
    appear in a constant expression.  */
 
-tree
-groktypename (struct c_type_name *type_name, tree *expr,
-	      bool *expr_const_operands)
+ವೃಕ್ಷ
+groktypename (ಸಂರಚನಾ c_type_name *type_name, ವೃಕ್ಷ *ಅಭಿವ್ಯಕ್ತಿ,
+	      ತಾರ್ಕಿಕ *ಅಭಿವ್ಯಕ್ತಿ_const_operands)
 {
-  tree type;
-  tree attrs = type_name->specs->attrs;
+  ವೃಕ್ಷ type;
+  ವೃಕ್ಷ attrs = type_name->specs->attrs;
 
-  type_name->specs->attrs = NULL_TREE;
+  type_name->specs->attrs = NULL_ವೃಕ್ಷ;
 
   type = grokdeclarator (type_name->declarator, type_name->specs, TYPENAME,
-			 false, NULL, &attrs, expr, expr_const_operands,
+			 ಅಸತ್ಯ, ರಿಕ್ತ, &attrs, ಅಭಿವ್ಯಕ್ತಿ, ಅಭಿವ್ಯಕ್ತಿ_const_operands,
 			 DEPRECATED_NORMAL);
 
   /* Apply attributes.  */
   attrs = c_warn_type_attributes (type, attrs);
   decl_attributes (&type, attrs, 0);
 
-  return type;
+  ಪ್ರತ್ಯಾಗಮ type;
 }
 
 
 /* Decode a "typename", such as "int **", returning a ..._TYPE node,
    as for groktypename but setting the context to GENERIC_ASSOC.  */
 
-tree
-grokgenassoc (struct c_type_name *type_name)
+ವೃಕ್ಷ
+grokgenassoc (ಸಂರಚನಾ c_type_name *type_name)
 {
-  tree type;
-  tree attrs = type_name->specs->attrs;
+  ವೃಕ್ಷ type;
+  ವೃಕ್ಷ attrs = type_name->specs->attrs;
 
-  type_name->specs->attrs = NULL_TREE;
+  type_name->specs->attrs = NULL_ವೃಕ್ಷ;
 
   type = grokdeclarator (type_name->declarator, type_name->specs, GENERIC_ASSOC,
-			 false, NULL, &attrs, NULL, NULL, DEPRECATED_NORMAL);
+			 ಅಸತ್ಯ, ರಿಕ್ತ, &attrs, ರಿಕ್ತ, ರಿಕ್ತ, DEPRECATED_NORMAL);
 
   /* Apply attributes.  */
   attrs = c_warn_type_attributes (type, attrs);
   decl_attributes (&type, attrs, 0);
 
-  return type;
+  ಪ್ರತ್ಯಾಗಮ type;
 }
 
 
 /* Looks up the most recent pushed declaration corresponding to DECL.  */
 
-static tree
-lookup_last_decl (tree decl)
+ಸ್ಥಿರ ವೃಕ್ಷ
+lookup_last_decl (ವೃಕ್ಷ decl)
 {
-  tree last_decl = lookup_name (DECL_NAME (decl));
-  if (!last_decl)
+  ವೃಕ್ಷ last_decl = lookup_name (DECL_NAME (decl));
+  ಯದಿ (!last_decl)
     last_decl = lookup_name_in_scope (DECL_NAME (decl), external_scope);
-  return last_decl;
+  ಪ್ರತ್ಯಾಗಮ last_decl;
 }
 
 /* Wrapper for decl_attributes that adds some implicit attributes
    to VAR_DECLs or FUNCTION_DECLs.  */
 
-static tree
-c_decl_attributes (tree *node, tree attributes, int flags)
+ಸ್ಥಿರ ವೃಕ್ಷ
+c_decl_attributes (ವೃಕ್ಷ *ಗಂಟು, ವೃಕ್ಷ attributes, ಪೂರ್ಣಾಙ್ಕ flags)
 {
   /* Add implicit "omp declare target" attribute if requested.  */
-  if (vec_safe_length (current_omp_declare_target_attribute)
-      && ((VAR_P (*node) && is_global_var (*node))
-	  || TREE_CODE (*node) == FUNCTION_DECL))
+  ಯದಿ (vec_safe_length (current_omp_declare_target_attribute)
+      && ((VAR_P (*ಗಂಟು) && is_global_var (*ಗಂಟು))
+	  || ವೃಕ್ಷ_CODE (*ಗಂಟು) == FUNCTION_DECL))
     {
-      if (VAR_P (*node) && !omp_mappable_type (TREE_TYPE (*node)))
-	attributes = tree_cons (get_identifier ("omp declare target implicit"),
-				NULL_TREE, attributes);
-      else
-	attributes = tree_cons (get_identifier ("omp declare target"),
-				NULL_TREE, attributes);
-      if (TREE_CODE (*node) == FUNCTION_DECL)
+      ಯದಿ (VAR_P (*ಗಂಟು) && !omp_mappable_type (ವೃಕ್ಷ_TYPE (*ಗಂಟು)))
+	attributes = ವೃಕ್ಷ_cons (get_identifier ("omp declare target implicit"),
+				NULL_ವೃಕ್ಷ, attributes);
+      ಅನ್ಯಥಾ
+	attributes = ವೃಕ್ಷ_cons (get_identifier ("omp declare target"),
+				NULL_ವೃಕ್ಷ, attributes);
+      ಯದಿ (ವೃಕ್ಷ_CODE (*ಗಂಟು) == FUNCTION_DECL)
 	{
-	  int device_type
+	  ಪೂರ್ಣಾಙ್ಕ device_type
 	    = current_omp_declare_target_attribute->last ().device_type;
 	  device_type = MAX (device_type, 0);
-	  if ((device_type & OMP_CLAUSE_DEVICE_TYPE_HOST) != 0
+	  ಯದಿ ((device_type & OMP_CLAUSE_DEVICE_TYPE_HOST) != 0
 	      && !lookup_attribute ("omp declare target host", attributes))
 	    attributes
-	      = tree_cons (get_identifier ("omp declare target host"),
-			   NULL_TREE, attributes);
-	  if ((device_type & OMP_CLAUSE_DEVICE_TYPE_NOHOST) != 0
+	      = ವೃಕ್ಷ_cons (get_identifier ("omp declare target host"),
+			   NULL_ವೃಕ್ಷ, attributes);
+	  ಯದಿ ((device_type & OMP_CLAUSE_DEVICE_TYPE_NOHOST) != 0
 	      && !lookup_attribute ("omp declare target nohost", attributes))
 	    attributes
-	      = tree_cons (get_identifier ("omp declare target nohost"),
-			   NULL_TREE, attributes);
+	      = ವೃಕ್ಷ_cons (get_identifier ("omp declare target nohost"),
+			   NULL_ವೃಕ್ಷ, attributes);
 
-	  int indirect
+	  ಪೂರ್ಣಾಙ್ಕ indirect
 	    = current_omp_declare_target_attribute->last ().indirect;
-	  if (indirect && !lookup_attribute ("omp declare target indirect",
+	  ಯದಿ (indirect && !lookup_attribute ("omp declare target indirect",
 					     attributes))
 	    attributes
-	      = tree_cons (get_identifier ("omp declare target indirect"),
-			   NULL_TREE, attributes);
+	      = ವೃಕ್ಷ_cons (get_identifier ("omp declare target indirect"),
+			   NULL_ವೃಕ್ಷ, attributes);
 	}
     }
 
-  if (flag_openmp || flag_openmp_simd)
+  ಯದಿ (flag_openmp || flag_openmp_simd)
     {
-      bool diagnosed = false;
-      for (tree *pa = &attributes; *pa; )
+      ತಾರ್ಕಿಕ diagnosed = ಅಸತ್ಯ;
+      ಪ್ರತಿ (ವೃಕ್ಷ *pa = &attributes; *pa; )
 	{
-	  if (is_attribute_namespace_p ("omp", *pa))
+	  ಯದಿ (is_attribute_namespace_p ("omp", *pa))
 	    {
-	      tree name = get_attribute_name (*pa);
-	      if (is_attribute_p ("directive", name)
+	      ವೃಕ್ಷ name = get_attribute_name (*pa);
+	      ಯದಿ (is_attribute_p ("directive", name)
 		  || is_attribute_p ("sequence", name)
 		  || is_attribute_p ("decl", name))
 		{
-		  const char *p = NULL;
-		  if (TREE_VALUE (*pa) == NULL_TREE)
+		  ಧ್ರುವ ವರ್ಣ *p = ರಿಕ್ತ;
+		  ಯದಿ (ವೃಕ್ಷ_ಮೌಲ್ಯ (*pa) == NULL_ವೃಕ್ಷ)
 		    p = IDENTIFIER_POINTER (name);
-		  for (tree a = TREE_VALUE (*pa); a; a = TREE_CHAIN (a))
+		  ಪ್ರತಿ (ವೃಕ್ಷ a = ವೃಕ್ಷ_ಮೌಲ್ಯ (*pa); a; a = ವೃಕ್ಷ_CHAIN (a))
 		    {
-		      tree d = TREE_VALUE (a);
-		      gcc_assert (TREE_CODE (d) == C_TOKEN_VEC);
-		      if (TREE_PUBLIC (d)
-			  && (VAR_P (*node)
-			      || TREE_CODE (*node) == FUNCTION_DECL)
-			  && c_maybe_parse_omp_decl (*node, d))
-			continue;
-		      p = TREE_PUBLIC (d) ? "decl" : "directive";
+		      ವೃಕ್ಷ d = ವೃಕ್ಷ_ಮೌಲ್ಯ (a);
+		      gcc_assert (ವೃಕ್ಷ_CODE (d) == C_TOKEN_VEC);
+		      ಯದಿ (ವೃಕ್ಷ_PUBLIC (d)
+			  && (VAR_P (*ಗಂಟು)
+			      || ವೃಕ್ಷ_CODE (*ಗಂಟು) == FUNCTION_DECL)
+			  && c_maybe_parse_omp_decl (*ಗಂಟು, d))
+			ಅನುವರ್ತ;
+		      p = ವೃಕ್ಷ_PUBLIC (d) ? "decl" : "directive";
 		    }
-		  if (p && !diagnosed)
+		  ಯದಿ (p && !diagnosed)
 		    {
 		      error ("%<omp::%s%> not allowed to be specified in "
 			     "this context", p);
-		      diagnosed = true;
+		      diagnosed = ಸತ್ಯ;
 		    }
-		  if (p)
+		  ಯದಿ (p)
 		    {
-		      *pa = TREE_CHAIN (*pa);
-		      continue;
+		      *pa = ವೃಕ್ಷ_CHAIN (*pa);
+		      ಅನುವರ್ತ;
 		    }
 		}
 	    }
-	  pa = &TREE_CHAIN (*pa);
+	  pa = &ವೃಕ್ಷ_CHAIN (*pa);
 	}
     }
 
@@ -5741,19 +5741,19 @@ c_decl_attributes (tree *node, tree attributes, int flags)
      about to be pushed that conflict with the former can be detected,
      diagnosed, and rejected as appropriate.  To match the C++ FE, do
      not pass an error_mark_node when we found an undeclared variable.  */
-  tree last_decl = lookup_last_decl (*node);
-  if (last_decl == error_mark_node)
-    last_decl = NULL_TREE;
-  tree attr = decl_attributes (node, attributes, flags, last_decl);
-  if (VAR_P (*node) && DECL_THREAD_LOCAL_P (*node))
+  ವೃಕ್ಷ last_decl = lookup_last_decl (*ಗಂಟು);
+  ಯದಿ (last_decl == error_mark_ಗಂಟು)
+    last_decl = NULL_ವೃಕ್ಷ;
+  ವೃಕ್ಷ attr = decl_attributes (ಗಂಟು, attributes, flags, last_decl);
+  ಯದಿ (VAR_P (*ಗಂಟು) && DECL_THREAD_LOCAL_P (*ಗಂಟು))
     {
       // tls_model attribute can set a stronger TLS access model.
-      tls_model model = DECL_TLS_MODEL (*node);
-      tls_model default_model = decl_default_tls_model (*node);
-      if (default_model > model)
-	set_decl_tls_model (*node, default_model);
+      tls_model model = DECL_TLS_MODEL (*ಗಂಟು);
+      tls_model default_model = decl_default_tls_model (*ಗಂಟು);
+      ಯದಿ (default_model > model)
+	set_decl_tls_model (*ಗಂಟು, default_model);
     }
-  return attr;
+  ಪ್ರತ್ಯಾಗಮ attr;
 }
 
 
@@ -5774,111 +5774,111 @@ c_decl_attributes (tree *node, tree attributes, int flags)
    do go through here.  Structure field declarations are done by
    grokfield and not through here.  */
 
-tree
-start_decl (struct c_declarator *declarator, struct c_declspecs *declspecs,
-	    bool initialized, tree attributes, bool do_push /* = true */,
+ವೃಕ್ಷ
+start_decl (ಸಂರಚನಾ c_declarator *declarator, ಸಂರಚನಾ c_declspecs *declspecs,
+	    ತಾರ್ಕಿಕ initialized, ವೃಕ್ಷ attributes, ತಾರ್ಕಿಕ do_ತಳ್ಳು /* = true */,
 	    location_t *lastloc /* = NULL */)
 {
-  tree decl;
-  tree old_decl;
-  tree tem;
-  tree expr = NULL_TREE;
-  enum deprecated_states deprecated_state = DEPRECATED_NORMAL;
+  ವೃಕ್ಷ decl;
+  ವೃಕ್ಷ old_decl;
+  ವೃಕ್ಷ tem;
+  ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ = NULL_ವೃಕ್ಷ;
+  ಗಣನಾ deprecated_states deprecated_state = DEPRECATED_NORMAL;
 
   /* An object declared as __attribute__((unavailable)) suppresses
      warnings and errors from __attribute__((deprecated/unavailable))
      components.
      An object declared as __attribute__((deprecated)) suppresses
      warnings of uses of other deprecated items.  */
-  if (lookup_attribute ("unavailable", attributes))
+  ಯದಿ (lookup_attribute ("unavailable", attributes))
     deprecated_state = UNAVAILABLE_DEPRECATED_SUPPRESS;
-  else if (lookup_attribute ("deprecated", attributes))
+  ಅನ್ಯಥಾ ಯದಿ (lookup_attribute ("deprecated", attributes))
     deprecated_state = DEPRECATED_SUPPRESS;
 
   decl = grokdeclarator (declarator, declspecs,
-			 NORMAL, initialized, NULL, &attributes, &expr, NULL,
+			 NORMAL, initialized, ರಿಕ್ತ, &attributes, &ಅಭಿವ್ಯಕ್ತಿ, ರಿಕ್ತ,
 			 deprecated_state);
-  if (!decl || decl == error_mark_node)
-    return NULL_TREE;
+  ಯದಿ (!decl || decl == error_mark_ಗಂಟು)
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
   old_decl = lookup_last_decl (decl);
 
-  if (tree lastdecl = lastloc ? old_decl : NULL_TREE)
-    if (lastdecl != error_mark_node)
+  ಯದಿ (ವೃಕ್ಷ lastdecl = lastloc ? old_decl : NULL_ವೃಕ್ಷ)
+    ಯದಿ (lastdecl != error_mark_ಗಂಟು)
       *lastloc = DECL_SOURCE_LOCATION (lastdecl);
 
   /* Make sure the size expression is evaluated at this point.  */
-  if (expr && !current_scope->parm_flag)
-    add_stmt (fold_convert (void_type_node, expr));
+  ಯದಿ (ಅಭಿವ್ಯಕ್ತಿ && !current_scope->parm_flag)
+    add_stmt (fold_convert (void_type_ಗಂಟು, ಅಭಿವ್ಯಕ್ತಿ));
 
-  if (TREE_CODE (decl) != FUNCTION_DECL && MAIN_NAME_P (DECL_NAME (decl))
-      && TREE_PUBLIC (decl))
+  ಯದಿ (ವೃಕ್ಷ_CODE (decl) != FUNCTION_DECL && MAIN_NAME_P (DECL_NAME (decl))
+      && ವೃಕ್ಷ_PUBLIC (decl))
     warning (OPT_Wmain, "%q+D is usually a function", decl);
 
-  if (warn_missing_variable_declarations && VAR_P (decl)
-      && !DECL_EXTERNAL (decl) && TREE_PUBLIC (decl) && old_decl == NULL_TREE)
+  ಯದಿ (warn_missing_variable_declarations && VAR_P (decl)
+      && !DECL_EXTERNAL (decl) && ವೃಕ್ಷ_PUBLIC (decl) && old_decl == NULL_ವೃಕ್ಷ)
     warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wmissing_variable_declarations,
 		"no previous declaration for %qD", decl);
 
-  if (initialized)
+  ಯದಿ (initialized)
     /* Is it valid for this decl to have an initializer at all?
        If not, set INITIALIZED to zero, which will indirectly
        tell 'finish_decl' to ignore the initializer once it is parsed.  */
-    switch (TREE_CODE (decl))
+    ವಿಕಲ್ಪ (ವೃಕ್ಷ_CODE (decl))
       {
-      case TYPE_DECL:
+      ಪಕ್ಷ TYPE_DECL:
 	error ("typedef %qD is initialized (use %<__typeof__%> instead)", decl);
-	initialized = false;
-	break;
+	initialized = ಅಸತ್ಯ;
+	ಭಙ್ಗ;
 
-      case FUNCTION_DECL:
+      ಪಕ್ಷ FUNCTION_DECL:
 	error ("function %qD is initialized like a variable", decl);
-	initialized = false;
-	break;
+	initialized = ಅಸತ್ಯ;
+	ಭಙ್ಗ;
 
-      case PARM_DECL:
+      ಪಕ್ಷ PARM_DECL:
 	/* DECL_INITIAL in a PARM_DECL is really DECL_ARG_TYPE.  */
 	error ("parameter %qD is initialized", decl);
-	initialized = false;
-	break;
+	initialized = ಅಸತ್ಯ;
+	ಭಙ್ಗ;
 
-      default:
+      ಸ್ವಭಾವ:
 	/* Don't allow initializations for incomplete types except for
 	   arrays which might be completed by the initialization.  */
 
 	/* This can happen if the array size is an undefined macro.
 	   We already gave a warning, so we don't need another one.  */
-	if (TREE_TYPE (decl) == error_mark_node)
-	  initialized = false;
-	else if (COMPLETE_TYPE_P (TREE_TYPE (decl)))
+	ಯದಿ (ವೃಕ್ಷ_TYPE (decl) == error_mark_ಗಂಟು)
+	  initialized = ಅಸತ್ಯ;
+	ಅನ್ಯಥಾ ಯದಿ (COMPLETE_TYPE_P (ವೃಕ್ಷ_TYPE (decl)))
 	  {
 	    /* A complete type is ok if size is fixed.  If the size is
 	       variable, an empty initializer is OK and nonempty
 	       initializers will be diagnosed in the parser.  */
 	  }
-	else if (TREE_CODE (TREE_TYPE (decl)) != ARRAY_TYPE)
+	ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (decl)) != ARRAY_TYPE)
 	  {
 	    error ("variable %qD has initializer but incomplete type", decl);
-	    initialized = false;
+	    initialized = ಅಸತ್ಯ;
 	  }
       }
 
-  if (initialized)
+  ಯದಿ (initialized)
     {
-      if (current_scope == file_scope)
-	TREE_STATIC (decl) = 1;
+      ಯದಿ (current_scope == file_scope)
+	ವೃಕ್ಷ_STATIC (decl) = 1;
 
       /* Tell 'pushdecl' this is an initialized decl
 	 even though we don't yet have the initializer expression.
 	 Also tell 'finish_decl' it may store the real initializer.  */
-      DECL_INITIAL (decl) = error_mark_node;
+      DECL_INITIAL (decl) = error_mark_ಗಂಟು;
     }
 
   /* If this is a function declaration, write a record describing it to the
      prototypes file (if requested).  */
 
-  if (TREE_CODE (decl) == FUNCTION_DECL)
-    gen_aux_info_record (decl, 0, 0, prototype_p (TREE_TYPE (decl)));
+  ಯದಿ (ವೃಕ್ಷ_CODE (decl) == FUNCTION_DECL)
+    gen_aux_info_record (decl, 0, 0, prototype_p (ವೃಕ್ಷ_TYPE (decl)));
 
   /* ANSI specifies that a tentative definition which is not merged with
      a non-tentative definition behaves exactly like a definition with an
@@ -5891,9 +5891,9 @@ start_decl (struct c_declarator *declarator, struct c_declspecs *declspecs,
      body of code to break, and it allows more efficient variable references
      in the presence of dynamic linking.  */
 
-  if (VAR_P (decl)
+  ಯದಿ (VAR_P (decl)
       && !initialized
-      && TREE_PUBLIC (decl)
+      && ವೃಕ್ಷ_PUBLIC (decl)
       && !DECL_THREAD_LOCAL_P (decl)
       && !flag_no_common)
     DECL_COMMON (decl) = 1;
@@ -5902,19 +5902,19 @@ start_decl (struct c_declarator *declarator, struct c_declspecs *declspecs,
   c_decl_attributes (&decl, attributes, 0);
 
   /* Handle gnu_inline attribute.  */
-  if (declspecs->inline_p
+  ಯದಿ (declspecs->inline_p
       && !flag_gnu89_inline
-      && TREE_CODE (decl) == FUNCTION_DECL
+      && ವೃಕ್ಷ_CODE (decl) == FUNCTION_DECL
       && (lookup_attribute ("gnu_inline", DECL_ATTRIBUTES (decl))
 	  || current_function_decl))
     {
-      if (declspecs->storage_class == csc_auto && current_scope != file_scope)
+      ಯದಿ (declspecs->storage_class == csc_auto && current_scope != file_scope)
 	;
-      else if (declspecs->storage_class != csc_static)
+      ಅನ್ಯಥಾ ಯದಿ (declspecs->storage_class != csc_static)
 	DECL_EXTERNAL (decl) = !DECL_EXTERNAL (decl);
     }
 
-  if (TREE_CODE (decl) == FUNCTION_DECL
+  ಯದಿ (ವೃಕ್ಷ_CODE (decl) == FUNCTION_DECL
       && DECL_DECLARED_INLINE_P (decl)
       && DECL_UNINLINABLE (decl)
       && lookup_attribute ("noinline", DECL_ATTRIBUTES (decl)))
@@ -5927,73 +5927,73 @@ start_decl (struct c_declarator *declarator, struct c_declspecs *declspecs,
   /* C99 6.7.4p3: An inline definition of a function with external
      linkage shall not contain a definition of a modifiable object
      with static storage duration...  */
-  if (VAR_P (decl)
+  ಯದಿ (VAR_P (decl)
       && current_scope != file_scope
-      && TREE_STATIC (decl)
-      && !TREE_READONLY (decl)
+      && ವೃಕ್ಷ_STATIC (decl)
+      && !ವೃಕ್ಷ_READONLY (decl)
       && DECL_DECLARED_INLINE_P (current_function_decl)
       && DECL_EXTERNAL (current_function_decl))
-    record_inline_static (input_location, current_function_decl,
+    record_inline_static (ಒಳಹರಿವು_location, current_function_decl,
 			  decl, csi_modifiable);
 
-  if (c_dialect_objc ()
+  ಯದಿ (c_dialect_objc ()
       && VAR_OR_FUNCTION_DECL_P (decl))
       objc_check_global_decl (decl);
 
   /* To enable versions to be created across TU's we mark and mangle all
      non-default versioned functions.  */
-  if (TREE_CODE (decl) == FUNCTION_DECL
+  ಯದಿ (ವೃಕ್ಷ_CODE (decl) == FUNCTION_DECL
       && !TARGET_HAS_FMV_TARGET_ATTRIBUTE
       && get_target_version (decl).is_valid ())
     {
       maybe_mark_function_versioned (decl);
-      if (current_scope != file_scope)
+      ಯದಿ (current_scope != file_scope)
 	error ("versioned declarations are only allowed at file scope");
     }
 
   /* Add this decl to the current scope.
      TEM may equal DECL or it may be a previous decl of the same name.  */
-  if (do_push)
+  ಯದಿ (do_ತಳ್ಳು)
     {
       tem = pushdecl (decl);
 
-      if (initialized && DECL_EXTERNAL (tem))
+      ಯದಿ (initialized && DECL_EXTERNAL (tem))
 	{
 	  DECL_EXTERNAL (tem) = 0;
-	  TREE_STATIC (tem) = 1;
+	  ವೃಕ್ಷ_STATIC (tem) = 1;
 	}
 
-      return tem;
+      ಪ್ರತ್ಯಾಗಮ tem;
     }
-  else
-    return decl;
+  ಅನ್ಯಥಾ
+    ಪ್ರತ್ಯಾಗಮ decl;
 }
 
 /* Subroutine of finish_decl. TYPE is the type of an uninitialized object
    DECL or the non-array element type if DECL is an uninitialized array.
    If that type has a const member, diagnose this. */
 
-static void
-diagnose_uninitialized_cst_member (tree decl, tree type)
+ಸ್ಥಿರ ಶೂನ್ಯ
+diagnose_uninitialized_cst_member (ವೃಕ್ಷ decl, ವೃಕ್ಷ type)
 {
-  tree field;
-  for (field = TYPE_FIELDS (type); field; field = TREE_CHAIN (field))
+  ವೃಕ್ಷ field;
+  ಪ್ರತಿ (field = TYPE_FIELDS (type); field; field = ವೃಕ್ಷ_CHAIN (field))
     {
-      tree field_type;
-      if (TREE_CODE (field) != FIELD_DECL)
-	continue;
-      field_type = strip_array_types (TREE_TYPE (field));
+      ವೃಕ್ಷ field_type;
+      ಯದಿ (ವೃಕ್ಷ_CODE (field) != FIELD_DECL)
+	ಅನುವರ್ತ;
+      field_type = strip_array_types (ವೃಕ್ಷ_TYPE (field));
 
-      if (TYPE_QUALS (field_type) & TYPE_QUAL_CONST)
+      ಯದಿ (TYPE_QUALS (field_type) & TYPE_QUAL_CONST)
       	{
 	  auto_diagnostic_group d;
-	  if (warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wc___compat,
+	  ಯದಿ (warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wc___compat,
 			  "uninitialized const member in %qT is invalid in C++",
-			  strip_array_types (TREE_TYPE (decl))))
+			  strip_array_types (ವೃಕ್ಷ_TYPE (decl))))
 	    inform (DECL_SOURCE_LOCATION (field), "%qD should be initialized", field);
 	}
 
-      if (RECORD_OR_UNION_TYPE_P (field_type))
+      ಯದಿ (RECORD_OR_UNION_TYPE_P (field_type))
 	diagnose_uninitialized_cst_member (decl, field_type);
     }
 }
@@ -6006,146 +6006,146 @@ diagnose_uninitialized_cst_member (tree decl, tree type)
 
    INIT_LOC is the location of the initial value.  */
 
-void
-finish_decl (tree decl, location_t init_loc, tree init,
-	     tree origtype, tree asmspec_tree)
+ಶೂನ್ಯ
+finish_decl (ವೃಕ್ಷ decl, location_t init_loc, ವೃಕ್ಷ init,
+	     ವೃಕ್ಷ origtype, ವೃಕ್ಷ asmspec_ವೃಕ್ಷ)
 {
-  tree type;
-  bool was_incomplete = (DECL_SIZE (decl) == NULL_TREE);
-  const char *asmspec = 0;
+  ವೃಕ್ಷ type;
+  ತಾರ್ಕಿಕ was_incomplete = (DECL_SIZE (decl) == NULL_ವೃಕ್ಷ);
+  ಧ್ರುವ ವರ್ಣ *asmspec = 0;
 
   /* If a name was specified, get the string.  */
-  if (VAR_OR_FUNCTION_DECL_P (decl)
+  ಯದಿ (VAR_OR_FUNCTION_DECL_P (decl)
       && DECL_FILE_SCOPE_P (decl))
-    asmspec_tree = maybe_apply_renaming_pragma (decl, asmspec_tree);
-  if (asmspec_tree)
-    asmspec = TREE_STRING_POINTER (asmspec_tree);
+    asmspec_ವೃಕ್ಷ = maybe_apply_renaming_pragma (decl, asmspec_ವೃಕ್ಷ);
+  ಯದಿ (asmspec_ವೃಕ್ಷ)
+    asmspec = ವೃಕ್ಷ_STRING_POINTER (asmspec_ವೃಕ್ಷ);
 
-  if (VAR_P (decl)
-      && TREE_STATIC (decl)
+  ಯದಿ (VAR_P (decl)
+      && ವೃಕ್ಷ_STATIC (decl)
       && global_bindings_p ())
     /* So decl is a global variable. Record the types it uses
        so that we can decide later to emit debug info for them.  */
     record_types_used_by_current_var_decl (decl);
 
   /* If `start_decl' didn't like having an initialization, ignore it now.  */
-  if (init != NULL_TREE && DECL_INITIAL (decl) == NULL_TREE)
-    init = NULL_TREE;
+  ಯದಿ (init != NULL_ವೃಕ್ಷ && DECL_INITIAL (decl) == NULL_ವೃಕ್ಷ)
+    init = NULL_ವೃಕ್ಷ;
 
   /* Don't crash if parm is initialized.  */
-  if (TREE_CODE (decl) == PARM_DECL)
-    init = NULL_TREE;
+  ಯದಿ (ವೃಕ್ಷ_CODE (decl) == PARM_DECL)
+    init = NULL_ವೃಕ್ಷ;
 
-  if (init)
-    store_init_value (init_loc, decl, init, origtype);
+  ಯದಿ (init)
+    store_init_ಮೌಲ್ಯ (init_loc, decl, init, origtype);
 
-  if (c_dialect_objc () && (VAR_OR_FUNCTION_DECL_P (decl)
-			    || TREE_CODE (decl) == FIELD_DECL))
+  ಯದಿ (c_dialect_objc () && (VAR_OR_FUNCTION_DECL_P (decl)
+			    || ವೃಕ್ಷ_CODE (decl) == FIELD_DECL))
     objc_check_decl (decl);
 
-  type = TREE_TYPE (decl);
+  type = ವೃಕ್ಷ_TYPE (decl);
 
   /* Deduce size of array from initialization, if not already known.
      This is only needed for an initialization in the current scope;
      it must not be done for a file-scope initialization of a
      declaration with external linkage, redeclared in an inner scope
      with the outer declaration shadowed in an intermediate scope.  */
-  if (TREE_CODE (type) == ARRAY_TYPE
-      && TYPE_DOMAIN (type) == NULL_TREE
-      && TREE_CODE (decl) != TYPE_DECL
-      && !(TREE_PUBLIC (decl) && current_scope != file_scope))
+  ಯದಿ (ವೃಕ್ಷ_CODE (type) == ARRAY_TYPE
+      && TYPE_DOMAIN (type) == NULL_ವೃಕ್ಷ
+      && ವೃಕ್ಷ_CODE (decl) != TYPE_DECL
+      && !(ವೃಕ್ಷ_PUBLIC (decl) && current_scope != file_scope))
     {
-      bool do_default
-	= !TREE_STATIC (decl) && !DECL_EXTERNAL (decl);
-      int failure
-	= complete_array_type (&TREE_TYPE (decl), DECL_INITIAL (decl),
+      ತಾರ್ಕಿಕ do_default
+	= !ವೃಕ್ಷ_STATIC (decl) && !DECL_EXTERNAL (decl);
+      ಪೂರ್ಣಾಙ್ಕ failure
+	= complete_array_type (&ವೃಕ್ಷ_TYPE (decl), DECL_INITIAL (decl),
 			       do_default);
 
       /* Get the completed type made by complete_array_type.  */
-      type = TREE_TYPE (decl);
+      type = ವೃಕ್ಷ_TYPE (decl);
 
-      switch (failure)
+      ವಿಕಲ್ಪ (failure)
 	{
-	case 1:
+	ಪಕ್ಷ 1:
 	  error ("initializer fails to determine size of %q+D", decl);
-	  break;
+	  ಭಙ್ಗ;
 
-	case 2:
-	  if (do_default)
+	ಪಕ್ಷ 2:
+	  ಯದಿ (do_default)
 	    error ("array size missing in %q+D", decl);
-	  else if (!TREE_PUBLIC (decl))
+	  ಅನ್ಯಥಾ ಯದಿ (!ವೃಕ್ಷ_PUBLIC (decl))
 	    pedwarn_c23 (DECL_SOURCE_LOCATION (decl), OPT_Wpedantic,
 			 "array size missing in %q+D", decl);
-	  break;
+	  ಭಙ್ಗ;
 
-	case 3:
+	ಪಕ್ಷ 3:
 	  error ("zero or negative size array %q+D", decl);
-	  break;
+	  ಭಙ್ಗ;
 
-	case 0:
+	ಪಕ್ಷ 0:
 	  /* For global variables, update the copy of the type that
 	     exists in the binding.  */
-	  if (TREE_PUBLIC (decl))
+	  ಯದಿ (ವೃಕ್ಷ_PUBLIC (decl))
 	    {
-	      struct c_binding *b_ext = I_SYMBOL_BINDING (DECL_NAME (decl));
-	      while (b_ext && !B_IN_EXTERNAL_SCOPE (b_ext))
+	      ಸಂರಚನಾ c_binding *b_ext = I_ಚಿಹ್ನೆ_BINDING (DECL_NAME (decl));
+	      ಯಾವತ್ (b_ext && !B_IN_EXTERNAL_SCOPE (b_ext))
 		b_ext = b_ext->shadowed;
-	      if (b_ext && TREE_CODE (decl) == TREE_CODE (b_ext->decl))
+	      ಯದಿ (b_ext && ವೃಕ್ಷ_CODE (decl) == ವೃಕ್ಷ_CODE (b_ext->decl))
 		{
-		  if (b_ext->u.type && comptypes (b_ext->u.type, type))
+		  ಯದಿ (b_ext->u.type && comptypes (b_ext->u.type, type))
 		    b_ext->u.type = composite_type (b_ext->u.type, type);
-		  else
+		  ಅನ್ಯಥಾ
 		    b_ext->u.type = type;
 		}
 	    }
-	  break;
+	  ಭಙ್ಗ;
 
-	default:
+	ಸ್ವಭಾವ:
 	  gcc_unreachable ();
 	}
 
-      if (DECL_INITIAL (decl) && DECL_INITIAL (decl) != error_mark_node)
-	TREE_TYPE (DECL_INITIAL (decl)) = type;
+      ಯದಿ (DECL_INITIAL (decl) && DECL_INITIAL (decl) != error_mark_ಗಂಟು)
+	ವೃಕ್ಷ_TYPE (DECL_INITIAL (decl)) = type;
 
       relayout_decl (decl);
     }
 
   /* Look for braced array initializers for character arrays and
      recursively convert them into STRING_CSTs.  */
-  if (tree init = DECL_INITIAL (decl))
+  ಯದಿ (ವೃಕ್ಷ init = DECL_INITIAL (decl))
     DECL_INITIAL (decl) = braced_lists_to_strings (type, init);
 
-  if (VAR_P (decl))
+  ಯದಿ (VAR_P (decl))
     {
-      if (init && TREE_CODE (init) == CONSTRUCTOR)
+      ಯದಿ (init && ವೃಕ್ಷ_CODE (init) == CONSTRUCTOR)
 	add_flexible_array_elts_to_size (decl, init);
 
       complete_flexible_array_elts (DECL_INITIAL (decl));
 
-      if (is_global_var (decl))
+      ಯದಿ (is_global_var (decl))
 	{
 	  type_context_kind context = (DECL_THREAD_LOCAL_P (decl)
 				       ? TCTX_THREAD_STORAGE
 				       : TCTX_STATIC_STORAGE);
-	  if (!verify_type_context (input_location, context, TREE_TYPE (decl)))
-	    TREE_TYPE (decl) = error_mark_node;
+	  ಯದಿ (!verify_type_context (ಒಳಹರಿವು_location, context, ವೃಕ್ಷ_TYPE (decl)))
+	    ವೃಕ್ಷ_TYPE (decl) = error_mark_ಗಂಟು;
 	}
 
-      if (DECL_SIZE (decl) == NULL_TREE && TREE_TYPE (decl) != error_mark_node
-	  && COMPLETE_TYPE_P (TREE_TYPE (decl)))
+      ಯದಿ (DECL_SIZE (decl) == NULL_ವೃಕ್ಷ && ವೃಕ್ಷ_TYPE (decl) != error_mark_ಗಂಟು
+	  && COMPLETE_TYPE_P (ವೃಕ್ಷ_TYPE (decl)))
 	layout_decl (decl, 0);
 
-      if (DECL_SIZE (decl) == NULL_TREE
+      ಯದಿ (DECL_SIZE (decl) == NULL_ವೃಕ್ಷ
 	  /* Don't give an error if we already gave one earlier.  */
-	  && TREE_TYPE (decl) != error_mark_node
-	  && (TREE_STATIC (decl)
+	  && ವೃಕ್ಷ_TYPE (decl) != error_mark_ಗಂಟು
+	  && (ವೃಕ್ಷ_STATIC (decl)
 	      /* A static variable with an incomplete type
 		 is an error if it is initialized.
 		 Also if it is not file scope.
 		 Also if it is thread-local (in C23).
 		 Otherwise, let it through, but if it is not `extern'
 		 then it may cause an error message later.  */
-	      ? (DECL_INITIAL (decl) != NULL_TREE
+	      ? (DECL_INITIAL (decl) != NULL_ವೃಕ್ಷ
 		 || !DECL_FILE_SCOPE_P (decl)
 		 || (flag_isoc23 && DECL_THREAD_LOCAL_P (decl)))
 	      /* An automatic variable with an incomplete type
@@ -6153,31 +6153,31 @@ finish_decl (tree decl, location_t init_loc, tree init,
 	      : !DECL_EXTERNAL (decl)))
 	 {
 	   error ("storage size of %q+D isn%'t known", decl);
-	   TREE_TYPE (decl) = error_mark_node;
+	   ವೃಕ್ಷ_TYPE (decl) = error_mark_ಗಂಟು;
 	 }
 
-      if ((RECORD_OR_UNION_TYPE_P (TREE_TYPE (decl))
-	  || TREE_CODE (TREE_TYPE (decl)) == ENUMERAL_TYPE)
-	  && DECL_SIZE (decl) == NULL_TREE
-	  && TREE_STATIC (decl))
-	incomplete_record_decls.safe_push (decl);
+      ಯದಿ ((RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (decl))
+	  || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (decl)) == ENUMERAL_TYPE)
+	  && DECL_SIZE (decl) == NULL_ವೃಕ್ಷ
+	  && ವೃಕ್ಷ_STATIC (decl))
+	incomplete_record_decls.safe_ತಳ್ಳು (decl);
 
-      if (is_global_var (decl)
-	  && DECL_SIZE (decl) != NULL_TREE
-	  && TREE_TYPE (decl) != error_mark_node)
+      ಯದಿ (is_global_var (decl)
+	  && DECL_SIZE (decl) != NULL_ವೃಕ್ಷ
+	  && ವೃಕ್ಷ_TYPE (decl) != error_mark_ಗಂಟು)
 	{
-	  if (TREE_CODE (DECL_SIZE (decl)) == INTEGER_CST)
+	  ಯದಿ (ವೃಕ್ಷ_CODE (DECL_SIZE (decl)) == INTEGER_CST)
 	    constant_expression_warning (DECL_SIZE (decl));
-	  else
+	  ಅನ್ಯಥಾ
 	    {
 	      error ("storage size of %q+D isn%'t constant", decl);
-	      TREE_TYPE (decl) = error_mark_node;
+	      ವೃಕ್ಷ_TYPE (decl) = error_mark_ಗಂಟು;
 	    }
 	}
 
-      if (TREE_USED (type))
+      ಯದಿ (ವೃಕ್ಷ_USED (type))
 	{
-	  TREE_USED (decl) = 1;
+	  ವೃಕ್ಷ_USED (decl) = 1;
 	  DECL_READ_P (decl) = 1;
 	}
     }
@@ -6185,9 +6185,9 @@ finish_decl (tree decl, location_t init_loc, tree init,
   /* If this is a function and an assembler name is specified, reset DECL_RTL
      so we can give it its new name.  Also, update builtin_decl if it
      was a normal built-in.  */
-  if (TREE_CODE (decl) == FUNCTION_DECL && asmspec)
+  ಯದಿ (ವೃಕ್ಷ_CODE (decl) == FUNCTION_DECL && asmspec)
     {
-      if (DECL_BUILT_IN_CLASS (decl) == BUILT_IN_NORMAL)
+      ಯದಿ (DECL_BUILT_IN_CLASS (decl) == BUILT_IN_NORMAL)
 	set_builtin_user_assembler_name (decl, asmspec);
       set_user_assembler_name (decl, asmspec);
     }
@@ -6199,158 +6199,158 @@ finish_decl (tree decl, location_t init_loc, tree init,
      unless the type is an undefined structure or union.
      If not, it will get done when the type is completed.  */
 
-  if (VAR_OR_FUNCTION_DECL_P (decl))
+  ಯದಿ (VAR_OR_FUNCTION_DECL_P (decl))
     {
       /* Determine the ELF visibility.  */
-      if (TREE_PUBLIC (decl))
+      ಯದಿ (ವೃಕ್ಷ_PUBLIC (decl))
 	c_determine_visibility (decl);
 
       /* This is a no-op in c-lang.cc or something real in objc-act.cc.  */
-      if (c_dialect_objc ())
+      ಯದಿ (c_dialect_objc ())
 	objc_check_decl (decl);
 
-      if (asmspec)
+      ಯದಿ (asmspec)
 	{
 	  /* If this is not a static variable, issue a warning.
 	     It doesn't make any sense to give an ASMSPEC for an
 	     ordinary, non-register local variable.  Historically,
 	     GCC has accepted -- but ignored -- the ASMSPEC in
 	     this case.  */
-	  if (!DECL_FILE_SCOPE_P (decl)
+	  ಯದಿ (!DECL_FILE_SCOPE_P (decl)
 	      && VAR_P (decl)
 	      && !C_DECL_REGISTER (decl)
-	      && !TREE_STATIC (decl))
+	      && !ವೃಕ್ಷ_STATIC (decl))
 	    warning (0, "ignoring %<asm%> specifier for non-static local "
 		     "variable %q+D", decl);
-	  else
+	  ಅನ್ಯಥಾ
 	    set_user_assembler_name (decl, asmspec);
 	}
 
-      if (DECL_FILE_SCOPE_P (decl))
+      ಯದಿ (DECL_FILE_SCOPE_P (decl))
 	{
-	  if (DECL_INITIAL (decl) == NULL_TREE
-	      || DECL_INITIAL (decl) == error_mark_node)
+	  ಯದಿ (DECL_INITIAL (decl) == NULL_ವೃಕ್ಷ
+	      || DECL_INITIAL (decl) == error_mark_ಗಂಟು)
 	    /* Don't output anything
 	       when a tentative file-scope definition is seen.
 	       But at end of compilation, do output code for them.  */
 	    DECL_DEFER_OUTPUT (decl) = 1;
-	  if (asmspec && VAR_P (decl) && C_DECL_REGISTER (decl))
+	  ಯದಿ (asmspec && VAR_P (decl) && C_DECL_REGISTER (decl))
 	    DECL_HARD_REGISTER (decl) = 1;
-	  rest_of_decl_compilation (decl, true, 0);
+	  rest_of_decl_compilation (decl, ಸತ್ಯ, 0);
 
-	  if (TREE_CODE (decl) == FUNCTION_DECL)
+	  ಯದಿ (ವೃಕ್ಷ_CODE (decl) == FUNCTION_DECL)
 	    {
-	      tree parms = DECL_ARGUMENTS (decl);
-	      const bool builtin = fndecl_built_in_p (decl);
-	      if (tree access = build_attr_access_from_parms (parms, !builtin))
+	      ವೃಕ್ಷ parms = DECL_ARGUMENTS (decl);
+	      ಧ್ರುವ ತಾರ್ಕಿಕ builtin = fndecl_built_in_p (decl);
+	      ಯದಿ (ವೃಕ್ಷ access = build_attr_access_from_parms (parms, !builtin))
 		decl_attributes (&decl, access, 0);
 	    }
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
 	  /* In conjunction with an ASMSPEC, the `register'
 	     keyword indicates that we should place the variable
 	     in a particular register.  */
-	  if (asmspec && C_DECL_REGISTER (decl))
+	  ಯದಿ (asmspec && C_DECL_REGISTER (decl))
 	    {
 	      DECL_HARD_REGISTER (decl) = 1;
 	      /* This cannot be done for a structure with volatile
 		 fields, on which DECL_REGISTER will have been
 		 reset.  */
-	      if (!DECL_REGISTER (decl))
+	      ಯದಿ (!DECL_REGISTER (decl))
 		error ("cannot put object with volatile field into register");
 	    }
 
-	  if (TREE_CODE (decl) != FUNCTION_DECL)
+	  ಯದಿ (ವೃಕ್ಷ_CODE (decl) != FUNCTION_DECL)
 	    {
 	      /* If we're building a variable sized type, and we might be
 		 reachable other than via the top of the current binding
 		 level, then create a new BIND_EXPR so that we deallocate
 		 the object at the right time.  */
 	      /* Note that DECL_SIZE can be null due to errors.  */
-	      if (DECL_SIZE (decl)
-		  && !TREE_CONSTANT (DECL_SIZE (decl))
+	      ಯದಿ (DECL_SIZE (decl)
+		  && !ವೃಕ್ಷ_CONSTANT (DECL_SIZE (decl))
 		  && STATEMENT_LIST_HAS_LABEL (cur_stmt_list))
 		{
-		  tree bind;
-		  bind = build3 (BIND_EXPR, void_type_node, NULL, NULL, NULL);
-		  TREE_SIDE_EFFECTS (bind) = 1;
+		  ವೃಕ್ಷ bind;
+		  bind = build3 (BIND_ಅಭಿವ್ಯಕ್ತಿ, void_type_ಗಂಟು, ರಿಕ್ತ, ರಿಕ್ತ, ರಿಕ್ತ);
+		  ವೃಕ್ಷ_SIDE_EFFECTS (bind) = 1;
 		  add_stmt (bind);
-		  BIND_EXPR_BODY (bind) = push_stmt_list ();
+		  BIND_ಅಭಿವ್ಯಕ್ತಿ_BODY (bind) = ತಳ್ಳು_stmt_list ();
 		}
 	      add_stmt (build_stmt (DECL_SOURCE_LOCATION (decl),
-				    DECL_EXPR, decl));
+				    DECL_ಅಭಿವ್ಯಕ್ತಿ, decl));
 	    }
 	}
 
 
-      if (!DECL_FILE_SCOPE_P (decl))
+      ಯದಿ (!DECL_FILE_SCOPE_P (decl))
 	{
 	  /* Recompute the RTL of a local array now
 	     if it used to be an incomplete type.  */
-	  if (was_incomplete && !is_global_var (decl))
+	  ಯದಿ (was_incomplete && !is_global_var (decl))
 	    {
 	      /* If we used it already as memory, it must stay in memory.  */
-	      TREE_ADDRESSABLE (decl) = TREE_USED (decl);
+	      ವೃಕ್ಷ_ADDRESSABLE (decl) = ವೃಕ್ಷ_USED (decl);
 	      /* If it's still incomplete now, no init will save it.  */
-	      if (DECL_SIZE (decl) == NULL_TREE)
-		DECL_INITIAL (decl) = NULL_TREE;
+	      ಯದಿ (DECL_SIZE (decl) == NULL_ವೃಕ್ಷ)
+		DECL_INITIAL (decl) = NULL_ವೃಕ್ಷ;
 	    }
 	}
     }
 
-  if (TREE_CODE (decl) == TYPE_DECL)
+  ಯದಿ (ವೃಕ್ಷ_CODE (decl) == TYPE_DECL)
     {
-      if (!DECL_FILE_SCOPE_P (decl)
-	  && c_type_variably_modified_p (TREE_TYPE (decl)))
-	add_stmt (build_stmt (DECL_SOURCE_LOCATION (decl), DECL_EXPR, decl));
+      ಯದಿ (!DECL_FILE_SCOPE_P (decl)
+	  && c_type_variably_modified_p (ವೃಕ್ಷ_TYPE (decl)))
+	add_stmt (build_stmt (DECL_SOURCE_LOCATION (decl), DECL_ಅಭಿವ್ಯಕ್ತಿ, decl));
 
       rest_of_decl_compilation (decl, DECL_FILE_SCOPE_P (decl), 0);
     }
 
   /* Install a cleanup (aka destructor) if one was given.  */
-  if (VAR_P (decl) && !TREE_STATIC (decl))
+  ಯದಿ (VAR_P (decl) && !ವೃಕ್ಷ_STATIC (decl))
     {
-      tree attr = lookup_attribute ("cleanup", DECL_ATTRIBUTES (decl));
-      if (attr)
+      ವೃಕ್ಷ attr = lookup_attribute ("cleanup", DECL_ATTRIBUTES (decl));
+      ಯದಿ (attr)
 	{
-	  tree cleanup_id = TREE_VALUE (TREE_VALUE (attr));
-	  tree cleanup_decl = lookup_name (cleanup_id);
-	  tree cleanup;
-	  vec<tree, va_gc> *v;
+	  ವೃಕ್ಷ cleanup_id = ವೃಕ್ಷ_ಮೌಲ್ಯ (ವೃಕ್ಷ_ಮೌಲ್ಯ (attr));
+	  ವೃಕ್ಷ cleanup_decl = lookup_name (cleanup_id);
+	  ವೃಕ್ಷ cleanup;
+	  vec<ವೃಕ್ಷ, va_gc> *v;
 
 	  /* Build "cleanup(&decl)" for the destructor.  */
-	  cleanup = build_unary_op (input_location, ADDR_EXPR, decl, false);
+	  cleanup = build_unary_op (ಒಳಹರಿವು_location, ADDR_ಅಭಿವ್ಯಕ್ತಿ, decl, ಅಸತ್ಯ);
 	  vec_alloc (v, 1);
-	  v->quick_push (cleanup);
+	  v->quick_ತಳ್ಳು (cleanup);
 	  cleanup = c_build_function_call_vec (DECL_SOURCE_LOCATION (decl),
-					       vNULL, cleanup_decl, v, NULL);
+					       vNULL, cleanup_decl, v, ರಿಕ್ತ);
 	  vec_free (v);
 
 	  /* Don't warn about decl unused; the cleanup uses it.  */
-	  TREE_USED (decl) = 1;
-	  TREE_USED (cleanup_decl) = 1;
+	  ವೃಕ್ಷ_USED (decl) = 1;
+	  ವೃಕ್ಷ_USED (cleanup_decl) = 1;
 	  DECL_READ_P (decl) = 1;
 
-	  push_cleanup (decl, cleanup, false);
+	  ತಳ್ಳು_cleanup (decl, cleanup, ಅಸತ್ಯ);
 	}
     }
 
-  if (warn_cxx_compat
+  ಯದಿ (warn_cxx_compat
       && VAR_P (decl)
       && !DECL_EXTERNAL (decl)
-      && DECL_INITIAL (decl) == NULL_TREE)
+      && DECL_INITIAL (decl) == NULL_ವೃಕ್ಷ)
     {
       type = strip_array_types (type);
-      if (TREE_READONLY (decl))
+      ಯದಿ (ವೃಕ್ಷ_READONLY (decl))
 	warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wc___compat,
 		    "uninitialized %<const %D%> is invalid in C++", decl);
-      else if (RECORD_OR_UNION_TYPE_P (type)
+      ಅನ್ಯಥಾ ಯದಿ (RECORD_OR_UNION_TYPE_P (type)
 	       && C_TYPE_FIELDS_READONLY (type))
 	diagnose_uninitialized_cst_member (decl, type);
     }
 
-  if (flag_openmp
+  ಯದಿ (flag_openmp
       && VAR_P (decl)
       && lookup_attribute ("omp declare target implicit",
 			   DECL_ATTRIBUTES (decl)))
@@ -6358,26 +6358,26 @@ finish_decl (tree decl, location_t init_loc, tree init,
       DECL_ATTRIBUTES (decl)
 	= remove_attribute ("omp declare target implicit",
 			    DECL_ATTRIBUTES (decl));
-      if (!omp_mappable_type (TREE_TYPE (decl)))
+      ಯದಿ (!omp_mappable_type (ವೃಕ್ಷ_TYPE (decl)))
 	error ("%q+D in declare target directive does not have mappable type",
 	       decl);
-      else if (!lookup_attribute ("omp declare target",
+      ಅನ್ಯಥಾ ಯದಿ (!lookup_attribute ("omp declare target",
 				  DECL_ATTRIBUTES (decl))
 	       && !lookup_attribute ("omp declare target link",
 				     DECL_ATTRIBUTES (decl)))
 	{
 	  DECL_ATTRIBUTES (decl)
-	    = tree_cons (get_identifier ("omp declare target"),
-			 NULL_TREE, DECL_ATTRIBUTES (decl));
-	    symtab_node *node = symtab_node::get (decl);
-	    if (node != NULL)
+	    = ವೃಕ್ಷ_cons (get_identifier ("omp declare target"),
+			 NULL_ವೃಕ್ಷ, DECL_ATTRIBUTES (decl));
+	    symtab_ಗಂಟು *ಗಂಟು = symtab_ಗಂಟು::get (decl);
+	    ಯದಿ (ಗಂಟು != ರಿಕ್ತ)
 	      {
-		node->offloadable = 1;
-		if (ENABLE_OFFLOADING)
+		ಗಂಟು->offloadable = 1;
+		ಯದಿ (ENABLE_OFFLOADING)
 		  {
-		    g->have_offload = true;
-		    if (is_a <varpool_node *> (node))
-		      vec_safe_push (offload_vars, decl);
+		    g->have_offload = ಸತ್ಯ;
+		    ಯದಿ (is_a <varpool_ಗಂಟು *> (ಗಂಟು))
+		      vec_safe_ತಳ್ಳು (offload_vars, decl);
 		  }
 	      }
 	}
@@ -6385,7 +6385,7 @@ finish_decl (tree decl, location_t init_loc, tree init,
 
   /* This is the last point we can lower alignment so give the target the
      chance to do so.  */
-  if (VAR_P (decl)
+  ಯದಿ (VAR_P (decl)
       && !is_global_var (decl)
       && !DECL_HARD_REGISTER (decl))
     targetm.lower_local_decl_alignment (decl);
@@ -6398,16 +6398,16 @@ finish_decl (tree decl, location_t init_loc, tree init,
    evaluated for the side effects of array size expressions in the
    parameters.  */
 
-tree
-grokparm (const struct c_parm *parm, tree *expr)
+ವೃಕ್ಷ
+grokparm (ಧ್ರುವ ಸಂರಚನಾ c_parm *parm, ವೃಕ್ಷ *ಅಭಿವ್ಯಕ್ತಿ)
 {
-  tree attrs = parm->attrs;
-  tree decl = grokdeclarator (parm->declarator, parm->specs, PARM, false,
-			      NULL, &attrs, expr, NULL, DEPRECATED_NORMAL);
+  ವೃಕ್ಷ attrs = parm->attrs;
+  ವೃಕ್ಷ decl = grokdeclarator (parm->declarator, parm->specs, PARM, ಅಸತ್ಯ,
+			      ರಿಕ್ತ, &attrs, ಅಭಿವ್ಯಕ್ತಿ, ರಿಕ್ತ, DEPRECATED_NORMAL);
 
   decl_attributes (&decl, attrs, 0);
 
-  return decl;
+  ಪ್ರತ್ಯಾಗಮ decl;
 }
 
 
@@ -6417,42 +6417,42 @@ grokparm (const struct c_parm *parm, tree *expr)
    expression that needs to be evaluated for the side effects of array
    size expressions in the parameters.  */
 
-void
-push_parm_decl (const struct c_parm *parm, tree *expr)
+ಶೂನ್ಯ
+ತಳ್ಳು_parm_decl (ಧ್ರುವ ಸಂರಚನಾ c_parm *parm, ವೃಕ್ಷ *ಅಭಿವ್ಯಕ್ತಿ)
 {
-  tree attrs = parm->attrs;
-  tree decl = grokdeclarator (parm->declarator, parm->specs, PARM, false, NULL,
-			      &attrs, expr, NULL, DEPRECATED_NORMAL);
-  if (decl && DECL_P (decl))
+  ವೃಕ್ಷ attrs = parm->attrs;
+  ವೃಕ್ಷ decl = grokdeclarator (parm->declarator, parm->specs, PARM, ಅಸತ್ಯ, ರಿಕ್ತ,
+			      &attrs, ಅಭಿವ್ಯಕ್ತಿ, ರಿಕ್ತ, DEPRECATED_NORMAL);
+  ಯದಿ (decl && DECL_P (decl))
     DECL_SOURCE_LOCATION (decl) = parm->loc;
 
   decl_attributes (&decl, attrs, 0);
 
   decl = pushdecl (decl);
 
-  finish_decl (decl, input_location, NULL_TREE, NULL_TREE, NULL_TREE);
+  finish_decl (decl, ಒಳಹರಿವು_location, NULL_ವೃಕ್ಷ, NULL_ವೃಕ್ಷ, NULL_ವೃಕ್ಷ);
 }
 
 /* Mark all the parameter declarations to date as forward decls.
    Also diagnose use of this extension.  */
 
-void
-mark_forward_parm_decls (void)
+ಶೂನ್ಯ
+mark_forward_parm_decls (ಶೂನ್ಯ)
 {
-  struct c_binding *b;
+  ಸಂರಚನಾ c_binding *b;
 
-  if (current_scope->had_forward_parm_decls)
-    warning_at (input_location, OPT_Wmultiple_parameter_fwd_decl_lists,
+  ಯದಿ (current_scope->had_forward_parm_decls)
+    warning_at (ಒಳಹರಿವು_location, OPT_Wmultiple_parameter_fwd_decl_lists,
 		"more than one list of forward declarations of parameters");
-  if (pedantic && !current_scope->had_forward_parm_decls)
-    pedwarn (input_location, OPT_Wpedantic,
+  ಯದಿ (pedantic && !current_scope->had_forward_parm_decls)
+    pedwarn (ಒಳಹರಿವು_location, OPT_Wpedantic,
 	     "ISO C forbids forward parameter declarations");
 
-  current_scope->had_forward_parm_decls = true;
+  current_scope->had_forward_parm_decls = ಸತ್ಯ;
 
-  for (b = current_scope->bindings; b; b = b->prev)
-    if (TREE_CODE (b->decl) == PARM_DECL)
-      TREE_ASM_WRITTEN (b->decl) = 1;
+  ಪ್ರತಿ (b = current_scope->bindings; b; b = b->prev)
+    ಯದಿ (ವೃಕ್ಷ_CODE (b->decl) == PARM_DECL)
+      ವೃಕ್ಷ_ASM_WRITTEN (b->decl) = 1;
 }
 
 /* Build a COMPOUND_LITERAL_EXPR.  TYPE is the type given in the compound
@@ -6464,113 +6464,113 @@ mark_forward_parm_decls (void)
    with _Alignas.  SCSPECS are the storage class specifiers (C23) from the
    compound literal.  */
 
-tree
-build_compound_literal (location_t loc, tree type, tree init, bool non_const,
-			unsigned int alignas_align,
-			struct c_declspecs *scspecs)
+ವೃಕ್ಷ
+build_compound_literal (location_t loc, ವೃಕ್ಷ type, ವೃಕ್ಷ init, ತಾರ್ಕಿಕ non_const,
+			unsigned ಪೂರ್ಣಾಙ್ಕ alignas_align,
+			ಸಂರಚನಾ c_declspecs *scspecs)
 {
   /* We do not use start_decl here because we have a type, not a declarator;
      and do not use finish_decl because the decl should be stored inside
      the COMPOUND_LITERAL_EXPR rather than added elsewhere as a DECL_EXPR.  */
-  tree decl;
-  tree complit;
-  tree stmt;
-  bool threadp = scspecs ? scspecs->thread_p : false;
-  enum c_storage_class storage_class = (scspecs
+  ವೃಕ್ಷ decl;
+  ವೃಕ್ಷ complit;
+  ವೃಕ್ಷ stmt;
+  ತಾರ್ಕಿಕ threadp = scspecs ? scspecs->thread_p : ಅಸತ್ಯ;
+  ಗಣನಾ c_storage_class storage_class = (scspecs
 					? scspecs->storage_class
 					: csc_none);
 
-  if (type == error_mark_node
-      || init == error_mark_node)
-    return error_mark_node;
+  ಯದಿ (type == error_mark_ಗಂಟು
+      || init == error_mark_ಗಂಟು)
+    ಪ್ರತ್ಯಾಗಮ error_mark_ಗಂಟು;
 
-  if (current_scope == file_scope && storage_class == csc_register)
+  ಯದಿ (current_scope == file_scope && storage_class == csc_register)
     {
       error_at (loc, "file-scope compound literal specifies %<register%>");
       storage_class = csc_none;
     }
 
-  if (current_scope != file_scope && threadp && storage_class == csc_none)
+  ಯದಿ (current_scope != file_scope && threadp && storage_class == csc_none)
     {
       error_at (loc, "compound literal implicitly auto and declared %qs",
 		scspecs->thread_gnu_p ? "__thread" : "_Thread_local");
-      threadp = false;
+      threadp = ಅಸತ್ಯ;
     }
 
-  decl = build_decl (loc, VAR_DECL, NULL_TREE, type);
+  decl = build_decl (loc, VAR_DECL, NULL_ವೃಕ್ಷ, type);
   DECL_EXTERNAL (decl) = 0;
-  TREE_PUBLIC (decl) = 0;
-  TREE_STATIC (decl) = (current_scope == file_scope
+  ವೃಕ್ಷ_PUBLIC (decl) = 0;
+  ವೃಕ್ಷ_STATIC (decl) = (current_scope == file_scope
 			|| storage_class == csc_static);
   DECL_CONTEXT (decl) = current_function_decl;
-  TREE_USED (decl) = 1;
+  ವೃಕ್ಷ_USED (decl) = 1;
   DECL_READ_P (decl) = 1;
   DECL_ARTIFICIAL (decl) = 1;
   DECL_IGNORED_P (decl) = 1;
   C_DECL_COMPOUND_LITERAL_P (decl) = 1;
   C_DECL_DECLARED_CONSTEXPR (decl) = scspecs && scspecs->constexpr_p;
-  TREE_TYPE (decl) = type;
-  if (threadp)
+  ವೃಕ್ಷ_TYPE (decl) = type;
+  ಯದಿ (threadp)
     set_decl_tls_model (decl, decl_default_tls_model (decl));
-  if (storage_class == csc_register)
+  ಯದಿ (storage_class == csc_register)
     {
       C_DECL_REGISTER (decl) = 1;
       DECL_REGISTER (decl) = 1;
     }
   c_apply_type_quals_to_decl (TYPE_QUALS (strip_array_types (type)), decl);
-  if (alignas_align)
+  ಯದಿ (alignas_align)
     {
       SET_DECL_ALIGN (decl, alignas_align * BITS_PER_UNIT);
       DECL_USER_ALIGN (decl) = 1;
     }
-  store_init_value (loc, decl, init, NULL_TREE);
-  if (current_scope != file_scope
-      && TREE_STATIC (decl)
-      && !TREE_READONLY (decl)
+  store_init_ಮೌಲ್ಯ (loc, decl, init, NULL_ವೃಕ್ಷ);
+  ಯದಿ (current_scope != file_scope
+      && ವೃಕ್ಷ_STATIC (decl)
+      && !ವೃಕ್ಷ_READONLY (decl)
       && DECL_DECLARED_INLINE_P (current_function_decl)
       && DECL_EXTERNAL (current_function_decl))
-    record_inline_static (input_location, current_function_decl,
+    record_inline_static (ಒಳಹರಿವು_location, current_function_decl,
 			  decl, csi_modifiable);
 
-  if (TREE_CODE (type) == ARRAY_TYPE && !COMPLETE_TYPE_P (type))
+  ಯದಿ (ವೃಕ್ಷ_CODE (type) == ARRAY_TYPE && !COMPLETE_TYPE_P (type))
     {
-      int failure = complete_array_type (&TREE_TYPE (decl),
-					 DECL_INITIAL (decl), true);
+      ಪೂರ್ಣಾಙ್ಕ failure = complete_array_type (&ವೃಕ್ಷ_TYPE (decl),
+					 DECL_INITIAL (decl), ಸತ್ಯ);
       /* If complete_array_type returns 3, it means that the initial value of
          the compound literal is empty.  Allow it with a pedwarn; in pre-C23
          modes, the empty initializer itself has been diagnosed if pedantic so
          does not need to be diagnosed again here.  */
       gcc_assert (failure == 0 || failure == 3);
-      if (failure == 3 && flag_isoc23)
+      ಯದಿ (failure == 3 && flag_isoc23)
 	pedwarn (loc, OPT_Wpedantic,
 		 "array of unknown size with empty initializer");
 
-      type = TREE_TYPE (decl);
-      TREE_TYPE (DECL_INITIAL (decl)) = type;
+      type = ವೃಕ್ಷ_TYPE (decl);
+      ವೃಕ್ಷ_TYPE (DECL_INITIAL (decl)) = type;
       relayout_decl (decl);
     }
 
-  if (type == error_mark_node || !COMPLETE_TYPE_P (type))
+  ಯದಿ (type == error_mark_ಗಂಟು || !COMPLETE_TYPE_P (type))
     {
-      c_incomplete_type_error (loc, NULL_TREE, type);
-      return error_mark_node;
+      c_incomplete_type_error (loc, NULL_ವೃಕ್ಷ, type);
+      ಪ್ರತ್ಯಾಗಮ error_mark_ಗಂಟು;
     }
 
-  if ((TREE_STATIC (decl) || C_DECL_DECLARED_CONSTEXPR (decl))
+  ಯದಿ ((ವೃಕ್ಷ_STATIC (decl) || C_DECL_DECLARED_CONSTEXPR (decl))
       && C_TYPE_VARIABLE_SIZE (type))
     error_at (loc, "storage size isn%'t constant");
 
-  if (TREE_STATIC (decl)
+  ಯದಿ (ವೃಕ್ಷ_STATIC (decl)
       && !verify_type_context (loc, TCTX_STATIC_STORAGE, type))
-    return error_mark_node;
+    ಪ್ರತ್ಯಾಗಮ error_mark_ಗಂಟು;
 
-  stmt = build_stmt (DECL_SOURCE_LOCATION (decl), DECL_EXPR, decl);
-  complit = build1 (COMPOUND_LITERAL_EXPR, type, stmt);
-  TREE_SIDE_EFFECTS (complit) = 1;
+  stmt = build_stmt (DECL_SOURCE_LOCATION (decl), DECL_ಅಭಿವ್ಯಕ್ತಿ, decl);
+  complit = build1 (COMPOUND_LITERAL_ಅಭಿವ್ಯಕ್ತಿ, type, stmt);
+  ವೃಕ್ಷ_SIDE_EFFECTS (complit) = 1;
 
   layout_decl (decl, 0);
 
-  if (TREE_STATIC (decl))
+  ಯದಿ (ವೃಕ್ಷ_STATIC (decl))
     {
       /* This decl needs a name for the assembler output.  */
       set_compound_literal_name (decl);
@@ -6579,25 +6579,25 @@ build_compound_literal (location_t loc, tree type, tree init, bool non_const,
       pushdecl (decl);
       rest_of_decl_compilation (decl, 1, 0);
     }
-  else if (current_function_decl && !current_scope->parm_flag)
+  ಅನ್ಯಥಾ ಯದಿ (current_function_decl && !current_scope->parm_flag)
     pushdecl (decl);
 
-  if (non_const)
+  ಯದಿ (non_const)
     {
-      complit = build2 (C_MAYBE_CONST_EXPR, type, NULL, complit);
-      C_MAYBE_CONST_EXPR_NON_CONST (complit) = 1;
+      complit = build2 (C_MAYBE_CONST_ಅಭಿವ್ಯಕ್ತಿ, type, ರಿಕ್ತ, complit);
+      C_MAYBE_CONST_ಅಭಿವ್ಯಕ್ತಿ_NON_CONST (complit) = 1;
     }
 
-  return complit;
+  ಪ್ರತ್ಯಾಗಮ complit;
 }
 
 /* Check the type of a compound literal.  Here we just check that it
    is valid for C++.  */
 
-void
-check_compound_literal_type (location_t loc, struct c_type_name *type_name)
+ಶೂನ್ಯ
+check_compound_literal_type (location_t loc, ಸಂರಚನಾ c_type_name *type_name)
 {
-  if (warn_cxx_compat
+  ಯದಿ (warn_cxx_compat
       && (type_name->specs->typespec_kind == ctsk_tagdef
           || type_name->specs->typespec_kind == ctsk_tagfirstref
 	  || type_name->specs->typespec_kind == ctsk_tagfirstref_attrs))
@@ -6608,100 +6608,100 @@ check_compound_literal_type (location_t loc, struct c_type_name *type_name)
 /* Performs sanity checks on the TYPE and WIDTH of the bit-field NAME,
    replacing with appropriate values if they are invalid.  */
 
-static void
-check_bitfield_type_and_width (location_t loc, tree *type, tree *width,
-			       tree orig_name)
+ಸ್ಥಿರ ಶೂನ್ಯ
+check_bitfield_type_and_width (location_t loc, ವೃಕ್ಷ *type, ವೃಕ್ಷ *width,
+			       ವೃಕ್ಷ orig_name)
 {
-  tree type_mv;
-  unsigned int max_width;
+  ವೃಕ್ಷ type_mv;
+  unsigned ಪೂರ್ಣಾಙ್ಕ max_width;
   unsigned HOST_WIDE_INT w;
-  const char *name = (orig_name
+  ಧ್ರುವ ವರ್ಣ *name = (orig_name
 		      ? identifier_to_locale (IDENTIFIER_POINTER (orig_name))
 		      : _("<anonymous>"));
 
   /* Detect and ignore out of range field width and process valid
      field widths.  */
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (*width)))
+  ಯದಿ (!INTEGRAL_TYPE_P (ವೃಕ್ಷ_TYPE (*width)))
     {
       error_at (loc, "bit-field %qs width not an integer constant", name);
-      *width = integer_one_node;
+      *width = integer_one_ಗಂಟು;
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      if (TREE_CODE (*width) != INTEGER_CST)
+      ಯದಿ (ವೃಕ್ಷ_CODE (*width) != INTEGER_CST)
 	{
-	  *width = c_fully_fold (*width, false, NULL);
-	  if (TREE_CODE (*width) == INTEGER_CST)
+	  *width = c_fully_fold (*width, ಅಸತ್ಯ, ರಿಕ್ತ);
+	  ಯದಿ (ವೃಕ್ಷ_CODE (*width) == INTEGER_CST)
 	    pedwarn (loc, OPT_Wpedantic,
 		     "bit-field %qs width not an integer constant expression",
 		     name);
 	}
-      if (TREE_CODE (*width) != INTEGER_CST)
+      ಯದಿ (ವೃಕ್ಷ_CODE (*width) != INTEGER_CST)
 	{
 	  error_at (loc, "bit-field %qs width not an integer constant", name);
-	  *width = integer_one_node;
+	  *width = integer_one_ಗಂಟು;
 	}
       constant_expression_warning (*width);
-      if (tree_int_cst_sgn (*width) < 0)
+      ಯದಿ (ವೃಕ್ಷ_int_cst_sgn (*width) < 0)
 	{
 	  error_at (loc, "negative width in bit-field %qs", name);
-	  *width = integer_one_node;
+	  *width = integer_one_ಗಂಟು;
 	}
-      else if (integer_zerop (*width) && orig_name)
+      ಅನ್ಯಥಾ ಯದಿ (integer_zerop (*width) && orig_name)
 	{
 	  error_at (loc, "zero width for bit-field %qs", name);
-	  *width = integer_one_node;
+	  *width = integer_one_ಗಂಟು;
 	}
     }
 
   /* Detect invalid bit-field type.  */
-  if (TREE_CODE (*type) != INTEGER_TYPE
-      && TREE_CODE (*type) != BOOLEAN_TYPE
-      && TREE_CODE (*type) != ENUMERAL_TYPE
-      && TREE_CODE (*type) != BITINT_TYPE)
+  ಯದಿ (ವೃಕ್ಷ_CODE (*type) != INTEGER_TYPE
+      && ವೃಕ್ಷ_CODE (*type) != BOOLEAN_TYPE
+      && ವೃಕ್ಷ_CODE (*type) != ENUMERAL_TYPE
+      && ವೃಕ್ಷ_CODE (*type) != BITINT_TYPE)
     {
       error_at (loc, "bit-field %qs has invalid type", name);
-      *type = unsigned_type_node;
+      *type = unsigned_type_ಗಂಟು;
     }
 
-  if (TYPE_WARN_IF_NOT_ALIGN (*type))
+  ಯದಿ (TYPE_WARN_IF_NOT_ALIGN (*type))
     {
       error_at (loc, "cannot declare bit-field %qs with %<warn_if_not_aligned%> type",
 		name);
-      *type = unsigned_type_node;
+      *type = unsigned_type_ಗಂಟು;
     }
 
   type_mv = TYPE_MAIN_VARIANT (*type);
-  if (!in_system_header_at (input_location)
-      && type_mv != integer_type_node
-      && type_mv != unsigned_type_node
-      && type_mv != boolean_type_node)
+  ಯದಿ (!in_system_header_at (ಒಳಹರಿವು_location)
+      && type_mv != integer_type_ಗಂಟು
+      && type_mv != unsigned_type_ಗಂಟು
+      && type_mv != boolean_type_ಗಂಟು)
     pedwarn_c90 (loc, OPT_Wpedantic,
 		 "type of bit-field %qs is a GCC extension", name);
 
   max_width = TYPE_PRECISION (*type);
 
-  if (compare_tree_int (*width, max_width) > 0)
+  ಯದಿ (compare_ವೃಕ್ಷ_int (*width, max_width) > 0)
     {
       error_at (loc, "width of %qs exceeds its type", name);
       w = max_width;
-      *width = build_int_cst (integer_type_node, w);
+      *width = build_int_cst (integer_type_ಗಂಟು, w);
     }
-  else
-    w = tree_to_uhwi (*width);
+  ಅನ್ಯಥಾ
+    w = ವೃಕ್ಷ_to_uhwi (*width);
 
   /* Truncation of hardbool false and true representation values is always safe:
      either the values remain different, or we'll report a problem when creating
      the narrower type.  */
-  if (c_hardbool_type_attr (*type))
-    return;
+  ಯದಿ (c_hardbool_type_attr (*type))
+    ಪ್ರತ್ಯಾಗಮ;
 
-  if (TREE_CODE (*type) == ENUMERAL_TYPE)
+  ಯದಿ (ವೃಕ್ಷ_CODE (*type) == ENUMERAL_TYPE)
     {
-      struct lang_type *lt = TYPE_LANG_SPECIFIC (*type);
-      if (!lt
-	  || w < tree_int_cst_min_precision (lt->enum_min, TYPE_SIGN (*type))
-	  || w < tree_int_cst_min_precision (lt->enum_max, TYPE_SIGN (*type)))
+      ಸಂರಚನಾ lang_type *lt = TYPE_LANG_SPECIFIC (*type);
+      ಯದಿ (!lt
+	  || w < ವೃಕ್ಷ_int_cst_min_precision (lt->enum_min, TYPE_SIGN (*type))
+	  || w < ವೃಕ್ಷ_int_cst_min_precision (lt->enum_max, TYPE_SIGN (*type)))
 	warning_at (loc, 0, "%qs is narrower than values of its type", name);
     }
 }
@@ -6710,26 +6710,26 @@ check_bitfield_type_and_width (location_t loc, tree *type, tree *width,
 
 /* Print warning about variable length array if necessary.  */
 
-static void
-warn_variable_length_array (tree name, tree size)
+ಸ್ಥಿರ ಶೂನ್ಯ
+warn_variable_length_array (ವೃಕ್ಷ name, ವೃಕ್ಷ size)
 {
-  if (TREE_CONSTANT (size))
+  ಯದಿ (ವೃಕ್ಷ_CONSTANT (size))
     {
-      if (name)
-	pedwarn_c90 (input_location, OPT_Wvla,
+      ಯದಿ (name)
+	pedwarn_c90 (ಒಳಹರಿವು_location, OPT_Wvla,
 		     "ISO C90 forbids array %qE whose size "
 		     "cannot be evaluated", name);
-      else
-	pedwarn_c90 (input_location, OPT_Wvla, "ISO C90 forbids array "
+      ಅನ್ಯಥಾ
+	pedwarn_c90 (ಒಳಹರಿವು_location, OPT_Wvla, "ISO C90 forbids array "
 		     "whose size cannot be evaluated");
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      if (name)
-	pedwarn_c90 (input_location, OPT_Wvla,
+      ಯದಿ (name)
+	pedwarn_c90 (ಒಳಹರಿವು_location, OPT_Wvla,
 		     "ISO C90 forbids variable length array %qE", name);
-      else
-	pedwarn_c90 (input_location, OPT_Wvla, "ISO C90 forbids variable "
+      ಅನ್ಯಥಾ
+	pedwarn_c90 (ಒಳಹರಿವು_location, OPT_Wvla, "ISO C90 forbids variable "
 		     "length array");
     }
 }
@@ -6738,21 +6738,21 @@ warn_variable_length_array (tree name, tree size)
    considering only those c_declspec_words found in LIST, which
    must be terminated by cdw_number_of_elements.  */
 
-static location_t
-smallest_type_quals_location (const location_t *locations,
-			      const c_declspec_word *list)
+ಸ್ಥಿರ location_t
+smallest_type_quals_location (ಧ್ರುವ location_t *locations,
+			      ಧ್ರುವ c_declspec_word *list)
 {
   location_t loc = UNKNOWN_LOCATION;
-  while (*list != cdw_number_of_elements)
+  ಯಾವತ್ (*list != cdw_ಸಂಖ್ಯೆ_of_elements)
     {
       location_t newloc = locations[*list];
-      if (loc == UNKNOWN_LOCATION
+      ಯದಿ (loc == UNKNOWN_LOCATION
 	  || (newloc != UNKNOWN_LOCATION && newloc < loc))
 	loc = newloc;
       list++;
     }
 
-  return loc;
+  ಪ್ರತ್ಯಾಗಮ loc;
 }
 
 
@@ -6775,34 +6775,34 @@ smallest_type_quals_location (const location_t *locations,
    the fake TYPE_DECL in the enclosing context would force
    the size evaluation prior to the side effects.  We therefore
    use BIND_EXPRs in TYPENAME contexts too.  */
-static void
-add_decl_expr (location_t loc, tree type, tree *expr, bool set_name_p)
+ಸ್ಥಿರ ಶೂನ್ಯ
+add_decl_ಅಭಿವ್ಯಕ್ತಿ (location_t loc, ವೃಕ್ಷ type, ವೃಕ್ಷ *ಅಭಿವ್ಯಕ್ತಿ, ತಾರ್ಕಿಕ set_name_p)
 {
-  tree bind = NULL_TREE;
-  if (expr)
+  ವೃಕ್ಷ bind = NULL_ವೃಕ್ಷ;
+  ಯದಿ (ಅಭಿವ್ಯಕ್ತಿ)
     {
-      bind = build3 (BIND_EXPR, void_type_node, NULL_TREE, NULL_TREE,
-		     NULL_TREE);
-      TREE_SIDE_EFFECTS (bind) = 1;
-      BIND_EXPR_BODY (bind) = push_stmt_list ();
-      push_scope ();
+      bind = build3 (BIND_ಅಭಿವ್ಯಕ್ತಿ, void_type_ಗಂಟು, NULL_ವೃಕ್ಷ, NULL_ವೃಕ್ಷ,
+		     NULL_ವೃಕ್ಷ);
+      ವೃಕ್ಷ_SIDE_EFFECTS (bind) = 1;
+      BIND_ಅಭಿವ್ಯಕ್ತಿ_BODY (bind) = ತಳ್ಳು_stmt_list ();
+      ತಳ್ಳು_scope ();
     }
 
-  tree decl = build_decl (loc, TYPE_DECL, NULL_TREE, type);
+  ವೃಕ್ಷ decl = build_decl (loc, TYPE_DECL, NULL_ವೃಕ್ಷ, type);
   pushdecl (decl);
   DECL_ARTIFICIAL (decl) = 1;
-  add_stmt (build_stmt (DECL_SOURCE_LOCATION (decl), DECL_EXPR, decl));
-  if (set_name_p)
+  add_stmt (build_stmt (DECL_SOURCE_LOCATION (decl), DECL_ಅಭಿವ್ಯಕ್ತಿ, decl));
+  ಯದಿ (set_name_p)
     TYPE_NAME (type) = decl;
 
-  if (bind)
+  ಯದಿ (bind)
     {
-      pop_scope ();
-      BIND_EXPR_BODY (bind) = pop_stmt_list (BIND_EXPR_BODY (bind));
-      if (*expr)
-	*expr = build2 (COMPOUND_EXPR, void_type_node, *expr, bind);
-      else
-	*expr = bind;
+      ತೆಗೆ_scope ();
+      BIND_ಅಭಿವ್ಯಕ್ತಿ_BODY (bind) = ತೆಗೆ_stmt_list (BIND_ಅಭಿವ್ಯಕ್ತಿ_BODY (bind));
+      ಯದಿ (*ಅಭಿವ್ಯಕ್ತಿ)
+	*ಅಭಿವ್ಯಕ್ತಿ = build2 (COMPOUND_ಅಭಿವ್ಯಕ್ತಿ, void_type_ಗಂಟು, *ಅಭಿವ್ಯಕ್ತಿ, bind);
+      ಅನ್ಯಥಾ
+	*ಅಭಿವ್ಯಕ್ತಿ = bind;
     }
 }
 
@@ -6813,15 +6813,15 @@ add_decl_expr (location_t loc, tree type, tree *expr, bool set_name_p)
    the declared type of the array before adjustment, i.e. as an array type
    including the outermost bound.  */
 
-static tree
-build_arg_spec_attribute (tree type, bool static_p, tree attrs)
+ಸ್ಥಿರ ವೃಕ್ಷ
+build_arg_spec_attribute (ವೃಕ್ಷ type, ತಾರ್ಕಿಕ static_p, ವೃಕ್ಷ attrs)
 {
-  tree vbchain = tree_cons (NULL_TREE, type, NULL_TREE);
-  tree acsstr = static_p ? build_string (7, "static") :
+  ವೃಕ್ಷ vbchain = ವೃಕ್ಷ_cons (NULL_ವೃಕ್ಷ, type, NULL_ವೃಕ್ಷ);
+  ವೃಕ್ಷ acsstr = static_p ? build_string (7, "static") :
 			   build_string (1, "");
-  tree args = tree_cons (NULL_TREE, acsstr, vbchain);
-  tree name = get_identifier ("arg spec");
-  return tree_cons (name, args, attrs);
+  ವೃಕ್ಷ args = ವೃಕ್ಷ_cons (NULL_ವೃಕ್ಷ, acsstr, vbchain);
+  ವೃಕ್ಷ name = get_identifier ("arg spec");
+  ಪ್ರತ್ಯಾಗಮ ವೃಕ್ಷ_cons (name, args, attrs);
 }
 
 
@@ -6865,117 +6865,117 @@ build_arg_spec_attribute (tree type, bool static_p, tree attrs)
    This function is where the complicated C meanings of `static'
    and `extern' are interpreted.  */
 
-static tree
-grokdeclarator (const struct c_declarator *declarator,
-		struct c_declspecs *declspecs,
-		enum decl_context decl_context, bool initialized, tree *width,
-		tree *decl_attrs, tree *expr, bool *expr_const_operands,
-		enum deprecated_states deprecated_state)
+ಸ್ಥಿರ ವೃಕ್ಷ
+grokdeclarator (ಧ್ರುವ ಸಂರಚನಾ c_declarator *declarator,
+		ಸಂರಚನಾ c_declspecs *declspecs,
+		ಗಣನಾ decl_context decl_context, ತಾರ್ಕಿಕ initialized, ವೃಕ್ಷ *width,
+		ವೃಕ್ಷ *decl_attrs, ವೃಕ್ಷ *ಅಭಿವ್ಯಕ್ತಿ, ತಾರ್ಕಿಕ *ಅಭಿವ್ಯಕ್ತಿ_const_operands,
+		ಗಣನಾ deprecated_states deprecated_state)
 {
-  tree type = declspecs->type;
-  bool threadp = declspecs->thread_p;
-  bool constexprp = declspecs->constexpr_p;
-  enum c_storage_class storage_class = declspecs->storage_class;
-  int constp;
-  int restrictp;
-  int volatilep;
-  int atomicp;
-  int type_quals = TYPE_UNQUALIFIED;
-  tree name = NULL_TREE;
-  bool funcdef_flag = false;
-  bool funcdef_syntax = false;
-  bool size_varies = false;
-  bool size_error = false;
-  tree decl_attr = declspecs->decl_attr;
-  int array_ptr_quals = TYPE_UNQUALIFIED;
-  tree array_ptr_attrs = NULL_TREE;
-  bool array_parm_static = false;
-  bool array_parm_vla_unspec_p = false;
-  tree returned_attrs = NULL_TREE;
-  tree decl_id_attrs = NULL_TREE;
-  bool bitfield = width != NULL;
-  tree element_type;
-  tree orig_qual_type = NULL;
+  ವೃಕ್ಷ type = declspecs->type;
+  ತಾರ್ಕಿಕ threadp = declspecs->thread_p;
+  ತಾರ್ಕಿಕ constexprp = declspecs->constexpr_p;
+  ಗಣನಾ c_storage_class storage_class = declspecs->storage_class;
+  ಪೂರ್ಣಾಙ್ಕ constp;
+  ಪೂರ್ಣಾಙ್ಕ restrictp;
+  ಪೂರ್ಣಾಙ್ಕ volatilep;
+  ಪೂರ್ಣಾಙ್ಕ atomicp;
+  ಪೂರ್ಣಾಙ್ಕ type_quals = TYPE_UNQUALIFIED;
+  ವೃಕ್ಷ name = NULL_ವೃಕ್ಷ;
+  ತಾರ್ಕಿಕ funcdef_flag = ಅಸತ್ಯ;
+  ತಾರ್ಕಿಕ funcdef_syntax = ಅಸತ್ಯ;
+  ತಾರ್ಕಿಕ size_varies = ಅಸತ್ಯ;
+  ತಾರ್ಕಿಕ size_error = ಅಸತ್ಯ;
+  ವೃಕ್ಷ decl_attr = declspecs->decl_attr;
+  ಪೂರ್ಣಾಙ್ಕ array_ptr_quals = TYPE_UNQUALIFIED;
+  ವೃಕ್ಷ array_ptr_attrs = NULL_ವೃಕ್ಷ;
+  ತಾರ್ಕಿಕ array_parm_static = ಅಸತ್ಯ;
+  ತಾರ್ಕಿಕ array_parm_vla_unspec_p = ಅಸತ್ಯ;
+  ವೃಕ್ಷ returned_attrs = NULL_ವೃಕ್ಷ;
+  ವೃಕ್ಷ decl_id_attrs = NULL_ವೃಕ್ಷ;
+  ತಾರ್ಕಿಕ bitfield = width != ರಿಕ್ತ;
+  ವೃಕ್ಷ element_type;
+  ವೃಕ್ಷ orig_qual_type = ರಿಕ್ತ;
   size_t orig_qual_indirect = 0;
-  struct c_arg_info *arg_info = 0;
+  ಸಂರಚನಾ c_arg_info *arg_info = 0;
   addr_space_t as1, as2, address_space;
   location_t loc = UNKNOWN_LOCATION;
-  tree expr_dummy;
-  bool expr_const_operands_dummy;
-  enum c_declarator_kind first_non_attr_kind;
-  unsigned int alignas_align = 0;
+  ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ_dummy;
+  ತಾರ್ಕಿಕ ಅಭಿವ್ಯಕ್ತಿ_const_operands_dummy;
+  ಗಣನಾ c_declarator_kind first_non_attr_kind;
+  unsigned ಪೂರ್ಣಾಙ್ಕ alignas_align = 0;
 
-  if (type == NULL_TREE)
+  ಯದಿ (type == NULL_ವೃಕ್ಷ)
     {
       /* This can occur for auto on a parameter in C23 mode.  Set a
 	 dummy type here so subsequent code can give diagnostics for
 	 this case.  */
       gcc_assert (declspecs->c23_auto_p);
       gcc_assert (decl_context == PARM);
-      type = declspecs->type = integer_type_node;
+      type = declspecs->type = integer_type_ಗಂಟು;
     }
-  if (TREE_CODE (type) == ERROR_MARK)
-    return error_mark_node;
-  if (expr == NULL)
+  ಯದಿ (ವೃಕ್ಷ_CODE (type) == ERROR_MARK)
+    ಪ್ರತ್ಯಾಗಮ error_mark_ಗಂಟು;
+  ಯದಿ (ಅಭಿವ್ಯಕ್ತಿ == ರಿಕ್ತ)
     {
-      expr = &expr_dummy;
-      expr_dummy = NULL_TREE;
+      ಅಭಿವ್ಯಕ್ತಿ = &ಅಭಿವ್ಯಕ್ತಿ_dummy;
+      ಅಭಿವ್ಯಕ್ತಿ_dummy = NULL_ವೃಕ್ಷ;
     }
-  if (expr_const_operands == NULL)
-    expr_const_operands = &expr_const_operands_dummy;
+  ಯದಿ (ಅಭಿವ್ಯಕ್ತಿ_const_operands == ರಿಕ್ತ)
+    ಅಭಿವ್ಯಕ್ತಿ_const_operands = &ಅಭಿವ್ಯಕ್ತಿ_const_operands_dummy;
 
-  if (declspecs->expr)
+  ಯದಿ (declspecs->ಅಭಿವ್ಯಕ್ತಿ)
     {
-      if (*expr)
-	*expr = build2 (COMPOUND_EXPR, TREE_TYPE (declspecs->expr), *expr,
-			declspecs->expr);
-      else
-	*expr = declspecs->expr;
+      ಯದಿ (*ಅಭಿವ್ಯಕ್ತಿ)
+	*ಅಭಿವ್ಯಕ್ತಿ = build2 (COMPOUND_ಅಭಿವ್ಯಕ್ತಿ, ವೃಕ್ಷ_TYPE (declspecs->ಅಭಿವ್ಯಕ್ತಿ), *ಅಭಿವ್ಯಕ್ತಿ,
+			declspecs->ಅಭಿವ್ಯಕ್ತಿ);
+      ಅನ್ಯಥಾ
+	*ಅಭಿವ್ಯಕ್ತಿ = declspecs->ಅಭಿವ್ಯಕ್ತಿ;
     }
-  *expr_const_operands = declspecs->expr_const_operands;
+  *ಅಭಿವ್ಯಕ್ತಿ_const_operands = declspecs->ಅಭಿವ್ಯಕ್ತಿ_const_operands;
 
-  if (decl_context == FUNCDEF)
-    funcdef_flag = true, decl_context = NORMAL;
+  ಯದಿ (decl_context == FUNCDEF)
+    funcdef_flag = ಸತ್ಯ, decl_context = NORMAL;
 
   /* Look inside a declarator for the name being declared
      and get it as an IDENTIFIER_NODE, for an error message.  */
   {
-    const struct c_declarator *decl = declarator;
+    ಧ್ರುವ ಸಂರಚನಾ c_declarator *decl = declarator;
 
     first_non_attr_kind = cdk_attrs;
-    while (decl)
-      switch (decl->kind)
+    ಯಾವತ್ (decl)
+      ವಿಕಲ್ಪ (decl->kind)
 	{
-	case cdk_array:
+	ಪಕ್ಷ cdk_array:
 	  loc = decl->id_loc;
 	  /* FALL THRU.  */
 
-	case cdk_function:
-	case cdk_pointer:
+	ಪಕ್ಷ cdk_function:
+	ಪಕ್ಷ cdk_pointer:
 	  funcdef_syntax = (decl->kind == cdk_function);
-	  if (first_non_attr_kind == cdk_attrs)
+	  ಯದಿ (first_non_attr_kind == cdk_attrs)
 	    first_non_attr_kind = decl->kind;
 	  decl = decl->declarator;
-	  break;
+	  ಭಙ್ಗ;
 
-	case cdk_attrs:
+	ಪಕ್ಷ cdk_attrs:
 	  decl = decl->declarator;
-	  break;
+	  ಭಙ್ಗ;
 
-	case cdk_id:
+	ಪಕ್ಷ cdk_id:
 	  loc = decl->id_loc;
-	  if (decl->u.id.id)
+	  ಯದಿ (decl->u.id.id)
 	    name = decl->u.id.id;
 	  decl_id_attrs = decl->u.id.attrs;
-	  if (first_non_attr_kind == cdk_attrs)
+	  ಯದಿ (first_non_attr_kind == cdk_attrs)
 	    first_non_attr_kind = decl->kind;
 	  decl = 0;
-	  break;
+	  ಭಙ್ಗ;
 
-	default:
+	ಸ್ವಭಾವ:
 	  gcc_unreachable ();
 	}
-    if (name == NULL_TREE)
+    ಯದಿ (name == NULL_ವೃಕ್ಷ)
       {
 	gcc_assert (decl_context == PARM
 		    || decl_context == TYPENAME
@@ -6993,60 +6993,60 @@ grokdeclarator (const struct c_declarator *declarator,
      declaration specifiers, all invalid contexts (declarations that
      aren't empty, type names, parameter declarations, member
      declarations) pass through grokdeclarator.  */
-  if (declspecs->enum_type_specifier_ref_p)
+  ಯದಿ (declspecs->enum_type_specifier_ref_p)
     error_at (loc, "%<enum%> underlying type may not be specified here");
 
   /* A function definition's declarator must have the form of
      a function declarator.  */
 
-  if (funcdef_flag && !funcdef_syntax)
-    return NULL_TREE;
+  ಯದಿ (funcdef_flag && !funcdef_syntax)
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
   /* If this looks like a function definition, make it one,
      even if it occurs where parms are expected.
      Then store_parm_decls will reject it and not use it as a parm.  */
-  if (decl_context == NORMAL && !funcdef_flag && current_scope->parm_flag)
+  ಯದಿ (decl_context == NORMAL && !funcdef_flag && current_scope->parm_flag)
     decl_context = PARM;
 
-  if (deprecated_state != UNAVAILABLE_DEPRECATED_SUPPRESS)
+  ಯದಿ (deprecated_state != UNAVAILABLE_DEPRECATED_SUPPRESS)
     {
-      if (declspecs->unavailable_p)
+      ಯದಿ (declspecs->unavailable_p)
 	error_unavailable_use (declspecs->type, declspecs->decl_attr);
-      else if (declspecs->deprecated_p
+      ಅನ್ಯಥಾ ಯದಿ (declspecs->deprecated_p
 		&& deprecated_state != DEPRECATED_SUPPRESS)
 	warn_deprecated_use (declspecs->type, declspecs->decl_attr);
     }
 
-  if ((decl_context == NORMAL || decl_context == FIELD)
+  ಯದಿ ((decl_context == NORMAL || decl_context == FIELD)
       && current_scope == file_scope
       && c_type_variably_modified_p (type))
     {
-      if (name)
+      ಯದಿ (name)
 	error_at (loc, "variably modified %qE at file scope", name);
-      else
+      ಅನ್ಯಥಾ
 	error_at (loc, "variably modified field at file scope");
-      type = integer_type_node;
+      type = integer_type_ಗಂಟು;
     }
 
   size_varies = C_TYPE_VARIABLE_SIZE (type) != 0;
 
   /* Diagnose defaulting to "int".  */
 
-  if (declspecs->default_int_p)
+  ಯದಿ (declspecs->default_int_p)
     {
       /* Issue a warning if this is an ISO C 99 program or if
 	 -Wreturn-type and this is a function, or if -Wimplicit;
 	 prefer the former warning since it is more explicit.  */
-      if ((warn_implicit_int || warn_return_type > 0 || flag_isoc99)
+      ಯದಿ ((warn_implicit_int || warn_return_type > 0 || flag_isoc99)
 	  && funcdef_flag)
 	warn_about_return_type = 1;
-      else
+      ಅನ್ಯಥಾ
 	{
-	  if (name)
+	  ಯದಿ (name)
 	    permerror_opt (loc, OPT_Wimplicit_int,
 			   "type defaults to %<int%> in declaration "
 			   "of %qE", name);
-	  else
+	  ಅನ್ಯಥಾ
 	    permerror_opt (loc, OPT_Wimplicit_int,
 			   "type defaults to %<int%> in type name");
 	}
@@ -7055,8 +7055,8 @@ grokdeclarator (const struct c_declarator *declarator,
   /* Adjust the type if a bit-field is being declared,
      -funsigned-bitfields applied and the type is not explicitly
      "signed".  */
-  if (bitfield && !flag_signed_bitfields && !declspecs->explicit_signed_p
-      && TREE_CODE (type) == INTEGER_TYPE)
+  ಯದಿ (bitfield && !flag_signed_bitfields && !declspecs->explicit_signed_p
+      && ವೃಕ್ಷ_CODE (type) == INTEGER_TYPE)
     type = c_common_unsigned_type (type);
 
   /* Figure out the type qualifiers for the declaration.  There are
@@ -7079,20 +7079,20 @@ grokdeclarator (const struct c_declarator *declarator,
   as2 = TYPE_ADDR_SPACE (element_type);
   address_space = ADDR_SPACE_GENERIC_P (as1)? as2 : as1;
 
-  if (constp > 1)
+  ಯದಿ (constp > 1)
     pedwarn_c90 (loc, OPT_Wpedantic, "duplicate %<const%>");
-  if (restrictp > 1)
+  ಯದಿ (restrictp > 1)
     pedwarn_c90 (loc, OPT_Wpedantic, "duplicate %<restrict%>");
-  if (volatilep > 1)
+  ಯದಿ (volatilep > 1)
     pedwarn_c90 (loc, OPT_Wpedantic, "duplicate %<volatile%>");
-  if (atomicp > 1)
+  ಯದಿ (atomicp > 1)
     pedwarn_c90 (loc, OPT_Wpedantic, "duplicate %<_Atomic%>");
 
-  if (!ADDR_SPACE_GENERIC_P (as1) && !ADDR_SPACE_GENERIC_P (as2) && as1 != as2)
+  ಯದಿ (!ADDR_SPACE_GENERIC_P (as1) && !ADDR_SPACE_GENERIC_P (as2) && as1 != as2)
     error_at (loc, "conflicting named address spaces (%s vs %s)",
 	      c_addr_space_name (as1), c_addr_space_name (as2));
 
-  if ((TREE_CODE (type) == ARRAY_TYPE
+  ಯದಿ ((ವೃಕ್ಷ_CODE (type) == ARRAY_TYPE
        || first_non_attr_kind == cdk_array)
       && TYPE_QUALS (element_type))
     {
@@ -7104,118 +7104,118 @@ grokdeclarator (const struct c_declarator *declarator,
 		| (volatilep ? TYPE_QUAL_VOLATILE : 0)
 		| (atomicp ? TYPE_QUAL_ATOMIC : 0)
 		| ENCODE_QUAL_ADDR_SPACE (address_space));
-  if (type_quals != TYPE_QUALS (element_type))
-    orig_qual_type = NULL_TREE;
+  ಯದಿ (type_quals != TYPE_QUALS (element_type))
+    orig_qual_type = NULL_ವೃಕ್ಷ;
 
   /* Applying the _Atomic qualifier to an array type (through the use
      of typedefs or typeof) must be detected here.  If the qualifier
      is introduced later, any appearance of applying it to an array is
      actually applying it to an element of that array.  */
-  if (declspecs->atomic_p && TREE_CODE (type) == ARRAY_TYPE)
+  ಯದಿ (declspecs->atomic_p && ವೃಕ್ಷ_CODE (type) == ARRAY_TYPE)
     error_at (loc, "%<_Atomic%>-qualified array type");
 
   /* Warn about storage classes that are invalid for certain
      kinds of declarations (parameters, typenames, etc.).  */
 
-  if (funcdef_flag
+  ಯದಿ (funcdef_flag
       && (threadp
 	  || constexprp
 	  || storage_class == csc_auto
 	  || storage_class == csc_register
 	  || storage_class == csc_typedef))
     {
-      if (storage_class == csc_auto)
+      ಯದಿ (storage_class == csc_auto)
 	pedwarn (loc,
 		 (current_scope == file_scope) ? 0 : OPT_Wpedantic,
 		 "function definition declared %<auto%>");
-      if (storage_class == csc_register)
+      ಯದಿ (storage_class == csc_register)
 	error_at (loc, "function definition declared %<register%>");
-      if (storage_class == csc_typedef)
+      ಯದಿ (storage_class == csc_typedef)
 	error_at (loc, "function definition declared %<typedef%>");
-      if (threadp)
+      ಯದಿ (threadp)
 	error_at (loc, "function definition declared %qs",
 		  declspecs->thread_gnu_p ? "__thread" : "_Thread_local");
-      threadp = false;
+      threadp = ಅಸತ್ಯ;
       /* The parser ensures a constexpr function definition never
 	 reaches here.  */
       gcc_assert (!constexprp);
-      if (storage_class == csc_auto
+      ಯದಿ (storage_class == csc_auto
 	  || storage_class == csc_register
 	  || storage_class == csc_typedef)
 	storage_class = csc_none;
     }
-  else if (decl_context != NORMAL && (storage_class != csc_none
+  ಅನ್ಯಥಾ ಯದಿ (decl_context != NORMAL && (storage_class != csc_none
 				      || threadp
 				      || constexprp
 				      || declspecs->c23_auto_p))
     {
-      if (decl_context == PARM
+      ಯದಿ (decl_context == PARM
 	  && storage_class == csc_register
 	  && !constexprp
 	  && !declspecs->c23_auto_p)
 	;
-      else
+      ಅನ್ಯಥಾ
 	{
-	  switch (decl_context)
+	  ವಿಕಲ್ಪ (decl_context)
 	    {
-	    case FIELD:
-	      if (name)
+	    ಪಕ್ಷ FIELD:
+	      ಯದಿ (name)
 		error_at (loc, "storage class specified for structure "
 		    	  "field %qE", name);
-	      else
+	      ಅನ್ಯಥಾ
 		error_at (loc, "storage class specified for structure field");
-	      break;
-	    case PARM:
-	      if (name)
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ PARM:
+	      ಯದಿ (name)
 		error_at (loc, "storage class specified for parameter %qE",
 		    	  name);
-	      else
+	      ಅನ್ಯಥಾ
 		error_at (loc, "storage class specified for unnamed parameter");
-	      break;
-	    default:
+	      ಭಙ್ಗ;
+	    ಸ್ವಭಾವ:
 	      error_at (loc, "storage class specified for typename");
-	      break;
+	      ಭಙ್ಗ;
 	    }
 	  storage_class = csc_none;
-	  threadp = false;
-	  constexprp = false;
+	  threadp = ಅಸತ್ಯ;
+	  constexprp = ಅಸತ್ಯ;
 	}
     }
-  else if (storage_class == csc_extern
+  ಅನ್ಯಥಾ ಯದಿ (storage_class == csc_extern
 	   && initialized
 	   && !funcdef_flag)
     {
       /* 'extern' with initialization is invalid if not at file scope.  */
-       if (current_scope == file_scope)
+       ಯದಿ (current_scope == file_scope)
          {
            /* It is fine to have 'extern const' when compiling at C
               and C++ intersection.  */
-           if (!(warn_cxx_compat && constp))
+           ಯದಿ (!(warn_cxx_compat && constp))
              warning_at (loc, 0, "%qE initialized and declared %<extern%>",
 		 	 name);
          }
-      else
+      ಅನ್ಯಥಾ
 	error_at (loc, "%qE has both %<extern%> and initializer", name);
     }
-  else if (current_scope == file_scope)
+  ಅನ್ಯಥಾ ಯದಿ (current_scope == file_scope)
     {
-      if (storage_class == csc_auto)
+      ಯದಿ (storage_class == csc_auto)
 	error_at (loc, "file-scope declaration of %qE specifies %<auto%>",
 	    	  name);
-      if (pedantic && storage_class == csc_register)
-	pedwarn (input_location, OPT_Wpedantic,
+      ಯದಿ (pedantic && storage_class == csc_register)
+	pedwarn (ಒಳಹರಿವು_location, OPT_Wpedantic,
 		 "file-scope declaration of %qE specifies %<register%>", name);
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      if (storage_class == csc_extern && funcdef_flag)
+      ಯದಿ (storage_class == csc_extern && funcdef_flag)
 	error_at (loc, "nested function %qE declared %<extern%>", name);
-      else if (threadp && storage_class == csc_none)
+      ಅನ್ಯಥಾ ಯದಿ (threadp && storage_class == csc_none)
 	{
 	  error_at (loc, "function-scope %qE implicitly auto and declared "
 		    "%qs", name,
 		    declspecs->thread_gnu_p ? "__thread" : "_Thread_local");
-	  threadp = false;
+	  threadp = ಅಸತ್ಯ;
 	}
     }
 
@@ -7229,12 +7229,12 @@ grokdeclarator (const struct c_declarator *declarator,
      form and then the qualified form is created with
      TYPE_MAIN_VARIANT pointing to the unqualified form.  */
 
-  while (declarator && declarator->kind != cdk_id)
+  ಯಾವತ್ (declarator && declarator->kind != cdk_id)
     {
-      if (type == error_mark_node)
+      ಯದಿ (type == error_mark_ಗಂಟು)
 	{
 	  declarator = declarator->declarator;
-	  continue;
+	  ಅನುವರ್ತ;
 	}
 
       /* Each level of DECLARATOR is either a cdk_array (for ...[..]),
@@ -7252,8 +7252,8 @@ grokdeclarator (const struct c_declarator *declarator,
 	 array or function or pointer, and DECLARATOR has had its
 	 outermost layer removed.  */
 
-      if (array_ptr_quals != TYPE_UNQUALIFIED
-	  || array_ptr_attrs != NULL_TREE
+      ಯದಿ (array_ptr_quals != TYPE_UNQUALIFIED
+	  || array_ptr_attrs != NULL_ವೃಕ್ಷ
 	  || array_parm_static)
 	{
 	  /* Only the innermost declarator (making a parameter be of
@@ -7261,18 +7261,18 @@ grokdeclarator (const struct c_declarator *declarator,
 	     may have static or type qualifiers.  */
 	  error_at (loc, "static or type qualifiers in non-parameter array declarator");
 	  array_ptr_quals = TYPE_UNQUALIFIED;
-	  array_ptr_attrs = NULL_TREE;
-	  array_parm_static = false;
+	  array_ptr_attrs = NULL_ವೃಕ್ಷ;
+	  array_parm_static = ಅಸತ್ಯ;
 	}
 
-      switch (declarator->kind)
+      ವಿಕಲ್ಪ (declarator->kind)
 	{
-	case cdk_attrs:
+	ಪಕ್ಷ cdk_attrs:
 	  {
 	    /* A declarator with embedded attributes.  */
-	    tree attrs = declarator->u.attrs;
-	    const struct c_declarator *inner_decl;
-	    int attr_flags = 0;
+	    ವೃಕ್ಷ attrs = declarator->u.attrs;
+	    ಧ್ರುವ ಸಂರಚನಾ c_declarator *inner_decl;
+	    ಪೂರ್ಣಾಙ್ಕ attr_flags = 0;
 	    declarator = declarator->declarator;
 	    /* Standard attribute syntax precisely defines what entity
 	       an attribute in each position appertains to, so only
@@ -7284,29 +7284,29 @@ grokdeclarator (const struct c_declarator *declarator,
 	       using a cdk_id declarator rather than using
 	       cdk_attrs.  */
 	    inner_decl = declarator;
-	    while (inner_decl->kind == cdk_attrs)
+	    ಯಾವತ್ (inner_decl->kind == cdk_attrs)
 	      inner_decl = inner_decl->declarator;
-	    if (!cxx11_attribute_p (attrs))
+	    ಯದಿ (!cxx11_attribute_p (attrs))
 	      {
-		if (inner_decl->kind == cdk_id)
-		  attr_flags |= (int) ATTR_FLAG_DECL_NEXT;
-		else if (inner_decl->kind == cdk_function)
-		  attr_flags |= (int) ATTR_FLAG_FUNCTION_NEXT;
-		else if (inner_decl->kind == cdk_array)
-		  attr_flags |= (int) ATTR_FLAG_ARRAY_NEXT;
+		ಯದಿ (inner_decl->kind == cdk_id)
+		  attr_flags |= (ಪೂರ್ಣಾಙ್ಕ) ATTR_FLAG_DECL_NEXT;
+		ಅನ್ಯಥಾ ಯದಿ (inner_decl->kind == cdk_function)
+		  attr_flags |= (ಪೂರ್ಣಾಙ್ಕ) ATTR_FLAG_FUNCTION_NEXT;
+		ಅನ್ಯಥಾ ಯದಿ (inner_decl->kind == cdk_array)
+		  attr_flags |= (ಪೂರ್ಣಾಙ್ಕ) ATTR_FLAG_ARRAY_NEXT;
 	      }
 	    attrs = c_warn_type_attributes (type, attrs);
 	    returned_attrs = decl_attributes (&type,
 					      chainon (returned_attrs, attrs),
 					      attr_flags);
-	    break;
+	    ಭಙ್ಗ;
 	  }
-	case cdk_array:
+	ಪಕ್ಷ cdk_array:
 	  {
-	    tree itype = NULL_TREE;
-	    tree size = declarator->u.array.dimen;
+	    ವೃಕ್ಷ itype = NULL_ವೃಕ್ಷ;
+	    ವೃಕ್ಷ size = declarator->u.array.dimen;
 	    /* The index is a signed object `sizetype' bits wide.  */
-	    tree index_type = c_common_signed_type (sizetype);
+	    ವೃಕ್ಷ index_type = c_common_signed_type (sizetype);
 
 	    array_ptr_quals = declarator->u.array.quals;
 	    array_ptr_attrs = declarator->u.array.attrs;
@@ -7315,266 +7315,266 @@ grokdeclarator (const struct c_declarator *declarator,
 
 	    declarator = declarator->declarator;
 
-	    bool flexible_array_member = false;
+	    ತಾರ್ಕಿಕ flexible_array_member = ಅಸತ್ಯ;
 
 	    /* Check for some types that there cannot be arrays of.  */
 
-	    if (VOID_TYPE_P (type))
+	    ಯದಿ (VOID_TYPE_P (type))
 	      {
-		if (name)
+		ಯದಿ (name)
 		  error_at (loc, "declaration of %qE as array of voids", name);
-		else
+		ಅನ್ಯಥಾ
 		  error_at (loc, "declaration of type name as array of voids");
-		type = error_mark_node;
+		type = error_mark_ಗಂಟು;
 	      }
 
-	    if (TREE_CODE (type) == FUNCTION_TYPE)
+	    ಯದಿ (ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
 	      {
-		if (name)
+		ಯದಿ (name)
 		  error_at (loc, "declaration of %qE as array of functions",
 		      	    name);
-		else
+		ಅನ್ಯಥಾ
 		  error_at (loc, "declaration of type name as array of "
 		            "functions");
-		type = error_mark_node;
+		type = error_mark_ಗಂಟು;
 	      }
 
-	    if (pedantic && !in_system_header_at (input_location)
+	    ಯದಿ (pedantic && !in_system_header_at (ಒಳಹರಿವು_location)
 		&& flexible_array_type_p (type))
 	      pedwarn (loc, OPT_Wpedantic,
 		       "invalid use of structure with flexible array member");
 
-	    if (size == error_mark_node)
-	      type = error_mark_node;
+	    ಯದಿ (size == error_mark_ಗಂಟು)
+	      type = error_mark_ಗಂಟು;
 
-	    if (type == error_mark_node)
-	      continue;
+	    ಯದಿ (type == error_mark_ಗಂಟು)
+	      ಅನುವರ್ತ;
 
-	    if (!verify_type_context (loc, TCTX_ARRAY_ELEMENT, type))
+	    ಯದಿ (!verify_type_context (loc, TCTX_ARRAY_ELEMENT, type))
 	      {
-		type = error_mark_node;
-		continue;
+		type = error_mark_ಗಂಟು;
+		ಅನುವರ್ತ;
 	      }
 
 	    /* If size was specified, set ITYPE to a range-type for
 	       that size.  Otherwise, ITYPE remains null.  finish_decl
 	       may figure it out from an initial value.  */
 
-	    if (size)
+	    ಯದಿ (size)
 	      {
-		bool size_maybe_const = true;
-		bool size_int_const = (TREE_CODE (size) == INTEGER_CST
-				       && !TREE_OVERFLOW (size));
-		bool this_size_varies = false;
+		ತಾರ್ಕಿಕ size_maybe_const = ಸತ್ಯ;
+		ತಾರ್ಕಿಕ size_int_const = (ವೃಕ್ಷ_CODE (size) == INTEGER_CST
+				       && !ವೃಕ್ಷ_OVERFLOW (size));
+		ತಾರ್ಕಿಕ this_size_varies = ಅಸತ್ಯ;
 
 		/* Strip NON_LVALUE_EXPRs since we aren't using as an
 		   lvalue.  */
 		STRIP_TYPE_NOPS (size);
 
-		if (!INTEGRAL_TYPE_P (TREE_TYPE (size)))
+		ಯದಿ (!INTEGRAL_TYPE_P (ವೃಕ್ಷ_TYPE (size)))
 		  {
-		    if (name)
+		    ಯದಿ (name)
 		      error_at (loc, "size of array %qE has non-integer type",
 				name);
-		    else
+		    ಅನ್ಯಥಾ
 		      error_at (loc,
 				"size of unnamed array has non-integer type");
-		    size = integer_one_node;
-		    size_int_const = true;
-		    size_error = true;
+		    size = integer_one_ಗಂಟು;
+		    size_int_const = ಸತ್ಯ;
+		    size_error = ಸತ್ಯ;
 		  }
 		/* This can happen with enum forward declaration.  */
-		else if (!COMPLETE_TYPE_P (TREE_TYPE (size)))
+		ಅನ್ಯಥಾ ಯದಿ (!COMPLETE_TYPE_P (ವೃಕ್ಷ_TYPE (size)))
 		  {
-		    if (name)
+		    ಯದಿ (name)
 		      error_at (loc, "size of array %qE has incomplete type",
 				name);
-		    else
+		    ಅನ್ಯಥಾ
 		      error_at (loc, "size of unnamed array has incomplete "
 				"type");
-		    size = integer_one_node;
-		    size_int_const = true;
-		    size_error = true;
+		    size = integer_one_ಗಂಟು;
+		    size_int_const = ಸತ್ಯ;
+		    size_error = ಸತ್ಯ;
 		  }
 
-		size = c_fully_fold (size, false, &size_maybe_const);
+		size = c_fully_fold (size, ಅಸತ್ಯ, &size_maybe_const);
 
-		if (pedantic && size_maybe_const && integer_zerop (size))
+		ಯದಿ (pedantic && size_maybe_const && integer_zerop (size))
 		  {
-		    if (name)
+		    ಯದಿ (name)
 		      pedwarn (loc, OPT_Wpedantic,
 			       "ISO C forbids zero-size array %qE", name);
-		    else
+		    ಅನ್ಯಥಾ
 		      pedwarn (loc, OPT_Wpedantic,
 			       "ISO C forbids zero-size array");
 		  }
 
-		if (TREE_CODE (size) == INTEGER_CST && size_maybe_const)
+		ಯದಿ (ವೃಕ್ಷ_CODE (size) == INTEGER_CST && size_maybe_const)
 		  {
 		    constant_expression_warning (size);
-		    if (tree_int_cst_sgn (size) < 0)
+		    ಯದಿ (ವೃಕ್ಷ_int_cst_sgn (size) < 0)
 		      {
-			if (name)
+			ಯದಿ (name)
 			  error_at (loc, "size of array %qE is negative", name);
-			else
+			ಅನ್ಯಥಾ
 			  error_at (loc, "size of unnamed array is negative");
-			size = integer_one_node;
-			size_int_const = true;
-			size_error = true;
+			size = integer_one_ಗಂಟು;
+			size_int_const = ಸತ್ಯ;
+			size_error = ಸತ್ಯ;
 		      }
 		    /* Handle a size folded to an integer constant but
 		       not an integer constant expression.  */
-		    if (!size_int_const)
+		    ಯದಿ (!size_int_const)
 		      {
 			/* If this is a file scope declaration of an
 			   ordinary identifier, this is invalid code;
 			   diagnosing it here and not subsequently
 			   treating the type as variable-length avoids
 			   more confusing diagnostics later.  */
-			if ((decl_context == NORMAL || decl_context == FIELD)
+			ಯದಿ ((decl_context == NORMAL || decl_context == FIELD)
 			    && current_scope == file_scope)
-			  pedwarn (input_location, 0,
+			  pedwarn (ಒಳಹರಿವು_location, 0,
 				   "variably modified %qE at file scope",
 				   name);
-			else
-			  this_size_varies = size_varies = true;
+			ಅನ್ಯಥಾ
+			  this_size_varies = size_varies = ಸತ್ಯ;
 			warn_variable_length_array (name, size);
 		      }
 		  }
-		else if ((decl_context == NORMAL || decl_context == FIELD)
+		ಅನ್ಯಥಾ ಯದಿ ((decl_context == NORMAL || decl_context == FIELD)
 			 && current_scope == file_scope)
 		  {
 		    error_at (loc, "variably modified %qE at file scope", name);
-		    size = integer_one_node;
+		    size = integer_one_ಗಂಟು;
 		  }
-		else
+		ಅನ್ಯಥಾ
 		  {
 		    /* Make sure the array size remains visibly
 		       nonconstant even if it is (eg) a const variable
 		       with known value.  */
-		    this_size_varies = size_varies = true;
+		    this_size_varies = size_varies = ಸತ್ಯ;
 		    warn_variable_length_array (name, size);
-		    if (sanitize_flags_p (SANITIZE_VLA)
-			&& current_function_decl != NULL_TREE
+		    ಯದಿ (sanitize_flags_p (SANITIZE_VLA)
+			&& current_function_decl != NULL_ವೃಕ್ಷ
 			&& decl_context == NORMAL)
 		      {
 			/* Evaluate the array size only once.  */
-			size = save_expr (size);
-			size = c_fully_fold (size, false, NULL);
-		        size = fold_build2 (COMPOUND_EXPR, TREE_TYPE (size),
+			size = save_ಅಭಿವ್ಯಕ್ತಿ (size);
+			size = c_fully_fold (size, ಅಸತ್ಯ, ರಿಕ್ತ);
+		        size = fold_build2 (COMPOUND_ಅಭಿವ್ಯಕ್ತಿ, ವೃಕ್ಷ_TYPE (size),
 					    ubsan_instrument_vla (loc, size),
 					    size);
 		      }
 		  }
 
-		if (integer_zerop (size) && !this_size_varies)
+		ಯದಿ (integer_zerop (size) && !this_size_varies)
 		  {
 		    /* A zero-length array cannot be represented with
 		       an unsigned index type, which is what we'll
 		       get with build_index_type.  Create an
 		       open-ended range instead.  */
-		    itype = build_index_type (NULL_TREE);
+		    itype = build_index_type (NULL_ವೃಕ್ಷ);
 		  }
-		else
+		ಅನ್ಯಥಾ
 		  {
 		    /* Arrange for the SAVE_EXPR on the inside of the
 		       MINUS_EXPR, which allows the -1 to get folded
 		       with the +1 that happens when building TYPE_SIZE.  */
-		    if (size_varies)
-		      size = save_expr (size);
-		    if (this_size_varies && TREE_CODE (size) == INTEGER_CST)
-		      size = build2 (COMPOUND_EXPR, TREE_TYPE (size),
-				     integer_zero_node, size);
+		    ಯದಿ (size_varies)
+		      size = save_ಅಭಿವ್ಯಕ್ತಿ (size);
+		    ಯದಿ (this_size_varies && ವೃಕ್ಷ_CODE (size) == INTEGER_CST)
+		      size = build2 (COMPOUND_ಅಭಿವ್ಯಕ್ತಿ, ವೃಕ್ಷ_TYPE (size),
+				     integer_zero_ಗಂಟು, size);
 
 		    /* Compute the maximum valid index, that is, size
 		       - 1.  Do the calculation in index_type, so that
 		       if it is a variable the computations will be
 		       done in the proper mode.  */
-		    itype = fold_build2_loc (loc, MINUS_EXPR, index_type,
+		    itype = fold_build2_loc (loc, MINUS_ಅಭಿವ್ಯಕ್ತಿ, index_type,
 					     convert (index_type, size),
 					     convert (index_type,
-						      size_one_node));
+						      size_one_ಗಂಟು));
 
 		    /* The above overflows when size does not fit
 		       in index_type.
 		       ???  While a size of INT_MAX+1 technically shouldn't
 		       cause an overflow (because we subtract 1), handling
 		       this case seems like an unnecessary complication.  */
-		    if (TREE_CODE (size) == INTEGER_CST
+		    ಯದಿ (ವೃಕ್ಷ_CODE (size) == INTEGER_CST
 			&& !int_fits_type_p (size, index_type))
 		      {
-			if (name)
+			ಯದಿ (name)
 			  error_at (loc, "size of array %qE is too large",
 			            name);
-			else
+			ಅನ್ಯಥಾ
 			  error_at (loc, "size of unnamed array is too large");
-			type = error_mark_node;
-			continue;
+			type = error_mark_ಗಂಟು;
+			ಅನುವರ್ತ;
 		      }
 
 		    itype = build_index_type (itype);
 		  }
-		if (this_size_varies)
+		ಯದಿ (this_size_varies)
 		  {
-		    if (TREE_SIDE_EFFECTS (size))
+		    ಯದಿ (ವೃಕ್ಷ_SIDE_EFFECTS (size))
 		      {
-			if (*expr)
-			  *expr = build2 (COMPOUND_EXPR, TREE_TYPE (size),
-					  *expr, size);
-			else
-			  *expr = size;
+			ಯದಿ (*ಅಭಿವ್ಯಕ್ತಿ)
+			  *ಅಭಿವ್ಯಕ್ತಿ = build2 (COMPOUND_ಅಭಿವ್ಯಕ್ತಿ, ವೃಕ್ಷ_TYPE (size),
+					  *ಅಭಿವ್ಯಕ್ತಿ, size);
+			ಅನ್ಯಥಾ
+			  *ಅಭಿವ್ಯಕ್ತಿ = size;
 		      }
-		    *expr_const_operands &= size_maybe_const;
+		    *ಅಭಿವ್ಯಕ್ತಿ_const_operands &= size_maybe_const;
 		  }
 	      }
-	    else if (decl_context == FIELD)
+	    ಅನ್ಯಥಾ ಯದಿ (decl_context == FIELD)
 	      {
-		if (array_parm_vla_unspec_p)
+		ಯದಿ (array_parm_vla_unspec_p)
 		  /* Field names can in fact have function prototype
 		     scope so [*] is disallowed here through making
 		     the field variably modified, not through being
 		     something other than a declaration with function
 		     prototype scope.  */
-		  size_varies = true;
-		else
+		  size_varies = ಸತ್ಯ;
+		ಅನ್ಯಥಾ
 		  {
-		    const struct c_declarator *t = declarator;
-		    while (t->kind == cdk_attrs)
+		    ಧ್ರುವ ಸಂರಚನಾ c_declarator *t = declarator;
+		    ಯಾವತ್ (t->kind == cdk_attrs)
 		      t = t->declarator;
 		    flexible_array_member = (t->kind == cdk_id);
 		  }
-		if (flexible_array_member
-		    && !in_system_header_at (input_location))
+		ಯದಿ (flexible_array_member
+		    && !in_system_header_at (ಒಳಹರಿವು_location))
 		  pedwarn_c90 (loc, OPT_Wpedantic, "ISO C90 does not "
 			       "support flexible array members");
 
 		/* ISO C99 Flexible array members are effectively
 		   identical to GCC's zero-length array extension.  */
-		if (flexible_array_member)
-		  itype = build_index_type (NULL_TREE);
+		ಯದಿ (flexible_array_member)
+		  itype = build_index_type (NULL_ವೃಕ್ಷ);
 	      }
 
 	    /* Complain about arrays of incomplete types.  */
-	    if (!COMPLETE_TYPE_P (type))
+	    ಯದಿ (!COMPLETE_TYPE_P (type))
 	      {
 		auto_diagnostic_group d;
 		error_at (loc, "array type has incomplete element type %qT",
 			  type);
 		/* See if we can be more helpful.  */
-		if (TREE_CODE (type) == ARRAY_TYPE)
+		ಯದಿ (ವೃಕ್ಷ_CODE (type) == ARRAY_TYPE)
 		  {
-		    if (name)
+		    ಯದಿ (name)
 		      inform (loc, "declaration of %qE as multidimensional "
 			      "array must have bounds for all dimensions "
 			      "except the first", name);
-		    else
+		    ಅನ್ಯಥಾ
 		      inform (loc, "declaration of multidimensional array "
 			      "must have bounds for all dimensions except "
 			      "the first");
 		  }
-		type = error_mark_node;
+		type = error_mark_ಗಂಟು;
 	      }
-	    else
+	    ಅನ್ಯಥಾ
 	    /* When itype is NULL, a shared incomplete array type is
 	       returned for all array of a given type.  Elsewhere we
 	       make sure we don't complete that type before copying
@@ -7583,101 +7583,101 @@ grokdeclarator (const struct c_declarator *declarator,
 	       below.  */
 	      {
 		addr_space_t as = DECODE_QUAL_ADDR_SPACE (type_quals);
-		if (!ADDR_SPACE_GENERIC_P (as) && as != TYPE_ADDR_SPACE (type))
+		ಯದಿ (!ADDR_SPACE_GENERIC_P (as) && as != TYPE_ADDR_SPACE (type))
 		  type = c_build_qualified_type (type,
 						 ENCODE_QUAL_ADDR_SPACE (as));
-		if (array_parm_vla_unspec_p)
+		ಯದಿ (array_parm_vla_unspec_p)
 		  type = c_build_array_type_unspecified (type);
 		/* The GCC extension for zero-length arrays differs from
 		   ISO flexible array members in that sizeof yields
 		   zero.  */
-		else if (size && integer_zerop (size))
+		ಅನ್ಯಥಾ ಯದಿ (size && integer_zerop (size))
 		  type = c_build_array_type_zero_size (type);
-		else
+		ಅನ್ಯಥಾ
 		  type = c_build_array_type (type, itype);
 
-		if (!valid_array_size_p (loc, type, name))
-		  type = error_mark_node;
+		ಯದಿ (!valid_array_size_p (loc, type, name))
+		  type = error_mark_ಗಂಟು;
 	      }
 
-	    if (array_parm_vla_unspec_p)
+	    ಯದಿ (array_parm_vla_unspec_p)
 	      {
 		/* C99 6.7.5.2p4 */
-		if (decl_context == TYPENAME)
+		ಯದಿ (decl_context == TYPENAME)
 		  warning (0, "%<[*]%> not in a declaration");
-		else if (decl_context != GENERIC_ASSOC
+		ಅನ್ಯಥಾ ಯದಿ (decl_context != GENERIC_ASSOC
 			 && decl_context != PARM
 			 && decl_context != FIELD)
 		  {
 		    error ("%<[*]%> not allowed in other than function prototype scope "
 			   "or generic association");
-		    type = error_mark_node;
+		    type = error_mark_ಗಂಟು;
 		  }
-		size_varies = true;
+		size_varies = ಸತ್ಯ;
 	      }
 
 
-	    gcc_assert (type == error_mark_node
+	    gcc_assert (type == error_mark_ಗಂಟು
 			|| flexible_array_member
 			   == flexible_array_member_type_p (type));
 
-	    if (decl_context != PARM
+	    ಯದಿ (decl_context != PARM
 		&& (array_ptr_quals != TYPE_UNQUALIFIED
-		    || array_ptr_attrs != NULL_TREE
+		    || array_ptr_attrs != NULL_ವೃಕ್ಷ
 		    || array_parm_static))
 	      {
 		error_at (loc, "static or type qualifiers in non-parameter "
 			  "array declarator");
 		array_ptr_quals = TYPE_UNQUALIFIED;
-		array_ptr_attrs = NULL_TREE;
-		array_parm_static = false;
+		array_ptr_attrs = NULL_ವೃಕ್ಷ;
+		array_parm_static = ಅಸತ್ಯ;
 	      }
 	    orig_qual_indirect++;
-	    break;
+	    ಭಙ್ಗ;
 	  }
-	case cdk_function:
+	ಪಕ್ಷ cdk_function:
 	  {
 	    /* Say it's a definition only for the declarator closest
 	       to the identifier, apart possibly from some
 	       attributes.  */
-	    bool really_funcdef = false;
-	    tree arg_types;
-	    orig_qual_type = NULL_TREE;
-	    if (funcdef_flag)
+	    ತಾರ್ಕಿಕ really_funcdef = ಅಸತ್ಯ;
+	    ವೃಕ್ಷ arg_types;
+	    orig_qual_type = NULL_ವೃಕ್ಷ;
+	    ಯದಿ (funcdef_flag)
 	      {
-		const struct c_declarator *t = declarator->declarator;
-		while (t->kind == cdk_attrs)
+		ಧ್ರುವ ಸಂರಚನಾ c_declarator *t = declarator->declarator;
+		ಯಾವತ್ (t->kind == cdk_attrs)
 		  t = t->declarator;
 		really_funcdef = (t->kind == cdk_id);
 	      }
 
 	    /* Declaring a function type.  Make sure we have a valid
 	       type for the function to return.  */
-	    if (type == error_mark_node)
-	      continue;
+	    ಯದಿ (type == error_mark_ಗಂಟು)
+	      ಅನುವರ್ತ;
 
-	    size_varies = false;
+	    size_varies = ಅಸತ್ಯ;
 
 	    /* Warn about some types functions can't return.  */
-	    if (TREE_CODE (type) == FUNCTION_TYPE)
+	    ಯದಿ (ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
 	      {
-		if (name)
+		ಯದಿ (name)
 		  error_at (loc, "%qE declared as function returning a "
 		      		 "function", name);
-		else
+		ಅನ್ಯಥಾ
 		  error_at (loc, "type name declared as function "
 			    "returning a function");
-		type = integer_type_node;
+		type = integer_type_ಗಂಟು;
 	      }
-	    if (TREE_CODE (type) == ARRAY_TYPE)
+	    ಯದಿ (ವೃಕ್ಷ_CODE (type) == ARRAY_TYPE)
 	      {
-		if (name)
+		ಯದಿ (name)
 		  error_at (loc, "%qE declared as function returning an array",
 		      	    name);
-		else
+		ಅನ್ಯಥಾ
 		  error_at (loc, "type name declared as function returning "
 		      	    "an array");
-		type = integer_type_node;
+		type = integer_type_ಗಂಟು;
 	      }
 
 	    /* Construct the function type and go to the next
@@ -7687,19 +7687,19 @@ grokdeclarator (const struct c_declarator *declarator,
 
 	    /* Type qualifiers before the return type of the function
 	       qualify the return type, not the function type.  */
-	    if (type_quals)
+	    ಯದಿ (type_quals)
 	      {
-		const enum c_declspec_word ignored_quals_list[] =
+		ಧ್ರುವ ಗಣನಾ c_declspec_word ignored_quals_list[] =
 		  {
 		    cdw_const, cdw_volatile, cdw_restrict, cdw_address_space,
-		    cdw_atomic, cdw_number_of_elements
+		    cdw_atomic, cdw_ಸಂಖ್ಯೆ_of_elements
 		  };
 		location_t specs_loc
 		  = smallest_type_quals_location (declspecs->locations,
 						  ignored_quals_list);
-		if (specs_loc == UNKNOWN_LOCATION)
+		ಯದಿ (specs_loc == UNKNOWN_LOCATION)
 		  specs_loc = declspecs->locations[cdw_typedef];
-		if (specs_loc == UNKNOWN_LOCATION)
+		ಯದಿ (specs_loc == UNKNOWN_LOCATION)
 		  specs_loc = loc;
 
 		/* Type qualifiers on a function return type are
@@ -7712,16 +7712,16 @@ grokdeclarator (const struct c_declarator *declarator,
 		   actually removed from the return type when
 		   determining the function type.  For C23, _Atomic is
 		   removed as well.  */
-		int quals_used = type_quals;
-		if (flag_isoc23)
+		ಪೂರ್ಣಾಙ್ಕ quals_used = type_quals;
+		ಯದಿ (flag_isoc23)
 		  quals_used = 0;
-		else if (flag_isoc11)
+		ಅನ್ಯಥಾ ಯದಿ (flag_isoc11)
 		  quals_used &= TYPE_QUAL_ATOMIC;
-		if (quals_used && VOID_TYPE_P (type) && really_funcdef)
+		ಯದಿ (quals_used && VOID_TYPE_P (type) && really_funcdef)
 		  pedwarn (specs_loc, 0,
 			   "function definition has qualified void "
 			   "return type");
-		else
+		ಅನ್ಯಥಾ
 		  warning_at (specs_loc, OPT_Wignored_qualifiers,
 			      "type qualifiers ignored on function "
 			      "return type");
@@ -7729,10 +7729,10 @@ grokdeclarator (const struct c_declarator *declarator,
 		/* Ensure an error for restrict on invalid types; the
 		   DR#423 resolution is not entirely clear about
 		   this.  */
-		if (flag_isoc11
+		ಯದಿ (flag_isoc11
 		    && (type_quals & TYPE_QUAL_RESTRICT)
 		    && (!POINTER_TYPE_P (type)
-			|| !C_TYPE_OBJECT_OR_INCOMPLETE_P (TREE_TYPE (type))))
+			|| !C_TYPE_OBJECT_OR_INCOMPLETE_P (ವೃಕ್ಷ_TYPE (type))))
 		  error_at (loc, "invalid use of %<restrict%>");
 		type = c_build_qualified_type (type, quals_used);
 	      }
@@ -7752,28 +7752,28 @@ grokdeclarator (const struct c_declarator *declarator,
 	      FOR_EACH_VEC_SAFE_ELT_REVERSE (arg_info->tags, ix, tag)
 		TYPE_CONTEXT (tag->type) = type;
 	    }
-	    break;
+	    ಭಙ್ಗ;
 	  }
-	case cdk_pointer:
+	ಪಕ್ಷ cdk_pointer:
 	  {
 	    /* Merge any constancy or volatility into the target type
 	       for the pointer.  */
-	    if ((type_quals & TYPE_QUAL_ATOMIC)
-		&& TREE_CODE (type) == FUNCTION_TYPE)
+	    ಯದಿ ((type_quals & TYPE_QUAL_ATOMIC)
+		&& ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
 	      {
 		error_at (loc,
 			  "%<_Atomic%>-qualified function type");
 		type_quals &= ~TYPE_QUAL_ATOMIC;
 	      }
-	    else if (pedantic && TREE_CODE (type) == FUNCTION_TYPE
+	    ಅನ್ಯಥಾ ಯದಿ (pedantic && ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE
 		     && type_quals)
 	      pedwarn (loc, OPT_Wpedantic,
 		       "ISO C forbids qualified function types");
-	    if (type_quals)
+	    ಯದಿ (type_quals)
 	      type = c_build_qualified_type (type, type_quals, orig_qual_type,
 					     orig_qual_indirect);
-	    orig_qual_type = NULL_TREE;
-	    size_varies = false;
+	    orig_qual_type = NULL_ವೃಕ್ಷ;
+	    size_varies = ಅಸತ್ಯ;
 
 	    /* When the pointed-to type involves components of variable size,
 	       care must be taken to ensure that the size evaluation code is
@@ -7784,12 +7784,12 @@ grokdeclarator (const struct c_declarator *declarator,
 	       This is expected to happen automatically when the pointed-to
 	       type has a name/declaration of it's own, but special attention
 	       is required if the type is anonymous. */
-	    if (!TYPE_NAME (type) && c_type_variably_modified_p (type))
+	    ಯದಿ (!TYPE_NAME (type) && c_type_variably_modified_p (type))
 	      {
-		bool bind_p = decl_context == TYPENAME
+		ತಾರ್ಕಿಕ bind_p = decl_context == TYPENAME
 			      || decl_context == FIELD
 			      || decl_context == PARM;
-		add_decl_expr (loc, type, bind_p ? expr : NULL, true);
+		add_decl_ಅಭಿವ್ಯಕ್ತಿ (loc, type, bind_p ? ಅಭಿವ್ಯಕ್ತಿ : ರಿಕ್ತ, ಸತ್ಯ);
 	      }
 
 	    type = c_build_pointer_type (type);
@@ -7799,9 +7799,9 @@ grokdeclarator (const struct c_declarator *declarator,
 	    type_quals = declarator->u.pointer_quals;
 
 	    declarator = declarator->declarator;
-	    break;
+	    ಭಙ್ಗ;
 	  }
-	default:
+	ಸ್ವಭಾವ:
 	  gcc_unreachable ();
 	}
     }
@@ -7814,106 +7814,106 @@ grokdeclarator (const struct c_declarator *declarator,
   /* Warn about address space used for things other than static memory or
      pointers.  */
   address_space = DECODE_QUAL_ADDR_SPACE (type_quals);
-  if (!ADDR_SPACE_GENERIC_P (address_space))
+  ಯದಿ (!ADDR_SPACE_GENERIC_P (address_space))
     {
-      if (decl_context == NORMAL)
+      ಯದಿ (decl_context == NORMAL)
 	{
-	  switch (storage_class)
+	  ವಿಕಲ್ಪ (storage_class)
 	    {
-	    case csc_auto:
+	    ಪಕ್ಷ csc_auto:
 	      error ("%qs combined with %<auto%> qualifier for %qE",
 		     c_addr_space_name (address_space), name);
-	      break;
-	    case csc_register:
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ csc_register:
 	      error ("%qs combined with %<register%> qualifier for %qE",
 		     c_addr_space_name (address_space), name);
-	      break;
-	    case csc_none:
-	      if (current_function_scope)
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ csc_none:
+	      ಯದಿ (current_function_scope)
 		{
 		  error ("%qs specified for auto variable %qE",
 			 c_addr_space_name (address_space), name);
-		  break;
+		  ಭಙ್ಗ;
 		}
-	      break;
-	    case csc_static:
-	    case csc_extern:
-	    case csc_typedef:
-	      break;
-	    default:
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ csc_static:
+	    ಪಕ್ಷ csc_extern:
+	    ಪಕ್ಷ csc_typedef:
+	      ಭಙ್ಗ;
+	    ಸ್ವಭಾವ:
 	      gcc_unreachable ();
 	    }
 	}
-      else if (decl_context == PARM && TREE_CODE (type) != ARRAY_TYPE)
+      ಅನ್ಯಥಾ ಯದಿ (decl_context == PARM && ವೃಕ್ಷ_CODE (type) != ARRAY_TYPE)
 	{
-	  if (name)
+	  ಯದಿ (name)
 	    error ("%qs specified for parameter %qE",
 		   c_addr_space_name (address_space), name);
-	  else
+	  ಅನ್ಯಥಾ
 	    error ("%qs specified for unnamed parameter",
 		   c_addr_space_name (address_space));
 	}
-      else if (decl_context == FIELD)
+      ಅನ್ಯಥಾ ಯದಿ (decl_context == FIELD)
 	{
-	  if (name)
+	  ಯದಿ (name)
 	    error ("%qs specified for structure field %qE",
 		   c_addr_space_name (address_space), name);
-	  else
+	  ಅನ್ಯಥಾ
 	    error ("%qs specified for structure field",
 		   c_addr_space_name (address_space));
 	}
     }
 
   /* Check the type and width of a bit-field.  */
-  if (bitfield)
+  ಯದಿ (bitfield)
     {
       check_bitfield_type_and_width (loc, &type, width, name);
       /* C11 makes it implementation-defined (6.7.2.1#5) whether
 	 atomic types are permitted for bit-fields; we have no code to
 	 make bit-field accesses atomic, so disallow them.  */
-      if (type_quals & TYPE_QUAL_ATOMIC)
+      ಯದಿ (type_quals & TYPE_QUAL_ATOMIC)
 	{
-	  if (name)
+	  ಯದಿ (name)
 	    error_at (loc, "bit-field %qE has atomic type", name);
-	  else
+	  ಅನ್ಯಥಾ
 	    error_at (loc, "bit-field has atomic type");
 	  type_quals &= ~TYPE_QUAL_ATOMIC;
 	}
     }
 
   /* Reject invalid uses of _Alignas.  */
-  if (declspecs->alignas_p)
+  ಯದಿ (declspecs->alignas_p)
     {
-      if (storage_class == csc_typedef)
+      ಯದಿ (storage_class == csc_typedef)
 	error_at (loc, "alignment specified for typedef %qE", name);
-      else if (storage_class == csc_register)
+      ಅನ್ಯಥಾ ಯದಿ (storage_class == csc_register)
 	error_at (loc, "alignment specified for %<register%> object %qE",
 		  name);
-      else if (decl_context == PARM)
+      ಅನ್ಯಥಾ ಯದಿ (decl_context == PARM)
 	{
-	  if (name)
+	  ಯದಿ (name)
 	    error_at (loc, "alignment specified for parameter %qE", name);
-	  else
+	  ಅನ್ಯಥಾ
 	    error_at (loc, "alignment specified for unnamed parameter");
 	}
-      else if (bitfield)
+      ಅನ್ಯಥಾ ಯದಿ (bitfield)
 	{
-	  if (name)
+	  ಯದಿ (name)
 	    error_at (loc, "alignment specified for bit-field %qE", name);
-	  else
+	  ಅನ್ಯಥಾ
 	    error_at (loc, "alignment specified for unnamed bit-field");
 	}
-      else if (TREE_CODE (type) == FUNCTION_TYPE)
+      ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
 	error_at (loc, "alignment specified for function %qE", name);
-      else if (declspecs->align_log != -1 && TYPE_P (type))
+      ಅನ್ಯಥಾ ಯದಿ (declspecs->align_log != -1 && TYPE_P (type))
 	{
 	  alignas_align = 1U << declspecs->align_log;
-	  if (alignas_align < min_align_of_type (type))
+	  ಯದಿ (alignas_align < min_align_of_type (type))
 	    {
-	      if (name)
+	      ಯದಿ (name)
 		error_at (loc, "%<_Alignas%> specifiers cannot reduce "
 			  "alignment of %qE", name);
-	      else
+	      ಅನ್ಯಥಾ
 		error_at (loc, "%<_Alignas%> specifiers cannot reduce "
 			  "alignment of unnamed field");
 	      alignas_align = 0;
@@ -7923,44 +7923,44 @@ grokdeclarator (const struct c_declarator *declarator,
 
   /* If this is declaring a typedef name, return a TYPE_DECL.  */
 
-  if (storage_class == csc_typedef)
+  ಯದಿ (storage_class == csc_typedef)
     {
-      tree decl;
-      if ((type_quals & TYPE_QUAL_ATOMIC)
-	  && TREE_CODE (type) == FUNCTION_TYPE)
+      ವೃಕ್ಷ decl;
+      ಯದಿ ((type_quals & TYPE_QUAL_ATOMIC)
+	  && ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
 	{
 	  error_at (loc,
 		    "%<_Atomic%>-qualified function type");
 	  type_quals &= ~TYPE_QUAL_ATOMIC;
 	}
-      else if (pedantic && TREE_CODE (type) == FUNCTION_TYPE
+      ಅನ್ಯಥಾ ಯದಿ (pedantic && ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE
 	       && type_quals)
 	pedwarn (loc, OPT_Wpedantic,
 		 "ISO C forbids qualified function types");
-      if (type_quals)
+      ಯದಿ (type_quals)
 	type = c_build_qualified_type (type, type_quals, orig_qual_type,
 				       orig_qual_indirect);
       decl = build_decl (declarator->id_loc,
 			 TYPE_DECL, declarator->u.id.id, type);
-      if (declspecs->explicit_signed_p)
+      ಯದಿ (declspecs->explicit_signed_p)
 	C_TYPEDEF_EXPLICITLY_SIGNED (decl) = 1;
-      if (declspecs->inline_p)
+      ಯದಿ (declspecs->inline_p)
 	pedwarn (loc, 0,"typedef %q+D declared %<inline%>", decl);
-      if (declspecs->noreturn_p)
+      ಯದಿ (declspecs->noreturn_p)
 	pedwarn (loc, 0,"typedef %q+D declared %<_Noreturn%>", decl);
 
-      if (warn_cxx_compat && declarator->u.id.id != NULL_TREE)
+      ಯದಿ (warn_cxx_compat && declarator->u.id.id != NULL_ವೃಕ್ಷ)
 	{
-	  struct c_binding *b = I_TAG_BINDING (declarator->u.id.id);
+	  ಸಂರಚನಾ c_binding *b = I_TAG_BINDING (declarator->u.id.id);
 
-	  if (b != NULL
-	      && b->decl != NULL_TREE
+	  ಯದಿ (b != ರಿಕ್ತ
+	      && b->decl != NULL_ವೃಕ್ಷ
 	      && (B_IN_CURRENT_SCOPE (b)
 		  || (current_scope == file_scope && B_IN_EXTERNAL_SCOPE (b)))
 	      && TYPE_MAIN_VARIANT (b->decl) != TYPE_MAIN_VARIANT (type))
 	    {
 	      auto_diagnostic_group d;
-	      if (warning_at (declarator->id_loc, OPT_Wc___compat,
+	      ಯದಿ (warning_at (declarator->id_loc, OPT_Wc___compat,
 			      "using %qD as both a typedef and a tag is "
 			      "invalid in C++", decl)
 		  && b->locus != UNKNOWN_LOCATION)
@@ -7968,36 +7968,36 @@ grokdeclarator (const struct c_declarator *declarator,
 	    }
 	}
 
-      return decl;
+      ಪ್ರತ್ಯಾಗಮ decl;
     }
 
   /* If this is a type name (such as, in a cast or sizeof),
      compute the type and return it now.  */
 
-  if (decl_context == TYPENAME || decl_context == GENERIC_ASSOC)
+  ಯದಿ (decl_context == TYPENAME || decl_context == GENERIC_ASSOC)
     {
       /* Note that the grammar rejects storage classes in typenames
 	 and fields.  */
       gcc_assert (storage_class == csc_none && !threadp
 		  && !declspecs->inline_p && !declspecs->noreturn_p);
-      if ((type_quals & TYPE_QUAL_ATOMIC)
-	  && TREE_CODE (type) == FUNCTION_TYPE)
+      ಯದಿ ((type_quals & TYPE_QUAL_ATOMIC)
+	  && ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
 	{
 	  error_at (loc,
 		    "%<_Atomic%>-qualified function type");
 	  type_quals &= ~TYPE_QUAL_ATOMIC;
 	}
-      else if (pedantic && TREE_CODE (type) == FUNCTION_TYPE
+      ಅನ್ಯಥಾ ಯದಿ (pedantic && ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE
 	       && type_quals)
 	pedwarn (loc, OPT_Wpedantic,
 		 "ISO C forbids const or volatile function types");
-      if (type_quals)
+      ಯದಿ (type_quals)
 	type = c_build_qualified_type (type, type_quals, orig_qual_type,
 				       orig_qual_indirect);
-      return type;
+      ಪ್ರತ್ಯಾಗಮ type;
     }
 
-  if (pedantic && decl_context == FIELD
+  ಯದಿ (pedantic && decl_context == FIELD
       && c_type_variably_modified_p (type))
     {
       /* C99 6.7.2.1p8 */
@@ -8011,94 +8011,94 @@ grokdeclarator (const struct c_declarator *declarator,
      We don't complain about parms either, but that is because
      a better error message can be made later.  */
 
-  if (VOID_TYPE_P (type) && decl_context != PARM
-      && !((decl_context != FIELD && TREE_CODE (type) != FUNCTION_TYPE)
+  ಯದಿ (VOID_TYPE_P (type) && decl_context != PARM
+      && !((decl_context != FIELD && ವೃಕ್ಷ_CODE (type) != FUNCTION_TYPE)
 	    && (storage_class == csc_extern
 		|| (current_scope == file_scope
 		    && !(storage_class == csc_static
 			 || storage_class == csc_register)))))
     {
       error_at (loc, "variable or field %qE declared void", name);
-      type = integer_type_node;
+      type = integer_type_ಗಂಟು;
     }
 
   /* Now create the decl, which may be a VAR_DECL, a PARM_DECL
      or a FUNCTION_DECL, depending on DECL_CONTEXT and TYPE.  */
 
   {
-    tree decl;
+    ವೃಕ್ಷ decl;
 
-    if (decl_context == PARM)
+    ಯದಿ (decl_context == PARM)
       {
-	tree promoted_type;
-	bool array_parameter_p = false;
+	ವೃಕ್ಷ promoted_type;
+	ತಾರ್ಕಿಕ array_parameter_p = ಅಸತ್ಯ;
 
 	/* A parameter declared as an array of T is really a pointer to T.
 	   One declared as a function is really a pointer to a function.  */
 
-	if (TREE_CODE (type) == ARRAY_TYPE)
+	ಯದಿ (ವೃಕ್ಷ_CODE (type) == ARRAY_TYPE)
 	  {
-	    if (!size_error)
+	    ಯದಿ (!size_error)
 	      *decl_attrs = build_arg_spec_attribute (type, array_parm_static,
 						      *decl_attrs);
 
 	    /* Transfer const-ness of array into that of type pointed to.  */
-	    type = TREE_TYPE (type);
-	    if (orig_qual_type != NULL_TREE)
+	    type = ವೃಕ್ಷ_TYPE (type);
+	    ಯದಿ (orig_qual_type != NULL_ವೃಕ್ಷ)
 	      {
-		if (orig_qual_indirect == 0)
-		  orig_qual_type = TREE_TYPE (orig_qual_type);
-		else
+		ಯದಿ (orig_qual_indirect == 0)
+		  orig_qual_type = ವೃಕ್ಷ_TYPE (orig_qual_type);
+		ಅನ್ಯಥಾ
 		  orig_qual_indirect--;
 	      }
-	    if (type_quals)
+	    ಯದಿ (type_quals)
 	      type = c_build_qualified_type (type, type_quals, orig_qual_type,
 					     orig_qual_indirect);
 
 	    /* The pointed-to type may need a decl expr (see above).  */
-	    if (!TYPE_NAME (type) && c_type_variably_modified_p (type))
+	    ಯದಿ (!TYPE_NAME (type) && c_type_variably_modified_p (type))
 	      {
-		bool bind_p = decl_context == TYPENAME
+		ತಾರ್ಕಿಕ bind_p = decl_context == TYPENAME
 			      || decl_context == FIELD
 			      || decl_context == PARM;
-		add_decl_expr (loc, type, bind_p ? expr : NULL, true);
+		add_decl_ಅಭಿವ್ಯಕ್ತಿ (loc, type, bind_p ? ಅಭಿವ್ಯಕ್ತಿ : ರಿಕ್ತ, ಸತ್ಯ);
 	      }
 
 	    type = c_build_pointer_type (type);
 	    type_quals = array_ptr_quals;
-	    if (type_quals)
+	    ಯದಿ (type_quals)
 	      type = c_build_qualified_type (type, type_quals);
 
 	    /* We don't yet implement attributes in this context.  */
-	    if (array_ptr_attrs != NULL_TREE)
+	    ಯದಿ (array_ptr_attrs != NULL_ವೃಕ್ಷ)
 	      warning_at (loc, OPT_Wattributes,
 			  "attributes in parameter array declarator ignored");
 
-	    size_varies = false;
-	    array_parameter_p = true;
+	    size_varies = ಅಸತ್ಯ;
+	    array_parameter_p = ಸತ್ಯ;
 	  }
-	else if (TREE_CODE (type) == FUNCTION_TYPE)
+	ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
 	  {
-	    if (type_quals & TYPE_QUAL_ATOMIC)
+	    ಯದಿ (type_quals & TYPE_QUAL_ATOMIC)
 	      {
 		error_at (loc,
 			  "%<_Atomic%>-qualified function type");
 		type_quals &= ~TYPE_QUAL_ATOMIC;
 	      }
-	    else if (type_quals)
+	    ಅನ್ಯಥಾ ಯದಿ (type_quals)
 	      pedwarn (loc, OPT_Wpedantic,
 		       "ISO C forbids qualified function types");
-	    if (type_quals)
+	    ಯದಿ (type_quals)
 	      type = c_build_qualified_type (type, type_quals);
 	    type = c_build_pointer_type (type);
 	    type_quals = TYPE_UNQUALIFIED;
 	  }
-	else if (type_quals)
+	ಅನ್ಯಥಾ ಯದಿ (type_quals)
 	  type = c_build_qualified_type (type, type_quals);
 
 	decl = build_decl (declarator->id_loc,
 			   PARM_DECL, declarator->u.id.id, type);
-	if (size_varies)
+	ಯದಿ (size_varies)
 	  C_DECL_VARIABLE_SIZE (decl) = 1;
 	C_ARRAY_PARAMETER (decl) = array_parameter_p;
 
@@ -8107,18 +8107,18 @@ grokdeclarator (const struct c_declarator *declarator,
 	   (For example, shorts and chars are passed as ints.)
 	   When there is a prototype, this is overridden later.  */
 
-	if (type == error_mark_node)
+	ಯದಿ (type == error_mark_ಗಂಟು)
 	  promoted_type = type;
-	else
+	ಅನ್ಯಥಾ
 	  promoted_type = c_type_promotes_to (type);
 
 	DECL_ARG_TYPE (decl) = promoted_type;
-	if (declspecs->inline_p)
+	ಯದಿ (declspecs->inline_p)
 	  pedwarn (loc, 0, "parameter %q+D declared %<inline%>", decl);
-	if (declspecs->noreturn_p)
+	ಯದಿ (declspecs->noreturn_p)
 	  pedwarn (loc, 0, "parameter %q+D declared %<_Noreturn%>", decl);
       }
-    else if (decl_context == FIELD)
+    ಅನ್ಯಥಾ ಯದಿ (decl_context == FIELD)
       {
 	/* Note that the grammar rejects storage classes in typenames
 	   and fields.  */
@@ -8127,72 +8127,72 @@ grokdeclarator (const struct c_declarator *declarator,
 
 	/* Structure field.  It may not be a function.  */
 
-	if (TREE_CODE (type) == FUNCTION_TYPE)
+	ಯದಿ (ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
 	  {
 	    error_at (loc, "field %qE declared as a function", name);
 	    type = c_build_pointer_type (type);
 	  }
-	else if (TREE_CODE (type) != ERROR_MARK
+	ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (type) != ERROR_MARK
 		 && !COMPLETE_OR_UNBOUND_ARRAY_TYPE_P (type))
 	  {
-	    if (name)
+	    ಯದಿ (name)
 	      error_at (loc, "field %qE has incomplete type", name);
-	    else
+	    ಅನ್ಯಥಾ
 	      error_at (loc, "unnamed field has incomplete type");
-	    type = error_mark_node;
+	    type = error_mark_ಗಂಟು;
 	  }
-	else if (TREE_CODE (type) == ARRAY_TYPE
-		 && TYPE_DOMAIN (type) == NULL_TREE)
+	ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (type) == ARRAY_TYPE
+		 && TYPE_DOMAIN (type) == NULL_ವೃಕ್ಷ)
 	  {
 	    /* We have a flexible array member through a typedef.
 	       Set suitable range.  Whether this is a correct position
 	       for a flexible array member will be determined elsewhere.  */
-	    if (!in_system_header_at (input_location))
+	    ಯದಿ (!in_system_header_at (ಒಳಹರಿವು_location))
 	      pedwarn_c90 (loc, OPT_Wpedantic, "ISO C90 does not "
 			   "support flexible array members");
 	    type = build_distinct_type_copy (TYPE_MAIN_VARIANT (type));
-	    TYPE_DOMAIN (type) = build_index_type (NULL_TREE);
-	    if (orig_qual_indirect == 0)
-	      orig_qual_type = NULL_TREE;
+	    TYPE_DOMAIN (type) = build_index_type (NULL_ವೃಕ್ಷ);
+	    ಯದಿ (orig_qual_indirect == 0)
+	      orig_qual_type = NULL_ವೃಕ್ಷ;
 	  }
-	if (type != error_mark_node
+	ಯದಿ (type != error_mark_ಗಂಟು
 	    && !verify_type_context (loc, TCTX_FIELD, type))
-	  type = error_mark_node;
+	  type = error_mark_ಗಂಟು;
 
 	type = c_build_qualified_type (type, type_quals, orig_qual_type,
 				       orig_qual_indirect);
 	decl = build_decl (declarator->id_loc,
 			   FIELD_DECL, declarator->u.id.id, type);
 	DECL_NONADDRESSABLE_P (decl) = bitfield;
-	if (bitfield && !declarator->u.id.id)
+	ಯದಿ (bitfield && !declarator->u.id.id)
 	  DECL_PADDING_P (decl) = 1;
 
-	if (size_varies)
+	ಯದಿ (size_varies)
 	  C_DECL_VARIABLE_SIZE (decl) = 1;
       }
-    else if (TREE_CODE (type) == FUNCTION_TYPE)
+    ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
       {
-	if (storage_class == csc_register || threadp || constexprp)
+	ಯದಿ (storage_class == csc_register || threadp || constexprp)
 	  {
 	    error_at (loc, "invalid storage class for function %qE", name);
 	  }
-	else if (current_scope != file_scope)
+	ಅನ್ಯಥಾ ಯದಿ (current_scope != file_scope)
 	  {
 	    /* Function declaration not at file scope.  Storage
 	       classes other than `extern' are not allowed, C99
 	       6.7.1p5, and `extern' makes no difference.  However,
 	       GCC allows 'auto', perhaps with 'inline', to support
 	       nested functions.  */
-	    if (storage_class == csc_auto)
+	    ಯದಿ (storage_class == csc_auto)
 		pedwarn (loc, OPT_Wpedantic,
 			 "invalid storage class for function %qE", name);
-	    else if (storage_class == csc_static)
+	    ಅನ್ಯಥಾ ಯದಿ (storage_class == csc_static)
 	      {
 		error_at (loc, "invalid storage class for function %qE", name);
-		if (funcdef_flag)
+		ಯದಿ (funcdef_flag)
 		  storage_class = declspecs->storage_class = csc_none;
-		else
-		  return NULL_TREE;
+		ಅನ್ಯಥಾ
+		  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 	      }
 	  }
 
@@ -8200,13 +8200,13 @@ grokdeclarator (const struct c_declarator *declarator,
 			   FUNCTION_DECL, declarator->u.id.id, type);
 	decl = build_decl_attribute_variant (decl, decl_attr);
 
-	if (type_quals & TYPE_QUAL_ATOMIC)
+	ಯದಿ (type_quals & TYPE_QUAL_ATOMIC)
 	  {
 	    error_at (loc,
 		      "%<_Atomic%>-qualified function type");
 	    type_quals &= ~TYPE_QUAL_ATOMIC;
 	  }
-	else if (pedantic && type_quals && !DECL_IN_SYSTEM_HEADER (decl))
+	ಅನ್ಯಥಾ ಯದಿ (pedantic && type_quals && !DECL_IN_SYSTEM_HEADER (decl))
 	  pedwarn (loc, OPT_Wpedantic,
 		   "ISO C forbids qualified function types");
 
@@ -8215,54 +8215,54 @@ grokdeclarator (const struct c_declarator *declarator,
 	   scope and are explicitly declared "auto".  This is
 	   forbidden by standard C (C99 6.7.1p5) and is interpreted by
 	   GCC to signify a forward declaration of a nested function.  */
-	if (storage_class == csc_auto && current_scope != file_scope)
+	ಯದಿ (storage_class == csc_auto && current_scope != file_scope)
 	  DECL_EXTERNAL (decl) = 0;
 	/* In C99, a function which is declared 'inline' with 'extern'
 	   is not an external reference (which is confusing).  It
 	   means that the later definition of the function must be output
 	   in this file, C99 6.7.4p6.  In GNU C89, a function declared
 	   'extern inline' is an external reference.  */
-	else if (declspecs->inline_p && storage_class != csc_static)
+	ಅನ್ಯಥಾ ಯದಿ (declspecs->inline_p && storage_class != csc_static)
 	  DECL_EXTERNAL (decl) = ((storage_class == csc_extern)
 				  == flag_gnu89_inline);
-	else
+	ಅನ್ಯಥಾ
 	  DECL_EXTERNAL (decl) = !initialized;
 
 	/* Record absence of global scope for `static' or `auto'.  */
-	TREE_PUBLIC (decl)
+	ವೃಕ್ಷ_PUBLIC (decl)
 	  = !(storage_class == csc_static || storage_class == csc_auto);
 
 	/* For a function definition, record the argument information
 	   block where store_parm_decls will look for it.  */
-	if (funcdef_flag)
+	ಯದಿ (funcdef_flag)
 	  current_function_arg_info = arg_info;
 
-	if (declspecs->default_int_p)
+	ಯದಿ (declspecs->default_int_p)
 	  C_FUNCTION_IMPLICIT_INT (decl) = 1;
 
 	/* Record presence of `inline' and `_Noreturn', if it is
 	   reasonable.  */
-	if (flag_hosted && MAIN_NAME_P (declarator->u.id.id))
+	ಯದಿ (flag_hosted && MAIN_NAME_P (declarator->u.id.id))
 	  {
-	    if (declspecs->inline_p)
+	    ಯದಿ (declspecs->inline_p)
 	      pedwarn (loc, 0, "cannot inline function %<main%>");
-	    if (declspecs->noreturn_p)
+	    ಯದಿ (declspecs->noreturn_p)
 	      pedwarn (loc, 0, "%<main%> declared %<_Noreturn%>");
 	  }
-	else
+	ಅನ್ಯಥಾ
 	  {
-	    if (declspecs->inline_p)
+	    ಯದಿ (declspecs->inline_p)
 	      /* Record that the function is declared `inline'.  */
 	      DECL_DECLARED_INLINE_P (decl) = 1;
-	    if (declspecs->noreturn_p)
+	    ಯದಿ (declspecs->noreturn_p)
 	      {
-		if (flag_isoc99)
+		ಯದಿ (flag_isoc99)
 		  pedwarn_c99 (loc, OPT_Wpedantic,
 			       "ISO C99 does not support %<_Noreturn%>");
-		else
+		ಅನ್ಯಥಾ
 		  pedwarn_c99 (loc, OPT_Wpedantic,
 			       "ISO C90 does not support %<_Noreturn%>");
-		TREE_THIS_VOLATILE (decl) = 1;
+		ವೃಕ್ಷ_THIS_VOLATILE (decl) = 1;
 	      }
 	  }
 
@@ -8272,50 +8272,50 @@ grokdeclarator (const struct c_declarator *declarator,
 	   'static' and the global declaration is not visible.
 	   (If the static declaration _is_ currently visible,
 	   the 'extern' declaration is taken to refer to that decl.) */
-	if (!initialized
-	    && TREE_PUBLIC (decl)
+	ಯದಿ (!initialized
+	    && ವೃಕ್ಷ_PUBLIC (decl)
 	    && current_scope != file_scope)
 	  {
-	    tree global_decl  = identifier_global_value (declarator->u.id.id);
-	    tree visible_decl = lookup_name (declarator->u.id.id);
+	    ವೃಕ್ಷ global_decl  = identifier_global_ಮೌಲ್ಯ (declarator->u.id.id);
+	    ವೃಕ್ಷ visible_decl = lookup_name (declarator->u.id.id);
 
-	    if (global_decl
+	    ಯದಿ (global_decl
 		&& global_decl != visible_decl
 		&& VAR_OR_FUNCTION_DECL_P (global_decl)
-		&& !TREE_PUBLIC (global_decl))
+		&& !ವೃಕ್ಷ_PUBLIC (global_decl))
 	      error_at (loc, "function previously declared %<static%> "
 			"redeclared %<extern%>");
 	  }
       }
-    else
+    ಅನ್ಯಥಾ
       {
 	/* It's a variable.  */
 	/* An uninitialized decl with `extern' is a reference.  */
-	int extern_ref = !initialized && storage_class == csc_extern;
+	ಪೂರ್ಣಾಙ್ಕ extern_ref = !initialized && storage_class == csc_extern;
 
-	if (constexprp)
+	ಯದಿ (constexprp)
 	  {
 	    /* The type of a constexpr variable must not be variably
 	       modified, volatile, atomic or restrict qualified or
 	       have a member with such a qualifier.  const
 	       qualification is implicitly added, and, at file scope,
 	       has internal linkage.  */
-	    if (c_type_variably_modified_p (type))
+	    ಯದಿ (c_type_variably_modified_p (type))
 	      error_at (loc, "%<constexpr%> object has variably modified "
 			"type");
-	    if (type_quals
+	    ಯದಿ (type_quals
 		& (TYPE_QUAL_VOLATILE | TYPE_QUAL_RESTRICT | TYPE_QUAL_ATOMIC))
 	      error_at (loc, "invalid qualifiers for %<constexpr%> object");
-	    else
+	    ಅನ್ಯಥಾ
 	      {
-		tree type_no_array = strip_array_types (type);
-		if (RECORD_OR_UNION_TYPE_P (type_no_array)
+		ವೃಕ್ಷ type_no_array = strip_array_types (type);
+		ಯದಿ (RECORD_OR_UNION_TYPE_P (type_no_array)
 		    && C_TYPE_FIELDS_NON_CONSTEXPR (type_no_array))
 		  error_at (loc, "invalid qualifiers for field of "
 			    "%<constexpr%> object");
 	      }
 	    type_quals |= TYPE_QUAL_CONST;
-	    if (current_scope == file_scope)
+	    ಯದಿ (current_scope == file_scope)
 	      storage_class = csc_static;
 	  }
 
@@ -8328,29 +8328,29 @@ grokdeclarator (const struct c_declarator *declarator,
 	   'static' and the global declaration is not visible.
 	   (If the static declaration _is_ currently visible,
 	   the 'extern' declaration is taken to refer to that decl.) */
-	if (extern_ref && current_scope != file_scope)
+	ಯದಿ (extern_ref && current_scope != file_scope)
 	  {
-	    tree global_decl  = identifier_global_value (declarator->u.id.id);
-	    tree visible_decl = lookup_name (declarator->u.id.id);
+	    ವೃಕ್ಷ global_decl  = identifier_global_ಮೌಲ್ಯ (declarator->u.id.id);
+	    ವೃಕ್ಷ visible_decl = lookup_name (declarator->u.id.id);
 
-	    if (global_decl
+	    ಯದಿ (global_decl
 		&& global_decl != visible_decl
 		&& VAR_P (global_decl)
-		&& !TREE_PUBLIC (global_decl))
+		&& !ವೃಕ್ಷ_PUBLIC (global_decl))
 	      error_at (loc, "variable previously declared %<static%> "
 			"redeclared %<extern%>");
 	  }
 
 	decl = build_decl (declarator->id_loc,
 			   VAR_DECL, declarator->u.id.id, type);
-	if (size_varies)
+	ಯದಿ (size_varies)
 	  C_DECL_VARIABLE_SIZE (decl) = 1;
-	if (constexprp)
+	ಯದಿ (constexprp)
 	  C_DECL_DECLARED_CONSTEXPR (decl) = 1;
 
-	if (declspecs->inline_p)
+	ಯದಿ (declspecs->inline_p)
 	  pedwarn (loc, 0, "variable %q+D declared %<inline%>", decl);
-	if (declspecs->noreturn_p)
+	ಯದಿ (declspecs->noreturn_p)
 	  pedwarn (loc, 0, "variable %q+D declared %<_Noreturn%>", decl);
 
 	/* At file scope, an initialized extern declaration may follow
@@ -8362,35 +8362,35 @@ grokdeclarator (const struct c_declarator *declarator,
 	   class specifier, or the absence of all storage class specifiers
 	   makes this declaration a definition (perhaps tentative).  Also,
 	   the absence of `static' makes it public.  */
-	if (current_scope == file_scope)
+	ಯದಿ (current_scope == file_scope)
 	  {
-	    TREE_PUBLIC (decl) = storage_class != csc_static;
-	    TREE_STATIC (decl) = !extern_ref;
+	    ವೃಕ್ಷ_PUBLIC (decl) = storage_class != csc_static;
+	    ವೃಕ್ಷ_STATIC (decl) = !extern_ref;
 	  }
 	/* Not at file scope, only `static' makes a static definition.  */
-	else
+	ಅನ್ಯಥಾ
 	  {
-	    TREE_STATIC (decl) = (storage_class == csc_static);
-	    TREE_PUBLIC (decl) = extern_ref;
+	    ವೃಕ್ಷ_STATIC (decl) = (storage_class == csc_static);
+	    ವೃಕ್ಷ_PUBLIC (decl) = extern_ref;
 	  }
 
 	// NB: Set a tentative TLS model to avoid tls_model attribute
 	// warnings due to lack of thread storage duration.  It will
 	// be updated by c_decl_attributes later.
-	if (threadp)
+	ಯದಿ (threadp)
 	  set_decl_tls_model (decl, TLS_MODEL_REAL);
       }
 
-    if ((storage_class == csc_extern
+    ಯದಿ ((storage_class == csc_extern
 	 || (storage_class == csc_none
-	     && TREE_CODE (type) == FUNCTION_TYPE
+	     && ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE
 	     && !funcdef_flag))
 	&& c_type_variably_modified_p (type))
       {
 	/* C99 6.7.5.2p2 */
-	if (TREE_CODE (type) == FUNCTION_TYPE)
+	ಯದಿ (ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
 	  error_at (loc, "non-nested function with variably modified type");
-	else
+	ಅನ್ಯಥಾ
 	  error_at (loc, "object with variably modified type must have "
 	      	    "no linkage");
       }
@@ -8399,24 +8399,24 @@ grokdeclarator (const struct c_declarator *declarator,
        from inlining since the middle-end cannot deal with this.
        ???  We should arrange for those to be passed by reference
        with emitting the copy on the caller side in the frontend.  */
-    if (storage_class == csc_none
-	&& TREE_CODE (type) == FUNCTION_TYPE)
-      for (tree al = TYPE_ARG_TYPES (type); al; al = TREE_CHAIN (al))
+    ಯದಿ (storage_class == csc_none
+	&& ವೃಕ್ಷ_CODE (type) == FUNCTION_TYPE)
+      ಪ್ರತಿ (ವೃಕ್ಷ al = TYPE_ARG_TYPES (type); al; al = ವೃಕ್ಷ_CHAIN (al))
 	{
-	  tree arg = TREE_VALUE (al);
-	  if (arg != error_mark_node
+	  ವೃಕ್ಷ arg = ವೃಕ್ಷ_ಮೌಲ್ಯ (al);
+	  ಯದಿ (arg != error_mark_ಗಂಟು
 	      && C_TYPE_VARIABLE_SIZE (arg))
 	    {
 	      DECL_UNINLINABLE (decl) = 1;
-	      break;
+	      ಭಙ್ಗ;
 	    }
 	}
 
     /* Record `register' declaration for warnings on &
        and in case doing stupid register allocation.  */
 
-    if (storage_class == csc_register
-	&& TREE_CODE (type) != FUNCTION_TYPE)
+    ಯದಿ (storage_class == csc_register
+	&& ವೃಕ್ಷ_CODE (type) != FUNCTION_TYPE)
       {
 	C_DECL_REGISTER (decl) = 1;
 	DECL_REGISTER (decl) = 1;
@@ -8426,7 +8426,7 @@ grokdeclarator (const struct c_declarator *declarator,
     c_apply_type_quals_to_decl (type_quals, decl);
 
     /* Apply _Alignas specifiers.  */
-    if (alignas_align)
+    ಯದಿ (alignas_align)
       {
 	SET_DECL_ALIGN (decl, alignas_align * BITS_PER_UNIT);
 	DECL_USER_ALIGN (decl) = 1;
@@ -8436,14 +8436,14 @@ grokdeclarator (const struct c_declarator *declarator,
        Otherwise, the fact that those components are volatile
        will be ignored, and would even crash the compiler.
        Of course, this only makes sense on  VAR,PARM, and RESULT decl's.   */
-    if (C_TYPE_FIELDS_VOLATILE (TREE_TYPE (decl))
-	&& (VAR_P (decl) ||  TREE_CODE (decl) == PARM_DECL
-	  || TREE_CODE (decl) == RESULT_DECL))
+    ಯದಿ (C_TYPE_FIELDS_VOLATILE (ವೃಕ್ಷ_TYPE (decl))
+	&& (VAR_P (decl) ||  ವೃಕ್ಷ_CODE (decl) == PARM_DECL
+	  || ವೃಕ್ಷ_CODE (decl) == RESULT_DECL))
       {
 	/* It is not an error for a structure with volatile fields to
 	   be declared register, but reset DECL_REGISTER since it
 	   cannot actually go in a register.  */
-	int was_reg = C_DECL_REGISTER (decl);
+	ಪೂರ್ಣಾಙ್ಕ was_reg = C_DECL_REGISTER (decl);
 	C_DECL_REGISTER (decl) = 0;
 	DECL_REGISTER (decl) = 0;
 	c_mark_addressable (decl);
@@ -8455,18 +8455,18 @@ grokdeclarator (const struct c_declarator *declarator,
     gcc_assert (!HAS_DECL_ASSEMBLER_NAME_P (decl)
 		|| !DECL_ASSEMBLER_NAME_SET_P (decl));
 
-    if (warn_cxx_compat
+    ಯದಿ (warn_cxx_compat
 	&& VAR_P (decl)
-	&& TREE_PUBLIC (decl)
-	&& TREE_STATIC (decl)
-	&& (RECORD_OR_UNION_TYPE_P (TREE_TYPE (decl))
-	    || TREE_CODE (TREE_TYPE (decl)) == ENUMERAL_TYPE)
-	&& TYPE_NAME (TREE_TYPE (decl)) == NULL_TREE)
+	&& ವೃಕ್ಷ_PUBLIC (decl)
+	&& ವೃಕ್ಷ_STATIC (decl)
+	&& (RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (decl))
+	    || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (decl)) == ENUMERAL_TYPE)
+	&& TYPE_NAME (ವೃಕ್ಷ_TYPE (decl)) == NULL_ವೃಕ್ಷ)
       warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wc___compat,
 		  "non-local variable %qD with anonymous type is "
 		  "questionable in C++", decl);
 
-    return decl;
+    ಪ್ರತ್ಯಾಗಮ decl;
   }
 }
 
@@ -8484,55 +8484,55 @@ grokdeclarator (const struct c_declarator *declarator,
    a mere declaration.  A nonempty identifier-list gets an error message
    when FUNCDEF_FLAG is false.  */
 
-static tree
-grokparms (struct c_arg_info *arg_info, bool funcdef_flag)
+ಸ್ಥಿರ ವೃಕ್ಷ
+grokparms (ಸಂರಚನಾ c_arg_info *arg_info, ತಾರ್ಕಿಕ funcdef_flag)
 {
-  tree arg_types = arg_info->types;
+  ವೃಕ್ಷ arg_types = arg_info->types;
 
-  if (funcdef_flag && arg_info->had_vla_unspec)
+  ಯದಿ (funcdef_flag && arg_info->had_vla_unspec)
     {
       /* A function definition isn't function prototype scope C99 6.2.1p4.  */
       /* C99 6.7.5.2p4 */
       error ("%<[*]%> not allowed in other than function prototype scope");
     }
 
-  if (arg_types == NULL_TREE && !funcdef_flag && !flag_isoc23
-      && !in_system_header_at (input_location))
+  ಯದಿ (arg_types == NULL_ವೃಕ್ಷ && !funcdef_flag && !flag_isoc23
+      && !in_system_header_at (ಒಳಹರಿವು_location))
     warning (OPT_Wstrict_prototypes,
 	     "function declaration isn%'t a prototype");
 
-  if (arg_types == error_mark_node)
+  ಯದಿ (arg_types == error_mark_ಗಂಟು)
     /* Don't set TYPE_ARG_TYPES in this case.  */
-    return NULL_TREE;
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
-  else if (arg_types && TREE_CODE (TREE_VALUE (arg_types)) == IDENTIFIER_NODE)
+  ಅನ್ಯಥಾ ಯದಿ (arg_types && ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_ಮೌಲ್ಯ (arg_types)) == IDENTIFIER_ಗಂಟು)
     {
-      if (!funcdef_flag)
+      ಯದಿ (!funcdef_flag)
 	{
-	  permerror_opt (input_location,
+	  permerror_opt (ಒಳಹರಿವು_location,
 			 OPT_Wdeclaration_missing_parameter_type,
 			 "parameter names (without types) in "
 			 "function declaration");
-	  arg_info->parms = NULL_TREE;
+	  arg_info->parms = NULL_ವೃಕ್ಷ;
 	}
-      else
+      ಅನ್ಯಥಾ
 	arg_info->parms = arg_info->types;
 
-      arg_info->types = NULL_TREE;
-      return NULL_TREE;
+      arg_info->types = NULL_ವೃಕ್ಷ;
+      ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      tree parm, type, typelt;
-      unsigned int parmno;
+      ವೃಕ್ಷ parm, type, typelt;
+      unsigned ಪೂರ್ಣಾಙ್ಕ parmno;
 
       /* In C23, convert () to (void).  */
-      if (flag_isoc23
+      ಯದಿ (flag_isoc23
 	  && !arg_types
 	  && !arg_info->parms
 	  && !arg_info->no_named_args_stdarg_p)
 	{
-	  arg_types = arg_info->types = void_list_node;
+	  arg_types = arg_info->types = void_list_ಗಂಟು;
 	  arg_info->c23_empty_parens = 1;
 	}
 
@@ -8545,56 +8545,56 @@ grokparms (struct c_arg_info *arg_info, bool funcdef_flag)
 	 this has already received an error (constraint violation in C2Y,
 	 previously implicitly undefined behavior).  */
 
-      for (parm = arg_info->parms, typelt = arg_types, parmno = 1;
+      ಪ್ರತಿ (parm = arg_info->parms, typelt = arg_types, parmno = 1;
 	   parm;
-	   parm = DECL_CHAIN (parm), typelt = TREE_CHAIN (typelt), parmno++)
+	   parm = DECL_CHAIN (parm), typelt = ವೃಕ್ಷ_CHAIN (typelt), parmno++)
 	{
-	  type = TREE_VALUE (typelt);
-	  if (type == error_mark_node)
-	    continue;
+	  type = ವೃಕ್ಷ_ಮೌಲ್ಯ (typelt);
+	  ಯದಿ (type == error_mark_ಗಂಟು)
+	    ಅನುವರ್ತ;
 
-	  if (!COMPLETE_TYPE_P (type))
+	  ಯದಿ (!COMPLETE_TYPE_P (type))
 	    {
-	      if (funcdef_flag)
+	      ಯದಿ (funcdef_flag)
 		{
-		  if (DECL_NAME (parm))
-		    error_at (input_location,
+		  ಯದಿ (DECL_NAME (parm))
+		    error_at (ಒಳಹರಿವು_location,
 			      "parameter %u (%q+D) has incomplete type",
 			      parmno, parm);
-		  else
+		  ಅನ್ಯಥಾ
 		    error_at (DECL_SOURCE_LOCATION (parm),
 			      "parameter %u has incomplete type",
 			      parmno);
 
-		  TREE_VALUE (typelt) = error_mark_node;
-		  TREE_TYPE (parm) = error_mark_node;
-		  arg_types = NULL_TREE;
+		  ವೃಕ್ಷ_ಮೌಲ್ಯ (typelt) = error_mark_ಗಂಟು;
+		  ವೃಕ್ಷ_TYPE (parm) = error_mark_ಗಂಟು;
+		  arg_types = NULL_ವೃಕ್ಷ;
 		}
 	    }
 
-	  if (DECL_NAME (parm) && TREE_USED (parm))
+	  ಯದಿ (DECL_NAME (parm) && ವೃಕ್ಷ_USED (parm))
 	    warn_if_shadowing (parm);
 	}
-      return arg_types;
+      ಪ್ರತ್ಯಾಗಮ arg_types;
     }
 }
 
 /* Allocate and initialize a c_arg_info structure from the parser's
    obstack.  */
 
-struct c_arg_info *
-build_arg_info (void)
+ಸಂರಚನಾ c_arg_info *
+build_arg_info (ಶೂನ್ಯ)
 {
-  struct c_arg_info *ret = XOBNEW (&parser_obstack, struct c_arg_info);
-  ret->parms = NULL_TREE;
-  ret->tags = NULL;
-  ret->types = NULL_TREE;
-  ret->others = NULL_TREE;
-  ret->pending_sizes = NULL;
+  ಸಂರಚನಾ c_arg_info *ret = XOBNEW (&parser_obstack, ಸಂರಚನಾ c_arg_info);
+  ret->parms = NULL_ವೃಕ್ಷ;
+  ret->tags = ರಿಕ್ತ;
+  ret->types = NULL_ವೃಕ್ಷ;
+  ret->others = NULL_ವೃಕ್ಷ;
+  ret->pending_sizes = ರಿಕ್ತ;
   ret->had_vla_unspec = 0;
   ret->no_named_args_stdarg_p = 0;
   ret->c23_empty_parens = 0;
-  return ret;
+  ಪ್ರತ್ಯಾಗಮ ret;
 }
 
 /* Take apart the current scope and return a c_arg_info structure with
@@ -8608,18 +8608,18 @@ build_arg_info (void)
    EXPR is NULL or an expression that needs to be evaluated for the
    side effects of array size expressions in the parameters.  */
 
-struct c_arg_info *
-get_parm_info (bool ellipsis, tree expr)
+ಸಂರಚನಾ c_arg_info *
+get_parm_info (ತಾರ್ಕಿಕ ellipsis, ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ)
 {
-  struct c_binding *b = current_scope->bindings;
-  struct c_arg_info *arg_info = build_arg_info ();
+  ಸಂರಚನಾ c_binding *b = current_scope->bindings;
+  ಸಂರಚನಾ c_arg_info *arg_info = build_arg_info ();
 
-  tree parms = NULL_TREE;
-  vec<c_arg_tag, va_gc> *tags = NULL;
-  tree types = NULL_TREE;
-  tree others = NULL_TREE;
+  ವೃಕ್ಷ parms = NULL_ವೃಕ್ಷ;
+  vec<c_arg_tag, va_gc> *tags = ರಿಕ್ತ;
+  ವೃಕ್ಷ types = NULL_ವೃಕ್ಷ;
+  ವೃಕ್ಷ others = NULL_ವೃಕ್ಷ;
 
-  bool gave_void_only_once_err = false;
+  ತಾರ್ಕಿಕ gave_void_only_once_err = ಅಸತ್ಯ;
 
   arg_info->had_vla_unspec = current_scope->had_vla_unspec;
 
@@ -8636,60 +8636,60 @@ get_parm_info (bool ellipsis, tree expr)
      (by 'const' or 'volatile'), or has a storage class specifier
      ('register'), then the behavior is undefined; issue an error.
      Typedefs for 'void' are OK (see DR#157).  */
-  if (b->prev == 0			    /* one binding */
-      && TREE_CODE (b->decl) == PARM_DECL   /* which is a parameter */
+  ಯದಿ (b->prev == 0			    /* one binding */
+      && ವೃಕ್ಷ_CODE (b->decl) == PARM_DECL   /* which is a parameter */
       && !DECL_NAME (b->decl)               /* anonymous */
-      && VOID_TYPE_P (TREE_TYPE (b->decl))) /* of void type */
+      && VOID_TYPE_P (ವೃಕ್ಷ_TYPE (b->decl))) /* of void type */
     {
-      if (TYPE_QUALS (TREE_TYPE (b->decl)) != TYPE_UNQUALIFIED
+      ಯದಿ (TYPE_QUALS (ವೃಕ್ಷ_TYPE (b->decl)) != TYPE_UNQUALIFIED
 	  || C_DECL_REGISTER (b->decl))
 	error_at (b->locus, "%<void%> as only parameter may not be qualified");
 
       /* There cannot be an ellipsis.  */
-      if (ellipsis)
+      ಯದಿ (ellipsis)
 	error_at (b->locus, "%<void%> must be the only parameter");
 
-      arg_info->types = void_list_node;
-      return arg_info;
+      arg_info->types = void_list_ಗಂಟು;
+      ಪ್ರತ್ಯಾಗಮ arg_info;
     }
 
-  if (!ellipsis)
-    types = void_list_node;
+  ಯದಿ (!ellipsis)
+    types = void_list_ಗಂಟು;
 
   /* Break up the bindings list into parms, tags, types, and others;
      apply sanity checks; purge the name-to-decl bindings.  */
-  while (b)
+  ಯಾವತ್ (b)
     {
-      tree decl = b->decl;
-      tree type = TREE_TYPE (decl);
+      ವೃಕ್ಷ decl = b->decl;
+      ವೃಕ್ಷ type = ವೃಕ್ಷ_TYPE (decl);
       c_arg_tag tag;
-      const char *keyword;
+      ಧ್ರುವ ವರ್ಣ *keyword;
 
-      switch (TREE_CODE (decl))
+      ವಿಕಲ್ಪ (ವೃಕ್ಷ_CODE (decl))
 	{
-	case PARM_DECL:
-	  if (b->id)
+	ಪಕ್ಷ PARM_DECL:
+	  ಯದಿ (b->id)
 	    {
-	      gcc_assert (I_SYMBOL_BINDING (b->id) == b);
-	      I_SYMBOL_BINDING (b->id) = b->shadowed;
+	      gcc_assert (I_ಚಿಹ್ನೆ_BINDING (b->id) == b);
+	      I_ಚಿಹ್ನೆ_BINDING (b->id) = b->shadowed;
 	    }
 
 	  /* Check for forward decls that never got their actual decl.  */
-	  if (TREE_ASM_WRITTEN (decl))
+	  ಯದಿ (ವೃಕ್ಷ_ASM_WRITTEN (decl))
 	    error_at (b->locus,
 		      "parameter %q+D has just a forward declaration", decl);
 	  /* Check for (..., void, ...) and named void parameters and issue an
 	     error.  */
-	  else if (VOID_TYPE_P (type))
+	  ಅನ್ಯಥಾ ಯದಿ (VOID_TYPE_P (type))
 	    {
-	      if (!gave_void_only_once_err)
+	      ಯದಿ (!gave_void_only_once_err)
 		{
 		  error_at (b->locus,
 			    "%<void%> must be the only parameter and unnamed");
-		  gave_void_only_once_err = true;
+		  gave_void_only_once_err = ಸತ್ಯ;
 		}
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    {
 	      /* Valid parameter, add it to the list.  */
 	      DECL_CHAIN (decl) = parms;
@@ -8698,17 +8698,17 @@ get_parm_info (bool ellipsis, tree expr)
 	      /* Since there is a prototype, args are passed in their
 		 declared types.  The back end may override this later.  */
 	      DECL_ARG_TYPE (decl) = type;
-	      types = tree_cons (0, type, types);
+	      types = ವೃಕ್ಷ_cons (0, type, types);
 	    }
-	  break;
+	  ಭಙ್ಗ;
 
-	case ENUMERAL_TYPE: keyword = "enum"; goto tag;
-	case UNION_TYPE:    keyword = "union"; goto tag;
-	case RECORD_TYPE:   keyword = "struct"; goto tag;
+	ಪಕ್ಷ ENUMERAL_TYPE: keyword = "enum"; ಗಚ್ಛ tag;
+	ಪಕ್ಷ UNION_TYPE:    keyword = "union"; ಗಚ್ಛ tag;
+	ಪಕ್ಷ RECORD_TYPE:   keyword = "struct"; ಗಚ್ಛ tag;
 	tag:
 	  /* Types may not have tag-names, in which case the type
 	     appears in the bindings list with b->id NULL.  */
-	  if (b->id)
+	  ಯದಿ (b->id)
 	    {
 	      gcc_assert (I_TAG_BINDING (b->id) == b);
 	      I_TAG_BINDING (b->id) = b->shadowed;
@@ -8720,18 +8720,18 @@ get_parm_info (bool ellipsis, tree expr)
 	     (it's impossible to call such a function with type-
 	     correct arguments).  An anonymous union parm type is
 	     meaningful as a GNU extension, so don't warn for that.  */
-	  if (TREE_CODE (decl) != UNION_TYPE || b->id != NULL_TREE)
+	  ಯದಿ (ವೃಕ್ಷ_CODE (decl) != UNION_TYPE || b->id != NULL_ವೃಕ್ಷ)
 	    {
-	      if (b->id)
+	      ಯದಿ (b->id)
 		{
 		  /* The %s will be one of 'struct', 'union', or 'enum'.  */
-		  if (!flag_isoc23 || !COMPLETE_TYPE_P (decl))
+		  ಯದಿ (!flag_isoc23 || !COMPLETE_TYPE_P (decl))
 		    warning_at (b->locus, 0,
 				"%<%s %E%> declared inside parameter list"
 				" will not be visible outside of this definition or"
 				" declaration", keyword, b->id);
 		}
-	      else
+	      ಅನ್ಯಥಾ
 		/* The %s will be one of 'struct', 'union', or 'enum'.  */
 		warning_at (b->locus, 0,
 			    "anonymous %s declared inside parameter list"
@@ -8741,17 +8741,17 @@ get_parm_info (bool ellipsis, tree expr)
 
 	  tag.id = b->id;
 	  tag.type = decl;
-	  vec_safe_push (tags, tag);
-	  break;
+	  vec_safe_ತಳ್ಳು (tags, tag);
+	  ಭಙ್ಗ;
 
-	case FUNCTION_DECL:
+	ಪಕ್ಷ FUNCTION_DECL:
 	  /* FUNCTION_DECLs appear when there is an implicit function
 	     declaration in the parameter list.  */
 	  gcc_assert (b->nested || seen_error ());
-	  goto set_shadowed;
+	  ಗಚ್ಛ set_shadowed;
 
-	case CONST_DECL:
-	case TYPE_DECL:
+	ಪಕ್ಷ CONST_DECL:
+	ಪಕ್ಷ TYPE_DECL:
 	  /* CONST_DECLs appear here when we have an embedded enum,
 	     and TYPE_DECLs appear here when we have an embedded struct
 	     or union.  No warnings for this - we already warned about the
@@ -8764,21 +8764,21 @@ get_parm_info (bool ellipsis, tree expr)
 	  others = decl;
 	  /* fall through */
 
-	case ERROR_MARK:
+	ಪಕ್ಷ ERROR_MARK:
 	set_shadowed:
 	  /* error_mark_node appears here when we have an undeclared
 	     variable.  Just throw it away.  */
-	  if (b->id)
+	  ಯದಿ (b->id)
 	    {
-	      gcc_assert (I_SYMBOL_BINDING (b->id) == b);
-	      I_SYMBOL_BINDING (b->id) = b->shadowed;
+	      gcc_assert (I_ಚಿಹ್ನೆ_BINDING (b->id) == b);
+	      I_ಚಿಹ್ನೆ_BINDING (b->id) = b->shadowed;
 	    }
-	  break;
+	  ಭಙ್ಗ;
 
 	  /* Other things that might be encountered.  */
-	case LABEL_DECL:
-	case VAR_DECL:
-	default:
+	ಪಕ್ಷ LABEL_DECL:
+	ಪಕ್ಷ VAR_DECL:
+	ಸ್ವಭಾವ:
 	  gcc_unreachable ();
 	}
 
@@ -8789,9 +8789,9 @@ get_parm_info (bool ellipsis, tree expr)
   arg_info->tags = tags;
   arg_info->types = types;
   arg_info->others = others;
-  arg_info->pending_sizes = expr;
+  arg_info->pending_sizes = ಅಭಿವ್ಯಕ್ತಿ;
   arg_info->no_named_args_stdarg_p = ellipsis && !types;
-  return arg_info;
+  ಪ್ರತ್ಯಾಗಮ arg_info;
 }
 
 /* Get the struct, enum or union (CODE says which) with tag NAME.
@@ -8804,16 +8804,16 @@ get_parm_info (bool ellipsis, tree expr)
    that the tag is in scope for that specifier.  Return a c_typespec
    structure for the type specifier.  */
 
-struct c_typespec
-parser_xref_tag (location_t loc, enum tree_code code, tree name,
-		 bool have_std_attrs, tree attrs, bool has_enum_type_specifier)
+ಸಂರಚನಾ c_typespec
+parser_xref_tag (location_t loc, ಗಣನಾ ವೃಕ್ಷ_code code, ವೃಕ್ಷ name,
+		 ತಾರ್ಕಿಕ have_std_attrs, ವೃಕ್ಷ attrs, ತಾರ್ಕಿಕ has_enum_type_specifier)
 {
-  struct c_typespec ret;
-  tree ref;
+  ಸಂರಚನಾ c_typespec ret;
+  ವೃಕ್ಷ ref;
   location_t refloc;
 
-  ret.expr = NULL_TREE;
-  ret.expr_const_operands = true;
+  ret.ಅಭಿವ್ಯಕ್ತಿ = NULL_ವೃಕ್ಷ;
+  ret.ಅಭಿವ್ಯಕ್ತಿ_const_operands = ಸತ್ಯ;
   ret.has_enum_type_specifier = has_enum_type_specifier;
 
   /* If a cross reference is requested, look up the type already
@@ -8825,10 +8825,10 @@ parser_xref_tag (location_t loc, enum tree_code code, tree name,
   /* If the visible type is still being defined, see if there is
      an earlier definition (which may be complete).  We do not
      have to loop because nested redefinitions are not allowed.  */
-  if (flag_isoc23 && ref && C_TYPE_BEING_DEFINED (ref))
+  ಯದಿ (flag_isoc23 && ref && C_TYPE_BEING_DEFINED (ref))
     {
-      tree vis = previous_tag (ref);
-      if (vis)
+      ವೃಕ್ಷ vis = previous_tag (ref);
+      ಯದಿ (vis)
 	ref = vis;
     }
 
@@ -8846,41 +8846,41 @@ parser_xref_tag (location_t loc, enum tree_code code, tree name,
   ret.kind = (ref
 	      ? (have_std_attrs ? ctsk_tagref_attrs : ctsk_tagref)
 	      : (have_std_attrs ? ctsk_tagfirstref_attrs : ctsk_tagfirstref));
-  if (ref && TREE_CODE (ref) == code)
+  ಯದಿ (ref && ವೃಕ್ಷ_CODE (ref) == code)
     {
-      decl_attributes (&ref, attrs, (int) ATTR_FLAG_TYPE_IN_PLACE);
-      if (C_TYPE_DEFINED_IN_STRUCT (ref)
+      decl_attributes (&ref, attrs, (ಪೂರ್ಣಾಙ್ಕ) ATTR_FLAG_TYPE_IN_PLACE);
+      ಯದಿ (C_TYPE_DEFINED_IN_STRUCT (ref)
 	  && loc != UNKNOWN_LOCATION
 	  && warn_cxx_compat)
 	{
 	  auto_diagnostic_group d;
-	  switch (code)
+	  ವಿಕಲ್ಪ (code)
 	    {
-	    case ENUMERAL_TYPE:
-	      if (warning_at (loc, OPT_Wc___compat,
+	    ಪಕ್ಷ ENUMERAL_TYPE:
+	      ಯದಿ (warning_at (loc, OPT_Wc___compat,
 			      ("enum type defined in struct or union "
 			       "is not visible in C++")))
 		  inform (refloc, "enum type defined here");
-	      break;
-	    case RECORD_TYPE:
-	      if (warning_at (loc, OPT_Wc___compat,
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ RECORD_TYPE:
+	      ಯದಿ (warning_at (loc, OPT_Wc___compat,
 			      ("struct defined in struct or union "
 			       "is not visible in C++")))
 		inform (refloc, "struct defined here");
-	      break;
-	    case UNION_TYPE:
-	      if (warning_at (loc, OPT_Wc___compat,
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ UNION_TYPE:
+	      ಯದಿ (warning_at (loc, OPT_Wc___compat,
 			      ("union defined in struct or union "
 			       "is not visible in C++")))
 		inform (refloc, "union defined here");
-	      break;
-	    default:
+	      ಭಙ್ಗ;
+	    ಸ್ವಭಾವ:
 	      gcc_unreachable();
 	    }
 	}
 
       ret.spec = ref;
-      return ret;
+      ಪ್ರತ್ಯಾಗಮ ret;
     }
 
   /* If no such tag is yet defined, create a forward-reference node
@@ -8888,42 +8888,42 @@ parser_xref_tag (location_t loc, enum tree_code code, tree name,
      When a real declaration of this type is found,
      the forward-reference will be altered into a real type.  */
 
-  ref = make_node (code);
-  if (flag_isoc23 || code == ENUMERAL_TYPE)
+  ref = make_ಗಂಟು (code);
+  ಯದಿ (flag_isoc23 || code == ENUMERAL_TYPE)
     SET_TYPE_STRUCTURAL_EQUALITY (ref);
-  if (code == ENUMERAL_TYPE)
+  ಯದಿ (code == ENUMERAL_TYPE)
     {
       /* Give the type a default layout like unsigned int
 	 to avoid crashing if it does not get defined.  */
-      SET_TYPE_MODE (ref, TYPE_MODE (unsigned_type_node));
-      SET_TYPE_ALIGN (ref, TYPE_ALIGN (unsigned_type_node));
+      SET_TYPE_MODE (ref, TYPE_MODE (unsigned_type_ಗಂಟು));
+      SET_TYPE_ALIGN (ref, TYPE_ALIGN (unsigned_type_ಗಂಟು));
       TYPE_USER_ALIGN (ref) = 0;
       TYPE_UNSIGNED (ref) = 1;
-      TYPE_PRECISION (ref) = TYPE_PRECISION (unsigned_type_node);
-      TYPE_MIN_VALUE (ref) = TYPE_MIN_VALUE (unsigned_type_node);
-      TYPE_MAX_VALUE (ref) = TYPE_MAX_VALUE (unsigned_type_node);
+      TYPE_PRECISION (ref) = TYPE_PRECISION (unsigned_type_ಗಂಟು);
+      TYPE_MIN_ಮೌಲ್ಯ (ref) = TYPE_MIN_ಮೌಲ್ಯ (unsigned_type_ಗಂಟು);
+      TYPE_MAX_ಮೌಲ್ಯ (ref) = TYPE_MAX_ಮೌಲ್ಯ (unsigned_type_ಗಂಟು);
       ENUM_FIXED_UNDERLYING_TYPE_P (ref) = has_enum_type_specifier;
     }
 
   pushtag (loc, name, ref);
-  decl_attributes (&ref, attrs, (int) ATTR_FLAG_TYPE_IN_PLACE);
-  if (in_underspecified_init)
+  decl_attributes (&ref, attrs, (ಪೂರ್ಣಾಙ್ಕ) ATTR_FLAG_TYPE_IN_PLACE);
+  ಯದಿ (in_underspecified_init)
     error_at (loc, "%qT declared in underspecified object initializer",
 	      ref);
 
   ret.spec = ref;
-  return ret;
+  ಪ್ರತ್ಯಾಗಮ ret;
 }
 
 /* Get the struct, enum or union (CODE says which) with tag NAME.
    Define the tag as a forward-reference if it is not defined.
    Return a tree for the type.  */
 
-tree
-xref_tag (enum tree_code code, tree name)
+ವೃಕ್ಷ
+xref_tag (ಗಣನಾ ವೃಕ್ಷ_code code, ವೃಕ್ಷ name)
 {
-  return parser_xref_tag (input_location, code, name, false, NULL_TREE,
-			  false).spec;
+  ಪ್ರತ್ಯಾಗಮ parser_xref_tag (ಒಳಹರಿವು_location, code, name, ಅಸತ್ಯ, NULL_ವೃಕ್ಷ,
+			  ಅಸತ್ಯ).spec;
 }
 
 /* Make sure that the tag NAME is defined *in the current scope*
@@ -8936,80 +8936,80 @@ xref_tag (enum tree_code code, tree name)
    new c_struct_parse_info structure.  The old value of
    STRUCT_PARSE_INFO is restored in finish_struct.  */
 
-tree
-start_struct (location_t loc, enum tree_code code, tree name,
-	      class c_struct_parse_info **enclosing_struct_parse_info)
+ವೃಕ್ಷ
+start_struct (location_t loc, ಗಣನಾ ವೃಕ್ಷ_code code, ವೃಕ್ಷ name,
+	      ವರ್ಗ c_struct_parse_info **enclosing_struct_parse_info)
 {
   /* If there is already a tag defined at this scope
      (as a forward reference), just return it.  */
 
-  tree ref = NULL_TREE;
+  ವೃಕ್ಷ ref = NULL_ವೃಕ್ಷ;
   location_t refloc = UNKNOWN_LOCATION;
 
-  if (name != NULL_TREE)
-    ref = lookup_tag (code, name, true, &refloc);
+  ಯದಿ (name != NULL_ವೃಕ್ಷ)
+    ref = lookup_tag (code, name, ಸತ್ಯ, &refloc);
 
   /* For C23, even if we already have a completed definition,
      we do not use it. We will check for consistency later.
      If we are in a nested redefinition the type is not
      complete. We will then detect this below.  */
-  if (flag_isoc23 && ref && TYPE_SIZE (ref))
-    ref = NULL_TREE;
+  ಯದಿ (flag_isoc23 && ref && TYPE_SIZE (ref))
+    ref = NULL_ವೃಕ್ಷ;
 
-  if (ref && TREE_CODE (ref) == code)
+  ಯದಿ (ref && ವೃಕ್ಷ_CODE (ref) == code)
     {
-      if (TYPE_STUB_DECL (ref))
+      ಯದಿ (TYPE_STUB_DECL (ref))
 	refloc = DECL_SOURCE_LOCATION (TYPE_STUB_DECL (ref));
 
-      if (TYPE_SIZE (ref))
+      ಯದಿ (TYPE_SIZE (ref))
 	{
 	  auto_diagnostic_group d;
-	  if (code == UNION_TYPE)
+	  ಯದಿ (code == UNION_TYPE)
 	    error_at (loc, "redefinition of %<union %E%>", name);
-	  else
+	  ಅನ್ಯಥಾ
 	    error_at (loc, "redefinition of %<struct %E%>", name);
-	  if (refloc != UNKNOWN_LOCATION)
+	  ಯದಿ (refloc != UNKNOWN_LOCATION)
 	    inform (refloc, "originally defined here");
 	  /* Don't create structures using a name already in use.  */
-	  ref = NULL_TREE;
+	  ref = NULL_ವೃಕ್ಷ;
 	}
-      else if (C_TYPE_BEING_DEFINED (ref))
+      ಅನ್ಯಥಾ ಯದಿ (C_TYPE_BEING_DEFINED (ref))
 	{
-	  if (code == UNION_TYPE)
+	  ಯದಿ (code == UNION_TYPE)
 	    error_at (loc, "nested redefinition of %<union %E%>", name);
-	  else
+	  ಅನ್ಯಥಾ
 	    error_at (loc, "nested redefinition of %<struct %E%>", name);
 	  /* Don't bother to report "originally defined here" for a
 	     nested redefinition; the original definition should be
 	     obvious.  */
 	  /* Don't create structures that contain themselves.  */
-	  ref = NULL_TREE;
+	  ref = NULL_ವೃಕ್ಷ;
 	}
     }
 
   /* Otherwise create a forward-reference just so the tag is in scope.  */
 
-  if (ref == NULL_TREE || TREE_CODE (ref) != code)
+  ಯದಿ (ref == NULL_ವೃಕ್ಷ || ವೃಕ್ಷ_CODE (ref) != code)
     {
-      ref = make_node (code);
-      if (flag_isoc23)
+      ref = make_ಗಂಟು (code);
+      ಯದಿ (flag_isoc23)
 	SET_TYPE_STRUCTURAL_EQUALITY (ref);
       pushtag (loc, name, ref);
     }
 
   C_TYPE_BEING_DEFINED (ref) = 1;
-  for (tree v = TYPE_MAIN_VARIANT (ref); v; v = TYPE_NEXT_VARIANT (v))
+  ಪ್ರತಿ (ವೃಕ್ಷ v = TYPE_MAIN_VARIANT (ref); v; v = TYPE_NEXT_VARIANT (v))
     TYPE_PACKED (v) = flag_pack_struct;
 
   *enclosing_struct_parse_info = struct_parse_info;
-  struct_parse_info = new c_struct_parse_info ();
+  struct_parse_info = ನೂತನ c_struct_parse_info ();
   struct_parse_info->refloc = refloc;
 
   /* FIXME: This will issue a warning for a use of a type defined
      within a statement expr used within sizeof, et. al.  This is not
      terribly serious as C++ doesn't permit statement exprs within
      sizeof anyhow.  */
-  if (warn_cxx_compat
+  ಯದಿ (warn_cxx_compat
       && (in_sizeof || in_typeof || in_alignof || in_countof))
     warning_at (loc, OPT_Wc___compat,
 		"defining type in %qs expression is invalid in C++",
@@ -9018,10 +9018,10 @@ start_struct (location_t loc, enum tree_code code, tree name,
 		 : in_alignof ? "alignof"
 		 : "_Countof"));
 
-  if (in_underspecified_init)
+  ಯದಿ (in_underspecified_init)
     error_at (loc, "%qT defined in underspecified object initializer", ref);
 
-  return ref;
+  ಪ್ರತ್ಯಾಗಮ ref;
 }
 
 /* Process the specs, declarator and width (NULL if omitted)
@@ -9035,15 +9035,15 @@ start_struct (location_t loc, enum tree_code code, tree name,
    The FIELD_DECL nodes are chained together and the lot of them
    are ultimately passed to `build_struct' to make the RECORD_TYPE node.  */
 
-tree
+ವೃಕ್ಷ
 grokfield (location_t loc,
-	   struct c_declarator *declarator, struct c_declspecs *declspecs,
-	   tree width, tree *decl_attrs, tree *expr)
+	   ಸಂರಚನಾ c_declarator *declarator, ಸಂರಚನಾ c_declspecs *declspecs,
+	   ವೃಕ್ಷ width, ವೃಕ್ಷ *decl_attrs, ವೃಕ್ಷ *ಅಭಿವ್ಯಕ್ತಿ)
 {
-  tree value;
+  ವೃಕ್ಷ ಮೌಲ್ಯ;
 
-  if (declarator->kind == cdk_id && declarator->u.id.id == NULL_TREE
-      && width == NULL_TREE)
+  ಯದಿ (declarator->kind == cdk_id && declarator->u.id.id == NULL_ವೃಕ್ಷ
+      && width == NULL_ವೃಕ್ಷ)
     {
       /* This is an unnamed decl.
 
@@ -9066,149 +9066,149 @@ grokfield (location_t loc,
 	 took this from Plan 9 or if it was an accident of implementation
 	 that took root before someone noticed the bug...  */
 
-      tree type = declspecs->type;
-      bool ok = false;
+      ವೃಕ್ಷ type = declspecs->type;
+      ತಾರ್ಕಿಕ ok = ಅಸತ್ಯ;
 
-      if (RECORD_OR_UNION_TYPE_P (type)
+      ಯದಿ (RECORD_OR_UNION_TYPE_P (type)
 	  && (flag_ms_extensions
 	      || flag_plan9_extensions
 	      || !declspecs->typedef_p))
 	{
-	  if (flag_ms_extensions || flag_plan9_extensions)
-	    ok = true;
-	  else if (TYPE_NAME (type) == NULL)
-	    ok = true;
-	  else
-	    ok = false;
+	  ಯದಿ (flag_ms_extensions || flag_plan9_extensions)
+	    ok = ಸತ್ಯ;
+	  ಅನ್ಯಥಾ ಯದಿ (TYPE_NAME (type) == ರಿಕ್ತ)
+	    ok = ಸತ್ಯ;
+	  ಅನ್ಯಥಾ
+	    ok = ಅಸತ್ಯ;
 	}
-      if (!ok)
+      ಯದಿ (!ok)
 	{
 	  pedwarn (loc, 0, "declaration does not declare anything");
-	  return NULL_TREE;
+	  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 	}
-      if (flag_isoc99)
+      ಯದಿ (flag_isoc99)
 	pedwarn_c99 (loc, OPT_Wpedantic,
 		     "ISO C99 doesn%'t support unnamed structs/unions");
-      else
+      ಅನ್ಯಥಾ
 	pedwarn_c99 (loc, OPT_Wpedantic,
 		     "ISO C90 doesn%'t support unnamed structs/unions");
     }
 
-  value = grokdeclarator (declarator, declspecs, FIELD, false,
-			  width ? &width : NULL, decl_attrs, expr, NULL,
+  ಮೌಲ್ಯ = grokdeclarator (declarator, declspecs, FIELD, ಅಸತ್ಯ,
+			  width ? &width : ರಿಕ್ತ, decl_attrs, ಅಭಿವ್ಯಕ್ತಿ, ರಿಕ್ತ,
 			  DEPRECATED_NORMAL);
 
   /* When this field has name, its type is a top level type, we should
      call verify_counted_by_for_top_anonymous_type.  */
-  if (DECL_NAME (value) != NULL_TREE
+  ಯದಿ (DECL_NAME (ಮೌಲ್ಯ) != NULL_ವೃಕ್ಷ
       && declspecs->typespec_kind == ctsk_tagdef)
-    verify_counted_by_for_top_anonymous_type (declspecs->type);
+    verify_counted_by_for_ತುದಿ_anonymous_type (declspecs->type);
 
-  finish_decl (value, loc, NULL_TREE, NULL_TREE, NULL_TREE);
-  DECL_INITIAL (value) = width;
-  if (width)
-    SET_DECL_C_BIT_FIELD (value);
+  finish_decl (ಮೌಲ್ಯ, loc, NULL_ವೃಕ್ಷ, NULL_ವೃಕ್ಷ, NULL_ವೃಕ್ಷ);
+  DECL_INITIAL (ಮೌಲ್ಯ) = width;
+  ಯದಿ (width)
+    SET_DECL_C_BIT_FIELD (ಮೌಲ್ಯ);
 
-  if (warn_cxx_compat && DECL_NAME (value) != NULL_TREE)
+  ಯದಿ (warn_cxx_compat && DECL_NAME (ಮೌಲ್ಯ) != NULL_ವೃಕ್ಷ)
     {
       /* If we currently have a binding for this field, set the
 	 in_struct field in the binding, so that we warn about lookups
 	 which find it.  */
-      struct c_binding *b = I_SYMBOL_BINDING (DECL_NAME (value));
-      if (b != NULL)
+      ಸಂರಚನಾ c_binding *b = I_ಚಿಹ್ನೆ_BINDING (DECL_NAME (ಮೌಲ್ಯ));
+      ಯದಿ (b != ರಿಕ್ತ)
 	{
 	  /* If the in_struct field is not yet set, push it on a list
 	     to be cleared when this struct is finished.  */
-	  if (!b->in_struct)
+	  ಯದಿ (!b->in_struct)
 	    {
-	      struct_parse_info->fields.safe_push (b);
+	      struct_parse_info->fields.safe_ತಳ್ಳು (b);
 	      b->in_struct = 1;
 	    }
 	}
     }
 
-  return value;
+  ಪ್ರತ್ಯಾಗಮ ಮೌಲ್ಯ;
 }
 
 /* Subroutine of detect_field_duplicates: return whether X and Y,
    which are both fields in the same struct, have duplicate field
    names.  */
 
-static bool
-is_duplicate_field (tree x, tree y)
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+is_duplicate_field (ವೃಕ್ಷ x, ವೃಕ್ಷ y)
 {
-  if (DECL_NAME (x) != NULL_TREE && DECL_NAME (x) == DECL_NAME (y))
-    return true;
+  ಯದಿ (DECL_NAME (x) != NULL_ವೃಕ್ಷ && DECL_NAME (x) == DECL_NAME (y))
+    ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
 
   /* When using -fplan9-extensions, an anonymous field whose name is a
      typedef can duplicate a field name.  */
-  if (flag_plan9_extensions
-      && (DECL_NAME (x) == NULL_TREE || DECL_NAME (y) == NULL_TREE))
+  ಯದಿ (flag_plan9_extensions
+      && (DECL_NAME (x) == NULL_ವೃಕ್ಷ || DECL_NAME (y) == NULL_ವೃಕ್ಷ))
     {
-      tree xt, xn, yt, yn;
+      ವೃಕ್ಷ xt, xn, yt, yn;
 
-      xt = TREE_TYPE (x);
-      if (DECL_NAME (x) != NULL_TREE)
+      xt = ವೃಕ್ಷ_TYPE (x);
+      ಯದಿ (DECL_NAME (x) != NULL_ವೃಕ್ಷ)
 	xn = DECL_NAME (x);
-      else if (RECORD_OR_UNION_TYPE_P (xt)
-	       && TYPE_NAME (xt) != NULL_TREE
-	       && TREE_CODE (TYPE_NAME (xt)) == TYPE_DECL)
+      ಅನ್ಯಥಾ ಯದಿ (RECORD_OR_UNION_TYPE_P (xt)
+	       && TYPE_NAME (xt) != NULL_ವೃಕ್ಷ
+	       && ವೃಕ್ಷ_CODE (TYPE_NAME (xt)) == TYPE_DECL)
 	xn = DECL_NAME (TYPE_NAME (xt));
-      else
-	xn = NULL_TREE;
+      ಅನ್ಯಥಾ
+	xn = NULL_ವೃಕ್ಷ;
 
-      yt = TREE_TYPE (y);
-      if (DECL_NAME (y) != NULL_TREE)
+      yt = ವೃಕ್ಷ_TYPE (y);
+      ಯದಿ (DECL_NAME (y) != NULL_ವೃಕ್ಷ)
 	yn = DECL_NAME (y);
-      else if (RECORD_OR_UNION_TYPE_P (yt)
-	       && TYPE_NAME (yt) != NULL_TREE
-	       && TREE_CODE (TYPE_NAME (yt)) == TYPE_DECL)
+      ಅನ್ಯಥಾ ಯದಿ (RECORD_OR_UNION_TYPE_P (yt)
+	       && TYPE_NAME (yt) != NULL_ವೃಕ್ಷ
+	       && ವೃಕ್ಷ_CODE (TYPE_NAME (yt)) == TYPE_DECL)
 	yn = DECL_NAME (TYPE_NAME (yt));
-      else
-	yn = NULL_TREE;
+      ಅನ್ಯಥಾ
+	yn = NULL_ವೃಕ್ಷ;
 
-      if (xn != NULL_TREE && xn == yn)
-	return true;
+      ಯದಿ (xn != NULL_ವೃಕ್ಷ && xn == yn)
+	ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
     }
 
-  return false;
+  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 }
 
 /* Subroutine of detect_field_duplicates: add the fields of FIELDLIST
    to HTAB, giving errors for any duplicates.  */
 
-static void
-detect_field_duplicates_hash (tree fieldlist,
-			      hash_table<nofree_ptr_hash <tree_node> > *htab)
+ಸ್ಥಿರ ಶೂನ್ಯ
+detect_field_duplicates_hash (ವೃಕ್ಷ fieldlist,
+			      hash_table<nofree_ptr_hash <ವೃಕ್ಷ_ಗಂಟು> > *htab)
 {
-  tree x, y;
-  tree_node **slot;
+  ವೃಕ್ಷ x, y;
+  ವೃಕ್ಷ_ಗಂಟು **slot;
 
-  for (x = fieldlist; x ; x = DECL_CHAIN (x))
-    if ((y = DECL_NAME (x)) != NULL_TREE)
+  ಪ್ರತಿ (x = fieldlist; x ; x = DECL_CHAIN (x))
+    ಯದಿ ((y = DECL_NAME (x)) != NULL_ವೃಕ್ಷ)
       {
-	slot = htab->find_slot (y, INSERT);
-	if (*slot)
+	slot = htab->find_slot (y, ಸೇರಿಸು);
+	ಯದಿ (*slot)
 	  {
 	    error ("duplicate member %q+D", x);
-	    DECL_NAME (x) = NULL_TREE;
+	    DECL_NAME (x) = NULL_ವೃಕ್ಷ;
 	  }
 	*slot = y;
       }
-    else if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (x)))
+    ಅನ್ಯಥಾ ಯದಿ (RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (x)))
       {
-	detect_field_duplicates_hash (TYPE_FIELDS (TREE_TYPE (x)), htab);
+	detect_field_duplicates_hash (TYPE_FIELDS (ವೃಕ್ಷ_TYPE (x)), htab);
 
 	/* When using -fplan9-extensions, an anonymous field whose
 	   name is a typedef can duplicate a field name.  */
-	if (flag_plan9_extensions
-	    && TYPE_NAME (TREE_TYPE (x)) != NULL_TREE
-	    && TREE_CODE (TYPE_NAME (TREE_TYPE (x))) == TYPE_DECL)
+	ಯದಿ (flag_plan9_extensions
+	    && TYPE_NAME (ವೃಕ್ಷ_TYPE (x)) != NULL_ವೃಕ್ಷ
+	    && ವೃಕ್ಷ_CODE (TYPE_NAME (ವೃಕ್ಷ_TYPE (x))) == TYPE_DECL)
 	  {
-	    tree xn = DECL_NAME (TYPE_NAME (TREE_TYPE (x)));
-	    slot = htab->find_slot (xn, INSERT);
-	    if (*slot)
-	      error ("duplicate member %q+D", TYPE_NAME (TREE_TYPE (x)));
+	    ವೃಕ್ಷ xn = DECL_NAME (TYPE_NAME (ವೃಕ್ಷ_TYPE (x)));
+	    slot = htab->find_slot (xn, ಸೇರಿಸು);
+	    ಯದಿ (*slot)
+	      error ("duplicate member %q+D", TYPE_NAME (ವೃಕ್ಷ_TYPE (x)));
 	    *slot = xn;
 	  }
       }
@@ -9217,11 +9217,11 @@ detect_field_duplicates_hash (tree fieldlist,
 /* Generate an error for any duplicate field names in FIELDLIST.  Munge
    the list such that this does not present a problem later.  */
 
-static void
-detect_field_duplicates (tree fieldlist)
+ಸ್ಥಿರ ಶೂನ್ಯ
+detect_field_duplicates (ವೃಕ್ಷ fieldlist)
 {
-  tree x, y;
-  int timeout = 10;
+  ವೃಕ್ಷ x, y;
+  ಪೂರ್ಣಾಙ್ಕ timeout = 10;
 
   /* If the struct is the list of instance variables of an Objective-C
      class, then we need to check all the instance variables of
@@ -9234,69 +9234,69 @@ detect_field_duplicates (tree fieldlist)
      checks.  If we are checking the list of instance variables, the
      ObjC frontend will do the check, emit the errors if needed, and
      then return true.  */
-  if (c_dialect_objc ())
-    if (objc_detect_field_duplicates (false))
-      return;
+  ಯದಿ (c_dialect_objc ())
+    ಯದಿ (objc_detect_field_duplicates (ಅಸತ್ಯ))
+      ಪ್ರತ್ಯಾಗಮ;
 
   /* First, see if there are more than "a few" fields.
      This is trivially true if there are zero or one fields.  */
-  if (!fieldlist || !DECL_CHAIN (fieldlist))
-    return;
+  ಯದಿ (!fieldlist || !DECL_CHAIN (fieldlist))
+    ಪ್ರತ್ಯಾಗಮ;
   x = fieldlist;
-  do {
+  ಕುರು {
     timeout--;
-    if (DECL_NAME (x) == NULL_TREE
-	&& RECORD_OR_UNION_TYPE_P (TREE_TYPE (x)))
+    ಯದಿ (DECL_NAME (x) == NULL_ವೃಕ್ಷ
+	&& RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (x)))
       timeout = 0;
     x = DECL_CHAIN (x);
-  } while (timeout > 0 && x);
+  } ಯಾವತ್ (timeout > 0 && x);
 
   /* If there were "few" fields and no anonymous structures or unions,
      avoid the overhead of allocating a hash table.  Instead just do
      the nested traversal thing.  */
-  if (timeout > 0)
+  ಯದಿ (timeout > 0)
     {
-      for (x = DECL_CHAIN (fieldlist); x; x = DECL_CHAIN (x))
+      ಪ್ರತಿ (x = DECL_CHAIN (fieldlist); x; x = DECL_CHAIN (x))
 	/* When using -fplan9-extensions, we can have duplicates
 	   between typedef names and fields.  */
-	if (DECL_NAME (x)
+	ಯದಿ (DECL_NAME (x)
 	    || (flag_plan9_extensions
-		&& DECL_NAME (x) == NULL_TREE
-		&& RECORD_OR_UNION_TYPE_P (TREE_TYPE (x))
-		&& TYPE_NAME (TREE_TYPE (x)) != NULL_TREE
-		&& TREE_CODE (TYPE_NAME (TREE_TYPE (x))) == TYPE_DECL))
+		&& DECL_NAME (x) == NULL_ವೃಕ್ಷ
+		&& RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (x))
+		&& TYPE_NAME (ವೃಕ್ಷ_TYPE (x)) != NULL_ವೃಕ್ಷ
+		&& ವೃಕ್ಷ_CODE (TYPE_NAME (ವೃಕ್ಷ_TYPE (x))) == TYPE_DECL))
 	  {
-	    for (y = fieldlist; y != x; y = TREE_CHAIN (y))
-	      if (is_duplicate_field (y, x))
+	    ಪ್ರತಿ (y = fieldlist; y != x; y = ವೃಕ್ಷ_CHAIN (y))
+	      ಯದಿ (is_duplicate_field (y, x))
 		{
 		  error ("duplicate member %q+D", x);
-		  DECL_NAME (x) = NULL_TREE;
+		  DECL_NAME (x) = NULL_ವೃಕ್ಷ;
 		}
 	  }
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      hash_table<nofree_ptr_hash <tree_node> > htab (37);
+      hash_table<nofree_ptr_hash <ವೃಕ್ಷ_ಗಂಟು> > htab (37);
       detect_field_duplicates_hash (fieldlist, &htab);
     }
 }
 
 /* Finish up struct info used by -Wc++-compat.  */
 
-static void
-warn_cxx_compat_finish_struct (tree fieldlist, enum tree_code code,
+ಸ್ಥಿರ ಶೂನ್ಯ
+warn_cxx_compat_finish_struct (ವೃಕ್ಷ fieldlist, ಗಣನಾ ವೃಕ್ಷ_code code,
 			       location_t record_loc)
 {
-  unsigned int ix;
-  tree x;
-  struct c_binding *b;
+  unsigned ಪೂರ್ಣಾಙ್ಕ ix;
+  ವೃಕ್ಷ x;
+  ಸಂರಚನಾ c_binding *b;
 
-  if (fieldlist == NULL_TREE)
+  ಯದಿ (fieldlist == NULL_ವೃಕ್ಷ)
     {
-      if (code == RECORD_TYPE)
+      ಯದಿ (code == RECORD_TYPE)
 	warning_at (record_loc, OPT_Wc___compat,
 		    "empty struct has size 0 in C, size 1 in C++");
-      else
+      ಅನ್ಯಥಾ
 	warning_at (record_loc, OPT_Wc___compat,
 		    "empty union has size 0 in C, size 1 in C++");
     }
@@ -9315,19 +9315,19 @@ warn_cxx_compat_finish_struct (tree fieldlist, enum tree_code code,
      not parse in C++, because the C++ lookup rules say that the
      typedef name would be looked up in the context of the struct, and
      would thus be the field rather than the typedef.  */
-  if (!struct_parse_info->typedefs_seen.is_empty ()
-      && fieldlist != NULL_TREE)
+  ಯದಿ (!struct_parse_info->typedefs_seen.is_empty ()
+      && fieldlist != NULL_ವೃಕ್ಷ)
     {
       /* Use a hash_set<tree> using the name of the typedef.  We can use
 	 a hash_set<tree> because identifiers are interned.  */
-      hash_set<tree> tset;
+      hash_set<ವೃಕ್ಷ> tset;
 
       FOR_EACH_VEC_ELT (struct_parse_info->typedefs_seen, ix, x)
 	tset.add (DECL_NAME (x));
 
-      for (x = fieldlist; x != NULL_TREE; x = DECL_CHAIN (x))
+      ಪ್ರತಿ (x = fieldlist; x != NULL_ವೃಕ್ಷ; x = DECL_CHAIN (x))
 	{
-	  if (DECL_NAME (x) != NULL_TREE
+	  ಯದಿ (DECL_NAME (x) != NULL_ವೃಕ್ಷ
 	      && tset.contains (DECL_NAME (x)))
 	    {
 	      warning_at (DECL_SOURCE_LOCATION (x), OPT_Wc___compat,
@@ -9347,38 +9347,38 @@ warn_cxx_compat_finish_struct (tree fieldlist, enum tree_code code,
 
 /* Function to help qsort sort FIELD_DECLs by name order.  */
 
-static int
-field_decl_cmp (const void *x_p, const void *y_p)
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ
+field_decl_cmp (ಧ್ರುವ ಶೂನ್ಯ *x_p, ಧ್ರುವ ಶೂನ್ಯ *y_p)
 {
-  const tree *const x = (const tree *) x_p;
-  const tree *const y = (const tree *) y_p;
+  ಧ್ರುವ ವೃಕ್ಷ *ಧ್ರುವ x = (ಧ್ರುವ ವೃಕ್ಷ *) x_p;
+  ಧ್ರುವ ವೃಕ್ಷ *ಧ್ರುವ y = (ಧ್ರುವ ವೃಕ್ಷ *) y_p;
 
-  if (DECL_NAME (*x) == DECL_NAME (*y))
+  ಯದಿ (DECL_NAME (*x) == DECL_NAME (*y))
     /* A nontype is "greater" than a type.  */
-    return (TREE_CODE (*y) == TYPE_DECL) - (TREE_CODE (*x) == TYPE_DECL);
-  if (DECL_NAME (*x) == NULL_TREE)
-    return -1;
-  if (DECL_NAME (*y) == NULL_TREE)
-    return 1;
-  if (DECL_NAME (*x) < DECL_NAME (*y))
-    return -1;
-  return 1;
+    ಪ್ರತ್ಯಾಗಮ (ವೃಕ್ಷ_CODE (*y) == TYPE_DECL) - (ವೃಕ್ಷ_CODE (*x) == TYPE_DECL);
+  ಯದಿ (DECL_NAME (*x) == NULL_ವೃಕ್ಷ)
+    ಪ್ರತ್ಯಾಗಮ -1;
+  ಯದಿ (DECL_NAME (*y) == NULL_ವೃಕ್ಷ)
+    ಪ್ರತ್ಯಾಗಮ 1;
+  ಯದಿ (DECL_NAME (*x) < DECL_NAME (*y))
+    ಪ್ರತ್ಯಾಗಮ -1;
+  ಪ್ರತ್ಯಾಗಮ 1;
 }
 
 /* If this structure or union completes the type of any previous
    variable declaration, lay it out and output its rtl.  */
-static void
-finish_incomplete_vars (tree incomplete_vars, bool toplevel)
+ಸ್ಥಿರ ಶೂನ್ಯ
+finish_incomplete_vars (ವೃಕ್ಷ incomplete_vars, ತಾರ್ಕಿಕ toplevel)
 {
-  for (tree x = incomplete_vars; x; x = TREE_CHAIN (x))
+  ಪ್ರತಿ (ವೃಕ್ಷ x = incomplete_vars; x; x = ವೃಕ್ಷ_CHAIN (x))
     {
-      tree decl = TREE_VALUE (x);
-      if (TREE_CODE (TREE_TYPE (decl)) == ARRAY_TYPE)
-	layout_array_type (TREE_TYPE (decl));
-      if (TREE_CODE (decl) != TYPE_DECL)
+      ವೃಕ್ಷ decl = ವೃಕ್ಷ_ಮೌಲ್ಯ (x);
+      ಯದಿ (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (decl)) == ARRAY_TYPE)
+	layout_array_type (ವೃಕ್ಷ_TYPE (decl));
+      ಯದಿ (ವೃಕ್ಷ_CODE (decl) != TYPE_DECL)
 	{
 	  relayout_decl (decl);
-	  if (c_dialect_objc ())
+	  ಯದಿ (c_dialect_objc ())
 	    objc_check_decl (decl);
 	  rest_of_decl_compilation (decl, toplevel, 0);
 	}
@@ -9395,48 +9395,48 @@ finish_incomplete_vars (tree incomplete_vars, bool toplevel)
      if presenting.
   Return TRUE when it's a flexible array member, FALSE otherwise.  */
 
-static bool
-is_flexible_array_member_p (bool is_last_field,
-			    tree x)
+ಸ್ಥಿರ ತಾರ್ಕಿಕ
+is_flexible_array_member_p (ತಾರ್ಕಿಕ is_last_field,
+			    ವೃಕ್ಷ x)
 {
   /* If not the last field, return false.  */
-  if (!is_last_field)
-    return false;
+  ಯದಿ (!is_last_field)
+    ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 
   /* If not an array field, return false.  */
-  if (TREE_CODE (TREE_TYPE (x)) != ARRAY_TYPE)
-    return false;
+  ಯದಿ (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (x)) != ARRAY_TYPE)
+    ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 
-  bool is_zero_length_array = zero_length_array_type_p (TREE_TYPE (x));
-  bool is_one_element_array = one_element_array_type_p (TREE_TYPE (x));
-  bool is_flexible_array = flexible_array_member_type_p (TREE_TYPE (x));
+  ತಾರ್ಕಿಕ is_zero_length_array = zero_length_array_type_p (ವೃಕ್ಷ_TYPE (x));
+  ತಾರ್ಕಿಕ is_one_element_array = one_element_array_type_p (ವೃಕ್ಷ_TYPE (x));
+  ತಾರ್ಕಿಕ is_flexible_array = flexible_array_member_type_p (ವೃಕ್ಷ_TYPE (x));
 
-  unsigned int strict_flex_array_level = c_strict_flex_array_level_of (x);
+  unsigned ಪೂರ್ಣಾಙ್ಕ strict_flex_array_level = c_strict_flex_array_level_of (x);
 
-  switch (strict_flex_array_level)
+  ವಿಕಲ್ಪ (strict_flex_array_level)
     {
-      case 0:
+      ಪಕ್ಷ 0:
 	/* Default, all trailing arrays are flexible array members.  */
-	return true;
-      case 1:
+	ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
+      ಪಕ್ಷ 1:
 	/* Level 1: all "[1]", "[0]", and "[]" are flexible array members.  */
-	if (is_one_element_array)
-	  return true;
+	ಯದಿ (is_one_element_array)
+	  ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
 	/* FALLTHROUGH.  */
-      case 2:
+      ಪಕ್ಷ 2:
 	/* Level 2: all "[0]", and "[]" are flexible array members.  */
-	if (is_zero_length_array)
-	  return true;
+	ಯದಿ (is_zero_length_array)
+	  ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
 	/* FALLTHROUGH.  */
-      case 3:
+      ಪಕ್ಷ 3:
 	/* Level 3: Only "[]" are flexible array members.  */
-	if (is_flexible_array)
-	  return true;
-	break;
-      default:
+	ಯದಿ (is_flexible_array)
+	  ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
+	ಭಙ್ಗ;
+      ಸ್ವಭಾವ:
 	gcc_unreachable ();
     }
-  return false;
+  ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 }
 
 /* Recompute TYPE_CANONICAL for variants of the type including qualified
@@ -9446,33 +9446,33 @@ is_flexible_array_member_p (bool is_last_field,
    types and other derived types created while the type was still
    incomplete, those will remain TYPE_STRUCTURAL_EQUALITY_P.  */
 
-static void
-c_update_type_canonical (tree t)
+ಸ್ಥಿರ ಶೂನ್ಯ
+c_update_type_canonical (ವೃಕ್ಷ t)
 {
   gcc_checking_assert (TYPE_MAIN_VARIANT (t) == t && !TYPE_QUALS (t));
-  for (tree x = t, l = NULL_TREE; x; l = x, x = TYPE_NEXT_VARIANT (x))
+  ಪ್ರತಿ (ವೃಕ್ಷ x = t, l = NULL_ವೃಕ್ಷ; x; l = x, x = TYPE_NEXT_VARIANT (x))
     {
-      if (x != t && TYPE_STRUCTURAL_EQUALITY_P (x))
+      ಯದಿ (x != t && TYPE_STRUCTURAL_EQUALITY_P (x))
 	{
-	  if (!TYPE_QUALS (x))
+	  ಯದಿ (!TYPE_QUALS (x))
 	    TYPE_CANONICAL (x) = TYPE_CANONICAL (t);
-	  else
+	  ಅನ್ಯಥಾ
 	    {
-	      tree
+	      ವೃಕ್ಷ
 		c = c_build_qualified_type (TYPE_CANONICAL (t), TYPE_QUALS (x));
-	      if (TYPE_STRUCTURAL_EQUALITY_P (c))
+	      ಯದಿ (TYPE_STRUCTURAL_EQUALITY_P (c))
 		{
 		  gcc_checking_assert (TYPE_CANONICAL (t) == t);
-		  if (c == x)
+		  ಯದಿ (c == x)
 		    TYPE_CANONICAL (x) = x;
-		  else
+		  ಅನ್ಯಥಾ
 		    {
 		      /* build_qualified_type for this function unhelpfully
 			 moved c from some later spot in TYPE_MAIN_VARIANT (t)
 			 chain to right after t (or created it there).  Move
 			 it right before x and process c and then x.  */
 		      gcc_checking_assert (TYPE_NEXT_VARIANT (t) == c);
-		      if (l != t)
+		      ಯದಿ (l != t)
 			{
 			  TYPE_NEXT_VARIANT (t) = TYPE_NEXT_VARIANT (c);
 			  TYPE_NEXT_VARIANT (l) = c;
@@ -9482,21 +9482,21 @@ c_update_type_canonical (tree t)
 		      x = c;
 		    }
 		}
-	      else
+	      ಅನ್ಯಥಾ
 		TYPE_CANONICAL (x) = TYPE_CANONICAL (c);
 	    }
 	}
-      else if (x != t)
-	continue;
-      for (tree p = TYPE_POINTER_TO (x); p; p = TYPE_NEXT_PTR_TO (p))
+      ಅನ್ಯಥಾ ಯದಿ (x != t)
+	ಅನುವರ್ತ;
+      ಪ್ರತಿ (ವೃಕ್ಷ p = TYPE_POINTER_TO (x); p; p = TYPE_NEXT_PTR_TO (p))
 	{
-	  if (!TYPE_STRUCTURAL_EQUALITY_P (p))
-	    continue;
-	  if (TYPE_CANONICAL (x) != x || TYPE_REF_CAN_ALIAS_ALL (p))
+	  ಯದಿ (!TYPE_STRUCTURAL_EQUALITY_P (p))
+	    ಅನುವರ್ತ;
+	  ಯದಿ (TYPE_CANONICAL (x) != x || TYPE_REF_CAN_ALIAS_ALL (p))
 	    TYPE_CANONICAL (p)
 	      = c_build_pointer_type_for_mode (TYPE_CANONICAL (x), TYPE_MODE (p),
-					       false);
-	  else
+					       ಅಸತ್ಯ);
+	  ಅನ್ಯಥಾ
 	    TYPE_CANONICAL (p) = p;
 	  c_update_type_canonical (p);
 	}
@@ -9511,13 +9511,13 @@ c_update_type_canonical (tree t)
    those we later assume (in c_variably_modified_p) that the bit is
    up-to-date.  */
 
-static void
-c_update_variably_modified (tree t)
+ಸ್ಥಿರ ಶೂನ್ಯ
+c_update_variably_modified (ವೃಕ್ಷ t)
 {
-  for (tree x = t; x; x = TYPE_NEXT_VARIANT (x))
+  ಪ್ರತಿ (ವೃಕ್ಷ x = t; x; x = TYPE_NEXT_VARIANT (x))
     {
       C_TYPE_VARIABLY_MODIFIED (x) = 1;
-      for (tree p = TYPE_POINTER_TO (x); p; p = TYPE_NEXT_PTR_TO (p))
+      ಪ್ರತಿ (ವೃಕ್ಷ p = TYPE_POINTER_TO (x); p; p = TYPE_NEXT_PTR_TO (p))
 	c_update_variably_modified (p);
     }
 }
@@ -9528,37 +9528,37 @@ c_update_variably_modified (tree t)
    anonymous struct/union, Report error and remove the corresponding
    attribute when it's not.  */
 
-static void
-verify_counted_by_attribute (tree outmost_struct_type,
-			     tree cur_struct_type)
+ಸ್ಥಿರ ಶೂನ್ಯ
+verify_counted_by_attribute (ವೃಕ್ಷ outmost_struct_type,
+			     ವೃಕ್ಷ cur_struct_type)
 {
-  for (tree field = TYPE_FIELDS (cur_struct_type); field;
-       field = TREE_CHAIN (field))
+  ಪ್ರತಿ (ವೃಕ್ಷ field = TYPE_FIELDS (cur_struct_type); field;
+       field = ವೃಕ್ಷ_CHAIN (field))
     {
-      if (flexible_array_member_type_p (TREE_TYPE (field))
-	   || TREE_CODE (TREE_TYPE (field)) == POINTER_TYPE)
+      ಯದಿ (flexible_array_member_type_p (ವೃಕ್ಷ_TYPE (field))
+	   || ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (field)) == POINTER_TYPE)
 	{
-	  tree attr_counted_by = lookup_attribute ("counted_by",
+	  ವೃಕ್ಷ attr_counted_by = lookup_attribute ("counted_by",
 						   DECL_ATTRIBUTES (field));
 
-	  if (!attr_counted_by)
-	    continue;
+	  ಯದಿ (!attr_counted_by)
+	    ಅನುವರ್ತ;
 
 	  /* If there is an counted_by attribute attached to the field,
 	     verify it.  */
 
-	  tree fieldname = TREE_VALUE (TREE_VALUE (attr_counted_by));
+	  ವೃಕ್ಷ fieldname = ವೃಕ್ಷ_ಮೌಲ್ಯ (ವೃಕ್ಷ_ಮೌಲ್ಯ (attr_counted_by));
 
 	  /* Verify the argument of the attribute is a valid field of the
 	     containing structure.  */
 
-	  tree counted_by_field = lookup_field (outmost_struct_type,
+	  ವೃಕ್ಷ counted_by_field = lookup_field (outmost_struct_type,
 						fieldname);
 
 	  /* Error when the field is not found in the containing structure
 	     and remove the corresponding counted_by attribute from the
 	     field_decl.  */
-	  if (!counted_by_field)
+	  ಯದಿ (!counted_by_field)
 	    {
 	      error_at (DECL_SOURCE_LOCATION (field),
 		    "argument %qE to the %<counted_by%> attribute"
@@ -9567,14 +9567,14 @@ verify_counted_by_attribute (tree outmost_struct_type,
 	      DECL_ATTRIBUTES (field)
 		= remove_attribute ("counted_by", DECL_ATTRIBUTES (field));
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	  /* Error when the field is not with an integer type.  */
 	    {
-	      while (TREE_CHAIN (counted_by_field))
-		counted_by_field = TREE_CHAIN (counted_by_field);
-	      tree real_field = TREE_VALUE (counted_by_field);
+	      ಯಾವತ್ (ವೃಕ್ಷ_CHAIN (counted_by_field))
+		counted_by_field = ವೃಕ್ಷ_CHAIN (counted_by_field);
+	      ವೃಕ್ಷ real_field = ವೃಕ್ಷ_ಮೌಲ್ಯ (counted_by_field);
 
-	      if (!INTEGRAL_TYPE_P (TREE_TYPE (real_field)))
+	      ಯದಿ (!INTEGRAL_TYPE_P (ವೃಕ್ಷ_TYPE (real_field)))
 		{
 		  error_at (DECL_SOURCE_LOCATION (field),
 			"argument %qE to the %<counted_by%> attribute"
@@ -9586,9 +9586,9 @@ verify_counted_by_attribute (tree outmost_struct_type,
 		}
 	    }
 	}
-      else if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (field))
-	       && (DECL_NAME (field) == NULL_TREE))
-	verify_counted_by_attribute (outmost_struct_type, TREE_TYPE (field));
+      ಅನ್ಯಥಾ ಯದಿ (RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (field))
+	       && (DECL_NAME (field) == NULL_ವೃಕ್ಷ))
+	verify_counted_by_attribute (outmost_struct_type, ವೃಕ್ಷ_TYPE (field));
     }
 }
 
@@ -9596,26 +9596,26 @@ verify_counted_by_attribute (tree outmost_struct_type,
    nested in other structure/uniona). For such type, verify its counted_by
    if it is an anonymous structure/union.  */
 
-void
-verify_counted_by_for_top_anonymous_type (tree type)
+ಶೂನ್ಯ
+verify_counted_by_for_ತುದಿ_anonymous_type (ವೃಕ್ಷ type)
 {
-  if (!RECORD_OR_UNION_TYPE_P (type))
-    return;
+  ಯದಿ (!RECORD_OR_UNION_TYPE_P (type))
+    ಪ್ರತ್ಯಾಗಮ;
 
-  if (C_TYPE_FIELDS_HAS_COUNTED_BY (type)
-      && c_type_tag (type) == NULL_TREE)
+  ಯದಿ (C_TYPE_FIELDS_HAS_COUNTED_BY (type)
+      && c_type_tag (type) == NULL_ವೃಕ್ಷ)
     verify_counted_by_attribute (type, type);
 }
 
 /* TYPE is a struct or union that we're applying may_alias to after the body is
    parsed.  Fixup any POINTER_TO types.  */
 
-static void
-c_fixup_may_alias (tree type)
+ಸ್ಥಿರ ಶೂನ್ಯ
+c_fixup_may_alias (ವೃಕ್ಷ type)
 {
-  for (tree t = TYPE_POINTER_TO (type); t; t = TYPE_NEXT_PTR_TO (t))
-    for (tree v = TYPE_MAIN_VARIANT (t); v; v = TYPE_NEXT_VARIANT (v))
-      TYPE_REF_CAN_ALIAS_ALL (v) = true;
+  ಪ್ರತಿ (ವೃಕ್ಷ t = TYPE_POINTER_TO (type); t; t = TYPE_NEXT_PTR_TO (t))
+    ಪ್ರತಿ (ವೃಕ್ಷ v = TYPE_MAIN_VARIANT (t); v; v = TYPE_NEXT_VARIANT (v))
+      TYPE_REF_CAN_ALIAS_ALL (v) = ಸತ್ಯ;
 }
 
 /* Fill in the fields of a RECORD_TYPE or UNION_TYPE node, T.
@@ -9626,45 +9626,45 @@ c_fixup_may_alias (tree type)
    ENCLOSING_STRUCT_PARSE_INFO is the value of STRUCT_PARSE_INFO when
    the struct was started.  */
 
-tree
-finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
-	       class c_struct_parse_info *enclosing_struct_parse_info,
-	       tree *expr)
+ವೃಕ್ಷ
+finish_struct (location_t loc, ವೃಕ್ಷ t, ವೃಕ್ಷ fieldlist, ವೃಕ್ಷ attributes,
+	       ವರ್ಗ c_struct_parse_info *enclosing_struct_parse_info,
+	       ವೃಕ್ಷ *ಅಭಿವ್ಯಕ್ತಿ)
 {
-  tree x;
-  bool toplevel = file_scope == current_scope;
+  ವೃಕ್ಷ x;
+  ತಾರ್ಕಿಕ toplevel = file_scope == current_scope;
 
   /* If this type was previously laid out as a forward reference,
      make sure we lay it out again.  */
 
-  TYPE_SIZE (t) = NULL_TREE;
+  TYPE_SIZE (t) = NULL_ವೃಕ್ಷ;
 
-  decl_attributes (&t, attributes, (int) ATTR_FLAG_TYPE_IN_PLACE);
+  decl_attributes (&t, attributes, (ಪೂರ್ಣಾಙ್ಕ) ATTR_FLAG_TYPE_IN_PLACE);
 
-  if (pedantic)
+  ಯದಿ (pedantic)
     {
-      for (x = fieldlist; x; x = DECL_CHAIN (x))
+      ಪ್ರತಿ (x = fieldlist; x; x = DECL_CHAIN (x))
 	{
-	  if (DECL_NAME (x) != NULL_TREE)
-	    break;
-	  if (flag_isoc11 && RECORD_OR_UNION_TYPE_P (TREE_TYPE (x)))
-	    break;
+	  ಯದಿ (DECL_NAME (x) != NULL_ವೃಕ್ಷ)
+	    ಭಙ್ಗ;
+	  ಯದಿ (flag_isoc11 && RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (x)))
+	    ಭಙ್ಗ;
 	}
 
-      if (x == NULL_TREE)
+      ಯದಿ (x == NULL_ವೃಕ್ಷ)
 	{
-	  if (TREE_CODE (t) == UNION_TYPE)
+	  ಯದಿ (ವೃಕ್ಷ_CODE (t) == UNION_TYPE)
 	    {
-	      if (fieldlist)
+	      ಯದಿ (fieldlist)
 		pedwarn (loc, OPT_Wpedantic, "union has no named members");
-	      else
+	      ಅನ್ಯಥಾ
 		pedwarn (loc, OPT_Wpedantic, "union has no members");
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    {
-	      if (fieldlist)
+	      ಯದಿ (fieldlist)
 		pedwarn (loc, OPT_Wpedantic, "struct has no named members");
-	      else
+	      ಅನ್ಯಥಾ
 		pedwarn (loc, OPT_Wpedantic, "struct has no members");
 	    }
 	}
@@ -9677,33 +9677,33 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
      type.  (Correct layout requires the original type to have been preserved
      until now.)  */
 
-  bool saw_named_field = false;
-  for (x = fieldlist; x; x = DECL_CHAIN (x))
+  ತಾರ್ಕಿಕ saw_named_field = ಅಸತ್ಯ;
+  ಪ್ರತಿ (x = fieldlist; x; x = DECL_CHAIN (x))
     {
       /* Whether this field is the last field of the structure or union.
 	 for UNION, any field is the last field of it.  */
-      bool is_last_field = (DECL_CHAIN (x) == NULL_TREE)
-			    || (TREE_CODE (t) == UNION_TYPE);
+      ತಾರ್ಕಿಕ is_last_field = (DECL_CHAIN (x) == NULL_ವೃಕ್ಷ)
+			    || (ವೃಕ್ಷ_CODE (t) == UNION_TYPE);
 
-      if (TREE_TYPE (x) == error_mark_node)
-	continue;
+      ಯದಿ (ವೃಕ್ಷ_TYPE (x) == error_mark_ಗಂಟು)
+	ಅನುವರ್ತ;
 
       DECL_CONTEXT (x) = t;
 
-      tree t1 = strip_array_types (TREE_TYPE (x));
+      ವೃಕ್ಷ t1 = strip_array_types (ವೃಕ್ಷ_TYPE (x));
       /* If any field is const, the structure type is pseudo-const.  */
-      if (TREE_READONLY (x))
+      ಯದಿ (ವೃಕ್ಷ_READONLY (x))
 	C_TYPE_FIELDS_READONLY (t) = 1;
-      else
+      ಅನ್ಯಥಾ
 	{
 	  /* A field that is pseudo-const makes the structure likewise.  */
-	  if (RECORD_OR_UNION_TYPE_P (t1) && C_TYPE_FIELDS_READONLY (t1))
+	  ಯದಿ (RECORD_OR_UNION_TYPE_P (t1) && C_TYPE_FIELDS_READONLY (t1))
 	    C_TYPE_FIELDS_READONLY (t) = 1;
 	}
 
       /* Any field that is volatile means variables of this type must be
 	 treated in some ways as volatile.  */
-      if (TREE_THIS_VOLATILE (x))
+      ಯದಿ (ವೃಕ್ಷ_THIS_VOLATILE (x))
 	{
 	  C_TYPE_FIELDS_VOLATILE (t) = 1;
 	  C_TYPE_FIELDS_NON_CONSTEXPR (t) = 1;
@@ -9711,67 +9711,67 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
 
       /* Any field that is volatile, restrict-qualified or atomic
 	 means the type cannot be used for a constexpr object.  */
-      if (TYPE_QUALS (t1)
+      ಯದಿ (TYPE_QUALS (t1)
 	  & (TYPE_QUAL_VOLATILE | TYPE_QUAL_RESTRICT | TYPE_QUAL_ATOMIC))
 	C_TYPE_FIELDS_NON_CONSTEXPR (t) = 1;
-      else if (RECORD_OR_UNION_TYPE_P (t1) && C_TYPE_FIELDS_NON_CONSTEXPR (t1))
+      ಅನ್ಯಥಾ ಯದಿ (RECORD_OR_UNION_TYPE_P (t1) && C_TYPE_FIELDS_NON_CONSTEXPR (t1))
 	    C_TYPE_FIELDS_NON_CONSTEXPR (t) = 1;
 
       /* Any field of nominal variable size implies structure is too.  */
-      if (C_DECL_VARIABLE_SIZE (x))
+      ಯದಿ (C_DECL_VARIABLE_SIZE (x))
 	C_TYPE_VARIABLE_SIZE (t) = 1;
 
       /* If any field is variably modified, record this fact. */
-      if (c_type_variably_modified_p (TREE_TYPE (x)))
+      ಯದಿ (c_type_variably_modified_p (ವೃಕ್ಷ_TYPE (x)))
 	C_TYPE_VARIABLY_MODIFIED (t) = 1;
 
-      if (DECL_C_BIT_FIELD (x))
+      ಯದಿ (DECL_C_BIT_FIELD (x))
 	{
-	  unsigned HOST_WIDE_INT width = tree_to_uhwi (DECL_INITIAL (x));
+	  unsigned HOST_WIDE_INT width = ವೃಕ್ಷ_to_uhwi (DECL_INITIAL (x));
 	  DECL_SIZE (x) = bitsize_int (width);
 	  DECL_BIT_FIELD (x) = 1;
 	}
 
-      if (TYPE_PACKED (t)
+      ಯದಿ (TYPE_PACKED (t)
 	  && (DECL_BIT_FIELD (x)
-	      || TYPE_ALIGN (TREE_TYPE (x)) > BITS_PER_UNIT))
+	      || TYPE_ALIGN (ವೃಕ್ಷ_TYPE (x)) > BITS_PER_UNIT))
 	DECL_PACKED (x) = 1;
 
       /* Detect flexible array member in an invalid context.  */
-      if (flexible_array_member_type_p (TREE_TYPE (x)))
+      ಯದಿ (flexible_array_member_type_p (ವೃಕ್ಷ_TYPE (x)))
 	{
-	  if (TREE_CODE (t) == UNION_TYPE)
+	  ಯದಿ (ವೃಕ್ಷ_CODE (t) == UNION_TYPE)
 	    pedwarn (DECL_SOURCE_LOCATION (x), OPT_Wpedantic,
 		     "flexible array member in union is a GCC extension");
-	  else if (!is_last_field)
+	  ಅನ್ಯಥಾ ಯದಿ (!is_last_field)
 	    {
 	      error_at (DECL_SOURCE_LOCATION (x),
 			"flexible array member not at end of struct");
-	      TREE_TYPE (x) = error_mark_node;
+	      ವೃಕ್ಷ_TYPE (x) = error_mark_ಗಂಟು;
 	    }
-	  else if (!saw_named_field)
+	  ಅನ್ಯಥಾ ಯದಿ (!saw_named_field)
 	    pedwarn (DECL_SOURCE_LOCATION (x), OPT_Wpedantic,
 		     "flexible array member in a struct with no named "
 		     "members is a GCC extension");
-	  if (lookup_attribute ("counted_by", DECL_ATTRIBUTES (x)))
+	  ಯದಿ (lookup_attribute ("counted_by", DECL_ATTRIBUTES (x)))
 	    C_TYPE_FIELDS_HAS_COUNTED_BY (t) = 1;
 	}
 
-      if (TREE_CODE (TREE_TYPE (x)) == POINTER_TYPE
+      ಯದಿ (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (x)) == POINTER_TYPE
 	  && lookup_attribute ("counted_by", DECL_ATTRIBUTES (x)))
 	C_TYPE_FIELDS_HAS_COUNTED_BY (t) = 1;
 
       /* If the field is an anonymous structure that includes a field
 	 with counted_by attribute, this structure should also be marked
 	 too.  */
-      if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (x))
-	  && C_TYPE_FIELDS_HAS_COUNTED_BY (TREE_TYPE (x))
-	  && DECL_NAME (x) == NULL_TREE
-	  && c_type_tag (TREE_TYPE (x)) == NULL_TREE)
+      ಯದಿ (RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (x))
+	  && C_TYPE_FIELDS_HAS_COUNTED_BY (ವೃಕ್ಷ_TYPE (x))
+	  && DECL_NAME (x) == NULL_ವೃಕ್ಷ
+	  && c_type_tag (ವೃಕ್ಷ_TYPE (x)) == NULL_ವೃಕ್ಷ)
 	C_TYPE_FIELDS_HAS_COUNTED_BY (t) = 1;
 
-      if (pedantic && TREE_CODE (t) == RECORD_TYPE
-	  && flexible_array_type_p (TREE_TYPE (x)))
+      ಯದಿ (pedantic && ವೃಕ್ಷ_CODE (t) == RECORD_TYPE
+	  && flexible_array_type_p (ವೃಕ್ಷ_TYPE (x)))
 	pedwarn (DECL_SOURCE_LOCATION (x), OPT_Wpedantic,
 		 "invalid use of structure with flexible array member");
 
@@ -9783,31 +9783,31 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
 	 There is only one last_field for a structure type, but there might
 	 be multiple last_fields for a union type, therefore we should ORed
 	 the result for multiple last_fields.  */
-      if (TREE_CODE (TREE_TYPE (x)) == ARRAY_TYPE)
+      ಯದಿ (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (x)) == ARRAY_TYPE)
 	TYPE_INCLUDES_FLEXARRAY (t)
-	  |= is_last_field && flexible_array_member_type_p (TREE_TYPE (x));
+	  |= is_last_field && flexible_array_member_type_p (ವೃಕ್ಷ_TYPE (x));
       /* Recursively set TYPE_INCLUDES_FLEXARRAY for the context of x, t
 	 when x is an union or record and is the last field.  */
-      else if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (x)))
+      ಅನ್ಯಥಾ ಯದಿ (RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (x)))
 	TYPE_INCLUDES_FLEXARRAY (t)
-	  |= is_last_field && TYPE_INCLUDES_FLEXARRAY (TREE_TYPE (x));
+	  |= is_last_field && TYPE_INCLUDES_FLEXARRAY (ವೃಕ್ಷ_TYPE (x));
 
-      if (warn_flex_array_member_not_at_end
+      ಯದಿ (warn_flex_array_member_not_at_end
 	  && !is_last_field
-	  && RECORD_OR_UNION_TYPE_P (TREE_TYPE (x))
-	  && TYPE_INCLUDES_FLEXARRAY (TREE_TYPE (x)))
+	  && RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (x))
+	  && TYPE_INCLUDES_FLEXARRAY (ವೃಕ್ಷ_TYPE (x)))
 	warning_at (DECL_SOURCE_LOCATION (x),
 		    OPT_Wflex_array_member_not_at_end,
 		    "structure containing a flexible array member"
 		    " is not at the end of another structure");
 
-      if (DECL_NAME (x)
-	  || RECORD_OR_UNION_TYPE_P (TREE_TYPE (x)))
-	saw_named_field = true;
+      ಯದಿ (DECL_NAME (x)
+	  || RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (x)))
+	saw_named_field = ಸತ್ಯ;
 
-      if (AGGREGATE_TYPE_P (TREE_TYPE (x))
-	  && TYPE_TYPELESS_STORAGE (TREE_TYPE (x)))
-	TYPE_TYPELESS_STORAGE (t) = true;
+      ಯದಿ (AGGREGATE_TYPE_P (ವೃಕ್ಷ_TYPE (x))
+	  && TYPE_TYPELESS_STORAGE (ವೃಕ್ಷ_TYPE (x)))
+	TYPE_TYPELESS_STORAGE (t) = ಸತ್ಯ;
     }
 
   detect_field_duplicates (fieldlist);
@@ -9821,77 +9821,77 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
 
   layout_type (t);
 
-  if (TYPE_SIZE_UNIT (t)
-      && TREE_CODE (TYPE_SIZE_UNIT (t)) == INTEGER_CST
-      && !TREE_OVERFLOW (TYPE_SIZE_UNIT (t))
+  ಯದಿ (TYPE_SIZE_UNIT (t)
+      && ವೃಕ್ಷ_CODE (TYPE_SIZE_UNIT (t)) == INTEGER_CST
+      && !ವೃಕ್ಷ_OVERFLOW (TYPE_SIZE_UNIT (t))
       && !valid_constant_size_p (TYPE_SIZE_UNIT (t)))
     error ("type %qT is too large", t);
 
   /* Give bit-fields their proper types and rewrite the type of array fields
      with scalar component if the enclosing type has reverse storage order.  */
-  for (tree field = fieldlist; field; field = DECL_CHAIN (field))
+  ಪ್ರತಿ (ವೃಕ್ಷ field = fieldlist; field; field = DECL_CHAIN (field))
     {
-      if (TREE_CODE (field) == FIELD_DECL
+      ಯದಿ (ವೃಕ್ಷ_CODE (field) == FIELD_DECL
 	  && DECL_INITIAL (field)
-	  && TREE_TYPE (field) != error_mark_node)
+	  && ವೃಕ್ಷ_TYPE (field) != error_mark_ಗಂಟು)
 	{
 	  unsigned HOST_WIDE_INT width
-	    = tree_to_uhwi (DECL_INITIAL (field));
-	  tree type = TREE_TYPE (field);
-	  if (VECTOR_TYPE_P (type))
+	    = ವೃಕ್ಷ_to_uhwi (DECL_INITIAL (field));
+	  ವೃಕ್ಷ type = ವೃಕ್ಷ_TYPE (field);
+	  ಯದಿ (VECTOR_TYPE_P (type))
 	    {
 	      error_at (DECL_SOURCE_LOCATION (field),
 			"bit-field %qD has invalid type", field);
-	      type = TREE_TYPE (type);
-	      TREE_TYPE (field) = type;
+	      type = ವೃಕ್ಷ_TYPE (type);
+	      ವೃಕ್ಷ_TYPE (field) = type;
 	    }
-	  if (width != TYPE_PRECISION (type))
+	  ಯದಿ (width != TYPE_PRECISION (type))
 	    {
-	      if (BITINT_TYPE_P (type)
+	      ಯದಿ (BITINT_TYPE_P (type)
 		  && width >= ((TYPE_UNSIGNED (type) || flag_isoc2y) ? 1 : 2))
-		TREE_TYPE (field)
+		ವೃಕ್ಷ_TYPE (field)
 		  = build_bitint_type (width, TYPE_UNSIGNED (type));
-	      else
-		TREE_TYPE (field)
+	      ಅನ್ಯಥಾ
+		ವೃಕ್ಷ_TYPE (field)
 		  = c_build_bitfield_integer_type (width,
 						   TYPE_UNSIGNED (type));
-	      if (tree attr = c_hardbool_type_attr (type))
-		decl_attributes (&TREE_TYPE (field),
+	      ಯದಿ (ವೃಕ್ಷ attr = c_hardbool_type_attr (type))
+		decl_attributes (&ವೃಕ್ಷ_TYPE (field),
 				 copy_list (attr),
-				 0, NULL_TREE);
-	      SET_DECL_MODE (field, TYPE_MODE (TREE_TYPE (field)));
+				 0, NULL_ವೃಕ್ಷ);
+	      SET_DECL_MODE (field, TYPE_MODE (ವೃಕ್ಷ_TYPE (field)));
 	    }
-	  DECL_INITIAL (field) = NULL_TREE;
+	  DECL_INITIAL (field) = NULL_ವೃಕ್ಷ;
 	}
-      else if (TYPE_REVERSE_STORAGE_ORDER (t)
-	       && TREE_CODE (field) == FIELD_DECL
-	       && TREE_CODE (TREE_TYPE (field)) == ARRAY_TYPE)
+      ಅನ್ಯಥಾ ಯದಿ (TYPE_REVERSE_STORAGE_ORDER (t)
+	       && ವೃಕ್ಷ_CODE (field) == FIELD_DECL
+	       && ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (field)) == ARRAY_TYPE)
 	{
-	  tree ftype = TREE_TYPE (field);
-	  tree ctype = strip_array_types (ftype);
-	  if (!RECORD_OR_UNION_TYPE_P (ctype) && TYPE_MODE (ctype) != QImode)
+	  ವೃಕ್ಷ ftype = ವೃಕ್ಷ_TYPE (field);
+	  ವೃಕ್ಷ ctype = strip_array_types (ftype);
+	  ಯದಿ (!RECORD_OR_UNION_TYPE_P (ctype) && TYPE_MODE (ctype) != QImode)
 	    {
-	      tree fmain_type = TYPE_MAIN_VARIANT (ftype);
-	      tree *typep = &fmain_type;
-	      do {
+	      ವೃಕ್ಷ fmain_type = TYPE_MAIN_VARIANT (ftype);
+	      ವೃಕ್ಷ *typep = &fmain_type;
+	      ಕುರು {
 		*typep = build_distinct_type_copy (*typep);
 		TYPE_REVERSE_STORAGE_ORDER (*typep) = 1;
-		typep = &TREE_TYPE (*typep);
-	      } while (TREE_CODE (*typep) == ARRAY_TYPE);
-	      TREE_TYPE (field)
+		typep = &ವೃಕ್ಷ_TYPE (*typep);
+	      } ಯಾವತ್ (ವೃಕ್ಷ_CODE (*typep) == ARRAY_TYPE);
+	      ವೃಕ್ಷ_TYPE (field)
 		= c_build_qualified_type (fmain_type, TYPE_QUALS (ftype));
 	    }
 	}
 
       /* Warn on problematic type punning for storage order purposes.  */
-      if (TREE_CODE (t) == UNION_TYPE
-	  && TREE_CODE (field) == FIELD_DECL
-	  && AGGREGATE_TYPE_P (TREE_TYPE (field)))
+      ಯದಿ (ವೃಕ್ಷ_CODE (t) == UNION_TYPE
+	  && ವೃಕ್ಷ_CODE (field) == FIELD_DECL
+	  && AGGREGATE_TYPE_P (ವೃಕ್ಷ_TYPE (field)))
 	{
-	  tree ftype = TREE_TYPE (field);
-	  if (TREE_CODE (ftype) == ARRAY_TYPE)
+	  ವೃಕ್ಷ ftype = ವೃಕ್ಷ_TYPE (field);
+	  ಯದಿ (ವೃಕ್ಷ_CODE (ftype) == ARRAY_TYPE)
 	    ftype = strip_array_types (ftype);
-	  if (RECORD_OR_UNION_TYPE_P (ftype)
+	  ಯದಿ (RECORD_OR_UNION_TYPE_P (ftype)
 	      && TYPE_REVERSE_STORAGE_ORDER (ftype)
 		 != TYPE_REVERSE_STORAGE_ORDER (t))
 	    warning_at (DECL_SOURCE_LOCATION (field),
@@ -9909,20 +9909,20 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
      We arbitrarily consider 16 or more elts to be "a lot".  */
 
   {
-    int len = 0;
+    ಪೂರ್ಣಾಙ್ಕ len = 0;
 
-    for (x = fieldlist; x; x = DECL_CHAIN (x))
+    ಪ್ರತಿ (x = fieldlist; x; x = DECL_CHAIN (x))
       {
-	if (len > 15 || DECL_NAME (x) == NULL)
-	  break;
+	ಯದಿ (len > 15 || DECL_NAME (x) == ರಿಕ್ತ)
+	  ಭಙ್ಗ;
 	len += 1;
       }
 
-    if (len > 15)
+    ಯದಿ (len > 15)
       {
-	tree *field_array;
-	struct lang_type *space;
-	struct sorted_fields_type *space2;
+	ವೃಕ್ಷ *field_array;
+	ಸಂರಚನಾ lang_type *space;
+	ಸಂರಚನಾ sorted_fields_type *space2;
 
 	len += list_length (x);
 
@@ -9930,40 +9930,40 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
 	   ensure that this lives as long as the rest of the struct decl.
 	   All decls in an inline function need to be saved.  */
 
-	space = ((struct lang_type *)
+	space = ((ಸಂರಚನಾ lang_type *)
 		 ggc_internal_cleared_alloc (c_dialect_objc ()
-					     ? sizeof (struct lang_type)
-					     : offsetof (struct lang_type,
+					     ? ಪರಿಮಾಣ (ಸಂರಚನಾ lang_type)
+					     : offsetof (ಸಂರಚನಾ lang_type,
 							 info)));
 	space2 = ((sorted_fields_type *)
-		  ggc_internal_alloc (sizeof (struct sorted_fields_type)
-				      + len * sizeof (tree)));
+		  ggc_internal_alloc (ಪರಿಮಾಣ (ಸಂರಚನಾ sorted_fields_type)
+				      + len * ಪರಿಮಾಣ (ವೃಕ್ಷ)));
 
 	len = 0;
 	space->s = space2;
 	field_array = &space2->elts[0];
-	for (x = fieldlist; x; x = DECL_CHAIN (x))
+	ಪ್ರತಿ (x = fieldlist; x; x = DECL_CHAIN (x))
 	  {
 	    field_array[len++] = x;
 
 	    /* If there is anonymous struct or union, break out of the loop.  */
-	    if (DECL_NAME (x) == NULL)
-	      break;
+	    ಯದಿ (DECL_NAME (x) == ರಿಕ್ತ)
+	      ಭಙ್ಗ;
 	  }
 	/* Found no anonymous struct/union.  Add the TYPE_LANG_SPECIFIC.  */
-	if (x == NULL)
+	ಯದಿ (x == ರಿಕ್ತ)
 	  {
 	    TYPE_LANG_SPECIFIC (t) = space;
 	    TYPE_LANG_SPECIFIC (t)->s->len = len;
 	    field_array = TYPE_LANG_SPECIFIC (t)->s->elts;
-	    qsort (field_array, len, sizeof (tree), field_decl_cmp);
+	    qsort (field_array, len, ಪರಿಮಾಣ (ವೃಕ್ಷ), field_decl_cmp);
 	  }
       }
   }
 
   /* If this was supposed to be a transparent union, but we can't
      make it one, warn and turn off the flag.  */
-  if (TREE_CODE (t) == UNION_TYPE
+  ಯದಿ (ವೃಕ್ಷ_CODE (t) == UNION_TYPE
       && TYPE_TRANSPARENT_AGGR (t)
       && (!TYPE_FIELDS (t) || TYPE_MODE (t) != DECL_MODE (TYPE_FIELDS (t))))
     {
@@ -9971,8 +9971,8 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
       warning_at (loc, 0, "union cannot be made transparent");
     }
 
-  tree incomplete_vars = C_TYPE_INCOMPLETE_VARS (TYPE_MAIN_VARIANT (t));
-  for (x = TYPE_MAIN_VARIANT (t); x; x = TYPE_NEXT_VARIANT (x))
+  ವೃಕ್ಷ incomplete_vars = C_TYPE_INCOMPLETE_VARS (TYPE_MAIN_VARIANT (t));
+  ಪ್ರತಿ (x = TYPE_MAIN_VARIANT (t); x; x = TYPE_NEXT_VARIANT (x))
     {
       TYPE_FIELDS (x) = TYPE_FIELDS (t);
       TYPE_LANG_SPECIFIC (x) = TYPE_LANG_SPECIFIC (t);
@@ -9984,30 +9984,30 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
       C_TYPE_FIELDS_HAS_COUNTED_BY (x) = C_TYPE_FIELDS_HAS_COUNTED_BY (t);
       C_TYPE_VARIABLE_SIZE (x) = C_TYPE_VARIABLE_SIZE (t);
       C_TYPE_VARIABLY_MODIFIED (x) = C_TYPE_VARIABLY_MODIFIED (t);
-      C_TYPE_INCOMPLETE_VARS (x) = NULL_TREE;
+      C_TYPE_INCOMPLETE_VARS (x) = NULL_ವೃಕ್ಷ;
       TYPE_INCLUDES_FLEXARRAY (x) = TYPE_INCLUDES_FLEXARRAY (t);
     }
 
   /* Check for consistency with previous definition.  */
-  if (flag_isoc23 && NULL != enclosing_struct_parse_info)
+  ಯದಿ (flag_isoc23 && ರಿಕ್ತ != enclosing_struct_parse_info)
     {
-      tree vistype = previous_tag (t);
-      if (vistype
-	  && TREE_CODE (vistype) == TREE_CODE (t)
+      ವೃಕ್ಷ vistype = previous_tag (t);
+      ಯದಿ (vistype
+	  && ವೃಕ್ಷ_CODE (vistype) == ವೃಕ್ಷ_CODE (t)
 	  && !C_TYPE_BEING_DEFINED (vistype))
 	{
 	  TYPE_STUB_DECL (t) = TYPE_STUB_DECL (vistype);
-	  if (c_type_variably_modified_p (t))
+	  ಯದಿ (c_type_variably_modified_p (t))
 	    {
 	      error ("redefinition of struct or union %qT with variably "
 		     "modified type", t);
-	      if (struct_parse_info->refloc != UNKNOWN_LOCATION)
+	      ಯದಿ (struct_parse_info->refloc != UNKNOWN_LOCATION)
 		inform (struct_parse_info->refloc, "originally defined here");
 	    }
-	  else if (!comptypes_same_p (t, vistype))
+	  ಅನ್ಯಥಾ ಯದಿ (!comptypes_same_p (t, vistype))
 	    {
 	      error ("redefinition of struct or union %qT", t);
-	      if (struct_parse_info->refloc != UNKNOWN_LOCATION)
+	      ಯದಿ (struct_parse_info->refloc != UNKNOWN_LOCATION)
 		inform (struct_parse_info->refloc, "originally defined here");
 	    }
 	}
@@ -10015,26 +10015,26 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
 
   C_TYPE_BEING_DEFINED (t) = 0;
 
-  if (lookup_attribute ("may_alias", TYPE_ATTRIBUTES (t)))
-    for (x = TYPE_MAIN_VARIANT (t); x; x = TYPE_NEXT_VARIANT (x))
+  ಯದಿ (lookup_attribute ("may_alias", TYPE_ATTRIBUTES (t)))
+    ಪ್ರತಿ (x = TYPE_MAIN_VARIANT (t); x; x = TYPE_NEXT_VARIANT (x))
       c_fixup_may_alias (x);
 
   /* Set type canonical based on equivalence class.  */
-  if (flag_isoc23 && !C_TYPE_VARIABLE_SIZE (t))
+  ಯದಿ (flag_isoc23 && !C_TYPE_VARIABLE_SIZE (t))
     {
-      if (c_struct_htab == NULL)
+      ಯದಿ (c_struct_htab == ರಿಕ್ತ)
 	c_struct_htab = hash_table<c_struct_hasher>::create_ggc (61);
 
       hashval_t hash = c_struct_hasher::hash (t);
 
       gcc_checking_assert (TYPE_STRUCTURAL_EQUALITY_P (t));
       gcc_checking_assert (!TYPE_NAME (t)
-			   || TREE_CODE (TYPE_NAME (t)) == IDENTIFIER_NODE);
+			   || ವೃಕ್ಷ_CODE (TYPE_NAME (t)) == IDENTIFIER_ಗಂಟು);
 
-      tree *e = c_struct_htab->find_slot_with_hash (t, hash, INSERT);
-      if (*e)
+      ವೃಕ್ಷ *e = c_struct_htab->find_slot_with_hash (t, hash, ಸೇರಿಸು);
+      ಯದಿ (*e)
 	TYPE_CANONICAL (t) = TYPE_CANONICAL (*e);
-      else
+      ಅನ್ಯಥಾ
 	{
 	  TYPE_CANONICAL (t) = c_type_canonical (t);
 	  *e = t;
@@ -10044,7 +10044,7 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
 
   /* Update type location to the one of the definition, instead of e.g.
      a forward declaration.  */
-  if (TYPE_STUB_DECL (t))
+  ಯದಿ (TYPE_STUB_DECL (t))
     DECL_SOURCE_LOCATION (TYPE_STUB_DECL (t)) = loc;
 
   /* Finish debugging output for this type.  */
@@ -10053,20 +10053,20 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
   finish_incomplete_vars (incomplete_vars, toplevel);
 
 
-  if (c_type_variably_modified_p (t))
+  ಯದಿ (c_type_variably_modified_p (t))
     {
       c_update_variably_modified (t);
       /* Make sure a DECL_EXPR is created for structs with VLA members.
 	 Because we do not know the context, we always pass expr
 	 to force creation of a BIND_EXPR which is required in some
 	 contexts.  */
-      add_decl_expr (loc, t, expr, false);
+      add_decl_ಅಭಿವ್ಯಕ್ತಿ (loc, t, ಅಭಿವ್ಯಕ್ತಿ, ಅಸತ್ಯ);
     }
 
-  if (warn_cxx_compat)
-    warn_cxx_compat_finish_struct (fieldlist, TREE_CODE (t), loc);
+  ಯದಿ (warn_cxx_compat)
+    warn_cxx_compat_finish_struct (fieldlist, ವೃಕ್ಷ_CODE (t), loc);
 
-  if (NULL != enclosing_struct_parse_info)
+  ಯದಿ (ರಿಕ್ತ != enclosing_struct_parse_info)
     {
       delete struct_parse_info;
 
@@ -10074,74 +10074,74 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
 
       /* If this struct is defined inside a struct, add it to
 	 struct_types.  */
-      if (warn_cxx_compat
-	  && struct_parse_info != NULL
+      ಯದಿ (warn_cxx_compat
+	  && struct_parse_info != ರಿಕ್ತ
 	  && !in_sizeof && !in_typeof && !in_alignof && !in_countof)
-	struct_parse_info->struct_types.safe_push (t);
+	struct_parse_info->struct_types.safe_ತಳ್ಳು (t);
      }
 
   /* Only when the enclosing struct/union type is not anonymous, do more
      verification on the fields with counted_by attributes.  */
-  if (C_TYPE_FIELDS_HAS_COUNTED_BY (t) && c_type_tag (t) != NULL_TREE)
+  ಯದಿ (C_TYPE_FIELDS_HAS_COUNTED_BY (t) && c_type_tag (t) != NULL_ವೃಕ್ಷ)
     verify_counted_by_attribute (t, t);
 
-  return t;
+  ಪ್ರತ್ಯಾಗಮ t;
 }
 
-static struct {
-  gt_pointer_operator new_value;
-  void *cookie;
+ಸ್ಥಿರ ಸಂರಚನಾ {
+  gt_pointer_operator new_ಮೌಲ್ಯ;
+  ಶೂನ್ಯ *cookie;
 } resort_data;
 
 /* This routine compares two fields like field_decl_cmp but using the
 pointer operator in resort_data.  */
 
-static int
-resort_field_decl_cmp (const void *x_p, const void *y_p)
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ
+resort_field_decl_cmp (ಧ್ರುವ ಶೂನ್ಯ *x_p, ಧ್ರುವ ಶೂನ್ಯ *y_p)
 {
-  const tree *const x = (const tree *) x_p;
-  const tree *const y = (const tree *) y_p;
+  ಧ್ರುವ ವೃಕ್ಷ *ಧ್ರುವ x = (ಧ್ರುವ ವೃಕ್ಷ *) x_p;
+  ಧ್ರುವ ವೃಕ್ಷ *ಧ್ರುವ y = (ಧ್ರುವ ವೃಕ್ಷ *) y_p;
 
-  if (DECL_NAME (*x) == DECL_NAME (*y))
+  ಯದಿ (DECL_NAME (*x) == DECL_NAME (*y))
     /* A nontype is "greater" than a type.  */
-    return (TREE_CODE (*y) == TYPE_DECL) - (TREE_CODE (*x) == TYPE_DECL);
-  if (DECL_NAME (*x) == NULL_TREE)
-    return -1;
-  if (DECL_NAME (*y) == NULL_TREE)
-    return 1;
+    ಪ್ರತ್ಯಾಗಮ (ವೃಕ್ಷ_CODE (*y) == TYPE_DECL) - (ವೃಕ್ಷ_CODE (*x) == TYPE_DECL);
+  ಯದಿ (DECL_NAME (*x) == NULL_ವೃಕ್ಷ)
+    ಪ್ರತ್ಯಾಗಮ -1;
+  ಯದಿ (DECL_NAME (*y) == NULL_ವೃಕ್ಷ)
+    ಪ್ರತ್ಯಾಗಮ 1;
   {
-    tree d1 = DECL_NAME (*x);
-    tree d2 = DECL_NAME (*y);
-    resort_data.new_value (&d1, &d1, resort_data.cookie);
-    resort_data.new_value (&d2, &d2, resort_data.cookie);
-    if (d1 < d2)
-      return -1;
+    ವೃಕ್ಷ d1 = DECL_NAME (*x);
+    ವೃಕ್ಷ d2 = DECL_NAME (*y);
+    resort_data.new_ಮೌಲ್ಯ (&d1, &d1, resort_data.cookie);
+    resort_data.new_ಮೌಲ್ಯ (&d2, &d2, resort_data.cookie);
+    ಯದಿ (d1 < d2)
+      ಪ್ರತ್ಯಾಗಮ -1;
   }
-  return 1;
+  ಪ್ರತ್ಯಾಗಮ 1;
 }
 
 /* Resort DECL_SORTED_FIELDS because pointers have been reordered.  */
 
-void
-resort_sorted_fields (void *obj,
-		      void * ARG_UNUSED (orig_obj),
-		      gt_pointer_operator new_value,
-		      void *cookie)
+ಶೂನ್ಯ
+resort_sorted_fields (ಶೂನ್ಯ *obj,
+		      ಶೂನ್ಯ * ARG_UNUSED (orig_obj),
+		      gt_pointer_operator new_ಮೌಲ್ಯ,
+		      ಶೂನ್ಯ *cookie)
 {
-  struct sorted_fields_type *sf = (struct sorted_fields_type *) obj;
-  resort_data.new_value = new_value;
+  ಸಂರಚನಾ sorted_fields_type *sf = (ಸಂರಚನಾ sorted_fields_type *) obj;
+  resort_data.new_ಮೌಲ್ಯ = new_ಮೌಲ್ಯ;
   resort_data.cookie = cookie;
-  qsort (&sf->elts[0], sf->len, sizeof (tree),
+  qsort (&sf->elts[0], sf->len, ಪರಿಮಾಣ (ವೃಕ್ಷ),
 	 resort_field_decl_cmp);
 }
 
 /* Lay out the type T, and its element type, and so on.  */
 
-static void
-layout_array_type (tree t)
+ಸ್ಥಿರ ಶೂನ್ಯ
+layout_array_type (ವೃಕ್ಷ t)
 {
-  if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE)
-    layout_array_type (TREE_TYPE (t));
+  ಯದಿ (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (t)) == ARRAY_TYPE)
+    layout_array_type (ವೃಕ್ಷ_TYPE (t));
   layout_type (t);
 }
 
@@ -10154,55 +10154,55 @@ layout_array_type (tree t)
    Also records info about it so that build_enumerator
    may be used to declare the individual values as they are read.  */
 
-tree
-start_enum (location_t loc, struct c_enum_contents *the_enum, tree name,
-	    tree fixed_underlying_type, bool potential_nesting_p)
+ವೃಕ್ಷ
+start_enum (location_t loc, ಸಂರಚನಾ c_enum_contents *the_enum, ವೃಕ್ಷ name,
+	    ವೃಕ್ಷ fixed_underlying_type, ತಾರ್ಕಿಕ potential_nesting_p)
 {
-  tree enumtype = NULL_TREE;
+  ವೃಕ್ಷ enumtype = NULL_ವೃಕ್ಷ;
   location_t enumloc = UNKNOWN_LOCATION;
 
   /* If this is the real definition for a previous forward reference,
      fill in the contents in the same object that used to be the
      forward reference.  */
 
-  if (name != NULL_TREE)
-    enumtype = lookup_tag (ENUMERAL_TYPE, name, true, &enumloc);
+  ಯದಿ (name != NULL_ವೃಕ್ಷ)
+    enumtype = lookup_tag (ENUMERAL_TYPE, name, ಸತ್ಯ, &enumloc);
 
-  if (enumtype != NULL_TREE && TREE_CODE (enumtype) == ENUMERAL_TYPE)
+  ಯದಿ (enumtype != NULL_ವೃಕ್ಷ && ವೃಕ್ಷ_CODE (enumtype) == ENUMERAL_TYPE)
     {
       /* If the type is currently being defined or if we have seen an
 	 incomplete version which is now complete, this is a nested
 	 redefinition.  The later happens if the redefinition occurs
 	 inside the enum specifier itself.  */
-      if (C_TYPE_BEING_DEFINED (enumtype)
-	  || (potential_nesting_p && TYPE_VALUES (enumtype) != NULL_TREE))
+      ಯದಿ (C_TYPE_BEING_DEFINED (enumtype)
+	  || (potential_nesting_p && TYPE_ಮೌಲ್ಯಗಳು (enumtype) != NULL_ವೃಕ್ಷ))
 	error_at (loc, "nested redefinition of %<enum %E%>", name);
 
       /* For C23 we allow redefinitions.  We set to zero and check for
 	 consistency later.  */
-      if (flag_isoc23 && TYPE_VALUES (enumtype) != NULL_TREE)
-	enumtype = NULL_TREE;
+      ಯದಿ (flag_isoc23 && TYPE_ಮೌಲ್ಯಗಳು (enumtype) != NULL_ವೃಕ್ಷ)
+	enumtype = NULL_ವೃಕ್ಷ;
     }
 
-  if (enumtype == NULL_TREE || TREE_CODE (enumtype) != ENUMERAL_TYPE)
+  ಯದಿ (enumtype == NULL_ವೃಕ್ಷ || ವೃಕ್ಷ_CODE (enumtype) != ENUMERAL_TYPE)
     {
-      enumtype = make_node (ENUMERAL_TYPE);
-      TYPE_SIZE (enumtype) = NULL_TREE;
+      enumtype = make_ಗಂಟು (ENUMERAL_TYPE);
+      TYPE_SIZE (enumtype) = NULL_ವೃಕ್ಷ;
       SET_TYPE_STRUCTURAL_EQUALITY (enumtype);
       pushtag (loc, name, enumtype);
-      if (fixed_underlying_type != NULL_TREE)
+      ಯದಿ (fixed_underlying_type != NULL_ವೃಕ್ಷ)
 	{
 	  /* For an enum definition with a fixed underlying type, the
 	     type is complete during the definition and the
 	     enumeration constants have that type.  If there was a
 	     tag, the type was completed in c_parser_enum_specifier.
 	     If not, it must be completed here.  */
-	  ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) = true;
-	  TYPE_MIN_VALUE (enumtype) = TYPE_MIN_VALUE (fixed_underlying_type);
-	  TYPE_MAX_VALUE (enumtype) = TYPE_MAX_VALUE (fixed_underlying_type);
+	  ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) = ಸತ್ಯ;
+	  TYPE_MIN_ಮೌಲ್ಯ (enumtype) = TYPE_MIN_ಮೌಲ್ಯ (fixed_underlying_type);
+	  TYPE_MAX_ಮೌಲ್ಯ (enumtype) = TYPE_MAX_ಮೌಲ್ಯ (fixed_underlying_type);
 	  TYPE_UNSIGNED (enumtype) = TYPE_UNSIGNED (fixed_underlying_type);
 	  SET_TYPE_ALIGN (enumtype, TYPE_ALIGN (fixed_underlying_type));
-	  TYPE_SIZE (enumtype) = NULL_TREE;
+	  TYPE_SIZE (enumtype) = NULL_ವೃಕ್ಷ;
 	  TYPE_PRECISION (enumtype) = TYPE_PRECISION (fixed_underlying_type);
 	  ENUM_UNDERLYING_TYPE (enumtype) = fixed_underlying_type;
 	  TYPE_CANONICAL (enumtype) = TYPE_CANONICAL (fixed_underlying_type);
@@ -10212,7 +10212,7 @@ start_enum (location_t loc, struct c_enum_contents *the_enum, tree name,
     }
   /* Update type location to the one of the definition, instead of e.g.
      a forward declaration.  */
-  else if (TYPE_STUB_DECL (enumtype))
+  ಅನ್ಯಥಾ ಯದಿ (TYPE_STUB_DECL (enumtype))
     {
       enumloc = DECL_SOURCE_LOCATION (TYPE_STUB_DECL (enumtype));
       DECL_SOURCE_LOCATION (TYPE_STUB_DECL (enumtype)) = loc;
@@ -10220,39 +10220,39 @@ start_enum (location_t loc, struct c_enum_contents *the_enum, tree name,
 
   C_TYPE_BEING_DEFINED (enumtype) = 1;
 
-  if (TYPE_VALUES (enumtype) != NULL_TREE)
+  ಯದಿ (TYPE_ಮೌಲ್ಯಗಳು (enumtype) != NULL_ವೃಕ್ಷ)
     {
       /* This enum is a named one that has been declared already.  */
       auto_diagnostic_group d;
       error_at (loc, "redeclaration of %<enum %E%>", name);
-      if (enumloc != UNKNOWN_LOCATION)
+      ಯದಿ (enumloc != UNKNOWN_LOCATION)
 	inform (enumloc, "originally defined here");
 
       /* Completely replace its old definition.
 	 The old enumerators remain defined, however.  */
-      TYPE_VALUES (enumtype) = NULL_TREE;
+      TYPE_ಮೌಲ್ಯಗಳು (enumtype) = NULL_ವೃಕ್ಷ;
     }
 
-  if (ENUM_FIXED_UNDERLYING_TYPE_P (enumtype)
-      && fixed_underlying_type == NULL_TREE)
+  ಯದಿ (ENUM_FIXED_UNDERLYING_TYPE_P (enumtype)
+      && fixed_underlying_type == NULL_ವೃಕ್ಷ)
     {
       error_at (loc, "%<enum%> declared with but defined without "
 		"fixed underlying type");
-      ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) = false;
+      ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) = ಅಸತ್ಯ;
     }
 
-  the_enum->enum_next_value = integer_zero_node;
+  the_enum->enum_next_ಮೌಲ್ಯ = integer_zero_ಗಂಟು;
   the_enum->enum_type = enumtype;
   the_enum->enum_overflow = 0;
 
-  if (flag_short_enums && !ENUM_FIXED_UNDERLYING_TYPE_P (enumtype))
-    for (tree v = TYPE_MAIN_VARIANT (enumtype); v; v = TYPE_NEXT_VARIANT (v))
+  ಯದಿ (flag_short_enums && !ENUM_FIXED_UNDERLYING_TYPE_P (enumtype))
+    ಪ್ರತಿ (ವೃಕ್ಷ v = TYPE_MAIN_VARIANT (enumtype); v; v = TYPE_NEXT_VARIANT (v))
       TYPE_PACKED (v) = 1;
 
   /* FIXME: This will issue a warning for a use of a type defined
      within sizeof in a statement expr.  This is not terribly serious
      as C++ doesn't permit statement exprs within sizeof anyhow.  */
-  if (warn_cxx_compat
+  ಯದಿ (warn_cxx_compat
       && (in_sizeof || in_typeof || in_alignof || in_countof))
     warning_at (loc, OPT_Wc___compat,
 		"defining type in %qs expression is invalid in C++",
@@ -10261,11 +10261,11 @@ start_enum (location_t loc, struct c_enum_contents *the_enum, tree name,
 		 : in_alignof ? "alignof"
 		 : "_Countof"));
 
-  if (in_underspecified_init)
+  ಯದಿ (in_underspecified_init)
     error_at (loc, "%qT defined in underspecified object initializer",
 	      enumtype);
 
-  return enumtype;
+  ಪ್ರತ್ಯಾಗಮ enumtype;
 }
 
 /* After processing and defining all the values of an enumeration type,
@@ -10274,32 +10274,32 @@ start_enum (location_t loc, struct c_enum_contents *the_enum, tree name,
    and ATTRIBUTES are the specified attributes.
    Returns ENUMTYPE.  */
 
-tree
-finish_enum (tree enumtype, tree values, tree attributes)
+ವೃಕ್ಷ
+finish_enum (ವೃಕ್ಷ enumtype, ವೃಕ್ಷ ಮೌಲ್ಯಗಳು, ವೃಕ್ಷ attributes)
 {
-  tree pair, tem;
-  tree minnode = NULL_TREE, maxnode = NULL_TREE;
-  int precision;
+  ವೃಕ್ಷ pair, tem;
+  ವೃಕ್ಷ minnode = NULL_ವೃಕ್ಷ, maxnode = NULL_ವೃಕ್ಷ;
+  ಪೂರ್ಣಾಙ್ಕ precision;
   signop sign;
-  bool toplevel = (file_scope == current_scope);
-  struct lang_type *lt;
+  ತಾರ್ಕಿಕ toplevel = (file_scope == current_scope);
+  ಸಂರಚನಾ lang_type *lt;
 
-  decl_attributes (&enumtype, attributes, (int) ATTR_FLAG_TYPE_IN_PLACE);
+  decl_attributes (&enumtype, attributes, (ಪೂರ್ಣಾಙ್ಕ) ATTR_FLAG_TYPE_IN_PLACE);
 
   /* Calculate the maximum value of any enumerator in this type.  */
 
-  if (values == error_mark_node)
-    minnode = maxnode = integer_zero_node;
-  else
+  ಯದಿ (ಮೌಲ್ಯಗಳು == error_mark_ಗಂಟು)
+    minnode = maxnode = integer_zero_ಗಂಟು;
+  ಅನ್ಯಥಾ
     {
-      minnode = maxnode = TREE_VALUE (values);
-      for (pair = TREE_CHAIN (values); pair; pair = TREE_CHAIN (pair))
+      minnode = maxnode = ವೃಕ್ಷ_ಮೌಲ್ಯ (ಮೌಲ್ಯಗಳು);
+      ಪ್ರತಿ (pair = ವೃಕ್ಷ_CHAIN (ಮೌಲ್ಯಗಳು); pair; pair = ವೃಕ್ಷ_CHAIN (pair))
 	{
-	  tree value = TREE_VALUE (pair);
-	  if (tree_int_cst_lt (maxnode, value))
-	    maxnode = value;
-	  if (tree_int_cst_lt (value, minnode))
-	    minnode = value;
+	  ವೃಕ್ಷ ಮೌಲ್ಯ = ವೃಕ್ಷ_ಮೌಲ್ಯ (pair);
+	  ಯದಿ (ವೃಕ್ಷ_int_cst_lt (maxnode, ಮೌಲ್ಯ))
+	    maxnode = ಮೌಲ್ಯ;
+	  ಯದಿ (ವೃಕ್ಷ_int_cst_lt (ಮೌಲ್ಯ, minnode))
+	    minnode = ಮೌಲ್ಯ;
 	}
     }
 
@@ -10307,63 +10307,63 @@ finish_enum (tree enumtype, tree values, tree attributes)
      as one of the integral types - the narrowest one that fits, except
      that normally we only go as narrow as int - and signed iff any of
      the values are negative.  */
-  sign = (tree_int_cst_sgn (minnode) >= 0) ? UNSIGNED : SIGNED;
-  precision = MAX (tree_int_cst_min_precision (minnode, sign),
-		   tree_int_cst_min_precision (maxnode, sign));
+  sign = (ವೃಕ್ಷ_int_cst_sgn (minnode) >= 0) ? UNSIGNED : SIGNED;
+  precision = MAX (ವೃಕ್ಷ_int_cst_min_precision (minnode, sign),
+		   ವೃಕ್ಷ_int_cst_min_precision (maxnode, sign));
 
-  bool wider_than_int =
-    (tree_int_cst_lt (minnode, TYPE_MIN_VALUE (integer_type_node))
-     || tree_int_cst_lt (TYPE_MAX_VALUE (integer_type_node), maxnode));
+  ತಾರ್ಕಿಕ wider_than_int =
+    (ವೃಕ್ಷ_int_cst_lt (minnode, TYPE_MIN_ಮೌಲ್ಯ (integer_type_ಗಂಟು))
+     || ವೃಕ್ಷ_int_cst_lt (TYPE_MAX_ಮೌಲ್ಯ (integer_type_ಗಂಟು), maxnode));
 
 
-  if (!ENUM_FIXED_UNDERLYING_TYPE_P (enumtype))
+  ಯದಿ (!ENUM_FIXED_UNDERLYING_TYPE_P (enumtype))
     {
       /* If the precision of the type was specified with an attribute and it
 	 was too small, give an error.  Otherwise, use it.  */
-      if (TYPE_PRECISION (enumtype) && lookup_attribute ("mode", attributes))
+      ಯದಿ (TYPE_PRECISION (enumtype) && lookup_attribute ("mode", attributes))
 	{
-	  if (precision > TYPE_PRECISION (enumtype))
+	  ಯದಿ (precision > TYPE_PRECISION (enumtype))
 	    {
 	      TYPE_PRECISION (enumtype) = 0;
 	      error ("specified mode too small for enumerated values");
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    precision = TYPE_PRECISION (enumtype);
 	}
-      else
+      ಅನ್ಯಥಾ
 	TYPE_PRECISION (enumtype) = 0;
 
-      if (TYPE_PACKED (enumtype)
-	  || precision > TYPE_PRECISION (integer_type_node)
+      ಯದಿ (TYPE_PACKED (enumtype)
+	  || precision > TYPE_PRECISION (integer_type_ಗಂಟು)
 	  || TYPE_PRECISION (enumtype))
 	{
 	  tem = c_common_type_for_size (precision, sign == UNSIGNED ? 1 : 0);
-	  if (tem == NULL)
+	  ಯದಿ (tem == ರಿಕ್ತ)
 	    {
 	      /* This should only occur when both signed and unsigned
 		 values of maximum precision occur among the
 		 enumerators.  */
-	      pedwarn (input_location, 0,
+	      pedwarn (ಒಳಹರಿವು_location, 0,
 		       "enumeration values exceed range of largest integer");
-	      tem = widest_integer_literal_type_node;
+	      tem = widest_integer_literal_type_ಗಂಟು;
 	    }
-	  else if (precision > TYPE_PRECISION (intmax_type_node)
-		   && !tree_int_cst_lt (minnode,
-					TYPE_MIN_VALUE (intmax_type_node))
-		   && !tree_int_cst_lt (TYPE_MAX_VALUE (uintmax_type_node),
+	  ಅನ್ಯಥಾ ಯದಿ (precision > TYPE_PRECISION (intmax_type_ಗಂಟು)
+		   && !ವೃಕ್ಷ_int_cst_lt (minnode,
+					TYPE_MIN_ಮೌಲ್ಯ (intmax_type_ಗಂಟು))
+		   && !ವೃಕ್ಷ_int_cst_lt (TYPE_MAX_ಮೌಲ್ಯ (uintmax_type_ಗಂಟು),
 					maxnode))
-	    pedwarn (input_location, OPT_Wpedantic,
+	    pedwarn (ಒಳಹರಿವು_location, OPT_Wpedantic,
 		     "enumeration values exceed range of %qs",
 		     sign == UNSIGNED ? "uintmax_t" : "intmax_t");
 	}
-      else
-	tem = sign == UNSIGNED ? unsigned_type_node : integer_type_node;
+      ಅನ್ಯಥಾ
+	tem = sign == UNSIGNED ? unsigned_type_ಗಂಟು : integer_type_ಗಂಟು;
 
-      TYPE_MIN_VALUE (enumtype) = TYPE_MIN_VALUE (tem);
-      TYPE_MAX_VALUE (enumtype) = TYPE_MAX_VALUE (tem);
+      TYPE_MIN_ಮೌಲ್ಯ (enumtype) = TYPE_MIN_ಮೌಲ್ಯ (tem);
+      TYPE_MAX_ಮೌಲ್ಯ (enumtype) = TYPE_MAX_ಮೌಲ್ಯ (tem);
       TYPE_UNSIGNED (enumtype) = TYPE_UNSIGNED (tem);
       SET_TYPE_ALIGN (enumtype, TYPE_ALIGN (tem));
-      TYPE_SIZE (enumtype) = NULL_TREE;
+      TYPE_SIZE (enumtype) = NULL_ವೃಕ್ಷ;
       TYPE_PRECISION (enumtype) = TYPE_PRECISION (tem);
       ENUM_UNDERLYING_TYPE (enumtype) =
 	c_common_type_for_size (TYPE_PRECISION (tem), TYPE_UNSIGNED (tem));
@@ -10375,7 +10375,7 @@ finish_enum (tree enumtype, tree values, tree attributes)
       layout_type (enumtype);
     }
 
-  if (values != error_mark_node)
+  ಯದಿ (ಮೌಲ್ಯಗಳು != error_mark_ಗಂಟು)
     {
       /* Change the type of the enumerators to be the enum type.  We
 	 need to do this irrespective of the size of the enum, for
@@ -10384,12 +10384,12 @@ finish_enum (tree enumtype, tree values, tree attributes)
 	 that have the enum type; they cannot be modified in place
 	 because they may be shared (e.g.  integer_zero_node) Finally,
 	 change the purpose slots to point to the names of the decls.  */
-      for (pair = values; pair; pair = TREE_CHAIN (pair))
+      ಪ್ರತಿ (pair = ಮೌಲ್ಯಗಳು; pair; pair = ವೃಕ್ಷ_CHAIN (pair))
 	{
-	  tree enu = TREE_PURPOSE (pair);
-	  tree ini = DECL_INITIAL (enu);
+	  ವೃಕ್ಷ enu = ವೃಕ್ಷ_PURPOSE (pair);
+	  ವೃಕ್ಷ ini = DECL_INITIAL (enu);
 
-	  TREE_TYPE (enu) = enumtype;
+	  ವೃಕ್ಷ_TYPE (enu) = enumtype;
 
 	  /* Before C23, the ISO C Standard mandates enumerators to
 	     have type int, even though the underlying type of an enum
@@ -10403,39 +10403,39 @@ finish_enum (tree enumtype, tree values, tree attributes)
 	     enumerators fit in int.  If the enum has a fixed
 	     underlying type, the correct type was also given in
 	     build_enumerator.  */
-	  if (!ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) && wider_than_int)
+	  ಯದಿ (!ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) && wider_than_int)
 	    ini = convert (enumtype, ini);
 
 	  DECL_INITIAL (enu) = ini;
-	  TREE_PURPOSE (pair) = DECL_NAME (enu);
+	  ವೃಕ್ಷ_PURPOSE (pair) = DECL_NAME (enu);
 	  /* To match the C++ FE, store the CONST_DECL rather than just its
 	     value.  */
-	  TREE_VALUE (pair) = enu;
+	  ವೃಕ್ಷ_ಮೌಲ್ಯ (pair) = enu;
 	}
 
-      TYPE_VALUES (enumtype) = values;
+      TYPE_ಮೌಲ್ಯಗಳು (enumtype) = ಮೌಲ್ಯಗಳು;
     }
 
   /* Record the min/max values so that we can warn about bit-field
      enumerations that are too small for the values.  */
-  lt = ((struct lang_type *)
+  lt = ((ಸಂರಚನಾ lang_type *)
 	ggc_internal_cleared_alloc (c_dialect_objc ()
-				    ? sizeof (struct lang_type)
-				    : offsetof (struct lang_type, info)));
+				    ? ಪರಿಮಾಣ (ಸಂರಚನಾ lang_type)
+				    : offsetof (ಸಂರಚನಾ lang_type, info)));
   lt->enum_min = minnode;
   lt->enum_max = maxnode;
   TYPE_LANG_SPECIFIC (enumtype) = lt;
 
   /* Fix up all variant types of this enum type.  */
-  tree incomplete_vars = C_TYPE_INCOMPLETE_VARS (TYPE_MAIN_VARIANT (enumtype));
-  for (tem = TYPE_MAIN_VARIANT (enumtype); tem; tem = TYPE_NEXT_VARIANT (tem))
+  ವೃಕ್ಷ incomplete_vars = C_TYPE_INCOMPLETE_VARS (TYPE_MAIN_VARIANT (enumtype));
+  ಪ್ರತಿ (tem = TYPE_MAIN_VARIANT (enumtype); tem; tem = TYPE_NEXT_VARIANT (tem))
     {
-      C_TYPE_INCOMPLETE_VARS (tem) = NULL_TREE;
-      if (tem == enumtype)
-	continue;
-      TYPE_VALUES (tem) = TYPE_VALUES (enumtype);
-      TYPE_MIN_VALUE (tem) = TYPE_MIN_VALUE (enumtype);
-      TYPE_MAX_VALUE (tem) = TYPE_MAX_VALUE (enumtype);
+      C_TYPE_INCOMPLETE_VARS (tem) = NULL_ವೃಕ್ಷ;
+      ಯದಿ (tem == enumtype)
+	ಅನುವರ್ತ;
+      TYPE_ಮೌಲ್ಯಗಳು (tem) = TYPE_ಮೌಲ್ಯಗಳು (enumtype);
+      TYPE_MIN_ಮೌಲ್ಯ (tem) = TYPE_MIN_ಮೌಲ್ಯ (enumtype);
+      TYPE_MAX_ಮೌಲ್ಯ (tem) = TYPE_MAX_ಮೌಲ್ಯ (enumtype);
       TYPE_SIZE (tem) = TYPE_SIZE (enumtype);
       TYPE_SIZE_UNIT (tem) = TYPE_SIZE_UNIT (enumtype);
       SET_TYPE_MODE (tem, TYPE_MODE (enumtype));
@@ -10455,28 +10455,28 @@ finish_enum (tree enumtype, tree values, tree attributes)
 
   /* If this enum is defined inside a struct, add it to
      struct_types.  */
-  if (warn_cxx_compat
-      && struct_parse_info != NULL
+  ಯದಿ (warn_cxx_compat
+      && struct_parse_info != ರಿಕ್ತ
       && !in_sizeof && !in_typeof && !in_alignof && !in_countof)
-    struct_parse_info->struct_types.safe_push (enumtype);
+    struct_parse_info->struct_types.safe_ತಳ್ಳು (enumtype);
 
   /* Check for consistency with previous definition */
-  if (flag_isoc23)
+  ಯದಿ (flag_isoc23)
     {
-      tree vistype = previous_tag (enumtype);
-      if (vistype
-	  && TREE_CODE (vistype) == TREE_CODE (enumtype)
+      ವೃಕ್ಷ vistype = previous_tag (enumtype);
+      ಯದಿ (vistype
+	  && ವೃಕ್ಷ_CODE (vistype) == ವೃಕ್ಷ_CODE (enumtype)
 	  && !C_TYPE_BEING_DEFINED (vistype))
 	{
 	  TYPE_STUB_DECL (enumtype) = TYPE_STUB_DECL (vistype);
-	  if (!comptypes_same_p (enumtype, vistype))
+	  ಯದಿ (!comptypes_same_p (enumtype, vistype))
 	    error("conflicting redefinition of enum %qT", enumtype);
 	}
     }
 
   C_TYPE_BEING_DEFINED (enumtype) = 0;
 
-  return enumtype;
+  ಪ್ರತ್ಯಾಗಮ enumtype;
 }
 
 /* Build and install a CONST_DECL for one value of the
@@ -10486,47 +10486,47 @@ finish_enum (tree enumtype, tree values, tree attributes)
    Return a tree-list containing the CONST_DECL and its value.
    Assignment of sequential values by default is handled here.  */
 
-tree
+ವೃಕ್ಷ
 build_enumerator (location_t decl_loc, location_t loc,
-		  struct c_enum_contents *the_enum, tree name, tree value)
+		  ಸಂರಚನಾ c_enum_contents *the_enum, ವೃಕ್ಷ name, ವೃಕ್ಷ ಮೌಲ್ಯ)
 {
-  tree decl;
-  tree old_decl;
+  ವೃಕ್ಷ decl;
+  ವೃಕ್ಷ old_decl;
 
   /* Validate and default VALUE.  */
 
-  if (value != NULL_TREE)
+  ಯದಿ (ಮೌಲ್ಯ != NULL_ವೃಕ್ಷ)
     {
       /* Don't issue more errors for error_mark_node (i.e. an
 	 undeclared identifier) - just ignore the value expression.  */
-      if (value == error_mark_node)
-	value = NULL_TREE;
-      else if (!INTEGRAL_TYPE_P (TREE_TYPE (value)))
+      ಯದಿ (ಮೌಲ್ಯ == error_mark_ಗಂಟು)
+	ಮೌಲ್ಯ = NULL_ವೃಕ್ಷ;
+      ಅನ್ಯಥಾ ಯದಿ (!INTEGRAL_TYPE_P (ವೃಕ್ಷ_TYPE (ಮೌಲ್ಯ)))
 	{
 	  error_at (loc, "enumerator value for %qE is not an integer constant",
 		    name);
-	  value = NULL_TREE;
+	  ಮೌಲ್ಯ = NULL_ವೃಕ್ಷ;
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
-	  if (TREE_CODE (value) != INTEGER_CST)
+	  ಯದಿ (ವೃಕ್ಷ_CODE (ಮೌಲ್ಯ) != INTEGER_CST)
 	    {
-	      value = c_fully_fold (value, false, NULL);
-	      if (TREE_CODE (value) == INTEGER_CST)
+	      ಮೌಲ್ಯ = c_fully_fold (ಮೌಲ್ಯ, ಅಸತ್ಯ, ರಿಕ್ತ);
+	      ಯದಿ (ವೃಕ್ಷ_CODE (ಮೌಲ್ಯ) == INTEGER_CST)
 		pedwarn (loc, OPT_Wpedantic,
 			 "enumerator value for %qE is not an integer "
 			 "constant expression", name);
 	    }
-	  if (TREE_CODE (value) != INTEGER_CST)
+	  ಯದಿ (ವೃಕ್ಷ_CODE (ಮೌಲ್ಯ) != INTEGER_CST)
 	    {
 	      error ("enumerator value for %qE is not an integer constant",
 		     name);
-	      value = NULL_TREE;
+	      ಮೌಲ್ಯ = NULL_ವೃಕ್ಷ;
 	    }
-	  else
+	  ಅನ್ಯಥಾ
 	    {
-	      value = default_conversion (value);
-	      constant_expression_warning (value);
+	      ಮೌಲ್ಯ = default_conversion (ಮೌಲ್ಯ);
+	      constant_expression_warning (ಮೌಲ್ಯ);
 	    }
 	}
     }
@@ -10534,51 +10534,51 @@ build_enumerator (location_t decl_loc, location_t loc,
   /* Default based on previous value.  */
   /* It should no longer be possible to have NON_LVALUE_EXPR
      in the default.  */
-  if (value == NULL_TREE)
+  ಯದಿ (ಮೌಲ್ಯ == NULL_ವೃಕ್ಷ)
     {
-      value = the_enum->enum_next_value;
-      if (the_enum->enum_overflow)
+      ಮೌಲ್ಯ = the_enum->enum_next_ಮೌಲ್ಯ;
+      ಯದಿ (the_enum->enum_overflow)
 	error_at (loc, "overflow in enumeration values");
     }
-  if (ENUM_FIXED_UNDERLYING_TYPE_P (the_enum->enum_type))
+  ಯದಿ (ENUM_FIXED_UNDERLYING_TYPE_P (the_enum->enum_type))
     {
       /* Enumeration constants must fit in the fixed underlying type.  */
-      if (!int_fits_type_p (value, ENUM_UNDERLYING_TYPE (the_enum->enum_type)))
+      ಯದಿ (!int_fits_type_p (ಮೌಲ್ಯ, ENUM_UNDERLYING_TYPE (the_enum->enum_type)))
 	error_at (loc,
 		  "enumerator value outside the range of underlying type");
       /* Enumeration constants for an enum with fixed underlying type
 	 have the enum type, both inside and outside the
 	 definition.  */
-      value = convert (the_enum->enum_type, value);
+      ಮೌಲ್ಯ = convert (the_enum->enum_type, ಮೌಲ್ಯ);
     }
-  else if (flag_isoc23
+  ಅನ್ಯಥಾ ಯದಿ (flag_isoc23
 	   && (old_decl = lookup_name_in_scope (name, current_scope))
-	   && old_decl != error_mark_node
-	   && TREE_TYPE (old_decl)
-	   && TREE_TYPE (TREE_TYPE (old_decl))
-	   && TREE_CODE (old_decl) == CONST_DECL)
+	   && old_decl != error_mark_ಗಂಟು
+	   && ವೃಕ್ಷ_TYPE (old_decl)
+	   && ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (old_decl))
+	   && ವೃಕ್ಷ_CODE (old_decl) == CONST_DECL)
     {
       /* Enumeration constants in a redeclaration have the previous type.  */
-      tree previous_type = TREE_TYPE (DECL_INITIAL (old_decl));
-      if (!int_fits_type_p (value, previous_type))
+      ವೃಕ್ಷ previous_type = ವೃಕ್ಷ_TYPE (DECL_INITIAL (old_decl));
+      ಯದಿ (!int_fits_type_p (ಮೌಲ್ಯ, previous_type))
 	{
 	  error_at (loc, "value of redeclared enumerator outside the range "
 			 "of %qT", previous_type);
 	  locate_old_decl (old_decl);
 	}
-      value = convert (previous_type, value);
+      ಮೌಲ್ಯ = convert (previous_type, ಮೌಲ್ಯ);
     }
-  else
+  ಅನ್ಯಥಾ
     {
       /* Even though the underlying type of an enum is unspecified, the
 	 type of enumeration constants is explicitly defined as int
 	 (6.4.4.3/2 in the C99 Standard).  C23 allows any integer type, and
 	 GCC allows such types for older standards as an extension.  */
-      bool warned_range = false;
-      if (!int_fits_type_p (value,
-			    (TYPE_UNSIGNED (TREE_TYPE (value))
-			     ? uintmax_type_node
-			     : intmax_type_node)))
+      ತಾರ್ಕಿಕ warned_range = ಅಸತ್ಯ;
+      ಯದಿ (!int_fits_type_p (ಮೌಲ್ಯ,
+			    (TYPE_UNSIGNED (ವೃಕ್ಷ_TYPE (ಮೌಲ್ಯ))
+			     ? uintmax_type_ಗಂಟು
+			     : intmax_type_ಗಂಟು)))
 	/* GCC does not consider its types larger than intmax_t to be
 	   extended integer types (although C23 would permit such types to
 	   be considered extended integer types if all the features
@@ -10591,10 +10591,10 @@ build_enumerator (location_t decl_loc, location_t loc,
 	   overflows.)  */
 	warned_range = pedwarn (loc, OPT_Wpedantic,
 				"enumerator value outside the range of %qs",
-				TYPE_UNSIGNED (TREE_TYPE (value))
+				TYPE_UNSIGNED (ವೃಕ್ಷ_TYPE (ಮೌಲ್ಯ))
 				? "uintmax_t"
 				: "intmax_t");
-      if (!warned_range && !int_fits_type_p (value, integer_type_node))
+      ಯದಿ (!warned_range && !int_fits_type_p (ಮೌಲ್ಯ, integer_type_ಗಂಟು))
 	pedwarn_c11 (loc, OPT_Wpedantic,
 		     "ISO C restricts enumerator values to range of %<int%> "
 		     "before C23");
@@ -10611,138 +10611,138 @@ build_enumerator (location_t decl_loc, location_t loc,
 	 of the same signedness is chosen automatically; after the
 	 enumeration is parsed, all the constants have the type of the
 	 enumeration if any do not fit in int.  */
-      if (int_fits_type_p (value, integer_type_node))
-	value = convert (integer_type_node, value);
+      ಯದಿ (int_fits_type_p (ಮೌಲ್ಯ, integer_type_ಗಂಟು))
+	ಮೌಲ್ಯ = convert (integer_type_ಗಂಟು, ಮೌಲ್ಯ);
     }
 
   /* Set basis for default for next value.  */
-  if (ENUM_FIXED_UNDERLYING_TYPE_P (the_enum->enum_type))
+  ಯದಿ (ENUM_FIXED_UNDERLYING_TYPE_P (the_enum->enum_type))
     {
-      tree underlying_type = ENUM_UNDERLYING_TYPE (the_enum->enum_type);
-      if (TREE_CODE (underlying_type) == BOOLEAN_TYPE)
+      ವೃಕ್ಷ underlying_type = ENUM_UNDERLYING_TYPE (the_enum->enum_type);
+      ಯದಿ (ವೃಕ್ಷ_CODE (underlying_type) == BOOLEAN_TYPE)
 	/* A value of 2 following a value of 1 overflows bool, but we
 	   cannot carry out addition directly on bool without
 	   promotion, and converting the result of arithmetic in a
 	   wider type back to bool would not produce the right result
 	   for this overflow check.  */
-	the_enum->enum_next_value = invert_truthvalue_loc (loc, value);
-      else
-	the_enum->enum_next_value
-	  = build_binary_op (EXPR_LOC_OR_LOC (value, input_location),
-			     PLUS_EXPR, convert (underlying_type, value),
-			     convert (underlying_type, integer_one_node),
-			     false);
+	the_enum->enum_next_ಮೌಲ್ಯ = invert_truthvalue_loc (loc, ಮೌಲ್ಯ);
+      ಅನ್ಯಥಾ
+	the_enum->enum_next_ಮೌಲ್ಯ
+	  = build_ದ್ವಿಮಾನ_op (ಅಭಿವ್ಯಕ್ತಿ_LOC_OR_LOC (ಮೌಲ್ಯ, ಒಳಹರಿವು_location),
+			     PLUS_ಅಭಿವ್ಯಕ್ತಿ, convert (underlying_type, ಮೌಲ್ಯ),
+			     convert (underlying_type, integer_one_ಗಂಟು),
+			     ಅಸತ್ಯ);
     }
-  else
+  ಅನ್ಯಥಾ
     {
       /* In a redeclaration the type can already be the enumeral type.  */
-      if (TREE_CODE (TREE_TYPE (value)) == ENUMERAL_TYPE)
-	value = convert (ENUM_UNDERLYING_TYPE (TREE_TYPE (value)), value);
-      the_enum->enum_next_value
-	= build_binary_op (EXPR_LOC_OR_LOC (value, input_location),
-			   PLUS_EXPR, value, integer_one_node, false);
+      ಯದಿ (ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (ಮೌಲ್ಯ)) == ENUMERAL_TYPE)
+	ಮೌಲ್ಯ = convert (ENUM_UNDERLYING_TYPE (ವೃಕ್ಷ_TYPE (ಮೌಲ್ಯ)), ಮೌಲ್ಯ);
+      the_enum->enum_next_ಮೌಲ್ಯ
+	= build_ದ್ವಿಮಾನ_op (ಅಭಿವ್ಯಕ್ತಿ_LOC_OR_LOC (ಮೌಲ್ಯ, ಒಳಹರಿವು_location),
+			   PLUS_ಅಭಿವ್ಯಕ್ತಿ, ಮೌಲ್ಯ, integer_one_ಗಂಟು, ಅಸತ್ಯ);
     }
-  the_enum->enum_overflow = tree_int_cst_lt (the_enum->enum_next_value, value);
-  if (the_enum->enum_overflow
+  the_enum->enum_overflow = ವೃಕ್ಷ_int_cst_lt (the_enum->enum_next_ಮೌಲ್ಯ, ಮೌಲ್ಯ);
+  ಯದಿ (the_enum->enum_overflow
       && !ENUM_FIXED_UNDERLYING_TYPE_P (the_enum->enum_type))
     {
       /* Choose a wider type with the same signedness if
 	 available.  */
-      int prec = TYPE_PRECISION (TREE_TYPE (value)) + 1;
-      bool unsignedp = TYPE_UNSIGNED (TREE_TYPE (value));
-      tree new_type = (unsignedp
-		       ? long_unsigned_type_node
-		       : long_integer_type_node);
-      if (prec > TYPE_PRECISION (new_type))
+      ಪೂರ್ಣಾಙ್ಕ prec = TYPE_PRECISION (ವೃಕ್ಷ_TYPE (ಮೌಲ್ಯ)) + 1;
+      ತಾರ್ಕಿಕ unsignedp = TYPE_UNSIGNED (ವೃಕ್ಷ_TYPE (ಮೌಲ್ಯ));
+      ವೃಕ್ಷ new_type = (unsignedp
+		       ? long_unsigned_type_ಗಂಟು
+		       : long_integer_type_ಗಂಟು);
+      ಯದಿ (prec > TYPE_PRECISION (new_type))
 	new_type = (unsignedp
-		    ? long_long_unsigned_type_node
-		    : long_long_integer_type_node);
-      if (prec > TYPE_PRECISION (new_type))
+		    ? long_long_unsigned_type_ಗಂಟು
+		    : long_long_integer_type_ಗಂಟು);
+      ಯದಿ (prec > TYPE_PRECISION (new_type))
 	new_type = (unsignedp
-		    ? widest_unsigned_literal_type_node
-		    : widest_integer_literal_type_node);
-      if (prec <= TYPE_PRECISION (new_type))
+		    ? widest_unsigned_literal_type_ಗಂಟು
+		    : widest_integer_literal_type_ಗಂಟು);
+      ಯದಿ (prec <= TYPE_PRECISION (new_type))
 	{
-	  the_enum->enum_overflow = false;
-	  the_enum->enum_next_value
-	    = build_binary_op (EXPR_LOC_OR_LOC (value, input_location),
-			       PLUS_EXPR, convert (new_type, value),
-			       integer_one_node, false);
-	  gcc_assert (!tree_int_cst_lt (the_enum->enum_next_value, value));
+	  the_enum->enum_overflow = ಅಸತ್ಯ;
+	  the_enum->enum_next_ಮೌಲ್ಯ
+	    = build_ದ್ವಿಮಾನ_op (ಅಭಿವ್ಯಕ್ತಿ_LOC_OR_LOC (ಮೌಲ್ಯ, ಒಳಹರಿವು_location),
+			       PLUS_ಅಭಿವ್ಯಕ್ತಿ, convert (new_type, ಮೌಲ್ಯ),
+			       integer_one_ಗಂಟು, ಅಸತ್ಯ);
+	  gcc_assert (!ವೃಕ್ಷ_int_cst_lt (the_enum->enum_next_ಮೌಲ್ಯ, ಮೌಲ್ಯ));
 	}
     }
 
   /* Now create a declaration for the enum value name.  */
 
-  decl = build_decl (decl_loc, CONST_DECL, name, TREE_TYPE (value));
-  DECL_INITIAL (decl) = value;
+  decl = build_decl (decl_loc, CONST_DECL, name, ವೃಕ್ಷ_TYPE (ಮೌಲ್ಯ));
+  DECL_INITIAL (decl) = ಮೌಲ್ಯ;
   DECL_CONTEXT (decl) = the_enum->enum_type;
   pushdecl (decl);
 
-  return tree_cons (decl, value, NULL_TREE);
+  ಪ್ರತ್ಯಾಗಮ ವೃಕ್ಷ_cons (decl, ಮೌಲ್ಯ, NULL_ವೃಕ್ಷ);
 }
 
 /* Implement LANG_HOOKS_SIMULATE_ENUM_DECL.  */
 
-tree
-c_simulate_enum_decl (location_t loc, const char *name,
-		      vec<string_int_pair> *values_ptr)
+ವೃಕ್ಷ
+c_simulate_enum_decl (location_t loc, ಧ್ರುವ ವರ್ಣ *name,
+		      vec<string_int_pair> *ಮೌಲ್ಯಗಳು_ptr)
 {
-  location_t saved_loc = input_location;
-  input_location = loc;
+  location_t saved_loc = ಒಳಹರಿವು_location;
+  ಒಳಹರಿವು_location = loc;
 
-  struct c_enum_contents the_enum;
-  tree enumtype = start_enum (loc, &the_enum, get_identifier (name),
-			      NULL_TREE, false);
+  ಸಂರಚನಾ c_enum_contents the_enum;
+  ವೃಕ್ಷ enumtype = start_enum (loc, &the_enum, get_identifier (name),
+			      NULL_ವೃಕ್ಷ, ಅಸತ್ಯ);
 
-  tree value_chain = NULL_TREE;
-  string_int_pair *value;
-  vec<string_int_pair> values = *values_ptr;
-  unsigned int i;
-  FOR_EACH_VEC_ELT (values, i, value)
+  ವೃಕ್ಷ ಮೌಲ್ಯ_chain = NULL_ವೃಕ್ಷ;
+  string_int_pair *ಮೌಲ್ಯ;
+  vec<string_int_pair> ಮೌಲ್ಯಗಳು = *ಮೌಲ್ಯಗಳು_ptr;
+  unsigned ಪೂರ್ಣಾಙ್ಕ i;
+  FOR_EACH_VEC_ELT (ಮೌಲ್ಯಗಳು, i, ಮೌಲ್ಯ)
     {
-      tree decl = build_enumerator (loc, loc, &the_enum,
-				    get_identifier (value->first),
-				    build_int_cst (integer_type_node,
-						   value->second));
-      TREE_CHAIN (decl) = value_chain;
-      value_chain = decl;
+      ವೃಕ್ಷ decl = build_enumerator (loc, loc, &the_enum,
+				    get_identifier (ಮೌಲ್ಯ->first),
+				    build_int_cst (integer_type_ಗಂಟು,
+						   ಮೌಲ್ಯ->second));
+      ವೃಕ್ಷ_CHAIN (decl) = ಮೌಲ್ಯ_chain;
+      ಮೌಲ್ಯ_chain = decl;
     }
 
-  finish_enum (enumtype, nreverse (value_chain), NULL_TREE);
+  finish_enum (enumtype, nreverse (ಮೌಲ್ಯ_chain), NULL_ವೃಕ್ಷ);
 
-  input_location = saved_loc;
-  return enumtype;
+  ಒಳಹರಿವು_location = saved_loc;
+  ಪ್ರತ್ಯಾಗಮ enumtype;
 }
 
 /* Implement LANG_HOOKS_SIMULATE_RECORD_DECL.  */
 
-tree
-c_simulate_record_decl (location_t loc, const char *name,
-			array_slice<const tree> fields)
+ವೃಕ್ಷ
+c_simulate_record_decl (location_t loc, ಧ್ರುವ ವರ್ಣ *name,
+			array_slice<ಧ್ರುವ ವೃಕ್ಷ> fields)
 {
-  location_t saved_loc = input_location;
-  input_location = loc;
+  location_t saved_loc = ಒಳಹರಿವು_location;
+  ಒಳಹರಿವು_location = loc;
 
-  class c_struct_parse_info *struct_info;
-  tree ident = get_identifier (name);
-  tree type = start_struct (loc, RECORD_TYPE, ident, &struct_info);
+  ವರ್ಗ c_struct_parse_info *struct_info;
+  ವೃಕ್ಷ ident = get_identifier (name);
+  ವೃಕ್ಷ type = start_struct (loc, RECORD_TYPE, ident, &struct_info);
 
-  for (unsigned int i = 0; i < fields.size (); ++i)
+  ಪ್ರತಿ (unsigned ಪೂರ್ಣಾಙ್ಕ i = 0; i < fields.size (); ++i)
     {
       DECL_FIELD_CONTEXT (fields[i]) = type;
-      if (i > 0)
+      ಯದಿ (i > 0)
 	DECL_CHAIN (fields[i - 1]) = fields[i];
     }
 
-  finish_struct (loc, type, fields[0], NULL_TREE, struct_info);
+  finish_struct (loc, type, fields[0], NULL_ವೃಕ್ಷ, struct_info);
 
-  tree decl = build_decl (loc, TYPE_DECL, ident, type);
+  ವೃಕ್ಷ decl = build_decl (loc, TYPE_DECL, ident, type);
   set_underlying_type (decl);
   lang_hooks.decls.pushdecl (decl);
 
-  input_location = saved_loc;
-  return type;
+  ಒಳಹರಿವು_location = saved_loc;
+  ಪ್ರತ್ಯಾಗಮ type;
 }
 
 /* Create the FUNCTION_DECL for a function definition.
@@ -10756,49 +10756,49 @@ c_simulate_record_decl (location_t loc, const char *name,
    Returns true on success.  If the DECLARATOR is not suitable for a function
    (it defines a datum instead), we return false to report a parse error.  */
 
-bool
-start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
-		tree attributes)
+ತಾರ್ಕಿಕ
+start_function (ಸಂರಚನಾ c_declspecs *declspecs, ಸಂರಚನಾ c_declarator *declarator,
+		ವೃಕ್ಷ attributes)
 {
-  tree decl1, old_decl;
-  tree restype, resdecl;
+  ವೃಕ್ಷ decl1, old_decl;
+  ವೃಕ್ಷ restype, resdecl;
   location_t loc;
   location_t result_loc;
-  tree expr = NULL;
+  ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ = ರಿಕ್ತ;
 
-  current_function_returns_value = 0;  /* Assume, until we see it does.  */
+  current_function_returns_ಮೌಲ್ಯ = 0;  /* Assume, until we see it does.  */
   current_function_returns_null = 0;
   current_function_returns_abnormally = 0;
   warn_about_return_type = 0;
-  c_switch_stack = NULL;
+  c_switch_ರಾಶಿ = ರಿಕ್ತ;
 
   /* Indicate no valid break/continue context.  */
   in_statement = 0;
 
-  decl1 = grokdeclarator (declarator, declspecs, FUNCDEF, true, NULL,
-			  &attributes, &expr, NULL, DEPRECATED_NORMAL);
+  decl1 = grokdeclarator (declarator, declspecs, FUNCDEF, ಸತ್ಯ, ರಿಕ್ತ,
+			  &attributes, &ಅಭಿವ್ಯಕ್ತಿ, ರಿಕ್ತ, DEPRECATED_NORMAL);
   invoke_plugin_callbacks (PLUGIN_START_PARSE_FUNCTION, decl1);
 
   /* If the declarator is not suitable for a function definition,
      cause a syntax error.  */
-  if (decl1 == NULL_TREE
-      || TREE_CODE (decl1) != FUNCTION_DECL)
-    return false;
+  ಯದಿ (decl1 == NULL_ವೃಕ್ಷ
+      || ವೃಕ್ಷ_CODE (decl1) != FUNCTION_DECL)
+    ಪ್ರತ್ಯಾಗಮ ಅಸತ್ಯ;
 
   /* Nested functions may have variably modified (return) type.
      Make sure the size expression is evaluated at this point.  */
-  if (expr && !current_scope->parm_flag)
-    add_stmt (fold_convert (void_type_node, expr));
+  ಯದಿ (ಅಭಿವ್ಯಕ್ತಿ && !current_scope->parm_flag)
+    add_stmt (fold_convert (void_type_ಗಂಟು, ಅಭಿವ್ಯಕ್ತಿ));
 
   loc = DECL_SOURCE_LOCATION (decl1);
 
   /* A nested function is not global.  */
-  if (current_function_decl != NULL_TREE)
-    TREE_PUBLIC (decl1) = 0;
+  ಯದಿ (current_function_decl != NULL_ವೃಕ್ಷ)
+    ವೃಕ್ಷ_PUBLIC (decl1) = 0;
 
   c_decl_attributes (&decl1, attributes, 0);
 
-  if (DECL_DECLARED_INLINE_P (decl1)
+  ಯದಿ (DECL_DECLARED_INLINE_P (decl1)
       && DECL_UNINLINABLE (decl1)
       && lookup_attribute ("noinline", DECL_ATTRIBUTES (decl1)))
     {
@@ -10809,29 +10809,29 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
     }
 
   /* Handle gnu_inline attribute.  */
-  if (declspecs->inline_p
+  ಯದಿ (declspecs->inline_p
       && !flag_gnu89_inline
-      && TREE_CODE (decl1) == FUNCTION_DECL
+      && ವೃಕ್ಷ_CODE (decl1) == FUNCTION_DECL
       && (lookup_attribute ("gnu_inline", DECL_ATTRIBUTES (decl1))
 	  || current_function_decl))
     {
-      if (declspecs->storage_class != csc_static)
+      ಯದಿ (declspecs->storage_class != csc_static)
 	DECL_EXTERNAL (decl1) = !DECL_EXTERNAL (decl1);
     }
 
   announce_function (decl1);
 
-  if (!COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (TREE_TYPE (decl1))))
+  ಯದಿ (!COMPLETE_OR_VOID_TYPE_P (ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (decl1))))
     {
       error_at (loc, "return type is an incomplete type");
       /* Make it return void instead.  */
-      TREE_TYPE (decl1)
-	= c_build_function_type (void_type_node,
-				 TYPE_ARG_TYPES (TREE_TYPE (decl1)),
-				 TYPE_NO_NAMED_ARGS_STDARG_P (TREE_TYPE (decl1)));
+      ವೃಕ್ಷ_TYPE (decl1)
+	= c_build_function_type (void_type_ಗಂಟು,
+				 TYPE_ARG_TYPES (ವೃಕ್ಷ_TYPE (decl1)),
+				 TYPE_NO_NAMED_ARGS_STDARG_P (ವೃಕ್ಷ_TYPE (decl1)));
     }
 
-  if (warn_about_return_type)
+  ಯದಿ (warn_about_return_type)
     permerror_opt (loc, flag_isoc99 ? OPT_Wimplicit_int
 		   : (warn_return_type > 0 ? OPT_Wreturn_type
 		      : OPT_Wimplicit_int),
@@ -10839,43 +10839,43 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
 
   /* Make the init_value nonzero so pushdecl knows this is not tentative.
      error_mark_node is replaced below (in pop_scope) with the BLOCK.  */
-  DECL_INITIAL (decl1) = error_mark_node;
+  DECL_INITIAL (decl1) = error_mark_ಗಂಟು;
 
   /* If this definition isn't a prototype and we had a prototype declaration
      before, copy the arg type info from that prototype.  */
   old_decl = lookup_name_in_scope (DECL_NAME (decl1), current_scope);
-  if (old_decl && TREE_CODE (old_decl) != FUNCTION_DECL)
-    old_decl = NULL_TREE;
+  ಯದಿ (old_decl && ವೃಕ್ಷ_CODE (old_decl) != FUNCTION_DECL)
+    old_decl = NULL_ವೃಕ್ಷ;
 
   current_function_prototype_locus = UNKNOWN_LOCATION;
-  current_function_prototype_built_in = false;
-  current_function_prototype_arg_types = NULL_TREE;
-  tree newtype = TREE_TYPE (decl1);
-  tree oldtype = old_decl ? TREE_TYPE (old_decl) : newtype;
-  if (!prototype_p (newtype))
+  current_function_prototype_built_in = ಅಸತ್ಯ;
+  current_function_prototype_arg_types = NULL_ವೃಕ್ಷ;
+  ವೃಕ್ಷ newtype = ವೃಕ್ಷ_TYPE (decl1);
+  ವೃಕ್ಷ oldtype = old_decl ? ವೃಕ್ಷ_TYPE (old_decl) : newtype;
+  ಯದಿ (!prototype_p (newtype))
     {
-      tree oldrt = TREE_TYPE (oldtype);
-      tree newrt = TREE_TYPE (newtype);
-      if (old_decl != NULL_TREE
-	  && TREE_CODE (oldtype) == FUNCTION_TYPE
+      ವೃಕ್ಷ oldrt = ವೃಕ್ಷ_TYPE (oldtype);
+      ವೃಕ್ಷ newrt = ವೃಕ್ಷ_TYPE (newtype);
+      ಯದಿ (old_decl != NULL_ವೃಕ್ಷ
+	  && ವೃಕ್ಷ_CODE (oldtype) == FUNCTION_TYPE
 	  && comptypes (oldrt, newrt)
 	  && !TYPE_NO_NAMED_ARGS_STDARG_P (oldtype))
 	{
-	  if (stdarg_p (oldtype))
+	  ಯದಿ (stdarg_p (oldtype))
 	    {
 	      auto_diagnostic_group d;
 	      warning_at (loc, 0, "%q+D defined as variadic function "
 			  "without prototype", decl1);
 	      locate_old_decl (old_decl);
 	    }
-	  TREE_TYPE (decl1) = composite_type (oldtype, newtype);
+	  ವೃಕ್ಷ_TYPE (decl1) = composite_type (oldtype, newtype);
 	  current_function_prototype_locus = DECL_SOURCE_LOCATION (old_decl);
 	  current_function_prototype_built_in
 	    = C_DECL_BUILTIN_PROTOTYPE (old_decl);
 	  current_function_prototype_arg_types
 	    = TYPE_ARG_TYPES (newtype);
 	}
-      if (TREE_PUBLIC (decl1))
+      ಯದಿ (ವೃಕ್ಷ_PUBLIC (decl1))
 	{
 	  /* If there is an external prototype declaration of this
 	     function, record its location but do not copy information
@@ -10883,18 +10883,18 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
 	     (built-in or in a scope which has finished) or simply
 	     have more refined argument types than any declaration
 	     found above.  */
-	  struct c_binding *b;
-	  for (b = I_SYMBOL_BINDING (DECL_NAME (decl1)); b; b = b->shadowed)
-	    if (B_IN_SCOPE (b, external_scope))
-	      break;
-	  if (b)
+	  ಸಂರಚನಾ c_binding *b;
+	  ಪ್ರತಿ (b = I_ಚಿಹ್ನೆ_BINDING (DECL_NAME (decl1)); b; b = b->shadowed)
+	    ಯದಿ (B_IN_SCOPE (b, external_scope))
+	      ಭಙ್ಗ;
+	  ಯದಿ (b)
 	    {
-	      tree ext_decl, ext_type;
+	      ವೃಕ್ಷ ext_decl, ext_type;
 	      ext_decl = b->decl;
-	      ext_type = b->u.type ? b->u.type : TREE_TYPE (ext_decl);
-	      if (TREE_CODE (ext_type) == FUNCTION_TYPE
-		  && comptypes (TREE_TYPE (TREE_TYPE (decl1)),
-				TREE_TYPE (ext_type)))
+	      ext_type = b->u.type ? b->u.type : ವೃಕ್ಷ_TYPE (ext_decl);
+	      ಯದಿ (ವೃಕ್ಷ_CODE (ext_type) == FUNCTION_TYPE
+		  && comptypes (ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (decl1)),
+				ವೃಕ್ಷ_TYPE (ext_type)))
 		{
 		  current_function_prototype_locus
 		    = DECL_SOURCE_LOCATION (ext_decl);
@@ -10908,34 +10908,34 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
     }
 
   /* Optionally warn about C23 compatibility.  */
-  if (warn_deprecated_non_prototype
-      && old_decl != NULL_TREE
-      && TREE_CODE (oldtype) == FUNCTION_TYPE
+  ಯದಿ (warn_deprecated_non_prototype
+      && old_decl != NULL_ವೃಕ್ಷ
+      && ವೃಕ್ಷ_CODE (oldtype) == FUNCTION_TYPE
       && !TYPE_ARG_TYPES (oldtype)
       && !TYPE_NO_NAMED_ARGS_STDARG_P (oldtype)
       && (TYPE_ARG_TYPES (newtype)
-	  && TREE_VALUE (TYPE_ARG_TYPES (newtype)) != void_type_node))
+	  && ವೃಕ್ಷ_ಮೌಲ್ಯ (TYPE_ARG_TYPES (newtype)) != void_type_ಗಂಟು))
     {
-      bool warned = warning_at (loc, OPT_Wdeprecated_non_prototype,
+      ತಾರ್ಕಿಕ warned = warning_at (loc, OPT_Wdeprecated_non_prototype,
 				"ISO C23 does not allow defining"
 				" parameters for function %qE declared"
 				" without parameters",
 				decl1);
-      if (warned)
+      ಯದಿ (warned)
 	inform (DECL_SOURCE_LOCATION (old_decl), "declared here");
     }
 
   /* Optionally warn of old-fashioned def with no previous prototype.  */
-  if (warn_strict_prototypes
-      && old_decl != error_mark_node
-      && !prototype_p (TREE_TYPE (decl1))
+  ಯದಿ (warn_strict_prototypes
+      && old_decl != error_mark_ಗಂಟು
+      && !prototype_p (ವೃಕ್ಷ_TYPE (decl1))
       && C_DECL_ISNT_PROTOTYPE (old_decl))
     warning_at (loc, OPT_Wstrict_prototypes,
 		"function declaration isn%'t a prototype");
   /* Optionally warn of any global def with no previous prototype.  */
-  else if (warn_missing_prototypes
-	   && old_decl != error_mark_node
-	   && TREE_PUBLIC (decl1)
+  ಅನ್ಯಥಾ ಯದಿ (warn_missing_prototypes
+	   && old_decl != error_mark_ಗಂಟು
+	   && ವೃಕ್ಷ_PUBLIC (decl1)
 	   && !MAIN_NAME_P (DECL_NAME (decl1))
 	   && C_DECL_ISNT_PROTOTYPE (old_decl)
 	   && !DECL_DECLARED_INLINE_P (decl1))
@@ -10943,17 +10943,17 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
 		"no previous prototype for %qD", decl1);
   /* Optionally warn of any def with no previous prototype
      if the function has already been used.  */
-  else if (warn_missing_prototypes
-	   && old_decl != NULL_TREE
-	   && old_decl != error_mark_node
-	   && TREE_USED (old_decl)
-	   && !prototype_p (TREE_TYPE (old_decl)))
+  ಅನ್ಯಥಾ ಯದಿ (warn_missing_prototypes
+	   && old_decl != NULL_ವೃಕ್ಷ
+	   && old_decl != error_mark_ಗಂಟು
+	   && ವೃಕ್ಷ_USED (old_decl)
+	   && !prototype_p (ವೃಕ್ಷ_TYPE (old_decl)))
     warning_at (loc, OPT_Wmissing_prototypes,
 		"%qD was used with no prototype before its definition", decl1);
   /* Optionally warn of any global def with no previous declaration.  */
-  else if (warn_missing_declarations
-	   && TREE_PUBLIC (decl1)
-	   && old_decl == NULL_TREE
+  ಅನ್ಯಥಾ ಯದಿ (warn_missing_declarations
+	   && ವೃಕ್ಷ_PUBLIC (decl1)
+	   && old_decl == NULL_ವೃಕ್ಷ
 	   && !MAIN_NAME_P (DECL_NAME (decl1))
 	   && !DECL_DECLARED_INLINE_P (decl1))
     warning_at (loc, OPT_Wmissing_declarations,
@@ -10961,45 +10961,45 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
 		decl1);
   /* Optionally warn of any def with no previous declaration
      if the function has already been used.  */
-  else if (warn_missing_declarations
-	   && old_decl != NULL_TREE
-	   && old_decl != error_mark_node
-	   && TREE_USED (old_decl)
+  ಅನ್ಯಥಾ ಯದಿ (warn_missing_declarations
+	   && old_decl != NULL_ವೃಕ್ಷ
+	   && old_decl != error_mark_ಗಂಟು
+	   && ವೃಕ್ಷ_USED (old_decl)
 	   && C_DECL_IMPLICIT (old_decl))
     warning_at (loc, OPT_Wmissing_declarations,
 		"%qD was used with no declaration before its definition", decl1);
 
   /* This function exists in static storage.
      (This does not mean `static' in the C sense!)  */
-  TREE_STATIC (decl1) = 1;
+  ವೃಕ್ಷ_STATIC (decl1) = 1;
 
   /* This is the earliest point at which we might know the assembler
      name of the function.  Thus, if it's set before this, die horribly.  */
   gcc_assert (!DECL_ASSEMBLER_NAME_SET_P (decl1));
 
   /* If #pragma weak was used, mark the decl weak now.  */
-  if (current_scope == file_scope)
+  ಯದಿ (current_scope == file_scope)
     maybe_apply_pragma_weak (decl1);
 
   /* Warn for unlikely, improbable, or stupid declarations of `main'.  */
-  if (warn_main && MAIN_NAME_P (DECL_NAME (decl1)))
+  ಯದಿ (warn_main && MAIN_NAME_P (DECL_NAME (decl1)))
     {
-      if (TYPE_MAIN_VARIANT (TREE_TYPE (TREE_TYPE (decl1)))
-	  != integer_type_node)
+      ಯದಿ (TYPE_MAIN_VARIANT (ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (decl1)))
+	  != integer_type_ಗಂಟು)
 	pedwarn (loc, OPT_Wmain, "return type of %qD is not %<int%>", decl1);
-      else if (TYPE_ATOMIC (TREE_TYPE (TREE_TYPE (decl1))))
+      ಅನ್ಯಥಾ ಯದಿ (TYPE_ATOMIC (ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (decl1))))
 	pedwarn (loc, OPT_Wmain, "%<_Atomic%>-qualified return type of %qD",
 		 decl1);
 
       check_main_parameter_types (decl1);
 
-      if (!TREE_PUBLIC (decl1))
+      ಯದಿ (!ವೃಕ್ಷ_PUBLIC (decl1))
 	pedwarn (loc, OPT_Wmain,
 		 "%qD is normally a non-static function", decl1);
     }
 
-  tree parms = current_function_arg_info->parms;
-  if (old_decl)
+  ವೃಕ್ಷ parms = current_function_arg_info->parms;
+  ಯದಿ (old_decl)
     {
       location_t origloc = DECL_SOURCE_LOCATION (old_decl);
       warn_parms_array_mismatch (origloc, old_decl, parms);
@@ -11007,12 +11007,12 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
 
   /* To enable versions to be created across TU's we mark and mangle all
      non-default versioned functions.  */
-  if (TREE_CODE (decl1) == FUNCTION_DECL
+  ಯದಿ (ವೃಕ್ಷ_CODE (decl1) == FUNCTION_DECL
       && !TARGET_HAS_FMV_TARGET_ATTRIBUTE
       && get_target_version (decl1).is_valid ())
     {
       maybe_mark_function_versioned (decl1);
-      if (current_scope != file_scope)
+      ಯದಿ (current_scope != file_scope)
 	error ("versioned definitions are only allowed at file scope");
     }
 
@@ -11022,73 +11022,73 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
 
   current_function_decl = pushdecl (decl1);
 
-  if (tree access = build_attr_access_from_parms (parms, false))
+  ಯದಿ (ವೃಕ್ಷ access = build_attr_access_from_parms (parms, ಅಸತ್ಯ))
     decl_attributes (&current_function_decl, access, ATTR_FLAG_INTERNAL,
 		     old_decl);
 
-  push_scope ();
+  ತಳ್ಳು_scope ();
   declare_parm_level ();
 
   /* Set the result decl source location to the location of the typespec.  */
   result_loc = (declspecs->locations[cdw_typespec] == UNKNOWN_LOCATION
 		? loc : declspecs->locations[cdw_typespec]);
-  restype = TREE_TYPE (TREE_TYPE (current_function_decl));
-  resdecl = build_decl (result_loc, RESULT_DECL, NULL_TREE, restype);
+  restype = ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (current_function_decl));
+  resdecl = build_decl (result_loc, RESULT_DECL, NULL_ವೃಕ್ಷ, restype);
   DECL_ARTIFICIAL (resdecl) = 1;
   DECL_IGNORED_P (resdecl) = 1;
   DECL_RESULT (current_function_decl) = resdecl;
 
   start_fname_decls ();
 
-  return true;
+  ಪ್ರತ್ಯಾಗಮ ಸತ್ಯ;
 }
 
 /* Subroutine of store_parm_decls which handles new-style function
    definitions (prototype format). The parms already have decls, so we
    need only record them as in effect and complain if any redundant
    old-style parm decls were written.  */
-static void
-store_parm_decls_newstyle (tree fndecl, const struct c_arg_info *arg_info)
+ಸ್ಥಿರ ಶೂನ್ಯ
+store_parm_decls_newstyle (ವೃಕ್ಷ fndecl, ಧ್ರುವ ಸಂರಚನಾ c_arg_info *arg_info)
 {
-  tree decl;
+  ವೃಕ್ಷ decl;
   c_arg_tag *tag;
   unsigned ix;
 
-  if (current_scope->bindings)
+  ಯದಿ (current_scope->bindings)
     {
       error_at (DECL_SOURCE_LOCATION (fndecl),
 		"old-style parameter declarations in prototyped "
 		"function definition");
 
       /* Get rid of the old-style declarations.  */
-      pop_scope ();
-      push_scope ();
+      ತೆಗೆ_scope ();
+      ತಳ್ಳು_scope ();
     }
   /* Don't issue this warning for nested functions, and don't issue this
      warning if we got here because ARG_INFO_TYPES was error_mark_node
      (this happens when a function definition has just an ellipsis in
      its parameter list).  */
-  else if (!in_system_header_at (input_location)
+  ಅನ್ಯಥಾ ಯದಿ (!in_system_header_at (ಒಳಹರಿವು_location)
 	   && !current_function_scope
-	   && arg_info->types != error_mark_node
+	   && arg_info->types != error_mark_ಗಂಟು
 	   && !arg_info->c23_empty_parens)
     warning_at (DECL_SOURCE_LOCATION (fndecl), OPT_Wtraditional,
 		"traditional C rejects ISO C style function definitions");
 
   /* Now make all the parameter declarations visible in the function body.
      We can bypass most of the grunt work of pushdecl.  */
-  for (decl = arg_info->parms; decl; decl = DECL_CHAIN (decl))
+  ಪ್ರತಿ (decl = arg_info->parms; decl; decl = DECL_CHAIN (decl))
     {
       DECL_CONTEXT (decl) = current_function_decl;
-      if (DECL_NAME (decl))
+      ಯದಿ (DECL_NAME (decl))
 	{
 	  bind (DECL_NAME (decl), decl, current_scope,
-		/*invisible=*/false, /*nested=*/false,
+		/*invisible=*/ಅಸತ್ಯ, /*nested=*/ಅಸತ್ಯ,
 		UNKNOWN_LOCATION);
-	  if (!TREE_USED (decl))
+	  ಯದಿ (!ವೃಕ್ಷ_USED (decl))
 	    warn_if_shadowing (decl);
 	}
-      else
+      ಅನ್ಯಥಾ
 	pedwarn_c11 (DECL_SOURCE_LOCATION (decl), OPT_Wmissing_parameter_name,
 		     "ISO C does not support omitting parameter names in "
 		     "function definitions before C23");
@@ -11098,97 +11098,97 @@ store_parm_decls_newstyle (tree fndecl, const struct c_arg_info *arg_info)
   DECL_ARGUMENTS (fndecl) = arg_info->parms;
 
   /* Now make all the ancillary declarations visible, likewise.  */
-  for (decl = arg_info->others; decl; decl = DECL_CHAIN (decl))
+  ಪ್ರತಿ (decl = arg_info->others; decl; decl = DECL_CHAIN (decl))
     {
       DECL_CONTEXT (decl) = current_function_decl;
-      if (DECL_NAME (decl))
+      ಯದಿ (DECL_NAME (decl))
 	bind (DECL_NAME (decl), decl, current_scope,
-	      /*invisible=*/false,
-	      /*nested=*/(TREE_CODE (decl) == FUNCTION_DECL),
+	      /*invisible=*/ಅಸತ್ಯ,
+	      /*nested=*/(ವೃಕ್ಷ_CODE (decl) == FUNCTION_DECL),
 	      UNKNOWN_LOCATION);
     }
 
   /* And all the tag declarations.  */
   FOR_EACH_VEC_SAFE_ELT_REVERSE (arg_info->tags, ix, tag)
-    if (tag->id)
+    ಯದಿ (tag->id)
       bind (tag->id, tag->type, current_scope,
-	    /*invisible=*/false, /*nested=*/false, UNKNOWN_LOCATION);
+	    /*invisible=*/ಅಸತ್ಯ, /*nested=*/ಅಸತ್ಯ, UNKNOWN_LOCATION);
 }
 
 /* Subroutine of store_parm_decls which handles old-style function
    definitions (separate parameter list and declarations).  */
 
-static void
-store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
+ಸ್ಥಿರ ಶೂನ್ಯ
+store_parm_decls_oldstyle (ವೃಕ್ಷ fndecl, ಧ್ರುವ ಸಂರಚನಾ c_arg_info *arg_info)
 {
-  struct c_binding *b;
-  tree parm, decl, last;
-  tree parmids = arg_info->parms;
-  hash_set<tree> seen_args;
+  ಸಂರಚನಾ c_binding *b;
+  ವೃಕ್ಷ parm, decl, last;
+  ವೃಕ್ಷ parmids = arg_info->parms;
+  hash_set<ವೃಕ್ಷ> seen_args;
 
-  if (!in_system_header_at (input_location))
+  ಯದಿ (!in_system_header_at (ಒಳಹರಿವು_location))
     {
-      if (flag_isoc23)
+      ಯದಿ (flag_isoc23)
 	pedwarn (DECL_SOURCE_LOCATION (fndecl),
 		 OPT_Wold_style_definition, "old-style function definition");
-      else
+      ಅನ್ಯಥಾ
 	warning_at (DECL_SOURCE_LOCATION (fndecl),
 		    OPT_Wold_style_definition,
 		    "old-style function definition");
     }
 
-  if (current_scope->had_vla_unspec)
+  ಯದಿ (current_scope->had_vla_unspec)
     error ("%<[*]%> not allowed in other than function prototype scope");
 
   /* Match each formal parameter name with its declaration.  Save each
      decl in the appropriate TREE_PURPOSE slot of the parmids chain.  */
-  for (parm = parmids; parm; parm = TREE_CHAIN (parm))
+  ಪ್ರತಿ (parm = parmids; parm; parm = ವೃಕ್ಷ_CHAIN (parm))
     {
-      if (TREE_VALUE (parm) == NULL_TREE)
+      ಯದಿ (ವೃಕ್ಷ_ಮೌಲ್ಯ (parm) == NULL_ವೃಕ್ಷ)
 	{
 	  error_at (DECL_SOURCE_LOCATION (fndecl),
 		    "parameter name missing from parameter list");
-	  TREE_PURPOSE (parm) = NULL_TREE;
-	  continue;
+	  ವೃಕ್ಷ_PURPOSE (parm) = NULL_ವೃಕ್ಷ;
+	  ಅನುವರ್ತ;
 	}
 
-      b = I_SYMBOL_BINDING (TREE_VALUE (parm));
-      if (b && B_IN_CURRENT_SCOPE (b))
+      b = I_ಚಿಹ್ನೆ_BINDING (ವೃಕ್ಷ_ಮೌಲ್ಯ (parm));
+      ಯದಿ (b && B_IN_CURRENT_SCOPE (b))
 	{
 	  decl = b->decl;
 	  /* Skip erroneous parameters.  */
-	  if (decl == error_mark_node)
-	    continue;
+	  ಯದಿ (decl == error_mark_ಗಂಟು)
+	    ಅನುವರ್ತ;
 	  /* If we got something other than a PARM_DECL it is an error.  */
-	  if (TREE_CODE (decl) != PARM_DECL)
+	  ಯದಿ (ವೃಕ್ಷ_CODE (decl) != PARM_DECL)
 	    {
 	      error_at (DECL_SOURCE_LOCATION (decl),
 			"%qD declared as a non-parameter", decl);
-	      continue;
+	      ಅನುವರ್ತ;
 	    }
 	  /* If the declaration is already marked, we have a duplicate
 	     name.  Complain and ignore the duplicate.  */
-	  else if (seen_args.contains (decl))
+	  ಅನ್ಯಥಾ ಯದಿ (seen_args.contains (decl))
 	    {
 	      error_at (DECL_SOURCE_LOCATION (decl),
 			"multiple parameters named %qD", decl);
-	      TREE_PURPOSE (parm) = NULL_TREE;
-	      continue;
+	      ವೃಕ್ಷ_PURPOSE (parm) = NULL_ವೃಕ್ಷ;
+	      ಅನುವರ್ತ;
 	    }
 	  /* If the declaration says "void", complain and turn it into
 	     an int.  */
-	  else if (VOID_TYPE_P (TREE_TYPE (decl)))
+	  ಅನ್ಯಥಾ ಯದಿ (VOID_TYPE_P (ವೃಕ್ಷ_TYPE (decl)))
 	    {
 	      error_at (DECL_SOURCE_LOCATION (decl),
 			"parameter %qD declared with void type", decl);
-	      TREE_TYPE (decl) = integer_type_node;
-	      DECL_ARG_TYPE (decl) = integer_type_node;
+	      ವೃಕ್ಷ_TYPE (decl) = integer_type_ಗಂಟು;
+	      DECL_ARG_TYPE (decl) = integer_type_ಗಂಟು;
 	      layout_decl (decl, 0);
 	    }
 	  warn_if_shadowing (decl);
 	}
       /* If no declaration found, default to int.  */
-      else
+      ಅನ್ಯಥಾ
 	{
 	  /* FIXME diagnostics: This should be the location of the argument,
 	     not the FNDECL.  E.g., for an old-style declaration
@@ -11202,43 +11202,43 @@ store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
 
 	     See gcc.dg/Wshadow-3.c for an example of this problem. */
 	  decl = build_decl (DECL_SOURCE_LOCATION (fndecl),
-			     PARM_DECL, TREE_VALUE (parm), integer_type_node);
-	  DECL_ARG_TYPE (decl) = TREE_TYPE (decl);
+			     PARM_DECL, ವೃಕ್ಷ_ಮೌಲ್ಯ (parm), integer_type_ಗಂಟು);
+	  DECL_ARG_TYPE (decl) = ವೃಕ್ಷ_TYPE (decl);
 	  pushdecl (decl);
 	  warn_if_shadowing (decl);
 
-	  if (flag_isoc99)
+	  ಯದಿ (flag_isoc99)
 	    permerror_opt (DECL_SOURCE_LOCATION (decl),
 			   OPT_Wimplicit_int, "type of %qD defaults to %<int%>",
 			   decl);
-	  else
+	  ಅನ್ಯಥಾ
 	    warning_at (DECL_SOURCE_LOCATION (decl),
 			OPT_Wmissing_parameter_type,
 			"type of %qD defaults to %<int%>", decl);
 	}
 
-      TREE_PURPOSE (parm) = decl;
+      ವೃಕ್ಷ_PURPOSE (parm) = decl;
       seen_args.add (decl);
     }
 
   /* Now examine the parms chain for incomplete declarations
      and declarations with no corresponding names.  */
 
-  for (b = current_scope->bindings; b; b = b->prev)
+  ಪ್ರತಿ (b = current_scope->bindings; b; b = b->prev)
     {
       parm = b->decl;
-      if (TREE_CODE (parm) != PARM_DECL)
-	continue;
+      ಯದಿ (ವೃಕ್ಷ_CODE (parm) != PARM_DECL)
+	ಅನುವರ್ತ;
 
-      if (TREE_TYPE (parm) != error_mark_node
-	  && !COMPLETE_TYPE_P (TREE_TYPE (parm)))
+      ಯದಿ (ವೃಕ್ಷ_TYPE (parm) != error_mark_ಗಂಟು
+	  && !COMPLETE_TYPE_P (ವೃಕ್ಷ_TYPE (parm)))
 	{
 	  error_at (DECL_SOURCE_LOCATION (parm),
 		    "parameter %qD has incomplete type", parm);
-	  TREE_TYPE (parm) = error_mark_node;
+	  ವೃಕ್ಷ_TYPE (parm) = error_mark_ಗಂಟು;
 	}
 
-      if (!seen_args.contains (parm))
+      ಯದಿ (!seen_args.contains (parm))
 	{
 	  error_at (DECL_SOURCE_LOCATION (parm),
 		    "declaration for parameter %qD but no such parameter",
@@ -11247,56 +11247,56 @@ store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
 	  /* Pretend the parameter was not missing.
 	     This gets us to a standard state and minimizes
 	     further error messages.  */
-	  parmids = chainon (parmids, tree_cons (parm, 0, 0));
+	  parmids = chainon (parmids, ವೃಕ್ಷ_cons (parm, 0, 0));
 	}
     }
 
   /* Chain the declarations together in the order of the list of
      names.  Store that chain in the function decl, replacing the
      list of names.  Update the current scope to match.  */
-  DECL_ARGUMENTS (fndecl) = NULL_TREE;
+  DECL_ARGUMENTS (fndecl) = NULL_ವೃಕ್ಷ;
 
-  for (parm = parmids; parm; parm = TREE_CHAIN (parm))
-    if (TREE_PURPOSE (parm))
-      break;
-  if (parm && TREE_PURPOSE (parm))
+  ಪ್ರತಿ (parm = parmids; parm; parm = ವೃಕ್ಷ_CHAIN (parm))
+    ಯದಿ (ವೃಕ್ಷ_PURPOSE (parm))
+      ಭಙ್ಗ;
+  ಯದಿ (parm && ವೃಕ್ಷ_PURPOSE (parm))
     {
-      last = TREE_PURPOSE (parm);
+      last = ವೃಕ್ಷ_PURPOSE (parm);
       DECL_ARGUMENTS (fndecl) = last;
 
-      for (parm = TREE_CHAIN (parm); parm; parm = TREE_CHAIN (parm))
-	if (TREE_PURPOSE (parm))
+      ಪ್ರತಿ (parm = ವೃಕ್ಷ_CHAIN (parm); parm; parm = ವೃಕ್ಷ_CHAIN (parm))
+	ಯದಿ (ವೃಕ್ಷ_PURPOSE (parm))
 	  {
-	    DECL_CHAIN (last) = TREE_PURPOSE (parm);
-	    last = TREE_PURPOSE (parm);
+	    DECL_CHAIN (last) = ವೃಕ್ಷ_PURPOSE (parm);
+	    last = ವೃಕ್ಷ_PURPOSE (parm);
 	  }
-      DECL_CHAIN (last) = NULL_TREE;
+      DECL_CHAIN (last) = NULL_ವೃಕ್ಷ;
     }
 
   /* If there was a previous prototype,
      set the DECL_ARG_TYPE of each argument according to
      the type previously specified, and report any mismatches.  */
 
-  if (current_function_prototype_arg_types)
+  ಯದಿ (current_function_prototype_arg_types)
     {
-      tree type;
-      for (parm = DECL_ARGUMENTS (fndecl),
+      ವೃಕ್ಷ type;
+      ಪ್ರತಿ (parm = DECL_ARGUMENTS (fndecl),
 	     type = current_function_prototype_arg_types;
-	   parm || (type != NULL_TREE
-		    && TREE_VALUE (type) != error_mark_node
-		    && TYPE_MAIN_VARIANT (TREE_VALUE (type)) != void_type_node);
-	   parm = DECL_CHAIN (parm), type = TREE_CHAIN (type))
+	   parm || (type != NULL_ವೃಕ್ಷ
+		    && ವೃಕ್ಷ_ಮೌಲ್ಯ (type) != error_mark_ಗಂಟು
+		    && TYPE_MAIN_VARIANT (ವೃಕ್ಷ_ಮೌಲ್ಯ (type)) != void_type_ಗಂಟು);
+	   parm = DECL_CHAIN (parm), type = ವೃಕ್ಷ_CHAIN (type))
 	{
-	  if (parm == NULL_TREE
-	      || type == NULL_TREE
-	      || (TREE_VALUE (type) != error_mark_node
-		  && TYPE_MAIN_VARIANT (TREE_VALUE (type)) == void_type_node))
+	  ಯದಿ (parm == NULL_ವೃಕ್ಷ
+	      || type == NULL_ವೃಕ್ಷ
+	      || (ವೃಕ್ಷ_ಮೌಲ್ಯ (type) != error_mark_ಗಂಟು
+		  && TYPE_MAIN_VARIANT (ವೃಕ್ಷ_ಮೌಲ್ಯ (type)) == void_type_ಗಂಟು))
 	    {
-	      if (current_function_prototype_built_in)
+	      ಯದಿ (current_function_prototype_built_in)
 		warning_at (DECL_SOURCE_LOCATION (fndecl),
 			    0, "number of arguments doesn%'t match "
 			    "built-in prototype");
-	      else
+	      ಅನ್ಯಥಾ
 		{
 		  /* FIXME diagnostics: This should be the location of
 		     FNDECL, but there is bug when a prototype is
@@ -11304,45 +11304,45 @@ store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
 		     outside of it (e.g., gcc.dg/pr15698-2.c).  In
 		     which case FNDECL gets the location of the
 		     prototype, not the definition.  */
-		  error_at (input_location,
+		  error_at (ಒಳಹರಿವು_location,
 			    "number of arguments doesn%'t match prototype");
 
 		  error_at (current_function_prototype_locus,
 			    "prototype declaration");
 		}
-	      break;
+	      ಭಙ್ಗ;
 	    }
 	  /* Type for passing arg must be consistent with that
 	     declared for the arg.  ISO C says we take the unqualified
 	     type for parameters declared with qualified type.  */
-	  if (TREE_TYPE (parm) != error_mark_node
-	      && TREE_VALUE (type) != error_mark_node
+	  ಯದಿ (ವೃಕ್ಷ_TYPE (parm) != error_mark_ಗಂಟು
+	      && ವೃಕ್ಷ_ಮೌಲ್ಯ (type) != error_mark_ಗಂಟು
 	      && ((TYPE_ATOMIC (DECL_ARG_TYPE (parm))
-		   != TYPE_ATOMIC (TREE_VALUE (type)))
+		   != TYPE_ATOMIC (ವೃಕ್ಷ_ಮೌಲ್ಯ (type)))
 		  || !comptypes (TYPE_MAIN_VARIANT (DECL_ARG_TYPE (parm)),
-				 TYPE_MAIN_VARIANT (TREE_VALUE (type)))))
+				 TYPE_MAIN_VARIANT (ವೃಕ್ಷ_ಮೌಲ್ಯ (type)))))
 	    {
-	      if ((TYPE_ATOMIC (DECL_ARG_TYPE (parm))
-		   == TYPE_ATOMIC (TREE_VALUE (type)))
-		  && (TYPE_MAIN_VARIANT (TREE_TYPE (parm))
-		      == TYPE_MAIN_VARIANT (TREE_VALUE (type))))
+	      ಯದಿ ((TYPE_ATOMIC (DECL_ARG_TYPE (parm))
+		   == TYPE_ATOMIC (ವೃಕ್ಷ_ಮೌಲ್ಯ (type)))
+		  && (TYPE_MAIN_VARIANT (ವೃಕ್ಷ_TYPE (parm))
+		      == TYPE_MAIN_VARIANT (ವೃಕ್ಷ_ಮೌಲ್ಯ (type))))
 		{
 		  /* Adjust argument to match prototype.  E.g. a previous
 		     `int foo(float);' prototype causes
 		     `int foo(x) float x; {...}' to be treated like
 		     `int foo(float x) {...}'.  This is particularly
 		     useful for argument types like uid_t.  */
-		  DECL_ARG_TYPE (parm) = TREE_TYPE (parm);
+		  DECL_ARG_TYPE (parm) = ವೃಕ್ಷ_TYPE (parm);
 
 		  /* ??? Is it possible to get here with a
 		     built-in prototype or will it always have
 		     been diagnosed as conflicting with an
 		     old-style definition and discarded?  */
-		  if (current_function_prototype_built_in)
+		  ಯದಿ (current_function_prototype_built_in)
 		    warning_at (DECL_SOURCE_LOCATION (parm),
 				OPT_Wpedantic, "promoted argument %qD "
 				"doesn%'t match built-in prototype", parm);
-		  else
+		  ಅನ್ಯಥಾ
 		    {
 		      pedwarn (DECL_SOURCE_LOCATION (parm),
 			       OPT_Wpedantic, "promoted argument %qD "
@@ -11351,13 +11351,13 @@ store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
 			       "prototype declaration");
 		    }
 		}
-	      else
+	      ಅನ್ಯಥಾ
 		{
-		  if (current_function_prototype_built_in)
+		  ಯದಿ (current_function_prototype_built_in)
 		    warning_at (DECL_SOURCE_LOCATION (parm),
 				0, "argument %qD doesn%'t match "
 				"built-in prototype", parm);
-		  else
+		  ಅನ್ಯಥಾ
 		    {
 		      error_at (DECL_SOURCE_LOCATION (parm),
 				"argument %qD doesn%'t match prototype", parm);
@@ -11367,28 +11367,28 @@ store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
 		}
 	    }
 	}
-      TYPE_ACTUAL_ARG_TYPES (TREE_TYPE (fndecl)) = NULL_TREE;
+      TYPE_ACTUAL_ARG_TYPES (ವೃಕ್ಷ_TYPE (fndecl)) = NULL_ವೃಕ್ಷ;
     }
 
   /* Otherwise, create a prototype that would match.  */
 
-  else
+  ಅನ್ಯಥಾ
     {
-      tree actual = NULL_TREE, last = NULL_TREE, type;
+      ವೃಕ್ಷ actual = NULL_ವೃಕ್ಷ, last = NULL_ವೃಕ್ಷ, type;
 
-      for (parm = DECL_ARGUMENTS (fndecl); parm; parm = DECL_CHAIN (parm))
+      ಪ್ರತಿ (parm = DECL_ARGUMENTS (fndecl); parm; parm = DECL_CHAIN (parm))
 	{
-	  type = tree_cons (NULL_TREE, DECL_ARG_TYPE (parm), NULL_TREE);
-	  if (last)
-	    TREE_CHAIN (last) = type;
-	  else
+	  type = ವೃಕ್ಷ_cons (NULL_ವೃಕ್ಷ, DECL_ARG_TYPE (parm), NULL_ವೃಕ್ಷ);
+	  ಯದಿ (last)
+	    ವೃಕ್ಷ_CHAIN (last) = type;
+	  ಅನ್ಯಥಾ
 	    actual = type;
 	  last = type;
 	}
-      type = tree_cons (NULL_TREE, void_type_node, NULL_TREE);
-      if (last)
-	TREE_CHAIN (last) = type;
-      else
+      type = ವೃಕ್ಷ_cons (NULL_ವೃಕ್ಷ, void_type_ಗಂಟು, NULL_ವೃಕ್ಷ);
+      ಯದಿ (last)
+	ವೃಕ್ಷ_CHAIN (last) = type;
+      ಅನ್ಯಥಾ
 	actual = type;
 
       /* We are going to assign a new value for the TYPE_ACTUAL_ARG_TYPES
@@ -11399,17 +11399,17 @@ store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
 	 will be a variant of the main variant of the original function
 	 type.  */
 
-      TREE_TYPE (fndecl) = build_variant_type_copy (TREE_TYPE (fndecl));
+      ವೃಕ್ಷ_TYPE (fndecl) = build_variant_type_copy (ವೃಕ್ಷ_TYPE (fndecl));
 
-      TYPE_ACTUAL_ARG_TYPES (TREE_TYPE (fndecl)) = actual;
+      TYPE_ACTUAL_ARG_TYPES (ವೃಕ್ಷ_TYPE (fndecl)) = actual;
     }
 }
 
 /* Store parameter declarations passed in ARG_INFO into the current
    function declaration.  */
 
-void
-store_parm_decls_from (struct c_arg_info *arg_info)
+ಶೂನ್ಯ
+store_parm_decls_from (ಸಂರಚನಾ c_arg_info *arg_info)
 {
   current_function_arg_info = arg_info;
   store_parm_decls ();
@@ -11418,19 +11418,19 @@ store_parm_decls_from (struct c_arg_info *arg_info)
 /* Called by walk_tree to look for and update context-less labels
    or labels with context in the parent function.  */
 
-static tree
-set_labels_context_r (tree *tp, int *walk_subtrees, void *data)
+ಸ್ಥಿರ ವೃಕ್ಷ
+set_labels_context_r (ವೃಕ್ಷ *tp, ಪೂರ್ಣಾಙ್ಕ *walk_subtrees, ಶೂನ್ಯ *data)
 {
-  tree ctx = static_cast<tree>(data);
-  if (TREE_CODE (*tp) == LABEL_EXPR
-      && (DECL_CONTEXT (LABEL_EXPR_LABEL (*tp)) == NULL_TREE
-	  || DECL_CONTEXT (LABEL_EXPR_LABEL (*tp)) == DECL_CONTEXT (ctx)))
+  ವೃಕ್ಷ ctx = static_cast<ವೃಕ್ಷ>(data);
+  ಯದಿ (ವೃಕ್ಷ_CODE (*tp) == LABEL_ಅಭಿವ್ಯಕ್ತಿ
+      && (DECL_CONTEXT (LABEL_ಅಭಿವ್ಯಕ್ತಿ_LABEL (*tp)) == NULL_ವೃಕ್ಷ
+	  || DECL_CONTEXT (LABEL_ಅಭಿವ್ಯಕ್ತಿ_LABEL (*tp)) == DECL_CONTEXT (ctx)))
     {
-      DECL_CONTEXT (LABEL_EXPR_LABEL (*tp)) = ctx;
+      DECL_CONTEXT (LABEL_ಅಭಿವ್ಯಕ್ತಿ_LABEL (*tp)) = ctx;
       *walk_subtrees = 0;
     }
 
-  return NULL_TREE;
+  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 }
 
 /* Store the parameter declarations into the current function declaration.
@@ -11440,14 +11440,14 @@ set_labels_context_r (tree *tp, int *walk_subtrees, void *data)
    For an old-style definition, construct a prototype out of the old-style
    parameter declarations and inject it into the function's type.  */
 
-void
-store_parm_decls (void)
+ಶೂನ್ಯ
+store_parm_decls (ಶೂನ್ಯ)
 {
-  tree fndecl = current_function_decl;
-  bool proto;
+  ವೃಕ್ಷ fndecl = current_function_decl;
+  ತಾರ್ಕಿಕ proto;
 
   /* The argument information block for FNDECL.  */
-  struct c_arg_info *arg_info = current_function_arg_info;
+  ಸಂರಚನಾ c_arg_info *arg_info = current_function_arg_info;
   current_function_arg_info = 0;
 
   /* True if this definition is written with a prototype.  In C23, an
@@ -11456,14 +11456,14 @@ store_parm_decls (void)
      with a prototype for future calls.  */
   proto = arg_info->types != 0 || arg_info->no_named_args_stdarg_p;
 
-  if (proto)
+  ಯದಿ (proto)
     store_parm_decls_newstyle (fndecl, arg_info);
-  else
+  ಅನ್ಯಥಾ
     store_parm_decls_oldstyle (fndecl, arg_info);
 
   /* The next call to push_scope will be a function body.  */
 
-  next_is_function_body = true;
+  next_is_function_body = ಸತ್ಯ;
 
   /* Write a record describing this function definition to the prototypes
      file (if requested).  */
@@ -11471,13 +11471,13 @@ store_parm_decls (void)
   gen_aux_info_record (fndecl, 1, 0, proto);
 
   /* Initialize the RTL code for the function.  */
-  allocate_struct_function (fndecl, false);
+  allocate_struct_function (fndecl, ಅಸತ್ಯ);
 
-  if (warn_unused_local_typedefs)
+  ಯದಿ (warn_unused_local_typedefs)
     cfun->language = ggc_cleared_alloc<language_function> ();
 
   /* Begin the statement tree for this function.  */
-  DECL_SAVED_TREE (fndecl) = push_stmt_list ();
+  DECL_SAVED_ವೃಕ್ಷ (fndecl) = ತಳ್ಳು_stmt_list ();
 
   /* ??? Insert the contents of the pending sizes list into the function
      to be evaluated.  The only reason left to have this is
@@ -11485,7 +11485,7 @@ store_parm_decls (void)
      because we throw away the array type in favor of a pointer type, and
      thus won't naturally see the SAVE_EXPR containing the increment.  All
      other pending sizes would be handled by gimplify_parameters.  */
-  if (arg_info->pending_sizes)
+  ಯದಿ (arg_info->pending_sizes)
     {
       /* In very special circumstances, e.g. for code like
 	   _Atomic int i = 5;
@@ -11501,7 +11501,7 @@ store_parm_decls (void)
 	 function's context, while when the statement is emitted at the
 	 start of the nested function, it needs the nested function's
 	 context.  */
-      walk_tree_without_duplicates (&arg_info->pending_sizes,
+      walk_ವೃಕ್ಷ_without_duplicates (&arg_info->pending_sizes,
 				    set_labels_context_r, fndecl);
       add_stmt (arg_info->pending_sizes);
     }
@@ -11511,39 +11511,39 @@ store_parm_decls (void)
    c_finish_omp_declare_simd for function prototypes.  No diagnostics
    should be done.  */
 
-void
-temp_store_parm_decls (tree fndecl, tree parms)
+ಶೂನ್ಯ
+temp_store_parm_decls (ವೃಕ್ಷ fndecl, ವೃಕ್ಷ parms)
 {
-  push_scope ();
-  for (tree p = parms; p; p = DECL_CHAIN (p))
+  ತಳ್ಳು_scope ();
+  ಪ್ರತಿ (ವೃಕ್ಷ p = parms; p; p = DECL_CHAIN (p))
     {
       DECL_CONTEXT (p) = fndecl;
-      if (DECL_NAME (p))
+      ಯದಿ (DECL_NAME (p))
 	bind (DECL_NAME (p), p, current_scope,
-	      /*invisible=*/false, /*nested=*/false,
+	      /*invisible=*/ಅಸತ್ಯ, /*nested=*/ಅಸತ್ಯ,
 	      UNKNOWN_LOCATION);
     }
 }
 
 /* Undo what temp_store_parm_decls did.  */
 
-void
-temp_pop_parm_decls (void)
+ಶೂನ್ಯ
+temp_ತೆಗೆ_parm_decls (ಶೂನ್ಯ)
 {
   /* Clear all bindings in this temporary scope, so that
      pop_scope doesn't create a BLOCK.  */
-  struct c_binding *b = current_scope->bindings;
-  current_scope->bindings = NULL;
-  for (; b; b = free_binding_and_advance (b))
+  ಸಂರಚನಾ c_binding *b = current_scope->bindings;
+  current_scope->bindings = ರಿಕ್ತ;
+  ಪ್ರತಿ (; b; b = free_binding_and_advance (b))
     {
-      gcc_assert (TREE_CODE (b->decl) == PARM_DECL
-		  || b->decl == error_mark_node);
-      gcc_assert (I_SYMBOL_BINDING (b->id) == b);
-      I_SYMBOL_BINDING (b->id) = b->shadowed;
-      if (b->shadowed && b->shadowed->u.type)
-	TREE_TYPE (b->shadowed->decl) = b->shadowed->u.type;
+      gcc_assert (ವೃಕ್ಷ_CODE (b->decl) == PARM_DECL
+		  || b->decl == error_mark_ಗಂಟು);
+      gcc_assert (I_ಚಿಹ್ನೆ_BINDING (b->id) == b);
+      I_ಚಿಹ್ನೆ_BINDING (b->id) = b->shadowed;
+      ಯದಿ (b->shadowed && b->shadowed->u.type)
+	ವೃಕ್ಷ_TYPE (b->shadowed->decl) = b->shadowed->u.type;
     }
-  pop_scope ();
+  ತೆಗೆ_scope ();
 }
 
 
@@ -11553,25 +11553,25 @@ temp_pop_parm_decls (void)
 
    This is called after parsing the body of the function definition.  */
 
-void
+ಶೂನ್ಯ
 finish_function (location_t end_loc)
 {
-  tree fndecl = current_function_decl;
+  ವೃಕ್ಷ fndecl = current_function_decl;
 
-  if (c_dialect_objc ())
+  ಯದಿ (c_dialect_objc ())
     objc_finish_function ();
 
-  if (DECL_INITIAL (fndecl) && DECL_INITIAL (fndecl) != error_mark_node)
+  ಯದಿ (DECL_INITIAL (fndecl) && DECL_INITIAL (fndecl) != error_mark_ಗಂಟು)
     BLOCK_SUPERCONTEXT (DECL_INITIAL (fndecl)) = fndecl;
 
   /* Must mark the RESULT_DECL as being in this function.  */
 
-  if (DECL_RESULT (fndecl) && DECL_RESULT (fndecl) != error_mark_node)
+  ಯದಿ (DECL_RESULT (fndecl) && DECL_RESULT (fndecl) != error_mark_ಗಂಟು)
     DECL_CONTEXT (DECL_RESULT (fndecl)) = fndecl;
 
-  if (MAIN_NAME_P (DECL_NAME (fndecl)) && !TREE_THIS_VOLATILE (fndecl)
-      && TYPE_MAIN_VARIANT (TREE_TYPE (TREE_TYPE (fndecl)))
-      == integer_type_node && flag_isoc99)
+  ಯದಿ (MAIN_NAME_P (DECL_NAME (fndecl)) && !ವೃಕ್ಷ_THIS_VOLATILE (fndecl)
+      && TYPE_MAIN_VARIANT (ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (fndecl)))
+      == integer_type_ಗಂಟು && flag_isoc99)
     {
       /* Hack.  We don't want the middle-end to warn that this return
 	 is unreachable, so we mark its location as special.  Using
@@ -11579,45 +11579,45 @@ finish_function (location_t end_loc)
 	 annotate_one_with_locus.  A cleaner solution might be to
 	 ensure ! should_carry_locus_p (stmt), but that needs a flag.
       */
-      c_finish_return (BUILTINS_LOCATION, integer_zero_node, NULL_TREE);
+      c_finish_return (BUILTINS_LOCATION, integer_zero_ಗಂಟು, NULL_ವೃಕ್ಷ);
     }
 
   /* Tie off the statement tree for this function.  */
-  DECL_SAVED_TREE (fndecl) = pop_stmt_list (DECL_SAVED_TREE (fndecl));
+  DECL_SAVED_ವೃಕ್ಷ (fndecl) = ತೆಗೆ_stmt_list (DECL_SAVED_ವೃಕ್ಷ (fndecl));
 
   finish_fname_decls ();
 
   /* Complain if there's no return statement only if option specified on
      command line.  */
-  if (warn_return_type > 0
-      && TREE_CODE (TREE_TYPE (TREE_TYPE (fndecl))) != VOID_TYPE
-      && !current_function_returns_value && !current_function_returns_null
+  ಯದಿ (warn_return_type > 0
+      && ವೃಕ್ಷ_CODE (ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_TYPE (fndecl))) != VOID_TYPE
+      && !current_function_returns_ಮೌಲ್ಯ && !current_function_returns_null
       /* Don't complain if we are no-return.  */
       && !current_function_returns_abnormally
       /* Don't complain if we are declared noreturn.  */
-      && !TREE_THIS_VOLATILE (fndecl)
+      && !ವೃಕ್ಷ_THIS_VOLATILE (fndecl)
       /* Don't warn for main().  */
       && !MAIN_NAME_P (DECL_NAME (fndecl))
       /* Or if they didn't actually specify a return type.  */
       && !C_FUNCTION_IMPLICIT_INT (fndecl)
       /* Normally, with -Wreturn-type, flow will complain, but we might
          optimize out static functions.  */
-      && !TREE_PUBLIC (fndecl)
+      && !ವೃಕ್ಷ_PUBLIC (fndecl)
       && targetm.warn_func_return (fndecl)
       && warning (OPT_Wreturn_type,
 		  "no return statement in function returning non-void"))
     suppress_warning (fndecl, OPT_Wreturn_type);
 
   /* Complain about parameters that are only set, but never otherwise used.  */
-  if (warn_unused_but_set_parameter)
+  ಯದಿ (warn_unused_but_set_parameter)
     {
-      tree decl;
+      ವೃಕ್ಷ decl;
 
-      for (decl = DECL_ARGUMENTS (fndecl);
+      ಪ್ರತಿ (decl = DECL_ARGUMENTS (fndecl);
 	   decl;
 	   decl = DECL_CHAIN (decl))
-	if (TREE_USED (decl)
-	    && TREE_CODE (decl) == PARM_DECL
+	ಯದಿ (ವೃಕ್ಷ_USED (decl)
+	    && ವೃಕ್ಷ_CODE (decl) == PARM_DECL
 	    && !DECL_READ_P (decl)
 	    && DECL_NAME (decl)
 	    && !DECL_ARTIFICIAL (decl)
@@ -11632,7 +11632,7 @@ finish_function (location_t end_loc)
   maybe_warn_unused_local_typedefs ();
 
   /* Possibly warn about unused parameters.  */
-  if (warn_unused_parameter)
+  ಯದಿ (warn_unused_parameter)
     do_warn_unused_parameter (fndecl);
 
   /* Store the end of the function, so that we get good line number
@@ -11643,7 +11643,7 @@ finish_function (location_t end_loc)
   c_determine_visibility (fndecl);
 
   /* For GNU C extern inline functions disregard inline limits.  */
-  if (DECL_EXTERNAL (fndecl)
+  ಯದಿ (DECL_EXTERNAL (fndecl)
       && DECL_DECLARED_INLINE_P (fndecl)
       && (flag_gnu89_inline
 	  || lookup_attribute ("gnu_inline", DECL_ATTRIBUTES (fndecl))))
@@ -11653,47 +11653,47 @@ finish_function (location_t end_loc)
      until their parent function is genericized.  Since finalizing
      requires GENERIC, delay that as well.  */
 
-  if (DECL_INITIAL (fndecl) && DECL_INITIAL (fndecl) != error_mark_node
+  ಯದಿ (DECL_INITIAL (fndecl) && DECL_INITIAL (fndecl) != error_mark_ಗಂಟು
       && !undef_nested_function)
     {
-      if (!decl_function_context (fndecl))
+      ಯದಿ (!decl_function_context (fndecl))
 	{
 	  invoke_plugin_callbacks (PLUGIN_PRE_GENERICIZE, fndecl);
 	  c_genericize (fndecl);
 
 	  /* ??? Objc emits functions after finalizing the compilation unit.
 	     This should be cleaned up later and this conditional removed.  */
-	  if (symtab->global_info_ready)
+	  ಯದಿ (symtab->global_info_ready)
 	    {
-	      cgraph_node::add_new_function (fndecl, false);
-	      return;
+	      cgraph_ಗಂಟು::add_new_function (fndecl, ಅಸತ್ಯ);
+	      ಪ್ರತ್ಯಾಗಮ;
 	    }
-	  cgraph_node::finalize_function (fndecl, false);
+	  cgraph_ಗಂಟು::finalize_function (fndecl, ಅಸತ್ಯ);
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
 	  /* Register this function with cgraph just far enough to get it
 	    added to our parent's nested function list.  Handy, since the
 	    C front end doesn't have such a list.  */
-	  (void) cgraph_node::get_create (fndecl);
+	  (ಶೂನ್ಯ) cgraph_ಗಂಟು::get_create (fndecl);
 	}
     }
 
-  if (!decl_function_context (fndecl))
-    undef_nested_function = false;
+  ಯದಿ (!decl_function_context (fndecl))
+    undef_nested_function = ಅಸತ್ಯ;
 
-  if (cfun->language != NULL)
+  ಯದಿ (cfun->language != ರಿಕ್ತ)
     {
       ggc_free (cfun->language);
-      cfun->language = NULL;
+      cfun->language = ರಿಕ್ತ;
     }
 
   /* We're leaving the context of this function, so zap cfun.
      It's still in DECL_STRUCT_FUNCTION, and we'll restore it in
      tree_rest_of_compilation.  */
-  set_cfun (NULL);
+  set_cfun (ರಿಕ್ತ);
   invoke_plugin_callbacks (PLUGIN_FINISH_PARSE_FUNCTION, current_function_decl);
-  current_function_decl = NULL;
+  current_function_decl = ರಿಕ್ತ;
 }
 
 /* Check the declarations given in a for-loop for satisfying the C99
@@ -11707,32 +11707,32 @@ finish_function (location_t end_loc)
    off the error about not being in C99 mode.
 */
 
-tree
-check_for_loop_decls (location_t loc, bool turn_off_iso_c99_error)
+ವೃಕ್ಷ
+check_for_loop_decls (location_t loc, ತಾರ್ಕಿಕ turn_off_iso_c99_error)
 {
-  struct c_binding *b;
-  tree one_decl = NULL_TREE;
-  int n_decls = 0;
+  ಸಂರಚನಾ c_binding *b;
+  ವೃಕ್ಷ one_decl = NULL_ವೃಕ್ಷ;
+  ಪೂರ್ಣಾಙ್ಕ n_decls = 0;
 
-  if (!turn_off_iso_c99_error)
+  ಯದಿ (!turn_off_iso_c99_error)
     {
-      static bool hint = true;
+      ಸ್ಥಿರ ತಾರ್ಕಿಕ hint = ಸತ್ಯ;
       /* If we get here, declarations have been used in a for loop without
 	 the C99 for loop scope.  This doesn't make much sense, so don't
 	 allow it.  */
       auto_diagnostic_group d;
       error_at (loc, "%<for%> loop initial declarations "
 		"are only allowed in C99 or C11 mode");
-      if (hint)
+      ಯದಿ (hint)
 	{
 	  inform (loc,
 		  "use option %<-std=c99%>, %<-std=gnu99%>, %<-std=c11%> or "
 		  "%<-std=gnu11%> to compile your code");
-	  hint = false;
+	  hint = ಅಸತ್ಯ;
 	}
-      return NULL_TREE;
+      ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
     }
-  else
+  ಅನ್ಯಥಾ
     pedwarn_c90 (loc, OPT_Wpedantic, "ISO C90 does not support %<for%> loop "
 		 "initial declarations");
 
@@ -11752,47 +11752,47 @@ check_for_loop_decls (location_t loc, bool turn_off_iso_c99_error)
 
      This constraint was removed in C23.  */
 
-  for (b = current_scope->bindings; b; b = b->prev)
+  ಪ್ರತಿ (b = current_scope->bindings; b; b = b->prev)
     {
-      tree id = b->id;
-      tree decl = b->decl;
+      ವೃಕ್ಷ id = b->id;
+      ವೃಕ್ಷ decl = b->decl;
 
-      if (!id)
-	continue;
+      ಯದಿ (!id)
+	ಅನುವರ್ತ;
 
-      switch (TREE_CODE (decl))
+      ವಿಕಲ್ಪ (ವೃಕ್ಷ_CODE (decl))
 	{
-	case VAR_DECL:
+	ಪಕ್ಷ VAR_DECL:
 	  {
 	    location_t decl_loc = DECL_SOURCE_LOCATION (decl);
-	    if (TREE_STATIC (decl))
+	    ಯದಿ (ವೃಕ್ಷ_STATIC (decl))
 	      pedwarn_c11 (decl_loc, OPT_Wpedantic,
 			   "declaration of static variable %qD in %<for%> "
 			   "loop initial declaration", decl);
-	    else if (DECL_EXTERNAL (decl))
+	    ಅನ್ಯಥಾ ಯದಿ (DECL_EXTERNAL (decl))
 	      pedwarn_c11 (decl_loc, OPT_Wpedantic,
 			   "declaration of %<extern%> variable %qD in %<for%> "
 			   "loop initial declaration", decl);
 	  }
-	  break;
+	  ಭಙ್ಗ;
 
-	case RECORD_TYPE:
+	ಪಕ್ಷ RECORD_TYPE:
 	  pedwarn_c11 (loc, OPT_Wpedantic,
 		       "%<struct %E%> declared in %<for%> loop initial "
 		       "declaration", id);
-	  break;
-	case UNION_TYPE:
+	  ಭಙ್ಗ;
+	ಪಕ್ಷ UNION_TYPE:
 	  pedwarn_c11 (loc, OPT_Wpedantic,
 		       "%<union %E%> declared in %<for%> loop initial "
 		       "declaration",
 		       id);
-	  break;
-	case ENUMERAL_TYPE:
+	  ಭಙ್ಗ;
+	ಪಕ್ಷ ENUMERAL_TYPE:
 	  pedwarn_c11 (loc, OPT_Wpedantic,
 		       "%<enum %E%> declared in %<for%> loop "
 		       "initial declaration", id);
-	  break;
-	default:
+	  ಭಙ್ಗ;
+	ಸ್ವಭಾವ:
 	  pedwarn_c11 (loc, OPT_Wpedantic, "declaration of non-variable "
 		       "%qD in %<for%> loop initial declaration", decl);
 	}
@@ -11801,76 +11801,76 @@ check_for_loop_decls (location_t loc, bool turn_off_iso_c99_error)
       one_decl = decl;
     }
 
-  return n_decls == 1 ? one_decl : NULL_TREE;
+  ಪ್ರತ್ಯಾಗಮ n_decls == 1 ? one_decl : NULL_ವೃಕ್ಷ;
 }
 
 /* Save and reinitialize the variables
    used during compilation of a C function.  */
 
-void
-c_push_function_context (void)
+ಶೂನ್ಯ
+c_ತಳ್ಳು_function_context (ಶೂನ್ಯ)
 {
-  struct language_function *p = cfun->language;
+  ಸಂರಚನಾ language_function *p = cfun->language;
   /* cfun->language might have been already allocated by the use of
      -Wunused-local-typedefs.  In that case, just re-use it.  */
-  if (p == NULL)
+  ಯದಿ (p == ರಿಕ್ತ)
     cfun->language = p = ggc_cleared_alloc<language_function> ();
 
-  p->base.x_stmt_tree = c_stmt_tree;
-  c_stmt_tree.x_cur_stmt_list = vec_safe_copy (c_stmt_tree.x_cur_stmt_list);
+  p->base.x_stmt_ವೃಕ್ಷ = c_stmt_ವೃಕ್ಷ;
+  c_stmt_ವೃಕ್ಷ.x_cur_stmt_list = vec_safe_copy (c_stmt_ವೃಕ್ಷ.x_cur_stmt_list);
   p->x_in_statement = in_statement;
-  p->x_switch_stack = c_switch_stack;
+  p->x_switch_ರಾಶಿ = c_switch_ರಾಶಿ;
   p->loop_names = loop_names;
   loop_names = vNULL;
   p->loop_names_hash = loop_names_hash;
-  loop_names_hash = NULL;
+  loop_names_hash = ರಿಕ್ತ;
   p->arg_info = current_function_arg_info;
-  p->returns_value = current_function_returns_value;
+  p->returns_ಮೌಲ್ಯ = current_function_returns_ಮೌಲ್ಯ;
   p->returns_null = current_function_returns_null;
   p->returns_abnormally = current_function_returns_abnormally;
   p->warn_about_return_type = warn_about_return_type;
 
-  push_function_context ();
+  ತಳ್ಳು_function_context ();
 }
 
 /* Restore the variables used during compilation of a C function.  */
 
-void
-c_pop_function_context (void)
+ಶೂನ್ಯ
+c_ತೆಗೆ_function_context (ಶೂನ್ಯ)
 {
-  struct language_function *p;
+  ಸಂರಚನಾ language_function *p;
 
-  pop_function_context ();
+  ತೆಗೆ_function_context ();
   p = cfun->language;
 
   /* When -Wunused-local-typedefs is in effect, cfun->languages is
      used to store data throughout the life time of the current cfun,
      So don't deallocate it.  */
-  if (!warn_unused_local_typedefs)
-    cfun->language = NULL;
+  ಯದಿ (!warn_unused_local_typedefs)
+    cfun->language = ರಿಕ್ತ;
 
-  if (DECL_STRUCT_FUNCTION (current_function_decl) == 0
-      && DECL_SAVED_TREE (current_function_decl) == NULL_TREE)
+  ಯದಿ (DECL_STRUCT_FUNCTION (current_function_decl) == 0
+      && DECL_SAVED_ವೃಕ್ಷ (current_function_decl) == NULL_ವೃಕ್ಷ)
     {
       /* Stop pointing to the local nodes about to be freed.  */
       /* But DECL_INITIAL must remain nonzero so we know this
 	 was an actual function definition.  */
-      DECL_INITIAL (current_function_decl) = error_mark_node;
-      DECL_ARGUMENTS (current_function_decl) = NULL_TREE;
+      DECL_INITIAL (current_function_decl) = error_mark_ಗಂಟು;
+      DECL_ARGUMENTS (current_function_decl) = NULL_ವೃಕ್ಷ;
     }
 
-  c_stmt_tree = p->base.x_stmt_tree;
-  p->base.x_stmt_tree.x_cur_stmt_list = NULL;
+  c_stmt_ವೃಕ್ಷ = p->base.x_stmt_ವೃಕ್ಷ;
+  p->base.x_stmt_ವೃಕ್ಷ.x_cur_stmt_list = ರಿಕ್ತ;
   in_statement = p->x_in_statement;
-  c_switch_stack = p->x_switch_stack;
+  c_switch_ರಾಶಿ = p->x_switch_ರಾಶಿ;
   loop_names.release ();
   loop_names = p->loop_names;
   p->loop_names = vNULL;
   delete loop_names_hash;
   loop_names_hash = p->loop_names_hash;
-  p->loop_names_hash = NULL;
+  p->loop_names_hash = ರಿಕ್ತ;
   current_function_arg_info = p->arg_info;
-  current_function_returns_value = p->returns_value;
+  current_function_returns_ಮೌಲ್ಯ = p->returns_ಮೌಲ್ಯ;
   current_function_returns_null = p->returns_null;
   current_function_returns_abnormally = p->returns_abnormally;
   warn_about_return_type = p->warn_about_return_type;
@@ -11885,158 +11885,158 @@ c_pop_function_context (void)
    being added.  If there is no active statement-tree, NULL is
    returned.  */
 
-stmt_tree
-current_stmt_tree (void)
+stmt_ವೃಕ್ಷ
+current_stmt_ವೃಕ್ಷ (ಶೂನ್ಯ)
 {
-  return &c_stmt_tree;
+  ಪ್ರತ್ಯಾಗಮ &c_stmt_ವೃಕ್ಷ;
 }
 
 /* Return the global value of T as a symbol.  */
 
-tree
-identifier_global_value	(tree t)
+ವೃಕ್ಷ
+identifier_global_ಮೌಲ್ಯ	(ವೃಕ್ಷ t)
 {
-  struct c_binding *b;
+  ಸಂರಚನಾ c_binding *b;
 
-  for (b = I_SYMBOL_BINDING (t); b; b = b->shadowed)
-    if (B_IN_FILE_SCOPE (b) || B_IN_EXTERNAL_SCOPE (b))
-      return b->decl;
+  ಪ್ರತಿ (b = I_ಚಿಹ್ನೆ_BINDING (t); b; b = b->shadowed)
+    ಯದಿ (B_IN_FILE_SCOPE (b) || B_IN_EXTERNAL_SCOPE (b))
+      ಪ್ರತ್ಯಾಗಮ b->decl;
 
-  return NULL_TREE;
+  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 }
 
 /* Return the global value of tag T as a symbol.  */
 
-tree
-identifier_global_tag (tree t)
+ವೃಕ್ಷ
+identifier_global_tag (ವೃಕ್ಷ t)
 {
-  struct c_binding *b;
+  ಸಂರಚನಾ c_binding *b;
 
-  for (b = I_TAG_BINDING (t); b; b = b->shadowed)
-    if (B_IN_FILE_SCOPE (b) || B_IN_EXTERNAL_SCOPE (b))
-      return b->decl;
+  ಪ್ರತಿ (b = I_TAG_BINDING (t); b; b = b->shadowed)
+    ಯದಿ (B_IN_FILE_SCOPE (b) || B_IN_EXTERNAL_SCOPE (b))
+      ಪ್ರತ್ಯಾಗಮ b->decl;
 
-  return NULL_TREE;
+  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 }
 
 /* Returns non-zero (result of __has_builtin) if NAME refers to a built-in
    function or function-like operator.  */
 
-int
-names_builtin_p (const char *name)
+ಪೂರ್ಣಾಙ್ಕ
+names_builtin_p (ಧ್ರುವ ವರ್ಣ *name)
 {
-  tree id = get_identifier (name);
-  if (tree decl = identifier_global_value (id))
-    return TREE_CODE (decl) == FUNCTION_DECL && DECL_IS_UNDECLARED_BUILTIN (decl);
+  ವೃಕ್ಷ id = get_identifier (name);
+  ಯದಿ (ವೃಕ್ಷ decl = identifier_global_ಮೌಲ್ಯ (id))
+    ಪ್ರತ್ಯಾಗಮ ವೃಕ್ಷ_CODE (decl) == FUNCTION_DECL && DECL_IS_UNDECLARED_BUILTIN (decl);
 
   /* Also detect common reserved C words that aren't strictly built-in
      functions.  */
-  switch (C_RID_CODE (id))
+  ವಿಕಲ್ಪ (C_RID_CODE (id))
     {
-    case RID_BUILTIN_ASSOC_BARRIER:
-    case RID_BUILTIN_BITREVERSEG:
-    case RID_BUILTIN_BSWAPG:
-    case RID_BUILTIN_CONVERTVECTOR:
-    case RID_BUILTIN_HAS_ATTRIBUTE:
-    case RID_BUILTIN_SHUFFLE:
-    case RID_BUILTIN_SHUFFLEVECTOR:
-    case RID_BUILTIN_STDC:
-    case RID_BUILTIN_COUNTED_BY_REF:
-    case RID_CHOOSE_EXPR:
-    case RID_OFFSETOF:
-    case RID_TYPES_COMPATIBLE_P:
-    case RID_C23_VA_START:
-    case RID_VA_ARG:
-      return 1;
-    default:
-      break;
+    ಪಕ್ಷ RID_BUILTIN_ASSOC_BARRIER:
+    ಪಕ್ಷ RID_BUILTIN_BITREVERSEG:
+    ಪಕ್ಷ RID_BUILTIN_BSWAPG:
+    ಪಕ್ಷ RID_BUILTIN_CONVERTVECTOR:
+    ಪಕ್ಷ RID_BUILTIN_HAS_ATTRIBUTE:
+    ಪಕ್ಷ RID_BUILTIN_SHUFFLE:
+    ಪಕ್ಷ RID_BUILTIN_SHUFFLEVECTOR:
+    ಪಕ್ಷ RID_BUILTIN_STDC:
+    ಪಕ್ಷ RID_BUILTIN_COUNTED_BY_REF:
+    ಪಕ್ಷ RID_CHOOSE_ಅಭಿವ್ಯಕ್ತಿ:
+    ಪಕ್ಷ RID_OFFSETOF:
+    ಪಕ್ಷ RID_TYPES_COMPATIBLE_P:
+    ಪಕ್ಷ RID_C23_VA_START:
+    ಪಕ್ಷ RID_VA_ARG:
+      ಪ್ರತ್ಯಾಗಮ 1;
+    ಸ್ವಭಾವ:
+      ಭಙ್ಗ;
     }
 
-  return 0;
+  ಪ್ರತ್ಯಾಗಮ 0;
 }
 
 /* In C, the only C-linkage public declaration is at file scope.  */
 
-tree
-c_linkage_bindings (tree name)
+ವೃಕ್ಷ
+c_linkage_bindings (ವೃಕ್ಷ name)
 {
-  return identifier_global_value (name);
+  ಪ್ರತ್ಯಾಗಮ identifier_global_ಮೌಲ್ಯ (name);
 }
 
 /* Record a builtin type for C.  If NAME is non-NULL, it is the name used;
    otherwise the name is found in ridpointers from RID_INDEX.  */
 
-void
-record_builtin_type (enum rid rid_index, const char *name, tree type)
+ಶೂನ್ಯ
+record_builtin_type (ಗಣನಾ rid rid_index, ಧ್ರುವ ವರ್ಣ *name, ವೃಕ್ಷ type)
 {
-  tree id, decl;
-  if (name == 0)
-    id = ridpointers[(int) rid_index];
-  else
+  ವೃಕ್ಷ id, decl;
+  ಯದಿ (name == 0)
+    id = ridpointers[(ಪೂರ್ಣಾಙ್ಕ) rid_index];
+  ಅನ್ಯಥಾ
     id = get_identifier (name);
   decl = build_decl (UNKNOWN_LOCATION, TYPE_DECL, id, type);
   pushdecl (decl);
-  if (debug_hooks->type_decl)
-    debug_hooks->type_decl (decl, false);
+  ಯದಿ (debug_hooks->type_decl)
+    debug_hooks->type_decl (decl, ಅಸತ್ಯ);
 }
 
 /* Return a c_parm structure with the given SPECS, ATTRS and DECLARATOR.  */
 
-struct c_parm *
-build_c_parm (struct c_declspecs *specs, tree attrs,
-	      struct c_declarator *declarator,
+ಸಂರಚನಾ c_parm *
+build_c_parm (ಸಂರಚನಾ c_declspecs *specs, ವೃಕ್ಷ attrs,
+	      ಸಂರಚನಾ c_declarator *declarator,
 	      location_t loc)
 {
-  struct c_parm *ret = XOBNEW (&parser_obstack, struct c_parm);
+  ಸಂರಚನಾ c_parm *ret = XOBNEW (&parser_obstack, ಸಂರಚನಾ c_parm);
   ret->specs = specs;
   ret->attrs = attrs;
   ret->declarator = declarator;
   ret->loc = loc;
-  return ret;
+  ಪ್ರತ್ಯಾಗಮ ret;
 }
 
 /* Return a declarator with nested attributes.  TARGET is the inner
    declarator to which these attributes apply.  ATTRS are the
    attributes.  */
 
-struct c_declarator *
-build_attrs_declarator (tree attrs, struct c_declarator *target)
+ಸಂರಚನಾ c_declarator *
+build_attrs_declarator (ವೃಕ್ಷ attrs, ಸಂರಚನಾ c_declarator *target)
 {
-  struct c_declarator *ret = XOBNEW (&parser_obstack, struct c_declarator);
+  ಸಂರಚನಾ c_declarator *ret = XOBNEW (&parser_obstack, ಸಂರಚನಾ c_declarator);
   ret->kind = cdk_attrs;
   ret->declarator = target;
   ret->u.attrs = attrs;
-  return ret;
+  ಪ್ರತ್ಯಾಗಮ ret;
 }
 
 /* Return a declarator for a function with arguments specified by ARGS
    and return type specified by TARGET.  */
 
-struct c_declarator *
-build_function_declarator (struct c_arg_info *args,
-			   struct c_declarator *target)
+ಸಂರಚನಾ c_declarator *
+build_function_declarator (ಸಂರಚನಾ c_arg_info *args,
+			   ಸಂರಚನಾ c_declarator *target)
 {
-  struct c_declarator *ret = XOBNEW (&parser_obstack, struct c_declarator);
+  ಸಂರಚನಾ c_declarator *ret = XOBNEW (&parser_obstack, ಸಂರಚನಾ c_declarator);
   ret->kind = cdk_function;
   ret->declarator = target;
   ret->u.arg_info = args;
-  return ret;
+  ಪ್ರತ್ಯಾಗಮ ret;
 }
 
 /* Return a declarator for the identifier IDENT (which may be
    NULL_TREE for an abstract declarator).  */
 
-struct c_declarator *
-build_id_declarator (tree ident)
+ಸಂರಚನಾ c_declarator *
+build_id_declarator (ವೃಕ್ಷ ident)
 {
-  struct c_declarator *ret = XOBNEW (&parser_obstack, struct c_declarator);
+  ಸಂರಚನಾ c_declarator *ret = XOBNEW (&parser_obstack, ಸಂರಚನಾ c_declarator);
   ret->kind = cdk_id;
   ret->declarator = 0;
   ret->u.id.id = ident;
-  ret->u.id.attrs = NULL_TREE;
+  ret->u.id.attrs = NULL_ವೃಕ್ಷ;
   /* Default value - may get reset to a more precise location. */
-  ret->id_loc = input_location;
-  return ret;
+  ret->id_loc = ಒಳಹರಿವು_location;
+  ಪ್ರತ್ಯಾಗಮ ret;
 }
 
 /* Return something to represent absolute declarators containing a *.
@@ -12044,234 +12044,234 @@ build_id_declarator (tree ident)
    TYPE_QUALS_ATTRS is a structure for type qualifiers and attributes
    to apply to the pointer type.  */
 
-struct c_declarator *
-make_pointer_declarator (struct c_declspecs *type_quals_attrs,
-			 struct c_declarator *target)
+ಸಂರಚನಾ c_declarator *
+make_pointer_declarator (ಸಂರಚನಾ c_declspecs *type_quals_attrs,
+			 ಸಂರಚನಾ c_declarator *target)
 {
-  tree attrs;
-  int quals = 0;
-  struct c_declarator *itarget = target;
-  struct c_declarator *ret = XOBNEW (&parser_obstack, struct c_declarator);
-  if (type_quals_attrs)
+  ವೃಕ್ಷ attrs;
+  ಪೂರ್ಣಾಙ್ಕ quals = 0;
+  ಸಂರಚನಾ c_declarator *itarget = target;
+  ಸಂರಚನಾ c_declarator *ret = XOBNEW (&parser_obstack, ಸಂರಚನಾ c_declarator);
+  ಯದಿ (type_quals_attrs)
     {
       attrs = type_quals_attrs->attrs;
       quals = quals_from_declspecs (type_quals_attrs);
-      if (attrs != NULL_TREE)
+      ಯದಿ (attrs != NULL_ವೃಕ್ಷ)
 	itarget = build_attrs_declarator (attrs, target);
     }
   ret->kind = cdk_pointer;
   ret->declarator = itarget;
   ret->u.pointer_quals = quals;
-  return ret;
+  ಪ್ರತ್ಯಾಗಮ ret;
 }
 
 /* Return a pointer to a structure for an empty list of declaration
    specifiers.  */
 
-struct c_declspecs *
-build_null_declspecs (void)
+ಸಂರಚನಾ c_declspecs *
+build_null_declspecs (ಶೂನ್ಯ)
 {
-  struct c_declspecs *ret = XOBNEW (&parser_obstack, struct c_declspecs);
-  memset (ret, 0, sizeof *ret);
+  ಸಂರಚನಾ c_declspecs *ret = XOBNEW (&parser_obstack, ಸಂರಚನಾ c_declspecs);
+  memset (ret, 0, ಪರಿಮಾಣ *ret);
   ret->align_log = -1;
   ret->typespec_word = cts_none;
   ret->storage_class = csc_none;
-  ret->expr_const_operands = true;
+  ret->ಅಭಿವ್ಯಕ್ತಿ_const_operands = ಸತ್ಯ;
   ret->typespec_kind = ctsk_none;
   ret->address_space = ADDR_SPACE_GENERIC;
-  return ret;
+  ಪ್ರತ್ಯಾಗಮ ret;
 }
 
 /* Add the address space ADDRSPACE to the declaration specifiers
    SPECS, returning SPECS.  */
 
-struct c_declspecs *
+ಸಂರಚನಾ c_declspecs *
 declspecs_add_addrspace (location_t location,
-			 struct c_declspecs *specs, addr_space_t as)
+			 ಸಂರಚನಾ c_declspecs *specs, addr_space_t as)
 {
-  specs->non_sc_seen_p = true;
-  specs->declspecs_seen_p = true;
-  specs->non_std_attrs_seen_p = true;
+  specs->non_sc_seen_p = ಸತ್ಯ;
+  specs->declspecs_seen_p = ಸತ್ಯ;
+  specs->non_std_attrs_seen_p = ಸತ್ಯ;
 
-  if (!ADDR_SPACE_GENERIC_P (specs->address_space)
+  ಯದಿ (!ADDR_SPACE_GENERIC_P (specs->address_space)
       && specs->address_space != as)
     error ("incompatible address space qualifiers %qs and %qs",
 	   c_addr_space_name (as),
 	   c_addr_space_name (specs->address_space));
-  else
+  ಅನ್ಯಥಾ
     {
       specs->address_space = as;
       specs->locations[cdw_address_space] = location;
     }
-  return specs;
+  ಪ್ರತ್ಯಾಗಮ specs;
 }
 
 /* Add the type qualifier QUAL to the declaration specifiers SPECS,
    returning SPECS.  */
 
-struct c_declspecs *
+ಸಂರಚನಾ c_declspecs *
 declspecs_add_qual (location_t loc,
-		    struct c_declspecs *specs, tree qual)
+		    ಸಂರಚನಾ c_declspecs *specs, ವೃಕ್ಷ qual)
 {
-  enum rid i;
-  bool dupe = false;
-  specs->non_sc_seen_p = true;
-  specs->declspecs_seen_p = true;
-  specs->non_std_attrs_seen_p = true;
-  gcc_assert (TREE_CODE (qual) == IDENTIFIER_NODE
+  ಗಣನಾ rid i;
+  ತಾರ್ಕಿಕ dupe = ಅಸತ್ಯ;
+  specs->non_sc_seen_p = ಸತ್ಯ;
+  specs->declspecs_seen_p = ಸತ್ಯ;
+  specs->non_std_attrs_seen_p = ಸತ್ಯ;
+  gcc_assert (ವೃಕ್ಷ_CODE (qual) == IDENTIFIER_ಗಂಟು
 	      && C_IS_RESERVED_WORD (qual));
   i = C_RID_CODE (qual);
   location_t prev_loc = UNKNOWN_LOCATION;
-  switch (i)
+  ವಿಕಲ್ಪ (i)
     {
-    case RID_CONST:
+    ಪಕ್ಷ RID_CONST:
       dupe = specs->const_p;
-      specs->const_p = true;
+      specs->const_p = ಸತ್ಯ;
       prev_loc = specs->locations[cdw_const];
       specs->locations[cdw_const] = loc;
-      break;
-    case RID_VOLATILE:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ RID_VOLATILE:
       dupe = specs->volatile_p;
-      specs->volatile_p = true;
+      specs->volatile_p = ಸತ್ಯ;
       prev_loc = specs->locations[cdw_volatile];
       specs->locations[cdw_volatile] = loc;
-      break;
-    case RID_RESTRICT:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ RID_RESTRICT:
       dupe = specs->restrict_p;
-      specs->restrict_p = true;
+      specs->restrict_p = ಸತ್ಯ;
       prev_loc = specs->locations[cdw_restrict];
       specs->locations[cdw_restrict] = loc;
-      break;
-    case RID_ATOMIC:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ RID_ATOMIC:
       dupe = specs->atomic_p;
-      specs->atomic_p = true;
+      specs->atomic_p = ಸತ್ಯ;
       prev_loc = specs->locations[cdw_atomic];
       specs->locations[cdw_atomic] = loc;
-      break;
-    default:
+      ಭಙ್ಗ;
+    ಸ್ವಭಾವ:
       gcc_unreachable ();
     }
-  if (dupe)
+  ಯದಿ (dupe)
     {
-      bool warned = pedwarn_c90 (loc, OPT_Wpedantic,
+      ತಾರ್ಕಿಕ warned = pedwarn_c90 (loc, OPT_Wpedantic,
 				 "duplicate %qE declaration specifier", qual);
-      if (!warned
+      ಯದಿ (!warned
 	  && warn_duplicate_decl_specifier
-	  && prev_loc >= RESERVED_LOCATION_COUNT
+	  && prev_loc >= RESERVED_LOCATION_ಎಣಿಕೆ
 	  && !from_macro_expansion_at (prev_loc)
 	  && !from_macro_expansion_at (loc))
 	warning_at (loc, OPT_Wduplicate_decl_specifier,
 		    "duplicate %qE declaration specifier", qual);
     }
-  return specs;
+  ಪ್ರತ್ಯಾಗಮ specs;
 }
 
 /* Add the type specifier TYPE to the declaration specifiers SPECS,
    returning SPECS.  */
 
-struct c_declspecs *
-declspecs_add_type (location_t loc, struct c_declspecs *specs,
-		    struct c_typespec spec)
+ಸಂರಚನಾ c_declspecs *
+declspecs_add_type (location_t loc, ಸಂರಚನಾ c_declspecs *specs,
+		    ಸಂರಚನಾ c_typespec spec)
 {
-  tree type = spec.spec;
-  specs->non_sc_seen_p = true;
-  specs->declspecs_seen_p = true;
-  specs->non_std_attrs_seen_p = true;
+  ವೃಕ್ಷ type = spec.spec;
+  specs->non_sc_seen_p = ಸತ್ಯ;
+  specs->declspecs_seen_p = ಸತ್ಯ;
+  specs->non_std_attrs_seen_p = ಸತ್ಯ;
   specs->typespec_kind = spec.kind;
-  if (TREE_DEPRECATED (type))
-    specs->deprecated_p = true;
-  if (TREE_UNAVAILABLE (type))
-    specs->unavailable_p = true;
+  ಯದಿ (ವೃಕ್ಷ_DEPRECATED (type))
+    specs->deprecated_p = ಸತ್ಯ;
+  ಯದಿ (ವೃಕ್ಷ_UNAVAILABLE (type))
+    specs->unavailable_p = ಸತ್ಯ;
 
   /* As a type specifier is present, "auto" must be used as a storage
      class specifier, not for type deduction.  */
-  if (specs->c23_auto_p)
+  ಯದಿ (specs->c23_auto_p)
     {
-      specs->c23_auto_p = false;
-      if (specs->storage_class != csc_none)
+      specs->c23_auto_p = ಅಸತ್ಯ;
+      ಯದಿ (specs->storage_class != csc_none)
 	error ("multiple storage classes in declaration specifiers");
-      else if (specs->thread_p)
+      ಅನ್ಯಥಾ ಯದಿ (specs->thread_p)
 	error ("%qs used with %<auto%>",
 	       specs->thread_gnu_p ? "__thread" : "_Thread_local");
-      else if (specs->constexpr_p)
+      ಅನ್ಯಥಾ ಯದಿ (specs->constexpr_p)
 	/* auto may only be used with another storage class specifier,
 	   such as constexpr, if the type is inferred.  */
 	error ("%<auto%> used with %<constexpr%>");
-      else
+      ಅನ್ಯಥಾ
 	specs->storage_class = csc_auto;
     }
 
   /* Handle type specifier keywords.  */
-  if (TREE_CODE (type) == IDENTIFIER_NODE
+  ಯದಿ (ವೃಕ್ಷ_CODE (type) == IDENTIFIER_ಗಂಟು
       && C_IS_RESERVED_WORD (type)
       && C_RID_CODE (type) != RID_CXX_COMPAT_WARN)
     {
-      enum rid i = C_RID_CODE (type);
-      if (specs->type)
+      ಗಣನಾ rid i = C_RID_CODE (type);
+      ಯದಿ (specs->type)
 	{
 	  error_at (loc, "two or more data types in declaration specifiers");
-	  return specs;
+	  ಪ್ರತ್ಯಾಗಮ specs;
 	}
-      if ((int) i <= (int) RID_LAST_MODIFIER)
+      ಯದಿ ((ಪೂರ್ಣಾಙ್ಕ) i <= (ಪೂರ್ಣಾಙ್ಕ) RID_LAST_MODIFIER)
 	{
 	  /* "long", "short", "signed", "unsigned", "_Complex" or "_Sat".  */
-	  bool dupe = false;
-	  switch (i)
+	  ತಾರ್ಕಿಕ dupe = ಅಸತ್ಯ;
+	  ವಿಕಲ್ಪ (i)
 	    {
-	    case RID_LONG:
-	      if (specs->long_long_p)
+	    ಪಕ್ಷ RID_LONG:
+	      ಯದಿ (specs->long_long_p)
 		{
 		  error_at (loc, "%<long long long%> is too long for GCC");
-		  break;
+		  ಭಙ್ಗ;
 		}
-	      if (specs->long_p)
+	      ಯದಿ (specs->long_p)
 		{
-		  if (specs->typespec_word == cts_double)
+		  ಯದಿ (specs->typespec_word == cts_double)
 		    {
 		      error_at (loc,
 				"both %qs and %qs in declaration specifiers",
 				"long long", "double");
-		      break;
+		      ಭಙ್ಗ;
 		    }
 		  pedwarn_c90 (loc, OPT_Wlong_long,
 			       "ISO C90 does not support %<long long%>");
 		  specs->long_long_p = 1;
 		  specs->locations[cdw_long_long] = loc;
-		  break;
+		  ಭಙ್ಗ;
 		}
-	      if (specs->short_p)
+	      ಯದಿ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "short");
-	      else if (specs->typespec_word == cts_auto_type)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "void");
-	      else if (specs->typespec_word == cts_int_n)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_int_n)
 		error_at (loc,
 			  "both %qs and %<__int%d%> in declaration specifiers",
 			  "long", int_n_data[specs->u.int_n_idx].bitsize);
-	      else if (specs->typespec_word == cts_bool)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Bool");
-	      else if (specs->typespec_word == cts_bitint)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_bitint)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_BitInt");
-	      else if (specs->typespec_word == cts_char)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_char)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "char");
-	      else if (specs->typespec_word == cts_float)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_float)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "float");
-	      else if (specs->typespec_word == cts_floatn_nx)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_floatn_nx)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "long",
@@ -12279,67 +12279,67 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->typespec_word == cts_dfloat32)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat32)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Decimal64x");
-	      else
+	      ಅನ್ಯಥಾ
 		{
-		  specs->long_p = true;
+		  specs->long_p = ಸತ್ಯ;
 		  specs->locations[cdw_long] = loc;
 		}
-	      break;
-	    case RID_SHORT:
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ RID_SHORT:
 	      dupe = specs->short_p;
-	      if (specs->long_p)
+	      ಯದಿ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "short");
-	      else if (specs->typespec_word == cts_auto_type)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "void");
-	      else if (specs->typespec_word == cts_int_n)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_int_n)
 		error_at (loc,
 			  "both %qs and %<__int%d%> in declaration specifiers",
 			  "short", int_n_data[specs->u.int_n_idx].bitsize);
-	      else if (specs->typespec_word == cts_bool)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Bool");
-	      else if (specs->typespec_word == cts_bitint)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_bitint)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_BitInt");
-	      else if (specs->typespec_word == cts_char)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_char)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "char");
-	      else if (specs->typespec_word == cts_float)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_float)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "float");
-	      else if (specs->typespec_word == cts_double)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_double)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "double");
-	      else if (specs->typespec_word == cts_floatn_nx)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_floatn_nx)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "short",
@@ -12347,55 +12347,55 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->typespec_word == cts_dfloat32)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat32)
                 error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Decimal64x");
-	      else
+	      ಅನ್ಯಥಾ
 		{
-		  specs->short_p = true;
+		  specs->short_p = ಸತ್ಯ;
 		  specs->locations[cdw_short] = loc;
 		}
-	      break;
-	    case RID_SIGNED:
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ RID_SIGNED:
 	      dupe = specs->signed_p;
-	      if (specs->unsigned_p)
+	      ಯದಿ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "unsigned");
-	      else if (specs->typespec_word == cts_auto_type)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "void");
-	      else if (specs->typespec_word == cts_bool)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Bool");
-	      else if (specs->typespec_word == cts_float)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_float)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "float");
-	      else if (specs->typespec_word == cts_double)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_double)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "double");
-	      else if (specs->typespec_word == cts_floatn_nx)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_floatn_nx)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "signed",
@@ -12403,55 +12403,55 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->typespec_word == cts_dfloat32)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat32)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Decimal64x");
-	      else
+	      ಅನ್ಯಥಾ
 		{
-		  specs->signed_p = true;
+		  specs->signed_p = ಸತ್ಯ;
 		  specs->locations[cdw_signed] = loc;
 		}
-	      break;
-	    case RID_UNSIGNED:
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ RID_UNSIGNED:
 	      dupe = specs->unsigned_p;
-	      if (specs->signed_p)
+	      ಯದಿ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "unsigned");
-	      else if (specs->typespec_word == cts_auto_type)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "void");
-	      else if (specs->typespec_word == cts_bool)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Bool");
-	      else if (specs->typespec_word == cts_float)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_float)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "float");
-	      else if (specs->typespec_word == cts_double)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_double)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "double");
-	      else if (specs->typespec_word == cts_floatn_nx)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_floatn_nx)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "unsigned",
@@ -12459,124 +12459,124 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-              else if (specs->typespec_word == cts_dfloat32)
+              ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat32)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Decimal64x");
-	      else
+	      ಅನ್ಯಥಾ
 		{
-		  specs->unsigned_p = true;
+		  specs->unsigned_p = ಸತ್ಯ;
 		  specs->locations[cdw_unsigned] = loc;
 		}
-	      break;
-	    case RID_COMPLEX:
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ RID_COMPLEX:
 	      dupe = specs->complex_p;
-	      if (!in_system_header_at (loc))
+	      ಯದಿ (!in_system_header_at (loc))
 		pedwarn_c90 (loc, OPT_Wpedantic,
 			     "ISO C90 does not support complex types");
-	      if (specs->typespec_word == cts_auto_type)
+	      ಯದಿ (specs->typespec_word == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "void");
-	      else if (specs->typespec_word == cts_bool)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Bool");
-	      else if (specs->typespec_word == cts_bitint)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_bitint)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_BitInt");
-              else if (specs->typespec_word == cts_dfloat32)
+              ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat32)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Decimal64x");
-	      else if (specs->typespec_word == cts_fract)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_fract)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Fract");
-	      else if (specs->typespec_word == cts_accum)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_accum)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Accum");
-	      else if (specs->saturating_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Sat");
-	      else
+	      ಅನ್ಯಥಾ
 		{
-		  specs->complex_p = true;
+		  specs->complex_p = ಸತ್ಯ;
 		  specs->locations[cdw_complex] = loc;
 		}
-	      break;
-	    case RID_SAT:
+	      ಭಙ್ಗ;
+	    ಪಕ್ಷ RID_SAT:
 	      dupe = specs->saturating_p;
 	      pedwarn (loc, OPT_Wpedantic,
 		       "ISO C does not support saturating types");
-	      if (specs->typespec_word == cts_int_n)
+	      ಯದಿ (specs->typespec_word == cts_int_n)
 		error_at (loc,
 			  "both %qs and %<__int%d%> in declaration specifiers",
 			  "_Sat", int_n_data[specs->u.int_n_idx].bitsize);
-	      else if (specs->typespec_word == cts_auto_type)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "void");
-	      else if (specs->typespec_word == cts_bool)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Bool");
-	      else if (specs->typespec_word == cts_bitint)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_bitint)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_BitInt");
-	      else if (specs->typespec_word == cts_char)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_char)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "char");
-	      else if (specs->typespec_word == cts_int)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_int)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "int");
-	      else if (specs->typespec_word == cts_float)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_float)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "float");
-	      else if (specs->typespec_word == cts_double)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_double)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "double");
-	      else if (specs->typespec_word == cts_floatn_nx)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_floatn_nx)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "_Sat",
@@ -12584,106 +12584,106 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-              else if (specs->typespec_word == cts_dfloat32)
+              ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat32)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Decimal64x");
-	      else if (specs->complex_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->complex_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "complex");
-	      else
+	      ಅನ್ಯಥಾ
 		{
-		  specs->saturating_p = true;
+		  specs->saturating_p = ಸತ್ಯ;
 		  specs->locations[cdw_saturating] = loc;
 		}
-	      break;
-	    default:
+	      ಭಙ್ಗ;
+	    ಸ್ವಭಾವ:
 	      gcc_unreachable ();
 	    }
 
-	  if (dupe)
+	  ಯದಿ (dupe)
 	    error_at (loc, "duplicate %qE", type);
 
-	  return specs;
+	  ಪ್ರತ್ಯಾಗಮ specs;
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
 	  /* "void", "_Bool", "char", "int", "float", "double",
 	     "_FloatN", "_FloatNx", "_Decimal32", "__intN",
 	     "_Decimal64", "_Decimal128", "_Fract", "_Accum", "_BitInt(N)" or
 	     "__auto_type".  */
-	  if (specs->typespec_word != cts_none)
+	  ಯದಿ (specs->typespec_word != cts_none)
 	    {
-	      if (i == RID_BOOL)
+	      ಯದಿ (i == RID_BOOL)
 		{
 		  auto_diagnostic_group d;
-		  if (specs->storage_class == csc_typedef)
+		  ಯದಿ (specs->storage_class == csc_typedef)
 		    error_at (loc,
 			      "%qs cannot be defined via %<typedef%>",
 			      IDENTIFIER_POINTER (type));
-		  else
+		  ಅನ್ಯಥಾ
 		    error_at (loc,
 			      "%qs cannot be used here",
 			      IDENTIFIER_POINTER (type));
 		  add_note_about_new_keyword (loc, type);
 		}
-	      else
+	      ಅನ್ಯಥಾ
 		error_at (loc,
 			  "two or more data types in declaration specifiers");
-	      return specs;
+	      ಪ್ರತ್ಯಾಗಮ specs;
 	    }
-	  switch (i)
+	  ವಿಕಲ್ಪ (i)
 	    {
-	    case RID_AUTO_TYPE:
-	      if (specs->long_p)
+	    ಪಕ್ಷ RID_AUTO_TYPE:
+	      ಯದಿ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "__auto_type");
-	      else if (specs->short_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "__auto_type");
-	      else if (specs->signed_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "__auto_type");
-	      else if (specs->unsigned_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "__auto_type");
-	      else if (specs->complex_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->complex_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "__auto_type");
-	      else if (specs->saturating_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "__auto_type");
-	      else
+	      ಅನ್ಯಥಾ
 		{
 		  specs->typespec_word = cts_auto_type;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_INT_N_0:
-	    case RID_INT_N_1:
-	    case RID_INT_N_2:
-	    case RID_INT_N_3:
+	      ಪ್ರತ್ಯಾಗಮ specs;
+	    ಪಕ್ಷ RID_INT_N_0:
+	    ಪಕ್ಷ RID_INT_N_1:
+	    ಪಕ್ಷ RID_INT_N_2:
+	    ಪಕ್ಷ RID_INT_N_3:
 	      specs->u.int_n_idx = i - RID_INT_N_0;
-	      if (!in_system_header_at (input_location)
+	      ಯದಿ (!in_system_header_at (ಒಳಹರಿವು_location)
 		  /* If the INT_N type ends in "__", and so is of the format
 		     "__intN__", don't pedwarn.  */
 		  && (strncmp (IDENTIFIER_POINTER (type)
@@ -12692,183 +12692,183 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			 "ISO C does not support %<__int%d%> types",
 			 int_n_data[specs->u.int_n_idx].bitsize);
 
-	      if (specs->long_p)
+	      ಯದಿ (specs->long_p)
 		error_at (loc,
 			  "both %<__int%d%> and %qs in declaration specifiers",
 			  int_n_data[specs->u.int_n_idx].bitsize, "long");
-	      else if (specs->saturating_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %<__int%d%> in declaration specifiers",
 			  "_Sat", int_n_data[specs->u.int_n_idx].bitsize);
-	      else if (specs->short_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 		error_at (loc,
 			  "both %<__int%d%> and %qs in declaration specifiers",
 			  int_n_data[specs->u.int_n_idx].bitsize, "short");
-	      else if (! int_n_enabled_p[specs->u.int_n_idx])
+	      ಅನ್ಯಥಾ ಯದಿ (! int_n_enabled_p[specs->u.int_n_idx])
 		{
 		  specs->typespec_word = cts_int_n;
 		  error_at (loc,
 			    "%<__int%d%> is not supported on this target",
 			    int_n_data[specs->u.int_n_idx].bitsize);
 		}
-	      else
+	      ಅನ್ಯಥಾ
 		{
 		  specs->typespec_word = cts_int_n;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_VOID:
-	      if (specs->long_p)
+	      ಪ್ರತ್ಯಾಗಮ specs;
+	    ಪಕ್ಷ RID_VOID:
+	      ಯದಿ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "void");
-	      else if (specs->short_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "void");
-	      else if (specs->signed_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "void");
-	      else if (specs->unsigned_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "void");
-	      else if (specs->complex_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->complex_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "void");
-	      else if (specs->saturating_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "void");
-	      else
+	      ಅನ್ಯಥಾ
 		{
 		  specs->typespec_word = cts_void;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_BOOL:
-	      if (!in_system_header_at (loc))
+	      ಪ್ರತ್ಯಾಗಮ specs;
+	    ಪಕ್ಷ RID_BOOL:
+	      ಯದಿ (!in_system_header_at (loc))
 		pedwarn_c90 (loc, OPT_Wpedantic,
 			     "ISO C90 does not support boolean types");
-	      if (specs->long_p)
+	      ಯದಿ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Bool");
-	      else if (specs->short_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Bool");
-	      else if (specs->signed_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Bool");
-	      else if (specs->unsigned_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Bool");
-	      else if (specs->complex_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->complex_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Bool");
-	      else if (specs->saturating_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Bool");
-	      else
+	      ಅನ್ಯಥಾ
 		{
 		  specs->typespec_word = cts_bool;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_CHAR:
-	      if (specs->long_p)
+	      ಪ್ರತ್ಯಾಗಮ specs;
+	    ಪಕ್ಷ RID_CHAR:
+	      ಯದಿ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "char");
-	      else if (specs->short_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "char");
-	      else if (specs->saturating_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "char");
-	      else
+	      ಅನ್ಯಥಾ
 		{
 		  specs->typespec_word = cts_char;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_INT:
-	      if (specs->saturating_p)
+	      ಪ್ರತ್ಯಾಗಮ specs;
+	    ಪಕ್ಷ RID_INT:
+	      ಯದಿ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "int");
-	      else
+	      ಅನ್ಯಥಾ
 		{
 		  specs->typespec_word = cts_int;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_FLOAT:
-	      if (specs->long_p)
+	      ಪ್ರತ್ಯಾಗಮ specs;
+	    ಪಕ್ಷ RID_FLOAT:
+	      ಯದಿ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "float");
-	      else if (specs->short_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "float");
-	      else if (specs->signed_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "float");
-	      else if (specs->unsigned_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "float");
-	      else if (specs->saturating_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "float");
-	      else
+	      ಅನ್ಯಥಾ
 		{
 		  specs->typespec_word = cts_float;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_DOUBLE:
-	      if (specs->long_long_p)
+	      ಪ್ರತ್ಯಾಗಮ specs;
+	    ಪಕ್ಷ RID_DOUBLE:
+	      ಯದಿ (specs->long_long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long long", "double");
-	      else if (specs->short_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "double");
-	      else if (specs->signed_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "double");
-	      else if (specs->unsigned_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "double");
-	      else if (specs->saturating_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "double");
-	      else
+	      ಅನ್ಯಥಾ
 		{
 		  specs->typespec_word = cts_double;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
+	      ಪ್ರತ್ಯಾಗಮ specs;
 	    CASE_RID_FLOATN_NX:
 	      specs->u.floatn_nx_idx = i - RID_FLOATN_NX_FIRST;
-	      if (!in_system_header_at (input_location))
+	      ಯದಿ (!in_system_header_at (ಒಳಹರಿವು_location))
 		pedwarn_c11 (loc, OPT_Wpedantic,
 			     "ISO C does not support the %<_Float%d%s%> type"
 			     " before C23",
@@ -12877,7 +12877,7 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			     ? "x"
 			     : "");
 
-	      if (specs->long_p)
+	      ಯದಿ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "long",
@@ -12885,7 +12885,7 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->short_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "short",
@@ -12893,7 +12893,7 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->signed_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "signed",
@@ -12901,7 +12901,7 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->unsigned_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "unsigned",
@@ -12909,7 +12909,7 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->saturating_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "_Sat",
@@ -12917,7 +12917,7 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (FLOATN_NX_TYPE_NODE (specs->u.floatn_nx_idx) == NULL_TREE)
+	      ಅನ್ಯಥಾ ಯದಿ (FLOATN_NX_TYPE_ಗಂಟು (specs->u.floatn_nx_idx) == NULL_ವೃಕ್ಷ)
 		{
 		  specs->typespec_word = cts_floatn_nx;
 		  error_at (loc,
@@ -12927,156 +12927,156 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			    ? "x"
 			    : "");
 		}
-	      else
+	      ಅನ್ಯಥಾ
 		{
 		  specs->typespec_word = cts_floatn_nx;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_DFLOAT32:
-	    case RID_DFLOAT64:
-	    case RID_DFLOAT128:
-	    case RID_DFLOAT64X:
+	      ಪ್ರತ್ಯಾಗಮ specs;
+	    ಪಕ್ಷ RID_DFLOAT32:
+	    ಪಕ್ಷ RID_DFLOAT64:
+	    ಪಕ್ಷ RID_DFLOAT128:
+	    ಪಕ್ಷ RID_DFLOAT64X:
 	      {
-		const char *str;
-		if (i == RID_DFLOAT32)
+		ಧ್ರುವ ವರ್ಣ *str;
+		ಯದಿ (i == RID_DFLOAT32)
 		  str = "_Decimal32";
-		else if (i == RID_DFLOAT64)
+		ಅನ್ಯಥಾ ಯದಿ (i == RID_DFLOAT64)
 		  str = "_Decimal64";
-		else if (i == RID_DFLOAT128)
+		ಅನ್ಯಥಾ ಯದಿ (i == RID_DFLOAT128)
 		  str = "_Decimal128";
-		else
+		ಅನ್ಯಥಾ
 		  str = "_Decimal64x";
-		if (specs->long_long_p)
+		ಯದಿ (specs->long_long_p)
 		  error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "long long", str);
-		if (specs->long_p)
+		ಯದಿ (specs->long_p)
 		  error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "long", str);
-		else if (specs->short_p)
+		ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 		  error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "short", str);
-		else if (specs->signed_p)
+		ಅನ್ಯಥಾ ಯದಿ (specs->signed_p)
 		  error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "signed", str);
-		else if (specs->unsigned_p)
+		ಅನ್ಯಥಾ ಯದಿ (specs->unsigned_p)
 		  error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "unsigned", str);
-                else if (specs->complex_p)
+                ಅನ್ಯಥಾ ಯದಿ (specs->complex_p)
                   error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "complex", str);
-                else if (specs->saturating_p)
+                ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
                   error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "_Sat", str);
-		else if (i == RID_DFLOAT32)
+		ಅನ್ಯಥಾ ಯದಿ (i == RID_DFLOAT32)
 		  specs->typespec_word = cts_dfloat32;
-		else if (i == RID_DFLOAT64)
+		ಅನ್ಯಥಾ ಯದಿ (i == RID_DFLOAT64)
 		  specs->typespec_word = cts_dfloat64;
-		else if (i == RID_DFLOAT128)
+		ಅನ್ಯಥಾ ಯದಿ (i == RID_DFLOAT128)
 		  specs->typespec_word = cts_dfloat128;
-		else
+		ಅನ್ಯಥಾ
 		  specs->typespec_word = cts_dfloat64x;
 		specs->locations[cdw_typespec] = loc;
 	      }
-	      if (!targetm.decimal_float_supported_p ())
+	      ಯದಿ (!targetm.decimal_float_supported_p ())
 		error_at (loc,
 			  "decimal floating-point not supported "
 			  "for this target");
 	      pedwarn_c11 (loc, OPT_Wpedantic,
 			   "ISO C does not support decimal floating-point "
 			   "before C23");
-	      return specs;
-	    case RID_FRACT:
-	    case RID_ACCUM:
+	      ಪ್ರತ್ಯಾಗಮ specs;
+	    ಪಕ್ಷ RID_FRACT:
+	    ಪಕ್ಷ RID_ACCUM:
 	      {
-		const char *str;
-		if (i == RID_FRACT)
+		ಧ್ರುವ ವರ್ಣ *str;
+		ಯದಿ (i == RID_FRACT)
 		  str = "_Fract";
-		else
+		ಅನ್ಯಥಾ
 		  str = "_Accum";
-                if (specs->complex_p)
+                ಯದಿ (specs->complex_p)
                   error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "complex", str);
-		else if (i == RID_FRACT)
+		ಅನ್ಯಥಾ ಯದಿ (i == RID_FRACT)
 		    specs->typespec_word = cts_fract;
-		else
+		ಅನ್ಯಥಾ
 		    specs->typespec_word = cts_accum;
 		specs->locations[cdw_typespec] = loc;
 	      }
-	      if (!targetm.fixed_point_supported_p ())
+	      ಯದಿ (!targetm.fixed_point_supported_p ())
 		error_at (loc,
 			  "fixed-point types not supported for this target");
 	      pedwarn (loc, OPT_Wpedantic,
 		       "ISO C does not support fixed-point types");
-	      return specs;
-	    case RID_BITINT:
-	      if (specs->long_p)
+	      ಪ್ರತ್ಯಾಗಮ specs;
+	    ಪಕ್ಷ RID_BITINT:
+	      ಯದಿ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_BitInt");
-	      else if (specs->short_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_BitInt");
-	      else if (specs->complex_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->complex_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_BitInt");
-	      else if (specs->saturating_p)
+	      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_BitInt");
-	      else
+	      ಅನ್ಯಥಾ
 		{
 		  specs->typespec_word = cts_bitint;
 		  specs->locations[cdw_typespec] = loc;
 		  specs->u.bitint_prec = -1;
-		  if (error_operand_p (spec.expr))
-		    return specs;
-		  if (TREE_CODE (spec.expr) != INTEGER_CST
-		      || !INTEGRAL_TYPE_P (TREE_TYPE (spec.expr)))
+		  ಯದಿ (error_operand_p (spec.ಅಭಿವ್ಯಕ್ತಿ))
+		    ಪ್ರತ್ಯಾಗಮ specs;
+		  ಯದಿ (ವೃಕ್ಷ_CODE (spec.ಅಭಿವ್ಯಕ್ತಿ) != INTEGER_CST
+		      || !INTEGRAL_TYPE_P (ವೃಕ್ಷ_TYPE (spec.ಅಭಿವ್ಯಕ್ತಿ)))
 		    {
 		      error_at (loc, "%<_BitInt%> argument is not an integer "
 				     "constant expression");
-		      return specs;
+		      ಪ್ರತ್ಯಾಗಮ specs;
 		    }
-		  if (tree_int_cst_sgn (spec.expr) <= 0)
+		  ಯದಿ (ವೃಕ್ಷ_int_cst_sgn (spec.ಅಭಿವ್ಯಕ್ತಿ) <= 0)
 		    {
 		      error_at (loc, "%<_BitInt%> argument %qE is not a "
 				     "positive integer constant expression",
-				spec.expr);
-		      return specs;
+				spec.ಅಭಿವ್ಯಕ್ತಿ);
+		      ಪ್ರತ್ಯಾಗಮ specs;
 		    }
-		  if (wi::to_widest (spec.expr) > WIDE_INT_MAX_PRECISION - 1)
+		  ಯದಿ (wi::to_widest (spec.ಅಭಿವ್ಯಕ್ತಿ) > WIDE_INT_MAX_PRECISION - 1)
 		    {
 		      error_at (loc, "%<_BitInt%> argument %qE is larger than "
 				     "%<BITINT_MAXWIDTH%> %qd",
-				spec.expr, (int) WIDE_INT_MAX_PRECISION - 1);
-		      return specs;
+				spec.ಅಭಿವ್ಯಕ್ತಿ, (ಪೂರ್ಣಾಙ್ಕ) WIDE_INT_MAX_PRECISION - 1);
+		      ಪ್ರತ್ಯಾಗಮ specs;
 		    }
-		  specs->u.bitint_prec = tree_to_uhwi (spec.expr);
-		  struct bitint_info info;
-		  if (!targetm.c.bitint_type_info (specs->u.bitint_prec,
+		  specs->u.bitint_prec = ವೃಕ್ಷ_to_uhwi (spec.ಅಭಿವ್ಯಕ್ತಿ);
+		  ಸಂರಚನಾ bitint_info info;
+		  ಯದಿ (!targetm.c.bitint_type_info (specs->u.bitint_prec,
 						   &info))
 		    {
 		      sorry_at (loc, "%<_BitInt(%d)%> is not supported on "
 				     "this target", specs->u.bitint_prec);
 		      specs->u.bitint_prec = -1;
-		      return specs;
+		      ಪ್ರತ್ಯಾಗಮ specs;
 		    }
 		}
-	      return specs;
-	    default:
+	      ಪ್ರತ್ಯಾಗಮ specs;
+	    ಸ್ವಭಾವ:
 	      /* ObjC reserved word "id", handled below.  */
-	      break;
+	      ಭಙ್ಗ;
 	    }
 	}
     }
@@ -13086,279 +13086,279 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
      above), a TYPE (struct, union, enum and typeof specifiers) or an
      ERROR_MARK.  In none of these cases may there have previously
      been any type specifiers.  */
-  if (specs->type || specs->typespec_word != cts_none
+  ಯದಿ (specs->type || specs->typespec_word != cts_none
       || specs->long_p || specs->short_p || specs->signed_p
       || specs->unsigned_p || specs->complex_p)
     error_at (loc, "two or more data types in declaration specifiers");
-  else if (TREE_CODE (type) == TYPE_DECL)
+  ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (type) == TYPE_DECL)
     {
-      specs->type = TREE_TYPE (type);
-      if (TREE_TYPE (type) != error_mark_node)
+      specs->type = ವೃಕ್ಷ_TYPE (type);
+      ಯದಿ (ವೃಕ್ಷ_TYPE (type) != error_mark_ಗಂಟು)
 	{
-	  mark_decl_used (type, false);
+	  mark_decl_used (type, ಅಸತ್ಯ);
 	  specs->decl_attr = DECL_ATTRIBUTES (type);
-	  specs->typedef_p = true;
+	  specs->typedef_p = ಸತ್ಯ;
 	  specs->explicit_signed_p = C_TYPEDEF_EXPLICITLY_SIGNED (type);
 	  specs->locations[cdw_typedef] = loc;
 
 	  /* If this typedef name is defined in a struct, then a C++
 	     lookup would return a different value.  */
-	  if (warn_cxx_compat
-	      && I_SYMBOL_BINDING (DECL_NAME (type))->in_struct)
+	  ಯದಿ (warn_cxx_compat
+	      && I_ಚಿಹ್ನೆ_BINDING (DECL_NAME (type))->in_struct)
 	    warning_at (loc, OPT_Wc___compat,
 			"C++ lookup of %qD would return a field, not a type",
 			type);
 
 	  /* If we are parsing a struct, record that a struct field
 	     used a typedef.  */
-	  if (warn_cxx_compat && struct_parse_info != NULL)
-	    struct_parse_info->typedefs_seen.safe_push (type);
+	  ಯದಿ (warn_cxx_compat && struct_parse_info != ರಿಕ್ತ)
+	    struct_parse_info->typedefs_seen.safe_ತಳ್ಳು (type);
 	}
     }
-  else if (TREE_CODE (type) == IDENTIFIER_NODE)
+  ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (type) == IDENTIFIER_ಗಂಟು)
     {
-      tree t = lookup_name (type);
-      if (!t || TREE_CODE (t) != TYPE_DECL)
+      ವೃಕ್ಷ t = lookup_name (type);
+      ಯದಿ (!t || ವೃಕ್ಷ_CODE (t) != TYPE_DECL)
 	error_at (loc, "%qE fails to be a typedef or built in type", type);
-      else if (TREE_TYPE (t) == error_mark_node)
+      ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_TYPE (t) == error_mark_ಗಂಟು)
 	;
-      else
+      ಅನ್ಯಥಾ
 	{
-	  specs->type = TREE_TYPE (t);
+	  specs->type = ವೃಕ್ಷ_TYPE (t);
 	  specs->locations[cdw_typespec] = loc;
 	}
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      if (TREE_CODE (type) != ERROR_MARK)
+      ಯದಿ (ವೃಕ್ಷ_CODE (type) != ERROR_MARK)
 	{
-	  if (spec.kind == ctsk_typeof)
+	  ಯದಿ (spec.kind == ctsk_typeof)
 	    {
-	      specs->typedef_p = true;
+	      specs->typedef_p = ಸತ್ಯ;
 	      specs->locations[cdw_typedef] = loc;
 	    }
 
-	  if (TREE_CODE (type) == RECORD_TYPE || TREE_CODE (type) == UNION_TYPE
-	      || TREE_CODE (type) == ENUMERAL_TYPE)
-	    mark_decl_used (TYPE_STUB_DECL (type), false);
+	  ಯದಿ (ವೃಕ್ಷ_CODE (type) == RECORD_TYPE || ವೃಕ್ಷ_CODE (type) == UNION_TYPE
+	      || ವೃಕ್ಷ_CODE (type) == ENUMERAL_TYPE)
+	    mark_decl_used (TYPE_STUB_DECL (type), ಅಸತ್ಯ);
 
-	  if (spec.expr)
+	  ಯದಿ (spec.ಅಭಿವ್ಯಕ್ತಿ)
 	    {
-	      tree expr = save_expr (fold_convert (void_type_node, spec.expr));
-	      if (specs->expr)
-		specs->expr = build2 (COMPOUND_EXPR, TREE_TYPE (expr),
-				      specs->expr, expr);
-	      else
-		specs->expr = expr;
-	      specs->expr_const_operands &= spec.expr_const_operands;
+	      ವೃಕ್ಷ ಅಭಿವ್ಯಕ್ತಿ = save_ಅಭಿವ್ಯಕ್ತಿ (fold_convert (void_type_ಗಂಟು, spec.ಅಭಿವ್ಯಕ್ತಿ));
+	      ಯದಿ (specs->ಅಭಿವ್ಯಕ್ತಿ)
+		specs->ಅಭಿವ್ಯಕ್ತಿ = build2 (COMPOUND_ಅಭಿವ್ಯಕ್ತಿ, ವೃಕ್ಷ_TYPE (ಅಭಿವ್ಯಕ್ತಿ),
+				      specs->ಅಭಿವ್ಯಕ್ತಿ, ಅಭಿವ್ಯಕ್ತಿ);
+	      ಅನ್ಯಥಾ
+		specs->ಅಭಿವ್ಯಕ್ತಿ = ಅಭಿವ್ಯಕ್ತಿ;
+	      specs->ಅಭಿವ್ಯಕ್ತಿ_const_operands &= spec.ಅಭಿವ್ಯಕ್ತಿ_const_operands;
 	    }
 	}
       specs->type = type;
-      if (spec.has_enum_type_specifier
+      ಯದಿ (spec.has_enum_type_specifier
 	  && spec.kind != ctsk_tagdef)
-	specs->enum_type_specifier_ref_p = true;
+	specs->enum_type_specifier_ref_p = ಸತ್ಯ;
     }
 
-  return specs;
+  ಪ್ರತ್ಯಾಗಮ specs;
 }
 
 /* Add the storage class specifier or function specifier SCSPEC to the
    declaration specifiers SPECS, returning SPECS.  */
 
-struct c_declspecs *
+ಸಂರಚನಾ c_declspecs *
 declspecs_add_scspec (location_t loc,
-		      struct c_declspecs *specs,
-		      tree scspec)
+		      ಸಂರಚನಾ c_declspecs *specs,
+		      ವೃಕ್ಷ scspec)
 {
-  enum rid i;
-  enum c_storage_class n = csc_none;
-  bool dupe = false;
-  specs->declspecs_seen_p = true;
-  specs->non_std_attrs_seen_p = true;
-  gcc_assert (TREE_CODE (scspec) == IDENTIFIER_NODE
+  ಗಣನಾ rid i;
+  ಗಣನಾ c_storage_class n = csc_none;
+  ತಾರ್ಕಿಕ dupe = ಅಸತ್ಯ;
+  specs->declspecs_seen_p = ಸತ್ಯ;
+  specs->non_std_attrs_seen_p = ಸತ್ಯ;
+  gcc_assert (ವೃಕ್ಷ_CODE (scspec) == IDENTIFIER_ಗಂಟು
 	      && C_IS_RESERVED_WORD (scspec));
   i = C_RID_CODE (scspec);
-  if (specs->non_sc_seen_p)
+  ಯದಿ (specs->non_sc_seen_p)
     warning (OPT_Wold_style_declaration,
              "%qE is not at beginning of declaration", scspec);
-  switch (i)
+  ವಿಕಲ್ಪ (i)
     {
-    case RID_INLINE:
+    ಪಕ್ಷ RID_INLINE:
       /* C99 permits duplicate inline.  Although of doubtful utility,
 	 it seems simplest to permit it in gnu89 mode as well, as
 	 there is also little utility in maintaining this as a
 	 difference between gnu89 and C99 inline.  */
-      dupe = false;
-      specs->inline_p = true;
+      dupe = ಅಸತ್ಯ;
+      specs->inline_p = ಸತ್ಯ;
       specs->locations[cdw_inline] = loc;
-      break;
-    case RID_NORETURN:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ RID_NORETURN:
       /* Duplicate _Noreturn is permitted.  */
-      dupe = false;
-      specs->noreturn_p = true;
+      dupe = ಅಸತ್ಯ;
+      specs->noreturn_p = ಸತ್ಯ;
       specs->locations[cdw_noreturn] = loc;
-      break;
-    case RID_THREAD:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ RID_THREAD:
       dupe = specs->thread_p;
-      if (specs->storage_class == csc_auto)
+      ಯದಿ (specs->storage_class == csc_auto)
 	error ("%qE used with %<auto%>", scspec);
-      else if (specs->storage_class == csc_register)
+      ಅನ್ಯಥಾ ಯದಿ (specs->storage_class == csc_register)
 	error ("%qE used with %<register%>", scspec);
-      else if (specs->storage_class == csc_typedef)
+      ಅನ್ಯಥಾ ಯದಿ (specs->storage_class == csc_typedef)
 	error ("%qE used with %<typedef%>", scspec);
-      else if (specs->constexpr_p)
+      ಅನ್ಯಥಾ ಯದಿ (specs->constexpr_p)
 	error ("%qE used with %<constexpr%>", scspec);
-      else
+      ಅನ್ಯಥಾ
 	{
-	  specs->thread_p = true;
+	  specs->thread_p = ಸತ್ಯ;
 	  specs->thread_gnu_p = (strcmp (IDENTIFIER_POINTER (scspec),
 					 "__thread") == 0);
 	  /* A diagnostic is not required for the use of this
 	     identifier in the implementation namespace; only diagnose
 	     it for the C11 spelling because of existing code using
 	     the other spelling.  */
-	  if (!specs->thread_gnu_p)
+	  ಯದಿ (!specs->thread_gnu_p)
 	    {
-	      if (flag_isoc99)
+	      ಯದಿ (flag_isoc99)
 		pedwarn_c99 (loc, OPT_Wpedantic,
 			     "ISO C99 does not support %qE", scspec);
-	      else
+	      ಅನ್ಯಥಾ
 		pedwarn_c99 (loc, OPT_Wpedantic,
 			     "ISO C90 does not support %qE", scspec);
 	    }
 	  specs->locations[cdw_thread] = loc;
 	}
-      break;
-    case RID_AUTO:
-      if (flag_isoc23
+      ಭಙ್ಗ;
+    ಪಕ್ಷ RID_AUTO:
+      ಯದಿ (flag_isoc23
 	  && specs->typespec_kind == ctsk_none
 	  && specs->storage_class != csc_typedef)
 	{
 	  /* "auto" potentially used for type deduction.  */
-	  if (specs->c23_auto_p)
+	  ಯದಿ (specs->c23_auto_p)
 	    error ("duplicate %qE", scspec);
-	  specs->c23_auto_p = true;
-	  return specs;
+	  specs->c23_auto_p = ಸತ್ಯ;
+	  ಪ್ರತ್ಯಾಗಮ specs;
 	}
       n = csc_auto;
       /* auto may only be used with another storage class specifier,
 	 such as constexpr, if the type is inferred.  */
-      if (specs->constexpr_p)
+      ಯದಿ (specs->constexpr_p)
 	error ("%qE used with %<constexpr%>", scspec);
-      break;
-    case RID_EXTERN:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ RID_EXTERN:
       n = csc_extern;
       /* Diagnose "__thread extern".  */
-      if (specs->thread_p && specs->thread_gnu_p)
+      ಯದಿ (specs->thread_p && specs->thread_gnu_p)
 	error ("%<__thread%> before %<extern%>");
-      break;
-    case RID_REGISTER:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ RID_REGISTER:
       n = csc_register;
-      break;
-    case RID_STATIC:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ RID_STATIC:
       n = csc_static;
       /* Diagnose "__thread static".  */
-      if (specs->thread_p && specs->thread_gnu_p)
+      ಯದಿ (specs->thread_p && specs->thread_gnu_p)
 	error ("%<__thread%> before %<static%>");
-      break;
-    case RID_TYPEDEF:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ RID_TYPEDEF:
       n = csc_typedef;
-      if (specs->c23_auto_p)
+      ಯದಿ (specs->c23_auto_p)
 	{
 	  error ("%<typedef%> used with %<auto%>");
-	  specs->c23_auto_p = false;
+	  specs->c23_auto_p = ಅಸತ್ಯ;
 	}
-      break;
-    case RID_CONSTEXPR:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ RID_CONSTEXPR:
       dupe = specs->constexpr_p;
-      if (specs->storage_class == csc_extern)
+      ಯದಿ (specs->storage_class == csc_extern)
 	error ("%qE used with %<extern%>", scspec);
-      else if (specs->storage_class == csc_typedef)
+      ಅನ್ಯಥಾ ಯದಿ (specs->storage_class == csc_typedef)
 	error ("%qE used with %<typedef%>", scspec);
-      else if (specs->storage_class == csc_auto)
+      ಅನ್ಯಥಾ ಯದಿ (specs->storage_class == csc_auto)
 	/* auto may only be used with another storage class specifier,
 	   such as constexpr, if the type is inferred.  */
 	error ("%qE used with %<auto%>", scspec);
-      else if (specs->thread_p)
+      ಅನ್ಯಥಾ ಯದಿ (specs->thread_p)
 	error ("%qE used with %qs", scspec,
 	       specs->thread_gnu_p ? "__thread" : "_Thread_local");
-      else
-	specs->constexpr_p = true;
-      break;
-    default:
+      ಅನ್ಯಥಾ
+	specs->constexpr_p = ಸತ್ಯ;
+      ಭಙ್ಗ;
+    ಸ್ವಭಾವ:
       gcc_unreachable ();
     }
-  if (n != csc_none && n == specs->storage_class)
-    dupe = true;
-  if (dupe)
+  ಯದಿ (n != csc_none && n == specs->storage_class)
+    dupe = ಸತ್ಯ;
+  ಯದಿ (dupe)
     {
-      if (i == RID_THREAD)
+      ಯದಿ (i == RID_THREAD)
 	error ("duplicate %<_Thread_local%> or %<__thread%>");
-      else
+      ಅನ್ಯಥಾ
 	error ("duplicate %qE", scspec);
     }
-  if (n != csc_none)
+  ಯದಿ (n != csc_none)
     {
-      if (specs->storage_class != csc_none && n != specs->storage_class)
+      ಯದಿ (specs->storage_class != csc_none && n != specs->storage_class)
 	{
 	  error ("multiple storage classes in declaration specifiers");
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
 	  specs->storage_class = n;
 	  specs->locations[cdw_storage_class] = loc;
-	  if (n != csc_extern && n != csc_static && specs->thread_p)
+	  ಯದಿ (n != csc_extern && n != csc_static && specs->thread_p)
 	    {
 	      error ("%qs used with %qE",
 		     specs->thread_gnu_p ? "__thread" : "_Thread_local",
 		     scspec);
-	      specs->thread_p = false;
+	      specs->thread_p = ಅಸತ್ಯ;
 	    }
-	  if (n != csc_auto && n != csc_register && n != csc_static
+	  ಯದಿ (n != csc_auto && n != csc_register && n != csc_static
 	      && specs->constexpr_p)
 	    {
 	      error ("%<constexpr%> used with %qE", scspec);
-	      specs->constexpr_p = false;
+	      specs->constexpr_p = ಅಸತ್ಯ;
 	    }
 	}
     }
-  return specs;
+  ಪ್ರತ್ಯಾಗಮ specs;
 }
 
 /* Add the attributes ATTRS to the declaration specifiers SPECS,
    returning SPECS.  */
 
-struct c_declspecs *
-declspecs_add_attrs (location_t loc, struct c_declspecs *specs, tree attrs)
+ಸಂರಚನಾ c_declspecs *
+declspecs_add_attrs (location_t loc, ಸಂರಚನಾ c_declspecs *specs, ವೃಕ್ಷ attrs)
 {
   specs->attrs = chainon (attrs, specs->attrs);
   specs->locations[cdw_attributes] = loc;
-  specs->declspecs_seen_p = true;
+  specs->declspecs_seen_p = ಸತ್ಯ;
   /* In the case of standard attributes at the start of the
      declaration, the caller will reset this.  */
-  specs->non_std_attrs_seen_p = true;
-  return specs;
+  specs->non_std_attrs_seen_p = ಸತ್ಯ;
+  ಪ್ರತ್ಯಾಗಮ specs;
 }
 
 /* Add an _Alignas specifier (expression ALIGN, or type whose
    alignment is ALIGN) to the declaration specifiers SPECS, returning
    SPECS.  */
-struct c_declspecs *
+ಸಂರಚನಾ c_declspecs *
 declspecs_add_alignas (location_t loc,
-		       struct c_declspecs *specs, tree align)
+		       ಸಂರಚನಾ c_declspecs *specs, ವೃಕ್ಷ align)
 {
-  specs->alignas_p = true;
+  specs->alignas_p = ಸತ್ಯ;
   specs->locations[cdw_alignas] = loc;
-  if (align == error_mark_node)
-    return specs;
+  ಯದಿ (align == error_mark_ಗಂಟು)
+    ಪ್ರತ್ಯಾಗಮ specs;
 
   /* Only accept the alignment if it's valid and greater than
      the current one.  Zero is invalid but by C11 required to
      be silently ignored.  */
-  int align_log = check_user_alignment (align, false, /* warn_zero = */false);
-  if (align_log > specs->align_log)
+  ಪೂರ್ಣಾಙ್ಕ align_log = check_user_alignment (align, ಅಸತ್ಯ, /* warn_zero = */ಅಸತ್ಯ);
+  ಯದಿ (align_log > specs->align_log)
     specs->align_log = align_log;
-  return specs;
+  ಪ್ರತ್ಯಾಗಮ specs;
 }
 
 /* Combine "long", "short", "signed", "unsigned" and "_Complex" type
@@ -13367,21 +13367,21 @@ declspecs_add_alignas (location_t loc,
    "_Complex long" is a prefix of the valid ISO C type "_Complex long
    double".  Also apply postfix standard attributes to modify the type.  */
 
-struct c_declspecs *
-finish_declspecs (struct c_declspecs *specs)
+ಸಂರಚನಾ c_declspecs *
+finish_declspecs (ಸಂರಚನಾ c_declspecs *specs)
 {
   /* If a type was specified as a whole, we have no modifiers and are
      done.  */
-  if (specs->type != NULL_TREE)
+  ಯದಿ (specs->type != NULL_ವೃಕ್ಷ)
     {
       gcc_assert (!specs->long_p && !specs->long_long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p
 		  && !specs->complex_p && !specs->c23_auto_p);
 
       /* Set a dummy type.  */
-      if (TREE_CODE (specs->type) == ERROR_MARK)
-        specs->type = integer_type_node;
-      goto handle_postfix_attrs;
+      ಯದಿ (ವೃಕ್ಷ_CODE (specs->type) == ERROR_MARK)
+        specs->type = integer_type_ಗಂಟು;
+      ಗಚ್ಛ handle_postfix_attrs;
     }
 
   /* If none of "void", "_Bool", "char", "int", "float" or "double"
@@ -13389,45 +13389,45 @@ finish_declspecs (struct c_declspecs *specs)
      present and there are no other specifiers.  If we just have
      "_Complex", it is equivalent to "_Complex double", but e.g.
      "_Complex short" is equivalent to "_Complex short int".  */
-  if (specs->typespec_word == cts_none)
+  ಯದಿ (specs->typespec_word == cts_none)
     {
-      if (specs->saturating_p)
+      ಯದಿ (specs->saturating_p)
 	{
 	  error_at (specs->locations[cdw_saturating],
 		    "%<_Sat%> is used without %<_Fract%> or %<_Accum%>");
-	  if (!targetm.fixed_point_supported_p ())
+	  ಯದಿ (!targetm.fixed_point_supported_p ())
 	    error_at (specs->locations[cdw_saturating],
 		      "fixed-point types not supported for this target");
 	  specs->typespec_word = cts_fract;
 	}
-      else if (specs->long_p || specs->short_p
+      ಅನ್ಯಥಾ ಯದಿ (specs->long_p || specs->short_p
 	       || specs->signed_p || specs->unsigned_p)
 	{
 	  specs->typespec_word = cts_int;
 	}
-      else if (specs->complex_p)
+      ಅನ್ಯಥಾ ಯದಿ (specs->complex_p)
 	{
 	  specs->typespec_word = cts_double;
 	  pedwarn (specs->locations[cdw_complex], OPT_Wpedantic,
 		   "ISO C does not support plain %<complex%> meaning "
 		   "%<double complex%>");
 	}
-      else if (specs->c23_auto_p)
+      ಅನ್ಯಥಾ ಯದಿ (specs->c23_auto_p)
 	{
 	  /* Type to be filled in later, including applying postfix
 	     attributes.  This warning only actually appears for
 	     -Wc11-c23-compat in C23 mode; in older modes, there may
 	     be a warning or pedwarn for implicit "int" instead, or
 	     other errors for use of auto at file scope.  */
-	  pedwarn_c11 (input_location, OPT_Wpedantic,
+	  pedwarn_c11 (ಒಳಹರಿವು_location, OPT_Wpedantic,
 		       "ISO C does not support %<auto%> type deduction "
 		       "before C23");
-	  return specs;
+	  ಪ್ರತ್ಯಾಗಮ specs;
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
 	  specs->typespec_word = cts_int;
-	  specs->default_int_p = true;
+	  specs->default_int_p = ಸತ್ಯ;
 	  /* We don't diagnose this here because grokdeclarator will
 	     give more specific diagnostics according to whether it is
 	     a function definition.  */
@@ -13441,236 +13441,236 @@ finish_declspecs (struct c_declspecs *specs)
 
   /* Now compute the actual type.  */
   gcc_assert (!specs->c23_auto_p);
-  switch (specs->typespec_word)
+  ವಿಕಲ್ಪ (specs->typespec_word)
     {
-    case cts_auto_type:
+    ಪಕ್ಷ cts_auto_type:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p
 		  && !specs->complex_p);
       /* Type to be filled in later.  */
-      if (specs->postfix_attrs)
+      ಯದಿ (specs->postfix_attrs)
 	error ("%<__auto_type%> followed by %<[[]]%> attributes");
-      break;
-    case cts_void:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_void:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p
 		  && !specs->complex_p);
-      specs->type = void_type_node;
-      break;
-    case cts_bool:
+      specs->type = void_type_ಗಂಟು;
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_bool:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p
 		  && !specs->complex_p);
-      specs->type = boolean_type_node;
-      break;
-    case cts_char:
+      specs->type = boolean_type_ಗಂಟು;
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_char:
       gcc_assert (!specs->long_p && !specs->short_p);
       gcc_assert (!(specs->signed_p && specs->unsigned_p));
-      if (specs->signed_p)
-	specs->type = signed_char_type_node;
-      else if (specs->unsigned_p)
-	specs->type = unsigned_char_type_node;
-      else
-	specs->type = char_type_node;
-      if (specs->complex_p)
+      ಯದಿ (specs->signed_p)
+	specs->type = signed_char_type_ಗಂಟು;
+      ಅನ್ಯಥಾ ಯದಿ (specs->unsigned_p)
+	specs->type = unsigned_char_type_ಗಂಟು;
+      ಅನ್ಯಥಾ
+	specs->type = char_type_ಗಂಟು;
+      ಯದಿ (specs->complex_p)
 	{
 	  pedwarn (specs->locations[cdw_complex], OPT_Wpedantic,
 		   "ISO C does not support complex integer types");
 	  specs->type = build_complex_type (specs->type);
 	}
-      break;
-    case cts_int_n:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_int_n:
       gcc_assert (!specs->long_p && !specs->short_p && !specs->long_long_p);
       gcc_assert (!(specs->signed_p && specs->unsigned_p));
-      if (! int_n_enabled_p[specs->u.int_n_idx])
-	specs->type = integer_type_node;
-      else
+      ಯದಿ (! int_n_enabled_p[specs->u.int_n_idx])
+	specs->type = integer_type_ಗಂಟು;
+      ಅನ್ಯಥಾ
 	specs->type = (specs->unsigned_p
 		       ? int_n_trees[specs->u.int_n_idx].unsigned_type
 		       : int_n_trees[specs->u.int_n_idx].signed_type);
-      if (specs->complex_p)
+      ಯದಿ (specs->complex_p)
 	{
 	  pedwarn (specs->locations[cdw_complex], OPT_Wpedantic,
 		   "ISO C does not support complex integer types");
 	  specs->type = build_complex_type (specs->type);
 	}
-      break;
-    case cts_int:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_int:
       gcc_assert (!(specs->long_p && specs->short_p));
       gcc_assert (!(specs->signed_p && specs->unsigned_p));
-      if (specs->long_long_p)
+      ಯದಿ (specs->long_long_p)
 	specs->type = (specs->unsigned_p
-		       ? long_long_unsigned_type_node
-		       : long_long_integer_type_node);
-      else if (specs->long_p)
+		       ? long_long_unsigned_type_ಗಂಟು
+		       : long_long_integer_type_ಗಂಟು);
+      ಅನ್ಯಥಾ ಯದಿ (specs->long_p)
 	specs->type = (specs->unsigned_p
-		       ? long_unsigned_type_node
-		       : long_integer_type_node);
-      else if (specs->short_p)
+		       ? long_unsigned_type_ಗಂಟು
+		       : long_integer_type_ಗಂಟು);
+      ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 	specs->type = (specs->unsigned_p
-		       ? short_unsigned_type_node
-		       : short_integer_type_node);
-      else
+		       ? short_unsigned_type_ಗಂಟು
+		       : short_integer_type_ಗಂಟು);
+      ಅನ್ಯಥಾ
 	specs->type = (specs->unsigned_p
-		       ? unsigned_type_node
-		       : integer_type_node);
-      if (specs->complex_p)
+		       ? unsigned_type_ಗಂಟು
+		       : integer_type_ಗಂಟು);
+      ಯದಿ (specs->complex_p)
 	{
 	  pedwarn (specs->locations[cdw_complex], OPT_Wpedantic,
 		   "ISO C does not support complex integer types");
 	  specs->type = build_complex_type (specs->type);
 	}
-      break;
-    case cts_float:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_float:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p);
       specs->type = (specs->complex_p
-		     ? complex_float_type_node
-		     : float_type_node);
-      break;
-    case cts_double:
+		     ? complex_float_type_ಗಂಟು
+		     : float_type_ಗಂಟು);
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_double:
       gcc_assert (!specs->long_long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p);
-      if (specs->long_p)
+      ಯದಿ (specs->long_p)
 	{
 	  specs->type = (specs->complex_p
-			 ? complex_long_double_type_node
-			 : long_double_type_node);
+			 ? complex_long_double_type_ಗಂಟು
+			 : long_double_type_ಗಂಟು);
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
 	  specs->type = (specs->complex_p
-			 ? complex_double_type_node
-			 : double_type_node);
+			 ? complex_double_type_ಗಂಟು
+			 : double_type_ಗಂಟು);
 	}
-      break;
-    case cts_floatn_nx:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_floatn_nx:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p);
-      if (FLOATN_NX_TYPE_NODE (specs->u.floatn_nx_idx) == NULL_TREE)
-	specs->type = integer_type_node;
-      else if (specs->complex_p)
-	specs->type = COMPLEX_FLOATN_NX_TYPE_NODE (specs->u.floatn_nx_idx);
-      else
-	specs->type = FLOATN_NX_TYPE_NODE (specs->u.floatn_nx_idx);
-      break;
-    case cts_dfloat32:
-    case cts_dfloat64:
-    case cts_dfloat128:
-    case cts_dfloat64x:
+      ಯದಿ (FLOATN_NX_TYPE_ಗಂಟು (specs->u.floatn_nx_idx) == NULL_ವೃಕ್ಷ)
+	specs->type = integer_type_ಗಂಟು;
+      ಅನ್ಯಥಾ ಯದಿ (specs->complex_p)
+	specs->type = COMPLEX_FLOATN_NX_TYPE_ಗಂಟು (specs->u.floatn_nx_idx);
+      ಅನ್ಯಥಾ
+	specs->type = FLOATN_NX_TYPE_ಗಂಟು (specs->u.floatn_nx_idx);
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_dfloat32:
+    ಪಕ್ಷ cts_dfloat64:
+    ಪಕ್ಷ cts_dfloat128:
+    ಪಕ್ಷ cts_dfloat64x:
       gcc_assert (!specs->long_p && !specs->long_long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p && !specs->complex_p);
-      if (!targetm.decimal_float_supported_p ())
-	specs->type = integer_type_node;
-      else if (specs->typespec_word == cts_dfloat32)
-	specs->type = dfloat32_type_node;
-      else if (specs->typespec_word == cts_dfloat64)
-	specs->type = dfloat64_type_node;
-      else if (specs->typespec_word == cts_dfloat128)
-	specs->type = dfloat128_type_node;
-      else
-	specs->type = dfloat64x_type_node;
-      break;
-    case cts_fract:
+      ಯದಿ (!targetm.decimal_float_supported_p ())
+	specs->type = integer_type_ಗಂಟು;
+      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat32)
+	specs->type = dfloat32_type_ಗಂಟು;
+      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat64)
+	specs->type = dfloat64_type_ಗಂಟು;
+      ಅನ್ಯಥಾ ಯದಿ (specs->typespec_word == cts_dfloat128)
+	specs->type = dfloat128_type_ಗಂಟು;
+      ಅನ್ಯಥಾ
+	specs->type = dfloat64x_type_ಗಂಟು;
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_fract:
       gcc_assert (!specs->complex_p);
-      if (!targetm.fixed_point_supported_p ())
-	specs->type = integer_type_node;
-      else if (specs->saturating_p)
+      ಯದಿ (!targetm.fixed_point_supported_p ())
+	specs->type = integer_type_ಗಂಟು;
+      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 	{
-	  if (specs->long_long_p)
+	  ಯದಿ (specs->long_long_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_long_long_fract_type_node
-			  : sat_long_long_fract_type_node;
-	  else if (specs->long_p)
+			  ? sat_unsigned_long_long_fract_type_ಗಂಟು
+			  : sat_long_long_fract_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ ಯದಿ (specs->long_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_long_fract_type_node
-			  : sat_long_fract_type_node;
-	  else if (specs->short_p)
+			  ? sat_unsigned_long_fract_type_ಗಂಟು
+			  : sat_long_fract_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_short_fract_type_node
-			  : sat_short_fract_type_node;
-	  else
+			  ? sat_unsigned_short_fract_type_ಗಂಟು
+			  : sat_short_fract_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_fract_type_node
-			  : sat_fract_type_node;
+			  ? sat_unsigned_fract_type_ಗಂಟು
+			  : sat_fract_type_ಗಂಟು;
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
-	  if (specs->long_long_p)
+	  ಯದಿ (specs->long_long_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_long_long_fract_type_node
-			  : long_long_fract_type_node;
-	  else if (specs->long_p)
+			  ? unsigned_long_long_fract_type_ಗಂಟು
+			  : long_long_fract_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ ಯದಿ (specs->long_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_long_fract_type_node
-			  : long_fract_type_node;
-	  else if (specs->short_p)
+			  ? unsigned_long_fract_type_ಗಂಟು
+			  : long_fract_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_short_fract_type_node
-			  : short_fract_type_node;
-	  else
+			  ? unsigned_short_fract_type_ಗಂಟು
+			  : short_fract_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ
 	    specs->type = specs->unsigned_p
-			  ? unsigned_fract_type_node
-			  : fract_type_node;
+			  ? unsigned_fract_type_ಗಂಟು
+			  : fract_type_ಗಂಟು;
 	}
-      break;
-    case cts_accum:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_accum:
       gcc_assert (!specs->complex_p);
-      if (!targetm.fixed_point_supported_p ())
-	specs->type = integer_type_node;
-      else if (specs->saturating_p)
+      ಯದಿ (!targetm.fixed_point_supported_p ())
+	specs->type = integer_type_ಗಂಟು;
+      ಅನ್ಯಥಾ ಯದಿ (specs->saturating_p)
 	{
-	  if (specs->long_long_p)
+	  ಯದಿ (specs->long_long_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_long_long_accum_type_node
-			  : sat_long_long_accum_type_node;
-	  else if (specs->long_p)
+			  ? sat_unsigned_long_long_accum_type_ಗಂಟು
+			  : sat_long_long_accum_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ ಯದಿ (specs->long_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_long_accum_type_node
-			  : sat_long_accum_type_node;
-	  else if (specs->short_p)
+			  ? sat_unsigned_long_accum_type_ಗಂಟು
+			  : sat_long_accum_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_short_accum_type_node
-			  : sat_short_accum_type_node;
-	  else
+			  ? sat_unsigned_short_accum_type_ಗಂಟು
+			  : sat_short_accum_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_accum_type_node
-			  : sat_accum_type_node;
+			  ? sat_unsigned_accum_type_ಗಂಟು
+			  : sat_accum_type_ಗಂಟು;
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
-	  if (specs->long_long_p)
+	  ಯದಿ (specs->long_long_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_long_long_accum_type_node
-			  : long_long_accum_type_node;
-	  else if (specs->long_p)
+			  ? unsigned_long_long_accum_type_ಗಂಟು
+			  : long_long_accum_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ ಯದಿ (specs->long_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_long_accum_type_node
-			  : long_accum_type_node;
-	  else if (specs->short_p)
+			  ? unsigned_long_accum_type_ಗಂಟು
+			  : long_accum_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ ಯದಿ (specs->short_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_short_accum_type_node
-			  : short_accum_type_node;
-	  else
+			  ? unsigned_short_accum_type_ಗಂಟು
+			  : short_accum_type_ಗಂಟು;
+	  ಅನ್ಯಥಾ
 	    specs->type = specs->unsigned_p
-			  ? unsigned_accum_type_node
-			  : accum_type_node;
+			  ? unsigned_accum_type_ಗಂಟು
+			  : accum_type_ಗಂಟು;
 	}
-      break;
-    case cts_bitint:
+      ಭಙ್ಗ;
+    ಪಕ್ಷ cts_bitint:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->complex_p);
-      if (!specs->unsigned_p && specs->u.bitint_prec == 1 && !flag_isoc2y)
+      ಯದಿ (!specs->unsigned_p && specs->u.bitint_prec == 1 && !flag_isoc2y)
 	{
 	  error_at (specs->locations[cdw_typespec],
 		    "%<signed _BitInt%> argument must be at least 2 "
 		    "before C2Y");
-	  specs->type = integer_type_node;
-	  break;
+	  specs->type = integer_type_ಗಂಟು;
+	  ಭಙ್ಗ;
 	}
-      if (specs->u.bitint_prec == -1)
-	specs->type = integer_type_node;
-      else
+      ಯದಿ (specs->u.bitint_prec == -1)
+	specs->type = integer_type_ಗಂಟು;
+      ಅನ್ಯಥಾ
 	{
 	  pedwarn_c11 (specs->locations[cdw_typespec], OPT_Wpedantic,
 		       "ISO C does not support %<%s_BitInt(%d)%> before C23",
@@ -13680,51 +13680,51 @@ finish_declspecs (struct c_declspecs *specs)
 	  specs->type = build_bitint_type (specs->u.bitint_prec,
 					   specs->unsigned_p);
 	}
-      break;
-    default:
+      ಭಙ್ಗ;
+    ಸ್ವಭಾವ:
       gcc_unreachable ();
     }
  handle_postfix_attrs:
-  if (specs->type != NULL)
+  ಯದಿ (specs->type != ರಿಕ್ತ)
     {
       specs->postfix_attrs
 	= c_warn_type_attributes (specs->type, specs->postfix_attrs);
       decl_attributes (&specs->type, specs->postfix_attrs, 0);
-      specs->postfix_attrs = NULL_TREE;
+      specs->postfix_attrs = NULL_ವೃಕ್ಷ;
     }
 
-  return specs;
+  ಪ್ರತ್ಯಾಗಮ specs;
 }
 
 /* Perform final processing on one file scope's declarations (or the
    external scope's declarations), GLOBALS.  */
 
-static void
-c_write_global_declarations_1 (tree globals)
+ಸ್ಥಿರ ಶೂನ್ಯ
+c_write_global_declarations_1 (ವೃಕ್ಷ globals)
 {
-  tree decl;
-  bool reconsider;
+  ವೃಕ್ಷ decl;
+  ತಾರ್ಕಿಕ reconsider;
 
   /* Process the decls in the order they were written.  */
-  for (decl = globals; decl; decl = DECL_CHAIN (decl))
+  ಪ್ರತಿ (decl = globals; decl; decl = DECL_CHAIN (decl))
     {
       /* Check for used but undefined static functions using the C
 	 standard's definition of "used", and set TREE_NO_WARNING so
 	 that check_global_declaration doesn't repeat the check.  */
-      if (TREE_CODE (decl) == FUNCTION_DECL
-	  && DECL_INITIAL (decl) == NULL_TREE
+      ಯದಿ (ವೃಕ್ಷ_CODE (decl) == FUNCTION_DECL
+	  && DECL_INITIAL (decl) == NULL_ವೃಕ್ಷ
 	  && DECL_EXTERNAL (decl)
-	  && !TREE_PUBLIC (decl)
+	  && !ವೃಕ್ಷ_PUBLIC (decl)
 	  && !warning_suppressed_p (decl, OPT_Wunused))
 	{
-	  if (C_DECL_USED (decl))
+	  ಯದಿ (C_DECL_USED (decl))
 	    {
-	      if (pedwarn (input_location, 0, "%q+F used but never defined",
+	      ಯದಿ (pedwarn (ಒಳಹರಿವು_location, 0, "%q+F used but never defined",
 			   decl))
 		suppress_warning (decl, OPT_Wunused);
 	    }
 	  /* For -Wunused-function warn about unused static prototypes.  */
-	  else if (warn_unused_function
+	  ಅನ್ಯಥಾ ಯದಿ (warn_unused_function
 		   && ! DECL_ARTIFICIAL (decl)
 		   && warning (OPT_Wunused_function,
 			       "%q+F declared %<static%> but never defined",
@@ -13735,24 +13735,24 @@ c_write_global_declarations_1 (tree globals)
       wrapup_global_declaration_1 (decl);
     }
 
-  do
+  ಕುರು
     {
-      reconsider = false;
-      for (decl = globals; decl; decl = DECL_CHAIN (decl))
+      reconsider = ಅಸತ್ಯ;
+      ಪ್ರತಿ (decl = globals; decl; decl = DECL_CHAIN (decl))
 	reconsider |= wrapup_global_declaration_2 (decl);
     }
-  while (reconsider);
+  ಯಾವತ್ (reconsider);
 }
 
 /* Preserve the external declarations scope across a garbage collect.  */
-static GTY(()) tree ext_block;
+ಸ್ಥಿರ GTY(()) ವೃಕ್ಷ ext_block;
 
 /* Collect all references relevant to SOURCE_FILE.  */
 
-static void
-collect_all_refs (const char *source_file)
+ಸ್ಥಿರ ಶೂನ್ಯ
+collect_all_refs (ಧ್ರುವ ವರ್ಣ *source_file)
 {
-  tree t;
+  ವೃಕ್ಷ t;
   unsigned i;
 
   FOR_EACH_VEC_ELT (*all_translation_units, i, t)
@@ -13763,47 +13763,47 @@ collect_all_refs (const char *source_file)
 
 /* Collect source file references at global level.  */
 
-static void
-collect_source_refs (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+collect_source_refs (ಶೂನ್ಯ)
 {
-  tree t;
-  tree decls;
-  tree decl;
+  ವೃಕ್ಷ t;
+  ವೃಕ್ಷ decls;
+  ವೃಕ್ಷ decl;
   unsigned i;
 
   FOR_EACH_VEC_ELT (*all_translation_units, i, t)
     {
       decls = DECL_INITIAL (t);
-      for (decl = BLOCK_VARS (decls); decl; decl = TREE_CHAIN (decl))
-	if (!DECL_IS_UNDECLARED_BUILTIN (decl))
+      ಪ್ರತಿ (decl = BLOCK_VARS (decls); decl; decl = ವೃಕ್ಷ_CHAIN (decl))
+	ಯದಿ (!DECL_IS_UNDECLARED_BUILTIN (decl))
 	  collect_source_ref (DECL_SOURCE_FILE (decl));
     }
 
-  for (decl = BLOCK_VARS (ext_block); decl; decl = TREE_CHAIN (decl))
-    if (!DECL_IS_UNDECLARED_BUILTIN (decl))
+  ಪ್ರತಿ (decl = BLOCK_VARS (ext_block); decl; decl = ವೃಕ್ಷ_CHAIN (decl))
+    ಯದಿ (!DECL_IS_UNDECLARED_BUILTIN (decl))
       collect_source_ref (DECL_SOURCE_FILE (decl));
 }
 
 /* Free attribute access data that are not needed by the middle end. */
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 free_attr_access_data ()
 {
-  struct cgraph_node *n;
+  ಸಂರಚನಾ cgraph_ಗಂಟು *n;
 
   /* Iterate over all functions declared in the translation unit.  */
   FOR_EACH_FUNCTION (n)
     {
-      for (tree parm = DECL_ARGUMENTS (n->decl); parm; parm = TREE_CHAIN (parm))
-	if (tree attrs = DECL_ATTRIBUTES (parm))
+      ಪ್ರತಿ (ವೃಕ್ಷ parm = DECL_ARGUMENTS (n->decl); parm; parm = ವೃಕ್ಷ_CHAIN (parm))
+	ಯದಿ (ವೃಕ್ಷ attrs = DECL_ATTRIBUTES (parm))
 	  attr_access::free_lang_data (attrs);
 
-      tree fntype = TREE_TYPE (n->decl);
-      if (!fntype || fntype == error_mark_node)
-	continue;
-      tree attrs = TYPE_ATTRIBUTES (fntype);
-      if (!attrs)
-	continue;
+      ವೃಕ್ಷ fntype = ವೃಕ್ಷ_TYPE (n->decl);
+      ಯದಿ (!fntype || fntype == error_mark_ಗಂಟು)
+	ಅನುವರ್ತ;
+      ವೃಕ್ಷ attrs = TYPE_ATTRIBUTES (fntype);
+      ಯದಿ (!attrs)
+	ಅನುವರ್ತ;
 
       attr_access::free_lang_data (attrs);
     }
@@ -13812,15 +13812,15 @@ free_attr_access_data ()
 /* Perform any final parser cleanups and generate initial debugging
    information.  */
 
-void
-c_parse_final_cleanups (void)
+ಶೂನ್ಯ
+c_parse_final_cleanups (ಶೂನ್ಯ)
 {
-  tree t;
+  ವೃಕ್ಷ t;
   unsigned i;
 
   /* We don't want to do this if generating a PCH.  */
-  if (pch_file)
-    return;
+  ಯದಿ (pch_file)
+    ಪ್ರತ್ಯಾಗಮ;
 
   timevar_stop (TV_PHASE_PARSING);
   timevar_start (TV_PHASE_DEFERRED);
@@ -13828,23 +13828,23 @@ c_parse_final_cleanups (void)
   /* Do the Objective-C stuff.  This is where all the Objective-C
      module stuff gets generated (symtab, class/protocol/selector
      lists etc).  */
-  if (c_dialect_objc ())
+  ಯದಿ (c_dialect_objc ())
     objc_write_global_declarations ();
 
   /* Close the external scope.  */
-  ext_block = pop_scope ();
+  ext_block = ತೆಗೆ_scope ();
   external_scope = 0;
   gcc_assert (!current_scope);
 
   /* Handle -fdump-ada-spec[-slim]. */
-  if (flag_dump_ada_spec || flag_dump_ada_spec_slim)
+  ಯದಿ (flag_dump_ada_spec || flag_dump_ada_spec_slim)
     {
       /* Build a table of files to generate specs for */
-      collect_source_ref (main_input_filename);
-      if (!flag_dump_ada_spec_slim)
+      collect_source_ref (main_ಒಳಹರಿವು_filename);
+      ಯದಿ (!flag_dump_ada_spec_slim)
 	collect_source_refs ();
 
-      dump_ada_specs (collect_all_refs, NULL);
+      dump_ada_specs (collect_all_refs, ರಿಕ್ತ);
     }
 
   /* Process all file scopes in this compilation, and the external_scope,
@@ -13857,27 +13857,27 @@ c_parse_final_cleanups (void)
      important for function multiversioning aliases to get resolved.  */
   symtab->process_same_body_aliases ();
 
-  if (!in_lto_p)
+  ಯದಿ (!in_lto_p)
     free_attr_access_data ();
 
   timevar_stop (TV_PHASE_DEFERRED);
   timevar_start (TV_PHASE_PARSING);
 
-  ext_block = NULL;
+  ext_block = ರಿಕ್ತ;
 }
 
 /* Register reserved keyword WORD as qualifier for address space AS.  */
 
-void
-c_register_addr_space (const char *word, addr_space_t as)
+ಶೂನ್ಯ
+c_register_addr_space (ಧ್ರುವ ವರ್ಣ *word, addr_space_t as)
 {
-  int rid = RID_FIRST_ADDR_SPACE + as;
-  tree id;
+  ಪೂರ್ಣಾಙ್ಕ rid = RID_FIRST_ADDR_SPACE + as;
+  ವೃಕ್ಷ id;
 
   /* Address space qualifiers are only supported
      in C with GNU extensions enabled.  */
-  if (c_dialect_objc () || flag_no_asm)
-    return;
+  ಯದಿ (c_dialect_objc () || flag_no_asm)
+    ಪ್ರತ್ಯಾಗಮ;
 
   id = get_identifier (word);
   C_SET_RID_CODE (id, rid);
@@ -13887,266 +13887,266 @@ c_register_addr_space (const char *word, addr_space_t as)
 
 /* Return identifier to look up for omp declare reduction.  */
 
-tree
-c_omp_reduction_id (enum tree_code reduction_code, tree reduction_id)
+ವೃಕ್ಷ
+c_omp_reduction_id (ಗಣನಾ ವೃಕ್ಷ_code reduction_code, ವೃಕ್ಷ reduction_id)
 {
-  const char *p = NULL;
-  switch (reduction_code)
+  ಧ್ರುವ ವರ್ಣ *p = ರಿಕ್ತ;
+  ವಿಕಲ್ಪ (reduction_code)
     {
-    case PLUS_EXPR: p = "+"; break;
-    case MULT_EXPR: p = "*"; break;
-    case MINUS_EXPR: p = "-"; break;
-    case BIT_AND_EXPR: p = "&"; break;
-    case BIT_XOR_EXPR: p = "^"; break;
-    case BIT_IOR_EXPR: p = "|"; break;
-    case TRUTH_ANDIF_EXPR: p = "&&"; break;
-    case TRUTH_ORIF_EXPR: p = "||"; break;
-    case MIN_EXPR: p = "min"; break;
-    case MAX_EXPR: p = "max"; break;
-    default:
-      break;
+    ಪಕ್ಷ PLUS_ಅಭಿವ್ಯಕ್ತಿ: p = "+"; ಭಙ್ಗ;
+    ಪಕ್ಷ MULT_ಅಭಿವ್ಯಕ್ತಿ: p = "*"; ಭಙ್ಗ;
+    ಪಕ್ಷ MINUS_ಅಭಿವ್ಯಕ್ತಿ: p = "-"; ಭಙ್ಗ;
+    ಪಕ್ಷ BIT_AND_ಅಭಿವ್ಯಕ್ತಿ: p = "&"; ಭಙ್ಗ;
+    ಪಕ್ಷ BIT_XOR_ಅಭಿವ್ಯಕ್ತಿ: p = "^"; ಭಙ್ಗ;
+    ಪಕ್ಷ BIT_IOR_ಅಭಿವ್ಯಕ್ತಿ: p = "|"; ಭಙ್ಗ;
+    ಪಕ್ಷ TRUTH_ANDIF_ಅಭಿವ್ಯಕ್ತಿ: p = "&&"; ಭಙ್ಗ;
+    ಪಕ್ಷ TRUTH_ORIF_ಅಭಿವ್ಯಕ್ತಿ: p = "||"; ಭಙ್ಗ;
+    ಪಕ್ಷ MIN_ಅಭಿವ್ಯಕ್ತಿ: p = "min"; ಭಙ್ಗ;
+    ಪಕ್ಷ MAX_ಅಭಿವ್ಯಕ್ತಿ: p = "max"; ಭಙ್ಗ;
+    ಸ್ವಭಾವ:
+      ಭಙ್ಗ;
     }
 
-  if (p == NULL)
+  ಯದಿ (p == ರಿಕ್ತ)
     {
-      if (TREE_CODE (reduction_id) != IDENTIFIER_NODE)
-	return error_mark_node;
+      ಯದಿ (ವೃಕ್ಷ_CODE (reduction_id) != IDENTIFIER_ಗಂಟು)
+	ಪ್ರತ್ಯಾಗಮ error_mark_ಗಂಟು;
       p = IDENTIFIER_POINTER (reduction_id);
     }
 
-  const char prefix[] = "omp declare reduction ";
-  size_t lenp = sizeof (prefix);
+  ಧ್ರುವ ವರ್ಣ prefix[] = "omp declare reduction ";
+  size_t lenp = ಪರಿಮಾಣ (prefix);
   size_t len = strlen (p);
-  char *name = XALLOCAVEC (char, lenp + len);
+  ವರ್ಣ *name = XALLOCAVEC (ವರ್ಣ, lenp + len);
   memcpy (name, prefix, lenp - 1);
   memcpy (name + lenp - 1, p, len + 1);
-  return get_identifier (name);
+  ಪ್ರತ್ಯಾಗಮ get_identifier (name);
 }
 
 /* Lookup REDUCTION_ID in the current scope, or create an artificial
    VAR_DECL, bind it into the current scope and return it.  */
 
-tree
-c_omp_reduction_decl (tree reduction_id)
+ವೃಕ್ಷ
+c_omp_reduction_decl (ವೃಕ್ಷ reduction_id)
 {
-  struct c_binding *b = I_SYMBOL_BINDING (reduction_id);
-  if (b != NULL && B_IN_CURRENT_SCOPE (b))
-    return b->decl;
+  ಸಂರಚನಾ c_binding *b = I_ಚಿಹ್ನೆ_BINDING (reduction_id);
+  ಯದಿ (b != ರಿಕ್ತ && B_IN_CURRENT_SCOPE (b))
+    ಪ್ರತ್ಯಾಗಮ b->decl;
 
-  tree decl = build_decl (BUILTINS_LOCATION, VAR_DECL,
-			  reduction_id, integer_type_node);
+  ವೃಕ್ಷ decl = build_decl (BUILTINS_LOCATION, VAR_DECL,
+			  reduction_id, integer_type_ಗಂಟು);
   DECL_ARTIFICIAL (decl) = 1;
   DECL_EXTERNAL (decl) = 1;
-  TREE_STATIC (decl) = 1;
-  TREE_PUBLIC (decl) = 0;
-  bind (reduction_id, decl, current_scope, true, false, BUILTINS_LOCATION);
-  return decl;
+  ವೃಕ್ಷ_STATIC (decl) = 1;
+  ವೃಕ್ಷ_PUBLIC (decl) = 0;
+  bind (reduction_id, decl, current_scope, ಸತ್ಯ, ಅಸತ್ಯ, BUILTINS_LOCATION);
+  ಪ್ರತ್ಯಾಗಮ decl;
 }
 
 /* Lookup REDUCTION_ID in the first scope where it has entry for TYPE.  */
 
-tree
-c_omp_reduction_lookup (tree reduction_id, tree type)
+ವೃಕ್ಷ
+c_omp_reduction_lookup (ವೃಕ್ಷ reduction_id, ವೃಕ್ಷ type)
 {
-  struct c_binding *b = I_SYMBOL_BINDING (reduction_id);
-  while (b)
+  ಸಂರಚನಾ c_binding *b = I_ಚಿಹ್ನೆ_BINDING (reduction_id);
+  ಯಾವತ್ (b)
     {
-      tree t;
-      for (t = DECL_INITIAL (b->decl); t; t = TREE_CHAIN (t))
-	if (comptypes (TREE_PURPOSE (t), type))
-	  return TREE_VALUE (t);
+      ವೃಕ್ಷ t;
+      ಪ್ರತಿ (t = DECL_INITIAL (b->decl); t; t = ವೃಕ್ಷ_CHAIN (t))
+	ಯದಿ (comptypes (ವೃಕ್ಷ_PURPOSE (t), type))
+	  ಪ್ರತ್ಯಾಗಮ ವೃಕ್ಷ_ಮೌಲ್ಯ (t);
       b = b->shadowed;
     }
-  return error_mark_node;
+  ಪ್ರತ್ಯಾಗಮ error_mark_ಗಂಟು;
 }
 
 /* Helper function called via walk_tree, to diagnose invalid
    #pragma omp declare reduction combiners or initializers.  */
 
-tree
-c_check_omp_declare_reduction_r (tree *tp, int *, void *data)
+ವೃಕ್ಷ
+c_check_omp_declare_reduction_r (ವೃಕ್ಷ *tp, ಪೂರ್ಣಾಙ್ಕ *, ಶೂನ್ಯ *data)
 {
-  tree *vars = (tree *) data;
-  if (SSA_VAR_P (*tp)
+  ವೃಕ್ಷ *vars = (ವೃಕ್ಷ *) data;
+  ಯದಿ (SSA_VAR_P (*tp)
       && !DECL_ARTIFICIAL (*tp)
       && *tp != vars[0]
       && *tp != vars[1])
     {
       location_t loc = DECL_SOURCE_LOCATION (vars[0]);
-      if (strcmp (IDENTIFIER_POINTER (DECL_NAME (vars[0])), "omp_out") == 0)
+      ಯದಿ (strcmp (IDENTIFIER_POINTER (DECL_NAME (vars[0])), "omp_out") == 0)
 	error_at (loc, "%<#pragma omp declare reduction%> combiner refers to "
 		       "variable %qD which is not %<omp_out%> nor %<omp_in%>",
 		  *tp);
-      else
+      ಅನ್ಯಥಾ
 	error_at (loc, "%<#pragma omp declare reduction%> initializer refers "
 		       "to variable %qD which is not %<omp_priv%> nor "
 		       "%<omp_orig%>",
 		  *tp);
-      return *tp;
+      ಪ್ರತ್ಯಾಗಮ *tp;
     }
-  return NULL_TREE;
+  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 }
 
 /* Return identifier to look up for omp declare mapper.  */
 
-tree
-c_omp_mapper_id (tree mapper_id)
+ವೃಕ್ಷ
+c_omp_mapper_id (ವೃಕ್ಷ mapper_id)
 {
-  const char *p = NULL;
+  ಧ್ರುವ ವರ್ಣ *p = ರಿಕ್ತ;
 
-  const char prefix[] = "omp declare mapper ";
+  ಧ್ರುವ ವರ್ಣ prefix[] = "omp declare mapper ";
 
-  if (mapper_id == NULL_TREE)
+  ಯದಿ (mapper_id == NULL_ವೃಕ್ಷ)
     p = "<default>";
-  else if (TREE_CODE (mapper_id) == IDENTIFIER_NODE)
+  ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (mapper_id) == IDENTIFIER_ಗಂಟು)
     p = IDENTIFIER_POINTER (mapper_id);
-  else
-    return error_mark_node;
+  ಅನ್ಯಥಾ
+    ಪ್ರತ್ಯಾಗಮ error_mark_ಗಂಟು;
 
-  size_t lenp = sizeof (prefix);
+  size_t lenp = ಪರಿಮಾಣ (prefix);
   size_t len = strlen (p);
-  char *name = XALLOCAVEC (char, lenp + len);
+  ವರ್ಣ *name = XALLOCAVEC (ವರ್ಣ, lenp + len);
   memcpy (name, prefix, lenp - 1);
   memcpy (name + lenp - 1, p, len + 1);
-  return get_identifier (name);
+  ಪ್ರತ್ಯಾಗಮ get_identifier (name);
 }
 
 /* Lookup MAPPER_ID in the current scope, or create an artificial
    VAR_DECL, bind it into the current scope and return it.  */
 
-tree
-c_omp_mapper_decl (tree mapper_id)
+ವೃಕ್ಷ
+c_omp_mapper_decl (ವೃಕ್ಷ mapper_id)
 {
-  struct c_binding *b = I_SYMBOL_BINDING (mapper_id);
-  if (b != NULL && B_IN_CURRENT_SCOPE (b))
-    return b->decl;
+  ಸಂರಚನಾ c_binding *b = I_ಚಿಹ್ನೆ_BINDING (mapper_id);
+  ಯದಿ (b != ರಿಕ್ತ && B_IN_CURRENT_SCOPE (b))
+    ಪ್ರತ್ಯಾಗಮ b->decl;
 
-  tree decl = build_decl (BUILTINS_LOCATION, VAR_DECL,
-			  mapper_id, integer_type_node);
+  ವೃಕ್ಷ decl = build_decl (BUILTINS_LOCATION, VAR_DECL,
+			  mapper_id, integer_type_ಗಂಟು);
   DECL_ARTIFICIAL (decl) = 1;
   DECL_EXTERNAL (decl) = 1;
-  TREE_STATIC (decl) = 1;
-  TREE_PUBLIC (decl) = 0;
-  bind (mapper_id, decl, current_scope, true, false, BUILTINS_LOCATION);
-  return decl;
+  ವೃಕ್ಷ_STATIC (decl) = 1;
+  ವೃಕ್ಷ_PUBLIC (decl) = 0;
+  bind (mapper_id, decl, current_scope, ಸತ್ಯ, ಅಸತ್ಯ, BUILTINS_LOCATION);
+  ಪ್ರತ್ಯಾಗಮ decl;
 }
 
 /* Lookup MAPPER_ID in the first scope where it has entry for TYPE.  */
 
-tree
-c_omp_mapper_lookup (tree mapper_id, tree type)
+ವೃಕ್ಷ
+c_omp_mapper_lookup (ವೃಕ್ಷ mapper_id, ವೃಕ್ಷ type)
 {
-  if (!RECORD_OR_UNION_TYPE_P (type))
-    return NULL_TREE;
+  ಯದಿ (!RECORD_OR_UNION_TYPE_P (type))
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
   mapper_id = c_omp_mapper_id (mapper_id);
 
-  struct c_binding *b = I_SYMBOL_BINDING (mapper_id);
-  while (b)
+  ಸಂರಚನಾ c_binding *b = I_ಚಿಹ್ನೆ_BINDING (mapper_id);
+  ಯಾವತ್ (b)
     {
-      tree t;
-      for (t = DECL_INITIAL (b->decl); t; t = TREE_CHAIN (t))
-	if (comptypes (TREE_PURPOSE (t), type))
-	  return TREE_VALUE (t);
+      ವೃಕ್ಷ t;
+      ಪ್ರತಿ (t = DECL_INITIAL (b->decl); t; t = ವೃಕ್ಷ_CHAIN (t))
+	ಯದಿ (comptypes (ವೃಕ್ಷ_PURPOSE (t), type))
+	  ಪ್ರತ್ಯಾಗಮ ವೃಕ್ಷ_ಮೌಲ್ಯ (t);
       b = b->shadowed;
     }
-  return NULL_TREE;
+  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 }
 
 /* For C, we record a pointer to the mapper itself without wrapping it in an
    artificial function or similar.  So, just return it.  */
 
-tree
-c_omp_extract_mapper_directive (tree mapper)
+ವೃಕ್ಷ
+c_omp_extract_mapper_directive (ವೃಕ್ಷ mapper)
 {
-  return mapper;
+  ಪ್ರತ್ಯಾಗಮ mapper;
 }
 
 /* For now we can handle singleton OMP_ARRAY_SECTIONs with custom mappers, but
    nothing more complicated.  */
 
-tree
-c_omp_map_array_section (location_t loc, tree t)
+ವೃಕ್ಷ
+c_omp_map_array_section (location_t loc, ವೃಕ್ಷ t)
 {
-  tree low = TREE_OPERAND (t, 1);
-  tree len = TREE_OPERAND (t, 2);
+  ವೃಕ್ಷ ಕೆಳಗಿನ = ವೃಕ್ಷ_OPERAND (t, 1);
+  ವೃಕ್ಷ len = ವೃಕ್ಷ_OPERAND (t, 2);
 
-  if (len && integer_onep (len))
+  ಯದಿ (len && integer_onep (len))
     {
-      t = TREE_OPERAND (t, 0);
+      t = ವೃಕ್ಷ_OPERAND (t, 0);
 
-      if (!low)
-	low = integer_zero_node;
+      ಯದಿ (!ಕೆಳಗಿನ)
+	ಕೆಳಗಿನ = integer_zero_ಗಂಟು;
 
-      t = build_array_ref (loc, t, low);
+      t = build_array_ref (loc, t, ಕೆಳಗಿನ);
     }
 
-  return t;
+  ಪ್ರತ್ಯಾಗಮ t;
 }
 
 /* Helper function for below function.  */
 
-static tree
-c_omp_scan_mapper_bindings_r (tree *tp, int *walk_subtrees, void *ptr)
+ಸ್ಥಿರ ವೃಕ್ಷ
+c_omp_scan_mapper_bindings_r (ವೃಕ್ಷ *tp, ಪೂರ್ಣಾಙ್ಕ *walk_subtrees, ಶೂನ್ಯ *ptr)
 {
-  tree t = *tp;
-  omp_mapper_list<tree> *mlist = (omp_mapper_list<tree> *) ptr;
-  tree aggr_type = NULL_TREE;
+  ವೃಕ್ಷ t = *tp;
+  omp_mapper_list<ವೃಕ್ಷ> *mlist = (omp_mapper_list<ವೃಕ್ಷ> *) ptr;
+  ವೃಕ್ಷ aggr_type = NULL_ವೃಕ್ಷ;
 
-  if (TREE_CODE (t) == SIZEOF_EXPR
-      || TREE_CODE (t) == ALIGNOF_EXPR)
+  ಯದಿ (ವೃಕ್ಷ_CODE (t) == SIZEOF_ಅಭಿವ್ಯಕ್ತಿ
+      || ವೃಕ್ಷ_CODE (t) == ALIGNOF_ಅಭಿವ್ಯಕ್ತಿ)
     {
       *walk_subtrees = 0;
-      return NULL_TREE;
+      ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
     }
 
-  if (TREE_CODE (t) == OMP_CLAUSE)
-    return NULL_TREE;
+  ಯದಿ (ವೃಕ್ಷ_CODE (t) == OMP_CLAUSE)
+    ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 
-  if (TREE_CODE (t) == COMPONENT_REF
-      && RECORD_OR_UNION_TYPE_P (TREE_TYPE (TREE_OPERAND (t, 0))))
-    aggr_type = TREE_TYPE (TREE_OPERAND (t, 0));
-  else if ((TREE_CODE (t) == VAR_DECL
-	    || TREE_CODE (t) == PARM_DECL
-	    || TREE_CODE (t) == RESULT_DECL)
-	   && RECORD_OR_UNION_TYPE_P (TREE_TYPE (t)))
-    aggr_type = TREE_TYPE (t);
+  ಯದಿ (ವೃಕ್ಷ_CODE (t) == COMPONENT_REF
+      && RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_OPERAND (t, 0))))
+    aggr_type = ವೃಕ್ಷ_TYPE (ವೃಕ್ಷ_OPERAND (t, 0));
+  ಅನ್ಯಥಾ ಯದಿ ((ವೃಕ್ಷ_CODE (t) == VAR_DECL
+	    || ವೃಕ್ಷ_CODE (t) == PARM_DECL
+	    || ವೃಕ್ಷ_CODE (t) == RESULT_DECL)
+	   && RECORD_OR_UNION_TYPE_P (ವೃಕ್ಷ_TYPE (t)))
+    aggr_type = ವೃಕ್ಷ_TYPE (t);
 
-  if (aggr_type)
+  ಯದಿ (aggr_type)
     {
-      tree mapper_fn = c_omp_mapper_lookup (NULL_TREE, aggr_type);
-      if (mapper_fn)
-	mlist->add_mapper (NULL_TREE, aggr_type, mapper_fn);
+      ವೃಕ್ಷ mapper_fn = c_omp_mapper_lookup (NULL_ವೃಕ್ಷ, aggr_type);
+      ಯದಿ (mapper_fn)
+	mlist->add_mapper (NULL_ವೃಕ್ಷ, aggr_type, mapper_fn);
     }
 
-  return NULL_TREE;
+  ಪ್ರತ್ಯಾಗಮ NULL_ವೃಕ್ಷ;
 }
 
 /* Scan an offload region's body, and record uses of struct- or union-typed
    variables.  Add _mapper_binding_ fake clauses to *CLAUSES_PTR.  */
 
-void
-c_omp_scan_mapper_bindings (location_t loc, tree *clauses_ptr, tree body)
+ಶೂನ್ಯ
+c_omp_scan_mapper_bindings (location_t loc, ವೃಕ್ಷ *clauses_ptr, ವೃಕ್ಷ body)
 {
-  hash_set<omp_name_type<tree>> seen_types;
-  auto_vec<tree> mappers;
-  omp_mapper_list<tree> mlist (&seen_types, &mappers);
+  hash_set<omp_name_type<ವೃಕ್ಷ>> seen_types;
+  auto_vec<ವೃಕ್ಷ> mappers;
+  omp_mapper_list<ವೃಕ್ಷ> mlist (&seen_types, &mappers);
 
-  walk_tree_without_duplicates (&body, c_omp_scan_mapper_bindings_r, &mlist);
+  walk_ವೃಕ್ಷ_without_duplicates (&body, c_omp_scan_mapper_bindings_r, &mlist);
 
-  unsigned int i;
-  tree mapper;
+  unsigned ಪೂರ್ಣಾಙ್ಕ i;
+  ವೃಕ್ಷ mapper;
   FOR_EACH_VEC_ELT (mappers, i, mapper)
     c_omp_find_nested_mappers (&mlist, mapper);
 
   FOR_EACH_VEC_ELT (mappers, i, mapper)
     {
-      if (mapper == error_mark_node)
-	continue;
-      tree mapper_name = OMP_DECLARE_MAPPER_ID (mapper);
-      tree decl = OMP_DECLARE_MAPPER_DECL (mapper);
+      ಯದಿ (mapper == error_mark_ಗಂಟು)
+	ಅನುವರ್ತ;
+      ವೃಕ್ಷ mapper_name = OMP_DECLARE_MAPPER_ID (mapper);
+      ವೃಕ್ಷ decl = OMP_DECLARE_MAPPER_DECL (mapper);
 
-      tree c = build_omp_clause (loc, OMP_CLAUSE__MAPPER_BINDING_);
+      ವೃಕ್ಷ c = build_omp_clause (loc, OMP_CLAUSE__MAPPER_BINDING_);
       OMP_CLAUSE__MAPPER_BINDING__ID (c) = mapper_name;
       OMP_CLAUSE__MAPPER_BINDING__DECL (c) = decl;
       OMP_CLAUSE__MAPPER_BINDING__MAPPER (c) = mapper;
@@ -14156,11 +14156,11 @@ c_omp_scan_mapper_bindings (location_t loc, tree *clauses_ptr, tree body)
     }
 }
 
-bool
-c_check_in_current_scope (tree decl)
+ತಾರ್ಕಿಕ
+c_check_in_current_scope (ವೃಕ್ಷ decl)
 {
-  struct c_binding *b = I_SYMBOL_BINDING (DECL_NAME (decl));
-  return b != NULL && B_IN_CURRENT_SCOPE (b);
+  ಸಂರಚನಾ c_binding *b = I_ಚಿಹ್ನೆ_BINDING (DECL_NAME (decl));
+  ಪ್ರತ್ಯಾಗಮ b != ರಿಕ್ತ && B_IN_CURRENT_SCOPE (b);
 }
 
 /* Search for loop or switch names.  BEFORE_LABELS is last statement before
@@ -14170,90 +14170,90 @@ c_check_in_current_scope (tree decl)
    Returns number of loop/switch names found and if any are found, sets
    *LAST_P to the canonical loop/switch name LABEL_DECL.  */
 
-int
-c_get_loop_names (tree before_labels, bool switch_p, tree *last_p)
+ಪೂರ್ಣಾಙ್ಕ
+c_get_loop_names (ವೃಕ್ಷ before_labels, ತಾರ್ಕಿಕ switch_p, ವೃಕ್ಷ *last_p)
 {
-  *last_p = NULL_TREE;
-  if (!building_stmt_list_p ()
+  *last_p = NULL_ವೃಕ್ಷ;
+  ಯದಿ (!building_stmt_list_p ()
       || !STATEMENT_LIST_HAS_LABEL (cur_stmt_list)
-      || before_labels == void_list_node)
-    return 0;
+      || before_labels == void_list_ಗಂಟು)
+    ಪ್ರತ್ಯಾಗಮ 0;
 
-  int ret = 0;
-  tree last = NULL_TREE;
-  for (tree_stmt_iterator tsi = tsi_last (cur_stmt_list);
+  ಪೂರ್ಣಾಙ್ಕ ret = 0;
+  ವೃಕ್ಷ last = NULL_ವೃಕ್ಷ;
+  ಪ್ರತಿ (ವೃಕ್ಷ_stmt_iterator tsi = tsi_last (cur_stmt_list);
        !tsi_end_p (tsi); tsi_prev (&tsi))
     {
-      tree stmt = tsi_stmt (tsi);
-      if (stmt == before_labels)
-	break;
-      else if (TREE_CODE (stmt) == LABEL_EXPR)
+      ವೃಕ್ಷ stmt = tsi_stmt (tsi);
+      ಯದಿ (stmt == before_labels)
+	ಭಙ್ಗ;
+      ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (stmt) == LABEL_ಅಭಿವ್ಯಕ್ತಿ)
 	{
-	  if (last == NULL_TREE)
-	    last = LABEL_EXPR_LABEL (stmt);
-	  else
+	  ಯದಿ (last == NULL_ವೃಕ್ಷ)
+	    last = LABEL_ಅಭಿವ್ಯಕ್ತಿ_LABEL (stmt);
+	  ಅನ್ಯಥಾ
 	    {
-	      loop_names.safe_push (LABEL_EXPR_LABEL (stmt));
+	      loop_names.safe_ತಳ್ಳು (LABEL_ಅಭಿವ್ಯಕ್ತಿ_LABEL (stmt));
 	      ++ret;
 	    }
 	}
-      else if (TREE_CODE (stmt) != CASE_LABEL_EXPR
-	       && TREE_CODE (stmt) != DEBUG_BEGIN_STMT)
-	break;
+      ಅನ್ಯಥಾ ಯದಿ (ವೃಕ್ಷ_CODE (stmt) != CASE_LABEL_ಅಭಿವ್ಯಕ್ತಿ
+	       && ವೃಕ್ಷ_CODE (stmt) != DEBUG_BEGIN_STMT)
+	ಭಙ್ಗ;
     }
-  if (last)
+  ಯದಿ (last)
     {
-      if (switch_p)
+      ಯದಿ (switch_p)
 	C_DECL_SWITCH_NAME (last) = 1;
-      else
+      ಅನ್ಯಥಾ
 	C_DECL_LOOP_NAME (last) = 1;
-      loop_names.safe_push (last);
+      loop_names.safe_ತಳ್ಳು (last);
       ++ret;
-      if (loop_names.length () > 16)
+      ಯದಿ (loop_names.length () > 16)
 	{
-	  unsigned int first = 0, i;
-	  tree l, c = NULL_TREE;
-	  if (loop_names_hash == NULL)
-	    loop_names_hash = new decl_tree_map (ret);
-	  else
+	  unsigned ಪೂರ್ಣಾಙ್ಕ first = 0, i;
+	  ವೃಕ್ಷ l, c = NULL_ವೃಕ್ಷ;
+	  ಯದಿ (loop_names_hash == ರಿಕ್ತ)
+	    loop_names_hash = ನೂತನ decl_ವೃಕ್ಷ_map (ret);
+	  ಅನ್ಯಥಾ
 	    first = loop_names.length () - ret;
 	  FOR_EACH_VEC_ELT_REVERSE (loop_names, i, l)
 	    {
-	      if (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
+	      ಯದಿ (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
 		c = l;
 	      gcc_checking_assert (c);
 	      loop_names_hash->put (l, c);
-	      if (i == first)
-		break;
+	      ಯದಿ (i == first)
+		ಭಙ್ಗ;
 	    }
 	}
       *last_p = last;
     }
-  return ret;
+  ಪ್ರತ್ಯಾಗಮ ret;
 }
 
 /* Undoes what get_loop_names did when it returned NUM_NAMES.  */
 
-void
-c_release_loop_names (int num_names)
+ಶೂನ್ಯ
+c_release_loop_names (ಪೂರ್ಣಾಙ್ಕ ಅಂಕೆ_names)
 {
-  unsigned len = loop_names.length () - num_names;
-  if (loop_names_hash)
+  unsigned len = loop_names.length () - ಅಂಕೆ_names;
+  ಯದಿ (loop_names_hash)
     {
-      if (len <= 16)
+      ಯದಿ (len <= 16)
 	{
 	  delete loop_names_hash;
-	  loop_names_hash = NULL;
+	  loop_names_hash = ರಿಕ್ತ;
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
-	  unsigned int i;
-	  tree l;
+	  unsigned ಪೂರ್ಣಾಙ್ಕ i;
+	  ವೃಕ್ಷ l;
 	  FOR_EACH_VEC_ELT_REVERSE (loop_names, i, l)
 	    {
 	      loop_names_hash->remove (l);
-	      if (i == len)
-		break;
+	      ಯದಿ (i == len)
+		ಭಙ್ಗ;
 	    }
 	}
     }
@@ -14266,113 +14266,113 @@ c_release_loop_names (int num_names)
    to use for BREAK_STMT or CONTINUE_STMT, either NULL_TREE or
    canonical loop/switch name LABEL_DECL.  */
 
-tree
-c_finish_bc_name (location_t loc, tree name, bool is_break)
+ವೃಕ್ಷ
+c_finish_bc_name (location_t loc, ವೃಕ್ಷ name, ತಾರ್ಕಿಕ is_break)
 {
-  tree label = NULL_TREE, lab;
+  ವೃಕ್ಷ label = NULL_ವೃಕ್ಷ, lab;
   pedwarn_c23 (loc, OPT_Wpedantic,
 	       "ISO C does not support %qs statement with an identifier "
 	       "operand before C2Y", is_break ? "break" : "continue");
 
   /* If I_LABEL_DECL is NULL or not from current function, don't waste time
      trying to find it among loop_names, it can't be there.  */
-  if (!loop_names.is_empty ()
+  ಯದಿ (!loop_names.is_empty ()
       && current_function_scope
       && (lab = I_LABEL_DECL (name))
       && DECL_CONTEXT (lab) == current_function_decl)
     {
-      unsigned int i;
-      tree l, c = NULL_TREE;
-      if (loop_names_hash)
+      unsigned ಪೂರ್ಣಾಙ್ಕ i;
+      ವೃಕ್ಷ l, c = NULL_ವೃಕ್ಷ;
+      ಯದಿ (loop_names_hash)
 	{
-	  if (tree *val = loop_names_hash->get (lab))
+	  ಯದಿ (ವೃಕ್ಷ *val = loop_names_hash->get (lab))
 	    label = *val;
 	}
-      else
+      ಅನ್ಯಥಾ
 	FOR_EACH_VEC_ELT_REVERSE (loop_names, i, l)
 	  {
-	    if (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
+	    ಯದಿ (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
 	      c = l;
 	    gcc_checking_assert (c);
-	    if (l == lab)
+	    ಯದಿ (l == lab)
 	      {
 		label = c;
-		break;
+		ಭಙ್ಗ;
 	      }
 	  }
-      if (label)
-	TREE_USED (lab) = 1;
+      ಯದಿ (label)
+	ವೃಕ್ಷ_USED (lab) = 1;
     }
-  if (label == NULL_TREE)
+  ಯದಿ (label == NULL_ವೃಕ್ಷ)
     {
-      auto_vec<const char *> candidates;
-      unsigned int i;
-      tree l, c = NULL_TREE;
+      auto_vec<ಧ್ರುವ ವರ್ಣ *> candidates;
+      unsigned ಪೂರ್ಣಾಙ್ಕ i;
+      ವೃಕ್ಷ l, c = NULL_ವೃಕ್ಷ;
       FOR_EACH_VEC_ELT_REVERSE (loop_names, i, l)
 	{
-	  if (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
+	  ಯದಿ (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
 	    c = l;
 	  gcc_checking_assert (c);
-	  if (is_break || C_DECL_LOOP_NAME (c))
-	    candidates.safe_push (IDENTIFIER_POINTER (DECL_NAME (l)));
+	  ಯದಿ (is_break || C_DECL_LOOP_NAME (c))
+	    candidates.safe_ತಳ್ಳು (IDENTIFIER_POINTER (DECL_NAME (l)));
 	}
-      const char *hint = find_closest_string (IDENTIFIER_POINTER (name),
+      ಧ್ರುವ ವರ್ಣ *hint = find_closest_string (IDENTIFIER_POINTER (name),
 					      &candidates);
-      if (hint)
+      ಯದಿ (hint)
 	{
 	  gcc_rich_location richloc (loc);
 	  richloc.add_fixit_replace (hint);
-	  if (is_break)
+	  ಯದಿ (is_break)
 	    error_at (&richloc, "%<break%> statement operand %qE does not "
 				"refer to a named loop or %<switch%>; "
 				"did you mean %qs?", name, hint);
-	  else
+	  ಅನ್ಯಥಾ
 	    error_at (&richloc, "%<continue%> statement operand %qE does not "
 				"refer to a named loop; did you mean %qs?",
 		      name, hint);
 	}
-      else if (is_break)
+      ಅನ್ಯಥಾ ಯದಿ (is_break)
 	error_at (loc, "%<break%> statement operand %qE does not refer to a "
 		       "named loop or %<switch%>", name);
-      else
+      ಅನ್ಯಥಾ
 	error_at (loc, "%<continue%> statement operand %qE does not refer to "
 		       "a named loop", name);
     }
-  else if (!C_DECL_LOOP_NAME (label) && !is_break)
+  ಅನ್ಯಥಾ ಯದಿ (!C_DECL_LOOP_NAME (label) && !is_break)
     {
       auto_diagnostic_group d;
       error_at (loc, "%<continue%> statement operand %qE refers to a named "
 		     "%<switch%>", name);
       inform (DECL_SOURCE_LOCATION (label), "%<switch%> name defined here");
-      label = NULL_TREE;
+      label = NULL_ವೃಕ್ಷ;
     }
-  else if (!C_DECL_LOOP_SWITCH_NAME_VALID (label))
+  ಅನ್ಯಥಾ ಯದಿ (!C_DECL_LOOP_SWITCH_NAME_VALID (label))
     {
       auto_diagnostic_group d;
-      if (C_DECL_LOOP_NAME (label))
+      ಯದಿ (C_DECL_LOOP_NAME (label))
 	{
 	  error_at (loc, "%qs statement operand %qE refers to a loop outside "
 			 "of its body", is_break ? "break" : "continue", name);
 	  inform (DECL_SOURCE_LOCATION (label), "loop name defined here");
 	}
-      else
+      ಅನ್ಯಥಾ
 	{
 	  error_at (loc, "%<break%> statement operand %qE refers to a "
 			 "%<switch%> outside of its body", name);
 	  inform (DECL_SOURCE_LOCATION (label),
 		  "%<switch%> name defined here");
 	}
-      label = NULL_TREE;
+      label = NULL_ವೃಕ್ಷ;
     }
-  else if (label == loop_names.last () && (in_statement & IN_NAMED_STMT) != 0)
+  ಅನ್ಯಥಾ ಯದಿ (label == loop_names.last () && (in_statement & IN_NAMED_STMT) != 0)
     /* If it is just a fancy reference to the innermost construct, handle it
        just like break; or continue; though tracking cheaply what is the
        innermost loop for continue when nested in switches would require
        another global variable and updating it.  */
-    label = NULL_TREE;
-  else
+    label = NULL_ವೃಕ್ಷ;
+  ಅನ್ಯಥಾ
     C_DECL_LOOP_SWITCH_NAME_USED (label) = 1;
-  return label;
+  ಪ್ರತ್ಯಾಗಮ label;
 }
 
-#include "gt-c-c-decl.h"
+#ಅನ್ತರ್ಭಾವ "gt-c-c-decl.h"
