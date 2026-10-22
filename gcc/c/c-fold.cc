@@ -37,7 +37,7 @@ static tree c_fully_fold_internal (tree expr, bool, bool *, bool *, bool,
 static void
 c_disable_warnings (bool disable)
 {
-  if (disable)
+  ᱡᱩᱫᱤ (disable)
     {
       ++c_inhibit_evaluation_warnings;
     }
@@ -48,7 +48,7 @@ c_disable_warnings (bool disable)
 static void
 c_enable_warnings (bool enable)
 {
-  if (enable)
+  ᱡᱩᱫᱤ (enable)
     {
       --c_inhibit_evaluation_warnings;
     }
@@ -60,12 +60,12 @@ c_enable_warnings (bool enable)
 static tree
 c_fold_array_ref (tree type, tree ary, tree index)
 {
-  if (TREE_CODE (ary) != STRING_CST
+  ᱡᱩᱫᱤ (TREE_CODE (ary) != STRING_CST
       || TREE_CODE (index) != INTEGER_CST
       || TREE_OVERFLOW (index)
       || TREE_CODE (TREE_TYPE (ary)) != ARRAY_TYPE
       || !tree_fits_uhwi_p (index))
-    return NULL_TREE;
+    ᱨᱩᱣᱟᱹᱲ NULL_TREE;
 
   tree elem_type = TREE_TYPE (TREE_TYPE (ary));
   unsigned elem_nchars = (TYPE_PRECISION (elem_type)
@@ -76,17 +76,17 @@ c_fold_array_ref (tree type, tree ary, tree index)
   nelts_minus_one = c_fully_fold_internal (nelts_minus_one, true, &dummy1,
 					   &dummy2, false, false);
   unsigned HOST_WIDE_INT i = tree_to_uhwi (index);
-  if (!tree_int_cst_le (index, nelts_minus_one)
+  ᱡᱩᱫᱤ (!tree_int_cst_le (index, nelts_minus_one)
       || i >= len
       || i + elem_nchars > len)
-    return NULL_TREE;
+    ᱨᱩᱣᱟᱹᱲ NULL_TREE;
 
-  if (elem_nchars == 1)
-    return build_int_cst (type, TREE_STRING_POINTER (ary)[i]);
+  ᱡᱩᱫᱤ (elem_nchars == 1)
+    ᱨᱩᱣᱟᱹᱲ build_int_cst (type, TREE_STRING_POINTER (ary)[i]);
 
-  const unsigned char *ptr
-    = ((const unsigned char *)TREE_STRING_POINTER (ary) + i * elem_nchars);
-  return native_interpret_expr (type, ptr, elem_nchars);
+  const unsigned var_na *ptr
+    = ((const unsigned var_na *)TREE_STRING_POINTER (ary) + i * elem_nchars);
+  ᱨᱩᱣᱟᱹᱲ native_interpret_expr (type, ptr, elem_nchars);
 }
 
 /* Fully fold EXPR, an expression that was not folded (beyond integer
@@ -114,19 +114,19 @@ c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
   bool maybe_const_itself = true;
   location_t loc = EXPR_LOCATION (expr);
 
-  if (!maybe_const)
+  ᱡᱩᱫᱤ (!maybe_const)
     maybe_const = &dummy;
-  if (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
+  ᱡᱩᱫᱤ (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
     {
       eptype = TREE_TYPE (expr);
       expr = TREE_OPERAND (expr, 0);
     }
   ret = c_fully_fold_internal (expr, in_init, maybe_const,
 			       &maybe_const_itself, false, lval);
-  if (eptype)
+  ᱡᱩᱫᱤ (eptype)
     ret = fold_convert_loc (loc, eptype, ret);
   *maybe_const &= maybe_const_itself;
-  return ret;
+  ᱨᱩᱣᱟᱹᱲ ret;
 }
 
 /* Internal helper for c_fully_fold.  EXPR and IN_INIT are as for
@@ -146,8 +146,8 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 		       bool *maybe_const_itself, bool for_int_const, bool lval)
 {
   tree ret = expr;
-  enum tree_code code = TREE_CODE (expr);
-  enum tree_code_class kind = TREE_CODE_CLASS (code);
+  ga_nanaa tree_code code = TREE_CODE (expr);
+  ga_nanaa tree_code_class kind = TREE_CODE_CLASS (code);
   location_t loc = EXPR_LOCATION (expr);
   tree op0, op1, op2, op3;
   tree orig_op0, orig_op1, orig_op2;
@@ -161,59 +161,59 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
   /* Constants, declarations, statements, errors, and anything else not
      counted as an expression cannot usefully be folded further at this
      point.  */
-  if (!IS_EXPR_CODE_CLASS (kind) || kind == tcc_statement)
+  ᱡᱩᱫᱤ (!IS_EXPR_CODE_CLASS (kind) || kind == tcc_statement)
     {
       /* Except for variables which we can optimize to its initializer.  */
-      if (VAR_P (expr) && !lval && (optimize || in_init))
+      ᱡᱩᱫᱤ (VAR_P (expr) && !lval && (optimize || in_init))
 	{
-	  if (in_init)
+	  ᱡᱩᱫᱤ (in_init)
 	    ret = decl_constant_value_1 (expr, true);
-	  else
+	  ᱵᱟᱝ
 	    {
 	      ret = decl_constant_value (expr);
-	      if (ret != expr
+	      ᱡᱩᱫᱤ (ret != expr
 		  && (TYPE_MODE (TREE_TYPE (ret)) == BLKmode
 		      || TREE_CODE (TREE_TYPE (ret)) == ARRAY_TYPE))
-		return expr;
+		ᱨᱩᱣᱟᱹᱲ expr;
 	    }
 	  /* Avoid unwanted tree sharing between the initializer and current
 	     function's body where the tree can be modified e.g. by the
 	     gimplifier.  */
-	  if (ret != expr && TREE_STATIC (expr))
+	  ᱡᱩᱫᱤ (ret != expr && TREE_STATIC (expr))
 	    ret = unshare_expr (ret);
-	  return ret;
+	  ᱨᱩᱣᱟᱹᱲ ret;
 	}
-      return expr;
+      ᱨᱩᱣᱟᱹᱲ expr;
     }
 
-  if (IS_EXPR_CODE_CLASS (kind))
+  ᱡᱩᱫᱤ (IS_EXPR_CODE_CLASS (kind))
     old_range = EXPR_LOCATION_RANGE (expr);
 
   /* Operands of variable-length expressions (function calls) have
      already been folded, as have __builtin_* function calls, and such
      expressions cannot occur in constant expressions.  */
-  if (kind == tcc_vl_exp)
+  ᱡᱩᱫᱤ (kind == tcc_vl_exp)
     {
       *maybe_const_operands = false;
       ret = fold (expr);
       goto out;
     }
 
-  if (code == C_MAYBE_CONST_EXPR)
+  ᱡᱩᱫᱤ (code == C_MAYBE_CONST_EXPR)
     {
       tree pre = C_MAYBE_CONST_EXPR_PRE (expr);
       tree inner = C_MAYBE_CONST_EXPR_EXPR (expr);
-      if (C_MAYBE_CONST_EXPR_NON_CONST (expr))
+      ᱡᱩᱫᱤ (C_MAYBE_CONST_EXPR_NON_CONST (expr))
 	*maybe_const_operands = false;
-      if (C_MAYBE_CONST_EXPR_INT_OPERANDS (expr))
+      ᱡᱩᱫᱤ (C_MAYBE_CONST_EXPR_INT_OPERANDS (expr))
 	{
 	  *maybe_const_itself = false;
 	  inner = c_fully_fold_internal (inner, in_init, maybe_const_operands,
 					 maybe_const_itself, true, lval);
 	}
-      if (pre && !in_init)
+      ᱡᱩᱫᱤ (pre && !in_init)
 	ret = build2 (COMPOUND_EXPR, TREE_TYPE (expr), pre, inner);
-      else
+      ᱵᱟᱝ
 	ret = inner;
       goto out;
     }
@@ -226,54 +226,54 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      C_MAYBE_CONST_EXPR to avoid folding inside them.)  */
   switch (code)
     {
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-    case COMPOUND_EXPR:
+    pak_sa MODIFY_EXPR:
+    pak_sa PREDECREMENT_EXPR:
+    pak_sa PREINCREMENT_EXPR:
+    pak_sa POSTDECREMENT_EXPR:
+    pak_sa POSTINCREMENT_EXPR:
+    pak_sa COMPOUND_EXPR:
       *maybe_const_operands = false;
-      break;
+      bha_nga;
 
-    case VA_ARG_EXPR:
-    case TARGET_EXPR:
-    case BIND_EXPR:
-    case OBJ_TYPE_REF:
+    pak_sa VA_ARG_EXPR:
+    pak_sa TARGET_EXPR:
+    pak_sa BIND_EXPR:
+    pak_sa OBJ_TYPE_REF:
       *maybe_const_operands = false;
       ret = fold (expr);
       goto out;
 
     default:
-      break;
+      bha_nga;
     }
 
   /* Fold individual tree codes as appropriate.  */
   switch (code)
     {
-    case COMPOUND_LITERAL_EXPR:
+    pak_sa COMPOUND_LITERAL_EXPR:
       /* Any non-constancy will have been marked in a containing
 	 C_MAYBE_CONST_EXPR; there is no more folding to do here.  */
       goto out;
 
-    case COMPONENT_REF:
+    pak_sa COMPONENT_REF:
       orig_op0 = op0 = TREE_OPERAND (expr, 0);
       op1 = TREE_OPERAND (expr, 1);
       op2 = TREE_OPERAND (expr, 2);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
-      if (op0 != orig_op0)
+      ᱡᱩᱫᱤ (op0 != orig_op0)
 	ret = build3 (COMPONENT_REF, TREE_TYPE (expr), op0, op1, op2);
-      if (ret != expr)
+      ᱡᱩᱫᱤ (ret != expr)
 	{
 	  TREE_READONLY (ret) = TREE_READONLY (expr);
 	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
 	}
-      if (!lval)
+      ᱡᱩᱫᱤ (!lval)
 	ret = fold (ret);
       goto out;
 
-    case ARRAY_REF:
+    pak_sa ARRAY_REF:
       orig_op0 = op0 = TREE_OPERAND (expr, 0);
       orig_op1 = op1 = TREE_OPERAND (expr, 1);
       op2 = TREE_OPERAND (expr, 2);
@@ -285,69 +285,69 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 				   maybe_const_itself, for_int_const, false);
       STRIP_TYPE_NOPS (op1);
       /* Fold "foo"[2] in initializers.  */
-      if (!lval && in_init)
+      ᱡᱩᱫᱤ (!lval && in_init)
 	{
 	  ret = c_fold_array_ref (TREE_TYPE (expr), op0, op1);
-	  if (ret)
+	  ᱡᱩᱫᱤ (ret)
 	    goto out;
 	  ret = expr;
 	}
-      if (op0 != orig_op0 || op1 != orig_op1)
+      ᱡᱩᱫᱤ (op0 != orig_op0 || op1 != orig_op1)
 	ret = build4 (ARRAY_REF, TREE_TYPE (expr), op0, op1, op2, op3);
-      if (ret != expr)
+      ᱡᱩᱫᱤ (ret != expr)
 	{
 	  TREE_READONLY (ret) = TREE_READONLY (expr);
 	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
 	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
 	}
-      if (!lval)
+      ᱡᱩᱫᱤ (!lval)
 	ret = fold (ret);
       goto out;
 
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
+    pak_sa MODIFY_EXPR:
+    pak_sa PREDECREMENT_EXPR:
+    pak_sa PREINCREMENT_EXPR:
+    pak_sa POSTDECREMENT_EXPR:
+    pak_sa POSTINCREMENT_EXPR:
       op0_lval = true;
       /* FALLTHRU */
-    case COMPOUND_EXPR:
-    case PLUS_EXPR:
-    case MINUS_EXPR:
-    case MULT_EXPR:
-    case POINTER_PLUS_EXPR:
-    case POINTER_DIFF_EXPR:
-    case TRUNC_DIV_EXPR:
-    case CEIL_DIV_EXPR:
-    case FLOOR_DIV_EXPR:
-    case TRUNC_MOD_EXPR:
-    case RDIV_EXPR:
-    case EXACT_DIV_EXPR:
-    case LSHIFT_EXPR:
-    case RSHIFT_EXPR:
-    case LROTATE_EXPR:
-    case RROTATE_EXPR:
-    case BIT_IOR_EXPR:
-    case BIT_XOR_EXPR:
-    case BIT_AND_EXPR:
-    case LT_EXPR:
-    case LE_EXPR:
-    case GT_EXPR:
-    case GE_EXPR:
-    case EQ_EXPR:
-    case NE_EXPR:
-    case COMPLEX_EXPR:
-    case TRUTH_AND_EXPR:
-    case TRUTH_OR_EXPR:
-    case TRUTH_XOR_EXPR:
-    case UNORDERED_EXPR:
-    case ORDERED_EXPR:
-    case UNLT_EXPR:
-    case UNLE_EXPR:
-    case UNGT_EXPR:
-    case UNGE_EXPR:
-    case UNEQ_EXPR:
-    case MEM_REF:
+    pak_sa COMPOUND_EXPR:
+    pak_sa PLUS_EXPR:
+    pak_sa MINUS_EXPR:
+    pak_sa MULT_EXPR:
+    pak_sa POINTER_PLUS_EXPR:
+    pak_sa POINTER_DIFF_EXPR:
+    pak_sa TRUNC_DIV_EXPR:
+    pak_sa CEIL_DIV_EXPR:
+    pak_sa FLOOR_DIV_EXPR:
+    pak_sa TRUNC_MOD_EXPR:
+    pak_sa RDIV_EXPR:
+    pak_sa EXACT_DIV_EXPR:
+    pak_sa LSHIFT_EXPR:
+    pak_sa RSHIFT_EXPR:
+    pak_sa LROTATE_EXPR:
+    pak_sa RROTATE_EXPR:
+    pak_sa BIT_IOR_EXPR:
+    pak_sa BIT_XOR_EXPR:
+    pak_sa BIT_AND_EXPR:
+    pak_sa LT_EXPR:
+    pak_sa LE_EXPR:
+    pak_sa GT_EXPR:
+    pak_sa GE_EXPR:
+    pak_sa EQ_EXPR:
+    pak_sa NE_EXPR:
+    pak_sa COMPLEX_EXPR:
+    pak_sa TRUTH_AND_EXPR:
+    pak_sa TRUTH_OR_EXPR:
+    pak_sa TRUTH_XOR_EXPR:
+    pak_sa UNORDERED_EXPR:
+    pak_sa ORDERED_EXPR:
+    pak_sa UNLT_EXPR:
+    pak_sa UNLE_EXPR:
+    pak_sa UNGT_EXPR:
+    pak_sa UNGE_EXPR:
+    pak_sa UNEQ_EXPR:
+    pak_sa MEM_REF:
       /* Binary operations evaluating both arguments (increment and
 	 decrement are binary internally in GCC).  */
       orig_op0 = op0 = TREE_OPERAND (expr, 0);
@@ -358,45 +358,45 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
       STRIP_TYPE_NOPS (op0);
       /* The RHS of a MODIFY_EXPR was fully folded when building that
 	 expression for the sake of conversion warnings.  */
-      if (code != MODIFY_EXPR)
+      ᱡᱩᱫᱤ (code != MODIFY_EXPR)
 	op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
 				     maybe_const_itself, for_int_const, false);
       STRIP_TYPE_NOPS (op1);
 
-      if (for_int_const && (TREE_CODE (op0) != INTEGER_CST
+      ᱡᱩᱫᱤ (for_int_const && (TREE_CODE (op0) != INTEGER_CST
 			    || TREE_CODE (op1) != INTEGER_CST))
 	goto out;
 
-      if (TREE_CODE_CLASS (code) == tcc_comparison
+      ᱡᱩᱫᱤ (TREE_CODE_CLASS (code) == tcc_comparison
 	  && TREE_CODE (TREE_TYPE (op0)) == NULLPTR_TYPE
 	  && TREE_CODE (TREE_TYPE (op1)) == NULLPTR_TYPE)
 	{
 	  switch (code)
 	    {
-	    case EQ_EXPR:
+	    pak_sa EQ_EXPR:
 	      ret = constant_boolean_node (true, TREE_TYPE (expr));
-	      break;
-	    case NE_EXPR:
+	      bha_nga;
+	    pak_sa NE_EXPR:
 	      ret = constant_boolean_node (false, TREE_TYPE (expr));
-	      break;
+	      bha_nga;
 	    default:
 	      gcc_unreachable ();
 	    }
 	  ret = omit_two_operands_loc (loc, TREE_TYPE (expr), ret,
 				       op0, op1);
 	}
-      else if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      ᱵᱟᱝ ᱡᱩᱫᱤ (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
 	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
 	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
+      ᱵᱟᱝ
 	ret = fold (expr);
-      if (TREE_OVERFLOW_P (ret)
+      ᱡᱩᱫᱤ (TREE_OVERFLOW_P (ret)
 	  && !TREE_OVERFLOW_P (op0)
 	  && !(BINARY_CLASS_P (op0) && TREE_OVERFLOW_P (TREE_OPERAND (op0, 1)))
 	  && !TREE_OVERFLOW_P (op1))
 	overflow_warning (EXPR_LOC_OR_LOC (expr, input_location), ret, expr);
-      if (code == LSHIFT_EXPR
+      ᱡᱩᱫᱤ (code == LSHIFT_EXPR
 	  && TREE_CODE (orig_op0) != INTEGER_CST
 	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
 	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
@@ -406,7 +406,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  && tree_int_cst_sgn (op0) < 0)
 	warning_at (loc, OPT_Wshift_negative_value,
 		    "left shift of negative value");
-      if ((code == LSHIFT_EXPR
+      ᱡᱩᱫᱤ ((code == LSHIFT_EXPR
 	   || code == RSHIFT_EXPR
 	   || code == LROTATE_EXPR
 	   || code == RROTATE_EXPR)
@@ -415,12 +415,12 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  && TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
 	  && c_inhibit_evaluation_warnings == 0)
 	{
-	  if (tree_int_cst_sgn (op1) < 0)
+	  ᱡᱩᱫᱤ (tree_int_cst_sgn (op1) < 0)
 	    warning_at (loc, OPT_Wshift_count_negative,
 			(code == LSHIFT_EXPR
 			 ? G_("left shift count is negative")
 			 : G_("right shift count is negative")));
-	  else if ((TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
+	  ᱵᱟᱝ ᱡᱩᱫᱤ ((TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
 		    || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
 		    || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
 		   && compare_tree_int (op1,
@@ -431,7 +431,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 			(code == LSHIFT_EXPR
 			 ? G_("left shift count >= width of type")
 			 : G_("right shift count >= width of type")));
-	  else if (TREE_CODE (TREE_TYPE (orig_op0)) == VECTOR_TYPE
+	  ᱵᱟᱝ ᱡᱩᱫᱤ (TREE_CODE (TREE_TYPE (orig_op0)) == VECTOR_TYPE
 		   && compare_tree_int (op1,
 					TYPE_PRECISION (TREE_TYPE (TREE_TYPE (orig_op0))))
 		      >= 0)
@@ -440,7 +440,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 			? G_("left shift count >= width of vector element")
 			: G_("right shift count >= width of vector element"));
 	}
-      if (code == LSHIFT_EXPR
+      ᱡᱩᱫᱤ (code == LSHIFT_EXPR
 	  /* If either OP0 has been folded to INTEGER_CST...  */
 	  && ((TREE_CODE (orig_op0) != INTEGER_CST
 	       && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
@@ -454,7 +454,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  && c_inhibit_evaluation_warnings == 0)
 	/* ...then maybe we can detect an overflow.  */
 	maybe_warn_shift_overflow (loc, op0, op1);
-      if ((code == TRUNC_DIV_EXPR
+      ᱡᱩᱫᱤ ((code == TRUNC_DIV_EXPR
 	   || code == CEIL_DIV_EXPR
 	   || code == FLOOR_DIV_EXPR
 	   || code == EXACT_DIV_EXPR
@@ -467,7 +467,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
 	      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE))
 	warn_for_div_by_zero (loc, op1);
-      if (code == MEM_REF
+      ᱡᱩᱫᱤ (code == MEM_REF
 	  && ret != expr
 	  && TREE_CODE (ret) == MEM_REF)
 	{
@@ -477,25 +477,25 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	}
       goto out;
 
-    case ADDR_EXPR:
+    pak_sa ADDR_EXPR:
       op0_lval = true;
       goto unary;
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-    case VIEW_CONVERT_EXPR:
+    pak_sa REALPART_EXPR:
+    pak_sa IMAGPART_EXPR:
+    pak_sa VIEW_CONVERT_EXPR:
       op0_lval = lval;
       /* FALLTHRU */
-    case INDIRECT_REF:
-    case FIX_TRUNC_EXPR:
-    case FLOAT_EXPR:
+    pak_sa INDIRECT_REF:
+    pak_sa FIX_TRUNC_EXPR:
+    pak_sa FLOAT_EXPR:
     CASE_CONVERT:
-    case ADDR_SPACE_CONVERT_EXPR:
-    case NON_LVALUE_EXPR:
-    case NEGATE_EXPR:
-    case BIT_NOT_EXPR:
-    case TRUTH_NOT_EXPR:
-    case CONJ_EXPR:
-    case PAREN_EXPR:
+    pak_sa ADDR_SPACE_CONVERT_EXPR:
+    pak_sa NON_LVALUE_EXPR:
+    pak_sa NEGATE_EXPR:
+    pak_sa BIT_NOT_EXPR:
+    pak_sa TRUTH_NOT_EXPR:
+    pak_sa CONJ_EXPR:
+    pak_sa PAREN_EXPR:
     unary:
       /* Unary operations.  */
       orig_op0 = op0 = TREE_OPERAND (expr, 0);
@@ -504,24 +504,24 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
 
-      if (for_int_const && TREE_CODE (op0) != INTEGER_CST)
+      ᱡᱩᱫᱤ (for_int_const && TREE_CODE (op0) != INTEGER_CST)
 	goto out;
 
       /* ??? Cope with user tricks that amount to offsetof.  The middle-end is
 	 not prepared to deal with them if they occur in initializers.  */
-      if (op0 != orig_op0
+      ᱡᱩᱫᱤ (op0 != orig_op0
 	  && code == ADDR_EXPR
 	  && (op1 = get_base_address (op0)) != NULL_TREE
 	  && INDIRECT_REF_P (op1)
 	  && TREE_CONSTANT (TREE_OPERAND (op1, 0)))
 	ret = fold_offsetof (op0, TREE_TYPE (expr));
-      else if (op0 != orig_op0 || in_init)
+      ᱵᱟᱝ ᱡᱩᱫᱤ (op0 != orig_op0 || in_init)
 	ret = in_init
 	  ? fold_build1_initializer_loc (loc, code, TREE_TYPE (expr), op0)
 	  : fold_build1_loc (loc, code, TREE_TYPE (expr), op0);
-      else
+      ᱵᱟᱝ
 	ret = fold (expr);
-      if (code == INDIRECT_REF
+      ᱡᱩᱫᱤ (code == INDIRECT_REF
 	  && ret != expr
 	  && INDIRECT_REF_P (ret))
 	{
@@ -531,22 +531,22 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	}
       switch (code)
 	{
-	case FIX_TRUNC_EXPR:
-	case FLOAT_EXPR:
+	pak_sa FIX_TRUNC_EXPR:
+	pak_sa FLOAT_EXPR:
 	CASE_CONVERT:
 	  /* Don't warn about explicit conversions.  We will already
 	     have warned about suspect implicit conversions.  */
-	  break;
+	  bha_nga;
 
 	default:
-	  if (TREE_OVERFLOW_P (ret) && !TREE_OVERFLOW_P (op0))
+	  ᱡᱩᱫᱤ (TREE_OVERFLOW_P (ret) && !TREE_OVERFLOW_P (op0))
 	    overflow_warning (EXPR_LOCATION (expr), ret, op0);
-	  break;
+	  bha_nga;
 	}
       goto out;
 
-    case TRUTH_ANDIF_EXPR:
-    case TRUTH_ORIF_EXPR:
+    pak_sa TRUTH_ANDIF_EXPR:
+    pak_sa TRUTH_ORIF_EXPR:
       /* Binary operations not necessarily evaluating both
 	 arguments.  */
       orig_op0 = op0 = TREE_OPERAND (expr, 0);
@@ -564,28 +564,28 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
       STRIP_TYPE_NOPS (op1);
       c_enable_warnings (unused_p);
 
-      if (for_int_const
+      ᱡᱩᱫᱤ (for_int_const
 	  && (TREE_CODE (op0) != INTEGER_CST
 	      /* Require OP1 be an INTEGER_CST only if it's evaluated.  */
 	      || (!unused_p && TREE_CODE (op1) != INTEGER_CST)))
 	goto out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      ᱡᱩᱫᱤ (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
 	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
 	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
+      ᱵᱟᱝ
 	ret = fold (expr);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      ᱡᱩᱫᱤ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
 	    && (code == TRUTH_ANDIF_EXPR
 		? op0 == truthvalue_false_node
 		: op0 == truthvalue_true_node)))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      ᱡᱩᱫᱤ (!(op0_const
 	    && op0_const_self
 	    && (code == TRUTH_ANDIF_EXPR
 		? op0 == truthvalue_false_node
@@ -593,7 +593,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	*maybe_const_itself &= op1_const_self;
       goto out;
 
-    case COND_EXPR:
+    pak_sa COND_EXPR:
       orig_op0 = op0 = TREE_OPERAND (expr, 0);
       orig_op1 = op1 = TREE_OPERAND (expr, 1);
       orig_op2 = op2 = TREE_OPERAND (expr, 2);
@@ -613,7 +613,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
       STRIP_TYPE_NOPS (op2);
       c_enable_warnings (op0 == truthvalue_true_node);
 
-      if (for_int_const
+      ᱡᱩᱫᱤ (for_int_const
 	  && (TREE_CODE (op0) != INTEGER_CST
 	      /* Only the evaluated operand must be an INTEGER_CST.  */
 	      || (op0 == truthvalue_true_node
@@ -621,33 +621,33 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 		  : TREE_CODE (op2) != INTEGER_CST)))
 	goto out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+      ᱡᱩᱫᱤ (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
 	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
+      ᱵᱟᱝ
 	ret = fold (expr);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      ᱡᱩᱫᱤ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
 	    && op0 == truthvalue_false_node))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      ᱡᱩᱫᱤ (!(op0_const
 	    && op0_const_self
 	    && op0 == truthvalue_false_node))
 	*maybe_const_itself &= op1_const_self;
-      if (!(flag_isoc99
+      ᱡᱩᱫᱤ (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
 	    && op0 == truthvalue_true_node))
 	*maybe_const_operands &= op2_const;
-      if (!(op0_const
+      ᱡᱩᱫᱤ (!(op0_const
 	    && op0_const_self
 	    && op0 == truthvalue_true_node))
 	*maybe_const_itself &= op2_const_self;
       goto out;
 
-    case VEC_COND_EXPR:
+    pak_sa VEC_COND_EXPR:
       orig_op0 = op0 = TREE_OPERAND (expr, 0);
       orig_op1 = op1 = TREE_OPERAND (expr, 1);
       orig_op2 = op2 = TREE_OPERAND (expr, 2);
@@ -661,13 +661,13 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 				   maybe_const_itself, for_int_const, false);
       STRIP_TYPE_NOPS (op2);
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+      ᱡᱩᱫᱤ (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
 	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
+      ᱵᱟᱝ
 	ret = fold (expr);
       goto out;
 
-    case EXCESS_PRECISION_EXPR:
+    pak_sa EXCESS_PRECISION_EXPR:
       /* Each case where an operand with excess precision may be
 	 encountered must remove the EXCESS_PRECISION_EXPR around
 	 inner operands and possibly put one around the whole
@@ -676,10 +676,10 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	 appropriate in any particular case.  */
       gcc_unreachable ();
 
-    case SAVE_EXPR:
+    pak_sa SAVE_EXPR:
       /* Make sure to fold the contents of a SAVE_EXPR exactly once.  */
       op0 = TREE_OPERAND (expr, 0);
-      if (!SAVE_EXPR_FOLDED_P (expr))
+      ᱡᱩᱫᱤ (!SAVE_EXPR_FOLDED_P (expr))
 	{
 	  op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				       maybe_const_itself, for_int_const,
@@ -688,7 +688,7 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	  SAVE_EXPR_FOLDED_P (expr) = true;
 	}
       /* Return the SAVE_EXPR operand if it is invariant.  */
-      if (tree_invariant_p (op0))
+      ᱡᱩᱫᱤ (tree_invariant_p (op0))
 	ret = op0;
       goto out;
 
@@ -703,19 +703,19 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      have been done by this point, so remove them again.  */
   nowarning |= warning_suppressed_p (ret, OPT_Woverflow);
   STRIP_TYPE_NOPS (ret);
-  if (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
+  ᱡᱩᱫᱤ (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
     {
-      if (!CAN_HAVE_LOCATION_P (ret))
+      ᱡᱩᱫᱤ (!CAN_HAVE_LOCATION_P (ret))
 	ret = build1 (NOP_EXPR, TREE_TYPE (ret), ret);
       suppress_warning (ret, OPT_Woverflow);
     }
-  if (ret != expr)
+  ᱡᱩᱫᱤ (ret != expr)
     {
       protected_set_expr_location (ret, loc);
-      if (IS_EXPR_CODE_CLASS (kind))
+      ᱡᱩᱫᱤ (IS_EXPR_CODE_CLASS (kind))
 	set_source_range (ret, old_range.m_start, old_range.m_finish);
     }
-  return ret;
+  ᱨᱩᱣᱟᱹᱲ ret;
 }
 
 /* Fold X for consideration by one of the warning functions when checking
@@ -725,5 +725,5 @@ tree
 fold_for_warn (tree x)
 {
   /* The C front-end has already folded X appropriately.  */
-  return x;
+  ᱨᱩᱣᱟᱹᱲ x;
 }
