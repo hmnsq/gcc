@@ -20,77 +20,77 @@ along with GCC; see the file COPYING3.  If not see
 #ifndef GCC_C_LANG_H
 #define GCC_C_LANG_H
 
-#include "c-family/c-common.h"
+#অন্তর্ভাব "c-family/c-common.h"
 
 /* In a RECORD_TYPE, a sorted array of the fields of the type, not a
    tree for size reasons.  */
-struct GTY(()) sorted_fields_type {
-  int len;
-  tree GTY((length ("%h.len"))) elts[1];
+কাঠামো GTY(()) sorted_fields_type {
+  পূর্ণসংখ্যা len;
+  বৃক্ষ GTY((দৈর্ঘ্য ("%h.len"))) elts[1];
 };
 
-struct GTY(()) lang_type {
+কাঠামো GTY(()) lang_type {
   /* In a RECORD_TYPE, a sorted array of the fields of the type.  */
-  struct sorted_fields_type * GTY ((reorder ("resort_sorted_fields"))) s;
+  কাঠামো sorted_fields_type * GTY ((reorder ("resort_sorted_fields"))) s;
   /* In an ENUMERAL_TYPE, the min and max values.  */
-  tree enum_min;
-  tree enum_max;
-  union maybe_objc_info {
+  বৃক্ষ enum_min;
+  বৃক্ষ enum_max;
+  সংঘ maybe_objc_info {
     /* If not c_dialect_objc, this part is not even allocated.  */
-    char GTY((tag ("0"))) non_objc;
+    অক্ষর GTY((tag ("0"))) non_objc;
     /* In a RECORD_TYPE, information specific to Objective-C, such
        as a list of adopted protocols or a pointer to a corresponding
        @interface.  See objc/objc-act.h for details.  */
-    tree GTY((tag ("1"))) objc_info;
+    বৃক্ষ GTY((tag ("1"))) objc_info;
   } GTY ((desc ("c_dialect_objc ()"))) info;
 };
 
-struct GTY(()) lang_decl {
-  char dummy;
+কাঠামো GTY(()) lang_decl {
+  অক্ষর dummy;
 };
 
 /* Save and restore the variables in this file and elsewhere
    that keep track of the progress of compilation of the current function.
    Used for nested functions.  */
 
-struct GTY(()) language_function {
-  struct c_language_function base;
-  unsigned char x_in_statement;
-  struct c_switch * GTY((skip)) x_switch_stack;
-  struct c_arg_info * GTY((skip)) arg_info;
-  vec<tree> GTY((skip)) loop_names;
-  decl_tree_map * GTY((skip)) loop_names_hash;
-  int returns_value;
-  int returns_null;
-  int returns_abnormally;
-  int warn_about_return_type;
+কাঠামো GTY(()) language_function {
+  কাঠামো c_language_function base;
+  unsigned অক্ষর x_in_statement;
+  কাঠামো c_switch * GTY((skip)) x_switch_স্তূপ;
+  কাঠামো c_arg_info * GTY((skip)) arg_info;
+  vec<বৃক্ষ> GTY((skip)) loop_names;
+  decl_বৃক্ষ_map * GTY((skip)) loop_names_hash;
+  পূর্ণসংখ্যা returns_মান;
+  পূর্ণসংখ্যা returns_null;
+  পূর্ণসংখ্যা returns_abnormally;
+  পূর্ণসংখ্যা warn_about_return_type;
 };
 
-struct GTY(()) c_omp_declare_target_attr {
+কাঠামো GTY(()) c_omp_declare_target_attr {
   bool attr_syntax;
-  int device_type;
-  int indirect;
+  পূর্ণসংখ্যা device_type;
+  পূর্ণসংখ্যা indirect;
 };
 
-struct GTY(()) c_omp_begin_assumes_data {
+কাঠামো GTY(()) c_omp_begin_assumes_তথ্য {
   bool attr_syntax;
 };
 
-struct GTY(()) c_omp_declare_variant_attr {
+কাঠামো GTY(()) c_omp_declare_variant_attr {
   bool attr_syntax;
-  tree selector;
+  বৃক্ষ selector;
 };
 
 /* If non-empty, implicit "omp declare target" attribute is added into the
    attribute lists.  */
-extern GTY(()) vec<c_omp_declare_target_attr, va_gc>
+বাহ্যিক GTY(()) vec<c_omp_declare_target_attr, va_gc>
   *current_omp_declare_target_attribute;
 /* Similarly whether we are in between #pragma omp begin assumes and
    #pragma omp end assumes (and how many times when nested).  */
-extern GTY(()) vec<c_omp_begin_assumes_data, va_gc>
+বাহ্যিক GTY(()) vec<c_omp_begin_assumes_তথ্য, va_gc>
   *current_omp_begin_assumes;
 /* And similarly for #pragma omp begin/end declare variant.  */
-extern GTY(()) vec<c_omp_declare_variant_attr, va_gc>
+বাহ্যিক GTY(()) vec<c_omp_declare_variant_attr, va_gc>
   *current_omp_declare_variant_attribute;
 
 #endif /* ! GCC_C_LANG_H */
