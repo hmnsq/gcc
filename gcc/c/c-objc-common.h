@@ -18,137 +18,137 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_C_OBJC_COMMON
-#define GCC_C_OBJC_COMMON
+#جيڪڏهن_وصف_نه_ٿيل GCC_C_OBJC_COMMON
+#وصف_ڪريو GCC_C_OBJC_COMMON
 
 /* Implemented in c-objc-common.cc.  */
-extern void c_register_features ();
+خارجي فراغ c_رجسٽر_features ();
 
 /* Lang hooks that are shared between C and ObjC are defined here.  Hooks
    specific to C or ObjC go in c-lang.cc and objc/objc-lang.cc, respectively.  */
 
-#undef LANG_HOOKS_IDENTIFIER_SIZE
-#define LANG_HOOKS_IDENTIFIER_SIZE C_SIZEOF_STRUCT_LANG_IDENTIFIER
-#undef LANG_HOOKS_TREE_SIZE
-#define LANG_HOOKS_TREE_SIZE c_tree_size
-#undef LANG_HOOKS_FINISH
-#define LANG_HOOKS_FINISH c_common_finish
-#undef LANG_HOOKS_OPTION_LANG_MASK
-#define LANG_HOOKS_OPTION_LANG_MASK c_common_option_lang_mask
-#undef LANG_HOOKS_COMPLAIN_WRONG_LANG_P
-#define LANG_HOOKS_COMPLAIN_WRONG_LANG_P c_common_complain_wrong_lang_p
-#undef LANG_HOOKS_INIT_OPTIONS_STRUCT
-#define LANG_HOOKS_INIT_OPTIONS_STRUCT c_common_init_options_struct
-#undef LANG_HOOKS_INIT_OPTIONS
-#define LANG_HOOKS_INIT_OPTIONS c_common_init_options
-#undef LANG_HOOKS_INITIALIZE_DIAGNOSTICS
-#define LANG_HOOKS_INITIALIZE_DIAGNOSTICS c_initialize_diagnostics
-#undef LANG_HOOKS_HANDLE_OPTION
-#define LANG_HOOKS_HANDLE_OPTION c_common_handle_option
-#undef LANG_HOOKS_POST_OPTIONS
-#define LANG_HOOKS_POST_OPTIONS c_common_post_options
-#undef LANG_HOOKS_GET_ALIAS_SET
-#define LANG_HOOKS_GET_ALIAS_SET c_get_alias_set
-#undef LANG_HOOKS_PARSE_FILE
-#define LANG_HOOKS_PARSE_FILE c_common_parse_file
-#undef LANG_HOOKS_FINISH_INCOMPLETE_DECL
-#define LANG_HOOKS_FINISH_INCOMPLETE_DECL c_finish_incomplete_decl
-#undef LANG_HOOKS_WARN_UNUSED_GLOBAL_DECL
-#define LANG_HOOKS_WARN_UNUSED_GLOBAL_DECL c_warn_unused_global_decl
-#undef LANG_HOOKS_PRINT_IDENTIFIER
-#define LANG_HOOKS_PRINT_IDENTIFIER c_print_identifier
-#undef LANG_HOOKS_TYPES_COMPATIBLE_P
-#define LANG_HOOKS_TYPES_COMPATIBLE_P c_types_compatible_p
-#undef LANG_HOOKS_MISSING_NORETURN_OK_P
-#define LANG_HOOKS_MISSING_NORETURN_OK_P c_missing_noreturn_ok_p
-#undef LANG_HOOKS_BLOCK_MAY_FALLTHRU
-#define LANG_HOOKS_BLOCK_MAY_FALLTHRU c_block_may_fallthru
-#undef  LANG_HOOKS_BUILTIN_FUNCTION
-#define LANG_HOOKS_BUILTIN_FUNCTION c_builtin_function
-#undef  LANG_HOOKS_BUILTIN_FUNCTION_EXT_SCOPE
-#define LANG_HOOKS_BUILTIN_FUNCTION_EXT_SCOPE c_builtin_function_ext_scope
-#undef  LANG_HOOKS_SIMULATE_BUILTIN_FUNCTION_DECL
-#define LANG_HOOKS_SIMULATE_BUILTIN_FUNCTION_DECL \
+#وصف_رد LANG_HOOKS_IDENTIFIER_سائيز
+#وصف_ڪريو LANG_HOOKS_IDENTIFIER_سائيز C_SIZEOF_STRUCT_LANG_IDENTIFIER
+#وصف_رد LANG_HOOKS_وڻ_سائيز
+#وصف_ڪريو LANG_HOOKS_وڻ_سائيز c_وڻ_سائيز
+#وصف_رد LANG_HOOKS_پڄاڻي
+#وصف_ڪريو LANG_HOOKS_پڄاڻي c_common_پڄاڻي
+#وصف_رد LANG_HOOKS_OPTION_LANG_نقاب
+#وصف_ڪريو LANG_HOOKS_OPTION_LANG_نقاب c_common_option_lang_نقاب
+#وصف_رد LANG_HOOKS_COMPLAIN_WRONG_LANG_P
+#وصف_ڪريو LANG_HOOKS_COMPLAIN_WRONG_LANG_P c_common_complain_wrong_lang_p
+#وصف_رد LANG_HOOKS_INIT_OPTIONS_STRUCT
+#وصف_ڪريو LANG_HOOKS_INIT_OPTIONS_STRUCT c_common_init_options_struct
+#وصف_رد LANG_HOOKS_INIT_OPTIONS
+#وصف_ڪريو LANG_HOOKS_INIT_OPTIONS c_common_init_options
+#وصف_رد LANG_HOOKS_INITIALIZE_DIAGNOSTICS
+#وصف_ڪريو LANG_HOOKS_INITIALIZE_DIAGNOSTICS c_initialize_diagnostics
+#وصف_رد LANG_HOOKS_HANDLE_OPTION
+#وصف_ڪريو LANG_HOOKS_HANDLE_OPTION c_common_handle_option
+#وصف_رد LANG_HOOKS_POST_OPTIONS
+#وصف_ڪريو LANG_HOOKS_POST_OPTIONS c_common_post_options
+#وصف_رد LANG_HOOKS_GET_ALIAS_سيٽ
+#وصف_ڪريو LANG_HOOKS_GET_ALIAS_سيٽ c_get_alias_سيٽ
+#وصف_رد LANG_HOOKS_PARSE_FILE
+#وصف_ڪريو LANG_HOOKS_PARSE_FILE c_common_parse_file
+#وصف_رد LANG_HOOKS_پڄاڻي_INCOMPLETE_DECL
+#وصف_ڪريو LANG_HOOKS_پڄاڻي_INCOMPLETE_DECL c_پڄاڻي_incomplete_decl
+#وصف_رد LANG_HOOKS_WARN_اڻ_استعمال_ٿيل_GLOBAL_DECL
+#وصف_ڪريو LANG_HOOKS_WARN_اڻ_استعمال_ٿيل_GLOBAL_DECL c_warn_اڻ_استعمال_ٿيل_global_decl
+#وصف_رد LANG_HOOKS_PRINT_IDENTIFIER
+#وصف_ڪريو LANG_HOOKS_PRINT_IDENTIFIER c_print_identifier
+#وصف_رد LANG_HOOKS_TYPES_COMPATIBLE_P
+#وصف_ڪريو LANG_HOOKS_TYPES_COMPATIBLE_P c_types_compatible_p
+#وصف_رد LANG_HOOKS_MISSING_NORETURN_OK_P
+#وصف_ڪريو LANG_HOOKS_MISSING_NORETURN_OK_P c_missing_noreturn_ok_p
+#وصف_رد LANG_HOOKS_بلاڪ_MAY_FALLTHRU
+#وصف_ڪريو LANG_HOOKS_بلاڪ_MAY_FALLTHRU c_بلاڪ_may_fallthru
+#وصف_رد  LANG_HOOKS_BUILTIN_FUNCTION
+#وصف_ڪريو LANG_HOOKS_BUILTIN_FUNCTION c_builtin_function
+#وصف_رد  LANG_HOOKS_BUILTIN_FUNCTION_EXT_SCOPE
+#وصف_ڪريو LANG_HOOKS_BUILTIN_FUNCTION_EXT_SCOPE c_builtin_function_ext_scope
+#وصف_رد  LANG_HOOKS_SIMULATE_BUILTIN_FUNCTION_DECL
+#وصف_ڪريو LANG_HOOKS_SIMULATE_BUILTIN_FUNCTION_DECL \
   c_simulate_builtin_function_decl
-#undef LANG_HOOKS_EMITS_BEGIN_STMT
-#define LANG_HOOKS_EMITS_BEGIN_STMT true
-#undef LANG_HOOKS_FINALIZE_EARLY_DEBUG
-#define LANG_HOOKS_FINALIZE_EARLY_DEBUG c_common_finalize_early_debug
-#undef LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE
-#define LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE c_reconstruct_complex_type
+#وصف_رد LANG_HOOKS_EMITS_BEGIN_STMT
+#وصف_ڪريو LANG_HOOKS_EMITS_BEGIN_STMT true
+#وصف_رد LANG_HOOKS_FINALIZE_EARLY_DEBUG
+#وصف_ڪريو LANG_HOOKS_FINALIZE_EARLY_DEBUG c_common_finalize_early_debug
+#وصف_رد LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE
+#وصف_ڪريو LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE c_reconstruct_complex_type
 
-static const scoped_attribute_specs *const c_objc_attribute_table[] =
+ساكن ثابت scoped_attribute_specs *ثابت c_objc_attribute_جدول[] =
 {
-  &std_attribute_table,
-  &c_common_gnu_attribute_table,
-  &c_common_clang_attribute_table,
-  &c_common_format_attribute_table
+  &std_attribute_جدول,
+  &c_common_gnu_attribute_جدول,
+  &c_common_clang_attribute_جدول,
+  &c_common_format_attribute_جدول
 };
 
-#undef LANG_HOOKS_ATTRIBUTE_TABLE
-#define LANG_HOOKS_ATTRIBUTE_TABLE c_objc_attribute_table
+#وصف_رد LANG_HOOKS_ATTRIBUTE_جدول
+#وصف_ڪريو LANG_HOOKS_ATTRIBUTE_جدول c_objc_attribute_جدول
 
-#undef LANG_HOOKS_TREE_DUMP_DUMP_TREE_FN
-#define LANG_HOOKS_TREE_DUMP_DUMP_TREE_FN c_dump_tree
+#وصف_رد LANG_HOOKS_وڻ_DUMP_DUMP_وڻ_FN
+#وصف_ڪريو LANG_HOOKS_وڻ_DUMP_DUMP_وڻ_FN c_dump_وڻ
 
-#undef LANG_HOOKS_SIMULATE_ENUM_DECL
-#define LANG_HOOKS_SIMULATE_ENUM_DECL c_simulate_enum_decl
-#undef LANG_HOOKS_SIMULATE_RECORD_DECL
-#define LANG_HOOKS_SIMULATE_RECORD_DECL c_simulate_record_decl
-#undef LANG_HOOKS_TYPE_FOR_MODE
-#define LANG_HOOKS_TYPE_FOR_MODE c_common_type_for_mode
-#undef LANG_HOOKS_TYPE_FOR_SIZE
-#define LANG_HOOKS_TYPE_FOR_SIZE c_common_type_for_size
-#undef LANG_HOOKS_INCOMPLETE_TYPE_ERROR
-#define LANG_HOOKS_INCOMPLETE_TYPE_ERROR c_incomplete_type_error
-#undef LANG_HOOKS_TYPE_PROMOTES_TO
-#define LANG_HOOKS_TYPE_PROMOTES_TO c_type_promotes_to
-#undef LANG_HOOKS_REGISTER_BUILTIN_TYPE
-#define LANG_HOOKS_REGISTER_BUILTIN_TYPE c_register_builtin_type
-#undef LANG_HOOKS_TO_TARGET_CHARSET
-#define LANG_HOOKS_TO_TARGET_CHARSET c_common_to_target_charset
-#undef LANG_HOOKS_EXPR_TO_DECL
-#define LANG_HOOKS_EXPR_TO_DECL c_expr_to_decl
+#وصف_رد LANG_HOOKS_SIMULATE_ENUM_DECL
+#وصف_ڪريو LANG_HOOKS_SIMULATE_ENUM_DECL c_simulate_enum_decl
+#وصف_رد LANG_HOOKS_SIMULATE_رڪارڊ_DECL
+#وصف_ڪريو LANG_HOOKS_SIMULATE_رڪارڊ_DECL c_simulate_رڪارڊ_decl
+#وصف_رد LANG_HOOKS_TYPE_FOR_گهڻائي
+#وصف_ڪريو LANG_HOOKS_TYPE_FOR_گهڻائي c_common_type_for_گهڻائي
+#وصف_رد LANG_HOOKS_TYPE_FOR_سائيز
+#وصف_ڪريو LANG_HOOKS_TYPE_FOR_سائيز c_common_type_for_سائيز
+#وصف_رد LANG_HOOKS_INCOMPLETE_TYPE_ERROR
+#وصف_ڪريو LANG_HOOKS_INCOMPLETE_TYPE_ERROR c_incomplete_type_error
+#وصف_رد LANG_HOOKS_TYPE_PROMOTES_منزل
+#وصف_ڪريو LANG_HOOKS_TYPE_PROMOTES_منزل c_type_promotes_منزل
+#وصف_رد LANG_HOOKS_رجسٽر_BUILTIN_TYPE
+#وصف_ڪريو LANG_HOOKS_رجسٽر_BUILTIN_TYPE c_رجسٽر_builtin_type
+#وصف_رد LANG_HOOKS_منزل_هدف_CHARSET
+#وصف_ڪريو LANG_HOOKS_منزل_هدف_CHARSET c_common_منزل_هدف_charset
+#وصف_رد LANG_HOOKS_اظهار_منزل_DECL
+#وصف_ڪريو LANG_HOOKS_اظهار_منزل_DECL c_اظهار_منزل_decl
 
 /* The C front end's scoping structure is very different from
    that expected by the language-independent code; it is best
    to disable getdecls.
    This means it must also provide its own write_globals.  */
 
-#undef LANG_HOOKS_GETDECLS
-#define LANG_HOOKS_GETDECLS hook_tree_void_null
+#وصف_رد LANG_HOOKS_GETDECLS
+#وصف_ڪريو LANG_HOOKS_GETDECLS hook_وڻ_void_null
 
 /* Hooks for tree gimplification.  */
-#undef LANG_HOOKS_GIMPLIFY_EXPR
-#define LANG_HOOKS_GIMPLIFY_EXPR c_gimplify_expr
+#وصف_رد LANG_HOOKS_GIMPLIFY_اظهار
+#وصف_ڪريو LANG_HOOKS_GIMPLIFY_اظهار c_gimplify_اظهار
 
-#undef LANG_HOOKS_TYPE_DWARF_ATTRIBUTE
-#define LANG_HOOKS_TYPE_DWARF_ATTRIBUTE c_type_dwarf_attribute
+#وصف_رد LANG_HOOKS_TYPE_DWARF_ATTRIBUTE
+#وصف_ڪريو LANG_HOOKS_TYPE_DWARF_ATTRIBUTE c_type_dwarf_attribute
 
-#undef LANG_HOOKS_OMP_PREDETERMINED_SHARING
-#define LANG_HOOKS_OMP_PREDETERMINED_SHARING c_omp_predetermined_sharing
+#وصف_رد LANG_HOOKS_OMP_PREDETERMINED_SHARING
+#وصف_ڪريو LANG_HOOKS_OMP_PREDETERMINED_SHARING c_omp_predetermined_sharing
 
-#undef LANG_HOOKS_OMP_PREDETERMINED_MAPPING
-#define LANG_HOOKS_OMP_PREDETERMINED_MAPPING c_omp_predetermined_mapping
+#وصف_رد LANG_HOOKS_OMP_PREDETERMINED_MAPPING
+#وصف_ڪريو LANG_HOOKS_OMP_PREDETERMINED_MAPPING c_omp_predetermined_mapping
 
-#undef LANG_HOOKS_OMP_CLAUSE_COPY_CTOR
-#define LANG_HOOKS_OMP_CLAUSE_COPY_CTOR c_omp_clause_copy_ctor
+#وصف_رد LANG_HOOKS_OMP_CLAUSE_COPY_CTOR
+#وصف_ڪريو LANG_HOOKS_OMP_CLAUSE_COPY_CTOR c_omp_clause_copy_ctor
 
-#undef LANG_HOOKS_OMP_CLAUSE_ASSIGN_OP
-#define LANG_HOOKS_OMP_CLAUSE_ASSIGN_OP c_omp_clause_copy_ctor
+#وصف_رد LANG_HOOKS_OMP_CLAUSE_سونپيو_OP
+#وصف_ڪريو LANG_HOOKS_OMP_CLAUSE_سونپيو_OP c_omp_clause_copy_ctor
 
-#undef LANG_HOOKS_OMP_FINISH_MAPPER_CLAUSES
-#define LANG_HOOKS_OMP_FINISH_MAPPER_CLAUSES c_omp_finish_mapper_clauses
+#وصف_رد LANG_HOOKS_OMP_پڄاڻي_MAPPER_CLAUSES
+#وصف_ڪريو LANG_HOOKS_OMP_پڄاڻي_MAPPER_CLAUSES c_omp_پڄاڻي_mapper_clauses
 
-#undef LANG_HOOKS_OMP_MAPPER_LOOKUP
-#define LANG_HOOKS_OMP_MAPPER_LOOKUP c_omp_mapper_lookup
+#وصف_رد LANG_HOOKS_OMP_MAPPER_LOOKUP
+#وصف_ڪريو LANG_HOOKS_OMP_MAPPER_LOOKUP c_omp_mapper_lookup
 
-#undef LANG_HOOKS_OMP_EXTRACT_MAPPER_DIRECTIVE
-#define LANG_HOOKS_OMP_EXTRACT_MAPPER_DIRECTIVE c_omp_extract_mapper_directive
+#وصف_رد LANG_HOOKS_OMP_ڪڍو_MAPPER_DIRECTIVE
+#وصف_ڪريو LANG_HOOKS_OMP_ڪڍو_MAPPER_DIRECTIVE c_omp_ڪڍو_mapper_directive
 
-#undef LANG_HOOKS_OMP_MAP_ARRAY_SECTION
-#define LANG_HOOKS_OMP_MAP_ARRAY_SECTION c_omp_map_array_section
+#وصف_رد LANG_HOOKS_OMP_MAP_ARRAY_SECTION
+#وصف_ڪريو LANG_HOOKS_OMP_MAP_ARRAY_SECTION c_omp_map_array_section
 
-#undef LANG_HOOKS_TREE_INLINING_VAR_MOD_TYPE_P
-#define LANG_HOOKS_TREE_INLINING_VAR_MOD_TYPE_P c_var_mod_p
-#endif /* GCC_C_OBJC_COMMON */
+#وصف_رد LANG_HOOKS_وڻ_INLINING_VAR_MOD_TYPE_P
+#وصف_ڪريو LANG_HOOKS_وڻ_INLINING_VAR_MOD_TYPE_P c_var_mod_p
+#جيڪڏهن_پورو /* GCC_C_OBJC_COMMON */
