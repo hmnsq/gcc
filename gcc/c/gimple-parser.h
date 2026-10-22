@@ -17,13 +17,13 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_GIMPLE_PARSER_H
-#define GCC_GIMPLE_PARSER_H
+#اگر_تعریف_نشده GCC_GIMPLE_PARSER_H
+#تعریف_کن GCC_GIMPLE_PARSER_H
 
 /* Gimple parsing functions.  */
-extern void c_parser_parse_gimple_body (c_parser *, char *,
-					enum c_declspec_il,
-					profile_count);
-extern void c_parser_gimple_or_rtl_pass_list (c_parser *, c_declspecs *);
+خارجي فراغ c_parser_parse_gimple_body (c_parser *, حرف *,
+					تعداد c_declspec_il,
+					profile_شمار);
+خارجي فراغ c_parser_gimple_or_rtl_pass_list (c_parser *, c_declspecs *);
 
-#endif
+#پایان_اگر
