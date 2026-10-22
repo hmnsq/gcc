@@ -18,70 +18,70 @@ along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "c-tree.h"
-#include "langhooks.h"
-#include "langhooks-def.h"
-#include "c-objc-common.h"
-#include "c-family/c-pragma.h"
-#include "c-parser.h"
+#अन्तर्भाव "config.h"
+#अन्तर्भाव "system.h"
+#अन्तर्भाव "coretypes.h"
+#अन्तर्भाव "c-tree.h"
+#अन्तर्भाव "langhooks.h"
+#अन्तर्भाव "langhooks-def.h"
+#अन्तर्भाव "c-objc-common.h"
+#अन्तर्भाव "c-family/c-pragma.h"
+#अन्तर्भाव "c-parser.h"
 
-enum c_language_kind c_language = clk_c;
+गणना c_language_विधा c_language = clk_c;
 
 /* Lang hooks common to C and ObjC are declared in c-objc-common.h;
    consequently, there should be very few hooks below.  */
 
-#undef LANG_HOOKS_NAME
-#define LANG_HOOKS_NAME "GNU C"
-#undef LANG_HOOKS_INIT
-#define LANG_HOOKS_INIT c_objc_common_init
-#undef LANG_HOOKS_INIT_TS
-#define LANG_HOOKS_INIT_TS c_common_init_ts
-#undef LANG_HOOKS_ENUM_UNDERLYING_BASE_TYPE
-#define LANG_HOOKS_ENUM_UNDERLYING_BASE_TYPE c_enum_underlying_base_type
+#अपरिभाषय LANG_HOOKS_NAME
+#परिभाषय LANG_HOOKS_NAME "GNU C"
+#अपरिभाषय LANG_HOOKS_INIT
+#परिभाषय LANG_HOOKS_INIT c_objc_common_init
+#अपरिभाषय LANG_HOOKS_INIT_TS
+#परिभाषय LANG_HOOKS_INIT_TS c_common_init_ts
+#अपरिभाषय LANG_HOOKS_ENUM_UNDERLYING_आधारः_TYPE
+#परिभाषय LANG_HOOKS_ENUM_UNDERLYING_आधारः_TYPE c_enum_underlying_आधारः_type
 
-#if CHECKING_P
-#undef LANG_HOOKS_RUN_LANG_SELFTESTS
-#define LANG_HOOKS_RUN_LANG_SELFTESTS selftest::run_c_tests
-#endif /* #if CHECKING_P */
+#यदि CHECKING_P
+#अपरिभाषय LANG_HOOKS_सततम्_LANG_SELFTESTS
+#परिभाषय LANG_HOOKS_सततम्_LANG_SELFTESTS selftest::सततम्_c_tests
+#यदि_अन्तः /* #if CHECKING_P */
 
-#undef LANG_HOOKS_GET_SUBSTRING_LOCATION
-#define LANG_HOOKS_GET_SUBSTRING_LOCATION c_get_substring_location
+#अपरिभाषय LANG_HOOKS_GET_SUBSTRING_LOCATION
+#परिभाषय LANG_HOOKS_GET_SUBSTRING_LOCATION c_get_substring_location
 
-#undef LANG_HOOKS_GET_SARIF_SOURCE_LANGUAGE
-#define LANG_HOOKS_GET_SARIF_SOURCE_LANGUAGE c_get_sarif_source_language
+#अपरिभाषय LANG_HOOKS_GET_SARIF_SOURCE_LANGUAGE
+#परिभाषय LANG_HOOKS_GET_SARIF_SOURCE_LANGUAGE c_get_sarif_source_language
 
 /* Each front end provides its own lang hook initializer.  */
-struct lang_hooks lang_hooks = LANG_HOOKS_INITIALIZER;
+संरचना lang_hooks lang_hooks = LANG_HOOKS_INITIALIZER;
 
 /* Get a value for the SARIF v2.1.0 "artifact.sourceLanguage" property,
    based on the list in SARIF v2.1.0 Appendix J.  */
 
-const char *
-c_get_sarif_source_language (const char *)
+ध्रुव वर्ण *
+c_get_sarif_source_language (ध्रुव वर्ण *)
 {
-  return "c";
+  प्रत्यागम "c";
 }
 
 /* Implement c-family hook to register language-specific features for
    __has_{feature,extension}.  */
 
-void
-c_family_register_lang_features ()
+शून्य
+c_family_पञ्जिकाकोशः_lang_features ()
 {
-  c_register_features ();
+  c_पञ्जिकाकोशः_features ();
 }
 
-#if CHECKING_P
+#यदि CHECKING_P
 
-namespace selftest {
+नामाकाश selftest {
 
 /* Implementation of LANG_HOOKS_RUN_LANG_SELFTESTS for the C frontend.  */
 
-void
-run_c_tests (void)
+शून्य
+सततम्_c_tests (शून्य)
 {
   /* Run selftests shared within the C family.  */
   c_family_tests ();
@@ -91,7 +91,7 @@ run_c_tests (void)
 
 } // namespace selftest
 
-#endif /* #if CHECKING_P */
+#यदि_अन्तः /* #if CHECKING_P */
 
 
-#include "gtype-c.h"
+#अन्तर्भाव "gtype-c.h"

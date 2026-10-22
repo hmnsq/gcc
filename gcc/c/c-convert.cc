@@ -23,17 +23,17 @@ along with GCC; see the file COPYING3.  If not see
    Every language front end must have a `convert' function
    but what kind of conversions it does will depend on the language.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "c-tree.h"
-#include "convert.h"
-#include "langhooks.h"
-#include "ubsan.h"
-#include "stringpool.h"
-#include "attribs.h"
-#include "asan.h"
+#अन्तर्भाव "config.h"
+#अन्तर्भाव "system.h"
+#अन्तर्भाव "coretypes.h"
+#अन्तर्भाव "target.h"
+#अन्तर्भाव "c-tree.h"
+#अन्तर्भाव "convert.h"
+#अन्तर्भाव "langhooks.h"
+#अन्तर्भाव "ubsan.h"
+#अन्तर्भाव "stringpool.h"
+#अन्तर्भाव "attribs.h"
+#अन्तर्भाव "asan.h"
 
 /* Change of width--truncation and extension of integers or reals--
    is represented with NOP_EXPR.  Proper functioning of many things
@@ -65,181 +65,181 @@ along with GCC; see the file COPYING3.  If not see
    initializer and folding must apply accordingly (discarding floating-point
    exceptions and assuming the default rounding mode is in effect).  */
 
-static tree
-c_convert (tree type, tree expr, bool init_const)
+स्थिर वृक्षः
+c_convert (वृक्षः type, वृक्षः व्यञ्जकम्, तार्किक init_const)
 {
-  tree e = expr;
-  enum tree_code code = TREE_CODE (type);
-  const char *invalid_conv_diag;
-  tree ret;
-  location_t loc = EXPR_LOCATION (expr);
+  वृक्षः e = व्यञ्जकम्;
+  गणना वृक्षः_संहिता_2 संहिता = वृक्षः_संहिता (type);
+  ध्रुव वर्ण *invalid_conv_diag;
+  वृक्षः ret;
+  location_t loc = व्यञ्जकम्_LOCATION (व्यञ्जकम्);
 
-  if (type == error_mark_node
-      || error_operand_p (expr))
-    return error_mark_node;
+  यदि (type == error_mark_ग्रन्थिः
+      || error_सङ्कार्यम्_p (व्यञ्जकम्))
+    प्रत्यागम error_mark_ग्रन्थिः;
 
-  if ((invalid_conv_diag
-       = targetm.invalid_conversion (TREE_TYPE (expr), type)))
+  यदि ((invalid_conv_diag
+       = targetm.invalid_conversion (वृक्षः_TYPE (व्यञ्जकम्), type)))
     {
       error (invalid_conv_diag);
-      return error_mark_node;
+      प्रत्यागम error_mark_ग्रन्थिः;
     }
 
-  if (type == TREE_TYPE (expr))
-    return expr;
-  ret = targetm.convert_to_type (type, expr);
-  if (ret)
-      return ret;
+  यदि (type == वृक्षः_TYPE (व्यञ्जकम्))
+    प्रत्यागम व्यञ्जकम्;
+  ret = targetm.convert_गन्तव्यम्_type (type, व्यञ्जकम्);
+  यदि (ret)
+      प्रत्यागम ret;
 
   STRIP_TYPE_NOPS (e);
 
-  if (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (TREE_TYPE (expr))
-      && (TREE_CODE (TREE_TYPE (expr)) != COMPLEX_TYPE
-	  || TREE_CODE (e) == COMPLEX_EXPR))
-    return fold_convert_loc (loc, type, expr);
-  if (TREE_CODE (TREE_TYPE (expr)) == ERROR_MARK)
-    return error_mark_node;
-  if (VOID_TYPE_P (TREE_TYPE (expr)))
+  यदि (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (वृक्षः_TYPE (व्यञ्जकम्))
+      && (वृक्षः_संहिता (वृक्षः_TYPE (व्यञ्जकम्)) != COMPLEX_TYPE
+	  || वृक्षः_संहिता (e) == COMPLEX_व्यञ्जकम्))
+    प्रत्यागम fold_convert_loc (loc, type, व्यञ्जकम्);
+  यदि (वृक्षः_संहिता (वृक्षः_TYPE (व्यञ्जकम्)) == ERROR_MARK)
+    प्रत्यागम error_mark_ग्रन्थिः;
+  यदि (VOID_TYPE_P (वृक्षः_TYPE (व्यञ्जकम्)))
     {
       error ("void value not ignored as it ought to be");
-      return error_mark_node;
+      प्रत्यागम error_mark_ग्रन्थिः;
     }
 
   {
-    tree false_value, true_value;
-    if (c_hardbool_type_attr (type, &false_value, &true_value))
+    वृक्षः false_मानम्, true_मानम्;
+    यदि (c_hardbool_type_attr (type, &false_मानम्, &true_मानम्))
       {
-	bool save = in_late_binary_op;
-	in_late_binary_op = true;
-	expr = c_objc_common_truthvalue_conversion (input_location, expr);
-	in_late_binary_op = save;
+	तार्किक save = अन्तर्_late_द्विमान_op;
+	अन्तर्_late_द्विमान_op = सत्य;
+	व्यञ्जकम् = c_objc_common_truthvalue_conversion (निवेशः_location, व्यञ्जकम्);
+	अन्तर्_late_द्विमान_op = save;
 
-	return fold_build3_loc (loc, COND_EXPR, type,
-				expr, true_value, false_value);
+	प्रत्यागम fold_build3_loc (loc, COND_व्यञ्जकम्, type,
+				व्यञ्जकम्, true_मानम्, false_मानम्);
       }
   }
 
-  switch (code)
+  विकल्प (संहिता)
     {
-    case VOID_TYPE:
-      return fold_convert_loc (loc, type, e);
+    पक्ष VOID_TYPE:
+      प्रत्यागम fold_convert_loc (loc, type, e);
 
-    case ENUMERAL_TYPE:
-      if (ENUM_UNDERLYING_TYPE (type) != NULL_TREE
-	  && TREE_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
-	goto convert_to_boolean;
+    पक्ष ENUMERAL_TYPE:
+      यदि (ENUM_UNDERLYING_TYPE (type) != NULL_वृक्षः
+	  && वृक्षः_संहिता (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
+	गच्छ convert_गन्तव्यम्_boolean;
       gcc_fallthrough ();
 
-    case INTEGER_TYPE:
-    case BITINT_TYPE:
-      if (sanitize_flags_p (SANITIZE_FLOAT_CAST)
-	  && current_function_decl != NULL_TREE
-	  && SCALAR_FLOAT_TYPE_P (TREE_TYPE (expr))
+    पक्ष INTEGER_TYPE:
+    पक्ष BITINT_TYPE:
+      यदि (sanitize_flags_p (SANITIZE_FLOAT_CAST)
+	  && current_function_decl != NULL_वृक्षः
+	  && SCALAR_FLOAT_TYPE_P (वृक्षः_TYPE (व्यञ्जकम्))
 	  && COMPLETE_TYPE_P (type))
 	{
-	  expr = save_expr (expr);
-	  expr = c_fully_fold (expr, init_const, NULL);
-	  tree check = ubsan_instrument_float_cast (loc, type, expr);
-	  expr = fold_build1 (FIX_TRUNC_EXPR, type, expr);
-	  if (check == NULL_TREE)
-	    return expr;
-	  return fold_build2 (COMPOUND_EXPR, TREE_TYPE (expr), check, expr);
+	  व्यञ्जकम् = save_व्यञ्जकम् (व्यञ्जकम्);
+	  व्यञ्जकम् = c_fully_fold (व्यञ्जकम्, init_const, रिक्त);
+	  वृक्षः check = ubsan_instrument_float_cast (loc, type, व्यञ्जकम्);
+	  व्यञ्जकम् = fold_build1 (FIX_TRUNC_व्यञ्जकम्, type, व्यञ्जकम्);
+	  यदि (check == NULL_वृक्षः)
+	    प्रत्यागम व्यञ्जकम्;
+	  प्रत्यागम fold_build2 (COMPOUND_व्यञ्जकम्, वृक्षः_TYPE (व्यञ्जकम्), check, व्यञ्जकम्);
 	}
-      ret = convert_to_integer (type, e);
-      goto maybe_fold;
+      ret = convert_गन्तव्यम्_integer (type, e);
+      गच्छ maybe_fold;
 
-    case BOOLEAN_TYPE:
-    convert_to_boolean:
-      return c_objc_common_truthvalue_conversion (input_location, expr, type);
+    पक्ष BOOLEAN_TYPE:
+    convert_गन्तव्यम्_boolean:
+      प्रत्यागम c_objc_common_truthvalue_conversion (निवेशः_location, व्यञ्जकम्, type);
 
-    case POINTER_TYPE:
+    पक्ष POINTER_TYPE:
       /* The type nullptr_t may be converted to a pointer type.  The result is
 	 a null pointer value.  */
-      if (NULLPTR_TYPE_P (TREE_TYPE (e)))
+      यदि (NULLPTR_TYPE_P (वृक्षः_TYPE (e)))
 	{
 	  /* To make sure that (void *)nullptr is not a null pointer constant,
 	     build_c_cast will create an additional NOP_EXPR around the result
 	     of this conversion.  */
-	  if (TREE_SIDE_EFFECTS (e))
-	    ret = build2 (COMPOUND_EXPR, type, e, build_int_cst (type, 0));
-	  else
+	  यदि (वृक्षः_SIDE_EFFECTS (e))
+	    ret = build2 (COMPOUND_व्यञ्जकम्, type, e, build_int_cst (type, 0));
+	  अन्यथा
 	    ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  गच्छ maybe_fold;
 	}
       gcc_fallthrough ();
-    case REFERENCE_TYPE:
-      ret = convert_to_pointer (type, e);
-      goto maybe_fold;
+    पक्ष REFERENCE_TYPE:
+      ret = convert_गन्तव्यम्_pointer (type, e);
+      गच्छ maybe_fold;
 
-    case NULLPTR_TYPE:
+    पक्ष NULLPTR_TYPE:
       /* A null pointer constant or value of type nullptr_t may be
 	 converted to nullptr_t.  The latter case has already been
 	 handled.  build_c_cast will create an additional NOP_EXPR to
 	 ensure the result of the conversion is not itself a null
 	 pointer constant.  */
-      if (null_pointer_constant_p (expr))
+      यदि (null_pointer_constant_p (व्यञ्जकम्))
 	{
 	  ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  गच्छ maybe_fold;
 	}
-      break;
+      भङ्ग;
 
-    case REAL_TYPE:
-      ret = convert_to_real (type, e);
-      goto maybe_fold;
+    पक्ष REAL_TYPE:
+      ret = convert_गन्तव्यम्_real (type, e);
+      गच्छ maybe_fold;
 
-    case FIXED_POINT_TYPE:
-      ret = convert_to_fixed (type, e);
-      goto maybe_fold;
+    पक्ष FIXED_POINT_TYPE:
+      ret = convert_गन्तव्यम्_fixed (type, e);
+      गच्छ maybe_fold;
 
-    case COMPLEX_TYPE:
-      ret = convert_to_complex (type, e);
-      goto maybe_fold;
+    पक्ष COMPLEX_TYPE:
+      ret = convert_गन्तव्यम्_complex (type, e);
+      गच्छ maybe_fold;
 
-    case VECTOR_TYPE:
-      if (gnu_vector_type_p (type)
-	  || gnu_vector_type_p (TREE_TYPE (e))
+    पक्ष सदिशम्_TYPE:
+      यदि (gnu_सदिशम्_type_p (type)
+	  || gnu_सदिशम्_type_p (वृक्षः_TYPE (e))
 	  /* Allow conversions between compatible non-GNU vector types
 	     when -flax-vector-conversions is passed.  The whole purpose
 	     of the option is to bend the normal type rules and accept
 	     nonconforming code.  */
-	  || (flag_lax_vector_conversions
-	      && VECTOR_TYPE_P (TREE_TYPE (e))
-	      && vector_types_convertible_p (type, TREE_TYPE (e), false)))
+	  || (flag_lax_सदिशम्_conversions
+	      && सदिशम्_TYPE_P (वृक्षः_TYPE (e))
+	      && सदिशम्_types_convertible_p (type, वृक्षः_TYPE (e), असत्य)))
 	{
-	  ret = convert_to_vector (type, e);
-	  goto maybe_fold;
+	  ret = convert_गन्तव्यम्_सदिशम् (type, e);
+	  गच्छ maybe_fold;
 	}
-      break;
+      भङ्ग;
 
-    case RECORD_TYPE:
-    case UNION_TYPE:
-      if (lang_hooks.types_compatible_p (type, TREE_TYPE (expr)))
-	return e;
-      break;
+    पक्ष लेखः_TYPE:
+    पक्ष UNION_TYPE:
+      यदि (lang_hooks.types_compatible_p (type, वृक्षः_TYPE (व्यञ्जकम्)))
+	प्रत्यागम e;
+      भङ्ग;
 
-    default:
-      break;
+    स्वभाव:
+      भङ्ग;
 
     maybe_fold:
-      if (TREE_CODE (ret) != C_MAYBE_CONST_EXPR)
+      यदि (वृक्षः_संहिता (ret) != C_MAYBE_CONST_व्यञ्जकम्)
 	ret = init_const ? fold_init (ret) : fold (ret);
-      return ret;
+      प्रत्यागम ret;
     }
 
   /* If we are converting to nullptr_t, don't say "non-scalar type" because
      the nullptr_t type is a scalar type.  Only nullptr_t or a null pointer
      constant shall be converted to nullptr_t.  */
-  if (code == NULLPTR_TYPE)
+  यदि (संहिता == NULLPTR_TYPE)
     {
-      error ("conversion from %qT to %qT", TREE_TYPE (e), type);
-      inform (input_location,
+      error ("conversion from %qT to %qT", वृक्षः_TYPE (e), type);
+      inform (निवेशः_location,
 	      "only %qT or a null pointer constant can be converted to %qT",
 	      type, type);
     }
-  else
+  अन्यथा
     error ("conversion to non-scalar type requested");
-  return error_mark_node;
+  प्रत्यागम error_mark_ग्रन्थिः;
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE.
@@ -247,10 +247,10 @@ c_convert (tree type, tree expr, bool init_const)
    reasonable conversions; callers should filter out those that are not
    permitted by the language being compiled.  */
 
-tree
-convert (tree type, tree expr)
+वृक्षः
+convert (वृक्षः type, वृक्षः व्यञ्जकम्)
 {
-  return c_convert (type, expr, false);
+  प्रत्यागम c_convert (type, व्यञ्जकम्, असत्य);
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE, in
@@ -258,8 +258,8 @@ convert (tree type, tree expr)
    function implements all reasonable conversions; callers should filter out
    those that are not permitted by the language being compiled.  */
 
-tree
-convert_init (tree type, tree expr)
+वृक्षः
+convert_init (वृक्षः type, वृक्षः व्यञ्जकम्)
 {
-  return c_convert (type, expr, true);
+  प्रत्यागम c_convert (type, व्यञ्जकम्, सत्य);
 }
