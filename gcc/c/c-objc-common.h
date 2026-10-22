@@ -22,7 +22,7 @@ along with GCC; see the file COPYING3.  If not see
 #define GCC_C_OBJC_COMMON
 
 /* Implemented in c-objc-common.cc.  */
-extern void c_register_features ();
+خارجي فراغ c_register_features ();
 
 /* Lang hooks that are shared between C and ObjC are defined here.  Hooks
    specific to C or ObjC go in c-lang.cc and objc/objc-lang.cc, respectively.  */
@@ -77,7 +77,7 @@ extern void c_register_features ();
 #undef LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE
 #define LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE c_reconstruct_complex_type
 
-static const scoped_attribute_specs *const c_objc_attribute_table[] =
+ساكن ثابت scoped_attribute_specs *ثابت c_objc_attribute_table[] =
 {
   &std_attribute_table,
   &c_common_gnu_attribute_table,
