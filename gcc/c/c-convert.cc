@@ -23,17 +23,17 @@ along with GCC; see the file COPYING3.  If not see
    Every language front end must have a `convert' function
    but what kind of conversions it does will depend on the language.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "c-tree.h"
-#include "convert.h"
-#include "langhooks.h"
-#include "ubsan.h"
-#include "stringpool.h"
-#include "attribs.h"
-#include "asan.h"
+#समावेश "config.h"
+#समावेश "system.h"
+#समावेश "coretypes.h"
+#समावेश "target.h"
+#समावेश "c-tree.h"
+#समावेश "convert.h"
+#समावेश "langhooks.h"
+#समावेश "ubsan.h"
+#समावेश "stringpool.h"
+#समावेश "attribs.h"
+#समावेश "asan.h"
 
 /* Change of width--truncation and extension of integers or reals--
    is represented with NOP_EXPR.  Proper functioning of many things
@@ -65,181 +65,181 @@ along with GCC; see the file COPYING3.  If not see
    initializer and folding must apply accordingly (discarding floating-point
    exceptions and assuming the default rounding mode is in effect).  */
 
-static tree
-c_convert (tree type, tree expr, bool init_const)
+अटल वृक्ष
+c_convert (वृक्ष type, वृक्ष व्यंजक, bool init_const)
 {
-  tree e = expr;
-  enum tree_code code = TREE_CODE (type);
-  const char *invalid_conv_diag;
-  tree ret;
-  location_t loc = EXPR_LOCATION (expr);
+  वृक्ष e = व्यंजक;
+  क्रमागत वृक्ष_code code = वृक्ष_CODE (type);
+  स्थिर अक्षर *invalid_conv_diag;
+  वृक्ष ret;
+  location_t loc = व्यंजक_LOCATION (व्यंजक);
 
-  if (type == error_mark_node
-      || error_operand_p (expr))
-    return error_mark_node;
+  अगर (type == error_mark_गाँठ
+      || error_operand_p (व्यंजक))
+    वापस error_mark_गाँठ;
 
-  if ((invalid_conv_diag
-       = targetm.invalid_conversion (TREE_TYPE (expr), type)))
+  अगर ((invalid_conv_diag
+       = targetm.invalid_conversion (वृक्ष_TYPE (व्यंजक), type)))
     {
       error (invalid_conv_diag);
-      return error_mark_node;
+      वापस error_mark_गाँठ;
     }
 
-  if (type == TREE_TYPE (expr))
-    return expr;
-  ret = targetm.convert_to_type (type, expr);
-  if (ret)
-      return ret;
+  अगर (type == वृक्ष_TYPE (व्यंजक))
+    वापस व्यंजक;
+  ret = targetm.convert_to_type (type, व्यंजक);
+  अगर (ret)
+      वापस ret;
 
   STRIP_TYPE_NOPS (e);
 
-  if (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (TREE_TYPE (expr))
-      && (TREE_CODE (TREE_TYPE (expr)) != COMPLEX_TYPE
-	  || TREE_CODE (e) == COMPLEX_EXPR))
-    return fold_convert_loc (loc, type, expr);
-  if (TREE_CODE (TREE_TYPE (expr)) == ERROR_MARK)
-    return error_mark_node;
-  if (VOID_TYPE_P (TREE_TYPE (expr)))
+  अगर (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (वृक्ष_TYPE (व्यंजक))
+      && (वृक्ष_CODE (वृक्ष_TYPE (व्यंजक)) != COMPLEX_TYPE
+	  || वृक्ष_CODE (e) == COMPLEX_व्यंजक))
+    वापस fold_convert_loc (loc, type, व्यंजक);
+  अगर (वृक्ष_CODE (वृक्ष_TYPE (व्यंजक)) == ERROR_MARK)
+    वापस error_mark_गाँठ;
+  अगर (VOID_TYPE_P (वृक्ष_TYPE (व्यंजक)))
     {
       error ("void value not ignored as it ought to be");
-      return error_mark_node;
+      वापस error_mark_गाँठ;
     }
 
   {
-    tree false_value, true_value;
-    if (c_hardbool_type_attr (type, &false_value, &true_value))
+    वृक्ष false_मूल्य, true_मूल्य;
+    अगर (c_hardbool_type_attr (type, &false_मूल्य, &true_मूल्य))
       {
-	bool save = in_late_binary_op;
-	in_late_binary_op = true;
-	expr = c_objc_common_truthvalue_conversion (input_location, expr);
-	in_late_binary_op = save;
+	bool save = in_late_द्विआधारी_op;
+	in_late_द्विआधारी_op = true;
+	व्यंजक = c_objc_common_truthvalue_conversion (निवेश_location, व्यंजक);
+	in_late_द्विआधारी_op = save;
 
-	return fold_build3_loc (loc, COND_EXPR, type,
-				expr, true_value, false_value);
+	वापस fold_build3_loc (loc, COND_व्यंजक, type,
+				व्यंजक, true_मूल्य, false_मूल्य);
       }
   }
 
-  switch (code)
+  चयन (code)
     {
-    case VOID_TYPE:
-      return fold_convert_loc (loc, type, e);
+    हाल VOID_TYPE:
+      वापस fold_convert_loc (loc, type, e);
 
-    case ENUMERAL_TYPE:
-      if (ENUM_UNDERLYING_TYPE (type) != NULL_TREE
-	  && TREE_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
-	goto convert_to_boolean;
+    हाल ENUMERAL_TYPE:
+      अगर (ENUM_UNDERLYING_TYPE (type) != NULL_वृक्ष
+	  && वृक्ष_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
+	जाओ convert_to_boolean;
       gcc_fallthrough ();
 
-    case INTEGER_TYPE:
-    case BITINT_TYPE:
-      if (sanitize_flags_p (SANITIZE_FLOAT_CAST)
-	  && current_function_decl != NULL_TREE
-	  && SCALAR_FLOAT_TYPE_P (TREE_TYPE (expr))
+    हाल INTEGER_TYPE:
+    हाल BITINT_TYPE:
+      अगर (sanitize_flags_p (SANITIZE_FLOAT_CAST)
+	  && current_function_decl != NULL_वृक्ष
+	  && SCALAR_FLOAT_TYPE_P (वृक्ष_TYPE (व्यंजक))
 	  && COMPLETE_TYPE_P (type))
 	{
-	  expr = save_expr (expr);
-	  expr = c_fully_fold (expr, init_const, NULL);
-	  tree check = ubsan_instrument_float_cast (loc, type, expr);
-	  expr = fold_build1 (FIX_TRUNC_EXPR, type, expr);
-	  if (check == NULL_TREE)
-	    return expr;
-	  return fold_build2 (COMPOUND_EXPR, TREE_TYPE (expr), check, expr);
+	  व्यंजक = save_व्यंजक (व्यंजक);
+	  व्यंजक = c_fully_fold (व्यंजक, init_const, शून्य);
+	  वृक्ष check = ubsan_instrument_float_cast (loc, type, व्यंजक);
+	  व्यंजक = fold_build1 (FIX_TRUNC_व्यंजक, type, व्यंजक);
+	  अगर (check == NULL_वृक्ष)
+	    वापस व्यंजक;
+	  वापस fold_build2 (COMPOUND_व्यंजक, वृक्ष_TYPE (व्यंजक), check, व्यंजक);
 	}
       ret = convert_to_integer (type, e);
-      goto maybe_fold;
+      जाओ maybe_fold;
 
-    case BOOLEAN_TYPE:
+    हाल BOOLEAN_TYPE:
     convert_to_boolean:
-      return c_objc_common_truthvalue_conversion (input_location, expr, type);
+      वापस c_objc_common_truthvalue_conversion (निवेश_location, व्यंजक, type);
 
-    case POINTER_TYPE:
+    हाल POINTER_TYPE:
       /* The type nullptr_t may be converted to a pointer type.  The result is
 	 a null pointer value.  */
-      if (NULLPTR_TYPE_P (TREE_TYPE (e)))
+      अगर (NULLPTR_TYPE_P (वृक्ष_TYPE (e)))
 	{
 	  /* To make sure that (void *)nullptr is not a null pointer constant,
 	     build_c_cast will create an additional NOP_EXPR around the result
 	     of this conversion.  */
-	  if (TREE_SIDE_EFFECTS (e))
-	    ret = build2 (COMPOUND_EXPR, type, e, build_int_cst (type, 0));
-	  else
+	  अगर (वृक्ष_SIDE_EFFECTS (e))
+	    ret = build2 (COMPOUND_व्यंजक, type, e, build_int_cst (type, 0));
+	  अन्यथा
 	    ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  जाओ maybe_fold;
 	}
       gcc_fallthrough ();
-    case REFERENCE_TYPE:
+    हाल REFERENCE_TYPE:
       ret = convert_to_pointer (type, e);
-      goto maybe_fold;
+      जाओ maybe_fold;
 
-    case NULLPTR_TYPE:
+    हाल NULLPTR_TYPE:
       /* A null pointer constant or value of type nullptr_t may be
 	 converted to nullptr_t.  The latter case has already been
 	 handled.  build_c_cast will create an additional NOP_EXPR to
 	 ensure the result of the conversion is not itself a null
 	 pointer constant.  */
-      if (null_pointer_constant_p (expr))
+      अगर (null_pointer_constant_p (व्यंजक))
 	{
 	  ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  जाओ maybe_fold;
 	}
-      break;
+      अवरोध;
 
-    case REAL_TYPE:
+    हाल REAL_TYPE:
       ret = convert_to_real (type, e);
-      goto maybe_fold;
+      जाओ maybe_fold;
 
-    case FIXED_POINT_TYPE:
+    हाल FIXED_POINT_TYPE:
       ret = convert_to_fixed (type, e);
-      goto maybe_fold;
+      जाओ maybe_fold;
 
-    case COMPLEX_TYPE:
+    हाल COMPLEX_TYPE:
       ret = convert_to_complex (type, e);
-      goto maybe_fold;
+      जाओ maybe_fold;
 
-    case VECTOR_TYPE:
-      if (gnu_vector_type_p (type)
-	  || gnu_vector_type_p (TREE_TYPE (e))
+    हाल VECTOR_TYPE:
+      अगर (gnu_vector_type_p (type)
+	  || gnu_vector_type_p (वृक्ष_TYPE (e))
 	  /* Allow conversions between compatible non-GNU vector types
 	     when -flax-vector-conversions is passed.  The whole purpose
 	     of the option is to bend the normal type rules and accept
 	     nonconforming code.  */
 	  || (flag_lax_vector_conversions
-	      && VECTOR_TYPE_P (TREE_TYPE (e))
-	      && vector_types_convertible_p (type, TREE_TYPE (e), false)))
+	      && VECTOR_TYPE_P (वृक्ष_TYPE (e))
+	      && vector_types_convertible_p (type, वृक्ष_TYPE (e), false)))
 	{
 	  ret = convert_to_vector (type, e);
-	  goto maybe_fold;
+	  जाओ maybe_fold;
 	}
-      break;
+      अवरोध;
 
-    case RECORD_TYPE:
-    case UNION_TYPE:
-      if (lang_hooks.types_compatible_p (type, TREE_TYPE (expr)))
-	return e;
-      break;
+    हाल RECORD_TYPE:
+    हाल UNION_TYPE:
+      अगर (lang_hooks.types_compatible_p (type, वृक्ष_TYPE (व्यंजक)))
+	वापस e;
+      अवरोध;
 
-    default:
-      break;
+    शेष:
+      अवरोध;
 
     maybe_fold:
-      if (TREE_CODE (ret) != C_MAYBE_CONST_EXPR)
+      अगर (वृक्ष_CODE (ret) != C_MAYBE_CONST_व्यंजक)
 	ret = init_const ? fold_init (ret) : fold (ret);
-      return ret;
+      वापस ret;
     }
 
   /* If we are converting to nullptr_t, don't say "non-scalar type" because
      the nullptr_t type is a scalar type.  Only nullptr_t or a null pointer
      constant shall be converted to nullptr_t.  */
-  if (code == NULLPTR_TYPE)
+  अगर (code == NULLPTR_TYPE)
     {
-      error ("conversion from %qT to %qT", TREE_TYPE (e), type);
-      inform (input_location,
+      error ("conversion from %qT to %qT", वृक्ष_TYPE (e), type);
+      inform (निवेश_location,
 	      "only %qT or a null pointer constant can be converted to %qT",
 	      type, type);
     }
-  else
+  अन्यथा
     error ("conversion to non-scalar type requested");
-  return error_mark_node;
+  वापस error_mark_गाँठ;
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE.
@@ -247,10 +247,10 @@ c_convert (tree type, tree expr, bool init_const)
    reasonable conversions; callers should filter out those that are not
    permitted by the language being compiled.  */
 
-tree
-convert (tree type, tree expr)
+वृक्ष
+convert (वृक्ष type, वृक्ष व्यंजक)
 {
-  return c_convert (type, expr, false);
+  वापस c_convert (type, व्यंजक, false);
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE, in
@@ -258,8 +258,8 @@ convert (tree type, tree expr)
    function implements all reasonable conversions; callers should filter out
    those that are not permitted by the language being compiled.  */
 
-tree
-convert_init (tree type, tree expr)
+वृक्ष
+convert_init (वृक्ष type, वृक्ष व्यंजक)
 {
-  return c_convert (type, expr, true);
+  वापस c_convert (type, व्यंजक, true);
 }

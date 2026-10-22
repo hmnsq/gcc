@@ -20,26 +20,26 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "tm.h"
-#include "c-tree.h"
+#समावेश "config.h"
+#समावेश "system.h"
+#समावेश "coretypes.h"
+#समावेश "tm.h"
+#समावेश "c-tree.h"
 
-enum formals_style {
+क्रमागत formals_style {
   ansi,
   k_and_r_names,
   k_and_r_decls
 };
 
 
-static const char *data_type;
+अटल स्थिर अक्षर *तथ्य_type;
 
-static char *affix_data_type (const char *) ATTRIBUTE_MALLOC;
-static const char *gen_formal_list_for_type (tree, formals_style);
-static const char *gen_formal_list_for_func_def (tree, formals_style);
-static const char *gen_type (const char *, tree, formals_style);
-static const char *gen_decl (tree, int, formals_style);
+अटल अक्षर *affix_तथ्य_type (स्थिर अक्षर *) ATTRIBUTE_MALLOC;
+अटल स्थिर अक्षर *gen_formal_list_for_type (वृक्ष, formals_style);
+अटल स्थिर अक्षर *gen_formal_list_for_func_def (वृक्ष, formals_style);
+अटल स्थिर अक्षर *gen_type (स्थिर अक्षर *, वृक्ष, formals_style);
+अटल स्थिर अक्षर *gen_decl (वृक्ष, पूर्णांक, formals_style);
 
 /* Given a string representing an entire type or an entire declaration
    which only lacks the actual "data-type" specifier (at its left end),
@@ -55,43 +55,43 @@ static const char *gen_decl (tree, int, formals_style);
    `const char *foo;' and *not* `char const *foo;' so we try to create types
    that look as expected.  */
 
-static char *
-affix_data_type (const char *param)
+अटल अक्षर *
+affix_तथ्य_type (स्थिर अक्षर *param)
 {
-  char *const type_or_decl = ASTRDUP (param);
-  char *p = type_or_decl;
-  char *qualifiers_then_data_type;
-  char saved;
+  अक्षर *स्थिर type_or_decl = ASTRDUP (param);
+  अक्षर *p = type_or_decl;
+  अक्षर *qualifiers_then_तथ्य_type;
+  अक्षर saved;
 
   /* Skip as many leading const's or volatile's as there are.  */
 
-  for (;;)
+  क्रम (;;)
     {
-      if (startswith (p, "volatile "))
+      अगर (startswith (p, "volatile "))
 	{
 	  p += 9;
-	  continue;
+	  जारी;
 	}
-      if (startswith (p, "const "))
+      अगर (startswith (p, "const "))
 	{
 	  p += 6;
-	  continue;
+	  जारी;
 	}
-      break;
+      अवरोध;
     }
 
   /* p now points to the place where we can insert the data type.  We have to
      add a blank after the data-type of course.  */
 
-  if (p == type_or_decl)
-    return concat (data_type, " ", type_or_decl, NULL);
+  अगर (p == type_or_decl)
+    वापस concat (तथ्य_type, " ", type_or_decl, शून्य);
 
   saved = *p;
   *p = '\0';
-  qualifiers_then_data_type = concat (type_or_decl, data_type, NULL);
+  qualifiers_then_तथ्य_type = concat (type_or_decl, तथ्य_type, शून्य);
   *p = saved;
-  return reconcat (qualifiers_then_data_type,
-		   qualifiers_then_data_type, " ", p, NULL);
+  वापस reconcat (qualifiers_then_तथ्य_type,
+		   qualifiers_then_तथ्य_type, " ", p, शून्य);
 }
 
 /* Given a tree node which represents some "function type", generate the
@@ -101,30 +101,30 @@ affix_data_type (const char *param)
    we are currently aiming for is non-ansi, then we just return a pair
    of empty parens here.  */
 
-static const char *
-gen_formal_list_for_type (tree fntype, formals_style style)
+अटल स्थिर अक्षर *
+gen_formal_list_for_type (वृक्ष fntype, formals_style style)
 {
-  const char *formal_list = "";
-  tree formal_type;
+  स्थिर अक्षर *formal_list = "";
+  वृक्ष formal_type;
 
-  if (style != ansi)
-    return "()";
+  अगर (style != ansi)
+    वापस "()";
 
   formal_type = TYPE_ARG_TYPES (fntype);
-  while (formal_type && TREE_VALUE (formal_type) != void_type_node)
+  जबतक (formal_type && वृक्ष_मूल्य (formal_type) != void_type_गाँठ)
     {
-      const char *this_type;
+      स्थिर अक्षर *this_type;
 
-      if (*formal_list)
-	formal_list = concat (formal_list, ", ", NULL);
+      अगर (*formal_list)
+	formal_list = concat (formal_list, ", ", शून्य);
 
-      this_type = gen_type ("", TREE_VALUE (formal_type), ansi);
+      this_type = gen_type ("", वृक्ष_मूल्य (formal_type), ansi);
       formal_list
-	= ((strlen (this_type))
-	   ? concat (formal_list, affix_data_type (this_type), NULL)
-	   : concat (formal_list, data_type, NULL));
+	= ((म_माप (this_type))
+	   ? concat (formal_list, affix_तथ्य_type (this_type), शून्य)
+	   : concat (formal_list, तथ्य_type, शून्य));
 
-      formal_type = TREE_CHAIN (formal_type);
+      formal_type = वृक्ष_CHAIN (formal_type);
     }
 
   /* If we got to here, then we are trying to generate an ANSI style formal
@@ -157,24 +157,24 @@ gen_formal_list_for_type (tree fntype, formals_style style)
 
      The string chosen here is a comment with question marks in it.  */
 
-  if (!*formal_list)
+  अगर (!*formal_list)
     {
-      if (prototype_p (fntype))
+      अगर (prototype_p (fntype))
 	/* assert (TREE_VALUE (TYPE_ARG_TYPES (fntype)) == void_type_node);  */
 	formal_list = "void";
-      else
+      अन्यथा
 	formal_list = "/* ??? */";
     }
-  else
+  अन्यथा
     {
       /* If there were at least some parameters, and if the formals-types-list
 	 petered out to a NULL (i.e. without being terminated by a
 	 void_type_node) then we need to tack on an ellipsis.  */
-      if (!formal_type)
-	formal_list = concat (formal_list, ", ...", NULL);
+      अगर (!formal_type)
+	formal_list = concat (formal_list, ", ...", शून्य);
     }
 
-  return concat (" (", formal_list, ")", NULL);
+  वापस concat (" (", formal_list, ")", शून्य);
 }
 
 /* Generate a parameter list for a function definition (in some given style).
@@ -196,36 +196,36 @@ gen_formal_list_for_type (tree fntype, formals_style style)
    This routine returns a string which is the source form for the entire
    function formal parameter list.  */
 
-static const char *
-gen_formal_list_for_func_def (tree fndecl, formals_style style)
+अटल स्थिर अक्षर *
+gen_formal_list_for_func_def (वृक्ष fndecl, formals_style style)
 {
-  const char *formal_list = "";
-  tree formal_decl;
+  स्थिर अक्षर *formal_list = "";
+  वृक्ष formal_decl;
 
   formal_decl = DECL_ARGUMENTS (fndecl);
-  while (formal_decl)
+  जबतक (formal_decl)
     {
-      const char *this_formal;
+      स्थिर अक्षर *this_formal;
 
-      if (*formal_list && ((style == ansi) || (style == k_and_r_names)))
-	formal_list = concat (formal_list, ", ", NULL);
+      अगर (*formal_list && ((style == ansi) || (style == k_and_r_names)))
+	formal_list = concat (formal_list, ", ", शून्य);
       this_formal = gen_decl (formal_decl, 0, style);
-      if (style == k_and_r_decls)
-	formal_list = concat (formal_list, this_formal, "; ", NULL);
-      else
-	formal_list = concat (formal_list, this_formal, NULL);
-      formal_decl = TREE_CHAIN (formal_decl);
+      अगर (style == k_and_r_decls)
+	formal_list = concat (formal_list, this_formal, "; ", शून्य);
+      अन्यथा
+	formal_list = concat (formal_list, this_formal, शून्य);
+      formal_decl = वृक्ष_CHAIN (formal_decl);
     }
-  if (style == ansi)
+  अगर (style == ansi)
     {
-      if (!DECL_ARGUMENTS (fndecl))
-	formal_list = concat (formal_list, "void", NULL);
-      if (stdarg_p (TREE_TYPE (fndecl)))
-	formal_list = concat (formal_list, ", ...", NULL);
+      अगर (!DECL_ARGUMENTS (fndecl))
+	formal_list = concat (formal_list, "void", शून्य);
+      अगर (stdarg_p (वृक्ष_TYPE (fndecl)))
+	formal_list = concat (formal_list, ", ...", शून्य);
     }
-  if ((style == ansi) || (style == k_and_r_names))
-    formal_list = concat (" (", formal_list, ")", NULL);
-  return formal_list;
+  अगर ((style == ansi) || (style == k_and_r_names))
+    formal_list = concat (" (", formal_list, ")", शून्य);
+  वापस formal_list;
 }
 
 /* Generate a string which is the source code form for a given type (t).  This
@@ -269,63 +269,63 @@ gen_formal_list_for_func_def (tree fndecl, formals_style style)
    to do at this point is for the initial caller to prepend the "data_type"
    string onto the returned "seed".  */
 
-static const char *
-gen_type (const char *ret_val, tree t, formals_style style)
+अटल स्थिर अक्षर *
+gen_type (स्थिर अक्षर *ret_val, वृक्ष t, formals_style style)
 {
-  tree chain_p;
+  वृक्ष chain_p;
 
   /* If there is a typedef name for this type, use it.  */
-  if (TYPE_NAME (t) && TREE_CODE (TYPE_NAME (t)) == TYPE_DECL)
-    data_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
-  else
+  अगर (TYPE_NAME (t) && वृक्ष_CODE (TYPE_NAME (t)) == TYPE_DECL)
+    तथ्य_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
+  अन्यथा
     {
-      switch (TREE_CODE (t))
+      चयन (वृक्ष_CODE (t))
 	{
-	case POINTER_TYPE:
-	  if (TYPE_ATOMIC (t))
-	    ret_val = concat ("_Atomic ", ret_val, NULL);
-	  if (TYPE_READONLY (t))
-	    ret_val = concat ("const ", ret_val, NULL);
-	  if (TYPE_VOLATILE (t))
-	    ret_val = concat ("volatile ", ret_val, NULL);
+	हाल POINTER_TYPE:
+	  अगर (TYPE_ATOMIC (t))
+	    ret_val = concat ("_Atomic ", ret_val, शून्य);
+	  अगर (TYPE_READONLY (t))
+	    ret_val = concat ("const ", ret_val, शून्य);
+	  अगर (TYPE_VOLATILE (t))
+	    ret_val = concat ("volatile ", ret_val, शून्य);
 
-	  ret_val = concat ("*", ret_val, NULL);
+	  ret_val = concat ("*", ret_val, शून्य);
 
-	  if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE || TREE_CODE (TREE_TYPE (t)) == FUNCTION_TYPE)
-	    ret_val = concat ("(", ret_val, ")", NULL);
+	  अगर (वृक्ष_CODE (वृक्ष_TYPE (t)) == ARRAY_TYPE || वृक्ष_CODE (वृक्ष_TYPE (t)) == FUNCTION_TYPE)
+	    ret_val = concat ("(", ret_val, ")", शून्य);
 
-	  ret_val = gen_type (ret_val, TREE_TYPE (t), style);
+	  ret_val = gen_type (ret_val, वृक्ष_TYPE (t), style);
 
-	  return ret_val;
+	  वापस ret_val;
 
-	case ARRAY_TYPE:
-	  if (!COMPLETE_TYPE_P (t) || TREE_CODE (TYPE_SIZE (t)) != INTEGER_CST)
-	    ret_val = gen_type (concat (ret_val, "[]", NULL),
-				TREE_TYPE (t), style);
-	  else if (int_size_in_bytes (t) == 0)
-	    ret_val = gen_type (concat (ret_val, "[0]", NULL),
-				TREE_TYPE (t), style);
-	  else
+	हाल ARRAY_TYPE:
+	  अगर (!COMPLETE_TYPE_P (t) || वृक्ष_CODE (TYPE_आकार (t)) != INTEGER_CST)
+	    ret_val = gen_type (concat (ret_val, "[]", शून्य),
+				वृक्ष_TYPE (t), style);
+	  अन्यथा अगर (int_आकार_in_bytes (t) == 0)
+	    ret_val = gen_type (concat (ret_val, "[0]", शून्य),
+				वृक्ष_TYPE (t), style);
+	  अन्यथा
 	    {
-	      char buff[23];
-	      sprintf (buff, "[" HOST_WIDE_INT_PRINT_DEC"]",
-		       int_size_in_bytes (t)
-		       / int_size_in_bytes (TREE_TYPE (t)));
-	      ret_val = gen_type (concat (ret_val, buff, NULL),
-				  TREE_TYPE (t), style);
+	      अक्षर buff[23];
+	      प्र_लिखो (buff, "[" HOST_WIDE_INT_PRINT_DEC"]",
+		       int_आकार_in_bytes (t)
+		       / int_आकार_in_bytes (वृक्ष_TYPE (t)));
+	      ret_val = gen_type (concat (ret_val, buff, शून्य),
+				  वृक्ष_TYPE (t), style);
 	    }
-	  break;
+	  अवरोध;
 
-	case FUNCTION_TYPE:
+	हाल FUNCTION_TYPE:
 	  ret_val = gen_type (concat (ret_val,
 				      gen_formal_list_for_type (t, style),
-				      NULL),
-			      TREE_TYPE (t), style);
-	  break;
+				      शून्य),
+			      वृक्ष_TYPE (t), style);
+	  अवरोध;
 
-	case IDENTIFIER_NODE:
-	  data_type = IDENTIFIER_POINTER (t);
-	  break;
+	हाल IDENTIFIER_गाँठ:
+	  तथ्य_type = IDENTIFIER_POINTER (t);
+	  अवरोध;
 
 	/* The following three cases are complicated by the fact that a
 	   user may do something really stupid, like creating a brand new
@@ -338,114 +338,114 @@ gen_type (const char *ret_val, tree t, formals_style style)
 	   to represent the (anonymous) type.  Thus, we have to generate the
 	   whole darn type specification.  Yuck!  */
 
-	case RECORD_TYPE:
-	  if (TYPE_NAME (t))
-	    data_type = IDENTIFIER_POINTER (TYPE_NAME (t));
-	  else
+	हाल RECORD_TYPE:
+	  अगर (TYPE_NAME (t))
+	    तथ्य_type = IDENTIFIER_POINTER (TYPE_NAME (t));
+	  अन्यथा
 	    {
-	      data_type = "";
+	      तथ्य_type = "";
 	      chain_p = TYPE_FIELDS (t);
-	      while (chain_p)
+	      जबतक (chain_p)
 		{
-		  data_type = concat (data_type, gen_decl (chain_p, 0, ansi),
-				      NULL);
-		  chain_p = TREE_CHAIN (chain_p);
-		  data_type = concat (data_type, "; ", NULL);
+		  तथ्य_type = concat (तथ्य_type, gen_decl (chain_p, 0, ansi),
+				      शून्य);
+		  chain_p = वृक्ष_CHAIN (chain_p);
+		  तथ्य_type = concat (तथ्य_type, "; ", शून्य);
 		}
-	      data_type = concat ("{ ", data_type, "}", NULL);
+	      तथ्य_type = concat ("{ ", तथ्य_type, "}", शून्य);
 	    }
-	  data_type = concat ("struct ", data_type, NULL);
-	  break;
+	  तथ्य_type = concat ("struct ", तथ्य_type, शून्य);
+	  अवरोध;
 
-	case UNION_TYPE:
-	  if (TYPE_NAME (t))
-	    data_type = IDENTIFIER_POINTER (TYPE_NAME (t));
-	  else
+	हाल UNION_TYPE:
+	  अगर (TYPE_NAME (t))
+	    तथ्य_type = IDENTIFIER_POINTER (TYPE_NAME (t));
+	  अन्यथा
 	    {
-	      data_type = "";
+	      तथ्य_type = "";
 	      chain_p = TYPE_FIELDS (t);
-	      while (chain_p)
+	      जबतक (chain_p)
 		{
-		  data_type = concat (data_type, gen_decl (chain_p, 0, ansi),
-				      NULL);
-		  chain_p = TREE_CHAIN (chain_p);
-		  data_type = concat (data_type, "; ", NULL);
+		  तथ्य_type = concat (तथ्य_type, gen_decl (chain_p, 0, ansi),
+				      शून्य);
+		  chain_p = वृक्ष_CHAIN (chain_p);
+		  तथ्य_type = concat (तथ्य_type, "; ", शून्य);
 		}
-	      data_type = concat ("{ ", data_type, "}", NULL);
+	      तथ्य_type = concat ("{ ", तथ्य_type, "}", शून्य);
 	    }
-	  data_type = concat ("union ", data_type, NULL);
-	  break;
+	  तथ्य_type = concat ("union ", तथ्य_type, शून्य);
+	  अवरोध;
 
-	case ENUMERAL_TYPE:
-	  if (TYPE_NAME (t))
-	    data_type = IDENTIFIER_POINTER (TYPE_NAME (t));
-	  else
+	हाल ENUMERAL_TYPE:
+	  अगर (TYPE_NAME (t))
+	    तथ्य_type = IDENTIFIER_POINTER (TYPE_NAME (t));
+	  अन्यथा
 	    {
-	      data_type = "";
-	      chain_p = TYPE_VALUES (t);
-	      while (chain_p)
+	      तथ्य_type = "";
+	      chain_p = TYPE_मूल्यावली (t);
+	      जबतक (chain_p)
 		{
-		  data_type = concat (data_type,
-			IDENTIFIER_POINTER (TREE_PURPOSE (chain_p)), NULL);
-		  chain_p = TREE_CHAIN (chain_p);
-		  if (chain_p)
-		    data_type = concat (data_type, ", ", NULL);
+		  तथ्य_type = concat (तथ्य_type,
+			IDENTIFIER_POINTER (वृक्ष_PURPOSE (chain_p)), शून्य);
+		  chain_p = वृक्ष_CHAIN (chain_p);
+		  अगर (chain_p)
+		    तथ्य_type = concat (तथ्य_type, ", ", शून्य);
 		}
-	      data_type = concat ("{ ", data_type, " }", NULL);
+	      तथ्य_type = concat ("{ ", तथ्य_type, " }", शून्य);
 	    }
-	  data_type = concat ("enum ", data_type, NULL);
-	  break;
+	  तथ्य_type = concat ("enum ", तथ्य_type, शून्य);
+	  अवरोध;
 
-	case TYPE_DECL:
-	  data_type = IDENTIFIER_POINTER (DECL_NAME (t));
-	  break;
+	हाल TYPE_DECL:
+	  तथ्य_type = IDENTIFIER_POINTER (DECL_NAME (t));
+	  अवरोध;
 
-	case INTEGER_TYPE:
-	case FIXED_POINT_TYPE:
-	  data_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
+	हाल INTEGER_TYPE:
+	हाल FIXED_POINT_TYPE:
+	  तथ्य_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
 	  /* Normally, `unsigned' is part of the deal.  Not so if it comes
 	     with a type qualifier.  */
-	  if (TYPE_UNSIGNED (t) && TYPE_QUALS (t))
-	    data_type = concat ("unsigned ", data_type, NULL);
-	  break;
+	  अगर (TYPE_UNSIGNED (t) && TYPE_QUALS (t))
+	    तथ्य_type = concat ("unsigned ", तथ्य_type, शून्य);
+	  अवरोध;
 
-	case BITINT_TYPE:
+	हाल BITINT_TYPE:
 	  {
-	    char buf[sizeof ("2147483647")];
-	    sprintf (buf, "%d", TYPE_PRECISION (t));
-	    if (TYPE_UNSIGNED (t))
-	      data_type = concat ("unsigned _BitInt(", buf, ")", NULL);
-	    else
-	      data_type = concat ("_BitInt(", buf, ")", NULL);
-	    break;
+	    अक्षर buf[माप ("2147483647")];
+	    प्र_लिखो (buf, "%d", TYPE_PRECISION (t));
+	    अगर (TYPE_UNSIGNED (t))
+	      तथ्य_type = concat ("unsigned _BitInt(", buf, ")", शून्य);
+	    अन्यथा
+	      तथ्य_type = concat ("_BitInt(", buf, ")", शून्य);
+	    अवरोध;
 	  }
 
-	case OPAQUE_TYPE:
-	case REAL_TYPE:
-	  data_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
-	  break;
+	हाल OPAQUE_TYPE:
+	हाल REAL_TYPE:
+	  तथ्य_type = IDENTIFIER_POINTER (DECL_NAME (TYPE_NAME (t)));
+	  अवरोध;
 
-	case VOID_TYPE:
-	  data_type = "void";
-	  break;
+	हाल VOID_TYPE:
+	  तथ्य_type = "void";
+	  अवरोध;
 
-	case ERROR_MARK:
-	  data_type = "[ERROR]";
-	  break;
+	हाल ERROR_MARK:
+	  तथ्य_type = "[ERROR]";
+	  अवरोध;
 
-	default:
+	शेष:
 	  gcc_unreachable ();
 	}
     }
-  if (TYPE_ATOMIC (t))
-    ret_val = concat ("_Atomic ", ret_val, NULL);
-  if (TYPE_READONLY (t))
-    ret_val = concat ("const ", ret_val, NULL);
-  if (TYPE_VOLATILE (t))
-    ret_val = concat ("volatile ", ret_val, NULL);
-  if (TYPE_RESTRICT (t))
-    ret_val = concat ("restrict ", ret_val, NULL);
-  return ret_val;
+  अगर (TYPE_ATOMIC (t))
+    ret_val = concat ("_Atomic ", ret_val, शून्य);
+  अगर (TYPE_READONLY (t))
+    ret_val = concat ("const ", ret_val, शून्य);
+  अगर (TYPE_VOLATILE (t))
+    ret_val = concat ("volatile ", ret_val, शून्य);
+  अगर (TYPE_RESTRICT (t))
+    ret_val = concat ("restrict ", ret_val, शून्य);
+  वापस ret_val;
 }
 
 /* Generate a string (source) representation of an entire entity declaration
@@ -458,22 +458,22 @@ gen_type (const char *ret_val, tree t, formals_style style)
    associated with a function definition.  In this case, we can assume that
    an attached list of DECL nodes for function formal arguments is present.  */
 
-static const char *
-gen_decl (tree decl, int is_func_definition, formals_style style)
+अटल स्थिर अक्षर *
+gen_decl (वृक्ष decl, पूर्णांक is_func_definition, formals_style style)
 {
-  const char *ret_val;
+  स्थिर अक्षर *ret_val;
 
-  if (DECL_NAME (decl))
+  अगर (DECL_NAME (decl))
     ret_val = IDENTIFIER_POINTER (DECL_NAME (decl));
-  else
+  अन्यथा
     ret_val = "";
 
   /* If we are just generating a list of names of formal parameters, we can
      simply return the formal parameter name (with no typing information
      attached to it) now.  */
 
-  if (style == k_and_r_names)
-    return ret_val;
+  अगर (style == k_and_r_names)
+    वापस ret_val;
 
   /* Note that for the declaration of some entity (either a function or a
      data object, like for instance a parameter) if the entity itself was
@@ -482,12 +482,12 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
      the `type' of the entity.  Thus, for such declared entities, we have to
      generate the qualifiers here.  */
 
-  if (TREE_THIS_VOLATILE (decl))
-    ret_val = concat ("volatile ", ret_val, NULL);
-  if (TREE_READONLY (decl))
-    ret_val = concat ("const ", ret_val, NULL);
+  अगर (वृक्ष_THIS_VOLATILE (decl))
+    ret_val = concat ("volatile ", ret_val, शून्य);
+  अगर (वृक्ष_READONLY (decl))
+    ret_val = concat ("const ", ret_val, शून्य);
 
-  data_type = "";
+  तथ्य_type = "";
 
   /* For FUNCTION_DECL nodes, there are two possible cases here.  First, if
      this FUNCTION_DECL node was generated from a function "definition", then
@@ -501,10 +501,10 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
      parameter list is considered to be a (suffix) part of the "type" of the
      function.  */
 
-  if (TREE_CODE (decl) == FUNCTION_DECL && is_func_definition)
+  अगर (वृक्ष_CODE (decl) == FUNCTION_DECL && is_func_definition)
     {
       ret_val = concat (ret_val, gen_formal_list_for_func_def (decl, ansi),
-			NULL);
+			शून्य);
 
       /* Since we have already added in the formals list stuff, here we don't
 	 add the whole "type" of the function we are considering (which
@@ -513,53 +513,53 @@ gen_decl (tree decl, int is_func_definition, formals_style style)
 	 the return-type of the function (and does not include the parameter
 	 list info).  */
 
-      ret_val = gen_type (ret_val, TREE_TYPE (TREE_TYPE (decl)), style);
+      ret_val = gen_type (ret_val, वृक्ष_TYPE (वृक्ष_TYPE (decl)), style);
     }
-  else
-    ret_val = gen_type (ret_val, TREE_TYPE (decl), style);
+  अन्यथा
+    ret_val = gen_type (ret_val, वृक्ष_TYPE (decl), style);
 
-  ret_val = affix_data_type (ret_val);
+  ret_val = affix_तथ्य_type (ret_val);
 
-  if (TREE_CODE (decl) != FUNCTION_DECL && C_DECL_REGISTER (decl))
-    ret_val = concat ("register ", ret_val, NULL);
-  if (TREE_PUBLIC (decl))
-    ret_val = concat ("extern ", ret_val, NULL);
-  if (TREE_CODE (decl) == FUNCTION_DECL && !TREE_PUBLIC (decl))
-    ret_val = concat ("static ", ret_val, NULL);
+  अगर (वृक्ष_CODE (decl) != FUNCTION_DECL && C_DECL_REGISTER (decl))
+    ret_val = concat ("register ", ret_val, शून्य);
+  अगर (वृक्ष_PUBLIC (decl))
+    ret_val = concat ("extern ", ret_val, शून्य);
+  अगर (वृक्ष_CODE (decl) == FUNCTION_DECL && !वृक्ष_PUBLIC (decl))
+    ret_val = concat ("static ", ret_val, शून्य);
 
-  return ret_val;
+  वापस ret_val;
 }
 
-extern FILE *aux_info_file;
+बाह्य खाता *aux_info_file;
 
 /* Generate and write a new line of info to the aux-info (.X) file.  This
    routine is called once for each function declaration, and once for each
    function definition (even the implicit ones).  */
 
-void
-gen_aux_info_record (tree fndecl, int is_definition, int is_implicit,
-		     int is_prototyped)
+व्योम
+gen_aux_info_record (वृक्ष fndecl, पूर्णांक is_definition, पूर्णांक is_implicit,
+		     पूर्णांक is_prototyped)
 {
-  if (flag_gen_aux_info)
+  अगर (flag_gen_aux_info)
     {
-      static int compiled_from_record = 0;
+      अटल पूर्णांक compiled_from_record = 0;
       expanded_location xloc = expand_location (DECL_SOURCE_LOCATION (fndecl));
 
       /* Each output .X file must have a header line.  Write one now if we
 	 have not yet done so.  */
 
-      if (!compiled_from_record++)
+      अगर (!compiled_from_record++)
 	{
 	  /* The first line tells which directory file names are relative to.
 	     Currently, -aux-info works only for files in the working
 	     directory, so just use a `.' as a placeholder for now.  */
-	  fprintf (aux_info_file, "/* compiled from: . */\n");
+	  ख_लिखो (aux_info_file, "/* compiled from: . */\n");
 	}
 
       /* Write the actual line of auxiliary info.  */
 
-      fprintf (aux_info_file, "/* %s:%d:%c%c */ %s;",
-	       xloc.file, xloc.line,
+      ख_लिखो (aux_info_file, "/* %s:%d:%c%c */ %s;",
+	       xloc.file, xloc.पंक्ति,
 	       (is_implicit) ? 'I' : (is_prototyped) ? 'N' : 'O',
 	       (is_definition) ? 'F' : 'C',
 	       gen_decl (fndecl, is_definition, ansi));
@@ -568,13 +568,13 @@ gen_aux_info_record (tree fndecl, int is_definition, int is_implicit,
 	 out an old-style (i.e. K&R) function header, just in case the user
 	 wants to run unprotoize.  */
 
-      if (is_definition)
+      अगर (is_definition)
 	{
-	  fprintf (aux_info_file, " /*%s %s*/",
+	  ख_लिखो (aux_info_file, " /*%s %s*/",
 		   gen_formal_list_for_func_def (fndecl, k_and_r_names),
 		   gen_formal_list_for_func_def (fndecl, k_and_r_decls));
 	}
 
-      fprintf (aux_info_file, "\n");
+      ख_लिखो (aux_info_file, "\n");
     }
 }

@@ -20,8 +20,8 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_C_PARSER_H
-#define GCC_C_PARSER_H
+#अगर_अघोषित GCC_C_PARSER_H
+#घोषणा GCC_C_PARSER_H
 
 /* The C lexer intermediates between the lexer in cpplib and c-lex.cc
    and the C parser.  Unlike the C++ lexer, the parser structure
@@ -35,7 +35,7 @@ along with GCC; see the file COPYING3.  If not see
    lexer code, if desired.  */
 
 /* More information about the type of a CPP_NAME token.  */
-enum c_id_kind {
+क्रमागत c_id_kind {
   /* An ordinary identifier.  */
   C_ID_ID,
   /* An identifier declared as a typedef name.  */
@@ -50,52 +50,52 @@ enum c_id_kind {
 
 /* A single C token after string literal concatenation and conversion
    of preprocessing tokens to tokens.  */
-struct GTY (()) c_token {
+काष्ठा GTY (()) c_token {
   /* The kind of token.  */
-  enum cpp_ttype type : 8;
+  क्रमागत cpp_ttype type : 8;
   /* If this token is a CPP_NAME, this value indicates whether also
      declared as some kind of type.  Otherwise, it is C_ID_NONE.  */
-  enum c_id_kind id_kind : 8;
+  क्रमागत c_id_kind id_kind : 8;
   /* If this token is a keyword, this value indicates which keyword.
      Otherwise, this value is RID_MAX.  */
-  enum rid keyword : 8;
+  क्रमागत rid keyword : 8;
   /* If this token is a CPP_PRAGMA, this indicates the pragma that
      was seen.  Otherwise it is PRAGMA_NONE.  */
-  enum pragma_kind pragma_kind : 8;
+  क्रमागत pragma_kind pragma_kind : 8;
   /* The location at which this token was found.  */
   location_t location;
   /* The value associated with this token, if any.  */
-  tree value;
+  वृक्ष मूल्य;
   /* Token flags.  */
-  unsigned char flags;
+  अचिन्हित अक्षर flags;
 
-  source_range get_range () const
+  source_range get_range () स्थिर
   {
-    return get_range_from_loc (line_table, location);
+    वापस get_range_from_loc (पंक्ति_table, location);
   }
 
-  location_t get_finish () const
+  location_t get_finish () स्थिर
   {
-    return get_range ().m_finish;
+    वापस get_range ().m_finish;
   }
 };
 
 /* This should have the same layout as c_tree_token_vec
    in c-decl.cc, but for GTY reasons with ObjC can't be
    GTY itself.  */
-struct c_tree_token_vec_struct {
-  struct tree_base base;
+काष्ठा c_वृक्ष_token_vec_struct {
+  काष्ठा वृक्ष_base base;
   vec<c_token, va_gc> *tokens;
 };
 
-#define C_TOKEN_VEC_TOKENS(NODE) \
-  (((struct c_tree_token_vec_struct *) TREE_CHECK (NODE, C_TOKEN_VEC))->tokens)
+#घोषणा C_TOKEN_VEC_TOKENS(गाँठ_2) \
+  (((काष्ठा c_वृक्ष_token_vec_struct *) वृक्ष_CHECK (गाँठ_2, C_TOKEN_VEC))->tokens)
 
 /* The parser.  */
-struct c_parser;
+काष्ठा c_parser;
 
 /* Possibly kinds of declarator to parse.  */
-enum c_dtr_syn {
+क्रमागत c_dtr_syn {
   /* A normal declarator with an identifier.  */
   C_DTR_NORMAL,
   /* An abstract declarator (maybe empty).  */
@@ -115,7 +115,7 @@ enum c_dtr_syn {
 
 /* The binary operation precedence levels, where 0 is a dummy lowest level
    used for the bottom of the stack.  */
-enum c_parser_prec {
+क्रमागत c_parser_prec {
   PREC_NONE,
   PREC_LOGOR,
   PREC_LOGAND,
@@ -127,10 +127,10 @@ enum c_parser_prec {
   PREC_SHIFT,
   PREC_ADD,
   PREC_MULT,
-  NUM_PRECS
+  अंक_PRECS
 };
 
-enum c_lookahead_kind {
+क्रमागत c_lookahead_kind {
   /* Always treat unknown identifiers as typenames.  */
   cla_prefer_type,
 
@@ -143,68 +143,68 @@ enum c_lookahead_kind {
 };
 
 
-extern c_token * c_parser_peek_token (c_parser *parser);
-extern c_token * c_parser_peek_2nd_token (c_parser *parser);
-extern c_token * c_parser_peek_nth_token (c_parser *parser, unsigned int n);
-extern bool c_parser_require (c_parser *parser, enum cpp_ttype type,
-			      const char *msgid,
+बाह्य c_token * c_parser_peek_token (c_parser *parser);
+बाह्य c_token * c_parser_peek_2nd_token (c_parser *parser);
+बाह्य c_token * c_parser_peek_nth_token (c_parser *parser, अचिन्हित पूर्णांक n);
+बाह्य bool c_parser_require (c_parser *parser, क्रमागत cpp_ttype type,
+			      स्थिर अक्षर *msgid,
 			      location_t matching_location = UNKNOWN_LOCATION,
 			      bool type_is_unique=true);
-extern bool c_parser_error (c_parser *parser, const char *gmsgid);
-extern void c_parser_consume_token (c_parser *parser);
-extern void c_parser_skip_until_found (c_parser *parser, enum cpp_ttype type,
-				       const char *msgid,
+बाह्य bool c_parser_error (c_parser *parser, स्थिर अक्षर *gmsgid);
+बाह्य व्योम c_parser_consume_token (c_parser *parser);
+बाह्य व्योम c_parser_skip_until_found (c_parser *parser, क्रमागत cpp_ttype type,
+				       स्थिर अक्षर *msgid,
 				       location_t = UNKNOWN_LOCATION);
-extern bool c_parser_next_token_starts_declspecs (c_parser *parser);
-bool c_parser_next_tokens_start_declaration (c_parser *parser,
-					     unsigned int n = 1);
+बाह्य bool c_parser_अग्र_token_starts_declspecs (c_parser *parser);
+bool c_parser_अग्र_tokens_start_declaration (c_parser *parser,
+					     अचिन्हित पूर्णांक n = 1);
 bool c_token_starts_typename (c_token *token);
 
 /* Abstraction to avoid defining c_parser here which messes up gengtype
    output wrt ObjC due to vec<c_token> routines being put in gtype-c.h
    but not gtype-objc.h.  */
-extern c_token * c_parser_tokens_buf (c_parser *parser, unsigned n);
-extern bool c_parser_error (c_parser *parser);
-extern void c_parser_set_error (c_parser *parser, bool);
+बाह्य c_token * c_parser_tokens_buf (c_parser *parser, अचिन्हित n);
+बाह्य bool c_parser_error (c_parser *parser);
+बाह्य व्योम c_parser_set_error (c_parser *parser, bool);
 
 /* A bit of a hack to have this here.  It would be better in a c-decl.h.  */
-extern bool old_style_parameter_scope (void);
+बाह्य bool old_style_parameter_scope (व्योम);
 
 /* Return true if the next token from PARSER has the indicated
    TYPE.  */
 
-inline bool
-c_parser_next_token_is (c_parser *parser, enum cpp_ttype type)
+अंतरभूत bool
+c_parser_अग्र_token_is (c_parser *parser, क्रमागत cpp_ttype type)
 {
-  return c_parser_peek_token (parser)->type == type;
+  वापस c_parser_peek_token (parser)->type == type;
 }
 
 /* Return true if the next token from PARSER does not have the
    indicated TYPE.  */
 
-inline bool
-c_parser_next_token_is_not (c_parser *parser, enum cpp_ttype type)
+अंतरभूत bool
+c_parser_अग्र_token_is_not (c_parser *parser, क्रमागत cpp_ttype type)
 {
-  return !c_parser_next_token_is (parser, type);
+  वापस !c_parser_अग्र_token_is (parser, type);
 }
 
 /* Return true if the next token from PARSER is the indicated
    KEYWORD.  */
 
-inline bool
-c_parser_next_token_is_keyword (c_parser *parser, enum rid keyword)
+अंतरभूत bool
+c_parser_अग्र_token_is_keyword (c_parser *parser, क्रमागत rid keyword)
 {
-  return c_parser_peek_token (parser)->keyword == keyword;
+  वापस c_parser_peek_token (parser)->keyword == keyword;
 }
 
-struct c_expr c_parser_string_literal (c_parser *, bool, bool);
-extern struct c_declarator *
+काष्ठा c_व्यंजक c_parser_string_literal (c_parser *, bool, bool);
+बाह्य काष्ठा c_declarator *
 c_parser_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
 		     bool *seen_id);
-extern void c_parser_declspecs (c_parser *, struct c_declspecs *, bool, bool,
+बाह्य व्योम c_parser_declspecs (c_parser *, काष्ठा c_declspecs *, bool, bool,
 				bool, bool, bool, bool, bool,
-				enum c_lookahead_kind);
-extern struct c_type_name *c_parser_type_name (c_parser *, bool = false);
-extern bool c_maybe_parse_omp_decl (tree, tree);
+				क्रमागत c_lookahead_kind);
+बाह्य काष्ठा c_type_name *c_parser_type_name (c_parser *, bool = false);
+बाह्य bool c_maybe_parse_omp_decl (वृक्ष, वृक्ष);
 
-#endif
+#पूर्ण_अगर
