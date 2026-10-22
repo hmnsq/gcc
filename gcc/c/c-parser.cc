@@ -93,7 +93,7 @@ set_c_expr_source_range (c_expr *expr,
 {
   expr->src_range.m_start = start;
   expr->src_range.m_finish = finish;
-  if (expr->value)
+  만약 (expr->value)
     set_source_range (expr->value, start, finish);
 }
 
@@ -102,7 +102,7 @@ set_c_expr_source_range (c_expr *expr,
 			 source_range src_range)
 {
   expr->src_range = src_range;
-  if (expr->value)
+  만약 (expr->value)
     set_source_range (expr->value, src_range);
 }
 
@@ -114,38 +114,38 @@ c_parse_init (void)
 {
   /* The only initialization required is of the reserved word
      identifiers.  */
-  unsigned int i;
+  unsigned 정수 i;
   tree id;
-  int mask = 0;
+  정수 mask = 0;
 
   /* Make sure RID_MAX hasn't grown past the 8 bits used to hold the keyword in
      the c_token structure.  */
   gcc_assert (RID_MAX <= 255);
 
   mask |= D_CXXONLY;
-  if (!flag_isoc99)
+  만약 (!flag_isoc99)
     mask |= D_C99;
-  if (!flag_isoc23)
+  만약 (!flag_isoc23)
     mask |= D_C23;
-  if (flag_no_asm)
+  만약 (flag_no_asm)
     {
       mask |= D_ASM | D_EXT;
-      if (!flag_isoc99)
+      만약 (!flag_isoc99)
 	mask |= D_EXT89;
-      if (!flag_isoc23)
+      만약 (!flag_isoc23)
 	mask |= D_EXT11;
     }
-  if (!c_dialect_objc ())
+  만약 (!c_dialect_objc ())
     mask |= D_OBJC | D_CXX_OBJC;
 
-  ridpointers = ggc_cleared_vec_alloc<tree> ((int) RID_MAX);
-  for (i = 0; i < num_c_common_reswords; i++)
+  ridpointers = ggc_cleared_vec_alloc<tree> ((정수) RID_MAX);
+  위해 (i = 0; i < num_c_common_reswords; i++)
     {
       /* If a keyword is disabled, do not enter it into the table
 	 and so create a canonical spelling that isn't a keyword.  */
-      if (c_common_reswords[i].disable & mask)
+      만약 (c_common_reswords[i].disable & mask)
 	{
-	  if (warn_cxx_compat
+	  만약 (warn_cxx_compat
 	      && (c_common_reswords[i].disable & D_CXXWARN))
 	    {
 	      id = get_identifier (c_common_reswords[i].word);
@@ -158,10 +158,10 @@ c_parse_init (void)
       id = get_identifier (c_common_reswords[i].word);
       C_SET_RID_CODE (id, c_common_reswords[i].rid);
       C_IS_RESERVED_WORD (id) = 1;
-      ridpointers [(int) c_common_reswords[i].rid] = id;
+      ridpointers [(정수) c_common_reswords[i].rid] = id;
     }
 
-  for (i = 0; i < NUM_INT_N_ENTS; i++)
+  위해 (i = 0; i < NUM_INT_N_ENTS; i++)
     {
       /* We always create the symbols but they aren't always supported.  */
       char name[50];
@@ -176,7 +176,7 @@ c_parse_init (void)
       C_IS_RESERVED_WORD (id) = 1;
     }
 
-  if (flag_openmp)
+  만약 (flag_openmp)
     {
       id = get_identifier ("omp_all_memory");
       C_SET_RID_CODE (id, RID_OMP_ALL_MEMORY);
@@ -195,13 +195,13 @@ struct GTY(()) c_parser {
   c_token tokens_buf[4];
   /* How many look-ahead tokens are available (0 - 4, or
      more if parsing from pre-lexed tokens).  */
-  unsigned int tokens_avail;
+  unsigned 정수 tokens_avail;
   /* Raw look-ahead tokens, used only for checking in Objective-C
      whether '[[' starts attributes.  */
   vec<c_token, va_gc> *raw_tokens;
   /* The number of raw look-ahead tokens that have since been fully
      lexed.  */
-  unsigned int raw_tokens_used;
+  unsigned 정수 raw_tokens_used;
   /* True if a syntax error is being recovered from; false otherwise.
      c_parser_error sets this flag.  It should clear this flag when
      enough tokens have been consumed to recover from the error.  */
@@ -238,7 +238,7 @@ struct GTY(()) c_parser {
   bool objc_need_raw_identifier : 1;
   /* Nonzero if we're processing a __transaction statement.  The value
      is 1 | TM_STMT_ATTR_*.  */
-  unsigned int in_transaction : 4;
+  unsigned 정수 in_transaction : 4;
   /* True if we are in a context where the Objective-C "Property attribute"
      keywords are valid.  */
   bool objc_property_attr_context : 1;
@@ -283,7 +283,7 @@ struct GTY(()) omp_attribute_pragma_state
 {
   vec<c_token, va_gc> *token_vec;
   c_token * GTY((skip)) save_tokens;
-  unsigned int save_tokens_avail;
+  unsigned 정수 save_tokens_avail;
 };
 
 /* Holds data for deferred lookup of base functions for OpenMP
@@ -304,7 +304,7 @@ static void omp_finish_variant_function (tree, tree, tree);
 c_token *
 c_parser_tokens_buf (c_parser *parser, unsigned n)
 {
-  return &parser->tokens_buf[n];
+  반환 &parser->tokens_buf[n];
 }
 
 /* Return the error state of PARSER.  */
@@ -312,7 +312,7 @@ c_parser_tokens_buf (c_parser *parser, unsigned n)
 bool
 c_parser_error (c_parser *parser)
 {
-  return parser->error;
+  반환 parser->error;
 }
 
 /* Set the error state of PARSER to ERR.  */
@@ -337,7 +337,7 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 {
   timevar_push (TV_LEX);
 
-  if (raw || vec_safe_length (parser->raw_tokens) == 0)
+  만약 (raw || vec_safe_length (parser->raw_tokens) == 0)
     {
       token->type = c_lex_with_flags (&token->value, &token->location,
 				      &token->flags,
@@ -347,20 +347,20 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
       token->keyword = RID_MAX;
       token->pragma_kind = PRAGMA_NONE;
     }
-  else
+  아니면
     {
       /* Use a token previously lexed as a raw look-ahead token, and
 	 complete the processing on it.  */
       *token = (*parser->raw_tokens)[parser->raw_tokens_used];
       ++parser->raw_tokens_used;
-      if (parser->raw_tokens_used == vec_safe_length (parser->raw_tokens))
+      만약 (parser->raw_tokens_used == vec_safe_length (parser->raw_tokens))
 	{
 	  vec_free (parser->raw_tokens);
 	  parser->raw_tokens_used = 0;
 	}
     }
 
-  if (raw)
+  만약 (raw)
     goto out;
 
   switch (token->type)
@@ -370,21 +370,21 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 	tree decl;
 
 	bool objc_force_identifier = parser->objc_need_raw_identifier;
-	if (c_dialect_objc ())
+	만약 (c_dialect_objc ())
 	  parser->objc_need_raw_identifier = false;
 
-	if (C_IS_RESERVED_WORD (token->value))
+	만약 (C_IS_RESERVED_WORD (token->value))
 	  {
 	    enum rid rid_code = C_RID_CODE (token->value);
 
-	    if (rid_code == RID_CXX_COMPAT_WARN)
+	    만약 (rid_code == RID_CXX_COMPAT_WARN)
 	      {
 		warning_at (token->location,
 			    OPT_Wc___compat,
 			    "identifier %qE conflicts with C++ keyword",
 			    token->value);
 	      }
-	    else if (rid_code >= RID_FIRST_ADDR_SPACE
+	    아니면 만약 (rid_code >= RID_FIRST_ADDR_SPACE
 		     && rid_code <= RID_LAST_ADDR_SPACE)
 	      {
 		addr_space_t as;
@@ -394,19 +394,19 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 		token->keyword = rid_code;
 		break;
 	      }
-	    else if (c_dialect_objc () && OBJC_IS_PQ_KEYWORD (rid_code))
+	    아니면 만약 (c_dialect_objc () && OBJC_IS_PQ_KEYWORD (rid_code))
 	      {
 		/* We found an Objective-C "pq" keyword (in, out,
 		   inout, bycopy, byref, oneway).  They need special
 		   care because the interpretation depends on the
 		   context.  */
-		if (parser->objc_pq_context)
+		만약 (parser->objc_pq_context)
 		  {
 		    token->type = CPP_KEYWORD;
 		    token->keyword = rid_code;
 		    break;
 		  }
-		else if (parser->objc_could_be_foreach_context
+		아니면 만약 (parser->objc_could_be_foreach_context
 			 && rid_code == RID_IN)
 		  {
 		    /* We are in Objective-C, inside a (potential)
@@ -429,12 +429,12 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 		   not keywords, and we fall through to the code for
 		   normal tokens.  */
 	      }
-	    else if (c_dialect_objc () && OBJC_IS_PATTR_KEYWORD (rid_code))
+	    아니면 만약 (c_dialect_objc () && OBJC_IS_PATTR_KEYWORD (rid_code))
 	      {
 		/* We found an Objective-C "property attribute"
 		   keyword (getter, setter, readonly, etc). These are
 		   only valid in the property context.  */
-		if (parser->objc_property_attr_context)
+		만약 (parser->objc_property_attr_context)
 		  {
 		    token->type = CPP_KEYWORD;
 		    token->keyword = rid_code;
@@ -443,7 +443,7 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 		/* Else they are not special keywords.
 		*/
 	      }
-	    else if (c_dialect_objc ()
+	    아니면 만약 (c_dialect_objc ()
 		     && (OBJC_IS_AT_KEYWORD (rid_code)
 			 || OBJC_IS_CXX_KEYWORD (rid_code)))
 	      {
@@ -456,7 +456,7 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 		   consider the CXX ones keywords, but not in C).  */
 		;
 	      }
-	    else
+	    아니면
 	      {
 		token->type = CPP_KEYWORD;
 		token->keyword = rid_code;
@@ -465,21 +465,21 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 	  }
 
 	decl = lookup_name (token->value);
-	if (decl)
+	만약 (decl)
 	  {
-	    if (TREE_CODE (decl) == TYPE_DECL)
+	    만약 (TREE_CODE (decl) == TYPE_DECL)
 	      {
 		token->id_kind = C_ID_TYPENAME;
 		break;
 	      }
 	  }
-	else if (c_dialect_objc ())
+	아니면 만약 (c_dialect_objc ())
 	  {
 	    tree objc_interface_decl = objc_is_class_name (token->value);
 	    /* Objective-C class names are in the same namespace as
 	       variables and typedefs, and hence are shadowed by local
 	       declarations.  */
-	    if (objc_interface_decl
+	    만약 (objc_interface_decl
                 && (!objc_force_identifier || global_bindings_p ()))
 	      {
 		token->value = objc_interface_decl;
@@ -520,7 +520,7 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
     case CPP_SEMICOLON:
       /* These tokens may affect the interpretation of any identifiers
 	 following, if doing Objective-C.  */
-      if (c_dialect_objc ())
+      만약 (c_dialect_objc ())
 	parser->objc_need_raw_identifier = false;
       break;
     case CPP_PRAGMA:
@@ -541,12 +541,12 @@ c_lex_one_token (c_parser *parser, c_token *token, bool raw = false)
 c_token *
 c_parser_peek_token (c_parser *parser)
 {
-  if (parser->tokens_avail == 0)
+  만약 (parser->tokens_avail == 0)
     {
       c_lex_one_token (parser, &parser->tokens[0]);
       parser->tokens_avail = 1;
     }
-  return &parser->tokens[0];
+  반환 &parser->tokens[0];
 }
 
 /* Return a pointer to the next-but-one token from PARSER, reading it
@@ -555,31 +555,31 @@ c_parser_peek_token (c_parser *parser)
 c_token *
 c_parser_peek_2nd_token (c_parser *parser)
 {
-  if (parser->tokens_avail >= 2)
-    return &parser->tokens[1];
+  만약 (parser->tokens_avail >= 2)
+    반환 &parser->tokens[1];
   gcc_assert (parser->tokens_avail == 1);
   gcc_assert (parser->tokens[0].type != CPP_EOF);
   gcc_assert (parser->tokens[0].type != CPP_PRAGMA_EOL);
   c_lex_one_token (parser, &parser->tokens[1]);
   parser->tokens_avail = 2;
-  return &parser->tokens[1];
+  반환 &parser->tokens[1];
 }
 
 /* Return a pointer to the Nth token from PARSER, reading it
    in if necessary.  The N-1th token is already read in.  */
 
 c_token *
-c_parser_peek_nth_token (c_parser *parser, unsigned int n)
+c_parser_peek_nth_token (c_parser *parser, unsigned 정수 n)
 {
   /* N is 1-based, not zero-based.  */
   gcc_assert (n > 0);
 
-  if (parser->tokens_avail >= n)
-    return &parser->tokens[n - 1];
+  만약 (parser->tokens_avail >= n)
+    반환 &parser->tokens[n - 1];
   gcc_assert (parser->tokens_avail == n - 1);
   c_lex_one_token (parser, &parser->tokens[n - 1]);
   parser->tokens_avail = n;
-  return &parser->tokens[n - 1];
+  반환 &parser->tokens[n - 1];
 }
 
 /* Return a pointer to the Nth token from PARSER, reading it in as a
@@ -588,24 +588,24 @@ c_parser_peek_nth_token (c_parser *parser, unsigned int n)
    functions above are called.  */
 
 c_token *
-c_parser_peek_nth_token_raw (c_parser *parser, unsigned int n)
+c_parser_peek_nth_token_raw (c_parser *parser, unsigned 정수 n)
 {
   /* N is 1-based, not zero-based.  */
   gcc_assert (n > 0);
 
-  if (parser->tokens_avail >= n)
-    return &parser->tokens[n - 1];
-  unsigned int raw_len = vec_safe_length (parser->raw_tokens);
-  unsigned int raw_avail
+  만약 (parser->tokens_avail >= n)
+    반환 &parser->tokens[n - 1];
+  unsigned 정수 raw_len = vec_safe_length (parser->raw_tokens);
+  unsigned 정수 raw_avail
     = parser->tokens_avail + raw_len - parser->raw_tokens_used;
   gcc_assert (raw_avail >= n - 1);
-  if (raw_avail >= n)
-    return &(*parser->raw_tokens)[parser->raw_tokens_used
+  만약 (raw_avail >= n)
+    반환 &(*parser->raw_tokens)[parser->raw_tokens_used
 				  + n - 1 - parser->tokens_avail];
   vec_safe_reserve (parser->raw_tokens, 1);
   parser->raw_tokens->quick_grow (raw_len + 1);
   c_lex_one_token (parser, &(*parser->raw_tokens)[raw_len], true);
-  return &(*parser->raw_tokens)[raw_len];
+  반환 &(*parser->raw_tokens)[raw_len];
 }
 
 bool
@@ -645,13 +645,13 @@ c_keyword_starts_typename (enum rid keyword)
     case RID_SAT:
     case RID_AUTO_TYPE:
     case RID_ALIGNAS:
-      return true;
+      반환 true;
     default:
-      if (keyword >= RID_FIRST_INT_N
+      만약 (keyword >= RID_FIRST_INT_N
 	  && keyword < RID_FIRST_INT_N + NUM_INT_N_ENTS
 	  && int_n_enabled_p[keyword - RID_FIRST_INT_N])
-	return true;
-      return false;
+	반환 true;
+      반환 false;
     }
 }
 
@@ -666,25 +666,25 @@ c_token_starts_typename (c_token *token)
       switch (token->id_kind)
 	{
 	case C_ID_ID:
-	  return false;
+	  반환 false;
 	case C_ID_ADDRSPACE:
-	  return true;
+	  반환 true;
 	case C_ID_TYPENAME:
-	  return true;
+	  반환 true;
 	case C_ID_CLASSNAME:
 	  gcc_assert (c_dialect_objc ());
-	  return true;
+	  반환 true;
 	default:
 	  gcc_unreachable ();
 	}
     case CPP_KEYWORD:
-      return c_keyword_starts_typename (token->keyword);
+      반환 c_keyword_starts_typename (token->keyword);
     case CPP_LESS:
-      if (c_dialect_objc ())
-	return true;
-      return false;
+      만약 (c_dialect_objc ())
+	반환 true;
+      반환 false;
     default:
-      return false;
+      반환 false;
     }
 }
 
@@ -694,14 +694,14 @@ c_token_starts_typename (c_token *token)
 
 static inline bool
 c_parser_next_tokens_start_typename (c_parser *parser, enum c_lookahead_kind la,
-				     unsigned int n = 1)
+				     unsigned 정수 n = 1)
 {
   c_token *token = c_parser_peek_nth_token (parser, n);
-  if (c_token_starts_typename (token))
-    return true;
+  만약 (c_token_starts_typename (token))
+    반환 true;
 
   /* Try a bit harder to detect an unknown typename.  */
-  if (la != cla_prefer_id
+  만약 (la != cla_prefer_id
       && token->type == CPP_NAME
       && token->id_kind == C_ID_ID
 
@@ -714,9 +714,9 @@ c_parser_next_tokens_start_typename (c_parser *parser, enum c_lookahead_kind la,
 
       /* Only unknown identifiers.  */
       && !lookup_name (token->value))
-    return true;
+    반환 true;
 
-  return false;
+  반환 false;
 }
 
 /* Return true if TOKEN, after an open parenthesis, can start a
@@ -734,13 +734,13 @@ c_token_starts_compound_literal (c_token *token)
 	case RID_REGISTER:
 	case RID_STATIC:
 	case RID_THREAD:
-	  return true;
+	  반환 true;
 	default:
 	  break;
 	}
       /* Fall through.  */
     default:
-      return c_token_starts_typename (token);
+      반환 c_token_starts_typename (token);
     }
 }
 
@@ -754,9 +754,9 @@ c_token_is_qualifier (c_token *token)
       switch (token->id_kind)
 	{
 	case C_ID_ADDRSPACE:
-	  return true;
+	  반환 true;
 	default:
-	  return false;
+	  반환 false;
 	}
     case CPP_KEYWORD:
       switch (token->keyword)
@@ -766,12 +766,12 @@ c_token_is_qualifier (c_token *token)
 	case RID_RESTRICT:
 	case RID_ATTRIBUTE:
 	case RID_ATOMIC:
-	  return true;
+	  반환 true;
 	default:
-	  return false;
+	  반환 false;
 	}
     case CPP_LESS:
-      return false;
+      반환 false;
     default:
       gcc_unreachable ();
     }
@@ -783,7 +783,7 @@ static inline bool
 c_parser_next_token_is_qualifier (c_parser *parser)
 {
   c_token *token = c_parser_peek_token (parser);
-  return c_token_is_qualifier (token);
+  반환 c_token_is_qualifier (token);
 }
 
 /* Return true if TOKEN can start declaration specifiers (not
@@ -797,14 +797,14 @@ c_token_starts_declspecs (c_token *token)
       switch (token->id_kind)
 	{
 	case C_ID_ID:
-	  return false;
+	  반환 false;
 	case C_ID_ADDRSPACE:
-	  return true;
+	  반환 true;
 	case C_ID_TYPENAME:
-	  return true;
+	  반환 true;
 	case C_ID_CLASSNAME:
 	  gcc_assert (c_dialect_objc ());
-	  return true;
+	  반환 true;
 	default:
 	  gcc_unreachable ();
 	}
@@ -852,20 +852,20 @@ c_token_starts_declspecs (c_token *token)
 	case RID_ATOMIC:
 	case RID_AUTO_TYPE:
 	case RID_CONSTEXPR:
-	  return true;
+	  반환 true;
 	default:
-	  if (token->keyword >= RID_FIRST_INT_N
+	  만약 (token->keyword >= RID_FIRST_INT_N
 	      && token->keyword < RID_FIRST_INT_N + NUM_INT_N_ENTS
 	      && int_n_enabled_p[token->keyword - RID_FIRST_INT_N])
-	    return true;
-	  return false;
+	    반환 true;
+	  반환 false;
 	}
     case CPP_LESS:
-      if (c_dialect_objc ())
-	return true;
-      return false;
+      만약 (c_dialect_objc ())
+	반환 true;
+      반환 false;
     default:
-      return false;
+      반환 false;
     }
 }
 
@@ -876,11 +876,11 @@ c_token_starts_declspecs (c_token *token)
 static bool
 c_token_starts_declaration (c_token *token)
 {
-  if (c_token_starts_declspecs (token)
+  만약 (c_token_starts_declspecs (token)
       || token->keyword == RID_STATIC_ASSERT)
-    return true;
-  else
-    return false;
+    반환 true;
+  아니면
+    반환 false;
 }
 
 /* Return true if the next token from PARSER can start declaration
@@ -897,59 +897,59 @@ c_parser_next_token_starts_declspecs (c_parser *parser)
      setter/getter on the class.  c_token_starts_declspecs() can't
      differentiate between the two cases because it only checks the
      current token, so we have a special check here.  */
-  if (c_dialect_objc ()
+  만약 (c_dialect_objc ()
       && token->type == CPP_NAME
       && token->id_kind == C_ID_CLASSNAME
       && c_parser_peek_2nd_token (parser)->type == CPP_DOT)
-    return false;
+    반환 false;
 
-  return c_token_starts_declspecs (token);
+  반환 c_token_starts_declspecs (token);
 }
 
 static bool c_parser_check_balanced_raw_token_sequence (c_parser *,
-							unsigned int *);
+							unsigned 정수 *);
 
 /* Return true if the next tokens from PARSER (starting with token N, 1-based)
    can start declaration specifiers (not including standard attributes) or a
    static assertion, false otherwise.  */
 bool
-c_parser_next_tokens_start_declaration (c_parser *parser, unsigned int n)
+c_parser_next_tokens_start_declaration (c_parser *parser, unsigned 정수 n)
 {
   c_token *token = c_parser_peek_nth_token (parser, n);
 
   /* Same as above.  */
-  if (c_dialect_objc ()
+  만약 (c_dialect_objc ()
       && token->type == CPP_NAME
       && token->id_kind == C_ID_CLASSNAME
       && c_parser_peek_nth_token (parser, n + 1)->type == CPP_DOT)
-    return false;
+    반환 false;
 
   /* Labels do not start declarations.  */
-  if (token->type == CPP_NAME
+  만약 (token->type == CPP_NAME
       && c_parser_peek_nth_token (parser, n + 1)->type == CPP_COLON)
-    return false;
+    반환 false;
 
   /* A static assertion is only a declaration if followed by a semicolon;
      otherwise, it may be an expression in C2Y.  */
-  if (token->keyword == RID_STATIC_ASSERT
+  만약 (token->keyword == RID_STATIC_ASSERT
       && c_parser_peek_nth_token (parser, n + 1)->type == CPP_OPEN_PAREN)
     {
       n += 2;
-      if (!c_parser_check_balanced_raw_token_sequence (parser, &n)
+      만약 (!c_parser_check_balanced_raw_token_sequence (parser, &n)
 	  || c_parser_peek_nth_token_raw (parser, n)->type != CPP_CLOSE_PAREN)
 	/* Invalid static assertion syntax; treat as a declaration and report a
 	   syntax error there.  */
-	return true;
-      return c_parser_peek_nth_token_raw (parser, n + 1)->type == CPP_SEMICOLON;
+	반환 true;
+      반환 c_parser_peek_nth_token_raw (parser, n + 1)->type == CPP_SEMICOLON;
     }
 
-  if (c_token_starts_declaration (token))
-    return true;
+  만약 (c_token_starts_declaration (token))
+    반환 true;
 
-  if (c_parser_next_tokens_start_typename (parser, cla_nonabstract_decl, n))
-    return true;
+  만약 (c_parser_next_tokens_start_typename (parser, cla_nonabstract_decl, n))
+    반환 true;
 
-  return false;
+  반환 false;
 }
 
 /* Consume the next token from PARSER.  */
@@ -966,15 +966,15 @@ c_parser_consume_token (c_parser *parser)
 	      || parser->error
 	      || parser->tokens[0].type != CPP_PRAGMA);
   parser->last_token_location = parser->tokens[0].location;
-  if (parser->tokens != &parser->tokens_buf[0])
+  만약 (parser->tokens != &parser->tokens_buf[0])
     parser->tokens++;
-  else if (parser->tokens_avail >= 2)
+  아니면 만약 (parser->tokens_avail >= 2)
     {
       parser->tokens[0] = parser->tokens[1];
-      if (parser->tokens_avail >= 3)
+      만약 (parser->tokens_avail >= 3)
         {
           parser->tokens[1] = parser->tokens[2];
-          if (parser->tokens_avail >= 4)
+          만약 (parser->tokens_avail >= 4)
             parser->tokens[2] = parser->tokens[3];
         }
     }
@@ -991,12 +991,12 @@ c_parser_consume_pragma (c_parser *parser)
   gcc_assert (!parser->in_pragma);
   gcc_assert (parser->tokens_avail >= 1);
   gcc_assert (parser->tokens[0].type == CPP_PRAGMA);
-  if (parser->tokens != &parser->tokens_buf[0])
+  만약 (parser->tokens != &parser->tokens_buf[0])
     parser->tokens++;
-  else if (parser->tokens_avail >= 2)
+  아니면 만약 (parser->tokens_avail >= 2)
     {
       parser->tokens[0] = parser->tokens[1];
-      if (parser->tokens_avail >= 3)
+      만약 (parser->tokens_avail >= 3)
 	parser->tokens[1] = parser->tokens[2];
     }
   parser->tokens_avail--;
@@ -1007,7 +1007,7 @@ c_parser_consume_pragma (c_parser *parser)
 static inline void
 c_parser_set_source_position_from_token (c_token *token)
 {
-  if (token->type != CPP_EOF)
+  만약 (token->type != CPP_EOF)
     {
       input_location = token->location;
     }
@@ -1029,19 +1029,19 @@ c_parser_peek_conflict_marker (c_parser *parser, enum cpp_ttype tok1_kind,
 			       location_t *out_loc)
 {
   c_token *token2 = c_parser_peek_2nd_token (parser);
-  if (token2->type != tok1_kind)
-    return false;
+  만약 (token2->type != tok1_kind)
+    반환 false;
   c_token *token3 = c_parser_peek_nth_token (parser, 3);
-  if (token3->type != tok1_kind)
-    return false;
+  만약 (token3->type != tok1_kind)
+    반환 false;
   c_token *token4 = c_parser_peek_nth_token (parser, 4);
-  if (token4->type != conflict_marker_get_final_tok_kind (tok1_kind))
-    return false;
+  만약 (token4->type != conflict_marker_get_final_tok_kind (tok1_kind))
+    반환 false;
 
   /* It must be at the start of the line.  */
   location_t start_loc = c_parser_peek_token (parser)->location;
-  if (LOCATION_COLUMN (start_loc) != 1)
-    return false;
+  만약 (LOCATION_COLUMN (start_loc) != 1)
+    반환 false;
 
   /* We have a conflict marker.  Construct a location of the form:
        <<<<<<<
@@ -1050,7 +1050,7 @@ c_parser_peek_conflict_marker (c_parser *parser, enum cpp_ttype tok1_kind,
   location_t finish_loc = get_finish (token4->location);
   *out_loc = make_location (start_loc, start_loc, finish_loc);
 
-  return true;
+  반환 true;
 }
 
 /* Issue a diagnostic of the form
@@ -1074,22 +1074,22 @@ c_parser_error_richloc (c_parser *parser, const char *gmsgid,
 			rich_location *richloc)
 {
   c_token *token = c_parser_peek_token (parser);
-  if (parser->error)
-    return false;
+  만약 (parser->error)
+    반환 false;
   parser->error = true;
-  if (!gmsgid)
-    return false;
+  만약 (!gmsgid)
+    반환 false;
 
   /* If this is actually a conflict marker, report it as such.  */
-  if (token->type == CPP_LSHIFT
+  만약 (token->type == CPP_LSHIFT
       || token->type == CPP_RSHIFT
       || token->type == CPP_EQ_EQ)
     {
       location_t loc;
-      if (c_parser_peek_conflict_marker (parser, token->type, &loc))
+      만약 (c_parser_peek_conflict_marker (parser, token->type, &loc))
 	{
 	  error_at (loc, "version control conflict marker in file");
-	  return true;
+	  반환 true;
 	}
     }
 
@@ -1100,13 +1100,13 @@ c_parser_error_richloc (c_parser *parser, const char *gmsgid,
      there is one, then add that as an hint to the error message. */
   auto_diagnostic_group d;
   name_hint h;
-  if (parser->seen_string_literal && token->type == CPP_NAME)
+  만약 (parser->seen_string_literal && token->type == CPP_NAME)
     {
       tree name = token->value;
       const char *token_name = IDENTIFIER_POINTER (name);
       const char *header_hint
 	= get_c_stdlib_header_for_string_macro_name (token_name);
-      if (header_hint != NULL)
+      만약 (header_hint != NULL)
 	h = name_hint (nullptr,
 		       std::make_unique<suggest_missing_header>
 			 (token->location,
@@ -1124,7 +1124,7 @@ c_parser_error_richloc (c_parser *parser, const char *gmsgid,
 		    the source spelling of some tokens but rather the
 		    canonical spelling.  */
 		 token->value, /*flags=*/0, richloc);
-  return true;
+  반환 true;
 }
 
 /* As c_parser_error_richloc, but issue the message at the
@@ -1137,7 +1137,7 @@ c_parser_error (c_parser *parser, const char *gmsgid)
   c_token *token = c_parser_peek_token (parser);
   c_parser_set_source_position_from_token (token);
   rich_location richloc (line_table, input_location);
-  return c_parser_error_richloc (parser, gmsgid, &richloc);
+  반환 c_parser_error_richloc (parser, gmsgid, &richloc);
 }
 
 /* Some tokens naturally come in pairs e.g.'(' and ')'.
@@ -1162,10 +1162,10 @@ class token_pair
   bool require_open (c_parser *parser)
   {
     c_token *token = c_parser_peek_token (parser);
-    if (token)
+    만약 (token)
       m_open_loc = token->location;
 
-    return c_parser_require (parser, traits_t::open_token_type,
+    반환 c_parser_require (parser, traits_t::open_token_type,
 			     traits_t::open_gmsgid);
   }
 
@@ -1187,7 +1187,7 @@ class token_pair
 
   bool require_close (c_parser *parser) const
   {
-    return c_parser_require (parser, traits_t::close_token_type,
+    반환 c_parser_require (parser, traits_t::close_token_type,
 			     traits_t::close_gmsgid, m_open_loc);
   }
 
@@ -1252,9 +1252,9 @@ get_matching_symbol (enum cpp_ttype type)
     default:
       gcc_unreachable ();
     case CPP_CLOSE_PAREN:
-      return "(";
+      반환 "(";
     case CPP_CLOSE_BRACE:
-      return "{";
+      반환 "{";
     }
 }
 
@@ -1282,12 +1282,12 @@ c_parser_require (c_parser *parser,
 		  location_t matching_location,
 		  bool type_is_unique)
 {
-  if (c_parser_next_token_is (parser, type))
+  만약 (c_parser_next_token_is (parser, type))
     {
       c_parser_consume_token (parser);
-      return true;
+      반환 true;
     }
-  else
+  아니면
     {
       location_t next_token_loc = c_parser_peek_token (parser)->location;
       gcc_rich_location richloc (next_token_loc);
@@ -1295,7 +1295,7 @@ c_parser_require (c_parser *parser,
       /* Potentially supply a fix-it hint, suggesting to add the
 	 missing token immediately after the *previous* token.
 	 This may move the primary location within richloc.  */
-      if (!parser->error && type_is_unique)
+      만약 (!parser->error && type_is_unique)
 	maybe_suggest_missing_token_insertion (&richloc, type,
 					       parser->last_token_location);
 
@@ -1303,18 +1303,18 @@ c_parser_require (c_parser *parser,
 	 Attempt to consolidate diagnostics by printing it as a
 	 secondary range within the main diagnostic.  */
       bool added_matching_location = false;
-      if (matching_location != UNKNOWN_LOCATION)
+      만약 (matching_location != UNKNOWN_LOCATION)
 	added_matching_location
 	  = richloc.add_location_if_nearby (*global_dc, matching_location);
 
-      if (c_parser_error_richloc (parser, msgid, &richloc))
+      만약 (c_parser_error_richloc (parser, msgid, &richloc))
 	/* If we weren't able to consolidate matching_location, then
 	   print it as a secondary diagnostic.  */
-	if (matching_location != UNKNOWN_LOCATION && !added_matching_location)
+	만약 (matching_location != UNKNOWN_LOCATION && !added_matching_location)
 	  inform (matching_location, "to match this %qs",
 		  get_matching_symbol (type));
 
-      return false;
+      반환 false;
     }
 }
 
@@ -1326,15 +1326,15 @@ c_parser_require_keyword (c_parser *parser,
 			  enum rid keyword,
 			  const char *msgid)
 {
-  if (c_parser_next_token_is_keyword (parser, keyword))
+  만약 (c_parser_next_token_is_keyword (parser, keyword))
     {
       c_parser_consume_token (parser);
-      return true;
+      반환 true;
     }
-  else
+  아니면
     {
       c_parser_error (parser, msgid);
-      return false;
+      반환 false;
     }
 }
 
@@ -1357,12 +1357,12 @@ c_parser_skip_until_found (c_parser *parser,
 {
   unsigned nesting_depth = 0;
 
-  if (c_parser_require (parser, type, msgid, matching_location))
+  만약 (c_parser_require (parser, type, msgid, matching_location))
     {
-      if (UNLIKELY (type == CPP_PRAGMA_EOL) && parser->in_omp_attribute_pragma)
+      만약 (UNLIKELY (type == CPP_PRAGMA_EOL) && parser->in_omp_attribute_pragma)
 	{
 	  c_token *token = c_parser_peek_token (parser);
-	  if (token->type == CPP_EOF)
+	  만약 (token->type == CPP_EOF)
 	    {
 	      parser->tokens = parser->in_omp_attribute_pragma->save_tokens;
 	      parser->tokens_avail
@@ -1370,23 +1370,23 @@ c_parser_skip_until_found (c_parser *parser,
 	      parser->in_omp_attribute_pragma = NULL;
 	    }
 	}
-      return;
+      반환;
     }
 
   /* Skip tokens until the desired token is found.  */
-  while (true)
+  동안 (true)
     {
       /* Peek at the next token.  */
       c_token *token = c_parser_peek_token (parser);
       /* If we've reached the token we want, consume it and stop.  */
-      if (token->type == type && !nesting_depth)
+      만약 (token->type == type && !nesting_depth)
 	{
 	  c_parser_consume_token (parser);
-	  if (UNLIKELY (type == CPP_PRAGMA_EOL)
+	  만약 (UNLIKELY (type == CPP_PRAGMA_EOL)
 	      && parser->in_omp_attribute_pragma)
 	    {
 	      c_token *token = c_parser_peek_token (parser);
-	      if (token->type == CPP_EOF)
+	      만약 (token->type == CPP_EOF)
 		{
 		  parser->tokens = parser->in_omp_attribute_pragma->save_tokens;
 		  parser->tokens_avail
@@ -1398,19 +1398,19 @@ c_parser_skip_until_found (c_parser *parser,
 	}
 
       /* If we've run out of tokens, stop.  */
-      if (token->type == CPP_EOF)
-	return;
-      if (token->type == CPP_PRAGMA_EOL && parser->in_pragma)
-	return;
-      if (token->type == CPP_OPEN_BRACE
+      만약 (token->type == CPP_EOF)
+	반환;
+      만약 (token->type == CPP_PRAGMA_EOL && parser->in_pragma)
+	반환;
+      만약 (token->type == CPP_OPEN_BRACE
 	  || token->type == CPP_OPEN_PAREN
 	  || token->type == CPP_OPEN_SQUARE)
 	++nesting_depth;
-      else if (token->type == CPP_CLOSE_BRACE
+      아니면 만약 (token->type == CPP_CLOSE_BRACE
 	       || token->type == CPP_CLOSE_PAREN
 	       || token->type == CPP_CLOSE_SQUARE)
 	{
-	  if (nesting_depth-- == 0)
+	  만약 (nesting_depth-- == 0)
 	    break;
 	}
       /* Consume this token.  */
@@ -1427,26 +1427,26 @@ c_parser_skip_to_end_of_parameter (c_parser *parser)
 {
   unsigned nesting_depth = 0;
 
-  while (true)
+  동안 (true)
     {
       c_token *token = c_parser_peek_token (parser);
-      if ((token->type == CPP_COMMA || token->type == CPP_SEMICOLON)
+      만약 ((token->type == CPP_COMMA || token->type == CPP_SEMICOLON)
 	  && !nesting_depth)
 	break;
       /* If we've run out of tokens, stop.  */
-      if (token->type == CPP_EOF)
-	return;
-      if (token->type == CPP_PRAGMA_EOL && parser->in_pragma)
-	return;
-      if (token->type == CPP_OPEN_BRACE
+      만약 (token->type == CPP_EOF)
+	반환;
+      만약 (token->type == CPP_PRAGMA_EOL && parser->in_pragma)
+	반환;
+      만약 (token->type == CPP_OPEN_BRACE
 	  || token->type == CPP_OPEN_PAREN
 	  || token->type == CPP_OPEN_SQUARE)
 	++nesting_depth;
-      else if (token->type == CPP_CLOSE_BRACE
+      아니면 만약 (token->type == CPP_CLOSE_BRACE
 	       || token->type == CPP_CLOSE_PAREN
 	       || token->type == CPP_CLOSE_SQUARE)
 	{
-	  if (nesting_depth-- == 0)
+	  만약 (nesting_depth-- == 0)
 	    break;
 	}
       /* Consume this token.  */
@@ -1464,25 +1464,25 @@ c_parser_skip_to_closing_brace (c_parser *parser)
 {
   unsigned nesting_depth = 0;
 
-  while (true)
+  동안 (true)
     {
       c_token *token = c_parser_peek_token (parser);
 
       switch (token->type)
 	{
 	case CPP_PRAGMA_EOL:
-	  if (!parser->in_pragma)
+	  만약 (!parser->in_pragma)
 	    break;
 	  /* FALLTHRU */
 	case CPP_EOF:
 	  /* If we've run out of tokens, stop.  */
-	  return false;
+	  반환 false;
 
 	case CPP_CLOSE_BRACE:
 	  /* If the next token is a non-nested `}', then we have reached
 	     the end of the current block.  */
-	  if (nesting_depth-- == 0)
-	    return true;
+	  만약 (nesting_depth-- == 0)
+	    반환 true;
 	  break;
 
 	case CPP_OPEN_BRACE:
@@ -1509,7 +1509,7 @@ c_parser_skip_to_pragma_eol (c_parser *parser, bool error_if_not_eol = true)
   gcc_assert (parser->in_pragma);
   parser->in_pragma = false;
 
-  if (error_if_not_eol && c_parser_peek_token (parser)->type != CPP_PRAGMA_EOL)
+  만약 (error_if_not_eol && c_parser_peek_token (parser)->type != CPP_PRAGMA_EOL)
     c_parser_error (parser, "expected end of line");
 
   cpp_ttype token_type;
@@ -1517,16 +1517,16 @@ c_parser_skip_to_pragma_eol (c_parser *parser, bool error_if_not_eol = true)
     {
       c_token *token = c_parser_peek_token (parser);
       token_type = token->type;
-      if (token_type == CPP_EOF)
+      만약 (token_type == CPP_EOF)
 	break;
       c_parser_consume_token (parser);
     }
-  while (token_type != CPP_PRAGMA_EOL);
+  동안 (token_type != CPP_PRAGMA_EOL);
 
-  if (parser->in_omp_attribute_pragma)
+  만약 (parser->in_omp_attribute_pragma)
     {
       c_token *token = c_parser_peek_token (parser);
-      if (token->type == CPP_EOF)
+      만약 (token->type == CPP_EOF)
 	{
 	  parser->tokens = parser->in_omp_attribute_pragma->save_tokens;
 	  parser->tokens_avail
@@ -1543,34 +1543,34 @@ c_parser_skip_to_pragma_eol (c_parser *parser, bool error_if_not_eol = true)
 static void
 c_parser_skip_to_pragma_omp_end_declare_variant (c_parser *parser)
 {
-  for (int depth = 0; depth >= 0; )
+  위해 (정수 depth = 0; depth >= 0; )
     {
       c_token *token = c_parser_peek_token (parser);
 
       switch (token->type)
 	{
 	case CPP_PRAGMA_EOL:
-	  if (!parser->in_pragma)
+	  만약 (!parser->in_pragma)
 	    break;
 	  /* FALLTHRU */
 	case CPP_EOF:
 	  /* If we've run out of tokens, stop.  */
-	  return;
+	  반환;
 
 	case CPP_PRAGMA:
-	  if ((token->pragma_kind == PRAGMA_OMP_BEGIN
+	  만약 ((token->pragma_kind == PRAGMA_OMP_BEGIN
 	       || token->pragma_kind == PRAGMA_OMP_END)
 	      && c_parser_peek_nth_token (parser, 2)->type == CPP_NAME
 	      && c_parser_peek_nth_token (parser, 3)->type == CPP_NAME)
 	    {
 	      tree id1 = c_parser_peek_nth_token (parser, 2)->value;
 	      tree id2 = c_parser_peek_nth_token (parser, 3)->value;
-	      if (strcmp (IDENTIFIER_POINTER (id1), "declare") == 0
+	      만약 (strcmp (IDENTIFIER_POINTER (id1), "declare") == 0
 		  && strcmp (IDENTIFIER_POINTER (id2), "variant") == 0)
 		{
-		  if (token->pragma_kind == PRAGMA_OMP_BEGIN)
+		  만약 (token->pragma_kind == PRAGMA_OMP_BEGIN)
 		    depth++;
-		  else
+		  아니면
 		    depth--;
 		}
 	    }
@@ -1595,10 +1595,10 @@ c_parser_skip_to_end_of_block_or_statement (c_parser *parser,
 					    bool metadirective_p = false)
 {
   unsigned nesting_depth = 0;
-  int bracket_depth = 0;
+  정수 bracket_depth = 0;
   bool save_error = parser->error;
 
-  while (true)
+  동안 (true)
     {
       c_token *token;
 
@@ -1608,17 +1608,17 @@ c_parser_skip_to_end_of_block_or_statement (c_parser *parser,
       switch (token->type)
 	{
 	case CPP_EOF:
-	  return;
+	  반환;
 
 	case CPP_PRAGMA_EOL:
-	  if (parser->in_pragma)
-	    return;
+	  만약 (parser->in_pragma)
+	    반환;
 	  break;
 
 	case CPP_SEMICOLON:
 	  /* If the next token is a ';', we have reached the
 	     end of the statement.  */
-	  if (!nesting_depth && (!metadirective_p || bracket_depth <= 0))
+	  만약 (!nesting_depth && (!metadirective_p || bracket_depth <= 0))
 	    {
 	      /* Consume the ';'.  */
 	      c_parser_consume_token (parser);
@@ -1629,7 +1629,7 @@ c_parser_skip_to_end_of_block_or_statement (c_parser *parser,
 	case CPP_CLOSE_BRACE:
 	  /* If the next token is a non-nested '}', then we have
 	     reached the end of the current block.  */
-	  if ((nesting_depth == 0 || --nesting_depth == 0)
+	  만약 ((nesting_depth == 0 || --nesting_depth == 0)
 	      && (!metadirective_p || bracket_depth <= 0))
 	    {
 	      c_parser_consume_token (parser);
@@ -1647,12 +1647,12 @@ c_parser_skip_to_end_of_block_or_statement (c_parser *parser,
 	  /* Track parentheses in case the statement is a standalone 'for'
 	     statement - we want to skip over the semicolons separating the
 	     operands.  */
-	  if (metadirective_p && nesting_depth == 0)
+	  만약 (metadirective_p && nesting_depth == 0)
 	    ++bracket_depth;
 	  break;
 
 	case CPP_CLOSE_PAREN:
-	  if (metadirective_p && nesting_depth == 0)
+	  만약 (metadirective_p && nesting_depth == 0)
 	    --bracket_depth;
 	  break;
 
@@ -1684,10 +1684,10 @@ extern cpp_options *cpp_opts;
 
 /* Save the warning flags which are controlled by __extension__.  */
 
-static inline int
+static inline 정수
 disable_extension_diagnostics (void)
 {
-  int ret = (pedantic
+  정수 ret = (pedantic
 	     | (warn_pointer_arith << 1)
 	     | (warn_traditional << 2)
 	     | (flag_iso << 3)
@@ -1719,14 +1719,14 @@ disable_extension_diagnostics (void)
   warn_c99_c11_compat = 0;
   warn_c11_c23_compat = 0;
   warn_c23_c2y_compat = 0;
-  return ret;
+  반환 ret;
 }
 
 /* Restore the warning flags which are controlled by __extension__.
    FLAGS is the return value from disable_extension_diagnostics.  */
 
 static inline void
-restore_extension_diagnostics (int flags)
+restore_extension_diagnostics (정수 flags)
 {
   cpp_opts->cpp_pedantic = pedantic = flags & 1;
   warn_pointer_arith = (flags >> 1) & 1;
@@ -1779,8 +1779,8 @@ struct omp_for_parse_data {
   tree declv, condv, incrv, initv;
   tree pre_body;
   tree bindings;
-  int count;	/* Expected nesting depth.  */
-  int depth;	/* Current nesting depth.  */
+  정수 count;	/* Expected nesting depth.  */
+  정수 depth;	/* Current nesting depth.  */
   location_t for_loc;
   bool ordered : 1;
   bool inscan : 1;
@@ -1800,7 +1800,7 @@ struct attr_state
 };
 
 static bool c_parser_nth_token_starts_std_attributes (c_parser *,
-						      unsigned int);
+						      unsigned 정수);
 static tree c_parser_std_attribute_specifier_sequence (c_parser *);
 static void c_parser_external_declaration (c_parser *);
 static void c_parser_asm_definition (c_parser *);
@@ -1888,7 +1888,7 @@ static struct c_expr c_parser_expression_conv (c_parser *);
 static vec<tree, va_gc> *c_parser_expr_list (c_parser *, bool, bool,
 					     vec<tree, va_gc> **, location_t *,
 					     tree *, vec<location_t> *,
-					     unsigned int * = NULL);
+					     unsigned 정수 * = NULL);
 static struct c_expr c_parser_has_attribute_expression (c_parser *);
 
 static void c_parser_oacc_declare (c_parser *);
@@ -1958,7 +1958,7 @@ static bool c_parser_objc_diagnose_bad_element_prefix
 static location_t c_parser_parse_rtl_body (c_parser *, char *);
 static tree c_parser_handle_musttail (c_parser *, tree, attr_state &);
 
-#if ENABLE_ANALYZER
+#만약 ENABLE_ANALYZER
 
 namespace ana {
 
@@ -1972,43 +1972,43 @@ public:
   tree lookup_constant_by_id (tree id) const final override
   {
     /* Consider decls.  */
-    if (tree decl = lookup_name (id))
-      if (TREE_CODE (decl) == CONST_DECL)
-	if (tree value = DECL_INITIAL (decl))
-	  if (TREE_CODE (value) == INTEGER_CST)
-	    return value;
+    만약 (tree decl = lookup_name (id))
+      만약 (TREE_CODE (decl) == CONST_DECL)
+	만약 (tree value = DECL_INITIAL (decl))
+	  만약 (TREE_CODE (value) == INTEGER_CST)
+	    반환 value;
 
     /* Consider macros.  */
     cpp_hashnode *hashnode = C_CPP_HASHNODE (id);
-    if (cpp_macro_p (hashnode))
-      if (tree value = consider_macro (hashnode->value.macro))
-	return value;
+    만약 (cpp_macro_p (hashnode))
+      만약 (tree value = consider_macro (hashnode->value.macro))
+	반환 value;
 
-    return NULL_TREE;
+    반환 NULL_TREE;
   }
 
   tree
   lookup_type_by_id (tree id) const final override
   {
-    if (tree type_decl = lookup_name (id))
-	if (TREE_CODE (type_decl) == TYPE_DECL)
+    만약 (tree type_decl = lookup_name (id))
+	만약 (TREE_CODE (type_decl) == TYPE_DECL)
 	  {
 	    tree record_type = TREE_TYPE (type_decl);
-	    if (TREE_CODE (record_type) == RECORD_TYPE)
-	      return record_type;
+	    만약 (TREE_CODE (record_type) == RECORD_TYPE)
+	      반환 record_type;
 	  }
 
-    return NULL_TREE;
+    반환 NULL_TREE;
   }
 
   tree
   lookup_global_var_by_id (tree id) const final override
   {
-    if (tree var_decl = lookup_name (id))
-      if (TREE_CODE (var_decl) == VAR_DECL)
-				return var_decl;
+    만약 (tree var_decl = lookup_name (id))
+      만약 (TREE_CODE (var_decl) == VAR_DECL)
+				반환 var_decl;
 
-    return NULL_TREE;
+    반환 NULL_TREE;
   }
 
 private:
@@ -2023,34 +2023,34 @@ private:
      Also handle the case where MACRO's definition is a single identifier
      that is itself a macro name (e.g. "#define O_CREAT _FCREAT"), by
      following the chain of aliases.  */
-  tree consider_macro (cpp_macro *macro, int depth = 0) const
+  tree consider_macro (cpp_macro *macro, 정수 depth = 0) const
   {
     /* UInteger option variables are stored as int, so "depth" must be signed
        to avoid a signed/unsigned comparison here. */
     gcc_assert (depth >= 0);
 
-    if (macro->paramc > 0)
-      return NULL_TREE;
-    if (macro->kind != cmk_macro)
-      return NULL_TREE;
-    if (macro->count != 1)
-      return NULL_TREE;
+    만약 (macro->paramc > 0)
+      반환 NULL_TREE;
+    만약 (macro->kind != cmk_macro)
+      반환 NULL_TREE;
+    만약 (macro->count != 1)
+      반환 NULL_TREE;
     const cpp_token &tok = macro->exp.tokens[0];
-    if (tok.type == CPP_NAME)
+    만약 (tok.type == CPP_NAME)
       {
 	/* Limit recursion.  */
-	if (depth >= param_analyzer_max_macro_alias_depth)
-	  return NULL_TREE;
+	만약 (depth >= param_analyzer_max_macro_alias_depth)
+	  반환 NULL_TREE;
 
 	cpp_hashnode *alias = tok.val.node.node;
-	if (cpp_macro_p (alias))
-	  return consider_macro (alias->value.macro, depth + 1);
+	만약 (cpp_macro_p (alias))
+	  반환 consider_macro (alias->value.macro, depth + 1);
 
 	/* Not a simple alias.  */
-	return NULL_TREE;
+	반환 NULL_TREE;
       }
-    else if (tok.type != CPP_NUMBER)
-      return NULL_TREE;
+    아니면 만약 (tok.type != CPP_NUMBER)
+      반환 NULL_TREE;
 
     cpp_reader *old_parse_in = parse_in;
     parse_in = cpp_create_reader (CLK_GNUC89, NULL, line_table);
@@ -2071,10 +2071,10 @@ private:
     cpp_destroy (parse_in);
     parse_in = old_parse_in;
 
-    if (value && TREE_CODE (value) == INTEGER_CST)
-      return value;
+    만약 (value && TREE_CODE (value) == INTEGER_CST)
+      반환 value;
 
-    return NULL_TREE;
+    반환 NULL_TREE;
   }
 };
 
@@ -2100,12 +2100,12 @@ private:
 static void
 c_parser_translation_unit (c_parser *parser)
 {
-  if (c_parser_next_token_is (parser, CPP_EOF))
+  만약 (c_parser_next_token_is (parser, CPP_EOF))
     {
       pedwarn (c_parser_peek_token (parser)->location, OPT_Wpedantic,
 	       "ISO C forbids an empty translation unit");
     }
-  else
+  아니면
     {
       void *obstack_position = obstack_alloc (&parser_obstack, 0);
       mark_valid_location_for_stdc_pragma (false);
@@ -2115,51 +2115,51 @@ c_parser_translation_unit (c_parser *parser)
 	  c_parser_external_declaration (parser);
 	  obstack_free (&parser_obstack, obstack_position);
 	}
-      while (c_parser_next_token_is_not (parser, CPP_EOF));
+      동안 (c_parser_next_token_is_not (parser, CPP_EOF));
     }
 
-  unsigned int i;
+  unsigned 정수 i;
   tree decl;
   FOR_EACH_VEC_ELT (incomplete_record_decls, i, decl)
-    if (DECL_SIZE (decl) == NULL_TREE && TREE_TYPE (decl) != error_mark_node)
+    만약 (DECL_SIZE (decl) == NULL_TREE && TREE_TYPE (decl) != error_mark_node)
       error ("storage size of %q+D isn%'t known", decl);
 
-  if (vec_safe_length (current_omp_declare_target_attribute))
+  만약 (vec_safe_length (current_omp_declare_target_attribute))
     {
       c_omp_declare_target_attr
 	a = current_omp_declare_target_attribute->pop ();
-      if (!errorcount)
+      만약 (!errorcount)
 	error ("%qs without corresponding %qs",
 	       a.device_type >= 0 ? "#pragma omp begin declare target"
 				  : "#pragma omp declare target",
 	       "#pragma omp end declare target");
       vec_safe_truncate (current_omp_declare_target_attribute, 0);
     }
-  if (vec_safe_length (current_omp_begin_assumes))
+  만약 (vec_safe_length (current_omp_begin_assumes))
     {
-      if (!errorcount)
+      만약 (!errorcount)
 	error ("%qs without corresponding %qs",
 	       "#pragma omp begin assumes", "#pragma omp end assumes");
       vec_safe_truncate (current_omp_begin_assumes, 0);
     }
-  if (vec_safe_length (current_omp_declare_variant_attribute))
+  만약 (vec_safe_length (current_omp_declare_variant_attribute))
     {
-      if (!errorcount)
+      만약 (!errorcount)
 	error ("%<omp begin declare variant%> without corresponding "
 	       "%<omp end declare variant%>");
       vec_safe_truncate (current_omp_declare_variant_attribute, 0);
     }
-  if (vec_safe_length (omp_begin_declare_variant_map))
+  만약 (vec_safe_length (omp_begin_declare_variant_map))
     {
-      unsigned int i;
+      unsigned 정수 i;
       omp_begin_declare_variant_map_entry *e;
       FOR_EACH_VEC_ELT (*omp_begin_declare_variant_map, i, e)
 	omp_finish_variant_function (e->variant, e->id, e->ctx);
       vec_safe_truncate (omp_begin_declare_variant_map, 0);
     }
 
-#if ENABLE_ANALYZER
-  if (flag_analyzer)
+#만약 ENABLE_ANALYZER
+  만약 (flag_analyzer)
     {
       ana::c_translation_unit tu;
       ana::on_finish_translation_unit (tu);
@@ -2194,7 +2194,7 @@ c_parser_translation_unit (c_parser *parser)
 static void
 c_parser_external_declaration (c_parser *parser)
 {
-  int ext;
+  정수 ext;
   switch (c_parser_peek_token (parser)->type)
     {
     case CPP_KEYWORD:
@@ -2259,7 +2259,7 @@ c_parser_external_declaration (c_parser *parser)
       break;
     case CPP_PLUS:
     case CPP_MINUS:
-      if (c_dialect_objc ())
+      만약 (c_dialect_objc ())
 	{
 	  c_parser_objc_method_definition (parser);
 	  break;
@@ -2290,8 +2290,8 @@ static void
 add_debug_begin_stmt (location_t loc)
 {
   /* Don't add DEBUG_BEGIN_STMTs outside of functions, see PR84721.  */
-  if (!MAY_HAVE_DEBUG_MARKER_STMTS || !building_stmt_list_p ())
-    return;
+  만약 (!MAY_HAVE_DEBUG_MARKER_STMTS || !building_stmt_list_p ())
+    반환;
 
   tree stmt = build0 (DEBUG_BEGIN_STMT, void_type_node);
   SET_EXPR_LOCATION (stmt, loc);
@@ -2304,25 +2304,25 @@ add_debug_begin_stmt (location_t loc)
 static tree
 handle_assume_attribute (location_t here, tree attrs, bool nested)
 {
-  if (nested)
-    for (tree attr = lookup_attribute ("gnu", "assume", attrs); attr;
+  만약 (nested)
+    위해 (tree attr = lookup_attribute ("gnu", "assume", attrs); attr;
 	 attr = lookup_attribute ("gnu", "assume", TREE_CHAIN (attr)))
       {
 	tree args = TREE_VALUE (attr);
-	int nargs = list_length (args);
-	if (nargs != 1)
+	정수 nargs = list_length (args);
+	만약 (nargs != 1)
 	  {
 	    error_at (here, "wrong number of arguments specified "
 			    "for %qE attribute",
 		      get_attribute_name (attr));
 	    inform (here, "expected %i, found %i", 1, nargs);
 	  }
-	else
+	아니면
 	  {
 	    tree arg = TREE_VALUE (args);
 	    arg = c_objc_common_truthvalue_conversion (here, arg);
 	    arg = c_fully_fold (arg, false, NULL);
-	    if (arg != error_mark_node)
+	    만약 (arg != error_mark_node)
 	      {
 		tree fn = build_call_expr_internal_loc (here, IFN_ASSUME,
 							void_type_node, 1,
@@ -2331,11 +2331,11 @@ handle_assume_attribute (location_t here, tree attrs, bool nested)
 	      }
 	  }
       }
-  else
+  아니면
     pedwarn (here, OPT_Wattributes,
 	     "%<assume%> attribute at top level");
 
-  return remove_attribute ("gnu", "assume", attrs);
+  반환 remove_attribute ("gnu", "assume", attrs);
 }
 
 /* We might need to reclassify any previously-lexed identifier, e.g.
@@ -2345,27 +2345,27 @@ handle_assume_attribute (location_t here, tree attrs, bool nested)
 static void
 c_parser_maybe_reclassify_token (c_parser *parser)
 {
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       c_token *token = c_parser_peek_token (parser);
 
-      if (token->id_kind == C_ID_ID || token->id_kind == C_ID_TYPENAME)
+      만약 (token->id_kind == C_ID_ID || token->id_kind == C_ID_TYPENAME)
 	{
 	  tree decl = lookup_name (token->value);
 
 	  token->id_kind = C_ID_ID;
-	  if (decl)
+	  만약 (decl)
 	    {
-	      if (TREE_CODE (decl) == TYPE_DECL)
+	      만약 (TREE_CODE (decl) == TYPE_DECL)
 		token->id_kind = C_ID_TYPENAME;
 	    }
-	  else if (c_dialect_objc ())
+	  아니면 만약 (c_dialect_objc ())
 	    {
 	      tree objc_interface_decl = objc_is_class_name (token->value);
 	      /* Objective-C class names are in the same namespace as
 		 variables and typedefs, and hence are shadowed by local
 		 declarations.  */
-	      if (objc_interface_decl)
+	      만약 (objc_interface_decl)
 		{
 		  token->value = objc_interface_decl;
 		  token->id_kind = C_ID_CLASSNAME;
@@ -2498,23 +2498,23 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 
   add_debug_begin_stmt (c_parser_peek_token (parser)->location);
 
-  if (static_assert_ok
+  만약 (static_assert_ok
       && c_parser_next_token_is_keyword (parser, RID_STATIC_ASSERT))
     {
       c_parser_static_assert_declaration (parser);
-      return result;
+      반환 result;
     }
   specs = build_null_declspecs ();
 
   /* Handle any standard attributes parsed in the caller.  */
-  if (have_attrs)
+  만약 (have_attrs)
     {
       declspecs_add_attrs (here, specs, attrs);
       specs->non_std_attrs_seen_p = false;
     }
 
   /* Try to detect an unknown type name when we have "A B" or "A *B".  */
-  if (c_parser_peek_token (parser)->type == CPP_NAME
+  만약 (c_parser_peek_token (parser)->type == CPP_NAME
       && c_parser_peek_token (parser)->id_kind == C_ID_ID
       && (c_parser_peek_2nd_token (parser)->type == CPP_NAME
           || c_parser_peek_2nd_token (parser)->type == CPP_MULT)
@@ -2527,7 +2527,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	 If the user forgot a "struct" etc, suggest inserting
 	 it.  Otherwise, attempt to look for misspellings.  */
       gcc_rich_location richloc (here);
-      if (tag_exists_p (RECORD_TYPE, name))
+      만약 (tag_exists_p (RECORD_TYPE, name))
 	{
 	  /* This is not C++ with its implicit typedef.  */
 	  richloc.add_fixit_insert_before ("struct ");
@@ -2536,7 +2536,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		    " use %<struct%> keyword to refer to the type",
 		    name);
 	}
-      else if (tag_exists_p (UNION_TYPE, name))
+      아니면 만약 (tag_exists_p (UNION_TYPE, name))
 	{
 	  richloc.add_fixit_insert_before ("union ");
 	  error_at (&richloc,
@@ -2544,7 +2544,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		    " use %<union%> keyword to refer to the type",
 		    name);
 	}
-      else if (tag_exists_p (ENUMERAL_TYPE, name))
+      아니면 만약 (tag_exists_p (ENUMERAL_TYPE, name))
 	{
 	  richloc.add_fixit_insert_before ("enum ");
 	  error_at (&richloc,
@@ -2552,19 +2552,19 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		    " use %<enum%> keyword to refer to the type",
 		    name);
 	}
-      else
+      아니면
 	{
 	  auto_diagnostic_group d;
 	  name_hint hint = lookup_name_fuzzy (name, FUZZY_LOOKUP_TYPENAME,
 					      here);
-	  if (const char *suggestion = hint.suggestion ())
+	  만약 (const char *suggestion = hint.suggestion ())
 	    {
 	      richloc.add_fixit_replace (suggestion);
 	      error_at (&richloc,
 			"unknown type name %qE; did you mean %qs?",
 			name, suggestion);
 	    }
-	  else
+	  아니면
 	    error_at (here, "unknown type name %qE", name);
 	}
 
@@ -2580,27 +2580,27 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
   /* When there are standard attributes at the start of the
      declaration (to apply to the entity being declared), an
      init-declarator-list or function definition must be present.  */
-  if (c_parser_nth_token_starts_std_attributes (parser, 1))
+  만약 (c_parser_nth_token_starts_std_attributes (parser, 1))
     have_attrs = true;
 
   c_parser_declspecs (parser, specs, true, true, start_attr_ok,
 		      true, true, start_attr_ok, true, cla_nonabstract_decl);
-  if (parser->error)
+  만약 (parser->error)
     {
       c_parser_skip_to_end_of_block_or_statement (parser);
-      return result;
+      반환 result;
     }
-  if (nested && !specs->declspecs_seen_p)
+  만약 (nested && !specs->declspecs_seen_p)
     {
       c_parser_error (parser, "expected declaration specifiers");
       c_parser_skip_to_end_of_block_or_statement (parser);
-      return result;
+      반환 result;
     }
 
   finish_declspecs (specs);
   /* When the decl is declared, its type is a top level type, we should
      call verify_counted_by_for_top_anonymous_type.  */
-  if (specs->typespec_kind == ctsk_tagdef)
+  만약 (specs->typespec_kind == ctsk_tagdef)
     verify_counted_by_for_top_anonymous_type (specs->type);
 
   bool gnu_auto_type_p = specs->typespec_word == cts_auto_type;
@@ -2608,7 +2608,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
   bool any_auto_type_p = gnu_auto_type_p || std_auto_type_p;
   gcc_assert (!(gnu_auto_type_p && std_auto_type_p));
   const char *auto_type_keyword = gnu_auto_type_p ? "__auto_type" : "auto";
-  if (specs->constexpr_p)
+  만약 (specs->constexpr_p)
     {
       /* An underspecified declaration may not declare tags or members
 	 or structures or unions; it is undefined behavior to declare
@@ -2635,68 +2635,68 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	}
     }
 
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
       bool handled_assume = false;
-      if (specs->attrs
+      만약 (specs->attrs
 	  && !nested
 	  && specs->typespec_kind == ctsk_none
 	  && c_parser_handle_statement_omp_attributes (parser, specs->attrs,
 						       NULL))
 	{
-	  if (specs->attrs)
+	  만약 (specs->attrs)
 	    c_warn_unused_attributes (specs->attrs);
-	  while (parser->in_omp_attribute_pragma)
+	  동안 (parser->in_omp_attribute_pragma)
 	    {
 	      gcc_assert (c_parser_next_token_is (parser, CPP_PRAGMA));
 	      c_parser_pragma (parser, pragma_external, NULL, NULL_TREE);
 	    }
 	  c_parser_consume_token (parser);
-	  return result;
+	  반환 result;
 	}
-      if (specs->typespec_kind == ctsk_none
+      만약 (specs->typespec_kind == ctsk_none
 	  && lookup_attribute ("gnu", "assume", specs->attrs))
 	{
 	  handled_assume = true;
 	  specs->attrs
 	    = handle_assume_attribute (here, specs->attrs, nested);
 	}
-      if (any_auto_type_p)
+      만약 (any_auto_type_p)
 	error_at (here, "%qs in empty declaration", auto_type_keyword);
-      else if (specs->typespec_kind == ctsk_none
+      아니면 만약 (specs->typespec_kind == ctsk_none
 	       && attribute_fallthrough_p (specs->attrs))
 	{
-	  if (fallthru_attr_p != NULL)
+	  만약 (fallthru_attr_p != NULL)
 	    *fallthru_attr_p = true;
-	  if (nested)
+	  만약 (nested)
 	    {
 	      tree fn = build_call_expr_internal_loc (here, IFN_FALLTHROUGH,
 						      void_type_node, 0);
 	      add_stmt (fn);
 	    }
-	  else
+	  아니면
 	    pedwarn (here, OPT_Wattributes,
 		     "%<fallthrough%> attribute at top level");
 	}
-      else if (empty_ok
+      아니면 만약 (empty_ok
 	       && !(have_attrs && specs->non_std_attrs_seen_p)
 	       && !handled_assume)
 	shadow_tag (specs);
-      else
+      아니면
 	{
 	  shadow_tag_warned (specs, 1);
-	  if (!handled_assume)
+	  만약 (!handled_assume)
 	    pedwarn (here, 0, "empty declaration");
 	}
       /* We still have to evaluate size expressions.  */
-      if (specs->expr)
+      만약 (specs->expr)
 	add_stmt (fold_convert (void_type_node, specs->expr));
       c_parser_consume_token (parser);
-      if (oacc_routine_data)
+      만약 (oacc_routine_data)
 	c_finish_oacc_routine (oacc_routine_data, NULL_TREE, false);
-      return result;
+      반환 result;
     }
-  else if (specs->typespec_kind == ctsk_none
+  아니면 만약 (specs->typespec_kind == ctsk_none
 	   && nested
 	   /* Only parse __attribute__((musttail)) when called from
 	      c_parser_compound_statement_nostart.  This certainly isn't
@@ -2707,9 +2707,9 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
     {
       attr_state astate = {};
       specs->attrs = c_parser_handle_musttail (parser, specs->attrs, astate);
-      if (astate.musttail_p)
+      만약 (astate.musttail_p)
 	{
-	  if (specs->attrs)
+	  만약 (specs->attrs)
 	    {
 	      auto_urlify_attributes sentinel;
 	      warning_at (c_parser_peek_token (parser)->location,
@@ -2719,13 +2719,13 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	    }
 	  c_parser_statement_after_labels (parser, NULL, NULL_TREE, NULL,
 					   astate);
-	  return result;
+	  반환 result;
 	}
     }
 
   /* Provide better error recovery.  Note that a type name here is usually
      better diagnosed as a redeclaration.  */
-  if (empty_ok
+  만약 (empty_ok
       && specs->typespec_kind == ctsk_tagdef
       && c_parser_next_token_starts_declspecs (parser)
       && !c_parser_next_token_is (parser, CPP_NAME))
@@ -2733,29 +2733,29 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
       c_parser_error (parser, "expected %<;%>, identifier or %<(%>");
       parser->error = false;
       shadow_tag_warned (specs, 1);
-      return result;
+      반환 result;
     }
-  else if (c_dialect_objc () && !any_auto_type_p)
+  아니면 만약 (c_dialect_objc () && !any_auto_type_p)
     {
       /* Prefix attributes are an error on method decls.  */
       switch (c_parser_peek_token (parser)->type)
 	{
 	  case CPP_PLUS:
 	  case CPP_MINUS:
-	    if (c_parser_objc_diagnose_bad_element_prefix (parser, specs))
-	      return result;
-	    if (specs->attrs)
+	    만약 (c_parser_objc_diagnose_bad_element_prefix (parser, specs))
+	      반환 result;
+	    만약 (specs->attrs)
 	      {
 		warning_at (c_parser_peek_token (parser)->location,
 			    OPT_Wattributes,
 	       		    "prefix attributes are ignored for methods");
 		specs->attrs = NULL_TREE;
 	      }
-	    if (fndef_ok)
+	    만약 (fndef_ok)
 	      c_parser_objc_method_definition (parser);
-	    else
+	    아니면
 	      c_parser_objc_methodproto (parser);
-	    return result;
+	    반환 result;
 	    break;
 	  default:
 	    break;
@@ -2769,17 +2769,17 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	{
 	case RID_AT_INTERFACE:
 	  {
-	    if (c_parser_objc_diagnose_bad_element_prefix (parser, specs))
-	      return result;
+	    만약 (c_parser_objc_diagnose_bad_element_prefix (parser, specs))
+	      반환 result;
 	    c_parser_objc_class_definition (parser, specs->attrs);
-	    return result;
+	    반환 result;
 	  }
 	  break;
 	case RID_AT_IMPLEMENTATION:
 	  {
-	    if (c_parser_objc_diagnose_bad_element_prefix (parser, specs))
-	      return result;
-	    if (specs->attrs)
+	    만약 (c_parser_objc_diagnose_bad_element_prefix (parser, specs))
+	      반환 result;
+	    만약 (specs->attrs)
 	      {
 		warning_at (c_parser_peek_token (parser)->location,
 			OPT_Wattributes,
@@ -2787,22 +2787,22 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		specs->attrs = NULL_TREE;
 	      }
 	    c_parser_objc_class_definition (parser, NULL_TREE);
-	    return result;
+	    반환 result;
 	  }
 	  break;
 	case RID_AT_PROTOCOL:
 	  {
-	    if (c_parser_objc_diagnose_bad_element_prefix (parser, specs))
-	      return result;
+	    만약 (c_parser_objc_diagnose_bad_element_prefix (parser, specs))
+	      반환 result;
 	    c_parser_objc_protocol_definition (parser, specs->attrs);
-	    return result;
+	    반환 result;
 	  }
 	  break;
 	case RID_AT_ALIAS:
 	case RID_AT_CLASS:
 	case RID_AT_END:
 	case RID_AT_PROPERTY:
-	  if (specs->attrs)
+	  만약 (specs->attrs)
 	    {
 	      c_parser_error (parser, "unexpected attribute");
 	      specs->attrs = NULL;
@@ -2812,10 +2812,10 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	  break;
 	}
     }
-  else if (attribute_fallthrough_p (specs->attrs))
+  아니면 만약 (attribute_fallthrough_p (specs->attrs))
     warning_at (here, OPT_Wattributes,
 		"%<fallthrough%> attribute not followed by %<;%>");
-  else if (lookup_attribute ("gnu", "assume", specs->attrs))
+  아니면 만약 (lookup_attribute ("gnu", "assume", specs->attrs))
     warning_at (here, OPT_Wattributes,
 		"%<assume%> attribute not followed by %<;%>");
 
@@ -2828,7 +2828,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
   all_prefix_attrs = prefix_attrs;
   specs->attrs = NULL_TREE;
   bool more_than_one_decl = false;
-  while (true)
+  동안 (true)
     {
       struct c_declarator *declarator;
       bool dummy = false;
@@ -2843,58 +2843,58 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
       declarator = c_parser_declarator (parser,
 					specs->typespec_kind != ctsk_none,
 					C_DTR_NORMAL, &dummy);
-      if (declarator == NULL)
+      만약 (declarator == NULL)
 	{
-	  if (omp_declare_simd_clauses)
+	  만약 (omp_declare_simd_clauses)
 	    c_finish_omp_declare_simd (parser, NULL_TREE, NULL_TREE,
 				       omp_declare_simd_clauses);
-	  if (oacc_routine_data)
+	  만약 (oacc_routine_data)
 	    c_finish_oacc_routine (oacc_routine_data, NULL_TREE, false);
 	  /* This check is here purely to improve the diagnostic.  */
-	  if (!simple_ok)
+	  만약 (!simple_ok)
 	    c_parser_skip_to_end_of_block_or_statement (parser);
-	  return result;
+	  반환 result;
 	}
-      if (flag_openmp || flag_openmp_simd)
+      만약 (flag_openmp || flag_openmp_simd)
 	{
 	  struct c_declarator *d = declarator;
-	  while (d->kind != cdk_id)
+	  동안 (d->kind != cdk_id)
 	    d = d->declarator;
 	  vec<c_token> *dummy = NULL;
 	  c_parser_handle_directive_omp_attributes (d->u.id.attrs, dummy,
 						    &omp_dsimd_idattr_clauses);
 	}
-      if (gnu_auto_type_p && declarator->kind != cdk_id)
+      만약 (gnu_auto_type_p && declarator->kind != cdk_id)
 	{
 	  error_at (here,
 		    "%<__auto_type%> requires a plain identifier"
 		    " as declarator");
 	  c_parser_skip_to_end_of_block_or_statement (parser);
-	  return result;
+	  반환 result;
 	}
-      if (std_auto_type_p)
+      만약 (std_auto_type_p)
 	{
 	  struct c_declarator *d = declarator;
-	  while (d->kind == cdk_attrs)
+	  동안 (d->kind == cdk_attrs)
 	    d = d->declarator;
-	  if (d->kind != cdk_id)
+	  만약 (d->kind != cdk_id)
 	    {
 	      error_at (here,
 			"%<auto%> requires a plain identifier, possibly with"
 			" attributes, as declarator");
 	      c_parser_skip_to_end_of_block_or_statement (parser);
-	      return result;
+	      반환 result;
 	    }
 	  underspec_name = d->u.id.id;
 	}
-      else if (specs->constexpr_p)
+      아니면 만약 (specs->constexpr_p)
 	{
 	  struct c_declarator *d = declarator;
-	  while (d->kind != cdk_id)
+	  동안 (d->kind != cdk_id)
 	    d = d->declarator;
 	  underspec_name = d->u.id.id;
 	}
-      if (c_parser_next_token_is (parser, CPP_EQ)
+      만약 (c_parser_next_token_is (parser, CPP_EQ)
 	  || c_parser_next_token_is (parser, CPP_COMMA)
 	  || c_parser_next_token_is (parser, CPP_SEMICOLON)
 	  || c_parser_next_token_is_keyword (parser, RID_ASM)
@@ -2903,7 +2903,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	{
 	  tree asm_name = NULL_TREE;
 	  tree postfix_attrs = NULL_TREE;
-	  if (!diagnosed_no_specs && !specs->declspecs_seen_p)
+	  만약 (!diagnosed_no_specs && !specs->declspecs_seen_p)
 	    {
 	      diagnosed_no_specs = true;
 	      pedwarn (here, 0, "data definition has no type or storage class");
@@ -2911,12 +2911,12 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	  /* Having seen a data definition, there cannot now be a
 	     function definition.  */
 	  fndef_ok = false;
-	  if (c_parser_next_token_is_keyword (parser, RID_ASM))
+	  만약 (c_parser_next_token_is_keyword (parser, RID_ASM))
 	    asm_name = c_parser_simple_asm_expr (parser);
-	  if (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
+	  만약 (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
 	    {
 	      postfix_attrs = c_parser_gnu_attributes (parser);
-	      if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+	      만약 (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 		{
 		  /* This means there is an attribute specifier after
 		     the declarator in a function definition.  Provide
@@ -2924,21 +2924,21 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		  error_at (here, "attributes should be specified before the "
 			    "declarator in a function definition");
 		  c_parser_skip_to_end_of_block_or_statement (parser);
-		  return result;
+		  반환 result;
 		}
 	    }
-	  if (c_parser_next_token_is (parser, CPP_EQ))
+	  만약 (c_parser_next_token_is (parser, CPP_EQ))
 	    {
 	      tree d;
 	      struct c_expr init;
 	      location_t init_loc;
 	      c_parser_consume_token (parser);
-	      if (any_auto_type_p)
+	      만약 (any_auto_type_p)
 		{
 		  init_loc = c_parser_peek_token (parser)->location;
 		  rich_location richloc (line_table, init_loc);
-		  unsigned int underspec_state = 0;
-		  if (std_auto_type_p)
+		  unsigned 정수 underspec_state = 0;
+		  만약 (std_auto_type_p)
 		    underspec_state =
 		      start_underspecified_init (init_loc, underspec_name);
 		  start_init (NULL_TREE, asm_name,
@@ -2949,14 +2949,14 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		  /* A parameter is initialized, which is invalid.  Don't
 		     attempt to instrument the initializer.  */
 		  sanitize_code_type flag_sanitize_save = flag_sanitize;
-		  if (nested && !empty_ok)
+		  만약 (nested && !empty_ok)
 		    flag_sanitize = 0;
 		  init = c_parser_expr_no_commas (parser, NULL);
-		  if (std_auto_type_p)
+		  만약 (std_auto_type_p)
 		    finish_underspecified_init (underspec_name,
 						underspec_state);
 		  flag_sanitize = flag_sanitize_save;
-		  if (gnu_auto_type_p
+		  만약 (gnu_auto_type_p
 		      && TREE_CODE (init.value) == COMPONENT_REF
 		      && DECL_C_BIT_FIELD (TREE_OPERAND (init.value, 1)))
 		    error_at (here,
@@ -2966,14 +2966,14 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 						   true);
 		  tree init_type = TREE_TYPE (init.value);
 		  bool vm_type = c_type_variably_modified_p (init_type);
-		  if (vm_type)
+		  만약 (vm_type)
 		    init.value = save_expr (init.value);
 		  finish_init ();
 		  specs->typespec_kind = ctsk_typeof;
 		  specs->locations[cdw_typedef] = init_loc;
 		  specs->typedef_p = true;
 		  specs->type = init_type;
-		  if (specs->postfix_attrs)
+		  만약 (specs->postfix_attrs)
 		    {
 		      /* Postfix [[]] attributes are valid with C23
 			 auto, although not with __auto_type, and
@@ -2984,51 +2984,51 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		      decl_attributes (&specs->type, specs->postfix_attrs, 0);
 		      specs->postfix_attrs = NULL_TREE;
 		    }
-		  if (vm_type)
+		  만약 (vm_type)
 		    {
 		      bool maybe_const = true;
 		      tree type_expr = c_fully_fold (init.value, false,
 						     &maybe_const);
 		      specs->expr_const_operands &= maybe_const;
-		      if (specs->expr)
+		      만약 (specs->expr)
 			specs->expr = build2 (COMPOUND_EXPR,
 					      TREE_TYPE (type_expr),
 					      specs->expr, type_expr);
-		      else
+		      아니면
 			specs->expr = type_expr;
 		    }
 		  d = start_decl (declarator, specs, true,
 				  chainon (postfix_attrs, all_prefix_attrs));
-		  if (!d)
+		  만약 (!d)
 		    d = error_mark_node;
-		  if (omp_declare_simd_clauses)
+		  만약 (omp_declare_simd_clauses)
 		    c_finish_omp_declare_simd (parser, d, NULL_TREE,
 					       omp_declare_simd_clauses);
-		  if (!omp_dsimd_idattr_clauses.is_empty ())
+		  만약 (!omp_dsimd_idattr_clauses.is_empty ())
 		    c_finish_omp_declare_simd (parser, d, NULL_TREE,
 					       &omp_dsimd_idattr_clauses);
 		}
-	      else
+	      아니면
 		{
 		  /* The declaration of the variable is in effect while
 		     its initializer is parsed, except for a constexpr
 		     variable.  */
 		  init_loc = c_parser_peek_token (parser)->location;
 		  rich_location richloc (line_table, init_loc);
-		  unsigned int underspec_state = 0;
-		  if (specs->constexpr_p)
+		  unsigned 정수 underspec_state = 0;
+		  만약 (specs->constexpr_p)
 		    underspec_state =
 		      start_underspecified_init (init_loc, underspec_name);
 		  d = start_decl (declarator, specs, true,
 				  chainon (postfix_attrs,
 					   all_prefix_attrs),
 				  !specs->constexpr_p);
-		  if (!d)
+		  만약 (!d)
 		    d = error_mark_node;
-		  if (!specs->constexpr_p && omp_declare_simd_clauses)
+		  만약 (!specs->constexpr_p && omp_declare_simd_clauses)
 		    c_finish_omp_declare_simd (parser, d, NULL_TREE,
 					       omp_declare_simd_clauses);
-		  if (!specs->constexpr_p
+		  만약 (!specs->constexpr_p
 		      && !omp_dsimd_idattr_clauses.is_empty ())
 		    c_finish_omp_declare_simd (parser, d, NULL_TREE,
 					       &omp_dsimd_idattr_clauses);
@@ -3038,28 +3038,28 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		  /* A parameter is initialized, which is invalid.  Don't
 		     attempt to instrument the initializer.  */
 		  sanitize_code_type flag_sanitize_save = flag_sanitize;
-		  if (TREE_CODE (d) == PARM_DECL)
+		  만약 (TREE_CODE (d) == PARM_DECL)
 		    flag_sanitize = 0;
 		  init = c_parser_initializer (parser, d);
 		  flag_sanitize = flag_sanitize_save;
-		  if (specs->constexpr_p)
+		  만약 (specs->constexpr_p)
 		    {
 		      finish_underspecified_init (underspec_name,
 						  underspec_state);
 		      d = pushdecl (d);
-		      if (omp_declare_simd_clauses)
+		      만약 (omp_declare_simd_clauses)
 			c_finish_omp_declare_simd (parser, d, NULL_TREE,
 						   omp_declare_simd_clauses);
-		  if (!specs->constexpr_p
+		  만약 (!specs->constexpr_p
 		      && !omp_dsimd_idattr_clauses.is_empty ())
 		    c_finish_omp_declare_simd (parser, d, NULL_TREE,
 					       &omp_dsimd_idattr_clauses);
 		    }
 		  finish_init ();
 		}
-	      if (oacc_routine_data)
+	      만약 (oacc_routine_data)
 		c_finish_oacc_routine (oacc_routine_data, d, false);
-	      if (d != error_mark_node)
+	      만약 (d != error_mark_node)
 		{
 		  maybe_warn_string_init (init_loc, TREE_TYPE (d), init);
 		  finish_decl (d, init_loc, init.value,
@@ -3067,29 +3067,29 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 		  result = d;
 		}
 	    }
-	  else
+	  아니면
 	    {
-	      if (any_auto_type_p || specs->constexpr_p)
+	      만약 (any_auto_type_p || specs->constexpr_p)
 		{
 		  error_at (here,
 			    "%qs requires an initialized data declaration",
 			    any_auto_type_p ? auto_type_keyword : "constexpr");
 		  c_parser_skip_to_end_of_block_or_statement (parser);
-		  return result;
+		  반환 result;
 		}
 
 	      location_t lastloc = UNKNOWN_LOCATION;
 	      tree attrs = chainon (postfix_attrs, all_prefix_attrs);
 	      tree d = start_decl (declarator, specs, false, attrs, true,
 				   &lastloc);
-	      if (d && TREE_CODE (d) == FUNCTION_DECL)
+	      만약 (d && TREE_CODE (d) == FUNCTION_DECL)
 		{
 		  /* Find the innermost declarator that is neither cdk_id
 		     nor cdk_attrs.  */
 		  const struct c_declarator *decl = declarator;
 		  const struct c_declarator *last_non_id_attrs = NULL;
 
-		  while (decl)
+		  동안 (decl)
 		    switch (decl->kind)
 		      {
 		      case cdk_array:
@@ -3113,129 +3113,129 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 
 		  /* If it exists and is cdk_function declaration whose
 		     arguments have not been set yet, use its arguments.  */
-		  if (last_non_id_attrs
+		  만약 (last_non_id_attrs
 		      && last_non_id_attrs->kind == cdk_function)
 		    {
 		      tree parms = last_non_id_attrs->u.arg_info->parms;
-		      if (DECL_ARGUMENTS (d) == NULL_TREE
+		      만약 (DECL_ARGUMENTS (d) == NULL_TREE
 			  && DECL_INITIAL (d) == NULL_TREE)
 			DECL_ARGUMENTS (d) = parms;
 
 		      warn_parms_array_mismatch (lastloc, d, parms);
 		    }
 		}
-	      if (omp_declare_simd_clauses
+	      만약 (omp_declare_simd_clauses
 		  || !omp_dsimd_idattr_clauses.is_empty ())
 		{
 		  tree parms = NULL_TREE;
-		  if (d && TREE_CODE (d) == FUNCTION_DECL)
+		  만약 (d && TREE_CODE (d) == FUNCTION_DECL)
 		    {
 		      struct c_declarator *ce = declarator;
-		      while (ce != NULL)
-			if (ce->kind == cdk_function)
+		      동안 (ce != NULL)
+			만약 (ce->kind == cdk_function)
 			  {
 			    parms = ce->u.arg_info->parms;
 			    break;
 			  }
-			else
+			아니면
 			  ce = ce->declarator;
 		    }
-		  if (parms)
+		  만약 (parms)
 		    temp_store_parm_decls (d, parms);
-		  if (omp_declare_simd_clauses)
+		  만약 (omp_declare_simd_clauses)
 		    c_finish_omp_declare_simd (parser, d, parms,
 					       omp_declare_simd_clauses);
-		  if (!specs->constexpr_p
+		  만약 (!specs->constexpr_p
 		      && !omp_dsimd_idattr_clauses.is_empty ())
 		    c_finish_omp_declare_simd (parser, d, parms,
 					       &omp_dsimd_idattr_clauses);
-		  if (parms)
+		  만약 (parms)
 		    temp_pop_parm_decls ();
 		}
-	      if (oacc_routine_data)
+	      만약 (oacc_routine_data)
 		c_finish_oacc_routine (oacc_routine_data, d, false);
-	      if (d)
+	      만약 (d)
 		finish_decl (d, UNKNOWN_LOCATION, NULL_TREE,
 			     NULL_TREE, asm_name);
 
-	      if (c_parser_next_token_is_keyword (parser, RID_IN))
+	      만약 (c_parser_next_token_is_keyword (parser, RID_IN))
 		{
-		  if (d)
+		  만약 (d)
 		    *objc_foreach_object_declaration = d;
-		  else
+		  아니면
 		    *objc_foreach_object_declaration = error_mark_node;
 		}
 	    }
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    {
 	      more_than_one_decl = true;
-	      if (any_auto_type_p || specs->constexpr_p)
+	      만약 (any_auto_type_p || specs->constexpr_p)
 		{
 		  error_at (here,
 			    "%qs may only be used with a single declarator",
 			    any_auto_type_p ? auto_type_keyword : "constexpr");
 		  c_parser_skip_to_end_of_block_or_statement (parser);
-		  return result;
+		  반환 result;
 		}
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
+	      만약 (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
 		all_prefix_attrs = chainon (c_parser_gnu_attributes (parser),
 					    prefix_attrs);
-	      else
+	      아니면
 		all_prefix_attrs = prefix_attrs;
 	      continue;
 	    }
-	  else if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+	  아니면 만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	    {
-	      if (!simple_ok)
+	      만약 (!simple_ok)
 		c_parser_consume_token (parser);
-	      return result;
+	      반환 result;
 	    }
-	  else if (c_parser_next_token_is_keyword (parser, RID_IN))
+	  아니면 만약 (c_parser_next_token_is_keyword (parser, RID_IN))
 	    {
 	      /* This can only happen in Objective-C: we found the
 		 'in' that terminates the declaration inside an
 		 Objective-C foreach statement.  Do not consume the
 		 token, so that the caller can use it to determine
 		 that this indeed is a foreach context.  */
-	      return result;
+	      반환 result;
 	    }
-	  else
+	  아니면
 	    {
-	      if (!simple_ok)
+	      만약 (!simple_ok)
 		{
 		  c_parser_error (parser, "expected %<,%> or %<;%>");
 		  c_parser_skip_to_end_of_block_or_statement (parser);
 		}
 	      /* It's not valid to use if (int i = 2, j = 3).  */
-	      else if (more_than_one_decl)
+	      아니면 만약 (more_than_one_decl)
 		error_at (here, "declaration in condition can only declare "
 			  "a single object");
-	      return result;
+	      반환 result;
 	    }
 	}
-      else if (any_auto_type_p || specs->constexpr_p)
+      아니면 만약 (any_auto_type_p || specs->constexpr_p)
 	{
 	  error_at (here,
 		    "%qs requires an initialized data declaration",
 		    any_auto_type_p ? auto_type_keyword : "constexpr");
 	  c_parser_skip_to_end_of_block_or_statement (parser);
-	  return result;
+	  반환 result;
 	}
-      else if (!fndef_ok)
+      아니면 만약 (!fndef_ok)
 	{
-	  if (simple_ok && c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	  만약 (simple_ok && c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	    /* Let c_parser_selection_header emit the error.  */;
-	  else
+	  아니면
 	    {
 	      c_parser_error (parser, "expected %<=%>, %<,%>, %<;%>, "
 			      "%<asm%> or %<__attribute__%>");
 	      c_parser_skip_to_end_of_block_or_statement (parser);
 	    }
-	  return result;
+	  반환 result;
 	}
       /* Function definition (nested or otherwise).  */
-      if (nested)
+      만약 (nested)
 	{
 	  pedwarn (here, OPT_Wpedantic, "ISO C forbids nested functions");
 	  c_push_function_context ();
@@ -3247,7 +3247,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	 name for the variant function instead.  */
       tree dv_base = NULL_TREE;
       tree dv_ctx = NULL_TREE;
-      if (!vec_safe_is_empty (current_omp_declare_variant_attribute))
+      만약 (!vec_safe_is_empty (current_omp_declare_variant_attribute))
 	{
 	  c_omp_declare_variant_attr a
 	    = current_omp_declare_variant_attribute->last ();
@@ -3255,7 +3255,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	  dv_base = omp_start_variant_function (declarator, dv_ctx);
 	}
 
-      if (!start_function (specs, declarator, all_prefix_attrs))
+      만약 (!start_function (specs, declarator, all_prefix_attrs))
 	{
 	  /* At this point we've consumed:
 	       declaration-specifiers declarator
@@ -3266,7 +3266,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	     aren't grokkable as a function definition, so we have
 	     an error.  */
 	  gcc_assert (!c_parser_next_token_is (parser, CPP_SEMICOLON));
-	  if (c_parser_next_token_starts_declspecs (parser))
+	  만약 (c_parser_next_token_starts_declspecs (parser))
 	    {
 	      /* If we have
 		   declaration-specifiers declarator decl-specs
@@ -3280,7 +3280,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	      c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>");
 	      parser->error = false;
 	    }
-	  else
+	  아니면
 	    {
 	      /* This can appear in many cases looking nothing like a
 		 function definition, so we don't give a more specific
@@ -3288,14 +3288,14 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	      c_parser_error (parser, "expected %<=%>, %<,%>, %<;%>, %<asm%> "
 			      "or %<__attribute__%>");
 	    }
-	  if (nested)
+	  만약 (nested)
 	    c_pop_function_context ();
 	  break;
 	}
 
-      if (DECL_DECLARED_INLINE_P (current_function_decl))
+      만약 (DECL_DECLARED_INLINE_P (current_function_decl))
         tv = TV_PARSE_INLINE;
-      else
+      아니면
         tv = TV_PARSE_FUNC;
       auto_timevar at (g_timer, tv);
 
@@ -3311,22 +3311,22 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	 declarator with a nonempty identifier list in a definition;
 	 and postfix attributes have never been accepted here in
 	 function definitions either.  */
-      int save_debug_nonbind_markers_p = debug_nonbind_markers_p;
+      정수 save_debug_nonbind_markers_p = debug_nonbind_markers_p;
       debug_nonbind_markers_p = 0;
       c_parser_maybe_reclassify_token (parser);
-      while (c_parser_next_token_is_not (parser, CPP_EOF)
+      동안 (c_parser_next_token_is_not (parser, CPP_EOF)
 	     && c_parser_next_token_is_not (parser, CPP_OPEN_BRACE))
 	c_parser_declaration_or_fndef (parser, false, false, false,
 				       true, false, false);
       debug_nonbind_markers_p = save_debug_nonbind_markers_p;
       store_parm_decls ();
-      if (omp_declare_simd_clauses)
+      만약 (omp_declare_simd_clauses)
 	c_finish_omp_declare_simd (parser, current_function_decl, NULL_TREE,
 				   omp_declare_simd_clauses);
-      if (!omp_dsimd_idattr_clauses.is_empty ())
+      만약 (!omp_dsimd_idattr_clauses.is_empty ())
 	c_finish_omp_declare_simd (parser, current_function_decl, NULL_TREE,
 				   &omp_dsimd_idattr_clauses);
-      if (oacc_routine_data)
+      만약 (oacc_routine_data)
 	c_finish_oacc_routine (oacc_routine_data, current_function_decl, true);
       location_t startloc = c_parser_peek_token (parser)->location;
       DECL_STRUCT_FUNCTION (current_function_decl)->function_start_locus
@@ -3336,7 +3336,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	 remember it.  We will associate it with the base function at
 	 the end of processing the translation unit, since it is permitted
 	 for the variant definition to appear before the base declaration.  */
-      if (dv_base && current_function_decl != error_mark_node)
+      만약 (dv_base && current_function_decl != error_mark_node)
 	{
 	  omp_begin_declare_variant_map_entry e
 	    = { current_function_decl, dv_base, dv_ctx };
@@ -3345,7 +3345,7 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 
       /* If the definition was marked with __RTL, use the RTL parser now,
 	 consuming the function body.  */
-      if (specs->declspec_il == cdil_rtl)
+      만약 (specs->declspec_il == cdil_rtl)
 	{
 	  endloc = c_parser_parse_rtl_body (parser, specs->gimple_or_rtl_pass);
 
@@ -3357,11 +3357,11 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	  pop_scope ();
 
 	  finish_function (endloc);
-	  return result;
+	  반환 result;
 	}
       /* If the definition was marked with __GIMPLE then parse the
          function body as GIMPLE.  */
-      else if (specs->declspec_il != cdil_none)
+      아니면 만약 (specs->declspec_il != cdil_none)
 	{
 	  bool saved = in_late_binary_op;
 	  in_late_binary_op = true;
@@ -3370,10 +3370,10 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 				      specs->entry_bb_count);
 	  in_late_binary_op = saved;
 	}
-      else
+      아니면
 	fnbody = c_parser_compound_statement (parser, &endloc);
       tree fndecl = current_function_decl;
-      if (nested && specs->declspec_il == cdil_none)
+      만약 (nested && specs->declspec_il == cdil_none)
 	{
 	  tree decl = current_function_decl;
 	  /* Mark nested functions as needing static-chain initially.
@@ -3386,29 +3386,29 @@ c_parser_declaration_or_fndef (c_parser *parser, bool fndef_ok,
 	  c_pop_function_context ();
 	  add_stmt (build_stmt (DECL_SOURCE_LOCATION (decl), DECL_EXPR, decl));
 	}
-      else if (nested)
+      아니면 만약 (nested)
 	{
-	  if (specs->declspec_il == cdil_rtl)
+	  만약 (specs->declspec_il == cdil_rtl)
 	    error ("%<__RTL%> function cannot be a nested function");
-	  else
+	  아니면
 	    error ("%<__GIMPLE%> function cannot be a nested function");
 	  finish_function (endloc);
 	  c_pop_function_context ();
 	}
-      else
+      아니면
 	{
-	  if (fnbody)
+	  만약 (fnbody)
 	    add_stmt (fnbody);
 	  finish_function (endloc);
 	}
       /* Get rid of the empty stmt list for GIMPLE/RTL.  */
-      if (specs->declspec_il != cdil_none)
+      만약 (specs->declspec_il != cdil_none)
 	DECL_SAVED_TREE (fndecl) = NULL_TREE;
 
       break;
     }
 
-  return result;
+  반환 result;
 }
 
 /* Parse an asm-definition (asm() outside a function body).  This is a
@@ -3434,20 +3434,20 @@ c_parser_asm_definition (c_parser *parser)
   matching_parens parens;
   tree asm_str = NULL_TREE;
   tree outputs = NULL_TREE, inputs = NULL_TREE;
-  if (!parens.require_open (parser))
+  만약 (!parens.require_open (parser))
     goto done;
   asm_str = c_parser_asm_string_literal (parser);
-  if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
     {
       parens.require_close (parser);
       goto done;
     }
-  for (int section = 0; section < 2; ++section)
+  위해 (정수 section = 0; section < 2; ++section)
     {
-      if (c_parser_next_token_is (parser, CPP_SCOPE))
+      만약 (c_parser_next_token_is (parser, CPP_SCOPE))
 	{
 	  ++section;
-	  if (section == 2)
+	  만약 (section == 2)
 	    {
 	      c_parser_error (parser, "expected %<)%>");
 	    error_close_paren:
@@ -3457,34 +3457,34 @@ c_parser_asm_definition (c_parser *parser)
 	    }
 	  c_parser_consume_token (parser);
 	}
-      else if (!c_parser_require (parser, CPP_COLON,
+      아니면 만약 (!c_parser_require (parser, CPP_COLON,
 				  "expected %<:%> or %<)%>",
 				  UNKNOWN_LOCATION, false))
 	goto error_close_paren;
-      if (!c_parser_next_token_is (parser, CPP_COLON)
+      만약 (!c_parser_next_token_is (parser, CPP_COLON)
 	  && !c_parser_next_token_is (parser, CPP_SCOPE)
 	  && !c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	{
-	  if (section)
+	  만약 (section)
 	    inputs = c_parser_asm_operands (parser);
-	  else
+	  아니면
 	    outputs = c_parser_asm_operands (parser);
 	}
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	break;
     }
 
-  if (!parens.require_close (parser))
+  만약 (!parens.require_close (parser))
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
       asm_str = NULL_TREE;
     }
 
-  if (asm_str)
+  만약 (asm_str)
     asm_str = build_asm_expr (asm_loc, asm_str, outputs, inputs,
 			      NULL_TREE, NULL_TREE, false, false);
 done:
-  if (asm_str)
+  만약 (asm_str)
     symtab->finalize_toplevel_asm (asm_str);
   c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
 }
@@ -3499,7 +3499,7 @@ static void
 c_parser_static_assert_declaration (c_parser *parser)
 {
   c_parser_static_assert_declaration_no_semi (parser);
-  if (parser->error
+  만약 (parser->error
       || !c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
     c_parser_skip_to_end_of_block_or_statement (parser);
 }
@@ -3525,22 +3525,22 @@ c_parser_static_assert_declaration_no_semi (c_parser *parser)
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_STATIC_ASSERT));
   tree spelling = c_parser_peek_token (parser)->value;
   assert_loc = c_parser_peek_token (parser)->location;
-  if (flag_isoc99)
+  만약 (flag_isoc99)
     pedwarn_c99 (assert_loc, OPT_Wpedantic,
 		 "ISO C99 does not support %qE", spelling);
-  else
+  아니면
     pedwarn_c99 (assert_loc, OPT_Wpedantic,
 		 "ISO C90 does not support %qE", spelling);
   c_parser_consume_token (parser);
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return;
+  만약 (!parens.require_open (parser))
+    반환;
   location_t value_tok_loc = c_parser_peek_token (parser)->location;
   value = convert_lvalue_to_rvalue (value_tok_loc,
 				    c_parser_expr_no_commas (parser, NULL),
 				    true, true).value;
   value_loc = EXPR_LOC_OR_LOC (value, value_tok_loc);
-  if (c_parser_next_token_is (parser, CPP_COMMA))
+  만약 (c_parser_next_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
       switch (c_parser_peek_token (parser)->type)
@@ -3554,10 +3554,10 @@ c_parser_static_assert_declaration_no_semi (c_parser *parser)
 	  break;
 	default:
 	  c_parser_error (parser, "expected string literal");
-	  return;
+	  반환;
 	}
     }
-  else if (flag_isoc11)
+  아니면 만약 (flag_isoc11)
     /* If pedantic for pre-C11, the use of _Static_assert itself will
        have been diagnosed, so do not also diagnose the use of this
        new C23 feature of _Static_assert.  */
@@ -3566,31 +3566,31 @@ c_parser_static_assert_declaration_no_semi (c_parser *parser)
 		 "%qE", spelling);
   parens.require_close (parser);
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (value)))
+  만약 (!INTEGRAL_TYPE_P (TREE_TYPE (value)))
     {
       error_at (value_loc, "expression in static assertion is not an integer");
-      return;
+      반환;
     }
-  if (TREE_CODE (value) != INTEGER_CST)
+  만약 (TREE_CODE (value) != INTEGER_CST)
     {
       value = c_fully_fold (value, false, NULL);
       /* Strip no-op conversions.  */
       STRIP_TYPE_NOPS (value);
-      if (TREE_CODE (value) == INTEGER_CST)
+      만약 (TREE_CODE (value) == INTEGER_CST)
 	pedwarn (value_loc, OPT_Wpedantic, "expression in static assertion "
 		 "is not an integer constant expression");
     }
-  if (TREE_CODE (value) != INTEGER_CST)
+  만약 (TREE_CODE (value) != INTEGER_CST)
     {
       error_at (value_loc, "expression in static assertion is not constant");
-      return;
+      반환;
     }
   constant_expression_warning (value);
-  if (integer_zerop (value))
+  만약 (integer_zerop (value))
     {
-      if (string)
+      만약 (string)
 	error_at (assert_loc, "static assertion failed: %E", string);
-      else
+      아니면
 	error_at (assert_loc, "static assertion failed");
     }
 }
@@ -3723,10 +3723,10 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
   bool attrs_ok = start_attr_ok;
   bool seen_type = specs->typespec_kind != ctsk_none;
 
-  if (!typespec_ok)
+  만약 (!typespec_ok)
     gcc_assert (la == cla_prefer_id);
 
-  if (start_std_attr_ok
+  만약 (start_std_attr_ok
       && c_parser_nth_token_starts_std_attributes (parser, 1))
     {
       gcc_assert (!specs->non_std_attrs_seen_p);
@@ -3736,7 +3736,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
       specs->non_std_attrs_seen_p = false;
     }
 
-  while (c_parser_next_token_is (parser, CPP_NAME)
+  동안 (c_parser_next_token_is (parser, CPP_NAME)
 	 || c_parser_next_token_is (parser, CPP_KEYWORD)
 	 || (c_dialect_objc () && c_parser_next_token_is (parser, CPP_LESS)))
     {
@@ -3749,19 +3749,19 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	 one.  Also, if we already have seen a tagged definition,
 	 a typename would be an error anyway and likely the user
 	 has simply forgotten a semicolon, so we exit.  */
-      if ((!typespec_ok || specs->typespec_kind == ctsk_tagdef)
+      만약 ((!typespec_ok || specs->typespec_kind == ctsk_tagdef)
 	  && c_parser_next_tokens_start_typename (parser, la)
 	  && !c_parser_next_token_is_qualifier (parser)
 	  && !c_parser_next_token_is_keyword (parser, RID_ALIGNAS))
 	break;
 
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_token *name_token = c_parser_peek_token (parser);
 	  tree value = name_token->value;
 	  c_id_kind kind = name_token->id_kind;
 
-	  if (kind == C_ID_ADDRSPACE)
+	  만약 (kind == C_ID_ADDRSPACE)
 	    {
 	      addr_space_t as
 		= name_token->keyword - RID_FIRST_ADDR_SPACE;
@@ -3777,7 +3777,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	     exit.  Do the same if we already have seen a tagged definition,
 	     since it would be an error anyway and likely the user has simply
 	     forgotten a semicolon.  */
-	  if (seen_type || !c_parser_next_tokens_start_typename (parser, la))
+	  만약 (seen_type || !c_parser_next_tokens_start_typename (parser, la))
 	    break;
 
 	  /* Now at an unknown typename (C_ID_ID), a C_ID_TYPENAME or
@@ -3785,12 +3785,12 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	  c_parser_consume_token (parser);
 	  seen_type = true;
 	  attrs_ok = true;
-	  if (kind == C_ID_ID)
+	  만약 (kind == C_ID_ID)
 	    {
 	      auto_diagnostic_group d;
 	      name_hint hint = lookup_name_fuzzy (value, FUZZY_LOOKUP_TYPENAME,
 						  loc);
-	      if (const char *suggestion = hint.suggestion ())
+	      만약 (const char *suggestion = hint.suggestion ())
 		{
 		  gcc_rich_location richloc (loc);
 		  richloc.add_fixit_replace (suggestion);
@@ -3798,12 +3798,12 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 			    "unknown type name %qE; did you mean %qs?",
 			    value, suggestion);
 		}
-	      else
+	      아니면
 		error_at (loc, "unknown type name %qE", value);
 	      t.kind = ctsk_typedef;
 	      t.spec = error_mark_node;
 	    }
-	  else if (kind == C_ID_TYPENAME
+	  아니면 만약 (kind == C_ID_TYPENAME
 	           && (!c_dialect_objc ()
 	               || c_parser_next_token_is_not (parser, CPP_LESS)))
 	    {
@@ -3812,12 +3812,12 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 		 In case of 'foo foo, bar;'.  */
 	      t.spec = lookup_name (value);
 	    }
-	  else
+	  아니면
 	    {
 	      tree proto = NULL_TREE;
 	      gcc_assert (c_dialect_objc ());
 	      t.kind = ctsk_objc;
-	      if (c_parser_next_token_is (parser, CPP_LESS))
+	      만약 (c_parser_next_token_is (parser, CPP_LESS))
 		proto = c_parser_objc_protocol_refs (parser);
 	      t.spec = objc_get_protocol_qualified_type (value, proto);
 	    }
@@ -3827,13 +3827,13 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	  declspecs_add_type (name_token->location, specs, t);
 	  continue;
 	}
-      if (c_parser_next_token_is (parser, CPP_LESS))
+      만약 (c_parser_next_token_is (parser, CPP_LESS))
 	{
 	  /* Make "<SomeProtocol>" equivalent to "id <SomeProtocol>" -
 	     nisse@lysator.liu.se.  */
 	  tree proto;
 	  gcc_assert (c_dialect_objc ());
-	  if (!typespec_ok || seen_type)
+	  만약 (!typespec_ok || seen_type)
 	    break;
 	  proto = c_parser_objc_protocol_refs (parser);
 	  t.kind = ctsk_objc;
@@ -3856,7 +3856,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	case RID_AUTO:
 	case RID_THREAD:
 	case RID_CONSTEXPR:
-	  if (!scspec_ok)
+	  만약 (!scspec_ok)
 	    goto out;
 	  attrs_ok = true;
 	  /* TODO: Distinguish between function specifiers (inline, noreturn)
@@ -3867,7 +3867,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	  c_parser_consume_token (parser);
 	  break;
 	case RID_AUTO_TYPE:
-	  if (!auto_type_ok)
+	  만약 (!auto_type_ok)
 	    goto out;
 	  /* Fall through.  */
 	case RID_UNSIGNED:
@@ -3893,11 +3893,11 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	case RID_INT_N_1:
 	case RID_INT_N_2:
 	case RID_INT_N_3:
-	  if (!typespec_ok)
+	  만약 (!typespec_ok)
 	    goto out;
 	  attrs_ok = true;
 	  seen_type = true;
-	  if (c_dialect_objc ())
+	  만약 (c_dialect_objc ())
 	    parser->objc_need_raw_identifier = true;
 	  t.kind = ctsk_resword;
 	  t.spec = c_parser_peek_token (parser)->value;
@@ -3908,7 +3908,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	  c_parser_consume_token (parser);
 	  break;
 	case RID_ENUM:
-	  if (!typespec_ok)
+	  만약 (!typespec_ok)
 	    goto out;
 	  attrs_ok = true;
 	  seen_type = true;
@@ -3918,7 +3918,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	  break;
 	case RID_STRUCT:
 	case RID_UNION:
-	  if (!typespec_ok)
+	  만약 (!typespec_ok)
 	    goto out;
 	  attrs_ok = true;
 	  seen_type = true;
@@ -3931,7 +3931,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	  /* ??? The old parser rejected typeof after other type
 	     specifiers, but is a syntax error the best way of
 	     handling this?  */
-	  if (!typespec_ok || seen_type)
+	  만약 (!typespec_ok || seen_type)
 	    goto out;
 	  attrs_ok = true;
 	  seen_type = true;
@@ -3939,9 +3939,9 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	  declspecs_add_type (loc, specs, t);
 	  break;
 	case RID_BITINT:
-	  if (!typespec_ok)
+	  만약 (!typespec_ok)
 	    goto out;
-	  else
+	  아니면
 	    {
 	      attrs_ok = true;
 	      seen_type = true;
@@ -3952,7 +3952,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	      t.has_enum_type_specifier = false;
 	      c_parser_consume_token (parser);
 	      matching_parens parens;
-	      if (parens.require_open (parser))
+	      만약 (parens.require_open (parser))
 		{
 		  c_expr expr = c_parser_expr_no_commas (parser, NULL);
 		  t.expr = convert_lvalue_to_rvalue (loc, expr, true,
@@ -3970,19 +3970,19 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	     Objective-C cases for increment / decrement, also needs
 	     updating; uses of TYPE_MAIN_VARIANT in objc_compare_types
 	     and objc_types_are_equivalent may also need updates.  */
-	  if (c_dialect_objc ())
+	  만약 (c_dialect_objc ())
 	    sorry ("%<_Atomic%> in Objective-C");
-	  if (flag_isoc99)
+	  만약 (flag_isoc99)
 	    pedwarn_c99 (loc, OPT_Wpedantic,
 			 "ISO C99 does not support the %<_Atomic%> qualifier");
-	  else
+	  아니면
 	    pedwarn_c99 (loc, OPT_Wpedantic,
 			 "ISO C90 does not support the %<_Atomic%> qualifier");
 	  attrs_ok = true;
 	  tree value;
 	  value = c_parser_peek_token (parser)->value;
 	  c_parser_consume_token (parser);
-	  if (typespec_ok && c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+	  만약 (typespec_ok && c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	    {
 	      /* _Atomic ( type-name ).  */
 	      seen_type = true;
@@ -3993,25 +3993,25 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	      t.expr = NULL_TREE;
 	      t.expr_const_operands = true;
 	      t.has_enum_type_specifier = false;
-	      if (type != NULL)
+	      만약 (type != NULL)
 		t.spec = groktypename (type, &t.expr,
 				       &t.expr_const_operands);
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					 "expected %<)%>");
-	      if (t.spec != error_mark_node)
+	      만약 (t.spec != error_mark_node)
 		{
-		  if (TREE_CODE (t.spec) == ARRAY_TYPE)
+		  만약 (TREE_CODE (t.spec) == ARRAY_TYPE)
 		    error_at (loc, "%<_Atomic%>-qualified array type");
-		  else if (TREE_CODE (t.spec) == FUNCTION_TYPE)
+		  아니면 만약 (TREE_CODE (t.spec) == FUNCTION_TYPE)
 		    error_at (loc, "%<_Atomic%>-qualified function type");
-		  else if (TYPE_QUALS (t.spec) != TYPE_UNQUALIFIED)
+		  아니면 만약 (TYPE_QUALS (t.spec) != TYPE_UNQUALIFIED)
 		    error_at (loc, "%<_Atomic%> applied to a qualified type");
-		  else
+		  아니면
 		    t.spec = c_build_qualified_type (t.spec, TYPE_QUAL_ATOMIC);
 		}
 	      declspecs_add_type (loc, specs, t);
 	    }
-	  else
+	  아니면
 	    declspecs_add_qual (loc, specs, value);
 	  break;
 	case RID_CONST:
@@ -4022,19 +4022,19 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	  c_parser_consume_token (parser);
 	  break;
 	case RID_ATTRIBUTE:
-	  if (!attrs_ok)
+	  만약 (!attrs_ok)
 	    goto out;
 	  attrs = c_parser_gnu_attributes (parser);
 	  declspecs_add_attrs (loc, specs, attrs);
 	  break;
 	case RID_ALIGNAS:
-	  if (!alignspec_ok)
+	  만약 (!alignspec_ok)
 	    goto out;
 	  align = c_parser_alignas_specifier (parser);
 	  declspecs_add_alignas (loc, specs, align);
 	  break;
 	case RID_GIMPLE:
-	  if (! flag_gimple)
+	  만약 (! flag_gimple)
 	    error_at (loc, "%<__GIMPLE%> only valid with %<-fgimple%>");
 	  c_parser_consume_token (parser);
 	  specs->declspec_il = cdil_gimple;
@@ -4052,7 +4052,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 	}
     }
  out:
-  if (end_std_attr_ok
+  만약 (end_std_attr_ok
       && c_parser_nth_token_starts_std_attributes (parser, 1))
     specs->postfix_attrs = c_parser_std_attribute_specifier_sequence (parser);
 }
@@ -4062,7 +4062,7 @@ c_parser_declspecs (c_parser *parser, struct c_declspecs *specs,
 static void
 report_bad_enum_name (c_parser *parser)
 {
-  if (!parser->error)
+  만약 (!parser->error)
     {
       c_token *token = c_parser_peek_token (parser);
       switch (token->type)
@@ -4074,11 +4074,11 @@ report_bad_enum_name (c_parser *parser)
 	  error_at (token->location,
 		    "empty enum is invalid");
 	  parser->error = true;
-	  return;
+	  반환;
 	case CPP_KEYWORD:
 	  /* Give a nicer error for attempts to use "true" and "false"
 	     in enums with C23 onwards.  */
-	  if (token->keyword == RID_FALSE
+	  만약 (token->keyword == RID_FALSE
 	      || token->keyword == RID_TRUE)
 	    {
 	      auto_diagnostic_group d;
@@ -4088,7 +4088,7 @@ report_bad_enum_name (c_parser *parser)
 	      add_note_about_new_keyword (token->location,
 					  token->value);
 	      parser->error = true;
-	      return;
+	      반환;
 	    }
 	  break;
 	}
@@ -4149,20 +4149,20 @@ c_parser_enum_specifier (c_parser *parser)
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_ENUM));
   c_parser_consume_token (parser);
   have_std_attrs = c_parser_nth_token_starts_std_attributes (parser, 1);
-  if (have_std_attrs)
+  만약 (have_std_attrs)
     std_attrs = c_parser_std_attribute_specifier_sequence (parser);
   attrs = c_parser_gnu_attributes (parser);
   enum_loc = c_parser_peek_token (parser)->location;
   /* Set the location in case we create a decl now.  */
   c_parser_set_source_position_from_token (c_parser_peek_token (parser));
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       ident = c_parser_peek_token (parser)->value;
       ident_loc = c_parser_peek_token (parser)->location;
       enum_loc = ident_loc;
       c_parser_consume_token (parser);
     }
-  if (c_parser_next_token_is (parser, CPP_COLON)
+  만약 (c_parser_next_token_is (parser, CPP_COLON)
       /* Distinguish an enum-type-specifier from a bit-field
 	 declaration of the form "enum e : constant-expression;".  */
       && c_token_starts_typename (c_parser_peek_2nd_token (parser)))
@@ -4170,18 +4170,18 @@ c_parser_enum_specifier (c_parser *parser)
       pedwarn_c11 (enum_loc, OPT_Wpedantic,
 		   "ISO C does not support specifying %<enum%> underlying "
 		   "types before C23");
-      if (ident)
+      만약 (ident)
 	{
 	  /* The tag is in scope during the enum-type-specifier (which
 	     may refer to the tag inside typeof).  */
 	  ret = parser_xref_tag (ident_loc, ENUMERAL_TYPE, ident,
 				 have_std_attrs, std_attrs, true);
-	  if (!ENUM_FIXED_UNDERLYING_TYPE_P (ret.spec))
+	  만약 (!ENUM_FIXED_UNDERLYING_TYPE_P (ret.spec))
 	    error_at (enum_loc, "%<enum%> declared both with and without "
 		      "fixed underlying type");
 	  potential_nesting_p = NULL_TREE == TYPE_VALUES (ret.spec);
 	}
-      else
+      아니면
 	{
 	  /* There must be an enum definition, so this initialization
 	     (to avoid possible warnings about uninitialized data)
@@ -4199,24 +4199,24 @@ c_parser_enum_specifier (c_parser *parser)
       c_parser_declspecs (parser, specs, false, true, false, false, false,
 			  false, true, cla_prefer_id);
       finish_declspecs (specs);
-      if (specs->default_int_p)
+      만약 (specs->default_int_p)
 	error_at (enum_loc, "no %<enum%> underlying type specified");
-      else if (TREE_CODE (specs->type) != INTEGER_TYPE
+      아니면 만약 (TREE_CODE (specs->type) != INTEGER_TYPE
 	       && TREE_CODE (specs->type) != BOOLEAN_TYPE
 	       && (!flag_isoc2y || TREE_CODE (specs->type) != BITINT_TYPE))
 	{
 	  error_at (enum_loc, "invalid %<enum%> underlying type");
 	  specs->type = integer_type_node;
 	}
-      else if (specs->restrict_p)
+      아니면 만약 (specs->restrict_p)
 	error_at (enum_loc, "invalid use of %<restrict%>");
       fixed_underlying_type = TYPE_MAIN_VARIANT (specs->type);
-      if (ident)
+      만약 (ident)
 	{
 	  /* The type specified must be consistent with any previously
 	     specified underlying type.  If this is a newly declared
 	     type, it is now a complete type.  */
-	  if (ENUM_FIXED_UNDERLYING_TYPE_P (ret.spec)
+	  만약 (ENUM_FIXED_UNDERLYING_TYPE_P (ret.spec)
 	      && ENUM_UNDERLYING_TYPE (ret.spec) == NULL_TREE)
 	    {
 	      TYPE_MIN_VALUE (ret.spec) =
@@ -4231,7 +4231,7 @@ c_parser_enum_specifier (c_parser *parser)
 	      ENUM_UNDERLYING_TYPE (ret.spec) = fixed_underlying_type;
 	      layout_type (ret.spec);
 	    }
-	  else if (ENUM_FIXED_UNDERLYING_TYPE_P (ret.spec)
+	  아니면 만약 (ENUM_FIXED_UNDERLYING_TYPE_P (ret.spec)
 		   && !comptypes (fixed_underlying_type,
 				  ENUM_UNDERLYING_TYPE (ret.spec)))
 	    {
@@ -4241,7 +4241,7 @@ c_parser_enum_specifier (c_parser *parser)
 	    }
 	}
     }
-  if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
     {
       /* Parse an enum definition.  */
       struct c_enum_contents the_enum;
@@ -4255,7 +4255,7 @@ c_parser_enum_specifier (c_parser *parser)
 			 potential_nesting_p);
       values = NULL_TREE;
       c_parser_consume_token (parser);
-      while (true)
+      동안 (true)
 	{
 	  tree enum_id;
 	  tree enum_value;
@@ -4264,7 +4264,7 @@ c_parser_enum_specifier (c_parser *parser)
 	  c_token *token;
 	  location_t comma_loc = UNKNOWN_LOCATION;  /* Quiet warning.  */
 	  location_t decl_loc, value_loc;
-	  if (c_parser_next_token_is_not (parser, CPP_NAME))
+	  만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	    {
 	      report_bad_enum_name (parser);
 	      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, NULL);
@@ -4279,11 +4279,11 @@ c_parser_enum_specifier (c_parser *parser)
 	  c_parser_consume_token (parser);
 	  /* Parse any specified attributes.  */
 	  tree std_attrs = NULL_TREE;
-	  if (c_parser_nth_token_starts_std_attributes (parser, 1))
+	  만약 (c_parser_nth_token_starts_std_attributes (parser, 1))
 	    std_attrs = c_parser_std_attribute_specifier_sequence (parser);
 	  tree enum_attrs = chainon (std_attrs,
 				     c_parser_gnu_attributes (parser));
-	  if (c_parser_next_token_is (parser, CPP_EQ))
+	  만약 (c_parser_next_token_is (parser, CPP_EQ))
 	    {
 	      c_parser_consume_token (parser);
 	      value_loc = c_parser_peek_token (parser)->location;
@@ -4292,30 +4292,30 @@ c_parser_enum_specifier (c_parser *parser)
 						      (parser, NULL)),
 						     true, true).value;
 	    }
-	  else
+	  아니면
 	    enum_value = NULL_TREE;
 	  enum_decl = build_enumerator (decl_loc, value_loc,
 					&the_enum, enum_id, enum_value);
-	  if (enum_attrs)
+	  만약 (enum_attrs)
 	    decl_attributes (&TREE_PURPOSE (enum_decl), enum_attrs, 0);
 	  TREE_CHAIN (enum_decl) = values;
 	  values = enum_decl;
 	  seen_comma = false;
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    {
 	      comma_loc = c_parser_peek_token (parser)->location;
 	      seen_comma = true;
 	      c_parser_consume_token (parser);
 	    }
-	  if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+	  만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 	    {
-	      if (seen_comma)
+	      만약 (seen_comma)
 		pedwarn_c90 (comma_loc, OPT_Wpedantic,
 			     "comma at end of enumerator list");
 	      c_parser_consume_token (parser);
 	      break;
 	    }
-	  if (!seen_comma)
+	  만약 (!seen_comma)
 	    {
 	      c_parser_error (parser, "expected %<,%> or %<}%>");
 	      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, NULL);
@@ -4332,9 +4332,9 @@ c_parser_enum_specifier (c_parser *parser)
       ret.expr_const_operands = true;
       ret.has_enum_type_specifier = fixed_underlying_type != NULL_TREE;
       timevar_pop (TV_PARSE_ENUM);
-      return ret;
+      반환 ret;
     }
-  else if (!ident)
+  아니면 만약 (!ident)
     {
       c_parser_error (parser, "expected %<{%>");
       ret.spec = error_mark_node;
@@ -4342,28 +4342,28 @@ c_parser_enum_specifier (c_parser *parser)
       ret.expr = NULL_TREE;
       ret.expr_const_operands = true;
       ret.has_enum_type_specifier = false;
-      return ret;
+      반환 ret;
     }
   /* Attributes may only appear when the members are defined or in
      certain forward declarations (treat enum forward declarations in
      GNU C analogously to struct and union forward declarations in
      standard C).  */
-  if (have_std_attrs && c_parser_next_token_is_not (parser, CPP_SEMICOLON))
+  만약 (have_std_attrs && c_parser_next_token_is_not (parser, CPP_SEMICOLON))
     c_parser_error (parser, "expected %<;%>");
-  if (fixed_underlying_type == NULL_TREE)
+  만약 (fixed_underlying_type == NULL_TREE)
     {
       ret = parser_xref_tag (ident_loc, ENUMERAL_TYPE, ident, have_std_attrs,
 			     std_attrs, false);
       /* In ISO C, enumerated types without a fixed underlying type
 	 can be referred to only if already defined.  */
-      if (pedantic && !COMPLETE_TYPE_P (ret.spec))
+      만약 (pedantic && !COMPLETE_TYPE_P (ret.spec))
 	{
 	  gcc_assert (ident);
 	  pedwarn (enum_loc, OPT_Wpedantic,
 		   "ISO C forbids forward references to %<enum%> types");
 	}
     }
-  return ret;
+  반환 ret;
 }
 
 /* Parse a struct or union specifier (C90 6.5.2.1, C99 6.7.2.1, C11 6.7.2.1).
@@ -4431,21 +4431,21 @@ c_parser_struct_or_union_specifier (c_parser *parser)
   struct_loc = c_parser_peek_token (parser)->location;
   c_parser_consume_token (parser);
   have_std_attrs = c_parser_nth_token_starts_std_attributes (parser, 1);
-  if (have_std_attrs)
+  만약 (have_std_attrs)
     std_attrs = c_parser_std_attribute_specifier_sequence (parser);
   attrs = c_parser_gnu_attributes (parser);
 
   /* Set the location in case we create a decl now.  */
   c_parser_set_source_position_from_token (c_parser_peek_token (parser));
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       ident = c_parser_peek_token (parser)->value;
       ident_loc = c_parser_peek_token (parser)->location;
       struct_loc = ident_loc;
       c_parser_consume_token (parser);
     }
-  if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
     {
       /* Parse a struct or union definition.  Start the scope of the
 	 tag before parsing components.  */
@@ -4469,21 +4469,21 @@ c_parser_struct_or_union_specifier (c_parser *parser)
       c_parser_consume_token (parser);
       /* Handle the Objective-C @defs construct,
 	 e.g. foo(sizeof(struct{ @defs(ClassName) }));.  */
-      if (c_parser_next_token_is_keyword (parser, RID_AT_DEFS))
+      만약 (c_parser_next_token_is_keyword (parser, RID_AT_DEFS))
 	{
 	  tree name;
 	  gcc_assert (c_dialect_objc ());
 	  c_parser_consume_token (parser);
 	  matching_parens parens;
-	  if (!parens.require_open (parser))
+	  만약 (!parens.require_open (parser))
 	    goto end_at_defs;
-	  if (c_parser_next_token_is (parser, CPP_NAME)
+	  만약 (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_token (parser)->id_kind == C_ID_CLASSNAME)
 	    {
 	      name = c_parser_peek_token (parser)->value;
 	      c_parser_consume_token (parser);
 	    }
-	  else
+	  아니면
 	    {
 	      c_parser_error (parser, "expected class name");
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
@@ -4496,11 +4496,11 @@ c_parser_struct_or_union_specifier (c_parser *parser)
       /* Parse the struct-declarations and semicolons.  Problems with
 	 semicolons are diagnosed here; empty structures are diagnosed
 	 elsewhere.  */
-      while (true)
+      동안 (true)
 	{
 	  tree decls;
 	  /* Parse any stray semicolon.  */
-	  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+	  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	    {
 	      location_t semicolon_loc
 		= c_parser_peek_token (parser)->location;
@@ -4512,13 +4512,13 @@ c_parser_struct_or_union_specifier (c_parser *parser)
 	      continue;
 	    }
 	  /* Stop if at the end of the struct or union contents.  */
-	  if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+	  만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 	    {
 	      c_parser_consume_token (parser);
 	      break;
 	    }
 	  /* Accept #pragmas at struct scope.  */
-	  if (c_parser_next_token_is (parser, CPP_PRAGMA))
+	  만약 (c_parser_next_token_is (parser, CPP_PRAGMA))
 	    {
 	      c_parser_pragma (parser, pragma_struct, NULL, NULL_TREE);
 	      continue;
@@ -4530,14 +4530,14 @@ c_parser_struct_or_union_specifier (c_parser *parser)
 	  /* If no semicolon follows, either we have a parse error or
 	     are at the end of the struct or union and should
 	     pedwarn.  */
-	  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+	  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	    c_parser_consume_token (parser);
-	  else
+	  아니면
 	    {
-	      if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+	      만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 		pedwarn (c_parser_peek_token (parser)->location, 0,
 			 "no semicolon at end of struct or union");
-	      else if (parser->error
+	      아니면 만약 (parser->error
 		       || !c_parser_next_token_starts_declspecs (parser))
 		{
 		  c_parser_error (parser, "expected %<;%>");
@@ -4560,9 +4560,9 @@ c_parser_struct_or_union_specifier (c_parser *parser)
       ret.expr_const_operands = true;
       ret.has_enum_type_specifier = false;
       timevar_pop (TV_PARSE_STRUCT);
-      return ret;
+      반환 ret;
     }
-  else if (!ident)
+  아니면 만약 (!ident)
     {
       c_parser_error (parser, "expected %<{%>");
       ret.spec = error_mark_node;
@@ -4570,17 +4570,17 @@ c_parser_struct_or_union_specifier (c_parser *parser)
       ret.expr = NULL_TREE;
       ret.expr_const_operands = true;
       ret.has_enum_type_specifier = false;
-      return ret;
+      반환 ret;
     }
   /* Attributes may only appear when the members are defined or in
      certain forward declarations.  */
-  if (have_std_attrs && c_parser_next_token_is_not (parser, CPP_SEMICOLON))
+  만약 (have_std_attrs && c_parser_next_token_is_not (parser, CPP_SEMICOLON))
     c_parser_error (parser, "expected %<;%>");
   /* ??? Existing practice is that GNU attributes are ignored after
      the struct or union keyword when not defining the members.  */
   ret = parser_xref_tag (ident_loc, code, ident, have_std_attrs, std_attrs,
 			 false);
-  return ret;
+  반환 ret;
 }
 
 /* Parse a struct-declaration (C90 6.5.2.1, C99 6.7.2.1, C11 6.7.2.1),
@@ -4625,20 +4625,20 @@ c_parser_struct_declaration (c_parser *parser, tree *expr)
   tree all_prefix_attrs;
   tree decls;
   location_t decl_loc;
-  if (c_parser_next_token_is_keyword (parser, RID_EXTENSION))
+  만약 (c_parser_next_token_is_keyword (parser, RID_EXTENSION))
     {
-      int ext;
+      정수 ext;
       tree decl;
       ext = disable_extension_diagnostics ();
       c_parser_consume_token (parser);
       decl = c_parser_struct_declaration (parser, expr);
       restore_extension_diagnostics (ext);
-      return decl;
+      반환 decl;
     }
-  if (c_parser_next_token_is_keyword (parser, RID_STATIC_ASSERT))
+  만약 (c_parser_next_token_is_keyword (parser, RID_STATIC_ASSERT))
     {
       c_parser_static_assert_declaration_no_semi (parser);
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
   specs = build_null_declspecs ();
   decl_loc = c_parser_peek_token (parser)->location;
@@ -4649,26 +4649,26 @@ c_parser_struct_declaration (c_parser *parser, tree *expr)
      <http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1731.pdf>  */
   c_parser_declspecs (parser, specs, false, true, true,
 		      true, false, true, true, cla_nonabstract_decl);
-  if (parser->error)
-    return NULL_TREE;
-  if (!specs->declspecs_seen_p)
+  만약 (parser->error)
+    반환 NULL_TREE;
+  만약 (!specs->declspecs_seen_p)
     {
       c_parser_error (parser, "expected specifier-qualifier-list");
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
   finish_declspecs (specs);
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON)
+  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON)
       || c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
     {
       tree ret;
-      if (specs->typespec_kind == ctsk_none)
+      만약 (specs->typespec_kind == ctsk_none)
 	{
 	  pedwarn (decl_loc, OPT_Wpedantic,
 		   "ISO C forbids member declarations with no members");
 	  shadow_tag_warned (specs, pedantic);
 	  ret = NULL_TREE;
 	}
-      else
+      아니면
 	{
 	  /* Support for unnamed structs or unions as members of
 	     structs or unions (which is [a] useful and [b] supports
@@ -4678,22 +4678,22 @@ c_parser_struct_declaration (c_parser *parser, tree *expr)
 	  ret = grokfield (c_parser_peek_token (parser)->location,
 			   build_id_declarator (NULL_TREE), specs,
 			   NULL_TREE, &attrs, expr);
-	  if (ret)
+	  만약 (ret)
 	    decl_attributes (&ret, attrs, 0);
 	}
-      return ret;
+      반환 ret;
     }
 
   /* Provide better error recovery.  Note that a type name here is valid,
      and will be treated as a field name.  */
-  if (specs->typespec_kind == ctsk_tagdef
+  만약 (specs->typespec_kind == ctsk_tagdef
       && TREE_CODE (specs->type) != ENUMERAL_TYPE
       && c_parser_next_token_starts_declspecs (parser)
       && !c_parser_next_token_is (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected %<;%>, identifier or %<(%>");
       parser->error = false;
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
   pending_xref_error ();
@@ -4701,23 +4701,23 @@ c_parser_struct_declaration (c_parser *parser, tree *expr)
   all_prefix_attrs = prefix_attrs;
   specs->attrs = NULL_TREE;
   decls = NULL_TREE;
-  while (true)
+  동안 (true)
     {
       /* Declaring one or more declarators or un-named bit-fields.  */
       struct c_declarator *declarator;
       bool dummy = false;
-      if (c_parser_next_token_is (parser, CPP_COLON))
+      만약 (c_parser_next_token_is (parser, CPP_COLON))
 	declarator = build_id_declarator (NULL_TREE);
-      else
+      아니면
 	declarator = c_parser_declarator (parser,
 					  specs->typespec_kind != ctsk_none,
 					  C_DTR_NORMAL, &dummy);
-      if (declarator == NULL)
+      만약 (declarator == NULL)
 	{
 	  c_parser_skip_to_end_of_block_or_statement (parser);
 	  break;
 	}
-      if (c_parser_next_token_is (parser, CPP_COLON)
+      만약 (c_parser_next_token_is (parser, CPP_COLON)
 	  || c_parser_next_token_is (parser, CPP_COMMA)
 	  || c_parser_next_token_is (parser, CPP_SEMICOLON)
 	  || c_parser_next_token_is (parser, CPP_CLOSE_BRACE)
@@ -4726,7 +4726,7 @@ c_parser_struct_declaration (c_parser *parser, tree *expr)
 	  tree postfix_attrs = NULL_TREE;
 	  tree width = NULL_TREE;
 	  tree d;
-	  if (c_parser_next_token_is (parser, CPP_COLON))
+	  만약 (c_parser_next_token_is (parser, CPP_COLON))
 	    {
 	      c_parser_consume_token (parser);
 	      location_t loc = c_parser_peek_token (parser)->location;
@@ -4735,7 +4735,7 @@ c_parser_struct_declaration (c_parser *parser, tree *expr)
 						 (parser, NULL)),
 						true, true).value;
 	    }
-	  if (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
+	  만약 (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
 	    postfix_attrs = c_parser_gnu_attributes (parser);
 	  d = grokfield (c_parser_peek_token (parser)->location,
 			 declarator, specs, width, &all_prefix_attrs, expr);
@@ -4743,26 +4743,26 @@ c_parser_struct_declaration (c_parser *parser, tree *expr)
 					all_prefix_attrs), 0);
 	  DECL_CHAIN (d) = decls;
 	  decls = d;
-	  if (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
+	  만약 (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
 	    all_prefix_attrs = chainon (c_parser_gnu_attributes (parser),
 					prefix_attrs);
-	  else
+	  아니면
 	    all_prefix_attrs = prefix_attrs;
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
-	  else if (c_parser_next_token_is (parser, CPP_SEMICOLON)
+	  아니면 만약 (c_parser_next_token_is (parser, CPP_SEMICOLON)
 		   || c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 	    {
 	      /* Semicolon consumed in caller.  */
 	      break;
 	    }
-	  else
+	  아니면
 	    {
 	      c_parser_error (parser, "expected %<,%>, %<;%> or %<}%>");
 	      break;
 	    }
 	}
-      else
+      아니면
 	{
 	  c_parser_error (parser,
 			  "expected %<:%>, %<,%>, %<;%>, %<}%> or "
@@ -4770,7 +4770,7 @@ c_parser_struct_declaration (c_parser *parser, tree *expr)
 	  break;
 	}
     }
-  return decls;
+  반환 decls;
 }
 
 /* Parse a typeof specifier (a GNU extension adopted in C23).
@@ -4793,14 +4793,14 @@ c_parser_typeof_specifier (c_parser *parser)
   ret.expr = NULL_TREE;
   ret.expr_const_operands = true;
   ret.has_enum_type_specifier = false;
-  if (c_parser_next_token_is_keyword (parser, RID_TYPEOF))
+  만약 (c_parser_next_token_is_keyword (parser, RID_TYPEOF))
     {
       is_unqual = false;
       tree spelling = c_parser_peek_token (parser)->value;
       is_std = (flag_isoc23
 		&& strcmp (IDENTIFIER_POINTER (spelling), "typeof") == 0);
     }
-  else
+  아니면
     {
       gcc_assert (c_parser_next_token_is_keyword (parser, RID_TYPEOF_UNQUAL));
       is_unqual = true;
@@ -4811,31 +4811,31 @@ c_parser_typeof_specifier (c_parser *parser)
   c_inhibit_evaluation_warnings++;
   in_typeof++;
   matching_parens parens;
-  if (!parens.require_open (parser))
+  만약 (!parens.require_open (parser))
     {
       c_inhibit_evaluation_warnings--;
       in_typeof--;
-      return ret;
+      반환 ret;
     }
-  if (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
+  만약 (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
     {
       struct c_type_name *type = c_parser_type_name (parser);
       c_inhibit_evaluation_warnings--;
       in_typeof--;
-      if (type != NULL)
+      만약 (type != NULL)
 	{
 	  ret.spec = groktypename (type, &ret.expr, &ret.expr_const_operands);
 	  pop_maybe_used (c_type_variably_modified_p (ret.spec));
 	}
     }
-  else
+  아니면
     {
       bool was_vm;
       location_t here = c_parser_peek_token (parser)->location;
       struct c_expr expr = c_parser_expression (parser);
       c_inhibit_evaluation_warnings--;
       in_typeof--;
-      if (TREE_CODE (expr.value) == COMPONENT_REF
+      만약 (TREE_CODE (expr.value) == COMPONENT_REF
 	  && DECL_C_BIT_FIELD (TREE_OPERAND (expr.value, 1)))
 	error_at (here, "%<typeof%> applied to a bit-field");
       mark_exp_read (expr.value);
@@ -4843,41 +4843,41 @@ c_parser_typeof_specifier (c_parser *parser)
       was_vm = c_type_variably_modified_p (ret.spec);
       /* This is returned with the type so that when the type is
 	 evaluated, this can be evaluated.  */
-      if (was_vm)
+      만약 (was_vm)
 	ret.expr = c_fully_fold (expr.value, false, &ret.expr_const_operands);
       pop_maybe_used (was_vm);
     }
   parens.skip_until_found_close (parser);
-  if (ret.spec != error_mark_node)
+  만약 (ret.spec != error_mark_node)
     {
-      if (is_unqual)
+      만약 (is_unqual)
 	{
 	  bool is_array = TREE_CODE (ret.spec) == ARRAY_TYPE;
-	  int quals = TYPE_QUALS (strip_array_types (ret.spec));
-	  if ((is_array ? quals & ~TYPE_QUAL_ATOMIC : quals)
+	  정수 quals = TYPE_QUALS (strip_array_types (ret.spec));
+	  만약 ((is_array ? quals & ~TYPE_QUAL_ATOMIC : quals)
 	      != TYPE_UNQUALIFIED)
 	    {
 	      ret.spec = TYPE_MAIN_VARIANT (ret.spec);
-	      if (quals & TYPE_QUAL_ATOMIC && is_array)
+	      만약 (quals & TYPE_QUAL_ATOMIC && is_array)
 		ret.spec = c_build_qualified_type (ret.spec,
 						   TYPE_QUAL_ATOMIC);
 	    }
 	}
-      if (is_std)
+      만약 (is_std)
 	{
 	  /* In ISO C terms, _Noreturn is not part of the type of
 	     expressions such as &abort, but in GCC it is represented
 	     internally as a type qualifier.  */
-	  if (TREE_CODE (ret.spec) == FUNCTION_TYPE
+	  만약 (TREE_CODE (ret.spec) == FUNCTION_TYPE
 	      && TYPE_QUALS (ret.spec) != TYPE_UNQUALIFIED)
 	    ret.spec = TYPE_MAIN_VARIANT (ret.spec);
-	  else if (FUNCTION_POINTER_TYPE_P (ret.spec)
+	  아니면 만약 (FUNCTION_POINTER_TYPE_P (ret.spec)
 		   && TYPE_QUALS (TREE_TYPE (ret.spec)) != TYPE_UNQUALIFIED)
 	    ret.spec
 	      = c_build_pointer_type (TYPE_MAIN_VARIANT (TREE_TYPE (ret.spec)));
 	}
     }
-  return ret;
+  반환 ret;
 }
 
 /* Parse an alignment-specifier.
@@ -4897,28 +4897,28 @@ c_parser_alignas_specifier (c_parser * parser)
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_ALIGNAS));
   tree spelling = c_parser_peek_token (parser)->value;
   c_parser_consume_token (parser);
-  if (flag_isoc99)
+  만약 (flag_isoc99)
     pedwarn_c99 (loc, OPT_Wpedantic,
 		 "ISO C99 does not support %qE", spelling);
-  else
+  아니면
     pedwarn_c99 (loc, OPT_Wpedantic,
 		 "ISO C90 does not support %qE", spelling);
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return ret;
-  if (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
+  만약 (!parens.require_open (parser))
+    반환 ret;
+  만약 (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
     {
       struct c_type_name *type = c_parser_type_name (parser);
-      if (type != NULL)
+      만약 (type != NULL)
 	ret = c_sizeof_or_alignof_type (loc, groktypename (type, NULL, NULL),
 					false, true, 1);
     }
-  else
+  아니면
     ret = convert_lvalue_to_rvalue (loc,
 				    c_parser_expr_no_commas (parser, NULL),
 				    true, true).value;
   parens.skip_until_found_close (parser);
-  return ret;
+  반환 ret;
 }
 
 /* Parse a declarator, possibly an abstract declarator (C90 6.5.4,
@@ -5009,7 +5009,7 @@ c_parser_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
 		     bool *seen_id)
 {
   /* Parse any initial pointer part.  */
-  if (c_parser_next_token_is (parser, CPP_MULT))
+  만약 (c_parser_next_token_is (parser, CPP_MULT))
     {
       struct c_declspecs *quals_attrs = build_null_declspecs ();
       struct c_declarator *inner;
@@ -5017,14 +5017,14 @@ c_parser_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
       c_parser_declspecs (parser, quals_attrs, false, false, true,
 			  false, false, true, false, cla_prefer_id);
       inner = c_parser_declarator (parser, type_seen_p, kind, seen_id);
-      if (inner == NULL)
-	return NULL;
-      else
-	return make_pointer_declarator (quals_attrs, inner);
+      만약 (inner == NULL)
+	반환 NULL;
+      아니면
+	반환 make_pointer_declarator (quals_attrs, inner);
     }
   /* Now we have a direct declarator, direct abstract declarator or
      nothing (which counts as a direct abstract declarator here).  */
-  return c_parser_direct_declarator (parser, type_seen_p, kind, seen_id);
+  반환 c_parser_direct_declarator (parser, type_seen_p, kind, seen_id);
 }
 
 /* Parse a direct declarator or direct abstract declarator; arguments
@@ -5069,7 +5069,7 @@ c_parser_direct_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
      ??? Also following the old parser, typedef names may be
      redeclared in declarators, but not Objective-C class names.  */
 
-  if (kind != C_DTR_ABSTRACT
+  만약 (kind != C_DTR_ABSTRACT
       && c_parser_next_token_is (parser, CPP_NAME)
       && ((type_seen_p
 	   && (c_parser_peek_token (parser)->id_kind == C_ID_TYPENAME
@@ -5081,24 +5081,24 @@ c_parser_direct_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
       *seen_id = true;
       inner->id_loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      if (c_parser_nth_token_starts_std_attributes (parser, 1))
+      만약 (c_parser_nth_token_starts_std_attributes (parser, 1))
 	inner->u.id.attrs = c_parser_std_attribute_specifier_sequence (parser);
-      return c_parser_direct_declarator_inner (parser, *seen_id, inner);
+      반환 c_parser_direct_declarator_inner (parser, *seen_id, inner);
     }
 
-  if (kind != C_DTR_NORMAL
+  만약 (kind != C_DTR_NORMAL
       && c_parser_next_token_is (parser, CPP_OPEN_SQUARE)
       && !c_parser_nth_token_starts_std_attributes (parser, 1))
     {
       struct c_declarator *inner = build_id_declarator (NULL_TREE);
       inner->id_loc = c_parser_peek_token (parser)->location;
-      return c_parser_direct_declarator_inner (parser, *seen_id, inner);
+      반환 c_parser_direct_declarator_inner (parser, *seen_id, inner);
     }
 
   /* Either we are at the end of an abstract declarator, or we have
      parentheses.  */
 
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       tree attrs;
       struct c_declarator *inner;
@@ -5106,7 +5106,7 @@ c_parser_direct_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
       bool have_gnu_attrs = c_parser_next_token_is_keyword (parser,
 							    RID_ATTRIBUTE);
       attrs = c_parser_gnu_attributes (parser);
-      if (kind != C_DTR_NORMAL
+      만약 (kind != C_DTR_NORMAL
 	  && (c_parser_next_token_starts_declspecs (parser)
 	      || (!have_gnu_attrs
 		  && (c_parser_nth_token_starts_std_attributes (parser, 1)
@@ -5116,54 +5116,54 @@ c_parser_direct_declarator (c_parser *parser, bool type_seen_p, c_dtr_syn kind,
 	  struct c_arg_info *args
 	    = c_parser_parms_declarator (parser, kind == C_DTR_NORMAL,
 					 attrs, have_gnu_attrs);
-	  if (args == NULL)
-	    return NULL;
-	  else
+	  만약 (args == NULL)
+	    반환 NULL;
+	  아니면
 	    {
 	      inner = build_id_declarator (NULL_TREE);
-	      if (!(args->types
+	      만약 (!(args->types
 		    && args->types != error_mark_node
 		    && TREE_CODE (TREE_VALUE (args->types)) == IDENTIFIER_NODE)
 		  && c_parser_nth_token_starts_std_attributes (parser, 1))
 		{
 		  tree std_attrs
 		    = c_parser_std_attribute_specifier_sequence (parser);
-		  if (std_attrs)
+		  만약 (std_attrs)
 		    inner = build_attrs_declarator (std_attrs, inner);
 		}
 	      inner = build_function_declarator (args, inner);
-	      return c_parser_direct_declarator_inner (parser, *seen_id,
+	      반환 c_parser_direct_declarator_inner (parser, *seen_id,
 						       inner);
 	    }
 	}
       /* A parenthesized declarator.  */
       inner = c_parser_declarator (parser, type_seen_p, kind, seen_id);
-      if (inner != NULL && attrs != NULL)
+      만약 (inner != NULL && attrs != NULL)
 	inner = build_attrs_declarator (attrs, inner);
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	{
 	  c_parser_consume_token (parser);
-	  if (inner == NULL)
-	    return NULL;
-	  else
-	    return c_parser_direct_declarator_inner (parser, *seen_id, inner);
+	  만약 (inner == NULL)
+	    반환 NULL;
+	  아니면
+	    반환 c_parser_direct_declarator_inner (parser, *seen_id, inner);
 	}
-      else
+      아니면
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				     "expected %<)%>");
-	  return NULL;
+	  반환 NULL;
 	}
     }
-  else
+  아니면
     {
-      if (kind == C_DTR_NORMAL)
+      만약 (kind == C_DTR_NORMAL)
 	{
 	  c_parser_error (parser, "expected identifier or %<(%>");
-	  return NULL;
+	  반환 NULL;
 	}
-      else
-	return build_id_declarator (NULL_TREE);
+      아니면
+	반환 build_id_declarator (NULL_TREE);
     }
 }
 
@@ -5177,7 +5177,7 @@ c_parser_direct_declarator_inner (c_parser *parser, bool id_present,
 				  struct c_declarator *inner)
 {
   /* Parse a sequence of array declarators and parameter lists.  */
-  if (c_parser_next_token_is (parser, CPP_OPEN_SQUARE)
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_SQUARE)
       && !c_parser_nth_token_starts_std_attributes (parser, 1))
     {
       location_t brace_loc = c_parser_peek_token (parser)->location;
@@ -5192,33 +5192,33 @@ c_parser_direct_declarator_inner (c_parser *parser, bool id_present,
 			  false, false, false, false, cla_prefer_id);
 
       location_t static_loc = UNKNOWN_LOCATION;
-      if (c_parser_next_token_is_keyword (parser, RID_STATIC))
+      만약 (c_parser_next_token_is_keyword (parser, RID_STATIC))
 	{
 	  static_loc = c_parser_peek_token (parser)->location;
 	  c_parser_consume_token (parser);
-	  if (!quals_attrs->declspecs_seen_p)
+	  만약 (!quals_attrs->declspecs_seen_p)
 	    c_parser_declspecs (parser, quals_attrs, false, false, true,
 				false, false, false, false, cla_prefer_id);
 	}
-      if (!quals_attrs->declspecs_seen_p)
+      만약 (!quals_attrs->declspecs_seen_p)
 	quals_attrs = NULL;
       /* If "static" is present, there must be an array dimension.
 	 Otherwise, there may be a dimension, "*", or no
 	 dimension.  */
       const bool static_seen = (static_loc != UNKNOWN_LOCATION);
       bool star_seen = false;
-      if (c_parser_next_token_is (parser, CPP_MULT)
+      만약 (c_parser_next_token_is (parser, CPP_MULT)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_CLOSE_SQUARE)
 	{
 	  star_seen = true;
 	  c_parser_consume_token (parser);
 	}
-      else if (!c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
+      아니면 만약 (!c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
 	dimen = c_parser_expr_no_commas (parser, NULL);
 
-      if (static_seen)
+      만약 (static_seen)
 	{
-	  if (star_seen)
+	  만약 (star_seen)
 	    {
 	      error_at (static_loc,
 			"%<static%> may not be used with an unspecified "
@@ -5227,36 +5227,36 @@ c_parser_direct_declarator_inner (c_parser *parser, bool id_present,
 	      star_seen = false;
 	      dimen.value = error_mark_node;
 	    }
-	  else if (!dimen.value)
+	  아니면 만약 (!dimen.value)
 	    error_at (static_loc,
 		      "%<static%> may not be used without an array size");
 	}
 
-      if (c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE,
 				     "expected %<]%>");
-	  return NULL;
+	  반환 NULL;
 	}
-      if (dimen.value)
+      만약 (dimen.value)
 	dimen = convert_lvalue_to_rvalue (brace_loc, dimen, true, true);
       declarator = build_array_declarator (brace_loc, dimen.value, quals_attrs,
 					   static_seen, star_seen);
-      if (declarator == NULL)
-	return NULL;
-      if (c_parser_nth_token_starts_std_attributes (parser, 1))
+      만약 (declarator == NULL)
+	반환 NULL;
+      만약 (c_parser_nth_token_starts_std_attributes (parser, 1))
 	{
 	  tree std_attrs
 	    = c_parser_std_attribute_specifier_sequence (parser);
-	  if (std_attrs)
+	  만약 (std_attrs)
 	    inner = build_attrs_declarator (std_attrs, inner);
 	}
       inner = set_array_declarator_inner (declarator, inner);
-      return c_parser_direct_declarator_inner (parser, id_present, inner);
+      반환 c_parser_direct_declarator_inner (parser, id_present, inner);
     }
-  else if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  아니면 만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       tree attrs;
       struct c_arg_info *args;
@@ -5266,25 +5266,25 @@ c_parser_direct_declarator_inner (c_parser *parser, bool id_present,
       attrs = c_parser_gnu_attributes (parser);
       args = c_parser_parms_declarator (parser, id_present, attrs,
 					have_gnu_attrs);
-      if (args == NULL)
-	return NULL;
-      else
+      만약 (args == NULL)
+	반환 NULL;
+      아니면
 	{
-	  if (!(args->types
+	  만약 (!(args->types
 		&& args->types != error_mark_node
 		&& TREE_CODE (TREE_VALUE (args->types)) == IDENTIFIER_NODE)
 	      && c_parser_nth_token_starts_std_attributes (parser, 1))
 	    {
 	      tree std_attrs
 		= c_parser_std_attribute_specifier_sequence (parser);
-	      if (std_attrs)
+	      만약 (std_attrs)
 		inner = build_attrs_declarator (std_attrs, inner);
 	    }
 	  inner = build_function_declarator (args, inner);
-	  return c_parser_direct_declarator_inner (parser, id_present, inner);
+	  반환 c_parser_direct_declarator_inner (parser, id_present, inner);
 	}
     }
-  return inner;
+  반환 inner;
 }
 
 /* Parse a parameter list or identifier list, including the closing
@@ -5303,7 +5303,7 @@ c_parser_parms_declarator (c_parser *parser, bool id_list_ok, tree attrs,
   declare_parm_level ();
   /* If the list starts with an identifier, it is an identifier list.
      Otherwise, it is either a prototype list or an empty list.  */
-  if (id_list_ok
+  만약 (id_list_ok
       && !attrs
       && c_parser_next_token_is (parser, CPP_NAME)
       && c_parser_peek_token (parser)->id_kind == C_ID_ID
@@ -5316,44 +5316,44 @@ c_parser_parms_declarator (c_parser *parser, bool id_list_ok, tree attrs,
       && c_parser_peek_2nd_token (parser)->type != CPP_KEYWORD)
     {
       tree list = NULL_TREE, *nextp = &list;
-      while (c_parser_next_token_is (parser, CPP_NAME)
+      동안 (c_parser_next_token_is (parser, CPP_NAME)
 	     && c_parser_peek_token (parser)->id_kind == C_ID_ID)
 	{
 	  *nextp = build_tree_list (NULL_TREE,
 				    c_parser_peek_token (parser)->value);
 	  nextp = & TREE_CHAIN (*nextp);
 	  c_parser_consume_token (parser);
-	  if (c_parser_next_token_is_not (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is_not (parser, CPP_COMMA))
 	    break;
 	  c_parser_consume_token (parser);
-	  if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	  만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	    {
 	      c_parser_error (parser, "expected identifier");
 	      break;
 	    }
 	}
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	{
 	  struct c_arg_info *ret = build_arg_info ();
 	  ret->types = list;
 	  c_parser_consume_token (parser);
 	  pop_scope ();
-	  return ret;
+	  반환 ret;
 	}
-      else
+      아니면
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				     "expected %<)%>");
 	  pop_scope ();
-	  return NULL;
+	  반환 NULL;
 	}
     }
-  else
+  아니면
     {
       struct c_arg_info *ret
 	= c_parser_parms_list_declarator (parser, attrs, NULL, have_gnu_attrs);
       pop_scope ();
-      return ret;
+      반환 ret;
     }
 }
 
@@ -5377,13 +5377,13 @@ c_parser_parms_list_declarator (c_parser *parser, tree attrs, tree expr,
      note as above that gnu-attributes are ignored as the only contents of
      the parentheses, or as the only contents after forward
      declarations.  */
-  if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
     {
       struct c_arg_info *ret = build_arg_info ();
       c_parser_consume_token (parser);
-      return ret;
+      반환 ret;
     }
-  if (c_parser_next_token_is (parser, CPP_ELLIPSIS) && !have_gnu_attrs)
+  만약 (c_parser_next_token_is (parser, CPP_ELLIPSIS) && !have_gnu_attrs)
     {
       struct c_arg_info *ret = build_arg_info ();
 
@@ -5392,34 +5392,34 @@ c_parser_parms_list_declarator (c_parser *parser, tree attrs, tree expr,
 		   "ISO C requires a named argument before %<...%> "
 		   "before C23");
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	{
 	  ret->no_named_args_stdarg_p = true;
 	  c_parser_consume_token (parser);
-	  return ret;
+	  반환 ret;
 	}
-      else
+      아니면
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				     "expected %<)%>");
-	  return NULL;
+	  반환 NULL;
 	}
     }
   /* Nonempty list of parameters, either terminated with semicolon
      (forward declarations; recurse) or with close parenthesis (normal
      function) or with ", ... )" (variadic function).  */
-  while (true)
+  동안 (true)
     {
       /* Parse a parameter.  */
       struct c_parm *parm = c_parser_parameter_declaration (parser, attrs,
 							    have_gnu_attrs);
       attrs = NULL_TREE;
       have_gnu_attrs = false;
-      if (parm == NULL)
+      만약 (parm == NULL)
 	bad_parm = true;
-      else
+      아니면
 	push_parm_decl (parm, &expr);
-      if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+      만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	{
 	  tree new_attrs;
 	  c_parser_consume_token (parser);
@@ -5427,40 +5427,40 @@ c_parser_parms_list_declarator (c_parser *parser, tree attrs, tree expr,
 	  bool new_have_gnu_attrs
 	    = c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE);
 	  new_attrs = c_parser_gnu_attributes (parser);
-	  return c_parser_parms_list_declarator (parser, new_attrs, expr,
+	  반환 c_parser_parms_list_declarator (parser, new_attrs, expr,
 						 new_have_gnu_attrs);
 	}
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	{
 	  c_parser_consume_token (parser);
-	  if (bad_parm)
-	    return NULL;
-	  else
-	    return get_parm_info (false, expr);
+	  만약 (bad_parm)
+	    반환 NULL;
+	  아니면
+	    반환 get_parm_info (false, expr);
 	}
-      if (!c_parser_require (parser, CPP_COMMA,
+      만약 (!c_parser_require (parser, CPP_COMMA,
 			     "expected %<;%>, %<,%> or %<)%>",
 			     UNKNOWN_LOCATION, false))
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	  return NULL;
+	  반환 NULL;
 	}
-      if (c_parser_next_token_is (parser, CPP_ELLIPSIS))
+      만약 (c_parser_next_token_is (parser, CPP_ELLIPSIS))
 	{
 	  c_parser_consume_token (parser);
-	  if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	  만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	    {
 	      c_parser_consume_token (parser);
-	      if (bad_parm)
-		return NULL;
-	      else
-		return get_parm_info (true, expr);
+	      만약 (bad_parm)
+		반환 NULL;
+	      아니면
+		반환 get_parm_info (true, expr);
 	    }
-	  else
+	  아니면
 	    {
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					 "expected %<)%>");
-	      return NULL;
+	      반환 NULL;
 	    }
 	}
     }
@@ -5482,23 +5482,23 @@ c_parser_parameter_declaration (c_parser *parser, tree attrs,
   bool dummy = false;
 
   /* Accept #pragmas between parameter declarations.  */
-  while (c_parser_next_token_is (parser, CPP_PRAGMA))
+  동안 (c_parser_next_token_is (parser, CPP_PRAGMA))
     c_parser_pragma (parser, pragma_param, NULL, NULL_TREE);
 
-  if (!c_parser_next_token_starts_declspecs (parser)
+  만약 (!c_parser_next_token_starts_declspecs (parser)
       && !c_parser_nth_token_starts_std_attributes (parser, 1))
     {
       c_token *token = c_parser_peek_token (parser);
-      if (parser->error)
-	return NULL;
+      만약 (parser->error)
+	반환 NULL;
       c_parser_set_source_position_from_token (token);
-      if (c_parser_next_tokens_start_typename (parser, cla_prefer_type))
+      만약 (c_parser_next_tokens_start_typename (parser, cla_prefer_type))
 	{
 	  auto_diagnostic_group d;
 	  name_hint hint = lookup_name_fuzzy (token->value,
 					      FUZZY_LOOKUP_TYPENAME,
 					      token->location);
-	  if (const char *suggestion = hint.suggestion ())
+	  만약 (const char *suggestion = hint.suggestion ())
 	    {
 	      gcc_rich_location richloc (token->location);
 	      richloc.add_fixit_replace (suggestion);
@@ -5506,23 +5506,23 @@ c_parser_parameter_declaration (c_parser *parser, tree attrs,
 			"unknown type name %qE; did you mean %qs?",
 			token->value, suggestion);
 	    }
-	  else
+	  아니면
 	    error_at (token->location, "unknown type name %qE", token->value);
 	  parser->error = true;
 	}
       /* ??? In some Objective-C cases '...' isn't applicable so there
 	 should be a different message.  */
-      else
+      아니면
 	c_parser_error (parser,
 			"expected declaration specifiers or %<...%>");
       c_parser_skip_to_end_of_parameter (parser);
-      return NULL;
+      반환 NULL;
     }
 
   location_t start_loc = c_parser_peek_token (parser)->location;
 
   specs = build_null_declspecs ();
-  if (attrs)
+  만약 (attrs)
     {
       declspecs_add_attrs (input_location, specs, attrs);
       attrs = NULL_TREE;
@@ -5532,7 +5532,7 @@ c_parser_parameter_declaration (c_parser *parser, tree attrs,
   finish_declspecs (specs);
   /* When the param is declared, its type is a top level type, we should
      call verify_counted_by_for_top_anonymous_type.  */
-  if (specs->typespec_kind == ctsk_tagdef)
+  만약 (specs->typespec_kind == ctsk_tagdef)
     verify_counted_by_for_top_anonymous_type (specs->type);
 
   pending_xref_error ();
@@ -5541,12 +5541,12 @@ c_parser_parameter_declaration (c_parser *parser, tree attrs,
   declarator = c_parser_declarator (parser,
 				    specs->typespec_kind != ctsk_none,
 				    C_DTR_PARM, &dummy);
-  if (declarator == NULL)
+  만약 (declarator == NULL)
     {
       c_parser_skip_until_found (parser, CPP_COMMA, NULL);
-      return NULL;
+      반환 NULL;
     }
-  if (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
+  만약 (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
     postfix_attrs = c_parser_gnu_attributes (parser);
 
   /* Generate a location for the parameter, ranging from the start of the
@@ -5566,14 +5566,14 @@ c_parser_parameter_declaration (c_parser *parser, tree attrs,
 
   /* Find any cdk_id declarator; determine if we have an identifier.  */
   c_declarator *id_declarator = declarator;
-  while (id_declarator && id_declarator->kind != cdk_id)
+  동안 (id_declarator && id_declarator->kind != cdk_id)
     id_declarator = id_declarator->declarator;
   location_t caret_loc = (id_declarator->u.id.id
 			  ? id_declarator->id_loc
 			  : start_loc);
   location_t param_loc = make_location (caret_loc, start_loc, end_loc);
 
-  return build_c_parm (specs, chainon (postfix_attrs, prefix_attrs),
+  반환 build_c_parm (specs, chainon (postfix_attrs, prefix_attrs),
 		       declarator, param_loc);
 }
 
@@ -5589,11 +5589,11 @@ static tree
 c_parser_asm_string_literal (c_parser *parser)
 {
   tree str;
-  int save_flag = warn_overlength_strings;
+  정수 save_flag = warn_overlength_strings;
   warn_overlength_strings = 0;
   str = c_parser_string_literal (parser, false, false).value;
   warn_overlength_strings = save_flag;
-  return str;
+  반환 str;
 }
 
 /* Parse a simple asm expression.  This is used in restricted
@@ -5611,15 +5611,15 @@ c_parser_simple_asm_expr (c_parser *parser)
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_ASM));
   c_parser_consume_token (parser);
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return NULL_TREE;
+  만약 (!parens.require_open (parser))
+    반환 NULL_TREE;
   str = c_parser_asm_string_literal (parser);
-  if (!parens.require_close (parser))
+  만약 (!parens.require_close (parser))
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
-  return str;
+  반환 str;
 }
 
 static tree
@@ -5627,7 +5627,7 @@ c_parser_gnu_attribute_any_word (c_parser *parser)
 {
   tree attr_name = NULL_TREE;
 
-  if (c_parser_next_token_is (parser, CPP_KEYWORD))
+  만약 (c_parser_next_token_is (parser, CPP_KEYWORD))
     {
       /* ??? See comment above about what keywords are accepted here.  */
       bool ok;
@@ -5679,16 +5679,16 @@ c_parser_gnu_attribute_any_word (c_parser *parser)
 	  ok = false;
 	  break;
 	}
-      if (!ok)
-	return NULL_TREE;
+      만약 (!ok)
+	반환 NULL_TREE;
 
       /* Accept __attribute__((__const)) as __attribute__((const)) etc.  */
-      attr_name = ridpointers[(int) c_parser_peek_token (parser)->keyword];
+      attr_name = ridpointers[(정수) c_parser_peek_token (parser)->keyword];
     }
-  else if (c_parser_next_token_is (parser, CPP_NAME))
+  아니면 만약 (c_parser_next_token_is (parser, CPP_NAME))
     attr_name = c_parser_peek_token (parser)->value;
 
-  return attr_name;
+  반환 attr_name;
 }
 
 /* Parse attribute arguments.  This is a common form of syntax
@@ -5714,7 +5714,7 @@ c_parser_attribute_arguments (c_parser *parser, bool takes_identifier,
      parenthesis, then the arguments start with that
      identifier; otherwise they are an expression list.
      In objective-c the identifier may be a classname.  */
-  if (c_parser_next_token_is (parser, CPP_NAME)
+  만약 (c_parser_next_token_is (parser, CPP_NAME)
       && (c_parser_peek_token (parser)->id_kind == C_ID_ID
 	  || (c_dialect_objc ()
 	      && c_parser_peek_token (parser)->id_kind
@@ -5730,9 +5730,9 @@ c_parser_attribute_arguments (c_parser *parser, bool takes_identifier,
     {
       tree arg1 = c_parser_peek_token (parser)->value;
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	attr_args = build_tree_list (NULL_TREE, arg1);
-      else
+      아니면
 	{
 	  tree tree_list;
 	  c_parser_consume_token (parser);
@@ -5743,17 +5743,17 @@ c_parser_attribute_arguments (c_parser *parser, bool takes_identifier,
 	  release_tree_vector (expr_list);
 	}
     }
-  else
+  아니면
     {
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	{
-	  if (!allow_empty_args)
+	  만약 (!allow_empty_args)
 	    error_at (c_parser_peek_token (parser)->location,
 		      "parentheses must be omitted if "
 		      "attribute argument list is empty");
 	  attr_args = NULL_TREE;
 	}
-      else if (require_string)
+      아니면 만약 (require_string)
 	{
 	  /* The only valid argument for this attribute is a string
 	     literal.  Handle this specially here to avoid accepting
@@ -5761,13 +5761,13 @@ c_parser_attribute_arguments (c_parser *parser, bool takes_identifier,
 	  tree string = c_parser_string_literal (parser, false, true).value;
 	  attr_args = build_tree_list (NULL_TREE, string);
 	}
-      else if (assume_attr)
+      아니면 만약 (assume_attr)
 	{
 	  tree cond
 	    = c_parser_conditional_expression (parser, NULL, NULL_TREE).value;
-	  if (!c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (!c_parser_next_token_is (parser, CPP_COMMA))
 	    attr_args = build_tree_list (NULL_TREE, cond);
-	  else
+	  아니면
 	    {
 	      tree tree_list;
 	      c_parser_consume_token (parser);
@@ -5778,7 +5778,7 @@ c_parser_attribute_arguments (c_parser *parser, bool takes_identifier,
 	      release_tree_vector (expr_list);
 	    }
 	}
-      else
+      아니면
 	{
 	  expr_list = c_parser_expr_list (parser, false, true,
 					  NULL, NULL, NULL, NULL);
@@ -5786,7 +5786,7 @@ c_parser_attribute_arguments (c_parser *parser, bool takes_identifier,
 	  release_tree_vector (expr_list);
 	}
     }
-  return attr_args;
+  반환 attr_args;
 }
 
 /* Parse (possibly empty) gnu-attributes.  This is a GNU extension.
@@ -5821,40 +5821,40 @@ c_parser_gnu_attribute (c_parser *parser, tree attrs,
 			bool expect_comma = false, bool empty_ok = true)
 {
   bool comma_first = c_parser_next_token_is (parser, CPP_COMMA);
-  if (!comma_first
+  만약 (!comma_first
       && !c_parser_next_token_is (parser, CPP_NAME)
       && !c_parser_next_token_is (parser, CPP_KEYWORD))
-    return NULL_TREE;
+    반환 NULL_TREE;
 
-  while (c_parser_next_token_is (parser, CPP_COMMA))
+  동안 (c_parser_next_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
-      if (!empty_ok)
-	return attrs;
+      만약 (!empty_ok)
+	반환 attrs;
     }
 
   tree attr_name = c_parser_gnu_attribute_any_word (parser);
-  if (attr_name == NULL_TREE)
-    return NULL_TREE;
+  만약 (attr_name == NULL_TREE)
+    반환 NULL_TREE;
 
   attr_name = canonicalize_attr_name (attr_name);
   c_parser_consume_token (parser);
 
   tree attr;
-  if (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
     {
-      if (expect_comma && !comma_first)
+      만약 (expect_comma && !comma_first)
 	{
 	  /* A comma is missing between the last attribute on the chain
 	     and this one.  */
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				     "expected %<)%>");
-	  return error_mark_node;
+	  반환 error_mark_node;
 	}
       attr = build_tree_list (attr_name, NULL_TREE);
       /* Add this attribute to the list.  */
       attrs = chainon (attrs, attr);
-      return attrs;
+      반환 attrs;
     }
   c_parser_consume_token (parser);
 
@@ -5866,87 +5866,87 @@ c_parser_gnu_attribute (c_parser *parser, tree attrs,
 				    true);
 
   attr = build_tree_list (attr_name, attr_args);
-  if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
     c_parser_consume_token (parser);
-  else
+  아니면
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				 "expected %<)%>");
-      return error_mark_node;
+      반환 error_mark_node;
     }
 
-  if (expect_comma && !comma_first)
+  만약 (expect_comma && !comma_first)
     {
       /* A comma is missing between the last attribute on the chain
 	 and this one.  */
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				 "expected %<)%>");
-      return error_mark_node;
+      반환 error_mark_node;
     }
 
   /* Add this attribute to the list.  */
   attrs = chainon (attrs, attr);
-  return attrs;
+  반환 attrs;
 }
 
 static tree
 c_parser_gnu_attributes (c_parser *parser)
 {
   tree attrs = NULL_TREE;
-  while (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
+  동안 (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
     {
       bool save_translate_strings_p = parser->translate_strings_p;
       parser->translate_strings_p = false;
       /* Consume the `__attribute__' keyword.  */
       c_parser_consume_token (parser);
       /* Look for the two `(' tokens.  */
-      if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+      만약 (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 	{
 	  parser->translate_strings_p = save_translate_strings_p;
-	  return attrs;
+	  반환 attrs;
 	}
-      if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+      만약 (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 	{
 	  parser->translate_strings_p = save_translate_strings_p;
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	  return attrs;
+	  반환 attrs;
 	}
       /* Parse the attribute list.  Require a comma between successive
 	 (possibly empty) attributes.  */
-      for (bool expect_comma = false; ; expect_comma = true)
+      위해 (bool expect_comma = false; ; expect_comma = true)
 	{
 	  /* Parse a single attribute.  */
 	  tree attr = c_parser_gnu_attribute (parser, attrs, expect_comma);
-	  if (attr == error_mark_node)
-	    return attrs;
-	  if (!attr)
+	  만약 (attr == error_mark_node)
+	    반환 attrs;
+	  만약 (!attr)
 	    break;
 	  attrs = attr;
       }
 
       /* Look for the two `)' tokens.  */
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	{
 	  parser->translate_strings_p = save_translate_strings_p;
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				     "expected %<)%>");
-	  return attrs;
+	  반환 attrs;
 	}
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	{
 	  parser->translate_strings_p = save_translate_strings_p;
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				     "expected %<)%>");
-	  return attrs;
+	  반환 attrs;
 	}
       parser->translate_strings_p = save_translate_strings_p;
     }
 
-  return attrs;
+  반환 attrs;
 }
 
 /* Parse an optional balanced token sequence.
@@ -5965,7 +5965,7 @@ c_parser_gnu_attributes (c_parser *parser)
 static void
 c_parser_balanced_token_sequence (c_parser *parser)
 {
-  while (true)
+  동안 (true)
     {
       c_token *token = c_parser_peek_token (parser);
       switch (token->type)
@@ -5998,7 +5998,7 @@ c_parser_balanced_token_sequence (c_parser *parser)
 	case CPP_CLOSE_PAREN:
 	case CPP_CLOSE_SQUARE:
 	case CPP_EOF:
-	  return;
+	  반환;
 
 	case CPP_PRAGMA:
 	  c_parser_consume_pragma (parser);
@@ -6022,25 +6022,25 @@ c_parser_balanced_token_sequence (c_parser *parser)
 static void
 c_parser_omp_directive_args (c_parser *parser, tree attribute, bool decl_p)
 {
-  unsigned int n = 1;
+  unsigned 정수 n = 1;
   c_token *first = c_parser_peek_token (parser);
-  if (!c_parser_check_balanced_raw_token_sequence (parser, &n)
+  만약 (!c_parser_check_balanced_raw_token_sequence (parser, &n)
       || (c_parser_peek_nth_token_raw (parser, n)->type
 	  != CPP_CLOSE_PAREN))
     {
       c_parser_balanced_token_sequence (parser);
       TREE_VALUE (attribute) = NULL_TREE;
-      return;
+      반환;
     }
-  if (n == 1)
+  만약 (n == 1)
     {
       error_at (first->location, "expected OpenMP directive name");
       TREE_VALUE (attribute) = NULL_TREE;
-      return;
+      반환;
     }
   vec<c_token, va_gc> *v;
   vec_alloc (v, n - 1);
-  for (--n; n; --n)
+  위해 (--n; n; --n)
     {
       c_token *tok = c_parser_peek_token (parser);
       v->quick_push (*tok);
@@ -6048,7 +6048,7 @@ c_parser_omp_directive_args (c_parser *parser, tree attribute, bool decl_p)
     }
   tree arg = make_node (C_TOKEN_VEC);
   C_TOKEN_VEC_TOKENS (arg) = v;
-  if (decl_p)
+  만약 (decl_p)
     TREE_PUBLIC (arg) = 1;
   TREE_VALUE (attribute) = tree_cons (NULL_TREE, arg, TREE_VALUE (attribute));
 }
@@ -6063,7 +6063,7 @@ c_parser_omp_sequence_args (c_parser *parser, tree attribute)
   do
     {
       c_token *token = c_parser_peek_token (parser);
-      if (token->type == CPP_NAME
+      만약 (token->type == CPP_NAME
 	  && strcmp (IDENTIFIER_POINTER (token->value), "omp") == 0
 	  && c_parser_peek_2nd_token (parser)->type == CPP_SCOPE)
 	{
@@ -6073,68 +6073,68 @@ c_parser_omp_sequence_args (c_parser *parser, tree attribute)
 	}
       bool directive = false;
       const char *p;
-      if (token->type != CPP_NAME)
+      만약 (token->type != CPP_NAME)
 	p = "";
-      else
+      아니면
 	p = IDENTIFIER_POINTER (token->value);
-      if (strcmp (p, "directive") == 0)
+      만약 (strcmp (p, "directive") == 0)
 	directive = true;
-      else if (strcmp (p, "sequence") != 0)
+      아니면 만약 (strcmp (p, "sequence") != 0)
 	{
 	  error_at (token->location, "expected %<directive%> or %<sequence%>");
 	  unsigned nesting_depth = 0;
 
-	  while (true)
+	  동안 (true)
 	    {
 	      /* Peek at the next token.  */
 	      token = c_parser_peek_token (parser);
 	      /* If we've reached the token we want, consume it and stop.  */
-	      if ((token->type == CPP_CLOSE_PAREN || token->type == CPP_COMMA)
+	      만약 ((token->type == CPP_CLOSE_PAREN || token->type == CPP_COMMA)
 		  && !nesting_depth)
 		break;
 	      /* If we've run out of tokens, stop.  */
-	      if (token->type == CPP_EOF)
+	      만약 (token->type == CPP_EOF)
 		break;
-	      if (token->type == CPP_PRAGMA_EOL && parser->in_pragma)
+	      만약 (token->type == CPP_PRAGMA_EOL && parser->in_pragma)
 		break;
-	      if (token->type == CPP_OPEN_BRACE
+	      만약 (token->type == CPP_OPEN_BRACE
 		  || token->type == CPP_OPEN_PAREN
 		  || token->type == CPP_OPEN_SQUARE)
 		++nesting_depth;
-	      else if (token->type == CPP_CLOSE_BRACE
+	      아니면 만약 (token->type == CPP_CLOSE_BRACE
 		       || token->type == CPP_CLOSE_PAREN
 		       || token->type == CPP_CLOSE_SQUARE)
 		{
-		  if (nesting_depth-- == 0)
+		  만약 (nesting_depth-- == 0)
 		    break;
 		}
 	      /* Consume this token.  */
 	      c_parser_consume_token (parser);
 	    }
-	  if (c_parser_next_token_is_not (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is_not (parser, CPP_COMMA))
 	    break;
 	  c_parser_consume_token (parser);
 	  continue;
 	}
       c_parser_consume_token (parser);
       matching_parens parens;
-      if (parens.require_open (parser))
+      만약 (parens.require_open (parser))
 	{
-	  if (directive)
+	  만약 (directive)
 	    c_parser_omp_directive_args (parser, attribute, false);
-	  else
+	  아니면
 	    c_parser_omp_sequence_args (parser, attribute);
 	  parens.skip_until_found_close (parser);
-	  if (c_parser_next_token_is_not (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is_not (parser, CPP_COMMA))
 	    break;
 	  c_parser_consume_token (parser);
 	}
-      else if (c_parser_next_token_is_not (parser, CPP_COMMA))
+      아니면 만약 (c_parser_next_token_is_not (parser, CPP_COMMA))
 	break;
-      else
+      아니면
 	c_parser_consume_token (parser);
     }
-  while (1);
+  동안 (1);
 }
 
 /* Parse standard (C23) attributes (including GNU attributes in the
@@ -6186,40 +6186,40 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
   tree ns, name, attribute;
 
   /* Parse the attribute-token.  */
-  if (token->type != CPP_NAME && token->type != CPP_KEYWORD)
+  만약 (token->type != CPP_NAME && token->type != CPP_KEYWORD)
     {
       c_parser_error (parser, "expected identifier");
-      return error_mark_node;
+      반환 error_mark_node;
     }
   name = canonicalize_attr_name (token->value);
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is (parser, CPP_SCOPE)
+  만약 (c_parser_next_token_is (parser, CPP_SCOPE)
       || (c_parser_next_token_is (parser, CPP_COLON)
 	  && (c_parser_peek_token (parser)->flags & COLON_SCOPE) != 0
 	  && c_parser_peek_2nd_token (parser)->type == CPP_COLON))
     {
       ns = name;
-      if (c_parser_next_token_is (parser, CPP_COLON))
+      만약 (c_parser_next_token_is (parser, CPP_COLON))
 	c_parser_consume_token (parser);
       c_parser_consume_token (parser);
       token = c_parser_peek_token (parser);
-      if (token->type != CPP_NAME && token->type != CPP_KEYWORD)
+      만약 (token->type != CPP_NAME && token->type != CPP_KEYWORD)
 	{
 	  c_parser_error (parser, "expected identifier");
-	  return error_mark_node;
+	  반환 error_mark_node;
 	}
       name = canonicalize_attr_name (token->value);
       c_parser_consume_token (parser);
     }
-  else
+  아니면
     ns = NULL_TREE;
   attribute = build_tree_list (build_tree_list (ns, name), NULL_TREE);
 
   /* Parse the arguments, if any.  */
   const attribute_spec *as = lookup_attribute_spec (TREE_PURPOSE (attribute));
-  if (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
     {
-      if ((flag_openmp || flag_openmp_simd)
+      만약 ((flag_openmp || flag_openmp_simd)
 	  && ns
 	  && is_attribute_p ("omp", ns)
 	  && (is_attribute_p ("directive", name)
@@ -6227,7 +6227,7 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
 	      || is_attribute_p ("decl", name)))
 	{
 	  error ("%<omp::%E%> attribute requires argument", name);
-	  return error_mark_node;
+	  반환 error_mark_node;
 	}
       goto out;
     }
@@ -6235,7 +6235,7 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
     location_t open_loc = c_parser_peek_token (parser)->location;
     matching_parens parens;
     parens.consume_open (parser);
-    if ((as && as->max_length == 0)
+    만약 ((as && as->max_length == 0)
 	/* Special-case the transactional-memory attribute "outer",
 	   which is specially handled but not registered as an
 	   attribute, to avoid allowing arbitrary balanced token
@@ -6244,11 +6244,11 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
       {
 	error_at (open_loc, "%qE attribute does not take any arguments", name);
 	parens.skip_until_found_close (parser);
-	return error_mark_node;
+	반환 error_mark_node;
       }
     /* If this is a fake attribute created to handle -Wno-attributes,
        we must skip parsing the arguments.  */
-    if (as && !attribute_ignored_p (as))
+    만약 (as && !attribute_ignored_p (as))
       {
 	bool takes_identifier
 	  = (ns != NULL_TREE
@@ -6266,34 +6266,34 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
 	  = c_parser_attribute_arguments (parser, takes_identifier,
 					  require_string, assume_attr, false);
       }
-    else
+    아니면
       {
-	if ((flag_openmp || flag_openmp_simd)
+	만약 ((flag_openmp || flag_openmp_simd)
 	    && ns
 	    && is_attribute_p ("omp", ns))
 	  {
-	    if (is_attribute_p ("directive", name))
+	    만약 (is_attribute_p ("directive", name))
 	      {
 		c_parser_omp_directive_args (parser, attribute, false);
 		parens.skip_until_found_close (parser);
-		return attribute;
+		반환 attribute;
 	      }
-	    else if (is_attribute_p ("decl", name))
+	    아니면 만약 (is_attribute_p ("decl", name))
 	      {
 		TREE_VALUE (TREE_PURPOSE (attribute))
 		  = get_identifier ("directive");
 		c_parser_omp_directive_args (parser, attribute, true);
 		parens.skip_until_found_close (parser);
-		return attribute;
+		반환 attribute;
 	      }
-	    else if (is_attribute_p ("sequence", name))
+	    아니면 만약 (is_attribute_p ("sequence", name))
 	      {
 		TREE_VALUE (TREE_PURPOSE (attribute))
 		  = get_identifier ("directive");
 		c_parser_omp_sequence_args (parser, attribute);
 		parens.skip_until_found_close (parser);
 		TREE_VALUE (attribute) = nreverse (TREE_VALUE (attribute));
-		return attribute;
+		반환 attribute;
 	      }
 	  }
 	c_parser_balanced_token_sequence (parser);
@@ -6301,7 +6301,7 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
     parens.require_close (parser);
   }
  out:
-  if (ns == NULL_TREE && !for_tm && !as)
+  만약 (ns == NULL_TREE && !for_tm && !as)
     {
       /* An attribute with standard syntax and no namespace specified
 	 is a constraint violation if it is not one of the known
@@ -6309,66 +6309,66 @@ c_parser_std_attribute (c_parser *parser, bool for_tm)
 	 then discard it to prevent a duplicate warning later.  */
       pedwarn (input_location, OPT_Wattributes, "%qE attribute ignored",
 	       name);
-      return error_mark_node;
+      반환 error_mark_node;
     }
-  return attribute;
+  반환 attribute;
 }
 
 static tree
 c_parser_std_attribute_list (c_parser *parser, bool for_tm)
 {
   tree attributes = NULL_TREE;
-  while (true)
+  동안 (true)
     {
       c_token *token = c_parser_peek_token (parser);
-      if (token->type == CPP_CLOSE_SQUARE)
+      만약 (token->type == CPP_CLOSE_SQUARE)
 	break;
-      if (token->type == CPP_COMMA)
+      만약 (token->type == CPP_COMMA)
 	{
 	  c_parser_consume_token (parser);
 	  continue;
 	}
       tree attribute = c_parser_std_attribute (parser, for_tm);
-      if (attribute != error_mark_node)
+      만약 (attribute != error_mark_node)
 	{
 	  TREE_CHAIN (attribute) = attributes;
 	  attributes = attribute;
 	}
-      if (c_parser_next_token_is_not (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is_not (parser, CPP_COMMA))
 	break;
     }
-  return attributes;
+  반환 attributes;
 }
 
 static tree
 c_parser_std_attribute_specifier (c_parser *parser, bool for_tm)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  if (!c_parser_require (parser, CPP_OPEN_SQUARE, "expected %<[%>"))
-    return NULL_TREE;
-  if (!c_parser_require (parser, CPP_OPEN_SQUARE, "expected %<[%>"))
+  만약 (!c_parser_require (parser, CPP_OPEN_SQUARE, "expected %<[%>"))
+    반환 NULL_TREE;
+  만약 (!c_parser_require (parser, CPP_OPEN_SQUARE, "expected %<[%>"))
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, "expected %<]%>");
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
   tree attributes;
-  if (c_parser_next_token_is_keyword (parser, RID_EXTENSION))
+  만약 (c_parser_next_token_is_keyword (parser, RID_EXTENSION))
     {
       auto ext = disable_extension_diagnostics ();
       c_parser_consume_token (parser);
       attributes = c_parser_std_attribute_list (parser, for_tm);
       restore_extension_diagnostics (ext);
     }
-  else
+  아니면
     {
-      if (!for_tm)
+      만약 (!for_tm)
 	pedwarn_c11 (loc, OPT_Wpedantic,
 		     "ISO C does not support %<[[]]%> attributes before C23");
       attributes = c_parser_std_attribute_list (parser, for_tm);
     }
   c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, "expected %<]%>");
   c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, "expected %<]%>");
-  return nreverse (attributes);
+  반환 nreverse (attributes);
 }
 
 /* Look past an optional balanced token sequence of raw look-ahead
@@ -6377,9 +6377,9 @@ c_parser_std_attribute_specifier (c_parser *parser, bool for_tm)
    if the tokens parsed were not balanced.  */
 
 static bool
-c_parser_check_balanced_raw_token_sequence (c_parser *parser, unsigned int *n)
+c_parser_check_balanced_raw_token_sequence (c_parser *parser, unsigned 정수 *n)
 {
-  while (true)
+  동안 (true)
     {
       c_token *token = c_parser_peek_nth_token_raw (parser, *n);
       switch (token->type)
@@ -6387,48 +6387,48 @@ c_parser_check_balanced_raw_token_sequence (c_parser *parser, unsigned int *n)
 	case CPP_OPEN_BRACE:
 	  {
 	    ++*n;
-	    if (c_parser_check_balanced_raw_token_sequence (parser, n))
+	    만약 (c_parser_check_balanced_raw_token_sequence (parser, n))
 	      {
 		token = c_parser_peek_nth_token_raw (parser, *n);
-		if (token->type == CPP_CLOSE_BRACE)
+		만약 (token->type == CPP_CLOSE_BRACE)
 		  ++*n;
-		else
-		  return false;
+		아니면
+		  반환 false;
 	      }
-	    else
-	      return false;
+	    아니면
+	      반환 false;
 	    break;
 	  }
 
 	case CPP_OPEN_PAREN:
 	  {
 	    ++*n;
-	    if (c_parser_check_balanced_raw_token_sequence (parser, n))
+	    만약 (c_parser_check_balanced_raw_token_sequence (parser, n))
 	      {
 		token = c_parser_peek_nth_token_raw (parser, *n);
-		if (token->type == CPP_CLOSE_PAREN)
+		만약 (token->type == CPP_CLOSE_PAREN)
 		  ++*n;
-		else
-		  return false;
+		아니면
+		  반환 false;
 	      }
-	    else
-	      return false;
+	    아니면
+	      반환 false;
 	    break;
 	  }
 
 	case CPP_OPEN_SQUARE:
 	  {
 	    ++*n;
-	    if (c_parser_check_balanced_raw_token_sequence (parser, n))
+	    만약 (c_parser_check_balanced_raw_token_sequence (parser, n))
 	      {
 		token = c_parser_peek_nth_token_raw (parser, *n);
-		if (token->type == CPP_CLOSE_SQUARE)
+		만약 (token->type == CPP_CLOSE_SQUARE)
 		  ++*n;
-		else
-		  return false;
+		아니면
+		  반환 false;
 	      }
-	    else
-	      return false;
+	    아니면
+	      반환 false;
 	    break;
 	  }
 
@@ -6436,7 +6436,7 @@ c_parser_check_balanced_raw_token_sequence (c_parser *parser, unsigned int *n)
 	case CPP_CLOSE_PAREN:
 	case CPP_CLOSE_SQUARE:
 	case CPP_EOF:
-	  return true;
+	  반환 true;
 
 	default:
 	  ++*n;
@@ -6448,23 +6448,23 @@ c_parser_check_balanced_raw_token_sequence (c_parser *parser, unsigned int *n)
 /* Return whether standard attributes start with the Nth token.  */
 
 static bool
-c_parser_nth_token_starts_std_attributes (c_parser *parser, unsigned int n)
+c_parser_nth_token_starts_std_attributes (c_parser *parser, unsigned 정수 n)
 {
-  if (!(c_parser_peek_nth_token (parser, n)->type == CPP_OPEN_SQUARE
+  만약 (!(c_parser_peek_nth_token (parser, n)->type == CPP_OPEN_SQUARE
 	&& c_parser_peek_nth_token (parser, n + 1)->type == CPP_OPEN_SQUARE))
-    return false;
+    반환 false;
   /* In C, '[[' must start attributes.  In Objective-C, we need to
      check whether '[[' is matched by ']]'.  */
-  if (!c_dialect_objc ())
-    return true;
+  만약 (!c_dialect_objc ())
+    반환 true;
   n += 2;
-  if (!c_parser_check_balanced_raw_token_sequence (parser, &n))
-    return false;
+  만약 (!c_parser_check_balanced_raw_token_sequence (parser, &n))
+    반환 false;
   c_token *token = c_parser_peek_nth_token_raw (parser, n);
-  if (token->type != CPP_CLOSE_SQUARE)
-    return false;
+  만약 (token->type != CPP_CLOSE_SQUARE)
+    반환 false;
   token = c_parser_peek_nth_token_raw (parser, n + 1);
-  return token->type == CPP_CLOSE_SQUARE;
+  반환 token->type == CPP_CLOSE_SQUARE;
 }
 
 /* Skip standard attribute tokens starting at Nth token (with 1 as the
@@ -6475,27 +6475,27 @@ static size_t
 c_parser_skip_std_attribute_spec_seq (c_parser *parser, size_t n)
 {
   size_t orig_n = n;
-  while (true)
+  동안 (true)
     {
-      if (c_parser_peek_nth_token_raw (parser, n)->type == CPP_OPEN_SQUARE
+      만약 (c_parser_peek_nth_token_raw (parser, n)->type == CPP_OPEN_SQUARE
 	  && (c_parser_peek_nth_token_raw (parser, n + 1)->type
 	      == CPP_OPEN_SQUARE))
 	{
-	  unsigned int m = n + 2;
-	  if (!c_parser_check_balanced_raw_token_sequence (parser, &m))
-	    return orig_n;
+	  unsigned 정수 m = n + 2;
+	  만약 (!c_parser_check_balanced_raw_token_sequence (parser, &m))
+	    반환 orig_n;
 	  c_token *token = c_parser_peek_nth_token_raw (parser, m);
-	  if (token->type != CPP_CLOSE_SQUARE)
-	    return orig_n;
+	  만약 (token->type != CPP_CLOSE_SQUARE)
+	    반환 orig_n;
 	  token = c_parser_peek_nth_token_raw (parser, m + 1);
-	  if (token->type != CPP_CLOSE_SQUARE)
-	    return orig_n;
+	  만약 (token->type != CPP_CLOSE_SQUARE)
+	    반환 orig_n;
 	  n = m + 2;
 	}
-      else
+      아니면
 	break;
     }
-  return n;
+  반환 n;
 }
 
 static tree
@@ -6507,8 +6507,8 @@ c_parser_std_attribute_specifier_sequence (c_parser *parser)
       tree attrs = c_parser_std_attribute_specifier (parser, false);
       attributes = chainon (attributes, attrs);
     }
-  while (c_parser_nth_token_starts_std_attributes (parser, 1));
-  return attributes;
+  동안 (c_parser_nth_token_starts_std_attributes (parser, 1));
+  반환 attributes;
 }
 
 /* Parse a type name (C90 6.5.5, C99 6.7.6, C11 6.7.7).  ALIGNAS_OK
@@ -6528,29 +6528,29 @@ c_parser_type_name (c_parser *parser, bool alignas_ok)
   bool dummy = false;
   c_parser_declspecs (parser, specs, false, true, true, alignas_ok, false,
 		      false, true, cla_prefer_type);
-  if (!specs->declspecs_seen_p)
+  만약 (!specs->declspecs_seen_p)
     {
       c_parser_error (parser, "expected specifier-qualifier-list");
-      return NULL;
+      반환 NULL;
     }
-  if (specs->type != error_mark_node)
+  만약 (specs->type != error_mark_node)
     {
       pending_xref_error ();
       finish_declspecs (specs);
       /* When the typename is declared, its type is a top level type, we should
 	 call verify_counted_by_for_top_anonymous_type.  */
-      if (specs->typespec_kind == ctsk_tagdef)
+      만약 (specs->typespec_kind == ctsk_tagdef)
 	verify_counted_by_for_top_anonymous_type (specs->type);
     }
   declarator = c_parser_declarator (parser,
 				    specs->typespec_kind != ctsk_none,
 				    C_DTR_ABSTRACT, &dummy);
-  if (declarator == NULL)
-    return NULL;
+  만약 (declarator == NULL)
+    반환 NULL;
   ret = XOBNEW (&parser_obstack, struct c_type_name);
   ret->specs = specs;
   ret->declarator = declarator;
-  return ret;
+  반환 ret;
 }
 
 /* Parse an initializer (C90 6.5.7, C99 6.7.8, C11 6.7.9).
@@ -6601,16 +6601,16 @@ c_parser_type_name (c_parser *parser, bool alignas_ok)
 static struct c_expr
 c_parser_initializer (c_parser *parser, tree decl)
 {
-  if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
-    return c_parser_braced_init (parser, NULL_TREE, false, NULL,
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+    반환 c_parser_braced_init (parser, NULL_TREE, false, NULL,
 				 decl != error_mark_node
 				 && C_DECL_VARIABLE_SIZE (decl));
-  else
+  아니면
     {
       struct c_expr ret;
       location_t loc = c_parser_peek_token (parser)->location;
       ret = c_parser_expr_no_commas (parser, NULL);
-      if (decl != error_mark_node && C_DECL_VARIABLE_SIZE (decl))
+      만약 (decl != error_mark_node && C_DECL_VARIABLE_SIZE (decl))
 	{
 	  error_at (loc,
 		    "variable-sized object may not be initialized except "
@@ -6620,18 +6620,18 @@ c_parser_initializer (c_parser *parser, tree decl)
       /* This is handled mostly by gimplify.cc, but we have to deal with
 	 not warning about int x = x; as it is a GCC extension to turn off
 	 this warning but only if warn_init_self is zero.  */
-      if (VAR_P (decl)
+      만약 (VAR_P (decl)
 	  && !DECL_EXTERNAL (decl)
 	  && !TREE_STATIC (decl)
 	  && ret.value == decl
 	  && !warning_enabled_at (DECL_SOURCE_LOCATION (decl), OPT_Winit_self))
 	suppress_warning (decl, OPT_Winit_self);
-      if (TREE_CODE (ret.value) != STRING_CST
+      만약 (TREE_CODE (ret.value) != STRING_CST
 	  && (TREE_CODE (ret.value) != COMPOUND_LITERAL_EXPR
 	      || C_DECL_DECLARED_CONSTEXPR (COMPOUND_LITERAL_EXPR_DECL
 					    (ret.value))))
 	ret = convert_lvalue_to_rvalue (loc, ret, true, true, true);
-      return ret;
+      반환 ret;
     }
 }
 
@@ -6661,40 +6661,40 @@ c_parser_braced_init (c_parser *parser, tree type, bool nested_p,
   bool zero_init_padding_bits = false;
   matching_braces braces;
   braces.consume_open (parser);
-  if (nested_p)
+  만약 (nested_p)
     {
       finish_implicit_inits (brace_loc, outer_obstack);
       push_init_level (brace_loc, 0, &braced_init_obstack);
     }
-  else
+  아니면
     really_start_incremental_init (type);
-  if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+  만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
     {
       pedwarn_c11 (brace_loc, OPT_Wpedantic,
 		   "ISO C forbids empty initializer braces before C23");
-      if (flag_isoc23)
+      만약 (flag_isoc23)
 	zero_init_padding_bits = true;
     }
-  else
+  아니면
     {
-      if (varsize_p)
+      만약 (varsize_p)
 	error_at (brace_loc,
 		  "variable-sized object may not be initialized except "
 		  "with an empty initializer");
       /* Parse a non-empty initializer list, possibly with a trailing
 	 comma.  */
-      while (true)
+      동안 (true)
 	{
 	  c_parser_initelt (parser, &braced_init_obstack);
-	  if (parser->error)
+	  만약 (parser->error)
 	    break;
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    {
 	      last_init_list_comma = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
 	      /* CPP_EMBED should be always in between two CPP_COMMA
 		 tokens.  */
-	      while (c_parser_next_token_is (parser, CPP_EMBED))
+	      동안 (c_parser_next_token_is (parser, CPP_EMBED))
 		{
 		  c_token *embed = c_parser_peek_token (parser);
 		  c_parser_consume_token (parser);
@@ -6712,15 +6712,15 @@ c_parser_braced_init (c_parser *parser, tree type, bool nested_p,
 		  c_parser_consume_token (parser);
 		}
 	    }
-	  else
+	  아니면
 	    break;
-	  if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+	  만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 	    break;
 	}
     }
   c_omp_array_section_p = save_c_omp_array_section_p;
   c_token *next_tok = c_parser_peek_token (parser);
-  if (next_tok->type != CPP_CLOSE_BRACE)
+  만약 (next_tok->type != CPP_CLOSE_BRACE)
     {
       ret.set_error ();
       ret.original_code = ERROR_MARK;
@@ -6728,18 +6728,18 @@ c_parser_braced_init (c_parser *parser, tree type, bool nested_p,
       braces.skip_until_found_close (parser);
       pop_init_level (brace_loc, 0, &braced_init_obstack, last_init_list_comma);
       obstack_free (&braced_init_obstack, NULL);
-      return ret;
+      반환 ret;
     }
   location_t close_loc = next_tok->location;
   c_parser_consume_token (parser);
   ret = pop_init_level (brace_loc, 0, &braced_init_obstack, close_loc);
-  if (zero_init_padding_bits
+  만약 (zero_init_padding_bits
       && ret.value
       && TREE_CODE (ret.value) == CONSTRUCTOR)
     CONSTRUCTOR_ZERO_PADDING_BITS (ret.value) = 1;
   obstack_free (&braced_init_obstack, NULL);
   set_c_expr_source_range (&ret, brace_loc, close_loc);
-  return ret;
+  반환 ret;
 }
 
 /* Parse a nested initializer, including designators.  */
@@ -6750,7 +6750,7 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
   /* Parse any designator or designator list.  A single array
      designator may have the subsequent "=" omitted in GNU C, but a
      longer list or a structure member designator may not.  */
-  if (c_parser_next_token_is (parser, CPP_NAME)
+  만약 (c_parser_next_token_is (parser, CPP_NAME)
       && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
     {
       /* Old-style structure member designator.  */
@@ -6764,33 +6764,33 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
       c_parser_consume_token (parser);
       c_parser_consume_token (parser);
     }
-  else
+  아니면
     {
       /* des_seen is 0 if there have been no designators, 1 if there
 	 has been a single array designator and 2 otherwise.  */
-      int des_seen = 0;
+      정수 des_seen = 0;
       /* Location of a designator.  */
       location_t des_loc = UNKNOWN_LOCATION;  /* Quiet warning.  */
-      while (c_parser_next_token_is (parser, CPP_OPEN_SQUARE)
+      동안 (c_parser_next_token_is (parser, CPP_OPEN_SQUARE)
 	     || c_parser_next_token_is (parser, CPP_DOT))
 	{
-	  int des_prev = des_seen;
-	  if (!des_seen)
+	  정수 des_prev = des_seen;
+	  만약 (!des_seen)
 	    des_loc = c_parser_peek_token (parser)->location;
-	  if (des_seen < 2)
+	  만약 (des_seen < 2)
 	    des_seen++;
-	  if (c_parser_next_token_is (parser, CPP_DOT))
+	  만약 (c_parser_next_token_is (parser, CPP_DOT))
 	    {
 	      des_seen = 2;
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is (parser, CPP_NAME))
+	      만약 (c_parser_next_token_is (parser, CPP_NAME))
 		{
 		  set_init_label (des_loc, c_parser_peek_token (parser)->value,
 				  c_parser_peek_token (parser)->location,
 				  braced_init_obstack);
 		  c_parser_consume_token (parser);
 		}
-	      else
+	      아니면
 		{
 		  struct c_expr init;
 		  init.set_error ();
@@ -6800,10 +6800,10 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 		  c_parser_skip_until_found (parser, CPP_COMMA, NULL);
 		  process_init_element (input_location, init, false,
 					braced_init_obstack);
-		  return;
+		  반환;
 		}
 	    }
-	  else
+	  아니면
 	    {
 	      struct c_expr first_expr;
 	      tree first, second;
@@ -6820,12 +6820,12 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 		 possibly being a second level of designation: in LALR
 		 terms, the '[' is shifted rather than reducing
 		 designator to designator-list.  */
-	      if (des_prev == 1 && c_dialect_objc ())
+	      만약 (des_prev == 1 && c_dialect_objc ())
 		{
 		  des_seen = des_prev;
 		  break;
 		}
-	      if (des_prev == 0 && c_dialect_objc ())
+	      만약 (des_prev == 0 && c_dialect_objc ())
 		{
 		  /* This might be an array designator or an
 		     Objective-C message expression.  If the former,
@@ -6837,7 +6837,7 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 		  tree rec, args;
 		  struct c_expr mexpr;
 		  c_parser_consume_token (parser);
-		  if (c_parser_peek_token (parser)->type == CPP_NAME
+		  만약 (c_parser_peek_token (parser)->type == CPP_NAME
 		      && ((c_parser_peek_token (parser)->id_kind
 			   == C_ID_TYPENAME)
 			  || (c_parser_peek_token (parser)->id_kind
@@ -6852,7 +6852,7 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 		  array_index_loc = c_parser_peek_token (parser)->location;
 		  first_expr = c_parser_expr_no_commas (parser, NULL);
 		  mark_exp_read (first_expr.value);
-		  if (c_parser_next_token_is (parser, CPP_ELLIPSIS)
+		  만약 (c_parser_next_token_is (parser, CPP_ELLIPSIS)
 		      || c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
 		    goto array_desig_after_first;
 		  first = first_expr.value;
@@ -6860,7 +6860,7 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 		     without commas has been parsed; there might be
 		     more of the expression.  */
 		  rec = first;
-		  while (c_parser_next_token_is (parser, CPP_COMMA))
+		  동안 (c_parser_next_token_is (parser, CPP_COMMA))
 		    {
 		      struct c_expr next;
 		      location_t comma_loc, exp_loc;
@@ -6886,7 +6886,7 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 		     initializer, starting with this message
 		     expression as a primary-expression.  */
 		  c_parser_initval (parser, &mexpr, braced_init_obstack);
-		  return;
+		  반환;
 		}
 	      c_parser_consume_token (parser);
 	      array_index_loc = c_parser_peek_token (parser)->location;
@@ -6897,7 +6897,7 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 						     first_expr,
 						     true, true);
 	      first = first_expr.value;
-	      if (c_parser_next_token_is (parser, CPP_ELLIPSIS))
+	      만약 (c_parser_next_token_is (parser, CPP_ELLIPSIS))
 		{
 		  ellipsis_loc = c_parser_peek_token (parser)->location;
 		  c_parser_consume_token (parser);
@@ -6907,37 +6907,37 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 						     true, true).value;
 		  mark_exp_read (second);
 		}
-	      else
+	      아니면
 		second = NULL_TREE;
-	      if (c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
+	      만약 (c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
 		{
 		  c_parser_consume_token (parser);
 		  set_init_index (array_index_loc, first, second,
 				  braced_init_obstack);
-		  if (second)
+		  만약 (second)
 		    pedwarn (ellipsis_loc, OPT_Wpedantic,
 			     "ISO C forbids specifying range of elements to initialize");
 		}
-	      else
+	      아니면
 		c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE,
 					   "expected %<]%>");
 	    }
 	}
-      if (des_seen >= 1)
+      만약 (des_seen >= 1)
 	{
-	  if (c_parser_next_token_is (parser, CPP_EQ))
+	  만약 (c_parser_next_token_is (parser, CPP_EQ))
 	    {
 	      pedwarn_c90 (des_loc, OPT_Wpedantic,
 			   "ISO C90 forbids specifying subobject "
 			   "to initialize");
 	      c_parser_consume_token (parser);
 	    }
-	  else
+	  아니면
 	    {
-	      if (des_seen == 1)
+	      만약 (des_seen == 1)
 		pedwarn (c_parser_peek_token (parser)->location, OPT_Wpedantic,
 			 "obsolete use of designated initializer without %<=%>");
-	      else
+	      아니면
 		{
 		  struct c_expr init;
 		  init.set_error ();
@@ -6947,7 +6947,7 @@ c_parser_initelt (c_parser *parser, struct obstack * braced_init_obstack)
 		  c_parser_skip_until_found (parser, CPP_COMMA, NULL);
 		  process_init_element (input_location, init, false,
 					braced_init_obstack);
-		  return;
+		  반환;
 		}
 	    }
 	}
@@ -6969,13 +6969,13 @@ c_parser_initval (c_parser *parser, struct c_expr *after,
   gcc_assert (!after || c_dialect_objc ());
   location_t loc = c_parser_peek_token (parser)->location;
 
-  if (c_parser_next_token_is (parser, CPP_OPEN_BRACE) && !after)
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_BRACE) && !after)
     init = c_parser_braced_init (parser, NULL_TREE, true,
 				 braced_init_obstack, false);
-  else
+  아니면
     {
       init = c_parser_expr_no_commas (parser, after);
-      if (init.value != NULL_TREE
+      만약 (init.value != NULL_TREE
 	  && TREE_CODE (init.value) != STRING_CST
 	  && (TREE_CODE (init.value) != COMPOUND_LITERAL_EXPR
 	      || C_DECL_DECLARED_CONSTEXPR (COMPOUND_LITERAL_EXPR_DECL
@@ -6988,89 +6988,89 @@ c_parser_initval (c_parser *parser, struct c_expr *after,
   /* Attempt to optimize large char array initializers into RAW_DATA_CST
      to save compile time and memory even when not using #embed.  */
   static unsigned vals_to_ignore;
-  if (vals_to_ignore)
+  만약 (vals_to_ignore)
     /* If earlier call determined there is certain number of CPP_COMMA
        CPP_NUMBER tokens with 0-255 int values, but not enough for
        RAW_DATA_CST to be beneficial, don't try to check it again until
        they are all parsed.  */
     --vals_to_ignore;
-  else if (val
+  아니면 만약 (val
 	   && TREE_CODE (val) == INTEGER_CST
 	   && TREE_TYPE (val) == integer_type_node
 	   && c_parser_next_token_is (parser, CPP_COMMA))
-    if (unsigned int len = c_maybe_optimize_large_byte_initializer ())
+    만약 (unsigned 정수 len = c_maybe_optimize_large_byte_initializer ())
       {
 	char buf1[64];
-	unsigned int i;
+	unsigned 정수 i;
 	gcc_checking_assert (len >= 64);
 	location_t last_loc = UNKNOWN_LOCATION;
-	for (i = 0; i < 64; ++i)
+	위해 (i = 0; i < 64; ++i)
 	  {
 	    c_token *tok = c_parser_peek_nth_token_raw (parser, 1 + 2 * i);
-	    if (tok->type != CPP_COMMA)
+	    만약 (tok->type != CPP_COMMA)
 	      break;
 	    tok = c_parser_peek_nth_token_raw (parser, 2 + 2 * i);
-	    if (tok->type != CPP_NUMBER
+	    만약 (tok->type != CPP_NUMBER
 		|| TREE_CODE (tok->value) != INTEGER_CST
 		|| TREE_TYPE (tok->value) != integer_type_node
 		|| wi::neg_p (wi::to_wide (tok->value))
 		|| wi::to_widest (tok->value) > UCHAR_MAX)
 	      break;
 	    buf1[i] = (char) tree_to_uhwi (tok->value);
-	    if (i == 0)
+	    만약 (i == 0)
 	      loc = tok->location;
 	    last_loc = tok->location;
 	  }
-	if (i < 64)
+	만약 (i < 64)
 	  {
 	    vals_to_ignore = i;
-	    return;
+	    반환;
 	  }
 	c_token *tok = c_parser_peek_nth_token_raw (parser, 1 + 2 * i);
 	/* If 64 CPP_COMMA CPP_NUMBER pairs are followed by CPP_CLOSE_BRACE,
 	   punt if len is INT_MAX as that can mean this is a flexible array
 	   member and in that case we need one CPP_NUMBER afterwards
 	   (as guaranteed for CPP_EMBED).  */
-	if (tok->type == CPP_CLOSE_BRACE && len != INT_MAX)
+	만약 (tok->type == CPP_CLOSE_BRACE && len != INT_MAX)
 	  len = i;
-	else if (tok->type != CPP_COMMA
+	아니면 만약 (tok->type != CPP_COMMA
 		 || (c_parser_peek_nth_token_raw (parser, 2 + 2 * i)->type
 		     != CPP_NUMBER))
 	  {
 	    vals_to_ignore = i;
-	    return;
+	    반환;
 	  }
 	/* Ensure the STRING_CST fits into 128K.  */
-	unsigned int max_len = 131072 - offsetof (struct tree_string, str) - 1;
-	unsigned int orig_len = len;
-	unsigned int off = 0, last = 0;
-	if (!wi::neg_p (wi::to_wide (val)) && wi::to_widest (val) <= UCHAR_MAX)
+	unsigned 정수 max_len = 131072 - offsetof (struct tree_string, str) - 1;
+	unsigned 정수 orig_len = len;
+	unsigned 정수 off = 0, last = 0;
+	만약 (!wi::neg_p (wi::to_wide (val)) && wi::to_widest (val) <= UCHAR_MAX)
 	  off = 1;
 	len = MIN (len, max_len - off);
 	char *buf2 = XNEWVEC (char, len + off);
-	if (off)
+	만약 (off)
 	  buf2[0] = (char) tree_to_uhwi (val);
 	memcpy (buf2 + off, buf1, i);
-	for (unsigned int j = 0; j < i; ++j)
+	위해 (unsigned 정수 j = 0; j < i; ++j)
 	  {
 	    c_parser_peek_token (parser);
 	    c_parser_consume_token (parser);
 	    c_parser_peek_token (parser);
 	    c_parser_consume_token (parser);
 	  }
-	for (; i < len; ++i)
+	위해 (; i < len; ++i)
 	  {
-	    if (!c_parser_next_token_is (parser, CPP_COMMA))
+	    만약 (!c_parser_next_token_is (parser, CPP_COMMA))
 	      break;
 	    tok = c_parser_peek_2nd_token (parser);
-	    if (tok->type != CPP_NUMBER
+	    만약 (tok->type != CPP_NUMBER
 		|| TREE_CODE (tok->value) != INTEGER_CST
 		|| TREE_TYPE (tok->value) != integer_type_node
 		|| wi::neg_p (wi::to_wide (tok->value))
 		|| wi::to_widest (tok->value) > UCHAR_MAX)
 	      break;
 	    c_token *tok2 = c_parser_peek_nth_token (parser, 3);
-	    if (tok2->type != CPP_COMMA && tok2->type != CPP_CLOSE_BRACE)
+	    만약 (tok2->type != CPP_COMMA && tok2->type != CPP_CLOSE_BRACE)
 	      break;
 	    buf2[i + off] = (char) tree_to_uhwi (tok->value);
 	    /* If orig_len is INT_MAX, this can be flexible array member and
@@ -7078,7 +7078,7 @@ c_parser_initval (c_parser *parser, struct c_expr *after,
 	       for CPP_EMBED is normally guaranteed after it.  Include
 	       that byte in the RAW_DATA_OWNER though, so it can be optimized
 	       later.  */
-	    if (orig_len == INT_MAX
+	    만약 (orig_len == INT_MAX
 		&& (tok2->type == CPP_CLOSE_BRACE
 		    || (c_parser_peek_nth_token (parser, 4)->type
 			!= CPP_NUMBER)))
@@ -7180,20 +7180,20 @@ c_parser_compound_statement (c_parser *parser, location_t *endlocp)
   tree stmt;
   location_t brace_loc;
   brace_loc = c_parser_peek_token (parser)->location;
-  if (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+  만약 (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
     {
       /* Ensure a scope is entered and left anyway to avoid confusion
 	 if we have just prepared to enter a function body.  */
       stmt = c_begin_compound_stmt (true);
       c_end_compound_stmt (brace_loc, stmt, true);
-      return error_mark_node;
+      반환 error_mark_node;
     }
   stmt = c_begin_compound_stmt (true);
   location_t end_loc = c_parser_compound_statement_nostart (parser);
-  if (endlocp)
+  만약 (endlocp)
     *endlocp = end_loc;
 
-  return c_end_compound_stmt (brace_loc, stmt, true);
+  반환 c_end_compound_stmt (brace_loc, stmt, true);
 }
 
 /* Diagnose errors related to imperfectly nested loops in an OMP
@@ -7210,45 +7210,45 @@ check_omp_intervening_code (c_parser *parser)
   struct omp_for_parse_data *omp_for_parse_state = parser->omp_for_parse_state;
   gcc_assert (omp_for_parse_state);
 
-  if (!omp_for_parse_state->in_intervening_code)
-    return;
+  만약 (!omp_for_parse_state->in_intervening_code)
+    반환;
   omp_for_parse_state->saw_intervening_code = true;
 
   /* Only diagnose errors related to perfect nesting once.  */
-  if (!omp_for_parse_state->perfect_nesting_fail)
+  만약 (!omp_for_parse_state->perfect_nesting_fail)
     {
 
       /* OpenACC does not (yet) permit intervening code, in
 	 addition to situations forbidden by the OpenMP spec.  */
-      if (omp_for_parse_state->code == OACC_LOOP)
+      만약 (omp_for_parse_state->code == OACC_LOOP)
 	{
 	  error_at (omp_for_parse_state->for_loc,
 		    "inner loops must be perfectly nested in "
 		    "%<#pragma acc loop%>");
 	  omp_for_parse_state->perfect_nesting_fail = true;
 	}
-      else if (omp_for_parse_state->ordered)
+      아니면 만약 (omp_for_parse_state->ordered)
 	{
 	  error_at (omp_for_parse_state->for_loc,
 		    "inner loops must be perfectly nested with "
 		    "%<ordered%> clause");
 	  omp_for_parse_state->perfect_nesting_fail = true;
 	}
-      else if (omp_for_parse_state->inscan)
+      아니면 만약 (omp_for_parse_state->inscan)
 	{
 	  error_at (omp_for_parse_state->for_loc,
 		    "inner loops must be perfectly nested with "
 		    "%<reduction%> %<inscan%> clause");
 	  omp_for_parse_state->perfect_nesting_fail = true;
 	}
-      else if (omp_for_parse_state->code == OMP_TILE)
+      아니면 만약 (omp_for_parse_state->code == OMP_TILE)
 	{
 	  error_at (omp_for_parse_state->for_loc,
 		    "inner loops must be perfectly nested in "
 		     "%<pragma omp tile%>");
 	  omp_for_parse_state->perfect_nesting_fail = true;
 	}
-      if (omp_for_parse_state->perfect_nesting_fail)
+      만약 (omp_for_parse_state->perfect_nesting_fail)
 	omp_for_parse_state->fail = true;
     }
 }
@@ -7259,7 +7259,7 @@ check_omp_intervening_code (c_parser *parser)
 static void
 add_structured_block_stmt (tree sl)
 {
-  if (TREE_CODE (sl) != STATEMENT_LIST
+  만약 (TREE_CODE (sl) != STATEMENT_LIST
       || !tsi_end_p (tsi_start (sl)))
     add_stmt (build1 (OMP_STRUCTURED_BLOCK, void_type_node, sl));
 }
@@ -7278,26 +7278,26 @@ static bool
 c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 					  bool *have_std_attrs)
 {
-  if (!flag_openmp && !flag_openmp_simd)
-    return false;
+  만약 (!flag_openmp && !flag_openmp_simd)
+    반환 false;
 
   auto_vec<c_omp_attribute_data, 16> vd;
-  int cnt = 0;
-  int tokens = 0;
+  정수 cnt = 0;
+  정수 tokens = 0;
   bool bad = false;
-  for (tree *pa = &attrs; *pa; )
-    if (is_attribute_namespace_p ("omp", *pa)
+  위해 (tree *pa = &attrs; *pa; )
+    만약 (is_attribute_namespace_p ("omp", *pa)
 	&& is_attribute_p ("directive", get_attribute_name (*pa)))
       {
 	cnt++;
-	for (tree a = TREE_VALUE (*pa); a; a = TREE_CHAIN (a))
+	위해 (tree a = TREE_VALUE (*pa); a; a = TREE_CHAIN (a))
 	  {
 	    tree d = TREE_VALUE (a);
 	    gcc_assert (TREE_CODE (d) == C_TOKEN_VEC);
 	    vec<c_token, va_gc> *toks = C_TOKEN_VEC_TOKENS (d);
 	    c_token *first = toks->address ();
 	    c_token *last = first + toks->length ();
-	    if (parser->omp_attrs_forbidden_p)
+	    만약 (parser->omp_attrs_forbidden_p)
 	      {
 		error_at (first->location,
 			  "mixing OpenMP directives with attribute and pragma "
@@ -7305,31 +7305,31 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 		parser->omp_attrs_forbidden_p = false;
 		bad = true;
 	      }
-	    else if (TREE_PUBLIC (d))
+	    아니면 만약 (TREE_PUBLIC (d))
 	      {
 		error_at (first->location,
 			  "OpenMP %<omp::decl%> attribute on a statement");
 		bad = true;
 	      }
 	    const char *directive[3] = {};
-	    for (int i = 0; i < 3; i++)
+	    위해 (정수 i = 0; i < 3; i++)
 	      {
 		tree id = NULL_TREE;
-		if (first + i == last)
+		만약 (first + i == last)
 		  break;
-		if (first[i].type == CPP_NAME)
+		만약 (first[i].type == CPP_NAME)
 		  id = first[i].value;
-		else if (first[i].type == CPP_KEYWORD)
-		  id = ridpointers[(int) first[i].keyword];
-		else
+		아니면 만약 (first[i].type == CPP_KEYWORD)
+		  id = ridpointers[(정수) first[i].keyword];
+		아니면
 		  break;
 		directive[i] = IDENTIFIER_POINTER (id);
 	      }
 	    const c_omp_directive *dir = NULL;
-	    if (directive[0])
+	    만약 (directive[0])
 	      dir = c_omp_categorize_directive (directive[0], directive[1],
 						directive[2]);
-	    if (dir == NULL)
+	    만약 (dir == NULL)
 	      {
 		error_at (first->location,
 			  "unknown OpenMP directive name in %qs attribute "
@@ -7338,15 +7338,15 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 		continue;
 	      }
 	    c_omp_directive_kind kind = dir->kind;
-	    if (dir->id == PRAGMA_OMP_ORDERED)
+	    만약 (dir->id == PRAGMA_OMP_ORDERED)
 	      {
 		/* ordered is C_OMP_DIR_CONSTRUCT only if it doesn't contain
 		   depend/doacross clause.  */
-		if (directive[1]
+		만약 (directive[1]
 		    && (strcmp (directive[1], "depend") == 0
 			|| strcmp (directive[1], "doacross") == 0))
 		  kind = C_OMP_DIR_STANDALONE;
-		else if (first + 2 < last
+		아니면 만약 (first + 2 < last
 			 && first[1].type == CPP_COMMA
 			 && first[2].type == CPP_NAME
 			 && (strcmp (IDENTIFIER_POINTER (first[2].value),
@@ -7355,16 +7355,16 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 					"doacross") == 0))
 		  kind = C_OMP_DIR_STANDALONE;
 	      }
-	    else if (dir->id == PRAGMA_OMP_ERROR)
+	    아니면 만약 (dir->id == PRAGMA_OMP_ERROR)
 	      {
 		/* error with at(execution) clause is C_OMP_DIR_STANDALONE.  */
-		int paren_depth = 0;
-		for (int i = 1; first + i < last; i++)
-		  if (first[i].type == CPP_OPEN_PAREN)
+		정수 paren_depth = 0;
+		위해 (정수 i = 1; first + i < last; i++)
+		  만약 (first[i].type == CPP_OPEN_PAREN)
 		    paren_depth++;
-		  else if (first[i].type == CPP_CLOSE_PAREN)
+		  아니면 만약 (first[i].type == CPP_CLOSE_PAREN)
 		    paren_depth--;
-		  else if (paren_depth == 0
+		  아니면 만약 (paren_depth == 0
 			   && first + i + 2 < last
 			   && first[i].type == CPP_NAME
 			   && first[i + 1].type == CPP_OPEN_PAREN
@@ -7381,47 +7381,47 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 	      }
 	    c_omp_attribute_data v = { toks, dir, kind };
 	    vd.safe_push (v);
-	    if (flag_openmp || dir->simd)
+	    만약 (flag_openmp || dir->simd)
 	      tokens += (last - first) + 1;
 	  }
 	c_omp_attribute_data v = {};
 	vd.safe_push (v);
 	*pa = TREE_CHAIN (*pa);
       }
-    else
+    아니면
       pa = &TREE_CHAIN (*pa);
 
-  if (bad)
+  만약 (bad)
     {
     fail:
-      if (have_std_attrs && attrs == NULL)
+      만약 (have_std_attrs && attrs == NULL)
 	*have_std_attrs = false;
-      return false;
+      반환 false;
     }
 
-  unsigned int i;
+  unsigned 정수 i;
   c_omp_attribute_data *v;
   c_omp_attribute_data *construct_seen = nullptr;
   c_omp_attribute_data *standalone_seen = nullptr;
   c_omp_attribute_data *prev_standalone_seen = nullptr;
   FOR_EACH_VEC_ELT (vd, i, v)
-    if (v->tokens)
+    만약 (v->tokens)
       {
-	if (v->kind == C_OMP_DIR_CONSTRUCT && !construct_seen)
+	만약 (v->kind == C_OMP_DIR_CONSTRUCT && !construct_seen)
 	  construct_seen = v;
-	else if (v->kind == C_OMP_DIR_STANDALONE && !standalone_seen)
+	아니면 만약 (v->kind == C_OMP_DIR_STANDALONE && !standalone_seen)
 	  standalone_seen = v;
       }
-    else
+    아니면
       {
-	if (standalone_seen && !prev_standalone_seen)
+	만약 (standalone_seen && !prev_standalone_seen)
 	  {
 	    prev_standalone_seen = standalone_seen;
 	    standalone_seen = nullptr;
 	  }
       }
 
-  if (cnt > 1 && construct_seen)
+  만약 (cnt > 1 && construct_seen)
     {
       error_at ((*construct_seen->tokens)[0].location,
 		"OpenMP construct among %<omp::directive%> attributes"
@@ -7429,7 +7429,7 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 		" same statement to be in the same %<omp::sequence%>");
       goto fail;
     }
-  if (cnt > 1 && standalone_seen && prev_standalone_seen)
+  만약 (cnt > 1 && standalone_seen && prev_standalone_seen)
     {
       error_at ((*standalone_seen->tokens)[0].location,
 		"multiple OpenMP standalone directives among"
@@ -7438,9 +7438,9 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
       goto fail;
     }
 
-  if (prev_standalone_seen)
+  만약 (prev_standalone_seen)
     standalone_seen = prev_standalone_seen;
-  if (standalone_seen
+  만약 (standalone_seen
       && !c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
       error_at (standalone_seen->tokens->address ()->location,
@@ -7448,11 +7448,11 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 		" can only appear on an empty statement");
       goto fail;
     }
-  if (cnt && c_parser_next_token_is (parser, CPP_PRAGMA))
+  만약 (cnt && c_parser_next_token_is (parser, CPP_PRAGMA))
     {
       c_token *token = c_parser_peek_token (parser);
       enum pragma_kind kind = token->pragma_kind;
-      if (kind >= PRAGMA_OMP__START_ && kind <= PRAGMA_OMP__LAST_)
+      만약 (kind >= PRAGMA_OMP__START_ && kind <= PRAGMA_OMP__LAST_)
 	{
 	  error_at (token->location,
 		    "mixing OpenMP directives with attribute and pragma "
@@ -7461,19 +7461,19 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
 	}
     }
 
-  if (!tokens)
-    return false;
+  만약 (!tokens)
+    반환 false;
 
-  unsigned int tokens_avail = parser->tokens_avail;
+  unsigned 정수 tokens_avail = parser->tokens_avail;
 
   tokens++;
   vec<c_token, va_gc> *toks = NULL;
   vec_safe_reserve (toks, tokens, true);
   FOR_EACH_VEC_ELT (vd, i, v)
     {
-      if (!v->tokens)
+      만약 (!v->tokens)
 	continue;
-      if (!flag_openmp && !v->dir->simd)
+      만약 (!flag_openmp && !v->dir->simd)
 	continue;
       c_token *first = v->tokens->address ();
       c_token *last = first + v->tokens->length ();
@@ -7483,7 +7483,7 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
       tok.pragma_kind = pragma_kind (v->dir->id);
       tok.location = first->location;
       toks->quick_push (tok);
-      while (++first < last)
+      동안 (++first < last)
 	toks->quick_push (*first);
       tok = {};
       tok.type = CPP_PRAGMA_EOL;
@@ -7505,7 +7505,7 @@ c_parser_handle_statement_omp_attributes (c_parser *parser, tree &attrs,
   parser->in_omp_attribute_pragma->save_tokens_avail = tokens_avail;
   parser->tokens = toks->address ();
   parser->tokens_avail = tokens;
-  return true;
+  반환 true;
 }
 
 /* Handle omp::directive and omp::sequence attributes in ATTRS
@@ -7516,15 +7516,15 @@ c_parser_handle_directive_omp_attributes (tree &attrs,
 					  vec<c_token> *&pragma_clauses,
 					  vec<c_token> *attr_clauses)
 {
-  if (!flag_openmp && !flag_openmp_simd)
-    return;
+  만약 (!flag_openmp && !flag_openmp_simd)
+    반환;
 
-  for (tree *pa = &attrs; *pa; )
-    if (is_attribute_namespace_p ("omp", *pa)
+  위해 (tree *pa = &attrs; *pa; )
+    만약 (is_attribute_namespace_p ("omp", *pa)
 	&& is_attribute_p ("directive", get_attribute_name (*pa)))
       {
-	int cnt = 0;
-	for (tree *pa2 = &TREE_VALUE (*pa); *pa2; )
+	정수 cnt = 0;
+	위해 (tree *pa2 = &TREE_VALUE (*pa); *pa2; )
 	  {
 	    tree a = *pa2;
 	    tree d = TREE_VALUE (a);
@@ -7533,24 +7533,24 @@ c_parser_handle_directive_omp_attributes (tree &attrs,
 	    c_token *first = toks->address ();
 	    c_token *last = first + toks->length ();
 	    const char *directive[3] = {};
-	    for (int i = 0; i < 3; i++)
+	    위해 (정수 i = 0; i < 3; i++)
 	      {
 		tree id = NULL_TREE;
-		if (first + i == last)
+		만약 (first + i == last)
 		  break;
-		if (first[i].type == CPP_NAME)
+		만약 (first[i].type == CPP_NAME)
 		  id = first[i].value;
-		else if (first[i].type == CPP_KEYWORD)
-		  id = ridpointers[(int) first[i].keyword];
-		else
+		아니면 만약 (first[i].type == CPP_KEYWORD)
+		  id = ridpointers[(정수) first[i].keyword];
+		아니면
 		  break;
 		directive[i] = IDENTIFIER_POINTER (id);
 	      }
 	    const c_omp_directive *dir = NULL;
-	    if (directive[0])
+	    만약 (directive[0])
 	      dir = c_omp_categorize_directive (directive[0], directive[1],
 						directive[2]);
-	    if (dir == NULL)
+	    만약 (dir == NULL)
 	      {
 		error_at (first->location,
 			  "unknown OpenMP directive name in "
@@ -7558,28 +7558,28 @@ c_parser_handle_directive_omp_attributes (tree &attrs,
 			  TREE_PUBLIC (d) ? "omp::decl" : "omp::directive");
 		*pa2 = TREE_CHAIN (a);
 	      }
-	    else if (dir->id == PRAGMA_OMP_DECLARE
+	    아니면 만약 (dir->id == PRAGMA_OMP_DECLARE
 		     && (strcmp (directive[1], "simd") == 0
 			 || strcmp (directive[1], "variant") == 0))
 	      {
-		if (pragma_clauses)
+		만약 (pragma_clauses)
 		  {
 		    error_at (first->location,
 			      "mixing OpenMP directives with attribute and "
 			      "pragma syntax on the same declaration");
-		    for (pa = &attrs; *pa; )
-		      if (is_attribute_namespace_p ("omp", *pa)
+		    위해 (pa = &attrs; *pa; )
+		      만약 (is_attribute_namespace_p ("omp", *pa)
 			  && is_attribute_p ("directive",
 					     get_attribute_name (*pa)))
 			*pa = TREE_CHAIN (*pa);
-		      else
+		      아니면
 			pa = &TREE_CHAIN (*pa);
-		    return;
+		    반환;
 		  }
 		++cnt;
 		attr_clauses->reserve (attr_clauses->length ()
 				       + toks->length () + 2);
-		for (++first; first < last; ++first)
+		위해 (++first; first < last; ++first)
 		  attr_clauses->quick_push (*first);
 		c_token tok = {};
 		tok.type = CPP_PRAGMA_EOL;
@@ -7588,17 +7588,17 @@ c_parser_handle_directive_omp_attributes (tree &attrs,
 		attr_clauses->quick_push (tok);
 		*pa2 = TREE_CHAIN (a);
 	      }
-	    else
+	    아니면
 	      pa2 = &TREE_CHAIN (a);
 	  }
-	if (cnt && TREE_VALUE (*pa) == NULL_TREE)
+	만약 (cnt && TREE_VALUE (*pa) == NULL_TREE)
 	  *pa = TREE_CHAIN (*pa);
-	else
+	아니면
 	  pa = &TREE_CHAIN (*pa);
       }
-    else
+    아니면
       pa = &TREE_CHAIN (*pa);
-  if (attr_clauses->length ())
+  만약 (attr_clauses->length ())
     {
       c_token tok = {};
       tok.type = CPP_EOF;
@@ -7617,24 +7617,24 @@ c_parser_handle_directive_omp_attributes (tree &attrs,
 static tree
 c_parser_handle_musttail (c_parser *parser, tree std_attrs, attr_state &attr)
 {
-  if (c_parser_next_token_is_keyword (parser, RID_RETURN))
+  만약 (c_parser_next_token_is_keyword (parser, RID_RETURN))
     {
-      if (tree a = lookup_attribute ("gnu", "musttail", std_attrs))
+      만약 (tree a = lookup_attribute ("gnu", "musttail", std_attrs))
 	{
-	  for (; a; a = lookup_attribute ("gnu", "musttail", TREE_CHAIN (a)))
-	    if (TREE_VALUE (a))
+	  위해 (; a; a = lookup_attribute ("gnu", "musttail", TREE_CHAIN (a)))
+	    만약 (TREE_VALUE (a))
 	      error ("%qs attribute does not take any arguments",
 		     "musttail");
 	  std_attrs = remove_attribute ("gnu", "musttail", std_attrs);
 	  attr.musttail_p = true;
 	}
-      if (lookup_attribute ("clang", "musttail", std_attrs))
+      만약 (lookup_attribute ("clang", "musttail", std_attrs))
 	{
 	  std_attrs = remove_attribute ("clang", "musttail", std_attrs);
 	  attr.musttail_p = true;
 	}
     }
-  return std_attrs;
+  반환 std_attrs;
 }
 
 /* Return a statement before optional series of LABEL_EXPR/CASE_LABEL_EXPRs.
@@ -7647,12 +7647,12 @@ c_parser_handle_musttail (c_parser *parser, tree std_attrs, attr_state &attr)
 static tree
 get_before_labels ()
 {
-  if (!building_stmt_list_p ())
-    return NULL_TREE;
+  만약 (!building_stmt_list_p ())
+    반환 NULL_TREE;
   tree_stmt_iterator tsi = tsi_last (cur_stmt_list);
-  if (tsi_end_p (tsi))
-    return NULL_TREE;
-  return tsi_stmt (tsi);
+  만약 (tsi_end_p (tsi))
+    반환 NULL_TREE;
+  반환 tsi_stmt (tsi);
 }
 
 /* Parse a compound statement except for the opening brace.  This is
@@ -7673,37 +7673,37 @@ c_parser_compound_statement_nostart (c_parser *parser)
   tree sl = NULL_TREE;
   attr_state astate = {};
 
-  if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+  만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
     {
       location_t endloc = c_parser_peek_token (parser)->location;
       add_debug_begin_stmt (endloc);
       c_parser_consume_token (parser);
-      return endloc;
+      반환 endloc;
     }
 
   /* If we're parsing a {} sequence in an OMP_FOR body, start a
      statement list for intervening code.  */
-  if (in_omp_loop_block)
+  만약 (in_omp_loop_block)
     sl = push_stmt_list ();
 
   mark_valid_location_for_stdc_pragma (true);
-  if (c_parser_next_token_is_keyword (parser, RID_LABEL))
+  만약 (c_parser_next_token_is_keyword (parser, RID_LABEL))
     {
       /* Read zero or more forward-declarations for labels that nested
 	 functions can jump to.  */
       mark_valid_location_for_stdc_pragma (false);
-      if (in_omp_loop_block)
+      만약 (in_omp_loop_block)
 	check_omp_intervening_code (parser);
-      while (c_parser_next_token_is_keyword (parser, RID_LABEL))
+      동안 (c_parser_next_token_is_keyword (parser, RID_LABEL))
 	{
 	  label_loc = c_parser_peek_token (parser)->location;
 	  c_parser_consume_token (parser);
 	  /* Any identifiers, including those declared as type names,
 	     are OK here.  */
-	  while (true)
+	  동안 (true)
 	    {
 	      tree label;
-	      if (c_parser_next_token_is_not (parser, CPP_NAME))
+	      만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 		{
 		  c_parser_error (parser, "expected identifier");
 		  break;
@@ -7713,9 +7713,9 @@ c_parser_compound_statement_nostart (c_parser *parser)
 	      C_DECLARED_LABEL_FLAG (label) = 1;
 	      add_stmt (build_stmt (label_loc, DECL_EXPR, label));
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is (parser, CPP_COMMA))
+	      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 		c_parser_consume_token (parser);
-	      else
+	      아니면
 		break;
 	    }
 	  c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
@@ -7723,16 +7723,16 @@ c_parser_compound_statement_nostart (c_parser *parser)
       pedwarn (label_loc, OPT_Wpedantic, "ISO C forbids label declarations");
     }
   /* We must now have at least one statement, label or declaration.  */
-  if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+  만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
     {
       mark_valid_location_for_stdc_pragma (save_valid_for_pragma);
       c_parser_error (parser, "expected declaration or statement");
       location_t endloc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      return endloc;
+      반환 endloc;
     }
   tree before_labels = get_before_labels ();
-  while (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
+  동안 (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
     {
       location_t loc = c_parser_peek_token (parser)->location;
       loc = expansion_point_location_if_in_system_header (loc);
@@ -7744,10 +7744,10 @@ c_parser_compound_statement_nostart (c_parser *parser)
       /* First take care of special cases for OpenMP "canonical loop
 	 nest form", that do not allow standard attributes, labels, or
 	 __extension__ before the nested statement.  */
-      if (in_omp_loop_block && !last_label)
+      만약 (in_omp_loop_block && !last_label)
 	{
 	  tree_code code = omp_for_parse_state->code;
-	  if (want_nested_loop
+	  만약 (want_nested_loop
 	      && c_parser_omp_next_tokens_can_be_canon_loop (parser, code,
 							     false))
 	    {
@@ -7766,7 +7766,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
 	      astate.reset ();
 	      continue;
 	    }
-	  else if (want_nested_loop
+	  아니면 만약 (want_nested_loop
 		   && c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 	    {
 	      /* If this nested compound statement contains the nested loop,
@@ -7779,7 +7779,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
 	      mark_valid_location_for_stdc_pragma (false);
 	      c_parser_statement_after_labels (parser, NULL, NULL_TREE);
 	      nested_sl = pop_stmt_list (nested_sl);
-	      if (omp_for_parse_state->want_nested_loop)
+	      만약 (omp_for_parse_state->want_nested_loop)
 		{
 		  /* This block didn't contain a loop-nest, so it's
 		     all part of the same chunk of intervening code.  */
@@ -7788,7 +7788,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
 		  add_stmt (pre_sl);
 		  add_stmt (nested_sl);
 		}
-	      else
+	      아니면
 		{
 		  /* It contains the nested loop.  */
 		  add_structured_block_stmt (pre_sl);
@@ -7800,7 +7800,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
 	      astate.reset ();
 	      continue;
 	    }
-	  else if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+	  아니면 만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	    {
 	      /* Prior to implementing the OpenMP 5.1 syntax for canonical
 		 loop form, GCC used to accept an empty statements that
@@ -7818,41 +7818,41 @@ c_parser_compound_statement_nostart (c_parser *parser)
       bool have_std_attrs
 	= c_parser_nth_token_starts_std_attributes (parser, 1);
       tree std_attrs = NULL_TREE;
-      if (have_std_attrs)
+      만약 (have_std_attrs)
 	{
 	  std_attrs = c_parser_std_attribute_specifier_sequence (parser);
 	  std_attrs = c_parser_handle_musttail (parser, std_attrs, astate);
 	}
-      if (c_parser_next_token_is_keyword (parser, RID_CASE)
+      만약 (c_parser_next_token_is_keyword (parser, RID_CASE)
 	  || c_parser_next_token_is_keyword (parser, RID_DEFAULT)
 	  || (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON))
 	{
-	  if (c_parser_next_token_is_keyword (parser, RID_CASE))
+	  만약 (c_parser_next_token_is_keyword (parser, RID_CASE))
 	    label_loc = c_parser_peek_2nd_token (parser)->location;
-	  else
+	  아니면
 	    label_loc = c_parser_peek_token (parser)->location;
 	  last_label = true;
 	  last_stmt = false;
 	  mark_valid_location_for_stdc_pragma (false);
-	  if (in_omp_loop_block)
+	  만약 (in_omp_loop_block)
 	    check_omp_intervening_code (parser);
 	  c_parser_label (parser, std_attrs);
 	}
-      else if (c_parser_next_tokens_start_declaration (parser)
+      아니면 만약 (c_parser_next_tokens_start_declaration (parser)
 	       || (have_std_attrs
 		   && !c_parser_handle_statement_omp_attributes
 				(parser, std_attrs, &have_std_attrs)
 		   && c_parser_next_token_is (parser, CPP_SEMICOLON)
 		   && (have_std_attrs = true)))
 	{
-	  if (last_label)
+	  만약 (last_label)
 	    pedwarn_c11 (c_parser_peek_token (parser)->location, OPT_Wfree_labels,
 			 "a label can only be part of a statement and "
 			 "a declaration is not a statement");
 	  /* It's unlikely we'll see a nested loop in a declaration in
 	     intervening code in an OMP loop, but disallow it anyway.  */
-	  if (in_omp_loop_block)
+	  만약 (in_omp_loop_block)
 	    {
 	      check_omp_intervening_code (parser);
 	      omp_for_parse_state->want_nested_loop = false;
@@ -7864,16 +7864,16 @@ c_parser_compound_statement_nostart (c_parser *parser)
 					 NULL, have_std_attrs, std_attrs,
 					 NULL, &fallthru_attr_p);
 
-	  if (in_omp_loop_block)
+	  만약 (in_omp_loop_block)
 	      omp_for_parse_state->want_nested_loop = want_nested_loop;
-	  if (last_stmt && !fallthru_attr_p)
+	  만약 (last_stmt && !fallthru_attr_p)
 	    pedwarn_c90 (loc, OPT_Wdeclaration_after_statement,
 			 "ISO C90 forbids mixed declarations and code");
 	  last_stmt = fallthru_attr_p;
 	  last_label = false;
 	  before_labels = get_before_labels ();
 	}
-      else if (c_parser_next_token_is_keyword (parser, RID_EXTENSION))
+      아니면 만약 (c_parser_next_token_is_keyword (parser, RID_EXTENSION))
 	{
 	  /* __extension__ can start a declaration, but is also an
 	     unary operator that can start an expression.  Consume all
@@ -7882,21 +7882,21 @@ c_parser_compound_statement_nostart (c_parser *parser)
 	     been seen, it must start a statement, not a declaration,
 	     but standard attributes starting a declaration may appear
 	     after __extension__.  */
-	  while (c_parser_peek_2nd_token (parser)->type == CPP_KEYWORD
+	  동안 (c_parser_peek_2nd_token (parser)->type == CPP_KEYWORD
 		 && (c_parser_peek_2nd_token (parser)->keyword
 		     == RID_EXTENSION))
 	    c_parser_consume_token (parser);
-	  if (!have_std_attrs
+	  만약 (!have_std_attrs
 	      && (c_parser_next_tokens_start_declaration (parser, 2)
 		  || c_parser_nth_token_starts_std_attributes (parser, 2)))
 	    {
-	      int ext;
+	      정수 ext;
 	      ext = disable_extension_diagnostics ();
 	      c_parser_consume_token (parser);
 	      last_label = false;
 	      /* It's unlikely we'll see a nested loop in a declaration in
 		 intervening code in an OMP loop, but disallow it anyway.  */
-	      if (in_omp_loop_block)
+	      만약 (in_omp_loop_block)
 		{
 		  check_omp_intervening_code (parser);
 		  omp_for_parse_state->want_nested_loop = false;
@@ -7904,61 +7904,61 @@ c_parser_compound_statement_nostart (c_parser *parser)
 	      mark_valid_location_for_stdc_pragma (false);
 	      c_parser_declaration_or_fndef (parser, true, true, true, true,
 					     true, false);
-	      if (in_omp_loop_block)
+	      만약 (in_omp_loop_block)
 		omp_for_parse_state->want_nested_loop = want_nested_loop;
 	      /* Following the old parser, __extension__ does not
 		 disable this diagnostic.  */
 	      restore_extension_diagnostics (ext);
-	      if (last_stmt)
+	      만약 (last_stmt)
 		pedwarn_c90 (loc, OPT_Wdeclaration_after_statement,
 			     "ISO C90 forbids mixed declarations and code");
 	      last_stmt = false;
 	      before_labels = get_before_labels ();
 	    }
-	  else
+	  아니면
 	    goto statement;
 	}
-      else if (c_parser_next_token_is (parser, CPP_PRAGMA))
+      아니면 만약 (c_parser_next_token_is (parser, CPP_PRAGMA))
 	{
-	  if (have_std_attrs && !parser->in_omp_attribute_pragma)
+	  만약 (have_std_attrs && !parser->in_omp_attribute_pragma)
 	    c_parser_error (parser, "expected declaration or statement");
-	  else if (std_attrs)
+	  아니면 만약 (std_attrs)
 	    c_warn_unused_attributes (std_attrs);
 	  /* External pragmas, and some omp pragmas, are not associated
 	     with regular c code, and so are not to be considered statements
 	     syntactically.  This ensures that the user doesn't put them
 	     places that would turn into syntax errors if the directive
 	     were ignored.  */
-	  if (omp_for_parse_state)
+	  만약 (omp_for_parse_state)
 	    omp_for_parse_state->want_nested_loop = false;
-	  if (c_parser_pragma (parser,
+	  만약 (c_parser_pragma (parser,
 			       last_label ? pragma_stmt : pragma_compound,
 			       NULL, before_labels))
 	    {
 	      last_label = false;
 	      last_stmt = true;
-	      if (omp_for_parse_state)
+	      만약 (omp_for_parse_state)
 		check_omp_intervening_code (parser);
 	    }
-	  if (omp_for_parse_state)
+	  만약 (omp_for_parse_state)
 	    omp_for_parse_state->want_nested_loop = want_nested_loop;
 	  before_labels = get_before_labels ();
 	}
-      else if (c_parser_next_token_is (parser, CPP_EOF))
+      아니면 만약 (c_parser_next_token_is (parser, CPP_EOF))
 	{
 	  mark_valid_location_for_stdc_pragma (save_valid_for_pragma);
 	  c_parser_error (parser, "expected declaration or statement");
-	  return c_parser_peek_token (parser)->location;
+	  반환 c_parser_peek_token (parser)->location;
 	}
-      else if (c_parser_next_token_is_keyword (parser, RID_ELSE))
+      아니면 만약 (c_parser_next_token_is_keyword (parser, RID_ELSE))
         {
-          if (parser->in_if_block)
+          만약 (parser->in_if_block)
             {
 	      mark_valid_location_for_stdc_pragma (save_valid_for_pragma);
 	      error_at (loc, "expected %<}%> before %<else%>");
-	      return c_parser_peek_token (parser)->location;
+	      반환 c_parser_peek_token (parser)->location;
             }
-          else
+          아니면
             {
               error_at (loc, "%<else%> without a previous %<if%>");
               c_parser_consume_token (parser);
@@ -7967,17 +7967,17 @@ c_parser_compound_statement_nostart (c_parser *parser)
               continue;
             }
         }
-      else
+      아니면
 	{
 	statement:
 	  c_warn_unused_attributes (std_attrs);
 	  last_label = false;
 	  last_stmt = true;
 	  mark_valid_location_for_stdc_pragma (false);
-	  if (!omp_for_parse_state)
+	  만약 (!omp_for_parse_state)
 	    c_parser_statement_after_labels (parser, NULL, before_labels,
 					     NULL, astate);
-	  else
+	  아니면
 	    {
 	      /* In canonical loop nest form, nested loops can only appear
 		 directly, or in a directly nested compound statement.  We
@@ -7995,7 +7995,7 @@ c_parser_compound_statement_nostart (c_parser *parser)
       parser->error = false;
       astate.reset ();
     }
-  if (last_label)
+  만약 (last_label)
     pedwarn_c11 (label_loc, OPT_Wfree_labels,
 		 "label at end of compound statement");
   location_t endloc = c_parser_peek_token (parser)->location;
@@ -8007,15 +8007,15 @@ c_parser_compound_statement_nostart (c_parser *parser)
   /* Package leftover intervening code, or the whole contents of the
      compound statement if we were looking for a nested loop in an OMP_FOR
      construct and didn't find one.  */
-  if (sl)
+  만약 (sl)
     {
       sl = pop_stmt_list (sl);
-      if (omp_for_parse_state->want_nested_loop)
+      만약 (omp_for_parse_state->want_nested_loop)
 	add_stmt (sl);
-      else
+      아니면
 	add_structured_block_stmt (sl);
     }
-  return endloc;
+  반환 endloc;
 }
 
 /* Parse all consecutive labels, possibly preceded by standard
@@ -8029,37 +8029,37 @@ c_parser_all_labels (c_parser *parser)
   attr_state attr = {};
   bool have_std_attrs;
   tree std_attrs = NULL;
-  if ((have_std_attrs = c_parser_nth_token_starts_std_attributes (parser, 1)))
+  만약 ((have_std_attrs = c_parser_nth_token_starts_std_attributes (parser, 1)))
     {
       std_attrs = c_parser_std_attribute_specifier_sequence (parser);
       std_attrs = c_parser_handle_musttail (parser, std_attrs, attr);
     }
 
-  while (c_parser_next_token_is_keyword (parser, RID_CASE)
+  동안 (c_parser_next_token_is_keyword (parser, RID_CASE)
 	 || c_parser_next_token_is_keyword (parser, RID_DEFAULT)
 	 || (c_parser_next_token_is (parser, CPP_NAME)
 	     && c_parser_peek_2nd_token (parser)->type == CPP_COLON))
     {
       c_parser_label (parser, std_attrs);
       std_attrs = NULL;
-      if ((have_std_attrs = c_parser_nth_token_starts_std_attributes (parser,
+      만약 ((have_std_attrs = c_parser_nth_token_starts_std_attributes (parser,
 								      1)))
 	{
 	  std_attrs = c_parser_std_attribute_specifier_sequence (parser);
 	  std_attrs = c_parser_handle_musttail (parser, std_attrs, attr);
 	}
     }
-  if (std_attrs
+  만약 (std_attrs
       && (!c_parser_handle_statement_omp_attributes (parser, std_attrs, &have_std_attrs)
 	  || std_attrs))
     {
-      if (have_std_attrs && c_parser_next_token_is (parser, CPP_SEMICOLON))
+      만약 (have_std_attrs && c_parser_next_token_is (parser, CPP_SEMICOLON))
 	c_parser_error (parser, "expected statement");
       c_warn_unused_attributes (std_attrs);
     }
-  else if (have_std_attrs && c_parser_next_token_is (parser, CPP_SEMICOLON))
+  아니면 만약 (have_std_attrs && c_parser_next_token_is (parser, CPP_SEMICOLON))
     c_parser_error (parser, "expected statement");
-  return attr;
+  반환 attr;
 }
 
 
@@ -8068,7 +8068,7 @@ struct omp_metadirective_parse_data {
   /* These fields are used to unique-ify labels when reparsing the
      code in a metadirective alternative.  */
   vec<tree> * GTY((skip)) body_labels;
-  unsigned int region_num;
+  unsigned 정수 region_num;
 };
 
 /* Helper function for c_parser_label: mangle a metadirective region
@@ -8076,15 +8076,15 @@ struct omp_metadirective_parse_data {
 static tree
 mangle_metadirective_region_label (c_parser *parser, tree name)
 {
-  if (parser->omp_metadirective_state->body_labels->contains (name))
+  만약 (parser->omp_metadirective_state->body_labels->contains (name))
     {
       const char *old_name = IDENTIFIER_POINTER (name);
       char *new_name = (char *) XALLOCAVEC (char, strlen (old_name) + 32);
       sprintf (new_name, "%s_MDR%u", old_name,
 	       parser->omp_metadirective_state->region_num);
-      return get_identifier (new_name);
+      반환 get_identifier (new_name);
     }
-  return name;
+  반환 name;
 }
 
 /* Parse a label (C90 6.6.1, C99 6.8.1, C11 6.8.1).
@@ -8116,38 +8116,38 @@ c_parser_label (c_parser *parser, tree std_attrs)
      through to.  */
   bool fallthrough_p = c_parser_peek_token (parser)->flags & PREV_FALLTHROUGH;
 
-  if (c_parser_next_token_is_keyword (parser, RID_CASE))
+  만약 (c_parser_next_token_is_keyword (parser, RID_CASE))
     {
       tree exp1, exp2;
       c_parser_consume_token (parser);
       exp1 = convert_lvalue_to_rvalue (loc1,
 				       c_parser_expr_no_commas (parser, NULL),
 				       true, true).value;
-      if (c_parser_next_token_is (parser, CPP_COLON))
+      만약 (c_parser_next_token_is (parser, CPP_COLON))
 	{
 	  c_parser_consume_token (parser);
 	  label = do_case (loc1, exp1, NULL_TREE, std_attrs);
 	}
-      else if (c_parser_next_token_is (parser, CPP_ELLIPSIS))
+      아니면 만약 (c_parser_next_token_is (parser, CPP_ELLIPSIS))
 	{
 	  c_parser_consume_token (parser);
 	  exp2 = convert_lvalue_to_rvalue (loc1,
 					   c_parser_expr_no_commas (parser,
 								    NULL),
 					   true, true).value;
-	  if (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	  만약 (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    label = do_case (loc1, exp1, exp2, std_attrs);
 	}
-      else
+      아니면
 	c_parser_error (parser, "expected %<:%> or %<...%>");
     }
-  else if (c_parser_next_token_is_keyword (parser, RID_DEFAULT))
+  아니면 만약 (c_parser_next_token_is_keyword (parser, RID_DEFAULT))
     {
       c_parser_consume_token (parser);
-      if (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+      만약 (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	label = do_case (loc1, NULL_TREE, NULL_TREE, std_attrs);
     }
-  else
+  아니면
     {
       tree name = c_parser_peek_token (parser)->value;
       tree tlab;
@@ -8158,25 +8158,25 @@ c_parser_label (c_parser *parser, tree std_attrs)
       gcc_assert (c_parser_next_token_is (parser, CPP_COLON));
       c_parser_consume_token (parser);
       attrs = c_parser_gnu_attributes (parser);
-      if (parser->omp_metadirective_state)
+      만약 (parser->omp_metadirective_state)
 	name = mangle_metadirective_region_label (parser, name);
       tlab = define_label (loc2, name);
-      if (tlab)
+      만약 (tlab)
 	{
 	  decl_attributes (&tlab, attrs, 0);
 	  decl_attributes (&tlab, std_attrs, 0);
 	  label = add_stmt (build_stmt (loc1, LABEL_EXPR, tlab));
 	}
-      if (attrs
+      만약 (attrs
 	  && c_parser_next_tokens_start_declaration (parser))
 	  warning_at (loc2, OPT_Wattributes, "GNU-style attribute between"
 		      " label and declaration appertains to the label");
     }
-  if (label)
+  만약 (label)
     {
-      if (TREE_CODE (label) == LABEL_EXPR)
+      만약 (TREE_CODE (label) == LABEL_EXPR)
 	FALLTHROUGH_LABEL_P (LABEL_EXPR_LABEL (label)) = fallthrough_p;
-      else
+      아니면
 	FALLTHROUGH_LABEL_P (CASE_LABEL (label)) = fallthrough_p;
     }
 }
@@ -8332,7 +8332,7 @@ c_parser_statement (c_parser *parser, bool *if_p, location_t *loc_after_labels)
 {
   tree before_labels = get_before_labels ();
   attr_state a = c_parser_all_labels (parser);
-  if (loc_after_labels)
+  만약 (loc_after_labels)
     *loc_after_labels = c_parser_peek_token (parser)->location;
   parser->omp_attrs_forbidden_p = false;
   c_parser_statement_after_labels (parser, if_p, before_labels, NULL, a);
@@ -8343,13 +8343,13 @@ c_parser_statement (c_parser *parser, bool *if_p, location_t *loc_after_labels)
 static tree
 c_parser_bc_name (c_parser *parser, bool is_break)
 {
-  if (!c_parser_next_token_is (parser, CPP_NAME))
-    return NULL_TREE;
+  만약 (!c_parser_next_token_is (parser, CPP_NAME))
+    반환 NULL_TREE;
 
   c_token *tok = c_parser_peek_token (parser);
   tree label = c_finish_bc_name (tok->location, tok->value, is_break);
   c_parser_consume_token (parser);
-  return label;
+  반환 label;
 }
 
 /* Parse a statement, other than a labeled statement.  CHAIN is a vector
@@ -8372,10 +8372,10 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
   tree stmt = NULL_TREE;
   bool in_if_block = parser->in_if_block;
   parser->in_if_block = false;
-  if (if_p != NULL)
+  만약 (if_p != NULL)
     *if_p = false;
 
-  if (c_parser_peek_token (parser)->type != CPP_OPEN_BRACE)
+  만약 (c_parser_peek_token (parser)->type != CPP_OPEN_BRACE)
     add_debug_begin_stmt (loc);
 
  restart:
@@ -8404,15 +8404,15 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	  break;
 	case RID_GOTO:
 	  c_parser_consume_token (parser);
-	  if (c_parser_next_token_is (parser, CPP_NAME))
+	  만약 (c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      tree name = c_parser_peek_token (parser)->value;
-	      if (parser->omp_metadirective_state)
+	      만약 (parser->omp_metadirective_state)
 		name = mangle_metadirective_region_label (parser, name);
 	      stmt = c_finish_goto_label (loc, name);
 	      c_parser_consume_token (parser);
 	    }
-	  else if (c_parser_next_token_is (parser, CPP_MULT))
+	  아니면 만약 (c_parser_next_token_is (parser, CPP_MULT))
 	    {
 	      struct c_expr val;
 
@@ -8421,7 +8421,7 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	      val = convert_lvalue_to_rvalue (loc, val, false, true);
 	      stmt = c_finish_goto_ptr (loc, val);
 	    }
-	  else
+	  아니면
 	    c_parser_error (parser, "expected identifier or %<*%>");
 	  goto expect_semicolon;
 	case RID_CONTINUE:
@@ -8436,13 +8436,13 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	  goto expect_semicolon;
 	case RID_RETURN:
 	  c_parser_consume_token (parser);
-	  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+	  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	    {
 	      stmt = c_finish_return (loc, NULL_TREE, NULL_TREE,
 				      astate.musttail_p);
 	      c_parser_consume_token (parser);
 	    }
-	  else
+	  아니면
 	    {
 	      location_t xloc = c_parser_peek_token (parser)->location;
 	      struct c_expr expr = c_parser_expression_conv (parser);
@@ -8467,12 +8467,12 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	case RID_AT_THROW:
 	  gcc_assert (c_dialect_objc ());
 	  c_parser_consume_token (parser);
-	  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+	  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	    {
 	      stmt = objc_build_throw_stmt (loc, NULL_TREE);
 	      c_parser_consume_token (parser);
 	    }
-	  else
+	  아니면
 	    {
 	      struct c_expr expr = c_parser_expression (parser);
 	      expr = convert_lvalue_to_rvalue (loc, expr, false, false);
@@ -8496,11 +8496,11 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	       '__attribute__((musttail))) return'.  */
 	    tree attrs = c_parser_gnu_attributes (parser);
 	    bool has_assume = lookup_attribute ("assume", attrs);
-	    if (has_assume)
+	    만약 (has_assume)
 	      {
-		if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+		만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 		  attrs = handle_assume_attribute (loc, attrs, true);
-		else
+		아니면
 		  {
 		    auto_urlify_attributes sentinel;
 		    warning_at (loc, OPT_Wattributes,
@@ -8510,9 +8510,9 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 	      }
 	    gcc_assert (!astate.musttail_p);
 	    attrs = c_parser_handle_musttail (parser, attrs, astate);
-	    if (astate.musttail_p)
+	    만약 (astate.musttail_p)
 	      {
-		if (attrs)
+		만약 (attrs)
 		  {
 		    auto_urlify_attributes sentinel;
 		    warning_at (c_parser_peek_token (parser)->location,
@@ -8522,9 +8522,9 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 		  }
 		goto restart;
 	      }
-	    if (attribute_fallthrough_p (attrs))
+	    만약 (attribute_fallthrough_p (attrs))
 	      {
-		if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+		만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 		  {
 		    tree fn = build_call_expr_internal_loc (loc,
 							    IFN_FALLTHROUGH,
@@ -8533,7 +8533,7 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 		    /* Eat the ';'.  */
 		    c_parser_consume_token (parser);
 		  }
-		else
+		아니면
 		  {
 		    auto_urlify_attributes sentinel;
 		    warning_at (loc, OPT_Wattributes,
@@ -8541,10 +8541,10 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
 				"by %<;%>");
 		  }
 	      }
-	    else if (has_assume)
+	    아니면 만약 (has_assume)
 	      /* Eat the ';'.  */
 	      c_parser_consume_token (parser);
-	    else if (attrs != NULL_TREE)
+	    아니면 만약 (attrs != NULL_TREE)
 	      {
 		auto_urlify_attributes sentinel;
 		warning_at (loc, OPT_Wattributes,
@@ -8570,7 +8570,7 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
       c_parser_consume_token (parser);
       break;
     case CPP_PRAGMA:
-      if (!c_parser_pragma (parser, pragma_stmt, if_p, before_labels))
+      만약 (!c_parser_pragma (parser, pragma_stmt, if_p, before_labels))
         goto restart;
       break;
     default:
@@ -8590,7 +8590,7 @@ c_parser_statement_after_labels (c_parser *parser, bool *if_p,
      (recursively) all of the component statements should already have
      line numbers assigned.  ??? Can we discard no-op statements
      earlier?  */
-  if (EXPR_LOCATION (stmt) == UNKNOWN_LOCATION)
+  만약 (EXPR_LOCATION (stmt) == UNKNOWN_LOCATION)
     protected_set_expr_location (stmt, loc);
 
   parser->in_if_block = in_if_block;
@@ -8606,9 +8606,9 @@ c_parser_condition (c_parser *parser)
   cond = c_parser_expression_conv (parser).value;
   cond = c_objc_common_truthvalue_conversion (loc, cond);
   cond = c_fully_fold (cond, false, NULL);
-  if (warn_sequence_point)
+  만약 (warn_sequence_point)
     verify_sequence_points (cond);
-  return cond;
+  반환 cond;
 }
 
 /* Parse a parenthesized condition from a do or while statement.
@@ -8622,11 +8622,11 @@ c_parser_paren_condition (c_parser *parser)
 {
   tree cond;
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return error_mark_node;
+  만약 (!parens.require_open (parser))
+    반환 error_mark_node;
   cond = c_parser_condition (parser);
   parens.skip_until_found_close (parser);
-  return cond;
+  반환 cond;
 }
 
 /* Parse a selection-header:
@@ -8651,11 +8651,11 @@ c_parser_selection_header (c_parser *parser, bool switch_p)
   bool parse_expr = true;
   tree std_attrs;
   bool have_std_attrs = c_parser_nth_token_starts_std_attributes (parser, 1);
-  if (have_std_attrs)
+  만약 (have_std_attrs)
     std_attrs = c_parser_std_attribute_specifier_sequence (parser);
-  else
+  아니면
     std_attrs = NULL_TREE;
-  if (c_parser_next_tokens_start_declaration (parser))
+  만약 (c_parser_next_tokens_start_declaration (parser))
     {
       pedwarn_c23 (loc, OPT_Wpedantic,
 		   "ISO C does not support if declarations before C2Y");
@@ -8671,48 +8671,48 @@ c_parser_selection_header (c_parser *parser, bool switch_p)
 					 /*omp_declare_simd_clauses=*/nullptr,
 					 have_std_attrs,
 					 std_attrs);
-      if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+      만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	{
 	  /* A simple-declaration is a declaration that can appear in
 	     place of the controlling expression of a selection statement.
 	     In that case, there shall be an initializer.  */
-	  if (!expr.value)
+	  만약 (!expr.value)
 	    {
 	      error_at (loc, "declaration in the controlling expression must "
 			"have an initializer");
 	      expr.original_type = error_mark_node;
 	      expr.set_error ();
-	      return expr;
+	      반환 expr;
 	    }
 	  parse_expr = false;
 	}
-      if (expr.value)
+      만약 (expr.value)
 	{
 	  expr.original_type = TREE_TYPE (expr.value);
 	  expr = convert_lvalue_to_rvalue (loc, expr, /*convert_p=*/true,
 					   /*read_p=*/true);
 	}
     }
-  else if (have_std_attrs)
+  아니면 만약 (have_std_attrs)
     {
       c_parser_error (parser, "expected declaration");
       expr.original_type = error_mark_node;
       expr.set_error ();
-      return expr;
+      반환 expr;
     }
 
-  if (parse_expr)
+  만약 (parse_expr)
     expr = c_parser_expression_conv (parser);
-  if (!switch_p)
+  만약 (!switch_p)
     {
       expr.value = c_objc_common_truthvalue_conversion (loc, expr.value);
       expr.value = c_fully_fold (expr.value, false, NULL);
-      if (warn_sequence_point)
+      만약 (warn_sequence_point)
 	verify_sequence_points (expr.value);
     }
-  return expr;
+  반환 expr;
 }
 
 /* Parse a selection-header enclosed in parentheses:
@@ -8724,11 +8724,11 @@ static tree
 c_parser_paren_selection_header (c_parser *parser)
 {
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return error_mark_node;
+  만약 (!parens.require_open (parser))
+    반환 error_mark_node;
   tree cond = c_parser_selection_header (parser, /*switch_p=*/false).value;
   parens.skip_until_found_close (parser);
-  return cond;
+  반환 cond;
 }
 
 /* Parse a statement which is a block in C99.
@@ -8744,7 +8744,7 @@ c_parser_c99_block_statement (c_parser *parser, bool *if_p,
   tree block = c_begin_compound_stmt (flag_isoc99);
   location_t loc = c_parser_peek_token (parser)->location;
   c_parser_statement (parser, if_p, loc_after_labels);
-  return c_end_compound_stmt (loc, block, flag_isoc99);
+  반환 c_end_compound_stmt (loc, block, flag_isoc99);
 }
 
 /* Parse the body of an if statement.  This is just parsing a
@@ -8771,18 +8771,18 @@ c_parser_if_body (c_parser *parser, bool *if_p,
   tree before_labels = get_before_labels ();
   attr_state a = c_parser_all_labels (parser);
 
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
       location_t loc = c_parser_peek_token (parser)->location;
       add_stmt (build_empty_stmt (loc));
       c_parser_consume_token (parser);
-      if (!c_parser_next_token_is_keyword (parser, RID_ELSE))
+      만약 (!c_parser_next_token_is_keyword (parser, RID_ELSE))
 	warning_at (loc, OPT_Wempty_body,
 		    "suggest braces around empty body in an %<if%> statement");
     }
-  else if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+  아니면 만약 (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
     add_stmt (c_parser_compound_statement (parser));
-  else
+  아니면
     {
       body_loc_after_labels = c_parser_peek_token (parser)->location;
       c_parser_statement_after_labels (parser, if_p, before_labels, NULL, a);
@@ -8791,12 +8791,12 @@ c_parser_if_body (c_parser *parser, bool *if_p,
   token_indent_info next_tinfo
     = get_token_indent_info (c_parser_peek_token (parser));
   warn_for_misleading_indentation (if_tinfo, body_tinfo, next_tinfo);
-  if (body_loc_after_labels != UNKNOWN_LOCATION
+  만약 (body_loc_after_labels != UNKNOWN_LOCATION
       && next_tinfo.type != CPP_SEMICOLON)
     warn_for_multistatement_macros (body_loc_after_labels, next_tinfo.location,
 				    if_tinfo.location, RID_IF);
 
-  return c_end_compound_stmt (body_loc, block, flag_isoc99);
+  반환 c_end_compound_stmt (body_loc, block, flag_isoc99);
 }
 
 /* Parse the else body of an if statement.  This is just parsing a
@@ -8816,7 +8816,7 @@ c_parser_else_body (c_parser *parser, const token_indent_info &else_tinfo,
   tree before_labels = get_before_labels ();
   attr_state a = c_parser_all_labels (parser);
 
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
       location_t loc = c_parser_peek_token (parser)->location;
       warning_at (loc,
@@ -8825,9 +8825,9 @@ c_parser_else_body (c_parser *parser, const token_indent_info &else_tinfo,
       add_stmt (build_empty_stmt (loc));
       c_parser_consume_token (parser);
     }
-  else
+  아니면
     {
-      if (!c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+      만약 (!c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 	body_loc_after_labels = c_parser_peek_token (parser)->location;
       c_parser_statement_after_labels (parser, NULL, before_labels, chain, a);
     }
@@ -8835,12 +8835,12 @@ c_parser_else_body (c_parser *parser, const token_indent_info &else_tinfo,
   token_indent_info next_tinfo
     = get_token_indent_info (c_parser_peek_token (parser));
   warn_for_misleading_indentation (else_tinfo, body_tinfo, next_tinfo);
-  if (body_loc_after_labels != UNKNOWN_LOCATION
+  만약 (body_loc_after_labels != UNKNOWN_LOCATION
       && next_tinfo.type != CPP_SEMICOLON)
     warn_for_multistatement_macros (body_loc_after_labels, next_tinfo.location,
 				    else_tinfo.location, RID_ELSE);
 
-  return c_end_compound_stmt (body_loc, block, flag_isoc99);
+  반환 c_end_compound_stmt (body_loc, block, flag_isoc99);
 }
 
 /* Parse an if statement (C90 6.6.4, C99 6.8.4, C11 6.8.4).
@@ -8876,26 +8876,26 @@ c_parser_if_statement (c_parser *parser, bool *if_p, vec<tree> *chain)
   first_body = c_parser_if_body (parser, &nested_if, if_tinfo);
   parser->in_if_block = in_if_block;
 
-  if (warn_duplicated_cond)
+  만약 (warn_duplicated_cond)
     warn_duplicated_cond_add_or_warn (EXPR_LOCATION (cond), cond, &chain);
 
-  if (c_parser_next_token_is_keyword (parser, RID_ELSE))
+  만약 (c_parser_next_token_is_keyword (parser, RID_ELSE))
     {
       token_indent_info else_tinfo
 	= get_token_indent_info (c_parser_peek_token (parser));
       c_parser_consume_token (parser);
-      if (warn_duplicated_cond)
+      만약 (warn_duplicated_cond)
 	{
-	  if (c_parser_next_token_is_keyword (parser, RID_IF)
+	  만약 (c_parser_next_token_is_keyword (parser, RID_IF)
 	      && chain == NULL)
 	    {
 	      /* We've got "if (COND) else if (COND2)".  Start the
 		 condition chain and add COND as the first element.  */
 	      chain = new vec<tree> ();
-	      if (!CONSTANT_CLASS_P (cond) && !TREE_SIDE_EFFECTS (cond))
+	      만약 (!CONSTANT_CLASS_P (cond) && !TREE_SIDE_EFFECTS (cond))
 		chain->safe_push (cond);
 	    }
-	  else if (!c_parser_next_token_is_keyword (parser, RID_IF))
+	  아니면 만약 (!c_parser_next_token_is_keyword (parser, RID_IF))
 	    /* This is if-else without subsequent if.  Zap the condition
 	       chain; we would have already warned at this point.  */
 	    vec_free (chain);
@@ -8904,20 +8904,20 @@ c_parser_if_statement (c_parser *parser, bool *if_p, vec<tree> *chain)
       /* Set IF_P to true to indicate that this if statement has an
 	 else clause.  This may trigger the Wparentheses warning
 	 below when we get back up to the parent if statement.  */
-      if (if_p != NULL)
+      만약 (if_p != NULL)
 	*if_p = true;
     }
-  else
+  아니면
     {
       second_body = NULL_TREE;
 
       /* Diagnose an ambiguous else if if-then-else is nested inside
 	 if-then.  */
-      if (nested_if)
+      만약 (nested_if)
 	warning_at (loc, OPT_Wdangling_else,
 		    "suggest explicit braces to avoid ambiguous %<else%>");
 
-      if (warn_duplicated_cond)
+      만약 (warn_duplicated_cond)
 	/* This if statement does not have an else clause.  We don't
 	   need the condition chain anymore.  */
 	vec_free (chain);
@@ -8947,14 +8947,14 @@ c_parser_switch_statement (c_parser *parser, bool *if_p, tree before_labels)
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_SWITCH));
   c_parser_consume_token (parser);
   tree switch_name;
-  int num_names = c_get_loop_names (before_labels, true, &switch_name);
+  정수 num_names = c_get_loop_names (before_labels, true, &switch_name);
   block = c_begin_compound_stmt (flag_isoc99);
   bool explicit_cast_p = false;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       switch_cond_loc = c_parser_peek_token (parser)->location;
-      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+      만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
 	  && c_token_starts_typename (c_parser_peek_2nd_token (parser)))
 	explicit_cast_p = true;
       ce = c_parser_selection_header (parser, /*switch_p=*/true);
@@ -8966,7 +8966,7 @@ c_parser_switch_statement (c_parser *parser, bool *if_p, tree before_labels)
       /* ??? expr has no valid location?  */
       parens.skip_until_found_close (parser);
     }
-  else
+  아니면
     {
       switch_cond_loc = UNKNOWN_LOCATION;
       expr = error_mark_node;
@@ -8977,27 +8977,27 @@ c_parser_switch_statement (c_parser *parser, bool *if_p, tree before_labels)
 		      switch_name);
   save_in_statement = in_statement;
   in_statement |= IN_SWITCH_STMT;
-  if (switch_name)
+  만약 (switch_name)
     {
       C_DECL_LOOP_SWITCH_NAME_VALID (switch_name) = 1;
       in_statement |= IN_NAMED_STMT;
     }
-  else
+  아니면
     in_statement &= ~IN_NAMED_STMT;
   location_t loc_after_labels;
   bool open_brace_p = c_parser_peek_token (parser)->type == CPP_OPEN_BRACE;
   body = c_parser_c99_block_statement (parser, if_p, &loc_after_labels);
   location_t next_loc = c_parser_peek_token (parser)->location;
-  if (!open_brace_p && c_parser_peek_token (parser)->type != CPP_SEMICOLON)
+  만약 (!open_brace_p && c_parser_peek_token (parser)->type != CPP_SEMICOLON)
     warn_for_multistatement_macros (loc_after_labels, next_loc, switch_loc,
 				    RID_SWITCH);
   c_finish_switch (body, ce.original_type);
   in_statement = save_in_statement;
-  if (num_names)
+  만약 (num_names)
     {
-      if (!C_DECL_LOOP_SWITCH_NAME_USED (switch_name))
+      만약 (!C_DECL_LOOP_SWITCH_NAME_USED (switch_name))
 	SWITCH_STMT_NAME (stmt) = NULL_TREE;
-      else
+      아니면
 	SWITCH_STMT_NO_BREAK_P (stmt) = 0;
       c_release_loop_names (num_names);
     }
@@ -9028,9 +9028,9 @@ c_parser_while_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   token_indent_info while_tinfo
     = get_token_indent_info (c_parser_peek_token (parser));
   tree loop_name;
-  int num_names = c_get_loop_names (before_labels, false, &loop_name);
+  정수 num_names = c_get_loop_names (before_labels, false, &loop_name);
 
-  if (parser->omp_for_parse_state)
+  만약 (parser->omp_for_parse_state)
     {
       error_at (c_parser_peek_token (parser)->location,
 		"loop not permitted in intervening code in OpenMP loop body");
@@ -9041,24 +9041,24 @@ c_parser_while_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   block = c_begin_compound_stmt (flag_isoc99);
   loc = c_parser_peek_token (parser)->location;
   cond = c_parser_paren_condition (parser);
-  if (ivdep && cond != error_mark_node)
+  만약 (ivdep && cond != error_mark_node)
     cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
 		   build_int_cst (integer_type_node,
 				  annot_expr_ivdep_kind),
 		   integer_zero_node);
-  if (unroll && cond != error_mark_node)
+  만약 (unroll && cond != error_mark_node)
     cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
 		   build_int_cst (integer_type_node,
 				  annot_expr_unroll_kind),
 		   build_int_cst (integer_type_node, unroll));
-  if (novector && cond != error_mark_node)
+  만약 (novector && cond != error_mark_node)
     cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
 		   build_int_cst (integer_type_node,
 				  annot_expr_no_vector_kind),
 		   integer_zero_node);
   save_in_statement = in_statement;
   in_statement = IN_ITERATION_STMT;
-  if (loop_name)
+  만약 (loop_name)
     {
       C_DECL_LOOP_SWITCH_NAME_VALID (loop_name) = 1;
       in_statement |= IN_NAMED_STMT;
@@ -9070,20 +9070,20 @@ c_parser_while_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   location_t loc_after_labels;
   bool open_brace = c_parser_next_token_is (parser, CPP_OPEN_BRACE);
   body = c_parser_c99_block_statement (parser, if_p, &loc_after_labels);
-  if (loop_name && !C_DECL_LOOP_SWITCH_NAME_USED (loop_name))
+  만약 (loop_name && !C_DECL_LOOP_SWITCH_NAME_USED (loop_name))
     loop_name = NULL_TREE;
   add_stmt (build_stmt (loc, WHILE_STMT, cond, body, loop_name, NULL_TREE,
 			NULL_TREE));
   add_stmt (c_end_compound_stmt (loc, block, flag_isoc99));
   c_parser_maybe_reclassify_token (parser);
-  if (num_names)
+  만약 (num_names)
     c_release_loop_names (num_names);
 
   token_indent_info next_tinfo
     = get_token_indent_info (c_parser_peek_token (parser));
   warn_for_misleading_indentation (while_tinfo, body_tinfo, next_tinfo);
 
-  if (next_tinfo.type != CPP_SEMICOLON && !open_brace)
+  만약 (next_tinfo.type != CPP_SEMICOLON && !open_brace)
     warn_for_multistatement_macros (loc_after_labels, next_tinfo.location,
 				    while_tinfo.location, RID_WHILE);
 
@@ -9107,9 +9107,9 @@ c_parser_do_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   location_t loc;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_DO));
   tree loop_name;
-  int num_names = c_get_loop_names (before_labels, false, &loop_name);
+  정수 num_names = c_get_loop_names (before_labels, false, &loop_name);
 
-  if (parser->omp_for_parse_state)
+  만약 (parser->omp_for_parse_state)
     {
       error_at (c_parser_peek_token (parser)->location,
 		"loop not permitted in intervening code in OpenMP loop body");
@@ -9117,7 +9117,7 @@ c_parser_do_statement (c_parser *parser, bool ivdep, unsigned short unroll,
     }
 
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
     warning_at (c_parser_peek_token (parser)->location,
 		OPT_Wempty_body,
 		"suggest braces around empty body in %<do%> statement");
@@ -9125,7 +9125,7 @@ c_parser_do_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   loc = c_parser_peek_token (parser)->location;
   save_in_statement = in_statement;
   in_statement = IN_ITERATION_STMT;
-  if (loop_name)
+  만약 (loop_name)
     {
       C_DECL_LOOP_SWITCH_NAME_VALID (loop_name) = 1;
       in_statement |= IN_NAMED_STMT;
@@ -9133,29 +9133,29 @@ c_parser_do_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   body = c_parser_c99_block_statement (parser, NULL);
   c_parser_require_keyword (parser, RID_WHILE, "expected %<while%>");
   in_statement = save_in_statement;
-  if (num_names)
+  만약 (num_names)
     {
-      if (!C_DECL_LOOP_SWITCH_NAME_USED (loop_name))
+      만약 (!C_DECL_LOOP_SWITCH_NAME_USED (loop_name))
 	loop_name = NULL_TREE;
       c_release_loop_names (num_names);
     }
   cond = c_parser_paren_condition (parser);
-  if (ivdep && cond != error_mark_node)
+  만약 (ivdep && cond != error_mark_node)
     cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
 		   build_int_cst (integer_type_node,
 				  annot_expr_ivdep_kind),
 		   integer_zero_node);
-  if (unroll && cond != error_mark_node)
+  만약 (unroll && cond != error_mark_node)
     cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
 		   build_int_cst (integer_type_node,
 				  annot_expr_unroll_kind),
  		   build_int_cst (integer_type_node, unroll));
-  if (novector && cond != error_mark_node)
+  만약 (novector && cond != error_mark_node)
     cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
 		   build_int_cst (integer_type_node,
 				  annot_expr_no_vector_kind),
 		   integer_zero_node);
-  if (!c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+  만약 (!c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
     c_parser_skip_to_end_of_block_or_statement (parser);
 
   add_stmt (build_stmt (loc, DO_STMT, cond, body, loop_name));
@@ -9242,9 +9242,9 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   token_indent_info for_tinfo
     = get_token_indent_info (c_parser_peek_token (parser));
   tree loop_name;
-  int num_names = c_get_loop_names (before_labels, false, &loop_name);
+  정수 num_names = c_get_loop_names (before_labels, false, &loop_name);
 
-  if (parser->omp_for_parse_state)
+  만약 (parser->omp_for_parse_state)
     {
       error_at (for_loc,
 		"loop not permitted in intervening code in OpenMP loop body");
@@ -9258,49 +9258,49 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   cond = error_mark_node;
   incr = error_mark_node;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       /* Parse the initialization declaration or expression.  */
       object_expression = error_mark_node;
       parser->objc_could_be_foreach_context = c_dialect_objc ();
-      if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+      만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	{
 	  parser->objc_could_be_foreach_context = false;
 	  c_parser_consume_token (parser);
 	  c_finish_expr_stmt (loc, NULL_TREE);
 	}
-      else if (c_parser_next_tokens_start_declaration (parser)
+      아니면 만약 (c_parser_next_tokens_start_declaration (parser)
 	       || c_parser_nth_token_starts_std_attributes (parser, 1))
 	{
 	  c_parser_declaration_or_fndef (parser, true, true, true, true, true,
 					 false, &object_expression);
 	  parser->objc_could_be_foreach_context = false;
 
-	  if (c_parser_next_token_is_keyword (parser, RID_IN))
+	  만약 (c_parser_next_token_is_keyword (parser, RID_IN))
 	    {
 	      c_parser_consume_token (parser);
 	      is_foreach_statement = true;
-	      if (check_for_loop_decls (for_loc, true) == NULL_TREE)
+	      만약 (check_for_loop_decls (for_loc, true) == NULL_TREE)
 		c_parser_error (parser, "multiple iterating variables in "
 					"fast enumeration");
 	    }
-	  else
+	  아니면
 	    check_for_loop_decls (for_loc, flag_isoc99);
 	}
-      else if (c_parser_next_token_is_keyword (parser, RID_EXTENSION))
+      아니면 만약 (c_parser_next_token_is_keyword (parser, RID_EXTENSION))
 	{
 	  /* __extension__ can start a declaration, but is also an
 	     unary operator that can start an expression.  Consume all
 	     but the last of a possible series of __extension__ to
 	     determine which.  */
-	  while (c_parser_peek_2nd_token (parser)->type == CPP_KEYWORD
+	  동안 (c_parser_peek_2nd_token (parser)->type == CPP_KEYWORD
 		 && (c_parser_peek_2nd_token (parser)->keyword
 		     == RID_EXTENSION))
 	    c_parser_consume_token (parser);
-	  if (c_parser_next_tokens_start_declaration (parser, 2)
+	  만약 (c_parser_next_tokens_start_declaration (parser, 2)
 	      || c_parser_nth_token_starts_std_attributes (parser, 2))
 	    {
-	      int ext;
+	      정수 ext;
 	      ext = disable_extension_diagnostics ();
 	      c_parser_consume_token (parser);
 	      c_parser_declaration_or_fndef (parser, true, true, true, true,
@@ -9308,21 +9308,21 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 	      parser->objc_could_be_foreach_context = false;
 
 	      restore_extension_diagnostics (ext);
-	      if (c_parser_next_token_is_keyword (parser, RID_IN))
+	      만약 (c_parser_next_token_is_keyword (parser, RID_IN))
 		{
 		  c_parser_consume_token (parser);
 		  is_foreach_statement = true;
-		  if (check_for_loop_decls (for_loc, true) == NULL_TREE)
+		  만약 (check_for_loop_decls (for_loc, true) == NULL_TREE)
 		    c_parser_error (parser, "multiple iterating variables in "
 					    "fast enumeration");
 		}
-	      else
+	      아니면
 		check_for_loop_decls (for_loc, flag_isoc99);
 	    }
-	  else
+	  아니면
 	    goto init_expr;
 	}
-      else
+      아니면
 	{
 	init_expr:
 	  {
@@ -9331,17 +9331,17 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 	    ce = c_parser_expression (parser);
 	    init_expression = ce.value;
 	    parser->objc_could_be_foreach_context = false;
-	    if (c_parser_next_token_is_keyword (parser, RID_IN))
+	    만약 (c_parser_next_token_is_keyword (parser, RID_IN))
 	      {
 		c_parser_consume_token (parser);
 		is_foreach_statement = true;
-		if (! lvalue_p (init_expression))
+		만약 (! lvalue_p (init_expression))
 		  c_parser_error (parser, "invalid iterating variable in "
 					  "fast enumeration");
 		object_expression
 		  = c_fully_fold (init_expression, false, NULL);
 	      }
-	    else
+	    아니면
 	      {
 		ce = convert_lvalue_to_rvalue (loc, ce, true, false);
 		init_expression = ce.value;
@@ -9354,45 +9354,45 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
       /* Parse the loop condition.  In the case of a foreach
 	 statement, there is no loop condition.  */
       gcc_assert (!parser->objc_could_be_foreach_context);
-      if (!is_foreach_statement)
+      만약 (!is_foreach_statement)
 	{
-	  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+	  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	    {
-	      if (ivdep)
+	      만약 (ivdep)
 		{
 		  c_parser_error (parser, "missing loop condition in loop "
 					  "with %<GCC ivdep%> pragma");
 		  cond = error_mark_node;
 		}
-	      else if (unroll)
+	      아니면 만약 (unroll)
 		{
 		  c_parser_error (parser, "missing loop condition in loop "
 					  "with %<GCC unroll%> pragma");
 		  cond = error_mark_node;
 		}
-	      else
+	      아니면
 		{
 		  c_parser_consume_token (parser);
 		  cond = NULL_TREE;
 		}
 	    }
-	  else
+	  아니면
 	    {
 	      cond = c_parser_condition (parser);
 	      c_parser_skip_until_found (parser, CPP_SEMICOLON,
 					 "expected %<;%>");
 	    }
-	  if (ivdep && cond != error_mark_node)
+	  만약 (ivdep && cond != error_mark_node)
 	    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
 			   build_int_cst (integer_type_node,
 					  annot_expr_ivdep_kind),
 			   integer_zero_node);
-	  if (unroll && cond != error_mark_node)
+	  만약 (unroll && cond != error_mark_node)
 	    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
  			   build_int_cst (integer_type_node,
 					  annot_expr_unroll_kind),
 			   build_int_cst (integer_type_node, unroll));
-	  if (novector && cond && cond != error_mark_node)
+	  만약 (novector && cond && cond != error_mark_node)
 	    cond = build3 (ANNOTATE_EXPR, TREE_TYPE (cond), cond,
 			   build_int_cst (integer_type_node,
 					  annot_expr_no_vector_kind),
@@ -9402,23 +9402,23 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 	 for-statement).  In the case of a foreach-statement, this is
 	 the expression that follows the 'in'.  */
       loc = c_parser_peek_token (parser)->location;
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	{
-	  if (is_foreach_statement)
+	  만약 (is_foreach_statement)
 	    {
 	      c_parser_error (parser,
 			      "missing collection in fast enumeration");
 	      collection_expression = error_mark_node;
 	    }
-	  else
+	  아니면
 	    incr = c_process_expr_stmt (loc, NULL_TREE);
 	}
-      else
+      아니면
 	{
-	  if (is_foreach_statement)
+	  만약 (is_foreach_statement)
 	    collection_expression
 	      = c_fully_fold (c_parser_expression (parser).value, false, NULL);
-	  else
+	  아니면
 	    {
 	      struct c_expr ce = c_parser_expression (parser);
 	      ce = convert_lvalue_to_rvalue (loc, ce, true, false);
@@ -9428,14 +9428,14 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
       parens.skip_until_found_close (parser);
     }
   save_in_statement = in_statement;
-  if (is_foreach_statement)
+  만약 (is_foreach_statement)
     {
       in_statement = IN_OBJC_FOREACH;
       save_objc_foreach_break_label = objc_foreach_break_label;
       save_objc_foreach_continue_label = objc_foreach_continue_label;
       objc_foreach_break_label = create_artificial_label (loc);
       objc_foreach_continue_label = create_artificial_label (loc);
-      if (loop_name)
+      만약 (loop_name)
 	{
 	  gcc_checking_assert (!DECL_CHAIN (loop_name)
 			       && !DECL_CHAIN (objc_foreach_break_label));
@@ -9444,9 +9444,9 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
 	  DECL_CHAIN (objc_foreach_break_label) = objc_foreach_continue_label;
 	}
     }
-  else
+  아니면
     in_statement = IN_ITERATION_STMT;
-  if (loop_name)
+  만약 (loop_name)
     {
       C_DECL_LOOP_SWITCH_NAME_VALID (loop_name) = 1;
       in_statement |= IN_NAMED_STMT;
@@ -9459,7 +9459,7 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
   bool open_brace = c_parser_next_token_is (parser, CPP_OPEN_BRACE);
   body = c_parser_c99_block_statement (parser, if_p, &loc_after_labels);
 
-  if (loop_name && is_foreach_statement)
+  만약 (loop_name && is_foreach_statement)
     {
       gcc_checking_assert (DECL_CHAIN (loop_name) == objc_foreach_break_label
 			   && (DECL_CHAIN (objc_foreach_break_label)
@@ -9469,12 +9469,12 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
       DECL_CHAIN (objc_foreach_break_label) = NULL_TREE;
     }
 
-  if (is_foreach_statement)
+  만약 (is_foreach_statement)
     objc_finish_foreach_loop (for_loc, object_expression,
 			      collection_expression, body,
 			      objc_foreach_break_label,
 			      objc_foreach_continue_label);
-  else
+  아니면
     add_stmt (build_stmt (for_loc, FOR_STMT, NULL_TREE, cond, incr,
 			  body, NULL_TREE,
 			  loop_name && C_DECL_LOOP_SWITCH_NAME_USED (loop_name)
@@ -9487,14 +9487,14 @@ c_parser_for_statement (c_parser *parser, bool ivdep, unsigned short unroll,
     = get_token_indent_info (c_parser_peek_token (parser));
   warn_for_misleading_indentation (for_tinfo, body_tinfo, next_tinfo);
 
-  if (next_tinfo.type != CPP_SEMICOLON && !open_brace)
+  만약 (next_tinfo.type != CPP_SEMICOLON && !open_brace)
     warn_for_multistatement_macros (loc_after_labels, next_tinfo.location,
 				    for_tinfo.location, RID_FOR);
 
   in_statement = save_in_statement;
-  if (num_names)
+  만약 (num_names)
     c_release_loop_names (num_names);
-  if (is_foreach_statement)
+  만약 (is_foreach_statement)
     {
       objc_foreach_break_label = save_objc_foreach_break_label;
       objc_foreach_continue_label = save_objc_foreach_continue_label;
@@ -9538,7 +9538,7 @@ c_parser_asm_statement (c_parser *parser)
   tree str, outputs, inputs, clobbers, labels, ret;
   bool simple;
   location_t asm_loc = c_parser_peek_token (parser)->location;
-  int section, nsections;
+  정수 section, nsections;
 
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_ASM));
   c_parser_consume_token (parser);
@@ -9547,41 +9547,41 @@ c_parser_asm_statement (c_parser *parser)
   location_t volatile_loc = UNKNOWN_LOCATION;
   location_t inline_loc = UNKNOWN_LOCATION;
   location_t goto_loc = UNKNOWN_LOCATION;
-  for (;;)
+  위해 (;;)
     {
       c_token *token = c_parser_peek_token (parser);
       location_t loc = token->location;
       switch (token->keyword)
 	{
 	case RID_VOLATILE:
-	  if (volatile_loc)
+	  만약 (volatile_loc)
 	    {
 	      error_at (loc, "duplicate %<asm%> qualifier %qE", token->value);
 	      inform (volatile_loc, "first seen here");
 	    }
-	  else
+	  아니면
 	    volatile_loc = loc;
 	  c_parser_consume_token (parser);
 	  continue;
 
 	case RID_INLINE:
-	  if (inline_loc)
+	  만약 (inline_loc)
 	    {
 	      error_at (loc, "duplicate %<asm%> qualifier %qE", token->value);
 	      inform (inline_loc, "first seen here");
 	    }
-	  else
+	  아니면
 	    inline_loc = loc;
 	  c_parser_consume_token (parser);
 	  continue;
 
 	case RID_GOTO:
-	  if (goto_loc)
+	  만약 (goto_loc)
 	    {
 	      error_at (loc, "duplicate %<asm%> qualifier %qE", token->value);
 	      inform (goto_loc, "first seen here");
 	    }
-	  else
+	  아니면
 	    goto_loc = loc;
 	  c_parser_consume_token (parser);
 	  continue;
@@ -9605,11 +9605,11 @@ c_parser_asm_statement (c_parser *parser)
   ret = NULL;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
+  만약 (!parens.require_open (parser))
     goto error;
 
   str = c_parser_asm_string_literal (parser);
-  if (str == NULL_TREE)
+  만약 (str == NULL_TREE)
     goto error_close_paren;
 
   simple = true;
@@ -9618,24 +9618,24 @@ c_parser_asm_statement (c_parser *parser)
   clobbers = NULL_TREE;
   labels = NULL_TREE;
 
-  if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN) && !is_goto)
+  만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN) && !is_goto)
     goto done_asm;
 
   /* Parse each colon-delimited section of operands.  */
   nsections = 3 + is_goto;
-  for (section = 0; section < nsections; ++section)
+  위해 (section = 0; section < nsections; ++section)
     {
-      if (c_parser_next_token_is (parser, CPP_SCOPE))
+      만약 (c_parser_next_token_is (parser, CPP_SCOPE))
 	{
 	  ++section;
-	  if (section == nsections)
+	  만약 (section == nsections)
 	    {
 	      c_parser_error (parser, "expected %<)%>");
 	      goto error_close_paren;
 	    }
 	  c_parser_consume_token (parser);
 	}
-      else if (!c_parser_require (parser, CPP_COLON,
+      아니면 만약 (!c_parser_require (parser, CPP_COLON,
 				  is_goto
 				  ? G_("expected %<:%>")
 				  : G_("expected %<:%> or %<)%>"),
@@ -9645,7 +9645,7 @@ c_parser_asm_statement (c_parser *parser)
       /* Once past any colon, we're no longer a simple asm.  */
       simple = false;
 
-      if ((!c_parser_next_token_is (parser, CPP_COLON)
+      만약 ((!c_parser_next_token_is (parser, CPP_COLON)
 	   && !c_parser_next_token_is (parser, CPP_SCOPE)
 	   && !c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	  || section == 3)
@@ -9667,18 +9667,18 @@ c_parser_asm_statement (c_parser *parser)
 	    gcc_unreachable ();
 	  }
 
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN) && !is_goto)
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN) && !is_goto)
 	goto done_asm;
     }
 
  done_asm:
-  if (!parens.require_close (parser))
+  만약 (!parens.require_close (parser))
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
       goto error;
     }
 
-  if (!c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+  만약 (!c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
     c_parser_skip_to_end_of_block_or_statement (parser);
 
   ret = build_asm_stmt (is_volatile,
@@ -9686,7 +9686,7 @@ c_parser_asm_statement (c_parser *parser)
 					clobbers, labels, simple, is_inline));
 
  error:
-  return ret;
+  반환 ret;
 
  error_close_paren:
   c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
@@ -9708,52 +9708,52 @@ static tree
 c_parser_asm_operands (c_parser *parser)
 {
   tree list = NULL_TREE;
-  while (true)
+  동안 (true)
     {
       tree name, str;
       struct c_expr expr;
-      if (c_parser_next_token_is (parser, CPP_OPEN_SQUARE))
+      만약 (c_parser_next_token_is (parser, CPP_OPEN_SQUARE))
 	{
 	  c_parser_consume_token (parser);
-	  if (c_parser_next_token_is (parser, CPP_NAME))
+	  만약 (c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      tree id = c_parser_peek_token (parser)->value;
 	      c_parser_consume_token (parser);
 	      name = build_string (IDENTIFIER_LENGTH (id),
 				   IDENTIFIER_POINTER (id));
 	    }
-	  else
+	  아니면
 	    {
 	      c_parser_error (parser, "expected identifier");
 	      c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, NULL);
-	      return NULL_TREE;
+	      반환 NULL_TREE;
 	    }
 	  c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE,
 				     "expected %<]%>");
 	}
-      else
+      아니면
 	name = NULL_TREE;
       str = c_parser_asm_string_literal (parser);
-      if (str == NULL_TREE)
-	return NULL_TREE;
+      만약 (str == NULL_TREE)
+	반환 NULL_TREE;
       matching_parens parens;
-      if (!parens.require_open (parser))
-	return NULL_TREE;
+      만약 (!parens.require_open (parser))
+	반환 NULL_TREE;
       expr = c_parser_expression (parser);
       mark_exp_read (expr.value);
-      if (!parens.require_close (parser))
+      만약 (!parens.require_close (parser))
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	  return NULL_TREE;
+	  반환 NULL_TREE;
 	}
       list = chainon (list, build_tree_list (build_tree_list (name, str),
 					     expr.value));
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	break;
     }
-  return list;
+  반환 list;
 }
 
 /* Parse asm clobbers, a GNU extension.
@@ -9767,19 +9767,19 @@ static tree
 c_parser_asm_clobbers (c_parser *parser)
 {
   tree list = NULL_TREE;
-  while (true)
+  동안 (true)
     {
       tree str = c_parser_asm_string_literal (parser);
-      if (str)
+      만약 (str)
 	list = tree_cons (NULL_TREE, str, list);
-      else
-	return NULL_TREE;
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      아니면
+	반환 NULL_TREE;
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	break;
     }
-  return list;
+  반환 list;
 }
 
 /* Parse asm goto labels, a GNU extension.
@@ -9793,11 +9793,11 @@ static tree
 c_parser_asm_goto_operands (c_parser *parser)
 {
   tree list = NULL_TREE;
-  while (true)
+  동안 (true)
     {
       tree name, label;
 
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_token *tok = c_parser_peek_token (parser);
 	  name = tok->value;
@@ -9805,19 +9805,19 @@ c_parser_asm_goto_operands (c_parser *parser)
 	  c_parser_consume_token (parser);
 	  TREE_USED (label) = 1;
 	}
-      else
+      아니면
 	{
 	  c_parser_error (parser, "expected identifier");
-	  return NULL_TREE;
+	  반환 NULL_TREE;
 	}
 
       name = build_string (IDENTIFIER_LENGTH (name),
 			   IDENTIFIER_POINTER (name));
       list = tree_cons (name, label, list);
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
-      else
-	return nreverse (list);
+      아니면
+	반환 nreverse (list);
     }
 }
 
@@ -9862,7 +9862,7 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
       ret.value = NULL_TREE;
       ret.original_code = ERROR_MARK;
       ret.original_type = NULL_TREE;
-      return ret;
+      반환 ret;
     }
 
   /* Try to avoid the overhead of creating and destroying an obstack
@@ -9891,11 +9891,11 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
 	  count++;
 	  str.text = (const unsigned char *) TREE_STRING_POINTER (string_tree);
 	  str.len = TREE_STRING_LENGTH (string_tree);
-	  if (type != tok->type)
+	  만약 (type != tok->type)
 	    {
-	      if (type == CPP_STRING)
+	      만약 (type == CPP_STRING)
 		type = tok->type;
-	      else if (tok->type != CPP_STRING)
+	      아니면 만약 (tok->type != CPP_STRING)
 		error ("unsupported non-standard concatenation "
 		       "of string literals");
 	    }
@@ -9907,7 +9907,7 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
 	    = linemap_resolve_location (line_table, tok->location,
 					LRK_MACRO_DEFINITION_LOCATION, NULL);
 	}
-      while (tok->type == CPP_STRING
+      동안 (tok->type == CPP_STRING
 	     || tok->type == CPP_WSTRING
 	     || tok->type == CPP_STRING16
 	     || tok->type == CPP_STRING32
@@ -9915,27 +9915,27 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
       strs = (cpp_string *) obstack_finish (&str_ob);
     }
 
-  if (count > 1 && !in_system_header_at (input_location))
+  만약 (count > 1 && !in_system_header_at (input_location))
     warning (OPT_Wtraditional,
 	     "traditional C rejects string constant concatenation");
 
-  if ((type == CPP_STRING || wide_ok)
+  만약 ((type == CPP_STRING || wide_ok)
       && ((translate
 	  ? cpp_interpret_string : cpp_interpret_string_notranslate)
 	  (parse_in, strs, count, &istr, type)))
     {
       value = build_string (istr.len, (const char *) istr.text);
       free (const_cast<unsigned char *> (istr.text));
-      if (count > 1)
+      만약 (count > 1)
 	{
 	  location_t *locs = (location_t *) obstack_finish (&loc_ob);
 	  gcc_assert (g_string_concat_db);
 	  g_string_concat_db->record_string_concatenation (count, locs);
 	}
     }
-  else
+  아니면
     {
-      if (type != CPP_STRING && !wide_ok)
+      만약 (type != CPP_STRING && !wide_ok)
 	{
 	  error_at (loc, "a wide string is invalid in this context");
 	  type = CPP_STRING;
@@ -9948,13 +9948,13 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
 	default:
 	case CPP_STRING:
 	case CPP_UTF8STRING:
-	  if (type == CPP_UTF8STRING && flag_char8_t)
+	  만약 (type == CPP_UTF8STRING && flag_char8_t)
 	    {
 	      value = build_string (TYPE_PRECISION (char8_type_node)
 				    / TYPE_PRECISION (char_type_node),
 				    "");  /* char8_t is 8 bits */
 	    }
-	  else
+	  아니면
 	    value = build_string (1, "");
 	  break;
 	case CPP_STRING16:
@@ -9983,9 +9983,9 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
       TREE_TYPE (value) = char_array_type_node;
       break;
     case CPP_UTF8STRING:
-      if (flag_char8_t)
+      만약 (flag_char8_t)
 	TREE_TYPE (value) = char8_array_type_node;
-      else
+      아니면
 	TREE_TYPE (value) = char_array_type_node;
       break;
     case CPP_STRING16:
@@ -9999,7 +9999,7 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
     }
   value = fix_string_type (value);
 
-  if (count > 1)
+  만약 (count > 1)
     {
       obstack_free (&str_ob, 0);
       obstack_free (&loc_ob, 0);
@@ -10011,7 +10011,7 @@ c_parser_string_literal (c_parser *parser, bool translate, bool wide_ok)
   set_c_expr_source_range (&ret, get_range_from_loc (line_table, loc));
   ret.m_decimal = 0;
   parser->seen_string_literal = true;
-  return ret;
+  반환 ret;
 }
 
 /* Parse an expression other than a compound expression; that is, an
@@ -10079,7 +10079,7 @@ c_parser_expr_no_commas (c_parser *parser, struct c_expr *after,
       break;
     default:
       c_in_omp_for = save_in_omp_for;
-      return lhs;
+      반환 lhs;
     }
   c_parser_consume_token (parser);
   exp_location = c_parser_peek_token (parser)->location;
@@ -10091,16 +10091,16 @@ c_parser_expr_no_commas (c_parser *parser, struct c_expr *after,
 				 rhs.original_type);
   ret.m_decimal = 0;
   set_c_expr_source_range (&ret, lhs.get_start (), rhs.get_finish ());
-  if (code == NOP_EXPR)
+  만약 (code == NOP_EXPR)
     ret.original_code = MODIFY_EXPR;
-  else
+  아니면
     {
       suppress_warning (ret.value, OPT_Wparentheses);
       ret.original_code = ERROR_MARK;
     }
   ret.original_type = NULL;
   c_in_omp_for = save_in_omp_for;
-  return ret;
+  반환 ret;
 }
 
 /* Parse a conditional expression (C90 6.3.15, C99 6.5.15, C11 6.5.15).  If
@@ -10129,42 +10129,42 @@ c_parser_conditional_expression (c_parser *parser, struct c_expr *after,
 
   cond = c_parser_binary_expression (parser, after, omp_atomic_lhs);
 
-  if (c_parser_next_token_is_not (parser, CPP_QUERY))
-    return cond;
+  만약 (c_parser_next_token_is_not (parser, CPP_QUERY))
+    반환 cond;
   c_omp_array_section_p = false;
-  if (cond.value != error_mark_node)
+  만약 (cond.value != error_mark_node)
     start = cond.get_start ();
-  else
+  아니면
     start = UNKNOWN_LOCATION;
   cond_loc = c_parser_peek_token (parser)->location;
   cond = convert_lvalue_to_rvalue (cond_loc, cond, true, true);
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is (parser, CPP_COLON))
+  만약 (c_parser_next_token_is (parser, CPP_COLON))
     {
       tree eptype = NULL_TREE;
 
       location_t middle_loc = c_parser_peek_token (parser)->location;
       pedwarn (middle_loc, OPT_Wpedantic,
 	       "ISO C forbids omitting the middle term of a %<?:%> expression");
-      if (TREE_CODE (cond.value) == EXCESS_PRECISION_EXPR)
+      만약 (TREE_CODE (cond.value) == EXCESS_PRECISION_EXPR)
 	{
 	  eptype = TREE_TYPE (cond.value);
 	  cond.value = TREE_OPERAND (cond.value, 0);
 	}
       tree e = cond.value;
-      while (TREE_CODE (e) == COMPOUND_EXPR)
+      동안 (TREE_CODE (e) == COMPOUND_EXPR)
 	e = TREE_OPERAND (e, 1);
       warn_for_omitted_condop (middle_loc, e);
       /* Make sure first operand is calculated only once.  */
       exp1.value = save_expr (default_conversion (cond.value));
-      if (eptype)
+      만약 (eptype)
 	exp1.value = build1 (EXCESS_PRECISION_EXPR, eptype, exp1.value);
       exp1.original_type = NULL;
       exp1.src_range = cond.src_range;
       cond.value = c_objc_common_truthvalue_conversion (cond_loc, exp1.value);
       c_inhibit_evaluation_warnings += cond.value == truthvalue_true_node;
     }
-  else
+  아니면
     {
       cond.value
 	= c_objc_common_truthvalue_conversion
@@ -10178,14 +10178,14 @@ c_parser_conditional_expression (c_parser *parser, struct c_expr *after,
     }
 
   colon_loc = c_parser_peek_token (parser)->location;
-  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+  만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
     {
       c_inhibit_evaluation_warnings -= cond.value == truthvalue_true_node;
       ret.set_error ();
       ret.original_code = ERROR_MARK;
       ret.original_type = NULL;
       c_omp_array_section_p = save_c_omp_array_section_p;
-      return ret;
+      반환 ret;
     }
   {
     location_t exp2_loc = c_parser_peek_token (parser)->location;
@@ -10195,7 +10195,7 @@ c_parser_conditional_expression (c_parser *parser, struct c_expr *after,
   c_inhibit_evaluation_warnings -= cond.value == truthvalue_true_node;
   location_t loc1 = make_location (exp1.get_start (), exp1.src_range);
   location_t loc2 = make_location (exp2.get_start (), exp2.src_range);
-  if (UNLIKELY (omp_atomic_lhs != NULL)
+  만약 (UNLIKELY (omp_atomic_lhs != NULL)
       && (TREE_CODE (cond.value) == GT_EXPR
 	  || TREE_CODE (cond.value) == LT_EXPR
 	  || TREE_CODE (cond.value) == EQ_EXPR)
@@ -10204,16 +10204,16 @@ c_parser_conditional_expression (c_parser *parser, struct c_expr *after,
 	  || c_tree_equal (TREE_OPERAND (cond.value, 1), omp_atomic_lhs)))
     ret.value = build3_loc (colon_loc, COND_EXPR, TREE_TYPE (omp_atomic_lhs),
 			    cond.value, exp1.value, exp2.value);
-  else
+  아니면
     ret.value
       = build_conditional_expr (colon_loc, cond.value,
 				cond.original_code == C_MAYBE_CONST_EXPR,
 				exp1.value, exp1.original_type, loc1,
 				exp2.value, exp2.original_type, loc2);
   ret.original_code = ERROR_MARK;
-  if (exp1.value == error_mark_node || exp2.value == error_mark_node)
+  만약 (exp1.value == error_mark_node || exp2.value == error_mark_node)
     ret.original_type = NULL;
-  else
+  아니면
     {
       tree t1, t2;
 
@@ -10232,7 +10232,7 @@ c_parser_conditional_expression (c_parser *parser, struct c_expr *after,
   set_c_expr_source_range (&ret, start, exp2.get_finish ());
   ret.m_decimal = 0;
   c_omp_array_section_p = save_c_omp_array_section_p;
-  return ret;
+  반환 ret;
 }
 
 /* Parse a binary expression; that is, a logical-OR-expression (C90
@@ -10336,7 +10336,7 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
        for TRUTH_{AND,OR}*_EXPR lhs operands.  */
     tree orig_expr;
   } stack[NUM_PRECS];
-  int sp;
+  정수 sp;
   /* Location of the binary operator.  */
   location_t binary_loc = UNKNOWN_LOCATION;  /* Quiet warning.  */
 #define POP								      \
@@ -10352,7 +10352,7 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
 					  == truthvalue_true_node);	      \
 	break;								      \
       case TRUNC_DIV_EXPR:						      \
-	if ((stack[sp - 1].expr.original_code == SIZEOF_EXPR		      \
+	만약 ((stack[sp - 1].expr.original_code == SIZEOF_EXPR		      \
 	     || stack[sp - 1].expr.original_code == PAREN_SIZEOF_EXPR)	      \
 	    && (stack[sp].expr.original_code == SIZEOF_EXPR		      \
 		|| stack[sp].expr.original_code == PAREN_SIZEOF_EXPR))	      \
@@ -10360,27 +10360,27 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
 	    tree type0 = stack[sp - 1].sizeof_arg;			      \
 	    tree type1 = stack[sp].sizeof_arg;				      \
 	    tree first_arg = type0;					      \
-	    if (!TYPE_P (type0))					      \
+	    만약 (!TYPE_P (type0))					      \
 	      type0 = TREE_TYPE (type0);				      \
-	    if (!TYPE_P (type1))					      \
+	    만약 (!TYPE_P (type1))					      \
 	      type1 = TREE_TYPE (type1);				      \
-	    if (POINTER_TYPE_P (type0)					      \
+	    만약 (POINTER_TYPE_P (type0)					      \
 		&& comptypes (TREE_TYPE (type0), type1)			      \
 		&& !(TREE_CODE (first_arg) == PARM_DECL			      \
 		     && C_ARRAY_PARAMETER (first_arg)			      \
 		     && warn_sizeof_array_argument))			      \
 	      {								      \
 		auto_diagnostic_group d;				      \
-		if (warning_at (stack[sp].loc, OPT_Wsizeof_pointer_div,	      \
+		만약 (warning_at (stack[sp].loc, OPT_Wsizeof_pointer_div,	      \
 				  "division %<sizeof (%T) / sizeof (%T)%> "   \
 				  "does not compute the number of array "     \
 				  "elements",				      \
 				  type0, type1))			      \
-		  if (DECL_P (first_arg))				      \
+		  만약 (DECL_P (first_arg))				      \
 		    inform (DECL_SOURCE_LOCATION (first_arg),		      \
 			      "first %<sizeof%> operand was declared here");  \
 	      }								      \
-	    else if (TREE_CODE (type0) == ARRAY_TYPE			      \
+	    아니면 만약 (TREE_CODE (type0) == ARRAY_TYPE			      \
 		     && !char_type_p (TYPE_MAIN_VARIANT (TREE_TYPE (type0)))  \
 		     && stack[sp].expr.original_code != PAREN_SIZEOF_EXPR)    \
 	      maybe_warn_sizeof_array_div (stack[sp].loc, first_arg, type0,   \
@@ -10396,7 +10396,7 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
     stack[sp].expr							      \
       = convert_lvalue_to_rvalue (stack[sp].loc,			      \
 				  stack[sp].expr, true, true);		      \
-    if (UNLIKELY (omp_atomic_lhs != NULL_TREE) && sp == 1		      \
+    만약 (UNLIKELY (omp_atomic_lhs != NULL_TREE) && sp == 1		      \
 	&& ((c_parser_next_token_is (parser, CPP_SEMICOLON)		      \
 	     && ((1 << stack[sp].prec)					      \
 		 & ((1 << PREC_BITOR) | (1 << PREC_BITXOR)		      \
@@ -10426,7 +10426,7 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
 	stack[0].expr.value = t;					      \
 	stack[0].expr.m_decimal = 0;					      \
       }									      \
-    else								      \
+    아니면								      \
       stack[sp - 1].expr = parser_build_binary_op (stack[sp].loc,	      \
 						   stack[sp].op,	      \
 						   stack[sp - 1].expr,	      \
@@ -10434,7 +10434,7 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
 						   stack[sp - 1].orig_expr);  \
     stack[sp - 1].orig_expr = NULL_TREE;				      \
     sp--;								      \
-  } while (0)
+  } 동안 (0)
   gcc_assert (!after || c_dialect_objc ());
   stack[0].loc = c_parser_peek_token (parser)->location;
   stack[0].expr = c_parser_cast_expression (parser, after);
@@ -10442,12 +10442,12 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
   stack[0].sizeof_arg = c_last_sizeof_arg;
   stack[0].orig_expr = NULL_TREE;
   sp = 0;
-  while (true)
+  동안 (true)
     {
       enum c_parser_prec oprec;
       enum tree_code ocode;
       source_range src_range;
-      if (parser->error)
+      만약 (parser->error)
 	goto out;
       switch (c_parser_peek_token (parser)->type)
 	{
@@ -10529,7 +10529,7 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
 	  goto out;
 	}
       binary_loc = c_parser_peek_token (parser)->location;
-      while (oprec <= stack[sp].prec)
+      동안 (oprec <= stack[sp].prec)
 	POP;
       c_parser_consume_token (parser);
       switch (ocode)
@@ -10570,9 +10570,9 @@ c_parser_binary_expression (c_parser *parser, struct c_expr *after,
       stack[sp].orig_expr = NULL_TREE;
     }
  out:
-  while (sp > 0)
+  동안 (sp > 0)
     POP;
-  return stack[0].expr;
+  반환 stack[0].expr;
 #undef POP
 }
 
@@ -10584,7 +10584,7 @@ c_parser_compound_literal_scspecs (c_parser *parser)
 {
   bool seen_scspec = false;
   struct c_declspecs *specs = build_null_declspecs ();
-  while (c_parser_next_token_is (parser, CPP_KEYWORD))
+  동안 (c_parser_next_token_is (parser, CPP_KEYWORD))
     {
       switch (c_parser_peek_token (parser)->keyword)
 	{
@@ -10602,7 +10602,7 @@ c_parser_compound_literal_scspecs (c_parser *parser)
 	}
     }
  out:
-  return seen_scspec ? specs : NULL;
+  반환 seen_scspec ? specs : NULL;
 }
 
 /* Parse a cast expression (C90 6.3.4, C99 6.5.4, C11 6.5.4).  If AFTER
@@ -10619,15 +10619,15 @@ c_parser_cast_expression (c_parser *parser, struct c_expr *after)
 {
   location_t cast_loc = c_parser_peek_token (parser)->location;
   gcc_assert (!after || c_dialect_objc ());
-  if (after)
-    return c_parser_postfix_expression_after_primary (parser,
+  만약 (after)
+    반환 c_parser_postfix_expression_after_primary (parser,
 						      cast_loc, *after);
   /* If the expression begins with a parenthesized type name, it may
      be either a cast or a compound literal; we need to see whether
      the next character is '{' to tell the difference.  If not, it is
      an unary expression.  Full detection of unknown typenames here
      would require a 3-token lookahead.  */
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
       && c_token_starts_compound_literal (c_parser_peek_2nd_token (parser)))
     {
       struct c_declspecs *scspecs;
@@ -10639,24 +10639,24 @@ c_parser_cast_expression (c_parser *parser, struct c_expr *after)
       scspecs = c_parser_compound_literal_scspecs (parser);
       type_name = c_parser_type_name (parser, true);
       parens.skip_until_found_close (parser);
-      if (type_name == NULL)
+      만약 (type_name == NULL)
 	{
 	  ret.set_error ();
 	  ret.original_code = ERROR_MARK;
 	  ret.original_type = NULL;
-	  return ret;
+	  반환 ret;
 	}
 
       /* Save casted types in the function's used types hash table.  */
       used_types_insert (type_name->specs->type);
 
-      if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
-	return c_parser_postfix_expression_after_paren_type (parser, scspecs,
+      만약 (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+	반환 c_parser_postfix_expression_after_paren_type (parser, scspecs,
 							     type_name,
 							     cast_loc);
-      if (scspecs)
+      만약 (scspecs)
 	error_at (cast_loc, "storage class specifier in cast");
-      if (type_name->specs->alignas_p)
+      만약 (type_name->specs->alignas_p)
 	error_at (type_name->specs->locations[cdw_alignas],
 		  "alignment specified for type name in cast");
       {
@@ -10665,15 +10665,15 @@ c_parser_cast_expression (c_parser *parser, struct c_expr *after)
 	expr = convert_lvalue_to_rvalue (expr_loc, expr, true, true);
       }
       ret.value = c_cast_expr (cast_loc, type_name, expr.value);
-      if (ret.value && expr.value)
+      만약 (ret.value && expr.value)
 	set_c_expr_source_range (&ret, cast_loc, expr.get_finish ());
       ret.original_code = ERROR_MARK;
       ret.original_type = NULL;
       ret.m_decimal = 0;
-      return ret;
+      반환 ret;
     }
-  else
-    return c_parser_unary_expression (parser);
+  아니면
+    반환 c_parser_unary_expression (parser);
 }
 
 
@@ -10687,10 +10687,10 @@ c_parser_cast_expression (c_parser *parser, struct c_expr *after)
 static void
 mark_exp_read_cond (tree exp)
 {
-  if ((VAR_P (exp) || TREE_CODE (exp) == PARM_DECL)
+  만약 ((VAR_P (exp) || TREE_CODE (exp) == PARM_DECL)
       && (VAR_P (exp) ? warn_unused_but_set_variable
 		      : warn_unused_but_set_parameter) > 1)
-    return;
+    반환;
 
   mark_exp_read (exp);
 }
@@ -10740,7 +10740,7 @@ mark_exp_read_cond (tree exp)
 static struct c_expr
 c_parser_unary_expression (c_parser *parser)
 {
-  int ext;
+  정수 ext;
   struct c_expr ret, op;
   location_t op_loc = c_parser_peek_token (parser)->location;
   location_t exp_loc;
@@ -10755,19 +10755,19 @@ c_parser_unary_expression (c_parser *parser)
       op = c_parser_cast_expression (parser, NULL);
       mark_exp_read_cond (op.value);
       op = default_function_array_conversion (exp_loc, op);
-      return parser_build_unary_op (op_loc, PREINCREMENT_EXPR, op);
+      반환 parser_build_unary_op (op_loc, PREINCREMENT_EXPR, op);
     case CPP_MINUS_MINUS:
       c_parser_consume_token (parser);
       exp_loc = c_parser_peek_token (parser)->location;
       op = c_parser_cast_expression (parser, NULL);
       mark_exp_read_cond (op.value);
       op = default_function_array_conversion (exp_loc, op);
-      return parser_build_unary_op (op_loc, PREDECREMENT_EXPR, op);
+      반환 parser_build_unary_op (op_loc, PREDECREMENT_EXPR, op);
     case CPP_AND:
       c_parser_consume_token (parser);
       op = c_parser_cast_expression (parser, NULL);
       mark_exp_read (op.value);
-      return parser_build_unary_op (op_loc, ADDR_EXPR, op);
+      반환 parser_build_unary_op (op_loc, ADDR_EXPR, op);
     case CPP_MULT:
       {
 	c_parser_consume_token (parser);
@@ -10780,10 +10780,10 @@ c_parser_unary_expression (c_parser *parser)
 	ret.src_range.m_start = op_loc;
 	ret.src_range.m_finish = finish;
 	ret.m_decimal = 0;
-	return ret;
+	반환 ret;
       }
     case CPP_PLUS:
-      if (!c_dialect_objc () && !in_system_header_at (input_location))
+      만약 (!c_dialect_objc () && !in_system_header_at (input_location))
 	warning_at (op_loc,
 		    OPT_Wtraditional,
 		    "traditional C rejects the unary plus operator");
@@ -10791,29 +10791,29 @@ c_parser_unary_expression (c_parser *parser)
       exp_loc = c_parser_peek_token (parser)->location;
       op = c_parser_cast_expression (parser, NULL);
       op = convert_lvalue_to_rvalue (exp_loc, op, true, true);
-      return parser_build_unary_op (op_loc, CONVERT_EXPR, op);
+      반환 parser_build_unary_op (op_loc, CONVERT_EXPR, op);
     case CPP_MINUS:
       c_parser_consume_token (parser);
       exp_loc = c_parser_peek_token (parser)->location;
       op = c_parser_cast_expression (parser, NULL);
       op = convert_lvalue_to_rvalue (exp_loc, op, true, true);
-      return parser_build_unary_op (op_loc, NEGATE_EXPR, op);
+      반환 parser_build_unary_op (op_loc, NEGATE_EXPR, op);
     case CPP_COMPL:
       c_parser_consume_token (parser);
       exp_loc = c_parser_peek_token (parser)->location;
       op = c_parser_cast_expression (parser, NULL);
       op = convert_lvalue_to_rvalue (exp_loc, op, true, true);
-      return parser_build_unary_op (op_loc, BIT_NOT_EXPR, op);
+      반환 parser_build_unary_op (op_loc, BIT_NOT_EXPR, op);
     case CPP_NOT:
       c_parser_consume_token (parser);
       exp_loc = c_parser_peek_token (parser)->location;
       op = c_parser_cast_expression (parser, NULL);
       op = convert_lvalue_to_rvalue (exp_loc, op, true, true);
-      return parser_build_unary_op (op_loc, TRUTH_NOT_EXPR, op);
+      반환 parser_build_unary_op (op_loc, TRUTH_NOT_EXPR, op);
     case CPP_AND_AND:
       /* Refer to the address of a label as a pointer.  */
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  ret.value = finish_label_address_expr
 	    (c_parser_peek_token (parser)->value, op_loc);
@@ -10821,12 +10821,12 @@ c_parser_unary_expression (c_parser *parser)
 				   c_parser_peek_token (parser)->get_finish ());
 	  c_parser_consume_token (parser);
 	}
-      else
+      아니면
 	{
 	  c_parser_error (parser, "expected identifier");
 	  ret.set_error ();
 	}
-      return ret;
+      반환 ret;
     case CPP_KEYWORD:
       {
 	enum rid rid = c_parser_peek_token (parser)->keyword;
@@ -10834,35 +10834,35 @@ c_parser_unary_expression (c_parser *parser)
 	  {
 	  case RID_COUNTOF:
 	  case RID_SIZEOF:
-	    return c_parser_sizeof_or_countof_expression (parser, rid);
+	    반환 c_parser_sizeof_or_countof_expression (parser, rid);
 	  case RID_ALIGNOF:
-	    return c_parser_alignof_expression (parser);
+	    반환 c_parser_alignof_expression (parser);
 	  case RID_MAXOF:
 	  case RID_MINOF:
-	    return c_parser_maxof_or_minof_expression (parser, rid);
+	    반환 c_parser_maxof_or_minof_expression (parser, rid);
 	  case RID_BUILTIN_HAS_ATTRIBUTE:
-	    return c_parser_has_attribute_expression (parser);
+	    반환 c_parser_has_attribute_expression (parser);
 	  case RID_EXTENSION:
 	    c_parser_consume_token (parser);
 	    ext = disable_extension_diagnostics ();
 	    ret = c_parser_cast_expression (parser, NULL);
 	    restore_extension_diagnostics (ext);
-	    return ret;
+	    반환 ret;
 	  case RID_REALPART:
 	    c_parser_consume_token (parser);
 	    exp_loc = c_parser_peek_token (parser)->location;
 	    op = c_parser_cast_expression (parser, NULL);
 	    op = default_function_array_conversion (exp_loc, op);
-	    return parser_build_unary_op (op_loc, REALPART_EXPR, op);
+	    반환 parser_build_unary_op (op_loc, REALPART_EXPR, op);
 	  case RID_IMAGPART:
 	    c_parser_consume_token (parser);
 	    exp_loc = c_parser_peek_token (parser)->location;
 	    op = c_parser_cast_expression (parser, NULL);
 	    op = default_function_array_conversion (exp_loc, op);
-	    return parser_build_unary_op (op_loc, IMAGPART_EXPR, op);
+	    반환 parser_build_unary_op (op_loc, IMAGPART_EXPR, op);
 	  case RID_TRANSACTION_ATOMIC:
 	  case RID_TRANSACTION_RELAXED:
-	    return c_parser_transaction_expression (parser, rid);
+	    반환 c_parser_transaction_expression (parser, rid);
 	  case RID_STATIC_ASSERT:
 	    c_parser_static_assert_declaration_no_semi (parser);
 	    pedwarn_c23 (op_loc, OPT_Wpedantic,
@@ -10871,13 +10871,13 @@ c_parser_unary_expression (c_parser *parser)
 	    ret.value = void_node;
 	    set_c_expr_source_range (&ret, op_loc, op_loc);
 	    ret.m_decimal = 0;
-	    return ret;
+	    반환 ret;
 	  default:
-	    return c_parser_postfix_expression (parser);
+	    반환 c_parser_postfix_expression (parser);
 	  }
       }
     default:
-      return c_parser_postfix_expression (parser);
+      반환 c_parser_postfix_expression (parser);
     }
 }
 
@@ -10897,17 +10897,17 @@ c_parser_sizeof_or_countof_expression (c_parser *parser, enum rid rid)
 
   start = c_parser_peek_token (parser)->location;
 
-  if (rid == RID_COUNTOF)
+  만약 (rid == RID_COUNTOF)
     pedwarn_c23 (start, OPT_Wpedantic,
 		 "ISO C does not support %qs before C2Y", op_name);
 
   c_parser_consume_token (parser);
   c_inhibit_evaluation_warnings++;
-  if (rid == RID_COUNTOF)
+  만약 (rid == RID_COUNTOF)
     in_countof++;
-  else
+  아니면
     in_sizeof++;
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
       && c_token_starts_compound_literal (c_parser_peek_2nd_token (parser)))
     {
       /* Either sizeof ( type-name ) or sizeof unary-expression
@@ -10921,7 +10921,7 @@ c_parser_sizeof_or_countof_expression (c_parser *parser, enum rid rid)
       type_name = c_parser_type_name (parser, true);
       parens.skip_until_found_close (parser);
       finish = parser->tokens_buf[0].location;
-      if (type_name == NULL)
+      만약 (type_name == NULL)
 	{
 	  /* Let c_expr_sizeof_expr call pop_maybe_used and fill in c_expr
 	     for parsing error; the parsing of the expression could have
@@ -10929,7 +10929,7 @@ c_parser_sizeof_or_countof_expression (c_parser *parser, enum rid rid)
 	  expr.set_error ();
 	  goto Xof_expr;
 	}
-      if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+      만약 (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 	{
 	  expr = c_parser_postfix_expression_after_paren_type (parser, scspecs,
 							       type_name,
@@ -10938,47 +10938,47 @@ c_parser_sizeof_or_countof_expression (c_parser *parser, enum rid rid)
 	  goto Xof_expr;
 	}
       /* sizeof ( type-name ).  */
-      if (scspecs)
+      만약 (scspecs)
 	error_at (expr_loc, "storage class specifier in %qs", op_name);
-      if (type_name->specs->alignas_p)
+      만약 (type_name->specs->alignas_p)
 	error_at (type_name->specs->locations[cdw_alignas],
 		  "alignment specified for type name in %qs", op_name);
       c_inhibit_evaluation_warnings--;
-      if (rid == RID_COUNTOF)
+      만약 (rid == RID_COUNTOF)
 	{
 	  in_countof--;
 	  result = c_expr_countof_type (expr_loc, type_name);
 	}
-      else
+      아니면
 	{
 	  in_sizeof--;
 	  result = c_expr_sizeof_type (expr_loc, type_name);
 	}
     }
-  else
+  아니면
     {
       expr_loc = c_parser_peek_token (parser)->location;
       expr = c_parser_unary_expression (parser);
       finish = expr.get_finish ();
     Xof_expr:
       c_inhibit_evaluation_warnings--;
-      if (rid == RID_COUNTOF)
+      만약 (rid == RID_COUNTOF)
 	in_countof--;
-      else
+      아니면
 	in_sizeof--;
       mark_exp_read (expr.value);
-      if (TREE_CODE (expr.value) == COMPONENT_REF
+      만약 (TREE_CODE (expr.value) == COMPONENT_REF
 	  && DECL_C_BIT_FIELD (TREE_OPERAND (expr.value, 1)))
 	error_at (expr_loc, "%qs applied to a bit-field", op_name);
-      if (rid == RID_COUNTOF)
+      만약 (rid == RID_COUNTOF)
 	result = c_expr_countof_expr (expr_loc, expr);
-      else
+      아니면
 	result = c_expr_sizeof_expr (expr_loc, expr);
     }
-  if (finish == UNKNOWN_LOCATION)
+  만약 (finish == UNKNOWN_LOCATION)
     finish = start;
   set_c_expr_source_range (&result, start, finish);
-  return result;
+  반환 result;
 }
 
 /* Parse an alignof expression.  */
@@ -10998,19 +10998,19 @@ c_parser_alignof_expression (c_parser *parser)
   /* A diagnostic is not required for the use of this identifier in
      the implementation namespace; only diagnose it for the C11 or C23
      spelling because of existing code using the other spellings.  */
-  if (is_c11_alignof)
+  만약 (is_c11_alignof)
     {
-      if (flag_isoc99)
+      만약 (flag_isoc99)
 	pedwarn_c99 (start_loc, OPT_Wpedantic, "ISO C99 does not support %qE",
 		     alignof_spelling);
-      else
+      아니면
 	pedwarn_c99 (start_loc, OPT_Wpedantic, "ISO C90 does not support %qE",
 		     alignof_spelling);
     }
   c_parser_consume_token (parser);
   c_inhibit_evaluation_warnings++;
   in_alignof++;
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
       && c_token_starts_compound_literal (c_parser_peek_2nd_token (parser)))
     {
       /* Either __alignof__ ( type-name ) or __alignof__
@@ -11026,7 +11026,7 @@ c_parser_alignof_expression (c_parser *parser)
       type_name = c_parser_type_name (parser, true);
       end_loc = c_parser_peek_token (parser)->location;
       parens.skip_until_found_close (parser);
-      if (type_name == NULL)
+      만약 (type_name == NULL)
 	{
 	  struct c_expr ret;
 	  c_inhibit_evaluation_warnings--;
@@ -11034,9 +11034,9 @@ c_parser_alignof_expression (c_parser *parser)
 	  ret.set_error ();
 	  ret.original_code = ERROR_MARK;
 	  ret.original_type = NULL;
-	  return ret;
+	  반환 ret;
 	}
-      if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+      만약 (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 	{
 	  expr = c_parser_postfix_expression_after_paren_type (parser, scspecs,
 							       type_name,
@@ -11044,9 +11044,9 @@ c_parser_alignof_expression (c_parser *parser)
 	  goto alignof_expr;
 	}
       /* alignof ( type-name ).  */
-      if (scspecs)
+      만약 (scspecs)
 	error_at (loc, "storage class specifier in %qE", alignof_spelling);
-      if (type_name->specs->alignas_p)
+      만약 (type_name->specs->alignas_p)
 	error_at (type_name->specs->locations[cdw_alignas],
 		  "alignment specified for type name in %qE",
 		  alignof_spelling);
@@ -11059,9 +11059,9 @@ c_parser_alignof_expression (c_parser *parser)
       ret.original_type = NULL;
       set_c_expr_source_range (&ret, start_loc, end_loc);
       ret.m_decimal = 0;
-      return ret;
+      반환 ret;
     }
-  else
+  아니면
     {
       struct c_expr ret;
       expr = c_parser_unary_expression (parser);
@@ -11070,7 +11070,7 @@ c_parser_alignof_expression (c_parser *parser)
       mark_exp_read (expr.value);
       c_inhibit_evaluation_warnings--;
       in_alignof--;
-      if (is_c11_alignof)
+      만약 (is_c11_alignof)
 	pedwarn (start_loc,
 		 OPT_Wpedantic, "ISO C does not allow %<%E (expression)%>",
 		 alignof_spelling);
@@ -11079,7 +11079,7 @@ c_parser_alignof_expression (c_parser *parser)
       ret.original_type = NULL;
       set_c_expr_source_range (&ret, start_loc, end_loc);
       ret.m_decimal = 0;
-      return ret;
+      반환 ret;
     }
 }
 
@@ -11104,21 +11104,21 @@ c_parser_maxof_or_minof_expression (c_parser *parser, enum rid rid)
 
   c_parser_consume_token (parser);
   c_inhibit_evaluation_warnings++;
-  if (!c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (!c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       c_parser_error (parser, "expected %<(%>");
       goto fail;
     }
   parens.consume_open (parser);
   expr_loc = c_parser_peek_token (parser)->location;
-  if (!c_token_starts_typename (c_parser_peek_token (parser)))
+  만약 (!c_token_starts_typename (c_parser_peek_token (parser)))
     {
       error_at (expr_loc, "invalid application of %qs to something not a type", op_name);
       parens.skip_until_found_close (parser);
       goto fail;
     }
   type_name = c_parser_type_name (parser, true);
-  if (type_name == NULL)
+  만약 (type_name == NULL)
     {
       // c_parser_type_name() has already diagnosed the error.
       parens.skip_until_found_close (parser);
@@ -11126,22 +11126,22 @@ c_parser_maxof_or_minof_expression (c_parser *parser, enum rid rid)
     }
   parens.skip_until_found_close (parser);
   finish = parser->tokens_buf[0].location;
-  if (type_name->specs->alignas_p)
+  만약 (type_name->specs->alignas_p)
     error_at (type_name->specs->locations[cdw_alignas],
 	      "alignment specified for type name in %qs", op_name);
   c_inhibit_evaluation_warnings--;
-  if (rid == RID_MAXOF)
+  만약 (rid == RID_MAXOF)
     result = c_expr_maxof_type (expr_loc, type_name);
-  else
+  아니면
     result = c_expr_minof_type (expr_loc, type_name);
   set_c_expr_source_range (&result, start, finish);
-  return result;
+  반환 result;
 fail:
   c_inhibit_evaluation_warnings--;
   result.set_error ();
   result.original_code = ERROR_MARK;
   result.original_type = NULL;
-  return result;
+  반환 result;
 }
 
 /* Parse the __builtin_has_attribute ([expr|type], attribute-spec)
@@ -11158,7 +11158,7 @@ c_parser_has_attribute_expression (c_parser *parser)
   c_inhibit_evaluation_warnings++;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
+  만약 (!parens.require_open (parser))
     {
       c_inhibit_evaluation_warnings--;
       in_typeof--;
@@ -11167,7 +11167,7 @@ c_parser_has_attribute_expression (c_parser *parser)
       result.set_error ();
       result.original_code = ERROR_MARK;
       result.original_type = NULL;
-      return result;
+      반환 result;
     }
 
   /* Treat the type argument the same way as in typeof for the purposes
@@ -11177,22 +11177,22 @@ c_parser_has_attribute_expression (c_parser *parser)
 
   /* The first operand: one of DECL, EXPR, or TYPE.  */
   tree oper = NULL_TREE;
-  if (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
+  만약 (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
     {
       struct c_type_name *tname = c_parser_type_name (parser);
       in_typeof--;
-      if (tname)
+      만약 (tname)
 	{
 	  oper = groktypename (tname, NULL, NULL);
 	  pop_maybe_used (c_type_variably_modified_p (oper));
 	}
     }
-  else
+  아니면
     {
       struct c_expr cexpr = c_parser_expr_no_commas (parser, NULL);
       c_inhibit_evaluation_warnings--;
       in_typeof--;
-      if (cexpr.value != error_mark_node)
+      만약 (cexpr.value != error_mark_node)
 	{
 	  mark_exp_read (cexpr.value);
 	  oper = cexpr.value;
@@ -11200,7 +11200,7 @@ c_parser_has_attribute_expression (c_parser *parser)
 	  bool was_vm = c_type_variably_modified_p (etype);
 	  /* This is returned with the type so that when the type is
 	     evaluated, this can be evaluated.  */
-	  if (was_vm)
+	  만약 (was_vm)
 	    oper = c_fully_fold (oper, false, NULL);
 	  pop_maybe_used (was_vm);
 	}
@@ -11210,16 +11210,16 @@ c_parser_has_attribute_expression (c_parser *parser)
   result.original_code = ERROR_MARK;
   result.original_type = NULL;
 
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+  만약 (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
     {
       /* Consume the closing parenthesis if that's the next token
 	 in the likely case the built-in was invoked with fewer
 	 than two arguments.  */
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	c_parser_consume_token (parser);
       c_inhibit_evaluation_warnings--;
       result.set_error ();
-      return result;
+      반환 result;
     }
 
   bool save_translate_strings_p = parser->translate_strings_p;
@@ -11232,37 +11232,37 @@ c_parser_has_attribute_expression (c_parser *parser)
   parser->translate_strings_p = save_translate_strings_p;
 
   location_t finish = c_parser_peek_token (parser)->location;
-  if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
     c_parser_consume_token (parser);
-  else
+  아니면
     {
       c_parser_error (parser, "expected identifier");
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
 
       result.set_error ();
-      return result;
+      반환 result;
     }
 
-  if (!attr)
+  만약 (!attr)
     {
       error_at (atloc, "expected identifier");
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				 "expected %<)%>");
       result.set_error ();
-      return result;
+      반환 result;
     }
 
   result.original_code = INTEGER_CST;
   result.original_type = boolean_type_node;
 
-  if (has_attribute (atloc, oper, attr, default_conversion))
+  만약 (has_attribute (atloc, oper, attr, default_conversion))
     result.value = boolean_true_node;
-  else
+  아니면
     result.value =  boolean_false_node;
 
   set_c_expr_source_range (&result, start, finish);
   result.m_decimal = 0;
-  return result;
+  반환 result;
 }
 
 /* Helper function to read arguments of builtins which are interfaces
@@ -11284,19 +11284,19 @@ c_parser_get_builtin_args (c_parser *parser, const char *bname,
   bool saved_force_folding_builtin_constant_p;
 
   *ret_cexpr_list = NULL;
-  if (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
     {
       error_at (loc, "cannot take address of %qs", bname);
-      return false;
+      반환 false;
     }
 
   c_parser_consume_token (parser);
 
-  if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
     {
       *out_close_paren_loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      return true;
+      반환 true;
     }
 
   saved_force_folding_builtin_constant_p
@@ -11307,10 +11307,10 @@ c_parser_get_builtin_args (c_parser *parser, const char *bname,
     = saved_force_folding_builtin_constant_p;
   vec_alloc (cexpr_list, 1);
   vec_safe_push (cexpr_list, expr);
-  while (c_parser_next_token_is (parser, CPP_COMMA))
+  동안 (c_parser_next_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_EMBED))
+      만약 (c_parser_next_token_is (parser, CPP_EMBED))
 	{
 	  c_token *embed = c_parser_peek_token (parser);
 	  tree value = embed->value;
@@ -11319,7 +11319,7 @@ c_parser_get_builtin_args (c_parser *parser, const char *bname,
 	  expr.value = NULL_TREE;
 	  set_c_expr_source_range (&expr, embed->get_range ());
 	  expr.m_decimal = 0;
-	  for (unsigned int i = 0; i < (unsigned) RAW_DATA_LENGTH (value); i++)
+	  위해 (unsigned 정수 i = 0; i < (unsigned) RAW_DATA_LENGTH (value); i++)
 	    {
 	      expr.value = build_int_cst (integer_type_node,
 					  RAW_DATA_UCHAR_ELT (value, i));
@@ -11333,11 +11333,11 @@ c_parser_get_builtin_args (c_parser *parser, const char *bname,
     }
 
   *out_close_paren_loc = c_parser_peek_token (parser)->location;
-  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return false;
+  만약 (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    반환 false;
 
   *ret_cexpr_list = cexpr_list;
-  return true;
+  반환 true;
 }
 
 /* This represents a single generic-association.  */
@@ -11378,7 +11378,7 @@ c_parser_generic_selection (c_parser *parser)
   struct c_expr selector, error_expr;
   tree selector_type;
   struct c_generic_association matched_assoc;
-  int match_found = -1;
+  정수 match_found = -1;
   location_t generic_loc, selector_loc;
 
   error_expr.original_code = ERROR_MARK;
@@ -11391,35 +11391,35 @@ c_parser_generic_selection (c_parser *parser)
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_GENERIC));
   generic_loc = c_parser_peek_token (parser)->location;
   c_parser_consume_token (parser);
-  if (flag_isoc99)
+  만약 (flag_isoc99)
     pedwarn_c99 (generic_loc, OPT_Wpedantic,
 		 "ISO C99 does not support %<_Generic%>");
-  else
+  아니면
     pedwarn_c99 (generic_loc, OPT_Wpedantic,
 		 "ISO C90 does not support %<_Generic%>");
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return error_expr;
+  만약 (!parens.require_open (parser))
+    반환 error_expr;
 
   selector_loc = c_parser_peek_token (parser)->location;
-  if (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
+  만약 (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
     {
       c_inhibit_evaluation_warnings++;
       pedwarn_c23 (selector_loc, OPT_Wpedantic,
 		   "ISO C does not support use of type name as %<_Generic%> "
 		   "controlling operand before C2Y");
       struct c_type_name *type = c_parser_type_name (parser);
-      if (type)
+      만약 (type)
 	selector_type = groktypename (type, NULL, NULL);
       c_inhibit_evaluation_warnings--;
-      if (!type)
+      만약 (!type)
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	  return error_expr;
+	  반환 error_expr;
 	}
     }
-  else
+  아니면
     {
       c_inhibit_evaluation_warnings++;
       in_generic++;
@@ -11429,123 +11429,123 @@ c_parser_generic_selection (c_parser *parser)
       in_generic--;
       pop_maybe_used (!flag_isoc23);
 
-      if (selector.value == error_mark_node)
+      만약 (selector.value == error_mark_node)
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	  return selector;
+	  반환 selector;
 	}
       mark_exp_read (selector.value);
       selector_type = TREE_TYPE (selector.value);
       /* In ISO C terms, rvalues (including the controlling expression
 	 of _Generic) do not have qualified types.  */
-      if (TREE_CODE (selector_type) != ARRAY_TYPE)
+      만약 (TREE_CODE (selector_type) != ARRAY_TYPE)
 	selector_type = TYPE_MAIN_VARIANT (selector_type);
       /* In ISO C terms, _Noreturn is not part of the type of expressions
 	 such as &abort, but in GCC it is represented internally as a type
 	 qualifier.  */
-      if (FUNCTION_POINTER_TYPE_P (selector_type)
+      만약 (FUNCTION_POINTER_TYPE_P (selector_type)
 	  && TYPE_QUALS (TREE_TYPE (selector_type)) != TYPE_UNQUALIFIED)
 	selector_type
 	  = c_build_pointer_type (TYPE_MAIN_VARIANT (TREE_TYPE (selector_type)));
     }
 
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+  만약 (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-      return error_expr;
+      반환 error_expr;
     }
 
   auto_vec<c_generic_association> associations;
   struct maybe_used_decl *maybe_used_default = NULL;
-  while (1)
+  동안 (1)
     {
       struct c_generic_association assoc, *iter;
-      unsigned int ix;
+      unsigned 정수 ix;
       c_token *token = c_parser_peek_token (parser);
 
       assoc.type_location = token->location;
-      if (token->type == CPP_KEYWORD && token->keyword == RID_DEFAULT)
+      만약 (token->type == CPP_KEYWORD && token->keyword == RID_DEFAULT)
 	{
 	  c_parser_consume_token (parser);
 	  assoc.type = NULL_TREE;
 	}
-      else
+      아니면
 	{
 	  struct c_type_name *type_name;
 
 	  type_name = c_parser_type_name (parser);
-	  if (type_name == NULL)
+	  만약 (type_name == NULL)
 	    {
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	      return error_expr;
+	      반환 error_expr;
 	    }
 	  assoc.type = grokgenassoc (type_name);
-	  if (assoc.type == error_mark_node)
+	  만약 (assoc.type == error_mark_node)
 	    {
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	      return error_expr;
+	      반환 error_expr;
 	    }
 
-	  if (TREE_CODE (assoc.type) == FUNCTION_TYPE)
+	  만약 (TREE_CODE (assoc.type) == FUNCTION_TYPE)
 	    pedwarn_c23 (assoc.type_location, OPT_Wpedantic,
 			 "ISO C does not support %<_Generic%> association with "
 			 "function type before C2Y");
-	  else if (!COMPLETE_TYPE_P (assoc.type))
+	  아니면 만약 (!COMPLETE_TYPE_P (assoc.type))
 	    pedwarn_c23 (assoc.type_location, OPT_Wpedantic,
 			 "ISO C does not support %<_Generic%> association with "
 			 "incomplete type before C2Y");
 
-	  if (c_type_variably_modified_p (assoc.type))
+	  만약 (c_type_variably_modified_p (assoc.type))
 	    pedwarn_c23 (assoc.type_location, OPT_Wpedantic,
 			 "ISO C does not support %<_Generic%> association with "
 			 "variably-modified type before C2Y");
 	}
 
-      if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+      만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	  return error_expr;
+	  반환 error_expr;
 	}
 
       bool match = assoc.type == NULL_TREE
 		   || comptypes (assoc.type, selector_type);
 
-      if (!match || matched_assoc.type != NULL_TREE)
+      만약 (!match || matched_assoc.type != NULL_TREE)
 	c_inhibit_evaluation_warnings++;
       in_generic++;
 
       assoc.expression = c_parser_expr_no_commas (parser, NULL);
 
-      if (!match || matched_assoc.type != NULL_TREE)
+      만약 (!match || matched_assoc.type != NULL_TREE)
 	c_inhibit_evaluation_warnings--;
       in_generic--;
-      if (!match)
+      만약 (!match)
 	pop_maybe_used (!flag_isoc23);
-      else if (assoc.type == NULL_TREE)
+      아니면 만약 (assoc.type == NULL_TREE)
 	maybe_used_default = save_maybe_used ();
-      else
+      아니면
 	pop_maybe_used (true);
 
-      if (assoc.expression.value == error_mark_node)
+      만약 (assoc.expression.value == error_mark_node)
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	  return error_expr;
+	  반환 error_expr;
 	}
 
-      for (ix = 0; associations.iterate (ix, &iter); ++ix)
+      위해 (ix = 0; associations.iterate (ix, &iter); ++ix)
 	{
-	  if (assoc.type == NULL_TREE)
+	  만약 (assoc.type == NULL_TREE)
 	    {
-	      if (iter->type == NULL_TREE)
+	      만약 (iter->type == NULL_TREE)
 		{
 		  error_at (assoc.type_location,
 			    "duplicate %<default%> case in %<_Generic%>");
 		  inform (iter->type_location, "original %<default%> is here");
 		}
 	    }
-	  else if (iter->type != NULL_TREE)
+	  아니면 만약 (iter->type != NULL_TREE)
 	    {
-	      if (comptypes (assoc.type, iter->type))
+	      만약 (comptypes (assoc.type, iter->type))
 		{
 		  error_at (assoc.type_location,
 			    "%<_Generic%> specifies two compatible types");
@@ -11554,22 +11554,22 @@ c_parser_generic_selection (c_parser *parser)
 	    }
 	}
 
-      if (assoc.type == NULL_TREE)
+      만약 (assoc.type == NULL_TREE)
 	{
-	  if (match_found < 0)
+	  만약 (match_found < 0)
 	    {
 	      matched_assoc = assoc;
 	      match_found = associations.length ();
 	    }
 	}
-      else if (match)
+      아니면 만약 (match)
 	{
-	  if (match_found < 0 || matched_assoc.type == NULL_TREE)
+	  만약 (match_found < 0 || matched_assoc.type == NULL_TREE)
 	    {
 	      matched_assoc = assoc;
 	      match_found = associations.length ();
 	    }
-	  else
+	  아니면
 	    {
 	      error_at (assoc.type_location,
 			"%<_Generic%> selector matches multiple associations");
@@ -11580,18 +11580,18 @@ c_parser_generic_selection (c_parser *parser)
 
       associations.safe_push (assoc);
 
-      if (c_parser_peek_token (parser)->type != CPP_COMMA)
+      만약 (c_parser_peek_token (parser)->type != CPP_COMMA)
 	break;
       c_parser_consume_token (parser);
     }
 
-  if (match_found >= 0 && matched_assoc.type == NULL_TREE)
+  만약 (match_found >= 0 && matched_assoc.type == NULL_TREE)
     {
       /* Declarations referenced in the default association are used.  */
       restore_maybe_used (maybe_used_default);
       pop_maybe_used (true);
     }
-  else if (maybe_used_default)
+  아니면 만약 (maybe_used_default)
     {
       /* Declarations referenced in the default association are not used, but
 	 are treated as used before C23.  */
@@ -11599,27 +11599,27 @@ c_parser_generic_selection (c_parser *parser)
       pop_maybe_used (!flag_isoc23);
     }
 
-  unsigned int ix;
+  unsigned 정수 ix;
   struct c_generic_association *iter;
   FOR_EACH_VEC_ELT (associations, ix, iter)
-    if (ix != (unsigned) match_found)
+    만약 (ix != (unsigned) match_found)
       mark_exp_read (iter->expression.value);
 
-  if (!parens.require_close (parser))
+  만약 (!parens.require_close (parser))
     {
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-      return error_expr;
+      반환 error_expr;
     }
 
-  if (match_found < 0)
+  만약 (match_found < 0)
     {
       error_at (selector_loc, "%<_Generic%> selector of type %qT is not "
 		"compatible with any association",
 		selector_type);
-      return error_expr;
+      반환 error_expr;
     }
 
-  return matched_assoc.expression;
+  반환 matched_assoc.expression;
 }
 
 /* Check the validity of a function pointer argument *EXPR (argument
@@ -11627,47 +11627,47 @@ c_parser_generic_selection (c_parser *parser)
    arguments if possibly valid; return 0 having reported an error if
    not valid.  */
 
-static unsigned int
-check_tgmath_function (c_expr *expr, unsigned int pos)
+static unsigned 정수
+check_tgmath_function (c_expr *expr, unsigned 정수 pos)
 {
   tree type = TREE_TYPE (expr->value);
-  if (!FUNCTION_POINTER_TYPE_P (type))
+  만약 (!FUNCTION_POINTER_TYPE_P (type))
     {
       error_at (expr->get_location (),
 		"argument %u of %<__builtin_tgmath%> is not a function pointer",
 		pos);
-      return 0;
+      반환 0;
     }
   type = TREE_TYPE (type);
-  if (!prototype_p (type))
+  만약 (!prototype_p (type))
     {
       error_at (expr->get_location (),
 		"argument %u of %<__builtin_tgmath%> is unprototyped", pos);
-      return 0;
+      반환 0;
     }
-  if (stdarg_p (type))
+  만약 (stdarg_p (type))
     {
       error_at (expr->get_location (),
 		"argument %u of %<__builtin_tgmath%> has variable arguments",
 		pos);
-      return 0;
+      반환 0;
     }
-  unsigned int nargs = 0;
+  unsigned 정수 nargs = 0;
   function_args_iterator iter;
   tree t;
   FOREACH_FUNCTION_ARGS (type, t, iter)
     {
-      if (t == void_type_node)
+      만약 (t == void_type_node)
 	break;
       nargs++;
     }
-  if (nargs == 0)
+  만약 (nargs == 0)
     {
       error_at (expr->get_location (),
 		"argument %u of %<__builtin_tgmath%> has no arguments", pos);
-      return 0;
+      반환 0;
     }
-  return nargs;
+  반환 nargs;
 }
 
 /* Ways in which a parameter or return value of a type-generic macro
@@ -11710,7 +11710,7 @@ c_parser_predefined_identifier (c_parser *parser)
   set_c_expr_source_range (&expr, loc, loc);
   expr.m_decimal = 0;
   c_parser_consume_token (parser);
-  return expr;
+  반환 expr;
 }
 
 /* Check whether the REF has an counted-by object associated with it
@@ -11726,11 +11726,11 @@ has_counted_by_object (tree ref)
 	(this is for pointer field inside a structure)
      More cases can be included later when the counted_by attribute is
      extended to other situations.  */
-  if ((TREE_CODE (ref) == INDIRECT_REF
+  만약 ((TREE_CODE (ref) == INDIRECT_REF
        && is_access_with_size_p (TREE_OPERAND (ref, 0)))
       || is_access_with_size_p (ref))
-    return true;
-  return false;
+    반환 true;
+  반환 false;
 }
 
 /* Get the reference to the counted-by object associated with the REF.  */
@@ -11745,13 +11745,13 @@ get_counted_by_ref (tree ref)
 	(this is for pointer field inside a structure)
      More cases can be included later when the counted_by attribute is
      extended to other situations.  */
-  if (TREE_CODE (ref) == INDIRECT_REF
+  만약 (TREE_CODE (ref) == INDIRECT_REF
       && is_access_with_size_p (TREE_OPERAND (ref, 0)))
-    return CALL_EXPR_ARG (TREE_OPERAND (ref, 0), 1);
-  else if (is_access_with_size_p (ref))
-    return CALL_EXPR_ARG (ref, 1);
+    반환 CALL_EXPR_ARG (TREE_OPERAND (ref, 0), 1);
+  아니면 만약 (is_access_with_size_p (ref))
+    반환 CALL_EXPR_ARG (ref, 1);
 
-  return NULL_TREE;
+  반환 NULL_TREE;
 }
 
 /* Parse a postfix expression (C90 6.3.1-6.3.2, C99 6.5.1-6.5.2,
@@ -11837,7 +11837,7 @@ c_parser_postfix_expression (c_parser *parser)
       loc = c_parser_peek_token (parser)->location;
       expr.m_decimal = c_parser_peek_token (parser)->flags & DECIMAL_INT;
       c_parser_consume_token (parser);
-      if (TREE_CODE (expr.value) == FIXED_CST
+      만약 (TREE_CODE (expr.value) == FIXED_CST
 	  && !targetm.fixed_point_supported_p ())
 	{
 	  error_at (loc, "fixed-point types not supported for this target");
@@ -11893,12 +11893,12 @@ c_parser_postfix_expression (c_parser *parser)
 	    tree component;
 	    c_parser_consume_token (parser);
 	    gcc_assert (c_dialect_objc ());
-	    if (!c_parser_require (parser, CPP_DOT, "expected %<.%>"))
+	    만약 (!c_parser_require (parser, CPP_DOT, "expected %<.%>"))
 	      {
 		expr.set_error ();
 		break;
 	      }
-	    if (c_parser_next_token_is_not (parser, CPP_NAME))
+	    만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	      {
 		c_parser_error (parser, "expected identifier");
 		expr.set_error ();
@@ -11922,7 +11922,7 @@ c_parser_postfix_expression (c_parser *parser)
     case CPP_OPEN_PAREN:
       /* A parenthesized expression, statement expression or compound
 	 literal.  */
-      if (c_parser_peek_2nd_token (parser)->type == CPP_OPEN_BRACE)
+      만약 (c_parser_peek_2nd_token (parser)->type == CPP_OPEN_BRACE)
 	{
 	  /* A statement expression.  */
 	  tree stmt;
@@ -11934,7 +11934,7 @@ c_parser_postfix_expression (c_parser *parser)
 	  /* If we've not yet started the current function's statement list,
 	     or we're in the parameter scope of an old-style function
 	     declaration, statement expressions are not allowed.  */
-	  if (!building_stmt_list_p () || old_style_parameter_scope ())
+	  만약 (!building_stmt_list_p () || old_style_parameter_scope ())
 	    {
 	      error_at (loc, "braced-group within expression allowed "
 			"only inside a function");
@@ -11957,19 +11957,19 @@ c_parser_postfix_expression (c_parser *parser)
 	  mark_exp_read (expr.value);
 	  c_omp_array_section_p = save_c_omp_array_section_p;
 	}
-      else
+      아니면
 	{
 	  /* A parenthesized expression.  */
 	  location_t loc_open_paren = c_parser_peek_token (parser)->location;
 	  c_parser_consume_token (parser);
 	  expr = c_parser_expression (parser);
-	  if (TREE_CODE (expr.value) == MODIFY_EXPR)
+	  만약 (TREE_CODE (expr.value) == MODIFY_EXPR)
 	    suppress_warning (expr.value, OPT_Wparentheses);
-	  if (expr.original_code != C_MAYBE_CONST_EXPR
+	  만약 (expr.original_code != C_MAYBE_CONST_EXPR
 	      && expr.original_code != SIZEOF_EXPR)
 	    expr.original_code = ERROR_MARK;
 	  /* Remember that we saw ( ) around the sizeof.  */
-	  if (expr.original_code == SIZEOF_EXPR)
+	  만약 (expr.original_code == SIZEOF_EXPR)
 	    expr.original_code = PAREN_SIZEOF_EXPR;
 	  /* Don't change EXPR.ORIGINAL_TYPE.  */
 	  location_t loc_close_paren = c_parser_peek_token (parser)->location;
@@ -11991,7 +11991,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    location_t start_loc = loc;
 	    c_parser_consume_token (parser);
 	    matching_parens parens;
-	    if (!parens.require_open (parser))
+	    만약 (!parens.require_open (parser))
 	      {
 		expr.set_error ();
 		break;
@@ -11999,7 +11999,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    e1 = c_parser_expr_no_commas (parser, NULL);
 	    mark_exp_read (e1.value);
 	    e1.value = c_fully_fold (e1.value, false, NULL);
-	    if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+	    만약 (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
 	      {
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
 		expr.set_error ();
@@ -12010,11 +12010,11 @@ c_parser_postfix_expression (c_parser *parser)
 	    location_t end_loc = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				       "expected %<)%>");
-	    if (t1 == NULL)
+	    만약 (t1 == NULL)
 	      {
 		expr.set_error ();
 	      }
-	    else
+	    아니면
 	      {
 		tree type_expr = NULL_TREE;
 		tree type = groktypename (t1, &type_expr, NULL);
@@ -12028,23 +12028,23 @@ c_parser_postfix_expression (c_parser *parser)
 	  {
 	    c_parser_consume_token (parser);
 	    matching_parens parens;
-	    if (!parens.require_open (parser))
+	    만약 (!parens.require_open (parser))
 	      {
 		expr.set_error ();
 		break;
 	      }
 	    e1 = c_parser_expr_no_commas (parser, NULL);
 	    e1 = convert_lvalue_to_rvalue (e1.get_location (), e1, true, true);
-	    if (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	    만약 (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	      {
 		location_t cloc = c_parser_peek_token (parser)->location;
-		if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+		만약 (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
 		  {
 		    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
 		    expr.set_error ();
 		    break;
 		  }
-		if (c_parser_next_token_is (parser, CPP_NAME)
+		만약 (c_parser_next_token_is (parser, CPP_NAME)
 		    && c_parser_peek_token (parser)->id_kind == C_ID_ID
 		    && (c_parser_peek_2nd_token (parser)->type
 			== CPP_CLOSE_PAREN))
@@ -12054,18 +12054,18 @@ c_parser_postfix_expression (c_parser *parser)
 		    tree decl = lookup_name (name);
 		    tree last_parm
 		      = tree_last (DECL_ARGUMENTS (current_function_decl));
-		    if (!last_parm || decl != last_parm)
+		    만약 (!last_parm || decl != last_parm)
 		      warning_at (nloc, OPT_Wvarargs,
 				  "optional second parameter of %<va_start%> "
 				  "not last named argument");
-		    else if (DECL_REGISTER (decl))
+		    아니면 만약 (DECL_REGISTER (decl))
 		      warning_at (nloc, OPT_Wvarargs,
 				  "undefined behavior when second parameter "
 				  "of %<va_start%> is declared with "
 				  "%<register%> storage");
 		    c_parser_consume_token (parser);
 		  }
-		else
+		아니면
 		  {
 		    unsigned nesting_depth = 0;
 		    location_t sloc = c_parser_peek_token (parser)->location;
@@ -12075,24 +12075,24 @@ c_parser_postfix_expression (c_parser *parser)
 		       Use location of , in that case, otherwise without
 		       -Wsystem-headers nothing is reported.  After all,
 		       the problematic token is the comma in that case.  */
-		    if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+		    만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 		      sloc = eloc = cloc;
-		    while (true)
+		    동안 (true)
 		      {
 			c_token *token = c_parser_peek_token (parser);
-			if (token->type == CPP_CLOSE_PAREN && !nesting_depth)
+			만약 (token->type == CPP_CLOSE_PAREN && !nesting_depth)
 			  break;
 
-			if (token->type == CPP_EOF)
+			만약 (token->type == CPP_EOF)
 			  break;
-			if (token->type == CPP_OPEN_PAREN)
+			만약 (token->type == CPP_OPEN_PAREN)
 			  ++nesting_depth;
-			else if (token->type == CPP_CLOSE_PAREN)
+			아니면 만약 (token->type == CPP_CLOSE_PAREN)
 			  --nesting_depth;
 			eloc = token->location;
 			c_parser_consume_token (parser);
 		      }
-		    if (sloc != eloc)
+		    만약 (sloc != eloc)
 		      sloc = make_location (sloc, sloc, eloc);
 		    warning_at (sloc, OPT_Wvarargs,
 				"%<va_start%> macro used with additional "
@@ -12123,17 +12123,17 @@ c_parser_postfix_expression (c_parser *parser)
 	  {
 	    c_parser_consume_token (parser);
 	    matching_parens parens;
-	    if (!parens.require_open (parser))
+	    만약 (!parens.require_open (parser))
 	      {
 		expr.set_error ();
 		break;
 	      }
 	    t1 = c_parser_type_name (parser);
-	    if (t1 == NULL)
+	    만약 (t1 == NULL)
 	      parser->error = true;
-	    if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+	    만약 (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
 	      gcc_assert (parser->error);
-	    if (parser->error)
+	    만약 (parser->error)
 	      {
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
 		expr.set_error ();
@@ -12141,9 +12141,9 @@ c_parser_postfix_expression (c_parser *parser)
 	      }
 	    tree type = groktypename (t1, NULL, NULL);
 	    tree offsetof_ref;
-	    if (type == error_mark_node)
+	    만약 (type == error_mark_node)
 	      offsetof_ref = error_mark_node;
-	    else
+	    아니면
 	      {
 		offsetof_ref = build1 (INDIRECT_REF, type, null_pointer_node);
 		SET_EXPR_LOCATION (offsetof_ref, loc);
@@ -12151,20 +12151,20 @@ c_parser_postfix_expression (c_parser *parser)
 	    /* Parse the second argument to __builtin_offsetof.  We
 	       must have one identifier, and beyond that we want to
 	       accept sub structure and sub array references.  */
-	    if (c_parser_next_token_is (parser, CPP_NAME))
+	    만약 (c_parser_next_token_is (parser, CPP_NAME))
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
 		offsetof_ref
 		  = build_component_ref (loc, offsetof_ref, comp_tok->value,
 					 comp_tok->location, UNKNOWN_LOCATION);
 		c_parser_consume_token (parser);
-		while (c_parser_next_token_is (parser, CPP_DOT)
+		동안 (c_parser_next_token_is (parser, CPP_DOT)
 		       || c_parser_next_token_is (parser,
 						  CPP_OPEN_SQUARE)
 		       || c_parser_next_token_is (parser,
 						  CPP_DEREF))
 		  {
-		    if (c_parser_next_token_is (parser, CPP_DEREF))
+		    만약 (c_parser_next_token_is (parser, CPP_DEREF))
 		      {
 			loc = c_parser_peek_token (parser)->location;
 			offsetof_ref = build_array_ref (loc,
@@ -12172,11 +12172,11 @@ c_parser_postfix_expression (c_parser *parser)
 							integer_zero_node);
 			goto do_dot;
 		      }
-		    else if (c_parser_next_token_is (parser, CPP_DOT))
+		    아니면 만약 (c_parser_next_token_is (parser, CPP_DOT))
 		      {
 		      do_dot:
 			c_parser_consume_token (parser);
-			if (c_parser_next_token_is_not (parser,
+			만약 (c_parser_next_token_is_not (parser,
 							CPP_NAME))
 			  {
 			    c_parser_error (parser, "expected identifier");
@@ -12190,7 +12190,7 @@ c_parser_postfix_expression (c_parser *parser)
 						 UNKNOWN_LOCATION);
 			c_parser_consume_token (parser);
 		      }
-		    else
+		    아니면
 		      {
 			struct c_expr ce;
 			tree idx;
@@ -12206,7 +12206,7 @@ c_parser_postfix_expression (c_parser *parser)
 		      }
 		  }
 	      }
-	    else
+	    아니면
 	      c_parser_error (parser, "expected identifier");
 	    location_t end_loc = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
@@ -12223,7 +12223,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    만약 (!c_parser_get_builtin_args (parser,
 					    "__builtin_choose_expr",
 					    &cexpr_list, true,
 					    &close_paren_loc))
@@ -12232,7 +12232,7 @@ c_parser_postfix_expression (c_parser *parser)
 		break;
 	      }
 
-	    if (vec_safe_length (cexpr_list) != 3)
+	    만약 (vec_safe_length (cexpr_list) != 3)
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_choose_expr%>");
@@ -12247,7 +12247,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    c = e1_p->value;
 	    mark_exp_read (e2_p->value);
 	    mark_exp_read (e3_p->value);
-	    if (TREE_CODE (c) != INTEGER_CST
+	    만약 (TREE_CODE (c) != INTEGER_CST
 		|| !INTEGRAL_TYPE_P (TREE_TYPE (c)))
 	      error_at (loc,
 			"first argument to %<__builtin_choose_expr%> not"
@@ -12261,25 +12261,25 @@ c_parser_postfix_expression (c_parser *parser)
 	  {
 	    c_parser_consume_token (parser);
 	    matching_parens parens;
-	    if (!parens.require_open (parser))
+	    만약 (!parens.require_open (parser))
 	      {
 		expr.set_error ();
 		break;
 	      }
 	    t1 = c_parser_type_name (parser);
-	    if (t1 == NULL)
+	    만약 (t1 == NULL)
 	      {
 		expr.set_error ();
 		break;
 	      }
-	    if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+	    만약 (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
 	      {
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
 		expr.set_error ();
 		break;
 	      }
 	    t2 = c_parser_type_name (parser);
-	    if (t2 == NULL)
+	    만약 (t2 == NULL)
 	      {
 		expr.set_error ();
 		break;
@@ -12289,7 +12289,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    tree e1, e2;
 	    e1 = groktypename (t1, NULL, NULL);
 	    e2 = groktypename (t2, NULL, NULL);
-	    if (e1 == error_mark_node || e2 == error_mark_node)
+	    만약 (e1 == error_mark_node || e2 == error_mark_node)
 	      {
 		expr.set_error ();
 		break;
@@ -12309,7 +12309,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    만약 (!c_parser_get_builtin_args (parser,
 					    "__builtin_tgmath",
 					    &cexpr_list, false,
 					    &close_paren_loc))
@@ -12318,31 +12318,31 @@ c_parser_postfix_expression (c_parser *parser)
 		break;
 	      }
 
-	    if (vec_safe_length (cexpr_list) < 3)
+	    만약 (vec_safe_length (cexpr_list) < 3)
 	      {
 		error_at (loc, "too few arguments to %<__builtin_tgmath%>");
 		expr.set_error ();
 		break;
 	      }
 
-	    unsigned int i;
+	    unsigned 정수 i;
 	    c_expr_t *p;
 	    FOR_EACH_VEC_ELT (*cexpr_list, i, p)
 	      *p = convert_lvalue_to_rvalue (loc, *p, true, true);
-	    unsigned int nargs = check_tgmath_function (&(*cexpr_list)[0], 1);
-	    if (nargs == 0)
+	    unsigned 정수 nargs = check_tgmath_function (&(*cexpr_list)[0], 1);
+	    만약 (nargs == 0)
 	      {
 		expr.set_error ();
 		break;
 	      }
-	    if (vec_safe_length (cexpr_list) < nargs)
+	    만약 (vec_safe_length (cexpr_list) < nargs)
 	      {
 		error_at (loc, "too few arguments to %<__builtin_tgmath%>");
 		expr.set_error ();
 		break;
 	      }
-	    unsigned int num_functions = vec_safe_length (cexpr_list) - nargs;
-	    if (num_functions < 2)
+	    unsigned 정수 num_functions = vec_safe_length (cexpr_list) - nargs;
+	    만약 (num_functions < 2)
 	      {
 		error_at (loc, "too few arguments to %<__builtin_tgmath%>");
 		expr.set_error ();
@@ -12353,16 +12353,16 @@ c_parser_postfix_expression (c_parser *parser)
 	       pointers.  The remaining NARGS expressions are the
 	       arguments that are to be passed to one of those
 	       functions, chosen following <tgmath.h> rules.  */
-	    for (unsigned int j = 1; j < num_functions; j++)
+	    위해 (unsigned 정수 j = 1; j < num_functions; j++)
 	      {
-		unsigned int this_nargs
+		unsigned 정수 this_nargs
 		  = check_tgmath_function (&(*cexpr_list)[j], j + 1);
-		if (this_nargs == 0)
+		만약 (this_nargs == 0)
 		  {
 		    expr.set_error ();
 		    goto out;
 		  }
-		if (this_nargs != nargs)
+		만약 (this_nargs != nargs)
 		  {
 		    error_at ((*cexpr_list)[j].get_location (),
 			      "argument %u of %<__builtin_tgmath%> has "
@@ -12389,23 +12389,23 @@ c_parser_postfix_expression (c_parser *parser)
 	    parm_varies.quick_push (false);
 	    function_args_iterator iter;
 	    tree t;
-	    unsigned int argpos;
+	    unsigned 정수 argpos;
 	    FOREACH_FUNCTION_ARGS (first_type, t, iter)
 	      {
-		if (t == void_type_node)
+		만약 (t == void_type_node)
 		  break;
 		parm_first.quick_push (TYPE_MAIN_VARIANT (t));
 		parm_complex.quick_push (TREE_CODE (t) == COMPLEX_TYPE);
 		parm_varies.quick_push (false);
 	      }
-	    for (unsigned int j = 1; j < num_functions; j++)
+	    위해 (unsigned 정수 j = 1; j < num_functions; j++)
 	      {
 		tree type = TREE_TYPE (TREE_TYPE ((*cexpr_list)[j].value));
 		tree ret = TYPE_MAIN_VARIANT (TREE_TYPE (type));
-		if (ret != parm_first[0])
+		만약 (ret != parm_first[0])
 		  {
 		    parm_varies[0] = true;
-		    if (!SCALAR_FLOAT_TYPE_P (parm_first[0])
+		    만약 (!SCALAR_FLOAT_TYPE_P (parm_first[0])
 			&& !COMPLEX_FLOAT_TYPE_P (parm_first[0]))
 		      {
 			error_at ((*cexpr_list)[0].get_location (),
@@ -12415,7 +12415,7 @@ c_parser_postfix_expression (c_parser *parser)
 			expr.set_error ();
 			goto out;
 		      }
-		    if (!SCALAR_FLOAT_TYPE_P (ret)
+		    만약 (!SCALAR_FLOAT_TYPE_P (ret)
 			&& !COMPLEX_FLOAT_TYPE_P (ret))
 		      {
 			error_at ((*cexpr_list)[j].get_location (),
@@ -12426,18 +12426,18 @@ c_parser_postfix_expression (c_parser *parser)
 			goto out;
 		      }
 		  }
-		if (TREE_CODE (ret) == COMPLEX_TYPE)
+		만약 (TREE_CODE (ret) == COMPLEX_TYPE)
 		  parm_complex[0] = true;
 		argpos = 1;
 		FOREACH_FUNCTION_ARGS (type, t, iter)
 		  {
-		    if (t == void_type_node)
+		    만약 (t == void_type_node)
 		      break;
 		    t = TYPE_MAIN_VARIANT (t);
-		    if (t != parm_first[argpos])
+		    만약 (t != parm_first[argpos])
 		      {
 			parm_varies[argpos] = true;
-			if (!SCALAR_FLOAT_TYPE_P (parm_first[argpos])
+			만약 (!SCALAR_FLOAT_TYPE_P (parm_first[argpos])
 			    && !COMPLEX_FLOAT_TYPE_P (parm_first[argpos]))
 			  {
 			    error_at ((*cexpr_list)[0].get_location (),
@@ -12447,7 +12447,7 @@ c_parser_postfix_expression (c_parser *parser)
 			    expr.set_error ();
 			    goto out;
 			  }
-			if (!SCALAR_FLOAT_TYPE_P (t)
+			만약 (!SCALAR_FLOAT_TYPE_P (t)
 			    && !COMPLEX_FLOAT_TYPE_P (t))
 			  {
 			    error_at ((*cexpr_list)[j].get_location (),
@@ -12458,31 +12458,31 @@ c_parser_postfix_expression (c_parser *parser)
 			    goto out;
 			  }
 		      }
-		    if (TREE_CODE (t) == COMPLEX_TYPE)
+		    만약 (TREE_CODE (t) == COMPLEX_TYPE)
 		      parm_complex[argpos] = true;
 		    argpos++;
 		  }
 	      }
 	    enum tgmath_parm_kind max_variation = tgmath_fixed;
-	    for (unsigned int j = 0; j <= nargs; j++)
+	    위해 (unsigned 정수 j = 0; j <= nargs; j++)
 	      {
 		enum tgmath_parm_kind this_kind;
-		if (parm_varies[j])
+		만약 (parm_varies[j])
 		  {
-		    if (parm_complex[j])
+		    만약 (parm_complex[j])
 		      max_variation = this_kind = tgmath_complex;
-		    else
+		    아니면
 		      {
 			this_kind = tgmath_real;
-			if (max_variation != tgmath_complex)
+			만약 (max_variation != tgmath_complex)
 			  max_variation = tgmath_real;
 		      }
 		  }
-		else
+		아니면
 		  this_kind = tgmath_fixed;
 		parm_kind.quick_push (this_kind);
 	      }
-	    if (max_variation == tgmath_fixed)
+	    만약 (max_variation == tgmath_fixed)
 	      {
 		error_at (loc, "function arguments of %<__builtin_tgmath%> "
 			  "all have the same type");
@@ -12494,14 +12494,14 @@ c_parser_postfix_expression (c_parser *parser)
 	       including with complex types if any variation includes
 	       complex types; there must be at least one such
 	       parameter.  */
-	    unsigned int tgarg = 0;
-	    for (unsigned int j = 1; j <= nargs; j++)
-	      if (parm_kind[j] == max_variation)
+	    unsigned 정수 tgarg = 0;
+	    위해 (unsigned 정수 j = 1; j <= nargs; j++)
+	      만약 (parm_kind[j] == max_variation)
 		{
 		  tgarg = j;
 		  break;
 		}
-	    if (tgarg == 0)
+	    만약 (tgarg == 0)
 	      {
 		error_at (loc, "function arguments of %<__builtin_tgmath%> "
 			  "lack type-generic parameter");
@@ -12512,13 +12512,13 @@ c_parser_postfix_expression (c_parser *parser)
 	    /* Determine the type of the relevant parameter for each
 	       function.  */
 	    auto_vec<tree> tg_type (num_functions);
-	    for (unsigned int j = 0; j < num_functions; j++)
+	    위해 (unsigned 정수 j = 0; j < num_functions; j++)
 	      {
 		tree type = TREE_TYPE (TREE_TYPE ((*cexpr_list)[j].value));
 		argpos = 1;
 		FOREACH_FUNCTION_ARGS (type, t, iter)
 		  {
-		    if (argpos == tgarg)
+		    만약 (argpos == tgarg)
 		      {
 			tg_type.quick_push (TYPE_MAIN_VARIANT (t));
 			break;
@@ -12538,17 +12538,17 @@ c_parser_postfix_expression (c_parser *parser)
 	    hash_set<tree> tg_types;
 	    FOR_EACH_VEC_ELT (tg_type, i, t)
 	      {
-		if (TREE_CODE (t) == COMPLEX_TYPE)
+		만약 (TREE_CODE (t) == COMPLEX_TYPE)
 		  all_decimal = false;
-		else
+		아니면
 		  {
 		    all_complex = false;
-		    if (DECIMAL_FLOAT_TYPE_P (t))
+		    만약 (DECIMAL_FLOAT_TYPE_P (t))
 		      all_binary = false;
-		    else
+		    아니면
 		      all_decimal = false;
 		  }
-		if (tg_types.add (t))
+		만약 (tg_types.add (t))
 		  {
 		    error_at ((*cexpr_list)[i].get_location (),
 			      "duplicate type-generic parameter type for "
@@ -12562,15 +12562,15 @@ c_parser_postfix_expression (c_parser *parser)
 	    /* Verify that other parameters and the return type whose
 	       types vary have their types varying in the correct
 	       way.  */
-	    for (unsigned int j = 0; j < num_functions; j++)
+	    위해 (unsigned 정수 j = 0; j < num_functions; j++)
 	      {
 		tree exp_type = tg_type[j];
 		tree exp_real_type = exp_type;
-		if (TREE_CODE (exp_type) == COMPLEX_TYPE)
+		만약 (TREE_CODE (exp_type) == COMPLEX_TYPE)
 		  exp_real_type = TREE_TYPE (exp_type);
 		tree type = TREE_TYPE (TREE_TYPE ((*cexpr_list)[j].value));
 		tree ret = TYPE_MAIN_VARIANT (TREE_TYPE (type));
-		if ((parm_kind[0] == tgmath_complex && ret != exp_type)
+		만약 ((parm_kind[0] == tgmath_complex && ret != exp_type)
 		    || (parm_kind[0] == tgmath_real && ret != exp_real_type))
 		  {
 		    error_at ((*cexpr_list)[j].get_location (),
@@ -12582,10 +12582,10 @@ c_parser_postfix_expression (c_parser *parser)
 		argpos = 1;
 		FOREACH_FUNCTION_ARGS (type, t, iter)
 		  {
-		    if (t == void_type_node)
+		    만약 (t == void_type_node)
 		      break;
 		    t = TYPE_MAIN_VARIANT (t);
-		    if ((parm_kind[argpos] == tgmath_complex
+		    만약 ((parm_kind[argpos] == tgmath_complex
 			 && t != exp_type)
 			|| (parm_kind[argpos] == tgmath_real
 			    && t != exp_real_type))
@@ -12620,13 +12620,13 @@ c_parser_postfix_expression (c_parser *parser)
 	    bool arg_int_decimal = all_decimal;
 	    bool arg_int_floatnx = false;
 	    bool arg_int_decimalx = false;
-	    for (unsigned int j = 1; j <= nargs; j++)
+	    위해 (unsigned 정수 j = 1; j <= nargs; j++)
 	      {
-		if (parm_kind[j] == tgmath_fixed)
+		만약 (parm_kind[j] == tgmath_fixed)
 		  continue;
 		c_expr_t *ce = &(*cexpr_list)[num_functions + j - 1];
 		tree type = TREE_TYPE (ce->value);
-		if (!INTEGRAL_TYPE_P (type)
+		만약 (!INTEGRAL_TYPE_P (type)
 		    && !SCALAR_FLOAT_TYPE_P (type)
 		    && TREE_CODE (type) != COMPLEX_TYPE)
 		  {
@@ -12636,10 +12636,10 @@ c_parser_postfix_expression (c_parser *parser)
 		    expr.set_error ();
 		    goto out;
 		  }
-		if (DECIMAL_FLOAT_TYPE_P (type))
+		만약 (DECIMAL_FLOAT_TYPE_P (type))
 		  {
 		    arg_int_decimal = true;
-		    if (all_complex)
+		    만약 (all_complex)
 		      {
 			error_at (ce->get_location (),
 				  "decimal floating-point argument %u to "
@@ -12647,7 +12647,7 @@ c_parser_postfix_expression (c_parser *parser)
 			expr.set_error ();
 			goto out;
 		      }
-		    else if (all_binary)
+		    아니면 만약 (all_binary)
 		      {
 			error_at (ce->get_location (),
 				  "decimal floating-point argument %u to "
@@ -12655,7 +12655,7 @@ c_parser_postfix_expression (c_parser *parser)
 			expr.set_error ();
 			goto out;
 		      }
-		    else if (arg_complex)
+		    아니면 만약 (arg_complex)
 		      {
 			error_at (ce->get_location (),
 				  "both complex and decimal floating-point "
@@ -12663,7 +12663,7 @@ c_parser_postfix_expression (c_parser *parser)
 			expr.set_error ();
 			goto out;
 		      }
-		    else if (arg_binary)
+		    아니면 만약 (arg_binary)
 		      {
 			error_at (ce->get_location (),
 				  "both binary and decimal floating-point "
@@ -12672,12 +12672,12 @@ c_parser_postfix_expression (c_parser *parser)
 			goto out;
 		      }
 		  }
-		else if (TREE_CODE (type) == COMPLEX_TYPE)
+		아니면 만약 (TREE_CODE (type) == COMPLEX_TYPE)
 		  {
 		    arg_complex = true;
-		    if (COMPLEX_FLOAT_TYPE_P (type))
+		    만약 (COMPLEX_FLOAT_TYPE_P (type))
 		      arg_binary = true;
-		    if (all_decimal)
+		    만약 (all_decimal)
 		      {
 			error_at (ce->get_location (),
 				  "complex argument %u to "
@@ -12685,7 +12685,7 @@ c_parser_postfix_expression (c_parser *parser)
 			expr.set_error ();
 			goto out;
 		      }
-		    else if (arg_int_decimal)
+		    아니면 만약 (arg_int_decimal)
 		      {
 			error_at (ce->get_location (),
 				  "both complex and decimal floating-point "
@@ -12694,10 +12694,10 @@ c_parser_postfix_expression (c_parser *parser)
 			goto out;
 		      }
 		  }
-		else if (SCALAR_FLOAT_TYPE_P (type))
+		아니면 만약 (SCALAR_FLOAT_TYPE_P (type))
 		  {
 		    arg_binary = true;
-		    if (all_decimal)
+		    만약 (all_decimal)
 		      {
 			error_at (ce->get_location (),
 				  "binary argument %u to "
@@ -12705,7 +12705,7 @@ c_parser_postfix_expression (c_parser *parser)
 			expr.set_error ();
 			goto out;
 		      }
-		    else if (arg_int_decimal)
+		    아니면 만약 (arg_int_decimal)
 		      {
 			error_at (ce->get_location (),
 				  "both binary and decimal floating-point "
@@ -12715,28 +12715,28 @@ c_parser_postfix_expression (c_parser *parser)
 		      }
 		  }
 		tree rtype = TYPE_MAIN_VARIANT (type);
-		if (TREE_CODE (rtype) == COMPLEX_TYPE)
+		만약 (TREE_CODE (rtype) == COMPLEX_TYPE)
 		  rtype = TREE_TYPE (rtype);
-		if (SCALAR_FLOAT_TYPE_P (rtype))
-		  for (unsigned int j = 0; j < NUM_FLOATNX_TYPES; j++)
-		    if (rtype == FLOATNX_TYPE_NODE (j))
+		만약 (SCALAR_FLOAT_TYPE_P (rtype))
+		  위해 (unsigned 정수 j = 0; j < NUM_FLOATNX_TYPES; j++)
+		    만약 (rtype == FLOATNX_TYPE_NODE (j))
 		      {
 			arg_int_floatnx = true;
 			break;
 		      }
-		if (rtype == dfloat64x_type_node)
+		만약 (rtype == dfloat64x_type_node)
 		  arg_int_decimalx = true;
 	      }
 	    tree arg_real = NULL_TREE;
-	    for (unsigned int j = 1; j <= nargs; j++)
+	    위해 (unsigned 정수 j = 1; j <= nargs; j++)
 	      {
-		if (parm_kind[j] == tgmath_fixed)
+		만약 (parm_kind[j] == tgmath_fixed)
 		  continue;
 		c_expr_t *ce = &(*cexpr_list)[num_functions + j - 1];
 		tree type = TYPE_MAIN_VARIANT (TREE_TYPE (ce->value));
-		if (TREE_CODE (type) == COMPLEX_TYPE)
+		만약 (TREE_CODE (type) == COMPLEX_TYPE)
 		  type = TREE_TYPE (type);
-		if (INTEGRAL_TYPE_P (type))
+		만약 (INTEGRAL_TYPE_P (type))
 		  type = (arg_int_decimalx
 			  ? dfloat64x_type_node
 			  : arg_int_floatnx
@@ -12744,11 +12744,11 @@ c_parser_postfix_expression (c_parser *parser)
 			  : arg_int_decimal
 			  ? dfloat64_type_node
 			  : double_type_node);
-		if (arg_real == NULL_TREE)
+		만약 (arg_real == NULL_TREE)
 		  arg_real = type;
-		else
+		아니면
 		  arg_real = common_type (arg_real, type);
-		if (arg_real == error_mark_node)
+		만약 (arg_real == error_mark_node)
 		  {
 		    expr.set_error ();
 		    goto out;
@@ -12761,15 +12761,15 @@ c_parser_postfix_expression (c_parser *parser)
 	    /* Look for a function to call with type-generic parameter
 	       type ARG_TYPE.  */
 	    c_expr_t *fn = NULL;
-	    for (unsigned int j = 0; j < num_functions; j++)
+	    위해 (unsigned 정수 j = 0; j < num_functions; j++)
 	      {
-		if (tg_type[j] == arg_type)
+		만약 (tg_type[j] == arg_type)
 		  {
 		    fn = &(*cexpr_list)[j];
 		    break;
 		  }
 	      }
-	    if (fn == NULL
+	    만약 (fn == NULL
 		&& parm_kind[0] == tgmath_fixed
 		&& SCALAR_FLOAT_TYPE_P (parm_first[0]))
 	      {
@@ -12777,15 +12777,15 @@ c_parser_postfix_expression (c_parser *parser)
 		   narrower type, and look for the first function with
 		   at least the range and precision of the argument
 		   type.  */
-		for (unsigned int j = 0; j < num_functions; j++)
+		위해 (unsigned 정수 j = 0; j < num_functions; j++)
 		  {
-		    if (arg_complex
+		    만약 (arg_complex
 			!= (TREE_CODE (tg_type[j]) == COMPLEX_TYPE))
 		      continue;
 		    tree real_tg_type = (arg_complex
 					 ? TREE_TYPE (tg_type[j])
 					 : tg_type[j]);
-		    if (DECIMAL_FLOAT_TYPE_P (arg_real)
+		    만약 (DECIMAL_FLOAT_TYPE_P (arg_real)
 			!= DECIMAL_FLOAT_TYPE_P (real_tg_type))
 		      continue;
 		    scalar_float_mode arg_mode
@@ -12794,7 +12794,7 @@ c_parser_postfix_expression (c_parser *parser)
 		      = SCALAR_FLOAT_TYPE_MODE (real_tg_type);
 		    const real_format *arg_fmt = REAL_MODE_FORMAT (arg_mode);
 		    const real_format *tg_fmt = REAL_MODE_FORMAT (tg_mode);
-		    if (arg_fmt->b == tg_fmt->b
+		    만약 (arg_fmt->b == tg_fmt->b
 			&& arg_fmt->p <= tg_fmt->p
 			&& arg_fmt->emax <= tg_fmt->emax
 			&& (arg_fmt->emin - arg_fmt->p
@@ -12805,7 +12805,7 @@ c_parser_postfix_expression (c_parser *parser)
 		      }
 		  }
 	      }
-	    if (fn == NULL)
+	    만약 (fn == NULL)
 	      {
 		error_at (loc, "no matching function for type-generic call");
 		expr.set_error ();
@@ -12818,7 +12818,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    vec<tree, va_gc> *origtypes;
 	    vec_alloc (origtypes, nargs);
 	    auto_vec<location_t> arg_loc (nargs);
-	    for (unsigned int j = 0; j < nargs; j++)
+	    위해 (unsigned 정수 j = 0; j < nargs; j++)
 	      {
 		c_expr_t *ce = &(*cexpr_list)[num_functions + j];
 		args->quick_push (ce->value);
@@ -12838,7 +12838,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    만약 (!c_parser_get_builtin_args (parser,
 					    "__builtin_call_with_static_chain",
 					    &cexpr_list, false,
 					    &close_paren_loc))
@@ -12846,7 +12846,7 @@ c_parser_postfix_expression (c_parser *parser)
 		expr.set_error ();
 		break;
 	      }
-	    if (vec_safe_length (cexpr_list) != 2)
+	    만약 (vec_safe_length (cexpr_list) != 2)
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_call_with_static_chain%>");
@@ -12860,15 +12860,15 @@ c_parser_postfix_expression (c_parser *parser)
 	    chain_value = e2_p->value;
 	    mark_exp_read (chain_value);
 
-	    if (TREE_CODE (expr.value) != CALL_EXPR)
+	    만약 (TREE_CODE (expr.value) != CALL_EXPR)
 	      error_at (loc, "first argument to "
 			"%<__builtin_call_with_static_chain%> "
 			"must be a call expression");
-	    else if (TREE_CODE (TREE_TYPE (chain_value)) != POINTER_TYPE)
+	    아니면 만약 (TREE_CODE (TREE_TYPE (chain_value)) != POINTER_TYPE)
 	      error_at (loc, "second argument to "
 			"%<__builtin_call_with_static_chain%> "
 			"must be a pointer type");
-	    else
+	    아니면
 	      CALL_EXPR_STATIC_CHAIN (expr.value) = chain_value;
 	    set_c_expr_source_range (&expr, loc, close_paren_loc);
 	    break;
@@ -12880,7 +12880,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    만약 (!c_parser_get_builtin_args (parser,
 					    "__builtin_complex",
 					    &cexpr_list, false,
 					    &close_paren_loc))
@@ -12889,7 +12889,7 @@ c_parser_postfix_expression (c_parser *parser)
 		break;
 	      }
 
-	    if (vec_safe_length (cexpr_list) != 2)
+	    만약 (vec_safe_length (cexpr_list) != 2)
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_complex%>");
@@ -12901,14 +12901,14 @@ c_parser_postfix_expression (c_parser *parser)
 	    e2_p = &(*cexpr_list)[1];
 
 	    *e1_p = convert_lvalue_to_rvalue (loc, *e1_p, true, true);
-	    if (TREE_CODE (e1_p->value) == EXCESS_PRECISION_EXPR)
+	    만약 (TREE_CODE (e1_p->value) == EXCESS_PRECISION_EXPR)
 	      e1_p->value = convert (TREE_TYPE (e1_p->value),
 				     TREE_OPERAND (e1_p->value, 0));
 	    *e2_p = convert_lvalue_to_rvalue (loc, *e2_p, true, true);
-	    if (TREE_CODE (e2_p->value) == EXCESS_PRECISION_EXPR)
+	    만약 (TREE_CODE (e2_p->value) == EXCESS_PRECISION_EXPR)
 	      e2_p->value = convert (TREE_TYPE (e2_p->value),
 				     TREE_OPERAND (e2_p->value, 0));
-	    if (!SCALAR_FLOAT_TYPE_P (TREE_TYPE (e1_p->value))
+	    만약 (!SCALAR_FLOAT_TYPE_P (TREE_TYPE (e1_p->value))
 		|| DECIMAL_FLOAT_TYPE_P (TREE_TYPE (e1_p->value))
 		|| !SCALAR_FLOAT_TYPE_P (TREE_TYPE (e2_p->value))
 		|| DECIMAL_FLOAT_TYPE_P (TREE_TYPE (e2_p->value)))
@@ -12918,7 +12918,7 @@ c_parser_postfix_expression (c_parser *parser)
 		expr.set_error ();
 		break;
 	      }
-	    if (TYPE_MAIN_VARIANT (TREE_TYPE (e1_p->value))
+	    만약 (TYPE_MAIN_VARIANT (TREE_TYPE (e1_p->value))
 		!= TYPE_MAIN_VARIANT (TREE_TYPE (e2_p->value)))
 	      {
 		error_at (loc,
@@ -12943,7 +12943,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    만약 (!c_parser_get_builtin_args (parser,
 					    "__builtin_counted_by_ref",
 					    &cexpr_list, false,
 					    &close_paren_loc))
@@ -12951,7 +12951,7 @@ c_parser_postfix_expression (c_parser *parser)
 		expr.set_error ();
 		break;
 	      }
-	    if (vec_safe_length (cexpr_list) != 1)
+	    만약 (vec_safe_length (cexpr_list) != 1)
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_counted_by_ref%>");
@@ -12962,7 +12962,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    e_p = &(*cexpr_list)[0];
 	    tree ref = e_p->value;
 
-	    if (TREE_CODE (TREE_TYPE (ref)) != ARRAY_TYPE
+	    만약 (TREE_CODE (TREE_TYPE (ref)) != ARRAY_TYPE
 		 && TREE_CODE (TREE_TYPE (ref)) != POINTER_TYPE)
 	      {
 		error_at (loc, "the argument to %<__builtin_counted_by_ref%>"
@@ -12971,7 +12971,7 @@ c_parser_postfix_expression (c_parser *parser)
 		break;
 	      }
 
-	    if (TREE_CODE (ref) != COMPONENT_REF)
+	    만약 (TREE_CODE (ref) != COMPONENT_REF)
 	      {
 		error_at (loc, "the argument to %<__builtin_counted_by_ref%>"
 				" must be a field of a structure");
@@ -12982,12 +12982,12 @@ c_parser_postfix_expression (c_parser *parser)
 	    /* If the ref is inside TYPEOF or ALIGNOF, the call to
 	       .ACCESS_WITH_SIZE was not generated by the routine
 	       build_component_ref by default, we should generate it here.  */
-	    if (TREE_CODE (ref) == COMPONENT_REF)
+	    만약 (TREE_CODE (ref) == COMPONENT_REF)
 	      ref = handle_counted_by_for_component_ref (loc, ref);
 
-	    if (has_counted_by_object (ref))
+	    만약 (has_counted_by_object (ref))
 	      expr.value = get_counted_by_ref (ref);
-	    else
+	    아니면
 	      expr.value = null_pointer_node;
 
 	    set_c_expr_source_range (&expr, loc, close_paren_loc);
@@ -12996,12 +12996,12 @@ c_parser_postfix_expression (c_parser *parser)
 	case RID_BUILTIN_SHUFFLE:
 	  {
 	    vec<c_expr_t, va_gc> *cexpr_list;
-	    unsigned int i;
+	    unsigned 정수 i;
 	    c_expr_t *p;
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    만약 (!c_parser_get_builtin_args (parser,
 					    "__builtin_shuffle",
 					    &cexpr_list, false,
 					    &close_paren_loc))
@@ -13013,16 +13013,16 @@ c_parser_postfix_expression (c_parser *parser)
 	    FOR_EACH_VEC_SAFE_ELT (cexpr_list, i, p)
 	      *p = convert_lvalue_to_rvalue (loc, *p, true, true);
 
-	    if (vec_safe_length (cexpr_list) == 2)
+	    만약 (vec_safe_length (cexpr_list) == 2)
 	      expr.value = c_build_vec_perm_expr (loc, (*cexpr_list)[0].value,
 						  NULL_TREE,
 						  (*cexpr_list)[1].value);
 
-	    else if (vec_safe_length (cexpr_list) == 3)
+	    아니면 만약 (vec_safe_length (cexpr_list) == 3)
 	      expr.value = c_build_vec_perm_expr (loc, (*cexpr_list)[0].value,
 						  (*cexpr_list)[1].value,
 						  (*cexpr_list)[2].value);
-	    else
+	    아니면
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_shuffle%>");
@@ -13034,12 +13034,12 @@ c_parser_postfix_expression (c_parser *parser)
 	case RID_BUILTIN_SHUFFLEVECTOR:
 	  {
 	    vec<c_expr_t, va_gc> *cexpr_list;
-	    unsigned int i;
+	    unsigned 정수 i;
 	    c_expr_t *p;
 	    location_t close_paren_loc;
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser,
+	    만약 (!c_parser_get_builtin_args (parser,
 					    "__builtin_shufflevector",
 					    &cexpr_list, false,
 					    &close_paren_loc))
@@ -13051,16 +13051,16 @@ c_parser_postfix_expression (c_parser *parser)
 	    FOR_EACH_VEC_SAFE_ELT (cexpr_list, i, p)
 	      *p = convert_lvalue_to_rvalue (loc, *p, true, true);
 
-	    if (vec_safe_length (cexpr_list) < 3)
+	    만약 (vec_safe_length (cexpr_list) < 3)
 	      {
 		error_at (loc, "wrong number of arguments to "
 			       "%<__builtin_shuffle%>");
 		expr.set_error ();
 	      }
-	    else
+	    아니면
 	      {
 		auto_vec<tree, 16> mask;
-		for (i = 2; i < cexpr_list->length (); ++i)
+		위해 (i = 2; i < cexpr_list->length (); ++i)
 		  mask.safe_push ((*cexpr_list)[i].value);
 		expr.value = c_build_shufflevector (loc, (*cexpr_list)[0].value,
 						    (*cexpr_list)[1].value,
@@ -13074,14 +13074,14 @@ c_parser_postfix_expression (c_parser *parser)
 	    location_t start_loc = loc;
 	    c_parser_consume_token (parser);
 	    matching_parens parens;
-	    if (!parens.require_open (parser))
+	    만약 (!parens.require_open (parser))
 	      {
 		expr.set_error ();
 		break;
 	      }
 	    e1 = c_parser_expr_no_commas (parser, NULL);
 	    mark_exp_read (e1.value);
-	    if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+	    만약 (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
 	      {
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
 		expr.set_error ();
@@ -13092,9 +13092,9 @@ c_parser_postfix_expression (c_parser *parser)
 	    location_t end_loc = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				       "expected %<)%>");
-	    if (t1 == NULL)
+	    만약 (t1 == NULL)
 	      expr.set_error ();
-	    else
+	    아니면
 	      {
 		tree type_expr = NULL_TREE;
 		expr.value = c_build_vec_convert (start_loc, e1.value, loc,
@@ -13109,7 +13109,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    location_t start_loc = loc;
 	    c_parser_consume_token (parser);
 	    matching_parens parens;
-	    if (!parens.require_open (parser))
+	    만약 (!parens.require_open (parser))
 	      {
 		expr.set_error ();
 		break;
@@ -13166,9 +13166,9 @@ c_parser_postfix_expression (c_parser *parser)
 		  }
 		break;
 	      case 'c':
-		if (name[sizeof ("__builtin_stdc_count_") - 1] == 'o')
+		만약 (name[sizeof ("__builtin_stdc_count_") - 1] == 'o')
 		  stdc_rid = C_BUILTIN_STDC_COUNT_ONES;
-		else
+		아니면
 		  stdc_rid = C_BUILTIN_STDC_COUNT_ZEROS;
 		break;
 	      case 'f':
@@ -13192,29 +13192,29 @@ c_parser_postfix_expression (c_parser *parser)
 		stdc_rid = C_BUILTIN_STDC_HAS_SINGLE_BIT;
 		break;
 	      case 'l':
-		if (name[sizeof ("__builtin_stdc_leading_") - 1] == 'o')
+		만약 (name[sizeof ("__builtin_stdc_leading_") - 1] == 'o')
 		  stdc_rid = C_BUILTIN_STDC_LEADING_ONES;
-		else
+		아니면
 		  stdc_rid = C_BUILTIN_STDC_LEADING_ZEROS;
 		break;
 	      case 'r':
-		if (name[sizeof ("__builtin_stdc_rotate_") - 1] == 'l')
+		만약 (name[sizeof ("__builtin_stdc_rotate_") - 1] == 'l')
 		  stdc_rid = C_BUILTIN_STDC_ROTATE_LEFT;
-		else
+		아니면
 		  stdc_rid = C_BUILTIN_STDC_ROTATE_RIGHT;
 		num_args = 2;
 		break;
 	      case 't':
-		if (name[sizeof ("__builtin_stdc_trailing_") - 1] == 'o')
+		만약 (name[sizeof ("__builtin_stdc_trailing_") - 1] == 'o')
 		  stdc_rid = C_BUILTIN_STDC_TRAILING_ONES;
-		else
+		아니면
 		  stdc_rid = C_BUILTIN_STDC_TRAILING_ZEROS;
 		break;
 	      }
 	    gcc_checking_assert (stdc_rid != C_BUILTIN_STDC_MAX);
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser, name,
+	    만약 (!c_parser_get_builtin_args (parser, name,
 					    &cexpr_list, false,
 					    &close_paren_loc))
 	      {
@@ -13222,7 +13222,7 @@ c_parser_postfix_expression (c_parser *parser)
 		break;
 	      }
 
-	    if (vec_safe_length (cexpr_list) != num_args)
+	    만약 (vec_safe_length (cexpr_list) != num_args)
 	      {
 		error_at (loc, "wrong number of arguments to %qs", name);
 		expr.set_error ();
@@ -13231,34 +13231,34 @@ c_parser_postfix_expression (c_parser *parser)
 
 	    arg_p = &(*cexpr_list)[0];
 	    *arg_p = convert_lvalue_to_rvalue (loc, *arg_p, true, true);
-	    if (!INTEGRAL_TYPE_P (TREE_TYPE (arg_p->value)))
+	    만약 (!INTEGRAL_TYPE_P (TREE_TYPE (arg_p->value)))
 	      {
 		error_at (loc, "%qs operand not an integral type", name);
 		expr.set_error ();
 		break;
 	      }
-	    if (TREE_CODE (TREE_TYPE (arg_p->value)) == ENUMERAL_TYPE)
+	    만약 (TREE_CODE (TREE_TYPE (arg_p->value)) == ENUMERAL_TYPE)
 	      {
 		error_at (loc, "argument %u in call to function "
 			  "%qs has enumerated type", 1, name);
 		expr.set_error ();
 		break;
 	      }
-	    if (TREE_CODE (TREE_TYPE (arg_p->value)) == BOOLEAN_TYPE)
+	    만약 (TREE_CODE (TREE_TYPE (arg_p->value)) == BOOLEAN_TYPE)
 	      {
 		error_at (loc, "argument %u in call to function "
 			  "%qs has boolean type", 1, name);
 		expr.set_error ();
 		break;
 	      }
-	    if (!TYPE_UNSIGNED (TREE_TYPE (arg_p->value)))
+	    만약 (!TYPE_UNSIGNED (TREE_TYPE (arg_p->value)))
 	      {
 		error_at (loc, "argument 1 in call to function "
 			  "%qs has signed type", name);
 		expr.set_error ();
 		break;
 	      }
-	    if (TYPE_MAIN_VARIANT (TREE_TYPE (arg_p->value))
+	    만약 (TYPE_MAIN_VARIANT (TREE_TYPE (arg_p->value))
 		== char_type_node)
 	      {
 		error_at (loc, "argument 1 in call to function "
@@ -13301,8 +13301,8 @@ c_parser_postfix_expression (c_parser *parser)
 			  : (type) 2 << (prec - 1 - __builtin_clzg (arg - 1))
 	       without evaluating arg multiple times, type being
 	       __typeof (arg) and prec __builtin_popcountg ((type) ~0)).  */
-	    int prec = TYPE_PRECISION (type);
-	    if (num_args == 2)
+	    정수 prec = TYPE_PRECISION (type);
+	    만약 (num_args == 2)
 	      {
 		/* Expand:
 		   __builtin_stdc_rotate_left (arg1, arg2) as
@@ -13311,13 +13311,13 @@ c_parser_postfix_expression (c_parser *parser)
 		   arg1 r>> (arg2 % prec).  */
 		arg_p = &(*cexpr_list)[1];
 		*arg_p = convert_lvalue_to_rvalue (loc, *arg_p, true, true);
-		if (!INTEGRAL_TYPE_P (TREE_TYPE (arg_p->value)))
+		만약 (!INTEGRAL_TYPE_P (TREE_TYPE (arg_p->value)))
 		  {
 		    error_at (loc, "%qs operand not an integral type", name);
 		    expr.set_error ();
 		    break;
 		  }
-		if (TREE_CODE (TREE_TYPE (arg_p->value)) == ENUMERAL_TYPE)
+		만약 (TREE_CODE (TREE_TYPE (arg_p->value)) == ENUMERAL_TYPE)
 		  {
 		    error_at (loc, "argument %u in call to function "
 				   "%qs has enumerated type", 2, name);
@@ -13327,18 +13327,18 @@ c_parser_postfix_expression (c_parser *parser)
 		tree arg1 = save_expr (arg);
 		tree arg2 = save_expr (arg_p->value);
 		tree_code code;
-		if (stdc_rid == C_BUILTIN_STDC_ROTATE_LEFT)
+		만약 (stdc_rid == C_BUILTIN_STDC_ROTATE_LEFT)
 		  code = LROTATE_EXPR;
-		else
+		아니면
 		  code = RROTATE_EXPR;
 
-		if (TREE_CODE (arg2) == INTEGER_CST
+		만약 (TREE_CODE (arg2) == INTEGER_CST
 		    && tree_int_cst_sgn (arg2) < 0)
 		  warning_at (loc, OPT_Wshift_count_negative,
 			      "rotate count is negative");
 
 		tree instrument_expr = NULL_TREE;
-		if (sanitize_flags_p (SANITIZE_SHIFT))
+		만약 (sanitize_flags_p (SANITIZE_SHIFT))
 		  instrument_expr = ubsan_instrument_shift (loc, code,
 							    arg1, arg2);
 
@@ -13346,15 +13346,15 @@ c_parser_postfix_expression (c_parser *parser)
 		   need to deal with arg2 type not being able to represent
 		   prec.  In the end gimplification uses unsigned int
 		   for all shifts/rotates anyway.  */
-		if (TYPE_PRECISION (TREE_TYPE (arg2))
+		만약 (TYPE_PRECISION (TREE_TYPE (arg2))
 		    < TYPE_PRECISION (integer_type_node))
 		  arg2 = fold_convert (unsigned_type_node, arg2);
 
-		if (TYPE_UNSIGNED (TREE_TYPE (arg2)))
+		만약 (TYPE_UNSIGNED (TREE_TYPE (arg2)))
 		  arg2 = build2_loc (loc, TRUNC_MOD_EXPR, TREE_TYPE (arg2),
 				     arg2, build_int_cst (TREE_TYPE (arg2),
 							  prec));
-		else
+		아니면
 		  {
 		    /* When second argument is signed, just do the modulo in
 		       unsigned type, that results in better generated code
@@ -13368,12 +13368,12 @@ c_parser_postfix_expression (c_parser *parser)
 		/* The middle-end isn't prepared to handle {L,R}ROTATE_EXPR
 		   on types without mode precision, except for large/huge
 		   _BitInt types.  */
-		if (type_has_mode_precision_p (TREE_TYPE (arg1))
+		만약 (type_has_mode_precision_p (TREE_TYPE (arg1))
 		    || (TREE_CODE (TREE_TYPE (arg1)) == BITINT_TYPE
 			&& prec > MAX_FIXED_MODE_SIZE))
 		  expr.value = build2_loc (loc, code, TREE_TYPE (arg1), arg1,
 					   arg2);
-		else
+		아니면
 		  {
 		    arg2 = save_expr (arg2);
 		    tree t1 = build2_loc (loc, (code == LROTATE_EXPR
@@ -13397,7 +13397,7 @@ c_parser_postfix_expression (c_parser *parser)
 		    expr.value = build3_loc (loc, COND_EXPR,
 					     TREE_TYPE (arg1), t4, t3, arg1);
 		  }
-		if (instrument_expr)
+		만약 (instrument_expr)
 		  expr.value = build2_loc (loc, COMPOUND_EXPR,
 					   TREE_TYPE (expr.value),
 					   instrument_expr, expr.value);
@@ -13471,7 +13471,7 @@ c_parser_postfix_expression (c_parser *parser)
 		gcc_unreachable ();
 	      }
 	    /* Construct a call to __builtin_{clz,ctz,popcount}g.  */
-	    int nargs = barg2 != NULL_TREE ? 2 : 1;
+	    정수 nargs = barg2 != NULL_TREE ? 2 : 1;
 	    vec<tree, va_gc> *args;
 	    vec_alloc (args, nargs);
 	    vec<tree, va_gc> *origtypes;
@@ -13480,7 +13480,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    args->quick_push (barg1);
 	    arg_loc.quick_push (arg_p->get_location ());
 	    origtypes->quick_push (arg_p->original_type);
-	    if (nargs == 2)
+	    만약 (nargs == 2)
 	      {
 		args->quick_push (barg2);
 		arg_loc.quick_push (loc);
@@ -13489,7 +13489,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    expr.value = c_build_function_call_vec (loc, arg_loc, fndecl,
 						    args, origtypes);
 	    set_c_expr_source_range (&expr, loc, close_paren_loc);
-	    if (expr.value == error_mark_node)
+	    만약 (expr.value == error_mark_node)
 	      break;
 	    switch (stdc_rid)
 	      {
@@ -13517,10 +13517,10 @@ c_parser_postfix_expression (c_parser *parser)
 		break;
 	      }
 
-	    if (stdc_rid != C_BUILTIN_STDC_BIT_CEIL
+	    만약 (stdc_rid != C_BUILTIN_STDC_BIT_CEIL
 		&& stdc_rid != C_BUILTIN_STDC_BIT_FLOOR)
 	      {
-		if (stdc_rid != C_BUILTIN_STDC_HAS_SINGLE_BIT)
+		만약 (stdc_rid != C_BUILTIN_STDC_HAS_SINGLE_BIT)
 		  expr.value = fold_convert_loc (loc, unsigned_type_node,
 						 expr.value);
 		break;
@@ -13528,24 +13528,24 @@ c_parser_postfix_expression (c_parser *parser)
 	    /* For __builtin_stdc_bit_ceil (0U) or __builtin_stdc_bit_ceil (1U)
 	       or __builtin_stdc_bit_floor (0U) avoid bogus -Wshift-count-*
 	       warnings.  The LSHIFT_EXPR is in dead code in that case.  */
-	    if (integer_zerop (arg)
+	    만약 (integer_zerop (arg)
 		|| (stdc_rid == C_BUILTIN_STDC_BIT_CEIL && integer_onep (arg)))
 	      expr.value = build_int_cst (type, 0);
-	    else
+	    아니면
 	      expr.value
 		= build2_loc (loc, LSHIFT_EXPR, type,
 			      build_int_cst (type,
 					     (stdc_rid
 					      == C_BUILTIN_STDC_BIT_CEIL
 					      ? 2 : 1)), expr.value);
-	    if (stdc_rid == C_BUILTIN_STDC_BIT_CEIL)
+	    만약 (stdc_rid == C_BUILTIN_STDC_BIT_CEIL)
 	      expr.value = build3_loc (loc, COND_EXPR, type,
 				       build2_loc (loc, LE_EXPR,
 						   boolean_type_node, arg,
 						   build_int_cst (type, 1)),
 				       build_int_cst (type, 1),
 				       expr.value);
-	    else
+	    아니면
 	      expr.value = build3_loc (loc, COND_EXPR, type,
 				       build2_loc (loc, EQ_EXPR,
 						   boolean_type_node, arg,
@@ -13567,14 +13567,14 @@ c_parser_postfix_expression (c_parser *parser)
 		 : "__builtin_bitreverseg");
 
 	    c_parser_consume_token (parser);
-	    if (!c_parser_get_builtin_args (parser, name, &cexpr_list, false,
+	    만약 (!c_parser_get_builtin_args (parser, name, &cexpr_list, false,
 					    &close_paren_loc))
 	      {
 		expr.set_error ();
 		break;
 	      }
 
-	    if (vec_safe_length (cexpr_list) != 1)
+	    만약 (vec_safe_length (cexpr_list) != 1)
 	      {
 		error_at (loc, "wrong number of arguments to %qs", name);
 		expr.set_error ();
@@ -13584,40 +13584,40 @@ c_parser_postfix_expression (c_parser *parser)
 	    c_expr_t *arg_p = &(*cexpr_list)[0];
 	    *arg_p = convert_lvalue_to_rvalue (loc, *arg_p, true, true);
 	    tree arg = arg_p->value;
-	    if (error_operand_p (arg))
+	    만약 (error_operand_p (arg))
 	      {
 		expr.set_error ();
 		break;
 	      }
 	    tree type = TYPE_MAIN_VARIANT (TREE_TYPE (arg));
-	    if (!INTEGRAL_TYPE_P (type))
+	    만약 (!INTEGRAL_TYPE_P (type))
 	      {
 		error_at (loc, "%qs operand not an integral type", name);
 		expr.set_error ();
 		break;
 	      }
-	    if (TREE_CODE (type) == ENUMERAL_TYPE)
+	    만약 (TREE_CODE (type) == ENUMERAL_TYPE)
 	      {
 		error_at (loc, "argument %u in call to function "
 			  "%qs has enumerated type", 1, name);
 		expr.set_error ();
 		break;
 	      }
-	    if (TREE_CODE (type) == BOOLEAN_TYPE)
+	    만약 (TREE_CODE (type) == BOOLEAN_TYPE)
 	      {
 		error_at (loc, "argument %u in call to function "
 			  "%qs has boolean type", 1, name);
 		expr.set_error ();
 		break;
 	      }
-	    if (!TYPE_UNSIGNED (type))
+	    만약 (!TYPE_UNSIGNED (type))
 	      {
 		error_at (loc, "argument 1 in call to function "
 			  "%qs has signed type", name);
 		expr.set_error ();
 		break;
 	      }
-	    if (ifn == IFN_BSWAP && (TYPE_PRECISION (type) % 8) != 0)
+	    만약 (ifn == IFN_BSWAP && (TYPE_PRECISION (type) % 8) != 0)
 	      {
 		error_at (loc, "precision %d of argument 1 to function "
 			  "%qs is not a multiple of 8",
@@ -13635,7 +13635,7 @@ c_parser_postfix_expression (c_parser *parser)
 	    gcc_assert (c_dialect_objc ());
 	    c_parser_consume_token (parser);
 	    matching_parens parens;
-	    if (!parens.require_open (parser))
+	    만약 (!parens.require_open (parser))
 	      {
 		expr.set_error ();
 		break;
@@ -13652,12 +13652,12 @@ c_parser_postfix_expression (c_parser *parser)
 	    gcc_assert (c_dialect_objc ());
 	    c_parser_consume_token (parser);
 	    matching_parens parens;
-	    if (!parens.require_open (parser))
+	    만약 (!parens.require_open (parser))
 	      {
 		expr.set_error ();
 		break;
 	      }
-	    if (c_parser_next_token_is_not (parser, CPP_NAME))
+	    만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	      {
 		c_parser_error (parser, "expected identifier");
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
@@ -13678,13 +13678,13 @@ c_parser_postfix_expression (c_parser *parser)
 	    gcc_assert (c_dialect_objc ());
 	    c_parser_consume_token (parser);
 	    matching_parens parens;
-	    if (!parens.require_open (parser))
+	    만약 (!parens.require_open (parser))
 	      {
 		expr.set_error ();
 		break;
 	      }
 	    t1 = c_parser_type_name (parser);
-	    if (t1 == NULL)
+	    만약 (t1 == NULL)
 	      {
 		expr.set_error ();
 		c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
@@ -13732,7 +13732,7 @@ c_parser_postfix_expression (c_parser *parser)
 	}
       break;
     case CPP_OPEN_SQUARE:
-      if (c_dialect_objc ())
+      만약 (c_dialect_objc ())
 	{
 	  tree receiver, args;
 	  c_parser_consume_token (parser);
@@ -13753,7 +13753,7 @@ c_parser_postfix_expression (c_parser *parser)
       break;
     }
  out:
-  return c_parser_postfix_expression_after_primary
+  반환 c_parser_postfix_expression_after_primary
     (parser, EXPR_LOC_OR_LOC (expr.value, loc), expr);
 }
 
@@ -13781,11 +13781,11 @@ c_parser_postfix_expression_after_paren_type (c_parser *parser,
   tree type_expr = NULL_TREE;
   bool type_expr_const = true;
   bool constexpr_p = scspecs ? scspecs->constexpr_p : false;
-  unsigned int underspec_state = 0;
+  unsigned 정수 underspec_state = 0;
   check_compound_literal_type (type_loc, type_name);
   rich_location richloc (line_table, type_loc);
   start_loc = c_parser_peek_token (parser)->location;
-  if (constexpr_p)
+  만약 (constexpr_p)
     {
       underspec_state = start_underspecified_init (start_loc, NULL_TREE);
       /* A constexpr compound literal is subject to the constraints on
@@ -13820,27 +13820,27 @@ c_parser_postfix_expression_after_paren_type (c_parser *parser,
 	       || constexpr_p), constexpr_p, &richloc);
   type = groktypename (type_name, &type_expr, &type_expr_const);
   bool varsize_p = false;
-  if (type != error_mark_node && C_TYPE_VARIABLE_SIZE (type))
+  만약 (type != error_mark_node && C_TYPE_VARIABLE_SIZE (type))
     {
       pedwarn (type_loc, OPT_Wpedantic, "compound literal has variable size");
       varsize_p = true;
     }
-  else if (TREE_CODE (type) == FUNCTION_TYPE)
+  아니면 만약 (TREE_CODE (type) == FUNCTION_TYPE)
     {
       error_at (type_loc, "compound literal has function type");
       type = error_mark_node;
     }
-  if (constexpr_p && type != error_mark_node)
+  만약 (constexpr_p && type != error_mark_node)
     {
       tree type_no_array = strip_array_types (type);
       /* The type of a constexpr object must not be variably modified
 	 (which applies to all compound literals), volatile, atomic or
 	 restrict qualified or have a member with such a qualifier.
 	 const qualification is implicitly added.  */
-      if (TYPE_QUALS (type_no_array)
+      만약 (TYPE_QUALS (type_no_array)
 	  & (TYPE_QUAL_VOLATILE | TYPE_QUAL_RESTRICT | TYPE_QUAL_ATOMIC))
 	error_at (type_loc, "invalid qualifiers for %<constexpr%> object");
-      else if (RECORD_OR_UNION_TYPE_P (type_no_array)
+      아니면 만약 (RECORD_OR_UNION_TYPE_P (type_no_array)
 	       && C_TYPE_FIELDS_NON_CONSTEXPR (type_no_array))
 	error_at (type_loc, "invalid qualifiers for field of "
 		  "%<constexpr%> object");
@@ -13849,12 +13849,12 @@ c_parser_postfix_expression_after_paren_type (c_parser *parser,
 				      | TYPE_QUAL_CONST));
     }
   init = c_parser_braced_init (parser, type, false, NULL, varsize_p);
-  if (constexpr_p)
+  만약 (constexpr_p)
     finish_underspecified_init (NULL_TREE, underspec_state);
   finish_init ();
   maybe_warn_string_init (type_loc, type, init);
 
-  if (type != error_mark_node
+  만약 (type != error_mark_node
       && !ADDR_SPACE_GENERIC_P (TYPE_ADDR_SPACE (type))
       && current_function_decl)
     {
@@ -13862,7 +13862,7 @@ c_parser_postfix_expression_after_paren_type (c_parser *parser,
       type = error_mark_node;
     }
 
-  if (!pedwarn_c90 (start_loc, OPT_Wpedantic,
+  만약 (!pedwarn_c90 (start_loc, OPT_Wpedantic,
 		    "ISO C90 forbids compound literals") && scspecs)
     pedwarn_c11 (start_loc, OPT_Wpedantic,
 		 "ISO C forbids storage class specifiers in compound literals "
@@ -13871,12 +13871,12 @@ c_parser_postfix_expression_after_paren_type (c_parser *parser,
 	       ? CONSTRUCTOR_NON_CONST (init.value)
 	       : init.original_code == C_MAYBE_CONST_EXPR);
   non_const |= !type_expr_const;
-  unsigned int alignas_align = 0;
-  if (type != error_mark_node
+  unsigned 정수 alignas_align = 0;
+  만약 (type != error_mark_node
       && type_name->specs->align_log != -1)
     {
       alignas_align = 1U << type_name->specs->align_log;
-      if (alignas_align < min_align_of_type (type))
+      만약 (alignas_align < min_align_of_type (type))
 	{
 	  error_at (type_name->specs->locations[cdw_alignas],
 		    "%<_Alignas%> specifiers cannot reduce "
@@ -13890,23 +13890,23 @@ c_parser_postfix_expression_after_paren_type (c_parser *parser,
   expr.m_decimal = 0;
   expr.original_code = ERROR_MARK;
   expr.original_type = NULL;
-  if (type != error_mark_node
+  만약 (type != error_mark_node
       && expr.value != error_mark_node
       && type_expr)
     {
-      if (TREE_CODE (expr.value) == C_MAYBE_CONST_EXPR)
+      만약 (TREE_CODE (expr.value) == C_MAYBE_CONST_EXPR)
 	{
 	  gcc_assert (C_MAYBE_CONST_EXPR_PRE (expr.value) == NULL_TREE);
 	  C_MAYBE_CONST_EXPR_PRE (expr.value) = type_expr;
 	}
-      else
+      아니면
 	{
 	  gcc_assert (!non_const);
 	  expr.value = build2 (C_MAYBE_CONST_EXPR, type,
 			       type_expr, expr.value);
 	}
     }
-  return c_parser_postfix_expression_after_primary (parser, start_loc, expr);
+  반환 c_parser_postfix_expression_after_primary (parser, start_loc, expr);
 }
 
 /* Callback function for sizeof_pointer_memaccess_warning to compare
@@ -13915,7 +13915,7 @@ c_parser_postfix_expression_after_paren_type (c_parser *parser,
 static bool
 sizeof_ptr_memacc_comptypes (tree type1, tree type2)
 {
-  return comptypes (type1, type2) == 1;
+  반환 comptypes (type1, type2) == 1;
 }
 
 /* Warn for patterns where abs-like function appears to be used incorrectly,
@@ -13928,8 +13928,8 @@ static void
 warn_for_abs (location_t loc, tree fndecl, tree arg)
 {
   /* Avoid warning in unreachable subexpressions.  */
-  if (c_inhibit_evaluation_warnings)
-    return;
+  만약 (c_inhibit_evaluation_warnings)
+    반환;
 
   tree atype = TREE_TYPE (arg);
 
@@ -13937,10 +13937,10 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
      -Wint-conversion warnings.  Most other wrong types hopefully lead to type
      mismatch errors.  TODO: Think about what to do with FIXED_POINT_TYPE_P
      types and possibly other exotic types.  */
-  if (!INTEGRAL_TYPE_P (atype)
+  만약 (!INTEGRAL_TYPE_P (atype)
       && !SCALAR_FLOAT_TYPE_P (atype)
       && TREE_CODE (atype) != COMPLEX_TYPE)
-    return;
+    반환;
 
   enum built_in_function fcode = DECL_FUNCTION_CODE (fndecl);
 
@@ -13950,22 +13950,22 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
     case BUILT_IN_LABS:
     case BUILT_IN_LLABS:
     case BUILT_IN_IMAXABS:
-      if (!INTEGRAL_TYPE_P (atype))
+      만약 (!INTEGRAL_TYPE_P (atype))
 	{
-	  if (SCALAR_FLOAT_TYPE_P (atype))
+	  만약 (SCALAR_FLOAT_TYPE_P (atype))
 	    warning_at (loc, OPT_Wabsolute_value,
 			"using integer absolute value function %qD when "
 			"argument is of floating-point type %qT",
 			fndecl, atype);
-	  else if (TREE_CODE (atype) == COMPLEX_TYPE)
+	  아니면 만약 (TREE_CODE (atype) == COMPLEX_TYPE)
 	    warning_at (loc, OPT_Wabsolute_value,
 			"using integer absolute value function %qD when "
 			"argument is of complex type %qT", fndecl, atype);
-	  else
+	  아니면
 	    gcc_unreachable ();
-	  return;
+	  반환;
 	}
-      if (TYPE_UNSIGNED (atype))
+      만약 (TYPE_UNSIGNED (atype))
 	warning_at (loc, OPT_Wabsolute_value,
 		    "taking the absolute value of unsigned type %qT "
 		    "has no effect", atype);
@@ -13973,44 +13973,44 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
 
     CASE_FLT_FN (BUILT_IN_FABS):
     CASE_FLT_FN_FLOATN_NX (BUILT_IN_FABS):
-      if (!SCALAR_FLOAT_TYPE_P (atype)
+      만약 (!SCALAR_FLOAT_TYPE_P (atype)
 	  || DECIMAL_FLOAT_MODE_P (TYPE_MODE (atype)))
 	{
-	  if (INTEGRAL_TYPE_P (atype))
+	  만약 (INTEGRAL_TYPE_P (atype))
 	    warning_at (loc, OPT_Wabsolute_value,
 			"using floating-point absolute value function %qD "
 			"when argument is of integer type %qT", fndecl, atype);
-	  else if (DECIMAL_FLOAT_TYPE_P (atype))
+	  아니면 만약 (DECIMAL_FLOAT_TYPE_P (atype))
 	    warning_at (loc, OPT_Wabsolute_value,
 			"using floating-point absolute value function %qD "
 			"when argument is of decimal floating-point type %qT",
 			fndecl, atype);
-	  else if (TREE_CODE (atype) == COMPLEX_TYPE)
+	  아니면 만약 (TREE_CODE (atype) == COMPLEX_TYPE)
 	    warning_at (loc, OPT_Wabsolute_value,
 			"using floating-point absolute value function %qD when "
 			"argument is of complex type %qT", fndecl, atype);
-	  else
+	  아니면
 	    gcc_unreachable ();
-	  return;
+	  반환;
 	}
       break;
 
     CASE_FLT_FN (BUILT_IN_CABS):
-      if (TREE_CODE (atype) != COMPLEX_TYPE)
+      만약 (TREE_CODE (atype) != COMPLEX_TYPE)
 	{
-	  if (INTEGRAL_TYPE_P (atype))
+	  만약 (INTEGRAL_TYPE_P (atype))
 	    warning_at (loc, OPT_Wabsolute_value,
 			"using complex absolute value function %qD when "
 			"argument is of integer type %qT", fndecl, atype);
-	  else if (SCALAR_FLOAT_TYPE_P (atype))
+	  아니면 만약 (SCALAR_FLOAT_TYPE_P (atype))
 	    warning_at (loc, OPT_Wabsolute_value,
 			"using complex absolute value function %qD when "
 			"argument is of floating-point type %qT",
 			fndecl, atype);
-	  else
+	  아니면
 	    gcc_unreachable ();
 
-	  return;
+	  반환;
 	}
       break;
 
@@ -14018,45 +14018,45 @@ warn_for_abs (location_t loc, tree fndecl, tree arg)
     case BUILT_IN_FABSD64:
     case BUILT_IN_FABSD128:
     case BUILT_IN_FABSD64X:
-      if (!DECIMAL_FLOAT_TYPE_P (atype))
+      만약 (!DECIMAL_FLOAT_TYPE_P (atype))
 	{
-	  if (INTEGRAL_TYPE_P (atype))
+	  만약 (INTEGRAL_TYPE_P (atype))
 	    warning_at (loc, OPT_Wabsolute_value,
 			"using decimal floating-point absolute value "
 			"function %qD when argument is of integer type %qT",
 			fndecl, atype);
-	  else if (SCALAR_FLOAT_TYPE_P (atype))
+	  아니면 만약 (SCALAR_FLOAT_TYPE_P (atype))
 	    warning_at (loc, OPT_Wabsolute_value,
 			"using decimal floating-point absolute value "
 			"function %qD when argument is of floating-point "
 			"type %qT", fndecl, atype);
-	  else if (TREE_CODE (atype) == COMPLEX_TYPE)
+	  아니면 만약 (TREE_CODE (atype) == COMPLEX_TYPE)
 	    warning_at (loc, OPT_Wabsolute_value,
 			"using decimal floating-point absolute value "
 			"function %qD when argument is of complex type %qT",
 			fndecl, atype);
-	  else
+	  아니면
 	    gcc_unreachable ();
-	  return;
+	  반환;
 	}
       break;
 
     default:
-      return;
+      반환;
     }
 
-  if (!TYPE_ARG_TYPES (TREE_TYPE (fndecl)))
-    return;
+  만약 (!TYPE_ARG_TYPES (TREE_TYPE (fndecl)))
+    반환;
 
   tree ftype = TREE_VALUE (TYPE_ARG_TYPES (TREE_TYPE (fndecl)));
-  if (TREE_CODE (atype) == COMPLEX_TYPE)
+  만약 (TREE_CODE (atype) == COMPLEX_TYPE)
     {
       gcc_assert (TREE_CODE (ftype) == COMPLEX_TYPE);
       atype = TREE_TYPE (atype);
       ftype = TREE_TYPE (ftype);
     }
 
-  if (TYPE_PRECISION (ftype) < TYPE_PRECISION (atype))
+  만약 (TYPE_PRECISION (ftype) < TYPE_PRECISION (atype))
     warning_at (loc, OPT_Wabsolute_value,
 		"absolute value function %qD given an argument of type %qT "
 		"but has parameter of type %qT which may cause truncation "
@@ -14078,15 +14078,15 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
   tree ident, idx, len;
   location_t sizeof_arg_loc[6], comp_loc;
   tree sizeof_arg[6];
-  unsigned int literal_zero_mask;
-  unsigned int i;
+  unsigned 정수 literal_zero_mask;
+  unsigned 정수 i;
   vec<tree, va_gc> *exprlist;
   vec<tree, va_gc> *origtypes = NULL;
   vec<location_t> arg_loc = vNULL;
   location_t start;
   location_t finish;
 
-  while (true)
+  동안 (true)
     {
       location_t op_loc = c_parser_peek_token (parser)->location;
       switch (c_parser_peek_token (parser)->type)
@@ -14095,21 +14095,21 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 	  /* Array reference.  */
 	  c_parser_consume_token (parser);
 	  idx = len = NULL_TREE;
-	  if (!c_omp_array_section_p
+	  만약 (!c_omp_array_section_p
 	      || c_parser_next_token_is_not (parser, CPP_COLON))
 	    idx = c_parser_expression (parser).value;
 
-	  if (c_omp_array_section_p
+	  만약 (c_omp_array_section_p
 	      && c_parser_next_token_is (parser, CPP_COLON))
 	    {
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is_not (parser, CPP_CLOSE_SQUARE))
+	      만약 (c_parser_next_token_is_not (parser, CPP_CLOSE_SQUARE))
 		len = c_parser_expression (parser).value;
 
 	      expr.value = build_omp_array_section (op_loc, expr.value, idx,
 						    len);
 	    }
-	  else
+	  아니면
 	    expr.value = build_array_ref (op_loc, expr.value, idx);
 
 	  c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE,
@@ -14127,15 +14127,15 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 	  {
 	    matching_parens parens;
 	    parens.consume_open (parser);
-	    for (i = 0; i < 6; i++)
+	    위해 (i = 0; i < 6; i++)
 	      {
 		sizeof_arg[i] = NULL_TREE;
 		sizeof_arg_loc[i] = UNKNOWN_LOCATION;
 	      }
 	    literal_zero_mask = 0;
-	    if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	    만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	      exprlist = NULL;
-	    else if (TREE_CODE (expr.value) == FUNCTION_DECL
+	    아니면 만약 (TREE_CODE (expr.value) == FUNCTION_DECL
 		     && fndecl_built_in_p (expr.value, BUILT_IN_CLASSIFY_TYPE)
 		     && c_parser_next_tokens_start_typename (parser,
 							     cla_prefer_id))
@@ -14150,7 +14150,7 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 		ret.expr = NULL_TREE;
 		ret.spec = error_mark_node;
 		ret.expr_const_operands = false;
-		if (type != NULL)
+		만약 (type != NULL)
 		  ret.spec = groktypename (type, &ret.expr,
 					   &ret.expr_const_operands);
 		parens.skip_until_found_close (parser);
@@ -14158,7 +14158,7 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 					    type_to_class (ret.spec));
 		break;
 	      }
-	    else
+	    아니면
 	      exprlist = c_parser_expr_list (parser, true, false, &origtypes,
 					     sizeof_arg_loc, sizeof_arg,
 					     &arg_loc, &literal_zero_mask);
@@ -14166,25 +14166,25 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 	  }
 	  orig_expr = expr;
 	  mark_exp_read (expr.value);
-	  if (warn_sizeof_pointer_memaccess)
+	  만약 (warn_sizeof_pointer_memaccess)
 	    sizeof_pointer_memaccess_warning (sizeof_arg_loc,
 					      expr.value, exprlist,
 					      sizeof_arg,
 					      sizeof_ptr_memacc_comptypes);
-	  if (TREE_CODE (expr.value) == FUNCTION_DECL)
+	  만약 (TREE_CODE (expr.value) == FUNCTION_DECL)
 	    {
-	      if (fndecl_built_in_p (expr.value, BUILT_IN_MEMSET)
+	      만약 (fndecl_built_in_p (expr.value, BUILT_IN_MEMSET)
 		  && vec_safe_length (exprlist) == 3)
 		{
 		  tree arg0 = (*exprlist)[0];
 		  tree arg2 = (*exprlist)[2];
 		  warn_for_memset (expr_loc, arg0, arg2, literal_zero_mask);
 		}
-	      if (warn_absolute_value
+	      만약 (warn_absolute_value
 		  && fndecl_built_in_p (expr.value, BUILT_IN_NORMAL)
 		  && vec_safe_length (exprlist) == 1)
 		warn_for_abs (expr_loc, expr.value, (*exprlist)[0]);
-	      if (parser->omp_for_parse_state
+	      만약 (parser->omp_for_parse_state
 		  && parser->omp_for_parse_state->in_intervening_code
 		  && omp_runtime_api_call (expr.value))
 		{
@@ -14192,11 +14192,11 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 				      "not permitted in intervening code");
 		  parser->omp_for_parse_state->fail = true;
 		}
-	      if (warn_calloc_transposed_args)
-		if (tree attr = lookup_attribute ("alloc_size",
+	      만약 (warn_calloc_transposed_args)
+		만약 (tree attr = lookup_attribute ("alloc_size",
 						  TYPE_ATTRIBUTES
 						    (TREE_TYPE (expr.value))))
-		  if (TREE_VALUE (attr) && TREE_CHAIN (TREE_VALUE (attr)))
+		  만약 (TREE_VALUE (attr) && TREE_CHAIN (TREE_VALUE (attr)))
 		    warn_for_calloc (sizeof_arg_loc, expr.value, exprlist,
 				     sizeof_arg, attr);
 	    }
@@ -14210,12 +14210,12 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 	  expr.m_decimal = 0;
 
 	  expr.original_code = ERROR_MARK;
-	  if (TREE_CODE (expr.value) == INTEGER_CST
+	  만약 (TREE_CODE (expr.value) == INTEGER_CST
 	      && TREE_CODE (orig_expr.value) == FUNCTION_DECL
 	      && fndecl_built_in_p (orig_expr.value, BUILT_IN_CONSTANT_P))
 	    expr.original_code = C_MAYBE_CONST_EXPR;
 	  expr.original_type = NULL;
-	  if (exprlist)
+	  만약 (exprlist)
 	    {
 	      release_tree_vector (exprlist);
 	      release_tree_vector (origtypes);
@@ -14226,19 +14226,19 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 	  /* Structure element reference.  */
 	  c_parser_consume_token (parser);
 	  expr = default_function_array_conversion (expr_loc, expr);
-	  if (c_parser_next_token_is (parser, CPP_NAME))
+	  만약 (c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      c_token *comp_tok = c_parser_peek_token (parser);
 	      ident = comp_tok->value;
 	      comp_loc = comp_tok->location;
 	    }
-	  else
+	  아니면
 	    {
 	      c_parser_error (parser, "expected identifier");
 	      expr.set_error ();
 	      expr.original_code = ERROR_MARK;
               expr.original_type = NULL;
-	      return expr;
+	      반환 expr;
 	    }
 	  start = expr.get_start ();
 	  finish = c_parser_peek_token (parser)->get_finish ();
@@ -14247,15 +14247,15 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 					    comp_loc, UNKNOWN_LOCATION);
 	  set_c_expr_source_range (&expr, start, finish);
 	  expr.original_code = ERROR_MARK;
-	  if (TREE_CODE (expr.value) != COMPONENT_REF)
+	  만약 (TREE_CODE (expr.value) != COMPONENT_REF)
 	    expr.original_type = NULL;
-	  else
+	  아니면
 	    {
 	      /* Remember the original type of a bitfield.  */
 	      tree field = TREE_OPERAND (expr.value, 1);
-	      if (TREE_CODE (field) != FIELD_DECL)
+	      만약 (TREE_CODE (field) != FIELD_DECL)
 		expr.original_type = NULL;
-	      else
+	      아니면
 		expr.original_type = DECL_BIT_FIELD_TYPE (field);
 	    }
 	  expr.m_decimal = 0;
@@ -14264,19 +14264,19 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 	  /* Structure element reference.  */
 	  c_parser_consume_token (parser);
 	  expr = convert_lvalue_to_rvalue (expr_loc, expr, true, false);
-	  if (c_parser_next_token_is (parser, CPP_NAME))
+	  만약 (c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      c_token *comp_tok = c_parser_peek_token (parser);
 	      ident = comp_tok->value;
 	      comp_loc = comp_tok->location;
 	    }
-	  else
+	  아니면
 	    {
 	      c_parser_error (parser, "expected identifier");
 	      expr.set_error ();
 	      expr.original_code = ERROR_MARK;
 	      expr.original_type = NULL;
-	      return expr;
+	      반환 expr;
 	    }
 	  start = expr.get_start ();
 	  finish = c_parser_peek_token (parser)->get_finish ();
@@ -14289,15 +14289,15 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 					    expr.get_location ());
 	  set_c_expr_source_range (&expr, start, finish);
 	  expr.original_code = ERROR_MARK;
-	  if (TREE_CODE (expr.value) != COMPONENT_REF)
+	  만약 (TREE_CODE (expr.value) != COMPONENT_REF)
 	    expr.original_type = NULL;
-	  else
+	  아니면
 	    {
 	      /* Remember the original type of a bitfield.  */
 	      tree field = TREE_OPERAND (expr.value, 1);
-	      if (TREE_CODE (field) != FIELD_DECL)
+	      만약 (TREE_CODE (field) != FIELD_DECL)
 		expr.original_type = NULL;
-	      else
+	      아니면
 		expr.original_type = DECL_BIT_FIELD_TYPE (field);
 	    }
 	  expr.m_decimal = 0;
@@ -14329,7 +14329,7 @@ c_parser_postfix_expression_after_primary (c_parser *parser,
 	  expr.original_type = NULL;
 	  break;
 	default:
-	  return expr;
+	  반환 expr;
 	}
     }
 }
@@ -14347,9 +14347,9 @@ c_parser_expression (c_parser *parser)
   location_t tloc = c_parser_peek_token (parser)->location;
   struct c_expr expr;
   expr = c_parser_expr_no_commas (parser, NULL);
-  if (c_parser_next_token_is (parser, CPP_COMMA))
+  만약 (c_parser_next_token_is (parser, CPP_COMMA))
     expr = convert_lvalue_to_rvalue (tloc, expr, true, false);
-  while (c_parser_next_token_is (parser, CPP_COMMA))
+  동안 (c_parser_next_token_is (parser, CPP_COMMA))
     {
       struct c_expr next;
       tree lhsval;
@@ -14358,17 +14358,17 @@ c_parser_expression (c_parser *parser)
       c_parser_consume_token (parser);
       expr_loc = c_parser_peek_token (parser)->location;
       lhsval = expr.value;
-      while (TREE_CODE (lhsval) == COMPOUND_EXPR
+      동안 (TREE_CODE (lhsval) == COMPOUND_EXPR
 	     || TREE_CODE (lhsval) == NOP_EXPR)
 	{
-	  if (TREE_CODE (lhsval) == COMPOUND_EXPR)
+	  만약 (TREE_CODE (lhsval) == COMPOUND_EXPR)
 	    lhsval = TREE_OPERAND (lhsval, 1);
-	  else
+	  아니면
 	    lhsval = TREE_OPERAND (lhsval, 0);
 	}
-      if (DECL_P (lhsval) || handled_component_p (lhsval))
+      만약 (DECL_P (lhsval) || handled_component_p (lhsval))
 	mark_exp_read (lhsval);
-      if (c_parser_next_token_is (parser, CPP_EMBED))
+      만약 (c_parser_next_token_is (parser, CPP_EMBED))
 	{
 	  /* Users aren't interested in millions of -Wunused-value
 	     warnings when using #embed inside of a comma expression,
@@ -14384,7 +14384,7 @@ c_parser_expression (c_parser *parser)
 	  next.original_type = integer_type_node;
 	  c_parser_consume_token (parser);
 	}
-      else
+      아니면
 	{
 	  next = c_parser_expr_no_commas (parser, NULL);
 	  next = convert_lvalue_to_rvalue (expr_loc, next, true, false);
@@ -14394,7 +14394,7 @@ c_parser_expression (c_parser *parser)
       expr.original_type = next.original_type;
       expr.m_decimal = 0;
     }
-  return expr;
+  반환 expr;
 }
 
 /* Parse an expression and convert functions or arrays to pointers and
@@ -14407,7 +14407,7 @@ c_parser_expression_conv (c_parser *parser)
   location_t loc = c_parser_peek_token (parser)->location;
   expr = c_parser_expression (parser);
   expr = convert_lvalue_to_rvalue (loc, expr, true, false);
-  return expr;
+  반환 expr;
 }
 
 /* Helper function of c_parser_expr_list.  Check if IDXth (0 based)
@@ -14415,10 +14415,10 @@ c_parser_expression_conv (c_parser *parser)
 
 static inline void
 c_parser_check_literal_zero (c_parser *parser, unsigned *literal_zero_mask,
-			     unsigned int idx)
+			     unsigned 정수 idx)
 {
-  if (idx >= HOST_BITS_PER_INT)
-    return;
+  만약 (idx >= HOST_BITS_PER_INT)
+    반환;
 
   c_token *tok = c_parser_peek_token (parser);
   switch (tok->type)
@@ -14431,7 +14431,7 @@ c_parser_check_literal_zero (c_parser *parser, unsigned *literal_zero_mask,
     case CPP_UTF8CHAR:
       /* If a parameter is literal zero alone, remember it
 	 for -Wmemset-transposed-args warning.  */
-      if (integer_zerop (tok->value)
+      만약 (integer_zerop (tok->value)
 	  && !TREE_OVERFLOW (tok->value)
 	  && (c_parser_peek_2nd_token (parser)->type == CPP_COMMA
 	      || c_parser_peek_2nd_token (parser)->type == CPP_CLOSE_PAREN))
@@ -14456,44 +14456,44 @@ c_parser_expr_list (c_parser *parser, bool convert_p, bool fold_p,
 		    vec<tree, va_gc> **p_orig_types,
 		    location_t *sizeof_arg_loc, tree *sizeof_arg,
 		    vec<location_t> *locations,
-		    unsigned int *literal_zero_mask)
+		    unsigned 정수 *literal_zero_mask)
 {
   vec<tree, va_gc> *ret;
   vec<tree, va_gc> *orig_types;
   struct c_expr expr;
-  unsigned int idx = 0;
+  unsigned 정수 idx = 0;
   bool save_c_omp_array_section_p = c_omp_array_section_p;
   c_omp_array_section_p = false;
 
   ret = make_tree_vector ();
-  if (p_orig_types == NULL)
+  만약 (p_orig_types == NULL)
     orig_types = NULL;
-  else
+  아니면
     orig_types = make_tree_vector ();
 
-  if (literal_zero_mask)
+  만약 (literal_zero_mask)
     c_parser_check_literal_zero (parser, literal_zero_mask, 0);
   expr = c_parser_expr_no_commas (parser, NULL);
-  if (convert_p)
+  만약 (convert_p)
     expr = convert_lvalue_to_rvalue (expr.get_location (), expr, true, true);
-  if (fold_p)
+  만약 (fold_p)
     expr.value = c_fully_fold (expr.value, false, NULL);
   ret->quick_push (expr.value);
-  if (orig_types)
+  만약 (orig_types)
     orig_types->quick_push (expr.original_type);
-  if (locations)
+  만약 (locations)
     locations->safe_push (expr.get_location ());
-  if (sizeof_arg != NULL
+  만약 (sizeof_arg != NULL
       && (expr.original_code == SIZEOF_EXPR
 	  || expr.original_code == PAREN_SIZEOF_EXPR))
     {
       sizeof_arg[0] = c_last_sizeof_arg;
       sizeof_arg_loc[0] = c_last_sizeof_loc;
     }
-  while (c_parser_next_token_is (parser, CPP_COMMA))
+  동안 (c_parser_next_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_EMBED))
+      만약 (c_parser_next_token_is (parser, CPP_EMBED))
 	{
 	  c_token *embed = c_parser_peek_token (parser);
 	  tree value = embed->value;
@@ -14502,38 +14502,38 @@ c_parser_expr_list (c_parser *parser, bool convert_p, bool fold_p,
 	  expr.value = NULL_TREE;
 	  set_c_expr_source_range (&expr, embed->get_range ());
 	  expr.m_decimal = 0;
-	  for (unsigned int i = 0; i < (unsigned) RAW_DATA_LENGTH (value); i++)
+	  위해 (unsigned 정수 i = 0; i < (unsigned) RAW_DATA_LENGTH (value); i++)
 	    {
-	      if (literal_zero_mask
+	      만약 (literal_zero_mask
 		  && idx + 1 < HOST_BITS_PER_INT
 		  && RAW_DATA_POINTER (value)[i] == 0)
 		*literal_zero_mask |= 1U << (idx + 1);
 	      expr.value = build_int_cst (integer_type_node,
 					  RAW_DATA_UCHAR_ELT (value, i));
 	      vec_safe_push (ret, expr.value);
-	      if (orig_types)
+	      만약 (orig_types)
 		vec_safe_push (orig_types, expr.original_type);
-	      if (locations)
+	      만약 (locations)
 		locations->safe_push (expr.get_location ());
 	      ++idx;
 	    }
 	  c_parser_consume_token (parser);
 	  continue;
 	}
-      if (literal_zero_mask)
+      만약 (literal_zero_mask)
 	c_parser_check_literal_zero (parser, literal_zero_mask, idx + 1);
       expr = c_parser_expr_no_commas (parser, NULL);
-      if (convert_p)
+      만약 (convert_p)
 	expr = convert_lvalue_to_rvalue (expr.get_location (), expr, true,
 					 true);
-      if (fold_p)
+      만약 (fold_p)
 	expr.value = c_fully_fold (expr.value, false, NULL);
       vec_safe_push (ret, expr.value);
-      if (orig_types)
+      만약 (orig_types)
 	vec_safe_push (orig_types, expr.original_type);
-      if (locations)
+      만약 (locations)
 	locations->safe_push (expr.get_location ());
-      if (++idx < 6
+      만약 (++idx < 6
 	  && sizeof_arg != NULL
 	  && (expr.original_code == SIZEOF_EXPR
 	      || expr.original_code == PAREN_SIZEOF_EXPR))
@@ -14542,10 +14542,10 @@ c_parser_expr_list (c_parser *parser, bool convert_p, bool fold_p,
 	  sizeof_arg_loc[idx] = c_last_sizeof_loc;
 	}
     }
-  if (orig_types)
+  만약 (orig_types)
     *p_orig_types = orig_types;
   c_omp_array_section_p = save_c_omp_array_section_p;
-  return ret;
+  반환 ret;
 }
 
 /* Parse Objective-C-specific constructs.  */
@@ -14578,97 +14578,97 @@ c_parser_objc_class_definition (c_parser *parser, tree attributes)
   bool iface_p;
   tree id1;
   tree superclass;
-  if (c_parser_next_token_is_keyword (parser, RID_AT_INTERFACE))
+  만약 (c_parser_next_token_is_keyword (parser, RID_AT_INTERFACE))
     iface_p = true;
-  else if (c_parser_next_token_is_keyword (parser, RID_AT_IMPLEMENTATION))
+  아니면 만약 (c_parser_next_token_is_keyword (parser, RID_AT_IMPLEMENTATION))
     iface_p = false;
-  else
+  아니면
     gcc_unreachable ();
 
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is_not (parser, CPP_NAME))
+  만약 (c_parser_next_token_is_not (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected identifier");
-      return;
+      반환;
     }
   id1 = c_parser_peek_token (parser)->value;
   location_t loc1 = c_parser_peek_token (parser)->location;
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       /* We have a category or class extension.  */
       tree id2;
       tree proto = NULL_TREE;
       matching_parens parens;
       parens.consume_open (parser);
-      if (c_parser_next_token_is_not (parser, CPP_NAME))
+      만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	{
-	  if (iface_p && c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	  만약 (iface_p && c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	    {
 	      /* We have a class extension.  */
 	      id2 = NULL_TREE;
 	    }
-	  else
+	  아니면
 	    {
 	      c_parser_error (parser, "expected identifier or %<)%>");
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
-	      return;
+	      반환;
 	    }
 	}
-      else
+      아니면
 	{
 	  id2 = c_parser_peek_token (parser)->value;
 	  c_parser_consume_token (parser);
 	}
       parens.skip_until_found_close (parser);
-      if (!iface_p)
+      만약 (!iface_p)
 	{
 	  objc_start_category_implementation (id1, id2);
-	  return;
+	  반환;
 	}
-      if (c_parser_next_token_is (parser, CPP_LESS))
+      만약 (c_parser_next_token_is (parser, CPP_LESS))
 	proto = c_parser_objc_protocol_refs (parser);
       objc_start_category_interface (id1, id2, proto, attributes);
       c_parser_objc_methodprotolist (parser);
       c_parser_require_keyword (parser, RID_AT_END, "expected %<@end%>");
       objc_finish_interface ();
-      return;
+      반환;
     }
-  if (c_parser_next_token_is (parser, CPP_COLON))
+  만약 (c_parser_next_token_is (parser, CPP_COLON))
     {
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is_not (parser, CPP_NAME))
+      만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected identifier");
-	  return;
+	  반환;
 	}
       superclass = c_parser_peek_token (parser)->value;
       c_parser_consume_token (parser);
     }
-  else
+  아니면
     superclass = NULL_TREE;
-  if (iface_p)
+  만약 (iface_p)
     {
       tree proto = NULL_TREE;
-      if (c_parser_next_token_is (parser, CPP_LESS))
+      만약 (c_parser_next_token_is (parser, CPP_LESS))
 	proto = c_parser_objc_protocol_refs (parser);
       objc_start_class_interface (id1, loc1, superclass, proto, attributes);
     }
-  else
+  아니면
     objc_start_class_implementation (id1, superclass);
-  if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
     c_parser_objc_class_instance_variables (parser);
-  if (iface_p)
+  만약 (iface_p)
     {
       objc_continue_interface ();
       c_parser_objc_methodprotolist (parser);
       c_parser_require_keyword (parser, RID_AT_END, "expected %<@end%>");
       objc_finish_interface ();
     }
-  else
+  아니면
     {
       objc_continue_implementation ();
-      return;
+      반환;
     }
 }
 
@@ -14699,11 +14699,11 @@ c_parser_objc_class_instance_variables (c_parser *parser)
 {
   gcc_assert (c_parser_next_token_is (parser, CPP_OPEN_BRACE));
   c_parser_consume_token (parser);
-  while (c_parser_next_token_is_not (parser, CPP_EOF))
+  동안 (c_parser_next_token_is_not (parser, CPP_EOF))
     {
       tree decls;
       /* Parse any stray semicolon.  */
-      if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+      만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
 	{
 	  pedwarn (c_parser_peek_token (parser)->location, OPT_Wpedantic,
 		   "extra semicolon");
@@ -14711,37 +14711,37 @@ c_parser_objc_class_instance_variables (c_parser *parser)
 	  continue;
 	}
       /* Stop if at the end of the instance variables.  */
-      if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 	{
 	  c_parser_consume_token (parser);
 	  break;
 	}
       /* Parse any objc-visibility-spec.  */
-      if (c_parser_next_token_is_keyword (parser, RID_AT_PRIVATE))
+      만약 (c_parser_next_token_is_keyword (parser, RID_AT_PRIVATE))
 	{
 	  c_parser_consume_token (parser);
 	  objc_set_visibility (OBJC_IVAR_VIS_PRIVATE);
 	  continue;
 	}
-      else if (c_parser_next_token_is_keyword (parser, RID_AT_PROTECTED))
+      아니면 만약 (c_parser_next_token_is_keyword (parser, RID_AT_PROTECTED))
 	{
 	  c_parser_consume_token (parser);
 	  objc_set_visibility (OBJC_IVAR_VIS_PROTECTED);
 	  continue;
 	}
-      else if (c_parser_next_token_is_keyword (parser, RID_AT_PUBLIC))
+      아니면 만약 (c_parser_next_token_is_keyword (parser, RID_AT_PUBLIC))
 	{
 	  c_parser_consume_token (parser);
 	  objc_set_visibility (OBJC_IVAR_VIS_PUBLIC);
 	  continue;
 	}
-      else if (c_parser_next_token_is_keyword (parser, RID_AT_PACKAGE))
+      아니면 만약 (c_parser_next_token_is_keyword (parser, RID_AT_PACKAGE))
 	{
 	  c_parser_consume_token (parser);
 	  objc_set_visibility (OBJC_IVAR_VIS_PACKAGE);
 	  continue;
 	}
-      else if (c_parser_next_token_is (parser, CPP_PRAGMA))
+      아니면 만약 (c_parser_next_token_is (parser, CPP_PRAGMA))
 	{
 	  c_parser_pragma (parser, pragma_external, NULL, NULL_TREE);
 	  continue;
@@ -14749,7 +14749,7 @@ c_parser_objc_class_instance_variables (c_parser *parser)
 
       /* Parse some comma-separated declarations.  */
       decls = c_parser_struct_declaration (parser, NULL);
-      if (decls == NULL)
+      만약 (decls == NULL)
 	{
 	  /* There is a syntax error.  We want to skip the offending
 	     tokens up to the next ';' (included) or '}'
@@ -14759,7 +14759,7 @@ c_parser_objc_class_instance_variables (c_parser *parser)
 	     reduce the nesting level, so c_parser_skip_until_found()
 	     wouldn't be able to skip past them.  */
 	  c_token *token = c_parser_peek_token (parser);
-	  if (token->type == CPP_CLOSE_PAREN || token->type == CPP_CLOSE_SQUARE)
+	  만약 (token->type == CPP_CLOSE_PAREN || token->type == CPP_CLOSE_SQUARE)
 	    c_parser_consume_token (parser);
 
 	  /* Then, do the standard skipping.  */
@@ -14769,12 +14769,12 @@ c_parser_objc_class_instance_variables (c_parser *parser)
 	  parser->error = false;
 	  continue;
 	}
-      else
+      아니면
 	{
 	  /* Comma-separated instance variables are chained together
 	     in reverse order; add them one by one.  */
 	  tree ivar = nreverse (decls);
-	  for (; ivar; ivar = DECL_CHAIN (ivar))
+	  위해 (; ivar; ivar = DECL_CHAIN (ivar))
 	    objc_add_instance_variable (copy_node (ivar));
 	}
       c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
@@ -14794,22 +14794,22 @@ c_parser_objc_class_declaration (c_parser *parser)
   c_parser_consume_token (parser);
   /* Any identifiers, including those declared as type names, are OK
      here.  */
-  while (true)
+  동안 (true)
     {
       tree id;
-      if (c_parser_next_token_is_not (parser, CPP_NAME))
+      만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected identifier");
 	  c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
 	  parser->error = false;
-	  return;
+	  반환;
 	}
       id = c_parser_peek_token (parser)->value;
       objc_declare_class (id);
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	break;
     }
   c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
@@ -14827,19 +14827,19 @@ c_parser_objc_alias_declaration (c_parser *parser)
   tree id1, id2;
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_AT_ALIAS));
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is_not (parser, CPP_NAME))
+  만약 (c_parser_next_token_is_not (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected identifier");
       c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
-      return;
+      반환;
     }
   id1 = c_parser_peek_token (parser)->value;
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is_not (parser, CPP_NAME))
+  만약 (c_parser_next_token_is_not (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected identifier");
       c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
-      return;
+      반환;
     }
   id2 = c_parser_peek_token (parser)->value;
   c_parser_consume_token (parser);
@@ -14864,20 +14864,20 @@ c_parser_objc_protocol_definition (c_parser *parser, tree attributes)
   gcc_assert (c_parser_next_token_is_keyword (parser, RID_AT_PROTOCOL));
 
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is_not (parser, CPP_NAME))
+  만약 (c_parser_next_token_is_not (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected identifier");
-      return;
+      반환;
     }
-  if (c_parser_peek_2nd_token (parser)->type == CPP_COMMA
+  만약 (c_parser_peek_2nd_token (parser)->type == CPP_COMMA
       || c_parser_peek_2nd_token (parser)->type == CPP_SEMICOLON)
     {
       /* Any identifiers, including those declared as type names, are
 	 OK here.  */
-      while (true)
+      동안 (true)
 	{
 	  tree id;
-	  if (c_parser_next_token_is_not (parser, CPP_NAME))
+	  만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	    {
 	      c_parser_error (parser, "expected identifier");
 	      break;
@@ -14885,19 +14885,19 @@ c_parser_objc_protocol_definition (c_parser *parser, tree attributes)
 	  id = c_parser_peek_token (parser)->value;
 	  objc_declare_protocol (id, attributes);
 	  c_parser_consume_token (parser);
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
-	  else
+	  아니면
 	    break;
 	}
       c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
     }
-  else
+  아니면
     {
       tree id = c_parser_peek_token (parser)->value;
       tree proto = NULL_TREE;
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_LESS))
+      만약 (c_parser_next_token_is (parser, CPP_LESS))
 	proto = c_parser_objc_protocol_refs (parser);
       parser->objc_pq_context = true;
       objc_start_protocol (id, proto, attributes);
@@ -14924,10 +14924,10 @@ c_parser_objc_method_type (c_parser *parser)
     {
     case CPP_PLUS:
       c_parser_consume_token (parser);
-      return true;
+      반환 true;
     case CPP_MINUS:
       c_parser_consume_token (parser);
-      return false;
+      반환 false;
     default:
       gcc_unreachable ();
     }
@@ -14947,29 +14947,29 @@ c_parser_objc_method_definition (c_parser *parser)
   parser->objc_pq_context = true;
   decl = c_parser_objc_method_decl (parser, is_class_method, &attributes,
 				    &expr);
-  if (decl == error_mark_node)
-    return;  /* Bail here. */
+  만약 (decl == error_mark_node)
+    반환;  /* Bail here. */
 
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
       c_parser_consume_token (parser);
       pedwarn (c_parser_peek_token (parser)->location, OPT_Wpedantic,
 	       "extra semicolon in method definition specified");
     }
 
-  if (!c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+  만약 (!c_parser_next_token_is (parser, CPP_OPEN_BRACE))
     {
       c_parser_error (parser, "expected %<{%>");
-      return;
+      반환;
     }
 
   parser->objc_pq_context = false;
-  if (objc_start_method_definition (is_class_method, decl, attributes, expr))
+  만약 (objc_start_method_definition (is_class_method, decl, attributes, expr))
     {
       add_stmt (c_parser_compound_statement (parser));
       objc_finish_method_definition (current_function_decl);
     }
-  else
+  아니면
     {
       /* This code is executed when we find a method definition
 	 outside of an @implementation context (or invalid for other
@@ -14999,7 +14999,7 @@ c_parser_objc_method_definition (c_parser *parser)
 static void
 c_parser_objc_methodprotolist (c_parser *parser)
 {
-  while (true)
+  동안 (true)
     {
       /* The list is terminated by @end.  */
       switch (c_parser_peek_token (parser)->type)
@@ -15017,23 +15017,23 @@ c_parser_objc_methodprotolist (c_parser *parser)
 	  c_parser_pragma (parser, pragma_external, NULL, NULL_TREE);
 	  break;
 	case CPP_EOF:
-	  return;
+	  반환;
 	default:
-	  if (c_parser_next_token_is_keyword (parser, RID_AT_END))
-	    return;
-	  else if (c_parser_next_token_is_keyword (parser, RID_AT_PROPERTY))
+	  만약 (c_parser_next_token_is_keyword (parser, RID_AT_END))
+	    반환;
+	  아니면 만약 (c_parser_next_token_is_keyword (parser, RID_AT_PROPERTY))
 	    c_parser_objc_at_property_declaration (parser);
-	  else if (c_parser_next_token_is_keyword (parser, RID_AT_OPTIONAL))
+	  아니면 만약 (c_parser_next_token_is_keyword (parser, RID_AT_OPTIONAL))
 	    {
 	      objc_set_method_opt (true);
 	      c_parser_consume_token (parser);
 	    }
-	  else if (c_parser_next_token_is_keyword (parser, RID_AT_REQUIRED))
+	  아니면 만약 (c_parser_next_token_is_keyword (parser, RID_AT_REQUIRED))
 	    {
 	      objc_set_method_opt (false);
 	      c_parser_consume_token (parser);
 	    }
-	  else
+	  아니면
 	    c_parser_declaration_or_fndef (parser, false, false, true,
 					   false, true, false);
 	  break;
@@ -15062,13 +15062,13 @@ c_parser_objc_methodproto (c_parser *parser)
 
   /* Do not allow the presence of attributes to hide an erroneous
      method implementation in the interface section.  */
-  if (!c_parser_next_token_is (parser, CPP_SEMICOLON))
+  만약 (!c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
       c_parser_error (parser, "expected %<;%>");
-      return;
+      반환;
     }
 
-  if (decl != error_mark_node)
+  만약 (decl != error_mark_node)
     objc_add_method_declaration (is_class_method, decl, attributes);
 
   c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
@@ -15083,7 +15083,7 @@ static bool
 c_parser_objc_maybe_method_attributes (c_parser* parser, tree* attributes)
 {
   bool bad = false;
-  if (*attributes)
+  만약 (*attributes)
     {
       c_parser_error (parser,
 		    "method attributes must be specified at the end only");
@@ -15091,23 +15091,23 @@ c_parser_objc_maybe_method_attributes (c_parser* parser, tree* attributes)
       bad = true;
     }
 
-  if (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
+  만약 (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
     *attributes = c_parser_gnu_attributes (parser);
 
   /* If there were no attributes here, just report any earlier error.  */
-  if (*attributes == NULL_TREE || bad)
-    return bad;
+  만약 (*attributes == NULL_TREE || bad)
+    반환 bad;
 
   /* If the attributes are followed by a ; or {, then just report any earlier
      error.  */
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON)
+  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON)
       || c_parser_next_token_is (parser, CPP_OPEN_BRACE))
-    return bad;
+    반환 bad;
 
   /* We've got attributes, but not at the end.  */
   c_parser_error (parser,
 		  "expected %<;%> or %<{%> after method attribute definition");
-  return true;
+  반환 true;
 }
 
 /* Parse an objc-method-decl.
@@ -15152,7 +15152,7 @@ c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
   bool attr_err = false;
 
   *attributes = NULL_TREE;
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       matching_parens parens;
       parens.consume_open (parser);
@@ -15163,17 +15163,17 @@ c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
   /* If there is no selector, or a colon follows, we have an
      objc-keyword-selector.  If there is a selector, and a colon does
      not follow, that selector ends the objc-method-decl.  */
-  if (!sel || c_parser_next_token_is (parser, CPP_COLON))
+  만약 (!sel || c_parser_next_token_is (parser, CPP_COLON))
     {
       tree tsel = sel;
       tree list = NULL_TREE;
-      while (true)
+      동안 (true)
 	{
 	  tree atype = NULL_TREE, id, keyworddecl;
 	  tree param_attr = NULL_TREE;
-	  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	  만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    break;
-	  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+	  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	    {
 	      c_parser_consume_token (parser);
 	      atype = c_parser_objc_type_name (parser);
@@ -15181,19 +15181,19 @@ c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
 					 "expected %<)%>");
 	    }
 	  /* New ObjC allows attributes on method parameters.  */
-	  if (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
+	  만약 (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
 	    param_attr = c_parser_gnu_attributes (parser);
-	  if (c_parser_next_token_is_not (parser, CPP_NAME))
+	  만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	    {
 	      c_parser_error (parser, "expected identifier");
-	      return error_mark_node;
+	      반환 error_mark_node;
 	    }
 	  id = c_parser_peek_token (parser)->value;
 	  c_parser_consume_token (parser);
 	  keyworddecl = objc_build_keyword_decl (tsel, atype, id, param_attr);
 	  list = chainon (list, keyworddecl);
 	  tsel = c_parser_objc_selector (parser);
-	  if (!tsel && c_parser_next_token_is_not (parser, CPP_COLON))
+	  만약 (!tsel && c_parser_next_token_is_not (parser, CPP_COLON))
 	    break;
 	}
 
@@ -15203,11 +15203,11 @@ c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
 	 method parameters follow the C syntax, and may include '...'
 	 to denote a variable number of arguments.  */
       parms = make_node (TREE_LIST);
-      while (c_parser_next_token_is (parser, CPP_COMMA))
+      동안 (c_parser_next_token_is (parser, CPP_COMMA))
 	{
 	  struct c_parm *parm;
 	  c_parser_consume_token (parser);
-	  if (c_parser_next_token_is (parser, CPP_ELLIPSIS))
+	  만약 (c_parser_next_token_is (parser, CPP_ELLIPSIS))
 	    {
 	      ellipsis = true;
 	      c_parser_consume_token (parser);
@@ -15216,26 +15216,26 @@ c_parser_objc_method_decl (c_parser *parser, bool is_class_method,
 	      break;
 	    }
 	  parm = c_parser_parameter_declaration (parser, NULL_TREE, false);
-	  if (parm == NULL)
+	  만약 (parm == NULL)
 	    break;
 	  parms = chainon (parms,
 			   build_tree_list (NULL_TREE, grokparm (parm, expr)));
 	}
       sel = list;
     }
-  else
+  아니면
     attr_err |= c_parser_objc_maybe_method_attributes (parser, attributes) ;
 
-  if (sel == NULL)
+  만약 (sel == NULL)
     {
       c_parser_error (parser, "objective-c method declaration is expected");
-      return error_mark_node;
+      반환 error_mark_node;
     }
 
-  if (attr_err)
-    return error_mark_node;
+  만약 (attr_err)
+    반환 error_mark_node;
 
-  return objc_build_method_signature (is_class_method, type, sel, parms, ellipsis);
+  반환 objc_build_method_signature (is_class_method, type, sel, parms, ellipsis);
 }
 
 /* Parse an objc-type-name.
@@ -15258,10 +15258,10 @@ c_parser_objc_type_name (c_parser *parser)
   tree quals = NULL_TREE;
   struct c_type_name *type_name = NULL;
   tree type = NULL_TREE;
-  while (true)
+  동안 (true)
     {
       c_token *token = c_parser_peek_token (parser);
-      if (token->type == CPP_KEYWORD
+      만약 (token->type == CPP_KEYWORD
 	  && (token->keyword == RID_IN
 	      || token->keyword == RID_OUT
 	      || token->keyword == RID_INOUT
@@ -15272,22 +15272,22 @@ c_parser_objc_type_name (c_parser *parser)
 	  quals = chainon (build_tree_list (NULL_TREE, token->value), quals);
 	  c_parser_consume_token (parser);
 	}
-      else
+      아니면
 	break;
     }
-  if (c_parser_next_tokens_start_typename (parser, cla_prefer_type))
+  만약 (c_parser_next_tokens_start_typename (parser, cla_prefer_type))
     type_name = c_parser_type_name (parser);
-  if (type_name)
+  만약 (type_name)
     type = groktypename (type_name, NULL, NULL);
 
   /* If the type is unknown, and error has already been produced and
      we need to recover from the error.  In that case, use NULL_TREE
      for the type, as if no type had been specified; this will use the
      default type ('id') which is good for error recovery.  */
-  if (type == error_mark_node)
+  만약 (type == error_mark_node)
     type = NULL_TREE;
 
-  return build_tree_list (quals, type);
+  반환 build_tree_list (quals, type);
 }
 
 /* Parse objc-protocol-refs.
@@ -15304,10 +15304,10 @@ c_parser_objc_protocol_refs (c_parser *parser)
   c_parser_consume_token (parser);
   /* Any identifiers, including those declared as type names, are OK
      here.  */
-  while (true)
+  동안 (true)
     {
       tree id;
-      if (c_parser_next_token_is_not (parser, CPP_NAME))
+      만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected identifier");
 	  break;
@@ -15315,13 +15315,13 @@ c_parser_objc_protocol_refs (c_parser *parser)
       id = c_parser_peek_token (parser)->value;
       list = chainon (list, build_tree_list (NULL_TREE, id));
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	break;
     }
   c_parser_require (parser, CPP_GREATER, "expected %<>%>");
-  return list;
+  반환 list;
 }
 
 /* Parse an objc-try-catch-finally-statement.
@@ -15356,7 +15356,7 @@ c_parser_objc_try_catch_finally_statement (c_parser *parser)
   stmt = c_parser_compound_statement (parser);
   objc_begin_try_stmt (location, stmt);
 
-  while (c_parser_next_token_is_keyword (parser, RID_AT_CATCH))
+  동안 (c_parser_next_token_is_keyword (parser, RID_AT_CATCH))
     {
       struct c_parm *parm;
       tree parameter_declaration = error_mark_node;
@@ -15364,9 +15364,9 @@ c_parser_objc_try_catch_finally_statement (c_parser *parser)
 
       c_parser_consume_token (parser);
       matching_parens parens;
-      if (!parens.require_open (parser))
+      만약 (!parens.require_open (parser))
 	seen_open_paren = true;
-      if (c_parser_next_token_is (parser, CPP_ELLIPSIS))
+      만약 (c_parser_next_token_is (parser, CPP_ELLIPSIS))
 	{
 	  /* We have "@catch (...)" (where the '...' are literally
 	     what is in the code).  Skip the '...'.
@@ -15376,19 +15376,19 @@ c_parser_objc_try_catch_finally_statement (c_parser *parser)
 	  c_parser_consume_token (parser);
 	  parameter_declaration = NULL_TREE;
 	}
-      else
+      아니면
 	{
 	  /* We have "@catch (NSException *exception)" or something
 	     like that.  Parse the parameter declaration.  */
 	  parm = c_parser_parameter_declaration (parser, NULL_TREE, false);
-	  if (parm == NULL)
+	  만약 (parm == NULL)
 	    parameter_declaration = error_mark_node;
-	  else
+	  아니면
 	    parameter_declaration = grokparm (parm, NULL);
 	}
-      if (seen_open_paren)
+      만약 (seen_open_paren)
 	parens.require_close (parser);
-      else
+      아니면
 	{
 	  /* If there was no open parenthesis, we are recovering from
 	     an error, and we are trying to figure out what mistake
@@ -15398,7 +15398,7 @@ c_parser_objc_try_catch_finally_statement (c_parser *parser)
 	     probably forgot the opening one (ie, they typed "@catch
 	     NSException *e)".  Parse the closing parenthesis and keep
 	     going.  */
-	  if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	  만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	    c_parser_consume_token (parser);
 
 	  /* If these is no immediate closing parenthesis, the user
@@ -15407,11 +15407,11 @@ c_parser_objc_try_catch_finally_statement (c_parser *parser)
 	     forget about the closing parenthesis and keep going.  */
 	}
       objc_begin_catch_clause (parameter_declaration);
-      if (c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+      만약 (c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
 	c_parser_compound_statement_nostart (parser);
       objc_finish_catch_clause ();
     }
-  if (c_parser_next_token_is_keyword (parser, RID_AT_FINALLY))
+  만약 (c_parser_next_token_is_keyword (parser, RID_AT_FINALLY))
     {
       c_parser_consume_token (parser);
       location = c_parser_peek_token (parser)->location;
@@ -15437,7 +15437,7 @@ c_parser_objc_synchronized_statement (c_parser *parser)
   loc = c_parser_peek_token (parser)->location;
   objc_maybe_warn_exceptions (loc);
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       struct c_expr ce = c_parser_expression (parser);
       ce = convert_lvalue_to_rvalue (loc, ce, false, false);
@@ -15445,7 +15445,7 @@ c_parser_objc_synchronized_statement (c_parser *parser)
       expr = c_fully_fold (expr, false, NULL);
       parens.skip_until_found_close (parser);
     }
-  else
+  아니면
     expr = error_mark_node;
   stmt = c_parser_compound_statement (parser);
   objc_build_synchronized (loc, expr, stmt);
@@ -15471,13 +15471,13 @@ c_parser_objc_selector (c_parser *parser)
 {
   c_token *token = c_parser_peek_token (parser);
   tree value = token->value;
-  if (token->type == CPP_NAME)
+  만약 (token->type == CPP_NAME)
     {
       c_parser_consume_token (parser);
-      return value;
+      반환 value;
     }
-  if (token->type != CPP_KEYWORD)
-    return NULL_TREE;
+  만약 (token->type != CPP_KEYWORD)
+    반환 NULL_TREE;
   switch (token->keyword)
     {
     case RID_ENUM:
@@ -15528,9 +15528,9 @@ c_parser_objc_selector (c_parser *parser)
     case RID_INT_N_2:
     case RID_INT_N_3:
       c_parser_consume_token (parser);
-      return value;
+      반환 value;
     default:
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 }
 
@@ -15554,31 +15554,31 @@ c_parser_objc_selector_arg (c_parser *parser)
 {
   tree sel = c_parser_objc_selector (parser);
   tree list = NULL_TREE;
-  if (sel
+  만약 (sel
       && c_parser_next_token_is_not (parser, CPP_COLON)
       && c_parser_next_token_is_not (parser, CPP_SCOPE))
-    return sel;
-  while (true)
+    반환 sel;
+  동안 (true)
     {
-      if (c_parser_next_token_is (parser, CPP_SCOPE))
+      만약 (c_parser_next_token_is (parser, CPP_SCOPE))
 	{
 	  c_parser_consume_token (parser);
 	  list = chainon (list, build_tree_list (sel, NULL_TREE));
 	  list = chainon (list, build_tree_list (NULL_TREE, NULL_TREE));
 	}
-      else
+      아니면
 	{
-	  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
-	    return list;
+	  만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	    반환 list;
 	  list = chainon (list, build_tree_list (sel, NULL_TREE));
 	}
       sel = c_parser_objc_selector (parser);
-      if (!sel
+      만약 (!sel
 	  && c_parser_next_token_is_not (parser, CPP_COLON)
 	  && c_parser_next_token_is_not (parser, CPP_SCOPE))
 	break;
     }
-  return list;
+  반환 list;
 }
 
 /* Parse an objc-receiver.
@@ -15594,17 +15594,17 @@ c_parser_objc_receiver (c_parser *parser)
 {
   location_t loc = c_parser_peek_token (parser)->location;
 
-  if (c_parser_peek_token (parser)->type == CPP_NAME
+  만약 (c_parser_peek_token (parser)->type == CPP_NAME
       && (c_parser_peek_token (parser)->id_kind == C_ID_TYPENAME
 	  || c_parser_peek_token (parser)->id_kind == C_ID_CLASSNAME))
     {
       tree id = c_parser_peek_token (parser)->value;
       c_parser_consume_token (parser);
-      return objc_get_class_reference (id);
+      반환 objc_get_class_reference (id);
     }
   struct c_expr ce = c_parser_expression (parser);
   ce = convert_lvalue_to_rvalue (loc, ce, false, false);
-  return c_fully_fold (ce.value, false, NULL);
+  반환 c_fully_fold (ce.value, false, NULL);
 }
 
 /* Parse objc-message-args.
@@ -15627,20 +15627,20 @@ c_parser_objc_message_args (c_parser *parser)
 {
   tree sel = c_parser_objc_selector (parser);
   tree list = NULL_TREE;
-  if (sel && c_parser_next_token_is_not (parser, CPP_COLON))
-    return sel;
-  while (true)
+  만약 (sel && c_parser_next_token_is_not (parser, CPP_COLON))
+    반환 sel;
+  동안 (true)
     {
       tree keywordexpr;
-      if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
-	return error_mark_node;
+      만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	반환 error_mark_node;
       keywordexpr = c_parser_objc_keywordexpr (parser);
       list = chainon (list, build_tree_list (sel, keywordexpr));
       sel = c_parser_objc_selector (parser);
-      if (!sel && c_parser_next_token_is_not (parser, CPP_COLON))
+      만약 (!sel && c_parser_next_token_is_not (parser, CPP_COLON))
 	break;
     }
-  return list;
+  반환 list;
 }
 
 /* Parse an objc-keywordexpr.
@@ -15655,19 +15655,19 @@ c_parser_objc_keywordexpr (c_parser *parser)
   tree ret;
   vec<tree, va_gc> *expr_list = c_parser_expr_list (parser, true, true,
 						NULL, NULL, NULL, NULL);
-  if (vec_safe_length (expr_list) == 1)
+  만약 (vec_safe_length (expr_list) == 1)
     {
       /* Just return the expression, remove a level of
 	 indirection.  */
       ret = (*expr_list)[0];
     }
-  else
+  아니면
     {
       /* We have a comma expression, we will collapse later.  */
       ret = build_tree_list_vec (expr_list);
     }
   release_tree_vector (expr_list);
-  return ret;
+  반환 ret;
 }
 
 /* A check, needed in several places, that ObjC interface, implementation or
@@ -15676,15 +15676,15 @@ static bool
 c_parser_objc_diagnose_bad_element_prefix (c_parser *parser,
 					   struct c_declspecs *specs)
 {
-  if (!specs->declspecs_seen_p || specs->non_sc_seen_p
+  만약 (!specs->declspecs_seen_p || specs->non_sc_seen_p
       || specs->typespec_kind != ctsk_none)
     {
       c_parser_error (parser,
       		      "no type or storage class may be specified here,");
       c_parser_skip_to_end_of_block_or_statement (parser);
-      return true;
+      반환 true;
     }
-  return false;
+  반환 false;
 }
 
 /* Parse an Objective-C @property declaration.  The syntax is:
@@ -15730,7 +15730,7 @@ c_parser_objc_at_property_declaration (c_parser *parser)
   vec<property_attribute_info *> prop_attr_list = vNULL;
 
   bool syntax_error = false;
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       matching_parens parens;
 
@@ -15744,14 +15744,14 @@ c_parser_objc_at_property_declaration (c_parser *parser)
       /* Allow @property (), with a warning.  */
       location_t attr_end = c_parser_peek_token (parser)->location;
 
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	{
 	  location_t attr_comb = make_location (attr_end, attr_start, attr_end);
 	  warning_at (attr_comb, OPT_Wattributes,
 		      "empty property attribute list");
 	}
-      else
-	while (true)
+      아니면
+	동안 (true)
 	  {
 	    c_token *token = c_parser_peek_token (parser);
 	    attr_start = token->location;
@@ -15759,11 +15759,11 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 	    location_t attr_comb = make_location (attr_start, attr_start,
 						  attr_end);
 
-	    if (token->type == CPP_CLOSE_PAREN || token->type == CPP_COMMA)
+	    만약 (token->type == CPP_CLOSE_PAREN || token->type == CPP_COMMA)
 	      {
 		warning_at (attr_comb, OPT_Wattributes,
 			    "missing property attribute");
-		if (token->type == CPP_CLOSE_PAREN)
+		만약 (token->type == CPP_CLOSE_PAREN)
 		  break;
 		c_parser_consume_token (parser);
 		continue;
@@ -15772,20 +15772,20 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 	    tree attr_name = NULL_TREE;
 	    enum rid keyword = RID_MAX; /* Not a valid property attribute.  */
 	    bool add_at = false;
-	    if (token->type == CPP_KEYWORD)
+	    만약 (token->type == CPP_KEYWORD)
 	      {
 		keyword = token->keyword;
-		if (OBJC_IS_AT_KEYWORD (keyword))
+		만약 (OBJC_IS_AT_KEYWORD (keyword))
 		  {
 		    /* For '@' keywords the token value has the keyword,
 		       prepend the '@' for diagnostics.  */
 		    attr_name = token->value;
 		    add_at = true;
 		  }
-		else
-		  attr_name = ridpointers[(int)keyword];
+		아니면
+		  attr_name = ridpointers[(정수)keyword];
 	      }
-	    else if (token->type == CPP_NAME)
+	    아니면 만약 (token->type == CPP_NAME)
 	      attr_name = token->value;
 	    c_parser_consume_token (parser);
 
@@ -15800,17 +15800,17 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 	      {
 	      default: break;
 	      case OBJC_PROPERTY_ATTR_UNKNOWN:
-		if (attr_name)
+		만약 (attr_name)
 		  error_at (attr_comb, "unknown property attribute %<%s%s%>",
 			    add_at ? "@" : "", IDENTIFIER_POINTER (attr_name));
-		else
+		아니면
 		  error_at (attr_comb, "unknown property attribute");
 		prop->parse_error = syntax_error = true;
 		break;
 
 	      case OBJC_PROPERTY_ATTR_GETTER:
 	      case OBJC_PROPERTY_ATTR_SETTER:
-		if (c_parser_next_token_is_not (parser, CPP_EQ))
+		만약 (c_parser_next_token_is_not (parser, CPP_EQ))
 		  {
 		    attr_comb = make_location (attr_end, attr_start, attr_end);
 		    error_at (attr_comb, "expected %<=%> after Objective-C %qE",
@@ -15821,7 +15821,7 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 		token = c_parser_peek_token (parser);
 		attr_end = token->location;
 		c_parser_consume_token (parser); /* eat the = */
-		if (c_parser_next_token_is_not (parser, CPP_NAME))
+		만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 		  {
 		    attr_comb = make_location (attr_end, attr_start, attr_end);
 		    error_at (attr_comb, "expected %qE selector name",
@@ -15834,9 +15834,9 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 		attr_end = get_finish (token->location);
 		meth_name = token->value;
 		c_parser_consume_token (parser);
-		if (prop->prop_kind == OBJC_PROPERTY_ATTR_SETTER)
+		만약 (prop->prop_kind == OBJC_PROPERTY_ATTR_SETTER)
 		  {
-		    if (c_parser_next_token_is_not (parser, CPP_COLON))
+		    만약 (c_parser_next_token_is_not (parser, CPP_COLON))
 		      {
 			attr_comb = make_location (attr_end, attr_start,
 						   attr_end);
@@ -15844,7 +15844,7 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 				  " terminate with %<:%>");
 			prop->parse_error = syntax_error = true;
 		      }
-		    else
+		    아니면
 		      {
 			attr_end = get_finish (c_parser_peek_token
 					       (parser)->location);
@@ -15853,7 +15853,7 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 		    attr_comb = make_location (attr_start, attr_start,
 					       attr_end);
 		  }
-		else
+		아니면
 		  attr_comb = make_location (attr_start, attr_start,
 					       attr_end);
 		prop->ident = meth_name;
@@ -15868,19 +15868,19 @@ c_parser_objc_at_property_declaration (c_parser *parser)
 	     this makes a more useful output and avoid spurious warnings about
 	     missing attributes that are, in fact, specified after the one with
 	     the syntax error.  */
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
-	  else
+	  아니면
 	    break;
 	}
       parser->objc_property_attr_context = false;
 
-      if (syntax_error && c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN))
+      만약 (syntax_error && c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN))
 	/* We don't really want to chew the whole of the file looking for a
 	   matching closing parenthesis, so we will try to read the decl and
 	   let the error handling for that close out the statement.  */
 	;
-      else
+      아니면
 	syntax_error = false, parens.skip_until_found_close (parser);
     }
 
@@ -15889,25 +15889,25 @@ c_parser_objc_at_property_declaration (c_parser *parser)
      are three).  */
   tree properties = c_parser_struct_declaration (parser, NULL);
 
-  if (properties == error_mark_node)
+  만약 (properties == error_mark_node)
     c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
-  else
+  아니면
     {
-      if (properties == NULL_TREE)
+      만약 (properties == NULL_TREE)
 	c_parser_error (parser, "expected identifier");
-      else
+      아니면
 	{
 	  /* Comma-separated properties are chained together in reverse order;
 	     add them one by one.  */
 	  properties = nreverse (properties);
-	  for (; properties; properties = TREE_CHAIN (properties))
+	  위해 (; properties; properties = TREE_CHAIN (properties))
 	    objc_add_property_declaration (loc, copy_node (properties),
 					    prop_attr_list);
 	}
       c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
     }
 
-  while (!prop_attr_list.is_empty())
+  동안 (!prop_attr_list.is_empty())
     delete prop_attr_list.pop ();
   prop_attr_list.release ();
   parser->error = false;
@@ -15942,10 +15942,10 @@ c_parser_objc_at_synthesize_declaration (c_parser *parser)
   loc = c_parser_peek_token (parser)->location;
 
   c_parser_consume_token (parser);
-  while (true)
+  동안 (true)
     {
       tree property, ivar;
-      if (c_parser_next_token_is_not (parser, CPP_NAME))
+      만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected identifier");
 	  c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
@@ -15954,29 +15954,29 @@ c_parser_objc_at_synthesize_declaration (c_parser *parser)
 	     c_parser_skip_until_found() won't reset it for us if the
 	     next token is precisely a semicolon.  */
 	  parser->error = false;
-	  return;
+	  반환;
 	}
       property = c_parser_peek_token (parser)->value;
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_EQ))
+      만약 (c_parser_next_token_is (parser, CPP_EQ))
 	{
 	  c_parser_consume_token (parser);
-	  if (c_parser_next_token_is_not (parser, CPP_NAME))
+	  만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	    {
 	      c_parser_error (parser, "expected identifier");
 	      c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
 	      parser->error = false;
-	      return;
+	      반환;
 	    }
 	  ivar = c_parser_peek_token (parser)->value;
 	  c_parser_consume_token (parser);
 	}
-      else
+      아니면
 	ivar = NULL_TREE;
       list = chainon (list, build_tree_list (ivar, property));
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	break;
     }
   c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
@@ -16004,22 +16004,22 @@ c_parser_objc_at_dynamic_declaration (c_parser *parser)
   loc = c_parser_peek_token (parser)->location;
 
   c_parser_consume_token (parser);
-  while (true)
+  동안 (true)
     {
       tree property;
-      if (c_parser_next_token_is_not (parser, CPP_NAME))
+      만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected identifier");
 	  c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
 	  parser->error = false;
-	  return;
+	  반환;
 	}
       property = c_parser_peek_token (parser)->value;
       list = chainon (list, build_tree_list (NULL_TREE, property));
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	break;
     }
   c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
@@ -16034,7 +16034,7 @@ c_parse_pragma_ivdep (c_parser *parser)
 {
   c_parser_consume_pragma (parser);
   c_parser_skip_to_pragma_eol (parser);
-  return true;
+  반환 true;
 }
 
 /* Parse a pragma GCC novector.  */
@@ -16044,7 +16044,7 @@ c_parse_pragma_novector (c_parser *parser)
 {
   c_parser_consume_pragma (parser);
   c_parser_skip_to_pragma_eol (parser);
-  return true;
+  반환 true;
 }
 
 /* Parse a pragma GCC unroll.  */
@@ -16059,7 +16059,7 @@ c_parser_pragma_unroll (c_parser *parser)
   mark_exp_read (expr);
   expr = c_fully_fold (expr, false, NULL);
   HOST_WIDE_INT lunroll = 0;
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (expr))
+  만약 (!INTEGRAL_TYPE_P (TREE_TYPE (expr))
       || TREE_CODE (expr) != INTEGER_CST
       || (lunroll = tree_to_shwi (expr)) < 0
       || lunroll >= USHRT_MAX)
@@ -16069,15 +16069,15 @@ c_parser_pragma_unroll (c_parser *parser)
 		" integral constant less than %u", USHRT_MAX);
       unroll = 0;
     }
-  else
+  아니면
     {
       unroll = (unsigned short)lunroll;
-      if (unroll == 0)
+      만약 (unroll == 0)
 	unroll = 1;
     }
 
   c_parser_skip_to_pragma_eol (parser);
-  return unroll;
+  반환 unroll;
 }
 
 /* Handle pragmas.  Some OpenMP pragmas are associated with, and therefore
@@ -16090,13 +16090,13 @@ static bool
 c_parser_pragma (c_parser *parser, enum pragma_context context, bool *if_p,
 		 tree before_labels)
 {
-  unsigned int id;
+  unsigned 정수 id;
   const char *construct = NULL;
 
   input_location = c_parser_peek_token (parser)->location;
   id = c_parser_peek_token (parser)->pragma_kind;
   gcc_assert (id != PRAGMA_NONE);
-  if (parser->omp_for_parse_state
+  만약 (parser->omp_for_parse_state
       && parser->omp_for_parse_state->in_intervening_code
       && id >= PRAGMA_OMP__START_ && id <= PRAGMA_OMP__LAST_
       /* Allow a safe subset of non-executable directives. See classification in
@@ -16109,205 +16109,205 @@ c_parser_pragma (c_parser *parser, enum pragma_context context, bool *if_p,
 	"intervening code must not contain executable OpenMP directives");
       parser->omp_for_parse_state->fail = true;
       c_parser_skip_until_found (parser, CPP_PRAGMA_EOL, NULL);
-      return false;
+      반환 false;
     }
 
   switch (id)
     {
     case PRAGMA_OACC_DECLARE:
       c_parser_oacc_declare (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OACC_ENTER_DATA:
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  construct = "acc enter data";
 	in_compound:
-	  if (context == pragma_stmt)
+	  만약 (context == pragma_stmt)
 	    {
 	      error_at (c_parser_peek_token (parser)->location,
 			"%<#pragma %s%> may only be used in compound "
 			"statements", construct);
 	      c_parser_skip_until_found (parser, CPP_PRAGMA_EOL, NULL);
-	      return true;
+	      반환 true;
 	    }
 	  goto bad_stmt;
 	}
       c_parser_oacc_enter_exit_data (parser, true);
-      return false;
+      반환 false;
 
     case PRAGMA_OACC_EXIT_DATA:
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  construct = "acc exit data";
 	  goto in_compound;
 	}
       c_parser_oacc_enter_exit_data (parser, false);
-      return false;
+      반환 false;
 
     case PRAGMA_OACC_ROUTINE:
-      if (context != pragma_external)
+      만약 (context != pragma_external)
 	{
 	  error_at (c_parser_peek_token (parser)->location,
 		    "%<#pragma acc routine%> must be at file scope");
 	  c_parser_skip_until_found (parser, CPP_PRAGMA_EOL, NULL);
-	  return false;
+	  반환 false;
 	}
       c_parser_oacc_routine (parser, context);
-      return false;
+      반환 false;
 
     case PRAGMA_OACC_UPDATE:
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  construct = "acc update";
 	  goto in_compound;
 	}
       c_parser_oacc_update (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_BARRIER:
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  construct = "omp barrier";
 	  goto in_compound;
 	}
       c_parser_omp_barrier (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_DEPOBJ:
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  construct = "omp depobj";
 	  goto in_compound;
 	}
       c_parser_omp_depobj (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_FLUSH:
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  construct = "omp flush";
 	  goto in_compound;
 	}
       c_parser_omp_flush (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_INTEROP:
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  construct = "omp interop";
 	  goto in_compound;
 	}
       c_parser_omp_interop (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_TASKWAIT:
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  construct = "omp taskwait";
 	  goto in_compound;
 	}
       c_parser_omp_taskwait (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_TASKYIELD:
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  construct = "omp taskyield";
 	  goto in_compound;
 	}
       c_parser_omp_taskyield (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_CANCEL:
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  construct = "omp cancel";
 	  goto in_compound;
 	}
       c_parser_omp_cancel (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_CANCELLATION_POINT:
-      return c_parser_omp_cancellation_point (parser, context);
+      반환 c_parser_omp_cancellation_point (parser, context);
 
     case PRAGMA_OMP_GROUPPRIVATE:
       c_parser_omp_groupprivate (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_THREADPRIVATE:
       c_parser_omp_threadprivate (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_TARGET:
-      return c_parser_omp_target (parser, context, if_p);
+      반환 c_parser_omp_target (parser, context, if_p);
 
     case PRAGMA_OMP_BEGIN:
       c_parser_omp_begin (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_END:
       c_parser_omp_end (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_SCAN:
       error_at (c_parser_peek_token (parser)->location,
 		"%<#pragma omp scan%> may only be used in "
 		"a loop construct with %<inscan%> %<reduction%> clause");
       c_parser_skip_until_found (parser, CPP_PRAGMA_EOL, NULL);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_SECTION:
       error_at (c_parser_peek_token (parser)->location,
 		"%<#pragma omp section%> may only be used in "
 		"%<#pragma omp sections%> construct");
       c_parser_skip_until_found (parser, CPP_PRAGMA_EOL, NULL);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_DECLARE:
-      return c_parser_omp_declare (parser, context);
+      반환 c_parser_omp_declare (parser, context);
 
     case PRAGMA_OMP_REQUIRES:
-      if (context != pragma_external)
+      만약 (context != pragma_external)
 	{
 	  error_at (c_parser_peek_token (parser)->location,
 		    "%<#pragma %s%> may only be used at file scope",
 		    "omp requires");
 	  c_parser_skip_until_found (parser, CPP_PRAGMA_EOL, NULL);
-	  return false;
+	  반환 false;
 	}
       c_parser_omp_requires (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_ALLOCATE:
       c_parser_omp_allocate (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_ASSUMES:
-      if (context != pragma_external)
+      만약 (context != pragma_external)
 	{
 	  error_at (c_parser_peek_token (parser)->location,
 		    "%<#pragma %s%> may only be used at file scope",
 		    "omp assumes");
 	  c_parser_skip_until_found (parser, CPP_PRAGMA_EOL, NULL);
-	  return false;
+	  반환 false;
 	}
       c_parser_omp_assumes (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_NOTHING:
       c_parser_omp_nothing (parser);
-      return false;
+      반환 false;
 
     case PRAGMA_OMP_METADIRECTIVE:
       c_parser_omp_metadirective (parser, if_p);
-      return true;
+      반환 true;
 
     case PRAGMA_OMP_ERROR:
-      return c_parser_omp_error (parser, context);
+      반환 c_parser_omp_error (parser, context);
 
     case PRAGMA_OMP_ORDERED:
-      return c_parser_omp_ordered (parser, context, if_p);
+      반환 c_parser_omp_ordered (parser, context, if_p);
 
     case PRAGMA_NOVECTOR:
     case PRAGMA_UNROLL:
@@ -16334,7 +16334,7 @@ c_parser_pragma (c_parser *parser, enum pragma_context context, bool *if_p,
 
 	c_token *tok = c_parser_peek_token (parser);
 	bool has_more = tok->type == CPP_PRAGMA;
-	while (has_more)
+	동안 (has_more)
 	  {
 	    switch (tok->pragma_kind)
 	      {
@@ -16354,32 +16354,32 @@ c_parser_pragma (c_parser *parser, enum pragma_context context, bool *if_p,
 	    tok = c_parser_peek_token (parser);
 	    has_more = has_more && tok->type == CPP_PRAGMA;
 	  }
-	if (!c_parser_next_token_is_keyword (parser, RID_FOR)
+	만약 (!c_parser_next_token_is_keyword (parser, RID_FOR)
 	    && !c_parser_next_token_is_keyword (parser, RID_WHILE)
 	    && !c_parser_next_token_is_keyword (parser, RID_DO))
 	  {
 	    c_parser_error (parser, "for, while or do statement expected");
-	    return false;
+	    반환 false;
 	  }
-	if (c_parser_next_token_is_keyword (parser, RID_FOR))
+	만약 (c_parser_next_token_is_keyword (parser, RID_FOR))
 	  c_parser_for_statement (parser, ivdep, unroll, novector, if_p,
 				  before_labels);
-	else if (c_parser_next_token_is_keyword (parser, RID_WHILE))
+	아니면 만약 (c_parser_next_token_is_keyword (parser, RID_WHILE))
 	  c_parser_while_statement (parser, ivdep, unroll, novector, if_p,
 				    before_labels);
-	else
+	아니면
 	  c_parser_do_statement (parser, ivdep, unroll, novector,
 				 before_labels);
       }
-      return true;
+      반환 true;
 
     case PRAGMA_GCC_PCH_PREPROCESS:
       c_parser_error (parser, "%<#pragma GCC pch_preprocess%> must be first");
       c_parser_skip_until_found (parser, CPP_PRAGMA_EOL, NULL);
-      return false;
+      반환 false;
 
     case PRAGMA_OACC_WAIT:
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  construct = "acc wait";
 	  goto in_compound;
@@ -16387,17 +16387,17 @@ c_parser_pragma (c_parser *parser, enum pragma_context context, bool *if_p,
 	/* FALL THROUGH.  */
 
     default:
-      if (id < PRAGMA_FIRST_EXTERNAL)
+      만약 (id < PRAGMA_FIRST_EXTERNAL)
 	{
-	  if (context != pragma_stmt && context != pragma_compound)
+	  만약 (context != pragma_stmt && context != pragma_compound)
 	    {
 	    bad_stmt:
 	      c_parser_error (parser, "expected declaration specifiers");
 	      c_parser_skip_until_found (parser, CPP_PRAGMA_EOL, NULL);
-	      return false;
+	      반환 false;
 	    }
 	  c_parser_omp_construct (parser, if_p);
-	  return true;
+	  반환 true;
 	}
       break;
     }
@@ -16411,7 +16411,7 @@ c_parser_pragma (c_parser *parser, enum pragma_context context, bool *if_p,
   parser->error = true;
   c_parser_skip_to_pragma_eol (parser);
 
-  return false;
+  반환 false;
 }
 
 /* The interface the pragma parsers have to the lexer.  */
@@ -16423,21 +16423,21 @@ pragma_lex (tree *value, location_t *loc)
   enum cpp_ttype ret = tok->type;
 
   *value = tok->value;
-  if (loc)
+  만약 (loc)
     *loc = tok->location;
 
-  if (ret == CPP_PRAGMA_EOL || ret == CPP_EOF)
+  만약 (ret == CPP_PRAGMA_EOL || ret == CPP_EOF)
     ret = CPP_EOF;
-  else if (ret == CPP_STRING)
+  아니면 만약 (ret == CPP_STRING)
     *value = c_parser_string_literal (the_parser, false, false).value;
-  else
+  아니면
     {
-      if (ret == CPP_KEYWORD)
+      만약 (ret == CPP_KEYWORD)
 	ret = CPP_NAME;
       c_parser_consume_token (the_parser);
     }
 
-  return ret;
+  반환 ret;
 }
 
 void
@@ -16449,7 +16449,7 @@ pragma_lex_discard_to_eol ()
       type = c_parser_peek_token (the_parser)->type;
       gcc_assert (type != CPP_EOF);
       c_parser_consume_token (the_parser);
-    } while (type != CPP_PRAGMA_EOL);
+    } 동안 (type != CPP_PRAGMA_EOL);
 }
 
 static void
@@ -16459,17 +16459,17 @@ c_parser_pragma_pch_preprocess (c_parser *parser)
 
   parser->lex_joined_string = true;
   c_parser_consume_pragma (parser);
-  if (c_parser_next_token_is (parser, CPP_STRING))
+  만약 (c_parser_next_token_is (parser, CPP_STRING))
     {
       name = c_parser_peek_token (parser)->value;
       c_parser_consume_token (parser);
     }
-  else
+  아니면
     c_parser_error (parser, "expected string literal");
   c_parser_skip_to_pragma_eol (parser);
   parser->lex_joined_string = false;
 
-  if (name)
+  만약 (name)
     c_common_pch_pragma (parse_in, TREE_STRING_POINTER (name));
 }
 
@@ -16485,275 +16485,275 @@ c_parser_omp_clause_name (c_parser *parser)
 {
   pragma_omp_clause result = PRAGMA_OMP_CLAUSE_NONE;
 
-  if (c_parser_next_token_is_keyword (parser, RID_AUTO))
+  만약 (c_parser_next_token_is_keyword (parser, RID_AUTO))
     result = PRAGMA_OACC_CLAUSE_AUTO;
-  else if (c_parser_next_token_is_keyword (parser, RID_IF))
+  아니면 만약 (c_parser_next_token_is_keyword (parser, RID_IF))
     result = PRAGMA_OMP_CLAUSE_IF;
-  else if (c_parser_next_token_is_keyword (parser, RID_DEFAULT))
+  아니면 만약 (c_parser_next_token_is_keyword (parser, RID_DEFAULT))
     result = PRAGMA_OMP_CLAUSE_DEFAULT;
-  else if (c_parser_next_token_is_keyword (parser, RID_FOR))
+  아니면 만약 (c_parser_next_token_is_keyword (parser, RID_FOR))
     result = PRAGMA_OMP_CLAUSE_FOR;
-  else if (c_parser_next_token_is (parser, CPP_NAME))
+  아니면 만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
       switch (p[0])
 	{
 	case 'a':
-	  if (!strcmp ("affinity", p))
+	  만약 (!strcmp ("affinity", p))
 	    result = PRAGMA_OMP_CLAUSE_AFFINITY;
-	  else if (!strcmp ("aligned", p))
+	  아니면 만약 (!strcmp ("aligned", p))
 	    result = PRAGMA_OMP_CLAUSE_ALIGNED;
-	  else if (!strcmp ("allocate", p))
+	  아니면 만약 (!strcmp ("allocate", p))
 	    result = PRAGMA_OMP_CLAUSE_ALLOCATE;
-	  else if (!strcmp ("async", p))
+	  아니면 만약 (!strcmp ("async", p))
 	    result = PRAGMA_OACC_CLAUSE_ASYNC;
-	  else if (!strcmp ("attach", p))
+	  아니면 만약 (!strcmp ("attach", p))
 	    result = PRAGMA_OACC_CLAUSE_ATTACH;
 	  break;
 	case 'b':
-	  if (!strcmp ("bind", p))
+	  만약 (!strcmp ("bind", p))
 	    result = PRAGMA_OMP_CLAUSE_BIND;
 	  break;
 	case 'c':
-	  if (!strcmp ("collapse", p))
+	  만약 (!strcmp ("collapse", p))
 	    result = PRAGMA_OMP_CLAUSE_COLLAPSE;
-	  else if (!strcmp ("copy", p))
+	  아니면 만약 (!strcmp ("copy", p))
 	    result = PRAGMA_OACC_CLAUSE_COPY;
-	  else if (!strcmp ("copyin", p))
+	  아니면 만약 (!strcmp ("copyin", p))
 	    result = PRAGMA_OMP_CLAUSE_COPYIN;
-	  else if (!strcmp ("copyout", p))
+	  아니면 만약 (!strcmp ("copyout", p))
 	    result = PRAGMA_OACC_CLAUSE_COPYOUT;
-          else if (!strcmp ("copyprivate", p))
+          아니면 만약 (!strcmp ("copyprivate", p))
 	    result = PRAGMA_OMP_CLAUSE_COPYPRIVATE;
-	  else if (!strcmp ("create", p))
+	  아니면 만약 (!strcmp ("create", p))
 	    result = PRAGMA_OACC_CLAUSE_CREATE;
 	  break;
 	case 'd':
-	  if (!strcmp ("defaultmap", p))
+	  만약 (!strcmp ("defaultmap", p))
 	    result = PRAGMA_OMP_CLAUSE_DEFAULTMAP;
-	  else if (!strcmp ("delete", p))
+	  아니면 만약 (!strcmp ("delete", p))
 	    result = PRAGMA_OACC_CLAUSE_DELETE;
-	  else if (!strcmp ("depend", p))
+	  아니면 만약 (!strcmp ("depend", p))
 	    result = PRAGMA_OMP_CLAUSE_DEPEND;
-	  else if (!strcmp ("destroy", p))
+	  아니면 만약 (!strcmp ("destroy", p))
 	    result = PRAGMA_OMP_CLAUSE_DESTROY;
-	  else if (!strcmp ("detach", p))
+	  아니면 만약 (!strcmp ("detach", p))
 	    result = PRAGMA_OACC_CLAUSE_DETACH;
-	  else if (!strcmp ("device", p))
+	  아니면 만약 (!strcmp ("device", p))
 	    result = PRAGMA_OMP_CLAUSE_DEVICE;
-	  else if (!strcmp ("deviceptr", p))
+	  아니면 만약 (!strcmp ("deviceptr", p))
 	    result = PRAGMA_OACC_CLAUSE_DEVICEPTR;
-	  else if (!strcmp ("device_resident", p))
+	  아니면 만약 (!strcmp ("device_resident", p))
 	    result = PRAGMA_OACC_CLAUSE_DEVICE_RESIDENT;
-	  else if (!strcmp ("device_type", p))
+	  아니면 만약 (!strcmp ("device_type", p))
 	    result = PRAGMA_OMP_CLAUSE_DEVICE_TYPE;
-	  else if (!strcmp ("dist_schedule", p))
+	  아니면 만약 (!strcmp ("dist_schedule", p))
 	    result = PRAGMA_OMP_CLAUSE_DIST_SCHEDULE;
-	  else if (!strcmp ("doacross", p))
+	  아니면 만약 (!strcmp ("doacross", p))
 	    result = PRAGMA_OMP_CLAUSE_DOACROSS;
-	  else if (!strcmp ("dyn_groupprivate", p))
+	  아니면 만약 (!strcmp ("dyn_groupprivate", p))
 	    result = PRAGMA_OMP_CLAUSE_DYN_GROUPPRIVATE;
 	  break;
 	case 'e':
-	  if (!strcmp ("enter", p))
+	  만약 (!strcmp ("enter", p))
 	    result = PRAGMA_OMP_CLAUSE_ENTER;
 	  break;
 	case 'f':
-	  if (!strcmp ("filter", p))
+	  만약 (!strcmp ("filter", p))
 	    result = PRAGMA_OMP_CLAUSE_FILTER;
-	  else if (!strcmp ("final", p))
+	  아니면 만약 (!strcmp ("final", p))
 	    result = PRAGMA_OMP_CLAUSE_FINAL;
-	  else if (!strcmp ("finalize", p))
+	  아니면 만약 (!strcmp ("finalize", p))
 	    result = PRAGMA_OACC_CLAUSE_FINALIZE;
-	  else if (!strcmp ("firstprivate", p))
+	  아니면 만약 (!strcmp ("firstprivate", p))
 	    result = PRAGMA_OMP_CLAUSE_FIRSTPRIVATE;
-	  else if (!strcmp ("from", p))
+	  아니면 만약 (!strcmp ("from", p))
 	    result = PRAGMA_OMP_CLAUSE_FROM;
-	  else if (!strcmp ("full", p))
+	  아니면 만약 (!strcmp ("full", p))
 	    result = PRAGMA_OMP_CLAUSE_FULL;
 	  break;
 	case 'g':
-	  if (!strcmp ("gang", p))
+	  만약 (!strcmp ("gang", p))
 	    result = PRAGMA_OACC_CLAUSE_GANG;
-	  else if (!strcmp ("grainsize", p))
+	  아니면 만약 (!strcmp ("grainsize", p))
 	    result = PRAGMA_OMP_CLAUSE_GRAINSIZE;
 	  break;
 	case 'h':
-	  if (!strcmp ("has_device_addr", p))
+	  만약 (!strcmp ("has_device_addr", p))
 	    result = PRAGMA_OMP_CLAUSE_HAS_DEVICE_ADDR;
-	  else if (!strcmp ("hint", p))
+	  아니면 만약 (!strcmp ("hint", p))
 	    result = PRAGMA_OMP_CLAUSE_HINT;
-	  else if (!strcmp ("host", p))
+	  아니면 만약 (!strcmp ("host", p))
 	    result = PRAGMA_OACC_CLAUSE_HOST;
 	  break;
 	case 'i':
-	  if (!strcmp ("if_present", p))
+	  만약 (!strcmp ("if_present", p))
 	    result = PRAGMA_OACC_CLAUSE_IF_PRESENT;
-	  else if (!strcmp ("in_reduction", p))
+	  아니면 만약 (!strcmp ("in_reduction", p))
 	    result = PRAGMA_OMP_CLAUSE_IN_REDUCTION;
-	  else if (!strcmp ("inbranch", p))
+	  아니면 만약 (!strcmp ("inbranch", p))
 	    result = PRAGMA_OMP_CLAUSE_INBRANCH;
-	  else if (!strcmp ("independent", p))
+	  아니면 만약 (!strcmp ("independent", p))
 	    result = PRAGMA_OACC_CLAUSE_INDEPENDENT;
-	  else if (!strcmp ("indirect", p))
+	  아니면 만약 (!strcmp ("indirect", p))
 	    result = PRAGMA_OMP_CLAUSE_INDIRECT;
-	  else if (!strcmp ("init", p))
+	  아니면 만약 (!strcmp ("init", p))
 	    result = PRAGMA_OMP_CLAUSE_INIT;
-	  else if (!strcmp ("is_device_ptr", p))
+	  아니면 만약 (!strcmp ("is_device_ptr", p))
 	    result = PRAGMA_OMP_CLAUSE_IS_DEVICE_PTR;
-	  else if (!strcmp ("interop", p))
+	  아니면 만약 (!strcmp ("interop", p))
 	    result = PRAGMA_OMP_CLAUSE_INTEROP;
 	  break;
 	case 'l':
-	  if (!strcmp ("lastprivate", p))
+	  만약 (!strcmp ("lastprivate", p))
 	    result = PRAGMA_OMP_CLAUSE_LASTPRIVATE;
-	  else if (!strcmp ("linear", p))
+	  아니면 만약 (!strcmp ("linear", p))
 	    result = PRAGMA_OMP_CLAUSE_LINEAR;
-	  else if (!strcmp ("link", p))
+	  아니면 만약 (!strcmp ("link", p))
 	    result = PRAGMA_OMP_CLAUSE_LINK;
-	  else if (!strcmp ("local", p))
+	  아니면 만약 (!strcmp ("local", p))
 	    result = PRAGMA_OMP_CLAUSE_LOCAL;
 	  break;
 	case 'm':
-	  if (!strcmp ("map", p))
+	  만약 (!strcmp ("map", p))
 	    result = PRAGMA_OMP_CLAUSE_MAP;
-	  else if (!strcmp ("mergeable", p))
+	  아니면 만약 (!strcmp ("mergeable", p))
 	    result = PRAGMA_OMP_CLAUSE_MERGEABLE;
 	  break;
 	case 'n':
-	  if (!strcmp ("no_create", p))
+	  만약 (!strcmp ("no_create", p))
 	    result = PRAGMA_OACC_CLAUSE_NO_CREATE;
-	  else if (!strcmp ("nocontext", p))
+	  아니면 만약 (!strcmp ("nocontext", p))
 	    result = PRAGMA_OMP_CLAUSE_NOCONTEXT;
-	  else if (!strcmp ("nogroup", p))
+	  아니면 만약 (!strcmp ("nogroup", p))
 	    result = PRAGMA_OMP_CLAUSE_NOGROUP;
-	  else if (!strcmp ("nohost", p))
+	  아니면 만약 (!strcmp ("nohost", p))
 	    result = PRAGMA_OACC_CLAUSE_NOHOST;
-	  else if (!strcmp ("nontemporal", p))
+	  아니면 만약 (!strcmp ("nontemporal", p))
 	    result = PRAGMA_OMP_CLAUSE_NONTEMPORAL;
-	  else if (!strcmp ("notinbranch", p))
+	  아니면 만약 (!strcmp ("notinbranch", p))
 	    result = PRAGMA_OMP_CLAUSE_NOTINBRANCH;
-	  else if (!strcmp ("novariants", p))
+	  아니면 만약 (!strcmp ("novariants", p))
 	    result = PRAGMA_OMP_CLAUSE_NOVARIANTS;
-	  else if (!strcmp ("nowait", p))
+	  아니면 만약 (!strcmp ("nowait", p))
 	    result = PRAGMA_OMP_CLAUSE_NOWAIT;
-	  else if (!strcmp ("num_gangs", p))
+	  아니면 만약 (!strcmp ("num_gangs", p))
 	    result = PRAGMA_OACC_CLAUSE_NUM_GANGS;
-	  else if (!strcmp ("num_tasks", p))
+	  아니면 만약 (!strcmp ("num_tasks", p))
 	    result = PRAGMA_OMP_CLAUSE_NUM_TASKS;
-	  else if (!strcmp ("num_teams", p))
+	  아니면 만약 (!strcmp ("num_teams", p))
 	    result = PRAGMA_OMP_CLAUSE_NUM_TEAMS;
-	  else if (!strcmp ("num_threads", p))
+	  아니면 만약 (!strcmp ("num_threads", p))
 	    result = PRAGMA_OMP_CLAUSE_NUM_THREADS;
-	  else if (!strcmp ("num_workers", p))
+	  아니면 만약 (!strcmp ("num_workers", p))
 	    result = PRAGMA_OACC_CLAUSE_NUM_WORKERS;
 	  break;
 	case 'o':
-	  if (!strcmp ("ordered", p))
+	  만약 (!strcmp ("ordered", p))
 	    result = PRAGMA_OMP_CLAUSE_ORDERED;
-	  else if (!strcmp ("order", p))
+	  아니면 만약 (!strcmp ("order", p))
 	    result = PRAGMA_OMP_CLAUSE_ORDER;
 	  break;
 	case 'p':
-	  if (!strcmp ("parallel", p))
+	  만약 (!strcmp ("parallel", p))
 	    result = PRAGMA_OMP_CLAUSE_PARALLEL;
-	  else if (!strcmp ("partial", p))
+	  아니면 만약 (!strcmp ("partial", p))
 	    result = PRAGMA_OMP_CLAUSE_PARTIAL;
-	  else if (!strcmp ("present", p))
+	  아니면 만약 (!strcmp ("present", p))
 	    result = PRAGMA_OACC_CLAUSE_PRESENT;
 	  /* As of OpenACC 2.5, these are now aliases of the non-present_or
 	     clauses.  */
-	  else if (!strcmp ("present_or_copy", p)
+	  아니면 만약 (!strcmp ("present_or_copy", p)
 		   || !strcmp ("pcopy", p))
 	    result = PRAGMA_OACC_CLAUSE_COPY;
-	  else if (!strcmp ("present_or_copyin", p)
+	  아니면 만약 (!strcmp ("present_or_copyin", p)
 		   || !strcmp ("pcopyin", p))
 	    result = PRAGMA_OACC_CLAUSE_COPYIN;
-	  else if (!strcmp ("present_or_copyout", p)
+	  아니면 만약 (!strcmp ("present_or_copyout", p)
 		   || !strcmp ("pcopyout", p))
 	    result = PRAGMA_OACC_CLAUSE_COPYOUT;
-	  else if (!strcmp ("present_or_create", p)
+	  아니면 만약 (!strcmp ("present_or_create", p)
 		   || !strcmp ("pcreate", p))
 	    result = PRAGMA_OACC_CLAUSE_CREATE;
-	  else if (!strcmp ("priority", p))
+	  아니면 만약 (!strcmp ("priority", p))
 	    result = PRAGMA_OMP_CLAUSE_PRIORITY;
-	  else if (!strcmp ("private", p))
+	  아니면 만약 (!strcmp ("private", p))
 	    result = PRAGMA_OMP_CLAUSE_PRIVATE;
-	  else if (!strcmp ("proc_bind", p))
+	  아니면 만약 (!strcmp ("proc_bind", p))
 	    result = PRAGMA_OMP_CLAUSE_PROC_BIND;
 	  break;
 	case 'r':
-	  if (!strcmp ("reduction", p))
+	  만약 (!strcmp ("reduction", p))
 	    result = PRAGMA_OMP_CLAUSE_REDUCTION;
 	  break;
 	case 's':
-	  if (!strcmp ("safelen", p))
+	  만약 (!strcmp ("safelen", p))
 	    result = PRAGMA_OMP_CLAUSE_SAFELEN;
-	  else if (!strcmp ("schedule", p))
+	  아니면 만약 (!strcmp ("schedule", p))
 	    result = PRAGMA_OMP_CLAUSE_SCHEDULE;
-	  else if (!strcmp ("sections", p))
+	  아니면 만약 (!strcmp ("sections", p))
 	    result = PRAGMA_OMP_CLAUSE_SECTIONS;
-	  else if (!strcmp ("self", p))
+	  아니면 만약 (!strcmp ("self", p))
 	    result = PRAGMA_OACC_CLAUSE_SELF;
-	  else if (!strcmp ("seq", p))
+	  아니면 만약 (!strcmp ("seq", p))
 	    result = PRAGMA_OACC_CLAUSE_SEQ;
-	  else if (!strcmp ("shared", p))
+	  아니면 만약 (!strcmp ("shared", p))
 	    result = PRAGMA_OMP_CLAUSE_SHARED;
-	  else if (!strcmp ("simd", p))
+	  아니면 만약 (!strcmp ("simd", p))
 	    result = PRAGMA_OMP_CLAUSE_SIMD;
-	  else if (!strcmp ("simdlen", p))
+	  아니면 만약 (!strcmp ("simdlen", p))
 	    result = PRAGMA_OMP_CLAUSE_SIMDLEN;
 	  break;
 	case 't':
-	  if (!strcmp ("task_reduction", p))
+	  만약 (!strcmp ("task_reduction", p))
 	    result = PRAGMA_OMP_CLAUSE_TASK_REDUCTION;
-	  else if (!strcmp ("taskgroup", p))
+	  아니면 만약 (!strcmp ("taskgroup", p))
 	    result = PRAGMA_OMP_CLAUSE_TASKGROUP;
-	  else if (!strcmp ("thread_limit", p))
+	  아니면 만약 (!strcmp ("thread_limit", p))
 	    result = PRAGMA_OMP_CLAUSE_THREAD_LIMIT;
-	  else if (!strcmp ("threads", p))
+	  아니면 만약 (!strcmp ("threads", p))
 	    result = PRAGMA_OMP_CLAUSE_THREADS;
-	  else if (!strcmp ("tile", p))
+	  아니면 만약 (!strcmp ("tile", p))
 	    result = PRAGMA_OACC_CLAUSE_TILE;
-	  else if (!strcmp ("to", p))
+	  아니면 만약 (!strcmp ("to", p))
 	    result = PRAGMA_OMP_CLAUSE_TO;
 	  break;
 	case 'u':
-	  if (!strcmp ("uniform", p))
+	  만약 (!strcmp ("uniform", p))
 	    result = PRAGMA_OMP_CLAUSE_UNIFORM;
-	  else if (!strcmp ("untied", p))
+	  아니면 만약 (!strcmp ("untied", p))
 	    result = PRAGMA_OMP_CLAUSE_UNTIED;
-	  else if (!strcmp ("use", p))
+	  아니면 만약 (!strcmp ("use", p))
 	    result = PRAGMA_OMP_CLAUSE_USE;
-	  else if (!strcmp ("use_device", p))
+	  아니면 만약 (!strcmp ("use_device", p))
 	    result = PRAGMA_OACC_CLAUSE_USE_DEVICE;
-	  else if (!strcmp ("use_device_addr", p))
+	  아니면 만약 (!strcmp ("use_device_addr", p))
 	    result = PRAGMA_OMP_CLAUSE_USE_DEVICE_ADDR;
-	  else if (!strcmp ("use_device_ptr", p))
+	  아니면 만약 (!strcmp ("use_device_ptr", p))
 	    result = PRAGMA_OMP_CLAUSE_USE_DEVICE_PTR;
-	  else if (!strcmp ("uses_allocators", p))
+	  아니면 만약 (!strcmp ("uses_allocators", p))
 	    result = PRAGMA_OMP_CLAUSE_USES_ALLOCATORS;
 	  break;
 	case 'v':
-	  if (!strcmp ("vector", p))
+	  만약 (!strcmp ("vector", p))
 	    result = PRAGMA_OACC_CLAUSE_VECTOR;
-	  else if (!strcmp ("vector_length", p))
+	  아니면 만약 (!strcmp ("vector_length", p))
 	    result = PRAGMA_OACC_CLAUSE_VECTOR_LENGTH;
 	  break;
 	case 'w':
-	  if (!strcmp ("wait", p))
+	  만약 (!strcmp ("wait", p))
 	    result = PRAGMA_OACC_CLAUSE_WAIT;
-	  else if (!strcmp ("worker", p))
+	  아니면 만약 (!strcmp ("worker", p))
 	    result = PRAGMA_OACC_CLAUSE_WORKER;
 	  break;
 	}
     }
 
-  if (result != PRAGMA_OMP_CLAUSE_NONE)
+  만약 (result != PRAGMA_OMP_CLAUSE_NONE)
     c_parser_consume_token (parser);
 
-  return result;
+  반환 result;
 }
 
 /* Validate that a clause of the given type does not already exist.  */
@@ -16762,7 +16762,7 @@ static void
 check_no_duplicate_clause (tree clauses, enum omp_clause_code code,
 			   const char *name)
 {
-  if (tree c = omp_find_clause (clauses, code))
+  만약 (tree c = omp_find_clause (clauses, code))
     error_at (OMP_CLAUSE_LOCATION (c), "too many %qs clauses", name);
 }
 
@@ -16776,24 +16776,24 @@ c_parser_oacc_wait_list (c_parser *parser, location_t clause_loc, tree list)
   tree t, args_tree;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
   args = c_parser_expr_list (parser, false, true, NULL, NULL, NULL, NULL);
   args_tree = build_tree_list_vec (args);
 
-  for (t = args_tree; t; t = TREE_CHAIN (t))
+  위해 (t = args_tree; t; t = TREE_CHAIN (t))
     {
       tree targ = TREE_VALUE (t);
 
-      if (targ != error_mark_node)
+      만약 (targ != error_mark_node)
 	{
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (targ)))
+	  만약 (!INTEGRAL_TYPE_P (TREE_TYPE (targ)))
 	    {
 	      c_parser_error (parser, "expression must be integral");
 	      targ = error_mark_node;
 	    }
-	  else
+	  아니면
 	    {
 	      tree c = build_omp_clause (clause_loc, OMP_CLAUSE_WAIT);
 
@@ -16806,7 +16806,7 @@ c_parser_oacc_wait_list (c_parser *parser, location_t clause_loc, tree list)
 
   release_tree_vector (args);
   parens.require_close (parser);
-  return list;
+  반환 list;
 }
 
 /* OpenACC 2.0, OpenMP 2.5:
@@ -16843,21 +16843,21 @@ c_parser_omp_variable_list (c_parser *parser,
   auto_vec<omp_dim> dims;
   bool array_section_p;
   auto_vec<c_token> tokens;
-  unsigned int tokens_avail = 0;
+  unsigned 정수 tokens_avail = 0;
   c_token *saved_tokens = NULL;
 
-  while (1)
+  동안 (1)
     {
       tree t = NULL_TREE;
       location_t tloc = c_parser_peek_token (parser)->location;
 
-      if (kind == OMP_CLAUSE_DEPEND || kind == OMP_CLAUSE_AFFINITY)
+      만약 (kind == OMP_CLAUSE_DEPEND || kind == OMP_CLAUSE_AFFINITY)
 	{
-	  if (c_parser_next_token_is_not (parser, CPP_NAME)
+	  만약 (c_parser_next_token_is_not (parser, CPP_NAME)
 	      || c_parser_peek_token (parser)->id_kind != C_ID_ID)
 	    {
 	      struct c_expr expr;
-	      if (kind == OMP_CLAUSE_DEPEND
+	      만약 (kind == OMP_CLAUSE_DEPEND
 		  && c_parser_next_token_is_keyword (parser,
 						     RID_OMP_ALL_MEMORY)
 		  && (c_parser_peek_2nd_token (parser)->type == CPP_COMMA
@@ -16867,9 +16867,9 @@ c_parser_omp_variable_list (c_parser *parser,
 		  expr.value = ridpointers[RID_OMP_ALL_MEMORY];
 		  c_parser_consume_token (parser);
 		}
-	      else
+	      아니면
 		expr = c_parser_expr_no_commas (parser, NULL);
-	      if (expr.value != error_mark_node)
+	      만약 (expr.value != error_mark_node)
 		{
 		  tree u = build_omp_clause (clause_loc, kind);
 		  OMP_CLAUSE_DECL (u) = expr.value;
@@ -16877,7 +16877,7 @@ c_parser_omp_variable_list (c_parser *parser,
 		  list = u;
 		}
 
-	      if (c_parser_next_token_is_not (parser, CPP_COMMA))
+	      만약 (c_parser_next_token_is_not (parser, CPP_COMMA))
 		break;
 
 	      c_parser_consume_token (parser);
@@ -16885,8 +16885,8 @@ c_parser_omp_variable_list (c_parser *parser,
 	    }
 
 	  tokens.truncate (0);
-	  unsigned int nesting_depth = 0;
-	  while (1)
+	  unsigned 정수 nesting_depth = 0;
+	  동안 (1)
 	    {
 	      c_token *token = c_parser_peek_token (parser);
 	      switch (token->type)
@@ -16902,11 +16902,11 @@ c_parser_omp_variable_list (c_parser *parser,
 		case CPP_CLOSE_BRACE:
 		case CPP_CLOSE_PAREN:
 		case CPP_CLOSE_SQUARE:
-		  if (nesting_depth-- == 0)
+		  만약 (nesting_depth-- == 0)
 		    break;
 		  goto add;
 		case CPP_COMMA:
-		  if (nesting_depth == 0)
+		  만약 (nesting_depth == 0)
 		    break;
 		  goto add;
 		default:
@@ -16930,7 +16930,7 @@ c_parser_omp_variable_list (c_parser *parser,
 	  parser->tokens = tokens.address ();
 	  parser->tokens_avail = tokens.length ();
 	}
-      else if (map_lvalue
+      아니면 만약 (map_lvalue
 	       && (kind == OMP_CLAUSE_MAP
 		   || kind == OMP_CLAUSE_TO
 		   || kind == OMP_CLAUSE_FROM))
@@ -16939,7 +16939,7 @@ c_parser_omp_variable_list (c_parser *parser,
 	  bool save_c_omp_array_section_p = c_omp_array_section_p;
 	  c_omp_array_section_p = true;
 	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-	  if (expr.value != error_mark_node)
+	  만약 (expr.value != error_mark_node)
 	    mark_exp_read (expr.value);
 	  c_omp_array_section_p = save_c_omp_array_section_p;
 	  tree decl = expr.value;
@@ -16953,9 +16953,9 @@ c_parser_omp_variable_list (c_parser *parser,
 	    form.  (See also equivalent code in cp/parser.cc,
 	    cp/semantics.cc).  */
 	  dims.truncate (0);
-	  if (TREE_CODE (decl) == OMP_ARRAY_SECTION)
+	  만약 (TREE_CODE (decl) == OMP_ARRAY_SECTION)
 	    {
-	      while (TREE_CODE (decl) == OMP_ARRAY_SECTION)
+	      동안 (TREE_CODE (decl) == OMP_ARRAY_SECTION)
 		{
 		  tree low_bound = TREE_OPERAND (decl, 1);
 		  tree length = TREE_OPERAND (decl, 2);
@@ -16963,22 +16963,22 @@ c_parser_omp_variable_list (c_parser *parser,
 		  decl = TREE_OPERAND (decl, 0);
 		}
 
-	      while (TREE_CODE (decl) == ARRAY_REF
+	      동안 (TREE_CODE (decl) == ARRAY_REF
 		     || TREE_CODE (decl) == INDIRECT_REF
 		     || TREE_CODE (decl) == COMPOUND_EXPR)
 		{
-		  if (TREE_CODE (decl) == COMPOUND_EXPR)
+		  만약 (TREE_CODE (decl) == COMPOUND_EXPR)
 		    {
 		      decl = TREE_OPERAND (decl, 1);
 		      STRIP_NOPS (decl);
 		    }
-		  else if (TREE_CODE (decl) == INDIRECT_REF)
+		  아니면 만약 (TREE_CODE (decl) == INDIRECT_REF)
 		    {
 		      dims.safe_push (omp_dim (integer_zero_node,
 					       integer_one_node, loc, true));
 		      decl = TREE_OPERAND (decl, 0);
 		    }
-		  else  /* ARRAY_REF. */
+		  아니면  /* ARRAY_REF. */
 		    {
 		      tree index = TREE_OPERAND (decl, 1);
 		      dims.safe_push (omp_dim (index, integer_one_node, loc,
@@ -16987,11 +16987,11 @@ c_parser_omp_variable_list (c_parser *parser,
 		    }
 		}
 
-	      for (int i = dims.length () - 1; i >= 0; i--)
+	      위해 (정수 i = dims.length () - 1; i >= 0; i--)
 		decl = build_omp_array_section (loc,  decl, dims[i].low_bound,
 						dims[i].length);
 	    }
-	  else if (TREE_CODE (decl) == INDIRECT_REF)
+	  아니면 만약 (TREE_CODE (decl) == INDIRECT_REF)
 	    {
 	      /* Turn indirection of a pointer "*foo" into "foo[0:1]".  */
 	      decl = TREE_OPERAND (decl, 0);
@@ -17000,7 +17000,7 @@ c_parser_omp_variable_list (c_parser *parser,
 	      decl = build_omp_array_section (loc, decl, integer_zero_node,
 					      integer_one_node);
 	    }
-	  else if (TREE_CODE (decl) == ARRAY_REF)
+	  아니면 만약 (TREE_CODE (decl) == ARRAY_REF)
 	    {
 	      tree idx = TREE_OPERAND (decl, 1);
 
@@ -17009,7 +17009,7 @@ c_parser_omp_variable_list (c_parser *parser,
 
 	      decl = build_omp_array_section (loc, decl, idx, integer_one_node);
 	    }
-	  else if (TREE_CODE (decl) == NON_LVALUE_EXPR
+	  아니면 만약 (TREE_CODE (decl) == NON_LVALUE_EXPR
 		   || CONVERT_EXPR_P (decl))
 	    decl = TREE_OPERAND (decl, 0);
 
@@ -17021,12 +17021,12 @@ c_parser_omp_variable_list (c_parser *parser,
 	  goto next_item;
 	}
 
-      if (c_parser_next_token_is (parser, CPP_NAME)
+      만약 (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_token (parser)->id_kind == C_ID_ID)
 	{
 	  t = lookup_name (c_parser_peek_token (parser)->value);
 
-	  if (t == NULL_TREE)
+	  만약 (t == NULL_TREE)
 	    {
 	      undeclared_variable (c_parser_peek_token (parser)->location,
 	      c_parser_peek_token (parser)->value);
@@ -17035,29 +17035,29 @@ c_parser_omp_variable_list (c_parser *parser,
 
 	  c_parser_consume_token (parser);
 	}
-      else if (c_parser_next_token_is (parser, CPP_KEYWORD)
+      아니면 만약 (c_parser_next_token_is (parser, CPP_KEYWORD)
 	       && (c_parser_peek_token (parser)->keyword == RID_FUNCTION_NAME
 		   || (c_parser_peek_token (parser)->keyword
 		       == RID_PRETTY_FUNCTION_NAME)
 		   || (c_parser_peek_token (parser)->keyword
 		       == RID_C99_FUNCTION_NAME)))
 	t = c_parser_predefined_identifier (parser).value;
-      else
+      아니면
 	{
 	  c_parser_error (parser, "expected identifier");
 	  break;
 	}
 
-      if (t == error_mark_node)
+      만약 (t == error_mark_node)
 	;
-      else if (kind != 0)  /* kind != OMP_CLAUSE_ERROR */
+      아니면 만약 (kind != 0)  /* kind != OMP_CLAUSE_ERROR */
 	{
 	  switch (kind)
 	    {
 	    case OMP_CLAUSE__CACHE_:
 	      /* The OpenACC cache directive explicitly only allows "array
 		 elements or subarrays".  */
-	      if (c_parser_peek_token (parser)->type != CPP_OPEN_SQUARE)
+	      만약 (c_parser_peek_token (parser)->type != CPP_OPEN_SQUARE)
 		{
 		  c_parser_error (parser, "expected %<[%>");
 		  t = error_mark_node;
@@ -17068,12 +17068,12 @@ c_parser_omp_variable_list (c_parser *parser,
 	    case OMP_CLAUSE_FROM:
 	    case OMP_CLAUSE_TO:
 	    start_component_ref:
-	      while (c_parser_next_token_is (parser, CPP_DOT)
+	      동안 (c_parser_next_token_is (parser, CPP_DOT)
 		     || c_parser_next_token_is (parser, CPP_DEREF))
 		{
 		  location_t op_loc = c_parser_peek_token (parser)->location;
 		  location_t arrow_loc = UNKNOWN_LOCATION;
-		  if (c_parser_next_token_is (parser, CPP_DEREF))
+		  만약 (c_parser_next_token_is (parser, CPP_DEREF))
 		    {
 		      c_expr t_expr;
 		      t_expr.value = t;
@@ -17087,7 +17087,7 @@ c_parser_omp_variable_list (c_parser *parser,
 		      arrow_loc = t_expr.get_location ();
 		    }
 		  c_parser_consume_token (parser);
-		  if (!c_parser_next_token_is (parser, CPP_NAME))
+		  만약 (!c_parser_next_token_is (parser, CPP_NAME))
 		    {
 		      c_parser_error (parser, "expected identifier");
 		      t = error_mark_node;
@@ -17110,14 +17110,14 @@ c_parser_omp_variable_list (c_parser *parser,
 	    case OMP_CLAUSE_HAS_DEVICE_ADDR:
 	      array_section_p = false;
 	      dims.truncate (0);
-	      while (c_parser_next_token_is (parser, CPP_OPEN_SQUARE))
+	      동안 (c_parser_next_token_is (parser, CPP_OPEN_SQUARE))
 		{
 		  location_t loc = UNKNOWN_LOCATION;
 		  tree low_bound = NULL_TREE, length = NULL_TREE;
 		  bool no_colon = false;
 
 		  c_parser_consume_token (parser);
-		  if (!c_parser_next_token_is (parser, CPP_COLON))
+		  만약 (!c_parser_next_token_is (parser, CPP_COLON))
 		    {
 		      location_t expr_loc
 			= c_parser_peek_token (parser)->location;
@@ -17127,22 +17127,22 @@ c_parser_omp_variable_list (c_parser *parser,
 		      low_bound = expr.value;
 		      loc = expr_loc;
 		    }
-		  if (c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
+		  만약 (c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
 		    {
 		      length = integer_one_node;
 		      no_colon = true;
 		    }
-		  else
+		  아니면
 		    {
 		      /* Look for `:'.  */
-		      if (!c_parser_require (parser, CPP_COLON,
+		      만약 (!c_parser_require (parser, CPP_COLON,
 					     "expected %<:%>"))
 			{
 			  t = error_mark_node;
 			  break;
 			}
 		      array_section_p = true;
-		      if (!c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
+		      만약 (!c_parser_next_token_is (parser, CPP_CLOSE_SQUARE))
 			{
 			  location_t expr_loc
 			    = c_parser_peek_token (parser)->location;
@@ -17153,7 +17153,7 @@ c_parser_omp_variable_list (c_parser *parser,
 			}
 		    }
 		  /* Look for the closing `]'.  */
-		  if (!c_parser_require (parser, CPP_CLOSE_SQUARE,
+		  만약 (!c_parser_require (parser, CPP_CLOSE_SQUARE,
 					 "expected %<]%>"))
 		    {
 		      t = error_mark_node;
@@ -17163,16 +17163,16 @@ c_parser_omp_variable_list (c_parser *parser,
 		  dims.safe_push (omp_dim (low_bound, length, loc, no_colon));
 		}
 
-	      if (t != error_mark_node)
+	      만약 (t != error_mark_node)
 		{
-		  if ((kind == OMP_CLAUSE_MAP
+		  만약 ((kind == OMP_CLAUSE_MAP
 		       || kind == OMP_CLAUSE_FROM
 		       || kind == OMP_CLAUSE_TO)
 		      && !array_section_p
 		      && (c_parser_next_token_is (parser, CPP_DOT)
 			  || c_parser_next_token_is (parser, CPP_DEREF)))
 		    {
-		      for (unsigned i = 0; i < dims.length (); i++)
+		      위해 (unsigned i = 0; i < dims.length (); i++)
 			{
 			  gcc_assert (dims[i].length == integer_one_node);
 			  t = build_array_ref (dims[i].loc,
@@ -17180,30 +17180,30 @@ c_parser_omp_variable_list (c_parser *parser,
 			}
 		      goto start_component_ref;
 		    }
-		  else
-		    for (unsigned i = 0; i < dims.length (); i++)
+		  아니면
+		    위해 (unsigned i = 0; i < dims.length (); i++)
 		      t = build_omp_array_section (clause_loc, t,
 						   dims[i].low_bound,
 						   dims[i].length);
 		}
 
-	      if ((kind == OMP_CLAUSE_DEPEND || kind == OMP_CLAUSE_AFFINITY)
+	      만약 ((kind == OMP_CLAUSE_DEPEND || kind == OMP_CLAUSE_AFFINITY)
 		  && t != error_mark_node
 		  && parser->tokens_avail != 2)
 		{
-		  if (array_section_p)
+		  만약 (array_section_p)
 		    {
 		      error_at (c_parser_peek_token (parser)->location,
 				"expected %<)%> or %<,%>");
 		      t = error_mark_node;
 		    }
-		  else
+		  아니면
 		    {
 		      parser->tokens = tokens.address ();
 		      parser->tokens_avail = tokens.length ();
 
 		      t = c_parser_expr_no_commas (parser, NULL).value;
-		      if (t != error_mark_node && parser->tokens_avail != 2)
+		      만약 (t != error_mark_node && parser->tokens_avail != 2)
 			{
 			  error_at (c_parser_peek_token (parser)->location,
 				    "expected %<)%> or %<,%>");
@@ -17216,7 +17216,7 @@ c_parser_omp_variable_list (c_parser *parser,
 	      break;
 	    }
 
-	  if (t != error_mark_node)
+	  만약 (t != error_mark_node)
 	    {
 	      tree u = build_omp_clause (clause_loc, kind);
 	      OMP_CLAUSE_DECL (u) = t;
@@ -17224,23 +17224,23 @@ c_parser_omp_variable_list (c_parser *parser,
 	      list = u;
 	    }
 	}
-      else  /* kind == OMP_CLAUSE_ERROR */
+      아니면  /* kind == OMP_CLAUSE_ERROR */
 	list = tree_cons (t, build_empty_stmt (tloc), list);
 
-      if (kind == OMP_CLAUSE_DEPEND || kind == OMP_CLAUSE_AFFINITY)
+      만약 (kind == OMP_CLAUSE_DEPEND || kind == OMP_CLAUSE_AFFINITY)
 	{
 	  parser->tokens = saved_tokens;
 	  parser->tokens_avail = tokens_avail;
 	}
 
     next_item:
-      if (c_parser_next_token_is_not (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is_not (parser, CPP_COMMA))
 	break;
 
       c_parser_consume_token (parser);
     }
 
-  return list;
+  반환 list;
 }
 
 /* Similarly, but expect leading and trailing parenthesis.  This is a very
@@ -17254,26 +17254,26 @@ c_parser_omp_var_list_parens (c_parser *parser, enum omp_clause_code kind,
   /* The clauses location.  */
   location_t loc = c_parser_peek_token (parser)->location;
 
-  if (parser->in_omp_decl_attribute)
+  만약 (parser->in_omp_decl_attribute)
     {
-      if (kind)
+      만약 (kind)
 	{
 	  tree u = build_omp_clause (loc, kind);
 	  OMP_CLAUSE_DECL (u) = parser->in_omp_decl_attribute;
 	  OMP_CLAUSE_CHAIN (u) = list;
-	  return u;
+	  반환 u;
 	}
-      else
-	return tree_cons (parser->in_omp_decl_attribute, NULL_TREE, list);
+      아니면
+	반환 tree_cons (parser->in_omp_decl_attribute, NULL_TREE, list);
     }
 
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       list = c_parser_omp_variable_list (parser, loc, kind, list, map_lvalue);
       parens.skip_until_found_close (parser);
     }
-  return list;
+  반환 list;
 }
 
 /* OpenACC 2.0:
@@ -17349,13 +17349,13 @@ c_parser_oacc_data_clause (c_parser *parser, pragma_omp_clause c_kind,
   bool readonly = false;
   location_t open_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       /* Turn on readonly modifier parsing for copyin clause.  */
-      if (c_kind == PRAGMA_OACC_CLAUSE_COPYIN)
+      만약 (c_kind == PRAGMA_OACC_CLAUSE_COPYIN)
 	{
 	  c_token *token = c_parser_peek_token (parser);
-	  if (token->type == CPP_NAME
+	  만약 (token->type == CPP_NAME
 	      && !strcmp (IDENTIFIER_POINTER (token->value), "readonly")
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
@@ -17369,14 +17369,14 @@ c_parser_oacc_data_clause (c_parser *parser, pragma_omp_clause c_kind,
       parens.skip_until_found_close (parser);
     }
 
-  for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  위해 (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
     {
       OMP_CLAUSE_SET_MAP_KIND (c, kind);
-      if (readonly)
+      만약 (readonly)
 	OMP_CLAUSE_MAP_READONLY (c) = 1;
     }
 
-  return nl;
+  반환 nl;
 }
 
 /* OpenACC 2.0:
@@ -17391,16 +17391,16 @@ c_parser_oacc_data_clause_deviceptr (c_parser *parser, tree list)
      c_parser_oacc_data_clause), as for PRAGMA_OACC_CLAUSE_DEVICEPTR,
      variable-list must only allow for pointer variables.  */
   vars = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ERROR, NULL);
-  for (t = vars; t && t; t = TREE_CHAIN (t))
+  위해 (t = vars; t && t; t = TREE_CHAIN (t))
     {
       tree v = TREE_PURPOSE (t);
       location_t loc = EXPR_LOCATION (TREE_VALUE (t));
 
-      if (!VAR_P (v) && TREE_CODE (v) != PARM_DECL)
+      만약 (!VAR_P (v) && TREE_CODE (v) != PARM_DECL)
 	error_at (loc, "%qD is not a variable", v);
-      else if (TREE_TYPE (v) == error_mark_node)
+      아니면 만약 (TREE_TYPE (v) == error_mark_node)
 	;
-      else if (!POINTER_TYPE_P (TREE_TYPE (v)))
+      아니면 만약 (!POINTER_TYPE_P (TREE_TYPE (v)))
 	error_at (loc, "%qD is not a pointer variable", v);
 
       tree u = build_omp_clause (loc, OMP_CLAUSE_MAP);
@@ -17410,7 +17410,7 @@ c_parser_oacc_data_clause_deviceptr (c_parser *parser, tree list)
       list = u;
     }
 
-  return list;
+  반환 list;
 }
 
 /* OpenACC 2.0, OpenMP 3.0:
@@ -17428,28 +17428,28 @@ c_parser_omp_clause_collapse (c_parser *parser, tree list)
 
   loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       num = c_parser_expr_no_commas (parser, NULL).value;
       parens.skip_until_found_close (parser);
     }
-  if (num == error_mark_node)
-    return list;
+  만약 (num == error_mark_node)
+    반환 list;
   mark_exp_read (num);
   num = c_fully_fold (num, false, NULL);
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (num))
+  만약 (!INTEGRAL_TYPE_P (TREE_TYPE (num))
       || !tree_fits_shwi_p (num)
       || (n = tree_to_shwi (num)) <= 0
-      || (int) n != n)
+      || (정수) n != n)
     {
       error_at (loc,
 		"collapse argument needs positive constant integer expression");
-      return list;
+      반환 list;
     }
   c = build_omp_clause (loc, OMP_CLAUSE_COLLAPSE);
   OMP_CLAUSE_COLLAPSE_EXPR (c) = num;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 2.5:
@@ -17458,7 +17458,7 @@ c_parser_omp_clause_collapse (c_parser *parser, tree list)
 static tree
 c_parser_omp_clause_copyin (c_parser *parser, tree list)
 {
-  return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_COPYIN, list);
+  반환 c_parser_omp_var_list_parens (parser, OMP_CLAUSE_COPYIN, list);
 }
 
 /* OpenMP 2.5:
@@ -17467,7 +17467,7 @@ c_parser_omp_clause_copyin (c_parser *parser, tree list)
 static tree
 c_parser_omp_clause_copyprivate (c_parser *parser, tree list)
 {
-  return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_COPYPRIVATE, list);
+  반환 c_parser_omp_var_list_parens (parser, OMP_CLAUSE_COPYPRIVATE, list);
 }
 
 /* OpenMP 2.5:
@@ -17487,43 +17487,43 @@ c_parser_omp_clause_default (c_parser *parser, tree list, bool is_oacc)
   tree c;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (!parens.require_open (parser))
+    반환 list;
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
       switch (p[0])
 	{
 	case 'n':
-	  if (strcmp ("none", p) != 0)
+	  만약 (strcmp ("none", p) != 0)
 	    goto invalid_kind;
 	  kind = OMP_CLAUSE_DEFAULT_NONE;
 	  break;
 
 	case 'p':
-	  if (is_oacc)
+	  만약 (is_oacc)
 	    {
-	      if (strcmp ("present", p) != 0)
+	      만약 (strcmp ("present", p) != 0)
 		goto invalid_kind;
 	      kind = OMP_CLAUSE_DEFAULT_PRESENT;
 	    }
-	  else
+	  아니면
 	    {
-	      if (strcmp ("private", p) != 0)
+	      만약 (strcmp ("private", p) != 0)
 		goto invalid_kind;
 	      kind = OMP_CLAUSE_DEFAULT_PRIVATE;
 	    }
 	  break;
 
 	case 'f':
-	  if (strcmp ("firstprivate", p) != 0 || is_oacc)
+	  만약 (strcmp ("firstprivate", p) != 0 || is_oacc)
 	    goto invalid_kind;
 	  kind = OMP_CLAUSE_DEFAULT_FIRSTPRIVATE;
 	  break;
 
 	case 's':
-	  if (strcmp ("shared", p) != 0 || is_oacc)
+	  만약 (strcmp ("shared", p) != 0 || is_oacc)
 	    goto invalid_kind;
 	  kind = OMP_CLAUSE_DEFAULT_SHARED;
 	  break;
@@ -17534,26 +17534,26 @@ c_parser_omp_clause_default (c_parser *parser, tree list, bool is_oacc)
 
       c_parser_consume_token (parser);
     }
-  else
+  아니면
     {
     invalid_kind:
-      if (is_oacc)
+      만약 (is_oacc)
 	c_parser_error (parser, "expected %<none%> or %<present%>");
-      else
+      아니면
 	c_parser_error (parser, "expected %<none%>, %<shared%>, "
 				"%<private%> or %<firstprivate%>");
     }
   parens.skip_until_found_close (parser);
 
-  if (kind == OMP_CLAUSE_DEFAULT_UNSPECIFIED)
-    return list;
+  만약 (kind == OMP_CLAUSE_DEFAULT_UNSPECIFIED)
+    반환 list;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_DEFAULT, "default");
   c = build_omp_clause (loc, OMP_CLAUSE_DEFAULT);
   OMP_CLAUSE_CHAIN (c) = list;
   OMP_CLAUSE_DEFAULT_KIND (c) = kind;
 
-  return c;
+  반환 c;
 }
 
 /* OpenMP 2.5:
@@ -17562,7 +17562,7 @@ c_parser_omp_clause_default (c_parser *parser, tree list, bool is_oacc)
 static tree
 c_parser_omp_clause_firstprivate (c_parser *parser, tree list)
 {
-  return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_FIRSTPRIVATE, list);
+  반환 c_parser_omp_var_list_parens (parser, OMP_CLAUSE_FIRSTPRIVATE, list);
 }
 
 /* OpenMP 3.1:
@@ -17572,13 +17572,13 @@ static tree
 c_parser_omp_clause_final (c_parser *parser, tree list)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       matching_parens parens;
       tree t, c;
-      if (!parens.require_open (parser))
+      만약 (!parens.require_open (parser))
 	t = error_mark_node;
-      else
+      아니면
 	{
 	  location_t eloc = c_parser_peek_token (parser)->location;
 	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
@@ -17595,10 +17595,10 @@ c_parser_omp_clause_final (c_parser *parser, tree list)
       OMP_CLAUSE_CHAIN (c) = list;
       list = c;
     }
-  else
+  아니면
     c_parser_error (parser, "expected %<(%>");
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 5.1:
@@ -17611,26 +17611,26 @@ c_parser_omp_clause_indirect (c_parser *parser, tree list)
   location_t location = c_parser_peek_token (parser)->location;
   tree t;
 
-  if (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
+  만약 (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
     {
       matching_parens parens;
-      if (!parens.require_open (parser))
-	return list;
+      만약 (!parens.require_open (parser))
+	반환 list;
 
       location_t loc = c_parser_peek_token (parser)->location;
       c_expr expr = c_parser_expr_no_commas (parser, NULL);
       expr = convert_lvalue_to_rvalue (loc, expr, true, true);
       t = c_objc_common_truthvalue_conversion (loc, expr.value);
       t = c_fully_fold (t, false, NULL);
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t))
 	  || TREE_CODE (t) != INTEGER_CST)
 	{
 	  c_parser_error (parser, "expected constant logical expression");
-	  return list;
+	  반환 list;
 	}
       parens.skip_until_found_close (parser);
     }
-  else
+  아니면
     t = integer_one_node;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_INDIRECT, "indirect");
@@ -17639,7 +17639,7 @@ c_parser_omp_clause_indirect (c_parser *parser, tree list)
   OMP_CLAUSE_INDIRECT_EXPR (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
 
-  return c;
+  반환 c;
 }
 
 /* OpenACC, OpenMP 2.5:
@@ -17663,62 +17663,62 @@ c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
   enum tree_code if_modifier = ERROR_MARK;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  if (is_omp && c_parser_next_token_is (parser, CPP_NAME))
+  만약 (is_omp && c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      int n = 2;
-      if (strcmp (p, "cancel") == 0)
+      정수 n = 2;
+      만약 (strcmp (p, "cancel") == 0)
 	if_modifier = VOID_CST;
-      else if (strcmp (p, "parallel") == 0)
+      아니면 만약 (strcmp (p, "parallel") == 0)
 	if_modifier = OMP_PARALLEL;
-      else if (strcmp (p, "simd") == 0)
+      아니면 만약 (strcmp (p, "simd") == 0)
 	if_modifier = OMP_SIMD;
-      else if (strcmp (p, "task") == 0)
+      아니면 만약 (strcmp (p, "task") == 0)
 	if_modifier = OMP_TASK;
-      else if (strcmp (p, "taskloop") == 0)
+      아니면 만약 (strcmp (p, "taskloop") == 0)
 	if_modifier = OMP_TASKLOOP;
-      else if (strcmp (p, "target") == 0)
+      아니면 만약 (strcmp (p, "target") == 0)
 	{
 	  if_modifier = OMP_TARGET;
-	  if (c_parser_peek_2nd_token (parser)->type == CPP_NAME)
+	  만약 (c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 	    {
 	      p = IDENTIFIER_POINTER (c_parser_peek_2nd_token (parser)->value);
-	      if (strcmp ("data", p) == 0)
+	      만약 (strcmp ("data", p) == 0)
 		if_modifier = OMP_TARGET_DATA;
-	      else if (strcmp ("update", p) == 0)
+	      아니면 만약 (strcmp ("update", p) == 0)
 		if_modifier = OMP_TARGET_UPDATE;
-	      else if (strcmp ("enter", p) == 0)
+	      아니면 만약 (strcmp ("enter", p) == 0)
 		if_modifier = OMP_TARGET_ENTER_DATA;
-	      else if (strcmp ("exit", p) == 0)
+	      아니면 만약 (strcmp ("exit", p) == 0)
 		if_modifier = OMP_TARGET_EXIT_DATA;
-	      if (if_modifier != OMP_TARGET)
+	      만약 (if_modifier != OMP_TARGET)
 		{
 		  n = 3;
 		  c_parser_consume_token (parser);
 		}
-	      else
+	      아니면
 		{
 		  location_t loc = c_parser_peek_2nd_token (parser)->location;
 		  error_at (loc, "expected %<data%>, %<update%>, %<enter%> "
 				 "or %<exit%>");
 		  if_modifier = ERROR_MARK;
 		}
-	      if (if_modifier == OMP_TARGET_ENTER_DATA
+	      만약 (if_modifier == OMP_TARGET_ENTER_DATA
 		  || if_modifier == OMP_TARGET_EXIT_DATA)
 		{
-		  if (c_parser_peek_2nd_token (parser)->type == CPP_NAME)
+		  만약 (c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 		    {
 		      p = IDENTIFIER_POINTER
 				(c_parser_peek_2nd_token (parser)->value);
-		      if (strcmp ("data", p) == 0)
+		      만약 (strcmp ("data", p) == 0)
 			n = 4;
 		    }
-		  if (n == 4)
+		  만약 (n == 4)
 		    c_parser_consume_token (parser);
-		  else
+		  아니면
 		    {
 		      location_t loc
 			= c_parser_peek_2nd_token (parser)->location;
@@ -17728,16 +17728,16 @@ c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
 		}
 	    }
 	}
-      if (if_modifier != ERROR_MARK)
+      만약 (if_modifier != ERROR_MARK)
 	{
-	  if (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
+	  만약 (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
 	      c_parser_consume_token (parser);
 	      c_parser_consume_token (parser);
 	    }
-	  else
+	  아니면
 	    {
-	      if (n > 2)
+	      만약 (n > 2)
 		{
 		  location_t loc = c_parser_peek_2nd_token (parser)->location;
 		  error_at (loc, "expected %<:%>");
@@ -17754,10 +17754,10 @@ c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
   t = c_fully_fold (t, false, NULL);
   parens.skip_until_found_close (parser);
 
-  for (c = list; c ; c = OMP_CLAUSE_CHAIN (c))
-    if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IF)
+  위해 (c = list; c ; c = OMP_CLAUSE_CHAIN (c))
+    만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IF)
       {
-	if (if_modifier != ERROR_MARK
+	만약 (if_modifier != ERROR_MARK
 	    && OMP_CLAUSE_IF_MODIFIER (c) == if_modifier)
 	  {
 	    const char *p = NULL;
@@ -17777,22 +17777,22 @@ c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
 	      }
 	    error_at (location, "too many %<if%> clauses with %qs modifier",
 		      p);
-	    return list;
+	    반환 list;
 	  }
-	else if (OMP_CLAUSE_IF_MODIFIER (c) == if_modifier)
+	아니면 만약 (OMP_CLAUSE_IF_MODIFIER (c) == if_modifier)
 	  {
-	    if (!is_omp)
+	    만약 (!is_omp)
 	      error_at (location, "too many %<if%> clauses");
-	    else
+	    아니면
 	      error_at (location, "too many %<if%> clauses without modifier");
-	    return list;
+	    반환 list;
 	  }
-	else if (if_modifier == ERROR_MARK
+	아니면 만약 (if_modifier == ERROR_MARK
 		 || OMP_CLAUSE_IF_MODIFIER (c) == ERROR_MARK)
 	  {
 	    error_at (location, "if any %<if%> clause has modifier, then all "
 				"%<if%> clauses have to use modifier");
-	    return list;
+	    반환 list;
 	  }
       }
 
@@ -17800,7 +17800,7 @@ c_parser_omp_clause_if (c_parser *parser, tree list, bool is_omp)
   OMP_CLAUSE_IF_MODIFIER (c) = if_modifier;
   OMP_CLAUSE_IF_EXPR (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 2.5:
@@ -17815,15 +17815,15 @@ c_parser_omp_clause_lastprivate (c_parser *parser, tree list)
   /* The clauses location.  */
   location_t loc = c_parser_peek_token (parser)->location;
 
-  if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+  만약 (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
     {
       bool conditional = false;
-      if (c_parser_next_token_is (parser, CPP_NAME)
+      만약 (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	{
 	  const char *p
 	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	  if (strcmp (p, "conditional") == 0)
+	  만약 (strcmp (p, "conditional") == 0)
 	    {
 	      conditional = true;
 	      c_parser_consume_token (parser);
@@ -17833,12 +17833,12 @@ c_parser_omp_clause_lastprivate (c_parser *parser, tree list)
       tree nlist = c_parser_omp_variable_list (parser, loc,
 					       OMP_CLAUSE_LASTPRIVATE, list);
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, "expected %<)%>");
-      if (conditional)
-	for (tree c = nlist; c != list; c = OMP_CLAUSE_CHAIN (c))
+      만약 (conditional)
+	위해 (tree c = nlist; c != list; c = OMP_CLAUSE_CHAIN (c))
 	  OMP_CLAUSE_LASTPRIVATE_CONDITIONAL (c) = 1;
-      return nlist;
+      반환 nlist;
     }
-  return list;
+  반환 list;
 }
 
 /* OpenMP 3.1:
@@ -17856,7 +17856,7 @@ c_parser_omp_clause_mergeable (c_parser *parser ATTRIBUTE_UNUSED, tree list)
 			OMP_CLAUSE_MERGEABLE);
   OMP_CLAUSE_CHAIN (c) = list;
 
-  return c;
+  반환 c;
 }
 
 /* OpenMP 2.5:
@@ -17872,7 +17872,7 @@ c_parser_omp_clause_nowait (c_parser *parser ATTRIBUTE_UNUSED, tree list)
 
   c = build_omp_clause (loc, OMP_CLAUSE_NOWAIT);
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 2.5:
@@ -17883,7 +17883,7 @@ c_parser_omp_clause_num_threads (c_parser *parser, tree list)
 {
   location_t num_threads_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       location_t expr_loc = c_parser_peek_token (parser)->location;
       c_expr expr = c_parser_expr_no_commas (parser, NULL);
@@ -17893,17 +17893,17 @@ c_parser_omp_clause_num_threads (c_parser *parser, tree list)
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
-	  return list;
+	  반환 list;
 	}
 
       /* Attempt to statically determine when the number isn't positive.  */
       c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, t,
 		       build_int_cst (TREE_TYPE (t), 0));
       protected_set_expr_location (c, expr_loc);
-      if (c == boolean_true_node)
+      만약 (c == boolean_true_node)
 	{
 	  warning_at (expr_loc, OPT_Wopenmp,
 		      "%<num_threads%> value must be positive");
@@ -17918,7 +17918,7 @@ c_parser_omp_clause_num_threads (c_parser *parser, tree list)
       list = c;
     }
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 4.5:
@@ -17932,10 +17932,10 @@ c_parser_omp_clause_num_tasks (c_parser *parser, tree list)
 {
   location_t num_tasks_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       bool strict = false;
-      if (c_parser_next_token_is (parser, CPP_NAME)
+      만약 (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_COLON
 	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
 		     "strict") == 0)
@@ -17953,18 +17953,18 @@ c_parser_omp_clause_num_tasks (c_parser *parser, tree list)
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
-	  return list;
+	  반환 list;
 	}
 
       /* Attempt to statically determine when the number isn't positive.  */
       c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, t,
 			   build_int_cst (TREE_TYPE (t), 0));
-      if (CAN_HAVE_LOCATION_P (c))
+      만약 (CAN_HAVE_LOCATION_P (c))
 	SET_EXPR_LOCATION (c, expr_loc);
-      if (c == boolean_true_node)
+      만약 (c == boolean_true_node)
 	{
 	  warning_at (expr_loc, OPT_Wopenmp,
 		      "%<num_tasks%> value must be positive");
@@ -17980,7 +17980,7 @@ c_parser_omp_clause_num_tasks (c_parser *parser, tree list)
       list = c;
     }
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 4.5:
@@ -17994,10 +17994,10 @@ c_parser_omp_clause_grainsize (c_parser *parser, tree list)
 {
   location_t grainsize_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       bool strict = false;
-      if (c_parser_next_token_is (parser, CPP_NAME)
+      만약 (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_COLON
 	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
 		     "strict") == 0)
@@ -18015,18 +18015,18 @@ c_parser_omp_clause_grainsize (c_parser *parser, tree list)
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
-	  return list;
+	  반환 list;
 	}
 
       /* Attempt to statically determine when the number isn't positive.  */
       c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, t,
 			   build_int_cst (TREE_TYPE (t), 0));
-      if (CAN_HAVE_LOCATION_P (c))
+      만약 (CAN_HAVE_LOCATION_P (c))
 	SET_EXPR_LOCATION (c, expr_loc);
-      if (c == boolean_true_node)
+      만약 (c == boolean_true_node)
 	{
 	  warning_at (expr_loc, OPT_Wopenmp,
 		      "%<grainsize%> value must be positive");
@@ -18042,7 +18042,7 @@ c_parser_omp_clause_grainsize (c_parser *parser, tree list)
       list = c;
     }
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 4.5:
@@ -18053,7 +18053,7 @@ c_parser_omp_clause_priority (c_parser *parser, tree list)
 {
   location_t priority_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       location_t expr_loc = c_parser_peek_token (parser)->location;
       c_expr expr = c_parser_expr_no_commas (parser, NULL);
@@ -18063,19 +18063,19 @@ c_parser_omp_clause_priority (c_parser *parser, tree list)
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
-	  return list;
+	  반환 list;
 	}
 
       /* Attempt to statically determine when the number isn't
 	 non-negative.  */
       c = fold_build2_loc (expr_loc, LT_EXPR, boolean_type_node, t,
 			   build_int_cst (TREE_TYPE (t), 0));
-      if (CAN_HAVE_LOCATION_P (c))
+      만약 (CAN_HAVE_LOCATION_P (c))
 	SET_EXPR_LOCATION (c, expr_loc);
-      if (c == boolean_true_node)
+      만약 (c == boolean_true_node)
 	{
 	  warning_at (expr_loc, OPT_Wopenmp,
 		      "%<priority%> value must be non-negative");
@@ -18090,7 +18090,7 @@ c_parser_omp_clause_priority (c_parser *parser, tree list)
       list = c;
     }
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 4.5:
@@ -18101,20 +18101,20 @@ c_parser_omp_clause_hint (c_parser *parser, tree list)
 {
   location_t hint_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       location_t expr_loc = c_parser_peek_token (parser)->location;
       c_expr expr = c_parser_expr_no_commas (parser, NULL);
       expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
       tree c, t = expr.value;
       t = c_fully_fold (t, false, NULL);
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t))
 	  || TREE_CODE (t) != INTEGER_CST
 	  || tree_int_cst_sgn (t) == -1)
 	{
 	  c_parser_error (parser, "expected constant integer expression "
 				  "with valid sync-hint value");
-	  return list;
+	  반환 list;
 	}
       parens.skip_until_found_close (parser);
       check_no_duplicate_clause (list, OMP_CLAUSE_HINT, "hint");
@@ -18125,7 +18125,7 @@ c_parser_omp_clause_hint (c_parser *parser, tree list)
       list = c;
     }
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 5.1:
@@ -18136,17 +18136,17 @@ c_parser_omp_clause_filter (c_parser *parser, tree list)
 {
   location_t hint_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       location_t expr_loc = c_parser_peek_token (parser)->location;
       c_expr expr = c_parser_expr_no_commas (parser, NULL);
       expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
       tree c, t = expr.value;
       t = c_fully_fold (t, false, NULL);
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
-	  return list;
+	  반환 list;
 	}
       parens.skip_until_found_close (parser);
       check_no_duplicate_clause (list, OMP_CLAUSE_FILTER, "filter");
@@ -18157,7 +18157,7 @@ c_parser_omp_clause_filter (c_parser *parser, tree list)
       list = c;
     }
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 4.5:
@@ -18177,11 +18177,11 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
     = OMP_CLAUSE_DEFAULTMAP_CATEGORY_UNSPECIFIED;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
-  if (c_parser_next_token_is_keyword (parser, RID_DEFAULT))
+  만약 (!parens.require_open (parser))
+    반환 list;
+  만약 (c_parser_next_token_is_keyword (parser, RID_DEFAULT))
     p = "default";
-  else if (!c_parser_next_token_is (parser, CPP_NAME))
+  아니면 만약 (!c_parser_next_token_is (parser, CPP_NAME))
     {
     invalid_behavior:
       c_parser_error (parser, "expected %<alloc%>, %<to%>, %<from%>, "
@@ -18189,54 +18189,54 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
 			      "or %<default%>");
       goto out_err;
     }
-  else
+  아니면
     p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
   switch (p[0])
     {
     case 'a':
-      if (strcmp ("alloc", p) == 0)
+      만약 (strcmp ("alloc", p) == 0)
 	behavior = OMP_CLAUSE_DEFAULTMAP_ALLOC;
-      else
+      아니면
 	goto invalid_behavior;
       break;
 
     case 'd':
-      if (strcmp ("default", p) == 0)
+      만약 (strcmp ("default", p) == 0)
 	behavior = OMP_CLAUSE_DEFAULTMAP_DEFAULT;
-      else
+      아니면
 	goto invalid_behavior;
       break;
 
     case 'f':
-      if (strcmp ("firstprivate", p) == 0)
+      만약 (strcmp ("firstprivate", p) == 0)
 	behavior = OMP_CLAUSE_DEFAULTMAP_FIRSTPRIVATE;
-      else if (strcmp ("from", p) == 0)
+      아니면 만약 (strcmp ("from", p) == 0)
 	behavior = OMP_CLAUSE_DEFAULTMAP_FROM;
-      else
+      아니면
 	goto invalid_behavior;
       break;
 
     case 'n':
-      if (strcmp ("none", p) == 0)
+      만약 (strcmp ("none", p) == 0)
 	behavior = OMP_CLAUSE_DEFAULTMAP_NONE;
-      else
+      아니면
 	goto invalid_behavior;
       break;
 
     case 'p':
-      if (strcmp ("present", p) == 0)
+      만약 (strcmp ("present", p) == 0)
 	behavior = OMP_CLAUSE_DEFAULTMAP_PRESENT;
-      else
+      아니면
 	goto invalid_behavior;
       break;
 
     case 't':
-      if (strcmp ("tofrom", p) == 0)
+      만약 (strcmp ("tofrom", p) == 0)
 	behavior = OMP_CLAUSE_DEFAULTMAP_TOFROM;
-      else if (strcmp ("to", p) == 0)
+      아니면 만약 (strcmp ("to", p) == 0)
 	behavior = OMP_CLAUSE_DEFAULTMAP_TO;
-      else
+      아니면
 	goto invalid_behavior;
       break;
 
@@ -18245,11 +18245,11 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
     }
   c_parser_consume_token (parser);
 
-  if (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+  만약 (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
     {
-      if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+      만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	goto out_err;
-      if (!c_parser_next_token_is (parser, CPP_NAME))
+      만약 (!c_parser_next_token_is (parser, CPP_NAME))
 	{
 	invalid_category:
 	  c_parser_error (parser, "expected %<scalar%>, %<aggregate%>, "
@@ -18260,25 +18260,25 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
       switch (p[0])
 	{
 	case 'a':
-	  if (strcmp ("aggregate", p) == 0)
+	  만약 (strcmp ("aggregate", p) == 0)
 	    category = OMP_CLAUSE_DEFAULTMAP_CATEGORY_AGGREGATE;
-	  else if (strcmp ("all", p) == 0)
+	  아니면 만약 (strcmp ("all", p) == 0)
 	    category = OMP_CLAUSE_DEFAULTMAP_CATEGORY_ALL;
-	  else
+	  아니면
 	    goto invalid_category;
 	  break;
 
 	case 'p':
-	  if (strcmp ("pointer", p) == 0)
+	  만약 (strcmp ("pointer", p) == 0)
 	    category = OMP_CLAUSE_DEFAULTMAP_CATEGORY_POINTER;
-	  else
+	  아니면
 	    goto invalid_category;
 	  break;
 
 	case 's':
-	  if (strcmp ("scalar", p) == 0)
+	  만약 (strcmp ("scalar", p) == 0)
 	    category = OMP_CLAUSE_DEFAULTMAP_CATEGORY_SCALAR;
-	  else
+	  아니면
 	    goto invalid_category;
 	  break;
 
@@ -18290,8 +18290,8 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
     }
   parens.skip_until_found_close (parser);
 
-  for (c = list; c ; c = OMP_CLAUSE_CHAIN (c))
-    if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEFAULTMAP
+  위해 (c = list; c ; c = OMP_CLAUSE_CHAIN (c))
+    만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEFAULTMAP
 	&& (category == OMP_CLAUSE_DEFAULTMAP_CATEGORY_UNSPECIFIED
 	    || category == OMP_CLAUSE_DEFAULTMAP_CATEGORY_ALL
 	    || OMP_CLAUSE_DEFAULTMAP_CATEGORY (c) == category
@@ -18302,7 +18302,7 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
       {
 	enum omp_clause_defaultmap_kind cat = category;
 	location_t loc = OMP_CLAUSE_LOCATION (c);
-	if (cat == OMP_CLAUSE_DEFAULTMAP_CATEGORY_UNSPECIFIED
+	만약 (cat == OMP_CLAUSE_DEFAULTMAP_CATEGORY_UNSPECIFIED
 	    || (cat == OMP_CLAUSE_DEFAULTMAP_CATEGORY_ALL
 		&& (OMP_CLAUSE_DEFAULTMAP_CATEGORY (c)
 		    != OMP_CLAUSE_DEFAULTMAP_CATEGORY_UNSPECIFIED)))
@@ -18328,10 +18328,10 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
 	  default:
 	    gcc_unreachable ();
 	  }
-	if (p)
+	만약 (p)
 	  error_at (loc, "too many %<defaultmap%> clauses with %qs category",
 		    p);
-	else
+	아니면
 	  error_at (loc, "too many %<defaultmap%> clauses with unspecified "
 			 "category");
 	break;
@@ -18340,11 +18340,11 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
   c = build_omp_clause (loc, OMP_CLAUSE_DEFAULTMAP);
   OMP_CLAUSE_DEFAULTMAP_SET_KIND (c, behavior, category);
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 
  out_err:
   parens.skip_until_found_close (parser);
-  return list;
+  반환 list;
 }
 
 /* OpenACC 2.0:
@@ -18356,7 +18356,7 @@ c_parser_omp_clause_defaultmap (c_parser *parser, tree list)
 static tree
 c_parser_omp_clause_use_device_ptr (c_parser *parser, tree list)
 {
-  return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_USE_DEVICE_PTR,
+  반환 c_parser_omp_var_list_parens (parser, OMP_CLAUSE_USE_DEVICE_PTR,
 				       list);
 }
 
@@ -18366,7 +18366,7 @@ c_parser_omp_clause_use_device_ptr (c_parser *parser, tree list)
 static tree
 c_parser_omp_clause_use_device_addr (c_parser *parser, tree list)
 {
-  return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_USE_DEVICE_ADDR,
+  반환 c_parser_omp_var_list_parens (parser, OMP_CLAUSE_USE_DEVICE_ADDR,
 				       list);
 }
 
@@ -18376,7 +18376,7 @@ c_parser_omp_clause_use_device_addr (c_parser *parser, tree list)
 static tree
 c_parser_omp_clause_has_device_addr (c_parser *parser, tree list)
 {
-  return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_HAS_DEVICE_ADDR,
+  반환 c_parser_omp_var_list_parens (parser, OMP_CLAUSE_HAS_DEVICE_ADDR,
 				       list);
 }
 
@@ -18386,7 +18386,7 @@ c_parser_omp_clause_has_device_addr (c_parser *parser, tree list)
 static tree
 c_parser_omp_clause_is_device_ptr (c_parser *parser, tree list)
 {
-  return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_IS_DEVICE_PTR, list);
+  반환 c_parser_omp_var_list_parens (parser, OMP_CLAUSE_IS_DEVICE_PTR, list);
 }
 
 /* OpenACC:
@@ -18401,8 +18401,8 @@ c_parser_oacc_single_int_clause (c_parser *parser, omp_clause_code code,
   location_t loc = c_parser_peek_token (parser)->location;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
   location_t expr_loc = c_parser_peek_token (parser)->location;
   c_expr expr = c_parser_expression (parser);
@@ -18412,20 +18412,20 @@ c_parser_oacc_single_int_clause (c_parser *parser, omp_clause_code code,
 
   parens.skip_until_found_close (parser);
 
-  if (t == error_mark_node)
-    return list;
-  else if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+  만약 (t == error_mark_node)
+    반환 list;
+  아니면 만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
     {
       error_at (expr_loc, "%qs expression must be integral",
 		omp_clause_code_name[code]);
-      return list;
+      반환 list;
     }
 
   /* Attempt to statically determine when the number isn't positive.  */
   c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, t,
 		       build_int_cst (TREE_TYPE (t), 0));
   protected_set_expr_location (c, expr_loc);
-  if (c == boolean_true_node)
+  만약 (c == boolean_true_node)
     {
       warning_at (expr_loc, 0,
 		  "%qs value must be positive",
@@ -18438,7 +18438,7 @@ c_parser_oacc_single_int_clause (c_parser *parser, omp_clause_code code,
   c = build_omp_clause (loc, code);
   OMP_CLAUSE_OPERAND (c, 0) = t;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenACC:
@@ -18466,36 +18466,36 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
   const char *id = "num";
   tree ops[2] = { NULL_TREE, NULL_TREE }, c;
 
-  if (kind == OMP_CLAUSE_VECTOR)
+  만약 (kind == OMP_CLAUSE_VECTOR)
     id = "length";
 
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       c_parser_consume_token (parser);
 
       do
 	{
 	  c_token *next = c_parser_peek_token (parser);
-	  int idx = 0;
+	  정수 idx = 0;
 
 	  /* Gang static argument.  */
-	  if (kind == OMP_CLAUSE_GANG
+	  만약 (kind == OMP_CLAUSE_GANG
 	      && c_parser_next_token_is_keyword (parser, RID_STATIC))
 	    {
 	      c_parser_consume_token (parser);
 
-	      if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	      만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 		goto cleanup_error;
 
 	      idx = 1;
-	      if (ops[idx] != NULL_TREE)
+	      만약 (ops[idx] != NULL_TREE)
 		{
 		  c_parser_error (parser, "too many %<static%> arguments");
 		  goto cleanup_error;
 		}
 
 	      /* Check for the '*' argument.  */
-	      if (c_parser_next_token_is (parser, CPP_MULT)
+	      만약 (c_parser_next_token_is (parser, CPP_MULT)
 		  && (c_parser_peek_2nd_token (parser)->type == CPP_COMMA
 		      || c_parser_peek_2nd_token (parser)->type
 		         == CPP_CLOSE_PAREN))
@@ -18503,17 +18503,17 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 		  c_parser_consume_token (parser);
 		  ops[idx] = integer_minus_one_node;
 
-		  if (c_parser_next_token_is (parser, CPP_COMMA))
+		  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 		    {
 		      c_parser_consume_token (parser);
 		      continue;
 		    }
-		  else
+		  아니면
 		    break;
 		}
 	    }
 	  /* Worker num: argument and vector length: arguments.  */
-	  else if (c_parser_next_token_is (parser, CPP_NAME)
+	  아니면 만약 (c_parser_next_token_is (parser, CPP_NAME)
 		   && strcmp (id, IDENTIFIER_POINTER (next->value)) == 0
 		   && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
@@ -18522,7 +18522,7 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 	    }
 
 	  /* Now collect the actual argument.  */
-	  if (ops[idx] != NULL_TREE)
+	  만약 (ops[idx] != NULL_TREE)
 	    {
 	      c_parser_error (parser, "unexpected argument");
 	      goto cleanup_error;
@@ -18532,7 +18532,7 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 	  c_expr cexpr = c_parser_expr_no_commas (parser, NULL);
 	  cexpr = convert_lvalue_to_rvalue (expr_loc, cexpr, false, true);
 	  tree expr = cexpr.value;
-	  if (expr == error_mark_node)
+	  만약 (expr == error_mark_node)
 	    goto cleanup_error;
 
 	  expr = c_fully_fold (expr, false, NULL);
@@ -18540,15 +18540,15 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 	  /* Attempt to statically determine when the number isn't a
 	     positive integer.  */
 
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (expr)))
+	  만약 (!INTEGRAL_TYPE_P (TREE_TYPE (expr)))
 	    {
 	      c_parser_error (parser, "expected integer expression");
-	      return list;
+	      반환 list;
 	    }
 
 	  tree c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, expr,
 				    build_int_cst (TREE_TYPE (expr), 0));
-	  if (c == boolean_true_node)
+	  만약 (c == boolean_true_node)
 	    {
 	      warning_at (loc, 0,
 			  "%qs value must be positive", str);
@@ -18557,7 +18557,7 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 
 	  ops[idx] = expr;
 
-	  if (kind == OMP_CLAUSE_GANG
+	  만약 (kind == OMP_CLAUSE_GANG
 	      && c_parser_next_token_is (parser, CPP_COMMA))
 	    {
 	      c_parser_consume_token (parser);
@@ -18565,9 +18565,9 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 	    }
 	  break;
 	}
-      while (1);
+      동안 (1);
 
-      if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+      만약 (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
 	goto cleanup_error;
     }
 
@@ -18575,17 +18575,17 @@ c_parser_oacc_shape_clause (c_parser *parser, location_t loc,
 
   c = build_omp_clause (loc, kind);
 
-  if (ops[1])
+  만약 (ops[1])
     OMP_CLAUSE_OPERAND (c, 1) = ops[1];
 
   OMP_CLAUSE_OPERAND (c, 0) = ops[0];
   OMP_CLAUSE_CHAIN (c) = list;
 
-  return c;
+  반환 c;
 
  cleanup_error:
   c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, 0);
-  return list;
+  반환 list;
 }
 
 /* OpenACC 2.5:
@@ -18604,7 +18604,7 @@ c_parser_oacc_simple_clause (location_t loc, enum omp_clause_code code,
   tree c = build_omp_clause (loc, code);
   OMP_CLAUSE_CHAIN (c) = list;
 
-  return c;
+  반환 c;
 }
 
 /* OpenACC:
@@ -18618,18 +18618,18 @@ c_parser_oacc_clause_async (c_parser *parser, tree list)
 
   t = build_int_cst (integer_type_node, GOMP_ASYNC_NOVAL);
 
-  if (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
+  만약 (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
     {
       c_parser_consume_token (parser);
 
       t = c_parser_expr_no_commas (parser, NULL).value;
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
 	c_parser_error (parser, "expected integer expression");
-      else if (t == error_mark_node
+      아니면 만약 (t == error_mark_node
 	  || !c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	return list;
+	반환 list;
     }
-  else
+  아니면
     t = c_fully_fold (t, false, NULL);
 
   check_no_duplicate_clause (list, OMP_CLAUSE_ASYNC, "async");
@@ -18639,7 +18639,7 @@ c_parser_oacc_clause_async (c_parser *parser, tree list)
   OMP_CLAUSE_CHAIN (c) = list;
   list = c;
 
-  return list;
+  반환 list;
 }
 
 /* OpenACC 2.0:
@@ -18656,38 +18656,38 @@ c_parser_oacc_clause_tile (c_parser *parser, tree list)
   check_no_duplicate_clause (list, OMP_CLAUSE_COLLAPSE, "collapse");
 
   loc = c_parser_peek_token (parser)->location;
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return list;
+  만약 (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    반환 list;
 
   do
     {
-      if (tile && !c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
-	return list;
+      만약 (tile && !c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+	반환 list;
 
-      if (c_parser_next_token_is (parser, CPP_MULT)
+      만약 (c_parser_next_token_is (parser, CPP_MULT)
 	  && (c_parser_peek_2nd_token (parser)->type == CPP_COMMA
 	      || c_parser_peek_2nd_token (parser)->type == CPP_CLOSE_PAREN))
 	{
 	  c_parser_consume_token (parser);
 	  expr = integer_zero_node;
 	}
-      else
+      아니면
 	{
 	  location_t expr_loc = c_parser_peek_token (parser)->location;
 	  c_expr cexpr = c_parser_expr_no_commas (parser, NULL);
 	  cexpr = convert_lvalue_to_rvalue (expr_loc, cexpr, false, true);
 	  expr = cexpr.value;
 
-	  if (expr == error_mark_node)
+	  만약 (expr == error_mark_node)
 	    {
 	      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					 "expected %<)%>");
-	      return list;
+	      반환 list;
 	    }
 
 	  expr = c_fully_fold (expr, false, NULL);
 
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (expr))
+	  만약 (!INTEGRAL_TYPE_P (TREE_TYPE (expr))
 	      || !tree_fits_shwi_p (expr)
 	      || tree_to_shwi (expr) <= 0)
 	    {
@@ -18699,7 +18699,7 @@ c_parser_oacc_clause_tile (c_parser *parser, tree list)
 
       tile = tree_cons (NULL_TREE, expr, tile);
     }
-  while (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN));
+  동안 (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN));
 
   /* Consume the trailing ')'.  */
   c_parser_consume_token (parser);
@@ -18708,7 +18708,7 @@ c_parser_oacc_clause_tile (c_parser *parser, tree list)
   tile = nreverse (tile);
   OMP_CLAUSE_TILE_LIST (c) = tile;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenACC:
@@ -18719,9 +18719,9 @@ c_parser_oacc_clause_wait (c_parser *parser, tree list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
 
-  if (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
+  만약 (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
     list = c_parser_oacc_wait_list (parser, clause_loc, list);
-  else
+  아니면
     {
       tree c = build_omp_clause (clause_loc, OMP_CLAUSE_WAIT);
 
@@ -18730,7 +18730,7 @@ c_parser_oacc_clause_wait (c_parser *parser, tree list)
       list = c;
     }
 
-  return list;
+  반환 list;
 }
 
 /* OpenACC 2.7:
@@ -18741,7 +18741,7 @@ c_parser_oacc_compute_clause_self (c_parser *parser, tree list)
 {
   tree t;
   location_t location = c_parser_peek_token (parser)->location;
-  if (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
+  만약 (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
     {
       matching_parens parens;
       parens.consume_open (parser);
@@ -18753,20 +18753,20 @@ c_parser_oacc_compute_clause_self (c_parser *parser, tree list)
       t = c_fully_fold (t, false, NULL);
       parens.skip_until_found_close (parser);
     }
-  else
+  아니면
     t = truthvalue_true_node;
 
-  for (tree c = list; c; c = OMP_CLAUSE_CHAIN (c))
-    if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SELF)
+  위해 (tree c = list; c; c = OMP_CLAUSE_CHAIN (c))
+    만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_SELF)
       {
 	error_at (location, "too many %<self%> clauses");
-	return list;
+	반환 list;
       }
 
   tree c = build_omp_clause (location, OMP_CLAUSE_SELF);
   OMP_CLAUSE_SELF_EXPR (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 5.0:
@@ -18789,17 +18789,17 @@ c_parser_omp_clause_order (c_parser *parser, tree list)
   bool reproducible = false;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
-  if (c_parser_next_token_is (parser, CPP_NAME)
+  만약 (!parens.require_open (parser))
+    반환 list;
+  만약 (c_parser_next_token_is (parser, CPP_NAME)
       && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
     {
       p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "unconstrained") == 0)
+      만약 (strcmp (p, "unconstrained") == 0)
 	unconstrained = true;
-      else if (strcmp (p, "reproducible") == 0)
+      아니면 만약 (strcmp (p, "reproducible") == 0)
 	reproducible = true;
-      else
+      아니면
 	{
 	  c_parser_error (parser, "expected %<reproducible%> or "
 				  "%<unconstrained%>");
@@ -18808,13 +18808,13 @@ c_parser_omp_clause_order (c_parser *parser, tree list)
       c_parser_consume_token (parser);
       c_parser_consume_token (parser);
     }
-  if (!c_parser_next_token_is (parser, CPP_NAME))
+  만약 (!c_parser_next_token_is (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected %<concurrent%>");
       goto out_err;
     }
   p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-  if (strcmp (p, "concurrent") != 0)
+  만약 (strcmp (p, "concurrent") != 0)
     {
       c_parser_error (parser, "expected %<concurrent%>");
       goto out_err;
@@ -18826,11 +18826,11 @@ c_parser_omp_clause_order (c_parser *parser, tree list)
   OMP_CLAUSE_ORDER_UNCONSTRAINED (c) = unconstrained;
   OMP_CLAUSE_ORDER_REPRODUCIBLE (c) = reproducible;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 
  out_err:
   parens.skip_until_found_close (parser);
-  return list;
+  반환 list;
 }
 
 
@@ -18846,22 +18846,22 @@ c_parser_omp_clause_bind (c_parser *parser, tree list)
   enum omp_clause_bind_kind kind = OMP_CLAUSE_BIND_THREAD;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
-  if (!c_parser_next_token_is (parser, CPP_NAME))
+  만약 (!parens.require_open (parser))
+    반환 list;
+  만약 (!c_parser_next_token_is (parser, CPP_NAME))
     {
      invalid:
       c_parser_error (parser,
 		      "expected %<teams%>, %<parallel%> or %<thread%>");
       parens.skip_until_found_close (parser);
-      return list;
+      반환 list;
     }
   p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-  if (strcmp (p, "teams") == 0)
+  만약 (strcmp (p, "teams") == 0)
     kind = OMP_CLAUSE_BIND_TEAMS;
-  else if (strcmp (p, "parallel") == 0)
+  아니면 만약 (strcmp (p, "parallel") == 0)
     kind = OMP_CLAUSE_BIND_PARALLEL;
-  else if (strcmp (p, "thread") != 0)
+  아니면 만약 (strcmp (p, "thread") != 0)
     goto invalid;
   c_parser_consume_token (parser);
   parens.skip_until_found_close (parser);
@@ -18869,7 +18869,7 @@ c_parser_omp_clause_bind (c_parser *parser, tree list)
   c = build_omp_clause (loc, OMP_CLAUSE_BIND);
   OMP_CLAUSE_BIND_KIND (c) = kind;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 
@@ -18887,33 +18887,33 @@ c_parser_omp_clause_ordered (c_parser *parser, tree list)
   tree c, num = NULL_TREE;
   HOST_WIDE_INT n;
   location_t loc = c_parser_peek_token (parser)->location;
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       matching_parens parens;
       parens.consume_open (parser);
       num = c_parser_expr_no_commas (parser, NULL).value;
       parens.skip_until_found_close (parser);
     }
-  if (num == error_mark_node)
-    return list;
-  if (num)
+  만약 (num == error_mark_node)
+    반환 list;
+  만약 (num)
     {
       mark_exp_read (num);
       num = c_fully_fold (num, false, NULL);
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (num))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (num))
 	  || !tree_fits_shwi_p (num)
 	  || (n = tree_to_shwi (num)) <= 0
-	  || (int) n != n)
+	  || (정수) n != n)
 	{
 	  error_at (loc, "ordered argument needs positive "
 			 "constant integer expression");
-	  return list;
+	  반환 list;
 	}
     }
   c = build_omp_clause (loc, OMP_CLAUSE_ORDERED);
   OMP_CLAUSE_ORDERED_EXPR (c) = num;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 2.5:
@@ -18922,7 +18922,7 @@ c_parser_omp_clause_ordered (c_parser *parser, tree list)
 static tree
 c_parser_omp_clause_private (c_parser *parser, tree list)
 {
-  return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_PRIVATE, list);
+  반환 c_parser_omp_var_list_parens (parser, OMP_CLAUSE_PRIVATE, list);
 }
 
 /* OpenMP 2.5:
@@ -18953,31 +18953,31 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       bool task = false;
       bool inscan = false;
       enum tree_code code = ERROR_MARK;
       tree reduc_id = NULL_TREE;
 
-      if (kind == OMP_CLAUSE_REDUCTION && is_omp)
+      만약 (kind == OMP_CLAUSE_REDUCTION && is_omp)
 	{
-	  if (c_parser_next_token_is_keyword (parser, RID_DEFAULT)
+	  만약 (c_parser_next_token_is_keyword (parser, RID_DEFAULT)
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COMMA)
 	    {
 	      c_parser_consume_token (parser);
 	      c_parser_consume_token (parser);
 	    }
-	  else if (c_parser_next_token_is (parser, CPP_NAME)
+	  아니면 만약 (c_parser_next_token_is (parser, CPP_NAME)
 		   && c_parser_peek_2nd_token (parser)->type == CPP_COMMA)
 	    {
 	      const char *p
 		= IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	      if (strcmp (p, "task") == 0)
+	      만약 (strcmp (p, "task") == 0)
 		task = true;
-	      else if (strcmp (p, "inscan") == 0)
+	      아니면 만약 (strcmp (p, "inscan") == 0)
 		inscan = true;
-	      if (task || inscan)
+	      만약 (task || inscan)
 		{
 		  c_parser_consume_token (parser);
 		  c_parser_consume_token (parser);
@@ -18994,7 +18994,7 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
 	  code = MULT_EXPR;
 	  break;
 	case CPP_MINUS:
-	  if (is_omp)
+	  만약 (is_omp)
 	    {
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      gcc_rich_location richloc (loc);
@@ -19024,12 +19024,12 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
 	  {
 	    const char *p
 	      = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	    if (strcmp (p, "min") == 0)
+	    만약 (strcmp (p, "min") == 0)
 	      {
 		code = MIN_EXPR;
 		break;
 	      }
-	    if (strcmp (p, "max") == 0)
+	    만약 (strcmp (p, "max") == 0)
 	      {
 		code = MAX_EXPR;
 		break;
@@ -19042,46 +19042,46 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
 			  "expected %<+%>, %<*%>, %<-%>, %<&%>, "
 			  "%<^%>, %<|%>, %<&&%>, %<||%> or identifier");
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, 0);
-	  return list;
+	  반환 list;
 	}
       c_parser_consume_token (parser);
       reduc_id = c_omp_reduction_id (code, reduc_id);
-      if (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+      만약 (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	{
 	  tree nl, c;
 
 	  nl = c_parser_omp_variable_list (parser, clause_loc, kind, list);
-	  for (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+	  위해 (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
 	    {
 	      tree d = OMP_CLAUSE_DECL (c), type;
-	      if (TREE_CODE (d) != OMP_ARRAY_SECTION)
+	      만약 (TREE_CODE (d) != OMP_ARRAY_SECTION)
 		type = TREE_TYPE (d);
-	      else
+	      아니면
 		{
-		  int cnt = 0;
+		  정수 cnt = 0;
 		  tree t;
-		  for (t = d;
+		  위해 (t = d;
 		      TREE_CODE (t) == OMP_ARRAY_SECTION;
 		      t = TREE_OPERAND (t, 0))
 		    cnt++;
 		  type = TREE_TYPE (t);
-		  while (cnt > 0)
+		  동안 (cnt > 0)
 		    {
-		      if (TREE_CODE (type) != POINTER_TYPE
+		      만약 (TREE_CODE (type) != POINTER_TYPE
 			  && TREE_CODE (type) != ARRAY_TYPE)
 			break;
 		      type = TREE_TYPE (type);
 		      cnt--;
 		    }
 		}
-	      while (TREE_CODE (type) == ARRAY_TYPE)
+	      동안 (TREE_CODE (type) == ARRAY_TYPE)
 		type = TREE_TYPE (type);
 	      OMP_CLAUSE_REDUCTION_CODE (c) = code;
-	      if (task)
+	      만약 (task)
 		OMP_CLAUSE_REDUCTION_TASK (c) = 1;
-	      else if (inscan)
+	      아니면 만약 (inscan)
 		OMP_CLAUSE_REDUCTION_INSCAN (c) = 1;
-	      if (code == ERROR_MARK
+	      만약 (code == ERROR_MARK
 		  || !(INTEGRAL_TYPE_P (type)
 		       || SCALAR_FLOAT_TYPE_P (type)
 		       || TREE_CODE (type) == COMPLEX_TYPE))
@@ -19094,7 +19094,7 @@ c_parser_omp_clause_reduction (c_parser *parser, enum omp_clause_code kind,
 	}
       parens.skip_until_found_close (parser);
     }
-  return list;
+  반환 list;
 }
 
 /* OpenMP 2.5:
@@ -19118,45 +19118,45 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
 {
   tree c, t;
   location_t loc = c_parser_peek_token (parser)->location;
-  int modifiers = 0, nmodifiers = 0;
+  정수 modifiers = 0, nmodifiers = 0;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
   c = build_omp_clause (loc, OMP_CLAUSE_SCHEDULE);
 
   location_t comma = UNKNOWN_LOCATION;
-  while (c_parser_next_token_is (parser, CPP_NAME))
+  동안 (c_parser_next_token_is (parser, CPP_NAME))
     {
       tree kind = c_parser_peek_token (parser)->value;
       const char *p = IDENTIFIER_POINTER (kind);
-      if (strcmp ("simd", p) == 0)
+      만약 (strcmp ("simd", p) == 0)
 	OMP_CLAUSE_SCHEDULE_SIMD (c) = 1;
-      else if (strcmp ("monotonic", p) == 0)
+      아니면 만약 (strcmp ("monotonic", p) == 0)
 	modifiers |= OMP_CLAUSE_SCHEDULE_MONOTONIC;
-      else if (strcmp ("nonmonotonic", p) == 0)
+      아니면 만약 (strcmp ("nonmonotonic", p) == 0)
 	modifiers |= OMP_CLAUSE_SCHEDULE_NONMONOTONIC;
-      else
+      아니면
 	break;
       comma = UNKNOWN_LOCATION;
       c_parser_consume_token (parser);
-      if (nmodifiers++ == 0
+      만약 (nmodifiers++ == 0
 	  && c_parser_next_token_is (parser, CPP_COMMA))
 	{
 	  comma = c_parser_peek_token (parser)->location;
 	  c_parser_consume_token (parser);
 	}
-      else
+      아니면
 	{
 	  c_parser_require (parser, CPP_COLON, "expected %<:%>");
 	  break;
 	}
     }
-  if (comma != UNKNOWN_LOCATION)
+  만약 (comma != UNKNOWN_LOCATION)
     error_at (comma, "expected %<:%>");
 
-  if ((modifiers & (OMP_CLAUSE_SCHEDULE_MONOTONIC
+  만약 ((modifiers & (OMP_CLAUSE_SCHEDULE_MONOTONIC
 		    | OMP_CLAUSE_SCHEDULE_NONMONOTONIC))
       == (OMP_CLAUSE_SCHEDULE_MONOTONIC
 	  | OMP_CLAUSE_SCHEDULE_NONMONOTONIC))
@@ -19166,7 +19166,7 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
       modifiers = 0;
     }
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       tree kind = c_parser_peek_token (parser)->value;
       const char *p = IDENTIFIER_POINTER (kind);
@@ -19174,19 +19174,19 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
       switch (p[0])
 	{
 	case 'd':
-	  if (strcmp ("dynamic", p) != 0)
+	  만약 (strcmp ("dynamic", p) != 0)
 	    goto invalid_kind;
 	  OMP_CLAUSE_SCHEDULE_KIND (c) = OMP_CLAUSE_SCHEDULE_DYNAMIC;
 	  break;
 
         case 'g':
-	  if (strcmp ("guided", p) != 0)
+	  만약 (strcmp ("guided", p) != 0)
 	    goto invalid_kind;
 	  OMP_CLAUSE_SCHEDULE_KIND (c) = OMP_CLAUSE_SCHEDULE_GUIDED;
 	  break;
 
 	case 'r':
-	  if (strcmp ("runtime", p) != 0)
+	  만약 (strcmp ("runtime", p) != 0)
 	    goto invalid_kind;
 	  OMP_CLAUSE_SCHEDULE_KIND (c) = OMP_CLAUSE_SCHEDULE_RUNTIME;
 	  break;
@@ -19195,15 +19195,15 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
 	  goto invalid_kind;
 	}
     }
-  else if (c_parser_next_token_is_keyword (parser, RID_STATIC))
+  아니면 만약 (c_parser_next_token_is_keyword (parser, RID_STATIC))
     OMP_CLAUSE_SCHEDULE_KIND (c) = OMP_CLAUSE_SCHEDULE_STATIC;
-  else if (c_parser_next_token_is_keyword (parser, RID_AUTO))
+  아니면 만약 (c_parser_next_token_is_keyword (parser, RID_AUTO))
     OMP_CLAUSE_SCHEDULE_KIND (c) = OMP_CLAUSE_SCHEDULE_AUTO;
-  else
+  아니면
     goto invalid_kind;
 
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is (parser, CPP_COMMA))
+  만약 (c_parser_next_token_is (parser, CPP_COMMA))
     {
       location_t here;
       c_parser_consume_token (parser);
@@ -19214,14 +19214,14 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
       t = expr.value;
       t = c_fully_fold (t, false, NULL);
 
-      if (OMP_CLAUSE_SCHEDULE_KIND (c) == OMP_CLAUSE_SCHEDULE_RUNTIME)
+      만약 (OMP_CLAUSE_SCHEDULE_KIND (c) == OMP_CLAUSE_SCHEDULE_RUNTIME)
 	error_at (here, "schedule %<runtime%> does not take "
 		  "a %<chunk_size%> parameter");
-      else if (OMP_CLAUSE_SCHEDULE_KIND (c) == OMP_CLAUSE_SCHEDULE_AUTO)
+      아니면 만약 (OMP_CLAUSE_SCHEDULE_KIND (c) == OMP_CLAUSE_SCHEDULE_AUTO)
 	error_at (here,
 		  "schedule %<auto%> does not take "
 		  "a %<chunk_size%> parameter");
-      else if (TREE_CODE (TREE_TYPE (t)) == INTEGER_TYPE
+      아니면 만약 (TREE_CODE (TREE_TYPE (t)) == INTEGER_TYPE
 	       || TREE_CODE (TREE_TYPE (t)) == BITINT_TYPE)
 	{
 	  /* Attempt to statically determine when the number isn't
@@ -19229,7 +19229,7 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
 	  tree s = fold_build2_loc (loc, LE_EXPR, boolean_type_node, t,
 				    build_int_cst (TREE_TYPE (t), 0));
 	  protected_set_expr_location (s, loc);
-	  if (s == boolean_true_node)
+	  만약 (s == boolean_true_node)
 	    {
 	      warning_at (loc, OPT_Wopenmp,
 			  "chunk size value must be positive");
@@ -19237,12 +19237,12 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
 	    }
 	  OMP_CLAUSE_SCHEDULE_CHUNK_EXPR (c) = t;
 	}
-      else
+      아니면
 	c_parser_error (parser, "expected integer expression");
 
       parens.skip_until_found_close (parser);
     }
-  else
+  아니면
     c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 			       "expected %<,%> or %<)%>");
 
@@ -19252,12 +19252,12 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
 
   check_no_duplicate_clause (list, OMP_CLAUSE_SCHEDULE, "schedule");
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 
  invalid_kind:
   c_parser_error (parser, "invalid schedule kind");
   c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, 0);
-  return list;
+  반환 list;
 }
 
 /* OpenMP 2.5:
@@ -19266,7 +19266,7 @@ c_parser_omp_clause_schedule (c_parser *parser, tree list)
 static tree
 c_parser_omp_clause_shared (c_parser *parser, tree list)
 {
-  return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_SHARED, list);
+  반환 c_parser_omp_var_list_parens (parser, OMP_CLAUSE_SHARED, list);
 }
 
 /* OpenMP 3.0:
@@ -19284,7 +19284,7 @@ c_parser_omp_clause_untied (c_parser *parser ATTRIBUTE_UNUSED, tree list)
 			OMP_CLAUSE_UNTIED);
   OMP_CLAUSE_CHAIN (c) = list;
 
-  return c;
+  반환 c;
 }
 
 /* OpenMP 4.0:
@@ -19300,7 +19300,7 @@ c_parser_omp_clause_branch (c_parser *parser ATTRIBUTE_UNUSED,
   tree c = build_omp_clause (c_parser_peek_token (parser)->location, code);
   OMP_CLAUSE_CHAIN (c) = list;
 
-  return c;
+  반환 c;
 }
 
 /* OpenMP 4.0:
@@ -19316,7 +19316,7 @@ c_parser_omp_clause_cancelkind (c_parser *parser ATTRIBUTE_UNUSED,
   tree c = build_omp_clause (c_parser_peek_token (parser)->location, code);
   OMP_CLAUSE_CHAIN (c) = list;
 
-  return c;
+  반환 c;
 }
 
 /* OpenMP 4.5:
@@ -19329,7 +19329,7 @@ c_parser_omp_clause_nogroup (c_parser *parser ATTRIBUTE_UNUSED, tree list)
   tree c = build_omp_clause (c_parser_peek_token (parser)->location,
 			     OMP_CLAUSE_NOGROUP);
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 4.5:
@@ -19343,7 +19343,7 @@ c_parser_omp_clause_orderedkind (c_parser *parser ATTRIBUTE_UNUSED,
   check_no_duplicate_clause (list, code, omp_clause_code_name[code]);
   tree c = build_omp_clause (c_parser_peek_token (parser)->location, code);
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 4.0:
@@ -19357,7 +19357,7 @@ c_parser_omp_clause_num_teams (c_parser *parser, tree list)
 {
   location_t num_teams_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       location_t upper_loc = c_parser_peek_token (parser)->location;
       location_t lower_loc = UNKNOWN_LOCATION;
@@ -19366,7 +19366,7 @@ c_parser_omp_clause_num_teams (c_parser *parser, tree list)
       tree c, upper = expr.value, lower = NULL_TREE;
       upper = c_fully_fold (upper, false, NULL);
 
-      if (c_parser_next_token_is (parser, CPP_COLON))
+      만약 (c_parser_next_token_is (parser, CPP_COLON))
 	{
 	  c_parser_consume_token (parser);
 	  lower_loc = upper_loc;
@@ -19380,35 +19380,35 @@ c_parser_omp_clause_num_teams (c_parser *parser, tree list)
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (upper))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (upper))
 	  || (lower && !INTEGRAL_TYPE_P (TREE_TYPE (lower))))
 	{
 	  c_parser_error (parser, "expected integer expression");
-	  return list;
+	  반환 list;
 	}
 
       /* Attempt to statically determine when the number isn't positive.  */
       c = fold_build2_loc (upper_loc, LE_EXPR, boolean_type_node, upper,
 			   build_int_cst (TREE_TYPE (upper), 0));
       protected_set_expr_location (c, upper_loc);
-      if (c == boolean_true_node)
+      만약 (c == boolean_true_node)
 	{
 	  warning_at (upper_loc, OPT_Wopenmp,
 		      "%<num_teams%> value must be positive");
 	  upper = integer_one_node;
 	}
-      if (lower)
+      만약 (lower)
 	{
 	  c = fold_build2_loc (lower_loc, LE_EXPR, boolean_type_node, lower,
 			       build_int_cst (TREE_TYPE (lower), 0));
 	  protected_set_expr_location (c, lower_loc);
-	  if (c == boolean_true_node)
+	  만약 (c == boolean_true_node)
 	    {
 	      warning_at (lower_loc, OPT_Wopenmp,
 			  "%<num_teams%> value must be positive");
 	      lower = NULL_TREE;
 	    }
-	  else if (TREE_CODE (lower) == INTEGER_CST
+	  아니면 만약 (TREE_CODE (lower) == INTEGER_CST
 		   && TREE_CODE (upper) == INTEGER_CST
 		   && tree_int_cst_lt (upper, lower))
 	    {
@@ -19428,7 +19428,7 @@ c_parser_omp_clause_num_teams (c_parser *parser, tree list)
       list = c;
     }
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 4.0:
@@ -19439,7 +19439,7 @@ c_parser_omp_clause_thread_limit (c_parser *parser, tree list)
 {
   location_t num_thread_limit_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       location_t expr_loc = c_parser_peek_token (parser)->location;
       c_expr expr = c_parser_expr_no_commas (parser, NULL);
@@ -19449,17 +19449,17 @@ c_parser_omp_clause_thread_limit (c_parser *parser, tree list)
 
       parens.skip_until_found_close (parser);
 
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
 	{
 	  c_parser_error (parser, "expected integer expression");
-	  return list;
+	  반환 list;
 	}
 
       /* Attempt to statically determine when the number isn't positive.  */
       c = fold_build2_loc (expr_loc, LE_EXPR, boolean_type_node, t,
 			   build_int_cst (TREE_TYPE (t), 0));
       protected_set_expr_location (c, expr_loc);
-      if (c == boolean_true_node)
+      만약 (c == boolean_true_node)
 	{
 	  warning_at (expr_loc, OPT_Wopenmp,
 		      "%<thread_limit%> value must be positive");
@@ -19475,7 +19475,7 @@ c_parser_omp_clause_thread_limit (c_parser *parser, tree list)
       list = c;
     }
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 4.0:
@@ -19489,13 +19489,13 @@ c_parser_omp_clause_aligned (c_parser *parser, tree list)
   tree nl, c;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
   nl = c_parser_omp_variable_list (parser, clause_loc,
 				   OMP_CLAUSE_ALIGNED, list);
 
-  if (c_parser_next_token_is (parser, CPP_COLON))
+  만약 (c_parser_next_token_is (parser, CPP_COLON))
     {
       c_parser_consume_token (parser);
       location_t expr_loc = c_parser_peek_token (parser)->location;
@@ -19503,7 +19503,7 @@ c_parser_omp_clause_aligned (c_parser *parser, tree list)
       expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
       tree alignment = expr.value;
       alignment = c_fully_fold (alignment, false, NULL);
-      if (TREE_CODE (alignment) != INTEGER_CST
+      만약 (TREE_CODE (alignment) != INTEGER_CST
 	  || !INTEGRAL_TYPE_P (TREE_TYPE (alignment))
 	  || tree_int_cst_sgn (alignment) != 1)
 	{
@@ -19512,12 +19512,12 @@ c_parser_omp_clause_aligned (c_parser *parser, tree list)
 	  alignment = NULL_TREE;
 	}
 
-      for (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+      위해 (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
 	OMP_CLAUSE_ALIGNED_ALIGNMENT (c) = alignment;
     }
 
   parens.skip_until_found_close (parser);
-  return nl;
+  반환 nl;
 }
 
 /* OpenMP 5.0:
@@ -19541,31 +19541,31 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
   tree align = NULL_TREE;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  if ((c_parser_next_token_is_not (parser, CPP_NAME)
+  만약 ((c_parser_next_token_is_not (parser, CPP_NAME)
        && c_parser_next_token_is_not (parser, CPP_KEYWORD))
       || (c_parser_peek_2nd_token (parser)->type != CPP_COMMA
 	  && c_parser_peek_2nd_token (parser)->type != CPP_CLOSE_PAREN))
     {
       bool has_modifiers = false;
       tree orig_type = NULL_TREE;
-      if (c_parser_next_token_is (parser, CPP_NAME)
+      만약 (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN)
 	{
-	  unsigned int n = 3;
+	  unsigned 정수 n = 3;
 	  const char *p
 	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	  if ((strcmp (p, "allocator") == 0 || strcmp (p, "align") == 0)
+	  만약 ((strcmp (p, "allocator") == 0 || strcmp (p, "align") == 0)
 	      && c_parser_check_balanced_raw_token_sequence (parser, &n)
 	      && (c_parser_peek_nth_token_raw (parser, n)->type
 		  == CPP_CLOSE_PAREN))
 	    {
-	      if (c_parser_peek_nth_token_raw (parser, n + 1)->type
+	      만약 (c_parser_peek_nth_token_raw (parser, n + 1)->type
 		  == CPP_COLON)
 		has_modifiers = true;
-	      else if (c_parser_peek_nth_token_raw (parser, n + 1)->type
+	      아니면 만약 (c_parser_peek_nth_token_raw (parser, n + 1)->type
 		       == CPP_COMMA
 		       && (c_parser_peek_nth_token_raw (parser, n + 2)->type
 			   == CPP_NAME)
@@ -19575,7 +19575,7 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 		  c_token *tok = c_parser_peek_nth_token_raw (parser, n + 2);
 		  const char *q = IDENTIFIER_POINTER (tok->value);
 		  n += 4;
-		  if ((strcmp (q, "allocator") == 0
+		  만약 ((strcmp (q, "allocator") == 0
 		       || strcmp (q, "align") == 0)
 		      && c_parser_check_balanced_raw_token_sequence (parser,
 								     &n)
@@ -19586,7 +19586,7 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 		    has_modifiers = true;
 		}
 	    }
-	  if (has_modifiers)
+	  만약 (has_modifiers)
 	    {
 	      c_parser_consume_token (parser);
 	      matching_parens parens2;
@@ -19594,9 +19594,9 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 	      location_t expr_loc = c_parser_peek_token (parser)->location;
 	      c_expr expr = c_parser_expr_no_commas (parser, NULL);
 	      expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-	      if (expr.value == error_mark_node)
+	      만약 (expr.value == error_mark_node)
 		;
-	      else if (strcmp (p, "allocator") == 0)
+	      아니면 만약 (strcmp (p, "allocator") == 0)
 		{
 		  allocator = expr.value;
 		  allocator = c_fully_fold (allocator, false, NULL);
@@ -19604,43 +19604,43 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 			      ? expr.original_type : TREE_TYPE (allocator);
 		  orig_type = TYPE_MAIN_VARIANT (orig_type);
 		}
-	      else
+	      아니면
 		{
 		  align = expr.value;
 		  align = c_fully_fold (align, false, NULL);
 		}
 	      parens2.skip_until_found_close (parser);
-	      if (c_parser_next_token_is (parser, CPP_COMMA))
+	      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 		{
 		  c_parser_consume_token (parser);
 		  c_token *tok = c_parser_peek_token (parser);
 		  const char *q = "";
-		  if (c_parser_next_token_is (parser, CPP_NAME))
+		  만약 (c_parser_next_token_is (parser, CPP_NAME))
 		    q = IDENTIFIER_POINTER (tok->value);
-		  if (strcmp (q, "allocator") != 0 && strcmp (q, "align") != 0)
+		  만약 (strcmp (q, "allocator") != 0 && strcmp (q, "align") != 0)
 		    {
 		      c_parser_error (parser, "expected %<allocator%> or "
 					      "%<align%>");
 		      parens.skip_until_found_close (parser);
-		      return list;
+		      반환 list;
 		    }
-		  else if (strcmp (p, q) == 0)
+		  아니면 만약 (strcmp (p, q) == 0)
 		    {
 		      error_at (tok->location, "duplicate %qs modifier", p);
 		      parens.skip_until_found_close (parser);
-		      return list;
+		      반환 list;
 		    }
 		  c_parser_consume_token (parser);
-		  if (!parens2.require_open (parser))
+		  만약 (!parens2.require_open (parser))
 		    {
 		      parens.skip_until_found_close (parser);
-		      return list;
+		      반환 list;
 		    }
 		  expr_loc = c_parser_peek_token (parser)->location;
 		  expr = c_parser_expr_no_commas (parser, NULL);
 		  expr = convert_lvalue_to_rvalue (expr_loc, expr, false,
 						   true);
-		  if (strcmp (q, "allocator") == 0)
+		  만약 (strcmp (q, "allocator") == 0)
 		    {
 		      allocator = expr.value;
 		      allocator = c_fully_fold (allocator, false, NULL);
@@ -19648,7 +19648,7 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 				  ? expr.original_type : TREE_TYPE (allocator);
 		      orig_type = TYPE_MAIN_VARIANT (orig_type);
 		    }
-		  else
+		  아니면
 		    {
 		      align = expr.value;
 		      align = c_fully_fold (align, false, NULL);
@@ -19657,12 +19657,12 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 		}
 	    }
 	}
-      if (!has_modifiers)
+      만약 (!has_modifiers)
 	{
 	  location_t expr_loc = c_parser_peek_token (parser)->location;
 	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
 	  expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
-	  if (expr.value != error_mark_node)
+	  만약 (expr.value != error_mark_node)
 	    {
 	      allocator = expr.value;
 	      allocator = c_fully_fold (allocator, false, NULL);
@@ -19671,7 +19671,7 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 	      orig_type = TYPE_MAIN_VARIANT (orig_type);
 	    }
 	}
-      if (allocator
+      만약 (allocator
 	  && (!INTEGRAL_TYPE_P (TREE_TYPE (allocator))
 	      || TREE_CODE (orig_type) != ENUMERAL_TYPE
 	      || (TYPE_NAME (orig_type)
@@ -19683,7 +19683,7 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 				TREE_TYPE (allocator));
           allocator = NULL_TREE;
         }
-      if (align
+      만약 (align
 	  && (!INTEGRAL_TYPE_P (TREE_TYPE (align))
 	      || !tree_fits_uhwi_p (align)
 	      || !integer_pow2p (align)))
@@ -19693,25 +19693,25 @@ c_parser_omp_clause_allocate (c_parser *parser, tree list)
 				"power of two integer expression");
 	  align = NULL_TREE;
 	}
-      if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+      만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	{
 	  parens.skip_until_found_close (parser);
-	  return list;
+	  반환 list;
 	}
     }
 
   nl = c_parser_omp_variable_list (parser, clause_loc,
 				   OMP_CLAUSE_ALLOCATE, list);
 
-  if (allocator || align)
-    for (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  만약 (allocator || align)
+    위해 (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
       {
 	OMP_CLAUSE_ALLOCATE_ALLOCATOR (c) = allocator;
 	OMP_CLAUSE_ALLOCATE_ALIGN (c) = align;
       }
 
   parens.skip_until_found_close (parser);
-  return nl;
+  반환 nl;
 }
 
 /* OpenMP 5.0:
@@ -19743,8 +19743,8 @@ c_parser_omp_clause_uses_allocators (c_parser *parser, tree list)
   location_t clause_loc = c_parser_peek_token (parser)->location;
   tree nl = list;
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
 parse_next:
 
@@ -19753,21 +19753,21 @@ parse_next:
   tree memspace_expr = NULL_TREE;
   tree traits_var = NULL_TREE;
 
-  if (c_parser_next_token_is (parser, CPP_NAME)
+  만약 (c_parser_next_token_is (parser, CPP_NAME)
       && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN)
     {
-      unsigned int n = 3;
+      unsigned 정수 n = 3;
       const char *p
 	= IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if ((strcmp (p, "traits") == 0 || strcmp (p, "memspace") == 0)
+      만약 ((strcmp (p, "traits") == 0 || strcmp (p, "memspace") == 0)
 	  && c_parser_check_balanced_raw_token_sequence (parser, &n)
 	  && (c_parser_peek_nth_token_raw (parser, n)->type
 	      == CPP_CLOSE_PAREN))
 	{
-	  if (c_parser_peek_nth_token_raw (parser, n + 1)->type
+	  만약 (c_parser_peek_nth_token_raw (parser, n + 1)->type
 	      == CPP_COLON)
 	    has_modifiers = true;
-	  else if (c_parser_peek_nth_token_raw (parser, n + 1)->type
+	  아니면 만약 (c_parser_peek_nth_token_raw (parser, n + 1)->type
 		   == CPP_COMMA
 		   && (c_parser_peek_nth_token_raw (parser, n + 2)->type
 		       == CPP_NAME)
@@ -19777,16 +19777,16 @@ parse_next:
 	      c_token *tok = c_parser_peek_nth_token_raw (parser, n + 2);
 	      const char *q = IDENTIFIER_POINTER (tok->value);
 	      n += 4;
-	      if ((strcmp (q, "traits") == 0
+	      만약 ((strcmp (q, "traits") == 0
 		   || strcmp (q, "memspace") == 0)
 		  && c_parser_check_balanced_raw_token_sequence (parser, &n)
 		  && (c_parser_peek_nth_token_raw (parser, n)->type
 		      == CPP_CLOSE_PAREN))
 		{
-		  if (c_parser_peek_nth_token_raw (parser, n + 1)->type
+		  만약 (c_parser_peek_nth_token_raw (parser, n + 1)->type
 		      == CPP_COLON)
 		    has_modifiers = true;
-		  if ((c_parser_peek_nth_token_raw (parser, n + 1)->type
+		  만약 ((c_parser_peek_nth_token_raw (parser, n + 1)->type
 		       == CPP_COMMA)
 		      && (c_parser_peek_nth_token_raw (parser, n + 2)->type
 			  == CPP_NAME))
@@ -19794,7 +19794,7 @@ parse_next:
 		      c_token *tok
 			= c_parser_peek_nth_token_raw (parser, n + 2);
 		      const char *m = IDENTIFIER_POINTER (tok->value);
-		      if (strcmp (p, m) == 0 || strcmp (q, m) == 0)
+		      만약 (strcmp (p, m) == 0 || strcmp (q, m) == 0)
 			{
 			  error_at (tok->location, "duplicate %qs modifier", m);
 			  goto end;
@@ -19803,78 +19803,78 @@ parse_next:
 		}
 	    }
 	}
-      if (has_modifiers)
+      만약 (has_modifiers)
 	{
 	  c_parser_consume_token (parser);
 	  matching_parens parens2;
 	  parens2.require_open (parser);
 	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
-	  if (expr.value == error_mark_node)
+	  만약 (expr.value == error_mark_node)
 	    ;
-	  else if (strcmp (p, "traits") == 0)
+	  아니면 만약 (strcmp (p, "traits") == 0)
 	    {
 	      traits_var = expr.value;
 	      traits_var = c_fully_fold (traits_var, false, NULL);
 	      mark_exp_read (traits_var);
 	    }
-	  else
+	  아니면
 	    {
 	      memspace_expr = expr.value;
 	      memspace_expr = c_fully_fold (memspace_expr, false, NULL);
 	    }
 	  parens2.skip_until_found_close (parser);
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    {
 	      c_parser_consume_token (parser);
 	      c_token *tok = c_parser_peek_token (parser);
 	      const char *q = "";
-	      if (c_parser_next_token_is (parser, CPP_NAME))
+	      만약 (c_parser_next_token_is (parser, CPP_NAME))
 		q = IDENTIFIER_POINTER (tok->value);
-	      if (strcmp (q, "traits") != 0 && strcmp (q, "memspace") != 0)
+	      만약 (strcmp (q, "traits") != 0 && strcmp (q, "memspace") != 0)
 		{
 		  c_parser_error (parser, "expected %<traits%> or "
 				  "%<memspace%>");
 		  parens.skip_until_found_close (parser);
-		  return list;
+		  반환 list;
 		}
-	      else if (strcmp (p, q) == 0)
+	      아니면 만약 (strcmp (p, q) == 0)
 		{
 		  error_at (tok->location, "duplicate %qs modifier", p);
 		  parens.skip_until_found_close (parser);
-		  return list;
+		  반환 list;
 		}
 	      c_parser_consume_token (parser);
-	      if (!parens2.require_open (parser))
+	      만약 (!parens2.require_open (parser))
 		{
 		  parens.skip_until_found_close (parser);
-		  return list;
+		  반환 list;
 		}
 	      expr = c_parser_expr_no_commas (parser, NULL);
-	      if (strcmp (q, "traits") == 0)
+	      만약 (strcmp (q, "traits") == 0)
 		{
 		  traits_var = expr.value;
 		  traits_var = c_fully_fold (traits_var, false, NULL);
 		  mark_exp_read (traits_var);
 		}
-	      else
+	      아니면
 		{
 		  memspace_expr = expr.value;
 		  memspace_expr = c_fully_fold (memspace_expr, false, NULL);
 		}
 	      parens2.skip_until_found_close (parser);
 	    }
-	  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	  만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    goto end;
 	}
     }
 
-  while (c_parser_next_token_is (parser, CPP_NAME))
+  동안 (c_parser_next_token_is (parser, CPP_NAME))
     {
       location_t alloc_loc = c_parser_peek_token (parser)->location;
       c_token *tok = c_parser_peek_token (parser);
       const char *tok_s = IDENTIFIER_POINTER (tok->value);
       tree t = lookup_name (tok->value);
-      if (t == NULL_TREE)
+      만약 (t == NULL_TREE)
 	{
 	  undeclared_variable (tok->location, tok->value);
 	  t = error_mark_node;
@@ -19883,7 +19883,7 @@ parse_next:
 
       /* Legacy traits syntax.  */
       tree legacy_traits = NULL_TREE;
-      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+      만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_NAME
 	  && c_parser_peek_nth_token_raw (parser, 3)->type == CPP_CLOSE_PAREN)
 	{
@@ -19895,7 +19895,7 @@ parse_next:
 	  location_t close_loc = c_parser_peek_token (parser)->location;
 	  parens2.skip_until_found_close (parser);
 
-	  if (has_modifiers)
+	  만약 (has_modifiers)
 	    {
 	      error_at (make_location (alloc_loc, alloc_loc, close_loc),
 			"legacy %<%s(%s)%> traits syntax not allowed in "
@@ -19904,12 +19904,12 @@ parse_next:
 	      goto end;
 	    }
 	  legacy_traits = c_fully_fold (expr.value, false, NULL);
-	  if (legacy_traits == error_mark_node)
+	  만약 (legacy_traits == error_mark_node)
 	    goto end;
 	  mark_exp_read (legacy_traits);
 
 	  gcc_rich_location richloc (make_location (alloc_loc, alloc_loc, close_loc));
-	  if (nl == list)
+	  만약 (nl == list)
 	    {
 	      /* Fixit only works well if it is the only first item.  */
 	      richloc.add_fixit_replace (alloc_loc, "traits");
@@ -19922,7 +19922,7 @@ parse_next:
 		      "deprecated since OpenMP 5.2");
 	}
 
-      if (seen_allocators && has_modifiers)
+      만약 (seen_allocators && has_modifiers)
 	{
 	  error_at (c_parser_peek_token (parser)->location,
 		    "%<uses_allocators%> clause only accepts a single "
@@ -19940,13 +19940,13 @@ parse_next:
       OMP_CLAUSE_CHAIN (c) = nl;
       nl = c;
 
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	break;
     }
 
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+  만약 (c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
       c_parser_consume_token (parser);
       goto parse_next;
@@ -19954,7 +19954,7 @@ parse_next:
 
  end:
   parens.skip_until_found_close (parser);
-  return nl;
+  반환 nl;
 }
 
 /* OpenMP 4.0:
@@ -19986,18 +19986,18 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
   bool old_linear_modifier = false;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       c_token *tok = c_parser_peek_token (parser);
       const char *p = IDENTIFIER_POINTER (tok->value);
-      if (strcmp ("val", p) == 0)
+      만약 (strcmp ("val", p) == 0)
 	kind = OMP_CLAUSE_LINEAR_VAL;
-      if (c_parser_peek_2nd_token (parser)->type != CPP_OPEN_PAREN)
+      만약 (c_parser_peek_2nd_token (parser)->type != CPP_OPEN_PAREN)
 	kind = OMP_CLAUSE_LINEAR_DEFAULT;
-      if (kind != OMP_CLAUSE_LINEAR_DEFAULT)
+      만약 (kind != OMP_CLAUSE_LINEAR_DEFAULT)
 	{
 	  old_linear_modifier = true;
 	  rm1_loc = make_location (tok->location, tok->location,
@@ -20010,66 +20010,66 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
   nl = c_parser_omp_variable_list (parser, clause_loc,
 				   OMP_CLAUSE_LINEAR, list);
 
-  if (kind != OMP_CLAUSE_LINEAR_DEFAULT)
+  만약 (kind != OMP_CLAUSE_LINEAR_DEFAULT)
     {
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	rm2_loc = c_parser_peek_token (parser)->location;
       parens.skip_until_found_close (parser);
     }
 
-  if (c_parser_next_token_is (parser, CPP_COLON))
+  만약 (c_parser_next_token_is (parser, CPP_COLON))
     {
       c_parser_consume_token (parser);
       location_t expr_loc = c_parser_peek_token (parser)->location;
       after_colon_loc = expr_loc;
       bool has_modifiers = false;
-      if (kind == OMP_CLAUSE_LINEAR_DEFAULT
+      만약 (kind == OMP_CLAUSE_LINEAR_DEFAULT
 	  && c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_token *tok = c_parser_peek_token (parser);
 	  const char *p = IDENTIFIER_POINTER (tok->value);
-	  unsigned int pos = 0;
-	  if (strcmp ("val", p) == 0)
+	  unsigned 정수 pos = 0;
+	  만약 (strcmp ("val", p) == 0)
 	    pos = 2;
-	  else if (strcmp ("step", p) == 0
+	  아니면 만약 (strcmp ("step", p) == 0
 		   && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN)
 	    {
 	      pos = 3;
-	      if (c_parser_check_balanced_raw_token_sequence (parser, &pos)
+	      만약 (c_parser_check_balanced_raw_token_sequence (parser, &pos)
 		  && (c_parser_peek_nth_token_raw (parser, pos)->type
 		      == CPP_CLOSE_PAREN))
 		++pos;
-	      else
+	      아니면
 		pos = 0;
 	    }
-	  if (pos)
+	  만약 (pos)
 	    {
 	      tok = c_parser_peek_nth_token_raw (parser, pos);
-	      if (tok->type == CPP_COMMA || tok->type == CPP_CLOSE_PAREN)
+	      만약 (tok->type == CPP_COMMA || tok->type == CPP_CLOSE_PAREN)
 		has_modifiers = true;
 	    }
 	}
-      if (has_modifiers)
+      만약 (has_modifiers)
 	{
 	  step = NULL_TREE;
-	  while (c_parser_next_token_is (parser, CPP_NAME))
+	  동안 (c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      c_token *tok = c_parser_peek_token (parser);
 	      const char *p = IDENTIFIER_POINTER (tok->value);
-	      if (strcmp ("val", p) == 0)
+	      만약 (strcmp ("val", p) == 0)
 		{
-		  if (kind != OMP_CLAUSE_LINEAR_DEFAULT)
+		  만약 (kind != OMP_CLAUSE_LINEAR_DEFAULT)
 		    error_at (tok->location, "multiple linear modifiers");
 		  kind = OMP_CLAUSE_LINEAR_DEFAULT;
 		  c_parser_consume_token (parser);
 		}
-	      else if (strcmp ("step", p) == 0)
+	      아니면 만약 (strcmp ("step", p) == 0)
 		{
 		  c_parser_consume_token (parser);
 		  matching_parens parens2;
-		  if (parens2.require_open (parser))
+		  만약 (parens2.require_open (parser))
 		    {
-		      if (step)
+		      만약 (step)
 			error_at (tok->location,
 				  "multiple %<step%> modifiers");
 		      expr_loc = c_parser_peek_token (parser)->location;
@@ -20077,7 +20077,7 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
 		      expr = convert_lvalue_to_rvalue (expr_loc, expr, false,
 						       true);
 		      step = c_fully_fold (expr.value, false, NULL);
-		      if (!INTEGRAL_TYPE_P (TREE_TYPE (step)))
+		      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (step)))
 			{
 			  error_at (clause_loc, "%<linear%> clause step "
 						"expression must be integral");
@@ -20085,27 +20085,27 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
 			}
 		      parens2.skip_until_found_close (parser);
 		    }
-		  else
+		  아니면
 		    break;
 		}
-	      else
+	      아니면
 		break;
-	      if (c_parser_next_token_is (parser, CPP_COMMA))
+	      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 		{
 		  c_parser_consume_token (parser);
 		  continue;
 		}
 	      break;
 	    }
-	  if (!step)
+	  만약 (!step)
 	    step = integer_one_node;
 	}
-      else
+      아니면
 	{
 	  c_expr expr = c_parser_expr_no_commas (parser, NULL);
 	  expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
 	  step = c_fully_fold (expr.value, false, NULL);
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (step)))
+	  만약 (!INTEGRAL_TYPE_P (TREE_TYPE (step)))
 	    {
 	      error_at (clause_loc, "%<linear%> clause step expression must "
 				    "be integral");
@@ -20114,30 +20114,30 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
 	}
 
     }
-  else
+  아니면
     step = integer_one_node;
 
-  for (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  위해 (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
     {
       OMP_CLAUSE_LINEAR_STEP (c) = step;
       OMP_CLAUSE_LINEAR_KIND (c) = kind;
       OMP_CLAUSE_LINEAR_OLD_LINEAR_MODIFIER (c) = old_linear_modifier;
     }
 
-  if (old_linear_modifier)
+  만약 (old_linear_modifier)
     {
       gcc_rich_location richloc (clause_loc);
-      if (rm2_loc != UNKNOWN_LOCATION)
+      만약 (rm2_loc != UNKNOWN_LOCATION)
 	{
 	  richloc.add_fixit_remove (rm1_loc);
-	  if (after_colon_loc != UNKNOWN_LOCATION)
+	  만약 (after_colon_loc != UNKNOWN_LOCATION)
 	    {
 	      richloc.add_fixit_remove (rm2_loc);
 	      richloc.add_fixit_insert_before (after_colon_loc, "val, step (");
 	      location_t close_loc = c_parser_peek_token (parser)->location;
 	      richloc.add_fixit_insert_before (close_loc, ")");
 	    }
-	  else
+	  아니면
 	    richloc.add_fixit_replace (rm2_loc, " : val");
 	}
       warning_at (&richloc, OPT_Wdeprecated_openmp,
@@ -20146,7 +20146,7 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
     }
 
   parens.skip_until_found_close (parser);
-  return nl;
+  반환 nl;
 }
 
 /* OpenMP 5.0:
@@ -20155,7 +20155,7 @@ c_parser_omp_clause_linear (c_parser *parser, tree list)
 static tree
 c_parser_omp_clause_nontemporal (c_parser *parser, tree list)
 {
-  return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_NONTEMPORAL, list);
+  반환 c_parser_omp_var_list_parens (parser, OMP_CLAUSE_NONTEMPORAL, list);
 }
 
 /* OpenMP 4.0:
@@ -20168,15 +20168,15 @@ c_parser_omp_clause_safelen (c_parser *parser, tree list)
   tree c, t;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
   location_t expr_loc = c_parser_peek_token (parser)->location;
   c_expr expr = c_parser_expr_no_commas (parser, NULL);
   expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
   t = expr.value;
   t = c_fully_fold (t, false, NULL);
-  if (TREE_CODE (t) != INTEGER_CST
+  만약 (TREE_CODE (t) != INTEGER_CST
       || !INTEGRAL_TYPE_P (TREE_TYPE (t))
       || tree_int_cst_sgn (t) != 1)
     {
@@ -20186,15 +20186,15 @@ c_parser_omp_clause_safelen (c_parser *parser, tree list)
     }
 
   parens.skip_until_found_close (parser);
-  if (t == NULL_TREE || t == error_mark_node)
-    return list;
+  만약 (t == NULL_TREE || t == error_mark_node)
+    반환 list;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_SAFELEN, "safelen");
 
   c = build_omp_clause (clause_loc, OMP_CLAUSE_SAFELEN);
   OMP_CLAUSE_SAFELEN_EXPR (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 4.0:
@@ -20210,11 +20210,11 @@ c_parser_omp_clause_simdlen (c_parser *parser, tree list)
   tree c, t = NULL_TREE, type = NULL_TREE, divisor = NULL_TREE;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
   unsigned pos = 3;
-  if (c_parser_next_token_is (parser, CPP_NAME)
+  만약 (c_parser_next_token_is (parser, CPP_NAME)
       && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN
       && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
 		 "scaled") == 0
@@ -20227,7 +20227,7 @@ c_parser_omp_clause_simdlen (c_parser *parser, tree list)
 
       location_t loc = c_parser_peek_token (parser)->location;
       struct c_type_name *ctype = c_parser_type_name (parser);
-      if (ctype == NULL
+      만약 (ctype == NULL
 	  || (type = groktypename (ctype, NULL, NULL)) == NULL
 	  || (!INTEGRAL_TYPE_P (type)
 	      && !SCALAR_FLOAT_TYPE_P (type)
@@ -20237,7 +20237,7 @@ c_parser_omp_clause_simdlen (c_parser *parser, tree list)
 			 "%<scaled%> modifier");
 	  type = error_mark_node;
 	}
-      else if (c_parser_next_token_is (parser, CPP_COMMA))
+      아니면 만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	{
 	  c_parser_consume_token (parser);
 	  loc = c_parser_peek_token (parser)->location;
@@ -20245,7 +20245,7 @@ c_parser_omp_clause_simdlen (c_parser *parser, tree list)
 	  expr = convert_lvalue_to_rvalue (loc, expr, false, true);
 	  divisor = expr.value;
 	  divisor = c_fully_fold (divisor, false, NULL);
-	  if (TREE_CODE (divisor) != INTEGER_CST
+	  만약 (TREE_CODE (divisor) != INTEGER_CST
 	      || !INTEGRAL_TYPE_P (TREE_TYPE (divisor))
 	      || tree_int_cst_sgn (divisor) != 1)
 	    {
@@ -20258,14 +20258,14 @@ c_parser_omp_clause_simdlen (c_parser *parser, tree list)
       c_parser_require (parser, CPP_COLON, "expected %<:%>");
     }
 
-  if (type != error_mark_node)
+  만약 (type != error_mark_node)
     {
       location_t expr_loc = c_parser_peek_token (parser)->location;
       c_expr expr = c_parser_expr_no_commas (parser, NULL);
       expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
       t = expr.value;
       t = c_fully_fold (t, false, NULL);
-      if (TREE_CODE (t) != INTEGER_CST
+      만약 (TREE_CODE (t) != INTEGER_CST
 	  || !INTEGRAL_TYPE_P (TREE_TYPE (t))
 	  || tree_int_cst_sgn (t) != 1)
 	{
@@ -20276,8 +20276,8 @@ c_parser_omp_clause_simdlen (c_parser *parser, tree list)
     }
 
   parens.skip_until_found_close (parser);
-  if (type == error_mark_node || t == NULL_TREE || t == error_mark_node)
-    return list;
+  만약 (type == error_mark_node || t == NULL_TREE || t == error_mark_node)
+    반환 list;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_SIMDLEN, "simdlen");
 
@@ -20286,7 +20286,7 @@ c_parser_omp_clause_simdlen (c_parser *parser, tree list)
   OMP_CLAUSE_SIMDLEN_TYPE (c) = type;
   OMP_CLAUSE_SIMDLEN_DIVISOR (c) = divisor;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 4.5:
@@ -20300,23 +20300,23 @@ c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
 				   tree list, bool depend_p)
 {
   tree vec = NULL;
-  if (c_parser_next_token_is_not (parser, CPP_NAME)
+  만약 (c_parser_next_token_is_not (parser, CPP_NAME)
       || c_parser_peek_token (parser)->id_kind != C_ID_ID)
     {
       c_parser_error (parser, "expected identifier");
-      return list;
+      반환 list;
     }
 
-  if (!depend_p)
+  만약 (!depend_p)
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "omp_cur_iteration") == 0
+      만약 (strcmp (p, "omp_cur_iteration") == 0
 	  && c_parser_peek_2nd_token (parser)->type == CPP_MINUS
 	  && c_parser_peek_nth_token (parser, 3)->type == CPP_NUMBER
 	  && c_parser_peek_nth_token (parser, 4)->type == CPP_CLOSE_PAREN)
 	{
 	  tree val = c_parser_peek_nth_token (parser, 3)->value;
-	  if (integer_onep (val))
+	  만약 (integer_onep (val))
 	    {
 	      c_parser_consume_token (parser);
 	      c_parser_consume_token (parser);
@@ -20324,20 +20324,20 @@ c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
 	      tree u = build_omp_clause (clause_loc, OMP_CLAUSE_DOACROSS);
 	      OMP_CLAUSE_DOACROSS_KIND (u) = OMP_CLAUSE_DOACROSS_SINK;
 	      OMP_CLAUSE_CHAIN (u) = list;
-	      return u;
+	      반환 u;
 	    }
 	}
     }
 
 
 
-  while (c_parser_next_token_is (parser, CPP_NAME)
+  동안 (c_parser_next_token_is (parser, CPP_NAME)
 	 && c_parser_peek_token (parser)->id_kind == C_ID_ID)
     {
       tree t = lookup_name (c_parser_peek_token (parser)->value);
       tree addend = NULL;
 
-      if (t == NULL_TREE)
+      만약 (t == NULL_TREE)
 	{
 	  undeclared_variable (c_parser_peek_token (parser)->location,
 			       c_parser_peek_token (parser)->value);
@@ -20347,9 +20347,9 @@ c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
       c_parser_consume_token (parser);
 
       bool neg = false;
-      if (c_parser_next_token_is (parser, CPP_MINUS))
+      만약 (c_parser_next_token_is (parser, CPP_MINUS))
 	neg = true;
-      else if (!c_parser_next_token_is (parser, CPP_PLUS))
+      아니면 만약 (!c_parser_next_token_is (parser, CPP_PLUS))
 	{
 	  addend = integer_zero_node;
 	  neg = false;
@@ -20357,29 +20357,29 @@ c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
 	}
       c_parser_consume_token (parser);
 
-      if (c_parser_next_token_is_not (parser, CPP_NUMBER))
+      만약 (c_parser_next_token_is_not (parser, CPP_NUMBER))
 	{
 	  c_parser_error (parser, "expected integer");
-	  return list;
+	  반환 list;
 	}
 
       addend = c_parser_peek_token (parser)->value;
-      if (TREE_CODE (addend) != INTEGER_CST)
+      만약 (TREE_CODE (addend) != INTEGER_CST)
 	{
 	  c_parser_error (parser, "expected integer");
-	  return list;
+	  반환 list;
 	}
       c_parser_consume_token (parser);
 
     add_to_vector:
-      if (t != error_mark_node)
+      만약 (t != error_mark_node)
 	{
 	  vec = tree_cons (addend, t, vec);
-	  if (neg)
+	  만약 (neg)
 	    OMP_CLAUSE_DOACROSS_SINK_NEGATIVE (vec) = 1;
 	}
 
-      if (c_parser_next_token_is_not (parser, CPP_COMMA)
+      만약 (c_parser_next_token_is_not (parser, CPP_COMMA)
 	  || c_parser_peek_2nd_token (parser)->type != CPP_NAME
 	  || c_parser_peek_2nd_token (parser)->id_kind != C_ID_ID)
 	break;
@@ -20387,15 +20387,15 @@ c_parser_omp_clause_doacross_sink (c_parser *parser, location_t clause_loc,
       c_parser_consume_token (parser);
     }
 
-  if (vec == NULL_TREE)
-    return list;
+  만약 (vec == NULL_TREE)
+    반환 list;
 
   tree u = build_omp_clause (clause_loc, OMP_CLAUSE_DOACROSS);
   OMP_CLAUSE_DOACROSS_KIND (u) = OMP_CLAUSE_DOACROSS_SINK;
   OMP_CLAUSE_DOACROSS_DEPEND (u) = depend_p;
   OMP_CLAUSE_DECL (u) = nreverse (vec);
   OMP_CLAUSE_CHAIN (u) = list;
-  return u;
+  반환 u;
 }
 
 /* OpenMP 5.0:
@@ -20422,23 +20422,23 @@ c_parser_omp_iterators (c_parser *parser)
   push_scope ();
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return error_mark_node;
+  만약 (!parens.require_open (parser))
+    반환 error_mark_node;
 
   do
     {
       tree iter_type = NULL_TREE, type_expr = NULL_TREE;
-      if (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
+      만약 (c_parser_next_tokens_start_typename (parser, cla_prefer_id))
 	{
 	  struct c_type_name *type = c_parser_type_name (parser);
-	  if (type != NULL)
+	  만약 (type != NULL)
 	    iter_type = groktypename (type, &type_expr, NULL);
 	}
-      if (iter_type == NULL_TREE)
+      만약 (iter_type == NULL_TREE)
 	iter_type = integer_type_node;
 
       location_t loc = c_parser_peek_token (parser)->location;
-      if (!c_parser_next_token_is (parser, CPP_NAME))
+      만약 (!c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected identifier");
 	  break;
@@ -20447,7 +20447,7 @@ c_parser_omp_iterators (c_parser *parser)
       tree id = c_parser_peek_token (parser)->value;
       c_parser_consume_token (parser);
 
-      if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+      만약 (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
 	break;
 
       location_t eloc = c_parser_peek_token (parser)->location;
@@ -20455,7 +20455,7 @@ c_parser_omp_iterators (c_parser *parser)
       expr = convert_lvalue_to_rvalue (eloc, expr, true, false);
       tree begin = expr.value;
 
-      if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+      만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	break;
 
       eloc = c_parser_peek_token (parser)->location;
@@ -20464,7 +20464,7 @@ c_parser_omp_iterators (c_parser *parser)
       tree end = expr.value;
 
       tree step = integer_one_node;
-      if (c_parser_next_token_is (parser, CPP_COLON))
+      만약 (c_parser_next_token_is (parser, CPP_COLON))
 	{
 	  c_parser_consume_token (parser);
 	  eloc = c_parser_peek_token (parser)->location;
@@ -20485,17 +20485,17 @@ c_parser_omp_iterators (c_parser *parser)
       OMP_ITERATOR_STEP (*last) = step;
       last = &TREE_CHAIN (*last);
 
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	{
 	  c_parser_consume_token (parser);
 	  continue;
 	}
       break;
     }
-  while (1);
+  동안 (1);
 
   parens.skip_until_found_close (parser);
-  return ret ? ret : error_mark_node;
+  반환 ret ? ret : error_mark_node;
 }
 
 /* OpenMP 5.0:
@@ -20510,16 +20510,16 @@ c_parser_omp_clause_affinity (c_parser *parser, tree list)
   tree nl, iterators = NULL_TREE;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
       bool parse_iter = ((strcmp ("iterator", p) == 0)
 			 && (c_parser_peek_2nd_token (parser)->type
 			     == CPP_OPEN_PAREN));
-      if (parse_iter)
+      만약 (parse_iter)
 	{
 	  unsigned n = 3;
 	  parse_iter = (c_parser_check_balanced_raw_token_sequence (parser, &n)
@@ -20528,34 +20528,34 @@ c_parser_omp_clause_affinity (c_parser *parser, tree list)
 			&& (c_parser_peek_nth_token_raw (parser, n + 1)->type
 			    == CPP_COLON));
 	}
-      if (parse_iter)
+      만약 (parse_iter)
 	{
 	  iterators = c_parser_omp_iterators (parser);
-	  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	  만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    {
-	      if (iterators)
+	      만약 (iterators)
 		pop_scope ();
 	      parens.skip_until_found_close (parser);
-	      return list;
+	      반환 list;
 	    }
 	}
     }
   nl = c_parser_omp_variable_list (parser, clause_loc, OMP_CLAUSE_AFFINITY,
 				   list);
-  if (iterators)
+  만약 (iterators)
     {
       tree block = pop_scope ();
-      if (iterators != error_mark_node)
+      만약 (iterators != error_mark_node)
 	{
 	  OMP_ITERATOR_BLOCK (iterators) = block;
-	  for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+	  위해 (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
 	    OMP_CLAUSE_DECL (c) = build_tree_list (iterators,
 						   OMP_CLAUSE_DECL (c));
 	}
     }
 
   parens.skip_until_found_close (parser);
-  return nl;
+  반환 nl;
 }
 
 
@@ -20588,34 +20588,34 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
   tree nl, c, iterators = NULL_TREE;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
   do
     {
-      if (c_parser_next_token_is_not (parser, CPP_NAME))
+      만약 (c_parser_next_token_is_not (parser, CPP_NAME))
 	goto invalid_kind;
 
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp ("iterator", p) == 0 && iterators == NULL_TREE)
+      만약 (strcmp ("iterator", p) == 0 && iterators == NULL_TREE)
 	{
 	  iterators = c_parser_omp_iterators (parser);
 	  c_parser_require (parser, CPP_COMMA, "expected %<,%>");
 	  continue;
 	}
-      if (strcmp ("in", p) == 0)
+      만약 (strcmp ("in", p) == 0)
 	kind = OMP_CLAUSE_DEPEND_IN;
-      else if (strcmp ("inout", p) == 0)
+      아니면 만약 (strcmp ("inout", p) == 0)
 	kind = OMP_CLAUSE_DEPEND_INOUT;
-      else if (strcmp ("inoutset", p) == 0)
+      아니면 만약 (strcmp ("inoutset", p) == 0)
 	kind = OMP_CLAUSE_DEPEND_INOUTSET;
-      else if (strcmp ("mutexinoutset", p) == 0)
+      아니면 만약 (strcmp ("mutexinoutset", p) == 0)
 	kind = OMP_CLAUSE_DEPEND_MUTEXINOUTSET;
-      else if (strcmp ("out", p) == 0)
+      아니면 만약 (strcmp ("out", p) == 0)
 	kind = OMP_CLAUSE_DEPEND_OUT;
-      else if (strcmp ("depobj", p) == 0)
+      아니면 만약 (strcmp ("depobj", p) == 0)
 	kind = OMP_CLAUSE_DEPEND_DEPOBJ;
-      else if (strcmp ("sink", p) == 0)
+      아니면 만약 (strcmp ("sink", p) == 0)
 	{
 	  gcc_rich_location richloc (clause_loc);
 	  richloc.add_fixit_replace (here, "doacross");
@@ -20624,7 +20624,7 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
 		      "since OpenMP 5.2, use with %<doacross%>");
 	  dkind = OMP_CLAUSE_DOACROSS_SINK;
 	}
-      else if (strcmp ("source", p) == 0)
+      아니면 만약 (strcmp ("source", p) == 0)
 	{
 	  gcc_rich_location richloc (clause_loc);
 	  richloc.add_fixit_replace (here, "doacross");
@@ -20633,15 +20633,15 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
 		      "since OpenMP 5.2, use with %<doacross%>");
 	  dkind = OMP_CLAUSE_DOACROSS_SOURCE;
 	}
-      else
+      아니면
 	goto invalid_kind;
       break;
     }
-  while (1);
+  동안 (1);
 
   c_parser_consume_token (parser);
 
-  if (iterators
+  만약 (iterators
       && (dkind == OMP_CLAUSE_DOACROSS_SOURCE
 	  || dkind == OMP_CLAUSE_DOACROSS_SINK))
     {
@@ -20651,7 +20651,7 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
       iterators = NULL_TREE;
     }
 
-  if (dkind == OMP_CLAUSE_DOACROSS_SOURCE)
+  만약 (dkind == OMP_CLAUSE_DOACROSS_SOURCE)
     {
       c = build_omp_clause (clause_loc, OMP_CLAUSE_DOACROSS);
       OMP_CLAUSE_DOACROSS_KIND (c) = dkind;
@@ -20659,47 +20659,47 @@ c_parser_omp_clause_depend (c_parser *parser, tree list, location_t here)
       OMP_CLAUSE_DECL (c) = NULL_TREE;
       OMP_CLAUSE_CHAIN (c) = list;
       parens.skip_until_found_close (parser);
-      return c;
+      반환 c;
     }
 
-  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+  만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
     goto resync_fail;
 
-  if (dkind == OMP_CLAUSE_DOACROSS_SINK)
+  만약 (dkind == OMP_CLAUSE_DOACROSS_SINK)
     nl = c_parser_omp_clause_doacross_sink (parser, clause_loc, list, true);
-  else
+  아니면
     {
       nl = c_parser_omp_variable_list (parser, clause_loc,
 				       OMP_CLAUSE_DEPEND, list);
 
-      if (iterators)
+      만약 (iterators)
 	{
 	  tree block = pop_scope ();
-	  if (iterators == error_mark_node)
+	  만약 (iterators == error_mark_node)
 	    iterators = NULL_TREE;
-	  else
+	  아니면
 	    OMP_ITERATOR_BLOCK (iterators) = block;
 	}
 
-      for (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+      위해 (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
 	{
 	  OMP_CLAUSE_DEPEND_KIND (c) = kind;
-	  if (iterators)
+	  만약 (iterators)
 	    OMP_CLAUSE_DECL (c)
 	      = build_tree_list (iterators, OMP_CLAUSE_DECL (c));
 	}
     }
 
   parens.skip_until_found_close (parser);
-  return nl;
+  반환 nl;
 
  invalid_kind:
   c_parser_error (parser, "invalid depend kind");
  resync_fail:
   parens.skip_until_found_close (parser);
-  if (iterators)
+  만약 (iterators)
     pop_scope ();
-  return list;
+  반환 list;
 }
 
 /* OpenMP 5.2:
@@ -20718,28 +20718,28 @@ c_parser_omp_clause_doacross (c_parser *parser, tree list)
   const char *p;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  if (c_parser_next_token_is_not (parser, CPP_NAME))
+  만약 (c_parser_next_token_is_not (parser, CPP_NAME))
     goto invalid_kind;
 
   p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-  if (strcmp ("sink", p) == 0)
+  만약 (strcmp ("sink", p) == 0)
     kind = OMP_CLAUSE_DOACROSS_SINK;
-  else if (strcmp ("source", p) == 0)
+  아니면 만약 (strcmp ("source", p) == 0)
     kind = OMP_CLAUSE_DOACROSS_SOURCE;
-  else
+  아니면
     goto invalid_kind;
 
   c_parser_consume_token (parser);
 
-  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+  만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
     goto resync_fail;
 
-  if (kind == OMP_CLAUSE_DOACROSS_SOURCE)
+  만약 (kind == OMP_CLAUSE_DOACROSS_SOURCE)
     {
-      if (c_parser_next_token_is (parser, CPP_NAME)
+      만약 (c_parser_next_token_is (parser, CPP_NAME)
 	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
 		     "omp_cur_iteration") == 0)
 	c_parser_consume_token (parser);
@@ -20748,17 +20748,17 @@ c_parser_omp_clause_doacross (c_parser *parser, tree list)
       OMP_CLAUSE_DECL (nl) = NULL_TREE;
       OMP_CLAUSE_CHAIN (nl) = list;
     }
-  else
+  아니면
     nl = c_parser_omp_clause_doacross_sink (parser, clause_loc, list, false);
 
   parens.skip_until_found_close (parser);
-  return nl;
+  반환 nl;
 
  invalid_kind:
   c_parser_error (parser, "invalid doacross kind");
  resync_fail:
   parens.skip_until_found_close (parser);
-  return list;
+  반환 list;
 }
 
 /* OpenMP 6.1:
@@ -20772,13 +20772,13 @@ c_parser_omp_clause_dyn_groupprivate (c_parser *parser, tree list)
 {
   location_t clause_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
   enum omp_clause_fallback_kind kind = OMP_CLAUSE_FALLBACK_UNSPECIFIED;
 
   unsigned n = 3;
-  if (c_parser_next_token_is (parser, CPP_NAME)
+  만약 (c_parser_next_token_is (parser, CPP_NAME)
       && (c_parser_peek_2nd_token (parser)->type == CPP_COLON
 	  || (c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN
 	      && c_parser_check_balanced_raw_token_sequence (parser, &n)
@@ -20788,34 +20788,34 @@ c_parser_omp_clause_dyn_groupprivate (c_parser *parser, tree list)
 		  == CPP_COLON))))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "fallback") != 0)
+      만약 (strcmp (p, "fallback") != 0)
 	{
 	  c_parser_error (parser, "expected %<fallback%> modifier");
-	  return list;
+	  반환 list;
 	}
       c_parser_consume_token (parser);
-      if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	return list;
+      만약 (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	반환 list;
       p = "";
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "abort") == 0)
+      만약 (strcmp (p, "abort") == 0)
 	kind = OMP_CLAUSE_FALLBACK_ABORT;
-      else if (strcmp (p, "default_mem") == 0)
+      아니면 만약 (strcmp (p, "default_mem") == 0)
 	kind = OMP_CLAUSE_FALLBACK_DEFAULT_MEM;
-      else if (strcmp (p, "null") == 0)
+      아니면 만약 (strcmp (p, "null") == 0)
 	kind = OMP_CLAUSE_FALLBACK_NULL;
-      else
+      아니면
 	{
 	  c_parser_error (parser, "expected %<abort%>, %<default_mem%>, or "
 				  "%<null%> as fallback mode");
-	  return list;
+	  반환 list;
 	}
       c_parser_consume_token (parser);
-      if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	return list;
-      if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
-	return list;
+      만약 (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	반환 list;
+      만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	반환 list;
     }
   location_t expr_loc = c_parser_peek_token (parser)->location;
   c_expr expr = c_parser_expr_no_commas (parser, NULL);
@@ -20823,17 +20823,17 @@ c_parser_omp_clause_dyn_groupprivate (c_parser *parser, tree list)
   tree size = c_fully_fold (expr.value, false, NULL);
   parens.skip_until_found_close (parser);
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (size)))
+  만약 (!INTEGRAL_TYPE_P (TREE_TYPE (size)))
     {
       error_at (expr_loc, "expected integer expression");
-      return list;
+      반환 list;
     }
 
   /* Attempt to statically determine when the number is negative.  */
   tree c = fold_build2_loc (expr_loc, LT_EXPR, boolean_type_node, size,
 			    build_int_cst (TREE_TYPE (size), 0));
   protected_set_expr_location (c, expr_loc);
-  if (c == boolean_true_node)
+  만약 (c == boolean_true_node)
     {
       warning_at (expr_loc, OPT_Wopenmp,
 		  "%<dyn_groupprivate%> value must be non-negative");
@@ -20848,7 +20848,7 @@ c_parser_omp_clause_dyn_groupprivate (c_parser *parser, tree list)
   OMP_CLAUSE_CHAIN (c) = list;
   list = c;
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 4.0:
@@ -20878,24 +20878,24 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
   enum gomp_map_kind kind = declare_mapper_p ? GOMP_MAP_UNSET : GOMP_MAP_TOFROM;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  int pos = 1;
-  int map_kind_pos = 0;
-  int iterator_length = 0;
-  for (;;)
+  정수 pos = 1;
+  정수 map_kind_pos = 0;
+  정수 iterator_length = 0;
+  위해 (;;)
     {
       c_token *tok = c_parser_peek_nth_token_raw (parser, pos);
-      if (tok->type != CPP_NAME)
+      만약 (tok->type != CPP_NAME)
 	break;
 
       const char *p = IDENTIFIER_POINTER (tok->value);
       c_token *next_tok = c_parser_peek_nth_token_raw (parser, pos + 1);
-      if (strcmp (p, "iterator") == 0 && next_tok->type == CPP_OPEN_PAREN)
+      만약 (strcmp (p, "iterator") == 0 && next_tok->type == CPP_OPEN_PAREN)
 	{
 	  unsigned n = pos + 2;
-	  if (c_parser_check_balanced_raw_token_sequence (parser, &n)
+	  만약 (c_parser_check_balanced_raw_token_sequence (parser, &n)
 	      && c_parser_peek_nth_token_raw (parser, n)->type
 		 == CPP_CLOSE_PAREN)
 	    {
@@ -20905,19 +20905,19 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
 	    }
 	}
 
-      if (next_tok->type == CPP_COLON)
+      만약 (next_tok->type == CPP_COLON)
 	{
 	  map_kind_pos = pos;
 	  break;
 	}
 
-      if (next_tok->type == CPP_COMMA)
+      만약 (next_tok->type == CPP_COMMA)
 	pos++;
-      else if (c_parser_peek_nth_token_raw (parser, pos + 1)->type
+      아니면 만약 (c_parser_peek_nth_token_raw (parser, pos + 1)->type
 	       == CPP_OPEN_PAREN)
 	{
-	  unsigned int npos = pos + 2;
-	  if (c_parser_check_balanced_raw_token_sequence (parser, &npos)
+	  unsigned 정수 npos = pos + 2;
+	  만약 (c_parser_check_balanced_raw_token_sequence (parser, &npos)
 	      && (c_parser_peek_nth_token_raw (parser, npos)->type
 		  == CPP_CLOSE_PAREN)
 	      && (c_parser_peek_nth_token_raw (parser, npos + 1)->type
@@ -20928,69 +20928,69 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
       pos++;
     }
 
-  int always_modifier = 0;
-  int close_modifier = 0;
-  int present_modifier = 0;
-  int mapper_modifier = 0;
-  int num_commas = 0;
-  int num_identifiers = 0;
+  정수 always_modifier = 0;
+  정수 close_modifier = 0;
+  정수 present_modifier = 0;
+  정수 mapper_modifier = 0;
+  정수 num_commas = 0;
+  정수 num_identifiers = 0;
   tree mapper_name = NULL_TREE;
   tree iterators = NULL_TREE;
-  for (int pos = 1; pos < map_kind_pos; ++pos)
+  위해 (정수 pos = 1; pos < map_kind_pos; ++pos)
     {
       c_token *tok = c_parser_peek_token (parser);
 
-      if (tok->type == CPP_COMMA)
+      만약 (tok->type == CPP_COMMA)
 	{
 	  ++num_commas;
-	  if (num_commas > num_identifiers)
+	  만약 (num_commas > num_identifiers)
 	    c_parser_error (parser, "illegal comma");
 	  c_parser_consume_token (parser);
 	  continue;
 	}
 
       const char *p = IDENTIFIER_POINTER (tok->value);
-      if (strcmp ("always", p) == 0)
+      만약 (strcmp ("always", p) == 0)
 	{
-	  if (always_modifier)
+	  만약 (always_modifier)
 	    {
 	      c_parser_error (parser, "too many %<always%> modifiers");
 	      parens.skip_until_found_close (parser);
-	      return list;
+	      반환 list;
 	    }
 	  always_modifier++;
 	  c_parser_consume_token (parser);
 	}
-      else if (strcmp ("close", p) == 0)
+      아니면 만약 (strcmp ("close", p) == 0)
 	{
-	  if (close_modifier)
+	  만약 (close_modifier)
 	    {
 	      c_parser_error (parser, "too many %<close%> modifiers");
 	      parens.skip_until_found_close (parser);
-	      return list;
+	      반환 list;
 	    }
 	  close_modifier++;
 	  c_parser_consume_token (parser);
 	}
-      else if (strcmp ("iterator", p) == 0)
+      아니면 만약 (strcmp ("iterator", p) == 0)
 	{
-	  if (iterators)
+	  만약 (iterators)
 	    {
 	      c_parser_error (parser, "too many %<iterator%> modifiers");
 	      parens.skip_until_found_close (parser);
-	      return list;
+	      반환 list;
 	    }
 	  iterators = c_parser_omp_iterators (parser);
 	  pos += iterator_length - 1;
 	}
-      else if (strcmp ("mapper", p) == 0)
+      아니면 만약 (strcmp ("mapper", p) == 0)
 	{
 	  c_parser_consume_token (parser);
 
 	  matching_parens mparens;
-	  if (mparens.require_open (parser))
+	  만약 (mparens.require_open (parser))
 	    {
-	      if (mapper_modifier)
+	      만약 (mapper_modifier)
 		{
 		  c_parser_error (parser, "too many %<mapper%> modifiers");
 		  /* Assume it's a well-formed mapper modifier, even if it
@@ -20998,7 +20998,7 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
 		  c_parser_consume_token (parser);
 		  mparens.require_close (parser);
 		  parens.skip_until_found_close (parser);
-		  return list;
+		  반환 list;
 		}
 
 	      tok = c_parser_peek_token (parser);
@@ -21009,7 +21009,7 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
 		  {
 		    mapper_name = tok->value;
 		    c_parser_consume_token (parser);
-		    if (declare_mapper_p)
+		    만약 (declare_mapper_p)
 		      {
 			error_at (tok->location,
 				  "in %<declare mapper%> directives, parameter "
@@ -21019,7 +21019,7 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
 		  break;
 
 		case CPP_KEYWORD:
-		  if (tok->keyword == RID_DEFAULT)
+		  만약 (tok->keyword == RID_DEFAULT)
 		    {
 		      c_parser_consume_token (parser);
 		      break;
@@ -21029,40 +21029,40 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
 		default:
 		  error_at (tok->location,
 			    "expected identifier or %<default%>");
-		  return list;
+		  반환 list;
 		}
 
-	      if (!mparens.require_close (parser))
+	      만약 (!mparens.require_close (parser))
 		{
 		  parens.skip_until_found_close (parser);
-		  return list;
+		  반환 list;
 		}
 
 	      mapper_modifier++;
 	      pos += 3;
 	    }
 	}
-      else if (strcmp ("present", p) == 0)
+      아니면 만약 (strcmp ("present", p) == 0)
 	{
-	  if (present_modifier)
+	  만약 (present_modifier)
 	    {
 	      c_parser_error (parser, "too many %<present%> modifiers");
 	      parens.skip_until_found_close (parser);
-	      return list;
+	      반환 list;
 	    }
 	  present_modifier++;
 	  c_parser_consume_token (parser);
 	}
-      else
+      아니면
 	{
 	  c_parser_error (parser, "%<map%> clause with map-type modifier other "
 				  "than %<always%>, %<close%>, %<iterator%>, "
 				  "%<mapper%> or %<present%>");
 	  parens.skip_until_found_close (parser);
-	  return list;
+	  반환 list;
 	}
       ++num_identifiers;
-      if (num_identifiers - 1 > num_commas)
+      만약 (num_identifiers - 1 > num_commas)
 	{
 	  gcc_rich_location richloc (clause_loc);
 	  richloc.add_fixit_insert_before (tok->location, ",");
@@ -21073,39 +21073,39 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
       num_commas = num_identifiers - 1;
     }
 
-  if (c_parser_next_token_is (parser, CPP_NAME)
+  만약 (c_parser_next_token_is (parser, CPP_NAME)
       && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      int always_present_modifier = always_modifier && present_modifier;
+      정수 always_present_modifier = always_modifier && present_modifier;
 
-      if (strcmp ("alloc", p) == 0)
+      만약 (strcmp ("alloc", p) == 0)
 	kind = present_modifier ? GOMP_MAP_PRESENT_ALLOC : GOMP_MAP_ALLOC;
-      else if (strcmp ("to", p) == 0)
+      아니면 만약 (strcmp ("to", p) == 0)
 	kind = (always_present_modifier ? GOMP_MAP_ALWAYS_PRESENT_TO
 		: present_modifier ? GOMP_MAP_PRESENT_TO
 		: always_modifier ? GOMP_MAP_ALWAYS_TO
 		: GOMP_MAP_TO);
-      else if (strcmp ("from", p) == 0)
+      아니면 만약 (strcmp ("from", p) == 0)
 	kind = (always_present_modifier ? GOMP_MAP_ALWAYS_PRESENT_FROM
 		: present_modifier ? GOMP_MAP_PRESENT_FROM
 		: always_modifier ? GOMP_MAP_ALWAYS_FROM
 		: GOMP_MAP_FROM);
-      else if (strcmp ("tofrom", p) == 0)
+      아니면 만약 (strcmp ("tofrom", p) == 0)
 	kind = (always_present_modifier ? GOMP_MAP_ALWAYS_PRESENT_TOFROM
 		: present_modifier ? GOMP_MAP_PRESENT_TOFROM
 		: always_modifier ? GOMP_MAP_ALWAYS_TOFROM
 		: GOMP_MAP_TOFROM);
-      else if (strcmp ("release", p) == 0)
+      아니면 만약 (strcmp ("release", p) == 0)
 	kind = GOMP_MAP_RELEASE;
-      else if (strcmp ("delete", p) == 0)
+      아니면 만약 (strcmp ("delete", p) == 0)
 	kind = GOMP_MAP_DELETE;
-      else
+      아니면
 	{
 	  c_parser_error (parser, "invalid map kind");
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				     "expected %<)%>");
-	  return list;
+	  반환 list;
 	}
       c_parser_consume_token (parser);
       c_parser_consume_token (parser);
@@ -21116,23 +21116,23 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
 
   tree last_new = NULL_TREE;
 
-  if (iterators)
+  만약 (iterators)
     {
       tree block = pop_scope ();
-      if (iterators == error_mark_node)
+      만약 (iterators == error_mark_node)
 	iterators = NULL_TREE;
-      else
+      아니면
 	OMP_ITERATOR_BLOCK (iterators) = block;
     }
 
-  for (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  위해 (c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
     {
       OMP_CLAUSE_SET_MAP_KIND (c, kind);
       OMP_CLAUSE_ITERATORS (c) = iterators;
       last_new = c;
     }
 
-  if (mapper_name)
+  만약 (mapper_name)
     {
       tree name = build_omp_clause (input_location, OMP_CLAUSE_MAP);
       OMP_CLAUSE_SET_MAP_KIND (name, GOMP_MAP_PUSH_MAPPER_NAME);
@@ -21150,7 +21150,7 @@ c_parser_omp_clause_map (c_parser *parser, tree list, bool declare_mapper_p)
     }
 
   parens.skip_until_found_close (parser);
-  return nl;
+  반환 nl;
 }
 
 /* OpenMP 4.0:
@@ -21172,35 +21172,35 @@ c_parser_omp_clause_device (c_parser *parser, tree list)
   bool ancestor = false;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  if (c_parser_next_token_is (parser, CPP_NAME)
+  만약 (c_parser_next_token_is (parser, CPP_NAME)
       && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
     {
       c_token *tok = c_parser_peek_token (parser);
       const char *p = IDENTIFIER_POINTER (tok->value);
-      if (strcmp ("ancestor", p) == 0)
+      만약 (strcmp ("ancestor", p) == 0)
 	{
 	  /* A requires directive with the reverse_offload clause must be
 	  specified.  */
-	  if ((omp_requires_mask & OMP_REQUIRES_REVERSE_OFFLOAD) == 0)
+	  만약 ((omp_requires_mask & OMP_REQUIRES_REVERSE_OFFLOAD) == 0)
 	    {
 	      error_at (tok->location, "%<ancestor%> device modifier not "
 				       "preceded by %<requires%> directive "
 				       "with %<reverse_offload%> clause");
 	      parens.skip_until_found_close (parser);
-	      return list;
+	      반환 list;
 	    }
 	  ancestor = true;
 	}
-      else if (strcmp ("device_num", p) == 0)
+      아니면 만약 (strcmp ("device_num", p) == 0)
 	;
-      else
+      아니면
 	{
 	  error_at (tok->location, "expected %<ancestor%> or %<device_num%>");
 	  parens.skip_until_found_close (parser);
-	  return list;
+	  반환 list;
 	}
       c_parser_consume_token (parser);
       c_parser_consume_token (parser);
@@ -21214,16 +21214,16 @@ c_parser_omp_clause_device (c_parser *parser, tree list)
 
   parens.skip_until_found_close (parser);
 
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+  만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
     {
       c_parser_error (parser, "expected integer expression");
-      return list;
+      반환 list;
     }
-  if (ancestor && TREE_CODE (t) == INTEGER_CST && !integer_onep (t))
+  만약 (ancestor && TREE_CODE (t) == INTEGER_CST && !integer_onep (t))
     {
       error_at (expr_loc, "the %<device%> clause expression must evaluate to "
 			  "%<1%>");
-      return list;
+      반환 list;
     }
 
   check_no_duplicate_clause (list, OMP_CLAUSE_DEVICE, "device");
@@ -21235,7 +21235,7 @@ c_parser_omp_clause_device (c_parser *parser, tree list)
   OMP_CLAUSE_DEVICE_ANCESTOR (c) = ancestor;
 
   list = c;
-  return list;
+  반환 list;
 }
 
 /* OpenMP 4.0:
@@ -21249,19 +21249,19 @@ c_parser_omp_clause_dist_schedule (c_parser *parser, tree list)
   location_t loc = c_parser_peek_token (parser)->location;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  if (!c_parser_next_token_is_keyword (parser, RID_STATIC))
+  만약 (!c_parser_next_token_is_keyword (parser, RID_STATIC))
     {
       c_parser_error (parser, "invalid dist_schedule kind");
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				 "expected %<)%>");
-      return list;
+      반환 list;
     }
 
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is (parser, CPP_COMMA))
+  만약 (c_parser_next_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
 
@@ -21272,21 +21272,21 @@ c_parser_omp_clause_dist_schedule (c_parser *parser, tree list)
       t = c_fully_fold (t, false, NULL);
       parens.skip_until_found_close (parser);
     }
-  else
+  아니면
     c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 			       "expected %<,%> or %<)%>");
 
   /* check_no_duplicate_clause (list, OMP_CLAUSE_DIST_SCHEDULE,
 				"dist_schedule"); */
-  if (omp_find_clause (list, OMP_CLAUSE_DIST_SCHEDULE))
+  만약 (omp_find_clause (list, OMP_CLAUSE_DIST_SCHEDULE))
     warning_at (loc, OPT_Wopenmp, "too many %qs clauses", "dist_schedule");
-  if (t == error_mark_node)
-    return list;
+  만약 (t == error_mark_node)
+    반환 list;
 
   c = build_omp_clause (loc, OMP_CLAUSE_DIST_SCHEDULE);
   OMP_CLAUSE_DIST_SCHEDULE_CHUNK_EXPR (c) = t;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 4.0:
@@ -21304,15 +21304,15 @@ c_parser_omp_clause_proc_bind (c_parser *parser, tree list)
   tree c;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp ("primary", p) == 0)
+      만약 (strcmp ("primary", p) == 0)
 	kind = OMP_CLAUSE_PROC_BIND_PRIMARY;
-      else if (strcmp ("master", p) == 0)
+      아니면 만약 (strcmp ("master", p) == 0)
 	{
 	  gcc_rich_location richloc (clause_loc);
 	  richloc.add_fixit_replace (c_parser_peek_token (parser)->location,
@@ -21322,14 +21322,14 @@ c_parser_omp_clause_proc_bind (c_parser *parser, tree list)
 		      "use %<primary%>");
 	  kind = OMP_CLAUSE_PROC_BIND_MASTER;
 	}
-      else if (strcmp ("close", p) == 0)
+      아니면 만약 (strcmp ("close", p) == 0)
 	kind = OMP_CLAUSE_PROC_BIND_CLOSE;
-      else if (strcmp ("spread", p) == 0)
+      아니면 만약 (strcmp ("spread", p) == 0)
 	kind = OMP_CLAUSE_PROC_BIND_SPREAD;
-      else
+      아니면
 	goto invalid_kind;
     }
-  else
+  아니면
     goto invalid_kind;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_PROC_BIND, "proc_bind");
@@ -21338,12 +21338,12 @@ c_parser_omp_clause_proc_bind (c_parser *parser, tree list)
   c = build_omp_clause (clause_loc, OMP_CLAUSE_PROC_BIND);
   OMP_CLAUSE_PROC_BIND_KIND (c) = kind;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 
  invalid_kind:
   c_parser_error (parser, "invalid proc_bind kind");
   parens.skip_until_found_close (parser);
-  return list;
+  반환 list;
 }
 
 /* OpenMP 5.0:
@@ -21357,22 +21357,22 @@ c_parser_omp_clause_device_type (c_parser *parser, tree list)
   tree c;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp ("host", p) == 0)
+      만약 (strcmp ("host", p) == 0)
 	kind = OMP_CLAUSE_DEVICE_TYPE_HOST;
-      else if (strcmp ("nohost", p) == 0)
+      아니면 만약 (strcmp ("nohost", p) == 0)
 	kind = OMP_CLAUSE_DEVICE_TYPE_NOHOST;
-      else if (strcmp ("any", p) == 0)
+      아니면 만약 (strcmp ("any", p) == 0)
 	kind = OMP_CLAUSE_DEVICE_TYPE_ANY;
-      else
+      아니면
 	goto invalid_kind;
     }
-  else
+  아니면
     goto invalid_kind;
 
   check_no_duplicate_clause (list, OMP_CLAUSE_DEVICE_TYPE,
@@ -21382,12 +21382,12 @@ c_parser_omp_clause_device_type (c_parser *parser, tree list)
   c = build_omp_clause (clause_loc, OMP_CLAUSE_DEVICE_TYPE);
   OMP_CLAUSE_DEVICE_TYPE_KIND (c) = kind;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 
  invalid_kind:
   c_parser_error (parser, "expected %<host%>, %<nohost%> or %<any%>");
   parens.skip_until_found_close (parser);
-  return list;
+  반환 list;
 }
 
 /* OpenMP 4.0:
@@ -21407,34 +21407,34 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
 {
   location_t loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  int pos = 1, colon_pos = 0;
-  int iterator_length = 0;
+  정수 pos = 1, colon_pos = 0;
+  정수 iterator_length = 0;
 
-  while (c_parser_peek_nth_token_raw (parser, pos)->type == CPP_NAME)
+  동안 (c_parser_peek_nth_token_raw (parser, pos)->type == CPP_NAME)
     {
       const char *identifier =
 	IDENTIFIER_POINTER (c_parser_peek_nth_token_raw (parser, pos)->value);
-      if (c_parser_peek_nth_token_raw (parser, pos + 1)->type
+      만약 (c_parser_peek_nth_token_raw (parser, pos + 1)->type
 	  == CPP_OPEN_PAREN)
 	{
-	  unsigned int npos = pos + 2;
-	  if (c_parser_check_balanced_raw_token_sequence (parser, &npos)
+	  unsigned 정수 npos = pos + 2;
+	  만약 (c_parser_check_balanced_raw_token_sequence (parser, &npos)
 	      && (c_parser_peek_nth_token_raw (parser, npos)->type
 		  == CPP_CLOSE_PAREN))
 	    {
-	      if (strcmp (identifier, "iterator") == 0)
+	      만약 (strcmp (identifier, "iterator") == 0)
 		iterator_length = npos - pos + 1;
 	      pos = npos;
 	    }
 	}
-      if (c_parser_peek_nth_token_raw (parser, pos + 1)->type == CPP_COMMA)
+      만약 (c_parser_peek_nth_token_raw (parser, pos + 1)->type == CPP_COMMA)
 	pos += 2;
-      else
+      아니면
 	pos++;
-      if (c_parser_peek_nth_token_raw (parser, pos)->type == CPP_COLON)
+      만약 (c_parser_peek_nth_token_raw (parser, pos)->type == CPP_COLON)
 	{
 	  colon_pos = pos;
 	  break;
@@ -21445,45 +21445,45 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
   tree iterators = NULL_TREE;
   tree mapper_name = NULL_TREE;
 
-  for (int pos = 1; pos < colon_pos; ++pos)
+  위해 (정수 pos = 1; pos < colon_pos; ++pos)
     {
       c_token *token = c_parser_peek_token (parser);
-      if (token->type == CPP_COMMA)
+      만약 (token->type == CPP_COMMA)
 	{
 	  c_parser_consume_token (parser);
 	  continue;
 	}
       const char *p = IDENTIFIER_POINTER (token->value);
-      if (strcmp ("present", p) == 0)
+      만약 (strcmp ("present", p) == 0)
 	{
-	  if (present)
+	  만약 (present)
 	    {
 	      c_parser_error (parser, "too many %<present%> modifiers");
 	      parens.skip_until_found_close (parser);
-	      return list;
+	      반환 list;
 	    }
 	  present = true;
 	  c_parser_consume_token (parser);
 	}
-      else if (strcmp ("iterator", p) == 0)
+      아니면 만약 (strcmp ("iterator", p) == 0)
 	{
-	  if (iterators)
+	  만약 (iterators)
 	    {
 	      c_parser_error (parser, "too many %<iterator%> modifiers");
 	      parens.skip_until_found_close (parser);
-	      return list;
+	      반환 list;
 	    }
 	  iterators = c_parser_omp_iterators (parser);
 	  pos += iterator_length - 1;
 	}
-      else if (strcmp ("mapper", p) == 0)
+      아니면 만약 (strcmp ("mapper", p) == 0)
 	{
 	  c_parser_consume_token (parser);
 
 	  matching_parens mparens;
-	  if (mparens.require_open (parser))
+	  만약 (mparens.require_open (parser))
 	    {
-	      if (mapper_modifier)
+	      만약 (mapper_modifier)
 		{
 		  c_parser_error (parser, "too many %<mapper%> modifiers");
 		  /* Assume it's a well-formed mapper modifier, even if it
@@ -21491,7 +21491,7 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
 		  c_parser_consume_token (parser);
 		  mparens.require_close (parser);
 		  parens.skip_until_found_close (parser);
-		  return list;
+		  반환 list;
 		}
 
 	      token = c_parser_peek_token (parser);
@@ -21504,7 +21504,7 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
 		  }
 		  break;
 		case CPP_KEYWORD:
-		  if (token->keyword == RID_DEFAULT)
+		  만약 (token->keyword == RID_DEFAULT)
 		    {
 		      c_parser_consume_token (parser);
 		      break;
@@ -21513,55 +21513,55 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
 		default:
 		  error_at (token->location,
 			    "expected identifier or %<default%>");
-		  return list;
+		  반환 list;
 		}
-	      if (!mparens.require_close (parser))
+	      만약 (!mparens.require_close (parser))
 		{
 		  parens.skip_until_found_close (parser);
-		  return list;
+		  반환 list;
 		}
 	      mapper_modifier = true;
 	      pos += 3;
 	    }
 	}
-      else
+      아니면
 	{
 	  error_at (token->location,
 		    "%qs clause with modifier other than %<iterator%>, "
 		    "%<mapper%>, or %<present%>",
 		    kind == OMP_CLAUSE_TO ? "to" : "from");
 	  parens.skip_until_found_close (parser);
-	  return list;
+	  반환 list;
 	}
     }
 
-  if (colon_pos)
+  만약 (colon_pos)
     c_parser_require (parser, CPP_COLON, "expected %<:%>");
 
   tree nl = c_parser_omp_variable_list (parser, loc, kind, list);
   parens.skip_until_found_close (parser);
 
-  if (present)
-    for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  만약 (present)
+    위해 (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
       OMP_CLAUSE_MOTION_PRESENT (c) = 1;
 
-  if (iterators)
+  만약 (iterators)
     {
       tree block = pop_scope ();
-      if (iterators == error_mark_node)
+      만약 (iterators == error_mark_node)
 	iterators = NULL_TREE;
-      else
+      아니면
 	OMP_ITERATOR_BLOCK (iterators) = block;
     }
 
-  if (iterators)
-    for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  만약 (iterators)
+    위해 (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
       OMP_CLAUSE_ITERATORS (c) = iterators;
 
-  if (mapper_name)
+  만약 (mapper_name)
     {
       tree last_new = NULL_TREE;
-      for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+      위해 (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
 	last_new = c;
 
       tree name = build_omp_clause (input_location, OMP_CLAUSE_MAP);
@@ -21579,7 +21579,7 @@ c_parser_omp_clause_from_to (c_parser *parser, enum omp_clause_code kind,
       OMP_CLAUSE_CHAIN (last_new) = name;
     }
 
-  return nl;
+  반환 nl;
 }
 
 /* OpenMP 4.0:
@@ -21592,13 +21592,13 @@ c_parser_omp_clause_uniform (c_parser *parser, tree list)
   location_t loc = c_parser_peek_token (parser)->location;
 
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       list = c_parser_omp_variable_list (parser, loc, OMP_CLAUSE_UNIFORM,
 					 list);
       parens.skip_until_found_close (parser);
     }
-  return list;
+  반환 list;
 }
 
 /* OpenMP 5.1
@@ -21612,7 +21612,7 @@ c_parser_omp_clause_full (c_parser *parser, tree list)
   location_t loc = c_parser_peek_token (parser)->location;
   tree c = build_omp_clause (loc, OMP_CLAUSE_FULL);
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 5.1
@@ -21626,34 +21626,34 @@ c_parser_omp_clause_partial (c_parser *parser, tree list)
 
   check_no_duplicate_clause (list, OMP_CLAUSE_PARTIAL, "partial");
 
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       matching_parens parens;
       parens.consume_open (parser);
       num = c_parser_expr_no_commas (parser, NULL).value;
       parens.skip_until_found_close (parser);
 
-      if (num == error_mark_node)
-	return list;
+      만약 (num == error_mark_node)
+	반환 list;
 
       mark_exp_read (num);
       num = c_fully_fold (num, false, NULL);
       HOST_WIDE_INT n;
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (num))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (num))
 	  || !tree_fits_shwi_p (num)
 	  || (n = tree_to_shwi (num)) <= 0
-	  || (int) n != n)
+	  || (정수) n != n)
 	{
 	  error_at (loc, "%<partial%> argument needs positive constant "
 			 "integer expression");
-	  return list;
+	  반환 list;
 	}
     }
 
   tree c = build_omp_clause (loc, OMP_CLAUSE_PARTIAL);
   OMP_CLAUSE_PARTIAL_EXPR (c) = num;
   OMP_CLAUSE_CHAIN (c) = list;
-  return c;
+  반환 c;
 }
 
 /* OpenMP 5.1
@@ -21663,8 +21663,8 @@ static tree
 c_parser_omp_clause_novariants (c_parser *parser, tree list)
 {
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
   location_t loc = c_parser_peek_token (parser)->location;
   c_expr expr = c_parser_expr_no_commas (parser, NULL);
@@ -21680,7 +21680,7 @@ c_parser_omp_clause_novariants (c_parser *parser, tree list)
   OMP_CLAUSE_CHAIN (c) = list;
   list = c;
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 5.1
@@ -21690,8 +21690,8 @@ static tree
 c_parser_omp_clause_nocontext (c_parser *parser, tree list)
 {
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
   location_t loc = c_parser_peek_token (parser)->location;
   c_expr expr = c_parser_expr_no_commas (parser, NULL);
@@ -21707,7 +21707,7 @@ c_parser_omp_clause_nocontext (c_parser *parser, tree list)
   OMP_CLAUSE_CHAIN (c) = list;
   list = c;
 
-  return list;
+  반환 list;
 }
 
 /* OpenMP 5.0:
@@ -21719,29 +21719,29 @@ c_parser_omp_clause_detach (c_parser *parser, tree list)
   matching_parens parens;
   location_t clause_loc = c_parser_peek_token (parser)->location;
 
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
-  if (c_parser_next_token_is_not (parser, CPP_NAME)
+  만약 (c_parser_next_token_is_not (parser, CPP_NAME)
       || c_parser_peek_token (parser)->id_kind != C_ID_ID)
     {
       c_parser_error (parser, "expected identifier");
       parens.skip_until_found_close (parser);
-      return list;
+      반환 list;
     }
 
   tree t = lookup_name (c_parser_peek_token (parser)->value);
-  if (t == NULL_TREE)
+  만약 (t == NULL_TREE)
     {
       undeclared_variable (c_parser_peek_token (parser)->location,
 			   c_parser_peek_token (parser)->value);
       parens.skip_until_found_close (parser);
-      return list;
+      반환 list;
     }
   c_parser_consume_token (parser);
 
   tree type = TYPE_MAIN_VARIANT (TREE_TYPE (t));
-  if (!INTEGRAL_TYPE_P (type)
+  만약 (!INTEGRAL_TYPE_P (type)
       || TREE_CODE (type) != ENUMERAL_TYPE
       || TYPE_NAME (type) != get_identifier ("omp_event_handle_t"))
     {
@@ -21750,14 +21750,14 @@ c_parser_omp_clause_detach (c_parser *parser, tree list)
 			    "%<omp_event_handle_t%>",
 			    type);
       parens.skip_until_found_close (parser);
-      return list;
+      반환 list;
     }
 
   tree u = build_omp_clause (clause_loc, OMP_CLAUSE_DETACH);
   OMP_CLAUSE_DECL (u) = t;
   OMP_CLAUSE_CHAIN (u) = list;
   parens.skip_until_found_close (parser);
-  return u;
+  반환 u;
 }
 
 /* OpenMP 5.0:
@@ -21767,9 +21767,9 @@ static tree
 c_parser_omp_clause_destroy (c_parser *parser, tree list)
 {
   tree nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_DESTROY, list);
-  for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  위해 (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
     TREE_ADDRESSABLE (OMP_CLAUSE_DECL (c)) = 1;
-  return nl;
+  반환 nl;
 }
 
 /* OpenMP 5.1:
@@ -21798,54 +21798,54 @@ c_parser_omp_clause_destroy (c_parser *parser, tree list)
 static tree
 c_parser_omp_modifier_prefer_type (c_parser *parser)
 {
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return error_mark_node;
+  만약 (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    반환 error_mark_node;
 
   std::string str;
 
   /* Old Format: const-int-expr-or-string-literal-list */
-  if (!c_parser_next_token_is (parser, CPP_OPEN_BRACE))
-    while (true)
+  만약 (!c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+    동안 (true)
       {
 	str += (char) GOMP_INTEROP_IFR_SEPARATOR;
-	if (c_parser_next_token_is (parser, CPP_STRING))
+	만약 (c_parser_next_token_is (parser, CPP_STRING))
 	  {
 	    c_expr cval = c_parser_string_literal (parser, false, false);
-	    if (cval.value == error_mark_node)
-	      return error_mark_node;
-	    if ((size_t) TREE_STRING_LENGTH (cval.value)
+	    만약 (cval.value == error_mark_node)
+	      반환 error_mark_node;
+	    만약 ((size_t) TREE_STRING_LENGTH (cval.value)
 		!= strlen (TREE_STRING_POINTER (cval.value)) + 1)
 	      {
 		error_at (cval.get_location (), "string literal must "
 						"not contain %<\\0%>");
 		parser->error = true;
-		return error_mark_node;
+		반환 error_mark_node;
 	      }
 
 	    char c = omp_get_fr_id_from_name (TREE_STRING_POINTER (cval.value));
-	    if (c == GOMP_INTEROP_IFR_UNKNOWN)
+	    만약 (c == GOMP_INTEROP_IFR_UNKNOWN)
 	      warning_at (cval.get_location (), OPT_Wopenmp,
 			  "unknown foreign runtime identifier %qs",
 			  TREE_STRING_POINTER (cval.value));
 	    str += c;
 	  }
-	else
+	아니면
 	  {
 	    c_expr cval = c_parser_expr_no_commas (parser, NULL);
 	    tree value = c_fully_fold (cval.value, false, NULL);
-	    if (INTEGRAL_TYPE_P (TREE_TYPE (value))
+	    만약 (INTEGRAL_TYPE_P (TREE_TYPE (value))
 		&& TREE_CODE (value) != INTEGER_CST)
 	      value = convert_lvalue_to_rvalue (cval.get_start (), cval,
 						false, true).value;
-	    if (TREE_CODE (value) != INTEGER_CST
+	    만약 (TREE_CODE (value) != INTEGER_CST
 		|| !tree_fits_shwi_p (value))
 	      {
 		c_parser_error (parser, "expected string literal or constant "
 					"integer expression");
-		return error_mark_node;
+		반환 error_mark_node;
 	      }
 	    HOST_WIDE_INT n = tree_to_shwi (value);
-	    if (n < 1 || n > GOMP_INTEROP_IFR_LAST)
+	    만약 (n < 1 || n > GOMP_INTEROP_IFR_LAST)
 	      {
 		warning_at (cval.get_location (), OPT_Wopenmp,
 			    "unknown foreign runtime identifier %qwd", n);
@@ -21855,96 +21855,96 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
 	  }
 	str += (char) GOMP_INTEROP_IFR_SEPARATOR;
 	str += '\0';
-	if (c_parser_next_token_is (parser, CPP_COMMA))
+	만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	  {
 	    c_parser_consume_token (parser);
 	    continue;
 	  }
-	if (!c_parser_require (parser, CPP_CLOSE_PAREN,
+	만약 (!c_parser_require (parser, CPP_CLOSE_PAREN,
 			       "expected %<,%> or %<)%>"))
-	  return error_mark_node;
+	  반환 error_mark_node;
 	str += '\0';
 	tree res = build_string (str.length (), str.data ());
 	TREE_TYPE (res) = build_array_type_nelts (unsigned_char_type_node,
 						  str.length ());
-	return res;
+	반환 res;
       }
 
   /* New format. */
   std::string str2;
-  while (true)
+  동안 (true)
     {
-      if (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
-	return error_mark_node;
+      만약 (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+	반환 error_mark_node;
       str += (char) GOMP_INTEROP_IFR_SEPARATOR;
       str2.clear ();
       bool has_fr = false;
-      while (true)
+      동안 (true)
 	{
 	  c_token *tok = c_parser_peek_token (parser);
-	  if (tok->type != CPP_NAME
+	  만약 (tok->type != CPP_NAME
 	      || (strcmp("fr", IDENTIFIER_POINTER (tok->value)) != 0
 		  && strcmp("attr", IDENTIFIER_POINTER (tok->value)) != 0))
 	    {
 	      c_parser_error (parser, "expected %<fr%> or %<attr%> preference "
 				      "selector");
-	      return error_mark_node;
+	      반환 error_mark_node;
 	    }
 	  c_parser_consume_token (parser);
 	  bool is_fr = IDENTIFIER_POINTER (tok->value)[0] == 'f';
-	  if (is_fr && has_fr)
+	  만약 (is_fr && has_fr)
 	    {
 	      c_parser_error (parser, "duplicated %<fr%> preference selector");
-	      return error_mark_node;
+	      반환 error_mark_node;
 	    }
-	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return error_mark_node;
-	  while (true)
+	  만약 (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    반환 error_mark_node;
+	  동안 (true)
 	    {
-	      if (c_parser_next_token_is (parser, CPP_STRING))
+	      만약 (c_parser_next_token_is (parser, CPP_STRING))
 		{
 		  c_expr cval = c_parser_string_literal (parser, false, false);
 		  tree value = cval.value;
-		  if (value == error_mark_node)
-		    return error_mark_node;
-		  if ((size_t) TREE_STRING_LENGTH (value)
+		  만약 (value == error_mark_node)
+		    반환 error_mark_node;
+		  만약 ((size_t) TREE_STRING_LENGTH (value)
 		      != strlen (TREE_STRING_POINTER (value)) + 1)
 		    {
 		      error_at (cval.get_location (), "string literal must "
 						      "not contain %<\\0%>");
 		      parser->error = true;
-		      return error_mark_node;
+		      반환 error_mark_node;
 		    }
-		  if (!is_fr)
+		  만약 (!is_fr)
 		    {
-		      if (!startswith (TREE_STRING_POINTER (value), "ompx_"))
+		      만약 (!startswith (TREE_STRING_POINTER (value), "ompx_"))
 			{
 			  error_at (cval.get_location (),
 				    "%<attr%> string literal must start with "
 				    "%<ompx_%>");
 			  parser->error = true;
-			  return error_mark_node;
+			  반환 error_mark_node;
 			}
-		      if (strchr (TREE_STRING_POINTER (value), ','))
+		      만약 (strchr (TREE_STRING_POINTER (value), ','))
 			{
 			  error_at (cval.get_location (),
 				    "%<attr%> string literal must not contain "
 				    "a comma");
 			  parser->error = true;
-			  return error_mark_node;
+			  반환 error_mark_node;
 			}
 		      str2 += TREE_STRING_POINTER (value);
 		      str2 += '\0';
 		    }
-		  else
+		  아니면
 		    {
-		      if (*TREE_STRING_POINTER (value) == '\0')
+		      만약 (*TREE_STRING_POINTER (value) == '\0')
 			{
 			  c_parser_error (parser, "non-empty string literal expected");
-			  return error_mark_node;
+			  반환 error_mark_node;
 			}
 		      char c = omp_get_fr_id_from_name (TREE_STRING_POINTER (value));
-		      if (c == GOMP_INTEROP_IFR_UNKNOWN)
+		      만약 (c == GOMP_INTEROP_IFR_UNKNOWN)
 			warning_at (cval.get_location (), OPT_Wopenmp,
 				    "unknown foreign runtime identifier %qs",
 				    TREE_STRING_POINTER (value));
@@ -21952,29 +21952,29 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
 		     has_fr = true;
 		    }
 		}
-	      else if (!is_fr)
+	      아니면 만약 (!is_fr)
 		{
 		  c_parser_error (parser, "expected string literal");
-		  return error_mark_node;
+		  반환 error_mark_node;
 		}
-	      else
+	      아니면
 		{
 		  c_expr cval = c_parser_expr_no_commas (parser, NULL);
 		  tree value = c_fully_fold (cval.value, false, NULL);
-		  if (INTEGRAL_TYPE_P (TREE_TYPE (value))
+		  만약 (INTEGRAL_TYPE_P (TREE_TYPE (value))
 		      && TREE_CODE (value) != INTEGER_CST)
 		    value = convert_lvalue_to_rvalue (cval.get_start (), cval,
 						      false, true).value;
 
-		  if (TREE_CODE (value) != INTEGER_CST
+		  만약 (TREE_CODE (value) != INTEGER_CST
 		      || !tree_fits_shwi_p (value))
 		    {
 		      c_parser_error (parser, "expected string literal or "
 					      "constant integer expression");
-		      return error_mark_node;
+		      반환 error_mark_node;
 		    }
 		  HOST_WIDE_INT n = tree_to_shwi (value);
-		  if (n < 1 || n > GOMP_INTEROP_IFR_LAST)
+		  만약 (n < 1 || n > GOMP_INTEROP_IFR_LAST)
 		    {
 		      warning_at (cval.get_location (), OPT_Wopenmp,
 				  "unknown foreign runtime identifier %qwd", n);
@@ -21983,43 +21983,43 @@ c_parser_omp_modifier_prefer_type (c_parser *parser)
 		  str += (char) n;
 		  has_fr = true;
 		}
-	      if (!is_fr
+	      만약 (!is_fr
 		  && c_parser_next_token_is (parser, CPP_COMMA))
 		{
 		  c_parser_consume_token (parser);
 		  continue;
 		}
-	      if (!c_parser_require (parser, CPP_CLOSE_PAREN,
+	      만약 (!c_parser_require (parser, CPP_CLOSE_PAREN,
 				     is_fr ? G_("expected %<)%>")
 					   : G_("expected %<)%> or %<,%>")))
-		return error_mark_node;
+		반환 error_mark_node;
 	      break;
 	    }
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    {
 	      c_parser_consume_token (parser);
 	      continue;
 	    }
-	  if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+	  만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 	    break;
 	  c_parser_error (parser, "expected %<,%> or %<}%>");
-	  return error_mark_node;
+	  반환 error_mark_node;
 	}
       str += (char) GOMP_INTEROP_IFR_SEPARATOR;
       str += str2;
       str += '\0';
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	break;
-      if (!c_parser_require (parser, CPP_COMMA, "expected %<)%> or %<,%>"))
-	return error_mark_node;
+      만약 (!c_parser_require (parser, CPP_COMMA, "expected %<)%> or %<,%>"))
+	반환 error_mark_node;
     }
   c_parser_consume_token (parser);
   str += '\0';
   tree res = build_string (str.length (), str.data ());
   TREE_TYPE (res) = build_array_type_nelts (unsigned_char_type_node,
 						  str.length ());
-  return res;
+  반환 res;
 }
 
 /* OpenMP 5.1
@@ -22044,49 +22044,49 @@ c_parser_omp_clause_init_modifiers (c_parser *parser, bool *target,
   do
     {
       c_token *tok = c_parser_peek_token (parser);
-      if (tok->type != CPP_NAME)
+      만약 (tok->type != CPP_NAME)
 	goto fail;
       const char *p = IDENTIFIER_POINTER (tok->value);
-      if (strcmp ("targetsync", p) == 0)
+      만약 (strcmp ("targetsync", p) == 0)
 	{
-	  if (*targetsync)
+	  만약 (*targetsync)
 	    error_at (tok->location, "duplicate %<targetsync%> modifier");
 	  *targetsync = true;
 	  c_parser_consume_token (parser);
 	}
-      else if (strcmp ("target", p) == 0)
+      아니면 만약 (strcmp ("target", p) == 0)
 	{
-	  if (*target)
+	  만약 (*target)
 	    error_at (tok->location, "duplicate %<target%> modifier");
 	  *target = true;
 	  c_parser_consume_token (parser);
 	}
-      else if (strcmp ("prefer_type", p) == 0)
+      아니면 만약 (strcmp ("prefer_type", p) == 0)
 	{
-	  if (*prefer_type_tree != NULL_TREE)
+	  만약 (*prefer_type_tree != NULL_TREE)
 	    error_at (tok->location, "duplicate %<prefer_type%> modifier");
 	  c_parser_consume_token (parser);
 	  *prefer_type_tree = c_parser_omp_modifier_prefer_type (parser);
-	  if (*prefer_type_tree == error_mark_node)
-	    return false;
+	  만약 (*prefer_type_tree == error_mark_node)
+	    반환 false;
 	}
-      else
+      아니면
 	goto fail;
       tok = c_parser_peek_token (parser);
-      if (tok->type == CPP_COMMA)
+      만약 (tok->type == CPP_COMMA)
 	{
 	  c_parser_consume_token (parser);
 	  continue;
 	}
       /* Unknown token - either done or an error; handle it in the caller.  */
-      return true;
+      반환 true;
     }
-  while (true);
+  동안 (true);
 
 fail:
   c_parser_error (parser,
 		  "expected %<prefer_type%>, %<target%>, or %<targetsync%>");
-  return false;
+  반환 false;
 }
 
 /* OpenMP 5.1:
@@ -22103,23 +22103,23 @@ c_parser_omp_clause_init (c_parser *parser, tree list)
   location_t loc = c_parser_peek_token (parser)->location;
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return list;
+  만약 (!parens.require_open (parser))
+    반환 list;
 
   bool target = false;
   bool targetsync = false;
   tree prefer_type_tree = NULL_TREE;
 
-  if (!c_parser_omp_clause_init_modifiers (parser, &target, &targetsync,
+  만약 (!c_parser_omp_clause_init_modifiers (parser, &target, &targetsync,
 					   &prefer_type_tree)
       || !c_parser_require (parser, CPP_COLON, "expected %<:%>"))
     {
-      if (prefer_type_tree != error_mark_node)
+      만약 (prefer_type_tree != error_mark_node)
 	parens.skip_until_found_close (parser);
-      return list;
+      반환 list;
     }
 
-  if (!target && !targetsync)
+  만약 (!target && !targetsync)
     error_at (loc,
 	      "missing required %<target%> and/or %<targetsync%> modifier");
 
@@ -22127,17 +22127,17 @@ c_parser_omp_clause_init (c_parser *parser, tree list)
 					false);
   parens.skip_until_found_close (parser);
 
-  for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  위해 (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
     {
       TREE_ADDRESSABLE (OMP_CLAUSE_DECL (c)) = 1;
-      if (target)
+      만약 (target)
 	OMP_CLAUSE_INIT_TARGET (c) = 1;
-      if (targetsync)
+      만약 (targetsync)
 	OMP_CLAUSE_INIT_TARGETSYNC (c) = 1;
-      if (prefer_type_tree)
+      만약 (prefer_type_tree)
 	OMP_CLAUSE_INIT_PREFER_TYPE (c) = prefer_type_tree;
     }
-  return nl;
+  반환 nl;
 }
 
 /* OpenMP 5.0:
@@ -22146,7 +22146,7 @@ c_parser_omp_clause_init (c_parser *parser, tree list)
 static tree
 c_parser_omp_clause_use (c_parser *parser, tree list)
 {
-  return c_parser_omp_var_list_parens (parser, OMP_CLAUSE_USE, list);
+  반환 c_parser_omp_var_list_parens (parser, OMP_CLAUSE_USE, list);
 }
 
 /* OpenMP 6.0:
@@ -22157,12 +22157,12 @@ c_parser_omp_clause_interop (c_parser *parser, tree list)
 {
   check_no_duplicate_clause (list, OMP_CLAUSE_INTEROP, "interop");
   tree nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_INTEROP, list);
-  for (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
+  위해 (tree c = nl; c != list; c = OMP_CLAUSE_CHAIN (c))
     {
       TREE_USED (OMP_CLAUSE_DECL (c)) = 1;
       DECL_READ_P (OMP_CLAUSE_DECL (c)) = 1;
     }
-  return nl;
+  반환 nl;
 }
 
 /* Parse all OpenACC clauses.  The set clauses allowed by the directive
@@ -22176,14 +22176,14 @@ c_parser_oacc_all_clauses (c_parser *parser, omp_clause_mask mask,
   tree clauses = NULL;
   bool first = true;
 
-  while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+  동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
     {
       location_t here;
       pragma_omp_clause c_kind;
       const char *c_name;
       tree prev = clauses;
 
-      if (!first && c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (!first && c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
 
       here = c_parser_peek_token (parser)->location;
@@ -22320,10 +22320,10 @@ c_parser_oacc_all_clauses (c_parser *parser, omp_clause_mask mask,
 	  c_name = "reduction";
 	  break;
 	case PRAGMA_OACC_CLAUSE_SELF:
-	  if ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_HOST)) == 0)
+	  만약 ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OACC_CLAUSE_HOST)) == 0)
 	    /* OpenACC compute construct */
 	    clauses = c_parser_oacc_compute_clause_self (parser, clauses);
-	  else
+	  아니면
 	    /* OpenACC 'update' directive */
 	    clauses = c_parser_oacc_data_clause (parser, c_kind, clauses);
 	  c_name = "self";
@@ -22368,7 +22368,7 @@ c_parser_oacc_all_clauses (c_parser *parser, omp_clause_mask mask,
 
       first = false;
 
-      if (((mask >> c_kind) & 1) == 0)
+      만약 (((mask >> c_kind) & 1) == 0)
 	{
 	  /* Remove the invalid clause(s) from the list to avoid
 	     confusing the rest of the compiler.  */
@@ -22380,11 +22380,11 @@ c_parser_oacc_all_clauses (c_parser *parser, omp_clause_mask mask,
  saw_error:
   c_parser_skip_to_pragma_eol (parser);
 
-  if (finish_p)
-    return c_finish_omp_clauses (clauses, target_p ? C_ORT_ACC_TARGET
+  만약 (finish_p)
+    반환 c_finish_omp_clauses (clauses, target_p ? C_ORT_ACC_TARGET
 						   : C_ORT_ACC);
 
-  return clauses;
+  반환 clauses;
 }
 
 /* Parse all OpenMP clauses.  The set clauses allowed by the directive
@@ -22397,26 +22397,26 @@ c_parser_oacc_all_clauses (c_parser *parser, omp_clause_mask mask,
 static tree
 c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 			  const char *where, bool finish_p = true,
-			  int nested = 0)
+			  정수 nested = 0)
 {
   tree clauses = NULL;
   bool first = true;
 
-  while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+  동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
     {
       location_t here;
       pragma_omp_clause c_kind;
       const char *c_name;
       tree prev = clauses;
 
-      if (nested && c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+      만약 (nested && c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 	break;
 
-      if (!first || nested != 2)
+      만약 (!first || nested != 2)
 	{
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
-	  else if (nested == 2)
+	  아니면 만약 (nested == 2)
 	    error_at (c_parser_peek_token (parser)->location,
 		      "clauses in %<simd%> trait should be separated "
 		      "by %<,%>");
@@ -22568,7 +22568,7 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 	    = c_parser_omp_clause_cancelkind (parser, OMP_CLAUSE_PARALLEL,
 					      clauses);
 	  c_name = "parallel";
-	  if (!first)
+	  만약 (!first)
 	    {
 	     clause_not_first:
 	      error_at (here, "%qs must be the first clause of %qs",
@@ -22581,7 +22581,7 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 	    = c_parser_omp_clause_cancelkind (parser, OMP_CLAUSE_FOR,
 					      clauses);
 	  c_name = "for";
-	  if (!first)
+	  만약 (!first)
 	    goto clause_not_first;
 	  break;
 	case PRAGMA_OMP_CLAUSE_SECTIONS:
@@ -22589,7 +22589,7 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 	    = c_parser_omp_clause_cancelkind (parser, OMP_CLAUSE_SECTIONS,
 					      clauses);
 	  c_name = "sections";
-	  if (!first)
+	  만약 (!first)
 	    goto clause_not_first;
 	  break;
 	case PRAGMA_OMP_CLAUSE_TASKGROUP:
@@ -22597,7 +22597,7 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 	    = c_parser_omp_clause_cancelkind (parser, OMP_CLAUSE_TASKGROUP,
 					      clauses);
 	  c_name = "taskgroup";
-	  if (!first)
+	  만약 (!first)
 	    goto clause_not_first;
 	  break;
 	case PRAGMA_OMP_CLAUSE_LINK:
@@ -22611,7 +22611,7 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 	  c_name = "local";
 	  break;
 	case PRAGMA_OMP_CLAUSE_TO:
-	  if ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_LINK)) != 0)
+	  만약 ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_LINK)) != 0)
 	    {
 	      gcc_rich_location richloc (here);
 	      richloc.add_fixit_replace ("enter");
@@ -22620,11 +22620,11 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 			  "since OpenMP 5.2, use %<enter%>");
 	      tree nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ENTER,
 						      clauses);
-	      for (tree c = nl; c != clauses; c = OMP_CLAUSE_CHAIN (c))
+	      위해 (tree c = nl; c != clauses; c = OMP_CLAUSE_CHAIN (c))
 		OMP_CLAUSE_ENTER_TO (c) = 1;
 	      clauses = nl;
 	    }
-	  else
+	  아니면
 	    clauses = c_parser_omp_clause_from_to (parser, OMP_CLAUSE_TO,
 						   clauses);
 	  c_name = "to";
@@ -22783,7 +22783,7 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
 
       first = false;
 
-      if (((mask >> c_kind) & 1) == 0)
+      만약 (((mask >> c_kind) & 1) == 0)
 	{
 	  /* Remove the invalid clause(s) from the list to avoid
 	     confusing the rest of the compiler.  */
@@ -22793,19 +22793,19 @@ c_parser_omp_all_clauses (c_parser *parser, omp_clause_mask mask,
     }
 
  saw_error:
-  if (!nested)
+  만약 (!nested)
     c_parser_skip_to_pragma_eol (parser);
 
-  if (finish_p)
+  만약 (finish_p)
     {
-      if ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_UNIFORM)) != 0)
-	return c_finish_omp_clauses (clauses, C_ORT_OMP_DECLARE_SIMD);
-      if ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_USE)) != 0)
-	return c_finish_omp_clauses (clauses, C_ORT_OMP_INTEROP);
-      return c_finish_omp_clauses (clauses, C_ORT_OMP);
+      만약 ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_UNIFORM)) != 0)
+	반환 c_finish_omp_clauses (clauses, C_ORT_OMP_DECLARE_SIMD);
+      만약 ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_USE)) != 0)
+	반환 c_finish_omp_clauses (clauses, C_ORT_OMP_INTEROP);
+      반환 c_finish_omp_clauses (clauses, C_ORT_OMP);
     }
 
-  return clauses;
+  반환 clauses;
 }
 
 /* OpenACC 2.0, OpenMP 2.5:
@@ -22822,7 +22822,7 @@ c_parser_omp_structured_block (c_parser *parser, bool *if_p)
   tree stmt = push_stmt_list ();
   parser->omp_attrs_forbidden_p = true;
   c_parser_statement (parser, if_p);
-  return pop_stmt_list (stmt);
+  반환 pop_stmt_list (stmt);
 }
 
 /* OpenACC 2.0:
@@ -22841,10 +22841,10 @@ c_parser_oacc_cache (location_t loc, c_parser *parser)
   bool readonly = false;
   location_t open_loc = c_parser_peek_token (parser)->location;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       c_token *token = c_parser_peek_token (parser);
-      if (token->type == CPP_NAME
+      만약 (token->type == CPP_NAME
 	  && !strcmp (IDENTIFIER_POINTER (token->value), "readonly")
 	  && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	{
@@ -22857,8 +22857,8 @@ c_parser_oacc_cache (location_t loc, c_parser *parser)
       parens.skip_until_found_close (parser);
     }
 
-  if (readonly)
-    for (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+  만약 (readonly)
+    위해 (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
       OMP_CLAUSE__CACHE__READONLY (c) = 1;
 
   clauses = c_finish_omp_clauses (clauses, C_ORT_ACC);
@@ -22871,7 +22871,7 @@ c_parser_oacc_cache (location_t loc, c_parser *parser)
   SET_EXPR_LOCATION (stmt, loc);
   add_stmt (stmt);
 
-  return stmt;
+  반환 stmt;
 }
 
 /* OpenACC 2.0:
@@ -22906,7 +22906,7 @@ c_parser_oacc_data (location_t loc, c_parser *parser, bool *if_p)
 
   stmt = c_finish_oacc_data (loc, clauses, block);
 
-  return stmt;
+  반환 stmt;
 }
 
 /* OpenACC 2.0:
@@ -22935,18 +22935,18 @@ c_parser_oacc_declare (c_parser *parser)
 
   clauses = c_parser_oacc_all_clauses (parser, OACC_DECLARE_CLAUSE_MASK,
 				       "#pragma acc declare");
-  if (!clauses)
+  만약 (!clauses)
     {
       error_at (pragma_loc,
 		"no valid clauses specified in %<#pragma acc declare%>");
-      return;
+      반환;
     }
 
-  for (t = clauses; t; t = OMP_CLAUSE_CHAIN (t))
+  위해 (t = clauses; t; t = OMP_CLAUSE_CHAIN (t))
     {
       location_t loc = OMP_CLAUSE_LOCATION (t);
       decl = OMP_CLAUSE_DECL (t);
-      if (!DECL_P (decl))
+      만약 (!DECL_P (decl))
 	{
 	  error_at (loc, "array section in %<#pragma acc declare%>");
 	  error = true;
@@ -22963,7 +22963,7 @@ c_parser_oacc_declare (c_parser *parser)
 	  break;
 
 	case GOMP_MAP_LINK:
-	  if (!global_bindings_p ()
+	  만약 (!global_bindings_p ()
 	      && (TREE_STATIC (decl)
 	       || !DECL_EXTERNAL (decl)))
 	    {
@@ -22977,13 +22977,13 @@ c_parser_oacc_declare (c_parser *parser)
 	  break;
 
 	default:
-	  if (global_bindings_p ())
+	  만약 (global_bindings_p ())
 	    {
 	      error_at (loc, "invalid OpenACC clause at file scope");
 	      error = true;
 	      continue;
 	    }
-	  if (DECL_EXTERNAL (decl))
+	  만약 (DECL_EXTERNAL (decl))
 	    {
 	      error_at (loc,
 			"invalid use of %<extern%> variable %qD "
@@ -22991,7 +22991,7 @@ c_parser_oacc_declare (c_parser *parser)
 	      error = true;
 	      continue;
 	    }
-	  else if (TREE_PUBLIC (decl))
+	  아니면 만약 (TREE_PUBLIC (decl))
 	    {
 	      error_at (loc,
 			"invalid use of %<global%> variable %qD "
@@ -23002,7 +23002,7 @@ c_parser_oacc_declare (c_parser *parser)
 	  break;
 	}
 
-      if (!c_check_in_current_scope (decl))
+      만약 (!c_check_in_current_scope (decl))
 	{
 	  error_at (loc,
 		    "%qD must be a variable declared in the same scope as "
@@ -23011,7 +23011,7 @@ c_parser_oacc_declare (c_parser *parser)
 	  continue;
 	}
 
-      if (lookup_attribute ("omp declare target", DECL_ATTRIBUTES (decl))
+      만약 (lookup_attribute ("omp declare target", DECL_ATTRIBUTES (decl))
 	  || lookup_attribute ("omp declare target link",
 			       DECL_ATTRIBUTES (decl)))
 	{
@@ -23021,28 +23021,28 @@ c_parser_oacc_declare (c_parser *parser)
 	  continue;
 	}
 
-      if (!error)
+      만약 (!error)
 	{
 	  tree id;
 
-	  if (OMP_CLAUSE_MAP_KIND (t) == GOMP_MAP_LINK)
+	  만약 (OMP_CLAUSE_MAP_KIND (t) == GOMP_MAP_LINK)
 	    id = get_identifier ("omp declare target link");
-	  else
+	  아니면
 	    id = get_identifier ("omp declare target");
 
 	  DECL_ATTRIBUTES (decl)
 			   = tree_cons (id, NULL_TREE, DECL_ATTRIBUTES (decl));
 
-	  if (global_bindings_p ())
+	  만약 (global_bindings_p ())
 	    {
 	      symtab_node *node = symtab_node::get (decl);
-	      if (node != NULL)
+	      만약 (node != NULL)
 		{
 		  node->offloadable = 1;
-		  if (ENABLE_OFFLOADING)
+		  만약 (ENABLE_OFFLOADING)
 		    {
 		      g->have_offload = true;
-		      if (is_a <varpool_node *> (node))
+		      만약 (is_a <varpool_node *> (node))
 			vec_safe_push (offload_vars, decl);
 		    }
 		}
@@ -23050,8 +23050,8 @@ c_parser_oacc_declare (c_parser *parser)
 	}
     }
 
-  if (error || global_bindings_p ())
-    return;
+  만약 (error || global_bindings_p ())
+    반환;
 
   stmt = make_node (OACC_DECLARE);
   TREE_TYPE (stmt) = void_type_node;
@@ -23060,7 +23060,7 @@ c_parser_oacc_declare (c_parser *parser)
 
   add_stmt (stmt);
 
-  return;
+  반환;
 }
 
 /* OpenACC 2.0:
@@ -23100,33 +23100,33 @@ c_parser_oacc_enter_exit_data (c_parser *parser, bool enter)
 
   c_parser_consume_pragma (parser);
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
       c_parser_consume_token (parser);
     }
 
-  if (strcmp (p, "data") != 0)
+  만약 (strcmp (p, "data") != 0)
     {
       error_at (loc, "expected %<data%> after %<#pragma acc %s%>",
 		enter ? "enter" : "exit");
       parser->error = true;
       c_parser_skip_to_pragma_eol (parser);
-      return;
+      반환;
     }
 
-  if (enter)
+  만약 (enter)
     clauses = c_parser_oacc_all_clauses (parser, OACC_ENTER_DATA_CLAUSE_MASK,
 					 "#pragma acc enter data");
-  else
+  아니면
     clauses = c_parser_oacc_all_clauses (parser, OACC_EXIT_DATA_CLAUSE_MASK,
 					 "#pragma acc exit data");
 
-  if (omp_find_clause (clauses, OMP_CLAUSE_MAP) == NULL_TREE)
+  만약 (omp_find_clause (clauses, OMP_CLAUSE_MAP) == NULL_TREE)
     {
       error_at (loc, "%<#pragma acc %s data%> has no data movement clause",
 		enter ? "enter" : "exit");
-      return;
+      반환;
     }
 
   stmt = enter ? make_node (OACC_ENTER_DATA) : make_node (OACC_EXIT_DATA);
@@ -23154,16 +23154,16 @@ c_parser_oacc_host_data (location_t loc, c_parser *parser, bool *if_p)
 
   clauses = c_parser_oacc_all_clauses (parser, OACC_HOST_DATA_CLAUSE_MASK,
 				       "#pragma acc host_data", false);
-  if (!omp_find_clause (clauses, OMP_CLAUSE_USE_DEVICE_PTR))
+  만약 (!omp_find_clause (clauses, OMP_CLAUSE_USE_DEVICE_PTR))
     {
       error_at (loc, "%<host_data%> construct requires %<use_device%> clause");
-      return error_mark_node;
+      반환 error_mark_node;
     }
   clauses = c_finish_omp_clauses (clauses, C_ORT_ACC);
   block = c_begin_omp_parallel ();
   add_stmt (c_parser_omp_structured_block (parser, if_p));
   stmt = c_finish_oacc_host_data (loc, clauses, block);
-  return stmt;
+  반환 stmt;
 }
 
 
@@ -23198,12 +23198,12 @@ c_parser_oacc_loop (location_t loc, c_parser *parser, char *p_name,
   tree clauses = c_parser_oacc_all_clauses (parser, mask, p_name,
 					    /*finish_p=*/cclauses == NULL,
 					    /*target=*/is_parallel);
-  if (cclauses)
+  만약 (cclauses)
     {
       clauses = c_oacc_split_loop_clauses (clauses, cclauses, is_parallel);
-      if (*cclauses)
+      만약 (*cclauses)
 	*cclauses = c_finish_omp_clauses (*cclauses, C_ORT_ACC_TARGET);
-      if (clauses)
+      만약 (clauses)
 	clauses = c_finish_omp_clauses (clauses, C_ORT_ACC);
     }
 
@@ -23213,7 +23213,7 @@ c_parser_oacc_loop (location_t loc, c_parser *parser, char *p_name,
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
 
-  return stmt;
+  반환 stmt;
 }
 
 /* OpenACC 2.0:
@@ -23317,16 +23317,16 @@ c_parser_oacc_compute (location_t loc, c_parser *parser,
       gcc_unreachable ();
     }
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "loop") == 0)
+      만약 (strcmp (p, "loop") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  tree block = c_begin_omp_parallel ();
 	  tree clauses;
 	  c_parser_oacc_loop (loc, parser, p_name, mask, &clauses, if_p);
-	  return c_finish_omp_construct (loc, code, block, clauses);
+	  반환 c_finish_omp_construct (loc, code, block, clauses);
 	}
     }
 
@@ -23337,7 +23337,7 @@ c_parser_oacc_compute (location_t loc, c_parser *parser,
   tree block = c_begin_omp_parallel ();
   add_stmt (c_parser_omp_structured_block (parser, if_p));
 
-  return c_finish_omp_construct (loc, code, block, clauses);
+  반환 c_finish_omp_construct (loc, code, block, clauses);
 }
 
 /* OpenACC 2.0:
@@ -23371,31 +23371,31 @@ c_parser_oacc_routine (c_parser *parser, enum pragma_context context)
   c_parser_consume_pragma (parser);
 
   /* Look for optional '( name )'.  */
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       c_parser_consume_token (parser); /* '(' */
 
       tree decl = NULL_TREE;
       c_token *name_token = c_parser_peek_token (parser);
       location_t name_loc = name_token->location;
-      if (name_token->type == CPP_NAME
+      만약 (name_token->type == CPP_NAME
 	  && (name_token->id_kind == C_ID_ID
 	      || name_token->id_kind == C_ID_TYPENAME))
 	{
 	  decl = lookup_name (name_token->value);
-	  if (!decl)
+	  만약 (!decl)
 	    error_at (name_loc,
 		      "%qE has not been declared", name_token->value);
 	  c_parser_consume_token (parser);
 	}
-      else
+      아니면
 	c_parser_error (parser, "expected function name");
 
-      if (!decl
+      만약 (!decl
 	  || !c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
 	{
 	  c_parser_skip_to_pragma_eol (parser, false);
-	  return;
+	  반환;
 	}
 
       data.clauses
@@ -23405,15 +23405,15 @@ c_parser_oacc_routine (c_parser *parser, enum pragma_context context)
 	 emission easier.  */
       data.clauses = nreverse (data.clauses);
 
-      if (TREE_CODE (decl) != FUNCTION_DECL)
+      만약 (TREE_CODE (decl) != FUNCTION_DECL)
 	{
 	  error_at (name_loc, "%qD does not refer to a function", decl);
-	  return;
+	  반환;
 	}
 
       c_finish_oacc_routine (&data, decl, false);
     }
-  else /* No optional '( name )'.  */
+  아니면 /* No optional '( name )'.  */
     {
       data.clauses
 	= c_parser_oacc_all_clauses (parser, OACC_ROUTINE_CLAUSE_MASK,
@@ -23426,30 +23426,30 @@ c_parser_oacc_routine (c_parser *parser, enum pragma_context context)
 	 one.  Also don't allow a static assertion declaration, as in the
 	 following we'll just parse a *single* "declaration or function
 	 definition", and the static assertion counts an one.  */
-      if (c_parser_next_token_is (parser, CPP_PRAGMA)
+      만약 (c_parser_next_token_is (parser, CPP_PRAGMA)
 	  || c_parser_next_token_is_keyword (parser, RID_STATIC_ASSERT))
 	{
 	  error_at (data.loc,
 		    "%<#pragma acc routine%> not immediately followed by"
 		    " function declaration or definition");
 	  /* ..., and then just keep going.  */
-	  return;
+	  반환;
 	}
 
       /* We only have to consider the pragma_external case here.  */
-      if (c_parser_next_token_is (parser, CPP_KEYWORD)
+      만약 (c_parser_next_token_is (parser, CPP_KEYWORD)
 	  && c_parser_peek_token (parser)->keyword == RID_EXTENSION)
 	{
-	  int ext = disable_extension_diagnostics ();
+	  정수 ext = disable_extension_diagnostics ();
 	  do
 	    c_parser_consume_token (parser);
-	  while (c_parser_next_token_is (parser, CPP_KEYWORD)
+	  동안 (c_parser_next_token_is (parser, CPP_KEYWORD)
 		 && c_parser_peek_token (parser)->keyword == RID_EXTENSION);
 	  c_parser_declaration_or_fndef (parser, true, true, true, false, true,
 					 false, NULL, NULL, false, NULL, &data);
 	  restore_extension_diagnostics (ext);
 	}
-      else
+      아니면
 	c_parser_declaration_or_fndef (parser, true, true, true, false, true,
 				       false, NULL, NULL, false, NULL, &data);
     }
@@ -23463,41 +23463,41 @@ c_finish_oacc_routine (struct oacc_routine_data *data, tree fndecl,
 		       bool is_defn)
 {
   /* Keep going if we're in error reporting mode.  */
-  if (data->error_seen
+  만약 (data->error_seen
       || fndecl == error_mark_node)
-    return;
+    반환;
 
-  if (data->fndecl_seen)
+  만약 (data->fndecl_seen)
     {
       error_at (data->loc,
 		"%<#pragma acc routine%> not immediately followed by"
 		" a single function declaration or definition");
       data->error_seen = true;
-      return;
+      반환;
     }
-  if (fndecl == NULL_TREE || TREE_CODE (fndecl) != FUNCTION_DECL)
+  만약 (fndecl == NULL_TREE || TREE_CODE (fndecl) != FUNCTION_DECL)
     {
       error_at (data->loc,
 		"%<#pragma acc routine%> not immediately followed by"
 		" function declaration or definition");
       data->error_seen = true;
-      return;
+      반환;
     }
 
-  int compatible
+  정수 compatible
     = oacc_verify_routine_clauses (fndecl, &data->clauses, data->loc,
 				   "#pragma acc routine");
-  if (compatible < 0)
+  만약 (compatible < 0)
     {
       data->error_seen = true;
-      return;
+      반환;
     }
-  if (compatible > 0)
+  만약 (compatible > 0)
     {
     }
-  else
+  아니면
     {
-      if (TREE_USED (fndecl) || (!is_defn && DECL_SAVED_TREE (fndecl)))
+      만약 (TREE_USED (fndecl) || (!is_defn && DECL_SAVED_TREE (fndecl)))
 	{
 	  error_at (data->loc,
 		    TREE_USED (fndecl)
@@ -23505,7 +23505,7 @@ c_finish_oacc_routine (struct oacc_routine_data *data, tree fndecl,
 		    : G_("%<#pragma acc routine%> must be applied before"
 			 " definition"));
 	  data->error_seen = true;
-	  return;
+	  반환;
 	}
 
       /* Set the routine's level of parallelism.  */
@@ -23544,16 +23544,16 @@ c_parser_oacc_update (c_parser *parser)
 
   tree clauses = c_parser_oacc_all_clauses (parser, OACC_UPDATE_CLAUSE_MASK,
 					    "#pragma acc update");
-  if (omp_find_clause (clauses, OMP_CLAUSE_MAP) == NULL_TREE)
+  만약 (omp_find_clause (clauses, OMP_CLAUSE_MAP) == NULL_TREE)
     {
       error_at (loc,
 		"%<#pragma acc update%> must contain at least one "
 		"%<device%> or %<host%> or %<self%> clause");
-      return;
+      반환;
     }
 
-  if (parser->error)
-    return;
+  만약 (parser->error)
+    반환;
 
   tree stmt = make_node (OACC_UPDATE);
   TREE_TYPE (stmt) = void_type_node;
@@ -23577,7 +23577,7 @@ c_parser_oacc_wait (location_t loc, c_parser *parser, char *p_name)
 {
   tree clauses, list = NULL_TREE, stmt = NULL_TREE;
 
-  if (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
+  만약 (c_parser_peek_token (parser)->type == CPP_OPEN_PAREN)
     list = c_parser_oacc_wait_list (parser, loc, list);
 
   strcpy (p_name, " wait");
@@ -23585,7 +23585,7 @@ c_parser_oacc_wait (location_t loc, c_parser *parser, char *p_name)
   stmt = c_finish_oacc_wait (loc, list, clauses);
   add_stmt (stmt);
 
-  return stmt;
+  반환 stmt;
 }
 
 struct c_omp_loc_tree
@@ -23597,13 +23597,13 @@ struct c_omp_loc_tree
 /* Check whether the expression used in the allocator clause is declared or
    modified between the variable declaration and its allocate directive.  */
 static tree
-c_check_omp_allocate_allocator_r (tree *tp, int *, void *data)
+c_check_omp_allocate_allocator_r (tree *tp, 정수 *, void *data)
 {
   tree var = ((struct c_omp_loc_tree *) data)->var;
   location_t loc = ((struct c_omp_loc_tree *) data)->loc;
-  if (TREE_CODE (*tp) == VAR_DECL && c_check_in_current_scope (*tp))
+  만약 (TREE_CODE (*tp) == VAR_DECL && c_check_in_current_scope (*tp))
     {
-      if (linemap_location_before_p (line_table, DECL_SOURCE_LOCATION (var),
+      만약 (linemap_location_before_p (line_table, DECL_SOURCE_LOCATION (var),
 				     DECL_SOURCE_LOCATION (*tp)))
 	{
 	  error_at (loc, "variable %qD used in the %<allocator%> clause must "
@@ -23611,20 +23611,20 @@ c_check_omp_allocate_allocator_r (tree *tp, int *, void *data)
 	  inform (DECL_SOURCE_LOCATION (*tp), "declared here");
 	  inform (DECL_SOURCE_LOCATION (var),
 		  "to be allocated variable declared here");
-	  return *tp;
+	  반환 *tp;
 	}
-      else
+      아니면
 	{
 	  gcc_assert (cur_stmt_list
 		      && TREE_CODE (cur_stmt_list) == STATEMENT_LIST);
 
 	  tree_stmt_iterator l = tsi_last (cur_stmt_list);
-	  while (!tsi_end_p (l))
+	  동안 (!tsi_end_p (l))
 	    {
-	      if (linemap_location_before_p (line_table, EXPR_LOCATION (*l),
+	      만약 (linemap_location_before_p (line_table, EXPR_LOCATION (*l),
 					     DECL_SOURCE_LOCATION (var)))
 		  break;
-	      if (TREE_CODE (*l) == MODIFY_EXPR
+	      만약 (TREE_CODE (*l) == MODIFY_EXPR
 		  && TREE_OPERAND (*l, 0) == *tp)
 		{
 		  error_at (loc,
@@ -23634,13 +23634,13 @@ c_check_omp_allocate_allocator_r (tree *tp, int *, void *data)
 		  inform (EXPR_LOCATION (*l), "modified here");
 		  inform (DECL_SOURCE_LOCATION (var),
 			  "to be allocated variable declared here");
-		  return *tp;
+		  반환 *tp;
 		}
 	      --l;
 	    }
 	}
     }
-  return NULL_TREE;
+  반환 NULL_TREE;
 }
 
 /* OpenMP 5.x:
@@ -23663,38 +23663,38 @@ c_parser_omp_allocate (c_parser *parser)
   tree nl = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ALLOCATE, NULL_TREE);
   do
     {
-      if (c_parser_next_token_is (parser, CPP_COMMA)
+      만약 (c_parser_next_token_is (parser, CPP_COMMA)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 	c_parser_consume_token (parser);
-      if (!c_parser_next_token_is (parser, CPP_NAME))
+      만약 (!c_parser_next_token_is (parser, CPP_NAME))
 	break;
       matching_parens parens;
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
       c_parser_consume_token (parser);
       location_t expr_loc = c_parser_peek_token (parser)->location;
-      if (strcmp ("align", p) != 0 && strcmp ("allocator", p) != 0)
+      만약 (strcmp ("align", p) != 0 && strcmp ("allocator", p) != 0)
 	{
 	  error_at (c_parser_peek_token (parser)->location,
 		    "expected %<allocator%> or %<align%>");
 	  break;
 	}
-      if (!parens.require_open (parser))
+      만약 (!parens.require_open (parser))
 	break;
 
       c_expr expr = c_parser_expr_no_commas (parser, NULL);
       expr = convert_lvalue_to_rvalue (expr_loc, expr, false, true);
       expr_loc = c_parser_peek_token (parser)->location;
-      if (expr.value == error_mark_node)
+      만약 (expr.value == error_mark_node)
 	;
-      else if (p[2] == 'i' && alignment)
+      아니면 만약 (p[2] == 'i' && alignment)
 	{
 	  error_at (expr_loc, "too many %qs clauses", "align");
 	  break;
 	}
-      else if (p[2] == 'i')
+      아니면 만약 (p[2] == 'i')
 	{
 	  alignment = c_fully_fold (expr.value, false, NULL);
-	  if (TREE_CODE (alignment) != INTEGER_CST
+	  만약 (TREE_CODE (alignment) != INTEGER_CST
 	      || !INTEGRAL_TYPE_P (TREE_TYPE (alignment))
 	      || tree_int_cst_sgn (alignment) != 1
 	      || !integer_pow2p (alignment))
@@ -23705,19 +23705,19 @@ c_parser_omp_allocate (c_parser *parser)
 	      alignment = NULL_TREE;
 	    }
 	}
-      else if (allocator)
+      아니면 만약 (allocator)
 	{
 	  error_at (expr_loc, "too many %qs clauses", "allocator");
 	  break;
 	}
-      else
+      아니면
 	{
 	  allocator = c_fully_fold (expr.value, false, NULL);
 	  allocator_loc = expr_loc;
 	  tree orig_type
 	    = expr.original_type ? expr.original_type : TREE_TYPE (allocator);
 	  orig_type = TYPE_MAIN_VARIANT (orig_type);
-	  if (!INTEGRAL_TYPE_P (TREE_TYPE (allocator))
+	  만약 (!INTEGRAL_TYPE_P (TREE_TYPE (allocator))
 	      || TREE_CODE (orig_type) != ENUMERAL_TYPE
 	      || TYPE_NAME (orig_type)
 		 != get_identifier ("omp_allocator_handle_t"))
@@ -23730,21 +23730,21 @@ c_parser_omp_allocate (c_parser *parser)
 	    }
 	}
       parens.skip_until_found_close (parser);
-    } while (true);
+    } 동안 (true);
   c_parser_skip_to_pragma_eol (parser);
 
   c_mark_decl_jump_unsafe_in_current_scope ();
-  for (tree c = nl; c != NULL_TREE; c = OMP_CLAUSE_CHAIN (c))
+  위해 (tree c = nl; c != NULL_TREE; c = OMP_CLAUSE_CHAIN (c))
     {
       tree var = OMP_CLAUSE_DECL (c);
-      if (TREE_CODE (var) == PARM_DECL)
+      만약 (TREE_CODE (var) == PARM_DECL)
 	{
 	  error_at (OMP_CLAUSE_LOCATION (nl),
 		    "function parameter %qD may not appear as list item in an "
 		    "%<allocate%> directive", var);
 	  continue;
 	}
-      if (!parser->in_omp_decl_attribute && !c_check_in_current_scope (var))
+      만약 (!parser->in_omp_decl_attribute && !c_check_in_current_scope (var))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (nl),
 		    "%<allocate%> directive must be in the same scope as %qD",
@@ -23752,23 +23752,23 @@ c_parser_omp_allocate (c_parser *parser)
 	  inform (DECL_SOURCE_LOCATION (var), "declared here");
 	  continue;
 	}
-      if (lookup_attribute ("omp allocate", DECL_ATTRIBUTES (var)))
+      만약 (lookup_attribute ("omp allocate", DECL_ATTRIBUTES (var)))
 	{
 	  error_at (OMP_CLAUSE_LOCATION (nl),
 		    "%qD already appeared as list item in an "
 		    "%<allocate%> directive", var);
 	  continue;
 	}
-      if (TREE_STATIC (var))
+      만약 (TREE_STATIC (var))
 	{
-	  if (allocator == NULL_TREE && allocator_loc == UNKNOWN_LOCATION)
+	  만약 (allocator == NULL_TREE && allocator_loc == UNKNOWN_LOCATION)
 	    {
 	      error_at (loc,
 			"%<allocator%> clause required for "
 			"static variable %qD", var);
 	      continue;
 	    }
-	  else if (allocator
+	  아니면 만약 (allocator
 		   && (wi::to_widest (allocator) < 1
 		       || wi::to_widest (allocator) > GOMP_OMP_PREDEF_ALLOC_MAX)
 		   && (wi::to_widest (allocator) < GOMP_OMPX_PREDEF_ALLOC_MIN
@@ -23778,7 +23778,7 @@ c_parser_omp_allocate (c_parser *parser)
 			"%<allocator%> clause requires a predefined allocator as "
 			"%qD is static", var);
 	    }
-	  else if (allocator
+	  아니면 만약 (allocator
 		   && (wi::eq_p (wi::to_widest (allocator),
 				 GOMP_OMP_PREDEF_ALLOC_CGROUP)
 		       || wi::eq_p (wi::to_widest (allocator),
@@ -23792,7 +23792,7 @@ c_parser_omp_allocate (c_parser *parser)
 			"or %<omp_thread_mem_alloc%>", var);
 	    }
 	}
-      if (allocator)
+      만약 (allocator)
 	{
 	  struct c_omp_loc_tree data
 	    = {EXPR_LOC_OR_LOC (allocator, OMP_CLAUSE_LOCATION (nl)), var};
@@ -23909,13 +23909,13 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
   bool no_semicolon = false;
   bool extra_scope = false;
 
-  while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+  동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
     {
-      if (c_parser_next_token_is (parser, CPP_COMMA)
+      만약 (c_parser_next_token_is (parser, CPP_COMMA)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 	c_parser_consume_token (parser);
 
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  const char *p
 	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
@@ -23928,78 +23928,78 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 	  bool new_weak = false;
 	  enum omp_memory_order new_fail = OMP_MEMORY_ORDER_UNSPECIFIED;
 
-	  if (!strcmp (p, "read"))
+	  만약 (!strcmp (p, "read"))
 	    new_code = OMP_ATOMIC_READ;
-	  else if (!strcmp (p, "write"))
+	  아니면 만약 (!strcmp (p, "write"))
 	    new_code = NOP_EXPR;
-	  else if (!strcmp (p, "update"))
+	  아니면 만약 (!strcmp (p, "update"))
 	    new_code = OMP_ATOMIC;
-	  else if (openacc && !strcmp (p, "capture"))
+	  아니면 만약 (openacc && !strcmp (p, "capture"))
 	    new_code = OMP_ATOMIC_CAPTURE_NEW;
-	  else if (openacc)
+	  아니면 만약 (openacc)
 	    {
 	      p = NULL;
 	      error_at (cloc, "expected %<read%>, %<write%>, %<update%>, "
 			      "or %<capture%> clause");
 	    }
-	  else if (!strcmp (p, "capture"))
+	  아니면 만약 (!strcmp (p, "capture"))
 	    new_capture = true;
-	  else if (!strcmp (p, "compare"))
+	  아니면 만약 (!strcmp (p, "compare"))
 	    new_compare = true;
-	  else if (!strcmp (p, "weak"))
+	  아니면 만약 (!strcmp (p, "weak"))
 	    new_weak = true;
-	  else if (!strcmp (p, "fail"))
+	  아니면 만약 (!strcmp (p, "fail"))
 	    {
 	      matching_parens parens;
 
 	      c_parser_consume_token (parser);
-	      if (!parens.require_open (parser))
+	      만약 (!parens.require_open (parser))
 		continue;
 
-	      if (c_parser_next_token_is (parser, CPP_NAME))
+	      만약 (c_parser_next_token_is (parser, CPP_NAME))
 		{
 		  const char *q
 		    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
-		  if (!strcmp (q, "seq_cst"))
+		  만약 (!strcmp (q, "seq_cst"))
 		    new_fail = OMP_MEMORY_ORDER_SEQ_CST;
-		  else if (!strcmp (q, "acquire"))
+		  아니면 만약 (!strcmp (q, "acquire"))
 		    new_fail = OMP_MEMORY_ORDER_ACQUIRE;
-		  else if (!strcmp (q, "relaxed"))
+		  아니면 만약 (!strcmp (q, "relaxed"))
 		    new_fail = OMP_MEMORY_ORDER_RELAXED;
 		}
 
-	      if (new_fail != OMP_MEMORY_ORDER_UNSPECIFIED)
+	      만약 (new_fail != OMP_MEMORY_ORDER_UNSPECIFIED)
 		{
 		  c_parser_consume_token (parser);
-		  if (fail != OMP_MEMORY_ORDER_UNSPECIFIED)
+		  만약 (fail != OMP_MEMORY_ORDER_UNSPECIFIED)
 		    error_at (cloc, "too many %qs clauses", "fail");
-		  else
+		  아니면
 		    fail = new_fail;
 		}
-	      else
+	      아니면
 		c_parser_error (parser, "expected %<seq_cst%>, %<acquire%> "
 					"or %<relaxed%>");
 	      parens.skip_until_found_close (parser);
 	      continue;
 	    }
-	  else if (!strcmp (p, "seq_cst"))
+	  아니면 만약 (!strcmp (p, "seq_cst"))
 	    new_memory_order = OMP_MEMORY_ORDER_SEQ_CST;
-	  else if (!strcmp (p, "acq_rel"))
+	  아니면 만약 (!strcmp (p, "acq_rel"))
 	    new_memory_order = OMP_MEMORY_ORDER_ACQ_REL;
-	  else if (!strcmp (p, "release"))
+	  아니면 만약 (!strcmp (p, "release"))
 	    new_memory_order = OMP_MEMORY_ORDER_RELEASE;
-	  else if (!strcmp (p, "acquire"))
+	  아니면 만약 (!strcmp (p, "acquire"))
 	    new_memory_order = OMP_MEMORY_ORDER_ACQUIRE;
-	  else if (!strcmp (p, "relaxed"))
+	  아니면 만약 (!strcmp (p, "relaxed"))
 	    new_memory_order = OMP_MEMORY_ORDER_RELAXED;
-	  else if (!strcmp (p, "hint"))
+	  아니면 만약 (!strcmp (p, "hint"))
 	    {
 	      c_parser_consume_token (parser);
 	      clauses = c_parser_omp_clause_hint (parser, clauses);
 	      continue;
 	    }
-	  else
+	  아니면
 	    {
 	      p = NULL;
 	      error_at (cloc, "expected %<read%>, %<write%>, %<update%>, "
@@ -24007,46 +24007,46 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 			      "%<seq_cst%>, %<acq_rel%>, %<release%>, "
 			      "%<relaxed%> or %<hint%> clause");
 	    }
-	  if (p)
+	  만약 (p)
 	    {
-	      if (new_code != ERROR_MARK)
+	      만약 (new_code != ERROR_MARK)
 		{
 		  /* OpenACC permits 'update capture'.  */
-		  if (openacc
+		  만약 (openacc
 		      && code == OMP_ATOMIC
 		      && new_code == OMP_ATOMIC_CAPTURE_NEW)
 		    code = new_code;
-		  else if (code != ERROR_MARK)
+		  아니면 만약 (code != ERROR_MARK)
 		    error_at (cloc, "too many atomic clauses");
-		  else
+		  아니면
 		    code = new_code;
 		}
-	      else if (new_memory_order != OMP_MEMORY_ORDER_UNSPECIFIED)
+	      아니면 만약 (new_memory_order != OMP_MEMORY_ORDER_UNSPECIFIED)
 		{
-		  if (memory_order != OMP_MEMORY_ORDER_UNSPECIFIED)
+		  만약 (memory_order != OMP_MEMORY_ORDER_UNSPECIFIED)
 		    error_at (cloc, "too many memory order clauses");
-		  else
+		  아니면
 		    memory_order = new_memory_order;
 		}
-	      else if (new_capture)
+	      아니면 만약 (new_capture)
 		{
-		  if (capture)
+		  만약 (capture)
 		    error_at (cloc, "too many %qs clauses", "capture");
-		  else
+		  아니면
 		    capture = true;
 		}
-	      else if (new_compare)
+	      아니면 만약 (new_compare)
 		{
-		  if (compare)
+		  만약 (compare)
 		    error_at (cloc, "too many %qs clauses", "compare");
-		  else
+		  아니면
 		    compare = true;
 		}
-	      else if (new_weak)
+	      아니면 만약 (new_weak)
 		{
-		  if (weak)
+		  만약 (weak)
 		    error_at (cloc, "too many %qs clauses", "weak");
-		  else
+		  아니면
 		    weak = true;
 		}
 	      c_parser_consume_token (parser);
@@ -24057,35 +24057,35 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
     }
   c_parser_skip_to_pragma_eol (parser);
 
-  if (code == ERROR_MARK)
+  만약 (code == ERROR_MARK)
     code = OMP_ATOMIC;
-  if (capture)
+  만약 (capture)
     {
-      if (code != OMP_ATOMIC)
+      만약 (code != OMP_ATOMIC)
 	error_at (loc, "%qs clause is incompatible with %<read%> or %<write%> "
 		       "clauses", "capture");
-      else
+      아니면
 	code = OMP_ATOMIC_CAPTURE_NEW;
     }
-  if (compare && code != OMP_ATOMIC && code != OMP_ATOMIC_CAPTURE_NEW)
+  만약 (compare && code != OMP_ATOMIC && code != OMP_ATOMIC_CAPTURE_NEW)
     {
       error_at (loc, "%qs clause is incompatible with %<read%> or %<write%> "
 		      "clauses", "compare");
       compare = false;
     }
-  if (fail != OMP_MEMORY_ORDER_UNSPECIFIED && !compare)
+  만약 (fail != OMP_MEMORY_ORDER_UNSPECIFIED && !compare)
     {
       error_at (loc, "%qs clause requires %qs clause", "fail", "compare");
       fail = OMP_MEMORY_ORDER_UNSPECIFIED;
     }
-  if (weak && !compare)
+  만약 (weak && !compare)
     {
       error_at (loc, "%qs clause requires %qs clause", "weak", "compare");
       weak = false;
     }
-  if (openacc)
+  만약 (openacc)
     memory_order = OMP_MEMORY_ORDER_RELAXED;
-  else if (memory_order == OMP_MEMORY_ORDER_UNSPECIFIED)
+  아니면 만약 (memory_order == OMP_MEMORY_ORDER_UNSPECIFIED)
     {
       omp_requires_mask
 	= (enum omp_requires) (omp_requires_mask
@@ -24101,25 +24101,25 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 	  memory_order = OMP_MEMORY_ORDER_SEQ_CST;
 	  break;
 	case OMP_MEMORY_ORDER_ACQUIRE:
-	  if (code == NOP_EXPR)  /* atomic write */
+	  만약 (code == NOP_EXPR)  /* atomic write */
 	    {
 	      error_at (loc, "%<#pragma omp atomic write%> incompatible with "
 			     "%<acquire%> clause implicitly provided by a "
 			     "%<requires%> directive");
 	      memory_order = OMP_MEMORY_ORDER_SEQ_CST;
 	    }
-	  else
+	  아니면
 	    memory_order = OMP_MEMORY_ORDER_ACQUIRE;
 	  break;
 	case OMP_MEMORY_ORDER_RELEASE:
-	  if (code == OMP_ATOMIC_READ)
+	  만약 (code == OMP_ATOMIC_READ)
 	    {
 	      error_at (loc, "%<#pragma omp atomic read%> incompatible with "
 			     "%<release%> clause implicitly provided by a "
 			     "%<requires%> directive");
 	      memory_order = OMP_MEMORY_ORDER_SEQ_CST;
 	    }
-	  else
+	  아니면
 	    memory_order = OMP_MEMORY_ORDER_RELEASE;
 	  break;
 	case OMP_MEMORY_ORDER_ACQ_REL:
@@ -24140,33 +24140,33 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 	  gcc_unreachable ();
 	}
     }
-  else
+  아니면
     switch (code)
       {
       case OMP_ATOMIC_READ:
-	if (memory_order == OMP_MEMORY_ORDER_RELEASE)
+	만약 (memory_order == OMP_MEMORY_ORDER_RELEASE)
 	  {
 	    error_at (loc, "%<#pragma omp atomic read%> incompatible with "
 			   "%<release%> clause");
 	    memory_order = OMP_MEMORY_ORDER_SEQ_CST;
 	  }
-	else if (memory_order == OMP_MEMORY_ORDER_ACQ_REL)
+	아니면 만약 (memory_order == OMP_MEMORY_ORDER_ACQ_REL)
 	  memory_order = OMP_MEMORY_ORDER_ACQUIRE;
 	break;
       case NOP_EXPR: /* atomic write */
-	if (memory_order == OMP_MEMORY_ORDER_ACQUIRE)
+	만약 (memory_order == OMP_MEMORY_ORDER_ACQUIRE)
 	  {
 	    error_at (loc, "%<#pragma omp atomic write%> incompatible with "
 			   "%<acquire%> clause");
 	    memory_order = OMP_MEMORY_ORDER_SEQ_CST;
 	  }
-	else if (memory_order == OMP_MEMORY_ORDER_ACQ_REL)
+	아니면 만약 (memory_order == OMP_MEMORY_ORDER_ACQ_REL)
 	  memory_order = OMP_MEMORY_ORDER_RELEASE;
 	break;
       default:
 	break;
       }
-  if (fail != OMP_MEMORY_ORDER_UNSPECIFIED)
+  만약 (fail != OMP_MEMORY_ORDER_UNSPECIFIED)
     memory_order
       = (enum omp_memory_order) (memory_order
 				 | (fail << OMP_FAIL_MEMORY_ORDER_SHIFT));
@@ -24178,14 +24178,14 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
       v = c_parser_cast_expression (parser, NULL).value;
       non_lvalue_p = !lvalue_p (v);
       v = c_fully_fold (v, false, NULL, true);
-      if (v == error_mark_node)
+      만약 (v == error_mark_node)
 	goto saw_error;
-      if (non_lvalue_p)
+      만약 (non_lvalue_p)
 	v = non_lvalue (v);
       loc = c_parser_peek_token (parser)->location;
-      if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+      만약 (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
 	goto saw_error;
-      if (code == NOP_EXPR)
+      만약 (code == NOP_EXPR)
 	{
 	  eloc = c_parser_peek_token (parser)->location;
 	  expr = c_parser_expression (parser);
@@ -24196,41 +24196,41 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
 	  lhs = v;
 	  v = NULL_TREE;
 	  rhs = c_fully_fold (expr.value, false, NULL);
-	  if (rhs == error_mark_node)
+	  만약 (rhs == error_mark_node)
 	    goto saw_error;
 	}
-      else
+      아니면
 	{
 	  lhs = c_parser_cast_expression (parser, NULL).value;
 	  non_lvalue_p = !lvalue_p (lhs);
 	  lhs = c_fully_fold (lhs, false, NULL, true);
-	  if (lhs == error_mark_node)
+	  만약 (lhs == error_mark_node)
 	    goto saw_error;
-	  if (non_lvalue_p)
+	  만약 (non_lvalue_p)
 	    lhs = non_lvalue (lhs);
 	}
       goto done;
     case OMP_ATOMIC_CAPTURE_NEW:
-      if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+      만약 (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 	{
 	  c_parser_consume_token (parser);
 	  structured_block = true;
 	}
-      else if (compare
+      아니면 만약 (compare
 	       && c_parser_next_token_is_keyword (parser, RID_IF))
 	break;
-      else
+      아니면
 	{
 	  v = c_parser_cast_expression (parser, NULL).value;
 	  non_lvalue_p = !lvalue_p (v);
 	  v = c_fully_fold (v, false, NULL, true);
-	  if (v == error_mark_node)
+	  만약 (v == error_mark_node)
 	    goto saw_error;
-	  if (non_lvalue_p)
+	  만약 (non_lvalue_p)
 	    v = non_lvalue (v);
-	  if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+	  만약 (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
 	    goto saw_error;
-	  if (compare && c_parser_next_token_is_keyword (parser, RID_IF))
+	  만약 (compare && c_parser_next_token_is_keyword (parser, RID_IF))
 	    {
 	      eloc = c_parser_peek_token (parser)->location;
 	      error_at (eloc, "expected expression");
@@ -24245,42 +24245,42 @@ c_parser_omp_atomic (location_t loc, c_parser *parser, bool openacc)
   /* For structured_block case we don't know yet whether
      old or new x should be captured.  */
 restart:
-  if (compare && c_parser_next_token_is_keyword (parser, RID_IF))
+  만약 (compare && c_parser_next_token_is_keyword (parser, RID_IF))
     {
       c_parser_consume_token (parser);
 
       matching_parens parens;
-      if (!parens.require_open (parser))
+      만약 (!parens.require_open (parser))
 	goto saw_error;
       eloc = c_parser_peek_token (parser)->location;
       c_expr cmp_expr;
-      if (r)
+      만약 (r)
 	{
 	  cmp_expr = c_parser_cast_expression (parser, NULL);
 	  cmp_expr = default_function_array_conversion (eloc, cmp_expr);
 	}
-      else
+      아니면
 	cmp_expr = c_parser_binary_expression (parser, NULL, void_list_node);
       parens.skip_until_found_close (parser);
-      if (cmp_expr.value == error_mark_node)
+      만약 (cmp_expr.value == error_mark_node)
 	goto saw_error;
-      if (r)
+      만약 (r)
 	{
-	  if (!c_tree_equal (cmp_expr.value, unfolded_lhs))
+	  만약 (!c_tree_equal (cmp_expr.value, unfolded_lhs))
 	    goto bad_if;
 	  cmp_expr.value = rhs1;
 	  rhs1 = NULL_TREE;
 	  gcc_assert (TREE_CODE (cmp_expr.value) == EQ_EXPR);
 	}
-      if (TREE_CODE (cmp_expr.value) == EQ_EXPR)
+      만약 (TREE_CODE (cmp_expr.value) == EQ_EXPR)
 	;
-      else if (!structured_block && code == OMP_ATOMIC_CAPTURE_NEW)
+      아니면 만약 (!structured_block && code == OMP_ATOMIC_CAPTURE_NEW)
 	{
 	  error_at (EXPR_LOC_OR_LOC (cmp_expr.value, eloc),
 		    "expected %<==%> comparison in %<if%> condition");
 	  goto saw_error;
 	}
-      else if (TREE_CODE (cmp_expr.value) != GT_EXPR
+      아니면 만약 (TREE_CODE (cmp_expr.value) != GT_EXPR
 	       && TREE_CODE (cmp_expr.value) != LT_EXPR)
 	{
 	  error_at (EXPR_LOC_OR_LOC (cmp_expr.value, eloc),
@@ -24288,7 +24288,7 @@ restart:
 		    "condition");
 	  goto saw_error;
 	}
-      if (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+      만약 (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
 	goto saw_error;
 
       extra_scope = true;
@@ -24299,11 +24299,11 @@ restart:
       unfolded_lhs = expr.value;
       lhs = c_fully_fold (lhs, false, NULL, true);
       orig_lhs = lhs;
-      if (lhs == error_mark_node)
+      만약 (lhs == error_mark_node)
 	goto saw_error;
-      if (!lvalue_p (unfolded_lhs))
+      만약 (!lvalue_p (unfolded_lhs))
 	lhs = non_lvalue (lhs);
-      if (!c_parser_next_token_is (parser, CPP_EQ))
+      만약 (!c_parser_next_token_is (parser, CPP_EQ))
 	{
 	  c_parser_error (parser, "expected %<=%>");
 	  goto saw_error;
@@ -24313,25 +24313,25 @@ restart:
       expr = c_parser_expr_no_commas (parser, NULL);
       rhs1 = expr.value;
 
-      if (!c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+      만약 (!c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
 	goto saw_error;
 
-      if (!c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
+      만약 (!c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
 	goto saw_error;
 
       extra_scope = false;
       no_semicolon = true;
 
-      if (c_tree_equal (TREE_OPERAND (cmp_expr.value, 0), unfolded_lhs))
+      만약 (c_tree_equal (TREE_OPERAND (cmp_expr.value, 0), unfolded_lhs))
 	{
-	  if (TREE_CODE (cmp_expr.value) == EQ_EXPR)
+	  만약 (TREE_CODE (cmp_expr.value) == EQ_EXPR)
 	    {
 	      opcode = COND_EXPR;
 	      rhs = c_fully_fold (TREE_OPERAND (cmp_expr.value, 1),
 				  false, NULL, true);
 	      rhs1 = c_fully_fold (rhs1, false, NULL, true);
 	    }
-	  else if (c_tree_equal (TREE_OPERAND (cmp_expr.value, 1), rhs1))
+	  아니면 만약 (c_tree_equal (TREE_OPERAND (cmp_expr.value, 1), rhs1))
 	    {
 	      opcode = (TREE_CODE (cmp_expr.value) == GT_EXPR
 			? MIN_EXPR : MAX_EXPR);
@@ -24339,12 +24339,12 @@ restart:
 	      rhs1 = c_fully_fold (TREE_OPERAND (cmp_expr.value, 0),
 				   false, NULL, true);
 	    }
-	  else
+	  아니면
 	    goto bad_if;
 	}
-      else if (TREE_CODE (cmp_expr.value) == EQ_EXPR)
+      아니면 만약 (TREE_CODE (cmp_expr.value) == EQ_EXPR)
 	goto bad_if;
-      else if (c_tree_equal (TREE_OPERAND (cmp_expr.value, 1), unfolded_lhs)
+      아니면 만약 (c_tree_equal (TREE_OPERAND (cmp_expr.value, 1), unfolded_lhs)
 	       && c_tree_equal (TREE_OPERAND (cmp_expr.value, 0), rhs1))
 	{
 	  opcode = (TREE_CODE (cmp_expr.value) == GT_EXPR
@@ -24353,7 +24353,7 @@ restart:
 	  rhs1 = c_fully_fold (TREE_OPERAND (cmp_expr.value, 1),
 			       false, NULL, true);
 	}
-      else
+      아니면
 	{
 	bad_if:
 	  c_parser_error (parser,
@@ -24361,9 +24361,9 @@ restart:
 	  goto saw_error;
 	}
 
-      if (c_parser_next_token_is_keyword (parser, RID_ELSE))
+      만약 (c_parser_next_token_is_keyword (parser, RID_ELSE))
 	{
-	  if (code != OMP_ATOMIC_CAPTURE_NEW
+	  만약 (code != OMP_ATOMIC_CAPTURE_NEW
 	      || (structured_block && r == NULL_TREE)
 	      || TREE_CODE (cmp_expr.value) != EQ_EXPR)
 	    {
@@ -24374,45 +24374,45 @@ restart:
 
 	  c_parser_consume_token (parser);
 
-	  if (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+	  만약 (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
 	    goto saw_error;
 
 	  extra_scope = true;
 	  v = c_parser_cast_expression (parser, NULL).value;
 	  non_lvalue_p = !lvalue_p (v);
 	  v = c_fully_fold (v, false, NULL, true);
-	  if (v == error_mark_node)
+	  만약 (v == error_mark_node)
 	    goto saw_error;
-	  if (non_lvalue_p)
+	  만약 (non_lvalue_p)
 	    v = non_lvalue (v);
-	  if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+	  만약 (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
 	    goto saw_error;
 
 	  expr = c_parser_expr_no_commas (parser, NULL);
 
-	  if (!c_tree_equal (expr.value, unfolded_lhs))
+	  만약 (!c_tree_equal (expr.value, unfolded_lhs))
 	    goto bad_if;
 
-	  if (!c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	  만약 (!c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
 	    goto saw_error;
 
-	  if (!c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
+	  만약 (!c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
 	    goto saw_error;
 
 	  extra_scope = false;
 	  code = OMP_ATOMIC_CAPTURE_OLD;
-	  if (r == NULL_TREE)
+	  만약 (r == NULL_TREE)
 	    /* Signal to c_finish_omp_atomic that in
 	       if (x == e) { x = d; } else { v = x; }
 	       case the store to v should be conditional.  */
 	    r = void_list_node;
 	}
-      else if (code == OMP_ATOMIC_CAPTURE_NEW && !structured_block)
+      아니면 만약 (code == OMP_ATOMIC_CAPTURE_NEW && !structured_block)
 	{
 	  c_parser_require_keyword (parser, RID_ELSE, "expected %<else%>");
 	  goto saw_error;
 	}
-      else if (code == OMP_ATOMIC_CAPTURE_NEW
+      아니면 만약 (code == OMP_ATOMIC_CAPTURE_NEW
 	       && r != NULL_TREE
 	       && v == NULL_TREE)
 	code = OMP_ATOMIC;
@@ -24433,23 +24433,23 @@ restart:
     case ERROR_MARK:
     saw_error:
       c_parser_skip_to_end_of_block_or_statement (parser);
-      if (extra_scope && c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+      만약 (extra_scope && c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 	c_parser_consume_token (parser);
-      if (structured_block)
+      만약 (structured_block)
 	{
-	  if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+	  만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 	    c_parser_consume_token (parser);
-	  else if (code == OMP_ATOMIC_CAPTURE_NEW)
+	  아니면 만약 (code == OMP_ATOMIC_CAPTURE_NEW)
 	    {
 	      c_parser_skip_to_end_of_block_or_statement (parser);
-	      if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+	      만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 		c_parser_consume_token (parser);
 	    }
 	}
-      return;
+      반환;
 
     case POSTINCREMENT_EXPR:
-      if (code == OMP_ATOMIC_CAPTURE_NEW && !structured_block)
+      만약 (code == OMP_ATOMIC_CAPTURE_NEW && !structured_block)
 	code = OMP_ATOMIC_CAPTURE_OLD;
       /* FALLTHROUGH */
     case PREINCREMENT_EXPR:
@@ -24457,12 +24457,12 @@ restart:
       unfolded_lhs = NULL_TREE;
       opcode = PLUS_EXPR;
       rhs = integer_one_node;
-      if (compare)
+      만약 (compare)
 	goto invalid_compare;
       break;
 
     case POSTDECREMENT_EXPR:
-      if (code == OMP_ATOMIC_CAPTURE_NEW && !structured_block)
+      만약 (code == OMP_ATOMIC_CAPTURE_NEW && !structured_block)
 	code = OMP_ATOMIC_CAPTURE_OLD;
       /* FALLTHROUGH */
     case PREDECREMENT_EXPR:
@@ -24470,12 +24470,12 @@ restart:
       unfolded_lhs = NULL_TREE;
       opcode = MINUS_EXPR;
       rhs = integer_one_node;
-      if (compare)
+      만약 (compare)
 	goto invalid_compare;
       break;
 
     case COMPOUND_EXPR:
-      if (TREE_CODE (TREE_OPERAND (lhs, 0)) == SAVE_EXPR
+      만약 (TREE_CODE (TREE_OPERAND (lhs, 0)) == SAVE_EXPR
 	  && TREE_CODE (TREE_OPERAND (lhs, 1)) == COMPOUND_EXPR
 	  && TREE_CODE (TREE_OPERAND (TREE_OPERAND (lhs, 1), 0)) == MODIFY_EXPR
 	  && TREE_OPERAND (TREE_OPERAND (lhs, 1), 1) == TREE_OPERAND (lhs, 0)
@@ -24485,26 +24485,26 @@ restart:
 	lhs = TREE_OPERAND (TREE_OPERAND (lhs, 1), 0);
       /* FALLTHRU */
     case MODIFY_EXPR:
-      if (TREE_CODE (lhs) == MODIFY_EXPR
+      만약 (TREE_CODE (lhs) == MODIFY_EXPR
 	  && C_BOOLEAN_TYPE_P (TREE_TYPE (TREE_OPERAND (lhs, 0))))
 	{
 	  /* Undo effects of boolean_increment.  */
-	  if (integer_onep (TREE_OPERAND (lhs, 1)))
+	  만약 (integer_onep (TREE_OPERAND (lhs, 1)))
 	    {
 	      /* This is pre or post increment.  */
 	      rhs = TREE_OPERAND (lhs, 1);
 	      lhs = TREE_OPERAND (lhs, 0);
 	      unfolded_lhs = NULL_TREE;
 	      opcode = NOP_EXPR;
-	      if (code == OMP_ATOMIC_CAPTURE_NEW
+	      만약 (code == OMP_ATOMIC_CAPTURE_NEW
 		  && !structured_block
 		  && TREE_CODE (orig_lhs) == COMPOUND_EXPR)
 		code = OMP_ATOMIC_CAPTURE_OLD;
-	      if (compare)
+	      만약 (compare)
 		goto invalid_compare;
 	      break;
 	    }
-	  if (TREE_CODE (TREE_OPERAND (lhs, 1)) == TRUTH_NOT_EXPR
+	  만약 (TREE_CODE (TREE_OPERAND (lhs, 1)) == TRUTH_NOT_EXPR
 	      && TREE_OPERAND (lhs, 0)
 		 == TREE_OPERAND (TREE_OPERAND (lhs, 1), 0))
 	    {
@@ -24513,20 +24513,20 @@ restart:
 	      lhs = TREE_OPERAND (lhs, 0);
 	      unfolded_lhs = NULL_TREE;
 	      opcode = NOP_EXPR;
-	      if (code == OMP_ATOMIC_CAPTURE_NEW
+	      만약 (code == OMP_ATOMIC_CAPTURE_NEW
 		  && !structured_block
 		  && TREE_CODE (orig_lhs) == COMPOUND_EXPR)
 		code = OMP_ATOMIC_CAPTURE_OLD;
-	      if (compare)
+	      만약 (compare)
 		goto invalid_compare;
 	      break;
 	    }
 	}
       /* FALLTHRU */
     default:
-      if (!lvalue_p (unfolded_lhs))
+      만약 (!lvalue_p (unfolded_lhs))
 	lhs = non_lvalue (lhs);
-      if (compare && !c_parser_next_token_is (parser, CPP_EQ))
+      만약 (compare && !c_parser_next_token_is (parser, CPP_EQ))
 	{
 	  c_parser_error (parser, "expected %<=%>");
 	  goto saw_error;
@@ -24577,9 +24577,9 @@ restart:
 	    case BIT_AND_EXPR:
 	    case BIT_IOR_EXPR:
 	    case BIT_XOR_EXPR:
-	      if (compare)
+	      만약 (compare)
 		break;
-	      if (c_tree_equal (TREE_OPERAND (rhs1, 0), unfolded_lhs))
+	      만약 (c_tree_equal (TREE_OPERAND (rhs1, 0), unfolded_lhs))
 		{
 		  opcode = TREE_CODE (rhs1);
 		  rhs = c_fully_fold (TREE_OPERAND (rhs1, 1), false, NULL,
@@ -24588,7 +24588,7 @@ restart:
 				       true);
 		  goto stmt_done;
 		}
-	      if (c_tree_equal (TREE_OPERAND (rhs1, 1), unfolded_lhs))
+	      만약 (c_tree_equal (TREE_OPERAND (rhs1, 1), unfolded_lhs))
 		{
 		  opcode = TREE_CODE (rhs1);
 		  rhs = c_fully_fold (TREE_OPERAND (rhs1, 0), false, NULL,
@@ -24600,20 +24600,20 @@ restart:
 		}
 	      break;
 	    case COND_EXPR:
-	      if (!compare)
+	      만약 (!compare)
 		break;
-	      if (TREE_CODE (TREE_OPERAND (rhs1, 0)) != GT_EXPR
+	      만약 (TREE_CODE (TREE_OPERAND (rhs1, 0)) != GT_EXPR
 		  && TREE_CODE (TREE_OPERAND (rhs1, 0)) != LT_EXPR
 		  && TREE_CODE (TREE_OPERAND (rhs1, 0)) != EQ_EXPR)
 		break;
-	      if (!TREE_OPERAND (rhs1, 1))
+	      만약 (!TREE_OPERAND (rhs1, 1))
 		break;
-	      if (!c_tree_equal (TREE_OPERAND (rhs1, 2), unfolded_lhs))
+	      만약 (!c_tree_equal (TREE_OPERAND (rhs1, 2), unfolded_lhs))
 		break;
-	      if (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 0),
+	      만약 (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 0),
 				unfolded_lhs))
 		{
-		  if (TREE_CODE (TREE_OPERAND (rhs1, 0)) == EQ_EXPR)
+		  만약 (TREE_CODE (TREE_OPERAND (rhs1, 0)) == EQ_EXPR)
 		    {
 		      opcode = COND_EXPR;
 		      rhs = c_fully_fold (TREE_OPERAND (TREE_OPERAND (rhs1,
@@ -24623,7 +24623,7 @@ restart:
 					   NULL, true);
 		      goto stmt_done;
 		    }
-		  if (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 1),
+		  만약 (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 1),
 				    TREE_OPERAND (rhs1, 1)))
 		    {
 		      opcode = (TREE_CODE (TREE_OPERAND (rhs1, 0)) == GT_EXPR
@@ -24636,12 +24636,12 @@ restart:
 		      goto stmt_done;
 		    }
 		}
-	      else if (TREE_CODE (TREE_OPERAND (rhs1, 0)) == EQ_EXPR)
+	      아니면 만약 (TREE_CODE (TREE_OPERAND (rhs1, 0)) == EQ_EXPR)
 		break;
-	      else if (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 1),
+	      아니면 만약 (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 1),
 				     unfolded_lhs))
 		{
-		  if (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 0),
+		  만약 (c_tree_equal (TREE_OPERAND (TREE_OPERAND (rhs1, 0), 0),
 				    TREE_OPERAND (rhs1, 1)))
 		    {
 		      opcode = (TREE_CODE (TREE_OPERAND (rhs1, 0)) == GT_EXPR
@@ -24656,13 +24656,13 @@ restart:
 		}
 	      break;
 	    case EQ_EXPR:
-	      if (!compare
+	      만약 (!compare
 		  || code != OMP_ATOMIC_CAPTURE_NEW
 		  || !structured_block
 		  || v
 		  || r)
 		break;
-	      if (c_parser_next_token_is (parser, CPP_SEMICOLON)
+	      만약 (c_parser_next_token_is (parser, CPP_SEMICOLON)
 		  && c_parser_peek_2nd_token (parser)->keyword == RID_IF)
 		{
 		  r = lhs;
@@ -24676,9 +24676,9 @@ restart:
 	    default:
 	      break;
 	    }
-	  if (c_parser_peek_token (parser)->type == CPP_SEMICOLON)
+	  만약 (c_parser_peek_token (parser)->type == CPP_SEMICOLON)
 	    {
-	      if (structured_block && code == OMP_ATOMIC_CAPTURE_NEW)
+	      만약 (structured_block && code == OMP_ATOMIC_CAPTURE_NEW)
 		{
 		  code = OMP_ATOMIC_CAPTURE_OLD;
 		  v = lhs;
@@ -24690,7 +24690,7 @@ restart:
 		  c_parser_consume_token (parser);
 		  goto restart;
 		}
-	      if (structured_block && !compare)
+	      만약 (structured_block && !compare)
 		{
 		  opcode = NOP_EXPR;
 		  expr = default_function_array_read_conversion (eloc, expr);
@@ -24719,20 +24719,20 @@ restart:
       break;
     }
 stmt_done:
-  if (structured_block && code == OMP_ATOMIC_CAPTURE_NEW && r == NULL_TREE)
+  만약 (structured_block && code == OMP_ATOMIC_CAPTURE_NEW && r == NULL_TREE)
     {
-      if (!no_semicolon
+      만약 (!no_semicolon
 	  && !c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
 	goto saw_error;
       no_semicolon = false;
       v = c_parser_cast_expression (parser, NULL).value;
       non_lvalue_p = !lvalue_p (v);
       v = c_fully_fold (v, false, NULL, true);
-      if (v == error_mark_node)
+      만약 (v == error_mark_node)
 	goto saw_error;
-      if (non_lvalue_p)
+      만약 (non_lvalue_p)
 	v = non_lvalue (v);
-      if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+      만약 (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
 	goto saw_error;
       eloc = c_parser_peek_token (parser)->location;
       expr = c_parser_cast_expression (parser, NULL);
@@ -24740,37 +24740,37 @@ stmt_done:
       expr = default_function_array_read_conversion (eloc, expr);
       unfolded_lhs1 = expr.value;
       lhs1 = c_fully_fold (lhs1, false, NULL, true);
-      if (lhs1 == error_mark_node)
+      만약 (lhs1 == error_mark_node)
 	goto saw_error;
-      if (!lvalue_p (unfolded_lhs1))
+      만약 (!lvalue_p (unfolded_lhs1))
 	lhs1 = non_lvalue (lhs1);
     }
-  if (structured_block)
+  만약 (structured_block)
     {
-      if (!no_semicolon)
+      만약 (!no_semicolon)
 	c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
       c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>");
     }
 done:
-  if (weak && opcode != COND_EXPR)
+  만약 (weak && opcode != COND_EXPR)
     {
       error_at (loc, "%<weak%> clause requires atomic equality comparison");
       weak = false;
     }
-  if (unfolded_lhs && unfolded_lhs1
+  만약 (unfolded_lhs && unfolded_lhs1
       && !c_tree_equal (unfolded_lhs, unfolded_lhs1))
     {
       error ("%<#pragma omp atomic capture%> uses two different "
 	     "expressions for memory");
       stmt = error_mark_node;
     }
-  else
+  아니면
     stmt = c_finish_omp_atomic (loc, code, opcode, lhs, rhs, v, lhs1, rhs1, r,
 				swapped, memory_order, weak);
-  if (stmt != error_mark_node)
+  만약 (stmt != error_mark_node)
     add_stmt (stmt);
 
-  if (!structured_block && !no_semicolon)
+  만약 (!structured_block && !no_semicolon)
     c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
 }
 
@@ -24806,26 +24806,26 @@ c_parser_omp_critical (location_t loc, c_parser *parser, bool *if_p)
 {
   tree stmt, name = NULL_TREE, clauses = NULL_TREE;
 
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       c_parser_consume_token (parser);
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  name = c_parser_peek_token (parser)->value;
 	  c_parser_consume_token (parser);
 	  c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>");
 	}
-      else
+      아니면
 	c_parser_error (parser, "expected identifier");
 
-      if (c_parser_next_token_is (parser, CPP_COMMA)
+      만약 (c_parser_next_token_is (parser, CPP_COMMA)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 	c_parser_consume_token (parser);
     }
   clauses = c_parser_omp_all_clauses (parser, OMP_CRITICAL_CLAUSE_MASK,
 				      "#pragma omp critical");
   stmt = c_parser_omp_structured_block (parser, if_p);
-  return c_finish_omp_critical (loc, stmt, name, clauses);
+  반환 c_finish_omp_critical (loc, stmt, name, clauses);
 }
 
 /* OpenMP 5.0:
@@ -24851,28 +24851,28 @@ c_parser_omp_depobj (c_parser *parser)
   location_t loc = c_parser_peek_token (parser)->location;
   c_parser_consume_pragma (parser);
   matching_parens parens;
-  if (!parens.require_open (parser))
+  만약 (!parens.require_open (parser))
     {
       c_parser_skip_to_pragma_eol (parser);
-      return;
+      반환;
     }
 
   tree depobj = c_parser_expr_no_commas (parser, NULL).value;
-  if (depobj != error_mark_node)
+  만약 (depobj != error_mark_node)
     {
-      if (!lvalue_p (depobj))
+      만약 (!lvalue_p (depobj))
 	{
 	  error_at (EXPR_LOC_OR_LOC (depobj, loc),
 		    "%<depobj%> expression is not lvalue expression");
 	  depobj = error_mark_node;
 	}
-      else
+      아니면
 	{
 	  tree addr = build_unary_op (EXPR_LOC_OR_LOC (depobj, loc), ADDR_EXPR,
 				      depobj, false);
-	  if (addr == error_mark_node)
+	  만약 (addr == error_mark_node)
 	    depobj = error_mark_node;
-	  else
+	  아니면
 	    depobj = build_indirect_ref (EXPR_LOC_OR_LOC (depobj, loc),
 					 addr, RO_UNARY_STAR);
 	}
@@ -24881,33 +24881,33 @@ c_parser_omp_depobj (c_parser *parser)
   parens.skip_until_found_close (parser);
   tree clause = NULL_TREE;
   enum omp_clause_depend_kind kind = OMP_CLAUSE_DEPEND_INVALID;
-  if (c_parser_next_token_is (parser, CPP_COMMA))
+  만약 (c_parser_next_token_is (parser, CPP_COMMA))
     c_parser_consume_token (parser);
   location_t c_loc = c_parser_peek_token (parser)->location;
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
       c_parser_consume_token (parser);
-      if (!strcmp ("depend", p))
+      만약 (!strcmp ("depend", p))
 	{
 	  clause = c_parser_omp_clause_depend (parser, NULL_TREE, c_loc);
 	  clause = c_finish_omp_clauses (clause, C_ORT_OMP);
-	  if (!clause)
+	  만약 (!clause)
 	    clause = error_mark_node;
 	}
-      else if (!strcmp ("destroy", p))
+      아니면 만약 (!strcmp ("destroy", p))
 	{
 	  matching_parens c_parens;
 	  kind = OMP_CLAUSE_DEPEND_LAST;
-	  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+	  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
 	      && c_parens.require_open (parser))
 	    {
 	      tree destobj = c_parser_expr_no_commas (parser, NULL).value;
-	      if (!lvalue_p (destobj))
+	      만약 (!lvalue_p (destobj))
 		error_at (EXPR_LOC_OR_LOC (destobj, c_loc),
 			  "%<destroy%> expression is not lvalue expression");
-	      else if (depobj != error_mark_node
+	      아니면 만약 (depobj != error_mark_node
 		       && !operand_equal_p (destobj, depobj,
 					    OEP_MATCH_SIDE_EFFECTS
 					    | OEP_LEXICOGRAPHIC))
@@ -24917,30 +24917,30 @@ c_parser_omp_depobj (c_parser *parser)
 	      c_parens.skip_until_found_close (parser);
 	    }
 	}
-      else if (!strcmp ("update", p))
+      아니면 만약 (!strcmp ("update", p))
 	{
 	  matching_parens c_parens;
-	  if (c_parens.require_open (parser))
+	  만약 (c_parens.require_open (parser))
 	    {
 	      location_t c2_loc = c_parser_peek_token (parser)->location;
-	      if (c_parser_next_token_is (parser, CPP_NAME))
+	      만약 (c_parser_next_token_is (parser, CPP_NAME))
 		{
 		  const char *p2
 		    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
 		  c_parser_consume_token (parser);
-		  if (!strcmp ("in", p2))
+		  만약 (!strcmp ("in", p2))
 		    kind = OMP_CLAUSE_DEPEND_IN;
-		  else if (!strcmp ("out", p2))
+		  아니면 만약 (!strcmp ("out", p2))
 		    kind = OMP_CLAUSE_DEPEND_OUT;
-		  else if (!strcmp ("inout", p2))
+		  아니면 만약 (!strcmp ("inout", p2))
 		    kind = OMP_CLAUSE_DEPEND_INOUT;
-		  else if (!strcmp ("mutexinoutset", p2))
+		  아니면 만약 (!strcmp ("mutexinoutset", p2))
 		    kind = OMP_CLAUSE_DEPEND_MUTEXINOUTSET;
-		  else if (!strcmp ("inoutset", p2))
+		  아니면 만약 (!strcmp ("inoutset", p2))
 		    kind = OMP_CLAUSE_DEPEND_INOUTSET;
 		}
-	      if (kind == OMP_CLAUSE_DEPEND_INVALID)
+	      만약 (kind == OMP_CLAUSE_DEPEND_INVALID)
 		{
 		  clause = error_mark_node;
 		  error_at (c2_loc, "expected %<in%>, %<out%>, %<inout%>, "
@@ -24948,11 +24948,11 @@ c_parser_omp_depobj (c_parser *parser)
 		}
 	      c_parens.skip_until_found_close (parser);
 	    }
-	  else
+	  아니면
 	    clause = error_mark_node;
 	}
     }
-  if (!clause && kind == OMP_CLAUSE_DEPEND_INVALID)
+  만약 (!clause && kind == OMP_CLAUSE_DEPEND_INVALID)
     {
       clause = error_mark_node;
       error_at (c_loc, "expected %<depend%>, %<destroy%> or %<update%> clause");
@@ -24978,37 +24978,37 @@ c_parser_omp_flush (c_parser *parser)
   location_t loc = c_parser_peek_token (parser)->location;
   c_parser_consume_pragma (parser);
   enum memmodel mo = MEMMODEL_LAST;
-  if (c_parser_next_token_is (parser, CPP_COMMA)
+  만약 (c_parser_next_token_is (parser, CPP_COMMA)
       && c_parser_peek_2nd_token (parser)->type == CPP_NAME)
     c_parser_consume_token (parser);
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p
 	= IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
-      if (!strcmp (p, "seq_cst"))
+      만약 (!strcmp (p, "seq_cst"))
 	mo = MEMMODEL_SEQ_CST;
-      else if (!strcmp (p, "acq_rel"))
+      아니면 만약 (!strcmp (p, "acq_rel"))
 	mo = MEMMODEL_ACQ_REL;
-      else if (!strcmp (p, "release"))
+      아니면 만약 (!strcmp (p, "release"))
 	mo = MEMMODEL_RELEASE;
-      else if (!strcmp (p, "acquire"))
+      아니면 만약 (!strcmp (p, "acquire"))
 	mo = MEMMODEL_ACQUIRE;
-      else
+      아니면
 	error_at (c_parser_peek_token (parser)->location,
 		  "expected %<seq_cst%>, %<acq_rel%>, %<release%> or "
 		  "%<acquire%>");
       c_parser_consume_token (parser);
     }
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
-      if (mo != MEMMODEL_LAST)
+      만약 (mo != MEMMODEL_LAST)
 	error_at (c_parser_peek_token (parser)->location,
 		  "%<flush%> list specified together with memory order "
 		  "clause");
       c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ERROR, NULL);
     }
-  else if (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+  아니면 만약 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
     c_parser_error (parser, "expected %<(%> or end of line");
   c_parser_skip_to_pragma_eol (parser);
 
@@ -25022,70 +25022,70 @@ static bool
 c_parser_omp_section_scan (c_parser *parser, const char *directive,
 			   bool tentative)
 {
-  if (!c_parser_nth_token_starts_std_attributes (parser, 1))
-    return false;
-  unsigned int n = 3;
-  if (!c_parser_check_balanced_raw_token_sequence (parser, &n))
-    return false;
+  만약 (!c_parser_nth_token_starts_std_attributes (parser, 1))
+    반환 false;
+  unsigned 정수 n = 3;
+  만약 (!c_parser_check_balanced_raw_token_sequence (parser, &n))
+    반환 false;
   c_token *token = c_parser_peek_nth_token_raw (parser, n);
-  if (token->type != CPP_CLOSE_SQUARE)
-    return false;
+  만약 (token->type != CPP_CLOSE_SQUARE)
+    반환 false;
   token = c_parser_peek_nth_token_raw (parser, n + 1);
-  if (token->type != CPP_CLOSE_SQUARE)
-    return false;
-  if (n < 9)
-    return false;
-  if (c_parser_peek_nth_token_raw (parser, 3)->type == CPP_NAME
+  만약 (token->type != CPP_CLOSE_SQUARE)
+    반환 false;
+  만약 (n < 9)
+    반환 false;
+  만약 (c_parser_peek_nth_token_raw (parser, 3)->type == CPP_NAME
       && c_parser_peek_nth_token_raw (parser, 4)->type == CPP_OPEN_PAREN
       && c_parser_peek_nth_token_raw (parser, 5)->type == CPP_NAME)
     {
       tree first = c_parser_peek_nth_token_raw (parser, 3)->value;
       tree second = c_parser_peek_nth_token_raw (parser, 5)->value;
-      if (strcmp (IDENTIFIER_POINTER (first), "directive")
+      만약 (strcmp (IDENTIFIER_POINTER (first), "directive")
 	  && strcmp (IDENTIFIER_POINTER (first), "__directive__"))
-	return false;
-      if (strcmp (IDENTIFIER_POINTER (second), directive))
-	return false;
+	반환 false;
+      만약 (strcmp (IDENTIFIER_POINTER (second), directive))
+	반환 false;
     }
-  if (tentative)
-    return true;
+  만약 (tentative)
+    반환 true;
   location_t first_loc = c_parser_peek_token (parser)->location;
   location_t last_loc = c_parser_peek_nth_token_raw (parser, n + 1)->location;
   location_t middle_loc = UNKNOWN_LOCATION;
   tree std_attrs = c_parser_std_attribute_specifier_sequence (parser);
   bool seen = false;
-  int cnt = 0;
-  for (tree attr = std_attrs; attr; attr = TREE_CHAIN (attr))
-    if (is_attribute_namespace_p ("omp", attr)
+  정수 cnt = 0;
+  위해 (tree attr = std_attrs; attr; attr = TREE_CHAIN (attr))
+    만약 (is_attribute_namespace_p ("omp", attr)
 	&& is_attribute_p ("directive", get_attribute_name (attr)))
       {
-	for (tree a = TREE_VALUE (attr); a; a = TREE_CHAIN (a))
+	위해 (tree a = TREE_VALUE (attr); a; a = TREE_CHAIN (a))
 	  {
 	    tree d = TREE_VALUE (a);
 	    gcc_assert (TREE_CODE (d) == C_TOKEN_VEC);
 	    c_token *first = C_TOKEN_VEC_TOKENS (d)->address ();
 	    cnt++;
-	    if (first->type == CPP_NAME
+	    만약 (first->type == CPP_NAME
 		&& strcmp (IDENTIFIER_POINTER (first->value),
 			   directive) == 0)
 	      {
 		seen = true;
-		if (middle_loc == UNKNOWN_LOCATION)
+		만약 (middle_loc == UNKNOWN_LOCATION)
 		  middle_loc = first->location;
 	      }
 	  }
       }
-  if (!seen)
-    return false;
-  if (cnt != 1 || TREE_CHAIN (std_attrs))
+  만약 (!seen)
+    반환 false;
+  만약 (cnt != 1 || TREE_CHAIN (std_attrs))
     {
       error_at (make_location (first_loc, last_loc, middle_loc),
 		"%<[[omp::directive(%s)]]%> must be the only specified "
 		"attribute on a statement", directive);
-      return false;
+      반환 false;
     }
   c_parser_handle_statement_omp_attributes (parser, std_attrs, NULL);
-  return true;
+  반환 true;
 }
 
 /* Parse an OpenMP structured block sequence.  KIND is the corresponding
@@ -25099,16 +25099,16 @@ c_parser_omp_structured_block_sequence (c_parser *parser,
   c_parser_statement (parser, NULL);
   do
     {
-      if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 	break;
-      if (c_parser_next_token_is (parser, CPP_EOF))
+      만약 (c_parser_next_token_is (parser, CPP_EOF))
 	break;
 
-      if (kind != PRAGMA_NONE
+      만약 (kind != PRAGMA_NONE
 	  && c_parser_peek_token (parser)->pragma_kind == kind)
 	break;
 
-      if (kind != PRAGMA_NONE
+      만약 (kind != PRAGMA_NONE
 	  && c_parser_omp_section_scan (parser,
 					kind == PRAGMA_OMP_SCAN
 					? "scan" : "section", false))
@@ -25116,8 +25116,8 @@ c_parser_omp_structured_block_sequence (c_parser *parser,
 
       c_parser_statement (parser, NULL);
     }
-  while (1);
-  return pop_stmt_list (stmt);
+  동안 (1);
+  반환 pop_stmt_list (stmt);
 }
 
 /* OpenMP 5.0:
@@ -25134,17 +25134,17 @@ c_parser_omp_scan_loop_body (c_parser *parser, bool open_brace_parsed)
   bool found_scan = false;
 
   loc = c_parser_peek_token (parser)->location;
-  if (!open_brace_parsed
+  만약 (!open_brace_parsed
       && !c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
     {
       /* Avoid skipping until the end of the block.  */
       parser->error = false;
-      return;
+      반환;
     }
 
-  if (c_parser_peek_token (parser)->pragma_kind != PRAGMA_OMP_SCAN)
+  만약 (c_parser_peek_token (parser)->pragma_kind != PRAGMA_OMP_SCAN)
     substmt = c_parser_omp_structured_block_sequence (parser, PRAGMA_OMP_SCAN);
-  else
+  아니면
     {
       warning_at (c_parser_peek_token (parser)->location, OPT_Wopenmp,
 		  "%<#pragma omp scan%> with zero preceding executable "
@@ -25156,44 +25156,44 @@ c_parser_omp_scan_loop_body (c_parser *parser, bool open_brace_parsed)
   add_stmt (substmt);
 
   loc = c_parser_peek_token (parser)->location;
-  if (c_parser_peek_token (parser)->pragma_kind == PRAGMA_OMP_SCAN)
+  만약 (c_parser_peek_token (parser)->pragma_kind == PRAGMA_OMP_SCAN)
     {
       enum omp_clause_code clause = OMP_CLAUSE_ERROR;
       found_scan = true;
 
       c_parser_consume_pragma (parser);
 
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
 
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  const char *p
 	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	  if (strcmp (p, "inclusive") == 0)
+	  만약 (strcmp (p, "inclusive") == 0)
 	    clause = OMP_CLAUSE_INCLUSIVE;
-	  else if (strcmp (p, "exclusive") == 0)
+	  아니면 만약 (strcmp (p, "exclusive") == 0)
 	    clause = OMP_CLAUSE_EXCLUSIVE;
 	}
-      if (clause != OMP_CLAUSE_ERROR)
+      만약 (clause != OMP_CLAUSE_ERROR)
 	{
 	  c_parser_consume_token (parser);
 	  clauses = c_parser_omp_var_list_parens (parser, clause, NULL_TREE);
 	}
-      else
+      아니면
 	c_parser_error (parser, "expected %<inclusive%> or "
 				"%<exclusive%> clause");
       c_parser_skip_to_pragma_eol (parser);
     }
-  else
+  아니면
     error ("expected %<#pragma omp scan%>");
 
   clauses = c_finish_omp_clauses (clauses, C_ORT_OMP);
-  if (!c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+  만약 (!c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
     substmt = c_parser_omp_structured_block_sequence (parser, PRAGMA_NONE);
-  else
+  아니면
     {
-      if (found_scan)
+      만약 (found_scan)
 	warning_at (loc, OPT_Wopenmp,
 		    "%<#pragma omp scan%> with zero succeeding executable "
 		    "statements");
@@ -25215,24 +25215,24 @@ c_parser_omp_next_tokens_can_be_canon_loop (c_parser *parser,
 					    enum tree_code code,
 					    bool error_p)
 {
-  if (code == OACC_LOOP)
+  만약 (code == OACC_LOOP)
     {
-      if (c_parser_next_token_is_keyword (parser, RID_FOR))
-	return true;
-      if (error_p)
+      만약 (c_parser_next_token_is_keyword (parser, RID_FOR))
+	반환 true;
+      만약 (error_p)
 	c_parser_error (parser, "for statement expected");
     }
-  else
+  아니면
     {
-      if (c_parser_next_token_is_keyword (parser, RID_FOR))
-	return true;
+      만약 (c_parser_next_token_is_keyword (parser, RID_FOR))
+	반환 true;
 
-      if (c_parser_next_token_is (parser, CPP_PRAGMA))
+      만약 (c_parser_next_token_is (parser, CPP_PRAGMA))
 	switch (c_parser_peek_token (parser)->pragma_kind)
 	  {
 	  case PRAGMA_OMP_UNROLL:
 	  case PRAGMA_OMP_TILE:
-	    return true;
+	    반환 true;
 	  default:
 	    break;
 	  }
@@ -25244,15 +25244,15 @@ c_parser_omp_next_tokens_can_be_canon_loop (c_parser *parser,
       c_token *token = c_parser_peek_nth_token_raw (parser, n);
       /* TOKEN is a raw token that hasn't been converted to a keyword yet,
 	 we have to do the lookup explicitly.  */
-      if (token->type == CPP_NAME
+      만약 (token->type == CPP_NAME
 	  && C_IS_RESERVED_WORD (token->value)
 	  && C_RID_CODE (token->value) == RID_FOR)
-	return true;
-      if (error_p)
+	반환 true;
+      만약 (error_p)
 	c_parser_error (parser,	"loop nest expected");
     }
 
-  return false;
+  반환 false;
 }
 
 static tree c_parser_omp_tile (location_t, c_parser *, bool *);
@@ -25291,15 +25291,15 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
   struct omp_for_parse_data *omp_for_parse_state
     = parser->omp_for_parse_state;
   gcc_assert (omp_for_parse_state);
-  int depth = omp_for_parse_state->depth;
+  정수 depth = omp_for_parse_state->depth;
 
   /* Arrange for C23 standard attribute syntax to be parsed as regular
      pragmas.  */
-  if (c_parser_nth_token_starts_std_attributes (parser, 1))
+  만약 (c_parser_nth_token_starts_std_attributes (parser, 1))
     {
       tree std_attrs = c_parser_std_attribute_specifier_sequence (parser);
       c_parser_handle_statement_omp_attributes (parser, std_attrs, NULL);
-      if (std_attrs)
+      만약 (std_attrs)
 	error_at (c_parser_peek_token (parser)->location,
 		  "attributes other than OpenMP directives "
 		  "are not allowed on %<for%> in loop nest");
@@ -25308,10 +25308,10 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
   loc = c_parser_peek_token (parser)->location;
 
   /* Handle loop transformations first.  */
-  if (c_parser_next_token_is (parser, CPP_PRAGMA))
+  만약 (c_parser_next_token_is (parser, CPP_PRAGMA))
     {
       tree transform = NULL_TREE, sizes, body = NULL_TREE;
-      int count = 0;
+      정수 count = 0;
       switch (c_parser_peek_token (parser)->pragma_kind)
 	{
 	case PRAGMA_OMP_UNROLL:
@@ -25319,16 +25319,16 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
 	  body = push_stmt_list ();
 	  transform = c_parser_omp_unroll (loc, parser, if_p);
 	  body = pop_stmt_list (body);
-	  if (transform == NULL_TREE || transform == error_mark_node)
+	  만약 (transform == NULL_TREE || transform == error_mark_node)
 	    {
 	      transform = error_mark_node;
 	      break;
 	    }
 	  gcc_assert (TREE_CODE (transform) == OMP_UNROLL);
-	  if (omp_find_clause (OMP_FOR_CLAUSES (transform),
+	  만약 (omp_find_clause (OMP_FOR_CLAUSES (transform),
 			       OMP_CLAUSE_PARTIAL))
 	    {
-	      if (omp_for_parse_state->count - depth > 1)
+	      만약 (omp_for_parse_state->count - depth > 1)
 		{
 		  error_at (loc, "%<unroll%> construct with %<partial%> "
 				 "clause generates just one loop with "
@@ -25336,10 +25336,10 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
 			    omp_for_parse_state->count - depth);
 		  transform = error_mark_node;
 		}
-	      else
+	      아니면
 		count = 1;
 	    }
-	  else
+	  아니면
 	    {
 	      error_at (loc, "generated loop of %<unroll%> construct "
 			     "without %<partial%> clause does not have "
@@ -25352,7 +25352,7 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
 	  body = push_stmt_list ();
 	  transform = c_parser_omp_tile (loc, parser, if_p);
 	  body = pop_stmt_list (body);
-	  if (transform == NULL_TREE || transform == error_mark_node)
+	  만약 (transform == NULL_TREE || transform == error_mark_node)
 	    {
 	      transform = error_mark_node;
 	      break;
@@ -25362,7 +25362,7 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
 				   OMP_CLAUSE_SIZES);
 	  gcc_assert (sizes);
 	  count = list_length (OMP_CLAUSE_SIZES_LIST (sizes));
-	  if (depth + count < omp_for_parse_state->count)
+	  만약 (depth + count < omp_for_parse_state->count)
 	    {
 	      error_at (loc, "%<tile%> construct generates %d loops "
 			     "with canonical form but %d loops are needed",
@@ -25374,15 +25374,15 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
 	  c_parser_pragma (parser, pragma_stmt, NULL, void_list_node);
 	  break;
 	}
-      if (transform == NULL_TREE)
+      만약 (transform == NULL_TREE)
 	error_at (loc, "expected %<for%> loop or OpenMP loop "
 		       "transformation construct");
-      if (transform == NULL_TREE || transform == error_mark_node)
+      만약 (transform == NULL_TREE || transform == error_mark_node)
 	{
 	  omp_for_parse_state->fail = true;
-	  return NULL_TREE;
+	  반환 NULL_TREE;
 	}
-      for (count = omp_for_parse_state->count; depth < count; ++depth)
+      위해 (count = omp_for_parse_state->count; depth < count; ++depth)
 	{
 	  TREE_VEC_ELT (omp_for_parse_state->declv, depth) = NULL_TREE;
 	  TREE_VEC_ELT (omp_for_parse_state->initv, depth) = NULL_TREE;
@@ -25390,7 +25390,7 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
 	  TREE_VEC_ELT (omp_for_parse_state->incrv, depth) = NULL_TREE;
 	}
       omp_for_parse_state->want_nested_loop = false;
-      return body;
+      반환 body;
     }
 
   /* We have already matched the FOR token but not consumed it yet.  */
@@ -25405,10 +25405,10 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
   /* We are not in intervening code now.  */
   omp_for_parse_state->in_intervening_code = false;
 
-  if (!parens.require_open (parser))
+  만약 (!parens.require_open (parser))
     {
       omp_for_parse_state->fail = true;
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
   /* An implicit scope block surrounds each level of FOR loop, for
@@ -25416,7 +25416,7 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
   loop_scope = c_begin_compound_stmt (true);
 
   /* Parse the initialization declaration or expression.  */
-  if (c_parser_next_tokens_start_declaration (parser))
+  만약 (c_parser_next_tokens_start_declaration (parser))
     {
       /* This is a declaration, which must be added to the pre_body code.  */
       tree this_pre_body = push_stmt_list ();
@@ -25428,13 +25428,13 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
       append_to_statement_list_force (this_pre_body,
 				      &(omp_for_parse_state->pre_body));
       decl = check_for_loop_decls (omp_for_parse_state->for_loc, flag_isoc99);
-      if (decl == NULL)
+      만약 (decl == NULL)
 	goto error_init;
-      if (DECL_INITIAL (decl) == error_mark_node)
+      만약 (DECL_INITIAL (decl) == error_mark_node)
 	decl = error_mark_node;
       init = decl;
     }
-  else if (c_parser_next_token_is (parser, CPP_NAME)
+  아니면 만약 (c_parser_next_token_is (parser, CPP_NAME)
 	   && c_parser_peek_2nd_token (parser)->type == CPP_EQ)
     {
       struct c_expr decl_exp;
@@ -25459,7 +25459,7 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
 
       c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
     }
-  else
+  아니면
     {
     error_init:
       c_parser_error (parser,
@@ -25471,7 +25471,7 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
     }
 
   /* Parse the loop condition.  */
-  if (c_parser_next_token_is_not (parser, CPP_SEMICOLON))
+  만약 (c_parser_next_token_is_not (parser, CPP_SEMICOLON))
     {
       location_t cond_loc = c_parser_peek_token (parser)->location;
       c_in_omp_for = true;
@@ -25489,7 +25489,7 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
 	case LE_EXPR:
 	  break;
 	case NE_EXPR:
-	  if (omp_for_parse_state->code != OACC_LOOP)
+	  만약 (omp_for_parse_state->code != OACC_LOOP)
 	    break;
 	  /* FALLTHRU.  */
 	default:
@@ -25503,7 +25503,7 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
   c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
 
   /* Parse the increment expression.  */
-  if (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN))
+  만약 (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN))
     {
       location_t incr_loc = c_parser_peek_token (parser)->location;
 
@@ -25512,9 +25512,9 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
     }
   parens.skip_until_found_close (parser);
 
-  if (decl == NULL || decl == error_mark_node || init == error_mark_node)
+  만약 (decl == NULL || decl == error_mark_node || init == error_mark_node)
     omp_for_parse_state->fail = true;
-  else
+  아니면
     {
       TREE_VEC_ELT (omp_for_parse_state->declv, depth) = decl;
       TREE_VEC_ELT (omp_for_parse_state->initv, depth) = init;
@@ -25525,7 +25525,7 @@ c_parser_omp_loop_nest (c_parser *parser, bool *if_p)
 parse_next:
   moreloops = depth < omp_for_parse_state->count - 1;
   omp_for_parse_state->want_nested_loop = moreloops;
-  if (moreloops
+  만약 (moreloops
       && c_parser_omp_next_tokens_can_be_canon_loop (parser,
 						     omp_for_parse_state->code,
 						     false))
@@ -25534,7 +25534,7 @@ parse_next:
       body = c_parser_omp_loop_nest (parser, if_p);
       omp_for_parse_state->depth--;
     }
-  else if (moreloops && c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+  아니면 만약 (moreloops && c_parser_next_token_is (parser, CPP_OPEN_BRACE))
     {
       /* This is the open brace in the loop-body grammar production.  Rather
 	 than trying to special-case braces, just parse it as a compound
@@ -25547,7 +25547,7 @@ parse_next:
       omp_for_parse_state->in_intervening_code = true;
       body = c_parser_compound_statement (parser, NULL);
       omp_for_parse_state->in_intervening_code = false;
-      if (omp_for_parse_state->want_nested_loop)
+      만약 (omp_for_parse_state->want_nested_loop)
 	{
 	  /* We have already parsed the whole loop body and not found a
 	     nested loop.  */
@@ -25557,11 +25557,11 @@ parse_next:
 	}
       if_p = NULL;
     }
-  else
+  아니면
     {
       /* This is the final-loop-body case in the grammar: we have
 	 something that is not a FOR and not an open brace.  */
-      if (moreloops)
+      만약 (moreloops)
 	{
 	  /* If we were expecting a nested loop, give an error and mark
 	     that parsing has failed, and try to recover by parsing the
@@ -25573,9 +25573,9 @@ parse_next:
       in_statement = IN_OMP_FOR;
       parser->omp_for_parse_state = NULL;
       body = push_stmt_list ();
-      if (omp_for_parse_state->inscan)
+      만약 (omp_for_parse_state->inscan)
 	c_parser_omp_scan_loop_body (parser, false);
-      else
+      아니면
 	add_stmt (c_parser_c99_block_statement (parser, if_p));
       body = pop_stmt_list (body);
       parser->omp_for_parse_state = omp_for_parse_state;
@@ -25591,21 +25591,21 @@ parse_next:
      OMP_FOR.  That keeps the gimplifier happy later on, and meanwhile
      we have already resolved all references to the iteration variable
      in its true scope.  */
-  if (body)
+  만약 (body)
     add_stmt (body);
   body = c_end_compound_stmt (loc, loop_scope, true);
-  if (decl && TREE_CODE (body) == BIND_EXPR)
+  만약 (decl && TREE_CODE (body) == BIND_EXPR)
     {
       tree t = BIND_EXPR_VARS (body);
       tree prev = NULL_TREE, next = NULL_TREE;
-      while (t)
+      동안 (t)
 	{
 	  next = DECL_CHAIN (t);
-	  if (t == decl)
+	  만약 (t == decl)
 	    {
-	      if (prev)
+	      만약 (prev)
 		DECL_CHAIN (prev) = next;
-	      else
+	      아니면
 		{
 		  BIND_EXPR_VARS (body) = next;
 		  BLOCK_VARS (BIND_EXPR_BLOCK (body)) = next;
@@ -25614,17 +25614,17 @@ parse_next:
 	      omp_for_parse_state->bindings = t;
 	      break;
 	    }
-	  else
+	  아니면
 	    {
 	      prev = t;
 	      t = next;
 	    }
 	}
-      if (BIND_EXPR_VARS (body) == NULL_TREE)
+      만약 (BIND_EXPR_VARS (body) == NULL_TREE)
 	body = BIND_EXPR_BODY (body);
     }
 
-  return body;
+  반환 body;
 }
 
 /* Parse the restricted form of loop statements allowed by OpenACC and OpenMP.
@@ -25640,34 +25640,34 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
   tree body, stmt, cl;
   tree ret = NULL_TREE;
   tree ordered_cl = NULL_TREE;
-  int i, collapse = 1, ordered = 0, count;
+  정수 i, collapse = 1, ordered = 0, count;
   bool oacc_tiling = false;
   bool inscan = false;
   struct omp_for_parse_data data;
   struct omp_for_parse_data *save_data = parser->omp_for_parse_state;
 
-  for (cl = clauses; cl; cl = OMP_CLAUSE_CHAIN (cl))
-    if (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_COLLAPSE)
+  위해 (cl = clauses; cl; cl = OMP_CLAUSE_CHAIN (cl))
+    만약 (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_COLLAPSE)
       collapse = tree_to_shwi (OMP_CLAUSE_COLLAPSE_EXPR (cl));
-    else if (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_TILE)
+    아니면 만약 (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_TILE)
       {
 	oacc_tiling = true;
 	collapse = list_length (OMP_CLAUSE_TILE_LIST (cl));
       }
-    else if (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_SIZES)
+    아니면 만약 (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_SIZES)
       collapse = list_length (OMP_CLAUSE_SIZES_LIST (cl));
-    else if (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_ORDERED
+    아니면 만약 (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_ORDERED
 	     && OMP_CLAUSE_ORDERED_EXPR (cl))
       {
 	ordered_cl = cl;
 	ordered = tree_to_shwi (OMP_CLAUSE_ORDERED_EXPR (cl));
       }
-    else if (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_REDUCTION
+    아니면 만약 (OMP_CLAUSE_CODE (cl) == OMP_CLAUSE_REDUCTION
 	     && OMP_CLAUSE_REDUCTION_INSCAN (cl)
 	     && (code == OMP_SIMD || code == OMP_FOR))
       inscan = true;
 
-  if (ordered && ordered < collapse)
+  만약 (ordered && ordered < collapse)
     {
       error_at (OMP_CLAUSE_LOCATION (ordered_cl),
 		"%<ordered%> clause parameter is less than %<collapse%>");
@@ -25679,8 +25679,8 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
   gcc_assert (oacc_tiling || (collapse >= 1 && ordered >= 0));
   count = ordered ? ordered : collapse;
 
-  if (!c_parser_omp_next_tokens_can_be_canon_loop (parser, code, true))
-    return NULL;
+  만약 (!c_parser_omp_next_tokens_can_be_canon_loop (parser, code, true))
+    반환 NULL;
 
   /* Initialize parse state for recursive descent.  */
   data.declv = make_tree_vec (count);
@@ -25706,7 +25706,7 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
 
   /* Add saved bindings for iteration variables that were declared in
      the nested for loop to the scope surrounding the entire loop.  */
-  for (tree t = data.bindings; t; )
+  위해 (tree t = data.bindings; t; )
     {
       tree n = TREE_CHAIN (t);
       TREE_CHAIN (t) = NULL_TREE;
@@ -25716,7 +25716,7 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
 
   /* Only bother calling c_finish_omp_for if we haven't already generated
      an error from the initialization parsing.  */
-  if (!data.fail)
+  만약 (!data.fail)
     {
       c_in_omp_for = true;
       stmt = c_finish_omp_for (loc, code, data.declv, NULL, data.initv,
@@ -25725,24 +25725,24 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
       c_in_omp_for = false;
 
       /* Check for iterators appearing in lb, b or incr expressions.  */
-      if (stmt && !c_omp_check_loop_iv (stmt, data.declv, NULL))
+      만약 (stmt && !c_omp_check_loop_iv (stmt, data.declv, NULL))
 	stmt = NULL_TREE;
 
       /* Check for errors involving lb/ub/incr expressions referencing
 	 variables declared in intervening code.  */
-      if (data.saw_intervening_code
+      만약 (data.saw_intervening_code
 	  && stmt
 	  && !c_omp_check_loop_binding_exprs (stmt, NULL))
 	stmt = NULL_TREE;
 
-      if (stmt)
+      만약 (stmt)
 	{
 	  add_stmt (stmt);
 
-	  for (i = 0; i < TREE_VEC_LENGTH (OMP_FOR_INIT (stmt)); i++)
+	  위해 (i = 0; i < TREE_VEC_LENGTH (OMP_FOR_INIT (stmt)); i++)
 	    {
 	      tree init = TREE_VEC_ELT (OMP_FOR_INIT (stmt), i);
-	      if (init == NULL_TREE)
+	      만약 (init == NULL_TREE)
 		break;
 	      gcc_assert (TREE_CODE (init) == MODIFY_EXPR);
 	      tree decl = TREE_OPERAND (init, 0);
@@ -25751,10 +25751,10 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
 	      gcc_assert (TREE_OPERAND (cond, 0) == decl);
 
 	      tree op0 = TREE_OPERAND (init, 1);
-	      if (!OMP_FOR_NON_RECTANGULAR (stmt)
+	      만약 (!OMP_FOR_NON_RECTANGULAR (stmt)
 		  || TREE_CODE (op0) != TREE_VEC)
 		TREE_OPERAND (init, 1) = c_fully_fold (op0, false, NULL);
-	      else
+	      아니면
 		{
 		  TREE_VEC_ELT (op0, 1)
 		    = c_fully_fold (TREE_VEC_ELT (op0, 1), false, NULL);
@@ -25763,10 +25763,10 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
 		}
 
 	      tree op1 = TREE_OPERAND (cond, 1);
-	      if (!OMP_FOR_NON_RECTANGULAR (stmt)
+	      만약 (!OMP_FOR_NON_RECTANGULAR (stmt)
 		  || TREE_CODE (op1) != TREE_VEC)
 		TREE_OPERAND (cond, 1) = c_fully_fold (op1, false, NULL);
-	      else
+	      아니면
 		{
 		  TREE_VEC_ELT (op1, 1)
 		    = c_fully_fold (TREE_VEC_ELT (op1, 1), false, NULL);
@@ -25775,41 +25775,41 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
 		}
 	    }
 
-	  if (cclauses != NULL
+	  만약 (cclauses != NULL
 	      && cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL] != NULL)
 	    {
 	      tree *c;
-	      for (c = &cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL]; *c ; )
-		if (OMP_CLAUSE_CODE (*c) != OMP_CLAUSE_FIRSTPRIVATE
+	      위해 (c = &cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL]; *c ; )
+		만약 (OMP_CLAUSE_CODE (*c) != OMP_CLAUSE_FIRSTPRIVATE
 		    && OMP_CLAUSE_CODE (*c) != OMP_CLAUSE_LASTPRIVATE)
 		  c = &OMP_CLAUSE_CHAIN (*c);
-		else
+		아니면
 		  {
-		    for (i = 0; i < count; i++)
-		      if (TREE_VEC_ELT (data.declv, i) == OMP_CLAUSE_DECL (*c))
+		    위해 (i = 0; i < count; i++)
+		      만약 (TREE_VEC_ELT (data.declv, i) == OMP_CLAUSE_DECL (*c))
 			break;
-		    if (i == count)
+		    만약 (i == count)
 		      c = &OMP_CLAUSE_CHAIN (*c);
-		    else if (OMP_CLAUSE_CODE (*c) == OMP_CLAUSE_FIRSTPRIVATE)
+		    아니면 만약 (OMP_CLAUSE_CODE (*c) == OMP_CLAUSE_FIRSTPRIVATE)
 		      {
 			error_at (loc,
 				  "iteration variable %qD should not be firstprivate",
 				  OMP_CLAUSE_DECL (*c));
 			*c = OMP_CLAUSE_CHAIN (*c);
 		      }
-		    else
+		    아니면
 		      {
 			/* Move lastprivate (decl) clause to
 			   OMP_FOR_CLAUSES.  */
 			tree l = *c;
 			*c = OMP_CLAUSE_CHAIN (*c);
-			if (code == OMP_SIMD)
+			만약 (code == OMP_SIMD)
 			  {
 			    OMP_CLAUSE_CHAIN (l)
 			      = cclauses[C_OMP_CLAUSE_SPLIT_FOR];
 			    cclauses[C_OMP_CLAUSE_SPLIT_FOR] = l;
 			  }
-			else
+			아니면
 			  {
 			    OMP_CLAUSE_CHAIN (l) = clauses;
 			    clauses = l;
@@ -25823,7 +25823,7 @@ c_parser_omp_for_loop (location_t loc, c_parser *parser, enum tree_code code,
     }
 
   parser->omp_for_parse_state = save_data;
-  return ret;
+  반환 ret;
 }
 
 /* Helper function for OpenMP parsing, split clauses and call
@@ -25833,10 +25833,10 @@ static void
 omp_split_clauses (location_t loc, enum tree_code code,
 		   omp_clause_mask mask, tree clauses, tree *cclauses)
 {
-  int i;
+  정수 i;
   c_omp_split_clauses (loc, code, mask, clauses, cclauses);
-  for (i = 0; i < C_OMP_CLAUSE_SPLIT_COUNT; i++)
-    if (cclauses[i])
+  위해 (i = 0; i < C_OMP_CLAUSE_SPLIT_COUNT; i++)
+    만약 (cclauses[i])
       cclauses[i] = c_finish_omp_clauses (cclauses[i],
 					  i == C_OMP_CLAUSE_SPLIT_TARGET
 					  ? C_ORT_OMP_TARGET : C_ORT_OMP);
@@ -25868,7 +25868,7 @@ c_parser_omp_loop (location_t loc, c_parser *parser,
   mask |= OMP_LOOP_CLAUSE_MASK;
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
-  if (cclauses)
+  만약 (cclauses)
     {
       omp_split_clauses (loc, OMP_LOOP, mask, clauses, cclauses);
       clauses = cclauses[C_OMP_CLAUSE_SPLIT_LOOP];
@@ -25879,7 +25879,7 @@ c_parser_omp_loop (location_t loc, c_parser *parser,
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
 
-  return ret;
+  반환 ret;
 }
 
 /* OpenMP 4.0:
@@ -25913,7 +25913,7 @@ c_parser_omp_simd (location_t loc, c_parser *parser,
   mask |= OMP_SIMD_CLAUSE_MASK;
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
-  if (cclauses)
+  만약 (cclauses)
     {
       omp_split_clauses (loc, OMP_SIMD, mask, clauses, cclauses);
       clauses = cclauses[C_OMP_CLAUSE_SPLIT_SIMD];
@@ -25924,7 +25924,7 @@ c_parser_omp_simd (location_t loc, c_parser *parser,
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
 
-  return ret;
+  반환 ret;
 }
 
 /* OpenMP 2.5:
@@ -25962,52 +25962,52 @@ c_parser_omp_for (location_t loc, c_parser *parser,
   mask |= OMP_FOR_CLAUSE_MASK;
   /* parallel for{, simd} disallows nowait clause, but for
      target {teams distribute ,}parallel for{, simd} it should be accepted.  */
-  if (cclauses && (mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_MAP)) == 0)
+  만약 (cclauses && (mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_MAP)) == 0)
     mask &= ~(OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NOWAIT);
   /* Composite distribute parallel for{, simd} disallows ordered clause.  */
-  if ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_DIST_SCHEDULE)) != 0)
+  만약 ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_DIST_SCHEDULE)) != 0)
     mask &= ~(OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_ORDERED);
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
-      if (strcmp (p, "simd") == 0)
+      만약 (strcmp (p, "simd") == 0)
 	{
 	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
-	  if (cclauses == NULL)
+	  만약 (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
 	  c_parser_consume_token (parser);
-	  if (!flag_openmp)  /* flag_openmp_simd  */
-	    return c_parser_omp_simd (loc, parser, p_name, mask, cclauses,
+	  만약 (!flag_openmp)  /* flag_openmp_simd  */
+	    반환 c_parser_omp_simd (loc, parser, p_name, mask, cclauses,
 				      if_p);
 	  block = c_begin_compound_stmt (true);
 	  ret = c_parser_omp_simd (loc, parser, p_name, mask, cclauses, if_p);
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL_TREE)
-	    return ret;
+	  만약 (ret == NULL_TREE)
+	    반환 ret;
 	  ret = make_node (OMP_FOR);
 	  TREE_TYPE (ret) = void_type_node;
 	  OMP_FOR_BODY (ret) = block;
 	  OMP_FOR_CLAUSES (ret) = cclauses[C_OMP_CLAUSE_SPLIT_FOR];
 	  SET_EXPR_LOCATION (ret, loc);
 	  add_stmt (ret);
-	  return ret;
+	  반환 ret;
 	}
     }
-  if (!flag_openmp)  /* flag_openmp_simd  */
+  만약 (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
   /* Composite distribute parallel for disallows linear clause.  */
-  if ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_DIST_SCHEDULE)) != 0)
+  만약 ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_DIST_SCHEDULE)) != 0)
     mask &= ~(OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_LINEAR);
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
-  if (cclauses)
+  만약 (cclauses)
     {
       omp_split_clauses (loc, OMP_FOR, mask, clauses, cclauses);
       clauses = cclauses[C_OMP_CLAUSE_SPLIT_FOR];
@@ -26018,7 +26018,7 @@ c_parser_omp_for (location_t loc, c_parser *parser,
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
 
-  return ret;
+  반환 ret;
 }
 
 static tree c_parser_omp_taskloop (location_t, c_parser *, char *,
@@ -26038,7 +26038,7 @@ c_parser_omp_master (location_t loc, c_parser *parser,
 {
   tree block, clauses, ret;
   gcc_rich_location richloc (loc);
-  if (master_loc != UNKNOWN_LOCATION)
+  만약 (master_loc != UNKNOWN_LOCATION)
     richloc.add_fixit_replace (master_loc, "masked");
   warning_at (&richloc, OPT_Wdeprecated_openmp,
 	      "%<master%> construct deprecated since OpenMP 5.1, use "
@@ -26046,46 +26046,46 @@ c_parser_omp_master (location_t loc, c_parser *parser,
 
   strcat (p_name, " master");
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
-      if (strcmp (p, "taskloop") == 0)
+      만약 (strcmp (p, "taskloop") == 0)
 	{
 	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
-	  if (cclauses == NULL)
+	  만약 (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
 	  c_parser_consume_token (parser);
-	  if (!flag_openmp)  /* flag_openmp_simd  */
-	    return c_parser_omp_taskloop (loc, parser, p_name, mask, cclauses,
+	  만약 (!flag_openmp)  /* flag_openmp_simd  */
+	    반환 c_parser_omp_taskloop (loc, parser, p_name, mask, cclauses,
 					  if_p);
 	  block = c_begin_compound_stmt (true);
 	  ret = c_parser_omp_taskloop (loc, parser, p_name, mask, cclauses,
 				       if_p);
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL_TREE)
-	    return ret;
+	  만약 (ret == NULL_TREE)
+	    반환 ret;
 	  ret = c_finish_omp_master (loc, block);
 	  OMP_MASTER_COMBINED (ret) = 1;
-	  return ret;
+	  반환 ret;
 	}
     }
-  if (!flag_openmp)  /* flag_openmp_simd  */
+  만약 (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
-  if (cclauses)
+  만약 (cclauses)
     {
       clauses = c_parser_omp_all_clauses (parser, mask, p_name, false);
       omp_split_clauses (loc, OMP_MASTER, mask, clauses, cclauses);
     }
-  else
+  아니면
     c_parser_skip_to_pragma_eol (parser);
 
-  return c_finish_omp_master (loc, c_parser_omp_structured_block (parser,
+  반환 c_finish_omp_master (loc, c_parser_omp_structured_block (parser,
 								  if_p));
 }
 
@@ -26109,46 +26109,46 @@ c_parser_omp_masked (location_t loc, c_parser *parser,
   strcat (p_name, " masked");
   mask |= OMP_MASKED_CLAUSE_MASK;
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
-      if (strcmp (p, "taskloop") == 0)
+      만약 (strcmp (p, "taskloop") == 0)
 	{
 	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
-	  if (cclauses == NULL)
+	  만약 (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
 	  c_parser_consume_token (parser);
-	  if (!flag_openmp)  /* flag_openmp_simd  */
-	    return c_parser_omp_taskloop (loc, parser, p_name, mask, cclauses,
+	  만약 (!flag_openmp)  /* flag_openmp_simd  */
+	    반환 c_parser_omp_taskloop (loc, parser, p_name, mask, cclauses,
 					  if_p);
 	  block = c_begin_compound_stmt (true);
 	  ret = c_parser_omp_taskloop (loc, parser, p_name, mask, cclauses,
 				       if_p);
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL_TREE)
-	    return ret;
+	  만약 (ret == NULL_TREE)
+	    반환 ret;
 	  ret = c_finish_omp_masked (loc, block,
 				     cclauses[C_OMP_CLAUSE_SPLIT_MASKED]);
 	  OMP_MASKED_COMBINED (ret) = 1;
-	  return ret;
+	  반환 ret;
 	}
     }
-  if (!flag_openmp)  /* flag_openmp_simd  */
+  만약 (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
-  if (cclauses)
+  만약 (cclauses)
     {
       omp_split_clauses (loc, OMP_MASKED, mask, clauses, cclauses);
       clauses = cclauses[C_OMP_CLAUSE_SPLIT_MASKED];
     }
 
-  return c_finish_omp_masked (loc, c_parser_omp_structured_block (parser,
+  반환 c_finish_omp_masked (loc, c_parser_omp_structured_block (parser,
 								  if_p),
 			      clauses);
 }
@@ -26207,36 +26207,36 @@ c_parser_omp_ordered (c_parser *parser, enum pragma_context context,
   location_t loc = c_parser_peek_token (parser)->location;
   c_parser_consume_pragma (parser);
 
-  if (context != pragma_stmt && context != pragma_compound)
+  만약 (context != pragma_stmt && context != pragma_compound)
     {
       c_parser_error (parser, "expected declaration specifiers");
       c_parser_skip_to_pragma_eol (parser, false);
-      return false;
+      반환 false;
     }
 
-  int n = 1;
-  if (c_parser_next_token_is (parser, CPP_COMMA))
+  정수 n = 1;
+  만약 (c_parser_next_token_is (parser, CPP_COMMA))
     n = 2;
 
-  if (c_parser_peek_nth_token (parser, n)->type == CPP_NAME)
+  만약 (c_parser_peek_nth_token (parser, n)->type == CPP_NAME)
     {
       const char *p
 	= IDENTIFIER_POINTER (c_parser_peek_nth_token (parser, n)->value);
 
-      if (!strcmp ("depend", p) || !strcmp ("doacross", p))
+      만약 (!strcmp ("depend", p) || !strcmp ("doacross", p))
 	{
-	  if (!flag_openmp)	/* flag_openmp_simd  */
+	  만약 (!flag_openmp)	/* flag_openmp_simd  */
 	    {
 	      c_parser_skip_to_pragma_eol (parser, false);
-	      return false;
+	      반환 false;
 	    }
-	  if (context == pragma_stmt)
+	  만약 (context == pragma_stmt)
 	    {
 	      error_at (loc,
 			"%<#pragma omp ordered%> with %qs clause may "
 			"only be used in compound statements", p);
 	      c_parser_skip_to_pragma_eol (parser, false);
-	      return true;
+	      반환 true;
 	    }
 
 	  tree clauses
@@ -26244,20 +26244,20 @@ c_parser_omp_ordered (c_parser *parser, enum pragma_context context,
 					OMP_ORDERED_DEPEND_CLAUSE_MASK,
 					"#pragma omp ordered");
 	  c_finish_omp_ordered (loc, clauses, NULL_TREE);
-	  return false;
+	  반환 false;
 	}
     }
 
   tree clauses = c_parser_omp_all_clauses (parser, OMP_ORDERED_CLAUSE_MASK,
 					   "#pragma omp ordered");
 
-  if (!flag_openmp	/* flag_openmp_simd  */
+  만약 (!flag_openmp	/* flag_openmp_simd  */
       && omp_find_clause (clauses, OMP_CLAUSE_SIMD) == NULL_TREE)
-    return false;
+    반환 false;
 
   c_finish_omp_ordered (loc, clauses,
 			c_parser_omp_structured_block (parser, if_p));
-  return true;
+  반환 true;
 }
 
 /* OpenMP 2.5:
@@ -26281,16 +26281,16 @@ c_parser_omp_sections_scope (location_t sections_loc, c_parser *parser)
   location_t loc;
 
   loc = c_parser_peek_token (parser)->location;
-  if (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+  만약 (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
     {
       /* Avoid skipping until the end of the block.  */
       parser->error = false;
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
   stmt = push_stmt_list ();
 
-  if (c_parser_peek_token (parser)->pragma_kind != PRAGMA_OMP_SECTION
+  만약 (c_parser_peek_token (parser)->pragma_kind != PRAGMA_OMP_SECTION
       && !c_parser_omp_section_scan (parser, "section", true))
     {
       substmt = c_parser_omp_structured_block_sequence (parser,
@@ -26300,22 +26300,22 @@ c_parser_omp_sections_scope (location_t sections_loc, c_parser *parser)
       add_stmt (substmt);
     }
 
-  while (1)
+  동안 (1)
     {
-      if (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
+      만약 (c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 	break;
-      if (c_parser_next_token_is (parser, CPP_EOF))
+      만약 (c_parser_next_token_is (parser, CPP_EOF))
 	break;
 
       loc = c_parser_peek_token (parser)->location;
       c_parser_omp_section_scan (parser, "section", false);
-      if (c_parser_peek_token (parser)->pragma_kind == PRAGMA_OMP_SECTION)
+      만약 (c_parser_peek_token (parser)->pragma_kind == PRAGMA_OMP_SECTION)
 	{
 	  c_parser_consume_pragma (parser);
 	  c_parser_skip_to_pragma_eol (parser);
 	  error_suppress = false;
 	}
-      else if (!error_suppress)
+      아니면 만약 (!error_suppress)
 	{
 	  error_at (loc, "expected %<#pragma omp section%> or %<}%>");
 	  error_suppress = true;
@@ -26337,7 +26337,7 @@ c_parser_omp_sections_scope (location_t sections_loc, c_parser *parser)
   TREE_TYPE (stmt) = void_type_node;
   OMP_SECTIONS_BODY (stmt) = substmt;
 
-  return add_stmt (stmt);
+  반환 add_stmt (stmt);
 }
 
 /* OpenMP 2.5:
@@ -26363,11 +26363,11 @@ c_parser_omp_sections (location_t loc, c_parser *parser,
 
   strcat (p_name, " sections");
   mask |= OMP_SECTIONS_CLAUSE_MASK;
-  if (cclauses)
+  만약 (cclauses)
     mask &= ~(OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NOWAIT);
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
-  if (cclauses)
+  만약 (cclauses)
     {
       omp_split_clauses (loc, OMP_SECTIONS, mask, clauses, cclauses);
       clauses = cclauses[C_OMP_CLAUSE_SPLIT_SECTIONS];
@@ -26375,12 +26375,12 @@ c_parser_omp_sections (location_t loc, c_parser *parser,
 
   block = c_begin_compound_stmt (true);
   ret = c_parser_omp_sections_scope (loc, parser);
-  if (ret)
+  만약 (ret)
     OMP_SECTIONS_CLAUSES (ret) = clauses;
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
 
-  return ret;
+  반환 ret;
 }
 
 /* OpenMP 2.5:
@@ -26420,51 +26420,51 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
   strcat (p_name, " parallel");
   mask |= OMP_PARALLEL_CLAUSE_MASK;
   /* #pragma omp target parallel{, for, for simd} disallow copyin clause.  */
-  if ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_MAP)) != 0
+  만약 ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_MAP)) != 0
       && (mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_DIST_SCHEDULE)) == 0)
     mask &= ~(OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_COPYIN);
 
-  if (c_parser_next_token_is_keyword (parser, RID_FOR))
+  만약 (c_parser_next_token_is_keyword (parser, RID_FOR))
     {
       tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
-      if (cclauses == NULL)
+      만약 (cclauses == NULL)
 	cclauses = cclauses_buf;
 
       c_parser_consume_token (parser);
-      if (!flag_openmp)  /* flag_openmp_simd  */
-	return c_parser_omp_for (loc, parser, p_name, mask, cclauses, if_p);
+      만약 (!flag_openmp)  /* flag_openmp_simd  */
+	반환 c_parser_omp_for (loc, parser, p_name, mask, cclauses, if_p);
       block = c_begin_omp_parallel ();
       tree ret = c_parser_omp_for (loc, parser, p_name, mask, cclauses, if_p);
       stmt
 	= c_finish_omp_parallel (loc, cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL],
 				 block);
-      if (ret == NULL_TREE)
-	return ret;
+      만약 (ret == NULL_TREE)
+	반환 ret;
       OMP_PARALLEL_COMBINED (stmt) = 1;
-      return stmt;
+      반환 stmt;
     }
   /* When combined with distribute, parallel has to be followed by for.
      #pragma omp target parallel is allowed though.  */
-  else if (cclauses
+  아니면 만약 (cclauses
 	   && (mask & (OMP_CLAUSE_MASK_1
 		       << PRAGMA_OMP_CLAUSE_DIST_SCHEDULE)) != 0)
     {
       error_at (loc, "expected %<for%> after %qs", p_name);
       c_parser_skip_to_pragma_eol (parser);
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
-  else if (c_parser_next_token_is (parser, CPP_NAME))
+  아니면 만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
       location_t ploc = c_parser_peek_token (parser)->location;
-      if (cclauses == NULL && strcmp (p, "masked") == 0)
+      만약 (cclauses == NULL && strcmp (p, "masked") == 0)
 	{
 	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
 	  cclauses = cclauses_buf;
 
 	  c_parser_consume_token (parser);
-	  if (!flag_openmp)  /* flag_openmp_simd  */
-	    return c_parser_omp_masked (loc, parser, p_name, mask, cclauses,
+	  만약 (!flag_openmp)  /* flag_openmp_simd  */
+	    반환 c_parser_omp_masked (loc, parser, p_name, mask, cclauses,
 					if_p);
 	  block = c_begin_omp_parallel ();
 	  tree ret = c_parser_omp_masked (loc, parser, p_name, mask, cclauses,
@@ -26472,8 +26472,8 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 	  stmt = c_finish_omp_parallel (loc,
 					cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL],
 					block);
-	  if (ret == NULL)
-	    return ret;
+	  만약 (ret == NULL)
+	    반환 ret;
 	  /* masked does have just filter clause, but during gimplification
 	     isn't represented by a gimplification omp context, so for
 	     #pragma omp parallel masked don't set OMP_PARALLEL_COMBINED,
@@ -26482,18 +26482,18 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 	     #pragma omp taskloop simd lastprivate (x)
 	     isn't confused with
 	     #pragma omp parallel masked taskloop simd lastprivate (x)  */
-	  if (OMP_MASKED_COMBINED (ret))
+	  만약 (OMP_MASKED_COMBINED (ret))
 	    OMP_PARALLEL_COMBINED (stmt) = 1;
-	  return stmt;
+	  반환 stmt;
 	}
-      else if (cclauses == NULL && strcmp (p, "master") == 0)
+      아니면 만약 (cclauses == NULL && strcmp (p, "master") == 0)
 	{
 	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
 	  cclauses = cclauses_buf;
 
 	  c_parser_consume_token (parser);
-	  if (!flag_openmp)  /* flag_openmp_simd  */
-	    return c_parser_omp_master (loc, parser, p_name, mask, cclauses,
+	  만약 (!flag_openmp)  /* flag_openmp_simd  */
+	    반환 c_parser_omp_master (loc, parser, p_name, mask, cclauses,
 					if_p, ploc);
 	  block = c_begin_omp_parallel ();
 	  tree ret = c_parser_omp_master (loc, parser, p_name, mask, cclauses,
@@ -26501,8 +26501,8 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 	  stmt = c_finish_omp_parallel (loc,
 					cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL],
 					block);
-	  if (ret == NULL)
-	    return ret;
+	  만약 (ret == NULL)
+	    반환 ret;
 	  /* master doesn't have any clauses and during gimplification
 	     isn't represented by a gimplification omp context, so for
 	     #pragma omp parallel master don't set OMP_PARALLEL_COMBINED,
@@ -26511,19 +26511,19 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 	     #pragma omp taskloop simd lastprivate (x)
 	     isn't confused with
 	     #pragma omp parallel master taskloop simd lastprivate (x)  */
-	  if (OMP_MASTER_COMBINED (ret))
+	  만약 (OMP_MASTER_COMBINED (ret))
 	    OMP_PARALLEL_COMBINED (stmt) = 1;
-	  return stmt;
+	  반환 stmt;
 	}
-      else if (strcmp (p, "loop") == 0)
+      아니면 만약 (strcmp (p, "loop") == 0)
 	{
 	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
-	  if (cclauses == NULL)
+	  만약 (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
 	  c_parser_consume_token (parser);
-	  if (!flag_openmp)  /* flag_openmp_simd  */
-	    return c_parser_omp_loop (loc, parser, p_name, mask, cclauses,
+	  만약 (!flag_openmp)  /* flag_openmp_simd  */
+	    반환 c_parser_omp_loop (loc, parser, p_name, mask, cclauses,
 				      if_p);
 	  block = c_begin_omp_parallel ();
 	  tree ret = c_parser_omp_loop (loc, parser, p_name, mask, cclauses,
@@ -26532,17 +26532,17 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 	    = c_finish_omp_parallel (loc,
 				     cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL],
 				     block);
-	  if (ret == NULL_TREE)
-	    return ret;
+	  만약 (ret == NULL_TREE)
+	    반환 ret;
 	  OMP_PARALLEL_COMBINED (stmt) = 1;
-	  return stmt;
+	  반환 stmt;
 	}
-      else if (!flag_openmp)  /* flag_openmp_simd  */
+      아니면 만약 (!flag_openmp)  /* flag_openmp_simd  */
 	{
 	  c_parser_skip_to_pragma_eol (parser, false);
-	  return NULL_TREE;
+	  반환 NULL_TREE;
 	}
-      else if (cclauses == NULL && strcmp (p, "sections") == 0)
+      아니면 만약 (cclauses == NULL && strcmp (p, "sections") == 0)
 	{
 	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
 	  cclauses = cclauses_buf;
@@ -26554,17 +26554,17 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
 					cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL],
 					block);
 	  OMP_PARALLEL_COMBINED (stmt) = 1;
-	  return stmt;
+	  반환 stmt;
 	}
     }
-  else if (!flag_openmp)  /* flag_openmp_simd  */
+  아니면 만약 (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
-  if (cclauses)
+  만약 (cclauses)
     {
       omp_split_clauses (loc, OMP_PARALLEL, mask, clauses, cclauses);
       clauses = cclauses[C_OMP_CLAUSE_SPLIT_PARALLEL];
@@ -26575,7 +26575,7 @@ c_parser_omp_parallel (location_t loc, c_parser *parser,
   c_parser_statement (parser, if_p);
   stmt = c_finish_omp_parallel (loc, clauses, block);
 
-  return stmt;
+  반환 stmt;
 }
 
 /* OpenMP 2.5:
@@ -26604,7 +26604,7 @@ c_parser_omp_single (location_t loc, c_parser *parser, bool *if_p)
 				"#pragma omp single");
   OMP_SINGLE_BODY (stmt) = c_parser_omp_structured_block (parser, if_p);
 
-  return add_stmt (stmt);
+  반환 add_stmt (stmt);
 }
 
 /* OpenMP 5.1:
@@ -26633,7 +26633,7 @@ c_parser_omp_scope (location_t loc, c_parser *parser, bool *if_p)
 				"#pragma omp scope");
   OMP_SCOPE_BODY (stmt) = c_parser_omp_structured_block (parser, if_p);
 
-  return add_stmt (stmt);
+  반환 add_stmt (stmt);
 }
 
 /* Parse a function dispatch structured block:
@@ -26653,26 +26653,26 @@ c_parser_omp_dispatch_body (c_parser *parser)
   source_range tok_range = c_parser_peek_token (parser)->get_range ();
 
   lhs = c_parser_conditional_expression (parser, NULL, NULL);
-  if (TREE_CODE (lhs.value) == CALL_EXPR)
-    return lhs.value;
+  만약 (TREE_CODE (lhs.value) == CALL_EXPR)
+    반환 lhs.value;
 
   location_t op_location = c_parser_peek_token (parser)->location;
-  if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
-    return error_mark_node;
+  만약 (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+    반환 error_mark_node;
 
   /* Parse function name.  */
-  if (!c_parser_next_token_is (parser, CPP_NAME))
+  만약 (!c_parser_next_token_is (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected a function name");
-      return error_mark_node;
+      반환 error_mark_node;
     }
   expr_loc = c_parser_peek_token (parser)->location;
   tree id = c_parser_peek_token (parser)->value;
   c_parser_consume_token (parser);
-  if (!c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+  만약 (!c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       c_parser_error (parser, "expected a function name");
-      return error_mark_node;
+      반환 error_mark_node;
     }
 
   rhs.value = build_external_ref (expr_loc, id, true, &rhs.original_type);
@@ -26681,11 +26681,11 @@ c_parser_omp_dispatch_body (c_parser *parser)
   /* Parse argument list.  */
   rhs = c_parser_postfix_expression_after_primary (
     parser, EXPR_LOC_OR_LOC (rhs.value, expr_loc), rhs);
-  if (TREE_CODE (rhs.value) != CALL_EXPR)
+  만약 (TREE_CODE (rhs.value) != CALL_EXPR)
     {
       error_at (EXPR_LOC_OR_LOC (rhs.value, expr_loc),
 		"expected target-function call");
-      return error_mark_node;
+      반환 error_mark_node;
     }
 
   /* Build assignment. */
@@ -26697,7 +26697,7 @@ c_parser_omp_dispatch_body (c_parser *parser)
   set_c_expr_source_range (&ret, lhs.get_start (), rhs.get_finish ());
   ret.original_code = MODIFY_EXPR;
   ret.original_type = NULL;
-  return ret.value;
+  반환 ret.value;
 }
 
 /* OpenMP 5.1:
@@ -26731,15 +26731,15 @@ c_parser_omp_dispatch (location_t loc, c_parser *parser)
   // Extract depend clauses and create taskwait
   tree depend_clauses = NULL_TREE;
   tree *depend_clauses_ptr = &depend_clauses;
-  for (tree c = OMP_DISPATCH_CLAUSES (stmt); c; c = OMP_CLAUSE_CHAIN (c))
+  위해 (tree c = OMP_DISPATCH_CLAUSES (stmt); c; c = OMP_CLAUSE_CHAIN (c))
     {
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND)
+      만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEPEND)
 	{
 	  *depend_clauses_ptr = c;
 	  depend_clauses_ptr = &OMP_CLAUSE_CHAIN (c);
 	}
     }
-  if (depend_clauses != NULL_TREE)
+  만약 (depend_clauses != NULL_TREE)
     {
       tree stmt = make_node (OMP_TASK);
       TREE_TYPE (stmt) = void_node;
@@ -26752,12 +26752,12 @@ c_parser_omp_dispatch (location_t loc, c_parser *parser)
   // Parse body as expression statement
   loc = c_parser_peek_token (parser)->location;
   tree dispatch_body = c_parser_omp_dispatch_body (parser);
-  if (dispatch_body == error_mark_node)
+  만약 (dispatch_body == error_mark_node)
     {
       inform (loc, "%<#pragma omp dispatch%> must be followed by a function "
 		   "call with optional assignment");
       c_parser_skip_to_end_of_block_or_statement (parser);
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
   // Walk the tree to find the dispatch function call and wrap it into an IFN
@@ -26766,7 +26766,7 @@ c_parser_omp_dispatch (location_t loc, c_parser *parser)
   tree *dispatch_call = TREE_CODE (dispatch_body) == MODIFY_EXPR
 			  ? &TREE_OPERAND (dispatch_body, 1)
 			  : &dispatch_body;
-  while (TREE_CODE (*dispatch_call) == FLOAT_EXPR
+  동안 (TREE_CODE (*dispatch_call) == FLOAT_EXPR
 	 || TREE_CODE (*dispatch_call) == CONVERT_EXPR
 	 || TREE_CODE (*dispatch_call) == NOP_EXPR)
     dispatch_call = &TREE_OPERAND (*dispatch_call, 0);
@@ -26777,7 +26777,7 @@ c_parser_omp_dispatch (location_t loc, c_parser *parser)
   c_parser_skip_until_found (parser, CPP_SEMICOLON, "expected %<;%>");
   OMP_DISPATCH_BODY (stmt) = dispatch_body;
 
-  return add_stmt (stmt);
+  반환 add_stmt (stmt);
 }
 
 /* OpenMP 3.0:
@@ -26813,7 +26813,7 @@ c_parser_omp_task (location_t loc, c_parser *parser, bool *if_p)
   block = c_begin_omp_task ();
   parser->omp_attrs_forbidden_p = true;
   c_parser_statement (parser, if_p);
-  return c_finish_omp_task (loc, clauses, block);
+  반환 c_finish_omp_task (loc, clauses, block);
 }
 
 /* OpenMP 3.0:
@@ -26837,7 +26837,7 @@ c_parser_omp_taskwait (c_parser *parser)
     = c_parser_omp_all_clauses (parser, OMP_TASKWAIT_CLAUSE_MASK,
 				"#pragma omp taskwait");
 
-  if (clauses)
+  만약 (clauses)
     {
       tree stmt = make_node (OMP_TASK);
       TREE_TYPE (stmt) = void_node;
@@ -26846,7 +26846,7 @@ c_parser_omp_taskwait (c_parser *parser)
       SET_EXPR_LOCATION (stmt, loc);
       add_stmt (stmt);
     }
-  else
+  아니면
     c_finish_omp_taskwait (loc);
 }
 
@@ -26882,7 +26882,7 @@ c_parser_omp_taskgroup (location_t loc, c_parser *parser, bool *if_p)
 					   "#pragma omp taskgroup");
 
   tree body = c_parser_omp_structured_block (parser, if_p);
-  return c_finish_omp_taskgroup (loc, body, clauses);
+  반환 c_finish_omp_taskgroup (loc, body, clauses);
 }
 
 /* OpenMP 4.0:
@@ -26930,32 +26930,32 @@ c_parser_omp_cancellation_point (c_parser *parser, enum pragma_context context)
   bool point_seen = false;
 
   c_parser_consume_pragma (parser);
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "point") == 0)
+      만약 (strcmp (p, "point") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  point_seen = true;
 	}
     }
-  if (!point_seen)
+  만약 (!point_seen)
     {
       c_parser_error (parser, "expected %<point%>");
       c_parser_skip_to_pragma_eol (parser);
-      return false;
+      반환 false;
     }
 
-  if (context != pragma_compound)
+  만약 (context != pragma_compound)
     {
-      if (context == pragma_stmt)
+      만약 (context == pragma_stmt)
 	error_at (loc,
 		  "%<#pragma %s%> may only be used in compound statements",
 		  "omp cancellation point");
-      else
+      아니면
 	c_parser_error (parser, "expected declaration specifiers");
       c_parser_skip_to_pragma_eol (parser, false);
-      return true;
+      반환 true;
     }
 
   clauses
@@ -26963,7 +26963,7 @@ c_parser_omp_cancellation_point (c_parser *parser, enum pragma_context context)
 				"#pragma omp cancellation point");
 
   c_finish_omp_cancellation_point (loc, clauses);
-  return true;
+  반환 true;
 }
 
 /* OpenMP 4.0:
@@ -26989,58 +26989,58 @@ c_parser_omp_distribute (location_t loc, c_parser *parser,
   strcat (p_name, " distribute");
   mask |= OMP_DISTRIBUTE_CLAUSE_MASK;
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
       bool simd = false;
       bool parallel = false;
 
-      if (strcmp (p, "simd") == 0)
+      만약 (strcmp (p, "simd") == 0)
 	simd = true;
-      else
+      아니면
 	parallel = strcmp (p, "parallel") == 0;
-      if (parallel || simd)
+      만약 (parallel || simd)
 	{
 	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
-	  if (cclauses == NULL)
+	  만약 (cclauses == NULL)
 	    cclauses = cclauses_buf;
 	  c_parser_consume_token (parser);
-	  if (!flag_openmp)  /* flag_openmp_simd  */
+	  만약 (!flag_openmp)  /* flag_openmp_simd  */
 	    {
-	      if (simd)
-		return c_parser_omp_simd (loc, parser, p_name, mask, cclauses,
+	      만약 (simd)
+		반환 c_parser_omp_simd (loc, parser, p_name, mask, cclauses,
 					  if_p);
-	      else
-		return c_parser_omp_parallel (loc, parser, p_name, mask,
+	      아니면
+		반환 c_parser_omp_parallel (loc, parser, p_name, mask,
 					      cclauses, if_p);
 	    }
 	  block = c_begin_compound_stmt (true);
-	  if (simd)
+	  만약 (simd)
 	    ret = c_parser_omp_simd (loc, parser, p_name, mask, cclauses,
 				     if_p);
-	  else
+	  아니면
 	    ret = c_parser_omp_parallel (loc, parser, p_name, mask, cclauses,
 					 if_p);
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL)
-	    return ret;
+	  만약 (ret == NULL)
+	    반환 ret;
 	  ret = make_node (OMP_DISTRIBUTE);
 	  TREE_TYPE (ret) = void_type_node;
 	  OMP_FOR_BODY (ret) = block;
 	  OMP_FOR_CLAUSES (ret) = cclauses[C_OMP_CLAUSE_SPLIT_DISTRIBUTE];
 	  SET_EXPR_LOCATION (ret, loc);
 	  add_stmt (ret);
-	  return ret;
+	  반환 ret;
 	}
     }
-  if (!flag_openmp)  /* flag_openmp_simd  */
+  만약 (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
-  if (cclauses)
+  만약 (cclauses)
     {
       omp_split_clauses (loc, OMP_DISTRIBUTE, mask, clauses, cclauses);
       clauses = cclauses[C_OMP_CLAUSE_SPLIT_DISTRIBUTE];
@@ -27052,7 +27052,7 @@ c_parser_omp_distribute (location_t loc, c_parser *parser,
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
 
-  return ret;
+  반환 ret;
 }
 
 /* OpenMP 4.0:
@@ -27079,25 +27079,25 @@ c_parser_omp_teams (location_t loc, c_parser *parser,
   strcat (p_name, " teams");
   mask |= OMP_TEAMS_CLAUSE_MASK;
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "distribute") == 0)
+      만약 (strcmp (p, "distribute") == 0)
 	{
 	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
-	  if (cclauses == NULL)
+	  만약 (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
 	  c_parser_consume_token (parser);
-	  if (!flag_openmp)  /* flag_openmp_simd  */
-	    return c_parser_omp_distribute (loc, parser, p_name, mask,
+	  만약 (!flag_openmp)  /* flag_openmp_simd  */
+	    반환 c_parser_omp_distribute (loc, parser, p_name, mask,
 					    cclauses, if_p);
 	  block = c_begin_omp_parallel ();
 	  ret = c_parser_omp_distribute (loc, parser, p_name, mask, cclauses,
 					 if_p);
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL)
-	    return ret;
+	  만약 (ret == NULL)
+	    반환 ret;
 	  clauses = cclauses[C_OMP_CLAUSE_SPLIT_TEAMS];
 	  ret = make_node (OMP_TEAMS);
 	  TREE_TYPE (ret) = void_type_node;
@@ -27105,23 +27105,23 @@ c_parser_omp_teams (location_t loc, c_parser *parser,
 	  OMP_TEAMS_BODY (ret) = block;
 	  OMP_TEAMS_COMBINED (ret) = 1;
 	  SET_EXPR_LOCATION (ret, loc);
-	  return add_stmt (ret);
+	  반환 add_stmt (ret);
 	}
-      else if (strcmp (p, "loop") == 0)
+      아니면 만약 (strcmp (p, "loop") == 0)
 	{
 	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
-	  if (cclauses == NULL)
+	  만약 (cclauses == NULL)
 	    cclauses = cclauses_buf;
 
 	  c_parser_consume_token (parser);
-	  if (!flag_openmp)  /* flag_openmp_simd  */
-	    return c_parser_omp_loop (loc, parser, p_name, mask, cclauses,
+	  만약 (!flag_openmp)  /* flag_openmp_simd  */
+	    반환 c_parser_omp_loop (loc, parser, p_name, mask, cclauses,
 				      if_p);
 	  block = c_begin_omp_parallel ();
 	  ret = c_parser_omp_loop (loc, parser, p_name, mask, cclauses, if_p);
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL)
-	    return ret;
+	  만약 (ret == NULL)
+	    반환 ret;
 	  clauses = cclauses[C_OMP_CLAUSE_SPLIT_TEAMS];
 	  ret = make_node (OMP_TEAMS);
 	  TREE_TYPE (ret) = void_type_node;
@@ -27129,17 +27129,17 @@ c_parser_omp_teams (location_t loc, c_parser *parser,
 	  OMP_TEAMS_BODY (ret) = block;
 	  OMP_TEAMS_COMBINED (ret) = 1;
 	  SET_EXPR_LOCATION (ret, loc);
-	  return add_stmt (ret);
+	  반환 add_stmt (ret);
 	}
     }
-  if (!flag_openmp)  /* flag_openmp_simd  */
+  만약 (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
-  if (cclauses)
+  만약 (cclauses)
     {
       omp_split_clauses (loc, OMP_TEAMS, mask, clauses, cclauses);
       clauses = cclauses[C_OMP_CLAUSE_SPLIT_TEAMS];
@@ -27153,7 +27153,7 @@ c_parser_omp_teams (location_t loc, c_parser *parser,
   OMP_TEAMS_BODY (stmt) = c_end_compound_stmt (loc, block, true);
   SET_EXPR_LOCATION (stmt, loc);
 
-  return add_stmt (stmt);
+  반환 add_stmt (stmt);
 }
 
 /* OpenMP 4.0:
@@ -27170,7 +27170,7 @@ c_parser_omp_teams (location_t loc, c_parser *parser,
 static tree
 c_parser_omp_target_data (location_t loc, c_parser *parser, bool *if_p)
 {
-  if (flag_openmp)
+  만약 (flag_openmp)
     omp_requires_mask
       = (enum omp_requires) (omp_requires_mask | OMP_REQUIRES_TARGET_USED);
 
@@ -27180,10 +27180,10 @@ c_parser_omp_target_data (location_t loc, c_parser *parser, bool *if_p)
   clauses = c_omp_instantiate_mappers (clauses, C_ORT_OMP);
   clauses = c_finish_omp_clauses (clauses, C_ORT_OMP);
   c_omp_adjust_map_clauses (clauses, false);
-  int map_seen = 0;
-  for (tree *pc = &clauses; *pc;)
+  정수 map_seen = 0;
+  위해 (tree *pc = &clauses; *pc;)
     {
-      if (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_MAP)
+      만약 (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_MAP)
 	switch (OMP_CLAUSE_MAP_KIND (*pc))
 	  {
 	  case GOMP_MAP_TO:
@@ -27216,20 +27216,20 @@ c_parser_omp_target_data (location_t loc, c_parser *parser, bool *if_p)
 	    *pc = OMP_CLAUSE_CHAIN (*pc);
 	    continue;
 	  }
-      else if (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_USE_DEVICE_PTR
+      아니면 만약 (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_USE_DEVICE_PTR
 	       || OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_USE_DEVICE_ADDR)
 	map_seen = 3;
       pc = &OMP_CLAUSE_CHAIN (*pc);
     }
 
-  if (map_seen != 3)
+  만약 (map_seen != 3)
     {
-      if (map_seen == 0)
+      만약 (map_seen == 0)
 	error_at (loc,
 		  "%<#pragma omp target data%> must contain at least "
 		  "one %<map%>, %<use_device_ptr%> or %<use_device_addr%> "
 		  "clause");
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
   tree stmt = make_node (OMP_TARGET_DATA);
@@ -27241,7 +27241,7 @@ c_parser_omp_target_data (location_t loc, c_parser *parser, bool *if_p)
   OMP_TARGET_DATA_BODY (stmt) = c_end_compound_stmt (loc, block, true);
 
   SET_EXPR_LOCATION (stmt, loc);
-  return add_stmt (stmt);
+  반환 add_stmt (stmt);
 }
 
 /* OpenMP 4.0:
@@ -27259,12 +27259,12 @@ static bool
 c_parser_omp_target_update (location_t loc, c_parser *parser,
 			    enum pragma_context context)
 {
-  if (context == pragma_stmt)
+  만약 (context == pragma_stmt)
     {
       error_at (loc, "%<#pragma %s%> may only be used in compound statements",
 		"omp target update");
       c_parser_skip_to_pragma_eol (parser, false);
-      return true;
+      반환 true;
     }
 
   tree clauses
@@ -27274,16 +27274,16 @@ c_parser_omp_target_update (location_t loc, c_parser *parser,
   clauses = c_omp_instantiate_mappers (clauses, C_ORT_OMP_UPDATE);
   clauses = c_finish_omp_clauses (clauses, C_ORT_OMP_UPDATE);
 
-  if (omp_find_clause (clauses, OMP_CLAUSE_TO) == NULL_TREE
+  만약 (omp_find_clause (clauses, OMP_CLAUSE_TO) == NULL_TREE
       && omp_find_clause (clauses, OMP_CLAUSE_FROM) == NULL_TREE)
     {
       error_at (loc,
 		"%<#pragma omp target update%> must contain at least one "
 		"%<from%> or %<to%> clauses");
-      return false;
+      반환 false;
     }
 
-  if (flag_openmp)
+  만약 (flag_openmp)
     omp_requires_mask
       = (enum omp_requires) (omp_requires_mask | OMP_REQUIRES_TARGET_USED);
 
@@ -27292,7 +27292,7 @@ c_parser_omp_target_update (location_t loc, c_parser *parser,
   OMP_TARGET_UPDATE_CLAUSES (stmt) = clauses;
   SET_EXPR_LOCATION (stmt, loc);
   add_stmt (stmt);
-  return false;
+  반환 false;
 }
 
 /* OpenMP 4.5:
@@ -27310,31 +27310,31 @@ c_parser_omp_target_enter_data (location_t loc, c_parser *parser,
 				enum pragma_context context)
 {
   bool data_seen = false;
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "data") == 0)
+      만약 (strcmp (p, "data") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  data_seen = true;
 	}
     }
-  if (!data_seen)
+  만약 (!data_seen)
     {
       c_parser_error (parser, "expected %<data%>");
       c_parser_skip_to_pragma_eol (parser);
-      return false;
+      반환 false;
     }
 
-  if (context == pragma_stmt)
+  만약 (context == pragma_stmt)
     {
       error_at (loc, "%<#pragma %s%> may only be used in compound statements",
 		"omp target enter data");
       c_parser_skip_to_pragma_eol (parser, false);
-      return true;
+      반환 true;
     }
 
-  if (flag_openmp)
+  만약 (flag_openmp)
     omp_requires_mask
       = (enum omp_requires) (omp_requires_mask | OMP_REQUIRES_TARGET_USED);
 
@@ -27344,10 +27344,10 @@ c_parser_omp_target_enter_data (location_t loc, c_parser *parser,
   clauses = c_omp_instantiate_mappers (clauses, C_ORT_OMP);
   clauses = c_finish_omp_clauses (clauses, C_ORT_OMP);
   c_omp_adjust_map_clauses (clauses, false);
-  int map_seen = 0;
-  for (tree *pc = &clauses; *pc;)
+  정수 map_seen = 0;
+  위해 (tree *pc = &clauses; *pc;)
     {
-      if (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_MAP)
+      만약 (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_MAP)
 	switch (OMP_CLAUSE_MAP_KIND (*pc))
 	  {
 	  case GOMP_MAP_TO:
@@ -27390,13 +27390,13 @@ c_parser_omp_target_enter_data (location_t loc, c_parser *parser,
       pc = &OMP_CLAUSE_CHAIN (*pc);
     }
 
-  if (map_seen != 3)
+  만약 (map_seen != 3)
     {
-      if (map_seen == 0)
+      만약 (map_seen == 0)
 	error_at (loc,
 		  "%<#pragma omp target enter data%> must contain at least "
 		  "one %<map%> clause");
-      return true;
+      반환 true;
     }
 
   tree stmt = make_node (OMP_TARGET_ENTER_DATA);
@@ -27404,7 +27404,7 @@ c_parser_omp_target_enter_data (location_t loc, c_parser *parser,
   OMP_TARGET_ENTER_DATA_CLAUSES (stmt) = clauses;
   SET_EXPR_LOCATION (stmt, loc);
   add_stmt (stmt);
-  return true;
+  반환 true;
 }
 
 /* OpenMP 4.5:
@@ -27422,31 +27422,31 @@ c_parser_omp_target_exit_data (location_t loc, c_parser *parser,
 			       enum pragma_context context)
 {
   bool data_seen = false;
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "data") == 0)
+      만약 (strcmp (p, "data") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  data_seen = true;
 	}
     }
-  if (!data_seen)
+  만약 (!data_seen)
     {
       c_parser_error (parser, "expected %<data%>");
       c_parser_skip_to_pragma_eol (parser);
-      return false;
+      반환 false;
     }
 
-  if (context == pragma_stmt)
+  만약 (context == pragma_stmt)
     {
       error_at (loc, "%<#pragma %s%> may only be used in compound statements",
 		"omp target exit data");
       c_parser_skip_to_pragma_eol (parser, false);
-      return true;
+      반환 true;
     }
 
-  if (flag_openmp)
+  만약 (flag_openmp)
     omp_requires_mask
       = (enum omp_requires) (omp_requires_mask | OMP_REQUIRES_TARGET_USED);
 
@@ -27456,10 +27456,10 @@ c_parser_omp_target_exit_data (location_t loc, c_parser *parser,
   clauses = c_omp_instantiate_mappers (clauses, C_ORT_OMP_EXIT_DATA);
   clauses = c_finish_omp_clauses (clauses, C_ORT_OMP_EXIT_DATA);
   c_omp_adjust_map_clauses (clauses, false);
-  int map_seen = 0;
-  for (tree *pc = &clauses; *pc;)
+  정수 map_seen = 0;
+  위해 (tree *pc = &clauses; *pc;)
     {
-      if (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_MAP)
+      만약 (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_MAP)
 	switch (OMP_CLAUSE_MAP_KIND (*pc))
 	  {
 	  case GOMP_MAP_FROM:
@@ -27503,13 +27503,13 @@ c_parser_omp_target_exit_data (location_t loc, c_parser *parser,
       pc = &OMP_CLAUSE_CHAIN (*pc);
     }
 
-  if (map_seen != 3)
+  만약 (map_seen != 3)
     {
-      if (map_seen == 0)
+      만약 (map_seen == 0)
 	error_at (loc,
 		  "%<#pragma omp target exit data%> must contain at least one "
 		  "%<map%> clause");
-      return true;
+      반환 true;
     }
 
   tree stmt = make_node (OMP_TARGET_EXIT_DATA);
@@ -27517,7 +27517,7 @@ c_parser_omp_target_exit_data (location_t loc, c_parser *parser,
   OMP_TARGET_EXIT_DATA_CLAUSES (stmt) = clauses;
   SET_EXPR_LOCATION (stmt, loc);
   add_stmt (stmt);
-  return true;
+  반환 true;
 }
 
 /* OpenMP 4.0:
@@ -27549,29 +27549,29 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
   c_parser_consume_pragma (parser);
   tree *pc = NULL, stmt, block, body, clauses;
 
-  if (context != pragma_stmt && context != pragma_compound)
+  만약 (context != pragma_stmt && context != pragma_compound)
     {
       c_parser_error (parser, "expected declaration specifiers");
       c_parser_skip_to_pragma_eol (parser);
-      return false;
+      반환 false;
     }
 
-  if (flag_openmp)
+  만약 (flag_openmp)
     omp_requires_mask
       = (enum omp_requires) (omp_requires_mask | OMP_REQUIRES_TARGET_USED);
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
       enum tree_code ccode = ERROR_MARK;
 
-      if (strcmp (p, "teams") == 0)
+      만약 (strcmp (p, "teams") == 0)
 	ccode = OMP_TEAMS;
-      else if (strcmp (p, "parallel") == 0)
+      아니면 만약 (strcmp (p, "parallel") == 0)
 	ccode = OMP_PARALLEL;
-      else if (strcmp (p, "simd") == 0)
+      아니면 만약 (strcmp (p, "simd") == 0)
 	ccode = OMP_SIMD;
-      if (ccode != ERROR_MARK)
+      만약 (ccode != ERROR_MARK)
 	{
 	  tree cclauses[C_OMP_CLAUSE_SPLIT_COUNT];
 	  char p_name[sizeof ("#pragma omp target teams distribute "
@@ -27579,7 +27579,7 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
 
 	  c_parser_consume_token (parser);
 	  strcpy (p_name, "#pragma omp target");
-	  if (!flag_openmp)  /* flag_openmp_simd  */
+	  만약 (!flag_openmp)  /* flag_openmp_simd  */
 	    {
 	      tree stmt;
 	      switch (ccode)
@@ -27602,7 +27602,7 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
 		default:
 		  gcc_unreachable ();
 		}
-	      return stmt != NULL_TREE;
+	      반환 stmt != NULL_TREE;
 	    }
 	  keep_next_level ();
 	  tree block = c_begin_compound_stmt (true), ret;
@@ -27627,19 +27627,19 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
 	      gcc_unreachable ();
 	    }
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL_TREE)
-	    return false;
-	  if (ccode == OMP_TEAMS)
+	  만약 (ret == NULL_TREE)
+	    반환 false;
+	  만약 (ccode == OMP_TEAMS)
 	    /* For combined target teams, ensure the num_teams and
 	       thread_limit clause expressions are evaluated on the host,
 	       before entering the target construct.  */
-	    for (tree c = cclauses[C_OMP_CLAUSE_SPLIT_TEAMS];
+	    위해 (tree c = cclauses[C_OMP_CLAUSE_SPLIT_TEAMS];
 		 c; c = OMP_CLAUSE_CHAIN (c))
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_NUM_TEAMS
+	      만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_NUM_TEAMS
 		  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_THREAD_LIMIT)
-		for (int i = 0;
+		위해 (정수 i = 0;
 		     i <= (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_NUM_TEAMS); ++i)
-		  if (OMP_CLAUSE_OPERAND (c, i)
+		  만약 (OMP_CLAUSE_OPERAND (c, i)
 		      && TREE_CODE (OMP_CLAUSE_OPERAND (c, i)) != INTEGER_CST)
 		    {
 		      tree expr = OMP_CLAUSE_OPERAND (c, i);
@@ -27666,37 +27666,37 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
 	  pc = &OMP_TARGET_CLAUSES (stmt);
 	  goto check_clauses;
 	}
-      else if (!flag_openmp)  /* flag_openmp_simd  */
+      아니면 만약 (!flag_openmp)  /* flag_openmp_simd  */
 	{
 	  c_parser_skip_to_pragma_eol (parser, false);
-	  return false;
+	  반환 false;
 	}
-      else if (strcmp (p, "data") == 0)
+      아니면 만약 (strcmp (p, "data") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  c_parser_omp_target_data (loc, parser, if_p);
-	  return true;
+	  반환 true;
 	}
-      else if (strcmp (p, "enter") == 0)
+      아니면 만약 (strcmp (p, "enter") == 0)
 	{
 	  c_parser_consume_token (parser);
-	  return c_parser_omp_target_enter_data (loc, parser, context);
+	  반환 c_parser_omp_target_enter_data (loc, parser, context);
 	}
-      else if (strcmp (p, "exit") == 0)
+      아니면 만약 (strcmp (p, "exit") == 0)
 	{
 	  c_parser_consume_token (parser);
-	  return c_parser_omp_target_exit_data (loc, parser, context);
+	  반환 c_parser_omp_target_exit_data (loc, parser, context);
 	}
-      else if (strcmp (p, "update") == 0)
+      아니면 만약 (strcmp (p, "update") == 0)
 	{
 	  c_parser_consume_token (parser);
-	  return c_parser_omp_target_update (loc, parser, context);
+	  반환 c_parser_omp_target_update (loc, parser, context);
 	}
     }
-  if (!flag_openmp) /* flag_openmp_simd  */
+  만약 (!flag_openmp) /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return false;
+      반환 false;
     }
 
   stmt = make_node (OMP_TARGET);
@@ -27704,8 +27704,8 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
 
   clauses = c_parser_omp_all_clauses (parser, OMP_TARGET_CLAUSE_MASK,
 				      "#pragma omp target", false);
-  for (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
-    if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION)
+  위해 (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+    만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_IN_REDUCTION)
       {
 	tree nc = build_omp_clause (OMP_CLAUSE_LOCATION (c), OMP_CLAUSE_MAP);
 	OMP_CLAUSE_DECL (nc) = OMP_CLAUSE_DECL (c);
@@ -27732,9 +27732,9 @@ c_parser_omp_target (c_parser *parser, enum pragma_context context, bool *if_p)
   add_stmt (stmt);
 
 check_clauses:
-  while (*pc)
+  동안 (*pc)
     {
-      if (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_MAP)
+      만약 (OMP_CLAUSE_CODE (*pc) == OMP_CLAUSE_MAP)
 	switch (OMP_CLAUSE_MAP_KIND (*pc))
 	  {
 	  case GOMP_MAP_TO:
@@ -27768,7 +27768,7 @@ check_clauses:
       pc = &OMP_CLAUSE_CHAIN (*pc);
     }
   cfun->has_omp_target = true;
-  return true;
+  반환 true;
 }
 
 /* OpenMP 4.0:
@@ -27800,13 +27800,13 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
 	      || strcmp (IDENTIFIER_POINTER (kind), "variant") == 0);
 
   auto_vec<c_token> clauses;
-  while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+  동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
     {
       c_token *token = c_parser_peek_token (parser);
-      if (token->type == CPP_EOF)
+      만약 (token->type == CPP_EOF)
 	{
 	  c_parser_skip_to_pragma_eol (parser);
-	  return;
+	  반환;
 	}
       clauses.safe_push (*token);
       c_parser_consume_token (parser);
@@ -27814,9 +27814,9 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
   clauses.safe_push (*c_parser_peek_token (parser));
   c_parser_skip_to_pragma_eol (parser);
 
-  while (c_parser_next_token_is (parser, CPP_PRAGMA))
+  동안 (c_parser_next_token_is (parser, CPP_PRAGMA))
     {
-      if (c_parser_peek_token (parser)->pragma_kind != PRAGMA_OMP_DECLARE
+      만약 (c_parser_peek_token (parser)->pragma_kind != PRAGMA_OMP_DECLARE
 	  || c_parser_peek_2nd_token (parser)->type != CPP_NAME
 	  || c_parser_peek_2nd_token (parser)->value != kind)
 	{
@@ -27824,16 +27824,16 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
 		 "function declaration or definition or another "
 		 "%<#pragma omp declare %s%>",
 		 IDENTIFIER_POINTER (kind), IDENTIFIER_POINTER (kind));
-	  return;
+	  반환;
 	}
       c_parser_consume_pragma (parser);
-      while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+      동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
 	{
 	  c_token *token = c_parser_peek_token (parser);
-	  if (token->type == CPP_EOF)
+	  만약 (token->type == CPP_EOF)
 	    {
 	      c_parser_skip_to_pragma_eol (parser);
-	      return;
+	      반환;
 	    }
 	  clauses.safe_push (*token);
 	  c_parser_consume_token (parser);
@@ -27852,19 +27852,19 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
   switch (context)
     {
     case pragma_external:
-      if (c_parser_next_token_is (parser, CPP_KEYWORD)
+      만약 (c_parser_next_token_is (parser, CPP_KEYWORD)
 	  && c_parser_peek_token (parser)->keyword == RID_EXTENSION)
 	{
-	  int ext = disable_extension_diagnostics ();
+	  정수 ext = disable_extension_diagnostics ();
 	  do
 	    c_parser_consume_token (parser);
-	  while (c_parser_next_token_is (parser, CPP_KEYWORD)
+	  동안 (c_parser_next_token_is (parser, CPP_KEYWORD)
 		 && c_parser_peek_token (parser)->keyword == RID_EXTENSION);
 	  c_parser_declaration_or_fndef (parser, true, true, true, false, true,
 					 false, NULL, &clauses);
 	  restore_extension_diagnostics (ext);
 	}
-      else
+      아니면
 	c_parser_declaration_or_fndef (parser, true, true, true, false, true,
 				       false, NULL, &clauses);
       break;
@@ -27879,19 +27879,19 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
       bool have_std_attrs;
       tree std_attrs;
       have_std_attrs = c_parser_nth_token_starts_std_attributes (parser, 1);
-      if (have_std_attrs)
+      만약 (have_std_attrs)
 	std_attrs = c_parser_std_attribute_specifier_sequence (parser);
-      else
+      아니면
 	std_attrs = NULL_TREE;
-      if (c_parser_next_token_is (parser, CPP_KEYWORD)
+      만약 (c_parser_next_token_is (parser, CPP_KEYWORD)
 	  && c_parser_peek_token (parser)->keyword == RID_EXTENSION)
 	{
-	  int ext = disable_extension_diagnostics ();
+	  정수 ext = disable_extension_diagnostics ();
 	  do
 	    c_parser_consume_token (parser);
-	  while (c_parser_next_token_is (parser, CPP_KEYWORD)
+	  동안 (c_parser_next_token_is (parser, CPP_KEYWORD)
 		 && c_parser_peek_token (parser)->keyword == RID_EXTENSION);
-	  if (c_parser_next_tokens_start_declaration (parser)
+	  만약 (c_parser_next_tokens_start_declaration (parser)
 	      || c_parser_nth_token_starts_std_attributes (parser, 1))
 	    {
 	      c_parser_declaration_or_fndef (parser, true, true, true, true,
@@ -27902,7 +27902,7 @@ c_parser_omp_declare_simd (c_parser *parser, enum pragma_context context)
 	    }
 	  restore_extension_diagnostics (ext);
 	}
-      else if (c_parser_next_tokens_start_declaration (parser))
+      아니면 만약 (c_parser_next_tokens_start_declaration (parser))
 	{
 	  c_parser_declaration_or_fndef (parser, true, true, true, true, true,
 					 false, NULL, &clauses, have_std_attrs,
@@ -27937,18 +27937,18 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
   do
     {
       tree selector;
-      if (c_parser_next_token_is (parser, CPP_KEYWORD)
+      만약 (c_parser_next_token_is (parser, CPP_KEYWORD)
 	  || c_parser_next_token_is (parser, CPP_NAME))
 	selector = c_parser_peek_token (parser)->value;
-      else
+      아니면
 	{
 	  c_parser_error (parser, "expected trait selector name");
-	  return error_mark_node;
+	  반환 error_mark_node;
 	}
       enum omp_ts_code sel
 	= omp_lookup_ts_code (set, IDENTIFIER_POINTER (selector));
 
-      if (sel == OMP_TRAIT_INVALID)
+      만약 (sel == OMP_TRAIT_INVALID)
 	{
 	  /* Per the spec, "Implementations can ignore specified selectors
 	     that are not those described in this section"; however, we
@@ -27958,14 +27958,14 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 		      IDENTIFIER_POINTER (selector),  omp_tss_map[set]);
 	  c_parser_consume_token (parser);
 	  ret = make_trait_selector (sel, NULL_TREE, NULL_TREE, ret);
-	  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+	  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	    c_parser_balanced_token_sequence (parser);
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    {
 	      c_parser_consume_token (parser);
 	      continue;
 	    }
-	  else
+	  아니면
 	    break;
 	}
 
@@ -27977,21 +27977,21 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
       bool allow_score = omp_ts_map[sel].allow_score;
       tree t;
 
-      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+      만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	{
-	  if (property_kind == OMP_TRAIT_PROPERTY_NONE)
+	  만약 (property_kind == OMP_TRAIT_PROPERTY_NONE)
 	    {
 	      error_at (c_parser_peek_token (parser)->location,
 			"selector %qs does not accept any properties",
 			IDENTIFIER_POINTER (selector));
-	      return error_mark_node;
+	      반환 error_mark_node;
 	    }
 
 	  matching_parens parens;
 	  parens.require_open (parser);
 
 	  c_token *token = c_parser_peek_token (parser);
-	  if (c_parser_next_token_is (parser, CPP_NAME)
+	  만약 (c_parser_next_token_is (parser, CPP_NAME)
 	      && strcmp (IDENTIFIER_POINTER (token->value), "score") == 0
 	      && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN)
 	    {
@@ -28002,23 +28002,23 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 	      tree score = c_parser_expr_no_commas (parser, NULL).value;
 	      parens2.skip_until_found_close (parser);
 	      c_parser_require (parser, CPP_COLON, "expected %<:%>");
-	      if (!allow_score)
+	      만약 (!allow_score)
 		error_at (token->location,
 			  "%<score%> cannot be specified in traits "
 			  "in the %qs trait-selector-set",
 			  omp_tss_map[set]);
-	      else if (score != error_mark_node)
+	      아니면 만약 (score != error_mark_node)
 		{
 		  mark_exp_read (score);
 		  score = c_fully_fold (score, false, NULL);
-		  if (!INTEGRAL_TYPE_P (TREE_TYPE (score))
+		  만약 (!INTEGRAL_TYPE_P (TREE_TYPE (score))
 		      || TREE_CODE (score) != INTEGER_CST)
 		    error_at (token->location, "%<score%> argument must "
 			      "be constant integer expression");
-		  else if (tree_int_cst_sgn (score) < 0)
+		  아니면 만약 (tree_int_cst_sgn (score) < 0)
 		    error_at (token->location, "%<score%> argument must "
 			      "be non-negative");
-		  else
+		  아니면
 		    scoreval = score;
 		}
 	      token = c_parser_peek_token (parser);
@@ -28027,7 +28027,7 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 	  switch (property_kind)
 	    {
 	    case OMP_TRAIT_PROPERTY_ID:
-	      if (c_parser_next_token_is (parser, CPP_KEYWORD)
+	      만약 (c_parser_next_token_is (parser, CPP_KEYWORD)
 		  || c_parser_next_token_is (parser, CPP_NAME))
 		{
 		  tree prop = c_parser_peek_token (parser)->value;
@@ -28035,10 +28035,10 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 		  properties = make_trait_property (prop, NULL_TREE,
 						    properties);
 		}
-	      else
+	      아니면
 		{
 		  c_parser_error (parser, "expected identifier");
-		  return error_mark_node;
+		  반환 error_mark_node;
 		}
 	      break;
 	    case OMP_TRAIT_PROPERTY_NAME_LIST:
@@ -28046,30 +28046,30 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 		{
 		  tree prop = OMP_TP_NAMELIST_NODE;
 		  tree value = NULL_TREE;
-		  if (c_parser_next_token_is (parser, CPP_KEYWORD)
+		  만약 (c_parser_next_token_is (parser, CPP_KEYWORD)
 		      || c_parser_next_token_is (parser, CPP_NAME))
 		    {
 		      value = c_parser_peek_token (parser)->value;
 		      c_parser_consume_token (parser);
 		    }
-		  else if (c_parser_next_token_is (parser, CPP_STRING))
+		  아니면 만약 (c_parser_next_token_is (parser, CPP_STRING))
 		    value = c_parser_string_literal (parser, false,
 						     false).value;
-		  else
+		  아니면
 		    {
 		      c_parser_error (parser, "expected identifier or "
 					      "string literal");
-		      return error_mark_node;
+		      반환 error_mark_node;
 		    }
 
 		  properties = make_trait_property (prop, value, properties);
 
-		  if (c_parser_next_token_is (parser, CPP_COMMA))
+		  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 		    c_parser_consume_token (parser);
-		  else
+		  아니면
 		    break;
 		}
-	      while (1);
+	      동안 (1);
 	      break;
 	    case OMP_TRAIT_PROPERTY_DEV_NUM_EXPR:
 	    case OMP_TRAIT_PROPERTY_BOOL_EXPR:
@@ -28079,35 +28079,35 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 						  true, true);
 		t = texpr.value;
 	      }
-	      if (t == error_mark_node)
-		return error_mark_node;
+	      만약 (t == error_mark_node)
+		반환 error_mark_node;
 	      mark_exp_read (t);
-	      if (property_kind == OMP_TRAIT_PROPERTY_BOOL_EXPR)
+	      만약 (property_kind == OMP_TRAIT_PROPERTY_BOOL_EXPR)
 		{
 		  t = c_objc_common_truthvalue_conversion (token->location,
 							   t,
 							   boolean_type_node);
-		  if (t == error_mark_node)
-		    return error_mark_node;
+		  만약 (t == error_mark_node)
+		    반환 error_mark_node;
 		}
-	      else if (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
+	      아니면 만약 (!INTEGRAL_TYPE_P (TREE_TYPE (t)))
 		{
 		  error_at (token->location,
 			    "property must be integer expression");
-		  return error_mark_node;
+		  반환 error_mark_node;
 		}
 	      t = c_fully_fold (t, false, NULL);
 	      properties = make_trait_property (NULL_TREE, t, properties);
 	      break;
 	    case OMP_TRAIT_PROPERTY_CLAUSE_LIST:
-	      if (sel == OMP_TRAIT_CONSTRUCT_SIMD)
+	      만약 (sel == OMP_TRAIT_CONSTRUCT_SIMD)
 		{
-		  if (parms == NULL_TREE)
+		  만약 (parms == NULL_TREE)
 		    {
 		      error_at (token->location, "properties for %<simd%> "
 				"selector may not be specified in "
 				"%<metadirective%>");
-		      return error_mark_node;
+		      반환 error_mark_node;
 		    }
 		  tree c;
 		  c = c_parser_omp_all_clauses (parser,
@@ -28119,16 +28119,16 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 							     c);
 		  properties = c;
 		}
-	      else if (sel == OMP_TRAIT_IMPLEMENTATION_REQUIRES)
+	      아니면 만약 (sel == OMP_TRAIT_IMPLEMENTATION_REQUIRES)
 		{
 		  /* FIXME: The "requires" selector was added in OpenMP 5.1.
 		     Currently only the now-deprecated syntax
 		     from OpenMP 5.0 is supported.  */
 		  sorry_at (token->location,
 			    "%<requires%> selector is not supported yet");
-		  return error_mark_node;
+		  반환 error_mark_node;
 		}
-	      else
+	      아니면
 		gcc_unreachable ();
 	      break;
 	    default:
@@ -28138,24 +28138,24 @@ c_parser_omp_context_selector (c_parser *parser, enum omp_tss_code set,
 	  parens.skip_until_found_close (parser);
 	  properties = nreverse (properties);
 	}
-      else if (property_kind != OMP_TRAIT_PROPERTY_NONE
+      아니면 만약 (property_kind != OMP_TRAIT_PROPERTY_NONE
 	       && property_kind != OMP_TRAIT_PROPERTY_CLAUSE_LIST
 	       && property_kind != OMP_TRAIT_PROPERTY_EXTENSION)
 	{
 	  c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>");
-	  return error_mark_node;
+	  반환 error_mark_node;
 	}
 
       ret = make_trait_selector (sel, scoreval, properties, ret);
 
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	break;
     }
-  while (1);
+  동안 (1);
 
-  return nreverse (ret);
+  반환 nreverse (ret);
 }
 
 /* OpenMP 5.0:
@@ -28178,46 +28178,46 @@ c_parser_omp_context_selector_specification (c_parser *parser, tree parms)
   do
     {
       const char *setp = "";
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	setp = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
       enum omp_tss_code set = omp_lookup_tss_code (setp);
 
-      if (set == OMP_TRAIT_SET_INVALID)
+      만약 (set == OMP_TRAIT_SET_INVALID)
 	{
 	  c_parser_error (parser, "expected context selector set name");
-	  return error_mark_node;
+	  반환 error_mark_node;
 	}
 
       c_parser_consume_token (parser);
 
-      if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
-	return error_mark_node;
+      만약 (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+	반환 error_mark_node;
 
       matching_braces braces;
-      if (!braces.require_open (parser))
-	return error_mark_node;
+      만약 (!braces.require_open (parser))
+	반환 error_mark_node;
 
       tree selectors = c_parser_omp_context_selector (parser, set, parms);
-      if (selectors == error_mark_node)
+      만약 (selectors == error_mark_node)
 	{
 	  c_parser_skip_to_closing_brace (parser);
 	  ret = error_mark_node;
 	}
-      else if (ret != error_mark_node)
+      아니면 만약 (ret != error_mark_node)
 	ret = make_trait_set_selector (set, selectors, ret);
 
       braces.require_close (parser);
 
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
-      else
+      아니면
 	break;
     }
-  while (1);
+  동안 (1);
 
-  if (ret == error_mark_node)
-    return ret;
-  return nreverse (ret);
+  만약 (ret == error_mark_node)
+    반환 ret;
+  반환 nreverse (ret);
 }
 
 /* Finalize #pragma omp declare variant after FNDECL has been parsed, and put
@@ -28227,14 +28227,14 @@ static void
 c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 {
   matching_parens parens;
-  if (!parens.require_open (parser))
+  만약 (!parens.require_open (parser))
     {
      fail:
       c_parser_skip_to_pragma_eol (parser, false);
-      return;
+      반환;
     }
 
-  if (c_parser_next_token_is_not (parser, CPP_NAME)
+  만약 (c_parser_next_token_is_not (parser, CPP_NAME)
       || c_parser_peek_token (parser)->id_kind != C_ID_ID)
     {
       c_parser_error (parser, "expected identifier");
@@ -28244,18 +28244,18 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
   c_token *token = c_parser_peek_token (parser);
   tree variant = lookup_name (token->value);
 
-  if (variant == NULL_TREE)
+  만약 (variant == NULL_TREE)
     {
       undeclared_variable (token->location, token->value);
       variant = error_mark_node;
     }
-  else if (TREE_CODE (variant) != FUNCTION_DECL)
+  아니면 만약 (TREE_CODE (variant) != FUNCTION_DECL)
     {
       error_at (token->location, "variant %qD is not a function",
 		variant);
       variant = error_mark_node;
     }
-  else if (fndecl_built_in_p (variant)
+  아니면 만약 (fndecl_built_in_p (variant)
 	   && (strncmp (IDENTIFIER_POINTER (DECL_NAME (variant)),
 			"__builtin_", strlen ("__builtin_")) == 0
 	       || strncmp (IDENTIFIER_POINTER (DECL_NAME (variant)),
@@ -28267,7 +28267,7 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 		variant);
       variant = error_mark_node;
     }
-  else if (variant == fndecl)
+  아니면 만약 (variant == fndecl)
     {
       error_at (token->location, "variant %qD is the same as base function",
 		variant);
@@ -28290,13 +28290,13 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 
   do
     {
-      if (c_parser_next_token_is (parser, CPP_COMMA)
+      만약 (c_parser_next_token_is (parser, CPP_COMMA)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 	c_parser_consume_token (parser);
 
       const char *clause = "";
       location_t loc = c_parser_peek_token (parser)->location;
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	clause = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
       enum clause
@@ -28306,22 +28306,22 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	append_args
       } ccode;
 
-      if (strcmp (clause, "match") == 0)
+      만약 (strcmp (clause, "match") == 0)
 	{
 	  ccode = match;
 	  match_loc = loc;
 	}
-      else if (strcmp (clause, "adjust_args") == 0)
+      아니면 만약 (strcmp (clause, "adjust_args") == 0)
 	{
 	  ccode = adjust_args;
 	  adjust_args_loc = loc;
 	}
-      else if (strcmp (clause, "append_args") == 0)
+      아니면 만약 (strcmp (clause, "append_args") == 0)
 	{
 	  ccode = append_args;
 	  append_args_loc = loc;
 	}
-      else
+      아니면
 	{
 	  c_parser_error (parser, "expected %<match%>, %<adjust_args%> or "
 				  "%<append_args%> clause");
@@ -28330,19 +28330,19 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 
       c_parser_consume_token (parser);
 
-      if (!parens.require_open (parser))
+      만약 (!parens.require_open (parser))
 	goto fail;
 
-      if (parms == NULL_TREE)
+      만약 (parms == NULL_TREE)
 	parms = error_mark_node;
 
-      if (ccode == match)
+      만약 (ccode == match)
 	{
-	  if (has_match)
+	  만약 (has_match)
 	    error_at (match_loc, "too many %<match%> clauses");
 	  has_match = true;
 	  ctx  = c_parser_omp_context_selector_specification (parser, parms);
-	  if (ctx == error_mark_node)
+	  만약 (ctx == error_mark_node)
 	    goto fail;
 	  ctx = omp_check_context_selector (match_loc, ctx,
 					    OMP_CTX_DECLARE_VARIANT);
@@ -28351,7 +28351,7 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	     "begin declare variant" contexts apply to "declare variant
 	     directives" -- the term it uses to refer to both directive
 	     forms.  */
-	  if (ctx != error_mark_node
+	  만약 (ctx != error_mark_node
 	      && !vec_safe_is_empty (current_omp_declare_variant_attribute))
 	    {
 	      c_omp_declare_variant_attr a
@@ -28361,15 +28361,15 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 						 OMP_CTX_DECLARE_VARIANT);
 	    }
 	}
-      else if (ccode == adjust_args)
+      아니면 만약 (ccode == adjust_args)
 	{
 	  has_adjust_args = true;
-	  if (c_parser_next_token_is (parser, CPP_NAME)
+	  만약 (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
 	      const char *p
 		= IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	      if (strcmp (p, "need_device_ptr") == 0
+	      만약 (strcmp (p, "need_device_ptr") == 0
 		  || strcmp (p, "nothing") == 0)
 		{
 		  c_parser_consume_token (parser); // need_device_ptr
@@ -28381,38 +28381,38 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 						  NULL_TREE);
 
 		  tree arg;
-		  if (variant != error_mark_node)
-		    for (tree c = list; c != NULL_TREE; c = TREE_CHAIN (c))
+		  만약 (variant != error_mark_node)
+		    위해 (tree c = list; c != NULL_TREE; c = TREE_CHAIN (c))
 		      {
 			tree decl = TREE_PURPOSE (c);
 			location_t arg_loc = EXPR_LOCATION (TREE_VALUE (c));
-			int idx;
-			for (arg = parms, idx = 0; arg != NULL;
+			정수 idx;
+			위해 (arg = parms, idx = 0; arg != NULL;
 			     arg = TREE_CHAIN (arg), idx++)
-			  if (arg == decl)
+			  만약 (arg == decl)
 			    break;
-			if (arg == NULL_TREE)
+			만약 (arg == NULL_TREE)
 			  {
 			    error_at (arg_loc,
 				      "%qD is not a function argument",
 				      decl);
 			    goto fail;
 			  }
-			if (adjust_args_list.contains (arg))
+			만약 (adjust_args_list.contains (arg))
 			  {
 			    error_at (arg_loc,
 				      "%qD is specified more than once",
 				      decl);
 			    goto fail;
 			  }
-			if (strcmp (p, "need_device_ptr") == 0
+			만약 (strcmp (p, "need_device_ptr") == 0
 			    && TREE_CODE (TREE_TYPE (arg)) != POINTER_TYPE)
 			  {
 			    error_at (loc, "%qD is not of pointer type", decl);
 			    goto fail;
 			  }
 			adjust_args_list.safe_push (arg);
-			if (strcmp (p, "need_device_ptr") == 0)
+			만약 (strcmp (p, "need_device_ptr") == 0)
 			  {
 			    need_device_ptr_list = chainon (
 			      need_device_ptr_list,
@@ -28425,17 +28425,17 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 			  }
 		      }
 		}
-	      else
+	      아니면
 		{
 		  error_at (c_parser_peek_token (parser)->location,
 			    "expected %<nothing%> or %<need_device_ptr%>");
-		  if (strcmp (p, "need_device_addr") == 0)
+		  만약 (strcmp (p, "need_device_addr") == 0)
 		    inform (c_parser_peek_token (parser)->location,
 			    "%<need_device_addr%> is not valid for C");
 		  goto fail;
 		}
 	    }
-	  else
+	  아니면
 	    {
 	      error_at (c_parser_peek_token (parser)->location,
 			"expected %<nothing%> or %<need_device_ptr%> "
@@ -28443,9 +28443,9 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	      goto fail;
 	    }
 	}
-      else if (ccode == append_args)
+      아니면 만약 (ccode == append_args)
 	{
-	  if (append_args_tree)
+	  만약 (append_args_tree)
 	    {
 	      error_at (append_args_loc, "too many %qs clauses", "append_args");
 	      append_args_tree = NULL_TREE;
@@ -28453,7 +28453,7 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	  do
 	    {
 	      location_t loc = c_parser_peek_token (parser)->location;
-	      if (!c_parser_next_token_is (parser, CPP_NAME)
+	      만약 (!c_parser_next_token_is (parser, CPP_NAME)
 		  || strcmp ("interop",
 			     IDENTIFIER_POINTER (
 			       c_parser_peek_token (parser)->value)))
@@ -28463,18 +28463,18 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 		}
 	      c_parser_consume_token (parser);
 
-	      if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      만약 (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		goto fail;
 	      bool target = false;
 	      bool targetsync = false;
 	      tree prefer_type_tree = NULL_TREE;
-	      if (!c_parser_omp_clause_init_modifiers (parser, &target,
+	      만약 (!c_parser_omp_clause_init_modifiers (parser, &target,
 						       &targetsync,
 						       &prefer_type_tree)
 		  || !c_parser_require (parser, CPP_CLOSE_PAREN,
 					"expected %<)%> or %<,%>"))
 		goto fail;
-	      if (!target && !targetsync)
+	      만약 (!target && !targetsync)
 		error_at (loc,
 			  "missing required %<target%> and/or "
 			  "%<targetsync%> modifier");
@@ -28484,24 +28484,24 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 						   : boolean_false_node);
 	      t = build1_loc (loc, NOP_EXPR, void_type_node, t);
 	      t = build_tree_list (t, prefer_type_tree);
-	      if (append_args_tree)
+	      만약 (append_args_tree)
 		{
 		  TREE_CHAIN (append_args_last) = t;
 		  append_args_last = t;
 		}
-	      else
+	      아니면
 		append_args_tree = append_args_last = t;
-	      if (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	      만약 (c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
 		break;
-	      if (!c_parser_require (parser, CPP_COMMA, "expected %<)%> or %<,%>"))
+	      만약 (!c_parser_require (parser, CPP_COMMA, "expected %<)%> or %<,%>"))
 		goto fail;
 	    }
-	  while (true);
+	  동안 (true);
 	}
 
       parens.require_close (parser);
-  } while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL));
-  if (variant != error_mark_node && !has_match)
+  } 동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL));
+  만약 (variant != error_mark_node && !has_match)
     {
       c_parser_error (parser, "expected %<match%> clause");
       variant = error_mark_node;
@@ -28510,11 +28510,11 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 
   /* At this point, we have completed parsing of the pragma, now it's
      on to error checking.  */
-  if (variant == error_mark_node || ctx == error_mark_node)
+  만약 (variant == error_mark_node || ctx == error_mark_node)
     /* Previously diagnosed error.  */
-    return;
+    반환;
 
-  if ((has_adjust_args || append_args_tree)
+  만약 ((has_adjust_args || append_args_tree)
       && !omp_get_context_selector (ctx, OMP_TRAIT_SET_CONSTRUCT,
 				    OMP_TRAIT_CONSTRUCT_DISPATCH))
     {
@@ -28523,10 +28523,10 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 		"%<dispatch%> selector of the %<construct%> selector "
 		"set appears in the %<match%> clause",
 		has_adjust_args ? "adjust_args" : "append_args");
-      return;
+      반환;
     }
 
-  if (!omp_get_context_selector (ctx, OMP_TRAIT_SET_CONSTRUCT,
+  만약 (!omp_get_context_selector (ctx, OMP_TRAIT_SET_CONSTRUCT,
 				 OMP_TRAIT_CONSTRUCT_SIMD))
     /* Check that the base and variant have compatible types.  */
     {
@@ -28536,7 +28536,7 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	= (TYPE_ARG_TYPES (variant_type) == NULL_TREE
 	   && !TYPE_NO_NAMED_ARGS_STDARG_P (variant_type));
 
-      if (append_args_tree
+      만약 (append_args_tree
 	  && TYPE_ARG_TYPES (base_type) == NULL_TREE
 	  && !TYPE_NO_NAMED_ARGS_STDARG_P (base_type))
 	{
@@ -28550,18 +28550,18 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 		    "is not supported yet");
 	  inform (DECL_SOURCE_LOCATION (fndecl),
 		  "base function %qD declared here", fndecl);
-	  return;
+	  반환;
 	}
-      else if (append_args_tree)
+      아니면 만약 (append_args_tree)
 	{
 	  /* Find nbase_args, the number of fixed arguments in the base
 	     function.  */
-	  int nappend_args = 0;
-	  int nbase_args = 0;
-	  for (tree t = TYPE_ARG_TYPES (base_type);
+	  정수 nappend_args = 0;
+	  정수 nbase_args = 0;
+	  위해 (tree t = TYPE_ARG_TYPES (base_type);
 	       t && TREE_VALUE (t) != void_type_node; t = TREE_CHAIN (t))
 	    nbase_args++;
-	  for (tree t = append_args_tree; t; t = TREE_CHAIN (t))
+	  위해 (tree t = append_args_tree; t; t = TREE_CHAIN (t))
 	    nappend_args++;
 
 	  /* Store as purpose = arg number after which to append
@@ -28574,14 +28574,14 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	     of the variant are of the wrong type, or missing.  The
 	     compatible types test below could fail to detect this if
 	     the variant is a varargs function.  */
-	  if (!unprototyped_variant)
+	  만약 (!unprototyped_variant)
 	    {
 	      tree args = TYPE_ARG_TYPES (variant_type);
-	      for (int i = 0; args && i < nbase_args;
+	      위해 (정수 i = 0; args && i < nbase_args;
 		   i++, args = TREE_CHAIN (args))
 		;
-	      for (int i = 0; i < nappend_args; i++, args = TREE_CHAIN (args))
-		if (!args || !c_omp_interop_t_p (TREE_VALUE (args)))
+	      위해 (정수 i = 0; i < nappend_args; i++, args = TREE_CHAIN (args))
+		만약 (!args || !c_omp_interop_t_p (TREE_VALUE (args)))
 		  {
 		    error_at (DECL_SOURCE_LOCATION (variant),
 			      "argument %d of %qD must be of "
@@ -28589,7 +28589,7 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 			      nbase_args + i + 1, variant);
 		    inform (append_args_loc,
 			    "%<append_args%> specified here");
-		    return;
+		    반환;
 		  }
 	    }
 
@@ -28599,24 +28599,24 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	  tree args = TYPE_ARG_TYPES (base_type);
 	  tree newargs = NULL_TREE;
 	  tree lastarg = NULL_TREE;
-	  for (int j = 0; j < nbase_args; j++, args = TREE_CHAIN (args))
+	  위해 (정수 j = 0; j < nbase_args; j++, args = TREE_CHAIN (args))
 	    {
 	      tree t = tree_cons (TREE_PURPOSE (args),
 				  TREE_VALUE (args), NULL_TREE);
-	      if (lastarg)
+	      만약 (lastarg)
 		TREE_CHAIN (lastarg) = t;
-	      else
+	      아니면
 		newargs = t;
 	      lastarg = t;
 	    }
 	  tree type = lookup_name (get_identifier ("omp_interop_t"));
 	  type = type ? TREE_TYPE (type) : pointer_sized_int_node;
-	  for (int j = 0; j < nappend_args; j++)
+	  위해 (정수 j = 0; j < nappend_args; j++)
 	    {
 	      tree t = tree_cons (NULL_TREE, type, NULL_TREE);
-	      if (lastarg)
+	      만약 (lastarg)
 		TREE_CHAIN (lastarg) = t;
-	      else
+	      아니면
 		newargs = t;
 	      lastarg = t;
 	    }
@@ -28628,7 +28628,7 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	  bool fail = !comptypes (base_type, variant_type);
 	  TYPE_ARG_TYPES (base_type) = saveargs;
 
-	  if (fail)
+	  만약 (fail)
 	    {
 	      error_at (token->location,
 			"variant %qD and base %qD have incompatible types "
@@ -28637,17 +28637,17 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	      inform (DECL_SOURCE_LOCATION (variant),
 		      "%<declare variant%> candidate %qD declared here",
 		      variant);
-	      return;
+	      반환;
 	    }
-	  else if (unprototyped_variant)
+	  아니면 만약 (unprototyped_variant)
 	    /* If we've got an unprototyped variant, copy the transformed
 	       base arg types to the variant.  This is needed later by
 	       modify_call_for_omp_dispatch.  */
 	    TYPE_ARG_TYPES (variant_type) = newargs;
 	}
-      else  /* No append_args present.  */
+      아니면  /* No append_args present.  */
 	{
-	  if (!comptypes (base_type, variant_type))
+	  만약 (!comptypes (base_type, variant_type))
 	    {
 	      error_at (token->location,
 			"variant %qD and base %qD have incompatible types",
@@ -28655,9 +28655,9 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
 	      inform (DECL_SOURCE_LOCATION (variant),
 		      "%<declare variant%> candidate %qD declared here",
 		      variant);
-	      return;
+	      반환;
 	    }
-	  else if (TYPE_ARG_TYPES (variant_type) == NULL_TREE
+	  아니면 만약 (TYPE_ARG_TYPES (variant_type) == NULL_TREE
 		   && !TYPE_NO_NAMED_ARGS_STDARG_P (variant_type)
 		   && TYPE_ARG_TYPES (base_type) != NULL_TREE)
 	    /* If we've got an unprototyped variant but the base has
@@ -28671,7 +28671,7 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
   tree construct = omp_get_context_selector_list (ctx,
 						  OMP_TRAIT_SET_CONSTRUCT);
   omp_mark_declare_variant (match_loc, variant, construct);
-  if (omp_context_selector_matches (ctx, NULL_TREE, false))
+  만약 (omp_context_selector_matches (ctx, NULL_TREE, false))
     {
       tree attr = tree_cons (get_identifier ("omp declare variant base"),
 			     build_tree_list (variant, ctx),
@@ -28679,7 +28679,7 @@ c_finish_omp_declare_variant (c_parser *parser, tree fndecl, tree parms)
       DECL_ATTRIBUTES (fndecl) = attr;
     }
 
-  if (need_device_ptr_list || append_args_tree)
+  만약 (need_device_ptr_list || append_args_tree)
     {
       tree variant_decl = tree_strip_nop_conversions (variant);
       tree t = build_tree_list (need_device_ptr_list,
@@ -28704,47 +28704,47 @@ c_finish_omp_declare_simd (c_parser *parser, tree fndecl, tree parms,
   /* Normally first token is CPP_NAME "simd" or "variant".  CPP_EOF there
      indicates error has been reported and CPP_PRAGMA that
      c_finish_omp_declare_simd has already processed the tokens.  */
-  if (clauses.exists () && clauses[0].type == CPP_EOF)
-    return;
+  만약 (clauses.exists () && clauses[0].type == CPP_EOF)
+    반환;
   const char *kind = "simd";
-  if (clauses.exists ()
+  만약 (clauses.exists ()
       && (clauses[0].type == CPP_NAME || clauses[0].type == CPP_PRAGMA))
     kind = IDENTIFIER_POINTER (clauses[0].value);
   gcc_assert (strcmp (kind, "simd") == 0 || strcmp (kind, "variant") == 0);
-  if (fndecl == NULL_TREE || TREE_CODE (fndecl) != FUNCTION_DECL)
+  만약 (fndecl == NULL_TREE || TREE_CODE (fndecl) != FUNCTION_DECL)
     {
       error ("%<#pragma omp declare %s%> not immediately followed by "
 	     "a function declaration or definition", kind);
       clauses[0].type = CPP_EOF;
-      return;
+      반환;
     }
-  if (clauses.exists () && clauses[0].type != CPP_NAME)
+  만약 (clauses.exists () && clauses[0].type != CPP_NAME)
     {
       error_at (DECL_SOURCE_LOCATION (fndecl),
 		"%<#pragma omp declare %s%> not immediately followed by "
 		"a single function declaration or definition", kind);
       clauses[0].type = CPP_EOF;
-      return;
+      반환;
     }
-  if (DECL_FUNCTION_VERSIONED (fndecl))
+  만약 (DECL_FUNCTION_VERSIONED (fndecl))
     {
       error_at (DECL_SOURCE_LOCATION (fndecl),
 		"%<#pragma omp declare %s%> cannot be used with function "
 		"multi-versioning", kind);
-      return;
+      반환;
     }
 
-  if (parms == NULL_TREE)
+  만약 (parms == NULL_TREE)
     parms = DECL_ARGUMENTS (fndecl);
 
-  unsigned int tokens_avail = parser->tokens_avail;
+  unsigned 정수 tokens_avail = parser->tokens_avail;
   gcc_assert (parser->tokens == &parser->tokens_buf[0]);
 
   parser->tokens = clauses.address ();
   parser->tokens_avail = clauses.length ();
 
   /* c_parser_omp_declare_simd pushed 2 extra CPP_EOF tokens at the end.  */
-  while (parser->tokens_avail > 3)
+  동안 (parser->tokens_avail > 3)
     {
       c_token *token = c_parser_peek_token (parser);
       gcc_assert (token->type == CPP_NAME);
@@ -28752,19 +28752,19 @@ c_finish_omp_declare_simd (c_parser *parser, tree fndecl, tree parms,
       c_parser_consume_token (parser);
       parser->in_pragma = true;
 
-      if (strcmp (kind, "simd") == 0)
+      만약 (strcmp (kind, "simd") == 0)
 	{
 	  tree c;
 	  c = c_parser_omp_all_clauses (parser, OMP_DECLARE_SIMD_CLAUSE_MASK,
 					"#pragma omp declare simd");
 	  c = c_omp_declare_simd_clauses_to_numbers (parms, c);
-	  if (c != NULL_TREE)
+	  만약 (c != NULL_TREE)
 	    c = tree_cons (NULL_TREE, c, NULL_TREE);
 	  c = build_tree_list (get_identifier ("omp declare simd"), c);
 	  TREE_CHAIN (c) = DECL_ATTRIBUTES (fndecl);
 	  DECL_ATTRIBUTES (fndecl) = c;
 	}
-      else
+      아니면
 	{
 	  gcc_assert (strcmp (kind, "variant") == 0);
 	  c_finish_omp_declare_variant (parser, fndecl, parms);
@@ -28773,17 +28773,17 @@ c_finish_omp_declare_simd (c_parser *parser, tree fndecl, tree parms,
 
   parser->tokens = &parser->tokens_buf[0];
   parser->tokens_avail = tokens_avail;
-  if (clauses.exists ())
+  만약 (clauses.exists ())
     clauses[0].type = CPP_PRAGMA;
 }
 
 /* This is consistent with the C++ front end.  */
 
-#if !defined (NO_DOT_IN_LABEL)
+#만약 !defined (NO_DOT_IN_LABEL)
 #define JOIN_STR "."
 #elif !defined (NO_DOLLAR_IN_LABEL)
 #define JOIN_STR "$"
-#else
+#아니면
 #define JOIN_STR "_"
 #endif
 
@@ -28796,14 +28796,14 @@ static tree
 omp_start_variant_function (c_declarator *declarator, tree ctx)
 {
   c_declarator *id = declarator;
-  while (id->kind != cdk_id)
+  동안 (id->kind != cdk_id)
     {
       id = id->declarator;
       gcc_assert (id);
     }
   tree name = id->u.id.id;
   id->u.id.id = omp_mangle_variant_name (name, ctx, JOIN_STR);
-  return name;
+  반환 name;
 }
 
 /* Helper function for OpenMP "begin declare variant" directives.  Now
@@ -28816,24 +28816,24 @@ omp_finish_variant_function (tree decl, tree base_name, tree ctx)
 {
   /* First look up BASE_NAME and ensure it matches DECL.  */
   tree base_decl = lookup_name (base_name);
-  if (base_decl == error_mark_node)
+  만약 (base_decl == error_mark_node)
     base_decl = NULL_TREE;
-  if (!base_decl)
+  만약 (!base_decl)
     {
       error_at (DECL_SOURCE_LOCATION (decl),
 		"no declaration of base function %qs",
 		IDENTIFIER_POINTER (base_name));
-      return;
+      반환;
     }
 
-  if (!comptypes (TREE_TYPE (decl), TREE_TYPE (base_decl)))
+  만약 (!comptypes (TREE_TYPE (decl), TREE_TYPE (base_decl)))
     {
       error_at (DECL_SOURCE_LOCATION (decl),
 		"variant function definition does not match "
 		"declaration of %qE", base_decl);
       inform (DECL_SOURCE_LOCATION (base_decl),
 	      "%qE declared here", base_decl);
-      return;
+      반환;
     }
 
   /* Now set the attributes on the base and variant decls for the middle
@@ -28873,42 +28873,42 @@ c_maybe_parse_omp_decl (tree decl, tree d)
   c_token *first = toks->address ();
   c_token *last = first + toks->length ();
   const char *directive[3] = {};
-  for (int j = 0; j < 3; j++)
+  위해 (정수 j = 0; j < 3; j++)
     {
       tree id = NULL_TREE;
-      if (first + j == last)
+      만약 (first + j == last)
 	break;
-      if (first[j].type == CPP_NAME)
+      만약 (first[j].type == CPP_NAME)
 	id = first[j].value;
-      else if (first[j].type == CPP_KEYWORD)
-	id = ridpointers[(int) first[j].keyword];
-      else
+      아니면 만약 (first[j].type == CPP_KEYWORD)
+	id = ridpointers[(정수) first[j].keyword];
+      아니면
 	break;
       directive[j] = IDENTIFIER_POINTER (id);
     }
   const c_omp_directive *dir = NULL;
-  if (directive[0])
+  만약 (directive[0])
     dir = c_omp_categorize_directive (directive[0], directive[1],
 				      directive[2]);
-  if (dir == NULL)
+  만약 (dir == NULL)
     {
       error_at (first->location,
 		"unknown OpenMP directive name in "
 		"%qs attribute argument", "omp::decl");
-      return false;
+      반환 false;
     }
-  if (dir->id != PRAGMA_OMP_THREADPRIVATE
+  만약 (dir->id != PRAGMA_OMP_THREADPRIVATE
       && dir->id != PRAGMA_OMP_GROUPPRIVATE
       && dir->id != PRAGMA_OMP_ALLOCATE
       && (dir->id != PRAGMA_OMP_DECLARE
 	  || strcmp (directive[1], "target") != 0))
-    return false;
+    반환 false;
 
-  if (!flag_openmp && !dir->simd)
-    return true;
+  만약 (!flag_openmp && !dir->simd)
+    반환 true;
 
   c_parser *parser = the_parser;
-  unsigned int tokens_avail = parser->tokens_avail;
+  unsigned 정수 tokens_avail = parser->tokens_avail;
   gcc_assert (parser->tokens == &parser->tokens_buf[0]);
   toks = NULL;
   vec_safe_reserve (toks, last - first + 2, true);
@@ -28918,7 +28918,7 @@ c_maybe_parse_omp_decl (tree decl, tree d)
   tok.pragma_kind = pragma_kind (dir->id);
   tok.location = first->location;
   toks->quick_push (tok);
-  while (++first < last)
+  동안 (++first < last)
     toks->quick_push (*first);
   tok = {};
   tok.type = CPP_PRAGMA_EOL;
@@ -28940,7 +28940,7 @@ c_maybe_parse_omp_decl (tree decl, tree d)
   parser->tokens_avail = toks->length ();
   c_parser_pragma (parser, pragma_external, NULL, NULL_TREE);
   parser->in_omp_decl_attribute = NULL_TREE;
-  return true;
+  반환 true;
 }
 
 /* OpenMP 4.0:
@@ -28965,18 +28965,18 @@ static void
 c_parser_omp_declare_target (c_parser *parser)
 {
   tree clauses = NULL_TREE;
-  int device_type = 0;
+  정수 device_type = 0;
   bool indirect = false;
   bool only_device_type_or_indirect = true;
-  if (flag_openmp)
+  만약 (flag_openmp)
     omp_requires_mask
       = (enum omp_requires) (omp_requires_mask | OMP_REQUIRES_TARGET_USED);
-  if (c_parser_next_token_is (parser, CPP_NAME)
+  만약 (c_parser_next_token_is (parser, CPP_NAME)
       || (c_parser_next_token_is (parser, CPP_COMMA)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_NAME))
     clauses = c_parser_omp_all_clauses (parser, OMP_DECLARE_TARGET_CLAUSE_MASK,
 					"#pragma omp declare target");
-  else if (parser->in_omp_decl_attribute
+  아니면 만약 (parser->in_omp_decl_attribute
 	   || c_parser_next_token_is (parser, CPP_OPEN_PAREN))
     {
       clauses = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ENTER,
@@ -28984,7 +28984,7 @@ c_parser_omp_declare_target (c_parser *parser)
       clauses = c_finish_omp_clauses (clauses, C_ORT_OMP);
       c_parser_skip_to_pragma_eol (parser);
     }
-  else
+  아니면
     {
       warning_at (c_parser_peek_token (parser)->location,
 		  OPT_Wdeprecated_openmp,
@@ -28995,18 +28995,18 @@ c_parser_omp_declare_target (c_parser *parser)
       c_parser_skip_to_pragma_eol (parser);
       c_omp_declare_target_attr attr = { attr_syntax, -1, 0 };
       vec_safe_push (current_omp_declare_target_attribute, attr);
-      return;
+      반환;
     }
-  for (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+  위해 (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
     {
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEVICE_TYPE)
+      만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEVICE_TYPE)
 	device_type |= OMP_CLAUSE_DEVICE_TYPE_KIND (c);
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INDIRECT)
+      만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INDIRECT)
 	indirect |= !integer_zerop (OMP_CLAUSE_INDIRECT_EXPR (c));
     }
-  for (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+  위해 (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
     {
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEVICE_TYPE
+      만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEVICE_TYPE
 	  || OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INDIRECT)
 	continue;
       tree t = OMP_CLAUSE_DECL (c), id;
@@ -29014,59 +29014,59 @@ c_parser_omp_declare_target (c_parser *parser)
       tree at2 = lookup_attribute ("omp declare target link",
 				   DECL_ATTRIBUTES (t));
       only_device_type_or_indirect = false;
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LINK)
+      만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LINK)
 	{
 	  id = get_identifier ("omp declare target link");
 	  std::swap (at1, at2);
 	}
-      else
+      아니면
 	id = get_identifier ("omp declare target");
-      if (at2)
+      만약 (at2)
 	{
-	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
+	  만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qD specified both in declare target %<link%> and %qs"
 		      " clauses", t, OMP_CLAUSE_ENTER_TO (c) ? "to" : "enter");
-	  else if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LOCAL
+	  아니면 만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LOCAL
 		   || value_member (get_identifier ("local"), TREE_VALUE (at2)))
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qD specified both in declare target %<link%> and "
 		      "%<local%> clauses", t);
-	  else
+	  아니면
 	    error_at (OMP_CLAUSE_LOCATION (c),
 		      "%qD specified both in declare target %<link%> and "
 		      "%<to%> or %<enter%> clauses", t);
 	  continue;
 	}
-      if (!at1)
+      만약 (!at1)
 	{
 	  DECL_ATTRIBUTES (t) = tree_cons (id, NULL_TREE, DECL_ATTRIBUTES (t));
-	  if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LOCAL)
+	  만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LOCAL)
 	    TREE_VALUE (DECL_ATTRIBUTES (t))
 	      = tree_cons (NULL_TREE, get_identifier ("local"),
 			   TREE_VALUE (DECL_ATTRIBUTES (t)));
 
-	  if (TREE_CODE (t) != FUNCTION_DECL && !is_global_var (t))
+	  만약 (TREE_CODE (t) != FUNCTION_DECL && !is_global_var (t))
 	    continue;
 
 	  symtab_node *node = symtab_node::get (t);
-	  if (node != NULL)
+	  만약 (node != NULL)
 	    {
 	      node->offloadable = 1;
-	      if (ENABLE_OFFLOADING)
+	      만약 (ENABLE_OFFLOADING)
 		{
 		  g->have_offload = true;
-		  if (is_a <varpool_node *> (node)
+		  만약 (is_a <varpool_node *> (node)
 		      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_LOCAL)
 		    vec_safe_push (offload_vars, t);
 		}
 	    }
 	}
-      else
+      아니면
 	{
 	  bool saw_local = value_member (get_identifier ("local"),
 					 TREE_VALUE (at1));
-	  if (saw_local && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
+	  만약 (saw_local && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_ENTER)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD specified both in declare target %<local%> and "
@@ -29074,7 +29074,7 @@ c_parser_omp_declare_target (c_parser *parser)
 			OMP_CLAUSE_ENTER_TO (c) ? "to" : "enter");
 	      continue;
 	    }
-	  else if (!saw_local && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LOCAL)
+	  아니면 만약 (!saw_local && OMP_CLAUSE_CODE (c) == OMP_CLAUSE_LOCAL)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"%qD specified both in declare target %<local%> and "
@@ -29082,35 +29082,35 @@ c_parser_omp_declare_target (c_parser *parser)
 	      continue;
 	    }
 	}
-      if (TREE_CODE (t) != FUNCTION_DECL)
+      만약 (TREE_CODE (t) != FUNCTION_DECL)
 	continue;
-      if ((device_type & OMP_CLAUSE_DEVICE_TYPE_HOST) != 0)
+      만약 ((device_type & OMP_CLAUSE_DEVICE_TYPE_HOST) != 0)
 	{
 	  tree at3 = lookup_attribute ("omp declare target host",
 				       DECL_ATTRIBUTES (t));
-	  if (at3 == NULL_TREE)
+	  만약 (at3 == NULL_TREE)
 	    {
 	      id = get_identifier ("omp declare target host");
 	      DECL_ATTRIBUTES (t)
 		= tree_cons (id, NULL_TREE, DECL_ATTRIBUTES (t));
 	    }
 	}
-      if ((device_type & OMP_CLAUSE_DEVICE_TYPE_NOHOST) != 0)
+      만약 ((device_type & OMP_CLAUSE_DEVICE_TYPE_NOHOST) != 0)
 	{
 	  tree at3 = lookup_attribute ("omp declare target nohost",
 				       DECL_ATTRIBUTES (t));
-	  if (at3 == NULL_TREE)
+	  만약 (at3 == NULL_TREE)
 	    {
 	      id = get_identifier ("omp declare target nohost");
 	      DECL_ATTRIBUTES (t)
 		= tree_cons (id, NULL_TREE, DECL_ATTRIBUTES (t));
 	    }
 	}
-      if (indirect)
+      만약 (indirect)
 	{
 	  tree at4 = lookup_attribute ("omp declare target indirect",
 				       DECL_ATTRIBUTES (t));
-	  if (at4 == NULL_TREE)
+	  만약 (at4 == NULL_TREE)
 	    {
 	      id = get_identifier ("omp declare target indirect");
 	      DECL_ATTRIBUTES (t)
@@ -29118,10 +29118,10 @@ c_parser_omp_declare_target (c_parser *parser)
 	    }
 	}
     }
-  if ((device_type || indirect) && only_device_type_or_indirect)
+  만약 ((device_type || indirect) && only_device_type_or_indirect)
     error_at (OMP_CLAUSE_LOCATION (clauses),
 	      "directive with only %<device_type%> or %<indirect%> clauses");
-  if (indirect && device_type && device_type != OMP_CLAUSE_DEVICE_TYPE_ANY)
+  만약 (indirect && device_type && device_type != OMP_CLAUSE_DEVICE_TYPE_ANY)
     error_at (OMP_CLAUSE_LOCATION (clauses),
 	      "%<device_type%> clause must specify 'any' when used with "
 	      "an %<indirect%> clause");
@@ -29143,15 +29143,15 @@ c_parser_omp_begin (c_parser *parser)
 {
   const char *p = "";
   c_parser_consume_pragma (parser);
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-  if (strcmp (p, "declare") == 0)
+  만약 (strcmp (p, "declare") == 0)
     {
       c_parser_consume_token (parser);
       p = "";
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "target") == 0)
+      만약 (strcmp (p, "target") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  bool attr_syntax = parser->in_omp_attribute_pragma != NULL;
@@ -29159,54 +29159,54 @@ c_parser_omp_begin (c_parser *parser)
 	    = c_parser_omp_all_clauses (parser,
 					OMP_BEGIN_DECLARE_TARGET_CLAUSE_MASK,
 					"#pragma omp begin declare target");
-	  int device_type = 0;
-	  int indirect = 0;
-	  for (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
+	  정수 device_type = 0;
+	  정수 indirect = 0;
+	  위해 (tree c = clauses; c; c = OMP_CLAUSE_CHAIN (c))
 	    {
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEVICE_TYPE)
+	      만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_DEVICE_TYPE)
 		device_type |= OMP_CLAUSE_DEVICE_TYPE_KIND (c);
-	      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INDIRECT)
+	      만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_INDIRECT)
 		indirect |= !integer_zerop (OMP_CLAUSE_INDIRECT_EXPR (c));
 	    }
 	  c_omp_declare_target_attr attr = { attr_syntax, device_type,
 					     indirect };
 	  vec_safe_push (current_omp_declare_target_attribute, attr);
 	}
-      else if (strcmp (p, "variant") == 0)
+      아니면 만약 (strcmp (p, "variant") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  const char *clause = "";
 	  matching_parens parens;
 	  location_t match_loc = c_parser_peek_token (parser)->location;
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
-	  if (c_parser_next_token_is (parser, CPP_NAME))
+	  만약 (c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      tree id = c_parser_peek_token (parser)->value;
 	      clause = IDENTIFIER_POINTER (id);
 	    }
-	  if (strcmp (clause, "match") != 0)
+	  만약 (strcmp (clause, "match") != 0)
 	    {
 	      c_parser_error (parser, "expected %<match%>");
 	      c_parser_skip_to_pragma_eol (parser);
-	      return;
+	      반환;
 	    }
 
 	  c_parser_consume_token (parser);
 
-	  if (!parens.require_open (parser))
+	  만약 (!parens.require_open (parser))
 	    {
 	      c_parser_skip_to_pragma_eol (parser, false);
-	      return;
+	      반환;
 	    }
 
 	  tree ctx =
 	    c_parser_omp_context_selector_specification (parser, NULL_TREE);
-	  if (ctx != error_mark_node)
+	  만약 (ctx != error_mark_node)
 	    ctx = omp_check_context_selector (match_loc, ctx,
 					      OMP_CTX_BEGIN_DECLARE_VARIANT);
 
-	  if (ctx != error_mark_node
+	  만약 (ctx != error_mark_node
 	      && !vec_safe_is_empty (current_omp_declare_variant_attribute))
 	    {
 	      c_omp_declare_variant_attr a
@@ -29216,7 +29216,7 @@ c_parser_omp_begin (c_parser *parser)
 						 OMP_CTX_BEGIN_DECLARE_VARIANT);
 	    }
 
-	  if (ctx == error_mark_node
+	  만약 (ctx == error_mark_node
 	      || !omp_context_selector_matches (ctx, NULL_TREE, false, true))
 	    {
 	      /* The context is either invalid or cannot possibly match.
@@ -29226,9 +29226,9 @@ c_parser_omp_begin (c_parser *parser)
 		 use for name-mangling, so elide that too.  */
 	      c_parser_skip_to_pragma_eol (parser, false);
 	      c_parser_skip_to_pragma_omp_end_declare_variant (parser);
-	      return;
+	      반환;
 	    }
-	  else
+	  아니면
 	    {
 	      bool attr_syntax = parser->in_omp_attribute_pragma != NULL;
 	      c_omp_declare_variant_attr a = { attr_syntax, ctx };
@@ -29238,13 +29238,13 @@ c_parser_omp_begin (c_parser *parser)
 	  parens.require_close (parser);
 	  c_parser_skip_to_pragma_eol (parser);
 	}
-      else
+      아니면
 	{
 	  c_parser_error (parser, "expected %<target%> or %<variant%>");
 	  c_parser_skip_to_pragma_eol (parser, false);
 	}
     }
-  else if (strcmp (p, "assumes") == 0)
+  아니면 만약 (strcmp (p, "assumes") == 0)
     {
       c_parser_consume_token (parser);
       bool attr_syntax = parser->in_omp_attribute_pragma != NULL;
@@ -29252,7 +29252,7 @@ c_parser_omp_begin (c_parser *parser)
       struct c_omp_begin_assumes_data a = { attr_syntax };
       vec_safe_push (current_omp_begin_assumes, a);
     }
-  else
+  아니면
     {
       c_parser_error (parser, "expected %<declare target%>, "
 		      "%<declare variant%>, or %<assumes%>");
@@ -29273,37 +29273,37 @@ c_parser_omp_end (c_parser *parser)
   location_t loc = c_parser_peek_token (parser)->location;
   const char *p = "";
   c_parser_consume_pragma (parser);
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-  if (strcmp (p, "declare") == 0)
+  만약 (strcmp (p, "declare") == 0)
     {
       c_parser_consume_token (parser);
       p = "";
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "target") == 0)
+      만약 (strcmp (p, "target") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  bool attr_syntax = parser->in_omp_attribute_pragma != NULL;
 	  c_parser_skip_to_pragma_eol (parser);
-	  if (!vec_safe_length (current_omp_declare_target_attribute))
+	  만약 (!vec_safe_length (current_omp_declare_target_attribute))
 	    error_at (loc, "%<#pragma omp end declare target%> without "
 		      "corresponding %<#pragma omp declare target%> or "
 		      "%<#pragma omp begin declare target%>");
-	  else
+	  아니면
 	    {
 	      c_omp_declare_target_attr
 		a = current_omp_declare_target_attribute->pop ();
-	      if (a.attr_syntax != attr_syntax)
+	      만약 (a.attr_syntax != attr_syntax)
 		{
-		  if (a.attr_syntax)
+		  만약 (a.attr_syntax)
 		    error_at (loc,
 			      "%qs in attribute syntax terminated "
 			      "with %qs in pragma syntax",
 			      a.device_type >= 0 ? "begin declare target"
 						 : "declare target",
 			      "end declare target");
-		  else
+		  아니면
 		    error_at (loc,
 			      "%qs in pragma syntax terminated "
 			      "with %qs in attribute syntax",
@@ -29313,26 +29313,26 @@ c_parser_omp_end (c_parser *parser)
 		}
 	    }
 	}
-      else if (strcmp (p, "variant") == 0)
+      아니면 만약 (strcmp (p, "variant") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  bool attr_syntax = parser->in_omp_attribute_pragma != NULL;
 	  c_parser_skip_to_pragma_eol (parser);
-	  if (!vec_safe_length (current_omp_declare_variant_attribute))
+	  만약 (!vec_safe_length (current_omp_declare_variant_attribute))
 	    error_at (loc, "%<#pragma omp end declare variant%> without "
 		      "corresponding %<#pragma omp begin declare variant%>");
-	  else
+	  아니면
 	    {
 	      c_omp_declare_variant_attr
 		a = current_omp_declare_variant_attribute->pop ();
-	      if (a.attr_syntax != attr_syntax)
+	      만약 (a.attr_syntax != attr_syntax)
 		{
-		  if (a.attr_syntax)
+		  만약 (a.attr_syntax)
 		    error_at (loc,
 			      "%<begin declare variant%> in attribute syntax "
 			      "terminated with "
 			      "%<end declare variant%> in pragma syntax");
-		  else
+		  아니면
 		    error_at (loc,
 			      "%<begin declare variant%> in pragma syntax "
 			      "terminated with "
@@ -29340,33 +29340,33 @@ c_parser_omp_end (c_parser *parser)
 		}
 	    }
 	}
-      else
+      아니면
 	{
 	  c_parser_error (parser, "expected %<target%> or %<variant%>");
 	  c_parser_skip_to_pragma_eol (parser);
-	  return;
+	  반환;
 	}
     }
-  else if (strcmp (p, "assumes") == 0)
+  아니면 만약 (strcmp (p, "assumes") == 0)
     {
       c_parser_consume_token (parser);
       bool attr_syntax = parser->in_omp_attribute_pragma != NULL;
       c_parser_skip_to_pragma_eol (parser);
-      if (!vec_safe_length (current_omp_begin_assumes))
+      만약 (!vec_safe_length (current_omp_begin_assumes))
 	error_at (loc, "%qs without corresponding %qs",
 		  "#pragma omp end assumes", "#pragma omp begin assumes");
-      else
+      아니면
 	{
 	  c_omp_begin_assumes_data
 	    a = current_omp_begin_assumes->pop ();
-	  if (a.attr_syntax != attr_syntax)
+	  만약 (a.attr_syntax != attr_syntax)
 	    {
-	      if (a.attr_syntax)
+	      만약 (a.attr_syntax)
 		error_at (loc,
 			  "%qs in attribute syntax terminated "
 			  "with %qs in pragma syntax",
 			  "begin assumes", "end assumes");
-	      else
+	      아니면
 		error_at (loc,
 			  "%qs in pragma syntax terminated "
 			  "with %qs in attribute syntax",
@@ -29374,7 +29374,7 @@ c_parser_omp_end (c_parser *parser)
 	    }
 	}
     }
-  else
+  아니면
     {
       c_parser_error (parser, "expected %<declare%> or %<assumes%>");
       c_parser_skip_to_pragma_eol (parser);
@@ -29392,18 +29392,18 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
   tree maplist = NULL_TREE, mapper_id, mapper_decl, t;
   c_token *token;
 
-  if (context == pragma_struct || context == pragma_param)
+  만약 (context == pragma_struct || context == pragma_param)
     {
       error ("%<#pragma omp declare mapper%> not at file or block scope");
       goto fail;
     }
 
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+  만약 (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
     goto fail;
 
   token = c_parser_peek_token (parser);
 
-  if (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
+  만약 (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
     {
       switch (token->type)
 	{
@@ -29412,7 +29412,7 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
 	  c_parser_consume_token (parser);
 	  break;
 	case CPP_KEYWORD:
-	  if (token->keyword == RID_DEFAULT)
+	  만약 (token->keyword == RID_DEFAULT)
 	    {
 	      mapper_name = NULL_TREE;
 	      c_parser_consume_token (parser);
@@ -29422,10 +29422,10 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
 	default:
 	  error_at (token->location, "expected identifier or %<default%>");
 	  c_parser_skip_to_pragma_eol (parser, false);
-	  return;
+	  반환;
 	}
 
-      if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+      만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	goto fail;
     }
 
@@ -29436,17 +29436,17 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
     location_t loc = c_parser_peek_token (parser)->location;
     struct c_type_name *ctype = c_parser_type_name (parser);
     type = groktypename (ctype, NULL, NULL);
-    if (type == error_mark_node)
+    만약 (type == error_mark_node)
       goto fail;
-    if (!RECORD_OR_UNION_TYPE_P (type))
+    만약 (!RECORD_OR_UNION_TYPE_P (type))
       {
 	error_at (loc, "%qT is not a struct or union type in "
 		  "%<#pragma omp declare mapper%>", type);
 	c_parser_skip_to_pragma_eol (parser, false);
-	return;
+	반환;
       }
-    for (tree t = DECL_INITIAL (mapper_decl); t; t = TREE_CHAIN (t))
-      if (comptypes (TREE_PURPOSE (t), type))
+    위해 (tree t = DECL_INITIAL (mapper_decl); t; t = TREE_CHAIN (t))
+      만약 (comptypes (TREE_PURPOSE (t), type))
 	{
 	  error_at (loc, "redeclaration of %qs %<#pragma omp declare "
 		    "mapper%> for type %qT", IDENTIFIER_POINTER (mapper_id)
@@ -29459,24 +29459,24 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
 	  inform (ploc, "%<#pragma omp declare mapper%> "
 			"previously declared here");
 	  c_parser_skip_to_pragma_eol (parser, false);
-	  return;
+	  반환;
 	}
   }
 
   token = c_parser_peek_token (parser);
-  if (token->type == CPP_NAME)
+  만약 (token->type == CPP_NAME)
     {
       var = build_decl (token->location, VAR_DECL, token->value, type);
       c_parser_consume_token (parser);
       DECL_ARTIFICIAL (var) = 1;
     }
-  else
+  아니면
     {
       error_at (token->location, "expected identifier");
       goto fail;
     }
 
-  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+  만약 (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
     goto fail;
 
   push_scope ();
@@ -29484,13 +29484,13 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
   pushdecl (var);
   DECL_CONTEXT (var) = current_function_decl;
 
-  while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+  동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
     {
       location_t here;
       pragma_omp_clause c_kind;
       here = c_parser_peek_token (parser)->location;
       c_kind = c_parser_omp_clause_name (parser);
-      if (c_kind != PRAGMA_OMP_CLAUSE_MAP)
+      만약 (c_kind != PRAGMA_OMP_CLAUSE_MAP)
 	{
 	  error_at (here, "unexpected clause");
 	  goto fail;
@@ -29498,21 +29498,21 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
       maplist = c_parser_omp_clause_map (parser, maplist, true);
     }
 
-  if (maplist == NULL_TREE)
+  만약 (maplist == NULL_TREE)
     {
       error_at (input_location, "missing %<map%> clause");
       goto fail;
     }
   tree list;
-  for (list = maplist; list; list = OMP_CLAUSE_CHAIN (list))
+  위해 (list = maplist; list; list = OMP_CLAUSE_CHAIN (list))
     {
       tree dvar = OMP_CLAUSE_DECL (list);
-      while (!DECL_P (dvar) && TREE_OPERAND_LENGTH (dvar))
+      동안 (!DECL_P (dvar) && TREE_OPERAND_LENGTH (dvar))
 	dvar = TREE_OPERAND (dvar, 0);
-      if (dvar == var)
+      만약 (dvar == var)
 	break;
     }
-  if (!list)
+  만약 (!list)
     error_at (input_location, "at least one %<map%> clause must map %qD or an "
 			      "element of it", var);
 
@@ -29532,7 +29532,7 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
   t = tree_cons (type, stmt, DECL_INITIAL (mapper_decl));
   DECL_INITIAL (mapper_decl) = t;
 
-  return;
+  반환;
 
  fail:
   c_parser_skip_to_pragma_eol (parser);
@@ -29549,7 +29549,7 @@ c_parser_omp_declare_mapper (c_parser *parser, enum pragma_context context)
 static void
 c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 {
-  unsigned int tokens_avail = 0, i;
+  unsigned 정수 tokens_avail = 0, i;
   c_token *saved_tokens = NULL;
   vec<tree> types = vNULL;
   vec<c_token> clauses = vNULL;
@@ -29558,13 +29558,13 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
   tree type;
   location_t rloc = c_parser_peek_token (parser)->location;
 
-  if (context == pragma_struct || context == pragma_param)
+  만약 (context == pragma_struct || context == pragma_param)
     {
       error ("%<#pragma omp declare reduction%> not at file or block scope");
       goto fail;
     }
 
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+  만약 (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
     goto fail;
 
   switch (c_parser_peek_token (parser)->type)
@@ -29596,12 +29596,12 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
     case CPP_NAME:
       const char *p;
       p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "min") == 0)
+      만약 (strcmp (p, "min") == 0)
 	{
 	  reduc_code = MIN_EXPR;
 	  break;
 	}
-      if (strcmp (p, "max") == 0)
+      만약 (strcmp (p, "max") == 0)
 	{
 	  reduc_code = MAX_EXPR;
 	  break;
@@ -29621,39 +29621,39 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
   reduc_decl = c_omp_reduction_decl (reduc_id);
   c_parser_consume_token (parser);
 
-  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+  만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>"))
     goto fail;
 
-  while (true)
+  동안 (true)
     {
       location_t loc = c_parser_peek_token (parser)->location;
       struct c_type_name *ctype = c_parser_type_name (parser);
-      if (ctype != NULL)
+      만약 (ctype != NULL)
 	{
 	  type = groktypename (ctype, NULL, NULL);
-	  if (type == error_mark_node)
+	  만약 (type == error_mark_node)
 	    ;
-	  else if ((INTEGRAL_TYPE_P (type)
+	  아니면 만약 ((INTEGRAL_TYPE_P (type)
 		    || SCALAR_FLOAT_TYPE_P (type)
 		    || TREE_CODE (type) == COMPLEX_TYPE)
 		   && orig_reduc_id == NULL_TREE)
 	    error_at (loc, "predeclared arithmetic type in "
 			   "%<#pragma omp declare reduction%>");
-	  else if (TREE_CODE (type) == FUNCTION_TYPE
+	  아니면 만약 (TREE_CODE (type) == FUNCTION_TYPE
 		   || TREE_CODE (type) == ARRAY_TYPE)
 	    error_at (loc, "function or array type in "
 		      "%<#pragma omp declare reduction%>");
-	  else if (TYPE_ATOMIC (type))
+	  아니면 만약 (TYPE_ATOMIC (type))
 	    error_at (loc, "%<_Atomic%> qualified type in "
 			   "%<#pragma omp declare reduction%>");
-	  else if (TYPE_QUALS_NO_ADDR_SPACE (type))
+	  아니면 만약 (TYPE_QUALS_NO_ADDR_SPACE (type))
 	    error_at (loc, "const, volatile or restrict qualified type in "
 			   "%<#pragma omp declare reduction%>");
-	  else
+	  아니면
 	    {
 	      tree t;
-	      for (t = DECL_INITIAL (reduc_decl); t; t = TREE_CHAIN (t))
-		if (comptypes (TREE_PURPOSE (t), type))
+	      위해 (t = DECL_INITIAL (reduc_decl); t; t = TREE_CHAIN (t))
+		만약 (comptypes (TREE_PURPOSE (t), type))
 		  {
 		    error_at (loc, "redeclaration of %qs "
 				   "%<#pragma omp declare reduction%> for "
@@ -29668,41 +29668,41 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 				  "previously declared here");
 		    break;
 		  }
-	      if (t == NULL_TREE)
+	      만약 (t == NULL_TREE)
 		types.safe_push (type);
 	    }
-	  if (c_parser_next_token_is (parser, CPP_COMMA))
+	  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
-	  else
+	  아니면
 	    break;
 	}
-      else
+      아니면
 	break;
     }
 
-  if (!c_parser_require (parser, CPP_COLON, "expected %<:%>")
+  만약 (!c_parser_require (parser, CPP_COLON, "expected %<:%>")
       || types.is_empty ())
     {
      fail:
       clauses.release ();
       types.release ();
-      while (true)
+      동안 (true)
 	{
 	  c_token *token = c_parser_peek_token (parser);
-	  if (token->type == CPP_EOF || token->type == CPP_PRAGMA_EOL)
+	  만약 (token->type == CPP_EOF || token->type == CPP_PRAGMA_EOL)
 	    break;
 	  c_parser_consume_token (parser);
 	}
       c_parser_skip_to_pragma_eol (parser);
-      return;
+      반환;
     }
 
-  if (types.length () > 1)
+  만약 (types.length () > 1)
     {
-      while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+      동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
 	{
 	  c_token *token = c_parser_peek_token (parser);
-	  if (token->type == CPP_EOF)
+	  만약 (token->type == CPP_EOF)
 	    goto fail;
 	  clauses.safe_push (*token);
 	  c_parser_consume_token (parser);
@@ -29718,12 +29718,12 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
       clauses.safe_push (eof_token);
     }
 
-  int errs = errorcount;
+  정수 errs = errorcount;
   FOR_EACH_VEC_ELT (types, i, type)
     {
       saved_tokens = parser->tokens;
       tokens_avail = parser->tokens_avail;
-      if (!clauses.is_empty ())
+      만약 (!clauses.is_empty ())
 	{
 	  parser->tokens = clauses.address ();
 	  parser->tokens_avail = clauses.length ();
@@ -29731,7 +29731,7 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 	}
 
       bool nested = current_function_decl != NULL_TREE;
-      if (nested)
+      만약 (nested)
 	c_push_function_context ();
       tree fndecl = build_decl (BUILTINS_LOCATION, FUNCTION_DECL,
 				reduc_id, default_function_type);
@@ -29756,12 +29756,12 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
       tree omp_priv = NULL_TREE, omp_orig = NULL_TREE;
       bool bad = false;
       initializer.set_error ();
-      if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+      만약 (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
 	bad = true;
-      else if (c_parser_next_token_is (parser, CPP_COMMA)
+      아니면 만약 (c_parser_next_token_is (parser, CPP_COMMA)
 	       && c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 	c_parser_consume_token (parser);
-      if (!bad
+      만약 (!bad
 	  && (c_parser_next_token_is (parser, CPP_NAME)
 	      && strcmp (IDENTIFIER_POINTER
 				(c_parser_peek_token (parser)->value),
@@ -29781,50 +29781,50 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 	  DECL_ARTIFICIAL (omp_orig) = 1;
 	  DECL_CONTEXT (omp_orig) = fndecl;
 	  pushdecl (omp_orig);
-	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	  만약 (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 	    bad = true;
-	  else if (!c_parser_next_token_is (parser, CPP_NAME))
+	  아니면 만약 (!c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      c_parser_error (parser, "expected %<omp_priv%> or "
 				      "function-name");
 	      bad = true;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER
+	  아니면 만약 (strcmp (IDENTIFIER_POINTER
 				(c_parser_peek_token (parser)->value),
 			   "omp_priv") != 0)
 	    {
-	      if (c_parser_peek_2nd_token (parser)->type != CPP_OPEN_PAREN
+	      만약 (c_parser_peek_2nd_token (parser)->type != CPP_OPEN_PAREN
 		  || c_parser_peek_token (parser)->id_kind != C_ID_ID)
 		{
 		  c_parser_error (parser, "expected function-name %<(%>");
 		  bad = true;
 		}
-	      else
+	      아니면
 		initializer = c_parser_postfix_expression (parser);
-	      if (initializer.value
+	      만약 (initializer.value
 		  && TREE_CODE (initializer.value) == CALL_EXPR)
 		{
-		  int j;
+		  정수 j;
 		  tree c = initializer.value;
-		  for (j = 0; j < call_expr_nargs (c); j++)
+		  위해 (j = 0; j < call_expr_nargs (c); j++)
 		    {
 		      tree a = CALL_EXPR_ARG (c, j);
 		      STRIP_NOPS (a);
-		      if (TREE_CODE (a) == ADDR_EXPR
+		      만약 (TREE_CODE (a) == ADDR_EXPR
 			  && TREE_OPERAND (a, 0) == omp_priv)
 			break;
 		    }
-		  if (j == call_expr_nargs (c))
+		  만약 (j == call_expr_nargs (c))
 		    error ("one of the initializer call arguments should be "
 			   "%<&omp_priv%>");
 		}
 	    }
-	  else
+	  아니면
 	    {
 	      c_parser_consume_token (parser);
-	      if (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+	      만약 (!c_parser_require (parser, CPP_EQ, "expected %<=%>"))
 		bad = true;
-	      else
+	      아니면
 		{
 		  tree st = push_stmt_list ();
 		  location_t loc = c_parser_peek_token (parser)->location;
@@ -29837,12 +29837,12 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 		  pop_stmt_list (st);
 		}
 	    }
-	  if (!bad
+	  만약 (!bad
 	      && !c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
 	    bad = true;
 	}
 
-      if (!bad)
+      만약 (!bad)
 	{
 	  c_parser_skip_to_pragma_eol (parser);
 
@@ -29855,7 +29855,7 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 	  TREE_VEC_ELT (TREE_VALUE (t), 2) = combiner.value;
 	  walk_tree (&combiner.value, c_check_omp_declare_reduction_r,
 		     &TREE_VEC_ELT (TREE_VALUE (t), 0), NULL);
-	  if (omp_priv)
+	  만약 (omp_priv)
 	    {
 	      DECL_SOURCE_LOCATION (omp_priv) = rloc;
 	      TREE_VEC_ELT (TREE_VALUE (t), 3) = omp_priv;
@@ -29871,24 +29871,24 @@ c_parser_omp_declare_reduction (c_parser *parser, enum pragma_context context)
 
       pop_stmt_list (stmt);
       pop_scope ();
-      if (cfun->language != NULL)
+      만약 (cfun->language != NULL)
 	{
 	  ggc_free (cfun->language);
 	  cfun->language = NULL;
 	}
       set_cfun (NULL);
       current_function_decl = NULL_TREE;
-      if (nested)
+      만약 (nested)
 	c_pop_function_context ();
 
-      if (!clauses.is_empty ())
+      만약 (!clauses.is_empty ())
 	{
 	  parser->tokens = saved_tokens;
 	  parser->tokens_avail = tokens_avail;
 	}
-      if (bad)
+      만약 (bad)
 	goto fail;
-      if (errs != errorcount)
+      만약 (errs != errorcount)
 	break;
     }
 
@@ -29913,52 +29913,52 @@ static bool
 c_parser_omp_declare (c_parser *parser, enum pragma_context context)
 {
   c_parser_consume_pragma (parser);
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "simd") == 0)
+      만약 (strcmp (p, "simd") == 0)
 	{
 	  /* c_parser_consume_token (parser); done in
 	     c_parser_omp_declare_simd.  */
 	  c_parser_omp_declare_simd (parser, context);
-	  return true;
+	  반환 true;
 	}
-      if (strcmp (p, "reduction") == 0)
+      만약 (strcmp (p, "reduction") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  c_parser_omp_declare_reduction (parser, context);
-	  return false;
+	  반환 false;
 	}
-      if (strcmp (p, "mapper") == 0)
+      만약 (strcmp (p, "mapper") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  c_parser_omp_declare_mapper (parser, context);
-	  return false;
+	  반환 false;
 	}
-      if (!flag_openmp)  /* flag_openmp_simd  */
+      만약 (!flag_openmp)  /* flag_openmp_simd  */
 	{
 	  c_parser_skip_to_pragma_eol (parser, false);
-	  return false;
+	  반환 false;
 	}
-      if (strcmp (p, "target") == 0)
+      만약 (strcmp (p, "target") == 0)
 	{
 	  c_parser_consume_token (parser);
 	  c_parser_omp_declare_target (parser);
-	  return false;
+	  반환 false;
 	}
-      if (strcmp (p, "variant") == 0)
+      만약 (strcmp (p, "variant") == 0)
 	{
 	  /* c_parser_consume_token (parser); done in
 	     c_parser_omp_declare_simd.  */
 	  c_parser_omp_declare_simd (parser, context);
-	  return true;
+	  반환 true;
 	}
     }
 
   c_parser_error (parser, "expected %<simd%>, %<reduction%>, "
 			  "%<target%> or %<variant%>");
   c_parser_skip_to_pragma_eol (parser);
-  return false;
+  반환 false;
 }
 
 /* OpenMP 5.0
@@ -29972,58 +29972,58 @@ c_parser_omp_requires (c_parser *parser)
   c_parser_consume_pragma (parser);
 
   location_t loc = c_parser_peek_token (parser)->location;
-  while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+  동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
     {
-      if (c_parser_next_token_is (parser, CPP_COMMA)
+      만약 (c_parser_next_token_is (parser, CPP_COMMA)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 	c_parser_consume_token (parser);
 
-      if (c_parser_next_token_is (parser, CPP_NAME))
+      만약 (c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  const char *p
 	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 	  location_t cloc = c_parser_peek_token (parser)->location;
 	  enum omp_requires this_req = (enum omp_requires) 0;
 
-	  if (!strcmp (p, "unified_address"))
+	  만약 (!strcmp (p, "unified_address"))
 	    this_req = OMP_REQUIRES_UNIFIED_ADDRESS;
-	  else if (!strcmp (p, "unified_shared_memory"))
+	  아니면 만약 (!strcmp (p, "unified_shared_memory"))
 	    this_req = OMP_REQUIRES_UNIFIED_SHARED_MEMORY;
-	  else if (!strcmp (p, "self_maps"))
+	  아니면 만약 (!strcmp (p, "self_maps"))
 	    this_req = OMP_REQUIRES_SELF_MAPS;
-	  else if (!strcmp (p, "dynamic_allocators"))
+	  아니면 만약 (!strcmp (p, "dynamic_allocators"))
 	    this_req = OMP_REQUIRES_DYNAMIC_ALLOCATORS;
-	  else if (!strcmp (p, "reverse_offload"))
+	  아니면 만약 (!strcmp (p, "reverse_offload"))
 	    this_req = OMP_REQUIRES_REVERSE_OFFLOAD;
-	  else if (!strcmp (p, "atomic_default_mem_order"))
+	  아니면 만약 (!strcmp (p, "atomic_default_mem_order"))
 	    {
 	      c_parser_consume_token (parser);
 
 	      matching_parens parens;
-	      if (parens.require_open (parser))
+	      만약 (parens.require_open (parser))
 		{
-		  if (c_parser_next_token_is (parser, CPP_NAME))
+		  만약 (c_parser_next_token_is (parser, CPP_NAME))
 		    {
 		      tree v = c_parser_peek_token (parser)->value;
 		      p = IDENTIFIER_POINTER (v);
 
-		      if (!strcmp (p, "seq_cst"))
+		      만약 (!strcmp (p, "seq_cst"))
 			this_req
 			  = (enum omp_requires) OMP_MEMORY_ORDER_SEQ_CST;
-		      else if (!strcmp (p, "relaxed"))
+		      아니면 만약 (!strcmp (p, "relaxed"))
 			this_req
 			  = (enum omp_requires) OMP_MEMORY_ORDER_RELAXED;
-		      else if (!strcmp (p, "release"))
+		      아니면 만약 (!strcmp (p, "release"))
 			this_req
 			  = (enum omp_requires) OMP_MEMORY_ORDER_RELEASE;
-		      else if (!strcmp (p, "acq_rel"))
+		      아니면 만약 (!strcmp (p, "acq_rel"))
 			this_req
 			  = (enum omp_requires) OMP_MEMORY_ORDER_ACQ_REL;
-		      else if (!strcmp (p, "acquire"))
+		      아니면 만약 (!strcmp (p, "acquire"))
 			this_req
 			  = (enum omp_requires) OMP_MEMORY_ORDER_ACQUIRE;
 		    }
-		  if (this_req == 0)
+		  만약 (this_req == 0)
 		    {
 		      error_at (c_parser_peek_token (parser)->location,
 				"expected %<acq_rel%>, %<acquire%>, "
@@ -30035,25 +30035,25 @@ c_parser_omp_requires (c_parser *parser)
 			case CPP_CLOSE_PAREN:
 			  break;
 			default:
-			  if (c_parser_peek_2nd_token (parser)->type
+			  만약 (c_parser_peek_2nd_token (parser)->type
 			      == CPP_CLOSE_PAREN)
 			    c_parser_consume_token (parser);
 			  break;
 			}
 		    }
-		  else
+		  아니면
 		    c_parser_consume_token (parser);
 
 		  parens.skip_until_found_close (parser);
-		  if (this_req == 0)
+		  만약 (this_req == 0)
 		    {
 		      c_parser_skip_to_pragma_eol (parser, false);
-		      return;
+		      반환;
 		    }
 		}
 	      p = NULL;
 	    }
-	  else
+	  아니면
 	    {
 	      error_at (cloc, "expected %<unified_address%>, "
 			      "%<unified_shared_memory%>, "
@@ -30062,28 +30062,28 @@ c_parser_omp_requires (c_parser *parser)
 			       "%<reverse_offload%> "
 			       "or %<atomic_default_mem_order%> clause");
 	      c_parser_skip_to_pragma_eol (parser, false);
-	      return;
+	      반환;
 	    }
-	  if (p)
+	  만약 (p)
 	    c_parser_consume_token (parser);
-	  if (this_req)
+	  만약 (this_req)
 	    {
-	      if ((this_req & ~OMP_REQUIRES_ATOMIC_DEFAULT_MEM_ORDER) != 0)
+	      만약 ((this_req & ~OMP_REQUIRES_ATOMIC_DEFAULT_MEM_ORDER) != 0)
 		{
-		  if ((this_req & new_req) != 0)
+		  만약 ((this_req & new_req) != 0)
 		    error_at (cloc, "too many %qs clauses", p);
-		  if (this_req != OMP_REQUIRES_DYNAMIC_ALLOCATORS
+		  만약 (this_req != OMP_REQUIRES_DYNAMIC_ALLOCATORS
 		      && (omp_requires_mask & OMP_REQUIRES_TARGET_USED) != 0)
 		    error_at (cloc, "%qs clause used lexically after first "
 				    "target construct or offloading API", p);
 		}
-	      else if ((new_req & OMP_REQUIRES_ATOMIC_DEFAULT_MEM_ORDER) != 0)
+	      아니면 만약 ((new_req & OMP_REQUIRES_ATOMIC_DEFAULT_MEM_ORDER) != 0)
 		{
 		  error_at (cloc, "too many %qs clauses",
 			    "atomic_default_mem_order");
 		  this_req = (enum omp_requires) 0;
 		}
-	      else if ((omp_requires_mask
+	      아니면 만약 ((omp_requires_mask
 			& OMP_REQUIRES_ATOMIC_DEFAULT_MEM_ORDER) != 0)
 		{
 		  error_at (cloc, "more than one %<atomic_default_mem_order%>"
@@ -30093,7 +30093,7 @@ c_parser_omp_requires (c_parser *parser)
 		       (omp_requires_mask
 			& OMP_REQUIRES_ATOMIC_DEFAULT_MEM_ORDER);
 		}
-	      else if ((omp_requires_mask
+	      아니면 만약 ((omp_requires_mask
 			& OMP_REQUIRES_ATOMIC_DEFAULT_MEM_ORDER_USED) != 0)
 		error_at (cloc, "%<atomic_default_mem_order%> clause used "
 				"lexically after first %<atomic%> construct "
@@ -30108,7 +30108,7 @@ c_parser_omp_requires (c_parser *parser)
     }
   c_parser_skip_to_pragma_eol (parser);
 
-  if (new_req == 0)
+  만약 (new_req == 0)
     error_at (loc, "%<pragma omp requires%> requires at least one clause");
 }
 
@@ -30119,19 +30119,19 @@ static tree
 c_finish_taskloop_clauses (tree clauses)
 {
   tree *pc = &clauses;
-  for (tree c = clauses; c; c = *pc)
+  위해 (tree c = clauses; c; c = *pc)
     {
       bool remove = false;
-      if (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION)
+      만약 (OMP_CLAUSE_CODE (c) == OMP_CLAUSE_REDUCTION)
 	{
 	  tree type = strip_array_types (TREE_TYPE (OMP_CLAUSE_DECL (c)));
-	  if (integer_zerop (TYPE_SIZE_UNIT (type)))
+	  만약 (integer_zerop (TYPE_SIZE_UNIT (type)))
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"zero sized type %qT in %<reduction%> clause", type);
 	      remove = true;
 	    }
-	  else if (TREE_CODE (TYPE_SIZE_UNIT (type)) != INTEGER_CST)
+	  아니면 만약 (TREE_CODE (TYPE_SIZE_UNIT (type)) != INTEGER_CST)
 	    {
 	      error_at (OMP_CLAUSE_LOCATION (c),
 			"variable sized type %qT in %<reduction%> clause",
@@ -30139,12 +30139,12 @@ c_finish_taskloop_clauses (tree clauses)
 	      remove = true;
 	    }
 	}
-      if (remove)
+      만약 (remove)
 	*pc = OMP_CLAUSE_CHAIN (c);
-      else
+      아니면
 	pc = &OMP_CLAUSE_CHAIN (c);
     }
-  return clauses;
+  반환 clauses;
 }
 
 /* OpenMP 4.5:
@@ -30184,27 +30184,27 @@ c_parser_omp_taskloop (location_t loc, c_parser *parser,
   mask |= OMP_TASKLOOP_CLAUSE_MASK;
   /* #pragma omp parallel master taskloop{, simd} disallow in_reduction
      clause.  */
-  if ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NUM_THREADS)) != 0)
+  만약 ((mask & (OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_NUM_THREADS)) != 0)
     mask &= ~(OMP_CLAUSE_MASK_1 << PRAGMA_OMP_CLAUSE_IN_REDUCTION);
 
-  if (c_parser_next_token_is (parser, CPP_NAME))
+  만약 (c_parser_next_token_is (parser, CPP_NAME))
     {
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
 
-      if (strcmp (p, "simd") == 0)
+      만약 (strcmp (p, "simd") == 0)
 	{
 	  tree cclauses_buf[C_OMP_CLAUSE_SPLIT_COUNT];
-	  if (cclauses == NULL)
+	  만약 (cclauses == NULL)
 	    cclauses = cclauses_buf;
 	  c_parser_consume_token (parser);
-	  if (!flag_openmp)  /* flag_openmp_simd  */
-	    return c_parser_omp_simd (loc, parser, p_name, mask, cclauses,
+	  만약 (!flag_openmp)  /* flag_openmp_simd  */
+	    반환 c_parser_omp_simd (loc, parser, p_name, mask, cclauses,
 				      if_p);
 	  block = c_begin_compound_stmt (true);
 	  ret = c_parser_omp_simd (loc, parser, p_name, mask, cclauses, if_p);
 	  block = c_end_compound_stmt (loc, block, true);
-	  if (ret == NULL)
-	    return ret;
+	  만약 (ret == NULL)
+	    반환 ret;
 	  ret = make_node (OMP_TASKLOOP);
 	  TREE_TYPE (ret) = void_type_node;
 	  OMP_FOR_BODY (ret) = block;
@@ -30213,17 +30213,17 @@ c_parser_omp_taskloop (location_t loc, c_parser *parser,
 	    = c_finish_taskloop_clauses (OMP_FOR_CLAUSES (ret));
 	  SET_EXPR_LOCATION (ret, loc);
 	  add_stmt (ret);
-	  return ret;
+	  반환 ret;
 	}
     }
-  if (!flag_openmp)  /* flag_openmp_simd  */
+  만약 (!flag_openmp)  /* flag_openmp_simd  */
     {
       c_parser_skip_to_pragma_eol (parser, false);
-      return NULL_TREE;
+      반환 NULL_TREE;
     }
 
   clauses = c_parser_omp_all_clauses (parser, mask, p_name, cclauses == NULL);
-  if (cclauses)
+  만약 (cclauses)
     {
       omp_split_clauses (loc, OMP_TASKLOOP, mask, clauses, cclauses);
       clauses = cclauses[C_OMP_CLAUSE_SPLIT_TASKLOOP];
@@ -30235,7 +30235,7 @@ c_parser_omp_taskloop (location_t loc, c_parser *parser,
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
 
-  return ret;
+  반환 ret;
 }
 
 /* OpenMP 5.1: Parse sizes list for "omp tile sizes"
@@ -30245,41 +30245,41 @@ c_parser_omp_tile_sizes (c_parser *parser, location_t loc)
 {
   tree sizes = NULL_TREE;
 
-  if (c_parser_next_token_is (parser, CPP_COMMA))
+  만약 (c_parser_next_token_is (parser, CPP_COMMA))
     c_parser_consume_token (parser);
 
   c_token *tok = c_parser_peek_token (parser);
-  if (tok->type != CPP_NAME
+  만약 (tok->type != CPP_NAME
       || strcmp ("sizes", IDENTIFIER_POINTER (tok->value)))
     {
       c_parser_error (parser, "expected %<sizes%>");
-      return error_mark_node;
+      반환 error_mark_node;
     }
   c_parser_consume_token (parser);
 
   matching_parens parens;
-  if (!parens.require_open (parser))
-    return error_mark_node;
+  만약 (!parens.require_open (parser))
+    반환 error_mark_node;
 
   vec<tree, va_gc> *sizes_vec
     = c_parser_expr_list (parser, true, true, NULL, NULL, NULL, NULL);
   sizes = build_tree_list_vec (sizes_vec);
   release_tree_vector (sizes_vec);
 
-  for (tree s = sizes; s; s = TREE_CHAIN (s))
+  위해 (tree s = sizes; s; s = TREE_CHAIN (s))
     {
       tree expr = TREE_VALUE (s);
-      if (expr == error_mark_node)
+      만약 (expr == error_mark_node)
 	{
 	  parens.skip_until_found_close (parser);
-	  return error_mark_node;
+	  반환 error_mark_node;
 	}
 
       HOST_WIDE_INT n;
-      if (!INTEGRAL_TYPE_P (TREE_TYPE (expr))
+      만약 (!INTEGRAL_TYPE_P (TREE_TYPE (expr))
 	  || !tree_fits_shwi_p (expr)
 	  || (n = tree_to_shwi (expr)) <= 0
-	  || (int) n != n)
+	  || (정수) n != n)
 	{
 	  c_parser_error (parser, "%<sizes%> argument needs positive"
 				  " integral constant");
@@ -30292,7 +30292,7 @@ c_parser_omp_tile_sizes (c_parser *parser, location_t loc)
   tree c = build_omp_clause (loc, OMP_CLAUSE_SIZES);
   OMP_CLAUSE_SIZES_LIST (c) = sizes;
 
-  return c;
+  반환 c;
 }
 
 /* OpenMP 5.1:
@@ -30307,8 +30307,8 @@ c_parser_omp_tile (location_t loc, c_parser *parser, bool *if_p)
   tree clauses = c_parser_omp_tile_sizes (parser, loc);
   c_parser_skip_to_pragma_eol (parser);
 
-  if (!clauses || clauses == error_mark_node)
-    return error_mark_node;
+  만약 (!clauses || clauses == error_mark_node)
+    반환 error_mark_node;
 
   tree block = c_begin_compound_stmt (true);
   tree ret = c_parser_omp_for_loop (loc, parser, OMP_TILE, clauses,
@@ -30316,7 +30316,7 @@ c_parser_omp_tile (location_t loc, c_parser *parser, bool *if_p)
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
 
-  return ret;
+  반환 ret;
 }
 
 #define OMP_UNROLL_CLAUSE_MASK					\
@@ -30341,7 +30341,7 @@ c_parser_omp_unroll (location_t loc, c_parser *parser, bool *if_p)
   block = c_end_compound_stmt (loc, block, true);
   add_stmt (block);
 
-  return ret;
+  반환 ret;
 }
 
 /* OpenMP 5.1
@@ -30360,21 +30360,21 @@ c_parser_omp_nothing (c_parser *parser)
 static bool
 c_parser_omp_error (c_parser *parser, enum pragma_context context)
 {
-  int at_compilation = -1;
-  int severity_fatal = -1;
+  정수 at_compilation = -1;
+  정수 severity_fatal = -1;
   tree message = NULL_TREE;
   bool bad = false;
   location_t loc = c_parser_peek_token (parser)->location;
 
   c_parser_consume_pragma (parser);
 
-  while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+  동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
     {
-      if (c_parser_next_token_is (parser, CPP_COMMA)
+      만약 (c_parser_next_token_is (parser, CPP_COMMA)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 	c_parser_consume_token (parser);
 
-      if (!c_parser_next_token_is (parser, CPP_NAME))
+      만약 (!c_parser_next_token_is (parser, CPP_NAME))
 	break;
 
       const char *p
@@ -30383,31 +30383,31 @@ c_parser_omp_error (c_parser *parser, enum pragma_context context)
       static const char *args[] = {
 	"execution", "compilation", "warning", "fatal"
       };
-      int *v = NULL;
-      int idx = 0, n = -1;
+      정수 *v = NULL;
+      정수 idx = 0, n = -1;
       tree m = NULL_TREE;
 
-      if (!strcmp (p, "at"))
+      만약 (!strcmp (p, "at"))
 	v = &at_compilation;
-      else if (!strcmp (p, "severity"))
+      아니면 만약 (!strcmp (p, "severity"))
 	{
 	  v = &severity_fatal;
 	  idx += 2;
 	}
-      else if (strcmp (p, "message"))
+      아니면 만약 (strcmp (p, "message"))
 	{
 	  error_at (cloc,
 		    "expected %<at%>, %<severity%> or %<message%> clause");
 	  c_parser_skip_to_pragma_eol (parser, false);
-	  return false;
+	  반환 false;
 	}
 
       c_parser_consume_token (parser);
 
       matching_parens parens;
-      if (parens.require_open (parser))
+      만약 (parens.require_open (parser))
 	{
-	  if (v == NULL)
+	  만약 (v == NULL)
 	    {
 	      location_t expr_loc = c_parser_peek_token (parser)->location;
 	      c_expr expr = c_parser_expr_no_commas (parser, NULL);
@@ -30415,19 +30415,19 @@ c_parser_omp_error (c_parser *parser, enum pragma_context context)
 	      m = convert (const_string_type_node, expr.value);
 	      m = c_fully_fold (m, false, NULL);
 	    }
-	  else
+	  아니면
 	    {
-	      if (c_parser_next_token_is (parser, CPP_NAME))
+	      만약 (c_parser_next_token_is (parser, CPP_NAME))
 		{
 		  tree val = c_parser_peek_token (parser)->value;
 		  const char *q = IDENTIFIER_POINTER (val);
 
-		  if (!strcmp (q, args[idx]))
+		  만약 (!strcmp (q, args[idx]))
 		    n = 0;
-		  else if (!strcmp (q, args[idx + 1]))
+		  아니면 만약 (!strcmp (q, args[idx + 1]))
 		    n = 1;
 		}
-	      if (n == -1)
+	      만약 (n == -1)
 		{
 		  error_at (c_parser_peek_token (parser)->location,
 			    "expected %qs or %qs", args[idx], args[idx + 1]);
@@ -30439,93 +30439,93 @@ c_parser_omp_error (c_parser *parser, enum pragma_context context)
 		    case CPP_CLOSE_PAREN:
 		      break;
 		    default:
-		      if (c_parser_peek_2nd_token (parser)->type
+		      만약 (c_parser_peek_2nd_token (parser)->type
 			  == CPP_CLOSE_PAREN)
 			c_parser_consume_token (parser);
 		      break;
 		    }
 		}
-	      else
+	      아니면
 		c_parser_consume_token (parser);
 	    }
 
 	  parens.skip_until_found_close (parser);
 
-	  if (v == NULL)
+	  만약 (v == NULL)
 	    {
-	      if (message)
+	      만약 (message)
 		{
 		  error_at (cloc, "too many %qs clauses", p);
 		  bad = true;
 		}
-	      else
+	      아니면
 		message = m;
 	    }
-	  else if (n != -1)
+	  아니면 만약 (n != -1)
 	    {
-	      if (*v != -1)
+	      만약 (*v != -1)
 		{
 		  error_at (cloc, "too many %qs clauses", p);
 		  bad = true;
 		}
-	      else
+	      아니면
 		*v = n;
 	    }
 	}
-      else
+      아니면
 	bad = true;
     }
   c_parser_skip_to_pragma_eol (parser);
-  if (bad)
-    return true;
+  만약 (bad)
+    반환 true;
 
-  if (at_compilation == -1)
+  만약 (at_compilation == -1)
     at_compilation = 1;
-  if (severity_fatal == -1)
+  만약 (severity_fatal == -1)
     severity_fatal = 1;
-  if (!at_compilation)
+  만약 (!at_compilation)
     {
-      if (context != pragma_compound)
+      만약 (context != pragma_compound)
 	{
 	  error_at (loc, "%<#pragma omp error%> with %<at(execution)%> clause "
 			 "may only be used in compound statements");
-	  return true;
+	  반환 true;
 	}
-      if (parser->omp_for_parse_state
+      만약 (parser->omp_for_parse_state
 	  && parser->omp_for_parse_state->in_intervening_code)
 	{
 	  error_at (loc, "%<#pragma omp error%> with %<at(execution)%> clause "
 			 "may not be used in intervening code");
 	  parser->omp_for_parse_state->fail = true;
-	  return true;
+	  반환 true;
 	}
       tree fndecl
 	= builtin_decl_explicit (severity_fatal ? BUILT_IN_GOMP_ERROR
 						: BUILT_IN_GOMP_WARNING);
-      if (!message)
+      만약 (!message)
 	message = build_zero_cst (const_string_type_node);
       tree stmt = build_call_expr_loc (loc, fndecl, 2, message,
 				       build_all_ones_cst (size_type_node));
       add_stmt (stmt);
-      return true;
+      반환 true;
     }
   const char *msg = NULL;
-  if (message)
+  만약 (message)
     {
       msg = c_getstr (message);
-      if (msg == NULL)
+      만약 (msg == NULL)
 	msg = _("<message unknown at compile time>");
     }
   const enum diagnostics::kind diag_kind = (severity_fatal
 					    ? diagnostics::kind::error
 					    : diagnostics::kind::warning);
-  if (msg)
+  만약 (msg)
     emit_diagnostic (diag_kind, loc, 0,
 		     "%<pragma omp error%> encountered: %s", msg);
-  else
+  아니면
     emit_diagnostic (diag_kind, loc, 0,
 		     "%<pragma omp error%> encountered");
-  return false;
+  반환 false;
 }
 
 /* Assumption clauses
@@ -30553,63 +30553,63 @@ c_parser_omp_assumption_clauses (c_parser *parser, bool is_assume)
   bitmap_initialize (&absent_head, &bitmap_default_obstack);
   bitmap_initialize (&contains_head, &bitmap_default_obstack);
 
-  if (c_parser_next_token_is (parser, CPP_PRAGMA_EOL))
+  만약 (c_parser_next_token_is (parser, CPP_PRAGMA_EOL))
     error_at (c_parser_peek_token (parser)->location,
 	      "expected at least one assumption clause");
 
-  while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+  동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
     {
-      if (c_parser_next_token_is (parser, CPP_COMMA)
+      만약 (c_parser_next_token_is (parser, CPP_COMMA)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_NAME)
 	c_parser_consume_token (parser);
 
-      if (!c_parser_next_token_is (parser, CPP_NAME))
+      만약 (!c_parser_next_token_is (parser, CPP_NAME))
 	break;
 
       const char *p
 	= IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
       location_t cloc = c_parser_peek_token (parser)->location;
 
-      if (!strcmp (p, "no_openmp"))
+      만약 (!strcmp (p, "no_openmp"))
 	{
 	  c_parser_consume_token (parser);
-	  if (no_openmp)
+	  만약 (no_openmp)
 	    error_at (cloc, "too many %qs clauses", "no_openmp");
 	  no_openmp = true;
 	}
-      else if (!strcmp (p, "no_openmp_constructs"))
+      아니면 만약 (!strcmp (p, "no_openmp_constructs"))
 	{
 	  c_parser_consume_token (parser);
-	  if (no_openmp_constructs)
+	  만약 (no_openmp_constructs)
 	    error_at (cloc, "too many %qs clauses", "no_openmp_constructs");
 	  no_openmp_constructs = true;
 	}
-      else if (!strcmp (p, "no_openmp_routines"))
+      아니면 만약 (!strcmp (p, "no_openmp_routines"))
 	{
 	  c_parser_consume_token (parser);
-	  if (no_openmp_routines)
+	  만약 (no_openmp_routines)
 	    error_at (cloc, "too many %qs clauses", "no_openmp_routines");
 	  no_openmp_routines = true;
 	}
-      else if (!strcmp (p, "no_parallelism"))
+      아니면 만약 (!strcmp (p, "no_parallelism"))
 	{
 	  c_parser_consume_token (parser);
-	  if (no_parallelism)
+	  만약 (no_parallelism)
 	    error_at (cloc, "too many %qs clauses", "no_parallelism");
 	  no_parallelism = true;
 	}
-      else if (!strcmp (p, "holds"))
+      아니면 만약 (!strcmp (p, "holds"))
 	{
 	  c_parser_consume_token (parser);
 	  matching_parens parens;
-	  if (parens.require_open (parser))
+	  만약 (parens.require_open (parser))
 	    {
 	      location_t eloc = c_parser_peek_token (parser)->location;
 	      c_expr expr = c_parser_expr_no_commas (parser, NULL);
 	      tree t = convert_lvalue_to_rvalue (eloc, expr, true, true).value;
 	      t = c_objc_common_truthvalue_conversion (eloc, t);
 	      t = c_fully_fold (t, false, NULL);
-	      if (is_assume && t != error_mark_node)
+	      만약 (is_assume && t != error_mark_node)
 		{
 		  tree fn = build_call_expr_internal_loc (eloc, IFN_ASSUME,
 							  void_type_node, 1,
@@ -30619,43 +30619,43 @@ c_parser_omp_assumption_clauses (c_parser *parser, bool is_assume)
 	      parens.skip_until_found_close (parser);
 	    }
 	}
-      else if (!strcmp (p, "absent") || !strcmp (p, "contains"))
+      아니면 만약 (!strcmp (p, "absent") || !strcmp (p, "contains"))
 	{
 	  c_parser_consume_token (parser);
 	  matching_parens parens;
-	  if (parens.require_open (parser))
+	  만약 (parens.require_open (parser))
 	    {
 	      do
 		{
 		  const char *directive[3] = {};
-		  int i;
+		  정수 i;
 		  location_t dloc = c_parser_peek_token (parser)->location;
-		  for (i = 0; i < 3; i++)
+		  위해 (i = 0; i < 3; i++)
 		    {
 		      tree id;
-		      if (c_parser_peek_nth_token (parser, i + 1)->type
+		      만약 (c_parser_peek_nth_token (parser, i + 1)->type
 			  == CPP_NAME)
 			id = c_parser_peek_nth_token (parser, i + 1)->value;
-		      else if (c_parser_peek_nth_token (parser, i + 1)->keyword
+		      아니면 만약 (c_parser_peek_nth_token (parser, i + 1)->keyword
 			       != RID_MAX)
 			{
 			  enum rid rid
 			    = c_parser_peek_nth_token (parser, i + 1)->keyword;
 			  id = ridpointers[rid];
 			}
-		      else
+		      아니면
 			break;
 		      directive[i] = IDENTIFIER_POINTER (id);
 		    }
-		  if (i == 0)
+		  만약 (i == 0)
 		    error_at (dloc, "expected directive name");
-		  else
+		  아니면
 		    {
 		      const struct c_omp_directive *dir
 			= c_omp_categorize_directive (directive[0],
 						      directive[1],
 						      directive[2]);
-		      if (dir
+		      만약 (dir
 			  && dir->id != PRAGMA_OMP_END
 			  && (dir->kind == C_OMP_DIR_DECLARATIVE
 			      || dir->kind == C_OMP_DIR_INFORMATIONAL
@@ -30664,16 +30664,16 @@ c_parser_omp_assumption_clauses (c_parser *parser, bool is_assume)
 					"%qs clause argument: declarative, "
 					"informational, and meta directives "
 					"not permitted", p);
-		      else if (dir == NULL
+		      아니면 만약 (dir == NULL
 			       || dir->id == PRAGMA_OMP_END
 			       || (!dir->second && directive[1])
 			       || (!dir->third && directive[2]))
 			error_at (dloc, "unknown OpenMP directive name in "
 					"%qs clause argument", p);
-		      else
+		      아니면
 			{
-			  int id = dir - c_omp_directives;
-			  if (bitmap_bit_p (p[0] == 'a' ? &contains_head
+			  정수 id = dir - c_omp_directives;
+			  만약 (bitmap_bit_p (p[0] == 'a' ? &contains_head
 							: &absent_head, id))
 			    error_at (dloc, "%<%s%s%s%s%s%> directive "
 					    "mentioned in both %<absent%> and "
@@ -30683,7 +30683,7 @@ c_parser_omp_assumption_clauses (c_parser *parser, bool is_assume)
 				      directive[1] ? directive[1] : "",
 				      directive[2] ? " " : "",
 				      directive[2] ? directive[2] : "");
-			  else if (!bitmap_set_bit (p[0] == 'a'
+			  아니면 만약 (!bitmap_set_bit (p[0] == 'a'
 						    ? &absent_head
 						    : &contains_head, id))
 			    error_at (dloc, "%<%s%s%s%s%s%> directive "
@@ -30695,23 +30695,23 @@ c_parser_omp_assumption_clauses (c_parser *parser, bool is_assume)
 				      directive[2] ? " " : "",
 				      directive[2] ? directive[2] : "", p);
 			}
-		      for (; i; --i)
+		      위해 (; i; --i)
 			c_parser_consume_token (parser);
 		    }
-		  if (c_parser_next_token_is (parser, CPP_COMMA))
+		  만약 (c_parser_next_token_is (parser, CPP_COMMA))
 		    c_parser_consume_token (parser);
-		  else
+		  아니면
 		    break;
 		}
-	      while (1);
+	      동안 (1);
 	      parens.skip_until_found_close (parser);
 	    }
 	}
-      else if (startswith (p, "ext_"))
+      아니면 만약 (startswith (p, "ext_"))
 	{
 	  warning_at (cloc, OPT_Wopenmp, "unknown assumption clause %qs", p);
 	  c_parser_consume_token (parser);
-	  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+	  만약 (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	    {
 	      matching_parens parens;
 	      parens.consume_open (parser);
@@ -30719,7 +30719,7 @@ c_parser_omp_assumption_clauses (c_parser *parser, bool is_assume)
 	      parens.require_close (parser);
 	    }
 	}
-      else
+      아니면
 	{
 	  c_parser_consume_token (parser);
 	  error_at (cloc, "expected assumption clause");
@@ -30756,17 +30756,17 @@ analyze_metadirective_body (c_parser *parser,
 			    vec<c_token> &tokens,
 			    vec<tree> &labels)
 {
-  int nesting_depth = 0;
-  int bracket_depth = 0;
+  정수 nesting_depth = 0;
+  정수 bracket_depth = 0;
   bool ignore_label = false;
 
   /* Read in the body tokens to the tokens for each candidate directive.  */
-  while (1)
+  동안 (1)
     {
       c_token *token = c_parser_peek_token (parser);
       bool stop = false;
 
-      if (c_parser_next_token_is_keyword (parser, RID_CASE))
+      만약 (c_parser_next_token_is_keyword (parser, RID_CASE))
 	ignore_label = true;
 
       switch (token->type)
@@ -30774,7 +30774,7 @@ analyze_metadirective_body (c_parser *parser,
 	case CPP_EOF:
 	  break;
 	case CPP_NAME:
-	  if (!ignore_label
+	  만약 (!ignore_label
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    labels.safe_push (token->value);
 	  goto add;
@@ -30782,7 +30782,7 @@ analyze_metadirective_body (c_parser *parser,
 	  ++nesting_depth;
 	  goto add;
 	case CPP_CLOSE_BRACE:
-	  if (--nesting_depth == 0 && bracket_depth == 0)
+	  만약 (--nesting_depth == 0 && bracket_depth == 0)
 	    stop = true;
 	  goto add;
 	case CPP_OPEN_PAREN:
@@ -30795,19 +30795,19 @@ analyze_metadirective_body (c_parser *parser,
 	  ignore_label = false;
 	  goto add;
 	case CPP_SEMICOLON:
-	  if (nesting_depth == 0 && bracket_depth == 0)
+	  만약 (nesting_depth == 0 && bracket_depth == 0)
 	    stop = true;
 	  goto add;
 	default:
 	add:
 	  tokens.safe_push (*token);
-	  if (token->type == CPP_PRAGMA)
+	  만약 (token->type == CPP_PRAGMA)
 	    c_parser_consume_pragma (parser);
-	  else if (token->type == CPP_PRAGMA_EOL)
+	  아니면 만약 (token->type == CPP_PRAGMA_EOL)
 	    c_parser_skip_to_pragma_eol (parser);
-	  else
+	  아니면
 	    c_parser_consume_token (parser);
-	  if (stop)
+	  만약 (stop)
 	    break;
 	  continue;
 	}
@@ -30823,7 +30823,7 @@ analyze_metadirective_body (c_parser *parser,
 static void
 c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 {
-  static unsigned int metadirective_region_count = 0;
+  static unsigned 정수 metadirective_region_count = 0;
 
   tree ret;
   auto_vec<c_token> directive_tokens;
@@ -30833,7 +30833,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
   auto_vec<tree> ctxs;
   vec<struct omp_variant> candidates;
   bool default_seen = false;
-  int directive_token_idx = 0;
+  정수 directive_token_idx = 0;
   tree standalone_body = NULL_TREE;
   location_t pragma_loc = c_parser_peek_token (parser)->location;
   bool requires_body = false;
@@ -30844,11 +30844,11 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
   OMP_METADIRECTIVE_VARIANTS (ret) = NULL_TREE;
 
   c_parser_consume_pragma (parser);
-  while (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
+  동안 (c_parser_next_token_is_not (parser, CPP_PRAGMA_EOL))
     {
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      만약 (c_parser_next_token_is (parser, CPP_COMMA))
 	c_parser_consume_token (parser);
-      if (c_parser_next_token_is_not (parser, CPP_NAME)
+      만약 (c_parser_next_token_is_not (parser, CPP_NAME)
 	  && c_parser_next_token_is_not (parser, CPP_KEYWORD))
 	{
 	  c_parser_error (parser, "expected %<when%>, "
@@ -30858,7 +30858,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 
       location_t match_loc = c_parser_peek_token (parser)->location;
       const char *p = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-      if (strcmp (p, "default") == 0)
+      만약 (strcmp (p, "default") == 0)
 	{
 	  gcc_rich_location richloc (pragma_loc);
 	  richloc.add_fixit_replace (match_loc, "otherwise");
@@ -30869,9 +30869,9 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       c_parser_consume_token (parser);
       bool default_p
 	= strcmp (p, "default") == 0 || strcmp (p, "otherwise") == 0;
-      if (default_p)
+      만약 (default_p)
 	{
-	  if (default_seen)
+	  만약 (default_seen)
 	    {
 	      error_at (match_loc, "too many %<otherwise%> or %<default%> "
 			"clauses in %<metadirective%>");
@@ -30879,13 +30879,13 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	    }
 	  default_seen = true;
 	}
-      else if (default_seen)
+      아니면 만약 (default_seen)
 	{
 	  error_at (match_loc, "%<otherwise%> or %<default%> clause "
 		    "must appear last in %<metadirective%>");
 	  goto error;
 	}
-      if (!default_p && strcmp (p, "when") != 0)
+      만약 (!default_p && strcmp (p, "when") != 0)
 	{
 	  error_at (match_loc, "%qs is not valid for %qs",
 		    p, "metadirective");
@@ -30896,25 +30896,25 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       tree ctx = NULL_TREE;
       bool skip = false;
 
-      if (!parens.require_open (parser))
+      만약 (!parens.require_open (parser))
 	goto error;
 
-      if (!default_p)
+      만약 (!default_p)
 	{
 	  ctx = c_parser_omp_context_selector_specification (parser,
 							     NULL_TREE);
-	  if (ctx == error_mark_node)
+	  만약 (ctx == error_mark_node)
 	    goto error;
 	  ctx = omp_check_context_selector (match_loc, ctx,
 					    OMP_CTX_METADIRECTIVE);
-	  if (ctx == error_mark_node)
+	  만약 (ctx == error_mark_node)
 	    goto error;
 
 	  /* Remove the selector from further consideration if it can be
 	     evaluated as a non-match at this point.  */
 	  skip = (omp_context_selector_matches (ctx, NULL_TREE, false) == 0);
 
-	  if (c_parser_next_token_is_not (parser, CPP_COLON))
+	  만약 (c_parser_next_token_is_not (parser, CPP_COLON))
 	    {
 	      c_parser_require (parser, CPP_COLON, "expected %<:%>");
 	      goto error;
@@ -30927,33 +30927,33 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       location_t loc = c_parser_peek_token (parser)->location;
 
       const char *directive[3] = {};
-      int i;
-      for (i = 0; i < 3; i++)
+      정수 i;
+      위해 (i = 0; i < 3; i++)
 	{
 	  tree id;
-	  if (c_parser_peek_nth_token (parser, i + 1)->type
+	  만약 (c_parser_peek_nth_token (parser, i + 1)->type
 	      == CPP_CLOSE_PAREN)
 	    {
-	      if (i == 0)
+	      만약 (i == 0)
 		directive[i++] = "nothing";
 	      break;
 	    }
-	  else if (c_parser_peek_nth_token (parser, i + 1)->type
+	  아니면 만약 (c_parser_peek_nth_token (parser, i + 1)->type
 		   == CPP_NAME)
 	    id = c_parser_peek_nth_token (parser, i + 1)->value;
-	  else if (c_parser_peek_nth_token (parser, i + 1)->keyword
+	  아니면 만약 (c_parser_peek_nth_token (parser, i + 1)->keyword
 		   != RID_MAX)
 	    {
 	      enum rid rid
 		= c_parser_peek_nth_token (parser, i + 1)->keyword;
 	      id = ridpointers[rid];
 	    }
-	  else
+	  아니면
 	    break;
 
 	  directive[i] = IDENTIFIER_POINTER (id);
 	}
-      if (i == 0)
+      만약 (i == 0)
 	{
 	  error_at (loc, "expected directive name");
 	  goto error;
@@ -30964,39 +30964,39 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 				      directive[1],
 				      directive[2]);
 
-      if (omp_directive == NULL)
+      만약 (omp_directive == NULL)
 	{
-	  for (int j = 0; j < i; j++)
+	  위해 (정수 j = 0; j < i; j++)
 	    c_parser_consume_token (parser);
 	  c_parser_error (parser, "unknown directive name");
 	  goto error;
 	}
-      else
+      아니면
 	{
-	  int token_count = 0;
-	  if (omp_directive->first) token_count++;
-	  if (omp_directive->second) token_count++;
-	  if (omp_directive->third) token_count++;
-	  for (int j = 0; j < token_count; j++)
+	  정수 token_count = 0;
+	  만약 (omp_directive->first) token_count++;
+	  만약 (omp_directive->second) token_count++;
+	  만약 (omp_directive->third) token_count++;
+	  위해 (정수 j = 0; j < token_count; j++)
 	    c_parser_consume_token (parser);
 	}
-      if (omp_directive->id == PRAGMA_OMP_METADIRECTIVE)
+      만약 (omp_directive->id == PRAGMA_OMP_METADIRECTIVE)
 	{
 	  c_parser_error (parser,
 			  "metadirectives cannot be used as variants of a "
 			  "%<metadirective%>");
 	  goto error;
 	}
-      if (omp_directive->kind == C_OMP_DIR_DECLARATIVE)
+      만약 (omp_directive->kind == C_OMP_DIR_DECLARATIVE)
 	{
 	  sorry_at (loc, "declarative directive variants of a "
 			 "%<metadirective%> are not supported");
 	  goto error;
 	}
-      if (omp_directive->kind == C_OMP_DIR_CONSTRUCT)
+      만약 (omp_directive->kind == C_OMP_DIR_CONSTRUCT)
 	requires_body = true;
 
-      if (!skip)
+      만약 (!skip)
 	{
 	  c_token pragma_token;
 	  pragma_token.type = CPP_PRAGMA;
@@ -31009,8 +31009,8 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	}
 
       /* Read in tokens for the directive clauses.  */
-      int nesting_depth = 0;
-      while (1)
+      정수 nesting_depth = 0;
+      동안 (1)
 	{
 	  c_token *token = c_parser_peek_token (parser);
 	  switch (token->type)
@@ -31022,7 +31022,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	      ++nesting_depth;
 	      goto add;
 	    case CPP_CLOSE_PAREN:
-	      if (nesting_depth-- == 0)
+	      만약 (nesting_depth-- == 0)
 		{
 		  c_parser_consume_token (parser);
 		  break;
@@ -31030,7 +31030,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	      goto add;
 	    default:
 	    add:
-	      if (!skip)
+	      만약 (!skip)
 		directive_tokens.safe_push (*token);
 	      c_parser_consume_token (parser);
 	      continue;
@@ -31038,7 +31038,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 	  break;
 	}
 
-      if (!skip)
+      만약 (!skip)
 	{
 	  c_token eol_token;
 	  memset (&eol_token, 0, sizeof (eol_token));
@@ -31050,16 +31050,16 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 
   /* If only one selector matches and it evaluates to 'omp nothing', no need to
      proceed.  */
-  if (ctxs.length () == 1)
+  만약 (ctxs.length () == 1)
     {
       tree ctx = ctxs[0];
-      if (ctx == NULL_TREE
+      만약 (ctx == NULL_TREE
 	  || (omp_context_selector_matches (ctx, NULL_TREE, false) == 1
 	      && directive_tokens[0].pragma_kind == PRAGMA_OMP_NOTHING))
-	return;
+	반환;
     }
 
-  if (!default_seen)
+  만약 (!default_seen)
     {
       /* Add a default clause that evaluates to 'omp nothing'.  */
       const struct c_omp_directive *omp_directive
@@ -31080,7 +31080,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       directive_tokens.safe_push (eol_token);
     }
 
-  if (requires_body)
+  만약 (requires_body)
     analyze_metadirective_body (parser, body_tokens, body_labels);
 
   /* Process each candidate directive.  */
@@ -31094,11 +31094,11 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       /* Add the directive tokens.  */
       do
 	tokens.safe_push (directive_tokens [directive_token_idx++]);
-      while (tokens.last ().type != CPP_PRAGMA_EOL);
+      동안 (tokens.last ().type != CPP_PRAGMA_EOL);
 
       /* Add the body tokens.  */
       gcc_assert (requires_body || body_tokens.is_empty ());
-      for (unsigned j = 0; j < body_tokens.length (); j++)
+      위해 (unsigned j = 0; j < body_tokens.length (); j++)
 	tokens.safe_push (body_tokens[j]);
 
       /* Make sure nothing tries to read past the end of the tokens.  */
@@ -31108,7 +31108,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       tokens.safe_push (eof_token);
       tokens.safe_push (eof_token);
 
-      unsigned int old_tokens_avail = parser->tokens_avail;
+      unsigned 정수 old_tokens_avail = parser->tokens_avail;
       c_token *old_tokens = parser->tokens;
       struct omp_attribute_pragma_state *old_in_omp_attribute_pragma
 	= parser->in_omp_attribute_pragma;
@@ -31124,7 +31124,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       parser->in_omp_attribute_pragma = NULL;
       parser->omp_metadirective_state = &new_state;
 
-      int prev_errorcount = errorcount;
+      정수 prev_errorcount = errorcount;
       tree directive = c_begin_compound_stmt (true);
 
       c_parser_pragma (parser, pragma_compound, if_p, NULL_TREE);
@@ -31132,17 +31132,17 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
       bool standalone_p
 	= directives[i]->kind == C_OMP_DIR_STANDALONE
 	  || directives[i]->kind == C_OMP_DIR_UTILITY;
-      if (standalone_p && requires_body)
+      만약 (standalone_p && requires_body)
 	{
 	  /* Parsing standalone directives will not consume the body
 	     tokens, so do that here.  */
-	  if (standalone_body == NULL_TREE)
+	  만약 (standalone_body == NULL_TREE)
 	    {
 	      standalone_body = push_stmt_list ();
 	      c_parser_statement (parser, if_p); // TODO skip this
 	      standalone_body = pop_stmt_list (standalone_body);
 	    }
-	  else
+	  아니면
 	    c_parser_skip_to_end_of_block_or_statement (parser, true);
 	}
 
@@ -31153,7 +31153,7 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 
       /* Check that all valid tokens have been consumed if no parse errors
 	 encountered.  */
-      if (errorcount == prev_errorcount)
+      만약 (errorcount == prev_errorcount)
 	{
 	  gcc_assert (parser->tokens_avail == 2);
 	  gcc_assert (c_parser_next_token_is (parser, CPP_EOF));
@@ -31168,15 +31168,15 @@ c_parser_omp_metadirective (c_parser *parser, bool *if_p)
 
   /* Try to resolve the metadirective early.  */
   candidates = omp_early_resolve_metadirective (ret);
-  if (!candidates.is_empty ())
+  만약 (!candidates.is_empty ())
     ret = c_omp_expand_variant_construct (candidates);
 
   add_stmt (ret);
-  return;
+  반환;
 
 error:
   /* Skip the metadirective pragma.  Do not skip the metadirective body.  */
-  if (parser->in_pragma)
+  만약 (parser->in_pragma)
     c_parser_skip_to_pragma_eol (parser, false);
 }
 
@@ -31199,7 +31199,7 @@ c_parser_omp_construct (c_parser *parser, bool *if_p)
     {
     case PRAGMA_OACC_ATOMIC:
       c_parser_omp_atomic (loc, parser, true);
-      return;
+      반환;
     case PRAGMA_OACC_CACHE:
       strcpy (p_name, "#pragma acc");
       stmt = c_parser_oacc_cache (loc, parser);
@@ -31226,7 +31226,7 @@ c_parser_omp_construct (c_parser *parser, bool *if_p)
       break;
     case PRAGMA_OMP_ATOMIC:
       c_parser_omp_atomic (loc, parser, false);
-      return;
+      반환;
     case PRAGMA_OMP_CRITICAL:
       stmt = c_parser_omp_critical (loc, parser, if_p);
       break;
@@ -31285,7 +31285,7 @@ c_parser_omp_construct (c_parser *parser, bool *if_p)
       break;
     case PRAGMA_OMP_ASSUME:
       c_parser_omp_assume (parser, if_p);
-      return;
+      반환;
     case PRAGMA_OMP_TILE:
       stmt = c_parser_omp_tile (loc, parser, if_p);
       break;
@@ -31299,7 +31299,7 @@ c_parser_omp_construct (c_parser *parser, bool *if_p)
       gcc_unreachable ();
     }
 
-  if (stmt && stmt != error_mark_node)
+  만약 (stmt && stmt != error_mark_node)
     gcc_assert (EXPR_LOCATION (stmt) != UNKNOWN_LOCATION);
 }
 
@@ -31337,32 +31337,32 @@ c_parser_omp_threadprivate (c_parser *parser)
   vars = c_parser_omp_var_list_parens (parser, OMP_CLAUSE_ERROR, NULL);
 
   /* Mark every variable in VARS to be assigned thread local storage.  */
-  for (t = vars; t; t = TREE_CHAIN (t))
+  위해 (t = vars; t; t = TREE_CHAIN (t))
     {
       tree v = TREE_PURPOSE (t);
       loc = EXPR_LOCATION (TREE_VALUE (t));
 
       /* If V had already been marked threadprivate, it doesn't matter
 	 whether it had been used prior to this point.  */
-      if (!VAR_P (v))
+      만약 (!VAR_P (v))
 	error_at (loc, "%qD is not a variable", v);
-      else if (TREE_USED (v) && !C_DECL_THREADPRIVATE_P (v))
+      아니면 만약 (TREE_USED (v) && !C_DECL_THREADPRIVATE_P (v))
 	error_at (loc, "%qE declared %<threadprivate%> after first use", v);
-      else if (! is_global_var (v))
+      아니면 만약 (! is_global_var (v))
 	error_at (loc, "automatic variable %qE cannot be %<threadprivate%>", v);
-      else if (TREE_TYPE (v) == error_mark_node)
+      아니면 만약 (TREE_TYPE (v) == error_mark_node)
 	;
-      else if (! COMPLETE_TYPE_P (TREE_TYPE (v)))
+      아니면 만약 (! COMPLETE_TYPE_P (TREE_TYPE (v)))
 	error_at (loc, "%<threadprivate%> %qE has incomplete type", v);
-      else
+      아니면
 	{
-	  if (! DECL_THREAD_LOCAL_P (v))
+	  만약 (! DECL_THREAD_LOCAL_P (v))
 	    {
 	      set_decl_tls_model (v, decl_default_tls_model (v));
 	      /* If rtl has been already set for this var, call
 		 make_decl_rtl once again, so that encode_section_info
 		 has a chance to look at the new decl flags.  */
-	      if (DECL_RTL_SET_P (v))
+	      만약 (DECL_RTL_SET_P (v))
 		make_decl_rtl (v);
 	    }
 	  C_DECL_THREADPRIVATE_P (v) = 1;
@@ -31382,12 +31382,12 @@ c_parser_omp_threadprivate (c_parser *parser)
 static tree
 c_parser_transaction_attributes (c_parser *parser)
 {
-  if (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
-    return c_parser_gnu_attributes (parser);
+  만약 (c_parser_next_token_is_keyword (parser, RID_ATTRIBUTE))
+    반환 c_parser_gnu_attributes (parser);
 
-  if (!c_parser_next_token_is (parser, CPP_OPEN_SQUARE))
-    return NULL_TREE;
-  return c_parser_std_attribute_specifier (parser, true);
+  만약 (!c_parser_next_token_is (parser, CPP_OPEN_SQUARE))
+    반환 NULL_TREE;
+  반환 c_parser_std_attribute_specifier (parser, true);
 }
 
 /* Parse a __transaction_atomic or __transaction_relaxed statement
@@ -31403,8 +31403,8 @@ c_parser_transaction_attributes (c_parser *parser)
 static tree
 c_parser_transaction (c_parser *parser, enum rid keyword)
 {
-  unsigned int old_in = parser->in_transaction;
-  unsigned int this_in = 1, new_in;
+  unsigned 정수 old_in = parser->in_transaction;
+  unsigned 정수 this_in = 1, new_in;
   location_t loc = c_parser_peek_token (parser)->location;
   tree stmt, attrs;
 
@@ -31413,12 +31413,12 @@ c_parser_transaction (c_parser *parser, enum rid keyword)
       && c_parser_next_token_is_keyword (parser, keyword));
   c_parser_consume_token (parser);
 
-  if (keyword == RID_TRANSACTION_RELAXED)
+  만약 (keyword == RID_TRANSACTION_RELAXED)
     this_in |= TM_STMT_ATTR_RELAXED;
-  else
+  아니면
     {
       attrs = c_parser_transaction_attributes (parser);
-      if (attrs)
+      만약 (attrs)
 	this_in |= parse_tm_stmt_attr (attrs, TM_STMT_ATTR_OUTER);
     }
 
@@ -31429,9 +31429,9 @@ c_parser_transaction (c_parser *parser, enum rid keyword)
   stmt = c_parser_compound_statement (parser);
   parser->in_transaction = old_in;
 
-  if (flag_tm)
+  만약 (flag_tm)
     stmt = c_finish_transaction (loc, stmt, this_in);
-  else
+  아니면
     error_at (loc,
 	      keyword == RID_TRANSACTION_ATOMIC
 	      ? G_("%<__transaction_atomic%> without transactional memory "
@@ -31439,7 +31439,7 @@ c_parser_transaction (c_parser *parser, enum rid keyword)
 	      : G_("%<__transaction_relaxed%> without transactional memory "
 		   "support enabled"));
 
-  return stmt;
+  반환 stmt;
 }
 
 /* Parse a __transaction_atomic or __transaction_relaxed expression
@@ -31454,8 +31454,8 @@ static struct c_expr
 c_parser_transaction_expression (c_parser *parser, enum rid keyword)
 {
   struct c_expr ret;
-  unsigned int old_in = parser->in_transaction;
-  unsigned int this_in = 1;
+  unsigned 정수 old_in = parser->in_transaction;
+  unsigned 정수 this_in = 1;
   location_t loc = c_parser_peek_token (parser)->location;
   tree attrs;
 
@@ -31464,34 +31464,34 @@ c_parser_transaction_expression (c_parser *parser, enum rid keyword)
       && c_parser_next_token_is_keyword (parser, keyword));
   c_parser_consume_token (parser);
 
-  if (keyword == RID_TRANSACTION_RELAXED)
+  만약 (keyword == RID_TRANSACTION_RELAXED)
     this_in |= TM_STMT_ATTR_RELAXED;
-  else
+  아니면
     {
       attrs = c_parser_transaction_attributes (parser);
-      if (attrs)
+      만약 (attrs)
 	this_in |= parse_tm_stmt_attr (attrs, 0);
     }
 
   parser->in_transaction = this_in;
   matching_parens parens;
-  if (parens.require_open (parser))
+  만약 (parens.require_open (parser))
     {
       tree expr = c_parser_expression (parser).value;
       ret.original_type = TREE_TYPE (expr);
       ret.value = build1 (TRANSACTION_EXPR, ret.original_type, expr);
-      if (this_in & TM_STMT_ATTR_RELAXED)
+      만약 (this_in & TM_STMT_ATTR_RELAXED)
 	TRANSACTION_EXPR_RELAXED (ret.value) = 1;
       SET_EXPR_LOCATION (ret.value, loc);
       ret.original_code = TRANSACTION_EXPR;
       ret.m_decimal = 0;
-      if (!parens.require_close (parser))
+      만약 (!parens.require_close (parser))
 	{
 	  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, NULL);
 	  goto error;
 	}
     }
-  else
+  아니면
     {
      error:
       ret.set_error ();
@@ -31500,7 +31500,7 @@ c_parser_transaction_expression (c_parser *parser, enum rid keyword)
     }
   parser->in_transaction = old_in;
 
-  if (!flag_tm)
+  만약 (!flag_tm)
     error_at (loc,
 	      keyword == RID_TRANSACTION_ATOMIC
 	      ? G_("%<__transaction_atomic%> without transactional memory "
@@ -31510,7 +31510,7 @@ c_parser_transaction_expression (c_parser *parser, enum rid keyword)
 
   set_c_expr_source_range (&ret, loc, loc);
 
-  return ret;
+  반환 ret;
 }
 
 /* Parse a __transaction_cancel statement (GCC Extension).
@@ -31532,24 +31532,24 @@ c_parser_transaction_cancel (c_parser *parser)
   c_parser_consume_token (parser);
 
   attrs = c_parser_transaction_attributes (parser);
-  if (attrs)
+  만약 (attrs)
     is_outer = (parse_tm_stmt_attr (attrs, TM_STMT_ATTR_OUTER) != 0);
 
-  if (!flag_tm)
+  만약 (!flag_tm)
     {
       error_at (loc, "%<__transaction_cancel%> without "
 		"transactional memory support enabled");
       goto ret_error;
     }
-  else if (parser->in_transaction & TM_STMT_ATTR_RELAXED)
+  아니면 만약 (parser->in_transaction & TM_STMT_ATTR_RELAXED)
     {
       error_at (loc, "%<__transaction_cancel%> within a "
 		"%<__transaction_relaxed%>");
       goto ret_error;
     }
-  else if (is_outer)
+  아니면 만약 (is_outer)
     {
-      if ((parser->in_transaction & TM_STMT_ATTR_OUTER) == 0
+      만약 ((parser->in_transaction & TM_STMT_ATTR_OUTER) == 0
 	  && !is_tm_may_cancel_outer (current_function_decl))
 	{
 	  error_at (loc, "outer %<__transaction_cancel%> not "
@@ -31558,17 +31558,17 @@ c_parser_transaction_cancel (c_parser *parser)
 	  goto ret_error;
 	}
     }
-  else if (parser->in_transaction == 0)
+  아니면 만약 (parser->in_transaction == 0)
     {
       error_at (loc, "%<__transaction_cancel%> not within "
 		"%<__transaction_atomic%>");
       goto ret_error;
     }
 
-  return add_stmt (build_tm_abort_call (loc, is_outer));
+  반환 add_stmt (build_tm_abort_call (loc, is_outer));
 
  ret_error:
-  return build1 (NOP_EXPR, void_type_node, error_mark_node);
+  반환 build1 (NOP_EXPR, void_type_node, error_mark_node);
 }
 
 /* Parse a single source file.  */
@@ -31586,18 +31586,18 @@ c_parse_file (void)
   tparser.tokens = &tparser.tokens_buf[0];
   the_parser = &tparser;
 
-  if (c_parser_peek_token (&tparser)->pragma_kind == PRAGMA_GCC_PCH_PREPROCESS)
+  만약 (c_parser_peek_token (&tparser)->pragma_kind == PRAGMA_GCC_PCH_PREPROCESS)
     c_parser_pragma_pch_preprocess (&tparser);
-  else
+  아니면
     c_common_no_more_pch ();
 
   the_parser = ggc_alloc<c_parser> ();
   *the_parser = tparser;
-  if (tparser.tokens == &tparser.tokens_buf[0])
+  만약 (tparser.tokens == &tparser.tokens_buf[0])
     the_parser->tokens = &the_parser->tokens_buf[0];
 
   /* Initialize EH, if we've been told to do so.  */
-  if (flag_exceptions)
+  만약 (flag_exceptions)
     using_eh_for_cleanups ();
 
   c_parser_translation_unit (the_parser);
@@ -31630,18 +31630,18 @@ c_init_preprocess (void)
 location_t
 c_parser_parse_rtl_body (c_parser *parser, char *start_with_pass)
 {
-  if (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+  만약 (!c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
     {
       free (start_with_pass);
-      return c_parser_peek_token (parser)->location;
+      반환 c_parser_peek_token (parser)->location;
     }
 
   location_t start_loc = c_parser_peek_token (parser)->location;
 
   /* Consume all tokens, up to the closing brace, handling
      matching pairs of braces in the rtl dump.  */
-  int num_open_braces = 1;
-  while (1)
+  정수 num_open_braces = 1;
+  동안 (1)
     {
       switch (c_parser_peek_token (parser)->type)
 	{
@@ -31649,13 +31649,13 @@ c_parser_parse_rtl_body (c_parser *parser, char *start_with_pass)
 	  num_open_braces++;
 	  break;
 	case CPP_CLOSE_BRACE:
-	  if (--num_open_braces == 0)
+	  만약 (--num_open_braces == 0)
 	    goto found_closing_brace;
 	  break;
 	case CPP_EOF:
 	  error_at (start_loc, "no closing brace");
 	  free (start_with_pass);
-	  return c_parser_peek_token (parser)->location;
+	  반환 c_parser_peek_token (parser)->location;
 	default:
 	  break;
 	}
@@ -31670,16 +31670,16 @@ c_parser_parse_rtl_body (c_parser *parser, char *start_with_pass)
   c_parser_consume_token (parser);
 
   /* Invoke the RTL parser.  */
-  if (!read_rtl_function_body_from_file_range (start_loc, end_loc))
+  만약 (!read_rtl_function_body_from_file_range (start_loc, end_loc))
     {
       free (start_with_pass);
-      return end_loc;
+      반환 end_loc;
     }
 
  /*  Run the backend on the cfun created above, transferring ownership of
      START_WITH_PASS.  */
   run_rtl_passes (start_with_pass);
-  return end_loc;
+  반환 end_loc;
 }
 
 #include "gt-c-c-parser.h"
