@@ -206,15 +206,15 @@ struct c_expr
 
   /* Access to the first and last locations within the source spelling
      of this expression.  */
-  location_t get_start () const { return src_range.m_start; }
-  location_t get_finish () const { return src_range.m_finish; }
+  location_t get_start () const { 戻る src_range.m_start; }
+  location_t get_finish () const { 戻る src_range.m_finish; }
 
   location_t get_location () const
   {
-    if (EXPR_HAS_LOCATION (value))
-      return EXPR_LOCATION (value);
-    else
-      return make_location (get_start (), get_start (), get_finish ());
+    もし (EXPR_HAS_LOCATION (value))
+      戻る EXPR_LOCATION (value);
+    否则
+      戻る make_location (get_start (), get_start (), get_finish ());
   }
 
   /* Set the value to error_mark_node whilst ensuring that src_range
@@ -396,16 +396,16 @@ struct c_declspecs {
   /* The base-2 log of the greatest alignment required by an _Alignas
      specifier, in bytes, or -1 if no such specifiers with nonzero
      alignment.  */
-  int align_log;
+  整数 align_log;
   union {
     /* For the __intN declspec, this stores the index into the int_n_*
        arrays.  */
-    int int_n_idx;
+    整数 int_n_idx;
     /* For the _FloatN and _FloatNx declspec, this stores the index into
        the floatn_nx_types array.  */
-    int floatn_nx_idx;
+    整数 floatn_nx_idx;
     /* For _BitInt(N) this stores the N.  */
-    int bitint_prec;
+    整数 bitint_prec;
   } u;
   /* The storage class specifier, or csc_none if none.  */
   enum c_storage_class storage_class;
@@ -567,7 +567,7 @@ struct c_declarator {
       /* The array dimension, or NULL for [] and [*].  */
       tree dimen;
       /* The qualifiers inside [].  */
-      int quals;
+      整数 quals;
       /* The attributes (currently ignored) inside [].  */
       tree attrs;
       /* Whether [static] was used.  */
@@ -576,7 +576,7 @@ struct c_declarator {
       bool vla_unspec_p : 1;
     } array;
     /* For pointers, the qualifiers on the pointer type.  */
-    int pointer_quals;
+    整数 pointer_quals;
     /* For attributes.  */
     tree attrs;
   } u;
@@ -613,7 +613,7 @@ struct c_enum_contents
   tree enum_type;
 
   /* Nonzero means that there was overflow computing enum_next_value.  */
-  int enum_overflow;
+  整数 enum_overflow;
 };
 
 /* A type of reference to a static identifier in an inline
@@ -634,7 +634,7 @@ struct maybe_used_decl
   /* The decl.  */
   tree decl;
   /* The level seen at (in_sizeof + in_typeof + in_countof + in_generic).  */
-  int level;
+  整数 level;
   /* Seen in address-of.  */
   bool address;
   /* The next one at this level or above, or NULL.  */
@@ -648,7 +648,7 @@ extern void c_parse_init (void);
 extern bool c_keyword_starts_typename (enum rid keyword);
 
 /* in c-aux-info.cc */
-extern void gen_aux_info_record (tree, int, int, int);
+extern void gen_aux_info_record (tree, 整数, 整数, 整数);
 
 /* in c-decl.cc */
 struct c_spot_bindings;
@@ -673,8 +673,8 @@ extern bool switch_statement_break_seen_p;
 
 extern bool global_bindings_p (void);
 extern tree pushdecl (tree);
-extern unsigned int start_underspecified_init (location_t, tree);
-extern void finish_underspecified_init (tree, unsigned int);
+extern unsigned 整数 start_underspecified_init (location_t, tree);
+extern void finish_underspecified_init (tree, unsigned 整数);
 extern void push_scope (void);
 extern tree pop_scope (void);
 extern void c_mark_decl_jump_unsafe_in_current_scope ();
@@ -684,8 +684,8 @@ extern void c_bindings_end_stmt_expr (struct c_spot_bindings *);
 extern void record_inline_static (location_t, tree, tree,
 				  enum c_inline_static_type);
 extern void c_init_decl_processing (void);
-extern void c_print_identifier (FILE *, tree, int);
-extern int quals_from_declspecs (const struct c_declspecs *);
+extern void c_print_identifier (FILE *, tree, 整数);
+extern 整数 quals_from_declspecs (const struct c_declspecs *);
 extern struct c_declarator *build_array_declarator (location_t, tree,
     						    struct c_declspecs *,
 						    bool, bool);
@@ -733,7 +733,7 @@ extern tree c_simulate_builtin_function_decl (tree);
 extern void c_warn_unused_attributes (tree);
 extern tree c_warn_type_attributes (tree, tree);
 extern void shadow_tag (const struct c_declspecs *);
-extern void shadow_tag_warned (const struct c_declspecs *, int);
+extern void shadow_tag_warned (const struct c_declspecs *, 整数);
 extern tree start_enum (location_t, struct c_enum_contents *, tree, tree,
 			bool potential_nesting_p);
 extern bool start_function (struct c_declspecs *, struct c_declarator *, tree);
@@ -774,8 +774,8 @@ extern struct c_declspecs *declspecs_add_alignas (location_t,
 						  struct c_declspecs *, tree);
 extern struct c_declspecs *finish_declspecs (struct c_declspecs *);
 extern size_t c_tree_size (enum tree_code);
-extern int c_get_loop_names (tree, bool, tree *);
-extern void c_release_loop_names (int);
+extern 整数 c_get_loop_names (tree, bool, tree *);
+extern void c_release_loop_names (整数);
 extern tree c_finish_bc_name (location_t, tree, bool);
 
 /* in c-objc-common.cc */
@@ -785,15 +785,15 @@ extern bool c_warn_unused_global_decl (const_tree);
 extern void c_initialize_diagnostics (diagnostics::context *);
 extern bool c_var_mod_p (tree x, tree fn);
 extern alias_set_type c_get_alias_set (tree);
-extern int c_type_dwarf_attribute (const_tree, int);
+extern 整数 c_type_dwarf_attribute (const_tree, 整数);
 extern tree c_enum_underlying_base_type (const_tree);
 
 /* in c-typeck.cc */
-extern int in_alignof;
-extern int in_sizeof;
-extern int in_countof;
-extern int in_typeof;
-extern int in_generic;
+extern 整数 in_alignof;
+extern 整数 in_sizeof;
+extern 整数 in_countof;
+extern 整数 in_typeof;
+extern 整数 in_generic;
 extern bool c_in_omp_for;
 extern bool c_omp_array_section_p;
 
@@ -808,11 +808,11 @@ extern bool null_pointer_constant_p (const_tree);
 inline bool
 c_type_variably_modified_p (tree t)
 {
-  if (error_mark_node == t)
-    return false;
-  if (C_TYPE_VARIABLY_MODIFIED (t))
-    return true;
-  if (TYPE_STRUCTURAL_EQUALITY_P (t))
+  もし (error_mark_node == t)
+    戻る false;
+  もし (C_TYPE_VARIABLY_MODIFIED (t))
+    戻る true;
+  もし (TYPE_STRUCTURAL_EQUALITY_P (t))
     {
       /* The flag may not have been set yet because of incomplete
 	 structure or union types completed later.  */
@@ -822,23 +822,23 @@ c_type_variably_modified_p (tree t)
 	case FUNCTION_TYPE:
 	case POINTER_TYPE:
 	  /* Recurse.  */
-	  if (c_type_variably_modified_p (TREE_TYPE (t)))
+	  もし (c_type_variably_modified_p (TREE_TYPE (t)))
 	    {
 	      C_TYPE_VARIABLY_MODIFIED (t) = 1;
-	      return true;
+	      戻る true;
 	    }
 	  break;
 	default:
 	  break;
 	}
     }
-  return false;
+  戻る false;
 }
 
 inline bool
 c_type_unspecified_p (tree t)
 {
-  return error_mark_node != t
+  戻る error_mark_node != t
 	 && C_TYPE_VARIABLE_SIZE (t) && TREE_CODE (t) == ARRAY_TYPE
 	 && TYPE_DOMAIN (t) && TYPE_MAX_VALUE (TYPE_DOMAIN (t))
 	 && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (t))) == COMPOUND_EXPR
@@ -903,8 +903,8 @@ extern void start_init (tree, tree, bool, bool, rich_location *);
 extern void finish_init (void);
 extern void really_start_incremental_init (tree);
 extern void finish_implicit_inits (location_t, struct obstack *);
-extern void push_init_level (location_t, int, struct obstack *);
-extern struct c_expr pop_init_level (location_t, int, struct obstack *,
+extern void push_init_level (location_t, 整数, struct obstack *);
+extern struct c_expr pop_init_level (location_t, 整数, struct obstack *,
 				     location_t);
 extern void set_init_index (location_t, tree, tree, struct obstack *);
 extern void set_init_label (location_t, tree, location_t, struct obstack *);
@@ -912,14 +912,14 @@ unsigned c_maybe_optimize_large_byte_initializer (void);
 extern void process_init_element (location_t, struct c_expr, bool,
 				  struct obstack *);
 extern tree build_compound_literal (location_t, tree, tree, bool,
-				    unsigned int, struct c_declspecs *);
+				    unsigned 整数, struct c_declspecs *);
 extern void check_compound_literal_type (location_t, struct c_type_name *);
 extern tree c_start_switch (location_t, location_t, tree, bool, tree);
 extern void c_finish_switch (tree, tree);
 extern tree build_asm_expr (location_t, tree, tree, tree, tree, tree, bool,
 			    bool);
 extern tree build_asm_stmt (bool, tree);
-extern int c_types_compatible_p (tree, tree);
+extern 整数 c_types_compatible_p (tree, tree);
 extern tree c_begin_compound_stmt (bool);
 extern tree c_end_compound_stmt (location_t, tree, bool);
 extern void c_finish_if_stmt (location_t, tree, tree, tree);
@@ -949,7 +949,7 @@ extern tree c_omp_mapper_lookup (tree, tree);
 extern tree c_omp_extract_mapper_directive (tree);
 extern tree c_omp_map_array_section (location_t, tree);
 extern tree c_build_va_arg (location_t, tree, location_t, tree, tree);
-extern tree c_finish_transaction (location_t, tree, int);
+extern tree c_finish_transaction (location_t, tree, 整数);
 extern bool c_tree_equal (tree, tree);
 extern tree c_build_function_call_vec (location_t, const vec<location_t>&,
 				       tree, vec<tree, va_gc> *,
@@ -968,17 +968,17 @@ extern tree c_build_pointer_type_for_mode (tree type, machine_mode mode, bool m)
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement that specifies a return value is seen.  */
 
-extern int current_function_returns_value;
+extern 整数 current_function_returns_value;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement with no argument is seen.  */
 
-extern int current_function_returns_null;
+extern 整数 current_function_returns_null;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a call to a noreturn function is seen.  */
 
-extern int current_function_returns_abnormally;
+extern 整数 current_function_returns_abnormally;
 
 /* In c-decl.cc */
 
@@ -1007,7 +1007,7 @@ extern void c_finish_incomplete_decl (tree);
 extern tree c_omp_reduction_id (enum tree_code, tree);
 extern tree c_omp_reduction_decl (tree);
 extern tree c_omp_reduction_lookup (tree, tree);
-extern tree c_check_omp_declare_reduction_r (tree *, int *, void *);
+extern tree c_check_omp_declare_reduction_r (tree *, 整数 *, void *);
 extern tree c_omp_mapper_id (tree);
 extern tree c_omp_mapper_decl (tree);
 extern void c_omp_scan_mapper_bindings (location_t, tree *, tree);
@@ -1045,7 +1045,7 @@ extern const char *c_get_sarif_source_language (const char *filename);
 
 extern const struct scoped_attribute_specs std_attribute_table;
 
-#if CHECKING_P
+#もし CHECKING_P
 namespace selftest {
   extern void run_c_tests (void);
 } // namespace selftest
