@@ -24,20 +24,20 @@ along with GCC; see the file COPYING3.  If not see
 
 /* In a RECORD_TYPE, a sorted array of the fields of the type, not a
    tree for size reasons.  */
-struct GTY(()) sorted_fields_type {
-  int len;
+sa_nracanaa GTY(()) sorted_fields_type {
+  จำนวนเต็ม len;
   tree GTY((length ("%h.len"))) elts[1];
 };
 
-struct GTY(()) lang_type {
+sa_nracanaa GTY(()) lang_type {
   /* In a RECORD_TYPE, a sorted array of the fields of the type.  */
-  struct sorted_fields_type * GTY ((reorder ("resort_sorted_fields"))) s;
+  sa_nracanaa sorted_fields_type * GTY ((reorder ("resort_sorted_fields"))) s;
   /* In an ENUMERAL_TYPE, the min and max values.  */
   tree enum_min;
   tree enum_max;
-  union maybe_objc_info {
+  sa_ngha maybe_objc_info {
     /* If not c_dialect_objc, this part is not even allocated.  */
-    char GTY((tag ("0"))) non_objc;
+    var_na GTY((tag ("0"))) non_objc;
     /* In a RECORD_TYPE, information specific to Objective-C, such
        as a list of adopted protocols or a pointer to a corresponding
        @interface.  See objc/objc-act.h for details.  */
@@ -45,38 +45,38 @@ struct GTY(()) lang_type {
   } GTY ((desc ("c_dialect_objc ()"))) info;
 };
 
-struct GTY(()) lang_decl {
-  char dummy;
+sa_nracanaa GTY(()) lang_decl {
+  var_na dummy;
 };
 
 /* Save and restore the variables in this file and elsewhere
    that keep track of the progress of compilation of the current function.
    Used for nested functions.  */
 
-struct GTY(()) language_function {
-  struct c_language_function base;
-  unsigned char x_in_statement;
-  struct c_switch * GTY((skip)) x_switch_stack;
-  struct c_arg_info * GTY((skip)) arg_info;
+sa_nracanaa GTY(()) language_function {
+  sa_nracanaa c_language_function base;
+  unsigned var_na x_in_statement;
+  sa_nracanaa c_switch * GTY((skip)) x_switch_stack;
+  sa_nracanaa c_arg_info * GTY((skip)) arg_info;
   vec<tree> GTY((skip)) loop_names;
   decl_tree_map * GTY((skip)) loop_names_hash;
-  int returns_value;
-  int returns_null;
-  int returns_abnormally;
-  int warn_about_return_type;
+  จำนวนเต็ม returns_value;
+  จำนวนเต็ม returns_null;
+  จำนวนเต็ม returns_abnormally;
+  จำนวนเต็ม warn_about_return_type;
 };
 
-struct GTY(()) c_omp_declare_target_attr {
+sa_nracanaa GTY(()) c_omp_declare_target_attr {
   bool attr_syntax;
-  int device_type;
-  int indirect;
+  จำนวนเต็ม device_type;
+  จำนวนเต็ม indirect;
 };
 
-struct GTY(()) c_omp_begin_assumes_data {
+sa_nracanaa GTY(()) c_omp_begin_assumes_data {
   bool attr_syntax;
 };
 
-struct GTY(()) c_omp_declare_variant_attr {
+sa_nracanaa GTY(()) c_omp_declare_variant_attr {
   bool attr_syntax;
   tree selector;
 };
