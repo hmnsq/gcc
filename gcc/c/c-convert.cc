@@ -23,17 +23,17 @@ along with GCC; see the file COPYING3.  If not see
    Every language front end must have a `convert' function
    but what kind of conversions it does will depend on the language.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "c-tree.h"
-#include "convert.h"
-#include "langhooks.h"
-#include "ubsan.h"
-#include "stringpool.h"
-#include "attribs.h"
-#include "asan.h"
+#ضمن "config.h"
+#ضمن "system.h"
+#ضمن "coretypes.h"
+#ضمن "target.h"
+#ضمن "c-tree.h"
+#ضمن "convert.h"
+#ضمن "langhooks.h"
+#ضمن "ubsan.h"
+#ضمن "stringpool.h"
+#ضمن "attribs.h"
+#ضمن "asan.h"
 
 /* Change of width--truncation and extension of integers or reals--
    is represented with NOP_EXPR.  Proper functioning of many things
@@ -65,181 +65,181 @@ along with GCC; see the file COPYING3.  If not see
    initializer and folding must apply accordingly (discarding floating-point
    exceptions and assuming the default rounding mode is in effect).  */
 
-static tree
-c_convert (tree type, tree expr, bool init_const)
+ساكن درەخت
+c_convert (درەخت type, درەخت دەربڕین, منطقي init_const)
 {
-  tree e = expr;
-  enum tree_code code = TREE_CODE (type);
-  const char *invalid_conv_diag;
-  tree ret;
-  location_t loc = EXPR_LOCATION (expr);
+  درەخت e = دەربڕین;
+  تعداد درەخت_code code = درەخت_CODE (type);
+  ثابت حرف *invalid_conv_diag;
+  درەخت ret;
+  location_t loc = دەربڕین_LOCATION (دەربڕین);
 
-  if (type == error_mark_node
-      || error_operand_p (expr))
-    return error_mark_node;
+  إذا (type == error_mark_گرێ
+      || error_operand_p (دەربڕین))
+    أرجع error_mark_گرێ;
 
-  if ((invalid_conv_diag
-       = targetm.invalid_conversion (TREE_TYPE (expr), type)))
+  إذا ((invalid_conv_diag
+       = targetm.invalid_conversion (درەخت_TYPE (دەربڕین), type)))
     {
       error (invalid_conv_diag);
-      return error_mark_node;
+      أرجع error_mark_گرێ;
     }
 
-  if (type == TREE_TYPE (expr))
-    return expr;
-  ret = targetm.convert_to_type (type, expr);
-  if (ret)
-      return ret;
+  إذا (type == درەخت_TYPE (دەربڕین))
+    أرجع دەربڕین;
+  ret = targetm.convert_to_type (type, دەربڕین);
+  إذا (ret)
+      أرجع ret;
 
   STRIP_TYPE_NOPS (e);
 
-  if (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (TREE_TYPE (expr))
-      && (TREE_CODE (TREE_TYPE (expr)) != COMPLEX_TYPE
-	  || TREE_CODE (e) == COMPLEX_EXPR))
-    return fold_convert_loc (loc, type, expr);
-  if (TREE_CODE (TREE_TYPE (expr)) == ERROR_MARK)
-    return error_mark_node;
-  if (VOID_TYPE_P (TREE_TYPE (expr)))
+  إذا (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (درەخت_TYPE (دەربڕین))
+      && (درەخت_CODE (درەخت_TYPE (دەربڕین)) != COMPLEX_TYPE
+	  || درەخت_CODE (e) == COMPLEX_دەربڕین))
+    أرجع fold_convert_loc (loc, type, دەربڕین);
+  إذا (درەخت_CODE (درەخت_TYPE (دەربڕین)) == ERROR_MARK)
+    أرجع error_mark_گرێ;
+  إذا (VOID_TYPE_P (درەخت_TYPE (دەربڕین)))
     {
       error ("void value not ignored as it ought to be");
-      return error_mark_node;
+      أرجع error_mark_گرێ;
     }
 
   {
-    tree false_value, true_value;
-    if (c_hardbool_type_attr (type, &false_value, &true_value))
+    درەخت false_بەها, true_بەها;
+    إذا (c_hardbool_type_attr (type, &false_بەها, &true_بەها))
       {
-	bool save = in_late_binary_op;
-	in_late_binary_op = true;
-	expr = c_objc_common_truthvalue_conversion (input_location, expr);
-	in_late_binary_op = save;
+	منطقي save = in_late_دووانەیی_op;
+	in_late_دووانەیی_op = true;
+	دەربڕین = c_objc_common_truthvalue_conversion (تێخستن_location, دەربڕین);
+	in_late_دووانەیی_op = save;
 
-	return fold_build3_loc (loc, COND_EXPR, type,
-				expr, true_value, false_value);
+	أرجع fold_build3_loc (loc, COND_دەربڕین, type,
+				دەربڕین, true_بەها, false_بەها);
       }
   }
 
-  switch (code)
+  بدل (code)
     {
-    case VOID_TYPE:
-      return fold_convert_loc (loc, type, e);
+    حالة VOID_TYPE:
+      أرجع fold_convert_loc (loc, type, e);
 
-    case ENUMERAL_TYPE:
-      if (ENUM_UNDERLYING_TYPE (type) != NULL_TREE
-	  && TREE_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
-	goto convert_to_boolean;
+    حالة ENUMERAL_TYPE:
+      إذا (ENUM_UNDERLYING_TYPE (type) != NULL_درەخت
+	  && درەخت_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
+	اذهب convert_to_boolean;
       gcc_fallthrough ();
 
-    case INTEGER_TYPE:
-    case BITINT_TYPE:
-      if (sanitize_flags_p (SANITIZE_FLOAT_CAST)
-	  && current_function_decl != NULL_TREE
-	  && SCALAR_FLOAT_TYPE_P (TREE_TYPE (expr))
+    حالة INTEGER_TYPE:
+    حالة BITINT_TYPE:
+      إذا (sanitize_flags_p (SANITIZE_FLOAT_CAST)
+	  && current_function_decl != NULL_درەخت
+	  && SCALAR_FLOAT_TYPE_P (درەخت_TYPE (دەربڕین))
 	  && COMPLETE_TYPE_P (type))
 	{
-	  expr = save_expr (expr);
-	  expr = c_fully_fold (expr, init_const, NULL);
-	  tree check = ubsan_instrument_float_cast (loc, type, expr);
-	  expr = fold_build1 (FIX_TRUNC_EXPR, type, expr);
-	  if (check == NULL_TREE)
-	    return expr;
-	  return fold_build2 (COMPOUND_EXPR, TREE_TYPE (expr), check, expr);
+	  دەربڕین = save_دەربڕین (دەربڕین);
+	  دەربڕین = c_fully_fold (دەربڕین, init_const, عدم);
+	  درەخت check = ubsan_instrument_float_cast (loc, type, دەربڕین);
+	  دەربڕین = fold_build1 (FIX_TRUNC_دەربڕین, type, دەربڕین);
+	  إذا (check == NULL_درەخت)
+	    أرجع دەربڕین;
+	  أرجع fold_build2 (COMPOUND_دەربڕین, درەخت_TYPE (دەربڕین), check, دەربڕین);
 	}
       ret = convert_to_integer (type, e);
-      goto maybe_fold;
+      اذهب maybe_fold;
 
-    case BOOLEAN_TYPE:
+    حالة BOOLEAN_TYPE:
     convert_to_boolean:
-      return c_objc_common_truthvalue_conversion (input_location, expr, type);
+      أرجع c_objc_common_truthvalue_conversion (تێخستن_location, دەربڕین, type);
 
-    case POINTER_TYPE:
+    حالة POINTER_TYPE:
       /* The type nullptr_t may be converted to a pointer type.  The result is
 	 a null pointer value.  */
-      if (NULLPTR_TYPE_P (TREE_TYPE (e)))
+      إذا (NULLPTR_TYPE_P (درەخت_TYPE (e)))
 	{
 	  /* To make sure that (void *)nullptr is not a null pointer constant,
 	     build_c_cast will create an additional NOP_EXPR around the result
 	     of this conversion.  */
-	  if (TREE_SIDE_EFFECTS (e))
-	    ret = build2 (COMPOUND_EXPR, type, e, build_int_cst (type, 0));
-	  else
+	  إذا (درەخت_SIDE_EFFECTS (e))
+	    ret = build2 (COMPOUND_دەربڕین, type, e, build_int_cst (type, 0));
+	  وإلا
 	    ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  اذهب maybe_fold;
 	}
       gcc_fallthrough ();
-    case REFERENCE_TYPE:
+    حالة REFERENCE_TYPE:
       ret = convert_to_pointer (type, e);
-      goto maybe_fold;
+      اذهب maybe_fold;
 
-    case NULLPTR_TYPE:
+    حالة NULLPTR_TYPE:
       /* A null pointer constant or value of type nullptr_t may be
 	 converted to nullptr_t.  The latter case has already been
 	 handled.  build_c_cast will create an additional NOP_EXPR to
 	 ensure the result of the conversion is not itself a null
 	 pointer constant.  */
-      if (null_pointer_constant_p (expr))
+      إذا (null_pointer_constant_p (دەربڕین))
 	{
 	  ret = build_int_cst (type, 0);
-	  goto maybe_fold;
+	  اذهب maybe_fold;
 	}
-      break;
+      اكسر;
 
-    case REAL_TYPE:
+    حالة REAL_TYPE:
       ret = convert_to_real (type, e);
-      goto maybe_fold;
+      اذهب maybe_fold;
 
-    case FIXED_POINT_TYPE:
+    حالة FIXED_POINT_TYPE:
       ret = convert_to_fixed (type, e);
-      goto maybe_fold;
+      اذهب maybe_fold;
 
-    case COMPLEX_TYPE:
+    حالة COMPLEX_TYPE:
       ret = convert_to_complex (type, e);
-      goto maybe_fold;
+      اذهب maybe_fold;
 
-    case VECTOR_TYPE:
-      if (gnu_vector_type_p (type)
-	  || gnu_vector_type_p (TREE_TYPE (e))
+    حالة VECTOR_TYPE:
+      إذا (gnu_vector_type_p (type)
+	  || gnu_vector_type_p (درەخت_TYPE (e))
 	  /* Allow conversions between compatible non-GNU vector types
 	     when -flax-vector-conversions is passed.  The whole purpose
 	     of the option is to bend the normal type rules and accept
 	     nonconforming code.  */
 	  || (flag_lax_vector_conversions
-	      && VECTOR_TYPE_P (TREE_TYPE (e))
-	      && vector_types_convertible_p (type, TREE_TYPE (e), false)))
+	      && VECTOR_TYPE_P (درەخت_TYPE (e))
+	      && vector_types_convertible_p (type, درەخت_TYPE (e), خطأ)))
 	{
 	  ret = convert_to_vector (type, e);
-	  goto maybe_fold;
+	  اذهب maybe_fold;
 	}
-      break;
+      اكسر;
 
-    case RECORD_TYPE:
-    case UNION_TYPE:
-      if (lang_hooks.types_compatible_p (type, TREE_TYPE (expr)))
-	return e;
-      break;
+    حالة RECORD_TYPE:
+    حالة UNION_TYPE:
+      إذا (lang_hooks.types_compatible_p (type, درەخت_TYPE (دەربڕین)))
+	أرجع e;
+      اكسر;
 
-    default:
-      break;
+    افتراضي:
+      اكسر;
 
     maybe_fold:
-      if (TREE_CODE (ret) != C_MAYBE_CONST_EXPR)
+      إذا (درەخت_CODE (ret) != C_MAYBE_CONST_دەربڕین)
 	ret = init_const ? fold_init (ret) : fold (ret);
-      return ret;
+      أرجع ret;
     }
 
   /* If we are converting to nullptr_t, don't say "non-scalar type" because
      the nullptr_t type is a scalar type.  Only nullptr_t or a null pointer
      constant shall be converted to nullptr_t.  */
-  if (code == NULLPTR_TYPE)
+  إذا (code == NULLPTR_TYPE)
     {
-      error ("conversion from %qT to %qT", TREE_TYPE (e), type);
-      inform (input_location,
+      error ("conversion from %qT to %qT", درەخت_TYPE (e), type);
+      inform (تێخستن_location,
 	      "only %qT or a null pointer constant can be converted to %qT",
 	      type, type);
     }
-  else
+  وإلا
     error ("conversion to non-scalar type requested");
-  return error_mark_node;
+  أرجع error_mark_گرێ;
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE.
@@ -247,10 +247,10 @@ c_convert (tree type, tree expr, bool init_const)
    reasonable conversions; callers should filter out those that are not
    permitted by the language being compiled.  */
 
-tree
-convert (tree type, tree expr)
+درەخت
+convert (درەخت type, درەخت دەربڕین)
 {
-  return c_convert (type, expr, false);
+  أرجع c_convert (type, دەربڕین, خطأ);
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE, in
@@ -258,8 +258,8 @@ convert (tree type, tree expr)
    function implements all reasonable conversions; callers should filter out
    those that are not permitted by the language being compiled.  */
 
-tree
-convert_init (tree type, tree expr)
+درەخت
+convert_init (درەخت type, درەخت دەربڕین)
 {
-  return c_convert (type, expr, true);
+  أرجع c_convert (type, دەربڕین, true);
 }
