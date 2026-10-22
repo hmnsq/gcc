@@ -21,9 +21,9 @@ along with GCC; see the file COPYING3.  If not see
 #define GCC_GIMPLE_PARSER_H
 
 /* Gimple parsing functions.  */
-extern void c_parser_parse_gimple_body (c_parser *, char *,
-					enum c_declspec_il,
-					profile_count);
-extern void c_parser_gimple_or_rtl_pass_list (c_parser *, c_declspecs *);
+வெளி வெறுமை c_parser_parse_gimple_body (c_parser *, எழுத்து *,
+					எண்ணிக்கை c_declspec_il,
+					profile_மொத்தம்);
+வெளி வெறுமை c_parser_gimple_or_rtl_pass_list (c_parser *, c_declspecs *);
 
 #endif

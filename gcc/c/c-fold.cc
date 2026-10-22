@@ -17,27 +17,27 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "function.h"
-#include "bitmap.h"
-#include "c-tree.h"
-#include "intl.h"
-#include "gimplify.h"
+#அந்தர்பாவ "config.h"
+#அந்தர்பாவ "system.h"
+#அந்தர்பாவ "coretypes.h"
+#அந்தர்பாவ "target.h"
+#அந்தர்பாவ "function.h"
+#அந்தர்பாவ "bitmap.h"
+#அந்தர்பாவ "c-tree.h"
+#அந்தர்பாவ "intl.h"
+#அந்தர்பாவ "gimplify.h"
 
-static tree c_fully_fold_internal (tree expr, bool, bool *, bool *, bool,
-				   bool);
+நிலையான மரம் c_fully_fold_internal (மரம் கோவை, தருக்க, தருக்க *, தருக்க *, தருக்க,
+				   தருக்க);
 
 /* If DISABLE is true, stop issuing warnings.  This is used when
    parsing code that we know will not be executed.  This function may
    be called multiple times, and works as a stack.  */
 
-static void
-c_disable_warnings (bool disable)
+நிலையான வெறுமை
+c_disable_warnings (தருக்க disable)
 {
-  if (disable)
+  எனில் (disable)
     {
       ++c_inhibit_evaluation_warnings;
     }
@@ -45,10 +45,10 @@ c_disable_warnings (bool disable)
 
 /* If ENABLE is true, re-enable issuing warnings.  */
 
-static void
-c_enable_warnings (bool enable)
+நிலையான வெறுமை
+c_enable_warnings (தருக்க enable)
 {
-  if (enable)
+  எனில் (enable)
     {
       --c_inhibit_evaluation_warnings;
     }
@@ -57,36 +57,36 @@ c_enable_warnings (bool enable)
 /* Try to fold ARRAY_REF ary[index] if possible and not handled by
    normal fold, return NULL_TREE otherwise.  */
 
-static tree
-c_fold_array_ref (tree type, tree ary, tree index)
+நிலையான மரம்
+c_fold_array_ref (மரம் type, மரம் ary, மரம் index)
 {
-  if (TREE_CODE (ary) != STRING_CST
-      || TREE_CODE (index) != INTEGER_CST
-      || TREE_OVERFLOW (index)
-      || TREE_CODE (TREE_TYPE (ary)) != ARRAY_TYPE
-      || !tree_fits_uhwi_p (index))
-    return NULL_TREE;
+  எனில் (மரம்_CODE (ary) != STRING_CST
+      || மரம்_CODE (index) != INTEGER_CST
+      || மரம்_OVERFLOW (index)
+      || மரம்_CODE (மரம்_TYPE (ary)) != ARRAY_TYPE
+      || !மரம்_fits_uhwi_p (index))
+    திரும்பு NULL_மரம்;
 
-  tree elem_type = TREE_TYPE (TREE_TYPE (ary));
+  மரம் elem_type = மரம்_TYPE (மரம்_TYPE (ary));
   unsigned elem_nchars = (TYPE_PRECISION (elem_type)
-			  / TYPE_PRECISION (char_type_node));
-  unsigned len = (unsigned) TREE_STRING_LENGTH (ary) / elem_nchars;
-  tree nelts_minus_one = array_type_nelts_minus_one (TREE_TYPE (ary));
-  bool dummy1 = true, dummy2 = true;
-  nelts_minus_one = c_fully_fold_internal (nelts_minus_one, true, &dummy1,
-					   &dummy2, false, false);
-  unsigned HOST_WIDE_INT i = tree_to_uhwi (index);
-  if (!tree_int_cst_le (index, nelts_minus_one)
+			  / TYPE_PRECISION (char_type_முனை));
+  unsigned len = (unsigned) மரம்_STRING_LENGTH (ary) / elem_nchars;
+  மரம் nelts_minus_one = array_type_nelts_minus_one (மரம்_TYPE (ary));
+  தருக்க dummy1 = உண்மை, dummy2 = உண்மை;
+  nelts_minus_one = c_fully_fold_internal (nelts_minus_one, உண்மை, &dummy1,
+					   &dummy2, பொய், பொய்);
+  unsigned HOST_WIDE_INT i = மரம்_to_uhwi (index);
+  எனில் (!மரம்_int_cst_le (index, nelts_minus_one)
       || i >= len
       || i + elem_nchars > len)
-    return NULL_TREE;
+    திரும்பு NULL_மரம்;
 
-  if (elem_nchars == 1)
-    return build_int_cst (type, TREE_STRING_POINTER (ary)[i]);
+  எனில் (elem_nchars == 1)
+    திரும்பு build_int_cst (type, மரம்_STRING_POINTER (ary)[i]);
 
-  const unsigned char *ptr
-    = ((const unsigned char *)TREE_STRING_POINTER (ary) + i * elem_nchars);
-  return native_interpret_expr (type, ptr, elem_nchars);
+  மாறிலி unsigned எழுத்து *ptr
+    = ((மாறிலி unsigned எழுத்து *)மரம்_STRING_POINTER (ary) + i * elem_nchars);
+  திரும்பு native_interpret_கோவை (type, ptr, elem_nchars);
 }
 
 /* Fully fold EXPR, an expression that was not folded (beyond integer
@@ -105,28 +105,28 @@ c_fold_array_ref (tree type, tree ary, tree index)
    C_MAYBE_CONST_EXPR.  LVAL is true if it should be treated as an
    lvalue.  */
 
-tree
-c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
+மரம்
+c_fully_fold (மரம் கோவை, தருக்க in_init, தருக்க *maybe_const, தருக்க lval)
 {
-  tree ret;
-  tree eptype = NULL_TREE;
-  bool dummy = true;
-  bool maybe_const_itself = true;
-  location_t loc = EXPR_LOCATION (expr);
+  மரம் ret;
+  மரம் eptype = NULL_மரம்;
+  தருக்க dummy = உண்மை;
+  தருக்க maybe_const_itself = உண்மை;
+  location_t loc = கோவை_LOCATION (கோவை);
 
-  if (!maybe_const)
+  எனில் (!maybe_const)
     maybe_const = &dummy;
-  if (TREE_CODE (expr) == EXCESS_PRECISION_EXPR)
+  எனில் (மரம்_CODE (கோவை) == EXCESS_PRECISION_கோவை)
     {
-      eptype = TREE_TYPE (expr);
-      expr = TREE_OPERAND (expr, 0);
+      eptype = மரம்_TYPE (கோவை);
+      கோவை = மரம்_OPERAND (கோவை, 0);
     }
-  ret = c_fully_fold_internal (expr, in_init, maybe_const,
-			       &maybe_const_itself, false, lval);
-  if (eptype)
+  ret = c_fully_fold_internal (கோவை, in_init, maybe_const,
+			       &maybe_const_itself, பொய், lval);
+  எனில் (eptype)
     ret = fold_convert_loc (loc, eptype, ret);
   *maybe_const &= maybe_const_itself;
-  return ret;
+  திரும்பு ret;
 }
 
 /* Internal helper for c_fully_fold.  EXPR and IN_INIT are as for
@@ -141,81 +141,81 @@ c_fully_fold (tree expr, bool in_init, bool *maybe_const, bool lval)
    LVAL indicates folding of lvalue, where we can't replace it with
    an rvalue.  */
 
-static tree
-c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
-		       bool *maybe_const_itself, bool for_int_const, bool lval)
+நிலையான மரம்
+c_fully_fold_internal (மரம் கோவை, தருக்க in_init, தருக்க *maybe_const_operands,
+		       தருக்க *maybe_const_itself, தருக்க for_int_const, தருக்க lval)
 {
-  tree ret = expr;
-  enum tree_code code = TREE_CODE (expr);
-  enum tree_code_class kind = TREE_CODE_CLASS (code);
-  location_t loc = EXPR_LOCATION (expr);
-  tree op0, op1, op2, op3;
-  tree orig_op0, orig_op1, orig_op2;
-  bool op0_const = true, op1_const = true, op2_const = true;
-  bool op0_const_self = true, op1_const_self = true, op2_const_self = true;
-  bool nowarning = warning_suppressed_p (expr, OPT_Woverflow);
-  bool unused_p;
-  bool op0_lval = false;
+  மரம் ret = கோவை;
+  எண்ணிக்கை மரம்_code code = மரம்_CODE (கோவை);
+  எண்ணிக்கை மரம்_code_class kind = மரம்_CODE_CLASS (code);
+  location_t loc = கோவை_LOCATION (கோவை);
+  மரம் op0, op1, op2, op3;
+  மரம் orig_op0, orig_op1, orig_op2;
+  தருக்க op0_const = உண்மை, op1_const = உண்மை, op2_const = உண்மை;
+  தருக்க op0_const_self = உண்மை, op1_const_self = உண்மை, op2_const_self = உண்மை;
+  தருக்க nowarning = warning_suppressed_p (கோவை, OPT_Woverflow);
+  தருக்க unused_p;
+  தருக்க op0_lval = பொய்;
   source_range old_range;
 
   /* Constants, declarations, statements, errors, and anything else not
      counted as an expression cannot usefully be folded further at this
      point.  */
-  if (!IS_EXPR_CODE_CLASS (kind) || kind == tcc_statement)
+  எனில் (!IS_கோவை_CODE_CLASS (kind) || kind == tcc_statement)
     {
       /* Except for variables which we can optimize to its initializer.  */
-      if (VAR_P (expr) && !lval && (optimize || in_init))
+      எனில் (VAR_P (கோவை) && !lval && (optimize || in_init))
 	{
-	  if (in_init)
-	    ret = decl_constant_value_1 (expr, true);
-	  else
+	  எனில் (in_init)
+	    ret = decl_constant_மதிப்பு_1 (கோவை, உண்மை);
+	  இல்லையெனில்
 	    {
-	      ret = decl_constant_value (expr);
-	      if (ret != expr
-		  && (TYPE_MODE (TREE_TYPE (ret)) == BLKmode
-		      || TREE_CODE (TREE_TYPE (ret)) == ARRAY_TYPE))
-		return expr;
+	      ret = decl_constant_மதிப்பு (கோவை);
+	      எனில் (ret != கோவை
+		  && (TYPE_MODE (மரம்_TYPE (ret)) == BLKmode
+		      || மரம்_CODE (மரம்_TYPE (ret)) == ARRAY_TYPE))
+		திரும்பு கோவை;
 	    }
 	  /* Avoid unwanted tree sharing between the initializer and current
 	     function's body where the tree can be modified e.g. by the
 	     gimplifier.  */
-	  if (ret != expr && TREE_STATIC (expr))
-	    ret = unshare_expr (ret);
-	  return ret;
+	  எனில் (ret != கோவை && மரம்_STATIC (கோவை))
+	    ret = unshare_கோவை (ret);
+	  திரும்பு ret;
 	}
-      return expr;
+      திரும்பு கோவை;
     }
 
-  if (IS_EXPR_CODE_CLASS (kind))
-    old_range = EXPR_LOCATION_RANGE (expr);
+  எனில் (IS_கோவை_CODE_CLASS (kind))
+    old_range = கோவை_LOCATION_RANGE (கோவை);
 
   /* Operands of variable-length expressions (function calls) have
      already been folded, as have __builtin_* function calls, and such
      expressions cannot occur in constant expressions.  */
-  if (kind == tcc_vl_exp)
+  எனில் (kind == tcc_vl_exp)
     {
-      *maybe_const_operands = false;
-      ret = fold (expr);
-      goto out;
+      *maybe_const_operands = பொய்;
+      ret = fold (கோவை);
+      செல் out;
     }
 
-  if (code == C_MAYBE_CONST_EXPR)
+  எனில் (code == C_MAYBE_CONST_கோவை)
     {
-      tree pre = C_MAYBE_CONST_EXPR_PRE (expr);
-      tree inner = C_MAYBE_CONST_EXPR_EXPR (expr);
-      if (C_MAYBE_CONST_EXPR_NON_CONST (expr))
-	*maybe_const_operands = false;
-      if (C_MAYBE_CONST_EXPR_INT_OPERANDS (expr))
+      மரம் pre = C_MAYBE_CONST_கோவை_PRE (கோவை);
+      மரம் inner = C_MAYBE_CONST_கோவை_கோவை (கோவை);
+      எனில் (C_MAYBE_CONST_கோவை_NON_CONST (கோவை))
+	*maybe_const_operands = பொய்;
+      எனில் (C_MAYBE_CONST_கோவை_INT_OPERANDS (கோவை))
 	{
-	  *maybe_const_itself = false;
+	  *maybe_const_itself = பொய்;
 	  inner = c_fully_fold_internal (inner, in_init, maybe_const_operands,
-					 maybe_const_itself, true, lval);
+					 maybe_const_itself, உண்மை, lval);
 	}
-      if (pre && !in_init)
-	ret = build2 (COMPOUND_EXPR, TREE_TYPE (expr), pre, inner);
-      else
+      எனில் (pre && !in_init)
+	ret = build2 (COMPOUND_கோவை, மரம்_TYPE (கோவை), pre, inner);
+      இல்லையெனில்
 	ret = inner;
-      goto out;
+      செல் out;
     }
 
   /* Assignment, increment, decrement, function call and comma
@@ -224,450 +224,450 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      were handled above, though VA_ARG_EXPR is treated like a function
      call here, and statement expressions are handled through
      C_MAYBE_CONST_EXPR to avoid folding inside them.)  */
-  switch (code)
+  தேர்வு (code)
     {
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-    case COMPOUND_EXPR:
-      *maybe_const_operands = false;
-      break;
+    நிலை MODIFY_கோவை:
+    நிலை PREDECREMENT_கோவை:
+    நிலை PREINCREMENT_கோவை:
+    நிலை POSTDECREMENT_கோவை:
+    நிலை POSTINCREMENT_கோவை:
+    நிலை COMPOUND_கோவை:
+      *maybe_const_operands = பொய்;
+      நிறுத்து;
 
-    case VA_ARG_EXPR:
-    case TARGET_EXPR:
-    case BIND_EXPR:
-    case OBJ_TYPE_REF:
-      *maybe_const_operands = false;
-      ret = fold (expr);
-      goto out;
+    நிலை VA_ARG_கோவை:
+    நிலை TARGET_கோவை:
+    நிலை BIND_கோவை:
+    நிலை OBJ_TYPE_REF:
+      *maybe_const_operands = பொய்;
+      ret = fold (கோவை);
+      செல் out;
 
-    default:
-      break;
+    இயல்பு:
+      நிறுத்து;
     }
 
   /* Fold individual tree codes as appropriate.  */
-  switch (code)
+  தேர்வு (code)
     {
-    case COMPOUND_LITERAL_EXPR:
+    நிலை COMPOUND_LITERAL_கோவை:
       /* Any non-constancy will have been marked in a containing
 	 C_MAYBE_CONST_EXPR; there is no more folding to do here.  */
-      goto out;
+      செல் out;
 
-    case COMPONENT_REF:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      op1 = TREE_OPERAND (expr, 1);
-      op2 = TREE_OPERAND (expr, 2);
+    நிலை COMPONENT_REF:
+      orig_op0 = op0 = மரம்_OPERAND (கோவை, 0);
+      op1 = மரம்_OPERAND (கோவை, 1);
+      op2 = மரம்_OPERAND (கோவை, 2);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
-      if (op0 != orig_op0)
-	ret = build3 (COMPONENT_REF, TREE_TYPE (expr), op0, op1, op2);
-      if (ret != expr)
+      எனில் (op0 != orig_op0)
+	ret = build3 (COMPONENT_REF, மரம்_TYPE (கோவை), op0, op1, op2);
+      எனில் (ret != கோவை)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  மரம்_READONLY (ret) = மரம்_READONLY (கோவை);
+	  மரம்_THIS_VOLATILE (ret) = மரம்_THIS_VOLATILE (கோவை);
 	}
-      if (!lval)
+      எனில் (!lval)
 	ret = fold (ret);
-      goto out;
+      செல் out;
 
-    case ARRAY_REF:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      op2 = TREE_OPERAND (expr, 2);
-      op3 = TREE_OPERAND (expr, 3);
+    நிலை ARRAY_REF:
+      orig_op0 = op0 = மரம்_OPERAND (கோவை, 0);
+      orig_op1 = op1 = மரம்_OPERAND (கோவை, 1);
+      op2 = மரம்_OPERAND (கோவை, 2);
+      op3 = மரம்_OPERAND (கோவை, 3);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const, lval);
       STRIP_TYPE_NOPS (op0);
       op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, பொய்);
       STRIP_TYPE_NOPS (op1);
       /* Fold "foo"[2] in initializers.  */
-      if (!lval && in_init)
+      எனில் (!lval && in_init)
 	{
-	  ret = c_fold_array_ref (TREE_TYPE (expr), op0, op1);
-	  if (ret)
-	    goto out;
-	  ret = expr;
+	  ret = c_fold_array_ref (மரம்_TYPE (கோவை), op0, op1);
+	  எனில் (ret)
+	    செல் out;
+	  ret = கோவை;
 	}
-      if (op0 != orig_op0 || op1 != orig_op1)
-	ret = build4 (ARRAY_REF, TREE_TYPE (expr), op0, op1, op2, op3);
-      if (ret != expr)
+      எனில் (op0 != orig_op0 || op1 != orig_op1)
+	ret = build4 (ARRAY_REF, மரம்_TYPE (கோவை), op0, op1, op2, op3);
+      எனில் (ret != கோவை)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  மரம்_READONLY (ret) = மரம்_READONLY (கோவை);
+	  மரம்_SIDE_EFFECTS (ret) = மரம்_SIDE_EFFECTS (கோவை);
+	  மரம்_THIS_VOLATILE (ret) = மரம்_THIS_VOLATILE (கோவை);
 	}
-      if (!lval)
+      எனில் (!lval)
 	ret = fold (ret);
-      goto out;
+      செல் out;
 
-    case MODIFY_EXPR:
-    case PREDECREMENT_EXPR:
-    case PREINCREMENT_EXPR:
-    case POSTDECREMENT_EXPR:
-    case POSTINCREMENT_EXPR:
-      op0_lval = true;
+    நிலை MODIFY_கோவை:
+    நிலை PREDECREMENT_கோவை:
+    நிலை PREINCREMENT_கோவை:
+    நிலை POSTDECREMENT_கோவை:
+    நிலை POSTINCREMENT_கோவை:
+      op0_lval = உண்மை;
       /* FALLTHRU */
-    case COMPOUND_EXPR:
-    case PLUS_EXPR:
-    case MINUS_EXPR:
-    case MULT_EXPR:
-    case POINTER_PLUS_EXPR:
-    case POINTER_DIFF_EXPR:
-    case TRUNC_DIV_EXPR:
-    case CEIL_DIV_EXPR:
-    case FLOOR_DIV_EXPR:
-    case TRUNC_MOD_EXPR:
-    case RDIV_EXPR:
-    case EXACT_DIV_EXPR:
-    case LSHIFT_EXPR:
-    case RSHIFT_EXPR:
-    case LROTATE_EXPR:
-    case RROTATE_EXPR:
-    case BIT_IOR_EXPR:
-    case BIT_XOR_EXPR:
-    case BIT_AND_EXPR:
-    case LT_EXPR:
-    case LE_EXPR:
-    case GT_EXPR:
-    case GE_EXPR:
-    case EQ_EXPR:
-    case NE_EXPR:
-    case COMPLEX_EXPR:
-    case TRUTH_AND_EXPR:
-    case TRUTH_OR_EXPR:
-    case TRUTH_XOR_EXPR:
-    case UNORDERED_EXPR:
-    case ORDERED_EXPR:
-    case UNLT_EXPR:
-    case UNLE_EXPR:
-    case UNGT_EXPR:
-    case UNGE_EXPR:
-    case UNEQ_EXPR:
-    case MEM_REF:
+    நிலை COMPOUND_கோவை:
+    நிலை PLUS_கோவை:
+    நிலை MINUS_கோவை:
+    நிலை MULT_கோவை:
+    நிலை POINTER_PLUS_கோவை:
+    நிலை POINTER_DIFF_கோவை:
+    நிலை TRUNC_DIV_கோவை:
+    நிலை CEIL_DIV_கோவை:
+    நிலை FLOOR_DIV_கோவை:
+    நிலை TRUNC_MOD_கோவை:
+    நிலை RDIV_கோவை:
+    நிலை EXACT_DIV_கோவை:
+    நிலை LSHIFT_கோவை:
+    நிலை RSHIFT_கோவை:
+    நிலை LROTATE_கோவை:
+    நிலை RROTATE_கோவை:
+    நிலை BIT_IOR_கோவை:
+    நிலை BIT_XOR_கோவை:
+    நிலை BIT_AND_கோவை:
+    நிலை LT_கோவை:
+    நிலை LE_கோவை:
+    நிலை GT_கோவை:
+    நிலை GE_கோவை:
+    நிலை EQ_கோவை:
+    நிலை NE_கோவை:
+    நிலை COMPLEX_கோவை:
+    நிலை TRUTH_AND_கோவை:
+    நிலை TRUTH_OR_கோவை:
+    நிலை TRUTH_XOR_கோவை:
+    நிலை UNORDERED_கோவை:
+    நிலை ORDERED_கோவை:
+    நிலை UNLT_கோவை:
+    நிலை UNLE_கோவை:
+    நிலை UNGT_கோவை:
+    நிலை UNGE_கோவை:
+    நிலை UNEQ_கோவை:
+    நிலை MEM_REF:
       /* Binary operations evaluating both arguments (increment and
 	 decrement are binary internally in GCC).  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
+      orig_op0 = op0 = மரம்_OPERAND (கோவை, 0);
+      orig_op1 = op1 = மரம்_OPERAND (கோவை, 1);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
       /* The RHS of a MODIFY_EXPR was fully folded when building that
 	 expression for the sake of conversion warnings.  */
-      if (code != MODIFY_EXPR)
+      எனில் (code != MODIFY_கோவை)
 	op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				     maybe_const_itself, for_int_const, false);
+				     maybe_const_itself, for_int_const, பொய்);
       STRIP_TYPE_NOPS (op1);
 
-      if (for_int_const && (TREE_CODE (op0) != INTEGER_CST
-			    || TREE_CODE (op1) != INTEGER_CST))
-	goto out;
+      எனில் (for_int_const && (மரம்_CODE (op0) != INTEGER_CST
+			    || மரம்_CODE (op1) != INTEGER_CST))
+	செல் out;
 
-      if (TREE_CODE_CLASS (code) == tcc_comparison
-	  && TREE_CODE (TREE_TYPE (op0)) == NULLPTR_TYPE
-	  && TREE_CODE (TREE_TYPE (op1)) == NULLPTR_TYPE)
+      எனில் (மரம்_CODE_CLASS (code) == tcc_comparison
+	  && மரம்_CODE (மரம்_TYPE (op0)) == NULLPTR_TYPE
+	  && மரம்_CODE (மரம்_TYPE (op1)) == NULLPTR_TYPE)
 	{
-	  switch (code)
+	  தேர்வு (code)
 	    {
-	    case EQ_EXPR:
-	      ret = constant_boolean_node (true, TREE_TYPE (expr));
-	      break;
-	    case NE_EXPR:
-	      ret = constant_boolean_node (false, TREE_TYPE (expr));
-	      break;
-	    default:
+	    நிலை EQ_கோவை:
+	      ret = constant_boolean_முனை (உண்மை, மரம்_TYPE (கோவை));
+	      நிறுத்து;
+	    நிலை NE_கோவை:
+	      ret = constant_boolean_முனை (பொய், மரம்_TYPE (கோவை));
+	      நிறுத்து;
+	    இயல்பு:
 	      gcc_unreachable ();
 	    }
-	  ret = omit_two_operands_loc (loc, TREE_TYPE (expr), ret,
+	  ret = omit_two_operands_loc (loc, மரம்_TYPE (கோவை), ret,
 				       op0, op1);
 	}
-      else if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      இல்லையெனில் எனில் (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
-	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
-	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
-	ret = fold (expr);
-      if (TREE_OVERFLOW_P (ret)
-	  && !TREE_OVERFLOW_P (op0)
-	  && !(BINARY_CLASS_P (op0) && TREE_OVERFLOW_P (TREE_OPERAND (op0, 1)))
-	  && !TREE_OVERFLOW_P (op1))
-	overflow_warning (EXPR_LOC_OR_LOC (expr, input_location), ret, expr);
-      if (code == LSHIFT_EXPR
-	  && TREE_CODE (orig_op0) != INTEGER_CST
-	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
-	  && TREE_CODE (op0) == INTEGER_CST
+	  ? fold_build2_initializer_loc (loc, code, மரம்_TYPE (கோவை), op0, op1)
+	  : fold_build2_loc (loc, code, மரம்_TYPE (கோவை), op0, op1);
+      இல்லையெனில்
+	ret = fold (கோவை);
+      எனில் (மரம்_OVERFLOW_P (ret)
+	  && !மரம்_OVERFLOW_P (op0)
+	  && !(இருமம்_CLASS_P (op0) && மரம்_OVERFLOW_P (மரம்_OPERAND (op0, 1)))
+	  && !மரம்_OVERFLOW_P (op1))
+	overflow_warning (கோவை_LOC_OR_LOC (கோவை, உள்ளீடு_location), ret, கோவை);
+      எனில் (code == LSHIFT_கோவை
+	  && மரம்_CODE (orig_op0) != INTEGER_CST
+	  && (மரம்_CODE (மரம்_TYPE (orig_op0)) == INTEGER_TYPE
+	      || மரம்_CODE (மரம்_TYPE (orig_op0)) == BITINT_TYPE)
+	  && மரம்_CODE (op0) == INTEGER_CST
 	  && c_inhibit_evaluation_warnings == 0
-	  && !TYPE_OVERFLOW_WRAPS (TREE_TYPE (orig_op0))
-	  && tree_int_cst_sgn (op0) < 0)
-	warning_at (loc, OPT_Wshift_negative_value,
+	  && !TYPE_OVERFLOW_WRAPS (மரம்_TYPE (orig_op0))
+	  && மரம்_int_cst_sgn (op0) < 0)
+	warning_at (loc, OPT_Wshift_negative_மதிப்பு,
 		    "left shift of negative value");
-      if ((code == LSHIFT_EXPR
-	   || code == RSHIFT_EXPR
-	   || code == LROTATE_EXPR
-	   || code == RROTATE_EXPR)
-	  && TREE_CODE (orig_op1) != INTEGER_CST
-	  && TREE_CODE (op1) == INTEGER_CST
-	  && TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
+      எனில் ((code == LSHIFT_கோவை
+	   || code == RSHIFT_கோவை
+	   || code == LROTATE_கோவை
+	   || code == RROTATE_கோவை)
+	  && மரம்_CODE (orig_op1) != INTEGER_CST
+	  && மரம்_CODE (op1) == INTEGER_CST
+	  && மரம்_CODE (மரம்_TYPE (orig_op1)) == INTEGER_TYPE
 	  && c_inhibit_evaluation_warnings == 0)
 	{
-	  if (tree_int_cst_sgn (op1) < 0)
-	    warning_at (loc, OPT_Wshift_count_negative,
-			(code == LSHIFT_EXPR
+	  எனில் (மரம்_int_cst_sgn (op1) < 0)
+	    warning_at (loc, OPT_Wshift_மொத்தம்_negative,
+			(code == LSHIFT_கோவை
 			 ? G_("left shift count is negative")
 			 : G_("right shift count is negative")));
-	  else if ((TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-		    || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
-		    || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
-		   && compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (orig_op0)))
+	  இல்லையெனில் எனில் ((மரம்_CODE (மரம்_TYPE (orig_op0)) == INTEGER_TYPE
+		    || மரம்_CODE (மரம்_TYPE (orig_op0)) == BITINT_TYPE
+		    || மரம்_CODE (மரம்_TYPE (orig_op0)) == FIXED_POINT_TYPE)
+		   && compare_மரம்_int (op1,
+					TYPE_PRECISION (மரம்_TYPE (orig_op0)))
 		      >= 0
-		   && !warning_suppressed_p (expr, OPT_Wshift_count_overflow))
-	    warning_at (loc, OPT_Wshift_count_overflow,
-			(code == LSHIFT_EXPR
+		   && !warning_suppressed_p (கோவை, OPT_Wshift_மொத்தம்_overflow))
+	    warning_at (loc, OPT_Wshift_மொத்தம்_overflow,
+			(code == LSHIFT_கோவை
 			 ? G_("left shift count >= width of type")
 			 : G_("right shift count >= width of type")));
-	  else if (TREE_CODE (TREE_TYPE (orig_op0)) == VECTOR_TYPE
-		   && compare_tree_int (op1,
-					TYPE_PRECISION (TREE_TYPE (TREE_TYPE (orig_op0))))
+	  இல்லையெனில் எனில் (மரம்_CODE (மரம்_TYPE (orig_op0)) == VECTOR_TYPE
+		   && compare_மரம்_int (op1,
+					TYPE_PRECISION (மரம்_TYPE (மரம்_TYPE (orig_op0))))
 		      >= 0)
-	    warning_at (loc, OPT_Wshift_count_overflow,
-			code == LSHIFT_EXPR
+	    warning_at (loc, OPT_Wshift_மொத்தம்_overflow,
+			code == LSHIFT_கோவை
 			? G_("left shift count >= width of vector element")
 			: G_("right shift count >= width of vector element"));
 	}
-      if (code == LSHIFT_EXPR
+      எனில் (code == LSHIFT_கோவை
 	  /* If either OP0 has been folded to INTEGER_CST...  */
-	  && ((TREE_CODE (orig_op0) != INTEGER_CST
-	       && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-		   || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE)
-	       && TREE_CODE (op0) == INTEGER_CST)
+	  && ((மரம்_CODE (orig_op0) != INTEGER_CST
+	       && (மரம்_CODE (மரம்_TYPE (orig_op0)) == INTEGER_TYPE
+		   || மரம்_CODE (மரம்_TYPE (orig_op0)) == BITINT_TYPE)
+	       && மரம்_CODE (op0) == INTEGER_CST)
 	      /* ...or if OP1 has been folded to INTEGER_CST...  */
-	      || (TREE_CODE (orig_op1) != INTEGER_CST
-		  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
-		      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE)
-		  && TREE_CODE (op1) == INTEGER_CST))
+	      || (மரம்_CODE (orig_op1) != INTEGER_CST
+		  && (மரம்_CODE (மரம்_TYPE (orig_op1)) == INTEGER_TYPE
+		      || மரம்_CODE (மரம்_TYPE (orig_op1)) == BITINT_TYPE)
+		  && மரம்_CODE (op1) == INTEGER_CST))
 	  && c_inhibit_evaluation_warnings == 0)
 	/* ...then maybe we can detect an overflow.  */
 	maybe_warn_shift_overflow (loc, op0, op1);
-      if ((code == TRUNC_DIV_EXPR
-	   || code == CEIL_DIV_EXPR
-	   || code == FLOOR_DIV_EXPR
-	   || code == EXACT_DIV_EXPR
-	   || code == TRUNC_MOD_EXPR)
-	  && TREE_CODE (orig_op1) != INTEGER_CST
-	  && TREE_CODE (op1) == INTEGER_CST
-	  && (TREE_CODE (TREE_TYPE (orig_op0)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == BITINT_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op0)) == FIXED_POINT_TYPE)
-	  && (TREE_CODE (TREE_TYPE (orig_op1)) == INTEGER_TYPE
-	      || TREE_CODE (TREE_TYPE (orig_op1)) == BITINT_TYPE))
+      எனில் ((code == TRUNC_DIV_கோவை
+	   || code == CEIL_DIV_கோவை
+	   || code == FLOOR_DIV_கோவை
+	   || code == EXACT_DIV_கோவை
+	   || code == TRUNC_MOD_கோவை)
+	  && மரம்_CODE (orig_op1) != INTEGER_CST
+	  && மரம்_CODE (op1) == INTEGER_CST
+	  && (மரம்_CODE (மரம்_TYPE (orig_op0)) == INTEGER_TYPE
+	      || மரம்_CODE (மரம்_TYPE (orig_op0)) == BITINT_TYPE
+	      || மரம்_CODE (மரம்_TYPE (orig_op0)) == FIXED_POINT_TYPE)
+	  && (மரம்_CODE (மரம்_TYPE (orig_op1)) == INTEGER_TYPE
+	      || மரம்_CODE (மரம்_TYPE (orig_op1)) == BITINT_TYPE))
 	warn_for_div_by_zero (loc, op1);
-      if (code == MEM_REF
-	  && ret != expr
-	  && TREE_CODE (ret) == MEM_REF)
+      எனில் (code == MEM_REF
+	  && ret != கோவை
+	  && மரம்_CODE (ret) == MEM_REF)
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  மரம்_READONLY (ret) = மரம்_READONLY (கோவை);
+	  மரம்_SIDE_EFFECTS (ret) = மரம்_SIDE_EFFECTS (கோவை);
+	  மரம்_THIS_VOLATILE (ret) = மரம்_THIS_VOLATILE (கோவை);
 	}
-      goto out;
+      செல் out;
 
-    case ADDR_EXPR:
-      op0_lval = true;
-      goto unary;
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-    case VIEW_CONVERT_EXPR:
+    நிலை ADDR_கோவை:
+      op0_lval = உண்மை;
+      செல் unary;
+    நிலை REALPART_கோவை:
+    நிலை IMAGPART_கோவை:
+    நிலை VIEW_CONVERT_கோவை:
       op0_lval = lval;
       /* FALLTHRU */
-    case INDIRECT_REF:
-    case FIX_TRUNC_EXPR:
-    case FLOAT_EXPR:
+    நிலை INDIRECT_REF:
+    நிலை FIX_TRUNC_கோவை:
+    நிலை FLOAT_கோவை:
     CASE_CONVERT:
-    case ADDR_SPACE_CONVERT_EXPR:
-    case NON_LVALUE_EXPR:
-    case NEGATE_EXPR:
-    case BIT_NOT_EXPR:
-    case TRUTH_NOT_EXPR:
-    case CONJ_EXPR:
-    case PAREN_EXPR:
+    நிலை ADDR_SPACE_CONVERT_கோவை:
+    நிலை NON_LVALUE_கோவை:
+    நிலை NEGATE_கோவை:
+    நிலை BIT_NOT_கோவை:
+    நிலை TRUTH_NOT_கோவை:
+    நிலை CONJ_கோவை:
+    நிலை PAREN_கோவை:
     unary:
       /* Unary operations.  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
+      orig_op0 = op0 = மரம்_OPERAND (கோவை, 0);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				   maybe_const_itself, for_int_const,
 				   op0_lval);
       STRIP_TYPE_NOPS (op0);
 
-      if (for_int_const && TREE_CODE (op0) != INTEGER_CST)
-	goto out;
+      எனில் (for_int_const && மரம்_CODE (op0) != INTEGER_CST)
+	செல் out;
 
       /* ??? Cope with user tricks that amount to offsetof.  The middle-end is
 	 not prepared to deal with them if they occur in initializers.  */
-      if (op0 != orig_op0
-	  && code == ADDR_EXPR
-	  && (op1 = get_base_address (op0)) != NULL_TREE
+      எனில் (op0 != orig_op0
+	  && code == ADDR_கோவை
+	  && (op1 = get_base_address (op0)) != NULL_மரம்
 	  && INDIRECT_REF_P (op1)
-	  && TREE_CONSTANT (TREE_OPERAND (op1, 0)))
-	ret = fold_offsetof (op0, TREE_TYPE (expr));
-      else if (op0 != orig_op0 || in_init)
+	  && மரம்_CONSTANT (மரம்_OPERAND (op1, 0)))
+	ret = fold_offsetof (op0, மரம்_TYPE (கோவை));
+      இல்லையெனில் எனில் (op0 != orig_op0 || in_init)
 	ret = in_init
-	  ? fold_build1_initializer_loc (loc, code, TREE_TYPE (expr), op0)
-	  : fold_build1_loc (loc, code, TREE_TYPE (expr), op0);
-      else
-	ret = fold (expr);
-      if (code == INDIRECT_REF
-	  && ret != expr
+	  ? fold_build1_initializer_loc (loc, code, மரம்_TYPE (கோவை), op0)
+	  : fold_build1_loc (loc, code, மரம்_TYPE (கோவை), op0);
+      இல்லையெனில்
+	ret = fold (கோவை);
+      எனில் (code == INDIRECT_REF
+	  && ret != கோவை
 	  && INDIRECT_REF_P (ret))
 	{
-	  TREE_READONLY (ret) = TREE_READONLY (expr);
-	  TREE_SIDE_EFFECTS (ret) = TREE_SIDE_EFFECTS (expr);
-	  TREE_THIS_VOLATILE (ret) = TREE_THIS_VOLATILE (expr);
+	  மரம்_READONLY (ret) = மரம்_READONLY (கோவை);
+	  மரம்_SIDE_EFFECTS (ret) = மரம்_SIDE_EFFECTS (கோவை);
+	  மரம்_THIS_VOLATILE (ret) = மரம்_THIS_VOLATILE (கோவை);
 	}
-      switch (code)
+      தேர்வு (code)
 	{
-	case FIX_TRUNC_EXPR:
-	case FLOAT_EXPR:
+	நிலை FIX_TRUNC_கோவை:
+	நிலை FLOAT_கோவை:
 	CASE_CONVERT:
 	  /* Don't warn about explicit conversions.  We will already
 	     have warned about suspect implicit conversions.  */
-	  break;
+	  நிறுத்து;
 
-	default:
-	  if (TREE_OVERFLOW_P (ret) && !TREE_OVERFLOW_P (op0))
-	    overflow_warning (EXPR_LOCATION (expr), ret, op0);
-	  break;
+	இயல்பு:
+	  எனில் (மரம்_OVERFLOW_P (ret) && !மரம்_OVERFLOW_P (op0))
+	    overflow_warning (கோவை_LOCATION (கோவை), ret, op0);
+	  நிறுத்து;
 	}
-      goto out;
+      செல் out;
 
-    case TRUTH_ANDIF_EXPR:
-    case TRUTH_ORIF_EXPR:
+    நிலை TRUTH_ANDIF_கோவை:
+    நிலை TRUTH_ORIF_கோவை:
       /* Binary operations not necessarily evaluating both
 	 arguments.  */
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
+      orig_op0 = op0 = மரம்_OPERAND (கோவை, 0);
+      orig_op1 = op1 = மரம்_OPERAND (கோவை, 1);
       op0 = c_fully_fold_internal (op0, in_init, &op0_const, &op0_const_self,
-				   for_int_const, false);
+				   for_int_const, பொய்);
       STRIP_TYPE_NOPS (op0);
 
-      unused_p = (op0 == (code == TRUTH_ANDIF_EXPR
-			  ? truthvalue_false_node
-			  : truthvalue_true_node));
+      unused_p = (op0 == (code == TRUTH_ANDIF_கோவை
+			  ? truthvalue_false_முனை
+			  : truthvalue_true_முனை));
       c_disable_warnings (unused_p);
       op1 = c_fully_fold_internal (op1, in_init, &op1_const, &op1_const_self,
-				   for_int_const, false);
+				   for_int_const, பொய்);
       STRIP_TYPE_NOPS (op1);
       c_enable_warnings (unused_p);
 
-      if (for_int_const
-	  && (TREE_CODE (op0) != INTEGER_CST
+      எனில் (for_int_const
+	  && (மரம்_CODE (op0) != INTEGER_CST
 	      /* Require OP1 be an INTEGER_CST only if it's evaluated.  */
-	      || (!unused_p && TREE_CODE (op1) != INTEGER_CST)))
-	goto out;
+	      || (!unused_p && மரம்_CODE (op1) != INTEGER_CST)))
+	செல் out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || in_init)
+      எனில் (op0 != orig_op0 || op1 != orig_op1 || in_init)
 	ret = in_init
-	  ? fold_build2_initializer_loc (loc, code, TREE_TYPE (expr), op0, op1)
-	  : fold_build2_loc (loc, code, TREE_TYPE (expr), op0, op1);
-      else
-	ret = fold (expr);
+	  ? fold_build2_initializer_loc (loc, code, மரம்_TYPE (கோவை), op0, op1)
+	  : fold_build2_loc (loc, code, மரம்_TYPE (கோவை), op0, op1);
+      இல்லையெனில்
+	ret = fold (கோவை);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      எனில் (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && (code == TRUTH_ANDIF_EXPR
-		? op0 == truthvalue_false_node
-		: op0 == truthvalue_true_node)))
+	    && (code == TRUTH_ANDIF_கோவை
+		? op0 == truthvalue_false_முனை
+		: op0 == truthvalue_true_முனை)))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      எனில் (!(op0_const
 	    && op0_const_self
-	    && (code == TRUTH_ANDIF_EXPR
-		? op0 == truthvalue_false_node
-		: op0 == truthvalue_true_node)))
+	    && (code == TRUTH_ANDIF_கோவை
+		? op0 == truthvalue_false_முனை
+		: op0 == truthvalue_true_முனை)))
 	*maybe_const_itself &= op1_const_self;
-      goto out;
+      செல் out;
 
-    case COND_EXPR:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      orig_op2 = op2 = TREE_OPERAND (expr, 2);
+    நிலை COND_கோவை:
+      orig_op0 = op0 = மரம்_OPERAND (கோவை, 0);
+      orig_op1 = op1 = மரம்_OPERAND (கோவை, 1);
+      orig_op2 = op2 = மரம்_OPERAND (கோவை, 2);
       op0 = c_fully_fold_internal (op0, in_init, &op0_const, &op0_const_self,
-				   for_int_const, false);
+				   for_int_const, பொய்);
 
       STRIP_TYPE_NOPS (op0);
-      c_disable_warnings (op0 == truthvalue_false_node);
+      c_disable_warnings (op0 == truthvalue_false_முனை);
       op1 = c_fully_fold_internal (op1, in_init, &op1_const, &op1_const_self,
-				   for_int_const, false);
+				   for_int_const, பொய்);
       STRIP_TYPE_NOPS (op1);
-      c_enable_warnings (op0 == truthvalue_false_node);
+      c_enable_warnings (op0 == truthvalue_false_முனை);
 
-      c_disable_warnings (op0 == truthvalue_true_node);
+      c_disable_warnings (op0 == truthvalue_true_முனை);
       op2 = c_fully_fold_internal (op2, in_init, &op2_const, &op2_const_self,
-				   for_int_const, false);
+				   for_int_const, பொய்);
       STRIP_TYPE_NOPS (op2);
-      c_enable_warnings (op0 == truthvalue_true_node);
+      c_enable_warnings (op0 == truthvalue_true_முனை);
 
-      if (for_int_const
-	  && (TREE_CODE (op0) != INTEGER_CST
+      எனில் (for_int_const
+	  && (மரம்_CODE (op0) != INTEGER_CST
 	      /* Only the evaluated operand must be an INTEGER_CST.  */
-	      || (op0 == truthvalue_true_node
-		  ? TREE_CODE (op1) != INTEGER_CST
-		  : TREE_CODE (op2) != INTEGER_CST)))
-	goto out;
+	      || (op0 == truthvalue_true_முனை
+		  ? மரம்_CODE (op1) != INTEGER_CST
+		  : மரம்_CODE (op2) != INTEGER_CST)))
+	செல் out;
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
-	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
-	ret = fold (expr);
+      எனில் (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+	ret = fold_build3_loc (loc, code, மரம்_TYPE (கோவை), op0, op1, op2);
+      இல்லையெனில்
+	ret = fold (கோவை);
       *maybe_const_operands &= op0_const;
       *maybe_const_itself &= op0_const_self;
-      if (!(flag_isoc99
+      எனில் (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_false_node))
+	    && op0 == truthvalue_false_முனை))
 	*maybe_const_operands &= op1_const;
-      if (!(op0_const
+      எனில் (!(op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_false_node))
+	    && op0 == truthvalue_false_முனை))
 	*maybe_const_itself &= op1_const_self;
-      if (!(flag_isoc99
+      எனில் (!(flag_isoc99
 	    && op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_true_node))
+	    && op0 == truthvalue_true_முனை))
 	*maybe_const_operands &= op2_const;
-      if (!(op0_const
+      எனில் (!(op0_const
 	    && op0_const_self
-	    && op0 == truthvalue_true_node))
+	    && op0 == truthvalue_true_முனை))
 	*maybe_const_itself &= op2_const_self;
-      goto out;
+      செல் out;
 
-    case VEC_COND_EXPR:
-      orig_op0 = op0 = TREE_OPERAND (expr, 0);
-      orig_op1 = op1 = TREE_OPERAND (expr, 1);
-      orig_op2 = op2 = TREE_OPERAND (expr, 2);
+    நிலை VEC_COND_கோவை:
+      orig_op0 = op0 = மரம்_OPERAND (கோவை, 0);
+      orig_op1 = op1 = மரம்_OPERAND (கோவை, 1);
+      orig_op2 = op2 = மரம்_OPERAND (கோவை, 2);
       op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, பொய்);
       STRIP_TYPE_NOPS (op0);
       op1 = c_fully_fold_internal (op1, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, பொய்);
       STRIP_TYPE_NOPS (op1);
       op2 = c_fully_fold_internal (op2, in_init, maybe_const_operands,
-				   maybe_const_itself, for_int_const, false);
+				   maybe_const_itself, for_int_const, பொய்);
       STRIP_TYPE_NOPS (op2);
 
-      if (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
-	ret = fold_build3_loc (loc, code, TREE_TYPE (expr), op0, op1, op2);
-      else
-	ret = fold (expr);
-      goto out;
+      எனில் (op0 != orig_op0 || op1 != orig_op1 || op2 != orig_op2)
+	ret = fold_build3_loc (loc, code, மரம்_TYPE (கோவை), op0, op1, op2);
+      இல்லையெனில்
+	ret = fold (கோவை);
+      செல் out;
 
-    case EXCESS_PRECISION_EXPR:
+    நிலை EXCESS_PRECISION_கோவை:
       /* Each case where an operand with excess precision may be
 	 encountered must remove the EXCESS_PRECISION_EXPR around
 	 inner operands and possibly put one around the whole
@@ -676,26 +676,26 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
 	 appropriate in any particular case.  */
       gcc_unreachable ();
 
-    case SAVE_EXPR:
+    நிலை SAVE_கோவை:
       /* Make sure to fold the contents of a SAVE_EXPR exactly once.  */
-      op0 = TREE_OPERAND (expr, 0);
-      if (!SAVE_EXPR_FOLDED_P (expr))
+      op0 = மரம்_OPERAND (கோவை, 0);
+      எனில் (!SAVE_கோவை_FOLDED_P (கோவை))
 	{
 	  op0 = c_fully_fold_internal (op0, in_init, maybe_const_operands,
 				       maybe_const_itself, for_int_const,
-				       false);
-	  TREE_OPERAND (expr, 0) = op0;
-	  SAVE_EXPR_FOLDED_P (expr) = true;
+				       பொய்);
+	  மரம்_OPERAND (கோவை, 0) = op0;
+	  SAVE_கோவை_FOLDED_P (கோவை) = உண்மை;
 	}
       /* Return the SAVE_EXPR operand if it is invariant.  */
-      if (tree_invariant_p (op0))
+      எனில் (மரம்_invariant_p (op0))
 	ret = op0;
-      goto out;
+      செல் out;
 
-    default:
+    இயல்பு:
       /* Various codes may appear through folding built-in functions
 	 and their arguments.  */
-      goto out;
+      செல் out;
     }
 
  out:
@@ -703,27 +703,27 @@ c_fully_fold_internal (tree expr, bool in_init, bool *maybe_const_operands,
      have been done by this point, so remove them again.  */
   nowarning |= warning_suppressed_p (ret, OPT_Woverflow);
   STRIP_TYPE_NOPS (ret);
-  if (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
+  எனில் (nowarning && !warning_suppressed_p (ret, OPT_Woverflow))
     {
-      if (!CAN_HAVE_LOCATION_P (ret))
-	ret = build1 (NOP_EXPR, TREE_TYPE (ret), ret);
+      எனில் (!CAN_HAVE_LOCATION_P (ret))
+	ret = build1 (NOP_கோவை, மரம்_TYPE (ret), ret);
       suppress_warning (ret, OPT_Woverflow);
     }
-  if (ret != expr)
+  எனில் (ret != கோவை)
     {
-      protected_set_expr_location (ret, loc);
-      if (IS_EXPR_CODE_CLASS (kind))
+      protected_set_கோவை_location (ret, loc);
+      எனில் (IS_கோவை_CODE_CLASS (kind))
 	set_source_range (ret, old_range.m_start, old_range.m_finish);
     }
-  return ret;
+  திரும்பு ret;
 }
 
 /* Fold X for consideration by one of the warning functions when checking
    whether an expression has a constant value.  */
 
-tree
-fold_for_warn (tree x)
+மரம்
+fold_for_warn (மரம் x)
 {
   /* The C front-end has already folded X appropriately.  */
-  return x;
+  திரும்பு x;
 }

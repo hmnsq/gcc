@@ -17,82 +17,82 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "function.h"
-#include "c-tree.h"
-#include "timevar.h"
-#include "stringpool.h"
-#include "cgraph.h"
-#include "attribs.h"
-#include "stor-layout.h"
-#include "varasm.h"
-#include "trans-mem.h"
-#include "c-family/c-pragma.h"
-#include "c-lang.h"
-#include "c-family/c-objc.h"
-#include "plugin.h"
-#include "builtins.h"
-#include "gomp-constants.h"
-#include "c-family/c-indentation.h"
-#include "gimple-expr.h"
-#include "context.h"
-#include "gcc-rich-location.h"
-#include "c-parser.h"
-#include "tree-vrp.h"
-#include "tree-pass.h"
-#include "tree-pretty-print.h"
-#include "tree.h"
-#include "basic-block.h"
-#include "gimple.h"
-#include "gimple-pretty-print.h"
-#include "tree-ssa.h"
-#include "pass_manager.h"
-#include "tree-ssanames.h"
-#include "gimple-ssa.h"
-#include "tree-dfa.h"
-#include "internal-fn.h"
-#include "cfg.h"
-#include "cfghooks.h"
-#include "bitmap.h"
-#include "cfganal.h"
-#include "tree-cfg.h"
-#include "gimple-iterator.h"
-#include "cfgloop.h"
-#include "tree-phinodes.h"
-#include "tree-into-ssa.h"
+#அந்தர்பாவ "config.h"
+#அந்தர்பாவ "system.h"
+#அந்தர்பாவ "coretypes.h"
+#அந்தர்பாவ "target.h"
+#அந்தர்பாவ "function.h"
+#அந்தர்பாவ "c-tree.h"
+#அந்தர்பாவ "timevar.h"
+#அந்தர்பாவ "stringpool.h"
+#அந்தர்பாவ "cgraph.h"
+#அந்தர்பாவ "attribs.h"
+#அந்தர்பாவ "stor-layout.h"
+#அந்தர்பாவ "varasm.h"
+#அந்தர்பாவ "trans-mem.h"
+#அந்தர்பாவ "c-family/c-pragma.h"
+#அந்தர்பாவ "c-lang.h"
+#அந்தர்பாவ "c-family/c-objc.h"
+#அந்தர்பாவ "plugin.h"
+#அந்தர்பாவ "builtins.h"
+#அந்தர்பாவ "gomp-constants.h"
+#அந்தர்பாவ "c-family/c-indentation.h"
+#அந்தர்பாவ "gimple-expr.h"
+#அந்தர்பாவ "context.h"
+#அந்தர்பாவ "gcc-rich-location.h"
+#அந்தர்பாவ "c-parser.h"
+#அந்தர்பாவ "tree-vrp.h"
+#அந்தர்பாவ "tree-pass.h"
+#அந்தர்பாவ "tree-pretty-print.h"
+#அந்தர்பாவ "tree.h"
+#அந்தர்பாவ "basic-block.h"
+#அந்தர்பாவ "gimple.h"
+#அந்தர்பாவ "gimple-pretty-print.h"
+#அந்தர்பாவ "tree-ssa.h"
+#அந்தர்பாவ "pass_manager.h"
+#அந்தர்பாவ "tree-ssanames.h"
+#அந்தர்பாவ "gimple-ssa.h"
+#அந்தர்பாவ "tree-dfa.h"
+#அந்தர்பாவ "internal-fn.h"
+#அந்தர்பாவ "cfg.h"
+#அந்தர்பாவ "cfghooks.h"
+#அந்தர்பாவ "bitmap.h"
+#அந்தர்பாவ "cfganal.h"
+#அந்தர்பாவ "tree-cfg.h"
+#அந்தர்பாவ "gimple-iterator.h"
+#அந்தர்பாவ "cfgloop.h"
+#அந்தர்பாவ "tree-phinodes.h"
+#அந்தர்பாவ "tree-into-ssa.h"
 
 
 /* GIMPLE parser state.  */
 
-class gimple_parser
+வகுப்பு gimple_parser
 {
-public:
-  gimple_parser (c_parser *p) : parser (p), edges(), current_bb(NULL) {}
+பொது:
+  gimple_parser (c_parser *p) : parser (p), edges(), current_bb(வெற்று) {}
   /* c_parser is not visible here, use composition and fake inheritance
      via a conversion operator.  */
-  operator c_parser *() { return parser; }
+  operator c_parser *() { திரும்பு parser; }
   c_parser *parser;
 
   /* CFG build state.  */
-  class gimple_parser_edge
+  வகுப்பு gimple_parser_edge
   {
-  public:
-    int src;
-    int dest;
-    int flags;
+  பொது:
+    முழு src;
+    முழு dest;
+    முழு flags;
     profile_probability probability;
   };
   auto_vec<gimple_parser_edge> edges;
   basic_block current_bb;
 
-  void push_edge (int, int, int, profile_probability);
+  வெறுமை தள்ளு_edge (முழு, முழு, முழு, profile_probability);
 };
 
-void
-gimple_parser::push_edge (int src, int dest, int flags,
+வெறுமை
+gimple_parser::தள்ளு_edge (முழு src, முழு dest, முழு flags,
 			  profile_probability prob)
 {
   gimple_parser_edge e;
@@ -100,88 +100,88 @@ gimple_parser::push_edge (int src, int dest, int flags,
   e.dest = dest;
   e.flags = flags;
   e.probability = prob;
-  edges.safe_push (e);
+  edges.safe_தள்ளு (e);
 }
 
 
 /* Gimple parsing functions.  */
-static bool c_parser_gimple_compound_statement (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_label (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_statement (gimple_parser &, gimple_seq *);
-static struct c_expr c_parser_gimple_binary_expression (gimple_parser &, tree);
-static struct c_expr c_parser_gimple_unary_expression (gimple_parser &);
-static struct c_expr c_parser_gimple_postfix_expression
-			(gimple_parser &, tree = error_mark_node);
-static struct c_expr c_parser_gimple_postfix_expression_after_primary
-			(gimple_parser &, location_t, struct c_expr);
-static void c_parser_gimple_declaration (gimple_parser &);
-static void c_parser_gimple_goto_stmt (gimple_parser &, location_t,
-				       tree, gimple_seq *);
-static void c_parser_gimple_try_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_if_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_switch_stmt (gimple_parser &, gimple_seq *);
-static void c_parser_gimple_return_stmt (gimple_parser &, gimple_seq *);
-static void c_finish_gimple_return (location_t, tree);
-static tree c_parser_gimple_paren_condition (gimple_parser &);
-static void c_parser_gimple_expr_list (gimple_parser &, vec<tree> *);
+நிலையான தருக்க c_parser_gimple_compound_statement (gimple_parser &, gimple_seq *);
+நிலையான வெறுமை c_parser_gimple_label (gimple_parser &, gimple_seq *);
+நிலையான வெறுமை c_parser_gimple_statement (gimple_parser &, gimple_seq *);
+நிலையான கட்டமைப்பு c_கோவை c_parser_gimple_இருமம்_expression (gimple_parser &, மரம்);
+நிலையான கட்டமைப்பு c_கோவை c_parser_gimple_unary_expression (gimple_parser &);
+நிலையான கட்டமைப்பு c_கோவை c_parser_gimple_postfix_expression
+			(gimple_parser &, மரம் = error_mark_முனை);
+நிலையான கட்டமைப்பு c_கோவை c_parser_gimple_postfix_expression_after_primary
+			(gimple_parser &, location_t, கட்டமைப்பு c_கோவை);
+நிலையான வெறுமை c_parser_gimple_declaration (gimple_parser &);
+நிலையான வெறுமை c_parser_gimple_goto_stmt (gimple_parser &, location_t,
+				       மரம், gimple_seq *);
+நிலையான வெறுமை c_parser_gimple_try_stmt (gimple_parser &, gimple_seq *);
+நிலையான வெறுமை c_parser_gimple_if_stmt (gimple_parser &, gimple_seq *);
+நிலையான வெறுமை c_parser_gimple_switch_stmt (gimple_parser &, gimple_seq *);
+நிலையான வெறுமை c_parser_gimple_return_stmt (gimple_parser &, gimple_seq *);
+நிலையான வெறுமை c_finish_gimple_return (location_t, மரம்);
+நிலையான மரம் c_parser_gimple_paren_condition (gimple_parser &);
+நிலையான வெறுமை c_parser_gimple_கோவை_list (gimple_parser &, vec<மரம்> *);
 
 
 /* Much like parser_build_unary_op, but avoid applying default conversions.  */
 
-static c_expr
+நிலையான c_கோவை
 gimple_parser_build_unary_op (location_t loc,
-			      enum tree_code code, struct c_expr arg)
+			      எண்ணிக்கை மரம்_code code, கட்டமைப்பு c_கோவை arg)
 {
-  struct c_expr result;
+  கட்டமைப்பு c_கோவை result;
 
   result.original_code = code;
-  result.original_type = NULL;
+  result.original_type = வெற்று;
   result.m_decimal = 0;
 
-  if (reject_gcc_builtin (arg.value))
+  எனில் (reject_gcc_builtin (arg.மதிப்பு))
     {
-      result.value = error_mark_node;
+      result.மதிப்பு = error_mark_முனை;
     }
-  else
+  இல்லையெனில்
     {
-      result.value = build_unary_op (loc, code, arg.value, true);
+      result.மதிப்பு = build_unary_op (loc, code, arg.மதிப்பு, உண்மை);
 
-      if (TREE_OVERFLOW_P (result.value) && !TREE_OVERFLOW_P (arg.value))
-	overflow_warning (loc, result.value, arg.value);
+      எனில் (மரம்_OVERFLOW_P (result.மதிப்பு) && !மரம்_OVERFLOW_P (arg.மதிப்பு))
+	overflow_warning (loc, result.மதிப்பு, arg.மதிப்பு);
     }
 
   /* We are typically called when parsing a prefix token at LOC acting on
      ARG.  Reflect this by updating the source range of the result to
      start at LOC and end at the end of ARG.  */
-  set_c_expr_source_range (&result,
+  set_c_கோவை_source_range (&result,
 			   loc, arg.get_finish ());
 
-  return result;
+  திரும்பு result;
 }
 
 /* See if VAL is an identifier matching __BB<num> and return <num>
    in *INDEX.  */
 
-static bool
-c_parser_gimple_parse_bb_spec (tree val, int *index)
+நிலையான தருக்க
+c_parser_gimple_parse_bb_spec (மரம் val, முழு *index)
 {
-  if (!startswith (IDENTIFIER_POINTER (val), "__BB"))
-    return false;
+  எனில் (!startswith (IDENTIFIER_POINTER (val), "__BB"))
+    திரும்பு பொய்;
 
-  const char *bb = IDENTIFIER_POINTER (val) + 4;
-  if (! ISDIGIT (*bb))
-    return false;
+  மாறிலி எழுத்து *bb = IDENTIFIER_POINTER (val) + 4;
+  எனில் (! ISDIGIT (*bb))
+    திரும்பு பொய்;
 
-  char *pend;
+  எழுத்து *pend;
   errno = 0;
-  const unsigned long number = strtoul (bb, &pend, 10);
-  if (errno == ERANGE
+  மாறிலி unsigned long எண் = strtoul (bb, &pend, 10);
+  எனில் (errno == ERANGE
       || *pend != '\0'
-      || number > INT_MAX)
-    return false;
+      || எண் > INT_MAX)
+    திரும்பு பொய்;
 
-  *index = number;
-  return true;
+  *index = எண்;
+  திரும்பு உண்மை;
 }
 
 /* See if VAL is an identifier matching __BB<num> and return <num>
@@ -189,150 +189,150 @@ c_parser_gimple_parse_bb_spec (tree val, int *index)
    the edge.  */
 
 
-static bool
-c_parser_gimple_parse_bb_spec_edge_probability (tree val,
+நிலையான தருக்க
+c_parser_gimple_parse_bb_spec_edge_probability (மரம் val,
 						gimple_parser &parser,
-						int *index,
+						முழு *index,
 						profile_probability
 						*probability)
 {
-  bool return_p = c_parser_gimple_parse_bb_spec (val, index);
-  if (return_p)
+  தருக்க return_p = c_parser_gimple_parse_bb_spec (val, index);
+  எனில் (return_p)
     {
       *probability = profile_probability::uninitialized ();
       /* Parse frequency if provided.  */
-      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+      எனில் (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	{
-	  tree f;
+	  மரம் f;
 	  c_parser_consume_token (parser);
-	  if (!c_parser_next_token_is (parser, CPP_NAME))
+	  எனில் (!c_parser_next_token_is (parser, CPP_NAME))
 	    {
 	      c_parser_error (parser, "expected frequency quality");
-	      return false;
+	      திரும்பு பொய்;
 	    }
 
 	  profile_quality quality;
-	  const char *v
-	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
-	  if (!parse_profile_quality (v, &quality))
+	  மாறிலி எழுத்து *v
+	    = IDENTIFIER_POINTER (c_parser_peek_token (parser)->மதிப்பு);
+	  எனில் (!parse_profile_quality (v, &quality))
 	    {
 	      c_parser_error (parser, "unknown profile quality");
-	      return false;
+	      திரும்பு பொய்;
 	    }
 
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return false;
+	  எனில் (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    திரும்பு பொய்;
 
-	  if (!c_parser_next_token_is (parser, CPP_NUMBER)
-	      || (TREE_CODE (f = c_parser_peek_token (parser)->value)
+	  எனில் (!c_parser_next_token_is (parser, CPP_எண்)
+	      || (மரம்_CODE (f = c_parser_peek_token (parser)->மதிப்பு)
 		  != INTEGER_CST))
 	    {
 	      c_parser_error (parser, "expected frequency value");
-	      return false;
+	      திரும்பு பொய்;
 	    }
 
-	  unsigned int value = TREE_INT_CST_LOW (f);
-	  *probability = profile_probability (value, quality);
+	  unsigned முழு மதிப்பு = மரம்_INT_CST_கீழ் (f);
+	  *probability = profile_probability (மதிப்பு, quality);
 
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return false;
+	  எனில் (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    திரும்பு பொய்;
 
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return false;
+	  எனில் (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    திரும்பு பொய்;
 	}
 
-      return true;
+      திரும்பு உண்மை;
     }
 
-  return false;
+  திரும்பு பொய்;
 
 }
 
 /* Parse the body of a function declaration marked with "__GIMPLE".  */
 
-void
-c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
-			    enum c_declspec_il cdil,
-			    profile_count entry_bb_count)
+வெறுமை
+c_parser_parse_gimple_body (c_parser *cparser, எழுத்து *gimple_pass,
+			    எண்ணிக்கை c_declspec_il cdil,
+			    profile_மொத்தம் entry_bb_மொத்தம்)
 {
   gimple_parser parser (cparser);
-  gimple_seq seq = NULL;
-  gimple_seq body = NULL;
-  tree stmt = push_stmt_list ();
-  push_scope ();
+  gimple_seq seq = வெற்று;
+  gimple_seq body = வெற்று;
+  மரம் stmt = தள்ளு_stmt_list ();
+  தள்ளு_scope ();
   location_t loc1 = c_parser_peek_token (parser)->location;
 
   cfun->pass_startwith = gimple_pass;
-  init_tree_ssa (cfun);
+  init_மரம்_ssa (cfun);
 
-  if (cdil == cdil_gimple)
+  எனில் (cdil == cdil_gimple)
     /* While we have SSA names in the IL we do not have a CFG built yet
        and PHIs are represented using a PHI internal function.  We do
        have lowered control flow and exception handling (well, we do not
        have parser support for EH yet).  But as we still have BINDs
        we have to go through lowering again.  */
     cfun->curr_properties = PROP_gimple_any;
-  else
+  இல்லையெனில்
     {
       /* We have at least cdil_gimple_cfg.  */
       gimple_register_cfg_hooks ();
-      init_empty_tree_cfg ();
+      init_empty_மரம்_cfg ();
       parser.current_bb = ENTRY_BLOCK_PTR_FOR_FN (cfun);
       /* Initialize the bare loop structure - we are going to only
          mark headers and leave the rest to fixup.  */
-      set_loops_for_fn (cfun, ggc_cleared_alloc<struct loops> ());
+      set_loops_for_fn (cfun, ggc_cleared_alloc<கட்டமைப்பு loops> ());
       init_loops_structure (cfun, loops_for_fn (cfun), 1);
       loops_state_set (cfun, LOOPS_NEED_FIXUP|LOOPS_MAY_HAVE_MULTIPLE_LATCHES);
       cfun->curr_properties
 	|= PROP_gimple_lcf | PROP_gimple_leh | PROP_cfg | PROP_loops;
-      if (cdil == cdil_gimple_ssa)
+      எனில் (cdil == cdil_gimple_ssa)
 	{
 	  init_ssa_operands (cfun);
 	  cfun->curr_properties |= PROP_ssa;
 	}
     }
 
-  if (! c_parser_gimple_compound_statement (parser, &seq)
+  எனில் (! c_parser_gimple_compound_statement (parser, &seq)
       && cdil == cdil_gimple)
     {
-      gimple *ret = gimple_build_return (NULL);
+      gimple *ret = gimple_build_return (வெற்று);
       gimple_seq_add_stmt_without_update (&seq, ret);
     }
 
-  tree block = pop_scope ();
-  stmt = pop_stmt_list (stmt);
-  stmt = c_build_bind_expr (loc1, block, stmt);
+  மரம் block = எடு_scope ();
+  stmt = எடு_stmt_list (stmt);
+  stmt = c_build_bind_கோவை (loc1, block, stmt);
 
   block = DECL_INITIAL (current_function_decl);
-  BLOCK_SUBBLOCKS (block) = NULL_TREE;
-  BLOCK_CHAIN (block) = NULL_TREE;
-  TREE_ASM_WRITTEN (block) = 1;
+  BLOCK_SUBBLOCKS (block) = NULL_மரம்;
+  BLOCK_CHAIN (block) = NULL_மரம்;
+  மரம்_ASM_WRITTEN (block) = 1;
 
-  if (cdil == cdil_gimple)
+  எனில் (cdil == cdil_gimple)
     {
-      gbind *bind_stmt = gimple_build_bind (BIND_EXPR_VARS (stmt), NULL,
-					    BIND_EXPR_BLOCK (stmt));
+      gbind *bind_stmt = gimple_build_bind (BIND_கோவை_VARS (stmt), வெற்று,
+					    BIND_கோவை_BLOCK (stmt));
       gimple_bind_set_body (bind_stmt, seq);
       gimple_seq_add_stmt_without_update (&body, bind_stmt);
       gimple_set_body (current_function_decl, body);
     }
-  else
+  இல்லையெனில்
     {
       /* Control-flow and binds are lowered, record local decls.  */
-      for (tree var = BIND_EXPR_VARS (stmt); var; var = DECL_CHAIN (var))
-	if (VAR_P (var)
+      க்கு (மரம் var = BIND_கோவை_VARS (stmt); var; var = DECL_CHAIN (var))
+	எனில் (VAR_P (var)
 	    && !DECL_EXTERNAL (var))
 	  {
 	    add_local_decl (cfun, var);
 	    /* When the middle-end re-gimplifies any expression we might
 	       run into the assertion that we've seen the decl in a BIND.  */
-	    if (!TREE_STATIC (var))
-	      DECL_SEEN_IN_BIND_EXPR_P (var) = 1;
+	    எனில் (!மரம்_STATIC (var))
+	      DECL_SEEN_IN_BIND_கோவை_P (var) = 1;
 	  }
       /* We have a CFG.  Build the edges.  */
-      for (unsigned i = 0; i < parser.edges.length (); ++i)
+      க்கு (unsigned i = 0; i < parser.edges.length (); ++i)
 	{
 	  edge e = make_edge (BASIC_BLOCK_FOR_FN (cfun, parser.edges[i].src),
 			      BASIC_BLOCK_FOR_FN (cfun, parser.edges[i].dest),
@@ -342,10 +342,10 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
       /* Add edges for case labels.  */
       basic_block bb;
       FOR_EACH_BB_FN (bb, cfun)
-	if (EDGE_COUNT (bb->succs) == 0)
+	எனில் (EDGE_மொத்தம் (bb->succs) == 0)
 	  {
-	    if (gswitch *sw = safe_dyn_cast <gswitch *> (*gsi_last_bb (bb)))
-	      for (unsigned i = 0; i < gimple_switch_num_labels (sw); ++i)
+	    எனில் (gswitch *sw = safe_dyn_cast <gswitch *> (*gsi_last_bb (bb)))
+	      க்கு (unsigned i = 0; i < gimple_switch_இலக்கம்_labels (sw); ++i)
 		{
 		  basic_block label_bb = gimple_switch_label_bb (cfun, sw, i);
 		  make_edge (bb, label_bb, 0);
@@ -355,50 +355,50 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
       calculate_dominance_info (CDI_DOMINATORS);
       /* With SSA lower PHIs parsed as internal function calls and
 	 update stmts.  */
-      if (cdil == cdil_gimple_ssa)
+      எனில் (cdil == cdil_gimple_ssa)
 	{
 	  /* Create PHI nodes, they are parsed into __PHI internal calls
 	     and update SSA operands.  */
 	  FOR_EACH_BB_FN (bb, cfun)
 	    {
 	      gimple_stmt_iterator gsi;
-	      for (gsi = gsi_start_bb (bb); !gsi_end_p (gsi);)
+	      க்கு (gsi = gsi_start_bb (bb); !gsi_end_p (gsi);)
 		{
 		  gimple *stmt = gsi_stmt (gsi);
-		  if (!gimple_call_internal_p (stmt, IFN_PHI))
-		    break;
+		  எனில் (!gimple_call_internal_p (stmt, IFN_PHI))
+		    நிறுத்து;
 
-		  gphi *phi = create_phi_node (gimple_call_lhs (stmt), bb);
-		  for (unsigned i = 0; i < gimple_call_num_args (stmt); i += 2)
+		  gphi *phi = create_phi_முனை (gimple_call_lhs (stmt), bb);
+		  க்கு (unsigned i = 0; i < gimple_call_இலக்கம்_args (stmt); i += 2)
 		    {
-		      int srcidx = TREE_INT_CST_LOW (gimple_call_arg (stmt, i));
+		      முழு srcidx = மரம்_INT_CST_கீழ் (gimple_call_arg (stmt, i));
 		      edge e = find_edge (BASIC_BLOCK_FOR_FN (cfun, srcidx), bb);
-		      if (!e)
+		      எனில் (!e)
 			c_parser_error (parser, "edge not found");
-		      else
+		      இல்லையெனில்
 			add_phi_arg (phi, gimple_call_arg (stmt, i + 1), e,
 				     UNKNOWN_LOCATION);
 		    }
-		  gsi_remove (&gsi, true);
+		  gsi_remove (&gsi, உண்மை);
 		}
-	      for (; !gsi_end_p (gsi); gsi_next (&gsi))
+	      க்கு (; !gsi_end_p (gsi); gsi_next (&gsi))
 		update_stmt (gsi_stmt (gsi));
 	    }
 	  /* Fill SSA name gaps, putting them on the freelist and diagnose
 	     SSA names without definition.  */
-	  for (unsigned i = 1; i < num_ssa_names; ++i)
-	    if (!ssa_name (i))
+	  க்கு (unsigned i = 1; i < இலக்கம்_ssa_names; ++i)
+	    எனில் (!ssa_name (i))
 	      {
-		tree name = make_ssa_name_fn (cfun, integer_type_node, NULL, i);
+		மரம் name = make_ssa_name_fn (cfun, integer_type_முனை, வெற்று, i);
 		release_ssa_name_fn (cfun, name);
 	      }
-	    else if (!SSA_NAME_DEF_STMT (ssa_name (i)))
+	    இல்லையெனில் எனில் (!SSA_NAME_DEF_STMT (ssa_name (i)))
 	      error ("SSA name %qE with version %d has no definition",
 		     ssa_name (i), i);
 	  /* No explicit virtual operands (yet).  */
-	  bitmap_obstack_initialize (NULL);
+	  bitmap_obstack_initialize (வெற்று);
 	  update_ssa (TODO_update_ssa_only_virtuals);
-	  bitmap_obstack_release (NULL);
+	  bitmap_obstack_release (வெற்று);
 	  /* ???  By flushing the freelist after virtual operand SSA rewrite
 	     we keep the gaps available for re-use like needed for the
 	     PR89595 testcase but then usually virtual operands would have
@@ -406,27 +406,27 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
 	     operands explicit in the SSA IL.  */
 	  flush_ssaname_freelist ();
 	}
-      fix_loop_structure (NULL);
+      fix_loop_structure (வெற்று);
     }
 
-  if (cfun->curr_properties & PROP_cfg)
+  எனில் (cfun->curr_properties & PROP_cfg)
     {
-      ENTRY_BLOCK_PTR_FOR_FN (cfun)->count = entry_bb_count;
+      ENTRY_BLOCK_PTR_FOR_FN (cfun)->மொத்தம் = entry_bb_மொத்தம்;
       gcov_type t = param_gimple_fe_computed_hot_bb_threshold;
       set_hot_bb_threshold (t);
-      update_max_bb_count ();
-      cgraph_node::get_create (cfun->decl);
+      update_max_bb_மொத்தம் ();
+      cgraph_முனை::get_create (cfun->decl);
       cgraph_edge::rebuild_edges ();
     }
 
   /* Perform IL validation and if any error is found abort compilation
      of this function by zapping its body.  */
-  if ((cfun->curr_properties & PROP_cfg)
-      && verify_gimple_in_cfg (cfun, false, false))
-    init_empty_tree_cfg ();
-  else if (!(cfun->curr_properties & PROP_cfg)
-	   && verify_gimple_in_seq (gimple_body (current_function_decl), false))
-    gimple_set_body (current_function_decl, NULL);
+  எனில் ((cfun->curr_properties & PROP_cfg)
+      && verify_gimple_in_cfg (cfun, பொய், பொய்))
+    init_empty_மரம்_cfg ();
+  இல்லையெனில் எனில் (!(cfun->curr_properties & PROP_cfg)
+	   && verify_gimple_in_seq (gimple_body (current_function_decl), பொய்))
+    gimple_set_body (current_function_decl, வெற்று);
 
   dump_function (TDI_gimple, current_function_decl);
 }
@@ -445,210 +445,210 @@ c_parser_parse_gimple_body (c_parser *cparser, char *gimple_pass,
      gimple-return-statement
 */
 
-static bool
+நிலையான தருக்க
 c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 {
-  bool return_p = false;
+  தருக்க return_p = பொய்;
 
-  if (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
-    return false;
+  எனில் (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+    திரும்பு பொய்;
 
   /* A compound statement starts with optional declarations.  */
-  while (c_parser_next_tokens_start_declaration (parser))
+  போது (c_parser_next_tokens_start_declaration (parser))
     {
       c_parser_gimple_declaration (parser);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return false;
+      எனில் (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	திரும்பு பொய்;
     }
 
-  while (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
+  போது (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
     {
-      if (c_parser_error (parser))
+      எனில் (c_parser_error (parser))
 	{
-	  c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, NULL);
-	  return return_p;
+	  c_parser_skip_until_found (parser, CPP_CLOSE_BRACE, வெற்று);
+	  திரும்பு return_p;
 	}
-      else if (c_parser_next_token_is (parser, CPP_EOF))
+      இல்லையெனில் எனில் (c_parser_next_token_is (parser, CPP_EOF))
 	{
 	  c_parser_error (parser, "expected declaration or statement");
-	  return return_p;
+	  திரும்பு return_p;
 	}
 
-      switch (c_parser_peek_token (parser)->type)
+      தேர்வு (c_parser_peek_token (parser)->type)
 	{
-	case CPP_KEYWORD:
-	  switch (c_parser_peek_token (parser)->keyword)
+	நிலை CPP_KEYWORD:
+	  தேர்வு (c_parser_peek_token (parser)->keyword)
 	    {
-	    case RID_AT_TRY:
+	    நிலை RID_AT_TRY:
 	      c_parser_gimple_try_stmt (parser, seq);
-	      break;
-	    case RID_IF:
+	      நிறுத்து;
+	    நிலை RID_IF:
 	      c_parser_gimple_if_stmt (parser, seq);
-	      break;
-	    case RID_SWITCH:
+	      நிறுத்து;
+	    நிலை RID_SWITCH:
 	      c_parser_gimple_switch_stmt (parser, seq);
-	      break;
-	    case RID_GOTO:
+	      நிறுத்து;
+	    நிலை RID_GOTO:
 	      {
 		location_t loc = c_parser_peek_token (parser)->location;
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		எனில் (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    tree label = c_parser_peek_token (parser)->value;
+		    மரம் label = c_parser_peek_token (parser)->மதிப்பு;
 		    c_parser_consume_token (parser);
 		    c_parser_gimple_goto_stmt (parser, loc, label, seq);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    எனில் (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return return_p;
+		      திரும்பு return_p;
 		  }
 		}
-	      break;
-	    case RID_RETURN:
-	      return_p = true;
+	      நிறுத்து;
+	    நிலை RID_RETURN:
+	      return_p = உண்மை;
 	      c_parser_gimple_return_stmt (parser, seq);
-	      if (! c_parser_require (parser, CPP_SEMICOLON,
+	      எனில் (! c_parser_require (parser, CPP_SEMICOLON,
 				      "expected %<;%>"))
-		return return_p;
-	      if (cfun->curr_properties & PROP_cfg)
-		parser.push_edge (parser.current_bb->index, EXIT_BLOCK, 0,
+		திரும்பு return_p;
+	      எனில் (cfun->curr_properties & PROP_cfg)
+		parser.தள்ளு_edge (parser.current_bb->index, EXIT_BLOCK, 0,
 				  profile_probability::uninitialized ());
-	      break;
-	    default:
-	      goto expr_stmt;
+	      நிறுத்து;
+	    இயல்பு:
+	      செல் கோவை_stmt;
 	    }
-	  break;
-	case CPP_NAME:
-	  if (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
+	  நிறுத்து;
+	நிலை CPP_NAME:
+	  எனில் (c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
 	      c_parser_gimple_label (parser, seq);
-	      break;
+	      நிறுத்து;
 	    }
-	  if (c_parser_next_token_is (parser, CPP_NAME)
+	  எனில் (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_token (parser)->id_kind == C_ID_ID
-	      && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	      && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->மதிப்பு),
 			 "try") == 0)
 	    {
 	      c_parser_gimple_try_stmt (parser, seq);
-	      break;
+	      நிறுத்து;
 	    }
 	  /* Basic block specification.
 	     __BB (index, ...)  */
-	  if ((cfun->curr_properties & PROP_cfg)
+	  எனில் ((cfun->curr_properties & PROP_cfg)
 	      && !strcmp (IDENTIFIER_POINTER
-			    (c_parser_peek_token (parser)->value), "__BB"))
+			    (c_parser_peek_token (parser)->மதிப்பு), "__BB"))
 	    {
 	      c_parser_consume_token (parser);
-	      if (! c_parser_require (parser, CPP_OPEN_PAREN,
+	      எனில் (! c_parser_require (parser, CPP_OPEN_PAREN,
 				      "expected %<(%>"))
-		return return_p;
-	      if (c_parser_next_token_is_not (parser, CPP_NUMBER))
+		திரும்பு return_p;
+	      எனில் (c_parser_next_token_is_not (parser, CPP_எண்))
 		{
 		  c_parser_error (parser, "expected block index");
-		  return return_p;
+		  திரும்பு return_p;
 		}
-	      tree tnum = c_parser_peek_token (parser)->value;
-	      if (TREE_CODE (tnum) != INTEGER_CST)
+	      மரம் tnum = c_parser_peek_token (parser)->மதிப்பு;
+	      எனில் (மரம்_CODE (tnum) != INTEGER_CST)
 		{
 		  c_parser_error (parser, "expected block index");
-		  return return_p;
+		  திரும்பு return_p;
 		}
-	      int index = TREE_INT_CST_LOW (tnum);
-	      if (index < NUM_FIXED_BLOCKS
+	      முழு index = மரம்_INT_CST_கீழ் (tnum);
+	      எனில் (index < இலக்கம்_FIXED_BLOCKS
 		  || (index < last_basic_block_for_fn (cfun)
-		      && BASIC_BLOCK_FOR_FN (cfun, index) != NULL))
+		      && BASIC_BLOCK_FOR_FN (cfun, index) != வெற்று))
 		{
 		  c_parser_error (parser, "invalid block index");
-		  return return_p;
+		  திரும்பு return_p;
 		}
-	      int is_loop_header_of = -1;
-	      profile_count bb_count = profile_count::uninitialized ();
+	      முழு is_loop_header_of = -1;
+	      profile_மொத்தம் bb_மொத்தம் = profile_மொத்தம்::uninitialized ();
 	      c_parser_consume_token (parser);
-	      while (c_parser_next_token_is (parser, CPP_COMMA))
+	      போது (c_parser_next_token_is (parser, CPP_COMMA))
 		{
 		  c_parser_consume_token (parser);
-		  if (! c_parser_next_token_is (parser, CPP_NAME))
+		  எனில் (! c_parser_next_token_is (parser, CPP_NAME))
 		    {
 		      c_parser_error (parser, "expected block specifier");
-		      return return_p;
+		      திரும்பு return_p;
 		    }
 		  /* loop_header (NUM)  */
-		  if (!strcmp (IDENTIFIER_POINTER
-			         (c_parser_peek_token (parser)->value),
+		  எனில் (!strcmp (IDENTIFIER_POINTER
+			         (c_parser_peek_token (parser)->மதிப்பு),
 			       "loop_header"))
 		    {
 		      c_parser_consume_token (parser);
-		      if (! c_parser_require (parser, CPP_OPEN_PAREN,
+		      எனில் (! c_parser_require (parser, CPP_OPEN_PAREN,
 					      "expected %<(%>"))
-			return return_p;
-		      tree loop_num;
-		      if (! c_parser_next_token_is (parser, CPP_NUMBER)
-			  || TREE_CODE (loop_num
-					  = c_parser_peek_token (parser)->value)
+			திரும்பு return_p;
+		      மரம் loop_இலக்கம்;
+		      எனில் (! c_parser_next_token_is (parser, CPP_எண்)
+			  || மரம்_CODE (loop_இலக்கம்
+					  = c_parser_peek_token (parser)->மதிப்பு)
 			       != INTEGER_CST)
 			{
 			  c_parser_error (parser, "expected loop number");
-			  return return_p;
+			  திரும்பு return_p;
 			}
 		      c_parser_consume_token (parser);
-		      is_loop_header_of = TREE_INT_CST_LOW (loop_num);
-		      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+		      is_loop_header_of = மரம்_INT_CST_கீழ் (loop_இலக்கம்);
+		      எனில் (! c_parser_require (parser, CPP_CLOSE_PAREN,
 					      "expected %<)%>"))
-			return return_p;
+			திரும்பு return_p;
 		    }
 		  /* Parse profile: quality(value) */
-		  else
+		  இல்லையெனில்
 		    {
-		      tree q;
+		      மரம் q;
 		      profile_quality quality;
-		      tree v = c_parser_peek_token (parser)->value;
-		      if (!parse_profile_quality (IDENTIFIER_POINTER (v),
+		      மரம் v = c_parser_peek_token (parser)->மதிப்பு;
+		      எனில் (!parse_profile_quality (IDENTIFIER_POINTER (v),
 						  &quality))
 			{
 			  c_parser_error (parser, "unknown block specifier");
-			  return false;
+			  திரும்பு பொய்;
 			}
 
 		      c_parser_consume_token (parser);
-		      if (!c_parser_require (parser, CPP_OPEN_PAREN,
+		      எனில் (!c_parser_require (parser, CPP_OPEN_PAREN,
 					     "expected %<(%>"))
-			return false;
+			திரும்பு பொய்;
 
-		      if (!c_parser_next_token_is (parser, CPP_NUMBER)
-			  || (TREE_CODE (q = c_parser_peek_token (parser)->value)
+		      எனில் (!c_parser_next_token_is (parser, CPP_எண்)
+			  || (மரம்_CODE (q = c_parser_peek_token (parser)->மதிப்பு)
 			      != INTEGER_CST))
 			{
 			  c_parser_error (parser, "expected count value");
-			  return false;
+			  திரும்பு பொய்;
 			}
 
-		      bb_count
-			= profile_count::from_gcov_type (TREE_INT_CST_LOW (q),
+		      bb_மொத்தம்
+			= profile_மொத்தம்::from_gcov_type (மரம்_INT_CST_கீழ் (q),
 							 quality);
 		      c_parser_consume_token (parser);
-		      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+		      எனில் (! c_parser_require (parser, CPP_CLOSE_PAREN,
 					      "expected %<)%>"))
-			return return_p;
+			திரும்பு return_p;
 		    }
 		}
-	      if (! c_parser_require (parser, CPP_CLOSE_PAREN,
+	      எனில் (! c_parser_require (parser, CPP_CLOSE_PAREN,
 				      "expected %<)%>")
 		  || ! c_parser_require (parser, CPP_COLON,
 					 "expected %<:%>"))
-		return return_p;
+		திரும்பு return_p;
 
 	      /* Put stmts parsed in the current block.  */
-	      if (!gimple_seq_empty_p (*seq))
+	      எனில் (!gimple_seq_empty_p (*seq))
 		{
-		  if (!parser.current_bb)
+		  எனில் (!parser.current_bb)
 		    c_parser_error (parser, "stmts without block");
-		  else
+		  இல்லையெனில்
 		    {
 		      gimple_stmt_iterator gsi
 			= gsi_start_bb (parser.current_bb);
-		      gsi_insert_seq_after_without_update (&gsi, *seq,
+		      gsi_செருகு_seq_after_without_update (&gsi, *seq,
 							   GSI_CONTINUE_LINKING);
 		    }
-		  *seq = NULL;
+		  *seq = வெற்று;
 		}
 
 	      /* Build an empty block with specified index, linking them
@@ -657,53 +657,53 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 	      bb->index = index;
 	      link_block (bb, (parser.current_bb ? parser.current_bb
 			       : ENTRY_BLOCK_PTR_FOR_FN (cfun)));
-	      if (basic_block_info_for_fn (cfun)->length () <= (size_t)index)
+	      எனில் (basic_block_info_for_fn (cfun)->length () <= (size_t)index)
 		vec_safe_grow_cleared (basic_block_info_for_fn (cfun),
-				       index + 1, true);
+				       index + 1, உண்மை);
 	      SET_BASIC_BLOCK_FOR_FN (cfun, index, bb);
-	      if (last_basic_block_for_fn (cfun) <= index)
+	      எனில் (last_basic_block_for_fn (cfun) <= index)
 		last_basic_block_for_fn (cfun) = index + 1;
 	      n_basic_blocks_for_fn (cfun)++;
-	      if (parser.current_bb->index == ENTRY_BLOCK)
-		parser.push_edge (ENTRY_BLOCK, bb->index, EDGE_FALLTHRU,
+	      எனில் (parser.current_bb->index == ENTRY_BLOCK)
+		parser.தள்ளு_edge (ENTRY_BLOCK, bb->index, EDGE_FALLTHRU,
 				  profile_probability::always ());
 
 	      /* We leave the proper setting to fixup.  */
-	      class loop *loop_father = loops_for_fn (cfun)->tree_root;
+	      வகுப்பு loop *loop_father = loops_for_fn (cfun)->மரம்_வேர்;
 	      /* If the new block is a loop header, allocate a loop
 		 struct.  Fixup will take care of proper placement within
 		 the loop tree.  */
-	      if (is_loop_header_of != -1)
+	      எனில் (is_loop_header_of != -1)
 		{
-		  if (number_of_loops (cfun) > (unsigned)is_loop_header_of
-		      && get_loop (cfun, is_loop_header_of) != NULL)
+		  எனில் (எண்_of_loops (cfun) > (unsigned)is_loop_header_of
+		      && get_loop (cfun, is_loop_header_of) != வெற்று)
 		    {
 		      c_parser_error (parser, "duplicate loop header");
 		    }
-		  else
+		  இல்லையெனில்
 		    {
-		      class loop *loop = alloc_loop ();
-		      loop->num = is_loop_header_of;
+		      வகுப்பு loop *loop = alloc_loop ();
+		      loop->இலக்கம் = is_loop_header_of;
 		      loop->header = bb;
-		      if (number_of_loops (cfun) <= (unsigned)is_loop_header_of)
+		      எனில் (எண்_of_loops (cfun) <= (unsigned)is_loop_header_of)
 			vec_safe_grow_cleared (loops_for_fn (cfun)->larray,
-					       is_loop_header_of + 1, true);
+					       is_loop_header_of + 1, உண்மை);
 		      (*loops_for_fn (cfun)->larray)[is_loop_header_of] = loop;
-		      flow_loop_tree_node_add (loops_for_fn (cfun)->tree_root,
+		      flow_loop_மரம்_முனை_add (loops_for_fn (cfun)->மரம்_வேர்,
 					       loop);
 		    }
 		  loop_father = get_loop (cfun, is_loop_header_of);
 		}
 	      bb->loop_father = loop_father;
-	      bb->count = bb_count;
+	      bb->மொத்தம் = bb_மொத்தம்;
 
 	      /* Stmts now go to the new block.  */
 	      parser.current_bb = bb;
-	      break;
+	      நிறுத்து;
 	    }
-	  goto expr_stmt;
+	  செல் கோவை_stmt;
 
-	case CPP_SEMICOLON:
+	நிலை CPP_SEMICOLON:
 	  {
 	    /* Empty stmt.  */
 	    location_t loc = c_parser_peek_token (parser)->location;
@@ -711,44 +711,44 @@ c_parser_gimple_compound_statement (gimple_parser &parser, gimple_seq *seq)
 	    gimple *nop = gimple_build_nop ();
 	    gimple_set_location (nop, loc);
 	    gimple_seq_add_stmt_without_update (seq, nop);
-	    break;
+	    நிறுத்து;
 	  }
 
-	case CPP_CLOSE_PAREN:
-	case CPP_CLOSE_SQUARE:
+	நிலை CPP_CLOSE_PAREN:
+	நிலை CPP_CLOSE_SQUARE:
 	  /* Avoid infinite loop in error recovery:
 	     c_parser_skip_until_found stops at a closing nesting
 	     delimiter without consuming it, but here we need to consume
 	     it to proceed further.  */
 	  c_parser_error (parser, "expected statement");
 	  c_parser_consume_token (parser);
-	break;
+	நிறுத்து;
 
-	default:
-expr_stmt:
+	இயல்பு:
+கோவை_stmt:
 	  c_parser_gimple_statement (parser, seq);
-	  if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	    c_parser_skip_until_found (parser, CPP_SEMICOLON, NULL);
+	  எனில் (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	    c_parser_skip_until_found (parser, CPP_SEMICOLON, வெற்று);
 	}
     }
   c_parser_consume_token (parser);
 
   /* Put stmts parsed in the current block.  */
-  if ((cfun->curr_properties & PROP_cfg)
+  எனில் ((cfun->curr_properties & PROP_cfg)
       && !gimple_seq_empty_p (*seq))
     {
-      if (!parser.current_bb)
+      எனில் (!parser.current_bb)
 	c_parser_error (parser, "stmts without block");
-      else
+      இல்லையெனில்
 	{
 	  gimple_stmt_iterator gsi = gsi_start_bb (parser.current_bb);
-	  gsi_insert_seq_after_without_update (&gsi, *seq,
+	  gsi_செருகு_seq_after_without_update (&gsi, *seq,
 					       GSI_CONTINUE_LINKING);
 	}
-      *seq = NULL;
+      *seq = வெற்று;
     }
 
-  return return_p;
+  திரும்பு return_p;
 }
 
 /* Parse a gimple statement.
@@ -778,42 +778,42 @@ expr_stmt:
 
 */
 
-static void
+நிலையான வெறுமை
 c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
 {
-  struct c_expr lhs, rhs;
-  gimple *assign = NULL;
+  கட்டமைப்பு c_கோவை lhs, rhs;
+  gimple *assign = வெற்று;
   location_t loc;
-  tree arg = NULL_TREE;
-  auto_vec<tree> vargs;
+  மரம் arg = NULL_மரம்;
+  auto_vec<மரம்> vargs;
 
   lhs = c_parser_gimple_unary_expression (parser);
-  loc = EXPR_LOCATION (lhs.value);
+  loc = கோவை_LOCATION (lhs.மதிப்பு);
   rhs.set_error ();
 
   /* GIMPLE call statement without LHS.  */
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON)
-      && TREE_CODE (lhs.value) == CALL_EXPR)
+  எனில் (c_parser_next_token_is (parser, CPP_SEMICOLON)
+      && மரம்_CODE (lhs.மதிப்பு) == CALL_கோவை)
     {
       gimple *call;
-      call = gimple_build_call_from_tree (lhs.value, NULL);
+      call = gimple_build_call_from_மரம் (lhs.மதிப்பு, வெற்று);
       gimple_seq_add_stmt_without_update (seq, call);
       gimple_set_location (call, loc);
-      return;
+      திரும்பு;
     }
 
   /* All following cases are statements with LHS.  */
-  if (! c_parser_require (parser, CPP_EQ, "expected %<=%>"))
-    return;
+  எனில் (! c_parser_require (parser, CPP_EQ, "expected %<=%>"))
+    திரும்பு;
 
   /* Eat and ignore {v} right after the =, the has_volatile_ops is
      redundant and re-computed by the operand scanner.  */
-  if (c_parser_next_token_is (parser, CPP_OPEN_BRACE)
+  எனில் (c_parser_next_token_is (parser, CPP_OPEN_BRACE)
       && !(c_parser_peek_token (parser)->flags & PREV_WHITE)
       && c_parser_peek_2nd_token (parser)->type == CPP_NAME
       && !(c_parser_peek_2nd_token (parser)->flags & PREV_WHITE)
       && strcmp ("v", IDENTIFIER_POINTER
-			(c_parser_peek_2nd_token (parser)->value)) == 0
+			(c_parser_peek_2nd_token (parser)->மதிப்பு)) == 0
       && c_parser_peek_nth_token (parser, 3)->type == CPP_CLOSE_BRACE
       && !(c_parser_peek_nth_token (parser, 3)->flags & PREV_WHITE))
     {
@@ -823,104 +823,104 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
     }
 
   /* Cast expression.  */
-  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+  எனில் (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
       && c_token_starts_typename (c_parser_peek_2nd_token (parser)))
     {
       c_parser_consume_token (parser);
-      struct c_type_name *type_name = c_parser_type_name (parser);
+      கட்டமைப்பு c_type_name *type_name = c_parser_type_name (parser);
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, "expected %<)%>");
-      if (type_name == NULL)
-	return;
+      எனில் (type_name == வெற்று)
+	திரும்பு;
       /* ???  The actual type used in the cast expression is ignored as
          in GIMPLE it is encoded by the type of the LHS.  */
       rhs = c_parser_gimple_postfix_expression (parser);
-      if (lhs.value != error_mark_node
-	  && rhs.value != error_mark_node)
+      எனில் (lhs.மதிப்பு != error_mark_முனை
+	  && rhs.மதிப்பு != error_mark_முனை)
 	{
-	  enum tree_code code = NOP_EXPR;
-	  if (FLOAT_TYPE_P (TREE_TYPE (lhs.value))
-	      && ! FLOAT_TYPE_P (TREE_TYPE (rhs.value)))
-	    code = FLOAT_EXPR;
-	  else if (! FLOAT_TYPE_P (TREE_TYPE (lhs.value))
-		   && FLOAT_TYPE_P (TREE_TYPE (rhs.value)))
-	    code = FIX_TRUNC_EXPR;
-	  assign = gimple_build_assign (lhs.value, code, rhs.value);
+	  எண்ணிக்கை மரம்_code code = NOP_கோவை;
+	  எனில் (FLOAT_TYPE_P (மரம்_TYPE (lhs.மதிப்பு))
+	      && ! FLOAT_TYPE_P (மரம்_TYPE (rhs.மதிப்பு)))
+	    code = FLOAT_கோவை;
+	  இல்லையெனில் எனில் (! FLOAT_TYPE_P (மரம்_TYPE (lhs.மதிப்பு))
+		   && FLOAT_TYPE_P (மரம்_TYPE (rhs.மதிப்பு)))
+	    code = FIX_TRUNC_கோவை;
+	  assign = gimple_build_assign (lhs.மதிப்பு, code, rhs.மதிப்பு);
 	  gimple_seq_add_stmt_without_update (seq, assign);
 	  gimple_set_location (assign, loc);
-	  return;
+	  திரும்பு;
 	}
     }
 
   /* Unary expression.  */
-  switch (c_parser_peek_token (parser)->type)
+  தேர்வு (c_parser_peek_token (parser)->type)
     {
-    case CPP_NAME:
+    நிலை CPP_NAME:
       {
-	tree id = c_parser_peek_token (parser)->value;
-	if (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0
+	மரம் id = c_parser_peek_token (parser)->மதிப்பு;
+	எனில் (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0
 	    || strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
-	  goto build_unary_expr;
-	break;
+	  செல் build_unary_கோவை;
+	நிறுத்து;
       }
-    case CPP_KEYWORD:
-      if (c_parser_peek_token (parser)->keyword != RID_REALPART
+    நிலை CPP_KEYWORD:
+      எனில் (c_parser_peek_token (parser)->keyword != RID_REALPART
 	  && c_parser_peek_token (parser)->keyword != RID_IMAGPART)
-	break;
+	நிறுத்து;
       /* Fallthru.  */
-    case CPP_AND:
-    case CPP_PLUS:
-    case CPP_MINUS:
-    case CPP_COMPL:
-    case CPP_NOT:
-    case CPP_MULT: /* pointer deref */
-    build_unary_expr:
+    நிலை CPP_AND:
+    நிலை CPP_PLUS:
+    நிலை CPP_MINUS:
+    நிலை CPP_COMPL:
+    நிலை CPP_NOT:
+    நிலை CPP_MULT: /* pointer deref */
+    build_unary_கோவை:
       rhs = c_parser_gimple_unary_expression (parser);
-      if (rhs.value != error_mark_node)
+      எனில் (rhs.மதிப்பு != error_mark_முனை)
 	{
-	  assign = gimple_build_assign (lhs.value, rhs.value);
+	  assign = gimple_build_assign (lhs.மதிப்பு, rhs.மதிப்பு);
 	  gimple_set_location (assign, loc);
 	  gimple_seq_add_stmt_without_update (seq, assign);
 	}
-      return;
+      திரும்பு;
 
-    default:;
+    இயல்பு:;
     }
 
   /* GIMPLE PHI statement.  */
-  if (c_parser_next_token_is_keyword (parser, RID_PHI))
+  எனில் (c_parser_next_token_is_keyword (parser, RID_PHI))
     {
       c_parser_consume_token (parser);
 
-      if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	return;
+      எனில் (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	திரும்பு;
 
-      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+      எனில் (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 	c_parser_consume_token (parser);
 
-      while (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN))
+      போது (c_parser_next_token_is_not (parser, CPP_CLOSE_PAREN))
 	{
-	  if (c_parser_next_token_is (parser, CPP_NAME)
+	  எனில் (c_parser_next_token_is (parser, CPP_NAME)
 	      && c_parser_peek_2nd_token (parser)->type == CPP_COLON)
 	    {
-	      arg = c_parser_peek_token (parser)->value;
+	      arg = c_parser_peek_token (parser)->மதிப்பு;
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is (parser, CPP_COLON))
+	      எனில் (c_parser_next_token_is (parser, CPP_COLON))
 		c_parser_consume_token (parser);
-	      int src_index = -1;
-	      if (!c_parser_gimple_parse_bb_spec (arg, &src_index))
+	      முழு src_index = -1;
+	      எனில் (!c_parser_gimple_parse_bb_spec (arg, &src_index))
 		c_parser_error (parser, "invalid source block specification");
-	      vargs.safe_push (size_int (src_index));
+	      vargs.safe_தள்ளு (size_int (src_index));
 	    }
-	  else if (c_parser_next_token_is (parser, CPP_COMMA))
+	  இல்லையெனில் எனில் (c_parser_next_token_is (parser, CPP_COMMA))
 	    c_parser_consume_token (parser);
-	  else
+	  இல்லையெனில்
 	    {
-	      arg = c_parser_gimple_unary_expression (parser).value;
-	      vargs.safe_push (arg);
+	      arg = c_parser_gimple_unary_expression (parser).மதிப்பு;
+	      vargs.safe_தள்ளு (arg);
 	    }
 	}
 
@@ -929,85 +929,85 @@ c_parser_gimple_statement (gimple_parser &parser, gimple_seq *seq)
 
       /* Build internal function for PHI.  */
       gcall *call_stmt = gimple_build_call_internal_vec (IFN_PHI, vargs);
-      gimple_call_set_lhs (call_stmt, lhs.value);
+      gimple_call_set_lhs (call_stmt, lhs.மதிப்பு);
       gimple_set_location (call_stmt, UNKNOWN_LOCATION);
       gimple_seq_add_stmt_without_update (seq, call_stmt);
-      return;
+      திரும்பு;
     }
 
   /* GIMPLE call with lhs.  */
-  if (c_parser_next_token_is (parser, CPP_DOT)
+  எனில் (c_parser_next_token_is (parser, CPP_DOT)
       || (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_2nd_token (parser)->type == CPP_OPEN_PAREN
-	  && lookup_name (c_parser_peek_token (parser)->value)))
+	  && lookup_name (c_parser_peek_token (parser)->மதிப்பு)))
     {
       rhs = c_parser_gimple_unary_expression (parser);
-      if (rhs.value != error_mark_node)
+      எனில் (rhs.மதிப்பு != error_mark_முனை)
 	{
-	  gimple *call = gimple_build_call_from_tree (rhs.value, NULL);
-	  gimple_call_set_lhs (call, lhs.value);
+	  gimple *call = gimple_build_call_from_மரம் (rhs.மதிப்பு, வெற்று);
+	  gimple_call_set_lhs (call, lhs.மதிப்பு);
 	  gimple_seq_add_stmt_without_update (seq, call);
 	  gimple_set_location (call, loc);
 	}
-      return;
+      திரும்பு;
     }
 
-  rhs = c_parser_gimple_binary_expression (parser, TREE_TYPE (lhs.value));
-  if (lhs.value != error_mark_node
-      && rhs.value != error_mark_node)
+  rhs = c_parser_gimple_இருமம்_expression (parser, மரம்_TYPE (lhs.மதிப்பு));
+  எனில் (lhs.மதிப்பு != error_mark_முனை
+      && rhs.மதிப்பு != error_mark_முனை)
     {
       /* If we parsed an identifier and the next token  is a '?' then parse
 	 a conditional expression.  */
-      if (SSA_VAR_P (rhs.value) && c_parser_next_token_is (parser, CPP_QUERY))
+      எனில் (SSA_VAR_P (rhs.மதிப்பு) && c_parser_next_token_is (parser, CPP_QUERY))
 	{
-	  struct c_expr trueval, falseval;
+	  கட்டமைப்பு c_கோவை trueval, falseval;
 	  c_parser_consume_token (parser);
 	  trueval = c_parser_gimple_postfix_expression (parser);
 	  falseval.set_error ();
-	  if (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
+	  எனில் (c_parser_require (parser, CPP_COLON, "expected %<:%>"))
 	    falseval = c_parser_gimple_postfix_expression (parser);
-	  if (trueval.value == error_mark_node
-	      || falseval.value == error_mark_node)
-	    return;
-	  rhs.value = build3_loc (loc,
-				  VECTOR_TYPE_P (TREE_TYPE (rhs.value))
-				  ? VEC_COND_EXPR : COND_EXPR,
-				  TREE_TYPE (trueval.value),
-				  rhs.value, trueval.value, falseval.value);
+	  எனில் (trueval.மதிப்பு == error_mark_முனை
+	      || falseval.மதிப்பு == error_mark_முனை)
+	    திரும்பு;
+	  rhs.மதிப்பு = build3_loc (loc,
+				  VECTOR_TYPE_P (மரம்_TYPE (rhs.மதிப்பு))
+				  ? VEC_COND_கோவை : COND_கோவை,
+				  மரம்_TYPE (trueval.மதிப்பு),
+				  rhs.மதிப்பு, trueval.மதிப்பு, falseval.மதிப்பு);
 	}
-      if (get_gimple_rhs_class (TREE_CODE (rhs.value)) == GIMPLE_INVALID_RHS)
+      எனில் (get_gimple_rhs_class (மரம்_CODE (rhs.மதிப்பு)) == GIMPLE_INVALID_RHS)
 	{
 	  c_parser_error (parser, "unexpected RHS for assignment");
-	  return;
+	  திரும்பு;
 	}
-      assign = gimple_build_assign (lhs.value, rhs.value);
+      assign = gimple_build_assign (lhs.மதிப்பு, rhs.மதிப்பு);
       gimple_seq_add_stmt_without_update (seq, assign);
       gimple_set_location (assign, loc);
     }
-  return;
+  திரும்பு;
 }
 
 /* A mapping between an identifier to a tree code for binary operations. */
-static const std::pair<const char *, tree_code> gimple_binary_identifier_code[] =
+நிலையான மாறிலி std::pair<மாறிலி எழுத்து *, மரம்_code> gimple_இருமம்_identifier_code[] =
   {
-    {"__MULT_HIGHPART", MULT_HIGHPART_EXPR},
-    {"__UNLT", UNLT_EXPR},
-    {"__UNLE", UNLE_EXPR},
-    {"__UNGT", UNGT_EXPR},
-    {"__UNGE", UNGE_EXPR},
-    {"__UNEQ", UNEQ_EXPR},
-    {"__UNORDERED", UNORDERED_EXPR},
-    {"__ORDERED", ORDERED_EXPR},
-    {"__LTGT", LTGT_EXPR},
-    {"__FLOOR_DIV", FLOOR_DIV_EXPR},
-    {"__ROUND_DIV", ROUND_DIV_EXPR},
-    {"__EXACT_DIV", EXACT_DIV_EXPR},
-    {"__CEIL_DIV", CEIL_DIV_EXPR},
-    {"__FLOOR_MOD", FLOOR_MOD_EXPR},
-    {"__ROUND_MOD", ROUND_MOD_EXPR},
-    {"__CEIL_MOD", CEIL_MOD_EXPR},
-    {"__ROTATE_LEFT", LROTATE_EXPR},
-    {"__ROTATE_RIGHT", RROTATE_EXPR},
+    {"__MULT_HIGHPART", MULT_HIGHPART_கோவை},
+    {"__UNLT", UNLT_கோவை},
+    {"__UNLE", UNLE_கோவை},
+    {"__UNGT", UNGT_கோவை},
+    {"__UNGE", UNGE_கோவை},
+    {"__UNEQ", UNEQ_கோவை},
+    {"__UNORDERED", UNORDERED_கோவை},
+    {"__ORDERED", ORDERED_கோவை},
+    {"__LTGT", LTGT_கோவை},
+    {"__FLOOR_DIV", FLOOR_DIV_கோவை},
+    {"__ROUND_DIV", ROUND_DIV_கோவை},
+    {"__EXACT_DIV", EXACT_DIV_கோவை},
+    {"__CEIL_DIV", CEIL_DIV_கோவை},
+    {"__FLOOR_MOD", FLOOR_MOD_கோவை},
+    {"__ROUND_MOD", ROUND_MOD_கோவை},
+    {"__CEIL_MOD", CEIL_MOD_கோவை},
+    {"__ROTATE_LEFT", LROTATE_கோவை},
+    {"__ROTATE_RIGHT", RROTATE_கோவை},
   };
 
 /* Parse gimple binary expr.
@@ -1033,161 +1033,161 @@ static const std::pair<const char *, tree_code> gimple_binary_identifier_code[] 
 
 */
 
-static c_expr
-c_parser_gimple_binary_expression (gimple_parser &parser, tree ret_type)
+நிலையான c_கோவை
+c_parser_gimple_இருமம்_expression (gimple_parser &parser, மரம் ret_type)
 {
   /* Location of the binary operator.  */
-  struct c_expr ret, lhs, rhs;
-  enum tree_code code = ERROR_MARK;
+  கட்டமைப்பு c_கோவை ret, lhs, rhs;
+  எண்ணிக்கை மரம்_code code = ERROR_MARK;
   ret.set_error ();
   lhs = c_parser_gimple_postfix_expression (parser, ret_type);
-  if (c_parser_error (parser))
-    return ret;
-  switch (c_parser_peek_token (parser)->type)
+  எனில் (c_parser_error (parser))
+    திரும்பு ret;
+  தேர்வு (c_parser_peek_token (parser)->type)
     {
-    case CPP_MULT:
-      code = MULT_EXPR;
-      break;
-    case CPP_DIV:
-      code = TRUNC_DIV_EXPR;
-      break;
-    case CPP_MOD:
-      code = TRUNC_MOD_EXPR;
-      break;
-    case CPP_PLUS:
-      if (POINTER_TYPE_P (TREE_TYPE (lhs.value)))
-	code = POINTER_PLUS_EXPR;
-      else
-	code = PLUS_EXPR;
-      break;
-    case CPP_MINUS:
-      if (POINTER_TYPE_P (TREE_TYPE (lhs.value)))
-	code = POINTER_DIFF_EXPR;
-      else
-	code = MINUS_EXPR;
-      break;
-    case CPP_LSHIFT:
-      code = LSHIFT_EXPR;
-      break;
-    case CPP_RSHIFT:
-      code = RSHIFT_EXPR;
-      break;
-    case CPP_LESS:
-      code = LT_EXPR;
-      break;
-    case CPP_GREATER:
-      code = GT_EXPR;
-      break;
-    case CPP_LESS_EQ:
-      code = LE_EXPR;
-      break;
-    case CPP_GREATER_EQ:
-      code = GE_EXPR;
-      break;
-    case CPP_EQ_EQ:
-      code = EQ_EXPR;
-      break;
-    case CPP_NOT_EQ:
-      code = NE_EXPR;
-      break;
-    case CPP_AND:
-      code = BIT_AND_EXPR;
-      break;
-    case CPP_XOR:
-      code = BIT_XOR_EXPR;
-      break;
-    case CPP_OR:
-      code = BIT_IOR_EXPR;
-      break;
-    case CPP_AND_AND:
+    நிலை CPP_MULT:
+      code = MULT_கோவை;
+      நிறுத்து;
+    நிலை CPP_DIV:
+      code = TRUNC_DIV_கோவை;
+      நிறுத்து;
+    நிலை CPP_MOD:
+      code = TRUNC_MOD_கோவை;
+      நிறுத்து;
+    நிலை CPP_PLUS:
+      எனில் (POINTER_TYPE_P (மரம்_TYPE (lhs.மதிப்பு)))
+	code = POINTER_PLUS_கோவை;
+      இல்லையெனில்
+	code = PLUS_கோவை;
+      நிறுத்து;
+    நிலை CPP_MINUS:
+      எனில் (POINTER_TYPE_P (மரம்_TYPE (lhs.மதிப்பு)))
+	code = POINTER_DIFF_கோவை;
+      இல்லையெனில்
+	code = MINUS_கோவை;
+      நிறுத்து;
+    நிலை CPP_LSHIFT:
+      code = LSHIFT_கோவை;
+      நிறுத்து;
+    நிலை CPP_RSHIFT:
+      code = RSHIFT_கோவை;
+      நிறுத்து;
+    நிலை CPP_LESS:
+      code = LT_கோவை;
+      நிறுத்து;
+    நிலை CPP_GREATER:
+      code = GT_கோவை;
+      நிறுத்து;
+    நிலை CPP_LESS_EQ:
+      code = LE_கோவை;
+      நிறுத்து;
+    நிலை CPP_GREATER_EQ:
+      code = GE_கோவை;
+      நிறுத்து;
+    நிலை CPP_EQ_EQ:
+      code = EQ_கோவை;
+      நிறுத்து;
+    நிலை CPP_NOT_EQ:
+      code = NE_கோவை;
+      நிறுத்து;
+    நிலை CPP_AND:
+      code = BIT_AND_கோவை;
+      நிறுத்து;
+    நிலை CPP_XOR:
+      code = BIT_XOR_கோவை;
+      நிறுத்து;
+    நிலை CPP_OR:
+      code = BIT_IOR_கோவை;
+      நிறுத்து;
+    நிலை CPP_AND_AND:
       c_parser_error (parser, "%<&&%> not valid in GIMPLE");
-      return ret;
-    case CPP_OR_OR:
+      திரும்பு ret;
+    நிலை CPP_OR_OR:
       c_parser_error (parser, "%<||%> not valid in GIMPLE");
-      return ret;
-    case CPP_NAME:
+      திரும்பு ret;
+    நிலை CPP_NAME:
       {
-	tree id = c_parser_peek_token (parser)->value;
-	for (auto &p : gimple_binary_identifier_code)
+	மரம் id = c_parser_peek_token (parser)->மதிப்பு;
+	க்கு (auto &p : gimple_இருமம்_identifier_code)
 	  {
-	    if (strcmp (IDENTIFIER_POINTER (id), p.first) == 0)
+	    எனில் (strcmp (IDENTIFIER_POINTER (id), p.first) == 0)
 	      {
 		code = p.second;
-		break;
+		நிறுத்து;
 	      }
 	  }
-	if (code != ERROR_MARK)
-	  break;
+	எனில் (code != ERROR_MARK)
+	  நிறுத்து;
       }
       /* Fallthru.  */
-    default:
+    இயல்பு:
       /* Not a binary expression.  */
-      return lhs;
+      திரும்பு lhs;
     }
   location_t ret_loc = c_parser_peek_token (parser)->location;
   c_parser_consume_token (parser);
   rhs = c_parser_gimple_postfix_expression (parser);
-  if (lhs.value != error_mark_node && rhs.value != error_mark_node)
-    ret.value = build2_loc (ret_loc, code, ret_type, lhs.value, rhs.value);
-  return ret;
+  எனில் (lhs.மதிப்பு != error_mark_முனை && rhs.மதிப்பு != error_mark_முனை)
+    ret.மதிப்பு = build2_loc (ret_loc, code, ret_type, lhs.மதிப்பு, rhs.மதிப்பு);
+  திரும்பு ret;
 }
 
 /* Parse a gimple parentized binary expression.  */
 
-static c_expr
-c_parser_gimple_parentized_binary_expression (gimple_parser &parser,
+நிலையான c_கோவை
+c_parser_gimple_parentized_இருமம்_expression (gimple_parser &parser,
 					      location_t op_loc,
-					      tree_code code)
+					      மரம்_code code)
 {
-  struct c_expr ret;
+  கட்டமைப்பு c_கோவை ret;
   ret.set_error ();
 
   c_parser_consume_token (parser);
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return ret;
-  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
-    return ret;
-  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return ret;
+  எனில் (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    திரும்பு ret;
+  c_கோவை op1 = c_parser_gimple_postfix_expression (parser);
+  எனில் (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+    திரும்பு ret;
+  c_கோவை op2 = c_parser_gimple_postfix_expression (parser);
+  எனில் (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    திரும்பு ret;
 
-  if (op1.value != error_mark_node && op2.value != error_mark_node)
-    ret.value = build2_loc (op_loc,
-			    code, TREE_TYPE (op1.value), op1.value, op2.value);
-  return ret;
+  எனில் (op1.மதிப்பு != error_mark_முனை && op2.மதிப்பு != error_mark_முனை)
+    ret.மதிப்பு = build2_loc (op_loc,
+			    code, மரம்_TYPE (op1.மதிப்பு), op1.மதிப்பு, op2.மதிப்பு);
+  திரும்பு ret;
 }
 
 /* Parse a gimple parentized binary expression.  */
 
-static c_expr
+நிலையான c_கோவை
 c_parser_gimple_parentized_ternary_expression (gimple_parser &parser,
 					       location_t op_loc,
-					       tree_code code)
+					       மரம்_code code)
 {
-  struct c_expr ret;
+  கட்டமைப்பு c_கோவை ret;
   ret.set_error ();
 
   c_parser_consume_token (parser);
-  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return ret;
-  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
-    return ret;
-  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_COMMA, "expected %<)%>"))
-    return ret;
-  c_expr op3 = c_parser_gimple_postfix_expression (parser);
-  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return ret;
+  எனில் (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    திரும்பு ret;
+  c_கோவை op1 = c_parser_gimple_postfix_expression (parser);
+  எனில் (!c_parser_require (parser, CPP_COMMA, "expected %<,%>"))
+    திரும்பு ret;
+  c_கோவை op2 = c_parser_gimple_postfix_expression (parser);
+  எனில் (!c_parser_require (parser, CPP_COMMA, "expected %<)%>"))
+    திரும்பு ret;
+  c_கோவை op3 = c_parser_gimple_postfix_expression (parser);
+  எனில் (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    திரும்பு ret;
 
-  if (op1.value != error_mark_node
-      && op2.value != error_mark_node
-      && op3.value != error_mark_node)
-    ret.value = build3_loc (op_loc,
-			    code, TREE_TYPE (op1.value),
-			    op1.value, op2.value, op3.value);
-  return ret;
+  எனில் (op1.மதிப்பு != error_mark_முனை
+      && op2.மதிப்பு != error_mark_முனை
+      && op3.மதிப்பு != error_mark_முனை)
+    ret.மதிப்பு = build3_loc (op_loc,
+			    code, மரம்_TYPE (op1.மதிப்பு),
+			    op1.மதிப்பு, op2.மதிப்பு, op3.மதிப்பு);
+  திரும்பு ret;
 }
 
 /* Parse gimple unary expression.
@@ -1200,212 +1200,212 @@ c_parser_gimple_parentized_ternary_expression (gimple_parser &parser,
      & * + - ~ abs_expr
 */
 
-static c_expr
+நிலையான c_கோவை
 c_parser_gimple_unary_expression (gimple_parser &parser)
 {
-  struct c_expr ret, op;
+  கட்டமைப்பு c_கோவை ret, op;
   location_t op_loc = c_parser_peek_token (parser)->location;
   location_t finish;
   ret.set_error ();
-  switch (c_parser_peek_token (parser)->type)
+  தேர்வு (c_parser_peek_token (parser)->type)
     {
-    case CPP_AND:
+    நிலை CPP_AND:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      mark_exp_read (op.value);
-      return gimple_parser_build_unary_op (op_loc, ADDR_EXPR, op);
-    case CPP_MULT:
+      mark_exp_read (op.மதிப்பு);
+      திரும்பு gimple_parser_build_unary_op (op_loc, ADDR_கோவை, op);
+    நிலை CPP_MULT:
       {
 	c_parser_consume_token (parser);
 	op = c_parser_gimple_postfix_expression (parser);
-	if (op.value == error_mark_node)
-	  return ret;
-	if (! POINTER_TYPE_P (TREE_TYPE (op.value)))
+	எனில் (op.மதிப்பு == error_mark_முனை)
+	  திரும்பு ret;
+	எனில் (! POINTER_TYPE_P (மரம்_TYPE (op.மதிப்பு)))
 	  {
 	    error_at (op_loc, "expected pointer as argument of unary %<*%>");
-	    return ret;
+	    திரும்பு ret;
 	  }
 	finish = op.get_finish ();
 	location_t combined_loc = make_location (op_loc, op_loc, finish);
-	ret.value = build_simple_mem_ref_loc (combined_loc, op.value);
-	TREE_SIDE_EFFECTS (ret.value)
-	  = TREE_THIS_VOLATILE (ret.value)
-	  = TYPE_VOLATILE (TREE_TYPE (TREE_TYPE (op.value)));
+	ret.மதிப்பு = build_simple_mem_ref_loc (combined_loc, op.மதிப்பு);
+	மரம்_SIDE_EFFECTS (ret.மதிப்பு)
+	  = மரம்_THIS_VOLATILE (ret.மதிப்பு)
+	  = TYPE_VOLATILE (மரம்_TYPE (மரம்_TYPE (op.மதிப்பு)));
 	ret.src_range.m_start = op_loc;
 	ret.src_range.m_finish = finish;
-	return ret;
+	திரும்பு ret;
       }
-    case CPP_PLUS:
+    நிலை CPP_PLUS:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, CONVERT_EXPR, op);
-    case CPP_MINUS:
+      திரும்பு gimple_parser_build_unary_op (op_loc, CONVERT_கோவை, op);
+    நிலை CPP_MINUS:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, NEGATE_EXPR, op);
-    case CPP_COMPL:
+      திரும்பு gimple_parser_build_unary_op (op_loc, NEGATE_கோவை, op);
+    நிலை CPP_COMPL:
       c_parser_consume_token (parser);
       op = c_parser_gimple_postfix_expression (parser);
-      return gimple_parser_build_unary_op (op_loc, BIT_NOT_EXPR, op);
-    case CPP_NOT:
+      திரும்பு gimple_parser_build_unary_op (op_loc, BIT_NOT_கோவை, op);
+    நிலை CPP_NOT:
       c_parser_error (parser, "%<!%> not valid in GIMPLE");
-      return ret;
-    case CPP_KEYWORD:
-      switch (c_parser_peek_token (parser)->keyword)
+      திரும்பு ret;
+    நிலை CPP_KEYWORD:
+      தேர்வு (c_parser_peek_token (parser)->keyword)
 	{
-	case RID_REALPART:
+	நிலை RID_REALPART:
 	  c_parser_consume_token (parser);
 	  op = c_parser_gimple_postfix_expression (parser);
-	  return gimple_parser_build_unary_op (op_loc, REALPART_EXPR, op);
-	case RID_IMAGPART:
+	  திரும்பு gimple_parser_build_unary_op (op_loc, REALPART_கோவை, op);
+	நிலை RID_IMAGPART:
 	  c_parser_consume_token (parser);
 	  op = c_parser_gimple_postfix_expression (parser);
-	  return gimple_parser_build_unary_op (op_loc, IMAGPART_EXPR, op);
-	default:
-	  return c_parser_gimple_postfix_expression (parser);
+	  திரும்பு gimple_parser_build_unary_op (op_loc, IMAGPART_கோவை, op);
+	இயல்பு:
+	  திரும்பு c_parser_gimple_postfix_expression (parser);
 	}
-    case CPP_NAME:
+    நிலை CPP_NAME:
 	{
-	  tree id = c_parser_peek_token (parser)->value;
-	  if (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0)
+	  மரம் id = c_parser_peek_token (parser)->மதிப்பு;
+	  எனில் (strcmp (IDENTIFIER_POINTER (id), "__ABS") == 0)
 	    {
 	      c_parser_consume_token (parser);
 	      op = c_parser_gimple_postfix_expression (parser);
-	      return gimple_parser_build_unary_op (op_loc, ABS_EXPR, op);
+	      திரும்பு gimple_parser_build_unary_op (op_loc, ABS_கோவை, op);
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0)
+	  இல்லையெனில் எனில் (strcmp (IDENTIFIER_POINTER (id), "__ABSU") == 0)
 	    {
 	      c_parser_consume_token (parser);
 	      op = c_parser_gimple_postfix_expression (parser);
-	      return gimple_parser_build_unary_op (op_loc, ABSU_EXPR, op);
+	      திரும்பு gimple_parser_build_unary_op (op_loc, ABSU_கோவை, op);
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0)
-	    return c_parser_gimple_parentized_binary_expression (parser,
+	  இல்லையெனில் எனில் (strcmp (IDENTIFIER_POINTER (id), "__MIN") == 0)
+	    திரும்பு c_parser_gimple_parentized_இருமம்_expression (parser,
 								 op_loc,
-								 MIN_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0)
-	    return c_parser_gimple_parentized_binary_expression (parser,
+								 MIN_கோவை);
+	  இல்லையெனில் எனில் (strcmp (IDENTIFIER_POINTER (id), "__MAX") == 0)
+	    திரும்பு c_parser_gimple_parentized_இருமம்_expression (parser,
 								 op_loc,
-								 MAX_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
-	    return c_parser_gimple_parentized_ternary_expression
-			(parser, op_loc, VEC_PERM_EXPR);
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0)
+								 MAX_கோவை);
+	  இல்லையெனில் எனில் (strcmp (IDENTIFIER_POINTER (id), "__VEC_PERM") == 0)
+	    திரும்பு c_parser_gimple_parentized_ternary_expression
+			(parser, op_loc, VEC_PERM_கோவை);
+	  இல்லையெனில் எனில் (strcmp (IDENTIFIER_POINTER (id), "__BIT_INSERT") == 0)
 	    {
 	      /* __BIT_INSERT '(' postfix-expression, postfix-expression,
 			          integer ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      எனில் (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op0 = c_parser_gimple_postfix_expression (parser);
+		  c_கோவை op0 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op1 = c_parser_gimple_postfix_expression (parser);
+		  c_கோவை op1 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op2.value) != INTEGER_CST
-		      || !int_fits_type_p (op2.value, bitsizetype))
+		  c_கோவை op2 = c_parser_gimple_postfix_expression (parser);
+		  எனில் (மரம்_CODE (op2.மதிப்பு) != INTEGER_CST
+		      || !int_fits_type_p (op2.மதிப்பு, bitsizetype))
 		    c_parser_error (parser, "expected constant offset");
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (op0.value != error_mark_node
-		      && op1.value != error_mark_node
-		      && TREE_CODE (op2.value) == INTEGER_CST)
-		    ret.value = build3_loc (loc, BIT_INSERT_EXPR,
-					    TREE_TYPE (op0.value),
-					    op0.value, op1.value,
+		  எனில் (op0.மதிப்பு != error_mark_முனை
+		      && op1.மதிப்பு != error_mark_முனை
+		      && மரம்_CODE (op2.மதிப்பு) == INTEGER_CST)
+		    ret.மதிப்பு = build3_loc (loc, BIT_செருகு_கோவை,
+					    மரம்_TYPE (op0.மதிப்பு),
+					    op0.மதிப்பு, op1.மதிப்பு,
 					    fold_convert (bitsizetype,
-							  op2.value));
+							  op2.மதிப்பு));
 		}
-	      return ret;
+	      திரும்பு ret;
 	    }
-	  else
-	    return c_parser_gimple_postfix_expression (parser);
+	  இல்லையெனில்
+	    திரும்பு c_parser_gimple_postfix_expression (parser);
 	}
-    default:
-      return c_parser_gimple_postfix_expression (parser);
+    இயல்பு:
+      திரும்பு c_parser_gimple_postfix_expression (parser);
     }
 }
 
 /* Decompose ID into base name (ID until ver_offset) and VERSION.  Return
    true if ID matches a SSA name.  */
 
-static bool
-c_parser_parse_ssa_name_id (tree id, unsigned *version, unsigned *ver_offset)
+நிலையான தருக்க
+c_parser_parse_ssa_name_id (மரம் id, unsigned *version, unsigned *ver_offset)
 {
-  const char *token = IDENTIFIER_POINTER (id);
-  const char *var_version = strrchr (token, '_');
-  if (! var_version)
-    return false;
+  மாறிலி எழுத்து *token = IDENTIFIER_POINTER (id);
+  மாறிலி எழுத்து *var_version = strrchr (token, '_');
+  எனில் (! var_version)
+    திரும்பு பொய்;
 
   *ver_offset = var_version - token;
-  for (const char *p = var_version + 1; *p; ++p)
-    if (! ISDIGIT (*p))
-      return false;
+  க்கு (மாறிலி எழுத்து *p = var_version + 1; *p; ++p)
+    எனில் (! ISDIGIT (*p))
+      திரும்பு பொய்;
   *version = atoi (var_version + 1);
-  return *version > 0;
+  திரும்பு *version > 0;
 }
 
 /* Get at the actual SSA name ID with VERSION starting at VER_OFFSET.
    TYPE is the type if the SSA name is being declared.  */
 
-static tree
+நிலையான மரம்
 c_parser_parse_ssa_name (gimple_parser &parser,
-			 tree id, tree type, unsigned version,
+			 மரம் id, மரம் type, unsigned version,
 			 unsigned ver_offset)
 {
-  tree name = NULL_TREE;
-  const char *token = IDENTIFIER_POINTER (id);
+  மரம் name = NULL_மரம்;
+  மாறிலி எழுத்து *token = IDENTIFIER_POINTER (id);
 
-  if (ver_offset == 0)
+  எனில் (ver_offset == 0)
     {
       /* Anonymous unnamed SSA name.  */
-      if (version < num_ssa_names)
+      எனில் (version < இலக்கம்_ssa_names)
 	name = ssa_name (version);
-      if (! name)
+      எனில் (! name)
 	{
-	  if (! type)
+	  எனில் (! type)
 	    {
 	      c_parser_error (parser, "SSA name undeclared");
-	      return error_mark_node;
+	      திரும்பு error_mark_முனை;
 	    }
-	  name = make_ssa_name_fn (cfun, type, NULL, version);
+	  name = make_ssa_name_fn (cfun, type, வெற்று, version);
 	}
     }
-  else
+  இல்லையெனில்
     {
-      if (version < num_ssa_names)
+      எனில் (version < இலக்கம்_ssa_names)
 	name = ssa_name (version);
-      if (! name)
+      எனில் (! name)
 	{
 	  /* Separate var name from version.  */
-	  char *var_name = XNEWVEC (char, ver_offset + 1);
+	  எழுத்து *var_name = XNEWVEC (எழுத்து, ver_offset + 1);
 	  memcpy (var_name, token, ver_offset);
 	  var_name[ver_offset] = '\0';
 	  /* lookup for parent decl.  */
 	  id = get_identifier (var_name);
-	  tree parent = lookup_name (id);
+	  மரம் parent = lookup_name (id);
 	  XDELETEVEC (var_name);
-	  if (! parent || parent == error_mark_node)
+	  எனில் (! parent || parent == error_mark_முனை)
 	    {
 	      c_parser_error (parser, "base variable or SSA name undeclared");
-	      return error_mark_node;
+	      திரும்பு error_mark_முனை;
 	    }
-	  if (!(VAR_P (parent)
-		|| TREE_CODE (parent) == PARM_DECL
-		|| TREE_CODE (parent) == RESULT_DECL))
+	  எனில் (!(VAR_P (parent)
+		|| மரம்_CODE (parent) == PARM_DECL
+		|| மரம்_CODE (parent) == RESULT_DECL))
 	    {
 	      error ("invalid base %qE for SSA name", parent);
-	      return error_mark_node;
+	      திரும்பு error_mark_முனை;
 	    }
 	  name = make_ssa_name_fn (cfun, parent,
 				   gimple_build_nop (), version);
 	}
     }
 
-  return name;
+  திரும்பு name;
 }
 
 /* Parse a gimple call to an internal function.
@@ -1413,73 +1413,73 @@ c_parser_parse_ssa_name (gimple_parser &parser,
    gimple-call-internal:
      . identifier ( gimple-argument-expression-list[opt] )  */
 
-static struct c_expr
+நிலையான கட்டமைப்பு c_கோவை
 c_parser_gimple_call_internal (gimple_parser &parser)
 {
-  struct c_expr expr;
-  expr.set_error ();
+  கட்டமைப்பு c_கோவை கோவை;
+  கோவை.set_error ();
 
   gcc_assert (c_parser_next_token_is (parser, CPP_DOT));
   c_parser_consume_token (parser);
   location_t loc = c_parser_peek_token (parser)->location;
-  if (!c_parser_next_token_is (parser, CPP_NAME)
+  எனில் (!c_parser_next_token_is (parser, CPP_NAME)
       || c_parser_peek_token (parser)->id_kind != C_ID_ID)
     {
       c_parser_error (parser, "expecting internal function name");
-      return expr;
+      திரும்பு கோவை;
     }
-  tree id = c_parser_peek_token (parser)->value;
+  மரம் id = c_parser_peek_token (parser)->மதிப்பு;
   internal_fn ifn = lookup_internal_fn (IDENTIFIER_POINTER (id));
   c_parser_consume_token (parser);
-  if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+  எனில் (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
     {
-      auto_vec<tree> exprlist;
-      if (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
-	c_parser_gimple_expr_list (parser, &exprlist);
+      auto_vec<மரம்> exprlist;
+      எனில் (!c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	c_parser_gimple_கோவை_list (parser, &exprlist);
       c_parser_skip_until_found (parser, CPP_CLOSE_PAREN, "expected %<)%>");
-      if (ifn == IFN_LAST)
+      எனில் (ifn == IFN_LAST)
 	error_at (loc, "unknown internal function %qE", id);
-      else
+      இல்லையெனில்
 	{
-	  expr.value = build_call_expr_internal_loc_array
-	    (loc, ifn, void_type_node, exprlist.length (),
+	  கோவை.மதிப்பு = build_call_கோவை_internal_loc_array
+	    (loc, ifn, void_type_முனை, exprlist.length (),
 	     exprlist.address ());
-	  expr.original_code = ERROR_MARK;
-	  expr.original_type = NULL;
-	  expr.m_decimal = 0;
+	  கோவை.original_code = ERROR_MARK;
+	  கோவை.original_type = வெற்று;
+	  கோவை.m_decimal = 0;
 	}
     }
-  return expr;
+  திரும்பு கோவை;
 }
 
 /* Parse '<' type [',' alignment] '>' and return a type on success
    and NULL_TREE on error.  */
 
-static tree
+நிலையான மரம்
 c_parser_gimple_typespec (gimple_parser &parser)
 {
-  struct c_type_name *type_name = NULL;
-  tree alignment = NULL_TREE;
-  if (c_parser_require (parser, CPP_LESS, "expected %<<%>"))
+  கட்டமைப்பு c_type_name *type_name = வெற்று;
+  மரம் alignment = NULL_மரம்;
+  எனில் (c_parser_require (parser, CPP_LESS, "expected %<<%>"))
     {
       type_name = c_parser_type_name (parser);
       /* Optional alignment.  */
-      if (c_parser_next_token_is (parser, CPP_COMMA))
+      எனில் (c_parser_next_token_is (parser, CPP_COMMA))
 	{
 	  c_parser_consume_token (parser);
 	  alignment
-	      = c_parser_gimple_postfix_expression (parser).value;
+	      = c_parser_gimple_postfix_expression (parser).மதிப்பு;
 	}
       c_parser_skip_until_found (parser,
 				 CPP_GREATER, "expected %<>%>");
     }
-  if (!type_name)
-    return NULL_TREE;
-  tree tem;
-  tree type = groktypename (type_name, &tem, NULL);
-  if (alignment)
-    type = build_aligned_type (type, tree_to_uhwi (alignment));
-  return type;
+  எனில் (!type_name)
+    திரும்பு NULL_மரம்;
+  மரம் tem;
+  மரம் type = groktypename (type_name, &tem, வெற்று);
+  எனில் (alignment)
+    type = build_aligned_type (type, மரம்_to_uhwi (alignment));
+  திரும்பு type;
 }
 
 /* Parse gimple postfix expression.
@@ -1504,45 +1504,45 @@ c_parser_gimple_typespec (gimple_parser &parser)
 
 */
 
-static struct c_expr
-c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
+நிலையான கட்டமைப்பு c_கோவை
+c_parser_gimple_postfix_expression (gimple_parser &parser, மரம் ret_type)
 {
   location_t loc = c_parser_peek_token (parser)->location;
   source_range tok_range = c_parser_peek_token (parser)->get_range ();
-  struct c_expr expr;
-  expr.set_error ();
-  switch (c_parser_peek_token (parser)->type)
+  கட்டமைப்பு c_கோவை கோவை;
+  கோவை.set_error ();
+  தேர்வு (c_parser_peek_token (parser)->type)
     {
-    case CPP_NUMBER:
-      expr.value = c_parser_peek_token (parser)->value;
-      set_c_expr_source_range (&expr, tok_range);
+    நிலை CPP_எண்:
+      கோவை.மதிப்பு = c_parser_peek_token (parser)->மதிப்பு;
+      set_c_கோவை_source_range (&கோவை, tok_range);
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      break;
-    case CPP_CHAR:
-    case CPP_CHAR16:
-    case CPP_CHAR32:
-    case CPP_UTF8CHAR:
-    case CPP_WCHAR:
-      expr.value = c_parser_peek_token (parser)->value;
-      set_c_expr_source_range (&expr, tok_range);
+      நிறுத்து;
+    நிலை CPP_CHAR:
+    நிலை CPP_CHAR16:
+    நிலை CPP_CHAR32:
+    நிலை CPP_UTF8CHAR:
+    நிலை CPP_WCHAR:
+      கோவை.மதிப்பு = c_parser_peek_token (parser)->மதிப்பு;
+      set_c_கோவை_source_range (&கோவை, tok_range);
       c_parser_consume_token (parser);
-      break;
-    case CPP_STRING:
-    case CPP_STRING16:
-    case CPP_STRING32:
-    case CPP_WSTRING:
-    case CPP_UTF8STRING:
-      expr = c_parser_string_literal (parser, false, true);
-      break;
-    case CPP_DOT:
-      expr = c_parser_gimple_call_internal (parser);
-      break;
-    case CPP_NAME:
-      if (c_parser_peek_token (parser)->id_kind == C_ID_ID)
+      நிறுத்து;
+    நிலை CPP_STRING:
+    நிலை CPP_STRING16:
+    நிலை CPP_STRING32:
+    நிலை CPP_WSTRING:
+    நிலை CPP_UTF8STRING:
+      கோவை = c_parser_string_literal (parser, பொய், உண்மை);
+      நிறுத்து;
+    நிலை CPP_DOT:
+      கோவை = c_parser_gimple_call_internal (parser);
+      நிறுத்து;
+    நிலை CPP_NAME:
+      எனில் (c_parser_peek_token (parser)->id_kind == C_ID_ID)
 	{
-	  tree id = c_parser_peek_token (parser)->value;
-	  if (strcmp (IDENTIFIER_POINTER (id), "__MEM") == 0)
+	  மரம் id = c_parser_peek_token (parser)->மதிப்பு;
+	  எனில் (strcmp (IDENTIFIER_POINTER (id), "__MEM") == 0)
 	    {
 	      /* __MEM '<' type-name [ ',' number ] '>'
 	               '(' [ '(' type-name ')' ] unary-expression
@@ -1551,134 +1551,134 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 			   [ ',' number ':' number ] ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      struct c_expr ptr, alias_off, step, index, index2;
-	      ptr.value = error_mark_node;
-	      alias_off.value = NULL_TREE;
-	      step.value = NULL_TREE;
-	      index.value = NULL_TREE;
-	      index2.value = NULL_TREE;
+	      மரம் type = c_parser_gimple_typespec (parser);
+	      கட்டமைப்பு c_கோவை ptr, alias_off, step, index, index2;
+	      ptr.மதிப்பு = error_mark_முனை;
+	      alias_off.மதிப்பு = NULL_மரம்;
+	      step.மதிப்பு = NULL_மரம்;
+	      index.மதிப்பு = NULL_மரம்;
+	      index2.மதிப்பு = NULL_மரம்;
 	      unsigned short clique = 0;
 	      unsigned short base = 0;
-	      bool reverse_order = false;
-	      struct c_expr ro;
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      தருக்க reverse_order = பொய்;
+	      கட்டமைப்பு c_கோவை ro;
+	      எனில் (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  tree alias_type = NULL_TREE;
+		  மரம் alias_type = NULL_மரம்;
 		  /* Optional alias-type cast.  */
-		  if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+		  எனில் (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 		    {
 		      c_parser_consume_token (parser);
-		      struct c_type_name *alias_type_name
+		      கட்டமைப்பு c_type_name *alias_type_name
 			= c_parser_type_name (parser);
 		      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 						 "expected %<)%>");
-		      if (alias_type_name)
+		      எனில் (alias_type_name)
 			{
-			  tree tem;
+			  மரம் tem;
 			  alias_type = groktypename (alias_type_name,
-						     &tem, NULL);
+						     &tem, வெற்று);
 			}
 		    }
 		  ptr = c_parser_gimple_unary_expression (parser);
-		  if (ptr.value == error_mark_node
-		      || ! POINTER_TYPE_P (TREE_TYPE (ptr.value)))
+		  எனில் (ptr.மதிப்பு == error_mark_முனை
+		      || ! POINTER_TYPE_P (மரம்_TYPE (ptr.மதிப்பு)))
 		    {
-		      if (ptr.value != error_mark_node)
+		      எனில் (ptr.மதிப்பு != error_mark_முனை)
 			error_at (ptr.get_start (),
 				  "invalid type of %<__MEM%> operand");
 		      c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 						 "expected %<)%>");
-		      return expr;
+		      திரும்பு கோவை;
 		    }
-		  if (! alias_type)
-		    alias_type = TREE_TYPE (ptr.value);
+		  எனில் (! alias_type)
+		    alias_type = மரம்_TYPE (ptr.மதிப்பு);
 		  /* Optional constant offset.  */
-		  if (c_parser_next_token_is (parser, CPP_PLUS))
+		  எனில் (c_parser_next_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
 		      alias_off = c_parser_gimple_postfix_expression (parser);
 		    }
-		  if (c_parser_next_token_is (parser, CPP_MULT))
+		  எனில் (c_parser_next_token_is (parser, CPP_MULT))
 		    {
 		      std::swap (index, alias_off);
 		      c_parser_consume_token (parser);
 		      step = c_parser_gimple_postfix_expression (parser);
 		    }
-		  else if (c_parser_next_token_is (parser, CPP_PLUS))
+		  இல்லையெனில் எனில் (c_parser_next_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
 		      index = c_parser_gimple_postfix_expression (parser);
-		      if (c_parser_next_token_is (parser, CPP_MULT))
+		      எனில் (c_parser_next_token_is (parser, CPP_MULT))
 			{
 			  c_parser_consume_token (parser);
 			  step = c_parser_gimple_postfix_expression (parser);
 			}
-		      else
+		      இல்லையெனில்
 			std::swap (index, index2);
 		    }
-		  else if (alias_off.value
-			   && TREE_CODE (alias_off.value) != INTEGER_CST)
+		  இல்லையெனில் எனில் (alias_off.மதிப்பு
+			   && மரம்_CODE (alias_off.மதிப்பு) != INTEGER_CST)
 		    std::swap (alias_off, index2);
-		  if (c_parser_next_token_is (parser, CPP_PLUS))
+		  எனில் (c_parser_next_token_is (parser, CPP_PLUS))
 		    {
 		      c_parser_consume_token (parser);
 		      index2 = c_parser_gimple_postfix_expression (parser);
 		    }
-		  if (alias_off.value)
+		  எனில் (alias_off.மதிப்பு)
 		    {
-		      if (TREE_CODE (alias_off.value) != INTEGER_CST)
+		      எனில் (மரம்_CODE (alias_off.மதிப்பு) != INTEGER_CST)
 			error_at (alias_off.get_start (),
 				  "expected constant offset for %<__MEM%> "
 				  "operand");
-		      alias_off.value = fold_convert (alias_type,
-						      alias_off.value);
+		      alias_off.மதிப்பு = fold_convert (alias_type,
+						      alias_off.மதிப்பு);
 		    }
-		  else
-		    alias_off.value = build_int_cst (alias_type, 0);
-		  if (step.value)
+		  இல்லையெனில்
+		    alias_off.மதிப்பு = build_int_cst (alias_type, 0);
+		  எனில் (step.மதிப்பு)
 		    {
-		      if (TREE_CODE (step.value) != INTEGER_CST)
+		      எனில் (மரம்_CODE (step.மதிப்பு) != INTEGER_CST)
 			error_at (step.get_start (),
 				  "expected constant step for %<__MEM%> "
 				  "operand");
 		    }
-		  if (c_parser_next_token_is (parser, CPP_COMMA))
+		  எனில் (c_parser_next_token_is (parser, CPP_COMMA))
 		    {
-		      struct c_expr cl, ba;
-		      bool has_clb = true;
+		      கட்டமைப்பு c_கோவை cl, ba;
+		      தருக்க has_clb = உண்மை;
 		      c_parser_consume_token (parser);
 		      cl = c_parser_gimple_postfix_expression (parser);
-		      if (!c_parser_next_token_is (parser, CPP_COLON))
+		      எனில் (!c_parser_next_token_is (parser, CPP_COLON))
 			{
 			  ro = cl;
 			  unsigned HOST_WIDE_INT tmp = 0;
-			  if (!tree_fits_uhwi_p (ro.value)
-			      || (tmp = tree_to_uhwi (ro.value)) > 1)
+			  எனில் (!மரம்_fits_uhwi_p (ro.மதிப்பு)
+			      || (tmp = மரம்_to_uhwi (ro.மதிப்பு)) > 1)
 			    error_at (ro.get_start (),
 				      "invalid reverse order value");
 			  reverse_order = tmp;
-			  has_clb = false;
-			  if (c_parser_next_token_is (parser, CPP_COMMA))
+			  has_clb = பொய்;
+			  எனில் (c_parser_next_token_is (parser, CPP_COMMA))
 			    {
 			      c_parser_consume_token (parser);
 			      cl = c_parser_gimple_postfix_expression (parser);
-		              has_clb = true;
+		              has_clb = உண்மை;
 			    }
 			}
-		      if (has_clb
+		      எனில் (has_clb
 			  && c_parser_require (parser,
 					       CPP_COLON, "expected %<:%>"))
 			{
 			  ba = c_parser_gimple_postfix_expression (parser);
-			  if (!tree_fits_uhwi_p (cl.value)
-			      || !tree_fits_uhwi_p (ba.value)
-			      || compare_tree_int (cl.value,
-						   (clique = tree_to_uhwi
-								(cl.value)))
-			      || compare_tree_int (ba.value,
-						   (base = tree_to_uhwi
-								 (ba.value))))
+			  எனில் (!மரம்_fits_uhwi_p (cl.மதிப்பு)
+			      || !மரம்_fits_uhwi_p (ba.மதிப்பு)
+			      || compare_மரம்_int (cl.மதிப்பு,
+						   (clique = மரம்_to_uhwi
+								(cl.மதிப்பு)))
+			      || compare_மரம்_int (ba.மதிப்பு,
+						   (base = மரம்_to_uhwi
+								 (ba.மதிப்பு))))
 			    error_at (cl.get_start (),
 				      "invalid clique/base pair");
 			}
@@ -1686,111 +1686,111 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
 		}
-	      if (! type || c_parser_error (parser))
+	      எனில் (! type || c_parser_error (parser))
 		{
-		  c_parser_set_error (parser, false);
-		  return expr;
+		  c_parser_set_error (parser, பொய்);
+		  திரும்பு கோவை;
 		}
-	      if (index.value || step.value || index2.value)
-		expr.value = build5_loc (loc, TARGET_MEM_REF,
-					 type, ptr.value, alias_off.value,
-					 index.value, step.value, index2.value);
-	      else
-		expr.value = build2_loc (loc, MEM_REF,
-					 type, ptr.value, alias_off.value);
-	      if (clique != 0)
+	      எனில் (index.மதிப்பு || step.மதிப்பு || index2.மதிப்பு)
+		கோவை.மதிப்பு = build5_loc (loc, TARGET_MEM_REF,
+					 type, ptr.மதிப்பு, alias_off.மதிப்பு,
+					 index.மதிப்பு, step.மதிப்பு, index2.மதிப்பு);
+	      இல்லையெனில்
+		கோவை.மதிப்பு = build2_loc (loc, MEM_REF,
+					 type, ptr.மதிப்பு, alias_off.மதிப்பு);
+	      எனில் (clique != 0)
 		{
 		  cfun->last_clique = MAX (cfun->last_clique, clique);
-		  MR_DEPENDENCE_CLIQUE (expr.value) = clique;
-		  MR_DEPENDENCE_BASE (expr.value) = base;
+		  MR_DEPENDENCE_CLIQUE (கோவை.மதிப்பு) = clique;
+		  MR_DEPENDENCE_BASE (கோவை.மதிப்பு) = base;
 		}
-	      if (reverse_order)
+	      எனில் (reverse_order)
 		{
-		  if (TREE_CODE (expr.value) == MEM_REF)
-		    REF_REVERSE_STORAGE_ORDER (expr.value) = reverse_order;
-		  else
+		  எனில் (மரம்_CODE (கோவை.மதிப்பு) == MEM_REF)
+		    REF_REVERSE_STORAGE_ORDER (கோவை.மதிப்பு) = reverse_order;
+		  இல்லையெனில்
 		    error_at (ro.get_start (),
 			      "target mem ref cannot have reverse order");
 		}
-	      break;
+	      நிறுத்து;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__VIEW_CONVERT") == 0)
+	  இல்லையெனில் எனில் (strcmp (IDENTIFIER_POINTER (id), "__VIEW_CONVERT") == 0)
 	    {
 	      /* __VIEW_CONVERT '<' type-name [ ',' number ] '>'
 	                        '(' postfix-expression ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      மரம் type = c_parser_gimple_typespec (parser);
+	      எனில் (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op = c_parser_gimple_postfix_expression (parser);
+		  c_கோவை op = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (type && op.value != error_mark_node)
-		    expr.value = build1_loc (loc, VIEW_CONVERT_EXPR,
-					     type, op.value);
+		  எனில் (type && op.மதிப்பு != error_mark_முனை)
+		    கோவை.மதிப்பு = build1_loc (loc, VIEW_CONVERT_கோவை,
+					     type, op.மதிப்பு);
 		}
-	      break;
+	      நிறுத்து;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__BIT_FIELD_REF") == 0)
+	  இல்லையெனில் எனில் (strcmp (IDENTIFIER_POINTER (id), "__BIT_FIELD_REF") == 0)
 	    {
 	      /* __BIT_FIELD_REF '<' type-name [ ',' number ] '>'
 	                        '(' postfix-expression, integer, integer ')'  */
 	      location_t loc = c_parser_peek_token (parser)->location;
 	      c_parser_consume_token (parser);
-	      tree type = c_parser_gimple_typespec (parser);
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      மரம் type = c_parser_gimple_typespec (parser);
+	      எனில் (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  c_expr op0 = c_parser_gimple_postfix_expression (parser);
+		  c_கோவை op0 = c_parser_gimple_postfix_expression (parser);
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op1 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op1.value) != INTEGER_CST
-		      || !int_fits_type_p (op1.value, bitsizetype))
+		  c_கோவை op1 = c_parser_gimple_postfix_expression (parser);
+		  எனில் (மரம்_CODE (op1.மதிப்பு) != INTEGER_CST
+		      || !int_fits_type_p (op1.மதிப்பு, bitsizetype))
 		    c_parser_error (parser, "expected constant size");
 		  c_parser_skip_until_found (parser, CPP_COMMA,
 					     "expected %<,%>");
-		  c_expr op2 = c_parser_gimple_postfix_expression (parser);
-		  if (TREE_CODE (op2.value) != INTEGER_CST
-		      || !int_fits_type_p (op2.value, bitsizetype))
+		  c_கோவை op2 = c_parser_gimple_postfix_expression (parser);
+		  எனில் (மரம்_CODE (op2.மதிப்பு) != INTEGER_CST
+		      || !int_fits_type_p (op2.மதிப்பு, bitsizetype))
 		    c_parser_error (parser, "expected constant offset");
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
-		  if (type
-		      && op0.value != error_mark_node
-		      && TREE_CODE (op1.value) == INTEGER_CST
-		      && TREE_CODE (op2.value) == INTEGER_CST)
-		    expr.value = build3_loc (loc, BIT_FIELD_REF, type,
-					     op0.value,
+		  எனில் (type
+		      && op0.மதிப்பு != error_mark_முனை
+		      && மரம்_CODE (op1.மதிப்பு) == INTEGER_CST
+		      && மரம்_CODE (op2.மதிப்பு) == INTEGER_CST)
+		    கோவை.மதிப்பு = build3_loc (loc, BIT_FIELD_REF, type,
+					     op0.மதிப்பு,
 					     fold_convert (bitsizetype,
-							   op1.value),
+							   op1.மதிப்பு),
 					     fold_convert (bitsizetype,
-							   op2.value));
+							   op2.மதிப்பு));
 		}
-	      break;
+	      நிறுத்து;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "__CLOBBER") == 0)
+	  இல்லையெனில் எனில் (strcmp (IDENTIFIER_POINTER (id), "__CLOBBER") == 0)
 	    {
 	      /* __CLOBBER [ '(' bob | eob | bos | eos ')' ]  */
 	      clobber_kind kind = CLOBBER_UNDEF;
 	      c_parser_consume_token (parser);
-	      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
+	      எனில் (c_parser_next_token_is (parser, CPP_OPEN_PAREN))
 		{
 		  c_parser_consume_token (parser);
 		  auto tok = c_parser_peek_token (parser);
-		  if (c_parser_require (parser, CPP_NAME,
+		  எனில் (c_parser_require (parser, CPP_NAME,
 					"expected clobber kind"))
 		    {
-		      const char *kind_str = IDENTIFIER_POINTER (tok->value);
-		      if (strcmp (kind_str, "bos") == 0)
+		      மாறிலி எழுத்து *kind_str = IDENTIFIER_POINTER (tok->மதிப்பு);
+		      எனில் (strcmp (kind_str, "bos") == 0)
 			kind = CLOBBER_STORAGE_BEGIN;
-		      else if (strcmp (kind_str, "bob") == 0)
+		      இல்லையெனில் எனில் (strcmp (kind_str, "bob") == 0)
 			kind = CLOBBER_OBJECT_BEGIN;
-		      else if (strcmp (kind_str, "eob") == 0)
+		      இல்லையெனில் எனில் (strcmp (kind_str, "eob") == 0)
 			kind = CLOBBER_OBJECT_END;
-		      else if (strcmp (kind_str, "eos") == 0)
+		      இல்லையெனில் எனில் (strcmp (kind_str, "eos") == 0)
 			kind = CLOBBER_STORAGE_END;
-		      else
+		      இல்லையெனில்
 			c_parser_error (parser, "expected one of %<bos%>, "
 					"%<eos%>, %<bob>, %<eob%>");
 		    }
@@ -1798,334 +1798,334 @@ c_parser_gimple_postfix_expression (gimple_parser &parser, tree ret_type)
 					     "expected %<)%>");
 		}
 	      /* We infer the (redundant) type from the LHS.  */
-	      expr.value = build_clobber (ret_type, kind);
-	      break;
+	      கோவை.மதிப்பு = build_clobber (ret_type, kind);
+	      நிறுத்து;
 	    }
-	  else if (strcmp (IDENTIFIER_POINTER (id), "_Literal") == 0)
+	  இல்லையெனில் எனில் (strcmp (IDENTIFIER_POINTER (id), "_Literal") == 0)
 	    {
 	      /* _Literal '(' type-name ')' ( [ '-' ] constant | constructor ) */
 	      c_parser_consume_token (parser);
-	      tree type = NULL_TREE;
-	      if (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	      மரம் type = NULL_மரம்;
+	      எனில் (c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
 		{
-		  struct c_type_name *type_name = c_parser_type_name (parser);
-		  tree tem;
-		  if (type_name)
-		    type = groktypename (type_name, &tem, NULL);
+		  கட்டமைப்பு c_type_name *type_name = c_parser_type_name (parser);
+		  மரம் tem;
+		  எனில் (type_name)
+		    type = groktypename (type_name, &tem, வெற்று);
 		  c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 					     "expected %<)%>");
 		}
-	      if (! type)
+	      எனில் (! type)
 		{
 		  c_parser_error (parser, "invalid _Literal");
-		  return expr;
+		  திரும்பு கோவை;
 		}
-	      if (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
+	      எனில் (c_parser_next_token_is (parser, CPP_OPEN_BRACE))
 		{
 		  c_parser_consume_token (parser);
-		  if (!AGGREGATE_TYPE_P (type)
+		  எனில் (!AGGREGATE_TYPE_P (type)
 		      && !VECTOR_TYPE_P (type))
 		    {
 		      c_parser_error (parser, "invalid type for _Literal with "
 				      "constructor");
 		      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
 						 "expected %<}%>");
-		      return expr;
+		      திரும்பு கோவை;
 		    }
-		  vec<constructor_elt, va_gc> *v = NULL;
-		  bool constant_p = true;
-		  if (VECTOR_TYPE_P (type)
+		  vec<constructor_elt, va_gc> *v = வெற்று;
+		  தருக்க constant_p = உண்மை;
+		  எனில் (VECTOR_TYPE_P (type)
 		      && !c_parser_next_token_is (parser, CPP_CLOSE_BRACE))
 		    {
 		      vec_alloc (v, TYPE_VECTOR_SUBPARTS (type).to_constant ());
-		      do
+		      செய்
 			{
-			  tree val
-			    = c_parser_gimple_postfix_expression (parser).value;
-			  if (! val
-			      || val == error_mark_node
+			  மரம் val
+			    = c_parser_gimple_postfix_expression (parser).மதிப்பு;
+			  எனில் (! val
+			      || val == error_mark_முனை
 			      || (! CONSTANT_CLASS_P (val)
 				  && ! SSA_VAR_P (val)))
 			    {
 			      c_parser_error (parser, "invalid _Literal");
-			      return expr;
+			      திரும்பு கோவை;
 			    }
-			  CONSTRUCTOR_APPEND_ELT (v, NULL_TREE, val);
-			  if (! CONSTANT_CLASS_P (val))
-			    constant_p = false;
-			  if (c_parser_next_token_is (parser, CPP_COMMA))
+			  CONSTRUCTOR_APPEND_ELT (v, NULL_மரம், val);
+			  எனில் (! CONSTANT_CLASS_P (val))
+			    constant_p = பொய்;
+			  எனில் (c_parser_next_token_is (parser, CPP_COMMA))
 			    c_parser_consume_token (parser);
-			  else
-			    break;
+			  இல்லையெனில்
+			    நிறுத்து;
 			}
-		      while (1);
+		      போது (1);
 		    }
-		  if (c_parser_require (parser, CPP_CLOSE_BRACE,
+		  எனில் (c_parser_require (parser, CPP_CLOSE_BRACE,
 					"expected %<}%>"))
 		    {
-		      if (v && constant_p)
-			expr.value = build_vector_from_ctor (type, v);
-		      else
-			expr.value = build_constructor (type, v);
+		      எனில் (v && constant_p)
+			கோவை.மதிப்பு = build_vector_from_ctor (type, v);
+		      இல்லையெனில்
+			கோவை.மதிப்பு = build_constructor (type, v);
 		    }
-		  else
+		  இல்லையெனில்
 		    {
 		      c_parser_skip_until_found (parser, CPP_CLOSE_BRACE,
 						 "expected %<}%>");
-		      return expr;
+		      திரும்பு கோவை;
 		    }
 		}
-	      else
+	      இல்லையெனில்
 		{
-		  bool neg_p, addr_p;
-		  if ((neg_p = c_parser_next_token_is (parser, CPP_MINUS)))
+		  தருக்க neg_p, addr_p;
+		  எனில் ((neg_p = c_parser_next_token_is (parser, CPP_MINUS)))
 		    c_parser_consume_token (parser);
-		  if ((addr_p = c_parser_next_token_is (parser, CPP_AND)))
+		  எனில் ((addr_p = c_parser_next_token_is (parser, CPP_AND)))
 		    c_parser_consume_token (parser);
-		  tree val = c_parser_gimple_postfix_expression (parser).value;
-		  if (! val
-		      || val == error_mark_node
+		  மரம் val = c_parser_gimple_postfix_expression (parser).மதிப்பு;
+		  எனில் (! val
+		      || val == error_mark_முனை
 		      || (!CONSTANT_CLASS_P (val) && !addr_p))
 		    {
 		      c_parser_error (parser, "invalid _Literal");
-		      return expr;
+		      திரும்பு கோவை;
 		    }
-		  if (addr_p)
+		  எனில் (addr_p)
 		    {
-		      val = build1 (ADDR_EXPR, type, val);
-		      if (!is_gimple_invariant_address (val))
+		      val = build1 (ADDR_கோவை, type, val);
+		      எனில் (!is_gimple_invariant_address (val))
 			{
 			  c_parser_error (parser, "invalid _Literal");
-			  return expr;
+			  திரும்பு கோவை;
 			}
 		    }
-		  if (neg_p)
+		  எனில் (neg_p)
 		    {
-		      val = const_unop (NEGATE_EXPR, TREE_TYPE (val), val);
-		      if (! val)
+		      val = const_unop (NEGATE_கோவை, மரம்_TYPE (val), val);
+		      எனில் (! val)
 			{
 			  c_parser_error (parser, "invalid _Literal");
-			  return expr;
+			  திரும்பு கோவை;
 			}
 		    }
-		  expr.value = fold_convert (type, val);
+		  கோவை.மதிப்பு = fold_convert (type, val);
 		}
-	      return expr;
+	      திரும்பு கோவை;
 	    }
 
 	  /* SSA name.  */
 	  unsigned version, ver_offset;
-	  if (! lookup_name (id)
+	  எனில் (! lookup_name (id)
 	      && c_parser_parse_ssa_name_id (id, &version, &ver_offset))
 	    {
 	      c_parser_consume_token (parser);
-	      expr.value = c_parser_parse_ssa_name (parser, id, NULL_TREE,
+	      கோவை.மதிப்பு = c_parser_parse_ssa_name (parser, id, NULL_மரம்,
 						    version, ver_offset);
-	      if (expr.value == error_mark_node)
-		return expr;
-	      set_c_expr_source_range (&expr, tok_range);
+	      எனில் (கோவை.மதிப்பு == error_mark_முனை)
+		திரும்பு கோவை;
+	      set_c_கோவை_source_range (&கோவை, tok_range);
 	      /* For default definition SSA names.  */
-	      if (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
+	      எனில் (c_parser_next_token_is (parser, CPP_OPEN_PAREN)
 		  && c_parser_peek_2nd_token (parser)->type == CPP_NAME
 		  && strcmp ("D",
 			     IDENTIFIER_POINTER
-			       (c_parser_peek_2nd_token (parser)->value)) == 0
+			       (c_parser_peek_2nd_token (parser)->மதிப்பு)) == 0
 		  && c_parser_peek_nth_token (parser, 3)->type == CPP_CLOSE_PAREN)
 		{
 		  c_parser_consume_token (parser);
 		  c_parser_consume_token (parser);
 		  c_parser_consume_token (parser);
-		  if (! SSA_NAME_IS_DEFAULT_DEF (expr.value))
+		  எனில் (! SSA_NAME_IS_DEFAULT_DEF (கோவை.மதிப்பு))
 		    {
-		      if (!SSA_NAME_VAR (expr.value))
+		      எனில் (!SSA_NAME_VAR (கோவை.மதிப்பு))
 			{
 			  error_at (loc, "anonymous SSA name cannot have"
 				    " default definition");
-			  expr.value = error_mark_node;
-			  return expr;
+			  கோவை.மதிப்பு = error_mark_முனை;
+			  திரும்பு கோவை;
 			}
-		      set_ssa_default_def (cfun, SSA_NAME_VAR (expr.value),
-					   expr.value);
-		      SSA_NAME_DEF_STMT (expr.value) = gimple_build_nop ();
+		      set_ssa_default_def (cfun, SSA_NAME_VAR (கோவை.மதிப்பு),
+					   கோவை.மதிப்பு);
+		      SSA_NAME_DEF_STMT (கோவை.மதிப்பு) = gimple_build_nop ();
 		    }
 		}
 	    }
-	  else
+	  இல்லையெனில்
 	    {
 	      c_parser_consume_token (parser);
-	      expr.value
+	      கோவை.மதிப்பு
 		= build_external_ref (loc, id,
 				      (c_parser_peek_token (parser)->type
-				       == CPP_OPEN_PAREN), &expr.original_type);
-	      set_c_expr_source_range (&expr, tok_range);
+				       == CPP_OPEN_PAREN), &கோவை.original_type);
+	      set_c_கோவை_source_range (&கோவை, tok_range);
 	    }
-	  break;
+	  நிறுத்து;
 	}
       /* Fallthru.  */
-    default:
+    இயல்பு:
       c_parser_error (parser, "expected expression");
-      expr.set_error ();
-      break;
+      கோவை.set_error ();
+      நிறுத்து;
     }
-  if (expr.value == error_mark_node)
-    return expr;
-  return c_parser_gimple_postfix_expression_after_primary
-    (parser, EXPR_LOC_OR_LOC (expr.value, loc), expr);
+  எனில் (கோவை.மதிப்பு == error_mark_முனை)
+    திரும்பு கோவை;
+  திரும்பு c_parser_gimple_postfix_expression_after_primary
+    (parser, கோவை_LOC_OR_LOC (கோவை.மதிப்பு, loc), கோவை);
 }
 
 /* Parse a gimple postfix expression after the initial primary or compound
    literal.  */
 
-static struct c_expr
+நிலையான கட்டமைப்பு c_கோவை
 c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
-						  location_t expr_loc,
-						  struct c_expr expr)
+						  location_t கோவை_loc,
+						  கட்டமைப்பு c_கோவை கோவை)
 {
   location_t start;
   location_t finish;
-  tree ident;
+  மரம் ident;
   location_t comp_loc;
 
-  while (true)
+  போது (உண்மை)
     {
       location_t op_loc = c_parser_peek_token (parser)->location;
-      switch (c_parser_peek_token (parser)->type)
+      தேர்வு (c_parser_peek_token (parser)->type)
 	{
-	case CPP_OPEN_SQUARE:
+	நிலை CPP_OPEN_SQUARE:
 	  {
 	    c_parser_consume_token (parser);
-	    tree idx = c_parser_gimple_unary_expression (parser).value;
+	    மரம் idx = c_parser_gimple_unary_expression (parser).மதிப்பு;
 
-	    if (! c_parser_require (parser, CPP_CLOSE_SQUARE, "expected %<]%>"))
+	    எனில் (! c_parser_require (parser, CPP_CLOSE_SQUARE, "expected %<]%>"))
 	      {
-		c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, NULL);
-		break;
+		c_parser_skip_until_found (parser, CPP_CLOSE_SQUARE, வெற்று);
+		நிறுத்து;
 	      }
 
-	    start = expr.get_start ();
+	    start = கோவை.get_start ();
 	    finish = c_parser_tokens_buf (parser, 0)->location;
-	    expr.value = build_array_ref (op_loc, expr.value, idx);
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
+	    கோவை.மதிப்பு = build_array_ref (op_loc, கோவை.மதிப்பு, idx);
+	    set_c_கோவை_source_range (&கோவை, start, finish);
+	    கோவை.m_decimal = 0;
 
-	    expr.original_code = ERROR_MARK;
-	    expr.original_type = NULL;
-	    break;
+	    கோவை.original_code = ERROR_MARK;
+	    கோவை.original_type = வெற்று;
+	    நிறுத்து;
 	  }
-	case CPP_OPEN_PAREN:
+	நிலை CPP_OPEN_PAREN:
 	  {
 	    /* Function call.  */
 	    c_parser_consume_token (parser);
-	    auto_vec<tree> exprlist;
-	    if (! c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
-	      c_parser_gimple_expr_list (parser, &exprlist);
+	    auto_vec<மரம்> exprlist;
+	    எனில் (! c_parser_next_token_is (parser, CPP_CLOSE_PAREN))
+	      c_parser_gimple_கோவை_list (parser, &exprlist);
 	    c_parser_skip_until_found (parser, CPP_CLOSE_PAREN,
 				       "expected %<)%>");
-	    if (!FUNC_OR_METHOD_TYPE_P (TREE_TYPE (expr.value)))
+	    எனில் (!FUNC_OR_METHOD_TYPE_P (மரம்_TYPE (கோவை.மதிப்பு)))
 	      {
 		c_parser_error (parser, "invalid call to non-function");
-		expr.set_error ();
-		break;
+		கோவை.set_error ();
+		நிறுத்து;
 	      }
-	    expr.value = build_call_array_loc
-		(expr_loc, TREE_TYPE (TREE_TYPE (expr.value)),
-		 expr.value, exprlist.length (), exprlist.address ());
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    expr.original_type = NULL;
-	    break;
+	    கோவை.மதிப்பு = build_call_array_loc
+		(கோவை_loc, மரம்_TYPE (மரம்_TYPE (கோவை.மதிப்பு)),
+		 கோவை.மதிப்பு, exprlist.length (), exprlist.address ());
+	    கோவை.m_decimal = 0;
+	    கோவை.original_code = ERROR_MARK;
+	    கோவை.original_type = வெற்று;
+	    நிறுத்து;
 	  }
-	case CPP_DOT:
+	நிலை CPP_DOT:
 	  {
 	    /* Structure element reference.  */
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_NAME))
+	    எனில் (c_parser_next_token_is (parser, CPP_NAME))
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
-		ident = comp_tok->value;
+		ident = comp_tok->மதிப்பு;
 		comp_loc = comp_tok->location;
 	      }
-	    else
+	    இல்லையெனில்
 	      {
 		c_parser_error (parser, "expected identifier");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		கோவை.set_error ();
+		கோவை.original_code = ERROR_MARK;
+		கோவை.original_type = வெற்று;
+		திரும்பு கோவை;
 	      }
-	    start = expr.get_start ();
+	    start = கோவை.get_start ();
 	    finish = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_consume_token (parser);
-	    expr.value = build_component_ref (op_loc, expr.value, ident,
+	    கோவை.மதிப்பு = build_component_ref (op_loc, கோவை.மதிப்பு, ident,
 					      comp_loc, UNKNOWN_LOCATION);
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    if (TREE_CODE (expr.value) != COMPONENT_REF)
-	      expr.original_type = NULL;
-	    else
+	    set_c_கோவை_source_range (&கோவை, start, finish);
+	    கோவை.m_decimal = 0;
+	    கோவை.original_code = ERROR_MARK;
+	    எனில் (மரம்_CODE (கோவை.மதிப்பு) != COMPONENT_REF)
+	      கோவை.original_type = வெற்று;
+	    இல்லையெனில்
 	      {
 		/* Remember the original type of a bitfield.  */
-		tree field = TREE_OPERAND (expr.value, 1);
-		if (TREE_CODE (field) != FIELD_DECL)
-		  expr.original_type = NULL;
-		else
-		  expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		மரம் field = மரம்_OPERAND (கோவை.மதிப்பு, 1);
+		எனில் (மரம்_CODE (field) != FIELD_DECL)
+		  கோவை.original_type = வெற்று;
+		இல்லையெனில்
+		  கோவை.original_type = DECL_BIT_FIELD_TYPE (field);
 	      }
-	    break;
+	    நிறுத்து;
 	  }
-	case CPP_DEREF:
+	நிலை CPP_DEREF:
 	  {
 	    /* Structure element reference.  */
-	    if (!POINTER_TYPE_P (TREE_TYPE (expr.value)))
+	    எனில் (!POINTER_TYPE_P (மரம்_TYPE (கோவை.மதிப்பு)))
 	      {
 		c_parser_error (parser, "dereference of non-pointer");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		கோவை.set_error ();
+		கோவை.original_code = ERROR_MARK;
+		கோவை.original_type = வெற்று;
+		திரும்பு கோவை;
 	      }
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_NAME))
+	    எனில் (c_parser_next_token_is (parser, CPP_NAME))
 	      {
 		c_token *comp_tok = c_parser_peek_token (parser);
-		ident = comp_tok->value;
+		ident = comp_tok->மதிப்பு;
 		comp_loc = comp_tok->location;
 	      }
-	    else
+	    இல்லையெனில்
 	      {
 		c_parser_error (parser, "expected identifier");
-		expr.set_error ();
-		expr.original_code = ERROR_MARK;
-		expr.original_type = NULL;
-		return expr;
+		கோவை.set_error ();
+		கோவை.original_code = ERROR_MARK;
+		கோவை.original_type = வெற்று;
+		திரும்பு கோவை;
 	      }
-	    start = expr.get_start ();
+	    start = கோவை.get_start ();
 	    finish = c_parser_peek_token (parser)->get_finish ();
 	    c_parser_consume_token (parser);
-	    expr.value = build_component_ref (op_loc,
+	    கோவை.மதிப்பு = build_component_ref (op_loc,
 					      build_simple_mem_ref_loc
-					        (op_loc, expr.value),
+					        (op_loc, கோவை.மதிப்பு),
 					      ident, comp_loc,
-					      expr.get_location ());
-	    set_c_expr_source_range (&expr, start, finish);
-	    expr.m_decimal = 0;
-	    expr.original_code = ERROR_MARK;
-	    if (TREE_CODE (expr.value) != COMPONENT_REF)
-	      expr.original_type = NULL;
-	    else
+					      கோவை.get_location ());
+	    set_c_கோவை_source_range (&கோவை, start, finish);
+	    கோவை.m_decimal = 0;
+	    கோவை.original_code = ERROR_MARK;
+	    எனில் (மரம்_CODE (கோவை.மதிப்பு) != COMPONENT_REF)
+	      கோவை.original_type = வெற்று;
+	    இல்லையெனில்
 	      {
 		/* Remember the original type of a bitfield.  */
-		tree field = TREE_OPERAND (expr.value, 1);
-		if (TREE_CODE (field) != FIELD_DECL)
-		  expr.original_type = NULL;
-		else
-		  expr.original_type = DECL_BIT_FIELD_TYPE (field);
+		மரம் field = மரம்_OPERAND (கோவை.மதிப்பு, 1);
+		எனில் (மரம்_CODE (field) != FIELD_DECL)
+		  கோவை.original_type = வெற்று;
+		இல்லையெனில்
+		  கோவை.original_type = DECL_BIT_FIELD_TYPE (field);
 	      }
-	    break;
+	    நிறுத்து;
 	  }
-	default:
-	  return expr;
+	இயல்பு:
+	  திரும்பு கோவை;
 	}
     }
 }
@@ -2138,18 +2138,18 @@ c_parser_gimple_postfix_expression_after_primary (gimple_parser &parser,
 
  */
 
-static void
-c_parser_gimple_expr_list (gimple_parser &parser, vec<tree> *ret)
+நிலையான வெறுமை
+c_parser_gimple_கோவை_list (gimple_parser &parser, vec<மரம்> *ret)
 {
-  struct c_expr expr;
+  கட்டமைப்பு c_கோவை கோவை;
 
-  expr = c_parser_gimple_unary_expression (parser);
-  ret->safe_push (expr.value);
-  while (c_parser_next_token_is (parser, CPP_COMMA))
+  கோவை = c_parser_gimple_unary_expression (parser);
+  ret->safe_தள்ளு (கோவை.மதிப்பு);
+  போது (c_parser_next_token_is (parser, CPP_COMMA))
     {
       c_parser_consume_token (parser);
-      expr = c_parser_gimple_unary_expression (parser);
-      ret->safe_push (expr.value);
+      கோவை = c_parser_gimple_unary_expression (parser);
+      ret->safe_தள்ளு (கோவை.மதிப்பு);
     }
 }
 
@@ -2162,19 +2162,19 @@ c_parser_gimple_expr_list (gimple_parser &parser, vec<tree> *ret)
 
 */
 
-static void
+நிலையான வெறுமை
 c_parser_gimple_label (gimple_parser &parser, gimple_seq *seq)
 {
-  tree name = c_parser_peek_token (parser)->value;
+  மரம் name = c_parser_peek_token (parser)->மதிப்பு;
   location_t loc1 = c_parser_peek_token (parser)->location;
   gcc_assert (c_parser_next_token_is (parser, CPP_NAME));
   c_parser_consume_token (parser);
   gcc_assert (c_parser_next_token_is (parser, CPP_COLON));
   c_parser_consume_token (parser);
-  tree label = define_label (loc1, name);
-  if (label)
+  மரம் label = define_label (loc1, name);
+  எனில் (label)
     gimple_seq_add_stmt_without_update (seq, gimple_build_label (label));
-  return;
+  திரும்பு;
 }
 
 /* Parse gimple/RTL pass list.
@@ -2183,77 +2183,77 @@ c_parser_gimple_label (gimple_parser &parser, gimple_seq *seq)
      startwith("pass-name")[,{cfg,ssa}]
  */
 
-void
+வெறுமை
 c_parser_gimple_or_rtl_pass_list (c_parser *parser, c_declspecs *specs)
 {
-  char *pass = NULL;
+  எழுத்து *pass = வெற்று;
 
   /* Accept __GIMPLE/__RTL.  */
-  if (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
-    return;
+  எனில் (c_parser_next_token_is_not (parser, CPP_OPEN_PAREN))
+    திரும்பு;
   c_parser_consume_token (parser);
 
-  specs->entry_bb_count = profile_count::uninitialized ();
-  while (c_parser_next_token_is (parser, CPP_NAME))
+  specs->entry_bb_மொத்தம் = profile_மொத்தம்::uninitialized ();
+  போது (c_parser_next_token_is (parser, CPP_NAME))
     {
       profile_quality quality;
-      const char *op = IDENTIFIER_POINTER (c_parser_peek_token (parser)->value);
+      மாறிலி எழுத்து *op = IDENTIFIER_POINTER (c_parser_peek_token (parser)->மதிப்பு);
       c_parser_consume_token (parser);
-      if (! strcmp (op, "startwith"))
+      எனில் (! strcmp (op, "startwith"))
 	{
-	  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return;
-	  if (c_parser_next_token_is_not (parser, CPP_STRING))
+	  எனில் (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    திரும்பு;
+	  எனில் (c_parser_next_token_is_not (parser, CPP_STRING))
 	    {
 	      error_at (c_parser_peek_token (parser)->location,
 			"expected pass name");
-	      return;
+	      திரும்பு;
 	    }
-	  pass = xstrdup (TREE_STRING_POINTER
-			  (c_parser_string_literal (parser, false,
-						    false).value));
-	  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<(%>"))
-	    return;
+	  pass = xstrdup (மரம்_STRING_POINTER
+			  (c_parser_string_literal (parser, பொய்,
+						    பொய்).மதிப்பு));
+	  எனில் (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<(%>"))
+	    திரும்பு;
 	}
-      else if (parse_profile_quality (op, &quality))
+      இல்லையெனில் எனில் (parse_profile_quality (op, &quality))
 	{
-	  tree q;
-	  if (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-	    return;
+	  மரம் q;
+	  எனில் (!c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+	    திரும்பு;
 
-	  if (!c_parser_next_token_is (parser, CPP_NUMBER)
-	      || (TREE_CODE (q = c_parser_peek_token (parser)->value)
+	  எனில் (!c_parser_next_token_is (parser, CPP_எண்)
+	      || (மரம்_CODE (q = c_parser_peek_token (parser)->மதிப்பு)
 		  != INTEGER_CST))
 	    {
 	      c_parser_error (parser, "expected count value");
-	      return;
+	      திரும்பு;
 	    }
 
-	  specs->entry_bb_count
-	    = profile_count::from_gcov_type (TREE_INT_CST_LOW (q), quality);
+	  specs->entry_bb_மொத்தம்
+	    = profile_மொத்தம்::from_gcov_type (மரம்_INT_CST_கீழ் (q), quality);
 	  c_parser_consume_token (parser);
-	  if (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-	    return;
+	  எனில் (!c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+	    திரும்பு;
 	}
-      else if (specs->declspec_il != cdil_gimple)
+      இல்லையெனில் எனில் (specs->declspec_il != cdil_gimple)
 	/* Allow only one IL specifier and none on RTL.  */
 	;
-      else if (! strcmp (op, "cfg"))
+      இல்லையெனில் எனில் (! strcmp (op, "cfg"))
 	specs->declspec_il = cdil_gimple_cfg;
-      else if (! strcmp (op, "ssa"))
+      இல்லையெனில் எனில் (! strcmp (op, "ssa"))
 	specs->declspec_il = cdil_gimple_ssa;
-      else
+      இல்லையெனில்
 	{
 	  error_at (c_parser_peek_token (parser)->location,
 		    "invalid operation");
-	  return;
+	  திரும்பு;
 	}
-     if (c_parser_next_token_is (parser, CPP_COMMA))
+     எனில் (c_parser_next_token_is (parser, CPP_COMMA))
        c_parser_consume_token (parser);
     }
 
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return;
+  எனில் (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    திரும்பு;
 
   specs->gimple_or_rtl_pass = pass;
 }
@@ -2296,36 +2296,36 @@ c_parser_gimple_or_rtl_pass_list (c_parser *parser, c_declspecs *specs)
 
  */
 
-static void
+நிலையான வெறுமை
 c_parser_gimple_declaration (gimple_parser &parser)
 {
-  struct c_declarator *declarator;
-  struct c_declspecs *specs = build_null_declspecs ();
-  c_parser_declspecs (parser, specs, true, true, true,
-		      true, true, true, true, cla_nonabstract_decl);
+  கட்டமைப்பு c_declarator *declarator;
+  கட்டமைப்பு c_declspecs *specs = build_null_declspecs ();
+  c_parser_declspecs (parser, specs, உண்மை, உண்மை, உண்மை,
+		      உண்மை, உண்மை, உண்மை, உண்மை, cla_nonabstract_decl);
   finish_declspecs (specs);
 
   /* Provide better error recovery.  Note that a type name here is usually
      better diagnosed as a redeclaration.  */
-  if (c_parser_next_token_starts_declspecs (parser)
+  எனில் (c_parser_next_token_starts_declspecs (parser)
       && ! c_parser_next_token_is (parser, CPP_NAME))
     {
       c_parser_error (parser, "expected %<;%>");
-      c_parser_set_error (parser, false);
-      return;
+      c_parser_set_error (parser, பொய்);
+      திரும்பு;
     }
 
-  bool dummy = false;
+  தருக்க dummy = பொய்;
   declarator = c_parser_declarator (parser,
 				    specs->typespec_kind != ctsk_none,
 				    C_DTR_NORMAL, &dummy);
 
-  if (!c_parser_next_token_is (parser, CPP_SEMICOLON))
+  எனில் (!c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
       c_parser_error (parser, "expected %<;%>");
-      return;
+      திரும்பு;
     }
-  if (declarator)
+  எனில் (declarator)
     {
       /* Handle SSA name decls specially, they do not go into the identifier
          table but we simply build the SSA name for later lookup.  */
@@ -2335,10 +2335,10 @@ c_parser_gimple_declaration (gimple_parser &parser)
 	 just build the type of the decl - start_decl already pushes
 	 the identifier to the bindings for lookup, something we do not
 	 want.  */
-      struct c_declarator *id_declarator = declarator;
-      while (id_declarator->kind == cdk_pointer)
+      கட்டமைப்பு c_declarator *id_declarator = declarator;
+      போது (id_declarator->kind == cdk_pointer)
 	id_declarator = id_declarator->declarator;
-      if (id_declarator->kind == cdk_id
+      எனில் (id_declarator->kind == cdk_id
 	  && (declarator->kind == cdk_pointer
 	      || is_gimple_reg_type (specs->type))
 	  && c_parser_parse_ssa_name_id (id_declarator->u.id.id,
@@ -2348,9 +2348,9 @@ c_parser_gimple_declaration (gimple_parser &parser)
 	     decide to not dump their name for -gimple).  */
 	  && ver_offset == 0)
 	{
-	  struct c_declarator *p = declarator;
-	  tree type = specs->type;
-	  while (p->kind == cdk_pointer)
+	  கட்டமைப்பு c_declarator *p = declarator;
+	  மரம் type = specs->type;
+	  போது (p->kind == cdk_pointer)
 	    {
 	      type = build_pointer_type (type);
 	      p = p->declarator;
@@ -2358,39 +2358,39 @@ c_parser_gimple_declaration (gimple_parser &parser)
 	  c_parser_parse_ssa_name (parser, id_declarator->u.id.id, type,
 				   version, ver_offset);
 	}
-      else
+      இல்லையெனில்
 	{
-	  tree postfix_attrs = NULL_TREE;
-	  tree all_prefix_attrs = specs->attrs;
-	  specs->attrs = NULL;
-	  tree decl = start_decl (declarator, specs, false,
+	  மரம் postfix_attrs = NULL_மரம்;
+	  மரம் all_prefix_attrs = specs->attrs;
+	  specs->attrs = வெற்று;
+	  மரம் decl = start_decl (declarator, specs, பொய்,
 				  chainon (postfix_attrs, all_prefix_attrs));
-	  if (decl)
-	    finish_decl (decl, UNKNOWN_LOCATION, NULL_TREE, NULL_TREE,
-			 NULL_TREE);
+	  எனில் (decl)
+	    finish_decl (decl, UNKNOWN_LOCATION, NULL_மரம், NULL_மரம்,
+			 NULL_மரம்);
 	}
     }
 }
 
 /* Parse gimple goto statement.  */
 
-static void
+நிலையான வெறுமை
 c_parser_gimple_goto_stmt (gimple_parser &parser,
-			   location_t loc, tree label, gimple_seq *seq)
+			   location_t loc, மரம் label, gimple_seq *seq)
 {
-  if (cfun->curr_properties & PROP_cfg)
+  எனில் (cfun->curr_properties & PROP_cfg)
     {
-      int dest_index;
+      முழு dest_index;
       profile_probability prob;
-      if (c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
+      எனில் (c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							  &dest_index, &prob))
 	{
-	  parser.push_edge (parser.current_bb->index, dest_index,
+	  parser.தள்ளு_edge (parser.current_bb->index, dest_index,
 			    EDGE_FALLTHRU, prob);
-	  return;
+	  திரும்பு;
 	}
     }
-  tree decl = lookup_label_for_goto (loc, label);
+  மரம் decl = lookup_label_for_goto (loc, label);
   gimple_seq_add_stmt_without_update (seq, gimple_build_goto (decl));
 }
 
@@ -2398,24 +2398,24 @@ c_parser_gimple_goto_stmt (gimple_parser &parser,
    gimple-condition:
      ( gimple-binary-expression )    */
 
-static tree
+நிலையான மரம்
 c_parser_gimple_paren_condition (gimple_parser &parser)
 {
-  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return error_mark_node;
-  tree cond
-    = c_parser_gimple_binary_expression (parser, boolean_type_node).value;
-  if (cond != error_mark_node
+  எனில் (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    திரும்பு error_mark_முனை;
+  மரம் cond
+    = c_parser_gimple_இருமம்_expression (parser, boolean_type_முனை).மதிப்பு;
+  எனில் (cond != error_mark_முனை
       && ! COMPARISON_CLASS_P (cond)
       && ! CONSTANT_CLASS_P (cond)
       && ! SSA_VAR_P (cond))
     {
       c_parser_error (parser, "comparison required");
-      cond = error_mark_node;
+      cond = error_mark_முனை;
     }
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return error_mark_node;
-  return cond;
+  எனில் (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    திரும்பு error_mark_முனை;
+  திரும்பு cond;
 }
 
 /* Parse gimple try statement.
@@ -2427,43 +2427,43 @@ c_parser_gimple_paren_condition (gimple_parser &parser)
    This could support try/catch as well, but it's not implemented yet.
  */
 
-static void
+நிலையான வெறுமை
 c_parser_gimple_try_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  gimple_seq tryseq = NULL;
+  gimple_seq tryseq = வெற்று;
   c_parser_consume_token (parser);
   c_parser_gimple_compound_statement (parser, &tryseq);
 
-  if ((c_parser_next_token_is (parser, CPP_KEYWORD)
+  எனில் ((c_parser_next_token_is (parser, CPP_KEYWORD)
        && c_parser_peek_token (parser)->keyword == RID_AT_FINALLY)
       || (c_parser_next_token_is (parser, CPP_NAME)
 	  && c_parser_peek_token (parser)->id_kind == C_ID_ID
-	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->value),
+	  && strcmp (IDENTIFIER_POINTER (c_parser_peek_token (parser)->மதிப்பு),
 		     "finally") == 0))
     {
-      gimple_seq finseq = NULL;
+      gimple_seq finseq = வெற்று;
       c_parser_consume_token (parser);
       c_parser_gimple_compound_statement (parser, &finseq);
 
-      if (c_parser_next_token_is (parser, CPP_KEYWORD)
+      எனில் (c_parser_next_token_is (parser, CPP_KEYWORD)
 	  && c_parser_peek_token (parser)->keyword == RID_ELSE)
 	{
-	  gimple_seq elsseq = NULL;
+	  gimple_seq elsseq = வெற்று;
 	  c_parser_consume_token (parser);
 	  c_parser_gimple_compound_statement (parser, &elsseq);
 
 	  geh_else *stmt = gimple_build_eh_else (finseq, elsseq);
-	  finseq = NULL;
+	  finseq = வெற்று;
 	  gimple_seq_add_stmt_without_update (&finseq, stmt);
 	}
 
       gtry *stmt = gimple_build_try (tryseq, finseq, GIMPLE_TRY_FINALLY);
       gimple_seq_add_stmt_without_update (seq, stmt);
     }
-  else if (c_parser_next_token_is (parser, CPP_KEYWORD)
+  இல்லையெனில் எனில் (c_parser_next_token_is (parser, CPP_KEYWORD)
       && c_parser_peek_token (parser)->keyword == RID_AT_CATCH)
     c_parser_error (parser, "%<catch%> is not supported");
-  else
+  இல்லையெனில்
     c_parser_error (parser, "expected %<finally%> or %<catch%>");
 }
 
@@ -2475,82 +2475,82 @@ c_parser_gimple_try_stmt (gimple_parser &parser, gimple_seq *seq)
 					else gimple-goto-statement
  */
 
-static void
+நிலையான வெறுமை
 c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  tree t_label = NULL_TREE, f_label = NULL_TREE, label;
+  மரம் t_label = NULL_மரம், f_label = NULL_மரம், label;
   location_t loc;
   c_parser_consume_token (parser);
-  tree cond = c_parser_gimple_paren_condition (parser);
+  மரம் cond = c_parser_gimple_paren_condition (parser);
 
-  if (c_parser_next_token_is_keyword (parser, RID_GOTO))
+  எனில் (c_parser_next_token_is_keyword (parser, RID_GOTO))
     {
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      if (! c_parser_next_token_is (parser, CPP_NAME))
+      எனில் (! c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected label");
-	  return;
+	  திரும்பு;
 	}
-      label = c_parser_peek_token (parser)->value;
+      label = c_parser_peek_token (parser)->மதிப்பு;
       c_parser_consume_token (parser);
-      int dest_index;
+      முழு dest_index;
       profile_probability prob;
-      if ((cfun->curr_properties & PROP_cfg)
+      எனில் ((cfun->curr_properties & PROP_cfg)
 	  && c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							     &dest_index, &prob))
-	parser.push_edge (parser.current_bb->index, dest_index,
-			  EDGE_TRUE_VALUE, prob);
-      else
+	parser.தள்ளு_edge (parser.current_bb->index, dest_index,
+			  EDGE_TRUE_மதிப்பு, prob);
+      இல்லையெனில்
 	t_label = lookup_label_for_goto (loc, label);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return;
+      எனில் (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	திரும்பு;
     }
-  else
+  இல்லையெனில்
     {
       c_parser_error (parser, "expected goto expression");
-      return;
+      திரும்பு;
     }
 
-  if (c_parser_next_token_is_keyword (parser, RID_ELSE))
+  எனில் (c_parser_next_token_is_keyword (parser, RID_ELSE))
     c_parser_consume_token (parser);
-  else
+  இல்லையெனில்
     {
       c_parser_error (parser, "expected else statement");
-      return;
+      திரும்பு;
     }
 
-  if (c_parser_next_token_is_keyword (parser, RID_GOTO))
+  எனில் (c_parser_next_token_is_keyword (parser, RID_GOTO))
     {
       loc = c_parser_peek_token (parser)->location;
       c_parser_consume_token (parser);
-      if (! c_parser_next_token_is (parser, CPP_NAME))
+      எனில் (! c_parser_next_token_is (parser, CPP_NAME))
 	{
 	  c_parser_error (parser, "expected label");
-	  return;
+	  திரும்பு;
 	}
-      label = c_parser_peek_token (parser)->value;
+      label = c_parser_peek_token (parser)->மதிப்பு;
       c_parser_consume_token (parser);
-      int dest_index;
+      முழு dest_index;
       profile_probability prob;
-      if ((cfun->curr_properties & PROP_cfg)
+      எனில் ((cfun->curr_properties & PROP_cfg)
 	  && c_parser_gimple_parse_bb_spec_edge_probability (label, parser,
 							     &dest_index, &prob))
-	parser.push_edge (parser.current_bb->index, dest_index,
-			  EDGE_FALSE_VALUE, prob);
-      else
+	parser.தள்ளு_edge (parser.current_bb->index, dest_index,
+			  EDGE_FALSE_மதிப்பு, prob);
+      இல்லையெனில்
 	f_label = lookup_label_for_goto (loc, label);
-      if (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
-	return;
+      எனில் (! c_parser_require (parser, CPP_SEMICOLON, "expected %<;%>"))
+	திரும்பு;
     }
-  else
+  இல்லையெனில்
     {
       c_parser_error (parser, "expected goto expression");
-      return;
+      திரும்பு;
     }
 
-  if (cond != error_mark_node)
-    gimple_seq_add_stmt_without_update (seq, gimple_build_cond_from_tree (cond, t_label,
+  எனில் (cond != error_mark_முனை)
+    gimple_seq_add_stmt_without_update (seq, gimple_build_cond_from_மரம் (cond, t_label,
 							   f_label));
 }
 
@@ -2564,138 +2564,138 @@ c_parser_gimple_if_stmt (gimple_parser &parser, gimple_seq *seq)
      gimple-label-statement : gimple-goto-statement
 */
 
-static void
+நிலையான வெறுமை
 c_parser_gimple_switch_stmt (gimple_parser &parser, gimple_seq *seq)
 {
-  c_expr cond_expr;
-  tree case_label, label;
-  auto_vec<tree> labels;
-  tree default_label = NULL_TREE;
+  c_கோவை cond_கோவை;
+  மரம் case_label, label;
+  auto_vec<மரம்> labels;
+  மரம் default_label = NULL_மரம்;
   c_parser_consume_token (parser);
 
-  if (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
-    return;
-  cond_expr = c_parser_gimple_postfix_expression (parser);
-  if (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
-    return;
+  எனில் (! c_parser_require (parser, CPP_OPEN_PAREN, "expected %<(%>"))
+    திரும்பு;
+  cond_கோவை = c_parser_gimple_postfix_expression (parser);
+  எனில் (! c_parser_require (parser, CPP_CLOSE_PAREN, "expected %<)%>"))
+    திரும்பு;
 
-  if (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
-    return;
+  எனில் (! c_parser_require (parser, CPP_OPEN_BRACE, "expected %<{%>"))
+    திரும்பு;
 
-  while (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
+  போது (c_parser_next_token_is_not (parser, CPP_CLOSE_BRACE))
     {
-      if (c_parser_next_token_is (parser, CPP_EOF))
+      எனில் (c_parser_next_token_is (parser, CPP_EOF))
 	{
 	  c_parser_error (parser, "expected statement");
-	  return;
+	  திரும்பு;
 	}
 
-      switch (c_parser_peek_token (parser)->keyword)
+      தேர்வு (c_parser_peek_token (parser)->keyword)
 	{
-	case RID_CASE:
+	நிலை RID_CASE:
 	  {
-	    c_expr exp1;
+	    c_கோவை exp1;
 	    location_t loc = c_parser_peek_token (parser)->location;
 	    c_parser_consume_token (parser);
 
-	    if (c_parser_next_token_is (parser, CPP_NAME)
-		|| c_parser_peek_token (parser)->type == CPP_NUMBER)
+	    எனில் (c_parser_next_token_is (parser, CPP_NAME)
+		|| c_parser_peek_token (parser)->type == CPP_எண்)
 	      exp1 = c_parser_gimple_postfix_expression (parser);
-	    else
+	    இல்லையெனில்
 	      {
 		c_parser_error (parser, "expected expression");
-		return;
+		திரும்பு;
 	      }
 
-	    if (c_parser_next_token_is (parser, CPP_COLON))
+	    எனில் (c_parser_next_token_is (parser, CPP_COLON))
 	      {
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		எனில் (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    label = c_parser_peek_token (parser)->value;
+		    label = c_parser_peek_token (parser)->மதிப்பு;
 		    c_parser_consume_token (parser);
-		    tree decl = lookup_label_for_goto (loc, label);
-		    case_label = build_case_label (exp1.value, NULL_TREE,
+		    மரம் decl = lookup_label_for_goto (loc, label);
+		    case_label = build_case_label (exp1.மதிப்பு, NULL_மரம்,
 						   decl);
-		    labels.safe_push (case_label);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    labels.safe_தள்ளு (case_label);
+		    எனில் (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return;
+		      திரும்பு;
 		  }
-		else if (! c_parser_require (parser, CPP_NAME,
+		இல்லையெனில் எனில் (! c_parser_require (parser, CPP_NAME,
 					     "expected label"))
-		  return;
+		  திரும்பு;
 	      }
-	    else if (! c_parser_require (parser, CPP_SEMICOLON,
+	    இல்லையெனில் எனில் (! c_parser_require (parser, CPP_SEMICOLON,
 					 "expected %<:%>"))
-	      return;
-	    break;
+	      திரும்பு;
+	    நிறுத்து;
 	  }
-	case RID_DEFAULT:
+	நிலை RID_DEFAULT:
 	  {
 	    location_t loc = c_parser_peek_token (parser)->location;
 	    c_parser_consume_token (parser);
-	    if (c_parser_next_token_is (parser, CPP_COLON))
+	    எனில் (c_parser_next_token_is (parser, CPP_COLON))
 	      {
 		c_parser_consume_token (parser);
-		if (c_parser_next_token_is (parser, CPP_NAME))
+		எனில் (c_parser_next_token_is (parser, CPP_NAME))
 		  {
-		    label = c_parser_peek_token (parser)->value;
+		    label = c_parser_peek_token (parser)->மதிப்பு;
 		    c_parser_consume_token (parser);
-		    tree decl = lookup_label_for_goto (loc, label);
-		    default_label = build_case_label (NULL_TREE, NULL_TREE,
+		    மரம் decl = lookup_label_for_goto (loc, label);
+		    default_label = build_case_label (NULL_மரம், NULL_மரம்,
 						      decl);
-		    if (! c_parser_require (parser, CPP_SEMICOLON,
+		    எனில் (! c_parser_require (parser, CPP_SEMICOLON,
 					    "expected %<;%>"))
-		      return;
+		      திரும்பு;
 		  }
-		else if (! c_parser_require (parser, CPP_NAME,
+		இல்லையெனில் எனில் (! c_parser_require (parser, CPP_NAME,
 					     "expected label"))
-		  return;
+		  திரும்பு;
 	      }
-	    else if (! c_parser_require (parser, CPP_SEMICOLON,
+	    இல்லையெனில் எனில் (! c_parser_require (parser, CPP_SEMICOLON,
 					 "expected %<:%>"))
-	      return;
-	    break;
+	      திரும்பு;
+	    நிறுத்து;
 	  }
-	default:
+	இயல்பு:
 	  c_parser_error (parser, "expected case label");
-	  return;
+	  திரும்பு;
 	}
 
     }
-  if (! c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
-    return;
+  எனில் (! c_parser_require (parser, CPP_CLOSE_BRACE, "expected %<}%>"))
+    திரும்பு;
 
-  if (cond_expr.value != error_mark_node)
+  எனில் (cond_கோவை.மதிப்பு != error_mark_முனை)
     {
-      gswitch *s = gimple_build_switch (cond_expr.value, default_label, labels);
+      gswitch *s = gimple_build_switch (cond_கோவை.மதிப்பு, default_label, labels);
       gimple_seq_add_stmt_without_update (seq, s);
     }
 }
 
 /* Parse gimple return statement.  */
 
-static void
+நிலையான வெறுமை
 c_parser_gimple_return_stmt (gimple_parser &parser, gimple_seq *seq)
 {
   location_t loc = c_parser_peek_token (parser)->location;
-  gimple *ret = NULL;
+  gimple *ret = வெற்று;
   c_parser_consume_token (parser);
-  if (c_parser_next_token_is (parser, CPP_SEMICOLON))
+  எனில் (c_parser_next_token_is (parser, CPP_SEMICOLON))
     {
-      c_finish_gimple_return (loc, NULL_TREE);
-      ret = gimple_build_return (NULL);
+      c_finish_gimple_return (loc, NULL_மரம்);
+      ret = gimple_build_return (வெற்று);
       gimple_seq_add_stmt_without_update (seq, ret);
     }
-  else
+  இல்லையெனில்
     {
       location_t xloc = c_parser_peek_token (parser)->location;
-      c_expr expr = c_parser_gimple_unary_expression (parser);
-      if (expr.value != error_mark_node)
+      c_கோவை கோவை = c_parser_gimple_unary_expression (parser);
+      எனில் (கோவை.மதிப்பு != error_mark_முனை)
 	{
-	  c_finish_gimple_return (xloc, expr.value);
-	  ret = gimple_build_return (expr.value);
+	  c_finish_gimple_return (xloc, கோவை.மதிப்பு);
+	  ret = gimple_build_return (கோவை.மதிப்பு);
 	  gimple_seq_add_stmt_without_update (seq, ret);
 	}
     }
@@ -2703,25 +2703,25 @@ c_parser_gimple_return_stmt (gimple_parser &parser, gimple_seq *seq)
 
 /* Support function for c_parser_gimple_return_stmt.  */
 
-static void
-c_finish_gimple_return (location_t loc, tree retval)
+நிலையான வெறுமை
+c_finish_gimple_return (location_t loc, மரம் retval)
 {
-  tree valtype = TREE_TYPE (TREE_TYPE (current_function_decl));
+  மரம் valtype = மரம்_TYPE (மரம்_TYPE (current_function_decl));
 
   /* Use the expansion point to handle cases such as returning NULL
      in a function returning void.  */
   location_t xloc = expansion_point_location_if_in_system_header (loc);
 
-  if (TREE_THIS_VOLATILE (current_function_decl))
+  எனில் (மரம்_THIS_VOLATILE (current_function_decl))
     warning_at (xloc, 0,
 		"function declared %<noreturn%> has a %<return%> statement");
 
-  if (! retval)
+  எனில் (! retval)
     current_function_returns_null = 1;
-  else if (valtype == 0 || VOID_TYPE_P (valtype))
+  இல்லையெனில் எனில் (valtype == 0 || VOID_TYPE_P (valtype))
     {
       current_function_returns_null = 1;
-      if (TREE_CODE (TREE_TYPE (retval)) != VOID_TYPE)
+      எனில் (மரம்_CODE (மரம்_TYPE (retval)) != VOID_TYPE)
 	{
 	  error_at
 	    (xloc, "%<return%> with a value, in function returning void");
@@ -2729,12 +2729,12 @@ c_finish_gimple_return (location_t loc, tree retval)
 		  "declared here");
 	}
     }
-  else if (TREE_CODE (valtype) != TREE_CODE (TREE_TYPE (retval)))
+  இல்லையெனில் எனில் (மரம்_CODE (valtype) != மரம்_CODE (மரம்_TYPE (retval)))
     {
       error_at
 	(xloc, "invalid conversion in return statement");
       inform (DECL_SOURCE_LOCATION (current_function_decl),
 	      "declared here");
     }
-  return;
+  திரும்பு;
 }
