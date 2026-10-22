@@ -1,0 +1,560 @@
+# What is still missing
+
+76 languages. Each line says in how many languages it is missing.
+
+## Files in languages BURP cannot read yet
+
+
+## Keywords with no word in a language's table
+
+- shraeni:fail: 75
+- shraeni:bad: 75
+- shraeni:get: 75
+- shraeni:put: 75
+- shraeni:clear: 75
+- shraeni:remove: 71
+- shraeni:size_t: 71
+- shraeni:va_list: 71
+- shraeni:va_start: 71
+- shraeni:va_end: 71
+- shraeni:sprintf: 71
+- shraeni:fprintf: 71
+- shraeni:offsetof: 71
+- shraeni:CHAR_BIT: 71
+- shraeni:UCHAR_MAX: 71
+- shraeni:FILE: 71
+- shraeni:memcmp: 71
+- shraeni:va_arg: 71
+- shraeni:USHRT_MAX: 71
+- shraeni:errno: 71
+- shraeni:strchr: 71
+- guru:FILE: 71
+- guru:size_t: 71
+- shraeni:strtoul: 71
+- shraeni:ERANGE: 71
+- shraeni:strrchr: 71
+- shraeni:atoi: 71
+- shraeni:strcmp: 70
+- shraeni:strcpy: 70
+- shraeni:strcat: 70
+- shraeni:memset: 70
+- shraeni:qsort: 70
+- shraeni:exp: 67
+- shraeni:nullptr: 67
+- shraeni:using: 67
+- shraeni:typename: 67
+- guru:#define: 66
+- shraeni:#define: 66
+- guru:#undef: 66
+- shraeni:left: 66
+- shraeni:right: 66
+- shraeni:#undef: 66
+- shraeni:#endif: 66
+- guru:#endif: 66
+- guru:#ifndef: 66
+- shraeni:delete: 66
+- shraeni:unsigned: 62
+- shraeni:strlen: 62
+- shraeni:short: 62
+- shraeni:memcpy: 62
+- guru:unsigned: 62
+- shraeni:auto: 62
+- shraeni:INT_MAX: 62
+- shraeni:strncmp: 62
+- shraeni:strstr: 62
+- shraeni:template: 62
+- shraeni:operator: 62
+- shraeni:long: 62
+- shraeni:true: 38
+- shraeni:false: 26
+- shraeni:bool: 26
+- shraeni:namespace: 26
+- shraeni:NULL: 25
+- shraeni:static: 25
+- shraeni:void: 25
+- shraeni:goto: 25
+- shraeni:const: 25
+- guru:extern: 25
+- shraeni:switch: 25
+- shraeni:default: 25
+- shraeni:continue: 25
+- guru:void: 25
+- shraeni:do: 25
+- guru:const: 25
+- shraeni:class: 25
+- shraeni:public: 25
+- shraeni:free: 25
+- shraeni:extern: 25
+- shraeni:typedef: 25
+- shraeni:new: 25
+- shraeni:private: 25
+- guru:typedef: 25
+- guru:NULL: 25
+- guru:static: 25
+- shraeni:#elif: 25
+- guru:switch: 25
+- guru:default: 25
+- shraeni:for: 9
+- shraeni:case: 9
+- shraeni:break: 9
+- shraeni:struct: 9
+- shraeni:char: 9
+- shraeni:enum: 9
+- guru:struct: 9
+- shraeni:sizeof: 9
+- guru:enum: 9
+- guru:char: 9
+- shraeni:inline: 9
+- guru:inline: 9
+- shraeni:union: 9
+- guru:union: 9
+- guru:case: 9
+- guru:sizeof: 9
+- guru:break: 9
+- shraeni:if: 1
+- shraeni:return: 1
+- shraeni:else: 1
+- shraeni:int: 1
+- shraeni:while: 1
+- guru:int: 1
+- guru:return: 1
+- shraeni:#if: 1
+- guru:if: 1
+- shraeni:#else: 1
+- guru:else: 1
+- guru:#if: 1
+
+## Names with no dictionary entry (the most common first)
+
+- `parser`: 76
+- `type`: 76
+- `loc`: 76
+- `t`: 76
+- `decl`: 76
+- `c`: 76
+- `p`: 76
+- `error_at`: 76
+- `ret`: 76
+- `specs`: 76
+- `location`: 76
+- `c_parser_peek_token`: 76
+- `location_t`: 76
+- `c_parser_consume_token`: 76
+- `clauses`: 76
+- `list`: 76
+- `c_parser`: 76
+- `name`: 76
+- `b`: 76
+- `i`: 76
+- `token`: 76
+- `stmt`: 76
+- `parens`: 76
+- `id`: 76
+- `t1`: 76
+- `x`: 76
+- `gcc_assert`: 76
+- `t2`: 76
+- `newdecl`: 76
+- `warning_at`: 76
+- `c_parser_error`: 76
+- `CPP_NAME`: 76
+- `olddecl`: 76
+- `op1`: 76
+- `n`: 76
+- `attrs`: 76
+- `op0`: 76
+- `error`: 76
+- `arg`: 76
+- `u`: 76
+- `rhs`: 76
+- `TYPE_MAIN_VARIANT`: 76
+- `CPP_CLOSE_PAREN`: 76
+- `OMP_CLAUSE_LOCATION`: 76
+- `d`: 76
+- `INTEGER_CST`: 76
+- `c_token`: 76
+- `tok`: 76
+- `fndecl`: 76
+- `ref`: 76
+- `c_fully_fold`: 76
+- `OPT_Wpedantic`: 76
+- `init`: 76
+- `val`: 76
+- `OMP_CLAUSE_CHAIN`: 76
+- `c_parser_require`: 76
+- `pedwarn`: 76
+- `v`: 76
+- `richloc`: 76
+- `type1`: 76
+- `scope`: 76
+- `declarator`: 76
+- `if_p`: 76
+- `cclauses`: 76
+- `cond`: 76
+- `code1`: 76
+- `label`: 76
+- `lhs`: 76
+- `CPP_COMMA`: 76
+- `constructor_type`: 76
+- `ARRAY_TYPE`: 76
+- `declspecs`: 76
+- `keyword`: 76
+- `original_type`: 76
+- `DECL_NAME`: 76
+- `warned`: 76
+- `c_name`: 76
+- `ERROR_MARK`: 76
+- `vec`: 76
+- `j`: 76
+- `DECL_INITIAL`: 76
+- `UNKNOWN_LOCATION`: 76
+- `op`: 76
+- `matching_parens`: 76
+- `c_parser_peek_2nd_token`: 76
+- `FUNCTION_DECL`: 76
+- `current_scope`: 76
+- `omp_for_parse_state`: 76
+- `r`: 76
+- `CPP_OPEN_PAREN`: 76
+- `TYPE_PRECISION`: 76
+- `p_name`: 76
+- `require_open`: 76
+- `inside_init`: 76
+- `current_function_decl`: 76
+- `INTEGRAL_TYPE_P`: 76
+- `parm`: 76
+- `CPP_SEMICOLON`: 76
+- `inner`: 76
+- `type0`: 76
+- `pc`: 76
+- `CPP_COLON`: 76
+- `OMP_CLAUSE_DECL`: 76
+- `enumtype`: 76
+- `ENUMERAL_TYPE`: 76
+- `inform`: 76
+- `braced_init_obstack`: 76
+- `INTEGER_TYPE`: 76
+- `len`: 76
+- `spec`: 76
+- `gcc_unreachable`: 76
+- `DECL_CHAIN`: 76
+- `CASE_FLT_FN`: 76
+- `storage_class`: 76
+- `c_declarator`: 76
+- `FUNCTION_TYPE`: 76
+- `context`: 76
+- `c_declspecs`: 76
+- `cexpr_list`: 76
+- `COMPLEX_TYPE`: 76
+- `tem`: 76
+- `s`: 76
+- `a`: 76
+- `VAR_P`: 76
+- `type_name`: 76
+- `std_attrs`: 76
+- `comptypes`: 76
+- `type2`: 76
+- `nl`: 76
+- `BITINT_TYPE`: 76
+- `DECL_UID`: 76
+- `c_dialect_objc`: 76
+- `body`: 76
+- `str`: 76
+- `build_int_cst`: 76
+- `sp`: 76
+- `code0`: 76
+- `va_gc`: 76
+- `build2`: 76
+- `locations`: 76
+- `cfun`: 76
+- `c_parser_peek_nth_token_raw`: 76
+- `newtype`: 76
+- `l`: 76
+- `op2`: 76
+- `TYPE_NAME`: 76
+- `convert`: 76
+- `function`: 76
+- `code2`: 76
+- `TYPE_QUALS`: 76
+- `c_inhibit_evaluation_warnings`: 76
+- `orig_op0`: 76
+- `orig_op1`: 76
+- `build_omp_clause`: 76
+- `TYPE_UNSIGNED`: 76
+- `TYPE_DOMAIN`: 76
+- `directive`: 76
+- `c_binding`: 76
+- `lookup_attribute`: 76
+- `clause_loc`: 76
+- `rhstype`: 76
+- `attr`: 76
+- `params`: 76
+- `constructor_fields`: 76
+- `op_loc`: 76
+- `GTY`: 76
+- `DECL_EXTERNAL`: 76
+- `type_quals`: 76
+- `elt`: 76
+- `arg_info`: 76
+- `decl1`: 76
+- `parmnum`: 76
+- `e`: 76
+- `PARM_DECL`: 76
+- `parms`: 76
+- `CPP_KEYWORD`: 76
+- `CPP_CLOSE_BRACE`: 76
+- `arg2`: 76
+- `var`: 76
+- `ret_val`: 76
+- `G_`: 76
+- `arg1`: 76
+- `fundecl`: 76
+- `rid`: 76
+- `label_vars`: 76
+- `get_identifier`: 76
+- `flag_isoc99`: 76
+- `ce`: 76
+- `oldtype`: 76
+- `old_decl`: 76
+- `pos`: 76
+- `valtype`: 76
+- `purpose`: 76
+- `CPP_EOF`: 76
+- `m_decimal`: 76
+- `rhs1`: 76
+- `VOID_TYPE_P`: 76
+- `DECL_CONTEXT`: 76
+- `unsigned_p`: 76
+- `array`: 76
+- `init_loc`: 76
+- `mark_exp_read`: 76
+- `file_scope`: 76
+- `build1`: 76
+- `ctx`: 76
+- `CPP_PRAGMA_EOL`: 76
+- `CPP_OPEN_BRACE`: 76
+- `q`: 76
+- `TYPE_ARG_TYPES`: 76
+- `types`: 76
+- `concat`: 76
+- `flag_openmp`: 76
+- `get_location`: 76
+- `constructor_unfilled_fields`: 76
+- `TYPE_DECL`: 76
+- `decl_context`: 76
+- `tp`: 76
+- `c_type_name`: 76
+- `UNION_TYPE`: 76
+- `REAL_TYPE`: 76
+- `bindings`: 76
+- `saw_error`: 76
+- `wi`: 76
+- `atype`: 76
+- `COMPLETE_TYPE_P`: 76
+- `diagnostics`: 76
+- `origtype`: 76
+- `eloc`: 76
+- `obstack`: 76
+- `c_build_qualified_type`: 76
+- `integer_zerop`: 76
+- `have_std_attrs`: 76
+- `c_parser_consume_pragma`: 76
+- `idx`: 76
+- `typecode`: 76
+- `gcc_checking_assert`: 76
+- `flags`: 76
+- `nargs`: 76
+- `check_no_duplicate_clause`: 76
+- `allocator`: 76
+- `gimple_parser`: 76
+- `seq`: 76
+- `TYPE_ATOMIC`: 76
+- `addr_space_t`: 76
+- `pa`: 76
+- `COMPONENT_REF`: 76
+- `before_labels`: 76
+- `ttr`: 76
+- `nested`: 76
+- `flag_isoc23`: 76
+- `error_init`: 76
+- `implicit`: 76
+- `auto_vec`: 76
+- `bind`: 76
+- `warning`: 76
+- `constexpr_p`: 76
+- `pedantic`: 76
+- `fn`: 76
+- `ttl`: 76
+- `shadowed`: 76
+- `ident`: 76
+- `gmsgid`: 76
+- `cpp`: 76
+- `variant`: 76
+- `c_parser_peek_nth_token`: 76
+- `OMP_CLAUSE_MAP`: 76
+- `iterators`: 76
+- `rname`: 76
+- `TYPE_FIELDS`: 76
+- `gcc_rich_location`: 76
+- `ploc`: 76
+- `TYPE_UNQUALIFIED`: 76
+- `chainon`: 76
+- `ap`: 76
+- `eptype`: 76
+- `c_begin_compound_stmt`: 76
+- `dir`: 76
+- `cloc`: 76
+- `argtype`: 76
+- `c_scope`: 76
+- `ix`: 76
+- `quals`: 76
+- `short_p`: 76
+- `c_parser_omp_all_clauses`: 76
+- `otype`: 76
+- `OPT_Wc___compat`: 76
+- `long_p`: 76
+- `sizetype`: 76
+- `fold_convert`: 76
+- `diagnostic`: 76
+- `spelling`: 76
+- `SCALAR_FLOAT_TYPE_P`: 76
+- `c_arg_info`: 76
+- `build_decl`: 76
+- `warn_cxx_compat`: 76
+- `TYPE_CANONICAL`: 76
+- `postfix_attrs`: 76
+- `orig_type`: 76
+- `memb`: 76
+- `STRIP_TYPE_NOPS`: 76
+
+## Comments with no translation
+
+- FALLTHRU: 76
+- flag_openmp_simd: 76
+- invisible=: 76
+- nested=: 76
+- Quiet warning.: 76
+- Attempt to statically determine when the number isn't positive.: 76
+- Fall through.: 76
+- = NULL: 76
+- If we've run out of tokens, stop.: 76
+- FALLTHROUGH: 76
+- Structure element reference.: 76
+- Remember the original type of a bitfield.: 76
+- Make sure nothing tries to read past the end of the tokens.: 76
+- atomic write: 76
+- We only generate a call to .ACCESS_WITH_SIZE when it is a read.: 76
+- Skip any nameless bit fields at the beginning.: 76
+- This flag is set on an identifier if we have previously asked the
+   binding oracle for this identif: 76
+- Set the "checked" flag first, to avoid infinite recursion
+	 when the binding oracle calls back into : 76
+- #if CHECKING_P: 76
+- Peek at the next token.: 76
+- Consume this token.: 76
+- Set the location in case we create a decl now.: 76
+- The clauses location.: 76
+- Save time if the two types are the same.: 76
+- If one type is nonsense, use the other.: 76
+- Strip NON_LVALUE_EXPRs, etc., since we aren't using as an lvalue.: 76
+- This macro is used to emit diagnostics to ensure that all format
+     strings are complete sentences: 76
+- Accept a string constant to initialize a subarray.: 76
+- Otherwise, if we have come to a subaggregate,
+	     and we don't have an element of its type, push i: 76
+- Fallthru.: 76
+- Set to 0 at beginning of a function definition, set to 1 if
+   a return statement that specifies a r: 76
+- Set to 0 at beginning of a function definition, set to 1 if
+   a return statement with no argument i: 76
+- Set to 0 at beginning of a function definition, set to 1 if
+   a call to a noreturn function is seen: 76
+- The FLOAT_CONST_DECIMAL64 pragma applies to nested scopes.: 76
+- Types may not have tag-names, in which case the type
+	     appears in the bindings list with b->id N: 76
+- Make sure we keep void as the return type.: 76
+- If '-Wshadow=compatible-local' is specified without other
+	       -Wshadow= flags, we will warn only: 76
+- No label binding for that identifier; make one.: 76
+- Ordinary labels go in the current function scope.: 76
+- Builtins in the implementation namespace are made visible without
+     needing to be explicitly decl: 76
+- Apply attributes.: 76
+- Handle gnu_inline attribute.: 76
+- To enable versions to be created across TU's we mark and mangle all
+     non-default versioned funct: 76
+- If #pragma weak was used, mark the decl weak now.: 76
+- C99 6.2.2p7: It is invalid (compile-time undefined
+	   behavior) to create an 'extern' declaration f: 76
+- The %s will be one of 'struct', 'union', or 'enum'.: 76
+- fall through: 76
+- Get the struct, enum or union (CODE says which) with tag NAME.
+   Define the tag as a forward-refere: 76
+- A nontype is "greater" than a type.: 76
+- FALLTHROUGH.: 76
+- Update type location to the one of the definition, instead of e.g.
+     a forward declaration.: 76
+- Finish debugging output for this type.: 76
+- auto may only be used with another storage class specifier,
+	   such as constexpr, if the type is in: 76
+- namespace selftest: 76
+- N is 1-based, not zero-based.: 76
+- If we've reached the token we want, consume it and stop.: 76
+- Consume the token.: 76
+- Provide better error recovery.  Note that a type name here is usually
+     better diagnosed as a red: 76
+- A parameter is initialized, which is invalid.  Don't
+		     attempt to instrument the initializer.: 76
+- Strip no-op conversions.: 76
+- Parse any stray semicolon.: 76
+- Add this attribute to the list.: 76
+- __extension__ can start a declaration, but is also an
+	     unary operator that can start an express: 76
+- Eat the ';'.: 76
+- switch_p=: 76
+- Parse the initialization declaration or expression.: 76
+- Location of the binary operator.: 76
+- Currently, there are two cases are valid:
+     A. when the ref is an indirect_ref to a call to the
+	: 76
+- Function call.: 76
+- Any identifiers, including those declared as type names, are OK
+     here.: 76
+- FIXME: Should we allow duplicates?: 76
+- Assume it's a well-formed mapper modifier, even if it
+		     seems to be in the wrong place.: 76
+- Fallthrough.: 76
+- Remove the invalid clause(s) from the list to avoid
+	     confusing the rest of the compiler.: 76
+- finish_p=: 76
+- target=: 76
+- The clauses are in reverse order; fix that to make later diagnostic
+	 emission easier.: 76
+- Avoid skipping until the end of the block.: 76
+- c_parser_consume_token (parser); done in
+	     c_parser_omp_declare_simd.: 76
+- Likewise, with standard attributes present in the reference.: 76
+- The declarator.: 76
+- Preserve unsignedness if not really getting any wider.: 76
+- Merge the attributes.: 76
+- Save space: see if the result is identical to one of the args.: 76
+- Signed integers need to subtract one sign bit.: 76
+- If the type is a [*] array, it is a VLA but is represented as
+	 having a size of zero.  In such a ca: 76
+- Convert anything with function type to a pointer-to-function.: 76
+- Handle an ObjC selector specially for diagnostics.: 76
+- A NULLPTR type is just a nullptr always.: 76
+- We are typically called when parsing a prefix token at LOC acting on
+     ARG.  Reflect this by upda: 76
+- Finish the compound statement.: 76
+- The gmsgid may be a format string with %< and %>.: 76
+- Use the location where a macro was expanded rather than where
+     it was defined to make sure macro: 76
+- Avoid warning about the volatile ObjC EH puts on decls.: 76
+- Not fully determined before folding.: 76
+- TODO: this may not detect all cases of expressions folding to
+     constants that are not arithmetic: 76
+- Detect non-empty initializations of zero-length arrays.: 76
+- Vectors are like simple fixed-size arrays.: 76
+- Skip any nameless bit fields.: 76
+- Advance to the next smaller node.: 76
