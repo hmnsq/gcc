@@ -18,12 +18,12 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#include "config.h"
-#include "system.h"
-#include "coretypes.h"
-#include "tm.h"
-#include "c-tree.h"
-#include "opts.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "config.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "system.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "coretypes.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "tm.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "c-tree.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "opts.h"
 
 /* Issue an ISO C23 pedantic warning MSGID if -pedantic outside C2Y mode,
    otherwise issue warning MSGID if -Wc23-c2y-compat is specified.
@@ -31,41 +31,41 @@ along with GCC; see the file COPYING3.  If not see
    ISO C2Y but not supported in ISO C23, thus we explicitly don't pedwarn
    when C2Y is specified.  */
 
-bool
+ਤਾਰਕਿਕ
 pedwarn_c23 (location_t location,
 	     diagnostics::option_id option_id,
-	     const char *gmsgid, ...)
+	     ਅਚਲ ਅੱਖਰ *gmsgid, ...)
 {
   diagnostics::diagnostic_info diagnostic;
   va_list ap;
-  bool warned = false;
-  rich_location richloc (line_table, location);
+  ਤਾਰਕਿਕ warned = ਝੂਠ;
+  rich_location richloc (ਸਤਰ_ਸਾਰਣੀ, location);
 
-  va_start (ap, gmsgid);
+  va_ਸ਼ੁਰੂ (ap, gmsgid);
   /* If desired, issue the C23/C2Y compat warning, which is more specific
      than -pedantic.  */
-  if (warn_c23_c2y_compat > 0)
+  ਜੇ (warn_c23_c2y_compat > 0)
     {
-      diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
+      diagnostic_ਸੈੱਟ_info (&diagnostic, gmsgid, &ap, &richloc,
 			   (pedantic && !flag_isoc2y)
-			   ? diagnostics::kind::pedwarn
-			   : diagnostics::kind::warning);
+			   ? diagnostics::ਕਿਸਮ::pedwarn
+			   : diagnostics::ਕਿਸਮ::warning);
       diagnostic.m_option_id = OPT_Wc23_c2y_compat;
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
   /* -Wno-c23-c2y-compat suppresses even the pedwarns.  */
-  else if (warn_c23_c2y_compat == 0)
+  ਨਹੀਂਤਾਂ ਜੇ (warn_c23_c2y_compat == 0)
     ;
   /* For -pedantic outside C2Y, issue a pedwarn.  */
-  else if (pedantic && !flag_isoc2y)
+  ਨਹੀਂਤਾਂ ਜੇ (pedantic && !flag_isoc2y)
     {
-      diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
-			   diagnostics::kind::pedwarn);
+      diagnostic_ਸੈੱਟ_info (&diagnostic, gmsgid, &ap, &richloc,
+			   diagnostics::ਕਿਸਮ::pedwarn);
       diagnostic.m_option_id = option_id;
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
-  va_end (ap);
-  return warned;
+  va_ਸਿਰਾ (ap);
+  ਵਾਪਸ warned;
 }
 
 /* Issue an ISO C11 pedantic warning MSGID if -pedantic outside C23 mode,
@@ -77,45 +77,45 @@ pedwarn_c23 (location_t location,
    Additionally, warn if OPTION_ID is not OPT_Wpedantic nor
    OPT_Wc11_c23_compat.  */
 
-bool
+ਤਾਰਕਿਕ
 pedwarn_c11 (location_t location,
 	     diagnostics::option_id option_id,
-	     const char *gmsgid, ...)
+	     ਅਚਲ ਅੱਖਰ *gmsgid, ...)
 {
   diagnostics::diagnostic_info diagnostic;
   va_list ap;
-  bool warned = false;
-  rich_location richloc (line_table, location);
+  ਤਾਰਕਿਕ warned = ਝੂਠ;
+  rich_location richloc (ਸਤਰ_ਸਾਰਣੀ, location);
 
-  va_start (ap, gmsgid);
+  va_ਸ਼ੁਰੂ (ap, gmsgid);
   /* If desired, issue the C11/C23 compat warning, which is more specific than
      -pedantic, or the warning specified by option_id.  */
-  if (warn_c11_c23_compat > 0 || (option_id.m_idx != OPT_Wpedantic
+  ਜੇ (warn_c11_c23_compat > 0 || (option_id.m_idx != OPT_Wpedantic
 				  && option_id.m_idx != OPT_Wc11_c23_compat))
     {
-      diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
+      diagnostic_ਸੈੱਟ_info (&diagnostic, gmsgid, &ap, &richloc,
 			   (pedantic && !flag_isoc23)
-			   ? diagnostics::kind::pedwarn
-			   : diagnostics::kind::warning);
-      if (option_id == OPT_Wpedantic)
+			   ? diagnostics::ਕਿਸਮ::pedwarn
+			   : diagnostics::ਕਿਸਮ::warning);
+      ਜੇ (option_id == OPT_Wpedantic)
 	diagnostic.m_option_id = OPT_Wc11_c23_compat;
-      else
+      ਨਹੀਂਤਾਂ
 	diagnostic.m_option_id = option_id;
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
   /* -Wno-c11-c23-compat suppresses even the pedwarns.  */
-  else if (warn_c11_c23_compat == 0)
+  ਨਹੀਂਤਾਂ ਜੇ (warn_c11_c23_compat == 0)
     ;
   /* For -pedantic outside C23, issue a pedwarn.  */
-  else if (pedantic && !flag_isoc23)
+  ਨਹੀਂਤਾਂ ਜੇ (pedantic && !flag_isoc23)
     {
-      diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
-			   diagnostics::kind::pedwarn);
+      diagnostic_ਸੈੱਟ_info (&diagnostic, gmsgid, &ap, &richloc,
+			   diagnostics::ਕਿਸਮ::pedwarn);
       diagnostic.m_option_id = option_id;
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
-  va_end (ap);
-  return warned;
+  va_ਸਿਰਾ (ap);
+  ਵਾਪਸ warned;
 }
 
 /* Issue an ISO C99 pedantic warning MSGID if -pedantic outside C11 mode,
@@ -124,41 +124,41 @@ pedwarn_c11 (location_t location,
    ISO C11 but not supported in ISO C99, thus we explicitly don't pedwarn
    when C11 is specified.  */
 
-bool
+ਤਾਰਕਿਕ
 pedwarn_c99 (location_t location,
 	     diagnostics::option_id option_id,
-	     const char *gmsgid, ...)
+	     ਅਚਲ ਅੱਖਰ *gmsgid, ...)
 {
   diagnostics::diagnostic_info diagnostic;
   va_list ap;
-  bool warned = false;
-  rich_location richloc (line_table, location);
+  ਤਾਰਕਿਕ warned = ਝੂਠ;
+  rich_location richloc (ਸਤਰ_ਸਾਰਣੀ, location);
 
-  va_start (ap, gmsgid);
+  va_ਸ਼ੁਰੂ (ap, gmsgid);
   /* If desired, issue the C99/C11 compat warning, which is more specific
      than -pedantic.  */
-  if (warn_c99_c11_compat > 0)
+  ਜੇ (warn_c99_c11_compat > 0)
     {
-      diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
+      diagnostic_ਸੈੱਟ_info (&diagnostic, gmsgid, &ap, &richloc,
 			   (pedantic && !flag_isoc11)
-			   ? diagnostics::kind::pedwarn
-			   : diagnostics::kind::warning);
+			   ? diagnostics::ਕਿਸਮ::pedwarn
+			   : diagnostics::ਕਿਸਮ::warning);
       diagnostic.m_option_id = OPT_Wc99_c11_compat;
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
   /* -Wno-c99-c11-compat suppresses even the pedwarns.  */
-  else if (warn_c99_c11_compat == 0)
+  ਨਹੀਂਤਾਂ ਜੇ (warn_c99_c11_compat == 0)
     ;
   /* For -pedantic outside C11, issue a pedwarn.  */
-  else if (pedantic && !flag_isoc11)
+  ਨਹੀਂਤਾਂ ਜੇ (pedantic && !flag_isoc11)
     {
-      diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
-			   diagnostics::kind::pedwarn);
+      diagnostic_ਸੈੱਟ_info (&diagnostic, gmsgid, &ap, &richloc,
+			   diagnostics::ਕਿਸਮ::pedwarn);
       diagnostic.m_option_id = option_id;
       warned = diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
-  va_end (ap);
-  return warned;
+  va_ਸਿਰਾ (ap);
+  ਵਾਪਸ warned;
 }
 
 /* Issue an ISO C90 pedantic warning MSGID if -pedantic outside C99 mode,
@@ -168,95 +168,95 @@ pedwarn_c99 (location_t location,
    ISO C99 but not supported in ISO C90, thus we explicitly don't pedwarn
    when C99 is specified.  (There is no flag_c90.)  */
 
-bool
+ਤਾਰਕਿਕ
 pedwarn_c90 (location_t location,
 	     diagnostics::option_id option_id,
-	     const char *gmsgid, ...)
+	     ਅਚਲ ਅੱਖਰ *gmsgid, ...)
 {
   diagnostics::diagnostic_info diagnostic;
   va_list ap;
-  bool warned = false;
-  rich_location richloc (line_table, location);
+  ਤਾਰਕਿਕ warned = ਝੂਠ;
+  rich_location richloc (ਸਤਰ_ਸਾਰਣੀ, location);
 
-  va_start (ap, gmsgid);
+  va_ਸ਼ੁਰੂ (ap, gmsgid);
   /* Warnings such as -Wvla are the most specific ones.  */
-  if (option_id.m_idx != OPT_Wpedantic)
+  ਜੇ (option_id.m_idx != OPT_Wpedantic)
     {
-      int opt_var = *(int *) option_flag_var (option_id.m_idx, &global_options);
-      if (opt_var == 0)
-        goto out;
-      else if (opt_var > 0)
+      ਪੂਰਨ opt_var = *(ਪੂਰਨ *) option_flag_var (option_id.m_idx, &global_options);
+      ਜੇ (opt_var == 0)
+        ਜਾਓ ਬਾਹਰਲਾ;
+      ਨਹੀਂਤਾਂ ਜੇ (opt_var > 0)
 	{
-	  diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
+	  diagnostic_ਸੈੱਟ_info (&diagnostic, gmsgid, &ap, &richloc,
 			       (pedantic && !flag_isoc99)
-			       ? diagnostics::kind::pedwarn
-			       : diagnostics::kind::warning);
+			       ? diagnostics::ਕਿਸਮ::pedwarn
+			       : diagnostics::ਕਿਸਮ::warning);
 	  diagnostic.m_option_id = option_id;
 	  diagnostic_report_diagnostic (global_dc, &diagnostic);
-	  warned = true;
-	  goto out;
+	  warned = ਸੱਚ;
+	  ਜਾਓ ਬਾਹਰਲਾ;
 	}
     }
   /* Maybe we want to issue the C90/C99 compat warning, which is more
      specific than -pedantic.  */
-  if (warn_c90_c99_compat > 0)
+  ਜੇ (warn_c90_c99_compat > 0)
     {
-      diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
+      diagnostic_ਸੈੱਟ_info (&diagnostic, gmsgid, &ap, &richloc,
 			   (pedantic && !flag_isoc99)
-			   ? diagnostics::kind::pedwarn
-			   : diagnostics::kind::warning);
+			   ? diagnostics::ਕਿਸਮ::pedwarn
+			   : diagnostics::ਕਿਸਮ::warning);
       diagnostic.m_option_id = OPT_Wc90_c99_compat;
       diagnostic_report_diagnostic (global_dc, &diagnostic);
     }
   /* -Wno-c90-c99-compat suppresses the pedwarns.  */
-  else if (warn_c90_c99_compat == 0)
+  ਨਹੀਂਤਾਂ ਜੇ (warn_c90_c99_compat == 0)
     ;
   /* For -pedantic outside C99, issue a pedwarn.  */
-  else if (pedantic && !flag_isoc99)
+  ਨਹੀਂਤਾਂ ਜੇ (pedantic && !flag_isoc99)
     {
-      diagnostic_set_info (&diagnostic, gmsgid, &ap, &richloc,
-			   diagnostics::kind::pedwarn);
+      diagnostic_ਸੈੱਟ_info (&diagnostic, gmsgid, &ap, &richloc,
+			   diagnostics::ਕਿਸਮ::pedwarn);
       diagnostic.m_option_id = option_id;
       diagnostic_report_diagnostic (global_dc, &diagnostic);
-      warned = true;
+      warned = ਸੱਚ;
     }
-out:
-  va_end (ap);
-  return warned;
+ਬਾਹਰਲਾ:
+  va_ਸਿਰਾ (ap);
+  ਵਾਪਸ warned;
 }
 
 /* Determine in which version of the standard IDENTIFIER
    became a keyword.  */
 
-static const char *
-get_std_for_keyword (tree identifier)
+ਸਥਿਰ ਅਚਲ ਅੱਖਰ *
+get_std_for_keyword (ਰੁੱਖ identifier)
 {
-  switch (C_RID_CODE (identifier))
+  ਚੋਣ (C_RID_ਕੋਡ (identifier))
     {
-    default:
+    ਮੂਲ:
       gcc_unreachable ();
-    case RID_FALSE:
-    case RID_TRUE:
-      return "-std=c23";
-    case RID_BOOL:
-      if (IDENTIFIER_POINTER (identifier)[0] == 'b')
+    ਹਾਲਤ RID_FALSE:
+    ਹਾਲਤ RID_TRUE:
+      ਵਾਪਸ "-std=c23";
+    ਹਾਲਤ RID_BOOL:
+      ਜੇ (IDENTIFIER_ਸੂਚਕ (identifier)[0] == 'b')
 	/* "bool".  */
-	return "-std=c23";
-      else
+	ਵਾਪਸ "-std=c23";
+      ਨਹੀਂਤਾਂ
 	/* "_Bool".  */
-	return "-std=c99";
+	ਵਾਪਸ "-std=c99";
     }
 }
 
 /* Issue a note to the user at LOC that KEYWORD_ID is a keyword
    in STD_OPTION version of the standard onwards.  */
 
-void
-add_note_about_new_keyword (location_t loc,
-			    tree keyword_id)
+ਖਾਲੀ
+ਜੋੜੋ_note_about_new_keyword (location_t loc,
+			    ਰੁੱਖ keyword_id)
 {
-  gcc_assert (TREE_CODE (keyword_id) == IDENTIFIER_NODE);
-  const char *std_option = get_std_for_keyword (keyword_id);
+  gcc_assert (ਰੁੱਖ_ਕੋਡ (keyword_id) == IDENTIFIER_ਗੰਢ);
+  ਅਚਲ ਅੱਖਰ *std_option = get_std_for_keyword (keyword_id);
   inform (loc, "%qs is a keyword with %qs onwards",
-	  IDENTIFIER_POINTER (keyword_id), std_option);
+	  IDENTIFIER_ਸੂਚਕ (keyword_id), std_option);
 }

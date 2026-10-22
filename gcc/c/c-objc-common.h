@@ -18,137 +18,137 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_C_OBJC_COMMON
-#define GCC_C_OBJC_COMMON
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ GCC_C_OBJC_COMMON
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ GCC_C_OBJC_COMMON
 
 /* Implemented in c-objc-common.cc.  */
-extern void c_register_features ();
+ਬਾਹਰੀ ਖਾਲੀ c_ਰਜਿਸਟਰ_features ();
 
 /* Lang hooks that are shared between C and ObjC are defined here.  Hooks
    specific to C or ObjC go in c-lang.cc and objc/objc-lang.cc, respectively.  */
 
-#undef LANG_HOOKS_IDENTIFIER_SIZE
-#define LANG_HOOKS_IDENTIFIER_SIZE C_SIZEOF_STRUCT_LANG_IDENTIFIER
-#undef LANG_HOOKS_TREE_SIZE
-#define LANG_HOOKS_TREE_SIZE c_tree_size
-#undef LANG_HOOKS_FINISH
-#define LANG_HOOKS_FINISH c_common_finish
-#undef LANG_HOOKS_OPTION_LANG_MASK
-#define LANG_HOOKS_OPTION_LANG_MASK c_common_option_lang_mask
-#undef LANG_HOOKS_COMPLAIN_WRONG_LANG_P
-#define LANG_HOOKS_COMPLAIN_WRONG_LANG_P c_common_complain_wrong_lang_p
-#undef LANG_HOOKS_INIT_OPTIONS_STRUCT
-#define LANG_HOOKS_INIT_OPTIONS_STRUCT c_common_init_options_struct
-#undef LANG_HOOKS_INIT_OPTIONS
-#define LANG_HOOKS_INIT_OPTIONS c_common_init_options
-#undef LANG_HOOKS_INITIALIZE_DIAGNOSTICS
-#define LANG_HOOKS_INITIALIZE_DIAGNOSTICS c_initialize_diagnostics
-#undef LANG_HOOKS_HANDLE_OPTION
-#define LANG_HOOKS_HANDLE_OPTION c_common_handle_option
-#undef LANG_HOOKS_POST_OPTIONS
-#define LANG_HOOKS_POST_OPTIONS c_common_post_options
-#undef LANG_HOOKS_GET_ALIAS_SET
-#define LANG_HOOKS_GET_ALIAS_SET c_get_alias_set
-#undef LANG_HOOKS_PARSE_FILE
-#define LANG_HOOKS_PARSE_FILE c_common_parse_file
-#undef LANG_HOOKS_FINISH_INCOMPLETE_DECL
-#define LANG_HOOKS_FINISH_INCOMPLETE_DECL c_finish_incomplete_decl
-#undef LANG_HOOKS_WARN_UNUSED_GLOBAL_DECL
-#define LANG_HOOKS_WARN_UNUSED_GLOBAL_DECL c_warn_unused_global_decl
-#undef LANG_HOOKS_PRINT_IDENTIFIER
-#define LANG_HOOKS_PRINT_IDENTIFIER c_print_identifier
-#undef LANG_HOOKS_TYPES_COMPATIBLE_P
-#define LANG_HOOKS_TYPES_COMPATIBLE_P c_types_compatible_p
-#undef LANG_HOOKS_MISSING_NORETURN_OK_P
-#define LANG_HOOKS_MISSING_NORETURN_OK_P c_missing_noreturn_ok_p
-#undef LANG_HOOKS_BLOCK_MAY_FALLTHRU
-#define LANG_HOOKS_BLOCK_MAY_FALLTHRU c_block_may_fallthru
-#undef  LANG_HOOKS_BUILTIN_FUNCTION
-#define LANG_HOOKS_BUILTIN_FUNCTION c_builtin_function
-#undef  LANG_HOOKS_BUILTIN_FUNCTION_EXT_SCOPE
-#define LANG_HOOKS_BUILTIN_FUNCTION_EXT_SCOPE c_builtin_function_ext_scope
-#undef  LANG_HOOKS_SIMULATE_BUILTIN_FUNCTION_DECL
-#define LANG_HOOKS_SIMULATE_BUILTIN_FUNCTION_DECL \
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_IDENTIFIER_ਮਾਪ
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_IDENTIFIER_ਮਾਪ C_SIZEOF_STRUCT_LANG_IDENTIFIER
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_ਰੁੱਖ_ਮਾਪ
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_ਰੁੱਖ_ਮਾਪ c_ਰੁੱਖ_ਮਾਪ
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_ਅੰਤ
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_ਅੰਤ c_common_ਅੰਤ
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_OPTION_LANG_ਨਕਾਬ
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_OPTION_LANG_ਨਕਾਬ c_common_option_lang_ਨਕਾਬ
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_COMPLAIN_WRONG_LANG_P
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_COMPLAIN_WRONG_LANG_P c_common_complain_wrong_lang_p
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_INIT_OPTIONS_STRUCT
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_INIT_OPTIONS_STRUCT c_common_init_options_struct
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_INIT_OPTIONS
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_INIT_OPTIONS c_common_init_options
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_INITIALIZE_DIAGNOSTICS
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_INITIALIZE_DIAGNOSTICS c_initialize_diagnostics
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_HANDLE_OPTION
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_HANDLE_OPTION c_common_handle_option
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_POST_OPTIONS
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_POST_OPTIONS c_common_post_options
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_GET_ALIAS_ਸੈੱਟ
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_GET_ALIAS_ਸੈੱਟ c_get_alias_ਸੈੱਟ
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_PARSE_FILE
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_PARSE_FILE c_common_parse_file
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_ਅੰਤ_INCOMPLETE_DECL
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_ਅੰਤ_INCOMPLETE_DECL c_ਅੰਤ_incomplete_decl
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_WARN_ਅਣਵਰਤਿਆ_GLOBAL_DECL
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_WARN_ਅਣਵਰਤਿਆ_GLOBAL_DECL c_warn_ਅਣਵਰਤਿਆ_global_decl
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_PRINT_IDENTIFIER
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_PRINT_IDENTIFIER c_print_identifier
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_TYPES_COMPATIBLE_P
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_TYPES_COMPATIBLE_P c_types_compatible_p
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_MISSING_NORETURN_OK_P
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_MISSING_NORETURN_OK_P c_missing_noreturn_ok_p
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_ਖੰਡ_MAY_FALLTHRU
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_ਖੰਡ_MAY_FALLTHRU c_ਖੰਡ_may_fallthru
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ  LANG_HOOKS_BUILTIN_FUNCTION
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_BUILTIN_FUNCTION c_builtin_function
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ  LANG_HOOKS_BUILTIN_FUNCTION_EXT_SCOPE
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_BUILTIN_FUNCTION_EXT_SCOPE c_builtin_function_ext_scope
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ  LANG_HOOKS_SIMULATE_BUILTIN_FUNCTION_DECL
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_SIMULATE_BUILTIN_FUNCTION_DECL \
   c_simulate_builtin_function_decl
-#undef LANG_HOOKS_EMITS_BEGIN_STMT
-#define LANG_HOOKS_EMITS_BEGIN_STMT true
-#undef LANG_HOOKS_FINALIZE_EARLY_DEBUG
-#define LANG_HOOKS_FINALIZE_EARLY_DEBUG c_common_finalize_early_debug
-#undef LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE
-#define LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE c_reconstruct_complex_type
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_EMITS_BEGIN_STMT
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_EMITS_BEGIN_STMT true
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_FINALIZE_EARLY_DEBUG
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_FINALIZE_EARLY_DEBUG c_common_finalize_early_debug
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE c_reconstruct_complex_type
 
-static const scoped_attribute_specs *const c_objc_attribute_table[] =
+ਸਥਿਰ ਅਚਲ scoped_attribute_specs *ਅਚਲ c_objc_attribute_ਸਾਰਣੀ[] =
 {
-  &std_attribute_table,
-  &c_common_gnu_attribute_table,
-  &c_common_clang_attribute_table,
-  &c_common_format_attribute_table
+  &std_attribute_ਸਾਰਣੀ,
+  &c_common_gnu_attribute_ਸਾਰਣੀ,
+  &c_common_clang_attribute_ਸਾਰਣੀ,
+  &c_common_format_attribute_ਸਾਰਣੀ
 };
 
-#undef LANG_HOOKS_ATTRIBUTE_TABLE
-#define LANG_HOOKS_ATTRIBUTE_TABLE c_objc_attribute_table
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_ATTRIBUTE_ਸਾਰਣੀ
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_ATTRIBUTE_ਸਾਰਣੀ c_objc_attribute_ਸਾਰਣੀ
 
-#undef LANG_HOOKS_TREE_DUMP_DUMP_TREE_FN
-#define LANG_HOOKS_TREE_DUMP_DUMP_TREE_FN c_dump_tree
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_ਰੁੱਖ_DUMP_DUMP_ਰੁੱਖ_FN
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_ਰੁੱਖ_DUMP_DUMP_ਰੁੱਖ_FN c_dump_ਰੁੱਖ
 
-#undef LANG_HOOKS_SIMULATE_ENUM_DECL
-#define LANG_HOOKS_SIMULATE_ENUM_DECL c_simulate_enum_decl
-#undef LANG_HOOKS_SIMULATE_RECORD_DECL
-#define LANG_HOOKS_SIMULATE_RECORD_DECL c_simulate_record_decl
-#undef LANG_HOOKS_TYPE_FOR_MODE
-#define LANG_HOOKS_TYPE_FOR_MODE c_common_type_for_mode
-#undef LANG_HOOKS_TYPE_FOR_SIZE
-#define LANG_HOOKS_TYPE_FOR_SIZE c_common_type_for_size
-#undef LANG_HOOKS_INCOMPLETE_TYPE_ERROR
-#define LANG_HOOKS_INCOMPLETE_TYPE_ERROR c_incomplete_type_error
-#undef LANG_HOOKS_TYPE_PROMOTES_TO
-#define LANG_HOOKS_TYPE_PROMOTES_TO c_type_promotes_to
-#undef LANG_HOOKS_REGISTER_BUILTIN_TYPE
-#define LANG_HOOKS_REGISTER_BUILTIN_TYPE c_register_builtin_type
-#undef LANG_HOOKS_TO_TARGET_CHARSET
-#define LANG_HOOKS_TO_TARGET_CHARSET c_common_to_target_charset
-#undef LANG_HOOKS_EXPR_TO_DECL
-#define LANG_HOOKS_EXPR_TO_DECL c_expr_to_decl
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_SIMULATE_ENUM_DECL
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_SIMULATE_ENUM_DECL c_simulate_enum_decl
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_SIMULATE_ਰਿਕਾਰਡ_DECL
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_SIMULATE_ਰਿਕਾਰਡ_DECL c_simulate_ਰਿਕਾਰਡ_decl
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_TYPE_FOR_ਬਹੁਲਕ
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_TYPE_FOR_ਬਹੁਲਕ c_common_type_for_ਬਹੁਲਕ
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_TYPE_FOR_ਮਾਪ
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_TYPE_FOR_ਮਾਪ c_common_type_for_ਮਾਪ
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_INCOMPLETE_TYPE_ERROR
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_INCOMPLETE_TYPE_ERROR c_incomplete_type_error
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_TYPE_PROMOTES_ਮੰਜ਼ਿਲ
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_TYPE_PROMOTES_ਮੰਜ਼ਿਲ c_type_promotes_ਮੰਜ਼ਿਲ
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_ਰਜਿਸਟਰ_BUILTIN_TYPE
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_ਰਜਿਸਟਰ_BUILTIN_TYPE c_ਰਜਿਸਟਰ_builtin_type
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_ਮੰਜ਼ਿਲ_ਨਿਸ਼ਾਨਾ_CHARSET
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_ਮੰਜ਼ਿਲ_ਨਿਸ਼ਾਨਾ_CHARSET c_common_ਮੰਜ਼ਿਲ_ਨਿਸ਼ਾਨਾ_charset
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_ਵਿਅੰਜਕ_ਮੰਜ਼ਿਲ_DECL
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_ਵਿਅੰਜਕ_ਮੰਜ਼ਿਲ_DECL c_ਵਿਅੰਜਕ_ਮੰਜ਼ਿਲ_decl
 
 /* The C front end's scoping structure is very different from
    that expected by the language-independent code; it is best
    to disable getdecls.
    This means it must also provide its own write_globals.  */
 
-#undef LANG_HOOKS_GETDECLS
-#define LANG_HOOKS_GETDECLS hook_tree_void_null
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_GETDECLS
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_GETDECLS hook_ਰੁੱਖ_void_null
 
 /* Hooks for tree gimplification.  */
-#undef LANG_HOOKS_GIMPLIFY_EXPR
-#define LANG_HOOKS_GIMPLIFY_EXPR c_gimplify_expr
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_GIMPLIFY_ਵਿਅੰਜਕ
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_GIMPLIFY_ਵਿਅੰਜਕ c_gimplify_ਵਿਅੰਜਕ
 
-#undef LANG_HOOKS_TYPE_DWARF_ATTRIBUTE
-#define LANG_HOOKS_TYPE_DWARF_ATTRIBUTE c_type_dwarf_attribute
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_TYPE_DWARF_ATTRIBUTE
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_TYPE_DWARF_ATTRIBUTE c_type_dwarf_attribute
 
-#undef LANG_HOOKS_OMP_PREDETERMINED_SHARING
-#define LANG_HOOKS_OMP_PREDETERMINED_SHARING c_omp_predetermined_sharing
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_OMP_PREDETERMINED_SHARING
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_OMP_PREDETERMINED_SHARING c_omp_predetermined_sharing
 
-#undef LANG_HOOKS_OMP_PREDETERMINED_MAPPING
-#define LANG_HOOKS_OMP_PREDETERMINED_MAPPING c_omp_predetermined_mapping
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_OMP_PREDETERMINED_MAPPING
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_OMP_PREDETERMINED_MAPPING c_omp_predetermined_mapping
 
-#undef LANG_HOOKS_OMP_CLAUSE_COPY_CTOR
-#define LANG_HOOKS_OMP_CLAUSE_COPY_CTOR c_omp_clause_copy_ctor
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_OMP_CLAUSE_COPY_CTOR
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_OMP_CLAUSE_COPY_CTOR c_omp_clause_copy_ctor
 
-#undef LANG_HOOKS_OMP_CLAUSE_ASSIGN_OP
-#define LANG_HOOKS_OMP_CLAUSE_ASSIGN_OP c_omp_clause_copy_ctor
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_OMP_CLAUSE_ਸੌਂਪੋ_OP
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_OMP_CLAUSE_ਸੌਂਪੋ_OP c_omp_clause_copy_ctor
 
-#undef LANG_HOOKS_OMP_FINISH_MAPPER_CLAUSES
-#define LANG_HOOKS_OMP_FINISH_MAPPER_CLAUSES c_omp_finish_mapper_clauses
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_OMP_ਅੰਤ_MAPPER_CLAUSES
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_OMP_ਅੰਤ_MAPPER_CLAUSES c_omp_ਅੰਤ_mapper_clauses
 
-#undef LANG_HOOKS_OMP_MAPPER_LOOKUP
-#define LANG_HOOKS_OMP_MAPPER_LOOKUP c_omp_mapper_lookup
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_OMP_MAPPER_LOOKUP
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_OMP_MAPPER_LOOKUP c_omp_mapper_lookup
 
-#undef LANG_HOOKS_OMP_EXTRACT_MAPPER_DIRECTIVE
-#define LANG_HOOKS_OMP_EXTRACT_MAPPER_DIRECTIVE c_omp_extract_mapper_directive
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_OMP_ਕੱਢੋ_MAPPER_DIRECTIVE
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_OMP_ਕੱਢੋ_MAPPER_DIRECTIVE c_omp_ਕੱਢੋ_mapper_directive
 
-#undef LANG_HOOKS_OMP_MAP_ARRAY_SECTION
-#define LANG_HOOKS_OMP_MAP_ARRAY_SECTION c_omp_map_array_section
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_OMP_MAP_ARRAY_SECTION
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_OMP_MAP_ARRAY_SECTION c_omp_map_array_section
 
-#undef LANG_HOOKS_TREE_INLINING_VAR_MOD_TYPE_P
-#define LANG_HOOKS_TREE_INLINING_VAR_MOD_TYPE_P c_var_mod_p
-#endif /* GCC_C_OBJC_COMMON */
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ LANG_HOOKS_ਰੁੱਖ_INLINING_VAR_MOD_TYPE_P
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ LANG_HOOKS_ਰੁੱਖ_INLINING_VAR_MOD_TYPE_P c_var_mod_p
+#ਜੇ_ਅੰਤ /* GCC_C_OBJC_COMMON */

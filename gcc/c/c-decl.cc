@@ -24,53 +24,53 @@ along with GCC; see the file COPYING3.  If not see
 /* ??? not all decl nodes are given the most useful possible
    line numbers.  For example, the CONST_DECLs for enum values.  */
 
-#include "config.h"
-#define INCLUDE_STRING
-#include "system.h"
-#include "coretypes.h"
-#include "target.h"
-#include "function.h"
-#include "c-tree.h"
-#include "timevar.h"
-#include "stringpool.h"
-#include "cgraph.h"
-#include "intl.h"
-#include "print-tree.h"
-#include "stor-layout.h"
-#include "varasm.h"
-#include "attribs.h"
-#include "toplev.h"
-#include "debug.h"
-#include "c-family/c-objc.h"
-#include "c-family/c-pragma.h"
-#include "c-family/c-ubsan.h"
-#include "c-lang.h"
-#include "langhooks.h"
-#include "tree-iterator.h"
-#include "dumpfile.h"
-#include "plugin.h"
-#include "c-family/c-ada-spec.h"
-#include "builtins.h"
-#include "spellcheck-tree.h"
-#include "gcc-rich-location.h"
-#include "asan.h"
-#include "c-family/name-hint.h"
-#include "c-family/known-headers.h"
-#include "c-family/c-spellcheck.h"
-#include "context.h"  /* For 'g'.  */
-#include "omp-general.h"
-#include "omp-offload.h"  /* For offload_vars.  */
-#include "c-parser.h"
-#include "gcc-urlifier.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "config.h"
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ INCLUDE_STRING
+#ਅਨ੍ਤਰ੍ਭਾਵ "system.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "coretypes.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "target.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "function.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "c-tree.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "timevar.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "stringpool.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "cgraph.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "intl.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "print-tree.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "stor-layout.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "varasm.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "attribs.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "toplev.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "debug.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "c-family/c-objc.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "c-family/c-pragma.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "c-family/c-ubsan.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "c-lang.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "langhooks.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "tree-iterator.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "dumpfile.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "plugin.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "c-family/c-ada-spec.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "builtins.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "spellcheck-tree.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "gcc-rich-location.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "asan.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "c-family/name-hint.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "c-family/known-headers.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "c-family/c-spellcheck.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "context.h"  /* For 'g'.  */
+#ਅਨ੍ਤਰ੍ਭਾਵ "omp-general.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "omp-offload.h"  /* For offload_vars.  */
+#ਅਨ੍ਤਰ੍ਭਾਵ "c-parser.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "gcc-urlifier.h"
 
-#include "tree-pretty-print.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "tree-pretty-print.h"
 
 /* In grokdeclarator, distinguish syntactic contexts of declarators.  */
-enum decl_context
-{ NORMAL,			/* Ordinary declaration */
+ਗਿਣਤੀ decl_context
+{ ਸਾਧਾਰਨ,			/* Ordinary declaration */
   FUNCDEF,			/* Function definition */
   PARM,				/* Declaration of parm before function body */
-  FIELD,			/* Declaration inside struct or union */
+  ਖੇਤਰ,			/* Declaration inside struct or union */
   TYPENAME,			/* Typename (inside cast or sizeof)  */
   GENERIC_ASSOC };		/* Typename in generic association  */
 
@@ -81,8 +81,8 @@ enum decl_context
    An object declared as __attribute__((deprecated)) should suppress
    warnings of uses of other deprecated items.  */
 
-enum deprecated_states {
-  DEPRECATED_NORMAL,
+ਗਿਣਤੀ deprecated_ਹਾਲਤਾਂ {
+  DEPRECATED_ਸਾਧਾਰਨ,
   DEPRECATED_SUPPRESS,
   UNAVAILABLE_DEPRECATED_SUPPRESS
 };
@@ -90,7 +90,7 @@ enum deprecated_states {
 
 /* Nonzero if we have seen an invalid cross reference
    to a struct, union, or enum, but not yet printed the message.  */
-tree pending_invalid_xref;
+ਰੁੱਖ pending_invalid_xref;
 
 /* File and line to appear in the eventual error message.  */
 location_t pending_invalid_xref_location;
@@ -99,81 +99,81 @@ location_t pending_invalid_xref_location;
    old-style definition; used for diagnostics in
    store_parm_decls_oldstyle.  */
 
-static location_t current_function_prototype_locus;
+ਸਥਿਰ location_t current_function_prototype_locus;
 
 /* Whether this prototype was built-in.  */
 
-static bool current_function_prototype_built_in;
+ਸਥਿਰ ਤਾਰਕਿਕ current_function_prototype_built_ਵਿੱਚ;
 
 /* The argument type information of this prototype.  */
 
-static tree current_function_prototype_arg_types;
+ਸਥਿਰ ਰੁੱਖ current_function_prototype_arg_types;
 
 /* The argument information structure for the function currently being
    defined.  */
 
-static struct c_arg_info *current_function_arg_info;
+ਸਥਿਰ ਬਣਤਰ c_arg_info *current_function_arg_info;
 
 /* The obstack on which parser and related data structures, which are
    not live beyond their top-level declaration or definition, are
    allocated.  */
-struct obstack parser_obstack;
+ਬਣਤਰ obstack parser_obstack;
 
 /* The current statement tree.  */
 
-static GTY(()) struct stmt_tree_s c_stmt_tree;
+ਸਥਿਰ GTY(()) ਬਣਤਰ stmt_ਰੁੱਖ_s c_stmt_ਰੁੱਖ;
 
 /* Zero if we are not in an iteration or switch statement, otherwise
    a bitmask.  See bitmask definitions in c-tree.h.  */
-unsigned char in_statement;
+ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ ਵਿੱਚ_statement;
 
 /* A list of decls to be made automatically visible in each file scope.  */
-static GTY(()) tree visible_builtins;
+ਸਥਿਰ GTY(()) ਰੁੱਖ visible_builtins;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement that specifies a return value is seen.  */
 
-int current_function_returns_value;
+ਪੂਰਨ current_function_returns_ਮੁੱਲ;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement with no argument is seen.  */
 
-int current_function_returns_null;
+ਪੂਰਨ current_function_returns_null;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a call to a noreturn function is seen.  */
 
-int current_function_returns_abnormally;
+ਪੂਰਨ current_function_returns_abnormally;
 
 /* Set to nonzero by `grokdeclarator' for a function
    whose return type is defaulted, if warnings for this are desired.  */
 
-static int warn_about_return_type;
+ਸਥਿਰ ਪੂਰਨ warn_about_return_type;
 
 /* Nonzero when the current toplevel function contains a declaration
    of a nested function which is never defined.  */
 
-static bool undef_nested_function;
+ਸਥਿਰ ਤਾਰਕਿਕ undef_nested_function;
 
 /* Vector of implicit "omp declare target" attributes to be added into
    the attribute lists.  */
-vec<c_omp_declare_target_attr, va_gc> *current_omp_declare_target_attribute;
+vec<c_omp_declare_ਨਿਸ਼ਾਨਾ_attr, va_gc> *current_omp_declare_ਨਿਸ਼ਾਨਾ_attribute;
 
 /* Vector of
    #pragma omp begin assumes ... #pragma omp end assumes regions
    we are in.  */
-vec<c_omp_begin_assumes_data, va_gc> *current_omp_begin_assumes;
+vec<c_omp_begin_assumes_ਅੰਕੜੇ, va_gc> *current_omp_begin_assumes;
 
 /* Vector of "omp begin/end declare variant" blocks we are in.  */
 vec<c_omp_declare_variant_attr, va_gc> *current_omp_declare_variant_attribute;
 
 /* Vector of loop names with C_DECL_LOOP_NAME or C_DECL_SWITCH_NAME marked
    LABEL_DECL as the last and canonical for each loop or switch.  */
-static vec<tree> loop_names;
+ਸਥਿਰ vec<ਰੁੱਖ> loop_ਨਾਂ;
 
 /* Hash table mapping LABEL_DECLs to the canonical LABEL_DECLs if LOOP_NAMES
    vector becomes too long.  */
-static decl_tree_map *loop_names_hash;
+ਸਥਿਰ decl_ਰੁੱਖ_map *loop_ਨਾਂ_hash;
 
 /* Each c_binding structure describes one binding of an identifier to
    a decl.  All the decls in a scope - irrespective of namespace - are
@@ -211,168 +211,168 @@ static decl_tree_map *loop_names_hash;
    in all such cases, the binding in the outer scope will have its
    invisible bit true.  */
 
-struct GTY((chain_next ("%h.prev"))) c_binding {
-  union GTY(()) {		/* first so GTY desc can use decl */
-    tree GTY((tag ("0"))) type; /* the type in this scope */
-    struct c_label_vars * GTY((tag ("1"))) label; /* for warnings */
+ਬਣਤਰ GTY((chain_ਅਗਲਾ ("%h.prev"))) c_binding {
+  ਸੰਘ GTY(()) {		/* first so GTY desc can use decl */
+    ਰੁੱਖ GTY((ਟੈਗ ("0"))) type; /* the type in this scope */
+    ਬਣਤਰ c_label_vars * GTY((ਟੈਗ ("1"))) label; /* for warnings */
   } GTY((desc ("TREE_CODE (%0.decl) == LABEL_DECL"))) u;
-  tree decl;			/* the decl bound */
-  tree id;			/* the identifier it's bound to */
-  struct c_binding *prev;	/* the previous decl in this scope */
-  struct c_binding *shadowed;	/* the innermost decl shadowed by this one */
-  unsigned int depth : 28;      /* depth of this scope */
-  bool invisible : 1;  /* normal lookup should ignore this binding */
-  bool nested : 1;     /* do not set DECL_CONTEXT when popping */
-  bool inner_comp : 1; /* incomplete array completed in inner scope */
-  bool in_struct : 1;	/* currently defined as struct field */
+  ਰੁੱਖ decl;			/* the decl bound */
+  ਰੁੱਖ id;			/* the identifier it's bound to */
+  ਬਣਤਰ c_binding *prev;	/* the previous decl in this scope */
+  ਬਣਤਰ c_binding *shadowed;	/* the innermost decl shadowed by this one */
+  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ ਡੂੰਘਾਈ : 28;      /* depth of this scope */
+  ਤਾਰਕਿਕ invisible : 1;  /* normal lookup should ignore this binding */
+  ਤਾਰਕਿਕ nested : 1;     /* do not set DECL_CONTEXT when popping */
+  ਤਾਰਕਿਕ inner_comp : 1; /* incomplete array completed in inner scope */
+  ਤਾਰਕਿਕ ਵਿੱਚ_struct : 1;	/* currently defined as struct field */
   location_t locus;		/* location for nested bindings */
 };
-#define B_IN_SCOPE(b1, b2) ((b1)->depth == (b2)->depth)
-#define B_IN_CURRENT_SCOPE(b) ((b)->depth == current_scope->depth)
-#define B_IN_FILE_SCOPE(b) ((b)->depth == 1 /*file_scope->depth*/)
-#define B_IN_EXTERNAL_SCOPE(b) ((b)->depth == 0 /*external_scope->depth*/)
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ B_ਵਿੱਚ_SCOPE(b1, b2) ((b1)->ਡੂੰਘਾਈ == (b2)->ਡੂੰਘਾਈ)
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ B_ਵਿੱਚ_CURRENT_SCOPE(b) ((b)->ਡੂੰਘਾਈ == current_scope->ਡੂੰਘਾਈ)
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ B_ਵਿੱਚ_FILE_SCOPE(b) ((b)->ਡੂੰਘਾਈ == 1 /*file_scope->depth*/)
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ B_ਵਿੱਚ_EXTERNAL_SCOPE(b) ((b)->ਡੂੰਘਾਈ == 0 /*external_scope->depth*/)
 
 /* Each C symbol points to three linked lists of c_binding structures.
    These describe the values of the identifier in the three different
    namespaces defined by the language.  */
 
-struct GTY(()) lang_identifier {
-  struct c_common_identifier common_id;
-  struct c_binding *symbol_binding; /* vars, funcs, constants, typedefs */
-  struct c_binding *tag_binding;    /* struct/union/enum tags */
-  struct c_binding *label_binding;  /* labels */
+ਬਣਤਰ GTY(()) lang_identifier {
+  ਬਣਤਰ c_common_identifier common_id;
+  ਬਣਤਰ c_binding *ਚਿੰਨ੍ਹ_binding; /* vars, funcs, constants, typedefs */
+  ਬਣਤਰ c_binding *ਟੈਗ_binding;    /* struct/union/enum tags */
+  ਬਣਤਰ c_binding *label_binding;  /* labels */
 };
 
 /* Validate c-lang.cc's assumptions.  */
-extern char C_SIZEOF_STRUCT_LANG_IDENTIFIER_isnt_accurate
-[(sizeof(struct lang_identifier) == C_SIZEOF_STRUCT_LANG_IDENTIFIER) ? 1 : -1];
+ਬਾਹਰੀ ਅੱਖਰ C_SIZEOF_STRUCT_LANG_IDENTIFIER_isnt_accurate
+[(ਆਕਾਰ(ਬਣਤਰ lang_identifier) == C_SIZEOF_STRUCT_LANG_IDENTIFIER) ? 1 : -1];
 
 /* The binding oracle; see c-tree.h.  */
-void (*c_binding_oracle) (enum c_oracle_request, tree identifier);
+ਖਾਲੀ (*c_binding_oracle) (ਗਿਣਤੀ c_oracle_request, ਰੁੱਖ identifier);
 
 /* This flag is set on an identifier if we have previously asked the
    binding oracle for this identifier's symbol binding.  */
-#define I_SYMBOL_CHECKED(node) \
-  (TREE_LANG_FLAG_4 (IDENTIFIER_NODE_CHECK (node)))
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ I_ਚਿੰਨ੍ਹ_CHECKED(ਗੰਢ) \
+  (ਰੁੱਖ_LANG_FLAG_4 (IDENTIFIER_ਗੰਢ_CHECK (ਗੰਢ)))
 
-static inline struct c_binding* *
-i_symbol_binding (tree node)
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਬਣਤਰ c_binding* *
+i_ਚਿੰਨ੍ਹ_binding (ਰੁੱਖ ਗੰਢ)
 {
-  struct lang_identifier *lid
-    = (struct lang_identifier *) IDENTIFIER_NODE_CHECK (node);
+  ਬਣਤਰ lang_identifier *lid
+    = (ਬਣਤਰ lang_identifier *) IDENTIFIER_ਗੰਢ_CHECK (ਗੰਢ);
 
-  if (lid->symbol_binding == NULL
-      && c_binding_oracle != NULL
-      && !I_SYMBOL_CHECKED (node))
+  ਜੇ (lid->ਚਿੰਨ੍ਹ_binding == ਨਿਰਾ
+      && c_binding_oracle != ਨਿਰਾ
+      && !I_ਚਿੰਨ੍ਹ_CHECKED (ਗੰਢ))
     {
       /* Set the "checked" flag first, to avoid infinite recursion
 	 when the binding oracle calls back into gcc.  */
-      I_SYMBOL_CHECKED (node) = 1;
-      c_binding_oracle (C_ORACLE_SYMBOL, node);
+      I_ਚਿੰਨ੍ਹ_CHECKED (ਗੰਢ) = 1;
+      c_binding_oracle (C_ORACLE_ਚਿੰਨ੍ਹ, ਗੰਢ);
     }
 
-  return &lid->symbol_binding;
+  ਵਾਪਸ &lid->ਚਿੰਨ੍ਹ_binding;
 }
 
-#define I_SYMBOL_BINDING(node) (*i_symbol_binding (node))
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ I_ਚਿੰਨ੍ਹ_BINDING(ਗੰਢ) (*i_ਚਿੰਨ੍ਹ_binding (ਗੰਢ))
 
-#define I_SYMBOL_DECL(node) \
- (I_SYMBOL_BINDING(node) ? I_SYMBOL_BINDING(node)->decl : 0)
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ I_ਚਿੰਨ੍ਹ_DECL(ਗੰਢ) \
+ (I_ਚਿੰਨ੍ਹ_BINDING(ਗੰਢ) ? I_ਚਿੰਨ੍ਹ_BINDING(ਗੰਢ)->decl : 0)
 
 /* This flag is set on an identifier if we have previously asked the
    binding oracle for this identifier's tag binding.  */
-#define I_TAG_CHECKED(node) \
-  (TREE_LANG_FLAG_5 (IDENTIFIER_NODE_CHECK (node)))
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ I_ਟੈਗ_CHECKED(ਗੰਢ) \
+  (ਰੁੱਖ_LANG_FLAG_5 (IDENTIFIER_ਗੰਢ_CHECK (ਗੰਢ)))
 
-static inline struct c_binding **
-i_tag_binding (tree node)
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਬਣਤਰ c_binding **
+i_ਟੈਗ_binding (ਰੁੱਖ ਗੰਢ)
 {
-  struct lang_identifier *lid
-    = (struct lang_identifier *) IDENTIFIER_NODE_CHECK (node);
+  ਬਣਤਰ lang_identifier *lid
+    = (ਬਣਤਰ lang_identifier *) IDENTIFIER_ਗੰਢ_CHECK (ਗੰਢ);
 
-  if (lid->tag_binding == NULL
-      && c_binding_oracle != NULL
-      && !I_TAG_CHECKED (node))
+  ਜੇ (lid->ਟੈਗ_binding == ਨਿਰਾ
+      && c_binding_oracle != ਨਿਰਾ
+      && !I_ਟੈਗ_CHECKED (ਗੰਢ))
     {
       /* Set the "checked" flag first, to avoid infinite recursion
 	 when the binding oracle calls back into gcc.  */
-      I_TAG_CHECKED (node) = 1;
-      c_binding_oracle (C_ORACLE_TAG, node);
+      I_ਟੈਗ_CHECKED (ਗੰਢ) = 1;
+      c_binding_oracle (C_ORACLE_ਟੈਗ, ਗੰਢ);
     }
 
-  return &lid->tag_binding;
+  ਵਾਪਸ &lid->ਟੈਗ_binding;
 }
 
-#define I_TAG_BINDING(node) (*i_tag_binding (node))
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ I_ਟੈਗ_BINDING(ਗੰਢ) (*i_ਟੈਗ_binding (ਗੰਢ))
 
-#define I_TAG_DECL(node) \
- (I_TAG_BINDING(node) ? I_TAG_BINDING(node)->decl : 0)
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ I_ਟੈਗ_DECL(ਗੰਢ) \
+ (I_ਟੈਗ_BINDING(ਗੰਢ) ? I_ਟੈਗ_BINDING(ਗੰਢ)->decl : 0)
 
 /* This flag is set on an identifier if we have previously asked the
    binding oracle for this identifier's label binding.  */
-#define I_LABEL_CHECKED(node) \
-  (TREE_LANG_FLAG_6 (IDENTIFIER_NODE_CHECK (node)))
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ I_LABEL_CHECKED(ਗੰਢ) \
+  (ਰੁੱਖ_LANG_FLAG_6 (IDENTIFIER_ਗੰਢ_CHECK (ਗੰਢ)))
 
-static inline struct c_binding **
-i_label_binding (tree node)
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਬਣਤਰ c_binding **
+i_label_binding (ਰੁੱਖ ਗੰਢ)
 {
-  struct lang_identifier *lid
-    = (struct lang_identifier *) IDENTIFIER_NODE_CHECK (node);
+  ਬਣਤਰ lang_identifier *lid
+    = (ਬਣਤਰ lang_identifier *) IDENTIFIER_ਗੰਢ_CHECK (ਗੰਢ);
 
-  if (lid->label_binding == NULL
-      && c_binding_oracle != NULL
-      && !I_LABEL_CHECKED (node))
+  ਜੇ (lid->label_binding == ਨਿਰਾ
+      && c_binding_oracle != ਨਿਰਾ
+      && !I_LABEL_CHECKED (ਗੰਢ))
     {
       /* Set the "checked" flag first, to avoid infinite recursion
 	 when the binding oracle calls back into gcc.  */
-      I_LABEL_CHECKED (node) = 1;
-      c_binding_oracle (C_ORACLE_LABEL, node);
+      I_LABEL_CHECKED (ਗੰਢ) = 1;
+      c_binding_oracle (C_ORACLE_LABEL, ਗੰਢ);
     }
 
-  return &lid->label_binding;
+  ਵਾਪਸ &lid->label_binding;
 }
 
-#define I_LABEL_BINDING(node) (*i_label_binding (node))
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ I_LABEL_BINDING(ਗੰਢ) (*i_label_binding (ਗੰਢ))
 
-#define I_LABEL_DECL(node) \
- (I_LABEL_BINDING(node) ? I_LABEL_BINDING(node)->decl : 0)
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ I_LABEL_DECL(ਗੰਢ) \
+ (I_LABEL_BINDING(ਗੰਢ) ? I_LABEL_BINDING(ਗੰਢ)->decl : 0)
 
 /* Used by C_TOKEN_VEC tree.  */
-struct GTY (()) c_tree_token_vec {
-  struct tree_base base;
-  vec<c_token, va_gc> *tokens;
+ਬਣਤਰ GTY (()) c_ਰੁੱਖ_token_vec {
+  ਬਣਤਰ ਰੁੱਖ_ਅਧਾਰ ਅਧਾਰ;
+  vec<c_token, va_gc> *ਟੋਕਨ;
 };
 
-STATIC_ASSERT (sizeof (c_tree_token_vec) == sizeof (c_tree_token_vec_struct));
-STATIC_ASSERT (offsetof (c_tree_token_vec, tokens)
-	       == offsetof (c_tree_token_vec_struct, tokens));
+STATIC_ASSERT (ਆਕਾਰ (c_ਰੁੱਖ_token_vec) == ਆਕਾਰ (c_ਰੁੱਖ_token_vec_struct));
+STATIC_ASSERT (offsetof (c_ਰੁੱਖ_token_vec, ਟੋਕਨ)
+	       == offsetof (c_ਰੁੱਖ_token_vec_struct, ਟੋਕਨ));
 
 /* The resulting tree type.  */
 
-union GTY((desc ("TREE_CODE (&%h.generic) == IDENTIFIER_NODE + 2 * (TREE_CODE (&%h.generic) == C_TOKEN_VEC)"),
-       chain_next ("(union lang_tree_node *) c_tree_chain_next (&%h.generic)"))) lang_tree_node
+ਸੰਘ GTY((desc ("TREE_CODE (&%h.generic) == IDENTIFIER_NODE + 2 * (TREE_CODE (&%h.generic) == C_TOKEN_VEC)"),
+       chain_ਅਗਲਾ ("(union lang_tree_node *) c_tree_chain_next (&%h.generic)"))) lang_ਰੁੱਖ_ਗੰਢ
  {
-  union tree_node GTY ((tag ("0"),
+  ਸੰਘ ਰੁੱਖ_ਗੰਢ GTY ((ਟੈਗ ("0"),
 			desc ("tree_node_structure (&%h)")))
     generic;
-  struct lang_identifier GTY ((tag ("1"))) identifier;
-  struct c_tree_token_vec GTY ((tag ("2"))) c_token_vec;
+  ਬਣਤਰ lang_identifier GTY ((ਟੈਗ ("1"))) identifier;
+  ਬਣਤਰ c_ਰੁੱਖ_token_vec GTY ((ਟੈਗ ("2"))) c_token_vec;
 };
 
 /* Langhook for tree_size.  */
-size_t
-c_tree_size (enum tree_code code)
+ਮਾਪ_t
+c_ਰੁੱਖ_ਮਾਪ (ਗਿਣਤੀ ਰੁੱਖ_ਕੋਡ_2 ਕੋਡ)
 {
-  gcc_checking_assert (code >= NUM_TREE_CODES);
-  switch (code)
+  gcc_checking_assert (ਕੋਡ >= ਅੰਕ_ਰੁੱਖ_CODES);
+  ਚੋਣ (ਕੋਡ)
     {
-    case C_TOKEN_VEC: return sizeof (c_tree_token_vec);
-    default:
-      switch (TREE_CODE_CLASS (code))
+    ਹਾਲਤ C_TOKEN_VEC: ਵਾਪਸ ਆਕਾਰ (c_ਰੁੱਖ_token_vec);
+    ਮੂਲ:
+      ਚੋਣ (ਰੁੱਖ_ਕੋਡ_CLASS (ਕੋਡ))
 	{
-	case tcc_declaration: return sizeof (tree_decl_non_common);
-	case tcc_type: return sizeof (tree_type_non_common);
-	default: gcc_unreachable ();
+	ਹਾਲਤ tcc_declaration: ਵਾਪਸ ਆਕਾਰ (ਰੁੱਖ_decl_non_common);
+	ਹਾਲਤ tcc_type: ਵਾਪਸ ਆਕਾਰ (ਰੁੱਖ_type_non_common);
+	ਮੂਲ: gcc_unreachable ();
 	}
     }
 }
@@ -383,53 +383,53 @@ c_tree_size (enum tree_code code)
    scopes are popped, we update these structures and gather the decls
    that matter at that time.  */
 
-struct GTY(()) c_spot_bindings {
+ਬਣਤਰ GTY(()) c_spot_bindings {
   /* The currently open scope which holds bindings defined when the
      label was defined or the goto statement was found.  */
-  struct c_scope *scope;
+  ਬਣਤਰ c_scope *scope;
   /* The bindings in the scope field which were defined at the point
      of the label or goto.  This lets us look at older or newer
      bindings in the scope, as appropriate.  */
-  struct c_binding *bindings_in_scope;
+  ਬਣਤਰ c_binding *bindings_ਵਿੱਚ_scope;
   /* The number of statement expressions that have started since this
      label or goto statement was defined.  This is zero if we are at
      the same statement expression level.  It is positive if we are in
      a statement expression started since this spot.  It is negative
      if this spot was in a statement expression and we have left
      it.  */
-  int stmt_exprs;
+  ਪੂਰਨ stmt_exprs;
   /* Whether we started in a statement expression but are no longer in
      it.  This is set to true if stmt_exprs ever goes negative.  */
-  bool left_stmt_expr;
+  ਤਾਰਕਿਕ ਖੱਬਾ_stmt_ਵਿਅੰਜਕ;
 };
 
 /* This structure is used to keep track of bindings seen when a goto
    statement is defined.  This is only used if we see the goto
    statement before we see the label.  */
 
-struct GTY(()) c_goto_bindings {
+ਬਣਤਰ GTY(()) c_goto_bindings {
   /* The location of the goto statement.  */
   location_t loc;
   /* The bindings of the goto statement.  */
-  struct c_spot_bindings goto_bindings;
+  ਬਣਤਰ c_spot_bindings goto_bindings;
 };
 
-typedef struct c_goto_bindings *c_goto_bindings_p;
+ਕਿਸਮਪਰਿਭਾਸ਼ਾ ਬਣਤਰ c_goto_bindings *c_goto_bindings_p;
 
 /* The additional information we keep track of for a label binding.
    These fields are updated as scopes are popped.  */
 
-struct GTY(()) c_label_vars {
+ਬਣਤਰ GTY(()) c_label_vars {
   /* The shadowed c_label_vars, when one label shadows another (which
      can only happen using a __label__ declaration).  */
-  struct c_label_vars *shadowed;
+  ਬਣਤਰ c_label_vars *shadowed;
   /* The bindings when the label was defined.  */
-  struct c_spot_bindings label_bindings;
+  ਬਣਤਰ c_spot_bindings label_bindings;
   /* A list of decls that we care about: decls about which we should
      warn if a goto branches to this label from later in the function.
      Decls are added to this list as scopes are popped.  We only add
      the decls that matter.  */
-  vec<tree, va_gc> *decls_in_scope;
+  vec<ਰੁੱਖ, va_gc> *decls_ਵਿੱਚ_scope;
   /* A list of goto statements to this label.  This is only used for
      goto statements seen before the label was defined, so that we can
      issue appropriate warnings for them.  */
@@ -481,159 +481,159 @@ struct GTY(()) c_label_vars {
    pop_scope relies on this.  */
 
 
-struct GTY((chain_next ("%h.outer"))) c_scope {
+ਬਣਤਰ GTY((chain_ਅਗਲਾ ("%h.outer"))) c_scope {
   /* The scope containing this one.  */
-  struct c_scope *outer;
+  ਬਣਤਰ c_scope *outer;
 
   /* The next outermost function scope.  */
-  struct c_scope *outer_function;
+  ਬਣਤਰ c_scope *outer_function;
 
   /* All bindings in this scope.  */
-  struct c_binding *bindings;
+  ਬਣਤਰ c_binding *bindings;
 
   /* For each scope (except the global one), a chain of BLOCK nodes
      for all the scopes that were entered and exited one level down.  */
-  tree blocks;
-  tree blocks_last;
+  ਰੁੱਖ ਖੰਡਾਂ;
+  ਰੁੱਖ ਖੰਡਾਂ_ਆਖਰੀ;
 
   /* The depth of this scope.  Used to keep the ->shadowed chain of
      bindings sorted innermost to outermost.  */
-  unsigned int depth : 28;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ ਡੂੰਘਾਈ : 28;
 
   /* True if we are currently filling this scope with parameter
      declarations.  */
-  bool parm_flag : 1;
+  ਤਾਰਕਿਕ parm_flag : 1;
 
   /* True if we saw [*] in this scope.  Used to give an error messages
      if these appears in a function definition.  */
-  bool had_vla_unspec : 1;
+  ਤਾਰਕਿਕ had_vla_unspec : 1;
 
   /* True if we parsed a list of forward parameter decls in this scope.  */
-  bool had_forward_parm_decls : 1;
+  ਤਾਰਕਿਕ had_forward_parm_decls : 1;
 
   /* True if this is the outermost block scope of a function body.
      This scope contains the parameters, the local variables declared
      in the outermost block, and all the labels (except those in
      nested functions, or declared at block scope with __label__).  */
-  bool function_body : 1;
+  ਤਾਰਕਿਕ function_body : 1;
 
   /* True means make a BLOCK for this scope no matter what.  */
-  bool keep : 1;
+  ਤਾਰਕਿਕ keep : 1;
 
   /* True means that an unsuffixed float constant is _Decimal64.  */
-  bool float_const_decimal64 : 1;
+  ਤਾਰਕਿਕ float_const_decimal64 : 1;
 
   /* True if this scope has any label bindings.  This is used to speed
      up searching for labels when popping scopes, particularly since
      labels are normally only found at function scope.  */
-  bool has_label_bindings : 1;
+  ਤਾਰਕਿਕ has_label_bindings : 1;
 
   /* True if we should issue a warning if a goto statement crosses any
      of the bindings.  We still need to check the list of bindings to
      find the specific ones we need to warn about.  This is true if
      decl_jump_unsafe would return true for any of the bindings.  This
      is used to avoid looping over all the bindings unnecessarily.  */
-  bool has_jump_unsafe_decl : 1;
+  ਤਾਰਕਿਕ has_jump_unsafe_decl : 1;
 };
 
 /* The scope currently in effect.  */
 
-static GTY(()) struct c_scope *current_scope;
+ਸਥਿਰ GTY(()) ਬਣਤਰ c_scope *current_scope;
 
 /* The innermost function scope.  Ordinary (not explicitly declared)
    labels, bindings to error_mark_node, and the lazily-created
    bindings of __func__ and its friends get this scope.  */
 
-static GTY(()) struct c_scope *current_function_scope;
+ਸਥਿਰ GTY(()) ਬਣਤਰ c_scope *current_function_scope;
 
 /* The C file scope.  This is reset for each input translation unit.  */
 
-static GTY(()) struct c_scope *file_scope;
+ਸਥਿਰ GTY(()) ਬਣਤਰ c_scope *file_scope;
 
 /* The outermost scope.  This is used for all declarations with
    external linkage, and only these, hence the name.  */
 
-static GTY(()) struct c_scope *external_scope;
+ਸਥਿਰ GTY(()) ਬਣਤਰ c_scope *external_scope;
 
 /* A chain of c_scope structures awaiting reuse.  */
 
-static GTY((deletable)) struct c_scope *scope_freelist;
+ਸਥਿਰ GTY((deletable)) ਬਣਤਰ c_scope *scope_freelist;
 
 /* A chain of c_binding structures awaiting reuse.  */
 
-static GTY((deletable)) struct c_binding *binding_freelist;
+ਸਥਿਰ GTY((deletable)) ਬਣਤਰ c_binding *binding_freelist;
 
 /* Append VAR to LIST in scope SCOPE.  */
-#define SCOPE_LIST_APPEND(scope, list, decl) do {	\
-  struct c_scope *s_ = (scope);				\
-  tree d_ = (decl);					\
-  if (s_->list##_last)					\
-    BLOCK_CHAIN (s_->list##_last) = d_;			\
-  else							\
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ SCOPE_LIST_APPEND(scope, list, decl) ਕਰੋ {	\
+  ਬਣਤਰ c_scope *s_ = (scope);				\
+  ਰੁੱਖ d_ = (decl);					\
+  ਜੇ (s_->list##_last)					\
+    ਖੰਡ_CHAIN (s_->list##_last) = d_;			\
+  ਨਹੀਂਤਾਂ							\
     s_->list = d_;					\
   s_->list##_last = d_;					\
-} while (0)
+} ਜਦੋਂ (0)
 
 /* Concatenate FROM in scope FSCOPE onto TO in scope TSCOPE.  */
-#define SCOPE_LIST_CONCAT(tscope, to, fscope, from) do {	\
-  struct c_scope *t_ = (tscope);				\
-  struct c_scope *f_ = (fscope);				\
-  if (t_->to##_last)						\
-    BLOCK_CHAIN (t_->to##_last) = f_->from;			\
-  else								\
-    t_->to = f_->from;						\
-  t_->to##_last = f_->from##_last;				\
-} while (0)
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ SCOPE_LIST_CONCAT(tscope, ਮੰਜ਼ਿਲ, fscope, from) ਕਰੋ {	\
+  ਬਣਤਰ c_scope *t_ = (tscope);				\
+  ਬਣਤਰ c_scope *f_ = (fscope);				\
+  ਜੇ (t_->ਮੰਜ਼ਿਲ##_last)						\
+    ਖੰਡ_CHAIN (t_->ਮੰਜ਼ਿਲ##_last) = f_->from;			\
+  ਨਹੀਂਤਾਂ								\
+    t_->ਮੰਜ਼ਿਲ = f_->from;						\
+  t_->ਮੰਜ਼ਿਲ##_last = f_->from##_last;				\
+} ਜਦੋਂ (0)
 
 /* A c_inline_static structure stores details of a static identifier
    referenced in a definition of a function that may be an inline
    definition if no subsequent declaration of that function uses
    "extern" or does not use "inline".  */
 
-struct GTY((chain_next ("%h.next"))) c_inline_static {
+ਬਣਤਰ GTY((chain_ਅਗਲਾ ("%h.next"))) c_inline_static {
   /* The location for a diagnostic.  */
   location_t location;
 
   /* The function that may be an inline definition.  */
-  tree function;
+  ਰੁੱਖ function;
 
   /* The object or function referenced.  */
-  tree static_decl;
+  ਰੁੱਖ static_decl;
 
   /* What sort of reference this is.  */
-  enum c_inline_static_type type;
+  ਗਿਣਤੀ c_inline_static_type type;
 
   /* The next such structure or NULL.  */
-  struct c_inline_static *next;
+  ਬਣਤਰ c_inline_static *ਅਗਲਾ;
 };
 
 /* List of static identifiers used or referenced in functions that may
    be inline definitions.  */
-static GTY(()) struct c_inline_static *c_inline_statics;
+ਸਥਿਰ GTY(()) ਬਣਤਰ c_inline_static *c_inline_statics;
 
 /* True means unconditionally make a BLOCK for the next scope pushed.  */
 
-static bool keep_next_level_flag;
+ਸਥਿਰ ਤਾਰਕਿਕ keep_ਅਗਲਾ_level_flag;
 
 /* True means the next call to push_scope will be the outermost scope
    of a function body, so do not push a new scope, merely cease
    expecting parameter decls.  */
 
-static bool next_is_function_body;
+ਸਥਿਰ ਤਾਰਕਿਕ ਅਗਲਾ_is_function_body;
 
 /* A vector of pointers to c_binding structures.  */
 
-typedef struct c_binding *c_binding_ptr;
+ਕਿਸਮਪਰਿਭਾਸ਼ਾ ਬਣਤਰ c_binding *c_binding_ptr;
 
 /* Information that we keep for a struct or union while it is being
    parsed.  */
 
-class c_struct_parse_info
+ਵਰਗ c_struct_parse_info
 {
-public:
+ਜਨਤਕ:
   /* If warn_cxx_compat, a list of types defined within this
      struct.  */
-  auto_vec<tree> struct_types;
+  auto_vec<ਰੁੱਖ> struct_types;
   /* If warn_cxx_compat, a list of field names which have bindings,
      and which are defined in this struct, but which are not defined
      in any enclosing struct.  This is used to clear the in_struct
@@ -641,83 +641,83 @@ public:
   auto_vec<c_binding_ptr> fields;
   /* If warn_cxx_compat, a list of typedef names used when defining
      fields in this struct.  */
-  auto_vec<tree> typedefs_seen;
+  auto_vec<ਰੁੱਖ> typedefs_ਵੇਖਿਆ;
   /* The location of a previous definition of this struct.  */
   location_t refloc;
 };
 
 
 /* Hash table for structs and unions.  */
-struct c_struct_hasher : ggc_ptr_hash<tree_node>
+ਬਣਤਰ c_struct_hasher : ggc_ptr_hash<ਰੁੱਖ_ਗੰਢ>
 {
-  static hashval_t hash (tree t);
-  static bool equal (tree, tree);
+  ਸਥਿਰ hashval_t hash (ਰੁੱਖ t);
+  ਸਥਿਰ ਤਾਰਕਿਕ equal (ਰੁੱਖ, ਰੁੱਖ);
 };
 
 /* Hash an RECORD OR UNION.  */
 hashval_t
-c_struct_hasher::hash (tree type)
+c_struct_hasher::hash (ਰੁੱਖ type)
 {
   inchash::hash hstate;
 
-  hstate.add_int (TREE_CODE (type));
-  tree tag = c_type_tag (type);
-  hstate.add_object (tag);
+  hstate.ਜੋੜੋ_int (ਰੁੱਖ_ਕੋਡ (type));
+  ਰੁੱਖ ਟੈਗ = c_type_ਟੈਗ (type);
+  hstate.ਜੋੜੋ_object (ਟੈਗ);
 
-  return hstate.end ();
+  ਵਾਪਸ hstate.ਸਿਰਾ ();
 }
 
 /* Compare two RECORD or UNION types.  */
-bool
-c_struct_hasher::equal (tree t1,  tree t2)
+ਤਾਰਕਿਕ
+c_struct_hasher::equal (ਰੁੱਖ t1,  ਰੁੱਖ t2)
 {
-  return comptypes_equiv_p (t1, t2);
+  ਵਾਪਸ comptypes_equiv_p (t1, t2);
 }
 
 /* All tagged typed so that TYPE_CANONICAL can be set correctly.  */
-static GTY (()) hash_table<c_struct_hasher> *c_struct_htab;
+ਸਥਿਰ GTY (()) hash_ਸਾਰਣੀ<c_struct_hasher> *c_struct_htab;
 
 /* Information for the struct or union currently being parsed, or
    NULL if not parsing a struct or union.  */
-static class c_struct_parse_info *struct_parse_info;
+ਸਥਿਰ ਵਰਗ c_struct_parse_info *struct_parse_info;
 
 /* Forward declarations.  */
-static tree lookup_name_in_scope (tree, struct c_scope *);
-static tree c_make_fname_decl (location_t, tree, int);
-static tree grokdeclarator (const struct c_declarator *,
-			    struct c_declspecs *,
-			    enum decl_context, bool, tree *, tree *, tree *,
-			    bool *, enum deprecated_states);
-static tree grokparms (struct c_arg_info *, bool);
-static void layout_array_type (tree);
-static const char *header_for_builtin_fn (tree);
+ਸਥਿਰ ਰੁੱਖ lookup_name_ਵਿੱਚ_scope (ਰੁੱਖ, ਬਣਤਰ c_scope *);
+ਸਥਿਰ ਰੁੱਖ c_make_fname_decl (location_t, ਰੁੱਖ, ਪੂਰਨ);
+ਸਥਿਰ ਰੁੱਖ grokdeclarator (ਅਚਲ ਬਣਤਰ c_declarator *,
+			    ਬਣਤਰ c_declspecs *,
+			    ਗਿਣਤੀ decl_context, ਤਾਰਕਿਕ, ਰੁੱਖ *, ਰੁੱਖ *, ਰੁੱਖ *,
+			    ਤਾਰਕਿਕ *, ਗਿਣਤੀ deprecated_ਹਾਲਤਾਂ);
+ਸਥਿਰ ਰੁੱਖ grokparms (ਬਣਤਰ c_arg_info *, ਤਾਰਕਿਕ);
+ਸਥਿਰ ਖਾਲੀ layout_array_type (ਰੁੱਖ);
+ਸਥਿਰ ਅਚਲ ਅੱਖਰ *ਸਿਰਲੇਖ_for_builtin_fn (ਰੁੱਖ);
 
 /* T is a statement.  Add it to the statement-tree.  This is the
    C/ObjC version--C++ has a slightly different version of this
    function.  */
 
-tree
-add_stmt (tree t)
+ਰੁੱਖ
+ਜੋੜੋ_stmt (ਰੁੱਖ t)
 {
-  enum tree_code code = TREE_CODE (t);
+  ਗਿਣਤੀ ਰੁੱਖ_ਕੋਡ_2 ਕੋਡ = ਰੁੱਖ_ਕੋਡ (t);
 
-  if (CAN_HAVE_LOCATION_P (t) && code != LABEL_EXPR)
+  ਜੇ (CAN_HAVE_LOCATION_P (t) && ਕੋਡ != LABEL_ਵਿਅੰਜਕ)
     {
-      if (!EXPR_HAS_LOCATION (t))
-	SET_EXPR_LOCATION (t, input_location);
+      ਜੇ (!ਵਿਅੰਜਕ_HAS_LOCATION (t))
+	ਸੈੱਟ_ਵਿਅੰਜਕ_LOCATION (t, ਨਿਵੇਸ਼_location);
     }
 
   /* Add T to the statement-tree.  Non-side-effect statements need to be
      recorded during statement expressions.  */
-  if (!building_stmt_list_p ())
-    push_stmt_list ();
+  ਜੇ (!building_stmt_list_p ())
+    ਧੱਕੋ_stmt_list ();
 
-  if (code == LABEL_EXPR || code == CASE_LABEL_EXPR)
+  ਜੇ (ਕੋਡ == LABEL_ਵਿਅੰਜਕ || ਕੋਡ == CASE_LABEL_ਵਿਅੰਜਕ)
     STATEMENT_LIST_HAS_LABEL (cur_stmt_list) = 1;
 
-  append_to_statement_list_force (t, &cur_stmt_list);
+  append_ਮੰਜ਼ਿਲ_statement_list_force (t, &cur_stmt_list);
 
-  return t;
+  ਵਾਪਸ t;
 }
 
 
@@ -727,63 +727,63 @@ add_stmt (tree t)
 /* Return true if we will want to say something if a goto statement
    crosses DECL.  */
 
-static bool
-decl_jump_unsafe (tree decl)
+ਸਥਿਰ ਤਾਰਕਿਕ
+decl_jump_unsafe (ਰੁੱਖ decl)
 {
-  if (error_operand_p (decl))
-    return false;
+  ਜੇ (error_ਸੰਕਾਰਜ_p (decl))
+    ਵਾਪਸ ਝੂਠ;
 
   /* Don't warn for compound literals.  If a goto statement crosses
      their initialization, it should cross also all the places where
      the complit is used or where the complit address might be saved
      into some variable, so code after the label to which goto jumps
      should not be able to refer to the compound literal.  */
-  if (VAR_P (decl) && C_DECL_COMPOUND_LITERAL_P (decl))
-    return false;
+  ਜੇ (VAR_P (decl) && C_DECL_COMPOUND_LITERAL_P (decl))
+    ਵਾਪਸ ਝੂਠ;
 
-  if (flag_openmp
+  ਜੇ (flag_openmp
       && VAR_P (decl)
-      && lookup_attribute ("omp allocate", DECL_ATTRIBUTES (decl)))
-    return true;
+      && lookup_attribute ("omp allocate", DECL_ਗੁਣ (decl)))
+    ਵਾਪਸ ਸੱਚ;
 
   /* Always warn about crossing variably modified types.  */
-  if ((VAR_P (decl) || TREE_CODE (decl) == TYPE_DECL)
-      && c_type_variably_modified_p (TREE_TYPE (decl)))
-    return true;
+  ਜੇ ((VAR_P (decl) || ਰੁੱਖ_ਕੋਡ (decl) == TYPE_DECL)
+      && c_type_variably_modified_p (ਰੁੱਖ_TYPE (decl)))
+    ਵਾਪਸ ਸੱਚ;
 
   /* Otherwise, only warn if -Wgoto-misses-init and this is an
      initialized automatic decl.  */
-  if (warn_jump_misses_init
+  ਜੇ (warn_jump_ਖੁੰਝਾਂ_init
       && VAR_P (decl)
-      && !TREE_STATIC (decl)
-      && DECL_INITIAL (decl) != NULL_TREE)
-    return true;
+      && !ਰੁੱਖ_STATIC (decl)
+      && DECL_INITIAL (decl) != NULL_ਰੁੱਖ)
+    ਵਾਪਸ ਸੱਚ;
 
-  return false;
+  ਵਾਪਸ ਝੂਠ;
 }
 
 
-void
-c_print_identifier (FILE *file, tree node, int indent)
+ਖਾਲੀ
+c_print_identifier (FILE *file, ਰੁੱਖ ਗੰਢ, ਪੂਰਨ indent)
 {
-  void (*save) (enum c_oracle_request, tree identifier);
+  ਖਾਲੀ (*save) (ਗਿਣਤੀ c_oracle_request, ਰੁੱਖ identifier);
 
   /* Temporarily hide any binding oracle.  Without this, calls to
      debug_tree from the debugger will end up calling into the oracle,
      making for a confusing debug session.  As the oracle isn't needed
      here for normal operation, it's simplest to suppress it.  */
   save = c_binding_oracle;
-  c_binding_oracle = NULL;
+  c_binding_oracle = ਨਿਰਾ;
 
-  print_node (file, "symbol", I_SYMBOL_DECL (node), indent + 4);
-  print_node (file, "tag", I_TAG_DECL (node), indent + 4);
-  print_node (file, "label", I_LABEL_DECL (node), indent + 4);
-  if (C_IS_RESERVED_WORD (node) && C_RID_CODE (node) != RID_CXX_COMPAT_WARN)
+  print_ਗੰਢ (file, "symbol", I_ਚਿੰਨ੍ਹ_DECL (ਗੰਢ), indent + 4);
+  print_ਗੰਢ (file, "tag", I_ਟੈਗ_DECL (ਗੰਢ), indent + 4);
+  print_ਗੰਢ (file, "label", I_LABEL_DECL (ਗੰਢ), indent + 4);
+  ਜੇ (C_IS_RESERVED_ਸ਼ਬਦ (ਗੰਢ) && C_RID_ਕੋਡ (ਗੰਢ) != RID_CXX_COMPAT_WARN)
     {
-      tree rid = ridpointers[C_RID_CODE (node)];
-      indent_to (file, indent + 4);
+      ਰੁੱਖ rid = ridpointers[C_RID_ਕੋਡ (ਗੰਢ)];
+      indent_ਮੰਜ਼ਿਲ (file, indent + 4);
       fprintf (file, "rid " HOST_PTR_PRINTF " \"%s\"",
-	       (void *) rid, IDENTIFIER_POINTER (rid));
+	       (ਖਾਲੀ *) rid, IDENTIFIER_ਸੂਚਕ (rid));
     }
 
   c_binding_oracle = save;
@@ -792,8 +792,8 @@ c_print_identifier (FILE *file, tree node, int indent)
 /* Establish that the scope contains declarations that are sensitive to
    jumps that cross a binding.  Together with decl_jump_unsafe, this is
    used to diagnose such jumps.  */
-void
-c_mark_decl_jump_unsafe_in_current_scope ()
+ਖਾਲੀ
+c_mark_decl_jump_unsafe_ਵਿੱਚ_current_scope ()
 {
   current_scope->has_jump_unsafe_decl = 1;
 }
@@ -801,96 +801,96 @@ c_mark_decl_jump_unsafe_in_current_scope ()
 /* Establish a binding between NAME, an IDENTIFIER_NODE, and DECL,
    which may be any of several kinds of DECL or TYPE or error_mark_node,
    in the scope SCOPE.  */
-static void
-bind (tree name, tree decl, struct c_scope *scope, bool invisible,
-      bool nested, location_t locus)
+ਸਥਿਰ ਖਾਲੀ
+bind (ਰੁੱਖ name, ਰੁੱਖ decl, ਬਣਤਰ c_scope *scope, ਤਾਰਕਿਕ invisible,
+      ਤਾਰਕਿਕ nested, location_t locus)
 {
-  struct c_binding *b, **here;
+  ਬਣਤਰ c_binding *b, **ਇੱਥੇ;
 
-  if (binding_freelist)
+  ਜੇ (binding_freelist)
     {
       b = binding_freelist;
       binding_freelist = b->prev;
     }
-  else
+  ਨਹੀਂਤਾਂ
     b = ggc_alloc<c_binding> ();
 
   b->shadowed = 0;
   b->decl = decl;
   b->id = name;
-  b->depth = scope->depth;
+  b->ਡੂੰਘਾਈ = scope->ਡੂੰਘਾਈ;
   b->invisible = invisible;
   b->nested = nested;
   b->inner_comp = 0;
-  b->in_struct = 0;
+  b->ਵਿੱਚ_struct = 0;
   b->locus = locus;
 
-  b->u.type = NULL;
+  b->u.type = ਨਿਰਾ;
 
   b->prev = scope->bindings;
   scope->bindings = b;
 
-  if (decl_jump_unsafe (decl))
+  ਜੇ (decl_jump_unsafe (decl))
     scope->has_jump_unsafe_decl = 1;
 
-  if (!name)
-    return;
+  ਜੇ (!name)
+    ਵਾਪਸ;
 
-  switch (TREE_CODE (decl))
+  ਚੋਣ (ਰੁੱਖ_ਕੋਡ (decl))
     {
-    case LABEL_DECL:     here = &I_LABEL_BINDING (name);   break;
-    case ENUMERAL_TYPE:
-    case UNION_TYPE:
-    case RECORD_TYPE:    here = &I_TAG_BINDING (name);     break;
-    case VAR_DECL:
-    case FUNCTION_DECL:
-    case TYPE_DECL:
-    case CONST_DECL:
-    case PARM_DECL:
-    case ERROR_MARK:     here = &I_SYMBOL_BINDING (name);  break;
+    ਹਾਲਤ LABEL_DECL:     ਇੱਥੇ = &I_LABEL_BINDING (name);   ਰੋਕੋ;
+    ਹਾਲਤ ENUMERAL_TYPE:
+    ਹਾਲਤ UNION_TYPE:
+    ਹਾਲਤ ਰਿਕਾਰਡ_TYPE:    ਇੱਥੇ = &I_ਟੈਗ_BINDING (name);     ਰੋਕੋ;
+    ਹਾਲਤ VAR_DECL:
+    ਹਾਲਤ FUNCTION_DECL:
+    ਹਾਲਤ TYPE_DECL:
+    ਹਾਲਤ CONST_DECL:
+    ਹਾਲਤ PARM_DECL:
+    ਹਾਲਤ ERROR_MARK:     ਇੱਥੇ = &I_ਚਿੰਨ੍ਹ_BINDING (name);  ਰੋਕੋ;
 
-    default:
+    ਮੂਲ:
       gcc_unreachable ();
     }
 
   /* Locate the appropriate place in the chain of shadowed decls
      to insert this binding.  Normally, scope == current_scope and
      this does nothing.  */
-  while (*here && (*here)->depth > scope->depth)
-    here = &(*here)->shadowed;
+  ਜਦੋਂ (*ਇੱਥੇ && (*ਇੱਥੇ)->ਡੂੰਘਾਈ > scope->ਡੂੰਘਾਈ)
+    ਇੱਥੇ = &(*ਇੱਥੇ)->shadowed;
 
-  b->shadowed = *here;
-  *here = b;
+  b->shadowed = *ਇੱਥੇ;
+  *ਇੱਥੇ = b;
 }
 
 /* Clear the binding structure B, stick it on the binding_freelist,
    and return the former value of b->prev.  This is used by pop_scope
    and get_parm_info to iterate destructively over all the bindings
    from a given scope.  */
-static struct c_binding *
-free_binding_and_advance (struct c_binding *b)
+ਸਥਿਰ ਬਣਤਰ c_binding *
+free_binding_and_advance (ਬਣਤਰ c_binding *b)
 {
-  struct c_binding *prev = b->prev;
+  ਬਣਤਰ c_binding *prev = b->prev;
 
-  memset (b, 0, sizeof (struct c_binding));
+  memset (b, 0, ਆਕਾਰ (ਬਣਤਰ c_binding));
   b->prev = binding_freelist;
   binding_freelist = b;
 
-  return prev;
+  ਵਾਪਸ prev;
 }
 
 /* Bind a label.  Like bind, but skip fields which aren't used for
    labels, and add the LABEL_VARS value.  */
-static void
-bind_label (tree name, tree label, struct c_scope *scope,
-	    struct c_label_vars *label_vars)
+ਸਥਿਰ ਖਾਲੀ
+bind_label (ਰੁੱਖ name, ਰੁੱਖ label, ਬਣਤਰ c_scope *scope,
+	    ਬਣਤਰ c_label_vars *label_vars)
 {
-  struct c_binding *b;
+  ਬਣਤਰ c_binding *b;
 
-  bind (name, label, scope, /*invisible=*/false, /*nested=*/false,
+  bind (name, label, scope, /*invisible=*/ਝੂਠ, /*nested=*/ਝੂਠ,
 	UNKNOWN_LOCATION);
 
-  scope->has_label_bindings = true;
+  scope->has_label_bindings = ਸੱਚ;
 
   b = scope->bindings;
   gcc_assert (b->decl == label);
@@ -901,25 +901,25 @@ bind_label (tree name, tree label, struct c_scope *scope,
 /* Hook called at end of compilation to assume 1 elt
    for a file-scope tentative array defn that wasn't complete before.  */
 
-void
-c_finish_incomplete_decl (tree decl)
+ਖਾਲੀ
+c_ਅੰਤ_incomplete_decl (ਰੁੱਖ decl)
 {
-  if (VAR_P (decl))
+  ਜੇ (VAR_P (decl))
     {
-      tree type = TREE_TYPE (decl);
-      if (type != error_mark_node
-	  && TREE_CODE (type) == ARRAY_TYPE
+      ਰੁੱਖ type = ਰੁੱਖ_TYPE (decl);
+      ਜੇ (type != error_mark_ਗੰਢ
+	  && ਰੁੱਖ_ਕੋਡ (type) == ARRAY_TYPE
 	  && !DECL_EXTERNAL (decl)
-	  && TYPE_DOMAIN (type) == NULL_TREE)
+	  && TYPE_DOMAIN (type) == NULL_ਰੁੱਖ)
 	{
-	  if (flag_isoc2y && !TREE_PUBLIC (decl))
-	    error_at (DECL_SOURCE_LOCATION (decl),
+	  ਜੇ (flag_isoc2y && !ਰੁੱਖ_ਜਨਤਕ (decl))
+	    error_at (DECL_ਸਰੋਤ_LOCATION (decl),
 		      "array size missing in %q+D", decl);
-	  else
-	    warning_at (DECL_SOURCE_LOCATION (decl),
+	  ਨਹੀਂਤਾਂ
+	    warning_at (DECL_ਸਰੋਤ_LOCATION (decl),
 			0, "array %q+D assumed to have one element", decl);
 
-	  complete_array_type (&TREE_TYPE (decl), NULL_TREE, true);
+	  complete_array_type (&ਰੁੱਖ_TYPE (decl), NULL_ਰੁੱਖ, ਸੱਚ);
 
 	  relayout_decl (decl);
 	}
@@ -930,16 +930,16 @@ c_finish_incomplete_decl (tree decl)
    LOC) to static DECL (file-scope or function-local according to
    TYPE).  */
 
-void
-record_inline_static (location_t loc, tree func, tree decl,
-		      enum c_inline_static_type type)
+ਖਾਲੀ
+ਰਿਕਾਰਡ_inline_static (location_t loc, ਰੁੱਖ func, ਰੁੱਖ decl,
+		      ਗਿਣਤੀ c_inline_static_type type)
 {
   c_inline_static *csi = ggc_alloc<c_inline_static> ();
   csi->location = loc;
   csi->function = func;
   csi->static_decl = decl;
   csi->type = type;
-  csi->next = c_inline_statics;
+  csi->ਅਗਲਾ = c_inline_statics;
   c_inline_statics = csi;
 }
 
@@ -947,165 +947,165 @@ record_inline_static (location_t loc, tree func, tree decl,
    the end of the translation unit and diagnose them if the functions
    are still inline definitions.  */
 
-static void
-check_inline_statics (void)
+ਸਥਿਰ ਖਾਲੀ
+check_inline_statics (ਖਾਲੀ)
 {
-  struct c_inline_static *csi;
-  for (csi = c_inline_statics; csi; csi = csi->next)
+  ਬਣਤਰ c_inline_static *csi;
+  ਲਈ (csi = c_inline_statics; csi; csi = csi->ਅਗਲਾ)
     {
-      if (DECL_EXTERNAL (csi->function))
-	switch (csi->type)
+      ਜੇ (DECL_EXTERNAL (csi->function))
+	ਚੋਣ (csi->type)
 	  {
-	  case csi_internal:
+	  ਹਾਲਤ csi_ਅੰਦਰੂਨੀ:
 	    pedwarn (csi->location, 0,
 		     "%qD is static but used in inline function %qD "
 		     "which is not static", csi->static_decl, csi->function);
-	    break;
-	  case csi_modifiable:
+	    ਰੋਕੋ;
+	  ਹਾਲਤ csi_modifiable:
 	    pedwarn (csi->location, 0,
 		     "%q+D is static but declared in inline function %qD "
 		     "which is not static", csi->static_decl, csi->function);
-	    break;
-	  default:
+	    ਰੋਕੋ;
+	  ਮੂਲ:
 	    gcc_unreachable ();
 	  }
     }
-  c_inline_statics = NULL;
+  c_inline_statics = ਨਿਰਾ;
 }
 
 /* Fill in a c_spot_bindings structure.  If DEFINING is true, set it
    for the current state, otherwise set it to uninitialized.  */
 
-static void
-set_spot_bindings (struct c_spot_bindings *p, bool defining)
+ਸਥਿਰ ਖਾਲੀ
+ਸੈੱਟ_spot_bindings (ਬਣਤਰ c_spot_bindings *p, ਤਾਰਕਿਕ defining)
 {
-  if (defining)
+  ਜੇ (defining)
     {
       p->scope = current_scope;
-      p->bindings_in_scope = current_scope->bindings;
+      p->bindings_ਵਿੱਚ_scope = current_scope->bindings;
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      p->scope = NULL;
-      p->bindings_in_scope = NULL;
+      p->scope = ਨਿਰਾ;
+      p->bindings_ਵਿੱਚ_scope = ਨਿਰਾ;
     }
   p->stmt_exprs = 0;
-  p->left_stmt_expr = false;
+  p->ਖੱਬਾ_stmt_ਵਿਅੰਜਕ = ਝੂਠ;
 }
 
 /* Update spot bindings P as we pop out of SCOPE.  Return true if we
    should push decls for a label.  */
 
-static bool
-update_spot_bindings (struct c_scope *scope, struct c_spot_bindings *p)
+ਸਥਿਰ ਤਾਰਕਿਕ
+update_spot_bindings (ਬਣਤਰ c_scope *scope, ਬਣਤਰ c_spot_bindings *p)
 {
-  if (p->scope != scope)
+  ਜੇ (p->scope != scope)
     {
       /* This label or goto is defined in some other scope, or it is a
 	 label which is not yet defined.  There is nothing to
 	 update.  */
-      return false;
+      ਵਾਪਸ ਝੂਠ;
     }
 
   /* Adjust the spot bindings to refer to the bindings already defined
      in the enclosing scope.  */
   p->scope = scope->outer;
-  p->bindings_in_scope = p->scope->bindings;
+  p->bindings_ਵਿੱਚ_scope = p->scope->bindings;
 
-  return true;
+  ਵਾਪਸ ਸੱਚ;
 }
 
 /* The Objective-C front-end often needs to determine the current scope.  */
 
-void *
-objc_get_current_scope (void)
+ਖਾਲੀ *
+objc_get_current_scope (ਖਾਲੀ)
 {
-  return current_scope;
+  ਵਾਪਸ current_scope;
 }
 
 /* The following function is used only by Objective-C.  It needs to live here
    because it accesses the innards of c_scope.  */
 
-void
-objc_mark_locals_volatile (void *enclosing_blk)
+ਖਾਲੀ
+objc_mark_locals_volatile (ਖਾਲੀ *enclosing_blk)
 {
-  struct c_scope *scope;
-  struct c_binding *b;
+  ਬਣਤਰ c_scope *scope;
+  ਬਣਤਰ c_binding *b;
 
-  for (scope = current_scope;
+  ਲਈ (scope = current_scope;
        scope && scope != enclosing_blk;
        scope = scope->outer)
     {
-      for (b = scope->bindings; b; b = b->prev)
+      ਲਈ (b = scope->bindings; b; b = b->prev)
 	objc_volatilize_decl (b->decl);
 
       /* Do not climb up past the current function.  */
-      if (scope->function_body)
-	break;
+      ਜੇ (scope->function_body)
+	ਰੋਕੋ;
     }
 }
 
 /* Return true if we are in the global binding level.  */
 
-bool
-global_bindings_p (void)
+ਤਾਰਕਿਕ
+global_bindings_p (ਖਾਲੀ)
 {
-  return current_scope == file_scope;
+  ਵਾਪਸ current_scope == file_scope;
 }
 
 /* Return true if we're declaring parameters in an old-style function
    declaration.  */
 
-bool
-old_style_parameter_scope (void)
+ਤਾਰਕਿਕ
+old_style_parameter_scope (ਖਾਲੀ)
 {
   /* If processing parameters and there is no function statement list, we
    * have an old-style function declaration.  */
-  return (current_scope->parm_flag && !DECL_SAVED_TREE (current_function_decl));
+  ਵਾਪਸ (current_scope->parm_flag && !DECL_SAVED_ਰੁੱਖ (current_function_decl));
 }
 
-void
-keep_next_level (void)
+ਖਾਲੀ
+keep_ਅਗਲਾ_level (ਖਾਲੀ)
 {
-  keep_next_level_flag = true;
+  keep_ਅਗਲਾ_level_flag = ਸੱਚ;
 }
 
 /* Set the flag for the FLOAT_CONST_DECIMAL64 pragma being ON.  */
 
-void
-set_float_const_decimal64 (void)
+ਖਾਲੀ
+ਸੈੱਟ_float_const_decimal64 (ਖਾਲੀ)
 {
-  current_scope->float_const_decimal64 = true;
+  current_scope->float_const_decimal64 = ਸੱਚ;
 }
 
 /* Clear the flag for the FLOAT_CONST_DECIMAL64 pragma.  */
 
-void
-clear_float_const_decimal64 (void)
+ਖਾਲੀ
+clear_float_const_decimal64 (ਖਾਲੀ)
 {
-  current_scope->float_const_decimal64 = false;
+  current_scope->float_const_decimal64 = ਝੂਠ;
 }
 
 /* Return nonzero if an unsuffixed float constant is _Decimal64.  */
 
-bool
-float_const_decimal64_p (void)
+ਤਾਰਕਿਕ
+float_const_decimal64_p (ਖਾਲੀ)
 {
-  return current_scope->float_const_decimal64;
+  ਵਾਪਸ current_scope->float_const_decimal64;
 }
 
 /* Identify this scope as currently being filled with parameters.  */
 
-void
-declare_parm_level (void)
+ਖਾਲੀ
+declare_parm_level (ਖਾਲੀ)
 {
-  current_scope->parm_flag = true;
+  current_scope->parm_flag = ਸੱਚ;
 }
 
-void
-push_scope (void)
+ਖਾਲੀ
+ਧੱਕੋ_scope (ਖਾਲੀ)
 {
-  if (next_is_function_body)
+  ਜੇ (ਅਗਲਾ_is_function_body)
     {
       /* This is the transition from the parameters to the top level
 	 of the function body.  These are the same scope
@@ -1117,53 +1117,53 @@ push_scope (void)
 	 The outermost block of a function always gets a BLOCK node,
 	 because the debugging output routines expect that each
 	 function has at least one BLOCK.  */
-      current_scope->parm_flag         = false;
-      current_scope->function_body     = true;
-      current_scope->keep              = true;
+      current_scope->parm_flag         = ਝੂਠ;
+      current_scope->function_body     = ਸੱਚ;
+      current_scope->keep              = ਸੱਚ;
       current_scope->outer_function    = current_function_scope;
       current_function_scope           = current_scope;
 
-      keep_next_level_flag = false;
-      next_is_function_body = false;
+      keep_ਅਗਲਾ_level_flag = ਝੂਠ;
+      ਅਗਲਾ_is_function_body = ਝੂਠ;
 
       /* The FLOAT_CONST_DECIMAL64 pragma applies to nested scopes.  */
-      if (current_scope->outer)
+      ਜੇ (current_scope->outer)
 	current_scope->float_const_decimal64
 	  = current_scope->outer->float_const_decimal64;
-      else
-	current_scope->float_const_decimal64 = false;
+      ਨਹੀਂਤਾਂ
+	current_scope->float_const_decimal64 = ਝੂਠ;
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      struct c_scope *scope;
-      if (scope_freelist)
+      ਬਣਤਰ c_scope *scope;
+      ਜੇ (scope_freelist)
 	{
 	  scope = scope_freelist;
 	  scope_freelist = scope->outer;
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	scope = ggc_cleared_alloc<c_scope> ();
 
       /* The FLOAT_CONST_DECIMAL64 pragma applies to nested scopes.  */
-      if (current_scope)
+      ਜੇ (current_scope)
 	scope->float_const_decimal64 = current_scope->float_const_decimal64;
-      else
-	scope->float_const_decimal64 = false;
+      ਨਹੀਂਤਾਂ
+	scope->float_const_decimal64 = ਝੂਠ;
 
-      scope->keep          = keep_next_level_flag;
+      scope->keep          = keep_ਅਗਲਾ_level_flag;
       scope->outer         = current_scope;
-      scope->depth	   = current_scope ? (current_scope->depth + 1) : 0;
+      scope->ਡੂੰਘਾਈ	   = current_scope ? (current_scope->ਡੂੰਘਾਈ + 1) : 0;
 
       /* Check for scope depth overflow.  Unlikely (2^28 == 268,435,456) but
 	 possible.  */
-      if (current_scope && scope->depth == 0)
+      ਜੇ (current_scope && scope->ਡੂੰਘਾਈ == 0)
 	{
-	  scope->depth--;
-	  sorry ("GCC supports only %u nested scopes", scope->depth);
+	  scope->ਡੂੰਘਾਈ--;
+	  sorry ("GCC supports only %u nested scopes", scope->ਡੂੰਘਾਈ);
 	}
 
       current_scope        = scope;
-      keep_next_level_flag = false;
+      keep_ਅਗਲਾ_level_flag = ਝੂਠ;
     }
 }
 
@@ -1172,62 +1172,62 @@ push_scope (void)
    These are the decls whose initialization will be skipped by a goto
    later in the function.  */
 
-static void
-update_label_decls (struct c_scope *scope)
+ਸਥਿਰ ਖਾਲੀ
+update_label_decls (ਬਣਤਰ c_scope *scope)
 {
-  struct c_scope *s;
+  ਬਣਤਰ c_scope *s;
 
   s = scope;
-  while (s != NULL)
+  ਜਦੋਂ (s != ਨਿਰਾ)
     {
-      if (s->has_label_bindings)
+      ਜੇ (s->has_label_bindings)
 	{
-	  struct c_binding *b;
+	  ਬਣਤਰ c_binding *b;
 
-	  for (b = s->bindings; b != NULL; b = b->prev)
+	  ਲਈ (b = s->bindings; b != ਨਿਰਾ; b = b->prev)
 	    {
-	      struct c_label_vars *label_vars;
-	      struct c_binding *b1;
-	      bool hjud;
-	      unsigned int ix;
-	      struct c_goto_bindings *g;
+	      ਬਣਤਰ c_label_vars *label_vars;
+	      ਬਣਤਰ c_binding *b1;
+	      ਤਾਰਕਿਕ hjud;
+	      ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ ix;
+	      ਬਣਤਰ c_goto_bindings *g;
 
-	      if (TREE_CODE (b->decl) != LABEL_DECL)
-		continue;
+	      ਜੇ (ਰੁੱਖ_ਕੋਡ (b->decl) != LABEL_DECL)
+		ਜਾਰੀ;
 	      label_vars = b->u.label;
 
-	      b1 = label_vars->label_bindings.bindings_in_scope;
-	      if (label_vars->label_bindings.scope == NULL)
-		hjud = false;
-	      else
+	      b1 = label_vars->label_bindings.bindings_ਵਿੱਚ_scope;
+	      ਜੇ (label_vars->label_bindings.scope == ਨਿਰਾ)
+		hjud = ਝੂਠ;
+	      ਨਹੀਂਤਾਂ
 		hjud = label_vars->label_bindings.scope->has_jump_unsafe_decl;
-	      if (update_spot_bindings (scope, &label_vars->label_bindings))
+	      ਜੇ (update_spot_bindings (scope, &label_vars->label_bindings))
 		{
 		  /* This label is defined in this scope.  */
-		  if (hjud)
+		  ਜੇ (hjud)
 		    {
-		      for (; b1 != NULL; b1 = b1->prev)
+		      ਲਈ (; b1 != ਨਿਰਾ; b1 = b1->prev)
 			{
 			  /* A goto from later in the function to this
 			     label will never see the initialization
 			     of B1, if any.  Save it to issue a
 			     warning if needed.  */
-			  if (decl_jump_unsafe (b1->decl))
-			    vec_safe_push(label_vars->decls_in_scope, b1->decl);
+			  ਜੇ (decl_jump_unsafe (b1->decl))
+			    vec_ਸੁਰੱਖਿਅਤ_ਧੱਕੋ(label_vars->decls_ਵਿੱਚ_scope, b1->decl);
 			}
 		    }
 		}
 
 	      /* Update the bindings of any goto statements associated
 		 with this label.  */
-	      FOR_EACH_VEC_SAFE_ELT (label_vars->gotos, ix, g)
+	      FOR_EACH_VEC_ਸੁਰੱਖਿਅਤ_ELT (label_vars->gotos, ix, g)
 		update_spot_bindings (scope, &g->goto_bindings);
 	    }
 	}
 
       /* Don't search beyond the current function.  */
-      if (s == current_function_scope)
-	break;
+      ਜੇ (s == current_function_scope)
+	ਰੋਕੋ;
 
       s = s->outer;
     }
@@ -1238,32 +1238,32 @@ update_label_decls (struct c_scope *scope)
    node containing all the DECLs in this scope that are of interest
    to debug info generation.  */
 
-tree
-pop_scope (void)
+ਰੁੱਖ
+ਕੱਢੋ_scope (ਖਾਲੀ)
 {
-  struct c_scope *scope = current_scope;
-  tree block, context, p;
-  struct c_binding *b;
+  ਬਣਤਰ c_scope *scope = current_scope;
+  ਰੁੱਖ ਖੰਡ, context, p;
+  ਬਣਤਰ c_binding *b;
 
-  bool functionbody = scope->function_body;
-  bool keep = functionbody || scope->keep || scope->bindings;
+  ਤਾਰਕਿਕ functionbody = scope->function_body;
+  ਤਾਰਕਿਕ keep = functionbody || scope->keep || scope->bindings;
 
   update_label_decls (scope);
 
   /* If appropriate, create a BLOCK to record the decls for the life
      of this function.  */
-  block = NULL_TREE;
-  if (keep)
+  ਖੰਡ = NULL_ਰੁੱਖ;
+  ਜੇ (keep)
     {
-      block = make_node (BLOCK);
-      BLOCK_SUBBLOCKS (block) = scope->blocks;
-      TREE_USED (block) = 1;
+      ਖੰਡ = make_ਗੰਢ (ਖੰਡ_2);
+      ਖੰਡ_SUBBLOCKS (ਖੰਡ) = scope->ਖੰਡਾਂ;
+      ਰੁੱਖ_ਵਰਤਿਆ (ਖੰਡ) = 1;
 
       /* In each subblock, record that this is its superior.  */
-      for (p = scope->blocks; p; p = BLOCK_CHAIN (p))
-	BLOCK_SUPERCONTEXT (p) = block;
+      ਲਈ (p = scope->ਖੰਡਾਂ; p; p = ਖੰਡ_CHAIN (p))
+	ਖੰਡ_SUPERCONTEXT (p) = ਖੰਡ;
 
-      BLOCK_VARS (block) = NULL_TREE;
+      ਖੰਡ_VARS (ਖੰਡ) = NULL_ਰੁੱਖ;
     }
 
   /* The TYPE_CONTEXTs for all of the tagged types belonging to this
@@ -1279,158 +1279,158 @@ pop_scope (void)
      type nodes get set in `grokdeclarator' as soon as we have created
      the FUNCTION_TYPE node which will represent the "scope" for these
      "parameter list local" tagged types.  */
-  if (scope->function_body)
+  ਜੇ (scope->function_body)
     context = current_function_decl;
-  else if (scope == file_scope)
+  ਨਹੀਂਤਾਂ ਜੇ (scope == file_scope)
     {
-      tree file_decl
-	= build_translation_unit_decl (get_identifier (main_input_filename));
+      ਰੁੱਖ file_decl
+	= build_translation_unit_decl (get_identifier (main_ਨਿਵੇਸ਼_filename));
       context = file_decl;
-      debug_hooks->register_main_translation_unit (file_decl);
+      debug_hooks->ਰਜਿਸਟਰ_main_translation_unit (file_decl);
     }
-  else
-    context = block;
+  ਨਹੀਂਤਾਂ
+    context = ਖੰਡ;
 
   /* Clear all bindings in this scope.  */
-  for (b = scope->bindings; b; b = free_binding_and_advance (b))
+  ਲਈ (b = scope->bindings; b; b = free_binding_and_advance (b))
     {
       p = b->decl;
-      switch (TREE_CODE (p))
+      ਚੋਣ (ਰੁੱਖ_ਕੋਡ (p))
 	{
-	case LABEL_DECL:
+	ਹਾਲਤ LABEL_DECL:
 	  /* Warnings for unused labels, errors for undefined labels.  */
-	  if (TREE_USED (p) && !DECL_INITIAL (p))
+	  ਜੇ (ਰੁੱਖ_ਵਰਤਿਆ (p) && !DECL_INITIAL (p))
 	    {
 	      error ("label %q+D used but not defined", p);
-	      DECL_INITIAL (p) = error_mark_node;
+	      DECL_INITIAL (p) = error_mark_ਗੰਢ;
 	    }
-	  else
-	    warn_for_unused_label (p);
+	  ਨਹੀਂਤਾਂ
+	    warn_for_ਅਣਵਰਤਿਆ_label (p);
 
 	  /* Labels go in BLOCK_VARS.  */
-	  DECL_CHAIN (p) = BLOCK_VARS (block);
-	  BLOCK_VARS (block) = p;
+	  DECL_CHAIN (p) = ਖੰਡ_VARS (ਖੰਡ);
+	  ਖੰਡ_VARS (ਖੰਡ) = p;
 	  gcc_assert (I_LABEL_BINDING (b->id) == b);
 	  I_LABEL_BINDING (b->id) = b->shadowed;
 
 	  /* Also pop back to the shadowed label_vars.  */
-	  release_tree_vector (b->u.label->decls_in_scope);
+	  release_ਰੁੱਖ_ਸਦਿਸ਼ (b->u.label->decls_ਵਿੱਚ_scope);
 	  b->u.label = b->u.label->shadowed;
-	  break;
+	  ਰੋਕੋ;
 
-	case ENUMERAL_TYPE:
-	case UNION_TYPE:
-	case RECORD_TYPE:
+	ਹਾਲਤ ENUMERAL_TYPE:
+	ਹਾਲਤ UNION_TYPE:
+	ਹਾਲਤ ਰਿਕਾਰਡ_TYPE:
 
 	  /* Types may not have tag-names, in which case the type
 	     appears in the bindings list with b->id NULL.  */
-	  if (b->id)
+	  ਜੇ (b->id)
 	    {
-	      gcc_assert (I_TAG_BINDING (b->id) == b);
-	      I_TAG_BINDING (b->id) = b->shadowed;
+	      gcc_assert (I_ਟੈਗ_BINDING (b->id) == b);
+	      I_ਟੈਗ_BINDING (b->id) = b->shadowed;
 	    }
-	  break;
+	  ਰੋਕੋ;
 
-	case FUNCTION_DECL:
+	ਹਾਲਤ FUNCTION_DECL:
 	  /* Propagate TREE_ADDRESSABLE from nested functions to their
 	     containing functions.  */
-	  if (!TREE_ASM_WRITTEN (p)
-	      && DECL_INITIAL (p) != NULL_TREE
-	      && TREE_ADDRESSABLE (p)
-	      && DECL_ABSTRACT_ORIGIN (p) != NULL_TREE
+	  ਜੇ (!ਰੁੱਖ_ASM_WRITTEN (p)
+	      && DECL_INITIAL (p) != NULL_ਰੁੱਖ
+	      && ਰੁੱਖ_ADDRESSABLE (p)
+	      && DECL_ABSTRACT_ORIGIN (p) != NULL_ਰੁੱਖ
 	      && DECL_ABSTRACT_ORIGIN (p) != p)
-	    TREE_ADDRESSABLE (DECL_ABSTRACT_ORIGIN (p)) = 1;
-	  if (!TREE_PUBLIC (p)
+	    ਰੁੱਖ_ADDRESSABLE (DECL_ABSTRACT_ORIGIN (p)) = 1;
+	  ਜੇ (!ਰੁੱਖ_ਜਨਤਕ (p)
 	      && !DECL_INITIAL (p)
 	      && !b->nested
 	      && scope != file_scope
 	      && scope != external_scope)
 	    {
 	      error ("nested function %q+D declared but never defined", p);
-	      undef_nested_function = true;
+	      undef_nested_function = ਸੱਚ;
 	    }
-	  else if (DECL_DECLARED_INLINE_P (p)
-		   && TREE_PUBLIC (p)
+	  ਨਹੀਂਤਾਂ ਜੇ (DECL_DECLARED_INLINE_P (p)
+		   && ਰੁੱਖ_ਜਨਤਕ (p)
 		   && !DECL_INITIAL (p))
 	    {
 	      /* C99 6.7.4p6: "a function with external linkage... declared
 		 with an inline function specifier ... shall also be defined
 		 in the same translation unit."  */
-	      if (!flag_gnu89_inline
-		  && !lookup_attribute ("gnu_inline", DECL_ATTRIBUTES (p))
+	      ਜੇ (!flag_gnu89_inline
+		  && !lookup_attribute ("gnu_inline", DECL_ਗੁਣ (p))
 		  && scope == external_scope)
-		pedwarn (input_location, 0,
+		pedwarn (ਨਿਵੇਸ਼_location, 0,
 			 "inline function %q+D declared but never defined", p);
 	      DECL_EXTERNAL (p) = 1;
 	    }
 
-	  goto common_symbol;
+	  ਜਾਓ common_ਚਿੰਨ੍ਹ;
 
-	case VAR_DECL:
+	ਹਾਲਤ VAR_DECL:
 	  /* Warnings for unused variables.  */
-	  if ((!TREE_USED (p) || !DECL_READ_P (p))
-	      && !warning_suppressed_p (p, OPT_Wunused_but_set_variable_)
-	      && !DECL_IN_SYSTEM_HEADER (p)
+	  ਜੇ ((!ਰੁੱਖ_ਵਰਤਿਆ (p) || !DECL_READ_P (p))
+	      && !warning_suppressed_p (p, OPT_Wunused_but_ਸੈੱਟ_variable)
+	      && !DECL_ਵਿੱਚ_SYSTEM_ਸਿਰਲੇਖ (p)
 	      && DECL_NAME (p)
 	      && !DECL_ARTIFICIAL (p)
 	      && scope != file_scope
 	      && scope != external_scope)
 	    {
-	      if (!TREE_USED (p))
+	      ਜੇ (!ਰੁੱਖ_ਵਰਤਿਆ (p))
 		{
 		  warning (OPT_Wunused_variable, "unused variable %q+D", p);
 		  suppress_warning (p, OPT_Wunused_variable);
 		}
-	      else if (DECL_CONTEXT (p) == current_function_decl)
-		warning_at (DECL_SOURCE_LOCATION (p),
-			    OPT_Wunused_but_set_variable_,
+	      ਨਹੀਂਤਾਂ ਜੇ (DECL_CONTEXT (p) == current_function_decl)
+		warning_at (DECL_ਸਰੋਤ_LOCATION (p),
+			    OPT_Wunused_but_ਸੈੱਟ_variable,
 			    "variable %qD set but not used", p);
 	    }
 
-	  if (b->inner_comp)
+	  ਜੇ (b->inner_comp)
 	    {
 	      error ("type of array %q+D completed incompatibly with"
 		     " implicit initialization", p);
 	    }
 
 	  /* Fall through.  */
-	case TYPE_DECL:
-	case CONST_DECL:
-	common_symbol:
+	ਹਾਲਤ TYPE_DECL:
+	ਹਾਲਤ CONST_DECL:
+	common_ਚਿੰਨ੍ਹ:
 	  /* All of these go in BLOCK_VARS, but only if this is the
 	     binding in the home scope.  */
-	  if (!b->nested)
+	  ਜੇ (!b->nested)
 	    {
-	      DECL_CHAIN (p) = BLOCK_VARS (block);
-	      BLOCK_VARS (block) = p;
+	      DECL_CHAIN (p) = ਖੰਡ_VARS (ਖੰਡ);
+	      ਖੰਡ_VARS (ਖੰਡ) = p;
 	    }
-	  else if (VAR_OR_FUNCTION_DECL_P (p) && scope != file_scope)
+	  ਨਹੀਂਤਾਂ ਜੇ (VAR_OR_FUNCTION_DECL_P (p) && scope != file_scope)
 	    {
 	      /* For block local externs add a special
 		 DECL_EXTERNAL decl for debug info generation.  */
-	      tree extp = copy_node (p);
+	      ਰੁੱਖ extp = copy_ਗੰਢ (p);
 
 	      DECL_EXTERNAL (extp) = 1;
-	      TREE_STATIC (extp) = 0;
-	      TREE_PUBLIC (extp) = 1;
-	      DECL_INITIAL (extp) = NULL_TREE;
-	      DECL_LANG_SPECIFIC (extp) = NULL;
+	      ਰੁੱਖ_STATIC (extp) = 0;
+	      ਰੁੱਖ_ਜਨਤਕ (extp) = 1;
+	      DECL_INITIAL (extp) = NULL_ਰੁੱਖ;
+	      DECL_LANG_SPECIFIC (extp) = ਨਿਰਾ;
 	      DECL_CONTEXT (extp) = current_function_decl;
-	      if (TREE_CODE (p) == FUNCTION_DECL)
+	      ਜੇ (ਰੁੱਖ_ਕੋਡ (p) == FUNCTION_DECL)
 		{
-		  DECL_RESULT (extp) = NULL_TREE;
-		  DECL_SAVED_TREE (extp) = NULL_TREE;
-		  DECL_STRUCT_FUNCTION (extp) = NULL;
+		  DECL_ਨਤੀਜਾ (extp) = NULL_ਰੁੱਖ;
+		  DECL_SAVED_ਰੁੱਖ (extp) = NULL_ਰੁੱਖ;
+		  DECL_STRUCT_FUNCTION (extp) = ਨਿਰਾ;
 		}
-	      if (b->locus != UNKNOWN_LOCATION)
-		DECL_SOURCE_LOCATION (extp) = b->locus;
-	      DECL_CHAIN (extp) = BLOCK_VARS (block);
-	      BLOCK_VARS (block) = extp;
+	      ਜੇ (b->locus != UNKNOWN_LOCATION)
+		DECL_ਸਰੋਤ_LOCATION (extp) = b->locus;
+	      DECL_CHAIN (extp) = ਖੰਡ_VARS (ਖੰਡ);
+	      ਖੰਡ_VARS (ਖੰਡ) = extp;
 	    }
 	  /* If this is the file scope set DECL_CONTEXT of each decl to
 	     the TRANSLATION_UNIT_DECL.  This makes same_translation_unit_p
 	     work.  */
-	  if (scope == file_scope)
+	  ਜੇ (scope == file_scope)
 	      DECL_CONTEXT (p) = context;
 
 	  gcc_fallthrough ();
@@ -1439,108 +1439,108 @@ pop_scope (void)
 	     parameter warnings are handled by function.cc.
 	     error_mark_node obviously does not go in BLOCK_VARS and
 	     does not get unused-variable warnings.  */
-	case PARM_DECL:
-	case ERROR_MARK:
+	ਹਾਲਤ PARM_DECL:
+	ਹਾਲਤ ERROR_MARK:
 	  /* It is possible for a decl not to have a name.  We get
 	     here with b->id NULL in this case.  */
-	  if (b->id)
+	  ਜੇ (b->id)
 	    {
-	      gcc_assert (I_SYMBOL_BINDING (b->id) == b);
-	      I_SYMBOL_BINDING (b->id) = b->shadowed;
-	      if (b->shadowed && b->shadowed->u.type)
-		TREE_TYPE (b->shadowed->decl) = b->shadowed->u.type;
+	      gcc_assert (I_ਚਿੰਨ੍ਹ_BINDING (b->id) == b);
+	      I_ਚਿੰਨ੍ਹ_BINDING (b->id) = b->shadowed;
+	      ਜੇ (b->shadowed && b->shadowed->u.type)
+		ਰੁੱਖ_TYPE (b->shadowed->decl) = b->shadowed->u.type;
 	    }
-	  break;
+	  ਰੋਕੋ;
 
-	default:
+	ਮੂਲ:
 	  gcc_unreachable ();
 	}
     }
 
 
   /* Dispose of the block that we just made inside some higher level.  */
-  if ((scope->function_body || scope == file_scope) && context)
+  ਜੇ ((scope->function_body || scope == file_scope) && context)
     {
-      DECL_INITIAL (context) = block;
-      BLOCK_SUPERCONTEXT (block) = context;
+      DECL_INITIAL (context) = ਖੰਡ;
+      ਖੰਡ_SUPERCONTEXT (ਖੰਡ) = context;
     }
-  else if (scope->outer)
+  ਨਹੀਂਤਾਂ ਜੇ (scope->outer)
     {
-      if (block)
-	SCOPE_LIST_APPEND (scope->outer, blocks, block);
+      ਜੇ (ਖੰਡ)
+	SCOPE_LIST_APPEND (scope->outer, ਖੰਡਾਂ, ਖੰਡ);
       /* If we did not make a block for the scope just exited, any
 	 blocks made for inner scopes must be carried forward so they
 	 will later become subblocks of something else.  */
-      else if (scope->blocks)
-	SCOPE_LIST_CONCAT (scope->outer, blocks, scope, blocks);
+      ਨਹੀਂਤਾਂ ਜੇ (scope->ਖੰਡਾਂ)
+	SCOPE_LIST_CONCAT (scope->outer, ਖੰਡਾਂ, scope, ਖੰਡਾਂ);
     }
 
   /* Pop the current scope, and free the structure for reuse.  */
   current_scope = scope->outer;
-  if (scope->function_body)
+  ਜੇ (scope->function_body)
     current_function_scope = scope->outer_function;
 
-  memset (scope, 0, sizeof (struct c_scope));
+  memset (scope, 0, ਆਕਾਰ (ਬਣਤਰ c_scope));
   scope->outer = scope_freelist;
   scope_freelist = scope;
 
-  return block;
+  ਵਾਪਸ ਖੰਡ;
 }
 
-void
-push_file_scope (void)
+ਖਾਲੀ
+ਧੱਕੋ_file_scope (ਖਾਲੀ)
 {
-  tree decl;
+  ਰੁੱਖ decl;
 
-  if (file_scope)
-    return;
+  ਜੇ (file_scope)
+    ਵਾਪਸ;
 
   /* Call the target stack_protect_guard hook if the stack protection
      guard is declared as a global symbol.  */
-  if (targetm.stack_protect_guard_symbol_p ())
+  ਜੇ (targetm.ਢੇਰ_protect_guard_ਚਿੰਨ੍ਹ_p ())
     {
-      tree decl = targetm.stack_protect_guard ();
+      ਰੁੱਖ decl = targetm.ਢੇਰ_protect_guard ();
       DECL_CHAIN (decl) = visible_builtins;
       visible_builtins = decl;
     }
 
-  push_scope ();
+  ਧੱਕੋ_scope ();
   file_scope = current_scope;
 
-  start_fname_decls ();
+  ਸ਼ੁਰੂ_fname_decls ();
 
-  for (decl = visible_builtins; decl; decl = DECL_CHAIN (decl))
+  ਲਈ (decl = visible_builtins; decl; decl = DECL_CHAIN (decl))
     bind (DECL_NAME (decl), decl, file_scope,
-	  /*invisible=*/false, /*nested=*/true, DECL_SOURCE_LOCATION (decl));
+	  /*invisible=*/ਝੂਠ, /*nested=*/ਸੱਚ, DECL_ਸਰੋਤ_LOCATION (decl));
 }
 
-void
-pop_file_scope (void)
+ਖਾਲੀ
+ਕੱਢੋ_file_scope (ਖਾਲੀ)
 {
   /* In case there were missing closebraces, get us back to the global
      binding level.  */
-  while (current_scope != file_scope)
-    pop_scope ();
+  ਜਦੋਂ (current_scope != file_scope)
+    ਕੱਢੋ_scope ();
 
   /* __FUNCTION__ is defined at file scope ("").  This
      call may not be necessary as my tests indicate it
      still works without it.  */
-  finish_fname_decls ();
+  ਅੰਤ_fname_decls ();
 
   check_inline_statics ();
 
   /* This is the point to write out a PCH if we're doing that.
      In that case we do not want to do anything else.  */
-  if (pch_file)
+  ਜੇ (pch_file)
     {
       c_common_write_pch ();
       /* Ensure even the callers don't try to finalize the CU.  */
       flag_syntax_only = 1;
-      return;
+      ਵਾਪਸ;
     }
 
   /* Pop off the file scope and close this translation unit.  */
-  pop_scope ();
+  ਕੱਢੋ_scope ();
   file_scope = 0;
 
   maybe_apply_pending_pragma_weaks ();
@@ -1548,7 +1548,7 @@ pop_file_scope (void)
 
 /* Whether we are currently inside the initializer for an
    underspecified object definition (C23 auto or constexpr).  */
-static bool in_underspecified_init;
+ਸਥਿਰ ਤਾਰਕਿਕ ਵਿੱਚ_underspecified_init;
 
 /* Start an underspecified object definition for NAME at LOC.  This
    means that NAME is shadowed inside its initializer, so neither the
@@ -1558,33 +1558,33 @@ static bool in_underspecified_init;
    underspecified object is a (constexpr) compound literal; there is
    no shadowing in that case, but all the other restrictions on
    underspecified object definitions still apply.  */
-unsigned int
-start_underspecified_init (location_t loc, tree name)
+ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ
+ਸ਼ੁਰੂ_underspecified_init (location_t loc, ਰੁੱਖ name)
 {
-  bool prev = in_underspecified_init;
-  bool ok;
-  if (name == NULL_TREE)
-    ok = true;
-  else
+  ਤਾਰਕਿਕ prev = ਵਿੱਚ_underspecified_init;
+  ਤਾਰਕਿਕ ok;
+  ਜੇ (name == NULL_ਰੁੱਖ)
+    ok = ਸੱਚ;
+  ਨਹੀਂਤਾਂ
     {
-      tree decl = build_decl (loc, VAR_DECL, name, error_mark_node);
+      ਰੁੱਖ decl = build_decl (loc, VAR_DECL, name, error_mark_ਗੰਢ);
       C_DECL_UNDERSPECIFIED (decl) = 1;
-      struct c_scope *scope = current_scope;
-      struct c_binding *b = I_SYMBOL_BINDING (name);
-      if (b && B_IN_SCOPE (b, scope))
+      ਬਣਤਰ c_scope *scope = current_scope;
+      ਬਣਤਰ c_binding *b = I_ਚਿੰਨ੍ਹ_BINDING (name);
+      ਜੇ (b && B_ਵਿੱਚ_SCOPE (b, scope))
 	{
 	  error_at (loc, "underspecified declaration of %qE, which is already "
 		    "declared in this scope", name);
-	  ok = false;
+	  ok = ਝੂਠ;
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  bind (name, decl, scope, false, false, loc);
-	  ok = true;
+	  bind (name, decl, scope, ਝੂਠ, ਝੂਠ, loc);
+	  ok = ਸੱਚ;
 	}
     }
-  in_underspecified_init = true;
-  return ok | (prev << 1);
+  ਵਿੱਚ_underspecified_init = ਸੱਚ;
+  ਵਾਪਸ ok | (prev << 1);
 }
 
 /* Finish an underspecified object definition for NAME, before that
@@ -1592,105 +1592,105 @@ start_underspecified_init (location_t loc, tree name)
    PREV_STATE is the value returned by the call to
    start_underspecified_init.  If NAME is NULL_TREE, this means a
    compound literal, as for start_underspecified_init.  */
-void
-finish_underspecified_init (tree name, unsigned int prev_state)
+ਖਾਲੀ
+ਅੰਤ_underspecified_init (ਰੁੱਖ name, ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ prev_state)
 {
-  if (name != NULL_TREE && (prev_state & 1))
+  ਜੇ (name != NULL_ਰੁੱਖ && (prev_state & 1))
     {
       /* A VAR_DECL was bound to the name to shadow any previous
 	 declarations for the name; remove that binding now.  */
-      struct c_scope *scope = current_scope;
-      struct c_binding *b = I_SYMBOL_BINDING (name);
+      ਬਣਤਰ c_scope *scope = current_scope;
+      ਬਣਤਰ c_binding *b = I_ਚਿੰਨ੍ਹ_BINDING (name);
       gcc_assert (b);
-      gcc_assert (B_IN_SCOPE (b, scope));
+      gcc_assert (B_ਵਿੱਚ_SCOPE (b, scope));
       gcc_assert (VAR_P (b->decl));
       gcc_assert (C_DECL_UNDERSPECIFIED (b->decl));
-      I_SYMBOL_BINDING (name) = b->shadowed;
+      I_ਚਿੰਨ੍ਹ_BINDING (name) = b->shadowed;
       /* In erroneous cases there may be other bindings added to this
 	 scope during the initializer.  */
-      struct c_binding **p = &scope->bindings;
-      while (*p != b)
+      ਬਣਤਰ c_binding **p = &scope->bindings;
+      ਜਦੋਂ (*p != b)
 	p = &((*p)->prev);
       *p = free_binding_and_advance (*p);
     }
-  in_underspecified_init = (prev_state & (1u << 1)) >> 1;
+  ਵਿੱਚ_underspecified_init = (prev_state & (1u << 1)) >> 1;
 }
 
 /* Adjust the bindings for the start of a statement expression.  */
 
-void
-c_bindings_start_stmt_expr (struct c_spot_bindings* switch_bindings)
+ਖਾਲੀ
+c_bindings_ਸ਼ੁਰੂ_stmt_ਵਿਅੰਜਕ (ਬਣਤਰ c_spot_bindings* switch_bindings)
 {
-  struct c_scope *scope;
+  ਬਣਤਰ c_scope *scope;
 
-  for (scope = current_scope; scope != NULL; scope = scope->outer)
+  ਲਈ (scope = current_scope; scope != ਨਿਰਾ; scope = scope->outer)
     {
-      struct c_binding *b;
+      ਬਣਤਰ c_binding *b;
 
-      if (!scope->has_label_bindings)
-	continue;
+      ਜੇ (!scope->has_label_bindings)
+	ਜਾਰੀ;
 
-      for (b = scope->bindings; b != NULL; b = b->prev)
+      ਲਈ (b = scope->bindings; b != ਨਿਰਾ; b = b->prev)
 	{
-	  struct c_label_vars *label_vars;
-	  unsigned int ix;
-	  struct c_goto_bindings *g;
+	  ਬਣਤਰ c_label_vars *label_vars;
+	  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ ix;
+	  ਬਣਤਰ c_goto_bindings *g;
 
-	  if (TREE_CODE (b->decl) != LABEL_DECL)
-	    continue;
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (b->decl) != LABEL_DECL)
+	    ਜਾਰੀ;
 	  label_vars = b->u.label;
 	  ++label_vars->label_bindings.stmt_exprs;
-	  FOR_EACH_VEC_SAFE_ELT (label_vars->gotos, ix, g)
+	  FOR_EACH_VEC_ਸੁਰੱਖਿਅਤ_ELT (label_vars->gotos, ix, g)
 	    ++g->goto_bindings.stmt_exprs;
 	}
     }
 
-  if (switch_bindings != NULL)
+  ਜੇ (switch_bindings != ਨਿਰਾ)
     ++switch_bindings->stmt_exprs;
 }
 
 /* Adjust the bindings for the end of a statement expression.  */
 
-void
-c_bindings_end_stmt_expr (struct c_spot_bindings *switch_bindings)
+ਖਾਲੀ
+c_bindings_ਸਿਰਾ_stmt_ਵਿਅੰਜਕ (ਬਣਤਰ c_spot_bindings *switch_bindings)
 {
-  struct c_scope *scope;
+  ਬਣਤਰ c_scope *scope;
 
-  for (scope = current_scope; scope != NULL; scope = scope->outer)
+  ਲਈ (scope = current_scope; scope != ਨਿਰਾ; scope = scope->outer)
     {
-      struct c_binding *b;
+      ਬਣਤਰ c_binding *b;
 
-      if (!scope->has_label_bindings)
-	continue;
+      ਜੇ (!scope->has_label_bindings)
+	ਜਾਰੀ;
 
-      for (b = scope->bindings; b != NULL; b = b->prev)
+      ਲਈ (b = scope->bindings; b != ਨਿਰਾ; b = b->prev)
 	{
-	  struct c_label_vars *label_vars;
-	  unsigned int ix;
-	  struct c_goto_bindings *g;
+	  ਬਣਤਰ c_label_vars *label_vars;
+	  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ ix;
+	  ਬਣਤਰ c_goto_bindings *g;
 
-	  if (TREE_CODE (b->decl) != LABEL_DECL)
-	    continue;
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (b->decl) != LABEL_DECL)
+	    ਜਾਰੀ;
 	  label_vars = b->u.label;
 	  --label_vars->label_bindings.stmt_exprs;
-	  if (label_vars->label_bindings.stmt_exprs < 0)
+	  ਜੇ (label_vars->label_bindings.stmt_exprs < 0)
 	    {
-	      label_vars->label_bindings.left_stmt_expr = true;
+	      label_vars->label_bindings.ਖੱਬਾ_stmt_ਵਿਅੰਜਕ = ਸੱਚ;
 	      label_vars->label_bindings.stmt_exprs = 0;
 	    }
-	  FOR_EACH_VEC_SAFE_ELT (label_vars->gotos, ix, g)
+	  FOR_EACH_VEC_ਸੁਰੱਖਿਅਤ_ELT (label_vars->gotos, ix, g)
 	    {
 	      --g->goto_bindings.stmt_exprs;
-	      if (g->goto_bindings.stmt_exprs < 0)
+	      ਜੇ (g->goto_bindings.stmt_exprs < 0)
 		{
-		  g->goto_bindings.left_stmt_expr = true;
+		  g->goto_bindings.ਖੱਬਾ_stmt_ਵਿਅੰਜਕ = ਸੱਚ;
 		  g->goto_bindings.stmt_exprs = 0;
 		}
 	    }
 	}
     }
 
-  if (switch_bindings != NULL)
+  ਜੇ (switch_bindings != ਨਿਰਾ)
     {
       --switch_bindings->stmt_exprs;
       gcc_assert (switch_bindings->stmt_exprs >= 0);
@@ -1705,13 +1705,13 @@ c_bindings_end_stmt_expr (struct c_spot_bindings *switch_bindings)
    Note that the definition may really be just a forward reference.
    In that case, the TYPE_SIZE will be zero.  */
 
-static void
-pushtag (location_t loc, tree name, tree type)
+ਸਥਿਰ ਖਾਲੀ
+pushtag (location_t loc, ਰੁੱਖ name, ਰੁੱਖ type)
 {
   /* Record the identifier as the type's name if it has none.  */
-  if (name && !TYPE_NAME (type))
+  ਜੇ (name && !TYPE_NAME (type))
     TYPE_NAME (type) = name;
-  bind (name, type, current_scope, /*invisible=*/false, /*nested=*/false, loc);
+  bind (name, type, current_scope, /*invisible=*/ਝੂਠ, /*nested=*/ਝੂਠ, loc);
 
   /* Create a fake NULL-named TYPE_DECL node whose TREE_TYPE will be the
      tagged type we just added to the current scope.  This fake
@@ -1722,26 +1722,26 @@ pushtag (location_t loc, tree name, tree type)
      in a non-local context via mark_decl_used.  */
 
   TYPE_STUB_DECL (type) = pushdecl (build_decl (loc,
-						TYPE_DECL, NULL_TREE, type));
+						TYPE_DECL, NULL_ਰੁੱਖ, type));
 
   /* An approximation for now, so we can tell this is a function-scope tag.
      This will be updated in pop_scope.  */
   TYPE_CONTEXT (type) = DECL_CONTEXT (TYPE_STUB_DECL (type));
 
-  if (warn_cxx_compat && name != NULL_TREE)
+  ਜੇ (warn_cxx_compat && name != NULL_ਰੁੱਖ)
     {
-      struct c_binding *b = I_SYMBOL_BINDING (name);
+      ਬਣਤਰ c_binding *b = I_ਚਿੰਨ੍ਹ_BINDING (name);
 
-      if (b != NULL
-	  && b->decl != NULL_TREE
-	  && TREE_CODE (b->decl) == TYPE_DECL
-	  && (B_IN_CURRENT_SCOPE (b)
-	      || (current_scope == file_scope && B_IN_EXTERNAL_SCOPE (b)))
-	  && (TYPE_MAIN_VARIANT (TREE_TYPE (b->decl))
+      ਜੇ (b != ਨਿਰਾ
+	  && b->decl != NULL_ਰੁੱਖ
+	  && ਰੁੱਖ_ਕੋਡ (b->decl) == TYPE_DECL
+	  && (B_ਵਿੱਚ_CURRENT_SCOPE (b)
+	      || (current_scope == file_scope && B_ਵਿੱਚ_EXTERNAL_SCOPE (b)))
+	  && (TYPE_MAIN_VARIANT (ਰੁੱਖ_TYPE (b->decl))
 	      != TYPE_MAIN_VARIANT (type)))
 	{
-	  auto_diagnostic_group d;
-	  if (warning_at (loc, OPT_Wc___compat,
+	  auto_diagnostic_ਸਮੂਹ d;
+	  ਜੇ (warning_at (loc, OPT_Wc___compat,
 			  "using %qD as both a typedef and a tag is "
 			  "invalid in C++", b->decl)
 	      && b->locus != UNKNOWN_LOCATION)
@@ -1753,8 +1753,8 @@ pushtag (location_t loc, tree name, tree type)
 /* An exported interface to pushtag.  This is used by the gdb plugin's
    binding oracle to introduce a new tag binding.  */
 
-void
-c_pushtag (location_t loc, tree name, tree type)
+ਖਾਲੀ
+c_pushtag (location_t loc, ਰੁੱਖ name, ਰੁੱਖ type)
 {
   pushtag (loc, name, type);
 }
@@ -1766,36 +1766,36 @@ c_pushtag (location_t loc, tree name, tree type)
    and external) scope or the current function's scope; if DECL is not
    a VAR_DECL then it is always put into the file scope.  */
 
-void
-c_bind (location_t loc, tree decl, bool is_global)
+ਖਾਲੀ
+c_bind (location_t loc, ਰੁੱਖ decl, ਤਾਰਕਿਕ is_global)
 {
-  struct c_scope *scope;
-  bool nested = false;
+  ਬਣਤਰ c_scope *scope;
+  ਤਾਰਕਿਕ nested = ਝੂਠ;
 
-  if (!VAR_P (decl) || current_function_scope == NULL)
+  ਜੇ (!VAR_P (decl) || current_function_scope == ਨਿਰਾ)
     {
       /* Types and functions are always considered to be global.  */
       scope = file_scope;
       DECL_EXTERNAL (decl) = 1;
-      TREE_PUBLIC (decl) = 1;
+      ਰੁੱਖ_ਜਨਤਕ (decl) = 1;
     }
-  else if (is_global)
+  ਨਹੀਂਤਾਂ ਜੇ (is_global)
     {
       /* Also bind it into the external scope.  */
-      bind (DECL_NAME (decl), decl, external_scope, true, false, loc);
-      nested = true;
+      bind (DECL_NAME (decl), decl, external_scope, ਸੱਚ, ਝੂਠ, loc);
+      nested = ਸੱਚ;
       scope = file_scope;
       DECL_EXTERNAL (decl) = 1;
-      TREE_PUBLIC (decl) = 1;
+      ਰੁੱਖ_ਜਨਤਕ (decl) = 1;
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
       DECL_CONTEXT (decl) = current_function_decl;
-      TREE_PUBLIC (decl) = 0;
+      ਰੁੱਖ_ਜਨਤਕ (decl) = 0;
       scope = current_function_scope;
     }
 
-  bind (DECL_NAME (decl), decl, scope, false, nested, loc);
+  bind (DECL_NAME (decl), decl, scope, ਝੂਠ, nested, loc);
 }
 
 
@@ -1806,21 +1806,21 @@ c_bind (location_t loc, tree decl, bool is_global)
    etc. which is just void* (or to any other type).
    Used only by match_builtin_function_types.  */
 
-static const unsigned builtin_structptr_type_count
-  = ARRAY_SIZE (builtin_structptr_types);
+ਸਥਿਰ ਅਚਲ ਬਿਨਾਨਿਸ਼ਾਨੀ builtin_structptr_type_ਗਿਣਤੀ
+  = ARRAY_ਮਾਪ (builtin_structptr_types);
 
-static GTY(()) tree last_structptr_types[builtin_structptr_type_count];
+ਸਥਿਰ GTY(()) ਰੁੱਖ ਆਖਰੀ_structptr_types[builtin_structptr_type_ਗਿਣਤੀ];
 
 /* Returns true if types T1 and T2 representing return types or types
    of function arguments are close enough to be considered interchangeable
    in redeclarations of built-in functions.  */
 
-static bool
-types_close_enough_to_match (tree t1, tree t2)
+ਸਥਿਰ ਤਾਰਕਿਕ
+types_close_enough_ਮੰਜ਼ਿਲ_ਮੇਲ (ਰੁੱਖ t1, ਰੁੱਖ t2)
 {
-  return (TYPE_MODE (t1) == TYPE_MODE (t2)
-	  && POINTER_TYPE_P (t1) == POINTER_TYPE_P (t2)
-	  && FUNCTION_POINTER_TYPE_P (t1) == FUNCTION_POINTER_TYPE_P (t2));
+  ਵਾਪਸ (TYPE_ਬਹੁਲਕ (t1) == TYPE_ਬਹੁਲਕ (t2)
+	  && ਸੂਚਕ_TYPE_P (t1) == ਸੂਚਕ_TYPE_P (t2)
+	  && FUNCTION_ਸੂਚਕ_TYPE_P (t1) == FUNCTION_ਸੂਚਕ_TYPE_P (t2));
 }
 
 /* Subroutine of compare_decls.  Allow harmless mismatches in return
@@ -1829,157 +1829,157 @@ types_close_enough_to_match (tree t1, tree t2)
    an argument type mismatch or null and zero otherwise.  Return
    a unified type given a suitable match, and 0 otherwise.  */
 
-static tree
-match_builtin_function_types (tree newtype, tree oldtype,
-			      tree *strict, unsigned *argno)
+ਸਥਿਰ ਰੁੱਖ
+ਮੇਲ_builtin_function_types (ਰੁੱਖ newtype, ਰੁੱਖ oldtype,
+			      ਰੁੱਖ *strict, ਬਿਨਾਨਿਸ਼ਾਨੀ *argno)
 {
   *argno = 0;
-  *strict = NULL_TREE;
+  *strict = NULL_ਰੁੱਖ;
 
   /* Accept the return type of the new declaration if it has the same
      mode and if they're both pointers or if neither is.  */
-  tree oldrettype = TREE_TYPE (oldtype);
-  tree newrettype = TREE_TYPE (newtype);
+  ਰੁੱਖ oldrettype = ਰੁੱਖ_TYPE (oldtype);
+  ਰੁੱਖ newrettype = ਰੁੱਖ_TYPE (newtype);
 
-  if (!types_close_enough_to_match (oldrettype, newrettype))
-    return NULL_TREE;
+  ਜੇ (!types_close_enough_ਮੰਜ਼ਿਲ_ਮੇਲ (oldrettype, newrettype))
+    ਵਾਪਸ NULL_ਰੁੱਖ;
 
   /* Check that the return types are compatible but don't fail if they
      are not (e.g., int vs long in ILP32) and just let the caller know.  */
-  if (!comptypes (TYPE_MAIN_VARIANT (oldrettype),
+  ਜੇ (!comptypes (TYPE_MAIN_VARIANT (oldrettype),
 		  TYPE_MAIN_VARIANT (newrettype)))
     *strict = oldrettype;
 
-  tree oldargs = TYPE_ARG_TYPES (oldtype);
-  tree newargs = TYPE_ARG_TYPES (newtype);
-  tree tryargs = newargs;
+  ਰੁੱਖ oldargs = TYPE_ARG_TYPES (oldtype);
+  ਰੁੱਖ newargs = TYPE_ARG_TYPES (newtype);
+  ਰੁੱਖ tryargs = newargs;
 
-  const unsigned nlst = ARRAY_SIZE (last_structptr_types);
-  const unsigned nbst = ARRAY_SIZE (builtin_structptr_types);
+  ਅਚਲ ਬਿਨਾਨਿਸ਼ਾਨੀ nlst = ARRAY_ਮਾਪ (ਆਖਰੀ_structptr_types);
+  ਅਚਲ ਬਿਨਾਨਿਸ਼ਾਨੀ nbst = ARRAY_ਮਾਪ (builtin_structptr_types);
 
   gcc_checking_assert (nlst == nbst);
 
-  for (unsigned i = 1; oldargs || newargs; ++i)
+  ਲਈ (ਬਿਨਾਨਿਸ਼ਾਨੀ i = 1; oldargs || newargs; ++i)
     {
-      if (!oldargs
+      ਜੇ (!oldargs
 	  || !newargs
-	  || !TREE_VALUE (oldargs)
-	  || !TREE_VALUE (newargs))
-	return NULL_TREE;
+	  || !ਰੁੱਖ_ਮੁੱਲ (oldargs)
+	  || !ਰੁੱਖ_ਮੁੱਲ (newargs))
+	ਵਾਪਸ NULL_ਰੁੱਖ;
 
-      tree oldtype = TYPE_MAIN_VARIANT (TREE_VALUE (oldargs));
-      tree newtype = TREE_VALUE (newargs);
-      if (newtype == error_mark_node)
-       return NULL_TREE;
+      ਰੁੱਖ oldtype = TYPE_MAIN_VARIANT (ਰੁੱਖ_ਮੁੱਲ (oldargs));
+      ਰੁੱਖ newtype = ਰੁੱਖ_ਮੁੱਲ (newargs);
+      ਜੇ (newtype == error_mark_ਗੰਢ)
+       ਵਾਪਸ NULL_ਰੁੱਖ;
       newtype = TYPE_MAIN_VARIANT (newtype);
 
-      if (!types_close_enough_to_match (oldtype, newtype))
-	return NULL_TREE;
+      ਜੇ (!types_close_enough_ਮੰਜ਼ਿਲ_ਮੇਲ (oldtype, newtype))
+	ਵਾਪਸ NULL_ਰੁੱਖ;
 
-      unsigned j = nbst;
-      if (POINTER_TYPE_P (oldtype))
+      ਬਿਨਾਨਿਸ਼ਾਨੀ j = nbst;
+      ਜੇ (ਸੂਚਕ_TYPE_P (oldtype))
 	/* Iterate over well-known struct types like FILE (whose types
 	   aren't known to us) and compare the pointer to each to
 	   the pointer argument.  */
-	for (j = 0; j < nbst; ++j)
+	ਲਈ (j = 0; j < nbst; ++j)
 	  {
-	    if (TREE_VALUE (oldargs) != builtin_structptr_types[j].node)
-	      continue;
+	    ਜੇ (ਰੁੱਖ_ਮੁੱਲ (oldargs) != builtin_structptr_types[j].ਗੰਢ)
+	      ਜਾਰੀ;
 	    /* Store the first FILE* etc. argument type (whatever it is), and
 	       expect any subsequent declarations of file I/O etc. built-ins
 	       to refer to it rather than to fileptr_type_node etc. which is
 	       just void* (or const void*).  */
-	    if (last_structptr_types[j])
+	    ਜੇ (ਆਖਰੀ_structptr_types[j])
 	      {
-		if (!comptypes (last_structptr_types[j], newtype))
+		ਜੇ (!comptypes (ਆਖਰੀ_structptr_types[j], newtype))
 		  {
 		    *argno = i;
-		    *strict = last_structptr_types[j];
+		    *strict = ਆਖਰੀ_structptr_types[j];
 		  }
 	      }
-	    else
-	      last_structptr_types[j] = newtype;
-	    break;
+	    ਨਹੀਂਤਾਂ
+	      ਆਖਰੀ_structptr_types[j] = newtype;
+	    ਰੋਕੋ;
 	  }
 
-      if (j == nbst && !comptypes (oldtype, newtype))
+      ਜੇ (j == nbst && !comptypes (oldtype, newtype))
 	{
-	  if (POINTER_TYPE_P (oldtype))
+	  ਜੇ (ਸੂਚਕ_TYPE_P (oldtype))
 	    {
 	      /* For incompatible pointers, only reject differences in
 		 the unqualified variants of the referenced types but
 		 consider differences in qualifiers as benign (report
 		 those to caller via *STRICT below).  */
-	      tree oldref = TYPE_MAIN_VARIANT (TREE_TYPE (oldtype));
-	      tree newref = TYPE_MAIN_VARIANT (TREE_TYPE (newtype));
-	      if (!comptypes (oldref, newref))
-		return NULL_TREE;
+	      ਰੁੱਖ oldref = TYPE_MAIN_VARIANT (ਰੁੱਖ_TYPE (oldtype));
+	      ਰੁੱਖ newref = TYPE_MAIN_VARIANT (ਰੁੱਖ_TYPE (newtype));
+	      ਜੇ (!comptypes (oldref, newref))
+		ਵਾਪਸ NULL_ਰੁੱਖ;
 	    }
 
-	  if (!*strict)
+	  ਜੇ (!*strict)
 	    {
 	      *argno = i;
 	      *strict = oldtype;
 	    }
 	}
 
-      oldargs = TREE_CHAIN (oldargs);
-      newargs = TREE_CHAIN (newargs);
+      oldargs = ਰੁੱਖ_CHAIN (oldargs);
+      newargs = ਰੁੱਖ_CHAIN (newargs);
     }
 
-  tree trytype = c_build_function_type (newrettype, tryargs);
+  ਰੁੱਖ trytype = c_build_function_type (newrettype, tryargs);
 
   /* Allow declaration to change transaction_safe attribute.  */
-  tree oldattrs = TYPE_ATTRIBUTES (oldtype);
-  tree oldtsafe = lookup_attribute ("transaction_safe", oldattrs);
-  tree newattrs = TYPE_ATTRIBUTES (newtype);
-  tree newtsafe = lookup_attribute ("transaction_safe", newattrs);
-  if (oldtsafe && !newtsafe)
+  ਰੁੱਖ oldattrs = TYPE_ਗੁਣ (oldtype);
+  ਰੁੱਖ oldtsafe = lookup_attribute ("transaction_safe", oldattrs);
+  ਰੁੱਖ newattrs = TYPE_ਗੁਣ (newtype);
+  ਰੁੱਖ newtsafe = lookup_attribute ("transaction_safe", newattrs);
+  ਜੇ (oldtsafe && !newtsafe)
     oldattrs = remove_attribute ("transaction_safe", oldattrs);
-  else if (newtsafe && !oldtsafe)
-    oldattrs = tree_cons (get_identifier ("transaction_safe"),
-			  NULL_TREE, oldattrs);
+  ਨਹੀਂਤਾਂ ਜੇ (newtsafe && !oldtsafe)
+    oldattrs = ਰੁੱਖ_cons (get_identifier ("transaction_safe"),
+			  NULL_ਰੁੱਖ, oldattrs);
 
-  return c_build_type_attribute_variant (trytype, oldattrs);
+  ਵਾਪਸ c_build_type_attribute_variant (trytype, oldattrs);
 }
 
 /* Subroutine of diagnose_mismatched_decls.  Check for function type
    mismatch involving an empty arglist vs a nonempty one and give clearer
    diagnostics.  */
-static void
-diagnose_arglist_conflict (tree newdecl, tree olddecl,
-			   tree newtype, tree oldtype)
+ਸਥਿਰ ਖਾਲੀ
+diagnose_arglist_conflict (ਰੁੱਖ newdecl, ਰੁੱਖ olddecl,
+			   ਰੁੱਖ newtype, ਰੁੱਖ oldtype)
 {
-  tree t;
+  ਰੁੱਖ t;
 
-  if (TREE_CODE (olddecl) != FUNCTION_DECL
-      || !comptypes (TREE_TYPE (oldtype), TREE_TYPE (newtype))
-      || !((!prototype_p (oldtype) && DECL_INITIAL (olddecl) == NULL_TREE)
-	   || (!prototype_p (newtype) && DECL_INITIAL (newdecl) == NULL_TREE)))
-    return;
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (olddecl) != FUNCTION_DECL
+      || !comptypes (ਰੁੱਖ_TYPE (oldtype), ਰੁੱਖ_TYPE (newtype))
+      || !((!prototype_p (oldtype) && DECL_INITIAL (olddecl) == NULL_ਰੁੱਖ)
+	   || (!prototype_p (newtype) && DECL_INITIAL (newdecl) == NULL_ਰੁੱਖ)))
+    ਵਾਪਸ;
 
   t = TYPE_ARG_TYPES (oldtype);
-  if (t == NULL_TREE)
+  ਜੇ (t == NULL_ਰੁੱਖ)
     t = TYPE_ARG_TYPES (newtype);
-  for (; t; t = TREE_CHAIN (t))
+  ਲਈ (; t; t = ਰੁੱਖ_CHAIN (t))
     {
-      tree type = TREE_VALUE (t);
+      ਰੁੱਖ type = ਰੁੱਖ_ਮੁੱਲ (t);
 
-      if (TREE_CHAIN (t) == NULL_TREE
-	  && TYPE_MAIN_VARIANT (type) != void_type_node)
+      ਜੇ (ਰੁੱਖ_CHAIN (t) == NULL_ਰੁੱਖ
+	  && TYPE_MAIN_VARIANT (type) != void_type_ਗੰਢ)
 	{
-	  inform (input_location, "a parameter list with an ellipsis "
+	  inform (ਨਿਵੇਸ਼_location, "a parameter list with an ellipsis "
 		  "cannot match an empty parameter name list declaration");
-	  break;
+	  ਰੋਕੋ;
 	}
 
-      if (!error_operand_p (type)
-	  && c_type_promotes_to (type) != type)
+      ਜੇ (!error_ਸੰਕਾਰਜ_p (type)
+	  && c_type_promotes_ਮੰਜ਼ਿਲ (type) != type)
 	{
-	  inform (input_location, "an argument type that has a default "
+	  inform (ਨਿਵੇਸ਼_location, "an argument type that has a default "
 		  "promotion cannot match an empty parameter name list "
 		  "declaration");
-	  break;
+	  ਰੋਕੋ;
 	}
     }
 }
@@ -1988,25 +1988,25 @@ diagnose_arglist_conflict (tree newdecl, tree olddecl,
    old-style function definition, NEWDECL is a prototype declaration.
    Diagnose inconsistencies in the argument list.  Returns TRUE if
    the prototype is compatible, FALSE if not.  */
-static bool
-validate_proto_after_old_defn (tree newdecl, tree newtype, tree oldtype)
+ਸਥਿਰ ਤਾਰਕਿਕ
+validate_proto_after_old_defn (ਰੁੱਖ newdecl, ਰੁੱਖ newtype, ਰੁੱਖ oldtype)
 {
-  tree newargs, oldargs;
-  int i;
+  ਰੁੱਖ newargs, oldargs;
+  ਪੂਰਨ i;
 
-#define END_OF_ARGLIST(t) ((t) == void_type_node)
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ ਸਿਰਾ_ਦਾ_ARGLIST(t) ((t) == void_type_ਗੰਢ)
 
   oldargs = TYPE_ACTUAL_ARG_TYPES (oldtype);
   newargs = TYPE_ARG_TYPES (newtype);
   i = 1;
 
-  for (;;)
+  ਲਈ (;;)
     {
-      tree oldargtype = TREE_VALUE (oldargs);
-      tree newargtype = TREE_VALUE (newargs);
+      ਰੁੱਖ oldargtype = ਰੁੱਖ_ਮੁੱਲ (oldargs);
+      ਰੁੱਖ newargtype = ਰੁੱਖ_ਮੁੱਲ (newargs);
 
-      if (oldargtype == error_mark_node || newargtype == error_mark_node)
-	return false;
+      ਜੇ (oldargtype == error_mark_ਗੰਢ || newargtype == error_mark_ਗੰਢ)
+	ਵਾਪਸ ਝੂਠ;
 
       oldargtype = (TYPE_ATOMIC (oldargtype)
 		    ? c_build_qualified_type (TYPE_MAIN_VARIANT (oldargtype),
@@ -2017,36 +2017,36 @@ validate_proto_after_old_defn (tree newdecl, tree newtype, tree oldtype)
 					      TYPE_QUAL_ATOMIC)
 		    : TYPE_MAIN_VARIANT (newargtype));
 
-      if (END_OF_ARGLIST (oldargtype) && END_OF_ARGLIST (newargtype))
-	break;
+      ਜੇ (ਸਿਰਾ_ਦਾ_ARGLIST (oldargtype) && ਸਿਰਾ_ਦਾ_ARGLIST (newargtype))
+	ਰੋਕੋ;
 
       /* Reaching the end of just one list means the two decls don't
 	 agree on the number of arguments.  */
-      if (END_OF_ARGLIST (oldargtype))
+      ਜੇ (ਸਿਰਾ_ਦਾ_ARGLIST (oldargtype))
 	{
 	  error ("prototype for %q+D declares more arguments "
 		 "than previous old-style definition", newdecl);
-	  return false;
+	  ਵਾਪਸ ਝੂਠ;
 	}
-      else if (END_OF_ARGLIST (newargtype))
+      ਨਹੀਂਤਾਂ ਜੇ (ਸਿਰਾ_ਦਾ_ARGLIST (newargtype))
 	{
 	  error ("prototype for %q+D declares fewer arguments "
 		 "than previous old-style definition", newdecl);
-	  return false;
+	  ਵਾਪਸ ਝੂਠ;
 	}
 
       /* Type for passing arg must be consistent with that declared
 	 for the arg.  */
-      else if (!comptypes (oldargtype, newargtype))
+      ਨਹੀਂਤਾਂ ਜੇ (!comptypes (oldargtype, newargtype))
 	{
 	  error ("prototype for %q+D declares argument %d"
 		 " with incompatible type",
 		 newdecl, i);
-	  return false;
+	  ਵਾਪਸ ਝੂਠ;
 	}
 
-      oldargs = TREE_CHAIN (oldargs);
-      newargs = TREE_CHAIN (newargs);
+      oldargs = ਰੁੱਖ_CHAIN (oldargs);
+      newargs = ਰੁੱਖ_CHAIN (newargs);
       i++;
     }
 
@@ -2054,82 +2054,82 @@ validate_proto_after_old_defn (tree newdecl, tree newtype, tree oldtype)
      for this poor-style construct.  */
   warning (0, "prototype for %q+D follows non-prototype definition",
 	   newdecl);
-  return true;
-#undef END_OF_ARGLIST
+  ਵਾਪਸ ਸੱਚ;
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ ਸਿਰਾ_ਦਾ_ARGLIST
 }
 
 /* Subroutine of diagnose_mismatched_decls.  Report the location of DECL,
    first in a pair of mismatched declarations, using the diagnostic
    function DIAG.  */
-static void
-locate_old_decl (tree decl)
+ਸਥਿਰ ਖਾਲੀ
+locate_old_decl (ਰੁੱਖ decl)
 {
-  if (TREE_CODE (decl) == FUNCTION_DECL
-      && fndecl_built_in_p (decl)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) == FUNCTION_DECL
+      && fndecl_built_ਵਿੱਚ_p (decl)
       && !C_DECL_DECLARED_BUILTIN (decl))
     ;
-  else if (DECL_INITIAL (decl))
-    inform (input_location,
+  ਨਹੀਂਤਾਂ ਜੇ (DECL_INITIAL (decl))
+    inform (ਨਿਵੇਸ਼_location,
 	    "previous definition of %q+D with type %qT",
-	    decl, TREE_TYPE (decl));
-  else if (C_DECL_IMPLICIT (decl))
-    inform (input_location,
+	    decl, ਰੁੱਖ_TYPE (decl));
+  ਨਹੀਂਤਾਂ ਜੇ (C_DECL_IMPLICIT (decl))
+    inform (ਨਿਵੇਸ਼_location,
 	    "previous implicit declaration of %q+D with type %qT",
-	    decl, TREE_TYPE (decl));
-  else
-    inform (input_location,
+	    decl, ਰੁੱਖ_TYPE (decl));
+  ਨਹੀਂਤਾਂ
+    inform (ਨਿਵੇਸ਼_location,
 	    "previous declaration of %q+D with type %qT",
-	    decl, TREE_TYPE (decl));
+	    decl, ਰੁੱਖ_TYPE (decl));
 }
 
 
 /* Helper function.  For a tagged type, it finds the declaration
    for a visible tag declared in the same scope if such a
    declaration exists.  */
-static tree
-previous_tag (tree type)
+ਸਥਿਰ ਰੁੱਖ
+ਪਿਛਲਾ_ਟੈਗ (ਰੁੱਖ type)
 {
-  struct c_binding *b = NULL;
-  tree name = c_type_tag (type);
+  ਬਣਤਰ c_binding *b = ਨਿਰਾ;
+  ਰੁੱਖ name = c_type_ਟੈਗ (type);
 
-  if (name)
-    b = I_TAG_BINDING (name);
+  ਜੇ (name)
+    b = I_ਟੈਗ_BINDING (name);
 
-  if (b)
+  ਜੇ (b)
     b = b->shadowed;
 
-  if (b && B_IN_CURRENT_SCOPE (b))
-    return b->decl;
+  ਜੇ (b && B_ਵਿੱਚ_CURRENT_SCOPE (b))
+    ਵਾਪਸ b->decl;
 
-  return NULL_TREE;
+  ਵਾਪਸ NULL_ਰੁੱਖ;
 }
 
 /* Subroutine to mark functions as versioned when using the attribute
    'target_version'.  */
 
-static void
-maybe_mark_function_versioned (tree decl)
+ਸਥਿਰ ਖਾਲੀ
+maybe_mark_function_versioned (ਰੁੱਖ decl)
 {
-  if (!DECL_FUNCTION_VERSIONED (decl))
+  ਜੇ (!DECL_FUNCTION_VERSIONED (decl))
     {
       /* Check if the name of the function has been overridden.  */
-      if (DECL_ASSEMBLER_NAME_SET_P (decl)
-	  && IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (decl))[0] == '*')
-	error_at (DECL_SOURCE_LOCATION (decl),
+      ਜੇ (DECL_ASSEMBLER_NAME_ਸੈੱਟ_P (decl)
+	  && IDENTIFIER_ਸੂਚਕ (DECL_ASSEMBLER_NAME (decl))[0] == '*')
+	error_at (DECL_ਸਰੋਤ_LOCATION (decl),
 		  "cannot use function multiversioning on a renamed function");
 
       /* We need to insert function version now to make sure the correct
 	 pre-mangled assembler name is recorded.  */
-      cgraph_node *node = cgraph_node::get_create (decl);
+      cgraph_ਗੰਢ *ਗੰਢ = cgraph_ਗੰਢ::get_create (decl);
 
-      if (!node->function_version ())
-	node->insert_new_function_version ();
+      ਜੇ (!ਗੰਢ->function_ਸੰਸਕਰਣ ())
+	ਗੰਢ->ਪਾਓ_new_function_ਸੰਸਕਰਣ ();
 
       DECL_FUNCTION_VERSIONED (decl) = 1;
 
-      tree mangled_name
+      ਰੁੱਖ mangled_name
 	= targetm.mangle_decl_assembler_name (decl, DECL_NAME (decl));
-      SET_DECL_ASSEMBLER_NAME (decl, mangled_name);
+      ਸੈੱਟ_DECL_ASSEMBLER_NAME (decl, mangled_name);
     }
 }
 
@@ -2141,146 +2141,146 @@ maybe_mark_function_versioned (tree decl)
    *NEWTYPEP and *OLDTYPEP - these may have been adjusted from
    TREE_TYPE (NEWDECL, OLDDECL) respectively.  */
 
-static bool
-diagnose_mismatched_decls (tree newdecl, tree olddecl,
-			   tree *newtypep, tree *oldtypep)
+ਸਥਿਰ ਤਾਰਕਿਕ
+diagnose_mismatched_decls (ਰੁੱਖ newdecl, ਰੁੱਖ olddecl,
+			   ਰੁੱਖ *newtypep, ਰੁੱਖ *oldtypep)
 {
-  tree newtype, oldtype;
-  bool retval = true;
+  ਰੁੱਖ newtype, oldtype;
+  ਤਾਰਕਿਕ retval = ਸੱਚ;
 
-#define DECL_EXTERN_INLINE(DECL) (DECL_DECLARED_INLINE_P (DECL)  \
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ DECL_EXTERN_INLINE(DECL) (DECL_DECLARED_INLINE_P (DECL)  \
 				  && DECL_EXTERNAL (DECL))
 
   /* If we have error_mark_node for either decl or type, just discard
      the previous decl - we're in an error cascade already.  */
-  if (olddecl == error_mark_node || newdecl == error_mark_node)
-    return false;
-  *oldtypep = oldtype = TREE_TYPE (olddecl);
-  *newtypep = newtype = TREE_TYPE (newdecl);
-  if (oldtype == error_mark_node || newtype == error_mark_node)
-    return false;
+  ਜੇ (olddecl == error_mark_ਗੰਢ || newdecl == error_mark_ਗੰਢ)
+    ਵਾਪਸ ਝੂਠ;
+  *oldtypep = oldtype = ਰੁੱਖ_TYPE (olddecl);
+  *newtypep = newtype = ਰੁੱਖ_TYPE (newdecl);
+  ਜੇ (oldtype == error_mark_ਗੰਢ || newtype == error_mark_ਗੰਢ)
+    ਵਾਪਸ ਝੂਠ;
 
   /* Two different categories of symbol altogether.  This is an error
      unless OLDDECL is a builtin.  OLDDECL will be discarded in any case.  */
-  if (TREE_CODE (olddecl) != TREE_CODE (newdecl))
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (olddecl) != ਰੁੱਖ_ਕੋਡ (newdecl))
     {
-      if (!(TREE_CODE (olddecl) == FUNCTION_DECL
-	    && fndecl_built_in_p (olddecl)
+      ਜੇ (!(ਰੁੱਖ_ਕੋਡ (olddecl) == FUNCTION_DECL
+	    && fndecl_built_ਵਿੱਚ_p (olddecl)
 	    && !C_DECL_DECLARED_BUILTIN (olddecl)))
 	{
-	  auto_diagnostic_group d;
+	  auto_diagnostic_ਸਮੂਹ d;
 	  error ("%q+D redeclared as different kind of symbol", newdecl);
 	  locate_old_decl (olddecl);
 	}
-      else if (TREE_PUBLIC (newdecl))
+      ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਜਨਤਕ (newdecl))
 	warning (OPT_Wbuiltin_declaration_mismatch,
 		 "built-in function %q+D declared as non-function",
 		 newdecl);
-      else
+      ਨਹੀਂਤਾਂ
 	warning (OPT_Wshadow, "declaration of %q+D shadows "
 		 "a built-in function", newdecl);
-      return false;
+      ਵਾਪਸ ਝੂਠ;
     }
 
   /* Enumerators have no linkage, so may only be declared once in a
      given scope.  */
-  if (TREE_CODE (olddecl) == CONST_DECL)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (olddecl) == CONST_DECL)
     {
-      if (flag_isoc23
+      ਜੇ (flag_isoc23
 	  && TYPE_NAME (DECL_CONTEXT (newdecl))
 	  && DECL_CONTEXT (newdecl) != DECL_CONTEXT (olddecl)
 	  && TYPE_NAME (DECL_CONTEXT (newdecl)) == TYPE_NAME (DECL_CONTEXT (olddecl)))
 	{
-	  if (!simple_cst_equal (DECL_INITIAL (olddecl), DECL_INITIAL (newdecl)))
+	  ਜੇ (!simple_cst_equal (DECL_INITIAL (olddecl), DECL_INITIAL (newdecl)))
 	    {
-	      auto_diagnostic_group d;
+	      auto_diagnostic_ਸਮੂਹ d;
 	      error ("conflicting redeclaration of enumerator %q+D", newdecl);
 	      locate_old_decl (olddecl);
 	    }
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  auto_diagnostic_group d;
+	  auto_diagnostic_ਸਮੂਹ d;
 	  error ("redeclaration of enumerator %q+D", newdecl);
 	  locate_old_decl (olddecl);
 	}
-      return false;
+      ਵਾਪਸ ਝੂਠ;
     }
 
-  bool pedwarned = false;
-  bool warned = false;
-  bool enum_and_int_p = false;
-  auto_diagnostic_group d;
+  ਤਾਰਕਿਕ pedwarned = ਝੂਠ;
+  ਤਾਰਕਿਕ warned = ਝੂਠ;
+  ਤਾਰਕਿਕ enum_and_int_p = ਝੂਠ;
+  auto_diagnostic_ਸਮੂਹ d;
 
-  bool comptypes_result = comptypes_check_enum_int (oldtype, newtype,
+  ਤਾਰਕਿਕ comptypes_ਨਤੀਜਾ = comptypes_check_enum_int (oldtype, newtype,
 						    &enum_and_int_p);
-  if (!comptypes_result)
+  ਜੇ (!comptypes_ਨਤੀਜਾ)
     {
-      if (TREE_CODE (olddecl) == FUNCTION_DECL
-	  && fndecl_built_in_p (olddecl, BUILT_IN_NORMAL)
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (olddecl) == FUNCTION_DECL
+	  && fndecl_built_ਵਿੱਚ_p (olddecl, BUILT_ਵਿੱਚ_ਸਾਧਾਰਨ)
 	  && !C_DECL_DECLARED_BUILTIN (olddecl))
 	{
 	  /* Accept "harmless" mismatches in function types such
 	     as missing qualifiers or int vs long when they're the same
 	     size.  However, diagnose return and argument types that are
 	     incompatible according to language rules.  */
-	  tree mismatch_expect;
-	  unsigned mismatch_argno;
+	  ਰੁੱਖ mismatch_expect;
+	  ਬਿਨਾਨਿਸ਼ਾਨੀ mismatch_argno;
 
-	  tree trytype = match_builtin_function_types (newtype, oldtype,
+	  ਰੁੱਖ trytype = ਮੇਲ_builtin_function_types (newtype, oldtype,
 						       &mismatch_expect,
 						       &mismatch_argno);
 
-	  if (trytype && comptypes (newtype, trytype))
+	  ਜੇ (trytype && comptypes (newtype, trytype))
 	    *oldtypep = oldtype = trytype;
-	  else
+	  ਨਹੀਂਤਾਂ
 	    {
 	      /* If types don't match for a built-in, throw away the
 		 built-in.  No point in calling locate_old_decl here, it
 		 won't print anything.  */
-	      const char *header = header_for_builtin_fn (olddecl);
-	      location_t loc = DECL_SOURCE_LOCATION (newdecl);
-	      if (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
+	      ਅਚਲ ਅੱਖਰ *ਸਿਰਲੇਖ = ਸਿਰਲੇਖ_for_builtin_fn (olddecl);
+	      location_t loc = DECL_ਸਰੋਤ_LOCATION (newdecl);
+	      ਜੇ (warning_at (loc, OPT_Wbuiltin_declaration_mismatch,
 			      "conflicting types for built-in function %q+D; "
 			      "expected %qT",
 			      newdecl, oldtype)
-		  && header)
+		  && ਸਿਰਲੇਖ)
 		{
 		  /* Suggest the right header to include as the preferred
 		     solution rather than the spelling of the declaration.  */
-		  rich_location richloc (line_table, loc);
-		  maybe_add_include_fixit (&richloc, header, true);
+		  rich_location richloc (ਸਤਰ_ਸਾਰਣੀ, loc);
+		  maybe_ਜੋੜੋ_include_fixit (&richloc, ਸਿਰਲੇਖ, ਸੱਚ);
 		  inform (&richloc,
-			  "%qD is declared in header %qs", olddecl, header);
+			  "%qD is declared in header %qs", olddecl, ਸਿਰਲੇਖ);
 		}
-	      return false;
+	      ਵਾਪਸ ਝੂਠ;
 	    }
 
-	  if (mismatch_expect && extra_warnings)
+	  ਜੇ (mismatch_expect && extra_warnings)
 	    {
-	      location_t newloc = DECL_SOURCE_LOCATION (newdecl);
-	      bool warned = false;
-	      if (mismatch_argno)
+	      location_t newloc = DECL_ਸਰੋਤ_LOCATION (newdecl);
+	      ਤਾਰਕਿਕ warned = ਝੂਠ;
+	      ਜੇ (mismatch_argno)
 		warned = warning_at (newloc, OPT_Wbuiltin_declaration_mismatch,
 				     "mismatch in argument %u type of built-in "
 				     "function %qD; expected %qT",
 				     mismatch_argno, newdecl, mismatch_expect);
-	      else
+	      ਨਹੀਂਤਾਂ
 		warned = warning_at (newloc, OPT_Wbuiltin_declaration_mismatch,
 				     "mismatch in return type of built-in "
 				     "function %qD; expected %qT",
 				     newdecl, mismatch_expect);
-	      const char *header = header_for_builtin_fn (olddecl);
-	      if (warned && header)
+	      ਅਚਲ ਅੱਖਰ *ਸਿਰਲੇਖ = ਸਿਰਲੇਖ_for_builtin_fn (olddecl);
+	      ਜੇ (warned && ਸਿਰਲੇਖ)
 		{
-		  rich_location richloc (line_table, newloc);
-		  maybe_add_include_fixit (&richloc, header, true);
+		  rich_location richloc (ਸਤਰ_ਸਾਰਣੀ, newloc);
+		  maybe_ਜੋੜੋ_include_fixit (&richloc, ਸਿਰਲੇਖ, ਸੱਚ);
 		  inform (&richloc,
-			  "%qD is declared in header %qs", olddecl, header);
+			  "%qD is declared in header %qs", olddecl, ਸਿਰਲੇਖ);
 		}
 	    }
 	}
-      else if (TREE_CODE (olddecl) == FUNCTION_DECL
+      ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (olddecl) == FUNCTION_DECL
 	       && DECL_IS_UNDECLARED_BUILTIN (olddecl))
 	{
 	  /* A conflicting function declaration for a predeclared
@@ -2288,56 +2288,56 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	     these.  The new declaration silently overrides everything
 	     but the volatility (i.e. noreturn) indication.  See also
 	     below.  FIXME: Make Objective C use normal builtins.  */
-	  TREE_THIS_VOLATILE (newdecl) |= TREE_THIS_VOLATILE (olddecl);
-	  return false;
+	  ਰੁੱਖ_THIS_VOLATILE (newdecl) |= ਰੁੱਖ_THIS_VOLATILE (olddecl);
+	  ਵਾਪਸ ਝੂਠ;
 	}
       /* Permit void foo (...) to match int foo (...) if the latter is
 	 the definition and implicit int was used.  See
 	 c-torture/compile/920625-2.c.  */
-      else if (TREE_CODE (newdecl) == FUNCTION_DECL && DECL_INITIAL (newdecl)
-	       && TYPE_MAIN_VARIANT (TREE_TYPE (oldtype)) == void_type_node
-	       && TYPE_MAIN_VARIANT (TREE_TYPE (newtype)) == integer_type_node
+      ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL && DECL_INITIAL (newdecl)
+	       && TYPE_MAIN_VARIANT (ਰੁੱਖ_TYPE (oldtype)) == void_type_ਗੰਢ
+	       && TYPE_MAIN_VARIANT (ਰੁੱਖ_TYPE (newtype)) == integer_type_ਗੰਢ
 	       && C_FUNCTION_IMPLICIT_INT (newdecl) && !DECL_INITIAL (olddecl))
 	{
-	  pedwarned = pedwarn (input_location, 0,
+	  pedwarned = pedwarn (ਨਿਵੇਸ਼_location, 0,
 			       "conflicting types for %q+D", newdecl);
 	  /* Make sure we keep void as the return type.  */
-	  TREE_TYPE (newdecl) = *newtypep = newtype = oldtype;
+	  ਰੁੱਖ_TYPE (newdecl) = *newtypep = newtype = oldtype;
 	  C_FUNCTION_IMPLICIT_INT (newdecl) = 0;
 	}
       /* Permit void foo (...) to match an earlier call to foo (...) with
 	 no declared type (thus, implicitly int).  */
-      else if (TREE_CODE (newdecl) == FUNCTION_DECL
-	       && TYPE_MAIN_VARIANT (TREE_TYPE (newtype)) == void_type_node
-	       && TYPE_MAIN_VARIANT (TREE_TYPE (oldtype)) == integer_type_node
+      ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL
+	       && TYPE_MAIN_VARIANT (ਰੁੱਖ_TYPE (newtype)) == void_type_ਗੰਢ
+	       && TYPE_MAIN_VARIANT (ਰੁੱਖ_TYPE (oldtype)) == integer_type_ਗੰਢ
 	       && C_DECL_IMPLICIT (olddecl) && !DECL_INITIAL (olddecl))
 	{
-	  pedwarned = pedwarn (input_location, 0,
+	  pedwarned = pedwarn (ਨਿਵੇਸ਼_location, 0,
 			       "conflicting types for %q+D; have %qT",
 			       newdecl, newtype);
 	  /* Make sure we keep void as the return type.  */
-	  TREE_TYPE (olddecl) = *oldtypep = oldtype = newtype;
+	  ਰੁੱਖ_TYPE (olddecl) = *oldtypep = oldtype = newtype;
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  int new_quals = TYPE_QUALS (newtype);
-	  int old_quals = TYPE_QUALS (oldtype);
+	  ਪੂਰਨ new_quals = TYPE_QUALS (newtype);
+	  ਪੂਰਨ old_quals = TYPE_QUALS (oldtype);
 
-	  if (new_quals != old_quals)
+	  ਜੇ (new_quals != old_quals)
 	    {
 	      addr_space_t new_addr = DECODE_QUAL_ADDR_SPACE (new_quals);
 	      addr_space_t old_addr = DECODE_QUAL_ADDR_SPACE (old_quals);
-	      if (new_addr != old_addr)
+	      ਜੇ (new_addr != old_addr)
 		{
-		  if (ADDR_SPACE_GENERIC_P (new_addr))
+		  ਜੇ (ADDR_SPACE_GENERIC_P (new_addr))
 		    error ("conflicting named address spaces (generic vs %s) "
 			   "for %q+D",
 			   c_addr_space_name (old_addr), newdecl);
-		  else if (ADDR_SPACE_GENERIC_P (old_addr))
+		  ਨਹੀਂਤਾਂ ਜੇ (ADDR_SPACE_GENERIC_P (old_addr))
 		    error ("conflicting named address spaces (%s vs generic) "
 			   "for %q+D",
 			   c_addr_space_name (new_addr), newdecl);
-		  else
+		  ਨਹੀਂਤਾਂ
 		    error ("conflicting named address spaces (%s vs %s) "
 			   "for %q+D",
 			   c_addr_space_name (new_addr),
@@ -2345,58 +2345,58 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 			   newdecl);
 		}
 
-	      if (CLEAR_QUAL_ADDR_SPACE (new_quals)
+	      ਜੇ (CLEAR_QUAL_ADDR_SPACE (new_quals)
 		  != CLEAR_QUAL_ADDR_SPACE (old_quals))
 		error ("conflicting type qualifiers for %q+D", newdecl);
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    {
-	      if (TREE_CODE (olddecl) == FUNCTION_DECL)
+	      ਜੇ (ਰੁੱਖ_ਕੋਡ (olddecl) == FUNCTION_DECL)
 		{
-		  tree attrs = TYPE_ATTRIBUTES (TREE_TYPE (olddecl));
-		  if (attrs && !TYPE_ATTRIBUTES (TREE_TYPE (newdecl)))
+		  ਰੁੱਖ attrs = TYPE_ਗੁਣ (ਰੁੱਖ_TYPE (olddecl));
+		  ਜੇ (attrs && !TYPE_ਗੁਣ (ਰੁੱਖ_TYPE (newdecl)))
 		    {
 		      /* Similar to the C++ front-end, for FUNCTION_DECL,
 			 if OLDDECL has attributes and NEWDECL doesn't,
 			 try the type with OLDDECL attributes.  */
-		      tree rettype = TREE_TYPE (newtype);
-		      tree tryargs = TYPE_ARG_TYPES (newtype);
-		      tree trytype = c_build_function_type (rettype,
+		      ਰੁੱਖ rettype = ਰੁੱਖ_TYPE (newtype);
+		      ਰੁੱਖ tryargs = TYPE_ARG_TYPES (newtype);
+		      ਰੁੱਖ trytype = c_build_function_type (rettype,
 							    tryargs);
 		      trytype = c_build_type_attribute_variant (trytype,
 								attrs);
-		      if (comptypes (oldtype, trytype))
+		      ਜੇ (comptypes (oldtype, trytype))
 			{
 			  *newtypep = newtype = trytype;
-			  comptypes_result = true;
+			  comptypes_ਨਤੀਜਾ = ਸੱਚ;
 			}
 		    }
 		}
 
-	      if (!comptypes_result)
+	      ਜੇ (!comptypes_ਨਤੀਜਾ)
 		error ("conflicting types for %q+D; have %qT", newdecl,
 		       newtype);
 	    }
-	  if (!comptypes_result)
+	  ਜੇ (!comptypes_ਨਤੀਜਾ)
 	    {
 	      diagnose_arglist_conflict (newdecl, olddecl, newtype,
 					 oldtype);
 	      locate_old_decl (olddecl);
-	      return false;
+	      ਵਾਪਸ ਝੂਠ;
 	    }
 	}
     }
   /* Warn about enum/integer type mismatches.  They are compatible types
      (C23 6.7.2.2/5), but may pose portability problems.  */
-  else if (enum_and_int_p
-	   && TREE_CODE (newdecl) != TYPE_DECL
+  ਨਹੀਂਤਾਂ ਜੇ (enum_and_int_p
+	   && ਰੁੱਖ_ਕੋਡ (newdecl) != TYPE_DECL
 	   /* Don't warn about acc_on_device built-in redeclaration,
 	      the built-in is declared with int rather than enum because
 	      the enum isn't intrinsic.  */
-	   && !(TREE_CODE (olddecl) == FUNCTION_DECL
-		&& fndecl_built_in_p (olddecl, BUILT_IN_ACC_ON_DEVICE)
+	   && !(ਰੁੱਖ_ਕੋਡ (olddecl) == FUNCTION_DECL
+		&& fndecl_built_ਵਿੱਚ_p (olddecl, BUILT_ਵਿੱਚ_ACC_ON_DEVICE)
 		&& !C_DECL_DECLARED_BUILTIN (olddecl)))
-    warned = warning_at (DECL_SOURCE_LOCATION (newdecl),
+    warned = warning_at (DECL_ਸਰੋਤ_LOCATION (newdecl),
 			 OPT_Wenum_int_mismatch,
 			 "conflicting types for %q+D due to enum/integer "
 			 "mismatch; have %qT", newdecl, newtype);
@@ -2406,32 +2406,32 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
      header.  (Conflicting redeclarations were handled above.)  This
      is allowed for C11 if the types are the same, not just
      compatible.  */
-  if (TREE_CODE (newdecl) == TYPE_DECL)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == TYPE_DECL)
     {
-      if (!comptypes_same_p (oldtype, newtype))
+      ਜੇ (!comptypes_same_p (oldtype, newtype))
 	{
 	  error ("redefinition of typedef %q+D with different type", newdecl);
 	  locate_old_decl (olddecl);
-	  return false;
+	  ਵਾਪਸ ਝੂਠ;
 	}
 
-      if (DECL_IN_SYSTEM_HEADER (newdecl)
-	  || DECL_IN_SYSTEM_HEADER (olddecl)
+      ਜੇ (DECL_ਵਿੱਚ_SYSTEM_ਸਿਰਲੇਖ (newdecl)
+	  || DECL_ਵਿੱਚ_SYSTEM_ਸਿਰਲੇਖ (olddecl)
 	  || warning_suppressed_p (newdecl, OPT_Wpedantic)
 	  || warning_suppressed_p (olddecl, OPT_Wpedantic))
-	return true;  /* Allow OLDDECL to continue in use.  */
+	ਵਾਪਸ ਸੱਚ;  /* Allow OLDDECL to continue in use.  */
 
-      if (c_type_variably_modified_p (newtype))
+      ਜੇ (c_type_variably_modified_p (newtype))
 	{
 	  error ("redefinition of typedef %q+D with variably modified type",
 		 newdecl);
 	  locate_old_decl (olddecl);
 	}
-      else if (pedwarn_c99 (input_location, OPT_Wpedantic,
+      ਨਹੀਂਤਾਂ ਜੇ (pedwarn_c99 (ਨਿਵੇਸ਼_location, OPT_Wpedantic,
 			    "redefinition of typedef %q+D", newdecl))
 	locate_old_decl (olddecl);
 
-      return true;
+      ਵਾਪਸ ਸੱਚ;
     }
 
   /* Function declarations can either be 'static' or 'extern' (no
@@ -2442,77 +2442,77 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
      one is not.  The non- extern-inline definition supersedes the
      extern-inline definition.  */
 
-  else if (TREE_CODE (newdecl) == FUNCTION_DECL)
+  ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL)
     {
       /* If you declare a built-in function name as static, or
 	 define the built-in with an old-style definition (so we
 	 can't validate the argument list) the built-in definition is
 	 overridden, but optionally warn this was a bad choice of name.  */
-      if (fndecl_built_in_p (olddecl)
+      ਜੇ (fndecl_built_ਵਿੱਚ_p (olddecl)
 	  && !C_DECL_DECLARED_BUILTIN (olddecl))
 	{
-	  if (!TREE_PUBLIC (newdecl)
+	  ਜੇ (!ਰੁੱਖ_ਜਨਤਕ (newdecl)
 	      || (DECL_INITIAL (newdecl)
-		  && !prototype_p (TREE_TYPE (newdecl))))
+		  && !prototype_p (ਰੁੱਖ_TYPE (newdecl))))
 	    {
-	      warning_at (DECL_SOURCE_LOCATION (newdecl),
+	      warning_at (DECL_ਸਰੋਤ_LOCATION (newdecl),
 			  OPT_Wshadow, "declaration of %qD shadows "
 			  "a built-in function", newdecl);
 	      /* Discard the old built-in function.  */
-	      return false;
+	      ਵਾਪਸ ਝੂਠ;
 	    }
 
-	  if (!prototype_p (TREE_TYPE (newdecl)))
+	  ਜੇ (!prototype_p (ਰੁੱਖ_TYPE (newdecl)))
 	    {
 	      /* Set for built-ins that take no arguments.  */
-	      bool func_void_args = false;
-	      if (tree at = TYPE_ARG_TYPES (oldtype))
-		func_void_args = VOID_TYPE_P (TREE_VALUE (at));
+	      ਤਾਰਕਿਕ func_void_ਦਲੀਲਾਂ = ਝੂਠ;
+	      ਜੇ (ਰੁੱਖ at = TYPE_ARG_TYPES (oldtype))
+		func_void_ਦਲੀਲਾਂ = VOID_TYPE_P (ਰੁੱਖ_ਮੁੱਲ (at));
 
-	      if (extra_warnings && !func_void_args)
-		warning_at (DECL_SOURCE_LOCATION (newdecl),
+	      ਜੇ (extra_warnings && !func_void_ਦਲੀਲਾਂ)
+		warning_at (DECL_ਸਰੋਤ_LOCATION (newdecl),
 			    OPT_Wbuiltin_declaration_mismatch,
 			    "declaration of built-in function %qD without "
 			    "a prototype; expected %qT",
-			    newdecl, TREE_TYPE (olddecl));
+			    newdecl, ਰੁੱਖ_TYPE (olddecl));
 	    }
 	}
 
-      if (DECL_INITIAL (newdecl))
+      ਜੇ (DECL_INITIAL (newdecl))
 	{
-	  if (DECL_INITIAL (olddecl))
+	  ਜੇ (DECL_INITIAL (olddecl))
 	    {
 	      /* If the new declaration isn't overriding an extern inline
 		 reject the new decl. In c99, no overriding is allowed
 		 in the same translation unit.  */
-	      if (!DECL_EXTERN_INLINE (olddecl)
+	      ਜੇ (!DECL_EXTERN_INLINE (olddecl)
 		  || DECL_EXTERN_INLINE (newdecl)
 		  || (!flag_gnu89_inline
 		      && (!DECL_DECLARED_INLINE_P (olddecl)
 			  || !lookup_attribute ("gnu_inline",
-						DECL_ATTRIBUTES (olddecl)))
+						DECL_ਗੁਣ (olddecl)))
 		      && (!DECL_DECLARED_INLINE_P (newdecl)
 			  || !lookup_attribute ("gnu_inline",
-						DECL_ATTRIBUTES (newdecl)))))
+						DECL_ਗੁਣ (newdecl)))))
 		{
-		  auto_diagnostic_group d;
+		  auto_diagnostic_ਸਮੂਹ d;
 		  error ("redefinition of %q+D", newdecl);
 		  locate_old_decl (olddecl);
-		  return false;
+		  ਵਾਪਸ ਝੂਠ;
 		}
 	    }
 	}
       /* If we have a prototype after an old-style function definition,
 	 the argument types must be checked specially.  */
-      else if (DECL_INITIAL (olddecl)
+      ਨਹੀਂਤਾਂ ਜੇ (DECL_INITIAL (olddecl)
 	       && !prototype_p (oldtype) && prototype_p (newtype)
 	       && TYPE_ACTUAL_ARG_TYPES (oldtype))
 	{
-	  auto_diagnostic_group d;
-	  if (!validate_proto_after_old_defn (newdecl, newtype, oldtype))
+	  auto_diagnostic_ਸਮੂਹ d;
+	  ਜੇ (!validate_proto_after_old_defn (newdecl, newtype, oldtype))
 	    {
 	      locate_old_decl (olddecl);
-	      return false;
+	      ਵਾਪਸ ਝੂਠ;
 	    }
 	}
       /* A non-static declaration (even an "extern") followed by a
@@ -2524,34 +2524,34 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	 some effects (see e.g.  what unwind-dw2-fde-glibc.c does to
 	 the definition of _Unwind_Find_FDE in unwind-dw2-fde.c), but
 	 we do diagnose it if -Wtraditional.  */
-      if (TREE_PUBLIC (olddecl) && !TREE_PUBLIC (newdecl))
+      ਜੇ (ਰੁੱਖ_ਜਨਤਕ (olddecl) && !ਰੁੱਖ_ਜਨਤਕ (newdecl))
 	{
 	  /* Two exceptions to the rule.  If olddecl is an extern
 	     inline, or a predeclared function that isn't actually
 	     built in, newdecl silently overrides olddecl.  The latter
 	     occur only in Objective C; see also above.  (FIXME: Make
 	     Objective C use normal builtins.)  */
-	  if (!DECL_IS_UNDECLARED_BUILTIN (olddecl)
+	  ਜੇ (!DECL_IS_UNDECLARED_BUILTIN (olddecl)
 	      && !DECL_EXTERN_INLINE (olddecl))
 	    {
-	      auto_diagnostic_group d;
+	      auto_diagnostic_ਸਮੂਹ d;
 	      error ("static declaration of %q+D follows "
 		     "non-static declaration", newdecl);
 	      locate_old_decl (olddecl);
 	    }
-	  return false;
+	  ਵਾਪਸ ਝੂਠ;
 	}
-      else if (TREE_PUBLIC (newdecl) && !TREE_PUBLIC (olddecl))
+      ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਜਨਤਕ (newdecl) && !ਰੁੱਖ_ਜਨਤਕ (olddecl))
 	{
-	  if (DECL_CONTEXT (olddecl))
+	  ਜੇ (DECL_CONTEXT (olddecl))
 	    {
-	      auto_diagnostic_group d;
+	      auto_diagnostic_ਸਮੂਹ d;
 	      error ("non-static declaration of %q+D follows "
 		     "static declaration", newdecl);
 	      locate_old_decl (olddecl);
-	      return false;
+	      ਵਾਪਸ ਝੂਠ;
 	    }
-	  else if (warn_traditional)
+	  ਨਹੀਂਤਾਂ ਜੇ (warn_traditional)
 	    {
 	      warned |= warning (OPT_Wtraditional,
 				 "non-static declaration of %q+D "
@@ -2561,50 +2561,50 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 
       /* Make sure gnu_inline attribute is either not present, or
 	 present on all inline decls.  */
-      if (DECL_DECLARED_INLINE_P (olddecl)
+      ਜੇ (DECL_DECLARED_INLINE_P (olddecl)
 	  && DECL_DECLARED_INLINE_P (newdecl))
 	{
-	  bool newa = lookup_attribute ("gnu_inline",
-					DECL_ATTRIBUTES (newdecl)) != NULL;
-	  bool olda = lookup_attribute ("gnu_inline",
-					DECL_ATTRIBUTES (olddecl)) != NULL;
-	  if (newa != olda)
+	  ਤਾਰਕਿਕ newa = lookup_attribute ("gnu_inline",
+					DECL_ਗੁਣ (newdecl)) != ਨਿਰਾ;
+	  ਤਾਰਕਿਕ olda = lookup_attribute ("gnu_inline",
+					DECL_ਗੁਣ (olddecl)) != ਨਿਰਾ;
+	  ਜੇ (newa != olda)
 	    {
-	      auto_diagnostic_group d;
-	      error_at (input_location, "%<gnu_inline%> attribute present on %q+D",
+	      auto_diagnostic_ਸਮੂਹ d;
+	      error_at (ਨਿਵੇਸ਼_location, "%<gnu_inline%> attribute present on %q+D",
 			newa ? newdecl : olddecl);
-	      error_at (DECL_SOURCE_LOCATION (newa ? olddecl : newdecl),
+	      error_at (DECL_ਸਰੋਤ_LOCATION (newa ? olddecl : newdecl),
 			"but not here");
 	    }
 	}
       /* Check if these are unmergeable overlapping FMV declarations.  */
-      if (!TARGET_HAS_FMV_TARGET_ATTRIBUTE
+      ਜੇ (!ਨਿਸ਼ਾਨਾ_HAS_FMV_ਨਿਸ਼ਾਨਾ_ATTRIBUTE
 	  && diagnose_versioned_decls (olddecl, newdecl))
-	return false;
+	ਵਾਪਸ ਝੂਠ;
     }
-  else if (VAR_P (newdecl))
+  ਨਹੀਂਤਾਂ ਜੇ (VAR_P (newdecl))
     {
       /* Only variables can be thread-local, and all declarations must
 	 agree on this property.  */
-      if (C_DECL_THREADPRIVATE_P (olddecl) && !DECL_THREAD_LOCAL_P (newdecl))
+      ਜੇ (C_DECL_THREADPRIVATE_P (olddecl) && !DECL_THREAD_LOCAL_P (newdecl))
 	{
 	  /* Nothing to check.  Since OLDDECL is marked threadprivate
 	     and NEWDECL does not have a thread-local attribute, we
 	     will merge the threadprivate attribute into NEWDECL.  */
 	  ;
 	}
-      else if (DECL_THREAD_LOCAL_P (newdecl) != DECL_THREAD_LOCAL_P (olddecl))
+      ਨਹੀਂਤਾਂ ਜੇ (DECL_THREAD_LOCAL_P (newdecl) != DECL_THREAD_LOCAL_P (olddecl))
 	{
-	  auto_diagnostic_group d;
-	  if (DECL_THREAD_LOCAL_P (newdecl))
+	  auto_diagnostic_ਸਮੂਹ d;
+	  ਜੇ (DECL_THREAD_LOCAL_P (newdecl))
 	    error ("thread-local declaration of %q+D follows "
 		   "non-thread-local declaration", newdecl);
-	  else
+	  ਨਹੀਂਤਾਂ
 	    error ("non-thread-local declaration of %q+D follows "
 		   "thread-local declaration", newdecl);
 
 	  locate_old_decl (olddecl);
-	  return false;
+	  ਵਾਪਸ ਝੂਠ;
 	}
 
       /* Multiple initialized definitions are not allowed (6.9p3,5).
@@ -2616,16 +2616,16 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	 definitions only if they also used static, but without saying
 	 explicitly whether or not other cases count as
 	 definitions at all.  */
-      if ((DECL_INITIAL (newdecl) && DECL_INITIAL (olddecl))
+      ਜੇ ((DECL_INITIAL (newdecl) && DECL_INITIAL (olddecl))
 	  || (flag_isoc23
 	      && DECL_THREAD_LOCAL_P (newdecl)
 	      && !DECL_EXTERNAL (newdecl)
 	      && !DECL_EXTERNAL (olddecl)))
 	{
-	  auto_diagnostic_group d;
+	  auto_diagnostic_ਸਮੂਹ d;
 	  error ("redefinition of %q+D", newdecl);
 	  locate_old_decl (olddecl);
-	  return false;
+	  ਵਾਪਸ ਝੂਠ;
 	}
 
       /* Objects declared at file scope: if the first declaration had
@@ -2636,73 +2636,73 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	 case the composite declaration still has internal linkage).
 	 As for function declarations, we warn about the static-then-
 	 extern case only for -Wtraditional.  See generally 6.2.2p3-5,7.  */
-      if (DECL_FILE_SCOPE_P (newdecl)
-	  && TREE_PUBLIC (newdecl) != TREE_PUBLIC (olddecl))
+      ਜੇ (DECL_FILE_SCOPE_P (newdecl)
+	  && ਰੁੱਖ_ਜਨਤਕ (newdecl) != ਰੁੱਖ_ਜਨਤਕ (olddecl))
 	{
-	  if (DECL_EXTERNAL (newdecl))
+	  ਜੇ (DECL_EXTERNAL (newdecl))
 	    {
-	      if (!DECL_FILE_SCOPE_P (olddecl))
+	      ਜੇ (!DECL_FILE_SCOPE_P (olddecl))
 		{
-		  auto_diagnostic_group d;
+		  auto_diagnostic_ਸਮੂਹ d;
 		  error ("extern declaration of %q+D follows "
 			 "declaration with no linkage", newdecl);
 		  locate_old_decl (olddecl);
-		  return false;
+		  ਵਾਪਸ ਝੂਠ;
 		}
-	      else if (warn_traditional)
+	      ਨਹੀਂਤਾਂ ਜੇ (warn_traditional)
 		{
 		  warned |= warning (OPT_Wtraditional,
 				     "non-static declaration of %q+D "
 				     "follows static declaration", newdecl);
 		}
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    {
-	      auto_diagnostic_group d;
-	      if (TREE_PUBLIC (newdecl))
+	      auto_diagnostic_ਸਮੂਹ d;
+	      ਜੇ (ਰੁੱਖ_ਜਨਤਕ (newdecl))
 		error ("non-static declaration of %q+D follows "
 		       "static declaration", newdecl);
-	      else
+	      ਨਹੀਂਤਾਂ
 		error ("static declaration of %q+D follows "
 		       "non-static declaration", newdecl);
 
 	      locate_old_decl (olddecl);
-	      return false;
+	      ਵਾਪਸ ਝੂਠ;
 	    }
 	}
       /* Two objects with the same name declared at the same block
 	 scope must both be external references (6.7p3).  */
-      else if (!DECL_FILE_SCOPE_P (newdecl))
+      ਨਹੀਂਤਾਂ ਜੇ (!DECL_FILE_SCOPE_P (newdecl))
 	{
-	  if (DECL_EXTERNAL (newdecl))
+	  ਜੇ (DECL_EXTERNAL (newdecl))
 	    {
 	      /* Extern with initializer at block scope, which will
 		 already have received an error.  */
 	    }
-	  else if (DECL_EXTERNAL (olddecl))
+	  ਨਹੀਂਤਾਂ ਜੇ (DECL_EXTERNAL (olddecl))
 	    {
-	      auto_diagnostic_group d;
+	      auto_diagnostic_ਸਮੂਹ d;
 	      error ("declaration of %q+D with no linkage follows "
 		     "extern declaration", newdecl);
 	      locate_old_decl (olddecl);
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    {
-	      auto_diagnostic_group d;
+	      auto_diagnostic_ਸਮੂਹ d;
 	      error ("redeclaration of %q+D with no linkage", newdecl);
 	      locate_old_decl (olddecl);
 	    }
 
-	  return false;
+	  ਵਾਪਸ ਝੂਠ;
 	}
 
       /* C++ does not permit a decl to appear multiple times at file
 	 scope.  */
-      if (warn_cxx_compat
+      ਜੇ (warn_cxx_compat
 	  && DECL_FILE_SCOPE_P (newdecl)
 	  && !DECL_EXTERNAL (newdecl)
 	  && !DECL_EXTERNAL (olddecl))
-	warned |= warning_at (DECL_SOURCE_LOCATION (newdecl),
+	warned |= warning_at (DECL_ਸਰੋਤ_LOCATION (newdecl),
 			      OPT_Wc___compat,
 			      "duplicate declaration of %qD is "
 			      "invalid in C++", newdecl);
@@ -2710,7 +2710,7 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 
   /* warnings */
   /* All decls must agree on a visibility.  */
-  if (CODE_CONTAINS_STRUCT (TREE_CODE (newdecl), TS_DECL_WITH_VIS)
+  ਜੇ (ਕੋਡ_ਸ਼ਾਮਲ_ਹੈ_STRUCT (ਰੁੱਖ_ਕੋਡ (newdecl), TS_DECL_WITH_VIS)
       && DECL_VISIBILITY_SPECIFIED (newdecl) && DECL_VISIBILITY_SPECIFIED (olddecl)
       && DECL_VISIBILITY (newdecl) != DECL_VISIBILITY (olddecl))
     {
@@ -2718,9 +2718,9 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 			 "(old visibility preserved)", newdecl);
     }
 
-  if (TREE_CODE (newdecl) == FUNCTION_DECL)
-    warned |= diagnose_mismatched_attributes (olddecl, newdecl);
-  else /* PARM_DECL, VAR_DECL */
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL)
+    warned |= diagnose_mismatched_ਗੁਣ (olddecl, newdecl);
+  ਨਹੀਂਤਾਂ /* PARM_DECL, VAR_DECL */
     {
       /* Redeclaration of a parameter is a constraint violation (this is
 	 not explicitly stated, but follows from C99 6.7p3 [no more than
@@ -2731,33 +2731,33 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
 	 an extension, the mandatory diagnostic for which is handled by
 	 mark_forward_parm_decls.  */
 
-      if (TREE_CODE (newdecl) == PARM_DECL
-	  && (!TREE_ASM_WRITTEN (olddecl) || TREE_ASM_WRITTEN (newdecl)))
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == PARM_DECL
+	  && (!ਰੁੱਖ_ASM_WRITTEN (olddecl) || ਰੁੱਖ_ASM_WRITTEN (newdecl)))
 	{
-	  auto_diagnostic_group d;
+	  auto_diagnostic_ਸਮੂਹ d;
 	  error ("redefinition of parameter %q+D", newdecl);
 	  locate_old_decl (olddecl);
-	  return false;
+	  ਵਾਪਸ ਝੂਠ;
 	}
     }
 
   /* Optional warning for completely redundant decls.  */
-  if (!warned && !pedwarned
+  ਜੇ (!warned && !pedwarned
       && warn_redundant_decls
       /* Don't warn about a function declaration followed by a
 	 definition.  */
-      && !(TREE_CODE (newdecl) == FUNCTION_DECL
+      && !(ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL
 	   && DECL_INITIAL (newdecl) && !DECL_INITIAL (olddecl))
       /* Don't warn about redundant redeclarations of builtins.  */
-      && !(TREE_CODE (newdecl) == FUNCTION_DECL
-	   && !fndecl_built_in_p (newdecl)
-	   && fndecl_built_in_p (olddecl)
+      && !(ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL
+	   && !fndecl_built_ਵਿੱਚ_p (newdecl)
+	   && fndecl_built_ਵਿੱਚ_p (olddecl)
 	   && !C_DECL_DECLARED_BUILTIN (olddecl))
       /* Don't warn about an extern followed by a definition.  */
       && !(DECL_EXTERNAL (olddecl) && !DECL_EXTERNAL (newdecl))
       /* Don't warn about forward parameter decls.  */
-      && !(TREE_CODE (newdecl) == PARM_DECL
-	   && TREE_ASM_WRITTEN (olddecl) && !TREE_ASM_WRITTEN (newdecl))
+      && !(ਰੁੱਖ_ਕੋਡ (newdecl) == PARM_DECL
+	   && ਰੁੱਖ_ASM_WRITTEN (olddecl) && !ਰੁੱਖ_ASM_WRITTEN (newdecl))
       /* Don't warn about a variable definition following a declaration.  */
       && !(VAR_P (newdecl)
 	   && DECL_INITIAL (newdecl) && !DECL_INITIAL (olddecl)))
@@ -2767,12 +2767,12 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
     }
 
   /* Report location of previous decl/defn.  */
-  if (warned || pedwarned)
+  ਜੇ (warned || pedwarned)
     locate_old_decl (olddecl);
 
-#undef DECL_EXTERN_INLINE
+#ਪਰਿਭਾਸ਼ਾ_ਰੱਦ DECL_EXTERN_INLINE
 
-  return retval;
+  ਵਾਪਸ retval;
 }
 
 /* Subroutine of duplicate_decls.  NEWDECL has been found to be
@@ -2780,86 +2780,86 @@ diagnose_mismatched_decls (tree newdecl, tree olddecl,
    new information into OLDDECL.  This function issues no
    diagnostics.  */
 
-static void
-merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
+ਸਥਿਰ ਖਾਲੀ
+ਮਿਲਾਓ_decls (ਰੁੱਖ newdecl, ਰੁੱਖ olddecl, ਰੁੱਖ newtype, ਰੁੱਖ oldtype)
 {
-  bool new_is_definition = (TREE_CODE (newdecl) == FUNCTION_DECL
-			    && DECL_INITIAL (newdecl) != NULL_TREE);
-  bool new_is_prototype = (TREE_CODE (newdecl) == FUNCTION_DECL
-			   && prototype_p (TREE_TYPE (newdecl)));
-  bool old_is_prototype = (TREE_CODE (olddecl) == FUNCTION_DECL
-			   && prototype_p (TREE_TYPE (olddecl)));
+  ਤਾਰਕਿਕ new_is_definition = (ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL
+			    && DECL_INITIAL (newdecl) != NULL_ਰੁੱਖ);
+  ਤਾਰਕਿਕ new_is_prototype = (ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL
+			   && prototype_p (ਰੁੱਖ_TYPE (newdecl)));
+  ਤਾਰਕਿਕ old_is_prototype = (ਰੁੱਖ_ਕੋਡ (olddecl) == FUNCTION_DECL
+			   && prototype_p (ਰੁੱਖ_TYPE (olddecl)));
 
   /* For real parm decl following a forward decl, rechain the old decl
      in its new location and clear TREE_ASM_WRITTEN (it's not a
      forward decl anymore).  */
-  if (TREE_CODE (newdecl) == PARM_DECL
-      && TREE_ASM_WRITTEN (olddecl) && !TREE_ASM_WRITTEN (newdecl))
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == PARM_DECL
+      && ਰੁੱਖ_ASM_WRITTEN (olddecl) && !ਰੁੱਖ_ASM_WRITTEN (newdecl))
     {
-      struct c_binding *b, **here;
+      ਬਣਤਰ c_binding *b, **ਇੱਥੇ;
 
-      for (here = &current_scope->bindings; *here; here = &(*here)->prev)
-	if ((*here)->decl == olddecl)
-	  goto found;
+      ਲਈ (ਇੱਥੇ = &current_scope->bindings; *ਇੱਥੇ; ਇੱਥੇ = &(*ਇੱਥੇ)->prev)
+	ਜੇ ((*ਇੱਥੇ)->decl == olddecl)
+	  ਜਾਓ ਮਿਲਿਆ;
       gcc_unreachable ();
 
-    found:
-      b = *here;
-      *here = b->prev;
+    ਮਿਲਿਆ:
+      b = *ਇੱਥੇ;
+      *ਇੱਥੇ = b->prev;
       b->prev = current_scope->bindings;
       current_scope->bindings = b;
 
-      TREE_ASM_WRITTEN (olddecl) = 0;
+      ਰੁੱਖ_ASM_WRITTEN (olddecl) = 0;
     }
 
-  DECL_ATTRIBUTES (newdecl)
-    = targetm.merge_decl_attributes (olddecl, newdecl);
+  DECL_ਗੁਣ (newdecl)
+    = targetm.ਮਿਲਾਓ_decl_ਗੁਣ (olddecl, newdecl);
 
   /* For typedefs use the old type, as the new type's DECL_NAME points
      at newdecl, which will be ggc_freed.  */
-  if (TREE_CODE (newdecl) == TYPE_DECL)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == TYPE_DECL)
     {
       /* But NEWTYPE might have an attribute, honor that.  */
-      tree tem = newtype;
+      ਰੁੱਖ tem = newtype;
       newtype = oldtype;
 
-      if (TYPE_USER_ALIGN (tem))
+      ਜੇ (TYPE_USER_ALIGN (tem))
 	{
-	  if (TYPE_ALIGN (tem) > TYPE_ALIGN (newtype))
-	    SET_TYPE_ALIGN (newtype, TYPE_ALIGN (tem));
-	  TYPE_USER_ALIGN (newtype) = true;
+	  ਜੇ (TYPE_ALIGN (tem) > TYPE_ALIGN (newtype))
+	    ਸੈੱਟ_TYPE_ALIGN (newtype, TYPE_ALIGN (tem));
+	  TYPE_USER_ALIGN (newtype) = ਸੱਚ;
 	}
 
       /* And remove the new type from the variants list.  */
-      if (TYPE_NAME (TREE_TYPE (newdecl)) == newdecl)
+      ਜੇ (TYPE_NAME (ਰੁੱਖ_TYPE (newdecl)) == newdecl)
 	{
-	  tree remove = TREE_TYPE (newdecl);
-	  if (TYPE_MAIN_VARIANT (remove) == remove)
+	  ਰੁੱਖ remove = ਰੁੱਖ_TYPE (newdecl);
+	  ਜੇ (TYPE_MAIN_VARIANT (remove) == remove)
 	    {
-	      gcc_assert (TYPE_NEXT_VARIANT (remove) == NULL_TREE);
+	      gcc_assert (TYPE_ਅਗਲਾ_VARIANT (remove) == NULL_ਰੁੱਖ);
 	      /* If remove is the main variant, no need to remove that
 		 from the list.  One of the DECL_ORIGINAL_TYPE
 		 variants, e.g. created for aligned attribute, might still
 		 refer to the newdecl TYPE_DECL though, so remove that one
 		 in that case.  */
-	      if (DECL_ORIGINAL_TYPE (newdecl)
+	      ਜੇ (DECL_ORIGINAL_TYPE (newdecl)
 		  && DECL_ORIGINAL_TYPE (newdecl) != remove)
-		for (tree t = TYPE_MAIN_VARIANT (DECL_ORIGINAL_TYPE (newdecl));
+		ਲਈ (ਰੁੱਖ t = TYPE_MAIN_VARIANT (DECL_ORIGINAL_TYPE (newdecl));
 		     t; t = TYPE_MAIN_VARIANT (t))
-		  if (TYPE_NAME (TYPE_NEXT_VARIANT (t)) == newdecl)
+		  ਜੇ (TYPE_NAME (TYPE_ਅਗਲਾ_VARIANT (t)) == newdecl)
 		    {
-		      TYPE_NEXT_VARIANT (t)
-			= TYPE_NEXT_VARIANT (TYPE_NEXT_VARIANT (t));
-		      break;
+		      TYPE_ਅਗਲਾ_VARIANT (t)
+			= TYPE_ਅਗਲਾ_VARIANT (TYPE_ਅਗਲਾ_VARIANT (t));
+		      ਰੋਕੋ;
 		    }
 	    }
-	  else
-	    for (tree t = TYPE_MAIN_VARIANT (remove); ;
-		 t = TYPE_NEXT_VARIANT (t))
-	      if (TYPE_NEXT_VARIANT (t) == remove)
+	  ਨਹੀਂਤਾਂ
+	    ਲਈ (ਰੁੱਖ t = TYPE_MAIN_VARIANT (remove); ;
+		 t = TYPE_ਅਗਲਾ_VARIANT (t))
+	      ਜੇ (TYPE_ਅਗਲਾ_VARIANT (t) == remove)
 		{
-		  TYPE_NEXT_VARIANT (t) = TYPE_NEXT_VARIANT (remove);
-		  break;
+		  TYPE_ਅਗਲਾ_VARIANT (t) = TYPE_ਅਗਲਾ_VARIANT (remove);
+		  ਰੋਕੋ;
 		}
 	}
 
@@ -2868,145 +2868,145 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
     }
 
   /* Merge the data types specified in the two decls.  */
-  TREE_TYPE (newdecl)
-    = TREE_TYPE (olddecl)
-    = composite_type (newtype, oldtype);
+  ਰੁੱਖ_TYPE (newdecl)
+    = ਰੁੱਖ_TYPE (olddecl)
+    = ਸੰਯੁਕਤ_type (newtype, oldtype);
 
   /* Lay the type out, unless already done.  */
-  if (!comptypes (oldtype, TREE_TYPE (newdecl)))
+  ਜੇ (!comptypes (oldtype, ਰੁੱਖ_TYPE (newdecl)))
     {
-      if (TREE_TYPE (newdecl) != error_mark_node)
-	layout_type (TREE_TYPE (newdecl));
-      if (TREE_CODE (newdecl) != FUNCTION_DECL
-	  && TREE_CODE (newdecl) != TYPE_DECL
-	  && TREE_CODE (newdecl) != CONST_DECL)
+      ਜੇ (ਰੁੱਖ_TYPE (newdecl) != error_mark_ਗੰਢ)
+	layout_type (ਰੁੱਖ_TYPE (newdecl));
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) != FUNCTION_DECL
+	  && ਰੁੱਖ_ਕੋਡ (newdecl) != TYPE_DECL
+	  && ਰੁੱਖ_ਕੋਡ (newdecl) != CONST_DECL)
 	layout_decl (newdecl, 0);
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
       /* Since the type is OLDDECL's, make OLDDECL's size go with.  */
-      DECL_SIZE (newdecl) = DECL_SIZE (olddecl);
-      DECL_SIZE_UNIT (newdecl) = DECL_SIZE_UNIT (olddecl);
-      SET_DECL_MODE (newdecl, DECL_MODE (olddecl));
-      if (DECL_ALIGN (olddecl) > DECL_ALIGN (newdecl))
+      DECL_ਮਾਪ (newdecl) = DECL_ਮਾਪ (olddecl);
+      DECL_ਮਾਪ_UNIT (newdecl) = DECL_ਮਾਪ_UNIT (olddecl);
+      ਸੈੱਟ_DECL_ਬਹੁਲਕ (newdecl, DECL_ਬਹੁਲਕ (olddecl));
+      ਜੇ (DECL_ALIGN (olddecl) > DECL_ALIGN (newdecl))
 	{
-	  SET_DECL_ALIGN (newdecl, DECL_ALIGN (olddecl));
+	  ਸੈੱਟ_DECL_ALIGN (newdecl, DECL_ALIGN (olddecl));
 	  DECL_USER_ALIGN (newdecl) |= DECL_USER_ALIGN (olddecl);
 	}
-      else if (DECL_ALIGN (olddecl) == DECL_ALIGN (newdecl)
+      ਨਹੀਂਤਾਂ ਜੇ (DECL_ALIGN (olddecl) == DECL_ALIGN (newdecl)
 	       && DECL_USER_ALIGN (olddecl) != DECL_USER_ALIGN (newdecl))
 	DECL_USER_ALIGN (newdecl) = 1;
-      if (DECL_WARN_IF_NOT_ALIGN (olddecl)
+      ਜੇ (DECL_WARN_IF_NOT_ALIGN (olddecl)
 	  > DECL_WARN_IF_NOT_ALIGN (newdecl))
-	SET_DECL_WARN_IF_NOT_ALIGN (newdecl,
+	ਸੈੱਟ_DECL_WARN_IF_NOT_ALIGN (newdecl,
 				    DECL_WARN_IF_NOT_ALIGN (olddecl));
     }
 
   /* Keep the old rtl since we can safely use it.  */
-  if (HAS_RTL_P (olddecl))
+  ਜੇ (HAS_RTL_P (olddecl))
     COPY_DECL_RTL (olddecl, newdecl);
 
   /* Merge the type qualifiers.  */
-  if (TREE_READONLY (newdecl))
-    TREE_READONLY (olddecl) = 1;
+  ਜੇ (ਰੁੱਖ_READONLY (newdecl))
+    ਰੁੱਖ_READONLY (olddecl) = 1;
 
-  if (TREE_THIS_VOLATILE (newdecl))
-    TREE_THIS_VOLATILE (olddecl) = 1;
+  ਜੇ (ਰੁੱਖ_THIS_VOLATILE (newdecl))
+    ਰੁੱਖ_THIS_VOLATILE (olddecl) = 1;
 
   /* Merge deprecatedness.  */
-  if (TREE_DEPRECATED (newdecl))
-    TREE_DEPRECATED (olddecl) = 1;
+  ਜੇ (ਰੁੱਖ_DEPRECATED (newdecl))
+    ਰੁੱਖ_DEPRECATED (olddecl) = 1;
 
   /* Merge unavailability.  */
-  if (TREE_UNAVAILABLE (newdecl))
-    TREE_UNAVAILABLE (olddecl) = 1;
+  ਜੇ (ਰੁੱਖ_UNAVAILABLE (newdecl))
+    ਰੁੱਖ_UNAVAILABLE (olddecl) = 1;
 
   /* If a decl is in a system header and the other isn't, keep the one on the
      system header. Otherwise, keep source location of definition rather than
      declaration and of prototype rather than non-prototype unless that
      prototype is built-in.  */
-  if (HAS_DECL_ASSEMBLER_NAME_P (olddecl)
-      && DECL_IN_SYSTEM_HEADER (olddecl)
-      && !DECL_IN_SYSTEM_HEADER (newdecl) )
-    DECL_SOURCE_LOCATION (newdecl) = DECL_SOURCE_LOCATION (olddecl);
-  else if (HAS_DECL_ASSEMBLER_NAME_P (olddecl)
-	   && DECL_IN_SYSTEM_HEADER (newdecl)
-	   && !DECL_IN_SYSTEM_HEADER (olddecl))
-    DECL_SOURCE_LOCATION (olddecl) = DECL_SOURCE_LOCATION (newdecl);
-  else if ((DECL_INITIAL (newdecl) == NULL_TREE
-	    && DECL_INITIAL (olddecl) != NULL_TREE)
+  ਜੇ (HAS_DECL_ASSEMBLER_NAME_P (olddecl)
+      && DECL_ਵਿੱਚ_SYSTEM_ਸਿਰਲੇਖ (olddecl)
+      && !DECL_ਵਿੱਚ_SYSTEM_ਸਿਰਲੇਖ (newdecl) )
+    DECL_ਸਰੋਤ_LOCATION (newdecl) = DECL_ਸਰੋਤ_LOCATION (olddecl);
+  ਨਹੀਂਤਾਂ ਜੇ (HAS_DECL_ASSEMBLER_NAME_P (olddecl)
+	   && DECL_ਵਿੱਚ_SYSTEM_ਸਿਰਲੇਖ (newdecl)
+	   && !DECL_ਵਿੱਚ_SYSTEM_ਸਿਰਲੇਖ (olddecl))
+    DECL_ਸਰੋਤ_LOCATION (olddecl) = DECL_ਸਰੋਤ_LOCATION (newdecl);
+  ਨਹੀਂਤਾਂ ਜੇ ((DECL_INITIAL (newdecl) == NULL_ਰੁੱਖ
+	    && DECL_INITIAL (olddecl) != NULL_ਰੁੱਖ)
 	   || (old_is_prototype && !new_is_prototype
 	       && !C_DECL_BUILTIN_PROTOTYPE (olddecl)))
-    DECL_SOURCE_LOCATION (newdecl) = DECL_SOURCE_LOCATION (olddecl);
+    DECL_ਸਰੋਤ_LOCATION (newdecl) = DECL_ਸਰੋਤ_LOCATION (olddecl);
 
   /* Merge the initialization information.  */
-   if (DECL_INITIAL (newdecl) == NULL_TREE)
+   ਜੇ (DECL_INITIAL (newdecl) == NULL_ਰੁੱਖ)
     DECL_INITIAL (newdecl) = DECL_INITIAL (olddecl);
 
   /* Merge 'constexpr' information.  */
-  if (VAR_P (olddecl) && VAR_P (newdecl))
+  ਜੇ (VAR_P (olddecl) && VAR_P (newdecl))
     {
-      if (C_DECL_DECLARED_CONSTEXPR (olddecl))
+      ਜੇ (C_DECL_DECLARED_CONSTEXPR (olddecl))
 	C_DECL_DECLARED_CONSTEXPR (newdecl) = 1;
-      else if (C_DECL_DECLARED_CONSTEXPR (newdecl))
+      ਨਹੀਂਤਾਂ ਜੇ (C_DECL_DECLARED_CONSTEXPR (newdecl))
 	C_DECL_DECLARED_CONSTEXPR (olddecl) = 1;
     }
 
   /* Merge the threadprivate attribute.  */
-  if (VAR_P (olddecl) && C_DECL_THREADPRIVATE_P (olddecl))
+  ਜੇ (VAR_P (olddecl) && C_DECL_THREADPRIVATE_P (olddecl))
     C_DECL_THREADPRIVATE_P (newdecl) = 1;
 
-  if (HAS_DECL_ASSEMBLER_NAME_P (olddecl))
+  ਜੇ (HAS_DECL_ASSEMBLER_NAME_P (olddecl))
     {
       /* Copy the assembler name.
 	 Currently, it can only be defined in the prototype.  */
       COPY_DECL_ASSEMBLER_NAME (olddecl, newdecl);
 
       /* Use visibility of whichever declaration had it specified */
-      if (DECL_VISIBILITY_SPECIFIED (olddecl))
+      ਜੇ (DECL_VISIBILITY_SPECIFIED (olddecl))
 	{
 	  DECL_VISIBILITY (newdecl) = DECL_VISIBILITY (olddecl);
 	  DECL_VISIBILITY_SPECIFIED (newdecl) = 1;
 	}
 
-      if (TREE_CODE (newdecl) == FUNCTION_DECL)
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL)
 	{
 	  DECL_STATIC_CONSTRUCTOR(newdecl) |= DECL_STATIC_CONSTRUCTOR(olddecl);
 	  DECL_STATIC_DESTRUCTOR (newdecl) |= DECL_STATIC_DESTRUCTOR (olddecl);
-	  DECL_NO_LIMIT_STACK (newdecl) |= DECL_NO_LIMIT_STACK (olddecl);
-	  DECL_NO_INSTRUMENT_FUNCTION_ENTRY_EXIT (newdecl)
-	    |= DECL_NO_INSTRUMENT_FUNCTION_ENTRY_EXIT (olddecl);
-	  TREE_THIS_VOLATILE (newdecl) |= TREE_THIS_VOLATILE (olddecl);
+	  DECL_NO_ਹੱਦਬੰਦੀ_ਢੇਰ (newdecl) |= DECL_NO_ਹੱਦਬੰਦੀ_ਢੇਰ (olddecl);
+	  DECL_NO_INSTRUMENT_FUNCTION_ਇੰਦਰਾਜ_EXIT (newdecl)
+	    |= DECL_NO_INSTRUMENT_FUNCTION_ਇੰਦਰਾਜ_EXIT (olddecl);
+	  ਰੁੱਖ_THIS_VOLATILE (newdecl) |= ਰੁੱਖ_THIS_VOLATILE (olddecl);
 	  DECL_IS_MALLOC (newdecl) |= DECL_IS_MALLOC (olddecl);
-	  if (DECL_IS_OPERATOR_NEW_P (olddecl))
-	    DECL_SET_IS_OPERATOR_NEW (newdecl, true);
-	  if (DECL_IS_OPERATOR_DELETE_P (olddecl))
-	    DECL_SET_IS_OPERATOR_DELETE (newdecl, true);
-	  TREE_READONLY (newdecl) |= TREE_READONLY (olddecl);
-	  DECL_PURE_P (newdecl) |= DECL_PURE_P (olddecl);
+	  ਜੇ (DECL_IS_OPERATOR_NEW_P (olddecl))
+	    DECL_ਸੈੱਟ_IS_OPERATOR_NEW (newdecl, ਸੱਚ);
+	  ਜੇ (DECL_IS_OPERATOR_DELETE_P (olddecl))
+	    DECL_ਸੈੱਟ_IS_OPERATOR_DELETE (newdecl, ਸੱਚ);
+	  ਰੁੱਖ_READONLY (newdecl) |= ਰੁੱਖ_READONLY (olddecl);
+	  DECL_ਸ਼ੁੱਧ_P (newdecl) |= DECL_ਸ਼ੁੱਧ_P (olddecl);
 	  DECL_IS_NOVOPS (newdecl) |= DECL_IS_NOVOPS (olddecl);
 	}
 
       /* Merge the storage class information.  */
-      merge_weak (newdecl, olddecl);
+      ਮਿਲਾਓ_weak (newdecl, olddecl);
 
       /* For functions, static overrides non-static.  */
-      if (TREE_CODE (newdecl) == FUNCTION_DECL)
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL)
 	{
-	  TREE_PUBLIC (newdecl) &= TREE_PUBLIC (olddecl);
+	  ਰੁੱਖ_ਜਨਤਕ (newdecl) &= ਰੁੱਖ_ਜਨਤਕ (olddecl);
 	  /* This is since we don't automatically
 	     copy the attributes of NEWDECL into OLDDECL.  */
-	  TREE_PUBLIC (olddecl) = TREE_PUBLIC (newdecl);
+	  ਰੁੱਖ_ਜਨਤਕ (olddecl) = ਰੁੱਖ_ਜਨਤਕ (newdecl);
 	  /* If this clears `static', clear it in the identifier too.  */
-	  if (!TREE_PUBLIC (olddecl))
-	    TREE_PUBLIC (DECL_NAME (olddecl)) = 0;
+	  ਜੇ (!ਰੁੱਖ_ਜਨਤਕ (olddecl))
+	    ਰੁੱਖ_ਜਨਤਕ (DECL_NAME (olddecl)) = 0;
 	}
     }
 
   /* In c99, 'extern' declaration before (or after) 'inline' means this
      function is not DECL_EXTERNAL, unless 'gnu_inline' attribute
      is present.  */
-  if (TREE_CODE (newdecl) == FUNCTION_DECL
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL
       && !flag_gnu89_inline
       && (DECL_DECLARED_INLINE_P (newdecl)
 	  || DECL_DECLARED_INLINE_P (olddecl))
@@ -3014,40 +3014,40 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
 	  || !DECL_DECLARED_INLINE_P (olddecl)
 	  || !DECL_EXTERNAL (olddecl))
       && DECL_EXTERNAL (newdecl)
-      && !lookup_attribute ("gnu_inline", DECL_ATTRIBUTES (newdecl))
+      && !lookup_attribute ("gnu_inline", DECL_ਗੁਣ (newdecl))
       && !current_function_decl)
     DECL_EXTERNAL (newdecl) = 0;
 
   /* An inline definition following a static declaration is not
      DECL_EXTERNAL.  */
-  if (new_is_definition
+  ਜੇ (new_is_definition
       && (DECL_DECLARED_INLINE_P (newdecl)
 	  || DECL_DECLARED_INLINE_P (olddecl))
-      && !TREE_PUBLIC (olddecl))
+      && !ਰੁੱਖ_ਜਨਤਕ (olddecl))
     DECL_EXTERNAL (newdecl) = 0;
 
-  if (DECL_EXTERNAL (newdecl))
+  ਜੇ (DECL_EXTERNAL (newdecl))
     {
-      TREE_STATIC (newdecl) = TREE_STATIC (olddecl);
+      ਰੁੱਖ_STATIC (newdecl) = ਰੁੱਖ_STATIC (olddecl);
       DECL_EXTERNAL (newdecl) = DECL_EXTERNAL (olddecl);
 
       /* An extern decl does not override previous storage class.  */
-      TREE_PUBLIC (newdecl) = TREE_PUBLIC (olddecl);
-      if (!DECL_EXTERNAL (newdecl))
+      ਰੁੱਖ_ਜਨਤਕ (newdecl) = ਰੁੱਖ_ਜਨਤਕ (olddecl);
+      ਜੇ (!DECL_EXTERNAL (newdecl))
 	{
 	  DECL_CONTEXT (newdecl) = DECL_CONTEXT (olddecl);
 	  DECL_COMMON (newdecl) = DECL_COMMON (olddecl);
 	}
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      TREE_STATIC (olddecl) = TREE_STATIC (newdecl);
-      TREE_PUBLIC (olddecl) = TREE_PUBLIC (newdecl);
+      ਰੁੱਖ_STATIC (olddecl) = ਰੁੱਖ_STATIC (newdecl);
+      ਰੁੱਖ_ਜਨਤਕ (olddecl) = ਰੁੱਖ_ਜਨਤਕ (newdecl);
     }
 
-  if (TREE_CODE (newdecl) == FUNCTION_DECL)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL)
     {
-      if (DECL_FUNCTION_VERSIONED (olddecl)
+      ਜੇ (DECL_FUNCTION_VERSIONED (olddecl)
 	  || DECL_FUNCTION_VERSIONED (newdecl))
 	{
 	  maybe_mark_function_versioned (olddecl);
@@ -3057,14 +3057,14 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
 	 inline, make sure we emit debug info for the inline before we
 	 throw it away, in case it was inlined into a function that
 	 hasn't been written out yet.  */
-      if (new_is_definition && DECL_INITIAL (olddecl))
+      ਜੇ (new_is_definition && DECL_INITIAL (olddecl))
 	/* The new defn must not be inline.  */
 	DECL_UNINLINABLE (newdecl) = 1;
-      else
+      ਨਹੀਂਤਾਂ
 	{
 	  /* If either decl says `inline', this fn is inline, unless
 	     its definition was passed already.  */
-	  if (DECL_DECLARED_INLINE_P (newdecl)
+	  ਜੇ (DECL_DECLARED_INLINE_P (newdecl)
 	      || DECL_DECLARED_INLINE_P (olddecl))
 	    DECL_DECLARED_INLINE_P (newdecl) = 1;
 
@@ -3077,159 +3077,159 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
 	       || DECL_DISREGARD_INLINE_LIMITS (olddecl));
 	}
 
-      if (fndecl_built_in_p (olddecl))
+      ਜੇ (fndecl_built_ਵਿੱਚ_p (olddecl))
 	{
 	  /* If redeclaring a builtin function, it stays built in.
 	     But it gets tagged as having been declared.  */
-	  copy_decl_built_in_function (newdecl, olddecl);
+	  copy_decl_built_ਵਿੱਚ_function (newdecl, olddecl);
 	  C_DECL_DECLARED_BUILTIN (newdecl) = 1;
-	  if (new_is_prototype)
+	  ਜੇ (new_is_prototype)
 	    {
 	      C_DECL_BUILTIN_PROTOTYPE (newdecl) = 0;
-	      if (DECL_BUILT_IN_CLASS (newdecl) == BUILT_IN_NORMAL)
+	      ਜੇ (DECL_BUILT_ਵਿੱਚ_CLASS (newdecl) == BUILT_ਵਿੱਚ_ਸਾਧਾਰਨ)
 		{
-		  enum built_in_function fncode = DECL_FUNCTION_CODE (newdecl);
-		  switch (fncode)
+		  ਗਿਣਤੀ built_ਵਿੱਚ_function fncode = DECL_FUNCTION_ਕੋਡ (newdecl);
+		  ਚੋਣ (fncode)
 		    {
 		      /* If a compatible prototype of these builtin functions
 			 is seen, assume the runtime implements it with the
 			 expected semantics.  */
-		    case BUILT_IN_STPCPY:
-		      if (builtin_decl_explicit_p (fncode))
-			set_builtin_decl_implicit_p (fncode, true);
-		      break;
-		    default:
-		      if (builtin_decl_explicit_p (fncode))
-			set_builtin_decl_declared_p (fncode, true);
-		      break;
+		    ਹਾਲਤ BUILT_ਵਿੱਚ_STPCPY:
+		      ਜੇ (builtin_decl_explicit_p (fncode))
+			ਸੈੱਟ_builtin_decl_implicit_p (fncode, ਸੱਚ);
+		      ਰੋਕੋ;
+		    ਮੂਲ:
+		      ਜੇ (builtin_decl_explicit_p (fncode))
+			ਸੈੱਟ_builtin_decl_declared_p (fncode, ਸੱਚ);
+		      ਰੋਕੋ;
 		    }
 
-		  copy_attributes_to_builtin (newdecl);
+		  copy_ਗੁਣ_ਮੰਜ਼ਿਲ_builtin (newdecl);
 		}
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    C_DECL_BUILTIN_PROTOTYPE (newdecl)
 	      = C_DECL_BUILTIN_PROTOTYPE (olddecl);
 	}
 
       /* Preserve function specific target and optimization options */
-      if (DECL_FUNCTION_SPECIFIC_TARGET (olddecl)
-	  && !DECL_FUNCTION_SPECIFIC_TARGET (newdecl))
-	DECL_FUNCTION_SPECIFIC_TARGET (newdecl)
-	  = DECL_FUNCTION_SPECIFIC_TARGET (olddecl);
+      ਜੇ (DECL_FUNCTION_SPECIFIC_ਨਿਸ਼ਾਨਾ (olddecl)
+	  && !DECL_FUNCTION_SPECIFIC_ਨਿਸ਼ਾਨਾ (newdecl))
+	DECL_FUNCTION_SPECIFIC_ਨਿਸ਼ਾਨਾ (newdecl)
+	  = DECL_FUNCTION_SPECIFIC_ਨਿਸ਼ਾਨਾ (olddecl);
 
-      if (DECL_FUNCTION_SPECIFIC_OPTIMIZATION (olddecl)
+      ਜੇ (DECL_FUNCTION_SPECIFIC_OPTIMIZATION (olddecl)
 	  && !DECL_FUNCTION_SPECIFIC_OPTIMIZATION (newdecl))
 	DECL_FUNCTION_SPECIFIC_OPTIMIZATION (newdecl)
 	  = DECL_FUNCTION_SPECIFIC_OPTIMIZATION (olddecl);
 
       /* Also preserve various other info from the definition.  */
-      if (!new_is_definition)
+      ਜੇ (!new_is_definition)
 	{
-	  tree t;
-	  DECL_RESULT (newdecl) = DECL_RESULT (olddecl);
+	  ਰੁੱਖ t;
+	  DECL_ਨਤੀਜਾ (newdecl) = DECL_ਨਤੀਜਾ (olddecl);
 	  DECL_INITIAL (newdecl) = DECL_INITIAL (olddecl);
 	  DECL_STRUCT_FUNCTION (newdecl) = DECL_STRUCT_FUNCTION (olddecl);
-	  DECL_SAVED_TREE (newdecl) = DECL_SAVED_TREE (olddecl);
+	  DECL_SAVED_ਰੁੱਖ (newdecl) = DECL_SAVED_ਰੁੱਖ (olddecl);
 	  DECL_ARGUMENTS (newdecl) = copy_list (DECL_ARGUMENTS (olddecl));
-	  for (t = DECL_ARGUMENTS (newdecl); t ; t = DECL_CHAIN (t))
+	  ਲਈ (t = DECL_ARGUMENTS (newdecl); t ; t = DECL_CHAIN (t))
 	    DECL_CONTEXT (t) = newdecl;
 
 	  /* See if we've got a function to instantiate from.  */
-	  if (DECL_SAVED_TREE (olddecl))
+	  ਜੇ (DECL_SAVED_ਰੁੱਖ (olddecl))
 	    DECL_ABSTRACT_ORIGIN (newdecl)
 	      = DECL_ABSTRACT_ORIGIN (olddecl);
 	}
     }
 
   /* Merge the USED information.  */
-  if (TREE_USED (olddecl))
-    TREE_USED (newdecl) = 1;
-  else if (TREE_USED (newdecl))
-    TREE_USED (olddecl) = 1;
-  if (VAR_P (olddecl) || TREE_CODE (olddecl) == PARM_DECL)
+  ਜੇ (ਰੁੱਖ_ਵਰਤਿਆ (olddecl))
+    ਰੁੱਖ_ਵਰਤਿਆ (newdecl) = 1;
+  ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਵਰਤਿਆ (newdecl))
+    ਰੁੱਖ_ਵਰਤਿਆ (olddecl) = 1;
+  ਜੇ (VAR_P (olddecl) || ਰੁੱਖ_ਕੋਡ (olddecl) == PARM_DECL)
     DECL_READ_P (newdecl) |= DECL_READ_P (olddecl);
-  if (DECL_PRESERVE_P (olddecl))
+  ਜੇ (DECL_PRESERVE_P (olddecl))
     DECL_PRESERVE_P (newdecl) = 1;
-  else if (DECL_PRESERVE_P (newdecl))
+  ਨਹੀਂਤਾਂ ਜੇ (DECL_PRESERVE_P (newdecl))
     DECL_PRESERVE_P (olddecl) = 1;
 
   /* Merge DECL_COMMON */
-  if (VAR_P (olddecl) && VAR_P (newdecl)
-      && !lookup_attribute ("common", DECL_ATTRIBUTES (newdecl))
-      && !lookup_attribute ("nocommon", DECL_ATTRIBUTES (newdecl)))
+  ਜੇ (VAR_P (olddecl) && VAR_P (newdecl)
+      && !lookup_attribute ("common", DECL_ਗੁਣ (newdecl))
+      && !lookup_attribute ("nocommon", DECL_ਗੁਣ (newdecl)))
     DECL_COMMON (newdecl) = DECL_COMMON (newdecl) && DECL_COMMON (olddecl);
 
   /* Copy most of the decl-specific fields of NEWDECL into OLDDECL.
      But preserve OLDDECL's DECL_UID, DECL_CONTEXT and
      DECL_ARGUMENTS (if appropriate).  */
   {
-    unsigned olddecl_uid = DECL_UID (olddecl);
-    tree olddecl_context = DECL_CONTEXT (olddecl);
-    tree olddecl_arguments = NULL;
-    if (TREE_CODE (olddecl) == FUNCTION_DECL)
+    ਬਿਨਾਨਿਸ਼ਾਨੀ olddecl_uid = DECL_UID (olddecl);
+    ਰੁੱਖ olddecl_context = DECL_CONTEXT (olddecl);
+    ਰੁੱਖ olddecl_arguments = ਨਿਰਾ;
+    ਜੇ (ਰੁੱਖ_ਕੋਡ (olddecl) == FUNCTION_DECL)
       olddecl_arguments = DECL_ARGUMENTS (olddecl);
 
-    memcpy ((char *) olddecl + sizeof (struct tree_common),
-	    (char *) newdecl + sizeof (struct tree_common),
-	    sizeof (struct tree_decl_common) - sizeof (struct tree_common));
+    ਸਮ੍ਰਿਤੀ_ਨਕਲ ((ਅੱਖਰ *) olddecl + ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_common),
+	    (ਅੱਖਰ *) newdecl + ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_common),
+	    ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_decl_common) - ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_common));
     DECL_USER_ALIGN (olddecl) = DECL_USER_ALIGN (newdecl);
-    switch (TREE_CODE (olddecl))
+    ਚੋਣ (ਰੁੱਖ_ਕੋਡ (olddecl))
       {
-      case FUNCTION_DECL:
-      case VAR_DECL:
+      ਹਾਲਤ FUNCTION_DECL:
+      ਹਾਲਤ VAR_DECL:
 	{
-	  struct symtab_node *snode = olddecl->decl_with_vis.symtab_node;
+	  ਬਣਤਰ symtab_ਗੰਢ *snode = olddecl->decl_with_vis.symtab_ਗੰਢ;
 
-	  memcpy ((char *) olddecl + sizeof (struct tree_decl_common),
-		  (char *) newdecl + sizeof (struct tree_decl_common),
-		  tree_code_size (TREE_CODE (olddecl)) - sizeof (struct tree_decl_common));
-	  olddecl->decl_with_vis.symtab_node = snode;
+	  ਸਮ੍ਰਿਤੀ_ਨਕਲ ((ਅੱਖਰ *) olddecl + ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_decl_common),
+		  (ਅੱਖਰ *) newdecl + ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_decl_common),
+		  ਰੁੱਖ_ਕੋਡ_ਮਾਪ (ਰੁੱਖ_ਕੋਡ (olddecl)) - ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_decl_common));
+	  olddecl->decl_with_vis.symtab_ਗੰਢ = snode;
 
-	  if ((DECL_EXTERNAL (olddecl)
-	       || TREE_PUBLIC (olddecl)
-	       || TREE_STATIC (olddecl))
-	      && DECL_SECTION_NAME (newdecl) != NULL)
-	    set_decl_section_name (olddecl, newdecl);
+	  ਜੇ ((DECL_EXTERNAL (olddecl)
+	       || ਰੁੱਖ_ਜਨਤਕ (olddecl)
+	       || ਰੁੱਖ_STATIC (olddecl))
+	      && DECL_SECTION_NAME (newdecl) != ਨਿਰਾ)
+	    ਸੈੱਟ_decl_section_name (olddecl, newdecl);
 
 	  /* This isn't quite correct for something like
 		int __thread x attribute ((tls_model ("local-exec")));
 		extern int __thread x;
 	     as we'll lose the "local-exec" model.  */
-	  if (VAR_P (olddecl) && DECL_THREAD_LOCAL_P (newdecl))
-	    set_decl_tls_model (olddecl, DECL_TLS_MODEL (newdecl));
-	  break;
+	  ਜੇ (VAR_P (olddecl) && DECL_THREAD_LOCAL_P (newdecl))
+	    ਸੈੱਟ_decl_tls_model (olddecl, DECL_TLS_MODEL (newdecl));
+	  ਰੋਕੋ;
 	}
 
-      case FIELD_DECL:
-      case PARM_DECL:
-      case LABEL_DECL:
-      case RESULT_DECL:
-      case CONST_DECL:
-      case TYPE_DECL:
-	memcpy ((char *) olddecl + sizeof (struct tree_decl_common),
-		(char *) newdecl + sizeof (struct tree_decl_common),
-		tree_code_size (TREE_CODE (olddecl)) - sizeof (struct tree_decl_common));
-	break;
+      ਹਾਲਤ ਖੇਤਰ_DECL:
+      ਹਾਲਤ PARM_DECL:
+      ਹਾਲਤ LABEL_DECL:
+      ਹਾਲਤ ਨਤੀਜਾ_DECL:
+      ਹਾਲਤ CONST_DECL:
+      ਹਾਲਤ TYPE_DECL:
+	ਸਮ੍ਰਿਤੀ_ਨਕਲ ((ਅੱਖਰ *) olddecl + ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_decl_common),
+		(ਅੱਖਰ *) newdecl + ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_decl_common),
+		ਰੁੱਖ_ਕੋਡ_ਮਾਪ (ਰੁੱਖ_ਕੋਡ (olddecl)) - ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_decl_common));
+	ਰੋਕੋ;
 
-      default:
+      ਮੂਲ:
 
-	memcpy ((char *) olddecl + sizeof (struct tree_decl_common),
-		(char *) newdecl + sizeof (struct tree_decl_common),
-		sizeof (struct tree_decl_non_common) - sizeof (struct tree_decl_common));
+	ਸਮ੍ਰਿਤੀ_ਨਕਲ ((ਅੱਖਰ *) olddecl + ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_decl_common),
+		(ਅੱਖਰ *) newdecl + ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_decl_common),
+		ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_decl_non_common) - ਆਕਾਰ (ਬਣਤਰ ਰੁੱਖ_decl_common));
       }
     DECL_UID (olddecl) = olddecl_uid;
     DECL_CONTEXT (olddecl) = olddecl_context;
-    if (TREE_CODE (olddecl) == FUNCTION_DECL)
+    ਜੇ (ਰੁੱਖ_ਕੋਡ (olddecl) == FUNCTION_DECL)
       DECL_ARGUMENTS (olddecl) = olddecl_arguments;
   }
 
   /* If OLDDECL had its DECL_RTL instantiated, re-invoke make_decl_rtl
      so that encode_section_info has a chance to look at the new decl
      flags and attributes.  */
-  if (DECL_RTL_SET_P (olddecl)
-      && (TREE_CODE (olddecl) == FUNCTION_DECL
-	  || (VAR_P (olddecl) && TREE_STATIC (olddecl))))
+  ਜੇ (DECL_RTL_ਸੈੱਟ_P (olddecl)
+      && (ਰੁੱਖ_ਕੋਡ (olddecl) == FUNCTION_DECL
+	  || (VAR_P (olddecl) && ਰੁੱਖ_STATIC (olddecl))))
     make_decl_rtl (olddecl);
 }
 
@@ -3240,30 +3240,30 @@ merge_decls (tree newdecl, tree olddecl, tree newtype, tree oldtype)
    If safely possible, alter OLDDECL to look like NEWDECL, and return
    true.  Otherwise, return false.  */
 
-static bool
-duplicate_decls (tree newdecl, tree olddecl)
+ਸਥਿਰ ਤਾਰਕਿਕ
+duplicate_decls (ਰੁੱਖ newdecl, ਰੁੱਖ olddecl)
 {
-  tree newtype = NULL, oldtype = NULL;
+  ਰੁੱਖ newtype = ਨਿਰਾ, oldtype = ਨਿਰਾ;
 
-  if (!diagnose_mismatched_decls (newdecl, olddecl, &newtype, &oldtype))
+  ਜੇ (!diagnose_mismatched_decls (newdecl, olddecl, &newtype, &oldtype))
     {
       /* Avoid `unused variable' and other warnings for OLDDECL.  */
       suppress_warning (olddecl, OPT_Wunused);
       /* If the types are completely different, poison them both with
  	 error_mark_node.  */
-      if (TREE_CODE (TREE_TYPE (newdecl)) != TREE_CODE (TREE_TYPE (olddecl))
-	  && olddecl != error_mark_node
-	  && seen_error ())
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (newdecl)) != ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (olddecl))
+	  && olddecl != error_mark_ਗੰਢ
+	  && ਵੇਖਿਆ_error ())
 	{
-	  if (TREE_CODE (olddecl) != FUNCTION_DECL)
-	    TREE_TYPE (olddecl) = error_mark_node;
-	  if (TREE_CODE (newdecl) != FUNCTION_DECL)
-	    TREE_TYPE (newdecl) = error_mark_node;
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (olddecl) != FUNCTION_DECL)
+	    ਰੁੱਖ_TYPE (olddecl) = error_mark_ਗੰਢ;
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) != FUNCTION_DECL)
+	    ਰੁੱਖ_TYPE (newdecl) = error_mark_ਗੰਢ;
 	}
-      return false;
+      ਵਾਪਸ ਝੂਠ;
     }
 
-  merge_decls (newdecl, olddecl, newtype, oldtype);
+  ਮਿਲਾਓ_decls (newdecl, olddecl, newtype, oldtype);
 
   /* The NEWDECL will no longer be needed.
 
@@ -3271,114 +3271,114 @@ duplicate_decls (tree newdecl, tree olddecl)
      table that might have been inserted there to record comdat group.
      Be sure to however do not free DECL_STRUCT_FUNCTION because this
      structure is shared in between NEWDECL and OLDECL.  */
-  if (TREE_CODE (newdecl) == FUNCTION_DECL)
-    DECL_STRUCT_FUNCTION (newdecl) = NULL;
-  if (VAR_OR_FUNCTION_DECL_P (newdecl))
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (newdecl) == FUNCTION_DECL)
+    DECL_STRUCT_FUNCTION (newdecl) = ਨਿਰਾ;
+  ਜੇ (VAR_OR_FUNCTION_DECL_P (newdecl))
     {
-      struct symtab_node *snode = symtab_node::get (newdecl);
-      if (snode)
+      ਬਣਤਰ symtab_ਗੰਢ *snode = symtab_ਗੰਢ::get (newdecl);
+      ਜੇ (snode)
 	snode->remove ();
     }
   ggc_free (newdecl);
-  return true;
+  ਵਾਪਸ ਸੱਚ;
 }
 
 
 /* Check whether decl-node NEW_DECL shadows an existing declaration.  */
-static void
-warn_if_shadowing (tree new_decl)
+ਸਥਿਰ ਖਾਲੀ
+warn_if_shadowing (ਰੁੱਖ new_decl)
 {
-  struct c_binding *b;
+  ਬਣਤਰ c_binding *b;
 
   /* Shadow warnings wanted?  */
-  if (!(warn_shadow
+  ਜੇ (!(warn_shadow
         || warn_shadow_local
         || warn_shadow_compatible_local)
       /* No shadow warnings for internally generated vars.  */
       || DECL_IS_UNDECLARED_BUILTIN (new_decl))
-    return;
+    ਵਾਪਸ;
 
   /* Is anything being shadowed?  Invisible decls do not count.  */
-  for (b = I_SYMBOL_BINDING (DECL_NAME (new_decl)); b; b = b->shadowed)
-    if (b->decl && b->decl != new_decl && !b->invisible
-	&& (b->decl == error_mark_node
+  ਲਈ (b = I_ਚਿੰਨ੍ਹ_BINDING (DECL_NAME (new_decl)); b; b = b->shadowed)
+    ਜੇ (b->decl && b->decl != new_decl && !b->invisible
+	&& (b->decl == error_mark_ਗੰਢ
 	    || diagnostic_report_warnings_p (global_dc,
-					     DECL_SOURCE_LOCATION (b->decl))))
+					     DECL_ਸਰੋਤ_LOCATION (b->decl))))
       {
-	tree old_decl = b->decl;
+	ਰੁੱਖ old_decl = b->decl;
 
-	if (old_decl == error_mark_node)
+	ਜੇ (old_decl == error_mark_ਗੰਢ)
 	  {
 	    warning (OPT_Wshadow, "declaration of %q+D shadows previous "
 		     "non-variable", new_decl);
-	    break;
+	    ਰੋਕੋ;
 	  }
 
-	bool warned = false;
-	auto_diagnostic_group d;
-	if (TREE_CODE (old_decl) == PARM_DECL)
+	ਤਾਰਕਿਕ warned = ਝੂਠ;
+	auto_diagnostic_ਸਮੂਹ d;
+	ਜੇ (ਰੁੱਖ_ਕੋਡ (old_decl) == PARM_DECL)
 	  {
-	    enum opt_code warning_code;
+	    ਗਿਣਤੀ opt_ਕੋਡ warning_ਕੋਡ;
 
 	    /* If '-Wshadow=compatible-local' is specified without other
 	       -Wshadow= flags, we will warn only when the types of the
 	       shadowing variable (i.e. new_decl) and the shadowed variable
 	       (old_decl) are compatible.  */
-	    if (warn_shadow)
-	      warning_code = OPT_Wshadow;
-	    else if (comptypes (TREE_TYPE (old_decl), TREE_TYPE (new_decl)))
-	      warning_code = OPT_Wshadow_compatible_local;
-	    else
-	      warning_code = OPT_Wshadow_local;
-	    warned = warning_at (DECL_SOURCE_LOCATION (new_decl), warning_code,
+	    ਜੇ (warn_shadow)
+	      warning_ਕੋਡ = OPT_Wshadow;
+	    ਨਹੀਂਤਾਂ ਜੇ (comptypes (ਰੁੱਖ_TYPE (old_decl), ਰੁੱਖ_TYPE (new_decl)))
+	      warning_ਕੋਡ = OPT_Wshadow_compatible_local;
+	    ਨਹੀਂਤਾਂ
+	      warning_ਕੋਡ = OPT_Wshadow_local;
+	    warned = warning_at (DECL_ਸਰੋਤ_LOCATION (new_decl), warning_ਕੋਡ,
 				 "declaration of %qD shadows a parameter",
 				 new_decl);
 	  }
-	else if (DECL_FILE_SCOPE_P (old_decl))
+	ਨਹੀਂਤਾਂ ਜੇ (DECL_FILE_SCOPE_P (old_decl))
 	  {
 	    /* Do not warn if a variable shadows a function, unless
 	       the variable is a function or a pointer-to-function.  */
-	    if (TREE_CODE (old_decl) == FUNCTION_DECL
-		&& TREE_CODE (new_decl) != FUNCTION_DECL
-		&& !FUNCTION_POINTER_TYPE_P (TREE_TYPE (new_decl)))
-		continue;
+	    ਜੇ (ਰੁੱਖ_ਕੋਡ (old_decl) == FUNCTION_DECL
+		&& ਰੁੱਖ_ਕੋਡ (new_decl) != FUNCTION_DECL
+		&& !FUNCTION_ਸੂਚਕ_TYPE_P (ਰੁੱਖ_TYPE (new_decl)))
+		ਜਾਰੀ;
 
-	    warned = warning_at (DECL_SOURCE_LOCATION (new_decl), OPT_Wshadow,
+	    warned = warning_at (DECL_ਸਰੋਤ_LOCATION (new_decl), OPT_Wshadow,
 				 "declaration of %qD shadows a global "
 				 "declaration",
 				 new_decl);
 	  }
-	else if (TREE_CODE (old_decl) == FUNCTION_DECL
-		 && fndecl_built_in_p (old_decl))
+	ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (old_decl) == FUNCTION_DECL
+		 && fndecl_built_ਵਿੱਚ_p (old_decl))
 	  {
 	    warning (OPT_Wshadow, "declaration of %q+D shadows "
 		     "a built-in function", new_decl);
-	    break;
+	    ਰੋਕੋ;
 	  }
-	else
+	ਨਹੀਂਤਾਂ
 	  {
-	    enum opt_code warning_code;
+	    ਗਿਣਤੀ opt_ਕੋਡ warning_ਕੋਡ;
 
 	    /* If '-Wshadow=compatible-local' is specified without other
 	       -Wshadow= flags, we will warn only when the types of the
 	       shadowing variable (i.e. new_decl) and the shadowed variable
 	       (old_decl) are compatible.  */
-	    if (warn_shadow)
-	      warning_code = OPT_Wshadow;
-	    else if (comptypes (TREE_TYPE (old_decl), TREE_TYPE (new_decl)))
-	      warning_code = OPT_Wshadow_compatible_local;
-	    else
-	      warning_code = OPT_Wshadow_local;
-	    warned = warning_at (DECL_SOURCE_LOCATION (new_decl), warning_code,
+	    ਜੇ (warn_shadow)
+	      warning_ਕੋਡ = OPT_Wshadow;
+	    ਨਹੀਂਤਾਂ ਜੇ (comptypes (ਰੁੱਖ_TYPE (old_decl), ਰੁੱਖ_TYPE (new_decl)))
+	      warning_ਕੋਡ = OPT_Wshadow_compatible_local;
+	    ਨਹੀਂਤਾਂ
+	      warning_ਕੋਡ = OPT_Wshadow_local;
+	    warned = warning_at (DECL_ਸਰੋਤ_LOCATION (new_decl), warning_ਕੋਡ,
 				 "declaration of %qD shadows a previous local",
 				 new_decl);
 	  }
 
-	if (warned)
-	  inform (DECL_SOURCE_LOCATION (old_decl),
+	ਜੇ (warned)
+	  inform (DECL_ਸਰੋਤ_LOCATION (old_decl),
 		  "shadowed declaration is here");
 
-	break;
+	ਰੋਕੋ;
       }
 }
 
@@ -3390,32 +3390,32 @@ warn_if_shadowing (tree new_decl)
    If an old decl is returned, it may have been smashed
    to agree with what X says.  */
 
-tree
-pushdecl (tree x)
+ਰੁੱਖ
+pushdecl (ਰੁੱਖ x)
 {
-  tree name = DECL_NAME (x);
-  struct c_scope *scope = current_scope;
-  struct c_binding *b;
-  bool nested = false;
-  location_t locus = DECL_SOURCE_LOCATION (x);
+  ਰੁੱਖ name = DECL_NAME (x);
+  ਬਣਤਰ c_scope *scope = current_scope;
+  ਬਣਤਰ c_binding *b;
+  ਤਾਰਕਿਕ nested = ਝੂਠ;
+  location_t locus = DECL_ਸਰੋਤ_LOCATION (x);
 
   /* Must set DECL_CONTEXT for everything not at file scope or
      DECL_FILE_SCOPE_P won't work.  Local externs don't count
      unless they have initializers (which generate code).  We
      also exclude CONST_DECLs because enumerators will get the
      type of the enum as context.  */
-  if (current_function_decl
-      && TREE_CODE (x) != CONST_DECL
+  ਜੇ (current_function_decl
+      && ਰੁੱਖ_ਕੋਡ (x) != CONST_DECL
       && (!VAR_OR_FUNCTION_DECL_P (x)
-	  || DECL_INITIAL (x) || !TREE_PUBLIC (x)))
+	  || DECL_INITIAL (x) || !ਰੁੱਖ_ਜਨਤਕ (x)))
     DECL_CONTEXT (x) = current_function_decl;
 
   /* Anonymous decls are just inserted in the scope.  */
-  if (!name)
+  ਜੇ (!name)
     {
-      bind (name, x, scope, /*invisible=*/false, /*nested=*/false,
+      bind (name, x, scope, /*invisible=*/ਝੂਠ, /*nested=*/ਝੂਠ,
 	    locus);
-      return x;
+      ਵਾਪਸ x;
     }
 
   /* First, see if there is another declaration with the same name in
@@ -3425,107 +3425,107 @@ pushdecl (tree x)
      replace the old one (duplicate_decls has issued all appropriate
      diagnostics).  In particular, we should not consider possible
      duplicates in the external scope, or shadowing.  */
-  b = I_SYMBOL_BINDING (name);
-  if (b && B_IN_SCOPE (b, scope))
+  b = I_ਚਿੰਨ੍ਹ_BINDING (name);
+  ਜੇ (b && B_ਵਿੱਚ_SCOPE (b, scope))
     {
-      struct c_binding *b_ext, *b_use;
-      tree type = TREE_TYPE (x);
-      tree visdecl = b->decl;
-      tree vistype = TREE_TYPE (visdecl);
-      if (TREE_CODE (TREE_TYPE (x)) == ARRAY_TYPE
-	  && COMPLETE_TYPE_P (TREE_TYPE (x)))
-	b->inner_comp = false;
+      ਬਣਤਰ c_binding *b_ext, *b_use;
+      ਰੁੱਖ type = ਰੁੱਖ_TYPE (x);
+      ਰੁੱਖ visdecl = b->decl;
+      ਰੁੱਖ vistype = ਰੁੱਖ_TYPE (visdecl);
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (x)) == ARRAY_TYPE
+	  && COMPLETE_TYPE_P (ਰੁੱਖ_TYPE (x)))
+	b->inner_comp = ਝੂਠ;
       b_use = b;
       b_ext = b;
       /* If this is an external linkage declaration, we should check
 	 for compatibility with the type in the external scope before
 	 setting the type at this scope based on the visible
 	 information only.  */
-      if (TREE_PUBLIC (x) && TREE_PUBLIC (visdecl))
+      ਜੇ (ਰੁੱਖ_ਜਨਤਕ (x) && ਰੁੱਖ_ਜਨਤਕ (visdecl))
 	{
-	  while (b_ext && !B_IN_EXTERNAL_SCOPE (b_ext))
+	  ਜਦੋਂ (b_ext && !B_ਵਿੱਚ_EXTERNAL_SCOPE (b_ext))
 	    b_ext = b_ext->shadowed;
-	  if (b_ext)
+	  ਜੇ (b_ext)
 	    {
 	      b_use = b_ext;
-	      if (b_use->u.type)
-		TREE_TYPE (b_use->decl) = b_use->u.type;
+	      ਜੇ (b_use->u.type)
+		ਰੁੱਖ_TYPE (b_use->decl) = b_use->u.type;
 	    }
 	}
 
       /* Check if x is part of a FMV set with b_use.
 	 FMV is only supported in c for targets with target_version
 	 attributes.  */
-      if (!TARGET_HAS_FMV_TARGET_ATTRIBUTE
-	  && b_use && TREE_CODE (b_use->decl) == FUNCTION_DECL
-	  && TREE_CODE (x) == FUNCTION_DECL && DECL_FILE_SCOPE_P (b_use->decl)
+      ਜੇ (!ਨਿਸ਼ਾਨਾ_HAS_FMV_ਨਿਸ਼ਾਨਾ_ATTRIBUTE
+	  && b_use && ਰੁੱਖ_ਕੋਡ (b_use->decl) == FUNCTION_DECL
+	  && ਰੁੱਖ_ਕੋਡ (x) == FUNCTION_DECL && DECL_FILE_SCOPE_P (b_use->decl)
 	  && DECL_FILE_SCOPE_P (x)
-	  && disjoint_version_decls (x, b_use->decl)
+	  && disjoint_ਸੰਸਕਰਣ_decls (x, b_use->decl)
 	  && comptypes (vistype, type))
 	{
 	  maybe_mark_function_versioned (b_use->decl);
 	  maybe_mark_function_versioned (b->decl);
 	  maybe_mark_function_versioned (x);
 
-	  cgraph_node *b_node = cgraph_node::get_create (b_use->decl);
-	  cgraph_function_version_info *b_v = b_node->function_version ();
-	  if (!b_v)
-	    b_v = b_node->insert_new_function_version ();
+	  cgraph_ਗੰਢ *b_ਗੰਢ = cgraph_ਗੰਢ::get_create (b_use->decl);
+	  cgraph_function_ਸੰਸਕਰਣ_info *b_v = b_ਗੰਢ->function_ਸੰਸਕਰਣ ();
+	  ਜੇ (!b_v)
+	    b_v = b_ਗੰਢ->ਪਾਓ_new_function_ਸੰਸਕਰਣ ();
 
 	  /* Check if this new node conflicts with any previous functions
 	     in the set.  */
-	  cgraph_function_version_info *version = b_v;
-	  for (; version; version = version->next)
-	    if (!disjoint_version_decls (version->this_node->decl, x))
+	  cgraph_function_ਸੰਸਕਰਣ_info *ਸੰਸਕਰਣ = b_v;
+	  ਲਈ (; ਸੰਸਕਰਣ; ਸੰਸਕਰਣ = ਸੰਸਕਰਣ->ਅਗਲਾ)
+	    ਜੇ (!disjoint_ਸੰਸਕਰਣ_decls (ਸੰਸਕਰਣ->this_ਗੰਢ->decl, x))
 	      {
 		/* The decls define overlapping version, so attempt to merge
 		   or diagnose the conflict.  */
-		if (duplicate_decls (x, version->this_node->decl))
-		  return version->this_node->decl;
-		else
-		  return error_mark_node;
+		ਜੇ (duplicate_decls (x, ਸੰਸਕਰਣ->this_ਗੰਢ->decl))
+		  ਵਾਪਸ ਸੰਸਕਰਣ->this_ਗੰਢ->decl;
+		ਨਹੀਂਤਾਂ
+		  ਵਾਪਸ error_mark_ਗੰਢ;
 	      }
 
 	  /* This is a new version to be added to FMV structure.  */
-	  cgraph_node::add_function_version (b_v, x);
+	  cgraph_ਗੰਢ::ਜੋੜੋ_function_ਸੰਸਕਰਣ (b_v, x);
 
 	  /* Get the first node from the structure.  */
-	  cgraph_function_version_info *default_v = b_v;
-	  while (default_v->prev)
+	  cgraph_function_ਸੰਸਕਰਣ_info *default_v = b_v;
+	  ਜਦੋਂ (default_v->prev)
 	    default_v = default_v->prev;
 	  /* Always use the default node for the bindings.  */
-	  b_use->decl = default_v->this_node->decl;
-	  b->decl = default_v->this_node->decl;
+	  b_use->decl = default_v->this_ਗੰਢ->decl;
+	  b->decl = default_v->this_ਗੰਢ->decl;
 
 	  /* Node is not a duplicate, so no need to do the rest of the
 	     checks.  */
-	  return x;
+	  ਵਾਪਸ x;
 	}
 
-      if (duplicate_decls (x, b_use->decl))
+      ਜੇ (duplicate_decls (x, b_use->decl))
 	{
-	  if (b_use != b)
+	  ਜੇ (b_use != b)
 	    {
 	      /* Save the updated type in the external scope and
 		 restore the proper type for this scope.  */
-	      tree thistype;
-	      if (comptypes (vistype, type))
-		thistype = composite_type (vistype, type);
-	      else
-		thistype = TREE_TYPE (b_use->decl);
-	      b_use->u.type = TREE_TYPE (b_use->decl);
-	      if (TREE_CODE (b_use->decl) == FUNCTION_DECL
-		  && fndecl_built_in_p (b_use->decl))
+	      ਰੁੱਖ thistype;
+	      ਜੇ (comptypes (vistype, type))
+		thistype = ਸੰਯੁਕਤ_type (vistype, type);
+	      ਨਹੀਂਤਾਂ
+		thistype = ਰੁੱਖ_TYPE (b_use->decl);
+	      b_use->u.type = ਰੁੱਖ_TYPE (b_use->decl);
+	      ਜੇ (ਰੁੱਖ_ਕੋਡ (b_use->decl) == FUNCTION_DECL
+		  && fndecl_built_ਵਿੱਚ_p (b_use->decl))
 		thistype
 		  = c_build_type_attribute_variant (thistype,
-						    TYPE_ATTRIBUTES
+						    TYPE_ਗੁਣ
 						    (b_use->u.type));
-	      TREE_TYPE (b_use->decl) = thistype;
+	      ਰੁੱਖ_TYPE (b_use->decl) = thistype;
 	    }
-	  return b_use->decl;
+	  ਵਾਪਸ b_use->decl;
 	}
-      else
-	goto skip_external_and_shadow_checks;
+      ਨਹੀਂਤਾਂ
+	ਜਾਓ skip_external_and_shadow_checks;
     }
 
   /* All declarations with external linkage, and all external
@@ -3542,26 +3542,26 @@ pushdecl (tree x)
      have compatible type; otherwise, the behavior is undefined.)
      However, in Objective-C, we also want to detect declarations
      conflicting with those of the basic types.  */
-  if ((DECL_EXTERNAL (x) || scope == file_scope)
+  ਜੇ ((DECL_EXTERNAL (x) || scope == file_scope)
       && (VAR_OR_FUNCTION_DECL_P (x) || c_dialect_objc ()))
     {
-      tree type = TREE_TYPE (x);
-      tree vistype = NULL_TREE;
-      tree visdecl = NULL_TREE;
-      bool type_saved = false;
-      if (b && !B_IN_EXTERNAL_SCOPE (b)
+      ਰੁੱਖ type = ਰੁੱਖ_TYPE (x);
+      ਰੁੱਖ vistype = NULL_ਰੁੱਖ;
+      ਰੁੱਖ visdecl = NULL_ਰੁੱਖ;
+      ਤਾਰਕਿਕ type_saved = ਝੂਠ;
+      ਜੇ (b && !B_ਵਿੱਚ_EXTERNAL_SCOPE (b)
 	  && VAR_OR_FUNCTION_DECL_P (b->decl)
 	  && DECL_FILE_SCOPE_P (b->decl))
 	{
 	  visdecl = b->decl;
-	  vistype = TREE_TYPE (visdecl);
+	  vistype = ਰੁੱਖ_TYPE (visdecl);
 	}
-      if (scope != file_scope
-	  && !DECL_IN_SYSTEM_HEADER (x))
+      ਜੇ (scope != file_scope
+	  && !DECL_ਵਿੱਚ_SYSTEM_ਸਿਰਲੇਖ (x))
 	warning_at (locus, OPT_Wnested_externs,
 		    "nested extern declaration of %qD", x);
 
-      while (b && !B_IN_EXTERNAL_SCOPE (b))
+      ਜਦੋਂ (b && !B_ਵਿੱਚ_EXTERNAL_SCOPE (b))
 	{
 	  /* If this decl might be modified, save its type.  This is
 	     done here rather than when the decl is first bound
@@ -3571,25 +3571,25 @@ pushdecl (tree x)
 	     its type saved; the others will already have had their
 	     proper types saved and the types will not have changed as
 	     their scopes will not have been re-entered.  */
-	  if (DECL_P (b->decl) && DECL_FILE_SCOPE_P (b->decl) && !type_saved)
+	  ਜੇ (DECL_P (b->decl) && DECL_FILE_SCOPE_P (b->decl) && !type_saved)
 	    {
-	      b->u.type = TREE_TYPE (b->decl);
-	      type_saved = true;
+	      b->u.type = ਰੁੱਖ_TYPE (b->decl);
+	      type_saved = ਸੱਚ;
 	    }
-	  if (B_IN_FILE_SCOPE (b)
+	  ਜੇ (B_ਵਿੱਚ_FILE_SCOPE (b)
 	      && VAR_P (b->decl)
-	      && TREE_STATIC (b->decl)
-	      && TREE_CODE (TREE_TYPE (b->decl)) == ARRAY_TYPE
-	      && !TYPE_DOMAIN (TREE_TYPE (b->decl))
-	      && TREE_CODE (type) == ARRAY_TYPE
+	      && ਰੁੱਖ_STATIC (b->decl)
+	      && ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (b->decl)) == ARRAY_TYPE
+	      && !TYPE_DOMAIN (ਰੁੱਖ_TYPE (b->decl))
+	      && ਰੁੱਖ_ਕੋਡ (type) == ARRAY_TYPE
 	      && TYPE_DOMAIN (type)
-	      && TYPE_MAX_VALUE (TYPE_DOMAIN (type))
-	      && !integer_zerop (TYPE_MAX_VALUE (TYPE_DOMAIN (type))))
+	      && TYPE_MAX_ਮੁੱਲ (TYPE_DOMAIN (type))
+	      && !integer_zerop (TYPE_MAX_ਮੁੱਲ (TYPE_DOMAIN (type))))
 	    {
 	      /* Array type completed in inner scope, which should be
 		 diagnosed if the completion does not have size 1 and
 		 it does not get completed in the file scope.  */
-	      b->inner_comp = true;
+	      b->inner_comp = ਸੱਚ;
 	    }
 	  b = b->shadowed;
 	}
@@ -3598,69 +3598,69 @@ pushdecl (tree x)
 	 type to the composite of all the types of that declaration.
 	 After the consistency checks, it will be reset to the
 	 composite of the visible types only.  */
-      if (b && b->u.type)
-	TREE_TYPE (b->decl) = b->u.type;
+      ਜੇ (b && b->u.type)
+	ਰੁੱਖ_TYPE (b->decl) = b->u.type;
 
       /* the static does not go in the externals scope.  */
-      if (b && duplicate_decls (x, b->decl))
+      ਜੇ (b && duplicate_decls (x, b->decl))
 	{
-	  tree thistype;
-	  if (vistype)
+	  ਰੁੱਖ thistype;
+	  ਜੇ (vistype)
 	    {
-	      if (comptypes (vistype, type))
-		thistype = composite_type (vistype, type);
-	      else
-		thistype = TREE_TYPE (b->decl);
+	      ਜੇ (comptypes (vistype, type))
+		thistype = ਸੰਯੁਕਤ_type (vistype, type);
+	      ਨਹੀਂਤਾਂ
+		thistype = ਰੁੱਖ_TYPE (b->decl);
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    thistype = type;
-	  b->u.type = TREE_TYPE (b->decl);
+	  b->u.type = ਰੁੱਖ_TYPE (b->decl);
 	  /* Propagate the type attributes to the decl.  */
 	  thistype
 	    = c_build_type_attribute_variant (thistype,
-					      TYPE_ATTRIBUTES (b->u.type));
-	  TREE_TYPE (b->decl) = thistype;
-	  bind (name, b->decl, scope, /*invisible=*/false, /*nested=*/true,
+					      TYPE_ਗੁਣ (b->u.type));
+	  ਰੁੱਖ_TYPE (b->decl) = thistype;
+	  bind (name, b->decl, scope, /*invisible=*/ਝੂਠ, /*nested=*/ਸੱਚ,
 		locus);
-	  return b->decl;
+	  ਵਾਪਸ b->decl;
 	}
-      else if (TREE_PUBLIC (x))
+      ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਜਨਤਕ (x))
 	{
-	  if (visdecl && !b && duplicate_decls (x, visdecl))
+	  ਜੇ (visdecl && !b && duplicate_decls (x, visdecl))
 	    {
 	      /* An external declaration at block scope referring to a
 		 visible entity with internal linkage.  The composite
 		 type will already be correct for this scope, so we
 		 just need to fall through to make the declaration in
 		 this scope.  */
-	      nested = true;
+	      nested = ਸੱਚ;
 	      x = visdecl;
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    {
-	      bind (name, x, external_scope, /*invisible=*/true,
-		    /*nested=*/false, locus);
-	      nested = true;
+	      bind (name, x, external_scope, /*invisible=*/ਸੱਚ,
+		    /*nested=*/ਝੂਠ, locus);
+	      nested = ਸੱਚ;
 	    }
 	}
     }
 
-  if (TREE_CODE (x) != PARM_DECL)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (x) != PARM_DECL)
     warn_if_shadowing (x);
 
  skip_external_and_shadow_checks:
-  if (TREE_CODE (x) == TYPE_DECL)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (x) == TYPE_DECL)
     {
       /* So this is a typedef, set its underlying type.  */
-      set_underlying_type (x);
+      ਸੈੱਟ_underlying_type (x);
 
       /* If X is a typedef defined in the current function, record it
 	 for the purpose of implementing the -Wunused-local-typedefs
 	 warning.  */
-      record_locally_defined_typedef (x);
+      ਰਿਕਾਰਡ_locally_defined_typedef (x);
     }
 
-  bind (name, x, scope, /*invisible=*/false, nested, locus);
+  bind (name, x, scope, /*invisible=*/ਝੂਠ, nested, locus);
 
   /* If x's type is incomplete because it's based on a
      structure or union which has not yet been fully declared,
@@ -3671,24 +3671,24 @@ pushdecl (tree x)
      If the input is erroneous, we can have error_mark in the type
      slot (e.g. "f(void a, ...)") - that doesn't count as an
      incomplete type.  */
-  if (TREE_TYPE (x) != error_mark_node
-      && !COMPLETE_TYPE_P (TREE_TYPE (x)))
+  ਜੇ (ਰੁੱਖ_TYPE (x) != error_mark_ਗੰਢ
+      && !COMPLETE_TYPE_P (ਰੁੱਖ_TYPE (x)))
     {
-      tree element = TREE_TYPE (x);
+      ਰੁੱਖ element = ਰੁੱਖ_TYPE (x);
 
-      while (TREE_CODE (element) == ARRAY_TYPE)
-	element = TREE_TYPE (element);
+      ਜਦੋਂ (ਰੁੱਖ_ਕੋਡ (element) == ARRAY_TYPE)
+	element = ਰੁੱਖ_TYPE (element);
       element = TYPE_MAIN_VARIANT (element);
 
-      if ((RECORD_OR_UNION_TYPE_P (element)
-	   || TREE_CODE (element) == ENUMERAL_TYPE)
-	  && (TREE_CODE (x) != TYPE_DECL
-	      || TREE_CODE (TREE_TYPE (x)) == ARRAY_TYPE)
+      ਜੇ ((ਰਿਕਾਰਡ_OR_UNION_TYPE_P (element)
+	   || ਰੁੱਖ_ਕੋਡ (element) == ENUMERAL_TYPE)
+	  && (ਰੁੱਖ_ਕੋਡ (x) != TYPE_DECL
+	      || ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (x)) == ARRAY_TYPE)
 	  && !COMPLETE_TYPE_P (element))
 	C_TYPE_INCOMPLETE_VARS (element)
-	  = tree_cons (NULL_TREE, x, C_TYPE_INCOMPLETE_VARS (element));
+	  = ਰੁੱਖ_cons (NULL_ਰੁੱਖ, x, C_TYPE_INCOMPLETE_VARS (element));
     }
-  return x;
+  ਵਾਪਸ x;
 }
 
 
@@ -3696,72 +3696,72 @@ pushdecl (tree x)
    identifier, OLDDECL is a declaration of the function in a different scope,
    or NULL_TREE.  */
 
-static void
-implicit_decl_permerror (location_t loc, tree id, tree olddecl)
+ਸਥਿਰ ਖਾਲੀ
+implicit_decl_permerror (location_t loc, ਰੁੱਖ id, ਰੁੱਖ olddecl)
 {
-  if (!warn_implicit_function_declaration)
-    return;
+  ਜੇ (!warn_implicit_function_declaration)
+    ਵਾਪਸ;
 
-  bool warned;
-  auto_diagnostic_group d;
+  ਤਾਰਕਿਕ warned;
+  auto_diagnostic_ਸਮੂਹ d;
   name_hint hint;
-  if (!olddecl)
+  ਜੇ (!olddecl)
     hint = lookup_name_fuzzy (id, FUZZY_LOOKUP_FUNCTION_NAME, loc);
 
-  if (flag_isoc99)
+  ਜੇ (flag_isoc99)
     {
-      if (const char *suggestion = hint.suggestion ())
+      ਜੇ (ਅਚਲ ਅੱਖਰ *suggestion = hint.suggestion ())
 	{
 	  gcc_rich_location richloc (loc);
-	  richloc.add_fixit_replace (suggestion);
+	  richloc.ਜੋੜੋ_fixit_replace (suggestion);
 	  warned = permerror_opt (&richloc, OPT_Wimplicit_function_declaration,
 				  "implicit declaration of function %qE;"
 				  " did you mean %qs?",
 				  id, suggestion);
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	warned = permerror_opt (loc, OPT_Wimplicit_function_declaration,
 				"implicit declaration of function %qE", id);
     }
-  else if (const char *suggestion = hint.suggestion ())
+  ਨਹੀਂਤਾਂ ਜੇ (ਅਚਲ ਅੱਖਰ *suggestion = hint.suggestion ())
     {
       gcc_rich_location richloc (loc);
-      richloc.add_fixit_replace (suggestion);
+      richloc.ਜੋੜੋ_fixit_replace (suggestion);
       warned = warning_at
 	(&richloc, OPT_Wimplicit_function_declaration,
 	 G_("implicit declaration of function %qE; did you mean %qs?"),
 	 id, suggestion);
     }
-  else
+  ਨਹੀਂਤਾਂ
     warned = warning_at (loc, OPT_Wimplicit_function_declaration,
 			 G_("implicit declaration of function %qE"), id);
 
-  if (warned)
+  ਜੇ (warned)
     {
       /* Whether the olddecl is an undeclared builtin function.
 	 locate_old_decl will not generate a diagnostic for those,
 	 so in that case we want to look elsewhere.  */
-      bool undeclared_builtin = (olddecl
-				 && TREE_CODE (olddecl) == FUNCTION_DECL
-				 && fndecl_built_in_p (olddecl)
+      ਤਾਰਕਿਕ undeclared_builtin = (olddecl
+				 && ਰੁੱਖ_ਕੋਡ (olddecl) == FUNCTION_DECL
+				 && fndecl_built_ਵਿੱਚ_p (olddecl)
 				 && !C_DECL_DECLARED_BUILTIN (olddecl));
-      if (undeclared_builtin)
+      ਜੇ (undeclared_builtin)
 	{
-	  const char *header = header_for_builtin_fn (olddecl);
-	  if (header)
+	  ਅਚਲ ਅੱਖਰ *ਸਿਰਲੇਖ = ਸਿਰਲੇਖ_for_builtin_fn (olddecl);
+	  ਜੇ (ਸਿਰਲੇਖ)
 	    {
-	      rich_location richloc (line_table, loc);
-	      maybe_add_include_fixit (&richloc, header, true);
+	      rich_location richloc (ਸਤਰ_ਸਾਰਣੀ, loc);
+	      maybe_ਜੋੜੋ_include_fixit (&richloc, ਸਿਰਲੇਖ, ਸੱਚ);
 	      inform (&richloc,
 		      "include %qs or provide a declaration of %qE",
-		      header, id);
+		      ਸਿਰਲੇਖ, id);
 	    }
 	}
-      else if (olddecl)
+      ਨਹੀਂਤਾਂ ਜੇ (olddecl)
 	locate_old_decl (olddecl);
     }
 
-  if (!warned)
+  ਜੇ (!warned)
     hint.suppress ();
 }
 
@@ -3769,321 +3769,321 @@ implicit_decl_permerror (location_t loc, tree id, tree olddecl)
    FNDECL, or null if either we don't know or don't expect to see an
    explicit declaration.  */
 
-static const char *
-header_for_builtin_fn (tree fndecl)
+ਸਥਿਰ ਅਚਲ ਅੱਖਰ *
+ਸਿਰਲੇਖ_for_builtin_fn (ਰੁੱਖ fndecl)
 {
-  if (DECL_BUILT_IN_CLASS (fndecl) != BUILT_IN_NORMAL)
-    return NULL;
+  ਜੇ (DECL_BUILT_ਵਿੱਚ_CLASS (fndecl) != BUILT_ਵਿੱਚ_ਸਾਧਾਰਨ)
+    ਵਾਪਸ ਨਿਰਾ;
 
-  switch (DECL_FUNCTION_CODE (fndecl))
+  ਚੋਣ (DECL_FUNCTION_ਕੋਡ (fndecl))
     {
-    CASE_FLT_FN (BUILT_IN_ACOS):
-    CASE_FLT_FN (BUILT_IN_ACOSH):
-    CASE_FLT_FN (BUILT_IN_ASIN):
-    CASE_FLT_FN (BUILT_IN_ASINH):
-    CASE_FLT_FN (BUILT_IN_ATAN):
-    CASE_FLT_FN (BUILT_IN_ATANH):
-    CASE_FLT_FN (BUILT_IN_ATAN2):
-    CASE_FLT_FN (BUILT_IN_CBRT):
-    CASE_FLT_FN (BUILT_IN_CEIL):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_CEIL):
-    CASE_FLT_FN (BUILT_IN_COPYSIGN):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_COPYSIGN):
-    CASE_FLT_FN (BUILT_IN_COS):
-    CASE_FLT_FN (BUILT_IN_COSH):
-    CASE_FLT_FN (BUILT_IN_ERF):
-    CASE_FLT_FN (BUILT_IN_ERFC):
-    CASE_FLT_FN (BUILT_IN_EXP):
-    CASE_FLT_FN (BUILT_IN_EXP2):
-    CASE_FLT_FN (BUILT_IN_EXPM1):
-    CASE_FLT_FN (BUILT_IN_FABS):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_FABS):
-    CASE_FLT_FN (BUILT_IN_FDIM):
-    CASE_FLT_FN (BUILT_IN_FLOOR):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_FLOOR):
-    CASE_FLT_FN (BUILT_IN_FMA):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_FMA):
-    CASE_FLT_FN (BUILT_IN_FMAX):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_FMAX):
-    CASE_FLT_FN (BUILT_IN_FMIN):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_FMIN):
-    CASE_FLT_FN (BUILT_IN_FMOD):
-    CASE_FLT_FN (BUILT_IN_FREXP):
-    CASE_FLT_FN (BUILT_IN_HYPOT):
-    CASE_FLT_FN (BUILT_IN_ILOGB):
-    CASE_FLT_FN (BUILT_IN_LDEXP):
-    CASE_FLT_FN (BUILT_IN_LGAMMA):
-    CASE_FLT_FN (BUILT_IN_LLRINT):
-    CASE_FLT_FN (BUILT_IN_LLROUND):
-    CASE_FLT_FN (BUILT_IN_LOG):
-    CASE_FLT_FN (BUILT_IN_LOG10):
-    CASE_FLT_FN (BUILT_IN_LOG1P):
-    CASE_FLT_FN (BUILT_IN_LOG2):
-    CASE_FLT_FN (BUILT_IN_LOGB):
-    CASE_FLT_FN (BUILT_IN_LRINT):
-    CASE_FLT_FN (BUILT_IN_LROUND):
-    CASE_FLT_FN (BUILT_IN_MODF):
-    CASE_FLT_FN (BUILT_IN_NAN):
-    CASE_FLT_FN (BUILT_IN_NEARBYINT):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_NEARBYINT):
-    CASE_FLT_FN (BUILT_IN_NEXTAFTER):
-    CASE_FLT_FN (BUILT_IN_NEXTTOWARD):
-    CASE_FLT_FN (BUILT_IN_POW):
-    CASE_FLT_FN (BUILT_IN_REMAINDER):
-    CASE_FLT_FN (BUILT_IN_REMQUO):
-    CASE_FLT_FN (BUILT_IN_RINT):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_RINT):
-    CASE_FLT_FN (BUILT_IN_ROUND):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_ROUND):
-    CASE_FLT_FN (BUILT_IN_SCALBLN):
-    CASE_FLT_FN (BUILT_IN_SCALBN):
-    CASE_FLT_FN (BUILT_IN_SIN):
-    CASE_FLT_FN (BUILT_IN_SINH):
-    CASE_FLT_FN (BUILT_IN_SINCOS):
-    CASE_FLT_FN (BUILT_IN_SQRT):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_SQRT):
-    CASE_FLT_FN (BUILT_IN_TAN):
-    CASE_FLT_FN (BUILT_IN_TANH):
-    CASE_FLT_FN (BUILT_IN_TGAMMA):
-    CASE_FLT_FN (BUILT_IN_TRUNC):
-    CASE_FLT_FN_FLOATN_NX (BUILT_IN_TRUNC):
-    case BUILT_IN_ISINF:
-    case BUILT_IN_ISNAN:
-      return "<math.h>";
-    CASE_FLT_FN (BUILT_IN_CABS):
-    CASE_FLT_FN (BUILT_IN_CACOS):
-    CASE_FLT_FN (BUILT_IN_CACOSH):
-    CASE_FLT_FN (BUILT_IN_CARG):
-    CASE_FLT_FN (BUILT_IN_CASIN):
-    CASE_FLT_FN (BUILT_IN_CASINH):
-    CASE_FLT_FN (BUILT_IN_CATAN):
-    CASE_FLT_FN (BUILT_IN_CATANH):
-    CASE_FLT_FN (BUILT_IN_CCOS):
-    CASE_FLT_FN (BUILT_IN_CCOSH):
-    CASE_FLT_FN (BUILT_IN_CEXP):
-    CASE_FLT_FN (BUILT_IN_CIMAG):
-    CASE_FLT_FN (BUILT_IN_CLOG):
-    CASE_FLT_FN (BUILT_IN_CONJ):
-    CASE_FLT_FN (BUILT_IN_CPOW):
-    CASE_FLT_FN (BUILT_IN_CPROJ):
-    CASE_FLT_FN (BUILT_IN_CREAL):
-    CASE_FLT_FN (BUILT_IN_CSIN):
-    CASE_FLT_FN (BUILT_IN_CSINH):
-    CASE_FLT_FN (BUILT_IN_CSQRT):
-    CASE_FLT_FN (BUILT_IN_CTAN):
-    CASE_FLT_FN (BUILT_IN_CTANH):
-      return "<complex.h>";
-    case BUILT_IN_MEMCHR:
-    case BUILT_IN_MEMCMP:
-    case BUILT_IN_MEMCPY:
-    case BUILT_IN_MEMMOVE:
-    case BUILT_IN_MEMSET:
-    case BUILT_IN_STRCAT:
-    case BUILT_IN_STRCHR:
-    case BUILT_IN_STRCMP:
-    case BUILT_IN_STRCPY:
-    case BUILT_IN_STRCSPN:
-    case BUILT_IN_STRLEN:
-    case BUILT_IN_STRNCAT:
-    case BUILT_IN_STRNCMP:
-    case BUILT_IN_STRNCPY:
-    case BUILT_IN_STRPBRK:
-    case BUILT_IN_STRRCHR:
-    case BUILT_IN_STRSPN:
-    case BUILT_IN_STRSTR:
-      return "<string.h>";
-    case BUILT_IN_FPRINTF:
-    case BUILT_IN_PUTC:
-    case BUILT_IN_FPUTC:
-    case BUILT_IN_FPUTS:
-    case BUILT_IN_FSCANF:
-    case BUILT_IN_FWRITE:
-    case BUILT_IN_PRINTF:
-    case BUILT_IN_PUTCHAR:
-    case BUILT_IN_PUTS:
-    case BUILT_IN_SCANF:
-    case BUILT_IN_SNPRINTF:
-    case BUILT_IN_SPRINTF:
-    case BUILT_IN_SSCANF:
-    case BUILT_IN_VFPRINTF:
-    case BUILT_IN_VFSCANF:
-    case BUILT_IN_VPRINTF:
-    case BUILT_IN_VSCANF:
-    case BUILT_IN_VSNPRINTF:
-    case BUILT_IN_VSPRINTF:
-    case BUILT_IN_VSSCANF:
-      return "<stdio.h>";
-    case BUILT_IN_ISALNUM:
-    case BUILT_IN_ISALPHA:
-    case BUILT_IN_ISBLANK:
-    case BUILT_IN_ISCNTRL:
-    case BUILT_IN_ISDIGIT:
-    case BUILT_IN_ISGRAPH:
-    case BUILT_IN_ISLOWER:
-    case BUILT_IN_ISPRINT:
-    case BUILT_IN_ISPUNCT:
-    case BUILT_IN_ISSPACE:
-    case BUILT_IN_ISUPPER:
-    case BUILT_IN_ISXDIGIT:
-    case BUILT_IN_TOLOWER:
-    case BUILT_IN_TOUPPER:
-      return "<ctype.h>";
-    case BUILT_IN_ISWALNUM:
-    case BUILT_IN_ISWALPHA:
-    case BUILT_IN_ISWBLANK:
-    case BUILT_IN_ISWCNTRL:
-    case BUILT_IN_ISWDIGIT:
-    case BUILT_IN_ISWGRAPH:
-    case BUILT_IN_ISWLOWER:
-    case BUILT_IN_ISWPRINT:
-    case BUILT_IN_ISWPUNCT:
-    case BUILT_IN_ISWSPACE:
-    case BUILT_IN_ISWUPPER:
-    case BUILT_IN_ISWXDIGIT:
-    case BUILT_IN_TOWLOWER:
-    case BUILT_IN_TOWUPPER:
-      return "<wctype.h>";
-    case BUILT_IN_ABORT:
-    case BUILT_IN_ABS:
-    case BUILT_IN_CALLOC:
-    case BUILT_IN_EXIT:
-    case BUILT_IN_FREE:
-    case BUILT_IN_LABS:
-    case BUILT_IN_LLABS:
-    case BUILT_IN_MALLOC:
-    case BUILT_IN_REALLOC:
-    case BUILT_IN__EXIT2:
-    case BUILT_IN_ALIGNED_ALLOC:
-      return "<stdlib.h>";
-    case BUILT_IN_IMAXABS:
-      return "<inttypes.h>";
-    case BUILT_IN_STRFTIME:
-      return "<time.h>";
-    default:
-      return NULL;
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_ACOS):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_ACOSH):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_ASIN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_ASINH):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_ATAN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_ATANH):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_ATAN2):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CBRT):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CEIL):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_CEIL):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_COPYSIGN):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_COPYSIGN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_COS):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_COSH):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_ERF):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_ERFC):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_EXP):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_EXP2):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_EXPM1):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_FABS):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_FABS):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_FDIM):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_FLOOR):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_FLOOR):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_FMA):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_FMA):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_FMAX):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_FMAX):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_FMIN):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_FMIN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_FMOD):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_FREXP):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_HYPOT):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_ILOGB):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_LDEXP):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_LGAMMA):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_LLRINT):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_LLROUND):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_LOG):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_LOG10):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_LOG1_P):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_LOG2):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_LOGB):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_LRINT):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_LROUND):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_MODF):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_NAN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_NEARBYINT):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_NEARBYINT):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_NEXTAFTER):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_NEXTTOWARD):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_POW):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_REMAINDER):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_REMQUO):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_RINT):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_RINT):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_ਗੇੜਾ):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_ਗੇੜਾ):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_SCALBLN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_SCALBN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_SIN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_SINH):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_SINCOS):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_SQRT):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_SQRT):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_TAN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_TANH):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_TGAMMA):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_TRUNC):
+    CASE_FLT_FN_FLOATN_NX (BUILT_ਵਿੱਚ_TRUNC):
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISINF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISNAN:
+      ਵਾਪਸ "<math.h>";
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CABS):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CACOS):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CACOSH):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CARG):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CASIN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CASINH):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CATAN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CATANH):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CCOS):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CCOSH):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CEXP):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CIMAG):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CLOG):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CONJ):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CPOW):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CPROJ):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CREAL):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CSIN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CSINH):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CSQRT):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CTAN):
+    CASE_FLT_FN (BUILT_ਵਿੱਚ_CTANH):
+      ਵਾਪਸ "<complex.h>";
+    ਹਾਲਤ BUILT_ਵਿੱਚ_MEMCHR:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_MEMCMP:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_MEMCPY:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_MEMMOVE:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_MEMSET:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRCAT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRCHR:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRCMP:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRCPY:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRCSPN:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRLEN:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRNCAT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRNCMP:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRNCPY:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRPBRK:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRRCHR:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRSPN:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRSTR:
+      ਵਾਪਸ "<string.h>";
+    ਹਾਲਤ BUILT_ਵਿੱਚ_FPRINTF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_PUTC:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_FPUTC:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_FPUTS:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_FSCANF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_FWRITE:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_PRINTF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_PUTCHAR:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_PUTS:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_SCANF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_SNPRINTF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_SPRINTF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_SSCANF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_VFPRINTF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_VFSCANF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_VPRINTF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_VSCANF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_VSNPRINTF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_VSPRINTF:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_VSSCANF:
+      ਵਾਪਸ "<stdio.h>";
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISALNUM:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISALPHA:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISBLANK:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISCNTRL:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISDIGIT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISGRAPH:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISLOWER:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISPRINT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISPUNCT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISSPACE:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISUPPER:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISXDIGIT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_TOLOWER:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_TOUPPER:
+      ਵਾਪਸ "<ctype.h>";
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWALNUM:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWALPHA:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWBLANK:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWCNTRL:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWDIGIT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWGRAPH:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWLOWER:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWPRINT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWPUNCT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWSPACE:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWUPPER:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ISWXDIGIT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_TOWLOWER:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_TOWUPPER:
+      ਵਾਪਸ "<wctype.h>";
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ABORT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ABS:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_CALLOC:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_EXIT:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_FREE:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_LABS:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_LLABS:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_MALLOC:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_REALLOC:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_EXIT2:
+    ਹਾਲਤ BUILT_ਵਿੱਚ_ALIGNED_ALLOC:
+      ਵਾਪਸ "<stdlib.h>";
+    ਹਾਲਤ BUILT_ਵਿੱਚ_IMAXABS:
+      ਵਾਪਸ "<inttypes.h>";
+    ਹਾਲਤ BUILT_ਵਿੱਚ_STRFTIME:
+      ਵਾਪਸ "<time.h>";
+    ਮੂਲ:
+      ਵਾਪਸ ਨਿਰਾ;
     }
 }
 
 /* Generate an implicit declaration for identifier FUNCTIONID at LOC as a
    function of type int ().  */
 
-tree
-implicitly_declare (location_t loc, tree functionid)
+ਰੁੱਖ
+implicitly_declare (location_t loc, ਰੁੱਖ functionid)
 {
-  struct c_binding *b;
-  tree decl = NULL_TREE;
-  tree asmspec_tree;
+  ਬਣਤਰ c_binding *b;
+  ਰੁੱਖ decl = NULL_ਰੁੱਖ;
+  ਰੁੱਖ asmspec_ਰੁੱਖ;
 
-  for (b = I_SYMBOL_BINDING (functionid); b; b = b->shadowed)
+  ਲਈ (b = I_ਚਿੰਨ੍ਹ_BINDING (functionid); b; b = b->shadowed)
     {
-      if (B_IN_SCOPE (b, external_scope))
+      ਜੇ (B_ਵਿੱਚ_SCOPE (b, external_scope))
 	{
 	  decl = b->decl;
-	  break;
+	  ਰੋਕੋ;
 	}
     }
 
-  if (decl)
+  ਜੇ (decl)
     {
-      if (TREE_CODE (decl) != FUNCTION_DECL)
-	return decl;
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) != FUNCTION_DECL)
+	ਵਾਪਸ decl;
 
       /* FIXME: Objective-C has weird not-really-builtin functions
 	 which are supposed to be visible automatically.  They wind up
 	 in the external scope because they're pushed before the file
 	 scope gets created.  Catch this here and rebind them into the
 	 file scope.  */
-      if (!fndecl_built_in_p (decl) && DECL_IS_UNDECLARED_BUILTIN (decl))
+      ਜੇ (!fndecl_built_ਵਿੱਚ_p (decl) && DECL_IS_UNDECLARED_BUILTIN (decl))
 	{
 	  bind (functionid, decl, file_scope,
-		/*invisible=*/false, /*nested=*/true,
-		DECL_SOURCE_LOCATION (decl));
-	  return decl;
+		/*invisible=*/ਝੂਠ, /*nested=*/ਸੱਚ,
+		DECL_ਸਰੋਤ_LOCATION (decl));
+	  ਵਾਪਸ decl;
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  tree newtype = default_function_type;
-	  if (b->u.type)
-	    TREE_TYPE (decl) = b->u.type;
+	  ਰੁੱਖ newtype = default_function_type;
+	  ਜੇ (b->u.type)
+	    ਰੁੱਖ_TYPE (decl) = b->u.type;
 	  /* Implicit declaration of a function already declared
 	     (somehow) in a different scope, or as a built-in.
 	     If this is the first time this has happened, warn;
 	     then recycle the old declaration but with the new type.  */
-	  if (!C_DECL_IMPLICIT (decl))
+	  ਜੇ (!C_DECL_IMPLICIT (decl))
 	    {
 	      implicit_decl_permerror (loc, functionid, decl);
 	      C_DECL_IMPLICIT (decl) = 1;
 	    }
-	  if (fndecl_built_in_p (decl))
+	  ਜੇ (fndecl_built_ਵਿੱਚ_p (decl))
 	    {
 	      newtype = c_build_type_attribute_variant (newtype,
-							TYPE_ATTRIBUTES
-							(TREE_TYPE (decl)));
-	      if (!comptypes (newtype, TREE_TYPE (decl)))
+							TYPE_ਗੁਣ
+							(ਰੁੱਖ_TYPE (decl)));
+	      ਜੇ (!comptypes (newtype, ਰੁੱਖ_TYPE (decl)))
 		{
-		  auto_diagnostic_group d;
-		  bool warned = warning_at (loc,
+		  auto_diagnostic_ਸਮੂਹ d;
+		  ਤਾਰਕਿਕ warned = warning_at (loc,
 					    OPT_Wbuiltin_declaration_mismatch,
 					    "incompatible implicit "
 					    "declaration of built-in "
 					    "function %qD", decl);
 		  /* See if we can hint which header to include.  */
-		  const char *header = header_for_builtin_fn (decl);
-		  if (header != NULL && warned)
+		  ਅਚਲ ਅੱਖਰ *ਸਿਰਲੇਖ = ਸਿਰਲੇਖ_for_builtin_fn (decl);
+		  ਜੇ (ਸਿਰਲੇਖ != ਨਿਰਾ && warned)
 		    {
-		      rich_location richloc (line_table, loc);
-		      maybe_add_include_fixit (&richloc, header, true);
+		      rich_location richloc (ਸਤਰ_ਸਾਰਣੀ, loc);
+		      maybe_ਜੋੜੋ_include_fixit (&richloc, ਸਿਰਲੇਖ, ਸੱਚ);
 		      inform (&richloc,
 			      "include %qs or provide a declaration of %qD",
-			      header, decl);
+			      ਸਿਰਲੇਖ, decl);
 		    }
-		  newtype = TREE_TYPE (decl);
+		  newtype = ਰੁੱਖ_TYPE (decl);
 		}
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    {
-	      if (!comptypes (newtype, TREE_TYPE (decl)))
+	      ਜੇ (!comptypes (newtype, ਰੁੱਖ_TYPE (decl)))
 		{
-		  auto_diagnostic_group d;
+		  auto_diagnostic_ਸਮੂਹ d;
 		  error_at (loc, "incompatible implicit declaration of "
 			    "function %qD", decl);
 		  locate_old_decl (decl);
 		}
 	    }
-	  b->u.type = TREE_TYPE (decl);
-	  TREE_TYPE (decl) = newtype;
+	  b->u.type = ਰੁੱਖ_TYPE (decl);
+	  ਰੁੱਖ_TYPE (decl) = newtype;
 	  bind (functionid, decl, current_scope,
-		/*invisible=*/false, /*nested=*/true,
-		DECL_SOURCE_LOCATION (decl));
-	  return decl;
+		/*invisible=*/ਝੂਠ, /*nested=*/ਸੱਚ,
+		DECL_ਸਰੋਤ_LOCATION (decl));
+	  ਵਾਪਸ decl;
 	}
     }
 
   /* Not seen before.  */
   decl = build_decl (loc, FUNCTION_DECL, functionid, default_function_type);
   DECL_EXTERNAL (decl) = 1;
-  TREE_PUBLIC (decl) = 1;
+  ਰੁੱਖ_ਜਨਤਕ (decl) = 1;
   C_DECL_IMPLICIT (decl) = 1;
   implicit_decl_permerror (loc, functionid, 0);
-  asmspec_tree = maybe_apply_renaming_pragma (decl, /*asmname=*/NULL);
-  if (asmspec_tree)
-    set_user_assembler_name (decl, TREE_STRING_POINTER (asmspec_tree));
+  asmspec_ਰੁੱਖ = maybe_apply_renaming_pragma (decl, /*asmname=*/ਨਿਰਾ);
+  ਜੇ (asmspec_ਰੁੱਖ)
+    ਸੈੱਟ_user_assembler_name (decl, ਰੁੱਖ_STRING_ਸੂਚਕ (asmspec_ਰੁੱਖ));
 
   /* C89 says implicit declarations are in the innermost block.
      So we record the decl in the standard fashion.  */
   decl = pushdecl (decl);
 
   /* No need to call objc_check_decl here - it's a function type.  */
-  rest_of_decl_compilation (decl, 0, 0);
+  rest_ਦਾ_decl_compilation (decl, 0, 0);
 
   /* Write a record describing this implicit function declaration
      to the prototypes file (if requested).  */
-  gen_aux_info_record (decl, 0, 1, 0);
+  gen_aux_info_ਰਿਕਾਰਡ (decl, 0, 1, 0);
 
   /* Possibly apply some default attributes to this implicit declaration.  */
-  decl_attributes (&decl, NULL_TREE, 0);
+  decl_ਗੁਣ (&decl, NULL_ਰੁੱਖ, 0);
 
-  return decl;
+  ਵਾਪਸ decl;
 }
 
 /* Issue an error message for a reference to an undeclared variable
@@ -4091,58 +4091,58 @@ implicitly_declare (location_t loc, tree functionid)
    context.  Establish a binding of the identifier to error_mark_node
    in an appropriate scope, which will suppress further errors for the
    same identifier.  The error message should be given location LOC.  */
-void
-undeclared_variable (location_t loc, tree id)
+ਖਾਲੀ
+undeclared_variable (location_t loc, ਰੁੱਖ id)
 {
-  static bool already = false;
-  struct c_scope *scope;
+  ਸਥਿਰ ਤਾਰਕਿਕ already = ਝੂਠ;
+  ਬਣਤਰ c_scope *scope;
 
-  auto_diagnostic_group d;
-  if (current_function_decl == NULL_TREE)
+  auto_diagnostic_ਸਮੂਹ d;
+  ਜੇ (current_function_decl == NULL_ਰੁੱਖ)
     {
       name_hint guessed_id = lookup_name_fuzzy (id, FUZZY_LOOKUP_NAME, loc);
-      if (const char *suggestion = guessed_id.suggestion ())
+      ਜੇ (ਅਚਲ ਅੱਖਰ *suggestion = guessed_id.suggestion ())
 	{
 	  gcc_rich_location richloc (loc);
-	  richloc.add_fixit_replace (suggestion);
+	  richloc.ਜੋੜੋ_fixit_replace (suggestion);
 	  error_at (&richloc,
 		    "%qE undeclared here (not in a function);"
 		    " did you mean %qs?",
 		    id, suggestion);
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	error_at (loc, "%qE undeclared here (not in a function)", id);
       scope = current_scope;
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      if (!objc_diagnose_private_ivar (id))
+      ਜੇ (!objc_diagnose_ਨਿੱਜੀ_ivar (id))
 	{
 	  name_hint guessed_id = lookup_name_fuzzy (id, FUZZY_LOOKUP_NAME, loc);
-	  if (const char *suggestion = guessed_id.suggestion ())
+	  ਜੇ (ਅਚਲ ਅੱਖਰ *suggestion = guessed_id.suggestion ())
 	    {
 	      gcc_rich_location richloc (loc);
-	      richloc.add_fixit_replace (suggestion);
+	      richloc.ਜੋੜੋ_fixit_replace (suggestion);
 	      error_at (&richloc,
 			"%qE undeclared (first use in this function);"
 			" did you mean %qs?",
 			id, suggestion);
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    error_at (loc, "%qE undeclared (first use in this function)", id);
 	}
-      if (!already)
+      ਜੇ (!already)
 	{
           inform (loc, "each undeclared identifier is reported only"
                   " once for each function it appears in");
-	  already = true;
+	  already = ਸੱਚ;
 	}
 
       /* If we are parsing old-style parameter decls, current_function_decl
 	 will be nonnull but current_function_scope will be null.  */
       scope = current_function_scope ? current_function_scope : current_scope;
     }
-  bind (id, error_mark_node, scope, /*invisible=*/false, /*nested=*/false,
+  bind (id, error_mark_ਗੰਢ, scope, /*invisible=*/ਝੂਠ, /*nested=*/ਝੂਠ,
 	UNKNOWN_LOCATION);
 }
 
@@ -4150,22 +4150,22 @@ undeclared_variable (location_t loc, tree id)
    LABEL_DECL with all the proper frills.  Also create a struct
    c_label_vars initialized for the current scope.  */
 
-static tree
-make_label (location_t location, tree name, bool defining,
-	    struct c_label_vars **p_label_vars)
+ਸਥਿਰ ਰੁੱਖ
+make_label (location_t location, ਰੁੱਖ name, ਤਾਰਕਿਕ defining,
+	    ਬਣਤਰ c_label_vars **p_label_vars)
 {
-  tree label = build_decl (location, LABEL_DECL, name, void_type_node);
+  ਰੁੱਖ label = build_decl (location, LABEL_DECL, name, void_type_ਗੰਢ);
   DECL_CONTEXT (label) = current_function_decl;
-  SET_DECL_MODE (label, VOIDmode);
+  ਸੈੱਟ_DECL_ਬਹੁਲਕ (label, VOIDmode);
 
   c_label_vars *label_vars = ggc_alloc<c_label_vars> ();
-  label_vars->shadowed = NULL;
-  set_spot_bindings (&label_vars->label_bindings, defining);
-  label_vars->decls_in_scope = make_tree_vector ();
-  label_vars->gotos = NULL;
+  label_vars->shadowed = ਨਿਰਾ;
+  ਸੈੱਟ_spot_bindings (&label_vars->label_bindings, defining);
+  label_vars->decls_ਵਿੱਚ_scope = make_ਰੁੱਖ_ਸਦਿਸ਼ ();
+  label_vars->gotos = ਨਿਰਾ;
   *p_label_vars = label_vars;
 
-  return label;
+  ਵਾਪਸ label;
 }
 
 /* Get the LABEL_DECL corresponding to identifier NAME as a label.
@@ -4173,98 +4173,98 @@ make_label (location_t location, tree name, bool defining,
    This is called when a label is used in a goto expression or
    has its address taken.  */
 
-tree
-lookup_label (tree name)
+ਰੁੱਖ
+lookup_label (ਰੁੱਖ name)
 {
-  tree label;
-  struct c_label_vars *label_vars;
+  ਰੁੱਖ label;
+  ਬਣਤਰ c_label_vars *label_vars;
 
-  if (current_function_scope == 0)
+  ਜੇ (current_function_scope == 0)
     {
       error ("label %qE referenced outside of any function", name);
-      return NULL_TREE;
+      ਵਾਪਸ NULL_ਰੁੱਖ;
     }
 
   /* Use a label already defined or ref'd with this name, but not if
      it is inherited from a containing function and wasn't declared
      using __label__.  */
   label = I_LABEL_DECL (name);
-  if (label && (DECL_CONTEXT (label) == current_function_decl
+  ਜੇ (label && (DECL_CONTEXT (label) == current_function_decl
 		|| C_DECLARED_LABEL_FLAG (label)))
     {
       /* If the label has only been declared, update its apparent
 	 location to point here, for better diagnostics if it
 	 turns out not to have been defined.  */
-      if (DECL_INITIAL (label) == NULL_TREE)
-	DECL_SOURCE_LOCATION (label) = input_location;
-      return label;
+      ਜੇ (DECL_INITIAL (label) == NULL_ਰੁੱਖ)
+	DECL_ਸਰੋਤ_LOCATION (label) = ਨਿਵੇਸ਼_location;
+      ਵਾਪਸ label;
     }
 
   /* No label binding for that identifier; make one.  */
-  label = make_label (input_location, name, false, &label_vars);
+  label = make_label (ਨਿਵੇਸ਼_location, name, ਝੂਠ, &label_vars);
 
   /* Ordinary labels go in the current function scope.  */
   bind_label (name, label, current_function_scope, label_vars);
 
-  return label;
+  ਵਾਪਸ label;
 }
 
 /* Issue a warning about DECL for a goto statement at GOTO_LOC going
    to LABEL.  */
 
-static void
-warn_about_goto (location_t goto_loc, tree label, tree decl)
+ਸਥਿਰ ਖਾਲੀ
+warn_about_goto (location_t goto_loc, ਰੁੱਖ label, ਰੁੱਖ decl)
 {
-  auto_diagnostic_group d;
-  if (c_type_variably_modified_p (TREE_TYPE (decl)))
+  auto_diagnostic_ਸਮੂਹ d;
+  ਜੇ (c_type_variably_modified_p (ਰੁੱਖ_TYPE (decl)))
     error_at (goto_loc,
 	      "jump into scope of identifier with variably modified type");
-  else if (flag_openmp
-	   && lookup_attribute ("omp allocate", DECL_ATTRIBUTES (decl)))
+  ਨਹੀਂਤਾਂ ਜੇ (flag_openmp
+	   && lookup_attribute ("omp allocate", DECL_ਗੁਣ (decl)))
     error_at (goto_loc, "jump skips OpenMP %<allocate%> allocation");
-  else
-    if (!warning_at (goto_loc, OPT_Wjump_misses_init,
+  ਨਹੀਂਤਾਂ
+    ਜੇ (!warning_at (goto_loc, OPT_Wjump_ਖੁੰਝਾਂ_init,
 		     "jump skips variable initialization"))
-      return;
-  inform (DECL_SOURCE_LOCATION (label), "label %qD defined here", label);
-  inform (DECL_SOURCE_LOCATION (decl), "%qD declared here", decl);
+      ਵਾਪਸ;
+  inform (DECL_ਸਰੋਤ_LOCATION (label), "label %qD defined here", label);
+  inform (DECL_ਸਰੋਤ_LOCATION (decl), "%qD declared here", decl);
 }
 
 /* Look up a label because of a goto statement.  This is like
    lookup_label, but also issues any appropriate warnings.  */
 
-tree
-lookup_label_for_goto (location_t loc, tree name)
+ਰੁੱਖ
+lookup_label_for_goto (location_t loc, ਰੁੱਖ name)
 {
-  tree label;
-  struct c_label_vars *label_vars;
-  unsigned int ix;
-  tree decl;
+  ਰੁੱਖ label;
+  ਬਣਤਰ c_label_vars *label_vars;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ ix;
+  ਰੁੱਖ decl;
 
   label = lookup_label (name);
-  if (label == NULL_TREE)
-    return NULL_TREE;
+  ਜੇ (label == NULL_ਰੁੱਖ)
+    ਵਾਪਸ NULL_ਰੁੱਖ;
 
   /* If we are jumping to a different function, we can't issue any
      useful warnings.  */
-  if (DECL_CONTEXT (label) != current_function_decl)
+  ਜੇ (DECL_CONTEXT (label) != current_function_decl)
     {
       gcc_assert (C_DECLARED_LABEL_FLAG (label));
-      return label;
+      ਵਾਪਸ label;
     }
 
   label_vars = I_LABEL_BINDING (name)->u.label;
 
   /* If the label has not yet been defined, then push this goto on a
      list for possible later warnings.  */
-  if (label_vars->label_bindings.scope == NULL)
+  ਜੇ (label_vars->label_bindings.scope == ਨਿਰਾ)
     {
       c_goto_bindings *g = ggc_alloc<c_goto_bindings> ();
 
       g->loc = loc;
-      set_spot_bindings (&g->goto_bindings, true);
-      vec_safe_push (label_vars->gotos, g);
-      return label;
+      ਸੈੱਟ_spot_bindings (&g->goto_bindings, ਸੱਚ);
+      vec_ਸੁਰੱਖਿਅਤ_ਧੱਕੋ (label_vars->gotos, g);
+      ਵਾਪਸ label;
     }
 
   /* If there are any decls in label_vars->decls_in_scope, then this
@@ -4275,192 +4275,192 @@ lookup_label_for_goto (location_t loc, tree name)
        ...
        goto lab;
      Issue a warning or error.  */
-  FOR_EACH_VEC_SAFE_ELT (label_vars->decls_in_scope, ix, decl)
+  FOR_EACH_VEC_ਸੁਰੱਖਿਅਤ_ELT (label_vars->decls_ਵਿੱਚ_scope, ix, decl)
     warn_about_goto (loc, label, decl);
 
-  if (label_vars->label_bindings.left_stmt_expr)
+  ਜੇ (label_vars->label_bindings.ਖੱਬਾ_stmt_ਵਿਅੰਜਕ)
     {
-      auto_diagnostic_group d;
+      auto_diagnostic_ਸਮੂਹ d;
       error_at (loc, "jump into statement expression");
-      inform (DECL_SOURCE_LOCATION (label), "label %qD defined here", label);
+      inform (DECL_ਸਰੋਤ_LOCATION (label), "label %qD defined here", label);
     }
 
-  return label;
+  ਵਾਪਸ label;
 }
 
 /* Make a label named NAME in the current function, shadowing silently
    any that may be inherited from containing functions or containing
    scopes.  This is called for __label__ declarations.  */
 
-tree
-declare_label (tree name)
+ਰੁੱਖ
+declare_label (ਰੁੱਖ name)
 {
-  struct c_binding *b = I_LABEL_BINDING (name);
-  tree label;
-  struct c_label_vars *label_vars;
+  ਬਣਤਰ c_binding *b = I_LABEL_BINDING (name);
+  ਰੁੱਖ label;
+  ਬਣਤਰ c_label_vars *label_vars;
 
   /* Check to make sure that the label hasn't already been declared
      at this scope */
-  if (b && B_IN_CURRENT_SCOPE (b))
+  ਜੇ (b && B_ਵਿੱਚ_CURRENT_SCOPE (b))
     {
-      auto_diagnostic_group d;
+      auto_diagnostic_ਸਮੂਹ d;
       error ("duplicate label declaration %qE", name);
       locate_old_decl (b->decl);
 
       /* Just use the previous declaration.  */
-      return b->decl;
+      ਵਾਪਸ b->decl;
     }
 
-  label = make_label (input_location, name, false, &label_vars);
+  label = make_label (ਨਿਵੇਸ਼_location, name, ਝੂਠ, &label_vars);
   C_DECLARED_LABEL_FLAG (label) = 1;
 
   /* Declared labels go in the current scope.  */
   bind_label (name, label, current_scope, label_vars);
 
-  return label;
+  ਵਾਪਸ label;
 }
 
 /* When we define a label, issue any appropriate warnings if there are
    any gotos earlier in the function which jump to this label.  */
 
-static void
-check_earlier_gotos (tree label, struct c_label_vars* label_vars)
+ਸਥਿਰ ਖਾਲੀ
+check_earlier_gotos (ਰੁੱਖ label, ਬਣਤਰ c_label_vars* label_vars)
 {
-  unsigned int ix;
-  struct c_goto_bindings *g;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ ix;
+  ਬਣਤਰ c_goto_bindings *g;
 
-  FOR_EACH_VEC_SAFE_ELT (label_vars->gotos, ix, g)
+  FOR_EACH_VEC_ਸੁਰੱਖਿਅਤ_ELT (label_vars->gotos, ix, g)
     {
-      struct c_binding *b;
-      struct c_scope *scope;
+      ਬਣਤਰ c_binding *b;
+      ਬਣਤਰ c_scope *scope;
 
       /* We have a goto to this label.  The goto is going forward.  In
 	 g->scope, the goto is going to skip any binding which was
 	 defined after g->bindings_in_scope.  */
-      if (g->goto_bindings.scope->has_jump_unsafe_decl)
+      ਜੇ (g->goto_bindings.scope->has_jump_unsafe_decl)
 	{
-	  for (b = g->goto_bindings.scope->bindings;
-	       b != g->goto_bindings.bindings_in_scope;
+	  ਲਈ (b = g->goto_bindings.scope->bindings;
+	       b != g->goto_bindings.bindings_ਵਿੱਚ_scope;
 	       b = b->prev)
 	    {
-	      if (decl_jump_unsafe (b->decl))
+	      ਜੇ (decl_jump_unsafe (b->decl))
 		warn_about_goto (g->loc, label, b->decl);
 	    }
 	}
 
       /* We also need to warn about decls defined in any scopes
 	 between the scope of the label and the scope of the goto.  */
-      for (scope = label_vars->label_bindings.scope;
+      ਲਈ (scope = label_vars->label_bindings.scope;
 	   scope != g->goto_bindings.scope;
 	   scope = scope->outer)
 	{
-	  gcc_assert (scope != NULL);
-	  if (scope->has_jump_unsafe_decl)
+	  gcc_assert (scope != ਨਿਰਾ);
+	  ਜੇ (scope->has_jump_unsafe_decl)
 	    {
-	      if (scope == label_vars->label_bindings.scope)
-		b = label_vars->label_bindings.bindings_in_scope;
-	      else
+	      ਜੇ (scope == label_vars->label_bindings.scope)
+		b = label_vars->label_bindings.bindings_ਵਿੱਚ_scope;
+	      ਨਹੀਂਤਾਂ
 		b = scope->bindings;
-	      for (; b != NULL; b = b->prev)
+	      ਲਈ (; b != ਨਿਰਾ; b = b->prev)
 		{
-		  if (decl_jump_unsafe (b->decl))
+		  ਜੇ (decl_jump_unsafe (b->decl))
 		    warn_about_goto (g->loc, label, b->decl);
 		}
 	    }
 	}
 
-      if (g->goto_bindings.stmt_exprs > 0)
+      ਜੇ (g->goto_bindings.stmt_exprs > 0)
 	{
-	  auto_diagnostic_group d;
+	  auto_diagnostic_ਸਮੂਹ d;
 	  error_at (g->loc, "jump into statement expression");
-	  inform (DECL_SOURCE_LOCATION (label), "label %qD defined here",
+	  inform (DECL_ਸਰੋਤ_LOCATION (label), "label %qD defined here",
 		  label);
 	}
     }
 
   /* Now that the label is defined, we will issue warnings about
      subsequent gotos to this label when we see them.  */
-  vec_safe_truncate (label_vars->gotos, 0);
-  label_vars->gotos = NULL;
+  vec_ਸੁਰੱਖਿਅਤ_truncate (label_vars->gotos, 0);
+  label_vars->gotos = ਨਿਰਾ;
 }
 
 /* Define a label, specifying the location in the source file.
    Return the LABEL_DECL node for the label, if the definition is valid.
    Otherwise return NULL_TREE.  */
 
-tree
-define_label (location_t location, tree name)
+ਰੁੱਖ
+define_label (location_t location, ਰੁੱਖ name)
 {
   /* Find any preexisting label with this name.  It is an error
      if that label has already been defined in this function, or
      if there is a containing function with a declared label with
      the same name.  */
-  tree label = I_LABEL_DECL (name);
+  ਰੁੱਖ label = I_LABEL_DECL (name);
 
-  if (label
+  ਜੇ (label
       && ((DECL_CONTEXT (label) == current_function_decl
-	   && DECL_INITIAL (label) != NULL_TREE)
+	   && DECL_INITIAL (label) != NULL_ਰੁੱਖ)
 	  || (DECL_CONTEXT (label) != current_function_decl
 	      && C_DECLARED_LABEL_FLAG (label))))
     {
-      auto_diagnostic_group d;
+      auto_diagnostic_ਸਮੂਹ d;
       error_at (location, "duplicate label %qD", label);
       locate_old_decl (label);
-      return NULL_TREE;
+      ਵਾਪਸ NULL_ਰੁੱਖ;
     }
-  else if (label && DECL_CONTEXT (label) == current_function_decl)
+  ਨਹੀਂਤਾਂ ਜੇ (label && DECL_CONTEXT (label) == current_function_decl)
     {
-      struct c_label_vars *label_vars = I_LABEL_BINDING (name)->u.label;
+      ਬਣਤਰ c_label_vars *label_vars = I_LABEL_BINDING (name)->u.label;
 
       /* The label has been used or declared already in this function,
 	 but not defined.  Update its location to point to this
 	 definition.  */
-      DECL_SOURCE_LOCATION (label) = location;
-      set_spot_bindings (&label_vars->label_bindings, true);
+      DECL_ਸਰੋਤ_LOCATION (label) = location;
+      ਸੈੱਟ_spot_bindings (&label_vars->label_bindings, ਸੱਚ);
 
       /* Issue warnings as required about any goto statements from
 	 earlier in the function.  */
       check_earlier_gotos (label, label_vars);
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      struct c_label_vars *label_vars;
+      ਬਣਤਰ c_label_vars *label_vars;
 
       /* No label binding for that identifier; make one.  */
-      label = make_label (location, name, true, &label_vars);
+      label = make_label (location, name, ਸੱਚ, &label_vars);
 
       /* Ordinary labels go in the current function scope.  */
       bind_label (name, label, current_function_scope, label_vars);
     }
 
-  if (!in_system_header_at (input_location) && lookup_name (name))
+  ਜੇ (!ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location) && lookup_name (name))
     warning_at (location, OPT_Wtraditional,
 		"traditional C lacks a separate namespace "
 		"for labels, identifier %qE conflicts", name);
 
   /* Mark label as having been defined.  */
-  DECL_INITIAL (label) = error_mark_node;
-  return label;
+  DECL_INITIAL (label) = error_mark_ਗੰਢ;
+  ਵਾਪਸ label;
 }
 
 /* Get the bindings for a new switch statement.  This is used to issue
    warnings as appropriate for jumps from the switch to case or
    default labels.  */
 
-struct c_spot_bindings *
-c_get_switch_bindings (void)
+ਬਣਤਰ c_spot_bindings *
+c_get_switch_bindings (ਖਾਲੀ)
 {
-  struct c_spot_bindings *switch_bindings;
+  ਬਣਤਰ c_spot_bindings *switch_bindings;
 
-  switch_bindings = XNEW (struct c_spot_bindings);
-  set_spot_bindings (switch_bindings, true);
-  return switch_bindings;
+  switch_bindings = XNEW (ਬਣਤਰ c_spot_bindings);
+  ਸੈੱਟ_spot_bindings (switch_bindings, ਸੱਚ);
+  ਵਾਪਸ switch_bindings;
 }
 
-void
-c_release_switch_bindings (struct c_spot_bindings *bindings)
+ਖਾਲੀ
+c_release_switch_bindings (ਬਣਤਰ c_spot_bindings *bindings)
 {
-  gcc_assert (bindings->stmt_exprs == 0 && !bindings->left_stmt_expr);
+  gcc_assert (bindings->stmt_exprs == 0 && !bindings->ਖੱਬਾ_stmt_ਵਿਅੰਜਕ);
   XDELETE (bindings);
 }
 
@@ -4468,71 +4468,71 @@ c_release_switch_bindings (struct c_spot_bindings *bindings)
    warnings about decls as needed.  It returns true if it found an
    error, not just a warning.  */
 
-bool
-c_check_switch_jump_warnings (struct c_spot_bindings *switch_bindings,
+ਤਾਰਕਿਕ
+c_check_switch_jump_warnings (ਬਣਤਰ c_spot_bindings *switch_bindings,
 			      location_t switch_loc, location_t case_loc)
 {
-  bool saw_error;
-  struct c_scope *scope;
+  ਤਾਰਕਿਕ saw_error;
+  ਬਣਤਰ c_scope *scope;
 
-  saw_error = false;
-  for (scope = current_scope;
+  saw_error = ਝੂਠ;
+  ਲਈ (scope = current_scope;
        scope != switch_bindings->scope;
        scope = scope->outer)
     {
-      struct c_binding *b;
+      ਬਣਤਰ c_binding *b;
 
-      gcc_assert (scope != NULL);
+      gcc_assert (scope != ਨਿਰਾ);
 
-      if (!scope->has_jump_unsafe_decl)
-	continue;
+      ਜੇ (!scope->has_jump_unsafe_decl)
+	ਜਾਰੀ;
 
-      for (b = scope->bindings; b != NULL; b = b->prev)
+      ਲਈ (b = scope->bindings; b != ਨਿਰਾ; b = b->prev)
 	{
-	  if (decl_jump_unsafe (b->decl))
+	  ਜੇ (decl_jump_unsafe (b->decl))
 	    {
-	      auto_diagnostic_group d;
-	      bool emitted;
-	      if (c_type_variably_modified_p (TREE_TYPE (b->decl)))
+	      auto_diagnostic_ਸਮੂਹ d;
+	      ਤਾਰਕਿਕ emitted;
+	      ਜੇ (c_type_variably_modified_p (ਰੁੱਖ_TYPE (b->decl)))
 		{
-		  saw_error = true;
+		  saw_error = ਸੱਚ;
 		  error_at (case_loc,
 			    "switch jumps into scope of identifier with "
 			    "variably modified type");
-		  emitted = true;
+		  emitted = ਸੱਚ;
 		}
-	      else if (flag_openmp
+	      ਨਹੀਂਤਾਂ ਜੇ (flag_openmp
 		       && lookup_attribute ("omp allocate",
-					    DECL_ATTRIBUTES (b->decl)))
+					    DECL_ਗੁਣ (b->decl)))
 		{
-		  saw_error = true;
+		  saw_error = ਸੱਚ;
 		  error_at (case_loc,
 			    "switch jumps over OpenMP %<allocate%> allocation");
-		  emitted = true;
+		  emitted = ਸੱਚ;
 		}
-	      else
+	      ਨਹੀਂਤਾਂ
 		emitted
-		  = warning_at (case_loc, OPT_Wjump_misses_init,
+		  = warning_at (case_loc, OPT_Wjump_ਖੁੰਝਾਂ_init,
 				"switch jumps over variable initialization");
-	      if (emitted)
+	      ਜੇ (emitted)
 		{
 		  inform (switch_loc, "switch starts here");
-		  inform (DECL_SOURCE_LOCATION (b->decl), "%qD declared here",
+		  inform (DECL_ਸਰੋਤ_LOCATION (b->decl), "%qD declared here",
 			  b->decl);
 		}
 	    }
 	}
     }
 
-  if (switch_bindings->stmt_exprs > 0)
+  ਜੇ (switch_bindings->stmt_exprs > 0)
     {
-      saw_error = true;
-      auto_diagnostic_group d;
+      saw_error = ਸੱਚ;
+      auto_diagnostic_ਸਮੂਹ d;
       error_at (case_loc, "switch jumps into statement expression");
       inform (switch_loc, "switch starts here");
     }
 
-  return saw_error;
+  ਵਾਪਸ saw_error;
 }
 
 /* Given NAME, an IDENTIFIER_NODE,
@@ -4544,62 +4544,62 @@ c_check_switch_jump_warnings (struct c_spot_bindings *switch_bindings,
    location where the tag was defined.
    If the wrong kind of type is found, an error is reported.  */
 
-static tree
-lookup_tag (enum tree_code code, tree name, bool thislevel_only,
+ਸਥਿਰ ਰੁੱਖ
+lookup_ਟੈਗ (ਗਿਣਤੀ ਰੁੱਖ_ਕੋਡ_2 ਕੋਡ, ਰੁੱਖ name, ਤਾਰਕਿਕ thislevel_only,
 	    location_t *ploc)
 {
-  struct c_binding *b = I_TAG_BINDING (name);
-  bool thislevel = false;
+  ਬਣਤਰ c_binding *b = I_ਟੈਗ_BINDING (name);
+  ਤਾਰਕਿਕ thislevel = ਝੂਠ;
 
-  if (!b || !b->decl)
-    return NULL_TREE;
+  ਜੇ (!b || !b->decl)
+    ਵਾਪਸ NULL_ਰੁੱਖ;
 
   /* We only care about whether it's in this level if
      thislevel_only was set or it might be a type clash.  */
-  if (thislevel_only || TREE_CODE (b->decl) != code)
+  ਜੇ (thislevel_only || ਰੁੱਖ_ਕੋਡ (b->decl) != ਕੋਡ)
     {
       /* For our purposes, a tag in the external scope is the same as
 	 a tag in the file scope.  (Primarily relevant to Objective-C
 	 and its builtin structure tags, which get pushed before the
 	 file scope is created.)  */
-      if (B_IN_CURRENT_SCOPE (b)
-	  || (current_scope == file_scope && B_IN_EXTERNAL_SCOPE (b)))
-	thislevel = true;
+      ਜੇ (B_ਵਿੱਚ_CURRENT_SCOPE (b)
+	  || (current_scope == file_scope && B_ਵਿੱਚ_EXTERNAL_SCOPE (b)))
+	thislevel = ਸੱਚ;
     }
 
-  if (thislevel_only && !thislevel)
-    return NULL_TREE;
+  ਜੇ (thislevel_only && !thislevel)
+    ਵਾਪਸ NULL_ਰੁੱਖ;
 
-  if (TREE_CODE (b->decl) != code)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (b->decl) != ਕੋਡ)
     {
       /* Definition isn't the kind we were looking for.  */
       pending_invalid_xref = name;
-      pending_invalid_xref_location = input_location;
+      pending_invalid_xref_location = ਨਿਵੇਸ਼_location;
 
       /* If in the same binding level as a declaration as a tag
 	 of a different type, this must not be allowed to
 	 shadow that tag, so give the error immediately.
 	 (For example, "struct foo; union foo;" is invalid.)  */
-      if (thislevel)
+      ਜੇ (thislevel)
 	pending_xref_error ();
     }
 
-  if (ploc != NULL)
+  ਜੇ (ploc != ਨਿਰਾ)
     *ploc = b->locus;
 
-  return b->decl;
+  ਵਾਪਸ b->decl;
 }
 
 /* Return true if a definition exists for NAME with code CODE.  */
 
-bool
-tag_exists_p (enum tree_code code, tree name)
+ਤਾਰਕਿਕ
+ਟੈਗ_exists_p (ਗਿਣਤੀ ਰੁੱਖ_ਕੋਡ_2 ਕੋਡ, ਰੁੱਖ name)
 {
-  struct c_binding *b = I_TAG_BINDING (name);
+  ਬਣਤਰ c_binding *b = I_ਟੈਗ_BINDING (name);
 
-  if (b == NULL || b->decl == NULL_TREE)
-    return false;
-  return TREE_CODE (b->decl) == code;
+  ਜੇ (b == ਨਿਰਾ || b->decl == NULL_ਰੁੱਖ)
+    ਵਾਪਸ ਝੂਠ;
+  ਵਾਪਸ ਰੁੱਖ_ਕੋਡ (b->decl) == ਕੋਡ;
 }
 
 /* Print an error message now
@@ -4607,13 +4607,13 @@ tag_exists_p (enum tree_code code, tree name)
    We don't print them immediately because they are not invalid
    when used in the `struct foo;' construct for shadowing.  */
 
-void
-pending_xref_error (void)
+ਖਾਲੀ
+pending_xref_error (ਖਾਲੀ)
 {
-  if (pending_invalid_xref != NULL_TREE)
+  ਜੇ (pending_invalid_xref != NULL_ਰੁੱਖ)
     error_at (pending_invalid_xref_location, "%qE defined as wrong kind of tag",
 	      pending_invalid_xref);
-  pending_invalid_xref = NULL_TREE;
+  pending_invalid_xref = NULL_ਰੁੱਖ;
 }
 
 
@@ -4622,35 +4622,35 @@ pending_xref_error (void)
    Return a ..._DECL node of some kind representing its definition,
    or return NULL_TREE if it is undefined.  */
 
-tree
-lookup_name (tree name)
+ਰੁੱਖ
+lookup_name (ਰੁੱਖ name)
 {
-  struct c_binding *b = I_SYMBOL_BINDING (name);
+  ਬਣਤਰ c_binding *b = I_ਚਿੰਨ੍ਹ_BINDING (name);
   /* Do not resolve non-default function versions.  */
-  if (b
-      && TREE_CODE (b->decl) == FUNCTION_DECL
+  ਜੇ (b
+      && ਰੁੱਖ_ਕੋਡ (b->decl) == FUNCTION_DECL
       && DECL_FUNCTION_VERSIONED (b->decl)
-      && !is_function_default_version (b->decl))
-    return NULL_TREE;
-  if (b && !b->invisible)
+      && !is_function_default_ਸੰਸਕਰਣ (b->decl))
+    ਵਾਪਸ NULL_ਰੁੱਖ;
+  ਜੇ (b && !b->invisible)
     {
-      maybe_record_typedef_use (b->decl);
-      return b->decl;
+      maybe_ਰਿਕਾਰਡ_typedef_use (b->decl);
+      ਵਾਪਸ b->decl;
     }
-  return NULL_TREE;
+  ਵਾਪਸ NULL_ਰੁੱਖ;
 }
 
 /* Similar to `lookup_name' but look only at the indicated scope.  */
 
-static tree
-lookup_name_in_scope (tree name, struct c_scope *scope)
+ਸਥਿਰ ਰੁੱਖ
+lookup_name_ਵਿੱਚ_scope (ਰੁੱਖ name, ਬਣਤਰ c_scope *scope)
 {
-  struct c_binding *b;
+  ਬਣਤਰ c_binding *b;
 
-  for (b = I_SYMBOL_BINDING (name); b; b = b->shadowed)
-    if (B_IN_SCOPE (b, scope))
-      return b->decl;
-  return NULL_TREE;
+  ਲਈ (b = I_ਚਿੰਨ੍ਹ_BINDING (name); b; b = b->shadowed)
+    ਜੇ (B_ਵਿੱਚ_SCOPE (b, scope))
+      ਵਾਪਸ b->decl;
+  ਵਾਪਸ NULL_ਰੁੱਖ;
 }
 
 /* Look for the closest match for NAME within the currently valid
@@ -4672,94 +4672,94 @@ lookup_name_in_scope (tree name, struct c_scope *scope)
    Use LOC for any deferred diagnostics.  */
 
 name_hint
-lookup_name_fuzzy (tree name, enum lookup_name_fuzzy_kind kind, location_t loc)
+lookup_name_fuzzy (ਰੁੱਖ name, ਗਿਣਤੀ lookup_name_fuzzy_ਕਿਸਮ ਕਿਸਮ, location_t loc)
 {
-  gcc_assert (TREE_CODE (name) == IDENTIFIER_NODE);
+  gcc_assert (ਰੁੱਖ_ਕੋਡ (name) == IDENTIFIER_ਗੰਢ);
 
   /* Look up function-like macros first; maybe misusing them. */
-  auto cpp_node = cpp_lookup (parse_in,
-			      (const unsigned char*)IDENTIFIER_POINTER (name),
-			      IDENTIFIER_LENGTH (name));
-  if (cpp_node && cpp_fun_like_macro_p (cpp_node))
-    return name_hint
-      (nullptr,
-       std::make_unique<macro_like_function_used> (loc,
-						   IDENTIFIER_POINTER (name)));
+  ਸਵੈਚਾਲਿਤ cpp_ਗੰਢ = cpp_lookup (parse_ਵਿੱਚ,
+			      (ਅਚਲ ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ*)IDENTIFIER_ਸੂਚਕ (name),
+			      IDENTIFIER_ਲੰਮਾਈ (name));
+  ਜੇ (cpp_ਗੰਢ && cpp_fun_like_macro_p (cpp_ਗੰਢ))
+    ਵਾਪਸ name_hint
+      (ਖਾਲੀ_ਸੂਚਕ,
+       std::make_unique<macro_like_function_ਵਰਤਿਆ> (loc,
+						   IDENTIFIER_ਸੂਚਕ (name)));
 
   /* Next, try some well-known names in the C standard library, in case
      the user forgot a #include.  */
-  const char *header_hint
-    = get_c_stdlib_header_for_name (IDENTIFIER_POINTER (name));
+  ਅਚਲ ਅੱਖਰ *ਸਿਰਲੇਖ_hint
+    = get_c_stdlib_ਸਿਰਲੇਖ_for_name (IDENTIFIER_ਸੂਚਕ (name));
 
-  if (header_hint)
-    return name_hint
-      (nullptr,
-       std::make_unique<suggest_missing_header> (loc,
-						 IDENTIFIER_POINTER (name),
-						 header_hint));
+  ਜੇ (ਸਿਰਲੇਖ_hint)
+    ਵਾਪਸ name_hint
+      (ਖਾਲੀ_ਸੂਚਕ,
+       std::make_unique<suggest_missing_ਸਿਰਲੇਖ> (loc,
+						 IDENTIFIER_ਸੂਚਕ (name),
+						 ਸਿਰਲੇਖ_hint));
 
   /* Next, look for exact matches for builtin defines that would have been
      defined if the user had passed a command-line option (e.g. -fopenmp
      for "_OPENMP").  */
   diagnostics::option_id option_id
-    = get_option_for_builtin_define (IDENTIFIER_POINTER (name));
-  if (option_id.m_idx > 0)
-    return name_hint
-      (nullptr,
+    = get_option_for_builtin_define (IDENTIFIER_ਸੂਚਕ (name));
+  ਜੇ (option_id.m_idx > 0)
+    ਵਾਪਸ name_hint
+      (ਖਾਲੀ_ਸੂਚਕ,
        std::make_unique<suggest_missing_option> (loc,
-						 IDENTIFIER_POINTER (name),
+						 IDENTIFIER_ਸੂਚਕ (name),
 						 option_id));
 
   /* Only suggest names reserved for the implementation if NAME begins
      with an underscore.  */
-  bool consider_implementation_names = (IDENTIFIER_POINTER (name)[0] == '_');
+  ਤਾਰਕਿਕ consider_implementation_ਨਾਂ = (IDENTIFIER_ਸੂਚਕ (name)[0] == '_');
 
-  best_match<tree, tree> bm (name);
+  ਉੱਤਮ_ਮੇਲ<ਰੁੱਖ, ਰੁੱਖ> bm (name);
 
   /* Look within currently valid scopes.  */
-  for (c_scope *scope = current_scope; scope; scope = scope->outer)
-    for (c_binding *binding = scope->bindings; binding; binding = binding->prev)
+  ਲਈ (c_scope *scope = current_scope; scope; scope = scope->outer)
+    ਲਈ (c_binding *binding = scope->bindings; binding; binding = binding->prev)
       {
-	if (!binding->id || binding->invisible)
-	  continue;
-	if (binding->decl == error_mark_node)
-	  continue;
+	ਜੇ (!binding->id || binding->invisible)
+	  ਜਾਰੀ;
+	ਜੇ (binding->decl == error_mark_ਗੰਢ)
+	  ਜਾਰੀ;
 	/* Don't use bindings from implicitly declared functions,
 	   as they were likely misspellings themselves.  */
-	if (TREE_CODE (binding->decl) == FUNCTION_DECL)
-	  if (C_DECL_IMPLICIT (binding->decl))
-	    continue;
+	ਜੇ (ਰੁੱਖ_ਕੋਡ (binding->decl) == FUNCTION_DECL)
+	  ਜੇ (C_DECL_IMPLICIT (binding->decl))
+	    ਜਾਰੀ;
 	/* Don't suggest names that are reserved for use by the
 	   implementation, unless NAME began with an underscore.  */
-	if (!consider_implementation_names)
+	ਜੇ (!consider_implementation_ਨਾਂ)
 	  {
-	    const char *suggestion_str = IDENTIFIER_POINTER (binding->id);
-	    if (name_reserved_for_implementation_p (suggestion_str))
-	      continue;
+	    ਅਚਲ ਅੱਖਰ *suggestion_str = IDENTIFIER_ਸੂਚਕ (binding->id);
+	    ਜੇ (name_reserved_for_implementation_p (suggestion_str))
+	      ਜਾਰੀ;
 	  }
-	switch (kind)
+	ਚੋਣ (ਕਿਸਮ)
 	  {
-	  case FUZZY_LOOKUP_TYPENAME:
-	    if (TREE_CODE (binding->decl) != TYPE_DECL)
-	      continue;
-	    break;
+	  ਹਾਲਤ FUZZY_LOOKUP_TYPENAME:
+	    ਜੇ (ਰੁੱਖ_ਕੋਡ (binding->decl) != TYPE_DECL)
+	      ਜਾਰੀ;
+	    ਰੋਕੋ;
 
-	  case FUZZY_LOOKUP_FUNCTION_NAME:
-	    if (TREE_CODE (binding->decl) != FUNCTION_DECL)
+	  ਹਾਲਤ FUZZY_LOOKUP_FUNCTION_NAME:
+	    ਜੇ (ਰੁੱਖ_ਕੋਡ (binding->decl) != FUNCTION_DECL)
 	      {
 		/* Allow function pointers.  */
-		if ((VAR_P (binding->decl)
-		     || TREE_CODE (binding->decl) == PARM_DECL)
-		    && TREE_CODE (TREE_TYPE (binding->decl)) == POINTER_TYPE
-		    && (TREE_CODE (TREE_TYPE (TREE_TYPE (binding->decl)))
+		ਜੇ ((VAR_P (binding->decl)
+		     || ਰੁੱਖ_ਕੋਡ (binding->decl) == PARM_DECL)
+		    && ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (binding->decl)) == ਸੂਚਕ_TYPE
+		    && (ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (ਰੁੱਖ_TYPE (binding->decl)))
 			== FUNCTION_TYPE))
-		  break;
-		continue;
+		  ਰੋਕੋ;
+		ਜਾਰੀ;
 	      }
-	    break;
+	    ਰੋਕੋ;
 
-	  default:
-	    break;
+	  ਮੂਲ:
+	    ਰੋਕੋ;
 	  }
 	bm.consider (binding->id);
       }
@@ -4777,150 +4777,150 @@ lookup_name_fuzzy (tree name, enum lookup_name_fuzzy_kind kind, location_t loc)
      non-NULL result for best_macro_match if it's better than any of
      the identifiers already checked, which avoids needless creation
      of identifiers for macro hashnodes.  */
-  best_macro_match bmm (name, bm.get_best_distance (), parse_in);
-  cpp_hashnode *best_macro = bmm.get_best_meaningful_candidate ();
+  ਉੱਤਮ_macro_ਮੇਲ bmm (name, bm.get_ਉੱਤਮ_ਦੂਰੀ (), parse_ਵਿੱਚ);
+  cpp_hashnode *ਉੱਤਮ_macro = bmm.get_ਉੱਤਮ_meaningful_candidate ();
   /* If a macro is the closest so far to NAME, use it, creating an
      identifier tree node for it.  */
-  if (best_macro)
+  ਜੇ (ਉੱਤਮ_macro)
     {
-      const char *id = (const char *)best_macro->ident.str;
-      tree macro_as_identifier
-	= get_identifier_with_length (id, best_macro->ident.len);
-      bm.set_best_so_far (macro_as_identifier,
-			  bmm.get_best_distance (),
-			  bmm.get_best_candidate_length ());
+      ਅਚਲ ਅੱਖਰ *id = (ਅਚਲ ਅੱਖਰ *)ਉੱਤਮ_macro->ident.str;
+      ਰੁੱਖ macro_as_identifier
+	= get_identifier_with_ਲੰਮਾਈ (id, ਉੱਤਮ_macro->ident.len);
+      bm.ਸੈੱਟ_ਉੱਤਮ_so_far (macro_as_identifier,
+			  bmm.get_ਉੱਤਮ_ਦੂਰੀ (),
+			  bmm.get_ਉੱਤਮ_candidate_ਲੰਮਾਈ ());
     }
 
   /* Try the "start_typename" keywords to detect
      "singed" vs "signed" typos.  */
-  if (kind == FUZZY_LOOKUP_TYPENAME)
+  ਜੇ (ਕਿਸਮ == FUZZY_LOOKUP_TYPENAME)
     {
-      for (unsigned i = 0; i < num_c_common_reswords; i++)
+      ਲਈ (ਬਿਨਾਨਿਸ਼ਾਨੀ i = 0; i < ਅੰਕ_c_common_reswords; i++)
 	{
-	  const c_common_resword *resword = &c_common_reswords[i];
-	  if (!c_keyword_starts_typename (resword->rid))
-	    continue;
-	  tree resword_identifier = ridpointers [resword->rid];
-	  if (!resword_identifier)
-	    continue;
-	  gcc_assert (TREE_CODE (resword_identifier) == IDENTIFIER_NODE);
+	  ਅਚਲ c_common_resword *resword = &c_common_reswords[i];
+	  ਜੇ (!c_keyword_starts_typename (resword->rid))
+	    ਜਾਰੀ;
+	  ਰੁੱਖ resword_identifier = ridpointers [resword->rid];
+	  ਜੇ (!resword_identifier)
+	    ਜਾਰੀ;
+	  gcc_assert (ਰੁੱਖ_ਕੋਡ (resword_identifier) == IDENTIFIER_ਗੰਢ);
 	  bm.consider (resword_identifier);
 	}
     }
 
-  tree best = bm.get_best_meaningful_candidate ();
-  if (best)
-    return name_hint (IDENTIFIER_POINTER (best), NULL);
-  else
-    return name_hint (NULL, NULL);
+  ਰੁੱਖ ਉੱਤਮ = bm.get_ਉੱਤਮ_meaningful_candidate ();
+  ਜੇ (ਉੱਤਮ)
+    ਵਾਪਸ name_hint (IDENTIFIER_ਸੂਚਕ (ਉੱਤਮ), ਨਿਰਾ);
+  ਨਹੀਂਤਾਂ
+    ਵਾਪਸ name_hint (ਨਿਰਾ, ਨਿਰਾ);
 }
 
 
 /* Handle the standard [[nodiscard]] attribute.  */
 
-static tree
-handle_nodiscard_attribute (tree *node, tree name, tree /*args*/,
-			    int /*flags*/, bool *no_add_attrs)
+ਸਥਿਰ ਰੁੱਖ
+handle_nodiscard_attribute (ਰੁੱਖ *ਗੰਢ, ਰੁੱਖ name, ਰੁੱਖ /*ਦਲੀਲਾਂ*/,
+			    ਪੂਰਨ /*flags*/, ਤਾਰਕਿਕ *no_ਜੋੜੋ_attrs)
 {
-  if (TREE_CODE (*node) == FUNCTION_DECL)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (*ਗੰਢ) == FUNCTION_DECL)
     {
-      if (VOID_TYPE_P (TREE_TYPE (TREE_TYPE (*node))))
-	warning_at (DECL_SOURCE_LOCATION (*node),
+      ਜੇ (VOID_TYPE_P (ਰੁੱਖ_TYPE (ਰੁੱਖ_TYPE (*ਗੰਢ))))
+	warning_at (DECL_ਸਰੋਤ_LOCATION (*ਗੰਢ),
 		    OPT_Wattributes, "%qE attribute applied to %qD with void "
-		    "return type", name, *node);
+		    "return type", name, *ਗੰਢ);
     }
-  else if (RECORD_OR_UNION_TYPE_P (*node)
-	   || TREE_CODE (*node) == ENUMERAL_TYPE)
+  ਨਹੀਂਤਾਂ ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (*ਗੰਢ)
+	   || ਰੁੱਖ_ਕੋਡ (*ਗੰਢ) == ENUMERAL_TYPE)
     /* OK */;
-  else
+  ਨਹੀਂਤਾਂ
     {
-      pedwarn (input_location,
+      pedwarn (ਨਿਵੇਸ਼_location,
 	       OPT_Wattributes, "%qE attribute can only be applied to "
 	       "functions or to structure, union or enumeration types", name);
-      *no_add_attrs = true;
+      *no_ਜੋੜੋ_attrs = ਸੱਚ;
     }
-  return NULL_TREE;
+  ਵਾਪਸ NULL_ਰੁੱਖ;
 }
 
 /* Handle the standard [[noreturn]] attribute.  */
 
-static tree
-handle_std_noreturn_attribute (tree *node, tree name, tree args,
-			       int flags, bool *no_add_attrs)
+ਸਥਿਰ ਰੁੱਖ
+handle_std_noreturn_attribute (ਰੁੱਖ *ਗੰਢ, ਰੁੱਖ name, ਰੁੱਖ ਦਲੀਲਾਂ,
+			       ਪੂਰਨ flags, ਤਾਰਕਿਕ *no_ਜੋੜੋ_attrs)
 {
   /* Unlike GNU __attribute__ ((noreturn)), the standard [[noreturn]]
      only applies to functions, not function pointers.  */
-  if (TREE_CODE (*node) == FUNCTION_DECL)
-    return handle_noreturn_attribute (node, name, args, flags, no_add_attrs);
-  else
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (*ਗੰਢ) == FUNCTION_DECL)
+    ਵਾਪਸ handle_noreturn_attribute (ਗੰਢ, name, ਦਲੀਲਾਂ, flags, no_ਜੋੜੋ_attrs);
+  ਨਹੀਂਤਾਂ
     {
-      pedwarn (input_location, OPT_Wattributes,
+      pedwarn (ਨਿਵੇਸ਼_location, OPT_Wattributes,
 	       "standard %qE attribute can only be applied to functions",
 	       name);
-      *no_add_attrs = true;
-      return NULL_TREE;
+      *no_ਜੋੜੋ_attrs = ਸੱਚ;
+      ਵਾਪਸ NULL_ਰੁੱਖ;
     }
 }
 
 /* Handle the standard [[unsequenced]] attribute.  */
 
-static tree
-handle_std_unsequenced_attribute (tree *node, tree name, tree args,
-				  int flags, bool *no_add_attrs)
+ਸਥਿਰ ਰੁੱਖ
+handle_std_unsequenced_attribute (ਰੁੱਖ *ਗੰਢ, ਰੁੱਖ name, ਰੁੱਖ ਦਲੀਲਾਂ,
+				  ਪੂਰਨ flags, ਤਾਰਕਿਕ *no_ਜੋੜੋ_attrs)
 {
   /* Unlike GNU __attribute__ ((unsequenced)), the standard [[unsequenced]]
      should be only applied to function declarators or type specifiers which
      have function type.  */
-  if (node[2])
+  ਜੇ (ਗੰਢ[2])
     {
-      auto_diagnostic_group d;
-      if (pedwarn (input_location, OPT_Wattributes,
+      auto_diagnostic_ਸਮੂਹ d;
+      ਜੇ (pedwarn (ਨਿਵੇਸ਼_location, OPT_Wattributes,
 		   "standard %qE attribute can only be applied to function "
 		   "declarators or type specifiers with function type", name))
-	inform (input_location, "did you mean to specify it after %<)%> "
+	inform (ਨਿਵੇਸ਼_location, "did you mean to specify it after %<)%> "
 				"following function parameters?");
-      *no_add_attrs = true;
-      return NULL_TREE;
+      *no_ਜੋੜੋ_attrs = ਸੱਚ;
+      ਵਾਪਸ NULL_ਰੁੱਖ;
     }
-  return handle_unsequenced_attribute (node, name, args, flags, no_add_attrs);
+  ਵਾਪਸ handle_unsequenced_attribute (ਗੰਢ, name, ਦਲੀਲਾਂ, flags, no_ਜੋੜੋ_attrs);
 }
 
 /* Handle the standard [[reproducible]] attribute.  */
 
-static tree
-handle_std_reproducible_attribute (tree *node, tree name, tree args,
-				   int flags, bool *no_add_attrs)
+ਸਥਿਰ ਰੁੱਖ
+handle_std_reproducible_attribute (ਰੁੱਖ *ਗੰਢ, ਰੁੱਖ name, ਰੁੱਖ ਦਲੀਲਾਂ,
+				   ਪੂਰਨ flags, ਤਾਰਕਿਕ *no_ਜੋੜੋ_attrs)
 {
-  return handle_std_unsequenced_attribute (node, name, args, flags,
-					   no_add_attrs);
+  ਵਾਪਸ handle_std_unsequenced_attribute (ਗੰਢ, name, ਦਲੀਲਾਂ, flags,
+					   no_ਜੋੜੋ_attrs);
 }
 
 /* Table of supported standard (C23) attributes.  */
-static const attribute_spec std_attributes[] =
+ਸਥਿਰ ਅਚਲ attribute_spec std_ਗੁਣ[] =
 {
   /* { name, min_len, max_len, decl_req, type_req, fn_type_req,
        affects_type_identity, handler, exclude } */
-  { "_Noreturn", 0, 0, false, false, false, false,
-    handle_std_noreturn_attribute, NULL },
-  { "deprecated", 0, 1, false, false, false, false,
-    handle_deprecated_attribute, NULL },
-  { "fallthrough", 0, 0, false, false, false, false,
-    handle_fallthrough_attribute, NULL },
-  { "maybe_unused", 0, 0, false, false, false, false,
-    handle_unused_attribute, NULL },
-  { "nodiscard", 0, 1, false, false, false, false,
-    handle_nodiscard_attribute, NULL },
-  { "noreturn", 0, 0, false, false, false, false,
-    handle_std_noreturn_attribute, NULL },
-  { "reproducible", 0, 0, false, true, true, false,
-    handle_std_reproducible_attribute, NULL },
-  { "unsequenced", 0, 0, false, true, true, false,
-    handle_std_unsequenced_attribute, NULL }
+  { "_Noreturn", 0, 0, ਝੂਠ, ਝੂਠ, ਝੂਠ, ਝੂਠ,
+    handle_std_noreturn_attribute, ਨਿਰਾ },
+  { "deprecated", 0, 1, ਝੂਠ, ਝੂਠ, ਝੂਠ, ਝੂਠ,
+    handle_deprecated_attribute, ਨਿਰਾ },
+  { "fallthrough", 0, 0, ਝੂਠ, ਝੂਠ, ਝੂਠ, ਝੂਠ,
+    handle_fallthrough_attribute, ਨਿਰਾ },
+  { "maybe_unused", 0, 0, ਝੂਠ, ਝੂਠ, ਝੂਠ, ਝੂਠ,
+    handle_ਅਣਵਰਤਿਆ_attribute, ਨਿਰਾ },
+  { "nodiscard", 0, 1, ਝੂਠ, ਝੂਠ, ਝੂਠ, ਝੂਠ,
+    handle_nodiscard_attribute, ਨਿਰਾ },
+  { "noreturn", 0, 0, ਝੂਠ, ਝੂਠ, ਝੂਠ, ਝੂਠ,
+    handle_std_noreturn_attribute, ਨਿਰਾ },
+  { "reproducible", 0, 0, ਝੂਠ, ਸੱਚ, ਸੱਚ, ਝੂਠ,
+    handle_std_reproducible_attribute, ਨਿਰਾ },
+  { "unsequenced", 0, 0, ਝੂਠ, ਸੱਚ, ਸੱਚ, ਝੂਠ,
+    handle_std_unsequenced_attribute, ਨਿਰਾ }
 };
 
-const scoped_attribute_specs std_attribute_table =
+ਅਚਲ scoped_attribute_specs std_attribute_ਸਾਰਣੀ =
 {
-  nullptr, { std_attributes }
+  ਖਾਲੀ_ਸੂਚਕ, { std_ਗੁਣ }
 };
 
 /* Create the predefined scalar types of C,
@@ -4928,69 +4928,69 @@ const scoped_attribute_specs std_attribute_table =
    Initialize the global scope.
    Make definitions for built-in primitive functions.  */
 
-void
-c_init_decl_processing (void)
+ਖਾਲੀ
+c_init_decl_processing (ਖਾਲੀ)
 {
-  location_t save_loc = input_location;
+  location_t save_loc = ਨਿਵੇਸ਼_location;
 
   /* Initialize reserved words for parser.  */
   c_parse_init ();
 
-  current_function_decl = NULL_TREE;
+  current_function_decl = NULL_ਰੁੱਖ;
 
   gcc_obstack_init (&parser_obstack);
 
   /* Make the externals scope.  */
-  push_scope ();
+  ਧੱਕੋ_scope ();
   external_scope = current_scope;
 
   /* Declarations from c_common_nodes_and_builtins must not be associated
      with this input file, lest we get differences between using and not
      using preprocessed headers.  */
-  input_location = BUILTINS_LOCATION;
+  ਨਿਵੇਸ਼_location = BUILTINS_LOCATION;
 
   c_common_nodes_and_builtins ();
 
   /* In C, comparisons and TRUTH_* expressions have type int.  */
-  truthvalue_type_node = integer_type_node;
-  truthvalue_true_node = integer_one_node;
-  truthvalue_false_node = integer_zero_node;
+  truthvalue_type_ਗੰਢ = integer_type_ਗੰਢ;
+  truthvalue_true_ਗੰਢ = integer_one_ਗੰਢ;
+  truthvalue_false_ਗੰਢ = integer_zero_ਗੰਢ;
 
   /* Even in C99, which has a real boolean type.  */
   pushdecl (build_decl (UNKNOWN_LOCATION, TYPE_DECL,
 			get_identifier (flag_isoc23 ? "bool" : "_Bool"),
-			boolean_type_node));
+			boolean_type_ਗੰਢ));
 
   /* C-specific nullptr initialization.  */
-  record_builtin_type (RID_MAX, "typeof (nullptr)", nullptr_type_node);
+  ਰਿਕਾਰਡ_builtin_type (RID_MAX, "typeof (nullptr)", nullptr_type_ਗੰਢ);
   /* The size and alignment of nullptr_t is the same as for a pointer to
      character type.  */
-  SET_TYPE_ALIGN (nullptr_type_node, GET_MODE_ALIGNMENT (ptr_mode));
+  ਸੈੱਟ_TYPE_ALIGN (nullptr_type_ਗੰਢ, GET_ਬਹੁਲਕ_ALIGNMENT (ptr_ਬਹੁਲਕ));
 
-  input_location = save_loc;
+  ਨਿਵੇਸ਼_location = save_loc;
 
   make_fname_decl = c_make_fname_decl;
-  start_fname_decls ();
+  ਸ਼ੁਰੂ_fname_decls ();
 
-  if (warn_keyword_macro)
+  ਜੇ (warn_keyword_macro)
     {
-      for (unsigned int i = 0; i < num_c_common_reswords; ++i)
+      ਲਈ (ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ i = 0; i < ਅੰਕ_c_common_reswords; ++i)
 	/* For C register keywords which don't start with underscore
 	   or start with just single underscore.  Don't complain about
 	   ObjC or Transactional Memory keywords.  */
-	if (c_common_reswords[i].word[0] == '_'
-	    && c_common_reswords[i].word[1] == '_')
-	  continue;
-	else if (c_common_reswords[i].disable
+	ਜੇ (c_common_reswords[i].ਸ਼ਬਦ[0] == '_'
+	    && c_common_reswords[i].ਸ਼ਬਦ[1] == '_')
+	  ਜਾਰੀ;
+	ਨਹੀਂਤਾਂ ਜੇ (c_common_reswords[i].disable
 		 & (D_TRANSMEM | D_OBJC | D_CXX_OBJC))
-	  continue;
-	else
+	  ਜਾਰੀ;
+	ਨਹੀਂਤਾਂ
 	  {
-	    tree id = get_identifier (c_common_reswords[i].word);
-	    if (C_IS_RESERVED_WORD (id)
-		&& C_RID_CODE (id) != RID_CXX_COMPAT_WARN)
-	      cpp_warn (parse_in, IDENTIFIER_POINTER (id),
-			IDENTIFIER_LENGTH (id));
+	    ਰੁੱਖ id = get_identifier (c_common_reswords[i].ਸ਼ਬਦ);
+	    ਜੇ (C_IS_RESERVED_ਸ਼ਬਦ (id)
+		&& C_RID_ਕੋਡ (id) != RID_CXX_COMPAT_WARN)
+	      cpp_warn (parse_ਵਿੱਚ, IDENTIFIER_ਸੂਚਕ (id),
+			IDENTIFIER_ਲੰਮਾਈ (id));
 	  }
     }
 }
@@ -5003,31 +5003,31 @@ c_init_decl_processing (void)
    it must therefore pull out the STRING_CST initializer directly.
    FIXME.  */
 
-static tree
-c_make_fname_decl (location_t loc, tree id, int type_dep)
+ਸਥਿਰ ਰੁੱਖ
+c_make_fname_decl (location_t loc, ਰੁੱਖ id, ਪੂਰਨ type_dep)
 {
-  const char *name = fname_as_string (type_dep);
-  tree decl, type, init;
-  size_t length = strlen (name);
+  ਅਚਲ ਅੱਖਰ *name = fname_as_string (type_dep);
+  ਰੁੱਖ decl, type, init;
+  ਮਾਪ_t ਲੰਮਾਈ = ਲੜੀ_ਲੰਬਾਈ (name);
 
-  type = c_build_array_type (char_type_node,
-			     build_index_type (size_int (length)));
+  type = c_build_array_type (char_type_ਗੰਢ,
+			     build_ਸੂਚਕਾਂਕ_type (ਮਾਪ_int (ਲੰਮਾਈ)));
   type = c_build_qualified_type (type, TYPE_QUAL_CONST);
 
   decl = build_decl (loc, VAR_DECL, id, type);
 
-  TREE_STATIC (decl) = 1;
-  TREE_READONLY (decl) = 1;
+  ਰੁੱਖ_STATIC (decl) = 1;
+  ਰੁੱਖ_READONLY (decl) = 1;
   DECL_ARTIFICIAL (decl) = 1;
 
-  init = build_string (length + 1, name);
-  free (const_cast<char *> (name));
-  TREE_TYPE (init) = type;
+  init = build_string (ਲੰਮਾਈ + 1, name);
+  ਮੁਕਤ (const_cast<ਅੱਖਰ *> (name));
+  ਰੁੱਖ_TYPE (init) = type;
   DECL_INITIAL (decl) = init;
 
-  TREE_USED (decl) = 1;
+  ਰੁੱਖ_ਵਰਤਿਆ (decl) = 1;
 
-  if (current_function_decl
+  ਜੇ (current_function_decl
       /* For invalid programs like this:
 
          void foo()
@@ -5040,88 +5040,88 @@ c_make_fname_decl (location_t loc, tree id, int type_dep)
     {
       DECL_CONTEXT (decl) = current_function_decl;
       bind (id, decl, current_function_scope,
-	    /*invisible=*/false, /*nested=*/false, UNKNOWN_LOCATION);
+	    /*invisible=*/ਝੂਠ, /*nested=*/ਝੂਠ, UNKNOWN_LOCATION);
     }
 
-  finish_decl (decl, loc, init, NULL_TREE, NULL_TREE);
+  ਅੰਤ_decl (decl, loc, init, NULL_ਰੁੱਖ, NULL_ਰੁੱਖ);
 
-  return decl;
+  ਵਾਪਸ decl;
 }
 
-tree
-c_builtin_function (tree decl)
+ਰੁੱਖ
+c_builtin_function (ਰੁੱਖ decl)
 {
-  tree type = TREE_TYPE (decl);
-  tree   id = DECL_NAME (decl);
+  ਰੁੱਖ type = ਰੁੱਖ_TYPE (decl);
+  ਰੁੱਖ   id = DECL_NAME (decl);
 
-  const char *name = IDENTIFIER_POINTER (id);
+  ਅਚਲ ਅੱਖਰ *name = IDENTIFIER_ਸੂਚਕ (id);
   C_DECL_BUILTIN_PROTOTYPE (decl) = prototype_p (type);
 
   /* Should never be called on a symbol with a preexisting meaning.  */
-  gcc_assert (!I_SYMBOL_BINDING (id));
+  gcc_assert (!I_ਚਿੰਨ੍ਹ_BINDING (id));
 
-  bind (id, decl, external_scope, /*invisible=*/true, /*nested=*/false,
+  bind (id, decl, external_scope, /*invisible=*/ਸੱਚ, /*nested=*/ਝੂਠ,
 	UNKNOWN_LOCATION);
 
   /* Builtins in the implementation namespace are made visible without
      needing to be explicitly declared.  See push_file_scope.  */
-  if (name[0] == '_' && (name[1] == '_' || ISUPPER (name[1])))
+  ਜੇ (name[0] == '_' && (name[1] == '_' || ISUPPER (name[1])))
     {
       DECL_CHAIN (decl) = visible_builtins;
       visible_builtins = decl;
     }
 
-  return decl;
+  ਵਾਪਸ decl;
 }
 
-tree
-c_builtin_function_ext_scope (tree decl)
+ਰੁੱਖ
+c_builtin_function_ext_scope (ਰੁੱਖ decl)
 {
-  tree type = TREE_TYPE (decl);
-  tree   id = DECL_NAME (decl);
+  ਰੁੱਖ type = ਰੁੱਖ_TYPE (decl);
+  ਰੁੱਖ   id = DECL_NAME (decl);
 
-  const char *name = IDENTIFIER_POINTER (id);
+  ਅਚਲ ਅੱਖਰ *name = IDENTIFIER_ਸੂਚਕ (id);
   C_DECL_BUILTIN_PROTOTYPE (decl) = prototype_p (type);
 
-  if (external_scope)
-    bind (id, decl, external_scope, /*invisible=*/false, /*nested=*/false,
+  ਜੇ (external_scope)
+    bind (id, decl, external_scope, /*invisible=*/ਝੂਠ, /*nested=*/ਝੂਠ,
 	  UNKNOWN_LOCATION);
 
   /* Builtins in the implementation namespace are made visible without
      needing to be explicitly declared.  See push_file_scope.  */
-  if (name[0] == '_' && (name[1] == '_' || ISUPPER (name[1])))
+  ਜੇ (name[0] == '_' && (name[1] == '_' || ISUPPER (name[1])))
     {
       DECL_CHAIN (decl) = visible_builtins;
       visible_builtins = decl;
     }
 
-  return decl;
+  ਵਾਪਸ decl;
 }
 
 /* Implement LANG_HOOKS_SIMULATE_BUILTIN_FUNCTION_DECL.  */
 
-tree
-c_simulate_builtin_function_decl (tree decl)
+ਰੁੱਖ
+c_simulate_builtin_function_decl (ਰੁੱਖ decl)
 {
-  tree type = TREE_TYPE (decl);
+  ਰੁੱਖ type = ਰੁੱਖ_TYPE (decl);
   C_DECL_BUILTIN_PROTOTYPE (decl) = prototype_p (type);
-  return pushdecl (decl);
+  ਵਾਪਸ pushdecl (decl);
 }
 
 /* Warn about attributes in a context where they are unused
    (attribute-declarations, except for the "fallthrough" case, and
    attributes on statements).  */
 
-void
-c_warn_unused_attributes (tree attrs)
+ਖਾਲੀ
+c_warn_ਅਣਵਰਤਿਆ_ਗੁਣ (ਰੁੱਖ attrs)
 {
-  for (tree t = attrs; t != NULL_TREE; t = TREE_CHAIN (t))
-    if (get_attribute_namespace (t) == NULL_TREE)
+  ਲਈ (ਰੁੱਖ t = attrs; t != NULL_ਰੁੱਖ; t = ਰੁੱਖ_CHAIN (t))
+    ਜੇ (get_attribute_namespace (t) == NULL_ਰੁੱਖ)
       /* The specifications of standard attributes mean this is a
 	 constraint violation.  */
-      pedwarn (input_location, OPT_Wattributes, "%qE attribute ignored",
+      pedwarn (ਨਿਵੇਸ਼_location, OPT_Wattributes, "%qE attribute ignored",
 	       get_attribute_name (t));
-    else if (!attribute_ignored_p (t))
+    ਨਹੀਂਤਾਂ ਜੇ (!attribute_ignored_p (t))
       warning (OPT_Wattributes, "%qE attribute ignored",
 	       get_attribute_name (t));
 }
@@ -5130,32 +5130,32 @@ c_warn_unused_attributes (tree attrs)
    being defined, where that is a constraint violation, and return a
    list of attributes with them removed.  */
 
-tree
-c_warn_type_attributes (tree type, tree attrs)
+ਰੁੱਖ
+c_warn_type_ਗੁਣ (ਰੁੱਖ type, ਰੁੱਖ attrs)
 {
-  tree *attr_ptr = &attrs;
-  while (*attr_ptr)
-    if (get_attribute_namespace (*attr_ptr) == NULL_TREE)
+  ਰੁੱਖ *attr_ptr = &attrs;
+  ਜਦੋਂ (*attr_ptr)
+    ਜੇ (get_attribute_namespace (*attr_ptr) == NULL_ਰੁੱਖ)
       {
-	if (TREE_CODE (type) == FUNCTION_TYPE)
+	ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
 	  {
-	    tree name = get_attribute_name (*attr_ptr);
+	    ਰੁੱਖ name = get_attribute_name (*attr_ptr);
 	    /* [[unsequenced]] and [[reproducible]] is fine on function
 	       types that aren't being defined.  */
-	    if (is_attribute_p ("unsequenced", name)
+	    ਜੇ (is_attribute_p ("unsequenced", name)
 		|| is_attribute_p ("reproducible", name))
 	      {
-		attr_ptr = &TREE_CHAIN (*attr_ptr);
-		continue;
+		attr_ptr = &ਰੁੱਖ_CHAIN (*attr_ptr);
+		ਜਾਰੀ;
 	      }
 	  }
-	pedwarn (input_location, OPT_Wattributes, "%qE attribute ignored",
+	pedwarn (ਨਿਵੇਸ਼_location, OPT_Wattributes, "%qE attribute ignored",
 		 get_attribute_name (*attr_ptr));
-	*attr_ptr = TREE_CHAIN (*attr_ptr);
+	*attr_ptr = ਰੁੱਖ_CHAIN (*attr_ptr);
       }
-    else
-      attr_ptr = &TREE_CHAIN (*attr_ptr);
-  return attrs;
+    ਨਹੀਂਤਾਂ
+      attr_ptr = &ਰੁੱਖ_CHAIN (*attr_ptr);
+  ਵਾਪਸ attrs;
 }
 
 /* Called when a declaration is seen that contains no names to declare.
@@ -5166,203 +5166,203 @@ c_warn_type_attributes (tree type, tree attrs)
    or defines an enum, it is valid but we need not do anything here.
    Otherwise, it is an error.  */
 
-void
-shadow_tag (const struct c_declspecs *declspecs)
+ਖਾਲੀ
+shadow_ਟੈਗ (ਅਚਲ ਬਣਤਰ c_declspecs *declspecs)
 {
-  shadow_tag_warned (declspecs, 0);
+  shadow_ਟੈਗ_warned (declspecs, 0);
 }
 
 /* WARNED is 1 if we have done a pedwarn, 2 if we have done a warning,
    but no pedwarn.  */
-void
-shadow_tag_warned (const struct c_declspecs *declspecs, int warned)
+ਖਾਲੀ
+shadow_ਟੈਗ_warned (ਅਚਲ ਬਣਤਰ c_declspecs *declspecs, ਪੂਰਨ warned)
 {
-  bool found_tag = false;
+  ਤਾਰਕਿਕ ਮਿਲਿਆ_ਟੈਗ = ਝੂਠ;
 
-  if (declspecs->type && !declspecs->default_int_p && !declspecs->typedef_p)
+  ਜੇ (declspecs->type && !declspecs->default_int_p && !declspecs->typedef_p)
     {
-      tree value = declspecs->type;
-      enum tree_code code = TREE_CODE (value);
+      ਰੁੱਖ ਮੁੱਲ = declspecs->type;
+      ਗਿਣਤੀ ਰੁੱਖ_ਕੋਡ_2 ਕੋਡ = ਰੁੱਖ_ਕੋਡ (ਮੁੱਲ);
 
-      if (code == RECORD_TYPE || code == UNION_TYPE || code == ENUMERAL_TYPE)
+      ਜੇ (ਕੋਡ == ਰਿਕਾਰਡ_TYPE || ਕੋਡ == UNION_TYPE || ਕੋਡ == ENUMERAL_TYPE)
 	/* Used to test also that TYPE_SIZE (value) != 0.
 	   That caused warning for `struct foo;' at top level in the file.  */
 	{
-	  tree name = TYPE_NAME (value);
-	  tree t;
+	  ਰੁੱਖ name = TYPE_NAME (ਮੁੱਲ);
+	  ਰੁੱਖ t;
 
-	  found_tag = true;
+	  ਮਿਲਿਆ_ਟੈਗ = ਸੱਚ;
 
-	  if (declspecs->restrict_p)
+	  ਜੇ (declspecs->restrict_p)
 	    {
 	      error ("invalid use of %<restrict%>");
 	      warned = 1;
 	    }
 
-	  if (in_underspecified_init)
+	  ਜੇ (ਵਿੱਚ_underspecified_init)
 	    {
 	      /* This can only occur with extensions such as statement
 		 expressions, but is still appropriate as an error to
 		 avoid types declared in such a context escaping to
 		 the type of an auto variable.  */
 	      error ("%qT declared in underspecified object initializer",
-		     value);
+		     ਮੁੱਲ);
 	      warned = 1;
 	    }
 
-	  if (name == NULL_TREE)
+	  ਜੇ (name == NULL_ਰੁੱਖ)
 	    {
-	      if (warned != 1 && code != ENUMERAL_TYPE)
+	      ਜੇ (warned != 1 && ਕੋਡ != ENUMERAL_TYPE)
 		/* Empty unnamed enum OK */
 		{
-		  pedwarn (input_location, 0,
+		  pedwarn (ਨਿਵੇਸ਼_location, 0,
 			   "unnamed struct/union that defines no instances");
 		  warned = 1;
 		}
 	    }
-	  else if (declspecs->typespec_kind != ctsk_tagdef
-                   && declspecs->typespec_kind != ctsk_tagfirstref
-		   && declspecs->typespec_kind != ctsk_tagfirstref_attrs
+	  ਨਹੀਂਤਾਂ ਜੇ (declspecs->typespec_ਕਿਸਮ != ctsk_tagdef
+                   && declspecs->typespec_ਕਿਸਮ != ctsk_tagfirstref
+		   && declspecs->typespec_ਕਿਸਮ != ctsk_tagfirstref_attrs
 		   && declspecs->storage_class != csc_none)
 	    {
-	      if (warned != 1)
-		pedwarn (input_location, 0,
+	      ਜੇ (warned != 1)
+		pedwarn (ਨਿਵੇਸ਼_location, 0,
 			 "empty declaration with storage class specifier "
 			 "does not redeclare tag");
 	      warned = 1;
 	      pending_xref_error ();
 	    }
-	  else if (declspecs->typespec_kind != ctsk_tagdef
-                   && declspecs->typespec_kind != ctsk_tagfirstref
-                   && declspecs->typespec_kind != ctsk_tagfirstref_attrs
+	  ਨਹੀਂਤਾਂ ਜੇ (declspecs->typespec_ਕਿਸਮ != ctsk_tagdef
+                   && declspecs->typespec_ਕਿਸਮ != ctsk_tagfirstref
+                   && declspecs->typespec_ਕਿਸਮ != ctsk_tagfirstref_attrs
 		   && (declspecs->const_p
 		       || declspecs->volatile_p
 		       || declspecs->atomic_p
 		       || declspecs->restrict_p
-		       || declspecs->address_space))
+		       || declspecs->ਪਤਾ_space))
 	    {
-	      if (warned != 1)
-		pedwarn (input_location, 0,
+	      ਜੇ (warned != 1)
+		pedwarn (ਨਿਵੇਸ਼_location, 0,
 			 "empty declaration with type qualifier "
 			  "does not redeclare tag");
 	      warned = 1;
 	      pending_xref_error ();
 	    }
-	  else if (declspecs->typespec_kind != ctsk_tagdef
-                   && declspecs->typespec_kind != ctsk_tagfirstref
-                   && declspecs->typespec_kind != ctsk_tagfirstref_attrs
+	  ਨਹੀਂਤਾਂ ਜੇ (declspecs->typespec_ਕਿਸਮ != ctsk_tagdef
+                   && declspecs->typespec_ਕਿਸਮ != ctsk_tagfirstref
+                   && declspecs->typespec_ਕਿਸਮ != ctsk_tagfirstref_attrs
 		   && declspecs->alignas_p)
 	    {
-	      if (warned != 1)
-		pedwarn (input_location, 0,
+	      ਜੇ (warned != 1)
+		pedwarn (ਨਿਵੇਸ਼_location, 0,
 			 "empty declaration with %<_Alignas%> "
 			  "does not redeclare tag");
 	      warned = 1;
 	      pending_xref_error ();
 	    }
-	  else if (declspecs->typespec_kind != ctsk_tagdef
-		   && declspecs->typespec_kind != ctsk_tagfirstref
-		   && declspecs->typespec_kind != ctsk_tagfirstref_attrs
-		   && code == ENUMERAL_TYPE
+	  ਨਹੀਂਤਾਂ ਜੇ (declspecs->typespec_ਕਿਸਮ != ctsk_tagdef
+		   && declspecs->typespec_ਕਿਸਮ != ctsk_tagfirstref
+		   && declspecs->typespec_ਕਿਸਮ != ctsk_tagfirstref_attrs
+		   && ਕੋਡ == ENUMERAL_TYPE
 		   && !declspecs->enum_type_specifier_ref_p)
 	    {
-	      bool warned_enum = false;
-	      if (warned != 1)
-		warned_enum = pedwarn (input_location, OPT_Wpedantic,
+	      ਤਾਰਕਿਕ warned_enum = ਝੂਠ;
+	      ਜੇ (warned != 1)
+		warned_enum = pedwarn (ਨਿਵੇਸ਼_location, OPT_Wpedantic,
 				       "empty declaration of %<enum%> type "
 				       "does not redeclare tag");
-	      if (warned_enum)
+	      ਜੇ (warned_enum)
 		warned = 1;
 	      pending_xref_error ();
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    {
-	      pending_invalid_xref = NULL_TREE;
-	      t = lookup_tag (code, name, true, NULL);
+	      pending_invalid_xref = NULL_ਰੁੱਖ;
+	      t = lookup_ਟੈਗ (ਕੋਡ, name, ਸੱਚ, ਨਿਰਾ);
 
-	      if (t == NULL_TREE)
+	      ਜੇ (t == NULL_ਰੁੱਖ)
 		{
-		  t = make_node (code);
-		  if (flag_isoc23 || code == ENUMERAL_TYPE)
-		    SET_TYPE_STRUCTURAL_EQUALITY (t);
-		  pushtag (input_location, name, t);
+		  t = make_ਗੰਢ (ਕੋਡ);
+		  ਜੇ (flag_isoc23 || ਕੋਡ == ENUMERAL_TYPE)
+		    ਸੈੱਟ_TYPE_STRUCTURAL_EQUALITY (t);
+		  pushtag (ਨਿਵੇਸ਼_location, name, t);
 		}
 	    }
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  if (warned != 1 && !in_system_header_at (input_location))
+	  ਜੇ (warned != 1 && !ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location))
 	    {
-	      pedwarn (input_location, 0,
+	      pedwarn (ਨਿਵੇਸ਼_location, 0,
 		       "useless type name in empty declaration");
 	      warned = 1;
 	    }
 	}
     }
-  else if (warned != 1 && !in_system_header_at (input_location)
+  ਨਹੀਂਤਾਂ ਜੇ (warned != 1 && !ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location)
 	   && declspecs->typedef_p)
     {
-      pedwarn (input_location, 0, "useless type name in empty declaration");
+      pedwarn (ਨਿਵੇਸ਼_location, 0, "useless type name in empty declaration");
       warned = 1;
     }
 
-  pending_invalid_xref = NULL_TREE;
+  pending_invalid_xref = NULL_ਰੁੱਖ;
 
-  if (declspecs->inline_p)
+  ਜੇ (declspecs->inline_p)
     {
       error ("%<inline%> in empty declaration");
       warned = 1;
     }
 
-  if (declspecs->noreturn_p)
+  ਜੇ (declspecs->noreturn_p)
     {
       error ("%<_Noreturn%> in empty declaration");
       warned = 1;
     }
 
-  if (declspecs->constexpr_p)
+  ਜੇ (declspecs->constexpr_p)
     {
       error ("%<constexpr%> in empty declaration");
       warned = 1;
     }
 
-  if (current_scope == file_scope && declspecs->storage_class == csc_auto)
+  ਜੇ (current_scope == file_scope && declspecs->storage_class == csc_auto)
     {
       error ("%<auto%> in file-scope empty declaration");
       warned = 1;
     }
 
-  if (current_scope == file_scope && declspecs->storage_class == csc_register)
+  ਜੇ (current_scope == file_scope && declspecs->storage_class == csc_ਰਜਿਸਟਰ)
     {
       error ("%<register%> in file-scope empty declaration");
       warned = 1;
     }
 
-  if (declspecs->enum_type_specifier_ref_p && !warned)
+  ਜੇ (declspecs->enum_type_specifier_ref_p && !warned)
     {
-      if (declspecs->storage_class != csc_none)
+      ਜੇ (declspecs->storage_class != csc_none)
 	{
 	  error ("storage class specifier in empty declaration with %<enum%> "
 		 "underlying type");
 	  warned = 1;
 	}
-      else if (declspecs->thread_p)
+      ਨਹੀਂਤਾਂ ਜੇ (declspecs->thread_p)
 	{
 	  error ("%qs in empty declaration with %<enum%> underlying type",
 		 declspecs->thread_gnu_p ? "__thread" : "_Thread_local");
 	  warned = 1;
 	}
-      else if (declspecs->const_p
+      ਨਹੀਂਤਾਂ ਜੇ (declspecs->const_p
 	       || declspecs->volatile_p
 	       || declspecs->atomic_p
 	       || declspecs->restrict_p
-	       || declspecs->address_space)
+	       || declspecs->ਪਤਾ_space)
 	{
 	  error ("type qualifier in empty declaration with %<enum%> "
 		 "underlying type");
 	  warned = 1;
 	}
-      else if (declspecs->alignas_p)
+      ਨਹੀਂਤਾਂ ਜੇ (declspecs->alignas_p)
 	{
 	  error ("%<alignas%> in empty declaration with %<enum%> "
 		 "underlying type");
@@ -5370,43 +5370,43 @@ shadow_tag_warned (const struct c_declspecs *declspecs, int warned)
 	}
     }
 
-  if (!warned && !in_system_header_at (input_location)
+  ਜੇ (!warned && !ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location)
       && declspecs->storage_class != csc_none)
     {
       warning (0, "useless storage class specifier in empty declaration");
       warned = 2;
     }
 
-  if (!warned && !in_system_header_at (input_location) && declspecs->thread_p)
+  ਜੇ (!warned && !ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location) && declspecs->thread_p)
     {
       warning (0, "useless %qs in empty declaration",
 	       declspecs->thread_gnu_p ? "__thread" : "_Thread_local");
       warned = 2;
     }
 
-  if (!warned
-      && !in_system_header_at (input_location)
+  ਜੇ (!warned
+      && !ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location)
       && (declspecs->const_p
 	  || declspecs->volatile_p
 	  || declspecs->atomic_p
 	  || declspecs->restrict_p
-	  || declspecs->address_space))
+	  || declspecs->ਪਤਾ_space))
     {
       warning (0, "useless type qualifier in empty declaration");
       warned = 2;
     }
 
-  if (!warned && !in_system_header_at (input_location)
+  ਜੇ (!warned && !ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location)
       && declspecs->alignas_p)
     {
       warning (0, "useless %<_Alignas%> in empty declaration");
       warned = 2;
     }
 
-  if (found_tag
+  ਜੇ (ਮਿਲਿਆ_ਟੈਗ
       && warned == 2
-      && (declspecs->typespec_kind == ctsk_tagref_attrs
-	  || declspecs->typespec_kind == ctsk_tagfirstref_attrs))
+      && (declspecs->typespec_ਕਿਸਮ == ctsk_tagref_attrs
+	  || declspecs->typespec_ਕਿਸਮ == ctsk_tagfirstref_attrs))
     {
       /* Standard attributes after the "struct" or "union" keyword are
 	 only permitted when the contents of the type are defined, or
@@ -5416,22 +5416,22 @@ shadow_tag_warned (const struct c_declspecs *declspecs, int warned)
 	 elements of the declaration result in a pedwarn, not just a
 	 warning.  Forward declarations of enum types are not part of
 	 standard C, but handle them the same.  */
-      pedwarn (input_location, 0,
+      pedwarn (ਨਿਵੇਸ਼_location, 0,
 	       "invalid use of attributes in empty declaration");
       warned = 1;
     }
 
-  if (warned != 1)
+  ਜੇ (warned != 1)
     {
-      if (declspecs->declspecs_seen_p
-	  && !declspecs->non_std_attrs_seen_p)
+      ਜੇ (declspecs->declspecs_ਵੇਖਿਆ_p
+	  && !declspecs->non_std_attrs_ਵੇਖਿਆ_p)
 	/* An attribute declaration (but not a fallthrough attribute
 	   declaration, which was handled separately); warn if there
 	   are any attributes being ignored (but not if the attributes
 	   were empty).  */
-	c_warn_unused_attributes (declspecs->attrs);
-      else if (!found_tag)
-	pedwarn (input_location, 0, "empty declaration");
+	c_warn_ਅਣਵਰਤਿਆ_ਗੁਣ (declspecs->attrs);
+      ਨਹੀਂਤਾਂ ਜੇ (!ਮਿਲਿਆ_ਟੈਗ)
+	pedwarn (ਨਿਵੇਸ਼_location, 0, "empty declaration");
     }
 }
 
@@ -5440,17 +5440,17 @@ shadow_tag_warned (const struct c_declspecs *declspecs, int warned)
    bits.  SPECS represents declaration specifiers that the grammar
    only permits to contain type qualifiers and attributes.  */
 
-int
-quals_from_declspecs (const struct c_declspecs *specs)
+ਪੂਰਨ
+quals_from_declspecs (ਅਚਲ ਬਣਤਰ c_declspecs *specs)
 {
-  int quals = ((specs->const_p ? TYPE_QUAL_CONST : 0)
+  ਪੂਰਨ quals = ((specs->const_p ? TYPE_QUAL_CONST : 0)
 	       | (specs->volatile_p ? TYPE_QUAL_VOLATILE : 0)
 	       | (specs->restrict_p ? TYPE_QUAL_RESTRICT : 0)
 	       | (specs->atomic_p ? TYPE_QUAL_ATOMIC : 0)
-	       | (ENCODE_QUAL_ADDR_SPACE (specs->address_space)));
+	       | (ENCODE_QUAL_ADDR_SPACE (specs->ਪਤਾ_space)));
   gcc_assert (!specs->type
 	      && !specs->decl_attr
-	      && specs->typespec_word == cts_none
+	      && specs->typespec_ਸ਼ਬਦ == cts_none
 	      && specs->storage_class == csc_none
 	      && !specs->typedef_p
 	      && !specs->explicit_signed_p
@@ -5465,7 +5465,7 @@ quals_from_declspecs (const struct c_declspecs *specs)
 	      && !specs->inline_p
 	      && !specs->noreturn_p
 	      && !specs->thread_p);
-  return quals;
+  ਵਾਪਸ quals;
 }
 
 /* Construct an array declarator.  LOC is the location of the
@@ -5478,75 +5478,75 @@ quals_from_declspecs (const struct c_declspecs *specs)
    false otherwise.  The field for the contained declarator is left to
    be filled in by set_array_declarator_inner.  */
 
-struct c_declarator *
+ਬਣਤਰ c_declarator *
 build_array_declarator (location_t loc,
-			tree expr, struct c_declspecs *quals, bool static_p,
-			bool vla_unspec_p)
+			ਰੁੱਖ ਵਿਅੰਜਕ, ਬਣਤਰ c_declspecs *quals, ਤਾਰਕਿਕ static_p,
+			ਤਾਰਕਿਕ vla_unspec_p)
 {
-  struct c_declarator *declarator = XOBNEW (&parser_obstack,
-					    struct c_declarator);
+  ਬਣਤਰ c_declarator *declarator = XOBNEW (&parser_obstack,
+					    ਬਣਤਰ c_declarator);
   declarator->id_loc = loc;
-  declarator->kind = cdk_array;
+  declarator->ਕਿਸਮ = cdk_array;
   declarator->declarator = 0;
-  declarator->u.array.dimen = expr;
-  if (quals)
+  declarator->u.array.dimen = ਵਿਅੰਜਕ;
+  ਜੇ (quals)
     {
       declarator->u.array.attrs = quals->attrs;
       declarator->u.array.quals = quals_from_declspecs (quals);
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      declarator->u.array.attrs = NULL_TREE;
+      declarator->u.array.attrs = NULL_ਰੁੱਖ;
       declarator->u.array.quals = 0;
     }
   declarator->u.array.static_p = static_p;
   declarator->u.array.vla_unspec_p = vla_unspec_p;
-  if (static_p || quals != NULL)
+  ਜੇ (static_p || quals != ਨਿਰਾ)
     pedwarn_c90 (loc, OPT_Wpedantic,
 		 "ISO C90 does not support %<static%> or type "
 		 "qualifiers in parameter array declarators");
-  if (vla_unspec_p)
+  ਜੇ (vla_unspec_p)
     {
       pedwarn_c90 (loc, OPT_Wpedantic,
 		   "ISO C90 does not support %<[*]%> array declarators");
-      if (current_scope->parm_flag)
-	current_scope->had_vla_unspec = true;
+      ਜੇ (current_scope->parm_flag)
+	current_scope->had_vla_unspec = ਸੱਚ;
     }
-  return declarator;
+  ਵਾਪਸ declarator;
 }
 
 /* Set the contained declarator of an array declarator.  DECL is the
    declarator, as constructed by build_array_declarator; INNER is what
    appears on the left of the [].  */
 
-struct c_declarator *
-set_array_declarator_inner (struct c_declarator *decl,
-			    struct c_declarator *inner)
+ਬਣਤਰ c_declarator *
+ਸੈੱਟ_array_declarator_inner (ਬਣਤਰ c_declarator *decl,
+			    ਬਣਤਰ c_declarator *inner)
 {
   decl->declarator = inner;
-  return decl;
+  ਵਾਪਸ decl;
 }
 
 /* Determine whether TYPE is a one-element array type "[1]".  */
-static bool
-one_element_array_type_p (const_tree type)
+ਸਥਿਰ ਤਾਰਕਿਕ
+one_element_array_type_p (const_ਰੁੱਖ type)
 {
-  if (TREE_CODE (type) != ARRAY_TYPE)
-    return false;
-  return integer_zerop (array_type_nelts_minus_one (type));
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (type) != ARRAY_TYPE)
+    ਵਾਪਸ ਝੂਠ;
+  ਵਾਪਸ integer_zerop (array_type_nelts_minus_one (type));
 }
 
 /* Determine whether TYPE is a zero-length array type "[0]".  */
-bool
-zero_length_array_type_p (const_tree type)
+ਤਾਰਕਿਕ
+zero_ਲੰਮਾਈ_array_type_p (const_ਰੁੱਖ type)
 {
-  if (TREE_CODE (type) == ARRAY_TYPE
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == ARRAY_TYPE
       && COMPLETE_TYPE_P (type)
-      && TYPE_DOMAIN (type) != NULL_TREE
-      && (TYPE_MAX_VALUE (TYPE_DOMAIN (type)) == NULL_TREE
-	  || integer_all_onesp (TYPE_MAX_VALUE (TYPE_DOMAIN (type)))))
-    return true;
-  return false;
+      && TYPE_DOMAIN (type) != NULL_ਰੁੱਖ
+      && (TYPE_MAX_ਮੁੱਲ (TYPE_DOMAIN (type)) == NULL_ਰੁੱਖ
+	  || integer_all_onesp (TYPE_MAX_ਮੁੱਲ (TYPE_DOMAIN (type)))))
+    ਵਾਪਸ ਸੱਚ;
+  ਵਾਪਸ ਝੂਠ;
 }
 
 /* INIT is a constructor that forms DECL's initializer.  If the final
@@ -5554,38 +5554,38 @@ zero_length_array_type_p (const_tree type)
    DECL with the initializer based on whether the DECL is a union or
    a structure.  */
 
-static void
-add_flexible_array_elts_to_size (tree decl, tree init)
+ਸਥਿਰ ਖਾਲੀ
+ਜੋੜੋ_flexible_array_elts_ਮੰਜ਼ਿਲ_ਮਾਪ (ਰੁੱਖ decl, ਰੁੱਖ init)
 {
-  tree elt, type;
+  ਰੁੱਖ elt, type;
 
-  if (vec_safe_is_empty (CONSTRUCTOR_ELTS (init)))
-    return;
+  ਜੇ (vec_ਸੁਰੱਖਿਅਤ_is_ਖਾਲੀ_ਥਾਵਾਂ (CONSTRUCTOR_ELTS (init)))
+    ਵਾਪਸ;
 
-  elt = CONSTRUCTOR_ELTS (init)->last ().value;
-  type = TREE_TYPE (elt);
-  if (flexible_array_member_type_p (type))
+  elt = CONSTRUCTOR_ELTS (init)->ਆਖਰੀ ().ਮੁੱਲ;
+  type = ਰੁੱਖ_TYPE (elt);
+  ਜੇ (flexible_array_member_type_p (type))
     {
-      complete_array_type (&type, elt, false);
+      complete_array_type (&type, elt, ਝੂਠ);
       /* For a structure, add the size of the initializer to the DECL's
 	 size.  */
-      if (TREE_CODE (TREE_TYPE (decl)) == RECORD_TYPE)
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (decl)) == ਰਿਕਾਰਡ_TYPE)
 	{
-	  DECL_SIZE (decl)
-	    = size_binop (PLUS_EXPR, DECL_SIZE (decl), TYPE_SIZE (type));
-	  DECL_SIZE_UNIT (decl)
-	    = size_binop (PLUS_EXPR, DECL_SIZE_UNIT (decl),
-			  TYPE_SIZE_UNIT (type));
+	  DECL_ਮਾਪ (decl)
+	    = ਮਾਪ_binop (PLUS_ਵਿਅੰਜਕ, DECL_ਮਾਪ (decl), TYPE_ਮਾਪ (type));
+	  DECL_ਮਾਪ_UNIT (decl)
+	    = ਮਾਪ_binop (PLUS_ਵਿਅੰਜਕ, DECL_ਮਾਪ_UNIT (decl),
+			  TYPE_ਮਾਪ_UNIT (type));
 	}
       /* For a union, the DECL's size is the maximum of the current size
 	 and the size of the initializer.  */
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  DECL_SIZE (decl)
-	    = size_binop (MAX_EXPR, DECL_SIZE (decl), TYPE_SIZE (type));
-	  DECL_SIZE_UNIT (decl)
-	    = size_binop (MAX_EXPR, DECL_SIZE_UNIT (decl),
-			  TYPE_SIZE_UNIT (type));
+	  DECL_ਮਾਪ (decl)
+	    = ਮਾਪ_binop (MAX_ਵਿਅੰਜਕ, DECL_ਮਾਪ (decl), TYPE_ਮਾਪ (type));
+	  DECL_ਮਾਪ_UNIT (decl)
+	    = ਮਾਪ_binop (MAX_ਵਿਅੰਜਕ, DECL_ਮਾਪ_UNIT (decl),
+			  TYPE_ਮਾਪ_UNIT (type));
 	}
     }
 }
@@ -5596,143 +5596,143 @@ add_flexible_array_elts_to_size (tree decl, tree init)
    EXPR_CONST_OPERANDS not NULL, to indicate whether the type name may
    appear in a constant expression.  */
 
-tree
-groktypename (struct c_type_name *type_name, tree *expr,
-	      bool *expr_const_operands)
+ਰੁੱਖ
+groktypename (ਬਣਤਰ c_type_name *type_name, ਰੁੱਖ *ਵਿਅੰਜਕ,
+	      ਤਾਰਕਿਕ *ਵਿਅੰਜਕ_const_operands)
 {
-  tree type;
-  tree attrs = type_name->specs->attrs;
+  ਰੁੱਖ type;
+  ਰੁੱਖ attrs = type_name->specs->attrs;
 
-  type_name->specs->attrs = NULL_TREE;
+  type_name->specs->attrs = NULL_ਰੁੱਖ;
 
   type = grokdeclarator (type_name->declarator, type_name->specs, TYPENAME,
-			 false, NULL, &attrs, expr, expr_const_operands,
-			 DEPRECATED_NORMAL);
+			 ਝੂਠ, ਨਿਰਾ, &attrs, ਵਿਅੰਜਕ, ਵਿਅੰਜਕ_const_operands,
+			 DEPRECATED_ਸਾਧਾਰਨ);
 
   /* Apply attributes.  */
-  attrs = c_warn_type_attributes (type, attrs);
-  decl_attributes (&type, attrs, 0);
+  attrs = c_warn_type_ਗੁਣ (type, attrs);
+  decl_ਗੁਣ (&type, attrs, 0);
 
-  return type;
+  ਵਾਪਸ type;
 }
 
 
 /* Decode a "typename", such as "int **", returning a ..._TYPE node,
    as for groktypename but setting the context to GENERIC_ASSOC.  */
 
-tree
-grokgenassoc (struct c_type_name *type_name)
+ਰੁੱਖ
+grokgenassoc (ਬਣਤਰ c_type_name *type_name)
 {
-  tree type;
-  tree attrs = type_name->specs->attrs;
+  ਰੁੱਖ type;
+  ਰੁੱਖ attrs = type_name->specs->attrs;
 
-  type_name->specs->attrs = NULL_TREE;
+  type_name->specs->attrs = NULL_ਰੁੱਖ;
 
   type = grokdeclarator (type_name->declarator, type_name->specs, GENERIC_ASSOC,
-			 false, NULL, &attrs, NULL, NULL, DEPRECATED_NORMAL);
+			 ਝੂਠ, ਨਿਰਾ, &attrs, ਨਿਰਾ, ਨਿਰਾ, DEPRECATED_ਸਾਧਾਰਨ);
 
   /* Apply attributes.  */
-  attrs = c_warn_type_attributes (type, attrs);
-  decl_attributes (&type, attrs, 0);
+  attrs = c_warn_type_ਗੁਣ (type, attrs);
+  decl_ਗੁਣ (&type, attrs, 0);
 
-  return type;
+  ਵਾਪਸ type;
 }
 
 
 /* Looks up the most recent pushed declaration corresponding to DECL.  */
 
-static tree
-lookup_last_decl (tree decl)
+ਸਥਿਰ ਰੁੱਖ
+lookup_ਆਖਰੀ_decl (ਰੁੱਖ decl)
 {
-  tree last_decl = lookup_name (DECL_NAME (decl));
-  if (!last_decl)
-    last_decl = lookup_name_in_scope (DECL_NAME (decl), external_scope);
-  return last_decl;
+  ਰੁੱਖ ਆਖਰੀ_decl = lookup_name (DECL_NAME (decl));
+  ਜੇ (!ਆਖਰੀ_decl)
+    ਆਖਰੀ_decl = lookup_name_ਵਿੱਚ_scope (DECL_NAME (decl), external_scope);
+  ਵਾਪਸ ਆਖਰੀ_decl;
 }
 
 /* Wrapper for decl_attributes that adds some implicit attributes
    to VAR_DECLs or FUNCTION_DECLs.  */
 
-static tree
-c_decl_attributes (tree *node, tree attributes, int flags)
+ਸਥਿਰ ਰੁੱਖ
+c_decl_ਗੁਣ (ਰੁੱਖ *ਗੰਢ, ਰੁੱਖ ਗੁਣ, ਪੂਰਨ flags)
 {
   /* Add implicit "omp declare target" attribute if requested.  */
-  if (vec_safe_length (current_omp_declare_target_attribute)
-      && ((VAR_P (*node) && is_global_var (*node))
-	  || TREE_CODE (*node) == FUNCTION_DECL))
+  ਜੇ (vec_ਸੁਰੱਖਿਅਤ_ਲੰਮਾਈ (current_omp_declare_ਨਿਸ਼ਾਨਾ_attribute)
+      && ((VAR_P (*ਗੰਢ) && is_global_var (*ਗੰਢ))
+	  || ਰੁੱਖ_ਕੋਡ (*ਗੰਢ) == FUNCTION_DECL))
     {
-      if (VAR_P (*node) && !omp_mappable_type (TREE_TYPE (*node)))
-	attributes = tree_cons (get_identifier ("omp declare target implicit"),
-				NULL_TREE, attributes);
-      else
-	attributes = tree_cons (get_identifier ("omp declare target"),
-				NULL_TREE, attributes);
-      if (TREE_CODE (*node) == FUNCTION_DECL)
+      ਜੇ (VAR_P (*ਗੰਢ) && !omp_mappable_type (ਰੁੱਖ_TYPE (*ਗੰਢ)))
+	ਗੁਣ = ਰੁੱਖ_cons (get_identifier ("omp declare target implicit"),
+				NULL_ਰੁੱਖ, ਗੁਣ);
+      ਨਹੀਂਤਾਂ
+	ਗੁਣ = ਰੁੱਖ_cons (get_identifier ("omp declare target"),
+				NULL_ਰੁੱਖ, ਗੁਣ);
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (*ਗੰਢ) == FUNCTION_DECL)
 	{
-	  int device_type
-	    = current_omp_declare_target_attribute->last ().device_type;
+	  ਪੂਰਨ device_type
+	    = current_omp_declare_ਨਿਸ਼ਾਨਾ_attribute->ਆਖਰੀ ().device_type;
 	  device_type = MAX (device_type, 0);
-	  if ((device_type & OMP_CLAUSE_DEVICE_TYPE_HOST) != 0
-	      && !lookup_attribute ("omp declare target host", attributes))
-	    attributes
-	      = tree_cons (get_identifier ("omp declare target host"),
-			   NULL_TREE, attributes);
-	  if ((device_type & OMP_CLAUSE_DEVICE_TYPE_NOHOST) != 0
-	      && !lookup_attribute ("omp declare target nohost", attributes))
-	    attributes
-	      = tree_cons (get_identifier ("omp declare target nohost"),
-			   NULL_TREE, attributes);
+	  ਜੇ ((device_type & OMP_CLAUSE_DEVICE_TYPE_HOST) != 0
+	      && !lookup_attribute ("omp declare target host", ਗੁਣ))
+	    ਗੁਣ
+	      = ਰੁੱਖ_cons (get_identifier ("omp declare target host"),
+			   NULL_ਰੁੱਖ, ਗੁਣ);
+	  ਜੇ ((device_type & OMP_CLAUSE_DEVICE_TYPE_NOHOST) != 0
+	      && !lookup_attribute ("omp declare target nohost", ਗੁਣ))
+	    ਗੁਣ
+	      = ਰੁੱਖ_cons (get_identifier ("omp declare target nohost"),
+			   NULL_ਰੁੱਖ, ਗੁਣ);
 
-	  int indirect
-	    = current_omp_declare_target_attribute->last ().indirect;
-	  if (indirect && !lookup_attribute ("omp declare target indirect",
-					     attributes))
-	    attributes
-	      = tree_cons (get_identifier ("omp declare target indirect"),
-			   NULL_TREE, attributes);
+	  ਪੂਰਨ ਅਸਿੱਧਾ
+	    = current_omp_declare_ਨਿਸ਼ਾਨਾ_attribute->ਆਖਰੀ ().ਅਸਿੱਧਾ;
+	  ਜੇ (ਅਸਿੱਧਾ && !lookup_attribute ("omp declare target indirect",
+					     ਗੁਣ))
+	    ਗੁਣ
+	      = ਰੁੱਖ_cons (get_identifier ("omp declare target indirect"),
+			   NULL_ਰੁੱਖ, ਗੁਣ);
 	}
     }
 
-  if (flag_openmp || flag_openmp_simd)
+  ਜੇ (flag_openmp || flag_openmp_simd)
     {
-      bool diagnosed = false;
-      for (tree *pa = &attributes; *pa; )
+      ਤਾਰਕਿਕ diagnosed = ਝੂਠ;
+      ਲਈ (ਰੁੱਖ *pa = &ਗੁਣ; *pa; )
 	{
-	  if (is_attribute_namespace_p ("omp", *pa))
+	  ਜੇ (is_attribute_namespace_p ("omp", *pa))
 	    {
-	      tree name = get_attribute_name (*pa);
-	      if (is_attribute_p ("directive", name)
+	      ਰੁੱਖ name = get_attribute_name (*pa);
+	      ਜੇ (is_attribute_p ("directive", name)
 		  || is_attribute_p ("sequence", name)
 		  || is_attribute_p ("decl", name))
 		{
-		  const char *p = NULL;
-		  if (TREE_VALUE (*pa) == NULL_TREE)
-		    p = IDENTIFIER_POINTER (name);
-		  for (tree a = TREE_VALUE (*pa); a; a = TREE_CHAIN (a))
+		  ਅਚਲ ਅੱਖਰ *p = ਨਿਰਾ;
+		  ਜੇ (ਰੁੱਖ_ਮੁੱਲ (*pa) == NULL_ਰੁੱਖ)
+		    p = IDENTIFIER_ਸੂਚਕ (name);
+		  ਲਈ (ਰੁੱਖ a = ਰੁੱਖ_ਮੁੱਲ (*pa); a; a = ਰੁੱਖ_CHAIN (a))
 		    {
-		      tree d = TREE_VALUE (a);
-		      gcc_assert (TREE_CODE (d) == C_TOKEN_VEC);
-		      if (TREE_PUBLIC (d)
-			  && (VAR_P (*node)
-			      || TREE_CODE (*node) == FUNCTION_DECL)
-			  && c_maybe_parse_omp_decl (*node, d))
-			continue;
-		      p = TREE_PUBLIC (d) ? "decl" : "directive";
+		      ਰੁੱਖ d = ਰੁੱਖ_ਮੁੱਲ (a);
+		      gcc_assert (ਰੁੱਖ_ਕੋਡ (d) == C_TOKEN_VEC);
+		      ਜੇ (ਰੁੱਖ_ਜਨਤਕ (d)
+			  && (VAR_P (*ਗੰਢ)
+			      || ਰੁੱਖ_ਕੋਡ (*ਗੰਢ) == FUNCTION_DECL)
+			  && c_maybe_parse_omp_decl (*ਗੰਢ, d))
+			ਜਾਰੀ;
+		      p = ਰੁੱਖ_ਜਨਤਕ (d) ? "decl" : "directive";
 		    }
-		  if (p && !diagnosed)
+		  ਜੇ (p && !diagnosed)
 		    {
 		      error ("%<omp::%s%> not allowed to be specified in "
 			     "this context", p);
-		      diagnosed = true;
+		      diagnosed = ਸੱਚ;
 		    }
-		  if (p)
+		  ਜੇ (p)
 		    {
-		      *pa = TREE_CHAIN (*pa);
-		      continue;
+		      *pa = ਰੁੱਖ_CHAIN (*pa);
+		      ਜਾਰੀ;
 		    }
 		}
 	    }
-	  pa = &TREE_CHAIN (*pa);
+	  pa = &ਰੁੱਖ_CHAIN (*pa);
 	}
     }
 
@@ -5741,19 +5741,19 @@ c_decl_attributes (tree *node, tree attributes, int flags)
      about to be pushed that conflict with the former can be detected,
      diagnosed, and rejected as appropriate.  To match the C++ FE, do
      not pass an error_mark_node when we found an undeclared variable.  */
-  tree last_decl = lookup_last_decl (*node);
-  if (last_decl == error_mark_node)
-    last_decl = NULL_TREE;
-  tree attr = decl_attributes (node, attributes, flags, last_decl);
-  if (VAR_P (*node) && DECL_THREAD_LOCAL_P (*node))
+  ਰੁੱਖ ਆਖਰੀ_decl = lookup_ਆਖਰੀ_decl (*ਗੰਢ);
+  ਜੇ (ਆਖਰੀ_decl == error_mark_ਗੰਢ)
+    ਆਖਰੀ_decl = NULL_ਰੁੱਖ;
+  ਰੁੱਖ attr = decl_ਗੁਣ (ਗੰਢ, ਗੁਣ, flags, ਆਖਰੀ_decl);
+  ਜੇ (VAR_P (*ਗੰਢ) && DECL_THREAD_LOCAL_P (*ਗੰਢ))
     {
       // tls_model attribute can set a stronger TLS access model.
-      tls_model model = DECL_TLS_MODEL (*node);
-      tls_model default_model = decl_default_tls_model (*node);
-      if (default_model > model)
-	set_decl_tls_model (*node, default_model);
+      tls_model model = DECL_TLS_MODEL (*ਗੰਢ);
+      tls_model default_model = decl_default_tls_model (*ਗੰਢ);
+      ਜੇ (default_model > model)
+	ਸੈੱਟ_decl_tls_model (*ਗੰਢ, default_model);
     }
-  return attr;
+  ਵਾਪਸ attr;
 }
 
 
@@ -5774,111 +5774,111 @@ c_decl_attributes (tree *node, tree attributes, int flags)
    do go through here.  Structure field declarations are done by
    grokfield and not through here.  */
 
-tree
-start_decl (struct c_declarator *declarator, struct c_declspecs *declspecs,
-	    bool initialized, tree attributes, bool do_push /* = true */,
+ਰੁੱਖ
+ਸ਼ੁਰੂ_decl (ਬਣਤਰ c_declarator *declarator, ਬਣਤਰ c_declspecs *declspecs,
+	    ਤਾਰਕਿਕ initialized, ਰੁੱਖ ਗੁਣ, ਤਾਰਕਿਕ do_ਧੱਕੋ /* = true */,
 	    location_t *lastloc /* = NULL */)
 {
-  tree decl;
-  tree old_decl;
-  tree tem;
-  tree expr = NULL_TREE;
-  enum deprecated_states deprecated_state = DEPRECATED_NORMAL;
+  ਰੁੱਖ decl;
+  ਰੁੱਖ old_decl;
+  ਰੁੱਖ tem;
+  ਰੁੱਖ ਵਿਅੰਜਕ = NULL_ਰੁੱਖ;
+  ਗਿਣਤੀ deprecated_ਹਾਲਤਾਂ deprecated_state = DEPRECATED_ਸਾਧਾਰਨ;
 
   /* An object declared as __attribute__((unavailable)) suppresses
      warnings and errors from __attribute__((deprecated/unavailable))
      components.
      An object declared as __attribute__((deprecated)) suppresses
      warnings of uses of other deprecated items.  */
-  if (lookup_attribute ("unavailable", attributes))
+  ਜੇ (lookup_attribute ("unavailable", ਗੁਣ))
     deprecated_state = UNAVAILABLE_DEPRECATED_SUPPRESS;
-  else if (lookup_attribute ("deprecated", attributes))
+  ਨਹੀਂਤਾਂ ਜੇ (lookup_attribute ("deprecated", ਗੁਣ))
     deprecated_state = DEPRECATED_SUPPRESS;
 
   decl = grokdeclarator (declarator, declspecs,
-			 NORMAL, initialized, NULL, &attributes, &expr, NULL,
+			 ਸਾਧਾਰਨ, initialized, ਨਿਰਾ, &ਗੁਣ, &ਵਿਅੰਜਕ, ਨਿਰਾ,
 			 deprecated_state);
-  if (!decl || decl == error_mark_node)
-    return NULL_TREE;
+  ਜੇ (!decl || decl == error_mark_ਗੰਢ)
+    ਵਾਪਸ NULL_ਰੁੱਖ;
 
-  old_decl = lookup_last_decl (decl);
+  old_decl = lookup_ਆਖਰੀ_decl (decl);
 
-  if (tree lastdecl = lastloc ? old_decl : NULL_TREE)
-    if (lastdecl != error_mark_node)
-      *lastloc = DECL_SOURCE_LOCATION (lastdecl);
+  ਜੇ (ਰੁੱਖ lastdecl = lastloc ? old_decl : NULL_ਰੁੱਖ)
+    ਜੇ (lastdecl != error_mark_ਗੰਢ)
+      *lastloc = DECL_ਸਰੋਤ_LOCATION (lastdecl);
 
   /* Make sure the size expression is evaluated at this point.  */
-  if (expr && !current_scope->parm_flag)
-    add_stmt (fold_convert (void_type_node, expr));
+  ਜੇ (ਵਿਅੰਜਕ && !current_scope->parm_flag)
+    ਜੋੜੋ_stmt (fold_convert (void_type_ਗੰਢ, ਵਿਅੰਜਕ));
 
-  if (TREE_CODE (decl) != FUNCTION_DECL && MAIN_NAME_P (DECL_NAME (decl))
-      && TREE_PUBLIC (decl))
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) != FUNCTION_DECL && MAIN_NAME_P (DECL_NAME (decl))
+      && ਰੁੱਖ_ਜਨਤਕ (decl))
     warning (OPT_Wmain, "%q+D is usually a function", decl);
 
-  if (warn_missing_variable_declarations && VAR_P (decl)
-      && !DECL_EXTERNAL (decl) && TREE_PUBLIC (decl) && old_decl == NULL_TREE)
-    warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wmissing_variable_declarations,
+  ਜੇ (warn_missing_variable_declarations && VAR_P (decl)
+      && !DECL_EXTERNAL (decl) && ਰੁੱਖ_ਜਨਤਕ (decl) && old_decl == NULL_ਰੁੱਖ)
+    warning_at (DECL_ਸਰੋਤ_LOCATION (decl), OPT_Wmissing_variable_declarations,
 		"no previous declaration for %qD", decl);
 
-  if (initialized)
+  ਜੇ (initialized)
     /* Is it valid for this decl to have an initializer at all?
        If not, set INITIALIZED to zero, which will indirectly
        tell 'finish_decl' to ignore the initializer once it is parsed.  */
-    switch (TREE_CODE (decl))
+    ਚੋਣ (ਰੁੱਖ_ਕੋਡ (decl))
       {
-      case TYPE_DECL:
+      ਹਾਲਤ TYPE_DECL:
 	error ("typedef %qD is initialized (use %<__typeof__%> instead)", decl);
-	initialized = false;
-	break;
+	initialized = ਝੂਠ;
+	ਰੋਕੋ;
 
-      case FUNCTION_DECL:
+      ਹਾਲਤ FUNCTION_DECL:
 	error ("function %qD is initialized like a variable", decl);
-	initialized = false;
-	break;
+	initialized = ਝੂਠ;
+	ਰੋਕੋ;
 
-      case PARM_DECL:
+      ਹਾਲਤ PARM_DECL:
 	/* DECL_INITIAL in a PARM_DECL is really DECL_ARG_TYPE.  */
 	error ("parameter %qD is initialized", decl);
-	initialized = false;
-	break;
+	initialized = ਝੂਠ;
+	ਰੋਕੋ;
 
-      default:
+      ਮੂਲ:
 	/* Don't allow initializations for incomplete types except for
 	   arrays which might be completed by the initialization.  */
 
 	/* This can happen if the array size is an undefined macro.
 	   We already gave a warning, so we don't need another one.  */
-	if (TREE_TYPE (decl) == error_mark_node)
-	  initialized = false;
-	else if (COMPLETE_TYPE_P (TREE_TYPE (decl)))
+	ਜੇ (ਰੁੱਖ_TYPE (decl) == error_mark_ਗੰਢ)
+	  initialized = ਝੂਠ;
+	ਨਹੀਂਤਾਂ ਜੇ (COMPLETE_TYPE_P (ਰੁੱਖ_TYPE (decl)))
 	  {
 	    /* A complete type is ok if size is fixed.  If the size is
 	       variable, an empty initializer is OK and nonempty
 	       initializers will be diagnosed in the parser.  */
 	  }
-	else if (TREE_CODE (TREE_TYPE (decl)) != ARRAY_TYPE)
+	ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (decl)) != ARRAY_TYPE)
 	  {
 	    error ("variable %qD has initializer but incomplete type", decl);
-	    initialized = false;
+	    initialized = ਝੂਠ;
 	  }
       }
 
-  if (initialized)
+  ਜੇ (initialized)
     {
-      if (current_scope == file_scope)
-	TREE_STATIC (decl) = 1;
+      ਜੇ (current_scope == file_scope)
+	ਰੁੱਖ_STATIC (decl) = 1;
 
       /* Tell 'pushdecl' this is an initialized decl
 	 even though we don't yet have the initializer expression.
 	 Also tell 'finish_decl' it may store the real initializer.  */
-      DECL_INITIAL (decl) = error_mark_node;
+      DECL_INITIAL (decl) = error_mark_ਗੰਢ;
     }
 
   /* If this is a function declaration, write a record describing it to the
      prototypes file (if requested).  */
 
-  if (TREE_CODE (decl) == FUNCTION_DECL)
-    gen_aux_info_record (decl, 0, 0, prototype_p (TREE_TYPE (decl)));
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) == FUNCTION_DECL)
+    gen_aux_info_ਰਿਕਾਰਡ (decl, 0, 0, prototype_p (ਰੁੱਖ_TYPE (decl)));
 
   /* ANSI specifies that a tentative definition which is not merged with
      a non-tentative definition behaves exactly like a definition with an
@@ -5891,35 +5891,35 @@ start_decl (struct c_declarator *declarator, struct c_declspecs *declspecs,
      body of code to break, and it allows more efficient variable references
      in the presence of dynamic linking.  */
 
-  if (VAR_P (decl)
+  ਜੇ (VAR_P (decl)
       && !initialized
-      && TREE_PUBLIC (decl)
+      && ਰੁੱਖ_ਜਨਤਕ (decl)
       && !DECL_THREAD_LOCAL_P (decl)
       && !flag_no_common)
     DECL_COMMON (decl) = 1;
 
   /* Set attributes here so if duplicate decl, will have proper attributes.  */
-  c_decl_attributes (&decl, attributes, 0);
+  c_decl_ਗੁਣ (&decl, ਗੁਣ, 0);
 
   /* Handle gnu_inline attribute.  */
-  if (declspecs->inline_p
+  ਜੇ (declspecs->inline_p
       && !flag_gnu89_inline
-      && TREE_CODE (decl) == FUNCTION_DECL
-      && (lookup_attribute ("gnu_inline", DECL_ATTRIBUTES (decl))
+      && ਰੁੱਖ_ਕੋਡ (decl) == FUNCTION_DECL
+      && (lookup_attribute ("gnu_inline", DECL_ਗੁਣ (decl))
 	  || current_function_decl))
     {
-      if (declspecs->storage_class == csc_auto && current_scope != file_scope)
+      ਜੇ (declspecs->storage_class == csc_auto && current_scope != file_scope)
 	;
-      else if (declspecs->storage_class != csc_static)
+      ਨਹੀਂਤਾਂ ਜੇ (declspecs->storage_class != csc_static)
 	DECL_EXTERNAL (decl) = !DECL_EXTERNAL (decl);
     }
 
-  if (TREE_CODE (decl) == FUNCTION_DECL
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) == FUNCTION_DECL
       && DECL_DECLARED_INLINE_P (decl)
       && DECL_UNINLINABLE (decl)
-      && lookup_attribute ("noinline", DECL_ATTRIBUTES (decl)))
+      && lookup_attribute ("noinline", DECL_ਗੁਣ (decl)))
     {
-      auto_urlify_attributes sentinel;
+      auto_urlify_ਗੁਣ sentinel;
       warning (OPT_Wattributes, "inline function %q+D given attribute %qs",
 	       decl, "noinline");
     }
@@ -5927,74 +5927,74 @@ start_decl (struct c_declarator *declarator, struct c_declspecs *declspecs,
   /* C99 6.7.4p3: An inline definition of a function with external
      linkage shall not contain a definition of a modifiable object
      with static storage duration...  */
-  if (VAR_P (decl)
+  ਜੇ (VAR_P (decl)
       && current_scope != file_scope
-      && TREE_STATIC (decl)
-      && !TREE_READONLY (decl)
+      && ਰੁੱਖ_STATIC (decl)
+      && !ਰੁੱਖ_READONLY (decl)
       && DECL_DECLARED_INLINE_P (current_function_decl)
       && DECL_EXTERNAL (current_function_decl))
-    record_inline_static (input_location, current_function_decl,
+    ਰਿਕਾਰਡ_inline_static (ਨਿਵੇਸ਼_location, current_function_decl,
 			  decl, csi_modifiable);
 
-  if (c_dialect_objc ()
+  ਜੇ (c_dialect_objc ()
       && VAR_OR_FUNCTION_DECL_P (decl))
       objc_check_global_decl (decl);
 
   /* To enable versions to be created across TU's we mark and mangle all
      non-default versioned functions.  */
-  if (TREE_CODE (decl) == FUNCTION_DECL
-      && !TARGET_HAS_FMV_TARGET_ATTRIBUTE
-      && get_target_version (decl).is_valid ())
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) == FUNCTION_DECL
+      && !ਨਿਸ਼ਾਨਾ_HAS_FMV_ਨਿਸ਼ਾਨਾ_ATTRIBUTE
+      && get_ਨਿਸ਼ਾਨਾ_ਸੰਸਕਰਣ (decl).is_valid ())
     {
       maybe_mark_function_versioned (decl);
-      if (current_scope != file_scope)
+      ਜੇ (current_scope != file_scope)
 	error ("versioned declarations are only allowed at file scope");
     }
 
   /* Add this decl to the current scope.
      TEM may equal DECL or it may be a previous decl of the same name.  */
-  if (do_push)
+  ਜੇ (do_ਧੱਕੋ)
     {
       tem = pushdecl (decl);
 
-      if (initialized && DECL_EXTERNAL (tem))
+      ਜੇ (initialized && DECL_EXTERNAL (tem))
 	{
 	  DECL_EXTERNAL (tem) = 0;
-	  TREE_STATIC (tem) = 1;
+	  ਰੁੱਖ_STATIC (tem) = 1;
 	}
 
-      return tem;
+      ਵਾਪਸ tem;
     }
-  else
-    return decl;
+  ਨਹੀਂਤਾਂ
+    ਵਾਪਸ decl;
 }
 
 /* Subroutine of finish_decl. TYPE is the type of an uninitialized object
    DECL or the non-array element type if DECL is an uninitialized array.
    If that type has a const member, diagnose this. */
 
-static void
-diagnose_uninitialized_cst_member (tree decl, tree type)
+ਸਥਿਰ ਖਾਲੀ
+diagnose_uninitialized_cst_member (ਰੁੱਖ decl, ਰੁੱਖ type)
 {
-  tree field;
-  for (field = TYPE_FIELDS (type); field; field = TREE_CHAIN (field))
+  ਰੁੱਖ ਖੇਤਰ_2;
+  ਲਈ (ਖੇਤਰ_2 = TYPE_FIELDS (type); ਖੇਤਰ_2; ਖੇਤਰ_2 = ਰੁੱਖ_CHAIN (ਖੇਤਰ_2))
     {
-      tree field_type;
-      if (TREE_CODE (field) != FIELD_DECL)
-	continue;
-      field_type = strip_array_types (TREE_TYPE (field));
+      ਰੁੱਖ ਖੇਤਰ_type;
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (ਖੇਤਰ_2) != ਖੇਤਰ_DECL)
+	ਜਾਰੀ;
+      ਖੇਤਰ_type = strip_array_types (ਰੁੱਖ_TYPE (ਖੇਤਰ_2));
 
-      if (TYPE_QUALS (field_type) & TYPE_QUAL_CONST)
+      ਜੇ (TYPE_QUALS (ਖੇਤਰ_type) & TYPE_QUAL_CONST)
       	{
-	  auto_diagnostic_group d;
-	  if (warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wc___compat,
+	  auto_diagnostic_ਸਮੂਹ d;
+	  ਜੇ (warning_at (DECL_ਸਰੋਤ_LOCATION (decl), OPT_Wc___compat,
 			  "uninitialized const member in %qT is invalid in C++",
-			  strip_array_types (TREE_TYPE (decl))))
-	    inform (DECL_SOURCE_LOCATION (field), "%qD should be initialized", field);
+			  strip_array_types (ਰੁੱਖ_TYPE (decl))))
+	    inform (DECL_ਸਰੋਤ_LOCATION (ਖੇਤਰ_2), "%qD should be initialized", ਖੇਤਰ_2);
 	}
 
-      if (RECORD_OR_UNION_TYPE_P (field_type))
-	diagnose_uninitialized_cst_member (decl, field_type);
+      ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਖੇਤਰ_type))
+	diagnose_uninitialized_cst_member (decl, ਖੇਤਰ_type);
     }
 }
 
@@ -6006,146 +6006,146 @@ diagnose_uninitialized_cst_member (tree decl, tree type)
 
    INIT_LOC is the location of the initial value.  */
 
-void
-finish_decl (tree decl, location_t init_loc, tree init,
-	     tree origtype, tree asmspec_tree)
+ਖਾਲੀ
+ਅੰਤ_decl (ਰੁੱਖ decl, location_t init_loc, ਰੁੱਖ init,
+	     ਰੁੱਖ origtype, ਰੁੱਖ asmspec_ਰੁੱਖ)
 {
-  tree type;
-  bool was_incomplete = (DECL_SIZE (decl) == NULL_TREE);
-  const char *asmspec = 0;
+  ਰੁੱਖ type;
+  ਤਾਰਕਿਕ was_incomplete = (DECL_ਮਾਪ (decl) == NULL_ਰੁੱਖ);
+  ਅਚਲ ਅੱਖਰ *asmspec = 0;
 
   /* If a name was specified, get the string.  */
-  if (VAR_OR_FUNCTION_DECL_P (decl)
+  ਜੇ (VAR_OR_FUNCTION_DECL_P (decl)
       && DECL_FILE_SCOPE_P (decl))
-    asmspec_tree = maybe_apply_renaming_pragma (decl, asmspec_tree);
-  if (asmspec_tree)
-    asmspec = TREE_STRING_POINTER (asmspec_tree);
+    asmspec_ਰੁੱਖ = maybe_apply_renaming_pragma (decl, asmspec_ਰੁੱਖ);
+  ਜੇ (asmspec_ਰੁੱਖ)
+    asmspec = ਰੁੱਖ_STRING_ਸੂਚਕ (asmspec_ਰੁੱਖ);
 
-  if (VAR_P (decl)
-      && TREE_STATIC (decl)
+  ਜੇ (VAR_P (decl)
+      && ਰੁੱਖ_STATIC (decl)
       && global_bindings_p ())
     /* So decl is a global variable. Record the types it uses
        so that we can decide later to emit debug info for them.  */
-    record_types_used_by_current_var_decl (decl);
+    ਰਿਕਾਰਡ_types_ਵਰਤਿਆ_by_current_var_decl (decl);
 
   /* If `start_decl' didn't like having an initialization, ignore it now.  */
-  if (init != NULL_TREE && DECL_INITIAL (decl) == NULL_TREE)
-    init = NULL_TREE;
+  ਜੇ (init != NULL_ਰੁੱਖ && DECL_INITIAL (decl) == NULL_ਰੁੱਖ)
+    init = NULL_ਰੁੱਖ;
 
   /* Don't crash if parm is initialized.  */
-  if (TREE_CODE (decl) == PARM_DECL)
-    init = NULL_TREE;
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) == PARM_DECL)
+    init = NULL_ਰੁੱਖ;
 
-  if (init)
-    store_init_value (init_loc, decl, init, origtype);
+  ਜੇ (init)
+    store_init_ਮੁੱਲ (init_loc, decl, init, origtype);
 
-  if (c_dialect_objc () && (VAR_OR_FUNCTION_DECL_P (decl)
-			    || TREE_CODE (decl) == FIELD_DECL))
+  ਜੇ (c_dialect_objc () && (VAR_OR_FUNCTION_DECL_P (decl)
+			    || ਰੁੱਖ_ਕੋਡ (decl) == ਖੇਤਰ_DECL))
     objc_check_decl (decl);
 
-  type = TREE_TYPE (decl);
+  type = ਰੁੱਖ_TYPE (decl);
 
   /* Deduce size of array from initialization, if not already known.
      This is only needed for an initialization in the current scope;
      it must not be done for a file-scope initialization of a
      declaration with external linkage, redeclared in an inner scope
      with the outer declaration shadowed in an intermediate scope.  */
-  if (TREE_CODE (type) == ARRAY_TYPE
-      && TYPE_DOMAIN (type) == NULL_TREE
-      && TREE_CODE (decl) != TYPE_DECL
-      && !(TREE_PUBLIC (decl) && current_scope != file_scope))
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == ARRAY_TYPE
+      && TYPE_DOMAIN (type) == NULL_ਰੁੱਖ
+      && ਰੁੱਖ_ਕੋਡ (decl) != TYPE_DECL
+      && !(ਰੁੱਖ_ਜਨਤਕ (decl) && current_scope != file_scope))
     {
-      bool do_default
-	= !TREE_STATIC (decl) && !DECL_EXTERNAL (decl);
-      int failure
-	= complete_array_type (&TREE_TYPE (decl), DECL_INITIAL (decl),
+      ਤਾਰਕਿਕ do_default
+	= !ਰੁੱਖ_STATIC (decl) && !DECL_EXTERNAL (decl);
+      ਪੂਰਨ failure
+	= complete_array_type (&ਰੁੱਖ_TYPE (decl), DECL_INITIAL (decl),
 			       do_default);
 
       /* Get the completed type made by complete_array_type.  */
-      type = TREE_TYPE (decl);
+      type = ਰੁੱਖ_TYPE (decl);
 
-      switch (failure)
+      ਚੋਣ (failure)
 	{
-	case 1:
+	ਹਾਲਤ 1:
 	  error ("initializer fails to determine size of %q+D", decl);
-	  break;
+	  ਰੋਕੋ;
 
-	case 2:
-	  if (do_default)
+	ਹਾਲਤ 2:
+	  ਜੇ (do_default)
 	    error ("array size missing in %q+D", decl);
-	  else if (!TREE_PUBLIC (decl))
-	    pedwarn_c23 (DECL_SOURCE_LOCATION (decl), OPT_Wpedantic,
+	  ਨਹੀਂਤਾਂ ਜੇ (!ਰੁੱਖ_ਜਨਤਕ (decl))
+	    pedwarn_c23 (DECL_ਸਰੋਤ_LOCATION (decl), OPT_Wpedantic,
 			 "array size missing in %q+D", decl);
-	  break;
+	  ਰੋਕੋ;
 
-	case 3:
+	ਹਾਲਤ 3:
 	  error ("zero or negative size array %q+D", decl);
-	  break;
+	  ਰੋਕੋ;
 
-	case 0:
+	ਹਾਲਤ 0:
 	  /* For global variables, update the copy of the type that
 	     exists in the binding.  */
-	  if (TREE_PUBLIC (decl))
+	  ਜੇ (ਰੁੱਖ_ਜਨਤਕ (decl))
 	    {
-	      struct c_binding *b_ext = I_SYMBOL_BINDING (DECL_NAME (decl));
-	      while (b_ext && !B_IN_EXTERNAL_SCOPE (b_ext))
+	      ਬਣਤਰ c_binding *b_ext = I_ਚਿੰਨ੍ਹ_BINDING (DECL_NAME (decl));
+	      ਜਦੋਂ (b_ext && !B_ਵਿੱਚ_EXTERNAL_SCOPE (b_ext))
 		b_ext = b_ext->shadowed;
-	      if (b_ext && TREE_CODE (decl) == TREE_CODE (b_ext->decl))
+	      ਜੇ (b_ext && ਰੁੱਖ_ਕੋਡ (decl) == ਰੁੱਖ_ਕੋਡ (b_ext->decl))
 		{
-		  if (b_ext->u.type && comptypes (b_ext->u.type, type))
-		    b_ext->u.type = composite_type (b_ext->u.type, type);
-		  else
+		  ਜੇ (b_ext->u.type && comptypes (b_ext->u.type, type))
+		    b_ext->u.type = ਸੰਯੁਕਤ_type (b_ext->u.type, type);
+		  ਨਹੀਂਤਾਂ
 		    b_ext->u.type = type;
 		}
 	    }
-	  break;
+	  ਰੋਕੋ;
 
-	default:
+	ਮੂਲ:
 	  gcc_unreachable ();
 	}
 
-      if (DECL_INITIAL (decl) && DECL_INITIAL (decl) != error_mark_node)
-	TREE_TYPE (DECL_INITIAL (decl)) = type;
+      ਜੇ (DECL_INITIAL (decl) && DECL_INITIAL (decl) != error_mark_ਗੰਢ)
+	ਰੁੱਖ_TYPE (DECL_INITIAL (decl)) = type;
 
       relayout_decl (decl);
     }
 
   /* Look for braced array initializers for character arrays and
      recursively convert them into STRING_CSTs.  */
-  if (tree init = DECL_INITIAL (decl))
-    DECL_INITIAL (decl) = braced_lists_to_strings (type, init);
+  ਜੇ (ਰੁੱਖ init = DECL_INITIAL (decl))
+    DECL_INITIAL (decl) = braced_lists_ਮੰਜ਼ਿਲ_ਲੜੀਆਂ (type, init);
 
-  if (VAR_P (decl))
+  ਜੇ (VAR_P (decl))
     {
-      if (init && TREE_CODE (init) == CONSTRUCTOR)
-	add_flexible_array_elts_to_size (decl, init);
+      ਜੇ (init && ਰੁੱਖ_ਕੋਡ (init) == CONSTRUCTOR)
+	ਜੋੜੋ_flexible_array_elts_ਮੰਜ਼ਿਲ_ਮਾਪ (decl, init);
 
       complete_flexible_array_elts (DECL_INITIAL (decl));
 
-      if (is_global_var (decl))
+      ਜੇ (is_global_var (decl))
 	{
-	  type_context_kind context = (DECL_THREAD_LOCAL_P (decl)
+	  type_context_ਕਿਸਮ context = (DECL_THREAD_LOCAL_P (decl)
 				       ? TCTX_THREAD_STORAGE
 				       : TCTX_STATIC_STORAGE);
-	  if (!verify_type_context (input_location, context, TREE_TYPE (decl)))
-	    TREE_TYPE (decl) = error_mark_node;
+	  ਜੇ (!verify_type_context (ਨਿਵੇਸ਼_location, context, ਰੁੱਖ_TYPE (decl)))
+	    ਰੁੱਖ_TYPE (decl) = error_mark_ਗੰਢ;
 	}
 
-      if (DECL_SIZE (decl) == NULL_TREE && TREE_TYPE (decl) != error_mark_node
-	  && COMPLETE_TYPE_P (TREE_TYPE (decl)))
+      ਜੇ (DECL_ਮਾਪ (decl) == NULL_ਰੁੱਖ && ਰੁੱਖ_TYPE (decl) != error_mark_ਗੰਢ
+	  && COMPLETE_TYPE_P (ਰੁੱਖ_TYPE (decl)))
 	layout_decl (decl, 0);
 
-      if (DECL_SIZE (decl) == NULL_TREE
+      ਜੇ (DECL_ਮਾਪ (decl) == NULL_ਰੁੱਖ
 	  /* Don't give an error if we already gave one earlier.  */
-	  && TREE_TYPE (decl) != error_mark_node
-	  && (TREE_STATIC (decl)
+	  && ਰੁੱਖ_TYPE (decl) != error_mark_ਗੰਢ
+	  && (ਰੁੱਖ_STATIC (decl)
 	      /* A static variable with an incomplete type
 		 is an error if it is initialized.
 		 Also if it is not file scope.
 		 Also if it is thread-local (in C23).
 		 Otherwise, let it through, but if it is not `extern'
 		 then it may cause an error message later.  */
-	      ? (DECL_INITIAL (decl) != NULL_TREE
+	      ? (DECL_INITIAL (decl) != NULL_ਰੁੱਖ
 		 || !DECL_FILE_SCOPE_P (decl)
 		 || (flag_isoc23 && DECL_THREAD_LOCAL_P (decl)))
 	      /* An automatic variable with an incomplete type
@@ -6153,31 +6153,31 @@ finish_decl (tree decl, location_t init_loc, tree init,
 	      : !DECL_EXTERNAL (decl)))
 	 {
 	   error ("storage size of %q+D isn%'t known", decl);
-	   TREE_TYPE (decl) = error_mark_node;
+	   ਰੁੱਖ_TYPE (decl) = error_mark_ਗੰਢ;
 	 }
 
-      if ((RECORD_OR_UNION_TYPE_P (TREE_TYPE (decl))
-	  || TREE_CODE (TREE_TYPE (decl)) == ENUMERAL_TYPE)
-	  && DECL_SIZE (decl) == NULL_TREE
-	  && TREE_STATIC (decl))
-	incomplete_record_decls.safe_push (decl);
+      ਜੇ ((ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (decl))
+	  || ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (decl)) == ENUMERAL_TYPE)
+	  && DECL_ਮਾਪ (decl) == NULL_ਰੁੱਖ
+	  && ਰੁੱਖ_STATIC (decl))
+	incomplete_ਰਿਕਾਰਡ_decls.ਸੁਰੱਖਿਅਤ_ਧੱਕੋ (decl);
 
-      if (is_global_var (decl)
-	  && DECL_SIZE (decl) != NULL_TREE
-	  && TREE_TYPE (decl) != error_mark_node)
+      ਜੇ (is_global_var (decl)
+	  && DECL_ਮਾਪ (decl) != NULL_ਰੁੱਖ
+	  && ਰੁੱਖ_TYPE (decl) != error_mark_ਗੰਢ)
 	{
-	  if (TREE_CODE (DECL_SIZE (decl)) == INTEGER_CST)
-	    constant_expression_warning (DECL_SIZE (decl));
-	  else
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (DECL_ਮਾਪ (decl)) == INTEGER_CST)
+	    constant_ਵਿਅੰਜਕ_warning (DECL_ਮਾਪ (decl));
+	  ਨਹੀਂਤਾਂ
 	    {
 	      error ("storage size of %q+D isn%'t constant", decl);
-	      TREE_TYPE (decl) = error_mark_node;
+	      ਰੁੱਖ_TYPE (decl) = error_mark_ਗੰਢ;
 	    }
 	}
 
-      if (TREE_USED (type))
+      ਜੇ (ਰੁੱਖ_ਵਰਤਿਆ (type))
 	{
-	  TREE_USED (decl) = 1;
+	  ਰੁੱਖ_ਵਰਤਿਆ (decl) = 1;
 	  DECL_READ_P (decl) = 1;
 	}
     }
@@ -6185,11 +6185,11 @@ finish_decl (tree decl, location_t init_loc, tree init,
   /* If this is a function and an assembler name is specified, reset DECL_RTL
      so we can give it its new name.  Also, update builtin_decl if it
      was a normal built-in.  */
-  if (TREE_CODE (decl) == FUNCTION_DECL && asmspec)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) == FUNCTION_DECL && asmspec)
     {
-      if (DECL_BUILT_IN_CLASS (decl) == BUILT_IN_NORMAL)
-	set_builtin_user_assembler_name (decl, asmspec);
-      set_user_assembler_name (decl, asmspec);
+      ਜੇ (DECL_BUILT_ਵਿੱਚ_CLASS (decl) == BUILT_ਵਿੱਚ_ਸਾਧਾਰਨ)
+	ਸੈੱਟ_builtin_user_assembler_name (decl, asmspec);
+      ਸੈੱਟ_user_assembler_name (decl, asmspec);
     }
 
   /* If #pragma weak was used, mark the decl weak now.  */
@@ -6199,185 +6199,185 @@ finish_decl (tree decl, location_t init_loc, tree init,
      unless the type is an undefined structure or union.
      If not, it will get done when the type is completed.  */
 
-  if (VAR_OR_FUNCTION_DECL_P (decl))
+  ਜੇ (VAR_OR_FUNCTION_DECL_P (decl))
     {
       /* Determine the ELF visibility.  */
-      if (TREE_PUBLIC (decl))
+      ਜੇ (ਰੁੱਖ_ਜਨਤਕ (decl))
 	c_determine_visibility (decl);
 
       /* This is a no-op in c-lang.cc or something real in objc-act.cc.  */
-      if (c_dialect_objc ())
+      ਜੇ (c_dialect_objc ())
 	objc_check_decl (decl);
 
-      if (asmspec)
+      ਜੇ (asmspec)
 	{
 	  /* If this is not a static variable, issue a warning.
 	     It doesn't make any sense to give an ASMSPEC for an
 	     ordinary, non-register local variable.  Historically,
 	     GCC has accepted -- but ignored -- the ASMSPEC in
 	     this case.  */
-	  if (!DECL_FILE_SCOPE_P (decl)
+	  ਜੇ (!DECL_FILE_SCOPE_P (decl)
 	      && VAR_P (decl)
-	      && !C_DECL_REGISTER (decl)
-	      && !TREE_STATIC (decl))
+	      && !C_DECL_ਰਜਿਸਟਰ (decl)
+	      && !ਰੁੱਖ_STATIC (decl))
 	    warning (0, "ignoring %<asm%> specifier for non-static local "
 		     "variable %q+D", decl);
-	  else
-	    set_user_assembler_name (decl, asmspec);
+	  ਨਹੀਂਤਾਂ
+	    ਸੈੱਟ_user_assembler_name (decl, asmspec);
 	}
 
-      if (DECL_FILE_SCOPE_P (decl))
+      ਜੇ (DECL_FILE_SCOPE_P (decl))
 	{
-	  if (DECL_INITIAL (decl) == NULL_TREE
-	      || DECL_INITIAL (decl) == error_mark_node)
+	  ਜੇ (DECL_INITIAL (decl) == NULL_ਰੁੱਖ
+	      || DECL_INITIAL (decl) == error_mark_ਗੰਢ)
 	    /* Don't output anything
 	       when a tentative file-scope definition is seen.
 	       But at end of compilation, do output code for them.  */
 	    DECL_DEFER_OUTPUT (decl) = 1;
-	  if (asmspec && VAR_P (decl) && C_DECL_REGISTER (decl))
-	    DECL_HARD_REGISTER (decl) = 1;
-	  rest_of_decl_compilation (decl, true, 0);
+	  ਜੇ (asmspec && VAR_P (decl) && C_DECL_ਰਜਿਸਟਰ (decl))
+	    DECL_HARD_ਰਜਿਸਟਰ (decl) = 1;
+	  rest_ਦਾ_decl_compilation (decl, ਸੱਚ, 0);
 
-	  if (TREE_CODE (decl) == FUNCTION_DECL)
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) == FUNCTION_DECL)
 	    {
-	      tree parms = DECL_ARGUMENTS (decl);
-	      const bool builtin = fndecl_built_in_p (decl);
-	      if (tree access = build_attr_access_from_parms (parms, !builtin))
-		decl_attributes (&decl, access, 0);
+	      ਰੁੱਖ parms = DECL_ARGUMENTS (decl);
+	      ਅਚਲ ਤਾਰਕਿਕ builtin = fndecl_built_ਵਿੱਚ_p (decl);
+	      ਜੇ (ਰੁੱਖ access = build_attr_access_from_parms (parms, !builtin))
+		decl_ਗੁਣ (&decl, access, 0);
 	    }
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
 	  /* In conjunction with an ASMSPEC, the `register'
 	     keyword indicates that we should place the variable
 	     in a particular register.  */
-	  if (asmspec && C_DECL_REGISTER (decl))
+	  ਜੇ (asmspec && C_DECL_ਰਜਿਸਟਰ (decl))
 	    {
-	      DECL_HARD_REGISTER (decl) = 1;
+	      DECL_HARD_ਰਜਿਸਟਰ (decl) = 1;
 	      /* This cannot be done for a structure with volatile
 		 fields, on which DECL_REGISTER will have been
 		 reset.  */
-	      if (!DECL_REGISTER (decl))
+	      ਜੇ (!DECL_ਰਜਿਸਟਰ (decl))
 		error ("cannot put object with volatile field into register");
 	    }
 
-	  if (TREE_CODE (decl) != FUNCTION_DECL)
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) != FUNCTION_DECL)
 	    {
 	      /* If we're building a variable sized type, and we might be
 		 reachable other than via the top of the current binding
 		 level, then create a new BIND_EXPR so that we deallocate
 		 the object at the right time.  */
 	      /* Note that DECL_SIZE can be null due to errors.  */
-	      if (DECL_SIZE (decl)
-		  && !TREE_CONSTANT (DECL_SIZE (decl))
+	      ਜੇ (DECL_ਮਾਪ (decl)
+		  && !ਰੁੱਖ_CONSTANT (DECL_ਮਾਪ (decl))
 		  && STATEMENT_LIST_HAS_LABEL (cur_stmt_list))
 		{
-		  tree bind;
-		  bind = build3 (BIND_EXPR, void_type_node, NULL, NULL, NULL);
-		  TREE_SIDE_EFFECTS (bind) = 1;
-		  add_stmt (bind);
-		  BIND_EXPR_BODY (bind) = push_stmt_list ();
+		  ਰੁੱਖ bind;
+		  bind = build3 (BIND_ਵਿਅੰਜਕ, void_type_ਗੰਢ, ਨਿਰਾ, ਨਿਰਾ, ਨਿਰਾ);
+		  ਰੁੱਖ_SIDE_EFFECTS (bind) = 1;
+		  ਜੋੜੋ_stmt (bind);
+		  BIND_ਵਿਅੰਜਕ_BODY (bind) = ਧੱਕੋ_stmt_list ();
 		}
-	      add_stmt (build_stmt (DECL_SOURCE_LOCATION (decl),
-				    DECL_EXPR, decl));
+	      ਜੋੜੋ_stmt (build_stmt (DECL_ਸਰੋਤ_LOCATION (decl),
+				    DECL_ਵਿਅੰਜਕ, decl));
 	    }
 	}
 
 
-      if (!DECL_FILE_SCOPE_P (decl))
+      ਜੇ (!DECL_FILE_SCOPE_P (decl))
 	{
 	  /* Recompute the RTL of a local array now
 	     if it used to be an incomplete type.  */
-	  if (was_incomplete && !is_global_var (decl))
+	  ਜੇ (was_incomplete && !is_global_var (decl))
 	    {
 	      /* If we used it already as memory, it must stay in memory.  */
-	      TREE_ADDRESSABLE (decl) = TREE_USED (decl);
+	      ਰੁੱਖ_ADDRESSABLE (decl) = ਰੁੱਖ_ਵਰਤਿਆ (decl);
 	      /* If it's still incomplete now, no init will save it.  */
-	      if (DECL_SIZE (decl) == NULL_TREE)
-		DECL_INITIAL (decl) = NULL_TREE;
+	      ਜੇ (DECL_ਮਾਪ (decl) == NULL_ਰੁੱਖ)
+		DECL_INITIAL (decl) = NULL_ਰੁੱਖ;
 	    }
 	}
     }
 
-  if (TREE_CODE (decl) == TYPE_DECL)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) == TYPE_DECL)
     {
-      if (!DECL_FILE_SCOPE_P (decl)
-	  && c_type_variably_modified_p (TREE_TYPE (decl)))
-	add_stmt (build_stmt (DECL_SOURCE_LOCATION (decl), DECL_EXPR, decl));
+      ਜੇ (!DECL_FILE_SCOPE_P (decl)
+	  && c_type_variably_modified_p (ਰੁੱਖ_TYPE (decl)))
+	ਜੋੜੋ_stmt (build_stmt (DECL_ਸਰੋਤ_LOCATION (decl), DECL_ਵਿਅੰਜਕ, decl));
 
-      rest_of_decl_compilation (decl, DECL_FILE_SCOPE_P (decl), 0);
+      rest_ਦਾ_decl_compilation (decl, DECL_FILE_SCOPE_P (decl), 0);
     }
 
   /* Install a cleanup (aka destructor) if one was given.  */
-  if (VAR_P (decl) && !TREE_STATIC (decl))
+  ਜੇ (VAR_P (decl) && !ਰੁੱਖ_STATIC (decl))
     {
-      tree attr = lookup_attribute ("cleanup", DECL_ATTRIBUTES (decl));
-      if (attr)
+      ਰੁੱਖ attr = lookup_attribute ("cleanup", DECL_ਗੁਣ (decl));
+      ਜੇ (attr)
 	{
-	  tree cleanup_id = TREE_VALUE (TREE_VALUE (attr));
-	  tree cleanup_decl = lookup_name (cleanup_id);
-	  tree cleanup;
-	  vec<tree, va_gc> *v;
+	  ਰੁੱਖ cleanup_id = ਰੁੱਖ_ਮੁੱਲ (ਰੁੱਖ_ਮੁੱਲ (attr));
+	  ਰੁੱਖ cleanup_decl = lookup_name (cleanup_id);
+	  ਰੁੱਖ cleanup;
+	  vec<ਰੁੱਖ, va_gc> *v;
 
 	  /* Build "cleanup(&decl)" for the destructor.  */
-	  cleanup = build_unary_op (input_location, ADDR_EXPR, decl, false);
+	  cleanup = build_unary_op (ਨਿਵੇਸ਼_location, ADDR_ਵਿਅੰਜਕ, decl, ਝੂਠ);
 	  vec_alloc (v, 1);
-	  v->quick_push (cleanup);
-	  cleanup = c_build_function_call_vec (DECL_SOURCE_LOCATION (decl),
-					       vNULL, cleanup_decl, v, NULL);
+	  v->ਤੇਜ਼_ਧੱਕੋ (cleanup);
+	  cleanup = c_build_function_call_vec (DECL_ਸਰੋਤ_LOCATION (decl),
+					       vNULL, cleanup_decl, v, ਨਿਰਾ);
 	  vec_free (v);
 
 	  /* Don't warn about decl unused; the cleanup uses it.  */
-	  TREE_USED (decl) = 1;
-	  TREE_USED (cleanup_decl) = 1;
+	  ਰੁੱਖ_ਵਰਤਿਆ (decl) = 1;
+	  ਰੁੱਖ_ਵਰਤਿਆ (cleanup_decl) = 1;
 	  DECL_READ_P (decl) = 1;
 
-	  push_cleanup (decl, cleanup, false);
+	  ਧੱਕੋ_cleanup (decl, cleanup, ਝੂਠ);
 	}
     }
 
-  if (warn_cxx_compat
+  ਜੇ (warn_cxx_compat
       && VAR_P (decl)
       && !DECL_EXTERNAL (decl)
-      && DECL_INITIAL (decl) == NULL_TREE)
+      && DECL_INITIAL (decl) == NULL_ਰੁੱਖ)
     {
       type = strip_array_types (type);
-      if (TREE_READONLY (decl))
-	warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wc___compat,
+      ਜੇ (ਰੁੱਖ_READONLY (decl))
+	warning_at (DECL_ਸਰੋਤ_LOCATION (decl), OPT_Wc___compat,
 		    "uninitialized %<const %D%> is invalid in C++", decl);
-      else if (RECORD_OR_UNION_TYPE_P (type)
+      ਨਹੀਂਤਾਂ ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (type)
 	       && C_TYPE_FIELDS_READONLY (type))
 	diagnose_uninitialized_cst_member (decl, type);
     }
 
-  if (flag_openmp
+  ਜੇ (flag_openmp
       && VAR_P (decl)
       && lookup_attribute ("omp declare target implicit",
-			   DECL_ATTRIBUTES (decl)))
+			   DECL_ਗੁਣ (decl)))
     {
-      DECL_ATTRIBUTES (decl)
+      DECL_ਗੁਣ (decl)
 	= remove_attribute ("omp declare target implicit",
-			    DECL_ATTRIBUTES (decl));
-      if (!omp_mappable_type (TREE_TYPE (decl)))
+			    DECL_ਗੁਣ (decl));
+      ਜੇ (!omp_mappable_type (ਰੁੱਖ_TYPE (decl)))
 	error ("%q+D in declare target directive does not have mappable type",
 	       decl);
-      else if (!lookup_attribute ("omp declare target",
-				  DECL_ATTRIBUTES (decl))
+      ਨਹੀਂਤਾਂ ਜੇ (!lookup_attribute ("omp declare target",
+				  DECL_ਗੁਣ (decl))
 	       && !lookup_attribute ("omp declare target link",
-				     DECL_ATTRIBUTES (decl)))
+				     DECL_ਗੁਣ (decl)))
 	{
-	  DECL_ATTRIBUTES (decl)
-	    = tree_cons (get_identifier ("omp declare target"),
-			 NULL_TREE, DECL_ATTRIBUTES (decl));
-	    symtab_node *node = symtab_node::get (decl);
-	    if (node != NULL)
+	  DECL_ਗੁਣ (decl)
+	    = ਰੁੱਖ_cons (get_identifier ("omp declare target"),
+			 NULL_ਰੁੱਖ, DECL_ਗੁਣ (decl));
+	    symtab_ਗੰਢ *ਗੰਢ = symtab_ਗੰਢ::get (decl);
+	    ਜੇ (ਗੰਢ != ਨਿਰਾ)
 	      {
-		node->offloadable = 1;
-		if (ENABLE_OFFLOADING)
+		ਗੰਢ->offloadable = 1;
+		ਜੇ (ENABLE_OFFLOADING)
 		  {
-		    g->have_offload = true;
-		    if (is_a <varpool_node *> (node))
-		      vec_safe_push (offload_vars, decl);
+		    g->have_offload = ਸੱਚ;
+		    ਜੇ (is_a <varpool_ਗੰਢ *> (ਗੰਢ))
+		      vec_ਸੁਰੱਖਿਅਤ_ਧੱਕੋ (offload_vars, decl);
 		  }
 	      }
 	}
@@ -6385,12 +6385,12 @@ finish_decl (tree decl, location_t init_loc, tree init,
 
   /* This is the last point we can lower alignment so give the target the
      chance to do so.  */
-  if (VAR_P (decl)
+  ਜੇ (VAR_P (decl)
       && !is_global_var (decl)
-      && !DECL_HARD_REGISTER (decl))
-    targetm.lower_local_decl_alignment (decl);
+      && !DECL_HARD_ਰਜਿਸਟਰ (decl))
+    targetm.ਹੇਠਲਾ_local_decl_alignment (decl);
 
-  invoke_plugin_callbacks (PLUGIN_FINISH_DECL, decl);
+  invoke_plugin_callbacks (PLUGIN_ਅੰਤ_DECL, decl);
 }
 
 /* Given a parsed parameter declaration, decode it into a PARM_DECL.
@@ -6398,16 +6398,16 @@ finish_decl (tree decl, location_t init_loc, tree init,
    evaluated for the side effects of array size expressions in the
    parameters.  */
 
-tree
-grokparm (const struct c_parm *parm, tree *expr)
+ਰੁੱਖ
+grokparm (ਅਚਲ ਬਣਤਰ c_parm *parm, ਰੁੱਖ *ਵਿਅੰਜਕ)
 {
-  tree attrs = parm->attrs;
-  tree decl = grokdeclarator (parm->declarator, parm->specs, PARM, false,
-			      NULL, &attrs, expr, NULL, DEPRECATED_NORMAL);
+  ਰੁੱਖ attrs = parm->attrs;
+  ਰੁੱਖ decl = grokdeclarator (parm->declarator, parm->specs, PARM, ਝੂਠ,
+			      ਨਿਰਾ, &attrs, ਵਿਅੰਜਕ, ਨਿਰਾ, DEPRECATED_ਸਾਧਾਰਨ);
 
-  decl_attributes (&decl, attrs, 0);
+  decl_ਗੁਣ (&decl, attrs, 0);
 
-  return decl;
+  ਵਾਪਸ decl;
 }
 
 
@@ -6417,42 +6417,42 @@ grokparm (const struct c_parm *parm, tree *expr)
    expression that needs to be evaluated for the side effects of array
    size expressions in the parameters.  */
 
-void
-push_parm_decl (const struct c_parm *parm, tree *expr)
+ਖਾਲੀ
+ਧੱਕੋ_parm_decl (ਅਚਲ ਬਣਤਰ c_parm *parm, ਰੁੱਖ *ਵਿਅੰਜਕ)
 {
-  tree attrs = parm->attrs;
-  tree decl = grokdeclarator (parm->declarator, parm->specs, PARM, false, NULL,
-			      &attrs, expr, NULL, DEPRECATED_NORMAL);
-  if (decl && DECL_P (decl))
-    DECL_SOURCE_LOCATION (decl) = parm->loc;
+  ਰੁੱਖ attrs = parm->attrs;
+  ਰੁੱਖ decl = grokdeclarator (parm->declarator, parm->specs, PARM, ਝੂਠ, ਨਿਰਾ,
+			      &attrs, ਵਿਅੰਜਕ, ਨਿਰਾ, DEPRECATED_ਸਾਧਾਰਨ);
+  ਜੇ (decl && DECL_P (decl))
+    DECL_ਸਰੋਤ_LOCATION (decl) = parm->loc;
 
-  decl_attributes (&decl, attrs, 0);
+  decl_ਗੁਣ (&decl, attrs, 0);
 
   decl = pushdecl (decl);
 
-  finish_decl (decl, input_location, NULL_TREE, NULL_TREE, NULL_TREE);
+  ਅੰਤ_decl (decl, ਨਿਵੇਸ਼_location, NULL_ਰੁੱਖ, NULL_ਰੁੱਖ, NULL_ਰੁੱਖ);
 }
 
 /* Mark all the parameter declarations to date as forward decls.
    Also diagnose use of this extension.  */
 
-void
-mark_forward_parm_decls (void)
+ਖਾਲੀ
+mark_forward_parm_decls (ਖਾਲੀ)
 {
-  struct c_binding *b;
+  ਬਣਤਰ c_binding *b;
 
-  if (current_scope->had_forward_parm_decls)
-    warning_at (input_location, OPT_Wmultiple_parameter_fwd_decl_lists,
+  ਜੇ (current_scope->had_forward_parm_decls)
+    warning_at (ਨਿਵੇਸ਼_location, OPT_Wmultiple_parameter_fwd_decl_lists,
 		"more than one list of forward declarations of parameters");
-  if (pedantic && !current_scope->had_forward_parm_decls)
-    pedwarn (input_location, OPT_Wpedantic,
+  ਜੇ (pedantic && !current_scope->had_forward_parm_decls)
+    pedwarn (ਨਿਵੇਸ਼_location, OPT_Wpedantic,
 	     "ISO C forbids forward parameter declarations");
 
-  current_scope->had_forward_parm_decls = true;
+  current_scope->had_forward_parm_decls = ਸੱਚ;
 
-  for (b = current_scope->bindings; b; b = b->prev)
-    if (TREE_CODE (b->decl) == PARM_DECL)
-      TREE_ASM_WRITTEN (b->decl) = 1;
+  ਲਈ (b = current_scope->bindings; b; b = b->prev)
+    ਜੇ (ਰੁੱਖ_ਕੋਡ (b->decl) == PARM_DECL)
+      ਰੁੱਖ_ASM_WRITTEN (b->decl) = 1;
 }
 
 /* Build a COMPOUND_LITERAL_EXPR.  TYPE is the type given in the compound
@@ -6464,143 +6464,143 @@ mark_forward_parm_decls (void)
    with _Alignas.  SCSPECS are the storage class specifiers (C23) from the
    compound literal.  */
 
-tree
-build_compound_literal (location_t loc, tree type, tree init, bool non_const,
-			unsigned int alignas_align,
-			struct c_declspecs *scspecs)
+ਰੁੱਖ
+build_compound_literal (location_t loc, ਰੁੱਖ type, ਰੁੱਖ init, ਤਾਰਕਿਕ non_const,
+			ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ alignas_align,
+			ਬਣਤਰ c_declspecs *scspecs)
 {
   /* We do not use start_decl here because we have a type, not a declarator;
      and do not use finish_decl because the decl should be stored inside
      the COMPOUND_LITERAL_EXPR rather than added elsewhere as a DECL_EXPR.  */
-  tree decl;
-  tree complit;
-  tree stmt;
-  bool threadp = scspecs ? scspecs->thread_p : false;
-  enum c_storage_class storage_class = (scspecs
+  ਰੁੱਖ decl;
+  ਰੁੱਖ complit;
+  ਰੁੱਖ stmt;
+  ਤਾਰਕਿਕ threadp = scspecs ? scspecs->thread_p : ਝੂਠ;
+  ਗਿਣਤੀ c_storage_class storage_class = (scspecs
 					? scspecs->storage_class
 					: csc_none);
 
-  if (type == error_mark_node
-      || init == error_mark_node)
-    return error_mark_node;
+  ਜੇ (type == error_mark_ਗੰਢ
+      || init == error_mark_ਗੰਢ)
+    ਵਾਪਸ error_mark_ਗੰਢ;
 
-  if (current_scope == file_scope && storage_class == csc_register)
+  ਜੇ (current_scope == file_scope && storage_class == csc_ਰਜਿਸਟਰ)
     {
       error_at (loc, "file-scope compound literal specifies %<register%>");
       storage_class = csc_none;
     }
 
-  if (current_scope != file_scope && threadp && storage_class == csc_none)
+  ਜੇ (current_scope != file_scope && threadp && storage_class == csc_none)
     {
       error_at (loc, "compound literal implicitly auto and declared %qs",
 		scspecs->thread_gnu_p ? "__thread" : "_Thread_local");
-      threadp = false;
+      threadp = ਝੂਠ;
     }
 
-  decl = build_decl (loc, VAR_DECL, NULL_TREE, type);
+  decl = build_decl (loc, VAR_DECL, NULL_ਰੁੱਖ, type);
   DECL_EXTERNAL (decl) = 0;
-  TREE_PUBLIC (decl) = 0;
-  TREE_STATIC (decl) = (current_scope == file_scope
+  ਰੁੱਖ_ਜਨਤਕ (decl) = 0;
+  ਰੁੱਖ_STATIC (decl) = (current_scope == file_scope
 			|| storage_class == csc_static);
   DECL_CONTEXT (decl) = current_function_decl;
-  TREE_USED (decl) = 1;
+  ਰੁੱਖ_ਵਰਤਿਆ (decl) = 1;
   DECL_READ_P (decl) = 1;
   DECL_ARTIFICIAL (decl) = 1;
   DECL_IGNORED_P (decl) = 1;
   C_DECL_COMPOUND_LITERAL_P (decl) = 1;
   C_DECL_DECLARED_CONSTEXPR (decl) = scspecs && scspecs->constexpr_p;
-  TREE_TYPE (decl) = type;
-  if (threadp)
-    set_decl_tls_model (decl, decl_default_tls_model (decl));
-  if (storage_class == csc_register)
+  ਰੁੱਖ_TYPE (decl) = type;
+  ਜੇ (threadp)
+    ਸੈੱਟ_decl_tls_model (decl, decl_default_tls_model (decl));
+  ਜੇ (storage_class == csc_ਰਜਿਸਟਰ)
     {
-      C_DECL_REGISTER (decl) = 1;
-      DECL_REGISTER (decl) = 1;
+      C_DECL_ਰਜਿਸਟਰ (decl) = 1;
+      DECL_ਰਜਿਸਟਰ (decl) = 1;
     }
-  c_apply_type_quals_to_decl (TYPE_QUALS (strip_array_types (type)), decl);
-  if (alignas_align)
+  c_apply_type_quals_ਮੰਜ਼ਿਲ_decl (TYPE_QUALS (strip_array_types (type)), decl);
+  ਜੇ (alignas_align)
     {
-      SET_DECL_ALIGN (decl, alignas_align * BITS_PER_UNIT);
+      ਸੈੱਟ_DECL_ALIGN (decl, alignas_align * ਬਿੱਟ_ਪ੍ਰਤੀ_UNIT);
       DECL_USER_ALIGN (decl) = 1;
     }
-  store_init_value (loc, decl, init, NULL_TREE);
-  if (current_scope != file_scope
-      && TREE_STATIC (decl)
-      && !TREE_READONLY (decl)
+  store_init_ਮੁੱਲ (loc, decl, init, NULL_ਰੁੱਖ);
+  ਜੇ (current_scope != file_scope
+      && ਰੁੱਖ_STATIC (decl)
+      && !ਰੁੱਖ_READONLY (decl)
       && DECL_DECLARED_INLINE_P (current_function_decl)
       && DECL_EXTERNAL (current_function_decl))
-    record_inline_static (input_location, current_function_decl,
+    ਰਿਕਾਰਡ_inline_static (ਨਿਵੇਸ਼_location, current_function_decl,
 			  decl, csi_modifiable);
 
-  if (TREE_CODE (type) == ARRAY_TYPE && !COMPLETE_TYPE_P (type))
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == ARRAY_TYPE && !COMPLETE_TYPE_P (type))
     {
-      int failure = complete_array_type (&TREE_TYPE (decl),
-					 DECL_INITIAL (decl), true);
+      ਪੂਰਨ failure = complete_array_type (&ਰੁੱਖ_TYPE (decl),
+					 DECL_INITIAL (decl), ਸੱਚ);
       /* If complete_array_type returns 3, it means that the initial value of
          the compound literal is empty.  Allow it with a pedwarn; in pre-C23
          modes, the empty initializer itself has been diagnosed if pedantic so
          does not need to be diagnosed again here.  */
       gcc_assert (failure == 0 || failure == 3);
-      if (failure == 3 && flag_isoc23)
+      ਜੇ (failure == 3 && flag_isoc23)
 	pedwarn (loc, OPT_Wpedantic,
 		 "array of unknown size with empty initializer");
 
-      type = TREE_TYPE (decl);
-      TREE_TYPE (DECL_INITIAL (decl)) = type;
+      type = ਰੁੱਖ_TYPE (decl);
+      ਰੁੱਖ_TYPE (DECL_INITIAL (decl)) = type;
       relayout_decl (decl);
     }
 
-  if (type == error_mark_node || !COMPLETE_TYPE_P (type))
+  ਜੇ (type == error_mark_ਗੰਢ || !COMPLETE_TYPE_P (type))
     {
-      c_incomplete_type_error (loc, NULL_TREE, type);
-      return error_mark_node;
+      c_incomplete_type_error (loc, NULL_ਰੁੱਖ, type);
+      ਵਾਪਸ error_mark_ਗੰਢ;
     }
 
-  if ((TREE_STATIC (decl) || C_DECL_DECLARED_CONSTEXPR (decl))
-      && C_TYPE_VARIABLE_SIZE (type))
+  ਜੇ ((ਰੁੱਖ_STATIC (decl) || C_DECL_DECLARED_CONSTEXPR (decl))
+      && C_TYPE_VARIABLE_ਮਾਪ (type))
     error_at (loc, "storage size isn%'t constant");
 
-  if (TREE_STATIC (decl)
+  ਜੇ (ਰੁੱਖ_STATIC (decl)
       && !verify_type_context (loc, TCTX_STATIC_STORAGE, type))
-    return error_mark_node;
+    ਵਾਪਸ error_mark_ਗੰਢ;
 
-  stmt = build_stmt (DECL_SOURCE_LOCATION (decl), DECL_EXPR, decl);
-  complit = build1 (COMPOUND_LITERAL_EXPR, type, stmt);
-  TREE_SIDE_EFFECTS (complit) = 1;
+  stmt = build_stmt (DECL_ਸਰੋਤ_LOCATION (decl), DECL_ਵਿਅੰਜਕ, decl);
+  complit = build1 (COMPOUND_LITERAL_ਵਿਅੰਜਕ, type, stmt);
+  ਰੁੱਖ_SIDE_EFFECTS (complit) = 1;
 
   layout_decl (decl, 0);
 
-  if (TREE_STATIC (decl))
+  ਜੇ (ਰੁੱਖ_STATIC (decl))
     {
       /* This decl needs a name for the assembler output.  */
-      set_compound_literal_name (decl);
+      ਸੈੱਟ_compound_literal_name (decl);
       DECL_DEFER_OUTPUT (decl) = 1;
       DECL_COMDAT (decl) = 1;
       pushdecl (decl);
-      rest_of_decl_compilation (decl, 1, 0);
+      rest_ਦਾ_decl_compilation (decl, 1, 0);
     }
-  else if (current_function_decl && !current_scope->parm_flag)
+  ਨਹੀਂਤਾਂ ਜੇ (current_function_decl && !current_scope->parm_flag)
     pushdecl (decl);
 
-  if (non_const)
+  ਜੇ (non_const)
     {
-      complit = build2 (C_MAYBE_CONST_EXPR, type, NULL, complit);
-      C_MAYBE_CONST_EXPR_NON_CONST (complit) = 1;
+      complit = build2 (C_MAYBE_CONST_ਵਿਅੰਜਕ, type, ਨਿਰਾ, complit);
+      C_MAYBE_CONST_ਵਿਅੰਜਕ_NON_CONST (complit) = 1;
     }
 
-  return complit;
+  ਵਾਪਸ complit;
 }
 
 /* Check the type of a compound literal.  Here we just check that it
    is valid for C++.  */
 
-void
-check_compound_literal_type (location_t loc, struct c_type_name *type_name)
+ਖਾਲੀ
+check_compound_literal_type (location_t loc, ਬਣਤਰ c_type_name *type_name)
 {
-  if (warn_cxx_compat
-      && (type_name->specs->typespec_kind == ctsk_tagdef
-          || type_name->specs->typespec_kind == ctsk_tagfirstref
-	  || type_name->specs->typespec_kind == ctsk_tagfirstref_attrs))
+  ਜੇ (warn_cxx_compat
+      && (type_name->specs->typespec_ਕਿਸਮ == ctsk_tagdef
+          || type_name->specs->typespec_ਕਿਸਮ == ctsk_tagfirstref
+	  || type_name->specs->typespec_ਕਿਸਮ == ctsk_tagfirstref_attrs))
     warning_at (loc, OPT_Wc___compat,
 		"defining a type in a compound literal is invalid in C++");
 }
@@ -6608,100 +6608,100 @@ check_compound_literal_type (location_t loc, struct c_type_name *type_name)
 /* Performs sanity checks on the TYPE and WIDTH of the bit-field NAME,
    replacing with appropriate values if they are invalid.  */
 
-static void
-check_bitfield_type_and_width (location_t loc, tree *type, tree *width,
-			       tree orig_name)
+ਸਥਿਰ ਖਾਲੀ
+check_bitfield_type_and_ਚੌੜਾਈ (location_t loc, ਰੁੱਖ *type, ਰੁੱਖ *ਚੌੜਾਈ,
+			       ਰੁੱਖ orig_name)
 {
-  tree type_mv;
-  unsigned int max_width;
-  unsigned HOST_WIDE_INT w;
-  const char *name = (orig_name
-		      ? identifier_to_locale (IDENTIFIER_POINTER (orig_name))
+  ਰੁੱਖ type_mv;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ max_ਚੌੜਾਈ;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ HOST_WIDE_INT w;
+  ਅਚਲ ਅੱਖਰ *name = (orig_name
+		      ? identifier_ਮੰਜ਼ਿਲ_locale (IDENTIFIER_ਸੂਚਕ (orig_name))
 		      : _("<anonymous>"));
 
   /* Detect and ignore out of range field width and process valid
      field widths.  */
-  if (!INTEGRAL_TYPE_P (TREE_TYPE (*width)))
+  ਜੇ (!INTEGRAL_TYPE_P (ਰੁੱਖ_TYPE (*ਚੌੜਾਈ)))
     {
       error_at (loc, "bit-field %qs width not an integer constant", name);
-      *width = integer_one_node;
+      *ਚੌੜਾਈ = integer_one_ਗੰਢ;
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      if (TREE_CODE (*width) != INTEGER_CST)
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (*ਚੌੜਾਈ) != INTEGER_CST)
 	{
-	  *width = c_fully_fold (*width, false, NULL);
-	  if (TREE_CODE (*width) == INTEGER_CST)
+	  *ਚੌੜਾਈ = c_fully_fold (*ਚੌੜਾਈ, ਝੂਠ, ਨਿਰਾ);
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (*ਚੌੜਾਈ) == INTEGER_CST)
 	    pedwarn (loc, OPT_Wpedantic,
 		     "bit-field %qs width not an integer constant expression",
 		     name);
 	}
-      if (TREE_CODE (*width) != INTEGER_CST)
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (*ਚੌੜਾਈ) != INTEGER_CST)
 	{
 	  error_at (loc, "bit-field %qs width not an integer constant", name);
-	  *width = integer_one_node;
+	  *ਚੌੜਾਈ = integer_one_ਗੰਢ;
 	}
-      constant_expression_warning (*width);
-      if (tree_int_cst_sgn (*width) < 0)
+      constant_ਵਿਅੰਜਕ_warning (*ਚੌੜਾਈ);
+      ਜੇ (ਰੁੱਖ_int_cst_sgn (*ਚੌੜਾਈ) < 0)
 	{
 	  error_at (loc, "negative width in bit-field %qs", name);
-	  *width = integer_one_node;
+	  *ਚੌੜਾਈ = integer_one_ਗੰਢ;
 	}
-      else if (integer_zerop (*width) && orig_name)
+      ਨਹੀਂਤਾਂ ਜੇ (integer_zerop (*ਚੌੜਾਈ) && orig_name)
 	{
 	  error_at (loc, "zero width for bit-field %qs", name);
-	  *width = integer_one_node;
+	  *ਚੌੜਾਈ = integer_one_ਗੰਢ;
 	}
     }
 
   /* Detect invalid bit-field type.  */
-  if (TREE_CODE (*type) != INTEGER_TYPE
-      && TREE_CODE (*type) != BOOLEAN_TYPE
-      && TREE_CODE (*type) != ENUMERAL_TYPE
-      && TREE_CODE (*type) != BITINT_TYPE)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (*type) != INTEGER_TYPE
+      && ਰੁੱਖ_ਕੋਡ (*type) != BOOLEAN_TYPE
+      && ਰੁੱਖ_ਕੋਡ (*type) != ENUMERAL_TYPE
+      && ਰੁੱਖ_ਕੋਡ (*type) != BITINT_TYPE)
     {
       error_at (loc, "bit-field %qs has invalid type", name);
-      *type = unsigned_type_node;
+      *type = unsigned_type_ਗੰਢ;
     }
 
-  if (TYPE_WARN_IF_NOT_ALIGN (*type))
+  ਜੇ (TYPE_WARN_IF_NOT_ALIGN (*type))
     {
       error_at (loc, "cannot declare bit-field %qs with %<warn_if_not_aligned%> type",
 		name);
-      *type = unsigned_type_node;
+      *type = unsigned_type_ਗੰਢ;
     }
 
   type_mv = TYPE_MAIN_VARIANT (*type);
-  if (!in_system_header_at (input_location)
-      && type_mv != integer_type_node
-      && type_mv != unsigned_type_node
-      && type_mv != boolean_type_node)
+  ਜੇ (!ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location)
+      && type_mv != integer_type_ਗੰਢ
+      && type_mv != unsigned_type_ਗੰਢ
+      && type_mv != boolean_type_ਗੰਢ)
     pedwarn_c90 (loc, OPT_Wpedantic,
 		 "type of bit-field %qs is a GCC extension", name);
 
-  max_width = TYPE_PRECISION (*type);
+  max_ਚੌੜਾਈ = TYPE_PRECISION (*type);
 
-  if (compare_tree_int (*width, max_width) > 0)
+  ਜੇ (compare_ਰੁੱਖ_int (*ਚੌੜਾਈ, max_ਚੌੜਾਈ) > 0)
     {
       error_at (loc, "width of %qs exceeds its type", name);
-      w = max_width;
-      *width = build_int_cst (integer_type_node, w);
+      w = max_ਚੌੜਾਈ;
+      *ਚੌੜਾਈ = build_int_cst (integer_type_ਗੰਢ, w);
     }
-  else
-    w = tree_to_uhwi (*width);
+  ਨਹੀਂਤਾਂ
+    w = ਰੁੱਖ_ਮੰਜ਼ਿਲ_uhwi (*ਚੌੜਾਈ);
 
   /* Truncation of hardbool false and true representation values is always safe:
      either the values remain different, or we'll report a problem when creating
      the narrower type.  */
-  if (c_hardbool_type_attr (*type))
-    return;
+  ਜੇ (c_hardbool_type_attr (*type))
+    ਵਾਪਸ;
 
-  if (TREE_CODE (*type) == ENUMERAL_TYPE)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (*type) == ENUMERAL_TYPE)
     {
-      struct lang_type *lt = TYPE_LANG_SPECIFIC (*type);
-      if (!lt
-	  || w < tree_int_cst_min_precision (lt->enum_min, TYPE_SIGN (*type))
-	  || w < tree_int_cst_min_precision (lt->enum_max, TYPE_SIGN (*type)))
+      ਬਣਤਰ lang_type *lt = TYPE_LANG_SPECIFIC (*type);
+      ਜੇ (!lt
+	  || w < ਰੁੱਖ_int_cst_min_precision (lt->enum_min, TYPE_SIGN (*type))
+	  || w < ਰੁੱਖ_int_cst_min_precision (lt->enum_max, TYPE_SIGN (*type)))
 	warning_at (loc, 0, "%qs is narrower than values of its type", name);
     }
 }
@@ -6710,26 +6710,26 @@ check_bitfield_type_and_width (location_t loc, tree *type, tree *width,
 
 /* Print warning about variable length array if necessary.  */
 
-static void
-warn_variable_length_array (tree name, tree size)
+ਸਥਿਰ ਖਾਲੀ
+warn_variable_ਲੰਮਾਈ_array (ਰੁੱਖ name, ਰੁੱਖ ਮਾਪ)
 {
-  if (TREE_CONSTANT (size))
+  ਜੇ (ਰੁੱਖ_CONSTANT (ਮਾਪ))
     {
-      if (name)
-	pedwarn_c90 (input_location, OPT_Wvla,
+      ਜੇ (name)
+	pedwarn_c90 (ਨਿਵੇਸ਼_location, OPT_Wvla,
 		     "ISO C90 forbids array %qE whose size "
 		     "cannot be evaluated", name);
-      else
-	pedwarn_c90 (input_location, OPT_Wvla, "ISO C90 forbids array "
+      ਨਹੀਂਤਾਂ
+	pedwarn_c90 (ਨਿਵੇਸ਼_location, OPT_Wvla, "ISO C90 forbids array "
 		     "whose size cannot be evaluated");
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      if (name)
-	pedwarn_c90 (input_location, OPT_Wvla,
+      ਜੇ (name)
+	pedwarn_c90 (ਨਿਵੇਸ਼_location, OPT_Wvla,
 		     "ISO C90 forbids variable length array %qE", name);
-      else
-	pedwarn_c90 (input_location, OPT_Wvla, "ISO C90 forbids variable "
+      ਨਹੀਂਤਾਂ
+	pedwarn_c90 (ਨਿਵੇਸ਼_location, OPT_Wvla, "ISO C90 forbids variable "
 		     "length array");
     }
 }
@@ -6738,21 +6738,21 @@ warn_variable_length_array (tree name, tree size)
    considering only those c_declspec_words found in LIST, which
    must be terminated by cdw_number_of_elements.  */
 
-static location_t
-smallest_type_quals_location (const location_t *locations,
-			      const c_declspec_word *list)
+ਸਥਿਰ location_t
+ਸਭ_ਤੋਂ_ਛੋਟਾ_type_quals_location (ਅਚਲ location_t *locations,
+			      ਅਚਲ c_declspec_ਸ਼ਬਦ *list)
 {
   location_t loc = UNKNOWN_LOCATION;
-  while (*list != cdw_number_of_elements)
+  ਜਦੋਂ (*list != cdw_ਸੰਖਿਆ_ਦਾ_elements)
     {
       location_t newloc = locations[*list];
-      if (loc == UNKNOWN_LOCATION
+      ਜੇ (loc == UNKNOWN_LOCATION
 	  || (newloc != UNKNOWN_LOCATION && newloc < loc))
 	loc = newloc;
       list++;
     }
 
-  return loc;
+  ਵਾਪਸ loc;
 }
 
 
@@ -6775,34 +6775,34 @@ smallest_type_quals_location (const location_t *locations,
    the fake TYPE_DECL in the enclosing context would force
    the size evaluation prior to the side effects.  We therefore
    use BIND_EXPRs in TYPENAME contexts too.  */
-static void
-add_decl_expr (location_t loc, tree type, tree *expr, bool set_name_p)
+ਸਥਿਰ ਖਾਲੀ
+ਜੋੜੋ_decl_ਵਿਅੰਜਕ (location_t loc, ਰੁੱਖ type, ਰੁੱਖ *ਵਿਅੰਜਕ, ਤਾਰਕਿਕ ਸੈੱਟ_name_p)
 {
-  tree bind = NULL_TREE;
-  if (expr)
+  ਰੁੱਖ bind = NULL_ਰੁੱਖ;
+  ਜੇ (ਵਿਅੰਜਕ)
     {
-      bind = build3 (BIND_EXPR, void_type_node, NULL_TREE, NULL_TREE,
-		     NULL_TREE);
-      TREE_SIDE_EFFECTS (bind) = 1;
-      BIND_EXPR_BODY (bind) = push_stmt_list ();
-      push_scope ();
+      bind = build3 (BIND_ਵਿਅੰਜਕ, void_type_ਗੰਢ, NULL_ਰੁੱਖ, NULL_ਰੁੱਖ,
+		     NULL_ਰੁੱਖ);
+      ਰੁੱਖ_SIDE_EFFECTS (bind) = 1;
+      BIND_ਵਿਅੰਜਕ_BODY (bind) = ਧੱਕੋ_stmt_list ();
+      ਧੱਕੋ_scope ();
     }
 
-  tree decl = build_decl (loc, TYPE_DECL, NULL_TREE, type);
+  ਰੁੱਖ decl = build_decl (loc, TYPE_DECL, NULL_ਰੁੱਖ, type);
   pushdecl (decl);
   DECL_ARTIFICIAL (decl) = 1;
-  add_stmt (build_stmt (DECL_SOURCE_LOCATION (decl), DECL_EXPR, decl));
-  if (set_name_p)
+  ਜੋੜੋ_stmt (build_stmt (DECL_ਸਰੋਤ_LOCATION (decl), DECL_ਵਿਅੰਜਕ, decl));
+  ਜੇ (ਸੈੱਟ_name_p)
     TYPE_NAME (type) = decl;
 
-  if (bind)
+  ਜੇ (bind)
     {
-      pop_scope ();
-      BIND_EXPR_BODY (bind) = pop_stmt_list (BIND_EXPR_BODY (bind));
-      if (*expr)
-	*expr = build2 (COMPOUND_EXPR, void_type_node, *expr, bind);
-      else
-	*expr = bind;
+      ਕੱਢੋ_scope ();
+      BIND_ਵਿਅੰਜਕ_BODY (bind) = ਕੱਢੋ_stmt_list (BIND_ਵਿਅੰਜਕ_BODY (bind));
+      ਜੇ (*ਵਿਅੰਜਕ)
+	*ਵਿਅੰਜਕ = build2 (COMPOUND_ਵਿਅੰਜਕ, void_type_ਗੰਢ, *ਵਿਅੰਜਕ, bind);
+      ਨਹੀਂਤਾਂ
+	*ਵਿਅੰਜਕ = bind;
     }
 }
 
@@ -6813,15 +6813,15 @@ add_decl_expr (location_t loc, tree type, tree *expr, bool set_name_p)
    the declared type of the array before adjustment, i.e. as an array type
    including the outermost bound.  */
 
-static tree
-build_arg_spec_attribute (tree type, bool static_p, tree attrs)
+ਸਥਿਰ ਰੁੱਖ
+build_arg_spec_attribute (ਰੁੱਖ type, ਤਾਰਕਿਕ static_p, ਰੁੱਖ attrs)
 {
-  tree vbchain = tree_cons (NULL_TREE, type, NULL_TREE);
-  tree acsstr = static_p ? build_string (7, "static") :
+  ਰੁੱਖ vbchain = ਰੁੱਖ_cons (NULL_ਰੁੱਖ, type, NULL_ਰੁੱਖ);
+  ਰੁੱਖ acsstr = static_p ? build_string (7, "static") :
 			   build_string (1, "");
-  tree args = tree_cons (NULL_TREE, acsstr, vbchain);
-  tree name = get_identifier ("arg spec");
-  return tree_cons (name, args, attrs);
+  ਰੁੱਖ ਦਲੀਲਾਂ = ਰੁੱਖ_cons (NULL_ਰੁੱਖ, acsstr, vbchain);
+  ਰੁੱਖ name = get_identifier ("arg spec");
+  ਵਾਪਸ ਰੁੱਖ_cons (name, ਦਲੀਲਾਂ, attrs);
 }
 
 
@@ -6865,123 +6865,123 @@ build_arg_spec_attribute (tree type, bool static_p, tree attrs)
    This function is where the complicated C meanings of `static'
    and `extern' are interpreted.  */
 
-static tree
-grokdeclarator (const struct c_declarator *declarator,
-		struct c_declspecs *declspecs,
-		enum decl_context decl_context, bool initialized, tree *width,
-		tree *decl_attrs, tree *expr, bool *expr_const_operands,
-		enum deprecated_states deprecated_state)
+ਸਥਿਰ ਰੁੱਖ
+grokdeclarator (ਅਚਲ ਬਣਤਰ c_declarator *declarator,
+		ਬਣਤਰ c_declspecs *declspecs,
+		ਗਿਣਤੀ decl_context decl_context, ਤਾਰਕਿਕ initialized, ਰੁੱਖ *ਚੌੜਾਈ,
+		ਰੁੱਖ *decl_attrs, ਰੁੱਖ *ਵਿਅੰਜਕ, ਤਾਰਕਿਕ *ਵਿਅੰਜਕ_const_operands,
+		ਗਿਣਤੀ deprecated_ਹਾਲਤਾਂ deprecated_state)
 {
-  tree type = declspecs->type;
-  bool threadp = declspecs->thread_p;
-  bool constexprp = declspecs->constexpr_p;
-  enum c_storage_class storage_class = declspecs->storage_class;
-  int constp;
-  int restrictp;
-  int volatilep;
-  int atomicp;
-  int type_quals = TYPE_UNQUALIFIED;
-  tree name = NULL_TREE;
-  bool funcdef_flag = false;
-  bool funcdef_syntax = false;
-  bool size_varies = false;
-  bool size_error = false;
-  tree decl_attr = declspecs->decl_attr;
-  int array_ptr_quals = TYPE_UNQUALIFIED;
-  tree array_ptr_attrs = NULL_TREE;
-  bool array_parm_static = false;
-  bool array_parm_vla_unspec_p = false;
-  tree returned_attrs = NULL_TREE;
-  tree decl_id_attrs = NULL_TREE;
-  bool bitfield = width != NULL;
-  tree element_type;
-  tree orig_qual_type = NULL;
-  size_t orig_qual_indirect = 0;
-  struct c_arg_info *arg_info = 0;
-  addr_space_t as1, as2, address_space;
+  ਰੁੱਖ type = declspecs->type;
+  ਤਾਰਕਿਕ threadp = declspecs->thread_p;
+  ਤਾਰਕਿਕ constexprp = declspecs->constexpr_p;
+  ਗਿਣਤੀ c_storage_class storage_class = declspecs->storage_class;
+  ਪੂਰਨ constp;
+  ਪੂਰਨ restrictp;
+  ਪੂਰਨ volatilep;
+  ਪੂਰਨ atomicp;
+  ਪੂਰਨ type_quals = TYPE_UNQUALIFIED;
+  ਰੁੱਖ name = NULL_ਰੁੱਖ;
+  ਤਾਰਕਿਕ funcdef_flag = ਝੂਠ;
+  ਤਾਰਕਿਕ funcdef_syntax = ਝੂਠ;
+  ਤਾਰਕਿਕ ਮਾਪ_varies = ਝੂਠ;
+  ਤਾਰਕਿਕ ਮਾਪ_error = ਝੂਠ;
+  ਰੁੱਖ decl_attr = declspecs->decl_attr;
+  ਪੂਰਨ array_ptr_quals = TYPE_UNQUALIFIED;
+  ਰੁੱਖ array_ptr_attrs = NULL_ਰੁੱਖ;
+  ਤਾਰਕਿਕ array_parm_static = ਝੂਠ;
+  ਤਾਰਕਿਕ array_parm_vla_unspec_p = ਝੂਠ;
+  ਰੁੱਖ returned_attrs = NULL_ਰੁੱਖ;
+  ਰੁੱਖ decl_id_attrs = NULL_ਰੁੱਖ;
+  ਤਾਰਕਿਕ bitfield = ਚੌੜਾਈ != ਨਿਰਾ;
+  ਰੁੱਖ element_type;
+  ਰੁੱਖ orig_qual_type = ਨਿਰਾ;
+  ਮਾਪ_t orig_qual_ਅਸਿੱਧਾ = 0;
+  ਬਣਤਰ c_arg_info *arg_info = 0;
+  addr_space_t as1, as2, ਪਤਾ_space;
   location_t loc = UNKNOWN_LOCATION;
-  tree expr_dummy;
-  bool expr_const_operands_dummy;
-  enum c_declarator_kind first_non_attr_kind;
-  unsigned int alignas_align = 0;
+  ਰੁੱਖ ਵਿਅੰਜਕ_dummy;
+  ਤਾਰਕਿਕ ਵਿਅੰਜਕ_const_operands_dummy;
+  ਗਿਣਤੀ c_declarator_ਕਿਸਮ ਪਹਿਲਾ_non_attr_ਕਿਸਮ;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ alignas_align = 0;
 
-  if (type == NULL_TREE)
+  ਜੇ (type == NULL_ਰੁੱਖ)
     {
       /* This can occur for auto on a parameter in C23 mode.  Set a
 	 dummy type here so subsequent code can give diagnostics for
 	 this case.  */
       gcc_assert (declspecs->c23_auto_p);
       gcc_assert (decl_context == PARM);
-      type = declspecs->type = integer_type_node;
+      type = declspecs->type = integer_type_ਗੰਢ;
     }
-  if (TREE_CODE (type) == ERROR_MARK)
-    return error_mark_node;
-  if (expr == NULL)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == ERROR_MARK)
+    ਵਾਪਸ error_mark_ਗੰਢ;
+  ਜੇ (ਵਿਅੰਜਕ == ਨਿਰਾ)
     {
-      expr = &expr_dummy;
-      expr_dummy = NULL_TREE;
+      ਵਿਅੰਜਕ = &ਵਿਅੰਜਕ_dummy;
+      ਵਿਅੰਜਕ_dummy = NULL_ਰੁੱਖ;
     }
-  if (expr_const_operands == NULL)
-    expr_const_operands = &expr_const_operands_dummy;
+  ਜੇ (ਵਿਅੰਜਕ_const_operands == ਨਿਰਾ)
+    ਵਿਅੰਜਕ_const_operands = &ਵਿਅੰਜਕ_const_operands_dummy;
 
-  if (declspecs->expr)
+  ਜੇ (declspecs->ਵਿਅੰਜਕ)
     {
-      if (*expr)
-	*expr = build2 (COMPOUND_EXPR, TREE_TYPE (declspecs->expr), *expr,
-			declspecs->expr);
-      else
-	*expr = declspecs->expr;
+      ਜੇ (*ਵਿਅੰਜਕ)
+	*ਵਿਅੰਜਕ = build2 (COMPOUND_ਵਿਅੰਜਕ, ਰੁੱਖ_TYPE (declspecs->ਵਿਅੰਜਕ), *ਵਿਅੰਜਕ,
+			declspecs->ਵਿਅੰਜਕ);
+      ਨਹੀਂਤਾਂ
+	*ਵਿਅੰਜਕ = declspecs->ਵਿਅੰਜਕ;
     }
-  *expr_const_operands = declspecs->expr_const_operands;
+  *ਵਿਅੰਜਕ_const_operands = declspecs->ਵਿਅੰਜਕ_const_operands;
 
-  if (decl_context == FUNCDEF)
-    funcdef_flag = true, decl_context = NORMAL;
+  ਜੇ (decl_context == FUNCDEF)
+    funcdef_flag = ਸੱਚ, decl_context = ਸਾਧਾਰਨ;
 
   /* Look inside a declarator for the name being declared
      and get it as an IDENTIFIER_NODE, for an error message.  */
   {
-    const struct c_declarator *decl = declarator;
+    ਅਚਲ ਬਣਤਰ c_declarator *decl = declarator;
 
-    first_non_attr_kind = cdk_attrs;
-    while (decl)
-      switch (decl->kind)
+    ਪਹਿਲਾ_non_attr_ਕਿਸਮ = cdk_attrs;
+    ਜਦੋਂ (decl)
+      ਚੋਣ (decl->ਕਿਸਮ)
 	{
-	case cdk_array:
+	ਹਾਲਤ cdk_array:
 	  loc = decl->id_loc;
 	  /* FALL THRU.  */
 
-	case cdk_function:
-	case cdk_pointer:
-	  funcdef_syntax = (decl->kind == cdk_function);
-	  if (first_non_attr_kind == cdk_attrs)
-	    first_non_attr_kind = decl->kind;
+	ਹਾਲਤ cdk_function:
+	ਹਾਲਤ cdk_ਸੂਚਕ:
+	  funcdef_syntax = (decl->ਕਿਸਮ == cdk_function);
+	  ਜੇ (ਪਹਿਲਾ_non_attr_ਕਿਸਮ == cdk_attrs)
+	    ਪਹਿਲਾ_non_attr_ਕਿਸਮ = decl->ਕਿਸਮ;
 	  decl = decl->declarator;
-	  break;
+	  ਰੋਕੋ;
 
-	case cdk_attrs:
+	ਹਾਲਤ cdk_attrs:
 	  decl = decl->declarator;
-	  break;
+	  ਰੋਕੋ;
 
-	case cdk_id:
+	ਹਾਲਤ cdk_id:
 	  loc = decl->id_loc;
-	  if (decl->u.id.id)
+	  ਜੇ (decl->u.id.id)
 	    name = decl->u.id.id;
 	  decl_id_attrs = decl->u.id.attrs;
-	  if (first_non_attr_kind == cdk_attrs)
-	    first_non_attr_kind = decl->kind;
+	  ਜੇ (ਪਹਿਲਾ_non_attr_ਕਿਸਮ == cdk_attrs)
+	    ਪਹਿਲਾ_non_attr_ਕਿਸਮ = decl->ਕਿਸਮ;
 	  decl = 0;
-	  break;
+	  ਰੋਕੋ;
 
-	default:
+	ਮੂਲ:
 	  gcc_unreachable ();
 	}
-    if (name == NULL_TREE)
+    ਜੇ (name == NULL_ਰੁੱਖ)
       {
 	gcc_assert (decl_context == PARM
 		    || decl_context == TYPENAME
 		    || decl_context == GENERIC_ASSOC
-		    || (decl_context == FIELD
-			&& declarator->kind == cdk_id));
+		    || (decl_context == ਖੇਤਰ
+			&& declarator->ਕਿਸਮ == cdk_id));
 	gcc_assert (!initialized);
       }
   }
@@ -6993,60 +6993,60 @@ grokdeclarator (const struct c_declarator *declarator,
      declaration specifiers, all invalid contexts (declarations that
      aren't empty, type names, parameter declarations, member
      declarations) pass through grokdeclarator.  */
-  if (declspecs->enum_type_specifier_ref_p)
+  ਜੇ (declspecs->enum_type_specifier_ref_p)
     error_at (loc, "%<enum%> underlying type may not be specified here");
 
   /* A function definition's declarator must have the form of
      a function declarator.  */
 
-  if (funcdef_flag && !funcdef_syntax)
-    return NULL_TREE;
+  ਜੇ (funcdef_flag && !funcdef_syntax)
+    ਵਾਪਸ NULL_ਰੁੱਖ;
 
   /* If this looks like a function definition, make it one,
      even if it occurs where parms are expected.
      Then store_parm_decls will reject it and not use it as a parm.  */
-  if (decl_context == NORMAL && !funcdef_flag && current_scope->parm_flag)
+  ਜੇ (decl_context == ਸਾਧਾਰਨ && !funcdef_flag && current_scope->parm_flag)
     decl_context = PARM;
 
-  if (deprecated_state != UNAVAILABLE_DEPRECATED_SUPPRESS)
+  ਜੇ (deprecated_state != UNAVAILABLE_DEPRECATED_SUPPRESS)
     {
-      if (declspecs->unavailable_p)
+      ਜੇ (declspecs->unavailable_p)
 	error_unavailable_use (declspecs->type, declspecs->decl_attr);
-      else if (declspecs->deprecated_p
+      ਨਹੀਂਤਾਂ ਜੇ (declspecs->deprecated_p
 		&& deprecated_state != DEPRECATED_SUPPRESS)
 	warn_deprecated_use (declspecs->type, declspecs->decl_attr);
     }
 
-  if ((decl_context == NORMAL || decl_context == FIELD)
+  ਜੇ ((decl_context == ਸਾਧਾਰਨ || decl_context == ਖੇਤਰ)
       && current_scope == file_scope
       && c_type_variably_modified_p (type))
     {
-      if (name)
+      ਜੇ (name)
 	error_at (loc, "variably modified %qE at file scope", name);
-      else
+      ਨਹੀਂਤਾਂ
 	error_at (loc, "variably modified field at file scope");
-      type = integer_type_node;
+      type = integer_type_ਗੰਢ;
     }
 
-  size_varies = C_TYPE_VARIABLE_SIZE (type) != 0;
+  ਮਾਪ_varies = C_TYPE_VARIABLE_ਮਾਪ (type) != 0;
 
   /* Diagnose defaulting to "int".  */
 
-  if (declspecs->default_int_p)
+  ਜੇ (declspecs->default_int_p)
     {
       /* Issue a warning if this is an ISO C 99 program or if
 	 -Wreturn-type and this is a function, or if -Wimplicit;
 	 prefer the former warning since it is more explicit.  */
-      if ((warn_implicit_int || warn_return_type > 0 || flag_isoc99)
+      ਜੇ ((warn_implicit_int || warn_return_type > 0 || flag_isoc99)
 	  && funcdef_flag)
 	warn_about_return_type = 1;
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  if (name)
+	  ਜੇ (name)
 	    permerror_opt (loc, OPT_Wimplicit_int,
 			   "type defaults to %<int%> in declaration "
 			   "of %qE", name);
-	  else
+	  ਨਹੀਂਤਾਂ
 	    permerror_opt (loc, OPT_Wimplicit_int,
 			   "type defaults to %<int%> in type name");
 	}
@@ -7055,8 +7055,8 @@ grokdeclarator (const struct c_declarator *declarator,
   /* Adjust the type if a bit-field is being declared,
      -funsigned-bitfields applied and the type is not explicitly
      "signed".  */
-  if (bitfield && !flag_signed_bitfields && !declspecs->explicit_signed_p
-      && TREE_CODE (type) == INTEGER_TYPE)
+  ਜੇ (bitfield && !flag_signed_bitfields && !declspecs->explicit_signed_p
+      && ਰੁੱਖ_ਕੋਡ (type) == INTEGER_TYPE)
     type = c_common_unsigned_type (type);
 
   /* Figure out the type qualifiers for the declaration.  There are
@@ -7075,25 +7075,25 @@ grokdeclarator (const struct c_declarator *declarator,
   restrictp = declspecs->restrict_p + TYPE_RESTRICT (element_type);
   volatilep = declspecs->volatile_p + TYPE_VOLATILE (element_type);
   atomicp = declspecs->atomic_p + TYPE_ATOMIC (element_type);
-  as1 = declspecs->address_space;
+  as1 = declspecs->ਪਤਾ_space;
   as2 = TYPE_ADDR_SPACE (element_type);
-  address_space = ADDR_SPACE_GENERIC_P (as1)? as2 : as1;
+  ਪਤਾ_space = ADDR_SPACE_GENERIC_P (as1)? as2 : as1;
 
-  if (constp > 1)
+  ਜੇ (constp > 1)
     pedwarn_c90 (loc, OPT_Wpedantic, "duplicate %<const%>");
-  if (restrictp > 1)
+  ਜੇ (restrictp > 1)
     pedwarn_c90 (loc, OPT_Wpedantic, "duplicate %<restrict%>");
-  if (volatilep > 1)
+  ਜੇ (volatilep > 1)
     pedwarn_c90 (loc, OPT_Wpedantic, "duplicate %<volatile%>");
-  if (atomicp > 1)
+  ਜੇ (atomicp > 1)
     pedwarn_c90 (loc, OPT_Wpedantic, "duplicate %<_Atomic%>");
 
-  if (!ADDR_SPACE_GENERIC_P (as1) && !ADDR_SPACE_GENERIC_P (as2) && as1 != as2)
+  ਜੇ (!ADDR_SPACE_GENERIC_P (as1) && !ADDR_SPACE_GENERIC_P (as2) && as1 != as2)
     error_at (loc, "conflicting named address spaces (%s vs %s)",
 	      c_addr_space_name (as1), c_addr_space_name (as2));
 
-  if ((TREE_CODE (type) == ARRAY_TYPE
-       || first_non_attr_kind == cdk_array)
+  ਜੇ ((ਰੁੱਖ_ਕੋਡ (type) == ARRAY_TYPE
+       || ਪਹਿਲਾ_non_attr_ਕਿਸਮ == cdk_array)
       && TYPE_QUALS (element_type))
     {
       orig_qual_type = type;
@@ -7103,119 +7103,119 @@ grokdeclarator (const struct c_declarator *declarator,
 		| (restrictp ? TYPE_QUAL_RESTRICT : 0)
 		| (volatilep ? TYPE_QUAL_VOLATILE : 0)
 		| (atomicp ? TYPE_QUAL_ATOMIC : 0)
-		| ENCODE_QUAL_ADDR_SPACE (address_space));
-  if (type_quals != TYPE_QUALS (element_type))
-    orig_qual_type = NULL_TREE;
+		| ENCODE_QUAL_ADDR_SPACE (ਪਤਾ_space));
+  ਜੇ (type_quals != TYPE_QUALS (element_type))
+    orig_qual_type = NULL_ਰੁੱਖ;
 
   /* Applying the _Atomic qualifier to an array type (through the use
      of typedefs or typeof) must be detected here.  If the qualifier
      is introduced later, any appearance of applying it to an array is
      actually applying it to an element of that array.  */
-  if (declspecs->atomic_p && TREE_CODE (type) == ARRAY_TYPE)
+  ਜੇ (declspecs->atomic_p && ਰੁੱਖ_ਕੋਡ (type) == ARRAY_TYPE)
     error_at (loc, "%<_Atomic%>-qualified array type");
 
   /* Warn about storage classes that are invalid for certain
      kinds of declarations (parameters, typenames, etc.).  */
 
-  if (funcdef_flag
+  ਜੇ (funcdef_flag
       && (threadp
 	  || constexprp
 	  || storage_class == csc_auto
-	  || storage_class == csc_register
+	  || storage_class == csc_ਰਜਿਸਟਰ
 	  || storage_class == csc_typedef))
     {
-      if (storage_class == csc_auto)
+      ਜੇ (storage_class == csc_auto)
 	pedwarn (loc,
 		 (current_scope == file_scope) ? 0 : OPT_Wpedantic,
 		 "function definition declared %<auto%>");
-      if (storage_class == csc_register)
+      ਜੇ (storage_class == csc_ਰਜਿਸਟਰ)
 	error_at (loc, "function definition declared %<register%>");
-      if (storage_class == csc_typedef)
+      ਜੇ (storage_class == csc_typedef)
 	error_at (loc, "function definition declared %<typedef%>");
-      if (threadp)
+      ਜੇ (threadp)
 	error_at (loc, "function definition declared %qs",
 		  declspecs->thread_gnu_p ? "__thread" : "_Thread_local");
-      threadp = false;
+      threadp = ਝੂਠ;
       /* The parser ensures a constexpr function definition never
 	 reaches here.  */
       gcc_assert (!constexprp);
-      if (storage_class == csc_auto
-	  || storage_class == csc_register
+      ਜੇ (storage_class == csc_auto
+	  || storage_class == csc_ਰਜਿਸਟਰ
 	  || storage_class == csc_typedef)
 	storage_class = csc_none;
     }
-  else if (decl_context != NORMAL && (storage_class != csc_none
+  ਨਹੀਂਤਾਂ ਜੇ (decl_context != ਸਾਧਾਰਨ && (storage_class != csc_none
 				      || threadp
 				      || constexprp
 				      || declspecs->c23_auto_p))
     {
-      if (decl_context == PARM
-	  && storage_class == csc_register
+      ਜੇ (decl_context == PARM
+	  && storage_class == csc_ਰਜਿਸਟਰ
 	  && !constexprp
 	  && !declspecs->c23_auto_p)
 	;
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  switch (decl_context)
+	  ਚੋਣ (decl_context)
 	    {
-	    case FIELD:
-	      if (name)
+	    ਹਾਲਤ ਖੇਤਰ:
+	      ਜੇ (name)
 		error_at (loc, "storage class specified for structure "
 		    	  "field %qE", name);
-	      else
+	      ਨਹੀਂਤਾਂ
 		error_at (loc, "storage class specified for structure field");
-	      break;
-	    case PARM:
-	      if (name)
+	      ਰੋਕੋ;
+	    ਹਾਲਤ PARM:
+	      ਜੇ (name)
 		error_at (loc, "storage class specified for parameter %qE",
 		    	  name);
-	      else
+	      ਨਹੀਂਤਾਂ
 		error_at (loc, "storage class specified for unnamed parameter");
-	      break;
-	    default:
+	      ਰੋਕੋ;
+	    ਮੂਲ:
 	      error_at (loc, "storage class specified for typename");
-	      break;
+	      ਰੋਕੋ;
 	    }
 	  storage_class = csc_none;
-	  threadp = false;
-	  constexprp = false;
+	  threadp = ਝੂਠ;
+	  constexprp = ਝੂਠ;
 	}
     }
-  else if (storage_class == csc_extern
+  ਨਹੀਂਤਾਂ ਜੇ (storage_class == csc_extern
 	   && initialized
 	   && !funcdef_flag)
     {
       /* 'extern' with initialization is invalid if not at file scope.  */
-       if (current_scope == file_scope)
+       ਜੇ (current_scope == file_scope)
          {
            /* It is fine to have 'extern const' when compiling at C
               and C++ intersection.  */
-           if (!(warn_cxx_compat && constp))
+           ਜੇ (!(warn_cxx_compat && constp))
              warning_at (loc, 0, "%qE initialized and declared %<extern%>",
 		 	 name);
          }
-      else
+      ਨਹੀਂਤਾਂ
 	error_at (loc, "%qE has both %<extern%> and initializer", name);
     }
-  else if (current_scope == file_scope)
+  ਨਹੀਂਤਾਂ ਜੇ (current_scope == file_scope)
     {
-      if (storage_class == csc_auto)
+      ਜੇ (storage_class == csc_auto)
 	error_at (loc, "file-scope declaration of %qE specifies %<auto%>",
 	    	  name);
-      if (pedantic && storage_class == csc_register)
-	pedwarn (input_location, OPT_Wpedantic,
+      ਜੇ (pedantic && storage_class == csc_ਰਜਿਸਟਰ)
+	pedwarn (ਨਿਵੇਸ਼_location, OPT_Wpedantic,
 		 "file-scope declaration of %qE specifies %<register%>", name);
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      if (storage_class == csc_extern && funcdef_flag)
+      ਜੇ (storage_class == csc_extern && funcdef_flag)
 	error_at (loc, "nested function %qE declared %<extern%>", name);
-      else if (threadp && storage_class == csc_none)
+      ਨਹੀਂਤਾਂ ਜੇ (threadp && storage_class == csc_none)
 	{
 	  error_at (loc, "function-scope %qE implicitly auto and declared "
 		    "%qs", name,
 		    declspecs->thread_gnu_p ? "__thread" : "_Thread_local");
-	  threadp = false;
+	  threadp = ਝੂਠ;
 	}
     }
 
@@ -7229,12 +7229,12 @@ grokdeclarator (const struct c_declarator *declarator,
      form and then the qualified form is created with
      TYPE_MAIN_VARIANT pointing to the unqualified form.  */
 
-  while (declarator && declarator->kind != cdk_id)
+  ਜਦੋਂ (declarator && declarator->ਕਿਸਮ != cdk_id)
     {
-      if (type == error_mark_node)
+      ਜੇ (type == error_mark_ਗੰਢ)
 	{
 	  declarator = declarator->declarator;
-	  continue;
+	  ਜਾਰੀ;
 	}
 
       /* Each level of DECLARATOR is either a cdk_array (for ...[..]),
@@ -7252,8 +7252,8 @@ grokdeclarator (const struct c_declarator *declarator,
 	 array or function or pointer, and DECLARATOR has had its
 	 outermost layer removed.  */
 
-      if (array_ptr_quals != TYPE_UNQUALIFIED
-	  || array_ptr_attrs != NULL_TREE
+      ਜੇ (array_ptr_quals != TYPE_UNQUALIFIED
+	  || array_ptr_attrs != NULL_ਰੁੱਖ
 	  || array_parm_static)
 	{
 	  /* Only the innermost declarator (making a parameter be of
@@ -7261,18 +7261,18 @@ grokdeclarator (const struct c_declarator *declarator,
 	     may have static or type qualifiers.  */
 	  error_at (loc, "static or type qualifiers in non-parameter array declarator");
 	  array_ptr_quals = TYPE_UNQUALIFIED;
-	  array_ptr_attrs = NULL_TREE;
-	  array_parm_static = false;
+	  array_ptr_attrs = NULL_ਰੁੱਖ;
+	  array_parm_static = ਝੂਠ;
 	}
 
-      switch (declarator->kind)
+      ਚੋਣ (declarator->ਕਿਸਮ)
 	{
-	case cdk_attrs:
+	ਹਾਲਤ cdk_attrs:
 	  {
 	    /* A declarator with embedded attributes.  */
-	    tree attrs = declarator->u.attrs;
-	    const struct c_declarator *inner_decl;
-	    int attr_flags = 0;
+	    ਰੁੱਖ attrs = declarator->u.attrs;
+	    ਅਚਲ ਬਣਤਰ c_declarator *inner_decl;
+	    ਪੂਰਨ attr_flags = 0;
 	    declarator = declarator->declarator;
 	    /* Standard attribute syntax precisely defines what entity
 	       an attribute in each position appertains to, so only
@@ -7284,29 +7284,29 @@ grokdeclarator (const struct c_declarator *declarator,
 	       using a cdk_id declarator rather than using
 	       cdk_attrs.  */
 	    inner_decl = declarator;
-	    while (inner_decl->kind == cdk_attrs)
+	    ਜਦੋਂ (inner_decl->ਕਿਸਮ == cdk_attrs)
 	      inner_decl = inner_decl->declarator;
-	    if (!cxx11_attribute_p (attrs))
+	    ਜੇ (!cxx11_attribute_p (attrs))
 	      {
-		if (inner_decl->kind == cdk_id)
-		  attr_flags |= (int) ATTR_FLAG_DECL_NEXT;
-		else if (inner_decl->kind == cdk_function)
-		  attr_flags |= (int) ATTR_FLAG_FUNCTION_NEXT;
-		else if (inner_decl->kind == cdk_array)
-		  attr_flags |= (int) ATTR_FLAG_ARRAY_NEXT;
+		ਜੇ (inner_decl->ਕਿਸਮ == cdk_id)
+		  attr_flags |= (ਪੂਰਨ) ATTR_FLAG_DECL_ਅਗਲਾ;
+		ਨਹੀਂਤਾਂ ਜੇ (inner_decl->ਕਿਸਮ == cdk_function)
+		  attr_flags |= (ਪੂਰਨ) ATTR_FLAG_FUNCTION_ਅਗਲਾ;
+		ਨਹੀਂਤਾਂ ਜੇ (inner_decl->ਕਿਸਮ == cdk_array)
+		  attr_flags |= (ਪੂਰਨ) ATTR_FLAG_ARRAY_ਅਗਲਾ;
 	      }
-	    attrs = c_warn_type_attributes (type, attrs);
-	    returned_attrs = decl_attributes (&type,
+	    attrs = c_warn_type_ਗੁਣ (type, attrs);
+	    returned_attrs = decl_ਗੁਣ (&type,
 					      chainon (returned_attrs, attrs),
 					      attr_flags);
-	    break;
+	    ਰੋਕੋ;
 	  }
-	case cdk_array:
+	ਹਾਲਤ cdk_array:
 	  {
-	    tree itype = NULL_TREE;
-	    tree size = declarator->u.array.dimen;
+	    ਰੁੱਖ itype = NULL_ਰੁੱਖ;
+	    ਰੁੱਖ ਮਾਪ = declarator->u.array.dimen;
 	    /* The index is a signed object `sizetype' bits wide.  */
-	    tree index_type = c_common_signed_type (sizetype);
+	    ਰੁੱਖ ਸੂਚਕਾਂਕ_type = c_common_signed_type (sizetype);
 
 	    array_ptr_quals = declarator->u.array.quals;
 	    array_ptr_attrs = declarator->u.array.attrs;
@@ -7315,266 +7315,266 @@ grokdeclarator (const struct c_declarator *declarator,
 
 	    declarator = declarator->declarator;
 
-	    bool flexible_array_member = false;
+	    ਤਾਰਕਿਕ flexible_array_member = ਝੂਠ;
 
 	    /* Check for some types that there cannot be arrays of.  */
 
-	    if (VOID_TYPE_P (type))
+	    ਜੇ (VOID_TYPE_P (type))
 	      {
-		if (name)
+		ਜੇ (name)
 		  error_at (loc, "declaration of %qE as array of voids", name);
-		else
+		ਨਹੀਂਤਾਂ
 		  error_at (loc, "declaration of type name as array of voids");
-		type = error_mark_node;
+		type = error_mark_ਗੰਢ;
 	      }
 
-	    if (TREE_CODE (type) == FUNCTION_TYPE)
+	    ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
 	      {
-		if (name)
+		ਜੇ (name)
 		  error_at (loc, "declaration of %qE as array of functions",
 		      	    name);
-		else
+		ਨਹੀਂਤਾਂ
 		  error_at (loc, "declaration of type name as array of "
 		            "functions");
-		type = error_mark_node;
+		type = error_mark_ਗੰਢ;
 	      }
 
-	    if (pedantic && !in_system_header_at (input_location)
+	    ਜੇ (pedantic && !ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location)
 		&& flexible_array_type_p (type))
 	      pedwarn (loc, OPT_Wpedantic,
 		       "invalid use of structure with flexible array member");
 
-	    if (size == error_mark_node)
-	      type = error_mark_node;
+	    ਜੇ (ਮਾਪ == error_mark_ਗੰਢ)
+	      type = error_mark_ਗੰਢ;
 
-	    if (type == error_mark_node)
-	      continue;
+	    ਜੇ (type == error_mark_ਗੰਢ)
+	      ਜਾਰੀ;
 
-	    if (!verify_type_context (loc, TCTX_ARRAY_ELEMENT, type))
+	    ਜੇ (!verify_type_context (loc, TCTX_ARRAY_ELEMENT, type))
 	      {
-		type = error_mark_node;
-		continue;
+		type = error_mark_ਗੰਢ;
+		ਜਾਰੀ;
 	      }
 
 	    /* If size was specified, set ITYPE to a range-type for
 	       that size.  Otherwise, ITYPE remains null.  finish_decl
 	       may figure it out from an initial value.  */
 
-	    if (size)
+	    ਜੇ (ਮਾਪ)
 	      {
-		bool size_maybe_const = true;
-		bool size_int_const = (TREE_CODE (size) == INTEGER_CST
-				       && !TREE_OVERFLOW (size));
-		bool this_size_varies = false;
+		ਤਾਰਕਿਕ ਮਾਪ_maybe_const = ਸੱਚ;
+		ਤਾਰਕਿਕ ਮਾਪ_int_const = (ਰੁੱਖ_ਕੋਡ (ਮਾਪ) == INTEGER_CST
+				       && !ਰੁੱਖ_ਉਛਾਲ (ਮਾਪ));
+		ਤਾਰਕਿਕ this_ਮਾਪ_varies = ਝੂਠ;
 
 		/* Strip NON_LVALUE_EXPRs since we aren't using as an
 		   lvalue.  */
-		STRIP_TYPE_NOPS (size);
+		STRIP_TYPE_NOPS (ਮਾਪ);
 
-		if (!INTEGRAL_TYPE_P (TREE_TYPE (size)))
+		ਜੇ (!INTEGRAL_TYPE_P (ਰੁੱਖ_TYPE (ਮਾਪ)))
 		  {
-		    if (name)
+		    ਜੇ (name)
 		      error_at (loc, "size of array %qE has non-integer type",
 				name);
-		    else
+		    ਨਹੀਂਤਾਂ
 		      error_at (loc,
 				"size of unnamed array has non-integer type");
-		    size = integer_one_node;
-		    size_int_const = true;
-		    size_error = true;
+		    ਮਾਪ = integer_one_ਗੰਢ;
+		    ਮਾਪ_int_const = ਸੱਚ;
+		    ਮਾਪ_error = ਸੱਚ;
 		  }
 		/* This can happen with enum forward declaration.  */
-		else if (!COMPLETE_TYPE_P (TREE_TYPE (size)))
+		ਨਹੀਂਤਾਂ ਜੇ (!COMPLETE_TYPE_P (ਰੁੱਖ_TYPE (ਮਾਪ)))
 		  {
-		    if (name)
+		    ਜੇ (name)
 		      error_at (loc, "size of array %qE has incomplete type",
 				name);
-		    else
+		    ਨਹੀਂਤਾਂ
 		      error_at (loc, "size of unnamed array has incomplete "
 				"type");
-		    size = integer_one_node;
-		    size_int_const = true;
-		    size_error = true;
+		    ਮਾਪ = integer_one_ਗੰਢ;
+		    ਮਾਪ_int_const = ਸੱਚ;
+		    ਮਾਪ_error = ਸੱਚ;
 		  }
 
-		size = c_fully_fold (size, false, &size_maybe_const);
+		ਮਾਪ = c_fully_fold (ਮਾਪ, ਝੂਠ, &ਮਾਪ_maybe_const);
 
-		if (pedantic && size_maybe_const && integer_zerop (size))
+		ਜੇ (pedantic && ਮਾਪ_maybe_const && integer_zerop (ਮਾਪ))
 		  {
-		    if (name)
+		    ਜੇ (name)
 		      pedwarn (loc, OPT_Wpedantic,
 			       "ISO C forbids zero-size array %qE", name);
-		    else
+		    ਨਹੀਂਤਾਂ
 		      pedwarn (loc, OPT_Wpedantic,
 			       "ISO C forbids zero-size array");
 		  }
 
-		if (TREE_CODE (size) == INTEGER_CST && size_maybe_const)
+		ਜੇ (ਰੁੱਖ_ਕੋਡ (ਮਾਪ) == INTEGER_CST && ਮਾਪ_maybe_const)
 		  {
-		    constant_expression_warning (size);
-		    if (tree_int_cst_sgn (size) < 0)
+		    constant_ਵਿਅੰਜਕ_warning (ਮਾਪ);
+		    ਜੇ (ਰੁੱਖ_int_cst_sgn (ਮਾਪ) < 0)
 		      {
-			if (name)
+			ਜੇ (name)
 			  error_at (loc, "size of array %qE is negative", name);
-			else
+			ਨਹੀਂਤਾਂ
 			  error_at (loc, "size of unnamed array is negative");
-			size = integer_one_node;
-			size_int_const = true;
-			size_error = true;
+			ਮਾਪ = integer_one_ਗੰਢ;
+			ਮਾਪ_int_const = ਸੱਚ;
+			ਮਾਪ_error = ਸੱਚ;
 		      }
 		    /* Handle a size folded to an integer constant but
 		       not an integer constant expression.  */
-		    if (!size_int_const)
+		    ਜੇ (!ਮਾਪ_int_const)
 		      {
 			/* If this is a file scope declaration of an
 			   ordinary identifier, this is invalid code;
 			   diagnosing it here and not subsequently
 			   treating the type as variable-length avoids
 			   more confusing diagnostics later.  */
-			if ((decl_context == NORMAL || decl_context == FIELD)
+			ਜੇ ((decl_context == ਸਾਧਾਰਨ || decl_context == ਖੇਤਰ)
 			    && current_scope == file_scope)
-			  pedwarn (input_location, 0,
+			  pedwarn (ਨਿਵੇਸ਼_location, 0,
 				   "variably modified %qE at file scope",
 				   name);
-			else
-			  this_size_varies = size_varies = true;
-			warn_variable_length_array (name, size);
+			ਨਹੀਂਤਾਂ
+			  this_ਮਾਪ_varies = ਮਾਪ_varies = ਸੱਚ;
+			warn_variable_ਲੰਮਾਈ_array (name, ਮਾਪ);
 		      }
 		  }
-		else if ((decl_context == NORMAL || decl_context == FIELD)
+		ਨਹੀਂਤਾਂ ਜੇ ((decl_context == ਸਾਧਾਰਨ || decl_context == ਖੇਤਰ)
 			 && current_scope == file_scope)
 		  {
 		    error_at (loc, "variably modified %qE at file scope", name);
-		    size = integer_one_node;
+		    ਮਾਪ = integer_one_ਗੰਢ;
 		  }
-		else
+		ਨਹੀਂਤਾਂ
 		  {
 		    /* Make sure the array size remains visibly
 		       nonconstant even if it is (eg) a const variable
 		       with known value.  */
-		    this_size_varies = size_varies = true;
-		    warn_variable_length_array (name, size);
-		    if (sanitize_flags_p (SANITIZE_VLA)
-			&& current_function_decl != NULL_TREE
-			&& decl_context == NORMAL)
+		    this_ਮਾਪ_varies = ਮਾਪ_varies = ਸੱਚ;
+		    warn_variable_ਲੰਮਾਈ_array (name, ਮਾਪ);
+		    ਜੇ (sanitize_flags_p (SANITIZE_VLA)
+			&& current_function_decl != NULL_ਰੁੱਖ
+			&& decl_context == ਸਾਧਾਰਨ)
 		      {
 			/* Evaluate the array size only once.  */
-			size = save_expr (size);
-			size = c_fully_fold (size, false, NULL);
-		        size = fold_build2 (COMPOUND_EXPR, TREE_TYPE (size),
-					    ubsan_instrument_vla (loc, size),
-					    size);
+			ਮਾਪ = save_ਵਿਅੰਜਕ (ਮਾਪ);
+			ਮਾਪ = c_fully_fold (ਮਾਪ, ਝੂਠ, ਨਿਰਾ);
+		        ਮਾਪ = fold_build2 (COMPOUND_ਵਿਅੰਜਕ, ਰੁੱਖ_TYPE (ਮਾਪ),
+					    ubsan_instrument_vla (loc, ਮਾਪ),
+					    ਮਾਪ);
 		      }
 		  }
 
-		if (integer_zerop (size) && !this_size_varies)
+		ਜੇ (integer_zerop (ਮਾਪ) && !this_ਮਾਪ_varies)
 		  {
 		    /* A zero-length array cannot be represented with
 		       an unsigned index type, which is what we'll
 		       get with build_index_type.  Create an
 		       open-ended range instead.  */
-		    itype = build_index_type (NULL_TREE);
+		    itype = build_ਸੂਚਕਾਂਕ_type (NULL_ਰੁੱਖ);
 		  }
-		else
+		ਨਹੀਂਤਾਂ
 		  {
 		    /* Arrange for the SAVE_EXPR on the inside of the
 		       MINUS_EXPR, which allows the -1 to get folded
 		       with the +1 that happens when building TYPE_SIZE.  */
-		    if (size_varies)
-		      size = save_expr (size);
-		    if (this_size_varies && TREE_CODE (size) == INTEGER_CST)
-		      size = build2 (COMPOUND_EXPR, TREE_TYPE (size),
-				     integer_zero_node, size);
+		    ਜੇ (ਮਾਪ_varies)
+		      ਮਾਪ = save_ਵਿਅੰਜਕ (ਮਾਪ);
+		    ਜੇ (this_ਮਾਪ_varies && ਰੁੱਖ_ਕੋਡ (ਮਾਪ) == INTEGER_CST)
+		      ਮਾਪ = build2 (COMPOUND_ਵਿਅੰਜਕ, ਰੁੱਖ_TYPE (ਮਾਪ),
+				     integer_zero_ਗੰਢ, ਮਾਪ);
 
 		    /* Compute the maximum valid index, that is, size
 		       - 1.  Do the calculation in index_type, so that
 		       if it is a variable the computations will be
 		       done in the proper mode.  */
-		    itype = fold_build2_loc (loc, MINUS_EXPR, index_type,
-					     convert (index_type, size),
-					     convert (index_type,
-						      size_one_node));
+		    itype = fold_build2_loc (loc, MINUS_ਵਿਅੰਜਕ, ਸੂਚਕਾਂਕ_type,
+					     convert (ਸੂਚਕਾਂਕ_type, ਮਾਪ),
+					     convert (ਸੂਚਕਾਂਕ_type,
+						      ਮਾਪ_one_ਗੰਢ));
 
 		    /* The above overflows when size does not fit
 		       in index_type.
 		       ???  While a size of INT_MAX+1 technically shouldn't
 		       cause an overflow (because we subtract 1), handling
 		       this case seems like an unnecessary complication.  */
-		    if (TREE_CODE (size) == INTEGER_CST
-			&& !int_fits_type_p (size, index_type))
+		    ਜੇ (ਰੁੱਖ_ਕੋਡ (ਮਾਪ) == INTEGER_CST
+			&& !int_ਸਮਾਉਂਦਾ_type_p (ਮਾਪ, ਸੂਚਕਾਂਕ_type))
 		      {
-			if (name)
+			ਜੇ (name)
 			  error_at (loc, "size of array %qE is too large",
 			            name);
-			else
+			ਨਹੀਂਤਾਂ
 			  error_at (loc, "size of unnamed array is too large");
-			type = error_mark_node;
-			continue;
+			type = error_mark_ਗੰਢ;
+			ਜਾਰੀ;
 		      }
 
-		    itype = build_index_type (itype);
+		    itype = build_ਸੂਚਕਾਂਕ_type (itype);
 		  }
-		if (this_size_varies)
+		ਜੇ (this_ਮਾਪ_varies)
 		  {
-		    if (TREE_SIDE_EFFECTS (size))
+		    ਜੇ (ਰੁੱਖ_SIDE_EFFECTS (ਮਾਪ))
 		      {
-			if (*expr)
-			  *expr = build2 (COMPOUND_EXPR, TREE_TYPE (size),
-					  *expr, size);
-			else
-			  *expr = size;
+			ਜੇ (*ਵਿਅੰਜਕ)
+			  *ਵਿਅੰਜਕ = build2 (COMPOUND_ਵਿਅੰਜਕ, ਰੁੱਖ_TYPE (ਮਾਪ),
+					  *ਵਿਅੰਜਕ, ਮਾਪ);
+			ਨਹੀਂਤਾਂ
+			  *ਵਿਅੰਜਕ = ਮਾਪ;
 		      }
-		    *expr_const_operands &= size_maybe_const;
+		    *ਵਿਅੰਜਕ_const_operands &= ਮਾਪ_maybe_const;
 		  }
 	      }
-	    else if (decl_context == FIELD)
+	    ਨਹੀਂਤਾਂ ਜੇ (decl_context == ਖੇਤਰ)
 	      {
-		if (array_parm_vla_unspec_p)
+		ਜੇ (array_parm_vla_unspec_p)
 		  /* Field names can in fact have function prototype
 		     scope so [*] is disallowed here through making
 		     the field variably modified, not through being
 		     something other than a declaration with function
 		     prototype scope.  */
-		  size_varies = true;
-		else
+		  ਮਾਪ_varies = ਸੱਚ;
+		ਨਹੀਂਤਾਂ
 		  {
-		    const struct c_declarator *t = declarator;
-		    while (t->kind == cdk_attrs)
+		    ਅਚਲ ਬਣਤਰ c_declarator *t = declarator;
+		    ਜਦੋਂ (t->ਕਿਸਮ == cdk_attrs)
 		      t = t->declarator;
-		    flexible_array_member = (t->kind == cdk_id);
+		    flexible_array_member = (t->ਕਿਸਮ == cdk_id);
 		  }
-		if (flexible_array_member
-		    && !in_system_header_at (input_location))
+		ਜੇ (flexible_array_member
+		    && !ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location))
 		  pedwarn_c90 (loc, OPT_Wpedantic, "ISO C90 does not "
 			       "support flexible array members");
 
 		/* ISO C99 Flexible array members are effectively
 		   identical to GCC's zero-length array extension.  */
-		if (flexible_array_member)
-		  itype = build_index_type (NULL_TREE);
+		ਜੇ (flexible_array_member)
+		  itype = build_ਸੂਚਕਾਂਕ_type (NULL_ਰੁੱਖ);
 	      }
 
 	    /* Complain about arrays of incomplete types.  */
-	    if (!COMPLETE_TYPE_P (type))
+	    ਜੇ (!COMPLETE_TYPE_P (type))
 	      {
-		auto_diagnostic_group d;
+		auto_diagnostic_ਸਮੂਹ d;
 		error_at (loc, "array type has incomplete element type %qT",
 			  type);
 		/* See if we can be more helpful.  */
-		if (TREE_CODE (type) == ARRAY_TYPE)
+		ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == ARRAY_TYPE)
 		  {
-		    if (name)
+		    ਜੇ (name)
 		      inform (loc, "declaration of %qE as multidimensional "
 			      "array must have bounds for all dimensions "
 			      "except the first", name);
-		    else
+		    ਨਹੀਂਤਾਂ
 		      inform (loc, "declaration of multidimensional array "
 			      "must have bounds for all dimensions except "
 			      "the first");
 		  }
-		type = error_mark_node;
+		type = error_mark_ਗੰਢ;
 	      }
-	    else
+	    ਨਹੀਂਤਾਂ
 	    /* When itype is NULL, a shared incomplete array type is
 	       returned for all array of a given type.  Elsewhere we
 	       make sure we don't complete that type before copying
@@ -7583,101 +7583,101 @@ grokdeclarator (const struct c_declarator *declarator,
 	       below.  */
 	      {
 		addr_space_t as = DECODE_QUAL_ADDR_SPACE (type_quals);
-		if (!ADDR_SPACE_GENERIC_P (as) && as != TYPE_ADDR_SPACE (type))
+		ਜੇ (!ADDR_SPACE_GENERIC_P (as) && as != TYPE_ADDR_SPACE (type))
 		  type = c_build_qualified_type (type,
 						 ENCODE_QUAL_ADDR_SPACE (as));
-		if (array_parm_vla_unspec_p)
+		ਜੇ (array_parm_vla_unspec_p)
 		  type = c_build_array_type_unspecified (type);
 		/* The GCC extension for zero-length arrays differs from
 		   ISO flexible array members in that sizeof yields
 		   zero.  */
-		else if (size && integer_zerop (size))
-		  type = c_build_array_type_zero_size (type);
-		else
+		ਨਹੀਂਤਾਂ ਜੇ (ਮਾਪ && integer_zerop (ਮਾਪ))
+		  type = c_build_array_type_zero_ਮਾਪ (type);
+		ਨਹੀਂਤਾਂ
 		  type = c_build_array_type (type, itype);
 
-		if (!valid_array_size_p (loc, type, name))
-		  type = error_mark_node;
+		ਜੇ (!valid_array_ਮਾਪ_p (loc, type, name))
+		  type = error_mark_ਗੰਢ;
 	      }
 
-	    if (array_parm_vla_unspec_p)
+	    ਜੇ (array_parm_vla_unspec_p)
 	      {
 		/* C99 6.7.5.2p4 */
-		if (decl_context == TYPENAME)
+		ਜੇ (decl_context == TYPENAME)
 		  warning (0, "%<[*]%> not in a declaration");
-		else if (decl_context != GENERIC_ASSOC
+		ਨਹੀਂਤਾਂ ਜੇ (decl_context != GENERIC_ASSOC
 			 && decl_context != PARM
-			 && decl_context != FIELD)
+			 && decl_context != ਖੇਤਰ)
 		  {
 		    error ("%<[*]%> not allowed in other than function prototype scope "
 			   "or generic association");
-		    type = error_mark_node;
+		    type = error_mark_ਗੰਢ;
 		  }
-		size_varies = true;
+		ਮਾਪ_varies = ਸੱਚ;
 	      }
 
 
-	    gcc_assert (type == error_mark_node
+	    gcc_assert (type == error_mark_ਗੰਢ
 			|| flexible_array_member
 			   == flexible_array_member_type_p (type));
 
-	    if (decl_context != PARM
+	    ਜੇ (decl_context != PARM
 		&& (array_ptr_quals != TYPE_UNQUALIFIED
-		    || array_ptr_attrs != NULL_TREE
+		    || array_ptr_attrs != NULL_ਰੁੱਖ
 		    || array_parm_static))
 	      {
 		error_at (loc, "static or type qualifiers in non-parameter "
 			  "array declarator");
 		array_ptr_quals = TYPE_UNQUALIFIED;
-		array_ptr_attrs = NULL_TREE;
-		array_parm_static = false;
+		array_ptr_attrs = NULL_ਰੁੱਖ;
+		array_parm_static = ਝੂਠ;
 	      }
-	    orig_qual_indirect++;
-	    break;
+	    orig_qual_ਅਸਿੱਧਾ++;
+	    ਰੋਕੋ;
 	  }
-	case cdk_function:
+	ਹਾਲਤ cdk_function:
 	  {
 	    /* Say it's a definition only for the declarator closest
 	       to the identifier, apart possibly from some
 	       attributes.  */
-	    bool really_funcdef = false;
-	    tree arg_types;
-	    orig_qual_type = NULL_TREE;
-	    if (funcdef_flag)
+	    ਤਾਰਕਿਕ really_funcdef = ਝੂਠ;
+	    ਰੁੱਖ arg_types;
+	    orig_qual_type = NULL_ਰੁੱਖ;
+	    ਜੇ (funcdef_flag)
 	      {
-		const struct c_declarator *t = declarator->declarator;
-		while (t->kind == cdk_attrs)
+		ਅਚਲ ਬਣਤਰ c_declarator *t = declarator->declarator;
+		ਜਦੋਂ (t->ਕਿਸਮ == cdk_attrs)
 		  t = t->declarator;
-		really_funcdef = (t->kind == cdk_id);
+		really_funcdef = (t->ਕਿਸਮ == cdk_id);
 	      }
 
 	    /* Declaring a function type.  Make sure we have a valid
 	       type for the function to return.  */
-	    if (type == error_mark_node)
-	      continue;
+	    ਜੇ (type == error_mark_ਗੰਢ)
+	      ਜਾਰੀ;
 
-	    size_varies = false;
+	    ਮਾਪ_varies = ਝੂਠ;
 
 	    /* Warn about some types functions can't return.  */
-	    if (TREE_CODE (type) == FUNCTION_TYPE)
+	    ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
 	      {
-		if (name)
+		ਜੇ (name)
 		  error_at (loc, "%qE declared as function returning a "
 		      		 "function", name);
-		else
+		ਨਹੀਂਤਾਂ
 		  error_at (loc, "type name declared as function "
 			    "returning a function");
-		type = integer_type_node;
+		type = integer_type_ਗੰਢ;
 	      }
-	    if (TREE_CODE (type) == ARRAY_TYPE)
+	    ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == ARRAY_TYPE)
 	      {
-		if (name)
+		ਜੇ (name)
 		  error_at (loc, "%qE declared as function returning an array",
 		      	    name);
-		else
+		ਨਹੀਂਤਾਂ
 		  error_at (loc, "type name declared as function returning "
 		      	    "an array");
-		type = integer_type_node;
+		type = integer_type_ਗੰਢ;
 	      }
 
 	    /* Construct the function type and go to the next
@@ -7687,19 +7687,19 @@ grokdeclarator (const struct c_declarator *declarator,
 
 	    /* Type qualifiers before the return type of the function
 	       qualify the return type, not the function type.  */
-	    if (type_quals)
+	    ਜੇ (type_quals)
 	      {
-		const enum c_declspec_word ignored_quals_list[] =
+		ਅਚਲ ਗਿਣਤੀ c_declspec_ਸ਼ਬਦ ignored_quals_list[] =
 		  {
-		    cdw_const, cdw_volatile, cdw_restrict, cdw_address_space,
-		    cdw_atomic, cdw_number_of_elements
+		    cdw_const, cdw_volatile, cdw_restrict, cdw_ਪਤਾ_space,
+		    cdw_atomic, cdw_ਸੰਖਿਆ_ਦਾ_elements
 		  };
 		location_t specs_loc
-		  = smallest_type_quals_location (declspecs->locations,
+		  = ਸਭ_ਤੋਂ_ਛੋਟਾ_type_quals_location (declspecs->locations,
 						  ignored_quals_list);
-		if (specs_loc == UNKNOWN_LOCATION)
+		ਜੇ (specs_loc == UNKNOWN_LOCATION)
 		  specs_loc = declspecs->locations[cdw_typedef];
-		if (specs_loc == UNKNOWN_LOCATION)
+		ਜੇ (specs_loc == UNKNOWN_LOCATION)
 		  specs_loc = loc;
 
 		/* Type qualifiers on a function return type are
@@ -7712,16 +7712,16 @@ grokdeclarator (const struct c_declarator *declarator,
 		   actually removed from the return type when
 		   determining the function type.  For C23, _Atomic is
 		   removed as well.  */
-		int quals_used = type_quals;
-		if (flag_isoc23)
-		  quals_used = 0;
-		else if (flag_isoc11)
-		  quals_used &= TYPE_QUAL_ATOMIC;
-		if (quals_used && VOID_TYPE_P (type) && really_funcdef)
+		ਪੂਰਨ quals_ਵਰਤਿਆ = type_quals;
+		ਜੇ (flag_isoc23)
+		  quals_ਵਰਤਿਆ = 0;
+		ਨਹੀਂਤਾਂ ਜੇ (flag_isoc11)
+		  quals_ਵਰਤਿਆ &= TYPE_QUAL_ATOMIC;
+		ਜੇ (quals_ਵਰਤਿਆ && VOID_TYPE_P (type) && really_funcdef)
 		  pedwarn (specs_loc, 0,
 			   "function definition has qualified void "
 			   "return type");
-		else
+		ਨਹੀਂਤਾਂ
 		  warning_at (specs_loc, OPT_Wignored_qualifiers,
 			      "type qualifiers ignored on function "
 			      "return type");
@@ -7729,51 +7729,51 @@ grokdeclarator (const struct c_declarator *declarator,
 		/* Ensure an error for restrict on invalid types; the
 		   DR#423 resolution is not entirely clear about
 		   this.  */
-		if (flag_isoc11
+		ਜੇ (flag_isoc11
 		    && (type_quals & TYPE_QUAL_RESTRICT)
-		    && (!POINTER_TYPE_P (type)
-			|| !C_TYPE_OBJECT_OR_INCOMPLETE_P (TREE_TYPE (type))))
+		    && (!ਸੂਚਕ_TYPE_P (type)
+			|| !C_TYPE_OBJECT_OR_INCOMPLETE_P (ਰੁੱਖ_TYPE (type))))
 		  error_at (loc, "invalid use of %<restrict%>");
-		type = c_build_qualified_type (type, quals_used);
+		type = c_build_qualified_type (type, quals_ਵਰਤਿਆ);
 	      }
 	    type_quals = TYPE_UNQUALIFIED;
 
 	    type = c_build_function_type (type, arg_types,
-					  arg_info->no_named_args_stdarg_p);
+					  arg_info->no_named_ਦਲੀਲਾਂ_stdarg_p);
 	    declarator = declarator->declarator;
 
 	    /* Set the TYPE_CONTEXTs for each tagged type which is local to
 	       the formal parameter list of this FUNCTION_TYPE to point to
 	       the FUNCTION_TYPE node itself.  */
 	    {
-	      c_arg_tag *tag;
-	      unsigned ix;
+	      c_arg_ਟੈਗ *ਟੈਗ;
+	      ਬਿਨਾਨਿਸ਼ਾਨੀ ix;
 
-	      FOR_EACH_VEC_SAFE_ELT_REVERSE (arg_info->tags, ix, tag)
-		TYPE_CONTEXT (tag->type) = type;
+	      FOR_EACH_VEC_ਸੁਰੱਖਿਅਤ_ELT_ਉਲਟ (arg_info->ਟੈਗ_ਸੂਚੀ, ix, ਟੈਗ)
+		TYPE_CONTEXT (ਟੈਗ->type) = type;
 	    }
-	    break;
+	    ਰੋਕੋ;
 	  }
-	case cdk_pointer:
+	ਹਾਲਤ cdk_ਸੂਚਕ:
 	  {
 	    /* Merge any constancy or volatility into the target type
 	       for the pointer.  */
-	    if ((type_quals & TYPE_QUAL_ATOMIC)
-		&& TREE_CODE (type) == FUNCTION_TYPE)
+	    ਜੇ ((type_quals & TYPE_QUAL_ATOMIC)
+		&& ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
 	      {
 		error_at (loc,
 			  "%<_Atomic%>-qualified function type");
 		type_quals &= ~TYPE_QUAL_ATOMIC;
 	      }
-	    else if (pedantic && TREE_CODE (type) == FUNCTION_TYPE
+	    ਨਹੀਂਤਾਂ ਜੇ (pedantic && ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE
 		     && type_quals)
 	      pedwarn (loc, OPT_Wpedantic,
 		       "ISO C forbids qualified function types");
-	    if (type_quals)
+	    ਜੇ (type_quals)
 	      type = c_build_qualified_type (type, type_quals, orig_qual_type,
-					     orig_qual_indirect);
-	    orig_qual_type = NULL_TREE;
-	    size_varies = false;
+					     orig_qual_ਅਸਿੱਧਾ);
+	    orig_qual_type = NULL_ਰੁੱਖ;
+	    ਮਾਪ_varies = ਝੂਠ;
 
 	    /* When the pointed-to type involves components of variable size,
 	       care must be taken to ensure that the size evaluation code is
@@ -7784,24 +7784,24 @@ grokdeclarator (const struct c_declarator *declarator,
 	       This is expected to happen automatically when the pointed-to
 	       type has a name/declaration of it's own, but special attention
 	       is required if the type is anonymous. */
-	    if (!TYPE_NAME (type) && c_type_variably_modified_p (type))
+	    ਜੇ (!TYPE_NAME (type) && c_type_variably_modified_p (type))
 	      {
-		bool bind_p = decl_context == TYPENAME
-			      || decl_context == FIELD
+		ਤਾਰਕਿਕ bind_p = decl_context == TYPENAME
+			      || decl_context == ਖੇਤਰ
 			      || decl_context == PARM;
-		add_decl_expr (loc, type, bind_p ? expr : NULL, true);
+		ਜੋੜੋ_decl_ਵਿਅੰਜਕ (loc, type, bind_p ? ਵਿਅੰਜਕ : ਨਿਰਾ, ਸੱਚ);
 	      }
 
-	    type = c_build_pointer_type (type);
+	    type = c_build_ਸੂਚਕ_type (type);
 
 	    /* Process type qualifiers (such as const or volatile)
 	       that were given inside the `*'.  */
-	    type_quals = declarator->u.pointer_quals;
+	    type_quals = declarator->u.ਸੂਚਕ_quals;
 
 	    declarator = declarator->declarator;
-	    break;
+	    ਰੋਕੋ;
 	  }
-	default:
+	ਮੂਲ:
 	  gcc_unreachable ();
 	}
     }
@@ -7813,107 +7813,107 @@ grokdeclarator (const struct c_declarator *declarator,
 
   /* Warn about address space used for things other than static memory or
      pointers.  */
-  address_space = DECODE_QUAL_ADDR_SPACE (type_quals);
-  if (!ADDR_SPACE_GENERIC_P (address_space))
+  ਪਤਾ_space = DECODE_QUAL_ADDR_SPACE (type_quals);
+  ਜੇ (!ADDR_SPACE_GENERIC_P (ਪਤਾ_space))
     {
-      if (decl_context == NORMAL)
+      ਜੇ (decl_context == ਸਾਧਾਰਨ)
 	{
-	  switch (storage_class)
+	  ਚੋਣ (storage_class)
 	    {
-	    case csc_auto:
+	    ਹਾਲਤ csc_auto:
 	      error ("%qs combined with %<auto%> qualifier for %qE",
-		     c_addr_space_name (address_space), name);
-	      break;
-	    case csc_register:
+		     c_addr_space_name (ਪਤਾ_space), name);
+	      ਰੋਕੋ;
+	    ਹਾਲਤ csc_ਰਜਿਸਟਰ:
 	      error ("%qs combined with %<register%> qualifier for %qE",
-		     c_addr_space_name (address_space), name);
-	      break;
-	    case csc_none:
-	      if (current_function_scope)
+		     c_addr_space_name (ਪਤਾ_space), name);
+	      ਰੋਕੋ;
+	    ਹਾਲਤ csc_none:
+	      ਜੇ (current_function_scope)
 		{
 		  error ("%qs specified for auto variable %qE",
-			 c_addr_space_name (address_space), name);
-		  break;
+			 c_addr_space_name (ਪਤਾ_space), name);
+		  ਰੋਕੋ;
 		}
-	      break;
-	    case csc_static:
-	    case csc_extern:
-	    case csc_typedef:
-	      break;
-	    default:
+	      ਰੋਕੋ;
+	    ਹਾਲਤ csc_static:
+	    ਹਾਲਤ csc_extern:
+	    ਹਾਲਤ csc_typedef:
+	      ਰੋਕੋ;
+	    ਮੂਲ:
 	      gcc_unreachable ();
 	    }
 	}
-      else if (decl_context == PARM && TREE_CODE (type) != ARRAY_TYPE)
+      ਨਹੀਂਤਾਂ ਜੇ (decl_context == PARM && ਰੁੱਖ_ਕੋਡ (type) != ARRAY_TYPE)
 	{
-	  if (name)
+	  ਜੇ (name)
 	    error ("%qs specified for parameter %qE",
-		   c_addr_space_name (address_space), name);
-	  else
+		   c_addr_space_name (ਪਤਾ_space), name);
+	  ਨਹੀਂਤਾਂ
 	    error ("%qs specified for unnamed parameter",
-		   c_addr_space_name (address_space));
+		   c_addr_space_name (ਪਤਾ_space));
 	}
-      else if (decl_context == FIELD)
+      ਨਹੀਂਤਾਂ ਜੇ (decl_context == ਖੇਤਰ)
 	{
-	  if (name)
+	  ਜੇ (name)
 	    error ("%qs specified for structure field %qE",
-		   c_addr_space_name (address_space), name);
-	  else
+		   c_addr_space_name (ਪਤਾ_space), name);
+	  ਨਹੀਂਤਾਂ
 	    error ("%qs specified for structure field",
-		   c_addr_space_name (address_space));
+		   c_addr_space_name (ਪਤਾ_space));
 	}
     }
 
   /* Check the type and width of a bit-field.  */
-  if (bitfield)
+  ਜੇ (bitfield)
     {
-      check_bitfield_type_and_width (loc, &type, width, name);
+      check_bitfield_type_and_ਚੌੜਾਈ (loc, &type, ਚੌੜਾਈ, name);
       /* C11 makes it implementation-defined (6.7.2.1#5) whether
 	 atomic types are permitted for bit-fields; we have no code to
 	 make bit-field accesses atomic, so disallow them.  */
-      if (type_quals & TYPE_QUAL_ATOMIC)
+      ਜੇ (type_quals & TYPE_QUAL_ATOMIC)
 	{
-	  if (name)
+	  ਜੇ (name)
 	    error_at (loc, "bit-field %qE has atomic type", name);
-	  else
+	  ਨਹੀਂਤਾਂ
 	    error_at (loc, "bit-field has atomic type");
 	  type_quals &= ~TYPE_QUAL_ATOMIC;
 	}
     }
 
   /* Reject invalid uses of _Alignas.  */
-  if (declspecs->alignas_p)
+  ਜੇ (declspecs->alignas_p)
     {
-      if (storage_class == csc_typedef)
+      ਜੇ (storage_class == csc_typedef)
 	error_at (loc, "alignment specified for typedef %qE", name);
-      else if (storage_class == csc_register)
+      ਨਹੀਂਤਾਂ ਜੇ (storage_class == csc_ਰਜਿਸਟਰ)
 	error_at (loc, "alignment specified for %<register%> object %qE",
 		  name);
-      else if (decl_context == PARM)
+      ਨਹੀਂਤਾਂ ਜੇ (decl_context == PARM)
 	{
-	  if (name)
+	  ਜੇ (name)
 	    error_at (loc, "alignment specified for parameter %qE", name);
-	  else
+	  ਨਹੀਂਤਾਂ
 	    error_at (loc, "alignment specified for unnamed parameter");
 	}
-      else if (bitfield)
+      ਨਹੀਂਤਾਂ ਜੇ (bitfield)
 	{
-	  if (name)
+	  ਜੇ (name)
 	    error_at (loc, "alignment specified for bit-field %qE", name);
-	  else
+	  ਨਹੀਂਤਾਂ
 	    error_at (loc, "alignment specified for unnamed bit-field");
 	}
-      else if (TREE_CODE (type) == FUNCTION_TYPE)
+      ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
 	error_at (loc, "alignment specified for function %qE", name);
-      else if (declspecs->align_log != -1 && TYPE_P (type))
+      ਨਹੀਂਤਾਂ ਜੇ (declspecs->align_log != -1 && TYPE_P (type))
 	{
 	  alignas_align = 1U << declspecs->align_log;
-	  if (alignas_align < min_align_of_type (type))
+	  ਜੇ (alignas_align < min_align_ਦਾ_type (type))
 	    {
-	      if (name)
+	      ਜੇ (name)
 		error_at (loc, "%<_Alignas%> specifiers cannot reduce "
 			  "alignment of %qE", name);
-	      else
+	      ਨਹੀਂਤਾਂ
 		error_at (loc, "%<_Alignas%> specifiers cannot reduce "
 			  "alignment of unnamed field");
 	      alignas_align = 0;
@@ -7923,44 +7923,44 @@ grokdeclarator (const struct c_declarator *declarator,
 
   /* If this is declaring a typedef name, return a TYPE_DECL.  */
 
-  if (storage_class == csc_typedef)
+  ਜੇ (storage_class == csc_typedef)
     {
-      tree decl;
-      if ((type_quals & TYPE_QUAL_ATOMIC)
-	  && TREE_CODE (type) == FUNCTION_TYPE)
+      ਰੁੱਖ decl;
+      ਜੇ ((type_quals & TYPE_QUAL_ATOMIC)
+	  && ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
 	{
 	  error_at (loc,
 		    "%<_Atomic%>-qualified function type");
 	  type_quals &= ~TYPE_QUAL_ATOMIC;
 	}
-      else if (pedantic && TREE_CODE (type) == FUNCTION_TYPE
+      ਨਹੀਂਤਾਂ ਜੇ (pedantic && ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE
 	       && type_quals)
 	pedwarn (loc, OPT_Wpedantic,
 		 "ISO C forbids qualified function types");
-      if (type_quals)
+      ਜੇ (type_quals)
 	type = c_build_qualified_type (type, type_quals, orig_qual_type,
-				       orig_qual_indirect);
+				       orig_qual_ਅਸਿੱਧਾ);
       decl = build_decl (declarator->id_loc,
 			 TYPE_DECL, declarator->u.id.id, type);
-      if (declspecs->explicit_signed_p)
+      ਜੇ (declspecs->explicit_signed_p)
 	C_TYPEDEF_EXPLICITLY_SIGNED (decl) = 1;
-      if (declspecs->inline_p)
+      ਜੇ (declspecs->inline_p)
 	pedwarn (loc, 0,"typedef %q+D declared %<inline%>", decl);
-      if (declspecs->noreturn_p)
+      ਜੇ (declspecs->noreturn_p)
 	pedwarn (loc, 0,"typedef %q+D declared %<_Noreturn%>", decl);
 
-      if (warn_cxx_compat && declarator->u.id.id != NULL_TREE)
+      ਜੇ (warn_cxx_compat && declarator->u.id.id != NULL_ਰੁੱਖ)
 	{
-	  struct c_binding *b = I_TAG_BINDING (declarator->u.id.id);
+	  ਬਣਤਰ c_binding *b = I_ਟੈਗ_BINDING (declarator->u.id.id);
 
-	  if (b != NULL
-	      && b->decl != NULL_TREE
-	      && (B_IN_CURRENT_SCOPE (b)
-		  || (current_scope == file_scope && B_IN_EXTERNAL_SCOPE (b)))
+	  ਜੇ (b != ਨਿਰਾ
+	      && b->decl != NULL_ਰੁੱਖ
+	      && (B_ਵਿੱਚ_CURRENT_SCOPE (b)
+		  || (current_scope == file_scope && B_ਵਿੱਚ_EXTERNAL_SCOPE (b)))
 	      && TYPE_MAIN_VARIANT (b->decl) != TYPE_MAIN_VARIANT (type))
 	    {
-	      auto_diagnostic_group d;
-	      if (warning_at (declarator->id_loc, OPT_Wc___compat,
+	      auto_diagnostic_ਸਮੂਹ d;
+	      ਜੇ (warning_at (declarator->id_loc, OPT_Wc___compat,
 			      "using %qD as both a typedef and a tag is "
 			      "invalid in C++", decl)
 		  && b->locus != UNKNOWN_LOCATION)
@@ -7968,36 +7968,36 @@ grokdeclarator (const struct c_declarator *declarator,
 	    }
 	}
 
-      return decl;
+      ਵਾਪਸ decl;
     }
 
   /* If this is a type name (such as, in a cast or sizeof),
      compute the type and return it now.  */
 
-  if (decl_context == TYPENAME || decl_context == GENERIC_ASSOC)
+  ਜੇ (decl_context == TYPENAME || decl_context == GENERIC_ASSOC)
     {
       /* Note that the grammar rejects storage classes in typenames
 	 and fields.  */
       gcc_assert (storage_class == csc_none && !threadp
 		  && !declspecs->inline_p && !declspecs->noreturn_p);
-      if ((type_quals & TYPE_QUAL_ATOMIC)
-	  && TREE_CODE (type) == FUNCTION_TYPE)
+      ਜੇ ((type_quals & TYPE_QUAL_ATOMIC)
+	  && ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
 	{
 	  error_at (loc,
 		    "%<_Atomic%>-qualified function type");
 	  type_quals &= ~TYPE_QUAL_ATOMIC;
 	}
-      else if (pedantic && TREE_CODE (type) == FUNCTION_TYPE
+      ਨਹੀਂਤਾਂ ਜੇ (pedantic && ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE
 	       && type_quals)
 	pedwarn (loc, OPT_Wpedantic,
 		 "ISO C forbids const or volatile function types");
-      if (type_quals)
+      ਜੇ (type_quals)
 	type = c_build_qualified_type (type, type_quals, orig_qual_type,
-				       orig_qual_indirect);
-      return type;
+				       orig_qual_ਅਸਿੱਧਾ);
+      ਵਾਪਸ type;
     }
 
-  if (pedantic && decl_context == FIELD
+  ਜੇ (pedantic && decl_context == ਖੇਤਰ
       && c_type_variably_modified_p (type))
     {
       /* C99 6.7.2.1p8 */
@@ -8011,95 +8011,95 @@ grokdeclarator (const struct c_declarator *declarator,
      We don't complain about parms either, but that is because
      a better error message can be made later.  */
 
-  if (VOID_TYPE_P (type) && decl_context != PARM
-      && !((decl_context != FIELD && TREE_CODE (type) != FUNCTION_TYPE)
+  ਜੇ (VOID_TYPE_P (type) && decl_context != PARM
+      && !((decl_context != ਖੇਤਰ && ਰੁੱਖ_ਕੋਡ (type) != FUNCTION_TYPE)
 	    && (storage_class == csc_extern
 		|| (current_scope == file_scope
 		    && !(storage_class == csc_static
-			 || storage_class == csc_register)))))
+			 || storage_class == csc_ਰਜਿਸਟਰ)))))
     {
       error_at (loc, "variable or field %qE declared void", name);
-      type = integer_type_node;
+      type = integer_type_ਗੰਢ;
     }
 
   /* Now create the decl, which may be a VAR_DECL, a PARM_DECL
      or a FUNCTION_DECL, depending on DECL_CONTEXT and TYPE.  */
 
   {
-    tree decl;
+    ਰੁੱਖ decl;
 
-    if (decl_context == PARM)
+    ਜੇ (decl_context == PARM)
       {
-	tree promoted_type;
-	bool array_parameter_p = false;
+	ਰੁੱਖ promoted_type;
+	ਤਾਰਕਿਕ array_parameter_p = ਝੂਠ;
 
 	/* A parameter declared as an array of T is really a pointer to T.
 	   One declared as a function is really a pointer to a function.  */
 
-	if (TREE_CODE (type) == ARRAY_TYPE)
+	ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == ARRAY_TYPE)
 	  {
-	    if (!size_error)
+	    ਜੇ (!ਮਾਪ_error)
 	      *decl_attrs = build_arg_spec_attribute (type, array_parm_static,
 						      *decl_attrs);
 
 	    /* Transfer const-ness of array into that of type pointed to.  */
-	    type = TREE_TYPE (type);
-	    if (orig_qual_type != NULL_TREE)
+	    type = ਰੁੱਖ_TYPE (type);
+	    ਜੇ (orig_qual_type != NULL_ਰੁੱਖ)
 	      {
-		if (orig_qual_indirect == 0)
-		  orig_qual_type = TREE_TYPE (orig_qual_type);
-		else
-		  orig_qual_indirect--;
+		ਜੇ (orig_qual_ਅਸਿੱਧਾ == 0)
+		  orig_qual_type = ਰੁੱਖ_TYPE (orig_qual_type);
+		ਨਹੀਂਤਾਂ
+		  orig_qual_ਅਸਿੱਧਾ--;
 	      }
-	    if (type_quals)
+	    ਜੇ (type_quals)
 	      type = c_build_qualified_type (type, type_quals, orig_qual_type,
-					     orig_qual_indirect);
+					     orig_qual_ਅਸਿੱਧਾ);
 
 	    /* The pointed-to type may need a decl expr (see above).  */
-	    if (!TYPE_NAME (type) && c_type_variably_modified_p (type))
+	    ਜੇ (!TYPE_NAME (type) && c_type_variably_modified_p (type))
 	      {
-		bool bind_p = decl_context == TYPENAME
-			      || decl_context == FIELD
+		ਤਾਰਕਿਕ bind_p = decl_context == TYPENAME
+			      || decl_context == ਖੇਤਰ
 			      || decl_context == PARM;
-		add_decl_expr (loc, type, bind_p ? expr : NULL, true);
+		ਜੋੜੋ_decl_ਵਿਅੰਜਕ (loc, type, bind_p ? ਵਿਅੰਜਕ : ਨਿਰਾ, ਸੱਚ);
 	      }
 
-	    type = c_build_pointer_type (type);
+	    type = c_build_ਸੂਚਕ_type (type);
 	    type_quals = array_ptr_quals;
-	    if (type_quals)
+	    ਜੇ (type_quals)
 	      type = c_build_qualified_type (type, type_quals);
 
 	    /* We don't yet implement attributes in this context.  */
-	    if (array_ptr_attrs != NULL_TREE)
+	    ਜੇ (array_ptr_attrs != NULL_ਰੁੱਖ)
 	      warning_at (loc, OPT_Wattributes,
 			  "attributes in parameter array declarator ignored");
 
-	    size_varies = false;
-	    array_parameter_p = true;
+	    ਮਾਪ_varies = ਝੂਠ;
+	    array_parameter_p = ਸੱਚ;
 	  }
-	else if (TREE_CODE (type) == FUNCTION_TYPE)
+	ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
 	  {
-	    if (type_quals & TYPE_QUAL_ATOMIC)
+	    ਜੇ (type_quals & TYPE_QUAL_ATOMIC)
 	      {
 		error_at (loc,
 			  "%<_Atomic%>-qualified function type");
 		type_quals &= ~TYPE_QUAL_ATOMIC;
 	      }
-	    else if (type_quals)
+	    ਨਹੀਂਤਾਂ ਜੇ (type_quals)
 	      pedwarn (loc, OPT_Wpedantic,
 		       "ISO C forbids qualified function types");
-	    if (type_quals)
+	    ਜੇ (type_quals)
 	      type = c_build_qualified_type (type, type_quals);
-	    type = c_build_pointer_type (type);
+	    type = c_build_ਸੂਚਕ_type (type);
 	    type_quals = TYPE_UNQUALIFIED;
 	  }
-	else if (type_quals)
+	ਨਹੀਂਤਾਂ ਜੇ (type_quals)
 	  type = c_build_qualified_type (type, type_quals);
 
 	decl = build_decl (declarator->id_loc,
 			   PARM_DECL, declarator->u.id.id, type);
-	if (size_varies)
-	  C_DECL_VARIABLE_SIZE (decl) = 1;
+	ਜੇ (ਮਾਪ_varies)
+	  C_DECL_VARIABLE_ਮਾਪ (decl) = 1;
 	C_ARRAY_PARAMETER (decl) = array_parameter_p;
 
 	/* Compute the type actually passed in the parmlist,
@@ -8107,18 +8107,18 @@ grokdeclarator (const struct c_declarator *declarator,
 	   (For example, shorts and chars are passed as ints.)
 	   When there is a prototype, this is overridden later.  */
 
-	if (type == error_mark_node)
+	ਜੇ (type == error_mark_ਗੰਢ)
 	  promoted_type = type;
-	else
-	  promoted_type = c_type_promotes_to (type);
+	ਨਹੀਂਤਾਂ
+	  promoted_type = c_type_promotes_ਮੰਜ਼ਿਲ (type);
 
 	DECL_ARG_TYPE (decl) = promoted_type;
-	if (declspecs->inline_p)
+	ਜੇ (declspecs->inline_p)
 	  pedwarn (loc, 0, "parameter %q+D declared %<inline%>", decl);
-	if (declspecs->noreturn_p)
+	ਜੇ (declspecs->noreturn_p)
 	  pedwarn (loc, 0, "parameter %q+D declared %<_Noreturn%>", decl);
       }
-    else if (decl_context == FIELD)
+    ਨਹੀਂਤਾਂ ਜੇ (decl_context == ਖੇਤਰ)
       {
 	/* Note that the grammar rejects storage classes in typenames
 	   and fields.  */
@@ -8127,72 +8127,72 @@ grokdeclarator (const struct c_declarator *declarator,
 
 	/* Structure field.  It may not be a function.  */
 
-	if (TREE_CODE (type) == FUNCTION_TYPE)
+	ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
 	  {
 	    error_at (loc, "field %qE declared as a function", name);
-	    type = c_build_pointer_type (type);
+	    type = c_build_ਸੂਚਕ_type (type);
 	  }
-	else if (TREE_CODE (type) != ERROR_MARK
+	ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (type) != ERROR_MARK
 		 && !COMPLETE_OR_UNBOUND_ARRAY_TYPE_P (type))
 	  {
-	    if (name)
+	    ਜੇ (name)
 	      error_at (loc, "field %qE has incomplete type", name);
-	    else
+	    ਨਹੀਂਤਾਂ
 	      error_at (loc, "unnamed field has incomplete type");
-	    type = error_mark_node;
+	    type = error_mark_ਗੰਢ;
 	  }
-	else if (TREE_CODE (type) == ARRAY_TYPE
-		 && TYPE_DOMAIN (type) == NULL_TREE)
+	ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == ARRAY_TYPE
+		 && TYPE_DOMAIN (type) == NULL_ਰੁੱਖ)
 	  {
 	    /* We have a flexible array member through a typedef.
 	       Set suitable range.  Whether this is a correct position
 	       for a flexible array member will be determined elsewhere.  */
-	    if (!in_system_header_at (input_location))
+	    ਜੇ (!ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location))
 	      pedwarn_c90 (loc, OPT_Wpedantic, "ISO C90 does not "
 			   "support flexible array members");
 	    type = build_distinct_type_copy (TYPE_MAIN_VARIANT (type));
-	    TYPE_DOMAIN (type) = build_index_type (NULL_TREE);
-	    if (orig_qual_indirect == 0)
-	      orig_qual_type = NULL_TREE;
+	    TYPE_DOMAIN (type) = build_ਸੂਚਕਾਂਕ_type (NULL_ਰੁੱਖ);
+	    ਜੇ (orig_qual_ਅਸਿੱਧਾ == 0)
+	      orig_qual_type = NULL_ਰੁੱਖ;
 	  }
-	if (type != error_mark_node
-	    && !verify_type_context (loc, TCTX_FIELD, type))
-	  type = error_mark_node;
+	ਜੇ (type != error_mark_ਗੰਢ
+	    && !verify_type_context (loc, TCTX_ਖੇਤਰ, type))
+	  type = error_mark_ਗੰਢ;
 
 	type = c_build_qualified_type (type, type_quals, orig_qual_type,
-				       orig_qual_indirect);
+				       orig_qual_ਅਸਿੱਧਾ);
 	decl = build_decl (declarator->id_loc,
-			   FIELD_DECL, declarator->u.id.id, type);
+			   ਖੇਤਰ_DECL, declarator->u.id.id, type);
 	DECL_NONADDRESSABLE_P (decl) = bitfield;
-	if (bitfield && !declarator->u.id.id)
+	ਜੇ (bitfield && !declarator->u.id.id)
 	  DECL_PADDING_P (decl) = 1;
 
-	if (size_varies)
-	  C_DECL_VARIABLE_SIZE (decl) = 1;
+	ਜੇ (ਮਾਪ_varies)
+	  C_DECL_VARIABLE_ਮਾਪ (decl) = 1;
       }
-    else if (TREE_CODE (type) == FUNCTION_TYPE)
+    ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
       {
-	if (storage_class == csc_register || threadp || constexprp)
+	ਜੇ (storage_class == csc_ਰਜਿਸਟਰ || threadp || constexprp)
 	  {
 	    error_at (loc, "invalid storage class for function %qE", name);
 	  }
-	else if (current_scope != file_scope)
+	ਨਹੀਂਤਾਂ ਜੇ (current_scope != file_scope)
 	  {
 	    /* Function declaration not at file scope.  Storage
 	       classes other than `extern' are not allowed, C99
 	       6.7.1p5, and `extern' makes no difference.  However,
 	       GCC allows 'auto', perhaps with 'inline', to support
 	       nested functions.  */
-	    if (storage_class == csc_auto)
+	    ਜੇ (storage_class == csc_auto)
 		pedwarn (loc, OPT_Wpedantic,
 			 "invalid storage class for function %qE", name);
-	    else if (storage_class == csc_static)
+	    ਨਹੀਂਤਾਂ ਜੇ (storage_class == csc_static)
 	      {
 		error_at (loc, "invalid storage class for function %qE", name);
-		if (funcdef_flag)
+		ਜੇ (funcdef_flag)
 		  storage_class = declspecs->storage_class = csc_none;
-		else
-		  return NULL_TREE;
+		ਨਹੀਂਤਾਂ
+		  ਵਾਪਸ NULL_ਰੁੱਖ;
 	      }
 	  }
 
@@ -8200,13 +8200,13 @@ grokdeclarator (const struct c_declarator *declarator,
 			   FUNCTION_DECL, declarator->u.id.id, type);
 	decl = build_decl_attribute_variant (decl, decl_attr);
 
-	if (type_quals & TYPE_QUAL_ATOMIC)
+	ਜੇ (type_quals & TYPE_QUAL_ATOMIC)
 	  {
 	    error_at (loc,
 		      "%<_Atomic%>-qualified function type");
 	    type_quals &= ~TYPE_QUAL_ATOMIC;
 	  }
-	else if (pedantic && type_quals && !DECL_IN_SYSTEM_HEADER (decl))
+	ਨਹੀਂਤਾਂ ਜੇ (pedantic && type_quals && !DECL_ਵਿੱਚ_SYSTEM_ਸਿਰਲੇਖ (decl))
 	  pedwarn (loc, OPT_Wpedantic,
 		   "ISO C forbids qualified function types");
 
@@ -8215,54 +8215,54 @@ grokdeclarator (const struct c_declarator *declarator,
 	   scope and are explicitly declared "auto".  This is
 	   forbidden by standard C (C99 6.7.1p5) and is interpreted by
 	   GCC to signify a forward declaration of a nested function.  */
-	if (storage_class == csc_auto && current_scope != file_scope)
+	ਜੇ (storage_class == csc_auto && current_scope != file_scope)
 	  DECL_EXTERNAL (decl) = 0;
 	/* In C99, a function which is declared 'inline' with 'extern'
 	   is not an external reference (which is confusing).  It
 	   means that the later definition of the function must be output
 	   in this file, C99 6.7.4p6.  In GNU C89, a function declared
 	   'extern inline' is an external reference.  */
-	else if (declspecs->inline_p && storage_class != csc_static)
+	ਨਹੀਂਤਾਂ ਜੇ (declspecs->inline_p && storage_class != csc_static)
 	  DECL_EXTERNAL (decl) = ((storage_class == csc_extern)
 				  == flag_gnu89_inline);
-	else
+	ਨਹੀਂਤਾਂ
 	  DECL_EXTERNAL (decl) = !initialized;
 
 	/* Record absence of global scope for `static' or `auto'.  */
-	TREE_PUBLIC (decl)
+	ਰੁੱਖ_ਜਨਤਕ (decl)
 	  = !(storage_class == csc_static || storage_class == csc_auto);
 
 	/* For a function definition, record the argument information
 	   block where store_parm_decls will look for it.  */
-	if (funcdef_flag)
+	ਜੇ (funcdef_flag)
 	  current_function_arg_info = arg_info;
 
-	if (declspecs->default_int_p)
+	ਜੇ (declspecs->default_int_p)
 	  C_FUNCTION_IMPLICIT_INT (decl) = 1;
 
 	/* Record presence of `inline' and `_Noreturn', if it is
 	   reasonable.  */
-	if (flag_hosted && MAIN_NAME_P (declarator->u.id.id))
+	ਜੇ (flag_hosted && MAIN_NAME_P (declarator->u.id.id))
 	  {
-	    if (declspecs->inline_p)
+	    ਜੇ (declspecs->inline_p)
 	      pedwarn (loc, 0, "cannot inline function %<main%>");
-	    if (declspecs->noreturn_p)
+	    ਜੇ (declspecs->noreturn_p)
 	      pedwarn (loc, 0, "%<main%> declared %<_Noreturn%>");
 	  }
-	else
+	ਨਹੀਂਤਾਂ
 	  {
-	    if (declspecs->inline_p)
+	    ਜੇ (declspecs->inline_p)
 	      /* Record that the function is declared `inline'.  */
 	      DECL_DECLARED_INLINE_P (decl) = 1;
-	    if (declspecs->noreturn_p)
+	    ਜੇ (declspecs->noreturn_p)
 	      {
-		if (flag_isoc99)
+		ਜੇ (flag_isoc99)
 		  pedwarn_c99 (loc, OPT_Wpedantic,
 			       "ISO C99 does not support %<_Noreturn%>");
-		else
+		ਨਹੀਂਤਾਂ
 		  pedwarn_c99 (loc, OPT_Wpedantic,
 			       "ISO C90 does not support %<_Noreturn%>");
-		TREE_THIS_VOLATILE (decl) = 1;
+		ਰੁੱਖ_THIS_VOLATILE (decl) = 1;
 	      }
 	  }
 
@@ -8272,55 +8272,55 @@ grokdeclarator (const struct c_declarator *declarator,
 	   'static' and the global declaration is not visible.
 	   (If the static declaration _is_ currently visible,
 	   the 'extern' declaration is taken to refer to that decl.) */
-	if (!initialized
-	    && TREE_PUBLIC (decl)
+	ਜੇ (!initialized
+	    && ਰੁੱਖ_ਜਨਤਕ (decl)
 	    && current_scope != file_scope)
 	  {
-	    tree global_decl  = identifier_global_value (declarator->u.id.id);
-	    tree visible_decl = lookup_name (declarator->u.id.id);
+	    ਰੁੱਖ global_decl  = identifier_global_ਮੁੱਲ (declarator->u.id.id);
+	    ਰੁੱਖ visible_decl = lookup_name (declarator->u.id.id);
 
-	    if (global_decl
+	    ਜੇ (global_decl
 		&& global_decl != visible_decl
 		&& VAR_OR_FUNCTION_DECL_P (global_decl)
-		&& !TREE_PUBLIC (global_decl))
+		&& !ਰੁੱਖ_ਜਨਤਕ (global_decl))
 	      error_at (loc, "function previously declared %<static%> "
 			"redeclared %<extern%>");
 	  }
       }
-    else
+    ਨਹੀਂਤਾਂ
       {
 	/* It's a variable.  */
 	/* An uninitialized decl with `extern' is a reference.  */
-	int extern_ref = !initialized && storage_class == csc_extern;
+	ਪੂਰਨ extern_ref = !initialized && storage_class == csc_extern;
 
-	if (constexprp)
+	ਜੇ (constexprp)
 	  {
 	    /* The type of a constexpr variable must not be variably
 	       modified, volatile, atomic or restrict qualified or
 	       have a member with such a qualifier.  const
 	       qualification is implicitly added, and, at file scope,
 	       has internal linkage.  */
-	    if (c_type_variably_modified_p (type))
+	    ਜੇ (c_type_variably_modified_p (type))
 	      error_at (loc, "%<constexpr%> object has variably modified "
 			"type");
-	    if (type_quals
+	    ਜੇ (type_quals
 		& (TYPE_QUAL_VOLATILE | TYPE_QUAL_RESTRICT | TYPE_QUAL_ATOMIC))
 	      error_at (loc, "invalid qualifiers for %<constexpr%> object");
-	    else
+	    ਨਹੀਂਤਾਂ
 	      {
-		tree type_no_array = strip_array_types (type);
-		if (RECORD_OR_UNION_TYPE_P (type_no_array)
+		ਰੁੱਖ type_no_array = strip_array_types (type);
+		ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (type_no_array)
 		    && C_TYPE_FIELDS_NON_CONSTEXPR (type_no_array))
 		  error_at (loc, "invalid qualifiers for field of "
 			    "%<constexpr%> object");
 	      }
 	    type_quals |= TYPE_QUAL_CONST;
-	    if (current_scope == file_scope)
+	    ਜੇ (current_scope == file_scope)
 	      storage_class = csc_static;
 	  }
 
 	type = c_build_qualified_type (type, type_quals, orig_qual_type,
-				       orig_qual_indirect);
+				       orig_qual_ਅਸਿੱਧਾ);
 
 	/* C99 6.2.2p7: It is invalid (compile-time undefined
 	   behavior) to create an 'extern' declaration for a
@@ -8328,29 +8328,29 @@ grokdeclarator (const struct c_declarator *declarator,
 	   'static' and the global declaration is not visible.
 	   (If the static declaration _is_ currently visible,
 	   the 'extern' declaration is taken to refer to that decl.) */
-	if (extern_ref && current_scope != file_scope)
+	ਜੇ (extern_ref && current_scope != file_scope)
 	  {
-	    tree global_decl  = identifier_global_value (declarator->u.id.id);
-	    tree visible_decl = lookup_name (declarator->u.id.id);
+	    ਰੁੱਖ global_decl  = identifier_global_ਮੁੱਲ (declarator->u.id.id);
+	    ਰੁੱਖ visible_decl = lookup_name (declarator->u.id.id);
 
-	    if (global_decl
+	    ਜੇ (global_decl
 		&& global_decl != visible_decl
 		&& VAR_P (global_decl)
-		&& !TREE_PUBLIC (global_decl))
+		&& !ਰੁੱਖ_ਜਨਤਕ (global_decl))
 	      error_at (loc, "variable previously declared %<static%> "
 			"redeclared %<extern%>");
 	  }
 
 	decl = build_decl (declarator->id_loc,
 			   VAR_DECL, declarator->u.id.id, type);
-	if (size_varies)
-	  C_DECL_VARIABLE_SIZE (decl) = 1;
-	if (constexprp)
+	ਜੇ (ਮਾਪ_varies)
+	  C_DECL_VARIABLE_ਮਾਪ (decl) = 1;
+	ਜੇ (constexprp)
 	  C_DECL_DECLARED_CONSTEXPR (decl) = 1;
 
-	if (declspecs->inline_p)
+	ਜੇ (declspecs->inline_p)
 	  pedwarn (loc, 0, "variable %q+D declared %<inline%>", decl);
-	if (declspecs->noreturn_p)
+	ਜੇ (declspecs->noreturn_p)
 	  pedwarn (loc, 0, "variable %q+D declared %<_Noreturn%>", decl);
 
 	/* At file scope, an initialized extern declaration may follow
@@ -8362,35 +8362,35 @@ grokdeclarator (const struct c_declarator *declarator,
 	   class specifier, or the absence of all storage class specifiers
 	   makes this declaration a definition (perhaps tentative).  Also,
 	   the absence of `static' makes it public.  */
-	if (current_scope == file_scope)
+	ਜੇ (current_scope == file_scope)
 	  {
-	    TREE_PUBLIC (decl) = storage_class != csc_static;
-	    TREE_STATIC (decl) = !extern_ref;
+	    ਰੁੱਖ_ਜਨਤਕ (decl) = storage_class != csc_static;
+	    ਰੁੱਖ_STATIC (decl) = !extern_ref;
 	  }
 	/* Not at file scope, only `static' makes a static definition.  */
-	else
+	ਨਹੀਂਤਾਂ
 	  {
-	    TREE_STATIC (decl) = (storage_class == csc_static);
-	    TREE_PUBLIC (decl) = extern_ref;
+	    ਰੁੱਖ_STATIC (decl) = (storage_class == csc_static);
+	    ਰੁੱਖ_ਜਨਤਕ (decl) = extern_ref;
 	  }
 
 	// NB: Set a tentative TLS model to avoid tls_model attribute
 	// warnings due to lack of thread storage duration.  It will
 	// be updated by c_decl_attributes later.
-	if (threadp)
-	  set_decl_tls_model (decl, TLS_MODEL_REAL);
+	ਜੇ (threadp)
+	  ਸੈੱਟ_decl_tls_model (decl, TLS_MODEL_REAL);
       }
 
-    if ((storage_class == csc_extern
+    ਜੇ ((storage_class == csc_extern
 	 || (storage_class == csc_none
-	     && TREE_CODE (type) == FUNCTION_TYPE
+	     && ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE
 	     && !funcdef_flag))
 	&& c_type_variably_modified_p (type))
       {
 	/* C99 6.7.5.2p2 */
-	if (TREE_CODE (type) == FUNCTION_TYPE)
+	ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
 	  error_at (loc, "non-nested function with variably modified type");
-	else
+	ਨਹੀਂਤਾਂ
 	  error_at (loc, "object with variably modified type must have "
 	      	    "no linkage");
       }
@@ -8399,36 +8399,36 @@ grokdeclarator (const struct c_declarator *declarator,
        from inlining since the middle-end cannot deal with this.
        ???  We should arrange for those to be passed by reference
        with emitting the copy on the caller side in the frontend.  */
-    if (storage_class == csc_none
-	&& TREE_CODE (type) == FUNCTION_TYPE)
-      for (tree al = TYPE_ARG_TYPES (type); al; al = TREE_CHAIN (al))
+    ਜੇ (storage_class == csc_none
+	&& ਰੁੱਖ_ਕੋਡ (type) == FUNCTION_TYPE)
+      ਲਈ (ਰੁੱਖ al = TYPE_ARG_TYPES (type); al; al = ਰੁੱਖ_CHAIN (al))
 	{
-	  tree arg = TREE_VALUE (al);
-	  if (arg != error_mark_node
-	      && C_TYPE_VARIABLE_SIZE (arg))
+	  ਰੁੱਖ arg = ਰੁੱਖ_ਮੁੱਲ (al);
+	  ਜੇ (arg != error_mark_ਗੰਢ
+	      && C_TYPE_VARIABLE_ਮਾਪ (arg))
 	    {
 	      DECL_UNINLINABLE (decl) = 1;
-	      break;
+	      ਰੋਕੋ;
 	    }
 	}
 
     /* Record `register' declaration for warnings on &
        and in case doing stupid register allocation.  */
 
-    if (storage_class == csc_register
-	&& TREE_CODE (type) != FUNCTION_TYPE)
+    ਜੇ (storage_class == csc_ਰਜਿਸਟਰ
+	&& ਰੁੱਖ_ਕੋਡ (type) != FUNCTION_TYPE)
       {
-	C_DECL_REGISTER (decl) = 1;
-	DECL_REGISTER (decl) = 1;
+	C_DECL_ਰਜਿਸਟਰ (decl) = 1;
+	DECL_ਰਜਿਸਟਰ (decl) = 1;
       }
 
     /* Record constancy and volatility.  */
-    c_apply_type_quals_to_decl (type_quals, decl);
+    c_apply_type_quals_ਮੰਜ਼ਿਲ_decl (type_quals, decl);
 
     /* Apply _Alignas specifiers.  */
-    if (alignas_align)
+    ਜੇ (alignas_align)
       {
-	SET_DECL_ALIGN (decl, alignas_align * BITS_PER_UNIT);
+	ਸੈੱਟ_DECL_ALIGN (decl, alignas_align * ਬਿੱਟ_ਪ੍ਰਤੀ_UNIT);
 	DECL_USER_ALIGN (decl) = 1;
       }
 
@@ -8436,37 +8436,37 @@ grokdeclarator (const struct c_declarator *declarator,
        Otherwise, the fact that those components are volatile
        will be ignored, and would even crash the compiler.
        Of course, this only makes sense on  VAR,PARM, and RESULT decl's.   */
-    if (C_TYPE_FIELDS_VOLATILE (TREE_TYPE (decl))
-	&& (VAR_P (decl) ||  TREE_CODE (decl) == PARM_DECL
-	  || TREE_CODE (decl) == RESULT_DECL))
+    ਜੇ (C_TYPE_FIELDS_VOLATILE (ਰੁੱਖ_TYPE (decl))
+	&& (VAR_P (decl) ||  ਰੁੱਖ_ਕੋਡ (decl) == PARM_DECL
+	  || ਰੁੱਖ_ਕੋਡ (decl) == ਨਤੀਜਾ_DECL))
       {
 	/* It is not an error for a structure with volatile fields to
 	   be declared register, but reset DECL_REGISTER since it
 	   cannot actually go in a register.  */
-	int was_reg = C_DECL_REGISTER (decl);
-	C_DECL_REGISTER (decl) = 0;
-	DECL_REGISTER (decl) = 0;
+	ਪੂਰਨ was_reg = C_DECL_ਰਜਿਸਟਰ (decl);
+	C_DECL_ਰਜਿਸਟਰ (decl) = 0;
+	DECL_ਰਜਿਸਟਰ (decl) = 0;
 	c_mark_addressable (decl);
-	C_DECL_REGISTER (decl) = was_reg;
+	C_DECL_ਰਜਿਸਟਰ (decl) = was_reg;
       }
 
   /* This is the earliest point at which we might know the assembler
      name of a variable.  Thus, if it's known before this, die horribly.  */
     gcc_assert (!HAS_DECL_ASSEMBLER_NAME_P (decl)
-		|| !DECL_ASSEMBLER_NAME_SET_P (decl));
+		|| !DECL_ASSEMBLER_NAME_ਸੈੱਟ_P (decl));
 
-    if (warn_cxx_compat
+    ਜੇ (warn_cxx_compat
 	&& VAR_P (decl)
-	&& TREE_PUBLIC (decl)
-	&& TREE_STATIC (decl)
-	&& (RECORD_OR_UNION_TYPE_P (TREE_TYPE (decl))
-	    || TREE_CODE (TREE_TYPE (decl)) == ENUMERAL_TYPE)
-	&& TYPE_NAME (TREE_TYPE (decl)) == NULL_TREE)
-      warning_at (DECL_SOURCE_LOCATION (decl), OPT_Wc___compat,
+	&& ਰੁੱਖ_ਜਨਤਕ (decl)
+	&& ਰੁੱਖ_STATIC (decl)
+	&& (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (decl))
+	    || ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (decl)) == ENUMERAL_TYPE)
+	&& TYPE_NAME (ਰੁੱਖ_TYPE (decl)) == NULL_ਰੁੱਖ)
+      warning_at (DECL_ਸਰੋਤ_LOCATION (decl), OPT_Wc___compat,
 		  "non-local variable %qD with anonymous type is "
 		  "questionable in C++", decl);
 
-    return decl;
+    ਵਾਪਸ decl;
   }
 }
 
@@ -8484,56 +8484,56 @@ grokdeclarator (const struct c_declarator *declarator,
    a mere declaration.  A nonempty identifier-list gets an error message
    when FUNCDEF_FLAG is false.  */
 
-static tree
-grokparms (struct c_arg_info *arg_info, bool funcdef_flag)
+ਸਥਿਰ ਰੁੱਖ
+grokparms (ਬਣਤਰ c_arg_info *arg_info, ਤਾਰਕਿਕ funcdef_flag)
 {
-  tree arg_types = arg_info->types;
+  ਰੁੱਖ arg_types = arg_info->types;
 
-  if (funcdef_flag && arg_info->had_vla_unspec)
+  ਜੇ (funcdef_flag && arg_info->had_vla_unspec)
     {
       /* A function definition isn't function prototype scope C99 6.2.1p4.  */
       /* C99 6.7.5.2p4 */
       error ("%<[*]%> not allowed in other than function prototype scope");
     }
 
-  if (arg_types == NULL_TREE && !funcdef_flag && !flag_isoc23
-      && !in_system_header_at (input_location))
+  ਜੇ (arg_types == NULL_ਰੁੱਖ && !funcdef_flag && !flag_isoc23
+      && !ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location))
     warning (OPT_Wstrict_prototypes,
 	     "function declaration isn%'t a prototype");
 
-  if (arg_types == error_mark_node)
+  ਜੇ (arg_types == error_mark_ਗੰਢ)
     /* Don't set TYPE_ARG_TYPES in this case.  */
-    return NULL_TREE;
+    ਵਾਪਸ NULL_ਰੁੱਖ;
 
-  else if (arg_types && TREE_CODE (TREE_VALUE (arg_types)) == IDENTIFIER_NODE)
+  ਨਹੀਂਤਾਂ ਜੇ (arg_types && ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_ਮੁੱਲ (arg_types)) == IDENTIFIER_ਗੰਢ)
     {
-      if (!funcdef_flag)
+      ਜੇ (!funcdef_flag)
 	{
-	  permerror_opt (input_location,
+	  permerror_opt (ਨਿਵੇਸ਼_location,
 			 OPT_Wdeclaration_missing_parameter_type,
 			 "parameter names (without types) in "
 			 "function declaration");
-	  arg_info->parms = NULL_TREE;
+	  arg_info->parms = NULL_ਰੁੱਖ;
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	arg_info->parms = arg_info->types;
 
-      arg_info->types = NULL_TREE;
-      return NULL_TREE;
+      arg_info->types = NULL_ਰੁੱਖ;
+      ਵਾਪਸ NULL_ਰੁੱਖ;
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      tree parm, type, typelt;
-      unsigned int parmno;
+      ਰੁੱਖ parm, type, typelt;
+      ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ parmno;
 
       /* In C23, convert () to (void).  */
-      if (flag_isoc23
+      ਜੇ (flag_isoc23
 	  && !arg_types
 	  && !arg_info->parms
-	  && !arg_info->no_named_args_stdarg_p)
+	  && !arg_info->no_named_ਦਲੀਲਾਂ_stdarg_p)
 	{
-	  arg_types = arg_info->types = void_list_node;
-	  arg_info->c23_empty_parens = 1;
+	  arg_types = arg_info->types = void_list_ਗੰਢ;
+	  arg_info->c23_ਖਾਲੀ_ਥਾਵਾਂ_parens = 1;
 	}
 
       /* If there is a parameter of incomplete type in a definition,
@@ -8545,56 +8545,56 @@ grokparms (struct c_arg_info *arg_info, bool funcdef_flag)
 	 this has already received an error (constraint violation in C2Y,
 	 previously implicitly undefined behavior).  */
 
-      for (parm = arg_info->parms, typelt = arg_types, parmno = 1;
+      ਲਈ (parm = arg_info->parms, typelt = arg_types, parmno = 1;
 	   parm;
-	   parm = DECL_CHAIN (parm), typelt = TREE_CHAIN (typelt), parmno++)
+	   parm = DECL_CHAIN (parm), typelt = ਰੁੱਖ_CHAIN (typelt), parmno++)
 	{
-	  type = TREE_VALUE (typelt);
-	  if (type == error_mark_node)
-	    continue;
+	  type = ਰੁੱਖ_ਮੁੱਲ (typelt);
+	  ਜੇ (type == error_mark_ਗੰਢ)
+	    ਜਾਰੀ;
 
-	  if (!COMPLETE_TYPE_P (type))
+	  ਜੇ (!COMPLETE_TYPE_P (type))
 	    {
-	      if (funcdef_flag)
+	      ਜੇ (funcdef_flag)
 		{
-		  if (DECL_NAME (parm))
-		    error_at (input_location,
+		  ਜੇ (DECL_NAME (parm))
+		    error_at (ਨਿਵੇਸ਼_location,
 			      "parameter %u (%q+D) has incomplete type",
 			      parmno, parm);
-		  else
-		    error_at (DECL_SOURCE_LOCATION (parm),
+		  ਨਹੀਂਤਾਂ
+		    error_at (DECL_ਸਰੋਤ_LOCATION (parm),
 			      "parameter %u has incomplete type",
 			      parmno);
 
-		  TREE_VALUE (typelt) = error_mark_node;
-		  TREE_TYPE (parm) = error_mark_node;
-		  arg_types = NULL_TREE;
+		  ਰੁੱਖ_ਮੁੱਲ (typelt) = error_mark_ਗੰਢ;
+		  ਰੁੱਖ_TYPE (parm) = error_mark_ਗੰਢ;
+		  arg_types = NULL_ਰੁੱਖ;
 		}
 	    }
 
-	  if (DECL_NAME (parm) && TREE_USED (parm))
+	  ਜੇ (DECL_NAME (parm) && ਰੁੱਖ_ਵਰਤਿਆ (parm))
 	    warn_if_shadowing (parm);
 	}
-      return arg_types;
+      ਵਾਪਸ arg_types;
     }
 }
 
 /* Allocate and initialize a c_arg_info structure from the parser's
    obstack.  */
 
-struct c_arg_info *
-build_arg_info (void)
+ਬਣਤਰ c_arg_info *
+build_arg_info (ਖਾਲੀ)
 {
-  struct c_arg_info *ret = XOBNEW (&parser_obstack, struct c_arg_info);
-  ret->parms = NULL_TREE;
-  ret->tags = NULL;
-  ret->types = NULL_TREE;
-  ret->others = NULL_TREE;
-  ret->pending_sizes = NULL;
+  ਬਣਤਰ c_arg_info *ret = XOBNEW (&parser_obstack, ਬਣਤਰ c_arg_info);
+  ret->parms = NULL_ਰੁੱਖ;
+  ret->ਟੈਗ_ਸੂਚੀ = ਨਿਰਾ;
+  ret->types = NULL_ਰੁੱਖ;
+  ret->others = NULL_ਰੁੱਖ;
+  ret->pending_sizes = ਨਿਰਾ;
   ret->had_vla_unspec = 0;
-  ret->no_named_args_stdarg_p = 0;
-  ret->c23_empty_parens = 0;
-  return ret;
+  ret->no_named_ਦਲੀਲਾਂ_stdarg_p = 0;
+  ret->c23_ਖਾਲੀ_ਥਾਵਾਂ_parens = 0;
+  ਵਾਪਸ ret;
 }
 
 /* Take apart the current scope and return a c_arg_info structure with
@@ -8608,18 +8608,18 @@ build_arg_info (void)
    EXPR is NULL or an expression that needs to be evaluated for the
    side effects of array size expressions in the parameters.  */
 
-struct c_arg_info *
-get_parm_info (bool ellipsis, tree expr)
+ਬਣਤਰ c_arg_info *
+get_parm_info (ਤਾਰਕਿਕ ellipsis, ਰੁੱਖ ਵਿਅੰਜਕ)
 {
-  struct c_binding *b = current_scope->bindings;
-  struct c_arg_info *arg_info = build_arg_info ();
+  ਬਣਤਰ c_binding *b = current_scope->bindings;
+  ਬਣਤਰ c_arg_info *arg_info = build_arg_info ();
 
-  tree parms = NULL_TREE;
-  vec<c_arg_tag, va_gc> *tags = NULL;
-  tree types = NULL_TREE;
-  tree others = NULL_TREE;
+  ਰੁੱਖ parms = NULL_ਰੁੱਖ;
+  vec<c_arg_ਟੈਗ, va_gc> *ਟੈਗ_ਸੂਚੀ = ਨਿਰਾ;
+  ਰੁੱਖ types = NULL_ਰੁੱਖ;
+  ਰੁੱਖ others = NULL_ਰੁੱਖ;
 
-  bool gave_void_only_once_err = false;
+  ਤਾਰਕਿਕ gave_void_only_once_err = ਝੂਠ;
 
   arg_info->had_vla_unspec = current_scope->had_vla_unspec;
 
@@ -8636,60 +8636,60 @@ get_parm_info (bool ellipsis, tree expr)
      (by 'const' or 'volatile'), or has a storage class specifier
      ('register'), then the behavior is undefined; issue an error.
      Typedefs for 'void' are OK (see DR#157).  */
-  if (b->prev == 0			    /* one binding */
-      && TREE_CODE (b->decl) == PARM_DECL   /* which is a parameter */
+  ਜੇ (b->prev == 0			    /* one binding */
+      && ਰੁੱਖ_ਕੋਡ (b->decl) == PARM_DECL   /* which is a parameter */
       && !DECL_NAME (b->decl)               /* anonymous */
-      && VOID_TYPE_P (TREE_TYPE (b->decl))) /* of void type */
+      && VOID_TYPE_P (ਰੁੱਖ_TYPE (b->decl))) /* of void type */
     {
-      if (TYPE_QUALS (TREE_TYPE (b->decl)) != TYPE_UNQUALIFIED
-	  || C_DECL_REGISTER (b->decl))
+      ਜੇ (TYPE_QUALS (ਰੁੱਖ_TYPE (b->decl)) != TYPE_UNQUALIFIED
+	  || C_DECL_ਰਜਿਸਟਰ (b->decl))
 	error_at (b->locus, "%<void%> as only parameter may not be qualified");
 
       /* There cannot be an ellipsis.  */
-      if (ellipsis)
+      ਜੇ (ellipsis)
 	error_at (b->locus, "%<void%> must be the only parameter");
 
-      arg_info->types = void_list_node;
-      return arg_info;
+      arg_info->types = void_list_ਗੰਢ;
+      ਵਾਪਸ arg_info;
     }
 
-  if (!ellipsis)
-    types = void_list_node;
+  ਜੇ (!ellipsis)
+    types = void_list_ਗੰਢ;
 
   /* Break up the bindings list into parms, tags, types, and others;
      apply sanity checks; purge the name-to-decl bindings.  */
-  while (b)
+  ਜਦੋਂ (b)
     {
-      tree decl = b->decl;
-      tree type = TREE_TYPE (decl);
-      c_arg_tag tag;
-      const char *keyword;
+      ਰੁੱਖ decl = b->decl;
+      ਰੁੱਖ type = ਰੁੱਖ_TYPE (decl);
+      c_arg_ਟੈਗ ਟੈਗ;
+      ਅਚਲ ਅੱਖਰ *keyword;
 
-      switch (TREE_CODE (decl))
+      ਚੋਣ (ਰੁੱਖ_ਕੋਡ (decl))
 	{
-	case PARM_DECL:
-	  if (b->id)
+	ਹਾਲਤ PARM_DECL:
+	  ਜੇ (b->id)
 	    {
-	      gcc_assert (I_SYMBOL_BINDING (b->id) == b);
-	      I_SYMBOL_BINDING (b->id) = b->shadowed;
+	      gcc_assert (I_ਚਿੰਨ੍ਹ_BINDING (b->id) == b);
+	      I_ਚਿੰਨ੍ਹ_BINDING (b->id) = b->shadowed;
 	    }
 
 	  /* Check for forward decls that never got their actual decl.  */
-	  if (TREE_ASM_WRITTEN (decl))
+	  ਜੇ (ਰੁੱਖ_ASM_WRITTEN (decl))
 	    error_at (b->locus,
 		      "parameter %q+D has just a forward declaration", decl);
 	  /* Check for (..., void, ...) and named void parameters and issue an
 	     error.  */
-	  else if (VOID_TYPE_P (type))
+	  ਨਹੀਂਤਾਂ ਜੇ (VOID_TYPE_P (type))
 	    {
-	      if (!gave_void_only_once_err)
+	      ਜੇ (!gave_void_only_once_err)
 		{
 		  error_at (b->locus,
 			    "%<void%> must be the only parameter and unnamed");
-		  gave_void_only_once_err = true;
+		  gave_void_only_once_err = ਸੱਚ;
 		}
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    {
 	      /* Valid parameter, add it to the list.  */
 	      DECL_CHAIN (decl) = parms;
@@ -8698,20 +8698,20 @@ get_parm_info (bool ellipsis, tree expr)
 	      /* Since there is a prototype, args are passed in their
 		 declared types.  The back end may override this later.  */
 	      DECL_ARG_TYPE (decl) = type;
-	      types = tree_cons (0, type, types);
+	      types = ਰੁੱਖ_cons (0, type, types);
 	    }
-	  break;
+	  ਰੋਕੋ;
 
-	case ENUMERAL_TYPE: keyword = "enum"; goto tag;
-	case UNION_TYPE:    keyword = "union"; goto tag;
-	case RECORD_TYPE:   keyword = "struct"; goto tag;
-	tag:
+	ਹਾਲਤ ENUMERAL_TYPE: keyword = "enum"; ਜਾਓ ਟੈਗ;
+	ਹਾਲਤ UNION_TYPE:    keyword = "union"; ਜਾਓ ਟੈਗ;
+	ਹਾਲਤ ਰਿਕਾਰਡ_TYPE:   keyword = "struct"; ਜਾਓ ਟੈਗ;
+	ਟੈਗ:
 	  /* Types may not have tag-names, in which case the type
 	     appears in the bindings list with b->id NULL.  */
-	  if (b->id)
+	  ਜੇ (b->id)
 	    {
-	      gcc_assert (I_TAG_BINDING (b->id) == b);
-	      I_TAG_BINDING (b->id) = b->shadowed;
+	      gcc_assert (I_ਟੈਗ_BINDING (b->id) == b);
+	      I_ਟੈਗ_BINDING (b->id) = b->shadowed;
 	    }
 
 	  /* Warn about any struct, union or enum tags defined in a
@@ -8720,18 +8720,18 @@ get_parm_info (bool ellipsis, tree expr)
 	     (it's impossible to call such a function with type-
 	     correct arguments).  An anonymous union parm type is
 	     meaningful as a GNU extension, so don't warn for that.  */
-	  if (TREE_CODE (decl) != UNION_TYPE || b->id != NULL_TREE)
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) != UNION_TYPE || b->id != NULL_ਰੁੱਖ)
 	    {
-	      if (b->id)
+	      ਜੇ (b->id)
 		{
 		  /* The %s will be one of 'struct', 'union', or 'enum'.  */
-		  if (!flag_isoc23 || !COMPLETE_TYPE_P (decl))
+		  ਜੇ (!flag_isoc23 || !COMPLETE_TYPE_P (decl))
 		    warning_at (b->locus, 0,
 				"%<%s %E%> declared inside parameter list"
 				" will not be visible outside of this definition or"
 				" declaration", keyword, b->id);
 		}
-	      else
+	      ਨਹੀਂਤਾਂ
 		/* The %s will be one of 'struct', 'union', or 'enum'.  */
 		warning_at (b->locus, 0,
 			    "anonymous %s declared inside parameter list"
@@ -8739,19 +8739,19 @@ get_parm_info (bool ellipsis, tree expr)
 			    " declaration", keyword);
 	    }
 
-	  tag.id = b->id;
-	  tag.type = decl;
-	  vec_safe_push (tags, tag);
-	  break;
+	  ਟੈਗ.id = b->id;
+	  ਟੈਗ.type = decl;
+	  vec_ਸੁਰੱਖਿਅਤ_ਧੱਕੋ (ਟੈਗ_ਸੂਚੀ, ਟੈਗ);
+	  ਰੋਕੋ;
 
-	case FUNCTION_DECL:
+	ਹਾਲਤ FUNCTION_DECL:
 	  /* FUNCTION_DECLs appear when there is an implicit function
 	     declaration in the parameter list.  */
-	  gcc_assert (b->nested || seen_error ());
-	  goto set_shadowed;
+	  gcc_assert (b->nested || ਵੇਖਿਆ_error ());
+	  ਜਾਓ ਸੈੱਟ_shadowed;
 
-	case CONST_DECL:
-	case TYPE_DECL:
+	ਹਾਲਤ CONST_DECL:
+	ਹਾਲਤ TYPE_DECL:
 	  /* CONST_DECLs appear here when we have an embedded enum,
 	     and TYPE_DECLs appear here when we have an embedded struct
 	     or union.  No warnings for this - we already warned about the
@@ -8764,21 +8764,21 @@ get_parm_info (bool ellipsis, tree expr)
 	  others = decl;
 	  /* fall through */
 
-	case ERROR_MARK:
-	set_shadowed:
+	ਹਾਲਤ ERROR_MARK:
+	ਸੈੱਟ_shadowed:
 	  /* error_mark_node appears here when we have an undeclared
 	     variable.  Just throw it away.  */
-	  if (b->id)
+	  ਜੇ (b->id)
 	    {
-	      gcc_assert (I_SYMBOL_BINDING (b->id) == b);
-	      I_SYMBOL_BINDING (b->id) = b->shadowed;
+	      gcc_assert (I_ਚਿੰਨ੍ਹ_BINDING (b->id) == b);
+	      I_ਚਿੰਨ੍ਹ_BINDING (b->id) = b->shadowed;
 	    }
-	  break;
+	  ਰੋਕੋ;
 
 	  /* Other things that might be encountered.  */
-	case LABEL_DECL:
-	case VAR_DECL:
-	default:
+	ਹਾਲਤ LABEL_DECL:
+	ਹਾਲਤ VAR_DECL:
+	ਮੂਲ:
 	  gcc_unreachable ();
 	}
 
@@ -8786,12 +8786,12 @@ get_parm_info (bool ellipsis, tree expr)
     }
 
   arg_info->parms = parms;
-  arg_info->tags = tags;
+  arg_info->ਟੈਗ_ਸੂਚੀ = ਟੈਗ_ਸੂਚੀ;
   arg_info->types = types;
   arg_info->others = others;
-  arg_info->pending_sizes = expr;
-  arg_info->no_named_args_stdarg_p = ellipsis && !types;
-  return arg_info;
+  arg_info->pending_sizes = ਵਿਅੰਜਕ;
+  arg_info->no_named_ਦਲੀਲਾਂ_stdarg_p = ellipsis && !types;
+  ਵਾਪਸ arg_info;
 }
 
 /* Get the struct, enum or union (CODE says which) with tag NAME.
@@ -8804,31 +8804,31 @@ get_parm_info (bool ellipsis, tree expr)
    that the tag is in scope for that specifier.  Return a c_typespec
    structure for the type specifier.  */
 
-struct c_typespec
-parser_xref_tag (location_t loc, enum tree_code code, tree name,
-		 bool have_std_attrs, tree attrs, bool has_enum_type_specifier)
+ਬਣਤਰ c_typespec
+parser_xref_ਟੈਗ (location_t loc, ਗਿਣਤੀ ਰੁੱਖ_ਕੋਡ_2 ਕੋਡ, ਰੁੱਖ name,
+		 ਤਾਰਕਿਕ have_std_attrs, ਰੁੱਖ attrs, ਤਾਰਕਿਕ has_enum_type_specifier)
 {
-  struct c_typespec ret;
-  tree ref;
+  ਬਣਤਰ c_typespec ret;
+  ਰੁੱਖ ref;
   location_t refloc;
 
-  ret.expr = NULL_TREE;
-  ret.expr_const_operands = true;
+  ret.ਵਿਅੰਜਕ = NULL_ਰੁੱਖ;
+  ret.ਵਿਅੰਜਕ_const_operands = ਸੱਚ;
   ret.has_enum_type_specifier = has_enum_type_specifier;
 
   /* If a cross reference is requested, look up the type already
      defined for this tag and return it.  If an enum type specifier is
      present, only a definition in the current scope is relevant.  */
 
-  ref = lookup_tag (code, name, has_enum_type_specifier, &refloc);
+  ref = lookup_ਟੈਗ (ਕੋਡ, name, has_enum_type_specifier, &refloc);
 
   /* If the visible type is still being defined, see if there is
      an earlier definition (which may be complete).  We do not
      have to loop because nested redefinitions are not allowed.  */
-  if (flag_isoc23 && ref && C_TYPE_BEING_DEFINED (ref))
+  ਜੇ (flag_isoc23 && ref && C_TYPE_BEING_DEFINED (ref))
     {
-      tree vis = previous_tag (ref);
-      if (vis)
+      ਰੁੱਖ vis = ਪਿਛਲਾ_ਟੈਗ (ref);
+      ਜੇ (vis)
 	ref = vis;
     }
 
@@ -8843,44 +8843,44 @@ parser_xref_tag (location_t loc, enum tree_code code, tree name,
      this would not work properly if we return the reference found.
      (For example, with "struct foo" in an outer scope, "union foo;"
      must shadow that tag with a new one of union type.)  */
-  ret.kind = (ref
+  ret.ਕਿਸਮ = (ref
 	      ? (have_std_attrs ? ctsk_tagref_attrs : ctsk_tagref)
 	      : (have_std_attrs ? ctsk_tagfirstref_attrs : ctsk_tagfirstref));
-  if (ref && TREE_CODE (ref) == code)
+  ਜੇ (ref && ਰੁੱਖ_ਕੋਡ (ref) == ਕੋਡ)
     {
-      decl_attributes (&ref, attrs, (int) ATTR_FLAG_TYPE_IN_PLACE);
-      if (C_TYPE_DEFINED_IN_STRUCT (ref)
+      decl_ਗੁਣ (&ref, attrs, (ਪੂਰਨ) ATTR_FLAG_TYPE_ਵਿੱਚ_ਰੱਖੋ);
+      ਜੇ (C_TYPE_DEFINED_ਵਿੱਚ_STRUCT (ref)
 	  && loc != UNKNOWN_LOCATION
 	  && warn_cxx_compat)
 	{
-	  auto_diagnostic_group d;
-	  switch (code)
+	  auto_diagnostic_ਸਮੂਹ d;
+	  ਚੋਣ (ਕੋਡ)
 	    {
-	    case ENUMERAL_TYPE:
-	      if (warning_at (loc, OPT_Wc___compat,
+	    ਹਾਲਤ ENUMERAL_TYPE:
+	      ਜੇ (warning_at (loc, OPT_Wc___compat,
 			      ("enum type defined in struct or union "
 			       "is not visible in C++")))
 		  inform (refloc, "enum type defined here");
-	      break;
-	    case RECORD_TYPE:
-	      if (warning_at (loc, OPT_Wc___compat,
+	      ਰੋਕੋ;
+	    ਹਾਲਤ ਰਿਕਾਰਡ_TYPE:
+	      ਜੇ (warning_at (loc, OPT_Wc___compat,
 			      ("struct defined in struct or union "
 			       "is not visible in C++")))
 		inform (refloc, "struct defined here");
-	      break;
-	    case UNION_TYPE:
-	      if (warning_at (loc, OPT_Wc___compat,
+	      ਰੋਕੋ;
+	    ਹਾਲਤ UNION_TYPE:
+	      ਜੇ (warning_at (loc, OPT_Wc___compat,
 			      ("union defined in struct or union "
 			       "is not visible in C++")))
 		inform (refloc, "union defined here");
-	      break;
-	    default:
+	      ਰੋਕੋ;
+	    ਮੂਲ:
 	      gcc_unreachable();
 	    }
 	}
 
       ret.spec = ref;
-      return ret;
+      ਵਾਪਸ ret;
     }
 
   /* If no such tag is yet defined, create a forward-reference node
@@ -8888,42 +8888,42 @@ parser_xref_tag (location_t loc, enum tree_code code, tree name,
      When a real declaration of this type is found,
      the forward-reference will be altered into a real type.  */
 
-  ref = make_node (code);
-  if (flag_isoc23 || code == ENUMERAL_TYPE)
-    SET_TYPE_STRUCTURAL_EQUALITY (ref);
-  if (code == ENUMERAL_TYPE)
+  ref = make_ਗੰਢ (ਕੋਡ);
+  ਜੇ (flag_isoc23 || ਕੋਡ == ENUMERAL_TYPE)
+    ਸੈੱਟ_TYPE_STRUCTURAL_EQUALITY (ref);
+  ਜੇ (ਕੋਡ == ENUMERAL_TYPE)
     {
       /* Give the type a default layout like unsigned int
 	 to avoid crashing if it does not get defined.  */
-      SET_TYPE_MODE (ref, TYPE_MODE (unsigned_type_node));
-      SET_TYPE_ALIGN (ref, TYPE_ALIGN (unsigned_type_node));
+      ਸੈੱਟ_TYPE_ਬਹੁਲਕ (ref, TYPE_ਬਹੁਲਕ (unsigned_type_ਗੰਢ));
+      ਸੈੱਟ_TYPE_ALIGN (ref, TYPE_ALIGN (unsigned_type_ਗੰਢ));
       TYPE_USER_ALIGN (ref) = 0;
       TYPE_UNSIGNED (ref) = 1;
-      TYPE_PRECISION (ref) = TYPE_PRECISION (unsigned_type_node);
-      TYPE_MIN_VALUE (ref) = TYPE_MIN_VALUE (unsigned_type_node);
-      TYPE_MAX_VALUE (ref) = TYPE_MAX_VALUE (unsigned_type_node);
+      TYPE_PRECISION (ref) = TYPE_PRECISION (unsigned_type_ਗੰਢ);
+      TYPE_MIN_ਮੁੱਲ (ref) = TYPE_MIN_ਮੁੱਲ (unsigned_type_ਗੰਢ);
+      TYPE_MAX_ਮੁੱਲ (ref) = TYPE_MAX_ਮੁੱਲ (unsigned_type_ਗੰਢ);
       ENUM_FIXED_UNDERLYING_TYPE_P (ref) = has_enum_type_specifier;
     }
 
   pushtag (loc, name, ref);
-  decl_attributes (&ref, attrs, (int) ATTR_FLAG_TYPE_IN_PLACE);
-  if (in_underspecified_init)
+  decl_ਗੁਣ (&ref, attrs, (ਪੂਰਨ) ATTR_FLAG_TYPE_ਵਿੱਚ_ਰੱਖੋ);
+  ਜੇ (ਵਿੱਚ_underspecified_init)
     error_at (loc, "%qT declared in underspecified object initializer",
 	      ref);
 
   ret.spec = ref;
-  return ret;
+  ਵਾਪਸ ret;
 }
 
 /* Get the struct, enum or union (CODE says which) with tag NAME.
    Define the tag as a forward-reference if it is not defined.
    Return a tree for the type.  */
 
-tree
-xref_tag (enum tree_code code, tree name)
+ਰੁੱਖ
+xref_ਟੈਗ (ਗਿਣਤੀ ਰੁੱਖ_ਕੋਡ_2 ਕੋਡ, ਰੁੱਖ name)
 {
-  return parser_xref_tag (input_location, code, name, false, NULL_TREE,
-			  false).spec;
+  ਵਾਪਸ parser_xref_ਟੈਗ (ਨਿਵੇਸ਼_location, ਕੋਡ, name, ਝੂਠ, NULL_ਰੁੱਖ,
+			  ਝੂਠ).spec;
 }
 
 /* Make sure that the tag NAME is defined *in the current scope*
@@ -8936,92 +8936,92 @@ xref_tag (enum tree_code code, tree name)
    new c_struct_parse_info structure.  The old value of
    STRUCT_PARSE_INFO is restored in finish_struct.  */
 
-tree
-start_struct (location_t loc, enum tree_code code, tree name,
-	      class c_struct_parse_info **enclosing_struct_parse_info)
+ਰੁੱਖ
+ਸ਼ੁਰੂ_struct (location_t loc, ਗਿਣਤੀ ਰੁੱਖ_ਕੋਡ_2 ਕੋਡ, ਰੁੱਖ name,
+	      ਵਰਗ c_struct_parse_info **enclosing_struct_parse_info)
 {
   /* If there is already a tag defined at this scope
      (as a forward reference), just return it.  */
 
-  tree ref = NULL_TREE;
+  ਰੁੱਖ ref = NULL_ਰੁੱਖ;
   location_t refloc = UNKNOWN_LOCATION;
 
-  if (name != NULL_TREE)
-    ref = lookup_tag (code, name, true, &refloc);
+  ਜੇ (name != NULL_ਰੁੱਖ)
+    ref = lookup_ਟੈਗ (ਕੋਡ, name, ਸੱਚ, &refloc);
 
   /* For C23, even if we already have a completed definition,
      we do not use it. We will check for consistency later.
      If we are in a nested redefinition the type is not
      complete. We will then detect this below.  */
-  if (flag_isoc23 && ref && TYPE_SIZE (ref))
-    ref = NULL_TREE;
+  ਜੇ (flag_isoc23 && ref && TYPE_ਮਾਪ (ref))
+    ref = NULL_ਰੁੱਖ;
 
-  if (ref && TREE_CODE (ref) == code)
+  ਜੇ (ref && ਰੁੱਖ_ਕੋਡ (ref) == ਕੋਡ)
     {
-      if (TYPE_STUB_DECL (ref))
-	refloc = DECL_SOURCE_LOCATION (TYPE_STUB_DECL (ref));
+      ਜੇ (TYPE_STUB_DECL (ref))
+	refloc = DECL_ਸਰੋਤ_LOCATION (TYPE_STUB_DECL (ref));
 
-      if (TYPE_SIZE (ref))
+      ਜੇ (TYPE_ਮਾਪ (ref))
 	{
-	  auto_diagnostic_group d;
-	  if (code == UNION_TYPE)
+	  auto_diagnostic_ਸਮੂਹ d;
+	  ਜੇ (ਕੋਡ == UNION_TYPE)
 	    error_at (loc, "redefinition of %<union %E%>", name);
-	  else
+	  ਨਹੀਂਤਾਂ
 	    error_at (loc, "redefinition of %<struct %E%>", name);
-	  if (refloc != UNKNOWN_LOCATION)
+	  ਜੇ (refloc != UNKNOWN_LOCATION)
 	    inform (refloc, "originally defined here");
 	  /* Don't create structures using a name already in use.  */
-	  ref = NULL_TREE;
+	  ref = NULL_ਰੁੱਖ;
 	}
-      else if (C_TYPE_BEING_DEFINED (ref))
+      ਨਹੀਂਤਾਂ ਜੇ (C_TYPE_BEING_DEFINED (ref))
 	{
-	  if (code == UNION_TYPE)
+	  ਜੇ (ਕੋਡ == UNION_TYPE)
 	    error_at (loc, "nested redefinition of %<union %E%>", name);
-	  else
+	  ਨਹੀਂਤਾਂ
 	    error_at (loc, "nested redefinition of %<struct %E%>", name);
 	  /* Don't bother to report "originally defined here" for a
 	     nested redefinition; the original definition should be
 	     obvious.  */
 	  /* Don't create structures that contain themselves.  */
-	  ref = NULL_TREE;
+	  ref = NULL_ਰੁੱਖ;
 	}
     }
 
   /* Otherwise create a forward-reference just so the tag is in scope.  */
 
-  if (ref == NULL_TREE || TREE_CODE (ref) != code)
+  ਜੇ (ref == NULL_ਰੁੱਖ || ਰੁੱਖ_ਕੋਡ (ref) != ਕੋਡ)
     {
-      ref = make_node (code);
-      if (flag_isoc23)
-	SET_TYPE_STRUCTURAL_EQUALITY (ref);
+      ref = make_ਗੰਢ (ਕੋਡ);
+      ਜੇ (flag_isoc23)
+	ਸੈੱਟ_TYPE_STRUCTURAL_EQUALITY (ref);
       pushtag (loc, name, ref);
     }
 
   C_TYPE_BEING_DEFINED (ref) = 1;
-  for (tree v = TYPE_MAIN_VARIANT (ref); v; v = TYPE_NEXT_VARIANT (v))
+  ਲਈ (ਰੁੱਖ v = TYPE_MAIN_VARIANT (ref); v; v = TYPE_ਅਗਲਾ_VARIANT (v))
     TYPE_PACKED (v) = flag_pack_struct;
 
   *enclosing_struct_parse_info = struct_parse_info;
-  struct_parse_info = new c_struct_parse_info ();
+  struct_parse_info = ਨਵਾਂ c_struct_parse_info ();
   struct_parse_info->refloc = refloc;
 
   /* FIXME: This will issue a warning for a use of a type defined
      within a statement expr used within sizeof, et. al.  This is not
      terribly serious as C++ doesn't permit statement exprs within
      sizeof anyhow.  */
-  if (warn_cxx_compat
-      && (in_sizeof || in_typeof || in_alignof || in_countof))
+  ਜੇ (warn_cxx_compat
+      && (ਵਿੱਚ_sizeof || ਵਿੱਚ_typeof || ਵਿੱਚ_alignof || ਵਿੱਚ_countof))
     warning_at (loc, OPT_Wc___compat,
 		"defining type in %qs expression is invalid in C++",
-		(in_sizeof ? "sizeof"
-		 : in_typeof ? "typeof"
-		 : in_alignof ? "alignof"
+		(ਵਿੱਚ_sizeof ? "sizeof"
+		 : ਵਿੱਚ_typeof ? "typeof"
+		 : ਵਿੱਚ_alignof ? "alignof"
 		 : "_Countof"));
 
-  if (in_underspecified_init)
+  ਜੇ (ਵਿੱਚ_underspecified_init)
     error_at (loc, "%qT defined in underspecified object initializer", ref);
 
-  return ref;
+  ਵਾਪਸ ref;
 }
 
 /* Process the specs, declarator and width (NULL if omitted)
@@ -9035,15 +9035,15 @@ start_struct (location_t loc, enum tree_code code, tree name,
    The FIELD_DECL nodes are chained together and the lot of them
    are ultimately passed to `build_struct' to make the RECORD_TYPE node.  */
 
-tree
+ਰੁੱਖ
 grokfield (location_t loc,
-	   struct c_declarator *declarator, struct c_declspecs *declspecs,
-	   tree width, tree *decl_attrs, tree *expr)
+	   ਬਣਤਰ c_declarator *declarator, ਬਣਤਰ c_declspecs *declspecs,
+	   ਰੁੱਖ ਚੌੜਾਈ, ਰੁੱਖ *decl_attrs, ਰੁੱਖ *ਵਿਅੰਜਕ)
 {
-  tree value;
+  ਰੁੱਖ ਮੁੱਲ;
 
-  if (declarator->kind == cdk_id && declarator->u.id.id == NULL_TREE
-      && width == NULL_TREE)
+  ਜੇ (declarator->ਕਿਸਮ == cdk_id && declarator->u.id.id == NULL_ਰੁੱਖ
+      && ਚੌੜਾਈ == NULL_ਰੁੱਖ)
     {
       /* This is an unnamed decl.
 
@@ -9066,150 +9066,150 @@ grokfield (location_t loc,
 	 took this from Plan 9 or if it was an accident of implementation
 	 that took root before someone noticed the bug...  */
 
-      tree type = declspecs->type;
-      bool ok = false;
+      ਰੁੱਖ type = declspecs->type;
+      ਤਾਰਕਿਕ ok = ਝੂਠ;
 
-      if (RECORD_OR_UNION_TYPE_P (type)
+      ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (type)
 	  && (flag_ms_extensions
 	      || flag_plan9_extensions
 	      || !declspecs->typedef_p))
 	{
-	  if (flag_ms_extensions || flag_plan9_extensions)
-	    ok = true;
-	  else if (TYPE_NAME (type) == NULL)
-	    ok = true;
-	  else
-	    ok = false;
+	  ਜੇ (flag_ms_extensions || flag_plan9_extensions)
+	    ok = ਸੱਚ;
+	  ਨਹੀਂਤਾਂ ਜੇ (TYPE_NAME (type) == ਨਿਰਾ)
+	    ok = ਸੱਚ;
+	  ਨਹੀਂਤਾਂ
+	    ok = ਝੂਠ;
 	}
-      if (!ok)
+      ਜੇ (!ok)
 	{
 	  pedwarn (loc, 0, "declaration does not declare anything");
-	  return NULL_TREE;
+	  ਵਾਪਸ NULL_ਰੁੱਖ;
 	}
-      if (flag_isoc99)
+      ਜੇ (flag_isoc99)
 	pedwarn_c99 (loc, OPT_Wpedantic,
 		     "ISO C99 doesn%'t support unnamed structs/unions");
-      else
+      ਨਹੀਂਤਾਂ
 	pedwarn_c99 (loc, OPT_Wpedantic,
 		     "ISO C90 doesn%'t support unnamed structs/unions");
     }
 
-  value = grokdeclarator (declarator, declspecs, FIELD, false,
-			  width ? &width : NULL, decl_attrs, expr, NULL,
-			  DEPRECATED_NORMAL);
+  ਮੁੱਲ = grokdeclarator (declarator, declspecs, ਖੇਤਰ, ਝੂਠ,
+			  ਚੌੜਾਈ ? &ਚੌੜਾਈ : ਨਿਰਾ, decl_attrs, ਵਿਅੰਜਕ, ਨਿਰਾ,
+			  DEPRECATED_ਸਾਧਾਰਨ);
 
   /* When this field has name, its type is a top level type, we should
      call verify_counted_by_for_top_anonymous_type.  */
-  if (DECL_NAME (value) != NULL_TREE
-      && declspecs->typespec_kind == ctsk_tagdef)
-    verify_counted_by_for_top_anonymous_type (declspecs->type);
+  ਜੇ (DECL_NAME (ਮੁੱਲ) != NULL_ਰੁੱਖ
+      && declspecs->typespec_ਕਿਸਮ == ctsk_tagdef)
+    verify_counted_by_for_ਸਿਖਰ_anonymous_type (declspecs->type);
 
-  finish_decl (value, loc, NULL_TREE, NULL_TREE, NULL_TREE);
-  DECL_INITIAL (value) = width;
-  if (width)
-    SET_DECL_C_BIT_FIELD (value);
+  ਅੰਤ_decl (ਮੁੱਲ, loc, NULL_ਰੁੱਖ, NULL_ਰੁੱਖ, NULL_ਰੁੱਖ);
+  DECL_INITIAL (ਮੁੱਲ) = ਚੌੜਾਈ;
+  ਜੇ (ਚੌੜਾਈ)
+    ਸੈੱਟ_DECL_C_ਦੋਆਧਾਰੀ_ਅੰਕ_ਖੇਤਰ (ਮੁੱਲ);
 
-  if (warn_cxx_compat && DECL_NAME (value) != NULL_TREE)
+  ਜੇ (warn_cxx_compat && DECL_NAME (ਮੁੱਲ) != NULL_ਰੁੱਖ)
     {
       /* If we currently have a binding for this field, set the
 	 in_struct field in the binding, so that we warn about lookups
 	 which find it.  */
-      struct c_binding *b = I_SYMBOL_BINDING (DECL_NAME (value));
-      if (b != NULL)
+      ਬਣਤਰ c_binding *b = I_ਚਿੰਨ੍ਹ_BINDING (DECL_NAME (ਮੁੱਲ));
+      ਜੇ (b != ਨਿਰਾ)
 	{
 	  /* If the in_struct field is not yet set, push it on a list
 	     to be cleared when this struct is finished.  */
-	  if (!b->in_struct)
+	  ਜੇ (!b->ਵਿੱਚ_struct)
 	    {
-	      struct_parse_info->fields.safe_push (b);
-	      b->in_struct = 1;
+	      struct_parse_info->fields.ਸੁਰੱਖਿਅਤ_ਧੱਕੋ (b);
+	      b->ਵਿੱਚ_struct = 1;
 	    }
 	}
     }
 
-  return value;
+  ਵਾਪਸ ਮੁੱਲ;
 }
 
 /* Subroutine of detect_field_duplicates: return whether X and Y,
    which are both fields in the same struct, have duplicate field
    names.  */
 
-static bool
-is_duplicate_field (tree x, tree y)
+ਸਥਿਰ ਤਾਰਕਿਕ
+is_duplicate_ਖੇਤਰ (ਰੁੱਖ x, ਰੁੱਖ y)
 {
-  if (DECL_NAME (x) != NULL_TREE && DECL_NAME (x) == DECL_NAME (y))
-    return true;
+  ਜੇ (DECL_NAME (x) != NULL_ਰੁੱਖ && DECL_NAME (x) == DECL_NAME (y))
+    ਵਾਪਸ ਸੱਚ;
 
   /* When using -fplan9-extensions, an anonymous field whose name is a
      typedef can duplicate a field name.  */
-  if (flag_plan9_extensions
-      && (DECL_NAME (x) == NULL_TREE || DECL_NAME (y) == NULL_TREE))
+  ਜੇ (flag_plan9_extensions
+      && (DECL_NAME (x) == NULL_ਰੁੱਖ || DECL_NAME (y) == NULL_ਰੁੱਖ))
     {
-      tree xt, xn, yt, yn;
+      ਰੁੱਖ xt, xn, yt, yn;
 
-      xt = TREE_TYPE (x);
-      if (DECL_NAME (x) != NULL_TREE)
+      xt = ਰੁੱਖ_TYPE (x);
+      ਜੇ (DECL_NAME (x) != NULL_ਰੁੱਖ)
 	xn = DECL_NAME (x);
-      else if (RECORD_OR_UNION_TYPE_P (xt)
-	       && TYPE_NAME (xt) != NULL_TREE
-	       && TREE_CODE (TYPE_NAME (xt)) == TYPE_DECL)
+      ਨਹੀਂਤਾਂ ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (xt)
+	       && TYPE_NAME (xt) != NULL_ਰੁੱਖ
+	       && ਰੁੱਖ_ਕੋਡ (TYPE_NAME (xt)) == TYPE_DECL)
 	xn = DECL_NAME (TYPE_NAME (xt));
-      else
-	xn = NULL_TREE;
+      ਨਹੀਂਤਾਂ
+	xn = NULL_ਰੁੱਖ;
 
-      yt = TREE_TYPE (y);
-      if (DECL_NAME (y) != NULL_TREE)
+      yt = ਰੁੱਖ_TYPE (y);
+      ਜੇ (DECL_NAME (y) != NULL_ਰੁੱਖ)
 	yn = DECL_NAME (y);
-      else if (RECORD_OR_UNION_TYPE_P (yt)
-	       && TYPE_NAME (yt) != NULL_TREE
-	       && TREE_CODE (TYPE_NAME (yt)) == TYPE_DECL)
+      ਨਹੀਂਤਾਂ ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (yt)
+	       && TYPE_NAME (yt) != NULL_ਰੁੱਖ
+	       && ਰੁੱਖ_ਕੋਡ (TYPE_NAME (yt)) == TYPE_DECL)
 	yn = DECL_NAME (TYPE_NAME (yt));
-      else
-	yn = NULL_TREE;
+      ਨਹੀਂਤਾਂ
+	yn = NULL_ਰੁੱਖ;
 
-      if (xn != NULL_TREE && xn == yn)
-	return true;
+      ਜੇ (xn != NULL_ਰੁੱਖ && xn == yn)
+	ਵਾਪਸ ਸੱਚ;
     }
 
-  return false;
+  ਵਾਪਸ ਝੂਠ;
 }
 
 /* Subroutine of detect_field_duplicates: add the fields of FIELDLIST
    to HTAB, giving errors for any duplicates.  */
 
-static void
-detect_field_duplicates_hash (tree fieldlist,
-			      hash_table<nofree_ptr_hash <tree_node> > *htab)
+ਸਥਿਰ ਖਾਲੀ
+detect_ਖੇਤਰ_duplicates_hash (ਰੁੱਖ fieldlist,
+			      hash_ਸਾਰਣੀ<nofree_ptr_hash <ਰੁੱਖ_ਗੰਢ> > *htab)
 {
-  tree x, y;
-  tree_node **slot;
+  ਰੁੱਖ x, y;
+  ਰੁੱਖ_ਗੰਢ **ਥਾਂ;
 
-  for (x = fieldlist; x ; x = DECL_CHAIN (x))
-    if ((y = DECL_NAME (x)) != NULL_TREE)
+  ਲਈ (x = fieldlist; x ; x = DECL_CHAIN (x))
+    ਜੇ ((y = DECL_NAME (x)) != NULL_ਰੁੱਖ)
       {
-	slot = htab->find_slot (y, INSERT);
-	if (*slot)
+	ਥਾਂ = htab->ਲੱਭੋ_ਥਾਂ (y, ਪਾਓ);
+	ਜੇ (*ਥਾਂ)
 	  {
 	    error ("duplicate member %q+D", x);
-	    DECL_NAME (x) = NULL_TREE;
+	    DECL_NAME (x) = NULL_ਰੁੱਖ;
 	  }
-	*slot = y;
+	*ਥਾਂ = y;
       }
-    else if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (x)))
+    ਨਹੀਂਤਾਂ ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (x)))
       {
-	detect_field_duplicates_hash (TYPE_FIELDS (TREE_TYPE (x)), htab);
+	detect_ਖੇਤਰ_duplicates_hash (TYPE_FIELDS (ਰੁੱਖ_TYPE (x)), htab);
 
 	/* When using -fplan9-extensions, an anonymous field whose
 	   name is a typedef can duplicate a field name.  */
-	if (flag_plan9_extensions
-	    && TYPE_NAME (TREE_TYPE (x)) != NULL_TREE
-	    && TREE_CODE (TYPE_NAME (TREE_TYPE (x))) == TYPE_DECL)
+	ਜੇ (flag_plan9_extensions
+	    && TYPE_NAME (ਰੁੱਖ_TYPE (x)) != NULL_ਰੁੱਖ
+	    && ਰੁੱਖ_ਕੋਡ (TYPE_NAME (ਰੁੱਖ_TYPE (x))) == TYPE_DECL)
 	  {
-	    tree xn = DECL_NAME (TYPE_NAME (TREE_TYPE (x)));
-	    slot = htab->find_slot (xn, INSERT);
-	    if (*slot)
-	      error ("duplicate member %q+D", TYPE_NAME (TREE_TYPE (x)));
-	    *slot = xn;
+	    ਰੁੱਖ xn = DECL_NAME (TYPE_NAME (ਰੁੱਖ_TYPE (x)));
+	    ਥਾਂ = htab->ਲੱਭੋ_ਥਾਂ (xn, ਪਾਓ);
+	    ਜੇ (*ਥਾਂ)
+	      error ("duplicate member %q+D", TYPE_NAME (ਰੁੱਖ_TYPE (x)));
+	    *ਥਾਂ = xn;
 	  }
       }
 }
@@ -9217,11 +9217,11 @@ detect_field_duplicates_hash (tree fieldlist,
 /* Generate an error for any duplicate field names in FIELDLIST.  Munge
    the list such that this does not present a problem later.  */
 
-static void
-detect_field_duplicates (tree fieldlist)
+ਸਥਿਰ ਖਾਲੀ
+detect_ਖੇਤਰ_duplicates (ਰੁੱਖ fieldlist)
 {
-  tree x, y;
-  int timeout = 10;
+  ਰੁੱਖ x, y;
+  ਪੂਰਨ timeout = 10;
 
   /* If the struct is the list of instance variables of an Objective-C
      class, then we need to check all the instance variables of
@@ -9234,70 +9234,70 @@ detect_field_duplicates (tree fieldlist)
      checks.  If we are checking the list of instance variables, the
      ObjC frontend will do the check, emit the errors if needed, and
      then return true.  */
-  if (c_dialect_objc ())
-    if (objc_detect_field_duplicates (false))
-      return;
+  ਜੇ (c_dialect_objc ())
+    ਜੇ (objc_detect_ਖੇਤਰ_duplicates (ਝੂਠ))
+      ਵਾਪਸ;
 
   /* First, see if there are more than "a few" fields.
      This is trivially true if there are zero or one fields.  */
-  if (!fieldlist || !DECL_CHAIN (fieldlist))
-    return;
+  ਜੇ (!fieldlist || !DECL_CHAIN (fieldlist))
+    ਵਾਪਸ;
   x = fieldlist;
-  do {
+  ਕਰੋ {
     timeout--;
-    if (DECL_NAME (x) == NULL_TREE
-	&& RECORD_OR_UNION_TYPE_P (TREE_TYPE (x)))
+    ਜੇ (DECL_NAME (x) == NULL_ਰੁੱਖ
+	&& ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (x)))
       timeout = 0;
     x = DECL_CHAIN (x);
-  } while (timeout > 0 && x);
+  } ਜਦੋਂ (timeout > 0 && x);
 
   /* If there were "few" fields and no anonymous structures or unions,
      avoid the overhead of allocating a hash table.  Instead just do
      the nested traversal thing.  */
-  if (timeout > 0)
+  ਜੇ (timeout > 0)
     {
-      for (x = DECL_CHAIN (fieldlist); x; x = DECL_CHAIN (x))
+      ਲਈ (x = DECL_CHAIN (fieldlist); x; x = DECL_CHAIN (x))
 	/* When using -fplan9-extensions, we can have duplicates
 	   between typedef names and fields.  */
-	if (DECL_NAME (x)
+	ਜੇ (DECL_NAME (x)
 	    || (flag_plan9_extensions
-		&& DECL_NAME (x) == NULL_TREE
-		&& RECORD_OR_UNION_TYPE_P (TREE_TYPE (x))
-		&& TYPE_NAME (TREE_TYPE (x)) != NULL_TREE
-		&& TREE_CODE (TYPE_NAME (TREE_TYPE (x))) == TYPE_DECL))
+		&& DECL_NAME (x) == NULL_ਰੁੱਖ
+		&& ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (x))
+		&& TYPE_NAME (ਰੁੱਖ_TYPE (x)) != NULL_ਰੁੱਖ
+		&& ਰੁੱਖ_ਕੋਡ (TYPE_NAME (ਰੁੱਖ_TYPE (x))) == TYPE_DECL))
 	  {
-	    for (y = fieldlist; y != x; y = TREE_CHAIN (y))
-	      if (is_duplicate_field (y, x))
+	    ਲਈ (y = fieldlist; y != x; y = ਰੁੱਖ_CHAIN (y))
+	      ਜੇ (is_duplicate_ਖੇਤਰ (y, x))
 		{
 		  error ("duplicate member %q+D", x);
-		  DECL_NAME (x) = NULL_TREE;
+		  DECL_NAME (x) = NULL_ਰੁੱਖ;
 		}
 	  }
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      hash_table<nofree_ptr_hash <tree_node> > htab (37);
-      detect_field_duplicates_hash (fieldlist, &htab);
+      hash_ਸਾਰਣੀ<nofree_ptr_hash <ਰੁੱਖ_ਗੰਢ> > htab (37);
+      detect_ਖੇਤਰ_duplicates_hash (fieldlist, &htab);
     }
 }
 
 /* Finish up struct info used by -Wc++-compat.  */
 
-static void
-warn_cxx_compat_finish_struct (tree fieldlist, enum tree_code code,
-			       location_t record_loc)
+ਸਥਿਰ ਖਾਲੀ
+warn_cxx_compat_ਅੰਤ_struct (ਰੁੱਖ fieldlist, ਗਿਣਤੀ ਰੁੱਖ_ਕੋਡ_2 ਕੋਡ,
+			       location_t ਰਿਕਾਰਡ_loc)
 {
-  unsigned int ix;
-  tree x;
-  struct c_binding *b;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ ix;
+  ਰੁੱਖ x;
+  ਬਣਤਰ c_binding *b;
 
-  if (fieldlist == NULL_TREE)
+  ਜੇ (fieldlist == NULL_ਰੁੱਖ)
     {
-      if (code == RECORD_TYPE)
-	warning_at (record_loc, OPT_Wc___compat,
+      ਜੇ (ਕੋਡ == ਰਿਕਾਰਡ_TYPE)
+	warning_at (ਰਿਕਾਰਡ_loc, OPT_Wc___compat,
 		    "empty struct has size 0 in C, size 1 in C++");
-      else
-	warning_at (record_loc, OPT_Wc___compat,
+      ਨਹੀਂਤਾਂ
+	warning_at (ਰਿਕਾਰਡ_loc, OPT_Wc___compat,
 		    "empty union has size 0 in C, size 1 in C++");
     }
 
@@ -9307,7 +9307,7 @@ warn_cxx_compat_finish_struct (tree fieldlist, enum tree_code code,
      only want to issue those warnings if the type is referenced
      outside of the struct declaration.  */
   FOR_EACH_VEC_ELT (struct_parse_info->struct_types, ix, x)
-    C_TYPE_DEFINED_IN_STRUCT (x) = 1;
+    C_TYPE_DEFINED_ਵਿੱਚ_STRUCT (x) = 1;
 
   /* The TYPEDEFS_SEEN field of STRUCT_PARSE_INFO is a list of
      typedefs used when declaring fields in this struct.  If the name
@@ -9315,22 +9315,22 @@ warn_cxx_compat_finish_struct (tree fieldlist, enum tree_code code,
      not parse in C++, because the C++ lookup rules say that the
      typedef name would be looked up in the context of the struct, and
      would thus be the field rather than the typedef.  */
-  if (!struct_parse_info->typedefs_seen.is_empty ()
-      && fieldlist != NULL_TREE)
+  ਜੇ (!struct_parse_info->typedefs_ਵੇਖਿਆ.is_ਖਾਲੀ_ਥਾਵਾਂ ()
+      && fieldlist != NULL_ਰੁੱਖ)
     {
       /* Use a hash_set<tree> using the name of the typedef.  We can use
 	 a hash_set<tree> because identifiers are interned.  */
-      hash_set<tree> tset;
+      hash_ਸੈੱਟ<ਰੁੱਖ> tset;
 
-      FOR_EACH_VEC_ELT (struct_parse_info->typedefs_seen, ix, x)
-	tset.add (DECL_NAME (x));
+      FOR_EACH_VEC_ELT (struct_parse_info->typedefs_ਵੇਖਿਆ, ix, x)
+	tset.ਜੋੜੋ (DECL_NAME (x));
 
-      for (x = fieldlist; x != NULL_TREE; x = DECL_CHAIN (x))
+      ਲਈ (x = fieldlist; x != NULL_ਰੁੱਖ; x = DECL_CHAIN (x))
 	{
-	  if (DECL_NAME (x) != NULL_TREE
-	      && tset.contains (DECL_NAME (x)))
+	  ਜੇ (DECL_NAME (x) != NULL_ਰੁੱਖ
+	      && tset.ਸ਼ਾਮਲ_ਹੈ (DECL_NAME (x)))
 	    {
-	      warning_at (DECL_SOURCE_LOCATION (x), OPT_Wc___compat,
+	      warning_at (DECL_ਸਰੋਤ_LOCATION (x), OPT_Wc___compat,
 			  "using %qD as both field and typedef name is "
 			  "invalid in C++", x);
 	      /* FIXME: It would be nice to report the location where
@@ -9342,45 +9342,45 @@ warn_cxx_compat_finish_struct (tree fieldlist, enum tree_code code,
   /* For each field which has a binding and which was not defined in
      an enclosing struct, clear the in_struct field.  */
   FOR_EACH_VEC_ELT (struct_parse_info->fields, ix, b)
-    b->in_struct = 0;
+    b->ਵਿੱਚ_struct = 0;
 }
 
 /* Function to help qsort sort FIELD_DECLs by name order.  */
 
-static int
-field_decl_cmp (const void *x_p, const void *y_p)
+ਸਥਿਰ ਪੂਰਨ
+ਖੇਤਰ_decl_cmp (ਅਚਲ ਖਾਲੀ *x_p, ਅਚਲ ਖਾਲੀ *y_p)
 {
-  const tree *const x = (const tree *) x_p;
-  const tree *const y = (const tree *) y_p;
+  ਅਚਲ ਰੁੱਖ *ਅਚਲ x = (ਅਚਲ ਰੁੱਖ *) x_p;
+  ਅਚਲ ਰੁੱਖ *ਅਚਲ y = (ਅਚਲ ਰੁੱਖ *) y_p;
 
-  if (DECL_NAME (*x) == DECL_NAME (*y))
+  ਜੇ (DECL_NAME (*x) == DECL_NAME (*y))
     /* A nontype is "greater" than a type.  */
-    return (TREE_CODE (*y) == TYPE_DECL) - (TREE_CODE (*x) == TYPE_DECL);
-  if (DECL_NAME (*x) == NULL_TREE)
-    return -1;
-  if (DECL_NAME (*y) == NULL_TREE)
-    return 1;
-  if (DECL_NAME (*x) < DECL_NAME (*y))
-    return -1;
-  return 1;
+    ਵਾਪਸ (ਰੁੱਖ_ਕੋਡ (*y) == TYPE_DECL) - (ਰੁੱਖ_ਕੋਡ (*x) == TYPE_DECL);
+  ਜੇ (DECL_NAME (*x) == NULL_ਰੁੱਖ)
+    ਵਾਪਸ -1;
+  ਜੇ (DECL_NAME (*y) == NULL_ਰੁੱਖ)
+    ਵਾਪਸ 1;
+  ਜੇ (DECL_NAME (*x) < DECL_NAME (*y))
+    ਵਾਪਸ -1;
+  ਵਾਪਸ 1;
 }
 
 /* If this structure or union completes the type of any previous
    variable declaration, lay it out and output its rtl.  */
-static void
-finish_incomplete_vars (tree incomplete_vars, bool toplevel)
+ਸਥਿਰ ਖਾਲੀ
+ਅੰਤ_incomplete_vars (ਰੁੱਖ incomplete_vars, ਤਾਰਕਿਕ toplevel)
 {
-  for (tree x = incomplete_vars; x; x = TREE_CHAIN (x))
+  ਲਈ (ਰੁੱਖ x = incomplete_vars; x; x = ਰੁੱਖ_CHAIN (x))
     {
-      tree decl = TREE_VALUE (x);
-      if (TREE_CODE (TREE_TYPE (decl)) == ARRAY_TYPE)
-	layout_array_type (TREE_TYPE (decl));
-      if (TREE_CODE (decl) != TYPE_DECL)
+      ਰੁੱਖ decl = ਰੁੱਖ_ਮੁੱਲ (x);
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (decl)) == ARRAY_TYPE)
+	layout_array_type (ਰੁੱਖ_TYPE (decl));
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) != TYPE_DECL)
 	{
 	  relayout_decl (decl);
-	  if (c_dialect_objc ())
+	  ਜੇ (c_dialect_objc ())
 	    objc_check_decl (decl);
-	  rest_of_decl_compilation (decl, toplevel, 0);
+	  rest_ਦਾ_decl_compilation (decl, toplevel, 0);
 	}
     }
 }
@@ -9395,48 +9395,48 @@ finish_incomplete_vars (tree incomplete_vars, bool toplevel)
      if presenting.
   Return TRUE when it's a flexible array member, FALSE otherwise.  */
 
-static bool
-is_flexible_array_member_p (bool is_last_field,
-			    tree x)
+ਸਥਿਰ ਤਾਰਕਿਕ
+is_flexible_array_member_p (ਤਾਰਕਿਕ is_ਆਖਰੀ_ਖੇਤਰ,
+			    ਰੁੱਖ x)
 {
   /* If not the last field, return false.  */
-  if (!is_last_field)
-    return false;
+  ਜੇ (!is_ਆਖਰੀ_ਖੇਤਰ)
+    ਵਾਪਸ ਝੂਠ;
 
   /* If not an array field, return false.  */
-  if (TREE_CODE (TREE_TYPE (x)) != ARRAY_TYPE)
-    return false;
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (x)) != ARRAY_TYPE)
+    ਵਾਪਸ ਝੂਠ;
 
-  bool is_zero_length_array = zero_length_array_type_p (TREE_TYPE (x));
-  bool is_one_element_array = one_element_array_type_p (TREE_TYPE (x));
-  bool is_flexible_array = flexible_array_member_type_p (TREE_TYPE (x));
+  ਤਾਰਕਿਕ is_zero_ਲੰਮਾਈ_array = zero_ਲੰਮਾਈ_array_type_p (ਰੁੱਖ_TYPE (x));
+  ਤਾਰਕਿਕ is_one_element_array = one_element_array_type_p (ਰੁੱਖ_TYPE (x));
+  ਤਾਰਕਿਕ is_flexible_array = flexible_array_member_type_p (ਰੁੱਖ_TYPE (x));
 
-  unsigned int strict_flex_array_level = c_strict_flex_array_level_of (x);
+  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ strict_flex_array_level = c_strict_flex_array_level_ਦਾ (x);
 
-  switch (strict_flex_array_level)
+  ਚੋਣ (strict_flex_array_level)
     {
-      case 0:
+      ਹਾਲਤ 0:
 	/* Default, all trailing arrays are flexible array members.  */
-	return true;
-      case 1:
+	ਵਾਪਸ ਸੱਚ;
+      ਹਾਲਤ 1:
 	/* Level 1: all "[1]", "[0]", and "[]" are flexible array members.  */
-	if (is_one_element_array)
-	  return true;
+	ਜੇ (is_one_element_array)
+	  ਵਾਪਸ ਸੱਚ;
 	/* FALLTHROUGH.  */
-      case 2:
+      ਹਾਲਤ 2:
 	/* Level 2: all "[0]", and "[]" are flexible array members.  */
-	if (is_zero_length_array)
-	  return true;
+	ਜੇ (is_zero_ਲੰਮਾਈ_array)
+	  ਵਾਪਸ ਸੱਚ;
 	/* FALLTHROUGH.  */
-      case 3:
+      ਹਾਲਤ 3:
 	/* Level 3: Only "[]" are flexible array members.  */
-	if (is_flexible_array)
-	  return true;
-	break;
-      default:
+	ਜੇ (is_flexible_array)
+	  ਵਾਪਸ ਸੱਚ;
+	ਰੋਕੋ;
+      ਮੂਲ:
 	gcc_unreachable ();
     }
-  return false;
+  ਵਾਪਸ ਝੂਠ;
 }
 
 /* Recompute TYPE_CANONICAL for variants of the type including qualified
@@ -9446,57 +9446,57 @@ is_flexible_array_member_p (bool is_last_field,
    types and other derived types created while the type was still
    incomplete, those will remain TYPE_STRUCTURAL_EQUALITY_P.  */
 
-static void
-c_update_type_canonical (tree t)
+ਸਥਿਰ ਖਾਲੀ
+c_update_type_canonical (ਰੁੱਖ t)
 {
   gcc_checking_assert (TYPE_MAIN_VARIANT (t) == t && !TYPE_QUALS (t));
-  for (tree x = t, l = NULL_TREE; x; l = x, x = TYPE_NEXT_VARIANT (x))
+  ਲਈ (ਰੁੱਖ x = t, l = NULL_ਰੁੱਖ; x; l = x, x = TYPE_ਅਗਲਾ_VARIANT (x))
     {
-      if (x != t && TYPE_STRUCTURAL_EQUALITY_P (x))
+      ਜੇ (x != t && TYPE_STRUCTURAL_EQUALITY_P (x))
 	{
-	  if (!TYPE_QUALS (x))
+	  ਜੇ (!TYPE_QUALS (x))
 	    TYPE_CANONICAL (x) = TYPE_CANONICAL (t);
-	  else
+	  ਨਹੀਂਤਾਂ
 	    {
-	      tree
+	      ਰੁੱਖ
 		c = c_build_qualified_type (TYPE_CANONICAL (t), TYPE_QUALS (x));
-	      if (TYPE_STRUCTURAL_EQUALITY_P (c))
+	      ਜੇ (TYPE_STRUCTURAL_EQUALITY_P (c))
 		{
 		  gcc_checking_assert (TYPE_CANONICAL (t) == t);
-		  if (c == x)
+		  ਜੇ (c == x)
 		    TYPE_CANONICAL (x) = x;
-		  else
+		  ਨਹੀਂਤਾਂ
 		    {
 		      /* build_qualified_type for this function unhelpfully
 			 moved c from some later spot in TYPE_MAIN_VARIANT (t)
 			 chain to right after t (or created it there).  Move
 			 it right before x and process c and then x.  */
-		      gcc_checking_assert (TYPE_NEXT_VARIANT (t) == c);
-		      if (l != t)
+		      gcc_checking_assert (TYPE_ਅਗਲਾ_VARIANT (t) == c);
+		      ਜੇ (l != t)
 			{
-			  TYPE_NEXT_VARIANT (t) = TYPE_NEXT_VARIANT (c);
-			  TYPE_NEXT_VARIANT (l) = c;
-			  TYPE_NEXT_VARIANT (c) = x;
+			  TYPE_ਅਗਲਾ_VARIANT (t) = TYPE_ਅਗਲਾ_VARIANT (c);
+			  TYPE_ਅਗਲਾ_VARIANT (l) = c;
+			  TYPE_ਅਗਲਾ_VARIANT (c) = x;
 			}
 		      TYPE_CANONICAL (c) = c;
 		      x = c;
 		    }
 		}
-	      else
+	      ਨਹੀਂਤਾਂ
 		TYPE_CANONICAL (x) = TYPE_CANONICAL (c);
 	    }
 	}
-      else if (x != t)
-	continue;
-      for (tree p = TYPE_POINTER_TO (x); p; p = TYPE_NEXT_PTR_TO (p))
+      ਨਹੀਂਤਾਂ ਜੇ (x != t)
+	ਜਾਰੀ;
+      ਲਈ (ਰੁੱਖ p = TYPE_ਸੂਚਕ_ਮੰਜ਼ਿਲ (x); p; p = TYPE_ਅਗਲਾ_PTR_ਮੰਜ਼ਿਲ (p))
 	{
-	  if (!TYPE_STRUCTURAL_EQUALITY_P (p))
-	    continue;
-	  if (TYPE_CANONICAL (x) != x || TYPE_REF_CAN_ALIAS_ALL (p))
+	  ਜੇ (!TYPE_STRUCTURAL_EQUALITY_P (p))
+	    ਜਾਰੀ;
+	  ਜੇ (TYPE_CANONICAL (x) != x || TYPE_REF_CAN_ALIAS_ALL (p))
 	    TYPE_CANONICAL (p)
-	      = c_build_pointer_type_for_mode (TYPE_CANONICAL (x), TYPE_MODE (p),
-					       false);
-	  else
+	      = c_build_ਸੂਚਕ_type_for_ਬਹੁਲਕ (TYPE_CANONICAL (x), TYPE_ਬਹੁਲਕ (p),
+					       ਝੂਠ);
+	  ਨਹੀਂਤਾਂ
 	    TYPE_CANONICAL (p) = p;
 	  c_update_type_canonical (p);
 	}
@@ -9511,13 +9511,13 @@ c_update_type_canonical (tree t)
    those we later assume (in c_variably_modified_p) that the bit is
    up-to-date.  */
 
-static void
-c_update_variably_modified (tree t)
+ਸਥਿਰ ਖਾਲੀ
+c_update_variably_modified (ਰੁੱਖ t)
 {
-  for (tree x = t; x; x = TYPE_NEXT_VARIANT (x))
+  ਲਈ (ਰੁੱਖ x = t; x; x = TYPE_ਅਗਲਾ_VARIANT (x))
     {
       C_TYPE_VARIABLY_MODIFIED (x) = 1;
-      for (tree p = TYPE_POINTER_TO (x); p; p = TYPE_NEXT_PTR_TO (p))
+      ਲਈ (ਰੁੱਖ p = TYPE_ਸੂਚਕ_ਮੰਜ਼ਿਲ (x); p; p = TYPE_ਅਗਲਾ_PTR_ਮੰਜ਼ਿਲ (p))
 	c_update_variably_modified (p);
     }
 }
@@ -9528,67 +9528,67 @@ c_update_variably_modified (tree t)
    anonymous struct/union, Report error and remove the corresponding
    attribute when it's not.  */
 
-static void
-verify_counted_by_attribute (tree outmost_struct_type,
-			     tree cur_struct_type)
+ਸਥਿਰ ਖਾਲੀ
+verify_counted_by_attribute (ਰੁੱਖ outmost_struct_type,
+			     ਰੁੱਖ cur_struct_type)
 {
-  for (tree field = TYPE_FIELDS (cur_struct_type); field;
-       field = TREE_CHAIN (field))
+  ਲਈ (ਰੁੱਖ ਖੇਤਰ_2 = TYPE_FIELDS (cur_struct_type); ਖੇਤਰ_2;
+       ਖੇਤਰ_2 = ਰੁੱਖ_CHAIN (ਖੇਤਰ_2))
     {
-      if (flexible_array_member_type_p (TREE_TYPE (field))
-	   || TREE_CODE (TREE_TYPE (field)) == POINTER_TYPE)
+      ਜੇ (flexible_array_member_type_p (ਰੁੱਖ_TYPE (ਖੇਤਰ_2))
+	   || ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (ਖੇਤਰ_2)) == ਸੂਚਕ_TYPE)
 	{
-	  tree attr_counted_by = lookup_attribute ("counted_by",
-						   DECL_ATTRIBUTES (field));
+	  ਰੁੱਖ attr_counted_by = lookup_attribute ("counted_by",
+						   DECL_ਗੁਣ (ਖੇਤਰ_2));
 
-	  if (!attr_counted_by)
-	    continue;
+	  ਜੇ (!attr_counted_by)
+	    ਜਾਰੀ;
 
 	  /* If there is an counted_by attribute attached to the field,
 	     verify it.  */
 
-	  tree fieldname = TREE_VALUE (TREE_VALUE (attr_counted_by));
+	  ਰੁੱਖ fieldname = ਰੁੱਖ_ਮੁੱਲ (ਰੁੱਖ_ਮੁੱਲ (attr_counted_by));
 
 	  /* Verify the argument of the attribute is a valid field of the
 	     containing structure.  */
 
-	  tree counted_by_field = lookup_field (outmost_struct_type,
+	  ਰੁੱਖ counted_by_ਖੇਤਰ = lookup_ਖੇਤਰ (outmost_struct_type,
 						fieldname);
 
 	  /* Error when the field is not found in the containing structure
 	     and remove the corresponding counted_by attribute from the
 	     field_decl.  */
-	  if (!counted_by_field)
+	  ਜੇ (!counted_by_ਖੇਤਰ)
 	    {
-	      error_at (DECL_SOURCE_LOCATION (field),
+	      error_at (DECL_ਸਰੋਤ_LOCATION (ਖੇਤਰ_2),
 		    "argument %qE to the %<counted_by%> attribute"
 		    " is not a field declaration in the same structure"
-		    " as %qD", fieldname, field);
-	      DECL_ATTRIBUTES (field)
-		= remove_attribute ("counted_by", DECL_ATTRIBUTES (field));
+		    " as %qD", fieldname, ਖੇਤਰ_2);
+	      DECL_ਗੁਣ (ਖੇਤਰ_2)
+		= remove_attribute ("counted_by", DECL_ਗੁਣ (ਖੇਤਰ_2));
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	  /* Error when the field is not with an integer type.  */
 	    {
-	      while (TREE_CHAIN (counted_by_field))
-		counted_by_field = TREE_CHAIN (counted_by_field);
-	      tree real_field = TREE_VALUE (counted_by_field);
+	      ਜਦੋਂ (ਰੁੱਖ_CHAIN (counted_by_ਖੇਤਰ))
+		counted_by_ਖੇਤਰ = ਰੁੱਖ_CHAIN (counted_by_ਖੇਤਰ);
+	      ਰੁੱਖ real_ਖੇਤਰ = ਰੁੱਖ_ਮੁੱਲ (counted_by_ਖੇਤਰ);
 
-	      if (!INTEGRAL_TYPE_P (TREE_TYPE (real_field)))
+	      ਜੇ (!INTEGRAL_TYPE_P (ਰੁੱਖ_TYPE (real_ਖੇਤਰ)))
 		{
-		  error_at (DECL_SOURCE_LOCATION (field),
+		  error_at (DECL_ਸਰੋਤ_LOCATION (ਖੇਤਰ_2),
 			"argument %qE to the %<counted_by%> attribute"
 			" is not a field declaration with an integer type",
 			fieldname);
-		  DECL_ATTRIBUTES (field)
+		  DECL_ਗੁਣ (ਖੇਤਰ_2)
 		    = remove_attribute ("counted_by",
-				    DECL_ATTRIBUTES (field));
+				    DECL_ਗੁਣ (ਖੇਤਰ_2));
 		}
 	    }
 	}
-      else if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (field))
-	       && (DECL_NAME (field) == NULL_TREE))
-	verify_counted_by_attribute (outmost_struct_type, TREE_TYPE (field));
+      ਨਹੀਂਤਾਂ ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (ਖੇਤਰ_2))
+	       && (DECL_NAME (ਖੇਤਰ_2) == NULL_ਰੁੱਖ))
+	verify_counted_by_attribute (outmost_struct_type, ਰੁੱਖ_TYPE (ਖੇਤਰ_2));
     }
 }
 
@@ -9596,26 +9596,26 @@ verify_counted_by_attribute (tree outmost_struct_type,
    nested in other structure/uniona). For such type, verify its counted_by
    if it is an anonymous structure/union.  */
 
-void
-verify_counted_by_for_top_anonymous_type (tree type)
+ਖਾਲੀ
+verify_counted_by_for_ਸਿਖਰ_anonymous_type (ਰੁੱਖ type)
 {
-  if (!RECORD_OR_UNION_TYPE_P (type))
-    return;
+  ਜੇ (!ਰਿਕਾਰਡ_OR_UNION_TYPE_P (type))
+    ਵਾਪਸ;
 
-  if (C_TYPE_FIELDS_HAS_COUNTED_BY (type)
-      && c_type_tag (type) == NULL_TREE)
+  ਜੇ (C_TYPE_FIELDS_HAS_COUNTED_BY (type)
+      && c_type_ਟੈਗ (type) == NULL_ਰੁੱਖ)
     verify_counted_by_attribute (type, type);
 }
 
 /* TYPE is a struct or union that we're applying may_alias to after the body is
    parsed.  Fixup any POINTER_TO types.  */
 
-static void
-c_fixup_may_alias (tree type)
+ਸਥਿਰ ਖਾਲੀ
+c_fixup_may_alias (ਰੁੱਖ type)
 {
-  for (tree t = TYPE_POINTER_TO (type); t; t = TYPE_NEXT_PTR_TO (t))
-    for (tree v = TYPE_MAIN_VARIANT (t); v; v = TYPE_NEXT_VARIANT (v))
-      TYPE_REF_CAN_ALIAS_ALL (v) = true;
+  ਲਈ (ਰੁੱਖ t = TYPE_ਸੂਚਕ_ਮੰਜ਼ਿਲ (type); t; t = TYPE_ਅਗਲਾ_PTR_ਮੰਜ਼ਿਲ (t))
+    ਲਈ (ਰੁੱਖ v = TYPE_MAIN_VARIANT (t); v; v = TYPE_ਅਗਲਾ_VARIANT (v))
+      TYPE_REF_CAN_ALIAS_ALL (v) = ਸੱਚ;
 }
 
 /* Fill in the fields of a RECORD_TYPE or UNION_TYPE node, T.
@@ -9626,45 +9626,45 @@ c_fixup_may_alias (tree type)
    ENCLOSING_STRUCT_PARSE_INFO is the value of STRUCT_PARSE_INFO when
    the struct was started.  */
 
-tree
-finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
-	       class c_struct_parse_info *enclosing_struct_parse_info,
-	       tree *expr)
+ਰੁੱਖ
+ਅੰਤ_struct (location_t loc, ਰੁੱਖ t, ਰੁੱਖ fieldlist, ਰੁੱਖ ਗੁਣ,
+	       ਵਰਗ c_struct_parse_info *enclosing_struct_parse_info,
+	       ਰੁੱਖ *ਵਿਅੰਜਕ)
 {
-  tree x;
-  bool toplevel = file_scope == current_scope;
+  ਰੁੱਖ x;
+  ਤਾਰਕਿਕ toplevel = file_scope == current_scope;
 
   /* If this type was previously laid out as a forward reference,
      make sure we lay it out again.  */
 
-  TYPE_SIZE (t) = NULL_TREE;
+  TYPE_ਮਾਪ (t) = NULL_ਰੁੱਖ;
 
-  decl_attributes (&t, attributes, (int) ATTR_FLAG_TYPE_IN_PLACE);
+  decl_ਗੁਣ (&t, ਗੁਣ, (ਪੂਰਨ) ATTR_FLAG_TYPE_ਵਿੱਚ_ਰੱਖੋ);
 
-  if (pedantic)
+  ਜੇ (pedantic)
     {
-      for (x = fieldlist; x; x = DECL_CHAIN (x))
+      ਲਈ (x = fieldlist; x; x = DECL_CHAIN (x))
 	{
-	  if (DECL_NAME (x) != NULL_TREE)
-	    break;
-	  if (flag_isoc11 && RECORD_OR_UNION_TYPE_P (TREE_TYPE (x)))
-	    break;
+	  ਜੇ (DECL_NAME (x) != NULL_ਰੁੱਖ)
+	    ਰੋਕੋ;
+	  ਜੇ (flag_isoc11 && ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (x)))
+	    ਰੋਕੋ;
 	}
 
-      if (x == NULL_TREE)
+      ਜੇ (x == NULL_ਰੁੱਖ)
 	{
-	  if (TREE_CODE (t) == UNION_TYPE)
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (t) == UNION_TYPE)
 	    {
-	      if (fieldlist)
+	      ਜੇ (fieldlist)
 		pedwarn (loc, OPT_Wpedantic, "union has no named members");
-	      else
+	      ਨਹੀਂਤਾਂ
 		pedwarn (loc, OPT_Wpedantic, "union has no members");
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    {
-	      if (fieldlist)
+	      ਜੇ (fieldlist)
 		pedwarn (loc, OPT_Wpedantic, "struct has no named members");
-	      else
+	      ਨਹੀਂਤਾਂ
 		pedwarn (loc, OPT_Wpedantic, "struct has no members");
 	    }
 	}
@@ -9677,33 +9677,33 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
      type.  (Correct layout requires the original type to have been preserved
      until now.)  */
 
-  bool saw_named_field = false;
-  for (x = fieldlist; x; x = DECL_CHAIN (x))
+  ਤਾਰਕਿਕ saw_named_ਖੇਤਰ = ਝੂਠ;
+  ਲਈ (x = fieldlist; x; x = DECL_CHAIN (x))
     {
       /* Whether this field is the last field of the structure or union.
 	 for UNION, any field is the last field of it.  */
-      bool is_last_field = (DECL_CHAIN (x) == NULL_TREE)
-			    || (TREE_CODE (t) == UNION_TYPE);
+      ਤਾਰਕਿਕ is_ਆਖਰੀ_ਖੇਤਰ = (DECL_CHAIN (x) == NULL_ਰੁੱਖ)
+			    || (ਰੁੱਖ_ਕੋਡ (t) == UNION_TYPE);
 
-      if (TREE_TYPE (x) == error_mark_node)
-	continue;
+      ਜੇ (ਰੁੱਖ_TYPE (x) == error_mark_ਗੰਢ)
+	ਜਾਰੀ;
 
       DECL_CONTEXT (x) = t;
 
-      tree t1 = strip_array_types (TREE_TYPE (x));
+      ਰੁੱਖ t1 = strip_array_types (ਰੁੱਖ_TYPE (x));
       /* If any field is const, the structure type is pseudo-const.  */
-      if (TREE_READONLY (x))
+      ਜੇ (ਰੁੱਖ_READONLY (x))
 	C_TYPE_FIELDS_READONLY (t) = 1;
-      else
+      ਨਹੀਂਤਾਂ
 	{
 	  /* A field that is pseudo-const makes the structure likewise.  */
-	  if (RECORD_OR_UNION_TYPE_P (t1) && C_TYPE_FIELDS_READONLY (t1))
+	  ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (t1) && C_TYPE_FIELDS_READONLY (t1))
 	    C_TYPE_FIELDS_READONLY (t) = 1;
 	}
 
       /* Any field that is volatile means variables of this type must be
 	 treated in some ways as volatile.  */
-      if (TREE_THIS_VOLATILE (x))
+      ਜੇ (ਰੁੱਖ_THIS_VOLATILE (x))
 	{
 	  C_TYPE_FIELDS_VOLATILE (t) = 1;
 	  C_TYPE_FIELDS_NON_CONSTEXPR (t) = 1;
@@ -9711,191 +9711,191 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
 
       /* Any field that is volatile, restrict-qualified or atomic
 	 means the type cannot be used for a constexpr object.  */
-      if (TYPE_QUALS (t1)
+      ਜੇ (TYPE_QUALS (t1)
 	  & (TYPE_QUAL_VOLATILE | TYPE_QUAL_RESTRICT | TYPE_QUAL_ATOMIC))
 	C_TYPE_FIELDS_NON_CONSTEXPR (t) = 1;
-      else if (RECORD_OR_UNION_TYPE_P (t1) && C_TYPE_FIELDS_NON_CONSTEXPR (t1))
+      ਨਹੀਂਤਾਂ ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (t1) && C_TYPE_FIELDS_NON_CONSTEXPR (t1))
 	    C_TYPE_FIELDS_NON_CONSTEXPR (t) = 1;
 
       /* Any field of nominal variable size implies structure is too.  */
-      if (C_DECL_VARIABLE_SIZE (x))
-	C_TYPE_VARIABLE_SIZE (t) = 1;
+      ਜੇ (C_DECL_VARIABLE_ਮਾਪ (x))
+	C_TYPE_VARIABLE_ਮਾਪ (t) = 1;
 
       /* If any field is variably modified, record this fact. */
-      if (c_type_variably_modified_p (TREE_TYPE (x)))
+      ਜੇ (c_type_variably_modified_p (ਰੁੱਖ_TYPE (x)))
 	C_TYPE_VARIABLY_MODIFIED (t) = 1;
 
-      if (DECL_C_BIT_FIELD (x))
+      ਜੇ (DECL_C_ਦੋਆਧਾਰੀ_ਅੰਕ_ਖੇਤਰ (x))
 	{
-	  unsigned HOST_WIDE_INT width = tree_to_uhwi (DECL_INITIAL (x));
-	  DECL_SIZE (x) = bitsize_int (width);
-	  DECL_BIT_FIELD (x) = 1;
+	  ਬਿਨਾਨਿਸ਼ਾਨੀ HOST_WIDE_INT ਚੌੜਾਈ = ਰੁੱਖ_ਮੰਜ਼ਿਲ_uhwi (DECL_INITIAL (x));
+	  DECL_ਮਾਪ (x) = bitsize_int (ਚੌੜਾਈ);
+	  DECL_ਦੋਆਧਾਰੀ_ਅੰਕ_ਖੇਤਰ (x) = 1;
 	}
 
-      if (TYPE_PACKED (t)
-	  && (DECL_BIT_FIELD (x)
-	      || TYPE_ALIGN (TREE_TYPE (x)) > BITS_PER_UNIT))
+      ਜੇ (TYPE_PACKED (t)
+	  && (DECL_ਦੋਆਧਾਰੀ_ਅੰਕ_ਖੇਤਰ (x)
+	      || TYPE_ALIGN (ਰੁੱਖ_TYPE (x)) > ਬਿੱਟ_ਪ੍ਰਤੀ_UNIT))
 	DECL_PACKED (x) = 1;
 
       /* Detect flexible array member in an invalid context.  */
-      if (flexible_array_member_type_p (TREE_TYPE (x)))
+      ਜੇ (flexible_array_member_type_p (ਰੁੱਖ_TYPE (x)))
 	{
-	  if (TREE_CODE (t) == UNION_TYPE)
-	    pedwarn (DECL_SOURCE_LOCATION (x), OPT_Wpedantic,
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (t) == UNION_TYPE)
+	    pedwarn (DECL_ਸਰੋਤ_LOCATION (x), OPT_Wpedantic,
 		     "flexible array member in union is a GCC extension");
-	  else if (!is_last_field)
+	  ਨਹੀਂਤਾਂ ਜੇ (!is_ਆਖਰੀ_ਖੇਤਰ)
 	    {
-	      error_at (DECL_SOURCE_LOCATION (x),
+	      error_at (DECL_ਸਰੋਤ_LOCATION (x),
 			"flexible array member not at end of struct");
-	      TREE_TYPE (x) = error_mark_node;
+	      ਰੁੱਖ_TYPE (x) = error_mark_ਗੰਢ;
 	    }
-	  else if (!saw_named_field)
-	    pedwarn (DECL_SOURCE_LOCATION (x), OPT_Wpedantic,
+	  ਨਹੀਂਤਾਂ ਜੇ (!saw_named_ਖੇਤਰ)
+	    pedwarn (DECL_ਸਰੋਤ_LOCATION (x), OPT_Wpedantic,
 		     "flexible array member in a struct with no named "
 		     "members is a GCC extension");
-	  if (lookup_attribute ("counted_by", DECL_ATTRIBUTES (x)))
+	  ਜੇ (lookup_attribute ("counted_by", DECL_ਗੁਣ (x)))
 	    C_TYPE_FIELDS_HAS_COUNTED_BY (t) = 1;
 	}
 
-      if (TREE_CODE (TREE_TYPE (x)) == POINTER_TYPE
-	  && lookup_attribute ("counted_by", DECL_ATTRIBUTES (x)))
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (x)) == ਸੂਚਕ_TYPE
+	  && lookup_attribute ("counted_by", DECL_ਗੁਣ (x)))
 	C_TYPE_FIELDS_HAS_COUNTED_BY (t) = 1;
 
       /* If the field is an anonymous structure that includes a field
 	 with counted_by attribute, this structure should also be marked
 	 too.  */
-      if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (x))
-	  && C_TYPE_FIELDS_HAS_COUNTED_BY (TREE_TYPE (x))
-	  && DECL_NAME (x) == NULL_TREE
-	  && c_type_tag (TREE_TYPE (x)) == NULL_TREE)
+      ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (x))
+	  && C_TYPE_FIELDS_HAS_COUNTED_BY (ਰੁੱਖ_TYPE (x))
+	  && DECL_NAME (x) == NULL_ਰੁੱਖ
+	  && c_type_ਟੈਗ (ਰੁੱਖ_TYPE (x)) == NULL_ਰੁੱਖ)
 	C_TYPE_FIELDS_HAS_COUNTED_BY (t) = 1;
 
-      if (pedantic && TREE_CODE (t) == RECORD_TYPE
-	  && flexible_array_type_p (TREE_TYPE (x)))
-	pedwarn (DECL_SOURCE_LOCATION (x), OPT_Wpedantic,
+      ਜੇ (pedantic && ਰੁੱਖ_ਕੋਡ (t) == ਰਿਕਾਰਡ_TYPE
+	  && flexible_array_type_p (ਰੁੱਖ_TYPE (x)))
+	pedwarn (DECL_ਸਰੋਤ_LOCATION (x), OPT_Wpedantic,
 		 "invalid use of structure with flexible array member");
 
       /* Set DECL_NOT_FLEXARRAY flag for FIELD_DECL x.  */
-      DECL_NOT_FLEXARRAY (x) = !is_flexible_array_member_p (is_last_field, x);
+      DECL_NOT_FLEXARRAY (x) = !is_flexible_array_member_p (is_ਆਖਰੀ_ਖੇਤਰ, x);
 
       /* Set TYPE_INCLUDES_FLEXARRAY for the context of x, t.
 	 when x is an array and is the last field.
 	 There is only one last_field for a structure type, but there might
 	 be multiple last_fields for a union type, therefore we should ORed
 	 the result for multiple last_fields.  */
-      if (TREE_CODE (TREE_TYPE (x)) == ARRAY_TYPE)
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (x)) == ARRAY_TYPE)
 	TYPE_INCLUDES_FLEXARRAY (t)
-	  |= is_last_field && flexible_array_member_type_p (TREE_TYPE (x));
+	  |= is_ਆਖਰੀ_ਖੇਤਰ && flexible_array_member_type_p (ਰੁੱਖ_TYPE (x));
       /* Recursively set TYPE_INCLUDES_FLEXARRAY for the context of x, t
 	 when x is an union or record and is the last field.  */
-      else if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (x)))
+      ਨਹੀਂਤਾਂ ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (x)))
 	TYPE_INCLUDES_FLEXARRAY (t)
-	  |= is_last_field && TYPE_INCLUDES_FLEXARRAY (TREE_TYPE (x));
+	  |= is_ਆਖਰੀ_ਖੇਤਰ && TYPE_INCLUDES_FLEXARRAY (ਰੁੱਖ_TYPE (x));
 
-      if (warn_flex_array_member_not_at_end
-	  && !is_last_field
-	  && RECORD_OR_UNION_TYPE_P (TREE_TYPE (x))
-	  && TYPE_INCLUDES_FLEXARRAY (TREE_TYPE (x)))
-	warning_at (DECL_SOURCE_LOCATION (x),
-		    OPT_Wflex_array_member_not_at_end,
+      ਜੇ (warn_flex_array_member_not_at_ਸਿਰਾ
+	  && !is_ਆਖਰੀ_ਖੇਤਰ
+	  && ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (x))
+	  && TYPE_INCLUDES_FLEXARRAY (ਰੁੱਖ_TYPE (x)))
+	warning_at (DECL_ਸਰੋਤ_LOCATION (x),
+		    OPT_Wflex_array_member_not_at_ਸਿਰਾ,
 		    "structure containing a flexible array member"
 		    " is not at the end of another structure");
 
-      if (DECL_NAME (x)
-	  || RECORD_OR_UNION_TYPE_P (TREE_TYPE (x)))
-	saw_named_field = true;
+      ਜੇ (DECL_NAME (x)
+	  || ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (x)))
+	saw_named_ਖੇਤਰ = ਸੱਚ;
 
-      if (AGGREGATE_TYPE_P (TREE_TYPE (x))
-	  && TYPE_TYPELESS_STORAGE (TREE_TYPE (x)))
-	TYPE_TYPELESS_STORAGE (t) = true;
+      ਜੇ (AGGREGATE_TYPE_P (ਰੁੱਖ_TYPE (x))
+	  && TYPE_TYPELESS_STORAGE (ਰੁੱਖ_TYPE (x)))
+	TYPE_TYPELESS_STORAGE (t) = ਸੱਚ;
     }
 
-  detect_field_duplicates (fieldlist);
+  detect_ਖੇਤਰ_duplicates (fieldlist);
 
   /* Now we have the nearly final fieldlist.  Record it,
      then lay out the structure or union (including the fields).  */
 
   TYPE_FIELDS (t) = fieldlist;
 
-  maybe_apply_pragma_scalar_storage_order (t);
+  maybe_apply_pragma_scalar_storage_ਕ੍ਰਮ (t);
 
   layout_type (t);
 
-  if (TYPE_SIZE_UNIT (t)
-      && TREE_CODE (TYPE_SIZE_UNIT (t)) == INTEGER_CST
-      && !TREE_OVERFLOW (TYPE_SIZE_UNIT (t))
-      && !valid_constant_size_p (TYPE_SIZE_UNIT (t)))
+  ਜੇ (TYPE_ਮਾਪ_UNIT (t)
+      && ਰੁੱਖ_ਕੋਡ (TYPE_ਮਾਪ_UNIT (t)) == INTEGER_CST
+      && !ਰੁੱਖ_ਉਛਾਲ (TYPE_ਮਾਪ_UNIT (t))
+      && !valid_constant_ਮਾਪ_p (TYPE_ਮਾਪ_UNIT (t)))
     error ("type %qT is too large", t);
 
   /* Give bit-fields their proper types and rewrite the type of array fields
      with scalar component if the enclosing type has reverse storage order.  */
-  for (tree field = fieldlist; field; field = DECL_CHAIN (field))
+  ਲਈ (ਰੁੱਖ ਖੇਤਰ_2 = fieldlist; ਖੇਤਰ_2; ਖੇਤਰ_2 = DECL_CHAIN (ਖੇਤਰ_2))
     {
-      if (TREE_CODE (field) == FIELD_DECL
-	  && DECL_INITIAL (field)
-	  && TREE_TYPE (field) != error_mark_node)
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (ਖੇਤਰ_2) == ਖੇਤਰ_DECL
+	  && DECL_INITIAL (ਖੇਤਰ_2)
+	  && ਰੁੱਖ_TYPE (ਖੇਤਰ_2) != error_mark_ਗੰਢ)
 	{
-	  unsigned HOST_WIDE_INT width
-	    = tree_to_uhwi (DECL_INITIAL (field));
-	  tree type = TREE_TYPE (field);
-	  if (VECTOR_TYPE_P (type))
+	  ਬਿਨਾਨਿਸ਼ਾਨੀ HOST_WIDE_INT ਚੌੜਾਈ
+	    = ਰੁੱਖ_ਮੰਜ਼ਿਲ_uhwi (DECL_INITIAL (ਖੇਤਰ_2));
+	  ਰੁੱਖ type = ਰੁੱਖ_TYPE (ਖੇਤਰ_2);
+	  ਜੇ (ਸਦਿਸ਼_TYPE_P (type))
 	    {
-	      error_at (DECL_SOURCE_LOCATION (field),
-			"bit-field %qD has invalid type", field);
-	      type = TREE_TYPE (type);
-	      TREE_TYPE (field) = type;
+	      error_at (DECL_ਸਰੋਤ_LOCATION (ਖੇਤਰ_2),
+			"bit-field %qD has invalid type", ਖੇਤਰ_2);
+	      type = ਰੁੱਖ_TYPE (type);
+	      ਰੁੱਖ_TYPE (ਖੇਤਰ_2) = type;
 	    }
-	  if (width != TYPE_PRECISION (type))
+	  ਜੇ (ਚੌੜਾਈ != TYPE_PRECISION (type))
 	    {
-	      if (BITINT_TYPE_P (type)
-		  && width >= ((TYPE_UNSIGNED (type) || flag_isoc2y) ? 1 : 2))
-		TREE_TYPE (field)
-		  = build_bitint_type (width, TYPE_UNSIGNED (type));
-	      else
-		TREE_TYPE (field)
-		  = c_build_bitfield_integer_type (width,
+	      ਜੇ (BITINT_TYPE_P (type)
+		  && ਚੌੜਾਈ >= ((TYPE_UNSIGNED (type) || flag_isoc2y) ? 1 : 2))
+		ਰੁੱਖ_TYPE (ਖੇਤਰ_2)
+		  = build_bitint_type (ਚੌੜਾਈ, TYPE_UNSIGNED (type));
+	      ਨਹੀਂਤਾਂ
+		ਰੁੱਖ_TYPE (ਖੇਤਰ_2)
+		  = c_build_bitfield_integer_type (ਚੌੜਾਈ,
 						   TYPE_UNSIGNED (type));
-	      if (tree attr = c_hardbool_type_attr (type))
-		decl_attributes (&TREE_TYPE (field),
+	      ਜੇ (ਰੁੱਖ attr = c_hardbool_type_attr (type))
+		decl_ਗੁਣ (&ਰੁੱਖ_TYPE (ਖੇਤਰ_2),
 				 copy_list (attr),
-				 0, NULL_TREE);
-	      SET_DECL_MODE (field, TYPE_MODE (TREE_TYPE (field)));
+				 0, NULL_ਰੁੱਖ);
+	      ਸੈੱਟ_DECL_ਬਹੁਲਕ (ਖੇਤਰ_2, TYPE_ਬਹੁਲਕ (ਰੁੱਖ_TYPE (ਖੇਤਰ_2)));
 	    }
-	  DECL_INITIAL (field) = NULL_TREE;
+	  DECL_INITIAL (ਖੇਤਰ_2) = NULL_ਰੁੱਖ;
 	}
-      else if (TYPE_REVERSE_STORAGE_ORDER (t)
-	       && TREE_CODE (field) == FIELD_DECL
-	       && TREE_CODE (TREE_TYPE (field)) == ARRAY_TYPE)
+      ਨਹੀਂਤਾਂ ਜੇ (TYPE_ਉਲਟ_STORAGE_ਕ੍ਰਮ (t)
+	       && ਰੁੱਖ_ਕੋਡ (ਖੇਤਰ_2) == ਖੇਤਰ_DECL
+	       && ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (ਖੇਤਰ_2)) == ARRAY_TYPE)
 	{
-	  tree ftype = TREE_TYPE (field);
-	  tree ctype = strip_array_types (ftype);
-	  if (!RECORD_OR_UNION_TYPE_P (ctype) && TYPE_MODE (ctype) != QImode)
+	  ਰੁੱਖ ftype = ਰੁੱਖ_TYPE (ਖੇਤਰ_2);
+	  ਰੁੱਖ ctype = strip_array_types (ftype);
+	  ਜੇ (!ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ctype) && TYPE_ਬਹੁਲਕ (ctype) != QImode)
 	    {
-	      tree fmain_type = TYPE_MAIN_VARIANT (ftype);
-	      tree *typep = &fmain_type;
-	      do {
+	      ਰੁੱਖ fmain_type = TYPE_MAIN_VARIANT (ftype);
+	      ਰੁੱਖ *typep = &fmain_type;
+	      ਕਰੋ {
 		*typep = build_distinct_type_copy (*typep);
-		TYPE_REVERSE_STORAGE_ORDER (*typep) = 1;
-		typep = &TREE_TYPE (*typep);
-	      } while (TREE_CODE (*typep) == ARRAY_TYPE);
-	      TREE_TYPE (field)
+		TYPE_ਉਲਟ_STORAGE_ਕ੍ਰਮ (*typep) = 1;
+		typep = &ਰੁੱਖ_TYPE (*typep);
+	      } ਜਦੋਂ (ਰੁੱਖ_ਕੋਡ (*typep) == ARRAY_TYPE);
+	      ਰੁੱਖ_TYPE (ਖੇਤਰ_2)
 		= c_build_qualified_type (fmain_type, TYPE_QUALS (ftype));
 	    }
 	}
 
       /* Warn on problematic type punning for storage order purposes.  */
-      if (TREE_CODE (t) == UNION_TYPE
-	  && TREE_CODE (field) == FIELD_DECL
-	  && AGGREGATE_TYPE_P (TREE_TYPE (field)))
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (t) == UNION_TYPE
+	  && ਰੁੱਖ_ਕੋਡ (ਖੇਤਰ_2) == ਖੇਤਰ_DECL
+	  && AGGREGATE_TYPE_P (ਰੁੱਖ_TYPE (ਖੇਤਰ_2)))
 	{
-	  tree ftype = TREE_TYPE (field);
-	  if (TREE_CODE (ftype) == ARRAY_TYPE)
+	  ਰੁੱਖ ftype = ਰੁੱਖ_TYPE (ਖੇਤਰ_2);
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (ftype) == ARRAY_TYPE)
 	    ftype = strip_array_types (ftype);
-	  if (RECORD_OR_UNION_TYPE_P (ftype)
-	      && TYPE_REVERSE_STORAGE_ORDER (ftype)
-		 != TYPE_REVERSE_STORAGE_ORDER (t))
-	    warning_at (DECL_SOURCE_LOCATION (field),
-			OPT_Wscalar_storage_order,
+	  ਜੇ (ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ftype)
+	      && TYPE_ਉਲਟ_STORAGE_ਕ੍ਰਮ (ftype)
+		 != TYPE_ਉਲਟ_STORAGE_ਕ੍ਰਮ (t))
+	    warning_at (DECL_ਸਰੋਤ_LOCATION (ਖੇਤਰ_2),
+			OPT_Wscalar_storage_ਕ੍ਰਮ,
 			"type punning toggles scalar storage order");
 	}
     }
@@ -9909,70 +9909,70 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
      We arbitrarily consider 16 or more elts to be "a lot".  */
 
   {
-    int len = 0;
+    ਪੂਰਨ len = 0;
 
-    for (x = fieldlist; x; x = DECL_CHAIN (x))
+    ਲਈ (x = fieldlist; x; x = DECL_CHAIN (x))
       {
-	if (len > 15 || DECL_NAME (x) == NULL)
-	  break;
+	ਜੇ (len > 15 || DECL_NAME (x) == ਨਿਰਾ)
+	  ਰੋਕੋ;
 	len += 1;
       }
 
-    if (len > 15)
+    ਜੇ (len > 15)
       {
-	tree *field_array;
-	struct lang_type *space;
-	struct sorted_fields_type *space2;
+	ਰੁੱਖ *ਖੇਤਰ_array;
+	ਬਣਤਰ lang_type *space;
+	ਬਣਤਰ sorted_fields_type *space2;
 
-	len += list_length (x);
+	len += list_ਲੰਮਾਈ (x);
 
 	/* Use the same allocation policy here that make_node uses, to
 	   ensure that this lives as long as the rest of the struct decl.
 	   All decls in an inline function need to be saved.  */
 
-	space = ((struct lang_type *)
-		 ggc_internal_cleared_alloc (c_dialect_objc ()
-					     ? sizeof (struct lang_type)
-					     : offsetof (struct lang_type,
+	space = ((ਬਣਤਰ lang_type *)
+		 ggc_ਅੰਦਰੂਨੀ_cleared_alloc (c_dialect_objc ()
+					     ? ਆਕਾਰ (ਬਣਤਰ lang_type)
+					     : offsetof (ਬਣਤਰ lang_type,
 							 info)));
 	space2 = ((sorted_fields_type *)
-		  ggc_internal_alloc (sizeof (struct sorted_fields_type)
-				      + len * sizeof (tree)));
+		  ggc_ਅੰਦਰੂਨੀ_alloc (ਆਕਾਰ (ਬਣਤਰ sorted_fields_type)
+				      + len * ਆਕਾਰ (ਰੁੱਖ)));
 
 	len = 0;
 	space->s = space2;
-	field_array = &space2->elts[0];
-	for (x = fieldlist; x; x = DECL_CHAIN (x))
+	ਖੇਤਰ_array = &space2->elts[0];
+	ਲਈ (x = fieldlist; x; x = DECL_CHAIN (x))
 	  {
-	    field_array[len++] = x;
+	    ਖੇਤਰ_array[len++] = x;
 
 	    /* If there is anonymous struct or union, break out of the loop.  */
-	    if (DECL_NAME (x) == NULL)
-	      break;
+	    ਜੇ (DECL_NAME (x) == ਨਿਰਾ)
+	      ਰੋਕੋ;
 	  }
 	/* Found no anonymous struct/union.  Add the TYPE_LANG_SPECIFIC.  */
-	if (x == NULL)
+	ਜੇ (x == ਨਿਰਾ)
 	  {
 	    TYPE_LANG_SPECIFIC (t) = space;
 	    TYPE_LANG_SPECIFIC (t)->s->len = len;
-	    field_array = TYPE_LANG_SPECIFIC (t)->s->elts;
-	    qsort (field_array, len, sizeof (tree), field_decl_cmp);
+	    ਖੇਤਰ_array = TYPE_LANG_SPECIFIC (t)->s->elts;
+	    qsort (ਖੇਤਰ_array, len, ਆਕਾਰ (ਰੁੱਖ), ਖੇਤਰ_decl_cmp);
 	  }
       }
   }
 
   /* If this was supposed to be a transparent union, but we can't
      make it one, warn and turn off the flag.  */
-  if (TREE_CODE (t) == UNION_TYPE
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (t) == UNION_TYPE
       && TYPE_TRANSPARENT_AGGR (t)
-      && (!TYPE_FIELDS (t) || TYPE_MODE (t) != DECL_MODE (TYPE_FIELDS (t))))
+      && (!TYPE_FIELDS (t) || TYPE_ਬਹੁਲਕ (t) != DECL_ਬਹੁਲਕ (TYPE_FIELDS (t))))
     {
       TYPE_TRANSPARENT_AGGR (t) = 0;
       warning_at (loc, 0, "union cannot be made transparent");
     }
 
-  tree incomplete_vars = C_TYPE_INCOMPLETE_VARS (TYPE_MAIN_VARIANT (t));
-  for (x = TYPE_MAIN_VARIANT (t); x; x = TYPE_NEXT_VARIANT (x))
+  ਰੁੱਖ incomplete_vars = C_TYPE_INCOMPLETE_VARS (TYPE_MAIN_VARIANT (t));
+  ਲਈ (x = TYPE_MAIN_VARIANT (t); x; x = TYPE_ਅਗਲਾ_VARIANT (x))
     {
       TYPE_FIELDS (x) = TYPE_FIELDS (t);
       TYPE_LANG_SPECIFIC (x) = TYPE_LANG_SPECIFIC (t);
@@ -9982,32 +9982,32 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
       C_TYPE_FIELDS_VOLATILE (x) = C_TYPE_FIELDS_VOLATILE (t);
       C_TYPE_FIELDS_NON_CONSTEXPR (x) = C_TYPE_FIELDS_NON_CONSTEXPR (t);
       C_TYPE_FIELDS_HAS_COUNTED_BY (x) = C_TYPE_FIELDS_HAS_COUNTED_BY (t);
-      C_TYPE_VARIABLE_SIZE (x) = C_TYPE_VARIABLE_SIZE (t);
+      C_TYPE_VARIABLE_ਮਾਪ (x) = C_TYPE_VARIABLE_ਮਾਪ (t);
       C_TYPE_VARIABLY_MODIFIED (x) = C_TYPE_VARIABLY_MODIFIED (t);
-      C_TYPE_INCOMPLETE_VARS (x) = NULL_TREE;
+      C_TYPE_INCOMPLETE_VARS (x) = NULL_ਰੁੱਖ;
       TYPE_INCLUDES_FLEXARRAY (x) = TYPE_INCLUDES_FLEXARRAY (t);
     }
 
   /* Check for consistency with previous definition.  */
-  if (flag_isoc23 && NULL != enclosing_struct_parse_info)
+  ਜੇ (flag_isoc23 && ਨਿਰਾ != enclosing_struct_parse_info)
     {
-      tree vistype = previous_tag (t);
-      if (vistype
-	  && TREE_CODE (vistype) == TREE_CODE (t)
+      ਰੁੱਖ vistype = ਪਿਛਲਾ_ਟੈਗ (t);
+      ਜੇ (vistype
+	  && ਰੁੱਖ_ਕੋਡ (vistype) == ਰੁੱਖ_ਕੋਡ (t)
 	  && !C_TYPE_BEING_DEFINED (vistype))
 	{
 	  TYPE_STUB_DECL (t) = TYPE_STUB_DECL (vistype);
-	  if (c_type_variably_modified_p (t))
+	  ਜੇ (c_type_variably_modified_p (t))
 	    {
 	      error ("redefinition of struct or union %qT with variably "
 		     "modified type", t);
-	      if (struct_parse_info->refloc != UNKNOWN_LOCATION)
+	      ਜੇ (struct_parse_info->refloc != UNKNOWN_LOCATION)
 		inform (struct_parse_info->refloc, "originally defined here");
 	    }
-	  else if (!comptypes_same_p (t, vistype))
+	  ਨਹੀਂਤਾਂ ਜੇ (!comptypes_same_p (t, vistype))
 	    {
 	      error ("redefinition of struct or union %qT", t);
-	      if (struct_parse_info->refloc != UNKNOWN_LOCATION)
+	      ਜੇ (struct_parse_info->refloc != UNKNOWN_LOCATION)
 		inform (struct_parse_info->refloc, "originally defined here");
 	    }
 	}
@@ -10015,26 +10015,26 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
 
   C_TYPE_BEING_DEFINED (t) = 0;
 
-  if (lookup_attribute ("may_alias", TYPE_ATTRIBUTES (t)))
-    for (x = TYPE_MAIN_VARIANT (t); x; x = TYPE_NEXT_VARIANT (x))
+  ਜੇ (lookup_attribute ("may_alias", TYPE_ਗੁਣ (t)))
+    ਲਈ (x = TYPE_MAIN_VARIANT (t); x; x = TYPE_ਅਗਲਾ_VARIANT (x))
       c_fixup_may_alias (x);
 
   /* Set type canonical based on equivalence class.  */
-  if (flag_isoc23 && !C_TYPE_VARIABLE_SIZE (t))
+  ਜੇ (flag_isoc23 && !C_TYPE_VARIABLE_ਮਾਪ (t))
     {
-      if (c_struct_htab == NULL)
-	c_struct_htab = hash_table<c_struct_hasher>::create_ggc (61);
+      ਜੇ (c_struct_htab == ਨਿਰਾ)
+	c_struct_htab = hash_ਸਾਰਣੀ<c_struct_hasher>::create_ggc (61);
 
       hashval_t hash = c_struct_hasher::hash (t);
 
       gcc_checking_assert (TYPE_STRUCTURAL_EQUALITY_P (t));
       gcc_checking_assert (!TYPE_NAME (t)
-			   || TREE_CODE (TYPE_NAME (t)) == IDENTIFIER_NODE);
+			   || ਰੁੱਖ_ਕੋਡ (TYPE_NAME (t)) == IDENTIFIER_ਗੰਢ);
 
-      tree *e = c_struct_htab->find_slot_with_hash (t, hash, INSERT);
-      if (*e)
+      ਰੁੱਖ *e = c_struct_htab->ਲੱਭੋ_ਥਾਂ_with_hash (t, hash, ਪਾਓ);
+      ਜੇ (*e)
 	TYPE_CANONICAL (t) = TYPE_CANONICAL (*e);
-      else
+      ਨਹੀਂਤਾਂ
 	{
 	  TYPE_CANONICAL (t) = c_type_canonical (t);
 	  *e = t;
@@ -10044,104 +10044,104 @@ finish_struct (location_t loc, tree t, tree fieldlist, tree attributes,
 
   /* Update type location to the one of the definition, instead of e.g.
      a forward declaration.  */
-  if (TYPE_STUB_DECL (t))
-    DECL_SOURCE_LOCATION (TYPE_STUB_DECL (t)) = loc;
+  ਜੇ (TYPE_STUB_DECL (t))
+    DECL_ਸਰੋਤ_LOCATION (TYPE_STUB_DECL (t)) = loc;
 
   /* Finish debugging output for this type.  */
-  rest_of_type_compilation (t, toplevel);
+  rest_ਦਾ_type_compilation (t, toplevel);
 
-  finish_incomplete_vars (incomplete_vars, toplevel);
+  ਅੰਤ_incomplete_vars (incomplete_vars, toplevel);
 
 
-  if (c_type_variably_modified_p (t))
+  ਜੇ (c_type_variably_modified_p (t))
     {
       c_update_variably_modified (t);
       /* Make sure a DECL_EXPR is created for structs with VLA members.
 	 Because we do not know the context, we always pass expr
 	 to force creation of a BIND_EXPR which is required in some
 	 contexts.  */
-      add_decl_expr (loc, t, expr, false);
+      ਜੋੜੋ_decl_ਵਿਅੰਜਕ (loc, t, ਵਿਅੰਜਕ, ਝੂਠ);
     }
 
-  if (warn_cxx_compat)
-    warn_cxx_compat_finish_struct (fieldlist, TREE_CODE (t), loc);
+  ਜੇ (warn_cxx_compat)
+    warn_cxx_compat_ਅੰਤ_struct (fieldlist, ਰੁੱਖ_ਕੋਡ (t), loc);
 
-  if (NULL != enclosing_struct_parse_info)
+  ਜੇ (ਨਿਰਾ != enclosing_struct_parse_info)
     {
-      delete struct_parse_info;
+      ਮਿਟਾਓ struct_parse_info;
 
       struct_parse_info = enclosing_struct_parse_info;
 
       /* If this struct is defined inside a struct, add it to
 	 struct_types.  */
-      if (warn_cxx_compat
-	  && struct_parse_info != NULL
-	  && !in_sizeof && !in_typeof && !in_alignof && !in_countof)
-	struct_parse_info->struct_types.safe_push (t);
+      ਜੇ (warn_cxx_compat
+	  && struct_parse_info != ਨਿਰਾ
+	  && !ਵਿੱਚ_sizeof && !ਵਿੱਚ_typeof && !ਵਿੱਚ_alignof && !ਵਿੱਚ_countof)
+	struct_parse_info->struct_types.ਸੁਰੱਖਿਅਤ_ਧੱਕੋ (t);
      }
 
   /* Only when the enclosing struct/union type is not anonymous, do more
      verification on the fields with counted_by attributes.  */
-  if (C_TYPE_FIELDS_HAS_COUNTED_BY (t) && c_type_tag (t) != NULL_TREE)
+  ਜੇ (C_TYPE_FIELDS_HAS_COUNTED_BY (t) && c_type_ਟੈਗ (t) != NULL_ਰੁੱਖ)
     verify_counted_by_attribute (t, t);
 
-  return t;
+  ਵਾਪਸ t;
 }
 
-static struct {
-  gt_pointer_operator new_value;
-  void *cookie;
-} resort_data;
+ਸਥਿਰ ਬਣਤਰ {
+  gt_ਸੂਚਕ_operator new_ਮੁੱਲ;
+  ਖਾਲੀ *cookie;
+} resort_ਅੰਕੜੇ;
 
 /* This routine compares two fields like field_decl_cmp but using the
 pointer operator in resort_data.  */
 
-static int
-resort_field_decl_cmp (const void *x_p, const void *y_p)
+ਸਥਿਰ ਪੂਰਨ
+resort_ਖੇਤਰ_decl_cmp (ਅਚਲ ਖਾਲੀ *x_p, ਅਚਲ ਖਾਲੀ *y_p)
 {
-  const tree *const x = (const tree *) x_p;
-  const tree *const y = (const tree *) y_p;
+  ਅਚਲ ਰੁੱਖ *ਅਚਲ x = (ਅਚਲ ਰੁੱਖ *) x_p;
+  ਅਚਲ ਰੁੱਖ *ਅਚਲ y = (ਅਚਲ ਰੁੱਖ *) y_p;
 
-  if (DECL_NAME (*x) == DECL_NAME (*y))
+  ਜੇ (DECL_NAME (*x) == DECL_NAME (*y))
     /* A nontype is "greater" than a type.  */
-    return (TREE_CODE (*y) == TYPE_DECL) - (TREE_CODE (*x) == TYPE_DECL);
-  if (DECL_NAME (*x) == NULL_TREE)
-    return -1;
-  if (DECL_NAME (*y) == NULL_TREE)
-    return 1;
+    ਵਾਪਸ (ਰੁੱਖ_ਕੋਡ (*y) == TYPE_DECL) - (ਰੁੱਖ_ਕੋਡ (*x) == TYPE_DECL);
+  ਜੇ (DECL_NAME (*x) == NULL_ਰੁੱਖ)
+    ਵਾਪਸ -1;
+  ਜੇ (DECL_NAME (*y) == NULL_ਰੁੱਖ)
+    ਵਾਪਸ 1;
   {
-    tree d1 = DECL_NAME (*x);
-    tree d2 = DECL_NAME (*y);
-    resort_data.new_value (&d1, &d1, resort_data.cookie);
-    resort_data.new_value (&d2, &d2, resort_data.cookie);
-    if (d1 < d2)
-      return -1;
+    ਰੁੱਖ d1 = DECL_NAME (*x);
+    ਰੁੱਖ d2 = DECL_NAME (*y);
+    resort_ਅੰਕੜੇ.new_ਮੁੱਲ (&d1, &d1, resort_ਅੰਕੜੇ.cookie);
+    resort_ਅੰਕੜੇ.new_ਮੁੱਲ (&d2, &d2, resort_ਅੰਕੜੇ.cookie);
+    ਜੇ (d1 < d2)
+      ਵਾਪਸ -1;
   }
-  return 1;
+  ਵਾਪਸ 1;
 }
 
 /* Resort DECL_SORTED_FIELDS because pointers have been reordered.  */
 
-void
-resort_sorted_fields (void *obj,
-		      void * ARG_UNUSED (orig_obj),
-		      gt_pointer_operator new_value,
-		      void *cookie)
+ਖਾਲੀ
+resort_sorted_fields (ਖਾਲੀ *obj,
+		      ਖਾਲੀ * ARG_ਅਣਵਰਤਿਆ (orig_obj),
+		      gt_ਸੂਚਕ_operator new_ਮੁੱਲ,
+		      ਖਾਲੀ *cookie)
 {
-  struct sorted_fields_type *sf = (struct sorted_fields_type *) obj;
-  resort_data.new_value = new_value;
-  resort_data.cookie = cookie;
-  qsort (&sf->elts[0], sf->len, sizeof (tree),
-	 resort_field_decl_cmp);
+  ਬਣਤਰ sorted_fields_type *sf = (ਬਣਤਰ sorted_fields_type *) obj;
+  resort_ਅੰਕੜੇ.new_ਮੁੱਲ = new_ਮੁੱਲ;
+  resort_ਅੰਕੜੇ.cookie = cookie;
+  qsort (&sf->elts[0], sf->len, ਆਕਾਰ (ਰੁੱਖ),
+	 resort_ਖੇਤਰ_decl_cmp);
 }
 
 /* Lay out the type T, and its element type, and so on.  */
 
-static void
-layout_array_type (tree t)
+ਸਥਿਰ ਖਾਲੀ
+layout_array_type (ਰੁੱਖ t)
 {
-  if (TREE_CODE (TREE_TYPE (t)) == ARRAY_TYPE)
-    layout_array_type (TREE_TYPE (t));
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (t)) == ARRAY_TYPE)
+    layout_array_type (ਰੁੱਖ_TYPE (t));
   layout_type (t);
 }
 
@@ -10154,55 +10154,55 @@ layout_array_type (tree t)
    Also records info about it so that build_enumerator
    may be used to declare the individual values as they are read.  */
 
-tree
-start_enum (location_t loc, struct c_enum_contents *the_enum, tree name,
-	    tree fixed_underlying_type, bool potential_nesting_p)
+ਰੁੱਖ
+ਸ਼ੁਰੂ_enum (location_t loc, ਬਣਤਰ c_enum_contents *the_enum, ਰੁੱਖ name,
+	    ਰੁੱਖ fixed_underlying_type, ਤਾਰਕਿਕ potential_nesting_p)
 {
-  tree enumtype = NULL_TREE;
+  ਰੁੱਖ enumtype = NULL_ਰੁੱਖ;
   location_t enumloc = UNKNOWN_LOCATION;
 
   /* If this is the real definition for a previous forward reference,
      fill in the contents in the same object that used to be the
      forward reference.  */
 
-  if (name != NULL_TREE)
-    enumtype = lookup_tag (ENUMERAL_TYPE, name, true, &enumloc);
+  ਜੇ (name != NULL_ਰੁੱਖ)
+    enumtype = lookup_ਟੈਗ (ENUMERAL_TYPE, name, ਸੱਚ, &enumloc);
 
-  if (enumtype != NULL_TREE && TREE_CODE (enumtype) == ENUMERAL_TYPE)
+  ਜੇ (enumtype != NULL_ਰੁੱਖ && ਰੁੱਖ_ਕੋਡ (enumtype) == ENUMERAL_TYPE)
     {
       /* If the type is currently being defined or if we have seen an
 	 incomplete version which is now complete, this is a nested
 	 redefinition.  The later happens if the redefinition occurs
 	 inside the enum specifier itself.  */
-      if (C_TYPE_BEING_DEFINED (enumtype)
-	  || (potential_nesting_p && TYPE_VALUES (enumtype) != NULL_TREE))
+      ਜੇ (C_TYPE_BEING_DEFINED (enumtype)
+	  || (potential_nesting_p && TYPE_ਮੁੱਲਾਂ (enumtype) != NULL_ਰੁੱਖ))
 	error_at (loc, "nested redefinition of %<enum %E%>", name);
 
       /* For C23 we allow redefinitions.  We set to zero and check for
 	 consistency later.  */
-      if (flag_isoc23 && TYPE_VALUES (enumtype) != NULL_TREE)
-	enumtype = NULL_TREE;
+      ਜੇ (flag_isoc23 && TYPE_ਮੁੱਲਾਂ (enumtype) != NULL_ਰੁੱਖ)
+	enumtype = NULL_ਰੁੱਖ;
     }
 
-  if (enumtype == NULL_TREE || TREE_CODE (enumtype) != ENUMERAL_TYPE)
+  ਜੇ (enumtype == NULL_ਰੁੱਖ || ਰੁੱਖ_ਕੋਡ (enumtype) != ENUMERAL_TYPE)
     {
-      enumtype = make_node (ENUMERAL_TYPE);
-      TYPE_SIZE (enumtype) = NULL_TREE;
-      SET_TYPE_STRUCTURAL_EQUALITY (enumtype);
+      enumtype = make_ਗੰਢ (ENUMERAL_TYPE);
+      TYPE_ਮਾਪ (enumtype) = NULL_ਰੁੱਖ;
+      ਸੈੱਟ_TYPE_STRUCTURAL_EQUALITY (enumtype);
       pushtag (loc, name, enumtype);
-      if (fixed_underlying_type != NULL_TREE)
+      ਜੇ (fixed_underlying_type != NULL_ਰੁੱਖ)
 	{
 	  /* For an enum definition with a fixed underlying type, the
 	     type is complete during the definition and the
 	     enumeration constants have that type.  If there was a
 	     tag, the type was completed in c_parser_enum_specifier.
 	     If not, it must be completed here.  */
-	  ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) = true;
-	  TYPE_MIN_VALUE (enumtype) = TYPE_MIN_VALUE (fixed_underlying_type);
-	  TYPE_MAX_VALUE (enumtype) = TYPE_MAX_VALUE (fixed_underlying_type);
+	  ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) = ਸੱਚ;
+	  TYPE_MIN_ਮੁੱਲ (enumtype) = TYPE_MIN_ਮੁੱਲ (fixed_underlying_type);
+	  TYPE_MAX_ਮੁੱਲ (enumtype) = TYPE_MAX_ਮੁੱਲ (fixed_underlying_type);
 	  TYPE_UNSIGNED (enumtype) = TYPE_UNSIGNED (fixed_underlying_type);
-	  SET_TYPE_ALIGN (enumtype, TYPE_ALIGN (fixed_underlying_type));
-	  TYPE_SIZE (enumtype) = NULL_TREE;
+	  ਸੈੱਟ_TYPE_ALIGN (enumtype, TYPE_ALIGN (fixed_underlying_type));
+	  TYPE_ਮਾਪ (enumtype) = NULL_ਰੁੱਖ;
 	  TYPE_PRECISION (enumtype) = TYPE_PRECISION (fixed_underlying_type);
 	  ENUM_UNDERLYING_TYPE (enumtype) = fixed_underlying_type;
 	  TYPE_CANONICAL (enumtype) = TYPE_CANONICAL (fixed_underlying_type);
@@ -10212,60 +10212,60 @@ start_enum (location_t loc, struct c_enum_contents *the_enum, tree name,
     }
   /* Update type location to the one of the definition, instead of e.g.
      a forward declaration.  */
-  else if (TYPE_STUB_DECL (enumtype))
+  ਨਹੀਂਤਾਂ ਜੇ (TYPE_STUB_DECL (enumtype))
     {
-      enumloc = DECL_SOURCE_LOCATION (TYPE_STUB_DECL (enumtype));
-      DECL_SOURCE_LOCATION (TYPE_STUB_DECL (enumtype)) = loc;
+      enumloc = DECL_ਸਰੋਤ_LOCATION (TYPE_STUB_DECL (enumtype));
+      DECL_ਸਰੋਤ_LOCATION (TYPE_STUB_DECL (enumtype)) = loc;
     }
 
   C_TYPE_BEING_DEFINED (enumtype) = 1;
 
-  if (TYPE_VALUES (enumtype) != NULL_TREE)
+  ਜੇ (TYPE_ਮੁੱਲਾਂ (enumtype) != NULL_ਰੁੱਖ)
     {
       /* This enum is a named one that has been declared already.  */
-      auto_diagnostic_group d;
+      auto_diagnostic_ਸਮੂਹ d;
       error_at (loc, "redeclaration of %<enum %E%>", name);
-      if (enumloc != UNKNOWN_LOCATION)
+      ਜੇ (enumloc != UNKNOWN_LOCATION)
 	inform (enumloc, "originally defined here");
 
       /* Completely replace its old definition.
 	 The old enumerators remain defined, however.  */
-      TYPE_VALUES (enumtype) = NULL_TREE;
+      TYPE_ਮੁੱਲਾਂ (enumtype) = NULL_ਰੁੱਖ;
     }
 
-  if (ENUM_FIXED_UNDERLYING_TYPE_P (enumtype)
-      && fixed_underlying_type == NULL_TREE)
+  ਜੇ (ENUM_FIXED_UNDERLYING_TYPE_P (enumtype)
+      && fixed_underlying_type == NULL_ਰੁੱਖ)
     {
       error_at (loc, "%<enum%> declared with but defined without "
 		"fixed underlying type");
-      ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) = false;
+      ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) = ਝੂਠ;
     }
 
-  the_enum->enum_next_value = integer_zero_node;
+  the_enum->enum_ਅਗਲਾ_ਮੁੱਲ = integer_zero_ਗੰਢ;
   the_enum->enum_type = enumtype;
-  the_enum->enum_overflow = 0;
+  the_enum->enum_ਉਛਾਲ = 0;
 
-  if (flag_short_enums && !ENUM_FIXED_UNDERLYING_TYPE_P (enumtype))
-    for (tree v = TYPE_MAIN_VARIANT (enumtype); v; v = TYPE_NEXT_VARIANT (v))
+  ਜੇ (flag_short_enums && !ENUM_FIXED_UNDERLYING_TYPE_P (enumtype))
+    ਲਈ (ਰੁੱਖ v = TYPE_MAIN_VARIANT (enumtype); v; v = TYPE_ਅਗਲਾ_VARIANT (v))
       TYPE_PACKED (v) = 1;
 
   /* FIXME: This will issue a warning for a use of a type defined
      within sizeof in a statement expr.  This is not terribly serious
      as C++ doesn't permit statement exprs within sizeof anyhow.  */
-  if (warn_cxx_compat
-      && (in_sizeof || in_typeof || in_alignof || in_countof))
+  ਜੇ (warn_cxx_compat
+      && (ਵਿੱਚ_sizeof || ਵਿੱਚ_typeof || ਵਿੱਚ_alignof || ਵਿੱਚ_countof))
     warning_at (loc, OPT_Wc___compat,
 		"defining type in %qs expression is invalid in C++",
-		(in_sizeof ? "sizeof"
-		 : in_typeof ? "typeof"
-		 : in_alignof ? "alignof"
+		(ਵਿੱਚ_sizeof ? "sizeof"
+		 : ਵਿੱਚ_typeof ? "typeof"
+		 : ਵਿੱਚ_alignof ? "alignof"
 		 : "_Countof"));
 
-  if (in_underspecified_init)
+  ਜੇ (ਵਿੱਚ_underspecified_init)
     error_at (loc, "%qT defined in underspecified object initializer",
 	      enumtype);
 
-  return enumtype;
+  ਵਾਪਸ enumtype;
 }
 
 /* After processing and defining all the values of an enumeration type,
@@ -10274,32 +10274,32 @@ start_enum (location_t loc, struct c_enum_contents *the_enum, tree name,
    and ATTRIBUTES are the specified attributes.
    Returns ENUMTYPE.  */
 
-tree
-finish_enum (tree enumtype, tree values, tree attributes)
+ਰੁੱਖ
+ਅੰਤ_enum (ਰੁੱਖ enumtype, ਰੁੱਖ ਮੁੱਲਾਂ, ਰੁੱਖ ਗੁਣ)
 {
-  tree pair, tem;
-  tree minnode = NULL_TREE, maxnode = NULL_TREE;
-  int precision;
+  ਰੁੱਖ pair, tem;
+  ਰੁੱਖ minnode = NULL_ਰੁੱਖ, maxnode = NULL_ਰੁੱਖ;
+  ਪੂਰਨ precision;
   signop sign;
-  bool toplevel = (file_scope == current_scope);
-  struct lang_type *lt;
+  ਤਾਰਕਿਕ toplevel = (file_scope == current_scope);
+  ਬਣਤਰ lang_type *lt;
 
-  decl_attributes (&enumtype, attributes, (int) ATTR_FLAG_TYPE_IN_PLACE);
+  decl_ਗੁਣ (&enumtype, ਗੁਣ, (ਪੂਰਨ) ATTR_FLAG_TYPE_ਵਿੱਚ_ਰੱਖੋ);
 
   /* Calculate the maximum value of any enumerator in this type.  */
 
-  if (values == error_mark_node)
-    minnode = maxnode = integer_zero_node;
-  else
+  ਜੇ (ਮੁੱਲਾਂ == error_mark_ਗੰਢ)
+    minnode = maxnode = integer_zero_ਗੰਢ;
+  ਨਹੀਂਤਾਂ
     {
-      minnode = maxnode = TREE_VALUE (values);
-      for (pair = TREE_CHAIN (values); pair; pair = TREE_CHAIN (pair))
+      minnode = maxnode = ਰੁੱਖ_ਮੁੱਲ (ਮੁੱਲਾਂ);
+      ਲਈ (pair = ਰੁੱਖ_CHAIN (ਮੁੱਲਾਂ); pair; pair = ਰੁੱਖ_CHAIN (pair))
 	{
-	  tree value = TREE_VALUE (pair);
-	  if (tree_int_cst_lt (maxnode, value))
-	    maxnode = value;
-	  if (tree_int_cst_lt (value, minnode))
-	    minnode = value;
+	  ਰੁੱਖ ਮੁੱਲ = ਰੁੱਖ_ਮੁੱਲ (pair);
+	  ਜੇ (ਰੁੱਖ_int_cst_lt (maxnode, ਮੁੱਲ))
+	    maxnode = ਮੁੱਲ;
+	  ਜੇ (ਰੁੱਖ_int_cst_lt (ਮੁੱਲ, minnode))
+	    minnode = ਮੁੱਲ;
 	}
     }
 
@@ -10307,66 +10307,66 @@ finish_enum (tree enumtype, tree values, tree attributes)
      as one of the integral types - the narrowest one that fits, except
      that normally we only go as narrow as int - and signed iff any of
      the values are negative.  */
-  sign = (tree_int_cst_sgn (minnode) >= 0) ? UNSIGNED : SIGNED;
-  precision = MAX (tree_int_cst_min_precision (minnode, sign),
-		   tree_int_cst_min_precision (maxnode, sign));
+  sign = (ਰੁੱਖ_int_cst_sgn (minnode) >= 0) ? UNSIGNED : SIGNED;
+  precision = MAX (ਰੁੱਖ_int_cst_min_precision (minnode, sign),
+		   ਰੁੱਖ_int_cst_min_precision (maxnode, sign));
 
-  bool wider_than_int =
-    (tree_int_cst_lt (minnode, TYPE_MIN_VALUE (integer_type_node))
-     || tree_int_cst_lt (TYPE_MAX_VALUE (integer_type_node), maxnode));
+  ਤਾਰਕਿਕ wider_than_int =
+    (ਰੁੱਖ_int_cst_lt (minnode, TYPE_MIN_ਮੁੱਲ (integer_type_ਗੰਢ))
+     || ਰੁੱਖ_int_cst_lt (TYPE_MAX_ਮੁੱਲ (integer_type_ਗੰਢ), maxnode));
 
 
-  if (!ENUM_FIXED_UNDERLYING_TYPE_P (enumtype))
+  ਜੇ (!ENUM_FIXED_UNDERLYING_TYPE_P (enumtype))
     {
       /* If the precision of the type was specified with an attribute and it
 	 was too small, give an error.  Otherwise, use it.  */
-      if (TYPE_PRECISION (enumtype) && lookup_attribute ("mode", attributes))
+      ਜੇ (TYPE_PRECISION (enumtype) && lookup_attribute ("mode", ਗੁਣ))
 	{
-	  if (precision > TYPE_PRECISION (enumtype))
+	  ਜੇ (precision > TYPE_PRECISION (enumtype))
 	    {
 	      TYPE_PRECISION (enumtype) = 0;
 	      error ("specified mode too small for enumerated values");
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    precision = TYPE_PRECISION (enumtype);
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	TYPE_PRECISION (enumtype) = 0;
 
-      if (TYPE_PACKED (enumtype)
-	  || precision > TYPE_PRECISION (integer_type_node)
+      ਜੇ (TYPE_PACKED (enumtype)
+	  || precision > TYPE_PRECISION (integer_type_ਗੰਢ)
 	  || TYPE_PRECISION (enumtype))
 	{
-	  tem = c_common_type_for_size (precision, sign == UNSIGNED ? 1 : 0);
-	  if (tem == NULL)
+	  tem = c_common_type_for_ਮਾਪ (precision, sign == UNSIGNED ? 1 : 0);
+	  ਜੇ (tem == ਨਿਰਾ)
 	    {
 	      /* This should only occur when both signed and unsigned
 		 values of maximum precision occur among the
 		 enumerators.  */
-	      pedwarn (input_location, 0,
+	      pedwarn (ਨਿਵੇਸ਼_location, 0,
 		       "enumeration values exceed range of largest integer");
-	      tem = widest_integer_literal_type_node;
+	      tem = widest_integer_literal_type_ਗੰਢ;
 	    }
-	  else if (precision > TYPE_PRECISION (intmax_type_node)
-		   && !tree_int_cst_lt (minnode,
-					TYPE_MIN_VALUE (intmax_type_node))
-		   && !tree_int_cst_lt (TYPE_MAX_VALUE (uintmax_type_node),
+	  ਨਹੀਂਤਾਂ ਜੇ (precision > TYPE_PRECISION (intmax_type_ਗੰਢ)
+		   && !ਰੁੱਖ_int_cst_lt (minnode,
+					TYPE_MIN_ਮੁੱਲ (intmax_type_ਗੰਢ))
+		   && !ਰੁੱਖ_int_cst_lt (TYPE_MAX_ਮੁੱਲ (uintmax_type_ਗੰਢ),
 					maxnode))
-	    pedwarn (input_location, OPT_Wpedantic,
+	    pedwarn (ਨਿਵੇਸ਼_location, OPT_Wpedantic,
 		     "enumeration values exceed range of %qs",
 		     sign == UNSIGNED ? "uintmax_t" : "intmax_t");
 	}
-      else
-	tem = sign == UNSIGNED ? unsigned_type_node : integer_type_node;
+      ਨਹੀਂਤਾਂ
+	tem = sign == UNSIGNED ? unsigned_type_ਗੰਢ : integer_type_ਗੰਢ;
 
-      TYPE_MIN_VALUE (enumtype) = TYPE_MIN_VALUE (tem);
-      TYPE_MAX_VALUE (enumtype) = TYPE_MAX_VALUE (tem);
+      TYPE_MIN_ਮੁੱਲ (enumtype) = TYPE_MIN_ਮੁੱਲ (tem);
+      TYPE_MAX_ਮੁੱਲ (enumtype) = TYPE_MAX_ਮੁੱਲ (tem);
       TYPE_UNSIGNED (enumtype) = TYPE_UNSIGNED (tem);
-      SET_TYPE_ALIGN (enumtype, TYPE_ALIGN (tem));
-      TYPE_SIZE (enumtype) = NULL_TREE;
+      ਸੈੱਟ_TYPE_ALIGN (enumtype, TYPE_ALIGN (tem));
+      TYPE_ਮਾਪ (enumtype) = NULL_ਰੁੱਖ;
       TYPE_PRECISION (enumtype) = TYPE_PRECISION (tem);
       ENUM_UNDERLYING_TYPE (enumtype) =
-	c_common_type_for_size (TYPE_PRECISION (tem), TYPE_UNSIGNED (tem));
+	c_common_type_for_ਮਾਪ (TYPE_PRECISION (tem), TYPE_UNSIGNED (tem));
 
       TYPE_CANONICAL (enumtype) =
 	TYPE_CANONICAL (ENUM_UNDERLYING_TYPE (enumtype));
@@ -10375,7 +10375,7 @@ finish_enum (tree enumtype, tree values, tree attributes)
       layout_type (enumtype);
     }
 
-  if (values != error_mark_node)
+  ਜੇ (ਮੁੱਲਾਂ != error_mark_ਗੰਢ)
     {
       /* Change the type of the enumerators to be the enum type.  We
 	 need to do this irrespective of the size of the enum, for
@@ -10384,12 +10384,12 @@ finish_enum (tree enumtype, tree values, tree attributes)
 	 that have the enum type; they cannot be modified in place
 	 because they may be shared (e.g.  integer_zero_node) Finally,
 	 change the purpose slots to point to the names of the decls.  */
-      for (pair = values; pair; pair = TREE_CHAIN (pair))
+      ਲਈ (pair = ਮੁੱਲਾਂ; pair; pair = ਰੁੱਖ_CHAIN (pair))
 	{
-	  tree enu = TREE_PURPOSE (pair);
-	  tree ini = DECL_INITIAL (enu);
+	  ਰੁੱਖ enu = ਰੁੱਖ_PURPOSE (pair);
+	  ਰੁੱਖ ini = DECL_INITIAL (enu);
 
-	  TREE_TYPE (enu) = enumtype;
+	  ਰੁੱਖ_TYPE (enu) = enumtype;
 
 	  /* Before C23, the ISO C Standard mandates enumerators to
 	     have type int, even though the underlying type of an enum
@@ -10403,44 +10403,44 @@ finish_enum (tree enumtype, tree values, tree attributes)
 	     enumerators fit in int.  If the enum has a fixed
 	     underlying type, the correct type was also given in
 	     build_enumerator.  */
-	  if (!ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) && wider_than_int)
+	  ਜੇ (!ENUM_FIXED_UNDERLYING_TYPE_P (enumtype) && wider_than_int)
 	    ini = convert (enumtype, ini);
 
 	  DECL_INITIAL (enu) = ini;
-	  TREE_PURPOSE (pair) = DECL_NAME (enu);
+	  ਰੁੱਖ_PURPOSE (pair) = DECL_NAME (enu);
 	  /* To match the C++ FE, store the CONST_DECL rather than just its
 	     value.  */
-	  TREE_VALUE (pair) = enu;
+	  ਰੁੱਖ_ਮੁੱਲ (pair) = enu;
 	}
 
-      TYPE_VALUES (enumtype) = values;
+      TYPE_ਮੁੱਲਾਂ (enumtype) = ਮੁੱਲਾਂ;
     }
 
   /* Record the min/max values so that we can warn about bit-field
      enumerations that are too small for the values.  */
-  lt = ((struct lang_type *)
-	ggc_internal_cleared_alloc (c_dialect_objc ()
-				    ? sizeof (struct lang_type)
-				    : offsetof (struct lang_type, info)));
+  lt = ((ਬਣਤਰ lang_type *)
+	ggc_ਅੰਦਰੂਨੀ_cleared_alloc (c_dialect_objc ()
+				    ? ਆਕਾਰ (ਬਣਤਰ lang_type)
+				    : offsetof (ਬਣਤਰ lang_type, info)));
   lt->enum_min = minnode;
   lt->enum_max = maxnode;
   TYPE_LANG_SPECIFIC (enumtype) = lt;
 
   /* Fix up all variant types of this enum type.  */
-  tree incomplete_vars = C_TYPE_INCOMPLETE_VARS (TYPE_MAIN_VARIANT (enumtype));
-  for (tem = TYPE_MAIN_VARIANT (enumtype); tem; tem = TYPE_NEXT_VARIANT (tem))
+  ਰੁੱਖ incomplete_vars = C_TYPE_INCOMPLETE_VARS (TYPE_MAIN_VARIANT (enumtype));
+  ਲਈ (tem = TYPE_MAIN_VARIANT (enumtype); tem; tem = TYPE_ਅਗਲਾ_VARIANT (tem))
     {
-      C_TYPE_INCOMPLETE_VARS (tem) = NULL_TREE;
-      if (tem == enumtype)
-	continue;
-      TYPE_VALUES (tem) = TYPE_VALUES (enumtype);
-      TYPE_MIN_VALUE (tem) = TYPE_MIN_VALUE (enumtype);
-      TYPE_MAX_VALUE (tem) = TYPE_MAX_VALUE (enumtype);
-      TYPE_SIZE (tem) = TYPE_SIZE (enumtype);
-      TYPE_SIZE_UNIT (tem) = TYPE_SIZE_UNIT (enumtype);
-      SET_TYPE_MODE (tem, TYPE_MODE (enumtype));
+      C_TYPE_INCOMPLETE_VARS (tem) = NULL_ਰੁੱਖ;
+      ਜੇ (tem == enumtype)
+	ਜਾਰੀ;
+      TYPE_ਮੁੱਲਾਂ (tem) = TYPE_ਮੁੱਲਾਂ (enumtype);
+      TYPE_MIN_ਮੁੱਲ (tem) = TYPE_MIN_ਮੁੱਲ (enumtype);
+      TYPE_MAX_ਮੁੱਲ (tem) = TYPE_MAX_ਮੁੱਲ (enumtype);
+      TYPE_ਮਾਪ (tem) = TYPE_ਮਾਪ (enumtype);
+      TYPE_ਮਾਪ_UNIT (tem) = TYPE_ਮਾਪ_UNIT (enumtype);
+      ਸੈੱਟ_TYPE_ਬਹੁਲਕ (tem, TYPE_ਬਹੁਲਕ (enumtype));
       TYPE_PRECISION (tem) = TYPE_PRECISION (enumtype);
-      SET_TYPE_ALIGN (tem, TYPE_ALIGN (enumtype));
+      ਸੈੱਟ_TYPE_ALIGN (tem, TYPE_ALIGN (enumtype));
       TYPE_USER_ALIGN (tem) = TYPE_USER_ALIGN (enumtype);
       TYPE_UNSIGNED (tem) = TYPE_UNSIGNED (enumtype);
       TYPE_LANG_SPECIFIC (tem) = TYPE_LANG_SPECIFIC (enumtype);
@@ -10449,34 +10449,34 @@ finish_enum (tree enumtype, tree values, tree attributes)
     }
 
   /* Finish debugging output for this type.  */
-  rest_of_type_compilation (enumtype, toplevel);
+  rest_ਦਾ_type_compilation (enumtype, toplevel);
 
-  finish_incomplete_vars (incomplete_vars, toplevel);
+  ਅੰਤ_incomplete_vars (incomplete_vars, toplevel);
 
   /* If this enum is defined inside a struct, add it to
      struct_types.  */
-  if (warn_cxx_compat
-      && struct_parse_info != NULL
-      && !in_sizeof && !in_typeof && !in_alignof && !in_countof)
-    struct_parse_info->struct_types.safe_push (enumtype);
+  ਜੇ (warn_cxx_compat
+      && struct_parse_info != ਨਿਰਾ
+      && !ਵਿੱਚ_sizeof && !ਵਿੱਚ_typeof && !ਵਿੱਚ_alignof && !ਵਿੱਚ_countof)
+    struct_parse_info->struct_types.ਸੁਰੱਖਿਅਤ_ਧੱਕੋ (enumtype);
 
   /* Check for consistency with previous definition */
-  if (flag_isoc23)
+  ਜੇ (flag_isoc23)
     {
-      tree vistype = previous_tag (enumtype);
-      if (vistype
-	  && TREE_CODE (vistype) == TREE_CODE (enumtype)
+      ਰੁੱਖ vistype = ਪਿਛਲਾ_ਟੈਗ (enumtype);
+      ਜੇ (vistype
+	  && ਰੁੱਖ_ਕੋਡ (vistype) == ਰੁੱਖ_ਕੋਡ (enumtype)
 	  && !C_TYPE_BEING_DEFINED (vistype))
 	{
 	  TYPE_STUB_DECL (enumtype) = TYPE_STUB_DECL (vistype);
-	  if (!comptypes_same_p (enumtype, vistype))
+	  ਜੇ (!comptypes_same_p (enumtype, vistype))
 	    error("conflicting redefinition of enum %qT", enumtype);
 	}
     }
 
   C_TYPE_BEING_DEFINED (enumtype) = 0;
 
-  return enumtype;
+  ਵਾਪਸ enumtype;
 }
 
 /* Build and install a CONST_DECL for one value of the
@@ -10486,47 +10486,47 @@ finish_enum (tree enumtype, tree values, tree attributes)
    Return a tree-list containing the CONST_DECL and its value.
    Assignment of sequential values by default is handled here.  */
 
-tree
+ਰੁੱਖ
 build_enumerator (location_t decl_loc, location_t loc,
-		  struct c_enum_contents *the_enum, tree name, tree value)
+		  ਬਣਤਰ c_enum_contents *the_enum, ਰੁੱਖ name, ਰੁੱਖ ਮੁੱਲ)
 {
-  tree decl;
-  tree old_decl;
+  ਰੁੱਖ decl;
+  ਰੁੱਖ old_decl;
 
   /* Validate and default VALUE.  */
 
-  if (value != NULL_TREE)
+  ਜੇ (ਮੁੱਲ != NULL_ਰੁੱਖ)
     {
       /* Don't issue more errors for error_mark_node (i.e. an
 	 undeclared identifier) - just ignore the value expression.  */
-      if (value == error_mark_node)
-	value = NULL_TREE;
-      else if (!INTEGRAL_TYPE_P (TREE_TYPE (value)))
+      ਜੇ (ਮੁੱਲ == error_mark_ਗੰਢ)
+	ਮੁੱਲ = NULL_ਰੁੱਖ;
+      ਨਹੀਂਤਾਂ ਜੇ (!INTEGRAL_TYPE_P (ਰੁੱਖ_TYPE (ਮੁੱਲ)))
 	{
 	  error_at (loc, "enumerator value for %qE is not an integer constant",
 		    name);
-	  value = NULL_TREE;
+	  ਮੁੱਲ = NULL_ਰੁੱਖ;
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  if (TREE_CODE (value) != INTEGER_CST)
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (ਮੁੱਲ) != INTEGER_CST)
 	    {
-	      value = c_fully_fold (value, false, NULL);
-	      if (TREE_CODE (value) == INTEGER_CST)
+	      ਮੁੱਲ = c_fully_fold (ਮੁੱਲ, ਝੂਠ, ਨਿਰਾ);
+	      ਜੇ (ਰੁੱਖ_ਕੋਡ (ਮੁੱਲ) == INTEGER_CST)
 		pedwarn (loc, OPT_Wpedantic,
 			 "enumerator value for %qE is not an integer "
 			 "constant expression", name);
 	    }
-	  if (TREE_CODE (value) != INTEGER_CST)
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (ਮੁੱਲ) != INTEGER_CST)
 	    {
 	      error ("enumerator value for %qE is not an integer constant",
 		     name);
-	      value = NULL_TREE;
+	      ਮੁੱਲ = NULL_ਰੁੱਖ;
 	    }
-	  else
+	  ਨਹੀਂਤਾਂ
 	    {
-	      value = default_conversion (value);
-	      constant_expression_warning (value);
+	      ਮੁੱਲ = default_conversion (ਮੁੱਲ);
+	      constant_ਵਿਅੰਜਕ_warning (ਮੁੱਲ);
 	    }
 	}
     }
@@ -10534,51 +10534,51 @@ build_enumerator (location_t decl_loc, location_t loc,
   /* Default based on previous value.  */
   /* It should no longer be possible to have NON_LVALUE_EXPR
      in the default.  */
-  if (value == NULL_TREE)
+  ਜੇ (ਮੁੱਲ == NULL_ਰੁੱਖ)
     {
-      value = the_enum->enum_next_value;
-      if (the_enum->enum_overflow)
+      ਮੁੱਲ = the_enum->enum_ਅਗਲਾ_ਮੁੱਲ;
+      ਜੇ (the_enum->enum_ਉਛਾਲ)
 	error_at (loc, "overflow in enumeration values");
     }
-  if (ENUM_FIXED_UNDERLYING_TYPE_P (the_enum->enum_type))
+  ਜੇ (ENUM_FIXED_UNDERLYING_TYPE_P (the_enum->enum_type))
     {
       /* Enumeration constants must fit in the fixed underlying type.  */
-      if (!int_fits_type_p (value, ENUM_UNDERLYING_TYPE (the_enum->enum_type)))
+      ਜੇ (!int_ਸਮਾਉਂਦਾ_type_p (ਮੁੱਲ, ENUM_UNDERLYING_TYPE (the_enum->enum_type)))
 	error_at (loc,
 		  "enumerator value outside the range of underlying type");
       /* Enumeration constants for an enum with fixed underlying type
 	 have the enum type, both inside and outside the
 	 definition.  */
-      value = convert (the_enum->enum_type, value);
+      ਮੁੱਲ = convert (the_enum->enum_type, ਮੁੱਲ);
     }
-  else if (flag_isoc23
-	   && (old_decl = lookup_name_in_scope (name, current_scope))
-	   && old_decl != error_mark_node
-	   && TREE_TYPE (old_decl)
-	   && TREE_TYPE (TREE_TYPE (old_decl))
-	   && TREE_CODE (old_decl) == CONST_DECL)
+  ਨਹੀਂਤਾਂ ਜੇ (flag_isoc23
+	   && (old_decl = lookup_name_ਵਿੱਚ_scope (name, current_scope))
+	   && old_decl != error_mark_ਗੰਢ
+	   && ਰੁੱਖ_TYPE (old_decl)
+	   && ਰੁੱਖ_TYPE (ਰੁੱਖ_TYPE (old_decl))
+	   && ਰੁੱਖ_ਕੋਡ (old_decl) == CONST_DECL)
     {
       /* Enumeration constants in a redeclaration have the previous type.  */
-      tree previous_type = TREE_TYPE (DECL_INITIAL (old_decl));
-      if (!int_fits_type_p (value, previous_type))
+      ਰੁੱਖ ਪਿਛਲਾ_type = ਰੁੱਖ_TYPE (DECL_INITIAL (old_decl));
+      ਜੇ (!int_ਸਮਾਉਂਦਾ_type_p (ਮੁੱਲ, ਪਿਛਲਾ_type))
 	{
 	  error_at (loc, "value of redeclared enumerator outside the range "
-			 "of %qT", previous_type);
+			 "of %qT", ਪਿਛਲਾ_type);
 	  locate_old_decl (old_decl);
 	}
-      value = convert (previous_type, value);
+      ਮੁੱਲ = convert (ਪਿਛਲਾ_type, ਮੁੱਲ);
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
       /* Even though the underlying type of an enum is unspecified, the
 	 type of enumeration constants is explicitly defined as int
 	 (6.4.4.3/2 in the C99 Standard).  C23 allows any integer type, and
 	 GCC allows such types for older standards as an extension.  */
-      bool warned_range = false;
-      if (!int_fits_type_p (value,
-			    (TYPE_UNSIGNED (TREE_TYPE (value))
-			     ? uintmax_type_node
-			     : intmax_type_node)))
+      ਤਾਰਕਿਕ warned_range = ਝੂਠ;
+      ਜੇ (!int_ਸਮਾਉਂਦਾ_type_p (ਮੁੱਲ,
+			    (TYPE_UNSIGNED (ਰੁੱਖ_TYPE (ਮੁੱਲ))
+			     ? uintmax_type_ਗੰਢ
+			     : intmax_type_ਗੰਢ)))
 	/* GCC does not consider its types larger than intmax_t to be
 	   extended integer types (although C23 would permit such types to
 	   be considered extended integer types if all the features
@@ -10591,10 +10591,10 @@ build_enumerator (location_t decl_loc, location_t loc,
 	   overflows.)  */
 	warned_range = pedwarn (loc, OPT_Wpedantic,
 				"enumerator value outside the range of %qs",
-				TYPE_UNSIGNED (TREE_TYPE (value))
+				TYPE_UNSIGNED (ਰੁੱਖ_TYPE (ਮੁੱਲ))
 				? "uintmax_t"
 				: "intmax_t");
-      if (!warned_range && !int_fits_type_p (value, integer_type_node))
+      ਜੇ (!warned_range && !int_ਸਮਾਉਂਦਾ_type_p (ਮੁੱਲ, integer_type_ਗੰਢ))
 	pedwarn_c11 (loc, OPT_Wpedantic,
 		     "ISO C restricts enumerator values to range of %<int%> "
 		     "before C23");
@@ -10611,138 +10611,138 @@ build_enumerator (location_t decl_loc, location_t loc,
 	 of the same signedness is chosen automatically; after the
 	 enumeration is parsed, all the constants have the type of the
 	 enumeration if any do not fit in int.  */
-      if (int_fits_type_p (value, integer_type_node))
-	value = convert (integer_type_node, value);
+      ਜੇ (int_ਸਮਾਉਂਦਾ_type_p (ਮੁੱਲ, integer_type_ਗੰਢ))
+	ਮੁੱਲ = convert (integer_type_ਗੰਢ, ਮੁੱਲ);
     }
 
   /* Set basis for default for next value.  */
-  if (ENUM_FIXED_UNDERLYING_TYPE_P (the_enum->enum_type))
+  ਜੇ (ENUM_FIXED_UNDERLYING_TYPE_P (the_enum->enum_type))
     {
-      tree underlying_type = ENUM_UNDERLYING_TYPE (the_enum->enum_type);
-      if (TREE_CODE (underlying_type) == BOOLEAN_TYPE)
+      ਰੁੱਖ underlying_type = ENUM_UNDERLYING_TYPE (the_enum->enum_type);
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (underlying_type) == BOOLEAN_TYPE)
 	/* A value of 2 following a value of 1 overflows bool, but we
 	   cannot carry out addition directly on bool without
 	   promotion, and converting the result of arithmetic in a
 	   wider type back to bool would not produce the right result
 	   for this overflow check.  */
-	the_enum->enum_next_value = invert_truthvalue_loc (loc, value);
-      else
-	the_enum->enum_next_value
-	  = build_binary_op (EXPR_LOC_OR_LOC (value, input_location),
-			     PLUS_EXPR, convert (underlying_type, value),
-			     convert (underlying_type, integer_one_node),
-			     false);
+	the_enum->enum_ਅਗਲਾ_ਮੁੱਲ = invert_truthvalue_loc (loc, ਮੁੱਲ);
+      ਨਹੀਂਤਾਂ
+	the_enum->enum_ਅਗਲਾ_ਮੁੱਲ
+	  = build_ਦੁਆਧਾਰੀ_op (ਵਿਅੰਜਕ_LOC_OR_LOC (ਮੁੱਲ, ਨਿਵੇਸ਼_location),
+			     PLUS_ਵਿਅੰਜਕ, convert (underlying_type, ਮੁੱਲ),
+			     convert (underlying_type, integer_one_ਗੰਢ),
+			     ਝੂਠ);
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
       /* In a redeclaration the type can already be the enumeral type.  */
-      if (TREE_CODE (TREE_TYPE (value)) == ENUMERAL_TYPE)
-	value = convert (ENUM_UNDERLYING_TYPE (TREE_TYPE (value)), value);
-      the_enum->enum_next_value
-	= build_binary_op (EXPR_LOC_OR_LOC (value, input_location),
-			   PLUS_EXPR, value, integer_one_node, false);
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (ਮੁੱਲ)) == ENUMERAL_TYPE)
+	ਮੁੱਲ = convert (ENUM_UNDERLYING_TYPE (ਰੁੱਖ_TYPE (ਮੁੱਲ)), ਮੁੱਲ);
+      the_enum->enum_ਅਗਲਾ_ਮੁੱਲ
+	= build_ਦੁਆਧਾਰੀ_op (ਵਿਅੰਜਕ_LOC_OR_LOC (ਮੁੱਲ, ਨਿਵੇਸ਼_location),
+			   PLUS_ਵਿਅੰਜਕ, ਮੁੱਲ, integer_one_ਗੰਢ, ਝੂਠ);
     }
-  the_enum->enum_overflow = tree_int_cst_lt (the_enum->enum_next_value, value);
-  if (the_enum->enum_overflow
+  the_enum->enum_ਉਛਾਲ = ਰੁੱਖ_int_cst_lt (the_enum->enum_ਅਗਲਾ_ਮੁੱਲ, ਮੁੱਲ);
+  ਜੇ (the_enum->enum_ਉਛਾਲ
       && !ENUM_FIXED_UNDERLYING_TYPE_P (the_enum->enum_type))
     {
       /* Choose a wider type with the same signedness if
 	 available.  */
-      int prec = TYPE_PRECISION (TREE_TYPE (value)) + 1;
-      bool unsignedp = TYPE_UNSIGNED (TREE_TYPE (value));
-      tree new_type = (unsignedp
-		       ? long_unsigned_type_node
-		       : long_integer_type_node);
-      if (prec > TYPE_PRECISION (new_type))
+      ਪੂਰਨ prec = TYPE_PRECISION (ਰੁੱਖ_TYPE (ਮੁੱਲ)) + 1;
+      ਤਾਰਕਿਕ unsignedp = TYPE_UNSIGNED (ਰੁੱਖ_TYPE (ਮੁੱਲ));
+      ਰੁੱਖ new_type = (unsignedp
+		       ? long_unsigned_type_ਗੰਢ
+		       : long_integer_type_ਗੰਢ);
+      ਜੇ (prec > TYPE_PRECISION (new_type))
 	new_type = (unsignedp
-		    ? long_long_unsigned_type_node
-		    : long_long_integer_type_node);
-      if (prec > TYPE_PRECISION (new_type))
+		    ? long_long_unsigned_type_ਗੰਢ
+		    : long_long_integer_type_ਗੰਢ);
+      ਜੇ (prec > TYPE_PRECISION (new_type))
 	new_type = (unsignedp
-		    ? widest_unsigned_literal_type_node
-		    : widest_integer_literal_type_node);
-      if (prec <= TYPE_PRECISION (new_type))
+		    ? widest_unsigned_literal_type_ਗੰਢ
+		    : widest_integer_literal_type_ਗੰਢ);
+      ਜੇ (prec <= TYPE_PRECISION (new_type))
 	{
-	  the_enum->enum_overflow = false;
-	  the_enum->enum_next_value
-	    = build_binary_op (EXPR_LOC_OR_LOC (value, input_location),
-			       PLUS_EXPR, convert (new_type, value),
-			       integer_one_node, false);
-	  gcc_assert (!tree_int_cst_lt (the_enum->enum_next_value, value));
+	  the_enum->enum_ਉਛਾਲ = ਝੂਠ;
+	  the_enum->enum_ਅਗਲਾ_ਮੁੱਲ
+	    = build_ਦੁਆਧਾਰੀ_op (ਵਿਅੰਜਕ_LOC_OR_LOC (ਮੁੱਲ, ਨਿਵੇਸ਼_location),
+			       PLUS_ਵਿਅੰਜਕ, convert (new_type, ਮੁੱਲ),
+			       integer_one_ਗੰਢ, ਝੂਠ);
+	  gcc_assert (!ਰੁੱਖ_int_cst_lt (the_enum->enum_ਅਗਲਾ_ਮੁੱਲ, ਮੁੱਲ));
 	}
     }
 
   /* Now create a declaration for the enum value name.  */
 
-  decl = build_decl (decl_loc, CONST_DECL, name, TREE_TYPE (value));
-  DECL_INITIAL (decl) = value;
+  decl = build_decl (decl_loc, CONST_DECL, name, ਰੁੱਖ_TYPE (ਮੁੱਲ));
+  DECL_INITIAL (decl) = ਮੁੱਲ;
   DECL_CONTEXT (decl) = the_enum->enum_type;
   pushdecl (decl);
 
-  return tree_cons (decl, value, NULL_TREE);
+  ਵਾਪਸ ਰੁੱਖ_cons (decl, ਮੁੱਲ, NULL_ਰੁੱਖ);
 }
 
 /* Implement LANG_HOOKS_SIMULATE_ENUM_DECL.  */
 
-tree
-c_simulate_enum_decl (location_t loc, const char *name,
-		      vec<string_int_pair> *values_ptr)
+ਰੁੱਖ
+c_simulate_enum_decl (location_t loc, ਅਚਲ ਅੱਖਰ *name,
+		      vec<string_int_pair> *ਮੁੱਲਾਂ_ptr)
 {
-  location_t saved_loc = input_location;
-  input_location = loc;
+  location_t saved_loc = ਨਿਵੇਸ਼_location;
+  ਨਿਵੇਸ਼_location = loc;
 
-  struct c_enum_contents the_enum;
-  tree enumtype = start_enum (loc, &the_enum, get_identifier (name),
-			      NULL_TREE, false);
+  ਬਣਤਰ c_enum_contents the_enum;
+  ਰੁੱਖ enumtype = ਸ਼ੁਰੂ_enum (loc, &the_enum, get_identifier (name),
+			      NULL_ਰੁੱਖ, ਝੂਠ);
 
-  tree value_chain = NULL_TREE;
-  string_int_pair *value;
-  vec<string_int_pair> values = *values_ptr;
-  unsigned int i;
-  FOR_EACH_VEC_ELT (values, i, value)
+  ਰੁੱਖ ਮੁੱਲ_chain = NULL_ਰੁੱਖ;
+  string_int_pair *ਮੁੱਲ;
+  vec<string_int_pair> ਮੁੱਲਾਂ = *ਮੁੱਲਾਂ_ptr;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ i;
+  FOR_EACH_VEC_ELT (ਮੁੱਲਾਂ, i, ਮੁੱਲ)
     {
-      tree decl = build_enumerator (loc, loc, &the_enum,
-				    get_identifier (value->first),
-				    build_int_cst (integer_type_node,
-						   value->second));
-      TREE_CHAIN (decl) = value_chain;
-      value_chain = decl;
+      ਰੁੱਖ decl = build_enumerator (loc, loc, &the_enum,
+				    get_identifier (ਮੁੱਲ->ਪਹਿਲਾ),
+				    build_int_cst (integer_type_ਗੰਢ,
+						   ਮੁੱਲ->ਦੂਜਾ));
+      ਰੁੱਖ_CHAIN (decl) = ਮੁੱਲ_chain;
+      ਮੁੱਲ_chain = decl;
     }
 
-  finish_enum (enumtype, nreverse (value_chain), NULL_TREE);
+  ਅੰਤ_enum (enumtype, nreverse (ਮੁੱਲ_chain), NULL_ਰੁੱਖ);
 
-  input_location = saved_loc;
-  return enumtype;
+  ਨਿਵੇਸ਼_location = saved_loc;
+  ਵਾਪਸ enumtype;
 }
 
 /* Implement LANG_HOOKS_SIMULATE_RECORD_DECL.  */
 
-tree
-c_simulate_record_decl (location_t loc, const char *name,
-			array_slice<const tree> fields)
+ਰੁੱਖ
+c_simulate_ਰਿਕਾਰਡ_decl (location_t loc, ਅਚਲ ਅੱਖਰ *name,
+			array_ਟੁਕੜਾ<ਅਚਲ ਰੁੱਖ> fields)
 {
-  location_t saved_loc = input_location;
-  input_location = loc;
+  location_t saved_loc = ਨਿਵੇਸ਼_location;
+  ਨਿਵੇਸ਼_location = loc;
 
-  class c_struct_parse_info *struct_info;
-  tree ident = get_identifier (name);
-  tree type = start_struct (loc, RECORD_TYPE, ident, &struct_info);
+  ਵਰਗ c_struct_parse_info *struct_info;
+  ਰੁੱਖ ident = get_identifier (name);
+  ਰੁੱਖ type = ਸ਼ੁਰੂ_struct (loc, ਰਿਕਾਰਡ_TYPE, ident, &struct_info);
 
-  for (unsigned int i = 0; i < fields.size (); ++i)
+  ਲਈ (ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ i = 0; i < fields.ਮਾਪ (); ++i)
     {
-      DECL_FIELD_CONTEXT (fields[i]) = type;
-      if (i > 0)
+      DECL_ਖੇਤਰ_CONTEXT (fields[i]) = type;
+      ਜੇ (i > 0)
 	DECL_CHAIN (fields[i - 1]) = fields[i];
     }
 
-  finish_struct (loc, type, fields[0], NULL_TREE, struct_info);
+  ਅੰਤ_struct (loc, type, fields[0], NULL_ਰੁੱਖ, struct_info);
 
-  tree decl = build_decl (loc, TYPE_DECL, ident, type);
-  set_underlying_type (decl);
+  ਰੁੱਖ decl = build_decl (loc, TYPE_DECL, ident, type);
+  ਸੈੱਟ_underlying_type (decl);
   lang_hooks.decls.pushdecl (decl);
 
-  input_location = saved_loc;
-  return type;
+  ਨਿਵੇਸ਼_location = saved_loc;
+  ਵਾਪਸ type;
 }
 
 /* Create the FUNCTION_DECL for a function definition.
@@ -10756,82 +10756,82 @@ c_simulate_record_decl (location_t loc, const char *name,
    Returns true on success.  If the DECLARATOR is not suitable for a function
    (it defines a datum instead), we return false to report a parse error.  */
 
-bool
-start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
-		tree attributes)
+ਤਾਰਕਿਕ
+ਸ਼ੁਰੂ_function (ਬਣਤਰ c_declspecs *declspecs, ਬਣਤਰ c_declarator *declarator,
+		ਰੁੱਖ ਗੁਣ)
 {
-  tree decl1, old_decl;
-  tree restype, resdecl;
+  ਰੁੱਖ decl1, old_decl;
+  ਰੁੱਖ restype, resdecl;
   location_t loc;
-  location_t result_loc;
-  tree expr = NULL;
+  location_t ਨਤੀਜਾ_loc;
+  ਰੁੱਖ ਵਿਅੰਜਕ = ਨਿਰਾ;
 
-  current_function_returns_value = 0;  /* Assume, until we see it does.  */
+  current_function_returns_ਮੁੱਲ = 0;  /* Assume, until we see it does.  */
   current_function_returns_null = 0;
   current_function_returns_abnormally = 0;
   warn_about_return_type = 0;
-  c_switch_stack = NULL;
+  c_switch_ਢੇਰ = ਨਿਰਾ;
 
   /* Indicate no valid break/continue context.  */
-  in_statement = 0;
+  ਵਿੱਚ_statement = 0;
 
-  decl1 = grokdeclarator (declarator, declspecs, FUNCDEF, true, NULL,
-			  &attributes, &expr, NULL, DEPRECATED_NORMAL);
-  invoke_plugin_callbacks (PLUGIN_START_PARSE_FUNCTION, decl1);
+  decl1 = grokdeclarator (declarator, declspecs, FUNCDEF, ਸੱਚ, ਨਿਰਾ,
+			  &ਗੁਣ, &ਵਿਅੰਜਕ, ਨਿਰਾ, DEPRECATED_ਸਾਧਾਰਨ);
+  invoke_plugin_callbacks (PLUGIN_ਸ਼ੁਰੂ_PARSE_FUNCTION, decl1);
 
   /* If the declarator is not suitable for a function definition,
      cause a syntax error.  */
-  if (decl1 == NULL_TREE
-      || TREE_CODE (decl1) != FUNCTION_DECL)
-    return false;
+  ਜੇ (decl1 == NULL_ਰੁੱਖ
+      || ਰੁੱਖ_ਕੋਡ (decl1) != FUNCTION_DECL)
+    ਵਾਪਸ ਝੂਠ;
 
   /* Nested functions may have variably modified (return) type.
      Make sure the size expression is evaluated at this point.  */
-  if (expr && !current_scope->parm_flag)
-    add_stmt (fold_convert (void_type_node, expr));
+  ਜੇ (ਵਿਅੰਜਕ && !current_scope->parm_flag)
+    ਜੋੜੋ_stmt (fold_convert (void_type_ਗੰਢ, ਵਿਅੰਜਕ));
 
-  loc = DECL_SOURCE_LOCATION (decl1);
+  loc = DECL_ਸਰੋਤ_LOCATION (decl1);
 
   /* A nested function is not global.  */
-  if (current_function_decl != NULL_TREE)
-    TREE_PUBLIC (decl1) = 0;
+  ਜੇ (current_function_decl != NULL_ਰੁੱਖ)
+    ਰੁੱਖ_ਜਨਤਕ (decl1) = 0;
 
-  c_decl_attributes (&decl1, attributes, 0);
+  c_decl_ਗੁਣ (&decl1, ਗੁਣ, 0);
 
-  if (DECL_DECLARED_INLINE_P (decl1)
+  ਜੇ (DECL_DECLARED_INLINE_P (decl1)
       && DECL_UNINLINABLE (decl1)
-      && lookup_attribute ("noinline", DECL_ATTRIBUTES (decl1)))
+      && lookup_attribute ("noinline", DECL_ਗੁਣ (decl1)))
     {
-      auto_urlify_attributes sentinel;
+      auto_urlify_ਗੁਣ sentinel;
       warning_at (loc, OPT_Wattributes,
 		  "inline function %qD given attribute %qs",
 		  decl1, "noinline");
     }
 
   /* Handle gnu_inline attribute.  */
-  if (declspecs->inline_p
+  ਜੇ (declspecs->inline_p
       && !flag_gnu89_inline
-      && TREE_CODE (decl1) == FUNCTION_DECL
-      && (lookup_attribute ("gnu_inline", DECL_ATTRIBUTES (decl1))
+      && ਰੁੱਖ_ਕੋਡ (decl1) == FUNCTION_DECL
+      && (lookup_attribute ("gnu_inline", DECL_ਗੁਣ (decl1))
 	  || current_function_decl))
     {
-      if (declspecs->storage_class != csc_static)
+      ਜੇ (declspecs->storage_class != csc_static)
 	DECL_EXTERNAL (decl1) = !DECL_EXTERNAL (decl1);
     }
 
   announce_function (decl1);
 
-  if (!COMPLETE_OR_VOID_TYPE_P (TREE_TYPE (TREE_TYPE (decl1))))
+  ਜੇ (!COMPLETE_OR_VOID_TYPE_P (ਰੁੱਖ_TYPE (ਰੁੱਖ_TYPE (decl1))))
     {
       error_at (loc, "return type is an incomplete type");
       /* Make it return void instead.  */
-      TREE_TYPE (decl1)
-	= c_build_function_type (void_type_node,
-				 TYPE_ARG_TYPES (TREE_TYPE (decl1)),
-				 TYPE_NO_NAMED_ARGS_STDARG_P (TREE_TYPE (decl1)));
+      ਰੁੱਖ_TYPE (decl1)
+	= c_build_function_type (void_type_ਗੰਢ,
+				 TYPE_ARG_TYPES (ਰੁੱਖ_TYPE (decl1)),
+				 TYPE_NO_NAMED_ਦਲੀਲਾਂ_STDARG_P (ਰੁੱਖ_TYPE (decl1)));
     }
 
-  if (warn_about_return_type)
+  ਜੇ (warn_about_return_type)
     permerror_opt (loc, flag_isoc99 ? OPT_Wimplicit_int
 		   : (warn_return_type > 0 ? OPT_Wreturn_type
 		      : OPT_Wimplicit_int),
@@ -10839,43 +10839,43 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
 
   /* Make the init_value nonzero so pushdecl knows this is not tentative.
      error_mark_node is replaced below (in pop_scope) with the BLOCK.  */
-  DECL_INITIAL (decl1) = error_mark_node;
+  DECL_INITIAL (decl1) = error_mark_ਗੰਢ;
 
   /* If this definition isn't a prototype and we had a prototype declaration
      before, copy the arg type info from that prototype.  */
-  old_decl = lookup_name_in_scope (DECL_NAME (decl1), current_scope);
-  if (old_decl && TREE_CODE (old_decl) != FUNCTION_DECL)
-    old_decl = NULL_TREE;
+  old_decl = lookup_name_ਵਿੱਚ_scope (DECL_NAME (decl1), current_scope);
+  ਜੇ (old_decl && ਰੁੱਖ_ਕੋਡ (old_decl) != FUNCTION_DECL)
+    old_decl = NULL_ਰੁੱਖ;
 
   current_function_prototype_locus = UNKNOWN_LOCATION;
-  current_function_prototype_built_in = false;
-  current_function_prototype_arg_types = NULL_TREE;
-  tree newtype = TREE_TYPE (decl1);
-  tree oldtype = old_decl ? TREE_TYPE (old_decl) : newtype;
-  if (!prototype_p (newtype))
+  current_function_prototype_built_ਵਿੱਚ = ਝੂਠ;
+  current_function_prototype_arg_types = NULL_ਰੁੱਖ;
+  ਰੁੱਖ newtype = ਰੁੱਖ_TYPE (decl1);
+  ਰੁੱਖ oldtype = old_decl ? ਰੁੱਖ_TYPE (old_decl) : newtype;
+  ਜੇ (!prototype_p (newtype))
     {
-      tree oldrt = TREE_TYPE (oldtype);
-      tree newrt = TREE_TYPE (newtype);
-      if (old_decl != NULL_TREE
-	  && TREE_CODE (oldtype) == FUNCTION_TYPE
+      ਰੁੱਖ oldrt = ਰੁੱਖ_TYPE (oldtype);
+      ਰੁੱਖ newrt = ਰੁੱਖ_TYPE (newtype);
+      ਜੇ (old_decl != NULL_ਰੁੱਖ
+	  && ਰੁੱਖ_ਕੋਡ (oldtype) == FUNCTION_TYPE
 	  && comptypes (oldrt, newrt)
-	  && !TYPE_NO_NAMED_ARGS_STDARG_P (oldtype))
+	  && !TYPE_NO_NAMED_ਦਲੀਲਾਂ_STDARG_P (oldtype))
 	{
-	  if (stdarg_p (oldtype))
+	  ਜੇ (stdarg_p (oldtype))
 	    {
-	      auto_diagnostic_group d;
+	      auto_diagnostic_ਸਮੂਹ d;
 	      warning_at (loc, 0, "%q+D defined as variadic function "
 			  "without prototype", decl1);
 	      locate_old_decl (old_decl);
 	    }
-	  TREE_TYPE (decl1) = composite_type (oldtype, newtype);
-	  current_function_prototype_locus = DECL_SOURCE_LOCATION (old_decl);
-	  current_function_prototype_built_in
+	  ਰੁੱਖ_TYPE (decl1) = ਸੰਯੁਕਤ_type (oldtype, newtype);
+	  current_function_prototype_locus = DECL_ਸਰੋਤ_LOCATION (old_decl);
+	  current_function_prototype_built_ਵਿੱਚ
 	    = C_DECL_BUILTIN_PROTOTYPE (old_decl);
 	  current_function_prototype_arg_types
 	    = TYPE_ARG_TYPES (newtype);
 	}
-      if (TREE_PUBLIC (decl1))
+      ਜੇ (ਰੁੱਖ_ਜਨਤਕ (decl1))
 	{
 	  /* If there is an external prototype declaration of this
 	     function, record its location but do not copy information
@@ -10883,22 +10883,22 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
 	     (built-in or in a scope which has finished) or simply
 	     have more refined argument types than any declaration
 	     found above.  */
-	  struct c_binding *b;
-	  for (b = I_SYMBOL_BINDING (DECL_NAME (decl1)); b; b = b->shadowed)
-	    if (B_IN_SCOPE (b, external_scope))
-	      break;
-	  if (b)
+	  ਬਣਤਰ c_binding *b;
+	  ਲਈ (b = I_ਚਿੰਨ੍ਹ_BINDING (DECL_NAME (decl1)); b; b = b->shadowed)
+	    ਜੇ (B_ਵਿੱਚ_SCOPE (b, external_scope))
+	      ਰੋਕੋ;
+	  ਜੇ (b)
 	    {
-	      tree ext_decl, ext_type;
+	      ਰੁੱਖ ext_decl, ext_type;
 	      ext_decl = b->decl;
-	      ext_type = b->u.type ? b->u.type : TREE_TYPE (ext_decl);
-	      if (TREE_CODE (ext_type) == FUNCTION_TYPE
-		  && comptypes (TREE_TYPE (TREE_TYPE (decl1)),
-				TREE_TYPE (ext_type)))
+	      ext_type = b->u.type ? b->u.type : ਰੁੱਖ_TYPE (ext_decl);
+	      ਜੇ (ਰੁੱਖ_ਕੋਡ (ext_type) == FUNCTION_TYPE
+		  && comptypes (ਰੁੱਖ_TYPE (ਰੁੱਖ_TYPE (decl1)),
+				ਰੁੱਖ_TYPE (ext_type)))
 		{
 		  current_function_prototype_locus
-		    = DECL_SOURCE_LOCATION (ext_decl);
-		  current_function_prototype_built_in
+		    = DECL_ਸਰੋਤ_LOCATION (ext_decl);
+		  current_function_prototype_built_ਵਿੱਚ
 		    = C_DECL_BUILTIN_PROTOTYPE (ext_decl);
 		  current_function_prototype_arg_types
 		    = TYPE_ARG_TYPES (ext_type);
@@ -10908,34 +10908,34 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
     }
 
   /* Optionally warn about C23 compatibility.  */
-  if (warn_deprecated_non_prototype
-      && old_decl != NULL_TREE
-      && TREE_CODE (oldtype) == FUNCTION_TYPE
+  ਜੇ (warn_deprecated_non_prototype
+      && old_decl != NULL_ਰੁੱਖ
+      && ਰੁੱਖ_ਕੋਡ (oldtype) == FUNCTION_TYPE
       && !TYPE_ARG_TYPES (oldtype)
-      && !TYPE_NO_NAMED_ARGS_STDARG_P (oldtype)
+      && !TYPE_NO_NAMED_ਦਲੀਲਾਂ_STDARG_P (oldtype)
       && (TYPE_ARG_TYPES (newtype)
-	  && TREE_VALUE (TYPE_ARG_TYPES (newtype)) != void_type_node))
+	  && ਰੁੱਖ_ਮੁੱਲ (TYPE_ARG_TYPES (newtype)) != void_type_ਗੰਢ))
     {
-      bool warned = warning_at (loc, OPT_Wdeprecated_non_prototype,
+      ਤਾਰਕਿਕ warned = warning_at (loc, OPT_Wdeprecated_non_prototype,
 				"ISO C23 does not allow defining"
 				" parameters for function %qE declared"
 				" without parameters",
 				decl1);
-      if (warned)
-	inform (DECL_SOURCE_LOCATION (old_decl), "declared here");
+      ਜੇ (warned)
+	inform (DECL_ਸਰੋਤ_LOCATION (old_decl), "declared here");
     }
 
   /* Optionally warn of old-fashioned def with no previous prototype.  */
-  if (warn_strict_prototypes
-      && old_decl != error_mark_node
-      && !prototype_p (TREE_TYPE (decl1))
+  ਜੇ (warn_strict_prototypes
+      && old_decl != error_mark_ਗੰਢ
+      && !prototype_p (ਰੁੱਖ_TYPE (decl1))
       && C_DECL_ISNT_PROTOTYPE (old_decl))
     warning_at (loc, OPT_Wstrict_prototypes,
 		"function declaration isn%'t a prototype");
   /* Optionally warn of any global def with no previous prototype.  */
-  else if (warn_missing_prototypes
-	   && old_decl != error_mark_node
-	   && TREE_PUBLIC (decl1)
+  ਨਹੀਂਤਾਂ ਜੇ (warn_missing_prototypes
+	   && old_decl != error_mark_ਗੰਢ
+	   && ਰੁੱਖ_ਜਨਤਕ (decl1)
 	   && !MAIN_NAME_P (DECL_NAME (decl1))
 	   && C_DECL_ISNT_PROTOTYPE (old_decl)
 	   && !DECL_DECLARED_INLINE_P (decl1))
@@ -10943,17 +10943,17 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
 		"no previous prototype for %qD", decl1);
   /* Optionally warn of any def with no previous prototype
      if the function has already been used.  */
-  else if (warn_missing_prototypes
-	   && old_decl != NULL_TREE
-	   && old_decl != error_mark_node
-	   && TREE_USED (old_decl)
-	   && !prototype_p (TREE_TYPE (old_decl)))
+  ਨਹੀਂਤਾਂ ਜੇ (warn_missing_prototypes
+	   && old_decl != NULL_ਰੁੱਖ
+	   && old_decl != error_mark_ਗੰਢ
+	   && ਰੁੱਖ_ਵਰਤਿਆ (old_decl)
+	   && !prototype_p (ਰੁੱਖ_TYPE (old_decl)))
     warning_at (loc, OPT_Wmissing_prototypes,
 		"%qD was used with no prototype before its definition", decl1);
   /* Optionally warn of any global def with no previous declaration.  */
-  else if (warn_missing_declarations
-	   && TREE_PUBLIC (decl1)
-	   && old_decl == NULL_TREE
+  ਨਹੀਂਤਾਂ ਜੇ (warn_missing_declarations
+	   && ਰੁੱਖ_ਜਨਤਕ (decl1)
+	   && old_decl == NULL_ਰੁੱਖ
 	   && !MAIN_NAME_P (DECL_NAME (decl1))
 	   && !DECL_DECLARED_INLINE_P (decl1))
     warning_at (loc, OPT_Wmissing_declarations,
@@ -10961,58 +10961,58 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
 		decl1);
   /* Optionally warn of any def with no previous declaration
      if the function has already been used.  */
-  else if (warn_missing_declarations
-	   && old_decl != NULL_TREE
-	   && old_decl != error_mark_node
-	   && TREE_USED (old_decl)
+  ਨਹੀਂਤਾਂ ਜੇ (warn_missing_declarations
+	   && old_decl != NULL_ਰੁੱਖ
+	   && old_decl != error_mark_ਗੰਢ
+	   && ਰੁੱਖ_ਵਰਤਿਆ (old_decl)
 	   && C_DECL_IMPLICIT (old_decl))
     warning_at (loc, OPT_Wmissing_declarations,
 		"%qD was used with no declaration before its definition", decl1);
 
   /* This function exists in static storage.
      (This does not mean `static' in the C sense!)  */
-  TREE_STATIC (decl1) = 1;
+  ਰੁੱਖ_STATIC (decl1) = 1;
 
   /* This is the earliest point at which we might know the assembler
      name of the function.  Thus, if it's set before this, die horribly.  */
-  gcc_assert (!DECL_ASSEMBLER_NAME_SET_P (decl1));
+  gcc_assert (!DECL_ASSEMBLER_NAME_ਸੈੱਟ_P (decl1));
 
   /* If #pragma weak was used, mark the decl weak now.  */
-  if (current_scope == file_scope)
+  ਜੇ (current_scope == file_scope)
     maybe_apply_pragma_weak (decl1);
 
   /* Warn for unlikely, improbable, or stupid declarations of `main'.  */
-  if (warn_main && MAIN_NAME_P (DECL_NAME (decl1)))
+  ਜੇ (warn_main && MAIN_NAME_P (DECL_NAME (decl1)))
     {
-      if (TYPE_MAIN_VARIANT (TREE_TYPE (TREE_TYPE (decl1)))
-	  != integer_type_node)
+      ਜੇ (TYPE_MAIN_VARIANT (ਰੁੱਖ_TYPE (ਰੁੱਖ_TYPE (decl1)))
+	  != integer_type_ਗੰਢ)
 	pedwarn (loc, OPT_Wmain, "return type of %qD is not %<int%>", decl1);
-      else if (TYPE_ATOMIC (TREE_TYPE (TREE_TYPE (decl1))))
+      ਨਹੀਂਤਾਂ ਜੇ (TYPE_ATOMIC (ਰੁੱਖ_TYPE (ਰੁੱਖ_TYPE (decl1))))
 	pedwarn (loc, OPT_Wmain, "%<_Atomic%>-qualified return type of %qD",
 		 decl1);
 
       check_main_parameter_types (decl1);
 
-      if (!TREE_PUBLIC (decl1))
+      ਜੇ (!ਰੁੱਖ_ਜਨਤਕ (decl1))
 	pedwarn (loc, OPT_Wmain,
 		 "%qD is normally a non-static function", decl1);
     }
 
-  tree parms = current_function_arg_info->parms;
-  if (old_decl)
+  ਰੁੱਖ parms = current_function_arg_info->parms;
+  ਜੇ (old_decl)
     {
-      location_t origloc = DECL_SOURCE_LOCATION (old_decl);
+      location_t origloc = DECL_ਸਰੋਤ_LOCATION (old_decl);
       warn_parms_array_mismatch (origloc, old_decl, parms);
     }
 
   /* To enable versions to be created across TU's we mark and mangle all
      non-default versioned functions.  */
-  if (TREE_CODE (decl1) == FUNCTION_DECL
-      && !TARGET_HAS_FMV_TARGET_ATTRIBUTE
-      && get_target_version (decl1).is_valid ())
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl1) == FUNCTION_DECL
+      && !ਨਿਸ਼ਾਨਾ_HAS_FMV_ਨਿਸ਼ਾਨਾ_ATTRIBUTE
+      && get_ਨਿਸ਼ਾਨਾ_ਸੰਸਕਰਣ (decl1).is_valid ())
     {
       maybe_mark_function_versioned (decl1);
-      if (current_scope != file_scope)
+      ਜੇ (current_scope != file_scope)
 	error ("versioned definitions are only allowed at file scope");
     }
 
@@ -11022,74 +11022,74 @@ start_function (struct c_declspecs *declspecs, struct c_declarator *declarator,
 
   current_function_decl = pushdecl (decl1);
 
-  if (tree access = build_attr_access_from_parms (parms, false))
-    decl_attributes (&current_function_decl, access, ATTR_FLAG_INTERNAL,
+  ਜੇ (ਰੁੱਖ access = build_attr_access_from_parms (parms, ਝੂਠ))
+    decl_ਗੁਣ (&current_function_decl, access, ATTR_FLAG_ਅੰਦਰੂਨੀ,
 		     old_decl);
 
-  push_scope ();
+  ਧੱਕੋ_scope ();
   declare_parm_level ();
 
   /* Set the result decl source location to the location of the typespec.  */
-  result_loc = (declspecs->locations[cdw_typespec] == UNKNOWN_LOCATION
+  ਨਤੀਜਾ_loc = (declspecs->locations[cdw_typespec] == UNKNOWN_LOCATION
 		? loc : declspecs->locations[cdw_typespec]);
-  restype = TREE_TYPE (TREE_TYPE (current_function_decl));
-  resdecl = build_decl (result_loc, RESULT_DECL, NULL_TREE, restype);
+  restype = ਰੁੱਖ_TYPE (ਰੁੱਖ_TYPE (current_function_decl));
+  resdecl = build_decl (ਨਤੀਜਾ_loc, ਨਤੀਜਾ_DECL, NULL_ਰੁੱਖ, restype);
   DECL_ARTIFICIAL (resdecl) = 1;
   DECL_IGNORED_P (resdecl) = 1;
-  DECL_RESULT (current_function_decl) = resdecl;
+  DECL_ਨਤੀਜਾ (current_function_decl) = resdecl;
 
-  start_fname_decls ();
+  ਸ਼ੁਰੂ_fname_decls ();
 
-  return true;
+  ਵਾਪਸ ਸੱਚ;
 }
 
 /* Subroutine of store_parm_decls which handles new-style function
    definitions (prototype format). The parms already have decls, so we
    need only record them as in effect and complain if any redundant
    old-style parm decls were written.  */
-static void
-store_parm_decls_newstyle (tree fndecl, const struct c_arg_info *arg_info)
+ਸਥਿਰ ਖਾਲੀ
+store_parm_decls_newstyle (ਰੁੱਖ fndecl, ਅਚਲ ਬਣਤਰ c_arg_info *arg_info)
 {
-  tree decl;
-  c_arg_tag *tag;
-  unsigned ix;
+  ਰੁੱਖ decl;
+  c_arg_ਟੈਗ *ਟੈਗ;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ ix;
 
-  if (current_scope->bindings)
+  ਜੇ (current_scope->bindings)
     {
-      error_at (DECL_SOURCE_LOCATION (fndecl),
+      error_at (DECL_ਸਰੋਤ_LOCATION (fndecl),
 		"old-style parameter declarations in prototyped "
 		"function definition");
 
       /* Get rid of the old-style declarations.  */
-      pop_scope ();
-      push_scope ();
+      ਕੱਢੋ_scope ();
+      ਧੱਕੋ_scope ();
     }
   /* Don't issue this warning for nested functions, and don't issue this
      warning if we got here because ARG_INFO_TYPES was error_mark_node
      (this happens when a function definition has just an ellipsis in
      its parameter list).  */
-  else if (!in_system_header_at (input_location)
+  ਨਹੀਂਤਾਂ ਜੇ (!ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location)
 	   && !current_function_scope
-	   && arg_info->types != error_mark_node
-	   && !arg_info->c23_empty_parens)
-    warning_at (DECL_SOURCE_LOCATION (fndecl), OPT_Wtraditional,
+	   && arg_info->types != error_mark_ਗੰਢ
+	   && !arg_info->c23_ਖਾਲੀ_ਥਾਵਾਂ_parens)
+    warning_at (DECL_ਸਰੋਤ_LOCATION (fndecl), OPT_Wtraditional,
 		"traditional C rejects ISO C style function definitions");
 
   /* Now make all the parameter declarations visible in the function body.
      We can bypass most of the grunt work of pushdecl.  */
-  for (decl = arg_info->parms; decl; decl = DECL_CHAIN (decl))
+  ਲਈ (decl = arg_info->parms; decl; decl = DECL_CHAIN (decl))
     {
       DECL_CONTEXT (decl) = current_function_decl;
-      if (DECL_NAME (decl))
+      ਜੇ (DECL_NAME (decl))
 	{
 	  bind (DECL_NAME (decl), decl, current_scope,
-		/*invisible=*/false, /*nested=*/false,
+		/*invisible=*/ਝੂਠ, /*nested=*/ਝੂਠ,
 		UNKNOWN_LOCATION);
-	  if (!TREE_USED (decl))
+	  ਜੇ (!ਰੁੱਖ_ਵਰਤਿਆ (decl))
 	    warn_if_shadowing (decl);
 	}
-      else
-	pedwarn_c11 (DECL_SOURCE_LOCATION (decl), OPT_Wmissing_parameter_name,
+      ਨਹੀਂਤਾਂ
+	pedwarn_c11 (DECL_ਸਰੋਤ_LOCATION (decl), OPT_Wmissing_parameter_name,
 		     "ISO C does not support omitting parameter names in "
 		     "function definitions before C23");
     }
@@ -11098,97 +11098,97 @@ store_parm_decls_newstyle (tree fndecl, const struct c_arg_info *arg_info)
   DECL_ARGUMENTS (fndecl) = arg_info->parms;
 
   /* Now make all the ancillary declarations visible, likewise.  */
-  for (decl = arg_info->others; decl; decl = DECL_CHAIN (decl))
+  ਲਈ (decl = arg_info->others; decl; decl = DECL_CHAIN (decl))
     {
       DECL_CONTEXT (decl) = current_function_decl;
-      if (DECL_NAME (decl))
+      ਜੇ (DECL_NAME (decl))
 	bind (DECL_NAME (decl), decl, current_scope,
-	      /*invisible=*/false,
-	      /*nested=*/(TREE_CODE (decl) == FUNCTION_DECL),
+	      /*invisible=*/ਝੂਠ,
+	      /*nested=*/(ਰੁੱਖ_ਕੋਡ (decl) == FUNCTION_DECL),
 	      UNKNOWN_LOCATION);
     }
 
   /* And all the tag declarations.  */
-  FOR_EACH_VEC_SAFE_ELT_REVERSE (arg_info->tags, ix, tag)
-    if (tag->id)
-      bind (tag->id, tag->type, current_scope,
-	    /*invisible=*/false, /*nested=*/false, UNKNOWN_LOCATION);
+  FOR_EACH_VEC_ਸੁਰੱਖਿਅਤ_ELT_ਉਲਟ (arg_info->ਟੈਗ_ਸੂਚੀ, ix, ਟੈਗ)
+    ਜੇ (ਟੈਗ->id)
+      bind (ਟੈਗ->id, ਟੈਗ->type, current_scope,
+	    /*invisible=*/ਝੂਠ, /*nested=*/ਝੂਠ, UNKNOWN_LOCATION);
 }
 
 /* Subroutine of store_parm_decls which handles old-style function
    definitions (separate parameter list and declarations).  */
 
-static void
-store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
+ਸਥਿਰ ਖਾਲੀ
+store_parm_decls_oldstyle (ਰੁੱਖ fndecl, ਅਚਲ ਬਣਤਰ c_arg_info *arg_info)
 {
-  struct c_binding *b;
-  tree parm, decl, last;
-  tree parmids = arg_info->parms;
-  hash_set<tree> seen_args;
+  ਬਣਤਰ c_binding *b;
+  ਰੁੱਖ parm, decl, ਆਖਰੀ;
+  ਰੁੱਖ parmids = arg_info->parms;
+  hash_ਸੈੱਟ<ਰੁੱਖ> ਵੇਖਿਆ_ਦਲੀਲਾਂ;
 
-  if (!in_system_header_at (input_location))
+  ਜੇ (!ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location))
     {
-      if (flag_isoc23)
-	pedwarn (DECL_SOURCE_LOCATION (fndecl),
+      ਜੇ (flag_isoc23)
+	pedwarn (DECL_ਸਰੋਤ_LOCATION (fndecl),
 		 OPT_Wold_style_definition, "old-style function definition");
-      else
-	warning_at (DECL_SOURCE_LOCATION (fndecl),
+      ਨਹੀਂਤਾਂ
+	warning_at (DECL_ਸਰੋਤ_LOCATION (fndecl),
 		    OPT_Wold_style_definition,
 		    "old-style function definition");
     }
 
-  if (current_scope->had_vla_unspec)
+  ਜੇ (current_scope->had_vla_unspec)
     error ("%<[*]%> not allowed in other than function prototype scope");
 
   /* Match each formal parameter name with its declaration.  Save each
      decl in the appropriate TREE_PURPOSE slot of the parmids chain.  */
-  for (parm = parmids; parm; parm = TREE_CHAIN (parm))
+  ਲਈ (parm = parmids; parm; parm = ਰੁੱਖ_CHAIN (parm))
     {
-      if (TREE_VALUE (parm) == NULL_TREE)
+      ਜੇ (ਰੁੱਖ_ਮੁੱਲ (parm) == NULL_ਰੁੱਖ)
 	{
-	  error_at (DECL_SOURCE_LOCATION (fndecl),
+	  error_at (DECL_ਸਰੋਤ_LOCATION (fndecl),
 		    "parameter name missing from parameter list");
-	  TREE_PURPOSE (parm) = NULL_TREE;
-	  continue;
+	  ਰੁੱਖ_PURPOSE (parm) = NULL_ਰੁੱਖ;
+	  ਜਾਰੀ;
 	}
 
-      b = I_SYMBOL_BINDING (TREE_VALUE (parm));
-      if (b && B_IN_CURRENT_SCOPE (b))
+      b = I_ਚਿੰਨ੍ਹ_BINDING (ਰੁੱਖ_ਮੁੱਲ (parm));
+      ਜੇ (b && B_ਵਿੱਚ_CURRENT_SCOPE (b))
 	{
 	  decl = b->decl;
 	  /* Skip erroneous parameters.  */
-	  if (decl == error_mark_node)
-	    continue;
+	  ਜੇ (decl == error_mark_ਗੰਢ)
+	    ਜਾਰੀ;
 	  /* If we got something other than a PARM_DECL it is an error.  */
-	  if (TREE_CODE (decl) != PARM_DECL)
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) != PARM_DECL)
 	    {
-	      error_at (DECL_SOURCE_LOCATION (decl),
+	      error_at (DECL_ਸਰੋਤ_LOCATION (decl),
 			"%qD declared as a non-parameter", decl);
-	      continue;
+	      ਜਾਰੀ;
 	    }
 	  /* If the declaration is already marked, we have a duplicate
 	     name.  Complain and ignore the duplicate.  */
-	  else if (seen_args.contains (decl))
+	  ਨਹੀਂਤਾਂ ਜੇ (ਵੇਖਿਆ_ਦਲੀਲਾਂ.ਸ਼ਾਮਲ_ਹੈ (decl))
 	    {
-	      error_at (DECL_SOURCE_LOCATION (decl),
+	      error_at (DECL_ਸਰੋਤ_LOCATION (decl),
 			"multiple parameters named %qD", decl);
-	      TREE_PURPOSE (parm) = NULL_TREE;
-	      continue;
+	      ਰੁੱਖ_PURPOSE (parm) = NULL_ਰੁੱਖ;
+	      ਜਾਰੀ;
 	    }
 	  /* If the declaration says "void", complain and turn it into
 	     an int.  */
-	  else if (VOID_TYPE_P (TREE_TYPE (decl)))
+	  ਨਹੀਂਤਾਂ ਜੇ (VOID_TYPE_P (ਰੁੱਖ_TYPE (decl)))
 	    {
-	      error_at (DECL_SOURCE_LOCATION (decl),
+	      error_at (DECL_ਸਰੋਤ_LOCATION (decl),
 			"parameter %qD declared with void type", decl);
-	      TREE_TYPE (decl) = integer_type_node;
-	      DECL_ARG_TYPE (decl) = integer_type_node;
+	      ਰੁੱਖ_TYPE (decl) = integer_type_ਗੰਢ;
+	      DECL_ARG_TYPE (decl) = integer_type_ਗੰਢ;
 	      layout_decl (decl, 0);
 	    }
 	  warn_if_shadowing (decl);
 	}
       /* If no declaration found, default to int.  */
-      else
+      ਨਹੀਂਤਾਂ
 	{
 	  /* FIXME diagnostics: This should be the location of the argument,
 	     not the FNDECL.  E.g., for an old-style declaration
@@ -11201,102 +11201,102 @@ store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
 	     entries.
 
 	     See gcc.dg/Wshadow-3.c for an example of this problem. */
-	  decl = build_decl (DECL_SOURCE_LOCATION (fndecl),
-			     PARM_DECL, TREE_VALUE (parm), integer_type_node);
-	  DECL_ARG_TYPE (decl) = TREE_TYPE (decl);
+	  decl = build_decl (DECL_ਸਰੋਤ_LOCATION (fndecl),
+			     PARM_DECL, ਰੁੱਖ_ਮੁੱਲ (parm), integer_type_ਗੰਢ);
+	  DECL_ARG_TYPE (decl) = ਰੁੱਖ_TYPE (decl);
 	  pushdecl (decl);
 	  warn_if_shadowing (decl);
 
-	  if (flag_isoc99)
-	    permerror_opt (DECL_SOURCE_LOCATION (decl),
+	  ਜੇ (flag_isoc99)
+	    permerror_opt (DECL_ਸਰੋਤ_LOCATION (decl),
 			   OPT_Wimplicit_int, "type of %qD defaults to %<int%>",
 			   decl);
-	  else
-	    warning_at (DECL_SOURCE_LOCATION (decl),
+	  ਨਹੀਂਤਾਂ
+	    warning_at (DECL_ਸਰੋਤ_LOCATION (decl),
 			OPT_Wmissing_parameter_type,
 			"type of %qD defaults to %<int%>", decl);
 	}
 
-      TREE_PURPOSE (parm) = decl;
-      seen_args.add (decl);
+      ਰੁੱਖ_PURPOSE (parm) = decl;
+      ਵੇਖਿਆ_ਦਲੀਲਾਂ.ਜੋੜੋ (decl);
     }
 
   /* Now examine the parms chain for incomplete declarations
      and declarations with no corresponding names.  */
 
-  for (b = current_scope->bindings; b; b = b->prev)
+  ਲਈ (b = current_scope->bindings; b; b = b->prev)
     {
       parm = b->decl;
-      if (TREE_CODE (parm) != PARM_DECL)
-	continue;
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (parm) != PARM_DECL)
+	ਜਾਰੀ;
 
-      if (TREE_TYPE (parm) != error_mark_node
-	  && !COMPLETE_TYPE_P (TREE_TYPE (parm)))
+      ਜੇ (ਰੁੱਖ_TYPE (parm) != error_mark_ਗੰਢ
+	  && !COMPLETE_TYPE_P (ਰੁੱਖ_TYPE (parm)))
 	{
-	  error_at (DECL_SOURCE_LOCATION (parm),
+	  error_at (DECL_ਸਰੋਤ_LOCATION (parm),
 		    "parameter %qD has incomplete type", parm);
-	  TREE_TYPE (parm) = error_mark_node;
+	  ਰੁੱਖ_TYPE (parm) = error_mark_ਗੰਢ;
 	}
 
-      if (!seen_args.contains (parm))
+      ਜੇ (!ਵੇਖਿਆ_ਦਲੀਲਾਂ.ਸ਼ਾਮਲ_ਹੈ (parm))
 	{
-	  error_at (DECL_SOURCE_LOCATION (parm),
+	  error_at (DECL_ਸਰੋਤ_LOCATION (parm),
 		    "declaration for parameter %qD but no such parameter",
 		    parm);
 
 	  /* Pretend the parameter was not missing.
 	     This gets us to a standard state and minimizes
 	     further error messages.  */
-	  parmids = chainon (parmids, tree_cons (parm, 0, 0));
+	  parmids = chainon (parmids, ਰੁੱਖ_cons (parm, 0, 0));
 	}
     }
 
   /* Chain the declarations together in the order of the list of
      names.  Store that chain in the function decl, replacing the
      list of names.  Update the current scope to match.  */
-  DECL_ARGUMENTS (fndecl) = NULL_TREE;
+  DECL_ARGUMENTS (fndecl) = NULL_ਰੁੱਖ;
 
-  for (parm = parmids; parm; parm = TREE_CHAIN (parm))
-    if (TREE_PURPOSE (parm))
-      break;
-  if (parm && TREE_PURPOSE (parm))
+  ਲਈ (parm = parmids; parm; parm = ਰੁੱਖ_CHAIN (parm))
+    ਜੇ (ਰੁੱਖ_PURPOSE (parm))
+      ਰੋਕੋ;
+  ਜੇ (parm && ਰੁੱਖ_PURPOSE (parm))
     {
-      last = TREE_PURPOSE (parm);
-      DECL_ARGUMENTS (fndecl) = last;
+      ਆਖਰੀ = ਰੁੱਖ_PURPOSE (parm);
+      DECL_ARGUMENTS (fndecl) = ਆਖਰੀ;
 
-      for (parm = TREE_CHAIN (parm); parm; parm = TREE_CHAIN (parm))
-	if (TREE_PURPOSE (parm))
+      ਲਈ (parm = ਰੁੱਖ_CHAIN (parm); parm; parm = ਰੁੱਖ_CHAIN (parm))
+	ਜੇ (ਰੁੱਖ_PURPOSE (parm))
 	  {
-	    DECL_CHAIN (last) = TREE_PURPOSE (parm);
-	    last = TREE_PURPOSE (parm);
+	    DECL_CHAIN (ਆਖਰੀ) = ਰੁੱਖ_PURPOSE (parm);
+	    ਆਖਰੀ = ਰੁੱਖ_PURPOSE (parm);
 	  }
-      DECL_CHAIN (last) = NULL_TREE;
+      DECL_CHAIN (ਆਖਰੀ) = NULL_ਰੁੱਖ;
     }
 
   /* If there was a previous prototype,
      set the DECL_ARG_TYPE of each argument according to
      the type previously specified, and report any mismatches.  */
 
-  if (current_function_prototype_arg_types)
+  ਜੇ (current_function_prototype_arg_types)
     {
-      tree type;
-      for (parm = DECL_ARGUMENTS (fndecl),
+      ਰੁੱਖ type;
+      ਲਈ (parm = DECL_ARGUMENTS (fndecl),
 	     type = current_function_prototype_arg_types;
-	   parm || (type != NULL_TREE
-		    && TREE_VALUE (type) != error_mark_node
-		    && TYPE_MAIN_VARIANT (TREE_VALUE (type)) != void_type_node);
-	   parm = DECL_CHAIN (parm), type = TREE_CHAIN (type))
+	   parm || (type != NULL_ਰੁੱਖ
+		    && ਰੁੱਖ_ਮੁੱਲ (type) != error_mark_ਗੰਢ
+		    && TYPE_MAIN_VARIANT (ਰੁੱਖ_ਮੁੱਲ (type)) != void_type_ਗੰਢ);
+	   parm = DECL_CHAIN (parm), type = ਰੁੱਖ_CHAIN (type))
 	{
-	  if (parm == NULL_TREE
-	      || type == NULL_TREE
-	      || (TREE_VALUE (type) != error_mark_node
-		  && TYPE_MAIN_VARIANT (TREE_VALUE (type)) == void_type_node))
+	  ਜੇ (parm == NULL_ਰੁੱਖ
+	      || type == NULL_ਰੁੱਖ
+	      || (ਰੁੱਖ_ਮੁੱਲ (type) != error_mark_ਗੰਢ
+		  && TYPE_MAIN_VARIANT (ਰੁੱਖ_ਮੁੱਲ (type)) == void_type_ਗੰਢ))
 	    {
-	      if (current_function_prototype_built_in)
-		warning_at (DECL_SOURCE_LOCATION (fndecl),
+	      ਜੇ (current_function_prototype_built_ਵਿੱਚ)
+		warning_at (DECL_ਸਰੋਤ_LOCATION (fndecl),
 			    0, "number of arguments doesn%'t match "
 			    "built-in prototype");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
 		  /* FIXME diagnostics: This should be the location of
 		     FNDECL, but there is bug when a prototype is
@@ -11304,62 +11304,62 @@ store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
 		     outside of it (e.g., gcc.dg/pr15698-2.c).  In
 		     which case FNDECL gets the location of the
 		     prototype, not the definition.  */
-		  error_at (input_location,
+		  error_at (ਨਿਵੇਸ਼_location,
 			    "number of arguments doesn%'t match prototype");
 
 		  error_at (current_function_prototype_locus,
 			    "prototype declaration");
 		}
-	      break;
+	      ਰੋਕੋ;
 	    }
 	  /* Type for passing arg must be consistent with that
 	     declared for the arg.  ISO C says we take the unqualified
 	     type for parameters declared with qualified type.  */
-	  if (TREE_TYPE (parm) != error_mark_node
-	      && TREE_VALUE (type) != error_mark_node
+	  ਜੇ (ਰੁੱਖ_TYPE (parm) != error_mark_ਗੰਢ
+	      && ਰੁੱਖ_ਮੁੱਲ (type) != error_mark_ਗੰਢ
 	      && ((TYPE_ATOMIC (DECL_ARG_TYPE (parm))
-		   != TYPE_ATOMIC (TREE_VALUE (type)))
+		   != TYPE_ATOMIC (ਰੁੱਖ_ਮੁੱਲ (type)))
 		  || !comptypes (TYPE_MAIN_VARIANT (DECL_ARG_TYPE (parm)),
-				 TYPE_MAIN_VARIANT (TREE_VALUE (type)))))
+				 TYPE_MAIN_VARIANT (ਰੁੱਖ_ਮੁੱਲ (type)))))
 	    {
-	      if ((TYPE_ATOMIC (DECL_ARG_TYPE (parm))
-		   == TYPE_ATOMIC (TREE_VALUE (type)))
-		  && (TYPE_MAIN_VARIANT (TREE_TYPE (parm))
-		      == TYPE_MAIN_VARIANT (TREE_VALUE (type))))
+	      ਜੇ ((TYPE_ATOMIC (DECL_ARG_TYPE (parm))
+		   == TYPE_ATOMIC (ਰੁੱਖ_ਮੁੱਲ (type)))
+		  && (TYPE_MAIN_VARIANT (ਰੁੱਖ_TYPE (parm))
+		      == TYPE_MAIN_VARIANT (ਰੁੱਖ_ਮੁੱਲ (type))))
 		{
 		  /* Adjust argument to match prototype.  E.g. a previous
 		     `int foo(float);' prototype causes
 		     `int foo(x) float x; {...}' to be treated like
 		     `int foo(float x) {...}'.  This is particularly
 		     useful for argument types like uid_t.  */
-		  DECL_ARG_TYPE (parm) = TREE_TYPE (parm);
+		  DECL_ARG_TYPE (parm) = ਰੁੱਖ_TYPE (parm);
 
 		  /* ??? Is it possible to get here with a
 		     built-in prototype or will it always have
 		     been diagnosed as conflicting with an
 		     old-style definition and discarded?  */
-		  if (current_function_prototype_built_in)
-		    warning_at (DECL_SOURCE_LOCATION (parm),
+		  ਜੇ (current_function_prototype_built_ਵਿੱਚ)
+		    warning_at (DECL_ਸਰੋਤ_LOCATION (parm),
 				OPT_Wpedantic, "promoted argument %qD "
 				"doesn%'t match built-in prototype", parm);
-		  else
+		  ਨਹੀਂਤਾਂ
 		    {
-		      pedwarn (DECL_SOURCE_LOCATION (parm),
+		      pedwarn (DECL_ਸਰੋਤ_LOCATION (parm),
 			       OPT_Wpedantic, "promoted argument %qD "
 			       "doesn%'t match prototype", parm);
 		      pedwarn (current_function_prototype_locus, OPT_Wpedantic,
 			       "prototype declaration");
 		    }
 		}
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  if (current_function_prototype_built_in)
-		    warning_at (DECL_SOURCE_LOCATION (parm),
+		  ਜੇ (current_function_prototype_built_ਵਿੱਚ)
+		    warning_at (DECL_ਸਰੋਤ_LOCATION (parm),
 				0, "argument %qD doesn%'t match "
 				"built-in prototype", parm);
-		  else
+		  ਨਹੀਂਤਾਂ
 		    {
-		      error_at (DECL_SOURCE_LOCATION (parm),
+		      error_at (DECL_ਸਰੋਤ_LOCATION (parm),
 				"argument %qD doesn%'t match prototype", parm);
 		      error_at (current_function_prototype_locus,
 				"prototype declaration");
@@ -11367,28 +11367,28 @@ store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
 		}
 	    }
 	}
-      TYPE_ACTUAL_ARG_TYPES (TREE_TYPE (fndecl)) = NULL_TREE;
+      TYPE_ACTUAL_ARG_TYPES (ਰੁੱਖ_TYPE (fndecl)) = NULL_ਰੁੱਖ;
     }
 
   /* Otherwise, create a prototype that would match.  */
 
-  else
+  ਨਹੀਂਤਾਂ
     {
-      tree actual = NULL_TREE, last = NULL_TREE, type;
+      ਰੁੱਖ actual = NULL_ਰੁੱਖ, ਆਖਰੀ = NULL_ਰੁੱਖ, type;
 
-      for (parm = DECL_ARGUMENTS (fndecl); parm; parm = DECL_CHAIN (parm))
+      ਲਈ (parm = DECL_ARGUMENTS (fndecl); parm; parm = DECL_CHAIN (parm))
 	{
-	  type = tree_cons (NULL_TREE, DECL_ARG_TYPE (parm), NULL_TREE);
-	  if (last)
-	    TREE_CHAIN (last) = type;
-	  else
+	  type = ਰੁੱਖ_cons (NULL_ਰੁੱਖ, DECL_ARG_TYPE (parm), NULL_ਰੁੱਖ);
+	  ਜੇ (ਆਖਰੀ)
+	    ਰੁੱਖ_CHAIN (ਆਖਰੀ) = type;
+	  ਨਹੀਂਤਾਂ
 	    actual = type;
-	  last = type;
+	  ਆਖਰੀ = type;
 	}
-      type = tree_cons (NULL_TREE, void_type_node, NULL_TREE);
-      if (last)
-	TREE_CHAIN (last) = type;
-      else
+      type = ਰੁੱਖ_cons (NULL_ਰੁੱਖ, void_type_ਗੰਢ, NULL_ਰੁੱਖ);
+      ਜੇ (ਆਖਰੀ)
+	ਰੁੱਖ_CHAIN (ਆਖਰੀ) = type;
+      ਨਹੀਂਤਾਂ
 	actual = type;
 
       /* We are going to assign a new value for the TYPE_ACTUAL_ARG_TYPES
@@ -11399,17 +11399,17 @@ store_parm_decls_oldstyle (tree fndecl, const struct c_arg_info *arg_info)
 	 will be a variant of the main variant of the original function
 	 type.  */
 
-      TREE_TYPE (fndecl) = build_variant_type_copy (TREE_TYPE (fndecl));
+      ਰੁੱਖ_TYPE (fndecl) = build_variant_type_copy (ਰੁੱਖ_TYPE (fndecl));
 
-      TYPE_ACTUAL_ARG_TYPES (TREE_TYPE (fndecl)) = actual;
+      TYPE_ACTUAL_ARG_TYPES (ਰੁੱਖ_TYPE (fndecl)) = actual;
     }
 }
 
 /* Store parameter declarations passed in ARG_INFO into the current
    function declaration.  */
 
-void
-store_parm_decls_from (struct c_arg_info *arg_info)
+ਖਾਲੀ
+store_parm_decls_from (ਬਣਤਰ c_arg_info *arg_info)
 {
   current_function_arg_info = arg_info;
   store_parm_decls ();
@@ -11418,19 +11418,19 @@ store_parm_decls_from (struct c_arg_info *arg_info)
 /* Called by walk_tree to look for and update context-less labels
    or labels with context in the parent function.  */
 
-static tree
-set_labels_context_r (tree *tp, int *walk_subtrees, void *data)
+ਸਥਿਰ ਰੁੱਖ
+ਸੈੱਟ_labels_context_r (ਰੁੱਖ *tp, ਪੂਰਨ *walk_subtrees, ਖਾਲੀ *ਅੰਕੜੇ)
 {
-  tree ctx = static_cast<tree>(data);
-  if (TREE_CODE (*tp) == LABEL_EXPR
-      && (DECL_CONTEXT (LABEL_EXPR_LABEL (*tp)) == NULL_TREE
-	  || DECL_CONTEXT (LABEL_EXPR_LABEL (*tp)) == DECL_CONTEXT (ctx)))
+  ਰੁੱਖ ctx = static_cast<ਰੁੱਖ>(ਅੰਕੜੇ);
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (*tp) == LABEL_ਵਿਅੰਜਕ
+      && (DECL_CONTEXT (LABEL_ਵਿਅੰਜਕ_LABEL (*tp)) == NULL_ਰੁੱਖ
+	  || DECL_CONTEXT (LABEL_ਵਿਅੰਜਕ_LABEL (*tp)) == DECL_CONTEXT (ctx)))
     {
-      DECL_CONTEXT (LABEL_EXPR_LABEL (*tp)) = ctx;
+      DECL_CONTEXT (LABEL_ਵਿਅੰਜਕ_LABEL (*tp)) = ctx;
       *walk_subtrees = 0;
     }
 
-  return NULL_TREE;
+  ਵਾਪਸ NULL_ਰੁੱਖ;
 }
 
 /* Store the parameter declarations into the current function declaration.
@@ -11440,44 +11440,44 @@ set_labels_context_r (tree *tp, int *walk_subtrees, void *data)
    For an old-style definition, construct a prototype out of the old-style
    parameter declarations and inject it into the function's type.  */
 
-void
-store_parm_decls (void)
+ਖਾਲੀ
+store_parm_decls (ਖਾਲੀ)
 {
-  tree fndecl = current_function_decl;
-  bool proto;
+  ਰੁੱਖ fndecl = current_function_decl;
+  ਤਾਰਕਿਕ proto;
 
   /* The argument information block for FNDECL.  */
-  struct c_arg_info *arg_info = current_function_arg_info;
+  ਬਣਤਰ c_arg_info *arg_info = current_function_arg_info;
   current_function_arg_info = 0;
 
   /* True if this definition is written with a prototype.  In C23, an
      empty argument list was converted to (void) in grokparms; in
      older C standard versions, it does not give the function a type
      with a prototype for future calls.  */
-  proto = arg_info->types != 0 || arg_info->no_named_args_stdarg_p;
+  proto = arg_info->types != 0 || arg_info->no_named_ਦਲੀਲਾਂ_stdarg_p;
 
-  if (proto)
+  ਜੇ (proto)
     store_parm_decls_newstyle (fndecl, arg_info);
-  else
+  ਨਹੀਂਤਾਂ
     store_parm_decls_oldstyle (fndecl, arg_info);
 
   /* The next call to push_scope will be a function body.  */
 
-  next_is_function_body = true;
+  ਅਗਲਾ_is_function_body = ਸੱਚ;
 
   /* Write a record describing this function definition to the prototypes
      file (if requested).  */
 
-  gen_aux_info_record (fndecl, 1, 0, proto);
+  gen_aux_info_ਰਿਕਾਰਡ (fndecl, 1, 0, proto);
 
   /* Initialize the RTL code for the function.  */
-  allocate_struct_function (fndecl, false);
+  allocate_struct_function (fndecl, ਝੂਠ);
 
-  if (warn_unused_local_typedefs)
+  ਜੇ (warn_ਅਣਵਰਤਿਆ_local_typedefs)
     cfun->language = ggc_cleared_alloc<language_function> ();
 
   /* Begin the statement tree for this function.  */
-  DECL_SAVED_TREE (fndecl) = push_stmt_list ();
+  DECL_SAVED_ਰੁੱਖ (fndecl) = ਧੱਕੋ_stmt_list ();
 
   /* ??? Insert the contents of the pending sizes list into the function
      to be evaluated.  The only reason left to have this is
@@ -11485,7 +11485,7 @@ store_parm_decls (void)
      because we throw away the array type in favor of a pointer type, and
      thus won't naturally see the SAVE_EXPR containing the increment.  All
      other pending sizes would be handled by gimplify_parameters.  */
-  if (arg_info->pending_sizes)
+  ਜੇ (arg_info->pending_sizes)
     {
       /* In very special circumstances, e.g. for code like
 	   _Atomic int i = 5;
@@ -11501,9 +11501,9 @@ store_parm_decls (void)
 	 function's context, while when the statement is emitted at the
 	 start of the nested function, it needs the nested function's
 	 context.  */
-      walk_tree_without_duplicates (&arg_info->pending_sizes,
-				    set_labels_context_r, fndecl);
-      add_stmt (arg_info->pending_sizes);
+      walk_ਰੁੱਖ_without_duplicates (&arg_info->pending_sizes,
+				    ਸੈੱਟ_labels_context_r, fndecl);
+      ਜੋੜੋ_stmt (arg_info->pending_sizes);
     }
 }
 
@@ -11511,39 +11511,39 @@ store_parm_decls (void)
    c_finish_omp_declare_simd for function prototypes.  No diagnostics
    should be done.  */
 
-void
-temp_store_parm_decls (tree fndecl, tree parms)
+ਖਾਲੀ
+ਆਰਜ਼ੀ_store_parm_decls (ਰੁੱਖ fndecl, ਰੁੱਖ parms)
 {
-  push_scope ();
-  for (tree p = parms; p; p = DECL_CHAIN (p))
+  ਧੱਕੋ_scope ();
+  ਲਈ (ਰੁੱਖ p = parms; p; p = DECL_CHAIN (p))
     {
       DECL_CONTEXT (p) = fndecl;
-      if (DECL_NAME (p))
+      ਜੇ (DECL_NAME (p))
 	bind (DECL_NAME (p), p, current_scope,
-	      /*invisible=*/false, /*nested=*/false,
+	      /*invisible=*/ਝੂਠ, /*nested=*/ਝੂਠ,
 	      UNKNOWN_LOCATION);
     }
 }
 
 /* Undo what temp_store_parm_decls did.  */
 
-void
-temp_pop_parm_decls (void)
+ਖਾਲੀ
+ਆਰਜ਼ੀ_ਕੱਢੋ_parm_decls (ਖਾਲੀ)
 {
   /* Clear all bindings in this temporary scope, so that
      pop_scope doesn't create a BLOCK.  */
-  struct c_binding *b = current_scope->bindings;
-  current_scope->bindings = NULL;
-  for (; b; b = free_binding_and_advance (b))
+  ਬਣਤਰ c_binding *b = current_scope->bindings;
+  current_scope->bindings = ਨਿਰਾ;
+  ਲਈ (; b; b = free_binding_and_advance (b))
     {
-      gcc_assert (TREE_CODE (b->decl) == PARM_DECL
-		  || b->decl == error_mark_node);
-      gcc_assert (I_SYMBOL_BINDING (b->id) == b);
-      I_SYMBOL_BINDING (b->id) = b->shadowed;
-      if (b->shadowed && b->shadowed->u.type)
-	TREE_TYPE (b->shadowed->decl) = b->shadowed->u.type;
+      gcc_assert (ਰੁੱਖ_ਕੋਡ (b->decl) == PARM_DECL
+		  || b->decl == error_mark_ਗੰਢ);
+      gcc_assert (I_ਚਿੰਨ੍ਹ_BINDING (b->id) == b);
+      I_ਚਿੰਨ੍ਹ_BINDING (b->id) = b->shadowed;
+      ਜੇ (b->shadowed && b->shadowed->u.type)
+	ਰੁੱਖ_TYPE (b->shadowed->decl) = b->shadowed->u.type;
     }
-  pop_scope ();
+  ਕੱਢੋ_scope ();
 }
 
 
@@ -11553,25 +11553,25 @@ temp_pop_parm_decls (void)
 
    This is called after parsing the body of the function definition.  */
 
-void
-finish_function (location_t end_loc)
+ਖਾਲੀ
+ਅੰਤ_function (location_t ਸਿਰਾ_loc)
 {
-  tree fndecl = current_function_decl;
+  ਰੁੱਖ fndecl = current_function_decl;
 
-  if (c_dialect_objc ())
-    objc_finish_function ();
+  ਜੇ (c_dialect_objc ())
+    objc_ਅੰਤ_function ();
 
-  if (DECL_INITIAL (fndecl) && DECL_INITIAL (fndecl) != error_mark_node)
-    BLOCK_SUPERCONTEXT (DECL_INITIAL (fndecl)) = fndecl;
+  ਜੇ (DECL_INITIAL (fndecl) && DECL_INITIAL (fndecl) != error_mark_ਗੰਢ)
+    ਖੰਡ_SUPERCONTEXT (DECL_INITIAL (fndecl)) = fndecl;
 
   /* Must mark the RESULT_DECL as being in this function.  */
 
-  if (DECL_RESULT (fndecl) && DECL_RESULT (fndecl) != error_mark_node)
-    DECL_CONTEXT (DECL_RESULT (fndecl)) = fndecl;
+  ਜੇ (DECL_ਨਤੀਜਾ (fndecl) && DECL_ਨਤੀਜਾ (fndecl) != error_mark_ਗੰਢ)
+    DECL_CONTEXT (DECL_ਨਤੀਜਾ (fndecl)) = fndecl;
 
-  if (MAIN_NAME_P (DECL_NAME (fndecl)) && !TREE_THIS_VOLATILE (fndecl)
-      && TYPE_MAIN_VARIANT (TREE_TYPE (TREE_TYPE (fndecl)))
-      == integer_type_node && flag_isoc99)
+  ਜੇ (MAIN_NAME_P (DECL_NAME (fndecl)) && !ਰੁੱਖ_THIS_VOLATILE (fndecl)
+      && TYPE_MAIN_VARIANT (ਰੁੱਖ_TYPE (ਰੁੱਖ_TYPE (fndecl)))
+      == integer_type_ਗੰਢ && flag_isoc99)
     {
       /* Hack.  We don't want the middle-end to warn that this return
 	 is unreachable, so we mark its location as special.  Using
@@ -11579,121 +11579,121 @@ finish_function (location_t end_loc)
 	 annotate_one_with_locus.  A cleaner solution might be to
 	 ensure ! should_carry_locus_p (stmt), but that needs a flag.
       */
-      c_finish_return (BUILTINS_LOCATION, integer_zero_node, NULL_TREE);
+      c_ਅੰਤ_return (BUILTINS_LOCATION, integer_zero_ਗੰਢ, NULL_ਰੁੱਖ);
     }
 
   /* Tie off the statement tree for this function.  */
-  DECL_SAVED_TREE (fndecl) = pop_stmt_list (DECL_SAVED_TREE (fndecl));
+  DECL_SAVED_ਰੁੱਖ (fndecl) = ਕੱਢੋ_stmt_list (DECL_SAVED_ਰੁੱਖ (fndecl));
 
-  finish_fname_decls ();
+  ਅੰਤ_fname_decls ();
 
   /* Complain if there's no return statement only if option specified on
      command line.  */
-  if (warn_return_type > 0
-      && TREE_CODE (TREE_TYPE (TREE_TYPE (fndecl))) != VOID_TYPE
-      && !current_function_returns_value && !current_function_returns_null
+  ਜੇ (warn_return_type > 0
+      && ਰੁੱਖ_ਕੋਡ (ਰੁੱਖ_TYPE (ਰੁੱਖ_TYPE (fndecl))) != VOID_TYPE
+      && !current_function_returns_ਮੁੱਲ && !current_function_returns_null
       /* Don't complain if we are no-return.  */
       && !current_function_returns_abnormally
       /* Don't complain if we are declared noreturn.  */
-      && !TREE_THIS_VOLATILE (fndecl)
+      && !ਰੁੱਖ_THIS_VOLATILE (fndecl)
       /* Don't warn for main().  */
       && !MAIN_NAME_P (DECL_NAME (fndecl))
       /* Or if they didn't actually specify a return type.  */
       && !C_FUNCTION_IMPLICIT_INT (fndecl)
       /* Normally, with -Wreturn-type, flow will complain, but we might
          optimize out static functions.  */
-      && !TREE_PUBLIC (fndecl)
+      && !ਰੁੱਖ_ਜਨਤਕ (fndecl)
       && targetm.warn_func_return (fndecl)
       && warning (OPT_Wreturn_type,
 		  "no return statement in function returning non-void"))
     suppress_warning (fndecl, OPT_Wreturn_type);
 
   /* Complain about parameters that are only set, but never otherwise used.  */
-  if (warn_unused_but_set_parameter)
+  ਜੇ (warn_ਅਣਵਰਤਿਆ_but_ਸੈੱਟ_parameter)
     {
-      tree decl;
+      ਰੁੱਖ decl;
 
-      for (decl = DECL_ARGUMENTS (fndecl);
+      ਲਈ (decl = DECL_ARGUMENTS (fndecl);
 	   decl;
 	   decl = DECL_CHAIN (decl))
-	if (TREE_USED (decl)
-	    && TREE_CODE (decl) == PARM_DECL
+	ਜੇ (ਰੁੱਖ_ਵਰਤਿਆ (decl)
+	    && ਰੁੱਖ_ਕੋਡ (decl) == PARM_DECL
 	    && !DECL_READ_P (decl)
 	    && DECL_NAME (decl)
 	    && !DECL_ARTIFICIAL (decl)
-	    && !warning_suppressed_p (decl, OPT_Wunused_but_set_parameter_))
-	  warning_at (DECL_SOURCE_LOCATION (decl),
-		      OPT_Wunused_but_set_parameter_,
+	    && !warning_suppressed_p (decl, OPT_Wunused_but_ਸੈੱਟ_parameter))
+	  warning_at (DECL_ਸਰੋਤ_LOCATION (decl),
+		      OPT_Wunused_but_ਸੈੱਟ_parameter,
 		      "parameter %qD set but not used", decl);
     }
 
   /* Complain about locally defined typedefs that are not used in this
      function.  */
-  maybe_warn_unused_local_typedefs ();
+  maybe_warn_ਅਣਵਰਤਿਆ_local_typedefs ();
 
   /* Possibly warn about unused parameters.  */
-  if (warn_unused_parameter)
-    do_warn_unused_parameter (fndecl);
+  ਜੇ (warn_ਅਣਵਰਤਿਆ_parameter)
+    do_warn_ਅਣਵਰਤਿਆ_parameter (fndecl);
 
   /* Store the end of the function, so that we get good line number
      info for the epilogue.  */
-  cfun->function_end_locus = end_loc;
+  cfun->function_ਸਿਰਾ_locus = ਸਿਰਾ_loc;
 
   /* Finalize the ELF visibility for the function.  */
   c_determine_visibility (fndecl);
 
   /* For GNU C extern inline functions disregard inline limits.  */
-  if (DECL_EXTERNAL (fndecl)
+  ਜੇ (DECL_EXTERNAL (fndecl)
       && DECL_DECLARED_INLINE_P (fndecl)
       && (flag_gnu89_inline
-	  || lookup_attribute ("gnu_inline", DECL_ATTRIBUTES (fndecl))))
+	  || lookup_attribute ("gnu_inline", DECL_ਗੁਣ (fndecl))))
     DECL_DISREGARD_INLINE_LIMITS (fndecl) = 1;
 
   /* Genericize before inlining.  Delay genericizing nested functions
      until their parent function is genericized.  Since finalizing
      requires GENERIC, delay that as well.  */
 
-  if (DECL_INITIAL (fndecl) && DECL_INITIAL (fndecl) != error_mark_node
+  ਜੇ (DECL_INITIAL (fndecl) && DECL_INITIAL (fndecl) != error_mark_ਗੰਢ
       && !undef_nested_function)
     {
-      if (!decl_function_context (fndecl))
+      ਜੇ (!decl_function_context (fndecl))
 	{
 	  invoke_plugin_callbacks (PLUGIN_PRE_GENERICIZE, fndecl);
 	  c_genericize (fndecl);
 
 	  /* ??? Objc emits functions after finalizing the compilation unit.
 	     This should be cleaned up later and this conditional removed.  */
-	  if (symtab->global_info_ready)
+	  ਜੇ (symtab->global_info_ready)
 	    {
-	      cgraph_node::add_new_function (fndecl, false);
-	      return;
+	      cgraph_ਗੰਢ::ਜੋੜੋ_new_function (fndecl, ਝੂਠ);
+	      ਵਾਪਸ;
 	    }
-	  cgraph_node::finalize_function (fndecl, false);
+	  cgraph_ਗੰਢ::finalize_function (fndecl, ਝੂਠ);
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
 	  /* Register this function with cgraph just far enough to get it
 	    added to our parent's nested function list.  Handy, since the
 	    C front end doesn't have such a list.  */
-	  (void) cgraph_node::get_create (fndecl);
+	  (ਖਾਲੀ) cgraph_ਗੰਢ::get_create (fndecl);
 	}
     }
 
-  if (!decl_function_context (fndecl))
-    undef_nested_function = false;
+  ਜੇ (!decl_function_context (fndecl))
+    undef_nested_function = ਝੂਠ;
 
-  if (cfun->language != NULL)
+  ਜੇ (cfun->language != ਨਿਰਾ)
     {
       ggc_free (cfun->language);
-      cfun->language = NULL;
+      cfun->language = ਨਿਰਾ;
     }
 
   /* We're leaving the context of this function, so zap cfun.
      It's still in DECL_STRUCT_FUNCTION, and we'll restore it in
      tree_rest_of_compilation.  */
-  set_cfun (NULL);
-  invoke_plugin_callbacks (PLUGIN_FINISH_PARSE_FUNCTION, current_function_decl);
-  current_function_decl = NULL;
+  ਸੈੱਟ_cfun (ਨਿਰਾ);
+  invoke_plugin_callbacks (PLUGIN_ਅੰਤ_PARSE_FUNCTION, current_function_decl);
+  current_function_decl = ਨਿਰਾ;
 }
 
 /* Check the declarations given in a for-loop for satisfying the C99
@@ -11707,32 +11707,32 @@ finish_function (location_t end_loc)
    off the error about not being in C99 mode.
 */
 
-tree
-check_for_loop_decls (location_t loc, bool turn_off_iso_c99_error)
+ਰੁੱਖ
+check_for_loop_decls (location_t loc, ਤਾਰਕਿਕ turn_off_iso_c99_error)
 {
-  struct c_binding *b;
-  tree one_decl = NULL_TREE;
-  int n_decls = 0;
+  ਬਣਤਰ c_binding *b;
+  ਰੁੱਖ one_decl = NULL_ਰੁੱਖ;
+  ਪੂਰਨ n_decls = 0;
 
-  if (!turn_off_iso_c99_error)
+  ਜੇ (!turn_off_iso_c99_error)
     {
-      static bool hint = true;
+      ਸਥਿਰ ਤਾਰਕਿਕ hint = ਸੱਚ;
       /* If we get here, declarations have been used in a for loop without
 	 the C99 for loop scope.  This doesn't make much sense, so don't
 	 allow it.  */
-      auto_diagnostic_group d;
+      auto_diagnostic_ਸਮੂਹ d;
       error_at (loc, "%<for%> loop initial declarations "
 		"are only allowed in C99 or C11 mode");
-      if (hint)
+      ਜੇ (hint)
 	{
 	  inform (loc,
 		  "use option %<-std=c99%>, %<-std=gnu99%>, %<-std=c11%> or "
 		  "%<-std=gnu11%> to compile your code");
-	  hint = false;
+	  hint = ਝੂਠ;
 	}
-      return NULL_TREE;
+      ਵਾਪਸ NULL_ਰੁੱਖ;
     }
-  else
+  ਨਹੀਂਤਾਂ
     pedwarn_c90 (loc, OPT_Wpedantic, "ISO C90 does not support %<for%> loop "
 		 "initial declarations");
 
@@ -11752,47 +11752,47 @@ check_for_loop_decls (location_t loc, bool turn_off_iso_c99_error)
 
      This constraint was removed in C23.  */
 
-  for (b = current_scope->bindings; b; b = b->prev)
+  ਲਈ (b = current_scope->bindings; b; b = b->prev)
     {
-      tree id = b->id;
-      tree decl = b->decl;
+      ਰੁੱਖ id = b->id;
+      ਰੁੱਖ decl = b->decl;
 
-      if (!id)
-	continue;
+      ਜੇ (!id)
+	ਜਾਰੀ;
 
-      switch (TREE_CODE (decl))
+      ਚੋਣ (ਰੁੱਖ_ਕੋਡ (decl))
 	{
-	case VAR_DECL:
+	ਹਾਲਤ VAR_DECL:
 	  {
-	    location_t decl_loc = DECL_SOURCE_LOCATION (decl);
-	    if (TREE_STATIC (decl))
+	    location_t decl_loc = DECL_ਸਰੋਤ_LOCATION (decl);
+	    ਜੇ (ਰੁੱਖ_STATIC (decl))
 	      pedwarn_c11 (decl_loc, OPT_Wpedantic,
 			   "declaration of static variable %qD in %<for%> "
 			   "loop initial declaration", decl);
-	    else if (DECL_EXTERNAL (decl))
+	    ਨਹੀਂਤਾਂ ਜੇ (DECL_EXTERNAL (decl))
 	      pedwarn_c11 (decl_loc, OPT_Wpedantic,
 			   "declaration of %<extern%> variable %qD in %<for%> "
 			   "loop initial declaration", decl);
 	  }
-	  break;
+	  ਰੋਕੋ;
 
-	case RECORD_TYPE:
+	ਹਾਲਤ ਰਿਕਾਰਡ_TYPE:
 	  pedwarn_c11 (loc, OPT_Wpedantic,
 		       "%<struct %E%> declared in %<for%> loop initial "
 		       "declaration", id);
-	  break;
-	case UNION_TYPE:
+	  ਰੋਕੋ;
+	ਹਾਲਤ UNION_TYPE:
 	  pedwarn_c11 (loc, OPT_Wpedantic,
 		       "%<union %E%> declared in %<for%> loop initial "
 		       "declaration",
 		       id);
-	  break;
-	case ENUMERAL_TYPE:
+	  ਰੋਕੋ;
+	ਹਾਲਤ ENUMERAL_TYPE:
 	  pedwarn_c11 (loc, OPT_Wpedantic,
 		       "%<enum %E%> declared in %<for%> loop "
 		       "initial declaration", id);
-	  break;
-	default:
+	  ਰੋਕੋ;
+	ਮੂਲ:
 	  pedwarn_c11 (loc, OPT_Wpedantic, "declaration of non-variable "
 		       "%qD in %<for%> loop initial declaration", decl);
 	}
@@ -11801,76 +11801,76 @@ check_for_loop_decls (location_t loc, bool turn_off_iso_c99_error)
       one_decl = decl;
     }
 
-  return n_decls == 1 ? one_decl : NULL_TREE;
+  ਵਾਪਸ n_decls == 1 ? one_decl : NULL_ਰੁੱਖ;
 }
 
 /* Save and reinitialize the variables
    used during compilation of a C function.  */
 
-void
-c_push_function_context (void)
+ਖਾਲੀ
+c_ਧੱਕੋ_function_context (ਖਾਲੀ)
 {
-  struct language_function *p = cfun->language;
+  ਬਣਤਰ language_function *p = cfun->language;
   /* cfun->language might have been already allocated by the use of
      -Wunused-local-typedefs.  In that case, just re-use it.  */
-  if (p == NULL)
+  ਜੇ (p == ਨਿਰਾ)
     cfun->language = p = ggc_cleared_alloc<language_function> ();
 
-  p->base.x_stmt_tree = c_stmt_tree;
-  c_stmt_tree.x_cur_stmt_list = vec_safe_copy (c_stmt_tree.x_cur_stmt_list);
-  p->x_in_statement = in_statement;
-  p->x_switch_stack = c_switch_stack;
-  p->loop_names = loop_names;
-  loop_names = vNULL;
-  p->loop_names_hash = loop_names_hash;
-  loop_names_hash = NULL;
+  p->ਅਧਾਰ.x_stmt_ਰੁੱਖ = c_stmt_ਰੁੱਖ;
+  c_stmt_ਰੁੱਖ.x_cur_stmt_list = vec_ਸੁਰੱਖਿਅਤ_copy (c_stmt_ਰੁੱਖ.x_cur_stmt_list);
+  p->x_ਵਿੱਚ_statement = ਵਿੱਚ_statement;
+  p->x_switch_ਢੇਰ = c_switch_ਢੇਰ;
+  p->loop_ਨਾਂ = loop_ਨਾਂ;
+  loop_ਨਾਂ = vNULL;
+  p->loop_ਨਾਂ_hash = loop_ਨਾਂ_hash;
+  loop_ਨਾਂ_hash = ਨਿਰਾ;
   p->arg_info = current_function_arg_info;
-  p->returns_value = current_function_returns_value;
+  p->returns_ਮੁੱਲ = current_function_returns_ਮੁੱਲ;
   p->returns_null = current_function_returns_null;
   p->returns_abnormally = current_function_returns_abnormally;
   p->warn_about_return_type = warn_about_return_type;
 
-  push_function_context ();
+  ਧੱਕੋ_function_context ();
 }
 
 /* Restore the variables used during compilation of a C function.  */
 
-void
-c_pop_function_context (void)
+ਖਾਲੀ
+c_ਕੱਢੋ_function_context (ਖਾਲੀ)
 {
-  struct language_function *p;
+  ਬਣਤਰ language_function *p;
 
-  pop_function_context ();
+  ਕੱਢੋ_function_context ();
   p = cfun->language;
 
   /* When -Wunused-local-typedefs is in effect, cfun->languages is
      used to store data throughout the life time of the current cfun,
      So don't deallocate it.  */
-  if (!warn_unused_local_typedefs)
-    cfun->language = NULL;
+  ਜੇ (!warn_ਅਣਵਰਤਿਆ_local_typedefs)
+    cfun->language = ਨਿਰਾ;
 
-  if (DECL_STRUCT_FUNCTION (current_function_decl) == 0
-      && DECL_SAVED_TREE (current_function_decl) == NULL_TREE)
+  ਜੇ (DECL_STRUCT_FUNCTION (current_function_decl) == 0
+      && DECL_SAVED_ਰੁੱਖ (current_function_decl) == NULL_ਰੁੱਖ)
     {
       /* Stop pointing to the local nodes about to be freed.  */
       /* But DECL_INITIAL must remain nonzero so we know this
 	 was an actual function definition.  */
-      DECL_INITIAL (current_function_decl) = error_mark_node;
-      DECL_ARGUMENTS (current_function_decl) = NULL_TREE;
+      DECL_INITIAL (current_function_decl) = error_mark_ਗੰਢ;
+      DECL_ARGUMENTS (current_function_decl) = NULL_ਰੁੱਖ;
     }
 
-  c_stmt_tree = p->base.x_stmt_tree;
-  p->base.x_stmt_tree.x_cur_stmt_list = NULL;
-  in_statement = p->x_in_statement;
-  c_switch_stack = p->x_switch_stack;
-  loop_names.release ();
-  loop_names = p->loop_names;
-  p->loop_names = vNULL;
-  delete loop_names_hash;
-  loop_names_hash = p->loop_names_hash;
-  p->loop_names_hash = NULL;
+  c_stmt_ਰੁੱਖ = p->ਅਧਾਰ.x_stmt_ਰੁੱਖ;
+  p->ਅਧਾਰ.x_stmt_ਰੁੱਖ.x_cur_stmt_list = ਨਿਰਾ;
+  ਵਿੱਚ_statement = p->x_ਵਿੱਚ_statement;
+  c_switch_ਢੇਰ = p->x_switch_ਢੇਰ;
+  loop_ਨਾਂ.release ();
+  loop_ਨਾਂ = p->loop_ਨਾਂ;
+  p->loop_ਨਾਂ = vNULL;
+  ਮਿਟਾਓ loop_ਨਾਂ_hash;
+  loop_ਨਾਂ_hash = p->loop_ਨਾਂ_hash;
+  p->loop_ਨਾਂ_hash = ਨਿਰਾ;
   current_function_arg_info = p->arg_info;
-  current_function_returns_value = p->returns_value;
+  current_function_returns_ਮੁੱਲ = p->returns_ਮੁੱਲ;
   current_function_returns_null = p->returns_null;
   current_function_returns_abnormally = p->returns_abnormally;
   warn_about_return_type = p->warn_about_return_type;
@@ -11885,158 +11885,158 @@ c_pop_function_context (void)
    being added.  If there is no active statement-tree, NULL is
    returned.  */
 
-stmt_tree
-current_stmt_tree (void)
+stmt_ਰੁੱਖ
+current_stmt_ਰੁੱਖ (ਖਾਲੀ)
 {
-  return &c_stmt_tree;
+  ਵਾਪਸ &c_stmt_ਰੁੱਖ;
 }
 
 /* Return the global value of T as a symbol.  */
 
-tree
-identifier_global_value	(tree t)
+ਰੁੱਖ
+identifier_global_ਮੁੱਲ	(ਰੁੱਖ t)
 {
-  struct c_binding *b;
+  ਬਣਤਰ c_binding *b;
 
-  for (b = I_SYMBOL_BINDING (t); b; b = b->shadowed)
-    if (B_IN_FILE_SCOPE (b) || B_IN_EXTERNAL_SCOPE (b))
-      return b->decl;
+  ਲਈ (b = I_ਚਿੰਨ੍ਹ_BINDING (t); b; b = b->shadowed)
+    ਜੇ (B_ਵਿੱਚ_FILE_SCOPE (b) || B_ਵਿੱਚ_EXTERNAL_SCOPE (b))
+      ਵਾਪਸ b->decl;
 
-  return NULL_TREE;
+  ਵਾਪਸ NULL_ਰੁੱਖ;
 }
 
 /* Return the global value of tag T as a symbol.  */
 
-tree
-identifier_global_tag (tree t)
+ਰੁੱਖ
+identifier_global_ਟੈਗ (ਰੁੱਖ t)
 {
-  struct c_binding *b;
+  ਬਣਤਰ c_binding *b;
 
-  for (b = I_TAG_BINDING (t); b; b = b->shadowed)
-    if (B_IN_FILE_SCOPE (b) || B_IN_EXTERNAL_SCOPE (b))
-      return b->decl;
+  ਲਈ (b = I_ਟੈਗ_BINDING (t); b; b = b->shadowed)
+    ਜੇ (B_ਵਿੱਚ_FILE_SCOPE (b) || B_ਵਿੱਚ_EXTERNAL_SCOPE (b))
+      ਵਾਪਸ b->decl;
 
-  return NULL_TREE;
+  ਵਾਪਸ NULL_ਰੁੱਖ;
 }
 
 /* Returns non-zero (result of __has_builtin) if NAME refers to a built-in
    function or function-like operator.  */
 
-int
-names_builtin_p (const char *name)
+ਪੂਰਨ
+ਨਾਂ_builtin_p (ਅਚਲ ਅੱਖਰ *name)
 {
-  tree id = get_identifier (name);
-  if (tree decl = identifier_global_value (id))
-    return TREE_CODE (decl) == FUNCTION_DECL && DECL_IS_UNDECLARED_BUILTIN (decl);
+  ਰੁੱਖ id = get_identifier (name);
+  ਜੇ (ਰੁੱਖ decl = identifier_global_ਮੁੱਲ (id))
+    ਵਾਪਸ ਰੁੱਖ_ਕੋਡ (decl) == FUNCTION_DECL && DECL_IS_UNDECLARED_BUILTIN (decl);
 
   /* Also detect common reserved C words that aren't strictly built-in
      functions.  */
-  switch (C_RID_CODE (id))
+  ਚੋਣ (C_RID_ਕੋਡ (id))
     {
-    case RID_BUILTIN_ASSOC_BARRIER:
-    case RID_BUILTIN_BITREVERSEG:
-    case RID_BUILTIN_BSWAPG:
-    case RID_BUILTIN_CONVERTVECTOR:
-    case RID_BUILTIN_HAS_ATTRIBUTE:
-    case RID_BUILTIN_SHUFFLE:
-    case RID_BUILTIN_SHUFFLEVECTOR:
-    case RID_BUILTIN_STDC:
-    case RID_BUILTIN_COUNTED_BY_REF:
-    case RID_CHOOSE_EXPR:
-    case RID_OFFSETOF:
-    case RID_TYPES_COMPATIBLE_P:
-    case RID_C23_VA_START:
-    case RID_VA_ARG:
-      return 1;
-    default:
-      break;
+    ਹਾਲਤ RID_BUILTIN_ASSOC_BARRIER:
+    ਹਾਲਤ RID_BUILTIN_BITREVERSEG:
+    ਹਾਲਤ RID_BUILTIN_BSWAPG:
+    ਹਾਲਤ RID_BUILTIN_CONVERTVECTOR:
+    ਹਾਲਤ RID_BUILTIN_HAS_ATTRIBUTE:
+    ਹਾਲਤ RID_BUILTIN_SHUFFLE:
+    ਹਾਲਤ RID_BUILTIN_SHUFFLEVECTOR:
+    ਹਾਲਤ RID_BUILTIN_STDC:
+    ਹਾਲਤ RID_BUILTIN_COUNTED_BY_REF:
+    ਹਾਲਤ RID_ਚੁਣੋ_ਵਿਅੰਜਕ:
+    ਹਾਲਤ RID_OFFSETOF:
+    ਹਾਲਤ RID_TYPES_COMPATIBLE_P:
+    ਹਾਲਤ RID_C23_VA_ਸ਼ੁਰੂ:
+    ਹਾਲਤ RID_VA_ARG:
+      ਵਾਪਸ 1;
+    ਮੂਲ:
+      ਰੋਕੋ;
     }
 
-  return 0;
+  ਵਾਪਸ 0;
 }
 
 /* In C, the only C-linkage public declaration is at file scope.  */
 
-tree
-c_linkage_bindings (tree name)
+ਰੁੱਖ
+c_linkage_bindings (ਰੁੱਖ name)
 {
-  return identifier_global_value (name);
+  ਵਾਪਸ identifier_global_ਮੁੱਲ (name);
 }
 
 /* Record a builtin type for C.  If NAME is non-NULL, it is the name used;
    otherwise the name is found in ridpointers from RID_INDEX.  */
 
-void
-record_builtin_type (enum rid rid_index, const char *name, tree type)
+ਖਾਲੀ
+ਰਿਕਾਰਡ_builtin_type (ਗਿਣਤੀ rid rid_ਸੂਚਕਾਂਕ, ਅਚਲ ਅੱਖਰ *name, ਰੁੱਖ type)
 {
-  tree id, decl;
-  if (name == 0)
-    id = ridpointers[(int) rid_index];
-  else
+  ਰੁੱਖ id, decl;
+  ਜੇ (name == 0)
+    id = ridpointers[(ਪੂਰਨ) rid_ਸੂਚਕਾਂਕ];
+  ਨਹੀਂਤਾਂ
     id = get_identifier (name);
   decl = build_decl (UNKNOWN_LOCATION, TYPE_DECL, id, type);
   pushdecl (decl);
-  if (debug_hooks->type_decl)
-    debug_hooks->type_decl (decl, false);
+  ਜੇ (debug_hooks->type_decl)
+    debug_hooks->type_decl (decl, ਝੂਠ);
 }
 
 /* Return a c_parm structure with the given SPECS, ATTRS and DECLARATOR.  */
 
-struct c_parm *
-build_c_parm (struct c_declspecs *specs, tree attrs,
-	      struct c_declarator *declarator,
+ਬਣਤਰ c_parm *
+build_c_parm (ਬਣਤਰ c_declspecs *specs, ਰੁੱਖ attrs,
+	      ਬਣਤਰ c_declarator *declarator,
 	      location_t loc)
 {
-  struct c_parm *ret = XOBNEW (&parser_obstack, struct c_parm);
+  ਬਣਤਰ c_parm *ret = XOBNEW (&parser_obstack, ਬਣਤਰ c_parm);
   ret->specs = specs;
   ret->attrs = attrs;
   ret->declarator = declarator;
   ret->loc = loc;
-  return ret;
+  ਵਾਪਸ ret;
 }
 
 /* Return a declarator with nested attributes.  TARGET is the inner
    declarator to which these attributes apply.  ATTRS are the
    attributes.  */
 
-struct c_declarator *
-build_attrs_declarator (tree attrs, struct c_declarator *target)
+ਬਣਤਰ c_declarator *
+build_attrs_declarator (ਰੁੱਖ attrs, ਬਣਤਰ c_declarator *ਨਿਸ਼ਾਨਾ)
 {
-  struct c_declarator *ret = XOBNEW (&parser_obstack, struct c_declarator);
-  ret->kind = cdk_attrs;
-  ret->declarator = target;
+  ਬਣਤਰ c_declarator *ret = XOBNEW (&parser_obstack, ਬਣਤਰ c_declarator);
+  ret->ਕਿਸਮ = cdk_attrs;
+  ret->declarator = ਨਿਸ਼ਾਨਾ;
   ret->u.attrs = attrs;
-  return ret;
+  ਵਾਪਸ ret;
 }
 
 /* Return a declarator for a function with arguments specified by ARGS
    and return type specified by TARGET.  */
 
-struct c_declarator *
-build_function_declarator (struct c_arg_info *args,
-			   struct c_declarator *target)
+ਬਣਤਰ c_declarator *
+build_function_declarator (ਬਣਤਰ c_arg_info *ਦਲੀਲਾਂ,
+			   ਬਣਤਰ c_declarator *ਨਿਸ਼ਾਨਾ)
 {
-  struct c_declarator *ret = XOBNEW (&parser_obstack, struct c_declarator);
-  ret->kind = cdk_function;
-  ret->declarator = target;
-  ret->u.arg_info = args;
-  return ret;
+  ਬਣਤਰ c_declarator *ret = XOBNEW (&parser_obstack, ਬਣਤਰ c_declarator);
+  ret->ਕਿਸਮ = cdk_function;
+  ret->declarator = ਨਿਸ਼ਾਨਾ;
+  ret->u.arg_info = ਦਲੀਲਾਂ;
+  ਵਾਪਸ ret;
 }
 
 /* Return a declarator for the identifier IDENT (which may be
    NULL_TREE for an abstract declarator).  */
 
-struct c_declarator *
-build_id_declarator (tree ident)
+ਬਣਤਰ c_declarator *
+build_id_declarator (ਰੁੱਖ ident)
 {
-  struct c_declarator *ret = XOBNEW (&parser_obstack, struct c_declarator);
-  ret->kind = cdk_id;
+  ਬਣਤਰ c_declarator *ret = XOBNEW (&parser_obstack, ਬਣਤਰ c_declarator);
+  ret->ਕਿਸਮ = cdk_id;
   ret->declarator = 0;
   ret->u.id.id = ident;
-  ret->u.id.attrs = NULL_TREE;
+  ret->u.id.attrs = NULL_ਰੁੱਖ;
   /* Default value - may get reset to a more precise location. */
-  ret->id_loc = input_location;
-  return ret;
+  ret->id_loc = ਨਿਵੇਸ਼_location;
+  ਵਾਪਸ ret;
 }
 
 /* Return something to represent absolute declarators containing a *.
@@ -12044,234 +12044,234 @@ build_id_declarator (tree ident)
    TYPE_QUALS_ATTRS is a structure for type qualifiers and attributes
    to apply to the pointer type.  */
 
-struct c_declarator *
-make_pointer_declarator (struct c_declspecs *type_quals_attrs,
-			 struct c_declarator *target)
+ਬਣਤਰ c_declarator *
+make_ਸੂਚਕ_declarator (ਬਣਤਰ c_declspecs *type_quals_attrs,
+			 ਬਣਤਰ c_declarator *ਨਿਸ਼ਾਨਾ)
 {
-  tree attrs;
-  int quals = 0;
-  struct c_declarator *itarget = target;
-  struct c_declarator *ret = XOBNEW (&parser_obstack, struct c_declarator);
-  if (type_quals_attrs)
+  ਰੁੱਖ attrs;
+  ਪੂਰਨ quals = 0;
+  ਬਣਤਰ c_declarator *itarget = ਨਿਸ਼ਾਨਾ;
+  ਬਣਤਰ c_declarator *ret = XOBNEW (&parser_obstack, ਬਣਤਰ c_declarator);
+  ਜੇ (type_quals_attrs)
     {
       attrs = type_quals_attrs->attrs;
       quals = quals_from_declspecs (type_quals_attrs);
-      if (attrs != NULL_TREE)
-	itarget = build_attrs_declarator (attrs, target);
+      ਜੇ (attrs != NULL_ਰੁੱਖ)
+	itarget = build_attrs_declarator (attrs, ਨਿਸ਼ਾਨਾ);
     }
-  ret->kind = cdk_pointer;
+  ret->ਕਿਸਮ = cdk_ਸੂਚਕ;
   ret->declarator = itarget;
-  ret->u.pointer_quals = quals;
-  return ret;
+  ret->u.ਸੂਚਕ_quals = quals;
+  ਵਾਪਸ ret;
 }
 
 /* Return a pointer to a structure for an empty list of declaration
    specifiers.  */
 
-struct c_declspecs *
-build_null_declspecs (void)
+ਬਣਤਰ c_declspecs *
+build_null_declspecs (ਖਾਲੀ)
 {
-  struct c_declspecs *ret = XOBNEW (&parser_obstack, struct c_declspecs);
-  memset (ret, 0, sizeof *ret);
+  ਬਣਤਰ c_declspecs *ret = XOBNEW (&parser_obstack, ਬਣਤਰ c_declspecs);
+  memset (ret, 0, ਆਕਾਰ *ret);
   ret->align_log = -1;
-  ret->typespec_word = cts_none;
+  ret->typespec_ਸ਼ਬਦ = cts_none;
   ret->storage_class = csc_none;
-  ret->expr_const_operands = true;
-  ret->typespec_kind = ctsk_none;
-  ret->address_space = ADDR_SPACE_GENERIC;
-  return ret;
+  ret->ਵਿਅੰਜਕ_const_operands = ਸੱਚ;
+  ret->typespec_ਕਿਸਮ = ctsk_none;
+  ret->ਪਤਾ_space = ADDR_SPACE_GENERIC;
+  ਵਾਪਸ ret;
 }
 
 /* Add the address space ADDRSPACE to the declaration specifiers
    SPECS, returning SPECS.  */
 
-struct c_declspecs *
-declspecs_add_addrspace (location_t location,
-			 struct c_declspecs *specs, addr_space_t as)
+ਬਣਤਰ c_declspecs *
+declspecs_ਜੋੜੋ_addrspace (location_t location,
+			 ਬਣਤਰ c_declspecs *specs, addr_space_t as)
 {
-  specs->non_sc_seen_p = true;
-  specs->declspecs_seen_p = true;
-  specs->non_std_attrs_seen_p = true;
+  specs->non_sc_ਵੇਖਿਆ_p = ਸੱਚ;
+  specs->declspecs_ਵੇਖਿਆ_p = ਸੱਚ;
+  specs->non_std_attrs_ਵੇਖਿਆ_p = ਸੱਚ;
 
-  if (!ADDR_SPACE_GENERIC_P (specs->address_space)
-      && specs->address_space != as)
+  ਜੇ (!ADDR_SPACE_GENERIC_P (specs->ਪਤਾ_space)
+      && specs->ਪਤਾ_space != as)
     error ("incompatible address space qualifiers %qs and %qs",
 	   c_addr_space_name (as),
-	   c_addr_space_name (specs->address_space));
-  else
+	   c_addr_space_name (specs->ਪਤਾ_space));
+  ਨਹੀਂਤਾਂ
     {
-      specs->address_space = as;
-      specs->locations[cdw_address_space] = location;
+      specs->ਪਤਾ_space = as;
+      specs->locations[cdw_ਪਤਾ_space] = location;
     }
-  return specs;
+  ਵਾਪਸ specs;
 }
 
 /* Add the type qualifier QUAL to the declaration specifiers SPECS,
    returning SPECS.  */
 
-struct c_declspecs *
-declspecs_add_qual (location_t loc,
-		    struct c_declspecs *specs, tree qual)
+ਬਣਤਰ c_declspecs *
+declspecs_ਜੋੜੋ_qual (location_t loc,
+		    ਬਣਤਰ c_declspecs *specs, ਰੁੱਖ qual)
 {
-  enum rid i;
-  bool dupe = false;
-  specs->non_sc_seen_p = true;
-  specs->declspecs_seen_p = true;
-  specs->non_std_attrs_seen_p = true;
-  gcc_assert (TREE_CODE (qual) == IDENTIFIER_NODE
-	      && C_IS_RESERVED_WORD (qual));
-  i = C_RID_CODE (qual);
+  ਗਿਣਤੀ rid i;
+  ਤਾਰਕਿਕ dupe = ਝੂਠ;
+  specs->non_sc_ਵੇਖਿਆ_p = ਸੱਚ;
+  specs->declspecs_ਵੇਖਿਆ_p = ਸੱਚ;
+  specs->non_std_attrs_ਵੇਖਿਆ_p = ਸੱਚ;
+  gcc_assert (ਰੁੱਖ_ਕੋਡ (qual) == IDENTIFIER_ਗੰਢ
+	      && C_IS_RESERVED_ਸ਼ਬਦ (qual));
+  i = C_RID_ਕੋਡ (qual);
   location_t prev_loc = UNKNOWN_LOCATION;
-  switch (i)
+  ਚੋਣ (i)
     {
-    case RID_CONST:
+    ਹਾਲਤ RID_CONST:
       dupe = specs->const_p;
-      specs->const_p = true;
+      specs->const_p = ਸੱਚ;
       prev_loc = specs->locations[cdw_const];
       specs->locations[cdw_const] = loc;
-      break;
-    case RID_VOLATILE:
+      ਰੋਕੋ;
+    ਹਾਲਤ RID_VOLATILE:
       dupe = specs->volatile_p;
-      specs->volatile_p = true;
+      specs->volatile_p = ਸੱਚ;
       prev_loc = specs->locations[cdw_volatile];
       specs->locations[cdw_volatile] = loc;
-      break;
-    case RID_RESTRICT:
+      ਰੋਕੋ;
+    ਹਾਲਤ RID_RESTRICT:
       dupe = specs->restrict_p;
-      specs->restrict_p = true;
+      specs->restrict_p = ਸੱਚ;
       prev_loc = specs->locations[cdw_restrict];
       specs->locations[cdw_restrict] = loc;
-      break;
-    case RID_ATOMIC:
+      ਰੋਕੋ;
+    ਹਾਲਤ RID_ATOMIC:
       dupe = specs->atomic_p;
-      specs->atomic_p = true;
+      specs->atomic_p = ਸੱਚ;
       prev_loc = specs->locations[cdw_atomic];
       specs->locations[cdw_atomic] = loc;
-      break;
-    default:
+      ਰੋਕੋ;
+    ਮੂਲ:
       gcc_unreachable ();
     }
-  if (dupe)
+  ਜੇ (dupe)
     {
-      bool warned = pedwarn_c90 (loc, OPT_Wpedantic,
+      ਤਾਰਕਿਕ warned = pedwarn_c90 (loc, OPT_Wpedantic,
 				 "duplicate %qE declaration specifier", qual);
-      if (!warned
+      ਜੇ (!warned
 	  && warn_duplicate_decl_specifier
-	  && prev_loc >= RESERVED_LOCATION_COUNT
+	  && prev_loc >= RESERVED_LOCATION_ਗਿਣਤੀ
 	  && !from_macro_expansion_at (prev_loc)
 	  && !from_macro_expansion_at (loc))
 	warning_at (loc, OPT_Wduplicate_decl_specifier,
 		    "duplicate %qE declaration specifier", qual);
     }
-  return specs;
+  ਵਾਪਸ specs;
 }
 
 /* Add the type specifier TYPE to the declaration specifiers SPECS,
    returning SPECS.  */
 
-struct c_declspecs *
-declspecs_add_type (location_t loc, struct c_declspecs *specs,
-		    struct c_typespec spec)
+ਬਣਤਰ c_declspecs *
+declspecs_ਜੋੜੋ_type (location_t loc, ਬਣਤਰ c_declspecs *specs,
+		    ਬਣਤਰ c_typespec spec)
 {
-  tree type = spec.spec;
-  specs->non_sc_seen_p = true;
-  specs->declspecs_seen_p = true;
-  specs->non_std_attrs_seen_p = true;
-  specs->typespec_kind = spec.kind;
-  if (TREE_DEPRECATED (type))
-    specs->deprecated_p = true;
-  if (TREE_UNAVAILABLE (type))
-    specs->unavailable_p = true;
+  ਰੁੱਖ type = spec.spec;
+  specs->non_sc_ਵੇਖਿਆ_p = ਸੱਚ;
+  specs->declspecs_ਵੇਖਿਆ_p = ਸੱਚ;
+  specs->non_std_attrs_ਵੇਖਿਆ_p = ਸੱਚ;
+  specs->typespec_ਕਿਸਮ = spec.ਕਿਸਮ;
+  ਜੇ (ਰੁੱਖ_DEPRECATED (type))
+    specs->deprecated_p = ਸੱਚ;
+  ਜੇ (ਰੁੱਖ_UNAVAILABLE (type))
+    specs->unavailable_p = ਸੱਚ;
 
   /* As a type specifier is present, "auto" must be used as a storage
      class specifier, not for type deduction.  */
-  if (specs->c23_auto_p)
+  ਜੇ (specs->c23_auto_p)
     {
-      specs->c23_auto_p = false;
-      if (specs->storage_class != csc_none)
+      specs->c23_auto_p = ਝੂਠ;
+      ਜੇ (specs->storage_class != csc_none)
 	error ("multiple storage classes in declaration specifiers");
-      else if (specs->thread_p)
+      ਨਹੀਂਤਾਂ ਜੇ (specs->thread_p)
 	error ("%qs used with %<auto%>",
 	       specs->thread_gnu_p ? "__thread" : "_Thread_local");
-      else if (specs->constexpr_p)
+      ਨਹੀਂਤਾਂ ਜੇ (specs->constexpr_p)
 	/* auto may only be used with another storage class specifier,
 	   such as constexpr, if the type is inferred.  */
 	error ("%<auto%> used with %<constexpr%>");
-      else
+      ਨਹੀਂਤਾਂ
 	specs->storage_class = csc_auto;
     }
 
   /* Handle type specifier keywords.  */
-  if (TREE_CODE (type) == IDENTIFIER_NODE
-      && C_IS_RESERVED_WORD (type)
-      && C_RID_CODE (type) != RID_CXX_COMPAT_WARN)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == IDENTIFIER_ਗੰਢ
+      && C_IS_RESERVED_ਸ਼ਬਦ (type)
+      && C_RID_ਕੋਡ (type) != RID_CXX_COMPAT_WARN)
     {
-      enum rid i = C_RID_CODE (type);
-      if (specs->type)
+      ਗਿਣਤੀ rid i = C_RID_ਕੋਡ (type);
+      ਜੇ (specs->type)
 	{
 	  error_at (loc, "two or more data types in declaration specifiers");
-	  return specs;
+	  ਵਾਪਸ specs;
 	}
-      if ((int) i <= (int) RID_LAST_MODIFIER)
+      ਜੇ ((ਪੂਰਨ) i <= (ਪੂਰਨ) RID_ਆਖਰੀ_MODIFIER)
 	{
 	  /* "long", "short", "signed", "unsigned", "_Complex" or "_Sat".  */
-	  bool dupe = false;
-	  switch (i)
+	  ਤਾਰਕਿਕ dupe = ਝੂਠ;
+	  ਚੋਣ (i)
 	    {
-	    case RID_LONG:
-	      if (specs->long_long_p)
+	    ਹਾਲਤ RID_LONG:
+	      ਜੇ (specs->long_long_p)
 		{
 		  error_at (loc, "%<long long long%> is too long for GCC");
-		  break;
+		  ਰੋਕੋ;
 		}
-	      if (specs->long_p)
+	      ਜੇ (specs->long_p)
 		{
-		  if (specs->typespec_word == cts_double)
+		  ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_double)
 		    {
 		      error_at (loc,
 				"both %qs and %qs in declaration specifiers",
 				"long long", "double");
-		      break;
+		      ਰੋਕੋ;
 		    }
 		  pedwarn_c90 (loc, OPT_Wlong_long,
 			       "ISO C90 does not support %<long long%>");
 		  specs->long_long_p = 1;
 		  specs->locations[cdw_long_long] = loc;
-		  break;
+		  ਰੋਕੋ;
 		}
-	      if (specs->short_p)
+	      ਜੇ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "short");
-	      else if (specs->typespec_word == cts_auto_type)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "void");
-	      else if (specs->typespec_word == cts_int_n)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_int_n)
 		error_at (loc,
 			  "both %qs and %<__int%d%> in declaration specifiers",
-			  "long", int_n_data[specs->u.int_n_idx].bitsize);
-	      else if (specs->typespec_word == cts_bool)
+			  "long", int_n_ਅੰਕੜੇ[specs->u.int_n_idx].bitsize);
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Bool");
-	      else if (specs->typespec_word == cts_bitint)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_bitint)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_BitInt");
-	      else if (specs->typespec_word == cts_char)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_char)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "char");
-	      else if (specs->typespec_word == cts_float)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_float)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "float");
-	      else if (specs->typespec_word == cts_floatn_nx)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_floatn_nx)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "long",
@@ -12279,67 +12279,67 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->typespec_word == cts_dfloat32)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat32)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Decimal64x");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->long_p = true;
+		  specs->long_p = ਸੱਚ;
 		  specs->locations[cdw_long] = loc;
 		}
-	      break;
-	    case RID_SHORT:
+	      ਰੋਕੋ;
+	    ਹਾਲਤ RID_SHORT:
 	      dupe = specs->short_p;
-	      if (specs->long_p)
+	      ਜੇ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "short");
-	      else if (specs->typespec_word == cts_auto_type)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "void");
-	      else if (specs->typespec_word == cts_int_n)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_int_n)
 		error_at (loc,
 			  "both %qs and %<__int%d%> in declaration specifiers",
-			  "short", int_n_data[specs->u.int_n_idx].bitsize);
-	      else if (specs->typespec_word == cts_bool)
+			  "short", int_n_ਅੰਕੜੇ[specs->u.int_n_idx].bitsize);
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Bool");
-	      else if (specs->typespec_word == cts_bitint)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_bitint)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_BitInt");
-	      else if (specs->typespec_word == cts_char)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_char)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "char");
-	      else if (specs->typespec_word == cts_float)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_float)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "float");
-	      else if (specs->typespec_word == cts_double)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_double)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "double");
-	      else if (specs->typespec_word == cts_floatn_nx)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_floatn_nx)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "short",
@@ -12347,55 +12347,55 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->typespec_word == cts_dfloat32)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat32)
                 error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Decimal64x");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->short_p = true;
+		  specs->short_p = ਸੱਚ;
 		  specs->locations[cdw_short] = loc;
 		}
-	      break;
-	    case RID_SIGNED:
+	      ਰੋਕੋ;
+	    ਹਾਲਤ RID_SIGNED:
 	      dupe = specs->signed_p;
-	      if (specs->unsigned_p)
+	      ਜੇ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "unsigned");
-	      else if (specs->typespec_word == cts_auto_type)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "void");
-	      else if (specs->typespec_word == cts_bool)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Bool");
-	      else if (specs->typespec_word == cts_float)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_float)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "float");
-	      else if (specs->typespec_word == cts_double)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_double)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "double");
-	      else if (specs->typespec_word == cts_floatn_nx)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_floatn_nx)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "signed",
@@ -12403,55 +12403,55 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->typespec_word == cts_dfloat32)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat32)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Decimal64x");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->signed_p = true;
+		  specs->signed_p = ਸੱਚ;
 		  specs->locations[cdw_signed] = loc;
 		}
-	      break;
-	    case RID_UNSIGNED:
+	      ਰੋਕੋ;
+	    ਹਾਲਤ RID_UNSIGNED:
 	      dupe = specs->unsigned_p;
-	      if (specs->signed_p)
+	      ਜੇ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "unsigned");
-	      else if (specs->typespec_word == cts_auto_type)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "void");
-	      else if (specs->typespec_word == cts_bool)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Bool");
-	      else if (specs->typespec_word == cts_float)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_float)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "float");
-	      else if (specs->typespec_word == cts_double)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_double)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "double");
-	      else if (specs->typespec_word == cts_floatn_nx)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_floatn_nx)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "unsigned",
@@ -12459,124 +12459,124 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-              else if (specs->typespec_word == cts_dfloat32)
+              ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat32)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Decimal64x");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->unsigned_p = true;
+		  specs->unsigned_p = ਸੱਚ;
 		  specs->locations[cdw_unsigned] = loc;
 		}
-	      break;
-	    case RID_COMPLEX:
+	      ਰੋਕੋ;
+	    ਹਾਲਤ RID_COMPLEX:
 	      dupe = specs->complex_p;
-	      if (!in_system_header_at (loc))
+	      ਜੇ (!ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (loc))
 		pedwarn_c90 (loc, OPT_Wpedantic,
 			     "ISO C90 does not support complex types");
-	      if (specs->typespec_word == cts_auto_type)
+	      ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "void");
-	      else if (specs->typespec_word == cts_bool)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Bool");
-	      else if (specs->typespec_word == cts_bitint)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_bitint)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_BitInt");
-              else if (specs->typespec_word == cts_dfloat32)
+              ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat32)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Decimal64x");
-	      else if (specs->typespec_word == cts_fract)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_fract)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Fract");
-	      else if (specs->typespec_word == cts_accum)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_accum)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Accum");
-	      else if (specs->saturating_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Sat");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->complex_p = true;
+		  specs->complex_p = ਸੱਚ;
 		  specs->locations[cdw_complex] = loc;
 		}
-	      break;
-	    case RID_SAT:
+	      ਰੋਕੋ;
+	    ਹਾਲਤ RID_SAT:
 	      dupe = specs->saturating_p;
 	      pedwarn (loc, OPT_Wpedantic,
 		       "ISO C does not support saturating types");
-	      if (specs->typespec_word == cts_int_n)
+	      ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_int_n)
 		error_at (loc,
 			  "both %qs and %<__int%d%> in declaration specifiers",
-			  "_Sat", int_n_data[specs->u.int_n_idx].bitsize);
-	      else if (specs->typespec_word == cts_auto_type)
+			  "_Sat", int_n_ਅੰਕੜੇ[specs->u.int_n_idx].bitsize);
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_auto_type)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "__auto_type");
-	      else if (specs->typespec_word == cts_void)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_void)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "void");
-	      else if (specs->typespec_word == cts_bool)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_bool)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Bool");
-	      else if (specs->typespec_word == cts_bitint)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_bitint)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_BitInt");
-	      else if (specs->typespec_word == cts_char)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_char)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "char");
-	      else if (specs->typespec_word == cts_int)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_int)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "int");
-	      else if (specs->typespec_word == cts_float)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_float)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "float");
-	      else if (specs->typespec_word == cts_double)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_double)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "double");
-	      else if (specs->typespec_word == cts_floatn_nx)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_floatn_nx)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "_Sat",
@@ -12584,291 +12584,291 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-              else if (specs->typespec_word == cts_dfloat32)
+              ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat32)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Decimal32");
-	      else if (specs->typespec_word == cts_dfloat64)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Decimal64");
-	      else if (specs->typespec_word == cts_dfloat128)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat128)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Decimal128");
-	      else if (specs->typespec_word == cts_dfloat64x)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64x)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Decimal64x");
-	      else if (specs->complex_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->complex_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "complex");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->saturating_p = true;
+		  specs->saturating_p = ਸੱਚ;
 		  specs->locations[cdw_saturating] = loc;
 		}
-	      break;
-	    default:
+	      ਰੋਕੋ;
+	    ਮੂਲ:
 	      gcc_unreachable ();
 	    }
 
-	  if (dupe)
+	  ਜੇ (dupe)
 	    error_at (loc, "duplicate %qE", type);
 
-	  return specs;
+	  ਵਾਪਸ specs;
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
 	  /* "void", "_Bool", "char", "int", "float", "double",
 	     "_FloatN", "_FloatNx", "_Decimal32", "__intN",
 	     "_Decimal64", "_Decimal128", "_Fract", "_Accum", "_BitInt(N)" or
 	     "__auto_type".  */
-	  if (specs->typespec_word != cts_none)
+	  ਜੇ (specs->typespec_ਸ਼ਬਦ != cts_none)
 	    {
-	      if (i == RID_BOOL)
+	      ਜੇ (i == RID_BOOL)
 		{
-		  auto_diagnostic_group d;
-		  if (specs->storage_class == csc_typedef)
+		  auto_diagnostic_ਸਮੂਹ d;
+		  ਜੇ (specs->storage_class == csc_typedef)
 		    error_at (loc,
 			      "%qs cannot be defined via %<typedef%>",
-			      IDENTIFIER_POINTER (type));
-		  else
+			      IDENTIFIER_ਸੂਚਕ (type));
+		  ਨਹੀਂਤਾਂ
 		    error_at (loc,
 			      "%qs cannot be used here",
-			      IDENTIFIER_POINTER (type));
-		  add_note_about_new_keyword (loc, type);
+			      IDENTIFIER_ਸੂਚਕ (type));
+		  ਜੋੜੋ_note_about_new_keyword (loc, type);
 		}
-	      else
+	      ਨਹੀਂਤਾਂ
 		error_at (loc,
 			  "two or more data types in declaration specifiers");
-	      return specs;
+	      ਵਾਪਸ specs;
 	    }
-	  switch (i)
+	  ਚੋਣ (i)
 	    {
-	    case RID_AUTO_TYPE:
-	      if (specs->long_p)
+	    ਹਾਲਤ RID_AUTO_TYPE:
+	      ਜੇ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "__auto_type");
-	      else if (specs->short_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "__auto_type");
-	      else if (specs->signed_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "__auto_type");
-	      else if (specs->unsigned_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "__auto_type");
-	      else if (specs->complex_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->complex_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "__auto_type");
-	      else if (specs->saturating_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "__auto_type");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->typespec_word = cts_auto_type;
+		  specs->typespec_ਸ਼ਬਦ = cts_auto_type;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_INT_N_0:
-	    case RID_INT_N_1:
-	    case RID_INT_N_2:
-	    case RID_INT_N_3:
+	      ਵਾਪਸ specs;
+	    ਹਾਲਤ RID_INT_N_0:
+	    ਹਾਲਤ RID_INT_N_1:
+	    ਹਾਲਤ RID_INT_N_2:
+	    ਹਾਲਤ RID_INT_N_3:
 	      specs->u.int_n_idx = i - RID_INT_N_0;
-	      if (!in_system_header_at (input_location)
+	      ਜੇ (!ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location)
 		  /* If the INT_N type ends in "__", and so is of the format
 		     "__intN__", don't pedwarn.  */
-		  && (strncmp (IDENTIFIER_POINTER (type)
-			       + (IDENTIFIER_LENGTH (type) - 2), "__", 2) != 0))
+		  && (ਲੜੀ_ਤੁਲਨਾ (IDENTIFIER_ਸੂਚਕ (type)
+			       + (IDENTIFIER_ਲੰਮਾਈ (type) - 2), "__", 2) != 0))
 		pedwarn (loc, OPT_Wpedantic,
 			 "ISO C does not support %<__int%d%> types",
-			 int_n_data[specs->u.int_n_idx].bitsize);
+			 int_n_ਅੰਕੜੇ[specs->u.int_n_idx].bitsize);
 
-	      if (specs->long_p)
+	      ਜੇ (specs->long_p)
 		error_at (loc,
 			  "both %<__int%d%> and %qs in declaration specifiers",
-			  int_n_data[specs->u.int_n_idx].bitsize, "long");
-	      else if (specs->saturating_p)
+			  int_n_ਅੰਕੜੇ[specs->u.int_n_idx].bitsize, "long");
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %<__int%d%> in declaration specifiers",
-			  "_Sat", int_n_data[specs->u.int_n_idx].bitsize);
-	      else if (specs->short_p)
+			  "_Sat", int_n_ਅੰਕੜੇ[specs->u.int_n_idx].bitsize);
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 		error_at (loc,
 			  "both %<__int%d%> and %qs in declaration specifiers",
-			  int_n_data[specs->u.int_n_idx].bitsize, "short");
-	      else if (! int_n_enabled_p[specs->u.int_n_idx])
+			  int_n_ਅੰਕੜੇ[specs->u.int_n_idx].bitsize, "short");
+	      ਨਹੀਂਤਾਂ ਜੇ (! int_n_enabled_p[specs->u.int_n_idx])
 		{
-		  specs->typespec_word = cts_int_n;
+		  specs->typespec_ਸ਼ਬਦ = cts_int_n;
 		  error_at (loc,
 			    "%<__int%d%> is not supported on this target",
-			    int_n_data[specs->u.int_n_idx].bitsize);
+			    int_n_ਅੰਕੜੇ[specs->u.int_n_idx].bitsize);
 		}
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->typespec_word = cts_int_n;
+		  specs->typespec_ਸ਼ਬਦ = cts_int_n;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_VOID:
-	      if (specs->long_p)
+	      ਵਾਪਸ specs;
+	    ਹਾਲਤ RID_VOID:
+	      ਜੇ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "void");
-	      else if (specs->short_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "void");
-	      else if (specs->signed_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "void");
-	      else if (specs->unsigned_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "void");
-	      else if (specs->complex_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->complex_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "void");
-	      else if (specs->saturating_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "void");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->typespec_word = cts_void;
+		  specs->typespec_ਸ਼ਬਦ = cts_void;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_BOOL:
-	      if (!in_system_header_at (loc))
+	      ਵਾਪਸ specs;
+	    ਹਾਲਤ RID_BOOL:
+	      ਜੇ (!ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (loc))
 		pedwarn_c90 (loc, OPT_Wpedantic,
 			     "ISO C90 does not support boolean types");
-	      if (specs->long_p)
+	      ਜੇ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_Bool");
-	      else if (specs->short_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_Bool");
-	      else if (specs->signed_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "_Bool");
-	      else if (specs->unsigned_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "_Bool");
-	      else if (specs->complex_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->complex_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_Bool");
-	      else if (specs->saturating_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_Bool");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->typespec_word = cts_bool;
+		  specs->typespec_ਸ਼ਬਦ = cts_bool;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_CHAR:
-	      if (specs->long_p)
+	      ਵਾਪਸ specs;
+	    ਹਾਲਤ RID_CHAR:
+	      ਜੇ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "char");
-	      else if (specs->short_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "char");
-	      else if (specs->saturating_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "char");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->typespec_word = cts_char;
+		  specs->typespec_ਸ਼ਬਦ = cts_char;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_INT:
-	      if (specs->saturating_p)
+	      ਵਾਪਸ specs;
+	    ਹਾਲਤ RID_INT:
+	      ਜੇ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "int");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->typespec_word = cts_int;
+		  specs->typespec_ਸ਼ਬਦ = cts_int;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_FLOAT:
-	      if (specs->long_p)
+	      ਵਾਪਸ specs;
+	    ਹਾਲਤ RID_FLOAT:
+	      ਜੇ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "float");
-	      else if (specs->short_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "float");
-	      else if (specs->signed_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "float");
-	      else if (specs->unsigned_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "float");
-	      else if (specs->saturating_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "float");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->typespec_word = cts_float;
+		  specs->typespec_ਸ਼ਬਦ = cts_float;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_DOUBLE:
-	      if (specs->long_long_p)
+	      ਵਾਪਸ specs;
+	    ਹਾਲਤ RID_DOUBLE:
+	      ਜੇ (specs->long_long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long long", "double");
-	      else if (specs->short_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "double");
-	      else if (specs->signed_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "signed", "double");
-	      else if (specs->unsigned_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "unsigned", "double");
-	      else if (specs->saturating_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "double");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->typespec_word = cts_double;
+		  specs->typespec_ਸ਼ਬਦ = cts_double;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
+	      ਵਾਪਸ specs;
 	    CASE_RID_FLOATN_NX:
-	      specs->u.floatn_nx_idx = i - RID_FLOATN_NX_FIRST;
-	      if (!in_system_header_at (input_location))
+	      specs->u.floatn_nx_idx = i - RID_FLOATN_NX_ਪਹਿਲਾ;
+	      ਜੇ (!ਵਿੱਚ_system_ਸਿਰਲੇਖ_at (ਨਿਵੇਸ਼_location))
 		pedwarn_c11 (loc, OPT_Wpedantic,
 			     "ISO C does not support the %<_Float%d%s%> type"
 			     " before C23",
@@ -12877,7 +12877,7 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			     ? "x"
 			     : "");
 
-	      if (specs->long_p)
+	      ਜੇ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "long",
@@ -12885,7 +12885,7 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->short_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "short",
@@ -12893,7 +12893,7 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->signed_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->signed_p)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "signed",
@@ -12901,7 +12901,7 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->unsigned_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->unsigned_p)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "unsigned",
@@ -12909,7 +12909,7 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (specs->saturating_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %<_Float%d%s%> in declaration "
 			  "specifiers", "_Sat",
@@ -12917,9 +12917,9 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			  floatn_nx_types[specs->u.floatn_nx_idx].extended
 			  ? "x"
 			  : "");
-	      else if (FLOATN_NX_TYPE_NODE (specs->u.floatn_nx_idx) == NULL_TREE)
+	      ਨਹੀਂਤਾਂ ਜੇ (FLOATN_NX_TYPE_ਗੰਢ (specs->u.floatn_nx_idx) == NULL_ਰੁੱਖ)
 		{
-		  specs->typespec_word = cts_floatn_nx;
+		  specs->typespec_ਸ਼ਬਦ = cts_floatn_nx;
 		  error_at (loc,
 			    "%<_Float%d%s%> is not supported on this target",
 			    floatn_nx_types[specs->u.floatn_nx_idx].n,
@@ -12927,156 +12927,156 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
 			    ? "x"
 			    : "");
 		}
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->typespec_word = cts_floatn_nx;
+		  specs->typespec_ਸ਼ਬਦ = cts_floatn_nx;
 		  specs->locations[cdw_typespec] = loc;
 		}
-	      return specs;
-	    case RID_DFLOAT32:
-	    case RID_DFLOAT64:
-	    case RID_DFLOAT128:
-	    case RID_DFLOAT64X:
+	      ਵਾਪਸ specs;
+	    ਹਾਲਤ RID_DFLOAT32:
+	    ਹਾਲਤ RID_DFLOAT64:
+	    ਹਾਲਤ RID_DFLOAT128:
+	    ਹਾਲਤ RID_DFLOAT64X:
 	      {
-		const char *str;
-		if (i == RID_DFLOAT32)
+		ਅਚਲ ਅੱਖਰ *str;
+		ਜੇ (i == RID_DFLOAT32)
 		  str = "_Decimal32";
-		else if (i == RID_DFLOAT64)
+		ਨਹੀਂਤਾਂ ਜੇ (i == RID_DFLOAT64)
 		  str = "_Decimal64";
-		else if (i == RID_DFLOAT128)
+		ਨਹੀਂਤਾਂ ਜੇ (i == RID_DFLOAT128)
 		  str = "_Decimal128";
-		else
+		ਨਹੀਂਤਾਂ
 		  str = "_Decimal64x";
-		if (specs->long_long_p)
+		ਜੇ (specs->long_long_p)
 		  error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "long long", str);
-		if (specs->long_p)
+		ਜੇ (specs->long_p)
 		  error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "long", str);
-		else if (specs->short_p)
+		ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 		  error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "short", str);
-		else if (specs->signed_p)
+		ਨਹੀਂਤਾਂ ਜੇ (specs->signed_p)
 		  error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "signed", str);
-		else if (specs->unsigned_p)
+		ਨਹੀਂਤਾਂ ਜੇ (specs->unsigned_p)
 		  error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "unsigned", str);
-                else if (specs->complex_p)
+                ਨਹੀਂਤਾਂ ਜੇ (specs->complex_p)
                   error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "complex", str);
-                else if (specs->saturating_p)
+                ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
                   error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "_Sat", str);
-		else if (i == RID_DFLOAT32)
-		  specs->typespec_word = cts_dfloat32;
-		else if (i == RID_DFLOAT64)
-		  specs->typespec_word = cts_dfloat64;
-		else if (i == RID_DFLOAT128)
-		  specs->typespec_word = cts_dfloat128;
-		else
-		  specs->typespec_word = cts_dfloat64x;
+		ਨਹੀਂਤਾਂ ਜੇ (i == RID_DFLOAT32)
+		  specs->typespec_ਸ਼ਬਦ = cts_dfloat32;
+		ਨਹੀਂਤਾਂ ਜੇ (i == RID_DFLOAT64)
+		  specs->typespec_ਸ਼ਬਦ = cts_dfloat64;
+		ਨਹੀਂਤਾਂ ਜੇ (i == RID_DFLOAT128)
+		  specs->typespec_ਸ਼ਬਦ = cts_dfloat128;
+		ਨਹੀਂਤਾਂ
+		  specs->typespec_ਸ਼ਬਦ = cts_dfloat64x;
 		specs->locations[cdw_typespec] = loc;
 	      }
-	      if (!targetm.decimal_float_supported_p ())
+	      ਜੇ (!targetm.decimal_float_supported_p ())
 		error_at (loc,
 			  "decimal floating-point not supported "
 			  "for this target");
 	      pedwarn_c11 (loc, OPT_Wpedantic,
 			   "ISO C does not support decimal floating-point "
 			   "before C23");
-	      return specs;
-	    case RID_FRACT:
-	    case RID_ACCUM:
+	      ਵਾਪਸ specs;
+	    ਹਾਲਤ RID_FRACT:
+	    ਹਾਲਤ RID_ACCUM:
 	      {
-		const char *str;
-		if (i == RID_FRACT)
+		ਅਚਲ ਅੱਖਰ *str;
+		ਜੇ (i == RID_FRACT)
 		  str = "_Fract";
-		else
+		ਨਹੀਂਤਾਂ
 		  str = "_Accum";
-                if (specs->complex_p)
+                ਜੇ (specs->complex_p)
                   error_at (loc,
 			    "both %qs and %qs in declaration specifiers",
 			    "complex", str);
-		else if (i == RID_FRACT)
-		    specs->typespec_word = cts_fract;
-		else
-		    specs->typespec_word = cts_accum;
+		ਨਹੀਂਤਾਂ ਜੇ (i == RID_FRACT)
+		    specs->typespec_ਸ਼ਬਦ = cts_fract;
+		ਨਹੀਂਤਾਂ
+		    specs->typespec_ਸ਼ਬਦ = cts_accum;
 		specs->locations[cdw_typespec] = loc;
 	      }
-	      if (!targetm.fixed_point_supported_p ())
+	      ਜੇ (!targetm.fixed_ਬਿੰਦੂ_supported_p ())
 		error_at (loc,
 			  "fixed-point types not supported for this target");
 	      pedwarn (loc, OPT_Wpedantic,
 		       "ISO C does not support fixed-point types");
-	      return specs;
-	    case RID_BITINT:
-	      if (specs->long_p)
+	      ਵਾਪਸ specs;
+	    ਹਾਲਤ RID_BITINT:
+	      ਜੇ (specs->long_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "long", "_BitInt");
-	      else if (specs->short_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "short", "_BitInt");
-	      else if (specs->complex_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->complex_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "complex", "_BitInt");
-	      else if (specs->saturating_p)
+	      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 		error_at (loc,
 			  "both %qs and %qs in declaration specifiers",
 			  "_Sat", "_BitInt");
-	      else
+	      ਨਹੀਂਤਾਂ
 		{
-		  specs->typespec_word = cts_bitint;
+		  specs->typespec_ਸ਼ਬਦ = cts_bitint;
 		  specs->locations[cdw_typespec] = loc;
 		  specs->u.bitint_prec = -1;
-		  if (error_operand_p (spec.expr))
-		    return specs;
-		  if (TREE_CODE (spec.expr) != INTEGER_CST
-		      || !INTEGRAL_TYPE_P (TREE_TYPE (spec.expr)))
+		  ਜੇ (error_ਸੰਕਾਰਜ_p (spec.ਵਿਅੰਜਕ))
+		    ਵਾਪਸ specs;
+		  ਜੇ (ਰੁੱਖ_ਕੋਡ (spec.ਵਿਅੰਜਕ) != INTEGER_CST
+		      || !INTEGRAL_TYPE_P (ਰੁੱਖ_TYPE (spec.ਵਿਅੰਜਕ)))
 		    {
 		      error_at (loc, "%<_BitInt%> argument is not an integer "
 				     "constant expression");
-		      return specs;
+		      ਵਾਪਸ specs;
 		    }
-		  if (tree_int_cst_sgn (spec.expr) <= 0)
+		  ਜੇ (ਰੁੱਖ_int_cst_sgn (spec.ਵਿਅੰਜਕ) <= 0)
 		    {
 		      error_at (loc, "%<_BitInt%> argument %qE is not a "
 				     "positive integer constant expression",
-				spec.expr);
-		      return specs;
+				spec.ਵਿਅੰਜਕ);
+		      ਵਾਪਸ specs;
 		    }
-		  if (wi::to_widest (spec.expr) > WIDE_INT_MAX_PRECISION - 1)
+		  ਜੇ (wi::ਮੰਜ਼ਿਲ_widest (spec.ਵਿਅੰਜਕ) > WIDE_INT_MAX_PRECISION - 1)
 		    {
 		      error_at (loc, "%<_BitInt%> argument %qE is larger than "
 				     "%<BITINT_MAXWIDTH%> %qd",
-				spec.expr, (int) WIDE_INT_MAX_PRECISION - 1);
-		      return specs;
+				spec.ਵਿਅੰਜਕ, (ਪੂਰਨ) WIDE_INT_MAX_PRECISION - 1);
+		      ਵਾਪਸ specs;
 		    }
-		  specs->u.bitint_prec = tree_to_uhwi (spec.expr);
-		  struct bitint_info info;
-		  if (!targetm.c.bitint_type_info (specs->u.bitint_prec,
+		  specs->u.bitint_prec = ਰੁੱਖ_ਮੰਜ਼ਿਲ_uhwi (spec.ਵਿਅੰਜਕ);
+		  ਬਣਤਰ bitint_info info;
+		  ਜੇ (!targetm.c.bitint_type_info (specs->u.bitint_prec,
 						   &info))
 		    {
 		      sorry_at (loc, "%<_BitInt(%d)%> is not supported on "
 				     "this target", specs->u.bitint_prec);
 		      specs->u.bitint_prec = -1;
-		      return specs;
+		      ਵਾਪਸ specs;
 		    }
 		}
-	      return specs;
-	    default:
+	      ਵਾਪਸ specs;
+	    ਮੂਲ:
 	      /* ObjC reserved word "id", handled below.  */
-	      break;
+	      ਰੋਕੋ;
 	    }
 	}
     }
@@ -13086,279 +13086,279 @@ declspecs_add_type (location_t loc, struct c_declspecs *specs,
      above), a TYPE (struct, union, enum and typeof specifiers) or an
      ERROR_MARK.  In none of these cases may there have previously
      been any type specifiers.  */
-  if (specs->type || specs->typespec_word != cts_none
+  ਜੇ (specs->type || specs->typespec_ਸ਼ਬਦ != cts_none
       || specs->long_p || specs->short_p || specs->signed_p
       || specs->unsigned_p || specs->complex_p)
     error_at (loc, "two or more data types in declaration specifiers");
-  else if (TREE_CODE (type) == TYPE_DECL)
+  ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == TYPE_DECL)
     {
-      specs->type = TREE_TYPE (type);
-      if (TREE_TYPE (type) != error_mark_node)
+      specs->type = ਰੁੱਖ_TYPE (type);
+      ਜੇ (ਰੁੱਖ_TYPE (type) != error_mark_ਗੰਢ)
 	{
-	  mark_decl_used (type, false);
-	  specs->decl_attr = DECL_ATTRIBUTES (type);
-	  specs->typedef_p = true;
+	  mark_decl_ਵਰਤਿਆ (type, ਝੂਠ);
+	  specs->decl_attr = DECL_ਗੁਣ (type);
+	  specs->typedef_p = ਸੱਚ;
 	  specs->explicit_signed_p = C_TYPEDEF_EXPLICITLY_SIGNED (type);
 	  specs->locations[cdw_typedef] = loc;
 
 	  /* If this typedef name is defined in a struct, then a C++
 	     lookup would return a different value.  */
-	  if (warn_cxx_compat
-	      && I_SYMBOL_BINDING (DECL_NAME (type))->in_struct)
+	  ਜੇ (warn_cxx_compat
+	      && I_ਚਿੰਨ੍ਹ_BINDING (DECL_NAME (type))->ਵਿੱਚ_struct)
 	    warning_at (loc, OPT_Wc___compat,
 			"C++ lookup of %qD would return a field, not a type",
 			type);
 
 	  /* If we are parsing a struct, record that a struct field
 	     used a typedef.  */
-	  if (warn_cxx_compat && struct_parse_info != NULL)
-	    struct_parse_info->typedefs_seen.safe_push (type);
+	  ਜੇ (warn_cxx_compat && struct_parse_info != ਨਿਰਾ)
+	    struct_parse_info->typedefs_ਵੇਖਿਆ.ਸੁਰੱਖਿਅਤ_ਧੱਕੋ (type);
 	}
     }
-  else if (TREE_CODE (type) == IDENTIFIER_NODE)
+  ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == IDENTIFIER_ਗੰਢ)
     {
-      tree t = lookup_name (type);
-      if (!t || TREE_CODE (t) != TYPE_DECL)
+      ਰੁੱਖ t = lookup_name (type);
+      ਜੇ (!t || ਰੁੱਖ_ਕੋਡ (t) != TYPE_DECL)
 	error_at (loc, "%qE fails to be a typedef or built in type", type);
-      else if (TREE_TYPE (t) == error_mark_node)
+      ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_TYPE (t) == error_mark_ਗੰਢ)
 	;
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  specs->type = TREE_TYPE (t);
+	  specs->type = ਰੁੱਖ_TYPE (t);
 	  specs->locations[cdw_typespec] = loc;
 	}
     }
-  else
+  ਨਹੀਂਤਾਂ
     {
-      if (TREE_CODE (type) != ERROR_MARK)
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (type) != ERROR_MARK)
 	{
-	  if (spec.kind == ctsk_typeof)
+	  ਜੇ (spec.ਕਿਸਮ == ctsk_typeof)
 	    {
-	      specs->typedef_p = true;
+	      specs->typedef_p = ਸੱਚ;
 	      specs->locations[cdw_typedef] = loc;
 	    }
 
-	  if (TREE_CODE (type) == RECORD_TYPE || TREE_CODE (type) == UNION_TYPE
-	      || TREE_CODE (type) == ENUMERAL_TYPE)
-	    mark_decl_used (TYPE_STUB_DECL (type), false);
+	  ਜੇ (ਰੁੱਖ_ਕੋਡ (type) == ਰਿਕਾਰਡ_TYPE || ਰੁੱਖ_ਕੋਡ (type) == UNION_TYPE
+	      || ਰੁੱਖ_ਕੋਡ (type) == ENUMERAL_TYPE)
+	    mark_decl_ਵਰਤਿਆ (TYPE_STUB_DECL (type), ਝੂਠ);
 
-	  if (spec.expr)
+	  ਜੇ (spec.ਵਿਅੰਜਕ)
 	    {
-	      tree expr = save_expr (fold_convert (void_type_node, spec.expr));
-	      if (specs->expr)
-		specs->expr = build2 (COMPOUND_EXPR, TREE_TYPE (expr),
-				      specs->expr, expr);
-	      else
-		specs->expr = expr;
-	      specs->expr_const_operands &= spec.expr_const_operands;
+	      ਰੁੱਖ ਵਿਅੰਜਕ = save_ਵਿਅੰਜਕ (fold_convert (void_type_ਗੰਢ, spec.ਵਿਅੰਜਕ));
+	      ਜੇ (specs->ਵਿਅੰਜਕ)
+		specs->ਵਿਅੰਜਕ = build2 (COMPOUND_ਵਿਅੰਜਕ, ਰੁੱਖ_TYPE (ਵਿਅੰਜਕ),
+				      specs->ਵਿਅੰਜਕ, ਵਿਅੰਜਕ);
+	      ਨਹੀਂਤਾਂ
+		specs->ਵਿਅੰਜਕ = ਵਿਅੰਜਕ;
+	      specs->ਵਿਅੰਜਕ_const_operands &= spec.ਵਿਅੰਜਕ_const_operands;
 	    }
 	}
       specs->type = type;
-      if (spec.has_enum_type_specifier
-	  && spec.kind != ctsk_tagdef)
-	specs->enum_type_specifier_ref_p = true;
+      ਜੇ (spec.has_enum_type_specifier
+	  && spec.ਕਿਸਮ != ctsk_tagdef)
+	specs->enum_type_specifier_ref_p = ਸੱਚ;
     }
 
-  return specs;
+  ਵਾਪਸ specs;
 }
 
 /* Add the storage class specifier or function specifier SCSPEC to the
    declaration specifiers SPECS, returning SPECS.  */
 
-struct c_declspecs *
-declspecs_add_scspec (location_t loc,
-		      struct c_declspecs *specs,
-		      tree scspec)
+ਬਣਤਰ c_declspecs *
+declspecs_ਜੋੜੋ_scspec (location_t loc,
+		      ਬਣਤਰ c_declspecs *specs,
+		      ਰੁੱਖ scspec)
 {
-  enum rid i;
-  enum c_storage_class n = csc_none;
-  bool dupe = false;
-  specs->declspecs_seen_p = true;
-  specs->non_std_attrs_seen_p = true;
-  gcc_assert (TREE_CODE (scspec) == IDENTIFIER_NODE
-	      && C_IS_RESERVED_WORD (scspec));
-  i = C_RID_CODE (scspec);
-  if (specs->non_sc_seen_p)
+  ਗਿਣਤੀ rid i;
+  ਗਿਣਤੀ c_storage_class n = csc_none;
+  ਤਾਰਕਿਕ dupe = ਝੂਠ;
+  specs->declspecs_ਵੇਖਿਆ_p = ਸੱਚ;
+  specs->non_std_attrs_ਵੇਖਿਆ_p = ਸੱਚ;
+  gcc_assert (ਰੁੱਖ_ਕੋਡ (scspec) == IDENTIFIER_ਗੰਢ
+	      && C_IS_RESERVED_ਸ਼ਬਦ (scspec));
+  i = C_RID_ਕੋਡ (scspec);
+  ਜੇ (specs->non_sc_ਵੇਖਿਆ_p)
     warning (OPT_Wold_style_declaration,
              "%qE is not at beginning of declaration", scspec);
-  switch (i)
+  ਚੋਣ (i)
     {
-    case RID_INLINE:
+    ਹਾਲਤ RID_INLINE:
       /* C99 permits duplicate inline.  Although of doubtful utility,
 	 it seems simplest to permit it in gnu89 mode as well, as
 	 there is also little utility in maintaining this as a
 	 difference between gnu89 and C99 inline.  */
-      dupe = false;
-      specs->inline_p = true;
+      dupe = ਝੂਠ;
+      specs->inline_p = ਸੱਚ;
       specs->locations[cdw_inline] = loc;
-      break;
-    case RID_NORETURN:
+      ਰੋਕੋ;
+    ਹਾਲਤ RID_NORETURN:
       /* Duplicate _Noreturn is permitted.  */
-      dupe = false;
-      specs->noreturn_p = true;
+      dupe = ਝੂਠ;
+      specs->noreturn_p = ਸੱਚ;
       specs->locations[cdw_noreturn] = loc;
-      break;
-    case RID_THREAD:
+      ਰੋਕੋ;
+    ਹਾਲਤ RID_THREAD:
       dupe = specs->thread_p;
-      if (specs->storage_class == csc_auto)
+      ਜੇ (specs->storage_class == csc_auto)
 	error ("%qE used with %<auto%>", scspec);
-      else if (specs->storage_class == csc_register)
+      ਨਹੀਂਤਾਂ ਜੇ (specs->storage_class == csc_ਰਜਿਸਟਰ)
 	error ("%qE used with %<register%>", scspec);
-      else if (specs->storage_class == csc_typedef)
+      ਨਹੀਂਤਾਂ ਜੇ (specs->storage_class == csc_typedef)
 	error ("%qE used with %<typedef%>", scspec);
-      else if (specs->constexpr_p)
+      ਨਹੀਂਤਾਂ ਜੇ (specs->constexpr_p)
 	error ("%qE used with %<constexpr%>", scspec);
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  specs->thread_p = true;
-	  specs->thread_gnu_p = (strcmp (IDENTIFIER_POINTER (scspec),
+	  specs->thread_p = ਸੱਚ;
+	  specs->thread_gnu_p = (strcmp (IDENTIFIER_ਸੂਚਕ (scspec),
 					 "__thread") == 0);
 	  /* A diagnostic is not required for the use of this
 	     identifier in the implementation namespace; only diagnose
 	     it for the C11 spelling because of existing code using
 	     the other spelling.  */
-	  if (!specs->thread_gnu_p)
+	  ਜੇ (!specs->thread_gnu_p)
 	    {
-	      if (flag_isoc99)
+	      ਜੇ (flag_isoc99)
 		pedwarn_c99 (loc, OPT_Wpedantic,
 			     "ISO C99 does not support %qE", scspec);
-	      else
+	      ਨਹੀਂਤਾਂ
 		pedwarn_c99 (loc, OPT_Wpedantic,
 			     "ISO C90 does not support %qE", scspec);
 	    }
 	  specs->locations[cdw_thread] = loc;
 	}
-      break;
-    case RID_AUTO:
-      if (flag_isoc23
-	  && specs->typespec_kind == ctsk_none
+      ਰੋਕੋ;
+    ਹਾਲਤ RID_AUTO:
+      ਜੇ (flag_isoc23
+	  && specs->typespec_ਕਿਸਮ == ctsk_none
 	  && specs->storage_class != csc_typedef)
 	{
 	  /* "auto" potentially used for type deduction.  */
-	  if (specs->c23_auto_p)
+	  ਜੇ (specs->c23_auto_p)
 	    error ("duplicate %qE", scspec);
-	  specs->c23_auto_p = true;
-	  return specs;
+	  specs->c23_auto_p = ਸੱਚ;
+	  ਵਾਪਸ specs;
 	}
       n = csc_auto;
       /* auto may only be used with another storage class specifier,
 	 such as constexpr, if the type is inferred.  */
-      if (specs->constexpr_p)
+      ਜੇ (specs->constexpr_p)
 	error ("%qE used with %<constexpr%>", scspec);
-      break;
-    case RID_EXTERN:
+      ਰੋਕੋ;
+    ਹਾਲਤ RID_EXTERN:
       n = csc_extern;
       /* Diagnose "__thread extern".  */
-      if (specs->thread_p && specs->thread_gnu_p)
+      ਜੇ (specs->thread_p && specs->thread_gnu_p)
 	error ("%<__thread%> before %<extern%>");
-      break;
-    case RID_REGISTER:
-      n = csc_register;
-      break;
-    case RID_STATIC:
+      ਰੋਕੋ;
+    ਹਾਲਤ RID_ਰਜਿਸਟਰ:
+      n = csc_ਰਜਿਸਟਰ;
+      ਰੋਕੋ;
+    ਹਾਲਤ RID_STATIC:
       n = csc_static;
       /* Diagnose "__thread static".  */
-      if (specs->thread_p && specs->thread_gnu_p)
+      ਜੇ (specs->thread_p && specs->thread_gnu_p)
 	error ("%<__thread%> before %<static%>");
-      break;
-    case RID_TYPEDEF:
+      ਰੋਕੋ;
+    ਹਾਲਤ RID_TYPEDEF:
       n = csc_typedef;
-      if (specs->c23_auto_p)
+      ਜੇ (specs->c23_auto_p)
 	{
 	  error ("%<typedef%> used with %<auto%>");
-	  specs->c23_auto_p = false;
+	  specs->c23_auto_p = ਝੂਠ;
 	}
-      break;
-    case RID_CONSTEXPR:
+      ਰੋਕੋ;
+    ਹਾਲਤ RID_CONSTEXPR:
       dupe = specs->constexpr_p;
-      if (specs->storage_class == csc_extern)
+      ਜੇ (specs->storage_class == csc_extern)
 	error ("%qE used with %<extern%>", scspec);
-      else if (specs->storage_class == csc_typedef)
+      ਨਹੀਂਤਾਂ ਜੇ (specs->storage_class == csc_typedef)
 	error ("%qE used with %<typedef%>", scspec);
-      else if (specs->storage_class == csc_auto)
+      ਨਹੀਂਤਾਂ ਜੇ (specs->storage_class == csc_auto)
 	/* auto may only be used with another storage class specifier,
 	   such as constexpr, if the type is inferred.  */
 	error ("%qE used with %<auto%>", scspec);
-      else if (specs->thread_p)
+      ਨਹੀਂਤਾਂ ਜੇ (specs->thread_p)
 	error ("%qE used with %qs", scspec,
 	       specs->thread_gnu_p ? "__thread" : "_Thread_local");
-      else
-	specs->constexpr_p = true;
-      break;
-    default:
+      ਨਹੀਂਤਾਂ
+	specs->constexpr_p = ਸੱਚ;
+      ਰੋਕੋ;
+    ਮੂਲ:
       gcc_unreachable ();
     }
-  if (n != csc_none && n == specs->storage_class)
-    dupe = true;
-  if (dupe)
+  ਜੇ (n != csc_none && n == specs->storage_class)
+    dupe = ਸੱਚ;
+  ਜੇ (dupe)
     {
-      if (i == RID_THREAD)
+      ਜੇ (i == RID_THREAD)
 	error ("duplicate %<_Thread_local%> or %<__thread%>");
-      else
+      ਨਹੀਂਤਾਂ
 	error ("duplicate %qE", scspec);
     }
-  if (n != csc_none)
+  ਜੇ (n != csc_none)
     {
-      if (specs->storage_class != csc_none && n != specs->storage_class)
+      ਜੇ (specs->storage_class != csc_none && n != specs->storage_class)
 	{
 	  error ("multiple storage classes in declaration specifiers");
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
 	  specs->storage_class = n;
 	  specs->locations[cdw_storage_class] = loc;
-	  if (n != csc_extern && n != csc_static && specs->thread_p)
+	  ਜੇ (n != csc_extern && n != csc_static && specs->thread_p)
 	    {
 	      error ("%qs used with %qE",
 		     specs->thread_gnu_p ? "__thread" : "_Thread_local",
 		     scspec);
-	      specs->thread_p = false;
+	      specs->thread_p = ਝੂਠ;
 	    }
-	  if (n != csc_auto && n != csc_register && n != csc_static
+	  ਜੇ (n != csc_auto && n != csc_ਰਜਿਸਟਰ && n != csc_static
 	      && specs->constexpr_p)
 	    {
 	      error ("%<constexpr%> used with %qE", scspec);
-	      specs->constexpr_p = false;
+	      specs->constexpr_p = ਝੂਠ;
 	    }
 	}
     }
-  return specs;
+  ਵਾਪਸ specs;
 }
 
 /* Add the attributes ATTRS to the declaration specifiers SPECS,
    returning SPECS.  */
 
-struct c_declspecs *
-declspecs_add_attrs (location_t loc, struct c_declspecs *specs, tree attrs)
+ਬਣਤਰ c_declspecs *
+declspecs_ਜੋੜੋ_attrs (location_t loc, ਬਣਤਰ c_declspecs *specs, ਰੁੱਖ attrs)
 {
   specs->attrs = chainon (attrs, specs->attrs);
-  specs->locations[cdw_attributes] = loc;
-  specs->declspecs_seen_p = true;
+  specs->locations[cdw_ਗੁਣ] = loc;
+  specs->declspecs_ਵੇਖਿਆ_p = ਸੱਚ;
   /* In the case of standard attributes at the start of the
      declaration, the caller will reset this.  */
-  specs->non_std_attrs_seen_p = true;
-  return specs;
+  specs->non_std_attrs_ਵੇਖਿਆ_p = ਸੱਚ;
+  ਵਾਪਸ specs;
 }
 
 /* Add an _Alignas specifier (expression ALIGN, or type whose
    alignment is ALIGN) to the declaration specifiers SPECS, returning
    SPECS.  */
-struct c_declspecs *
-declspecs_add_alignas (location_t loc,
-		       struct c_declspecs *specs, tree align)
+ਬਣਤਰ c_declspecs *
+declspecs_ਜੋੜੋ_alignas (location_t loc,
+		       ਬਣਤਰ c_declspecs *specs, ਰੁੱਖ align)
 {
-  specs->alignas_p = true;
+  specs->alignas_p = ਸੱਚ;
   specs->locations[cdw_alignas] = loc;
-  if (align == error_mark_node)
-    return specs;
+  ਜੇ (align == error_mark_ਗੰਢ)
+    ਵਾਪਸ specs;
 
   /* Only accept the alignment if it's valid and greater than
      the current one.  Zero is invalid but by C11 required to
      be silently ignored.  */
-  int align_log = check_user_alignment (align, false, /* warn_zero = */false);
-  if (align_log > specs->align_log)
+  ਪੂਰਨ align_log = check_user_alignment (align, ਝੂਠ, /* warn_zero = */ਝੂਠ);
+  ਜੇ (align_log > specs->align_log)
     specs->align_log = align_log;
-  return specs;
+  ਵਾਪਸ specs;
 }
 
 /* Combine "long", "short", "signed", "unsigned" and "_Complex" type
@@ -13367,21 +13367,21 @@ declspecs_add_alignas (location_t loc,
    "_Complex long" is a prefix of the valid ISO C type "_Complex long
    double".  Also apply postfix standard attributes to modify the type.  */
 
-struct c_declspecs *
-finish_declspecs (struct c_declspecs *specs)
+ਬਣਤਰ c_declspecs *
+ਅੰਤ_declspecs (ਬਣਤਰ c_declspecs *specs)
 {
   /* If a type was specified as a whole, we have no modifiers and are
      done.  */
-  if (specs->type != NULL_TREE)
+  ਜੇ (specs->type != NULL_ਰੁੱਖ)
     {
       gcc_assert (!specs->long_p && !specs->long_long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p
 		  && !specs->complex_p && !specs->c23_auto_p);
 
       /* Set a dummy type.  */
-      if (TREE_CODE (specs->type) == ERROR_MARK)
-        specs->type = integer_type_node;
-      goto handle_postfix_attrs;
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (specs->type) == ERROR_MARK)
+        specs->type = integer_type_ਗੰਢ;
+      ਜਾਓ handle_postfix_attrs;
     }
 
   /* If none of "void", "_Bool", "char", "int", "float" or "double"
@@ -13389,45 +13389,45 @@ finish_declspecs (struct c_declspecs *specs)
      present and there are no other specifiers.  If we just have
      "_Complex", it is equivalent to "_Complex double", but e.g.
      "_Complex short" is equivalent to "_Complex short int".  */
-  if (specs->typespec_word == cts_none)
+  ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_none)
     {
-      if (specs->saturating_p)
+      ਜੇ (specs->saturating_p)
 	{
 	  error_at (specs->locations[cdw_saturating],
 		    "%<_Sat%> is used without %<_Fract%> or %<_Accum%>");
-	  if (!targetm.fixed_point_supported_p ())
+	  ਜੇ (!targetm.fixed_ਬਿੰਦੂ_supported_p ())
 	    error_at (specs->locations[cdw_saturating],
 		      "fixed-point types not supported for this target");
-	  specs->typespec_word = cts_fract;
+	  specs->typespec_ਸ਼ਬਦ = cts_fract;
 	}
-      else if (specs->long_p || specs->short_p
+      ਨਹੀਂਤਾਂ ਜੇ (specs->long_p || specs->short_p
 	       || specs->signed_p || specs->unsigned_p)
 	{
-	  specs->typespec_word = cts_int;
+	  specs->typespec_ਸ਼ਬਦ = cts_int;
 	}
-      else if (specs->complex_p)
+      ਨਹੀਂਤਾਂ ਜੇ (specs->complex_p)
 	{
-	  specs->typespec_word = cts_double;
+	  specs->typespec_ਸ਼ਬਦ = cts_double;
 	  pedwarn (specs->locations[cdw_complex], OPT_Wpedantic,
 		   "ISO C does not support plain %<complex%> meaning "
 		   "%<double complex%>");
 	}
-      else if (specs->c23_auto_p)
+      ਨਹੀਂਤਾਂ ਜੇ (specs->c23_auto_p)
 	{
 	  /* Type to be filled in later, including applying postfix
 	     attributes.  This warning only actually appears for
 	     -Wc11-c23-compat in C23 mode; in older modes, there may
 	     be a warning or pedwarn for implicit "int" instead, or
 	     other errors for use of auto at file scope.  */
-	  pedwarn_c11 (input_location, OPT_Wpedantic,
+	  pedwarn_c11 (ਨਿਵੇਸ਼_location, OPT_Wpedantic,
 		       "ISO C does not support %<auto%> type deduction "
 		       "before C23");
-	  return specs;
+	  ਵਾਪਸ specs;
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  specs->typespec_word = cts_int;
-	  specs->default_int_p = true;
+	  specs->typespec_ਸ਼ਬਦ = cts_int;
+	  specs->default_int_p = ਸੱਚ;
 	  /* We don't diagnose this here because grokdeclarator will
 	     give more specific diagnostics according to whether it is
 	     a function definition.  */
@@ -13441,236 +13441,236 @@ finish_declspecs (struct c_declspecs *specs)
 
   /* Now compute the actual type.  */
   gcc_assert (!specs->c23_auto_p);
-  switch (specs->typespec_word)
+  ਚੋਣ (specs->typespec_ਸ਼ਬਦ)
     {
-    case cts_auto_type:
+    ਹਾਲਤ cts_auto_type:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p
 		  && !specs->complex_p);
       /* Type to be filled in later.  */
-      if (specs->postfix_attrs)
+      ਜੇ (specs->postfix_attrs)
 	error ("%<__auto_type%> followed by %<[[]]%> attributes");
-      break;
-    case cts_void:
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_void:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p
 		  && !specs->complex_p);
-      specs->type = void_type_node;
-      break;
-    case cts_bool:
+      specs->type = void_type_ਗੰਢ;
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_bool:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p
 		  && !specs->complex_p);
-      specs->type = boolean_type_node;
-      break;
-    case cts_char:
+      specs->type = boolean_type_ਗੰਢ;
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_char:
       gcc_assert (!specs->long_p && !specs->short_p);
       gcc_assert (!(specs->signed_p && specs->unsigned_p));
-      if (specs->signed_p)
-	specs->type = signed_char_type_node;
-      else if (specs->unsigned_p)
-	specs->type = unsigned_char_type_node;
-      else
-	specs->type = char_type_node;
-      if (specs->complex_p)
+      ਜੇ (specs->signed_p)
+	specs->type = signed_char_type_ਗੰਢ;
+      ਨਹੀਂਤਾਂ ਜੇ (specs->unsigned_p)
+	specs->type = unsigned_char_type_ਗੰਢ;
+      ਨਹੀਂਤਾਂ
+	specs->type = char_type_ਗੰਢ;
+      ਜੇ (specs->complex_p)
 	{
 	  pedwarn (specs->locations[cdw_complex], OPT_Wpedantic,
 		   "ISO C does not support complex integer types");
 	  specs->type = build_complex_type (specs->type);
 	}
-      break;
-    case cts_int_n:
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_int_n:
       gcc_assert (!specs->long_p && !specs->short_p && !specs->long_long_p);
       gcc_assert (!(specs->signed_p && specs->unsigned_p));
-      if (! int_n_enabled_p[specs->u.int_n_idx])
-	specs->type = integer_type_node;
-      else
+      ਜੇ (! int_n_enabled_p[specs->u.int_n_idx])
+	specs->type = integer_type_ਗੰਢ;
+      ਨਹੀਂਤਾਂ
 	specs->type = (specs->unsigned_p
 		       ? int_n_trees[specs->u.int_n_idx].unsigned_type
 		       : int_n_trees[specs->u.int_n_idx].signed_type);
-      if (specs->complex_p)
+      ਜੇ (specs->complex_p)
 	{
 	  pedwarn (specs->locations[cdw_complex], OPT_Wpedantic,
 		   "ISO C does not support complex integer types");
 	  specs->type = build_complex_type (specs->type);
 	}
-      break;
-    case cts_int:
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_int:
       gcc_assert (!(specs->long_p && specs->short_p));
       gcc_assert (!(specs->signed_p && specs->unsigned_p));
-      if (specs->long_long_p)
+      ਜੇ (specs->long_long_p)
 	specs->type = (specs->unsigned_p
-		       ? long_long_unsigned_type_node
-		       : long_long_integer_type_node);
-      else if (specs->long_p)
+		       ? long_long_unsigned_type_ਗੰਢ
+		       : long_long_integer_type_ਗੰਢ);
+      ਨਹੀਂਤਾਂ ਜੇ (specs->long_p)
 	specs->type = (specs->unsigned_p
-		       ? long_unsigned_type_node
-		       : long_integer_type_node);
-      else if (specs->short_p)
+		       ? long_unsigned_type_ਗੰਢ
+		       : long_integer_type_ਗੰਢ);
+      ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 	specs->type = (specs->unsigned_p
-		       ? short_unsigned_type_node
-		       : short_integer_type_node);
-      else
+		       ? short_unsigned_type_ਗੰਢ
+		       : short_integer_type_ਗੰਢ);
+      ਨਹੀਂਤਾਂ
 	specs->type = (specs->unsigned_p
-		       ? unsigned_type_node
-		       : integer_type_node);
-      if (specs->complex_p)
+		       ? unsigned_type_ਗੰਢ
+		       : integer_type_ਗੰਢ);
+      ਜੇ (specs->complex_p)
 	{
 	  pedwarn (specs->locations[cdw_complex], OPT_Wpedantic,
 		   "ISO C does not support complex integer types");
 	  specs->type = build_complex_type (specs->type);
 	}
-      break;
-    case cts_float:
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_float:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p);
       specs->type = (specs->complex_p
-		     ? complex_float_type_node
-		     : float_type_node);
-      break;
-    case cts_double:
+		     ? complex_float_type_ਗੰਢ
+		     : float_type_ਗੰਢ);
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_double:
       gcc_assert (!specs->long_long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p);
-      if (specs->long_p)
+      ਜੇ (specs->long_p)
 	{
 	  specs->type = (specs->complex_p
-			 ? complex_long_double_type_node
-			 : long_double_type_node);
+			 ? complex_long_double_type_ਗੰਢ
+			 : long_double_type_ਗੰਢ);
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
 	  specs->type = (specs->complex_p
-			 ? complex_double_type_node
-			 : double_type_node);
+			 ? complex_double_type_ਗੰਢ
+			 : double_type_ਗੰਢ);
 	}
-      break;
-    case cts_floatn_nx:
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_floatn_nx:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p);
-      if (FLOATN_NX_TYPE_NODE (specs->u.floatn_nx_idx) == NULL_TREE)
-	specs->type = integer_type_node;
-      else if (specs->complex_p)
-	specs->type = COMPLEX_FLOATN_NX_TYPE_NODE (specs->u.floatn_nx_idx);
-      else
-	specs->type = FLOATN_NX_TYPE_NODE (specs->u.floatn_nx_idx);
-      break;
-    case cts_dfloat32:
-    case cts_dfloat64:
-    case cts_dfloat128:
-    case cts_dfloat64x:
+      ਜੇ (FLOATN_NX_TYPE_ਗੰਢ (specs->u.floatn_nx_idx) == NULL_ਰੁੱਖ)
+	specs->type = integer_type_ਗੰਢ;
+      ਨਹੀਂਤਾਂ ਜੇ (specs->complex_p)
+	specs->type = COMPLEX_FLOATN_NX_TYPE_ਗੰਢ (specs->u.floatn_nx_idx);
+      ਨਹੀਂਤਾਂ
+	specs->type = FLOATN_NX_TYPE_ਗੰਢ (specs->u.floatn_nx_idx);
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_dfloat32:
+    ਹਾਲਤ cts_dfloat64:
+    ਹਾਲਤ cts_dfloat128:
+    ਹਾਲਤ cts_dfloat64x:
       gcc_assert (!specs->long_p && !specs->long_long_p && !specs->short_p
 		  && !specs->signed_p && !specs->unsigned_p && !specs->complex_p);
-      if (!targetm.decimal_float_supported_p ())
-	specs->type = integer_type_node;
-      else if (specs->typespec_word == cts_dfloat32)
-	specs->type = dfloat32_type_node;
-      else if (specs->typespec_word == cts_dfloat64)
-	specs->type = dfloat64_type_node;
-      else if (specs->typespec_word == cts_dfloat128)
-	specs->type = dfloat128_type_node;
-      else
-	specs->type = dfloat64x_type_node;
-      break;
-    case cts_fract:
+      ਜੇ (!targetm.decimal_float_supported_p ())
+	specs->type = integer_type_ਗੰਢ;
+      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat32)
+	specs->type = dfloat32_type_ਗੰਢ;
+      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat64)
+	specs->type = dfloat64_type_ਗੰਢ;
+      ਨਹੀਂਤਾਂ ਜੇ (specs->typespec_ਸ਼ਬਦ == cts_dfloat128)
+	specs->type = dfloat128_type_ਗੰਢ;
+      ਨਹੀਂਤਾਂ
+	specs->type = dfloat64x_type_ਗੰਢ;
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_fract:
       gcc_assert (!specs->complex_p);
-      if (!targetm.fixed_point_supported_p ())
-	specs->type = integer_type_node;
-      else if (specs->saturating_p)
+      ਜੇ (!targetm.fixed_ਬਿੰਦੂ_supported_p ())
+	specs->type = integer_type_ਗੰਢ;
+      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 	{
-	  if (specs->long_long_p)
+	  ਜੇ (specs->long_long_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_long_long_fract_type_node
-			  : sat_long_long_fract_type_node;
-	  else if (specs->long_p)
+			  ? sat_unsigned_long_long_fract_type_ਗੰਢ
+			  : sat_long_long_fract_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ ਜੇ (specs->long_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_long_fract_type_node
-			  : sat_long_fract_type_node;
-	  else if (specs->short_p)
+			  ? sat_unsigned_long_fract_type_ਗੰਢ
+			  : sat_long_fract_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_short_fract_type_node
-			  : sat_short_fract_type_node;
-	  else
+			  ? sat_unsigned_short_fract_type_ਗੰਢ
+			  : sat_short_fract_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_fract_type_node
-			  : sat_fract_type_node;
+			  ? sat_unsigned_fract_type_ਗੰਢ
+			  : sat_fract_type_ਗੰਢ;
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  if (specs->long_long_p)
+	  ਜੇ (specs->long_long_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_long_long_fract_type_node
-			  : long_long_fract_type_node;
-	  else if (specs->long_p)
+			  ? unsigned_long_long_fract_type_ਗੰਢ
+			  : long_long_fract_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ ਜੇ (specs->long_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_long_fract_type_node
-			  : long_fract_type_node;
-	  else if (specs->short_p)
+			  ? unsigned_long_fract_type_ਗੰਢ
+			  : long_fract_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_short_fract_type_node
-			  : short_fract_type_node;
-	  else
+			  ? unsigned_short_fract_type_ਗੰਢ
+			  : short_fract_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ
 	    specs->type = specs->unsigned_p
-			  ? unsigned_fract_type_node
-			  : fract_type_node;
+			  ? unsigned_fract_type_ਗੰਢ
+			  : fract_type_ਗੰਢ;
 	}
-      break;
-    case cts_accum:
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_accum:
       gcc_assert (!specs->complex_p);
-      if (!targetm.fixed_point_supported_p ())
-	specs->type = integer_type_node;
-      else if (specs->saturating_p)
+      ਜੇ (!targetm.fixed_ਬਿੰਦੂ_supported_p ())
+	specs->type = integer_type_ਗੰਢ;
+      ਨਹੀਂਤਾਂ ਜੇ (specs->saturating_p)
 	{
-	  if (specs->long_long_p)
+	  ਜੇ (specs->long_long_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_long_long_accum_type_node
-			  : sat_long_long_accum_type_node;
-	  else if (specs->long_p)
+			  ? sat_unsigned_long_long_accum_type_ਗੰਢ
+			  : sat_long_long_accum_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ ਜੇ (specs->long_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_long_accum_type_node
-			  : sat_long_accum_type_node;
-	  else if (specs->short_p)
+			  ? sat_unsigned_long_accum_type_ਗੰਢ
+			  : sat_long_accum_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_short_accum_type_node
-			  : sat_short_accum_type_node;
-	  else
+			  ? sat_unsigned_short_accum_type_ਗੰਢ
+			  : sat_short_accum_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ
 	    specs->type = specs->unsigned_p
-			  ? sat_unsigned_accum_type_node
-			  : sat_accum_type_node;
+			  ? sat_unsigned_accum_type_ਗੰਢ
+			  : sat_accum_type_ਗੰਢ;
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  if (specs->long_long_p)
+	  ਜੇ (specs->long_long_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_long_long_accum_type_node
-			  : long_long_accum_type_node;
-	  else if (specs->long_p)
+			  ? unsigned_long_long_accum_type_ਗੰਢ
+			  : long_long_accum_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ ਜੇ (specs->long_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_long_accum_type_node
-			  : long_accum_type_node;
-	  else if (specs->short_p)
+			  ? unsigned_long_accum_type_ਗੰਢ
+			  : long_accum_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ ਜੇ (specs->short_p)
 	    specs->type = specs->unsigned_p
-			  ? unsigned_short_accum_type_node
-			  : short_accum_type_node;
-	  else
+			  ? unsigned_short_accum_type_ਗੰਢ
+			  : short_accum_type_ਗੰਢ;
+	  ਨਹੀਂਤਾਂ
 	    specs->type = specs->unsigned_p
-			  ? unsigned_accum_type_node
-			  : accum_type_node;
+			  ? unsigned_accum_type_ਗੰਢ
+			  : accum_type_ਗੰਢ;
 	}
-      break;
-    case cts_bitint:
+      ਰੋਕੋ;
+    ਹਾਲਤ cts_bitint:
       gcc_assert (!specs->long_p && !specs->short_p
 		  && !specs->complex_p);
-      if (!specs->unsigned_p && specs->u.bitint_prec == 1 && !flag_isoc2y)
+      ਜੇ (!specs->unsigned_p && specs->u.bitint_prec == 1 && !flag_isoc2y)
 	{
 	  error_at (specs->locations[cdw_typespec],
 		    "%<signed _BitInt%> argument must be at least 2 "
 		    "before C2Y");
-	  specs->type = integer_type_node;
-	  break;
+	  specs->type = integer_type_ਗੰਢ;
+	  ਰੋਕੋ;
 	}
-      if (specs->u.bitint_prec == -1)
-	specs->type = integer_type_node;
-      else
+      ਜੇ (specs->u.bitint_prec == -1)
+	specs->type = integer_type_ਗੰਢ;
+      ਨਹੀਂਤਾਂ
 	{
 	  pedwarn_c11 (specs->locations[cdw_typespec], OPT_Wpedantic,
 		       "ISO C does not support %<%s_BitInt(%d)%> before C23",
@@ -13680,51 +13680,51 @@ finish_declspecs (struct c_declspecs *specs)
 	  specs->type = build_bitint_type (specs->u.bitint_prec,
 					   specs->unsigned_p);
 	}
-      break;
-    default:
+      ਰੋਕੋ;
+    ਮੂਲ:
       gcc_unreachable ();
     }
  handle_postfix_attrs:
-  if (specs->type != NULL)
+  ਜੇ (specs->type != ਨਿਰਾ)
     {
       specs->postfix_attrs
-	= c_warn_type_attributes (specs->type, specs->postfix_attrs);
-      decl_attributes (&specs->type, specs->postfix_attrs, 0);
-      specs->postfix_attrs = NULL_TREE;
+	= c_warn_type_ਗੁਣ (specs->type, specs->postfix_attrs);
+      decl_ਗੁਣ (&specs->type, specs->postfix_attrs, 0);
+      specs->postfix_attrs = NULL_ਰੁੱਖ;
     }
 
-  return specs;
+  ਵਾਪਸ specs;
 }
 
 /* Perform final processing on one file scope's declarations (or the
    external scope's declarations), GLOBALS.  */
 
-static void
-c_write_global_declarations_1 (tree globals)
+ਸਥਿਰ ਖਾਲੀ
+c_write_global_declarations_1 (ਰੁੱਖ globals)
 {
-  tree decl;
-  bool reconsider;
+  ਰੁੱਖ decl;
+  ਤਾਰਕਿਕ reconsider;
 
   /* Process the decls in the order they were written.  */
-  for (decl = globals; decl; decl = DECL_CHAIN (decl))
+  ਲਈ (decl = globals; decl; decl = DECL_CHAIN (decl))
     {
       /* Check for used but undefined static functions using the C
 	 standard's definition of "used", and set TREE_NO_WARNING so
 	 that check_global_declaration doesn't repeat the check.  */
-      if (TREE_CODE (decl) == FUNCTION_DECL
-	  && DECL_INITIAL (decl) == NULL_TREE
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (decl) == FUNCTION_DECL
+	  && DECL_INITIAL (decl) == NULL_ਰੁੱਖ
 	  && DECL_EXTERNAL (decl)
-	  && !TREE_PUBLIC (decl)
+	  && !ਰੁੱਖ_ਜਨਤਕ (decl)
 	  && !warning_suppressed_p (decl, OPT_Wunused))
 	{
-	  if (C_DECL_USED (decl))
+	  ਜੇ (C_DECL_ਵਰਤਿਆ (decl))
 	    {
-	      if (pedwarn (input_location, 0, "%q+F used but never defined",
+	      ਜੇ (pedwarn (ਨਿਵੇਸ਼_location, 0, "%q+F used but never defined",
 			   decl))
 		suppress_warning (decl, OPT_Wunused);
 	    }
 	  /* For -Wunused-function warn about unused static prototypes.  */
-	  else if (warn_unused_function
+	  ਨਹੀਂਤਾਂ ਜੇ (warn_ਅਣਵਰਤਿਆ_function
 		   && ! DECL_ARTIFICIAL (decl)
 		   && warning (OPT_Wunused_function,
 			       "%q+F declared %<static%> but never defined",
@@ -13735,418 +13735,418 @@ c_write_global_declarations_1 (tree globals)
       wrapup_global_declaration_1 (decl);
     }
 
-  do
+  ਕਰੋ
     {
-      reconsider = false;
-      for (decl = globals; decl; decl = DECL_CHAIN (decl))
+      reconsider = ਝੂਠ;
+      ਲਈ (decl = globals; decl; decl = DECL_CHAIN (decl))
 	reconsider |= wrapup_global_declaration_2 (decl);
     }
-  while (reconsider);
+  ਜਦੋਂ (reconsider);
 }
 
 /* Preserve the external declarations scope across a garbage collect.  */
-static GTY(()) tree ext_block;
+ਸਥਿਰ GTY(()) ਰੁੱਖ ext_ਖੰਡ;
 
 /* Collect all references relevant to SOURCE_FILE.  */
 
-static void
-collect_all_refs (const char *source_file)
+ਸਥਿਰ ਖਾਲੀ
+collect_all_refs (ਅਚਲ ਅੱਖਰ *ਸਰੋਤ_file)
 {
-  tree t;
-  unsigned i;
+  ਰੁੱਖ t;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ i;
 
   FOR_EACH_VEC_ELT (*all_translation_units, i, t)
-    collect_ada_nodes (BLOCK_VARS (DECL_INITIAL (t)), source_file);
+    collect_ada_nodes (ਖੰਡ_VARS (DECL_INITIAL (t)), ਸਰੋਤ_file);
 
-  collect_ada_nodes (BLOCK_VARS (ext_block), source_file);
+  collect_ada_nodes (ਖੰਡ_VARS (ext_ਖੰਡ), ਸਰੋਤ_file);
 }
 
 /* Collect source file references at global level.  */
 
-static void
-collect_source_refs (void)
+ਸਥਿਰ ਖਾਲੀ
+collect_ਸਰੋਤ_refs (ਖਾਲੀ)
 {
-  tree t;
-  tree decls;
-  tree decl;
-  unsigned i;
+  ਰੁੱਖ t;
+  ਰੁੱਖ decls;
+  ਰੁੱਖ decl;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ i;
 
   FOR_EACH_VEC_ELT (*all_translation_units, i, t)
     {
       decls = DECL_INITIAL (t);
-      for (decl = BLOCK_VARS (decls); decl; decl = TREE_CHAIN (decl))
-	if (!DECL_IS_UNDECLARED_BUILTIN (decl))
-	  collect_source_ref (DECL_SOURCE_FILE (decl));
+      ਲਈ (decl = ਖੰਡ_VARS (decls); decl; decl = ਰੁੱਖ_CHAIN (decl))
+	ਜੇ (!DECL_IS_UNDECLARED_BUILTIN (decl))
+	  collect_ਸਰੋਤ_ref (DECL_ਸਰੋਤ_FILE (decl));
     }
 
-  for (decl = BLOCK_VARS (ext_block); decl; decl = TREE_CHAIN (decl))
-    if (!DECL_IS_UNDECLARED_BUILTIN (decl))
-      collect_source_ref (DECL_SOURCE_FILE (decl));
+  ਲਈ (decl = ਖੰਡ_VARS (ext_ਖੰਡ); decl; decl = ਰੁੱਖ_CHAIN (decl))
+    ਜੇ (!DECL_IS_UNDECLARED_BUILTIN (decl))
+      collect_ਸਰੋਤ_ref (DECL_ਸਰੋਤ_FILE (decl));
 }
 
 /* Free attribute access data that are not needed by the middle end. */
 
-static void
-free_attr_access_data ()
+ਸਥਿਰ ਖਾਲੀ
+free_attr_access_ਅੰਕੜੇ ()
 {
-  struct cgraph_node *n;
+  ਬਣਤਰ cgraph_ਗੰਢ *n;
 
   /* Iterate over all functions declared in the translation unit.  */
   FOR_EACH_FUNCTION (n)
     {
-      for (tree parm = DECL_ARGUMENTS (n->decl); parm; parm = TREE_CHAIN (parm))
-	if (tree attrs = DECL_ATTRIBUTES (parm))
-	  attr_access::free_lang_data (attrs);
+      ਲਈ (ਰੁੱਖ parm = DECL_ARGUMENTS (n->decl); parm; parm = ਰੁੱਖ_CHAIN (parm))
+	ਜੇ (ਰੁੱਖ attrs = DECL_ਗੁਣ (parm))
+	  attr_access::free_lang_ਅੰਕੜੇ (attrs);
 
-      tree fntype = TREE_TYPE (n->decl);
-      if (!fntype || fntype == error_mark_node)
-	continue;
-      tree attrs = TYPE_ATTRIBUTES (fntype);
-      if (!attrs)
-	continue;
+      ਰੁੱਖ fntype = ਰੁੱਖ_TYPE (n->decl);
+      ਜੇ (!fntype || fntype == error_mark_ਗੰਢ)
+	ਜਾਰੀ;
+      ਰੁੱਖ attrs = TYPE_ਗੁਣ (fntype);
+      ਜੇ (!attrs)
+	ਜਾਰੀ;
 
-      attr_access::free_lang_data (attrs);
+      attr_access::free_lang_ਅੰਕੜੇ (attrs);
     }
 }
 
 /* Perform any final parser cleanups and generate initial debugging
    information.  */
 
-void
-c_parse_final_cleanups (void)
+ਖਾਲੀ
+c_parse_final_cleanups (ਖਾਲੀ)
 {
-  tree t;
-  unsigned i;
+  ਰੁੱਖ t;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ i;
 
   /* We don't want to do this if generating a PCH.  */
-  if (pch_file)
-    return;
+  ਜੇ (pch_file)
+    ਵਾਪਸ;
 
   timevar_stop (TV_PHASE_PARSING);
-  timevar_start (TV_PHASE_DEFERRED);
+  timevar_ਸ਼ੁਰੂ (TV_PHASE_DEFERRED);
 
   /* Do the Objective-C stuff.  This is where all the Objective-C
      module stuff gets generated (symtab, class/protocol/selector
      lists etc).  */
-  if (c_dialect_objc ())
+  ਜੇ (c_dialect_objc ())
     objc_write_global_declarations ();
 
   /* Close the external scope.  */
-  ext_block = pop_scope ();
+  ext_ਖੰਡ = ਕੱਢੋ_scope ();
   external_scope = 0;
   gcc_assert (!current_scope);
 
   /* Handle -fdump-ada-spec[-slim]. */
-  if (flag_dump_ada_spec || flag_dump_ada_spec_slim)
+  ਜੇ (flag_dump_ada_spec || flag_dump_ada_spec_slim)
     {
       /* Build a table of files to generate specs for */
-      collect_source_ref (main_input_filename);
-      if (!flag_dump_ada_spec_slim)
-	collect_source_refs ();
+      collect_ਸਰੋਤ_ref (main_ਨਿਵੇਸ਼_filename);
+      ਜੇ (!flag_dump_ada_spec_slim)
+	collect_ਸਰੋਤ_refs ();
 
-      dump_ada_specs (collect_all_refs, NULL);
+      dump_ada_specs (collect_all_refs, ਨਿਰਾ);
     }
 
   /* Process all file scopes in this compilation, and the external_scope,
      through wrapup_global_declarations.  */
   FOR_EACH_VEC_ELT (*all_translation_units, i, t)
-    c_write_global_declarations_1 (BLOCK_VARS (DECL_INITIAL (t)));
-  c_write_global_declarations_1 (BLOCK_VARS (ext_block));
+    c_write_global_declarations_1 (ਖੰਡ_VARS (DECL_INITIAL (t)));
+  c_write_global_declarations_1 (ਖੰਡ_VARS (ext_ਖੰਡ));
 
   /* Call this to set cpp_implicit_aliases_done on all nodes.  This is
      important for function multiversioning aliases to get resolved.  */
   symtab->process_same_body_aliases ();
 
-  if (!in_lto_p)
-    free_attr_access_data ();
+  ਜੇ (!ਵਿੱਚ_lto_p)
+    free_attr_access_ਅੰਕੜੇ ();
 
   timevar_stop (TV_PHASE_DEFERRED);
-  timevar_start (TV_PHASE_PARSING);
+  timevar_ਸ਼ੁਰੂ (TV_PHASE_PARSING);
 
-  ext_block = NULL;
+  ext_ਖੰਡ = ਨਿਰਾ;
 }
 
 /* Register reserved keyword WORD as qualifier for address space AS.  */
 
-void
-c_register_addr_space (const char *word, addr_space_t as)
+ਖਾਲੀ
+c_ਰਜਿਸਟਰ_addr_space (ਅਚਲ ਅੱਖਰ *ਸ਼ਬਦ, addr_space_t as)
 {
-  int rid = RID_FIRST_ADDR_SPACE + as;
-  tree id;
+  ਪੂਰਨ rid = RID_ਪਹਿਲਾ_ADDR_SPACE + as;
+  ਰੁੱਖ id;
 
   /* Address space qualifiers are only supported
      in C with GNU extensions enabled.  */
-  if (c_dialect_objc () || flag_no_asm)
-    return;
+  ਜੇ (c_dialect_objc () || flag_no_asm)
+    ਵਾਪਸ;
 
-  id = get_identifier (word);
-  C_SET_RID_CODE (id, rid);
-  C_IS_RESERVED_WORD (id) = 1;
+  id = get_identifier (ਸ਼ਬਦ);
+  C_ਸੈੱਟ_RID_ਕੋਡ (id, rid);
+  C_IS_RESERVED_ਸ਼ਬਦ (id) = 1;
   ridpointers [rid] = id;
 }
 
 /* Return identifier to look up for omp declare reduction.  */
 
-tree
-c_omp_reduction_id (enum tree_code reduction_code, tree reduction_id)
+ਰੁੱਖ
+c_omp_reduction_id (ਗਿਣਤੀ ਰੁੱਖ_ਕੋਡ_2 reduction_ਕੋਡ, ਰੁੱਖ reduction_id)
 {
-  const char *p = NULL;
-  switch (reduction_code)
+  ਅਚਲ ਅੱਖਰ *p = ਨਿਰਾ;
+  ਚੋਣ (reduction_ਕੋਡ)
     {
-    case PLUS_EXPR: p = "+"; break;
-    case MULT_EXPR: p = "*"; break;
-    case MINUS_EXPR: p = "-"; break;
-    case BIT_AND_EXPR: p = "&"; break;
-    case BIT_XOR_EXPR: p = "^"; break;
-    case BIT_IOR_EXPR: p = "|"; break;
-    case TRUTH_ANDIF_EXPR: p = "&&"; break;
-    case TRUTH_ORIF_EXPR: p = "||"; break;
-    case MIN_EXPR: p = "min"; break;
-    case MAX_EXPR: p = "max"; break;
-    default:
-      break;
+    ਹਾਲਤ PLUS_ਵਿਅੰਜਕ: p = "+"; ਰੋਕੋ;
+    ਹਾਲਤ MULT_ਵਿਅੰਜਕ: p = "*"; ਰੋਕੋ;
+    ਹਾਲਤ MINUS_ਵਿਅੰਜਕ: p = "-"; ਰੋਕੋ;
+    ਹਾਲਤ ਦੋਆਧਾਰੀ_ਅੰਕ_AND_ਵਿਅੰਜਕ: p = "&"; ਰੋਕੋ;
+    ਹਾਲਤ ਦੋਆਧਾਰੀ_ਅੰਕ_XOR_ਵਿਅੰਜਕ: p = "^"; ਰੋਕੋ;
+    ਹਾਲਤ ਦੋਆਧਾਰੀ_ਅੰਕ_IOR_ਵਿਅੰਜਕ: p = "|"; ਰੋਕੋ;
+    ਹਾਲਤ TRUTH_ANDIF_ਵਿਅੰਜਕ: p = "&&"; ਰੋਕੋ;
+    ਹਾਲਤ TRUTH_ORIF_ਵਿਅੰਜਕ: p = "||"; ਰੋਕੋ;
+    ਹਾਲਤ MIN_ਵਿਅੰਜਕ: p = "min"; ਰੋਕੋ;
+    ਹਾਲਤ MAX_ਵਿਅੰਜਕ: p = "max"; ਰੋਕੋ;
+    ਮੂਲ:
+      ਰੋਕੋ;
     }
 
-  if (p == NULL)
+  ਜੇ (p == ਨਿਰਾ)
     {
-      if (TREE_CODE (reduction_id) != IDENTIFIER_NODE)
-	return error_mark_node;
-      p = IDENTIFIER_POINTER (reduction_id);
+      ਜੇ (ਰੁੱਖ_ਕੋਡ (reduction_id) != IDENTIFIER_ਗੰਢ)
+	ਵਾਪਸ error_mark_ਗੰਢ;
+      p = IDENTIFIER_ਸੂਚਕ (reduction_id);
     }
 
-  const char prefix[] = "omp declare reduction ";
-  size_t lenp = sizeof (prefix);
-  size_t len = strlen (p);
-  char *name = XALLOCAVEC (char, lenp + len);
-  memcpy (name, prefix, lenp - 1);
-  memcpy (name + lenp - 1, p, len + 1);
-  return get_identifier (name);
+  ਅਚਲ ਅੱਖਰ ਅਗੇਤਰ[] = "omp declare reduction ";
+  ਮਾਪ_t lenp = ਆਕਾਰ (ਅਗੇਤਰ);
+  ਮਾਪ_t len = ਲੜੀ_ਲੰਬਾਈ (p);
+  ਅੱਖਰ *name = XALLOCAVEC (ਅੱਖਰ, lenp + len);
+  ਸਮ੍ਰਿਤੀ_ਨਕਲ (name, ਅਗੇਤਰ, lenp - 1);
+  ਸਮ੍ਰਿਤੀ_ਨਕਲ (name + lenp - 1, p, len + 1);
+  ਵਾਪਸ get_identifier (name);
 }
 
 /* Lookup REDUCTION_ID in the current scope, or create an artificial
    VAR_DECL, bind it into the current scope and return it.  */
 
-tree
-c_omp_reduction_decl (tree reduction_id)
+ਰੁੱਖ
+c_omp_reduction_decl (ਰੁੱਖ reduction_id)
 {
-  struct c_binding *b = I_SYMBOL_BINDING (reduction_id);
-  if (b != NULL && B_IN_CURRENT_SCOPE (b))
-    return b->decl;
+  ਬਣਤਰ c_binding *b = I_ਚਿੰਨ੍ਹ_BINDING (reduction_id);
+  ਜੇ (b != ਨਿਰਾ && B_ਵਿੱਚ_CURRENT_SCOPE (b))
+    ਵਾਪਸ b->decl;
 
-  tree decl = build_decl (BUILTINS_LOCATION, VAR_DECL,
-			  reduction_id, integer_type_node);
+  ਰੁੱਖ decl = build_decl (BUILTINS_LOCATION, VAR_DECL,
+			  reduction_id, integer_type_ਗੰਢ);
   DECL_ARTIFICIAL (decl) = 1;
   DECL_EXTERNAL (decl) = 1;
-  TREE_STATIC (decl) = 1;
-  TREE_PUBLIC (decl) = 0;
-  bind (reduction_id, decl, current_scope, true, false, BUILTINS_LOCATION);
-  return decl;
+  ਰੁੱਖ_STATIC (decl) = 1;
+  ਰੁੱਖ_ਜਨਤਕ (decl) = 0;
+  bind (reduction_id, decl, current_scope, ਸੱਚ, ਝੂਠ, BUILTINS_LOCATION);
+  ਵਾਪਸ decl;
 }
 
 /* Lookup REDUCTION_ID in the first scope where it has entry for TYPE.  */
 
-tree
-c_omp_reduction_lookup (tree reduction_id, tree type)
+ਰੁੱਖ
+c_omp_reduction_lookup (ਰੁੱਖ reduction_id, ਰੁੱਖ type)
 {
-  struct c_binding *b = I_SYMBOL_BINDING (reduction_id);
-  while (b)
+  ਬਣਤਰ c_binding *b = I_ਚਿੰਨ੍ਹ_BINDING (reduction_id);
+  ਜਦੋਂ (b)
     {
-      tree t;
-      for (t = DECL_INITIAL (b->decl); t; t = TREE_CHAIN (t))
-	if (comptypes (TREE_PURPOSE (t), type))
-	  return TREE_VALUE (t);
+      ਰੁੱਖ t;
+      ਲਈ (t = DECL_INITIAL (b->decl); t; t = ਰੁੱਖ_CHAIN (t))
+	ਜੇ (comptypes (ਰੁੱਖ_PURPOSE (t), type))
+	  ਵਾਪਸ ਰੁੱਖ_ਮੁੱਲ (t);
       b = b->shadowed;
     }
-  return error_mark_node;
+  ਵਾਪਸ error_mark_ਗੰਢ;
 }
 
 /* Helper function called via walk_tree, to diagnose invalid
    #pragma omp declare reduction combiners or initializers.  */
 
-tree
-c_check_omp_declare_reduction_r (tree *tp, int *, void *data)
+ਰੁੱਖ
+c_check_omp_declare_reduction_r (ਰੁੱਖ *tp, ਪੂਰਨ *, ਖਾਲੀ *ਅੰਕੜੇ)
 {
-  tree *vars = (tree *) data;
-  if (SSA_VAR_P (*tp)
+  ਰੁੱਖ *vars = (ਰੁੱਖ *) ਅੰਕੜੇ;
+  ਜੇ (SSA_VAR_P (*tp)
       && !DECL_ARTIFICIAL (*tp)
       && *tp != vars[0]
       && *tp != vars[1])
     {
-      location_t loc = DECL_SOURCE_LOCATION (vars[0]);
-      if (strcmp (IDENTIFIER_POINTER (DECL_NAME (vars[0])), "omp_out") == 0)
+      location_t loc = DECL_ਸਰੋਤ_LOCATION (vars[0]);
+      ਜੇ (strcmp (IDENTIFIER_ਸੂਚਕ (DECL_NAME (vars[0])), "omp_out") == 0)
 	error_at (loc, "%<#pragma omp declare reduction%> combiner refers to "
 		       "variable %qD which is not %<omp_out%> nor %<omp_in%>",
 		  *tp);
-      else
+      ਨਹੀਂਤਾਂ
 	error_at (loc, "%<#pragma omp declare reduction%> initializer refers "
 		       "to variable %qD which is not %<omp_priv%> nor "
 		       "%<omp_orig%>",
 		  *tp);
-      return *tp;
+      ਵਾਪਸ *tp;
     }
-  return NULL_TREE;
+  ਵਾਪਸ NULL_ਰੁੱਖ;
 }
 
 /* Return identifier to look up for omp declare mapper.  */
 
-tree
-c_omp_mapper_id (tree mapper_id)
+ਰੁੱਖ
+c_omp_mapper_id (ਰੁੱਖ mapper_id)
 {
-  const char *p = NULL;
+  ਅਚਲ ਅੱਖਰ *p = ਨਿਰਾ;
 
-  const char prefix[] = "omp declare mapper ";
+  ਅਚਲ ਅੱਖਰ ਅਗੇਤਰ[] = "omp declare mapper ";
 
-  if (mapper_id == NULL_TREE)
+  ਜੇ (mapper_id == NULL_ਰੁੱਖ)
     p = "<default>";
-  else if (TREE_CODE (mapper_id) == IDENTIFIER_NODE)
-    p = IDENTIFIER_POINTER (mapper_id);
-  else
-    return error_mark_node;
+  ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (mapper_id) == IDENTIFIER_ਗੰਢ)
+    p = IDENTIFIER_ਸੂਚਕ (mapper_id);
+  ਨਹੀਂਤਾਂ
+    ਵਾਪਸ error_mark_ਗੰਢ;
 
-  size_t lenp = sizeof (prefix);
-  size_t len = strlen (p);
-  char *name = XALLOCAVEC (char, lenp + len);
-  memcpy (name, prefix, lenp - 1);
-  memcpy (name + lenp - 1, p, len + 1);
-  return get_identifier (name);
+  ਮਾਪ_t lenp = ਆਕਾਰ (ਅਗੇਤਰ);
+  ਮਾਪ_t len = ਲੜੀ_ਲੰਬਾਈ (p);
+  ਅੱਖਰ *name = XALLOCAVEC (ਅੱਖਰ, lenp + len);
+  ਸਮ੍ਰਿਤੀ_ਨਕਲ (name, ਅਗੇਤਰ, lenp - 1);
+  ਸਮ੍ਰਿਤੀ_ਨਕਲ (name + lenp - 1, p, len + 1);
+  ਵਾਪਸ get_identifier (name);
 }
 
 /* Lookup MAPPER_ID in the current scope, or create an artificial
    VAR_DECL, bind it into the current scope and return it.  */
 
-tree
-c_omp_mapper_decl (tree mapper_id)
+ਰੁੱਖ
+c_omp_mapper_decl (ਰੁੱਖ mapper_id)
 {
-  struct c_binding *b = I_SYMBOL_BINDING (mapper_id);
-  if (b != NULL && B_IN_CURRENT_SCOPE (b))
-    return b->decl;
+  ਬਣਤਰ c_binding *b = I_ਚਿੰਨ੍ਹ_BINDING (mapper_id);
+  ਜੇ (b != ਨਿਰਾ && B_ਵਿੱਚ_CURRENT_SCOPE (b))
+    ਵਾਪਸ b->decl;
 
-  tree decl = build_decl (BUILTINS_LOCATION, VAR_DECL,
-			  mapper_id, integer_type_node);
+  ਰੁੱਖ decl = build_decl (BUILTINS_LOCATION, VAR_DECL,
+			  mapper_id, integer_type_ਗੰਢ);
   DECL_ARTIFICIAL (decl) = 1;
   DECL_EXTERNAL (decl) = 1;
-  TREE_STATIC (decl) = 1;
-  TREE_PUBLIC (decl) = 0;
-  bind (mapper_id, decl, current_scope, true, false, BUILTINS_LOCATION);
-  return decl;
+  ਰੁੱਖ_STATIC (decl) = 1;
+  ਰੁੱਖ_ਜਨਤਕ (decl) = 0;
+  bind (mapper_id, decl, current_scope, ਸੱਚ, ਝੂਠ, BUILTINS_LOCATION);
+  ਵਾਪਸ decl;
 }
 
 /* Lookup MAPPER_ID in the first scope where it has entry for TYPE.  */
 
-tree
-c_omp_mapper_lookup (tree mapper_id, tree type)
+ਰੁੱਖ
+c_omp_mapper_lookup (ਰੁੱਖ mapper_id, ਰੁੱਖ type)
 {
-  if (!RECORD_OR_UNION_TYPE_P (type))
-    return NULL_TREE;
+  ਜੇ (!ਰਿਕਾਰਡ_OR_UNION_TYPE_P (type))
+    ਵਾਪਸ NULL_ਰੁੱਖ;
 
   mapper_id = c_omp_mapper_id (mapper_id);
 
-  struct c_binding *b = I_SYMBOL_BINDING (mapper_id);
-  while (b)
+  ਬਣਤਰ c_binding *b = I_ਚਿੰਨ੍ਹ_BINDING (mapper_id);
+  ਜਦੋਂ (b)
     {
-      tree t;
-      for (t = DECL_INITIAL (b->decl); t; t = TREE_CHAIN (t))
-	if (comptypes (TREE_PURPOSE (t), type))
-	  return TREE_VALUE (t);
+      ਰੁੱਖ t;
+      ਲਈ (t = DECL_INITIAL (b->decl); t; t = ਰੁੱਖ_CHAIN (t))
+	ਜੇ (comptypes (ਰੁੱਖ_PURPOSE (t), type))
+	  ਵਾਪਸ ਰੁੱਖ_ਮੁੱਲ (t);
       b = b->shadowed;
     }
-  return NULL_TREE;
+  ਵਾਪਸ NULL_ਰੁੱਖ;
 }
 
 /* For C, we record a pointer to the mapper itself without wrapping it in an
    artificial function or similar.  So, just return it.  */
 
-tree
-c_omp_extract_mapper_directive (tree mapper)
+ਰੁੱਖ
+c_omp_ਕੱਢੋ_mapper_directive (ਰੁੱਖ mapper)
 {
-  return mapper;
+  ਵਾਪਸ mapper;
 }
 
 /* For now we can handle singleton OMP_ARRAY_SECTIONs with custom mappers, but
    nothing more complicated.  */
 
-tree
-c_omp_map_array_section (location_t loc, tree t)
+ਰੁੱਖ
+c_omp_map_array_section (location_t loc, ਰੁੱਖ t)
 {
-  tree low = TREE_OPERAND (t, 1);
-  tree len = TREE_OPERAND (t, 2);
+  ਰੁੱਖ ਨੀਵਾਂ = ਰੁੱਖ_ਸੰਕਾਰਜ (t, 1);
+  ਰੁੱਖ len = ਰੁੱਖ_ਸੰਕਾਰਜ (t, 2);
 
-  if (len && integer_onep (len))
+  ਜੇ (len && integer_onep (len))
     {
-      t = TREE_OPERAND (t, 0);
+      t = ਰੁੱਖ_ਸੰਕਾਰਜ (t, 0);
 
-      if (!low)
-	low = integer_zero_node;
+      ਜੇ (!ਨੀਵਾਂ)
+	ਨੀਵਾਂ = integer_zero_ਗੰਢ;
 
-      t = build_array_ref (loc, t, low);
+      t = build_array_ref (loc, t, ਨੀਵਾਂ);
     }
 
-  return t;
+  ਵਾਪਸ t;
 }
 
 /* Helper function for below function.  */
 
-static tree
-c_omp_scan_mapper_bindings_r (tree *tp, int *walk_subtrees, void *ptr)
+ਸਥਿਰ ਰੁੱਖ
+c_omp_ਜਾਂਚ_mapper_bindings_r (ਰੁੱਖ *tp, ਪੂਰਨ *walk_subtrees, ਖਾਲੀ *ptr)
 {
-  tree t = *tp;
-  omp_mapper_list<tree> *mlist = (omp_mapper_list<tree> *) ptr;
-  tree aggr_type = NULL_TREE;
+  ਰੁੱਖ t = *tp;
+  omp_mapper_list<ਰੁੱਖ> *mlist = (omp_mapper_list<ਰੁੱਖ> *) ptr;
+  ਰੁੱਖ aggr_type = NULL_ਰੁੱਖ;
 
-  if (TREE_CODE (t) == SIZEOF_EXPR
-      || TREE_CODE (t) == ALIGNOF_EXPR)
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (t) == SIZEOF_ਵਿਅੰਜਕ
+      || ਰੁੱਖ_ਕੋਡ (t) == ALIGNOF_ਵਿਅੰਜਕ)
     {
       *walk_subtrees = 0;
-      return NULL_TREE;
+      ਵਾਪਸ NULL_ਰੁੱਖ;
     }
 
-  if (TREE_CODE (t) == OMP_CLAUSE)
-    return NULL_TREE;
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (t) == OMP_CLAUSE)
+    ਵਾਪਸ NULL_ਰੁੱਖ;
 
-  if (TREE_CODE (t) == COMPONENT_REF
-      && RECORD_OR_UNION_TYPE_P (TREE_TYPE (TREE_OPERAND (t, 0))))
-    aggr_type = TREE_TYPE (TREE_OPERAND (t, 0));
-  else if ((TREE_CODE (t) == VAR_DECL
-	    || TREE_CODE (t) == PARM_DECL
-	    || TREE_CODE (t) == RESULT_DECL)
-	   && RECORD_OR_UNION_TYPE_P (TREE_TYPE (t)))
-    aggr_type = TREE_TYPE (t);
+  ਜੇ (ਰੁੱਖ_ਕੋਡ (t) == COMPONENT_REF
+      && ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (ਰੁੱਖ_ਸੰਕਾਰਜ (t, 0))))
+    aggr_type = ਰੁੱਖ_TYPE (ਰੁੱਖ_ਸੰਕਾਰਜ (t, 0));
+  ਨਹੀਂਤਾਂ ਜੇ ((ਰੁੱਖ_ਕੋਡ (t) == VAR_DECL
+	    || ਰੁੱਖ_ਕੋਡ (t) == PARM_DECL
+	    || ਰੁੱਖ_ਕੋਡ (t) == ਨਤੀਜਾ_DECL)
+	   && ਰਿਕਾਰਡ_OR_UNION_TYPE_P (ਰੁੱਖ_TYPE (t)))
+    aggr_type = ਰੁੱਖ_TYPE (t);
 
-  if (aggr_type)
+  ਜੇ (aggr_type)
     {
-      tree mapper_fn = c_omp_mapper_lookup (NULL_TREE, aggr_type);
-      if (mapper_fn)
-	mlist->add_mapper (NULL_TREE, aggr_type, mapper_fn);
+      ਰੁੱਖ mapper_fn = c_omp_mapper_lookup (NULL_ਰੁੱਖ, aggr_type);
+      ਜੇ (mapper_fn)
+	mlist->ਜੋੜੋ_mapper (NULL_ਰੁੱਖ, aggr_type, mapper_fn);
     }
 
-  return NULL_TREE;
+  ਵਾਪਸ NULL_ਰੁੱਖ;
 }
 
 /* Scan an offload region's body, and record uses of struct- or union-typed
    variables.  Add _mapper_binding_ fake clauses to *CLAUSES_PTR.  */
 
-void
-c_omp_scan_mapper_bindings (location_t loc, tree *clauses_ptr, tree body)
+ਖਾਲੀ
+c_omp_ਜਾਂਚ_mapper_bindings (location_t loc, ਰੁੱਖ *clauses_ptr, ਰੁੱਖ body)
 {
-  hash_set<omp_name_type<tree>> seen_types;
-  auto_vec<tree> mappers;
-  omp_mapper_list<tree> mlist (&seen_types, &mappers);
+  hash_ਸੈੱਟ<omp_name_type<ਰੁੱਖ>> ਵੇਖਿਆ_types;
+  auto_vec<ਰੁੱਖ> mappers;
+  omp_mapper_list<ਰੁੱਖ> mlist (&ਵੇਖਿਆ_types, &mappers);
 
-  walk_tree_without_duplicates (&body, c_omp_scan_mapper_bindings_r, &mlist);
+  walk_ਰੁੱਖ_without_duplicates (&body, c_omp_ਜਾਂਚ_mapper_bindings_r, &mlist);
 
-  unsigned int i;
-  tree mapper;
+  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ i;
+  ਰੁੱਖ mapper;
   FOR_EACH_VEC_ELT (mappers, i, mapper)
-    c_omp_find_nested_mappers (&mlist, mapper);
+    c_omp_ਲੱਭੋ_nested_mappers (&mlist, mapper);
 
   FOR_EACH_VEC_ELT (mappers, i, mapper)
     {
-      if (mapper == error_mark_node)
-	continue;
-      tree mapper_name = OMP_DECLARE_MAPPER_ID (mapper);
-      tree decl = OMP_DECLARE_MAPPER_DECL (mapper);
+      ਜੇ (mapper == error_mark_ਗੰਢ)
+	ਜਾਰੀ;
+      ਰੁੱਖ mapper_name = OMP_DECLARE_MAPPER_ID (mapper);
+      ਰੁੱਖ decl = OMP_DECLARE_MAPPER_DECL (mapper);
 
-      tree c = build_omp_clause (loc, OMP_CLAUSE__MAPPER_BINDING_);
+      ਰੁੱਖ c = build_omp_clause (loc, OMP_CLAUSE__MAPPER_BINDING_);
       OMP_CLAUSE__MAPPER_BINDING__ID (c) = mapper_name;
       OMP_CLAUSE__MAPPER_BINDING__DECL (c) = decl;
       OMP_CLAUSE__MAPPER_BINDING__MAPPER (c) = mapper;
@@ -14156,11 +14156,11 @@ c_omp_scan_mapper_bindings (location_t loc, tree *clauses_ptr, tree body)
     }
 }
 
-bool
-c_check_in_current_scope (tree decl)
+ਤਾਰਕਿਕ
+c_check_ਵਿੱਚ_current_scope (ਰੁੱਖ decl)
 {
-  struct c_binding *b = I_SYMBOL_BINDING (DECL_NAME (decl));
-  return b != NULL && B_IN_CURRENT_SCOPE (b);
+  ਬਣਤਰ c_binding *b = I_ਚਿੰਨ੍ਹ_BINDING (DECL_NAME (decl));
+  ਵਾਪਸ b != ਨਿਰਾ && B_ਵਿੱਚ_CURRENT_SCOPE (b);
 }
 
 /* Search for loop or switch names.  BEFORE_LABELS is last statement before
@@ -14170,94 +14170,94 @@ c_check_in_current_scope (tree decl)
    Returns number of loop/switch names found and if any are found, sets
    *LAST_P to the canonical loop/switch name LABEL_DECL.  */
 
-int
-c_get_loop_names (tree before_labels, bool switch_p, tree *last_p)
+ਪੂਰਨ
+c_get_loop_ਨਾਂ (ਰੁੱਖ before_labels, ਤਾਰਕਿਕ switch_p, ਰੁੱਖ *ਆਖਰੀ_p)
 {
-  *last_p = NULL_TREE;
-  if (!building_stmt_list_p ()
+  *ਆਖਰੀ_p = NULL_ਰੁੱਖ;
+  ਜੇ (!building_stmt_list_p ()
       || !STATEMENT_LIST_HAS_LABEL (cur_stmt_list)
-      || before_labels == void_list_node)
-    return 0;
+      || before_labels == void_list_ਗੰਢ)
+    ਵਾਪਸ 0;
 
-  int ret = 0;
-  tree last = NULL_TREE;
-  for (tree_stmt_iterator tsi = tsi_last (cur_stmt_list);
-       !tsi_end_p (tsi); tsi_prev (&tsi))
+  ਪੂਰਨ ret = 0;
+  ਰੁੱਖ ਆਖਰੀ = NULL_ਰੁੱਖ;
+  ਲਈ (ਰੁੱਖ_stmt_iterator tsi = tsi_ਆਖਰੀ (cur_stmt_list);
+       !tsi_ਸਿਰਾ_p (tsi); tsi_prev (&tsi))
     {
-      tree stmt = tsi_stmt (tsi);
-      if (stmt == before_labels)
-	break;
-      else if (TREE_CODE (stmt) == LABEL_EXPR)
+      ਰੁੱਖ stmt = tsi_stmt (tsi);
+      ਜੇ (stmt == before_labels)
+	ਰੋਕੋ;
+      ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (stmt) == LABEL_ਵਿਅੰਜਕ)
 	{
-	  if (last == NULL_TREE)
-	    last = LABEL_EXPR_LABEL (stmt);
-	  else
+	  ਜੇ (ਆਖਰੀ == NULL_ਰੁੱਖ)
+	    ਆਖਰੀ = LABEL_ਵਿਅੰਜਕ_LABEL (stmt);
+	  ਨਹੀਂਤਾਂ
 	    {
-	      loop_names.safe_push (LABEL_EXPR_LABEL (stmt));
+	      loop_ਨਾਂ.ਸੁਰੱਖਿਅਤ_ਧੱਕੋ (LABEL_ਵਿਅੰਜਕ_LABEL (stmt));
 	      ++ret;
 	    }
 	}
-      else if (TREE_CODE (stmt) != CASE_LABEL_EXPR
-	       && TREE_CODE (stmt) != DEBUG_BEGIN_STMT)
-	break;
+      ਨਹੀਂਤਾਂ ਜੇ (ਰੁੱਖ_ਕੋਡ (stmt) != CASE_LABEL_ਵਿਅੰਜਕ
+	       && ਰੁੱਖ_ਕੋਡ (stmt) != DEBUG_BEGIN_STMT)
+	ਰੋਕੋ;
     }
-  if (last)
+  ਜੇ (ਆਖਰੀ)
     {
-      if (switch_p)
-	C_DECL_SWITCH_NAME (last) = 1;
-      else
-	C_DECL_LOOP_NAME (last) = 1;
-      loop_names.safe_push (last);
+      ਜੇ (switch_p)
+	C_DECL_SWITCH_NAME (ਆਖਰੀ) = 1;
+      ਨਹੀਂਤਾਂ
+	C_DECL_LOOP_NAME (ਆਖਰੀ) = 1;
+      loop_ਨਾਂ.ਸੁਰੱਖਿਅਤ_ਧੱਕੋ (ਆਖਰੀ);
       ++ret;
-      if (loop_names.length () > 16)
+      ਜੇ (loop_ਨਾਂ.ਲੰਮਾਈ () > 16)
 	{
-	  unsigned int first = 0, i;
-	  tree l, c = NULL_TREE;
-	  if (loop_names_hash == NULL)
-	    loop_names_hash = new decl_tree_map (ret);
-	  else
-	    first = loop_names.length () - ret;
-	  FOR_EACH_VEC_ELT_REVERSE (loop_names, i, l)
+	  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ ਪਹਿਲਾ = 0, i;
+	  ਰੁੱਖ l, c = NULL_ਰੁੱਖ;
+	  ਜੇ (loop_ਨਾਂ_hash == ਨਿਰਾ)
+	    loop_ਨਾਂ_hash = ਨਵਾਂ decl_ਰੁੱਖ_map (ret);
+	  ਨਹੀਂਤਾਂ
+	    ਪਹਿਲਾ = loop_ਨਾਂ.ਲੰਮਾਈ () - ret;
+	  FOR_EACH_VEC_ELT_ਉਲਟ (loop_ਨਾਂ, i, l)
 	    {
-	      if (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
+	      ਜੇ (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
 		c = l;
 	      gcc_checking_assert (c);
-	      loop_names_hash->put (l, c);
-	      if (i == first)
-		break;
+	      loop_ਨਾਂ_hash->put (l, c);
+	      ਜੇ (i == ਪਹਿਲਾ)
+		ਰੋਕੋ;
 	    }
 	}
-      *last_p = last;
+      *ਆਖਰੀ_p = ਆਖਰੀ;
     }
-  return ret;
+  ਵਾਪਸ ret;
 }
 
 /* Undoes what get_loop_names did when it returned NUM_NAMES.  */
 
-void
-c_release_loop_names (int num_names)
+ਖਾਲੀ
+c_release_loop_ਨਾਂ (ਪੂਰਨ ਅੰਕ_ਨਾਂ)
 {
-  unsigned len = loop_names.length () - num_names;
-  if (loop_names_hash)
+  ਬਿਨਾਨਿਸ਼ਾਨੀ len = loop_ਨਾਂ.ਲੰਮਾਈ () - ਅੰਕ_ਨਾਂ;
+  ਜੇ (loop_ਨਾਂ_hash)
     {
-      if (len <= 16)
+      ਜੇ (len <= 16)
 	{
-	  delete loop_names_hash;
-	  loop_names_hash = NULL;
+	  ਮਿਟਾਓ loop_ਨਾਂ_hash;
+	  loop_ਨਾਂ_hash = ਨਿਰਾ;
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
-	  unsigned int i;
-	  tree l;
-	  FOR_EACH_VEC_ELT_REVERSE (loop_names, i, l)
+	  ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ i;
+	  ਰੁੱਖ l;
+	  FOR_EACH_VEC_ELT_ਉਲਟ (loop_ਨਾਂ, i, l)
 	    {
-	      loop_names_hash->remove (l);
-	      if (i == len)
-		break;
+	      loop_ਨਾਂ_hash->remove (l);
+	      ਜੇ (i == len)
+		ਰੋਕੋ;
 	    }
 	}
     }
-  loop_names.truncate (len);
+  loop_ਨਾਂ.truncate (len);
 }
 
 /* Finish processing of break or continue identifier operand.
@@ -14266,113 +14266,113 @@ c_release_loop_names (int num_names)
    to use for BREAK_STMT or CONTINUE_STMT, either NULL_TREE or
    canonical loop/switch name LABEL_DECL.  */
 
-tree
-c_finish_bc_name (location_t loc, tree name, bool is_break)
+ਰੁੱਖ
+c_ਅੰਤ_bc_name (location_t loc, ਰੁੱਖ name, ਤਾਰਕਿਕ is_break)
 {
-  tree label = NULL_TREE, lab;
+  ਰੁੱਖ label = NULL_ਰੁੱਖ, lab;
   pedwarn_c23 (loc, OPT_Wpedantic,
 	       "ISO C does not support %qs statement with an identifier "
 	       "operand before C2Y", is_break ? "break" : "continue");
 
   /* If I_LABEL_DECL is NULL or not from current function, don't waste time
      trying to find it among loop_names, it can't be there.  */
-  if (!loop_names.is_empty ()
+  ਜੇ (!loop_ਨਾਂ.is_ਖਾਲੀ_ਥਾਵਾਂ ()
       && current_function_scope
       && (lab = I_LABEL_DECL (name))
       && DECL_CONTEXT (lab) == current_function_decl)
     {
-      unsigned int i;
-      tree l, c = NULL_TREE;
-      if (loop_names_hash)
+      ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ i;
+      ਰੁੱਖ l, c = NULL_ਰੁੱਖ;
+      ਜੇ (loop_ਨਾਂ_hash)
 	{
-	  if (tree *val = loop_names_hash->get (lab))
+	  ਜੇ (ਰੁੱਖ *val = loop_ਨਾਂ_hash->get (lab))
 	    label = *val;
 	}
-      else
-	FOR_EACH_VEC_ELT_REVERSE (loop_names, i, l)
+      ਨਹੀਂਤਾਂ
+	FOR_EACH_VEC_ELT_ਉਲਟ (loop_ਨਾਂ, i, l)
 	  {
-	    if (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
+	    ਜੇ (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
 	      c = l;
 	    gcc_checking_assert (c);
-	    if (l == lab)
+	    ਜੇ (l == lab)
 	      {
 		label = c;
-		break;
+		ਰੋਕੋ;
 	      }
 	  }
-      if (label)
-	TREE_USED (lab) = 1;
+      ਜੇ (label)
+	ਰੁੱਖ_ਵਰਤਿਆ (lab) = 1;
     }
-  if (label == NULL_TREE)
+  ਜੇ (label == NULL_ਰੁੱਖ)
     {
-      auto_vec<const char *> candidates;
-      unsigned int i;
-      tree l, c = NULL_TREE;
-      FOR_EACH_VEC_ELT_REVERSE (loop_names, i, l)
+      auto_vec<ਅਚਲ ਅੱਖਰ *> candidates;
+      ਬਿਨਾਨਿਸ਼ਾਨੀ ਪੂਰਨ i;
+      ਰੁੱਖ l, c = NULL_ਰੁੱਖ;
+      FOR_EACH_VEC_ELT_ਉਲਟ (loop_ਨਾਂ, i, l)
 	{
-	  if (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
+	  ਜੇ (C_DECL_LOOP_NAME (l) || C_DECL_SWITCH_NAME (l))
 	    c = l;
 	  gcc_checking_assert (c);
-	  if (is_break || C_DECL_LOOP_NAME (c))
-	    candidates.safe_push (IDENTIFIER_POINTER (DECL_NAME (l)));
+	  ਜੇ (is_break || C_DECL_LOOP_NAME (c))
+	    candidates.ਸੁਰੱਖਿਅਤ_ਧੱਕੋ (IDENTIFIER_ਸੂਚਕ (DECL_NAME (l)));
 	}
-      const char *hint = find_closest_string (IDENTIFIER_POINTER (name),
+      ਅਚਲ ਅੱਖਰ *hint = ਲੱਭੋ_closest_string (IDENTIFIER_ਸੂਚਕ (name),
 					      &candidates);
-      if (hint)
+      ਜੇ (hint)
 	{
 	  gcc_rich_location richloc (loc);
-	  richloc.add_fixit_replace (hint);
-	  if (is_break)
+	  richloc.ਜੋੜੋ_fixit_replace (hint);
+	  ਜੇ (is_break)
 	    error_at (&richloc, "%<break%> statement operand %qE does not "
 				"refer to a named loop or %<switch%>; "
 				"did you mean %qs?", name, hint);
-	  else
+	  ਨਹੀਂਤਾਂ
 	    error_at (&richloc, "%<continue%> statement operand %qE does not "
 				"refer to a named loop; did you mean %qs?",
 		      name, hint);
 	}
-      else if (is_break)
+      ਨਹੀਂਤਾਂ ਜੇ (is_break)
 	error_at (loc, "%<break%> statement operand %qE does not refer to a "
 		       "named loop or %<switch%>", name);
-      else
+      ਨਹੀਂਤਾਂ
 	error_at (loc, "%<continue%> statement operand %qE does not refer to "
 		       "a named loop", name);
     }
-  else if (!C_DECL_LOOP_NAME (label) && !is_break)
+  ਨਹੀਂਤਾਂ ਜੇ (!C_DECL_LOOP_NAME (label) && !is_break)
     {
-      auto_diagnostic_group d;
+      auto_diagnostic_ਸਮੂਹ d;
       error_at (loc, "%<continue%> statement operand %qE refers to a named "
 		     "%<switch%>", name);
-      inform (DECL_SOURCE_LOCATION (label), "%<switch%> name defined here");
-      label = NULL_TREE;
+      inform (DECL_ਸਰੋਤ_LOCATION (label), "%<switch%> name defined here");
+      label = NULL_ਰੁੱਖ;
     }
-  else if (!C_DECL_LOOP_SWITCH_NAME_VALID (label))
+  ਨਹੀਂਤਾਂ ਜੇ (!C_DECL_LOOP_SWITCH_NAME_VALID (label))
     {
-      auto_diagnostic_group d;
-      if (C_DECL_LOOP_NAME (label))
+      auto_diagnostic_ਸਮੂਹ d;
+      ਜੇ (C_DECL_LOOP_NAME (label))
 	{
 	  error_at (loc, "%qs statement operand %qE refers to a loop outside "
 			 "of its body", is_break ? "break" : "continue", name);
-	  inform (DECL_SOURCE_LOCATION (label), "loop name defined here");
+	  inform (DECL_ਸਰੋਤ_LOCATION (label), "loop name defined here");
 	}
-      else
+      ਨਹੀਂਤਾਂ
 	{
 	  error_at (loc, "%<break%> statement operand %qE refers to a "
 			 "%<switch%> outside of its body", name);
-	  inform (DECL_SOURCE_LOCATION (label),
+	  inform (DECL_ਸਰੋਤ_LOCATION (label),
 		  "%<switch%> name defined here");
 	}
-      label = NULL_TREE;
+      label = NULL_ਰੁੱਖ;
     }
-  else if (label == loop_names.last () && (in_statement & IN_NAMED_STMT) != 0)
+  ਨਹੀਂਤਾਂ ਜੇ (label == loop_ਨਾਂ.ਆਖਰੀ () && (ਵਿੱਚ_statement & ਵਿੱਚ_NAMED_STMT) != 0)
     /* If it is just a fancy reference to the innermost construct, handle it
        just like break; or continue; though tracking cheaply what is the
        innermost loop for continue when nested in switches would require
        another global variable and updating it.  */
-    label = NULL_TREE;
-  else
-    C_DECL_LOOP_SWITCH_NAME_USED (label) = 1;
-  return label;
+    label = NULL_ਰੁੱਖ;
+  ਨਹੀਂਤਾਂ
+    C_DECL_LOOP_SWITCH_NAME_ਵਰਤਿਆ (label) = 1;
+  ਵਾਪਸ label;
 }
 
-#include "gt-c-c-decl.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "gt-c-c-decl.h"
