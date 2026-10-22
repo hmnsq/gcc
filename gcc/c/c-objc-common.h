@@ -22,15 +22,15 @@ along with GCC; see the file COPYING3.  If not see
 #define GCC_C_OBJC_COMMON
 
 /* Implemented in c-objc-common.cc.  */
-extern void c_register_features ();
+خارجي فراغ c_register_features ();
 
 /* Lang hooks that are shared between C and ObjC are defined here.  Hooks
    specific to C or ObjC go in c-lang.cc and objc/objc-lang.cc, respectively.  */
 
 #undef LANG_HOOKS_IDENTIFIER_SIZE
 #define LANG_HOOKS_IDENTIFIER_SIZE C_SIZEOF_STRUCT_LANG_IDENTIFIER
-#undef LANG_HOOKS_TREE_SIZE
-#define LANG_HOOKS_TREE_SIZE c_tree_size
+#undef LANG_HOOKS_شجرة_SIZE
+#define LANG_HOOKS_شجرة_SIZE c_شجرة_size
 #undef LANG_HOOKS_FINISH
 #define LANG_HOOKS_FINISH c_common_finish
 #undef LANG_HOOKS_OPTION_LANG_MASK
@@ -77,7 +77,7 @@ extern void c_register_features ();
 #undef LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE
 #define LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE c_reconstruct_complex_type
 
-static const scoped_attribute_specs *const c_objc_attribute_table[] =
+ساكن ثابت scoped_attribute_specs *ثابت c_objc_attribute_table[] =
 {
   &std_attribute_table,
   &c_common_gnu_attribute_table,
@@ -88,8 +88,8 @@ static const scoped_attribute_specs *const c_objc_attribute_table[] =
 #undef LANG_HOOKS_ATTRIBUTE_TABLE
 #define LANG_HOOKS_ATTRIBUTE_TABLE c_objc_attribute_table
 
-#undef LANG_HOOKS_TREE_DUMP_DUMP_TREE_FN
-#define LANG_HOOKS_TREE_DUMP_DUMP_TREE_FN c_dump_tree
+#undef LANG_HOOKS_شجرة_DUMP_DUMP_شجرة_FN
+#define LANG_HOOKS_شجرة_DUMP_DUMP_شجرة_FN c_dump_شجرة
 
 #undef LANG_HOOKS_SIMULATE_ENUM_DECL
 #define LANG_HOOKS_SIMULATE_ENUM_DECL c_simulate_enum_decl
@@ -107,8 +107,8 @@ static const scoped_attribute_specs *const c_objc_attribute_table[] =
 #define LANG_HOOKS_REGISTER_BUILTIN_TYPE c_register_builtin_type
 #undef LANG_HOOKS_TO_TARGET_CHARSET
 #define LANG_HOOKS_TO_TARGET_CHARSET c_common_to_target_charset
-#undef LANG_HOOKS_EXPR_TO_DECL
-#define LANG_HOOKS_EXPR_TO_DECL c_expr_to_decl
+#undef LANG_HOOKS_تعبير_TO_DECL
+#define LANG_HOOKS_تعبير_TO_DECL c_تعبير_to_decl
 
 /* The C front end's scoping structure is very different from
    that expected by the language-independent code; it is best
@@ -116,11 +116,11 @@ static const scoped_attribute_specs *const c_objc_attribute_table[] =
    This means it must also provide its own write_globals.  */
 
 #undef LANG_HOOKS_GETDECLS
-#define LANG_HOOKS_GETDECLS hook_tree_void_null
+#define LANG_HOOKS_GETDECLS hook_شجرة_void_null
 
 /* Hooks for tree gimplification.  */
-#undef LANG_HOOKS_GIMPLIFY_EXPR
-#define LANG_HOOKS_GIMPLIFY_EXPR c_gimplify_expr
+#undef LANG_HOOKS_GIMPLIFY_تعبير
+#define LANG_HOOKS_GIMPLIFY_تعبير c_gimplify_تعبير
 
 #undef LANG_HOOKS_TYPE_DWARF_ATTRIBUTE
 #define LANG_HOOKS_TYPE_DWARF_ATTRIBUTE c_type_dwarf_attribute
@@ -149,6 +149,6 @@ static const scoped_attribute_specs *const c_objc_attribute_table[] =
 #undef LANG_HOOKS_OMP_MAP_ARRAY_SECTION
 #define LANG_HOOKS_OMP_MAP_ARRAY_SECTION c_omp_map_array_section
 
-#undef LANG_HOOKS_TREE_INLINING_VAR_MOD_TYPE_P
-#define LANG_HOOKS_TREE_INLINING_VAR_MOD_TYPE_P c_var_mod_p
+#undef LANG_HOOKS_شجرة_INLINING_VAR_MOD_TYPE_P
+#define LANG_HOOKS_شجرة_INLINING_VAR_MOD_TYPE_P c_var_mod_p
 #endif /* GCC_C_OBJC_COMMON */
