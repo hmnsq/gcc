@@ -25,59 +25,59 @@ along with GCC; see the file COPYING3.  If not see
 
 /* Filter command line before processing by the gcc driver proper.  */
 void
-lang_specific_driver (struct cl_decoded_option **in_decoded_options ATTRIBUTE_UNUSED,
-		      unsigned int *in_decoded_options_count ATTRIBUTE_UNUSED,
-		      int *in_added_libraries ATTRIBUTE_UNUSED)
+lang_specific_driver (sa_nracanaa cl_decoded_option **in_decoded_options ATTRIBUTE_UNUSED,
+		      unsigned ཧྲིལ *in_decoded_options_count ATTRIBUTE_UNUSED,
+		      ཧྲིལ *in_added_libraries ATTRIBUTE_UNUSED)
 {
   /* Systems which use the NeXT runtime by default should arrange
      for the shared libgcc to be used when -fgnu-runtime is passed
      through specs.  */
-#if defined(ENABLE_SHARED_LIBGCC) && ! NEXT_OBJC_RUNTIME
-  unsigned int i;
+#གལ་ཏེ defined(ENABLE_SHARED_LIBGCC) && ! NEXT_OBJC_RUNTIME
+  unsigned ཧྲིལ i;
 
   /* The new argument list will be contained in this.  */
-  struct cl_decoded_option *new_decoded_options;
+  sa_nracanaa cl_decoded_option *new_decoded_options;
 
   /* True if we should add -shared-libgcc to the command-line.  */
-  int shared_libgcc = 0;
+  ཧྲིལ shared_libgcc = 0;
 
   /* The total number of arguments with the new stuff.  */
-  unsigned int argc;
+  unsigned ཧྲིལ argc;
 
   /* The argument list.  */
-  struct cl_decoded_option *decoded_options;
+  sa_nracanaa cl_decoded_option *decoded_options;
 
   argc = *in_decoded_options_count;
   decoded_options = *in_decoded_options;
 
-  for (i = 1; i < argc; i++)
+  ཆེད་དུ (i = 1; i < argc; i++)
     {
       switch (decoded_options[i].opt_index)
 	{
-	case OPT_static_libgcc:
-	case OPT_static:
-	  return;
+	pak_sa OPT_static_libgcc:
+	pak_sa OPT_static:
+	  ཕྱིར;
 
-	case OPT_SPECIAL_input_file:
+	pak_sa OPT_SPECIAL_input_file:
 	  {
-	    const char *file = decoded_options[i].arg;
-	    int len;
+	    const var_na *file = decoded_options[i].arg;
+	    ཧྲིལ len;
 
 	    /* If the filename ends in .m or .mi, we are compiling
 	       ObjC and want to pass -shared-libgcc.  */
 	    len = strlen (file);
-	    if ((len > 2 && file[len - 2] == '.' && file[len - 1] == 'm')
+	    གལ་ཏེ ((len > 2 && file[len - 2] == '.' && file[len - 1] == 'm')
 		||  (len > 3 && file[len - 3] == '.' && file[len - 2] == 'm'
 		     && file[len - 1] == 'i'))
 	      shared_libgcc = 1;
 	  }
-	  break;
+	  bha_nga;
 	}
     }
 
-  if  (shared_libgcc)
+  གལ་ཏེ  (shared_libgcc)
     {
-      new_decoded_options = XNEWVEC (struct cl_decoded_option, argc + 1);
+      new_decoded_options = XNEWVEC (sa_nracanaa cl_decoded_option, argc + 1);
 
       i = 0;
       do
@@ -85,7 +85,7 @@ lang_specific_driver (struct cl_decoded_option **in_decoded_options ATTRIBUTE_UN
 	  new_decoded_options[i] = decoded_options[i];
 	  i++;
 	}
-      while (i < argc);
+      སྐབས (i < argc);
 
       generate_option (OPT_shared_libgcc, NULL, 1, CL_DRIVER,
 		       &new_decoded_options[i++]);
@@ -97,11 +97,11 @@ lang_specific_driver (struct cl_decoded_option **in_decoded_options ATTRIBUTE_UN
 }
 
 /* Called before linking.  Returns 0 on success and -1 on failure.  */
-int
+ཧྲིལ
 lang_specific_pre_link (void)
 {
-  return 0;  /* Not used for C.  */
+  ཕྱིར 0;  /* Not used for C.  */
 }
 
 /* Number of extra output files that lang_specific_pre_link may generate.  */
-int lang_specific_extra_outfiles = 0;  /* Not used for C.  */
+ཧྲིལ lang_specific_extra_outfiles = 0;  /* Not used for C.  */
