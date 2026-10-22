@@ -74,47 +74,47 @@ c_convert (tree type, tree expr, bool init_const)
   tree ret;
   location_t loc = EXPR_LOCATION (expr);
 
-  if (type == error_mark_node
+  якщо (type == error_mark_node
       || error_operand_p (expr))
-    return error_mark_node;
+    повернути error_mark_node;
 
-  if ((invalid_conv_diag
+  якщо ((invalid_conv_diag
        = targetm.invalid_conversion (TREE_TYPE (expr), type)))
     {
       error (invalid_conv_diag);
-      return error_mark_node;
+      повернути error_mark_node;
     }
 
-  if (type == TREE_TYPE (expr))
-    return expr;
+  якщо (type == TREE_TYPE (expr))
+    повернути expr;
   ret = targetm.convert_to_type (type, expr);
-  if (ret)
-      return ret;
+  якщо (ret)
+      повернути ret;
 
   STRIP_TYPE_NOPS (e);
 
-  if (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (TREE_TYPE (expr))
+  якщо (TYPE_MAIN_VARIANT (type) == TYPE_MAIN_VARIANT (TREE_TYPE (expr))
       && (TREE_CODE (TREE_TYPE (expr)) != COMPLEX_TYPE
 	  || TREE_CODE (e) == COMPLEX_EXPR))
-    return fold_convert_loc (loc, type, expr);
-  if (TREE_CODE (TREE_TYPE (expr)) == ERROR_MARK)
-    return error_mark_node;
-  if (VOID_TYPE_P (TREE_TYPE (expr)))
+    повернути fold_convert_loc (loc, type, expr);
+  якщо (TREE_CODE (TREE_TYPE (expr)) == ERROR_MARK)
+    повернути error_mark_node;
+  якщо (VOID_TYPE_P (TREE_TYPE (expr)))
     {
       error ("void value not ignored as it ought to be");
-      return error_mark_node;
+      повернути error_mark_node;
     }
 
   {
     tree false_value, true_value;
-    if (c_hardbool_type_attr (type, &false_value, &true_value))
+    якщо (c_hardbool_type_attr (type, &false_value, &true_value))
       {
 	bool save = in_late_binary_op;
 	in_late_binary_op = true;
 	expr = c_objc_common_truthvalue_conversion (input_location, expr);
 	in_late_binary_op = save;
 
-	return fold_build3_loc (loc, COND_EXPR, type,
+	повернути fold_build3_loc (loc, COND_EXPR, type,
 				expr, true_value, false_value);
       }
   }
@@ -122,17 +122,17 @@ c_convert (tree type, tree expr, bool init_const)
   switch (code)
     {
     case VOID_TYPE:
-      return fold_convert_loc (loc, type, e);
+      повернути fold_convert_loc (loc, type, e);
 
     case ENUMERAL_TYPE:
-      if (ENUM_UNDERLYING_TYPE (type) != NULL_TREE
+      якщо (ENUM_UNDERLYING_TYPE (type) != NULL_TREE
 	  && TREE_CODE (ENUM_UNDERLYING_TYPE (type)) == BOOLEAN_TYPE)
 	goto convert_to_boolean;
       gcc_fallthrough ();
 
     case INTEGER_TYPE:
     case BITINT_TYPE:
-      if (sanitize_flags_p (SANITIZE_FLOAT_CAST)
+      якщо (sanitize_flags_p (SANITIZE_FLOAT_CAST)
 	  && current_function_decl != NULL_TREE
 	  && SCALAR_FLOAT_TYPE_P (TREE_TYPE (expr))
 	  && COMPLETE_TYPE_P (type))
@@ -141,28 +141,28 @@ c_convert (tree type, tree expr, bool init_const)
 	  expr = c_fully_fold (expr, init_const, NULL);
 	  tree check = ubsan_instrument_float_cast (loc, type, expr);
 	  expr = fold_build1 (FIX_TRUNC_EXPR, type, expr);
-	  if (check == NULL_TREE)
-	    return expr;
-	  return fold_build2 (COMPOUND_EXPR, TREE_TYPE (expr), check, expr);
+	  якщо (check == NULL_TREE)
+	    повернути expr;
+	  повернути fold_build2 (COMPOUND_EXPR, TREE_TYPE (expr), check, expr);
 	}
       ret = convert_to_integer (type, e);
       goto maybe_fold;
 
     case BOOLEAN_TYPE:
     convert_to_boolean:
-      return c_objc_common_truthvalue_conversion (input_location, expr, type);
+      повернути c_objc_common_truthvalue_conversion (input_location, expr, type);
 
     case POINTER_TYPE:
       /* The type nullptr_t may be converted to a pointer type.  The result is
 	 a null pointer value.  */
-      if (NULLPTR_TYPE_P (TREE_TYPE (e)))
+      якщо (NULLPTR_TYPE_P (TREE_TYPE (e)))
 	{
 	  /* To make sure that (void *)nullptr is not a null pointer constant,
 	     build_c_cast will create an additional NOP_EXPR around the result
 	     of this conversion.  */
-	  if (TREE_SIDE_EFFECTS (e))
+	  якщо (TREE_SIDE_EFFECTS (e))
 	    ret = build2 (COMPOUND_EXPR, type, e, build_int_cst (type, 0));
-	  else
+	  інакше
 	    ret = build_int_cst (type, 0);
 	  goto maybe_fold;
 	}
@@ -177,7 +177,7 @@ c_convert (tree type, tree expr, bool init_const)
 	 handled.  build_c_cast will create an additional NOP_EXPR to
 	 ensure the result of the conversion is not itself a null
 	 pointer constant.  */
-      if (null_pointer_constant_p (expr))
+      якщо (null_pointer_constant_p (expr))
 	{
 	  ret = build_int_cst (type, 0);
 	  goto maybe_fold;
@@ -197,7 +197,7 @@ c_convert (tree type, tree expr, bool init_const)
       goto maybe_fold;
 
     case VECTOR_TYPE:
-      if (gnu_vector_type_p (type)
+      якщо (gnu_vector_type_p (type)
 	  || gnu_vector_type_p (TREE_TYPE (e))
 	  /* Allow conversions between compatible non-GNU vector types
 	     when -flax-vector-conversions is passed.  The whole purpose
@@ -214,32 +214,32 @@ c_convert (tree type, tree expr, bool init_const)
 
     case RECORD_TYPE:
     case UNION_TYPE:
-      if (lang_hooks.types_compatible_p (type, TREE_TYPE (expr)))
-	return e;
+      якщо (lang_hooks.types_compatible_p (type, TREE_TYPE (expr)))
+	повернути e;
       break;
 
     default:
       break;
 
     maybe_fold:
-      if (TREE_CODE (ret) != C_MAYBE_CONST_EXPR)
+      якщо (TREE_CODE (ret) != C_MAYBE_CONST_EXPR)
 	ret = init_const ? fold_init (ret) : fold (ret);
-      return ret;
+      повернути ret;
     }
 
   /* If we are converting to nullptr_t, don't say "non-scalar type" because
      the nullptr_t type is a scalar type.  Only nullptr_t or a null pointer
      constant shall be converted to nullptr_t.  */
-  if (code == NULLPTR_TYPE)
+  якщо (code == NULLPTR_TYPE)
     {
       error ("conversion from %qT to %qT", TREE_TYPE (e), type);
       inform (input_location,
 	      "only %qT or a null pointer constant can be converted to %qT",
 	      type, type);
     }
-  else
+  інакше
     error ("conversion to non-scalar type requested");
-  return error_mark_node;
+  повернути error_mark_node;
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE.
@@ -250,7 +250,7 @@ c_convert (tree type, tree expr, bool init_const)
 tree
 convert (tree type, tree expr)
 {
-  return c_convert (type, expr, false);
+  повернути c_convert (type, expr, false);
 }
 
 /* Create an expression whose value is that of EXPR, converted to type TYPE, in
@@ -261,5 +261,5 @@ convert (tree type, tree expr)
 tree
 convert_init (tree type, tree expr)
 {
-  return c_convert (type, expr, true);
+  повернути c_convert (type, expr, true);
 }
