@@ -17,27 +17,27 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef GCC_C_TREE_H
-#define GCC_C_TREE_H
+#ifndef GCC_C_বৃক্ষ_H
+#define GCC_C_বৃক্ষ_H
 
-#include "c-family/c-common.h"
-#include "diagnostic.h"
+#অন্তর্ভাৱ "c-family/c-common.h"
+#অন্তর্ভাৱ "diagnostic.h"
 
 /* struct lang_identifier is private to c-decl.cc, but langhooks.cc needs to
    know how big it is.  This is sanity-checked in c-decl.cc.  */
 #define C_SIZEOF_STRUCT_LANG_IDENTIFIER \
-  (sizeof (struct c_common_identifier) + 3 * sizeof (void *))
+  (পরিমাণ (সংরচনা c_common_identifier) + 3 * পরিমাণ (শূন্য *))
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is read-only.  */
-#define C_TYPE_FIELDS_READONLY(TYPE) TREE_LANG_FLAG_1 (TYPE)
+#define C_TYPE_FIELDS_READONLY(TYPE) বৃক্ষ_LANG_FLAG_1 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is volatile.  */
-#define C_TYPE_FIELDS_VOLATILE(TYPE) TREE_LANG_FLAG_2 (TYPE)
+#define C_TYPE_FIELDS_VOLATILE(TYPE) বৃক্ষ_LANG_FLAG_2 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component is
    volatile, restrict-qualified or atomic; that is, has a type not
    permitted for a constexpr object.  */
-#define C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) TREE_LANG_FLAG_4 (TYPE)
+#define C_TYPE_FIELDS_NON_CONSTEXPR(TYPE) বৃক্ষ_LANG_FLAG_4 (TYPE)
 
 /* In a RECORD_TYPE or UNION_TYPE, nonzero if any component has a
    counted_by attribute.  */
@@ -51,12 +51,12 @@ along with GCC; see the file COPYING3.  If not see
    variable declarations whose type would be completed by completing
    that type.  */
 #define C_TYPE_INCOMPLETE_VARS(TYPE) \
-  TYPE_LANG_SLOT_1 (TREE_CHECK4 (TYPE, RECORD_TYPE, UNION_TYPE, \
+  TYPE_LANG_SLOT_1 (বৃক্ষ_CHECK4 (TYPE, RECORD_TYPE, UNION_TYPE, \
 				 QUAL_UNION_TYPE, ENUMERAL_TYPE))
 
 /* In an IDENTIFIER_NODE, nonzero if this identifier is actually a
    keyword.  C_RID_CODE (node) is then the RID_* value of the keyword.  */
-#define C_IS_RESERVED_WORD(ID) TREE_LANG_FLAG_0 (ID)
+#define C_IS_RESERVED_WORD(ID) বৃক্ষ_LANG_FLAG_0 (ID)
 
 /* Record whether a type or decl was written with nonconstant size.
    Note that TYPE_SIZE may have simplified to a constant.  */
@@ -82,7 +82,7 @@ along with GCC; see the file COPYING3.  If not see
 #define C_DECL_IMPLICIT(EXP) DECL_LANG_FLAG_2 (EXP)
 
 /* For a PARM_DECL, nonzero if it was declared as an array.  */
-#define C_ARRAY_PARAMETER(NODE) DECL_LANG_FLAG_0 (NODE)
+#define C_ARRAY_PARAMETER(গ্ৰন্থি_2) DECL_LANG_FLAG_0 (গ্ৰন্থি_2)
 
 /* For FUNCTION_DECLs, evaluates true if the decl is a nested
    function that requires a non-local context.  */
@@ -121,7 +121,7 @@ along with GCC; see the file COPYING3.  If not see
    front-end flag, whereas DECL_REGISTER is used for code generation;
    they may differ for structures with volatile fields.  */
 #define C_DECL_REGISTER(EXP) \
-  DECL_LANG_FLAG_4 (TREE_NOT_CHECK (EXP, FUNCTION_DECL))
+  DECL_LANG_FLAG_4 (বৃক্ষ_NOT_CHECK (EXP, FUNCTION_DECL))
 
 /* Record whether a decl was used in an expression anywhere except an
    unevaluated operand of sizeof / typeof / alignof.  This is only
@@ -150,50 +150,50 @@ along with GCC; see the file COPYING3.  If not see
    (but this is presently difficult because some of them need FILE*).  */
 #define C_DECL_ISNT_PROTOTYPE(EXP)			\
        (EXP == 0					\
-	|| (!prototype_p (TREE_TYPE (EXP))	\
+	|| (!prototype_p (বৃক্ষ_TYPE (EXP))	\
 	    && !fndecl_built_in_p (EXP)))
 
 /* For FUNCTION_TYPE, a hidden list of types of arguments.  The same as
    TYPE_ARG_TYPES for functions with prototypes, but created for functions
    without prototypes.  */
-#define TYPE_ACTUAL_ARG_TYPES(NODE) \
-  TYPE_LANG_SLOT_1 (FUNCTION_TYPE_CHECK (NODE))
+#define TYPE_ACTUAL_ARG_TYPES(গ্ৰন্থি_2) \
+  TYPE_LANG_SLOT_1 (FUNCTION_TYPE_CHECK (গ্ৰন্থি_2))
 
 /* For a CONSTRUCTOR, whether some initializer contains a
    subexpression meaning it is not a constant expression.  */
-#define CONSTRUCTOR_NON_CONST(EXPR) TREE_LANG_FLAG_1 (CONSTRUCTOR_CHECK (EXPR))
+#define CONSTRUCTOR_NON_CONST(ৰাশিমালা_2) বৃক্ষ_LANG_FLAG_1 (CONSTRUCTOR_CHECK (ৰাশিমালা_2))
 
 /* For a SAVE_EXPR, nonzero if the operand of the SAVE_EXPR has already
    been folded.  */
-#define SAVE_EXPR_FOLDED_P(EXP)	TREE_LANG_FLAG_1 (SAVE_EXPR_CHECK (EXP))
+#define SAVE_ৰাশিমালা_FOLDED_P(EXP)	বৃক্ষ_LANG_FLAG_1 (SAVE_ৰাশিমালা_CHECK (EXP))
 
 /* Whether a type has boolean semantics: either a boolean type or an
    enumeration type with a boolean type as its underlying type.  */
 #define C_BOOLEAN_TYPE_P(TYPE)						\
-  (TREE_CODE (TYPE) == BOOLEAN_TYPE					\
-   || (TREE_CODE (TYPE) == ENUMERAL_TYPE				\
-       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_TREE			\
-       && (TREE_CODE (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
+  (বৃক্ষ_CODE (TYPE) == BOOLEAN_TYPE					\
+   || (বৃক্ষ_CODE (TYPE) == ENUMERAL_TYPE				\
+       && ENUM_UNDERLYING_TYPE (TYPE) != NULL_বৃক্ষ			\
+       && (বৃক্ষ_CODE (ENUM_UNDERLYING_TYPE (TYPE)) == BOOLEAN_TYPE	\
 	   || c_hardbool_type_attr (TYPE))))
 
 /* Record parser information about an expression that is irrelevant
    for code generation alongside a tree representing its value.  */
-struct c_expr
+সংরচনা c_ৰাশিমালা
 {
   /* The value of the expression.  */
-  tree value;
+  বৃক্ষ মান;
   /* Record the original unary/binary operator of an expression, which may
      have been changed by fold, STRING_CST for unparenthesized string
      constants, C_MAYBE_CONST_EXPR for __builtin_constant_p calls
      (even if parenthesized), for subexpressions, and for non-constant
      initializers, or ERROR_MARK for other expressions (including
      parenthesized expressions).  */
-  enum tree_code original_code;
+  গণনা বৃক্ষ_code original_code;
   /* If not NULL, the original type of an expression.  This will
      differ from the type of the value field for an enum constant.
      The type of an enum constant is a plain integer type, but this
      field will be the enum type.  */
-  tree original_type;
+  বৃক্ষ original_type;
 
   /* The source range of this expression.  This is redundant
      for node values that have locations, but not all node kinds
@@ -206,22 +206,22 @@ struct c_expr
 
   /* Access to the first and last locations within the source spelling
      of this expression.  */
-  location_t get_start () const { return src_range.m_start; }
-  location_t get_finish () const { return src_range.m_finish; }
+  location_t get_start () ধ্রুৱ { ঘূৰাই src_range.m_start; }
+  location_t get_finish () ধ্রুৱ { ঘূৰাই src_range.m_finish; }
 
-  location_t get_location () const
+  location_t get_location () ধ্রুৱ
   {
-    if (EXPR_HAS_LOCATION (value))
-      return EXPR_LOCATION (value);
-    else
-      return make_location (get_start (), get_start (), get_finish ());
+    যদি (ৰাশিমালা_HAS_LOCATION (মান))
+      ঘূৰাই ৰাশিমালা_LOCATION (মান);
+    অন্যথা
+      ঘূৰাই make_location (get_start (), get_start (), get_finish ());
   }
 
   /* Set the value to error_mark_node whilst ensuring that src_range
      and m_decimal are initialized.  */
-  void set_error ()
+  শূন্য set_error ()
   {
-    value = error_mark_node;
+    মান = error_mark_গ্ৰন্থি;
     src_range.m_start = UNKNOWN_LOCATION;
     src_range.m_finish = UNKNOWN_LOCATION;
     m_decimal = 0;
@@ -230,12 +230,12 @@ struct c_expr
 
 /* Type alias for struct c_expr. This allows to use the structure
    inside the VEC types.  */
-typedef struct c_expr c_expr_t;
+প্রকারনির্দেশ সংরচনা c_ৰাশিমালা c_ৰাশিমালা_t;
 
 /* A kind of type specifier.  Note that this information is currently
    only used to distinguish tag definitions, tag references and typeof
    uses.  */
-enum c_typespec_kind {
+গণনা c_typespec_kind {
   /* No typespec.  This appears only in struct c_declspec.  */
   ctsk_none,
   /* A reserved keyword type specifier.  */
@@ -264,18 +264,18 @@ enum c_typespec_kind {
 
 /* A type specifier: this structure is created in the parser and
    passed to declspecs_add_type only.  */
-struct c_typespec {
+সংরচনা c_typespec {
   /* What kind of type specifier this is.  */
-  enum c_typespec_kind kind;
+  গণনা c_typespec_kind kind;
   /* Whether the expression has operands suitable for use in constant
      expressions.  */
-  bool expr_const_operands;
+  bool ৰাশিমালা_const_operands;
   /* Whether the type specifier includes an enum type specifier (that
      is, ": specifier-qualifier-list" in a declaration using
      "enum").  */
   bool has_enum_type_specifier;
   /* The specifier itself.  */
-  tree spec;
+  বৃক্ষ spec;
   /* An expression to be evaluated before the type specifier, in the
      case of typeof specifiers, or NULL otherwise or if no such
      expression is required for a particular typeof specifier.  In
@@ -284,11 +284,11 @@ struct c_typespec {
      determine array sizes that form part of the type, but the
      expression itself (as opposed to the array sizes) forms no part
      of the type and so needs to be recorded separately.  */
-  tree expr;
+  বৃক্ষ ৰাশিমালা;
 };
 
 /* A storage class specifier.  */
-enum c_storage_class {
+গণনা c_storage_class {
   csc_none,
   csc_auto,
   csc_extern,
@@ -300,7 +300,7 @@ enum c_storage_class {
 /* A type specifier keyword "void", "_Bool", "char", "int", "float",
    "double", "_Decimal32", "_Decimal64", "_Decimal128", "_Decimal64x",
    "_Fract", "_Accum", "_BitInt", or none of these.  */
-enum c_typespec_keyword {
+গণনা c_typespec_keyword {
   cts_none,
   cts_void,
   cts_bool,
@@ -327,7 +327,7 @@ enum c_typespec_keyword {
 
    It is used to index the array of declspec locations in struct
    c_declspecs.  */
-enum c_declspec_word {
+গণনা c_declspec_word {
   cdw_typespec /* A catch-all for a typespec.  */,
   cdw_storage_class  /* A catch-all for a storage class */,
   cdw_attributes,
@@ -353,11 +353,11 @@ enum c_declspec_word {
   cdw_address_space,
   cdw_gimple,
   cdw_rtl,
-  cdw_number_of_elements /* This one must always be the last
+  cdw_সংখ্যা_of_elements /* This one must always be the last
 			    enumerator.  */
 };
 
-enum c_declspec_il {
+গণনা c_declspec_il {
   cdil_none,
   cdil_gimple,		/* __GIMPLE  */
   cdil_gimple_cfg,	/* __GIMPLE(cfg)  */
@@ -368,57 +368,57 @@ enum c_declspec_il {
 /* A sequence of declaration specifiers in C.  When a new declaration
    specifier is added, please update the enum c_declspec_word above
    accordingly.  */
-struct c_declspecs {
-  location_t locations[cdw_number_of_elements];
+সংরচনা c_declspecs {
+  location_t locations[cdw_সংখ্যা_of_elements];
   /* The type specified, if a single type specifier such as a struct,
      union or enum specifier, typedef name or typeof specifies the
      whole type, or NULL_TREE if none or a keyword such as "void" or
      "char" is used.  Does not include qualifiers.  */
-  tree type;
+  বৃক্ষ type;
   /* Any expression to be evaluated before the type, from a typeof
      specifier.  */
-  tree expr;
+  বৃক্ষ ৰাশিমালা;
   /* The attributes from a typedef decl.  */
-  tree decl_attr;
+  বৃক্ষ decl_attr;
   /* When parsing, the GNU attributes and prefix standard attributes.
      Outside the parser, this will be NULL; attributes (possibly from
      multiple lists) will be passed separately.  */
-  tree attrs;
+  বৃক্ষ attrs;
   /* When parsing, postfix standard attributes (which appertain to the
      type specified by the preceding declaration specifiers, unlike
      prefix standard attributes which appertain to the declaration or
      declarations as a whole).  */
-  tree postfix_attrs;
+  বৃক্ষ postfix_attrs;
   /* The pass to start compiling a __GIMPLE or __RTL function with.  */
-  char *gimple_or_rtl_pass;
+  ৱর্ণ *gimple_or_rtl_pass;
   /* ENTRY BB count.  */
-  profile_count entry_bb_count;
+  profile_গুনতি entry_bb_গুনতি;
   /* The base-2 log of the greatest alignment required by an _Alignas
      specifier, in bytes, or -1 if no such specifiers with nonzero
      alignment.  */
-  int align_log;
-  union {
+  পূর্ণাঙ্ক align_log;
+  সঙ্ঘ {
     /* For the __intN declspec, this stores the index into the int_n_*
        arrays.  */
-    int int_n_idx;
+    পূর্ণাঙ্ক int_n_idx;
     /* For the _FloatN and _FloatNx declspec, this stores the index into
        the floatn_nx_types array.  */
-    int floatn_nx_idx;
+    পূর্ণাঙ্ক floatn_nx_idx;
     /* For _BitInt(N) this stores the N.  */
-    int bitint_prec;
+    পূর্ণাঙ্ক bitint_prec;
   } u;
   /* The storage class specifier, or csc_none if none.  */
-  enum c_storage_class storage_class;
+  গণনা c_storage_class storage_class;
   /* Any type specifier keyword used such as "int", not reflecting
      modifiers such as "short", or cts_none if none.  */
-  enum c_typespec_keyword typespec_word : 8;
+  গণনা c_typespec_keyword typespec_word : 8;
   /* The kind of type specifier if one has been seen, ctsk_none
      otherwise.  */
-  enum c_typespec_kind typespec_kind : 4;
-  enum c_declspec_il declspec_il : 3;
+  গণনা c_typespec_kind typespec_kind : 4;
+  গণনা c_declspec_il declspec_il : 3;
   /* Whether any expressions in typeof specifiers may appear in
      constant expressions.  */
-  bool expr_const_operands : 1;
+  bool ৰাশিমালা_const_operands : 1;
   /* Whether any declaration specifiers have been seen at all.  */
   bool declspecs_seen_p : 1;
   /* Whether any declaration specifiers other than standard attributes
@@ -495,7 +495,7 @@ struct c_declspecs {
 };
 
 /* The various kinds of declarators in C.  */
-enum c_declarator_kind {
+গণনা c_declarator_kind {
   /* An identifier.  */
   cdk_id,
   /* A function.  */
@@ -508,31 +508,31 @@ enum c_declarator_kind {
   cdk_attrs
 };
 
-struct c_arg_tag {
+সংরচনা c_arg_tag {
   /* The argument name.  */
-  tree id;
+  বৃক্ষ id;
   /* The type of the argument.  */
-  tree type;
+  বৃক্ষ type;
 };
 
 
 /* Information about the parameters in a function declarator.  */
-struct c_arg_info {
+সংরচনা c_arg_info {
   /* A list of parameter decls.  */
-  tree parms;
+  বৃক্ষ parms;
   /* A list of structure, union and enum tags defined.  */
   vec<c_arg_tag, va_gc> *tags;
   /* A list of argument types to go in the FUNCTION_TYPE.  */
-  tree types;
+  বৃক্ষ types;
   /* A list of non-parameter decls (notably enumeration constants)
      defined with the parameters.  */
-  tree others;
+  বৃক্ষ others;
   /* A compound expression of VLA sizes from the parameters, or NULL.
      In a function definition, these are used to ensure that
      side-effects in sizes of arrays converted to pointers (such as a
      parameter int i[n++]) take place; otherwise, they are
      ignored.  */
-  tree pending_sizes;
+  বৃক্ষ pending_sizes;
   /* True when these arguments had [*].  */
   bool had_vla_unspec : 1;
   /* True when the arguments are a (...) prototype.  */
@@ -544,81 +544,81 @@ struct c_arg_info {
 };
 
 /* A declarator.  */
-struct c_declarator {
+সংরচনা c_declarator {
   /* The kind of declarator.  */
-  enum c_declarator_kind kind;
+  গণনা c_declarator_kind kind;
   location_t id_loc; /* Currently only set for cdk_id, cdk_array. */
   /* Except for cdk_id, the contained declarator.  For cdk_id, NULL.  */
-  struct c_declarator *declarator;
-  union {
+  সংরচনা c_declarator *declarator;
+  সঙ্ঘ {
     /* For identifiers.  */
-    struct {
+    সংরচনা {
       /* An IDENTIFIER_NODE, or NULL_TREE if an abstract
 	 declarator.  */
-      tree id;
+      বৃক্ষ id;
       /* Any attributes (which apply to the declaration rather than to
 	 the type described by the outer declarators).  */
-      tree attrs;
+      বৃক্ষ attrs;
     } id;
     /* For functions.  */
-    struct c_arg_info *arg_info;
+    সংরচনা c_arg_info *arg_info;
     /* For arrays.  */
-    struct {
+    সংরচনা {
       /* The array dimension, or NULL for [] and [*].  */
-      tree dimen;
+      বৃক্ষ dimen;
       /* The qualifiers inside [].  */
-      int quals;
+      পূর্ণাঙ্ক quals;
       /* The attributes (currently ignored) inside [].  */
-      tree attrs;
+      বৃক্ষ attrs;
       /* Whether [static] was used.  */
       bool static_p : 1;
       /* Whether [*] was used.  */
       bool vla_unspec_p : 1;
     } array;
     /* For pointers, the qualifiers on the pointer type.  */
-    int pointer_quals;
+    পূর্ণাঙ্ক pointer_quals;
     /* For attributes.  */
-    tree attrs;
+    বৃক্ষ attrs;
   } u;
 };
 
 /* A type name.  */
-struct c_type_name {
+সংরচনা c_type_name {
   /* The declaration specifiers.  */
-  struct c_declspecs *specs;
+  সংরচনা c_declspecs *specs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  সংরচনা c_declarator *declarator;
 };
 
 /* A parameter.  */
-struct c_parm {
+সংরচনা c_parm {
   /* The declaration specifiers, minus any prefix attributes.  */
-  struct c_declspecs *specs;
+  সংরচনা c_declspecs *specs;
   /* The attributes.  */
-  tree attrs;
+  বৃক্ষ attrs;
   /* The declarator.  */
-  struct c_declarator *declarator;
+  সংরচনা c_declarator *declarator;
   /* The location of the parameter.  */
   location_t loc;
 };
 
 /* Used when parsing an enum.  Initialized by start_enum.  */
-struct c_enum_contents
+সংরচনা c_enum_contents
 {
   /* While defining an enum type, this is 1 plus the last enumerator
      constant value.  */
-  tree enum_next_value;
+  বৃক্ষ enum_next_মান;
 
   /* The enumeration type itself.  */
-  tree enum_type;
+  বৃক্ষ enum_type;
 
   /* Nonzero means that there was overflow computing enum_next_value.  */
-  int enum_overflow;
+  পূর্ণাঙ্ক enum_overflow;
 };
 
 /* A type of reference to a static identifier in an inline
    function.  */
-enum c_inline_static_type {
+গণনা c_inline_static_type {
   /* Identifier with internal linkage used in function that may be an
      inline definition (i.e., file-scope static).  */
   csi_internal,
@@ -629,31 +629,31 @@ enum c_inline_static_type {
 };
 
 /* Record details of decls possibly used inside sizeof or typeof.  */
-struct maybe_used_decl
+সংরচনা maybe_used_decl
 {
   /* The decl.  */
-  tree decl;
+  বৃক্ষ decl;
   /* The level seen at (in_sizeof + in_typeof + in_countof + in_generic).  */
-  int level;
+  পূর্ণাঙ্ক level;
   /* Seen in address-of.  */
   bool address;
   /* The next one at this level or above, or NULL.  */
-  struct maybe_used_decl *next;
+  সংরচনা maybe_used_decl *next;
 };
 
 
 /* in c-parser.cc */
-struct c_tree_token_vec;
-extern void c_parse_init (void);
-extern bool c_keyword_starts_typename (enum rid keyword);
+সংরচনা c_বৃক্ষ_token_vec;
+বাহ্য শূন্য c_parse_init (শূন্য);
+বাহ্য bool c_keyword_starts_typename (গণনা rid keyword);
 
 /* in c-aux-info.cc */
-extern void gen_aux_info_record (tree, int, int, int);
+বাহ্য শূন্য gen_aux_info_record (বৃক্ষ, পূর্ণাঙ্ক, পূর্ণাঙ্ক, পূর্ণাঙ্ক);
 
 /* in c-decl.cc */
-struct c_spot_bindings;
+সংরচনা c_spot_bindings;
 class c_struct_parse_info;
-extern struct obstack parser_obstack;
+বাহ্য সংরচনা obstack parser_obstack;
 /* Set to IN_ITERATION_STMT if parsing an iteration-statement,
    to IN_OMP_BLOCK if parsing OpenMP structured block and
    IN_OMP_FOR if parsing OpenMP loop.  If parsing a switch statement,
@@ -667,326 +667,326 @@ extern struct obstack parser_obstack;
 #define IN_OMP_FOR		8
 #define IN_OBJC_FOREACH		16
 #define IN_NAMED_STMT		32
-extern unsigned char in_statement;
+বাহ্য unsigned ৱর্ণ in_statement;
 
-extern bool switch_statement_break_seen_p;
+বাহ্য bool switch_statement_break_seen_p;
 
-extern bool global_bindings_p (void);
-extern tree pushdecl (tree);
-extern unsigned int start_underspecified_init (location_t, tree);
-extern void finish_underspecified_init (tree, unsigned int);
-extern void push_scope (void);
-extern tree pop_scope (void);
-extern void c_mark_decl_jump_unsafe_in_current_scope ();
-extern void c_bindings_start_stmt_expr (struct c_spot_bindings *);
-extern void c_bindings_end_stmt_expr (struct c_spot_bindings *);
+বাহ্য bool global_bindings_p (শূন্য);
+বাহ্য বৃক্ষ pushdecl (বৃক্ষ);
+বাহ্য unsigned পূর্ণাঙ্ক start_underspecified_init (location_t, বৃক্ষ);
+বাহ্য শূন্য finish_underspecified_init (বৃক্ষ, unsigned পূর্ণাঙ্ক);
+বাহ্য শূন্য ঠেলো_scope (শূন্য);
+বাহ্য বৃক্ষ বেৰ_কৰো_scope (শূন্য);
+বাহ্য শূন্য c_mark_decl_jump_unsafe_in_current_scope ();
+বাহ্য শূন্য c_bindings_start_stmt_ৰাশিমালা (সংরচনা c_spot_bindings *);
+বাহ্য শূন্য c_bindings_end_stmt_ৰাশিমালা (সংরচনা c_spot_bindings *);
 
-extern void record_inline_static (location_t, tree, tree,
-				  enum c_inline_static_type);
-extern void c_init_decl_processing (void);
-extern void c_print_identifier (FILE *, tree, int);
-extern int quals_from_declspecs (const struct c_declspecs *);
-extern struct c_declarator *build_array_declarator (location_t, tree,
-    						    struct c_declspecs *,
+বাহ্য শূন্য record_inline_static (location_t, বৃক্ষ, বৃক্ষ,
+				  গণনা c_inline_static_type);
+বাহ্য শূন্য c_init_decl_processing (শূন্য);
+বাহ্য শূন্য c_print_identifier (FILE *, বৃক্ষ, পূর্ণাঙ্ক);
+বাহ্য পূর্ণাঙ্ক quals_from_declspecs (ধ্রুৱ সংরচনা c_declspecs *);
+বাহ্য সংরচনা c_declarator *build_array_declarator (location_t, বৃক্ষ,
+    						    সংরচনা c_declspecs *,
 						    bool, bool);
-extern tree build_enumerator (location_t, location_t, struct c_enum_contents *,
-			      tree, tree);
-extern tree check_for_loop_decls (location_t, bool);
-extern void mark_forward_parm_decls (void);
-extern void declare_parm_level (void);
-extern void undeclared_variable (location_t, tree);
-extern tree lookup_label_for_goto (location_t, tree);
-extern tree declare_label (tree);
-extern tree define_label (location_t, tree);
-extern struct c_spot_bindings *c_get_switch_bindings (void);
-extern void c_release_switch_bindings (struct c_spot_bindings *);
-extern bool c_check_switch_jump_warnings (struct c_spot_bindings *,
+বাহ্য বৃক্ষ build_enumerator (location_t, location_t, সংরচনা c_enum_contents *,
+			      বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ check_for_loop_decls (location_t, bool);
+বাহ্য শূন্য mark_forward_parm_decls (শূন্য);
+বাহ্য শূন্য declare_parm_level (শূন্য);
+বাহ্য শূন্য undeclared_variable (location_t, বৃক্ষ);
+বাহ্য বৃক্ষ lookup_label_for_goto (location_t, বৃক্ষ);
+বাহ্য বৃক্ষ declare_label (বৃক্ষ);
+বাহ্য বৃক্ষ define_label (location_t, বৃক্ষ);
+বাহ্য সংরচনা c_spot_bindings *c_get_switch_bindings (শূন্য);
+বাহ্য শূন্য c_release_switch_bindings (সংরচনা c_spot_bindings *);
+বাহ্য bool c_check_switch_jump_warnings (সংরচনা c_spot_bindings *,
 					  location_t, location_t);
-extern void finish_decl (tree, location_t, tree, tree, tree);
-extern tree finish_enum (tree, tree, tree);
-extern void finish_function (location_t = input_location);
-extern tree finish_struct (location_t, tree, tree, tree,
+বাহ্য শূন্য finish_decl (বৃক্ষ, location_t, বৃক্ষ, বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ finish_enum (বৃক্ষ, বৃক্ষ, বৃক্ষ);
+বাহ্য শূন্য finish_function (location_t = প্ৰবেশ_location);
+বাহ্য বৃক্ষ finish_struct (location_t, বৃক্ষ, বৃক্ষ, বৃক্ষ,
 			   class c_struct_parse_info *,
-			   tree *expr = NULL);
-extern tree c_simulate_enum_decl (location_t, const char *,
+			   বৃক্ষ *ৰাশিমালা = রিক্ত);
+বাহ্য বৃক্ষ c_simulate_enum_decl (location_t, ধ্রুৱ ৱর্ণ *,
 				  vec<string_int_pair> *);
-extern tree c_simulate_record_decl (location_t, const char *,
-				    array_slice<const tree>);
-extern struct c_arg_info *build_arg_info (void);
-extern struct c_arg_info *get_parm_info (bool, tree);
-extern tree grokfield (location_t, struct c_declarator *,
-		       struct c_declspecs *, tree, tree *, tree *);
-extern tree groktypename (struct c_type_name *, tree *, bool *);
-extern tree grokgenassoc (struct c_type_name *);
-extern tree grokparm (const struct c_parm *, tree *);
-extern tree implicitly_declare (location_t, tree);
-extern void keep_next_level (void);
-extern void pending_xref_error (void);
-extern void c_push_function_context (void);
-extern void c_pop_function_context (void);
-extern void push_parm_decl (const struct c_parm *, tree *);
-extern struct c_declarator *set_array_declarator_inner (struct c_declarator *,
-							struct c_declarator *);
-extern tree c_builtin_function (tree);
-extern tree c_builtin_function_ext_scope (tree);
-extern tree c_simulate_builtin_function_decl (tree);
-extern void c_warn_unused_attributes (tree);
-extern tree c_warn_type_attributes (tree, tree);
-extern void shadow_tag (const struct c_declspecs *);
-extern void shadow_tag_warned (const struct c_declspecs *, int);
-extern tree start_enum (location_t, struct c_enum_contents *, tree, tree,
+বাহ্য বৃক্ষ c_simulate_record_decl (location_t, ধ্রুৱ ৱর্ণ *,
+				    array_slice<ধ্রুৱ বৃক্ষ>);
+বাহ্য সংরচনা c_arg_info *build_arg_info (শূন্য);
+বাহ্য সংরচনা c_arg_info *get_parm_info (bool, বৃক্ষ);
+বাহ্য বৃক্ষ grokfield (location_t, সংরচনা c_declarator *,
+		       সংরচনা c_declspecs *, বৃক্ষ, বৃক্ষ *, বৃক্ষ *);
+বাহ্য বৃক্ষ groktypename (সংরচনা c_type_name *, বৃক্ষ *, bool *);
+বাহ্য বৃক্ষ grokgenassoc (সংরচনা c_type_name *);
+বাহ্য বৃক্ষ grokparm (ধ্রুৱ সংরচনা c_parm *, বৃক্ষ *);
+বাহ্য বৃক্ষ implicitly_declare (location_t, বৃক্ষ);
+বাহ্য শূন্য keep_next_level (শূন্য);
+বাহ্য শূন্য pending_xref_error (শূন্য);
+বাহ্য শূন্য c_ঠেলো_function_context (শূন্য);
+বাহ্য শূন্য c_বেৰ_কৰো_function_context (শূন্য);
+বাহ্য শূন্য ঠেলো_parm_decl (ধ্রুৱ সংরচনা c_parm *, বৃক্ষ *);
+বাহ্য সংরচনা c_declarator *set_array_declarator_inner (সংরচনা c_declarator *,
+							সংরচনা c_declarator *);
+বাহ্য বৃক্ষ c_builtin_function (বৃক্ষ);
+বাহ্য বৃক্ষ c_builtin_function_ext_scope (বৃক্ষ);
+বাহ্য বৃক্ষ c_simulate_builtin_function_decl (বৃক্ষ);
+বাহ্য শূন্য c_warn_unused_attributes (বৃক্ষ);
+বাহ্য বৃক্ষ c_warn_type_attributes (বৃক্ষ, বৃক্ষ);
+বাহ্য শূন্য shadow_tag (ধ্রুৱ সংরচনা c_declspecs *);
+বাহ্য শূন্য shadow_tag_warned (ধ্রুৱ সংরচনা c_declspecs *, পূর্ণাঙ্ক);
+বাহ্য বৃক্ষ start_enum (location_t, সংরচনা c_enum_contents *, বৃক্ষ, বৃক্ষ,
 			bool potential_nesting_p);
-extern bool start_function (struct c_declspecs *, struct c_declarator *, tree);
-extern tree start_decl (struct c_declarator *, struct c_declspecs *, bool,
-			tree, bool = true, location_t * = NULL);
-extern tree start_struct (location_t, enum tree_code, tree,
+বাহ্য bool start_function (সংরচনা c_declspecs *, সংরচনা c_declarator *, বৃক্ষ);
+বাহ্য বৃক্ষ start_decl (সংরচনা c_declarator *, সংরচনা c_declspecs *, bool,
+			বৃক্ষ, bool = true, location_t * = রিক্ত);
+বাহ্য বৃক্ষ start_struct (location_t, গণনা বৃক্ষ_code, বৃক্ষ,
 			  class c_struct_parse_info **);
-extern void store_parm_decls (void);
-extern void store_parm_decls_from (struct c_arg_info *);
-extern void temp_store_parm_decls (tree, tree);
-extern void temp_pop_parm_decls (void);
-extern tree xref_tag (enum tree_code, tree);
-extern struct c_typespec parser_xref_tag (location_t, enum tree_code, tree,
-					  bool, tree, bool);
-extern struct c_parm *build_c_parm (struct c_declspecs *, tree,
-				    struct c_declarator *, location_t);
-extern struct c_declarator *build_attrs_declarator (tree,
-						    struct c_declarator *);
-extern struct c_declarator *build_function_declarator (struct c_arg_info *,
-						       struct c_declarator *);
-extern struct c_declarator *build_id_declarator (tree);
-extern struct c_declarator *make_pointer_declarator (struct c_declspecs *,
-						     struct c_declarator *);
-extern struct c_declspecs *build_null_declspecs (void);
-extern struct c_declspecs *declspecs_add_qual (location_t,
-					       struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_type (location_t,
-					       struct c_declspecs *,
-					       struct c_typespec);
-extern struct c_declspecs *declspecs_add_scspec (location_t,
-						 struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_attrs (location_t,
-						struct c_declspecs *, tree);
-extern struct c_declspecs *declspecs_add_addrspace (location_t,
-						    struct c_declspecs *,
+বাহ্য শূন্য store_parm_decls (শূন্য);
+বাহ্য শূন্য store_parm_decls_from (সংরচনা c_arg_info *);
+বাহ্য শূন্য temp_store_parm_decls (বৃক্ষ, বৃক্ষ);
+বাহ্য শূন্য temp_বেৰ_কৰো_parm_decls (শূন্য);
+বাহ্য বৃক্ষ xref_tag (গণনা বৃক্ষ_code, বৃক্ষ);
+বাহ্য সংরচনা c_typespec parser_xref_tag (location_t, গণনা বৃক্ষ_code, বৃক্ষ,
+					  bool, বৃক্ষ, bool);
+বাহ্য সংরচনা c_parm *build_c_parm (সংরচনা c_declspecs *, বৃক্ষ,
+				    সংরচনা c_declarator *, location_t);
+বাহ্য সংরচনা c_declarator *build_attrs_declarator (বৃক্ষ,
+						    সংরচনা c_declarator *);
+বাহ্য সংরচনা c_declarator *build_function_declarator (সংরচনা c_arg_info *,
+						       সংরচনা c_declarator *);
+বাহ্য সংরচনা c_declarator *build_id_declarator (বৃক্ষ);
+বাহ্য সংরচনা c_declarator *make_pointer_declarator (সংরচনা c_declspecs *,
+						     সংরচনা c_declarator *);
+বাহ্য সংরচনা c_declspecs *build_null_declspecs (শূন্য);
+বাহ্য সংরচনা c_declspecs *declspecs_add_qual (location_t,
+					       সংরচনা c_declspecs *, বৃক্ষ);
+বাহ্য সংরচনা c_declspecs *declspecs_add_type (location_t,
+					       সংরচনা c_declspecs *,
+					       সংরচনা c_typespec);
+বাহ্য সংরচনা c_declspecs *declspecs_add_scspec (location_t,
+						 সংরচনা c_declspecs *, বৃক্ষ);
+বাহ্য সংরচনা c_declspecs *declspecs_add_attrs (location_t,
+						সংরচনা c_declspecs *, বৃক্ষ);
+বাহ্য সংরচনা c_declspecs *declspecs_add_addrspace (location_t,
+						    সংরচনা c_declspecs *,
 						    addr_space_t);
-extern struct c_declspecs *declspecs_add_alignas (location_t,
-						  struct c_declspecs *, tree);
-extern struct c_declspecs *finish_declspecs (struct c_declspecs *);
-extern size_t c_tree_size (enum tree_code);
-extern int c_get_loop_names (tree, bool, tree *);
-extern void c_release_loop_names (int);
-extern tree c_finish_bc_name (location_t, tree, bool);
+বাহ্য সংরচনা c_declspecs *declspecs_add_alignas (location_t,
+						  সংরচনা c_declspecs *, বৃক্ষ);
+বাহ্য সংরচনা c_declspecs *finish_declspecs (সংরচনা c_declspecs *);
+বাহ্য size_t c_বৃক্ষ_size (গণনা বৃক্ষ_code);
+বাহ্য পূর্ণাঙ্ক c_get_loop_names (বৃক্ষ, bool, বৃক্ষ *);
+বাহ্য শূন্য c_release_loop_names (পূর্ণাঙ্ক);
+বাহ্য বৃক্ষ c_finish_bc_name (location_t, বৃক্ষ, bool);
 
 /* in c-objc-common.cc */
-extern bool c_objc_common_init (void);
-extern bool c_missing_noreturn_ok_p (tree);
-extern bool c_warn_unused_global_decl (const_tree);
-extern void c_initialize_diagnostics (diagnostics::context *);
-extern bool c_var_mod_p (tree x, tree fn);
-extern alias_set_type c_get_alias_set (tree);
-extern int c_type_dwarf_attribute (const_tree, int);
-extern tree c_enum_underlying_base_type (const_tree);
+বাহ্য bool c_objc_common_init (শূন্য);
+বাহ্য bool c_missing_noreturn_ok_p (বৃক্ষ);
+বাহ্য bool c_warn_unused_global_decl (const_বৃক্ষ);
+বাহ্য শূন্য c_initialize_diagnostics (diagnostics::context *);
+বাহ্য bool c_var_mod_p (বৃক্ষ x, বৃক্ষ fn);
+বাহ্য alias_set_type c_get_alias_set (বৃক্ষ);
+বাহ্য পূর্ণাঙ্ক c_type_dwarf_attribute (const_বৃক্ষ, পূর্ণাঙ্ক);
+বাহ্য বৃক্ষ c_enum_underlying_base_type (const_বৃক্ষ);
 
 /* in c-typeck.cc */
-extern int in_alignof;
-extern int in_sizeof;
-extern int in_countof;
-extern int in_typeof;
-extern int in_generic;
-extern bool c_in_omp_for;
-extern bool c_omp_array_section_p;
+বাহ্য পূর্ণাঙ্ক in_alignof;
+বাহ্য পূর্ণাঙ্ক in_sizeof;
+বাহ্য পূর্ণাঙ্ক in_countof;
+বাহ্য পূর্ণাঙ্ক in_typeof;
+বাহ্য পূর্ণাঙ্ক in_generic;
+বাহ্য bool c_in_omp_for;
+বাহ্য bool c_omp_array_section_p;
 
-extern tree c_last_sizeof_arg;
-extern location_t c_last_sizeof_loc;
+বাহ্য বৃক্ষ c_last_sizeof_arg;
+বাহ্য location_t c_last_sizeof_loc;
 
-extern struct c_switch *c_switch_stack;
+বাহ্য সংরচনা c_switch *c_switch_স্তূপ;
 
-extern bool null_pointer_constant_p (const_tree);
+বাহ্য bool null_pointer_constant_p (const_বৃক্ষ);
 
 
-inline bool
-c_type_variably_modified_p (tree t)
+অন্তঃস্থ bool
+c_type_variably_modified_p (বৃক্ষ t)
 {
-  if (error_mark_node == t)
-    return false;
-  if (C_TYPE_VARIABLY_MODIFIED (t))
-    return true;
-  if (TYPE_STRUCTURAL_EQUALITY_P (t))
+  যদি (error_mark_গ্ৰন্থি == t)
+    ঘূৰাই false;
+  যদি (C_TYPE_VARIABLY_MODIFIED (t))
+    ঘূৰাই true;
+  যদি (TYPE_STRUCTURAL_EQUALITY_P (t))
     {
       /* The flag may not have been set yet because of incomplete
 	 structure or union types completed later.  */
-      switch (TREE_CODE (t))
+      ৱিকল্প (বৃক্ষ_CODE (t))
 	{
-	case ARRAY_TYPE:
-	case FUNCTION_TYPE:
-	case POINTER_TYPE:
+	পক্ষ ARRAY_TYPE:
+	পক্ষ FUNCTION_TYPE:
+	পক্ষ POINTER_TYPE:
 	  /* Recurse.  */
-	  if (c_type_variably_modified_p (TREE_TYPE (t)))
+	  যদি (c_type_variably_modified_p (বৃক্ষ_TYPE (t)))
 	    {
 	      C_TYPE_VARIABLY_MODIFIED (t) = 1;
-	      return true;
+	      ঘূৰাই true;
 	    }
-	  break;
-	default:
-	  break;
+	  ভঙ্গ;
+	স্ৱভাৱ:
+	  ভঙ্গ;
 	}
     }
-  return false;
+  ঘূৰাই false;
 }
 
-inline bool
-c_type_unspecified_p (tree t)
+অন্তঃস্থ bool
+c_type_unspecified_p (বৃক্ষ t)
 {
-  return error_mark_node != t
-	 && C_TYPE_VARIABLE_SIZE (t) && TREE_CODE (t) == ARRAY_TYPE
-	 && TYPE_DOMAIN (t) && TYPE_MAX_VALUE (TYPE_DOMAIN (t))
-	 && TREE_CODE (TYPE_MAX_VALUE (TYPE_DOMAIN (t))) == COMPOUND_EXPR
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 0))
-	 && integer_zerop (TREE_OPERAND (TYPE_MAX_VALUE (TYPE_DOMAIN (t)), 1));
+  ঘূৰাই error_mark_গ্ৰন্থি != t
+	 && C_TYPE_VARIABLE_SIZE (t) && বৃক্ষ_CODE (t) == ARRAY_TYPE
+	 && TYPE_DOMAIN (t) && TYPE_MAX_মান (TYPE_DOMAIN (t))
+	 && বৃক্ষ_CODE (TYPE_MAX_মান (TYPE_DOMAIN (t))) == COMPOUND_ৰাশিমালা
+	 && integer_zerop (বৃক্ষ_OPERAND (TYPE_MAX_মান (TYPE_DOMAIN (t)), 0))
+	 && integer_zerop (বৃক্ষ_OPERAND (TYPE_MAX_মান (TYPE_DOMAIN (t)), 1));
 }
 
-extern bool zero_length_array_type_p (const_tree type);
-extern bool char_type_p (tree);
-extern tree c_type_tag (const_tree t);
-extern tree c_objc_common_truthvalue_conversion (location_t, tree,
-						 tree = integer_type_node);
-extern tree require_complete_type (location_t, tree);
-extern bool same_translation_unit_p (const_tree, const_tree);
-extern bool comptypes (tree, tree);
-extern bool comptypes_same_p (tree, tree);
-extern bool comptypes_equiv_p (tree, tree);
-extern bool comptypes_check_enum_int (tree, tree, bool *);
-extern bool c_mark_addressable (tree, bool = false, bool = false);
-extern void c_incomplete_type_error (location_t, const_tree, const_tree);
-extern tree c_type_promotes_to (tree);
-extern struct c_expr default_function_array_conversion (location_t,
-							struct c_expr);
-extern struct c_expr default_function_array_read_conversion (location_t,
-							     struct c_expr);
-extern struct c_expr convert_lvalue_to_rvalue (location_t, struct c_expr,
+বাহ্য bool zero_length_array_type_p (const_বৃক্ষ type);
+বাহ্য bool char_type_p (বৃক্ষ);
+বাহ্য বৃক্ষ c_type_tag (const_বৃক্ষ t);
+বাহ্য বৃক্ষ c_objc_common_truthvalue_conversion (location_t, বৃক্ষ,
+						 বৃক্ষ = integer_type_গ্ৰন্থি);
+বাহ্য বৃক্ষ require_complete_type (location_t, বৃক্ষ);
+বাহ্য bool same_translation_unit_p (const_বৃক্ষ, const_বৃক্ষ);
+বাহ্য bool comptypes (বৃক্ষ, বৃক্ষ);
+বাহ্য bool comptypes_same_p (বৃক্ষ, বৃক্ষ);
+বাহ্য bool comptypes_equiv_p (বৃক্ষ, বৃক্ষ);
+বাহ্য bool comptypes_check_enum_int (বৃক্ষ, বৃক্ষ, bool *);
+বাহ্য bool c_mark_addressable (বৃক্ষ, bool = false, bool = false);
+বাহ্য শূন্য c_incomplete_type_error (location_t, const_বৃক্ষ, const_বৃক্ষ);
+বাহ্য বৃক্ষ c_type_promotes_to (বৃক্ষ);
+বাহ্য সংরচনা c_ৰাশিমালা default_function_array_conversion (location_t,
+							সংরচনা c_ৰাশিমালা);
+বাহ্য সংরচনা c_ৰাশিমালা default_function_array_read_conversion (location_t,
+							     সংরচনা c_ৰাশিমালা);
+বাহ্য সংরচনা c_ৰাশিমালা convert_lvalue_to_rvalue (location_t, সংরচনা c_ৰাশিমালা,
 					       bool, bool, bool = false);
-extern tree decl_constant_value_1 (tree, bool);
-extern void mark_exp_read (tree);
-extern tree composite_type (tree, tree);
-extern tree lookup_field (const_tree, tree);
-extern tree build_component_ref (location_t, tree, tree, location_t,
+বাহ্য বৃক্ষ decl_constant_মান_1 (বৃক্ষ, bool);
+বাহ্য শূন্য mark_exp_read (বৃক্ষ);
+বাহ্য বৃক্ষ composite_type (বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ lookup_field (const_বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ build_component_ref (location_t, বৃক্ষ, বৃক্ষ, location_t,
 				 location_t);
-extern tree handle_counted_by_for_component_ref (location_t, tree);
-extern tree build_array_ref (location_t, tree, tree);
-extern tree build_omp_array_section (location_t, tree, tree, tree);
-extern tree build_external_ref (location_t, tree, bool, tree *);
-extern void pop_maybe_used (bool);
-extern struct maybe_used_decl *save_maybe_used ();
-extern void restore_maybe_used (struct maybe_used_decl *);
-extern void mark_decl_used (tree, bool);
-extern struct c_expr c_expr_sizeof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_sizeof_type (location_t, struct c_type_name *);
-extern struct c_expr c_expr_countof_expr (location_t, struct c_expr);
-extern struct c_expr c_expr_countof_type (location_t loc,
-					  struct c_type_name *);
-extern struct c_expr c_expr_maxof_type (location_t loc, struct c_type_name *);
-extern struct c_expr c_expr_minof_type (location_t loc, struct c_type_name *);
-extern struct c_expr parser_build_unary_op (location_t, enum tree_code,
-    					    struct c_expr);
-extern struct c_expr parser_build_binary_op (location_t,
-    					     enum tree_code, struct c_expr,
-					     struct c_expr, tree);
-extern tree build_conditional_expr (location_t, tree, bool, tree, tree,
-				    location_t, tree, tree, location_t);
-extern tree build_compound_expr (location_t, tree, tree);
-extern tree c_cast_expr (location_t, struct c_type_name *, tree);
-extern tree build_c_cast (location_t, tree, tree);
-extern void store_init_value (location_t, tree, tree, tree);
-extern void maybe_warn_string_init (location_t, tree, struct c_expr);
-extern void start_init (tree, tree, bool, bool, rich_location *);
-extern void finish_init (void);
-extern void really_start_incremental_init (tree);
-extern void finish_implicit_inits (location_t, struct obstack *);
-extern void push_init_level (location_t, int, struct obstack *);
-extern struct c_expr pop_init_level (location_t, int, struct obstack *,
+বাহ্য বৃক্ষ handle_counted_by_for_component_ref (location_t, বৃক্ষ);
+বাহ্য বৃক্ষ build_array_ref (location_t, বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ build_omp_array_section (location_t, বৃক্ষ, বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ build_external_ref (location_t, বৃক্ষ, bool, বৃক্ষ *);
+বাহ্য শূন্য বেৰ_কৰো_maybe_used (bool);
+বাহ্য সংরচনা maybe_used_decl *save_maybe_used ();
+বাহ্য শূন্য restore_maybe_used (সংরচনা maybe_used_decl *);
+বাহ্য শূন্য mark_decl_used (বৃক্ষ, bool);
+বাহ্য সংরচনা c_ৰাশিমালা c_ৰাশিমালা_sizeof_ৰাশিমালা (location_t, সংরচনা c_ৰাশিমালা);
+বাহ্য সংরচনা c_ৰাশিমালা c_ৰাশিমালা_sizeof_type (location_t, সংরচনা c_type_name *);
+বাহ্য সংরচনা c_ৰাশিমালা c_ৰাশিমালা_countof_ৰাশিমালা (location_t, সংরচনা c_ৰাশিমালা);
+বাহ্য সংরচনা c_ৰাশিমালা c_ৰাশিমালা_countof_type (location_t loc,
+					  সংরচনা c_type_name *);
+বাহ্য সংরচনা c_ৰাশিমালা c_ৰাশিমালা_maxof_type (location_t loc, সংরচনা c_type_name *);
+বাহ্য সংরচনা c_ৰাশিমালা c_ৰাশিমালা_minof_type (location_t loc, সংরচনা c_type_name *);
+বাহ্য সংরচনা c_ৰাশিমালা parser_build_unary_op (location_t, গণনা বৃক্ষ_code,
+    					    সংরচনা c_ৰাশিমালা);
+বাহ্য সংরচনা c_ৰাশিমালা parser_build_দ্বিমিক_op (location_t,
+    					     গণনা বৃক্ষ_code, সংরচনা c_ৰাশিমালা,
+					     সংরচনা c_ৰাশিমালা, বৃক্ষ);
+বাহ্য বৃক্ষ build_conditional_ৰাশিমালা (location_t, বৃক্ষ, bool, বৃক্ষ, বৃক্ষ,
+				    location_t, বৃক্ষ, বৃক্ষ, location_t);
+বাহ্য বৃক্ষ build_compound_ৰাশিমালা (location_t, বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_cast_ৰাশিমালা (location_t, সংরচনা c_type_name *, বৃক্ষ);
+বাহ্য বৃক্ষ build_c_cast (location_t, বৃক্ষ, বৃক্ষ);
+বাহ্য শূন্য store_init_মান (location_t, বৃক্ষ, বৃক্ষ, বৃক্ষ);
+বাহ্য শূন্য maybe_warn_string_init (location_t, বৃক্ষ, সংরচনা c_ৰাশিমালা);
+বাহ্য শূন্য start_init (বৃক্ষ, বৃক্ষ, bool, bool, rich_location *);
+বাহ্য শূন্য finish_init (শূন্য);
+বাহ্য শূন্য really_start_incremental_init (বৃক্ষ);
+বাহ্য শূন্য finish_implicit_inits (location_t, সংরচনা obstack *);
+বাহ্য শূন্য ঠেলো_init_level (location_t, পূর্ণাঙ্ক, সংরচনা obstack *);
+বাহ্য সংরচনা c_ৰাশিমালা বেৰ_কৰো_init_level (location_t, পূর্ণাঙ্ক, সংরচনা obstack *,
 				     location_t);
-extern void set_init_index (location_t, tree, tree, struct obstack *);
-extern void set_init_label (location_t, tree, location_t, struct obstack *);
-unsigned c_maybe_optimize_large_byte_initializer (void);
-extern void process_init_element (location_t, struct c_expr, bool,
-				  struct obstack *);
-extern tree build_compound_literal (location_t, tree, tree, bool,
-				    unsigned int, struct c_declspecs *);
-extern void check_compound_literal_type (location_t, struct c_type_name *);
-extern tree c_start_switch (location_t, location_t, tree, bool, tree);
-extern void c_finish_switch (tree, tree);
-extern tree build_asm_expr (location_t, tree, tree, tree, tree, tree, bool,
+বাহ্য শূন্য set_init_index (location_t, বৃক্ষ, বৃক্ষ, সংরচনা obstack *);
+বাহ্য শূন্য set_init_label (location_t, বৃক্ষ, location_t, সংরচনা obstack *);
+unsigned c_maybe_optimize_large_byte_initializer (শূন্য);
+বাহ্য শূন্য process_init_element (location_t, সংরচনা c_ৰাশিমালা, bool,
+				  সংরচনা obstack *);
+বাহ্য বৃক্ষ build_compound_literal (location_t, বৃক্ষ, বৃক্ষ, bool,
+				    unsigned পূর্ণাঙ্ক, সংরচনা c_declspecs *);
+বাহ্য শূন্য check_compound_literal_type (location_t, সংরচনা c_type_name *);
+বাহ্য বৃক্ষ c_start_switch (location_t, location_t, বৃক্ষ, bool, বৃক্ষ);
+বাহ্য শূন্য c_finish_switch (বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ build_asm_ৰাশিমালা (location_t, বৃক্ষ, বৃক্ষ, বৃক্ষ, বৃক্ষ, বৃক্ষ, bool,
 			    bool);
-extern tree build_asm_stmt (bool, tree);
-extern int c_types_compatible_p (tree, tree);
-extern tree c_begin_compound_stmt (bool);
-extern tree c_end_compound_stmt (location_t, tree, bool);
-extern void c_finish_if_stmt (location_t, tree, tree, tree);
-extern void c_finish_loop (location_t, location_t, tree, location_t, tree,
-			   tree, tree, tree, bool);
-extern tree c_begin_stmt_expr (void);
-extern tree c_finish_stmt_expr (location_t, tree);
-extern tree c_process_expr_stmt (location_t, tree);
-extern tree c_finish_expr_stmt (location_t, tree);
-extern tree c_finish_return (location_t, tree, tree, bool = false);
-extern tree c_finish_bc_stmt (location_t, tree, bool, tree);
-extern tree c_finish_goto_label (location_t, tree);
-extern tree c_finish_goto_ptr (location_t, c_expr val);
-extern tree c_expr_to_decl (tree, bool *, bool *);
-extern tree c_finish_omp_construct (location_t, enum tree_code, tree, tree);
-extern tree c_finish_oacc_data (location_t, tree, tree);
-extern tree c_finish_oacc_host_data (location_t, tree, tree);
-extern tree c_begin_omp_parallel (void);
-extern tree c_finish_omp_parallel (location_t, tree, tree);
-extern tree c_begin_omp_task (void);
-extern tree c_finish_omp_task (location_t, tree, tree);
-extern void c_finish_omp_cancel (location_t, tree);
-extern void c_finish_omp_cancellation_point (location_t, tree);
-extern tree c_finish_omp_clauses (tree, enum c_omp_region_type);
-extern tree c_omp_finish_mapper_clauses (tree);
-extern tree c_omp_mapper_lookup (tree, tree);
-extern tree c_omp_extract_mapper_directive (tree);
-extern tree c_omp_map_array_section (location_t, tree);
-extern tree c_build_va_arg (location_t, tree, location_t, tree, tree);
-extern tree c_finish_transaction (location_t, tree, int);
-extern bool c_tree_equal (tree, tree);
-extern tree c_build_function_call_vec (location_t, const vec<location_t>&,
-				       tree, vec<tree, va_gc> *,
-				       vec<tree, va_gc> *);
-extern tree c_omp_clause_copy_ctor (tree, tree, tree);
-extern tree c_reconstruct_complex_type (tree, tree);
-extern tree c_type_canonical (tree);
-extern tree c_build_type_attribute_variant (tree ntype, tree attrs);
-extern tree c_build_pointer_type (tree type);
-extern tree c_build_array_type (tree type, tree domain);
-extern tree c_build_array_type_unspecified (tree type);
-extern tree c_build_array_type_zero_size (tree type);
-extern tree c_build_function_type (tree type, tree args, bool no = false);
-extern tree c_build_pointer_type_for_mode (tree type, machine_mode mode, bool m);
+বাহ্য বৃক্ষ build_asm_stmt (bool, বৃক্ষ);
+বাহ্য পূর্ণাঙ্ক c_types_compatible_p (বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_begin_compound_stmt (bool);
+বাহ্য বৃক্ষ c_end_compound_stmt (location_t, বৃক্ষ, bool);
+বাহ্য শূন্য c_finish_if_stmt (location_t, বৃক্ষ, বৃক্ষ, বৃক্ষ);
+বাহ্য শূন্য c_finish_loop (location_t, location_t, বৃক্ষ, location_t, বৃক্ষ,
+			   বৃক্ষ, বৃক্ষ, বৃক্ষ, bool);
+বাহ্য বৃক্ষ c_begin_stmt_ৰাশিমালা (শূন্য);
+বাহ্য বৃক্ষ c_finish_stmt_ৰাশিমালা (location_t, বৃক্ষ);
+বাহ্য বৃক্ষ c_process_ৰাশিমালা_stmt (location_t, বৃক্ষ);
+বাহ্য বৃক্ষ c_finish_ৰাশিমালা_stmt (location_t, বৃক্ষ);
+বাহ্য বৃক্ষ c_finish_return (location_t, বৃক্ষ, বৃক্ষ, bool = false);
+বাহ্য বৃক্ষ c_finish_bc_stmt (location_t, বৃক্ষ, bool, বৃক্ষ);
+বাহ্য বৃক্ষ c_finish_goto_label (location_t, বৃক্ষ);
+বাহ্য বৃক্ষ c_finish_goto_ptr (location_t, c_ৰাশিমালা val);
+বাহ্য বৃক্ষ c_ৰাশিমালা_to_decl (বৃক্ষ, bool *, bool *);
+বাহ্য বৃক্ষ c_finish_omp_construct (location_t, গণনা বৃক্ষ_code, বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_finish_oacc_data (location_t, বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_finish_oacc_host_data (location_t, বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_begin_omp_parallel (শূন্য);
+বাহ্য বৃক্ষ c_finish_omp_parallel (location_t, বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_begin_omp_task (শূন্য);
+বাহ্য বৃক্ষ c_finish_omp_task (location_t, বৃক্ষ, বৃক্ষ);
+বাহ্য শূন্য c_finish_omp_cancel (location_t, বৃক্ষ);
+বাহ্য শূন্য c_finish_omp_cancellation_point (location_t, বৃক্ষ);
+বাহ্য বৃক্ষ c_finish_omp_clauses (বৃক্ষ, গণনা c_omp_region_type);
+বাহ্য বৃক্ষ c_omp_finish_mapper_clauses (বৃক্ষ);
+বাহ্য বৃক্ষ c_omp_mapper_lookup (বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_omp_extract_mapper_directive (বৃক্ষ);
+বাহ্য বৃক্ষ c_omp_map_array_section (location_t, বৃক্ষ);
+বাহ্য বৃক্ষ c_build_va_arg (location_t, বৃক্ষ, location_t, বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_finish_transaction (location_t, বৃক্ষ, পূর্ণাঙ্ক);
+বাহ্য bool c_বৃক্ষ_equal (বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_build_function_call_vec (location_t, ধ্রুৱ vec<location_t>&,
+				       বৃক্ষ, vec<বৃক্ষ, va_gc> *,
+				       vec<বৃক্ষ, va_gc> *);
+বাহ্য বৃক্ষ c_omp_clause_copy_ctor (বৃক্ষ, বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_reconstruct_complex_type (বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_type_canonical (বৃক্ষ);
+বাহ্য বৃক্ষ c_build_type_attribute_variant (বৃক্ষ ntype, বৃক্ষ attrs);
+বাহ্য বৃক্ষ c_build_pointer_type (বৃক্ষ type);
+বাহ্য বৃক্ষ c_build_array_type (বৃক্ষ type, বৃক্ষ domain);
+বাহ্য বৃক্ষ c_build_array_type_unspecified (বৃক্ষ type);
+বাহ্য বৃক্ষ c_build_array_type_zero_size (বৃক্ষ type);
+বাহ্য বৃক্ষ c_build_function_type (বৃক্ষ type, বৃক্ষ args, bool no = false);
+বাহ্য বৃক্ষ c_build_pointer_type_for_mode (বৃক্ষ type, machine_mode mode, bool m);
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement that specifies a return value is seen.  */
 
-extern int current_function_returns_value;
+বাহ্য পূর্ণাঙ্ক current_function_returns_মান;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a return statement with no argument is seen.  */
 
-extern int current_function_returns_null;
+বাহ্য পূর্ণাঙ্ক current_function_returns_null;
 
 /* Set to 0 at beginning of a function definition, set to 1 if
    a call to a noreturn function is seen.  */
 
-extern int current_function_returns_abnormally;
+বাহ্য পূর্ণাঙ্ক current_function_returns_abnormally;
 
 /* In c-decl.cc */
 
 /* Tell the binding oracle what kind of binding we are looking for.  */
 
-enum c_oracle_request
+গণনা c_oracle_request
 {
-  C_ORACLE_SYMBOL,
+  C_ORACLE_প্ৰতীক,
   C_ORACLE_TAG,
   C_ORACLE_LABEL
 };
@@ -999,55 +999,55 @@ enum c_oracle_request
    oracle has been called and will not call it again if it fails to
    create a given binding.  */
 
-typedef void c_binding_oracle_function (enum c_oracle_request, tree identifier);
+প্রকারনির্দেশ শূন্য c_binding_oracle_function (গণনা c_oracle_request, বৃক্ষ identifier);
 
-extern c_binding_oracle_function *c_binding_oracle;
+বাহ্য c_binding_oracle_function *c_binding_oracle;
 
-extern void c_finish_incomplete_decl (tree);
-extern tree c_omp_reduction_id (enum tree_code, tree);
-extern tree c_omp_reduction_decl (tree);
-extern tree c_omp_reduction_lookup (tree, tree);
-extern tree c_check_omp_declare_reduction_r (tree *, int *, void *);
-extern tree c_omp_mapper_id (tree);
-extern tree c_omp_mapper_decl (tree);
-extern void c_omp_scan_mapper_bindings (location_t, tree *, tree);
-extern bool c_check_in_current_scope (tree);
-extern void c_pushtag (location_t, tree, tree);
-extern void c_bind (location_t, tree, bool);
-extern bool tag_exists_p (enum tree_code, tree);
+বাহ্য শূন্য c_finish_incomplete_decl (বৃক্ষ);
+বাহ্য বৃক্ষ c_omp_reduction_id (গণনা বৃক্ষ_code, বৃক্ষ);
+বাহ্য বৃক্ষ c_omp_reduction_decl (বৃক্ষ);
+বাহ্য বৃক্ষ c_omp_reduction_lookup (বৃক্ষ, বৃক্ষ);
+বাহ্য বৃক্ষ c_check_omp_declare_reduction_r (বৃক্ষ *, পূর্ণাঙ্ক *, শূন্য *);
+বাহ্য বৃক্ষ c_omp_mapper_id (বৃক্ষ);
+বাহ্য বৃক্ষ c_omp_mapper_decl (বৃক্ষ);
+বাহ্য শূন্য c_omp_scan_mapper_bindings (location_t, বৃক্ষ *, বৃক্ষ);
+বাহ্য bool c_check_in_current_scope (বৃক্ষ);
+বাহ্য শূন্য c_pushtag (location_t, বৃক্ষ, বৃক্ষ);
+বাহ্য শূন্য c_bind (location_t, বৃক্ষ, bool);
+বাহ্য bool tag_exists_p (গণনা বৃক্ষ_code, বৃক্ষ);
 
-extern void verify_counted_by_for_top_anonymous_type (tree);
+বাহ্য শূন্য verify_counted_by_for_শীৰ্ষ_anonymous_type (বৃক্ষ);
 
 /* In c-errors.cc */
-extern bool pedwarn_c90 (location_t, diagnostics::option_id, const char *, ...)
+বাহ্য bool pedwarn_c90 (location_t, diagnostics::option_id, ধ্রুৱ ৱর্ণ *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c99 (location_t, diagnostics::option_id, const char *, ...)
+বাহ্য bool pedwarn_c99 (location_t, diagnostics::option_id, ধ্রুৱ ৱর্ণ *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c11 (location_t, diagnostics::option_id, const char *, ...)
+বাহ্য bool pedwarn_c11 (location_t, diagnostics::option_id, ধ্রুৱ ৱর্ণ *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern bool pedwarn_c23 (location_t, diagnostics::option_id, const char *, ...)
+বাহ্য bool pedwarn_c23 (location_t, diagnostics::option_id, ধ্রুৱ ৱর্ণ *, ...)
     ATTRIBUTE_GCC_DIAG(3,4);
-extern void add_note_about_new_keyword (location_t loc,
-					tree keyword_id);
+বাহ্য শূন্য add_note_about_new_keyword (location_t loc,
+					বৃক্ষ keyword_id);
 
-extern void
-set_c_expr_source_range (c_expr *expr,
+বাহ্য শূন্য
+set_c_ৰাশিমালা_source_range (c_ৰাশিমালা *ৰাশিমালা,
 			 location_t start, location_t finish);
 
-extern void
-set_c_expr_source_range (c_expr *expr,
+বাহ্য শূন্য
+set_c_ৰাশিমালা_source_range (c_ৰাশিমালা *ৰাশিমালা,
 			 source_range src_range);
 
 /* In c-fold.cc */
-extern vec<tree> incomplete_record_decls;
+বাহ্য vec<বৃক্ষ> incomplete_record_decls;
 
-extern const char *c_get_sarif_source_language (const char *filename);
+বাহ্য ধ্রুৱ ৱর্ণ *c_get_sarif_source_language (ধ্রুৱ ৱর্ণ *filename);
 
-extern const struct scoped_attribute_specs std_attribute_table;
+বাহ্য ধ্রুৱ সংরচনা scoped_attribute_specs std_attribute_table;
 
-#if CHECKING_P
+#যদি CHECKING_P
 namespace selftest {
-  extern void run_c_tests (void);
+  বাহ্য শূন্য run_c_tests (শূন্য);
 } // namespace selftest
 #endif /* #if CHECKING_P */
 
