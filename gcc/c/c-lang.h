@@ -25,7 +25,7 @@ along with GCC; see the file COPYING3.  If not see
 /* In a RECORD_TYPE, a sorted array of the fields of the type, not a
    tree for size reasons.  */
 struct GTY(()) sorted_fields_type {
-  int len;
+  цяло len;
   tree GTY((length ("%h.len"))) elts[1];
 };
 
@@ -60,16 +60,16 @@ struct GTY(()) language_function {
   struct c_arg_info * GTY((skip)) arg_info;
   vec<tree> GTY((skip)) loop_names;
   decl_tree_map * GTY((skip)) loop_names_hash;
-  int returns_value;
-  int returns_null;
-  int returns_abnormally;
-  int warn_about_return_type;
+  цяло returns_value;
+  цяло returns_null;
+  цяло returns_abnormally;
+  цяло warn_about_return_type;
 };
 
 struct GTY(()) c_omp_declare_target_attr {
   bool attr_syntax;
-  int device_type;
-  int indirect;
+  цяло device_type;
+  цяло indirect;
 };
 
 struct GTY(()) c_omp_begin_assumes_data {

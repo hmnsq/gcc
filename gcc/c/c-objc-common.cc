@@ -35,7 +35,7 @@ along with GCC; see the file COPYING3.  If not see
 #include "dwarf2.h"
 
 static bool c_tree_printer (pretty_printer *, text_info *, const char *,
-			    int, bool, bool, bool, bool *, pp_token_list &);
+			    цяло, bool, bool, bool, bool *, pp_token_list &);
 
 /* Info for C language features which can be queried through
    __has_{feature,extension}.  */
@@ -43,7 +43,7 @@ static bool c_tree_printer (pretty_printer *, text_info *, const char *,
 struct c_feature_info
 {
   const char *ident;
-  const int *enable_flag;
+  const цяло *enable_flag;
 };
 
 static const c_feature_info c_feature_table[] =
@@ -62,7 +62,7 @@ static const c_feature_info c_feature_table[] =
 void
 c_register_features ()
 {
-  for (unsigned i = 0; i < ARRAY_SIZE (c_feature_table); i++)
+  за (unsigned i = 0; i < ARRAY_SIZE (c_feature_table); i++)
     {
       const c_feature_info *info = c_feature_table + i;
       const bool feat_p = !info->enable_flag || *info->enable_flag;
@@ -74,10 +74,10 @@ bool
 c_missing_noreturn_ok_p (tree decl)
 {
   /* A missing noreturn is ok for the `main' function.  */
-  if (!MAIN_NAME_P (DECL_ASSEMBLER_NAME (decl)))
-    return false;
+  ако (!MAIN_NAME_P (DECL_ASSEMBLER_NAME (decl)))
+    върни false;
 
-  return flag_hosted
+  върни flag_hosted
     || TYPE_MAIN_VARIANT (TREE_TYPE (TREE_TYPE (decl))) == integer_type_node;
 }
 
@@ -86,12 +86,12 @@ c_missing_noreturn_ok_p (tree decl)
 bool
 c_warn_unused_global_decl (const_tree decl)
 {
-  if (TREE_CODE (decl) == FUNCTION_DECL && DECL_DECLARED_INLINE_P (decl))
-    return false;
-  if (DECL_IN_SYSTEM_HEADER (decl))
-    return false;
+  ако (TREE_CODE (decl) == FUNCTION_DECL && DECL_DECLARED_INLINE_P (decl))
+    върни false;
+  ако (DECL_IN_SYSTEM_HEADER (decl))
+    върни false;
 
-  return true;
+  върни true;
 }
 
 /* Initialization common to C and Objective-C front ends.  */
@@ -100,7 +100,7 @@ c_objc_common_init (void)
 {
   c_init_decl_processing ();
 
-  return c_common_init ();
+  върни c_common_init ();
 }
 
 /* Decide whether it's worth saying that TYPE is also known as some other
@@ -109,11 +109,11 @@ c_objc_common_init (void)
 static tree
 get_aka_type (tree type)
 {
-  if (type == error_mark_node)
-    return type;
+  ако (type == error_mark_node)
+    върни type;
 
   tree result;
-  if (typedef_variant_p (type))
+  ако (typedef_variant_p (type))
     {
       /* Saying that "foo" is also known as "struct foo" or
 	 "struct <anonymous>" is unlikely to be useful, since users of
@@ -123,22 +123,22 @@ get_aka_type (tree type)
       tree orig_type = DECL_ORIGINAL_TYPE (TYPE_NAME (type));
       tree_code code = TREE_CODE (orig_type);
       tree orig_id = TYPE_IDENTIFIER (orig_type);
-      if ((code == RECORD_TYPE || code == UNION_TYPE || code == ENUMERAL_TYPE)
+      ако ((code == RECORD_TYPE || code == UNION_TYPE || code == ENUMERAL_TYPE)
 	  && (!orig_id || TYPE_IDENTIFIER (type) == orig_id))
-	return type;
+	върни type;
 
-      if (!user_facing_original_type_p (type))
-	return type;
+      ако (!user_facing_original_type_p (type))
+	върни type;
 
       result = get_aka_type (orig_type);
     }
-  else if (TREE_CODE (type) == ENUMERAL_TYPE)
-    return type;
-  else
+  иначе ако (TREE_CODE (type) == ENUMERAL_TYPE)
+    върни type;
+  иначе
     {
       tree canonical = TYPE_CANONICAL (type);
-      if (canonical && TREE_CODE (type) != TREE_CODE (canonical))
-	return canonical;
+      ако (canonical && TREE_CODE (type) != TREE_CODE (canonical))
+	върни canonical;
 
       /* Recursive calls might choose a middle ground between TYPE
 	 (which has no typedefs stripped) and CANONICAL (which has
@@ -151,11 +151,11 @@ get_aka_type (tree type)
 	  {
 	    tree target_type = get_aka_type (TREE_TYPE (type));
 
-	    if (target_type == TREE_TYPE (type))
-	      return type;
+	    ако (target_type == TREE_TYPE (type))
+	      върни type;
 
-	    if (canonical && target_type == TREE_TYPE (canonical))
-	      return canonical;
+	    ако (canonical && target_type == TREE_TYPE (canonical))
+	      върни canonical;
 
 	    result = (TREE_CODE (type) == POINTER_TYPE
 		      ? build_pointer_type (target_type)
@@ -170,14 +170,14 @@ get_aka_type (tree type)
 			       ? get_aka_type (TYPE_DOMAIN (type))
 			       : NULL_TREE);
 
-	    if (element_type == TREE_TYPE (type)
+	    ако (element_type == TREE_TYPE (type)
 		&& index_type == TYPE_DOMAIN (type))
-	      return type;
+	      върни type;
 
-	    if (canonical
+	    ако (canonical
 		&& element_type == TREE_TYPE (canonical)
 		&& index_type == TYPE_DOMAIN (canonical))
-	      return canonical;
+	      върни canonical;
 
 	    result = build_array_type (element_type, index_type,
 				       TYPE_TYPELESS_STORAGE (type));
@@ -189,12 +189,12 @@ get_aka_type (tree type)
 	    tree return_type = get_aka_type (TREE_TYPE (type));
 
 	    tree args = TYPE_ARG_TYPES (type);
-	    if (args == error_mark_node)
-	      return type;
+	    ако (args == error_mark_node)
+	      върни type;
 
 	    auto_vec<tree, 32> arg_types;
 	    bool type_ok_p = true;
-	    while (args && args != void_list_node)
+	    докато (args && args != void_list_node)
 	      {
 		tree arg_type = get_aka_type (TREE_VALUE (args));
 		arg_types.safe_push (arg_type);
@@ -202,10 +202,10 @@ get_aka_type (tree type)
 		args = TREE_CHAIN (args);
 	      }
 
-	    if (type_ok_p && return_type == TREE_TYPE (type))
-	      return type;
+	    ако (type_ok_p && return_type == TREE_TYPE (type))
+	      върни type;
 
-	    unsigned int i;
+	    unsigned цяло i;
 	    tree arg_type;
 	    FOR_EACH_VEC_ELT_REVERSE (arg_types, i, arg_type)
 	      args = tree_cons (NULL_TREE, arg_type, args);
@@ -214,15 +214,15 @@ get_aka_type (tree type)
 	  }
 
 	default:
-	  return canonical ? canonical : type;
+	  върни canonical ? canonical : type;
 	}
     }
   /* For tagged types ignore attributes because they will otherwise
      be ignored later causing a warning inside diagnostics which leads
      to an ICE.  */
-  if (RECORD_OR_UNION_TYPE_P (type) || TREE_CODE (type) == ENUMERAL_TYPE)
-    return build_qualified_type (result, TYPE_QUALS (type));
-  return build_type_attribute_qual_variant (result, TYPE_ATTRIBUTES (type),
+  ако (RECORD_OR_UNION_TYPE_P (type) || TREE_CODE (type) == ENUMERAL_TYPE)
+    върни build_qualified_type (result, TYPE_QUALS (type));
+  върни build_type_attribute_qual_variant (result, TYPE_ATTRIBUTES (type),
 					    TYPE_QUALS (type));
 }
 
@@ -232,25 +232,25 @@ static void
 print_type (c_pretty_printer *cpp, tree t, bool *quoted,
 	    const char *highlight_color = nullptr)
 {
-  if (t == error_mark_node)
+  ако (t == error_mark_node)
     {
       pp_string (cpp, _("{erroneous}"));
-      return;
+      върни;
     }
 
-  if (!pp_show_highlight_colors (cpp))
+  ако (!pp_show_highlight_colors (cpp))
     highlight_color = nullptr;
 
   gcc_assert (TYPE_P (t));
   struct obstack *ob = pp_buffer (cpp)->m_obstack;
   char *p = (char *) obstack_base (ob);
   /* Remember the end of the initial dump.  */
-  int len = obstack_object_size (ob);
+  цяло len = obstack_object_size (ob);
 
   tree name = TYPE_NAME (t);
-  if (name && TREE_CODE (name) == TYPE_DECL && DECL_NAME (name))
+  ако (name && TREE_CODE (name) == TYPE_DECL && DECL_NAME (name))
     pp_identifier (cpp, lang_hooks.decl_printable_name (name, 2));
-  else
+  иначе
     cpp->type_id (t);
 
   /* If we're printing a type that involves typedefs, also print the
@@ -258,7 +258,7 @@ print_type (c_pretty_printer *cpp, tree t, bool *quoted,
      exactly the same, so we don't want it after all.  To avoid
      printing it in that case, we play ugly obstack games.  */
   tree aka_type = get_aka_type (t);
-  if (aka_type != t)
+  ако (aka_type != t)
     {
       const bool show_color = pp_show_color (cpp);
       c_pretty_printer cpp2;
@@ -267,27 +267,27 @@ print_type (c_pretty_printer *cpp, tree t, bool *quoted,
       struct obstack *ob2 = pp_buffer (&cpp2)->m_obstack;
       /* Get the stripped version from the temporary printer.  */
       const char *aka = (char *) obstack_base (ob2);
-      int aka_len = obstack_object_size (ob2);
-      int type1_len = obstack_object_size (ob) - len;
+      цяло aka_len = obstack_object_size (ob2);
+      цяло type1_len = obstack_object_size (ob) - len;
 
       /* If they are identical, bail out.  */
-      if (aka_len == type1_len && memcmp (p + len, aka, aka_len) == 0)
-	return;
+      ако (aka_len == type1_len && memcmp (p + len, aka, aka_len) == 0)
+	върни;
 
       /* They're not, print the stripped version now.  */
-      if (*quoted)
+      ако (*quoted)
 	pp_end_quote (cpp, show_color);
       pp_c_whitespace (cpp);
       pp_left_brace (cpp);
       pp_c_ws_string (cpp, _("aka"));
       pp_c_whitespace (cpp);
       pp_string (cpp, colorize_stop (show_color));
-      if (*quoted)
+      ако (*quoted)
 	pp_begin_quote (cpp, show_color);
-      if (highlight_color)
+      ако (highlight_color)
 	pp_string (cpp, colorize_start (show_color, highlight_color));
       cpp->type_id (aka_type);
-      if (*quoted)
+      ако (*quoted)
 	pp_end_quote (cpp, show_color);
       pp_right_brace (cpp);
       /* No further closing quotes are needed.  */
@@ -323,7 +323,7 @@ pp_markup::element_quoted_type::print_type (pp_markup::context &ctxt)
    diagnostic machinery.  */
 static bool
 c_tree_printer (pretty_printer *pp, text_info *text, const char *spec,
-		int precision, bool wide, bool set_locus, bool hash,
+		цяло precision, bool wide, bool set_locus, bool hash,
 		bool *quoted, pp_token_list &)
 {
   tree t = NULL_TREE;
@@ -331,13 +331,13 @@ c_tree_printer (pretty_printer *pp, text_info *text, const char *spec,
   c_pretty_printer *cpp = (c_pretty_printer *) pp;
   pp->set_padding (pp_none);
 
-  if (precision != 0 || wide)
-    return false;
+  ако (precision != 0 || wide)
+    върни false;
 
-  if (*spec != 'v')
+  ако (*spec != 'v')
     {
       t = va_arg (*text->m_args_ptr, tree);
-      if (set_locus)
+      ако (set_locus)
 	text->set_location (0, DECL_SOURCE_LOCATION (t),
 			    SHOW_RANGE_WITH_CARET);
     }
@@ -345,55 +345,55 @@ c_tree_printer (pretty_printer *pp, text_info *text, const char *spec,
   switch (*spec)
     {
     case 'D':
-      if (VAR_P (t) && DECL_HAS_DEBUG_EXPR_P (t))
+      ако (VAR_P (t) && DECL_HAS_DEBUG_EXPR_P (t))
 	{
 	  t = DECL_DEBUG_EXPR (t);
-	  if (!DECL_P (t))
+	  ако (!DECL_P (t))
 	    {
 	      cpp->expression (t);
-	      return true;
+	      върни true;
 	    }
 	}
       /* FALLTHRU */
 
     case 'F':
-      if (DECL_NAME (t))
+      ако (DECL_NAME (t))
 	{
 	  pp_identifier (cpp, lang_hooks.decl_printable_name (t, 2));
-	  if (TREE_CODE (t) == FUNCTION_DECL)
+	  ако (TREE_CODE (t) == FUNCTION_DECL)
 	    {
 	      pp_c_function_target_version (cpp, t);
 	      pp_c_function_target_clones (cpp, t);
 	    }
-	  return true;
+	  върни true;
 	}
       break;
 
     case 'T':
       print_type (cpp, t, quoted);
-      return true;
+      върни true;
 
     case 'E':
-      if (TREE_CODE (t) == IDENTIFIER_NODE)
+      ако (TREE_CODE (t) == IDENTIFIER_NODE)
 	pp_identifier (cpp, IDENTIFIER_POINTER (t));
-      else
+      иначе
 	cpp->expression (t);
-      return true;
+      върни true;
 
     case 'V':
       pp_c_type_qualifier_list (cpp, t);
-      return true;
+      върни true;
 
     case 'v':
-      pp_c_cv_qualifiers (cpp, va_arg (*text->m_args_ptr, int), hash);
-      return true;
+      pp_c_cv_qualifiers (cpp, va_arg (*text->m_args_ptr, цяло), hash);
+      върни true;
 
     default:
-      return false;
+      върни false;
     }
 
   pp_string (cpp, _("({anonymous})"));
-  return true;
+  върни true;
 }
 
 /* C-specific implementation of range_label::get_text () vfunc for
@@ -402,13 +402,13 @@ c_tree_printer (pretty_printer *pp, text_info *text, const char *spec,
 label_text
 range_label_for_type_mismatch::get_text (unsigned /*range_idx*/) const
 {
-  if (m_labelled_type == NULL_TREE)
-    return label_text::borrow (NULL);
+  ако (m_labelled_type == NULL_TREE)
+    върни label_text::borrow (NULL);
 
   c_pretty_printer cpp;
   bool quoted = false;
   print_type (&cpp, m_labelled_type, &quoted);
-  return label_text::take (xstrdup (pp_formatted_text (&cpp)));
+  върни label_text::take (xstrdup (pp_formatted_text (&cpp)));
 }
 
 
@@ -416,7 +416,7 @@ range_label_for_type_mismatch::get_text (unsigned /*range_idx*/) const
 bool
 has_c_linkage (const_tree decl ATTRIBUTE_UNUSED)
 {
-  return true;
+  върни true;
 }
 
 void
@@ -427,10 +427,10 @@ c_initialize_diagnostics (diagnostics::context *context)
   context->set_format_decoder (&c_tree_printer);
 }
 
-int
+цяло
 c_types_compatible_p (tree x, tree y)
 {
-  return comptypes (TYPE_MAIN_VARIANT (x), TYPE_MAIN_VARIANT (y));
+  върни comptypes (TYPE_MAIN_VARIANT (x), TYPE_MAIN_VARIANT (y));
 }
 
 /* Determine if the type is a variably modified type for the backend.  */
@@ -438,7 +438,7 @@ c_types_compatible_p (tree x, tree y)
 bool
 c_var_mod_p (tree x, tree fn ATTRIBUTE_UNUSED)
 {
-  return c_type_variably_modified_p (x);
+  върни c_type_variably_modified_p (x);
 }
 
 /* Special routine to get the alias set of T for C.  */
@@ -446,16 +446,16 @@ c_var_mod_p (tree x, tree fn ATTRIBUTE_UNUSED)
 alias_set_type
 c_get_alias_set (tree t)
 {
-  return c_common_get_alias_set (t);
+  върни c_common_get_alias_set (t);
 }
 
 /* In C there are no invisible parameters like in C++ (this, in-charge, VTT,
    etc.).  */
 
-int
+цяло
 maybe_adjust_arg_pos_for_attribute (const_tree)
 {
-  return 0;
+  върни 0;
 }
 
 /* In C, no expression is dependent.  */
@@ -463,29 +463,29 @@ maybe_adjust_arg_pos_for_attribute (const_tree)
 bool
 instantiation_dependent_expression_p (tree)
 {
-  return false;
+  върни false;
 }
 
 /* Return -1 if dwarf ATTR shouldn't be added for TYPE, or the attribute
    value otherwise.  */
-int
-c_type_dwarf_attribute (const_tree type, int attr)
+цяло
+c_type_dwarf_attribute (const_tree type, цяло attr)
 {
-  if (type == NULL_TREE)
-    return -1;
+  ако (type == NULL_TREE)
+    върни -1;
 
   switch (attr)
     {
     case DW_AT_export_symbols:
-      if (RECORD_OR_UNION_TYPE_P (type) && TYPE_NAME (type) == NULL_TREE)
-	return 1;
+      ако (RECORD_OR_UNION_TYPE_P (type) && TYPE_NAME (type) == NULL_TREE)
+	върни 1;
       break;
 
     default:
       break;
     }
 
-  return -1;
+  върни -1;
 }
 
 /* The C version of the enum_underlying_base_type langhook.  */
@@ -495,10 +495,10 @@ c_enum_underlying_base_type (const_tree type)
 {
   tree underlying_type = ENUM_UNDERLYING_TYPE (type);
 
-  if (! ENUM_FIXED_UNDERLYING_TYPE_P (type))
+  ако (! ENUM_FIXED_UNDERLYING_TYPE_P (type))
     underlying_type
       = c_common_type_for_mode (TYPE_MODE (underlying_type),
 				TYPE_UNSIGNED (underlying_type));
 
-  return underlying_type;
+  върни underlying_type;
 }
